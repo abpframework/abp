@@ -2,10 +2,8 @@
 using System.Diagnostics;
 using JetBrains.Annotations;
 
-namespace Volo.CodeAnnotations
+namespace Volo
 {
-    //TODO: Remove this library and move Check to somewhere else!
-
     [DebuggerStepThrough]
     public static class Check
     {
