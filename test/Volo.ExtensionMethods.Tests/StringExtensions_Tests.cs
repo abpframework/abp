@@ -1,9 +1,8 @@
 ﻿using System.Globalization;
-using Abp.Extensions;
 using Shouldly;
 using Xunit;
 
-namespace Abp.Tests.Extensions
+namespace Volo.ExtensionMethods.Tests
 {
     public class StringExtensions_Tests
     {

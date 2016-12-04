@@ -1,6 +1,6 @@
 using System;
 
-namespace Abp.Extensions
+namespace Volo.ExtensionMethods
 {
     /// <summary>
     /// Extension methods for <see cref="EventHandler"/>.

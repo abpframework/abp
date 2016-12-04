@@ -1,12 +1,11 @@
 using System;
-using System.Globalization;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using Volo.CodeAnnotations;
-using Volo.Collections.Generic;
+using Volo.ExtensionMethods.Collections.Generic;
 
-namespace Abp.Extensions
+namespace Volo.ExtensionMethods
 {
     //TODO: Not working properly with cultures!
 

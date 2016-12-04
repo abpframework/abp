@@ -1,7 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Volo.Abp;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.AspNetCore
+namespace Microsoft.Extensions.DependencyInjection
 {
     //TODO: Decide to move ABP?
     public static class AbpServiceCollectionExtensions

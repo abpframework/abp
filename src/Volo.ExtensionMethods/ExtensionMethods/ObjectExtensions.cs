@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Linq;
 
-namespace Abp.Extensions
+namespace Volo.ExtensionMethods
 {
     /// <summary>
     /// Extension methods for all objects.
