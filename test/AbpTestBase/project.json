@@ -1,0 +1,23 @@
+﻿{
+  "version": "1.0.0-*",
+
+  "dependencies": {
+    "NETStandard.Library": "1.6.1",
+    "dotnet-test-xunit": "2.2.0-preview2-build1029",
+    "NSubstitute": "2.0.0-rc",
+    "Shouldly": "2.8.2",
+    "xunit": "2.2.0-beta4-build3444",
+    "xunit.extensibility.execution": "2.2.0-beta4-build3444"
+  },
+
+  "frameworks": {
+    "netcoreapp1.0": {
+      "dependencies": {
+        "Microsoft.NETCore.App": {
+          "type": "platform",
+          "version": "1.0.0"
+        }
+      }
+    }
+  }
+}
