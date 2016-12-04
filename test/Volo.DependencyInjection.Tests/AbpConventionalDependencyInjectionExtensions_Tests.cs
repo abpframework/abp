@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using Microsoft.Extensions.DependencyInjection;
-using Shouldly;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
 namespace Volo.DependencyInjection.Tests
@@ -22,7 +19,7 @@ namespace Volo.DependencyInjection.Tests
             _services.AddType(typeof(MyTransientClass));
 
             //Assert
-            ShouldContainTransient(_services, typeof(MyTransientClass));
+            _services.ShouldContainTransient(typeof(MyTransientClass));
         }
 
         [Fact]
@@ -32,31 +29,9 @@ namespace Volo.DependencyInjection.Tests
             _services.AddType(typeof(MySingletonClass));
 
             //Assert
-            ShouldContainSingleton(_services, typeof(MySingletonClass));
+            _services.ShouldContainSingleton(typeof(MySingletonClass));
         }
-
-        private static void ShouldContainTransient(IServiceCollection services, Type type)
-        {
-            var serviceDescriptor = services.FirstOrDefault(s => s.ServiceType == type);
-
-            serviceDescriptor.ImplementationType.ShouldBe(type);
-            serviceDescriptor.ShouldNotBeNull();
-            serviceDescriptor.ImplementationFactory.ShouldBeNull();
-            serviceDescriptor.ImplementationInstance.ShouldBeNull();
-            serviceDescriptor.Lifetime.ShouldBe(ServiceLifetime.Transient);
-        }
-
-        private static void ShouldContainSingleton(IServiceCollection services, Type type)
-        {
-            var serviceDescriptor = services.FirstOrDefault(s => s.ServiceType == type);
-
-            serviceDescriptor.ImplementationType.ShouldBe(type);
-            serviceDescriptor.ShouldNotBeNull();
-            serviceDescriptor.ImplementationFactory.ShouldBeNull();
-            serviceDescriptor.ImplementationInstance.ShouldBeNull();
-            serviceDescriptor.Lifetime.ShouldBe(ServiceLifetime.Singleton);
-        }
-
+        
         public class MyTransientClass : ITransientDependency
         {
             
