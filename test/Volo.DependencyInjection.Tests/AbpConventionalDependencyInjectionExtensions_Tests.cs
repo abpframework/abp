@@ -42,6 +42,16 @@ namespace Volo.DependencyInjection.Tests
             _services.ShouldContainScoped(typeof(MyScopedClass));
         }
 
+        [Fact]
+        public void Should_Register_For_Exposed_Services()
+        {
+            _services.AddType(typeof(MyServiceWithExposeList));
+
+            _services.ShouldContain(typeof(IMyService1), typeof(MyServiceWithExposeList), ServiceLifetime.Transient);
+            _services.ShouldContain(typeof(IMyService2), typeof(MyServiceWithExposeList), ServiceLifetime.Transient);
+            _services.ShouldNotContain(typeof(MyServiceWithExposeList));
+        }
+
         public class MyTransientClass : ITransientDependency
         {
             
@@ -55,6 +65,22 @@ namespace Volo.DependencyInjection.Tests
         public class MyScopedClass : IScopedDependency
         {
 
+        }
+
+        public interface IMyService1
+        {
+            
+        }
+
+        public interface IMyService2
+        {
+
+        }
+
+        [ExposeServices(typeof(IMyService1), typeof(IMyService2))]
+        public class MyServiceWithExposeList : IMyService1, IMyService2, ITransientDependency
+        {
+            
         }
     }
 }

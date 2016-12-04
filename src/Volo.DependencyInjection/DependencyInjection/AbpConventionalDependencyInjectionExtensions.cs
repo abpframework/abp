@@ -34,7 +34,7 @@ namespace Volo.DependencyInjection
         {
             //TODO: Make this code extensible, so we can add other conventions!
 
-            foreach (var serviceType in FindDefaultServiceTypes(type))
+            foreach (var serviceType in FindServiceTypes(type))
             {
                 if (typeof(ITransientDependency).GetTypeInfo().IsAssignableFrom(type))
                 {
@@ -53,8 +53,14 @@ namespace Volo.DependencyInjection
             }
         }
 
-        private static List<Type> FindDefaultServiceTypes(Type type)
+        private static List<Type> FindServiceTypes(Type type)
         {
+            var customExposedServices = type.GetTypeInfo().GetCustomAttributes().OfType<IExposedServiceTypesProvider>().SelectMany(p => p.GetExposedServiceTypes()).ToList();
+            if (customExposedServices.Any())
+            {
+                return customExposedServices;
+            }
+
             var serviceTypes = new List<Type>();
 
             serviceTypes.Add(type);
