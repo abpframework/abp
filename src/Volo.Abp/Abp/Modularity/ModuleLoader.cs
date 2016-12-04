@@ -27,7 +27,16 @@ namespace Volo.Abp.Modularity
 
             FillModules(startupModuleType);
             SetModuleDependencies();
+            SortByDependency(startupModuleType);
             ConfigureServices(services);
+        }
+
+        private void FillModules(Type startupModuleType)
+        {
+            foreach (var moduleType in FindAllModuleTypes(startupModuleType).Distinct())
+            {
+                _modules.Add(CreateModuleDescriptor(moduleType));
+            }
         }
 
         private void SetModuleDependencies()
@@ -37,13 +46,12 @@ namespace Volo.Abp.Modularity
                 SetModuleDependencies(module);
             }
         }
-
-        private void FillModules(Type startupModuleType)
+        
+        private void SortByDependency(Type startupModuleType)
         {
-            foreach (var moduleType in FindAllModuleTypes(startupModuleType).Distinct())
-            {
-                _modules.Add(CreateModuleDescriptor(moduleType));
-            }
+            _modules.SortByDependencies(m => m.Dependencies);
+            _modules.MoveItem(m => m.Type == typeof(AbpKernelModule), 0);
+            _modules.MoveItem(m => m.Type == startupModuleType, _modules.Count - 1);
         }
 
         protected virtual IEnumerable<Type> FindAllModuleTypes(Type startupModuleType)
