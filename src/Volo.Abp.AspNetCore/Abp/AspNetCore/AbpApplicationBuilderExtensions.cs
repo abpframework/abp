@@ -1,8 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.DependencyInjection;
 
-namespace Microsoft.AspNetCore.Builder
+namespace Volo.Abp.AspNetCore
 {
     public static class AbpApplicationBuilderExtensions
     {

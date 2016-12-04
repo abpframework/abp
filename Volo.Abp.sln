@@ -42,6 +42,8 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Volo.ExtensionMethods", "sr
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Volo.CodeAnnotations", "src\Volo.CodeAnnotations\Volo.CodeAnnotations.xproj", "{161A6C10-00FF-4348-993F-D19893ABC57C}"
 EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Volo.ExtensionMethods.Tests", "test\Volo.ExtensionMethods.Tests\Volo.ExtensionMethods.Tests.xproj", "{B520B696-86C7-46D2-A359-C2E9013A7BED}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -88,6 +90,10 @@ Global
 		{161A6C10-00FF-4348-993F-D19893ABC57C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{161A6C10-00FF-4348-993F-D19893ABC57C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{161A6C10-00FF-4348-993F-D19893ABC57C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B520B696-86C7-46D2-A359-C2E9013A7BED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B520B696-86C7-46D2-A359-C2E9013A7BED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B520B696-86C7-46D2-A359-C2E9013A7BED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B520B696-86C7-46D2-A359-C2E9013A7BED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -108,5 +114,6 @@ Global
 		{12E14D95-4ABA-4290-AB1D-CCF5EB158411} = {A3A3B258-B3D5-4FDE-9D84-CAA8CBB70586}
 		{FC889503-0BF4-4959-AC80-F51073787025} = {9A4A646B-CC96-44FB-A717-E50C5C148B54}
 		{161A6C10-00FF-4348-993F-D19893ABC57C} = {9A4A646B-CC96-44FB-A717-E50C5C148B54}
+		{B520B696-86C7-46D2-A359-C2E9013A7BED} = {82B41A0A-6068-410F-9C6B-2508CA763E21}
 	EndGlobalSection
 EndGlobal

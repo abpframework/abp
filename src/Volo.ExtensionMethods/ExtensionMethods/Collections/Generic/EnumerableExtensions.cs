@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Volo.Collections.Generic
+namespace Volo.ExtensionMethods.Collections.Generic
 {    
     /// <summary> 
     /// Extension methods for <see cref="IEnumerable{T}"/>.

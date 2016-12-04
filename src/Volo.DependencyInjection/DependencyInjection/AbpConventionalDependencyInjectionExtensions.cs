@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Abp.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Internal;
 
@@ -31,22 +32,48 @@ namespace Volo.DependencyInjection
 
         public static void AddType(this IServiceCollection services, Type type)
         {
-            //TODO: Find exposed services for the type
+            //TODO: Make this code extensible, so we can add other conventions!
 
-            if (typeof(ITransientDependency).GetTypeInfo().IsAssignableFrom(type))
+            foreach (var serviceType in FindDefaultServiceTypes(type))
             {
-                services.AddTransient(type);
+                if (typeof(ITransientDependency).GetTypeInfo().IsAssignableFrom(type))
+                {
+                    services.AddTransient(serviceType, type);
+                }
+
+                if (typeof(ISingletonDependency).GetTypeInfo().IsAssignableFrom(type))
+                {
+                    services.AddSingleton(serviceType, type);
+                }
+
+                if (typeof(IScopedDependency).GetTypeInfo().IsAssignableFrom(type))
+                {
+                    services.AddScoped(serviceType, type);
+                }
+            }
+        }
+
+        private static List<Type> FindDefaultServiceTypes(Type type)
+        {
+            var serviceTypes = new List<Type>();
+
+            serviceTypes.Add(type);
+
+            foreach (var interfaceType in type.GetTypeInfo().GetInterfaces())
+            {
+                var interfaceName = interfaceType.Name;
+                if (interfaceName.StartsWith("I"))
+                {
+                    interfaceName = interfaceName.Right(interfaceName.Length - 1);
+                }
+
+                if (type.Name.EndsWith(interfaceName))
+                {
+                    serviceTypes.Add(interfaceType);
+                }
             }
 
-            if (typeof(ISingletonDependency).GetTypeInfo().IsAssignableFrom(type))
-            {
-                services.AddSingleton(type);
-            }
-
-            if (typeof(IScopedDependency).GetTypeInfo().IsAssignableFrom(type))
-            {
-                services.AddScoped(type);
-            }
+            return serviceTypes;
         }
 
         private static IEnumerable<Type> FilterInjectableTypes(this IEnumerable<Type> types)

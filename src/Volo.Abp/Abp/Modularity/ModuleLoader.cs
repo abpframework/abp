@@ -4,7 +4,7 @@ using System.Collections.Immutable;
 using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
-using Volo.Collections.Generic;
+using Volo.ExtensionMethods.Collections.Generic;
 
 namespace Volo.Abp.Modularity
 {
