@@ -84,7 +84,6 @@ namespace Volo.Abp.Modularity
             }
         }
 
-
         protected virtual List<Type> FindDependedModuleTypes(Type moduleType)
         {
             CheckAbpModuleType(moduleType);
@@ -94,7 +93,7 @@ namespace Volo.Abp.Modularity
             var dependencyDescriptors = moduleType
                 .GetTypeInfo()
                 .GetCustomAttributes()
-                .OfType<IModuleDependencyDescriptor>();
+                .OfType<IDependedModuleTypesProvider>();
 
             foreach (var descriptor in dependencyDescriptors)
             {

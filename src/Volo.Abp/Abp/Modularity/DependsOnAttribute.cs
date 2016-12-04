@@ -7,7 +7,7 @@ namespace Volo.Abp.Modularity
     /// It should be used for a class implements <see cref="IAbpModule"/>.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-    public class DependsOnAttribute : Attribute, IModuleDependencyDescriptor
+    public class DependsOnAttribute : Attribute, IDependedModuleTypesProvider
     {
         /// <summary>
         /// Types of depended modules.

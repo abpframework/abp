@@ -2,7 +2,7 @@
 
 namespace Volo.Abp.Modularity
 {
-    public interface IModuleDependencyDescriptor
+    public interface IDependedModuleTypesProvider
     {
         Type[] GetDependedModuleTypes();
     }
