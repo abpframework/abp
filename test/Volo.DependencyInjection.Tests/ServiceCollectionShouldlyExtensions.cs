@@ -11,6 +11,7 @@ namespace Volo.DependencyInjection.Tests
         {
             var serviceDescriptor = services.FirstOrDefault(s => s.ServiceType == type);
 
+            serviceDescriptor.ShouldNotBeNull();
             serviceDescriptor.ImplementationType.ShouldBe(type);
             serviceDescriptor.ShouldNotBeNull();
             serviceDescriptor.ImplementationFactory.ShouldBeNull();
@@ -22,6 +23,7 @@ namespace Volo.DependencyInjection.Tests
         {
             var serviceDescriptor = services.FirstOrDefault(s => s.ServiceType == type);
 
+            serviceDescriptor.ShouldNotBeNull();
             serviceDescriptor.ImplementationType.ShouldBe(type);
             serviceDescriptor.ShouldNotBeNull();
             serviceDescriptor.ImplementationFactory.ShouldBeNull();

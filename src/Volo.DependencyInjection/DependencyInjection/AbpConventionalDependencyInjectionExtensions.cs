@@ -9,6 +9,13 @@ namespace Volo.DependencyInjection
 {
     public static class AbpConventionalDependencyInjectionExtensions
     {
+        //TODO: Check if assembly/type is added before or add TryAdd versions of them?
+
+        public static void AddAssemblyOf<T>(this IServiceCollection services)
+        {
+            services.AddAssembly(typeof(T).GetTypeInfo().Assembly);
+        }
+
         public static void AddAssembly(this IServiceCollection services, Assembly assembly)
         {
             services.AddTypes(AssemblyHelper.GetAllTypes(assembly).FilterInjectableTypes().ToArray());

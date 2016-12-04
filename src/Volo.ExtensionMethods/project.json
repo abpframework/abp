@@ -1,11 +1,9 @@
-{
+﻿{
   "version": "1.0.0-*",
 
   "dependencies": {
     "NETStandard.Library": "1.6.1",
-    "Volo.DependencyInjection": "1.0.0-*",
-    "System.Collections.Immutable": "1.3.0",
-    "Volo.ExtensionMethods": "1.0.0-*"
+    "Volo.CodeAnnotations": "1.0.0-*"
   },
 
   "frameworks": {
