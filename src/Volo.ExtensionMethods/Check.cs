@@ -4,6 +4,8 @@ using JetBrains.Annotations;
 
 namespace Volo
 {
+    //TODO: This code should not be here and this library should not depend on JetBrains.Annotations.
+
     [DebuggerStepThrough]
     public static class Check
     {
