@@ -5,7 +5,6 @@
 
   "dependencies": {
     "AbpTestBase": "1.0.0-*",
-    "NETStandard.Library": "1.6.1",
     "Volo.DependencyInjection": "1.0.0-*"
   },
 
