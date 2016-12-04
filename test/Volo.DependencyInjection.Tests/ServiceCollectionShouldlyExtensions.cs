@@ -13,7 +13,6 @@ namespace Volo.DependencyInjection.Tests
 
             serviceDescriptor.ShouldNotBeNull();
             serviceDescriptor.ImplementationType.ShouldBe(type);
-            serviceDescriptor.ShouldNotBeNull();
             serviceDescriptor.ImplementationFactory.ShouldBeNull();
             serviceDescriptor.ImplementationInstance.ShouldBeNull();
             serviceDescriptor.Lifetime.ShouldBe(ServiceLifetime.Transient);
@@ -25,10 +24,20 @@ namespace Volo.DependencyInjection.Tests
 
             serviceDescriptor.ShouldNotBeNull();
             serviceDescriptor.ImplementationType.ShouldBe(type);
-            serviceDescriptor.ShouldNotBeNull();
             serviceDescriptor.ImplementationFactory.ShouldBeNull();
             serviceDescriptor.ImplementationInstance.ShouldBeNull();
             serviceDescriptor.Lifetime.ShouldBe(ServiceLifetime.Singleton);
+        }
+
+        public static void ShouldContainScoped(this IServiceCollection services, Type type)
+        {
+            var serviceDescriptor = services.FirstOrDefault(s => s.ServiceType == type);
+
+            serviceDescriptor.ShouldNotBeNull();
+            serviceDescriptor.ImplementationType.ShouldBe(type);
+            serviceDescriptor.ImplementationFactory.ShouldBeNull();
+            serviceDescriptor.ImplementationInstance.ShouldBeNull();
+            serviceDescriptor.Lifetime.ShouldBe(ServiceLifetime.Scoped);
         }
     }
 }

@@ -43,7 +43,10 @@ namespace Volo.DependencyInjection
                 services.AddSingleton(type);
             }
 
-            //TODO: Register scoped
+            if (typeof(IScopedDependency).GetTypeInfo().IsAssignableFrom(type))
+            {
+                services.AddScoped(type);
+            }
         }
 
         private static IEnumerable<Type> FilterInjectableTypes(this IEnumerable<Type> types)
