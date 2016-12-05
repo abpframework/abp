@@ -8,7 +8,7 @@ namespace Microsoft.AspNetCore.Builder
     {
         public static void InitializeAbpApplication(this IApplicationBuilder app) //TODO: Simply rename to InitializeApplication?
         {
-            var abpApplication = app.ApplicationServices.GetRequiredService<IAbpApplication>();
+            var abpApplication = app.ApplicationServices.GetRequiredService<AbpApplication>();
 
             app.ApplicationServices.GetRequiredService<ApplicationBuilderAccessor>().App = app;
 
