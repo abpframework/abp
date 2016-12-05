@@ -25,17 +25,17 @@ namespace Volo.Abp.Modularity
                 throw new InvalidOperationException($"{nameof(LoadAll)} should be called only once!");
             }
 
-            FillModules(startupModuleType);
+            FillModules(services, startupModuleType);
             SetModuleDependencies();
             SortByDependency(startupModuleType);
             ConfigureServices(services);
         }
 
-        private void FillModules(Type startupModuleType)
+        private void FillModules(IServiceCollection services, Type startupModuleType)
         {
             foreach (var moduleType in FindAllModuleTypes(startupModuleType).Distinct())
             {
-                _modules.Add(CreateModuleDescriptor(moduleType));
+                _modules.Add(CreateModuleDescriptor(services, moduleType));
             }
         }
 
@@ -62,9 +62,16 @@ namespace Volo.Abp.Modularity
             return moduleTypes;
         }
 
-        protected virtual AbpModuleDescriptor CreateModuleDescriptor(Type moduleType)
+        protected virtual AbpModuleDescriptor CreateModuleDescriptor(IServiceCollection services, Type moduleType)
         {
-            return new AbpModuleDescriptor(moduleType, (IAbpModule)Activator.CreateInstance(moduleType));
+            return new AbpModuleDescriptor(moduleType, CreateAndRegisterModule(services, moduleType));
+        }
+
+        private IAbpModule CreateAndRegisterModule(IServiceCollection services, Type moduleType)
+        {
+            var module = (IAbpModule) Activator.CreateInstance(moduleType);
+            services.AddSingleton(moduleType, module);
+            return module;
         }
 
         protected virtual void ConfigureServices(IServiceCollection services)

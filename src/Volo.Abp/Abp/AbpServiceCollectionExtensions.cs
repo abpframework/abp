@@ -29,7 +29,6 @@ namespace Volo.Abp
         internal static void AddCoreAbpServices(this IServiceCollection services)
         {
             services.TryAddSingleton<IModuleLoader>(new ModuleLoader());
-            services.TryAddSingleton<IModuleManager, ModuleManager>();
         }
     }
 }

@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
+using Volo.DependencyInjection;
 
 namespace Volo.Abp.Modularity
 {
-    public class ModuleManager : IModuleManager
+    public class ModuleManager : IModuleManager, ISingletonDependency
     {
         private readonly IModuleLoader _moduleLoader;
         private readonly IEnumerable<IModuleInitializer> _initializers;

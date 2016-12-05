@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Modularity;
+using Volo.DependencyInjection;
 
 namespace Volo.Abp
 {
-    public class AbpKernelModule : IAbpModule
+    public class AbpKernelModule : AbpModule
     {
-        public void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(IServiceCollection services)
         {
-            
+            services.AddAssemblyOf<AbpKernelModule>();
         }
     }
 }

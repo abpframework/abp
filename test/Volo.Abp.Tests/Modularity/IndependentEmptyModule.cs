@@ -3,11 +3,20 @@ using Volo.Abp.Modularity;
 
 namespace Volo.Abp.Tests.Modularity
 {
-    public class IndependentEmptyModule : IAbpModule
+    public class IndependentEmptyModule : AbpModule
     {
-        public void ConfigureServices(IServiceCollection services)
+        public bool ConfigureServicesIsCalled { get; set; }
+
+        public bool OnApplicationInitializeIsCalled { get; set; }
+
+        public override void ConfigureServices(IServiceCollection services)
         {
-            
+            ConfigureServicesIsCalled = true;
+        }
+
+        public override void OnApplicationInitialize()
+        {
+            OnApplicationInitializeIsCalled = true;
         }
     }
 }

@@ -23,7 +23,7 @@ namespace Volo.Abp.Modularity
             DependedModuleTypes = dependedModuleTypes;
         }
 
-        public Type[] GetDependedModuleTypes()
+        public virtual Type[] GetDependedModuleTypes()
         {
             return DependedModuleTypes;
         }

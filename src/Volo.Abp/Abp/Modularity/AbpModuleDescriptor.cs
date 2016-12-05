@@ -19,6 +19,7 @@ namespace Volo.Abp.Modularity
 
             Type = type;
             Instance = instance;
+
             Dependencies = new List<AbpModuleDescriptor>();
         }
     }

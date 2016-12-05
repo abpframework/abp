@@ -19,7 +19,13 @@ namespace Volo.DependencyInjection
 
         public static void AddAssembly(this IServiceCollection services, Assembly assembly)
         {
-            services.AddTypes(AssemblyHelper.GetAllTypes(assembly).FilterInjectableTypes().ToArray());
+            var types = AssemblyHelper.GetAllTypes(assembly).Where(t =>
+            {
+                var typeInfo = t.GetTypeInfo();
+                return typeInfo.IsClass && !typeInfo.IsAbstract && !typeInfo.IsGenericType && !typeInfo.IsDefined(typeof(DisableAutoDependencyInjectionRegistrationAttribute));
+            });
+            
+            services.AddTypes(types.ToArray());
         }
 
         public static void AddTypes(this IServiceCollection services, params Type[] types)
@@ -80,15 +86,6 @@ namespace Volo.DependencyInjection
             }
 
             return serviceTypes;
-        }
-
-        private static IEnumerable<Type> FilterInjectableTypes(this IEnumerable<Type> types)
-        {
-            return types.Where(t =>
-            {
-                var typeInfo = t.GetTypeInfo();
-                return typeInfo.IsClass && !typeInfo.IsAbstract && !typeInfo.IsGenericType;
-            });
         }
     }
 }

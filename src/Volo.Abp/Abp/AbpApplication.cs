@@ -8,7 +8,7 @@ namespace Volo.Abp
     {
         public Type StartupModuleType { get; }
 
-        private IServiceProvider _serviceProvider;
+        public IServiceProvider ServiceProvider { get; private set; }
 
         private AbpApplication(Type startupModuleType, IServiceCollection services)
         {
@@ -28,8 +28,8 @@ namespace Volo.Abp
 
         public void Initialize(IServiceProvider serviceProvider)
         {
-            _serviceProvider = serviceProvider;
-            _serviceProvider.GetRequiredService<IModuleManager>().Initialize();
+            ServiceProvider = serviceProvider;
+            ServiceProvider.GetRequiredService<IModuleManager>().Initialize();
         }
 
         public void Dispose()
