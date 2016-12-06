@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Shouldly;
 using Xunit;
 
 namespace Volo.DependencyInjection.Tests
@@ -52,6 +53,28 @@ namespace Volo.DependencyInjection.Tests
             _services.ShouldNotContain(typeof(MyServiceWithExposeList));
         }
 
+        [Fact]
+        public void AddObjectAccessor_Test()
+        {
+            //Arrange
+
+            var obj = new MyEmptyClass();
+
+            //Act
+
+            var accessor = _services.AddObjectAccessor<MyEmptyClass>();
+            accessor.Object = obj;
+
+            //Assert
+
+            _services.GetSingletonInstance<IObjectAccessor<MyEmptyClass>>().Object.ShouldBe(obj);
+            _services.GetSingletonInstance<ObjectAccessor<MyEmptyClass>>().Object.ShouldBe(obj);
+
+            var serviceProvider = _services.BuildServiceProvider();
+            serviceProvider.GetRequiredService<IObjectAccessor<MyEmptyClass>>().Object.ShouldBe(obj);
+            serviceProvider.GetRequiredService<ObjectAccessor<MyEmptyClass>>().Object.ShouldBe(obj);
+        }
+
         public class MyTransientClass : ITransientDependency
         {
             
@@ -79,6 +102,11 @@ namespace Volo.DependencyInjection.Tests
 
         [ExposeServices(typeof(IMyService1), typeof(IMyService2))]
         public class MyServiceWithExposeList : IMyService1, IMyService2, ITransientDependency
+        {
+            
+        }
+
+        public class MyEmptyClass
         {
             
         }

@@ -1,10 +1,23 @@
-﻿namespace Volo.Abp.Modularity
+﻿using System;
+
+namespace Volo.Abp.Modularity
 {
     public class DefaultModuleInitializer : IModuleInitializer
     {
+        private readonly IServiceProvider _serviceProvider;
+
+        public DefaultModuleInitializer(IServiceProvider serviceProvider)
+        {
+            _serviceProvider = serviceProvider;
+        }
+
         public void Initialize(IAbpModule module)
         {
-            (module as IOnApplicationInitialize)?.OnApplicationInitialize();
+            var context = new ApplicationInitializationContext(
+                _serviceProvider
+            );
+
+            (module as IOnApplicationInitialization)?.OnApplicationInitialization(context);
         }
     }
 }

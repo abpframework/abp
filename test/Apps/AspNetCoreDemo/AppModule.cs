@@ -1,32 +1,28 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Volo.Abp.AspNetCore;
-using Volo.Abp.AspNetCore.Builder;
+﻿using Volo.Abp.AspNetCore;
 using Volo.Abp.Modularity;
+using Volo.Abp.AspNetCore.Modularity;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Http;
 
 namespace AspNetCoreDemo
 {
     [DependsOn(typeof(AbpAspNetCoreModule))]
-    public class AppModule : IAbpModule, IConfigureAspNet
+    public class AppModule : AbpModule
     {
-        public void ConfigureServices(IServiceCollection services)
+        public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
-            
-        }
+            var app = context.GetApplicationBuilder();
 
-        public void Configure(AspNetConfigurationContext context)
-        {
-            context.LoggerFactory.AddConsole();
+            context.GetLoggerFactory().AddConsole();
 
-            if (context.Environment.IsDevelopment())
+            if (context.GetEnvironment().IsDevelopment())
             {
-                context.App.UseDeveloperExceptionPage();
+                app.UseDeveloperExceptionPage();
             }
 
-            context.App.Run(async (ctx) =>
+            app.Run(async (ctx) =>
             {
                 await ctx.Response.WriteAsync("Hello World 3!");
             });

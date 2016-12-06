@@ -6,10 +6,10 @@ namespace Microsoft.Extensions.DependencyInjection
     //TODO: Decide to move ABP?
     public static class AbpServiceCollectionExtensions
     {
-        public static void AddAbpApplication<TStartupModule>(this IServiceCollection services) //TODO: Simply rename to AddApplication?
+        public static AbpApplication AddApplication<TStartupModule>(this IServiceCollection services)
             where TStartupModule : IAbpModule
         {
-            AbpApplication.Create<TStartupModule>(services);
+            return AbpApplication.Create<TStartupModule>(services);
         }
     }
 }

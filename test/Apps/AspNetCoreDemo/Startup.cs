@@ -9,12 +9,12 @@ namespace AspNetCoreDemo
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddAbpApplication<AppModule>();
+            services.AddApplication<AppModule>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            app.InitializeAbpApplication();
+            app.InitializeApplication();
         }
     }
 }

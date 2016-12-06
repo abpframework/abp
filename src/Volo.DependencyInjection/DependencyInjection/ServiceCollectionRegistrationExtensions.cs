@@ -8,7 +8,7 @@ using Volo.Internal;
 
 namespace Volo.DependencyInjection
 {
-    public static class AbpConventionalDependencyInjectionExtensions
+    public static class ServiceCollectionRegistrationExtensions
     {
         //TODO: Check if assembly/type is added before or add TryAdd versions of them?
 
@@ -58,7 +58,7 @@ namespace Volo.DependencyInjection
                 }
             }
         }
-
+        
         private static List<Type> FindServiceTypes(Type type)
         {
             var customExposedServices = type.GetTypeInfo().GetCustomAttributes().OfType<IExposedServiceTypesProvider>().SelectMany(p => p.GetExposedServiceTypes()).ToList();

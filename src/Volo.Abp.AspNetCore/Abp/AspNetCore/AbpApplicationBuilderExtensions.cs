@@ -6,18 +6,10 @@ namespace Microsoft.AspNetCore.Builder
 {
     public static class AbpApplicationBuilderExtensions
     {
-        public static void InitializeAbpApplication(this IApplicationBuilder app) //TODO: Simply rename to InitializeApplication?
+        public static void InitializeApplication(this IApplicationBuilder app)
         {
-            var abpApplication = app.ApplicationServices.GetRequiredService<AbpApplication>();
-
-            app.ApplicationServices.GetRequiredService<ApplicationBuilderAccessor>().App = app;
-
-            abpApplication.Initialize(app.ApplicationServices);
+            app.ApplicationServices.GetRequiredService<ObjectAccessor<IApplicationBuilder>>().Object = app;
+            app.ApplicationServices.GetRequiredService<AbpApplication>().Initialize(app.ApplicationServices);
         }
-    }
-
-    public class ApplicationBuilderAccessor : ISingletonDependency
-    {
-        public IApplicationBuilder App { get; set; }
     }
 }
