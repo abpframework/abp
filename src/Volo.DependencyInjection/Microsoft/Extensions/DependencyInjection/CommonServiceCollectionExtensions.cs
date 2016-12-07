@@ -1,8 +1,8 @@
 using System;
 using System.Linq;
-using Microsoft.Extensions.DependencyInjection;
+using Volo.DependencyInjection;
 
-namespace Volo.DependencyInjection
+namespace Microsoft.Extensions.DependencyInjection
 {
     public static class CommonServiceCollectionExtensions
     {

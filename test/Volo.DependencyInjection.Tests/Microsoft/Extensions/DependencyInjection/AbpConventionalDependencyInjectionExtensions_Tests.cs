@@ -1,8 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Shouldly;
+﻿using Shouldly;
+using Volo.DependencyInjection;
 using Xunit;
 
-namespace Volo.DependencyInjection.Tests
+namespace Microsoft.Extensions.DependencyInjection
 {
     public class AbpConventionalDependencyInjectionExtensions_Tests
     {

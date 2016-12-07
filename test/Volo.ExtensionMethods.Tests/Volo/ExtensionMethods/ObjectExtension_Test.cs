@@ -2,7 +2,7 @@
 using Shouldly;
 using Xunit;
 
-namespace Volo.ExtensionMethods.Tests
+namespace Volo.ExtensionMethods
 {
     public class ObjectExtensions_Tests
     {

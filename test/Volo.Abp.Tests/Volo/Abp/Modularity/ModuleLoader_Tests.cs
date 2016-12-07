@@ -1,9 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
-using Volo.Abp.Modularity;
 using Xunit;
 
-namespace Volo.Abp.Tests.Modularity
+namespace Volo.Abp.Modularity
 {
     public class ModuleLoader_Tests
     {

@@ -3,27 +3,30 @@ using System.Collections.Generic;
 
 namespace Volo.Abp.MultiTenancy
 {
-    public interface ICurrentTenantAccessor
+    public interface ITenantInfo
     {
         Guid Id { get; }
 
         string Name { get; }
     }
 
-    public class CurrentTenantAccessor : ICurrentTenantAccessor
+    public interface IMultiTenancyManager
     {
-        public Guid Id => GetTenantId();
+        ITenantInfo CurrentTenant { get; }
+    }
 
-        public string Name { get; }
+    public class MultiTenancyManager : IMultiTenancyManager
+    {
+        public ITenantInfo CurrentTenant => GetCurrentTenant();
 
         private readonly IEnumerable<ICurrentTenantResolver> _currentTenantResolvers;
 
-        public CurrentTenantAccessor(IEnumerable<ICurrentTenantResolver> currentTenantResolvers)
+        public MultiTenancyManager(IEnumerable<ICurrentTenantResolver> currentTenantResolvers)
         {
             _currentTenantResolvers = currentTenantResolvers;
         }
 
-        public virtual Guid GetTenantId()
+        public virtual ITenantInfo GetCurrentTenant()
         {
             throw new NotImplementedException();
         }

@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Microsoft.Extensions.DependencyInjection;
+using Volo.DependencyInjection;
 using Volo.ExtensionMethods;
 using Volo.Internal;
 
-namespace Volo.DependencyInjection
+namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceCollectionRegistrationExtensions
     {

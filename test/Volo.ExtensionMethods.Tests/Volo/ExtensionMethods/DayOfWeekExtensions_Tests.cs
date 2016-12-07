@@ -2,7 +2,7 @@ using System;
 using Shouldly;
 using Xunit;
 
-namespace Volo.ExtensionMethods.Tests
+namespace Volo.ExtensionMethods
 {
     public class DayOfWeekExtensions_Tests
     {

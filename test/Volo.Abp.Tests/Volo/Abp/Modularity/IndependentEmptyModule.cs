@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.Modularity;
 
-namespace Volo.Abp.Tests.Modularity
+namespace Volo.Abp.Modularity
 {
     public class IndependentEmptyModule : AbpModule
     {

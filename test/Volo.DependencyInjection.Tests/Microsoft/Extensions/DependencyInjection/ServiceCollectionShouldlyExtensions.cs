@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Linq;
-using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 
-namespace Volo.DependencyInjection.Tests
+namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceCollectionShouldlyExtensions
     {
