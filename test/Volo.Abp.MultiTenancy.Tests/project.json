@@ -5,7 +5,7 @@
 
   "dependencies": {
     "AbpTestBase": "1.0.0-*",
-    "Volo.DependencyInjection": "1.0.0-*"
+    "Volo.Abp.MultiTenancy": "1.0.0-*"
   },
 
   "frameworks": {
