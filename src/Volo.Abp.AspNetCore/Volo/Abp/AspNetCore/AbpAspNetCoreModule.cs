@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Modularity;
-using Volo.DependencyInjection;
 
 namespace Volo.Abp.AspNetCore
 {
