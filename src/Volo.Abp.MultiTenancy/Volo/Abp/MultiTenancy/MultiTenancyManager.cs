@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using Volo.DependencyInjection;
 
 namespace Volo.Abp.MultiTenancy
 {
-    public class MultiTenancyManager : IMultiTenancyManager
+    public class MultiTenancyManager : IMultiTenancyManager, IScopedDependency
     {
         public TenantInfo CurrentTenant => GetCurrentTenant();
 

@@ -1,0 +1,23 @@
+﻿{
+  "version": "1.0.0-*",
+
+  "testRunner": "xunit",
+
+  "dependencies": {
+    "AbpTestBase": "1.0.0-*",
+    "Volo.Abp.AspNetCore.MultiTenancy": "1.0.0-*",
+    "Microsoft.AspNetCore.TestHost": "1.1.0",
+    "Microsoft.AspNetCore.Routing.Abstractions": "1.1.0"
+  },
+
+  "frameworks": {
+    "netcoreapp1.1": {
+      "dependencies": {
+        "Microsoft.NETCore.App": {
+          "type": "platform",
+          "version": "1.1.0"
+        }
+      }
+    }
+  }
+}
