@@ -1,7 +1,11 @@
+using System;
+
 namespace Volo.Abp.MultiTenancy
 {
     public interface IMultiTenancyManager
     {
-        ITenantInfo CurrentTenant { get; }
+        TenantInfo CurrentTenant { get; }
+
+        IDisposable ChangeTenant(TenantInfo tenantInfo);
     }
 }

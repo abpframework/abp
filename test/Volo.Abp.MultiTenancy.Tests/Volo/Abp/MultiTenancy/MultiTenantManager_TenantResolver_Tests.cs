@@ -1,4 +1,5 @@
 ﻿using System;
+using NSubstitute;
 using Shouldly;
 using Xunit;
 
@@ -11,9 +12,9 @@ namespace Volo.Abp.MultiTenancy
         {
             //Arrange
 
-            var manager = new MultiTenancyManager(new ITenantResolver[0]);
+            var manager = new MultiTenancyManager(Substitute.For<IAmbientTenantAccessor>(), new ITenantResolver[0]);
 
-            //Act
+            //Assert
 
             manager.CurrentTenant.ShouldBeNull();
         }
@@ -25,9 +26,7 @@ namespace Volo.Abp.MultiTenancy
 
             var fakeTenant = new TenantInfo(Guid.NewGuid().ToString(), "acme");
 
-            //Act
-
-            var manager = new MultiTenancyManager(new[]
+            var manager = new MultiTenancyManager(Substitute.For<IAmbientTenantAccessor>(), new[]
             {
                 new TenantResolverAction(context =>
                 {
@@ -49,13 +48,11 @@ namespace Volo.Abp.MultiTenancy
 
             var fakeTenant = new TenantInfo(Guid.NewGuid().ToString(), "acme");
 
-            //Act
-
-            var manager = new MultiTenancyManager(new[]
+            var manager = new MultiTenancyManager(Substitute.For<IAmbientTenantAccessor>(), new[]
             {
                 new TenantResolverAction(context =>
                 {
-                    context.Tenant = new TenantInfo(Guid.NewGuid().ToString(), "skipped-tenant");
+                    context.Tenant = new TenantInfo(Guid.NewGuid().ToString(), "skipped-tenant-1");
                 }),
                 new TenantResolverAction(context =>
                 {
@@ -64,7 +61,7 @@ namespace Volo.Abp.MultiTenancy
                 }),
                 new TenantResolverAction(context =>
                 {
-                    context.Tenant = new TenantInfo(Guid.NewGuid().ToString(), "skipped-tenant");
+                    context.Tenant = new TenantInfo(Guid.NewGuid().ToString(), "skipped-tenant-2");
                     context.Handled = true;
                 })
             });
@@ -72,6 +69,37 @@ namespace Volo.Abp.MultiTenancy
             //Assert
 
             manager.CurrentTenant.ShouldBe(fakeTenant);
+        }
+
+        [Fact]
+        public void Should_Get_Ambient_Tenant_If_Changed()
+        {
+            //Arrange
+
+            var oldTenant = new TenantInfo(Guid.NewGuid().ToString(), "old-tenant");
+
+            var manager = new MultiTenancyManager(Substitute.For<IAmbientTenantAccessor>(), new[]
+            {
+                new TenantResolverAction(context =>
+                {
+                    context.Tenant = oldTenant;
+                    context.Handled = true;
+                })
+            });
+
+            manager.CurrentTenant.ShouldBe(oldTenant);
+
+            //Act
+
+            var overridedTenant = new TenantInfo(Guid.NewGuid().ToString(), "overrided-tenant");
+            using (manager.ChangeTenant(overridedTenant))
+            {
+                //Assert
+                manager.CurrentTenant.ShouldBe(overridedTenant);
+            }
+
+            //Assert
+            manager.CurrentTenant.ShouldBe(oldTenant);
         }
     }
 }
