@@ -27,7 +27,7 @@ namespace Volo.ExtensionMethods.Collections.Generic
         }
 
         /// <summary>
-        /// Sort a list by a topological sorting, which consider their  dependencies
+        /// Sort a list by a topological sorting, which consider their dependencies.
         /// </summary>
         /// <typeparam name="T">The type of the members of values.</typeparam>
         /// <param name="source">A list of objects to sort</param>
