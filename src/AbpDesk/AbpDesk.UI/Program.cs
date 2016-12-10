@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using Microsoft.AspNetCore.Hosting;
 
-namespace AspNetCoreDemo
+namespace AbpDesk
 {
     public class Program
     {

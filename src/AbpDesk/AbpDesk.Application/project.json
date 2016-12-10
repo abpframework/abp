@@ -1,0 +1,15 @@
+﻿{
+  "version": "1.0.0-*",
+
+  "dependencies": {
+    "AbpDesk.Application.Contracts": "1.0.0-*",
+    "AbpDesk.Domain": "1.0.0-*",
+    "NETStandard.Library": "1.6.1"
+  },
+
+  "frameworks": {
+    "netstandard1.6": {
+      "imports": "dnxcore50"
+    }
+  }
+}

@@ -1,12 +1,12 @@
-﻿using Volo.Abp.AspNetCore;
-using Volo.Abp.Modularity;
-using Volo.Abp.AspNetCore.Modularity;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using Volo.Abp.AspNetCore;
+using Volo.Abp.AspNetCore.Modularity;
+using Volo.Abp.Modularity;
 
-namespace AspNetCoreDemo
+namespace AbpDesk
 {
     [DependsOn(typeof(AbpAspNetCoreModule))]
     public class AppModule : AbpModule

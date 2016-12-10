@@ -8,7 +8,8 @@
     "Microsoft.AspNetCore.Server.IISIntegration": "1.1.0",
     "Microsoft.AspNetCore.Server.Kestrel": "1.1.0",
     "Microsoft.Extensions.Logging.Console": "1.1.0",
-    "Volo.Abp.AspNetCore": "1.0.0-*"
+    "Volo.Abp.AspNetCore": "1.0.0-*",
+    "AbpDesk.Application.Contracts": "1.0.0-*"
   },
 
   "tools": {
