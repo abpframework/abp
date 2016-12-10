@@ -5,6 +5,9 @@
   },
 
   "dependencies": {
+    "AbpDesk.Application": "1.0.0-*",
+    "AbpDesk.Application.Contracts": "1.0.0-*",
+    "AbpDesk.EntityFrameworkCore": "1.0.0-*",
     "Microsoft.NETCore.App": {
       "type": "platform",
       "version": "1.1.0"

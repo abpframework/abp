@@ -27,5 +27,10 @@ namespace Volo.Abp.Application.Services.Dtos
         {
             Id = id;
         }
+
+        public override string ToString()
+        {
+            return $"[{GetType().Name}] Id = {Id}";
+        }
     }
 }
