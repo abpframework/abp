@@ -6,7 +6,8 @@ namespace Volo.Abp.Domain.Repositories
 {
     //TODO: Didn't get all members from ABP 1.x
 
-    public interface IRepository<TEntity, TPrimaryKey> : IRepositoryMarker where TEntity : class, IEntity<TPrimaryKey>
+    public interface IRepository<TEntity, TPrimaryKey> : IRepositoryMarker 
+        where TEntity : class, IEntity<TPrimaryKey>
     {
         /// <summary>
         /// Used to get all entities.
