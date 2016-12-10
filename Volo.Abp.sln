@@ -52,6 +52,8 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Volo.Abp.AspNetCore.MultiTe
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Volo.Abp.AspNetCore.TestBase", "src\Volo.Abp.AspNetCore.TestBase\Volo.Abp.AspNetCore.TestBase.xproj", "{DDEC5D74-212F-41BD-974C-4B4E88E574E1}"
 EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Volo.Abp.EntityFrameworkCore", "src\Volo.Abp.EntityFrameworkCore\Volo.Abp.EntityFrameworkCore.xproj", "{A1AE63E9-0CF4-4AFB-A584-65D826DEA3CB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -118,6 +120,10 @@ Global
 		{DDEC5D74-212F-41BD-974C-4B4E88E574E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DDEC5D74-212F-41BD-974C-4B4E88E574E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DDEC5D74-212F-41BD-974C-4B4E88E574E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1AE63E9-0CF4-4AFB-A584-65D826DEA3CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1AE63E9-0CF4-4AFB-A584-65D826DEA3CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1AE63E9-0CF4-4AFB-A584-65D826DEA3CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1AE63E9-0CF4-4AFB-A584-65D826DEA3CB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -143,5 +149,6 @@ Global
 		{7CC7946B-E026-4F66-8D4F-4F78F4801D43} = {4C753F64-0C93-4D65-96C2-A40893AFC1E8}
 		{2C282467-2CD5-4750-BE1F-CA8BD8ECC6EA} = {37087D1B-3693-4E96-983D-A69F210BDE53}
 		{DDEC5D74-212F-41BD-974C-4B4E88E574E1} = {4C753F64-0C93-4D65-96C2-A40893AFC1E8}
+		{A1AE63E9-0CF4-4AFB-A584-65D826DEA3CB} = {4C753F64-0C93-4D65-96C2-A40893AFC1E8}
 	EndGlobalSection
 EndGlobal
