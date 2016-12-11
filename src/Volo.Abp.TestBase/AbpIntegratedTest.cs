@@ -7,7 +7,6 @@ namespace Volo.Abp.TestBase
     public class AbpIntegratedTest<TStartupModule> : IDisposable
         where TStartupModule : IAbpModule
     {
-
         protected AbpApplication Application { get; }
 
         protected IServiceProvider ServiceProvider => Application.ServiceProvider;

@@ -18,7 +18,7 @@ namespace Volo.Abp.Domain.Repositories
 
         public virtual TEntity Get(TPrimaryKey id)
         {
-            var entity = FirstOrDefault(id);
+            var entity = Find(id);
             if (entity == null)
             {
                 throw new EntityNotFoundException(typeof(TEntity), id);
@@ -32,11 +32,11 @@ namespace Volo.Abp.Domain.Repositories
             return Task.FromResult(Get(id));
         }
 
-        public abstract TEntity FirstOrDefault(TPrimaryKey id);
+        public abstract TEntity Find(TPrimaryKey id);
 
-        public virtual Task<TEntity> FirstOrDefaultAsync(TPrimaryKey id)
+        public virtual Task<TEntity> FindAsync(TPrimaryKey id)
         {
-            return Task.FromResult(FirstOrDefault(id));
+            return Task.FromResult(Find(id));
         }
 
         public abstract TEntity Insert(TEntity entity);
@@ -73,7 +73,7 @@ namespace Volo.Abp.Domain.Repositories
 
         public virtual void Delete(TPrimaryKey id)
         {
-            var entity = FirstOrDefault(id);
+            var entity = Find(id);
             if (entity == null)
             {
                 return;

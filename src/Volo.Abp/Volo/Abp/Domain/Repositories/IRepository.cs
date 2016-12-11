@@ -7,7 +7,12 @@ namespace Volo.Abp.Domain.Repositories
 {
     //TODO: Didn't get all members from ABP 1.x
 
-    public interface IRepository<TEntity, TPrimaryKey> : IRepositoryMarker, ITransientDependency
+    public interface IRepository : ITransientDependency
+    {
+
+    }
+
+    public interface IRepository<TEntity, TPrimaryKey> : IRepository
         where TEntity : class, IEntity<TPrimaryKey>
     {
         /// <summary>
@@ -41,14 +46,14 @@ namespace Volo.Abp.Domain.Repositories
         /// </summary>
         /// <param name="id">Primary key of the entity to get</param>
         /// <returns>Entity or null</returns>
-        TEntity FirstOrDefault(TPrimaryKey id);
+        TEntity Find(TPrimaryKey id);
 
         /// <summary>
         /// Gets an entity with given primary key or null if not found.
         /// </summary>
         /// <param name="id">Primary key of the entity to get</param>
         /// <returns>Entity or null</returns>
-        Task<TEntity> FirstOrDefaultAsync(TPrimaryKey id);
+        Task<TEntity> FindAsync(TPrimaryKey id);
 
         /// <summary>
         /// Inserts a new entity.

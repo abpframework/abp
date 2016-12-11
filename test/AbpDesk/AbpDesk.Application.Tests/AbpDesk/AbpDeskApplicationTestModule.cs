@@ -1,4 +1,5 @@
-﻿using AbpDesk.EntityFrameworkCore;
+﻿using System;
+using AbpDesk.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Modularity;
@@ -11,10 +12,9 @@ namespace AbpDesk
         public override void ConfigureServices(IServiceCollection services)
         {
             services.AddEntityFrameworkInMemoryDatabase();
-
             services.AddDbContext<AbpDeskDbContext>(options =>
             {
-                options.UseInMemoryDatabase();
+                options.UseInMemoryDatabase(Guid.NewGuid().ToString());
             });
         }
     }

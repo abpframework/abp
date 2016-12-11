@@ -9,7 +9,8 @@
     "Newtonsoft.Json": "9.0.1",
     "Nito.AsyncEx.Context": "1.1.0",
     "System.Runtime.Loader": "4.3.0",
-    "System.Linq.Queryable": "4.3.0" 
+    "System.Linq.Queryable": "4.3.0",
+    "Volo.Abp.ApplicationContracts": "1.0.0-*"
   },
 
   "frameworks": {

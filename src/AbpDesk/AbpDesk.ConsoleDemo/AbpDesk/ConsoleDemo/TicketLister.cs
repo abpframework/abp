@@ -1,5 +1,6 @@
 using System;
 using AbpDesk.Tickets;
+using AbpDesk.Tickets.Dtos;
 using Volo.DependencyInjection;
 
 namespace AbpDesk.ConsoleDemo
@@ -15,7 +16,7 @@ namespace AbpDesk.ConsoleDemo
 
         public void List()
         {
-            var result = _ticketAppService.GetAll();
+            var result = _ticketAppService.GetAll(new GetAllTicketsInput());
 
             foreach (var ticket in result.Items)
             {

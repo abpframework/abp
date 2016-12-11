@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -10,36 +11,32 @@ namespace Volo.Abp.Domain.Repositories
     public abstract class QueryableRepositoryBase<TEntity, TPrimaryKey> : RepositoryBase<TEntity, TPrimaryKey>, IQueryableRepository<TEntity, TPrimaryKey>
         where TEntity : class, IEntity<TPrimaryKey>
     {
-        public abstract IQueryable<TEntity> GetQueryable();
+        public virtual Type ElementType => GetQueryable().ElementType;
+
+        public virtual Expression Expression => GetQueryable().Expression;
+
+        public virtual IQueryProvider Provider => GetQueryable().Provider;
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        public IEnumerator<TEntity> GetEnumerator()
+        {
+            return GetQueryable().GetEnumerator();
+        }
+
+        protected abstract IQueryable<TEntity> GetQueryable();
 
         public override List<TEntity> GetList()
         {
             return GetQueryable().ToList();
         }
 
-        public virtual List<TEntity> GetList(Expression<Func<TEntity, bool>> predicate)
+        public override TEntity Find(TPrimaryKey id)
         {
-            return GetQueryable().Where(predicate).ToList();
-        }
-
-        public virtual Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate)
-        {
-            return Task.FromResult(GetList(predicate));
-        }
-
-        public override TEntity FirstOrDefault(TPrimaryKey id)
-        {
-            return FirstOrDefault(CreateEqualityExpressionForId(id));
-        }
-
-        public virtual TEntity FirstOrDefault(Expression<Func<TEntity, bool>> predicate)
-        {
-            return GetQueryable().FirstOrDefault(predicate);
-        }
-
-        public virtual Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate)
-        {
-            return Task.FromResult(FirstOrDefault(predicate));
+            return GetQueryable().FirstOrDefault(CreateEqualityExpressionForId(id));
         }
 
         public virtual void Delete(Expression<Func<TEntity, bool>> predicate)
@@ -59,16 +56,6 @@ namespace Volo.Abp.Domain.Repositories
         public override int Count()
         {
             return GetQueryable().Count();
-        }
-
-        public virtual int Count(Expression<Func<TEntity, bool>> predicate)
-        {
-            return GetQueryable().Count(predicate);
-        }
-
-        public virtual Task<int> CountAsync(Expression<Func<TEntity, bool>> predicate)
-        {
-            return Task.FromResult(Count(predicate));
         }
     }
 }

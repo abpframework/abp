@@ -1,5 +1,6 @@
 ﻿using AbpDesk.Models.Tickets;
 using AbpDesk.Tickets;
+using AbpDesk.Tickets.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc;
 
@@ -14,9 +15,9 @@ namespace AbpDesk.Controllers
             _ticketAppService = ticketAppService;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(GetAllTicketsInput input)
         {
-            var result = _ticketAppService.GetAll();
+            var result = _ticketAppService.GetAll(input);
 
             var model = new IndexViewModel
             {

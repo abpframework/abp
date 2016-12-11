@@ -18,10 +18,13 @@ namespace Microsoft.Extensions.DependencyInjection
             foreach (var entityType in DbContextHelper.GetEntityTypes(dbContextType))
             {
                 var primaryKeyType = EntityHelper.GetPrimaryKeyType(entityType);
+
                 var repositoryInterfaceType = typeof(IRepository<,>).MakeGenericType(entityType, primaryKeyType);
+                var queryableRepositoryInterfaceType = typeof(IQueryableRepository<,>).MakeGenericType(entityType, primaryKeyType);
                 var repositoryImplementationType = typeof(EfCoreRepository<,,>).MakeGenericType(dbContextType, entityType, primaryKeyType);
 
                 services.TryAddTransient(repositoryInterfaceType, repositoryImplementationType);
+                services.TryAddTransient(queryableRepositoryInterfaceType, repositoryImplementationType);
             }
 
             return services;

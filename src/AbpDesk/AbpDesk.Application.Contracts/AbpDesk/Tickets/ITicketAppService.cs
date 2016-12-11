@@ -6,6 +6,6 @@ namespace AbpDesk.Tickets
 {
     public interface ITicketAppService : IApplicationService
     {
-        ListResultDto<TicketDto> GetAll();
+        ListResultDto<TicketDto> GetAll(GetAllTicketsInput input);
     }
 }

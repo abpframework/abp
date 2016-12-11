@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using AbpDesk.Tickets.Dtos;
+using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Xunit;
 
@@ -18,11 +19,23 @@ namespace AbpDesk.Tickets
         {
             //Act
 
-            var result = _ticketAppService.GetAll();
+            var result = _ticketAppService.GetAll(new GetAllTicketsInput());
 
             //Assert
 
             result.Items.Count.ShouldBe(1);
+        }
+
+        [Fact]
+        public void GetAll_Filtered_Test()
+        {
+            //Act
+
+            var result = _ticketAppService.GetAll(new GetAllTicketsInput { Filter = "non-existing-text" });
+
+            //Assert
+
+            result.Items.Count.ShouldBe(0);
         }
     }
 }
