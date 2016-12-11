@@ -17,7 +17,7 @@ namespace AbpDesk.Tickets
         public ListResultDto<TicketDto> GetAll()
         {
             var tickets = _ticketRepository
-                .GetAllList()
+                .GetList()
                 .Select(t => new TicketDto { Id = t.Id, Title = t.Title, Body = t.Body })
                 .ToList();
 

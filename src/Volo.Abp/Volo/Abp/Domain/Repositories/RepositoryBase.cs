@@ -9,14 +9,23 @@ namespace Volo.Abp.Domain.Repositories
     public abstract class RepositoryBase<TEntity, TPrimaryKey> : IRepository<TEntity, TPrimaryKey>
         where TEntity : class, IEntity<TPrimaryKey>
     {
-        public abstract List<TEntity> GetAllList();
+        public abstract List<TEntity> GetList();
 
-        public virtual Task<List<TEntity>> GetAllListAsync()
+        public virtual Task<List<TEntity>> GetListAsync()
         {
-            return Task.FromResult(GetAllList());
+            return Task.FromResult(GetList());
         }
 
-        public abstract TEntity Get(TPrimaryKey id);
+        public virtual TEntity Get(TPrimaryKey id)
+        {
+            var entity = FirstOrDefault(id);
+            if (entity == null)
+            {
+                throw new EntityNotFoundException(typeof(TEntity), id);
+            }
+
+            return entity;
+        }
 
         public virtual Task<TEntity> GetAsync(TPrimaryKey id)
         {
@@ -62,7 +71,16 @@ namespace Volo.Abp.Domain.Repositories
             return Task.CompletedTask;
         }
 
-        public abstract void Delete(TPrimaryKey id);
+        public virtual void Delete(TPrimaryKey id)
+        {
+            var entity = FirstOrDefault(id);
+            if (entity == null)
+            {
+                return;
+            }
+
+            Delete(entity);
+        }
 
         public virtual Task DeleteAsync(TPrimaryKey id)
         {

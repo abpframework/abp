@@ -14,21 +14,21 @@ namespace Volo.Abp.Domain.Repositories
         /// Used to get a IQueryable that is used to retrieve entities from entire table.
         /// </summary>
         /// <returns>IQueryable to be used to select entities from database</returns>
-        IQueryable<TEntity> GetAll();
+        IQueryable<TEntity> GetQueryable();
 
         /// <summary>
         /// Used to get all entities based on given <paramref name="predicate"/>.
         /// </summary>
         /// <param name="predicate">A condition to filter entities</param>
         /// <returns>List of all entities</returns>
-        List<TEntity> GetAllList(Expression<Func<TEntity, bool>> predicate);
+        List<TEntity> GetList(Expression<Func<TEntity, bool>> predicate);
 
         /// <summary>
         /// Used to get all entities based on given <paramref name="predicate"/>.
         /// </summary>
         /// <param name="predicate">A condition to filter entities</param>
         /// <returns>List of all entities</returns>
-        Task<List<TEntity>> GetAllListAsync(Expression<Func<TEntity, bool>> predicate);
+        Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate);
 
         /// <summary>
         /// Gets an entity with given given predicate or null if not found.

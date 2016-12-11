@@ -14,13 +14,13 @@ namespace Volo.Abp.Domain.Repositories
         /// Used to get all entities.
         /// </summary>
         /// <returns>List of all entities</returns>
-        List<TEntity> GetAllList();
+        List<TEntity> GetList();
 
         /// <summary>
         /// Used to get all entities.
         /// </summary>
         /// <returns>List of all entities</returns>
-        Task<List<TEntity>> GetAllListAsync();
+        Task<List<TEntity>> GetListAsync();
 
         /// <summary>
         /// Gets an entity with given primary key.
