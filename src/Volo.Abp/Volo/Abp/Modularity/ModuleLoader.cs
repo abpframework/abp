@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Modularity.PlugIns;
 using Volo.ExtensionMethods.Collections.Generic;
 
 namespace Volo.Abp.Modularity
@@ -18,22 +18,32 @@ namespace Volo.Abp.Modularity
             _modules = new List<AbpModuleDescriptor>();
         }
 
-        public virtual void LoadAll(IServiceCollection services, Type startupModuleType)
+        public virtual void LoadAll(IServiceCollection services, Type startupModuleType, PlugInSourceList plugInSources)
         {
             if (_modules.Any())
             {
                 throw new InvalidOperationException($"{nameof(LoadAll)} should be called only once!");
             }
 
-            FillModules(services, startupModuleType);
+            FillModules(services, startupModuleType, plugInSources);
             SetModuleDependencies();
             SortByDependency(startupModuleType);
             ConfigureServices(services);
         }
 
-        private void FillModules(IServiceCollection services, Type startupModuleType)
+        private void FillModules(IServiceCollection services, Type startupModuleType, PlugInSourceList plugInSources)
         {
-            foreach (var moduleType in FindAllModuleTypes(startupModuleType).Distinct())
+            //All modules starting from the startup module
+            var moduleTypes = AbpModuleFinder.FindAllModuleTypes(startupModuleType);
+
+            //Add plugin modules
+            foreach (var moduleType in plugInSources.GetAllModules())
+            {
+                moduleTypes.AddIfNotContains(moduleType);
+            }
+
+            //Create all modules
+            foreach (var moduleType in moduleTypes)
             {
                 _modules.Add(CreateModuleDescriptor(services, moduleType));
             }
@@ -54,20 +64,12 @@ namespace Volo.Abp.Modularity
             _modules.MoveItem(m => m.Type == startupModuleType, _modules.Count - 1);
         }
 
-        protected virtual IEnumerable<Type> FindAllModuleTypes(Type startupModuleType)
-        {
-            var moduleTypes = new List<Type>();
-            AddModuleAndDependenciesResursively(moduleTypes, startupModuleType);
-            moduleTypes.AddIfNotContains(typeof(AbpKernelModule));
-            return moduleTypes;
-        }
-
         protected virtual AbpModuleDescriptor CreateModuleDescriptor(IServiceCollection services, Type moduleType)
         {
             return new AbpModuleDescriptor(moduleType, CreateAndRegisterModule(services, moduleType));
         }
 
-        private IAbpModule CreateAndRegisterModule(IServiceCollection services, Type moduleType)
+        protected virtual IAbpModule CreateAndRegisterModule(IServiceCollection services, Type moduleType)
         {
             var module = (IAbpModule) Activator.CreateInstance(moduleType);
             services.AddSingleton(moduleType, module);
@@ -81,49 +83,10 @@ namespace Volo.Abp.Modularity
                 module.Instance.ConfigureServices(services);
             }
         }
-
-        protected virtual void AddModuleAndDependenciesResursively(List<Type> moduleTypes, Type moduleType)
-        {
-            CheckAbpModuleType(moduleType);
-
-            if (moduleTypes.Contains(moduleType))
-            {
-                return;
-            }
-
-            moduleTypes.Add(moduleType);
-
-            foreach (var dependedModuleType in FindDependedModuleTypes(moduleType))
-            {
-                AddModuleAndDependenciesResursively(moduleTypes, dependedModuleType);
-            }
-        }
-
-        protected virtual List<Type> FindDependedModuleTypes(Type moduleType)
-        {
-            CheckAbpModuleType(moduleType);
-
-            var dependencies = new List<Type>();
-
-            var dependencyDescriptors = moduleType
-                .GetTypeInfo()
-                .GetCustomAttributes()
-                .OfType<IDependedModuleTypesProvider>();
-
-            foreach (var descriptor in dependencyDescriptors)
-            {
-                foreach (var dependedModuleType in descriptor.GetDependedModuleTypes())
-                {
-                    dependencies.AddIfNotContains(dependedModuleType);
-                }
-            }
-
-            return dependencies;
-        }
-
+        
         protected virtual void SetModuleDependencies(AbpModuleDescriptor module)
         {
-            foreach (var dependedModuleType in FindDependedModuleTypes(module.Type))
+            foreach (var dependedModuleType in AbpModuleFinder.FindDependedModuleTypes(module.Type))
             {
                 var dependedModule = _modules.FirstOrDefault(m => m.Type == dependedModuleType);
                 if (dependedModule == null)
@@ -133,25 +96,6 @@ namespace Volo.Abp.Modularity
 
                 module.Dependencies.AddIfNotContains(dependedModule);
             }
-        }
-
-        protected static void CheckAbpModuleType(Type moduleType)
-        {
-            if (!IsAbpModule(moduleType))
-            {
-                throw new ArgumentException("Given type is not an ABP module: " + moduleType.AssemblyQualifiedName);
-            }
-        }
-
-        protected static bool IsAbpModule(Type type)
-        {
-            var typeInfo = type.GetTypeInfo();
-
-            return
-                typeInfo.IsClass &&
-                !typeInfo.IsAbstract &&
-                !typeInfo.IsGenericType &&
-                typeof(IAbpModule).GetTypeInfo().IsAssignableFrom(type);
         }
     }
 }
