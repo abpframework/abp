@@ -1,0 +1,5 @@
+﻿ul.ticket-list {
+  list-style: none; }
+  ul.ticket-list li {
+    border-bottom: 1px solid #d0d0d0; }
+

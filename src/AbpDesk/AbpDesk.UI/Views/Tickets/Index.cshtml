@@ -1,0 +1,15 @@
+﻿@model AbpDesk.Models.Tickets.IndexViewModel
+
+<link rel="stylesheet" type="text/css" href="~/global-styles.css"/>
+
+<h2>Tickets</h2>
+
+<ul class="ticket-list">
+    @foreach (var ticket in Model.Tickets)
+    {
+        <li data-entity-id="@ticket.Id">
+            <h3>@ticket.Title</h3>
+            <p>@ticket.Body</p>
+        </li>
+    }
+</ul>

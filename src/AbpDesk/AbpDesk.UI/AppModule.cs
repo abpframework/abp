@@ -1,16 +1,24 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using AbpDesk.EntityFrameworkCore;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Volo.Abp.AspNetCore;
 using Volo.Abp.AspNetCore.Modularity;
+using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Modularity;
 
 namespace AbpDesk
 {
-    [DependsOn(typeof(AbpAspNetCoreModule))]
+    //TODO: Rename project to AbpDesk.Web.Mvc
+
+    [DependsOn(typeof(AbpAspNetCoreMvcModule), typeof(AbpDeskApplicationModule), typeof(AbpDeskEntityFrameworkCoreModule))]
     public class AppModule : AbpModule
     {
+        public override void ConfigureServices(IServiceCollection services)
+        {
+            services.AddMvc();
+        }
+
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             var app = context.GetApplicationBuilder();
@@ -22,9 +30,13 @@ namespace AbpDesk
                 app.UseDeveloperExceptionPage();
             }
 
-            app.Run(async (ctx) =>
+            app.UseStaticFiles();
+
+            app.UseMvc(routes =>
             {
-                await ctx.Response.WriteAsync("Hello World 3!");
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }
