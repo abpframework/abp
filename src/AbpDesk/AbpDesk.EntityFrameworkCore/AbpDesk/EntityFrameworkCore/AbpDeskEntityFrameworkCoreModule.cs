@@ -16,10 +16,10 @@ namespace AbpDesk.EntityFrameworkCore
 
             services.AddTransient<IRepository<Ticket, int>, EfCoreRepository<AbpDeskDbContext, Ticket, int>>();
 
-            services.AddDbContext<AbpDeskDbContext>(options =>
-            {
-                options.UseSqlServer("Server=localhost;Database=AbpDesk;Trusted_Connection=True;");
-            });
+            //services.AddDbContext<AbpDeskDbContext>(options =>
+            //{
+            //    options.UseSqlServer("Server=localhost;Database=AbpDesk;Trusted_Connection=True;");
+            //});
         }
     }
 }
