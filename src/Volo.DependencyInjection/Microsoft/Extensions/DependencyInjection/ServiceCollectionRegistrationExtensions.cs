@@ -11,6 +11,7 @@ namespace Microsoft.Extensions.DependencyInjection
     public static class ServiceCollectionRegistrationExtensions
     {
         //TODO: Check if assembly/type is added before or add TryAdd versions of them?
+        //TODO: Return IServiceCollection from all methods
 
         public static void AddAssemblyOf<T>(this IServiceCollection services)
         {

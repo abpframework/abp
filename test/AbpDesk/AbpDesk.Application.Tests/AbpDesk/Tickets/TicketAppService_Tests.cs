@@ -22,7 +22,7 @@ namespace AbpDesk.Tickets
 
             //Assert
 
-            result.Items.Count.ShouldBeGreaterThan(0);
+            result.Items.Count.ShouldBe(1);
         }
     }
 }

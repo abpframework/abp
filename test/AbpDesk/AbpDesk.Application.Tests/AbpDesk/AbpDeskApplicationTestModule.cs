@@ -11,6 +11,7 @@ namespace AbpDesk
         public override void ConfigureServices(IServiceCollection services)
         {
             services.AddEntityFrameworkInMemoryDatabase();
+
             services.AddDbContext<AbpDeskDbContext>(options =>
             {
                 options.UseInMemoryDatabase();

@@ -1,6 +1,7 @@
 ﻿using AbpDesk.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.AspNetCore.Modularity;
@@ -9,13 +10,18 @@ using Volo.Abp.Modularity;
 
 namespace AbpDesk
 {
-    //TODO: Rename project to AbpDesk.Web.Mvc
+    //TODO: Rename project to AbpDesk.Web.Mvc & rename to AbpDeskWebAppModule
 
     [DependsOn(typeof(AbpAspNetCoreMvcModule), typeof(AbpDeskApplicationModule), typeof(AbpDeskEntityFrameworkCoreModule))]
     public class AppModule : AbpModule
     {
         public override void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<AbpDeskDbContext>(options =>
+            {
+                options.UseSqlServer("Server=localhost;Database=AbpDesk;Trusted_Connection=True;");
+            });
+
             services.AddMvc();
         }
 

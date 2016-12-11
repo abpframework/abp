@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Entities;
+using Volo.DependencyInjection;
 
 namespace Volo.Abp.Domain.Repositories
 {
     //TODO: Didn't get all members from ABP 1.x
 
-    public interface IRepository<TEntity, TPrimaryKey> : IRepositoryMarker 
+    public interface IRepository<TEntity, TPrimaryKey> : IRepositoryMarker, ITransientDependency
         where TEntity : class, IEntity<TPrimaryKey>
     {
         /// <summary>

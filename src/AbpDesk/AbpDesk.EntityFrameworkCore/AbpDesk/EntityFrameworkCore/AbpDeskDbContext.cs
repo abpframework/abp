@@ -6,6 +6,8 @@ namespace AbpDesk.EntityFrameworkCore
 {
     public class AbpDeskDbContext : AbpDbContext<AbpDeskDbContext>
     {
+        public DbSet<Ticket> Tickets { get; set; }
+
         public AbpDeskDbContext(DbContextOptions<AbpDeskDbContext> options) 
             : base(options)
         {
