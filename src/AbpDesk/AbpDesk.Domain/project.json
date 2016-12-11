@@ -3,6 +3,7 @@
 
   "dependencies": {
     "NETStandard.Library": "1.6.1",
+    "System.ComponentModel.Annotations": "4.3.0",
     "Volo.Abp": "1.0.0-*"
   },
 

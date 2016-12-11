@@ -1,13 +1,15 @@
 ﻿using AbpDesk.Tickets;
 using Microsoft.EntityFrameworkCore;
+using Volo.Abp.EntityFrameworkCore;
 
 namespace AbpDesk.EntityFrameworkCore
 {
-    public class AbpDeskDbContext : DbContext
+    public class AbpDeskDbContext : AbpDbContext<AbpDeskDbContext>
     {
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public AbpDeskDbContext(DbContextOptions<AbpDeskDbContext> options) 
+            : base(options)
         {
-            optionsBuilder.UseSqlServer("Server=localhost;Database=AbpDesk;Trusted_Connection=True;");
+
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

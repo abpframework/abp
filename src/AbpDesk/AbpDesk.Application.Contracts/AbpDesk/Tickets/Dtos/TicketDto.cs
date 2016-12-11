@@ -7,5 +7,10 @@ namespace AbpDesk.Tickets.Dtos
         public string Title { get; set; }
 
         public string Body { get; set; }
+
+        public override string ToString()
+        {
+            return $"{base.ToString()}, Title = {Title}, Body = {Body}";
+        }
     }
 }

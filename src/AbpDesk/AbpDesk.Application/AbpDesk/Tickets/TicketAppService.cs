@@ -1,17 +1,27 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
 using AbpDesk.Tickets.Dtos;
 using Volo.Abp.Application.Services.Dtos;
+using Volo.Abp.Domain.Repositories;
 
 namespace AbpDesk.Tickets
 {
     public class TicketAppService : ITicketAppService
     {
+        private readonly IRepository<Ticket, int> _ticketRepository;
+
+        public TicketAppService(IRepository<Ticket, int> ticketRepository)
+        {
+            _ticketRepository = ticketRepository;
+        }
+
         public ListResultDto<TicketDto> GetAll()
         {
-            return new ListResultDto<TicketDto>(new List<TicketDto>
-            {
-                new TicketDto {Id = 1, Title = "Ticket 1 Title", Body = "Ticket 1 Body" }
-            });
+            var tickets = _ticketRepository
+                .GetAllList()
+                .Select(t => new TicketDto { Id = t.Id, Title = t.Title, Body = t.Body })
+                .ToList();
+
+            return new ListResultDto<TicketDto>(tickets);
         }
     }
 }

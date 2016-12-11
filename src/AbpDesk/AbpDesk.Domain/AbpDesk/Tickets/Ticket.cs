@@ -1,4 +1,7 @@
-﻿using Volo.Abp.Domain.Entities;
+﻿using System.ComponentModel.DataAnnotations;
+using JetBrains.Annotations;
+using Volo;
+using Volo.Abp.Domain.Entities;
 
 namespace AbpDesk.Tickets
 {
@@ -8,8 +11,11 @@ namespace AbpDesk.Tickets
 
         public const int MaxBodyLength = 64 * 1024; //64K
 
+        [Required]
+        [MaxLength(MaxTitleLength)]
         public string Title { get; set; }
 
+        [MaxLength(MaxBodyLength)]
         public string Body { get; set; }
 
         private Ticket()
@@ -17,8 +23,10 @@ namespace AbpDesk.Tickets
             
         }
 
-        public Ticket(string title, string body)
+        public Ticket([NotNull] string title, string body)
         {
+            Check.NotNull(title, nameof(title));
+
             Title = title;
             Body = body;
         }
