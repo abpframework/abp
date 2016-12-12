@@ -5,8 +5,6 @@ using Volo.DependencyInjection;
 
 namespace Volo.Abp.Domain.Repositories
 {
-    //TODO: Didn't get all members from ABP 1.x
-
     public interface IRepository : ITransientDependency
     {
 
