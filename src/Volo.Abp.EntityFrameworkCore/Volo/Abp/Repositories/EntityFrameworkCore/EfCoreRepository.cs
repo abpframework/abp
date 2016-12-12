@@ -46,6 +46,8 @@ namespace Volo.Abp.Repositories.EntityFrameworkCore
             return entity;
         }
 
+        //TODO: Find by multiple primary key
+
         public override TEntity Find(TPrimaryKey id)
         {
             return DbSet.Find(id);

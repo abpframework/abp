@@ -10,10 +10,10 @@ using Volo.Abp.Modularity;
 
 namespace AbpDesk
 {
-    //TODO: Rename project to AbpDesk.Web.Mvc & rename to AbpDeskWebAppModule
+    //TODO: Rename project to AbpDesk.Web.Mvc
 
     [DependsOn(typeof(AbpAspNetCoreMvcModule), typeof(AbpDeskApplicationModule), typeof(AbpDeskEntityFrameworkCoreModule))]
-    public class AppModule : AbpModule
+    public class AbpDeskWebAppModule : AbpModule
     {
         public override void ConfigureServices(IServiceCollection services)
         {
