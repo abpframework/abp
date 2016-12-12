@@ -12,15 +12,17 @@ namespace Volo.Abp.Repositories.EntityFrameworkCore
         where TDbContext : AbpDbContext<TDbContext>
         where TEntity : class, IEntity<TPrimaryKey>
     {
-        public virtual TDbContext DbContext { get; }
-        
+        public virtual TDbContext DbContext => _dbContextProvider.GetDbContext();
+
         public virtual DbSet<TEntity> DbSet => DbContext.Set<TEntity>();
 
         DbContext IEfCoreRepository.DbContext => DbContext;
 
-        public EfCoreRepository(TDbContext dbContext)
+        private readonly IDbContextProvider<TDbContext> _dbContextProvider;
+
+        public EfCoreRepository(IDbContextProvider<TDbContext> dbContextProvider)
         {
-            DbContext = dbContext;
+            _dbContextProvider = dbContextProvider;
         }
 
         protected override IQueryable<TEntity> GetQueryable()
