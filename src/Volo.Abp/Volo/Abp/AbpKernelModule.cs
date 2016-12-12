@@ -7,6 +7,7 @@ namespace Volo.Abp
     {
         public override void ConfigureServices(IServiceCollection services)
         {
+            services.AddOptions();
             services.AddAssemblyOf<AbpKernelModule>();
         }
     }

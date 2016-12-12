@@ -1,11 +1,16 @@
-﻿using AbpDesk.EntityFrameworkCore;
+﻿using System.IO;
+using AbpDesk.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.AspNetCore.Modularity;
 using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.Data;
+using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 
 namespace AbpDesk
@@ -17,6 +22,18 @@ namespace AbpDesk
     {
         public override void ConfigureServices(IServiceCollection services)
         {
+            var configuration = BuildConfiguration();
+
+            services.Configure<DbConnectionOptions>(configuration);
+
+            services.Configure<AbpDbContextOptions>(options =>
+            {
+                options.Configure(context =>
+                {
+                    context.DbContextOptions.UseSqlServer(context.ConnectionString);
+                });
+            });
+
             services.AddDbContext<AbpDeskDbContext>(options =>
             {
                 options.UseSqlServer("Server=localhost;Database=AbpDesk;Trusted_Connection=True;");
@@ -44,6 +61,16 @@ namespace AbpDesk
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+        }
+
+        private static IConfigurationRoot BuildConfiguration()
+        {
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory()) //TODO: Get from IHostingEnvironment!!!
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+
+            var configuration = builder.Build();
+            return configuration;
         }
     }
 }

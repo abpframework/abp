@@ -1,6 +1,10 @@
-﻿using AbpDesk.EntityFrameworkCore;
+﻿using System.IO;
+using AbpDesk.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Data;
+using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 
 namespace AbpDesk.ConsoleDemo
@@ -10,12 +14,29 @@ namespace AbpDesk.ConsoleDemo
     {
         public override void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<AbpDeskDbContext>(options =>
+            var configuration = BuildConfiguration();
+
+            services.Configure<DbConnectionOptions>(configuration);
+
+            services.Configure<AbpDbContextOptions>(options =>
             {
-                options.UseSqlServer("Server=localhost;Database=AbpDesk;Trusted_Connection=True;");
+                options.Configure(context =>
+                {
+                    context.DbContextOptions.UseSqlServer(context.ConnectionString);
+                });
             });
 
             services.AddAssemblyOf<AbpDeskConsoleDemoModule>();
+        }
+
+        private static IConfigurationRoot BuildConfiguration()
+        {
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+
+            var configuration = builder.Build();
+            return configuration;
         }
     }
 }
