@@ -11,33 +11,35 @@ namespace Microsoft.Extensions.DependencyInjection
     public static class ServiceCollectionRegistrationExtensions
     {
         //TODO: Check if assembly/type is added before or add TryAdd versions of them?
-        //TODO: Return IServiceCollection from all methods
+        //TODO: When to use Add, when to use TryAdd? We may think to add conventional interfaces to indicate and attributes to override them.
 
-        public static void AddAssemblyOf<T>(this IServiceCollection services)
+        public static IServiceCollection AddAssemblyOf<T>(this IServiceCollection services)
         {
-            services.AddAssembly(typeof(T).GetTypeInfo().Assembly);
+            return services.AddAssembly(typeof(T).GetTypeInfo().Assembly);
         }
 
-        public static void AddAssembly(this IServiceCollection services, Assembly assembly)
+        public static IServiceCollection AddAssembly(this IServiceCollection services, Assembly assembly)
         {
             var types = AssemblyHelper.GetAllTypes(assembly).Where(t =>
             {
                 var typeInfo = t.GetTypeInfo();
-                return typeInfo.IsClass && !typeInfo.IsAbstract && !typeInfo.IsGenericType && !typeInfo.IsDefined(typeof(DisableAutoDependencyInjectionRegistrationAttribute));
+                return typeInfo.IsClass && !typeInfo.IsAbstract && !typeInfo.IsGenericType && !typeInfo.IsDefined(typeof(SkipAutoRegistrationAttribute));
             });
-            
-            services.AddTypes(types.ToArray());
+
+            return services.AddTypes(types.ToArray());
         }
 
-        public static void AddTypes(this IServiceCollection services, params Type[] types)
+        public static IServiceCollection AddTypes(this IServiceCollection services, params Type[] types)
         {
             foreach (var type in types)
             {
                 services.AddType(type);
             }
+
+            return services;
         }
 
-        public static void AddType(this IServiceCollection services, Type type)
+        public static IServiceCollection AddType(this IServiceCollection services, Type type)
         {
             //TODO: Make this code extensible, so we can add other conventions!
 
@@ -58,9 +60,11 @@ namespace Microsoft.Extensions.DependencyInjection
                     services.AddScoped(serviceType, type);
                 }
             }
+
+            return services;
         }
-        
-        private static List<Type> FindServiceTypes(Type type)
+
+        private static IEnumerable<Type> FindServiceTypes(Type type)
         {
             var customExposedServices = type.GetTypeInfo().GetCustomAttributes().OfType<IExposedServiceTypesProvider>().SelectMany(p => p.GetExposedServiceTypes()).ToList();
             if (customExposedServices.Any())
@@ -68,9 +72,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 return customExposedServices;
             }
 
-            var serviceTypes = new List<Type>();
-
-            serviceTypes.Add(type);
+            var serviceTypes = new List<Type> { type };
 
             foreach (var interfaceType in type.GetTypeInfo().GetInterfaces())
             {

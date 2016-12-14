@@ -8,7 +8,7 @@ namespace Volo.DependencyInjection
 
         public ExposeServicesAttribute(params Type[] exposedServiceTypes)
         {
-            ExposedServiceTypes = exposedServiceTypes;
+            ExposedServiceTypes = exposedServiceTypes ?? new Type[];
         }
 
         public Type[] GetExposedServiceTypes()
