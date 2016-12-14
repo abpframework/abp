@@ -1,4 +1,5 @@
 ﻿using System;
+using JetBrains.Annotations;
 
 namespace Volo.Abp.Modularity
 {
@@ -6,8 +7,10 @@ namespace Volo.Abp.Modularity
     {
         public IServiceProvider ServiceProvider { get; set; }
 
-        public ApplicationInitializationContext(IServiceProvider serviceProvider)
+        public ApplicationInitializationContext([NotNull] IServiceProvider serviceProvider)
         {
+            Check.NotNull(serviceProvider, nameof(serviceProvider));
+
             ServiceProvider = serviceProvider;
         }
     }

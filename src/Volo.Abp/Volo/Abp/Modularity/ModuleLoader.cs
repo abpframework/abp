@@ -24,7 +24,7 @@ namespace Volo.Abp.Modularity
         protected virtual void FillModules(List<AbpModuleDescriptor> modules, IServiceCollection services, Type startupModuleType, PlugInSourceList plugInSources)
         {
             //All modules starting from the startup module
-            var moduleTypes = AbpModuleFinder.FindAllModuleTypes(startupModuleType);
+            var moduleTypes = AbpModuleHelper.FindAllModuleTypes(startupModuleType);
 
             //Add plugin modules
             foreach (var moduleType in plugInSources.GetAllModules())
@@ -76,7 +76,7 @@ namespace Volo.Abp.Modularity
         
         protected virtual void SetModuleDependencies(List<AbpModuleDescriptor> modules, AbpModuleDescriptor module)
         {
-            foreach (var dependedModuleType in AbpModuleFinder.FindDependedModuleTypes(module.Type))
+            foreach (var dependedModuleType in AbpModuleHelper.FindDependedModuleTypes(module.Type))
             {
                 var dependedModule = modules.FirstOrDefault(m => m.Type == dependedModuleType);
                 if (dependedModule == null)

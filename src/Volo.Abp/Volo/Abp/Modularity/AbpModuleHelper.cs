@@ -6,7 +6,7 @@ using Volo.ExtensionMethods.Collections.Generic;
 
 namespace Volo.Abp.Modularity
 {
-    public static class AbpModuleFinder
+    internal static class AbpModuleHelper
     {
         public static List<Type> FindAllModuleTypes(Type startupModuleType)
         {

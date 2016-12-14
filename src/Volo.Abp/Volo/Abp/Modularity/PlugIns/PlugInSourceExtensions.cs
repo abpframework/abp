@@ -10,7 +10,7 @@ namespace Volo.Abp.Modularity.PlugIns
         {
             return plugInSource
                 .GetModules()
-                .SelectMany(AbpModuleFinder.FindAllModuleTypes)
+                .SelectMany(AbpModuleHelper.FindAllModuleTypes)
                 .Distinct()
                 .ToList();
         }
