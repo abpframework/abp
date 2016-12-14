@@ -11,16 +11,16 @@ namespace Volo.Abp.Repositories
         public static DbContext GetDbContext<TEntity, TPrimaryKey>(this IRepository<TEntity, TPrimaryKey> repository)
             where TEntity : class, IEntity<TPrimaryKey>, new()
         {
-            var efCoreRepository = repository as IEfCoreRepository;
-            if (efCoreRepository == null)
-            {
-                throw new ArgumentException("Given repository does not implement " + typeof(IEfCoreRepository).AssemblyQualifiedName, nameof(repository));
-            }
-
-            return efCoreRepository.DbContext;
+            return repository.ToEfCoreRepository().DbContext;
         }
 
         public static DbSet<TEntity> GetDbSet<TEntity, TPrimaryKey>(this IRepository<TEntity, TPrimaryKey> repository)
+            where TEntity : class, IEntity<TPrimaryKey>, new()
+        {
+            return repository.ToEfCoreRepository().DbSet;
+        }
+
+        public static IEfCoreRepository<TEntity, TPrimaryKey> ToEfCoreRepository<TEntity, TPrimaryKey>(this IRepository<TEntity, TPrimaryKey> repository)
             where TEntity : class, IEntity<TPrimaryKey>, new()
         {
             var efCoreRepository = repository as IEfCoreRepository<TEntity, TPrimaryKey>;
@@ -29,7 +29,7 @@ namespace Volo.Abp.Repositories
                 throw new ArgumentException("Given repository does not implement " + typeof(IEfCoreRepository<TEntity, TPrimaryKey>).AssemblyQualifiedName, nameof(repository));
             }
 
-            return efCoreRepository.DbSet;
+            return efCoreRepository;
         }
     }
 }
