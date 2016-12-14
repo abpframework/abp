@@ -8,7 +8,7 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public string ConnectionString { get; }
 
-        public string ModuleName { get; }
+        public string ModuleName { get; } //TODO: Use a SchemaName/DatabaseName instead?
 
         public virtual DbContextOptionsBuilder DbContextOptions { get; protected set; }
 
