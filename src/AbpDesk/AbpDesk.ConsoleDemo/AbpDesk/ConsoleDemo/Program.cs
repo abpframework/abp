@@ -9,9 +9,11 @@ namespace AbpDesk.ConsoleDemo
         public static void Main(string[] args)
         {
             var services = new ServiceCollection();
-            using (var application = AbpApplication.Create<AbpDeskConsoleDemoModule>(services))
+            var application = AbpApplication.Create<AbpDeskConsoleDemoModule>(services);
+
+            using (var scope = services.BuildServiceProvider().CreateScope())
             {
-                application.Initialize(services.BuildServiceProvider());
+                application.Initialize(scope.ServiceProvider);
 
                 application
                     .ServiceProvider
@@ -19,6 +21,8 @@ namespace AbpDesk.ConsoleDemo
                     .List();
 
                 Console.ReadLine();
+
+                application.Shutdown();
             }
         }
     }

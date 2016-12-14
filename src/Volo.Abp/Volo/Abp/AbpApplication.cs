@@ -1,25 +1,31 @@
 ﻿using System;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Internal;
 using Volo.Abp.Modularity;
 
 namespace Volo.Abp
 {
-    public class AbpApplication : IDisposable
+    public class AbpApplication
     {
         public Type StartupModuleType { get; }
 
         public IServiceProvider ServiceProvider { get; private set; }
 
-        private AbpApplication(Type startupModuleType, IServiceCollection services, Action<AbpApplicationOptions> optionsAction)
+        private AbpApplication(
+            [NotNull] Type startupModuleType,
+            [NotNull] IServiceCollection services,
+            [CanBeNull] Action<AbpApplicationCreationOptions> optionsAction)
         {
+            Check.NotNull(startupModuleType, nameof(startupModuleType));
+            Check.NotNull(services, nameof(services));
+
             StartupModuleType = startupModuleType;
 
-            var options = new AbpApplicationOptions();
-
+            var options = new AbpApplicationCreationOptions();
             optionsAction?.Invoke(options);
 
-            AddServices(services);
+            services.AddCoreAbpServices(this);
             LoadModules(services, options);
         }
 
@@ -31,34 +37,49 @@ namespace Volo.Abp
 
         public static AbpApplication Create<TStartupModule>(
             [NotNull] IServiceCollection services,
-            [CanBeNull] Action<AbpApplicationOptions> optionsAction)
+            [CanBeNull] Action<AbpApplicationCreationOptions> optionsAction)
             where TStartupModule : IAbpModule
         {
-            Check.NotNull(services, nameof(services));
-
             return new AbpApplication(typeof(TStartupModule), services, optionsAction);
         }
 
-        public void Initialize(IServiceProvider serviceProvider)
+        public static AbpApplication Create(
+            [NotNull] Type startupModuleType, 
+            [NotNull] IServiceCollection services)
         {
+            return Create(startupModuleType, services, null);
+        }
+
+        public static AbpApplication Create(
+            [NotNull] Type startupModuleType,
+            [NotNull] IServiceCollection services,
+            [CanBeNull] Action<AbpApplicationCreationOptions> optionsAction)
+        {
+            return new AbpApplication(startupModuleType, services, optionsAction);
+        }
+
+        public void Initialize([NotNull] IServiceProvider serviceProvider)
+        {
+            Check.NotNull(serviceProvider, nameof(serviceProvider));
+
             ServiceProvider = serviceProvider;
-            ServiceProvider.GetRequiredService<IModuleManager>().Initialize();
+            ServiceProvider.GetRequiredService<IModuleInitializationManager>().InitializeModules();
         }
 
-        private void AddServices(IServiceCollection services)
+        private void LoadModules(IServiceCollection services, AbpApplicationCreationOptions options)
         {
-            services.AddSingleton(this);
-            services.AddCoreAbpServices();
+            services
+                .GetSingletonInstance<IModuleLoader>()
+                .LoadAll(
+                    services,
+                    StartupModuleType,
+                    options.PlugInSources
+                );
         }
 
-        private void LoadModules(IServiceCollection services, AbpApplicationOptions options)
+        public void Shutdown()
         {
-            services.GetSingletonInstance<IModuleLoader>().LoadAll(services, StartupModuleType, options.PlugInSources);
-        }
-
-        public void Dispose()
-        {
-
+            //TODO: Shutdown modules
         }
     }
 }

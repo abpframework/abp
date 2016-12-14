@@ -14,8 +14,11 @@ namespace Volo.Abp.TestBase
         public AbpIntegratedTest()
         {
             var services = CreateServiceCollection();
+
             Application = AbpApplication.Create<TStartupModule>(services);
+
             var serviceProvider = CreateServiceProvider(services);
+
             Application.Initialize(serviceProvider);
         }
 
@@ -31,7 +34,7 @@ namespace Volo.Abp.TestBase
 
         public void Dispose()
         {
-            Application.Dispose();
+            Application.Shutdown();
         }
     }
 }

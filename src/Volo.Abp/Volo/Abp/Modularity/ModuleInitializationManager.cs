@@ -3,18 +3,18 @@ using Volo.DependencyInjection;
 
 namespace Volo.Abp.Modularity
 {
-    public class ModuleManager : IModuleManager, ISingletonDependency
+    public class ModuleInitializationManager : IModuleInitializationManager, ISingletonDependency
     {
         private readonly IModuleLoader _moduleLoader;
         private readonly IEnumerable<IModuleInitializer> _initializers;
 
-        public ModuleManager(IModuleLoader moduleLoader, IEnumerable<IModuleInitializer> initializers)
+        public ModuleInitializationManager(IModuleLoader moduleLoader, IEnumerable<IModuleInitializer> initializers)
         {
             _moduleLoader = moduleLoader;
             _initializers = initializers;
         }
 
-        public void Initialize()
+        public void InitializeModules()
         {
             foreach (var initializer in _initializers)
             {
