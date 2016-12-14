@@ -5,12 +5,12 @@ namespace Volo.Abp.Modularity
 {
     public class ModuleLifecycleManager : IModuleLifecycleManager, ISingletonDependency
     {
-        private readonly IModuleLoader _moduleLoader;
+        private readonly IModuleManager _moduleManager;
         private readonly IEnumerable<IModuleLifecycleContributer> _contributers;
 
-        public ModuleLifecycleManager(IModuleLoader moduleLoader, IEnumerable<IModuleLifecycleContributer> contributers)
+        public ModuleLifecycleManager(IModuleManager moduleManager, IEnumerable<IModuleLifecycleContributer> contributers)
         {
-            _moduleLoader = moduleLoader;
+            _moduleManager = moduleManager;
             _contributers = contributers;
         }
 
@@ -18,7 +18,7 @@ namespace Volo.Abp.Modularity
         {
             foreach (var contributer in _contributers)
             {
-                foreach (var module in _moduleLoader.Modules)
+                foreach (var module in _moduleManager.Modules)
                 {
                     contributer.Initialize(module.Instance);
                 }
@@ -29,7 +29,7 @@ namespace Volo.Abp.Modularity
         {
             foreach (var contributer in _contributers)
             {
-                foreach (var module in _moduleLoader.Modules)
+                foreach (var module in _moduleManager.Modules)
                 {
                     contributer.Shutdown(module.Instance);
                 }

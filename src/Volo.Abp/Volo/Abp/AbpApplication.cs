@@ -12,6 +12,8 @@ namespace Volo.Abp
 
         public IServiceProvider ServiceProvider { get; private set; }
 
+        internal AbpModuleDescriptor[] Modules { get; }
+
         private AbpApplication(
             [NotNull] Type startupModuleType,
             [NotNull] IServiceCollection services,
@@ -26,7 +28,7 @@ namespace Volo.Abp
             optionsAction?.Invoke(options);
 
             services.AddCoreAbpServices(this);
-            LoadModules(services, options);
+            Modules = LoadModules(services, options);
         }
 
         internal static AbpApplication Create<TStartupModule>([NotNull] IServiceCollection services)
@@ -66,11 +68,11 @@ namespace Volo.Abp
             ServiceProvider.GetRequiredService<IModuleLifecycleManager>().InitializeModules();
         }
 
-        private void LoadModules(IServiceCollection services, AbpApplicationCreationOptions options)
+        private AbpModuleDescriptor[] LoadModules(IServiceCollection services, AbpApplicationCreationOptions options)
         {
-            services
+            return services
                 .GetSingletonInstance<IModuleLoader>()
-                .LoadAll(
+                .LoadModules(
                     services,
                     StartupModuleType,
                     options.PlugInSources

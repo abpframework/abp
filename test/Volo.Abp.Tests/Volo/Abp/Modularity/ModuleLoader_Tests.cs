@@ -11,11 +11,11 @@ namespace Volo.Abp.Modularity
         public void Should_Load_Modules_By_Dependency_Order()
         {
             var moduleLoader = new ModuleLoader();
-            moduleLoader.LoadAll(new ServiceCollection(), typeof(MyStartupModule), new PlugInSourceList());
-            moduleLoader.Modules.Count.ShouldBe(3);
-            moduleLoader.Modules[0].Type.ShouldBe(typeof(AbpKernelModule));
-            moduleLoader.Modules[1].Type.ShouldBe(typeof(IndependentEmptyModule));
-            moduleLoader.Modules[2].Type.ShouldBe(typeof(MyStartupModule));
+            var modules = moduleLoader.LoadModules(new ServiceCollection(), typeof(MyStartupModule), new PlugInSourceList());
+            modules.Length.ShouldBe(3);
+            modules[0].Type.ShouldBe(typeof(AbpKernelModule));
+            modules[1].Type.ShouldBe(typeof(IndependentEmptyModule));
+            modules[2].Type.ShouldBe(typeof(MyStartupModule));
         }
 
         [DependsOn(typeof(IndependentEmptyModule))]
