@@ -1,4 +1,5 @@
 ﻿using System;
+using JetBrains.Annotations;
 
 namespace Volo.Abp.Modularity
 {
@@ -12,6 +13,7 @@ namespace Volo.Abp.Modularity
         /// <summary>
         /// Types of depended modules.
         /// </summary>
+        [NotNull]
         public Type[] DependedModuleTypes { get; }
 
         /// <summary>
@@ -20,9 +22,10 @@ namespace Volo.Abp.Modularity
         /// <param name="dependedModuleTypes">Types of depended modules</param>
         public DependsOnAttribute(params Type[] dependedModuleTypes)
         {
-            DependedModuleTypes = dependedModuleTypes;
+            DependedModuleTypes = dependedModuleTypes ?? new Type[0];
         }
 
+        [NotNull]
         public virtual Type[] GetDependedModuleTypes()
         {
             return DependedModuleTypes;

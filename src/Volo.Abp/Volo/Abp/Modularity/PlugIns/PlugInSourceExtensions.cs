@@ -1,18 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 
 namespace Volo.Abp.Modularity.PlugIns
 {
     public static class PlugInSourceExtensions
     {
-        public static List<Type> GetModulesWithAllDependencies(this IPlugInSource plugInSource)
+        [NotNull]
+        public static Type[] GetModulesWithAllDependencies([NotNull] this IPlugInSource plugInSource)
         {
+            Check.NotNull(plugInSource, nameof(plugInSource));
+
             return plugInSource
                 .GetModules()
                 .SelectMany(AbpModuleHelper.FindAllModuleTypes)
                 .Distinct()
-                .ToList();
+                .ToArray();
         }
     }
 }

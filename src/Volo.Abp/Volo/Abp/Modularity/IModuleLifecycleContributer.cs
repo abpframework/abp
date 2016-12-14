@@ -1,11 +1,12 @@
-﻿using Volo.DependencyInjection;
+﻿using JetBrains.Annotations;
+using Volo.DependencyInjection;
 
 namespace Volo.Abp.Modularity
 {
     public interface IModuleLifecycleContributer : ISingletonDependency
     {
-        void Initialize(IAbpModule module);
+        void Initialize([NotNull] IAbpModule module);
 
-        void Shutdown(IAbpModule module);
+        void Shutdown([NotNull] IAbpModule module);
     }
 }

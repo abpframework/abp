@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using JetBrains.Annotations;
 
 namespace Volo.Abp.Modularity.PlugIns
 {
@@ -10,12 +9,13 @@ namespace Volo.Abp.Modularity.PlugIns
 
         public PlugInTypeListSource(params Type[] moduleTypes)
         {
-            _moduleTypes = moduleTypes;
+            _moduleTypes = moduleTypes ?? new Type[0];
         }
 
-        public List<Type> GetModules()
+        [NotNull]
+        public Type[] GetModules()
         {
-            return _moduleTypes.ToList();
+            return _moduleTypes;
         }
     }
 }

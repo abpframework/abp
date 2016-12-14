@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using JetBrains.Annotations;
 using Volo.Abp.Reflection;
 using Volo.ExtensionMethods.Collections.Generic;
 
@@ -12,13 +13,16 @@ namespace Volo.Abp.Modularity.PlugIns
 
         public SearchOption SearchOption { get; set; }
 
-        public FolderPlugInSource(string folder, SearchOption searchOption = SearchOption.TopDirectoryOnly)
+        public FolderPlugInSource([NotNull] string folder, SearchOption searchOption = SearchOption.TopDirectoryOnly)
         {
+            Check.NotNull(folder, nameof(folder));
+
             Folder = folder;
             SearchOption = searchOption;
         }
 
-        public List<Type> GetModules()
+        [NotNull]
+        public Type[] GetModules()
         {
             var modules = new List<Type>();
 
@@ -41,7 +45,7 @@ namespace Volo.Abp.Modularity.PlugIns
                 }
             }
 
-            return modules;
+            return modules.ToArray();
         }
     }
 }
