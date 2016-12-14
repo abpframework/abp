@@ -31,7 +31,9 @@ namespace Volo.Abp
 
                 application.Shutdown();
 
-                //TODO: Assert shutdown module
+                //Assert
+
+                module.OnApplicationShutdownIsCalled.ShouldBeTrue();
             }
         }
 
@@ -61,7 +63,9 @@ namespace Volo.Abp
 
             application.Shutdown();
 
-            //TODO: Assert shutdown module
+            //Assert
+
+            plugInModule.OnApplicationShutdownIsCalled.ShouldBeTrue();
         }
     }
 }

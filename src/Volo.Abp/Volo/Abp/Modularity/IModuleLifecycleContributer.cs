@@ -2,8 +2,10 @@
 
 namespace Volo.Abp.Modularity
 {
-    public interface IModuleInitializer : ISingletonDependency
+    public interface IModuleLifecycleContributer : ISingletonDependency
     {
         void Initialize(IAbpModule module);
+
+        void Shutdown(IAbpModule module);
     }
 }

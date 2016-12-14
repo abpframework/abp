@@ -1,7 +1,9 @@
 ﻿namespace Volo.Abp.Modularity
 {
-    public interface IModuleInitializationManager
+    public interface IModuleLifecycleManager
     {
         void InitializeModules();
+
+        void ShutdownModules();
     }
 }

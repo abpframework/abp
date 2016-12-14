@@ -4,9 +4,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Volo.Abp.Modularity
 {
-    public abstract class AbpModule : IAbpModule, IOnApplicationInitialization
+    public abstract class AbpModule : IAbpModule, IOnApplicationInitialization, IOnApplicationShutdown
     {
-        //TODO: Add a OnBeforeConfigureServices method.
+        //TODO: Add a OnBeforeConfigureServices method?
 
         public virtual void ConfigureServices(IServiceCollection services)
         {
@@ -16,6 +16,11 @@ namespace Volo.Abp.Modularity
         public virtual void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             
+        }
+
+        public virtual void OnApplicationShutdown(ApplicationShutdownContext context)
+        {
+
         }
 
         public static bool IsAbpModule(Type type)
@@ -29,7 +34,7 @@ namespace Volo.Abp.Modularity
                 typeof(IAbpModule).GetTypeInfo().IsAssignableFrom(type);
         }
 
-        public static void CheckAbpModuleType(Type moduleType)
+        internal static void CheckAbpModuleType(Type moduleType)
         {
             if (!IsAbpModule(moduleType))
             {
