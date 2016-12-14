@@ -11,11 +11,13 @@ namespace Volo.Abp.TestBase
 
         protected IServiceProvider ServiceProvider => Application.ServiceProvider;
 
+        protected IServiceScope MainServiceScope { get; private set; }
+
         public AbpIntegratedTest()
         {
             var services = CreateServiceCollection();
 
-            Application = AbpApplication.Create<TStartupModule>(services);
+            Application = services.AddApplication<TStartupModule>();
 
             var serviceProvider = CreateServiceProvider(services);
 
@@ -29,12 +31,14 @@ namespace Volo.Abp.TestBase
 
         protected virtual IServiceProvider CreateServiceProvider(IServiceCollection services)
         {
-            return services.BuildServiceProvider();
+            MainServiceScope = services.BuildServiceProvider().CreateScope();
+            return MainServiceScope.ServiceProvider;
         }
 
         public void Dispose()
         {
             Application.Shutdown();
+            MainServiceScope.Dispose();
         }
     }
 }

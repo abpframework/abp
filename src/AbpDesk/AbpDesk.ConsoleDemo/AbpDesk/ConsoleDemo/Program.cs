@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp;
 
 namespace AbpDesk.ConsoleDemo
 {
@@ -9,8 +8,7 @@ namespace AbpDesk.ConsoleDemo
         public static void Main(string[] args)
         {
             var services = new ServiceCollection();
-            var application = AbpApplication.Create<AbpDeskConsoleDemoModule>(services);
-
+            var application = services.AddApplication<AbpDeskConsoleDemoModule>();
             using (var scope = services.BuildServiceProvider().CreateScope())
             {
                 application.Initialize(scope.ServiceProvider);

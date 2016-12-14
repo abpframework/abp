@@ -29,13 +29,13 @@ namespace Volo.Abp
             LoadModules(services, options);
         }
 
-        public static AbpApplication Create<TStartupModule>([NotNull] IServiceCollection services)
+        internal static AbpApplication Create<TStartupModule>([NotNull] IServiceCollection services)
             where TStartupModule : IAbpModule
         {
             return Create<TStartupModule>(services, null);
         }
 
-        public static AbpApplication Create<TStartupModule>(
+        internal static AbpApplication Create<TStartupModule>(
             [NotNull] IServiceCollection services,
             [CanBeNull] Action<AbpApplicationCreationOptions> optionsAction)
             where TStartupModule : IAbpModule
@@ -43,14 +43,14 @@ namespace Volo.Abp
             return new AbpApplication(typeof(TStartupModule), services, optionsAction);
         }
 
-        public static AbpApplication Create(
+        internal static AbpApplication Create(
             [NotNull] Type startupModuleType, 
             [NotNull] IServiceCollection services)
         {
             return Create(startupModuleType, services, null);
         }
 
-        public static AbpApplication Create(
+        internal static AbpApplication Create(
             [NotNull] Type startupModuleType,
             [NotNull] IServiceCollection services,
             [CanBeNull] Action<AbpApplicationCreationOptions> optionsAction)

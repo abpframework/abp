@@ -15,7 +15,7 @@ namespace Volo.Abp
 
             var services = new ServiceCollection();
 
-            var application = AbpApplication.Create<IndependentEmptyModule>(services);
+            var application = services.AddApplication<IndependentEmptyModule>();
 
             using (var scope = services.BuildServiceProvider().CreateScope())
             {
