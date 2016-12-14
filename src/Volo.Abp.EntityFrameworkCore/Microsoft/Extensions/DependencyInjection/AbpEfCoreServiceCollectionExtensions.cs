@@ -25,7 +25,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddTransient<TDbContext>();
             services.TryAddSingleton(serviceProvider =>
             {
-                const string moduleName = "";
+                const string moduleName = ""; //TODO: Use AbpModuleDescriptor instead of module name?
 
                 var connInfoResolver = serviceProvider.GetRequiredService<IConnectionStringResolver>();
 

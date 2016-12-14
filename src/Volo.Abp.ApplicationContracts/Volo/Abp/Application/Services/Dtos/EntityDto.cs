@@ -6,7 +6,7 @@ namespace Volo.Abp.Application.Services.Dtos
     /// Implements common properties for entity based DTOs.
     /// </summary>
     /// <typeparam name="TPrimaryKey">Type of the primary key</typeparam>
-    public class EntityDto<TPrimaryKey>
+    public class EntityDto<TPrimaryKey> : IEntityDto<TPrimaryKey>
     {
         /// <summary>
         /// Id of the entity.

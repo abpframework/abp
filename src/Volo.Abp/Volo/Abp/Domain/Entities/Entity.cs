@@ -79,19 +79,6 @@ namespace Volo.Abp.Domain.Entities
                 return false;
             }
 
-            //TODO: How to handle this?
-            //if (this is IMayHaveTenant && other is IMayHaveTenant &&
-            //    this.As<IMayHaveTenant>().TenantId != other.As<IMayHaveTenant>().TenantId)
-            //{
-            //    return false;
-            //}
-
-            //if (this is IMustHaveTenant && other is IMustHaveTenant &&
-            //    this.As<IMustHaveTenant>().TenantId != other.As<IMustHaveTenant>().TenantId)
-            //{
-            //    return false;
-            //}
-
             return Id.Equals(other.Id);
         }
 

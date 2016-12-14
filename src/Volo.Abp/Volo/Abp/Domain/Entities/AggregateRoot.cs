@@ -2,5 +2,6 @@
 {
     public class AggregateRoot<TPrimaryKey> : Entity<TPrimaryKey>, IAggregateRoot<TPrimaryKey>
     {
+
     }
 }

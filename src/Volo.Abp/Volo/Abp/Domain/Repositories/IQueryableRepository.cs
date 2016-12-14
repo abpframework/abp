@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Volo.Abp.Domain.Entities;
 
 namespace Volo.Abp.Domain.Repositories
@@ -16,7 +17,7 @@ namespace Volo.Abp.Domain.Repositories
         /// given predicate.
         /// </summary>
         /// <param name="predicate">A condition to filter entities</param>
-        void Delete(Expression<Func<TEntity, bool>> predicate);
+        void Delete([NotNull] Expression<Func<TEntity, bool>> predicate);
 
         /// <summary>
         /// Deletes many entities by function.
@@ -25,6 +26,6 @@ namespace Volo.Abp.Domain.Repositories
         /// given predicate.
         /// </summary>
         /// <param name="predicate">A condition to filter entities</param>
-        Task DeleteAsync(Expression<Func<TEntity, bool>> predicate);
+        Task DeleteAsync([NotNull] Expression<Func<TEntity, bool>> predicate);
     }
 }

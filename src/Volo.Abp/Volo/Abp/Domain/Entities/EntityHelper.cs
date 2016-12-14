@@ -1,5 +1,6 @@
 using System;
 using System.Reflection;
+using JetBrains.Annotations;
 using Volo.Abp.Reflection;
 
 namespace Volo.Abp.Domain.Entities
@@ -9,7 +10,7 @@ namespace Volo.Abp.Domain.Entities
     /// </summary>
     public static class EntityHelper
     {
-        public static bool IsEntity(Type type)
+        public static bool IsEntity([NotNull] Type type)
         {
             return ReflectionHelper.IsAssignableToGenericType(type, typeof (IEntity<>));
         }
@@ -22,7 +23,7 @@ namespace Volo.Abp.Domain.Entities
         /// <summary>
         /// Gets primary key type of given entity type
         /// </summary>
-        public static Type GetPrimaryKeyType(Type entityType)
+        public static Type GetPrimaryKeyType([NotNull] Type entityType)
         {
             foreach (var interfaceType in entityType.GetTypeInfo().GetInterfaces())
             {

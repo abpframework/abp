@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Volo.Abp.Domain.Entities;
 using Volo.DependencyInjection;
 
@@ -17,12 +18,14 @@ namespace Volo.Abp.Domain.Repositories
         /// Used to get all entities.
         /// </summary>
         /// <returns>List of all entities</returns>
+        [NotNull]
         List<TEntity> GetList();
 
         /// <summary>
         /// Used to get all entities.
         /// </summary>
         /// <returns>List of all entities</returns>
+        [NotNull]
         Task<List<TEntity>> GetListAsync();
 
         /// <summary>
@@ -30,6 +33,7 @@ namespace Volo.Abp.Domain.Repositories
         /// </summary>
         /// <param name="id">Primary key of the entity to get</param>
         /// <returns>Entity</returns>
+        [NotNull]
         TEntity Get(TPrimaryKey id);
 
         /// <summary>
@@ -37,6 +41,7 @@ namespace Volo.Abp.Domain.Repositories
         /// </summary>
         /// <param name="id">Primary key of the entity to get</param>
         /// <returns>Entity</returns>
+        [NotNull]
         Task<TEntity> GetAsync(TPrimaryKey id);
 
         /// <summary>
@@ -44,6 +49,7 @@ namespace Volo.Abp.Domain.Repositories
         /// </summary>
         /// <param name="id">Primary key of the entity to get</param>
         /// <returns>Entity or null</returns>
+        [CanBeNull]
         TEntity Find(TPrimaryKey id);
 
         /// <summary>
@@ -51,19 +57,22 @@ namespace Volo.Abp.Domain.Repositories
         /// </summary>
         /// <param name="id">Primary key of the entity to get</param>
         /// <returns>Entity or null</returns>
+        [CanBeNull]
         Task<TEntity> FindAsync(TPrimaryKey id);
 
         /// <summary>
         /// Inserts a new entity.
         /// </summary>
         /// <param name="entity">Inserted entity</param>
-        TEntity Insert(TEntity entity);
+        [NotNull]
+        TEntity Insert([NotNull] TEntity entity);
 
         /// <summary>
         /// Inserts a new entity.
         /// </summary>
         /// <param name="entity">Inserted entity</param>
-        Task<TEntity> InsertAsync(TEntity entity);
+        [NotNull]
+        Task<TEntity> InsertAsync([NotNull] TEntity entity);
 
         /// <summary>
         /// Inserts a new entity and gets it's Id.
@@ -72,7 +81,7 @@ namespace Volo.Abp.Domain.Repositories
         /// </summary>
         /// <param name="entity">Entity</param>
         /// <returns>Id of the entity</returns>
-        TPrimaryKey InsertAndGetId(TEntity entity);
+        TPrimaryKey InsertAndGetId([NotNull] TEntity entity);
 
         /// <summary>
         /// Inserts a new entity and gets it's Id.
@@ -81,31 +90,33 @@ namespace Volo.Abp.Domain.Repositories
         /// </summary>
         /// <param name="entity">Entity</param>
         /// <returns>Id of the entity</returns>
-        Task<TPrimaryKey> InsertAndGetIdAsync(TEntity entity);
+        Task<TPrimaryKey> InsertAndGetIdAsync([NotNull] TEntity entity);
 
         /// <summary>
         /// Updates an existing entity.
         /// </summary>
         /// <param name="entity">Entity</param>
-        TEntity Update(TEntity entity);
+        [NotNull]
+        TEntity Update([NotNull] TEntity entity);
 
         /// <summary>
         /// Updates an existing entity. 
         /// </summary>
         /// <param name="entity">Entity</param>
-        Task<TEntity> UpdateAsync(TEntity entity);
+        [NotNull]
+        Task<TEntity> UpdateAsync([NotNull] TEntity entity);
 
         /// <summary>
         /// Deletes an entity.
         /// </summary>
         /// <param name="entity">Entity to be deleted</param>
-        void Delete(TEntity entity);
+        void Delete([NotNull] TEntity entity);
 
         /// <summary>
         /// Deletes an entity.
         /// </summary>
         /// <param name="entity">Entity to be deleted</param>
-        Task DeleteAsync(TEntity entity);
+        Task DeleteAsync([NotNull] TEntity entity);
 
         /// <summary>
         /// Deletes an entity by primary key.
