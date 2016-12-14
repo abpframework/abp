@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Reflection;
+using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Shouldly;
 using Xunit;
 
@@ -9,23 +11,48 @@ namespace Volo.Abp.Threading
         [Fact]
         public void RunSync_Test_Without_Return_Value()
         {
-            AsyncHelper.RunSync(MyTaskWithoutReturnValue);
+            AsyncHelper.RunSync(MyTaskWithoutReturnValueAsync);
         }
 
         [Fact]
         public void RunSync_Test_With_Return_Value()
         {
-            AsyncHelper.RunSync(() => MyTaskWithReturnValue(42)).ShouldBe(42);
+            AsyncHelper.RunSync(() => MyTaskWithReturnValueAsync(42)).ShouldBe(42);
         }
 
-        private static async Task MyTaskWithoutReturnValue()
+        [Fact]
+        public void IsAsync_Should_Work()
+        {
+            GetType().GetMethod(
+                "MyTaskWithoutReturnValueAsync",
+                BindingFlags.NonPublic | BindingFlags.Static
+            ).IsAsyncMethod().ShouldBe(true);
+
+            GetType().GetMethod(
+                "MyTaskWithReturnValueAsync",
+                BindingFlags.NonPublic | BindingFlags.Static
+            ).IsAsyncMethod().ShouldBe(true);
+
+            GetType().GetMethod(
+                "MyTaskWithReturnValue2",
+                BindingFlags.NonPublic | BindingFlags.Instance
+            ).IsAsyncMethod().ShouldBe(false);
+        }
+
+        private static async Task MyTaskWithoutReturnValueAsync()
         {
             await Task.Delay(1);
         }
 
-        private static async Task<int> MyTaskWithReturnValue(int aNumber)
+        private static async Task<int> MyTaskWithReturnValueAsync(int aNumber)
         {
             await Task.Delay(1);
+            return aNumber;
+        }
+
+        [UsedImplicitly]
+        private int MyTaskWithReturnValue2(int aNumber)
+        {
             return aNumber;
         }
     }

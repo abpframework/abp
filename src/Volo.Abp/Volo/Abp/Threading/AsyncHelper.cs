@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Nito.AsyncEx;
 
 namespace Volo.Abp.Threading
@@ -14,7 +15,7 @@ namespace Volo.Abp.Threading
         /// Checks if given method is an async method.
         /// </summary>
         /// <param name="method">A method to check</param>
-        public static bool IsAsyncMethod(MethodInfo method)
+        public static bool IsAsyncMethod([NotNull] this MethodInfo method)
         {
             return method.ReturnType == typeof(Task) ||
                    (method.ReturnType.GetTypeInfo().IsGenericType && method.ReturnType.GetGenericTypeDefinition() == typeof(Task<>));
