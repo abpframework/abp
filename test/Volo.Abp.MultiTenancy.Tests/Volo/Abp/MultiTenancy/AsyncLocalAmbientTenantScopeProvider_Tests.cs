@@ -8,7 +8,7 @@ namespace Volo.Abp.MultiTenancy
         [Fact]
         public void Should_Support_Inner_Scopes()
         {
-            var scopeProvider = new AsyncLocalAmbientTenantScopeProvider();
+            var scopeProvider = new AsyncLocalTenantScopeProvider();
 
             scopeProvider.CurrentScope.ShouldBeNull();
 

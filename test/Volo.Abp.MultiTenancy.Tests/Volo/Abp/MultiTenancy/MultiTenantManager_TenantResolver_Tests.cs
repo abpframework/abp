@@ -12,7 +12,7 @@ namespace Volo.Abp.MultiTenancy
         {
             //Arrange
 
-            var manager = new MultiTenancyManager(Substitute.For<IAmbientTenantScopeProvider>(), new ITenantResolver[0]);
+            var manager = new MultiTenancyManager(Substitute.For<ITenantScopeProvider>(), new ITenantResolver[0]);
 
             //Assert
 
@@ -26,9 +26,9 @@ namespace Volo.Abp.MultiTenancy
 
             var fakeTenant = new TenantInfo(Guid.NewGuid().ToString(), "acme");
 
-            var manager = new MultiTenancyManager(Substitute.For<IAmbientTenantScopeProvider>(), new[]
+            var manager = new MultiTenancyManager(Substitute.For<ITenantScopeProvider>(), new[]
             {
-                new TenantResolverAction(context =>
+                new SimpleTenantResolver(context =>
                 {
                     context.Tenant = fakeTenant;
                     context.Handled = true;
@@ -48,18 +48,18 @@ namespace Volo.Abp.MultiTenancy
 
             var fakeTenant = new TenantInfo(Guid.NewGuid().ToString(), "acme");
 
-            var manager = new MultiTenancyManager(Substitute.For<IAmbientTenantScopeProvider>(), new[]
+            var manager = new MultiTenancyManager(Substitute.For<ITenantScopeProvider>(), new[]
             {
-                new TenantResolverAction(context =>
+                new SimpleTenantResolver(context =>
                 {
                     context.Tenant = new TenantInfo(Guid.NewGuid().ToString(), "skipped-tenant-1");
                 }),
-                new TenantResolverAction(context =>
+                new SimpleTenantResolver(context =>
                 {
                     context.Tenant = fakeTenant;
                     context.Handled = true;
                 }),
-                new TenantResolverAction(context =>
+                new SimpleTenantResolver(context =>
                 {
                     context.Tenant = new TenantInfo(Guid.NewGuid().ToString(), "skipped-tenant-2");
                     context.Handled = true;
@@ -78,9 +78,9 @@ namespace Volo.Abp.MultiTenancy
 
             var oldTenant = new TenantInfo(Guid.NewGuid().ToString(), "old-tenant");
 
-            var manager = new MultiTenancyManager(new AsyncLocalAmbientTenantScopeProvider(), new[]
+            var manager = new MultiTenancyManager(new AsyncLocalTenantScopeProvider(), new[]
             {
-                new TenantResolverAction(context =>
+                new SimpleTenantResolver(context =>
                 {
                     context.Tenant = oldTenant;
                     context.Handled = true;

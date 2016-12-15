@@ -2,15 +2,16 @@
 
 namespace Volo.Abp.MultiTenancy
 {
-    public class AmbientTenantScope
+    public class TenantScope
     {
         /// <summary>
         /// Null indicates the host.
         /// Not null value for a tenant.
         /// </summary>
-        public TenantInfo Tenant { get; set; }
+        [CanBeNull]
+        public TenantInfo Tenant { get; }
         
-        public AmbientTenantScope([CanBeNull] TenantInfo tenant)
+        public TenantScope([CanBeNull] TenantInfo tenant)
         {
             Tenant = tenant;
         }

@@ -4,25 +4,25 @@ using Volo.DependencyInjection;
 
 namespace Volo.Abp.MultiTenancy
 {
-    public class AsyncLocalAmbientTenantScopeProvider : IAmbientTenantScopeProvider, IScopedDependency
+    public class AsyncLocalTenantScopeProvider : ITenantScopeProvider, IScopedDependency
     {
-        public AmbientTenantScope CurrentScope
+        public TenantScope CurrentScope
         {
             get { return _tenant.Value; }
-            set { _tenant.Value = value; }
+            private set { _tenant.Value = value; }
         }
 
-        private readonly AsyncLocal<AmbientTenantScope> _tenant;
+        private readonly AsyncLocal<TenantScope> _tenant;
 
-        public AsyncLocalAmbientTenantScopeProvider()
+        public AsyncLocalTenantScopeProvider()
         {
-            _tenant = new AsyncLocal<AmbientTenantScope>();
+            _tenant = new AsyncLocal<TenantScope>();
         }
 
         public IDisposable EnterScope(TenantInfo tenantInfo)
         {
             var parentScope = CurrentScope;
-            CurrentScope = new AmbientTenantScope(tenantInfo);
+            CurrentScope = new TenantScope(tenantInfo);
             return new DisposeAction(() =>
             {
                 CurrentScope = parentScope;
