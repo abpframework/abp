@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using Microsoft.Extensions.Options;
 using Volo.DependencyInjection;
 
 namespace Volo.Abp.MultiTenancy
@@ -9,14 +9,14 @@ namespace Volo.Abp.MultiTenancy
         public TenantInfo CurrentTenant => GetCurrentTenant();
 
         private readonly ITenantScopeProvider _tenantScopeProvider;
-        private readonly IEnumerable<ITenantResolver> _currentTenantResolvers;
+        private readonly MultiTenancyOptions _options;
 
         public MultiTenancyManager(
-            ITenantScopeProvider tenantScopeProvider, 
-            IEnumerable<ITenantResolver> currentTenantResolvers)
+            ITenantScopeProvider tenantScopeProvider,
+            IOptions<MultiTenancyOptions> options)
         {
             _tenantScopeProvider = tenantScopeProvider;
-            _currentTenantResolvers = currentTenantResolvers;
+            _options = options.Value;
         }
 
         protected virtual TenantInfo GetCurrentTenant()
@@ -28,7 +28,7 @@ namespace Volo.Abp.MultiTenancy
 
             var context = new CurrentTenantResolveContext();
 
-            foreach (var currentTenantResolver in _currentTenantResolvers)
+            foreach (var currentTenantResolver in _options.TenantResolvers)
             {
                 currentTenantResolver.Resolve(context);
                 if (context.Handled)

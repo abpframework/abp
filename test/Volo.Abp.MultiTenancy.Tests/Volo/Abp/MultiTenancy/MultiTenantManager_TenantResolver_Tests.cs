@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Extensions.Options;
 using NSubstitute;
 using Shouldly;
 using Xunit;
@@ -12,7 +13,10 @@ namespace Volo.Abp.MultiTenancy
         {
             //Arrange
 
-            var manager = new MultiTenancyManager(Substitute.For<ITenantScopeProvider>(), new ITenantResolver[0]);
+            var manager = new MultiTenancyManager(
+                Substitute.For<ITenantScopeProvider>(),
+                new OptionsWrapper<MultiTenancyOptions>(new MultiTenancyOptions())
+            );
 
             //Assert
 
@@ -26,14 +30,21 @@ namespace Volo.Abp.MultiTenancy
 
             var fakeTenant = new TenantInfo(Guid.NewGuid().ToString(), "acme");
 
-            var manager = new MultiTenancyManager(Substitute.For<ITenantScopeProvider>(), new[]
-            {
-                new SimpleTenantResolver(context =>
-                {
-                    context.Tenant = fakeTenant;
-                    context.Handled = true;
-                })
-            });
+            var manager = new MultiTenancyManager(
+                Substitute.For<ITenantScopeProvider>(),
+                new OptionsWrapper<MultiTenancyOptions>(new MultiTenancyOptions
+                    {
+                        TenantResolvers =
+                        {
+                            new SimpleTenantResolver(context =>
+                            {
+                                context.Tenant = fakeTenant;
+                                context.Handled = true;
+                            })
+                        }
+                    }
+                )
+            );
 
             //Assert
 
@@ -48,23 +59,30 @@ namespace Volo.Abp.MultiTenancy
 
             var fakeTenant = new TenantInfo(Guid.NewGuid().ToString(), "acme");
 
-            var manager = new MultiTenancyManager(Substitute.For<ITenantScopeProvider>(), new[]
-            {
-                new SimpleTenantResolver(context =>
-                {
-                    context.Tenant = new TenantInfo(Guid.NewGuid().ToString(), "skipped-tenant-1");
-                }),
-                new SimpleTenantResolver(context =>
-                {
-                    context.Tenant = fakeTenant;
-                    context.Handled = true;
-                }),
-                new SimpleTenantResolver(context =>
-                {
-                    context.Tenant = new TenantInfo(Guid.NewGuid().ToString(), "skipped-tenant-2");
-                    context.Handled = true;
-                })
-            });
+            var manager = new MultiTenancyManager(
+                Substitute.For<ITenantScopeProvider>(),
+                new OptionsWrapper<MultiTenancyOptions>(new MultiTenancyOptions
+                    {
+                        TenantResolvers =
+                        {
+                            new SimpleTenantResolver(context =>
+                            {
+                                context.Tenant = new TenantInfo(Guid.NewGuid().ToString(), "skipped-tenant-1");
+                            }),
+                            new SimpleTenantResolver(context =>
+                            {
+                                context.Tenant = fakeTenant;
+                                context.Handled = true;
+                            }),
+                            new SimpleTenantResolver(context =>
+                            {
+                                context.Tenant = new TenantInfo(Guid.NewGuid().ToString(), "skipped-tenant-2");
+                                context.Handled = true;
+                            })
+                        }
+                    }
+                )
+            );
 
             //Assert
 
@@ -78,14 +96,21 @@ namespace Volo.Abp.MultiTenancy
 
             var oldTenant = new TenantInfo(Guid.NewGuid().ToString(), "old-tenant");
 
-            var manager = new MultiTenancyManager(new AsyncLocalTenantScopeProvider(), new[]
-            {
-                new SimpleTenantResolver(context =>
-                {
-                    context.Tenant = oldTenant;
-                    context.Handled = true;
-                })
-            });
+            var manager = new MultiTenancyManager(
+                new AsyncLocalTenantScopeProvider(),
+                new OptionsWrapper<MultiTenancyOptions>(
+                    new MultiTenancyOptions
+                    {
+                        TenantResolvers =
+                        {
+                            new SimpleTenantResolver(context =>
+                            {
+                                context.Tenant = oldTenant;
+                            })
+                        }
+                    }
+                )
+            );
 
             manager.CurrentTenant.ShouldBe(oldTenant);
 
