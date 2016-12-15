@@ -65,7 +65,7 @@ namespace Volo.Abp
             Check.NotNull(serviceProvider, nameof(serviceProvider));
 
             ServiceProvider = serviceProvider;
-            ServiceProvider.GetRequiredService<IModuleManager>().InitializeModules();
+            ServiceProvider.GetRequiredService<IModuleManager>().InitializeModules(new ApplicationInitializationContext(serviceProvider));
         }
 
         private AbpModuleDescriptor[] LoadModules(IServiceCollection services, AbpApplicationCreationOptions options)
@@ -81,7 +81,7 @@ namespace Volo.Abp
 
         public void Shutdown()
         {
-            ServiceProvider.GetRequiredService<IModuleManager>().ShutdownModules();
+            ServiceProvider.GetRequiredService<IModuleManager>().ShutdownModules(new ApplicationShutdownContext());
         }
     }
 }

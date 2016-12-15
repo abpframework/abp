@@ -8,8 +8,8 @@ namespace Volo.Abp.Modularity
         [NotNull]
         IReadOnlyList<AbpModuleDescriptor> Modules { get; }
 
-        void InitializeModules();
+        void InitializeModules([NotNull] ApplicationInitializationContext context);
 
-        void ShutdownModules();
+        void ShutdownModules([NotNull] ApplicationShutdownContext context);
     }
 }

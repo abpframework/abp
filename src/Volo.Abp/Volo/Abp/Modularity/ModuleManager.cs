@@ -20,24 +20,24 @@ namespace Volo.Abp.Modularity
             _modules = application.Modules.ToList();
         }
 
-        public void InitializeModules()
+        public void InitializeModules(ApplicationInitializationContext context)
         {
             foreach (var contributer in _lifecycleContributers)
             {
                 foreach (var module in Modules)
                 {
-                    contributer.Initialize(module.Instance);
+                    contributer.Initialize(context, module.Instance);
                 }
             }
         }
 
-        public void ShutdownModules()
+        public void ShutdownModules(ApplicationShutdownContext context)
         {
             foreach (var contributer in _lifecycleContributers)
             {
                 foreach (var module in Modules)
                 {
-                    contributer.Shutdown(module.Instance);
+                    contributer.Shutdown(context, module.Instance);
                 }
             }
         }

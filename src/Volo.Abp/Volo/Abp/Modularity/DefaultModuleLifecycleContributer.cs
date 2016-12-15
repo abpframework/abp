@@ -1,29 +1,14 @@
-﻿using System;
-
-namespace Volo.Abp.Modularity
+﻿namespace Volo.Abp.Modularity
 {
     public class DefaultModuleLifecycleContributer : ModuleLifecycleContributerBase
     {
-        private readonly IServiceProvider _serviceProvider;
-
-        public DefaultModuleLifecycleContributer(IServiceProvider serviceProvider)
+        public override void Initialize(ApplicationInitializationContext context, IAbpModule module)
         {
-            _serviceProvider = serviceProvider;
-        }
-
-        public override void Initialize(IAbpModule module)
-        {
-            var context = new ApplicationInitializationContext(
-                _serviceProvider
-            );
-
             (module as IOnApplicationInitialization)?.OnApplicationInitialization(context);
         }
 
-        public override void Shutdown(IAbpModule module)
+        public override void Shutdown(ApplicationShutdownContext context, IAbpModule module)
         {
-            var context = new ApplicationShutdownContext();
-
             (module as IOnApplicationShutdown)?.OnApplicationShutdown(context);
         }
     }
