@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.DependencyInjection;
 
@@ -40,20 +41,23 @@ namespace Volo.Abp.MultiTenancy
                 return null;
             }
 
-            var context = new CurrentTenantResolveContext(_serviceProvider);
-
-            foreach (var tenantResolver in _options.TenantResolvers)
+            using (var serviceScope = _serviceProvider.CreateScope())
             {
-                tenantResolver.Resolve(context);
-                if (context.IsHandled())
+                var context = new CurrentTenantResolveContext(serviceScope.ServiceProvider);
+
+                foreach (var tenantResolver in _options.TenantResolvers)
                 {
-                    break;
+                    tenantResolver.Resolve(context);
+                    if (context.IsHandled())
+                    {
+                        break;
+                    }
+
+                    context.Handled = null;
                 }
 
-                context.Handled = null;
+                return context.Tenant;
             }
-
-            return context.Tenant;
         }
 
         public IDisposable ChangeTenant(TenantInfo tenantInfo)
