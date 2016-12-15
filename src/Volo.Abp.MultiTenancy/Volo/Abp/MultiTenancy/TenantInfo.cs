@@ -8,6 +8,8 @@ namespace Volo.Abp.MultiTenancy
 
         public string Name { get; }
 
+        //TODO: Needed for serialization
+        [UsedImplicitly]
         private TenantInfo()
         {
             

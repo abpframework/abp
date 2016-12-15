@@ -8,20 +8,22 @@ namespace Volo.Abp.MultiTenancy
     {
         public TenantInfo CurrentTenant => GetCurrentTenant();
 
-        private readonly IAmbientTenantAccessor _ambientTenantAccessor;
+        private readonly IAmbientTenantScopeProvider _ambientTenantScopeProvider;
         private readonly IEnumerable<ITenantResolver> _currentTenantResolvers;
 
-        public MultiTenancyManager(IAmbientTenantAccessor ambientTenantAccessor, IEnumerable<ITenantResolver> currentTenantResolvers)
+        public MultiTenancyManager(
+            IAmbientTenantScopeProvider ambientTenantScopeProvider, 
+            IEnumerable<ITenantResolver> currentTenantResolvers)
         {
-            _ambientTenantAccessor = ambientTenantAccessor;
+            _ambientTenantScopeProvider = ambientTenantScopeProvider;
             _currentTenantResolvers = currentTenantResolvers;
         }
 
         protected virtual TenantInfo GetCurrentTenant()
         {
-            if (_ambientTenantAccessor.AmbientTenant != null)
+            if (_ambientTenantScopeProvider.CurrentScope != null)
             {
-                return _ambientTenantAccessor.AmbientTenant.Tenant;
+                return _ambientTenantScopeProvider.CurrentScope.Tenant;
             }
 
             var context = new CurrentTenantResolveContext();
@@ -40,14 +42,7 @@ namespace Volo.Abp.MultiTenancy
 
         public IDisposable ChangeTenant(TenantInfo tenantInfo)
         {
-            var oldValue = _ambientTenantAccessor.AmbientTenant;
-
-            _ambientTenantAccessor.AmbientTenant = new AmbientTenantInfo(tenantInfo);
-
-            return new DisposeAction(() =>
-            {
-                _ambientTenantAccessor.AmbientTenant = oldValue;
-            });
+            return _ambientTenantScopeProvider.CreateScope(tenantInfo);
         }
     }
 }

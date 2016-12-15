@@ -12,7 +12,7 @@ namespace Volo.Abp.MultiTenancy
         {
             //Arrange
 
-            var manager = new MultiTenancyManager(Substitute.For<IAmbientTenantAccessor>(), new ITenantResolver[0]);
+            var manager = new MultiTenancyManager(Substitute.For<IAmbientTenantScopeProvider>(), new ITenantResolver[0]);
 
             //Assert
 
@@ -26,7 +26,7 @@ namespace Volo.Abp.MultiTenancy
 
             var fakeTenant = new TenantInfo(Guid.NewGuid().ToString(), "acme");
 
-            var manager = new MultiTenancyManager(Substitute.For<IAmbientTenantAccessor>(), new[]
+            var manager = new MultiTenancyManager(Substitute.For<IAmbientTenantScopeProvider>(), new[]
             {
                 new TenantResolverAction(context =>
                 {
@@ -48,7 +48,7 @@ namespace Volo.Abp.MultiTenancy
 
             var fakeTenant = new TenantInfo(Guid.NewGuid().ToString(), "acme");
 
-            var manager = new MultiTenancyManager(Substitute.For<IAmbientTenantAccessor>(), new[]
+            var manager = new MultiTenancyManager(Substitute.For<IAmbientTenantScopeProvider>(), new[]
             {
                 new TenantResolverAction(context =>
                 {
@@ -78,7 +78,7 @@ namespace Volo.Abp.MultiTenancy
 
             var oldTenant = new TenantInfo(Guid.NewGuid().ToString(), "old-tenant");
 
-            var manager = new MultiTenancyManager(Substitute.For<IAmbientTenantAccessor>(), new[]
+            var manager = new MultiTenancyManager(new AsyncLocalAmbientTenantScopeProvider(), new[]
             {
                 new TenantResolverAction(context =>
                 {
