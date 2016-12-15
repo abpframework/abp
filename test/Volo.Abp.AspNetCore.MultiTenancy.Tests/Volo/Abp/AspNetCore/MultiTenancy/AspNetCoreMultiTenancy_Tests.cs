@@ -23,7 +23,5 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
             var result = await GetResponseAsObjectAsync<Dictionary<string, string>>($"http://abp.io?{QueryStringTenantResolver.TenantIdKey}={testTenantId}");
             result["TenantId"].ShouldBe(testTenantId);
         }
-
-        //TODO: Specify tenant in the header, cookie, domain, subdomain, route, querystring and so on...
     }
 }

@@ -12,6 +12,13 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
             services.Configure<MultiTenancyOptions>(options =>
             {
                 options.TenantResolvers.Insert(0, new QueryStringTenantResolver());
+                //TODO: Web tenant resolvers:
+                // values can be tenant id or name, should be validated first by an abstraction (say, ITenantStore over ITenantManager)!
+                //- domain/subdomain (not added by default)
+                //- route {tenantId}
+                //+ querystring
+                //- header
+                //- cookie
             });
 
             services.AddAssemblyOf<AbpAspNetMultiTenancyModule>();

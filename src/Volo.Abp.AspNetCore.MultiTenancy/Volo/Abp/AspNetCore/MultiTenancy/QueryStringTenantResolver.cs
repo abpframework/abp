@@ -6,7 +6,7 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
 {
     public class QueryStringTenantResolver : ITenantResolver, ITransientDependency
     {
-        public const string TenantIdKey = "_Abp.TenantId";
+        public const string TenantIdKey = "__tenantId";
         
         public void Resolve(ICurrentTenantResolveContext context)
         {
