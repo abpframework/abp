@@ -14,6 +14,7 @@ namespace Volo.Abp.MultiTenancy
             //Arrange
 
             var manager = new MultiTenancyManager(
+                Substitute.For<IServiceProvider>(),
                 Substitute.For<ITenantScopeProvider>(),
                 new OptionsWrapper<MultiTenancyOptions>(new MultiTenancyOptions())
             );
@@ -28,9 +29,10 @@ namespace Volo.Abp.MultiTenancy
         {
             //Arrange
 
-            var fakeTenant = new TenantInfo(Guid.NewGuid().ToString(), "acme");
+            var fakeTenant = new TenantInfo("A");
 
             var manager = new MultiTenancyManager(
+                Substitute.For<IServiceProvider>(),
                 Substitute.For<ITenantScopeProvider>(),
                 new OptionsWrapper<MultiTenancyOptions>(new MultiTenancyOptions
                     {
@@ -53,13 +55,14 @@ namespace Volo.Abp.MultiTenancy
 
 
         [Fact]
-        public void Should_Get_Current_Tenant_From_Two_Resolvers()
+        public void Should_Get_Current_Tenant_From_Multiple_Resolvers()
         {
             //Arrange
 
-            var fakeTenant = new TenantInfo(Guid.NewGuid().ToString(), "acme");
+            var selectedTenant = new TenantInfo("A");
 
             var manager = new MultiTenancyManager(
+                Substitute.For<IServiceProvider>(),
                 Substitute.For<ITenantScopeProvider>(),
                 new OptionsWrapper<MultiTenancyOptions>(new MultiTenancyOptions
                     {
@@ -67,17 +70,16 @@ namespace Volo.Abp.MultiTenancy
                         {
                             new SimpleTenantResolver(context =>
                             {
-                                context.Tenant = new TenantInfo(Guid.NewGuid().ToString(), "skipped-tenant-1");
+                                context.Tenant = new TenantInfo("B");
+                                context.Handled = false; //Causes go to the next resolver
                             }),
                             new SimpleTenantResolver(context =>
                             {
-                                context.Tenant = fakeTenant;
-                                context.Handled = true;
+                                context.Tenant = selectedTenant;
                             }),
                             new SimpleTenantResolver(context =>
                             {
-                                context.Tenant = new TenantInfo(Guid.NewGuid().ToString(), "skipped-tenant-2");
-                                context.Handled = true;
+                                context.Tenant = new TenantInfo("C");
                             })
                         }
                     }
@@ -86,7 +88,7 @@ namespace Volo.Abp.MultiTenancy
 
             //Assert
 
-            manager.CurrentTenant.ShouldBe(fakeTenant);
+            manager.CurrentTenant.ShouldBe(selectedTenant);
         }
 
         [Fact]
@@ -94,9 +96,10 @@ namespace Volo.Abp.MultiTenancy
         {
             //Arrange
 
-            var oldTenant = new TenantInfo(Guid.NewGuid().ToString(), "old-tenant");
+            var oldTenant = new TenantInfo("A");
 
             var manager = new MultiTenancyManager(
+                Substitute.For<IServiceProvider>(),
                 new AsyncLocalTenantScopeProvider(),
                 new OptionsWrapper<MultiTenancyOptions>(
                     new MultiTenancyOptions
@@ -116,7 +119,7 @@ namespace Volo.Abp.MultiTenancy
 
             //Act
 
-            var overridedTenant = new TenantInfo(Guid.NewGuid().ToString(), "overrided-tenant");
+            var overridedTenant = new TenantInfo("B");
             using (manager.ChangeTenant(overridedTenant))
             {
                 //Assert

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.Extensions.Options;
 using Volo.DependencyInjection;
 
@@ -8,13 +9,16 @@ namespace Volo.Abp.MultiTenancy
     {
         public TenantInfo CurrentTenant => GetCurrentTenant();
 
+        private readonly IServiceProvider _serviceProvider;
         private readonly ITenantScopeProvider _tenantScopeProvider;
         private readonly MultiTenancyOptions _options;
 
         public MultiTenancyManager(
+            IServiceProvider serviceProvider,
             ITenantScopeProvider tenantScopeProvider,
             IOptions<MultiTenancyOptions> options)
         {
+            _serviceProvider = serviceProvider;
             _tenantScopeProvider = tenantScopeProvider;
             _options = options.Value;
         }
@@ -26,15 +30,27 @@ namespace Volo.Abp.MultiTenancy
                 return _tenantScopeProvider.CurrentScope.Tenant;
             }
 
-            var context = new CurrentTenantResolveContext();
+            return GetCurrentTenantFromResolvers();
+        }
 
-            foreach (var currentTenantResolver in _options.TenantResolvers)
+        protected virtual TenantInfo GetCurrentTenantFromResolvers()
+        {
+            if (!_options.TenantResolvers.Any())
             {
-                currentTenantResolver.Resolve(context);
-                if (context.Handled)
+                return null;
+            }
+
+            var context = new CurrentTenantResolveContext(_serviceProvider);
+
+            foreach (var tenantResolver in _options.TenantResolvers)
+            {
+                tenantResolver.Resolve(context);
+                if (context.IsHandled())
                 {
                     break;
                 }
+
+                context.Handled = null;
             }
 
             return context.Tenant;

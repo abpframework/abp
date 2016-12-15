@@ -4,9 +4,9 @@
   "dependencies": {
     "NETStandard.Library": "1.6.1",
     "Volo.Abp": "1.0.0-*",
-    "Microsoft.AspNetCore.Http.Abstractions": "1.1.0",
     "Microsoft.AspNetCore.Hosting.Abstractions": "1.1.0",
-    "Microsoft.AspNetCore.Routing.Abstractions": "1.1.0"
+    "Microsoft.AspNetCore.Routing.Abstractions": "1.1.0",
+    "Microsoft.AspNetCore.Http": "1.1.0" 
   },
 
   "frameworks": {

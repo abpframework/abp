@@ -9,6 +9,11 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
     {
         public override void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<MultiTenancyOptions>(options =>
+            {
+                options.TenantResolvers.Insert(0, new QueryStringTenantResolver());
+            });
+
             services.AddAssemblyOf<AbpAspNetMultiTenancyModule>();
         }
     }

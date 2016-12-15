@@ -10,25 +10,26 @@ namespace Volo.Abp.MultiTenancy
         {
             var scopeProvider = new AsyncLocalTenantScopeProvider();
 
-            scopeProvider.CurrentScope.ShouldBeNull();
+            Assert.Null(scopeProvider.CurrentScope?.Tenant);
 
-            using (scopeProvider.EnterScope(new TenantInfo("1","A")))
+            using (scopeProvider.EnterScope(new TenantInfo("A")))
             {
-                scopeProvider.CurrentScope.Tenant.Name.ShouldBe("A");
+                Assert.Equal("A", scopeProvider.CurrentScope?.Tenant?.Id);
 
-                using (scopeProvider.EnterScope(new TenantInfo("2", "B")))
+                using (scopeProvider.EnterScope(new TenantInfo("B")))
                 {
-                    scopeProvider.CurrentScope.Tenant.Name.ShouldBe("B");
+                    Assert.Equal("B", scopeProvider.CurrentScope?.Tenant?.Id);
 
                     using (scopeProvider.EnterScope(null))
                     {
-                        scopeProvider.CurrentScope.Tenant.ShouldBeNull();
+                        Assert.NotNull(scopeProvider.CurrentScope);
+                        Assert.Null(scopeProvider.CurrentScope.Tenant);
                     }
 
-                    scopeProvider.CurrentScope.Tenant.Name.ShouldBe("B");
+                    Assert.Equal("B", scopeProvider.CurrentScope?.Tenant?.Id);
                 }
 
-                scopeProvider.CurrentScope.Tenant.Name.ShouldBe("A");
+                Assert.Equal("A", scopeProvider.CurrentScope?.Tenant?.Id);
             }
 
             scopeProvider.CurrentScope.ShouldBeNull();

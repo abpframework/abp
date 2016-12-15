@@ -27,7 +27,7 @@ namespace Volo.Abp.AspNetCore.App
 
                 var dictionary = new Dictionary<string, string>
                 {
-                    ["TenantName"] = manager.CurrentTenant?.Name ?? "<host>"
+                    ["TenantId"] = manager.CurrentTenant?.Id ?? ""
                 };
                 
                 await ctx.Response.WriteAsync(dictionary.ToJsonString());

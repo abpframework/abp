@@ -4,9 +4,8 @@ namespace Volo.Abp.MultiTenancy
 {
     public class TenantInfo
     {
+        [NotNull]
         public string Id { get; }
-
-        public string Name { get; }
 
         //TODO: Needed for serialization
         [UsedImplicitly]
@@ -15,13 +14,11 @@ namespace Volo.Abp.MultiTenancy
             
         }
 
-        public TenantInfo([NotNull] string id, [NotNull] string name)
+        public TenantInfo([NotNull] string id)
         {
             Check.NotNull(id, nameof(id));
-            Check.NotNull(name, nameof(name));
 
             Id = id;
-            Name = name;
         }
     }
 }
