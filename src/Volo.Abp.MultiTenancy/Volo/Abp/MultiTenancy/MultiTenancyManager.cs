@@ -42,7 +42,7 @@ namespace Volo.Abp.MultiTenancy
 
         public IDisposable ChangeTenant(TenantInfo tenantInfo)
         {
-            return _ambientTenantScopeProvider.CreateScope(tenantInfo);
+            return _ambientTenantScopeProvider.EnterScope(tenantInfo);
         }
     }
 }
