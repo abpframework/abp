@@ -17,7 +17,11 @@ namespace Volo.Abp.TestBase
         {
             var services = CreateServiceCollection();
 
+            BeforeAppApplication(services);
+
             Application = services.AddApplication<TStartupModule>();
+
+            AfterAddApplication(services);
 
             var serviceProvider = CreateServiceProvider(services);
 
@@ -27,6 +31,16 @@ namespace Volo.Abp.TestBase
         protected virtual IServiceCollection CreateServiceCollection()
         {
             return new ServiceCollection();
+        }
+
+        protected virtual void BeforeAppApplication(IServiceCollection services)
+        {
+
+        }
+
+        protected virtual void AfterAddApplication(IServiceCollection services)
+        {
+
         }
 
         protected virtual IServiceProvider CreateServiceProvider(IServiceCollection services)
