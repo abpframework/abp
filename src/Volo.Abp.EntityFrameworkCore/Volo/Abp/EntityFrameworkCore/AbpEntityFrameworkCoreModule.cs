@@ -10,7 +10,7 @@ namespace Volo.Abp.EntityFrameworkCore
         public override void ConfigureServices(IServiceCollection services)
         {
             //TODO: This will be changed!
-            services.TryAddTransient(typeof(IDbContextProvider<>), typeof(DefaultDbContextProvider<>));
+            services.TryAddTransient(typeof(IDbContextProvider<>), typeof(UnitOfWorkDbContextProvider<>));
         }
     }
 }

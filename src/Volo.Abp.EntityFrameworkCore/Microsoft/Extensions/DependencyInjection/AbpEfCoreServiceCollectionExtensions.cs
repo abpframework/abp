@@ -1,14 +1,8 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Options;
-using Volo.Abp;
-using Volo.Abp.Data;
+﻿using Microsoft.Extensions.DependencyInjection.Extensions;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Repositories.EntityFrameworkCore;
-using Volo.ExtensionMethods.Collections.Generic;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -23,32 +17,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddLogging();
 
             services.TryAddTransient<TDbContext>();
-            services.TryAddSingleton(serviceProvider =>
-            {
-                const string moduleName = ""; //TODO: Use AbpModuleDescriptor instead of module name?
-
-                var connInfoResolver = serviceProvider.GetRequiredService<IConnectionStringResolver>();
-
-                var context = new AbpDbContextConfigurationContext<TDbContext>(connInfoResolver.Resolve(moduleName), moduleName);
-
-                var dbContextOptions = serviceProvider.GetRequiredService<IOptions<AbpDbContextOptions>>().Value;
-
-                var configureAction = dbContextOptions.ConfigureActions.GetOrDefault(typeof(TDbContext));
-                if (configureAction != null)
-                {
-                    ((Action<AbpDbContextConfigurationContext<TDbContext>>) configureAction).Invoke(context);
-                }
-                else if(dbContextOptions.DefaultConfigureAction != null)
-                {
-                    dbContextOptions.DefaultConfigureAction.Invoke(context);
-                }
-                else
-                {
-                    throw new AbpException("Should set a configure action for dbcontext"); //TODO: Better message
-                }
-
-                return context.DbContextOptions.Options;
-            });
+            services.TryAddSingleton(DbContextOptionsFactory.Create<TDbContext>);
 
             return services;
         }

@@ -8,15 +8,15 @@ namespace Volo.Abp.MultiTenancy
     {
         public TenantScope CurrentScope
         {
-            get { return _tenant.Value; }
-            private set { _tenant.Value = value; }
+            get { return _currentScope.Value; }
+            private set { _currentScope.Value = value; }
         }
 
-        private readonly AsyncLocal<TenantScope> _tenant;
+        private readonly AsyncLocal<TenantScope> _currentScope;
 
         public AsyncLocalTenantScopeProvider()
         {
-            _tenant = new AsyncLocal<TenantScope>();
+            _currentScope = new AsyncLocal<TenantScope>();
         }
 
         public IDisposable EnterScope(TenantInfo tenantInfo)
