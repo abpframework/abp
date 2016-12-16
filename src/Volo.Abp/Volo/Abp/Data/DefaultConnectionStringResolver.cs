@@ -5,11 +5,11 @@ using Volo.ExtensionMethods.Collections.Generic;
 
 namespace Volo.Abp.Data
 {
-    public class ConnectionStringResolver : IConnectionStringResolver, ITransientDependency
+    public class DefaultConnectionStringResolver : IConnectionStringResolver, ITransientDependency
     {
-        private readonly DbConnectionOptions _options; //TODO: Use IOptionsSnapshot
+        private readonly DbConnectionOptions _options; //TODO: Use IOptionsSnapshot?
 
-        public ConnectionStringResolver(IOptions<DbConnectionOptions> options)
+        public DefaultConnectionStringResolver(IOptions<DbConnectionOptions> options)
         {
             _options = options.Value;
         }

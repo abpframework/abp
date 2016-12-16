@@ -1,4 +1,5 @@
-﻿using AbpDesk.Tickets.Dtos;
+﻿using System.Threading.Tasks;
+using AbpDesk.Tickets.Dtos;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Xunit;
@@ -15,11 +16,11 @@ namespace AbpDesk.Tickets
         }
 
         [Fact]
-        public void GetAll_Test()
+        public async Task GetAll_Test()
         {
             //Act
 
-            var result = _ticketAppService.GetAll(new GetAllTicketsInput());
+            var result = await _ticketAppService.GetAll(new GetAllTicketsInput());
 
             //Assert
 
@@ -27,11 +28,11 @@ namespace AbpDesk.Tickets
         }
 
         [Fact]
-        public void GetAll_Filtered_Test()
+        public async Task GetAll_Filtered_Test()
         {
             //Act
 
-            var result = _ticketAppService.GetAll(new GetAllTicketsInput { Filter = "non-existing-text" });
+            var result = await _ticketAppService.GetAll(new GetAllTicketsInput { Filter = "non-existing-text" });
 
             //Assert
 

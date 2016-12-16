@@ -1,31 +1,65 @@
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Uow;
 
 namespace Volo.Abp.Repositories.EntityFrameworkCore
 {
-    public class UnitOfWorkDbContextProvider<TDbContext> : IDbContextProvider<TDbContext> 
+    public class UnitOfWorkDbContextProvider<TDbContext> : IDbContextProvider<TDbContext>
         where TDbContext : AbpDbContext<TDbContext>
     {
-        private readonly TDbContext _dbContext;
-
         private readonly IUnitOfWorkManager _unitOfWorkManager;
+        private readonly IConnectionStringResolver _connectionStringResolver;
 
         public UnitOfWorkDbContextProvider(
-            TDbContext dbContext, 
-            IUnitOfWorkManager unitOfWorkManager) //TODO: Should create this dynamically inside a unit of work.
+            IUnitOfWorkManager unitOfWorkManager,
+            IConnectionStringResolver connectionStringResolver)
         {
-            _dbContext = dbContext;
             _unitOfWorkManager = unitOfWorkManager;
+            _connectionStringResolver = connectionStringResolver;
         }
 
         public TDbContext GetDbContext()
         {
-            //if (_unitOfWorkManager.Current == null)
-            //{
-            //    throw new AbpException("A DbContext can only be created inside a unit of work!");
-            //}
+            var unitOfWork = _unitOfWorkManager.Current;
+            if (unitOfWork == null)
+            {
+                throw new AbpException("A DbContext can only be created inside a unit of work!");
+            }
 
-            return _dbContext;
+            var moduleName = "";//TODO: Get module name from DbContext?
+            var dbContextKey = $"{moduleName}_{typeof(TDbContext).FullName}_{_connectionStringResolver.Resolve(moduleName)}";
+
+            var databaseApi = unitOfWork.GetOrAddDatabaseApi(
+                dbContextKey,
+                () => new DbContextDatabaseApi<TDbContext>(
+                    unitOfWork.ServiceProvider.GetRequiredService<TDbContext>()
+                ));
+            
+            return ((DbContextDatabaseApi<TDbContext>)databaseApi).DbContext;
+        }
+    }
+
+    public class DbContextDatabaseApi<TDbContext> : IDatabaseApi
+        where TDbContext : AbpDbContext<TDbContext>
+    {
+        public TDbContext DbContext { get; }
+
+        public DbContextDatabaseApi(TDbContext dbContext)
+        {
+            DbContext = dbContext;
+        }
+
+        public Task SaveChangesAsync()
+        {
+            return DbContext.SaveChangesAsync();
+        }
+
+        public Task CommitAsync()
+        {
+            return DbContext.SaveChangesAsync();
         }
     }
 }

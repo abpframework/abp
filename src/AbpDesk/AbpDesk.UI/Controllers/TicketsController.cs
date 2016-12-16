@@ -1,4 +1,5 @@
-﻿using AbpDesk.Models.Tickets;
+﻿using System.Threading.Tasks;
+using AbpDesk.Models.Tickets;
 using AbpDesk.Tickets;
 using AbpDesk.Tickets.Dtos;
 using Microsoft.AspNetCore.Mvc;
@@ -15,9 +16,9 @@ namespace AbpDesk.Controllers
             _ticketAppService = ticketAppService;
         }
 
-        public IActionResult Index(GetAllTicketsInput input)
+        public async Task<IActionResult> Index(GetAllTicketsInput input)
         {
-            var result = _ticketAppService.GetAll(input);
+            var result = await _ticketAppService.GetAll(input);
 
             var model = new IndexViewModel
             {
