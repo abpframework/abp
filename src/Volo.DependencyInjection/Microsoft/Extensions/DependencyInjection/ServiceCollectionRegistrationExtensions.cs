@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using JetBrains.Annotations;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Volo.DependencyInjection;
-using Volo.ExtensionMethods;
 using Volo.Internal;
 
 namespace Microsoft.Extensions.DependencyInjection
@@ -12,83 +12,122 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         //TODO: Check if assembly/type is added before or add TryAdd versions of them?
         //TODO: When to use Add, when to use TryAdd? We may think to add conventional interfaces to indicate and attributes to override them.
+        //TODO: Make this code extensible, so we can add other conventions!
 
         public static IServiceCollection AddAssemblyOf<T>(this IServiceCollection services)
         {
-            return services.AddAssembly(typeof(T).GetTypeInfo().Assembly);
+            return services.AddAssemblyOf<T>(false);
+        }
+
+        public static IServiceCollection TryAddAssemblyOf<T>(this IServiceCollection services)
+        {
+            return services.AddAssemblyOf<T>(true);
         }
 
         public static IServiceCollection AddAssembly(this IServiceCollection services, Assembly assembly)
         {
-            var types = AssemblyHelper.GetAllTypes(assembly).Where(t =>
-            {
-                var typeInfo = t.GetTypeInfo();
-                return typeInfo.IsClass && !typeInfo.IsAbstract && !typeInfo.IsGenericType && !typeInfo.IsDefined(typeof(SkipAutoRegistrationAttribute));
-            });
+            return services.AddAssembly(assembly, false);
+        }
 
-            return services.AddTypes(types.ToArray());
+        public static IServiceCollection TryAddAssembly(this IServiceCollection services, Assembly assembly)
+        {
+            return services.AddAssembly(assembly, true);
         }
 
         public static IServiceCollection AddTypes(this IServiceCollection services, params Type[] types)
         {
-            foreach (var type in types)
-            {
-                services.AddType(type);
-            }
+            return services.AddTypes(false, types);
+        }
 
-            return services;
+        public static IServiceCollection TryAddTypes(this IServiceCollection services, params Type[] types)
+        {
+            return services.AddTypes(true, types);
         }
 
         public static IServiceCollection AddType(this IServiceCollection services, Type type)
         {
-            //TODO: Make this code extensible, so we can add other conventions!
+            return services.AddType(type, false);
+        }
 
-            foreach (var serviceType in FindServiceTypes(type))
+        public static IServiceCollection TryAddType(this IServiceCollection services, Type type)
+        {
+            return services.AddType(type, true);
+        }
+
+        internal static IServiceCollection AddAssemblyOf<T>(this IServiceCollection services, bool tryAdd)
+        {
+            return services.AddAssembly(typeof(T).GetTypeInfo().Assembly, tryAdd);
+        }
+
+        internal static IServiceCollection AddAssembly(this IServiceCollection services, Assembly assembly, bool tryAdd)
+        {
+            var types = AssemblyHelper
+                .GetAllTypes(assembly)
+                .Where(t =>
+                {
+                    var typeInfo = t.GetTypeInfo();
+                    return typeInfo.IsClass &&
+                           !typeInfo.IsAbstract &&
+                           !typeInfo.IsGenericType &&
+                           !typeInfo.IsDefined(typeof(SkipAutoRegistrationAttribute));
+                });
+
+            return services.AddTypes(tryAdd, types.ToArray());
+        }
+
+        internal static IServiceCollection AddTypes(this IServiceCollection services, bool tryAdd, params Type[] types)
+        {
+            foreach (var type in types)
             {
-                if (typeof(ITransientDependency).GetTypeInfo().IsAssignableFrom(type))
-                {
-                    services.AddTransient(serviceType, type);
-                }
+                services.AddType(type, tryAdd);
+            }
 
-                if (typeof(ISingletonDependency).GetTypeInfo().IsAssignableFrom(type))
-                {
-                    services.AddSingleton(serviceType, type);
-                }
+            return services;
+        }
 
-                if (typeof(IScopedDependency).GetTypeInfo().IsAssignableFrom(type))
+        internal static IServiceCollection AddType(this IServiceCollection services, Type type, bool tryAdd)
+        {
+            var lifeTime = GetServiceLifeTime(type);
+            if (lifeTime == null)
+            {
+                return services;
+            }
+            
+            foreach (var serviceType in AutoRegistrationHelper.GetExposedServices(type))
+            {
+                var serviceDescriptor = ServiceDescriptor.Describe(serviceType, type, lifeTime.Value);
+                if (tryAdd)
                 {
-                    services.AddScoped(serviceType, type);
+                    services.Add(serviceDescriptor);
+                }
+                else
+                {
+                    services.TryAdd(serviceDescriptor);
                 }
             }
 
             return services;
         }
 
-        private static IEnumerable<Type> FindServiceTypes(Type type)
+        [CanBeNull]
+        internal static ServiceLifetime? GetServiceLifeTime(Type type)
         {
-            var customExposedServices = type.GetTypeInfo().GetCustomAttributes().OfType<IExposedServiceTypesProvider>().SelectMany(p => p.GetExposedServiceTypes()).ToList();
-            if (customExposedServices.Any())
+            if (typeof(ITransientDependency).GetTypeInfo().IsAssignableFrom(type))
             {
-                return customExposedServices;
+                return ServiceLifetime.Transient;
             }
 
-            var serviceTypes = new List<Type> { type };
-
-            foreach (var interfaceType in type.GetTypeInfo().GetInterfaces())
+            if (typeof(ISingletonDependency).GetTypeInfo().IsAssignableFrom(type))
             {
-                var interfaceName = interfaceType.Name;
-                if (interfaceName.StartsWith("I"))
-                {
-                    interfaceName = interfaceName.Right(interfaceName.Length - 1);
-                }
-
-                if (type.Name.EndsWith(interfaceName))
-                {
-                    serviceTypes.Add(interfaceType);
-                }
+                return ServiceLifetime.Singleton;
             }
 
-            return serviceTypes;
+            if (typeof(IScopedDependency).GetTypeInfo().IsAssignableFrom(type))
+            {
+                return ServiceLifetime.Scoped;
+            }
+
+            return null;
         }
     }
 }
