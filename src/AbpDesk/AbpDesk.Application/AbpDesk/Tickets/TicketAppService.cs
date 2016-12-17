@@ -25,6 +25,7 @@ namespace AbpDesk.Tickets
 
         public async Task<ListResultDto<TicketDto>> GetAll(GetAllTicketsInput input)
         {
+            //TODO: Use conventional unit of work for application services when it's available!
             using (var unitOfWork = _unitOfWorkManager.Begin())
             {
                 var tickets = _ticketRepository
