@@ -16,50 +16,30 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public static IServiceCollection AddAssemblyOf<T>(this IServiceCollection services)
         {
-            return services.AddAssemblyOf<T>(false);
+            return services.InternalAddAssemblyOf<T>(false);
         }
 
         public static IServiceCollection TryAddAssemblyOf<T>(this IServiceCollection services)
         {
-            return services.AddAssemblyOf<T>(true);
+            return services.InternalAddAssemblyOf<T>(true);
+        }
+
+        internal static IServiceCollection InternalAddAssemblyOf<T>(this IServiceCollection services, bool tryAdd)
+        {
+            return services.InternalAddAssembly(typeof(T).GetTypeInfo().Assembly, tryAdd);
         }
 
         public static IServiceCollection AddAssembly(this IServiceCollection services, Assembly assembly)
         {
-            return services.AddAssembly(assembly, false);
+            return services.InternalAddAssembly(assembly, false);
         }
 
         public static IServiceCollection TryAddAssembly(this IServiceCollection services, Assembly assembly)
         {
-            return services.AddAssembly(assembly, true);
+            return services.InternalAddAssembly(assembly, true);
         }
 
-        public static IServiceCollection AddTypes(this IServiceCollection services, params Type[] types)
-        {
-            return services.AddTypes(false, types);
-        }
-
-        public static IServiceCollection TryAddTypes(this IServiceCollection services, params Type[] types)
-        {
-            return services.AddTypes(true, types);
-        }
-
-        public static IServiceCollection AddType(this IServiceCollection services, Type type)
-        {
-            return services.AddType(type, false);
-        }
-
-        public static IServiceCollection TryAddType(this IServiceCollection services, Type type)
-        {
-            return services.AddType(type, true);
-        }
-
-        internal static IServiceCollection AddAssemblyOf<T>(this IServiceCollection services, bool tryAdd)
-        {
-            return services.AddAssembly(typeof(T).GetTypeInfo().Assembly, tryAdd);
-        }
-
-        internal static IServiceCollection AddAssembly(this IServiceCollection services, Assembly assembly, bool tryAdd)
+        internal static IServiceCollection InternalAddAssembly(this IServiceCollection services, Assembly assembly, bool tryAdd)
         {
             var types = AssemblyHelper
                 .GetAllTypes(assembly)
@@ -72,10 +52,20 @@ namespace Microsoft.Extensions.DependencyInjection
                            !typeInfo.IsDefined(typeof(SkipAutoRegistrationAttribute));
                 });
 
-            return services.AddTypes(tryAdd, types.ToArray());
+            return services.InternalAddTypes(tryAdd, types.ToArray());
         }
 
-        internal static IServiceCollection AddTypes(this IServiceCollection services, bool tryAdd, params Type[] types)
+        public static IServiceCollection AddTypes(this IServiceCollection services, params Type[] types)
+        {
+            return services.InternalAddTypes(false, types);
+        }
+
+        public static IServiceCollection TryAddTypes(this IServiceCollection services, params Type[] types)
+        {
+            return services.InternalAddTypes(true, types);
+        }
+
+        internal static IServiceCollection InternalAddTypes(this IServiceCollection services, bool tryAdd, params Type[] types)
         {
             foreach (var type in types)
             {
@@ -83,6 +73,16 @@ namespace Microsoft.Extensions.DependencyInjection
             }
 
             return services;
+        }
+
+        public static IServiceCollection AddType(this IServiceCollection services, Type type)
+        {
+            return services.AddType(type, false);
+        }
+
+        public static IServiceCollection TryAddType(this IServiceCollection services, Type type)
+        {
+            return services.AddType(type, true);
         }
 
         internal static IServiceCollection AddType(this IServiceCollection services, Type type, bool tryAdd)
@@ -96,13 +96,14 @@ namespace Microsoft.Extensions.DependencyInjection
             foreach (var serviceType in AutoRegistrationHelper.GetExposedServices(type))
             {
                 var serviceDescriptor = ServiceDescriptor.Describe(serviceType, type, lifeTime.Value);
+
                 if (tryAdd)
                 {
-                    services.Add(serviceDescriptor);
+                    services.TryAdd(serviceDescriptor);
                 }
                 else
                 {
-                    services.TryAdd(serviceDescriptor);
+                    services.Add(serviceDescriptor);
                 }
             }
 
