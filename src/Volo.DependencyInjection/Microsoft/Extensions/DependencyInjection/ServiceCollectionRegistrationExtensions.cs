@@ -10,8 +10,7 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceCollectionRegistrationExtensions
     {
-        //TODO: Check if assembly/type is added before or add TryAdd versions of them?
-        //TODO: When to use Add, when to use TryAdd? We may think to add conventional interfaces to indicate and attributes to override them.
+        //TODO: When to use TryAdd, when to use Add (create an attribute to declare it)
         //TODO: Make this code extensible, so we can add other conventions!
 
         public static IServiceCollection AddAssemblyOf<T>(this IServiceCollection services)
