@@ -14,15 +14,15 @@ namespace Volo.Abp.Data
             _options = options.Value;
         }
 
-        public string Resolve(string modulename)
+        public string Resolve(string databaseName = null)
         {
             //Get default value
             var connString = _options.ConnectionStrings.Default;
 
             //Override by module specific value if provided
-            if (!modulename.IsNullOrEmpty())
+            if (!databaseName.IsNullOrEmpty())
             {
-                var moduleConnString = _options.ConnectionStrings.Modules.GetOrDefault(modulename);
+                var moduleConnString = _options.ConnectionStrings.GetOrDefault(databaseName);
                 if (!moduleConnString.IsNullOrEmpty())
                 {
                     connString = moduleConnString;

@@ -2,11 +2,11 @@
 {
     public class DbConnectionOptions
     {
-        public ConnectionStringsOption ConnectionStrings { get; set; }
+        public ConnectionStringsDictionary ConnectionStrings { get; set; }
 
         public DbConnectionOptions()
         {
-            ConnectionStrings = new ConnectionStringsOption();
+            ConnectionStrings = new ConnectionStringsDictionary();
         }
     }
 }

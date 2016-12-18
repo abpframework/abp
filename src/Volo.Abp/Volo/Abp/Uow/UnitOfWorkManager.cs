@@ -36,7 +36,7 @@ namespace Volo.Abp.Uow
                     scope
                 );
             }
-            catch(Exception ex)
+            catch
             {
                 scope.Dispose();
                 throw;

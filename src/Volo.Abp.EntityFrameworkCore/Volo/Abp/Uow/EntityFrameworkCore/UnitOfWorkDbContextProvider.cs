@@ -26,9 +26,10 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
                 throw new AbpException("A DbContext can only be created inside a unit of work!");
             }
 
-            var moduleName = "";//TODO: Get module name from DbContext?
-            var dbContextKey = $"{moduleName}_{typeof(TDbContext).FullName}_{_connectionStringResolver.Resolve(moduleName)}";
+            var connectionString = _connectionStringResolver.Resolve<TDbContext>();
+            var dbContextKey = $"{typeof(TDbContext).FullName}_{connectionString}";
 
+            //TODO: It would be very good if we could pass the connection string to DbContext options while creating DbContext! Because _connectionStringResolver.Resolve is called twice in current implementation.
             var databaseApi = unitOfWork.GetOrAddDatabaseApi(
                 dbContextKey,
                 () => new DbContextDatabaseApi<TDbContext>(

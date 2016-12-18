@@ -8,14 +8,14 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public string ConnectionString { get; }
 
-        public string ModuleName { get; } //TODO: Use a SchemaName/DatabaseName instead?
+        public string DatabaseName { get; }
 
         public DbContextOptionsBuilder DbContextOptions { get; protected set; }
 
-        public AbpDbContextConfigurationContext(string connectionString, [CanBeNull] string moduleName)
+        public AbpDbContextConfigurationContext(string connectionString, [CanBeNull] string databaseName)
         {
             ConnectionString = connectionString;
-            ModuleName = moduleName;
+            DatabaseName = databaseName;
             DbContextOptions = new DbContextOptionsBuilder();
         }
     }
@@ -25,8 +25,8 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public new DbContextOptionsBuilder<TDbContext> DbContextOptions => (DbContextOptionsBuilder<TDbContext>)base.DbContextOptions;
 
-        public AbpDbContextConfigurationContext(string connectionString, [CanBeNull] string moduleName)
-            : base(connectionString, moduleName)
+        public AbpDbContextConfigurationContext(string connectionString, [CanBeNull] string databaseName)
+            : base(connectionString, databaseName)
         {
             base.DbContextOptions = new DbContextOptionsBuilder<TDbContext>();
         }

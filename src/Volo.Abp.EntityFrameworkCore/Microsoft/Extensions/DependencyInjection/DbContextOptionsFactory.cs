@@ -13,13 +13,13 @@ namespace Microsoft.Extensions.DependencyInjection
         public static DbContextOptions<TDbContext> Create<TDbContext>(IServiceProvider serviceProvider)
             where TDbContext : AbpDbContext<TDbContext>
         {
-            const string moduleName = ""; //TODO: Use AbpModuleDescriptor instead of module name?
+            var databaseName = DatabaseNameAttribute.GetDatabaseName<TDbContext>();
 
             using (var scope = serviceProvider.CreateScope())
             {
                 var connInfoResolver = scope.ServiceProvider.GetRequiredService<IConnectionStringResolver>();
 
-                var context = new AbpDbContextConfigurationContext<TDbContext>(connInfoResolver.Resolve(moduleName), moduleName);
+                var context = new AbpDbContextConfigurationContext<TDbContext>(connInfoResolver.Resolve(databaseName), databaseName);
 
                 var dbContextOptions = scope.ServiceProvider.GetRequiredService<IOptions<AbpDbContextOptions>>().Value;
 
