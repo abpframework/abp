@@ -50,7 +50,7 @@ namespace Microsoft.Extensions.DependencyInjection
             serviceDescriptor.Lifetime.ShouldBe(lifetime);
         }
 
-        public static void ShouldNotContain(this IServiceCollection services, Type serviceType)
+        public static void ShouldNotContainService(this IServiceCollection services, Type serviceType)
         {
             var serviceDescriptor = services.FirstOrDefault(s => s.ServiceType == serviceType);
 

@@ -73,7 +73,7 @@ namespace Microsoft.Extensions.DependencyInjection
             //Assert
             _services.ShouldContain(typeof(IMyService1), typeof(MyServiceWithExposeList), ServiceLifetime.Transient);
             _services.ShouldContain(typeof(IMyService2), typeof(MyServiceWithExposeList), ServiceLifetime.Transient);
-            _services.ShouldNotContain(typeof(MyServiceWithExposeList));
+            _services.ShouldNotContainService(typeof(MyServiceWithExposeList));
         }
 
         [Fact]
@@ -128,6 +128,15 @@ namespace Microsoft.Extensions.DependencyInjection
             var instances = serviceProvider.GetServices<IMyService>().ToList();
             instances.Count.ShouldBe(1);
             instances[0].ShouldBeOfType(typeof(FirstImplOfMyService));
+        }
+
+        [Fact]
+        public void Should_Not_Register_Classes_Marked_With_DisableConventionalRegistration()
+        {
+            _services.AddType(typeof(NonConventionalImplOfMyService));
+
+            _services.ShouldNotContainService(typeof(IMyService));
+            _services.ShouldNotContainService(typeof(NonConventionalImplOfMyService));
         }
 
         [Fact]
@@ -211,6 +220,12 @@ namespace Microsoft.Extensions.DependencyInjection
         [Dependency(TryRegister = true)]
         public class TryRegisterImplOfMyService : IMyService
         {
+        }
+
+        [DisableConventionalRegistration]
+        public class NonConventionalImplOfMyService : IMyService
+        {
+            
         }
 
         public class MyEmptyClass
