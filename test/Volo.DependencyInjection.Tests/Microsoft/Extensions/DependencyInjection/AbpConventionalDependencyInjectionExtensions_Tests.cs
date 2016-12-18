@@ -63,16 +63,16 @@ namespace Microsoft.Extensions.DependencyInjection
             //Act
 
             var accessor = _services.AddObjectAccessor<MyEmptyClass>();
-            accessor.Object = obj;
+            accessor.Value = obj;
 
             //Assert
 
-            _services.GetSingletonInstance<IObjectAccessor<MyEmptyClass>>().Object.ShouldBe(obj);
-            _services.GetSingletonInstance<ObjectAccessor<MyEmptyClass>>().Object.ShouldBe(obj);
+            _services.GetSingletonInstance<IObjectAccessor<MyEmptyClass>>().Value.ShouldBe(obj);
+            _services.GetSingletonInstance<ObjectAccessor<MyEmptyClass>>().Value.ShouldBe(obj);
 
             var serviceProvider = _services.BuildServiceProvider();
-            serviceProvider.GetRequiredService<IObjectAccessor<MyEmptyClass>>().Object.ShouldBe(obj);
-            serviceProvider.GetRequiredService<ObjectAccessor<MyEmptyClass>>().Object.ShouldBe(obj);
+            serviceProvider.GetRequiredService<IObjectAccessor<MyEmptyClass>>().Value.ShouldBe(obj);
+            serviceProvider.GetRequiredService<ObjectAccessor<MyEmptyClass>>().Value.ShouldBe(obj);
         }
 
         public class MyTransientClass : ITransientDependency

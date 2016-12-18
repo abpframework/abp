@@ -12,7 +12,7 @@ namespace Microsoft.AspNetCore.Builder
         {
             Check.NotNull(app, nameof(app));
 
-            app.ApplicationServices.GetRequiredService<ObjectAccessor<IApplicationBuilder>>().Object = app;
+            app.ApplicationServices.GetRequiredService<ObjectAccessor<IApplicationBuilder>>().Value = app;
             app.ApplicationServices.GetRequiredService<AbpApplication>().Initialize(app.ApplicationServices);
         }
     }

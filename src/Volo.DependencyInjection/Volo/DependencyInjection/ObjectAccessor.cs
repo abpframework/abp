@@ -1,17 +1,19 @@
+using JetBrains.Annotations;
+
 namespace Volo.DependencyInjection
 {
     public class ObjectAccessor<T> : IObjectAccessor<T>
     {
-        public T Object { get; set; }
+        public T Value { get; set; }
 
         public ObjectAccessor()
         {
             
         }
 
-        public ObjectAccessor(T obj)
+        public ObjectAccessor([CanBeNull] T obj)
         {
-            Object = obj;
+            Value = obj;
         }
     }
 }
