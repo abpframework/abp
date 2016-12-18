@@ -16,6 +16,8 @@ namespace AbpDesk.EntityFrameworkCore
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            //TODO: Use different classes to map each entity type?
+
             modelBuilder.Entity<Ticket>(builder =>
             {
                 builder.ToTable("DskTickets");

@@ -16,10 +16,12 @@ namespace AbpDesk.ConsoleDemo
         {
             var configuration = BuildConfiguration();
 
+            //Configure DbConnectionOptions by configuration file (appsettings.json)
             services.Configure<DbConnectionOptions>(configuration);
 
             services.Configure<AbpDbContextOptions>(options =>
             {
+                //Configures all dbcontextes to use Sql Server with calculated connection string
                 options.Configure(context =>
                 {
                     context.DbContextOptions.UseSqlServer(context.ConnectionString);

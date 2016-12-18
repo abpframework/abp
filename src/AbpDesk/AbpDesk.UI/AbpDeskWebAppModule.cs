@@ -1,8 +1,6 @@
-﻿using System.IO;
-using AbpDesk.EntityFrameworkCore;
+﻿using AbpDesk.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,21 +23,20 @@ namespace AbpDesk
         {
             var hostingEnvironment = services.GetSingletonInstance<IHostingEnvironment>();
 
+            //TODO: This code is pretty similar to AbpDeskConsoleDemoModule, so use a common code!
+
             var configuration = BuildConfiguration(hostingEnvironment);
 
+            //Configure DbConnectionOptions by configuration file (appsettings.json)
             services.Configure<DbConnectionOptions>(configuration);
 
             services.Configure<AbpDbContextOptions>(options =>
             {
+                //Configures all dbcontextes to use Sql Server with calculated connection string
                 options.Configure(context =>
                 {
                     context.DbContextOptions.UseSqlServer(context.ConnectionString);
                 });
-            });
-
-            services.AddDbContext<AbpDeskDbContext>(options =>
-            {
-                options.UseSqlServer("Server=localhost;Database=AbpDesk;Trusted_Connection=True;");
             });
 
             services.AddMvc();
