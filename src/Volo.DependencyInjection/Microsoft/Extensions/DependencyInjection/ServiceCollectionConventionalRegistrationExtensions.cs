@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
 using Volo.DependencyInjection;
 using Volo.ExtensionMethods.Collections.Generic;
 
@@ -11,11 +12,11 @@ namespace Microsoft.Extensions.DependencyInjection
 
     public static class ServiceCollectionConventionalRegistrationExtensions
     {
-        private static readonly Dictionary<IServiceCollection, List<IConventionalRegistrar>> ConventionalRegistrars;
+        private static readonly ConcurrentDictionary<IServiceCollection, List<IConventionalRegistrar>> ConventionalRegistrars;
 
         static ServiceCollectionConventionalRegistrationExtensions()
         {
-            ConventionalRegistrars = new Dictionary<IServiceCollection, List<IConventionalRegistrar>>();
+            ConventionalRegistrars = new ConcurrentDictionary<IServiceCollection, List<IConventionalRegistrar>>();
         }
 
         public static IServiceCollection AddConventionalRegistrar(this IServiceCollection services, IConventionalRegistrar registrar)
@@ -31,16 +32,12 @@ namespace Microsoft.Extensions.DependencyInjection
 
         private static List<IConventionalRegistrar> GetOrCreateRegistrarList(IServiceCollection services)
         {
-            var registrars = ConventionalRegistrars.GetOrDefault(services);
-            if (registrars == null)
-            {
-                registrars = ConventionalRegistrars[services] = new List<IConventionalRegistrar>
+            return ConventionalRegistrars.GetOrAdd(
+                services,
+                () => new List<IConventionalRegistrar>
                 {
                     new DefaultConventionalRegistrar()
-                };
-            }
-
-            return registrars;
+                });
         }
     }
 }
