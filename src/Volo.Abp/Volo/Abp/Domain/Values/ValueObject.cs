@@ -38,7 +38,6 @@ namespace Volo.Abp.Domain.Values
 
             var item = obj as ValueObject<TValueObject>;
             return (object)item != null && Equals((TValueObject)item);
-
         }
 
         public override int GetHashCode()
