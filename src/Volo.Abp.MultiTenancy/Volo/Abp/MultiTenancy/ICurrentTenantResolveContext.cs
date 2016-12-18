@@ -1,3 +1,5 @@
+using Volo.Abp.DependencyInjection;
+
 namespace Volo.Abp.MultiTenancy
 {
     public interface ICurrentTenantResolveContext : IServiceProviderAccessor

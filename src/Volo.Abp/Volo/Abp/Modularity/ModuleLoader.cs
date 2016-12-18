@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Modularity.PlugIns;
 using Volo.ExtensionMethods.Collections.Generic;
@@ -10,8 +9,10 @@ namespace Volo.Abp.Modularity
 {
     public class ModuleLoader : IModuleLoader
     {
-        [NotNull]
-        public AbpModuleDescriptor[] LoadModules([NotNull] IServiceCollection services, [NotNull] Type startupModuleType, [NotNull] PlugInSourceList plugInSources)
+        public AbpModuleDescriptor[] LoadModules(
+            IServiceCollection services, 
+            Type startupModuleType, 
+            PlugInSourceList plugInSources)
         {
             Check.NotNull(services, nameof(services));
             Check.NotNull(startupModuleType, nameof(startupModuleType));
@@ -27,7 +28,11 @@ namespace Volo.Abp.Modularity
             return modules.ToArray();
         }
 
-        protected virtual void FillModules(List<AbpModuleDescriptor> modules, IServiceCollection services, Type startupModuleType, PlugInSourceList plugInSources)
+        protected virtual void FillModules(
+            List<AbpModuleDescriptor> modules, 
+            IServiceCollection services, 
+            Type startupModuleType, 
+            PlugInSourceList plugInSources)
         {
             //All modules starting from the startup module
             var moduleTypes = AbpModuleHelper.FindAllModuleTypes(startupModuleType);

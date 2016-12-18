@@ -1,6 +1,7 @@
 ﻿using JetBrains.Annotations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp
 {

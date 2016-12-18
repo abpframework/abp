@@ -8,10 +8,12 @@ namespace Volo.Abp
 {
     public class AbpApplication
     {
+        [NotNull]
         public Type StartupModuleType { get; }
 
         public IServiceProvider ServiceProvider { get; private set; }
 
+        [NotNull]
         internal AbpModuleDescriptor[] Modules { get; }
 
         private AbpApplication(
@@ -65,7 +67,10 @@ namespace Volo.Abp
             Check.NotNull(serviceProvider, nameof(serviceProvider));
 
             ServiceProvider = serviceProvider;
-            ServiceProvider.GetRequiredService<IModuleManager>().InitializeModules(new ApplicationInitializationContext(serviceProvider));
+
+            ServiceProvider
+                .GetRequiredService<IModuleManager>()
+                .InitializeModules(new ApplicationInitializationContext(serviceProvider));
         }
 
         private AbpModuleDescriptor[] LoadModules(IServiceCollection services, AbpApplicationCreationOptions options)
@@ -81,7 +86,9 @@ namespace Volo.Abp
 
         public void Shutdown()
         {
-            ServiceProvider.GetRequiredService<IModuleManager>().ShutdownModules(new ApplicationShutdownContext());
+            ServiceProvider
+                .GetRequiredService<IModuleManager>()
+                .ShutdownModules(new ApplicationShutdownContext());
         }
     }
 }
