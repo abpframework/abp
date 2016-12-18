@@ -10,10 +10,15 @@ namespace Volo.Abp.AspNetCore
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            AddAspNetServices(services);
 
             services.AddObjectAccessor<IApplicationBuilder>();
             services.AddAssemblyOf<AbpAspNetCoreModule>();
+        }
+
+        private static void AddAspNetServices(IServiceCollection services)
+        {
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
     }
 }

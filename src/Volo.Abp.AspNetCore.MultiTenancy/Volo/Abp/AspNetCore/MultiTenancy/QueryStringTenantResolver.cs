@@ -1,10 +1,9 @@
 ﻿using Volo.Abp.MultiTenancy;
-using Volo.DependencyInjection;
 using Volo.ExtensionMethods.Collections.Generic;
 
 namespace Volo.Abp.AspNetCore.MultiTenancy
 {
-    public class QueryStringTenantResolver : ITenantResolver, ITransientDependency
+    public class QueryStringTenantResolver : ITenantResolver
     {
         public const string TenantIdKey = "__tenantId";
         
