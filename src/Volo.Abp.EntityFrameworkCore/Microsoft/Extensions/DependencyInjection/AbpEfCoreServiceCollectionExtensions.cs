@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection.Extensions;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
-using Volo.Abp.Repositories.EntityFrameworkCore;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -12,7 +12,7 @@ namespace Microsoft.Extensions.DependencyInjection
             this IServiceCollection services)
             where TDbContext : AbpDbContext<TDbContext>
         {
-            services //TODO: This are copied from EntityFrameworkServiceCollectionExtensions, we should think on that later
+            services //TODO: This code is copied from EntityFrameworkServiceCollectionExtensions, we should think on that later
                 .AddMemoryCache()
                 .AddLogging();
 

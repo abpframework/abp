@@ -1,6 +1,4 @@
-using Volo.Abp.EntityFrameworkCore;
-
-namespace Volo.Abp.Repositories.EntityFrameworkCore
+namespace Volo.Abp.EntityFrameworkCore
 {
     public interface IDbContextProvider<out TDbContext>
         where TDbContext : AbpDbContext<TDbContext>

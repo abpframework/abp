@@ -5,16 +5,16 @@ namespace Volo.Abp.MultiTenancy
 {
     public class SimpleTenantResolver : ITenantResolver
     {
-        private readonly Action<ICurrentTenantResolveContext> _resolveAction;
+        private readonly Action<ITenantResolveContext> _resolveAction;
 
-        public SimpleTenantResolver([NotNull] Action<ICurrentTenantResolveContext> resolveAction)
+        public SimpleTenantResolver([NotNull] Action<ITenantResolveContext> resolveAction)
         {
             Check.NotNull(resolveAction, nameof(resolveAction));
 
             _resolveAction = resolveAction;
         }
 
-        public void Resolve(ICurrentTenantResolveContext context)
+        public void Resolve(ITenantResolveContext context)
         {
             _resolveAction(context);
         }

@@ -7,7 +7,7 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
     {
         public const string TenantIdKey = "__tenantId";
         
-        public void Resolve(ICurrentTenantResolveContext context)
+        public void Resolve(ITenantResolveContext context)
         {
             var httpContext = context.GetHttpContext();
             if (httpContext == null)

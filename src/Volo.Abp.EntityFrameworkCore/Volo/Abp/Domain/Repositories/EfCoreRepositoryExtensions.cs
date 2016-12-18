@@ -1,10 +1,9 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Domain.Entities;
-using Volo.Abp.Domain.Repositories;
-using Volo.Abp.Repositories.EntityFrameworkCore;
+using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 
-namespace Volo.Abp.Repositories
+namespace Volo.Abp.Domain.Repositories
 {
     public static class EfCoreRepositoryExtensions
     {

@@ -10,7 +10,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public string ModuleName { get; } //TODO: Use a SchemaName/DatabaseName instead?
 
-        public virtual DbContextOptionsBuilder DbContextOptions { get; protected set; }
+        public DbContextOptionsBuilder DbContextOptions { get; protected set; }
 
         public AbpDbContextConfigurationContext(string connectionString, [CanBeNull] string moduleName)
         {

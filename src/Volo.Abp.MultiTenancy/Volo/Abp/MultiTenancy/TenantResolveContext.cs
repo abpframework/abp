@@ -2,7 +2,7 @@ using System;
 
 namespace Volo.Abp.MultiTenancy
 {
-    public class CurrentTenantResolveContext : ICurrentTenantResolveContext
+    public class TenantResolveContext : ITenantResolveContext
     {
         public IServiceProvider ServiceProvider { get; }
 
@@ -15,7 +15,7 @@ namespace Volo.Abp.MultiTenancy
             return Handled == true || (Handled == null && Tenant != null);
         }
 
-        public CurrentTenantResolveContext(IServiceProvider serviceProvider)
+        public TenantResolveContext(IServiceProvider serviceProvider)
         {
             ServiceProvider = serviceProvider;
         }

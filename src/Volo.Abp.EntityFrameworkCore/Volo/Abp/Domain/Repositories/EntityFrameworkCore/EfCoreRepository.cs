@@ -3,10 +3,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Domain.Entities;
-using Volo.Abp.Domain.Repositories;
 using Volo.Abp.EntityFrameworkCore;
 
-namespace Volo.Abp.Repositories.EntityFrameworkCore
+namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
 {
     public class EfCoreRepository<TDbContext, TEntity, TPrimaryKey> : QueryableRepositoryBase<TEntity, TPrimaryKey>, IEfCoreRepository<TEntity, TPrimaryKey>
         where TDbContext : AbpDbContext<TDbContext>

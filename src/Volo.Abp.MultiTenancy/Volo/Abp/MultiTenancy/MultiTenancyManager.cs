@@ -6,7 +6,7 @@ using Volo.DependencyInjection;
 
 namespace Volo.Abp.MultiTenancy
 {
-    public class MultiTenancyManager : IMultiTenancyManager, IScopedDependency
+    public class MultiTenancyManager : IMultiTenancyManager, ITransientDependency
     {
         public TenantInfo CurrentTenant => GetCurrentTenant();
 
@@ -43,7 +43,7 @@ namespace Volo.Abp.MultiTenancy
 
             using (var serviceScope = _serviceProvider.CreateScope())
             {
-                var context = new CurrentTenantResolveContext(serviceScope.ServiceProvider);
+                var context = new TenantResolveContext(serviceScope.ServiceProvider);
 
                 foreach (var tenantResolver in _options.TenantResolvers)
                 {
@@ -60,9 +60,9 @@ namespace Volo.Abp.MultiTenancy
             }
         }
 
-        public IDisposable ChangeTenant(TenantInfo tenantInfo)
+        public IDisposable ChangeTenant(TenantInfo tenant)
         {
-            return _tenantScopeProvider.EnterScope(tenantInfo);
+            return _tenantScopeProvider.EnterScope(tenant);
         }
     }
 }

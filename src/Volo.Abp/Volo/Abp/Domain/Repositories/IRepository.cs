@@ -57,7 +57,6 @@ namespace Volo.Abp.Domain.Repositories
         /// </summary>
         /// <param name="id">Primary key of the entity to get</param>
         /// <returns>Entity or null</returns>
-        [CanBeNull]
         Task<TEntity> FindAsync(TPrimaryKey id);
 
         /// <summary>

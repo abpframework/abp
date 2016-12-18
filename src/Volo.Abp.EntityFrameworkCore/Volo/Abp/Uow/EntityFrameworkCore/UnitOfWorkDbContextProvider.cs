@@ -1,11 +1,8 @@
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
-using Volo.Abp.Uow;
 
-namespace Volo.Abp.Repositories.EntityFrameworkCore
+namespace Volo.Abp.Uow.EntityFrameworkCore
 {
     public class UnitOfWorkDbContextProvider<TDbContext> : IDbContextProvider<TDbContext>
         where TDbContext : AbpDbContext<TDbContext>
@@ -39,27 +36,6 @@ namespace Volo.Abp.Repositories.EntityFrameworkCore
                 ));
             
             return ((DbContextDatabaseApi<TDbContext>)databaseApi).DbContext;
-        }
-    }
-
-    public class DbContextDatabaseApi<TDbContext> : IDatabaseApi
-        where TDbContext : AbpDbContext<TDbContext>
-    {
-        public TDbContext DbContext { get; }
-
-        public DbContextDatabaseApi(TDbContext dbContext)
-        {
-            DbContext = dbContext;
-        }
-
-        public Task SaveChangesAsync()
-        {
-            return DbContext.SaveChangesAsync();
-        }
-
-        public Task CommitAsync()
-        {
-            return DbContext.SaveChangesAsync();
         }
     }
 }
