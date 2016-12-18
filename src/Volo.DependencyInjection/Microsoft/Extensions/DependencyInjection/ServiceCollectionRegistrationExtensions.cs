@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Reflection;
-using Volo.DependencyInjection;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
