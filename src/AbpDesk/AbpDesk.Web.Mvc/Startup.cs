@@ -9,7 +9,7 @@ namespace AbpDesk
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddApplication<AbpDeskWebAppModule>();
+            services.AddApplication<AbpDeskWebMvcModule>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)

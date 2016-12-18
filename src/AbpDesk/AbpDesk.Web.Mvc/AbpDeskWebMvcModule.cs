@@ -17,7 +17,7 @@ namespace AbpDesk
     //TODO: Rename project to AbpDesk.Web.Mvc
 
     [DependsOn(typeof(AbpAspNetCoreMvcModule), typeof(AbpDeskApplicationModule), typeof(AbpDeskEntityFrameworkCoreModule))]
-    public class AbpDeskWebAppModule : AbpModule
+    public class AbpDeskWebMvcModule : AbpModule
     {
         public override void ConfigureServices(IServiceCollection services)
         {
