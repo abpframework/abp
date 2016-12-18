@@ -10,35 +10,14 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceCollectionRegistrationExtensions
     {
-        //TODO: When to use TryAdd, when to use Add (create an attribute to declare it)
-        //TODO: Make this code extensible, so we can add other conventions!
+        //TODO: Make this code extensible, so we can add other conventions! Also, extract default convention to a class which implements the convention interface.
 
         public static IServiceCollection AddAssemblyOf<T>(this IServiceCollection services)
         {
-            return services.InternalAddAssemblyOf<T>(false);
-        }
-
-        public static IServiceCollection TryAddAssemblyOf<T>(this IServiceCollection services)
-        {
-            return services.InternalAddAssemblyOf<T>(true);
-        }
-
-        internal static IServiceCollection InternalAddAssemblyOf<T>(this IServiceCollection services, bool tryAdd)
-        {
-            return services.InternalAddAssembly(typeof(T).GetTypeInfo().Assembly, tryAdd);
+            return services.AddAssembly(typeof(T).GetTypeInfo().Assembly);
         }
 
         public static IServiceCollection AddAssembly(this IServiceCollection services, Assembly assembly)
-        {
-            return services.InternalAddAssembly(assembly, false);
-        }
-
-        public static IServiceCollection TryAddAssembly(this IServiceCollection services, Assembly assembly)
-        {
-            return services.InternalAddAssembly(assembly, true);
-        }
-
-        internal static IServiceCollection InternalAddAssembly(this IServiceCollection services, Assembly assembly, bool tryAdd)
         {
             var types = AssemblyHelper
                 .GetAllTypes(assembly)
@@ -47,28 +26,17 @@ namespace Microsoft.Extensions.DependencyInjection
                     var typeInfo = t.GetTypeInfo();
                     return typeInfo.IsClass &&
                            !typeInfo.IsAbstract &&
-                           !typeInfo.IsGenericType &&
-                           !typeInfo.IsDefined(typeof(SkipAutoRegistrationAttribute));
+                           !typeInfo.IsGenericType;
                 });
 
-            return services.InternalAddTypes(tryAdd, types.ToArray());
+            return services.AddTypes(types.ToArray());
         }
 
         public static IServiceCollection AddTypes(this IServiceCollection services, params Type[] types)
         {
-            return services.InternalAddTypes(false, types);
-        }
-
-        public static IServiceCollection TryAddTypes(this IServiceCollection services, params Type[] types)
-        {
-            return services.InternalAddTypes(true, types);
-        }
-
-        internal static IServiceCollection InternalAddTypes(this IServiceCollection services, bool tryAdd, params Type[] types)
-        {
             foreach (var type in types)
             {
-                services.AddType(type, tryAdd);
+                services.AddType(type);
             }
 
             return services;
@@ -76,27 +44,26 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public static IServiceCollection AddType(this IServiceCollection services, Type type)
         {
-            return services.AddType(type, false);
-        }
+            var typeInfo = type.GetTypeInfo();
 
-        public static IServiceCollection TryAddType(this IServiceCollection services, Type type)
-        {
-            return services.AddType(type, true);
-        }
+            if (typeInfo.IsDefined(typeof(DisableConventionalRegistrationAttribute), true))
+            {
+                return services;
+            }
 
-        internal static IServiceCollection AddType(this IServiceCollection services, Type type, bool tryAdd)
-        {
-            var lifeTime = GetServiceLifeTime(type);
+            var dependencyAttribute = typeInfo.GetCustomAttributes<DependencyAttribute>(true).FirstOrDefault(); //TODO: Use GetCustomAttribute instead?
+
+            var lifeTime = dependencyAttribute?.Lifetime ?? GetServiceLifetimeFromInterfaces(type);
             if (lifeTime == null)
             {
                 return services;
             }
-            
+
             foreach (var serviceType in AutoRegistrationHelper.GetExposedServices(type))
             {
                 var serviceDescriptor = ServiceDescriptor.Describe(serviceType, type, lifeTime.Value);
 
-                if (tryAdd)
+                if (dependencyAttribute?.TryRegister == true)
                 {
                     services.TryAdd(serviceDescriptor);
                 }
@@ -110,7 +77,7 @@ namespace Microsoft.Extensions.DependencyInjection
         }
 
         [CanBeNull]
-        internal static ServiceLifetime? GetServiceLifeTime(Type type)
+        internal static ServiceLifetime? GetServiceLifetimeFromInterfaces(Type type)
         {
             if (typeof(ITransientDependency).GetTypeInfo().IsAssignableFrom(type))
             {
