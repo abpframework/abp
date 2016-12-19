@@ -14,7 +14,7 @@ namespace Volo.Abp.Data
             _options = options.Value;
         }
 
-        public string Resolve(string databaseName = null)
+        public virtual string Resolve(string databaseName = null)
         {
             //TODO: Override by tenant conn string
             //TODO: Override by tenant module specific conn string
