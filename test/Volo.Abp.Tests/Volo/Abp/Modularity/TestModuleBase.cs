@@ -4,11 +4,18 @@ namespace Volo.Abp.Modularity
 {
     public class TestModuleBase : AbpModule
     {
+        public bool PreConfigureServicesIsCalled { get; set; }
+
         public bool ConfigureServicesIsCalled { get; set; }
 
         public bool OnApplicationInitializeIsCalled { get; set; }
 
         public bool OnApplicationShutdownIsCalled { get; set; }
+
+        public override void PreConfigureServices(IServiceCollection services)
+        {
+            PreConfigureServicesIsCalled = true;
+        }
 
         public override void ConfigureServices(IServiceCollection services)
         {

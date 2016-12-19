@@ -12,27 +12,27 @@ namespace Volo.Abp
         public void Should_Initialize_Single_Module()
         {
             //Arrange
-
             var services = new ServiceCollection();
-
             var application = services.AddApplication<IndependentEmptyModule>();
+            
+            //Assert
+            var module = services.GetSingletonInstance<IndependentEmptyModule>();
+            module.PreConfigureServicesIsCalled.ShouldBeTrue();
+            module.ConfigureServicesIsCalled.ShouldBeTrue();
 
             using (var scope = services.BuildServiceProvider().CreateScope())
             {
+                //Act
                 application.Initialize(scope.ServiceProvider);
-
+                
                 //Assert
-
-                var module = application.ServiceProvider.GetRequiredService<IndependentEmptyModule>();
-                module.ConfigureServicesIsCalled.ShouldBeTrue();
+                application.ServiceProvider.GetRequiredService<IndependentEmptyModule>().ShouldBeSameAs(module);
                 module.OnApplicationInitializeIsCalled.ShouldBeTrue();
 
                 //Act
-
                 application.Shutdown();
 
                 //Assert
-
                 module.OnApplicationShutdownIsCalled.ShouldBeTrue();
             }
         }
@@ -41,30 +41,30 @@ namespace Volo.Abp
         public void Should_Initialize_PlugIn()
         {
             //Arrange
-
             var services = new ServiceCollection();
 
+            //Act
             var application = services.AddApplication<IndependentEmptyModule>(options =>
             {
                 options.PlugInSources.AddTypes(typeof(IndependentEmptyPlugInModule));
             });
 
-            //Act
+            //Assert
+            var plugInModule = services.GetSingletonInstance<IndependentEmptyPlugInModule>();
+            plugInModule.PreConfigureServicesIsCalled.ShouldBeTrue();
+            plugInModule.ConfigureServicesIsCalled.ShouldBeTrue();
 
+            //Act
             application.Initialize(services.BuildServiceProvider());
 
             //Assert
-
-            var plugInModule = application.ServiceProvider.GetRequiredService<IndependentEmptyPlugInModule>();
-            plugInModule.ConfigureServicesIsCalled.ShouldBeTrue();
+            application.ServiceProvider.GetRequiredService<IndependentEmptyPlugInModule>().ShouldBeSameAs(plugInModule);
             plugInModule.OnApplicationInitializeIsCalled.ShouldBeTrue();
 
             //Act
-
             application.Shutdown();
 
             //Assert
-
             plugInModule.OnApplicationShutdownIsCalled.ShouldBeTrue();
         }
     }
