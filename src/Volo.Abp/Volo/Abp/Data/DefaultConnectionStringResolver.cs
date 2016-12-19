@@ -16,23 +16,21 @@ namespace Volo.Abp.Data
 
         public string Resolve(string databaseName = null)
         {
-            //Get default value
-            var connString = _options.ConnectionStrings.Default;
+            //TODO: Override by tenant conn string
+            //TODO: Override by tenant module specific conn string
 
-            //Override by module specific value if provided
+            //Get module specific value if provided
             if (!databaseName.IsNullOrEmpty())
             {
                 var moduleConnString = _options.ConnectionStrings.GetOrDefault(databaseName);
                 if (!moduleConnString.IsNullOrEmpty())
                 {
-                    connString = moduleConnString;
+                    return moduleConnString;
                 }
             }
-
-            //TODO: Override by tenant conn string
-            //TODO: Override by tenant module specific conn string
-
-            return connString;
+            
+            //Get default value
+            return _options.ConnectionStrings.Default;
         }
     }
 }
