@@ -5,9 +5,6 @@ using Xunit;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
-    //TODO: Add unit test for:
-    // - IConventionalRegistrar
-
     public class AbpConventionalDependencyInjectionExtensions_Tests
     {
         private readonly IServiceCollection _services;

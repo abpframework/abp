@@ -3,11 +3,6 @@ using Volo.DependencyInjection;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
-    /* TODO: String IConventionalRegistrar objects in a static Dictionary
-     * may cause a performance problem if we create too many short lived IServiceCollection instances.
-     * Normally, an application will have a single IServiceCollection instance, but we should consider edge cases is there are.
-     */
-
     public static class ServiceCollectionConventionalRegistrationExtensions
     {
         public static IServiceCollection AddConventionalRegistrar(this IServiceCollection services, IConventionalRegistrar registrar)
