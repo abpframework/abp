@@ -5,7 +5,7 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace AbpDesk.EntityFrameworkCore
 {
-    [DatabaseName(ConnectionStrings.DefaultConnectionStringName)]
+    [DatabaseName(ConnectionStrings.DefaultConnectionStringName)] //Explicitly declares this module always uses the default connection string
     public class AbpDeskDbContext : AbpDbContext<AbpDeskDbContext>
     {
         public DbSet<Ticket> Tickets { get; set; }
