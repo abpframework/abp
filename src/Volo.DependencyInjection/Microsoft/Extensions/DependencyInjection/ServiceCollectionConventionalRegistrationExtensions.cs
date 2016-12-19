@@ -1,7 +1,5 @@
-﻿using System.Collections.Concurrent;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Volo.DependencyInjection;
-using Volo.ExtensionMethods.Collections.Generic;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -12,19 +10,12 @@ namespace Microsoft.Extensions.DependencyInjection
 
     public static class ServiceCollectionConventionalRegistrationExtensions
     {
-        private static readonly ConcurrentDictionary<IServiceCollection, List<IConventionalRegistrar>> ConventionalRegistrars;
-
-        static ServiceCollectionConventionalRegistrationExtensions()
-        {
-            ConventionalRegistrars = new ConcurrentDictionary<IServiceCollection, List<IConventionalRegistrar>>();
-        }
-
         public static IServiceCollection AddConventionalRegistrar(this IServiceCollection services, IConventionalRegistrar registrar)
         {
             GetOrCreateRegistrarList(services).Add(registrar);
             return services;
         }
-        
+
         internal static List<IConventionalRegistrar> GetConventionalRegistrars(this IServiceCollection services)
         {
             return GetOrCreateRegistrarList(services);
@@ -32,12 +23,14 @@ namespace Microsoft.Extensions.DependencyInjection
 
         private static List<IConventionalRegistrar> GetOrCreateRegistrarList(IServiceCollection services)
         {
-            return ConventionalRegistrars.GetOrAdd(
-                services,
-                () => new List<IConventionalRegistrar>
-                {
-                    new DefaultConventionalRegistrar()
-                });
+            var conventionalRegistrars = services.GetSingletonInstanceOrNull<IObjectAccessor<ConventionalRegistrarList>>()?.Value;
+            if (conventionalRegistrars == null)
+            {
+                conventionalRegistrars = new ConventionalRegistrarList { new DefaultConventionalRegistrar() };
+                services.AddObjectAccessor(conventionalRegistrars);
+            }
+
+            return conventionalRegistrars;
         }
     }
 }

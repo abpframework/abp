@@ -33,8 +33,9 @@ namespace Microsoft.Extensions.DependencyInjection
                 throw new Exception("An object accessor is registered before for type: " + typeof(T).AssemblyQualifiedName);
             }
 
-            services.AddSingleton(typeof(IObjectAccessor<T>), accessor);
-            services.AddSingleton(typeof(ObjectAccessor<T>), accessor);
+            //Add to the beginning for fast retrieve
+            services.Insert(0, ServiceDescriptor.Singleton(typeof(ObjectAccessor<T>), accessor));
+            services.Insert(0, ServiceDescriptor.Singleton(typeof(IObjectAccessor<T>), accessor));
 
             return accessor;
         }
