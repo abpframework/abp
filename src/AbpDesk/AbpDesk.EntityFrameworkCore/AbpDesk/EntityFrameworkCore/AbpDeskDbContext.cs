@@ -1,9 +1,11 @@
 ﻿using AbpDesk.Tickets;
 using Microsoft.EntityFrameworkCore;
+using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 
 namespace AbpDesk.EntityFrameworkCore
 {
+    [DatabaseName(ConnectionStrings.DefaultConnectionStringName)]
     public class AbpDeskDbContext : AbpDbContext<AbpDeskDbContext>
     {
         public DbSet<Ticket> Tickets { get; set; }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -17,7 +16,7 @@ namespace Volo.DependencyInjection
                 return;
             }
 
-            var dependencyAttribute = typeInfo.GetCustomAttributes<DependencyAttribute>(true).FirstOrDefault(); //TODO: Use GetCustomAttribute instead?
+            var dependencyAttribute = typeInfo.GetCustomAttribute<DependencyAttribute>(true);
 
             var lifeTime = dependencyAttribute?.Lifetime ?? GetServiceLifetimeFromInterfaces(type);
             if (lifeTime == null)
