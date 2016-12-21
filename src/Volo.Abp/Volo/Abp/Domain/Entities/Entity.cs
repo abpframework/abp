@@ -4,14 +4,13 @@ using System.Reflection;
 
 namespace Volo.Abp.Domain.Entities
 {
-    //TODO: Think on Entity class without PK
-    ///// <summary>
-    ///// A shortcut of <see cref="Entity{TPrimaryKey}"/> for most used primary key type (<see cref="int"/>).
-    ///// </summary>
-    //public abstract class Entity : Entity<string>, IEntity<>
-    //{
+    /// <summary>
+    /// A shortcut of <see cref="Entity{TPrimaryKey}"/> for default primary key type (<see cref="string"/>).
+    /// </summary>
+    public abstract class Entity : Entity<string>, IEntity
+    {
 
-    //}
+    }
 
     /// <summary>
     /// Basic implementation of IEntity interface.
