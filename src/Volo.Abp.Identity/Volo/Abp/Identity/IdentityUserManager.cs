@@ -4,10 +4,11 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Volo.Abp.Domain.Services;
 
 namespace Volo.Abp.Identity
 {
-    public class IdentityUserManager : UserManager<IdentityUser>
+    public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
     {
         public IdentityUserManager(
             IUserStore<IdentityUser> store,

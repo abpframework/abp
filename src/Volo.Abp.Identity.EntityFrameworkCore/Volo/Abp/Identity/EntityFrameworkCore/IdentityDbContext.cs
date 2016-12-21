@@ -12,9 +12,11 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         /// Initializes a new instance of <see cref="IdentityDbContext"/>.
         /// </summary>
         /// <param name="options">The options to be used by a <see cref="DbContext"/>.</param>
-        public IdentityDbContext(DbContextOptions<IdentityDbContext> options) 
+        public IdentityDbContext(DbContextOptions<IdentityDbContext> options)
             : base(options)
-        { }
+        {
+            
+        }
         
         /// <summary>
         /// Gets or sets the <see cref="DbSet{TEntity}"/> of Users.
@@ -59,6 +61,8 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         /// </param>
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            //TODO: Set Default Values for properties
+
             builder.Entity<IdentityUser>(b =>
             {
                 b.ToTable("IdentityUsers");
@@ -72,6 +76,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 b.HasMany(u => u.Claims).WithOne().HasForeignKey(uc => uc.UserId).IsRequired();
                 b.HasMany(u => u.Logins).WithOne().HasForeignKey(ul => ul.UserId).IsRequired();
                 b.HasMany(u => u.Roles).WithOne().HasForeignKey(ur => ur.UserId).IsRequired();
+                b.HasMany(u => u.Tokens).WithOne().HasForeignKey(ur => ur.UserId).IsRequired();
 
                 b.HasIndex(u => u.NormalizedUserName).HasName("UserNameIndex").IsUnique();
                 b.HasIndex(u => u.NormalizedEmail).HasName("EmailIndex");
@@ -95,22 +100,18 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             builder.Entity<IdentityUserClaim>(b => 
             {
                 b.ToTable("IdentityUserClaims");
-
-                //TODO: Index?
-                //TODO: Foreign Keys?
             });
 
             builder.Entity<IdentityRoleClaim>(b => 
             {
                 b.ToTable("IdentityRoleClaims");
-
-                //TODO: Index?
-                //TODO: Foreign Keys?
             });
 
             builder.Entity<IdentityUserRole>(b => 
             {
                 b.ToTable("IdentityUserRoles");
+
+                b.HasOne<IdentityRole>().WithMany().HasForeignKey(ur => ur.RoleId).IsRequired();
 
                 b.HasIndex(r => new { r.UserId, r.RoleId }).IsUnique();
             });
@@ -120,15 +121,13 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 b.ToTable("IdentityUserLogins");
 
                 b.HasIndex(l => new { l.UserId, l.LoginProvider, l.ProviderKey }).IsUnique();
-                //TODO: Foreign Keys?
             });
 
             builder.Entity<IdentityUserToken>(b => 
             {
                 b.ToTable("IdentityUserTokens");
 
-                b.HasIndex(l => new {l.UserId, l.LoginProvider, l.Name}).IsUnique();
-                //TODO: Foreign Keys?
+                b.HasIndex(l => new { l.UserId, l.LoginProvider, l.Name }).IsUnique();
             });
         }
     }

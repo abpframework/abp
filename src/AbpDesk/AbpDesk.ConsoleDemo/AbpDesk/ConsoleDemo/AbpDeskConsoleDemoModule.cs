@@ -5,11 +5,15 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 
 namespace AbpDesk.ConsoleDemo
 {
-    [DependsOn(typeof(AbpDeskApplicationModule), typeof(AbpDeskEntityFrameworkCoreModule))]
+    [DependsOn(
+        typeof(AbpDeskApplicationModule), 
+        typeof(AbpDeskEntityFrameworkCoreModule), 
+        typeof(AbpIdentityEntityFrameworkCoreModule))]
     public class AbpDeskConsoleDemoModule : AbpModule
     {
         public override void ConfigureServices(IServiceCollection services)

@@ -103,6 +103,11 @@ namespace Volo.Abp.Identity
         /// </summary>
         public virtual ICollection<IdentityUserLogin> Logins { get; } = new Collection<IdentityUserLogin>();
 
+        /// <summary>
+        /// Navigation property for this users tokens.
+        /// </summary>
+        public virtual ICollection<IdentityUserToken> Tokens { get; } = new Collection<IdentityUserToken>();
+
         protected IdentityUser()
         {
 

@@ -5,6 +5,7 @@
     "NETStandard.Library": "1.6.1",
     "Volo.Abp.EntityFrameworkCore": "1.0.0-*",
     "Microsoft.EntityFrameworkCore.Relational": "1.1.0",
+    "Microsoft.EntityFrameworkCore.SqlServer": "1.1.0",
     "Volo.Abp.Identity": "1.0.0-*"
   },
 
