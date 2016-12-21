@@ -63,6 +63,8 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         {
             //TODO: Set Default Values for properties
 
+            //TODO: Unique indexes can be a problem for a multi-tenant application. Think again.
+
             builder.Entity<IdentityUser>(b =>
             {
                 b.ToTable("IdentityUsers");
