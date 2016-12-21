@@ -9,7 +9,7 @@ namespace Volo.Abp.Identity
     //TODO: Should set Id to a GUID (where? on repository?)
     //TODO: Properties should not be public!
     
-    public class IdentityUser : Entity
+    public class IdentityUser : AggregateRoot
     {
         /// <summary>
         /// Gets or sets the user name for this user.

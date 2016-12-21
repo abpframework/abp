@@ -15,7 +15,7 @@ namespace Volo.Abp.Identity
     /// <summary>
     /// Represents a role in the identity system
     /// </summary>
-    public class IdentityRole : Entity
+    public class IdentityRole : AggregateRoot
     {
         /// <summary>
         /// Gets or sets the name for this role.
