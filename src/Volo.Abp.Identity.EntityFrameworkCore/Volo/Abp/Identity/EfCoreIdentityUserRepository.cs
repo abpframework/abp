@@ -11,11 +11,11 @@ using Volo.Abp.Identity.EntityFrameworkCore;
 namespace Volo.Abp.Identity
 {
     //TODO: Register for;
-    //- IIdentityUserRepository
-    //- IRepository<IdentityUser>
-    //- IRepository<IdentityUser, string>
-    //- IQueryableRepository<IdentityUser>
-    //- IQueryableRepository<IdentityUser, string>
+    //- IIdentityUserRepository OK, by convention
+    //- IRepository<IdentityUser> -> none!
+    //- IRepository<IdentityUser, string> -> OK, by AddDefaultEfCoreRepositories but note to EfCoreIdentityUserRepository!
+    //- IQueryableRepository<IdentityUser> -> none!
+    //- IQueryableRepository<IdentityUser, string> - OK, by AddDefaultEfCoreRepositories, but not to EfCoreIdentityUserRepository!
     public class EfCoreIdentityUserRepository : EfCoreRepository<IdentityDbContext, IdentityUser>, IIdentityUserRepository
     {
         public EfCoreIdentityUserRepository(IDbContextProvider<IdentityDbContext> dbContextProvider) 

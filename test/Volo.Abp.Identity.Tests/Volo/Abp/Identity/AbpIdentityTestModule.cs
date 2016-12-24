@@ -3,11 +3,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 
 namespace Volo.Abp.Identity
 {
-    [DependsOn(typeof(AbpIdentityModule))]
+    [DependsOn(typeof(AbpIdentityModule), typeof(AbpIdentityEntityFrameworkCoreModule))]
     public class AbpIdentityTestModule : AbpModule
     {
         public override void ConfigureServices(IServiceCollection services)
