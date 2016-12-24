@@ -197,9 +197,9 @@ namespace Volo.Abp.Identity
                 await _userRepository.UpdateAsync(user);
                 await SaveChanges(cancellationToken);
             }
-            catch (AbpDbConcurrencyException ex) //(DbUpdateConcurrencyException)
+            catch (AbpDbConcurrencyException ex)
             {
-                //TODO: Log...
+                //TODO: Log...?
                 return IdentityResult.Failed(ErrorDescriber.ConcurrencyFailure());
             }
 
@@ -224,7 +224,7 @@ namespace Volo.Abp.Identity
                 await _userRepository.DeleteAsync(user);
                 await SaveChanges(cancellationToken);
             }
-            catch (AbpDbConcurrencyException ex) //(DbUpdateConcurrencyException)
+            catch (AbpDbConcurrencyException ex)
             {
                 //TODO: Log...
                 return IdentityResult.Failed(ErrorDescriber.ConcurrencyFailure());

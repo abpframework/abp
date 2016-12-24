@@ -159,13 +159,20 @@ namespace Volo.Abp.Identity
             return Roles.Any(r => r.RoleId == roleId);
         }
 
+        public void AddClaim([NotNull] Claim claim)
+        {
+            Check.NotNull(claim, nameof(claim));
+
+            Claims.Add(new IdentityUserClaim(Id, claim));
+        }
+
         public void AddClaims([NotNull] IEnumerable<Claim> claims)
         {
             Check.NotNull(claims, nameof(claims));
 
             foreach (var claim in claims)
             {
-                Claims.Add(new IdentityUserClaim(Id, claim));
+                AddClaim(claim);
             }
         }
 
@@ -187,8 +194,15 @@ namespace Volo.Abp.Identity
 
             foreach (var claim in claims)
             {
-                Claims.RemoveAll(uc => uc.ClaimValue == claim.Value && uc.ClaimType == claim.Type);
+                RemoveClaim(claim);
             }
+        }
+
+        public void RemoveClaim([NotNull] Claim claim)
+        {
+            Check.NotNull(claim, nameof(claim));
+
+            Claims.RemoveAll(c => c.ClaimValue == claim.Value && c.ClaimType == claim.Type);
         }
 
         public void AddLogin([NotNull] UserLoginInfo login)

@@ -8,11 +8,11 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public class AddAbpDbContextOptions
     {
-        internal RepositoryRegistrationOptions Repositories { get; set; }
+        internal RepositoryRegistrationOptions RepositoryOptions { get; set; }
 
         public AddAbpDbContextOptions()
         {
-            Repositories = new RepositoryRegistrationOptions();
+            RepositoryOptions = new RepositoryRegistrationOptions();
         }
 
         /// <summary>
@@ -22,18 +22,24 @@ namespace Microsoft.Extensions.DependencyInjection
         /// Registers repositories only for aggregate root entities by default.
         /// set <see cref="includeAllEntities"/> to true to include all entities.
         /// </param>
-        public void AddDefaultRepositories(bool includeAllEntities = false)
+        public void WithDefaultRepositories(bool includeAllEntities = false)
         {
-            Repositories.RegisterDefaultRepositories = true;
-            Repositories.IncludeAllEntitiesForDefaultRepositories = includeAllEntities;
+            RepositoryOptions.RegisterDefaultRepositories = true;
+            RepositoryOptions.IncludeAllEntitiesForDefaultRepositories = includeAllEntities;
         }
 
-        public void AddCustomRepository<TEntity, TRepository>()
+        /// <summary>
+        /// Registers custom repository for a specific entity.
+        /// Custom repositories overrides default repositories.
+        /// </summary>
+        /// <typeparam name="TEntity">Entity type</typeparam>
+        /// <typeparam name="TRepository">Repository type</typeparam>
+        public void WithCustomRepository<TEntity, TRepository>()
         {
-            AddCustomRepository(typeof(TEntity), typeof(TRepository));
+            WithCustomRepository(typeof(TEntity), typeof(TRepository));
         }
 
-        private void AddCustomRepository(Type entityType, Type repositoryType)
+        private void WithCustomRepository(Type entityType, Type repositoryType)
         {
             if (!ReflectionHelper.IsAssignableToGenericType(entityType, typeof(IEntity<>)))
             {
@@ -45,7 +51,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 throw new AbpException($"Given repositoryType is not a repository: {entityType.AssemblyQualifiedName}. It must implement {typeof(IRepository<,>).AssemblyQualifiedName}.");
             }
 
-            Repositories.CustomRepositories[entityType] = repositoryType;
+            RepositoryOptions.CustomRepositories[entityType] = repositoryType;
         }
     }
 }

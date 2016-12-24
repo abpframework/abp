@@ -24,7 +24,7 @@ namespace Microsoft.Extensions.DependencyInjection
             var options = new AddAbpDbContextOptions();
             optionsAction?.Invoke(options);
 
-            services.AddRepositories<TDbContext>(options.Repositories);
+            services.AddRepositories<TDbContext>(options.RepositoryOptions);
 
             return services;
         }

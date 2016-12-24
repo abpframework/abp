@@ -11,7 +11,7 @@ namespace AbpDesk.EntityFrameworkCore
         {
             services.AddAbpDbContext<AbpDeskDbContext>(options =>
             {
-                options.AddDefaultRepositories();
+                options.WithDefaultRepositories();
             });
 
             services.AddAssemblyOf<AbpDeskEntityFrameworkCoreModule>();

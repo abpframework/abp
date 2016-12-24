@@ -4,8 +4,10 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Security.Claims;
 using JetBrains.Annotations;
 using Volo.Abp.Domain.Entities;
+using Volo.ExtensionMethods.Collections.Generic;
 
 namespace Volo.Abp.Identity
 {
@@ -15,7 +17,7 @@ namespace Volo.Abp.Identity
     /// <summary>
     /// Represents a role in the identity system
     /// </summary>
-    public class IdentityRole : AggregateRoot
+    public class IdentityRole : AggregateRoot, IHasConcurrencyStamp
     {
         /// <summary>
         /// Gets or sets the name for this role.
@@ -53,6 +55,23 @@ namespace Volo.Abp.Identity
             Name = name;
         }
 
+        public void AddClaim([NotNull] Claim claim)
+        {
+            Check.NotNull(claim, nameof(claim));
+
+            Claims.Add(new IdentityRoleClaim(Id, claim));
+        }
+
+        public void AddClaims([NotNull] IEnumerable<Claim> claims)
+        {
+            Check.NotNull(claims, nameof(claims));
+
+            foreach (var claim in claims)
+            {
+                AddClaim(claim);
+            }
+        }
+
         /// <summary>
         /// Returns the name of the role.
         /// </summary>
@@ -60,6 +79,13 @@ namespace Volo.Abp.Identity
         public override string ToString()
         {
             return Name;
+        }
+
+        public void RemoveClaim([NotNull] Claim claim)
+        {
+            Check.NotNull(claim, nameof(claim));
+
+            Claims.RemoveAll(c => c.ClaimType == claim.Type && c.ClaimValue == claim.Value);
         }
     }
 }

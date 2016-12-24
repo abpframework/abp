@@ -7,7 +7,6 @@ using Volo.Abp.Identity.EntityFrameworkCore;
 
 namespace Volo.Abp.Identity
 {
-    //TODO: Register for all repositories!
     public class EfCoreIdentityRoleRepository : EfCoreRepository<IdentityDbContext, IdentityRole>, IIdentityRoleRepository
     {
         public EfCoreIdentityRoleRepository(IDbContextProvider<IdentityDbContext> dbContextProvider)

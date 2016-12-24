@@ -9,12 +9,21 @@ namespace Volo.Abp.Identity
     public class Initialize_Tests : AbpIntegratedTest<AbpIdentityTestModule>
     {
         [Fact]
-        public void Should_Resolve_Services()
+        public void Should_Resolve_UserManager()
         {
             ServiceProvider.GetRequiredService<IdentityUserManager>();
+        }
 
-            //TODO: Move this service to Volo.Abp.EntityFrameworkCore.Tests since it's actually testing the EF Core repository registration!
+        [Fact]
+        public void Should_Resolve_RoleManager()
+        {
+            ServiceProvider.GetRequiredService<IdentityRoleManager>();
+        }
 
+        //TODO: Move this service to Volo.Abp.EntityFrameworkCore.Tests since it's actually testing the EF Core repository registration!
+        [Fact]
+        public void Should_Resolve_Repositories()
+        {
             (ServiceProvider.GetRequiredService<IIdentityUserRepository>() is EfCoreIdentityUserRepository).ShouldBeTrue();
 
             (ServiceProvider.GetRequiredService<IRepository<IdentityUser, string>>() is EfCoreIdentityUserRepository).ShouldBeTrue();
