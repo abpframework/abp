@@ -10,7 +10,6 @@ namespace AbpDesk.EntityFrameworkCore
         public override void ConfigureServices(IServiceCollection services)
         {
             services.AddAbpDbContext<AbpDeskDbContext>();
-            services.AddDefaultEfCoreRepositories<AbpDeskDbContext>();
 
             services.AddAssemblyOf<AbpDeskEntityFrameworkCoreModule>();
         }

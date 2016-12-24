@@ -10,7 +10,6 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         public override void ConfigureServices(IServiceCollection services)
         {
             services.AddAbpDbContext<IdentityDbContext>();
-            services.AddDefaultEfCoreRepositories<IdentityDbContext>();
             services.AddAssemblyOf<AbpIdentityEntityFrameworkCoreModule>();
         }
     }

@@ -9,6 +9,7 @@ namespace Microsoft.Extensions.DependencyInjection
     //TODO: By default, only create repositories for Aggregate Roots.
     //TODO: Move AddDefaultEfCoreRepositories into AddAbpDbContext as optional which will have it's own options
     //TODO: Add options to use a provided type as default repository.
+    //TODO: Register default PK type if available!
 
     public static class AbpEfCoreServiceCollectionExtensions
     {
@@ -23,10 +24,12 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddTransient<TDbContext>();
             services.TryAddSingleton(DbContextOptionsFactory.Create<TDbContext>);
 
+            services.AddDefaultEfCoreRepositories<TDbContext>();
+
             return services;
         }
 
-        public static IServiceCollection AddDefaultEfCoreRepositories<TDbContext>(this IServiceCollection services)
+        private static void AddDefaultEfCoreRepositories<TDbContext>(this IServiceCollection services)
             where TDbContext : AbpDbContext<TDbContext>
         {
             var dbContextType = typeof(TDbContext);
@@ -42,8 +45,6 @@ namespace Microsoft.Extensions.DependencyInjection
                 services.TryAddTransient(repositoryInterfaceType, repositoryImplementationType);
                 services.TryAddTransient(queryableRepositoryInterfaceType, repositoryImplementationType);
             }
-
-            return services;
         }
     }
 }
