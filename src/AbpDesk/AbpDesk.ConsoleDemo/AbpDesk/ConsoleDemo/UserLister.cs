@@ -1,6 +1,9 @@
 using System;
 using System.Linq;
+using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Identity;
+using Volo.Abp.Threading;
+using Volo.Abp.Uow;
 using Volo.DependencyInjection;
 
 namespace AbpDesk.ConsoleDemo
@@ -8,17 +11,34 @@ namespace AbpDesk.ConsoleDemo
     public class UserLister : ITransientDependency
     {
         private readonly IdentityUserManager _userManager;
+        private readonly IUnitOfWorkManager _unitOfWorkManager;
+        private readonly IQueryableRepository<IdentityUser> _userRepository;
 
-        public UserLister(IdentityUserManager userManager)
+        public UserLister(
+            IdentityUserManager userManager, 
+            IQueryableRepository<IdentityUser> userRepository, 
+            IUnitOfWorkManager unitOfWorkManager)
         {
             _userManager = userManager;
+            _userRepository = userRepository;
+            _unitOfWorkManager = unitOfWorkManager;
         }
 
         public void List()
         {
-            foreach (var user in _userManager.Users.ToList())
+            using (var uow = _unitOfWorkManager.Begin())
             {
-                Console.WriteLine(user);
+                foreach (var user in _userRepository.ToList())
+                {
+                    Console.WriteLine("# " + user);
+
+                    foreach (var roleName in AsyncHelper.RunSync(() => _userManager.GetRolesAsync(user)))
+                    {
+                        Console.WriteLine("  - " + roleName);
+                    }
+                }
+
+                AsyncHelper.RunSync(() => uow.CompleteAsync());
             }
         }
     }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Security.Claims;
-using System.Threading;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Identity;
 using Volo.Abp.Domain.Entities;
@@ -14,6 +13,7 @@ namespace Volo.Abp.Identity
     //TODO: Should set Id to a GUID (where? on repository?)
     //TODO: Properties should not be public!
     //TODO: Add Name/Surname/FullName?
+    //TODO: Set max lenght for Id (set a default max lenght by default, like 64)
     
     public class IdentityUser : AggregateRoot, IHasConcurrencyStamp
     {

@@ -17,11 +17,11 @@ namespace AbpDesk.ConsoleDemo
                     .ServiceProvider
                     .GetRequiredService<TicketLister>()
                     .List();
-                
-                //application
-                //    .ServiceProvider
-                //    .GetRequiredService<UserLister>()
-                //    .List();
+
+                application
+                    .ServiceProvider
+                    .GetRequiredService<UserLister>()
+                    .List();
 
                 Console.ReadLine();
 
