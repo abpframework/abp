@@ -1,8 +1,11 @@
 using JetBrains.Annotations;
+using Microsoft.AspNetCore.Identity;
 using Volo.Abp.Domain.Entities;
 
 namespace Volo.Abp.Identity
 {
+    //TODO: Make constructors internal to ensure that it's called by only from IdentityUser?
+
     /// <summary>
     /// Represents a login and its associated provider for a user.
     /// </summary>
@@ -43,6 +46,22 @@ namespace Volo.Abp.Identity
             LoginProvider = loginProvider;
             ProviderKey = providerKey;
             ProviderDisplayName = providerDisplayName;
+        }
+
+        public IdentityUserLogin(string userId, UserLoginInfo login)
+        {
+            Check.NotNull(userId, nameof(userId));
+            Check.NotNull(login, nameof(login));
+
+            UserId = userId;
+            LoginProvider = login.LoginProvider;
+            ProviderKey = login.ProviderKey;
+            ProviderDisplayName = login.ProviderDisplayName;
+        }
+
+        public UserLoginInfo ToUserLoginInfo()
+        {
+            return new UserLoginInfo(LoginProvider, ProviderKey, ProviderDisplayName);
         }
     }
 }

@@ -6,6 +6,10 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
+    //TODO: By default, only create repositories for Aggregate Roots.
+    //TODO: Move AddDefaultEfCoreRepositories into AddAbpDbContext as optional which will have it's own options
+    //TODO: Add options to use a provided type as default repository.
+
     public static class AbpEfCoreServiceCollectionExtensions
     {
         public static IServiceCollection AddAbpDbContext<TDbContext>(
@@ -25,8 +29,6 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddDefaultEfCoreRepositories<TDbContext>(this IServiceCollection services)
             where TDbContext : AbpDbContext<TDbContext>
         {
-            //TODO: Add options to use a provided type as default repository.
-
             var dbContextType = typeof(TDbContext);
 
             foreach (var entityType in DbContextHelper.GetEntityTypes(dbContextType))

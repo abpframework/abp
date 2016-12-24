@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 
@@ -20,6 +21,11 @@ namespace Volo.Abp.Uow
         public Task SaveChangesAsync()
         {
             return _parent.SaveChangesAsync();
+        }
+
+        public Task SaveChangesAsync(CancellationToken cancellationToken)
+        {
+            return _parent.SaveChangesAsync(cancellationToken);
         }
 
         public Task CompleteAsync()

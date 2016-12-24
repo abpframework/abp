@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using JetBrains.Annotations;
 
 namespace Volo.ExtensionMethods.Collections.Generic
@@ -34,6 +36,18 @@ namespace Volo.ExtensionMethods.Collections.Generic
 
             source.Add(item);
             return true;
+        }
+
+        public static IList<T> RemoveAll<T>([NotNull] this ICollection<T> source, Func<T, bool> predicate)
+        {
+            var items = source.Where(predicate).ToList();
+
+            foreach (var item in items)
+            {
+                source.Remove(item);
+            }
+
+            return items;
         }
     }
 }

@@ -1,3 +1,4 @@
+using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.EntityFrameworkCore;
 
@@ -16,6 +17,11 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
         public Task SaveChangesAsync()
         {
             return DbContext.SaveChangesAsync();
+        }
+
+        public Task SaveChangesAsync(CancellationToken cancellationToken)
+        {
+            return DbContext.SaveChangesAsync(cancellationToken);
         }
 
         public Task CommitAsync()

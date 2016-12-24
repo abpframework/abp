@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 
 namespace Volo.Abp.Uow
 {
@@ -6,6 +7,8 @@ namespace Volo.Abp.Uow
     {
         Task SaveChangesAsync();
 
-        Task CommitAsync();
+        Task SaveChangesAsync(CancellationToken cancellationToken);
+
+        Task CommitAsync(); //TODO: Add CancellationToken to CommitAsync?
     }
 }

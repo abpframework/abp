@@ -11,6 +11,15 @@ namespace Volo.Abp.Domain.Repositories
 
     }
 
+    public interface IRepository<TEntity> : IRepository<TEntity, string>
+        where TEntity : class, IEntity<string>
+    {
+        
+    }
+
+    //TODO: Add overloads with cancellationToken to appropriate methods?
+    //TODO: Add overloads for Find/Get/Delete to get multiple PK?
+
     public interface IRepository<TEntity, TPrimaryKey> : IRepository
         where TEntity : class, IEntity<TPrimaryKey>
     {
@@ -30,6 +39,7 @@ namespace Volo.Abp.Domain.Repositories
 
         /// <summary>
         /// Gets an entity with given primary key.
+        /// Throws <see cref="EntityNotFoundException"/> if can not find an entity with given id.
         /// </summary>
         /// <param name="id">Primary key of the entity to get</param>
         /// <returns>Entity</returns>
@@ -38,6 +48,7 @@ namespace Volo.Abp.Domain.Repositories
 
         /// <summary>
         /// Gets an entity with given primary key.
+        /// Throws <see cref="EntityNotFoundException"/> if can not find an entity with given id.
         /// </summary>
         /// <param name="id">Primary key of the entity to get</param>
         /// <returns>Entity</returns>

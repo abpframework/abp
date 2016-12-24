@@ -17,7 +17,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         {
             
         }
-        
+
         /// <summary>
         /// Gets or sets the <see cref="DbSet{TEntity}"/> of Users.
         /// </summary>

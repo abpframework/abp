@@ -57,5 +57,13 @@ namespace Volo.Abp.Identity
         {
             return new Claim(ClaimType, ClaimValue);
         }
+
+        public void SetClaim([NotNull] Claim claim)
+        {
+            Check.NotNull(claim, nameof(claim));
+
+            ClaimType = claim.Type;
+            ClaimValue = claim.Value;
+        }
     }
 }

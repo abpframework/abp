@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Volo.Abp.DependencyInjection;
@@ -17,6 +18,8 @@ namespace Volo.Abp.Uow
         IDatabaseApi AddDatabaseApi(string id, IDatabaseApi databaseApi);
 
         Task SaveChangesAsync();
+
+        Task SaveChangesAsync(CancellationToken cancellationToken);
 
         Task CompleteAsync();
     }

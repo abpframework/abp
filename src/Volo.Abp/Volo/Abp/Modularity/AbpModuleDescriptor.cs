@@ -28,5 +28,10 @@ namespace Volo.Abp.Modularity
 
             Dependencies = new List<AbpModuleDescriptor>();
         }
+
+        public override string ToString()
+        {
+            return $"[AbpModuleDescriptor {Type.FullName}]";
+        }
     }
 }

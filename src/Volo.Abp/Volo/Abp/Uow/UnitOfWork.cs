@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Volo.ExtensionMethods.Collections.Generic;
 
@@ -28,6 +29,14 @@ namespace Volo.Abp.Uow
             foreach (var databaseApi in _databaseApis.Values)
             {
                 await databaseApi.SaveChangesAsync();
+            }
+        }
+
+        public async Task SaveChangesAsync(CancellationToken cancellationToken)
+        {
+            foreach (var databaseApi in _databaseApis.Values)
+            {
+                await databaseApi.SaveChangesAsync(cancellationToken);
             }
         }
 

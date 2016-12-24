@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +8,16 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
 {
+    public class EfCoreRepository<TDbContext, TEntity> : EfCoreRepository<TDbContext, TEntity, string>, IEfCoreRepository<TEntity>
+        where TDbContext : AbpDbContext<TDbContext>
+        where TEntity : class, IEntity<string>
+    {
+        public EfCoreRepository(IDbContextProvider<TDbContext> dbContextProvider)
+            : base(dbContextProvider)
+        {
+        }
+    }
+
     public class EfCoreRepository<TDbContext, TEntity, TPrimaryKey> : QueryableRepositoryBase<TEntity, TPrimaryKey>, IEfCoreRepository<TEntity, TPrimaryKey>
         where TDbContext : AbpDbContext<TDbContext>
         where TEntity : class, IEntity<TPrimaryKey>
@@ -72,13 +83,25 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
         public override async Task<TPrimaryKey> InsertAndGetIdAsync(TEntity entity)
         {
             var insertedEntity = await InsertAsync(entity);
-            await DbContext.SaveChangesAsync();
+            await DbContext.SaveChangesAsync(true);
             return insertedEntity.Id;
         }
 
         public override TEntity Update(TEntity entity)
         {
-            return DbSet.Update(entity).Entity;
+            //TODO: This code is got from UserStore.UpdateAsync and revised Update method based on that, but we should be sure that it's valid
+            //Context.Attach(user);
+            //user.ConcurrencyStamp = Guid.NewGuid().ToString();
+            //Context.Update(user);
+            
+            DbContext.Attach(entity); //TODO: What is different for DbSet.Attach(entity)?
+
+            if (entity is IHasConcurrencyStamp)
+            {
+                (entity as IHasConcurrencyStamp).ConcurrencyStamp = Guid.NewGuid().ToString(); //TODO: Use IGuidGenerator!
+            }
+
+            return DbContext.Update(entity).Entity; //TODO: or DbSet.Update(entity) ?
         }
 
         public override void Delete(TEntity entity)

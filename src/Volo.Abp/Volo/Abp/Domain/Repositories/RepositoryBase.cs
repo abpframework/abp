@@ -6,6 +6,12 @@ using Volo.Abp.Domain.Entities;
 
 namespace Volo.Abp.Domain.Repositories
 {
+    public abstract class RepositoryBase<TEntity> : RepositoryBase<TEntity, string>, IRepository<TEntity>
+        where TEntity : class, IEntity<string>
+    {
+
+    }
+
     public abstract class RepositoryBase<TEntity, TPrimaryKey> : IRepository<TEntity, TPrimaryKey>
         where TEntity : class, IEntity<TPrimaryKey>
     {
