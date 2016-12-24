@@ -26,7 +26,7 @@ namespace Volo.DependencyInjection
             return GetDefaultExposedServices(type);
         }
 
-        private static IEnumerable<Type> GetDefaultExposedServices(Type type)
+        public static IEnumerable<Type> GetDefaultExposedServices(Type type)
         {
             var typeInfo = type.GetTypeInfo();
 
