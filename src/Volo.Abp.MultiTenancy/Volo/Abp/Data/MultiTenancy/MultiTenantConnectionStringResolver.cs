@@ -37,6 +37,8 @@ namespace Volo.Abp.Data.MultiTenancy
                 return base.Resolve(databaseName);
             }
 
+            //TODO: If given tenant did not specified a databaseName specific connection string, then use the default connection string for databaseName, not tenant's default database
+
             return connectionString;
         }
     }

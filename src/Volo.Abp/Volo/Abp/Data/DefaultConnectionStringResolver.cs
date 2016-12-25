@@ -16,9 +16,6 @@ namespace Volo.Abp.Data
 
         public virtual string Resolve(string databaseName = null)
         {
-            //TODO: Override by tenant conn string
-            //TODO: Override by tenant module specific conn string
-
             //Get module specific value if provided
             if (!databaseName.IsNullOrEmpty())
             {
