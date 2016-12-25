@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Entities;
 
@@ -15,16 +15,10 @@ namespace Volo.Abp.Domain.Repositories
     public abstract class RepositoryBase<TEntity, TPrimaryKey> : IRepository<TEntity, TPrimaryKey>
         where TEntity : class, IEntity<TPrimaryKey>
     {
-        public abstract List<TEntity> GetList();
-
-        public virtual Task<List<TEntity>> GetListAsync()
-        {
-            return Task.FromResult(GetList());
-        }
-
         public virtual TEntity Get(TPrimaryKey id)
         {
             var entity = Find(id);
+
             if (entity == null)
             {
                 throw new EntityNotFoundException(typeof(TEntity), id);
@@ -33,21 +27,21 @@ namespace Volo.Abp.Domain.Repositories
             return entity;
         }
 
-        public virtual Task<TEntity> GetAsync(TPrimaryKey id)
+        public virtual Task<TEntity> GetAsync(TPrimaryKey id, CancellationToken cancellationToken = default(CancellationToken))
         {
             return Task.FromResult(Get(id));
         }
 
         public abstract TEntity Find(TPrimaryKey id);
 
-        public virtual Task<TEntity> FindAsync(TPrimaryKey id)
+        public virtual Task<TEntity> FindAsync(TPrimaryKey id, CancellationToken cancellationToken = default(CancellationToken))
         {
             return Task.FromResult(Find(id));
         }
 
         public abstract TEntity Insert(TEntity entity);
 
-        public virtual Task<TEntity> InsertAsync(TEntity entity)
+        public virtual Task<TEntity> InsertAsync(TEntity entity, CancellationToken cancellationToken = default(CancellationToken))
         {
             return Task.FromResult(Insert(entity));
         }
@@ -57,21 +51,21 @@ namespace Volo.Abp.Domain.Repositories
             return Insert(entity).Id;
         }
 
-        public virtual Task<TPrimaryKey> InsertAndGetIdAsync(TEntity entity)
+        public virtual Task<TPrimaryKey> InsertAndGetIdAsync(TEntity entity, CancellationToken cancellationToken = default(CancellationToken))
         {
             return Task.FromResult(InsertAndGetId(entity));
         }
 
         public abstract TEntity Update(TEntity entity);
 
-        public virtual Task<TEntity> UpdateAsync(TEntity entity)
+        public virtual Task<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default(CancellationToken))
         {
             return Task.FromResult(Update(entity));
         }
 
         public abstract void Delete(TEntity entity);
 
-        public virtual Task DeleteAsync(TEntity entity)
+        public virtual Task DeleteAsync(TEntity entity, CancellationToken cancellationToken = default(CancellationToken))
         {
             Delete(entity);
             return Task.CompletedTask;
@@ -88,17 +82,10 @@ namespace Volo.Abp.Domain.Repositories
             Delete(entity);
         }
 
-        public virtual Task DeleteAsync(TPrimaryKey id)
+        public virtual Task DeleteAsync(TPrimaryKey id, CancellationToken cancellationToken = default(CancellationToken))
         {
             Delete(id);
             return Task.CompletedTask;
-        }
-
-        public abstract int Count();
-
-        public virtual Task<int> CountAsync()
-        {
-            return Task.FromResult(Count());
         }
 
         protected static Expression<Func<TEntity, bool>> CreateEqualityExpressionForId(TPrimaryKey id)

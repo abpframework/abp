@@ -1,6 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Domain.Entities;
@@ -40,14 +41,10 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
             return DbSet.AsQueryable();
         }
 
-        public override Task<List<TEntity>> GetListAsync()
+        public override async Task<TEntity> GetAsync(TPrimaryKey id, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return GetQueryable().ToListAsync();
-        }
+            var entity = await FindAsync(id, cancellationToken);
 
-        public override async Task<TEntity> GetAsync(TPrimaryKey id)
-        {
-            var entity = await FindAsync(id);
             if (entity == null)
             {
                 throw new EntityNotFoundException(typeof(TEntity), id);
@@ -56,16 +53,14 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
             return entity;
         }
 
-        //TODO: Find by multiple primary key
-
         public override TEntity Find(TPrimaryKey id)
         {
             return DbSet.Find(id);
         }
 
-        public override Task<TEntity> FindAsync(TPrimaryKey id)
+        public override Task<TEntity> FindAsync(TPrimaryKey id, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return DbSet.FindAsync(id);
+            return DbSet.FindAsync(new object[] { id }, cancellationToken);
         }
 
         public override TEntity Insert(TEntity entity)
@@ -80,10 +75,10 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
             return insertedEntity.Id;
         }
 
-        public override async Task<TPrimaryKey> InsertAndGetIdAsync(TEntity entity)
+        public override async Task<TPrimaryKey> InsertAndGetIdAsync(TEntity entity, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var insertedEntity = await InsertAsync(entity);
-            await DbContext.SaveChangesAsync(true);
+            var insertedEntity = await InsertAsync(entity, cancellationToken);
+            await DbContext.SaveChangesAsync(cancellationToken);
             return insertedEntity.Id;
         }
 
@@ -109,9 +104,13 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
             DbSet.Remove(entity);
         }
 
-        public override Task<int> CountAsync()
+        public override async Task DeleteAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return DbSet.CountAsync();
+            var entities = await GetQueryable().Where(predicate).ToListAsync(cancellationToken);
+            foreach (var entity in entities)
+            {
+                DbSet.Remove(entity);
+            }
         }
     }
 }

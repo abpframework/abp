@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Entities;
 
@@ -35,11 +36,6 @@ namespace Volo.Abp.Domain.Repositories
 
         protected abstract IQueryable<TEntity> GetQueryable();
 
-        public override List<TEntity> GetList()
-        {
-            return GetQueryable().ToList();
-        }
-
         public override TEntity Find(TPrimaryKey id)
         {
             return GetQueryable().FirstOrDefault(CreateEqualityExpressionForId(id));
@@ -53,15 +49,10 @@ namespace Volo.Abp.Domain.Repositories
             }
         }
 
-        public virtual Task DeleteAsync(Expression<Func<TEntity, bool>> predicate)
+        public virtual Task DeleteAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default(CancellationToken))
         {
             Delete(predicate);
             return Task.CompletedTask;
-        }
-
-        public override int Count()
-        {
-            return GetQueryable().Count();
         }
     }
 }
