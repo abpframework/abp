@@ -90,6 +90,12 @@ namespace Volo.Abp.Modularity
             {
                 module.Instance.ConfigureServices(services);
             }
+
+            //IPostConfigureServices
+            foreach (var module in modules.Where(m => m.Instance is IPostConfigureServices))
+            {
+                ((IPostConfigureServices)module.Instance).PostConfigureServices(services);
+            }
         }
         
         protected virtual void SetModuleDependencies(List<AbpModuleDescriptor> modules, AbpModuleDescriptor module)

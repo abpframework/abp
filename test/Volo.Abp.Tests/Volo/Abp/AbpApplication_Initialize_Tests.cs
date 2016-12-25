@@ -19,6 +19,7 @@ namespace Volo.Abp
             var module = services.GetSingletonInstance<IndependentEmptyModule>();
             module.PreConfigureServicesIsCalled.ShouldBeTrue();
             module.ConfigureServicesIsCalled.ShouldBeTrue();
+            module.PostConfigureServicesIsCalled.ShouldBeTrue();
 
             using (var scope = services.BuildServiceProvider().CreateScope())
             {
@@ -53,6 +54,7 @@ namespace Volo.Abp
             var plugInModule = services.GetSingletonInstance<IndependentEmptyPlugInModule>();
             plugInModule.PreConfigureServicesIsCalled.ShouldBeTrue();
             plugInModule.ConfigureServicesIsCalled.ShouldBeTrue();
+            plugInModule.PostConfigureServicesIsCalled.ShouldBeTrue();
 
             //Act
             application.Initialize(services.BuildServiceProvider());

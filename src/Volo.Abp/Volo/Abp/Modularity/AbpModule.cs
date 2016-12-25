@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Volo.Abp.Modularity
 {
-    public abstract class AbpModule : IAbpModule, IOnApplicationInitialization, IOnApplicationShutdown, IPreConfigureServices
+    public abstract class AbpModule : IAbpModule, IOnApplicationInitialization, IOnApplicationShutdown, IPreConfigureServices, IPostConfigureServices
     {
         public virtual void PreConfigureServices(IServiceCollection services)
         {
@@ -12,6 +12,11 @@ namespace Volo.Abp.Modularity
         }
 
         public virtual void ConfigureServices(IServiceCollection services)
+        {
+            
+        }
+
+        public virtual void PostConfigureServices(IServiceCollection services)
         {
             
         }

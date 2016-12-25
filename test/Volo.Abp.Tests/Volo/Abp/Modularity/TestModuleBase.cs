@@ -8,6 +8,8 @@ namespace Volo.Abp.Modularity
 
         public bool ConfigureServicesIsCalled { get; set; }
 
+        public bool PostConfigureServicesIsCalled { get; set; }
+
         public bool OnApplicationInitializeIsCalled { get; set; }
 
         public bool OnApplicationShutdownIsCalled { get; set; }
@@ -20,6 +22,11 @@ namespace Volo.Abp.Modularity
         public override void ConfigureServices(IServiceCollection services)
         {
             ConfigureServicesIsCalled = true;
+        }
+
+        public override void PostConfigureServices(IServiceCollection services)
+        {
+            PostConfigureServicesIsCalled = true;
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
