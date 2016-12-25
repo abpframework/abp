@@ -17,9 +17,6 @@ namespace Volo.Abp.Domain.Repositories
         
     }
 
-    //TODO: Add overloads with cancellationToken to appropriate methods?
-    //TODO: Add overloads for Find/Get/Delete to get multiple PK?
-
     public interface IRepository<TEntity, TPrimaryKey> : IRepository
         where TEntity : class, IEntity<TPrimaryKey>
     {
