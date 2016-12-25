@@ -4,6 +4,7 @@ using JetBrains.Annotations;
 
 namespace Volo.Abp.Data
 {
+    //TODO: Rename DatabaseNameAttribute to ConnectionStringNameAttribute
     public class DatabaseNameAttribute : Attribute
     {
         [NotNull]
