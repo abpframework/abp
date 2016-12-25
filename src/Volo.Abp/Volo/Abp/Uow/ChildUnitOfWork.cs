@@ -18,17 +18,12 @@ namespace Volo.Abp.Uow
             _parent = parent;
         }
 
-        public Task SaveChangesAsync()
-        {
-            return _parent.SaveChangesAsync();
-        }
-
-        public Task SaveChangesAsync(CancellationToken cancellationToken)
+        public Task SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             return _parent.SaveChangesAsync(cancellationToken);
         }
 
-        public Task CompleteAsync()
+        public Task CompleteAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             return Task.CompletedTask;
         }

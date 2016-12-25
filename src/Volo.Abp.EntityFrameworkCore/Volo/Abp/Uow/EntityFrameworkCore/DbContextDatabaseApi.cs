@@ -13,20 +13,10 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
         {
             DbContext = dbContext;
         }
-
-        public Task SaveChangesAsync()
-        {
-            return DbContext.SaveChangesAsync();
-        }
-
-        public Task SaveChangesAsync(CancellationToken cancellationToken)
+        
+        public Task SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             return DbContext.SaveChangesAsync(cancellationToken);
-        }
-
-        public Task CommitAsync()
-        {
-            return DbContext.SaveChangesAsync();
         }
     }
 }

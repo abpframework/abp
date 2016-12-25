@@ -24,15 +24,7 @@ namespace Volo.Abp.Uow
             //TODO: Remove itself from IUnitOfWorkManager
         }
 
-        public async Task SaveChangesAsync()
-        {
-            foreach (var databaseApi in _databaseApis.Values)
-            {
-                await databaseApi.SaveChangesAsync();
-            }
-        }
-
-        public async Task SaveChangesAsync(CancellationToken cancellationToken)
+        public async Task SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             foreach (var databaseApi in _databaseApis.Values)
             {
@@ -40,11 +32,13 @@ namespace Volo.Abp.Uow
             }
         }
 
-        public async Task CompleteAsync()
+        public async Task CompleteAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
+            //TODO: We need a transaction management system.
+
             foreach (var databaseApi in _databaseApis.Values)
             {
-                await databaseApi.CommitAsync();
+                await databaseApi.SaveChangesAsync(cancellationToken);
             }
         }
 
