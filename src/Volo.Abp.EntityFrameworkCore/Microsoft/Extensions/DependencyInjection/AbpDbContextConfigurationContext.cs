@@ -8,14 +8,14 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public string ConnectionString { get; }
 
-        public string DatabaseName { get; }
+        public string ConnectionStringName { get; }
 
         public DbContextOptionsBuilder DbContextOptions { get; protected set; }
 
-        public AbpDbContextConfigurationContext(string connectionString, [CanBeNull] string databaseName)
+        public AbpDbContextConfigurationContext(string connectionString, [CanBeNull] string connectionStringName)
         {
             ConnectionString = connectionString;
-            DatabaseName = databaseName;
+            ConnectionStringName = connectionStringName;
             DbContextOptions = new DbContextOptionsBuilder();
         }
     }
@@ -25,8 +25,8 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public new DbContextOptionsBuilder<TDbContext> DbContextOptions => (DbContextOptionsBuilder<TDbContext>)base.DbContextOptions;
 
-        public AbpDbContextConfigurationContext(string connectionString, [CanBeNull] string databaseName)
-            : base(connectionString, databaseName)
+        public AbpDbContextConfigurationContext(string connectionString, [CanBeNull] string connectionStringName)
+            : base(connectionString, connectionStringName)
         {
             base.DbContextOptions = new DbContextOptionsBuilder<TDbContext>();
         }

@@ -13,13 +13,13 @@ namespace Microsoft.Extensions.DependencyInjection
         public static DbContextOptions<TDbContext> Create<TDbContext>(IServiceProvider serviceProvider)
             where TDbContext : AbpDbContext<TDbContext>
         {
-            var databaseName = DatabaseNameAttribute.GetDatabaseName<TDbContext>();
+            var connectionStringName = ConnectionStringNameAttribute.GetConnStringName<TDbContext>();
 
             using (var scope = serviceProvider.CreateScope())
             {
                 var connInfoResolver = scope.ServiceProvider.GetRequiredService<IConnectionStringResolver>();
 
-                var context = new AbpDbContextConfigurationContext<TDbContext>(connInfoResolver.Resolve(databaseName), databaseName);
+                var context = new AbpDbContextConfigurationContext<TDbContext>(connInfoResolver.Resolve(connectionStringName), connectionStringName);
 
                 var dbContextOptions = scope.ServiceProvider.GetRequiredService<IOptions<AbpDbContextOptions>>().Value;
 

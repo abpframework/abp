@@ -14,12 +14,12 @@ namespace Volo.Abp.Data
             _options = options.Value;
         }
 
-        public virtual string Resolve(string databaseName = null)
+        public virtual string Resolve(string connectionStringName = null)
         {
             //Get module specific value if provided
-            if (!databaseName.IsNullOrEmpty())
+            if (!connectionStringName.IsNullOrEmpty())
             {
-                var moduleConnString = _options.ConnectionStrings.GetOrDefault(databaseName);
+                var moduleConnString = _options.ConnectionStrings.GetOrDefault(connectionStringName);
                 if (!moduleConnString.IsNullOrEmpty())
                 {
                     return moduleConnString;

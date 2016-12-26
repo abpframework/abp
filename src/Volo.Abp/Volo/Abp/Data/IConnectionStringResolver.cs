@@ -2,6 +2,6 @@
 {
     public interface IConnectionStringResolver
     {
-        string Resolve(string databaseName = null);
+        string Resolve(string connectionStringName = null);
     }
 }

@@ -71,13 +71,13 @@ namespace Volo.Abp.Data.MultiTenancy
                 _options = options;
             }
 
-            public string GetConnectionStringOrNull(string tenantId, string databaseName)
+            public string GetConnectionStringOrNull(string tenantId, string connStringName)
             {
-                if (databaseName != null)
+                if (connStringName != null)
                 {
-                    if (_options.Value.ConnectionStrings.ContainsKey(tenantId + "#" + databaseName))
+                    if (_options.Value.ConnectionStrings.ContainsKey(tenantId + "#" + connStringName))
                     {
-                        return _options.Value.ConnectionStrings[tenantId + "#" + databaseName];
+                        return _options.Value.ConnectionStrings[tenantId + "#" + connStringName];
                     }
                 }
                 else

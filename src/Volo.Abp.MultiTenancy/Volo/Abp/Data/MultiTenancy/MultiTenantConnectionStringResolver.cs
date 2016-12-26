@@ -23,21 +23,21 @@ namespace Volo.Abp.Data.MultiTenancy
             _tenantConnectionStringStore = tenantConnectionStringStore;
         }
 
-        public override string Resolve(string databaseName = null)
+        public override string Resolve(string connectionStringName = null)
         {
             var tenant = _multiTenancyManager.CurrentTenant;
             if (tenant == null)
             {
-                return base.Resolve(databaseName);
+                return base.Resolve(connectionStringName);
             }
 
-            var connectionString = _tenantConnectionStringStore.GetConnectionStringOrNull(tenant.Id, databaseName);
+            var connectionString = _tenantConnectionStringStore.GetConnectionStringOrNull(tenant.Id, connectionStringName);
             if (connectionString == null)
             {
-                return base.Resolve(databaseName);
+                return base.Resolve(connectionStringName);
             }
 
-            //TODO: If given tenant did not specified a databaseName specific connection string, then use the default connection string for databaseName, not tenant's default database
+            //TODO: If given tenant did not specified a connectionStringName specific connection string, then use the default connection string for connectionStringName, not tenant's default database
 
             return connectionString;
         }

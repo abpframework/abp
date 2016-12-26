@@ -4,7 +4,7 @@
     {
         public static string Resolve<T>(this IConnectionStringResolver resolver)
         {
-            return resolver.Resolve(DatabaseNameAttribute.GetDatabaseName<T>());
+            return resolver.Resolve(ConnectionStringNameAttribute.GetConnStringName<T>());
         }
     }
 }
