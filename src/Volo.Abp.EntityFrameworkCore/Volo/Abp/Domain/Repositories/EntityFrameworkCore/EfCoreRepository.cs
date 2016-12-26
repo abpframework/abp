@@ -63,23 +63,28 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
             return DbSet.FindAsync(new object[] { id }, cancellationToken);
         }
 
-        public override TEntity Insert(TEntity entity)
+        public override TEntity Insert(TEntity entity, bool autoSave = false)
         {
-            return DbSet.Add(entity).Entity;
+            var savedEntity = DbSet.Add(entity).Entity;
+
+            if (autoSave)
+            {
+                DbContext.SaveChanges();
+            }
+
+            return savedEntity;
         }
 
-        public override TPrimaryKey InsertAndGetId(TEntity entity)
+        public override async Task<TEntity> InsertAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = new CancellationToken())
         {
-            var insertedEntity = Insert(entity);
-            DbContext.SaveChanges();
-            return insertedEntity.Id;
-        }
+            var savedEntity = DbSet.Add(entity).Entity;
 
-        public override async Task<TPrimaryKey> InsertAndGetIdAsync(TEntity entity, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            var insertedEntity = await InsertAsync(entity, cancellationToken);
-            await DbContext.SaveChangesAsync(cancellationToken);
-            return insertedEntity.Id;
+            if (autoSave)
+            {
+                await DbContext.SaveChangesAsync(cancellationToken);
+            }
+
+            return savedEntity;
         }
 
         public override TEntity Update(TEntity entity)

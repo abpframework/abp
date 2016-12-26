@@ -39,21 +39,11 @@ namespace Volo.Abp.Domain.Repositories
             return Task.FromResult(Find(id));
         }
 
-        public abstract TEntity Insert(TEntity entity);
+        public abstract TEntity Insert(TEntity entity, bool autoSave = false);
 
-        public virtual Task<TEntity> InsertAsync(TEntity entity, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<TEntity> InsertAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return Task.FromResult(Insert(entity));
-        }
-
-        public virtual TPrimaryKey InsertAndGetId(TEntity entity)
-        {
-            return Insert(entity).Id;
-        }
-
-        public virtual Task<TPrimaryKey> InsertAndGetIdAsync(TEntity entity, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            return Task.FromResult(InsertAndGetId(entity));
+            return Task.FromResult(Insert(entity, autoSave));
         }
 
         public abstract TEntity Update(TEntity entity);

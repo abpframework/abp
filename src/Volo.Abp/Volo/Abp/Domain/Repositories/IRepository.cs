@@ -59,35 +59,24 @@ namespace Volo.Abp.Domain.Repositories
         /// Inserts a new entity.
         /// </summary>
         /// <param name="entity">Inserted entity</param>
+        /// <param name="autoSave">
+        /// Set true to automatically save changes to database.
+        /// This can be used to set database generated Id of an entity for some ORMs (like Entity Framework).
+        /// </param>
         [NotNull]
-        TEntity Insert([NotNull] TEntity entity);
+        TEntity Insert([NotNull] TEntity entity, bool autoSave = false);
 
         /// <summary>
         /// Inserts a new entity.
         /// </summary>
+        /// <param name="autoSave">
+        /// Set true to automatically save changes to database.
+        /// This can be used to set database generated Id of an entity for some ORMs (like Entity Framework).
+        /// </param>
         /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
         /// <param name="entity">Inserted entity</param>
         [NotNull]
-        Task<TEntity> InsertAsync([NotNull] TEntity entity, CancellationToken cancellationToken = default(CancellationToken));
-
-        /// <summary>
-        /// Inserts a new entity and gets it's Id.
-        /// It may require to save current unit of work
-        /// to be able to retrieve id.
-        /// </summary>
-        /// <param name="entity">Entity</param>
-        /// <returns>Id of the entity</returns>
-        TPrimaryKey InsertAndGetId([NotNull] TEntity entity);
-
-        /// <summary>
-        /// Inserts a new entity and gets it's Id.
-        /// It may require to save current unit of work
-        /// to be able to retrieve id.
-        /// </summary>
-        /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
-        /// <param name="entity">Entity</param>
-        /// <returns>Id of the entity</returns>
-        Task<TPrimaryKey> InsertAndGetIdAsync([NotNull] TEntity entity, CancellationToken cancellationToken = default(CancellationToken));
+        Task<TEntity> InsertAsync([NotNull] TEntity entity, bool autoSave = true, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Updates an existing entity.
