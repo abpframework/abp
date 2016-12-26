@@ -15,7 +15,7 @@ namespace Volo.Abp.Uow.MongoDB
 
         public Task SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
-            //TODO: Does MongoDB has such a feature?
+            //TODO: MongoDB has no such a feature, verify it!
             return Task.CompletedTask;
         }
     }
