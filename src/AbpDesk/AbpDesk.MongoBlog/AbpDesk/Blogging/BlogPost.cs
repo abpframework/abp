@@ -33,6 +33,13 @@ namespace AbpDesk.Blogging
             Comments = new List<BlogPostComment>();
         }
 
+        public void SetTitle([NotNull] string title)
+        {
+            Check.NotNull(title, nameof(title));
+
+            Title = title;
+        }
+
         public override string ToString()
         {
             return $"{base.ToString()}, Title = {Title}, Body = {Body.TruncateWithPostfix(32)}";

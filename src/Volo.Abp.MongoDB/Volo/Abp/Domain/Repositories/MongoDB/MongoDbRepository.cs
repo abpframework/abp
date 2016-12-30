@@ -39,7 +39,6 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
 
         public override TEntity Insert(TEntity entity, bool autoSave = false)
         {
-            //TODO: What about assigning PK? Does mongodb handle it? Test!
             //TODO: Mongo has InsertMany & UpdateMany methods. Does them transactional? If so, we may consider to add them to IRepository!
 
             Collection.InsertOne(entity);
@@ -48,17 +47,13 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
 
         public override TEntity Update(TEntity entity)
         {
-            //TODO: How to update? TEST!
-
             var filter = Builders<TEntity>.Filter.Eq(e => e.Id, entity.Id);
-            Collection.UpdateOne(filter, new ObjectUpdateDefinition<TEntity>(entity));
+            Collection.ReplaceOne(filter, entity);
             return entity;
         }
 
         public override void Delete(TEntity entity)
         {
-            //TODO: How to delete? TEST!
-
             var filter = Builders<TEntity>.Filter.Eq(e => e.Id, entity.Id);
             Collection.DeleteOne(filter);
         }
