@@ -1,13 +1,15 @@
 using System.Linq;
 using MongoDB.Driver;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.MongoDB;
 
 namespace Volo.Abp.Domain.Repositories.MongoDB
 {
-    public class MongoDbRepository<TEntity> : MongoDbRepository<TEntity, string>, IMongoDbRepository<TEntity>
+    public class MongoDbRepository<TMongoDbContext, TEntity> : MongoDbRepository<TMongoDbContext, TEntity, string>, IMongoDbRepository<TEntity>
+        where TMongoDbContext : AbpMongoDbContext
         where TEntity : class, IEntity<string>
     {
-        public MongoDbRepository(IMongoDatabaseProvider databaseProvider)
+        public MongoDbRepository(IMongoDatabaseProvider<TMongoDbContext> databaseProvider)
             : base(databaseProvider)
         {
         }
@@ -15,20 +17,24 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
 
     //TODO: MongoDb.Driver fully supports async, implement all of them!
 
-    public class MongoDbRepository<TEntity, TPrimaryKey> : QueryableRepositoryBase<TEntity, TPrimaryKey>, IMongoDbRepository<TEntity, TPrimaryKey> 
+    public class MongoDbRepository<TMongoDbContext, TEntity, TPrimaryKey> : QueryableRepositoryBase<TEntity, TPrimaryKey>, IMongoDbRepository<TEntity, TPrimaryKey> 
+        where TMongoDbContext : AbpMongoDbContext
         where TEntity : class, IEntity<TPrimaryKey>
     {
-        //TODO: Define a MongoDbContext to relate to a connection string for modularity!
-
-        public virtual IMongoCollection<TEntity> Collection => Database.GetCollection<TEntity>("");
-
-        public virtual IMongoDatabase Database => _databaseProvider.GetDatabase();
-
-        private readonly IMongoDatabaseProvider _databaseProvider;
-
-        public MongoDbRepository(IMongoDatabaseProvider databaseProvider)
+        public virtual string CollectionName
         {
-            _databaseProvider = databaseProvider;
+            get { return typeof(TEntity).Name; } //TODO: a better naming, or a way of easily overriding it?
+        }
+
+        public virtual IMongoCollection<TEntity> Collection => Database.GetCollection<TEntity>(CollectionName);
+
+        public virtual IMongoDatabase Database => DatabaseProvider.GetDatabase();
+
+        protected IMongoDatabaseProvider<TMongoDbContext> DatabaseProvider { get; }
+
+        public MongoDbRepository(IMongoDatabaseProvider<TMongoDbContext> databaseProvider)
+        {
+            DatabaseProvider = databaseProvider;
         }
 
         public override TEntity Insert(TEntity entity, bool autoSave = false)

@@ -2,16 +2,17 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Volo.Abp.Uow
 {
-    internal class UnitOfWorkInfo
-    {
-        public IUnitOfWork UnitOfWork { get; set; }
+    //public class UnitOfWorkInfo
+    //{
+    //    public IUnitOfWork UnitOfWork { get; set; }
 
-        public IServiceScope ServiceScope { get; set; }
+    //    //TODO: Remove if not used!
+    //    public IServiceScope ServiceScope { get; set; }
 
-        public UnitOfWorkInfo(IUnitOfWork unitOfWork, IServiceScope serviceScope)
-        {
-            UnitOfWork = unitOfWork;
-            ServiceScope = serviceScope;
-        }
-    }
+    //    public UnitOfWorkInfo(IUnitOfWork unitOfWork, IServiceScope serviceScope)
+    //    {
+    //        UnitOfWork = unitOfWork;
+    //        ServiceScope = serviceScope;
+    //    }
+    //}
 }

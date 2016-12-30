@@ -7,8 +7,6 @@ using Volo.DependencyInjection;
 
 namespace Volo.Abp.Uow
 {
-    //TODO: Sync versions of methods!
-
     public interface IUnitOfWork : IDisposable, IServiceProviderAccessor, ITransientDependency
     {
         [CanBeNull]

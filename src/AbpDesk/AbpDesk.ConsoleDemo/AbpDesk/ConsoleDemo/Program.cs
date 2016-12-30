@@ -23,6 +23,13 @@ namespace AbpDesk.ConsoleDemo
                     .GetRequiredService<UserLister>()
                     .List();
 
+                application
+                    .ServiceProvider
+                    .GetRequiredService<BlogPostLister>()
+                    .List();
+
+                Console.WriteLine();
+                Console.WriteLine("Press ENTER to exit...");
                 Console.ReadLine();
 
                 application.Shutdown();

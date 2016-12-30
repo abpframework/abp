@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using AbpDesk.Blogging;
 using AbpDesk.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -13,7 +14,8 @@ namespace AbpDesk.ConsoleDemo
     [DependsOn(
         typeof(AbpDeskApplicationModule), 
         typeof(AbpDeskEntityFrameworkCoreModule), 
-        typeof(AbpIdentityEntityFrameworkCoreModule))]
+        typeof(AbpIdentityEntityFrameworkCoreModule),
+        typeof(AbpDeskMongoBlogModule))]
     public class AbpDeskConsoleDemoModule : AbpModule
     {
         public override void ConfigureServices(IServiceCollection services)

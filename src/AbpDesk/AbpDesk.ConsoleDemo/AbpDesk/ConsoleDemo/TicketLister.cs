@@ -17,6 +17,9 @@ namespace AbpDesk.ConsoleDemo
 
         public void List()
         {
+            Console.WriteLine();
+            Console.WriteLine("List of tickets:");
+
             var result = AsyncHelper.RunSync(() => _ticketAppService.GetAll(new GetAllTicketsInput()));
 
             foreach (var ticket in result.Items)

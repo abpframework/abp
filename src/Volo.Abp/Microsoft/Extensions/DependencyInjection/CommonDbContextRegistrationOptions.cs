@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
@@ -6,34 +7,25 @@ using Volo.Abp.Reflection;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
-    public class AddAbpDbContextOptions
+    public class CommonDbContextRegistrationOptions : ICommonDbContextRegistrationOptionsBuilder
     {
-        internal RepositoryRegistrationOptions RepositoryOptions { get; set; }
+        public bool RegisterDefaultRepositories { get; set; }
 
-        public AddAbpDbContextOptions()
+        public bool IncludeAllEntitiesForDefaultRepositories { get; set; }
+
+        public Dictionary<Type, Type> CustomRepositories { get; set; }
+
+        public CommonDbContextRegistrationOptions()
         {
-            RepositoryOptions = new RepositoryRegistrationOptions();
+            CustomRepositories = new Dictionary<Type, Type>();
         }
 
-        /// <summary>
-        /// Registers default repositories for this DbContext. 
-        /// </summary>
-        /// <param name="includeAllEntities">
-        /// Registers repositories only for aggregate root entities by default.
-        /// set <see cref="includeAllEntities"/> to true to include all entities.
-        /// </param>
         public void WithDefaultRepositories(bool includeAllEntities = false)
         {
-            RepositoryOptions.RegisterDefaultRepositories = true;
-            RepositoryOptions.IncludeAllEntitiesForDefaultRepositories = includeAllEntities;
+            RegisterDefaultRepositories = true;
+            IncludeAllEntitiesForDefaultRepositories = includeAllEntities;
         }
 
-        /// <summary>
-        /// Registers custom repository for a specific entity.
-        /// Custom repositories overrides default repositories.
-        /// </summary>
-        /// <typeparam name="TEntity">Entity type</typeparam>
-        /// <typeparam name="TRepository">Repository type</typeparam>
         public void WithCustomRepository<TEntity, TRepository>()
         {
             WithCustomRepository(typeof(TEntity), typeof(TRepository));
@@ -51,7 +43,27 @@ namespace Microsoft.Extensions.DependencyInjection
                 throw new AbpException($"Given repositoryType is not a repository: {entityType.AssemblyQualifiedName}. It must implement {typeof(IRepository<,>).AssemblyQualifiedName}.");
             }
 
-            RepositoryOptions.CustomRepositories[entityType] = repositoryType;
+            CustomRepositories[entityType] = repositoryType;
+        }
+
+        public bool ShouldRegisterDefaultRepositoryFor(Type entityType)
+        {
+            if (!RegisterDefaultRepositories)
+            {
+                return false;
+            }
+
+            if (CustomRepositories.ContainsKey(entityType))
+            {
+                return false;
+            }
+
+            if (!IncludeAllEntitiesForDefaultRepositories && !ReflectionHelper.IsAssignableToGenericType(entityType, typeof(IAggregateRoot<>)))
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

@@ -18,7 +18,7 @@ namespace AbpDesk.Tickets
         [MaxLength(MaxBodyLength)]
         public string Body { get; set; }
 
-        private Ticket()
+        protected Ticket()
         {
             
         }

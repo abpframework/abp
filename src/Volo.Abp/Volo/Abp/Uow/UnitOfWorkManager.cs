@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.DependencyInjection;
 
@@ -8,33 +7,30 @@ namespace Volo.Abp.Uow
     public class UnitOfWorkManager : IUnitOfWorkManager, ISingletonDependency
     {
         //TODO: Skipped many feature of Abp 1.x
+        //TODO: Inner, real unit of works (RequiresNew option)!
 
-        public IUnitOfWork Current => _currentUowInfo.Value?.UnitOfWork;
+        public IUnitOfWork Current => _ambientUnitOfWork.UnitOfWork; //TODO: Remove Current!
 
-        private readonly AsyncLocal<UnitOfWorkInfo> _currentUowInfo;
         private readonly IServiceProvider _serviceProvider;
+        private readonly IAmbientUnitOfWork _ambientUnitOfWork;
 
-        public UnitOfWorkManager(IServiceProvider serviceProvider)
+        public UnitOfWorkManager(IServiceProvider serviceProvider, IAmbientUnitOfWork ambientUnitOfWork)
         {
             _serviceProvider = serviceProvider;
-            _currentUowInfo = new AsyncLocal<UnitOfWorkInfo>();
+            _ambientUnitOfWork = ambientUnitOfWork;
         }
 
         public IUnitOfWork Begin()
         {
-            if (Current != null)
+            if (_ambientUnitOfWork.UnitOfWork != null)
             {
-                return new ChildUnitOfWork(Current);
+                return new ChildUnitOfWork(_ambientUnitOfWork.UnitOfWork);
             }
 
             var scope = _serviceProvider.CreateScope();
-
             try
             {
-                _currentUowInfo.Value = new UnitOfWorkInfo(
-                    scope.ServiceProvider.GetRequiredService<IUnitOfWork>(),
-                    scope
-                );
+                _ambientUnitOfWork.SetUnitOfWork(scope.ServiceProvider.GetRequiredService<IUnitOfWork>());
             }
             catch
             {
@@ -42,7 +38,7 @@ namespace Volo.Abp.Uow
                 throw;
             }
 
-            return Current;
+            return _ambientUnitOfWork.UnitOfWork;
         }
     }
 }

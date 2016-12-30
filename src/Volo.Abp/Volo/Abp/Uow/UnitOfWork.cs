@@ -11,9 +11,13 @@ namespace Volo.Abp.Uow
         public IServiceProvider ServiceProvider { get; }
 
         private readonly Dictionary<string, IDatabaseApi> _databaseApis;
+        private readonly IAmbientUnitOfWork _ambientUnitOfWork;
 
-        public UnitOfWork(IServiceProvider serviceProvider)
+        private bool _isDisposed;
+
+        public UnitOfWork(IServiceProvider serviceProvider, IAmbientUnitOfWork ambientUnitOfWork)
         {
+            _ambientUnitOfWork = ambientUnitOfWork;
             ServiceProvider = serviceProvider;
 
             _databaseApis = new Dictionary<string, IDatabaseApi>();
@@ -21,7 +25,15 @@ namespace Volo.Abp.Uow
 
         public void Dispose()
         {
+            if (_isDisposed)
+            {
+                return;
+            }
+
+            _isDisposed = true;
+
             //TODO: Remove itself from IUnitOfWorkManager
+            _ambientUnitOfWork.SetUnitOfWork(null);
         }
 
         public async Task SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))

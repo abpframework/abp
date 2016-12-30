@@ -12,10 +12,10 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
     public interface IMongoDbRepository<TEntity, TPrimaryKey> : IQueryableRepository<TEntity, TPrimaryKey>
         where TEntity : class, IEntity<TPrimaryKey>
     {
-    }
+        IMongoDatabase Database { get; }
 
-    public interface IMongoDatabaseProvider
-    {
-        IMongoDatabase GetDatabase();
+        IMongoCollection<TEntity> Collection { get; }
+
+        string CollectionName { get; }
     }
 }

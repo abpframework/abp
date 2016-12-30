@@ -86,6 +86,8 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Volo.Abp.Identity.Tests", "
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Volo.Abp.MongoDB", "src\Volo.Abp.MongoDB\Volo.Abp.MongoDB.xproj", "{B31FFAE3-5DAC-4E51-BD17-F7446B741A36}"
 EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "AbpDesk.MongoBlog", "src\AbpDesk\AbpDesk.MongoBlog\AbpDesk.MongoBlog.xproj", "{63244DC7-34BE-44E1-BF6F-F2672E59AF36}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -208,6 +210,10 @@ Global
 		{B31FFAE3-5DAC-4E51-BD17-F7446B741A36}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B31FFAE3-5DAC-4E51-BD17-F7446B741A36}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B31FFAE3-5DAC-4E51-BD17-F7446B741A36}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63244DC7-34BE-44E1-BF6F-F2672E59AF36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63244DC7-34BE-44E1-BF6F-F2672E59AF36}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63244DC7-34BE-44E1-BF6F-F2672E59AF36}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63244DC7-34BE-44E1-BF6F-F2672E59AF36}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -250,5 +256,6 @@ Global
 		{439DFC0F-1BA2-464F-900E-EA7E18C08975} = {1895A5C9-50D4-4568-9A3A-14657E615A5E}
 		{4AB91077-82DC-4335-9274-BCE017BD9C8B} = {146F561E-C7B8-4166-9383-47E1BC1A2E62}
 		{B31FFAE3-5DAC-4E51-BD17-F7446B741A36} = {4C753F64-0C93-4D65-96C2-A40893AFC1E8}
+		{63244DC7-34BE-44E1-BF6F-F2672E59AF36} = {1187F469-0063-4065-9419-A1D956C80145}
 	EndGlobalSection
 EndGlobal

@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
-using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
-using Volo.Abp.Reflection;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static class AbpEfCoreServiceCollectionExtensions
     {
-        public static IServiceCollection AddAbpDbContext<TDbContext>(this IServiceCollection services, Action<AddAbpDbContextOptions> optionsAction = null) //Created overload instead of default parameter
+        public static IServiceCollection AddAbpDbContext<TDbContext>(this IServiceCollection services, Action<IAbpDbContextRegistrationOptionsBuilder> optionsBuilder = null) //Created overload instead of default parameter
             where TDbContext : AbpDbContext<TDbContext>
         {
             services //TODO: This code is copied from EntityFrameworkServiceCollectionExtensions, we should think on that later
@@ -21,72 +20,48 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddTransient<TDbContext>();
             services.TryAddSingleton(DbContextOptionsFactory.Create<TDbContext>);
 
-            var options = new AddAbpDbContextOptions();
-            optionsAction?.Invoke(options);
+            var options = new AbpDbContextRegistrationOptions();
+            optionsBuilder?.Invoke(options);
 
-            services.AddRepositories<TDbContext>(options.RepositoryOptions);
+            AddRepositories<TDbContext>(services, options);
 
             return services;
         }
 
-        private static void AddRepositories<TDbContext>(this IServiceCollection services, RepositoryRegistrationOptions options)
+        private static void AddRepositories<TDbContext>(IServiceCollection services, AbpDbContextRegistrationOptions options)
             where TDbContext : AbpDbContext<TDbContext>
         {
-            //TODO: Refactor!!!
-
-            var dbContextType = typeof(TDbContext);
-
             foreach (var customRepository in options.CustomRepositories)
             {
-                Register<TDbContext>(services, customRepository.Key, customRepository.Value);
+                services.AddDefaultRepository(customRepository.Key, customRepository.Value);
             }
 
             if (options.RegisterDefaultRepositories)
             {
-                foreach (var entityType in DbContextHelper.GetEntityTypes(dbContextType))
-                {
-                    if (options.CustomRepositories.ContainsKey(entityType))
-                    {
-                        continue;
-                    }
-
-                    if (!options.IncludeAllEntitiesForDefaultRepositories && !ReflectionHelper.IsAssignableToGenericType(entityType, typeof(IAggregateRoot<>)))
-                    {
-                        continue;
-                    }
-
-                    var primaryKeyType = EntityHelper.GetPrimaryKeyType(entityType);
-
-                    var repositoryImplementationType = typeof(IEntity).GetTypeInfo().IsAssignableFrom(entityType)
-                        ? typeof(EfCoreRepository<,>).MakeGenericType(dbContextType, entityType)
-                        : typeof(EfCoreRepository<,,>).MakeGenericType(dbContextType, entityType, primaryKeyType);
-
-                    Register<TDbContext>(services, entityType, repositoryImplementationType);
-                }
+                RegisterDefaultRepositories(services, typeof(TDbContext), options);
             }
         }
 
-        private static void Register<TDbContext>(IServiceCollection services, Type entityType, Type repositoryImplementationType)
-            where TDbContext : AbpDbContext<TDbContext>
+        private static void RegisterDefaultRepositories(IServiceCollection services, Type dbContextType, AbpDbContextRegistrationOptions options)
         {
-            var primaryKeyType = EntityHelper.GetPrimaryKeyType(entityType);
-
-            var repositoryInterfaceType = typeof(IRepository<,>).MakeGenericType(entityType, primaryKeyType);
-            var queryableRepositoryInterfaceType = typeof(IQueryableRepository<,>).MakeGenericType(entityType, primaryKeyType);
-
-            services.TryAddTransient(repositoryInterfaceType, repositoryImplementationType);
-            services.TryAddTransient(queryableRepositoryInterfaceType, repositoryImplementationType);
-
-            //Supports Default PK?
-            if (typeof(IEntity).GetTypeInfo().IsAssignableFrom(entityType) &&
-                ReflectionHelper.IsAssignableToGenericType(repositoryImplementationType, typeof(IRepository<>)))
+            foreach (var entityType in DbContextHelper.GetEntityTypes(dbContextType))
             {
-                var defaultPkRepositoryInterfaceType = typeof(IRepository<>).MakeGenericType(entityType);
-                var defaultPkQueryableRepositoryInterfaceType = typeof(IQueryableRepository<>).MakeGenericType(entityType);
+                if (!options.ShouldRegisterDefaultRepositoryFor(entityType))
+                {
+                    continue;
+                }
 
-                services.TryAddTransient(defaultPkRepositoryInterfaceType, repositoryImplementationType);
-                services.TryAddTransient(defaultPkQueryableRepositoryInterfaceType, repositoryImplementationType);
+                RegisterDefaultRepository(services, dbContextType, entityType, options);
             }
+        }
+
+        private static void RegisterDefaultRepository(IServiceCollection services, Type dbContextType, Type entityType, AbpDbContextRegistrationOptions options)
+        {
+            var repositoryImplementationType = typeof(IEntity).GetTypeInfo().IsAssignableFrom(entityType)
+                ? typeof(EfCoreRepository<,>).MakeGenericType(dbContextType, entityType)
+                : typeof(EfCoreRepository<,,>).MakeGenericType(dbContextType, entityType, EntityHelper.GetPrimaryKeyType(entityType));
+
+            services.AddDefaultRepository(entityType, repositoryImplementationType);
         }
     }
 }

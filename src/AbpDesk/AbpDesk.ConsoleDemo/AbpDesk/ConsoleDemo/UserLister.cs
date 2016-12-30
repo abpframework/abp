@@ -26,6 +26,9 @@ namespace AbpDesk.ConsoleDemo
 
         public void List()
         {
+            Console.WriteLine();
+            Console.WriteLine("List of users:");
+
             using (var uow = _unitOfWorkManager.Begin())
             {
                 foreach (var user in _userRepository.ToList())

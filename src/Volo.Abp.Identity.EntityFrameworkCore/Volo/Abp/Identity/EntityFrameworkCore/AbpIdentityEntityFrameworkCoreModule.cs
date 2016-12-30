@@ -11,7 +11,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         {
             services.AddAbpDbContext<IdentityDbContext>(options =>
             {
-                options.WithDefaultRepositories(true);
+                options.WithDefaultRepositories();
                 options.WithCustomRepository<IdentityUser, EfCoreIdentityUserRepository>();
                 options.WithCustomRepository<IdentityRole, EfCoreIdentityRoleRepository>();
             });

@@ -5,7 +5,7 @@ using Volo.Abp.Modularity;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
-    public static class AbpServiceCollectionExtensions
+    public static class ServiceCollectionAbpExtensions
     {
         public static AbpApplication AddApplication<TStartupModule>(
             [NotNull] this IServiceCollection services)

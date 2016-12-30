@@ -22,7 +22,8 @@
     "Microsoft.Extensions.Configuration.Json": "1.1.0",
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.0",
     "Volo.Abp.Identity": "1.0.0-*",
-    "Volo.Abp.Identity.EntityFrameworkCore": "1.0.0-*" 
+    "Volo.Abp.Identity.EntityFrameworkCore": "1.0.0-*",
+    "AbpDesk.MongoBlog": "1.0.0-*" 
   },
 
   "tools": {
