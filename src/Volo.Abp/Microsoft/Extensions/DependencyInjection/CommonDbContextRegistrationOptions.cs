@@ -9,6 +9,8 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public class CommonDbContextRegistrationOptions : ICommonDbContextRegistrationOptionsBuilder
     {
+        //TODO: Provide an option to set base repository classes, instead of defaults.
+
         public bool RegisterDefaultRepositories { get; set; }
 
         public bool IncludeAllEntitiesForDefaultRepositories { get; set; }
