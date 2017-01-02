@@ -12,7 +12,7 @@ namespace Volo.Abp.MongoDB.DependencyInjection
         {
         }
 
-        public override IEnumerable<Type> GetEntityTypes(Type dbContextType)
+        protected override IEnumerable<Type> GetEntityTypes(Type dbContextType)
         {
             var mongoDbContext = (AbpMongoDbContext)Activator.CreateInstance(dbContextType);
             return mongoDbContext.GetEntityCollectionTypes();

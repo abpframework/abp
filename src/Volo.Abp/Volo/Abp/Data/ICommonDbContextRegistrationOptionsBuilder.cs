@@ -9,7 +9,7 @@ namespace Volo.Abp.Data
         /// Registers repositories only for aggregate root entities by default.
         /// set <see cref="includeAllEntities"/> to true to include all entities.
         /// </param>
-        void WithDefaultRepositories(bool includeAllEntities = false);
+        ICommonDbContextRegistrationOptionsBuilder WithDefaultRepositories(bool includeAllEntities = false);
 
         /// <summary>
         /// Registers custom repository for a specific entity.
@@ -17,6 +17,6 @@ namespace Volo.Abp.Data
         /// </summary>
         /// <typeparam name="TEntity">Entity type</typeparam>
         /// <typeparam name="TRepository">Repository type</typeparam>
-        void WithCustomRepository<TEntity, TRepository>();
+        ICommonDbContextRegistrationOptionsBuilder WithCustomRepository<TEntity, TRepository>();
     }
 }

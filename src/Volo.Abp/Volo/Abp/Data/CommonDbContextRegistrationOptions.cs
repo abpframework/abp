@@ -10,26 +10,28 @@ namespace Volo.Abp.Data
     {
         //TODO: Provide an option to set base repository classes, instead of defaults.
 
-        public bool RegisterDefaultRepositories { get; set; }
+        public bool RegisterDefaultRepositories { get; private set; }
 
-        public bool IncludeAllEntitiesForDefaultRepositories { get; set; }
+        public bool IncludeAllEntitiesForDefaultRepositories { get; private set; }
 
-        public Dictionary<Type, Type> CustomRepositories { get; set; }
+        public Dictionary<Type, Type> CustomRepositories { get; }
 
         public CommonDbContextRegistrationOptions()
         {
             CustomRepositories = new Dictionary<Type, Type>();
         }
 
-        public void WithDefaultRepositories(bool includeAllEntities = false)
+        public ICommonDbContextRegistrationOptionsBuilder WithDefaultRepositories(bool includeAllEntities = false)
         {
             RegisterDefaultRepositories = true;
             IncludeAllEntitiesForDefaultRepositories = includeAllEntities;
+            return this;
         }
 
-        public void WithCustomRepository<TEntity, TRepository>()
+        public ICommonDbContextRegistrationOptionsBuilder WithCustomRepository<TEntity, TRepository>()
         {
             WithCustomRepository(typeof(TEntity), typeof(TRepository));
+            return this;
         }
 
         private void WithCustomRepository(Type entityType, Type repositoryType)

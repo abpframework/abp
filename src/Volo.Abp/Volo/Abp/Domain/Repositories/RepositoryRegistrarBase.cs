@@ -52,7 +52,7 @@ namespace Volo.Abp.Domain.Repositories
             services.AddDefaultRepository(entityType, repositoryImplementationType);
         }
 
-        public abstract IEnumerable<Type> GetEntityTypes(Type dbContextType);
+        protected abstract IEnumerable<Type> GetEntityTypes(Type dbContextType);
 
         protected abstract Type GetRepositoryTypeForDefaultPk(Type dbContextType, Type entityType);
 

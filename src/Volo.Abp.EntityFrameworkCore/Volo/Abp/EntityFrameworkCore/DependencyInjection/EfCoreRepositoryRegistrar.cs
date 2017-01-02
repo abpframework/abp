@@ -12,7 +12,7 @@ namespace Volo.Abp.EntityFrameworkCore.DependencyInjection
         {
         }
 
-        public override IEnumerable<Type> GetEntityTypes(Type dbContextType)
+        protected override IEnumerable<Type> GetEntityTypes(Type dbContextType)
         {
             return DbContextHelper.GetEntityTypes(dbContextType);
         }
