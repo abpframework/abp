@@ -2,9 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
 
-namespace Volo.Abp.Data
+namespace Volo.Abp.Domain.Repositories
 {
     public abstract class RepositoryRegistrarBase<TOptions>
         where TOptions: CommonDbContextRegistrationOptions

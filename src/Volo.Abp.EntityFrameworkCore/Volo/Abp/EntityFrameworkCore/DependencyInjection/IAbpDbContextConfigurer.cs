@@ -1,6 +1,4 @@
-using Volo.Abp.EntityFrameworkCore;
-
-namespace Microsoft.Extensions.DependencyInjection
+namespace Volo.Abp.EntityFrameworkCore.DependencyInjection
 {
     public interface IAbpDbContextConfigurer
     {

@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.Data;
-using Volo.Abp.MongoDB;
+using Volo.Abp.Domain.Repositories;
+using Volo.Abp.Domain.Repositories.MongoDB;
 
-namespace Volo.Abp.Domain.Repositories.MongoDB
+namespace Volo.Abp.MongoDB.DependencyInjection
 {
     public class MongoDbRepositoryRegistrar : RepositoryRegistrarBase<MongoDbContextRegistrationOptions>
     {

@@ -1,6 +1,7 @@
 ﻿using System;
 using Volo.Abp.Domain.Repositories.MongoDB;
 using Volo.Abp.MongoDB;
+using Volo.Abp.MongoDB.DependencyInjection;
 
 namespace Microsoft.Extensions.DependencyInjection
 {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
-using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.EntityFrameworkCore.DependencyInjection;
 
 namespace Volo.Abp.EntityFrameworkCore
 {

@@ -1,12 +1,11 @@
 using System;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Volo.Abp;
 using Volo.Abp.Data;
-using Volo.Abp.EntityFrameworkCore;
 using Volo.ExtensionMethods.Collections.Generic;
 
-namespace Microsoft.Extensions.DependencyInjection
+namespace Volo.Abp.EntityFrameworkCore.DependencyInjection
 {
     internal static class DbContextOptionsFactory
     {

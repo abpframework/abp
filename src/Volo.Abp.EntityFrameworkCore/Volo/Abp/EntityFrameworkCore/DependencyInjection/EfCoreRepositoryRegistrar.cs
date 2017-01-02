@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Volo.Abp.Data;
+using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
-using Volo.Abp.EntityFrameworkCore;
 
-namespace Microsoft.Extensions.DependencyInjection
+namespace Volo.Abp.EntityFrameworkCore.DependencyInjection
 {
     public class EfCoreRepositoryRegistrar : RepositoryRegistrarBase<AbpDbContextRegistrationOptions>
     {

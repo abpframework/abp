@@ -1,6 +1,6 @@
 using Volo.Abp.Data;
 
-namespace Microsoft.Extensions.DependencyInjection
+namespace Volo.Abp.EntityFrameworkCore.DependencyInjection
 {
     public interface IAbpDbContextRegistrationOptionsBuilder : ICommonDbContextRegistrationOptionsBuilder
     {

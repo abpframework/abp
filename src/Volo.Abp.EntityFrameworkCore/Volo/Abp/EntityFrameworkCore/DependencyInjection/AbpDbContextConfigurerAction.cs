@@ -1,9 +1,7 @@
 using System;
 using JetBrains.Annotations;
-using Volo;
-using Volo.Abp.EntityFrameworkCore;
 
-namespace Microsoft.Extensions.DependencyInjection
+namespace Volo.Abp.EntityFrameworkCore.DependencyInjection
 {
     public class AbpDbContextConfigurerAction : IAbpDbContextConfigurer
     {
