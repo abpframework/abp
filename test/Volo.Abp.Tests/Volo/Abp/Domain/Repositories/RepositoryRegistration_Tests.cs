@@ -59,8 +59,9 @@ namespace Volo.Abp.Domain.Repositories
             var services = new ServiceCollection();
 
             var options = new CommonDbContextRegistrationOptions();
-            options.WithDefaultRepositories(true);
-            options.WithCustomRepository<MyTestAggregateRootWithDefaultPk, MyTestAggregateRootWithDefaultPkCustomRepository>();
+            options
+                .WithDefaultRepositories(true)
+                .WithCustomRepository<MyTestAggregateRootWithDefaultPk, MyTestAggregateRootWithDefaultPkCustomRepository>();
 
             //Act
 
@@ -71,6 +72,29 @@ namespace Volo.Abp.Domain.Repositories
             services.ShouldContainTransient(typeof(IRepository<MyTestAggregateRootWithDefaultPk>), typeof(MyTestAggregateRootWithDefaultPkCustomRepository));
             services.ShouldContainTransient(typeof(IRepository<MyTestAggregateRootWithDefaultPk, string>), typeof(MyTestAggregateRootWithDefaultPkCustomRepository));
             services.ShouldContainTransient(typeof(IRepository<MyTestEntityWithCustomPk, int>), typeof(MyTestDefaultRepository<MyTestEntityWithCustomPk, int>));
+        }
+
+        [Fact]
+        public void Should_Register_Default_Repositories_With_Custom_Base()
+        {
+            //Arrange
+
+            var services = new ServiceCollection();
+
+            var options = new CommonDbContextRegistrationOptions();
+            options
+                .WithDefaultRepositories(true)
+                .WithDefaultRepositoryClasses(typeof(MyTestCustomBaseRepository<,>), typeof(MyTestCustomBaseRepository<>));
+
+            //Act
+
+            new MyTestRepositoryRegistrar(options).AddRepositories(services, typeof(MyFakeDbContext));
+
+            //Assert
+
+            services.ShouldContainTransient(typeof(IRepository<MyTestAggregateRootWithDefaultPk>), typeof(MyTestCustomBaseRepository<MyTestAggregateRootWithDefaultPk>));
+            services.ShouldContainTransient(typeof(IRepository<MyTestAggregateRootWithDefaultPk, string>), typeof(MyTestCustomBaseRepository<MyTestAggregateRootWithDefaultPk>));
+            services.ShouldContainTransient(typeof(IRepository<MyTestEntityWithCustomPk, int>), typeof(MyTestCustomBaseRepository<MyTestEntityWithCustomPk, int>));
         }
 
         public class MyTestRepositoryRegistrar : RepositoryRegistrarBase<CommonDbContextRegistrationOptions>
@@ -146,5 +170,18 @@ namespace Volo.Abp.Domain.Repositories
         {
 
         }
+
+        public class MyTestCustomBaseRepository<TEntity> : MyTestCustomBaseRepository<TEntity, string>, IRepository<TEntity>
+            where TEntity : class, IEntity<string>
+        {
+
+        }
+
+        public class MyTestCustomBaseRepository<TEntity, TPrimaryKey> : MyTestDefaultRepository<TEntity, TPrimaryKey>
+            where TEntity : class, IEntity<TPrimaryKey>
+        {
+
+        }
+
     }
 }

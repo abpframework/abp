@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Reflection;
@@ -8,7 +9,11 @@ namespace Volo.Abp.Data
 {
     public class CommonDbContextRegistrationOptions : ICommonDbContextRegistrationOptionsBuilder
     {
-        //TODO: Provide an option to set base repository classes, instead of defaults.
+        public bool SpecifiedDefaultRepositoryTypes => DefaultRepositoryImplementationType != null && DefaultRepositoryImplementationTypeWithDefaultPrimaryKey != null;
+        
+        public Type DefaultRepositoryImplementationType { get; private set; }
+
+        public Type DefaultRepositoryImplementationTypeWithDefaultPrimaryKey { get; private set; }
 
         public bool RegisterDefaultRepositories { get; private set; }
 
@@ -25,12 +30,25 @@ namespace Volo.Abp.Data
         {
             RegisterDefaultRepositories = true;
             IncludeAllEntitiesForDefaultRepositories = includeAllEntities;
+
             return this;
         }
 
         public ICommonDbContextRegistrationOptionsBuilder WithCustomRepository<TEntity, TRepository>()
         {
             WithCustomRepository(typeof(TEntity), typeof(TRepository));
+
+            return this;
+        }
+
+        public ICommonDbContextRegistrationOptionsBuilder WithDefaultRepositoryClasses([NotNull] Type repositoryImplementationType, [NotNull] Type repositoryImplementationTypeWithDefaultPrimaryKey)
+        {
+            Check.NotNull(repositoryImplementationType, nameof(repositoryImplementationType));
+            Check.NotNull(repositoryImplementationTypeWithDefaultPrimaryKey, nameof(repositoryImplementationTypeWithDefaultPrimaryKey));
+
+            DefaultRepositoryImplementationType = repositoryImplementationType;
+            DefaultRepositoryImplementationTypeWithDefaultPrimaryKey = repositoryImplementationTypeWithDefaultPrimaryKey;
+
             return this;
         }
 

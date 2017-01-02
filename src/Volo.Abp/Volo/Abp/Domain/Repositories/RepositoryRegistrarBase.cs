@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
@@ -45,9 +44,22 @@ namespace Volo.Abp.Domain.Repositories
 
         protected void RegisterDefaultRepository(IServiceCollection services, Type dbContextType, Type entityType)
         {
-            var repositoryImplementationType = typeof(IEntity).GetTypeInfo().IsAssignableFrom(entityType)
-                ? GetRepositoryTypeForDefaultPk(dbContextType, entityType)
-                : GetRepositoryType(dbContextType, entityType, EntityHelper.GetPrimaryKeyType(entityType));
+            var primaryKeyType = EntityHelper.GetPrimaryKeyType(entityType);
+            var isDefaultPrimaryKey = primaryKeyType == typeof(string);
+
+            Type repositoryImplementationType;
+            if (Options.SpecifiedDefaultRepositoryTypes)
+            {
+                repositoryImplementationType = isDefaultPrimaryKey
+                    ? Options.DefaultRepositoryImplementationTypeWithDefaultPrimaryKey.MakeGenericType(entityType)
+                    : Options.DefaultRepositoryImplementationType.MakeGenericType(entityType, primaryKeyType);
+            }
+            else
+            {
+                repositoryImplementationType = isDefaultPrimaryKey
+                    ? GetRepositoryTypeForDefaultPk(dbContextType, entityType)
+                    : GetRepositoryType(dbContextType, entityType, primaryKeyType);
+            }
 
             services.AddDefaultRepository(entityType, repositoryImplementationType);
         }

@@ -1,3 +1,5 @@
+using System;
+
 namespace Volo.Abp.Data
 {
     public interface ICommonDbContextRegistrationOptionsBuilder
@@ -18,5 +20,13 @@ namespace Volo.Abp.Data
         /// <typeparam name="TEntity">Entity type</typeparam>
         /// <typeparam name="TRepository">Repository type</typeparam>
         ICommonDbContextRegistrationOptionsBuilder WithCustomRepository<TEntity, TRepository>();
+
+        /// <summary>
+        /// Uses given class(es) for default repositories.
+        /// </summary>
+        /// <param name="repositoryImplementationType">Repository implementation type</param>
+        /// <param name="repositoryImplementationTypeWithDefaultPrimaryKey">Repository implementation type for default primary key type (<see cref="string"/>)</param>
+        /// <returns></returns>
+        ICommonDbContextRegistrationOptionsBuilder WithDefaultRepositoryClasses(Type repositoryImplementationType, Type repositoryImplementationTypeWithDefaultPrimaryKey);
     }
 }
