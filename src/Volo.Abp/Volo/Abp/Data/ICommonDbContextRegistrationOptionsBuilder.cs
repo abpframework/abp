@@ -1,4 +1,4 @@
-namespace Microsoft.Extensions.DependencyInjection
+namespace Volo.Abp.Data
 {
     public interface ICommonDbContextRegistrationOptionsBuilder
     {

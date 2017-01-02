@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
-using Volo.Abp;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Reflection;
 
-namespace Microsoft.Extensions.DependencyInjection
+namespace Volo.Abp.Data
 {
     public class CommonDbContextRegistrationOptions : ICommonDbContextRegistrationOptionsBuilder
     {
