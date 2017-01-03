@@ -1,6 +1,8 @@
 ﻿using System;
+using System.IO;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp;
+using Volo.Abp.Modularity.PlugIns;
 
 namespace AbpDesk.ConsoleDemo
 {
@@ -9,7 +11,12 @@ namespace AbpDesk.ConsoleDemo
         public static void Main(string[] args)
         {
             var services = new ServiceCollection();
-            var application = services.AddApplication<AbpDeskConsoleDemoModule>();
+
+            var application = services.AddApplication<AbpDeskConsoleDemoModule>(options =>
+            {
+                AddPlugIns(options);
+            });
+
             using (var scope = services.BuildServiceProvider().CreateScope())
             {
                 application.Initialize(scope.ServiceProvider);
@@ -45,6 +52,21 @@ namespace AbpDesk.ConsoleDemo
                 .ServiceProvider
                 .GetRequiredService<BlogPostLister>()
                 .List();
+        }
+
+        private static void AddPlugIns(AbpApplicationCreationOptions options)
+        {
+            options.PlugInSources.Add(
+                new FolderPlugInSource(
+                    Path.Combine(
+                        Directory.GetCurrentDirectory(),
+                        @"..\AbpDesk.SamplePlugInModule\bin\Debug\netstandard1.6\"
+                    )
+                )
+                {
+                    Filter = filePath => filePath.EndsWith("AbpDesk.SamplePlugInModule.dll")
+                }
+            );
         }
     }
 }

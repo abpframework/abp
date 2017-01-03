@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.Loader;
 using JetBrains.Annotations;
 using Volo.Abp.Reflection;
 using Volo.ExtensionMethods.Collections.Generic;
@@ -13,7 +16,11 @@ namespace Volo.Abp.Modularity.PlugIns
 
         public SearchOption SearchOption { get; set; }
 
-        public FolderPlugInSource([NotNull] string folder, SearchOption searchOption = SearchOption.TopDirectoryOnly)
+        public Func<string, bool> Filter { get; set; }
+
+        public FolderPlugInSource(
+            [NotNull] string folder, 
+            SearchOption searchOption = SearchOption.TopDirectoryOnly)
         {
             Check.NotNull(folder, nameof(folder));
 
@@ -21,13 +28,11 @@ namespace Volo.Abp.Modularity.PlugIns
             SearchOption = searchOption;
         }
 
-        [NotNull]
         public Type[] GetModules()
         {
             var modules = new List<Type>();
 
-            var assemblies = AssemblyHelper.GetAllAssembliesInFolder(Folder, SearchOption);
-            foreach (var assembly in assemblies)
+            foreach (var assembly in GetAssemblies())
             {
                 try
                 {
@@ -46,6 +51,18 @@ namespace Volo.Abp.Modularity.PlugIns
             }
 
             return modules.ToArray();
+        }
+
+        private IEnumerable<Assembly> GetAssemblies()
+        {
+            var assemblyFiles = AssemblyHelper.GetAssemblyFiles(Folder, SearchOption);
+
+            if (Filter != null)
+            {
+                assemblyFiles = assemblyFiles.Where(Filter);
+            }
+
+            return assemblyFiles.Select(AssemblyLoadContext.Default.LoadFromAssemblyPath);
         }
     }
 }

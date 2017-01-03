@@ -8,15 +8,18 @@ namespace Volo.Abp.Reflection
 {
     internal static class AssemblyHelper
     {
-        public static List<Assembly> GetAllAssembliesInFolder(string folderPath, SearchOption searchOption)
+        public static List<Assembly> LoadAssemblies(string folderPath, SearchOption searchOption)
         {
-            var assemblyFiles = Directory
+            return GetAssemblyFiles(folderPath, searchOption)
+                .Select(AssemblyLoadContext.Default.LoadFromAssemblyPath)
+                .ToList();
+        }
+
+        public static IEnumerable<string> GetAssemblyFiles(string folderPath, SearchOption searchOption)
+        {
+            return Directory
                 .EnumerateFiles(folderPath, "*.*", searchOption)
                 .Where(s => s.EndsWith(".dll") || s.EndsWith(".exe"));
-
-            //TODO: AssemblyLoadContext not tested
-
-            return assemblyFiles.Select(AssemblyLoadContext.Default.LoadFromAssemblyPath).ToList();
         }
     }
 }
