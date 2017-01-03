@@ -6,10 +6,7 @@ namespace Volo.Abp.Uow
 {
     public class UnitOfWorkManager : IUnitOfWorkManager, ISingletonDependency
     {
-        //TODO: Skipped many feature of Abp 1.x
-        //TODO: Inner, real unit of works (RequiresNew option)!
-
-        public IUnitOfWork Current => _ambientUnitOfWork.UnitOfWork; //TODO: Remove Current!
+        public IUnitOfWork Current => _ambientUnitOfWork.UnitOfWork;
 
         private readonly IServiceProvider _serviceProvider;
         private readonly IAmbientUnitOfWork _ambientUnitOfWork;

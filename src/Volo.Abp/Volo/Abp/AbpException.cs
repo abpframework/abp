@@ -2,8 +2,6 @@
 
 namespace Volo.Abp
 {
-    //TODO: Make Exceptions [Serializable] when it's available in .Net Standard 2.0.
-
     /// <summary>
     /// Base exception type for those are thrown by Abp system for Abp specific exceptions.
     /// </summary>
