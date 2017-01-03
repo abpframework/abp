@@ -5,7 +5,6 @@ namespace Volo.Abp.Domain.Entities
     /// <summary>
     /// This exception is thrown if an entity excepted to be found but not found.
     /// </summary>
-    //TODO: [Serializable]
     public class EntityNotFoundException : AbpException
     {
         /// <summary>
@@ -26,15 +25,6 @@ namespace Volo.Abp.Domain.Entities
 
         }
 
-        ///// <summary>
-        ///// Creates a new <see cref="EntityNotFoundException"/> object.
-        ///// </summary>
-        //public EntityNotFoundException(SerializationInfo serializationInfo, StreamingContext context)
-        //    : base(serializationInfo, context)
-        //{
-
-        //}
-        
         /// <summary>
         /// Creates a new <see cref="EntityNotFoundException"/> object.
         /// </summary>

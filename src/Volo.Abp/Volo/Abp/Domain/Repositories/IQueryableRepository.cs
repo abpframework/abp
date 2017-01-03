@@ -17,8 +17,6 @@ namespace Volo.Abp.Domain.Repositories
     public interface IQueryableRepository<TEntity, TPrimaryKey> : IRepository<TEntity, TPrimaryKey>, IQueryable<TEntity>
         where TEntity : class, IEntity<TPrimaryKey>
     {
-        //TODO: Is Delete needed?
-
         /// <summary>
         /// Deletes many entities by function.
         /// Notice that: All entities fits to given predicate are retrieved and deleted.
