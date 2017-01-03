@@ -2,7 +2,6 @@
 using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
-using Volo.Abp.DependencyInjection;
 using Volo.DependencyInjection;
 
 namespace Volo.Abp.Uow

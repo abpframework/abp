@@ -1,5 +1,5 @@
 using JetBrains.Annotations;
-using Volo.Abp.DependencyInjection;
+using Volo.DependencyInjection;
 
 namespace Volo.Abp.MultiTenancy
 {
