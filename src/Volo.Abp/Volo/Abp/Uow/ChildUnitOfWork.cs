@@ -18,9 +18,19 @@ namespace Volo.Abp.Uow
             _parent = parent;
         }
 
+        public void SaveChanges()
+        {
+            _parent.SaveChanges();
+        }
+
         public Task SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             return _parent.SaveChangesAsync(cancellationToken);
+        }
+        
+        public void Complete()
+        {
+            _parent.Complete();
         }
 
         public Task CompleteAsync(CancellationToken cancellationToken = default(CancellationToken))
@@ -42,6 +52,8 @@ namespace Volo.Abp.Uow
         {
             return _parent.AddDatabaseApi(id, databaseApi);
         }
+
+
 
         public void Dispose()
         {

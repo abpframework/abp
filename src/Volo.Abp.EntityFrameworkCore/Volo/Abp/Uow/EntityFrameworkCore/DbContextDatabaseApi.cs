@@ -4,7 +4,7 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace Volo.Abp.Uow.EntityFrameworkCore
 {
-    public class DbContextDatabaseApi<TDbContext> : IDatabaseApi
+    public class DbContextDatabaseApi<TDbContext> : IDatabaseApi, ISupportsSavingChanges
         where TDbContext : AbpDbContext<TDbContext>
     {
         public TDbContext DbContext { get; }
@@ -17,6 +17,11 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
         public Task SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             return DbContext.SaveChangesAsync(cancellationToken);
+        }
+
+        public void SaveChanges()
+        {
+            DbContext.SaveChanges();
         }
     }
 }

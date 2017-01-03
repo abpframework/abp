@@ -16,7 +16,11 @@ namespace Volo.Abp.Uow
 
         IDatabaseApi AddDatabaseApi(string id, IDatabaseApi databaseApi);
 
+        void SaveChanges();
+
         Task SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));
+
+        void Complete();
 
         Task CompleteAsync(CancellationToken cancellationToken = default(CancellationToken));
     }
