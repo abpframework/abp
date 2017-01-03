@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp;
 
 namespace AbpDesk.ConsoleDemo
 {
@@ -13,20 +14,12 @@ namespace AbpDesk.ConsoleDemo
             {
                 application.Initialize(scope.ServiceProvider);
 
-                application
-                    .ServiceProvider
-                    .GetRequiredService<TicketLister>()
-                    .List();
+                RunDemo(application);
 
-                application
-                    .ServiceProvider
-                    .GetRequiredService<UserLister>()
-                    .List();
+                Console.WriteLine("Press ENTER to run again...");
+                Console.ReadLine();
 
-                application
-                    .ServiceProvider
-                    .GetRequiredService<BlogPostLister>()
-                    .List();
+                RunDemo(application);
 
                 Console.WriteLine();
                 Console.WriteLine("Press ENTER to exit...");
@@ -34,6 +27,24 @@ namespace AbpDesk.ConsoleDemo
 
                 application.Shutdown();
             }
+        }
+
+        private static void RunDemo(AbpApplication application)
+        {
+            application
+                .ServiceProvider
+                .GetRequiredService<TicketLister>()
+                .List();
+
+            application
+                .ServiceProvider
+                .GetRequiredService<UserLister>()
+                .List();
+
+            application
+                .ServiceProvider
+                .GetRequiredService<BlogPostLister>()
+                .List();
         }
     }
 }

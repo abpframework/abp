@@ -7,9 +7,9 @@ namespace Volo.Abp.Data
 {
     public class DefaultConnectionStringResolver : IConnectionStringResolver, ITransientDependency
     {
-        private readonly DbConnectionOptions _options; //TODO: Use IOptionsSnapshot?
+        private readonly DbConnectionOptions _options;
 
-        public DefaultConnectionStringResolver(IOptions<DbConnectionOptions> options)
+        public DefaultConnectionStringResolver(IOptionsSnapshot<DbConnectionOptions> options)
         {
             _options = options.Value;
         }

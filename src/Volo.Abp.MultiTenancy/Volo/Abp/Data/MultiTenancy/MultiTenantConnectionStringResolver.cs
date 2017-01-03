@@ -14,7 +14,7 @@ namespace Volo.Abp.Data.MultiTenancy
         private readonly ITenantConnectionStringStore _tenantConnectionStringStore;
 
         public MultiTenantConnectionStringResolver(
-            IOptions<DbConnectionOptions> options,
+            IOptionsSnapshot<DbConnectionOptions> options,
             IMultiTenancyManager multiTenancyManager, 
             ITenantConnectionStringStore tenantConnectionStringStore)
             : base(options)

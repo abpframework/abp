@@ -15,7 +15,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddLogging();
 
             services.TryAddTransient<TDbContext>();
-            services.TryAddSingleton(DbContextOptionsFactory.Create<TDbContext>);
+            services.TryAddTransient(DbContextOptionsFactory.Create<TDbContext>);
 
             var options = new AbpDbContextRegistrationOptions();
             optionsBuilder?.Invoke(options);
