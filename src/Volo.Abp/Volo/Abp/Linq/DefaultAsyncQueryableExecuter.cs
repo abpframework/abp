@@ -6,8 +6,6 @@ using Volo.DependencyInjection;
 
 namespace Volo.Abp.Linq
 {
-    //TODO: DefaultAsyncQueryableExecuter should be able to work with multiple Executer, each will try to execute it!
-    //TODO: Implement with EF Core as first executer implementation!
     public class DefaultAsyncQueryableExecuter : IAsyncQueryableExecuter, ITransientDependency
     {
         public Task<int> CountAsync<T>(IQueryable<T> queryable)

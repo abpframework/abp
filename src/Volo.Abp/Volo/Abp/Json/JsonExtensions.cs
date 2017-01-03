@@ -5,6 +5,8 @@ namespace Volo.Abp.Json
 {
     public static class JsonExtensions
     {
+        //TODO: Remove this extension method, create IJsonSerializer abstraction (if there is not already such an abstraction).
+
         /// <summary>
         /// Converts given object to JSON string.
         /// </summary>
@@ -23,7 +25,8 @@ namespace Volo.Abp.Json
                 options.Formatting = Formatting.Indented;
             }
 
-            //options.Converters.Insert(0, new AbpDateTimeConverter()); //TODO: AbpDateTimeConverter?
+            //TODO: AbpDateTimeConverter contains Clock, so it should be injected!
+            //options.Converters.Insert(0, new AbpDateTimeConverter());
 
             return JsonConvert.SerializeObject(obj, options);
         }
