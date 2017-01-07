@@ -6,8 +6,6 @@ using Volo.ExtensionMethods.Collections.Generic;
 
 namespace Volo.ExtensionMethods
 {
-    //TODO: Not working properly with cultures!
-
     /// <summary>
     /// Extension methods for String class.
     /// </summary>
@@ -16,15 +14,7 @@ namespace Volo.ExtensionMethods
         /// <summary>
         /// Adds a char to end of given string if it does not ends with the char.
         /// </summary>
-        public static string EnsureEndsWith(this string str, char c)
-        {
-            return EnsureEndsWith(str, c, StringComparison.Ordinal);
-        }
-
-        /// <summary>
-        /// Adds a char to end of given string if it does not ends with the char.
-        /// </summary>
-        public static string EnsureEndsWith(this string str, char c, StringComparison comparisonType)
+        public static string EnsureEndsWith(this string str, char c, StringComparison comparisonType = StringComparison.Ordinal)
         {
             Check.NotNull(str, nameof(str));
 
@@ -36,19 +26,10 @@ namespace Volo.ExtensionMethods
             return str + c;
         }
 
-
         /// <summary>
         /// Adds a char to beginning of given string if it does not starts with the char.
         /// </summary>
-        public static string EnsureStartsWith(this string str, char c)
-        {
-            return EnsureStartsWith(str, c, StringComparison.Ordinal);
-        }
-
-        /// <summary>
-        /// Adds a char to beginning of given string if it does not starts with the char.
-        /// </summary>
-        public static string EnsureStartsWith(this string str, char c, StringComparison comparisonType)
+        public static string EnsureStartsWith(this string str, char c, StringComparison comparisonType = StringComparison.Ordinal)
         {
             Check.NotNull(str, nameof(str));
 
@@ -239,8 +220,9 @@ namespace Volo.ExtensionMethods
         /// Converts PascalCase string to camelCase string.
         /// </summary>
         /// <param name="str">String to convert</param>
+        /// <param name="useCurrentCulture">set true to use current culture. Otherwise, invariant culture will be used.</param>
         /// <returns>camelCase of the string</returns>
-        public static string ToCamelCase(this string str)
+        public static string ToCamelCase(this string str, bool useCurrentCulture = false)
         {
             if (string.IsNullOrWhiteSpace(str))
             {
@@ -249,10 +231,10 @@ namespace Volo.ExtensionMethods
 
             if (str.Length == 1)
             {
-                return str.ToLower();
+                return useCurrentCulture ? str.ToLower() : str.ToLowerInvariant();
             }
 
-            return char.ToLower(str[0]) + str.Substring(1);
+            return (useCurrentCulture ? char.ToLower(str[0]) : char.ToLowerInvariant(str[0])) + str.Substring(1);
         }
 
         /// <summary>
@@ -260,14 +242,17 @@ namespace Volo.ExtensionMethods
         /// Example: "ThisIsSampleSentence" is converted to "This is a sample sentence".
         /// </summary>
         /// <param name="str">String to convert.</param>
-        public static string ToSentenceCase(this string str)
+        /// <param name="useCurrentCulture">set true to use current culture. Otherwise, invariant culture will be used.</param>
+        public static string ToSentenceCase(this string str, bool useCurrentCulture = false)
         {
             if (string.IsNullOrWhiteSpace(str))
             {
                 return str;
             }
 
-            return Regex.Replace(str, "[a-z][A-Z]", m => m.Value[0] + " " + char.ToLower(m.Value[1]));
+            return useCurrentCulture
+                ? Regex.Replace(str, "[a-z][A-Z]", m => m.Value[0] + " " + char.ToLower(m.Value[1]))
+                : Regex.Replace(str, "[a-z][A-Z]", m => m.Value[0] + " " + char.ToLowerInvariant(m.Value[1]));
         }
 
         /// <summary>
@@ -318,8 +303,9 @@ namespace Volo.ExtensionMethods
         /// Converts camelCase string to PascalCase string.
         /// </summary>
         /// <param name="str">String to convert</param>
+        /// <param name="useCurrentCulture">set true to use current culture. Otherwise, invariant culture will be used.</param>
         /// <returns>PascalCase of the string</returns>
-        public static string ToPascalCase(this string str)
+        public static string ToPascalCase(this string str, bool useCurrentCulture = false)
         {
             if (string.IsNullOrWhiteSpace(str))
             {
@@ -328,10 +314,10 @@ namespace Volo.ExtensionMethods
 
             if (str.Length == 1)
             {
-                return str.ToUpper();
+                return useCurrentCulture ? str.ToUpper() : str.ToUpperInvariant();
             }
 
-            return char.ToUpper(str[0]) + str.Substring(1);
+            return (useCurrentCulture ? char.ToUpper(str[0]) : char.ToUpperInvariant(str[0])) + str.Substring(1);
         }
 
         /// <summary>

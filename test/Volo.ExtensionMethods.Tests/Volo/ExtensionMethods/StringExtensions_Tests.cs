@@ -1,16 +1,17 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using Shouldly;
 using Xunit;
 
 namespace Volo.ExtensionMethods
 {
-    public class StringExtensions_Tests
+    public class StringExtensions_Tests : IDisposable
     {
+        private readonly IDisposable _cultureScope;
+
         public StringExtensions_Tests()
         {
-            //TODO: Temporary workaround! See StringExtensions
-            CultureInfo.CurrentUICulture = new CultureInfo("en-US");
-            CultureInfo.CurrentCulture = new CultureInfo("en-US");
+            _cultureScope = CultureHelper.Use("en-US");
         }
 
         [Fact]
@@ -21,9 +22,19 @@ namespace Volo.ExtensionMethods
             "Test!".EnsureEndsWith('!').ShouldBe("Test!");
             @"C:\test\folderName".EnsureEndsWith('\\').ShouldBe(@"C:\test\folderName\");
             @"C:\test\folderName\".EnsureEndsWith('\\').ShouldBe(@"C:\test\folderName\");
+            "Sarı".EnsureEndsWith('ı').ShouldBe("Sarı");
 
             //Case differences
             "TurkeY".EnsureEndsWith('y').ShouldBe("TurkeYy");
+        }
+
+        [Fact]
+        public void EnsureEndsWith_CultureSpecific_Test()
+        {
+            using (CultureHelper.Use("tr-TR"))
+            {
+                "Kırmızı".EnsureEndsWith('I', StringComparison.CurrentCultureIgnoreCase).ShouldBe("Kırmızı");
+            }
         }
 
         [Fact]
@@ -43,6 +54,15 @@ namespace Volo.ExtensionMethods
             (null as string).ToPascalCase().ShouldBe(null);
             "helloWorld".ToPascalCase().ShouldBe("HelloWorld");
             "istanbul".ToPascalCase().ShouldBe("Istanbul");
+        }
+
+        [Fact]
+        public void ToPascalCase_CurrentCulture_Test()
+        {
+            using (CultureHelper.Use("tr-TR"))
+            {
+                "istanbul".ToPascalCase(true).ShouldBe("İstanbul");
+            }
         }
 
         [Fact]
@@ -172,6 +192,11 @@ namespace Volo.ExtensionMethods
         {
             MyValue1,
             MyValue2
+        }
+
+        public void Dispose()
+        {
+            _cultureScope.Dispose();
         }
     }
 }
