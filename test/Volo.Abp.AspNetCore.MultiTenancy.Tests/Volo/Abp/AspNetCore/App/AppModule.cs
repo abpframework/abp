@@ -24,13 +24,15 @@ namespace Volo.Abp.AspNetCore.App
             app.Run(async (ctx) =>
             {
                 var manager = ctx.RequestServices.GetRequiredService<IMultiTenancyManager>();
+                var jsonSerializer = ctx.RequestServices.GetRequiredService<IJsonSerializer>();
 
                 var dictionary = new Dictionary<string, string>
                 {
                     ["TenantId"] = manager.CurrentTenant?.Id ?? ""
                 };
-                
-                await ctx.Response.WriteAsync(dictionary.ToJsonString());
+
+                var result = jsonSerializer.Serialize(dictionary);
+                await ctx.Response.WriteAsync(result);
             });
         }
     }
