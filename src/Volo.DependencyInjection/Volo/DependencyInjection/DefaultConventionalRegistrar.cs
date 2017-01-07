@@ -24,8 +24,6 @@ namespace Volo.DependencyInjection
                 return;
             }
 
-            //TODO: Should have a list of ignored interfaces for exposed services. Say that MyTransientDependency class should not registered for ITransientDependency interface.
-
             foreach (var serviceType in AutoRegistrationHelper.GetExposedServices(type))
             {
                 var serviceDescriptor = ServiceDescriptor.Describe(serviceType, type, lifeTime.Value);
