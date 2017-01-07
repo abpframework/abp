@@ -5,6 +5,9 @@ namespace Volo.Abp.Data.MultiTenancy
     public interface ITenantConnectionStringStore
     {
         [CanBeNull]
-        string GetConnectionStringOrNull([NotNull] string tenantId, [CanBeNull] string connStringName);
+        string GetDefaultConnectionStringOrNull([NotNull] string tenantId);
+
+        [CanBeNull]
+        string GetConnectionStringOrNull([NotNull] string tenantId, [NotNull] string connStringName);
     }
 }

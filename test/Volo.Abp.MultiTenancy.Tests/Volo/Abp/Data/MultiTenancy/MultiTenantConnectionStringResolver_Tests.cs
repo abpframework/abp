@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using Shouldly;
 using Volo.Abp.MultiTenancy;
+using Volo.ExtensionMethods.Collections.Generic;
 using Xunit;
 
 namespace Volo.Abp.Data.MultiTenancy
@@ -73,22 +74,12 @@ namespace Volo.Abp.Data.MultiTenancy
 
             public string GetConnectionStringOrNull(string tenantId, string connStringName)
             {
-                if (connStringName != null)
-                {
-                    if (_options.Value.ConnectionStrings.ContainsKey(tenantId + "#" + connStringName))
-                    {
-                        return _options.Value.ConnectionStrings[tenantId + "#" + connStringName];
-                    }
-                }
-                else
-                {
-                    if (_options.Value.ConnectionStrings.ContainsKey(tenantId + "#Default"))
-                    {
-                        return _options.Value.ConnectionStrings[tenantId + "#Default"];
-                    }
-                }
+                return _options.Value.ConnectionStrings.GetOrDefault(tenantId + "#" + connStringName);
+            }
 
-                return null;
+            public string GetDefaultConnectionStringOrNull(string tenantId)
+            {
+                return _options.Value.ConnectionStrings.GetOrDefault(tenantId + "#Default");
             }
         }
     }

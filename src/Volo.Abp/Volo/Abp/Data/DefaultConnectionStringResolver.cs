@@ -7,11 +7,11 @@ namespace Volo.Abp.Data
 {
     public class DefaultConnectionStringResolver : IConnectionStringResolver, ITransientDependency
     {
-        private readonly DbConnectionOptions _options;
+        protected DbConnectionOptions Options { get; }
 
         public DefaultConnectionStringResolver(IOptionsSnapshot<DbConnectionOptions> options)
         {
-            _options = options.Value;
+            Options = options.Value;
         }
 
         public virtual string Resolve(string connectionStringName = null)
@@ -19,7 +19,7 @@ namespace Volo.Abp.Data
             //Get module specific value if provided
             if (!connectionStringName.IsNullOrEmpty())
             {
-                var moduleConnString = _options.ConnectionStrings.GetOrDefault(connectionStringName);
+                var moduleConnString = Options.ConnectionStrings.GetOrDefault(connectionStringName);
                 if (!moduleConnString.IsNullOrEmpty())
                 {
                     return moduleConnString;
@@ -27,7 +27,7 @@ namespace Volo.Abp.Data
             }
             
             //Get default value
-            return _options.ConnectionStrings.Default;
+            return Options.ConnectionStrings.Default;
         }
     }
 }
