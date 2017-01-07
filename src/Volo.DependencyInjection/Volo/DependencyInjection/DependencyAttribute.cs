@@ -11,6 +11,8 @@ namespace Volo.DependencyInjection
 
         public virtual bool TryRegister { get; set; }
 
+        public virtual bool ReplaceServices { get; set; }
+
         public DependencyAttribute()
         {
             

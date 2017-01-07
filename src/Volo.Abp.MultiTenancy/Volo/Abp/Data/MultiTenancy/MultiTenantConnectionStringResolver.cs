@@ -5,9 +5,7 @@ using Volo.ExtensionMethods.Collections.Generic;
 
 namespace Volo.Abp.Data.MultiTenancy
 {
-    //TODO: Create a replace service registration convention, instead of custom registration in AbpMultiTenancyModule?
-
-    [DisableConventionalRegistration]
+    [Dependency(ReplaceServices = true)]
     public class MultiTenantConnectionStringResolver : DefaultConnectionStringResolver
     {
         private readonly IMultiTenancyManager _multiTenancyManager;

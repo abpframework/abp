@@ -28,7 +28,11 @@ namespace Volo.DependencyInjection
             {
                 var serviceDescriptor = ServiceDescriptor.Describe(serviceType, type, lifeTime.Value);
 
-                if (dependencyAttribute?.TryRegister == true)
+                if (dependencyAttribute?.ReplaceServices == true)
+                {
+                    services.Replace(serviceDescriptor);
+                }
+                else if (dependencyAttribute?.TryRegister == true)
                 {
                     services.TryAdd(serviceDescriptor);
                 }

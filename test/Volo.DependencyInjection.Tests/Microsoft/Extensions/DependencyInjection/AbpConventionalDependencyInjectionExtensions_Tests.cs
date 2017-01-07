@@ -131,6 +131,32 @@ namespace Microsoft.Extensions.DependencyInjection
         }
 
         [Fact]
+        public void Should_Replace_First_Implementation_By_Second_If_Second_Marked_As_ReplaceServices()
+        {
+            //Act
+
+            _services.AddTypes(typeof(FirstImplOfMyService), typeof(MyServiceReplacesIMyService));
+
+            //Assert
+
+            //Check descriptons in service collection
+            var descriptions = _services.Where(s => s.ServiceType == typeof(IMyService)).ToList();
+            descriptions.Count.ShouldBe(1);
+            descriptions[0].ImplementationType.ShouldBe(typeof(MyServiceReplacesIMyService));
+
+            //Check from service provider
+            var serviceProvider = _services.BuildServiceProvider();
+
+            //Default service should be second one
+            serviceProvider.GetRequiredService<IMyService>().ShouldBeOfType(typeof(MyServiceReplacesIMyService));
+
+            //Should also get all services
+            var instances = serviceProvider.GetServices<IMyService>().ToList();
+            instances.Count.ShouldBe(1);
+            instances[0].ShouldBeOfType(typeof(MyServiceReplacesIMyService));
+        }
+
+        [Fact]
         public void Should_Not_Register_Classes_Marked_With_DisableConventionalRegistration()
         {
             _services.AddType(typeof(NonConventionalImplOfMyService));
@@ -200,6 +226,12 @@ namespace Microsoft.Extensions.DependencyInjection
         
         [ExposeServices(typeof(IMyService1), typeof(IMyService2))]
         public class MyServiceWithExposeList : IMyService1, IMyService2, ITransientDependency
+        {
+            
+        }
+        
+        [Dependency(ReplaceServices = true)]
+        public class MyServiceReplacesIMyService : IMyService
         {
             
         }
