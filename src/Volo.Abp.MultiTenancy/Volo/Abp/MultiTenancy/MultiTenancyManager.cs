@@ -48,6 +48,9 @@ namespace Volo.Abp.MultiTenancy
                 foreach (var tenantResolver in _options.TenantResolvers)
                 {
                     tenantResolver.Resolve(context);
+
+                    //TODO: Validate TenantId by a TenantStore (TenantId can be TenancyName, so also normalize it by tenant store)
+
                     if (context.IsHandled())
                     {
                         break;

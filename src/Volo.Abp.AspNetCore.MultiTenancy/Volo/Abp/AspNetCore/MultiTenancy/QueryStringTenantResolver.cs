@@ -1,30 +1,17 @@
-﻿using Volo.Abp.MultiTenancy;
-using Volo.ExtensionMethods.Collections.Generic;
+﻿using Microsoft.AspNetCore.Http;
 
 namespace Volo.Abp.AspNetCore.MultiTenancy
 {
-    public class QueryStringTenantResolver : ITenantResolver
+    public class QueryStringTenantResolver : HttpTenantResolverBase
     {
-        public const string TenantIdKey = "__tenantId";
-        
-        public void Resolve(ITenantResolveContext context)
+        protected override string GetTenantIdFromHttpContextOrNull(HttpContext httpContext)
         {
-            var httpContext = context.GetHttpContext();
-            if (httpContext == null)
-            {
-                return;
-            }
-
             if (!httpContext.Request.QueryString.HasValue)
             {
-                return;
+                return null;
             }
 
-            var tenantId = httpContext.Request.Query[TenantIdKey];
-            if (!tenantId.IsNullOrEmpty())
-            {
-                context.Tenant = new TenantInfo(tenantId);
-            }
+            return httpContext.Request.Query[AbpAspNetCoreMultiTenancyConsts.TenantIdKey];
         }
     }
 }
