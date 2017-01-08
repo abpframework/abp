@@ -89,19 +89,14 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
 
         public override TEntity Update(TEntity entity)
         {
-            //TODO: This code is got from UserStore.UpdateAsync and revised Update method based on that, but we should be sure that it's valid
-            //Context.Attach(user);
-            //user.ConcurrencyStamp = Guid.NewGuid().ToString();
-            //Context.Update(user);
-            
-            DbContext.Attach(entity); //TODO: What is different for DbSet.Attach(entity)?
+            DbContext.Attach(entity);
 
             if (entity is IHasConcurrencyStamp)
             {
                 (entity as IHasConcurrencyStamp).ConcurrencyStamp = Guid.NewGuid().ToString(); //TODO: Use IGuidGenerator!
             }
 
-            return DbContext.Update(entity).Entity; //TODO: or DbSet.Update(entity) ?
+            return DbContext.Update(entity).Entity;
         }
 
         public override void Delete(TEntity entity)
