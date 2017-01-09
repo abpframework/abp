@@ -3,7 +3,7 @@
 
   "dependencies": {
     "NETStandard.Library": "1.6.1",
-    "Volo.Abp.ApplicationContracts": "1.0.0-*"
+    "Volo.Abp": "1.0.0-*"
   },
 
   "frameworks": {

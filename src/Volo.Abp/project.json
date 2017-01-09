@@ -8,7 +8,6 @@
     "Nito.AsyncEx.Context": "1.1.0",
     "System.Runtime.Loader": "4.3.0",
     "System.Linq.Queryable": "4.3.0",
-    "Volo.Abp.ApplicationContracts": "1.0.0-*",
     "Microsoft.Extensions.Options": "1.1.0",
     "JetBrains.Annotations": "10.2.1",
     "Volo.Abp.DependencyInjection.Abstractions": "1.0.0-*"
