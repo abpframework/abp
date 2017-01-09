@@ -1,7 +1,5 @@
 namespace Volo.Abp.Application.Services.Dtos
 {
-    //TODO: Add [Serializable] to all DTOs and Entities when .Net Standard 2.0 is available.
-
     /// <summary>
     /// Implements common properties for entity based DTOs.
     /// </summary>

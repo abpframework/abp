@@ -2,8 +2,6 @@ using System.Collections.Generic;
 
 namespace Volo.Abp.Application.Services.Dtos
 {
-    //TODO: [Serializable] for all DTO classes
-
     public class ListResultDto<T>
     {
         /// <summary>
