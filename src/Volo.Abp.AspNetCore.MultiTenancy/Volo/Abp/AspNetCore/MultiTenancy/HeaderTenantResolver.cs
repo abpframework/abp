@@ -7,7 +7,7 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
         protected override string GetTenantIdFromHttpContextOrNull(HttpContext httpContext)
         {
             //TODO: Get first one if provided multiple values and write a log
-            return httpContext.Request.Headers[AbpAspNetCoreMultiTenancyConsts.TenantIdKey];
+            return httpContext.Request.Headers[Options.TenantIdKey];
         }
     }
 }
