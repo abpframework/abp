@@ -1,13 +1,32 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System.Linq;
+using Microsoft.AspNetCore.Http;
+using Volo.Abp.MultiTenancy;
+using Volo.ExtensionMethods.Collections.Generic;
 
 namespace Volo.Abp.AspNetCore.MultiTenancy
 {
     public class HeaderTenantResolver : HttpTenantResolverBase
     {
-        protected override string GetTenantIdFromHttpContextOrNull(HttpContext httpContext)
+        protected override string GetTenantIdFromHttpContextOrNull(ITenantResolveContext context, HttpContext httpContext)
         {
             //TODO: Get first one if provided multiple values and write a log
-            return httpContext.Request.Headers[Options.TenantIdKey];
+            if (httpContext.Request.Headers.IsNullOrEmpty())
+            {
+                return null;
+            }
+
+            var tenantIdHeader = httpContext.Request.Headers[context.GetAspNetCoreMultiTenancyOptions().TenantIdKey];
+            if (tenantIdHeader == string.Empty || tenantIdHeader.Count < 1)
+            {
+                return null;
+            }
+
+            if (tenantIdHeader.Count > 1)
+            {
+                
+            }
+
+            return tenantIdHeader.First();
         }
     }
 }

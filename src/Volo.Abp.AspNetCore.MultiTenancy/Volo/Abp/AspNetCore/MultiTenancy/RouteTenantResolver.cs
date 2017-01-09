@@ -1,14 +1,15 @@
 ﻿using System;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.AspNetCore.MultiTenancy
 {
     public class RouteTenantResolver : HttpTenantResolverBase
     {
-        protected override string GetTenantIdFromHttpContextOrNull(HttpContext httpContext)
+        protected override string GetTenantIdFromHttpContextOrNull(ITenantResolveContext context, HttpContext httpContext)
         {
-            var tenantId = httpContext.GetRouteValue(Options.TenantIdKey);
+            var tenantId = httpContext.GetRouteValue(context.GetAspNetCoreMultiTenancyOptions().TenantIdKey);
             if (tenantId == null)
             {
                 return null;
