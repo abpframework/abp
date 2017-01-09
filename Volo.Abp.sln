@@ -76,8 +76,6 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "AbpDesk.MongoBlog", "src\Ab
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "AbpDesk.SamplePlugInModule", "src\AbpDesk\AbpDesk.SamplePlugInModule\AbpDesk.SamplePlugInModule.xproj", "{ADFAF85B-B785-41EA-B57D-422775989FA6}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Volo.Abp.DependencyInjection.Abstractions", "src\Volo.Abp.DependencyInjection.Abstractions\Volo.Abp.DependencyInjection.Abstractions.xproj", "{53D69885-FE4A-49E4-B92D-C3F77AD97A8A}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -188,10 +186,6 @@ Global
 		{ADFAF85B-B785-41EA-B57D-422775989FA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ADFAF85B-B785-41EA-B57D-422775989FA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ADFAF85B-B785-41EA-B57D-422775989FA6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{53D69885-FE4A-49E4-B92D-C3F77AD97A8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{53D69885-FE4A-49E4-B92D-C3F77AD97A8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{53D69885-FE4A-49E4-B92D-C3F77AD97A8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{53D69885-FE4A-49E4-B92D-C3F77AD97A8A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -229,6 +223,5 @@ Global
 		{B31FFAE3-5DAC-4E51-BD17-F7446B741A36} = {4C753F64-0C93-4D65-96C2-A40893AFC1E8}
 		{63244DC7-34BE-44E1-BF6F-F2672E59AF36} = {1187F469-0063-4065-9419-A1D956C80145}
 		{ADFAF85B-B785-41EA-B57D-422775989FA6} = {1187F469-0063-4065-9419-A1D956C80145}
-		{53D69885-FE4A-49E4-B92D-C3F77AD97A8A} = {4C753F64-0C93-4D65-96C2-A40893AFC1E8}
 	EndGlobalSection
 EndGlobal
