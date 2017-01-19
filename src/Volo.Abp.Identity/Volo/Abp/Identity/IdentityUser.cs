@@ -121,10 +121,11 @@ namespace Volo.Abp.Identity
 
         }
 
-        public IdentityUser([NotNull] string userName)
+        public IdentityUser(Guid id, [NotNull] string userName)
         {
             Check.NotNull(userName, nameof(userName));
 
+            Id = id;
             UserName = userName;
         }
 

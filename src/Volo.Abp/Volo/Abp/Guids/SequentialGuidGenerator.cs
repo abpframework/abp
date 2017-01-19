@@ -2,6 +2,7 @@
 using System.Security.Cryptography;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Threading;
+using Volo.DependencyInjection;
 
 namespace Volo.Abp.Guids
 {
@@ -11,7 +12,7 @@ namespace Volo.Abp.Guids
     /// Implements <see cref="IGuidGenerator"/> by creating sequential Guids.
     /// Use <see cref="SequentialGuidGeneratorOptions"/> to configure.
     /// </summary>
-    public class SequentialGuidGenerator : IGuidGenerator
+    public class SequentialGuidGenerator : IGuidGenerator, ITransientDependency
     {
         public SequentialGuidGeneratorOptions Options { get; }
 
