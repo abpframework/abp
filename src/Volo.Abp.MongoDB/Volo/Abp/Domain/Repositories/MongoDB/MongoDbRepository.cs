@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using MongoDB.Driver;
 using Volo.Abp.Domain.Entities;
@@ -5,9 +6,9 @@ using Volo.Abp.MongoDB;
 
 namespace Volo.Abp.Domain.Repositories.MongoDB
 {
-    public class MongoDbRepository<TMongoDbContext, TEntity> : MongoDbRepository<TMongoDbContext, TEntity, string>, IMongoDbRepository<TEntity>
+    public class MongoDbRepository<TMongoDbContext, TEntity> : MongoDbRepository<TMongoDbContext, TEntity, Guid>, IMongoDbRepository<TEntity>
         where TMongoDbContext : AbpMongoDbContext
-        where TEntity : class, IEntity<string>
+        where TEntity : class, IEntity<Guid>
     {
         public MongoDbRepository(IMongoDatabaseProvider<TMongoDbContext> databaseProvider)
             : base(databaseProvider)

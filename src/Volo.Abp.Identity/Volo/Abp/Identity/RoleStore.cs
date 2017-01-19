@@ -77,7 +77,7 @@ namespace Volo.Abp.Identity
 
             Check.NotNull(role, nameof(role));
 
-            await _roleRepository.InsertAsync(role);
+            await _roleRepository.InsertAsync(role, cancellationToken: cancellationToken);
             await SaveChanges(cancellationToken);
 
             return IdentityResult.Success;
@@ -96,7 +96,7 @@ namespace Volo.Abp.Identity
 
             Check.NotNull(role, nameof(role));
 
-            await _roleRepository.UpdateAsync(role);
+            await _roleRepository.UpdateAsync(role, cancellationToken);
 
             try
             {
@@ -126,7 +126,7 @@ namespace Volo.Abp.Identity
 
             try
             {
-                await _roleRepository.DeleteAsync(role);
+                await _roleRepository.DeleteAsync(role, cancellationToken);
                 await SaveChanges(cancellationToken);
             }
             catch (AbpDbConcurrencyException ex)
@@ -151,7 +151,7 @@ namespace Volo.Abp.Identity
 
             Check.NotNull(role, nameof(role));
 
-            return Task.FromResult(role.Id);
+            return Task.FromResult(role.Id.ToString());
         }
 
         /// <summary>
@@ -194,15 +194,12 @@ namespace Volo.Abp.Identity
         /// <param name="id">The role ID to look for.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
         /// <returns>A <see cref="Task{TResult}"/> that result of the look up.</returns>
-        public virtual Task<IdentityRole> FindByIdAsync([NotNull] string id, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<IdentityRole> FindByIdAsync(string id, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
             ThrowIfDisposed();
 
-            Check.NotNull(id, nameof(id));
-
-            //TODO: Add cancellationToken to Repository.FindAsync method as overload
-            return _roleRepository.FindAsync(id);
+            return _roleRepository.FindAsync(Guid.Parse(id), cancellationToken);
         }
 
         /// <summary>

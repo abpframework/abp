@@ -1,6 +1,8 @@
-﻿namespace Volo.Abp.Domain.Entities
+﻿using System;
+
+namespace Volo.Abp.Domain.Entities
 {
-    public class AggregateRoot : AggregateRoot<string>, IAggregateRoot
+    public class AggregateRoot : AggregateRoot<Guid>, IAggregateRoot
     {
 
     }

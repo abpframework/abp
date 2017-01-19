@@ -69,7 +69,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             {
                 b.ToTable("IdentityUsers");
 
-                b.Property(u => u.ConcurrencyStamp).IsConcurrencyToken();
+                b.Property(u => u.ConcurrencyStamp).IsConcurrencyToken(); //TODO: Do automatically?
                 b.Property(u => u.UserName).HasMaxLength(256);
                 b.Property(u => u.NormalizedUserName).HasMaxLength(256);
                 b.Property(u => u.Email).HasMaxLength(256);

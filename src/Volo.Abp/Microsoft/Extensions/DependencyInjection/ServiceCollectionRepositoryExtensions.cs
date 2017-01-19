@@ -62,7 +62,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
         private static bool BothSupportsDefaultPrimaryKey(Type entityType, Type repositoryImplementationType)
         {
-            return typeof(IEntity<string>).GetTypeInfo().IsAssignableFrom(entityType) &&
+            return typeof(IEntity<Guid>).GetTypeInfo().IsAssignableFrom(entityType) &&
                    ReflectionHelper.IsAssignableToGenericType(repositoryImplementationType, typeof(IRepository<>));
         }
     }

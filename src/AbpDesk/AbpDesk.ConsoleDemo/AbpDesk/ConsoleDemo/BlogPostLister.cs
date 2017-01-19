@@ -30,7 +30,7 @@ namespace AbpDesk.ConsoleDemo
                 //blog.Comments.Add(new BlogPostComment("@john", "good post! " + DateTime.Now.ToString(CultureInfo.InvariantCulture), star: (byte)RandomHelper.GetRandom(1, 6)));
                 //_blogPostRepository.Update(blog);
 
-                //_blogPostRepository.Insert(new BlogPost("Hello World 3!", DateTime.Now.ToString(CultureInfo.InvariantCulture)));
+                //_blogPostRepository.Insert(new BlogPost("Hello World 1!", DateTime.Now.ToString(CultureInfo.InvariantCulture)));
 
                 foreach (var blogPost in _blogPostRepository)
                 {

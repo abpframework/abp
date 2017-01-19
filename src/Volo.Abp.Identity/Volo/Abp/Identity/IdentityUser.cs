@@ -128,7 +128,7 @@ namespace Volo.Abp.Identity
             UserName = userName;
         }
 
-        public void AddRole([NotNull] string roleId)
+        public void AddRole([NotNull] Guid roleId)
         {
             Check.NotNull(roleId, nameof(roleId));
 
@@ -140,7 +140,7 @@ namespace Volo.Abp.Identity
             Roles.Add(new IdentityUserRole(Id, roleId));
         }
 
-        public void RemoveRole([NotNull] string roleId)
+        public void RemoveRole(Guid roleId)
         {
             Check.NotNull(roleId, nameof(roleId));
 
@@ -152,7 +152,7 @@ namespace Volo.Abp.Identity
             Roles.Add(new IdentityUserRole(Id, roleId));
         }
 
-        public bool IsInRole([NotNull] string roleId)
+        public bool IsInRole(Guid roleId)
         {
             Check.NotNull(roleId, nameof(roleId));
 

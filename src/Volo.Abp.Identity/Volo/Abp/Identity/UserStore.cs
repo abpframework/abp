@@ -87,7 +87,7 @@ namespace Volo.Abp.Identity
 
             Check.NotNull(user, nameof(user));
 
-            return Task.FromResult(user.Id);
+            return Task.FromResult(user.Id.ToString());
         }
 
         /// <summary>
@@ -241,15 +241,12 @@ namespace Volo.Abp.Identity
         /// <returns>
         /// The <see cref="Task"/> that represents the asynchronous operation, containing the user matching the specified <paramref name="userId"/> if it exists.
         /// </returns>
-        public virtual Task<IdentityUser> FindByIdAsync([NotNull] string userId, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<IdentityUser> FindByIdAsync(string userId, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
             ThrowIfDisposed();
 
-            Check.NotNull(userId, nameof(userId));
-
-            //TODO: Add cancellationToken to Repository.FindAsync method as overload
-            return _userRepository.FindAsync(userId);
+            return _userRepository.FindAsync(Guid.Parse(userId), cancellationToken);
         }
 
         /// <summary>

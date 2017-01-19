@@ -7,7 +7,7 @@ namespace Volo.Abp.Domain.Entities
     /// <summary>
     /// A shortcut of <see cref="Entity{TPrimaryKey}"/> for default primary key type (<see cref="string"/>).
     /// </summary>
-    public abstract class Entity : Entity<string>, IEntity
+    public abstract class Entity : Entity<Guid>, IEntity
     {
 
     }

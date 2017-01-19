@@ -1,9 +1,11 @@
-﻿namespace Volo.Abp.Domain.Entities
+﻿using System;
+
+namespace Volo.Abp.Domain.Entities
 {
     /// <summary>
     /// A shortcut of <see cref="IEntity{TPrimaryKey}"/> for default primary key type (<see cref="string"/>).
     /// </summary>
-    public interface IEntity : IEntity<string>
+    public interface IEntity : IEntity<Guid>
     {
 
     }

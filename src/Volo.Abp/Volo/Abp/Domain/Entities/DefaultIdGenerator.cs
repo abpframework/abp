@@ -4,6 +4,7 @@ using Volo.DependencyInjection;
 
 namespace Volo.Abp.Domain.Entities
 {
+    //TODO: No need! Directly use Guid Generator!
     public class DefaultIdGenerator : IIdGenerator, ITransientDependency
     {
         private readonly IGuidGenerator _guidGenerator;
@@ -15,7 +16,7 @@ namespace Volo.Abp.Domain.Entities
 
         public string GenerateStringId()
         {
-            return GenerateGuid().ToString("D");
+            return GenerateGuid().ToString();
         }
 
         public Guid GenerateGuid()

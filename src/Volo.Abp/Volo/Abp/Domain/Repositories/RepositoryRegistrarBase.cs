@@ -45,7 +45,7 @@ namespace Volo.Abp.Domain.Repositories
         protected void RegisterDefaultRepository(IServiceCollection services, Type dbContextType, Type entityType)
         {
             var primaryKeyType = EntityHelper.GetPrimaryKeyType(entityType);
-            var isDefaultPrimaryKey = primaryKeyType == typeof(string);
+            var isDefaultPrimaryKey = primaryKeyType == typeof(Guid);
 
             Type repositoryImplementationType;
             if (Options.SpecifiedDefaultRepositoryTypes)

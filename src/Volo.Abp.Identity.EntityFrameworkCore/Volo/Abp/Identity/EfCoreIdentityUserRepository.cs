@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Linq;
 using System.Security.Claims;
@@ -22,7 +23,7 @@ namespace Volo.Abp.Identity
             return DbSet.FirstOrDefaultAsync(u => u.NormalizedUserName == normalizedUserName, cancellationToken);
         }
 
-        public Task<List<string>> GetRoleNamesAsync(string userId)
+        public Task<List<string>> GetRoleNamesAsync(Guid userId)
         {
             var query = from userRole in DbContext.UserRoles
                         join role in DbContext.Roles on userRole.RoleId equals role.Id

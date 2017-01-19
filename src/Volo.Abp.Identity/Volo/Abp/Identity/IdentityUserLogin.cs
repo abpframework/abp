@@ -1,3 +1,4 @@
+using System;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Identity;
 using Volo.Abp.Domain.Entities;
@@ -14,7 +15,7 @@ namespace Volo.Abp.Identity
         /// <summary>
         /// Gets or sets the of the primary key of the user associated with this login.
         /// </summary>
-        public virtual string UserId { get; protected set; }
+        public virtual Guid UserId { get; protected set; }
 
         /// <summary>
         /// Gets or sets the login provider for the login (e.g. facebook, google)
@@ -36,9 +37,8 @@ namespace Volo.Abp.Identity
             
         }
 
-        public IdentityUserLogin([NotNull] string userId, [NotNull] string loginProvider, [NotNull] string providerKey, string providerDisplayName)
+        public IdentityUserLogin(Guid userId, [NotNull] string loginProvider, [NotNull] string providerKey, string providerDisplayName)
         {
-            Check.NotNull(userId, nameof(userId));
             Check.NotNull(loginProvider, nameof(loginProvider));
             Check.NotNull(providerKey, nameof(providerKey));
 
@@ -48,9 +48,8 @@ namespace Volo.Abp.Identity
             ProviderDisplayName = providerDisplayName;
         }
 
-        public IdentityUserLogin(string userId, UserLoginInfo login)
+        public IdentityUserLogin(Guid userId, UserLoginInfo login)
         {
-            Check.NotNull(userId, nameof(userId));
             Check.NotNull(login, nameof(login));
 
             UserId = userId;

@@ -9,9 +9,9 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
 {
-    public class EfCoreRepository<TDbContext, TEntity> : EfCoreRepository<TDbContext, TEntity, string>, IEfCoreRepository<TEntity>
+    public class EfCoreRepository<TDbContext, TEntity> : EfCoreRepository<TDbContext, TEntity, Guid>, IEfCoreRepository<TEntity>
         where TDbContext : AbpDbContext<TDbContext>
-        where TEntity : class, IEntity<string>
+        where TEntity : class, IEntity<Guid>
     {
         public EfCoreRepository(IDbContextProvider<TDbContext> dbContextProvider)
             : base(dbContextProvider)

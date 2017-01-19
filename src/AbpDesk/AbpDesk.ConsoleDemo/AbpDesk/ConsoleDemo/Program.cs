@@ -26,12 +26,6 @@ namespace AbpDesk.ConsoleDemo
                 Console.WriteLine("Press ENTER to run again...");
                 Console.ReadLine();
 
-                RunDemo(application);
-
-                Console.WriteLine();
-                Console.WriteLine("Press ENTER to exit...");
-                Console.ReadLine();
-
                 application.Shutdown();
             }
         }

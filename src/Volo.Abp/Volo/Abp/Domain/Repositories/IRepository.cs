@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Volo.Abp.Domain.Entities;
@@ -11,8 +12,8 @@ namespace Volo.Abp.Domain.Repositories
 
     }
 
-    public interface IRepository<TEntity> : IRepository<TEntity, string>
-        where TEntity : class, IEntity<string>
+    public interface IRepository<TEntity> : IRepository<TEntity, Guid>
+        where TEntity : class, IEntity<Guid>
     {
         
     }
@@ -66,6 +67,7 @@ namespace Volo.Abp.Domain.Repositories
         [NotNull]
         TEntity Insert([NotNull] TEntity entity, bool autoSave = false);
 
+        //TODO: Consider to add a new overload that takes cancellationToken as second argument?
         /// <summary>
         /// Inserts a new entity.
         /// </summary>
@@ -76,7 +78,7 @@ namespace Volo.Abp.Domain.Repositories
         /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
         /// <param name="entity">Inserted entity</param>
         [NotNull]
-        Task<TEntity> InsertAsync([NotNull] TEntity entity, bool autoSave = true, CancellationToken cancellationToken = default(CancellationToken));
+        Task<TEntity> InsertAsync([NotNull] TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Updates an existing entity.

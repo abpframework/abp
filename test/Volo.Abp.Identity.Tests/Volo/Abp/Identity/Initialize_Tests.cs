@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System;
+using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.TestBase;
@@ -26,10 +27,10 @@ namespace Volo.Abp.Identity
         {
             (ServiceProvider.GetRequiredService<IIdentityUserRepository>() is EfCoreIdentityUserRepository).ShouldBeTrue();
 
-            (ServiceProvider.GetRequiredService<IRepository<IdentityUser, string>>() is EfCoreIdentityUserRepository).ShouldBeTrue();
+            (ServiceProvider.GetRequiredService<IRepository<IdentityUser, Guid>>() is EfCoreIdentityUserRepository).ShouldBeTrue();
             (ServiceProvider.GetRequiredService<IRepository<IdentityUser>>() is EfCoreIdentityUserRepository).ShouldBeTrue();
 
-            (ServiceProvider.GetRequiredService<IQueryableRepository<IdentityUser, string>>() is EfCoreIdentityUserRepository).ShouldBeTrue();
+            (ServiceProvider.GetRequiredService<IQueryableRepository<IdentityUser, Guid>>() is EfCoreIdentityUserRepository).ShouldBeTrue();
             (ServiceProvider.GetRequiredService<IQueryableRepository<IdentityUser>>() is EfCoreIdentityUserRepository).ShouldBeTrue();
         }
     }

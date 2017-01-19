@@ -22,7 +22,7 @@ namespace AbpDesk.Blogging
 
         public BlogPost([NotNull] string title, [NotNull] string body)
         {
-            Id = Guid.NewGuid().ToString("D");
+            Id = Guid.NewGuid(); //TODO: Get from ctor!
 
             Check.NotNull(title, nameof(title));
             Check.NotNull(body, nameof(body));

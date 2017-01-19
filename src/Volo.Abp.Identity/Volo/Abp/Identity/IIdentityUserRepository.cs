@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,7 +12,7 @@ namespace Volo.Abp.Identity
     {
         Task<IdentityUser> FindByNormalizedUserNameAsync([NotNull] string normalizedUserName, CancellationToken cancellationToken);
 
-        Task<List<string>> GetRoleNamesAsync([NotNull] string userId);
+        Task<List<string>> GetRoleNamesAsync(Guid userId);
 
         Task<IdentityUser> FindByLoginAsync([NotNull] string loginProvider, [NotNull] string providerKey, CancellationToken cancellationToken);
 

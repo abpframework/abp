@@ -1,3 +1,4 @@
+using System;
 using JetBrains.Annotations;
 using Volo.Abp.Domain.Entities;
 
@@ -11,7 +12,7 @@ namespace Volo.Abp.Identity
         /// <summary>
         /// Gets or sets the primary key of the user that the token belongs to.
         /// </summary>
-        public virtual string UserId { get; protected set; }
+        public virtual Guid UserId { get; protected set; }
 
         /// <summary>
         /// Gets or sets the LoginProvider this token is from.
@@ -33,7 +34,7 @@ namespace Volo.Abp.Identity
             
         }
 
-        public IdentityUserToken([NotNull] string userId, [NotNull] string loginProvider, [NotNull] string name, string value) //TODO: Can value be null?
+        public IdentityUserToken(Guid userId, [NotNull] string loginProvider, [NotNull] string name, string value) //TODO: Can value be null?
         {
             Check.NotNull(userId, nameof(userId));
             Check.NotNull(loginProvider, nameof(loginProvider));

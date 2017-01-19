@@ -8,8 +8,8 @@ using Volo.Abp.Identity.EntityFrameworkCore;
 namespace Volo.Abp.Identity.EntityFrameworkCore.Migrations
 {
     [DbContext(typeof(IdentityDbContext))]
-    [Migration("20161221194225_AbpIdentity_Initial_Migration")]
-    partial class AbpIdentity_Initial_Migration
+    [Migration("20170119175536_Initial_Abp_Identity")]
+    partial class Initial_Abp_Identity
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -19,7 +19,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore.Migrations
 
             modelBuilder.Entity("Volo.Abp.Identity.IdentityRole", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("ConcurrencyStamp")
@@ -42,15 +42,14 @@ namespace Volo.Abp.Identity.EntityFrameworkCore.Migrations
 
             modelBuilder.Entity("Volo.Abp.Identity.IdentityRoleClaim", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("ClaimType");
 
                     b.Property<string>("ClaimValue");
 
-                    b.Property<string>("RoleId")
-                        .IsRequired();
+                    b.Property<Guid>("RoleId");
 
                     b.HasKey("Id");
 
@@ -61,7 +60,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore.Migrations
 
             modelBuilder.Entity("Volo.Abp.Identity.IdentityUser", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<int>("AccessFailedCount");
@@ -111,15 +110,14 @@ namespace Volo.Abp.Identity.EntityFrameworkCore.Migrations
 
             modelBuilder.Entity("Volo.Abp.Identity.IdentityUserClaim", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("ClaimType");
 
                     b.Property<string>("ClaimValue");
 
-                    b.Property<string>("UserId")
-                        .IsRequired();
+                    b.Property<Guid>("UserId");
 
                     b.HasKey("Id");
 
@@ -130,7 +128,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore.Migrations
 
             modelBuilder.Entity("Volo.Abp.Identity.IdentityUserLogin", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("LoginProvider");
@@ -139,8 +137,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore.Migrations
 
                     b.Property<string>("ProviderKey");
 
-                    b.Property<string>("UserId")
-                        .IsRequired();
+                    b.Property<Guid>("UserId");
 
                     b.HasKey("Id");
 
@@ -152,14 +149,12 @@ namespace Volo.Abp.Identity.EntityFrameworkCore.Migrations
 
             modelBuilder.Entity("Volo.Abp.Identity.IdentityUserRole", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("RoleId")
-                        .IsRequired();
+                    b.Property<Guid>("RoleId");
 
-                    b.Property<string>("UserId")
-                        .IsRequired();
+                    b.Property<Guid>("UserId");
 
                     b.HasKey("Id");
 
@@ -173,15 +168,14 @@ namespace Volo.Abp.Identity.EntityFrameworkCore.Migrations
 
             modelBuilder.Entity("Volo.Abp.Identity.IdentityUserToken", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("LoginProvider");
 
                     b.Property<string>("Name");
 
-                    b.Property<string>("UserId")
-                        .IsRequired();
+                    b.Property<Guid>("UserId");
 
                     b.Property<string>("Value");
 

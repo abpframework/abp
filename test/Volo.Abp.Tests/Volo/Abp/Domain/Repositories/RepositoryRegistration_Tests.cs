@@ -26,7 +26,7 @@ namespace Volo.Abp.Domain.Repositories
             //Assert
 
             services.ShouldContainTransient(typeof(IRepository<MyTestAggregateRootWithDefaultPk>), typeof(MyTestDefaultRepository<MyTestAggregateRootWithDefaultPk>));
-            services.ShouldContainTransient(typeof(IRepository<MyTestAggregateRootWithDefaultPk, string>), typeof(MyTestDefaultRepository<MyTestAggregateRootWithDefaultPk>));
+            services.ShouldContainTransient(typeof(IRepository<MyTestAggregateRootWithDefaultPk, Guid>), typeof(MyTestDefaultRepository<MyTestAggregateRootWithDefaultPk>));
             services.ShouldNotContainService(typeof(IRepository<MyTestEntityWithCustomPk, int>));
         }
 
@@ -47,7 +47,7 @@ namespace Volo.Abp.Domain.Repositories
             //Assert
 
             services.ShouldContainTransient(typeof(IRepository<MyTestAggregateRootWithDefaultPk>), typeof(MyTestDefaultRepository<MyTestAggregateRootWithDefaultPk>));
-            services.ShouldContainTransient(typeof(IRepository<MyTestAggregateRootWithDefaultPk, string>), typeof(MyTestDefaultRepository<MyTestAggregateRootWithDefaultPk>));
+            services.ShouldContainTransient(typeof(IRepository<MyTestAggregateRootWithDefaultPk, Guid>), typeof(MyTestDefaultRepository<MyTestAggregateRootWithDefaultPk>));
             services.ShouldContainTransient(typeof(IRepository<MyTestEntityWithCustomPk, int>), typeof(MyTestDefaultRepository<MyTestEntityWithCustomPk, int>));
         }
 
@@ -70,7 +70,7 @@ namespace Volo.Abp.Domain.Repositories
             //Assert
 
             services.ShouldContainTransient(typeof(IRepository<MyTestAggregateRootWithDefaultPk>), typeof(MyTestAggregateRootWithDefaultPkCustomRepository));
-            services.ShouldContainTransient(typeof(IRepository<MyTestAggregateRootWithDefaultPk, string>), typeof(MyTestAggregateRootWithDefaultPkCustomRepository));
+            services.ShouldContainTransient(typeof(IRepository<MyTestAggregateRootWithDefaultPk, Guid>), typeof(MyTestAggregateRootWithDefaultPkCustomRepository));
             services.ShouldContainTransient(typeof(IRepository<MyTestEntityWithCustomPk, int>), typeof(MyTestDefaultRepository<MyTestEntityWithCustomPk, int>));
         }
 
@@ -93,7 +93,7 @@ namespace Volo.Abp.Domain.Repositories
             //Assert
 
             services.ShouldContainTransient(typeof(IRepository<MyTestAggregateRootWithDefaultPk>), typeof(MyTestCustomBaseRepository<MyTestAggregateRootWithDefaultPk>));
-            services.ShouldContainTransient(typeof(IRepository<MyTestAggregateRootWithDefaultPk, string>), typeof(MyTestCustomBaseRepository<MyTestAggregateRootWithDefaultPk>));
+            services.ShouldContainTransient(typeof(IRepository<MyTestAggregateRootWithDefaultPk, Guid>), typeof(MyTestCustomBaseRepository<MyTestAggregateRootWithDefaultPk>));
             services.ShouldContainTransient(typeof(IRepository<MyTestEntityWithCustomPk, int>), typeof(MyTestCustomBaseRepository<MyTestEntityWithCustomPk, int>));
         }
 
@@ -136,8 +136,8 @@ namespace Volo.Abp.Domain.Repositories
 
         }
 
-        public class MyTestDefaultRepository<TEntity> : MyTestDefaultRepository<TEntity, string>, IRepository<TEntity>
-            where TEntity : class, IEntity<string>
+        public class MyTestDefaultRepository<TEntity> : MyTestDefaultRepository<TEntity, Guid>, IRepository<TEntity>
+            where TEntity : class, IEntity<Guid>
         {
             
         }
@@ -171,8 +171,8 @@ namespace Volo.Abp.Domain.Repositories
 
         }
 
-        public class MyTestCustomBaseRepository<TEntity> : MyTestCustomBaseRepository<TEntity, string>, IRepository<TEntity>
-            where TEntity : class, IEntity<string>
+        public class MyTestCustomBaseRepository<TEntity> : MyTestCustomBaseRepository<TEntity, Guid>, IRepository<TEntity>
+            where TEntity : class, IEntity<Guid>
         {
 
         }

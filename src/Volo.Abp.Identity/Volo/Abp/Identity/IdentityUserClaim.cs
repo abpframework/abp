@@ -1,3 +1,4 @@
+using System;
 using System.Security.Claims;
 using JetBrains.Annotations;
 using Volo.Abp.Domain.Entities;
@@ -12,7 +13,7 @@ namespace Volo.Abp.Identity
         /// <summary>
         /// Gets or sets the primary key of the user associated with this claim.
         /// </summary>
-        public virtual string UserId { get; protected set; }
+        public virtual Guid UserId { get; protected set; }
 
         /// <summary>
         /// Gets or sets the claim type for this claim.
@@ -29,9 +30,8 @@ namespace Volo.Abp.Identity
             
         }
 
-        public IdentityUserClaim([NotNull] string userId, [NotNull] Claim claim)
+        public IdentityUserClaim(Guid userId, [NotNull] Claim claim)
         {
-            Check.NotNull(userId, nameof(userId));
             Check.NotNull(claim, nameof(claim));
 
             UserId = userId;
@@ -39,9 +39,8 @@ namespace Volo.Abp.Identity
             ClaimValue = claim.Value;
         }
 
-        public IdentityUserClaim([NotNull] string userId, [NotNull] string claimType, string claimValue)
+        public IdentityUserClaim(Guid userId, [NotNull] string claimType, string claimValue)
         {
-            Check.NotNull(userId, nameof(userId));
             Check.NotNull(claimType, nameof(claimType));
 
             UserId = userId;

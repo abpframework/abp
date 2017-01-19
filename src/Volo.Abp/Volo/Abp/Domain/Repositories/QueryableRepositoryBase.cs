@@ -9,8 +9,8 @@ using Volo.Abp.Domain.Entities;
 
 namespace Volo.Abp.Domain.Repositories
 {
-    public abstract class QueryableRepositoryBase<TEntity> : QueryableRepositoryBase<TEntity, string>, IQueryableRepository<TEntity>
-        where TEntity : class, IEntity<string>
+    public abstract class QueryableRepositoryBase<TEntity> : QueryableRepositoryBase<TEntity, Guid>, IQueryableRepository<TEntity>
+        where TEntity : class, IEntity<Guid>
     {
         
     }

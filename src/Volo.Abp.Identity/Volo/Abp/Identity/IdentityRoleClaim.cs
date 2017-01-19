@@ -1,3 +1,4 @@
+using System;
 using System.Security.Claims;
 using JetBrains.Annotations;
 using Volo.Abp.Domain.Entities;
@@ -12,7 +13,7 @@ namespace Volo.Abp.Identity
         /// <summary>
         /// Gets or sets the of the primary key of the role associated with this claim.
         /// </summary>
-        public virtual string RoleId { get; protected set; }
+        public virtual Guid RoleId { get; protected set; }
 
         /// <summary>
         /// Gets or sets the claim type for this claim.
@@ -29,9 +30,8 @@ namespace Volo.Abp.Identity
             
         }
 
-        public IdentityRoleClaim([NotNull] string roleId, [NotNull] Claim claim)
+        public IdentityRoleClaim(Guid roleId, [NotNull] Claim claim)
         {
-            Check.NotNull(roleId, nameof(roleId));
             Check.NotNull(claim, nameof(claim));
 
             RoleId = roleId;
@@ -39,7 +39,7 @@ namespace Volo.Abp.Identity
             ClaimValue = claim.Value;
         }
 
-        public IdentityRoleClaim([NotNull] string roleId, [NotNull] string claimType, string claimValue)
+        public IdentityRoleClaim(Guid roleId, [NotNull] string claimType, string claimValue)
         {
             Check.NotNull(roleId, nameof(roleId));
             Check.NotNull(claimType, nameof(claimType));
