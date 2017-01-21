@@ -67,7 +67,6 @@ namespace Volo.Abp.Domain.Repositories
         [NotNull]
         TEntity Insert([NotNull] TEntity entity, bool autoSave = false);
 
-        //TODO: Consider to add a new overload that takes cancellationToken as second argument?
         /// <summary>
         /// Inserts a new entity.
         /// </summary>

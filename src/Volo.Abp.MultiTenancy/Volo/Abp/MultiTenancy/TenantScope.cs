@@ -9,9 +9,9 @@ namespace Volo.Abp.MultiTenancy
         /// Not null value for a tenant.
         /// </summary>
         [CanBeNull]
-        public TenantInfo Tenant { get; }
+        public TenantInformation Tenant { get; }
         
-        public TenantScope([CanBeNull] TenantInfo tenant)
+        public TenantScope([CanBeNull] TenantInformation tenant)
         {
             Tenant = tenant;
         }

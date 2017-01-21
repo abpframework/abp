@@ -7,7 +7,7 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
 {
     public class HeaderTenantResolver : HttpTenantResolverBase
     {
-        protected override string GetTenantIdFromHttpContextOrNull(ITenantResolveContext context, HttpContext httpContext)
+        protected override string GetTenantIdOrNameFromHttpContextOrNull(ITenantResolveContext context, HttpContext httpContext)
         {
             //TODO: Get first one if provided multiple values and write a log
             if (httpContext.Request.Headers.IsNullOrEmpty())

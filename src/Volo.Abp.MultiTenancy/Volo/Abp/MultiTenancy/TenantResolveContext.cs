@@ -6,13 +6,13 @@ namespace Volo.Abp.MultiTenancy
     {
         public IServiceProvider ServiceProvider { get; }
 
-        public TenantInfo Tenant { get; set; }
+        public string TenantIdOrName { get; set; }
 
-        public bool? Handled { get; set; }
+        public bool Handled { get; set; }
 
-        internal bool IsHandled()
+        internal bool ResolvedTenantOrHost()
         {
-            return Handled == true || (Handled == null && Tenant != null);
+            return Handled || TenantIdOrName != null;
         }
 
         public TenantResolveContext(IServiceProvider serviceProvider)

@@ -5,9 +5,12 @@ namespace Volo.Abp.MultiTenancy
 {
     public interface ITenantScopeProvider
     {
+        /// <summary>
+        /// Can be null for host.
+        /// </summary>
         [CanBeNull]
         TenantScope CurrentScope { get; }
 
-        IDisposable EnterScope([CanBeNull] TenantInfo tenant);
+        IDisposable EnterScope([CanBeNull] TenantInformation tenant);
     }
 }

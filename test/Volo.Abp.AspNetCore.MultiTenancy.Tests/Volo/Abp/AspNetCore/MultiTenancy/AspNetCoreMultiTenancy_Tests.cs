@@ -1,21 +1,42 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 using Shouldly;
 using Volo.Abp.AspNetCore.App;
+using Volo.Abp.MultiTenancy;
+using Volo.Abp.MultiTenancy.ConfigurationStore;
 using Xunit;
 
 namespace Volo.Abp.AspNetCore.MultiTenancy
 {
     public class AspNetCoreMultiTenancy_Tests : AppTestBase
     {
+        private readonly Guid _testTenantId = Guid.NewGuid();
+        private readonly string _testTenantName = "acme";
+
         private readonly AspNetCoreMultiTenancyOptions _options;
 
         public AspNetCoreMultiTenancy_Tests()
         {
             _options = ServiceProvider.GetRequiredService<IOptions<AspNetCoreMultiTenancyOptions>>().Value;
+        }
+
+        protected override IWebHostBuilder CreateWebHostBuilder()
+        {
+            return base.CreateWebHostBuilder().ConfigureServices(services =>
+            {
+                services.Configure<ConfigurationTenantStoreOptions>(options =>
+                {
+                    options.Tenants = new[]
+                    {
+                        new TenantInformation(_testTenantId, _testTenantName)
+                    };
+                });
+            });
         }
 
         [Fact]
@@ -28,32 +49,27 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
         [Fact]
         public async Task Should_Use_QueryString_Tenant_Id_If_Specified()
         {
-            const string testTenantId = "42";
 
-            var result = await GetResponseAsObjectAsync<Dictionary<string, string>>($"http://abp.io?{_options.TenantIdKey}={testTenantId}");
-            result["TenantId"].ShouldBe(testTenantId);
+            var result = await GetResponseAsObjectAsync<Dictionary<string, string>>($"http://abp.io?{_options.TenantIdKey}={_testTenantName}");
+            result["TenantId"].ShouldBe(_testTenantId.ToString());
         }
 
         [Fact]
         public async Task Should_Use_Header_Tenant_Id_If_Specified()
         {
-            const string testTenantId = "42";
-
-            Client.DefaultRequestHeaders.Add(_options.TenantIdKey, testTenantId);
+            Client.DefaultRequestHeaders.Add(_options.TenantIdKey, _testTenantId.ToString());
 
             var result = await GetResponseAsObjectAsync<Dictionary<string, string>>("http://abp.io");
-            result["TenantId"].ShouldBe(testTenantId);
+            result["TenantId"].ShouldBe(_testTenantId.ToString());
         }
 
         [Fact]
         public async Task Should_Use_Cookie_Tenant_Id_If_Specified()
         {
-            const string testTenantId = "42";
-            
-            Client.DefaultRequestHeaders.Add("Cookie", new CookieHeaderValue(_options.TenantIdKey, testTenantId).ToString());
+            Client.DefaultRequestHeaders.Add("Cookie", new CookieHeaderValue(_options.TenantIdKey, _testTenantId.ToString()).ToString());
 
             var result = await GetResponseAsObjectAsync<Dictionary<string, string>>("http://abp.io");
-            result["TenantId"].ShouldBe(testTenantId);
+            result["TenantId"].ShouldBe(_testTenantId.ToString());
         }
     }
 }

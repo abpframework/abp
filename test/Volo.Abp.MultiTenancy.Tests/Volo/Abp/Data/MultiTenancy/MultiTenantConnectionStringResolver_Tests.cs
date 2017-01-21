@@ -1,8 +1,13 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using Shouldly;
+using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.MultiTenancy.ConfigurationStore;
 using Volo.ExtensionMethods.Collections.Generic;
 using Xunit;
 
@@ -27,14 +32,23 @@ namespace Volo.Abp.Data.MultiTenancy
             {
                 options.ConnectionStrings.Default = "default-value";
                 options.ConnectionStrings["db1"] = "db1-default-value";
-                options.ConnectionStrings["tenant1#Default"] = "tenant1-default-value";
-                options.ConnectionStrings["tenant1#db1"] = "tenant1-db1-value";
             });
-        }
 
-        protected override void AfterAddApplication(IServiceCollection services)
-        {
-            services.Replace(ServiceDescriptor.Transient<ITenantConnectionStringStore, MyTenantConnectionStringStore>());
+            services.Configure<ConfigurationTenantStoreOptions>(options =>
+            {
+                options.Tenants = new[]
+                {
+                    new TenantInformation(Guid.NewGuid(), "tenant1")
+                    {
+                        ConnectionStrings =
+                        {
+                            { ConnectionStrings.DefaultConnectionStringName, "tenant1-default-value" },
+                            { "db1", "tenant1-db1-value" }
+                        }
+                    },
+                    new TenantInformation(Guid.NewGuid(), "tenant2")
+                };
+            });
         }
 
         [Fact]
@@ -45,7 +59,7 @@ namespace Volo.Abp.Data.MultiTenancy
             _connectionResolver.Resolve("db1").ShouldBe("db1-default-value");
 
             //Overrided connection strings for tenant1
-            using (_multiTenancyManager.ChangeTenant(new TenantInfo("tenant1")))
+            using (_multiTenancyManager.ChangeTenant("tenant1"))
             {
                 _connectionResolver.Resolve().ShouldBe("tenant1-default-value");
                 _connectionResolver.Resolve("db1").ShouldBe("tenant1-db1-value");
@@ -56,30 +70,10 @@ namespace Volo.Abp.Data.MultiTenancy
             _connectionResolver.Resolve("db1").ShouldBe("db1-default-value");
 
             //Undefined connection strings for tenant2
-            using (_multiTenancyManager.ChangeTenant(new TenantInfo("tenant2")))
+            using (_multiTenancyManager.ChangeTenant("tenant2"))
             {
                 _connectionResolver.Resolve().ShouldBe("default-value");
                 _connectionResolver.Resolve("db1").ShouldBe("db1-default-value");
-            }
-        }
-
-        public class MyTenantConnectionStringStore : ITenantConnectionStringStore
-        {
-            private readonly IOptions<DbConnectionOptions> _options;
-
-            public MyTenantConnectionStringStore(IOptions<DbConnectionOptions> options)
-            {
-                _options = options;
-            }
-
-            public string GetConnectionStringOrNull(string tenantId, string connStringName)
-            {
-                return _options.Value.ConnectionStrings.GetOrDefault(tenantId + "#" + connStringName);
-            }
-
-            public string GetDefaultConnectionStringOrNull(string tenantId)
-            {
-                return _options.Value.ConnectionStrings.GetOrDefault(tenantId + "#Default");
             }
         }
     }

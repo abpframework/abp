@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Volo.ExtensionMethods.Collections.Generic;
 
 namespace Volo.Abp.Data
 {
@@ -8,7 +9,7 @@ namespace Volo.Abp.Data
         
         public string Default
         {
-            get { return this[DefaultConnectionStringName]; }
+            get { return this.GetOrDefault(DefaultConnectionStringName); }
             set { this[DefaultConnectionStringName] = value; }
         }
     }

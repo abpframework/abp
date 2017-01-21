@@ -1,5 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System;
+using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
+using Volo.Abp.Data;
+using Volo.Abp.MultiTenancy.ConfigurationStore;
 using Xunit;
 
 namespace Volo.Abp.MultiTenancy
@@ -8,9 +11,9 @@ namespace Volo.Abp.MultiTenancy
     {
         private readonly IMultiTenancyManager _multiTenancyManager;
 
-        private readonly TenantInfo _tenantA = new TenantInfo("A");
-        private readonly TenantInfo _tenantB = new TenantInfo("B");
-        private TenantInfo _tenantToBeResolved;
+        private readonly string _tenantA = "A";
+        private readonly string _tenantB = "B";
+        private string _tenantToBeResolved;
 
         public MultiTenantManager_Tests()
         {
@@ -25,6 +28,18 @@ namespace Volo.Abp.MultiTenancy
             _multiTenancyManager.CurrentTenant.ShouldBeNull();
         }
 
+        protected override void BeforeAddApplication(IServiceCollection services)
+        {
+            services.Configure<ConfigurationTenantStoreOptions>(options =>
+            {
+                options.Tenants = new[]
+                {
+                    new TenantInformation(Guid.NewGuid(), _tenantA),
+                    new TenantInformation(Guid.NewGuid(), _tenantB)
+                };
+            });
+        }
+
         protected override void AfterAddApplication(IServiceCollection services)
         {
             services.Configure<MultiTenancyOptions>(options =>
@@ -33,7 +48,7 @@ namespace Volo.Abp.MultiTenancy
                 {
                     if (_tenantToBeResolved == _tenantA)
                     {
-                        context.Tenant = _tenantA;
+                        context.TenantIdOrName = _tenantA;
                     }
                 }));
 
@@ -41,7 +56,7 @@ namespace Volo.Abp.MultiTenancy
                 {
                     if (_tenantToBeResolved == _tenantB)
                     {
-                        context.Tenant = _tenantB;
+                        context.TenantIdOrName = _tenantB;
                     }
                 }));
             });
@@ -56,9 +71,9 @@ namespace Volo.Abp.MultiTenancy
 
             //Assert
 
-            _multiTenancyManager.CurrentTenant.ShouldBe(_tenantA);
+            Assert.NotNull(_multiTenancyManager.CurrentTenant);
+            _multiTenancyManager.CurrentTenant.Name.ShouldBe(_tenantA);
         }
-
 
         [Fact]
         public void Should_Get_Current_Tenant_From_Multiple_Resolvers()
@@ -69,7 +84,8 @@ namespace Volo.Abp.MultiTenancy
 
             //Assert
 
-            _multiTenancyManager.CurrentTenant.ShouldBe(_tenantB);
+            Assert.NotNull(_multiTenancyManager.CurrentTenant);
+            _multiTenancyManager.CurrentTenant.Name.ShouldBe(_tenantB);
         }
 
         [Fact]
@@ -79,21 +95,26 @@ namespace Volo.Abp.MultiTenancy
 
             _tenantToBeResolved = _tenantB;
 
-            _multiTenancyManager.CurrentTenant.ShouldBe(_tenantB);
+            Assert.NotNull(_multiTenancyManager.CurrentTenant);
+            _multiTenancyManager.CurrentTenant.Name.ShouldBe(_tenantB);
 
             using (_multiTenancyManager.ChangeTenant(_tenantA))
             {
-                _multiTenancyManager.CurrentTenant.ShouldBe(_tenantA);
+                Assert.NotNull(_multiTenancyManager.CurrentTenant);
+                _multiTenancyManager.CurrentTenant.Name.ShouldBe(_tenantA);
 
                 using (_multiTenancyManager.ChangeTenant(_tenantB))
                 {
-                    _multiTenancyManager.CurrentTenant.ShouldBe(_tenantB);
+                    Assert.NotNull(_multiTenancyManager.CurrentTenant);
+                    _multiTenancyManager.CurrentTenant.Name.ShouldBe(_tenantB);
                 }
 
-                _multiTenancyManager.CurrentTenant.ShouldBe(_tenantA);
+                Assert.NotNull(_multiTenancyManager.CurrentTenant);
+                _multiTenancyManager.CurrentTenant.Name.ShouldBe(_tenantA);
             }
 
-            _multiTenancyManager.CurrentTenant.ShouldBe(_tenantB);
+            Assert.NotNull(_multiTenancyManager.CurrentTenant);
+            _multiTenancyManager.CurrentTenant.Name.ShouldBe(_tenantB);
         }
     }
 }

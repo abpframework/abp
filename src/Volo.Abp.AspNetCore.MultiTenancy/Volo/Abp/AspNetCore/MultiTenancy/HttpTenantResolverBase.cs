@@ -19,13 +19,13 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
 
         private void ResolveFromHttpContext(ITenantResolveContext context, HttpContext httpContext)
         {
-            var tenantId = GetTenantIdFromHttpContextOrNull(context, httpContext);
-            if (!tenantId.IsNullOrEmpty())
+            var tenantIdOrName = GetTenantIdOrNameFromHttpContextOrNull(context, httpContext);
+            if (!tenantIdOrName.IsNullOrEmpty())
             {
-                context.Tenant = new TenantInfo(tenantId);
+                context.TenantIdOrName = tenantIdOrName;
             }
         }
 
-        protected abstract string GetTenantIdFromHttpContextOrNull(ITenantResolveContext context,HttpContext httpContext);
+        protected abstract string GetTenantIdOrNameFromHttpContextOrNull(ITenantResolveContext context,HttpContext httpContext);
     }
 }

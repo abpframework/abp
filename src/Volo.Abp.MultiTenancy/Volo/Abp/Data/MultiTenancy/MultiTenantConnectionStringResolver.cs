@@ -9,16 +9,13 @@ namespace Volo.Abp.Data.MultiTenancy
     public class MultiTenantConnectionStringResolver : DefaultConnectionStringResolver
     {
         private readonly IMultiTenancyManager _multiTenancyManager;
-        private readonly ITenantConnectionStringStore _tenantConnectionStringStore;
 
         public MultiTenantConnectionStringResolver(
             IOptionsSnapshot<DbConnectionOptions> options,
-            IMultiTenancyManager multiTenancyManager, 
-            ITenantConnectionStringStore tenantConnectionStringStore)
+            IMultiTenancyManager multiTenancyManager)
             : base(options)
         {
             _multiTenancyManager = multiTenancyManager;
-            _tenantConnectionStringStore = tenantConnectionStringStore;
         }
 
         public override string Resolve(string connectionStringName = null)
@@ -34,12 +31,12 @@ namespace Volo.Abp.Data.MultiTenancy
             //Requesting default connection string
             if (connectionStringName == null)
             {
-                return _tenantConnectionStringStore.GetDefaultConnectionStringOrNull(tenant.Id) ??
+                return tenant.ConnectionStrings.Default ??
                        Options.ConnectionStrings.Default;
             }
 
             //Requesting specific connection string
-            var connString = _tenantConnectionStringStore.GetConnectionStringOrNull(tenant.Id, connectionStringName);
+            var connString = tenant.ConnectionStrings.GetOrDefault(connectionStringName);
             if (connString != null)
             {
                 return connString;
@@ -56,7 +53,7 @@ namespace Volo.Abp.Data.MultiTenancy
                 return connStringInOptions;
             }
 
-            return _tenantConnectionStringStore.GetDefaultConnectionStringOrNull(tenant.Id) ??
+            return tenant.ConnectionStrings.Default ??
                    Options.ConnectionStrings.Default;
         }
     }

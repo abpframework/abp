@@ -5,7 +5,7 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
 {
     public class CookieTenantResolver : HttpTenantResolverBase
     {
-        protected override string GetTenantIdFromHttpContextOrNull(ITenantResolveContext context, HttpContext httpContext)
+        protected override string GetTenantIdOrNameFromHttpContextOrNull(ITenantResolveContext context, HttpContext httpContext)
         {
             return httpContext.Request.Cookies[context.GetAspNetCoreMultiTenancyOptions().TenantIdKey];
         }

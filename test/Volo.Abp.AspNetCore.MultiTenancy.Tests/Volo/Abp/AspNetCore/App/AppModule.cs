@@ -28,7 +28,7 @@ namespace Volo.Abp.AspNetCore.App
 
                 var dictionary = new Dictionary<string, string>
                 {
-                    ["TenantId"] = manager.CurrentTenant?.Id ?? ""
+                    ["TenantId"] = manager.CurrentTenant == null ? "" : manager.CurrentTenant.Id.ToString()
                 };
 
                 var result = jsonSerializer.Serialize(dictionary);

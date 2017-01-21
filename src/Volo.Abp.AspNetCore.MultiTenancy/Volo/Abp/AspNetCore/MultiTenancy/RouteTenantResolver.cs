@@ -7,7 +7,7 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
 {
     public class RouteTenantResolver : HttpTenantResolverBase
     {
-        protected override string GetTenantIdFromHttpContextOrNull(ITenantResolveContext context, HttpContext httpContext)
+        protected override string GetTenantIdOrNameFromHttpContextOrNull(ITenantResolveContext context, HttpContext httpContext)
         {
             var tenantId = httpContext.GetRouteValue(context.GetAspNetCoreMultiTenancyOptions().TenantIdKey);
             if (tenantId == null)
