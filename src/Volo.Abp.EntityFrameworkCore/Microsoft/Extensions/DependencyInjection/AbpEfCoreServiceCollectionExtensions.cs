@@ -10,9 +10,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddAbpDbContext<TDbContext>(this IServiceCollection services, Action<IAbpDbContextRegistrationOptionsBuilder> optionsBuilder = null) //Created overload instead of default parameter
             where TDbContext : AbpDbContext<TDbContext>
         {
-            services //TODO: This code is copied from EntityFrameworkServiceCollectionExtensions, we should think on that later
-                .AddMemoryCache()
-                .AddLogging();
+            services.AddMemoryCache();
 
             services.TryAddTransient<TDbContext>();
             services.TryAddTransient(DbContextOptionsFactory.Create<TDbContext>);
