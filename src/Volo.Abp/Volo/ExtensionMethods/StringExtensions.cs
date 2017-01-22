@@ -117,6 +117,18 @@ namespace Volo.ExtensionMethods
         /// <returns>Modified string or the same string if it has not any of given postfixes</returns>
         public static string RemovePostFix(this string str, params string[] postFixes)
         {
+            return str.RemovePostFix(StringComparison.Ordinal, postFixes);
+        }
+
+        /// <summary>
+        /// Removes first occurrence of the given postfixes from end of the given string.
+        /// </summary>
+        /// <param name="str">The string.</param>
+        /// <param name="comparisonType">String comparison type</param>
+        /// <param name="postFixes">one or more postfix.</param>
+        /// <returns>Modified string or the same string if it has not any of given postfixes</returns>
+        public static string RemovePostFix(this string str, StringComparison comparisonType, params string[] postFixes)
+        {
             if (str.IsNullOrEmpty())
             {
                 return null;
@@ -129,7 +141,7 @@ namespace Volo.ExtensionMethods
 
             foreach (var postFix in postFixes)
             {
-                if (str.EndsWith(postFix))
+                if (str.EndsWith(postFix, comparisonType))
                 {
                     return str.Left(str.Length - postFix.Length);
                 }
@@ -146,6 +158,18 @@ namespace Volo.ExtensionMethods
         /// <returns>Modified string or the same string if it has not any of given prefixes</returns>
         public static string RemovePreFix(this string str, params string[] preFixes)
         {
+            return str.RemovePreFix(StringComparison.Ordinal, preFixes);
+        }
+
+        /// <summary>
+        /// Removes first occurrence of the given prefixes from beginning of the given string.
+        /// </summary>
+        /// <param name="str">The string.</param>
+        /// <param name="comparisonType">String comparison type</param>
+        /// <param name="preFixes">one or more prefix.</param>
+        /// <returns>Modified string or the same string if it has not any of given prefixes</returns>
+        public static string RemovePreFix(this string str, StringComparison comparisonType, params string[] preFixes)
+        {
             if (str.IsNullOrEmpty())
             {
                 return null;
@@ -158,7 +182,7 @@ namespace Volo.ExtensionMethods
 
             foreach (var preFix in preFixes)
             {
-                if (str.StartsWith(preFix))
+                if (str.StartsWith(preFix, comparisonType))
                 {
                     return str.Right(str.Length - preFix.Length);
                 }

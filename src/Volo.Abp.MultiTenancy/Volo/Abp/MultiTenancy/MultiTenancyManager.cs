@@ -81,8 +81,6 @@ namespace Volo.Abp.MultiTenancy
 
         protected virtual TenantInformation GetCurrentTenantFromResolvers()
         {
-            //TODO: Can be optimized by some caching mechanism?
-
             if (!_options.TenantResolvers.Any())
             {
                 return null;

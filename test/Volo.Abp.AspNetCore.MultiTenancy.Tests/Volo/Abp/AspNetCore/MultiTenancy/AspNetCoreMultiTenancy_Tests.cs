@@ -64,6 +64,22 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
         }
 
         [Fact]
+        public async Task Should_Use_Domain_If_Specified()
+        {
+            var result = await GetResponseAsObjectAsync<Dictionary<string, string>>("http://acme.abp.io");
+            result["TenantId"].ShouldBe(_testTenantId.ToString());
+        }
+
+        [Fact]
+        public async Task Should_Use_Domain_As_First_Priority_If_Specified()
+        {
+            Client.DefaultRequestHeaders.Add(_options.TenantIdKey, Guid.NewGuid().ToString());
+
+            var result = await GetResponseAsObjectAsync<Dictionary<string, string>>("http://acme.abp.io");
+            result["TenantId"].ShouldBe(_testTenantId.ToString());
+        }
+
+        [Fact]
         public async Task Should_Use_Cookie_Tenant_Id_If_Specified()
         {
             Client.DefaultRequestHeaders.Add("Cookie", new CookieHeaderValue(_options.TenantIdKey, _testTenantId.ToString()).ToString());

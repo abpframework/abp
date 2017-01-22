@@ -170,6 +170,9 @@ namespace Volo.ExtensionMethods
             "MyTestAppService".RemovePostFix("AppService", "Service").ShouldBe("MyTest");
             "MyTestAppService".RemovePostFix("Service", "AppService").ShouldBe("MyTestApp");
 
+            //Ignore case
+            "TestString".RemovePostFix(StringComparison.OrdinalIgnoreCase, "string").ShouldBe("Test");
+
             //Unmatched case
             "MyTestAppService".RemovePostFix("Unmatched").ShouldBe("MyTestAppService");
         }
@@ -179,6 +182,9 @@ namespace Volo.ExtensionMethods
         {
             "Home.Index".RemovePreFix("NotMatchedPostfix").ShouldBe("Home.Index");
             "Home.About".RemovePreFix("Home.").ShouldBe("About");
+
+            //Ignore case
+            "Https://abp.io".RemovePreFix(StringComparison.OrdinalIgnoreCase, "https://").ShouldBe("abp.io");
         }
 
         [Fact]

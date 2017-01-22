@@ -11,7 +11,6 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
         {
             services.Configure<MultiTenancyOptions>(options =>
             {
-                //TODO: domain/subdomain (not added by default) as first resolver!
                 options.TenantResolvers.Insert(0, new QueryStringTenantResolver());
                 options.TenantResolvers.Insert(1, new RouteTenantResolver());
                 options.TenantResolvers.Insert(2, new HeaderTenantResolver());
