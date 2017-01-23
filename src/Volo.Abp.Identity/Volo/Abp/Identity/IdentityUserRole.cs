@@ -23,7 +23,7 @@ namespace Volo.Abp.Identity
             
         }
 
-        public IdentityUserRole(Guid id, Guid userId, Guid roleId)
+        protected internal IdentityUserRole(Guid id, Guid userId, Guid roleId)
         {
             Id = id;
             UserId = userId;

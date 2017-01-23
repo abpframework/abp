@@ -33,13 +33,13 @@ namespace Volo.Abp.Identity
 
         }
 
-        public IdentityRoleClaim(Guid id, Guid roleId, [NotNull] Claim claim)
+        protected internal IdentityRoleClaim(Guid id, Guid roleId, [NotNull] Claim claim)
             : this(id, roleId, claim.Type, claim.Value)
         {
 
         }
 
-        public IdentityRoleClaim(Guid id, Guid roleId, [NotNull] string claimType, string claimValue)
+        protected internal IdentityRoleClaim(Guid id, Guid roleId, [NotNull] string claimType, string claimValue)
         {
             Check.NotNull(claimType, nameof(claimType));
 

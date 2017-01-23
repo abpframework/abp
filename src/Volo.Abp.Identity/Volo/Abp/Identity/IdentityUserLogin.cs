@@ -5,8 +5,6 @@ using Volo.Abp.Domain.Entities;
 
 namespace Volo.Abp.Identity
 {
-    //TODO: Make constructors internal to ensure that it's called by only from IdentityUser?
-
     /// <summary>
     /// Represents a login and its associated provider for a user.
     /// </summary>
@@ -41,7 +39,7 @@ namespace Volo.Abp.Identity
             
         }
 
-        public IdentityUserLogin(Guid id, Guid userId, [NotNull] string loginProvider, [NotNull] string providerKey, string providerDisplayName)
+        protected internal IdentityUserLogin(Guid id, Guid userId, [NotNull] string loginProvider, [NotNull] string providerKey, string providerDisplayName)
         {
             Check.NotNull(loginProvider, nameof(loginProvider));
             Check.NotNull(providerKey, nameof(providerKey));

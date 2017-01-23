@@ -36,7 +36,7 @@ namespace Volo.Abp.Identity
             
         }
 
-        public IdentityUserToken(Guid id, Guid userId, [NotNull] string loginProvider, [NotNull] string name, string value)
+        protected internal IdentityUserToken(Guid id, Guid userId, [NotNull] string loginProvider, [NotNull] string name, string value)
         {
             Check.NotNull(loginProvider, nameof(loginProvider));
             Check.NotNull(name, nameof(name));
