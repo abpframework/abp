@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 using Volo.Abp.Uow;
 using Volo.DependencyInjection;
 using Volo.ExtensionMethods;
@@ -43,6 +44,7 @@ namespace Volo.Abp.Identity
         public bool AutoSaveChanges { get; set; } = true;
 
         private readonly IIdentityRoleRepository _roleRepository;
+        private readonly ILogger<RoleStore> _logger;
         private readonly IIdentityUserRepository _userRepository;
         private readonly IUnitOfWorkManager _unitOfWorkManager;
 
@@ -50,11 +52,13 @@ namespace Volo.Abp.Identity
             IUnitOfWorkManager unitOfWorkManager,
             IIdentityUserRepository userRepository,
             IIdentityRoleRepository roleRepository,
+            ILogger<RoleStore> logger,
             IdentityErrorDescriber describer = null) //TODO: describer? TODO: Test if DI supports optional injection
         {
             _unitOfWorkManager = unitOfWorkManager;
             _userRepository = userRepository;
             _roleRepository = roleRepository;
+            _logger = logger;
 
             ErrorDescriber = describer ?? new IdentityErrorDescriber();
         }
@@ -190,7 +194,7 @@ namespace Volo.Abp.Identity
             }
             catch (AbpDbConcurrencyException ex)
             {
-                //TODO: Log...?
+                _logger.LogWarning(ex.ToString()); //Trigger some AbpHandledException event
                 return IdentityResult.Failed(ErrorDescriber.ConcurrencyFailure());
             }
 
@@ -216,7 +220,7 @@ namespace Volo.Abp.Identity
             }
             catch (AbpDbConcurrencyException ex)
             {
-                //TODO: Log...
+                _logger.LogWarning(ex.ToString()); //Trigger some AbpHandledException event
                 return IdentityResult.Failed(ErrorDescriber.ConcurrencyFailure());
             }
 

@@ -35,9 +35,6 @@ namespace AbpDesk.ConsoleDemo
 
             using (var uow = _unitOfWorkManager.Begin())
             {
-                //TODO: Create IdentityUser by a factory or manager to ensure requirements (like unique username) or just use UserManager.Create here?
-                //_userRepository.Insert(new IdentityUser(_guidGenerator.Create(), "tugrul"), true);
-
                 foreach (var user in _userRepository.ToList())
                 {
                     Console.WriteLine("# " + user);

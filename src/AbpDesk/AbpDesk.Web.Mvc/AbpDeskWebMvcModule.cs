@@ -20,24 +20,12 @@ namespace AbpDesk.Web.Mvc
         public override void ConfigureServices(IServiceCollection services)
         {
             var hostingEnvironment = services.GetSingletonInstance<IHostingEnvironment>();
+            var configuration = BuildConfiguration(hostingEnvironment.ContentRootPath);
 
-            //TODO: This code is pretty similar to AbpDeskConsoleDemoModule, so use a common code!
-
-            var configuration = BuildConfiguration(hostingEnvironment);
-
-            //Configure DbConnectionOptions by configuration file (appsettings.json)
-            services.Configure<DbConnectionOptions>(configuration);
-
-            services.Configure<AbpDbContextOptions>(options =>
-            {
-                //Configures all dbcontextes to use Sql Server with calculated connection string
-                options.Configure(context =>
-                {
-                    context.DbContextOptions.UseSqlServer(context.ConnectionString);
-                });
-            });
-
+            AbpDeskDbConfigurer.Configure(services, configuration);
+            
             services.AddMvc();
+            services.AddAssemblyOf<AbpDeskWebMvcModule>();
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
@@ -61,14 +49,13 @@ namespace AbpDesk.Web.Mvc
             });
         }
 
-        private static IConfigurationRoot BuildConfiguration(IHostingEnvironment hostingEnvironment)
+        private static IConfigurationRoot BuildConfiguration(string basePath)
         {
             var builder = new ConfigurationBuilder()
-                .SetBasePath(hostingEnvironment.ContentRootPath)
+                .SetBasePath(basePath)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
 
-            var configuration = builder.Build();
-            return configuration;
+            return builder.Build();
         }
     }
 }

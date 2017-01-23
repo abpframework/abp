@@ -5,6 +5,7 @@
     "NETStandard.Library": "1.6.1",
     "Microsoft.Extensions.DependencyInjection": "1.1.0",
     "Microsoft.Extensions.Options": "1.1.0",
+    "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.0",
     "Microsoft.Extensions.Logging": "1.1.0",
     "System.Collections.Immutable": "1.3.0",
     "System.Runtime.Loader": "4.3.0",

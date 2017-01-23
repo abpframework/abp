@@ -1,11 +1,8 @@
 ﻿using System.IO;
 using AbpDesk.Blogging;
 using AbpDesk.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.Data;
-using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 
@@ -20,31 +17,20 @@ namespace AbpDesk.ConsoleDemo
     {
         public override void ConfigureServices(IServiceCollection services)
         {
-            var configuration = BuildConfiguration();
+            var configuration = BuildConfiguration(Directory.GetCurrentDirectory());
 
-            //Configure DbConnectionOptions by configuration file (appsettings.json)
-            services.Configure<DbConnectionOptions>(configuration);
-
-            services.Configure<AbpDbContextOptions>(options =>
-            {
-                //Configures all dbcontextes to use Sql Server with calculated connection string
-                options.Configure(context =>
-                {
-                    context.DbContextOptions.UseSqlServer(context.ConnectionString);
-                });
-            });
+            AbpDeskDbConfigurer.Configure(services, configuration);
 
             services.AddAssemblyOf<AbpDeskConsoleDemoModule>();
         }
 
-        private static IConfigurationRoot BuildConfiguration()
+        private static IConfigurationRoot BuildConfiguration(string basePath)
         {
             var builder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
+                .SetBasePath(basePath)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
 
-            var configuration = builder.Build();
-            return configuration;
+            return builder.Build();
         }
     }
 }

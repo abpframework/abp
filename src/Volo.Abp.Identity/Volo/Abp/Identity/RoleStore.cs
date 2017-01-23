@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 using Volo.Abp.Uow;
 using Volo.DependencyInjection;
 
@@ -21,17 +22,20 @@ namespace Volo.Abp.Identity
     {
         private readonly IIdentityRoleRepository _roleRepository;
         private readonly IUnitOfWorkManager _unitOfWorkManager;
+        private readonly ILogger<RoleStore> _logger;
 
         /// <summary>
         /// Constructs a new instance of <see cref="RoleStore"/>.
         /// </summary>
         public RoleStore(
             IIdentityRoleRepository roleRepository, 
-            IUnitOfWorkManager unitOfWorkManager, 
+            IUnitOfWorkManager unitOfWorkManager,
+            ILogger<RoleStore> logger,
             IdentityErrorDescriber describer = null)
         {
             _roleRepository = roleRepository;
             _unitOfWorkManager = unitOfWorkManager;
+            _logger = logger;
 
             ErrorDescriber = describer ?? new IdentityErrorDescriber();
         }
@@ -100,7 +104,7 @@ namespace Volo.Abp.Identity
             }
             catch (AbpDbConcurrencyException ex)
             {
-                //TODO: Log...?
+                _logger.LogWarning(ex.ToString()); //Trigger some AbpHandledException event
                 return IdentityResult.Failed(ErrorDescriber.ConcurrencyFailure());
             }
 
@@ -126,7 +130,7 @@ namespace Volo.Abp.Identity
             }
             catch (AbpDbConcurrencyException ex)
             {
-                //TODO: Log...
+                _logger.LogWarning(ex.ToString()); //Trigger some AbpHandledException event
                 return IdentityResult.Failed(ErrorDescriber.ConcurrencyFailure());
             }
 
