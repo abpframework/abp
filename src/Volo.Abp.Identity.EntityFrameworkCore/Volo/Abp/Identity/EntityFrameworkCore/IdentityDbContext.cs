@@ -63,49 +63,62 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         {
             base.OnModelCreating(builder);
 
+            //Split configuration to dedicated classes
+
             //TODO: Set Default Values for properties
-            //TODO: Split configuration to dedicated classes.
             builder.Entity<IdentityUser>(b =>
             {
                 b.ToTable("IdentityUsers");
 
-                b.Property(u => u.UserName).HasMaxLength(256);
-                b.Property(u => u.NormalizedUserName).HasMaxLength(256);
-                b.Property(u => u.Email).HasMaxLength(256);
-                b.Property(u => u.NormalizedEmail).HasMaxLength(256);
+                b.Property(u => u.UserName).HasMaxLength(IdentityUser.MaxUserNameLength);
+                b.Property(u => u.NormalizedUserName).HasMaxLength(IdentityUser.MaxNormalizedUserNameLength);
+                b.Property(u => u.Email).HasMaxLength(IdentityUser.MaxEmailLength);
+                b.Property(u => u.NormalizedEmail).HasMaxLength(IdentityUser.MaxNormalizedEmailLength);
+                b.Property(u => u.EmailConfirmed).HasDefaultValue(false);
+                b.Property(u => u.PhoneNumberConfirmed).HasDefaultValue(false);
+                b.Property(u => u.TwoFactorEnabled).HasDefaultValue(false);
+                b.Property(u => u.LockoutEnabled).HasDefaultValue(false);
+                b.Property(u => u.AccessFailedCount).HasDefaultValue(0);
 
                 b.HasMany(u => u.Claims).WithOne().HasForeignKey(uc => uc.UserId).IsRequired();
                 b.HasMany(u => u.Logins).WithOne().HasForeignKey(ul => ul.UserId).IsRequired();
                 b.HasMany(u => u.Roles).WithOne().HasForeignKey(ur => ur.UserId).IsRequired();
                 b.HasMany(u => u.Tokens).WithOne().HasForeignKey(ur => ur.UserId).IsRequired();
 
-                b.HasIndex(u => u.NormalizedUserName).HasName("UserNameIndex");
-                b.HasIndex(u => u.NormalizedEmail).HasName("EmailIndex");
+                b.HasIndex(u => u.NormalizedUserName);
+                b.HasIndex(u => u.NormalizedEmail);
             });
 
             builder.Entity<IdentityRole>(b =>
             {
                 b.ToTable("IdentityRoles");
 
-                b.Property(r => r.ConcurrencyStamp).IsConcurrencyToken();
-                b.Property(u => u.Name).HasMaxLength(256);
-                b.Property(u => u.NormalizedName).HasMaxLength(256);
+                b.Property(u => u.Name).HasMaxLength(IdentityRole.MaxNameLength);
+                b.Property(u => u.NormalizedName).HasMaxLength(IdentityRole.MaxNormalizedNameLength);
 
-                //TODO: Relation & Foreign Key!
-                //b.HasMany(r => r.Users).WithOne().HasForeignKey(ur => ur.RoleId).IsRequired();
                 b.HasMany(r => r.Claims).WithOne().HasForeignKey(rc => rc.RoleId).IsRequired();
 
-                b.HasIndex(r => r.NormalizedName).HasName("RoleNameIndex");
+                b.HasIndex(r => r.NormalizedName);
             });
 
             builder.Entity<IdentityUserClaim>(b => 
             {
                 b.ToTable("IdentityUserClaims");
+
+                b.Property(uc => uc.ClaimType).HasMaxLength(IdentityUserClaim.MaxClaimTypeLength).IsRequired();
+                b.Property(uc => uc.ClaimValue).HasMaxLength(IdentityUserClaim.MaxClaimValueLength);
+
+                b.HasIndex(uc => uc.UserId);
             });
 
             builder.Entity<IdentityRoleClaim>(b => 
             {
                 b.ToTable("IdentityRoleClaims");
+
+                b.Property(uc => uc.ClaimType).HasMaxLength(IdentityRoleClaim.MaxClaimTypeLength).IsRequired();
+                b.Property(uc => uc.ClaimValue).HasMaxLength(IdentityRoleClaim.MaxClaimValueLength);
+
+                b.HasIndex(uc => uc.RoleId);
             });
 
             builder.Entity<IdentityUserRole>(b => 
@@ -113,20 +126,29 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 b.ToTable("IdentityUserRoles");
 
                 b.HasOne<IdentityRole>().WithMany().HasForeignKey(ur => ur.RoleId).IsRequired();
+                b.HasOne<IdentityUser>().WithMany().HasForeignKey(ur => ur.UserId).IsRequired();
 
                 b.HasIndex(r => new { r.UserId, r.RoleId });
+                b.HasIndex(r => new { r.RoleId, r.UserId });
             });
 
             builder.Entity<IdentityUserLogin>(b =>
             {
                 b.ToTable("IdentityUserLogins");
 
+                b.Property(ul => ul.LoginProvider).HasMaxLength(IdentityUserLogin.MaxLoginProviderLength).IsRequired();
+                b.Property(ul => ul.ProviderKey).HasMaxLength(IdentityUserLogin.MaxProviderKeyLength).IsRequired();
+                b.Property(ul => ul.ProviderDisplayName).HasMaxLength(IdentityUserLogin.MaxProviderDisplayNameLength);
+
                 b.HasIndex(l => new { l.UserId, l.LoginProvider, l.ProviderKey });
+                b.HasIndex(l => new { l.LoginProvider, l.ProviderKey });
             });
 
             builder.Entity<IdentityUserToken>(b => 
             {
                 b.ToTable("IdentityUserTokens");
+
+                b.Property(ul => ul.LoginProvider).HasMaxLength(IdentityUserToken.MaxLoginProviderLength).IsRequired();
 
                 b.HasIndex(l => new { l.UserId, l.LoginProvider, l.Name });
             });

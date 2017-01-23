@@ -15,6 +15,11 @@ namespace Volo.Abp.Identity
     
     public class IdentityUser : AggregateRoot, IHasConcurrencyStamp
     {
+        public const int MaxUserNameLength = 256;
+        public const int MaxNormalizedUserNameLength = MaxUserNameLength;
+        public const int MaxEmailLength = 256;
+        public const int MaxNormalizedEmailLength = MaxEmailLength;
+
         /// <summary>
         /// Gets or sets the user name for this user.
         /// </summary>
@@ -54,7 +59,7 @@ namespace Volo.Abp.Identity
         /// <summary>
         /// A random value that must change whenever a user is persisted to the store
         /// </summary>
-        public virtual string ConcurrencyStamp { get; set; } = Guid.NewGuid().ToString();
+        public virtual string ConcurrencyStamp { get; set; }
 
         /// <summary>
         /// Gets or sets a telephone number for the user.
@@ -125,9 +130,10 @@ namespace Volo.Abp.Identity
 
             Id = id;
             UserName = userName;
+            ConcurrencyStamp = Guid.NewGuid().ToString();
         }
 
-        public void AddRole([NotNull] Guid roleId)
+        public void AddRole(Guid roleId)
         {
             Check.NotNull(roleId, nameof(roleId));
 

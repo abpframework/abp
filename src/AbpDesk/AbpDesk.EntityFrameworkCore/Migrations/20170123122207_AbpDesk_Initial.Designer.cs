@@ -8,8 +8,8 @@ using AbpDesk.EntityFrameworkCore;
 namespace AbpDesk.EntityFrameworkCore.Migrations
 {
     [DbContext(typeof(AbpDeskDbContext))]
-    [Migration("20161210211733_Initial_Migration")]
-    partial class Initial_Migration
+    [Migration("20170123122207_AbpDesk_Initial")]
+    partial class AbpDesk_Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -22,9 +22,15 @@ namespace AbpDesk.EntityFrameworkCore.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Body");
+                    b.Property<string>("Body")
+                        .HasMaxLength(65536);
 
-                    b.Property<string>("Title");
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken();
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(256);
 
                     b.HasKey("Id");
 

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Volo.Abp.Identity.EntityFrameworkCore.Migrations
 {
-    public partial class Initial_Abp_Identity : Migration
+    public partial class Identity_Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -27,19 +27,19 @@ namespace Volo.Abp.Identity.EntityFrameworkCore.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    AccessFailedCount = table.Column<int>(nullable: false),
+                    AccessFailedCount = table.Column<int>(nullable: false, defaultValue: 0),
                     ConcurrencyStamp = table.Column<string>(nullable: true),
                     Email = table.Column<string>(maxLength: 256, nullable: true),
-                    EmailConfirmed = table.Column<bool>(nullable: false),
-                    LockoutEnabled = table.Column<bool>(nullable: false),
+                    EmailConfirmed = table.Column<bool>(nullable: false, defaultValue: false),
+                    LockoutEnabled = table.Column<bool>(nullable: false, defaultValue: false),
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     NormalizedEmail = table.Column<string>(maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(maxLength: 256, nullable: true),
                     PasswordHash = table.Column<string>(nullable: true),
                     PhoneNumber = table.Column<string>(nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(nullable: false),
+                    PhoneNumberConfirmed = table.Column<bool>(nullable: false, defaultValue: false),
                     SecurityStamp = table.Column<string>(nullable: true),
-                    TwoFactorEnabled = table.Column<bool>(nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(nullable: false, defaultValue: false),
                     UserName = table.Column<string>(maxLength: 256, nullable: true)
                 },
                 constraints: table =>
@@ -52,8 +52,8 @@ namespace Volo.Abp.Identity.EntityFrameworkCore.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    ClaimType = table.Column<string>(nullable: true),
-                    ClaimValue = table.Column<string>(nullable: true),
+                    ClaimType = table.Column<string>(maxLength: 256, nullable: false),
+                    ClaimValue = table.Column<string>(maxLength: 1024, nullable: true),
                     RoleId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
@@ -72,8 +72,8 @@ namespace Volo.Abp.Identity.EntityFrameworkCore.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    ClaimType = table.Column<string>(nullable: true),
-                    ClaimValue = table.Column<string>(nullable: true),
+                    ClaimType = table.Column<string>(maxLength: 256, nullable: false),
+                    ClaimValue = table.Column<string>(maxLength: 1024, nullable: true),
                     UserId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
@@ -92,9 +92,9 @@ namespace Volo.Abp.Identity.EntityFrameworkCore.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    LoginProvider = table.Column<string>(nullable: true),
-                    ProviderDisplayName = table.Column<string>(nullable: true),
-                    ProviderKey = table.Column<string>(nullable: true),
+                    LoginProvider = table.Column<string>(maxLength: 64, nullable: false),
+                    ProviderDisplayName = table.Column<string>(maxLength: 128, nullable: true),
+                    ProviderKey = table.Column<string>(maxLength: 256, nullable: false),
                     UserId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
@@ -113,12 +113,19 @@ namespace Volo.Abp.Identity.EntityFrameworkCore.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
+                    IdentityUserId1 = table.Column<Guid>(nullable: true),
                     RoleId = table.Column<Guid>(nullable: false),
                     UserId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_IdentityUserRoles", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_IdentityUserRoles_IdentityUsers_IdentityUserId1",
+                        column: x => x.IdentityUserId1,
+                        principalTable: "IdentityUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_IdentityUserRoles_IdentityRoles_RoleId",
                         column: x => x.RoleId,
@@ -138,7 +145,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    LoginProvider = table.Column<string>(nullable: true),
+                    LoginProvider = table.Column<string>(maxLength: 64, nullable: false),
                     Name = table.Column<string>(nullable: true),
                     UserId = table.Column<Guid>(nullable: false),
                     Value = table.Column<string>(nullable: true)
@@ -155,10 +162,9 @@ namespace Volo.Abp.Identity.EntityFrameworkCore.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "RoleNameIndex",
+                name: "IX_IdentityRoles_NormalizedName",
                 table: "IdentityRoles",
-                column: "NormalizedName",
-                unique: true);
+                column: "NormalizedName");
 
             migrationBuilder.CreateIndex(
                 name: "IX_IdentityRoleClaims_RoleId",
@@ -166,15 +172,14 @@ namespace Volo.Abp.Identity.EntityFrameworkCore.Migrations
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
-                name: "EmailIndex",
+                name: "IX_IdentityUsers_NormalizedEmail",
                 table: "IdentityUsers",
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
-                name: "UserNameIndex",
+                name: "IX_IdentityUsers_NormalizedUserName",
                 table: "IdentityUsers",
-                column: "NormalizedUserName",
-                unique: true);
+                column: "NormalizedUserName");
 
             migrationBuilder.CreateIndex(
                 name: "IX_IdentityUserClaims_UserId",
@@ -182,27 +187,34 @@ namespace Volo.Abp.Identity.EntityFrameworkCore.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_IdentityUserLogins_UserId_LoginProvider_ProviderKey",
+                name: "IX_IdentityUserLogins_LoginProvider_ProviderKey",
                 table: "IdentityUserLogins",
-                columns: new[] { "UserId", "LoginProvider", "ProviderKey" },
-                unique: true);
+                columns: new[] { "LoginProvider", "ProviderKey" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_IdentityUserRoles_RoleId",
+                name: "IX_IdentityUserLogins_UserId_LoginProvider_ProviderKey",
+                table: "IdentityUserLogins",
+                columns: new[] { "UserId", "LoginProvider", "ProviderKey" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_IdentityUserRoles_IdentityUserId1",
                 table: "IdentityUserRoles",
-                column: "RoleId");
+                column: "IdentityUserId1");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_IdentityUserRoles_RoleId_UserId",
+                table: "IdentityUserRoles",
+                columns: new[] { "RoleId", "UserId" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_IdentityUserRoles_UserId_RoleId",
                 table: "IdentityUserRoles",
-                columns: new[] { "UserId", "RoleId" },
-                unique: true);
+                columns: new[] { "UserId", "RoleId" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_IdentityUserTokens_UserId_LoginProvider_Name",
                 table: "IdentityUserTokens",
-                columns: new[] { "UserId", "LoginProvider", "Name" },
-                unique: true);
+                columns: new[] { "UserId", "LoginProvider", "Name" });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

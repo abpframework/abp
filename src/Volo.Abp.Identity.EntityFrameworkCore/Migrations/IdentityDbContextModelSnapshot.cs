@@ -32,8 +32,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("NormalizedName")
-                        .HasName("RoleNameIndex");
+                    b.HasIndex("NormalizedName");
 
                     b.ToTable("IdentityRoles");
                 });
@@ -43,9 +42,12 @@ namespace Volo.Abp.Identity.EntityFrameworkCore.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("ClaimType");
+                    b.Property<string>("ClaimType")
+                        .IsRequired()
+                        .HasMaxLength(256);
 
-                    b.Property<string>("ClaimValue");
+                    b.Property<string>("ClaimValue")
+                        .HasMaxLength(1024);
 
                     b.Property<Guid>("RoleId");
 
@@ -61,7 +63,9 @@ namespace Volo.Abp.Identity.EntityFrameworkCore.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("AccessFailedCount");
+                    b.Property<int>("AccessFailedCount")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(0);
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
@@ -69,9 +73,13 @@ namespace Volo.Abp.Identity.EntityFrameworkCore.Migrations
                     b.Property<string>("Email")
                         .HasMaxLength(256);
 
-                    b.Property<bool>("EmailConfirmed");
+                    b.Property<bool>("EmailConfirmed")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(false);
 
-                    b.Property<bool>("LockoutEnabled");
+                    b.Property<bool>("LockoutEnabled")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(false);
 
                     b.Property<DateTimeOffset?>("LockoutEnd");
 
@@ -85,22 +93,24 @@ namespace Volo.Abp.Identity.EntityFrameworkCore.Migrations
 
                     b.Property<string>("PhoneNumber");
 
-                    b.Property<bool>("PhoneNumberConfirmed");
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(false);
 
                     b.Property<string>("SecurityStamp");
 
-                    b.Property<bool>("TwoFactorEnabled");
+                    b.Property<bool>("TwoFactorEnabled")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(false);
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256);
 
                     b.HasKey("Id");
 
-                    b.HasIndex("NormalizedEmail")
-                        .HasName("EmailIndex");
+                    b.HasIndex("NormalizedEmail");
 
-                    b.HasIndex("NormalizedUserName")
-                        .HasName("UserNameIndex");
+                    b.HasIndex("NormalizedUserName");
 
                     b.ToTable("IdentityUsers");
                 });
@@ -110,9 +120,12 @@ namespace Volo.Abp.Identity.EntityFrameworkCore.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("ClaimType");
+                    b.Property<string>("ClaimType")
+                        .IsRequired()
+                        .HasMaxLength(256);
 
-                    b.Property<string>("ClaimValue");
+                    b.Property<string>("ClaimValue")
+                        .HasMaxLength(1024);
 
                     b.Property<Guid>("UserId");
 
@@ -128,15 +141,22 @@ namespace Volo.Abp.Identity.EntityFrameworkCore.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("LoginProvider");
+                    b.Property<string>("LoginProvider")
+                        .IsRequired()
+                        .HasMaxLength(64);
 
-                    b.Property<string>("ProviderDisplayName");
+                    b.Property<string>("ProviderDisplayName")
+                        .HasMaxLength(128);
 
-                    b.Property<string>("ProviderKey");
+                    b.Property<string>("ProviderKey")
+                        .IsRequired()
+                        .HasMaxLength(256);
 
                     b.Property<Guid>("UserId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("LoginProvider", "ProviderKey");
 
                     b.HasIndex("UserId", "LoginProvider", "ProviderKey");
 
@@ -148,13 +168,17 @@ namespace Volo.Abp.Identity.EntityFrameworkCore.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<Guid?>("IdentityUserId1");
+
                     b.Property<Guid>("RoleId");
 
                     b.Property<Guid>("UserId");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RoleId");
+                    b.HasIndex("IdentityUserId1");
+
+                    b.HasIndex("RoleId", "UserId");
 
                     b.HasIndex("UserId", "RoleId");
 
@@ -166,7 +190,9 @@ namespace Volo.Abp.Identity.EntityFrameworkCore.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("LoginProvider");
+                    b.Property<string>("LoginProvider")
+                        .IsRequired()
+                        .HasMaxLength(64);
 
                     b.Property<string>("Name");
 
@@ -207,13 +233,17 @@ namespace Volo.Abp.Identity.EntityFrameworkCore.Migrations
 
             modelBuilder.Entity("Volo.Abp.Identity.IdentityUserRole", b =>
                 {
+                    b.HasOne("Volo.Abp.Identity.IdentityUser")
+                        .WithMany("Roles")
+                        .HasForeignKey("IdentityUserId1");
+
                     b.HasOne("Volo.Abp.Identity.IdentityRole")
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Volo.Abp.Identity.IdentityUser")
-                        .WithMany("Roles")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

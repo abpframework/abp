@@ -15,6 +15,9 @@ namespace Volo.Abp.Identity
     /// </summary>
     public class IdentityRole : AggregateRoot, IHasConcurrencyStamp
     {
+        public const int MaxNameLength = 256;
+        public const int MaxNormalizedNameLength = MaxNameLength;
+
         /// <summary>
         /// Gets or sets the name for this role.
         /// </summary>
@@ -33,7 +36,7 @@ namespace Volo.Abp.Identity
         /// <summary>
         /// A random value that should change whenever a role is persisted to the store
         /// </summary>
-        public virtual string ConcurrencyStamp { get; set; } = Guid.NewGuid().ToString();
+        public virtual string ConcurrencyStamp { get; set; }
 
         /// <summary>
         /// Initializes a new instance of <see cref="IdentityRole"/>.
@@ -51,6 +54,7 @@ namespace Volo.Abp.Identity
 
             Id = id;
             Name = name;
+            ConcurrencyStamp = Guid.NewGuid().ToString();
         }
 
         public void AddClaim([NotNull] Claim claim)

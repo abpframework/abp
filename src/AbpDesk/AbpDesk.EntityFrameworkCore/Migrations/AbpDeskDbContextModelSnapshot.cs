@@ -24,7 +24,8 @@ namespace AbpDesk.EntityFrameworkCore.Migrations
                     b.Property<string>("Body")
                         .HasMaxLength(65536);
 
-                    b.Property<string>("ConcurrencyStamp");
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken();
 
                     b.Property<string>("Title")
                         .IsRequired()

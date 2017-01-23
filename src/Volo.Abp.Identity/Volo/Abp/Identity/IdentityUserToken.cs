@@ -9,6 +9,8 @@ namespace Volo.Abp.Identity
     /// </summary>
     public class IdentityUserToken : Entity
     {
+        public const int MaxLoginProviderLength = 64;
+
         /// <summary>
         /// Gets or sets the primary key of the user that the token belongs to.
         /// </summary>
@@ -34,11 +36,12 @@ namespace Volo.Abp.Identity
             
         }
 
-        public IdentityUserToken(Guid userId, [NotNull] string loginProvider, [NotNull] string name, string value) //TODO: Can value be null?
+        public IdentityUserToken(Guid userId, [NotNull] string loginProvider, [NotNull] string name, string value)
         {
-            Check.NotNull(userId, nameof(userId));
             Check.NotNull(loginProvider, nameof(loginProvider));
             Check.NotNull(name, nameof(name));
+
+            //TODO: Where to set Id?
 
             UserId = userId;
             LoginProvider = loginProvider;

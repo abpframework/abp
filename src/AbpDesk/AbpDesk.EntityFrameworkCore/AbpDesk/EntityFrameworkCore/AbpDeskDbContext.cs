@@ -21,9 +21,12 @@ namespace AbpDesk.EntityFrameworkCore
             base.OnModelCreating(modelBuilder);
 
             //Use different classes to map each entity type?
-            modelBuilder.Entity<Ticket>(builder =>
+            modelBuilder.Entity<Ticket>(b =>
             {
-                builder.ToTable("DskTickets");
+                b.ToTable("DskTickets");
+
+                b.Property(t => t.Title).HasMaxLength(Ticket.MaxTitleLength).IsRequired();
+                b.Property(t => t.Body).HasMaxLength(Ticket.MaxBodyLength);
             });
         }
     }

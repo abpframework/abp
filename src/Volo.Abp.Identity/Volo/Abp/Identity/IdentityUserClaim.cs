@@ -10,6 +10,9 @@ namespace Volo.Abp.Identity
     /// </summary>
     public class IdentityUserClaim : Entity
     {
+        public const int MaxClaimTypeLength = 256;
+        public const int MaxClaimValueLength = 1024;
+
         /// <summary>
         /// Gets or sets the primary key of the user associated with this claim.
         /// </summary>
@@ -32,6 +35,8 @@ namespace Volo.Abp.Identity
 
         public IdentityUserClaim(Guid userId, [NotNull] Claim claim)
         {
+            //TODO: Where to set Id?
+
             Check.NotNull(claim, nameof(claim));
 
             UserId = userId;

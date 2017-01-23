@@ -10,6 +10,9 @@ namespace Volo.Abp.Identity
     /// </summary>
     public class IdentityRoleClaim : Entity
     {
+        public const int MaxClaimTypeLength = IdentityUserClaim.MaxClaimTypeLength;
+        public const int MaxClaimValueLength = IdentityUserClaim.MaxClaimValueLength;
+
         /// <summary>
         /// Gets or sets the of the primary key of the role associated with this claim.
         /// </summary>
@@ -27,11 +30,13 @@ namespace Volo.Abp.Identity
 
         protected IdentityRoleClaim()
         {
-            
+
         }
 
         public IdentityRoleClaim(Guid roleId, [NotNull] Claim claim)
         {
+            //TODO: Where to set Id?
+
             Check.NotNull(claim, nameof(claim));
 
             RoleId = roleId;
@@ -41,7 +46,6 @@ namespace Volo.Abp.Identity
 
         public IdentityRoleClaim(Guid roleId, [NotNull] string claimType, string claimValue)
         {
-            Check.NotNull(roleId, nameof(roleId));
             Check.NotNull(claimType, nameof(claimType));
 
             RoleId = roleId;

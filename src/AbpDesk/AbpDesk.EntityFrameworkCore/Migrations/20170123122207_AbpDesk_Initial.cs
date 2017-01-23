@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace AbpDesk.EntityFrameworkCore.Migrations
 {
-    public partial class Initial_Migration : Migration
+    public partial class AbpDesk_Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -15,8 +15,9 @@ namespace AbpDesk.EntityFrameworkCore.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Body = table.Column<string>(nullable: true),
-                    Title = table.Column<string>(nullable: true)
+                    Body = table.Column<string>(maxLength: 65536, nullable: true),
+                    ConcurrencyStamp = table.Column<string>(nullable: true),
+                    Title = table.Column<string>(maxLength: 256, nullable: false)
                 },
                 constraints: table =>
                 {

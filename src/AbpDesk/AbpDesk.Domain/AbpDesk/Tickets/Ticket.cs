@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
 using JetBrains.Annotations;
 using Volo;
 using Volo.Abp.Domain.Entities;
@@ -11,12 +11,11 @@ namespace AbpDesk.Tickets
 
         public const int MaxBodyLength = 64 * 1024; //64K
 
-        [Required]
-        [MaxLength(MaxTitleLength)]
-        public string Title { get; set; }
+        [NotNull]
+        public string Title { get; protected set; }
 
-        [MaxLength(MaxBodyLength)]
-        public string Body { get; set; }
+        [CanBeNull]
+        public string Body { get; protected set; }
 
         public string ConcurrencyStamp { get; set; }
 
@@ -25,12 +24,13 @@ namespace AbpDesk.Tickets
             
         }
 
-        public Ticket([NotNull] string title, string body)
+        public Ticket([NotNull] string title, [CanBeNull] string body = null)
         {
             Check.NotNull(title, nameof(title));
 
             Title = title;
             Body = body;
+            ConcurrencyStamp = Guid.NewGuid().ToString();
         }
     }
 }
