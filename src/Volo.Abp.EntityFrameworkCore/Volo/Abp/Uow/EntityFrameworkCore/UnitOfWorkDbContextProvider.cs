@@ -29,7 +29,6 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
             var connectionString = _connectionStringResolver.Resolve<TDbContext>();
             var dbContextKey = $"{typeof(TDbContext).FullName}_{connectionString}";
 
-            //TODO: It would be very good if we could pass the connection string to DbContext options while creating DbContext! Because _connectionStringResolver.Resolve is called twice in current implementation.
             var databaseApi = unitOfWork.GetOrAddDatabaseApi(
                 dbContextKey,
                 () => new DbContextDatabaseApi<TDbContext>(
