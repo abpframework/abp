@@ -3,22 +3,27 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.DependencyInjection;
+using Volo.ExtensionMethods;
 using Volo.ExtensionMethods.Collections.Generic;
 
 namespace Volo.Abp.Uow
 {
     public class UnitOfWork : IUnitOfWork, ITransientDependency
     {
+        public event EventHandler Completed;
+        public event EventHandler<UnitOfWorkFailedEventArgs> Failed;
+        public event EventHandler Disposed;
+
         public IServiceProvider ServiceProvider { get; }
 
         private readonly Dictionary<string, IDatabaseApi> _databaseApis;
-        private readonly IAmbientUnitOfWork _ambientUnitOfWork;
 
+        private Exception _exception;
+        private bool _isCompleted;
         private bool _isDisposed;
 
-        public UnitOfWork(IServiceProvider serviceProvider, IAmbientUnitOfWork ambientUnitOfWork)
+        public UnitOfWork(IServiceProvider serviceProvider)
         {
-            _ambientUnitOfWork = ambientUnitOfWork;
             ServiceProvider = serviceProvider;
 
             _databaseApis = new Dictionary<string, IDatabaseApi>();
@@ -32,7 +37,13 @@ namespace Volo.Abp.Uow
             }
 
             _isDisposed = true;
-            _ambientUnitOfWork.SetUnitOfWork(null);
+
+            if (!_isCompleted || _exception != null)
+            {
+                OnFailed(_exception);
+            }
+
+            OnDisposed();
         }
 
         public void SaveChanges()
@@ -56,12 +67,33 @@ namespace Volo.Abp.Uow
 
         public void Complete()
         {
-            SaveChanges();
+            PreventMultipleComplete();
+            try
+            {
+                SaveChanges();
+                OnCompleted();
+            }
+            catch (Exception ex)
+            {
+                _exception = ex;
+                throw;
+            }
         }
 
         public async Task CompleteAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            await SaveChangesAsync(cancellationToken);
+            PreventMultipleComplete();
+
+            try
+            {
+                await SaveChangesAsync(cancellationToken);
+                OnCompleted();
+            }
+            catch (Exception ex)
+            {
+                _exception = ex;
+                throw;
+            }
         }
 
         public IDatabaseApi FindDatabaseApi(string id)
@@ -75,6 +107,31 @@ namespace Volo.Abp.Uow
             Check.NotNull(factory, nameof(factory));
 
             return _databaseApis.GetOrAdd(id, factory);
+        }
+
+        protected virtual void OnCompleted()
+        {
+            Completed.InvokeSafely(this);
+        }
+
+        protected virtual void OnFailed(Exception exception)
+        {
+            Failed.InvokeSafely(this, new UnitOfWorkFailedEventArgs(exception));
+        }
+
+        protected virtual void OnDisposed()
+        {
+            Disposed.InvokeSafely(this);
+        }
+
+        private void PreventMultipleComplete()
+        {
+            if (_isCompleted)
+            {
+                throw new AbpException("Complete is called before!");
+            }
+
+            _isCompleted = true;
         }
     }
 }

@@ -6,5 +6,7 @@ namespace Volo.Abp.Uow
     {
         [CanBeNull]
         IUnitOfWork UnitOfWork { get; }
+
+        void SetUnitOfWork([CanBeNull] IUnitOfWork unitOfWork);
     }
 }

@@ -7,6 +7,12 @@ namespace Volo.Abp.Uow
     //Find a better naming :(
     public interface IBasicUnitOfWork : IDisposable
     {
+        event EventHandler Completed;
+
+        event EventHandler<UnitOfWorkFailedEventArgs> Failed;
+
+        event EventHandler Disposed;
+
         void SaveChanges();
 
         Task SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));
