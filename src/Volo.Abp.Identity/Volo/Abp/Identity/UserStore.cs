@@ -55,7 +55,7 @@ namespace Volo.Abp.Identity
             IIdentityRoleRepository roleRepository,
             IGuidGenerator guidGenerator,
             ILogger<RoleStore> logger,
-            IdentityErrorDescriber describer = null) //TODO: describer? TODO: Test if DI supports optional injection
+            IdentityErrorDescriber describer = null)
         {
             _unitOfWorkManager = unitOfWorkManager;
             _userRepository = userRepository;
