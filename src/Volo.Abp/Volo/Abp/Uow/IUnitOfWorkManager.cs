@@ -8,6 +8,6 @@ namespace Volo.Abp.Uow
         IUnitOfWork Current { get; }
 
         [NotNull]
-        IUnitOfWork Begin();
+        IBasicUnitOfWork Begin();
     }
 }

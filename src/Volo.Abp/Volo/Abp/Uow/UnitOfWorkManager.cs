@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.DependencyInjection;
 
@@ -17,7 +18,7 @@ namespace Volo.Abp.Uow
             _ambientUnitOfWork = ambientUnitOfWork;
         }
 
-        public IUnitOfWork Begin()
+        public IBasicUnitOfWork Begin()
         {
             if (_ambientUnitOfWork.UnitOfWork != null)
             {
@@ -35,6 +36,7 @@ namespace Volo.Abp.Uow
                 throw;
             }
 
+            Debug.Assert(_ambientUnitOfWork.UnitOfWork != null, "_ambientUnitOfWork.UnitOfWork can not be null since it's set by _ambientUnitOfWork.SetUnitOfWork method!");
             return _ambientUnitOfWork.UnitOfWork;
         }
     }

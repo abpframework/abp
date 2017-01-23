@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Volo.DependencyInjection;
 using Volo.ExtensionMethods.Collections.Generic;
 
 namespace Volo.Abp.Uow
 {
-    public class UnitOfWork : IUnitOfWork
+    public class UnitOfWork : IUnitOfWork, ITransientDependency
     {
         public IServiceProvider ServiceProvider { get; }
 
@@ -74,19 +75,6 @@ namespace Volo.Abp.Uow
             Check.NotNull(factory, nameof(factory));
 
             return _databaseApis.GetOrAdd(id, factory);
-        }
-        
-        public IDatabaseApi AddDatabaseApi(string id, IDatabaseApi databaseApi)
-        {
-            Check.NotNull(id, nameof(id));
-            Check.NotNull(databaseApi, nameof(databaseApi));
-
-            if (_databaseApis.ContainsKey(id))
-            {
-                throw new AbpException($"There is already a database api with same id: {id}");
-            }
-
-            return _databaseApis[id] = databaseApi;
         }
     }
 }

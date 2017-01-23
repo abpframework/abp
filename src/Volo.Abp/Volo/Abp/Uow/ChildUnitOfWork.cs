@@ -47,14 +47,7 @@ namespace Volo.Abp.Uow
         {
             return _parent.GetOrAddDatabaseApi(id, factory);
         }
-
-        public IDatabaseApi AddDatabaseApi(string id, IDatabaseApi databaseApi)
-        {
-            return _parent.AddDatabaseApi(id, databaseApi);
-        }
-
-
-
+        
         public void Dispose()
         {
 
