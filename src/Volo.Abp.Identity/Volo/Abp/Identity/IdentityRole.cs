@@ -9,8 +9,6 @@ using Volo.ExtensionMethods.Collections.Generic;
 
 namespace Volo.Abp.Identity
 {
-    //TODO: Properties should not be public!
-
     /// <summary>
     /// Represents a role in the identity system
     /// </summary>
@@ -22,17 +20,17 @@ namespace Volo.Abp.Identity
         /// <summary>
         /// Gets or sets the name for this role.
         /// </summary>
-        public virtual string Name { get; set; }
+        public virtual string Name { get; protected internal set; }
 
         /// <summary>
         /// Gets or sets the normalized name for this role.
         /// </summary>
-        public virtual string NormalizedName { get; set; }
+        public virtual string NormalizedName { get; protected internal set; }
 
         /// <summary>
         /// Navigation property for claims in this role.
         /// </summary>
-        public virtual ICollection<IdentityRoleClaim> Claims { get; } = new Collection<IdentityRoleClaim>();
+        public virtual ICollection<IdentityRoleClaim> Claims { get; protected set; }
 
         /// <summary>
         /// A random value that should change whenever a role is persisted to the store
@@ -56,6 +54,8 @@ namespace Volo.Abp.Identity
             Id = id;
             Name = name;
             ConcurrencyStamp = Guid.NewGuid().ToString();
+
+            Claims = new Collection<IdentityRoleClaim>();
         }
 
         public void AddClaim([NotNull] IGuidGenerator guidGenerator, [NotNull] Claim claim)

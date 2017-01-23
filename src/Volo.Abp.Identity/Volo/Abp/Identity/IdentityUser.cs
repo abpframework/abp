@@ -11,7 +11,6 @@ using Volo.ExtensionMethods.Collections.Generic;
 
 namespace Volo.Abp.Identity
 {
-    //TODO: Properties should not be public!
     //TODO: Add Name/Surname/FullName?
 
     public class IdentityUser : AggregateRoot, IHasConcurrencyStamp
@@ -24,38 +23,38 @@ namespace Volo.Abp.Identity
         /// <summary>
         /// Gets or sets the user name for this user.
         /// </summary>
-        public virtual string UserName { get; set; }
+        public virtual string UserName { get; protected internal set; }
 
         /// <summary>
         /// Gets or sets the normalized user name for this user.
         /// </summary>
-        public virtual string NormalizedUserName { get; set; }
+        public virtual string NormalizedUserName { get; protected internal set; }
 
         /// <summary>
         /// Gets or sets the email address for this user.
         /// </summary>
-        public virtual string Email { get; set; }
+        public virtual string Email { get; protected internal set; }
 
         /// <summary>
         /// Gets or sets the normalized email address for this user.
         /// </summary>
-        public virtual string NormalizedEmail { get; set; }
+        public virtual string NormalizedEmail { get; protected internal set; }
 
         /// <summary>
         /// Gets or sets a flag indicating if a user has confirmed their email address.
         /// </summary>
         /// <value>True if the email address has been confirmed, otherwise false.</value>
-        public virtual bool EmailConfirmed { get; set; }
+        public virtual bool EmailConfirmed { get; protected internal set; }
 
         /// <summary>
         /// Gets or sets a salted and hashed representation of the password for this user.
         /// </summary>
-        public virtual string PasswordHash { get; set; }
+        public virtual string PasswordHash { get; protected internal set; }
 
         /// <summary>
         /// A random value that must change whenever a users credentials change (password changed, login removed)
         /// </summary>
-        public virtual string SecurityStamp { get; set; }
+        public virtual string SecurityStamp { get; protected internal set; }
 
         /// <summary>
         /// A random value that must change whenever a user is persisted to the store
@@ -65,19 +64,19 @@ namespace Volo.Abp.Identity
         /// <summary>
         /// Gets or sets a telephone number for the user.
         /// </summary>
-        public virtual string PhoneNumber { get; set; }
+        public virtual string PhoneNumber { get; protected internal set; }
 
         /// <summary>
         /// Gets or sets a flag indicating if a user has confirmed their telephone address.
         /// </summary>
         /// <value>True if the telephone number has been confirmed, otherwise false.</value>
-        public virtual bool PhoneNumberConfirmed { get; set; }
+        public virtual bool PhoneNumberConfirmed { get; protected internal set; }
 
         /// <summary>
         /// Gets or sets a flag indicating if two factor authentication is enabled for this user.
         /// </summary>
         /// <value>True if 2fa is enabled, otherwise false.</value>
-        public virtual bool TwoFactorEnabled { get; set; }
+        public virtual bool TwoFactorEnabled { get; protected internal set; }
 
         /// <summary>
         /// Gets or sets the date and time, in UTC, when any user lockout ends.
@@ -85,40 +84,40 @@ namespace Volo.Abp.Identity
         /// <remarks>
         /// A value in the past means the user is not locked out.
         /// </remarks>
-        public virtual DateTimeOffset? LockoutEnd { get; set; }
+        public virtual DateTimeOffset? LockoutEnd { get; protected internal set; }
 
         /// <summary>
         /// Gets or sets a flag indicating if the user could be locked out.
         /// </summary>
         /// <value>True if the user could be locked out, otherwise false.</value>
-        public virtual bool LockoutEnabled { get; set; }
+        public virtual bool LockoutEnabled { get; protected internal set; }
 
         /// <summary>
         /// Gets or sets the number of failed login attempts for the current user.
         /// </summary>
-        public virtual int AccessFailedCount { get; set; }
+        public virtual int AccessFailedCount { get; protected internal set; }
 
         //TODO: Can we make collections readonly collection, which will provide encapsulation but can work for all ORMs?
 
         /// <summary>
         /// Navigation property for the roles this user belongs to.
         /// </summary>
-        public virtual ICollection<IdentityUserRole> Roles { get; } = new Collection<IdentityUserRole>();
+        public virtual ICollection<IdentityUserRole> Roles { get; protected set; }
 
         /// <summary>
         /// Navigation property for the claims this user possesses.
         /// </summary>
-        public virtual ICollection<IdentityUserClaim> Claims { get; } = new Collection<IdentityUserClaim>();
+        public virtual ICollection<IdentityUserClaim> Claims { get; protected set; }
 
         /// <summary>
         /// Navigation property for this users login accounts.
         /// </summary>
-        public virtual ICollection<IdentityUserLogin> Logins { get; } = new Collection<IdentityUserLogin>();
+        public virtual ICollection<IdentityUserLogin> Logins { get; protected set; }
 
         /// <summary>
         /// Navigation property for this users tokens.
         /// </summary>
-        public virtual ICollection<IdentityUserToken> Tokens { get; } = new Collection<IdentityUserToken>();
+        public virtual ICollection<IdentityUserToken> Tokens { get; protected set; }
 
         protected IdentityUser()
         {
@@ -132,6 +131,11 @@ namespace Volo.Abp.Identity
             Id = id;
             UserName = userName;
             ConcurrencyStamp = Guid.NewGuid().ToString();
+
+            Roles = new Collection<IdentityUserRole>();
+            Claims = new Collection<IdentityUserClaim>();
+            Logins = new Collection<IdentityUserLogin>();
+            Tokens = new Collection<IdentityUserToken>();
         }
 
         public void AddRole(IGuidGenerator guidGenerator, Guid roleId)
