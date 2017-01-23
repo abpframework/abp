@@ -20,9 +20,8 @@ namespace Volo.Abp.Identity
         {
             ServiceProvider.GetRequiredService<IdentityRoleManager>();
         }
-
-        //TODO: Move this service to Volo.Abp.EntityFrameworkCore.Tests since it's actually testing the EF Core repository registration!
-        [Fact]
+        
+        [Fact] //Move this test to Volo.Abp.EntityFrameworkCore.Tests since it's actually testing the EF Core repository registration!
         public void Should_Resolve_Repositories()
         {
             (ServiceProvider.GetRequiredService<IIdentityUserRepository>() is EfCoreIdentityUserRepository).ShouldBeTrue();

@@ -11,7 +11,7 @@ using Volo.ExtensionMethods.Collections.Generic;
 
 namespace Volo.Abp.Identity
 {
-    //TODO: Add Name/Surname/FullName?
+    //Add Name and Surname properties?
 
     public class IdentityUser : AggregateRoot, IHasConcurrencyStamp
     {

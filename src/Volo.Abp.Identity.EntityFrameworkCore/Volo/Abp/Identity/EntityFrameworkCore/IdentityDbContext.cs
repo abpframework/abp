@@ -65,7 +65,6 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
 
             //Split configuration to dedicated classes
 
-            //TODO: Set Default Values for properties
             builder.Entity<IdentityUser>(b =>
             {
                 b.ToTable("IdentityUsers");

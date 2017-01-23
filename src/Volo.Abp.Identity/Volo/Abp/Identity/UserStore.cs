@@ -329,7 +329,7 @@ namespace Volo.Abp.Identity
 
             if (role == null)
             {
-                throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, "Role {0} does not exist.", normalizedRoleName)); //TODO: Localize
+                throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, "Role {0} does not exist!", normalizedRoleName));
             }
 
             user.AddRole(_guidGenerator, role.Id);
