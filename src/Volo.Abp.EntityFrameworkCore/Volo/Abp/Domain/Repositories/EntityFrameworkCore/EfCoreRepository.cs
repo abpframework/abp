@@ -90,12 +90,6 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
         public override TEntity Update(TEntity entity)
         {
             DbContext.Attach(entity);
-
-            if (entity is IHasConcurrencyStamp)
-            {
-                (entity as IHasConcurrencyStamp).ConcurrencyStamp = Guid.NewGuid().ToString();
-            }
-
             return DbContext.Update(entity).Entity;
         }
 
