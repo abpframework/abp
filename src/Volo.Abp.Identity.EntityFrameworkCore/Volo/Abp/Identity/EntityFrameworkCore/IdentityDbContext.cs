@@ -125,7 +125,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 b.ToTable("IdentityUserRoles");
 
                 b.HasOne<IdentityRole>().WithMany().HasForeignKey(ur => ur.RoleId).IsRequired();
-                b.HasOne<IdentityUser>().WithMany().HasForeignKey(ur => ur.UserId).IsRequired();
+                b.HasOne<IdentityUser>().WithMany(u => u.Roles).HasForeignKey(ur => ur.UserId).IsRequired();
 
                 b.HasIndex(r => new { r.UserId, r.RoleId });
                 b.HasIndex(r => new { r.RoleId, r.UserId });

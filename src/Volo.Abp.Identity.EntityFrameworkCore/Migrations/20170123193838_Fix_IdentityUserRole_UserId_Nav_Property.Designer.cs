@@ -8,9 +8,10 @@ using Volo.Abp.Identity.EntityFrameworkCore;
 namespace Volo.Abp.Identity.EntityFrameworkCore.Migrations
 {
     [DbContext(typeof(IdentityDbContext))]
-    partial class IdentityDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170123193838_Fix_IdentityUserRole_UserId_Nav_Property")]
+    partial class Fix_IdentityUserRole_UserId_Nav_Property
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.0-rtm-22752")
