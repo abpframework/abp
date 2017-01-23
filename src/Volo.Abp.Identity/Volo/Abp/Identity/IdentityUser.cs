@@ -6,13 +6,14 @@ using System.Security.Claims;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Identity;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.Guids;
 using Volo.ExtensionMethods.Collections.Generic;
 
 namespace Volo.Abp.Identity
 {
     //TODO: Properties should not be public!
     //TODO: Add Name/Surname/FullName?
-    
+
     public class IdentityUser : AggregateRoot, IHasConcurrencyStamp
     {
         public const int MaxUserNameLength = 256;
@@ -133,7 +134,7 @@ namespace Volo.Abp.Identity
             ConcurrencyStamp = Guid.NewGuid().ToString();
         }
 
-        public void AddRole(Guid roleId)
+        public void AddRole(IGuidGenerator guidGenerator, Guid roleId)
         {
             Check.NotNull(roleId, nameof(roleId));
 
@@ -142,19 +143,19 @@ namespace Volo.Abp.Identity
                 return;
             }
 
-            Roles.Add(new IdentityUserRole(Id, roleId));
+            Roles.Add(new IdentityUserRole(guidGenerator.Create(), Id, roleId));
         }
 
         public void RemoveRole(Guid roleId)
         {
             Check.NotNull(roleId, nameof(roleId));
 
-            if (Roles.All(r => r.RoleId != roleId))
+            if (!IsInRole(roleId))
             {
                 return;
             }
 
-            Roles.Add(new IdentityUserRole(Id, roleId));
+            Roles.RemoveAll(r => r.RoleId == roleId);
         }
 
         public bool IsInRole(Guid roleId)
@@ -164,20 +165,22 @@ namespace Volo.Abp.Identity
             return Roles.Any(r => r.RoleId == roleId);
         }
 
-        public void AddClaim([NotNull] Claim claim)
+        public void AddClaim([NotNull] IGuidGenerator guidGenerator, [NotNull] Claim claim)
         {
+            Check.NotNull(guidGenerator, nameof(guidGenerator));
             Check.NotNull(claim, nameof(claim));
 
-            Claims.Add(new IdentityUserClaim(Id, claim));
+            Claims.Add(new IdentityUserClaim(guidGenerator.Create(), Id, claim));
         }
 
-        public void AddClaims([NotNull] IEnumerable<Claim> claims)
+        public void AddClaims([NotNull] IGuidGenerator guidGenerator, [NotNull] IEnumerable<Claim> claims)
         {
+            Check.NotNull(guidGenerator, nameof(guidGenerator));
             Check.NotNull(claims, nameof(claims));
 
             foreach (var claim in claims)
             {
-                AddClaim(claim);
+                AddClaim(guidGenerator, claim);
             }
         }
 
@@ -210,11 +213,12 @@ namespace Volo.Abp.Identity
             Claims.RemoveAll(c => c.ClaimValue == claim.Value && c.ClaimType == claim.Type);
         }
 
-        public void AddLogin([NotNull] UserLoginInfo login)
+        public void AddLogin([NotNull] IGuidGenerator guidGenerator, [NotNull] UserLoginInfo login)
         {
+            Check.NotNull(guidGenerator, nameof(guidGenerator));
             Check.NotNull(login, nameof(login));
 
-            Logins.Add(new IdentityUserLogin(Id, login));
+            Logins.Add(new IdentityUserLogin(guidGenerator.Create(), Id, login));
         }
 
         public void RemoveLogin([NotNull] string loginProvider, [NotNull] string providerKey)
@@ -231,13 +235,12 @@ namespace Volo.Abp.Identity
             return Tokens.FirstOrDefault(t => t.LoginProvider == loginProvider && t.Name == name);
         }
 
-        public void SetToken(string loginProvider, string name, string value)
+        public void SetToken(IGuidGenerator guidGenerator, string loginProvider, string name, string value)
         {
             var token = FindToken(loginProvider, name);
             if (token == null)
             {
-
-                Tokens.Add(new IdentityUserToken(Id, loginProvider, name, value));
+                Tokens.Add(new IdentityUserToken(guidGenerator.Create(), Id, loginProvider, name, value));
             }
             else
             {

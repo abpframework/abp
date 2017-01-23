@@ -36,13 +36,12 @@ namespace Volo.Abp.Identity
             
         }
 
-        public IdentityUserToken(Guid userId, [NotNull] string loginProvider, [NotNull] string name, string value)
+        public IdentityUserToken(Guid id, Guid userId, [NotNull] string loginProvider, [NotNull] string name, string value)
         {
             Check.NotNull(loginProvider, nameof(loginProvider));
             Check.NotNull(name, nameof(name));
 
-            //TODO: Where to set Id?
-
+            Id = id;
             UserId = userId;
             LoginProvider = loginProvider;
             Name = name;

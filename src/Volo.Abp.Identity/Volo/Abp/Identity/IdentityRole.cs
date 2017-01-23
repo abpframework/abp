@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Security.Claims;
 using JetBrains.Annotations;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.Guids;
 using Volo.ExtensionMethods.Collections.Generic;
 
 namespace Volo.Abp.Identity
@@ -57,20 +58,22 @@ namespace Volo.Abp.Identity
             ConcurrencyStamp = Guid.NewGuid().ToString();
         }
 
-        public void AddClaim([NotNull] Claim claim)
+        public void AddClaim([NotNull] IGuidGenerator guidGenerator, [NotNull] Claim claim)
         {
+            Check.NotNull(guidGenerator, nameof(guidGenerator));
             Check.NotNull(claim, nameof(claim));
 
-            Claims.Add(new IdentityRoleClaim(Id, claim));
+            Claims.Add(new IdentityRoleClaim(guidGenerator.Create(), Id, claim));
         }
 
-        public void AddClaims([NotNull] IEnumerable<Claim> claims)
+        public void AddClaims([NotNull] IGuidGenerator guidGenerator, [NotNull] IEnumerable<Claim> claims)
         {
+            Check.NotNull(guidGenerator, nameof(guidGenerator));
             Check.NotNull(claims, nameof(claims));
 
             foreach (var claim in claims)
             {
-                AddClaim(claim);
+                AddClaim(guidGenerator, claim);
             }
         }
 

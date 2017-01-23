@@ -41,27 +41,22 @@ namespace Volo.Abp.Identity
             
         }
 
-        public IdentityUserLogin(Guid userId, [NotNull] string loginProvider, [NotNull] string providerKey, string providerDisplayName)
+        public IdentityUserLogin(Guid id, Guid userId, [NotNull] string loginProvider, [NotNull] string providerKey, string providerDisplayName)
         {
             Check.NotNull(loginProvider, nameof(loginProvider));
             Check.NotNull(providerKey, nameof(providerKey));
 
-            //TODO: Where to set Id?
-
+            Id = id;
             UserId = userId;
             LoginProvider = loginProvider;
             ProviderKey = providerKey;
             ProviderDisplayName = providerDisplayName;
         }
 
-        public IdentityUserLogin(Guid userId, UserLoginInfo login)
+        public IdentityUserLogin(Guid id, Guid userId, [NotNull] UserLoginInfo login)
+            : this(id, userId, login.LoginProvider, login.ProviderKey, login.ProviderDisplayName)
         {
-            Check.NotNull(login, nameof(login));
 
-            UserId = userId;
-            LoginProvider = login.LoginProvider;
-            ProviderKey = login.ProviderKey;
-            ProviderDisplayName = login.ProviderDisplayName;
         }
 
         public UserLoginInfo ToUserLoginInfo()

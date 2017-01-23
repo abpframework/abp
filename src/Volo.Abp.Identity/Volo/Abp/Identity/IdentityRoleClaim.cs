@@ -33,21 +33,17 @@ namespace Volo.Abp.Identity
 
         }
 
-        public IdentityRoleClaim(Guid roleId, [NotNull] Claim claim)
+        public IdentityRoleClaim(Guid id, Guid roleId, [NotNull] Claim claim)
+            : this(id, roleId, claim.Type, claim.Value)
         {
-            //TODO: Where to set Id?
 
-            Check.NotNull(claim, nameof(claim));
-
-            RoleId = roleId;
-            ClaimType = claim.Type;
-            ClaimValue = claim.Value;
         }
 
-        public IdentityRoleClaim(Guid roleId, [NotNull] string claimType, string claimValue)
+        public IdentityRoleClaim(Guid id, Guid roleId, [NotNull] string claimType, string claimValue)
         {
             Check.NotNull(claimType, nameof(claimType));
 
+            Id = id;
             RoleId = roleId;
             ClaimType = claimType;
             ClaimValue = claimValue;

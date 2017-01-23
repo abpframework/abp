@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
+using Volo.Abp.Guids;
 using Volo.Abp.Uow;
 using Volo.DependencyInjection;
-using Volo.ExtensionMethods;
 
 namespace Volo.Abp.Identity
 {
@@ -44,6 +44,7 @@ namespace Volo.Abp.Identity
         public bool AutoSaveChanges { get; set; } = true;
 
         private readonly IIdentityRoleRepository _roleRepository;
+        private readonly IGuidGenerator _guidGenerator;
         private readonly ILogger<RoleStore> _logger;
         private readonly IIdentityUserRepository _userRepository;
         private readonly IUnitOfWorkManager _unitOfWorkManager;
@@ -52,12 +53,14 @@ namespace Volo.Abp.Identity
             IUnitOfWorkManager unitOfWorkManager,
             IIdentityUserRepository userRepository,
             IIdentityRoleRepository roleRepository,
+            IGuidGenerator guidGenerator,
             ILogger<RoleStore> logger,
             IdentityErrorDescriber describer = null) //TODO: describer? TODO: Test if DI supports optional injection
         {
             _unitOfWorkManager = unitOfWorkManager;
             _userRepository = userRepository;
             _roleRepository = roleRepository;
+            _guidGenerator = guidGenerator;
             _logger = logger;
 
             ErrorDescriber = describer ?? new IdentityErrorDescriber();
@@ -320,11 +323,7 @@ namespace Volo.Abp.Identity
             cancellationToken.ThrowIfCancellationRequested();
 
             Check.NotNull(user, nameof(user));
-
-            if (normalizedRoleName.IsNullOrWhiteSpace()) //TODO: Create a Check.NotNullOrWhiteSpace()?
-            {
-                throw new ArgumentException(nameof(normalizedRoleName) + " can not be null or whitespace");
-            }
+            Check.NotNull(normalizedRoleName, nameof(normalizedRoleName));
 
             var role = await _roleRepository.FindByNormalizedNameAsync(normalizedRoleName, cancellationToken);
 
@@ -333,7 +332,7 @@ namespace Volo.Abp.Identity
                 throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, "Role {0} does not exist.", normalizedRoleName)); //TODO: Localize
             }
 
-            user.AddRole(role.Id);
+            user.AddRole(_guidGenerator, role.Id);
         }
 
         /// <summary>
@@ -443,7 +442,7 @@ namespace Volo.Abp.Identity
             Check.NotNull(user, nameof(user));
             Check.NotNull(claims, nameof(claims));
 
-            user.AddClaims(claims);
+            user.AddClaims(_guidGenerator, claims);
             
             return Task.CompletedTask;
         }
@@ -502,7 +501,7 @@ namespace Volo.Abp.Identity
             Check.NotNull(user, nameof(user));
             Check.NotNull(login, nameof(login));
 
-            user.AddLogin(login);
+            user.AddLogin(_guidGenerator, login);
 
             return Task.CompletedTask;
         }
@@ -998,7 +997,7 @@ namespace Volo.Abp.Identity
 
             Check.NotNull(user, nameof(user));
 
-            user.SetToken(loginProvider, name, value);
+            user.SetToken(_guidGenerator, loginProvider, name, value);
 
             return Task.CompletedTask;
         }

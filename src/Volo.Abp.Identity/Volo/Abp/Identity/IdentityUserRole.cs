@@ -23,10 +23,9 @@ namespace Volo.Abp.Identity
             
         }
 
-        public IdentityUserRole(Guid userId, Guid roleId)
+        public IdentityUserRole(Guid id, Guid userId, Guid roleId)
         {
-            //TODO: Where to set Id?
-
+            Id = id;
             UserId = userId;
             RoleId = roleId;
         }
