@@ -1,6 +1,10 @@
-﻿using System.Threading;
+﻿using System.Linq;
+using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Uow;
 
 namespace Volo.Abp.EntityFrameworkCore
@@ -18,7 +22,10 @@ namespace Volo.Abp.EntityFrameworkCore
         {
             base.OnModelCreating(modelBuilder);
 
-            //TODO: Automatically configure ConcurrencyStamp
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            {
+                ConfigureConcurrencyStamp(entityType);
+            }
         }
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
@@ -43,6 +50,19 @@ namespace Volo.Abp.EntityFrameworkCore
             {
                 throw new AbpDbConcurrencyException(ex.Message, ex);
             }
+        }
+
+        protected virtual void ConfigureConcurrencyStamp(IMutableEntityType entityType)
+        {
+            if (!typeof(IHasConcurrencyStamp).GetTypeInfo().IsAssignableFrom(entityType.ClrType))
+            {
+                return;
+            }
+
+            entityType
+                .GetProperties()
+                .First(p => p.Name == nameof(IHasConcurrencyStamp.ConcurrencyStamp))
+                .IsConcurrencyToken = true;
         }
     }
 }

@@ -18,12 +18,12 @@ namespace AbpDesk.EntityFrameworkCore
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //TODO: Use different classes to map each entity type?
+            base.OnModelCreating(modelBuilder);
 
+            //Use different classes to map each entity type?
             modelBuilder.Entity<Ticket>(builder =>
             {
                 builder.ToTable("DskTickets");
-                builder.Property(t => t.ConcurrencyStamp).IsConcurrencyToken();
             });
         }
     }
