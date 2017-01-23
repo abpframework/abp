@@ -16,8 +16,6 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
         }
     }
 
-    //TODO: MongoDb.Driver fully supports async, implement all of them!
-
     public class MongoDbRepository<TMongoDbContext, TEntity, TPrimaryKey> : QueryableRepositoryBase<TEntity, TPrimaryKey>, IMongoDbRepository<TEntity, TPrimaryKey> 
         where TMongoDbContext : AbpMongoDbContext
         where TEntity : class, IEntity<TPrimaryKey>
@@ -40,8 +38,6 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
 
         public override TEntity Insert(TEntity entity, bool autoSave = false)
         {
-            //TODO: Mongo has InsertMany & UpdateMany methods. Does them transactional? If so, we may consider to add them to IRepository!
-
             Collection.InsertOne(entity);
             return entity;
         }
