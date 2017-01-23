@@ -1,11 +1,11 @@
 ﻿using System.Threading.Tasks;
-using AbpDesk.Models.Tickets;
 using AbpDesk.Tickets;
 using AbpDesk.Tickets.Dtos;
+using AbpDesk.Web.Mvc.Models.Tickets;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc;
 
-namespace AbpDesk.Controllers
+namespace AbpDesk.Web.Mvc.Controllers
 {
     public class TicketsController : AbpController
     {

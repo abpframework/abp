@@ -12,10 +12,8 @@ using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 
-namespace AbpDesk
+namespace AbpDesk.Web.Mvc
 {
-    //TODO: Rename project to AbpDesk.Web.Mvc
-
     [DependsOn(typeof(AbpAspNetCoreMvcModule), typeof(AbpDeskApplicationModule), typeof(AbpDeskEntityFrameworkCoreModule))]
     public class AbpDeskWebMvcModule : AbpModule
     {

@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using Microsoft.AspNetCore.Hosting;
 
-namespace AbpDesk
+namespace AbpDesk.Web.Mvc
 {
     public class Program
     {

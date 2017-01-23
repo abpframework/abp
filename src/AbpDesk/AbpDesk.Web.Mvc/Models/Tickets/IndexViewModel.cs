@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using AbpDesk.Tickets.Dtos;
 
-namespace AbpDesk.Models.Tickets
+namespace AbpDesk.Web.Mvc.Models.Tickets
 {
     public class IndexViewModel
     {
