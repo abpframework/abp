@@ -10,10 +10,8 @@ using Volo.ExtensionMethods.Collections.Generic;
 
 namespace Volo.Abp.Identity
 {
-    //TODO: Should set Id to a GUID (where? on repository?)
     //TODO: Properties should not be public!
     //TODO: Add Name/Surname/FullName?
-    //TODO: Set max lenght for Id (set a default max lenght by default, like 64)
     
     public class IdentityUser : AggregateRoot, IHasConcurrencyStamp
     {
