@@ -16,11 +16,13 @@ namespace Volo.Abp.EntityFrameworkCore.DependencyInjection
 
             using (var scope = serviceProvider.CreateScope())
             {
-                var connInfoResolver = scope.ServiceProvider.GetRequiredService<IConnectionStringResolver>();
+                var context = new AbpDbContextConfigurationContext<TDbContext>(
+                    GetConnectionString(scope, connectionStringName),
+                    connectionStringName,
+                    scope.ServiceProvider
+                );
 
-                var context = new AbpDbContextConfigurationContext<TDbContext>(connInfoResolver.Resolve(connectionStringName), connectionStringName);
-
-                var dbContextOptions = scope.ServiceProvider.GetRequiredService<IOptions<AbpDbContextOptions>>().Value;
+                var dbContextOptions = GetDbContextOptions<TDbContext>(scope);
 
                 var configureAction = dbContextOptions.ConfigureActions.GetOrDefault(typeof(TDbContext));
                 if (configureAction != null)
@@ -38,6 +40,16 @@ namespace Volo.Abp.EntityFrameworkCore.DependencyInjection
 
                 return context.DbContextOptions.Options;
             }
+        }
+
+        private static AbpDbContextOptions GetDbContextOptions<TDbContext>(IServiceScope scope) where TDbContext : AbpDbContext<TDbContext>
+        {
+            return scope.ServiceProvider.GetRequiredService<IOptions<AbpDbContextOptions>>().Value;
+        }
+
+        private static string GetConnectionString(IServiceScope scope, string connectionStringName)
+        {
+            return scope.ServiceProvider.GetRequiredService<IConnectionStringResolver>().Resolve(connectionStringName);
         }
     }
 }
