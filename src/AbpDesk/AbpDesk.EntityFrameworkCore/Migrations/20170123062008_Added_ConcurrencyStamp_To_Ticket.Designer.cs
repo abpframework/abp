@@ -8,9 +8,10 @@ using AbpDesk.EntityFrameworkCore;
 namespace AbpDesk.EntityFrameworkCore.Migrations
 {
     [DbContext(typeof(AbpDeskDbContext))]
-    partial class AbpDeskDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170123062008_Added_ConcurrencyStamp_To_Ticket")]
+    partial class Added_ConcurrencyStamp_To_Ticket
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.0-rtm-22752")

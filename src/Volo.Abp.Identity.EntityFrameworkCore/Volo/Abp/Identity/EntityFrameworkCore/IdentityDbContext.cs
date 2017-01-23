@@ -61,15 +61,17 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         /// </param>
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            base.OnModelCreating(builder);
+
             //TODO: Set Default Values for properties
 
-            //TODO: Unique indexes can be a problem for a multi-tenant application. Think again.
+            //TODO: Split configuration to dedicated classes.
 
             builder.Entity<IdentityUser>(b =>
             {
                 b.ToTable("IdentityUsers");
 
-                b.Property(u => u.ConcurrencyStamp).IsConcurrencyToken(); //TODO: Do automatically?
+                b.Property(u => u.ConcurrencyStamp).IsConcurrencyToken();
                 b.Property(u => u.UserName).HasMaxLength(256);
                 b.Property(u => u.NormalizedUserName).HasMaxLength(256);
                 b.Property(u => u.Email).HasMaxLength(256);
@@ -80,7 +82,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 b.HasMany(u => u.Roles).WithOne().HasForeignKey(ur => ur.UserId).IsRequired();
                 b.HasMany(u => u.Tokens).WithOne().HasForeignKey(ur => ur.UserId).IsRequired();
 
-                b.HasIndex(u => u.NormalizedUserName).HasName("UserNameIndex").IsUnique();
+                b.HasIndex(u => u.NormalizedUserName).HasName("UserNameIndex");
                 b.HasIndex(u => u.NormalizedEmail).HasName("EmailIndex");
             });
 
@@ -96,7 +98,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 //b.HasMany(r => r.Users).WithOne().HasForeignKey(ur => ur.RoleId).IsRequired();
                 b.HasMany(r => r.Claims).WithOne().HasForeignKey(rc => rc.RoleId).IsRequired();
 
-                b.HasIndex(r => r.NormalizedName).HasName("RoleNameIndex").IsUnique();
+                b.HasIndex(r => r.NormalizedName).HasName("RoleNameIndex");
             });
 
             builder.Entity<IdentityUserClaim>(b => 
@@ -115,21 +117,21 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
 
                 b.HasOne<IdentityRole>().WithMany().HasForeignKey(ur => ur.RoleId).IsRequired();
 
-                b.HasIndex(r => new { r.UserId, r.RoleId }).IsUnique();
+                b.HasIndex(r => new { r.UserId, r.RoleId });
             });
 
             builder.Entity<IdentityUserLogin>(b =>
             {
                 b.ToTable("IdentityUserLogins");
 
-                b.HasIndex(l => new { l.UserId, l.LoginProvider, l.ProviderKey }).IsUnique();
+                b.HasIndex(l => new { l.UserId, l.LoginProvider, l.ProviderKey });
             });
 
             builder.Entity<IdentityUserToken>(b => 
             {
                 b.ToTable("IdentityUserTokens");
 
-                b.HasIndex(l => new { l.UserId, l.LoginProvider, l.Name }).IsUnique();
+                b.HasIndex(l => new { l.UserId, l.LoginProvider, l.Name });
             });
         }
     }

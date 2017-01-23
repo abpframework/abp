@@ -14,6 +14,13 @@ namespace Volo.Abp.EntityFrameworkCore
 
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            //TODO: Automatically configure ConcurrencyStamp
+        }
+
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
         {
             try
@@ -22,7 +29,6 @@ namespace Volo.Abp.EntityFrameworkCore
             }
             catch (DbUpdateConcurrencyException ex)
             {
-                //TODO: Better exception message using DbUpdateConcurrencyException
                 throw new AbpDbConcurrencyException(ex.Message, ex);
             }
         }
@@ -35,7 +41,6 @@ namespace Volo.Abp.EntityFrameworkCore
             }
             catch (DbUpdateConcurrencyException ex)
             {
-                //TODO: Better exception message using DbUpdateConcurrencyException
                 throw new AbpDbConcurrencyException(ex.Message, ex);
             }
         }

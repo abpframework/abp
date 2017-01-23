@@ -10,18 +10,28 @@ namespace AbpDesk.ConsoleDemo
     {
         public static void Main(string[] args)
         {
+            try
+            {
+                RunDemo();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR: " + ex.Message);
+                Console.ReadLine();
+            }
+        }
+
+        private static void RunDemo()
+        {
             var services = new ServiceCollection();
 
-            var application = services.AddApplication<AbpDeskConsoleDemoModule>(options =>
-            {
-                AddPlugIns(options);
-            });
+            var application = services.AddApplication<AbpDeskConsoleDemoModule>(options => { AddPlugIns(options); });
 
             using (var scope = services.BuildServiceProvider().CreateScope())
             {
                 application.Initialize(scope.ServiceProvider);
 
-                RunDemo(application);
+                RunListers(application);
 
                 Console.WriteLine("Press ENTER to run again...");
                 Console.ReadLine();
@@ -30,7 +40,7 @@ namespace AbpDesk.ConsoleDemo
             }
         }
 
-        private static void RunDemo(AbpApplication application)
+        private static void RunListers(AbpApplication application)
         {
             application
                 .ServiceProvider

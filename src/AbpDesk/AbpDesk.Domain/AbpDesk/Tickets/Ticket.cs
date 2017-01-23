@@ -5,7 +5,7 @@ using Volo.Abp.Domain.Entities;
 
 namespace AbpDesk.Tickets
 {
-    public class Ticket : AggregateRoot<int>
+    public class Ticket : AggregateRoot<int>, IHasConcurrencyStamp
     {
         public const int MaxTitleLength = 256;
 
@@ -17,6 +17,8 @@ namespace AbpDesk.Tickets
 
         [MaxLength(MaxBodyLength)]
         public string Body { get; set; }
+
+        public string ConcurrencyStamp { get; set; }
 
         protected Ticket()
         {

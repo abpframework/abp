@@ -33,7 +33,7 @@ namespace Volo.Abp.EntityFrameworkCore.DependencyInjection
                 }
                 else
                 {
-                    throw new AbpException("Should set a configure action for dbcontext"); //TODO: Better message
+                    throw new AbpException($"No configuration found for {typeof(DbContext).AssemblyQualifiedName}! Use services.Configure<AbpDbContextOptions>(...) to configure it.");
                 }
 
                 return context.DbContextOptions.Options;

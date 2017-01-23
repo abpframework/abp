@@ -11,6 +11,8 @@ namespace Volo.Abp.Uow
         [CanBeNull]
         IDatabaseApi FindDatabaseApi([NotNull] string id);
 
+        //TODO: Move Database API methods to another interface!
+
         [NotNull]
         IDatabaseApi GetOrAddDatabaseApi(string id, Func<IDatabaseApi> factory);
 

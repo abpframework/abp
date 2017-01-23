@@ -23,6 +23,7 @@ namespace AbpDesk.EntityFrameworkCore
             modelBuilder.Entity<Ticket>(builder =>
             {
                 builder.ToTable("DskTickets");
+                builder.Property(t => t.ConcurrencyStamp).IsConcurrencyToken();
             });
         }
     }

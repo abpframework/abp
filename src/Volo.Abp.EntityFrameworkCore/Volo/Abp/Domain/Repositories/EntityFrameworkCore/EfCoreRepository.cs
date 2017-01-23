@@ -93,7 +93,7 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
 
             if (entity is IHasConcurrencyStamp)
             {
-                (entity as IHasConcurrencyStamp).ConcurrencyStamp = Guid.NewGuid().ToString(); //TODO: Use IGuidGenerator!
+                (entity as IHasConcurrencyStamp).ConcurrencyStamp = Guid.NewGuid().ToString();
             }
 
             return DbContext.Update(entity).Entity;
