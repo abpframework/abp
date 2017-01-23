@@ -36,8 +36,6 @@ namespace Volo.Abp.Identity
             ErrorDescriber = describer ?? new IdentityErrorDescriber();
         }
 
-        private bool _disposed; //TODO: Remove!
-
         /// <summary>
         /// Gets or sets the <see cref="IdentityErrorDescriber"/> for any error that occurred with the current operation.
         /// </summary>
@@ -73,7 +71,6 @@ namespace Volo.Abp.Identity
         public virtual async Task<IdentityResult> CreateAsync([NotNull] IdentityRole role, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             Check.NotNull(role, nameof(role));
 
@@ -92,7 +89,6 @@ namespace Volo.Abp.Identity
         public virtual async Task<IdentityResult> UpdateAsync([NotNull] IdentityRole role, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             Check.NotNull(role, nameof(role));
 
@@ -120,7 +116,6 @@ namespace Volo.Abp.Identity
         public virtual async Task<IdentityResult> DeleteAsync([NotNull] IdentityRole role, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             Check.NotNull(role, nameof(role));
 
@@ -147,7 +142,6 @@ namespace Volo.Abp.Identity
         public Task<string> GetRoleIdAsync([NotNull] IdentityRole role, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             Check.NotNull(role, nameof(role));
 
@@ -163,7 +157,6 @@ namespace Volo.Abp.Identity
         public Task<string> GetRoleNameAsync([NotNull] IdentityRole role, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             Check.NotNull(role, nameof(role));
 
@@ -180,7 +173,6 @@ namespace Volo.Abp.Identity
         public Task SetRoleNameAsync([NotNull] IdentityRole role, string roleName, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             Check.NotNull(role, nameof(role));
 
@@ -197,7 +189,6 @@ namespace Volo.Abp.Identity
         public virtual Task<IdentityRole> FindByIdAsync(string id, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             return _roleRepository.FindAsync(Guid.Parse(id), cancellationToken);
         }
@@ -211,7 +202,6 @@ namespace Volo.Abp.Identity
         public virtual Task<IdentityRole> FindByNameAsync([NotNull] string normalizedName, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             Check.NotNull(normalizedName, nameof(normalizedName));
 
@@ -227,7 +217,6 @@ namespace Volo.Abp.Identity
         public virtual Task<string> GetNormalizedRoleNameAsync([NotNull] IdentityRole role, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             Check.NotNull(role, nameof(role));
 
@@ -244,7 +233,6 @@ namespace Volo.Abp.Identity
         public virtual Task SetNormalizedRoleNameAsync([NotNull] IdentityRole role, string normalizedName, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             Check.NotNull(role, nameof(role));
 
@@ -254,22 +242,10 @@ namespace Volo.Abp.Identity
         }
 
         /// <summary>
-        /// Throws if this class has been disposed.
-        /// </summary>
-        protected void ThrowIfDisposed()
-        {
-            if (_disposed)
-            {
-                throw new ObjectDisposedException(GetType().Name);
-            }
-        }
-
-        /// <summary>
         /// Dispose the stores
         /// </summary>
         public void Dispose()
         {
-            _disposed = true;
         }
 
         /// <summary>
@@ -281,7 +257,6 @@ namespace Volo.Abp.Identity
         public Task<IList<Claim>> GetClaimsAsync([NotNull] IdentityRole role, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             Check.NotNull(role, nameof(role));
 
@@ -298,7 +273,6 @@ namespace Volo.Abp.Identity
         public Task AddClaimAsync([NotNull] IdentityRole role, [NotNull] Claim claim, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             Check.NotNull(role, nameof(role));
             Check.NotNull(claim, nameof(claim));
@@ -317,8 +291,6 @@ namespace Volo.Abp.Identity
         /// <returns>The <see cref="Task"/> that represents the asynchronous operation.</returns>
         public Task RemoveClaimAsync([NotNull] IdentityRole role, [NotNull] Claim claim, CancellationToken cancellationToken = default(CancellationToken))
         {
-            ThrowIfDisposed();
-
             Check.NotNull(role, nameof(role));
             Check.NotNull(claim, nameof(claim));
 

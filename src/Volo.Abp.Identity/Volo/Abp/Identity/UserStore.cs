@@ -46,8 +46,6 @@ namespace Volo.Abp.Identity
         private readonly IIdentityUserRepository _userRepository;
         private readonly IUnitOfWorkManager _unitOfWorkManager;
 
-        private bool _disposed;
-
         public UserStore(
             IUnitOfWorkManager unitOfWorkManager,
             IIdentityUserRepository userRepository,
@@ -83,7 +81,6 @@ namespace Volo.Abp.Identity
         public virtual Task<string> GetUserIdAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             Check.NotNull(user, nameof(user));
 
@@ -99,7 +96,6 @@ namespace Volo.Abp.Identity
         public virtual Task<string> GetUserNameAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             Check.NotNull(user, nameof(user));
 
@@ -116,7 +112,6 @@ namespace Volo.Abp.Identity
         public virtual Task SetUserNameAsync([NotNull] IdentityUser user, string userName, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             Check.NotNull(user, nameof(user));
 
@@ -134,7 +129,6 @@ namespace Volo.Abp.Identity
         public virtual Task<string> GetNormalizedUserNameAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             Check.NotNull(user, nameof(user));
 
@@ -151,7 +145,6 @@ namespace Volo.Abp.Identity
         public virtual Task SetNormalizedUserNameAsync([NotNull] IdentityUser user, string normalizedName, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             Check.NotNull(user, nameof(user));
 
@@ -169,7 +162,6 @@ namespace Volo.Abp.Identity
         public virtual async Task<IdentityResult> CreateAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             Check.NotNull(user, nameof(user));
 
@@ -188,7 +180,6 @@ namespace Volo.Abp.Identity
         public virtual async Task<IdentityResult> UpdateAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             Check.NotNull(user, nameof(user));
 
@@ -215,7 +206,6 @@ namespace Volo.Abp.Identity
         public virtual async Task<IdentityResult> DeleteAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             Check.NotNull(user, nameof(user));
 
@@ -244,7 +234,6 @@ namespace Volo.Abp.Identity
         public virtual Task<IdentityUser> FindByIdAsync(string userId, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             return _userRepository.FindAsync(Guid.Parse(userId), cancellationToken);
         }
@@ -260,7 +249,6 @@ namespace Volo.Abp.Identity
         public virtual Task<IdentityUser> FindByNameAsync([NotNull] string normalizedUserName, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             Check.NotNull(normalizedUserName, nameof(normalizedUserName));
 
@@ -277,7 +265,6 @@ namespace Volo.Abp.Identity
         public virtual Task SetPasswordHashAsync([NotNull] IdentityUser user, string passwordHash, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             Check.NotNull(user, nameof(user));
 
@@ -295,7 +282,6 @@ namespace Volo.Abp.Identity
         public virtual Task<string> GetPasswordHashAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             Check.NotNull(user, nameof(user));
 
@@ -312,7 +298,6 @@ namespace Volo.Abp.Identity
         public virtual Task<bool> HasPasswordAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            //ThrowIfDisposed(); TODO: This was not exists in MS implementation, why?
 
             Check.NotNull(user, nameof(user));
 
@@ -329,7 +314,6 @@ namespace Volo.Abp.Identity
         public virtual async Task AddToRoleAsync([NotNull] IdentityUser user, [NotNull] string normalizedRoleName, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             Check.NotNull(user, nameof(user));
 
@@ -358,7 +342,6 @@ namespace Volo.Abp.Identity
         public virtual async Task RemoveFromRoleAsync([NotNull] IdentityUser user, [NotNull] string normalizedRoleName, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             Check.NotNull(user, nameof(user));
 
@@ -385,7 +368,6 @@ namespace Volo.Abp.Identity
         public virtual async Task<IList<string>> GetRolesAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             Check.NotNull(user, nameof(user));
 
@@ -403,7 +385,6 @@ namespace Volo.Abp.Identity
         public virtual async Task<bool> IsInRoleAsync([NotNull] IdentityUser user, [NotNull] string normalizedRoleName, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             Check.NotNull(user, nameof(user));
 
@@ -422,22 +403,11 @@ namespace Volo.Abp.Identity
         }
 
         /// <summary>
-        /// Throws if this class has been disposed.
-        /// </summary>
-        protected void ThrowIfDisposed()
-        {
-            if (_disposed)
-            {
-                throw new ObjectDisposedException(GetType().Name);
-            }
-        }
-
-        /// <summary>
         /// Dispose the store
         /// </summary>
         public void Dispose()
         {
-            _disposed = true; //TODO: Remove dispose code?
+            
         }
 
         /// <summary>
@@ -449,7 +419,6 @@ namespace Volo.Abp.Identity
         public virtual Task<IList<Claim>> GetClaimsAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             Check.NotNull(user, nameof(user));
 
@@ -466,7 +435,6 @@ namespace Volo.Abp.Identity
         public virtual Task AddClaimsAsync([NotNull] IdentityUser user, [NotNull] IEnumerable<Claim> claims, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             Check.NotNull(user, nameof(user));
             Check.NotNull(claims, nameof(claims));
@@ -487,7 +455,6 @@ namespace Volo.Abp.Identity
         public virtual Task ReplaceClaimAsync([NotNull] IdentityUser user, [NotNull] Claim claim, [NotNull] Claim newClaim, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             Check.NotNull(user, nameof(user));
             Check.NotNull(claim, nameof(claim));
@@ -508,7 +475,6 @@ namespace Volo.Abp.Identity
         public virtual Task RemoveClaimsAsync([NotNull] IdentityUser user, [NotNull] IEnumerable<Claim> claims, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             Check.NotNull(user, nameof(user));
             Check.NotNull(claims, nameof(claims));
@@ -528,7 +494,6 @@ namespace Volo.Abp.Identity
         public virtual Task AddLoginAsync([NotNull] IdentityUser user, [NotNull] UserLoginInfo login, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             Check.NotNull(user, nameof(user));
             Check.NotNull(login, nameof(login));
@@ -549,7 +514,6 @@ namespace Volo.Abp.Identity
         public virtual Task RemoveLoginAsync([NotNull] IdentityUser user, [NotNull] string loginProvider, [NotNull] string providerKey, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             Check.NotNull(user, nameof(user));
             Check.NotNull(loginProvider, nameof(loginProvider));
@@ -571,7 +535,6 @@ namespace Volo.Abp.Identity
         public virtual Task<IList<UserLoginInfo>> GetLoginsAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             Check.NotNull(user, nameof(user));
 
@@ -590,7 +553,6 @@ namespace Volo.Abp.Identity
         public virtual Task<IdentityUser> FindByLoginAsync([NotNull] string loginProvider, [NotNull] string providerKey, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             Check.NotNull(loginProvider, nameof(loginProvider));
             Check.NotNull(providerKey, nameof(providerKey));
@@ -611,7 +573,6 @@ namespace Volo.Abp.Identity
         public virtual Task<bool> GetEmailConfirmedAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             Check.NotNull(user, nameof(user));
 
@@ -628,7 +589,6 @@ namespace Volo.Abp.Identity
         public virtual Task SetEmailConfirmedAsync([NotNull] IdentityUser user, bool confirmed, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             Check.NotNull(user, nameof(user));
 
@@ -647,7 +607,6 @@ namespace Volo.Abp.Identity
         public virtual Task SetEmailAsync([NotNull] IdentityUser user, string email, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             Check.NotNull(user, nameof(user));
 
@@ -665,7 +624,6 @@ namespace Volo.Abp.Identity
         public virtual Task<string> GetEmailAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             Check.NotNull(user, nameof(user));
 
@@ -683,7 +641,6 @@ namespace Volo.Abp.Identity
         public virtual Task<string> GetNormalizedEmailAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             Check.NotNull(user, nameof(user));
 
@@ -700,7 +657,6 @@ namespace Volo.Abp.Identity
         public virtual Task SetNormalizedEmailAsync([NotNull] IdentityUser user, string normalizedEmail, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             Check.NotNull(user, nameof(user));
 
@@ -720,7 +676,6 @@ namespace Volo.Abp.Identity
         public virtual Task<IdentityUser> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             return _userRepository.FindByNormalizedEmailAsync(normalizedEmail, cancellationToken);
         }
@@ -738,7 +693,6 @@ namespace Volo.Abp.Identity
         public virtual Task<DateTimeOffset?> GetLockoutEndDateAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             Check.NotNull(user, nameof(user));
 
@@ -755,7 +709,6 @@ namespace Volo.Abp.Identity
         public virtual Task SetLockoutEndDateAsync([NotNull] IdentityUser user, DateTimeOffset? lockoutEnd, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             Check.NotNull(user, nameof(user));
 
@@ -773,7 +726,6 @@ namespace Volo.Abp.Identity
         public virtual Task<int> IncrementAccessFailedCountAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             Check.NotNull(user, nameof(user));
 
@@ -792,7 +744,6 @@ namespace Volo.Abp.Identity
         public virtual Task ResetAccessFailedCountAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             Check.NotNull(user, nameof(user));
 
@@ -810,7 +761,6 @@ namespace Volo.Abp.Identity
         public virtual Task<int> GetAccessFailedCountAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             Check.NotNull(user, nameof(user));
 
@@ -828,7 +778,6 @@ namespace Volo.Abp.Identity
         public virtual Task<bool> GetLockoutEnabledAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             Check.NotNull(user, nameof(user));
 
@@ -845,7 +794,6 @@ namespace Volo.Abp.Identity
         public virtual Task SetLockoutEnabledAsync([NotNull] IdentityUser user, bool enabled, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             Check.NotNull(user, nameof(user));
 
@@ -864,7 +812,6 @@ namespace Volo.Abp.Identity
         public virtual Task SetPhoneNumberAsync([NotNull] IdentityUser user, string phoneNumber, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             Check.NotNull(user, nameof(user));
 
@@ -882,7 +829,6 @@ namespace Volo.Abp.Identity
         public virtual Task<string> GetPhoneNumberAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             Check.NotNull(user, nameof(user));
 
@@ -901,7 +847,6 @@ namespace Volo.Abp.Identity
         public virtual Task<bool> GetPhoneNumberConfirmedAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             Check.NotNull(user, nameof(user));
 
@@ -918,7 +863,6 @@ namespace Volo.Abp.Identity
         public virtual Task SetPhoneNumberConfirmedAsync([NotNull] IdentityUser user, bool confirmed, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             Check.NotNull(user, nameof(user));
 
@@ -937,7 +881,6 @@ namespace Volo.Abp.Identity
         public virtual Task SetSecurityStampAsync([NotNull] IdentityUser user, string stamp, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             Check.NotNull(user, nameof(user));
 
@@ -955,7 +898,6 @@ namespace Volo.Abp.Identity
         public virtual Task<string> GetSecurityStampAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             Check.NotNull(user, nameof(user));
 
@@ -973,7 +915,6 @@ namespace Volo.Abp.Identity
         public virtual Task SetTwoFactorEnabledAsync([NotNull] IdentityUser user, bool enabled, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             Check.NotNull(user, nameof(user));
 
@@ -995,7 +936,6 @@ namespace Volo.Abp.Identity
         public virtual Task<bool> GetTwoFactorEnabledAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             Check.NotNull(user, nameof(user));
 
@@ -1013,7 +953,6 @@ namespace Volo.Abp.Identity
         public virtual Task<IList<IdentityUser>> GetUsersForClaimAsync([NotNull] Claim claim, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             Check.NotNull(claim, nameof(claim));
 
@@ -1031,7 +970,6 @@ namespace Volo.Abp.Identity
         public virtual Task<IList<IdentityUser>> GetUsersInRoleAsync([NotNull] string normalizedRoleName, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             if (string.IsNullOrEmpty(normalizedRoleName))
             {
@@ -1053,7 +991,6 @@ namespace Volo.Abp.Identity
         public virtual Task SetTokenAsync([NotNull] IdentityUser user, string loginProvider, string name, string value, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             Check.NotNull(user, nameof(user));
 
@@ -1073,7 +1010,6 @@ namespace Volo.Abp.Identity
         public Task RemoveTokenAsync(IdentityUser user, string loginProvider, string name, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             Check.NotNull(user, nameof(user));
 
@@ -1093,7 +1029,6 @@ namespace Volo.Abp.Identity
         public Task<string> GetTokenAsync(IdentityUser user, string loginProvider, string name, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
 
             Check.NotNull(user, nameof(user));
 
