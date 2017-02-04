@@ -11,7 +11,7 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
     {
         protected override string GetTenantIdOrNameFromHttpContextOrNull(ITenantResolveContext context, HttpContext httpContext)
         {
-            if (httpContext.Request.Headers.IsNullOrEmpty())
+            if (httpContext.Request == null || httpContext.Request.Headers.IsNullOrEmpty())
             {
                 return null;
             }

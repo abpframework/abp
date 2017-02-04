@@ -16,6 +16,11 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
 
         protected override string GetTenantIdOrNameFromHttpContextOrNull(ITenantResolveContext context, HttpContext httpContext)
         {
+            if (httpContext.Request?.Host == null)
+            {
+                return null;
+            }
+
             var hostName = httpContext.Request.Host.Host.RemovePreFix("http://", "https://");
             var extractResult = FormattedStringValueExtracter.Extract(hostName, _domainFormat, true);
 
