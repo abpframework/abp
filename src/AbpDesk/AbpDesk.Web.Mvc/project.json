@@ -54,7 +54,10 @@
   "publishOptions": {
     "include": [
       "wwwroot",
-      "web.config"
+      "Areas",
+      "Views",
+      "web.config",
+      "appsettings.json"
     ]
   },
 
