@@ -1,0 +1,21 @@
+version: '2'
+
+services:
+    abpdesk_web_1:
+        image: abpdesk/web
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Staging
+        ports:
+            - "9001:80"
+    abpdesk_web_2:
+        image: abpdesk/web
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Staging
+        ports:
+            - "9002:80"
+    load_balancer:
+        image: haproxy:1.7.1
+        volumes:
+            - "./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg"
+        ports:
+            - "9005:9005"

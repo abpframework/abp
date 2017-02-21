@@ -1,14 +1,30 @@
-$buildFolder = (Get-Item -Path ".\" -Verbose).FullName
-$outputFolder = Join-Path $buildFolder "outputs"
+# COMMON PATHS
 
+$buildFolder = (Get-Item -Path ".\" -Verbose).FullName
 $slnFolder = Join-Path $buildFolder "..\"
+$outputFolder = Join-Path $buildFolder "outputs"
 $abpDeskFolder = Join-Path $slnFolder "src/AbpDesk"
 $abpDeskWebFolder = Join-Path $abpDeskFolder "AbpDesk.Web.Mvc"
+
+# BUILD
 
 Set-Location $slnFolder
 dotnet restore
 
+# PUBLISH
+
 Set-Location $abpDeskWebFolder
 dotnet publish --output (Join-Path $outputFolder "AbpDesk/Web")
 
-Set-Location $buildFolder
+# CREATE DOCKER IMAGES
+
+Set-Location (Join-Path $outputFolder "AbpDesk/Web")
+
+docker rmi abpdesk/web -f
+docker build -t abpdesk/web .
+
+Copy-Item (Join-Path $slnFolder "/docker/*.*") $outputFolder
+
+# FINALIZE
+
+Set-Location $outputFolder

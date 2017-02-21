@@ -57,7 +57,9 @@
       "Areas",
       "Views",
       "web.config",
-      "appsettings.json"
+      "appsettings.json",
+      "appsettings.Staging.json",
+      "Dockerfile"
     ]
   },
 

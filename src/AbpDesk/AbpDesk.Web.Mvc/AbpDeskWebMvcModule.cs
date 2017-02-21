@@ -20,7 +20,7 @@ namespace AbpDesk.Web.Mvc
         public override void ConfigureServices(IServiceCollection services)
         {
             var hostingEnvironment = services.GetSingletonInstance<IHostingEnvironment>();
-            var configuration = BuildConfiguration(hostingEnvironment.ContentRootPath);
+            var configuration = BuildConfiguration(hostingEnvironment);
 
             AbpDeskDbConfigurer.Configure(services, configuration);
             
@@ -49,11 +49,12 @@ namespace AbpDesk.Web.Mvc
             });
         }
 
-        private static IConfigurationRoot BuildConfiguration(string basePath)
+        private static IConfigurationRoot BuildConfiguration(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
-                .SetBasePath(basePath)
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
 
             return builder.Build();
         }
