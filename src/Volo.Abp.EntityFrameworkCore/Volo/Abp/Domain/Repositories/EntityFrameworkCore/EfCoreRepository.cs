@@ -75,7 +75,7 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
             return savedEntity;
         }
 
-        public override async Task<TEntity> InsertAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = new CancellationToken())
+        public override async Task<TEntity> InsertAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default(CancellationToken))
         {
             var savedEntity = DbSet.Add(entity).Entity;
 

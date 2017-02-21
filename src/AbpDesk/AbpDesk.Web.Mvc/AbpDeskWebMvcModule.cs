@@ -1,20 +1,20 @@
 ﻿using AbpDesk.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Modularity;
 using Volo.Abp.AspNetCore.Mvc;
-using Volo.Abp.Data;
-using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 
 namespace AbpDesk.Web.Mvc
 {
-    [DependsOn(typeof(AbpAspNetCoreMvcModule), typeof(AbpDeskApplicationModule), typeof(AbpDeskEntityFrameworkCoreModule))]
+    [DependsOn(
+        typeof(AbpAspNetCoreMvcModule), 
+        typeof(AbpDeskApplicationModule), 
+        typeof(AbpDeskEntityFrameworkCoreModule))]
     public class AbpDeskWebMvcModule : AbpModule
     {
         public override void ConfigureServices(IServiceCollection services)

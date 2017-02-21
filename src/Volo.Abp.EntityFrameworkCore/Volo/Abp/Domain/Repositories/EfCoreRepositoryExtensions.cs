@@ -8,19 +8,19 @@ namespace Volo.Abp.Domain.Repositories
     public static class EfCoreRepositoryExtensions
     {
         public static DbContext GetDbContext<TEntity, TPrimaryKey>(this IRepository<TEntity, TPrimaryKey> repository)
-            where TEntity : class, IEntity<TPrimaryKey>, new()
+            where TEntity : class, IEntity<TPrimaryKey>
         {
             return repository.ToEfCoreRepository().DbContext;
         }
 
         public static DbSet<TEntity> GetDbSet<TEntity, TPrimaryKey>(this IRepository<TEntity, TPrimaryKey> repository)
-            where TEntity : class, IEntity<TPrimaryKey>, new()
+            where TEntity : class, IEntity<TPrimaryKey>
         {
             return repository.ToEfCoreRepository().DbSet;
         }
 
         public static IEfCoreRepository<TEntity, TPrimaryKey> ToEfCoreRepository<TEntity, TPrimaryKey>(this IRepository<TEntity, TPrimaryKey> repository)
-            where TEntity : class, IEntity<TPrimaryKey>, new()
+            where TEntity : class, IEntity<TPrimaryKey>
         {
             var efCoreRepository = repository as IEfCoreRepository<TEntity, TPrimaryKey>;
             if (efCoreRepository == null)
