@@ -6,6 +6,11 @@ $outputFolder = Join-Path $buildFolder "outputs"
 $abpDeskFolder = Join-Path $slnFolder "src/AbpDesk"
 $abpDeskWebFolder = Join-Path $abpDeskFolder "AbpDesk.Web.Mvc"
 
+# CLEAR
+
+Remove-Item $outputFolder -Force -Recurse
+New-Item -Path $outputFolder -ItemType Directory
+
 # BUILD
 
 Set-Location $slnFolder
