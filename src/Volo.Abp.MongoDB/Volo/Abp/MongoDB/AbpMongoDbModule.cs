@@ -9,8 +9,6 @@ namespace Volo.Abp.MongoDB
     {
         public override void ConfigureServices(IServiceCollection services)
         {
-            //TODO: ServiceCollection extensions to register mongodbcontext!
-
             services.TryAddTransient(typeof(IMongoDatabaseProvider<>), typeof(UnitOfWorkMongoDatabaseProvider<>));
             services.AddAssemblyOf<AbpMongoDbModule>();
         }

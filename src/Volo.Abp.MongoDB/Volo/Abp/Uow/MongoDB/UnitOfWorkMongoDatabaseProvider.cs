@@ -7,15 +7,19 @@ namespace Volo.Abp.Uow.MongoDB
     public class UnitOfWorkMongoDatabaseProvider<TMongoDbContext> : IMongoDatabaseProvider<TMongoDbContext>
         where TMongoDbContext : AbpMongoDbContext
     {
+        public TMongoDbContext DbContext { get; }
+        
         private readonly IUnitOfWorkManager _unitOfWorkManager;
         private readonly IConnectionStringResolver _connectionStringResolver;
 
         public UnitOfWorkMongoDatabaseProvider(
             IUnitOfWorkManager unitOfWorkManager,
-            IConnectionStringResolver connectionStringResolver)
+            IConnectionStringResolver connectionStringResolver,
+            TMongoDbContext dbContext)
         {
             _unitOfWorkManager = unitOfWorkManager;
             _connectionStringResolver = connectionStringResolver;
+            DbContext = dbContext;
         }
 
         public IMongoDatabase GetDatabase()

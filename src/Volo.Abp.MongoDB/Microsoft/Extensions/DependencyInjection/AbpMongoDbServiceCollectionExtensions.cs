@@ -1,5 +1,4 @@
 ﻿using System;
-using Volo.Abp.Domain.Repositories.MongoDB;
 using Volo.Abp.MongoDB;
 using Volo.Abp.MongoDB.DependencyInjection;
 
@@ -12,6 +11,8 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             var options = new MongoDbContextRegistrationOptions();
             optionsBuilder?.Invoke(options);
+
+            services.AddSingleton<TMongoDbContext>();
 
             new MongoDbRepositoryRegistrar(options)
                 .AddRepositories(services, typeof(TMongoDbContext));

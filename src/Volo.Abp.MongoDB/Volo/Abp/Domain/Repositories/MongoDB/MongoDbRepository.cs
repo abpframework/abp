@@ -23,10 +23,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
         where TMongoDbContext : AbpMongoDbContext
         where TEntity : class, IEntity<TPrimaryKey>
     {
-        public virtual string CollectionName
-        {
-            get { return typeof(TEntity).Name; } //TODO: a better naming, or a way of easily overriding it?
-        }
+        public virtual string CollectionName => DatabaseProvider.DbContext.GetCollectionName<TEntity>();
 
         public virtual IMongoCollection<TEntity> Collection => Database.GetCollection<TEntity>(CollectionName);
 

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Domain.Repositories.MongoDB;
 
@@ -15,7 +16,7 @@ namespace Volo.Abp.MongoDB.DependencyInjection
         protected override IEnumerable<Type> GetEntityTypes(Type dbContextType)
         {
             var mongoDbContext = (AbpMongoDbContext)Activator.CreateInstance(dbContextType);
-            return mongoDbContext.GetEntityCollectionTypes();
+            return mongoDbContext.GetMappings().Select(m => m.EntityType);
         }
 
         protected override Type GetRepositoryTypeForDefaultPk(Type dbContextType, Type entityType)
