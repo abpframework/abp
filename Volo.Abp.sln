@@ -79,7 +79,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docker-files", "docker-files", "{0BEA55D6-E0B8-40DD-A256-B34C4DD990A5}"
 	ProjectSection(SolutionItems) = preProject
 		docker\docker-compose.yml = docker\docker-compose.yml
+		docker\down.ps1 = docker\down.ps1
 		docker\haproxy.cfg = docker\haproxy.cfg
+		docker\up.ps1 = docker\up.ps1
 	EndProjectSection
 EndProject
 Global
