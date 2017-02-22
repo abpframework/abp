@@ -1,4 +1,4 @@
-﻿@using AbpDesk.Web.Mvc.Views.Shared.Components.Menu
+﻿@using Volo.Abp.Ui.Navigation
 @{
     Layout = null;
 }
@@ -13,7 +13,8 @@
 </head>
 <body>
 
-    @await Component.InvokeAsync(typeof(MenuViewComponent))
+    <!-- We should pass all optional parapeters because of a bug in MVC -->
+    <vc:menu menu-name="@StandardMenus.Main" view-name="Default"></vc:menu>
 
     @RenderBody()
 
