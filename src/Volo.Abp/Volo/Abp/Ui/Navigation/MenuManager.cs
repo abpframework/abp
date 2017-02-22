@@ -6,6 +6,7 @@ using Volo.DependencyInjection;
 
 namespace Volo.Abp.Ui.Navigation
 {
+    //TODO: We can move Navigation to a dedicated dll, or to a Volo.Abp.Ui dll.
     public class MenuManager : IMenuManager, ITransientDependency
     {
         private readonly NavigationOptions _options;
