@@ -7,7 +7,7 @@ namespace AbpDesk.Web.Mvc.Controllers
     {
         public IActionResult Index()
         {
-            return RedirectToAction("Index", "Tickets");
+            return View();
         }
     }
 }

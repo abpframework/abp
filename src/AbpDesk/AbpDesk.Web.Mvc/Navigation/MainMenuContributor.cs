@@ -14,11 +14,16 @@ namespace AbpDesk.Web.Mvc.Navigation
 
             context.Menu.DisplayName = "Main Menu";
 
-            context.Menu.AddItem(
-                new ApplicationMenuItem("TicketManagement", "Ticket Management")
-                    .AddItem(new ApplicationMenuItem("Administration.UserManagement", "User Management"))
-                    .AddItem(new ApplicationMenuItem("Administration.RoleManagement", "Role Management"))
-            );
+            context.Menu
+                .AddItem(
+                    new ApplicationMenuItem("Home", "Home", url: "/")
+                )
+                .AddItem(
+                    new ApplicationMenuItem("TicketManagement", "Ticket Management")
+                        .AddItem(
+                            new ApplicationMenuItem("TicketManagement.Tickets", "Tickets", url: "/Tickets")
+                        )
+                );
 
             return Task.CompletedTask;
         }

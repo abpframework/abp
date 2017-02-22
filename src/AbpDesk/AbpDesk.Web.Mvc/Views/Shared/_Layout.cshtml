@@ -1,5 +1,4 @@
-﻿@using AbpDesk.Web.Mvc.Views.Shared.Components
-@using AbpDesk.Web.Mvc.Views.Shared.Components.HorizontalMenu
+﻿@using AbpDesk.Web.Mvc.Views.Shared.Components.Menu
 @{
     Layout = null;
 }
@@ -14,7 +13,7 @@
 </head>
 <body>
 
-    @await Component.InvokeAsync(typeof(HorizontalMenuViewComponent))
+    @await Component.InvokeAsync(typeof(MenuViewComponent))
 
     @RenderBody()
 
