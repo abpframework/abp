@@ -2,13 +2,13 @@
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.UI.Navigation;
 
-namespace AbpDesk.Web.Mvc.Views.Shared.Components.Menu
+namespace Volo.Abp.AspNetCore.Mvc.Views.Shared.Components.Menu
 {
-    public class MenuViewComponent : ViewComponent
+    public class AbpMenuViewComponent : ViewComponent
     {
         private readonly IMenuManager _menuManager;
 
-        public MenuViewComponent(IMenuManager menuManager)
+        public AbpMenuViewComponent(IMenuManager menuManager)
         {
             _menuManager = menuManager;
         }

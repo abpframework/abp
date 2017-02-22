@@ -41,7 +41,7 @@ namespace AbpDesk.Web.Mvc
         {
             var app = context.GetApplicationBuilder();
 
-            context.GetLoggerFactory().AddConsole();
+            context.GetLoggerFactory().AddConsole().AddDebug();
 
             if (context.GetEnvironment().IsDevelopment())
             {

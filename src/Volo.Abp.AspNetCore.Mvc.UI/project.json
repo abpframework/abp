@@ -15,7 +15,7 @@
   "buildOptions": {
     "embed": {
       "include": [
-        "Views/AbpEmbeddedDemo/*.*"
+        "Views/**/*.*"
       ]
     }
   }
