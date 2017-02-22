@@ -8,6 +8,8 @@
 <html>
 <head>
     <title>title</title>
+    
+    <vc:abp-style-bundle name="GlobalStyles"></vc:abp-style-bundle>
 
     @RenderSection("styles", false)
 </head>
@@ -17,6 +19,8 @@
     <vc:abp-menu menu-name="@StandardMenus.Main" view-name="Default"></vc:abp-menu>
 
     @RenderBody()
+    
+    <vc:abp-script-bundle name="GlobalScripts"></vc:abp-script-bundle>
 
 </body>
 </html>

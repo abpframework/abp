@@ -1,0 +1,5 @@
+﻿@model List<string>
+@foreach (var styleFile in Model)
+{
+    <link rel="stylesheet" type="text/css" href="@styleFile" />
+}
