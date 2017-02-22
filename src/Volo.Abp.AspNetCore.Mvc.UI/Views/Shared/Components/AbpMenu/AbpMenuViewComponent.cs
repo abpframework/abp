@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.UI.Navigation;
 
-namespace Volo.Abp.AspNetCore.Mvc.Views.Shared.Components.Menu
+namespace Volo.Abp.AspNetCore.Mvc.Views.Shared.Components.AbpMenu
 {
     public class AbpMenuViewComponent : ViewComponent
     {
