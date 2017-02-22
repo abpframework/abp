@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Volo.Abp.Ui.Navigation;
+using Volo.Abp.UI.Navigation;
 
 namespace AbpDesk.Web.Mvc.Navigation
 {

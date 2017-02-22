@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Volo.Abp.Ui.Navigation;
+using Volo.Abp.UI.Navigation;
 
 namespace AbpDesk.Web.Mvc.Views.Shared.Components.Menu
 {

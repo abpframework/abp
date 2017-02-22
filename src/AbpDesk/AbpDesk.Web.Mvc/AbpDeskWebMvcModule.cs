@@ -9,7 +9,7 @@ using Volo.Abp;
 using Volo.Abp.AspNetCore.Modularity;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Modularity;
-using Volo.Abp.Ui.Navigation;
+using Volo.Abp.UI.Navigation;
 
 namespace AbpDesk.Web.Mvc
 {
