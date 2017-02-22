@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.EmbeddedFiles;
 using Volo.Abp.AspNetCore.Modularity;
-using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation;
 
@@ -16,7 +16,7 @@ namespace AbpDesk.Web.Mvc
 {
     [DependsOn(
         typeof(AbpAspNetCoreEmbeddedFilesModule),
-        typeof(AbpAspNetCoreMvcUiModule), 
+        typeof(AbpAspNetCoreMvcUiBootstrapModule), 
         typeof(AbpDeskApplicationModule), 
         typeof(AbpDeskEntityFrameworkCoreModule))]
     public class AbpDeskWebMvcModule : AbpModule

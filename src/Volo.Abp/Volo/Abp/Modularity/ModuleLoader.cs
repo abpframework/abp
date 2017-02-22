@@ -22,7 +22,9 @@ namespace Volo.Abp.Modularity
 
             FillModules(modules, services, startupModuleType, plugInSources);
             SetModuleDependencies(modules);
-            SortByDependency(modules, startupModuleType);
+
+            modules = SortByDependency(modules, startupModuleType);
+
             ConfigureServices(modules, services);
 
             return modules.ToArray();
@@ -58,11 +60,12 @@ namespace Volo.Abp.Modularity
             }
         }
         
-        protected virtual void SortByDependency(List<AbpModuleDescriptor> modules, Type startupModuleType)
+        protected virtual List<AbpModuleDescriptor> SortByDependency(List<AbpModuleDescriptor> modules, Type startupModuleType)
         {
-            modules.SortByDependencies(m => m.Dependencies);
-            modules.MoveItem(m => m.Type == typeof(AbpKernelModule), 0);
-            modules.MoveItem(m => m.Type == startupModuleType, modules.Count - 1);
+            var sortedModules = modules.SortByDependencies(m => m.Dependencies);
+            sortedModules.MoveItem(m => m.Type == typeof(AbpKernelModule), 0);
+            sortedModules.MoveItem(m => m.Type == startupModuleType, modules.Count - 1);
+            return sortedModules;
         }
 
         protected virtual AbpModuleDescriptor CreateModuleDescriptor(IServiceCollection services, Type moduleType)

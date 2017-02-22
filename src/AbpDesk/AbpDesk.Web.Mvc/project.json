@@ -24,7 +24,7 @@
     "Volo.Abp.AspNetCore.Mvc": "1.0.0-*",
     "AbpDesk.EntityFrameworkCore": "1.0.0-*",
     "AbpDesk.Application": "1.0.0-*",
-    "Volo.Abp.AspNetCore.Mvc.UI": "1.0.0-*",
+    "Volo.Abp.AspNetCore.Mvc.UI.Bootstrap": "1.0.0-*",
     "Volo.Abp.AspNetCore.EmbeddedFiles": "1.0.0-*"
   },
 
