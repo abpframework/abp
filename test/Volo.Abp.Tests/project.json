@@ -17,5 +17,13 @@
         }
       }
     }
+  },
+
+  "buildOptions": {
+    "embed": {
+      "include": [
+        "Volo/Abp/EmbeddedFiles/MyResources/js/*.js"
+      ]
+    }
   }
 }

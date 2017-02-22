@@ -1,0 +1,14 @@
+﻿{
+  "dependencies": {
+    "Volo.Abp.AspNetCore.Mvc": "1.0.0-*"
+  },
+
+  "tools": {
+  },
+
+  "frameworks": {
+    "netstandard1.6": {
+      "imports": "dnxcore50"
+    }
+  }
+}
