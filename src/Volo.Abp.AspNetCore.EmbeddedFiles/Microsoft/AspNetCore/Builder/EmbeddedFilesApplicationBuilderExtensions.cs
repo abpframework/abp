@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
-using Volo.Abp.AspNetCore.EmbeddedFiles;
+﻿using Volo.Abp.AspNetCore.EmbeddedFiles;
 
-namespace Volo.Abp.AspNetCore.Microsoft.AspNetCore.Builder
+namespace Microsoft.AspNetCore.Builder
 {
     public static class EmbeddedFilesApplicationBuilderExtensions
     {
@@ -21,6 +16,5 @@ namespace Volo.Abp.AspNetCore.Microsoft.AspNetCore.Builder
                 }
             );
         }
-
     }
 }

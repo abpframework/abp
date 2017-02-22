@@ -10,5 +10,13 @@
     "netstandard1.6": {
       "imports": "dnxcore50"
     }
+  },
+
+  "buildOptions": {
+    "embed": {
+      "include": [
+        "Views/AbpEmbeddedDemo/*.*"
+      ]
+    }
   }
 }

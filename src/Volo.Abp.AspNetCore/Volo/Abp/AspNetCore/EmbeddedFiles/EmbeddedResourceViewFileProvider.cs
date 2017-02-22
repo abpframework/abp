@@ -1,11 +1,12 @@
 ﻿using System;
 using Volo.Abp.EmbeddedFiles;
+using Volo.DependencyInjection;
 
 namespace Volo.Abp.AspNetCore.EmbeddedFiles
 {
     public class EmbeddedResourceViewFileProvider : EmbeddedResourceFileProvider
     {
-        public EmbeddedResourceViewFileProvider(IServiceProvider serviceProvider) 
+        public EmbeddedResourceViewFileProvider(IObjectAccessor<IServiceProvider> serviceProvider) 
             : base(serviceProvider)
         {
         }

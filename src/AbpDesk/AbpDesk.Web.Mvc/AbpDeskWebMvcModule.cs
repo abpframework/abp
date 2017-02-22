@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Volo.Abp;
+using Volo.Abp.AspNetCore.EmbeddedFiles;
 using Volo.Abp.AspNetCore.Modularity;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Modularity;
@@ -14,7 +15,8 @@ using Volo.Abp.UI.Navigation;
 namespace AbpDesk.Web.Mvc
 {
     [DependsOn(
-        typeof(AbpAspNetCoreMvcModule), 
+        typeof(AbpAspNetCoreEmbeddedFilesModule),
+        typeof(AbpAspNetCoreMvcUiModule), 
         typeof(AbpDeskApplicationModule), 
         typeof(AbpDeskEntityFrameworkCoreModule))]
     public class AbpDeskWebMvcModule : AbpModule
@@ -47,6 +49,7 @@ namespace AbpDesk.Web.Mvc
             }
 
             app.UseStaticFiles();
+            app.UseEmbeddedFiles();
 
             app.UseMvc(routes =>
             {

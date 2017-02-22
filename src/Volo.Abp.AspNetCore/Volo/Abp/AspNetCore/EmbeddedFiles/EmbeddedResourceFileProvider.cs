@@ -4,6 +4,7 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using Volo.Abp.EmbeddedFiles;
+using Volo.DependencyInjection;
 
 namespace Volo.Abp.AspNetCore.EmbeddedFiles
 {
@@ -13,14 +14,20 @@ namespace Volo.Abp.AspNetCore.EmbeddedFiles
         private readonly Lazy<AspNetCoreEmbeddedFileOptions> _options;
 
         public EmbeddedResourceFileProvider(IServiceProvider serviceProvider)
+            : this(new ObjectAccessor<IServiceProvider>(serviceProvider))
+        {
+            
+        }
+
+        public EmbeddedResourceFileProvider(IObjectAccessor<IServiceProvider> serviceProvider)
         {
             _embeddedResourceManager = new Lazy<IEmbeddedFileManager>(
-                () => serviceProvider.GetRequiredService<IEmbeddedFileManager>(),
+                () => serviceProvider.Value.GetRequiredService<IEmbeddedFileManager>(),
                 true
             );
 
             _options = new Lazy<AspNetCoreEmbeddedFileOptions>(
-                () => serviceProvider.GetRequiredService<IOptions<AspNetCoreEmbeddedFileOptions>>().Value,
+                () => serviceProvider.Value.GetRequiredService<IOptions<AspNetCoreEmbeddedFileOptions>>().Value,
                 true
             );
         }
