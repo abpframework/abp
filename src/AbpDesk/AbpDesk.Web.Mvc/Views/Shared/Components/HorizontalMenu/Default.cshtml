@@ -1,0 +1,22 @@
+﻿@using System.Threading.Tasks
+@model Volo.Abp.Ui.Navigation.ApplicationMenu
+<h2>@Model.DisplayName</h2>
+<ul>
+    @foreach (var menuItem in Model.Items)
+    {
+        <li>
+            <a href="@menuItem.Url">@menuItem.DisplayName</a>
+            @if (menuItem.Items.Any())
+            {
+                <ul>
+                    @foreach (var childMenuItem in menuItem.Items)
+                    {
+                        <li>
+                            <a href="@childMenuItem.Url">@childMenuItem.DisplayName</a>
+                        </li>
+                    }
+                </ul>
+            }
+        </li>
+    }
+</ul>

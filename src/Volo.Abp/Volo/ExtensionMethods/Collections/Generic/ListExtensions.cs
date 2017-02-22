@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using JetBrains.Annotations;
 
 namespace Volo.ExtensionMethods.Collections.Generic
 {
@@ -24,6 +26,22 @@ namespace Volo.ExtensionMethods.Collections.Generic
             var item = source[currentIndex];
             source.RemoveAt(currentIndex);
             source.Insert(targetIndex, item);
+        }
+
+        [NotNull]
+        public static T GetOrAdd<T>([NotNull] this IList<T> source, Func<T, bool> selector, Func<T> factory)
+        {
+            Check.NotNull(source, nameof(source));
+
+            var item = source.FirstOrDefault(selector);
+
+            if (item == null)
+            {
+                item = factory();
+                source.Add(item);
+            }
+
+            return item;
         }
 
         /// <summary>

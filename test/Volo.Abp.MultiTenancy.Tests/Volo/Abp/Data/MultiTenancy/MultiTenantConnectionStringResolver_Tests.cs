@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Options;
 using Shouldly;
-using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.MultiTenancy.ConfigurationStore;
-using Volo.ExtensionMethods.Collections.Generic;
 using Xunit;
 
 namespace Volo.Abp.Data.MultiTenancy

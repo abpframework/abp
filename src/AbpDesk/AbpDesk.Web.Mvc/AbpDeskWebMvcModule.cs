@@ -1,4 +1,5 @@
 ﻿using AbpDesk.EntityFrameworkCore;
+using AbpDesk.Web.Mvc.Navigation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -8,6 +9,7 @@ using Volo.Abp;
 using Volo.Abp.AspNetCore.Modularity;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Modularity;
+using Volo.Abp.Ui.Navigation;
 
 namespace AbpDesk.Web.Mvc
 {
@@ -23,7 +25,12 @@ namespace AbpDesk.Web.Mvc
             var configuration = BuildConfiguration(hostingEnvironment);
 
             AbpDeskDbConfigurer.Configure(services, configuration);
-            
+
+            services.Configure<NavigationOptions>(options =>
+            {
+                options.MenuContributors.Add(new MainMenuContributor());
+            });
+
             services.AddMvc();
             services.AddAssemblyOf<AbpDeskWebMvcModule>();
         }
