@@ -1,0 +1,23 @@
+﻿{
+  "dependencies": {
+    "Volo.Abp.AspNetCore.Mvc": "1.0.0-*",
+    "Volo.Abp.Identity.Application.Contracts": "1.0.0-*"
+  },
+
+  "tools": {
+  },
+
+  "frameworks": {
+    "netstandard1.6": {
+      "imports": "dnxcore50"
+    }
+  },
+
+  "buildOptions": {
+    "embed": {
+      "include": [
+        "Views/**/*.*"
+      ]
+    }
+  }
+}

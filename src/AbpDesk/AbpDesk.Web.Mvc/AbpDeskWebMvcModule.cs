@@ -10,6 +10,7 @@ using Volo.Abp.AspNetCore.EmbeddedFiles;
 using Volo.Abp.AspNetCore.Modularity;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.Identity;
+using Volo.Abp.Identity.Web;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation;
 
@@ -20,7 +21,8 @@ namespace AbpDesk.Web.Mvc
         typeof(AbpAspNetCoreMvcUiBootstrapModule), 
         typeof(AbpDeskApplicationModule), 
         typeof(AbpDeskEntityFrameworkCoreModule),
-        typeof(AbpIdentityHttpProxyModule)
+        typeof(AbpIdentityHttpProxyModule),
+        typeof(AbpIdentityWebModule)
         )]
     public class AbpDeskWebMvcModule : AbpModule
     {

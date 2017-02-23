@@ -1,11 +1,10 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc;
-using Volo.Abp.Identity;
 
-namespace AbpDesk.Web.Mvc.Controllers
+namespace Volo.Abp.Identity.Web.Controllers
 {
-    //TODO: Move to Volo.Abp.Identity.AspNetCore.Mvc or a similar module as a seperated area!
+    //TODO: to a seperated area, named Identity!
     public class UsersController : AbpController
     {
         private readonly IUserAppService _userAppService;

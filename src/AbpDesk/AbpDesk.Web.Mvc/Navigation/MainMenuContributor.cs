@@ -14,13 +14,9 @@ namespace AbpDesk.Web.Mvc.Navigation
 
             context.Menu.DisplayName = "Main Menu";
 
+            context.Menu.Items.Insert(0, new ApplicationMenuItem("Home", "Home", url: "/"));
+
             context.Menu
-                .AddItem(
-                    new ApplicationMenuItem("Home", "Home", url: "/")
-                )
-                .AddItem(
-                    new ApplicationMenuItem("Users", "Users", url: "/Users")
-                )
                 .AddItem(
                     new ApplicationMenuItem("TicketManagement", "Ticket Management")
                         .AddItem(

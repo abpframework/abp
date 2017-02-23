@@ -26,7 +26,8 @@
     "AbpDesk.Application": "1.0.0-*",
     "Volo.Abp.AspNetCore.Mvc.UI.Bootstrap": "1.0.0-*",
     "Volo.Abp.AspNetCore.EmbeddedFiles": "1.0.0-*",
-    "Volo.Abp.Identity.HttpProxy": "1.0.0-*"
+    "Volo.Abp.Identity.HttpProxy": "1.0.0-*",
+    "Volo.Abp.Identity.Web": "1.0.0-*"
   },
 
   "tools": {

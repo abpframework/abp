@@ -102,6 +102,8 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Volo.Abp.Identity.HttpApi.H
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Volo.Abp.Identity.HttpProxy", "src\Volo.Abp.Identity.HttpProxy\Volo.Abp.Identity.HttpProxy.xproj", "{00B240B6-EC44-461A-9578-EF4F1BE9C688}"
 EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Volo.Abp.Identity.Web", "src\Volo.Abp.Identity.Web\Volo.Abp.Identity.Web.xproj", "{17B14A48-5248-4F4C-A8E6-6926AA94EB7C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -244,6 +246,10 @@ Global
 		{00B240B6-EC44-461A-9578-EF4F1BE9C688}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{00B240B6-EC44-461A-9578-EF4F1BE9C688}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{00B240B6-EC44-461A-9578-EF4F1BE9C688}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17B14A48-5248-4F4C-A8E6-6926AA94EB7C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17B14A48-5248-4F4C-A8E6-6926AA94EB7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17B14A48-5248-4F4C-A8E6-6926AA94EB7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17B14A48-5248-4F4C-A8E6-6926AA94EB7C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -291,5 +297,6 @@ Global
 		{57FCA6CB-9D99-411E-8ABF-20ACFBD61D61} = {1895A5C9-50D4-4568-9A3A-14657E615A5E}
 		{EB902D57-C047-4CDF-828B-FDC204AC7398} = {1895A5C9-50D4-4568-9A3A-14657E615A5E}
 		{00B240B6-EC44-461A-9578-EF4F1BE9C688} = {1895A5C9-50D4-4568-9A3A-14657E615A5E}
+		{17B14A48-5248-4F4C-A8E6-6926AA94EB7C} = {1895A5C9-50D4-4568-9A3A-14657E615A5E}
 	EndGlobalSection
 EndGlobal
