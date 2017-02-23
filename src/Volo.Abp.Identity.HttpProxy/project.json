@@ -2,8 +2,8 @@
   "version": "1.0.0-*",
 
   "dependencies": {
-    "Microsoft.AspNetCore.Identity": "1.1.0",
-    "Volo.Abp": "1.0.0-*"
+    "Volo.Abp.Identity.Application.Contracts": "1.0.0-*",
+    "System.Net.Http": "4.3.1"
   },
 
   "frameworks": {

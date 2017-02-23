@@ -19,6 +19,9 @@ namespace AbpDesk.Web.Mvc.Navigation
                     new ApplicationMenuItem("Home", "Home", url: "/")
                 )
                 .AddItem(
+                    new ApplicationMenuItem("Users", "Users", url: "/Users")
+                )
+                .AddItem(
                     new ApplicationMenuItem("TicketManagement", "Ticket Management")
                         .AddItem(
                             new ApplicationMenuItem("TicketManagement.Tickets", "Tickets", url: "/Tickets")

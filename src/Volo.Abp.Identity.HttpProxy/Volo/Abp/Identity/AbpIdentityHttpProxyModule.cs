@@ -3,12 +3,12 @@ using Volo.Abp.Modularity;
 
 namespace Volo.Abp.Identity
 {
-    [DependsOn(typeof(AbpIdentityModule), typeof(AbpIdentityApplicationContractsModule))]
-    public class AbpIdentityApplicationModule : AbpModule
+    [DependsOn(typeof(AbpIdentityApplicationContractsModule))]
+    public class AbpIdentityHttpProxyModule : AbpModule
     {
         public override void ConfigureServices(IServiceCollection services)
         {
-            services.AddAssemblyOf<AbpIdentityApplicationModule>();
+            services.AddAssemblyOf<AbpIdentityHttpProxyModule>();
         }
     }
 }

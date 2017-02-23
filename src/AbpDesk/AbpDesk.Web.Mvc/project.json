@@ -12,7 +12,6 @@
     "Microsoft.AspNetCore.StaticFiles": "1.1.0",
     "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.1.0",
     "Microsoft.Extensions.Configuration.Json": "1.1.0",
-
     "AbpDesk.Application.Contracts": "1.0.0-*",
     "Microsoft.EntityFrameworkCore.Tools": {
       "type": "build",
@@ -26,7 +25,8 @@
     "AbpDesk.EntityFrameworkCore": "1.0.0-*",
     "AbpDesk.Application": "1.0.0-*",
     "Volo.Abp.AspNetCore.Mvc.UI.Bootstrap": "1.0.0-*",
-    "Volo.Abp.AspNetCore.EmbeddedFiles": "1.0.0-*"
+    "Volo.Abp.AspNetCore.EmbeddedFiles": "1.0.0-*",
+    "Volo.Abp.Identity.HttpProxy": "1.0.0-*"
   },
 
   "tools": {

@@ -1,0 +1,12 @@
+﻿@model List<Volo.Abp.Identity.IdentityUserDto>
+
+<h2>Users</h2>
+
+<ul class="ticket-list">
+    @foreach (var user in Model)
+    {
+        <li data-entity-id="@user.Id">
+            @user.UserName / @user.Email
+        </li>
+    }
+</ul>

@@ -9,6 +9,7 @@ using Volo.Abp;
 using Volo.Abp.AspNetCore.EmbeddedFiles;
 using Volo.Abp.AspNetCore.Modularity;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
+using Volo.Abp.Identity;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation;
 
@@ -18,7 +19,9 @@ namespace AbpDesk.Web.Mvc
         typeof(AbpAspNetCoreEmbeddedFilesModule),
         typeof(AbpAspNetCoreMvcUiBootstrapModule), 
         typeof(AbpDeskApplicationModule), 
-        typeof(AbpDeskEntityFrameworkCoreModule))]
+        typeof(AbpDeskEntityFrameworkCoreModule),
+        typeof(AbpIdentityHttpProxyModule)
+        )]
     public class AbpDeskWebMvcModule : AbpModule
     {
         public override void ConfigureServices(IServiceCollection services)
@@ -32,6 +35,8 @@ namespace AbpDesk.Web.Mvc
             {
                 options.MenuContributors.Add(new MainMenuContributor());
             });
+
+            services.Configure<AbpIdentityHttpProxyOptions>(configuration.GetSection("AbpIdentity:HttpProxy"));
 
             services.AddMvc();
             services.AddAssemblyOf<AbpDeskWebMvcModule>();
