@@ -1,22 +1,39 @@
 ﻿@using System.Threading.Tasks
 @model Volo.Abp.UI.Navigation.ApplicationMenu
-<h2>@Model.DisplayName (BOOTSTRAP)</h2>
-<ul>
-    @foreach (var menuItem in Model.Items)
-    {
-        <li>
-            <a href="@menuItem.Url">@menuItem.DisplayName</a>
-            @if (menuItem.Items.Any())
+<nav class="navbar navbar-toggleable-md navbar-inverse bg-inverse fixed-top">
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <a class="navbar-brand" href="#"><i>Project</i>Name</a>
+    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
+
+            @foreach (var menuItem in Model.Items)
             {
-                <ul>
-                    @foreach (var childMenuItem in menuItem.Items)
-                    {
-                        <li>
-                            <a href="@childMenuItem.Url">@childMenuItem.DisplayName</a>
-                        </li>
-                    }
-                </ul>
+                if (menuItem.IsLeaf)
+                {
+                    <li class="nav-item @(menuItem.IsDisabled ? "disabled" : "")">
+                        <!-- active -->
+                        <a class="nav-link" href="@(menuItem.Url ?? "#")">@menuItem.DisplayName</a> @*<span class="sr-only">(current)</span>*@
+                    </li>
+                }
+                else
+                {
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="Menu_@(menuItem.Name)" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">@menuItem.DisplayName</a>
+                        <div class="dropdown-menu" aria-labelledby="Menu_@(menuItem.Name)">
+                            @foreach (var childMenuItem in menuItem.Items)
+                            {
+                                <a class="dropdown-item" href="@(childMenuItem.Url ?? "#")">@childMenuItem.DisplayName</a>
+                            }
+                        </div>
+                    </li>
+                }
             }
-        </li>
-    }
-</ul>
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="text" placeholder="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+    </div>
+</nav>

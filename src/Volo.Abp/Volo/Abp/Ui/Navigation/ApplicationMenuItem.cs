@@ -62,6 +62,11 @@ namespace Volo.Abp.UI.Navigation
         [CanBeNull]
         public string Target { get; set; }
 
+        /// <summary>
+        /// Can be used to disable this menu item.
+        /// </summary>
+        public bool IsDisabled { get; set; }
+        
         /// <inheritdoc cref="IHasMenuItems.Items"/>
         [NotNull]
         public IList<ApplicationMenuItem> Items { get; }

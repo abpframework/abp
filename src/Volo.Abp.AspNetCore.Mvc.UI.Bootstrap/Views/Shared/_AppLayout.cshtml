@@ -5,11 +5,16 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
 <head>
-    <title>title</title>
-    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Fixed top navbar example for Bootstrap</title>
+
     <vc:abp-style-bundle name="GlobalStyles"></vc:abp-style-bundle>
+    
+    <link rel="stylesheet" type="text/css" href="~/Views/Shared/_AppLayout.css"/>
 
     @RenderSection("styles", false)
 </head>
@@ -18,8 +23,10 @@
     <!-- We should pass all optional parapeters because of a bug in MVC -->
     <vc:abp-menu menu-name="@StandardMenus.Main" view-name="Default"></vc:abp-menu>
 
-    @RenderBody()
-    
+    <div class="container">
+        @RenderBody()
+    </div>
+
     <vc:abp-script-bundle name="GlobalScripts"></vc:abp-script-bundle>
 
 </body>
