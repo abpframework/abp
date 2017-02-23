@@ -36,12 +36,14 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap
             {
                 options.StyleBundles.Add("GlobalStyles", new[]
                 {
-                    "/libs/bootstrap/css/bootstrap.css"
+                    "/libs/bootstrap/css/bootstrap.min.css"
                 });
 
                 options.ScriptBundles.Add("GlobalScripts", new[]
                 {
-                    "/libs/bootstrap/js/bootstrap.js"
+                    "/libs/jquery/jquery-3.1.1.min.js",
+                    "/libs/tether/js/tether.min.js",
+                    "/libs/bootstrap/js/bootstrap.min.js"
                 });
             });
         }

@@ -26,12 +26,12 @@ namespace Volo.Abp.EmbeddedFiles
         /// <inheritdoc/>
         public EmbeddedFileInfo FindFile(string fullPath)
         {
-            return _resources.Value.GetOrDefault(fullPath);
+            return _resources.Value.GetOrDefault(EmbeddedFilePathHelper.NormalizePath(fullPath));
         }
 
         private Dictionary<string, EmbeddedFileInfo> CreateResourcesDictionary()
         {
-            var resources = new Dictionary<string, EmbeddedFileInfo>();
+            var resources = new Dictionary<string, EmbeddedFileInfo>(StringComparer.OrdinalIgnoreCase);
 
             foreach (var source in _options.Sources)
             {
