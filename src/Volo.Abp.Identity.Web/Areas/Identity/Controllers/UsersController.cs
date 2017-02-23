@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc;
 
-namespace Volo.Abp.Identity.Web.Controllers
+namespace Volo.Abp.Identity.Web.Areas.Identity.Controllers
 {
-    //TODO: to a seperated area, named Identity!
+    [Area("Identity")]
     public class UsersController : AbpController
     {
         private readonly IUserAppService _userAppService;

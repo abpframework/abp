@@ -16,7 +16,7 @@
   "buildOptions": {
     "embed": {
       "include": [
-        "Views/**/*.*"
+        "Areas/**/*.*"
       ]
     }
   }

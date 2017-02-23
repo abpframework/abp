@@ -23,9 +23,9 @@ namespace Volo.Abp.Identity.Web
             {
                 options.Sources.Add(
                     new EmbeddedFileSet(
-                        "/Views/",
+                        "/Areas/",
                         GetType().GetTypeInfo().Assembly,
-                        "Volo.Abp.Identity.Web.Views"
+                        "Volo.Abp.Identity.Web.Areas"
                         )
                     );
             });
