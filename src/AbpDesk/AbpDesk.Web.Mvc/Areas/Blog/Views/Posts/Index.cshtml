@@ -1,0 +1,24 @@
+﻿@model List<AbpDesk.Blogging.BlogPost>
+
+<h2>Blog Posts</h2>
+
+<ul>
+    @foreach (var post in Model)
+    {
+        <h3>@post.Title</h3>
+        <p>@post.Body</p>
+        if (!post.Comments.Any())
+        {
+            <p><em>No comment yet!</em></p>
+        }
+        else
+        {
+            <h4>Comments</h4>
+            foreach (var comment in post.Comments)
+            {
+                <h5>@comment.Name</h5>
+                    <p>@comment.Message</p>
+            }
+        }
+    }
+</ul>

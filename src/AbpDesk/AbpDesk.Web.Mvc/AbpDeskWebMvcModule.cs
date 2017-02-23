@@ -1,4 +1,5 @@
-﻿using AbpDesk.EntityFrameworkCore;
+﻿using AbpDesk.Blogging;
+using AbpDesk.EntityFrameworkCore;
 using AbpDesk.Web.Mvc.Navigation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -22,7 +23,8 @@ namespace AbpDesk.Web.Mvc
         typeof(AbpDeskApplicationModule), 
         typeof(AbpDeskEntityFrameworkCoreModule),
         typeof(AbpIdentityHttpProxyModule),
-        typeof(AbpIdentityWebModule)
+        typeof(AbpIdentityWebModule),
+        typeof(AbpDeskMongoBlogModule)
         )]
     public class AbpDeskWebMvcModule : AbpModule
     {

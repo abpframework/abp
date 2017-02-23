@@ -6,6 +6,8 @@ using Volo.Abp.Uow;
 
 namespace Volo.Abp.Identity
 {
+    //TODO: Consider a way of passing cancellation token to all async application service methods!
+
     public class UserAppService : IUserAppService
     {
         private readonly IIdentityUserRepository _userRepository;
