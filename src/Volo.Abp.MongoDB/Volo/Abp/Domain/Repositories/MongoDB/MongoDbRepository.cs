@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
@@ -37,6 +38,11 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
         }
 
         //TODO: Override other methods?
+
+        public override async Task<List<TEntity>> GetListAsync(CancellationToken cancellationToken = new CancellationToken())
+        {
+            return await (await Collection.FindAsync(Builders<TEntity>.Filter.Empty, cancellationToken: cancellationToken)).ToListAsync(cancellationToken);
+        }
 
         public override async Task<TEntity> GetAsync(TPrimaryKey id, CancellationToken cancellationToken = default(CancellationToken))
         {

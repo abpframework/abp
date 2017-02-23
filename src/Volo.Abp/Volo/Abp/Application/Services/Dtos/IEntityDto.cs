@@ -1,12 +1,14 @@
-﻿namespace Volo.Abp.Application.Services.Dtos
-{
-    ///// <summary>
-    ///// A shortcut of <see cref="IEntityDto{TPrimaryKey}"/> for most used primary key type (<see cref="int"/>).
-    ///// </summary>
-    //public interface IEntityDto : IEntityDto<int>
-    //{
+﻿using System;
 
-    //}
+namespace Volo.Abp.Application.Services.Dtos
+{
+    /// <summary>
+    /// A shortcut of <see cref="IEntityDto{TPrimaryKey}"/> for default primary key type (<see cref="Guid"/>).
+    /// </summary>
+    public interface IEntityDto : IEntityDto<Guid>
+    {
+
+    }
 
     /// <summary>
     /// Defines common properties for entity based DTOs.

@@ -36,6 +36,11 @@ namespace Volo.Abp.Domain.Repositories
 
         protected abstract IQueryable<TEntity> GetQueryable();
 
+        public override List<TEntity> GetList()
+        {
+            return GetQueryable().ToList();
+        }
+
         public override TEntity Find(TPrimaryKey id)
         {
             return GetQueryable().FirstOrDefault(CreateEqualityExpressionForId(id));

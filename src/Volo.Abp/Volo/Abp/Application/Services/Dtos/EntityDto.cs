@@ -1,5 +1,28 @@
+using System;
+
 namespace Volo.Abp.Application.Services.Dtos
 {
+    public class EntityDto : EntityDto<Guid>, IEntityDto
+    {
+        /// <summary>
+        /// Creates a new <see cref="EntityDto"/> object.
+        /// </summary>
+        public EntityDto()
+        {
+
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="EntityDto"/> object.
+        /// </summary>
+        /// <param name="id">Id of the entity</param>
+        public EntityDto(Guid id)
+            : base(id)
+        {
+
+        }
+    }
+
     /// <summary>
     /// Implements common properties for entity based DTOs.
     /// </summary>

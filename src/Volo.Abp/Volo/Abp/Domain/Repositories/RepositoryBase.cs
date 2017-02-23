@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,6 +16,13 @@ namespace Volo.Abp.Domain.Repositories
     public abstract class RepositoryBase<TEntity, TPrimaryKey> : IRepository<TEntity, TPrimaryKey>
         where TEntity : class, IEntity<TPrimaryKey>
     {
+        public abstract List<TEntity> GetList();
+
+        public virtual Task<List<TEntity>> GetListAsync(CancellationToken cancellationToken = new CancellationToken())
+        {
+            return Task.FromResult(GetList());
+        }
+
         public virtual TEntity Get(TPrimaryKey id)
         {
             var entity = Find(id);

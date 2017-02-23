@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
@@ -21,6 +22,19 @@ namespace Volo.Abp.Domain.Repositories
     public interface IRepository<TEntity, TPrimaryKey> : IRepository
         where TEntity : class, IEntity<TPrimaryKey>
     {
+        /// <summary>
+        /// Get list of all entities without any filtering.
+        /// </summary>
+        /// <returns>List of entities</returns>
+        List<TEntity> GetList();
+
+        /// <summary>
+        /// Get list of all entities without any filtering.
+        /// </summary>
+        /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
+        /// <returns>List of entities</returns>
+        Task<List<TEntity>> GetListAsync(CancellationToken cancellationToken = default(CancellationToken));
+
         /// <summary>
         /// Gets an entity with given primary key.
         /// Throws <see cref="EntityNotFoundException"/> if can not find an entity with given id.

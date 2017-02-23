@@ -11,7 +11,7 @@ namespace AbpDesk.EntityFrameworkCore
         public static void Configure(IServiceCollection services, IConfigurationRoot configuration)
         {
             //Configure DbConnectionOptions by configuration file (appsettings.json)
-            services.Configure<DbConnectionOptions>(configuration);
+            services.Configure<DbConnectionOptions>(configuration); //TODO: Move to the application. No proper to be in EF Core package.
 
             services.Configure<AbpDbContextOptions>(options =>
             {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
@@ -39,6 +40,11 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
         protected override IQueryable<TEntity> GetQueryable()
         {
             return DbSet.AsQueryable();
+        }
+
+        public override Task<List<TEntity>> GetListAsync(CancellationToken cancellationToken = new CancellationToken())
+        {
+            return DbSet.ToListAsync(cancellationToken);
         }
 
         public override async Task<TEntity> GetAsync(TPrimaryKey id, CancellationToken cancellationToken = default(CancellationToken))
