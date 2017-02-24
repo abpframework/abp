@@ -1,14 +1,22 @@
 version: '2'
 
 services:
+
+    mongodb:
+        image: tutum/mongodb
+        environment:
+            - AUTH=no
+
     abpidentity_httpapihost:
         image: abpidentity/httpapihost
         environment:
             - ASPNETCORE_ENVIRONMENT=Staging
+
     abpdesk_web:
         image: abpdesk/web
         environment:
             - ASPNETCORE_ENVIRONMENT=Staging
+
     load_balancer:
         image: haproxy:1.7.1
         volumes:
