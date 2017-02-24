@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Volo.Abp.UI.Navigation;
 
-namespace Volo.Abp.Identity.Web
+namespace Volo.Abp.Identity.Web.Navigation
 {
     public class AbpIdentityWebMainMenuContributor : IMenuContributor
     {

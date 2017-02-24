@@ -5,9 +5,8 @@ using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Uow;
 
-namespace AbpDesk.Web.Mvc.Areas.Blog.Controllers
+namespace Areas.Blog.Controllers
 {
-    //TODO: Move this controller to a plug-in
     [Area("Blog")]
     public class PostsController : AbpController
     {

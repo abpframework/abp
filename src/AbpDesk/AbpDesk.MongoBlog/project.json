@@ -2,14 +2,21 @@
   "version": "1.0.0-*",
 
   "dependencies": {
-    "NETStandard.Library": "1.6.1",
-    "Volo.Abp": "1.0.0-*",
-    "Volo.Abp.MongoDB": "1.0.0-*"
+    "Volo.Abp.MongoDB": "1.0.0-*",
+    "Volo.Abp.AspNetCore.Mvc": "1.0.0-*"
   },
 
   "frameworks": {
     "netstandard1.6": {
       "imports": "dnxcore50"
+    }
+  },
+
+  "buildOptions": {
+    "embed": {
+      "include": [
+        "Areas/**/*.*"
+      ]
     }
   }
 }
