@@ -21,7 +21,7 @@ namespace AbpDesk.Web.Mvc
         typeof(AbpAspNetCoreMvcUiBootstrapModule), 
         typeof(AbpDeskApplicationModule), 
         typeof(AbpDeskEntityFrameworkCoreModule),
-        typeof(AbpIdentityHttpProxyModule),
+        typeof(AbpIdentityHttpApiClientModule),
         typeof(AbpIdentityWebModule)
         )]
     public class AbpDeskWebMvcModule : AbpModule
@@ -38,7 +38,7 @@ namespace AbpDesk.Web.Mvc
                 options.MenuContributors.Add(new MainMenuContributor());
             });
 
-            services.Configure<AbpIdentityHttpProxyOptions>(configuration.GetSection("AbpIdentity:HttpProxy"));
+            services.Configure<AbpIdentityHttpApiClientOptions>(configuration.GetSection("AbpIdentity:HttpApiClient"));
 
             services.AddMvc();
             services.AddAssemblyOf<AbpDeskWebMvcModule>();

@@ -1,6 +1,6 @@
 namespace Volo.Abp.Identity
 {
-    public class AbpIdentityHttpProxyOptions
+    public class AbpIdentityHttpApiClientOptions
     {
         public string ApiUrlBase { get; set; }
     }

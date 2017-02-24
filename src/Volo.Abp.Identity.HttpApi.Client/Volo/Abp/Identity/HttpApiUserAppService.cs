@@ -8,11 +8,11 @@ using Volo.Abp.Application.Services.Dtos;
 
 namespace Volo.Abp.Identity
 {
-    public class HttpProxyUserAppService : IUserAppService
+    public class HttpApiUserAppService : IUserAppService
     {
-        private readonly AbpIdentityHttpProxyOptions _options;
+        private readonly AbpIdentityHttpApiClientOptions _options;
 
-        public HttpProxyUserAppService(IOptionsSnapshot<AbpIdentityHttpProxyOptions> options)
+        public HttpApiUserAppService(IOptionsSnapshot<AbpIdentityHttpApiClientOptions> options)
         {
             _options = options.Value;
         }
