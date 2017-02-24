@@ -18,5 +18,9 @@
         "Areas/**/*.*"
       ]
     }
+  },
+
+  "scripts": {
+    "postcompile": [ "xcopy %compile:OutputDir%\\AbpDesk.MongoBlog.dll ..\\Web_PlugIns" ]
   }
 }

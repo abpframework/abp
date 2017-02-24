@@ -1,6 +1,12 @@
 version: '2'
 
 services:
+    abpidentity_httpapihost:
+        image: abpidentity/httpapihost
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Staging
+        ports:
+            - 9101:80
     abpdesk_web:
         image: abpdesk/web
         environment:
