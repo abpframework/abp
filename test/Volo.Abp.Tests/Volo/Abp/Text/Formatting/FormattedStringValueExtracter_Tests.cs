@@ -25,6 +25,13 @@ namespace Volo.Abp.Text.Formatting
                 "{domain}",
                 new NameValue("domain", "abp.io")
             );
+
+            Test_Matched(
+                "http://acme.abp.io/gaming/Index.html",
+                "http://{TENANCY_NAME}.abp.io/{AREA}/Index.html",
+                new NameValue("TENANCY_NAME", "acme"),
+                new NameValue("AREA", "gaming")
+            );
         }
 
         [Fact]
