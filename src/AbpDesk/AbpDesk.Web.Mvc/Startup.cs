@@ -27,7 +27,7 @@ namespace AbpDesk.Web.Mvc
                 options.PlugInSources.AddFolder(
                     Path.Combine(
                         _env.ContentRootPath,
-                        @"..\AbpDesk.Web.Mvc-PlugIns\")
+                        @"..\Web_PlugIns\")
                 );
             });
         }
