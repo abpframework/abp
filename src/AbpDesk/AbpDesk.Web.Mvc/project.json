@@ -28,7 +28,7 @@
     "Volo.Abp.AspNetCore.EmbeddedFiles": "1.0.0-*",
     "Volo.Abp.Identity.HttpProxy": "1.0.0-*",
     "Volo.Abp.Identity.Web": "1.0.0-*",
-    "AbpDesk.MongoBlog": "1.0.0-*"
+    "Volo.Abp.MongoDB": "1.0.0-*"
   },
 
   "tools": {

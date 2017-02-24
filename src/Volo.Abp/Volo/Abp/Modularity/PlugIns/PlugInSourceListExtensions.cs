@@ -22,7 +22,16 @@ namespace Volo.Abp.Modularity.PlugIns
         {
             Check.NotNull(list, nameof(list));
 
-            list.Add(new PlugInTypeListSource(moduleTypes));
+            list.Add(new TypePlugInSource(moduleTypes));
+        }
+
+        public static void AddFiles(
+            [NotNull] this PlugInSourceList list,
+            params string[] filePaths)
+        {
+            Check.NotNull(list, nameof(list));
+
+            list.Add(new FilePlugInSource(filePaths));
         }
     }
 }

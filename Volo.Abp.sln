@@ -104,6 +104,11 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Volo.Abp.Identity.HttpProxy
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Volo.Abp.Identity.Web", "src\Volo.Abp.Identity.Web\Volo.Abp.Identity.Web.xproj", "{17B14A48-5248-4F4C-A8E6-6926AA94EB7C}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{6D893E48-0739-401A-9AD1-286BCB6E5517}"
+	ProjectSection(SolutionItems) = preProject
+		build\build.ps1 = build\build.ps1
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -298,5 +303,6 @@ Global
 		{EB902D57-C047-4CDF-828B-FDC204AC7398} = {1895A5C9-50D4-4568-9A3A-14657E615A5E}
 		{00B240B6-EC44-461A-9578-EF4F1BE9C688} = {1895A5C9-50D4-4568-9A3A-14657E615A5E}
 		{17B14A48-5248-4F4C-A8E6-6926AA94EB7C} = {1895A5C9-50D4-4568-9A3A-14657E615A5E}
+		{6D893E48-0739-401A-9AD1-286BCB6E5517} = {CBCC288A-53C3-402F-99F7-E468738560F5}
 	EndGlobalSection
 EndGlobal

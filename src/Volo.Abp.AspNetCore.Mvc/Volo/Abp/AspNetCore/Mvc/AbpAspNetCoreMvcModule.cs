@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Linq;
+using System.Reflection;
+using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -11,9 +14,9 @@ namespace Volo.Abp.AspNetCore.Mvc
     [DependsOn(
         typeof(AbpAspNetCoreModule)
     )]
-    public class AbpAspNetCoreMvcModule : IAbpModule
+    public class AbpAspNetCoreMvcModule : AbpModule
     {
-        public void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(IServiceCollection services)
         {
             services.AddAssemblyOf<AbpAspNetCoreMvcModule>();
 
@@ -31,6 +34,22 @@ namespace Volo.Abp.AspNetCore.Mvc
                     )
                 )
             );
+        }
+
+        public override void OnApplicationInitialization(ApplicationInitializationContext context)
+        {
+            AddApplicationParts(context);
+        }
+
+        private static void AddApplicationParts(ApplicationInitializationContext context)
+        {
+            var partManager = context.ServiceProvider.GetRequiredService<ApplicationPartManager>();
+            var moduleManager = context.ServiceProvider.GetRequiredService<IModuleManager>();
+
+            foreach (var module in moduleManager.Modules.Where(m => m.IsLoadedAsPlugIn))
+            {
+                partManager.ApplicationParts.Add(new AssemblyPart(module.Type.GetTypeInfo().Assembly));
+            }
         }
     }
 }

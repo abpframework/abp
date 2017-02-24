@@ -3,7 +3,6 @@
 
   "dependencies": {
     "Microsoft.EntityFrameworkCore": "1.1.0",
-    "NETStandard.Library": "1.6.1",
     "Volo.Abp": "1.0.0-*"
   },
 

@@ -37,18 +37,20 @@ namespace Volo.Abp.Modularity
             PlugInSourceList plugInSources)
         {
             //All modules starting from the startup module
-            var moduleTypes = AbpModuleHelper.FindAllModuleTypes(startupModuleType);
-
-            //Add plugin modules
-            foreach (var moduleType in plugInSources.GetAllModules())
-            {
-                moduleTypes.AddIfNotContains(moduleType);
-            }
-
-            //Create all modules
-            foreach (var moduleType in moduleTypes)
+            foreach (var moduleType in AbpModuleHelper.FindAllModuleTypes(startupModuleType))
             {
                 modules.Add(CreateModuleDescriptor(services, moduleType));
+            }
+
+            //Plugin modules
+            foreach (var moduleType in plugInSources.GetAllModules())
+            {
+                if(modules.Any(m => m.Type == moduleType))
+                {
+                    continue;
+                }
+
+                modules.Add(CreateModuleDescriptor(services, moduleType, isLoadedAsPlugIn: true));
             }
         }
 
@@ -68,9 +70,9 @@ namespace Volo.Abp.Modularity
             return sortedModules;
         }
 
-        protected virtual AbpModuleDescriptor CreateModuleDescriptor(IServiceCollection services, Type moduleType)
+        protected virtual AbpModuleDescriptor CreateModuleDescriptor(IServiceCollection services, Type moduleType, bool isLoadedAsPlugIn = false)
         {
-            return new AbpModuleDescriptor(moduleType, CreateAndRegisterModule(services, moduleType));
+            return new AbpModuleDescriptor(moduleType, CreateAndRegisterModule(services, moduleType), isLoadedAsPlugIn);
         }
 
         protected virtual IAbpModule CreateAndRegisterModule(IServiceCollection services, Type moduleType)

@@ -3,11 +3,11 @@ using JetBrains.Annotations;
 
 namespace Volo.Abp.Modularity.PlugIns
 {
-    public class PlugInTypeListSource : IPlugInSource
+    public class TypePlugInSource : IPlugInSource
     {
         private readonly Type[] _moduleTypes;
 
-        public PlugInTypeListSource(params Type[] moduleTypes)
+        public TypePlugInSource(params Type[] moduleTypes)
         {
             _moduleTypes = moduleTypes ?? new Type[0];
         }

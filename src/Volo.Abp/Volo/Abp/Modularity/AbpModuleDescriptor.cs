@@ -11,9 +11,11 @@ namespace Volo.Abp.Modularity
 
         public IAbpModule Instance { get; }
 
+        public bool IsLoadedAsPlugIn { get; }
+
         internal List<AbpModuleDescriptor> Dependencies { get; }
 
-        public AbpModuleDescriptor([NotNull] Type type, [NotNull] IAbpModule instance)
+        public AbpModuleDescriptor([NotNull] Type type, [NotNull] IAbpModule instance, bool isLoadedAsPlugIn)
         {
             Check.NotNull(type, nameof(type));
             Check.NotNull(instance, nameof(instance));
@@ -25,6 +27,7 @@ namespace Volo.Abp.Modularity
 
             Type = type;
             Instance = instance;
+            IsLoadedAsPlugIn = isLoadedAsPlugIn;
 
             Dependencies = new List<AbpModuleDescriptor>();
         }
