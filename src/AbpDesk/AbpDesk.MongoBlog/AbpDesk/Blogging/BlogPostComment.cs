@@ -16,7 +16,7 @@ namespace AbpDesk.Blogging
         [NotNull]
         public virtual string Message { get; protected set; }
 
-        public BlogPostComment()
+        protected BlogPostComment()
         {
             
         }

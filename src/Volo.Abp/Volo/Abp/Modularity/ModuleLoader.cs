@@ -10,8 +10,8 @@ namespace Volo.Abp.Modularity
     public class ModuleLoader : IModuleLoader
     {
         public AbpModuleDescriptor[] LoadModules(
-            IServiceCollection services, 
-            Type startupModuleType, 
+            IServiceCollection services,
+            Type startupModuleType,
             PlugInSourceList plugInSources)
         {
             Check.NotNull(services, nameof(services));
@@ -31,9 +31,9 @@ namespace Volo.Abp.Modularity
         }
 
         protected virtual void FillModules(
-            List<AbpModuleDescriptor> modules, 
-            IServiceCollection services, 
-            Type startupModuleType, 
+            List<AbpModuleDescriptor> modules,
+            IServiceCollection services,
+            Type startupModuleType,
             PlugInSourceList plugInSources)
         {
             //All modules starting from the startup module
@@ -45,7 +45,7 @@ namespace Volo.Abp.Modularity
             //Plugin modules
             foreach (var moduleType in plugInSources.GetAllModules())
             {
-                if(modules.Any(m => m.Type == moduleType))
+                if (modules.Any(m => m.Type == moduleType))
                 {
                     continue;
                 }
@@ -61,7 +61,7 @@ namespace Volo.Abp.Modularity
                 SetModuleDependencies(modules, module);
             }
         }
-        
+
         protected virtual List<AbpModuleDescriptor> SortByDependency(List<AbpModuleDescriptor> modules, Type startupModuleType)
         {
             var sortedModules = modules.SortByDependencies(m => m.Dependencies);
@@ -77,7 +77,7 @@ namespace Volo.Abp.Modularity
 
         protected virtual IAbpModule CreateAndRegisterModule(IServiceCollection services, Type moduleType)
         {
-            var module = (IAbpModule) Activator.CreateInstance(moduleType);
+            var module = (IAbpModule)Activator.CreateInstance(moduleType);
             services.AddSingleton(moduleType, module);
             return module;
         }
@@ -87,7 +87,7 @@ namespace Volo.Abp.Modularity
             //PreConfigureServices
             foreach (var module in modules.Where(m => m.Instance is IPreConfigureServices))
             {
-                ((IPreConfigureServices) module.Instance).PreConfigureServices(services);
+                ((IPreConfigureServices)module.Instance).PreConfigureServices(services);
             }
 
             //ConfigureServices
@@ -102,7 +102,7 @@ namespace Volo.Abp.Modularity
                 ((IPostConfigureServices)module.Instance).PostConfigureServices(services);
             }
         }
-        
+
         protected virtual void SetModuleDependencies(List<AbpModuleDescriptor> modules, AbpModuleDescriptor module)
         {
             foreach (var dependedModuleType in AbpModuleHelper.FindDependedModuleTypes(module.Type))
