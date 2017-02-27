@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.EmbeddedFiles;
 using Volo.Abp.AspNetCore.Modularity;
@@ -41,14 +40,13 @@ namespace AbpDesk.Web.Mvc
             services.Configure<AbpIdentityHttpApiClientOptions>(configuration.GetSection("AbpIdentity:HttpApiClient"));
 
             services.AddMvc();
+
             services.AddAssemblyOf<AbpDeskWebMvcModule>();
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             var app = context.GetApplicationBuilder();
-
-            context.GetLoggerFactory().AddConsole().AddDebug();
 
             if (context.GetEnvironment().IsDevelopment())
             {

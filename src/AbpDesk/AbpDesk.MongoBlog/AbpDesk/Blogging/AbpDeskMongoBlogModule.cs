@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Domain.Repositories;
@@ -46,11 +47,16 @@ namespace AbpDesk.Blogging
         {
             using (var scope = context.ServiceProvider.CreateScope())
             {
+                var logger = context.ServiceProvider.GetRequiredService<ILogger<AbpDeskMongoBlogModule>>();
+
+                logger.LogInformation("Running seed data for mongo blog module...");
+
                 using (var uow = scope.ServiceProvider.GetRequiredService<IUnitOfWorkManager>().Begin())
                 {
                     var blogPostRepository = scope.ServiceProvider.GetRequiredService<IQueryableRepository<BlogPost>>();
                     if (blogPostRepository.Any())
                     {
+                        logger.LogInformation($"No need to seed database since there are already {blogPostRepository.Count()} blog posts!");
                         return;
                     }
 
@@ -79,7 +85,11 @@ namespace AbpDesk.Blogging
                         }
                     );
 
+                    logger.LogInformation("Inserted two blog post. completing the unit of work...");
+
                     uow.Complete();
+
+                    logger.LogInformation("Completed!");
                 }
             }
         }

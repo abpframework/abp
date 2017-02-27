@@ -21,6 +21,6 @@
   },
 
   "scripts": {
-    "postcompile": [ "xcopy %compile:OutputDir%\\AbpDesk.MongoBlog.dll ..\\Web_PlugIns" ]
+    "postcompile": [ "xcopy /y %compile:OutputDir%\\AbpDesk.MongoBlog.dll ..\\Web_PlugIns\\" ]
   }
 }

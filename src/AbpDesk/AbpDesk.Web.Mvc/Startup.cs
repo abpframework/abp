@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Serilog;
 using Volo.Abp.Modularity.PlugIns;
 
 namespace AbpDesk.Web.Mvc
@@ -20,7 +21,7 @@ namespace AbpDesk.Web.Mvc
         {
             services.AddApplication<AbpDeskWebMvcModule>(options =>
             {
-                /* @halil: I added Abp.MongoDb as a dependency to the main application.
+                /* @halil: I added Abp.MongoDb package as a dependency to the main application in order to use the blog plugin.
                  * Otherwise, we should add all dependencies (Recursively) into plugin folder
                  * and load in correct order. We should carefully think on that problem in the future.
                  */
@@ -34,6 +35,15 @@ namespace AbpDesk.Web.Mvc
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            loggerFactory
+                .AddConsole()
+                .AddDebug()
+                .AddSerilog(new LoggerConfiguration()
+                    .Enrich.FromLogContext()
+                    .WriteTo.RollingFile("logs.txt")
+                    .CreateLogger()
+                );
+
             app.InitializeApplication();
         }
     }

@@ -2,7 +2,7 @@
 
 <h2>Blog Posts</h2>
 
-<ul>
+<ul class="blog-post-list">
     @foreach (var post in Model)
     {
         <h3>@post.Title</h3>
@@ -13,11 +13,10 @@
         }
         else
         {
-            <h4>Comments</h4>
+            <h5>Comments</h5>
             foreach (var comment in post.Comments)
             {
-                <h5>@comment.Name</h5>
-                    <p>@comment.Message</p>
+                <p><strong>@comment.Name</strong>: @comment.Message</p>
             }
         }
     }

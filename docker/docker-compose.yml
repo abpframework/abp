@@ -6,7 +6,10 @@ services:
         image: tutum/mongodb
         environment:
             - AUTH=no
-
+        ports:
+            - "27017:27017"
+            - "28017:28017"
+            
     abpidentity_httpapihost:
         image: abpidentity/httpapihost
         environment:
