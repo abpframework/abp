@@ -253,3 +253,4 @@ paket-files/
 
 # ABP
 build/outputs
+src/AbpDesk/AbpDesk.Web.Mvc/Logs

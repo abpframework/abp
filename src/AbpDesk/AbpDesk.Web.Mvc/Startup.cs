@@ -40,7 +40,7 @@ namespace AbpDesk.Web.Mvc
                 .AddDebug()
                 .AddSerilog(new LoggerConfiguration()
                     .Enrich.FromLogContext()
-                    .WriteTo.RollingFile("logs.txt")
+                    .WriteTo.RollingFile("Logs/logs.txt")
                     .CreateLogger()
                 );
 
