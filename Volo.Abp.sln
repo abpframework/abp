@@ -1,80 +1,25 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.4
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CBCC288A-53C3-402F-99F7-E468738560F5}"
-	ProjectSection(SolutionItems) = preProject
-		global.json = global.json
-	EndProjectSection
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Volo.Abp", "src\Volo.Abp\Volo.Abp.xproj", "{FC5F7372-EA60-4052-B943-0EE070221CC1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{447C8A77-E5F0-4538-8687-7383196D04EA}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Volo.Abp.Tests", "test\Volo.Abp.Tests\Volo.Abp.Tests.xproj", "{E9A85F1B-A5CB-4E19-B2BB-A7F97BB25EE1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Abp", "Abp", "{4C753F64-0C93-4D65-96C2-A40893AFC1E8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Abp", "Abp", "{37087D1B-3693-4E96-983D-A69F210BDE53}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "AbpTestBase", "test\AbpTestBase\AbpTestBase.xproj", "{1020F5FD-6A97-40C2-AFCA-EBDF641DF111}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Volo.Abp.AspNetCore", "src\Volo.Abp.AspNetCore\Volo.Abp.AspNetCore.xproj", "{02BE03BA-3411-448C-AB61-CB36407CC49A}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Volo.Abp.AspNetCore.Tests", "test\Volo.Abp.AspNetCore.Tests\Volo.Abp.AspNetCore.Tests.xproj", "{B1D860BB-6EC6-4BAE-ADAA-C2AEC2FFB510}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Volo.Abp.MultiTenancy", "src\Volo.Abp.MultiTenancy\Volo.Abp.MultiTenancy.xproj", "{58FA9F8F-216D-4C93-8929-D40D22B11CA7}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Volo.Abp.MultiTenancy.Tests", "test\Volo.Abp.MultiTenancy.Tests\Volo.Abp.MultiTenancy.Tests.xproj", "{05271341-7A15-484C-9FD6-802A4193F4DE}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Volo.Abp.AspNetCore.MultiTenancy", "src\Volo.Abp.AspNetCore.MultiTenancy\Volo.Abp.AspNetCore.MultiTenancy.xproj", "{7CC7946B-E026-4F66-8D4F-4F78F4801D43}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Volo.Abp.AspNetCore.MultiTenancy.Tests", "test\Volo.Abp.AspNetCore.MultiTenancy.Tests\Volo.Abp.AspNetCore.MultiTenancy.Tests.xproj", "{2C282467-2CD5-4750-BE1F-CA8BD8ECC6EA}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Volo.Abp.AspNetCore.TestBase", "src\Volo.Abp.AspNetCore.TestBase\Volo.Abp.AspNetCore.TestBase.xproj", "{DDEC5D74-212F-41BD-974C-4B4E88E574E1}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Volo.Abp.EntityFrameworkCore", "src\Volo.Abp.EntityFrameworkCore\Volo.Abp.EntityFrameworkCore.xproj", "{A1AE63E9-0CF4-4AFB-A584-65D826DEA3CB}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AbpDesk", "AbpDesk", "{1187F469-0063-4065-9419-A1D956C80145}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "AbpDesk.Domain", "src\AbpDesk\AbpDesk.Domain\AbpDesk.Domain.xproj", "{2DBA20A3-8B1C-49F0-90F6-EB09DB78B1B8}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "AbpDesk.Application.Contracts", "src\AbpDesk\AbpDesk.Application.Contracts\AbpDesk.Application.Contracts.xproj", "{E45B2BA3-7917-4236-99CD-B0A25285A652}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "AbpDesk.Application", "src\AbpDesk\AbpDesk.Application\AbpDesk.Application.xproj", "{B6E622CE-0AEE-45DA-81AB-C244196CB583}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "AbpDesk.EntityFrameworkCore", "src\AbpDesk\AbpDesk.EntityFrameworkCore\AbpDesk.EntityFrameworkCore.xproj", "{35624E7C-6501-4B42-9AA7-70555666A8B3}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "AbpDesk.ConsoleDemo", "src\AbpDesk\AbpDesk.ConsoleDemo\AbpDesk.ConsoleDemo.xproj", "{1A1575D7-E57E-4A40-8113-FD01BB1753D5}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Volo.Abp.AspNetCore.Mvc", "src\Volo.Abp.AspNetCore.Mvc\Volo.Abp.AspNetCore.Mvc.xproj", "{3FB342CA-23B6-4795-91EF-C664527C07B7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AbpDesk", "AbpDesk", "{61708AC8-CE70-4351-9B31-13EA8213D208}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "AbpDesk.Application.Tests", "test\AbpDesk\AbpDesk.Application.Tests\AbpDesk.Application.Tests.xproj", "{E6E2467C-184A-4A0A-929F-932D5097953E}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Volo.Abp.TestBase", "src\Volo.Abp.TestBase\Volo.Abp.TestBase.xproj", "{8CECCEAF-F0D8-4257-96BA-EACF4763AF42}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "AbpDesk.Web.Mvc", "src\AbpDesk\AbpDesk.Web.Mvc\AbpDesk.Web.Mvc.xproj", "{12E14D95-4ABA-4290-AB1D-CCF5EB158411}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Abp.Identity", "Abp.Identity", "{1895A5C9-50D4-4568-9A3A-14657E615A5E}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Volo.Abp.Identity", "src\Volo.Abp.Identity\Volo.Abp.Identity.xproj", "{17DBB40A-243E-41F7-A672-FA316ECB1E33}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Abp.Identity", "Abp.Identity", "{146F561E-C7B8-4166-9383-47E1BC1A2E62}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Volo.Abp.Identity.EntityFrameworkCore", "src\Volo.Abp.Identity.EntityFrameworkCore\Volo.Abp.Identity.EntityFrameworkCore.xproj", "{439DFC0F-1BA2-464F-900E-EA7E18C08975}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Volo.Abp.Identity.Tests", "test\Volo.Abp.Identity.Tests\Volo.Abp.Identity.Tests.xproj", "{4AB91077-82DC-4335-9274-BCE017BD9C8B}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Volo.Abp.MongoDB", "src\Volo.Abp.MongoDB\Volo.Abp.MongoDB.xproj", "{B31FFAE3-5DAC-4E51-BD17-F7446B741A36}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "AbpDesk.MongoBlog", "src\AbpDesk\AbpDesk.MongoBlog\AbpDesk.MongoBlog.xproj", "{63244DC7-34BE-44E1-BF6F-F2672E59AF36}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "AbpDesk.SamplePlugInModule", "src\AbpDesk\AbpDesk.SamplePlugInModule\AbpDesk.SamplePlugInModule.xproj", "{ADFAF85B-B785-41EA-B57D-422775989FA6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docker-files", "docker-files", "{0BEA55D6-E0B8-40DD-A256-B34C4DD990A5}"
 	ProjectSection(SolutionItems) = preProject
@@ -84,30 +29,82 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docker-files", "docker-file
 		docker\up.ps1 = docker\up.ps1
 	EndProjectSection
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Volo.Abp.AspNetCore.Mvc.UI", "src\Volo.Abp.AspNetCore.Mvc.UI\Volo.Abp.AspNetCore.Mvc.UI.xproj", "{BF9AB22C-F48D-4DDE-A894-BC28EB37166B}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Volo.Abp.AspNetCore.EmbeddedFiles", "src\Volo.Abp.AspNetCore.EmbeddedFiles\Volo.Abp.AspNetCore.EmbeddedFiles.xproj", "{B6182BF1-9EC6-403D-A42C-D6441CF7B390}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Abp.UI", "Abp.UI", "{6F776E78-862A-4147-86BA-12B6B64E8958}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Volo.Abp.AspNetCore.Mvc.UI.Bootstrap", "src\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.xproj", "{C761A3F7-787D-4C7E-A41C-5FAB07F6B774}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Volo.Abp.Identity.Application.Contracts", "src\Volo.Abp.Identity.Application.Contracts\Volo.Abp.Identity.Application.Contracts.xproj", "{C714A3AB-8402-4DC2-B120-ACCB2E29BD8F}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Volo.Abp.Identity.Application", "src\Volo.Abp.Identity.Application\Volo.Abp.Identity.Application.xproj", "{54592671-9CB6-48AE-9AE0-84CD016E87FF}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Volo.Abp.Identity.HttpApi", "src\Volo.Abp.Identity.HttpApi\Volo.Abp.Identity.HttpApi.xproj", "{57FCA6CB-9D99-411E-8ABF-20ACFBD61D61}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Volo.Abp.Identity.HttpApi.Host", "src\Volo.Abp.Identity.HttpApi.Host\Volo.Abp.Identity.HttpApi.Host.xproj", "{EB902D57-C047-4CDF-828B-FDC204AC7398}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Volo.Abp.Identity.Web", "src\Volo.Abp.Identity.Web\Volo.Abp.Identity.Web.xproj", "{17B14A48-5248-4F4C-A8E6-6926AA94EB7C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{6D893E48-0739-401A-9AD1-286BCB6E5517}"
 	ProjectSection(SolutionItems) = preProject
 		build\build.ps1 = build\build.ps1
 	EndProjectSection
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Volo.Abp.Identity.HttpApi.Client", "src\Volo.Abp.Identity.HttpApi.Client\Volo.Abp.Identity.HttpApi.Client.xproj", "{00B240B6-EC44-461A-9578-EF4F1BE9C688}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp", "src\Volo.Abp\Volo.Abp.csproj", "{FC5F7372-EA60-4052-B943-0EE070221CC1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Tests", "test\Volo.Abp.Tests\Volo.Abp.Tests.csproj", "{E9A85F1B-A5CB-4E19-B2BB-A7F97BB25EE1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AbpTestBase", "test\AbpTestBase\AbpTestBase.csproj", "{1020F5FD-6A97-40C2-AFCA-EBDF641DF111}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AspNetCore", "src\Volo.Abp.AspNetCore\Volo.Abp.AspNetCore.csproj", "{02BE03BA-3411-448C-AB61-CB36407CC49A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AspNetCore.Tests", "test\Volo.Abp.AspNetCore.Tests\Volo.Abp.AspNetCore.Tests.csproj", "{B1D860BB-6EC6-4BAE-ADAA-C2AEC2FFB510}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.MultiTenancy", "src\Volo.Abp.MultiTenancy\Volo.Abp.MultiTenancy.csproj", "{58FA9F8F-216D-4C93-8929-D40D22B11CA7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.MultiTenancy.Tests", "test\Volo.Abp.MultiTenancy.Tests\Volo.Abp.MultiTenancy.Tests.csproj", "{05271341-7A15-484C-9FD6-802A4193F4DE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AspNetCore.MultiTenancy", "src\Volo.Abp.AspNetCore.MultiTenancy\Volo.Abp.AspNetCore.MultiTenancy.csproj", "{7CC7946B-E026-4F66-8D4F-4F78F4801D43}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AspNetCore.MultiTenancy.Tests", "test\Volo.Abp.AspNetCore.MultiTenancy.Tests\Volo.Abp.AspNetCore.MultiTenancy.Tests.csproj", "{2C282467-2CD5-4750-BE1F-CA8BD8ECC6EA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AspNetCore.TestBase", "src\Volo.Abp.AspNetCore.TestBase\Volo.Abp.AspNetCore.TestBase.csproj", "{DDEC5D74-212F-41BD-974C-4B4E88E574E1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.EntityFrameworkCore", "src\Volo.Abp.EntityFrameworkCore\Volo.Abp.EntityFrameworkCore.csproj", "{A1AE63E9-0CF4-4AFB-A584-65D826DEA3CB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AbpDesk.Domain", "src\AbpDesk\AbpDesk.Domain\AbpDesk.Domain.csproj", "{2DBA20A3-8B1C-49F0-90F6-EB09DB78B1B8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AbpDesk.Application.Contracts", "src\AbpDesk\AbpDesk.Application.Contracts\AbpDesk.Application.Contracts.csproj", "{E45B2BA3-7917-4236-99CD-B0A25285A652}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AbpDesk.Application", "src\AbpDesk\AbpDesk.Application\AbpDesk.Application.csproj", "{B6E622CE-0AEE-45DA-81AB-C244196CB583}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AbpDesk.EntityFrameworkCore", "src\AbpDesk\AbpDesk.EntityFrameworkCore\AbpDesk.EntityFrameworkCore.csproj", "{35624E7C-6501-4B42-9AA7-70555666A8B3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AbpDesk.ConsoleDemo", "src\AbpDesk\AbpDesk.ConsoleDemo\AbpDesk.ConsoleDemo.csproj", "{1A1575D7-E57E-4A40-8113-FD01BB1753D5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AspNetCore.Mvc", "src\Volo.Abp.AspNetCore.Mvc\Volo.Abp.AspNetCore.Mvc.csproj", "{3FB342CA-23B6-4795-91EF-C664527C07B7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AbpDesk.Application.Tests", "test\AbpDesk\AbpDesk.Application.Tests\AbpDesk.Application.Tests.csproj", "{E6E2467C-184A-4A0A-929F-932D5097953E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.TestBase", "src\Volo.Abp.TestBase\Volo.Abp.TestBase.csproj", "{8CECCEAF-F0D8-4257-96BA-EACF4763AF42}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AbpDesk.Web.Mvc", "src\AbpDesk\AbpDesk.Web.Mvc\AbpDesk.Web.Mvc.csproj", "{12E14D95-4ABA-4290-AB1D-CCF5EB158411}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Identity", "src\Volo.Abp.Identity\Volo.Abp.Identity.csproj", "{17DBB40A-243E-41F7-A672-FA316ECB1E33}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Identity.EntityFrameworkCore", "src\Volo.Abp.Identity.EntityFrameworkCore\Volo.Abp.Identity.EntityFrameworkCore.csproj", "{439DFC0F-1BA2-464F-900E-EA7E18C08975}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Identity.Tests", "test\Volo.Abp.Identity.Tests\Volo.Abp.Identity.Tests.csproj", "{4AB91077-82DC-4335-9274-BCE017BD9C8B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.MongoDB", "src\Volo.Abp.MongoDB\Volo.Abp.MongoDB.csproj", "{B31FFAE3-5DAC-4E51-BD17-F7446B741A36}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AbpDesk.MongoBlog", "src\AbpDesk\AbpDesk.MongoBlog\AbpDesk.MongoBlog.csproj", "{63244DC7-34BE-44E1-BF6F-F2672E59AF36}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AbpDesk.SamplePlugInModule", "src\AbpDesk\AbpDesk.SamplePlugInModule\AbpDesk.SamplePlugInModule.csproj", "{ADFAF85B-B785-41EA-B57D-422775989FA6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AspNetCore.Mvc.UI", "src\Volo.Abp.AspNetCore.Mvc.UI\Volo.Abp.AspNetCore.Mvc.UI.csproj", "{BF9AB22C-F48D-4DDE-A894-BC28EB37166B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AspNetCore.EmbeddedFiles", "src\Volo.Abp.AspNetCore.EmbeddedFiles\Volo.Abp.AspNetCore.EmbeddedFiles.csproj", "{B6182BF1-9EC6-403D-A42C-D6441CF7B390}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AspNetCore.Mvc.UI.Bootstrap", "src\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.csproj", "{C761A3F7-787D-4C7E-A41C-5FAB07F6B774}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Identity.Application.Contracts", "src\Volo.Abp.Identity.Application.Contracts\Volo.Abp.Identity.Application.Contracts.csproj", "{C714A3AB-8402-4DC2-B120-ACCB2E29BD8F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Identity.Application", "src\Volo.Abp.Identity.Application\Volo.Abp.Identity.Application.csproj", "{54592671-9CB6-48AE-9AE0-84CD016E87FF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Identity.HttpApi", "src\Volo.Abp.Identity.HttpApi\Volo.Abp.Identity.HttpApi.csproj", "{57FCA6CB-9D99-411E-8ABF-20ACFBD61D61}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Identity.HttpApi.Host", "src\Volo.Abp.Identity.HttpApi.Host\Volo.Abp.Identity.HttpApi.Host.csproj", "{EB902D57-C047-4CDF-828B-FDC204AC7398}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Identity.Web", "src\Volo.Abp.Identity.Web\Volo.Abp.Identity.Web.csproj", "{17B14A48-5248-4F4C-A8E6-6926AA94EB7C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Identity.HttpApi.Client", "src\Volo.Abp.Identity.HttpApi.Client\Volo.Abp.Identity.HttpApi.Client.csproj", "{00B240B6-EC44-461A-9578-EF4F1BE9C688}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -260,10 +257,17 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{FC5F7372-EA60-4052-B943-0EE070221CC1} = {4C753F64-0C93-4D65-96C2-A40893AFC1E8}
-		{E9A85F1B-A5CB-4E19-B2BB-A7F97BB25EE1} = {37087D1B-3693-4E96-983D-A69F210BDE53}
 		{4C753F64-0C93-4D65-96C2-A40893AFC1E8} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{37087D1B-3693-4E96-983D-A69F210BDE53} = {447C8A77-E5F0-4538-8687-7383196D04EA}
+		{1187F469-0063-4065-9419-A1D956C80145} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
+		{61708AC8-CE70-4351-9B31-13EA8213D208} = {447C8A77-E5F0-4538-8687-7383196D04EA}
+		{1895A5C9-50D4-4568-9A3A-14657E615A5E} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
+		{146F561E-C7B8-4166-9383-47E1BC1A2E62} = {447C8A77-E5F0-4538-8687-7383196D04EA}
+		{0BEA55D6-E0B8-40DD-A256-B34C4DD990A5} = {CBCC288A-53C3-402F-99F7-E468738560F5}
+		{6F776E78-862A-4147-86BA-12B6B64E8958} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
+		{6D893E48-0739-401A-9AD1-286BCB6E5517} = {CBCC288A-53C3-402F-99F7-E468738560F5}
+		{FC5F7372-EA60-4052-B943-0EE070221CC1} = {4C753F64-0C93-4D65-96C2-A40893AFC1E8}
+		{E9A85F1B-A5CB-4E19-B2BB-A7F97BB25EE1} = {37087D1B-3693-4E96-983D-A69F210BDE53}
 		{1020F5FD-6A97-40C2-AFCA-EBDF641DF111} = {447C8A77-E5F0-4538-8687-7383196D04EA}
 		{02BE03BA-3411-448C-AB61-CB36407CC49A} = {4C753F64-0C93-4D65-96C2-A40893AFC1E8}
 		{B1D860BB-6EC6-4BAE-ADAA-C2AEC2FFB510} = {37087D1B-3693-4E96-983D-A69F210BDE53}
@@ -273,36 +277,29 @@ Global
 		{2C282467-2CD5-4750-BE1F-CA8BD8ECC6EA} = {37087D1B-3693-4E96-983D-A69F210BDE53}
 		{DDEC5D74-212F-41BD-974C-4B4E88E574E1} = {4C753F64-0C93-4D65-96C2-A40893AFC1E8}
 		{A1AE63E9-0CF4-4AFB-A584-65D826DEA3CB} = {4C753F64-0C93-4D65-96C2-A40893AFC1E8}
-		{1187F469-0063-4065-9419-A1D956C80145} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{2DBA20A3-8B1C-49F0-90F6-EB09DB78B1B8} = {1187F469-0063-4065-9419-A1D956C80145}
 		{E45B2BA3-7917-4236-99CD-B0A25285A652} = {1187F469-0063-4065-9419-A1D956C80145}
 		{B6E622CE-0AEE-45DA-81AB-C244196CB583} = {1187F469-0063-4065-9419-A1D956C80145}
 		{35624E7C-6501-4B42-9AA7-70555666A8B3} = {1187F469-0063-4065-9419-A1D956C80145}
 		{1A1575D7-E57E-4A40-8113-FD01BB1753D5} = {1187F469-0063-4065-9419-A1D956C80145}
 		{3FB342CA-23B6-4795-91EF-C664527C07B7} = {4C753F64-0C93-4D65-96C2-A40893AFC1E8}
-		{61708AC8-CE70-4351-9B31-13EA8213D208} = {447C8A77-E5F0-4538-8687-7383196D04EA}
 		{E6E2467C-184A-4A0A-929F-932D5097953E} = {61708AC8-CE70-4351-9B31-13EA8213D208}
 		{8CECCEAF-F0D8-4257-96BA-EACF4763AF42} = {4C753F64-0C93-4D65-96C2-A40893AFC1E8}
 		{12E14D95-4ABA-4290-AB1D-CCF5EB158411} = {1187F469-0063-4065-9419-A1D956C80145}
-		{1895A5C9-50D4-4568-9A3A-14657E615A5E} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{17DBB40A-243E-41F7-A672-FA316ECB1E33} = {1895A5C9-50D4-4568-9A3A-14657E615A5E}
-		{146F561E-C7B8-4166-9383-47E1BC1A2E62} = {447C8A77-E5F0-4538-8687-7383196D04EA}
 		{439DFC0F-1BA2-464F-900E-EA7E18C08975} = {1895A5C9-50D4-4568-9A3A-14657E615A5E}
 		{4AB91077-82DC-4335-9274-BCE017BD9C8B} = {146F561E-C7B8-4166-9383-47E1BC1A2E62}
 		{B31FFAE3-5DAC-4E51-BD17-F7446B741A36} = {4C753F64-0C93-4D65-96C2-A40893AFC1E8}
 		{63244DC7-34BE-44E1-BF6F-F2672E59AF36} = {1187F469-0063-4065-9419-A1D956C80145}
 		{ADFAF85B-B785-41EA-B57D-422775989FA6} = {1187F469-0063-4065-9419-A1D956C80145}
-		{0BEA55D6-E0B8-40DD-A256-B34C4DD990A5} = {CBCC288A-53C3-402F-99F7-E468738560F5}
 		{BF9AB22C-F48D-4DDE-A894-BC28EB37166B} = {6F776E78-862A-4147-86BA-12B6B64E8958}
 		{B6182BF1-9EC6-403D-A42C-D6441CF7B390} = {4C753F64-0C93-4D65-96C2-A40893AFC1E8}
-		{6F776E78-862A-4147-86BA-12B6B64E8958} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{C761A3F7-787D-4C7E-A41C-5FAB07F6B774} = {6F776E78-862A-4147-86BA-12B6B64E8958}
 		{C714A3AB-8402-4DC2-B120-ACCB2E29BD8F} = {1895A5C9-50D4-4568-9A3A-14657E615A5E}
 		{54592671-9CB6-48AE-9AE0-84CD016E87FF} = {1895A5C9-50D4-4568-9A3A-14657E615A5E}
 		{57FCA6CB-9D99-411E-8ABF-20ACFBD61D61} = {1895A5C9-50D4-4568-9A3A-14657E615A5E}
 		{EB902D57-C047-4CDF-828B-FDC204AC7398} = {1895A5C9-50D4-4568-9A3A-14657E615A5E}
 		{17B14A48-5248-4F4C-A8E6-6926AA94EB7C} = {1895A5C9-50D4-4568-9A3A-14657E615A5E}
-		{6D893E48-0739-401A-9AD1-286BCB6E5517} = {CBCC288A-53C3-402F-99F7-E468738560F5}
 		{00B240B6-EC44-461A-9578-EF4F1BE9C688} = {1895A5C9-50D4-4568-9A3A-14657E615A5E}
 	EndGlobalSection
 EndGlobal
