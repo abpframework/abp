@@ -36,7 +36,7 @@ namespace Volo.Abp.EmbeddedFiles
                         new EmbeddedFileSet(
                             "/MyApp/MyResources/",
                             GetType().GetTypeInfo().Assembly,
-                            "Volo.Abp.Tests.Volo.Abp.EmbeddedFiles.MyResources"
+                            "Volo.Abp.EmbeddedFiles.MyResources"
                         )
                     );
                 });
