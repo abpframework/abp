@@ -77,6 +77,13 @@ namespace Volo.Abp.Identity
             }
         }
 
+        public void RemoveClaim([NotNull] Claim claim)
+        {
+            Check.NotNull(claim, nameof(claim));
+
+            Claims.RemoveAll(c => c.ClaimType == claim.Type && c.ClaimValue == claim.Value);
+        }
+
         /// <summary>
         /// Returns the name of the role.
         /// </summary>
@@ -84,13 +91,6 @@ namespace Volo.Abp.Identity
         public override string ToString()
         {
             return Name;
-        }
-
-        public void RemoveClaim([NotNull] Claim claim)
-        {
-            Check.NotNull(claim, nameof(claim));
-
-            Claims.RemoveAll(c => c.ClaimType == claim.Type && c.ClaimValue == claim.Value);
         }
     }
 }
