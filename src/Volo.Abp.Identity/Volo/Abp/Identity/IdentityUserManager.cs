@@ -11,7 +11,7 @@ namespace Volo.Abp.Identity
     public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
     {
         public IdentityUserManager(
-            UserStore store,
+            IdentityUserStore store,
             IOptions<IdentityOptions> optionsAccessor,
             IPasswordHasher<IdentityUser> passwordHasher,
             IEnumerable<IUserValidator<IdentityUser>> userValidators,

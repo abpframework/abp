@@ -16,23 +16,23 @@ namespace Volo.Abp.Identity
     /// <summary>
     /// Creates a new instance of a persistence store for roles.
     /// </summary>
-    public class RoleStore :
+    public class IdentityRoleStore :
         IRoleStore<IdentityRole>,
         IRoleClaimStore<IdentityRole>,
         ITransientDependency
     {
         private readonly IIdentityRoleRepository _roleRepository;
         private readonly IUnitOfWorkManager _unitOfWorkManager;
-        private readonly ILogger<RoleStore> _logger;
+        private readonly ILogger<IdentityRoleStore> _logger;
         private readonly IGuidGenerator _guidGenerator;
 
         /// <summary>
-        /// Constructs a new instance of <see cref="RoleStore"/>.
+        /// Constructs a new instance of <see cref="IdentityRoleStore"/>.
         /// </summary>
-        public RoleStore(
+        public IdentityRoleStore(
             IUnitOfWorkManager unitOfWorkManager,
             IIdentityRoleRepository roleRepository, 
-            ILogger<RoleStore> logger,
+            ILogger<IdentityRoleStore> logger,
             IGuidGenerator guidGenerator,
             IdentityErrorDescriber describer = null)
         {

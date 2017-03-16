@@ -9,7 +9,7 @@ namespace Volo.Abp.Identity
     public class IdentityRoleManager : RoleManager<IdentityRole>, IDomainService
     {
         public IdentityRoleManager(
-            RoleStore store,
+            IdentityRoleStore store,
             IEnumerable<IRoleValidator<IdentityRole>> roleValidators,
             ILookupNormalizer keyNormalizer,
             IdentityErrorDescriber errors,

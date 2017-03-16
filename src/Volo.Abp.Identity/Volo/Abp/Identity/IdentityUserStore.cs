@@ -17,7 +17,7 @@ namespace Volo.Abp.Identity
     /// <summary>
     /// Represents a new instance of a persistence store for the specified user and role types.
     /// </summary>
-    public class UserStore :
+    public class IdentityUserStore :
         IUserLoginStore<IdentityUser>,
         IUserRoleStore<IdentityUser>,
         IUserClaimStore<IdentityUser>,
@@ -45,16 +45,16 @@ namespace Volo.Abp.Identity
 
         private readonly IIdentityRoleRepository _roleRepository;
         private readonly IGuidGenerator _guidGenerator;
-        private readonly ILogger<RoleStore> _logger;
+        private readonly ILogger<IdentityRoleStore> _logger;
         private readonly IIdentityUserRepository _userRepository;
         private readonly IUnitOfWorkManager _unitOfWorkManager;
 
-        public UserStore(
+        public IdentityUserStore(
             IUnitOfWorkManager unitOfWorkManager,
             IIdentityUserRepository userRepository,
             IIdentityRoleRepository roleRepository,
             IGuidGenerator guidGenerator,
-            ILogger<RoleStore> logger,
+            ILogger<IdentityRoleStore> logger,
             IdentityErrorDescriber describer = null)
         {
             _unitOfWorkManager = unitOfWorkManager;
