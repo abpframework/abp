@@ -30,7 +30,7 @@ namespace AbpDesk.Blogging
                     new EmbeddedFileSet(
                         "/Areas/",
                         GetType().GetTypeInfo().Assembly,
-                        "AbpDesk.MongoBlog.Areas"
+                        "Areas"
                         )
                     );
             });

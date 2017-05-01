@@ -24,7 +24,7 @@ namespace Volo.Abp.AspNetCore.Mvc
                     new EmbeddedFileSet(
                         "/Views/",
                         GetType().GetTypeInfo().Assembly,
-                        "Volo.Abp.AspNetCore.Mvc.UI.Views"
+                        "Volo.Abp.AspNetCore.Mvc.Views"
                         )
                     );
             });
