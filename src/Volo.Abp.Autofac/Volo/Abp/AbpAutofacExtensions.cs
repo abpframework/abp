@@ -1,10 +1,11 @@
-﻿using Autofac;
+﻿using System;
+using Autofac;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Volo.Abp
 {
-    public static class AbpApplicationCreationOptionsAutofacExtensions
+    public static class AbpAutofacExtensions
     {
         public static void UseAutofac(this AbpApplicationCreationOptions options)
         {
@@ -25,6 +26,21 @@ namespace Volo.Abp
             }
 
             return builder;
+        }
+
+        public static IServiceProvider BuildAutofacServiceProvider([NotNull] this IServiceCollection services, Action<ContainerBuilder> builderAction = null)
+        {
+            Check.NotNull(services, nameof(services));
+
+            var serviceProviderFactory = services.GetSingletonInstanceOrNull<IServiceProviderFactory<ContainerBuilder>>();
+            if (serviceProviderFactory == null)
+            {
+                throw new AbpException($"Could not find {typeof(IServiceProviderFactory<ContainerBuilder>).FullName} in {services}. Use {nameof(UseAutofac)} before!");
+            }
+
+            var builder = serviceProviderFactory.CreateBuilder(services);
+            builderAction?.Invoke(builder);
+            return serviceProviderFactory.CreateServiceProvider(builder);
         }
     }
 }

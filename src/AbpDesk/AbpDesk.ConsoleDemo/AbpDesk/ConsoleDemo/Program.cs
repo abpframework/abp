@@ -25,15 +25,19 @@ namespace AbpDesk.ConsoleDemo
         {
             var services = new ServiceCollection();
 
-            var application = services.AddApplication<AbpDeskConsoleDemoModule>(options => { AddPlugIns(options); });
-
-            using (var scope = services.BuildServiceProvider().CreateScope())
+            var application = services.AddApplication<AbpDeskConsoleDemoModule>(options =>
+            {
+                options.UseAutofac();
+                AddPlugIns(options);
+            });
+            
+            using (var scope = services.BuildAutofacServiceProvider().CreateScope())
             {
                 application.Initialize(scope.ServiceProvider);
 
                 RunListers(application);
 
-                Console.WriteLine("Press ENTER to run again...");
+                Console.WriteLine("Press ENTER to exit...");
                 Console.ReadLine();
 
                 application.Shutdown();

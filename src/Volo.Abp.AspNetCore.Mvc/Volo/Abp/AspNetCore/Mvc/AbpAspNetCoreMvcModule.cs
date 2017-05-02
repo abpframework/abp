@@ -43,7 +43,12 @@ namespace Volo.Abp.AspNetCore.Mvc
 
         private static void AddApplicationParts(ApplicationInitializationContext context)
         {
-            var partManager = context.ServiceProvider.GetRequiredService<ApplicationPartManager>();
+            var partManager = context.ServiceProvider.GetService<ApplicationPartManager>();
+            if (partManager == null)
+            {
+                return;
+            }
+
             var moduleManager = context.ServiceProvider.GetRequiredService<IModuleManager>();
 
             foreach (var module in moduleManager.Modules.Where(m => m.IsLoadedAsPlugIn))
