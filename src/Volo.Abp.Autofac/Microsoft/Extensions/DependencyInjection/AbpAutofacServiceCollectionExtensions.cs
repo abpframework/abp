@@ -1,19 +1,13 @@
 ﻿using System;
 using Autofac;
 using JetBrains.Annotations;
-using Microsoft.Extensions.DependencyInjection;
+using Volo;
+using Volo.Abp;
 
-namespace Volo.Abp
+namespace Microsoft.Extensions.DependencyInjection
 {
-    public static class AbpAutofacExtensions
+    public static class AbpAutofacServiceCollectionExtensions
     {
-        public static void UseAutofac(this AbpApplicationCreationOptions options)
-        {
-            var builder = new ContainerBuilder();
-            options.Services.AddObjectAccessor(builder);
-            options.Services.AddSingleton((IServiceProviderFactory<ContainerBuilder>) new AbpAutofacServiceProviderFactory(builder));
-        }
-
         [NotNull]
         public static ContainerBuilder GetContainerBuilder([NotNull] this IServiceCollection services)
         {
@@ -22,7 +16,7 @@ namespace Volo.Abp
             var builder = services.GetObjectOrNull<ContainerBuilder>();
             if (builder == null)
             {
-                throw new AbpException($"Could not find ContainerBuilder. Be sure that you have called {nameof(UseAutofac)} method before!");
+                throw new AbpException($"Could not find ContainerBuilder. Be sure that you have called {nameof(AbpAutofacAbpApplicationCreationOptionsExtensions.UseAutofac)} method before!");
             }
 
             return builder;
@@ -35,7 +29,7 @@ namespace Volo.Abp
             var serviceProviderFactory = services.GetSingletonInstanceOrNull<IServiceProviderFactory<ContainerBuilder>>();
             if (serviceProviderFactory == null)
             {
-                throw new AbpException($"Could not find {typeof(IServiceProviderFactory<ContainerBuilder>).FullName} in {services}. Use {nameof(UseAutofac)} before!");
+                throw new AbpException($"Could not find {typeof(IServiceProviderFactory<ContainerBuilder>).FullName} in {services}. Use {nameof(AbpAutofacAbpApplicationCreationOptionsExtensions.UseAutofac)} before!");
             }
 
             var builder = serviceProviderFactory.CreateBuilder(services);
