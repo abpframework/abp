@@ -16,4 +16,8 @@
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.1.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Volo.Abp\Volo.Abp.csproj" />
+  </ItemGroup>
+
 </Project>

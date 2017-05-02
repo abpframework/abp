@@ -1,5 +1,7 @@
 ﻿using AbpDesk.EntityFrameworkCore;
 using AbpDesk.Web.Mvc.Navigation;
+using AbpDesk.Web.Mvc.Temp;
+using Autofac;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -42,6 +44,8 @@ namespace AbpDesk.Web.Mvc
             services.AddMvc();
 
             services.AddAssemblyOf<AbpDeskWebMvcModule>();
+
+            services.GetContainerBuilder().RegisterType<MyClassToTestAutofacCustomRegistration>();
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)

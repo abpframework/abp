@@ -39,5 +39,17 @@ namespace Microsoft.Extensions.DependencyInjection
 
             return accessor;
         }
+
+        public static T GetObjectOrNull<T>(this IServiceCollection services)
+            where T : class 
+        {
+            return services.GetSingletonInstanceOrNull<IObjectAccessor<T>>()?.Value;
+        }
+
+        public static T GetObject<T>(this IServiceCollection services)
+            where T : class
+        {
+            return services.GetObjectOrNull<T>() ?? throw new Exception($"Could not find an object of {typeof(T).AssemblyQualifiedName} in services. Be sure that you have used AddObjectAccessor before!");
+        }
     }
 }

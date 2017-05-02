@@ -1,20 +1,16 @@
-﻿using System;
-using System.IO;
-using Autofac;
-using Autofac.Extensions.DependencyInjection;
+﻿using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Serilog;
+using Volo.Abp;
 using Volo.Abp.Modularity.PlugIns;
 
 namespace AbpDesk.Web.Mvc
 {
     public class Startup
     {
-        public IContainer ApplicationContainer { get; private set; }
-
         private readonly IHostingEnvironment _env;
 
         public Startup(IHostingEnvironment env)
@@ -22,10 +18,12 @@ namespace AbpDesk.Web.Mvc
             _env = env;
         }
 
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
             services.AddApplication<AbpDeskWebMvcModule>(options =>
             {
+                options.UseAutofac();
+
                 /* @halil: I added Abp.MongoDb package as a dependency to the main application in order to use the blog plugin.
                  * Otherwise, we should add all dependencies (Recursively) into plugin folder
                  * and load in correct order. We should carefully think on that problem in the future.
@@ -36,11 +34,6 @@ namespace AbpDesk.Web.Mvc
                         @"../Web_PlugIns/")
                 );
             });
-
-            var builder = new ContainerBuilder();
-            builder.Populate(services);
-            ApplicationContainer = builder.Build();
-            return new AutofacServiceProvider(ApplicationContainer);
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IApplicationLifetime appLifetime)
@@ -53,8 +46,6 @@ namespace AbpDesk.Web.Mvc
                     .WriteTo.RollingFile("Logs/logs.txt")
                     .CreateLogger()
                 );
-
-            appLifetime.ApplicationStopped.Register(() => ApplicationContainer.Dispose());
 
             app.InitializeApplication();
         }

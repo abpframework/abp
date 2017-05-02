@@ -26,7 +26,7 @@ namespace Volo.Abp
 
             StartupModuleType = startupModuleType;
 
-            var options = new AbpApplicationCreationOptions();
+            var options = new AbpApplicationCreationOptions(services);
             optionsAction?.Invoke(options);
 
             services.AddCoreAbpServices(this);

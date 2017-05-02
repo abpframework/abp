@@ -1,4 +1,5 @@
 using JetBrains.Annotations;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Modularity.PlugIns;
 
 namespace Volo.Abp
@@ -6,10 +7,14 @@ namespace Volo.Abp
     public class AbpApplicationCreationOptions
     {
         [NotNull]
-        public PlugInSourceList PlugInSources { get; private set; }
+        public IServiceCollection Services { get; }
 
-        public AbpApplicationCreationOptions()
+        [NotNull]
+        public PlugInSourceList PlugInSources { get; }
+
+        public AbpApplicationCreationOptions([NotNull] IServiceCollection services)
         {
+            Services = Check.NotNull(services, nameof(services));
             PlugInSources = new PlugInSourceList();
         }
     }

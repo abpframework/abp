@@ -11,7 +11,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 .FirstOrDefault(d => d.ServiceType == typeof(T))
                 ?.ImplementationInstance;
         }
-
+        
         public static T GetSingletonInstance<T>(this IServiceCollection services)
         {
             var service = services.GetSingletonInstanceOrNull<T>();
