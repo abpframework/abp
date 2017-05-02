@@ -1,4 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,6 +13,8 @@ namespace AbpDesk.Web.Mvc
 {
     public class Startup
     {
+        public IContainer ApplicationContainer { get; private set; }
+
         private readonly IHostingEnvironment _env;
 
         public Startup(IHostingEnvironment env)
@@ -17,7 +22,7 @@ namespace AbpDesk.Web.Mvc
             _env = env;
         }
 
-        public void ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddApplication<AbpDeskWebMvcModule>(options =>
             {
@@ -31,9 +36,14 @@ namespace AbpDesk.Web.Mvc
                         @"../Web_PlugIns/")
                 );
             });
+
+            var builder = new ContainerBuilder();
+            builder.Populate(services);
+            ApplicationContainer = builder.Build();
+            return new AutofacServiceProvider(ApplicationContainer);
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IApplicationLifetime appLifetime)
         {
             loggerFactory
                 .AddConsole()
@@ -43,6 +53,8 @@ namespace AbpDesk.Web.Mvc
                     .WriteTo.RollingFile("Logs/logs.txt")
                     .CreateLogger()
                 );
+
+            appLifetime.ApplicationStopped.Register(() => ApplicationContainer.Dispose());
 
             app.InitializeApplication();
         }
