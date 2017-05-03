@@ -3,6 +3,7 @@ using AbpDesk.Blogging;
 using AbpDesk.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Autofac;
 using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 
@@ -12,7 +13,8 @@ namespace AbpDesk.ConsoleDemo
         typeof(AbpDeskApplicationModule), 
         typeof(AbpDeskEntityFrameworkCoreModule), 
         typeof(AbpIdentityEntityFrameworkCoreModule),
-        typeof(AbpDeskMongoBlogModule))]
+        typeof(AbpDeskMongoBlogModule),
+        typeof(AbpAutofacModule))]
     public class AbpDeskConsoleDemoModule : AbpModule
     {
         public override void ConfigureServices(IServiceCollection services)

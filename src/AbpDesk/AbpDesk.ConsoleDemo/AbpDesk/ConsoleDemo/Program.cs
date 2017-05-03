@@ -48,7 +48,7 @@ namespace AbpDesk.ConsoleDemo
         {
             application
                 .ServiceProvider
-                .GetRequiredService<TicketLister2>()
+                .GetRequiredService<TicketLister>()
                 .List();
 
             application
