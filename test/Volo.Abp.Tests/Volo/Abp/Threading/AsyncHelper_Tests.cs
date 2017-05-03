@@ -26,17 +26,17 @@ namespace Volo.Abp.Threading
             GetType().GetMethod(
                 "MyTaskWithoutReturnValueAsync",
                 BindingFlags.NonPublic | BindingFlags.Static
-            ).IsAsyncMethod().ShouldBe(true);
+            ).IsAsync().ShouldBe(true);
 
             GetType().GetMethod(
                 "MyTaskWithReturnValueAsync",
                 BindingFlags.NonPublic | BindingFlags.Static
-            ).IsAsyncMethod().ShouldBe(true);
+            ).IsAsync().ShouldBe(true);
 
             GetType().GetMethod(
                 "MyTaskWithReturnValue2",
                 BindingFlags.NonPublic | BindingFlags.Instance
-            ).IsAsyncMethod().ShouldBe(false);
+            ).IsAsync().ShouldBe(false);
         }
 
         private static async Task MyTaskWithoutReturnValueAsync()
