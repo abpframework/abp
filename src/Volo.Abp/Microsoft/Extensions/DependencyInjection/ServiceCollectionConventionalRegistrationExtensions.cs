@@ -18,7 +18,7 @@ namespace Microsoft.Extensions.DependencyInjection
             return GetOrCreateRegistrarList(services);
         }
 
-        private static List<IConventionalRegistrar> GetOrCreateRegistrarList(IServiceCollection services)
+        private static ConventionalRegistrarList GetOrCreateRegistrarList(IServiceCollection services)
         {
             var conventionalRegistrars = services.GetSingletonInstanceOrNull<IObjectAccessor<ConventionalRegistrarList>>()?.Value;
             if (conventionalRegistrars == null)

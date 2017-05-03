@@ -26,15 +26,19 @@ namespace Volo.DependencyInjection
             return GetDefaultExposedServices(type);
         }
 
-        public static IEnumerable<Type> GetDefaultExposedServices(Type type)
+        public static IEnumerable<Type> GetDefaultExposedServices(Type type, bool includeSelf = true)
         {
-            var typeInfo = type.GetTypeInfo();
+            var serviceTypes = new List<Type>();
 
-            var serviceTypes = new List<Type> { type };
+            if (includeSelf)
+            {
+                serviceTypes.Add(type);
+            }
 
-            foreach (var interfaceType in typeInfo.GetInterfaces())
+            foreach (var interfaceType in type.GetTypeInfo().GetInterfaces())
             {
                 var interfaceName = interfaceType.Name;
+
                 if (interfaceName.StartsWith("I"))
                 {
                     interfaceName = interfaceName.Right(interfaceName.Length - 1);

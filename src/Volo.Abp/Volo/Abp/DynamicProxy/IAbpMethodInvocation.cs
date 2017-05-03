@@ -9,9 +9,9 @@ namespace Volo.Abp.DynamicProxy
 
         Type[] GenericArguments { get; }
 
-        object InvocationTarget { get; }
+        object TargetObject { get; }
 
-        MethodInfo MethodInvocationTarget { get; }
+        MethodInfo Method { get; }
 
         object ReturnValue { get; set; }
 
