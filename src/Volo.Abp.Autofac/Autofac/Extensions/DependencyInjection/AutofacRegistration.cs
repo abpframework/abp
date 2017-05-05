@@ -44,17 +44,17 @@ namespace Autofac.Extensions.DependencyInjection
         /// <param name="builder">
         /// The <see cref="ContainerBuilder"/> into which the registrations should be made.
         /// </param>
-        /// <param name="descriptors">
+        /// <param name="services">
         /// The set of service descriptors to register in the container.
         /// </param>
         public static void Populate(
                 this ContainerBuilder builder,
-                IEnumerable<ServiceDescriptor> descriptors)
+                IServiceCollection services)
         {
             builder.RegisterType<AutofacServiceProvider>().As<IServiceProvider>();
             builder.RegisterType<AutofacServiceScopeFactory>().As<IServiceScopeFactory>();
 
-            Register(builder, descriptors);
+            Register(builder, services);
         }
 
         /// <summary>
@@ -94,43 +94,43 @@ namespace Autofac.Extensions.DependencyInjection
         /// <param name="builder">
         /// The <see cref="ContainerBuilder"/> into which the registrations should be made.
         /// </param>
-        /// <param name="descriptors">
+        /// <param name="services">
         /// The set of service descriptors to register in the container.
         /// </param>
         private static void Register(
                 ContainerBuilder builder,
-                IEnumerable<ServiceDescriptor> descriptors)
+                IServiceCollection services)
         {
-            foreach (var descriptor in descriptors)
+            foreach (var service in services)
             {
-                if (descriptor.ImplementationType != null)
+                if (service.ImplementationType != null)
                 {
                     // Test if the an open generic type is being registered
-                    var serviceTypeInfo = descriptor.ServiceType.GetTypeInfo();
+                    var serviceTypeInfo = service.ServiceType.GetTypeInfo();
                     if (serviceTypeInfo.IsGenericTypeDefinition)
                     {
                         builder
-                            .RegisterGeneric(descriptor.ImplementationType)
-                            .As(descriptor.ServiceType)
-                            .ConfigureLifecycle(descriptor.Lifetime);
+                            .RegisterGeneric(service.ImplementationType)
+                            .As(service.ServiceType)
+                            .ConfigureLifecycle(service.Lifetime);
                     }
                     else
                     {
                         builder
-                            .RegisterType(descriptor.ImplementationType)
-                            .As(descriptor.ServiceType)
-                            .ConfigureLifecycle(descriptor.Lifetime)
-                            .ApplyAbpConcepts();
+                            .RegisterType(service.ImplementationType)
+                            .As(service.ServiceType)
+                            .ConfigureLifecycle(service.Lifetime)
+                            .ConfigureAbpConventions(services);
                     }
                 }
-                else if (descriptor.ImplementationFactory != null)
+                else if (service.ImplementationFactory != null)
                 {
-                    var registration = RegistrationBuilder.ForDelegate(descriptor.ServiceType, (context, parameters) =>
+                    var registration = RegistrationBuilder.ForDelegate(service.ServiceType, (context, parameters) =>
                     {
                         var serviceProvider = context.Resolve<IServiceProvider>();
-                        return descriptor.ImplementationFactory(serviceProvider);
+                        return service.ImplementationFactory(serviceProvider);
                     })
-                    .ConfigureLifecycle(descriptor.Lifetime)
+                    .ConfigureLifecycle(service.Lifetime)
                     .CreateRegistration();
 
                     builder.RegisterComponent(registration);
@@ -138,9 +138,9 @@ namespace Autofac.Extensions.DependencyInjection
                 else
                 {
                     builder
-                        .RegisterInstance(descriptor.ImplementationInstance)
-                        .As(descriptor.ServiceType)
-                        .ConfigureLifecycle(descriptor.Lifetime);
+                        .RegisterInstance(service.ImplementationInstance)
+                        .As(service.ServiceType)
+                        .ConfigureLifecycle(service.Lifetime);
                 }
             }
         }

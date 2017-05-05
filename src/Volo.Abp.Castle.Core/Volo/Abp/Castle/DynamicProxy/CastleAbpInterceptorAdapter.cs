@@ -1,23 +1,10 @@
 ﻿using Castle.DynamicProxy;
 using Volo.Abp.DynamicProxy;
+using Volo.Abp.Threading;
+using Volo.ExtensionMethods;
 
 namespace Volo.Abp.Castle.DynamicProxy
 {
-    public class CastleAbpInterceptorAdapter : IInterceptor
-    {
-        private readonly IAbpInterceptor _abpInterceptor;
-
-        public CastleAbpInterceptorAdapter(IAbpInterceptor abpInterceptor)
-        {
-            _abpInterceptor = abpInterceptor;
-        }
-
-        public void Intercept(IInvocation invocation)
-        {
-            _abpInterceptor.Intercept(new CastleAbpMethodInvocationAdapter(invocation));
-        }
-    }
-
     public class CastleAbpInterceptorAdapter<TInterceptor> : IInterceptor
         where TInterceptor : IAbpInterceptor
     {
@@ -30,7 +17,14 @@ namespace Volo.Abp.Castle.DynamicProxy
 
         public void Intercept(IInvocation invocation)
         {
-            _abpInterceptor.Intercept(new CastleAbpMethodInvocationAdapter(invocation));
+            if (invocation.MethodInvocationTarget.IsAsync() && _abpInterceptor is IAbpAsyncInterceptor)
+            {
+                _abpInterceptor.As<IAbpAsyncInterceptor>().InterceptAsync(new CastleAbpAsyncMethodInvocationAdapter(invocation));
+            }
+            else
+            {
+                _abpInterceptor.Intercept(new CastleAbpMethodInvocationAdapter(invocation));
+            }
         }
     }
 }

@@ -5,7 +5,7 @@ using Volo.DependencyInjection;
 
 namespace Volo.Abp.Uow
 {
-    public class UnitOfWorkInterceptor : IAbpInterceptor, ITransientDependency
+    public class UnitOfWorkInterceptor : IAbpInterceptor, IAbpAsyncInterceptor, ITransientDependency
     {
         private readonly IUnitOfWorkManager _unitOfWorkManager;
 
@@ -13,30 +13,29 @@ namespace Volo.Abp.Uow
         {
             _unitOfWorkManager = unitOfWorkManager;
         }
-
-
+        
         public void Intercept(IAbpMethodInvocation invocation)
         {
             //TODO: Check UOW attribute and other conditions!
 
-            if (invocation.Method.IsAsync())
-            {
-                PerformAsyncUow(invocation);
-            }
-            else
-            {
-                PerformSyncUow(invocation);
-            }
-        }
-
-        private void PerformSyncUow(IAbpMethodInvocation invocation)
-        {
             using (var uow = _unitOfWorkManager.Begin())
             {
                 invocation.Proceed();
                 uow.Complete();
             }
         }
+
+        public async Task InterceptAsync(IAbpAsyncMethodInvocation invocation)
+        {
+            //TODO: Check UOW attribute and other conditions!
+
+            using (var uow = _unitOfWorkManager.Begin())
+            {
+                await invocation.ProceedAsync();
+                await uow.CompleteAsync();
+            }
+        }
+
 
         private void PerformAsyncUow(IAbpMethodInvocation invocation)
         {

@@ -55,6 +55,11 @@ namespace Microsoft.Extensions.DependencyInjection
             return services;
         }
 
+        public static IServiceCollection AddType<TType>(this IServiceCollection services)
+        {
+            return services.AddType(typeof(TType));
+        }
+
         public static IServiceCollection AddType(this IServiceCollection services, Type type)
         {
             foreach (var registrar in services.GetConventionalRegistrars())

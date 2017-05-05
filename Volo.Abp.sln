@@ -110,6 +110,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Autofac", "src\Vol
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Castle.Core", "src\Volo.Abp.Castle.Core\Volo.Abp.Castle.Core.csproj", "{053F7446-0545-482E-9F29-9C96B926966C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Autofac.Tests", "test\Volo.Abp.Autofac.Tests\Volo.Abp.Autofac.Tests.csproj", "{D8BE64D2-BD83-40F5-9783-D7FDDF668C45}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Castle.Core.Tests", "test\Volo.Abp.Castle.Core.Tests\Volo.Abp.Castle.Core.Tests.csproj", "{CE12E5C2-7B3E-4637-B6A3-274BB5C3DE16}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -264,6 +268,14 @@ Global
 		{053F7446-0545-482E-9F29-9C96B926966C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{053F7446-0545-482E-9F29-9C96B926966C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{053F7446-0545-482E-9F29-9C96B926966C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8BE64D2-BD83-40F5-9783-D7FDDF668C45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8BE64D2-BD83-40F5-9783-D7FDDF668C45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8BE64D2-BD83-40F5-9783-D7FDDF668C45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8BE64D2-BD83-40F5-9783-D7FDDF668C45}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE12E5C2-7B3E-4637-B6A3-274BB5C3DE16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE12E5C2-7B3E-4637-B6A3-274BB5C3DE16}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE12E5C2-7B3E-4637-B6A3-274BB5C3DE16}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE12E5C2-7B3E-4637-B6A3-274BB5C3DE16}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -315,5 +327,7 @@ Global
 		{00B240B6-EC44-461A-9578-EF4F1BE9C688} = {1895A5C9-50D4-4568-9A3A-14657E615A5E}
 		{CECE1288-B5A1-4A6B-BEE0-331861F94983} = {4C753F64-0C93-4D65-96C2-A40893AFC1E8}
 		{053F7446-0545-482E-9F29-9C96B926966C} = {4C753F64-0C93-4D65-96C2-A40893AFC1E8}
+		{D8BE64D2-BD83-40F5-9783-D7FDDF668C45} = {37087D1B-3693-4E96-983D-A69F210BDE53}
+		{CE12E5C2-7B3E-4637-B6A3-274BB5C3DE16} = {37087D1B-3693-4E96-983D-A69F210BDE53}
 	EndGlobalSection
 EndGlobal
