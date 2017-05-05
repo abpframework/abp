@@ -38,5 +38,17 @@ namespace AbpDesk.Tickets
 
             result.Items.Count.ShouldBe(0);
         }
+
+        [Fact]
+        public void GetAll2_Test()
+        {
+            //Act
+
+            var result = _ticketAppService.GetAll2(new GetAllTicketsInput());
+
+            //Assert
+
+            result.Items.Count.ShouldBe(1);
+        }
     }
 }

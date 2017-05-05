@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Castle.DynamicProxy;
 using Volo.Abp.Modularity;
-using Volo.Abp.Uow;
 
 namespace Volo.Abp.Castle
 {

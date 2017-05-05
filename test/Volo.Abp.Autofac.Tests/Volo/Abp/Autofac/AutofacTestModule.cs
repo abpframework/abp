@@ -10,7 +10,7 @@ namespace Volo.Abp.Autofac
     {
         public override void ConfigureServices(IServiceCollection services)
         {
-            services.AddAssemblyOf<AbpCastleCoreTestModule>();
+            services.AddAssemblyOf<AbpAutofacModule>();
         }
     }
 }
