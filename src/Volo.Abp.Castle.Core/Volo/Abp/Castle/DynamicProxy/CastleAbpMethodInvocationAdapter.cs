@@ -1,5 +1,7 @@
-﻿using Castle.DynamicProxy;
+﻿using System.Threading.Tasks;
+using Castle.DynamicProxy;
 using Volo.Abp.DynamicProxy;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.Castle.DynamicProxy
 {
@@ -13,7 +15,15 @@ namespace Volo.Abp.Castle.DynamicProxy
 
         public void Proceed()
         {
-            Invocation.Proceed();
+            if (Invocation.Method.IsAsync())
+            {
+                Invocation.Proceed();
+                AsyncHelper.RunSync(() => (Task) Invocation.ReturnValue);
+            }
+            else
+            {
+                Invocation.Proceed();
+            }
         }
     }
 }

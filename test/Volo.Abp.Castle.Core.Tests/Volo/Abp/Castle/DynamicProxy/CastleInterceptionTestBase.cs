@@ -7,6 +7,7 @@ using Xunit;
 
 namespace Volo.Abp.Castle.DynamicProxy
 {
+    //TODO: There is no Castle Dependency here.. We can move this base class directly to Volo.Abp.Tests
     public abstract class CastleInterceptionTestBase<TStartupModule> : AbpIntegratedTest<TStartupModule>
         where TStartupModule : IAbpModule
     {
@@ -25,9 +26,9 @@ namespace Volo.Abp.Castle.DynamicProxy
 
             result.ShouldBe(42);
             target.Logs.Count.ShouldBe(3);
-            target.Logs[0].ShouldBe("BeforeInvocation");
+            target.Logs[0].ShouldBe("SimpleInterceptor_BeforeInvocation");
             target.Logs[1].ShouldBe("ExecutingGetValue");
-            target.Logs[2].ShouldBe("AfterInvocation");
+            target.Logs[2].ShouldBe("SimpleInterceptor_AfterInvocation");
         }
     }
 }

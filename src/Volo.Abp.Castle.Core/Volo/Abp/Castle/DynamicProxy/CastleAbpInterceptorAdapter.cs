@@ -17,7 +17,19 @@ namespace Volo.Abp.Castle.DynamicProxy
 
         public void Intercept(IInvocation invocation)
         {
-            if (invocation.MethodInvocationTarget.IsAsync() && _abpInterceptor is IAbpAsyncInterceptor)
+            if (invocation.MethodInvocationTarget.IsAsync())
+            {
+                InterceptAsyncMethod(invocation);
+            }
+            else
+            {
+                InterceptSyncMethod(invocation);
+            }
+        }
+
+        private void InterceptAsyncMethod(IInvocation invocation)
+        {
+            if (_abpInterceptor is IAbpAsyncInterceptor)
             {
                 _abpInterceptor.As<IAbpAsyncInterceptor>().InterceptAsync(new CastleAbpAsyncMethodInvocationAdapter(invocation));
             }
@@ -25,6 +37,11 @@ namespace Volo.Abp.Castle.DynamicProxy
             {
                 _abpInterceptor.Intercept(new CastleAbpMethodInvocationAdapter(invocation));
             }
+        }
+
+        private void InterceptSyncMethod(IInvocation invocation)
+        {
+            _abpInterceptor.Intercept(new CastleAbpMethodInvocationAdapter(invocation));
         }
     }
 }

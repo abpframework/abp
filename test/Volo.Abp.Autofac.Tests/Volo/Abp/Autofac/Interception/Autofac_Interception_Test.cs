@@ -34,11 +34,11 @@ namespace Volo.Abp.Autofac.Interception
 
             result.ShouldBe(42);
             target.Logs.Count.ShouldBe(5);
-            target.Logs[0].ShouldBe("BeforeInvocation");
+            target.Logs[0].ShouldBe("SimpleInterceptor_BeforeInvocation");
             target.Logs[1].ShouldBe("EnterGetValueAsync");
             target.Logs[2].ShouldBe("MiddleGetValueAsync");
             target.Logs[3].ShouldBe("ExitGetValueAsync");
-            target.Logs[4].ShouldBe("AfterInvocation");
+            target.Logs[4].ShouldBe("SimpleInterceptor_AfterInvocation");
         }
     }
 }
