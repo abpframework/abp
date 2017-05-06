@@ -1,28 +1,62 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Reflection;
+using System.Threading.Tasks;
 using Castle.DynamicProxy;
 using Volo.Abp.DynamicProxy;
 using Volo.Abp.Threading;
 
 namespace Volo.Abp.Castle.DynamicProxy
 {
-    public class CastleAbpMethodInvocationAdapter : CastleAbpMethodInvocationAdapterBase, IAbpMethodInvocation
+    public class CastleAbpMethodInvocationAdapter : IAbpMethodInvocation
     {
-        public CastleAbpMethodInvocationAdapter(IInvocation invocation)
-            : base(invocation)
-        {
+        public object[] Arguments => Invocation.Arguments;
 
+        public Type[] GenericArguments => Invocation.GenericArguments;
+
+        public object TargetObject => Invocation.InvocationTarget;
+
+        public MethodInfo Method => Invocation.MethodInvocationTarget;
+
+        public object ReturnValue
+        {
+            get => Invocation.ReturnValue;
+            set => Invocation.ReturnValue = value;
         }
 
-        public void Proceed()
+        protected IInvocation Invocation { get; }
+
+        public CastleAbpMethodInvocationAdapter(IInvocation invocation)
         {
-            if (Invocation.Method.IsAsync())
+            Invocation = invocation;
+        }
+
+        public Task ProceedAsync()
+        {
+            return Invocation.Method.IsAsync()
+                ? RunAsync()
+                : RunSync();
+        }
+
+        private Task RunAsync()
+        {
+            Invocation.Proceed();
+            return (Task) Invocation.ReturnValue;
+        }
+
+        private Task RunSync()
+        {
+            Invocation.Proceed();
+
+            if (Method.ReturnType == typeof(void))
             {
-                Invocation.Proceed();
-                AsyncHelper.RunSync(() => (Task) Invocation.ReturnValue);
+                return Task.CompletedTask;
             }
             else
             {
-                Invocation.Proceed();
+                return (Task) typeof(Task)
+                    .GetMethod("FromResult", BindingFlags.Static | BindingFlags.Public)
+                    .MakeGenericMethod(Method.ReturnType)
+                    .Invoke(null, new object[] {Invocation.ReturnValue});
             }
         }
     }

@@ -54,6 +54,7 @@ namespace Autofac.Builder
                     typeof(CastleAbpInterceptorAdapter<>).MakeGenericType(interceptor)
                 );
             }
+
             return registrationBuilder;
         }
     }

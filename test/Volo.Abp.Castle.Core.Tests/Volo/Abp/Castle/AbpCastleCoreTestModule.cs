@@ -23,6 +23,7 @@ namespace Volo.Abp.Castle
             if (typeof(SimpleInterceptionTargetClass) == registration.ImplementationType)
             {
                 registration.Interceptors.Add<SimpleInterceptor>();
+                registration.Interceptors.Add<SimpleInterceptor2>();
             }
         }
     }

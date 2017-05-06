@@ -1,4 +1,5 @@
-﻿using Castle.DynamicProxy;
+﻿using System.Threading.Tasks;
+using Castle.DynamicProxy;
 using Volo.Abp.DynamicProxy;
 using Volo.Abp.Threading;
 using Volo.ExtensionMethods;
@@ -29,19 +30,26 @@ namespace Volo.Abp.Castle.DynamicProxy
 
         private void InterceptAsyncMethod(IInvocation invocation)
         {
-            if (_abpInterceptor is IAbpAsyncInterceptor)
+            if (invocation.Method.ReturnType == typeof(Task))
             {
-                _abpInterceptor.As<IAbpAsyncInterceptor>().InterceptAsync(new CastleAbpAsyncMethodInvocationAdapter(invocation));
+                invocation.ReturnValue = _abpInterceptor.InterceptAsync(new CastleAbpMethodInvocationAdapter(invocation));
             }
             else
             {
-                _abpInterceptor.Intercept(new CastleAbpMethodInvocationAdapter(invocation));
+	            var interceptResult = _abpInterceptor.InterceptAsync(new CastleAbpMethodInvocationAdapter(invocation));
+
+				invocation.ReturnValue = InternalAsyncHelper.CallAwaitTaskWithPostActionAndFinallyAndGetResult(
+		            invocation.Method.ReturnType.GenericTypeArguments[0],
+		            invocation.ReturnValue, //TODO: Can not change return value in that case !!! Create an interceptor that changes return value, for test purposes!
+		            () => interceptResult,
+		            exception => { }
+	            );
             }
         }
 
         private void InterceptSyncMethod(IInvocation invocation)
         {
-            _abpInterceptor.Intercept(new CastleAbpMethodInvocationAdapter(invocation));
+            AsyncHelper.RunSync(() => _abpInterceptor.InterceptAsync(new CastleAbpMethodInvocationAdapter(invocation)));
         }
     }
 }
