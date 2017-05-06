@@ -15,6 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\AbpDesk\AbpDesk.Application\AbpDesk.Application.csproj" />
     <ProjectReference Include="..\..\..\src\AbpDesk\AbpDesk.EntityFrameworkCore\AbpDesk.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\..\..\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
     <ProjectReference Include="..\..\AbpTestBase\AbpTestBase.csproj" />
   </ItemGroup>
 

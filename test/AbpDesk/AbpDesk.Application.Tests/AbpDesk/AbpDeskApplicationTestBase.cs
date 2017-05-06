@@ -1,6 +1,8 @@
+using System;
 using AbpDesk.EntityFrameworkCore;
 using AbpDesk.Tickets;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp;
 using Volo.Abp.TestBase;
 
 namespace AbpDesk
@@ -10,6 +12,18 @@ namespace AbpDesk
         protected AbpDeskApplicationTestBase()
         {
             SeedTestData();
+        }
+
+        //TODO: Make changing DI framework in unit tests easier.
+
+        protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
+        {
+            options.UseAutofac();
+        }
+
+        protected override IServiceProvider CreateServiceProvider(IServiceCollection services)
+        {
+            return services.BuildAutofacServiceProvider();
         }
 
         protected virtual void SeedTestData()
