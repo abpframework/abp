@@ -19,11 +19,12 @@ namespace Volo.Abp.TestBase
 
             BeforeAddApplication(services);
 
-            Application = services.AddApplication<TStartupModule>();
+            Application = services.AddApplication<TStartupModule>(SetAbpApplicationCreationOptions);
 
             AfterAddApplication(services);
 
-            var serviceProvider = CreateServiceProvider(services);
+            MainServiceScope = CreateServiceProvider(services).CreateScope();
+            var serviceProvider = MainServiceScope.ServiceProvider;
 
             Application.Initialize(serviceProvider);
         }
@@ -38,6 +39,11 @@ namespace Volo.Abp.TestBase
 
         }
 
+        protected virtual void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
+        {
+
+        }
+
         protected virtual void AfterAddApplication(IServiceCollection services)
         {
 
@@ -45,8 +51,7 @@ namespace Volo.Abp.TestBase
 
         protected virtual IServiceProvider CreateServiceProvider(IServiceCollection services)
         {
-            MainServiceScope = services.BuildServiceProvider().CreateScope();
-            return MainServiceScope.ServiceProvider;
+            return services.BuildServiceProvider();
         }
 
         public void Dispose()

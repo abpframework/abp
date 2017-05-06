@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Volo.Abp.Threading
 {
-    internal static class InternalAsyncHelper
+    public static class InternalAsyncHelper //TODO: Rename since it's not internal anymore!
     {
         public static async Task AwaitTaskWithFinally(Task actualReturnValue, Action<Exception> finalAction)
         {

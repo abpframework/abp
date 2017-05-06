@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp1.1</TargetFramework>
-    <AssemblyName>Volo.Abp.AspNetCore.Tests</AssemblyName>
-    <PackageId>Volo.Abp.AspNetCore.Tests</PackageId>
+    <AssemblyName>Volo.Abp.Castle.Core.Tests</AssemblyName>
+    <PackageId>Volo.Abp.Castle.Core.Tests</PackageId>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <RuntimeFrameworkVersion>1.1.1</RuntimeFrameworkVersion>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
@@ -13,8 +13,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Volo.Abp.Castle.Core\Volo.Abp.Castle.Core.csproj" />
     <ProjectReference Include="..\AbpTestBase\AbpTestBase.csproj" />
-    <ProjectReference Include="..\..\src\Volo.Abp.AspNetCore\Volo.Abp.AspNetCore.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
   </ItemGroup>
 
 </Project>

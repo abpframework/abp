@@ -39,5 +39,23 @@ namespace AbpDesk.Tickets
 
             return new ListResultDto<TicketDto>(tickets);
         }
+
+        public ListResultDto<TicketDto> GetAll2(GetAllTicketsInput input)
+        {
+            var tickets = _ticketRepository
+                .WhereIf(
+                    !input.Filter.IsNullOrWhiteSpace(),
+                    t => t.Title.Contains(input.Filter) || t.Body.Contains(input.Filter)
+                )
+                .Select(t => new TicketDto
+                {
+                    Id = t.Id,
+                    Title = t.Title,
+                    Body = t.Body
+                })
+                .ToList();
+
+            return new ListResultDto<TicketDto>(tickets);
+        }
     }
 }
