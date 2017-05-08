@@ -19,9 +19,11 @@ namespace Volo.Abp.Castle.DynamicProxy
 
         public object ReturnValue
         {
-            get => Invocation.ReturnValue;
+            get => _actualReturnValue ?? Invocation.ReturnValue;
             set => Invocation.ReturnValue = value;
         }
+
+	    private object _actualReturnValue;
 
         protected IInvocation Invocation { get; }
 
@@ -43,10 +45,10 @@ namespace Volo.Abp.Castle.DynamicProxy
 	    public Task ProceedAsync()
 	    {
 		    Invocation.Proceed();
-
-		    return Invocation.Method.IsAsync()
-			    ? (Task) Invocation.ReturnValue
-			    : Task.FromResult(Invocation.ReturnValue);
+		    _actualReturnValue = Invocation.ReturnValue;
+			return Invocation.Method.IsAsync()
+			    ? (Task)_actualReturnValue
+				: Task.FromResult(_actualReturnValue);
 	    }
 	}
 }

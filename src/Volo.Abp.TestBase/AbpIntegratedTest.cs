@@ -51,7 +51,7 @@ namespace Volo.Abp.TestBase
 
         protected virtual IServiceProvider CreateServiceProvider(IServiceCollection services)
         {
-            return services.BuildServiceProvider();
+	        return services.BuildServiceProviderFromFactory();
         }
 
         public void Dispose()

@@ -24,17 +24,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public static IServiceProvider BuildAutofacServiceProvider([NotNull] this IServiceCollection services, Action<ContainerBuilder> builderAction = null)
         {
-            Check.NotNull(services, nameof(services));
-
-            var serviceProviderFactory = services.GetSingletonInstanceOrNull<IServiceProviderFactory<ContainerBuilder>>();
-            if (serviceProviderFactory == null)
-            {
-                throw new AbpException($"Could not find {typeof(IServiceProviderFactory<ContainerBuilder>).FullName} in {services}. Use {nameof(AbpAutofacAbpApplicationCreationOptionsExtensions.UseAutofac)} before!");
-            }
-
-            var builder = serviceProviderFactory.CreateBuilder(services);
-            builderAction?.Invoke(builder);
-            return serviceProviderFactory.CreateServiceProvider(builder);
+	        return services.BuildServiceProviderFromFactory(builderAction);
         }
-    }
+	}
 }

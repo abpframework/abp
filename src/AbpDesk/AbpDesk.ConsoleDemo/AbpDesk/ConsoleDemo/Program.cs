@@ -31,7 +31,7 @@ namespace AbpDesk.ConsoleDemo
                 AddPlugIns(options);
             });
             
-            using (var scope = services.BuildAutofacServiceProvider().CreateScope())
+            using (var scope = services.BuildServiceProviderFromFactory().CreateScope())
             {
                 application.Initialize(scope.ServiceProvider);
 

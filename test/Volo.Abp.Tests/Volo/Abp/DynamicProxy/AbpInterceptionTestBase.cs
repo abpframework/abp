@@ -17,18 +17,25 @@ namespace Volo.Abp.DynamicProxy
 		    services.AddTransient<SimpleAsyncInterceptor2>();
 		    services.AddTransient<SimpleInterceptionTargetClass>();
 
+			services.AddTransient<SimpleResultCacheTestInterceptor>();
+			services.AddTransient<CachedTestObject>();
+
 			services.OnServiceRegistred(registration =>
 		    {
-				//TODO: Create an attribute to add interceptors!
 			    if (typeof(SimpleInterceptionTargetClass) == registration.ImplementationType)
 			    {
 				    registration.Interceptors.Add<SimpleAsyncInterceptor>();
 				    registration.Interceptors.Add<SimpleSyncInterceptor>();
 				    registration.Interceptors.Add<SimpleAsyncInterceptor2>();
 			    }
+
+			    if (typeof(CachedTestObject) == registration.ImplementationType)
+			    {
+				    registration.Interceptors.Add<SimpleResultCacheTestInterceptor>();
+			    }
 			});
 	    }
-
+		
 	    [Fact]
 	    public async Task Should_Intercept_Async_Method_Without_Return_Value()
 	    {
@@ -124,6 +131,34 @@ namespace Volo.Abp.DynamicProxy
 		    target.Logs[4].ShouldBe("SimpleAsyncInterceptor2_Intercept_AfterInvocation");
 		    target.Logs[5].ShouldBe("SimpleSyncInterceptor_Intercept_AfterInvocation");
 		    target.Logs[6].ShouldBe("SimpleAsyncInterceptor_Intercept_AfterInvocation");
+	    }
+
+	    [Fact]
+	    public void Should_Cache_Results()
+	    {
+		    //Arrange
+
+		    var target = ServiceProvider.GetService<CachedTestObject>();
+
+		    //Act & Assert
+
+		    target.GetValue(42).ShouldBe(42); //First run, not cached yet
+		    target.GetValue(43).ShouldBe(42); //First run, cached previous value
+		    target.GetValue(44).ShouldBe(42); //First run, cached previous value
+	    }
+
+	    [Fact]
+	    public async Task Should_Cache_Results_Async()
+	    {
+		    //Arrange
+
+		    var target = ServiceProvider.GetService<CachedTestObject>();
+
+		    //Act & Assert
+
+		    (await target.GetValueAsync(42)).ShouldBe(42); //First run, not cached yet
+		    (await target.GetValueAsync(43)).ShouldBe(42); //First run, cached previous value
+		    (await target.GetValueAsync(44)).ShouldBe(42); //First run, cached previous value
 	    }
 	}
 }

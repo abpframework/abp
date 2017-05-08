@@ -1,5 +1,9 @@
 using System;
 using System.Linq;
+using System.Reflection;
+using JetBrains.Annotations;
+using Volo;
+using Volo.Abp;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -22,5 +26,49 @@ namespace Microsoft.Extensions.DependencyInjection
 
             return service;
         }
-    }
+
+	    public static IServiceProvider BuildServiceProviderFromFactory([NotNull] this IServiceCollection services)
+	    {
+		    Check.NotNull(services, nameof(services));
+
+		    foreach (var service in services)
+		    {
+			    var factoryInterface = service.ImplementationInstance?.GetType()
+				    .GetTypeInfo()
+				    .GetInterfaces()
+				    .FirstOrDefault(i => i.GetTypeInfo().IsGenericType &&
+				                         i.GetGenericTypeDefinition() == typeof(IServiceProviderFactory<>));
+
+			    if (factoryInterface == null)
+			    {
+				    continue;
+			    }
+
+			    var containerBuilderType = factoryInterface.GenericTypeArguments[0];
+			    return (IServiceProvider)typeof(ServiceCollectionCommonExtensions)
+					.GetTypeInfo()
+				    .GetMethods()
+					.Single(m => m.Name == nameof(BuildServiceProviderFromFactory) && m.IsGenericMethod)
+				    .MakeGenericMethod(containerBuilderType)
+				    .Invoke(null, new object[] { services, null });
+		    }
+
+		    return services.BuildServiceProvider();
+	    }
+
+	    public static IServiceProvider BuildServiceProviderFromFactory<TContainerBuilder>([NotNull] this IServiceCollection services, Action<TContainerBuilder> builderAction = null)
+	    {
+		    Check.NotNull(services, nameof(services));
+
+		    var serviceProviderFactory = services.GetSingletonInstanceOrNull<IServiceProviderFactory<TContainerBuilder>>();
+		    if (serviceProviderFactory == null)
+		    {
+			    throw new AbpException($"Could not find {typeof(IServiceProviderFactory<TContainerBuilder>).FullName} in {services}.");
+		    }
+
+		    var builder = serviceProviderFactory.CreateBuilder(services);
+		    builderAction?.Invoke(builder);
+		    return serviceProviderFactory.CreateServiceProvider(builder);
+	    }
+	}
 }

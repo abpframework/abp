@@ -21,11 +21,6 @@ namespace AbpDesk
             options.UseAutofac();
         }
 
-        protected override IServiceProvider CreateServiceProvider(IServiceCollection services)
-        {
-            return services.BuildAutofacServiceProvider();
-        }
-
         protected virtual void SeedTestData()
         {
             using (var scope = ServiceProvider.CreateScope())
