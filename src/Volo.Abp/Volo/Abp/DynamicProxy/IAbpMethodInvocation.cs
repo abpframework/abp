@@ -16,6 +16,8 @@ namespace Volo.Abp.DynamicProxy
 
         object ReturnValue { get; set; }
 
-        Task ProceedAsync();
+	    void Proceed();
+
+		Task ProceedAsync();
     }
 }

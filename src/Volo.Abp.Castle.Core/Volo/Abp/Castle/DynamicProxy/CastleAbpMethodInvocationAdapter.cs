@@ -30,34 +30,28 @@ namespace Volo.Abp.Castle.DynamicProxy
             Invocation = invocation;
         }
 
-        public Task ProceedAsync()
-        {
-            return Invocation.Method.IsAsync()
-                ? RunAsync()
-                : RunSync();
-        }
+	    public void Proceed()
+	    {
+			Invocation.Proceed();
 
-        private Task RunAsync()
-        {
-            Invocation.Proceed();
-            return (Task) Invocation.ReturnValue;
-        }
+			if (Invocation.Method.IsAsync())
+			{
+				AsyncHelper.RunSync(() => (Task) Invocation.ReturnValue);
+			}
+	    }
 
-        private Task RunSync()
+	    public Task ProceedAsync()
         {
-            Invocation.Proceed();
+	        Invocation.Proceed();
 
-            if (Method.ReturnType == typeof(void))
-            {
-                return Task.CompletedTask;
-            }
-            else
-            {
-                return (Task) typeof(Task)
-                    .GetMethod("FromResult", BindingFlags.Static | BindingFlags.Public)
-                    .MakeGenericMethod(Method.ReturnType)
-                    .Invoke(null, new object[] {Invocation.ReturnValue});
-            }
-        }
-    }
+	        if (Invocation.Method.IsAsync())
+	        {
+		        return (Task)Invocation.ReturnValue;
+			}
+	        else
+	        {
+		        return Task.FromResult(Invocation.ReturnValue);
+			}
+		}
+	}
 }

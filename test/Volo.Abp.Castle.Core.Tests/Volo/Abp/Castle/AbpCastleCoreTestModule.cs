@@ -22,8 +22,9 @@ namespace Volo.Abp.Castle
             //TODO: Create an attribute to add interceptors!
             if (typeof(SimpleInterceptionTargetClass) == registration.ImplementationType)
             {
-                registration.Interceptors.Add<SimpleInterceptor>();
-                registration.Interceptors.Add<SimpleInterceptor2>();
+                registration.Interceptors.Add<SimpleAsyncInterceptor>();
+	            registration.Interceptors.Add<SimpleSyncInterceptor>();
+                registration.Interceptors.Add<SimpleAsyncInterceptor2>();
             }
         }
     }

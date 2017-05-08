@@ -2,8 +2,11 @@
 
 namespace Volo.Abp.DynamicProxy
 {
-    public interface IAbpInterceptor
+	//TODO: Create also Intercept() for sync method interception! Create AbpInterceptor for simpler usage!
+	public interface IAbpInterceptor
     {
+        void Intercept(IAbpMethodInvocation invocation);
+
         Task InterceptAsync(IAbpMethodInvocation invocation);
-    }
+	}
 }
