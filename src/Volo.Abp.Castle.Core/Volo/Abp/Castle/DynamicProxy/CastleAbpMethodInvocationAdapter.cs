@@ -41,17 +41,12 @@ namespace Volo.Abp.Castle.DynamicProxy
 	    }
 
 	    public Task ProceedAsync()
-        {
-	        Invocation.Proceed();
+	    {
+		    Invocation.Proceed();
 
-	        if (Invocation.Method.IsAsync())
-	        {
-		        return (Task)Invocation.ReturnValue;
-			}
-	        else
-	        {
-		        return Task.FromResult(Invocation.ReturnValue);
-			}
-		}
+		    return Invocation.Method.IsAsync()
+			    ? (Task) Invocation.ReturnValue
+			    : Task.FromResult(Invocation.ReturnValue);
+	    }
 	}
 }
