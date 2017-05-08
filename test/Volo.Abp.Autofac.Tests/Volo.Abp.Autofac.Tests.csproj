@@ -15,7 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
     <ProjectReference Include="..\AbpTestBase\AbpTestBase.csproj" />
-    <ProjectReference Include="..\Volo.Abp.Castle.Core.Tests\Volo.Abp.Castle.Core.Tests.csproj" />
+    <ProjectReference Include="..\Volo.Abp.Tests\Volo.Abp.Tests.csproj" />
   </ItemGroup>
 
   <ItemGroup>

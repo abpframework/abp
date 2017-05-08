@@ -1,11 +1,10 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.TestBase.Logging;
-using Volo.DependencyInjection;
 
-namespace Volo.Abp.Castle.DynamicProxy
+namespace Volo.Abp.DynamicProxy
 {
-    public class SimpleInterceptionTargetClass : ITransientDependency, ICanLogOnObject
+    public class SimpleInterceptionTargetClass : ICanLogOnObject
     {
         public List<string> Logs { get; } = new List<string>();
 

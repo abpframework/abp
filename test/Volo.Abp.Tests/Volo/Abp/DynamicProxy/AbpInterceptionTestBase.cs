@@ -5,12 +5,30 @@ using Volo.Abp.Modularity;
 using Volo.Abp.TestBase;
 using Xunit;
 
-namespace Volo.Abp.Castle.DynamicProxy
+namespace Volo.Abp.DynamicProxy
 {
-    //TODO: There is no Castle Dependency here.. We can move this base class directly to Volo.Abp.Tests
-    public abstract class CastleInterceptionTestBase<TStartupModule> : AbpIntegratedTest<TStartupModule>
+    public abstract class AbpInterceptionTestBase<TStartupModule> : AbpIntegratedTest<TStartupModule>
         where TStartupModule : IAbpModule
     {
+	    protected override void BeforeAddApplication(IServiceCollection services)
+	    {
+		    services.AddTransient<SimpleAsyncInterceptor>();
+		    services.AddTransient<SimpleSyncInterceptor>();
+		    services.AddTransient<SimpleAsyncInterceptor2>();
+		    services.AddTransient<SimpleInterceptionTargetClass>();
+
+			services.OnServiceRegistred(registration =>
+		    {
+				//TODO: Create an attribute to add interceptors!
+			    if (typeof(SimpleInterceptionTargetClass) == registration.ImplementationType)
+			    {
+				    registration.Interceptors.Add<SimpleAsyncInterceptor>();
+				    registration.Interceptors.Add<SimpleSyncInterceptor>();
+				    registration.Interceptors.Add<SimpleAsyncInterceptor2>();
+			    }
+			});
+	    }
+
 	    [Fact]
 	    public async Task Should_Intercept_Async_Method_Without_Return_Value()
 	    {
