@@ -7,7 +7,7 @@ namespace Volo.Abp.TestBase
     public class AbpIntegratedTest<TStartupModule> : IDisposable
         where TStartupModule : IAbpModule
     {
-        protected AbpApplication Application { get; }
+        protected IAbpApplication Application { get; }
 
         protected IServiceProvider ServiceProvider => Application.ServiceProvider;
 
@@ -19,14 +19,15 @@ namespace Volo.Abp.TestBase
 
             BeforeAddApplication(services);
 
-            Application = services.AddApplication<TStartupModule>(SetAbpApplicationCreationOptions);
+            var application = services.AddApplication<TStartupModule>(SetAbpApplicationCreationOptions);
+            Application = application;
 
             AfterAddApplication(services);
 
             MainServiceScope = CreateServiceProvider(services).CreateScope();
             var serviceProvider = MainServiceScope.ServiceProvider;
 
-            Application.Initialize(serviceProvider);
+            application.Initialize(serviceProvider);
         }
 
         protected virtual IServiceCollection CreateServiceCollection()

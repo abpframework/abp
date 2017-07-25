@@ -44,7 +44,7 @@ namespace AbpDesk.ConsoleDemo
             }
         }
 
-        private static void RunListers(AbpApplication application)
+        private static void RunListers(IAbpApplication application)
         {
             application
                 .ServiceProvider

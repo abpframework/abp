@@ -6,9 +6,8 @@ namespace Volo.Abp.Internal
 {
     internal static class InternalServiceCollectionExtensions
     {
-        internal static void AddCoreAbpServices(this IServiceCollection services, AbpApplication application)
+        internal static void AddCoreAbpServices(this IServiceCollection services)
         {
-            services.AddSingleton(application);
             services.TryAddSingleton<IModuleLoader>(new ModuleLoader());
         }
     }

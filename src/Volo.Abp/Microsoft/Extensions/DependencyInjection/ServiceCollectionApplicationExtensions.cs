@@ -7,34 +7,34 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceCollectionApplicationExtensions
     {
-        public static AbpApplication AddApplication<TStartupModule>(
+        public static IAbpApplicationWithExternalServiceProvider AddApplication<TStartupModule>(
             [NotNull] this IServiceCollection services)
             where TStartupModule : IAbpModule
         {
-            return AbpApplication.Create<TStartupModule>(services);
+            return AbpApplicationFactory.Create<TStartupModule>(services);
         }
 
-        public static AbpApplication AddApplication<TStartupModule>(
+        public static IAbpApplicationWithExternalServiceProvider AddApplication<TStartupModule>(
             [NotNull] this IServiceCollection services, 
             [CanBeNull] Action<AbpApplicationCreationOptions> optionsAction)
             where TStartupModule : IAbpModule
         {
-            return AbpApplication.Create<TStartupModule>(services, optionsAction);
+            return AbpApplicationFactory.Create<TStartupModule>(services, optionsAction);
         }
 
-        public static AbpApplication AddApplication(
+        public static IAbpApplicationWithExternalServiceProvider AddApplication(
             [NotNull] this IServiceCollection services,
             [NotNull] Type startupModuleType)
         {
-            return AbpApplication.Create(startupModuleType, services);
+            return AbpApplicationFactory.Create(startupModuleType, services);
         }
 
-        public static AbpApplication AddApplication(
+        public static IAbpApplicationWithExternalServiceProvider AddApplication(
             [NotNull] this IServiceCollection services,
             [NotNull] Type startupModuleType,
             [CanBeNull] Action<AbpApplicationCreationOptions> optionsAction)
         {
-            return AbpApplication.Create(startupModuleType, services, optionsAction);
+            return AbpApplicationFactory.Create(startupModuleType, services, optionsAction);
         }
     }
 }

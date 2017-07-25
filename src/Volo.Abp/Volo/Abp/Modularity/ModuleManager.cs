@@ -15,7 +15,7 @@ namespace Volo.Abp.Modularity
         private readonly ILogger<ModuleManager> _logger;
 
         public ModuleManager(
-            AbpApplication application,
+            IAbpApplication application,
             IEnumerable<IModuleLifecycleContributer> lifecycleContributers,
             ILogger<ModuleManager> logger)
         {
