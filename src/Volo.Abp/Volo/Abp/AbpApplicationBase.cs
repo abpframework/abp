@@ -13,6 +13,8 @@ namespace Volo.Abp
 
         public IServiceProvider ServiceProvider { get; protected set; }
 
+        public IServiceCollection Services { get; }
+
         [NotNull]
         public AbpModuleDescriptor[] Modules { get; }
 
@@ -25,6 +27,7 @@ namespace Volo.Abp
             Check.NotNull(services, nameof(services));
 
             StartupModuleType = startupModuleType;
+            Services = services;
 
             var options = new AbpApplicationCreationOptions(services);
             optionsAction?.Invoke(options);

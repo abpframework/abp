@@ -23,25 +23,20 @@ namespace AbpDesk.ConsoleDemo
 
         private static void RunDemo()
         {
-            var services = new ServiceCollection();
-
-            using (var application = services.AddApplication<AbpDeskConsoleDemoModule>(options =>
+            using (var application = AbpApplicationFactory.Create<AbpDeskConsoleDemoModule>(options =>
             {
                 options.UseAutofac();
                 AddPlugIns(options);
             }))
             {
-                using (var scope = services.BuildServiceProviderFromFactory().CreateScope())
-                {
-                    application.Initialize(scope.ServiceProvider);
+                application.Initialize();
 
-                    RunListers(application);
+                RunListers(application);
 
-                    Console.WriteLine("Press ENTER to exit...");
-                    Console.ReadLine();
+                Console.WriteLine("Press ENTER to exit...");
+                Console.ReadLine();
 
-                    application.Shutdown();
-                }
+                application.Shutdown();
             }
         }
 

@@ -11,54 +11,45 @@ namespace Volo.Abp
         [Fact]
         public void Should_Initialize_Single_Module()
         {
-            //Arrange
-            var services = new ServiceCollection();
-            using (var application = services.AddApplication<IndependentEmptyModule>())
+            using (var application = AbpApplicationFactory.Create<IndependentEmptyModule>())
             {
                 //Assert
-                var module = services.GetSingletonInstance<IndependentEmptyModule>();
+                var module = application.Services.GetSingletonInstance<IndependentEmptyModule>();
                 module.PreConfigureServicesIsCalled.ShouldBeTrue();
                 module.ConfigureServicesIsCalled.ShouldBeTrue();
                 module.PostConfigureServicesIsCalled.ShouldBeTrue();
 
-                using (var scope = services.BuildServiceProvider().CreateScope())
-                {
-                    //Act
-                    application.Initialize(scope.ServiceProvider);
+                //Act
+                application.Initialize();
 
-                    //Assert
-                    application.ServiceProvider.GetRequiredService<IndependentEmptyModule>().ShouldBeSameAs(module);
-                    module.OnApplicationInitializeIsCalled.ShouldBeTrue();
+                //Assert
+                application.ServiceProvider.GetRequiredService<IndependentEmptyModule>().ShouldBeSameAs(module);
+                module.OnApplicationInitializeIsCalled.ShouldBeTrue();
 
-                    //Act
-                    application.Shutdown();
+                //Act
+                application.Shutdown();
 
-                    //Assert
-                    module.OnApplicationShutdownIsCalled.ShouldBeTrue();
-                }
+                //Assert
+                module.OnApplicationShutdownIsCalled.ShouldBeTrue();
             }
         }
 
         [Fact]
         public void Should_Initialize_PlugIn()
         {
-            //Arrange
-            var services = new ServiceCollection();
-
-            //Act
-            using (var application = services.AddApplication<IndependentEmptyModule>(options =>
+            using (var application = AbpApplicationFactory.Create<IndependentEmptyModule>(options =>
             {
                 options.PlugInSources.AddTypes(typeof(IndependentEmptyPlugInModule));
             }))
             {
                 //Assert
-                var plugInModule = services.GetSingletonInstance<IndependentEmptyPlugInModule>();
+                var plugInModule = application.Services.GetSingletonInstance<IndependentEmptyPlugInModule>();
                 plugInModule.PreConfigureServicesIsCalled.ShouldBeTrue();
                 plugInModule.ConfigureServicesIsCalled.ShouldBeTrue();
                 plugInModule.PostConfigureServicesIsCalled.ShouldBeTrue();
 
                 //Act
-                application.Initialize(services.BuildServiceProvider());
+                application.Initialize();
 
                 //Assert
                 application.ServiceProvider.GetRequiredService<IndependentEmptyPlugInModule>().ShouldBeSameAs(plugInModule);

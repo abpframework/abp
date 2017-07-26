@@ -7,7 +7,7 @@ namespace Volo.Abp
 {
     internal class AbpApplicationWithInternalServiceProvider : AbpApplicationBase, IAbpApplicationWithInternalServiceProvider
     {
-        public IServiceScope ServiceScope { get; }
+        public IServiceScope ServiceScope { get; private set; }
 
         public AbpApplicationWithInternalServiceProvider(
             [NotNull] Type startupModuleType,
@@ -29,14 +29,13 @@ namespace Volo.Abp
                 services, 
                 optionsAction)
         {
-            services.AddSingleton<IAbpApplicationWithInternalServiceProvider>(_ => this);
-
-            ServiceScope = services.BuildServiceProviderFromFactory().CreateScope();
-            ServiceProvider = ServiceScope.ServiceProvider;
+            Services.AddSingleton<IAbpApplicationWithInternalServiceProvider>(_ => this);
         }
 
         public void Initialize()
         {
+            ServiceScope = Services.BuildServiceProviderFromFactory().CreateScope();
+            ServiceProvider = ServiceScope.ServiceProvider;
             ServiceProvider
                 .GetRequiredService<IModuleManager>()
                 .InitializeModules(new ApplicationInitializationContext(ServiceProvider));

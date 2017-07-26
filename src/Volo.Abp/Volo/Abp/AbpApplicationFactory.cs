@@ -7,32 +7,36 @@ namespace Volo.Abp
 {
     public static class AbpApplicationFactory
     {
-        public static IAbpApplicationWithExternalServiceProvider Create<TStartupModule>(
-            [NotNull] IServiceCollection services)
+        // IAbpApplicationWithExternalServiceProvider //////////////////////////////////////
+
+        public static IAbpApplicationWithInternalServiceProvider Create<TStartupModule>(
+            [CanBeNull] Action<AbpApplicationCreationOptions> optionsAction = null)
             where TStartupModule : IAbpModule
         {
-            return Create<TStartupModule>(services, null);
+            return Create(typeof(TStartupModule), optionsAction);
         }
+
+        public static IAbpApplicationWithInternalServiceProvider Create(
+            [NotNull] Type startupModuleType,
+            [CanBeNull] Action<AbpApplicationCreationOptions> optionsAction = null)
+        {
+            return new AbpApplicationWithInternalServiceProvider(startupModuleType, optionsAction);
+        }
+
+        // IAbpApplicationWithExternalServiceProvider //////////////////////////////////////
 
         public static IAbpApplicationWithExternalServiceProvider Create<TStartupModule>(
             [NotNull] IServiceCollection services,
-            [CanBeNull] Action<AbpApplicationCreationOptions> optionsAction)
+            [CanBeNull] Action<AbpApplicationCreationOptions> optionsAction = null)
             where TStartupModule : IAbpModule
         {
-            return new AbpApplicationWithExternalServiceProvider(typeof(TStartupModule), services, optionsAction);
+            return Create(typeof(TStartupModule), services, optionsAction);
         }
 
         public static IAbpApplicationWithExternalServiceProvider Create(
             [NotNull] Type startupModuleType,
-            [NotNull] IServiceCollection services)
-        {
-            return Create(startupModuleType, services, null);
-        }
-
-        public static IAbpApplicationWithExternalServiceProvider Create(
-            [NotNull] Type startupModuleType,
             [NotNull] IServiceCollection services,
-            [CanBeNull] Action<AbpApplicationCreationOptions> optionsAction)
+            [CanBeNull] Action<AbpApplicationCreationOptions> optionsAction = null)
         {
             return new AbpApplicationWithExternalServiceProvider(startupModuleType, services, optionsAction);
         }
