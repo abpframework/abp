@@ -2,7 +2,6 @@
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Application.Services;
-using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Modularity;
 using Volo.Abp.Uow;
 using Volo.DependencyInjection;
