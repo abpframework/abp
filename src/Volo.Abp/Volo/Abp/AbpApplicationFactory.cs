@@ -7,8 +7,6 @@ namespace Volo.Abp
 {
     public static class AbpApplicationFactory
     {
-        // IAbpApplicationWithExternalServiceProvider //////////////////////////////////////
-
         public static IAbpApplicationWithInternalServiceProvider Create<TStartupModule>(
             [CanBeNull] Action<AbpApplicationCreationOptions> optionsAction = null)
             where TStartupModule : IAbpModule
@@ -22,8 +20,6 @@ namespace Volo.Abp
         {
             return new AbpApplicationWithInternalServiceProvider(startupModuleType, optionsAction);
         }
-
-        // IAbpApplicationWithExternalServiceProvider //////////////////////////////////////
 
         public static IAbpApplicationWithExternalServiceProvider Create<TStartupModule>(
             [NotNull] IServiceCollection services,
