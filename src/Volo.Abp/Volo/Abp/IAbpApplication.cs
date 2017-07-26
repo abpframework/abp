@@ -3,7 +3,7 @@ using Volo.Abp.Modularity;
 
 namespace Volo.Abp
 {
-    public interface IAbpApplication
+    public interface IAbpApplication : IDisposable
     {
         Type StartupModuleType { get; }
 

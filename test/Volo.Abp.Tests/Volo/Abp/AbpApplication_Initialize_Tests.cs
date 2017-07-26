@@ -13,28 +13,29 @@ namespace Volo.Abp
         {
             //Arrange
             var services = new ServiceCollection();
-            var application = services.AddApplication<IndependentEmptyModule>();
-            
-            //Assert
-            var module = services.GetSingletonInstance<IndependentEmptyModule>();
-            module.PreConfigureServicesIsCalled.ShouldBeTrue();
-            module.ConfigureServicesIsCalled.ShouldBeTrue();
-            module.PostConfigureServicesIsCalled.ShouldBeTrue();
-
-            using (var scope = services.BuildServiceProvider().CreateScope())
+            using (var application = services.AddApplication<IndependentEmptyModule>())
             {
-                //Act
-                application.Initialize(scope.ServiceProvider);
-                
                 //Assert
-                application.ServiceProvider.GetRequiredService<IndependentEmptyModule>().ShouldBeSameAs(module);
-                module.OnApplicationInitializeIsCalled.ShouldBeTrue();
+                var module = services.GetSingletonInstance<IndependentEmptyModule>();
+                module.PreConfigureServicesIsCalled.ShouldBeTrue();
+                module.ConfigureServicesIsCalled.ShouldBeTrue();
+                module.PostConfigureServicesIsCalled.ShouldBeTrue();
 
-                //Act
-                application.Shutdown();
+                using (var scope = services.BuildServiceProvider().CreateScope())
+                {
+                    //Act
+                    application.Initialize(scope.ServiceProvider);
 
-                //Assert
-                module.OnApplicationShutdownIsCalled.ShouldBeTrue();
+                    //Assert
+                    application.ServiceProvider.GetRequiredService<IndependentEmptyModule>().ShouldBeSameAs(module);
+                    module.OnApplicationInitializeIsCalled.ShouldBeTrue();
+
+                    //Act
+                    application.Shutdown();
+
+                    //Assert
+                    module.OnApplicationShutdownIsCalled.ShouldBeTrue();
+                }
             }
         }
 
@@ -45,29 +46,30 @@ namespace Volo.Abp
             var services = new ServiceCollection();
 
             //Act
-            var application = services.AddApplication<IndependentEmptyModule>(options =>
+            using (var application = services.AddApplication<IndependentEmptyModule>(options =>
             {
                 options.PlugInSources.AddTypes(typeof(IndependentEmptyPlugInModule));
-            });
+            }))
+            {
+                //Assert
+                var plugInModule = services.GetSingletonInstance<IndependentEmptyPlugInModule>();
+                plugInModule.PreConfigureServicesIsCalled.ShouldBeTrue();
+                plugInModule.ConfigureServicesIsCalled.ShouldBeTrue();
+                plugInModule.PostConfigureServicesIsCalled.ShouldBeTrue();
 
-            //Assert
-            var plugInModule = services.GetSingletonInstance<IndependentEmptyPlugInModule>();
-            plugInModule.PreConfigureServicesIsCalled.ShouldBeTrue();
-            plugInModule.ConfigureServicesIsCalled.ShouldBeTrue();
-            plugInModule.PostConfigureServicesIsCalled.ShouldBeTrue();
+                //Act
+                application.Initialize(services.BuildServiceProvider());
 
-            //Act
-            application.Initialize(services.BuildServiceProvider());
+                //Assert
+                application.ServiceProvider.GetRequiredService<IndependentEmptyPlugInModule>().ShouldBeSameAs(plugInModule);
+                plugInModule.OnApplicationInitializeIsCalled.ShouldBeTrue();
 
-            //Assert
-            application.ServiceProvider.GetRequiredService<IndependentEmptyPlugInModule>().ShouldBeSameAs(plugInModule);
-            plugInModule.OnApplicationInitializeIsCalled.ShouldBeTrue();
+                //Act
+                application.Shutdown();
 
-            //Act
-            application.Shutdown();
-
-            //Assert
-            plugInModule.OnApplicationShutdownIsCalled.ShouldBeTrue();
+                //Assert
+                plugInModule.OnApplicationShutdownIsCalled.ShouldBeTrue();
+            }
         }
     }
 }

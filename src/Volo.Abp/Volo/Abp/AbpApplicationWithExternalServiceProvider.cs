@@ -27,7 +27,7 @@ namespace Volo.Abp
 
             ServiceProvider
                 .GetRequiredService<IModuleManager>()
-                .InitializeModules(new ApplicationInitializationContext(serviceProvider));
+                .InitializeModules(new ApplicationInitializationContext(ServiceProvider));
         }
     }
 }

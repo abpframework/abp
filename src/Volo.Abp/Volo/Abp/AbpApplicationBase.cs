@@ -46,11 +46,16 @@ namespace Volo.Abp
                 );
         }
 
-        public void Shutdown() //TODO: Why not disposable?
+        public virtual void Shutdown()
         {
             ServiceProvider
                 .GetRequiredService<IModuleManager>()
                 .ShutdownModules(new ApplicationShutdownContext());
+        }
+
+        public virtual void Dispose()
+        {
+
         }
     }
 }

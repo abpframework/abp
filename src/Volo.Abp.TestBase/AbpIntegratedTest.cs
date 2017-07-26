@@ -11,7 +11,7 @@ namespace Volo.Abp.TestBase
 
         protected IServiceProvider ServiceProvider => Application.ServiceProvider;
 
-        protected IServiceScope MainServiceScope { get; private set; }
+        protected IServiceScope MainServiceScope { get; }
 
         public AbpIntegratedTest()
         {
@@ -59,6 +59,7 @@ namespace Volo.Abp.TestBase
         {
             Application.Shutdown();
             MainServiceScope.Dispose();
+            Application.Dispose();
         }
     }
 }
