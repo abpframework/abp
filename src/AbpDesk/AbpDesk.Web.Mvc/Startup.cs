@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,7 +19,7 @@ namespace AbpDesk.Web.Mvc
             _env = env;
         }
 
-        public void ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddApplication<AbpDeskWebMvcModule>(options =>
             {
@@ -34,6 +35,9 @@ namespace AbpDesk.Web.Mvc
                         @"../Web_PlugIns/")
                 );
             });
+
+            //TODO: This is needed because ASP.NET Core does not use IServiceProviderFactory!
+            return services.BuildServiceProviderFromFactory();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IApplicationLifetime appLifetime)
