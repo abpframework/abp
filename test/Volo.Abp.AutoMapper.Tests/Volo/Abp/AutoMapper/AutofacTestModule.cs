@@ -8,7 +8,7 @@ namespace Volo.Abp.AutoMapper
     {
         public override void ConfigureServices(IServiceCollection services)
         {
-            services.AddAssemblyOf<AbpAutoMapperModule>();
+            services.AddAssemblyOf<AutoMapperTestModule>();
         }
     }
 }
