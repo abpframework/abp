@@ -14,7 +14,7 @@ namespace Volo.Abp.Reflection
         [InlineData(new object[] { new Type[] { } })]
         [InlineData(new object[] { new[] { typeof(IndependentEmptyModule) } })]
         [InlineData(new object[] { new[] { typeof(AbpKernelModule), typeof(IndependentEmptyModule) } })]
-        public void Should_Get_Assemblies_Of_All_Modules(Type[] moduleTypes)
+        public void Should_Get_Assemblies_Of_Given_Modules(Type[] moduleTypes)
         {
             //Arrange
 
