@@ -3,7 +3,6 @@ using AbpDesk.Blogging;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Domain.Repositories;
-using Volo.Abp.Uow;
 
 namespace Areas.Blog.Controllers
 {
@@ -11,24 +10,16 @@ namespace Areas.Blog.Controllers
     public class PostsController : AbpController
     {
         private readonly IQueryableRepository<BlogPost> _blogPostRepository;
-        private readonly IUnitOfWorkManager _unitOfWorkManager;
 
-        public PostsController(IQueryableRepository<BlogPost> blogPostRepository, IUnitOfWorkManager unitOfWorkManager)
+        public PostsController(IQueryableRepository<BlogPost> blogPostRepository)
         {
             _blogPostRepository = blogPostRepository;
-            _unitOfWorkManager = unitOfWorkManager;
         }
 
         public async Task<ActionResult> Index()
         {
-            using (var unitOfWork = _unitOfWorkManager.Begin())
-            {
-                var posts = await _blogPostRepository.GetListAsync(HttpContext.RequestAborted);
-
-                await unitOfWork.CompleteAsync(HttpContext.RequestAborted);
-
-                return View(posts);
-            }
+            var posts = await _blogPostRepository.GetListAsync(HttpContext.RequestAborted);
+            return View(posts);
         }
     }
 }

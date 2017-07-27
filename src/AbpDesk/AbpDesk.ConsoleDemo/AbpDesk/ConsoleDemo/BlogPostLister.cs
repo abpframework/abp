@@ -11,44 +11,37 @@ namespace AbpDesk.ConsoleDemo
     public class BlogPostLister : ITransientDependency
     {
         private readonly IQueryableRepository<BlogPost> _blogPostRepository;
-        private readonly IUnitOfWorkManager _unitOfWorkManager;
         private readonly IGuidGenerator _guidGenerator;
 
         public BlogPostLister(
             IQueryableRepository<BlogPost> blogPostRepository,
-            IUnitOfWorkManager unitOfWorkManager,
             IGuidGenerator guidGenerator)
         {
             _blogPostRepository = blogPostRepository;
-            _unitOfWorkManager = unitOfWorkManager;
             _guidGenerator = guidGenerator;
         }
 
-        public void List()
+        [UnitOfWork]
+        public virtual void List()
         {
             Console.WriteLine();
             Console.WriteLine("List of blog posts:");
 
-            using (var unitOfWork = _unitOfWorkManager.Begin())
+            //var blog = _blogPostRepository.FirstOrDefault(b => b.Title.StartsWith("Hello World 3!"));
+            //blog.SetTitle(blog.Title + "'");
+            //blog.Comments.Add(new BlogPostComment("@john", "good post! " + DateTime.Now.ToString(CultureInfo.InvariantCulture), star: (byte)RandomHelper.GetRandom(1, 6)));
+            //_blogPostRepository.Update(blog);
+
+            //_blogPostRepository.Insert(new BlogPost(_guidGenerator.Create(), "Hello World 1!", DateTime.Now.ToString(CultureInfo.InvariantCulture)));
+
+            foreach (var blogPost in _blogPostRepository)
             {
-                //var blog = _blogPostRepository.FirstOrDefault(b => b.Title.StartsWith("Hello World 3!"));
-                //blog.SetTitle(blog.Title + "'");
-                //blog.Comments.Add(new BlogPostComment("@john", "good post! " + DateTime.Now.ToString(CultureInfo.InvariantCulture), star: (byte)RandomHelper.GetRandom(1, 6)));
-                //_blogPostRepository.Update(blog);
+                Console.WriteLine("# " + blogPost);
 
-                //_blogPostRepository.Insert(new BlogPost(_guidGenerator.Create(), "Hello World 1!", DateTime.Now.ToString(CultureInfo.InvariantCulture)));
-
-                foreach (var blogPost in _blogPostRepository)
+                foreach (var comment in blogPost.Comments)
                 {
-                    Console.WriteLine("# " + blogPost);
-
-                    foreach (var comment in blogPost.Comments)
-                    {
-                        Console.WriteLine("  - " + comment);
-                    }
+                    Console.WriteLine("  - " + comment);
                 }
-
-                unitOfWork.Complete();
             }
         }
     }

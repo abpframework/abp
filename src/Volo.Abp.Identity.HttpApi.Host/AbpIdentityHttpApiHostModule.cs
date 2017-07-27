@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.AspNetCore.Modularity;
+using Volo.Abp.Autofac;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Identity.EntityFrameworkCore;
@@ -12,7 +13,7 @@ using Volo.Abp.Modularity;
 
 namespace Volo.Abp.Identity.HttpApi.Host
 {
-    [DependsOn(typeof(AbpIdentityHttpApiModule), typeof(AbpIdentityEntityFrameworkCoreModule))]
+    [DependsOn(typeof(AbpIdentityHttpApiModule), typeof(AbpIdentityEntityFrameworkCoreModule), typeof(AbpAutofacModule))]
     public class AbpIdentityHttpApiHostModule : AbpModule
     {
         public override void ConfigureServices(IServiceCollection services)

@@ -254,3 +254,4 @@ paket-files/
 # ABP
 build/outputs
 src/AbpDesk/AbpDesk.Web.Mvc/Logs
+/src/Volo.Abp.Identity.HttpApi.Host/Logs
