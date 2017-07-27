@@ -54,20 +54,22 @@ namespace Volo.Abp.AutoMapper
             target2.Value.ShouldBe("42");
         }
 
-        public class Entity
+        private class Entity
         {
             public string Value { get; set; }
         }
-        public class DerivedEntity : Entity { }
-        public class EntityProxy : DerivedEntity { }
+
+        private class DerivedEntity : Entity { }
+
+        private class EntityProxy : DerivedEntity { }
 
         [AutoMapFrom(typeof(Entity))]
-        public class EntityDto
+        private class EntityDto
         {
             public string Value { get; set; }
         }
 
         [AutoMapFrom(typeof(DerivedEntity))]
-        public class DerivedEntityDto : EntityDto { }
+        private class DerivedEntityDto : EntityDto { }
     }
 }
