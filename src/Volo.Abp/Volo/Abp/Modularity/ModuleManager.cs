@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
 using Microsoft.Extensions.Logging;
 using Volo.DependencyInjection;
 
@@ -8,20 +6,18 @@ namespace Volo.Abp.Modularity
 {
     public class ModuleManager : IModuleManager, ISingletonDependency
     {
-        public IReadOnlyList<AbpModuleDescriptor> Modules => _modules.ToImmutableList();
-
-        private readonly List<AbpModuleDescriptor> _modules;
+        private readonly IModuleContainer _moduleContainer;
         private readonly IEnumerable<IModuleLifecycleContributer> _lifecycleContributers;
         private readonly ILogger<ModuleManager> _logger;
 
         public ModuleManager(
-            IAbpApplication application,
+            IModuleContainer moduleContainer,
             IEnumerable<IModuleLifecycleContributer> lifecycleContributers,
             ILogger<ModuleManager> logger)
         {
+            _moduleContainer = moduleContainer;
             _lifecycleContributers = lifecycleContributers;
             _logger = logger;
-            _modules = application.Modules.ToList();
         }
 
         public void InitializeModules(ApplicationInitializationContext context)
@@ -30,7 +26,7 @@ namespace Volo.Abp.Modularity
 
             foreach (var contributer in _lifecycleContributers)
             {
-                foreach (var module in Modules)
+                foreach (var module in _moduleContainer.Modules)
                 {
                     contributer.Initialize(context, module.Instance);
                 }
@@ -43,7 +39,7 @@ namespace Volo.Abp.Modularity
         {
             _logger.LogInformation("Loaded modules:");
 
-            foreach (var module in Modules)
+            foreach (var module in _moduleContainer.Modules)
             {
                 _logger.LogInformation("- " + module.Type.FullName);
             }
@@ -53,7 +49,7 @@ namespace Volo.Abp.Modularity
         {
             foreach (var contributer in _lifecycleContributers)
             {
-                foreach (var module in Modules)
+                foreach (var module in _moduleContainer.Modules)
                 {
                     contributer.Shutdown(context, module.Instance);
                 }

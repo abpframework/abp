@@ -8,6 +8,10 @@ namespace Volo.Abp.Modularity
     public interface IModuleLoader
     {
         [NotNull]
-        AbpModuleDescriptor[] LoadModules([NotNull] IServiceCollection services, [NotNull] Type startupModuleType, [NotNull] PlugInSourceList plugInSources);
+        IAbpModuleDescriptor[] LoadModules(
+            [NotNull] IServiceCollection services,
+            [NotNull] Type startupModuleType,
+            [NotNull] PlugInSourceList plugInSources
+        );
     }
 }

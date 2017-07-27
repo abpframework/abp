@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Reflection;
 using JetBrains.Annotations;
+using Volo.ExtensionMethods.Collections.Generic;
 
 namespace Volo.Abp.Modularity
 {
-    public class AbpModuleDescriptor
+    public class AbpModuleDescriptor : IAbpModuleDescriptor
     {
         public Type Type { get; }
 
@@ -13,9 +15,13 @@ namespace Volo.Abp.Modularity
 
         public bool IsLoadedAsPlugIn { get; }
 
-        internal List<AbpModuleDescriptor> Dependencies { get; }
+        public IReadOnlyList<IAbpModuleDescriptor> Dependencies => _dependencies.ToImmutableList();
+        private readonly List<IAbpModuleDescriptor> _dependencies;
 
-        public AbpModuleDescriptor([NotNull] Type type, [NotNull] IAbpModule instance, bool isLoadedAsPlugIn)
+        public AbpModuleDescriptor(
+            [NotNull] Type type, 
+            [NotNull] IAbpModule instance, 
+            bool isLoadedAsPlugIn)
         {
             Check.NotNull(type, nameof(type));
             Check.NotNull(instance, nameof(instance));
@@ -29,7 +35,12 @@ namespace Volo.Abp.Modularity
             Instance = instance;
             IsLoadedAsPlugIn = isLoadedAsPlugIn;
 
-            Dependencies = new List<AbpModuleDescriptor>();
+            _dependencies = new List<IAbpModuleDescriptor>();
+        }
+
+        public void AddDependency(IAbpModuleDescriptor descriptor)
+        {
+            _dependencies.AddIfNotContains(descriptor);
         }
 
         public override string ToString()

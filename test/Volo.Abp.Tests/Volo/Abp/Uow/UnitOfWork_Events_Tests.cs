@@ -66,7 +66,6 @@ namespace Volo.Abp.Uow
             disposed.ShouldBeTrue();
         }
 
-
         [Fact]
         public void Should_Not_Trigger_Complete_If_Uow_Is_Not_Completed()
         {

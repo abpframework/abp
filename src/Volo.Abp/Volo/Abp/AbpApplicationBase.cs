@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Internal;
@@ -15,8 +16,7 @@ namespace Volo.Abp
 
         public IServiceCollection Services { get; }
 
-        [NotNull]
-        public AbpModuleDescriptor[] Modules { get; }
+        public IReadOnlyList<IAbpModuleDescriptor> Modules { get; }
 
         internal AbpApplicationBase(
             [NotNull] Type startupModuleType,
@@ -33,12 +33,13 @@ namespace Volo.Abp
             optionsAction?.Invoke(options);
 
             services.AddSingleton<IAbpApplication>(_ => this);
+            services.AddSingleton<IModuleContainer>(_ => this);
             services.AddCoreAbpServices();
 
             Modules = LoadModules(services, options);
         }
 
-        private AbpModuleDescriptor[] LoadModules(IServiceCollection services, AbpApplicationCreationOptions options)
+        private IReadOnlyList<IAbpModuleDescriptor> LoadModules(IServiceCollection services, AbpApplicationCreationOptions options)
         {
             return services
                 .GetSingletonInstance<IModuleLoader>()

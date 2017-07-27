@@ -4,7 +4,7 @@ using Volo.Abp.Modularity;
 
 namespace Volo.Abp
 {
-    public interface IAbpApplication : IDisposable
+    public interface IAbpApplication : IModuleContainer, IDisposable
     {
         /// <summary>
         /// Type of the startup (entrance) module of the application.
@@ -22,11 +22,6 @@ namespace Volo.Abp
         /// This can not be used before initialize the application.
         /// </summary>
         IServiceProvider ServiceProvider { get; }
-
-        /// <summary>
-        /// List of modules loaded into this application.
-        /// </summary>
-        AbpModuleDescriptor[] Modules { get; }
 
         /// <summary>
         /// Used to gracefully shutdown the application and all modules.

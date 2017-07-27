@@ -49,9 +49,9 @@ namespace Volo.Abp.AspNetCore.Mvc
                 return;
             }
 
-            var moduleManager = context.ServiceProvider.GetRequiredService<IModuleManager>();
+            var moduleContainer = context.ServiceProvider.GetRequiredService<IModuleContainer>();
 
-            foreach (var module in moduleManager.Modules.Where(m => m.IsLoadedAsPlugIn))
+            foreach (var module in moduleContainer.Modules.Where(m => m.IsLoadedAsPlugIn))
             {
                 partManager.ApplicationParts.Add(new AssemblyPart(module.Type.GetTypeInfo().Assembly));
             }
