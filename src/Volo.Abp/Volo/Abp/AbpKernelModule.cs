@@ -3,6 +3,8 @@ using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Modularity;
+using Volo.Abp.ObjectMapping;
+using Volo.Abp.Reflection;
 using Volo.Abp.Uow;
 using Volo.DependencyInjection;
 
@@ -12,7 +14,25 @@ namespace Volo.Abp
     {
         public override void PreConfigureServices(IServiceCollection services)
         {
-            services.OnServiceRegistred(registration => { RegisterUnitOfWorkInterceptor(registration); });
+            //TODO: Move these to dedicated class(es)
+
+            services.OnServiceRegistred(registration =>
+            {
+                if (typeof(IApplicationService).GetTypeInfo().IsAssignableFrom(registration.ImplementationType))
+                {
+                    registration.Interceptors.Add<UnitOfWorkInterceptor>();
+                }
+            });
+
+            services.OnServiceExposing(context =>
+            {
+                context.ExposedTypes.AddRange(
+                    ReflectionHelper.GetImplementedGenericTypes(
+                        context.ImplementationType,
+                        typeof(IObjectMapper<,>)
+                    )
+                );
+            });
         }
 
         public override void ConfigureServices(IServiceCollection services)
@@ -28,14 +48,6 @@ namespace Volo.Abp
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             context.ServiceProvider.GetRequiredService<ObjectAccessor<IServiceProvider>>().Value = context.ServiceProvider;
-        }
-
-        private static void RegisterUnitOfWorkInterceptor(IOnServiceRegistredArgs registration)
-        {
-            if (typeof(IApplicationService).GetTypeInfo().IsAssignableFrom(registration.ImplementationType))
-            {
-                registration.Interceptors.Add<UnitOfWorkInterceptor>();
-            }
         }
     }
 }

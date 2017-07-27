@@ -24,7 +24,7 @@ namespace Volo.DependencyInjection
                 return;
             }
 
-            foreach (var serviceType in AutoRegistrationHelper.GetExposedServices(type))
+            foreach (var serviceType in AutoRegistrationHelper.GetExposedServices(services, type))
             {
                 var serviceDescriptor = ServiceDescriptor.Describe(serviceType, type, lifeTime.Value);
 

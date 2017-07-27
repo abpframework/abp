@@ -11,7 +11,7 @@ namespace Volo.DependencyInjection
             ExposedServiceTypes = exposedServiceTypes ?? new Type[0];
         }
 
-        public Type[] GetExposedServiceTypes()
+        public Type[] GetExposedServiceTypes(Type targetType)
         {
             return ExposedServiceTypes;
         }

@@ -17,14 +17,36 @@ namespace Microsoft.Extensions.DependencyInjection
 
         private static ServiceRegistrationActionList GetOrCreateServiceActionList(IServiceCollection services)
         {
-            var registrationActionList = services.GetSingletonInstanceOrNull<IObjectAccessor<ServiceRegistrationActionList>>()?.Value;
-            if (registrationActionList == null)
+            var actionList = services.GetSingletonInstanceOrNull<IObjectAccessor<ServiceRegistrationActionList>>()?.Value;
+            if (actionList == null)
             {
-                registrationActionList = new ServiceRegistrationActionList();
-                services.AddObjectAccessor(registrationActionList);
+                actionList = new ServiceRegistrationActionList();
+                services.AddObjectAccessor(actionList);
             }
 
-            return registrationActionList;
+            return actionList;
+        }
+
+        public static void OnServiceExposing(this IServiceCollection services, Action<IOnServiceExposingArgs> exposeAction)
+        {
+            GetOrCreateOnServiceExposingList(services).Add(exposeAction);
+        }
+
+        public static ServiceExposingActionList GetServiceExposingActionList(this IServiceCollection services)
+        {
+            return GetOrCreateOnServiceExposingList(services);
+        }
+
+        private static ServiceExposingActionList GetOrCreateOnServiceExposingList(IServiceCollection services)
+        {
+            var actionList = services.GetSingletonInstanceOrNull<IObjectAccessor<ServiceExposingActionList>>()?.Value;
+            if (actionList == null)
+            {
+                actionList = new ServiceExposingActionList();
+                services.AddObjectAccessor(actionList);
+            }
+
+            return actionList;
         }
     }
 }

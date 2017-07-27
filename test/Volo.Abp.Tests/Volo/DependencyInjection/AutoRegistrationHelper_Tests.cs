@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Xunit;
 
@@ -11,7 +12,7 @@ namespace Volo.DependencyInjection
         {
             //Act
 
-            var exposedServices = AutoRegistrationHelper.GetExposedServices(typeof(DefaultDerivedService)).ToList();
+            var exposedServices = AutoRegistrationHelper.GetExposedServices(new ServiceCollection(), typeof(DefaultDerivedService)).ToList();
 
             //Assert
 
@@ -26,7 +27,7 @@ namespace Volo.DependencyInjection
         {
             //Act
 
-            var exposedServices = AutoRegistrationHelper.GetExposedServices(typeof(ExplicitDerivedService)).ToList();
+            var exposedServices = AutoRegistrationHelper.GetExposedServices(new ServiceCollection(), typeof(ExplicitDerivedService)).ToList();
 
             //Assert
 

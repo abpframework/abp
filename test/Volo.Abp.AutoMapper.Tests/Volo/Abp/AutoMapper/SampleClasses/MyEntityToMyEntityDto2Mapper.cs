@@ -3,7 +3,6 @@ using Volo.DependencyInjection;
 
 namespace Volo.Abp.AutoMapper.SampleClasses
 {
-    [ExposeServices(typeof(IObjectMapper<MyEntity, MyEntityDto2>))]
     public class MyEntityToMyEntityDto2Mapper : IObjectMapper<MyEntity, MyEntityDto2>, ITransientDependency
     {
         public MyEntityDto2 Map(MyEntity source)

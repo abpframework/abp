@@ -38,8 +38,7 @@ namespace Autofac.Builder
 
         private static IRegistrationBuilder<TLimit, TConcreteReflectionActivatorData, TRegistrationStyle> AddInterceptors<TLimit, TConcreteReflectionActivatorData, TRegistrationStyle>(
             this IRegistrationBuilder<TLimit, TConcreteReflectionActivatorData, TRegistrationStyle> registrationBuilder, 
-            Type[] interceptors
-            )
+            Type[] interceptors)
             where TConcreteReflectionActivatorData : ConcreteReflectionActivatorData
         {
             var serviceType = registrationBuilder.RegistrationData.Services.OfType<IServiceWithType>().FirstOrDefault()?.ServiceType;

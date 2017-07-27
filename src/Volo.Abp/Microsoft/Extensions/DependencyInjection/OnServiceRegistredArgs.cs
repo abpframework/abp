@@ -1,4 +1,5 @@
 using System;
+using JetBrains.Annotations;
 using Volo;
 using Volo.Abp.Collections;
 using Volo.Abp.DynamicProxy;
@@ -11,7 +12,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public virtual Type ImplementationType { get; }
 
-        public OnServiceRegistredArgs(Type implementationType)
+        public OnServiceRegistredArgs([NotNull] Type implementationType)
         {
             ImplementationType = Check.NotNull(implementationType, nameof(implementationType));
 

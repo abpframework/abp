@@ -4,6 +4,6 @@ namespace Volo.DependencyInjection
 {
     public interface IExposedServiceTypesProvider
     {
-        Type[] GetExposedServiceTypes();
+        Type[] GetExposedServiceTypes(Type targetType);
     }
 }
