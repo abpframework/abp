@@ -1,98 +1,114 @@
 ﻿using System;
+using System.Linq;
+using System.Reflection;
 using AutoMapper;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Volo.Abp.Modularity;
+using Volo.Abp.Reflection;
 
 namespace Volo.Abp.AutoMapper
 {
     public class AbpAutoMapperModule : AbpModule
     {
-        //private readonly ITypeFinder _typeFinder;
+        private static volatile bool _createdMappingsBefore;
+        private static readonly object SyncObj = new object();
 
-        //private static volatile bool _createdMappingsBefore;
-        //private static readonly object SyncObj = new object();
-        
-        //public AbpAutoMapperModule(ITypeFinder typeFinder)
-        //{
-        //    _typeFinder = typeFinder;
-        //}
+        public override void ConfigureServices(IServiceCollection services)
+        {
+            services.AddAssemblyOf<AbpAutoMapperModule>();
 
-        //public override void PreInitialize()
-        //{
-        //    IocManager.Register<IAbpAutoMapperConfiguration, AbpAutoMapperConfiguration>();
+            var mapperAccessor = new MapperAccessor();
+            services.AddSingleton<IMapperAccessor>(_ => mapperAccessor);
+            services.AddSingleton<MapperAccessor>(_ => mapperAccessor);
 
-        //    Configuration.ReplaceService<ObjectMapping.IObjectMapper, AutoMapperObjectMapper>();
+            services.Configure<AbpAutoMapperOptions>(options =>
+            {
+                options.Configurators.Add(CreateCoreMappings);
+            });
+        }
 
-        //    Configuration.Modules.AbpAutoMapper().Configurators.Add(CreateCoreMappings);
-        //}
+        public override void OnApplicationInitialization(ApplicationInitializationContext context)
+        {
+            CreateMappings(context.ServiceProvider);
+        }
 
-        //public override void PostInitialize()
-        //{
-        //    CreateMappings();
-        //}
+        private void CreateMappings(IServiceProvider serviceProvider)
+        {
+            lock (SyncObj)
+            {
+                using (var scope = serviceProvider.CreateScope())
+                {
+                    var options = scope.ServiceProvider.GetRequiredService<IOptions<AbpAutoMapperOptions>>().Value;
 
-        //private void CreateMappings()
-        //{
-        //    lock (SyncObj)
-        //    {
-        //        Action<IMapperConfigurationExpression> configurer = configuration =>
-        //        {
-        //            FindAndAutoMapTypes(configuration);
-        //            foreach (var configurator in Configuration.Modules.AbpAutoMapper().Configurators)
-        //            {
-        //                configurator(configuration);
-        //            }
-        //        };
+                    void ConfigureAll(IAbpAutoMapperConfigurationContext ctx)
+                    {
+                        FindAndAutoMapTypes(ctx);
+                        foreach (var configurator in options.Configurators)
+                        {
+                            configurator(ctx);
+                        }
+                    }
 
-        //        if (Configuration.Modules.AbpAutoMapper().UseStaticMapper)
-        //        {
-        //            //We should prevent duplicate mapping in an application, since Mapper is static.
-        //            if (!_createdMappingsBefore)
-        //            {
-        //                Mapper.Initialize(configurer);
-        //                _createdMappingsBefore = true;
-        //            }
+                    if (options.UseStaticMapper)
+                    {
+                        //We should prevent duplicate mapping in an application, since Mapper is static.
+                        if (!_createdMappingsBefore)
+                        {
+                            Mapper.Initialize(mapperConfigurationExpression =>
+                            {
+                                ConfigureAll(new AbpAutoMapperConfigurationContext(mapperConfigurationExpression, scope.ServiceProvider));
+                            });
 
-        //            IocManager.IocContainer.Register(
-        //                Component.For<IMapper>().Instance(Mapper.Instance).LifestyleSingleton()
-        //            );
-        //        }
-        //        else
-        //        {
-        //            var config = new MapperConfiguration(configurer);
-        //            IocManager.IocContainer.Register(
-        //                Component.For<IMapper>().Instance(config.CreateMapper()).LifestyleSingleton()
-        //            );
-        //        }
-        //    }
-        //}
+                            _createdMappingsBefore = true;
+                        }
 
-        //private void FindAndAutoMapTypes(IMapperConfigurationExpression configuration)
-        //{
-        //    var types = _typeFinder.Find(type =>
-        //        {
-        //            var typeInfo = type.GetTypeInfo();
-        //            return typeInfo.IsDefined(typeof(AutoMapAttribute)) ||
-        //                   typeInfo.IsDefined(typeof(AutoMapFromAttribute)) ||
-        //                   typeInfo.IsDefined(typeof(AutoMapToAttribute));
-        //        }
-        //    );
+                        scope.ServiceProvider.GetRequiredService<MapperAccessor>().Mapper = Mapper.Instance;
+                    }
+                    else
+                    {
+                        var config = new MapperConfiguration(mapperConfigurationExpression =>
+                        {
+                            ConfigureAll(new AbpAutoMapperConfigurationContext(mapperConfigurationExpression, scope.ServiceProvider));
+                        });
 
-        //    Logger<>.DebugFormat("Found {0} classes define auto mapping attributes", types.Length);
+                        scope.ServiceProvider.GetRequiredService<MapperAccessor>().Mapper = config.CreateMapper();
+                    }
+                }
+            }
+        }
 
-        //    foreach (var type in types)
-        //    {
-        //        Logger<>.Debug(type.FullName);
-        //        configuration.CreateAutoAttributeMaps(type);
-        //    }
-        //}
+        private void FindAndAutoMapTypes(IAbpAutoMapperConfigurationContext context)
+        {
+            var typeFinder = context.ServiceProvider.GetRequiredService<ITypeFinder>();
+            var logger = context.ServiceProvider.GetRequiredService<ILogger<AbpAutoMapperModule>>();
 
-        //private void CreateCoreMappings(IMapperConfigurationExpression configuration)
-        //{
-        //    var localizationContext = IocManager.Resolve<ILocalizationContext>();
+            var types = typeFinder.Types.Where(type =>
+                {
+                    var typeInfo = type.GetTypeInfo();
+                    return typeInfo.IsDefined(typeof(AutoMapAttribute)) ||
+                           typeInfo.IsDefined(typeof(AutoMapFromAttribute)) ||
+                           typeInfo.IsDefined(typeof(AutoMapToAttribute));
+                }
+            ).ToArray();
 
-        //    configuration.CreateMap<ILocalizableString, string>().ConvertUsing(ls => ls?.Localize(localizationContext));
-        //    configuration.CreateMap<LocalizableString, string>().ConvertUsing(ls => ls == null ? null : localizationContext.LocalizationManager.GetString(ls));
-        //}
+            logger.LogDebug($"Found {types.Length} classes define auto mapping attributes:");
+
+            foreach (var type in types)
+            {
+                logger.LogDebug(type.FullName);
+                context.MapperConfigurationExpression.CreateAutoAttributeMaps(type);
+            }
+        }
+
+        private void CreateCoreMappings(IAbpAutoMapperConfigurationContext context)
+        {
+            //Will be done when localization system completed
+            //var localizationContext = IocManager.Resolve<ILocalizationContext>();
+
+            //configuration.CreateMap<ILocalizableString, string>().ConvertUsing(ls => ls?.Localize(localizationContext));
+            //configuration.CreateMap<LocalizableString, string>().ConvertUsing(ls => ls == null ? null : localizationContext.LocalizationManager.GetString(ls));
+        }
     }
 }

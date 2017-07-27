@@ -4,13 +4,13 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using Microsoft.Extensions.Logging;
+using Volo.DependencyInjection;
 using Volo.ExtensionMethods.Collections.Generic;
 
 namespace Volo.Abp.Reflection
 {
-    //TODO: Write unit tests!
-
-    public class TypeFinder : ITypeFinder
+    //TODO: What if we need to this type finder while registering dependencies?
+    public class TypeFinder : ITypeFinder, ITransientDependency
     {
         private readonly IAssemblyFinder _assemblyFinder;
         private readonly ILogger<TypeFinder> _logger;

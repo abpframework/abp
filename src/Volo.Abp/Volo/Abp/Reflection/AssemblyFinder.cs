@@ -5,10 +5,11 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using Volo.Abp.Modularity;
+using Volo.DependencyInjection;
 
 namespace Volo.Abp.Reflection
 {
-    public class AssemblyFinder : IAssemblyFinder
+    public class AssemblyFinder : IAssemblyFinder, ITransientDependency
     {
         private readonly IModuleContainer _moduleContainer;
 

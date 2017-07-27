@@ -114,7 +114,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Autofac.Tests", "t
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Castle.Core.Tests", "test\Volo.Abp.Castle.Core.Tests\Volo.Abp.Castle.Core.Tests.csproj", "{CE12E5C2-7B3E-4637-B6A3-274BB5C3DE16}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AutoMapper", "src\Volo.Abp.AutoMapper\Volo.Abp.AutoMapper.csproj", "{D2F3594F-E2B9-4338-A022-F00C4E9A14C3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AutoMapper", "src\Volo.Abp.AutoMapper\Volo.Abp.AutoMapper.csproj", "{D2F3594F-E2B9-4338-A022-F00C4E9A14C3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AutoMapper.Tests", "test\Volo.Abp.AutoMapper.Tests\Volo.Abp.AutoMapper.Tests.csproj", "{8343BE23-6A7B-4C58-BF0D-95188B11B180}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -282,6 +284,10 @@ Global
 		{D2F3594F-E2B9-4338-A022-F00C4E9A14C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D2F3594F-E2B9-4338-A022-F00C4E9A14C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D2F3594F-E2B9-4338-A022-F00C4E9A14C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8343BE23-6A7B-4C58-BF0D-95188B11B180}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8343BE23-6A7B-4C58-BF0D-95188B11B180}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8343BE23-6A7B-4C58-BF0D-95188B11B180}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8343BE23-6A7B-4C58-BF0D-95188B11B180}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -336,5 +342,6 @@ Global
 		{D8BE64D2-BD83-40F5-9783-D7FDDF668C45} = {37087D1B-3693-4E96-983D-A69F210BDE53}
 		{CE12E5C2-7B3E-4637-B6A3-274BB5C3DE16} = {37087D1B-3693-4E96-983D-A69F210BDE53}
 		{D2F3594F-E2B9-4338-A022-F00C4E9A14C3} = {4C753F64-0C93-4D65-96C2-A40893AFC1E8}
+		{8343BE23-6A7B-4C58-BF0D-95188B11B180} = {37087D1B-3693-4E96-983D-A69F210BDE53}
 	EndGlobalSection
 EndGlobal
