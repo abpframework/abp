@@ -21,9 +21,9 @@ namespace Autofac.Builder
                 return registrationBuilder;
             }
 
-            var serviceRegistredArgs = new OnServiceRegistredArgs(serviceType);
+            var serviceRegistredArgs = new OnServiceRegistredContext(serviceType);
 
-            foreach (var registrationAction in services.GetServiceRegistrationActionList())
+            foreach (var registrationAction in services.GetRegistrationActionList())
             {
                 registrationAction.Invoke(serviceRegistredArgs);
             }

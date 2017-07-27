@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Volo.DependencyInjection
 {
-    public class ServiceExposingActionList : List<Action<IOnServiceExposingArgs>>
+    public class ServiceExposingActionList : List<Action<IOnServiceExposingContext>>
     {
 
     }

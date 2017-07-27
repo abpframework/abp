@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Volo.DependencyInjection
 {
-    public interface IOnServiceExposingArgs
+    public interface IOnServiceExposingContext
     {
         Type ImplementationType { get; }
 

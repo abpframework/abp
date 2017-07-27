@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Volo.DependencyInjection
 {
-    public class ServiceRegistrationActionList : List<Action<IOnServiceRegistredArgs>>
+    public class ServiceRegistrationActionList : List<Action<IOnServiceRegistredContext>>
     {
         
     }

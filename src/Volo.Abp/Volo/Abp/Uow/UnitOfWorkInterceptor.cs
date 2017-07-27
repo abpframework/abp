@@ -1,9 +1,23 @@
-﻿using System.Threading.Tasks;
+﻿using System.Reflection;
+using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Application.Services;
 using Volo.Abp.DynamicProxy;
 using Volo.DependencyInjection;
 
 namespace Volo.Abp.Uow
 {
+    public static class UnitOfWorkInterceptorRegistrar
+    {
+        public static void RegisterIfNeeded(IOnServiceRegistredContext context)
+        {
+            if (typeof(IApplicationService).GetTypeInfo().IsAssignableFrom(context.ImplementationType))
+            {
+                context.Interceptors.Add<UnitOfWorkInterceptor>();
+            }
+        }
+    }
+
     public class UnitOfWorkInterceptor : AbpInterceptor, ITransientDependency
     {
         private readonly IUnitOfWorkManager _unitOfWorkManager;

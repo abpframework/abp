@@ -20,7 +20,7 @@ namespace Volo.Abp.DynamicProxy
 			services.AddTransient<SimpleResultCacheTestInterceptor>();
 			services.AddTransient<CachedTestObject>();
 
-			services.OnServiceRegistred(registration =>
+			services.OnRegistred(registration =>
 		    {
 			    if (typeof(SimpleInterceptionTargetClass) == registration.ImplementationType)
 			    {

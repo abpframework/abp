@@ -48,11 +48,11 @@ namespace Volo.DependencyInjection
                 }
             }
 
-            var exposeActions = services.GetServiceExposingActionList();
+            var exposeActions = services.GetExposingActionList();
             if (exposeActions.Any())
             {
-                var args = new OnServiceExposingArgs(type, serviceTypes);
-                foreach (var action in services.GetServiceExposingActionList())
+                var args = new OnServiceExposingContext(type, serviceTypes);
+                foreach (var action in services.GetExposingActionList())
                 {
                     action(args);
                 }

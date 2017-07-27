@@ -5,17 +5,17 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceCollectionRegistrationActionExtensions
     {
-        public static void OnServiceRegistred(this IServiceCollection services, Action<IOnServiceRegistredArgs> registrationAction)
+        public static void OnRegistred(this IServiceCollection services, Action<IOnServiceRegistredContext> registrationAction)
         {
-            GetOrCreateServiceActionList(services).Add(registrationAction);
+            GetOrCreateRegistrationActionList(services).Add(registrationAction);
         }
 
-        public static ServiceRegistrationActionList GetServiceRegistrationActionList(this IServiceCollection services)
+        public static ServiceRegistrationActionList GetRegistrationActionList(this IServiceCollection services)
         {
-            return GetOrCreateServiceActionList(services);
+            return GetOrCreateRegistrationActionList(services);
         }
 
-        private static ServiceRegistrationActionList GetOrCreateServiceActionList(IServiceCollection services)
+        private static ServiceRegistrationActionList GetOrCreateRegistrationActionList(IServiceCollection services)
         {
             var actionList = services.GetSingletonInstanceOrNull<IObjectAccessor<ServiceRegistrationActionList>>()?.Value;
             if (actionList == null)
@@ -27,17 +27,17 @@ namespace Microsoft.Extensions.DependencyInjection
             return actionList;
         }
 
-        public static void OnServiceExposing(this IServiceCollection services, Action<IOnServiceExposingArgs> exposeAction)
+        public static void OnExposing(this IServiceCollection services, Action<IOnServiceExposingContext> exposeAction)
         {
-            GetOrCreateOnServiceExposingList(services).Add(exposeAction);
+            GetOrCreateExposingList(services).Add(exposeAction);
         }
 
-        public static ServiceExposingActionList GetServiceExposingActionList(this IServiceCollection services)
+        public static ServiceExposingActionList GetExposingActionList(this IServiceCollection services)
         {
-            return GetOrCreateOnServiceExposingList(services);
+            return GetOrCreateExposingList(services);
         }
 
-        private static ServiceExposingActionList GetOrCreateOnServiceExposingList(IServiceCollection services)
+        private static ServiceExposingActionList GetOrCreateExposingList(IServiceCollection services)
         {
             var actionList = services.GetSingletonInstanceOrNull<IObjectAccessor<ServiceExposingActionList>>()?.Value;
             if (actionList == null)

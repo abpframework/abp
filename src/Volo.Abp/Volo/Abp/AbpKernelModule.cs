@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.Application.Services;
 using Volo.Abp.Modularity;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Reflection;
@@ -14,17 +12,10 @@ namespace Volo.Abp
     {
         public override void PreConfigureServices(IServiceCollection services)
         {
-            //TODO: Move these to dedicated class(es)
-
-            services.OnServiceRegistred(registration =>
-            {
-                if (typeof(IApplicationService).GetTypeInfo().IsAssignableFrom(registration.ImplementationType))
-                {
-                    registration.Interceptors.Add<UnitOfWorkInterceptor>();
-                }
-            });
-
-            services.OnServiceExposing(context =>
+            services.OnRegistred(UnitOfWorkInterceptorRegistrar.RegisterIfNeeded);
+            
+            //TODO: Move to a dedicated class
+            services.OnExposing(context =>
             {
                 context.ExposedTypes.AddRange(
                     ReflectionHelper.GetImplementedGenericTypes(
