@@ -1,6 +1,8 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AbpDesk.Tickets.Dtos;
+using Volo.Abp.Application.Services;
 using Volo.Abp.Application.Services.Dtos;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Linq;
@@ -9,15 +11,14 @@ using Volo.ExtensionMethods;
 
 namespace AbpDesk.Tickets
 {
-    public class TicketAppService : ITicketAppService
+    public class TicketAppService : ApplicationService, ITicketAppService
     {
         private readonly IQueryableRepository<Ticket, int> _ticketRepository;
         private readonly IAsyncQueryableExecuter _asyncQueryableExecuter;
 
         public TicketAppService(
             IQueryableRepository<Ticket, int> ticketRepository,
-            IAsyncQueryableExecuter asyncQueryableExecuter
-            )
+            IAsyncQueryableExecuter asyncQueryableExecuter)
         {
             _ticketRepository = ticketRepository;
             _asyncQueryableExecuter = asyncQueryableExecuter;
@@ -30,14 +31,11 @@ namespace AbpDesk.Tickets
                     !input.Filter.IsNullOrWhiteSpace(),
                     t => t.Title.Contains(input.Filter) || t.Body.Contains(input.Filter)
                 )
-                .Select(t => new TicketDto
-                {
-                    Id = t.Id,
-                    Title = t.Title,
-                    Body = t.Body
-                }));
+            );
 
-            return new ListResultDto<TicketDto>(tickets);
+            return new ListResultDto<TicketDto>(
+                ObjectMapper.Map<List<Ticket>, List<TicketDto>>(tickets)
+            );
         }
 
         public ListResultDto<TicketDto> GetAll2(GetAllTicketsInput input)
@@ -47,15 +45,11 @@ namespace AbpDesk.Tickets
                     !input.Filter.IsNullOrWhiteSpace(),
                     t => t.Title.Contains(input.Filter) || t.Body.Contains(input.Filter)
                 )
-                .Select(t => new TicketDto
-                {
-                    Id = t.Id,
-                    Title = t.Title,
-                    Body = t.Body
-                })
                 .ToList();
 
-            return new ListResultDto<TicketDto>(tickets);
+            return new ListResultDto<TicketDto>(
+                ObjectMapper.Map<List<Ticket>, List<TicketDto>>(tickets)
+            );
         }
     }
 }

@@ -19,21 +19,21 @@ namespace Volo.Abp.AutoMapper
 
     public interface IAbpAutoMapperConfigurationContext
     {
-        IMapperConfigurationExpression MapperConfigurationExpression { get; }
+        IMapperConfigurationExpression MapperConfiguration { get; }
 
         IServiceProvider ServiceProvider { get; }
     }
 
     public class AbpAutoMapperConfigurationContext : IAbpAutoMapperConfigurationContext
     {
-        public IMapperConfigurationExpression MapperConfigurationExpression { get; }
+        public IMapperConfigurationExpression MapperConfiguration { get; }
         public IServiceProvider ServiceProvider { get; }
 
         public AbpAutoMapperConfigurationContext(
             IMapperConfigurationExpression mapperConfigurationExpression, 
             IServiceProvider serviceProvider)
         {
-            MapperConfigurationExpression = mapperConfigurationExpression;
+            MapperConfiguration = mapperConfigurationExpression;
             ServiceProvider = serviceProvider;
         }
     }

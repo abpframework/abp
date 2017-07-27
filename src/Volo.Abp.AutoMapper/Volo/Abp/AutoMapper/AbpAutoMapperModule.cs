@@ -98,7 +98,7 @@ namespace Volo.Abp.AutoMapper
             foreach (var type in types)
             {
                 logger.LogDebug(type.FullName);
-                context.MapperConfigurationExpression.CreateAutoAttributeMaps(type);
+                context.MapperConfiguration.CreateAutoAttributeMaps(type);
             }
         }
 

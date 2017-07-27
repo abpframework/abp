@@ -15,6 +15,8 @@ namespace Autofac.Builder
             IServiceCollection services)
             where TConcreteReflectionActivatorData : ConcreteReflectionActivatorData
         {
+            registrationBuilder = registrationBuilder.PropertiesAutowired();
+
             var serviceType = registrationBuilder.RegistrationData.Services.OfType<IServiceWithType>().FirstOrDefault()?.ServiceType;
             if (serviceType == null)
             {

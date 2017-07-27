@@ -1,13 +1,14 @@
 ﻿using System;
-using System.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Volo.Abp.Application.Services;
 using Volo.Abp.Application.Services.Dtos;
 
 namespace Volo.Abp.Identity
 {
     //TODO: Consider a way of passing cancellation token to all async application service methods!
 
-    public class UserAppService : IUserAppService
+    public class UserAppService : ApplicationService, IUserAppService
     {
         private readonly IIdentityUserRepository _userRepository;
 
@@ -18,28 +19,18 @@ namespace Volo.Abp.Identity
 
         public async Task<ListResultDto<IdentityUserDto>> GetAll()
         {
-            var users = (await _userRepository.GetListAsync())
-                .Select(u => new IdentityUserDto
-                {
-                    Id = u.Id,
-                    Email = u.Email,
-                    UserName = u.UserName
-                })
-                .ToList();
+            var users = await _userRepository.GetListAsync();
 
-            return new ListResultDto<IdentityUserDto>(users);
+            return new ListResultDto<IdentityUserDto>(
+                ObjectMapper.Map<List<IdentityUser>, List<IdentityUserDto>>(users)
+            );
         }
 
         public async Task<IdentityUserDto> Get(Guid id)
         {
             var user = await _userRepository.GetAsync(id);
 
-            return new IdentityUserDto
-            {
-                Id = user.Id,
-                UserName = user.UserName,
-                Email = user.Email
-            };
+            return ObjectMapper.Map<IdentityUser, IdentityUserDto>(user);
         }
     }
 }
