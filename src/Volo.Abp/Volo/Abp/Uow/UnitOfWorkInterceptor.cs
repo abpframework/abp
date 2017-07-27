@@ -15,7 +15,11 @@ namespace Volo.Abp.Uow
 
 	    public override void Intercept(IAbpMethodInvocation invocation)
 	    {
-            //TODO: Check UOW attribute and other conditions!
+	        if (!UnitOfWorkHelper.IsUnitOfWorkMethod(invocation.Method))
+	        {
+				invocation.Proceed();
+	            return;
+            }
 
 			using (var uow = _unitOfWorkManager.Begin())
 			{
@@ -26,7 +30,11 @@ namespace Volo.Abp.Uow
 
 	    public override async Task InterceptAsync(IAbpMethodInvocation invocation)
         {
-            //TODO: Check UOW attribute and other conditions!
+            if (!UnitOfWorkHelper.IsUnitOfWorkMethod(invocation.Method))
+            {
+                invocation.Proceed();
+                return;
+            }
 
             using (var uow = _unitOfWorkManager.Begin())
             {
