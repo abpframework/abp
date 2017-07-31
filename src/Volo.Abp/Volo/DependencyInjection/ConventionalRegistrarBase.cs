@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
-using Volo.Internal;
+using Volo.Abp.Reflection;
 
 namespace Volo.DependencyInjection
 {

@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Threading;
 using Microsoft.Extensions.Logging;
 using Volo.DependencyInjection;
-using Volo.ExtensionMethods.Collections.Generic;
 
 namespace Volo.Abp.Reflection
 {
@@ -35,18 +33,9 @@ namespace Volo.Abp.Reflection
             {
                 try
                 {
-                    Type[] typesInThisAssembly;
+                    var typesInThisAssembly = AssemblyHelper.GetAllTypes(assembly);
 
-                    try
-                    {
-                        typesInThisAssembly = assembly.GetTypes();
-                    }
-                    catch (ReflectionTypeLoadException ex)
-                    {
-                        typesInThisAssembly = ex.Types;
-                    }
-
-                    if (typesInThisAssembly.IsNullOrEmpty())
+                    if (!typesInThisAssembly.Any())
                     {
                         continue;
                     }

@@ -5,6 +5,8 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceCollectionRegistrationActionExtensions
     {
+        // OnRegistred
+
         public static void OnRegistred(this IServiceCollection services, Action<IOnServiceRegistredContext> registrationAction)
         {
             GetOrCreateRegistrationActionList(services).Add(registrationAction);
@@ -26,6 +28,8 @@ namespace Microsoft.Extensions.DependencyInjection
 
             return actionList;
         }
+
+        // OnExposing
 
         public static void OnExposing(this IServiceCollection services, Action<IOnServiceExposingContext> exposeAction)
         {
