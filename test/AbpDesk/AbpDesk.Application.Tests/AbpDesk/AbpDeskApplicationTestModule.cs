@@ -17,9 +17,11 @@ namespace AbpDesk
         {
             services.AddEntityFrameworkInMemoryDatabase();
 
+            var connStr = Guid.NewGuid().ToString();
+
             services.Configure<DbConnectionOptions>(options =>
             {
-                options.ConnectionStrings.Default = Guid.NewGuid().ToString();
+                options.ConnectionStrings.Default = connStr;
             });
 
             services.Configure<AbpDbContextOptions>(options =>
