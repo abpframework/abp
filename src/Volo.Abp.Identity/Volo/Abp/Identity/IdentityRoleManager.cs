@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.Domain.Services;
@@ -13,15 +12,13 @@ namespace Volo.Abp.Identity
             IEnumerable<IRoleValidator<IdentityRole>> roleValidators,
             ILookupNormalizer keyNormalizer,
             IdentityErrorDescriber errors,
-            ILogger<IdentityRoleManager> logger,
-            IHttpContextAccessor contextAccessor)
+            ILogger<IdentityRoleManager> logger)
             : base(
                   store, 
                   roleValidators, 
                   keyNormalizer, 
                   errors, 
-                  logger, 
-                  contextAccessor)
+                  logger)
         {
         }
     }
