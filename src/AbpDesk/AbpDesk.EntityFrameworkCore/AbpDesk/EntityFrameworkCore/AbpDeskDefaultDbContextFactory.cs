@@ -1,13 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Design;
 
 namespace AbpDesk.EntityFrameworkCore
 {
     /* This class is needed for EF Core command line tooling */
 
-    public class AbpDeskDefaultDbContextFactory : IDbContextFactory<AbpDeskDbContext>
+    public class AbpDeskDefaultDbContextFactory : IDesignTimeDbContextFactory<AbpDeskDbContext>
     {
-        public AbpDeskDbContext Create(DbContextFactoryOptions options)
+        public AbpDeskDbContext CreateDbContext(string[] args)
         {
             var builder = new DbContextOptionsBuilder<AbpDeskDbContext>();
             builder.UseSqlServer("Server=localhost;Database=AbpDesk;Trusted_Connection=True;");
