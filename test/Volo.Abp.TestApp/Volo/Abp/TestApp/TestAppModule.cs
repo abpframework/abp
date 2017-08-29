@@ -1,6 +1,4 @@
-﻿using System;
-using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.Domain.Repositories;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Modularity;
 using Volo.Abp.TestApp.Domain;
 using Volo.Abp.AutoMapper;
