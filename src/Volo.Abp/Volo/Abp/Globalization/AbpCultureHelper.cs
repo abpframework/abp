@@ -1,7 +1,8 @@
-﻿using JetBrains.Annotations;
-using Volo.Abp;
+﻿using System;
+using System.Globalization;
+using JetBrains.Annotations;
 
-namespace System.Globalization
+namespace Volo.Abp.Globalization
 {
     public static class AbpCultureHelper
     {
