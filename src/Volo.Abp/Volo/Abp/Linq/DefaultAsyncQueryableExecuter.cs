@@ -6,8 +6,10 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Linq
 {
-    public class DefaultAsyncQueryableExecuter : IAsyncQueryableExecuter, ITransientDependency
+    public class DefaultAsyncQueryableExecuter : IAsyncQueryableExecuter, ISingletonDependency
     {
+        public static DefaultAsyncQueryableExecuter Instance { get; } = new DefaultAsyncQueryableExecuter();
+
         public Task<int> CountAsync<T>(IQueryable<T> queryable)
         {
             return Task.FromResult(queryable.Count());
