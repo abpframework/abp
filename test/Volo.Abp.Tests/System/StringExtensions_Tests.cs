@@ -1,9 +1,8 @@
-﻿using System;
+﻿using Shouldly;
 using System.Globalization;
-using Shouldly;
 using Xunit;
 
-namespace Volo.ExtensionMethods
+namespace System
 {
     public class StringExtensions_Tests : IDisposable
     {

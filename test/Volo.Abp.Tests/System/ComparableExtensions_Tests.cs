@@ -1,8 +1,7 @@
-﻿using System;
-using Shouldly;
+﻿using Shouldly;
 using Xunit;
 
-namespace Volo.ExtensionMethods
+namespace System
 {
     public class ComparableExtensions_Tests
     {

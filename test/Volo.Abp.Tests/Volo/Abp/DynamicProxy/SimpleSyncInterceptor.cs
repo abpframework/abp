@@ -1,5 +1,4 @@
 using Volo.Abp.TestBase.Logging;
-using Volo.DependencyInjection;
 
 namespace Volo.Abp.DynamicProxy
 {

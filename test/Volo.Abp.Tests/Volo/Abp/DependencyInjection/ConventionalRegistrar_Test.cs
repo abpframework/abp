@@ -1,8 +1,8 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.DependencyInjection;
+using Shouldly;
 
-namespace Volo.DependencyInjection
+namespace Volo.Abp.DependencyInjection
 {
     public class ConventionalRegistrar_Tests
     {

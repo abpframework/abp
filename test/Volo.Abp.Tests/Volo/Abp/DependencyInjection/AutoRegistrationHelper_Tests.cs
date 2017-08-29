@@ -1,10 +1,9 @@
-﻿using System.Linq;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
+using System.Linq;
 using Xunit;
-using Volo.Abp.DependencyInjection;
 
-namespace Volo.DependencyInjection
+namespace Volo.Abp.DependencyInjection
 {
     public class AutoRegistrationHelper_Tests
     {
