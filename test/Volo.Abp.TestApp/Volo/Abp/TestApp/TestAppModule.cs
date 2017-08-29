@@ -26,11 +26,16 @@ namespace Volo.Abp.TestApp
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
-            //TODO: Refactor to a seed class!
-            using(IServiceScope scope = context.ServiceProvider.CreateScope())
+            SeedTestData(context);
+        }
+
+        private static void SeedTestData(ApplicationInitializationContext context)
+        {
+            using (IServiceScope scope = context.ServiceProvider.CreateScope())
             {
-                var personRepository = scope.ServiceProvider.GetRequiredService<IRepository<Person>>();
-                personRepository.Insert(new Person(Guid.NewGuid(), "Douglas", 42));
+                scope.ServiceProvider
+                    .GetRequiredService<TestDataBuilder>()
+                    .Build();
             }
         }
     }
