@@ -1,6 +1,4 @@
-using System;
-
-namespace Volo.ExtensionMethods
+namespace System
 {
     /// <summary>
     /// Extension methods for <see cref="IComparable{T}"/>.

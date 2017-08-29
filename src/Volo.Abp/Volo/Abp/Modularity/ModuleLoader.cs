@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Modularity.PlugIns;
-using Volo.ExtensionMethods.Collections.Generic;
 
 namespace Volo.Abp.Modularity
 {

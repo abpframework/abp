@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-
-namespace Volo.ExtensionMethods.Collections.Generic
+namespace System.Collections.Generic
 {
     /// <summary>
     /// Extension methods for Dictionary.

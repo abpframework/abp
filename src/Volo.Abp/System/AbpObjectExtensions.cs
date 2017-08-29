@@ -1,8 +1,7 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Linq;
 
-namespace Volo.ExtensionMethods
+namespace System
 {
     /// <summary>
     /// Extension methods for all objects.

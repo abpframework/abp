@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Loader;
-using Volo.ExtensionMethods.Collections.Generic;
 
 namespace Volo.Abp.Modularity.PlugIns
 {

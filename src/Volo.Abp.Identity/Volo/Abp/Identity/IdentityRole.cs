@@ -5,7 +5,6 @@ using System.Security.Claims;
 using JetBrains.Annotations;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Guids;
-using Volo.ExtensionMethods.Collections.Generic;
 
 namespace Volo.Abp.Identity
 {

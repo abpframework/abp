@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
-using Volo.ExtensionMethods;
-using Volo.ExtensionMethods.Collections.Generic;
 
 namespace Volo.Abp.EmbeddedFiles
 {

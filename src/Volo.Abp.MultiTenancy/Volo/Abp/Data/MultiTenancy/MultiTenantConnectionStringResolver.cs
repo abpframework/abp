@@ -1,7 +1,7 @@
-﻿using Microsoft.Extensions.Options;
+﻿using System.Collections.Generic;
+using Microsoft.Extensions.Options;
 using Volo.Abp.MultiTenancy;
 using Volo.DependencyInjection;
-using Volo.ExtensionMethods.Collections.Generic;
 
 namespace Volo.Abp.Data.MultiTenancy
 {

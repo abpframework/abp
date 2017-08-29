@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.Modularity;
 using Volo.Abp.TestBase;
-using Volo.ExtensionMethods.Collections.Generic;
+using System.Collections.Generic;
 using Xunit;
 
 namespace Volo.Abp.UI.Navigation

@@ -1,11 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.TestHost;
-using Volo.ExtensionMethods;
-using Volo.ExtensionMethods.Collections.Generic;
 
 namespace Volo.Abp.AspNetCore.TestBase
 {

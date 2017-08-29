@@ -1,9 +1,9 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.MultiTenancy;
-using Volo.ExtensionMethods.Collections.Generic;
 
 namespace Volo.Abp.AspNetCore.MultiTenancy
 {

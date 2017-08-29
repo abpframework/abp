@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 
-namespace Volo.ExtensionMethods.Collections.Generic
+namespace System.Collections.Generic
 {    
     /// <summary> 
     /// Extension methods for <see cref="IEnumerable{T}"/>.

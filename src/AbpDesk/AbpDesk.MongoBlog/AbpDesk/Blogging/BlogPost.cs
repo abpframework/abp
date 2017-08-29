@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using JetBrains.Annotations;
 using Volo;
 using Volo.Abp.Domain.Entities;
-using Volo.ExtensionMethods;
 
 namespace AbpDesk.Blogging
 {

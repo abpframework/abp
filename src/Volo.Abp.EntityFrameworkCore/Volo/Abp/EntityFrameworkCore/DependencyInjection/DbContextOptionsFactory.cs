@@ -1,9 +1,9 @@
 using System;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Data;
-using Volo.ExtensionMethods.Collections.Generic;
 
 namespace Volo.Abp.EntityFrameworkCore.DependencyInjection
 {

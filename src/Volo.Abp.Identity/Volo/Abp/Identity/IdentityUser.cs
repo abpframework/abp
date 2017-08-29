@@ -7,7 +7,6 @@ using JetBrains.Annotations;
 using Microsoft.AspNetCore.Identity;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Guids;
-using Volo.ExtensionMethods.Collections.Generic;
 
 namespace Volo.Abp.Identity
 {

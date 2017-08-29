@@ -1,6 +1,6 @@
 ﻿using System;
 using Shouldly;
-using Volo.ExtensionMethods.Collections.Generic;
+using System.Collections.Generic;
 using Xunit;
 
 namespace Volo.Abp.Text.Formatting

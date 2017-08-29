@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System;
+using Microsoft.AspNetCore.Http;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Text.Formatting;
-using Volo.ExtensionMethods;
 
 namespace Volo.Abp.AspNetCore.MultiTenancy
 {

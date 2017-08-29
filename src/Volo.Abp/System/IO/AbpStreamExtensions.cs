@@ -1,6 +1,4 @@
-﻿using System.IO;
-
-namespace Volo.ExtensionMethods
+﻿namespace System.IO
 {
     public static class AbpStreamExtensions
     {

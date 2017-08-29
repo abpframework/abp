@@ -1,7 +1,6 @@
-using System;
 using System.Runtime.ExceptionServices;
 
-namespace Volo.ExtensionMethods
+namespace System
 {
     /// <summary>
     /// Extension methods for <see cref="Exception"/> class.

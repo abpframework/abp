@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Volo.ExtensionMethods.Collections.Generic;
 
 namespace Volo.Abp.Data
 {

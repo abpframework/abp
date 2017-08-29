@@ -1,10 +1,10 @@
-using System;
+using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
-using Volo.ExtensionMethods.Collections.Generic;
+using Volo;
 
-namespace Volo.ExtensionMethods
+namespace System
 {
     /// <summary>
     /// Extension methods for String class.

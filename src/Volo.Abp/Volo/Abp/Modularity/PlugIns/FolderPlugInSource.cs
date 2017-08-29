@@ -6,7 +6,6 @@ using System.Reflection;
 using System.Runtime.Loader;
 using JetBrains.Annotations;
 using Volo.Abp.Reflection;
-using Volo.ExtensionMethods.Collections.Generic;
 
 namespace Volo.Abp.Modularity.PlugIns
 {

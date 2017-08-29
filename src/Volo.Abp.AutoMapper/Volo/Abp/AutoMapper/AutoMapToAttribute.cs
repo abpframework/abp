@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
 using AutoMapper;
-using Volo.ExtensionMethods.Collections.Generic;
 
 namespace Volo.Abp.AutoMapper
 {
