@@ -1,15 +1,14 @@
-﻿using System;
-using System.Linq;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 using JetBrains.Annotations;
+using Volo.Abp;
 using Volo.Abp.Application.Services.Dtos;
 
-namespace Volo.Abp.Linq.Extensions
+namespace System.Linq
 {
     /// <summary>
     /// Some useful extension methods for <see cref="IQueryable{T}"/>.
     /// </summary>
-    public static class QueryableExtensions
+    public static class AbpQueryableExtensions
     {
         /// <summary>
         /// Used for paging. Can be used as an alternative to Skip(...).Take(...) chaining.

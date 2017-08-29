@@ -6,7 +6,6 @@ using Volo.Abp.Application.Services;
 using Volo.Abp.Application.Services.Dtos;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
-using Volo.Abp.Linq.Extensions;
 
 namespace Abp.Application.Services
 {

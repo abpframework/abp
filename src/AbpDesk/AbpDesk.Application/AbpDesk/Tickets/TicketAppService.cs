@@ -7,7 +7,6 @@ using Volo.Abp.Application.Services;
 using Volo.Abp.Application.Services.Dtos;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Linq;
-using Volo.Abp.Linq.Extensions;
 
 namespace AbpDesk.Tickets
 {
