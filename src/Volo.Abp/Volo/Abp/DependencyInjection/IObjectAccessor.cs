@@ -1,6 +1,6 @@
 using JetBrains.Annotations;
 
-namespace Volo.DependencyInjection
+namespace Volo.Abp.DependencyInjection
 {
     public interface IObjectAccessor<out T>
     {

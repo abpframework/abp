@@ -1,8 +1,8 @@
 using System;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Timing;
-using Volo.DependencyInjection;
 
 namespace Volo.Abp.Json.Newtonsoft
 {

@@ -14,7 +14,7 @@ using Volo.Abp.Autofac;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.Web;
 using Volo.Abp.Modularity;
-using Volo.Abp.UI.Navigation;
+using Volo.Abp.Ui.Navigation;
 
 namespace AbpDesk.Web.Mvc
 {

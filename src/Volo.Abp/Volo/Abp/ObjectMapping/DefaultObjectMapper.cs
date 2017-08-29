@@ -1,6 +1,6 @@
 using System;
 using Microsoft.Extensions.DependencyInjection;
-using Volo.DependencyInjection;
+using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.ObjectMapping
 {

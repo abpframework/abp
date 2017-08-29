@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Volo.DependencyInjection;
+using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Uow
 {

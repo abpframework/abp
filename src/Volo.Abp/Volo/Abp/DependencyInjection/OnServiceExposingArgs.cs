@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using JetBrains.Annotations;
 
-namespace Volo.DependencyInjection
+namespace Volo.Abp.DependencyInjection
 {
     public class OnServiceExposingContext : IOnServiceExposingContext
     {

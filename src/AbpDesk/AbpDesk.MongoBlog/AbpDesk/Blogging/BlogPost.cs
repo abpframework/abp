@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using Volo;
+using Volo.Abp;
 using Volo.Abp.Domain.Entities;
 
 namespace AbpDesk.Blogging

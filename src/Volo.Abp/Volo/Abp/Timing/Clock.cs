@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.Extensions.Options;
-using Volo.DependencyInjection;
+using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Timing
 {

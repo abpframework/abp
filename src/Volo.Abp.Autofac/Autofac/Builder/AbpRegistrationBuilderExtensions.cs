@@ -5,6 +5,7 @@ using Autofac.Core;
 using Autofac.Extras.DynamicProxy;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Castle.DynamicProxy;
+using Volo.Abp.DependencyInjection;
 
 namespace Autofac.Builder
 {

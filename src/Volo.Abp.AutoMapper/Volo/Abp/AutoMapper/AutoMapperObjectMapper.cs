@@ -1,8 +1,8 @@
 ﻿using System;
 using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.ObjectMapping;
-using Volo.DependencyInjection;
 
 namespace Volo.Abp.AutoMapper
 {

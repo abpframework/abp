@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
-using Volo.DependencyInjection;
+using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Modularity
 {

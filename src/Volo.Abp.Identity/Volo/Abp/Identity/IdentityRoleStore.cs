@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
 using Volo.Abp.Uow;
-using Volo.DependencyInjection;
 
 namespace Volo.Abp.Identity
 {

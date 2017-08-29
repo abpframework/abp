@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Volo.DependencyInjection;
+using Volo.Abp.DependencyInjection;
 
 namespace Microsoft.Extensions.DependencyInjection
 {

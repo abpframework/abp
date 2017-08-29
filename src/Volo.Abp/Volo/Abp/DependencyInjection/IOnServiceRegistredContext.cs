@@ -2,7 +2,7 @@ using System;
 using Volo.Abp.Collections;
 using Volo.Abp.DynamicProxy;
 
-namespace Microsoft.Extensions.DependencyInjection
+namespace Volo.Abp.DependencyInjection
 {
     public interface IOnServiceRegistredContext
     {

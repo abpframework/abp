@@ -1,6 +1,6 @@
 ﻿using System;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.EmbeddedFiles;
-using Volo.DependencyInjection;
 
 namespace Volo.Abp.AspNetCore.EmbeddedFiles
 {

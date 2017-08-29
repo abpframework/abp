@@ -4,7 +4,7 @@ using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Volo.DependencyInjection;
+using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.MultiTenancy
 {

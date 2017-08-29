@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Volo;
 using Volo.Abp;
-using Volo.DependencyInjection;
+using Volo.Abp.DependencyInjection;
 
 namespace Microsoft.AspNetCore.Builder
 {

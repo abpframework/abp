@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace Volo.Abp.UI.Navigation
+namespace Volo.Abp.Ui.Navigation
 {
     public interface IMenuContributor
     {

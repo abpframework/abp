@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Volo.DependencyInjection
+namespace Volo.Abp.DependencyInjection
 {
     public class DependencyAttribute : Attribute
     {

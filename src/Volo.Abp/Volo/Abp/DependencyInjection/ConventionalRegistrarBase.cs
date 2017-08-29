@@ -4,7 +4,7 @@ using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Reflection;
 
-namespace Volo.DependencyInjection
+namespace Volo.Abp.DependencyInjection
 {
     public abstract class ConventionalRegistrarBase : IConventionalRegistrar
     {

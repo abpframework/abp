@@ -1,10 +1,10 @@
 using System;
 using System.Linq;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Identity;
 using Volo.Abp.Threading;
 using Volo.Abp.Uow;
-using Volo.DependencyInjection;
 
 namespace AbpDesk.ConsoleDemo
 {

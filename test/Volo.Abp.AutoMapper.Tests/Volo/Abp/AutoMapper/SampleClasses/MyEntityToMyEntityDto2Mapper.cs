@@ -1,5 +1,5 @@
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.ObjectMapping;
-using Volo.DependencyInjection;
 
 namespace Volo.Abp.AutoMapper.SampleClasses
 {

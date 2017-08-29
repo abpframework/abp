@@ -1,4 +1,4 @@
-﻿using Volo.DependencyInjection;
+﻿using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Application.Services
 {

@@ -1,4 +1,4 @@
-namespace Volo.Abp.UI.Navigation
+namespace Volo.Abp.Ui.Navigation
 {
     public static class StandardMenus
     {

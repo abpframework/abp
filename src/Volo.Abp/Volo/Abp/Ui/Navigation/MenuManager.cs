@@ -2,9 +2,9 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Volo.DependencyInjection;
+using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.UI.Navigation
+namespace Volo.Abp.Ui.Navigation
 {
     //TODO: We can move Navigation to a dedicated dll, or to a Volo.Abp.Ui dll.
     public class MenuManager : IMenuManager, ITransientDependency

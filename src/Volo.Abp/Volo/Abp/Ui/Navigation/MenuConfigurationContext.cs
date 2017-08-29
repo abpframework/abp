@@ -1,6 +1,6 @@
 using System;
 
-namespace Volo.Abp.UI.Navigation
+namespace Volo.Abp.Ui.Navigation
 {
     public class MenuConfigurationContext : IMenuConfigurationContext
     {

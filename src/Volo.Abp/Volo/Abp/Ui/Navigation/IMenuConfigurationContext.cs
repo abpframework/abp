@@ -1,6 +1,6 @@
-using Volo.DependencyInjection;
+using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.UI.Navigation
+namespace Volo.Abp.Ui.Navigation
 {
     public interface IMenuConfigurationContext : IServiceProviderAccessor
     {

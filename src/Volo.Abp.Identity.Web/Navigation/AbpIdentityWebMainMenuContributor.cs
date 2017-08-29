@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Volo.Abp.UI.Navigation;
+using Volo.Abp.Ui.Navigation;
 
 namespace Volo.Abp.Identity.Web.Navigation
 {

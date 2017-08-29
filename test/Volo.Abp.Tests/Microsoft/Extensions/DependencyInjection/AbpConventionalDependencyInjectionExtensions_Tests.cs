@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using Shouldly;
-using Volo.DependencyInjection;
 using Xunit;
+using Volo.Abp.DependencyInjection;
 
 namespace Microsoft.Extensions.DependencyInjection
 {

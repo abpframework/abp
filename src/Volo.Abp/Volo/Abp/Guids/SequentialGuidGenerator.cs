@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Security.Cryptography;
 using Microsoft.Extensions.Options;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Threading;
-using Volo.DependencyInjection;
 
 namespace Volo.Abp.Guids
 {

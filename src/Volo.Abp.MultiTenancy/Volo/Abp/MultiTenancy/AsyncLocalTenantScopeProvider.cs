@@ -1,6 +1,6 @@
 using System;
 using System.Threading;
-using Volo.DependencyInjection;
+using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.MultiTenancy
 {

@@ -4,8 +4,8 @@ using System.Collections.Immutable;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Modularity;
-using Volo.DependencyInjection;
 
 namespace Volo.Abp.Reflection
 {

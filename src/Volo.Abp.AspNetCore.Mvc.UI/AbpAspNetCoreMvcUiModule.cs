@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.EmbeddedFiles;
 using Volo.Abp.Modularity;
-using Volo.Abp.UI.Navigation;
+using Volo.Abp.Ui.Navigation;
 
 namespace Volo.Abp.AspNetCore.Mvc
 {

@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.DynamicProxy;
-using Volo.DependencyInjection;
 
 namespace Volo.Abp.Uow
 {

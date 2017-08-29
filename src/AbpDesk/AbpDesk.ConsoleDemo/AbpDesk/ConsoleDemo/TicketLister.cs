@@ -2,7 +2,7 @@ using System;
 using AbpDesk.Tickets;
 using AbpDesk.Tickets.Dtos;
 using Volo.Abp.Threading;
-using Volo.DependencyInjection;
+using Volo.Abp.DependencyInjection;
 
 namespace AbpDesk.ConsoleDemo
 {

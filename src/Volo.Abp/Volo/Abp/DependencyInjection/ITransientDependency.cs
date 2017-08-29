@@ -1,4 +1,4 @@
-﻿namespace Volo.DependencyInjection
+﻿namespace Volo.Abp.DependencyInjection
 {
     public interface ITransientDependency
     {

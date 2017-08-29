@@ -4,7 +4,7 @@ using AbpDesk.Blogging;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Guids;
 using Volo.Abp.Uow;
-using Volo.DependencyInjection;
+using Volo.Abp.DependencyInjection;
 
 namespace AbpDesk.ConsoleDemo
 {

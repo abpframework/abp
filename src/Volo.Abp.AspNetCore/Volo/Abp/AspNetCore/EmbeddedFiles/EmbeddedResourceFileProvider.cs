@@ -3,8 +3,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.EmbeddedFiles;
-using Volo.DependencyInjection;
 
 namespace Volo.Abp.AspNetCore.EmbeddedFiles
 {

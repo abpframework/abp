@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Volo.Abp.UI.Navigation
+namespace Volo.Abp.Ui.Navigation
 {
     public interface IHasMenuItems
     {

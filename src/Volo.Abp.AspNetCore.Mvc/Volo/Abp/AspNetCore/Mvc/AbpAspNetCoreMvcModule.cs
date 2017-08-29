@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.EmbeddedFiles;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Modularity;
-using Volo.DependencyInjection;
 
 namespace Volo.Abp.AspNetCore.Mvc
 {

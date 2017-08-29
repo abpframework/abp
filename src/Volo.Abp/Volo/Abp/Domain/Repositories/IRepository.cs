@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities;
-using Volo.DependencyInjection;
 
 namespace Volo.Abp.Domain.Repositories
 {

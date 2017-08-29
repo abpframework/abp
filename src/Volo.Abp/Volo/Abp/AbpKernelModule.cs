@@ -1,10 +1,10 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Modularity;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Reflection;
 using Volo.Abp.Uow;
-using Volo.DependencyInjection;
 
 namespace Volo.Abp
 {

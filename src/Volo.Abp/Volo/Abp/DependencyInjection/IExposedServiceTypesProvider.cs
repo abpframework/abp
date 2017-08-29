@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Volo.DependencyInjection
+namespace Volo.Abp.DependencyInjection
 {
     public interface IExposedServiceTypesProvider
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using JetBrains.Annotations;
 
-namespace Volo
+namespace Volo.Abp
 {
     [DebuggerStepThrough]
     public static class Check

@@ -5,6 +5,7 @@ using Volo.Abp.Modularity;
 using Volo.Abp.TestBase;
 using System.Collections.Generic;
 using Xunit;
+using Volo.Abp.Ui.Navigation;
 
 namespace Volo.Abp.UI.Navigation
 {

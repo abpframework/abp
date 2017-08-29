@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using Volo.DependencyInjection;
+using Volo.Abp.DependencyInjection;
 
 namespace Microsoft.Extensions.DependencyInjection
 {

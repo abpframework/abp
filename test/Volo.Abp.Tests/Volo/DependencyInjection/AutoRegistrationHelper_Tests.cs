@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Xunit;
+using Volo.Abp.DependencyInjection;
 
 namespace Volo.DependencyInjection
 {
