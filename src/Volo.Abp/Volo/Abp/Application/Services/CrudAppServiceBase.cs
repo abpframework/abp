@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Dynamic.Core;
-using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Entities;
@@ -18,7 +17,7 @@ namespace Abp.Application.Services
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TUpdateInput : IEntityDto<TPrimaryKey>
     {
-        protected IRepository<TEntity, TPrimaryKey> Repository { get; }
+        protected IQueryableRepository<TEntity, TPrimaryKey> Repository { get; }
 
         protected virtual string GetPermissionName { get; set; }
 
@@ -30,7 +29,7 @@ namespace Abp.Application.Services
 
         protected virtual string DeletePermissionName { get; set; }
 
-        protected CrudAppServiceBase(IRepository<TEntity, TPrimaryKey> repository)
+        protected CrudAppServiceBase(IQueryableRepository<TEntity, TPrimaryKey> repository)
         {
             Repository = repository;
         }
@@ -96,13 +95,7 @@ namespace Abp.Application.Services
         /// <param name="input">The input.</param>
         protected virtual IQueryable<TEntity> CreateFilteredQuery(TGetAllInput input)
         {
-            var queryableRepository = Repository as IQueryableRepository<TEntity, TPrimaryKey>;
-            if (queryableRepository == null)
-            {
-                throw new AbpException("Repository should be IQueryableRepository in order to call CreateFilteredQuery, but it's not. It's type: " + Repository.GetType().AssemblyQualifiedName);
-            }
-
-            return queryableRepository;
+            return Repository;
         }
 
         /// <summary>

@@ -81,6 +81,8 @@ namespace Volo.Abp.AutoMapper
 
         private void FindAndAutoMapTypes(IAbpAutoMapperConfigurationContext context)
         {
+            //TODO: AutoMapping (by attributes) can be optionally enabled/disabled.
+
             var typeFinder = context.ServiceProvider.GetRequiredService<ITypeFinder>();
             var logger = context.ServiceProvider.GetRequiredService<ILogger<AbpAutoMapperModule>>();
 

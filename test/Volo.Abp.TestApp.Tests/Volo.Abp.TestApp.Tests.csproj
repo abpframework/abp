@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-    <AssemblyName>Volo.Abp.TestApp</AssemblyName>
-    <PackageId>Volo.Abp.TestApp</PackageId>
+    <AssemblyName>Volo.Abp.TestApp.Tests</AssemblyName>
+    <PackageId>Volo.Abp.TestApp.Tests</PackageId>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
@@ -12,8 +12,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Volo.Abp.AutoMapper\Volo.Abp.AutoMapper.csproj" />
-    <ProjectReference Include="..\..\src\Volo.Abp\Volo.Abp.csproj" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Volo.Abp.MemoryDb.Tests\Volo.Abp.MemoryDb.Tests.csproj" />
   </ItemGroup>
 
 </Project>

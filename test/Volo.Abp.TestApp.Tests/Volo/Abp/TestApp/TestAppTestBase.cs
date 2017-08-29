@@ -1,8 +1,8 @@
-﻿using Volo.Abp.TestBase;
+using Volo.Abp.TestBase;
 
-namespace Volo.Abp.MemoryDb
+namespace Volo.Abp.TestApp
 {
-    public abstract class MemoryDbTestBase : AbpIntegratedTest<AbpMemoryDbTestModule>
+    public class TestAppTestBase : AbpIntegratedTest<TestAppTestModule>
     {
         protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
         {

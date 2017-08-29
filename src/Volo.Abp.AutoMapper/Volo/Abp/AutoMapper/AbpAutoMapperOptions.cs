@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using AutoMapper;
 
 namespace Volo.Abp.AutoMapper
 {
@@ -14,27 +13,6 @@ namespace Volo.Abp.AutoMapper
         {
             UseStaticMapper = true;
             Configurators = new List<Action<IAbpAutoMapperConfigurationContext>>();
-        }
-    }
-
-    public interface IAbpAutoMapperConfigurationContext
-    {
-        IMapperConfigurationExpression MapperConfiguration { get; }
-
-        IServiceProvider ServiceProvider { get; }
-    }
-
-    public class AbpAutoMapperConfigurationContext : IAbpAutoMapperConfigurationContext
-    {
-        public IMapperConfigurationExpression MapperConfiguration { get; }
-        public IServiceProvider ServiceProvider { get; }
-
-        public AbpAutoMapperConfigurationContext(
-            IMapperConfigurationExpression mapperConfigurationExpression, 
-            IServiceProvider serviceProvider)
-        {
-            MapperConfiguration = mapperConfigurationExpression;
-            ServiceProvider = serviceProvider;
         }
     }
 }

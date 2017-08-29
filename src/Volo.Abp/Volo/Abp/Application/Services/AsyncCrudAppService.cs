@@ -13,7 +13,7 @@ namespace Abp.Application.Services
         where TEntity : class, IEntity<Guid>
         where TEntityDto : IEntityDto<Guid>
     {
-        protected AsyncCrudAppService(IRepository<TEntity, Guid> repository)
+        protected AsyncCrudAppService(IQueryableRepository<TEntity, Guid> repository)
             : base(repository)
         {
 
@@ -25,7 +25,7 @@ namespace Abp.Application.Services
         where TEntity : class, IEntity<TPrimaryKey>
         where TEntityDto : IEntityDto<TPrimaryKey>
     {
-        protected AsyncCrudAppService(IRepository<TEntity, TPrimaryKey> repository)
+        protected AsyncCrudAppService(IQueryableRepository<TEntity, TPrimaryKey> repository)
             : base(repository)
         {
 
@@ -37,7 +37,7 @@ namespace Abp.Application.Services
         where TEntity : class, IEntity<TPrimaryKey>
         where TEntityDto : IEntityDto<TPrimaryKey>
     {
-        protected AsyncCrudAppService(IRepository<TEntity, TPrimaryKey> repository)
+        protected AsyncCrudAppService(IQueryableRepository<TEntity, TPrimaryKey> repository)
             : base(repository)
         {
 
@@ -51,7 +51,7 @@ namespace Abp.Application.Services
         where TEntityDto : IEntityDto<TPrimaryKey>
        where TCreateInput : IEntityDto<TPrimaryKey>
     {
-        protected AsyncCrudAppService(IRepository<TEntity, TPrimaryKey> repository)
+        protected AsyncCrudAppService(IQueryableRepository<TEntity, TPrimaryKey> repository)
             : base(repository)
         {
 
@@ -64,7 +64,7 @@ namespace Abp.Application.Services
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TUpdateInput : IEntityDto<TPrimaryKey>
     {
-        protected AsyncCrudAppService(IRepository<TEntity, TPrimaryKey> repository)
+        protected AsyncCrudAppService(IQueryableRepository<TEntity, TPrimaryKey> repository)
             : base(repository)
         {
 
@@ -78,7 +78,7 @@ namespace Abp.Application.Services
         where TUpdateInput : IEntityDto<TPrimaryKey>
         where TGetInput : IEntityDto<TPrimaryKey>
     {
-        protected AsyncCrudAppService(IRepository<TEntity, TPrimaryKey> repository)
+        protected AsyncCrudAppService(IQueryableRepository<TEntity, TPrimaryKey> repository)
             : base(repository)
         {
 
@@ -96,7 +96,7 @@ namespace Abp.Application.Services
     {
         public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; }
 
-        protected AsyncCrudAppService(IRepository<TEntity, TPrimaryKey> repository)
+        protected AsyncCrudAppService(IQueryableRepository<TEntity, TPrimaryKey> repository)
             :base(repository)
         {
             AsyncQueryableExecuter = DefaultAsyncQueryableExecuter.Instance;

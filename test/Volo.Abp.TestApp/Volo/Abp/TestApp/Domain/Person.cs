@@ -1,3 +1,4 @@
+using System;
 using Volo.Abp.Domain.Entities;
 
 namespace Volo.Abp.TestApp.Domain
@@ -8,8 +9,9 @@ namespace Volo.Abp.TestApp.Domain
 
         public int Age { get; set; }
 
-        public Person(string name, int age)
+        public Person(Guid id, string name, int age)
         {
+            Id = id;
             Name = name;
             Age = age;
         }

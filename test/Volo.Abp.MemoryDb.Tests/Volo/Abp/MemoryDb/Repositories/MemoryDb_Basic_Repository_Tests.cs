@@ -31,7 +31,7 @@ namespace Volo.Abp.MemoryDb.Repositories
             var name = Guid.NewGuid().ToString();
 
             //Act
-            _personRepository.Insert(new Person(name, 42));
+            _personRepository.Insert(new Person(Guid.NewGuid(), name, 42));
 
             //Assert
             UseUnitOfWork(() =>

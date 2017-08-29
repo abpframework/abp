@@ -11,7 +11,7 @@ namespace Abp.Application.Services
         where TEntity : class, IEntity<Guid>
         where TEntityDto : IEntityDto<Guid>
     {
-        protected CrudAppService(IRepository<TEntity, Guid> repository)
+        protected CrudAppService(IQueryableRepository<TEntity, Guid> repository)
             : base(repository)
         {
 
@@ -23,7 +23,7 @@ namespace Abp.Application.Services
         where TEntity : class, IEntity<TPrimaryKey>
         where TEntityDto : IEntityDto<TPrimaryKey>
     {
-        protected CrudAppService(IRepository<TEntity, TPrimaryKey> repository)
+        protected CrudAppService(IQueryableRepository<TEntity, TPrimaryKey> repository)
             : base(repository)
         {
 
@@ -35,7 +35,7 @@ namespace Abp.Application.Services
         where TEntity : class, IEntity<TPrimaryKey>
         where TEntityDto : IEntityDto<TPrimaryKey>
     {
-        protected CrudAppService(IRepository<TEntity, TPrimaryKey> repository)
+        protected CrudAppService(IQueryableRepository<TEntity, TPrimaryKey> repository)
             : base(repository)
         {
 
@@ -48,7 +48,7 @@ namespace Abp.Application.Services
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TCreateInput : IEntityDto<TPrimaryKey>
     {
-        protected CrudAppService(IRepository<TEntity, TPrimaryKey> repository)
+        protected CrudAppService(IQueryableRepository<TEntity, TPrimaryKey> repository)
             : base(repository)
         {
 
@@ -61,7 +61,7 @@ namespace Abp.Application.Services
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TUpdateInput : IEntityDto<TPrimaryKey>
     {
-        protected CrudAppService(IRepository<TEntity, TPrimaryKey> repository)
+        protected CrudAppService(IQueryableRepository<TEntity, TPrimaryKey> repository)
             : base(repository)
         {
 
@@ -75,7 +75,7 @@ namespace Abp.Application.Services
         where TUpdateInput : IEntityDto<TPrimaryKey>
         where TGetInput : IEntityDto<TPrimaryKey>
     {
-        protected CrudAppService(IRepository<TEntity, TPrimaryKey> repository)
+        protected CrudAppService(IQueryableRepository<TEntity, TPrimaryKey> repository)
             : base(repository)
         {
 
@@ -91,7 +91,7 @@ namespace Abp.Application.Services
            where TGetInput : IEntityDto<TPrimaryKey>
            where TDeleteInput : IEntityDto<TPrimaryKey>
     {
-        protected CrudAppService(IRepository<TEntity, TPrimaryKey> repository)
+        protected CrudAppService(IQueryableRepository<TEntity, TPrimaryKey> repository)
             : base(repository)
         {
 
