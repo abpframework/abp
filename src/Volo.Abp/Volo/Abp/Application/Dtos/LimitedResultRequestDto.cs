@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Volo.Abp.Application.Services.Dtos
+namespace Volo.Abp.Application.Dtos
 {
     /// <summary>
     /// Simply implements <see cref="ILimitedResultRequest"/>.

@@ -1,4 +1,4 @@
-namespace Volo.Abp.Application.Services.Dtos
+namespace Volo.Abp.Application.Dtos
 {
     /// <summary>
     /// This interface is defined to standardize to request a sorted result.

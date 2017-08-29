@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using Volo.Abp.Application.Services.Dtos;
+using Volo.Abp.Application.Dtos;
 
 namespace Volo.Abp.Identity
 {

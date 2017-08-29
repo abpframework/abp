@@ -1,6 +1,6 @@
 using System;
 
-namespace Volo.Abp.Application.Services.Dtos
+namespace Volo.Abp.Application.Dtos
 {
     public class EntityDto : EntityDto<Guid>, IEntityDto
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Volo.Abp.Application.Services.Dtos
+namespace Volo.Abp.Application.Dtos
 {
     /// <summary>
     /// A shortcut of <see cref="IEntityDto{TPrimaryKey}"/> for default primary key type (<see cref="Guid"/>).

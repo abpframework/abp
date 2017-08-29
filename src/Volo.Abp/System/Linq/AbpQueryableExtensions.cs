@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 using JetBrains.Annotations;
 using Volo.Abp;
-using Volo.Abp.Application.Services.Dtos;
+using Volo.Abp.Application.Dtos;
 
 namespace System.Linq
 {

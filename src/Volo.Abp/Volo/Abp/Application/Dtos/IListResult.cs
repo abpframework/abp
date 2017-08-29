@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Volo.Abp.Application.Services.Dtos
+namespace Volo.Abp.Application.Dtos
 {
     /// <summary>
     /// This interface is defined to standardize to return a list of items to clients.

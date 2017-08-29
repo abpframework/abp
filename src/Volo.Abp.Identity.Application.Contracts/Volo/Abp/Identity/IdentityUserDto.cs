@@ -1,4 +1,4 @@
-﻿using Volo.Abp.Application.Services.Dtos;
+﻿using Volo.Abp.Application.Dtos;
 
 namespace Volo.Abp.Identity
 {

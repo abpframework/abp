@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Volo.Abp.Application.Services.Dtos
+namespace Volo.Abp.Application.Dtos
 {
     /// <summary>
     /// Implements <see cref="IPagedResult{T}"/>.
