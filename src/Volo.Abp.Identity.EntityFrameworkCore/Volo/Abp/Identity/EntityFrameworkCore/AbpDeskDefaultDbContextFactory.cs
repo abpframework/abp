@@ -1,9 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Volo.Abp.Identity.EntityFrameworkCore;
 
-namespace AbpDesk.EntityFrameworkCore
+namespace Volo.Abp.Identity.EntityFrameworkCore
 {
     /* This class is needed for EF Core command line tooling */
 
