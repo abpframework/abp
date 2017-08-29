@@ -1,6 +1,8 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Modularity;
+using Volo.Abp.Uow;
+using System.Threading.Tasks;
 
 namespace Volo.Abp.TestBase
 {
@@ -53,6 +55,37 @@ namespace Volo.Abp.TestBase
         protected virtual IServiceProvider CreateServiceProvider(IServiceCollection services)
         {
 	        return services.BuildServiceProviderFromFactory();
+        }
+
+
+        protected virtual void UseUnitOfWork(Action action)
+        {
+            using (IServiceScope scope = ServiceProvider.CreateScope())
+            {
+                var uowManager = scope.ServiceProvider.GetRequiredService<IUnitOfWorkManager>();
+
+                using (var uow = uowManager.Begin())
+                {
+                    action();
+
+                    uow.Complete();
+                }
+            }
+        }
+
+        protected virtual async Task UseUnitOfWorkAsync(Func<Task> action)
+        {
+            using (IServiceScope scope = ServiceProvider.CreateScope())
+            {
+                var uowManager = scope.ServiceProvider.GetRequiredService<IUnitOfWorkManager>();
+
+                using (var uow = uowManager.Begin())
+                {
+                    await action();
+
+                    await uow.CompleteAsync();
+                }
+            }
         }
 
         public void Dispose()

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Volo.Abp.Application.Services;
 
-namespace App
+namespace Volo.Abp.TestApp.Domain
 {
     public class PersonAppService : ApplicationService
     {

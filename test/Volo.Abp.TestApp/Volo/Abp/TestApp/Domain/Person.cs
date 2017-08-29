@@ -1,6 +1,8 @@
-namespace App
+using Volo.Abp.Domain.Entities;
+
+namespace Volo.Abp.TestApp.Domain
 {
-    public class Person
+    public class Person : AggregateRoot
     {
         public string Name { get; set; }
 

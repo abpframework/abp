@@ -27,7 +27,7 @@ namespace Volo.Abp.Uow.MongoDB
             var unitOfWork = _unitOfWorkManager.Current;
             if (unitOfWork == null)
             {
-                throw new AbpException("A IMongoDatabase instance can only be created inside a unit of work!");
+                throw new AbpException($"A {nameof(IMongoDatabase)} instance can only be created inside a unit of work!");
             }
 
             var connectionString = _connectionStringResolver.Resolve<TMongoDbContext>();
