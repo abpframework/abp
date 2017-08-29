@@ -2,6 +2,8 @@
 
 namespace Volo.Abp.EmbeddedFiles
 {
+    //TODO: Move these classes to Volo.Abp.EmbeddedResources/EmbeddedFiles project?
+
     /// <summary>
     /// Provides infrastructure to use any type of files embedded into assemblies.
     /// </summary>
