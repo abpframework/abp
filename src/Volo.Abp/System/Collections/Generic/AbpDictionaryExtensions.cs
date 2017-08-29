@@ -6,7 +6,7 @@ namespace Volo.ExtensionMethods.Collections.Generic
     /// <summary>
     /// Extension methods for Dictionary.
     /// </summary>
-    public static class DictionaryExtensions
+    public static class AbpDictionaryExtensions
     {
         /// <summary>
         /// This method is used to try to get a value in a dictionary if it does exists.

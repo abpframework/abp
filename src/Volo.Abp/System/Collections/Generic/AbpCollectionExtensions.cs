@@ -8,7 +8,7 @@ namespace Volo.ExtensionMethods.Collections.Generic
     /// <summary>
     /// Extension methods for Collections.
     /// </summary>
-    public static class CollectionExtensions
+    public static class AbpCollectionExtensions
     {
         /// <summary>
         /// Checks whatever given collection object is null or has no item.

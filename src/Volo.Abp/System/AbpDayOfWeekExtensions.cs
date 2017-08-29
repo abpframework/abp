@@ -3,9 +3,9 @@
 namespace Volo.ExtensionMethods
 {
     /// <summary>
-    /// Extension methods for <see cref="DayOfWeekExtensions"/>.
+    /// Extension methods for <see cref="AbpDayOfWeekExtensions"/>.
     /// </summary>
-    public static class DayOfWeekExtensions
+    public static class AbpDayOfWeekExtensions
     {
         /// <summary>
         /// Check if given <see cref="DayOfWeek"/> value is weekend.

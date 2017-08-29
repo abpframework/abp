@@ -5,7 +5,7 @@ namespace Volo.ExtensionMethods
     /// <summary>
     /// Extension methods for <see cref="IComparable{T}"/>.
     /// </summary>
-    public static class ComparableExtensions
+    public static class AbpComparableExtensions
     {
         /// <summary>
         /// Checks a value is between a minimum and maximum value.

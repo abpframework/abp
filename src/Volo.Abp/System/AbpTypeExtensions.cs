@@ -2,7 +2,7 @@
 
 namespace System
 {
-    public static class TypeExtensions
+    public static class AbpTypeExtensions
     {
         public static Assembly GetAssembly(this Type type)
         {

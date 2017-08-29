@@ -4,7 +4,7 @@ using Volo.Abp;
 
 namespace System.Globalization
 {
-    public static class CultureHelper
+    public static class AbpCultureHelper
     {
         public static IDisposable Use([NotNull] string culture, string uiCulture = null)
         {

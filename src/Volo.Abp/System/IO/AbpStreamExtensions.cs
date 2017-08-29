@@ -2,7 +2,7 @@
 
 namespace Volo.ExtensionMethods
 {
-    public static class StreamExtensions
+    public static class AbpStreamExtensions
     {
         public static byte[] GetAllBytes(this Stream stream)
         {

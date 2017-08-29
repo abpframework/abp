@@ -6,7 +6,7 @@ namespace Volo.ExtensionMethods
     /// <summary>
     /// Extension methods for <see cref="Exception"/> class.
     /// </summary>
-    public static class ExceptionExtensions
+    public static class AbpExceptionExtensions
     {
         /// <summary>
         /// Uses <see cref="ExceptionDispatchInfo.Capture"/> method to re-throws exception

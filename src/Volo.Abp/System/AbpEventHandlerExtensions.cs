@@ -5,7 +5,7 @@ namespace Volo.ExtensionMethods
     /// <summary>
     /// Extension methods for <see cref="EventHandler"/>.
     /// </summary>
-    public static class EventHandlerExtensions
+    public static class AbpEventHandlerExtensions
     {
         /// <summary>
         /// Raises given event safely with given arguments.

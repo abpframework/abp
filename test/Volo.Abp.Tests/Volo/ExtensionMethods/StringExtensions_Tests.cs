@@ -11,7 +11,7 @@ namespace Volo.ExtensionMethods
 
         public StringExtensions_Tests()
         {
-            _cultureScope = CultureHelper.Use("en-US");
+            _cultureScope = AbpCultureHelper.Use("en-US");
         }
 
         [Fact]
@@ -31,7 +31,7 @@ namespace Volo.ExtensionMethods
         [Fact]
         public void EnsureEndsWith_CultureSpecific_Test()
         {
-            using (CultureHelper.Use("tr-TR"))
+            using (AbpCultureHelper.Use("tr-TR"))
             {
                 "Kırmızı".EnsureEndsWith('I', StringComparison.CurrentCultureIgnoreCase).ShouldBe("Kırmızı");
             }
@@ -59,7 +59,7 @@ namespace Volo.ExtensionMethods
         [Fact]
         public void ToPascalCase_CurrentCulture_Test()
         {
-            using (CultureHelper.Use("tr-TR"))
+            using (AbpCultureHelper.Use("tr-TR"))
             {
                 "istanbul".ToPascalCase(true).ShouldBe("İstanbul");
             }

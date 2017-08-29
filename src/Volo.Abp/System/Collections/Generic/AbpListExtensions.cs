@@ -8,7 +8,7 @@ namespace Volo.ExtensionMethods.Collections.Generic
     /// <summary>
     /// Extension methods for <see cref="IList{T}"/>.
     /// </summary>
-    public static class ListExtensions
+    public static class AbpListExtensions
     {
         public static void MoveItem<T>(this List<T> source, Predicate<T> selector, int targetIndex)
         {
