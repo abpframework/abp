@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using System.Reflection;
 using JetBrains.Annotations;
-using Volo;
 using Volo.Abp;
 
 namespace Microsoft.Extensions.DependencyInjection

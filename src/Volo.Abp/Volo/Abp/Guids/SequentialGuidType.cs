@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Volo.Abp.Guids
+﻿namespace Volo.Abp.Guids
 {
     /// <summary>
     /// Describes the type of a sequential GUID value.

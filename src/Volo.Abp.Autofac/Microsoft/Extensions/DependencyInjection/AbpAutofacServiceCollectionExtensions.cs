@@ -1,7 +1,6 @@
 ﻿using System;
 using Autofac;
 using JetBrains.Annotations;
-using Volo;
 using Volo.Abp;
 
 namespace Microsoft.Extensions.DependencyInjection

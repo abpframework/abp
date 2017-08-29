@@ -2,8 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
-using Volo.Abp.Identity.EntityFrameworkCore;
 
 namespace Volo.Abp.Identity.EntityFrameworkCore.Migrations
 {

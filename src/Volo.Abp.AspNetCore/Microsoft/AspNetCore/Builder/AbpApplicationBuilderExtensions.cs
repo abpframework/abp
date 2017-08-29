@@ -1,6 +1,5 @@
 ﻿using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
-using Volo;
 using Volo.Abp;
 using Volo.Abp.DependencyInjection;
 

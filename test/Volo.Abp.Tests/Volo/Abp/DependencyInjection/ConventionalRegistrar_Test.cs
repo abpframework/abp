@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
-using Shouldly;
 
 namespace Volo.Abp.DependencyInjection
 {

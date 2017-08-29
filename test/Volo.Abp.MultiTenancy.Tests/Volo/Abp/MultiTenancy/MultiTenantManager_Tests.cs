@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
-using Volo.Abp.Data;
 using Volo.Abp.MultiTenancy.ConfigurationStore;
 using Xunit;
 

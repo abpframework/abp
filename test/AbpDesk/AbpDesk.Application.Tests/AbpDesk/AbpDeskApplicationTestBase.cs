@@ -1,4 +1,3 @@
-using System;
 using AbpDesk.EntityFrameworkCore;
 using AbpDesk.Tickets;
 using Microsoft.Extensions.DependencyInjection;
