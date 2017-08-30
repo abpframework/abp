@@ -17,6 +17,7 @@ namespace Volo.Abp
             //TODO: Move to a dedicated class
             services.OnExposing(context =>
             {
+                //Register types for IObjectMapper<TSource, TDestination> if implements
                 context.ExposedTypes.AddRange(
                     ReflectionHelper.GetImplementedGenericTypes(
                         context.ImplementationType,
