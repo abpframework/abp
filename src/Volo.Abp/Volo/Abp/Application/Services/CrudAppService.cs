@@ -4,7 +4,7 @@ using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 
-namespace Abp.Application.Services
+namespace Volo.Abp.Application.Services
 {
     public abstract class CrudAppService<TEntity, TEntityDto>
         : CrudAppService<TEntity, TEntityDto, Guid>

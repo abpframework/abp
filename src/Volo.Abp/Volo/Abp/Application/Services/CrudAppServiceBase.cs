@@ -2,11 +2,10 @@
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using Volo.Abp.Application.Dtos;
-using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 
-namespace Abp.Application.Services
+namespace Volo.Abp.Application.Services
 {
     /// <summary>
     /// This is a common base class for CrudAppService and AsyncCrudAppService classes.

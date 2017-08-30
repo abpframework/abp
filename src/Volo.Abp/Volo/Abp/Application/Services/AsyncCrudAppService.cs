@@ -6,7 +6,7 @@ using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Linq;
 
-namespace Abp.Application.Services
+namespace Volo.Abp.Application.Services
 {
     public abstract class AsyncCrudAppService<TEntity, TEntityDto>
         : AsyncCrudAppService<TEntity, TEntityDto, Guid>

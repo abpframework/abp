@@ -1,8 +1,7 @@
 using System;
 using Volo.Abp.Application.Dtos;
-using Volo.Abp.Application.Services;
 
-namespace Abp.Application.Services
+namespace Volo.Abp.Application.Services
 {
     public interface ICrudAppService<TEntityDto>
         : ICrudAppService<TEntityDto, Guid>

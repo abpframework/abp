@@ -8,6 +8,7 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.EmbeddedFiles;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Modularity;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Volo.Abp.AspNetCore.Mvc
 {
@@ -34,6 +35,11 @@ namespace Volo.Abp.AspNetCore.Mvc
                     )
                 )
             );
+
+            services.Configure<MvcOptions>(mvcOptions =>
+            {
+                mvcOptions.AddAbp(services);
+            });
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
