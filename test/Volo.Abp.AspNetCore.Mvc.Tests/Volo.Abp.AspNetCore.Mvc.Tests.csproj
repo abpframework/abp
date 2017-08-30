@@ -16,12 +16,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AbpTestBase\AbpTestBase.csproj" />
     <ProjectReference Include="..\..\src\Volo.Abp.AspNetCore.Mvc\Volo.Abp.AspNetCore.Mvc.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Volo\Abp\AspNetCore\Mvc\" />
+    <ProjectReference Include="..\Volo.Abp.AspNetCore.Tests\Volo.Abp.AspNetCore.Tests.csproj" />
   </ItemGroup>
 
 </Project>

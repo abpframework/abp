@@ -8,7 +8,8 @@ using Volo.Abp.AspNetCore.TestBase;
 
 namespace Volo.Abp.AspNetCore.App
 {
-    public abstract class AppTestBase : AbpAspNetCoreIntegratedTestBase<Startup>
+    public abstract class AbpAspNetCoreTestBase<TStartup> : AbpAspNetCoreIntegratedTestBase<TStartup>
+        where TStartup : class
     {
         protected virtual async Task<T> GetResponseAsObjectAsync<T>(string url, HttpStatusCode expectedStatusCode = HttpStatusCode.OK)
         {

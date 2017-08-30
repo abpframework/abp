@@ -6,14 +6,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 using Shouldly;
-using Volo.Abp.AspNetCore.App;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.MultiTenancy.ConfigurationStore;
 using Xunit;
 
 namespace Volo.Abp.AspNetCore.MultiTenancy
 {
-    public class AspNetCoreMultiTenancy_Tests : AppTestBase
+    public class AspNetCoreMultiTenancy_Tests : AspNetCoreMultiTenancyTestBase
     {
         private readonly Guid _testTenantId = Guid.NewGuid();
         private readonly string _testTenantName = "acme";

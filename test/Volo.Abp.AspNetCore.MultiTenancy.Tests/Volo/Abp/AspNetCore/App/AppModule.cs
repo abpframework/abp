@@ -17,6 +17,14 @@ namespace Volo.Abp.AspNetCore.App
         )]
     public class AppModule : AbpModule
     {
+        public override void ConfigureServices(IServiceCollection services)
+        {
+            services.Configure<MultiTenancyOptions>(options =>
+            {
+                options.AddDomainTenantResolver("{0}.abp.io");
+            });
+        }
+
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             var app = context.GetApplicationBuilder();
