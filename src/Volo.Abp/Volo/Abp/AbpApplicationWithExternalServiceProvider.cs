@@ -16,7 +16,7 @@ namespace Volo.Abp
                 services, 
                 optionsAction)
         {
-            services.AddSingleton<IAbpApplicationWithExternalServiceProvider>(_ => this);
+            services.AddSingleton<IAbpApplicationWithExternalServiceProvider>(this);
         }
 
         public void Initialize(IServiceProvider serviceProvider)

@@ -1,39 +1,75 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Autofac.Core;
 using Autofac.Extras.DynamicProxy;
-using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Castle.DynamicProxy;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Modularity;
 
 namespace Autofac.Builder
 {
     public static class AbpRegistrationBuilderExtensions
     {
         public static IRegistrationBuilder<TLimit, TConcreteReflectionActivatorData, TRegistrationStyle> ConfigureAbpConventions<TLimit, TConcreteReflectionActivatorData, TRegistrationStyle>(
-            this IRegistrationBuilder<TLimit, TConcreteReflectionActivatorData, TRegistrationStyle> registrationBuilder,
-            IServiceCollection services)
+                this IRegistrationBuilder<TLimit, TConcreteReflectionActivatorData, TRegistrationStyle> registrationBuilder, 
+                IModuleContainer moduleContainer, 
+                ServiceRegistrationActionList registrationActionList)
             where TConcreteReflectionActivatorData : ConcreteReflectionActivatorData
         {
-            registrationBuilder = registrationBuilder.PropertiesAutowired();
-
             var serviceType = registrationBuilder.RegistrationData.Services.OfType<IServiceWithType>().FirstOrDefault()?.ServiceType;
             if (serviceType == null)
             {
                 return registrationBuilder;
             }
 
+            var implementationType = registrationBuilder.ActivatorData.ImplementationType;
+            if (implementationType == null)
+            {
+                return registrationBuilder;
+            }
+
+            registrationBuilder = registrationBuilder.EnablePropertyInjection(moduleContainer, implementationType);
+            registrationBuilder = registrationBuilder.InvokeRegistrationActions(registrationActionList, serviceType);
+
+            return registrationBuilder;
+        }
+
+        private static IRegistrationBuilder<TLimit, TConcreteReflectionActivatorData, TRegistrationStyle> InvokeRegistrationActions<TLimit, TConcreteReflectionActivatorData, TRegistrationStyle>(
+                this IRegistrationBuilder<TLimit, TConcreteReflectionActivatorData, TRegistrationStyle> registrationBuilder, 
+                ServiceRegistrationActionList registrationActionList,
+                Type serviceType) 
+            where TConcreteReflectionActivatorData : ConcreteReflectionActivatorData
+        {
             var serviceRegistredArgs = new OnServiceRegistredContext(serviceType);
 
-            foreach (var registrationAction in services.GetRegistrationActionList())
+            foreach (var registrationAction in registrationActionList)
             {
                 registrationAction.Invoke(serviceRegistredArgs);
             }
 
             if (serviceRegistredArgs.Interceptors.Any())
             {
-                registrationBuilder = registrationBuilder.AddInterceptors(serviceRegistredArgs.Interceptors.ToArray());
+                registrationBuilder = registrationBuilder.AddInterceptors(
+                    serviceType,
+                    serviceRegistredArgs.Interceptors
+                );
+            }
+
+            return registrationBuilder;
+        }
+
+        private static IRegistrationBuilder<TLimit, TConcreteReflectionActivatorData, TRegistrationStyle> EnablePropertyInjection<TLimit, TConcreteReflectionActivatorData, TRegistrationStyle>(
+                this IRegistrationBuilder<TLimit, TConcreteReflectionActivatorData, TRegistrationStyle> registrationBuilder, 
+                IModuleContainer moduleContainer,
+                Type implementationType) 
+            where TConcreteReflectionActivatorData : ConcreteReflectionActivatorData
+        {
+            //Enable Property Injection only for types in an assembly containing an AbpModule
+            if (moduleContainer.Modules.Any(m => m.Assembly == implementationType.Assembly))
+            {
+                registrationBuilder = registrationBuilder.PropertiesAutowired();
             }
 
             return registrationBuilder;
@@ -41,11 +77,10 @@ namespace Autofac.Builder
 
         private static IRegistrationBuilder<TLimit, TConcreteReflectionActivatorData, TRegistrationStyle> AddInterceptors<TLimit, TConcreteReflectionActivatorData, TRegistrationStyle>(
             this IRegistrationBuilder<TLimit, TConcreteReflectionActivatorData, TRegistrationStyle> registrationBuilder, 
-            Type[] interceptors)
+            Type serviceType,
+            IEnumerable<Type> interceptors)
             where TConcreteReflectionActivatorData : ConcreteReflectionActivatorData
         {
-            var serviceType = registrationBuilder.RegistrationData.Services.OfType<IServiceWithType>().FirstOrDefault()?.ServiceType;
-
             registrationBuilder = serviceType.GetTypeInfo().IsInterface
                 ? registrationBuilder.EnableInterfaceInterceptors()
                 : registrationBuilder.EnableClassInterceptors();

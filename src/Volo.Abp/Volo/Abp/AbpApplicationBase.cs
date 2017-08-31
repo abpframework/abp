@@ -32,8 +32,8 @@ namespace Volo.Abp
             var options = new AbpApplicationCreationOptions(services);
             optionsAction?.Invoke(options);
 
-            services.AddSingleton<IAbpApplication>(_ => this);
-            services.AddSingleton<IModuleContainer>(_ => this);
+            services.AddSingleton<IAbpApplication>(this);
+            services.AddSingleton<IModuleContainer>(this);
             services.AddCoreAbpServices();
 
             Modules = LoadModules(services, options);

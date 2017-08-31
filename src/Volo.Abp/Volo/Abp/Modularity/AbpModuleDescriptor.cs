@@ -10,6 +10,8 @@ namespace Volo.Abp.Modularity
     {
         public Type Type { get; }
 
+        public Assembly Assembly { get; }
+
         public IAbpModule Instance { get; }
 
         public bool IsLoadedAsPlugIn { get; }
@@ -31,6 +33,7 @@ namespace Volo.Abp.Modularity
             }
 
             Type = type;
+            Assembly = type.GetAssembly();
             Instance = instance;
             IsLoadedAsPlugIn = isLoadedAsPlugIn;
 

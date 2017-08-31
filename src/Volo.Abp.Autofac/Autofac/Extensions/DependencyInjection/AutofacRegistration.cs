@@ -27,6 +27,7 @@ using System;
 using System.Reflection;
 using Autofac.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Modularity;
 
 namespace Autofac.Extensions.DependencyInjection
 {
@@ -100,6 +101,9 @@ namespace Autofac.Extensions.DependencyInjection
                 ContainerBuilder builder,
                 IServiceCollection services)
         {
+            var moduleContainer = services.GetSingletonInstance<IModuleContainer>();
+            var registrationActionList = services.GetRegistrationActionList();
+
             foreach (var service in services)
             {
                 if (service.ImplementationType != null)
@@ -119,7 +123,7 @@ namespace Autofac.Extensions.DependencyInjection
                             .RegisterType(service.ImplementationType)
                             .As(service.ServiceType)
                             .ConfigureLifecycle(service.Lifetime)
-                            .ConfigureAbpConventions(services);
+                            .ConfigureAbpConventions(moduleContainer, registrationActionList);
                     }
                 }
                 else if (service.ImplementationFactory != null)
@@ -131,6 +135,7 @@ namespace Autofac.Extensions.DependencyInjection
                     })
                     .ConfigureLifecycle(service.Lifetime)
                     .CreateRegistration();
+                    //TODO: ConfigureAbpConventions ?
 
                     builder.RegisterComponent(registration);
                 }

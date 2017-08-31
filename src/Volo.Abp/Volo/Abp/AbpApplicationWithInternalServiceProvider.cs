@@ -29,7 +29,7 @@ namespace Volo.Abp
                 services, 
                 optionsAction)
         {
-            Services.AddSingleton<IAbpApplicationWithInternalServiceProvider>(_ => this);
+            Services.AddSingleton<IAbpApplicationWithInternalServiceProvider>(this);
         }
 
         public void Initialize()
