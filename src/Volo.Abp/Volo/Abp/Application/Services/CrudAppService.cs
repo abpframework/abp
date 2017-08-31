@@ -56,40 +56,10 @@ namespace Volo.Abp.Application.Services
     }
 
     public abstract class CrudAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
-        : CrudAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, EntityDto<TPrimaryKey>>
-        where TEntity : class, IEntity<TPrimaryKey>
-        where TEntityDto : IEntityDto<TPrimaryKey>
-        where TUpdateInput : IEntityDto<TPrimaryKey>
-    {
-        protected CrudAppService(IQueryableRepository<TEntity, TPrimaryKey> repository)
-            : base(repository)
-        {
-
-        }
-    }
-
-    public abstract class CrudAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput>
-    : CrudAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput, EntityDto<TPrimaryKey>>
-        where TEntity : class, IEntity<TPrimaryKey>
-        where TEntityDto : IEntityDto<TPrimaryKey>
-        where TUpdateInput : IEntityDto<TPrimaryKey>
-        where TGetInput : IEntityDto<TPrimaryKey>
-    {
-        protected CrudAppService(IQueryableRepository<TEntity, TPrimaryKey> repository)
-            : base(repository)
-        {
-
-        }
-    }
-
-    public abstract class CrudAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput, TDeleteInput>
        : CrudAppServiceBase<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>,
-        ICrudAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput, TDeleteInput>
+        ICrudAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
            where TEntity : class, IEntity<TPrimaryKey>
            where TEntityDto : IEntityDto<TPrimaryKey>
-           where TUpdateInput : IEntityDto<TPrimaryKey>
-           where TGetInput : IEntityDto<TPrimaryKey>
-           where TDeleteInput : IEntityDto<TPrimaryKey>
     {
         protected CrudAppService(IQueryableRepository<TEntity, TPrimaryKey> repository)
             : base(repository)
@@ -97,11 +67,11 @@ namespace Volo.Abp.Application.Services
 
         }
 
-        public virtual TEntityDto Get(TGetInput input)
+        public virtual TEntityDto Get(TPrimaryKey id)
         {
             CheckGetPermission();
 
-            var entity = GetEntityById(input.Id);
+            var entity = GetEntityById(id);
             return MapToEntityDto(entity);
         }
 
@@ -136,11 +106,11 @@ namespace Volo.Abp.Application.Services
             return MapToEntityDto(entity);
         }
 
-        public virtual TEntityDto Update(TUpdateInput input)
+        public virtual TEntityDto Update(TPrimaryKey id, TUpdateInput input)
         {
             CheckUpdatePermission();
 
-            var entity = GetEntityById(input.Id);
+            var entity = GetEntityById(id);
 
             MapToEntity(input, entity);
             CurrentUnitOfWork.SaveChanges();
@@ -148,11 +118,11 @@ namespace Volo.Abp.Application.Services
             return MapToEntityDto(entity);
         }
 
-        public virtual void Delete(TDeleteInput input)
+        public virtual void Delete(TPrimaryKey id)
         {
             CheckDeletePermission();
 
-            Repository.Delete(input.Id);
+            Repository.Delete(id);
         }
 
         protected virtual TEntity GetEntityById(TPrimaryKey id)

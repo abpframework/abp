@@ -101,9 +101,9 @@ namespace Volo.Abp.AspNetCore.Mvc
 
             //Act
 
-            //Ideally should be [PUT] /api/app/person
+            //Ideally should be [PUT] /api/app/person/{id}
             var response = await Client.PutAsync(
-                "/api/services/app/person/Update/{id}",
+                "/api/services/app/person/Update?id=" + updateDto.Id,
                 new StringContent(putData, Encoding.UTF8, "application/json")
             );
 

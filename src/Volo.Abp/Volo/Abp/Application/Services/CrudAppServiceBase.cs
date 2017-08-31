@@ -15,7 +15,6 @@ namespace Volo.Abp.Application.Services
     public abstract class CrudAppServiceBase<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput> : ApplicationService
         where TEntity : class, IEntity<TPrimaryKey>
         where TEntityDto : IEntityDto<TPrimaryKey>
-        where TUpdateInput : IEntityDto<TPrimaryKey>
     {
         protected IQueryableRepository<TEntity, TPrimaryKey> Repository { get; }
         

@@ -59,40 +59,10 @@ namespace Volo.Abp.Application.Services
     }
 
     public abstract class AsyncCrudAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
-        : AsyncCrudAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, EntityDto<TPrimaryKey>>
-        where TEntity : class, IEntity<TPrimaryKey>
-        where TEntityDto : IEntityDto<TPrimaryKey>
-        where TUpdateInput : IEntityDto<TPrimaryKey>
-    {
-        protected AsyncCrudAppService(IQueryableRepository<TEntity, TPrimaryKey> repository)
-            : base(repository)
-        {
-
-        }
-    }
-
-    public abstract class AsyncCrudAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput>
-    : AsyncCrudAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput, EntityDto<TPrimaryKey>>
-        where TEntity : class, IEntity<TPrimaryKey>
-        where TEntityDto : IEntityDto<TPrimaryKey>
-        where TUpdateInput : IEntityDto<TPrimaryKey>
-        where TGetInput : IEntityDto<TPrimaryKey>
-    {
-        protected AsyncCrudAppService(IQueryableRepository<TEntity, TPrimaryKey> repository)
-            : base(repository)
-        {
-
-        }
-    }
-
-    public abstract class AsyncCrudAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput, TDeleteInput>
        : CrudAppServiceBase<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>,
-        IAsyncCrudAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput, TDeleteInput>
+        IAsyncCrudAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
            where TEntity : class, IEntity<TPrimaryKey>
            where TEntityDto : IEntityDto<TPrimaryKey>
-           where TUpdateInput : IEntityDto<TPrimaryKey>
-           where TGetInput : IEntityDto<TPrimaryKey>
-           where TDeleteInput : IEntityDto<TPrimaryKey>
     {
         public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; }
 
@@ -102,11 +72,11 @@ namespace Volo.Abp.Application.Services
             AsyncQueryableExecuter = DefaultAsyncQueryableExecuter.Instance;
         }
 
-        public virtual async Task<TEntityDto> Get(TGetInput input)
+        public virtual async Task<TEntityDto> Get(TPrimaryKey id)
         {
             CheckGetPermission();
 
-            var entity = await GetEntityByIdAsync(input.Id);
+            var entity = await GetEntityByIdAsync(id);
             return MapToEntityDto(entity);
         }
 
@@ -141,11 +111,11 @@ namespace Volo.Abp.Application.Services
             return MapToEntityDto(entity);
         }
 
-        public virtual async Task<TEntityDto> Update(TUpdateInput input)
+        public virtual async Task<TEntityDto> Update(TPrimaryKey id, TUpdateInput input)
         {
             CheckUpdatePermission();
 
-            var entity = await GetEntityByIdAsync(input.Id);
+            var entity = await GetEntityByIdAsync(id);
 
             MapToEntity(input, entity);
             await CurrentUnitOfWork.SaveChangesAsync();
@@ -153,11 +123,11 @@ namespace Volo.Abp.Application.Services
             return MapToEntityDto(entity);
         }
 
-        public virtual Task Delete(TDeleteInput input)
+        public virtual Task Delete(TPrimaryKey id)
         {
             CheckDeletePermission();
 
-            return Repository.DeleteAsync(input.Id);
+            return Repository.DeleteAsync(id);
         }
 
         protected virtual Task<TEntity> GetEntityByIdAsync(TPrimaryKey id)

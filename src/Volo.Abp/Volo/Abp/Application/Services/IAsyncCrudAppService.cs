@@ -11,21 +11,21 @@ namespace Volo.Abp.Application.Services
 
     }
 
-    public interface IAsyncCrudAppService<TEntityDto, TPrimaryKey>
+    public interface IAsyncCrudAppService<TEntityDto, in TPrimaryKey>
         : IAsyncCrudAppService<TEntityDto, TPrimaryKey, PagedAndSortedResultRequestDto>
         where TEntityDto : IEntityDto<TPrimaryKey>
     {
 
     }
 
-    public interface IAsyncCrudAppService<TEntityDto, TPrimaryKey, in TGetAllInput>
+    public interface IAsyncCrudAppService<TEntityDto, in TPrimaryKey, in TGetAllInput>
         : IAsyncCrudAppService<TEntityDto, TPrimaryKey, TGetAllInput, TEntityDto, TEntityDto>
         where TEntityDto : IEntityDto<TPrimaryKey>
     {
 
     }
 
-    public interface IAsyncCrudAppService<TEntityDto, TPrimaryKey, in TGetAllInput, in TCreateInput>
+    public interface IAsyncCrudAppService<TEntityDto, in TPrimaryKey, in TGetAllInput, in TCreateInput>
         : IAsyncCrudAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TCreateInput>
         where TEntityDto : IEntityDto<TPrimaryKey>
         where TCreateInput : IEntityDto<TPrimaryKey>
@@ -33,38 +33,18 @@ namespace Volo.Abp.Application.Services
 
     }
 
-    public interface IAsyncCrudAppService<TEntityDto, TPrimaryKey, in TGetAllInput, in TCreateInput, in TUpdateInput>
-        : IAsyncCrudAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, EntityDto<TPrimaryKey>>
-        where TEntityDto : IEntityDto<TPrimaryKey>
-        where TUpdateInput : IEntityDto<TPrimaryKey>
-    {
-
-    }
-
-    public interface IAsyncCrudAppService<TEntityDto, TPrimaryKey, in TGetAllInput, in TCreateInput, in TUpdateInput, in TGetInput>
-        : IAsyncCrudAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput, TGetInput, EntityDto<TPrimaryKey>>
-        where TEntityDto : IEntityDto<TPrimaryKey>
-        where TUpdateInput : IEntityDto<TPrimaryKey>
-        where TGetInput : IEntityDto<TPrimaryKey>
-    {
-
-    }
-
-    public interface IAsyncCrudAppService<TEntityDto, TPrimaryKey, in TGetAllInput, in TCreateInput, in TUpdateInput, in TGetInput, in TDeleteInput>
+    public interface IAsyncCrudAppService<TEntityDto, in TPrimaryKey, in TGetAllInput, in TCreateInput, in TUpdateInput>
         : IApplicationService
         where TEntityDto : IEntityDto<TPrimaryKey>
-        where TUpdateInput : IEntityDto<TPrimaryKey>
-        where TGetInput : IEntityDto<TPrimaryKey>
-        where TDeleteInput : IEntityDto<TPrimaryKey>
     {
-        Task<TEntityDto> Get(TGetInput input);
+        Task<TEntityDto> Get(TPrimaryKey id);
 
         Task<PagedResultDto<TEntityDto>> GetAll(TGetAllInput input);
 
         Task<TEntityDto> Create(TCreateInput input);
 
-        Task<TEntityDto> Update(TUpdateInput input);
+        Task<TEntityDto> Update(TPrimaryKey id, TUpdateInput input);
 
-        Task Delete(TDeleteInput input);
+        Task Delete(TPrimaryKey id);
     }
 }
