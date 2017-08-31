@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
@@ -7,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.Guids;
+using Volo.Abp.Reflection;
 using Volo.Abp.Uow;
 
 namespace Volo.Abp.EntityFrameworkCore
@@ -14,10 +17,12 @@ namespace Volo.Abp.EntityFrameworkCore
     public abstract class AbpDbContext<TDbContext> : DbContext
         where TDbContext : DbContext
     {
+        public IGuidGenerator GuidGenerator { get; set; }
+
         protected AbpDbContext(DbContextOptions<TDbContext> options)
             : base(options)
         {
-
+            GuidGenerator = SimpleGuidGenerator.Instance;
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -91,6 +96,9 @@ namespace Volo.Abp.EntityFrameworkCore
             {
                 switch (entry.State)
                 {
+                    case EntityState.Added:
+                        CheckAndSetId(entry);
+                        break;
                     case EntityState.Modified:
                     case EntityState.Deleted:
                         HandleConcurrencyStamp(entry);
@@ -108,6 +116,24 @@ namespace Volo.Abp.EntityFrameworkCore
             }
 
             entity.ConcurrencyStamp = Guid.NewGuid().ToString();
+        }
+
+        protected virtual void CheckAndSetId(EntityEntry entry)
+        {
+            //Set GUID Ids
+            var entity = entry.Entity as IEntity<Guid>;
+            if (entity != null && entity.Id == Guid.Empty)
+            {
+                var dbGeneratedAttr = ReflectionHelper
+                    .GetSingleAttributeOrDefault<DatabaseGeneratedAttribute>(
+                        entry.Property("Id").Metadata.PropertyInfo
+                    );
+
+                if (dbGeneratedAttr == null || dbGeneratedAttr.DatabaseGeneratedOption == DatabaseGeneratedOption.None)
+                {
+                    entity.Id = GuidGenerator.Create();
+                }
+            }
         }
     }
 }
