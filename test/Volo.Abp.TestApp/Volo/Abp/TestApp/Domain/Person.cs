@@ -9,6 +9,11 @@ namespace Volo.Abp.TestApp.Domain
 
         public int Age { get; set; }
 
+        private Person()
+        {
+            
+        }
+
         public Person(Guid id, string name, int age)
         {
             Id = id;

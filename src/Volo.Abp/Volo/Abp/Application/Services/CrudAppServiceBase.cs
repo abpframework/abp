@@ -18,7 +18,7 @@ namespace Volo.Abp.Application.Services
         where TUpdateInput : IEntityDto<TPrimaryKey>
     {
         protected IQueryableRepository<TEntity, TPrimaryKey> Repository { get; }
-
+        
         protected virtual string GetPermissionName { get; set; }
 
         protected virtual string GetAllPermissionName { get; set; }
@@ -115,7 +115,16 @@ namespace Volo.Abp.Application.Services
         /// </summary>
         protected virtual TEntity MapToEntity(TCreateInput createInput)
         {
-            return ObjectMapper.Map<TCreateInput, TEntity>(createInput);
+            var entity = ObjectMapper.Map<TCreateInput, TEntity>(createInput);
+
+            //Set ID for GUIDs
+            var entityWithGuidId = entity as IEntity<Guid>;
+            if (entityWithGuidId != null && entityWithGuidId.Id == Guid.Empty)
+            {
+                entityWithGuidId.Id = GuidGenerator.Create();
+            }
+
+            return entity;
         }
 
         /// <summary>

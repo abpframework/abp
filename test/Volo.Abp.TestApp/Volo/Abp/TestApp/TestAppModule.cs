@@ -11,20 +11,24 @@ namespace Volo.Abp.TestApp
     {
         public override void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<AbpAutoMapperOptions>(options =>
-            {
-                options.Configurators.Add((IAbpAutoMapperConfigurationContext ctx) =>
-                {
-                    ctx.MapperConfiguration.CreateMap<Person, PersonDto>();
-                });
-            });
-
+            ConfigureAutoMapper(services);
             services.AddAssemblyOf<TestAppModule>();
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             SeedTestData(context);
+        }
+
+        private static void ConfigureAutoMapper(IServiceCollection services)
+        {
+            services.Configure<AbpAutoMapperOptions>(options =>
+            {
+                options.Configurators.Add((IAbpAutoMapperConfigurationContext ctx) =>
+                {
+                    ctx.MapperConfiguration.CreateMap<Person, PersonDto>().ReverseMap();
+                });
+            });
         }
 
         private static void SeedTestData(ApplicationInitializationContext context)

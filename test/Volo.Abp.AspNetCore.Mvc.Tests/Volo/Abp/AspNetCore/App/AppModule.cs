@@ -26,6 +26,8 @@ namespace Volo.Abp.AspNetCore.App
             {
                 options.CreateControllersForAppServices(typeof(TestAppModule).Assembly);
             });
+
+            services.AddAssemblyOf<AppModule>();
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)

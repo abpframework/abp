@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Volo.Abp.Guids;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Uow;
 
@@ -11,6 +12,8 @@ namespace Volo.Abp
         public IUnitOfWorkManager UnitOfWorkManager { get; set; }
 
         public IObjectMapper ObjectMapper { get; set; }
+
+        public IGuidGenerator GuidGenerator { get; set; }
 
         protected IUnitOfWork CurrentUnitOfWork => UnitOfWorkManager?.Current;
 
@@ -23,5 +26,10 @@ namespace Volo.Abp
            - Setting manager
            - Localization manager and helper methods
          */
+
+        protected AbpServiceBase()
+        {
+            GuidGenerator = SimpleGuidGenerator.Instance;
+        }
     }
 }
