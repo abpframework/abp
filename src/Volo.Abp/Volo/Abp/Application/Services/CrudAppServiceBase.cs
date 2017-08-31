@@ -4,6 +4,7 @@ using System.Linq.Dynamic.Core;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.ObjectMapping;
 
 namespace Volo.Abp.Application.Services
 {

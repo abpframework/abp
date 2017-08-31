@@ -17,7 +17,6 @@ namespace Volo.Abp.AspNetCore.App
 
             //TODO: This is needed because ASP.NET Core does not use IServiceProviderFactory!
             return services.BuildServiceProviderFromFactory();
-            //return services.BuildServiceProvider();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)

@@ -25,9 +25,12 @@ namespace Volo.Abp
 
             ServiceProvider = serviceProvider;
 
-            ServiceProvider
-                .GetRequiredService<IModuleManager>()
-                .InitializeModules(new ApplicationInitializationContext(ServiceProvider));
+            using (var scope = ServiceProvider.CreateScope())
+            {
+                ServiceProvider
+                    .GetRequiredService<IModuleManager>()
+                    .InitializeModules(new ApplicationInitializationContext(scope.ServiceProvider));
+            }
         }
     }
 }

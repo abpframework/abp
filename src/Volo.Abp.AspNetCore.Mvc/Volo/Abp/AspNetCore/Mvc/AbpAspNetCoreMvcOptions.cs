@@ -13,6 +13,7 @@ namespace Volo.Abp.AspNetCore.Mvc
 
         public AbpAspNetCoreMvcOptions()
         {
+            ControllerAssemblySettings = new ControllerAssemblySettingList();
             FormBodyBindingIgnoredTypes = new List<Type>
             {
                 typeof(IFormFile)

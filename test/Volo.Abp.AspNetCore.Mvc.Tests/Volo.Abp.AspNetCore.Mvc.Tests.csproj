@@ -19,6 +19,7 @@
     <ProjectReference Include="..\..\src\Volo.Abp.AspNetCore.Mvc\Volo.Abp.AspNetCore.Mvc.csproj" />
     <ProjectReference Include="..\..\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
     <ProjectReference Include="..\Volo.Abp.AspNetCore.Tests\Volo.Abp.AspNetCore.Tests.csproj" />
+    <ProjectReference Include="..\Volo.Abp.MemoryDb.Tests\Volo.Abp.MemoryDb.Tests.csproj" />
   </ItemGroup>
 
 </Project>

@@ -36,9 +36,13 @@ namespace Volo.Abp
         {
             ServiceScope = Services.BuildServiceProviderFromFactory().CreateScope();
             ServiceProvider = ServiceScope.ServiceProvider;
-            ServiceProvider
-                .GetRequiredService<IModuleManager>()
-                .InitializeModules(new ApplicationInitializationContext(ServiceProvider));
+
+            using (var scope = ServiceProvider.CreateScope())
+            {
+                ServiceProvider
+                    .GetRequiredService<IModuleManager>()
+                    .InitializeModules(new ApplicationInitializationContext(scope.ServiceProvider));
+            }
         }
 
         public override void Dispose()
