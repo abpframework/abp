@@ -24,16 +24,17 @@ namespace Volo.Abp.TestApp
         {
             services.Configure<AbpAutoMapperOptions>(options =>
             {
-                options.Configurators.Add((IAbpAutoMapperConfigurationContext ctx) =>
+                options.Configurators.Add(ctx =>
                 {
                     ctx.MapperConfiguration.CreateMap<Person, PersonDto>().ReverseMap();
+                    ctx.MapperConfiguration.CreateMap<Phone, PhoneDto>().ReverseMap();
                 });
             });
         }
 
         private static void SeedTestData(ApplicationInitializationContext context)
         {
-            using (IServiceScope scope = context.ServiceProvider.CreateScope())
+            using (var scope = context.ServiceProvider.CreateScope())
             {
                 scope.ServiceProvider
                     .GetRequiredService<TestDataBuilder>()

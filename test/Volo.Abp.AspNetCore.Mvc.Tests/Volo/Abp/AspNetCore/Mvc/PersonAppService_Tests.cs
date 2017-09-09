@@ -69,7 +69,7 @@ namespace Volo.Abp.AspNetCore.Mvc
 
             //Ideally should be [POST] /api/app/person
             var response = await Client.PostAsync(
-                "/api/services/app/person/Create",
+                "/api/services/app/person",
                 new StringContent(postData, Encoding.UTF8, "application/json")
             );
 

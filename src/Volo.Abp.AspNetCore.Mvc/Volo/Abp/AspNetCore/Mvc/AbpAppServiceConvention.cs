@@ -209,16 +209,15 @@ namespace Volo.Abp.AspNetCore.Mvc
 
         private void AddAbpServiceSelector(string moduleName, string controllerName, ActionModel action, [CanBeNull] AbpControllerAssemblySetting configuration)
         {
+            var verb = configuration?.UseConventionalHttpVerbs == true
+                ? HttpVerbHelper.GetConventionalVerbForMethodName(action.ActionName)
+                : HttpVerbHelper.DefaultHttpVerb;
+
             var abpServiceSelectorModel = new SelectorModel
             {
-                AttributeRouteModel = CreateAbpServiceAttributeRouteModel(moduleName, controllerName, action)
+                AttributeRouteModel = CreateAbpServiceAttributeRouteModel(moduleName, controllerName, action, verb),
+                ActionConstraints = { new HttpMethodActionConstraint(new[] { verb }) }
             };
-
-            var verb = configuration?.UseConventionalHttpVerbs == true
-                           ? HttpVerbHelper.GetConventionalVerbForMethodName(action.ActionName)
-                           : HttpVerbHelper.DefaultHttpVerb;
-
-            abpServiceSelectorModel.ActionConstraints.Add(new HttpMethodActionConstraint(new[] { verb }));
 
             action.Selectors.Add(abpServiceSelectorModel);
         }
@@ -227,13 +226,11 @@ namespace Volo.Abp.AspNetCore.Mvc
         {
             foreach (var selector in action.Selectors)
             {
+                //TODO: Revise this?
+                var method = selector.ActionConstraints.OfType<HttpMethodActionConstraint>().FirstOrDefault()?.HttpMethods?.FirstOrDefault();
                 if (selector.AttributeRouteModel == null)
                 {
-                    selector.AttributeRouteModel = CreateAbpServiceAttributeRouteModel(
-                        moduleName,
-                        controllerName,
-                        action
-                    );
+                    selector.AttributeRouteModel = CreateAbpServiceAttributeRouteModel(moduleName, controllerName, action, method);
                 }
             }
         }
@@ -250,13 +247,17 @@ namespace Volo.Abp.AspNetCore.Mvc
             return _configuration.Value.ControllerAssemblySettings.GetSettingOrNull(controllerType);
         }
 
-        private static AttributeRouteModel CreateAbpServiceAttributeRouteModel(string moduleName, string controllerName, ActionModel action)
+        private static AttributeRouteModel CreateAbpServiceAttributeRouteModel(string moduleName, string controllerName, ActionModel action, string verb)
         {
-            return new AttributeRouteModel(
-                new RouteAttribute(
-                    $"api/services/{moduleName}/{controllerName}/{action.ActionName}"
-                )
-            );
+            //TODO: Implement via interfaces!
+
+            var url = $"api/services/{moduleName}/{controllerName}";
+            if (!verb.IsIn("POST"))
+            {
+                url += $"/{action.ActionName}";
+            }
+
+            return new AttributeRouteModel(new RouteAttribute(url));
         }
 
         private static void RemoveEmptySelectors(IList<SelectorModel> selectors)

@@ -2,11 +2,9 @@ using System.Collections.Generic;
 
 namespace Volo.Abp.Application.Dtos
 {
-    public class ListResultDto<T>
+    public class ListResultDto<T> : IListResult<T>
     {
-        /// <summary>
-        /// List of items.
-        /// </summary>
+        /// <inheritdoc />
         public IReadOnlyList<T> Items
         {
             get { return _items ?? (_items = new List<T>()); }

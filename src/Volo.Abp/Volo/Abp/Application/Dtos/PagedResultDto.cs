@@ -10,9 +10,7 @@ namespace Volo.Abp.Application.Dtos
     [Serializable]
     public class PagedResultDto<T> : ListResultDto<T>, IPagedResult<T>
     {
-        /// <summary>
-        /// Total count of Items.
-        /// </summary>
+        /// <inheritdoc />
         public int TotalCount { get; set; }
 
         /// <summary>
