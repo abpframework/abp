@@ -115,15 +115,24 @@ namespace Volo.Abp.Application.Services
         protected virtual TEntity MapToEntity(TCreateInput createInput)
         {
             var entity = ObjectMapper.Map<TCreateInput, TEntity>(createInput);
+            SetIdForGuids(entity);
+            return entity;
+        }
 
-            //Set ID for GUIDs
+        /// <summary>
+        /// Sets Id value for the entity if <see cref="TPrimaryKey"/> is <see cref="Guid"/>.
+        /// It's used while creating a new entity.
+        /// </summary>
+        protected virtual void SetIdForGuids(TEntity entity)
+        {
             var entityWithGuidId = entity as IEntity<Guid>;
-            if (entityWithGuidId != null && entityWithGuidId.Id == Guid.Empty)
+
+            if (entityWithGuidId == null || entityWithGuidId.Id != Guid.Empty)
             {
-                entityWithGuidId.Id = GuidGenerator.Create();
+                return;
             }
 
-            return entity;
+            entityWithGuidId.Id = GuidGenerator.Create();
         }
 
         /// <summary>
