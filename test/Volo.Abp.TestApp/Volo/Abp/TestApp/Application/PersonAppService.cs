@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.TestApp.Domain;
@@ -16,13 +17,34 @@ namespace Volo.Abp.TestApp.Application
 
         }
         
-        public async Task<ListResultDto<PhoneDto>> GetPhones(Guid id, GetPersonPhonesFilter input)
+        //URL: [GET] /api/people/{id}?type=office
+        public async Task<ListResultDto<PhoneDto>> GetPhones(Guid id, GetPersonPhonesFilter filter)
+        {
+            var phones = (await GetEntityByIdAsync(id)).Phones
+                .WhereIf(filter.Type.HasValue, p => p.Type == filter.Type)
+                .ToList();
+            
+            return new ListResultDto<PhoneDto>(
+                ObjectMapper.Map<List<Phone>, List<PhoneDto>>(phones)
+            );
+        }
+
+        //URL: [POST] /api/people/{id}/phones
+        public async Task<PhoneDto> AddPhone(Guid id, PhoneDto phoneDto)
         {
             var person = await GetEntityByIdAsync(id);
+            var phone = new Phone(person.Id, phoneDto.Number, phoneDto.Type);
 
-            return new ListResultDto<PhoneDto>(
-                ObjectMapper.Map<Collection<Phone>, Collection<PhoneDto>>(person.Phones)
-            );
+            person.Phones.Add(phone);
+
+            return ObjectMapper.Map<Phone, PhoneDto>(phone);
+        }
+
+        //URL: [DELETE] /api/people/{id}/phones/{phoneId}
+        public async Task DeletePhone(Guid id, long phoneId)
+        {
+            var person = await GetEntityByIdAsync(id);
+            person.Phones.RemoveAll(p => p.Id == phoneId);
         }
     }
 }
