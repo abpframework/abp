@@ -17,7 +17,6 @@ namespace Volo.Abp.TestApp.Application
 
         }
         
-        //URL: [GET] /api/people/{id}?type=office
         public async Task<ListResultDto<PhoneDto>> GetPhones(Guid id, GetPersonPhonesFilter filter)
         {
             var phones = (await GetEntityByIdAsync(id)).Phones
@@ -29,7 +28,6 @@ namespace Volo.Abp.TestApp.Application
             );
         }
 
-        //URL: [POST] /api/people/{id}/phones
         public async Task<PhoneDto> AddPhone(Guid id, PhoneDto phoneDto)
         {
             var person = await GetEntityByIdAsync(id);
@@ -40,7 +38,6 @@ namespace Volo.Abp.TestApp.Application
             return ObjectMapper.Map<Phone, PhoneDto>(phone);
         }
 
-        //URL: [DELETE] /api/people/{id}/phones/{phoneId}
         public async Task DeletePhone(Guid id, long phoneId)
         {
             var person = await GetEntityByIdAsync(id);
