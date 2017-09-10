@@ -69,11 +69,10 @@ namespace Volo.Abp.AspNetCore.Mvc
 
             //Ideally should be [POST] /api/app/person
             var response = await Client.PostAsync(
-                "/api/services/app/person",
+                "/api/services/app/person/Create",
                 new StringContent(postData, Encoding.UTF8, "application/json")
             );
 
-            response.IsSuccessStatusCode.ShouldBeTrue();
             response.StatusCode.ShouldBe(HttpStatusCode.OK);
             var resultAsString = await response.Content.ReadAsStringAsync();
             PersonDto resultDto = _jsonSerializer.Deserialize<PersonDto>(resultAsString);
@@ -107,7 +106,6 @@ namespace Volo.Abp.AspNetCore.Mvc
                 new StringContent(putData, Encoding.UTF8, "application/json")
             );
 
-            response.IsSuccessStatusCode.ShouldBeTrue();
             response.StatusCode.ShouldBe(HttpStatusCode.OK);
             var resultAsString = await response.Content.ReadAsStringAsync();
             PersonDto resultDto = _jsonSerializer.Deserialize<PersonDto>(resultAsString);
@@ -122,6 +120,38 @@ namespace Volo.Abp.AspNetCore.Mvc
             personInDb.ShouldNotBeNull();
             personInDb.Name.ShouldBe(firstPerson.Name);
             personInDb.Age.ShouldBe(firstPersonAge + 1);
+        }
+
+        [Fact]
+        public async Task AddPhone_Test()
+        {
+            //Arrange
+
+            var personToAddNewPhone = _personRepository.GetList().First();
+            var phoneNumberToAdd = RandomHelper.GetRandom(1000000, 9000000).ToString();
+
+            //Act
+
+            var postData = _jsonSerializer.Serialize(new PhoneDto { Type = PhoneType.Mobile, Number = phoneNumberToAdd });
+
+            //Ideally should be [POST] /api/people/{id}/phones
+            var response = await Client.PostAsync(
+                "/api/services/app/person/AddPhone?id=" + personToAddNewPhone.Id,
+                new StringContent(postData, Encoding.UTF8, "application/json")
+            );
+
+            response.StatusCode.ShouldBe(HttpStatusCode.OK);
+            var resultAsString = await response.Content.ReadAsStringAsync();
+            var resultDto = _jsonSerializer.Deserialize<PhoneDto>(resultAsString);
+
+            //Assert
+
+            resultDto.Type.ShouldBe(PhoneType.Mobile);
+            resultDto.Number.ShouldBe(phoneNumberToAdd);
+
+            var personInDb = await _personRepository.FindAsync(personToAddNewPhone.Id);
+            personInDb.ShouldNotBeNull();
+            personInDb.Phones.Any(p => p.Number == phoneNumberToAdd).ShouldBeTrue();
         }
     }
 }

@@ -249,14 +249,7 @@ namespace Volo.Abp.AspNetCore.Mvc
 
         private static AttributeRouteModel CreateAbpServiceAttributeRouteModel(string moduleName, string controllerName, ActionModel action, string verb)
         {
-            //TODO: Implement via interfaces!
-
-            var url = $"api/services/{moduleName}/{controllerName}";
-            if (!verb.IsIn("POST"))
-            {
-                url += $"/{action.ActionName}";
-            }
-
+            var url = $"api/services/{moduleName}/{controllerName}/{action.ActionName}";
             return new AttributeRouteModel(new RouteAttribute(url));
         }
 
