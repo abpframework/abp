@@ -78,6 +78,12 @@ namespace Volo.Abp.AspNetCore.Mvc
 
         protected virtual void ConfigureParameters(ControllerModel controller)
         {
+            /* Default binding system of Asp.Net Core for a parameter
+             * 1. Form values
+             * 2. Route values.
+             * 3. Query string.
+             */
+
             foreach (var action in controller.Actions)
             {
                 foreach (var prm in action.Parameters)
@@ -250,7 +256,10 @@ namespace Volo.Abp.AspNetCore.Mvc
 
         protected virtual AttributeRouteModel CreateAbpServiceAttributeRouteModel(string moduleName, string controllerName, ActionModel action, string httpMethod)
         {
-            var url = $"api/services/{moduleName}/{controllerName}/{action.ActionName}";
+            var url = $"api/{moduleName}/{controllerName}/{action.ActionName}";
+
+
+
             return new AttributeRouteModel(new RouteAttribute(url));
         }
 
