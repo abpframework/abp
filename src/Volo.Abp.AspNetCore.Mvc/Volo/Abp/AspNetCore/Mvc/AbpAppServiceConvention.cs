@@ -26,23 +26,27 @@ namespace Volo.Abp.AspNetCore.Mvc
 
         public void Apply(ApplicationModel application)
         {
+            ApplyForControllers(application);
+        }
+
+        protected virtual void ApplyForControllers(ApplicationModel application)
+        {
             foreach (var controller in application.Controllers)
             {
-                var type = controller.ControllerType.AsType();
-                var configuration = GetControllerSettingOrNull(type);
+                var controllerType = controller.ControllerType.AsType();
+                var configuration = GetControllerSettingOrNull(controllerType);
 
-                if (typeof(IApplicationService).GetTypeInfo().IsAssignableFrom(type))
+                if (IsApplicationService(controllerType))
                 {
                     controller.ControllerName = controller.ControllerName.RemovePostFix(ApplicationService.CommonPostfixes);
                     configuration?.ControllerModelConfigurer(controller);
-
                     ConfigureArea(controller, configuration);
                     ConfigureRemoteService(controller, configuration);
                 }
                 else
                 {
-                    var remoteServiceAtt = ReflectionHelper.GetSingleAttributeOrDefault<RemoteServiceAttribute>(type.GetTypeInfo());
-                    if (remoteServiceAtt != null && remoteServiceAtt.IsEnabledFor(type))
+                    var remoteServiceAttr = ReflectionHelper.GetSingleAttributeOrDefault<RemoteServiceAttribute>(controllerType.GetTypeInfo());
+                    if (remoteServiceAttr != null && remoteServiceAttr.IsEnabledFor(controllerType))
                     {
                         ConfigureRemoteService(controller, configuration);
                     }
@@ -202,28 +206,32 @@ namespace Volo.Abp.AspNetCore.Mvc
 
         protected virtual void AddAbpServiceSelector(string moduleName, string controllerName, ActionModel action, [CanBeNull] AbpControllerAssemblySetting configuration)
         {
-            var verb = configuration?.UseConventionalHttpVerbs == true
-                ? HttpVerbHelper.GetConventionalVerbForMethodName(action.ActionName)
-                : HttpVerbHelper.DefaultHttpVerb;
+            var httpMethod = SelectHttpMethod(action, configuration);
 
             var abpServiceSelectorModel = new SelectorModel
             {
-                AttributeRouteModel = CreateAbpServiceAttributeRouteModel(moduleName, controllerName, action, verb),
-                ActionConstraints = { new HttpMethodActionConstraint(new[] { verb }) }
+                AttributeRouteModel = CreateAbpServiceAttributeRouteModel(moduleName, controllerName, action, httpMethod),
+                ActionConstraints = { new HttpMethodActionConstraint(new[] { httpMethod }) }
             };
 
             action.Selectors.Add(abpServiceSelectorModel);
+        }
+
+        protected virtual string SelectHttpMethod(ActionModel action, AbpControllerAssemblySetting configuration)
+        {
+            return configuration?.UseConventionalHttpVerbs == true
+                ? HttpVerbHelper.GetConventionalVerbForMethodName(action.ActionName)
+                : HttpVerbHelper.DefaultHttpVerb;
         }
 
         protected virtual void NormalizeSelectorRoutes(string moduleName, string controllerName, ActionModel action)
         {
             foreach (var selector in action.Selectors)
             {
-                //TODO: Revise this?
-                var method = selector.ActionConstraints.OfType<HttpMethodActionConstraint>().FirstOrDefault()?.HttpMethods?.FirstOrDefault();
+                var httpMethod = selector.ActionConstraints.OfType<HttpMethodActionConstraint>().FirstOrDefault()?.HttpMethods?.FirstOrDefault();
                 if (selector.AttributeRouteModel == null)
                 {
-                    selector.AttributeRouteModel = CreateAbpServiceAttributeRouteModel(moduleName, controllerName, action, method);
+                    selector.AttributeRouteModel = CreateAbpServiceAttributeRouteModel(moduleName, controllerName, action, httpMethod);
                 }
             }
         }
@@ -240,7 +248,7 @@ namespace Volo.Abp.AspNetCore.Mvc
             return _options.ControllerAssemblySettings.GetSettingOrNull(controllerType);
         }
 
-        protected virtual AttributeRouteModel CreateAbpServiceAttributeRouteModel(string moduleName, string controllerName, ActionModel action, string verb)
+        protected virtual AttributeRouteModel CreateAbpServiceAttributeRouteModel(string moduleName, string controllerName, ActionModel action, string httpMethod)
         {
             var url = $"api/services/{moduleName}/{controllerName}/{action.ActionName}";
             return new AttributeRouteModel(new RouteAttribute(url));
@@ -257,6 +265,11 @@ namespace Volo.Abp.AspNetCore.Mvc
         protected virtual bool IsEmptySelector(SelectorModel selector)
         {
             return selector.AttributeRouteModel == null && selector.ActionConstraints.IsNullOrEmpty();
+        }
+
+        protected virtual bool IsApplicationService(Type controllerType)
+        {
+            return typeof(IApplicationService).GetTypeInfo().IsAssignableFrom(controllerType);
         }
     }
 }
