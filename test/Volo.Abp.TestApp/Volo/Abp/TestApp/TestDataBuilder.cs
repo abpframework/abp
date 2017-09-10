@@ -16,7 +16,15 @@ namespace Volo.Abp.TestApp
 
         public void Build()
         {
-            _personRepository.Insert(new Person(Guid.NewGuid(), "Douglas", 42));
+            AddPeople();
+        }
+
+        private void AddPeople()
+        {
+            var douglas = new Person(Guid.NewGuid(), "Douglas", 42);
+            douglas.Phones.Add(new Phone(douglas.Id, "123456789"));
+            douglas.Phones.Add(new Phone(douglas.Id, "123456780", PhoneType.Home));
+            _personRepository.Insert(douglas);
         }
     }
 }

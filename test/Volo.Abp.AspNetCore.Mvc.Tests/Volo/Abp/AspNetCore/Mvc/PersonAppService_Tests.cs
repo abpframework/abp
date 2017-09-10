@@ -153,5 +153,28 @@ namespace Volo.Abp.AspNetCore.Mvc
             personInDb.ShouldNotBeNull();
             personInDb.Phones.Any(p => p.Number == phoneNumberToAdd).ShouldBeTrue();
         }
+
+        [Fact]
+        public async Task GetPhones_Test()
+        {
+            var douglas = _personRepository.GetList().First(p => p.Name == "Douglas");
+
+            //Ideally should be [GET] /api/person/{id}/phones?type=office
+            var result = await GetResponseAsObjectAsync<ListResultDto<PhoneDto>>("/api/services/app/person/GetPhones?id=" + douglas.Id);
+            result.Items.Count.ShouldBe(douglas.Phones.Count);
+        }
+
+        [Fact]
+        public async Task DeletePhone_Test()
+        {
+            var douglas = _personRepository.GetList().First(p => p.Name == "Douglas");
+            var firstPhone = douglas.Phones.First();
+
+            //Ideally should be [DELETE] /api/app/person/{id}
+            await Client.DeleteAsync("/api/services/app/person/DeletePhone?id=" + douglas.Id + "&phoneId=" + firstPhone.Id);
+
+            douglas = _personRepository.GetList().First(p => p.Name == "Douglas");
+            douglas.Phones.Any(p => p.Id == firstPhone.Id).ShouldBeFalse();
+        }
     }
 }

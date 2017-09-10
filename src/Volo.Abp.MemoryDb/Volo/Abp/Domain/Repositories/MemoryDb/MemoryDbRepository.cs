@@ -33,8 +33,20 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
 
         public override TEntity Insert(TEntity entity, bool autoSave = false)
         {
+            SetIdIfNeeded(entity);
             Collection.Add(entity);
             return entity;
+        }
+
+        private void SetIdIfNeeded(TEntity entity)
+        {
+            if (typeof(TPrimaryKey) == typeof(int) || typeof(TPrimaryKey) == typeof(long) || typeof(TPrimaryKey) == typeof(Guid))
+            {
+                if (entity.IsTransient())
+                {
+                    entity.Id = Database.GenerateNextId<TEntity, TPrimaryKey>();
+                }
+            }
         }
 
         public override TEntity Update(TEntity entity)

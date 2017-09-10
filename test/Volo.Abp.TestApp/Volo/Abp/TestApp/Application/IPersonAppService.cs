@@ -7,7 +7,6 @@ namespace Volo.Abp.TestApp.Application
 {
     public interface IPersonAppService : IAsyncCrudAppService<PersonDto>
     {
-        //URL: [GET] /api/people/{id}?type=office
         Task<ListResultDto<PhoneDto>> GetPhones(Guid id, GetPersonPhonesFilter filter);
 
         Task<PhoneDto> AddPhone(Guid id, PhoneDto phoneDto);
