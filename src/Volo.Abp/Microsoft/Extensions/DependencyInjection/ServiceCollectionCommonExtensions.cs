@@ -69,5 +69,91 @@ namespace Microsoft.Extensions.DependencyInjection
 		    builderAction?.Invoke(builder);
 		    return serviceProviderFactory.CreateServiceProvider(builder);
 	    }
-	}
+
+        /// <summary>
+        /// Resolves a dependency using given <see cref="IServiceCollection"/>.
+        /// This method should be used only after dependency injection registration phase completed.
+        /// </summary>
+        internal static T GetService<T>(this IServiceCollection services)
+        {
+            return services
+                .GetSingletonInstance<IAbpApplication>()
+                .ServiceProvider
+                .GetService<T>();
+        }
+
+        /// <summary>
+        /// Resolves a dependency using given <see cref="IServiceCollection"/>.
+        /// This method should be used only after dependency injection registration phase completed.
+        /// </summary>
+        internal static object GetService(this IServiceCollection services, Type type)
+        {
+            return services
+                .GetSingletonInstance<IAbpApplication>()
+                .ServiceProvider
+                .GetService(type);
+        }
+
+        /// <summary>
+        /// Resolves a dependency using given <see cref="IServiceCollection"/>.
+        /// Throws exception if service is not registered.
+        /// This method should be used only after dependency injection registration phase completed.
+        /// </summary>
+        internal static T GetRequiredService<T>(this IServiceCollection services)
+        {
+            return services
+                .GetSingletonInstance<IAbpApplication>()
+                .ServiceProvider
+                .GetRequiredService<T>();
+        }
+
+        /// <summary>
+        /// Resolves a dependency using given <see cref="IServiceCollection"/>.
+        /// Throws exception if service is not registered.
+        /// This method should be used only after dependency injection registration phase completed.
+        /// </summary>
+        internal static object GetRequiredService(this IServiceCollection services, Type type)
+        {
+            return services
+                .GetSingletonInstance<IAbpApplication>()
+                .ServiceProvider
+                .GetRequiredService(type);
+        }
+
+        /// <summary>
+        /// Returns a <see cref="Lazy{T}"/> to resolve a service from given <see cref="IServiceCollection"/>
+        /// once dependency injection registration phase completed.
+        /// </summary>
+        internal static Lazy<T> GetServiceLazy<T>(this IServiceCollection services)
+        {
+            return new Lazy<T>(services.GetService<T>, true);
+        }
+
+        /// <summary>
+        /// Returns a <see cref="Lazy{T}"/> to resolve a service from given <see cref="IServiceCollection"/>
+        /// once dependency injection registration phase completed.
+        /// </summary>
+        internal static Lazy<object> GetServiceLazy(this IServiceCollection services, Type type)
+        {
+            return new Lazy<object>(() => services.GetService(type), true);
+        }
+
+        /// <summary>
+        /// Returns a <see cref="Lazy{T}"/> to resolve a service from given <see cref="IServiceCollection"/>
+        /// once dependency injection registration phase completed.
+        /// </summary>
+        internal static Lazy<T> GetRequiredServiceLazy<T>(this IServiceCollection services)
+        {
+            return new Lazy<T>(services.GetRequiredService<T>, true);
+        }
+
+        /// <summary>
+        /// Returns a <see cref="Lazy{T}"/> to resolve a service from given <see cref="IServiceCollection"/>
+        /// once dependency injection registration phase completed.
+        /// </summary>
+        internal static Lazy<object> GetRequiredServiceLazy(this IServiceCollection services, Type type)
+        {
+            return new Lazy<object>(() => services.GetRequiredService(type), true);
+        }
+    }
 }

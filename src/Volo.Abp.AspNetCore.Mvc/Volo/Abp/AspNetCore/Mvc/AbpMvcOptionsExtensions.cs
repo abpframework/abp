@@ -14,7 +14,7 @@ namespace Volo.Abp.AspNetCore.Mvc
 
         private static void AddConventions(MvcOptions options, IServiceCollection services)
         {
-            options.Conventions.Add(new AbpAppServiceConvention(services));
+            options.Conventions.Add(new AbpAppServiceConventionWrapper(services));
         }
 
         private static void AddFilters(MvcOptions options)
