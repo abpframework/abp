@@ -170,7 +170,7 @@ namespace Volo.Abp.AspNetCore.Mvc
             var douglas = _personRepository.GetList().First(p => p.Name == "Douglas");
             var firstPhone = douglas.Phones.First();
 
-            //Ideally should be [DELETE] /api/app/person/{id}
+            //Ideally should be [DELETE] /api/app/person/{id}/phones/{phoneId}
             await Client.DeleteAsync($"/api/app/person/{douglas.Id}/Phone?phoneId=" + firstPhone.Id);
 
             douglas = _personRepository.GetList().First(p => p.Name == "Douglas");

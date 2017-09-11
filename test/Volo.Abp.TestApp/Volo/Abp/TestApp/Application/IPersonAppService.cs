@@ -11,7 +11,6 @@ namespace Volo.Abp.TestApp.Application
 
         Task<PhoneDto> AddPhone(Guid id, PhoneDto phoneDto);
 
-        //URL: [DELETE] /api/people/{id}/phones/{phoneId}
         Task DeletePhone(Guid id, long phoneId);
     }
 }
