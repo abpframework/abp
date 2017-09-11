@@ -8,17 +8,17 @@ namespace Volo.Abp.TestApp.Application
 {
     public class PersonAppService_Tests : TestAppTestBase
     {
-        private readonly IPersonAppService _personAppService;
+        private readonly IPeopleAppService _peopleAppService;
 
         public PersonAppService_Tests()
         {
-            _personAppService =  ServiceProvider.GetRequiredService<IPersonAppService>();
+            _peopleAppService =  ServiceProvider.GetRequiredService<IPeopleAppService>();
         }
 
         [Fact]
         public async Task GetAll()
         {
-            var people = await _personAppService.GetList(new PagedAndSortedResultRequestDto());
+            var people = await _peopleAppService.GetList(new PagedAndSortedResultRequestDto());
             people.Items.Count.ShouldBeGreaterThan(0);
         }
     }

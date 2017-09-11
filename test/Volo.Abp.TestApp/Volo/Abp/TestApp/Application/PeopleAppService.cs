@@ -9,9 +9,9 @@ using Volo.Abp.Application.Services;
 
 namespace Volo.Abp.TestApp.Application
 {
-    public class PersonAppService : AsyncCrudAppService<Person, PersonDto>, IPersonAppService
+    public class PeopleAppService : AsyncCrudAppService<Person, PersonDto>, IPeopleAppService
     {
-        public PersonAppService(IQueryableRepository<Person> repository) 
+        public PeopleAppService(IQueryableRepository<Person> repository) 
             : base(repository)
         {
 
@@ -38,7 +38,7 @@ namespace Volo.Abp.TestApp.Application
             return ObjectMapper.Map<Phone, PhoneDto>(phone);
         }
 
-        public async Task DeletePhone(Guid id, long phoneId)
+        public async Task RemovePhone(Guid id, long phoneId)
         {
             var person = await GetEntityByIdAsync(id);
             person.Phones.RemoveAll(p => p.Id == phoneId);

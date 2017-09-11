@@ -34,8 +34,8 @@ namespace Volo.Abp.AspNetCore.Mvc
         [Fact]
         public async Task GetAll_Test()
         {
-            //Ideally should be [GET] /api/app/person OK!
-            var result = await GetResponseAsObjectAsync<ListResultDto<PersonDto>>("/api/app/person");
+            //Ideally should be [GET] /api/app/people OK!
+            var result = await GetResponseAsObjectAsync<ListResultDto<PersonDto>>("/api/app/people");
             result.Items.Count.ShouldBeGreaterThan(0);
         }
 
@@ -44,8 +44,8 @@ namespace Volo.Abp.AspNetCore.Mvc
         {
             var firstPerson = _personRepository.GetList().First();
 
-            //Ideally should be [GET] /api/app/person/{id} OK!
-            var result = await GetResponseAsObjectAsync<PersonDto>($"/api/app/person/{firstPerson.Id}");
+            //Ideally should be [GET] /api/app/people/{id} OK!
+            var result = await GetResponseAsObjectAsync<PersonDto>($"/api/app/people/{firstPerson.Id}");
             result.Name.ShouldBe(firstPerson.Name);
         }
 
@@ -54,8 +54,8 @@ namespace Volo.Abp.AspNetCore.Mvc
         {
             var firstPerson = _personRepository.GetList().First();
 
-            //Ideally should be [DELETE] /api/app/person/{id} OK!
-            await Client.DeleteAsync($"/api/app/person/{firstPerson.Id}");
+            //Ideally should be [DELETE] /api/app/people/{id} OK!
+            await Client.DeleteAsync($"/api/app/people/{firstPerson.Id}");
 
             (await _personRepository.FindAsync(firstPerson.Id)).ShouldBeNull();
         }
@@ -67,9 +67,9 @@ namespace Volo.Abp.AspNetCore.Mvc
 
             var postData = _jsonSerializer.Serialize(new PersonDto {Name = "John", Age = 33});
 
-            //Ideally should be [POST] /api/app/person OK!
+            //Ideally should be [POST] /api/app/people OK!
             var response = await Client.PostAsync(
-                "/api/app/person",
+                "/api/app/people",
                 new StringContent(postData, Encoding.UTF8, "application/json")
             );
 
@@ -100,9 +100,9 @@ namespace Volo.Abp.AspNetCore.Mvc
 
             //Act
 
-            //Ideally should be [PUT] /api/app/person/{id} OK!
+            //Ideally should be [PUT] /api/app/people/{id} OK!
             var response = await Client.PutAsync(
-                $"/api/app/person/{updateDto.Id}",
+                $"/api/app/people/{updateDto.Id}",
                 new StringContent(putData, Encoding.UTF8, "application/json")
             );
 
@@ -136,7 +136,7 @@ namespace Volo.Abp.AspNetCore.Mvc
 
             //Ideally should be [POST] /api/people/{id}/phones
             var response = await Client.PostAsync(
-                $"/api/app/person/{personToAddNewPhone.Id}/Phone",
+                $"/api/app/people/{personToAddNewPhone.Id}/Phone",
                 new StringContent(postData, Encoding.UTF8, "application/json")
             );
 
@@ -159,8 +159,8 @@ namespace Volo.Abp.AspNetCore.Mvc
         {
             var douglas = _personRepository.GetList().First(p => p.Name == "Douglas");
 
-            //Ideally should be [GET] /api/person/{id}/phones?type=office
-            var result = await GetResponseAsObjectAsync<ListResultDto<PhoneDto>>($"/api/app/person/{douglas.Id}/Phones");
+            //Ideally should be [GET] /api/people/{id}/phones?type=office
+            var result = await GetResponseAsObjectAsync<ListResultDto<PhoneDto>>($"/api/app/people/{douglas.Id}/Phones");
             result.Items.Count.ShouldBe(douglas.Phones.Count);
         }
 
@@ -170,8 +170,8 @@ namespace Volo.Abp.AspNetCore.Mvc
             var douglas = _personRepository.GetList().First(p => p.Name == "Douglas");
             var firstPhone = douglas.Phones.First();
 
-            //Ideally should be [DELETE] /api/app/person/{id}/phones/{phoneId}
-            await Client.DeleteAsync($"/api/app/person/{douglas.Id}/Phone?phoneId=" + firstPhone.Id);
+            //Ideally should be [DELETE] /api/app/people/{id}/phones/{phoneId}
+            await Client.DeleteAsync($"/api/app/people/{douglas.Id}/Phone?phoneId=" + firstPhone.Id);
 
             douglas = _personRepository.GetList().First(p => p.Name == "Douglas");
             douglas.Phones.Any(p => p.Id == firstPhone.Id).ShouldBeFalse();
