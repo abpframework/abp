@@ -34,8 +34,8 @@ namespace Volo.Abp.AspNetCore.Mvc
         [Fact]
         public async Task GetAll_Test()
         {
-            //Ideally should be [GET] /api/app/person
-            var result = await GetResponseAsObjectAsync<ListResultDto<PersonDto>>("/api/app/person/GetAll");
+            //Ideally should be [GET] /api/app/person OK!
+            var result = await GetResponseAsObjectAsync<ListResultDto<PersonDto>>("/api/app/person");
             result.Items.Count.ShouldBeGreaterThan(0);
         }
 
@@ -44,8 +44,8 @@ namespace Volo.Abp.AspNetCore.Mvc
         {
             var firstPerson = _personRepository.GetList().First();
 
-            //Ideally should be [GET] /api/app/person/{id}
-            var result = await GetResponseAsObjectAsync<PersonDto>("/api/app/person/Get?id=" + firstPerson.Id);
+            //Ideally should be [GET] /api/app/person/{id} OK!
+            var result = await GetResponseAsObjectAsync<PersonDto>($"/api/app/person/{firstPerson.Id}");
             result.Name.ShouldBe(firstPerson.Name);
         }
 
@@ -54,8 +54,8 @@ namespace Volo.Abp.AspNetCore.Mvc
         {
             var firstPerson = _personRepository.GetList().First();
 
-            //Ideally should be [DELETE] /api/app/person/{id}
-            await Client.DeleteAsync("/api/app/person/Delete?id=" + firstPerson.Id);
+            //Ideally should be [DELETE] /api/app/person/{id} OK!
+            await Client.DeleteAsync($"/api/app/person/{firstPerson.Id}");
 
             (await _personRepository.FindAsync(firstPerson.Id)).ShouldBeNull();
         }
@@ -67,9 +67,9 @@ namespace Volo.Abp.AspNetCore.Mvc
 
             var postData = _jsonSerializer.Serialize(new PersonDto {Name = "John", Age = 33});
 
-            //Ideally should be [POST] /api/app/person
+            //Ideally should be [POST] /api/app/person OK!
             var response = await Client.PostAsync(
-                "/api/app/person/Create",
+                "/api/app/person",
                 new StringContent(postData, Encoding.UTF8, "application/json")
             );
 
@@ -100,9 +100,9 @@ namespace Volo.Abp.AspNetCore.Mvc
 
             //Act
 
-            //Ideally should be [PUT] /api/app/person/{id}
+            //Ideally should be [PUT] /api/app/person/{id} OK!
             var response = await Client.PutAsync(
-                "/api/app/person/Update?id=" + updateDto.Id,
+                $"/api/app/person/{updateDto.Id}",
                 new StringContent(putData, Encoding.UTF8, "application/json")
             );
 
@@ -136,7 +136,7 @@ namespace Volo.Abp.AspNetCore.Mvc
 
             //Ideally should be [POST] /api/people/{id}/phones
             var response = await Client.PostAsync(
-                "/api/app/person/AddPhone?id=" + personToAddNewPhone.Id,
+                $"/api/app/person/{personToAddNewPhone.Id}/Phone",
                 new StringContent(postData, Encoding.UTF8, "application/json")
             );
 
@@ -160,7 +160,7 @@ namespace Volo.Abp.AspNetCore.Mvc
             var douglas = _personRepository.GetList().First(p => p.Name == "Douglas");
 
             //Ideally should be [GET] /api/person/{id}/phones?type=office
-            var result = await GetResponseAsObjectAsync<ListResultDto<PhoneDto>>("/api/app/person/GetPhones?id=" + douglas.Id);
+            var result = await GetResponseAsObjectAsync<ListResultDto<PhoneDto>>($"/api/app/person/{douglas.Id}/Phones");
             result.Items.Count.ShouldBe(douglas.Phones.Count);
         }
 
@@ -171,7 +171,7 @@ namespace Volo.Abp.AspNetCore.Mvc
             var firstPhone = douglas.Phones.First();
 
             //Ideally should be [DELETE] /api/app/person/{id}
-            await Client.DeleteAsync("/api/app/person/DeletePhone?id=" + douglas.Id + "&phoneId=" + firstPhone.Id);
+            await Client.DeleteAsync($"/api/app/person/{douglas.Id}/Phone?phoneId=" + firstPhone.Id);
 
             douglas = _personRepository.GetList().First(p => p.Name == "Douglas");
             douglas.Phones.Any(p => p.Id == firstPhone.Id).ShouldBeFalse();

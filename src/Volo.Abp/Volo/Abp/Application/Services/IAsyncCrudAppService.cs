@@ -39,7 +39,7 @@ namespace Volo.Abp.Application.Services
     {
         Task<TEntityDto> Get(TPrimaryKey id);
 
-        Task<PagedResultDto<TEntityDto>> GetAll(TGetAllInput input);
+        Task<PagedResultDto<TEntityDto>> GetList(TGetAllInput input);
 
         Task<TEntityDto> Create(TCreateInput input);
 

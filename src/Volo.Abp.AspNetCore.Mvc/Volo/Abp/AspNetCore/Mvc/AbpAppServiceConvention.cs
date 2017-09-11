@@ -226,8 +226,8 @@ namespace Volo.Abp.AspNetCore.Mvc
         protected virtual string SelectHttpMethod(ActionModel action, AbpControllerAssemblySetting configuration)
         {
             return configuration?.UseConventionalHttpVerbs == true
-                ? HttpVerbHelper.GetConventionalVerbForMethodName(action.ActionName)
-                : HttpVerbHelper.DefaultHttpVerb;
+                ? HttpMethodConventionHelper.GetConventionalVerbForMethodName(action.ActionName)
+                : HttpMethodConventionHelper.DefaultHttpVerb;
         }
 
         protected virtual void NormalizeSelectorRoutes(string moduleName, string controllerName, ActionModel action)
@@ -256,11 +256,29 @@ namespace Volo.Abp.AspNetCore.Mvc
 
         protected virtual AttributeRouteModel CreateAbpServiceAttributeRouteModel(string moduleName, string controllerName, ActionModel action, string httpMethod)
         {
-            var url = $"api/{moduleName}/{controllerName}/{action.ActionName}";
-
-
+            var url = CalculateUrl(moduleName, controllerName, action, httpMethod);
 
             return new AttributeRouteModel(new RouteAttribute(url));
+        }
+
+        private static string CalculateUrl(string moduleName, string controllerName, ActionModel action, string httpMethod)
+        {
+            var url = $"api/{moduleName}/{controllerName}";
+
+            //Add {id} path if needed
+            if (action.Parameters.Any(p => p.ParameterName == "id"))
+            {
+                url += "/{id}";
+            }
+            
+            //Add action name if needed
+            var actionName = HttpMethodConventionHelper.RemoveHttpMethodPrefix(action.ActionName, httpMethod);
+            if (!actionName.IsNullOrEmpty())
+            {
+                url += $"/{actionName}";
+            }
+
+            return url;
         }
 
         protected virtual void RemoveEmptySelectors(IList<SelectorModel> selectors)

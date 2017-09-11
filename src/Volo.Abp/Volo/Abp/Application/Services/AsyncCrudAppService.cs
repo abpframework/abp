@@ -80,7 +80,7 @@ namespace Volo.Abp.Application.Services
             return MapToEntityDto(entity);
         }
 
-        public virtual async Task<PagedResultDto<TEntityDto>> GetAll(TGetAllInput input)
+        public virtual async Task<PagedResultDto<TEntityDto>> GetList(TGetAllInput input)
         {
             CheckGetAllPermission();
 
