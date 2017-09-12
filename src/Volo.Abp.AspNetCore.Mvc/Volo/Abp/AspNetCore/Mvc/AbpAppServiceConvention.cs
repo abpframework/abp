@@ -106,7 +106,7 @@ namespace Volo.Abp.AspNetCore.Mvc
 
         protected virtual bool CanUseFormBodyBinding(ActionModel action, ParameterModel parameter)
         {
-            if (_options.FormBodyBindingIgnoredTypes.Any(t => t.IsAssignableFrom(parameter.ParameterInfo.ParameterType)))
+            if (_options.AppServiceControllers.FormBodyBindingIgnoredTypes.Any(t => t.IsAssignableFrom(parameter.ParameterInfo.ParameterType)))
             {
                 return false;
             }
@@ -251,7 +251,7 @@ namespace Volo.Abp.AspNetCore.Mvc
         [CanBeNull]
         protected virtual AbpControllerAssemblySetting GetControllerSettingOrNull(Type controllerType)
         {
-            return _options.ControllerAssemblySettings.GetSettingOrNull(controllerType);
+            return _options.AppServiceControllers.ControllerAssemblySettings.GetSettingOrNull(controllerType);
         }
 
         protected virtual AttributeRouteModel CreateAbpServiceAttributeRouteModel(string moduleName, string controllerName, ActionModel action, string httpMethod)

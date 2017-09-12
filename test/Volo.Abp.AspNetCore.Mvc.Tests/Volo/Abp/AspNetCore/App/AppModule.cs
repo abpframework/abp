@@ -24,7 +24,7 @@ namespace Volo.Abp.AspNetCore.App
 
             services.Configure<AbpAspNetCoreMvcOptions>(options =>
             {
-                options.CreateControllersForAppServices(typeof(TestAppModule).Assembly);
+                options.AppServiceControllers.CreateFor(typeof(TestAppModule).Assembly);
             });
 
             services.AddAssemblyOf<AppModule>();

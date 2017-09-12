@@ -97,6 +97,7 @@ namespace Volo.Abp.AspNetCore.Mvc
                 .ServiceProvider
                 .GetRequiredService<IOptions<AbpAspNetCoreMvcOptions>>()
                 .Value
+                .AppServiceControllers
                 .ControllerAssemblySettings
                 .Select(s => s.Assembly)
                 .Distinct();

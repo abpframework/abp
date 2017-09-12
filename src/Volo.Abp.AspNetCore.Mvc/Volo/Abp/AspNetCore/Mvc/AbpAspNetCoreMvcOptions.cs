@@ -7,11 +7,20 @@ namespace Volo.Abp.AspNetCore.Mvc
 {
     public class AbpAspNetCoreMvcOptions
     {
-        //TODO: Group into a class since they are related.
+        public AppServiceControllerOptions AppServiceControllers { get; }
+
+        public AbpAspNetCoreMvcOptions()
+        {
+            AppServiceControllers = new AppServiceControllerOptions();
+        }
+    }
+
+    public class AppServiceControllerOptions
+    {
         public ControllerAssemblySettingList ControllerAssemblySettings { get; }
         public List<Type> FormBodyBindingIgnoredTypes { get; }
 
-        public AbpAspNetCoreMvcOptions()
+        public AppServiceControllerOptions()
         {
             ControllerAssemblySettings = new ControllerAssemblySettingList();
             FormBodyBindingIgnoredTypes = new List<Type>
@@ -20,7 +29,7 @@ namespace Volo.Abp.AspNetCore.Mvc
             };
         }
 
-        public AbpControllerAssemblySettingBuilder CreateControllersForAppServices(
+        public AbpControllerAssemblySettingBuilder CreateFor(
             Assembly assembly,
             string moduleName = AbpControllerAssemblySetting.DefaultServiceModuleName,
             bool useConventionalHttpVerbs = true)
