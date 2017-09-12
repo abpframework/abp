@@ -17,7 +17,7 @@ namespace Volo.Abp.Identity
             _userRepository = userRepository;
         }
 
-        public async Task<ListResultDto<IdentityUserDto>> GetAll()
+        public async Task<ListResultDto<IdentityUserDto>> Get()
         {
             var users = await _userRepository.GetListAsync();
 

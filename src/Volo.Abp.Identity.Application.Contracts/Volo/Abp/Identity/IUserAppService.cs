@@ -7,7 +7,7 @@ namespace Volo.Abp.Identity
 {
     public interface IUserAppService : IApplicationService
     {
-        Task<ListResultDto<IdentityUserDto>> GetAll();
+        Task<ListResultDto<IdentityUserDto>> Get();
 
         Task<IdentityUserDto> Get(Guid id);
     }

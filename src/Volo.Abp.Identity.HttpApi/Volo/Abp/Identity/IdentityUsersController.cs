@@ -18,9 +18,9 @@ namespace Volo.Abp.Identity
 
         [HttpGet]
         [Route("")]
-        public Task<ListResultDto<IdentityUserDto>> GetAll()
+        public Task<ListResultDto<IdentityUserDto>> Get()
         {
-            return _userAppService.GetAll();
+            return _userAppService.Get();
         }
 
         [HttpGet]

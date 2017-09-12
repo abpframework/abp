@@ -17,7 +17,7 @@ namespace Volo.Abp.Identity
             _options = options.Value;
         }
 
-        public async Task<ListResultDto<IdentityUserDto>> GetAll()
+        public async Task<ListResultDto<IdentityUserDto>> Get()
         {
             using (var client = new HttpClient())
             {

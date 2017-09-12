@@ -9,7 +9,7 @@ namespace Volo.Abp.Identity
     {
         public override void ConfigureServices(IServiceCollection services)
         {
-            services.AddAssemblyOf<AbpIdentityApplicationModule>();
+            services.AddAssemblyOf<AbpIdentityHttpApiModule>();
         }
     }
 }

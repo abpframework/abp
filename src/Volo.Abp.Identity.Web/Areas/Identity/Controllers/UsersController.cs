@@ -16,7 +16,7 @@ namespace Volo.Abp.Identity.Web.Areas.Identity.Controllers
 
         public async Task<ActionResult> Index()
         {
-            var result = await _userAppService.GetAll();
+            var result = await _userAppService.Get();
             return View(result.Items);
         }
     }
