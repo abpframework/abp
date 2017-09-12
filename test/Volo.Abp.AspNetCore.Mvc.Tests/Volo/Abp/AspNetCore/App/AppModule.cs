@@ -25,6 +25,7 @@ namespace Volo.Abp.AspNetCore.App
             services.Configure<AbpAspNetCoreMvcOptions>(options =>
             {
                 options.AppServiceControllers.CreateFor(typeof(TestAppModule).Assembly);
+                options.AppServiceControllers.UrlActionNameNormalizers.Add(new PhoneBookUrlActionNameNormalizer());
             });
 
             services.AddAssemblyOf<AppModule>();

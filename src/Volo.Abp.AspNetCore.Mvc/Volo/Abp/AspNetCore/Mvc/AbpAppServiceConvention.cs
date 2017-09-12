@@ -261,7 +261,7 @@ namespace Volo.Abp.AspNetCore.Mvc
             return new AttributeRouteModel(new RouteAttribute(url));
         }
 
-        private static string CalculateUrl(string moduleName, string controllerName, ActionModel action, string httpMethod)
+        protected virtual string CalculateUrl(string moduleName, string controllerName, ActionModel action, string httpMethod)
         {
             var url = $"api/{moduleName}/{controllerName}";
 
@@ -272,13 +272,32 @@ namespace Volo.Abp.AspNetCore.Mvc
             }
             
             //Add action name if needed
-            var actionName = HttpMethodConventionHelper.RemoveHttpMethodPrefix(action.ActionName, httpMethod);
-            if (!actionName.IsNullOrEmpty())
+            var actionNameInUrl = NormalizeUrlActionName(moduleName, controllerName, action, httpMethod);
+            if (!actionNameInUrl.IsNullOrEmpty())
             {
-                url += $"/{actionName}";
+                url += $"/{actionNameInUrl}";
+
+                //Add secondary Id
+                var secondaryIds = action.Parameters.Where(p => p.ParameterName.EndsWith("Id", StringComparison.Ordinal)).ToList();
+                if (secondaryIds.Count == 1)
+                {
+                    url += $"/{{{secondaryIds[0].ParameterName}}}";
+                }
             }
 
             return url;
+        }
+
+        protected virtual string NormalizeUrlActionName(string moduleName, string controllerName, ActionModel action, string httpMethod)
+        {
+            var context = new UrlActionNameNormalizerContext(moduleName, controllerName, action, httpMethod, action.ActionName);
+
+            foreach (var normalizer in _options.AppServiceControllers.UrlActionNameNormalizers)
+            {
+                normalizer.Normalize(context);
+            }
+
+            return context.ActionNameInUrl;
         }
 
         protected virtual void RemoveEmptySelectors(IList<SelectorModel> selectors)

@@ -129,9 +129,8 @@ namespace Volo.Abp.AspNetCore.Mvc
 
             var postData = _jsonSerializer.Serialize(new PhoneDto { Type = PhoneType.Mobile, Number = phoneNumberToAdd });
 
-            //Ideally should be [POST] /api/people/{id}/phones
             var response = await Client.PostAsync(
-                $"/api/app/people/{personToAddNewPhone.Id}/phone",
+                $"/api/app/people/{personToAddNewPhone.Id}/phones",
                 new StringContent(postData, Encoding.UTF8, "application/json")
             );
 
@@ -154,8 +153,7 @@ namespace Volo.Abp.AspNetCore.Mvc
         {
             var douglas = _personRepository.GetList().First(p => p.Name == "Douglas");
 
-            //Ideally should be [GET] /api/people/{id}/phones?type=office
-            var result = await GetResponseAsObjectAsync<ListResultDto<PhoneDto>>($"/api/app/people/{douglas.Id}/Phones");
+            var result = await GetResponseAsObjectAsync<ListResultDto<PhoneDto>>($"/api/app/people/{douglas.Id}/phones");
             result.Items.Count.ShouldBe(douglas.Phones.Count);
         }
 
@@ -165,8 +163,7 @@ namespace Volo.Abp.AspNetCore.Mvc
             var douglas = _personRepository.GetList().First(p => p.Name == "Douglas");
             var firstPhone = douglas.Phones.First();
 
-            //Ideally should be [DELETE] /api/app/people/{id}/phones/{phoneId}
-            await Client.DeleteAsync($"/api/app/people/{douglas.Id}/Phone?phoneId=" + firstPhone.Id);
+            await Client.DeleteAsync($"/api/app/people/{douglas.Id}/phones/{firstPhone.Id}");
 
             douglas = _personRepository.GetList().First(p => p.Name == "Douglas");
             douglas.Phones.Any(p => p.Id == firstPhone.Id).ShouldBeFalse();
