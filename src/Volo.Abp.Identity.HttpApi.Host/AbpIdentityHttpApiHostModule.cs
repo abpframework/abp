@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp.AspNetCore.Modularity;
 using Volo.Abp.Autofac;
 using Volo.Abp.Data;
@@ -33,6 +34,13 @@ namespace Volo.Abp.Identity.HttpApi.Host
             });
 
             services.AddMvc();
+
+            services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("v1", new Info { Title = "Volo.Abp.Identity API", Version = "v1" });
+                options.DocInclusionPredicate((docName, description) => true);
+            });
+
             services.AddAssemblyOf<AbpIdentityHttpApiHostModule>();
         }
 
@@ -47,7 +55,15 @@ namespace Volo.Abp.Identity.HttpApi.Host
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseMvc(); //No need to a default route
+            app.UseStaticFiles();
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Volo.Abp.Identity API");
+            });
+
+            app.UseMvcWithDefaultRoute();
         }
 
         private static IConfigurationRoot BuildConfiguration(IHostingEnvironment env)
