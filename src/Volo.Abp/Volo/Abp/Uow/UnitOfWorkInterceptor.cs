@@ -32,7 +32,7 @@ namespace Volo.Abp.Uow
         {
             if (!UnitOfWorkHelper.IsUnitOfWorkMethod(invocation.Method))
             {
-                invocation.Proceed();
+                await invocation.ProceedAsync();
                 return;
             }
 

@@ -14,6 +14,16 @@ namespace Volo.Abp.Http.DynamicProxying
     {
         private readonly IDynamicProxyHttpClientFactory _httpClientFactory;
 
+        private static readonly MethodInfo GenericInterceptAsyncMethod;
+        private static readonly object[] EmptyObjectArray = new object[0];
+
+        static DynamicHttpProxyInterceptor()
+        {
+            GenericInterceptAsyncMethod = typeof(DynamicHttpProxyInterceptor)
+                .GetMethods(BindingFlags.NonPublic | BindingFlags.Instance)
+                .First(m => m.Name == nameof(InterceptAsync) && m.IsGenericMethodDefinition);
+        }
+
         public DynamicHttpProxyInterceptor(IDynamicProxyHttpClientFactory httpClientFactory)
         {
             _httpClientFactory = httpClientFactory;
@@ -27,19 +37,12 @@ namespace Volo.Abp.Http.DynamicProxying
         public override async Task InterceptAsync(IAbpMethodInvocation invocation)
         {
             var returnTypeWithoutTask = invocation.Method.ReturnType.GenericTypeArguments[0];
-
-            //var result = await GetResult(client, returnTypeWithoutTask);
-
-            var methods = typeof(DynamicHttpProxyInterceptor).GetMethods(BindingFlags.NonPublic | BindingFlags.Instance);
-            var getResultMethod = methods
-                .Where(m => m.Name == nameof(GetResult))
-                .First()
-                .MakeGenericMethod(returnTypeWithoutTask);
-
-            invocation.ReturnValue = getResultMethod.Invoke(this, new object[] { returnTypeWithoutTask });
+            invocation.ReturnValue = GenericInterceptAsyncMethod
+                .MakeGenericMethod(returnTypeWithoutTask)
+                .Invoke(this, EmptyObjectArray);
         }
 
-        private async Task<T> GetResult<T>(Type returnTypeWithoutTask)
+        private async Task<T> InterceptAsync<T>()
         {
             using (var client = _httpClientFactory.Create())
             {
@@ -53,7 +56,7 @@ namespace Volo.Abp.Http.DynamicProxying
 
                 var result = JsonConvert.DeserializeObject(
                     content,
-                    returnTypeWithoutTask,
+                    typeof(T),
                     new JsonSerializerSettings
                     {
                         ContractResolver = new CamelCasePropertyNamesContractResolver()
