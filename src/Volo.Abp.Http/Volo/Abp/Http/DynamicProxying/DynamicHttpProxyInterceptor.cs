@@ -15,7 +15,6 @@ namespace Volo.Abp.Http.DynamicProxying
         private readonly IDynamicProxyHttpClientFactory _httpClientFactory;
 
         private static readonly MethodInfo GenericInterceptAsyncMethod;
-        private static readonly object[] EmptyObjectArray = new object[0];
 
         static DynamicHttpProxyInterceptor()
         {
@@ -34,15 +33,16 @@ namespace Volo.Abp.Http.DynamicProxying
             throw new System.NotImplementedException();
         }
 
-        public override async Task InterceptAsync(IAbpMethodInvocation invocation)
+        public override Task InterceptAsync(IAbpMethodInvocation invocation)
         {
-            var returnTypeWithoutTask = invocation.Method.ReturnType.GenericTypeArguments[0];
             invocation.ReturnValue = GenericInterceptAsyncMethod
-                .MakeGenericMethod(returnTypeWithoutTask)
-                .Invoke(this, EmptyObjectArray);
+                .MakeGenericMethod(invocation.Method.ReturnType.GenericTypeArguments[0])
+                .Invoke(this, new object[]{ invocation });
+
+            return Task.CompletedTask;
         }
 
-        private async Task<T> InterceptAsync<T>()
+        private async Task<T> InterceptAsync<T>(IAbpMethodInvocation invocation)
         {
             using (var client = _httpClientFactory.Create())
             {
