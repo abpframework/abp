@@ -16,7 +16,7 @@ namespace Volo.Abp.AspNetCore.App
         typeof(AbpAspNetCoreMvcModule),
         typeof(AbpAutofacModule)
         )]
-    public class AppModule : AbpModule
+    public class AbpAspNetCoreMvcTestModule : AbpModule
     {
         public override void ConfigureServices(IServiceCollection services)
         {
@@ -28,7 +28,7 @@ namespace Volo.Abp.AspNetCore.App
                 options.AppServiceControllers.UrlActionNameNormalizers.Add(new PhoneBookUrlActionNameNormalizer());
             });
 
-            services.AddAssemblyOf<AppModule>();
+            services.AddAssemblyOf<AbpAspNetCoreMvcTestModule>();
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
