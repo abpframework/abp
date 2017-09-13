@@ -1,3 +1,4 @@
+using Volo.Abp.AspNetCore;
 using Volo.Abp.AspNetCore.App;
 
 namespace Volo.Abp.Http

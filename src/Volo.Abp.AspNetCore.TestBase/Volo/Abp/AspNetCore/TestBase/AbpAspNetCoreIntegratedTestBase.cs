@@ -5,6 +5,7 @@ using System.Net.Http;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Volo.Abp.AspNetCore.TestBase
 {
@@ -22,8 +23,9 @@ namespace Volo.Abp.AspNetCore.TestBase
             var builder = CreateWebHostBuilder();
             Server = CreateTestServer(builder);
             Client = Server.CreateClient();
-
             ServiceProvider = Server.Host.Services;
+
+            ServiceProvider.GetRequiredService<ITestServerAccessor>().Server = Server;
         }
 
         protected virtual IWebHostBuilder CreateWebHostBuilder()

@@ -1,6 +1,9 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Castle.DynamicProxy;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.App;
+using Volo.Abp.Castle.DynamicProxy;
 using Volo.Abp.Modularity;
+using Volo.Abp.TestApp.Application;
 
 namespace Volo.Abp.Http
 {
@@ -9,7 +12,8 @@ namespace Volo.Abp.Http
     {
         public override void ConfigureServices(IServiceCollection services)
         {
-            services.AddAssemblyOf<AbpAspNetCoreMvcTestModule>();
+            services.AddAssemblyOf<AbpHttpTestModule>();
+            services.AddHttpClientProxy<IPeopleAppService>("/");
         }
     }
 }

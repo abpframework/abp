@@ -17,7 +17,9 @@ namespace Volo.Abp.Castle.DynamicProxy
 
         public void Intercept(IInvocation invocation)
         {
-            if (invocation.MethodInvocationTarget.IsAsync())
+            var method = invocation.MethodInvocationTarget ?? invocation.Method;
+
+            if (method.IsAsync())
             {
                 InterceptAsyncMethod(invocation);
             }

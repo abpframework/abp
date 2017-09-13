@@ -6,7 +6,7 @@ using Newtonsoft.Json.Serialization;
 using Shouldly;
 using Volo.Abp.AspNetCore.TestBase;
 
-namespace Volo.Abp.AspNetCore.App
+namespace Volo.Abp.AspNetCore
 {
     public abstract class AbpAspNetCoreTestBase<TStartup> : AbpAspNetCoreIntegratedTestBase<TStartup>
         where TStartup : class
