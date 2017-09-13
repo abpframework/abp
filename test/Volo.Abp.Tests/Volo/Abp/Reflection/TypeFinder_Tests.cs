@@ -18,8 +18,8 @@ namespace Volo.Abp.Reflection
             var fakeAssemblyFinder = Substitute.For<IAssemblyFinder>();
             fakeAssemblyFinder.Assemblies.Returns(new List<Assembly>
             {
-                typeof(AbpKernelModule).GetAssembly(),
-                typeof(TypeFinder_Tests).GetAssembly()
+                typeof(AbpKernelModule).Assembly,
+                typeof(TypeFinder_Tests).Assembly
             });
 
             //Act

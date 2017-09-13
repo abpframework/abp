@@ -33,7 +33,7 @@ namespace Volo.Abp.Modularity
             }
 
             Type = type;
-            Assembly = type.GetAssembly();
+            Assembly = type.Assembly;
             Instance = instance;
             IsLoadedAsPlugIn = isLoadedAsPlugIn;
 

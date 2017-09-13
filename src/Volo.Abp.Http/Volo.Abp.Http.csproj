@@ -16,8 +16,4 @@
     <ProjectReference Include="..\Volo.Abp\Volo.Abp.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Volo\Abp\Http\DynamicProxying\Oas\" />
-  </ItemGroup>
-
 </Project>

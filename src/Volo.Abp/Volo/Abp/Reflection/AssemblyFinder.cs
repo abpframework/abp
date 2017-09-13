@@ -30,7 +30,7 @@ namespace Volo.Abp.Reflection
 
             foreach (var module in _moduleContainer.Modules)
             {
-                assemblies.Add(module.Type.GetAssembly());
+                assemblies.Add(module.Type.Assembly);
             }
 
             return assemblies.Distinct().ToImmutableList();
