@@ -9,6 +9,10 @@ namespace Volo.Abp.Http.Modeling
     {
         public string Name { get; }
 
+        public Type Type { get; }
+
+        public string TypeAsString { get; }
+
         public IDictionary<string,  ActionApiDescriptionModel> Actions { get; }
 
         private ControllerApiDescriptionModel()
@@ -16,9 +20,11 @@ namespace Volo.Abp.Http.Modeling
 
         }
 
-        public ControllerApiDescriptionModel(string name)
+        public ControllerApiDescriptionModel(string name, Type type)
         {
             Name = name;
+            Type = type;
+            TypeAsString = type.FullName;
 
             Actions = new Dictionary<string, ActionApiDescriptionModel>();
         }

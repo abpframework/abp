@@ -33,9 +33,9 @@ namespace Volo.Abp.Http.Modeling
             return Controllers[controller.Name] = controller;
         }
 
-        public ControllerApiDescriptionModel GetOrAddController(string name)
+        public ControllerApiDescriptionModel GetOrAddController(string name, Type type)
         {
-            return Controllers.GetOrAdd(name, () => new ControllerApiDescriptionModel(name));
+            return Controllers.GetOrAdd(name, () => new ControllerApiDescriptionModel(name, type));
         }
         
         public ModuleApiDescriptionModel CreateSubModel(string[] controllers, string[] actions)

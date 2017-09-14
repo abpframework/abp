@@ -54,8 +54,11 @@ namespace Volo.Abp.AspNetCore.Mvc
 
         private void AddApiDescriptionToModel(ApiDescription apiDescription, ApplicationApiDescriptionModel model)
         {
-            var moduleModel = model.GetOrAddModule(GetModuleName(apiDescription));
-            var controllerModel = moduleModel.GetOrAddController(GetControllerName(apiDescription));
+            var controllerType = apiDescription.ActionDescriptor.AsControllerActionDescriptor().ControllerTypeInfo.AsType();
+
+            var moduleModel = model.GetOrAddModule(GetModuleName(controllerType));
+
+            var controllerModel = moduleModel.GetOrAddController(GetControllerName(apiDescription), controllerType);
 
             var method = apiDescription.ActionDescriptor.GetMethodInfo();
 
@@ -153,9 +156,8 @@ namespace Volo.Abp.AspNetCore.Mvc
             return modelNameProvider.Name;
         }
 
-        private string GetModuleName(ApiDescription apiDescription)
+        private string GetModuleName(Type controllerType)
         {
-            var controllerType = apiDescription.ActionDescriptor.AsControllerActionDescriptor().ControllerTypeInfo.AsType();
             if (controllerType == null)
             {
                 return AbpControllerAssemblySetting.DefaultServiceModuleName;
