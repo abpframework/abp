@@ -8,6 +8,8 @@ namespace Volo.Abp.Http.Modeling
     {
         public string Name { get; }
 
+        public string NameOnClass { get; }
+
         public string HttpMethod { get; }
 
         public string Url { get; }
@@ -21,9 +23,10 @@ namespace Volo.Abp.Http.Modeling
 
         }
 
-        public ActionApiDescriptionModel(string name, ReturnValueApiDescriptionModel returnValue, string url, string httpMethod = null)
+        public ActionApiDescriptionModel(string name, string nameOnClass, ReturnValueApiDescriptionModel returnValue, string url, string httpMethod = null)
         {
             Name = name;
+            NameOnClass = nameOnClass;
             ReturnValue = returnValue;
             Url = url;
             HttpMethod = httpMethod;

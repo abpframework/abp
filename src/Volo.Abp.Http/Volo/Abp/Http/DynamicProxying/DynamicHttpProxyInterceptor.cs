@@ -18,7 +18,7 @@ namespace Volo.Abp.Http.DynamicProxying
         private static readonly MethodInfo GenericInterceptAsyncMethod;
 
         private readonly IDynamicProxyHttpClientFactory _httpClientFactory;
-        private readonly IApplicationApiDescriptionModelCache _discoverManager;
+        private readonly IApplicationApiDescriptionModelManager _discoverManager;
         private readonly AbpHttpOptions _options;
 
         static DynamicHttpProxyInterceptor()
@@ -31,7 +31,7 @@ namespace Volo.Abp.Http.DynamicProxying
         public DynamicHttpProxyInterceptor(
             IDynamicProxyHttpClientFactory httpClientFactory, 
             IOptions<AbpHttpOptions> options,
-            IApplicationApiDescriptionModelCache discoverManager)
+            IApplicationApiDescriptionModelManager discoverManager)
         {
             _httpClientFactory = httpClientFactory;
             _discoverManager = discoverManager;
@@ -61,6 +61,7 @@ namespace Volo.Abp.Http.DynamicProxying
             }
 
             var apiDescriptionModel = await _discoverManager.GetAsync(config.BaseUrl);
+
             
             using (var client = _httpClientFactory.Create())
             {

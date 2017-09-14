@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -10,14 +9,16 @@ using Volo.Abp.Http.Modeling;
 
 namespace Volo.Abp.Http.DynamicProxying
 {
-    public class ApplicationApiDescriptionModelCache : IApplicationApiDescriptionModelCache, ISingletonDependency
+    //TODO: Move DynamicProxying to Volo.Abp.Http.Client module
+
+    public class ApplicationApiDescriptionModelManager : IApplicationApiDescriptionModelManager, ISingletonDependency
     {
         private readonly IDynamicProxyHttpClientFactory _httpClientFactory;
 
         private readonly Dictionary<string, ApplicationApiDescriptionModel> _cache;
         private readonly AsyncLock _asyncLock;
 
-        public ApplicationApiDescriptionModelCache(IDynamicProxyHttpClientFactory httpClientFactory)
+        public ApplicationApiDescriptionModelManager(IDynamicProxyHttpClientFactory httpClientFactory)
         {
             _httpClientFactory = httpClientFactory;
 
@@ -32,14 +33,14 @@ namespace Volo.Abp.Http.DynamicProxying
                 var model = _cache.GetOrDefault(baseUrl);
                 if (model == null)
                 {
-                    _cache[baseUrl] = model = await GetModelFromRemoteServer(baseUrl);
+                    _cache[baseUrl] = model = await GetFromServerAsync(baseUrl);
                 }
 
                 return model;
             }
         }
 
-        private async Task<ApplicationApiDescriptionModel> GetModelFromRemoteServer(string baseUrl)
+        private async Task<ApplicationApiDescriptionModel> GetFromServerAsync(string baseUrl)
         {
             using (var client = _httpClientFactory.Create())
             {

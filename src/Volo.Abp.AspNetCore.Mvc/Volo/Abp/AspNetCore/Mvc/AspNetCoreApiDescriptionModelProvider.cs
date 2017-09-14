@@ -73,6 +73,7 @@ namespace Volo.Abp.AspNetCore.Mvc
 
             var actionModel = controllerModel.AddAction(new ActionApiDescriptionModel(
                 uniqueMethodName,
+                method.Name,
                 returnValue,
                 apiDescription.RelativePath,
                 apiDescription.HttpMethod
