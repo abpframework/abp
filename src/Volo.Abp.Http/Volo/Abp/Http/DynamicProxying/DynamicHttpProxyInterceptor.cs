@@ -1,36 +1,46 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DynamicProxy;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.Http.DynamicProxying
 {
-    public class DynamicHttpProxyInterceptor : AbpInterceptor, ITransientDependency
+    public class DynamicHttpProxyInterceptor<TService> : AbpInterceptor, ITransientDependency
     {
-        private readonly IDynamicProxyHttpClientFactory _httpClientFactory;
-
         private static readonly MethodInfo GenericInterceptAsyncMethod;
+
+        private readonly IDynamicProxyHttpClientFactory _httpClientFactory;
+        private readonly IApplicationApiDescriptionModelCache _discoverManager;
+        private readonly AbpHttpOptions _options;
 
         static DynamicHttpProxyInterceptor()
         {
-            GenericInterceptAsyncMethod = typeof(DynamicHttpProxyInterceptor)
+            GenericInterceptAsyncMethod = typeof(DynamicHttpProxyInterceptor<TService>)
                 .GetMethods(BindingFlags.NonPublic | BindingFlags.Instance)
                 .First(m => m.Name == nameof(InterceptAsync) && m.IsGenericMethodDefinition);
         }
 
-        public DynamicHttpProxyInterceptor(IDynamicProxyHttpClientFactory httpClientFactory)
+        public DynamicHttpProxyInterceptor(
+            IDynamicProxyHttpClientFactory httpClientFactory, 
+            IOptions<AbpHttpOptions> options,
+            IApplicationApiDescriptionModelCache discoverManager)
         {
             _httpClientFactory = httpClientFactory;
+            _discoverManager = discoverManager;
+            _options = options.Value;
         }
 
         public override void Intercept(IAbpMethodInvocation invocation)
         {
-            throw new System.NotImplementedException();
+            AsyncHelper.RunSync(() => InterceptAsync(invocation));
         }
 
         public override Task InterceptAsync(IAbpMethodInvocation invocation)
@@ -44,6 +54,14 @@ namespace Volo.Abp.Http.DynamicProxying
 
         private async Task<T> InterceptAsync<T>(IAbpMethodInvocation invocation)
         {
+            var config = _options.HttpClientProxies.GetOrDefault(typeof(TService));
+            if (config == null)
+            {
+                throw new AbpException($"Could not get DynamicHttpClientProxyConfig for {typeof(T).FullName}.");
+            }
+
+            var apiDescriptionModel = await _discoverManager.GetAsync(config.BaseUrl);
+            
             using (var client = _httpClientFactory.Create())
             {
                 var response = await client.GetAsync("/api/app/people");

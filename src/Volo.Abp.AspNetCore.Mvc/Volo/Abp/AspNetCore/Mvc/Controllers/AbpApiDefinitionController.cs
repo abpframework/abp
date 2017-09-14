@@ -4,11 +4,11 @@ using Volo.Abp.Http.Modeling;
 namespace Volo.Abp.AspNetCore.Mvc.Controllers
 {
     [Area("abp")]
-    public class ApiDefinitionController : AbpController
+    public class AbpApiDefinitionController : AbpController
     {
         private readonly IApiDescriptionModelProvider _modelProvider;
 
-        public ApiDefinitionController(IApiDescriptionModelProvider modelProvider)
+        public AbpApiDefinitionController(IApiDescriptionModelProvider modelProvider)
         {
             _modelProvider = modelProvider;
         }
