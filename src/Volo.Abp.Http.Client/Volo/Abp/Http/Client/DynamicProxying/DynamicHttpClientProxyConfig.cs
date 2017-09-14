@@ -1,6 +1,6 @@
 using System;
 
-namespace Volo.Abp.Http.DynamicProxying
+namespace Volo.Abp.Http.Client.DynamicProxying
 {
     public class DynamicHttpClientProxyConfig
     {

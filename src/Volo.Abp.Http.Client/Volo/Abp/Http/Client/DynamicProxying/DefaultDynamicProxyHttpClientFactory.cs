@@ -1,7 +1,7 @@
 ﻿using System.Net.Http;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Http.DynamicProxying
+namespace Volo.Abp.Http.Client.DynamicProxying
 {
     public class DefaultDynamicProxyHttpClientFactory : IDynamicProxyHttpClientFactory, ITransientDependency
     {

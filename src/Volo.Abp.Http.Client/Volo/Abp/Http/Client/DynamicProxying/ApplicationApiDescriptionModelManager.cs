@@ -7,10 +7,8 @@ using Nito.AsyncEx;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Modeling;
 
-namespace Volo.Abp.Http.DynamicProxying
+namespace Volo.Abp.Http.Client.DynamicProxying
 {
-    //TODO: Move DynamicProxying to Volo.Abp.Http.Client module
-
     public class ApplicationApiDescriptionModelManager : IApplicationApiDescriptionModelManager, ISingletonDependency
     {
         private readonly IDynamicProxyHttpClientFactory _httpClientFactory;

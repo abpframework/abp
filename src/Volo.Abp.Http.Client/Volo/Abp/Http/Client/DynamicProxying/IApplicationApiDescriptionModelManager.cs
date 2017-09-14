@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Volo.Abp.Http.Modeling;
 
-namespace Volo.Abp.Http.DynamicProxying
+namespace Volo.Abp.Http.Client.DynamicProxying
 {
     public interface IApplicationApiDescriptionModelManager
     {

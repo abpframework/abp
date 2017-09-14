@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
@@ -9,9 +7,10 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DynamicProxy;
+using Volo.Abp.Http.Modeling;
 using Volo.Abp.Threading;
 
-namespace Volo.Abp.Http.DynamicProxying
+namespace Volo.Abp.Http.Client.DynamicProxying
 {
     public class DynamicHttpProxyInterceptor<TService> : AbpInterceptor, ITransientDependency
     {
@@ -19,7 +18,7 @@ namespace Volo.Abp.Http.DynamicProxying
 
         private readonly IDynamicProxyHttpClientFactory _httpClientFactory;
         private readonly IApplicationApiDescriptionModelManager _discoverManager;
-        private readonly AbpHttpOptions _options;
+        private readonly AbpHttpClientOptions _options;
 
         static DynamicHttpProxyInterceptor()
         {
@@ -29,8 +28,8 @@ namespace Volo.Abp.Http.DynamicProxying
         }
 
         public DynamicHttpProxyInterceptor(
-            IDynamicProxyHttpClientFactory httpClientFactory, 
-            IOptions<AbpHttpOptions> options,
+            IDynamicProxyHttpClientFactory httpClientFactory,
+            IOptions<AbpHttpClientOptions> options,
             IApplicationApiDescriptionModelManager discoverManager)
         {
             _httpClientFactory = httpClientFactory;
@@ -47,7 +46,7 @@ namespace Volo.Abp.Http.DynamicProxying
         {
             invocation.ReturnValue = GenericInterceptAsyncMethod
                 .MakeGenericMethod(invocation.Method.ReturnType.GenericTypeArguments[0])
-                .Invoke(this, new object[]{ invocation });
+                .Invoke(this, new object[] { invocation });
 
             return Task.CompletedTask;
         }
@@ -62,10 +61,11 @@ namespace Volo.Abp.Http.DynamicProxying
 
             var apiDescriptionModel = await _discoverManager.GetAsync(config.BaseUrl);
 
-            
+            var action = FindAction(apiDescriptionModel, invocation.Method);
+
             using (var client = _httpClientFactory.Create())
             {
-                var response = await client.GetAsync("/api/app/people");
+                var response = await client.GetAsync(config.BaseUrl + action.Url);
                 if (!response.IsSuccessStatusCode)
                 {
                     throw new AbpException("Remote service returns error!");
@@ -83,6 +83,45 @@ namespace Volo.Abp.Http.DynamicProxying
 
                 return (T)result;
             }
+        }
+
+        private ActionApiDescriptionModel FindAction(ApplicationApiDescriptionModel apiDescriptionModel, MethodInfo method)
+        {
+            var methodParameters = method.GetParameters().ToArray();
+
+            foreach (var module in apiDescriptionModel.Modules.Values)
+            {
+                //TODO: Check module type too
+
+                foreach (var controller in module.Controllers.Values)
+                {
+                    //TODO: Check controller type too
+
+                    foreach (var action in controller.Actions.Values)
+                    {
+                        if (action.NameOnClass == method.Name && action.Parameters.Count == methodParameters.Length)
+                        {
+                            var found = true;
+
+                            for (int i = 0; i < methodParameters.Length; i++)
+                            {
+                                if (action.Parameters[i].TypeAsString != methodParameters[i].ParameterType.FullName)
+                                {
+                                    found = false;
+                                    break;
+                                }
+                            }
+
+                            if (found)
+                            {
+                                return action;
+                            }
+                        }
+                    }
+                }
+            }
+
+            throw new AbpException("Could not found remote action for method: " + method);
         }
     }
 }

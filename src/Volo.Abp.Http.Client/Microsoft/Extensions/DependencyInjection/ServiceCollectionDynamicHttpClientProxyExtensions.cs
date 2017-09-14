@@ -2,7 +2,8 @@
 using Castle.DynamicProxy;
 using Volo.Abp.Castle.DynamicProxy;
 using Volo.Abp.Http;
-using Volo.Abp.Http.DynamicProxying;
+using Volo.Abp.Http.Client;
+using Volo.Abp.Http.Client.DynamicProxying;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -19,7 +20,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public static IServiceCollection AddHttpClientProxy(this IServiceCollection services, Type type, string baseUrl)
         {
-            services.Configure<AbpHttpOptions>(options =>
+            services.Configure<AbpHttpClientOptions>(options =>
             {
                 options.HttpClientProxies[type] = new DynamicHttpClientProxyConfig(type, baseUrl);
             });

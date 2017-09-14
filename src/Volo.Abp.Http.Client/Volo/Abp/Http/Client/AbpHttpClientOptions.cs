@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using Volo.Abp.Http.DynamicProxying;
+using Volo.Abp.Http.Client.DynamicProxying;
 
-namespace Volo.Abp.Http
+namespace Volo.Abp.Http.Client
 {
-    public class AbpHttpOptions
+    public class AbpHttpClientOptions
     {
         public Dictionary<Type, DynamicHttpClientProxyConfig> HttpClientProxies { get; set; }
 
-        public AbpHttpOptions()
+        public AbpHttpClientOptions()
         {
             HttpClientProxies = new Dictionary<Type, DynamicHttpClientProxyConfig>();
         }
