@@ -14,6 +14,8 @@ namespace Volo.Abp.Http.Modeling
 
         public string Url { get; }
 
+        //TODO: Add actual parameters on method
+
         public IList<ParameterApiDescriptionModel> Parameters { get; }
 
         public ReturnValueApiDescriptionModel ReturnValue { get; }

@@ -13,6 +13,8 @@ namespace Volo.Abp.Http.Modeling
 
         public string TypeAsString { get; }
 
+        //TODO: Add interfaces implemented by this service.
+
         public IDictionary<string,  ActionApiDescriptionModel> Actions { get; }
 
         private ControllerApiDescriptionModel()
