@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using System.Text;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Logging;
@@ -57,16 +59,17 @@ namespace Volo.Abp.AspNetCore.Mvc
 
             var method = apiDescription.ActionDescriptor.GetMethodInfo();
 
-            if (controllerModel.Actions.ContainsKey(method.Name))
+            var uniqueMethodName = GetUniqueActionName(method);
+            if (controllerModel.Actions.ContainsKey(uniqueMethodName))
             {
-                Logger.LogWarning($"Controller '{controllerModel.Name}' contains more than one action with name '{method.Name}' for module '{moduleModel.Name}'. Ignored: " + apiDescription.ActionDescriptor.GetMethodInfo());
+                Logger.LogWarning($"Controller '{controllerModel.Name}' contains more than one action with name '{uniqueMethodName}' for module '{moduleModel.Name}'. Ignored: " + method);
                 return;
             }
 
             var returnValue = new ReturnValueApiDescriptionModel(method.ReturnType);
 
             var actionModel = controllerModel.AddAction(new ActionApiDescriptionModel(
-                method.Name,
+                uniqueMethodName,
                 returnValue,
                 apiDescription.RelativePath,
                 apiDescription.HttpMethod
@@ -79,6 +82,29 @@ namespace Volo.Abp.AspNetCore.Mvc
         {
             return apiDescription.GroupName?.RemovePostFix(ApplicationService.CommonPostfixes) 
                    ?? apiDescription.ActionDescriptor.AsControllerActionDescriptor().ControllerName;
+        }
+
+        private static string GetUniqueActionName(MethodInfo method)
+        {
+            var methodNameBuilder = new StringBuilder(method.Name);
+
+            var parameters = method.GetParameters();
+            if (parameters.Any())
+            {
+                methodNameBuilder.Append("By");
+
+                for (var i = 0; i < parameters.Length; i++)
+                {
+                    if (i > 0)
+                    {
+                        methodNameBuilder.Append("And");
+                    }
+
+                    methodNameBuilder.Append(parameters[i].Name.ToPascalCase());
+                }
+            }
+
+            return methodNameBuilder.ToString();
         }
 
         private void AddParameterDescriptionsToModel(ActionApiDescriptionModel actionModel, MethodInfo method, ApiDescription apiDescription)
@@ -141,6 +167,12 @@ namespace Volo.Abp.AspNetCore.Mvc
                 {
                     return controllerSetting.ModuleName;
                 }
+            }
+
+            var areaAttr = controllerType.GetCustomAttributes().OfType<AreaAttribute>().FirstOrDefault();
+            if (areaAttr != null)
+            {
+                return areaAttr.RouteValue;
             }
 
             return AbpControllerAssemblySetting.DefaultServiceModuleName;
