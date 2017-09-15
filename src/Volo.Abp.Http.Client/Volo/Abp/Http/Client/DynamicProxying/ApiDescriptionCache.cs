@@ -9,14 +9,14 @@ using Volo.Abp.Http.Modeling;
 
 namespace Volo.Abp.Http.Client.DynamicProxying
 {
-    public class ApplicationApiDescriptionModelManager : IApplicationApiDescriptionModelManager, ISingletonDependency
+    public class ApiDescriptionCache : IApiDescriptionCache, ISingletonDependency
     {
         private readonly IDynamicProxyHttpClientFactory _httpClientFactory;
 
         private readonly Dictionary<string, ApplicationApiDescriptionModel> _cache;
         private readonly AsyncLock _asyncLock;
 
-        public ApplicationApiDescriptionModelManager(IDynamicProxyHttpClientFactory httpClientFactory)
+        public ApiDescriptionCache(IDynamicProxyHttpClientFactory httpClientFactory)
         {
             _httpClientFactory = httpClientFactory;
 
