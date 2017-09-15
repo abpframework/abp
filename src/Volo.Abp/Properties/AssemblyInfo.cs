@@ -12,6 +12,7 @@ using System.Runtime.InteropServices;
 
 [assembly: InternalsVisibleTo("Volo.Abp.Tests")]
 [assembly: InternalsVisibleTo("Volo.Abp.AspNetCore.Mvc")]
+[assembly: InternalsVisibleTo("Volo.Abp.Http.Client")]
 
 // Setting ComVisible to false makes the types in this assembly not visible
 // to COM components.  If you need to access a type in this assembly from

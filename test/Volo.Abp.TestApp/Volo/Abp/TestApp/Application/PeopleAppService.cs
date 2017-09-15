@@ -43,5 +43,10 @@ namespace Volo.Abp.TestApp.Application
             var person = await GetEntityByIdAsync(id);
             person.Phones.RemoveAll(p => p.Id == phoneId);
         }
+
+        public Task<GetWithComplexTypeInput> GetWithComplexType(GetWithComplexTypeInput input)
+        {
+            return Task.FromResult(input);
+        }
     }
 }

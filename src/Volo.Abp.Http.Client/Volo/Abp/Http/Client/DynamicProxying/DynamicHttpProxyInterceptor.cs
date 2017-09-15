@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -9,6 +10,7 @@ using Newtonsoft.Json.Serialization;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DynamicProxy;
 using Volo.Abp.Http.Modeling;
+using Volo.Abp.Reflection;
 using Volo.Abp.Threading;
 
 namespace Volo.Abp.Http.Client.DynamicProxying
@@ -91,7 +93,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
         {
             //TODO: Can be optimized using StringBuilder?
             var url = ReplacePathVariables(action.Url, action.Parameters, invocation);
-            //url = AddQueryStringParameters(url, action.Parameters);
+            url = AddQueryStringParameters(url, action.Parameters, invocation);
             return url;
         }
 
@@ -108,42 +110,58 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
             foreach (var pathParameter in pathParameters)
             {
-                url = url.Replace($"{{{pathParameter.Name}}}", FindParameterValue(invocation.Method, invocation.Arguments, pathParameter.Name));
+                url = url.Replace($"{{{pathParameter.Name}}}", FindParameterValue(invocation, pathParameter));
             }
 
             return url;
         }
 
-        //private static string AddQueryStringParameters(string url, IList<ParameterApiDescriptionModel> actionParameters)
-        //{
-        //    var queryStringParameters = actionParameters
-        //        .Where(p => p.BindingSourceId.IsIn("ModelBinding", "Query"))
-        //        .ToArray();
-
-        //    if (!queryStringParameters.Any())
-        //    {
-        //        return url;
-        //    }
-
-        //    var qsBuilderParams = queryStringParameters
-        //        .Select(p => $"{{ name: '{p.Name.ToCamelCase()}', value: {ProxyScriptingJsFuncHelper.GetParamNameInJsFunc(p)} }}")
-        //        .JoinAsString(", ");
-
-        //    return url + $"' + abp.utils.buildQueryString([{qsBuilderParams}]) + '";
-        //}
-
-        private static string FindParameterValue(MethodInfo method, object[] arguments, string parameterName)
+        private static string AddQueryStringParameters(string url, IList<ParameterApiDescriptionModel> actionParameters, IAbpMethodInvocation invocation)
         {
-            var methodParameters = method.GetParameters();
-            for (int i = 0; i < methodParameters.Length; i++)
+            var queryStringParameters = actionParameters
+                .Where(p => p.BindingSourceId.IsIn("ModelBinding", "Query"))
+                .ToArray();
+
+            if (!queryStringParameters.Any())
             {
-                if (methodParameters[i].Name == parameterName)
-                {
-                    return arguments[i].ToString();
-                }
+                return url;
             }
 
-            throw new AbpException("Could not find parameter in the invocation: " + parameterName);
+            var qsBuilder = new StringBuilder();
+
+            foreach (var queryStringParameter in queryStringParameters)
+            {
+                var value = FindParameterValue(invocation, queryStringParameter);
+                if (value == null)
+                {
+                    continue;
+                }
+
+                qsBuilder.Append(qsBuilder.Length == 0 ? "?" : "&");
+                qsBuilder.Append(queryStringParameter.Name + "=" + value); //TODO: URL Encode!
+            }
+
+            return url + qsBuilder;
+        }
+
+        private static string FindParameterValue(IAbpMethodInvocation invocation, ParameterApiDescriptionModel parameter)
+        {
+            //TODO: Handle null values
+
+            if (parameter.Name == parameter.NameOnMethod)
+            {
+                return invocation.ArgumentsDictionary[parameter.Name]?.ToString();
+            }
+            else
+            {
+                var obj = invocation.ArgumentsDictionary[parameter.NameOnMethod];
+                if (obj == null)
+                {
+                    return null;
+                }
+
+                return ReflectionHelper.GetValueByPath(obj, obj.GetType(), parameter.Name)?.ToString();
+            }
         }
     }
 }

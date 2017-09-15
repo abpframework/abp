@@ -9,8 +9,6 @@ namespace Volo.Abp.Http.Modeling
 
         public string Name { get; set; }
 
-        public Type Type { get; set; }
-
         public string TypeAsString { get; set; }
 
         public bool IsOptional { get; set; }
@@ -32,7 +30,6 @@ namespace Volo.Abp.Http.Modeling
             {
                 Name = name,
                 NameOnMethod = nameOnMethod,
-                Type = type,
                 TypeAsString = type.FullName,
                 IsOptional = isOptional,
                 DefaultValue = defaultValue,

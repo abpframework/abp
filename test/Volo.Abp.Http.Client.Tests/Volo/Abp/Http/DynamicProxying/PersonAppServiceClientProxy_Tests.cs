@@ -39,5 +39,28 @@ namespace Volo.Abp.Http.DynamicProxying
             person.Id.ShouldBe(firstPerson.Id);
             person.Name.ShouldBe(firstPerson.Name);
         }
+
+        [Fact]
+        public async Task GetWithComplexType()
+        {
+            var result = await _peopleAppService.GetWithComplexType(
+                new GetWithComplexTypeInput
+                {
+                    Value1 = "value one",
+                    Inner1 = new GetWithComplexTypeInner
+                    {
+                        Value2 = "value two",
+                        Inner2 = new GetWithComplexTypeInnerInner
+                        {
+                            Value3 = "value three"
+                        }
+                    }
+                }
+            );
+
+            result.Value1.ShouldBe("value one");
+            result.Inner1.Value2.ShouldBe("value two");
+            result.Inner1.Inner2.Value3.ShouldBe("value three");
+        }
     }
 }
