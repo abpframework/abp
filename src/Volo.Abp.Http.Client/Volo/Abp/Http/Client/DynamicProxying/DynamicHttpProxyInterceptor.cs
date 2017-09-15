@@ -61,7 +61,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
             var apiDescriptionModel = await _discoverManager.GetAsync(config.BaseUrl);
 
-            var action = FindAction(apiDescriptionModel, invocation.Method);
+            var action = FindAction(apiDescriptionModel, invocation.Method, config);
 
             using (var client = _httpClientFactory.Create())
             {
@@ -85,27 +85,33 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             }
         }
 
-        private ActionApiDescriptionModel FindAction(ApplicationApiDescriptionModel apiDescriptionModel, MethodInfo method)
+        private ActionApiDescriptionModel FindAction(ApplicationApiDescriptionModel apiDescriptionModel, MethodInfo method, DynamicHttpClientProxyConfig config)
         {
             var methodParameters = method.GetParameters().ToArray();
 
             foreach (var module in apiDescriptionModel.Modules.Values)
             {
-                //TODO: Check module type too
+                if (module.Name != config.ModuleName)
+                {
+                    continue;
+                }
 
                 foreach (var controller in module.Controllers.Values)
                 {
-                    //TODO: Check controller type too
+                    if (controller.Interfaces.All(i => i.TypeAsString != typeof(TService).FullName))
+                    {
+                        continue;
+                    }
 
                     foreach (var action in controller.Actions.Values)
                     {
-                        if (action.NameOnClass == method.Name && action.Parameters.Count == methodParameters.Length)
+                        if (action.NameOnClass == method.Name && action.ParametersOnMethod.Count == methodParameters.Length)
                         {
                             var found = true;
 
                             for (int i = 0; i < methodParameters.Length; i++)
                             {
-                                if (action.Parameters[i].TypeAsString != methodParameters[i].ParameterType.FullName)
+                                if (action.ParametersOnMethod[i].TypeAsString != methodParameters[i].ParameterType.FullName)
                                 {
                                     found = false;
                                     break;

@@ -34,7 +34,7 @@ namespace Volo.Abp.AspNetCore.Mvc
 
         public ApplicationApiDescriptionModel CreateModel()
         {
-            var model = new ApplicationApiDescriptionModel();
+            var model = ApplicationApiDescriptionModel.Create();
 
             foreach (var descriptionGroupItem in _descriptionProvider.ApiDescriptionGroups.Items)
             {
@@ -65,16 +65,13 @@ namespace Volo.Abp.AspNetCore.Mvc
             var uniqueMethodName = GetUniqueActionName(method);
             if (controllerModel.Actions.ContainsKey(uniqueMethodName))
             {
-                Logger.LogWarning($"Controller '{controllerModel.Name}' contains more than one action with name '{uniqueMethodName}' for module '{moduleModel.Name}'. Ignored: " + method);
+                Logger.LogWarning($"Controller '{controllerModel.ControllerName}' contains more than one action with name '{uniqueMethodName}' for module '{moduleModel.Name}'. Ignored: " + method);
                 return;
             }
 
-            var returnValue = new ReturnValueApiDescriptionModel(method.ReturnType);
-
-            var actionModel = controllerModel.AddAction(new ActionApiDescriptionModel(
+            var actionModel = controllerModel.AddAction(ActionApiDescriptionModel.Create(
+                method,
                 uniqueMethodName,
-                method.Name,
-                returnValue,
                 apiDescription.RelativePath,
                 apiDescription.HttpMethod
             ));
@@ -130,7 +127,7 @@ namespace Volo.Abp.AspNetCore.Mvc
                                                  ? matchedMethodParamNames[i]
                                                  : parameterDescription.Name;
 
-                actionModel.AddParameter(new ParameterApiDescriptionModel(
+                actionModel.AddParameter(ParameterApiDescriptionModel.Create(
                         parameterDescription.Name,
                         matchedMethodParamName,
                         parameterDescription.Type,
@@ -161,7 +158,7 @@ namespace Volo.Abp.AspNetCore.Mvc
         {
             if (controllerType == null)
             {
-                return AbpControllerAssemblySetting.DefaultServiceModuleName;
+                return ModuleApiDescriptionModel.DefaultServiceModuleName;
             }
 
             foreach (var controllerSetting in _options.AppServiceControllers.ControllerAssemblySettings)
@@ -178,7 +175,7 @@ namespace Volo.Abp.AspNetCore.Mvc
                 return areaAttr.RouteValue;
             }
 
-            return AbpControllerAssemblySetting.DefaultServiceModuleName;
+            return ModuleApiDescriptionModel.DefaultServiceModuleName;
         }
     }
 }

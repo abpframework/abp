@@ -7,44 +7,51 @@ namespace Volo.Abp.Http.Modeling
     [Serializable]
     public class ModuleApiDescriptionModel
     {
+        /// <summary>
+        /// "app".
+        /// </summary>
+        public const string DefaultServiceModuleName = "app";
+
         public string Name { get; set; }
 
-        public IDictionary<string, ControllerApiDescriptionModel> Controllers { get; }
+        public IDictionary<string, ControllerApiDescriptionModel> Controllers { get; set; }
 
         private ModuleApiDescriptionModel()
         {
             
         }
 
-        public ModuleApiDescriptionModel(string name)
+        public static ModuleApiDescriptionModel Create(string name)
         {
-            Name = name;
-
-            Controllers = new Dictionary<string, ControllerApiDescriptionModel>();
+            return new ModuleApiDescriptionModel
+            {
+                Name = name,
+                Controllers = new Dictionary<string, ControllerApiDescriptionModel>()
+            };
         }
 
         public ControllerApiDescriptionModel AddController(ControllerApiDescriptionModel controller)
         {
-            if (Controllers.ContainsKey(controller.Name))
+            if (Controllers.ContainsKey(controller.ControllerName))
             {
-                throw new AbpException($"There is already a controller with name: {controller.Name} in module: {Name}");
+                throw new AbpException($"There is already a controller with name: {controller.ControllerName} in module: {Name}");
             }
 
-            return Controllers[controller.Name] = controller;
+            return Controllers[controller.ControllerName] = controller;
         }
 
         public ControllerApiDescriptionModel GetOrAddController(string name, Type type)
         {
-            return Controllers.GetOrAdd(name, () => new ControllerApiDescriptionModel(name, type));
+            return Controllers.GetOrAdd(name, () => ControllerApiDescriptionModel.Create(name, type));
         }
         
         public ModuleApiDescriptionModel CreateSubModel(string[] controllers, string[] actions)
         {
-            var subModel = new ModuleApiDescriptionModel(Name);
+            var subModel = ModuleApiDescriptionModel.Create(Name);
 
             foreach (var controller in Controllers.Values)
             {
-                if (controllers == null || controllers.Contains(controller.Name))
+                if (controllers == null || controllers.Contains(controller.ControllerName))
                 {
                     subModel.AddController(controller.CreateSubModel(actions));
                 }

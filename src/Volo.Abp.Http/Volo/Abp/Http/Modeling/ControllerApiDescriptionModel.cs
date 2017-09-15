@@ -7,49 +7,58 @@ namespace Volo.Abp.Http.Modeling
     [Serializable]
     public class ControllerApiDescriptionModel
     {
-        public string Name { get; }
+        public string ControllerName { get; set; }
 
-        public Type Type { get; }
+        public string TypeAsString { get; set; }
 
-        public string TypeAsString { get; }
+        public List<ControllerInterfaceApiDescriptionModel> Interfaces { get; set; }
 
-        //TODO: Add interfaces implemented by this service.
-
-        public IDictionary<string,  ActionApiDescriptionModel> Actions { get; }
+        public Dictionary<string,  ActionApiDescriptionModel> Actions { get; set; }
 
         private ControllerApiDescriptionModel()
         {
 
         }
 
-        public ControllerApiDescriptionModel(string name, Type type)
+        public static ControllerApiDescriptionModel Create(string controllerName, Type type)
         {
-            Name = name;
-            Type = type;
-            TypeAsString = type.FullName;
-
-            Actions = new Dictionary<string, ActionApiDescriptionModel>();
+            return new ControllerApiDescriptionModel
+            {
+                ControllerName = controllerName,
+                TypeAsString = type.FullName,
+                Actions = new Dictionary<string, ActionApiDescriptionModel>(),
+                Interfaces = type
+                    .GetInterfaces()
+                    .Select(ControllerInterfaceApiDescriptionModel.Create)
+                    .ToList()
+            };
         }
 
         public ActionApiDescriptionModel AddAction(ActionApiDescriptionModel action)
         {
-            if (Actions.ContainsKey(action.Name))
+            if (Actions.ContainsKey(action.UniqueName))
             {
                 throw new AbpException(
-                    $"Can not add more than one action with same name to the same controller. Controller: {Name}, Action: {action.Name}."
+                    $"Can not add more than one action with same name to the same controller. Controller: {ControllerName}, Action: {action.UniqueName}."
                     );
             }
 
-            return Actions[action.Name] = action;
+            return Actions[action.UniqueName] = action;
         }
 
         public ControllerApiDescriptionModel CreateSubModel(string[] actions)
         {
-            var subModel = new ControllerApiDescriptionModel(Name, Type);
+            var subModel = new ControllerApiDescriptionModel
+            {
+                TypeAsString = TypeAsString,
+                Interfaces = Interfaces,
+                ControllerName = ControllerName,
+                Actions = new Dictionary<string, ActionApiDescriptionModel>()
+            };
 
             foreach (var action in Actions.Values)
             {
-                if (actions == null || actions.Contains(action.Name))
+                if (actions == null || actions.Contains(action.UniqueName))
                 {
                     subModel.AddAction(action);
                 }

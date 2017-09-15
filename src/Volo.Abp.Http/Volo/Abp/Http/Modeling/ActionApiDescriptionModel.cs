@@ -1,39 +1,47 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
 namespace Volo.Abp.Http.Modeling
 {
     [Serializable]
     public class ActionApiDescriptionModel
     {
-        public string Name { get; }
+        public string UniqueName { get; set; }
 
-        public string NameOnClass { get; }
+        public string NameOnClass { get; set; }
 
-        public string HttpMethod { get; }
+        public string HttpMethod { get; set; }
 
-        public string Url { get; }
+        public string Url { get; set; }
 
-        //TODO: Add actual parameters on method
+        public IList<MethodParameterApiDescriptionModel> ParametersOnMethod { get; set; }
 
-        public IList<ParameterApiDescriptionModel> Parameters { get; }
+        public IList<ParameterApiDescriptionModel> Parameters { get; set; }
 
-        public ReturnValueApiDescriptionModel ReturnValue { get; }
+        public ReturnValueApiDescriptionModel ReturnValue { get; set; }
 
         private ActionApiDescriptionModel()
         {
 
         }
 
-        public ActionApiDescriptionModel(string name, string nameOnClass, ReturnValueApiDescriptionModel returnValue, string url, string httpMethod = null)
+        public static ActionApiDescriptionModel Create(MethodInfo method, string uniqueName, string url, string httpMethod = null)
         {
-            Name = name;
-            NameOnClass = nameOnClass;
-            ReturnValue = returnValue;
-            Url = url;
-            HttpMethod = httpMethod;
-
-            Parameters = new List<ParameterApiDescriptionModel>();
+            return new ActionApiDescriptionModel
+            {
+                UniqueName = uniqueName,
+                NameOnClass = method.Name,
+                Url = url,
+                HttpMethod = httpMethod,
+                ReturnValue = new ReturnValueApiDescriptionModel(method.ReturnType),
+                Parameters = new List<ParameterApiDescriptionModel>(),
+                ParametersOnMethod = method
+                    .GetParameters()
+                    .Select(MethodParameterApiDescriptionModel.Create)
+                    .ToList()
+            };
         }
 
         public ParameterApiDescriptionModel AddParameter(ParameterApiDescriptionModel parameter)

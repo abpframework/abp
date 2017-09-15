@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -7,11 +8,20 @@ namespace Volo.Abp.Http.Modeling
     [Serializable]
     public class ApplicationApiDescriptionModel
     {
-        public IDictionary<string, ModuleApiDescriptionModel> Modules { get; }
+        public IDictionary<string, ModuleApiDescriptionModel> Modules { get; set; }
 
-        public ApplicationApiDescriptionModel()
+        private ApplicationApiDescriptionModel()
         {
-            Modules = new Dictionary<string, ModuleApiDescriptionModel>();
+            
+        }
+
+        public static ApplicationApiDescriptionModel Create()
+        {
+            return new ApplicationApiDescriptionModel
+            {
+                //TODO: Why ConcurrentDictionary?
+                Modules = new ConcurrentDictionary<string, ModuleApiDescriptionModel>()
+            };
         }
 
         public ModuleApiDescriptionModel AddModule(ModuleApiDescriptionModel module)
@@ -26,7 +36,7 @@ namespace Volo.Abp.Http.Modeling
 
         public ModuleApiDescriptionModel GetOrAddModule(string name)
         {
-            return Modules.GetOrAdd(name, () => new ModuleApiDescriptionModel(name));
+            return Modules.GetOrAdd(name, () => ModuleApiDescriptionModel.Create(name));
         }
 
         public ApplicationApiDescriptionModel CreateSubModel(string[] modules = null, string[] controllers = null, string[] actions = null)

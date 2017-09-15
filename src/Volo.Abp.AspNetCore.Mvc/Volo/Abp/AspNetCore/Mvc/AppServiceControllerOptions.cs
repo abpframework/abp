@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using Microsoft.AspNetCore.Http;
+using Volo.Abp.Http.Modeling;
 
 namespace Volo.Abp.AspNetCore.Mvc
 {
@@ -30,7 +31,7 @@ namespace Volo.Abp.AspNetCore.Mvc
 
         public AbpControllerAssemblySettingBuilder CreateFor(
             Assembly assembly,
-            string moduleName = AbpControllerAssemblySetting.DefaultServiceModuleName,
+            string moduleName = ModuleApiDescriptionModel.DefaultServiceModuleName,
             bool useConventionalHttpVerbs = true)
         {
             var setting = new AbpControllerAssemblySetting(moduleName, assembly, useConventionalHttpVerbs);

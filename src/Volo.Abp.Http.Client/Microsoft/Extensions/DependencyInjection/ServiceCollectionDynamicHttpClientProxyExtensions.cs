@@ -1,9 +1,9 @@
 ﻿using System;
 using Castle.DynamicProxy;
 using Volo.Abp.Castle.DynamicProxy;
-using Volo.Abp.Http;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Http.Client.DynamicProxying;
+using Volo.Abp.Http.Modeling;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -13,16 +13,16 @@ namespace Microsoft.Extensions.DependencyInjection
 
         //TODO: AddHttpClientProxies for adding all services from single assembly!
 
-        public static IServiceCollection AddHttpClientProxy<T>(this IServiceCollection services, string baseUrl)
+        public static IServiceCollection AddHttpClientProxy<T>(this IServiceCollection services, string baseUrl, string moduleName = ModuleApiDescriptionModel.DefaultServiceModuleName)
         {
-            return services.AddHttpClientProxy(typeof(T), baseUrl);
+            return services.AddHttpClientProxy(typeof(T), baseUrl, moduleName);
         }
 
-        public static IServiceCollection AddHttpClientProxy(this IServiceCollection services, Type type, string baseUrl)
+        public static IServiceCollection AddHttpClientProxy(this IServiceCollection services, Type type, string baseUrl, string moduleName = ModuleApiDescriptionModel.DefaultServiceModuleName)
         {
             services.Configure<AbpHttpClientOptions>(options =>
             {
-                options.HttpClientProxies[type] = new DynamicHttpClientProxyConfig(type, baseUrl);
+                options.HttpClientProxies[type] = new DynamicHttpClientProxyConfig(moduleName, baseUrl, type);
             });
 
             var interceptorType = typeof(DynamicHttpProxyInterceptor<>).MakeGenericType(type);
