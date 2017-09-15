@@ -6,11 +6,6 @@ namespace Volo.Abp.AspNetCore.Mvc
 {
     public class AbpControllerAssemblySetting
     {
-        /// <summary>
-        /// "app".
-        /// </summary>
-        public const string DefaultServiceModuleName = "app";
-
         public string ModuleName { get; }
 
         public Assembly Assembly { get; }

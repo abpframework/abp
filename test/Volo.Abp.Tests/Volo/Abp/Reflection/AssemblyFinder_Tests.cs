@@ -30,7 +30,7 @@ namespace Volo.Abp.Reflection
 
             foreach (var moduleType in moduleTypes)
             {
-                assemblyFinder.Assemblies.ShouldContain(moduleType.GetAssembly());
+                assemblyFinder.Assemblies.ShouldContain(moduleType.Assembly);
             }
         }
 

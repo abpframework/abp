@@ -11,6 +11,7 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.Application.Services;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http;
+using Volo.Abp.Http.Modeling;
 using Volo.Abp.Reflection;
 
 namespace Volo.Abp.AspNetCore.Mvc
@@ -245,7 +246,7 @@ namespace Volo.Abp.AspNetCore.Mvc
         protected virtual string GetModuleNameOrDefault(Type controllerType)
         {
             return GetControllerSettingOrNull(controllerType)?.ModuleName ??
-                   AbpControllerAssemblySetting.DefaultServiceModuleName;
+                   ModuleApiDescriptionModel.DefaultServiceModuleName;
         }
 
         [CanBeNull]

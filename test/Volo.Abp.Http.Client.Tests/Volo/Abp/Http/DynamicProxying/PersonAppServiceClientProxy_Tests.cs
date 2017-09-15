@@ -13,7 +13,6 @@ namespace Volo.Abp.Http.DynamicProxying
 
         public PersonAppServiceClientProxy_Tests()
         {
-            //TODO: Should actually test the proxy!
             _peopleAppService = ServiceProvider.GetRequiredService<IPeopleAppService>();
         }
 
