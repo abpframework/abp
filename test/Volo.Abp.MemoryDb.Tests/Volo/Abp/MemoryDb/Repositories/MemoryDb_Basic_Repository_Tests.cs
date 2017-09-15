@@ -34,7 +34,7 @@ namespace Volo.Abp.MemoryDb.Repositories
             _personRepository.Insert(new Person(Guid.NewGuid(), name, 42));
 
             //Assert
-            UseUnitOfWork(() =>
+            WithUnitOfWork(() =>
             {
                 _personRepository.FirstOrDefault(p => p.Name == name).ShouldNotBeNull();
             });

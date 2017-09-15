@@ -6,17 +6,18 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.TestBase;
 
 namespace Volo.Abp.AspNetCore.TestBase
 {
-    public abstract class AbpAspNetCoreIntegratedTestBase<TStartup> 
+    public abstract class AbpAspNetCoreIntegratedTestBase<TStartup> : AbpTestBaseWithServiceProvider
         where TStartup : class
     {
         protected TestServer Server { get; }
 
         protected HttpClient Client { get; }
 
-        protected IServiceProvider ServiceProvider { get; }
+        protected override IServiceProvider ServiceProvider { get; }
 
         protected AbpAspNetCoreIntegratedTestBase()
         {

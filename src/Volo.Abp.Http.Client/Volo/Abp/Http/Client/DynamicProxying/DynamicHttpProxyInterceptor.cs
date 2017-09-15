@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -58,7 +59,9 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
             using (var client = _httpClientFactory.Create())
             {
-                var response = await client.GetAsync(proxyConfig.BaseUrl + actionApiDescription.Url);
+                var url = GenerateUrlWithParameters(actionApiDescription, invocation);
+
+                var response = await client.GetAsync(proxyConfig.BaseUrl + url);
                 if (!response.IsSuccessStatusCode)
                 {
                     throw new AbpException("Remote service returns error!");
@@ -82,6 +85,65 @@ namespace Volo.Abp.Http.Client.DynamicProxying
         {
             return _options.HttpClientProxies.GetOrDefault(typeof(TService))
                    ?? throw new AbpException($"Could not get DynamicHttpClientProxyConfig for {typeof(TService).FullName}.");
+        }
+
+        public static string GenerateUrlWithParameters(ActionApiDescriptionModel action, IAbpMethodInvocation invocation)
+        {
+            //TODO: Can be optimized using StringBuilder?
+            var url = ReplacePathVariables(action.Url, action.Parameters, invocation);
+            //url = AddQueryStringParameters(url, action.Parameters);
+            return url;
+        }
+
+        private static string ReplacePathVariables(string url, IList<ParameterApiDescriptionModel> actionParameters, IAbpMethodInvocation invocation)
+        {
+            var pathParameters = actionParameters
+                .Where(p => p.BindingSourceId == "Path")
+                .ToArray();
+
+            if (!pathParameters.Any())
+            {
+                return url;
+            }
+
+            foreach (var pathParameter in pathParameters)
+            {
+                url = url.Replace($"{{{pathParameter.Name}}}", FindParameterValue(invocation.Method, invocation.Arguments, pathParameter.Name));
+            }
+
+            return url;
+        }
+
+        //private static string AddQueryStringParameters(string url, IList<ParameterApiDescriptionModel> actionParameters)
+        //{
+        //    var queryStringParameters = actionParameters
+        //        .Where(p => p.BindingSourceId.IsIn("ModelBinding", "Query"))
+        //        .ToArray();
+
+        //    if (!queryStringParameters.Any())
+        //    {
+        //        return url;
+        //    }
+
+        //    var qsBuilderParams = queryStringParameters
+        //        .Select(p => $"{{ name: '{p.Name.ToCamelCase()}', value: {ProxyScriptingJsFuncHelper.GetParamNameInJsFunc(p)} }}")
+        //        .JoinAsString(", ");
+
+        //    return url + $"' + abp.utils.buildQueryString([{qsBuilderParams}]) + '";
+        //}
+
+        private static string FindParameterValue(MethodInfo method, object[] arguments, string parameterName)
+        {
+            var methodParameters = method.GetParameters();
+            for (int i = 0; i < methodParameters.Length; i++)
+            {
+                if (methodParameters[i].Name == parameterName)
+                {
+                    return arguments[i].ToString();
+                }
+            }
+
+            throw new AbpException("Could not find parameter in the invocation: " + parameterName);
         }
     }
 }

@@ -1,17 +1,15 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Modularity;
-using Volo.Abp.Uow;
-using System.Threading.Tasks;
 
 namespace Volo.Abp.TestBase
 {
-    public class AbpIntegratedTest<TStartupModule> : IDisposable
+    public class AbpIntegratedTest<TStartupModule> : AbpTestBaseWithServiceProvider, IDisposable
         where TStartupModule : IAbpModule
     {
         protected IAbpApplication Application { get; }
 
-        protected IServiceProvider ServiceProvider => Application.ServiceProvider;
+        protected override IServiceProvider ServiceProvider => Application.ServiceProvider;
 
         protected IServiceScope MainServiceScope { get; }
 
@@ -57,36 +55,6 @@ namespace Volo.Abp.TestBase
 	        return services.BuildServiceProviderFromFactory();
         }
 
-
-        protected virtual void UseUnitOfWork(Action action)
-        {
-            using (IServiceScope scope = ServiceProvider.CreateScope())
-            {
-                var uowManager = scope.ServiceProvider.GetRequiredService<IUnitOfWorkManager>();
-
-                using (var uow = uowManager.Begin())
-                {
-                    action();
-
-                    uow.Complete();
-                }
-            }
-        }
-
-        protected virtual async Task UseUnitOfWorkAsync(Func<Task> action)
-        {
-            using (IServiceScope scope = ServiceProvider.CreateScope())
-            {
-                var uowManager = scope.ServiceProvider.GetRequiredService<IUnitOfWorkManager>();
-
-                using (var uow = uowManager.Begin())
-                {
-                    await action();
-
-                    await uow.CompleteAsync();
-                }
-            }
-        }
 
         public void Dispose()
         {
