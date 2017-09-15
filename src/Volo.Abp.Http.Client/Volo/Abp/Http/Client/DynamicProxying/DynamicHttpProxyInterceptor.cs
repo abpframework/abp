@@ -14,7 +14,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 {
     public class DynamicHttpProxyInterceptor<TService> : AbpInterceptor, ITransientDependency
     {
-        private static readonly MethodInfo GenericInterceptAsyncMethod;
+        private static MethodInfo GenericInterceptAsyncMethod { get; }
 
         private readonly IDynamicProxyHttpClientFactory _httpClientFactory;
         private readonly IApplicationApiDescriptionModelManager _discoverManager;
@@ -53,19 +53,13 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
         private async Task<T> InterceptAsync<T>(IAbpMethodInvocation invocation)
         {
-            var config = _options.HttpClientProxies.GetOrDefault(typeof(TService));
-            if (config == null)
-            {
-                throw new AbpException($"Could not get DynamicHttpClientProxyConfig for {typeof(T).FullName}.");
-            }
-
-            var apiDescriptionModel = await _discoverManager.GetAsync(config.BaseUrl);
-
-            var action = FindAction(apiDescriptionModel, invocation.Method, config);
+            var proxyConfig = GetProxyConfig();
+            var apiDescription = await _discoverManager.GetAsync(proxyConfig.BaseUrl);
+            var actionApiDescription = FindAction(apiDescription, invocation.Method, proxyConfig);
 
             using (var client = _httpClientFactory.Create())
             {
-                var response = await client.GetAsync(config.BaseUrl + action.Url);
+                var response = await client.GetAsync(proxyConfig.BaseUrl + actionApiDescription.Url);
                 if (!response.IsSuccessStatusCode)
                 {
                     throw new AbpException("Remote service returns error!");
@@ -85,8 +79,20 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             }
         }
 
-        private ActionApiDescriptionModel FindAction(ApplicationApiDescriptionModel apiDescriptionModel, MethodInfo method, DynamicHttpClientProxyConfig config)
+        private DynamicHttpClientProxyConfig GetProxyConfig()
         {
+            var config = _options.HttpClientProxies.GetOrDefault(typeof(TService));
+            if (config == null)
+            {
+                throw new AbpException($"Could not get DynamicHttpClientProxyConfig for {typeof(TService).FullName}.");
+            }
+            return config;
+        }
+
+        private static ActionApiDescriptionModel FindAction(ApplicationApiDescriptionModel apiDescriptionModel, MethodInfo method, DynamicHttpClientProxyConfig config)
+        {
+            //TODO: Move to another class and cache results!
+
             var methodParameters = method.GetParameters().ToArray();
 
             foreach (var module in apiDescriptionModel.Modules.Values)
