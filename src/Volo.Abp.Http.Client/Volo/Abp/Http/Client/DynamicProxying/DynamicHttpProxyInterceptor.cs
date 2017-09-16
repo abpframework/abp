@@ -12,6 +12,8 @@ using Volo.Abp.Threading;
 
 namespace Volo.Abp.Http.Client.DynamicProxying
 {
+    //TODO: Somehow capture cancellationtoken and pass to other methods...?
+
     public class DynamicHttpProxyInterceptor<TService> : AbpInterceptor, ITransientDependency
     {
         private static MethodInfo GenericInterceptAsyncMethod { get; }
@@ -39,47 +41,58 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
         public override void Intercept(IAbpMethodInvocation invocation)
         {
+            //TODO: Handle this differently because InterceptAsync assumes that given method is async!
+
             AsyncHelper.RunSync(() => InterceptAsync(invocation));
         }
 
         public override Task InterceptAsync(IAbpMethodInvocation invocation)
         {
+            if (invocation.Method.ReturnType.GenericTypeArguments.IsNullOrEmpty())
+            {
+                return MakeRequest(invocation);
+            }
+
             invocation.ReturnValue = GenericInterceptAsyncMethod
                 .MakeGenericMethod(invocation.Method.ReturnType.GenericTypeArguments[0])
-                .Invoke(this, new object[] { invocation });
+                .Invoke(this, new object[] {invocation});
 
             return Task.CompletedTask;
         }
 
         private async Task<T> InterceptAsync<T>(IAbpMethodInvocation invocation)
         {
-            //TODO: Somehow capture cancellationtoken and pass to other methods...?
+            var content = await MakeRequest(invocation);
 
-            var proxyConfig = GetProxyConfig();
-            var actionApiDescription = await _apiDescriptionFinder.FindActionAsync(proxyConfig, invocation.Method);
+            var result = JsonConvert.DeserializeObject(
+                content,
+                typeof(T),
+                new JsonSerializerSettings
+                {
+                    ContractResolver = new CamelCasePropertyNamesContractResolver()
+                });
 
+            return (T)result;
+        }
+
+        private async Task<string> MakeRequest(IAbpMethodInvocation invocation)
+        {
             using (var client = _httpClientFactory.Create())
             {
-                var url = proxyConfig.BaseUrl + UrlBuilder.GenerateUrlWithParameters(actionApiDescription, invocation.ArgumentsDictionary);
+                var proxyConfig = GetProxyConfig();
+                var actionApiDescription = await _apiDescriptionFinder.FindActionAsync(proxyConfig, invocation.Method);
 
+                var url = proxyConfig.BaseUrl + UrlBuilder.GenerateUrlWithParameters(actionApiDescription, invocation.ArgumentsDictionary);
                 var requestMessage = new HttpRequestMessage(actionApiDescription.GetHttpMethod(), url);
+
                 var response = await client.SendAsync(requestMessage);
+
                 if (!response.IsSuccessStatusCode)
                 {
-                    throw new AbpException("Remote service returns error!");
+                    throw new AbpException($"Remote service returns error! HttpStatusCode: {response.StatusCode}, ReasonPhrase: {response.ReasonPhrase}");
                 }
 
-                var content = await response.Content.ReadAsStringAsync();
-
-                var result = JsonConvert.DeserializeObject(
-                    content,
-                    typeof(T),
-                    new JsonSerializerSettings
-                    {
-                        ContractResolver = new CamelCasePropertyNamesContractResolver()
-                    });
-
-                return (T)result;
+                return await response.Content.ReadAsStringAsync();
             }
         }
 

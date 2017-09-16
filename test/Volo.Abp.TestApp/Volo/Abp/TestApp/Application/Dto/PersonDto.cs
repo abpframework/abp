@@ -1,6 +1,6 @@
 ﻿using Volo.Abp.Application.Dtos;
 
-namespace Volo.Abp.TestApp.Application
+namespace Volo.Abp.TestApp.Application.Dto
 {
     public class PersonDto : EntityDto
     {

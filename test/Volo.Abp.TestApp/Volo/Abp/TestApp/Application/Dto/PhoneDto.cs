@@ -1,7 +1,7 @@
 ﻿using Volo.Abp.Application.Dtos;
 using Volo.Abp.TestApp.Domain;
 
-namespace Volo.Abp.TestApp.Application
+namespace Volo.Abp.TestApp.Application.Dto
 {
     public class PhoneDto : EntityDto<long>
     {

@@ -6,6 +6,7 @@ using Volo.Abp.Application.Dtos;
 using Volo.Abp.TestApp.Domain;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Application.Services;
+using Volo.Abp.TestApp.Application.Dto;
 
 namespace Volo.Abp.TestApp.Application
 {

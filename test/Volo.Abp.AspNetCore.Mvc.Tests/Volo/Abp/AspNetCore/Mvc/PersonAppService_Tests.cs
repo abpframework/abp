@@ -13,6 +13,7 @@ using System.Net.Http;
 using System.Text;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Json;
+using Volo.Abp.TestApp.Application.Dto;
 
 namespace Volo.Abp.AspNetCore.Mvc
 {

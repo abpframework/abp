@@ -5,6 +5,7 @@ using Shouldly;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.TestApp.Application;
+using Volo.Abp.TestApp.Application.Dto;
 using Volo.Abp.TestApp.Domain;
 using Xunit;
 
@@ -47,10 +48,10 @@ namespace Volo.Abp.Http.DynamicProxying
                 new GetWithComplexTypeInput
                 {
                     Value1 = "value one",
-                    Inner1 = new GetWithComplexTypeInner
+                    Inner1 = new GetWithComplexTypeInput.GetWithComplexTypeInner
                     {
                         Value2 = "value two",
-                        Inner2 = new GetWithComplexTypeInnerInner
+                        Inner2 = new GetWithComplexTypeInput.GetWithComplexTypeInnerInner
                         {
                             Value3 = "value three"
                         }
