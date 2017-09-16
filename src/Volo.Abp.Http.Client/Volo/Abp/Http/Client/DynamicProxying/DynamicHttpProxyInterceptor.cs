@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Net.Mime;
 using System.Reflection;
 using System.Text;
@@ -61,7 +62,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
             invocation.ReturnValue = GenericInterceptAsyncMethod
                 .MakeGenericMethod(invocation.Method.ReturnType.GenericTypeArguments[0])
-                .Invoke(this, new object[] {invocation});
+                .Invoke(this, new object[] { invocation });
 
             return Task.CompletedTask;
         }
@@ -89,13 +90,10 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                 var actionApiDescription = await _apiDescriptionFinder.FindActionAsync(proxyConfig, invocation.Method);
                 var url = proxyConfig.BaseUrl + UrlBuilder.GenerateUrlWithParameters(actionApiDescription, invocation.ArgumentsDictionary);
 
-                var requestMessage = new HttpRequestMessage(actionApiDescription.GetHttpMethod(), url);
-
-                var body = RequestPayloadBuilder.GenerateBody(actionApiDescription, invocation.ArgumentsDictionary, _jsonSerializer);
-                if (body != null)
+                var requestMessage = new HttpRequestMessage(actionApiDescription.GetHttpMethod(), url)
                 {
-                    requestMessage.Content = new StringContent(body, Encoding.UTF8, "application/json"); //TODO: application/json to a constant
-                }
+                    Content = RequestPayloadBuilder.BuildContent(actionApiDescription, invocation.ArgumentsDictionary, _jsonSerializer)
+                };
 
                 var response = await client.SendAsync(requestMessage);
 
