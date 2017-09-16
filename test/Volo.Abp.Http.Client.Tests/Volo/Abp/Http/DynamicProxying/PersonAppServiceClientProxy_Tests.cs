@@ -23,15 +23,7 @@ namespace Volo.Abp.Http.DynamicProxying
         }
 
         [Fact]
-        public async Task Test_GetList()
-        {
-            var people = await _peopleAppService.GetList(new PagedAndSortedResultRequestDto());
-            people.TotalCount.ShouldBeGreaterThan(0);
-            people.Items.Count.ShouldBe(people.TotalCount);
-        }
-
-        [Fact]
-        public async Task Test_GetById()
+        public async Task Get()
         {
             var firstPerson = _personRepository.GetList().First();
 
@@ -39,6 +31,25 @@ namespace Volo.Abp.Http.DynamicProxying
             person.ShouldNotBeNull();
             person.Id.ShouldBe(firstPerson.Id);
             person.Name.ShouldBe(firstPerson.Name);
+        }
+
+        [Fact]
+        public async Task GetList()
+        {
+            var people = await _peopleAppService.GetList(new PagedAndSortedResultRequestDto());
+            people.TotalCount.ShouldBeGreaterThan(0);
+            people.Items.Count.ShouldBe(people.TotalCount);
+        }
+
+        [Fact]
+        public async Task Delete()
+        {
+            var firstPerson = _personRepository.GetList().First();
+
+            await _peopleAppService.Delete(firstPerson.Id);
+
+            firstPerson = _personRepository.GetList().FirstOrDefault(p => p.Id == firstPerson.Id);
+            firstPerson.ShouldBeNull();
         }
 
         [Fact]
