@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
@@ -50,6 +51,27 @@ namespace Volo.Abp.Http.DynamicProxying
 
             firstPerson = _personRepository.GetList().FirstOrDefault(p => p.Id == firstPerson.Id);
             firstPerson.ShouldBeNull();
+        }
+
+        [Fact]
+        public async Task Create()
+        {
+            var uniquePersonName = Guid.NewGuid().ToString();
+
+            var person = await _peopleAppService.Create(new PersonDto
+                {
+                    Name = uniquePersonName,
+                    Age = 42
+                }
+            );
+
+            person.ShouldNotBeNull();
+            person.Id.ShouldNotBe(Guid.Empty);
+            person.Name.ShouldBe(uniquePersonName);
+
+            var personInDb = _personRepository.GetList().FirstOrDefault(p => p.Name == uniquePersonName);
+            personInDb.ShouldNotBeNull();
+            personInDb.Id.ShouldBe(person.Id);
         }
 
         [Fact]

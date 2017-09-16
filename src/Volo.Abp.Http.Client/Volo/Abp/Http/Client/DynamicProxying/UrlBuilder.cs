@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Volo.Abp.Http.Modeling;
-using Volo.Abp.Reflection;
 
 namespace Volo.Abp.Http.Client.DynamicProxying
 {
@@ -32,7 +31,26 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
             foreach (var pathParameter in pathParameters)
             {
-                urlBuilder = urlBuilder.Replace($"{{{pathParameter.Name}}}", FindParameterValue(methodArguments, pathParameter));
+                var value = HttpActionParameterHelper.FindParameterValue(methodArguments, pathParameter);
+                if (value == null)
+                {
+                    if (pathParameter.IsOptional)
+                    {
+                        urlBuilder = urlBuilder.Replace($"{{{pathParameter.Name}}}", "");
+                    }
+                    else if (pathParameter.DefaultValue != null)
+                    {
+                        urlBuilder = urlBuilder.Replace($"{{{pathParameter.Name}}}", pathParameter.DefaultValue.ToString());
+                    }
+                    else
+                    {
+                        throw new AbpException($"Missing path parameter value for {pathParameter.Name} ({pathParameter.NameOnMethod})");
+                    }
+                }
+                else
+                {
+                    urlBuilder = urlBuilder.Replace($"{{{pathParameter.Name}}}", value.ToString());
+                }
             }
         }
 
@@ -50,33 +68,17 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             var isFirstParam = true;
             foreach (var queryStringParameter in queryStringParameters)
             {
-                var value = FindParameterValue(methodArguments, queryStringParameter);
+                var value = HttpActionParameterHelper.FindParameterValue(methodArguments, queryStringParameter);
                 if (value == null)
                 {
                     continue;
                 }
 
                 urlBuilder.Append(isFirstParam ? "?" : "&");
-                urlBuilder.Append(queryStringParameter.Name + "=" + System.Net.WebUtility.UrlEncode(value));
+                urlBuilder.Append(queryStringParameter.Name + "=" + System.Net.WebUtility.UrlEncode(value.ToString()));
 
                 isFirstParam = false;
             }
-        }
-
-        private static string FindParameterValue(IReadOnlyDictionary<string, object> methodArguments, ParameterApiDescriptionModel apiParameter)
-        {
-            var value = methodArguments[apiParameter.NameOnMethod];
-            if (value == null)
-            {
-                return null;
-            }
-
-            if (apiParameter.Name == apiParameter.NameOnMethod)
-            {
-                return value.ToString();
-            }
-
-            return ReflectionHelper.GetValueByPath(value, value.GetType(), apiParameter.Name)?.ToString();
         }
     }
 }

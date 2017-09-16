@@ -1,13 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Mime;
 using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DynamicProxy;
+using Volo.Abp.Json;
 using Volo.Abp.Threading;
 
 namespace Volo.Abp.Http.Client.DynamicProxying
@@ -21,6 +24,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
         private readonly IDynamicProxyHttpClientFactory _httpClientFactory;
         private readonly IApiDescriptionFinder _apiDescriptionFinder;
         private readonly AbpHttpClientOptions _options;
+        private readonly IJsonSerializer _jsonSerializer;
 
         static DynamicHttpProxyInterceptor()
         {
@@ -32,10 +36,12 @@ namespace Volo.Abp.Http.Client.DynamicProxying
         public DynamicHttpProxyInterceptor(
             IDynamicProxyHttpClientFactory httpClientFactory,
             IOptions<AbpHttpClientOptions> options,
-            IApiDescriptionFinder apiDescriptionFinder)
+            IApiDescriptionFinder apiDescriptionFinder,
+            IJsonSerializer jsonSerializer)
         {
             _httpClientFactory = httpClientFactory;
             _apiDescriptionFinder = apiDescriptionFinder;
+            _jsonSerializer = jsonSerializer;
             _options = options.Value;
         }
 
@@ -81,9 +87,15 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             {
                 var proxyConfig = GetProxyConfig();
                 var actionApiDescription = await _apiDescriptionFinder.FindActionAsync(proxyConfig, invocation.Method);
-
                 var url = proxyConfig.BaseUrl + UrlBuilder.GenerateUrlWithParameters(actionApiDescription, invocation.ArgumentsDictionary);
+
                 var requestMessage = new HttpRequestMessage(actionApiDescription.GetHttpMethod(), url);
+
+                var body = RequestPayloadBuilder.GenerateBody(actionApiDescription, invocation.ArgumentsDictionary, _jsonSerializer);
+                if (body != null)
+                {
+                    requestMessage.Content = new StringContent(body, Encoding.UTF8, "application/json"); //TODO: application/json to a constant
+                }
 
                 var response = await client.SendAsync(requestMessage);
 

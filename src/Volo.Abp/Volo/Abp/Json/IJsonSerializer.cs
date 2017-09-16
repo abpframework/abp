@@ -2,7 +2,7 @@
 {
     public interface IJsonSerializer
     {
-        string Serialize(object obj, bool camelCase = false, bool indented = false);
+        string Serialize(object obj, bool camelCase = true, bool indented = false);
 
         T Deserialize<T>(string jsonString);
     }

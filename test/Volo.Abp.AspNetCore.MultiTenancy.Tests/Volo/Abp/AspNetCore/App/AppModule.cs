@@ -39,7 +39,7 @@ namespace Volo.Abp.AspNetCore.App
                     ["TenantId"] = manager.CurrentTenant == null ? "" : manager.CurrentTenant.Id.ToString()
                 };
 
-                var result = jsonSerializer.Serialize(dictionary);
+                var result = jsonSerializer.Serialize(dictionary, camelCase: false);
                 await ctx.Response.WriteAsync(result);
             });
         }
