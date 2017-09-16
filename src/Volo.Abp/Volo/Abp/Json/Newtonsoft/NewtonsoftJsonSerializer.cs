@@ -1,3 +1,4 @@
+using System;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Volo.Abp.DependencyInjection;
@@ -13,33 +14,38 @@ namespace Volo.Abp.Json.Newtonsoft
             _dateTimeConverter = dateTimeConverter;
         }
 
-        public string Serialize(object obj, bool camelCase = false, bool indented = false)
+        public string Serialize(object obj, bool camelCase = true, bool indented = false)
         {
-            var serializerSettings = CreateDefaultSerializerSettings();
+            return JsonConvert.SerializeObject(obj, CreateSerializerSettings(camelCase, indented));
+        }
+
+        public T Deserialize<T>(string jsonString, bool camelCase = true)
+        {
+            return JsonConvert.DeserializeObject<T>(jsonString, CreateSerializerSettings(camelCase));
+        }
+
+        public object Deserialize(Type type, string jsonString, bool camelCase = true)
+        {
+            return JsonConvert.DeserializeObject(jsonString, type, CreateSerializerSettings(camelCase));
+        }
+
+        protected virtual JsonSerializerSettings CreateSerializerSettings(bool camelCase = true, bool indented = false)
+        {
+            var settings = new JsonSerializerSettings();
+
+            settings.Converters.Insert(0, _dateTimeConverter);
             
             if (camelCase)
             {
-                serializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                settings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             }
 
             if (indented)
             {
-                serializerSettings.Formatting = Formatting.Indented;
+                settings.Formatting = Formatting.Indented;
             }
-
-            return JsonConvert.SerializeObject(obj, serializerSettings);
-        }
-
-        protected virtual JsonSerializerSettings CreateDefaultSerializerSettings()
-        {
-            var settings = new JsonSerializerSettings();
-            settings.Converters.Insert(0, _dateTimeConverter);
+            
             return settings;
-        }
-
-        public T Deserialize<T>(string jsonString)
-        {
-            return JsonConvert.DeserializeObject<T>(jsonString);
         }
     }
 }

@@ -31,7 +31,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
         {
             GenericInterceptAsyncMethod = typeof(DynamicHttpProxyInterceptor<TService>)
                 .GetMethods(BindingFlags.NonPublic | BindingFlags.Instance)
-                .First(m => m.Name == nameof(InterceptAsync) && m.IsGenericMethodDefinition);
+                .First(m => m.Name == nameof(MakeRequestAndGetResultAsync) && m.IsGenericMethodDefinition);
         }
 
         public DynamicHttpProxyInterceptor(
@@ -48,9 +48,17 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
         public override void Intercept(IAbpMethodInvocation invocation)
         {
-            //TODO: Handle this differently because InterceptAsync assumes that given method is async!
-
-            AsyncHelper.RunSync(() => InterceptAsync(invocation));
+            if (invocation.Method.ReturnType == typeof(void))
+            {
+                AsyncHelper.RunSync(() => MakeRequest(invocation));
+            }
+            else
+            {
+                invocation.ReturnValue = _jsonSerializer.Deserialize(
+                    invocation.Method.ReturnType,
+                    AsyncHelper.RunSync(() => MakeRequest(invocation))
+                );
+            }
         }
 
         public override Task InterceptAsync(IAbpMethodInvocation invocation)
@@ -67,19 +75,9 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             return Task.CompletedTask;
         }
 
-        private async Task<T> InterceptAsync<T>(IAbpMethodInvocation invocation)
+        private async Task<T> MakeRequestAndGetResultAsync<T>(IAbpMethodInvocation invocation)
         {
-            var content = await MakeRequest(invocation);
-
-            var result = JsonConvert.DeserializeObject(
-                content,
-                typeof(T),
-                new JsonSerializerSettings
-                {
-                    ContractResolver = new CamelCasePropertyNamesContractResolver()
-                });
-
-            return (T)result;
+            return _jsonSerializer.Deserialize<T>(await MakeRequest(invocation));
         }
 
         private async Task<string> MakeRequest(IAbpMethodInvocation invocation)
