@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DynamicProxy;
+using Volo.Abp.Http.Modeling;
 using Volo.Abp.Json;
 using Volo.Abp.Threading;
 
@@ -85,14 +86,16 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             using (var client = _httpClientFactory.Create())
             {
                 var proxyConfig = GetProxyConfig();
-                var actionApiDescription = await _apiDescriptionFinder.FindActionAsync(proxyConfig, invocation.Method);
-                var url = proxyConfig.BaseUrl + UrlBuilder.GenerateUrlWithParameters(actionApiDescription, invocation.ArgumentsDictionary);
+                var action = await _apiDescriptionFinder.FindActionAsync(proxyConfig, invocation.Method);
+                var url = proxyConfig.BaseUrl + UrlBuilder.GenerateUrlWithParameters(action, invocation.ArgumentsDictionary);
 
-                var requestMessage = new HttpRequestMessage(actionApiDescription.GetHttpMethod(), url)
+                var requestMessage = new HttpRequestMessage(action.GetHttpMethod(), url)
                 {
-                    Content = RequestPayloadBuilder.BuildContent(actionApiDescription, invocation.ArgumentsDictionary, _jsonSerializer)
+                    Content = RequestPayloadBuilder.BuildContent(action, invocation.ArgumentsDictionary, _jsonSerializer)
                 };
 
+                AddHeaders(invocation, action, requestMessage);
+                
                 var response = await client.SendAsync(requestMessage);
 
                 if (!response.IsSuccessStatusCode)
@@ -101,6 +104,18 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                 }
 
                 return await response.Content.ReadAsStringAsync();
+            }
+        }
+
+        private static void AddHeaders(IAbpMethodInvocation invocation, ActionApiDescriptionModel action, HttpRequestMessage requestMessage)
+        {
+            foreach (var headerParameter in action.Parameters.Where(p => p.BindingSourceId == "Header"))
+            {
+                var value = HttpActionParameterHelper.FindParameterValue(invocation.ArgumentsDictionary, headerParameter);
+                if (value != null)
+                {
+                    requestMessage.Headers.Add(headerParameter.Name, value.ToString());
+                }
             }
         }
 
