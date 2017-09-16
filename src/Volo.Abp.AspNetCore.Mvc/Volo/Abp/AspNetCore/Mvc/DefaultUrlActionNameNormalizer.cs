@@ -12,7 +12,7 @@ namespace Volo.Abp.AspNetCore.Mvc
                 return;
             }
 
-            context.ActionNameInUrl = HttpMethodConventionHelper.RemoveHttpMethodPrefix(context.ActionNameInUrl, context.HttpMethod);
+            context.ActionNameInUrl = HttpMethodHelper.RemoveHttpMethodPrefix(context.ActionNameInUrl, context.HttpMethod);
         }
     }
 }

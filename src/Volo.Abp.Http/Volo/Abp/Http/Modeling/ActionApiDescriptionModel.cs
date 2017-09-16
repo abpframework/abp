@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Reflection;
 
 namespace Volo.Abp.Http.Modeling
@@ -48,6 +49,11 @@ namespace Volo.Abp.Http.Modeling
         {
             Parameters.Add(parameter);
             return parameter;
+        }
+
+        public HttpMethod GetHttpMethod()
+        {
+            return HttpMethodHelper.ConvertToHttpMethod(HttpMethod);
         }
     }
 }
