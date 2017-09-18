@@ -7,6 +7,7 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DynamicProxy;
 using Volo.Abp.Http.Modeling;
+using Volo.Abp.Http.ProxyScripting.Generators;
 using Volo.Abp.Json;
 using Volo.Abp.Threading;
 
@@ -104,7 +105,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
         private static void AddHeaders(IAbpMethodInvocation invocation, ActionApiDescriptionModel action, HttpRequestMessage requestMessage)
         {
-            foreach (var headerParameter in action.Parameters.Where(p => p.BindingSourceId == "Header"))
+            foreach (var headerParameter in action.Parameters.Where(p => p.BindingSourceId == ParameterBindingSources.Header))
             {
                 var value = HttpActionParameterHelper.FindParameterValue(invocation.ArgumentsDictionary, headerParameter);
                 if (value != null)

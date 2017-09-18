@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Text;
 using JetBrains.Annotations;
 using Volo.Abp.Http.Modeling;
+using Volo.Abp.Http.ProxyScripting.Generators;
 using Volo.Abp.Json;
 
 namespace Volo.Abp.Http.Client.DynamicProxying
@@ -33,7 +34,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
         {
             var parameters = action
                 .Parameters
-                .Where(p => p.BindingSourceId == "Body")
+                .Where(p => p.BindingSourceId == ParameterBindingSources.Body)
                 .ToArray();
 
             if (parameters.Length <= 0)
@@ -61,7 +62,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
         {
             var parameters = action
                 .Parameters
-                .Where(p => p.BindingSourceId == "Form")
+                .Where(p => p.BindingSourceId == ParameterBindingSources.Form)
                 .ToArray();
 
             if (!parameters.Any())

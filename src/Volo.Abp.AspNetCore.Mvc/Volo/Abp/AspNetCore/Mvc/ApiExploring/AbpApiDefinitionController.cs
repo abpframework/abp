@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.Http.Modeling;
 
-namespace Volo.Abp.AspNetCore.Mvc.Controllers
+namespace Volo.Abp.AspNetCore.Mvc.ApiExploring
 {
     [Area("abp")]
     public class AbpApiDefinitionController : AbpController
@@ -17,7 +17,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Controllers
         [Route("api/abp/api-description")]
         public ApplicationApiDescriptionModel Get()
         {
-            return _modelProvider.CreateModel();
+            return _modelProvider.CreateApiModel();
         }
     }
 }

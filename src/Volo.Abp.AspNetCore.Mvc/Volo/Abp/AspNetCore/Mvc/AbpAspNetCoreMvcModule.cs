@@ -15,12 +15,12 @@ using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.ViewComponents;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Volo.Abp.Http;
 
 namespace Volo.Abp.AspNetCore.Mvc
 {
-    [DependsOn(
-        typeof(AbpAspNetCoreModule)
-    )]
+    [DependsOn(typeof(AbpHttpModule))]
+    [DependsOn(typeof(AbpAspNetCoreModule))]
     public class AbpAspNetCoreMvcModule : AbpModule
     {
         public override void ConfigureServices(IServiceCollection services)

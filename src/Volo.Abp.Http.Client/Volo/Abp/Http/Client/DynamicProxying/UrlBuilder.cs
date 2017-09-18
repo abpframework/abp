@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Volo.Abp.Http.Modeling;
+using Volo.Abp.Http.ProxyScripting.Generators;
 
 namespace Volo.Abp.Http.Client.DynamicProxying
 {
@@ -21,7 +22,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
         private static void ReplacePathVariables(StringBuilder urlBuilder, IList<ParameterApiDescriptionModel> actionParameters, IReadOnlyDictionary<string, object> methodArguments)
         {
             var pathParameters = actionParameters
-                .Where(p => p.BindingSourceId == "Path")
+                .Where(p => p.BindingSourceId == ParameterBindingSources.Path)
                 .ToArray();
 
             if (!pathParameters.Any())
@@ -57,7 +58,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
         private static void AddQueryStringParameters(StringBuilder urlBuilder, IList<ParameterApiDescriptionModel> actionParameters, IReadOnlyDictionary<string, object> methodArguments)
         {
             var queryStringParameters = actionParameters
-                .Where(p => p.BindingSourceId.IsIn("ModelBinding", "Query"))
+                .Where(p => p.BindingSourceId.IsIn(ParameterBindingSources.ModelBinding, ParameterBindingSources.Query))
                 .ToArray();
 
             if (!queryStringParameters.Any())

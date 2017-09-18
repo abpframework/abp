@@ -32,7 +32,7 @@ namespace Volo.Abp.AspNetCore.Mvc
             Logger = NullLogger<AspNetCoreApiDescriptionModelProvider>.Instance;
         }
 
-        public ApplicationApiDescriptionModel CreateModel()
+        public ApplicationApiDescriptionModel CreateApiModel()
         {
             var model = ApplicationApiDescriptionModel.Create();
 
