@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Reflection;
-using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Shouldly;
 using Xunit;
@@ -24,7 +22,7 @@ namespace Volo.Abp.Reflection
 
             //Act
 
-            var typeFinder = new TypeFinder(fakeAssemblyFinder, Substitute.For<ILogger<TypeFinder>>());
+            var typeFinder = new TypeFinder(fakeAssemblyFinder);
 
             //Assert
 

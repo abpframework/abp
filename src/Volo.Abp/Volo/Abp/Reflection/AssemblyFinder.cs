@@ -4,12 +4,11 @@ using System.Collections.Immutable;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
-using Volo.Abp.DependencyInjection;
 using Volo.Abp.Modularity;
 
 namespace Volo.Abp.Reflection
 {
-    public class AssemblyFinder : IAssemblyFinder, ITransientDependency
+    public class AssemblyFinder : IAssemblyFinder
     {
         private readonly IModuleContainer _moduleContainer;
 

@@ -2,23 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using Microsoft.Extensions.Logging;
-using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Reflection
 {
-    //TODO: What if we need to this type finder while registering dependencies?
-    public class TypeFinder : ITypeFinder, ITransientDependency
+    public class TypeFinder : ITypeFinder
     {
         private readonly IAssemblyFinder _assemblyFinder;
-        private readonly ILogger<TypeFinder> _logger;
 
         private readonly Lazy<IReadOnlyList<Type>> _types;
 
-        public TypeFinder(IAssemblyFinder assemblyFinder, ILogger<TypeFinder> logger)
+        public TypeFinder(IAssemblyFinder assemblyFinder)
         {
             _assemblyFinder = assemblyFinder;
-            _logger = logger;
 
             _types = new Lazy<IReadOnlyList<Type>>(FindAll, LazyThreadSafetyMode.ExecutionAndPublication);
         }
@@ -44,7 +39,7 @@ namespace Volo.Abp.Reflection
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogWarning(ex.ToString());
+                    //TODO: Trigger a global event?
                 }
             }
 

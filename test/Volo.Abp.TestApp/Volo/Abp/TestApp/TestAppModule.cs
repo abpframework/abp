@@ -2,7 +2,6 @@
 using Volo.Abp.Modularity;
 using Volo.Abp.TestApp.Domain;
 using Volo.Abp.AutoMapper;
-using Volo.Abp.TestApp.Application;
 using Volo.Abp.TestApp.Application.Dto;
 
 namespace Volo.Abp.TestApp

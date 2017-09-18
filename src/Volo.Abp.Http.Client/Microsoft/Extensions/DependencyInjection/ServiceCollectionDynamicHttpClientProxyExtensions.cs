@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Linq;
+using System.Reflection;
 using Castle.DynamicProxy;
+using Volo.Abp.Application.Services;
 using Volo.Abp.Castle.DynamicProxy;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Http.Client.DynamicProxying;
@@ -11,7 +14,25 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         private static readonly ProxyGenerator ProxyGeneratorInstance = new ProxyGenerator();
 
-        //TODO: AddHttpClientProxies for adding all services from single assembly!
+        public static IServiceCollection AddHttpClientProxies(
+            this IServiceCollection services,
+            Assembly assembly,
+            string baseUrl,
+            string moduleName = ModuleApiDescriptionModel.DefaultServiceModuleName)
+        {
+            //TODO: Add option to change type filter
+
+            var serviceTypes = assembly.GetTypes().Where(t =>
+                t.IsInterface && t.IsPublic && typeof(IApplicationService).IsAssignableFrom(t)
+            );
+
+            foreach (var serviceType in serviceTypes)
+            {
+                services.AddHttpClientProxy(serviceType, baseUrl, moduleName);
+            }
+
+            return services;
+        }
 
         public static IServiceCollection AddHttpClientProxy<T>(this IServiceCollection services, string baseUrl, string moduleName = ModuleApiDescriptionModel.DefaultServiceModuleName)
         {
@@ -34,7 +55,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 serviceProvider => ProxyGeneratorInstance
                     .CreateInterfaceProxyWithoutTarget(
                         type,
-                        (IInterceptor) serviceProvider.GetRequiredService(interceptorAdapterType)
+                        (IInterceptor)serviceProvider.GetRequiredService(interceptorAdapterType)
                     )
             );
         }

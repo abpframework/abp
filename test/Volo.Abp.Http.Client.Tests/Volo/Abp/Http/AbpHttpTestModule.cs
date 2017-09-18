@@ -1,11 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.App;
-using Volo.Abp.AspNetCore.Modularity;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Http.DynamicProxying;
 using Volo.Abp.Modularity;
-using Volo.Abp.TestApp.Application;
+using Volo.Abp.TestApp;
 
 namespace Volo.Abp.Http
 {
@@ -15,13 +13,10 @@ namespace Volo.Abp.Http
         public override void ConfigureServices(IServiceCollection services)
         {
             services.AddAssemblyOf<AbpHttpTestModule>();
-            services.AddHttpClientProxy<IPeopleAppService>("/");
-            services.AddHttpClientProxy<IRegularTestController>("/");
 
-            services.Configure<MvcOptions>(options =>
-            {
-                
-            });
+            services.AddHttpClientProxies(typeof(TestAppModule).Assembly, "/");
+
+            services.AddHttpClientProxy<IRegularTestController>("/");
         }
     }
 }

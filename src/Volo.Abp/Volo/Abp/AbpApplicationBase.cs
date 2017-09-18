@@ -34,7 +34,7 @@ namespace Volo.Abp
 
             services.AddSingleton<IAbpApplication>(this);
             services.AddSingleton<IModuleContainer>(this);
-            services.AddCoreAbpServices();
+            services.AddCoreAbpServices(this);
 
             Modules = LoadModules(services, options);
         }
