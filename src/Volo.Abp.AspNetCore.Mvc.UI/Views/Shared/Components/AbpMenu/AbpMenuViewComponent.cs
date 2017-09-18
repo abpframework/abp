@@ -4,7 +4,7 @@ using Volo.Abp.Ui.Navigation;
 
 namespace Volo.Abp.AspNetCore.Mvc.Views.Shared.Components.AbpMenu
 {
-    public class AbpMenuViewComponent : ViewComponent
+    public class AbpMenuViewComponent : AbpViewComponent
     {
         private readonly IMenuManager _menuManager;
 

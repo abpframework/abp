@@ -1,4 +1,5 @@
-﻿using AbpDesk.EntityFrameworkCore;
+﻿using System;
+using AbpDesk.EntityFrameworkCore;
 using AbpDesk.Web.Mvc.Navigation;
 using AbpDesk.Web.Mvc.Temp;
 using Autofac;
@@ -9,11 +10,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.EmbeddedFiles;
 using Volo.Abp.AspNetCore.Modularity;
+using Volo.Abp.AspNetCore.Mvc.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.Autofac;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.Web;
 using Volo.Abp.Modularity;
+using Volo.Abp.Timing;
 using Volo.Abp.Ui.Navigation;
 
 namespace AbpDesk.Web.Mvc
@@ -48,6 +51,14 @@ namespace AbpDesk.Web.Mvc
             services.AddAssemblyOf<AbpDeskWebMvcModule>();
 
             services.GetContainerBuilder().RegisterType<MyClassToTestAutofacCustomRegistration>();
+
+            services.Configure<BundlingOptions>(options =>
+            {
+                options.ScriptBundles.Add("GlobalScripts", new[]
+                {
+                    "/AbpServiceProxies/GetAll?_v=" + DateTime.Now.Ticks
+                });
+            });
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)

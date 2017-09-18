@@ -45,7 +45,7 @@ namespace Volo.Abp.AspNetCore.Mvc
 
         public override void PostConfigureServices(IServiceCollection services)
         {
-            //TODO: Consider to use services.AddMvc() and move this to ConfigureServices method!
+            //TODO: Consider to use services.AddMvc() and move this to ConfigureServices method! And also use .AddControllersAsServices and .AddViewComponentsAsServices...
 
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.TryAddSingleton<IActionContextAccessor, ActionContextAccessor>();

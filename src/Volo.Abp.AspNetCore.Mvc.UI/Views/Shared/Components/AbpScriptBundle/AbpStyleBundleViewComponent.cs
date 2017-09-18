@@ -3,7 +3,7 @@ using Volo.Abp.AspNetCore.Mvc.Bundling;
 
 namespace Volo.Abp.AspNetCore.Mvc.Views.Shared.Components.AbpScriptBundle
 {
-    public class AbpScriptBundleViewComponent : ViewComponent
+    public class AbpScriptBundleViewComponent : AbpViewComponent
     {
         private readonly IBundleManager _bundleManager;
 
