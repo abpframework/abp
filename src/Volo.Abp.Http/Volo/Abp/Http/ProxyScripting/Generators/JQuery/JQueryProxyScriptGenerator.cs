@@ -5,6 +5,8 @@ using Volo.Abp.Http.Modeling;
 
 namespace Volo.Abp.Http.ProxyScripting.Generators.JQuery
 {
+    //TODO: Add abp.ajax, abp.utils... etc.
+
     public class JQueryProxyScriptGenerator : IProxyScriptGenerator, ITransientDependency
     {
         /// <summary>

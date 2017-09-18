@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.EmbeddedFiles;
 using Volo.Abp.AspNetCore.Modularity;
+using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.Autofac;
@@ -58,6 +59,11 @@ namespace AbpDesk.Web.Mvc
                 {
                     "/AbpServiceProxies/GetAll?_v=" + DateTime.Now.Ticks
                 });
+            });
+
+            services.Configure<AbpAspNetCoreMvcOptions>(options =>
+            {
+                options.AppServiceControllers.CreateFor(typeof(AbpDeskApplicationModule).Assembly);
             });
         }
 

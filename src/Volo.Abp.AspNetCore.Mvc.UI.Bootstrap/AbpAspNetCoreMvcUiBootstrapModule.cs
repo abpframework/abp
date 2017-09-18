@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Bundling;
 using Volo.Abp.EmbeddedFiles;
@@ -43,7 +44,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap
                 {
                     "/libs/jquery/jquery-3.1.1.min.js",
                     "/libs/tether/js/tether.min.js",
-                    "/libs/bootstrap/js/bootstrap.min.js"
+                    "/libs/bootstrap/js/bootstrap.min.js",
+                    "/abp/abp.jquery.js?_v" + DateTime.Now.Ticks
                 });
             });
         }

@@ -23,7 +23,8 @@ namespace AbpDesk.Tickets
             _asyncQueryableExecuter = asyncQueryableExecuter;
         }
 
-        public async Task<ListResultDto<TicketDto>> GetAll(GetAllTicketsInput input)
+        //TODO: No need to virtual once we implement UOW filter for AspNet Core!
+        public virtual async Task<ListResultDto<TicketDto>> GetAll(GetAllTicketsInput input)
         {
             var tickets = await _asyncQueryableExecuter.ToListAsync(_ticketRepository
                 .WhereIf(
