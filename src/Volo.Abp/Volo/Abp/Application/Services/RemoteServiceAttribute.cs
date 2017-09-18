@@ -1,11 +1,11 @@
 using System;
 using System.Reflection;
 
-namespace Volo.Abp.Http
+namespace Volo.Abp.Application.Services
 {
     [Serializable]
     [AttributeUsage(AttributeTargets.Interface | AttributeTargets.Class | AttributeTargets.Method)]
-    public class RemoteServiceAttribute : Attribute
+    public class RemoteServiceAttribute : Attribute //TODO: Consider to move to another namespace (with IRemoteService)?
     {
         /// <summary>
         /// Default: true.

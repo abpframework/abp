@@ -1,17 +1,12 @@
-using System;
 using System.Reflection;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Application.Services;
-using Volo.Abp.Http;
 using Volo.Abp.Reflection;
 
 namespace Volo.Abp.AspNetCore.Mvc
 {
-    /// <summary>
-    /// Used to add application services as controller.
-    /// </summary>
     public class AbpAppServiceControllerFeatureProvider : ControllerFeatureProvider
     {
         private readonly IAbpApplication _application;
@@ -25,7 +20,7 @@ namespace Volo.Abp.AspNetCore.Mvc
         {
             var type = typeInfo.AsType();
 
-            if (!typeof(IApplicationService).IsAssignableFrom(type) ||
+            if (!typeof(IRemoteService).IsAssignableFrom(type) ||
                 !typeInfo.IsPublic || typeInfo.IsAbstract || typeInfo.IsGenericType)
             {
                 return false;

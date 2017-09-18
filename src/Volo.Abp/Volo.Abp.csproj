@@ -27,8 +27,4 @@
     <PackageReference Include="Nito.AsyncEx.Context" Version="1.1.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Volo\Abp\Http\" />
-  </ItemGroup>
-
 </Project>

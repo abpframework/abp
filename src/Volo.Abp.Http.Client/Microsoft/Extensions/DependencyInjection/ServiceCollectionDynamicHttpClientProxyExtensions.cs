@@ -23,7 +23,7 @@ namespace Microsoft.Extensions.DependencyInjection
             //TODO: Add option to change type filter
 
             var serviceTypes = assembly.GetTypes().Where(t =>
-                t.IsInterface && t.IsPublic && typeof(IApplicationService).IsAssignableFrom(t)
+                t.IsInterface && t.IsPublic && typeof(IRemoteService).IsAssignableFrom(t)
             );
 
             foreach (var serviceType in serviceTypes)

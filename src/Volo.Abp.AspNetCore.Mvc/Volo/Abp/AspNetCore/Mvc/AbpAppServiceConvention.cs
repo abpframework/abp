@@ -37,7 +37,7 @@ namespace Volo.Abp.AspNetCore.Mvc
                 var controllerType = controller.ControllerType.AsType();
                 var configuration = GetControllerSettingOrNull(controllerType);
 
-                if (IsApplicationService(controllerType))
+                if (IsRemoteService(controllerType))
                 {
                     controller.ControllerName = controller.ControllerName.RemovePostFix(ApplicationService.CommonPostfixes);
                     configuration?.ControllerModelConfigurer(controller);
@@ -314,9 +314,9 @@ namespace Volo.Abp.AspNetCore.Mvc
             return selector.AttributeRouteModel == null && selector.ActionConstraints.IsNullOrEmpty();
         }
 
-        protected virtual bool IsApplicationService(Type controllerType)
+        protected virtual bool IsRemoteService(Type controllerType)
         {
-            return typeof(IApplicationService).GetTypeInfo().IsAssignableFrom(controllerType);
+            return typeof(IRemoteService).GetTypeInfo().IsAssignableFrom(controllerType);
         }
     }
 }
