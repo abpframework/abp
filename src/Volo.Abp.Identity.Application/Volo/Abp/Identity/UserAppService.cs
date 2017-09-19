@@ -10,27 +10,66 @@ namespace Volo.Abp.Identity
 
     public class UserAppService : ApplicationService, IUserAppService
     {
+        private readonly IdentityUserManager _userManager;
         private readonly IIdentityUserRepository _userRepository;
 
-        public UserAppService(IIdentityUserRepository userRepository)
+        public UserAppService(IdentityUserManager userManager, IIdentityUserRepository userRepository)
         {
+            _userManager = userManager;
             _userRepository = userRepository;
         }
 
-        public async Task<ListResultDto<IdentityUserDto>> Get()
+        public async Task<IdentityUserDto> GetAsync(Guid id)
         {
-            var users = await _userRepository.GetListAsync();
-
-            return new ListResultDto<IdentityUserDto>(
-                ObjectMapper.Map<List<IdentityUser>, List<IdentityUserDto>>(users)
+            return ObjectMapper.Map<IdentityUser, IdentityUserDto>(
+                await _userManager.GetByIdAsync(id)
             );
         }
 
-        public async Task<IdentityUserDto> Get(Guid id)
+        public async Task<PagedResultDto<IdentityUserDto>> GetListAsync(PagedAndSortedResultRequestDto input)
         {
-            var user = await _userRepository.GetAsync(id);
+            var userCount = (int) await _userRepository.GetCountAsync();
+            var userDtos = ObjectMapper.Map<List<IdentityUser>, List<IdentityUserDto>>(
+                await _userRepository.GetListAsync(input.Sorting, input.MaxResultCount, input.SkipCount)
+            );
+
+            return new PagedResultDto<IdentityUserDto>(userCount, userDtos);
+        }
+
+        public async Task<IdentityUserDto> CreateAsync(IdentityUserCreateOrUpdateDto input)
+        {
+            var user = new IdentityUser(GuidGenerator.Create(), input.UserName);
+
+            await UpdateUserProperties(input, user);
+            await _userManager.CreateAsync(user, input.Password);
+            await CurrentUnitOfWork.SaveChangesAsync();
 
             return ObjectMapper.Map<IdentityUser, IdentityUserDto>(user);
+        }
+
+        public async Task<IdentityUserDto> UpdateAsync(Guid id, IdentityUserCreateOrUpdateDto input)
+        {
+            var user = await _userManager.GetByIdAsync(id);
+
+            await _userManager.SetUserNameAsync(user, input.UserName);
+            await UpdateUserProperties(input, user);
+            await CurrentUnitOfWork.SaveChangesAsync();
+
+            return ObjectMapper.Map<IdentityUser, IdentityUserDto>(user);
+        }
+
+        public async Task DeleteAsync(Guid id)
+        {
+            var user = await _userManager.GetByIdAsync(id);
+            await _userManager.DeleteAsync(user);
+        }
+
+        private async Task UpdateUserProperties(IdentityUserCreateOrUpdateDto input, IdentityUser user)
+        {
+            await _userManager.SetEmailAsync(user, input.Email);
+            await _userManager.SetPhoneNumberAsync(user, input.PhoneNumber);
+            await _userManager.SetTwoFactorEnabledAsync(user, input.TwoFactorEnabled);
+            await _userManager.SetLockoutEnabledAsync(user, input.LockoutEnabled);
         }
     }
 }

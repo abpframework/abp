@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Services;
 
 namespace Volo.Abp.Identity
@@ -30,6 +32,17 @@ namespace Volo.Abp.Identity
                   logger)
         {
 
+        }
+
+        public async Task<IdentityUser> GetByIdAsync(Guid id)
+        {
+            var user = await Store.FindByIdAsync(id.ToString(), CancellationToken);
+            if (user == null)
+            {
+                throw new EntityNotFoundException(typeof(IdentityUser), id);
+            }
+
+            return user;
         }
     }
 }

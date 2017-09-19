@@ -17,28 +17,27 @@ namespace Volo.Abp.Application.Services
 
     }
 
-    public interface ICrudAppService<TEntityDto, in TPrimaryKey, in TGetAllInput>
-        : ICrudAppService<TEntityDto, TPrimaryKey, TGetAllInput, TEntityDto, TEntityDto>
+    public interface ICrudAppService<TEntityDto, in TPrimaryKey, in TGetListInput>
+        : ICrudAppService<TEntityDto, TPrimaryKey, TGetListInput, TEntityDto, TEntityDto>
         where TEntityDto : IEntityDto<TPrimaryKey>
     {
 
     }
 
-    public interface ICrudAppService<TEntityDto, in TPrimaryKey, in TGetAllInput, in TCreateInput>
-        : ICrudAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TCreateInput>
+    public interface ICrudAppService<TEntityDto, in TPrimaryKey, in TGetListInput, in TCreateInput>
+        : ICrudAppService<TEntityDto, TPrimaryKey, TGetListInput, TCreateInput, TCreateInput>
         where TEntityDto : IEntityDto<TPrimaryKey>
-        where TCreateInput : IEntityDto<TPrimaryKey>
     {
 
     }
 
-    public interface ICrudAppService<TEntityDto, in TPrimaryKey, in TGetAllInput, in TCreateInput, in TUpdateInput>
+    public interface ICrudAppService<TEntityDto, in TPrimaryKey, in TGetListInput, in TCreateInput, in TUpdateInput>
         : IApplicationService
         where TEntityDto : IEntityDto<TPrimaryKey>
     {
         TEntityDto Get(TPrimaryKey id);
 
-        PagedResultDto<TEntityDto> GetAll(TGetAllInput input);
+        PagedResultDto<TEntityDto> GetAll(TGetListInput input);
 
         TEntityDto Create(TCreateInput input);
 

@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Mvc;
 
 namespace Volo.Abp.Identity.Web.Areas.Identity.Controllers
@@ -16,7 +17,7 @@ namespace Volo.Abp.Identity.Web.Areas.Identity.Controllers
 
         public async Task<ActionResult> Index()
         {
-            var result = await _userAppService.Get();
+            var result = await _userAppService.GetListAsync(new PagedAndSortedResultRequestDto());
             return View(result.Items);
         }
     }

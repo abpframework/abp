@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -75,6 +76,11 @@ namespace Volo.Abp.Identity
                 select user;
 
             return await query.ToListAsync(cancellationToken);
+        }
+
+        public async Task<List<IdentityUser>> GetListAsync(string sorting, int maxResultCount, int skipCount)
+        {
+            return await this.OrderBy(sorting ?? "UserName").PageBy(skipCount, maxResultCount).ToListAsync();
         }
     }
 }

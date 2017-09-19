@@ -120,5 +120,10 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
         {
             return Collection.AsQueryable();
         }
+
+        public override Task<long> GetCountAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return Collection.CountAsync(Builders<TEntity>.Filter.Empty, cancellationToken: cancellationToken);
+        }
     }
 }

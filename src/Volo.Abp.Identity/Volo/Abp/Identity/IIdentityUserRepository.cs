@@ -18,8 +18,12 @@ namespace Volo.Abp.Identity
 
         Task<IdentityUser> FindByNormalizedEmailAsync([NotNull] string normalizedEmail, CancellationToken cancellationToken);
 
+        //TODO: Why not return List instead of IList
         Task<IList<IdentityUser>> GetListByClaimAsync(Claim claim, CancellationToken cancellationToken);
 
+        //TODO: Why not return List instead of IList
         Task<IList<IdentityUser>> GetListByNormalizedRoleNameAsync(string normalizedRoleName, CancellationToken cancellationToken);
+
+        Task<List<IdentityUser>> GetListAsync(string sorting, int maxResultCount, int skipCount);
     }
 }

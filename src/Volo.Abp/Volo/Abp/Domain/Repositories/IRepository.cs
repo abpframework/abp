@@ -133,5 +133,18 @@ namespace Volo.Abp.Domain.Repositories
         /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
         /// <param name="id">Primary key of the entity</param>
         Task DeleteAsync(TPrimaryKey id, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Get list of all entities without any filtering.
+        /// </summary>
+        /// <returns>List of entities</returns>
+        long GetCount();
+
+        /// <summary>
+        /// Get list of all entities without any filtering.
+        /// </summary>
+        /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
+        /// <returns>List of entities</returns>
+        Task<long> GetCountAsync(CancellationToken cancellationToken = default(CancellationToken));
     }
 }

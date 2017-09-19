@@ -165,6 +165,11 @@ namespace Volo.Abp.Domain.Repositories
                 throw new NotImplementedException();
             }
 
+            public override long GetCount()
+            {
+                throw new NotImplementedException();
+            }
+
             public override List<TEntity> GetList()
             {
                 throw new NotImplementedException();

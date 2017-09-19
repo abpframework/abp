@@ -86,6 +86,13 @@ namespace Volo.Abp.Domain.Repositories
             return Task.CompletedTask;
         }
 
+        public abstract long GetCount();
+
+        public virtual Task<long> GetCountAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return Task.FromResult(GetCount());
+        }
+
         protected static Expression<Func<TEntity, bool>> CreateEqualityExpressionForId(TPrimaryKey id)
         {
             var lambdaParam = Expression.Parameter(typeof(TEntity));

@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 
 namespace Volo.Abp.Identity
 {
-    public interface IUserAppService : IApplicationService
+    public interface IUserAppService : IAsyncCrudAppService<IdentityUserDto, Guid, PagedAndSortedResultRequestDto, IdentityUserCreateOrUpdateDto>
     {
-        Task<ListResultDto<IdentityUserDto>> Get();
-
-        Task<IdentityUserDto> Get(Guid id);
+        
     }
 }

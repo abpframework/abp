@@ -112,5 +112,10 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
                 DbSet.Remove(entity);
             }
         }
+
+        public override Task<long> GetCountAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return GetQueryable().LongCountAsync(cancellationToken);
+        }
     }
 }

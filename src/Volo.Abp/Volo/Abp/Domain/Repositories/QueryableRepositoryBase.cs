@@ -59,5 +59,10 @@ namespace Volo.Abp.Domain.Repositories
             Delete(predicate);
             return Task.CompletedTask;
         }
+
+        public override long GetCount()
+        {
+            return GetQueryable().LongCount();
+        }
     }
 }

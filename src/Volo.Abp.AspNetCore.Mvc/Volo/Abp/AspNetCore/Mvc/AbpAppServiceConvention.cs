@@ -247,7 +247,7 @@ namespace Volo.Abp.AspNetCore.Mvc
 
         protected virtual string CalculateUrl(string rootPath, string controllerName, ActionModel action, string httpMethod)
         {
-            var url = $"api/{rootPath}/{controllerName}";
+            var url = $"api/{rootPath}/{controllerName.ToCamelCase()}";
 
             //Add {id} path if needed
             if (action.Parameters.Any(p => p.ParameterName == "id"))

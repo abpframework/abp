@@ -18,28 +18,27 @@ namespace Volo.Abp.Application.Services
 
     }
 
-    public interface IAsyncCrudAppService<TEntityDto, in TPrimaryKey, in TGetAllInput>
-        : IAsyncCrudAppService<TEntityDto, TPrimaryKey, TGetAllInput, TEntityDto, TEntityDto>
+    public interface IAsyncCrudAppService<TEntityDto, in TPrimaryKey, in TGetListInput>
+        : IAsyncCrudAppService<TEntityDto, TPrimaryKey, TGetListInput, TEntityDto, TEntityDto>
         where TEntityDto : IEntityDto<TPrimaryKey>
     {
 
     }
 
-    public interface IAsyncCrudAppService<TEntityDto, in TPrimaryKey, in TGetAllInput, in TCreateInput>
-        : IAsyncCrudAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TCreateInput>
+    public interface IAsyncCrudAppService<TEntityDto, in TPrimaryKey, in TGetListInput, in TCreateInput>
+        : IAsyncCrudAppService<TEntityDto, TPrimaryKey, TGetListInput, TCreateInput, TCreateInput>
         where TEntityDto : IEntityDto<TPrimaryKey>
-        where TCreateInput : IEntityDto<TPrimaryKey>
     {
 
     }
 
-    public interface IAsyncCrudAppService<TEntityDto, in TPrimaryKey, in TGetAllInput, in TCreateInput, in TUpdateInput>
+    public interface IAsyncCrudAppService<TEntityDto, in TPrimaryKey, in TGetListInput, in TCreateInput, in TUpdateInput>
         : IApplicationService
         where TEntityDto : IEntityDto<TPrimaryKey>
     {
         Task<TEntityDto> GetAsync(TPrimaryKey id);
 
-        Task<PagedResultDto<TEntityDto>> GetListAsync(TGetAllInput input);
+        Task<PagedResultDto<TEntityDto>> GetListAsync(TGetListInput input);
 
         Task<TEntityDto> CreateAsync(TCreateInput input);
 
