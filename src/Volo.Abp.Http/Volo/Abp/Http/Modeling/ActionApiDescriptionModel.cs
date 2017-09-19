@@ -36,7 +36,7 @@ namespace Volo.Abp.Http.Modeling
                 NameOnClass = method.Name,
                 Url = url,
                 HttpMethod = httpMethod,
-                ReturnValue = new ReturnValueApiDescriptionModel(method.ReturnType),
+                ReturnValue = ReturnValueApiDescriptionModel.Create(method.ReturnType),
                 Parameters = new List<ParameterApiDescriptionModel>(),
                 ParametersOnMethod = method
                     .GetParameters()

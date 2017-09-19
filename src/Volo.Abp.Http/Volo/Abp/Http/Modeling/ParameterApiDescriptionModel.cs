@@ -30,7 +30,7 @@ namespace Volo.Abp.Http.Modeling
             {
                 Name = name,
                 NameOnMethod = nameOnMethod,
-                TypeAsString = type.FullName,
+                TypeAsString = type.GetFullNameWithAssemblyName(),
                 IsOptional = isOptional,
                 DefaultValue = defaultValue,
                 ConstraintTypes = constraintTypes,

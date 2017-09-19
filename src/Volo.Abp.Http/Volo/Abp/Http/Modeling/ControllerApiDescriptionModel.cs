@@ -13,7 +13,7 @@ namespace Volo.Abp.Http.Modeling
 
         public List<ControllerInterfaceApiDescriptionModel> Interfaces { get; set; }
 
-        public Dictionary<string,  ActionApiDescriptionModel> Actions { get; set; }
+        public Dictionary<string, ActionApiDescriptionModel> Actions { get; set; }
 
         private ControllerApiDescriptionModel()
         {
@@ -25,7 +25,7 @@ namespace Volo.Abp.Http.Modeling
             return new ControllerApiDescriptionModel
             {
                 ControllerName = controllerName,
-                TypeAsString = type.FullName,
+                TypeAsString = type.GetFullNameWithAssemblyName(),
                 Actions = new Dictionary<string, ActionApiDescriptionModel>(),
                 Interfaces = type
                     .GetInterfaces()
@@ -69,7 +69,7 @@ namespace Volo.Abp.Http.Modeling
 
         public bool Implements(Type interfaceType)
         {
-            return Interfaces.Any(i => i.TypeAsString == interfaceType.AssemblyQualifiedName);
+            return Interfaces.Any(i => i.TypeAsString == interfaceType.GetFullNameWithAssemblyName());
         }
     }
 }

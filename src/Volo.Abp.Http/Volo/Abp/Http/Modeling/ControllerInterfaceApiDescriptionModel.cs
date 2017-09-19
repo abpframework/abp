@@ -16,7 +16,7 @@ namespace Volo.Abp.Http.Modeling
         {
             return new ControllerInterfaceApiDescriptionModel
             {
-                TypeAsString = type.AssemblyQualifiedName
+                TypeAsString = type.GetFullNameWithAssemblyName()
             };
         }
     }

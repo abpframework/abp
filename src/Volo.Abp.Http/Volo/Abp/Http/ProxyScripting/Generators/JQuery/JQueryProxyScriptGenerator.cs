@@ -90,7 +90,7 @@ namespace Volo.Abp.Http.ProxyScripting.Generators.JQuery
             script.AppendLine("        url: abp.appPath + '" + ProxyScriptingHelper.GenerateUrlWithParameters(action) + "',");
             script.Append("        type: '" + httpMethod + "'");
 
-            if (action.ReturnValue.Type == typeof(void))
+            if (action.ReturnValue.TypeAsString == typeof(void).GetFullNameWithAssemblyName())
             {
                 script.AppendLine(",");
                 script.Append("        dataType: null");

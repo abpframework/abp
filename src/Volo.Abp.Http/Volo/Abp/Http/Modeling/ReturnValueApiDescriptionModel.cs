@@ -5,13 +5,19 @@ namespace Volo.Abp.Http.Modeling
     [Serializable]
     public class ReturnValueApiDescriptionModel
     {
-        public Type Type { get; }
-        public string TypeAsString { get; }
+        public string TypeAsString { get; set; }
 
-        public ReturnValueApiDescriptionModel(Type type)
+        private ReturnValueApiDescriptionModel()
         {
-            Type = type;
-            TypeAsString = type.FullName;
+            
+        }
+
+        public static ReturnValueApiDescriptionModel Create(Type type)
+        {
+            return new ReturnValueApiDescriptionModel
+            {
+                TypeAsString = type.GetFullNameWithAssemblyName()
+            };
         }
     }
 }
