@@ -34,10 +34,12 @@ namespace Volo.Abp.Http.ProxyScripting.Generators.JQuery
 
         private static void AddModuleScript(StringBuilder script, ModuleApiDescriptionModel module)
         {
+            //TODO: Eleminate repeating module.Name.Replace("/", ".").ToCamelCase() !
+            //TODO: Remove illegal chars (like '-') from module/controller names!
+
             script.AppendLine($"// module '{module.Name.ToCamelCase()}'");
             script.AppendLine("(function(){");
-            script.AppendLine();
-            script.AppendLine($"  abp.services.{module.Name.ToCamelCase()} = abp.services.{module.Name.ToCamelCase()} || {{}};");
+            script.AppendLine($"abp.utils.createNamespace(abp, 'services.{module.Name.Replace("/", ".").ToCamelCase()}');");
 
             foreach (var controller in module.Controllers.Values)
             {
@@ -55,7 +57,7 @@ namespace Volo.Abp.Http.ProxyScripting.Generators.JQuery
             script.AppendLine("  (function(){");
             script.AppendLine();
 
-            script.AppendLine($"    abp.services.{module.Name.ToCamelCase()}.{controller.ControllerName.ToCamelCase()} = abp.services.{module.Name.ToCamelCase()}.{controller.ControllerName.ToCamelCase()} || {{}};");
+            script.AppendLine($"    abp.services.{module.Name.Replace("/", ".").ToCamelCase()}.{controller.ControllerName.ToCamelCase()} = abp.services.{module.Name.Replace("/", ".").ToCamelCase()}.{controller.ControllerName.ToCamelCase()} || {{}};");
 
             foreach (var action in controller.Actions.Values)
             {
@@ -72,7 +74,7 @@ namespace Volo.Abp.Http.ProxyScripting.Generators.JQuery
             var parameterList = ProxyScriptingJsFuncHelper.GenerateJsFuncParameterList(action, "ajaxParams");
 
             script.AppendLine($"    // action '{action.NameOnClass.ToCamelCase()}'");
-            script.AppendLine($"    abp.services.{module.Name.ToCamelCase()}.{controller.ControllerName.ToCamelCase()}{ProxyScriptingJsFuncHelper.WrapWithBracketsOrWithDotPrefix(action.NameOnClass.ToCamelCase())} = function({parameterList}) {{");
+            script.AppendLine($"    abp.services.{module.Name.Replace("/", ".").ToCamelCase()}.{controller.ControllerName.ToCamelCase()}{ProxyScriptingJsFuncHelper.WrapWithBracketsOrWithDotPrefix(action.NameOnClass.ToCamelCase())} = function({parameterList}) {{");
             script.AppendLine("      return abp.ajax($.extend(true, {");
 
             AddAjaxCallParameters(script, controller, action);

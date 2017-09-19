@@ -41,7 +41,7 @@ namespace Volo.Abp.AspNetCore.Mvc
                 {
                     controller.ControllerName = controller.ControllerName.RemovePostFix(ApplicationService.CommonPostfixes);
                     configuration?.ControllerModelConfigurer(controller);
-                    ConfigureArea(controller, configuration);
+                    //ConfigureArea(controller, configuration);
                     ConfigureRemoteService(controller, configuration);
                 }
                 else
