@@ -29,12 +29,9 @@ namespace Volo.Abp.AspNetCore.Mvc
             };
         }
 
-        public AbpControllerAssemblySettingBuilder CreateFor(
-            Assembly assembly,
-            string moduleName = ModuleApiDescriptionModel.DefaultServiceModuleName,
-            bool useConventionalHttpVerbs = true)
+        public AbpControllerAssemblySettingBuilder CreateFor(Assembly assembly, string moduleName = ModuleApiDescriptionModel.DefaultServiceModuleName)
         {
-            var setting = new AbpControllerAssemblySetting(moduleName, assembly, useConventionalHttpVerbs);
+            var setting = new AbpControllerAssemblySetting(moduleName, assembly);
             ControllerAssemblySettings.Add(setting);
             return new AbpControllerAssemblySettingBuilder(setting);
         }

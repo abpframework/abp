@@ -10,17 +10,14 @@ namespace Volo.Abp.AspNetCore.Mvc
 
         public Assembly Assembly { get; }
 
-        public bool UseConventionalHttpVerbs { get; }
-
         public Func<Type, bool> TypePredicate { get; set; }
 
         public Action<ControllerModel> ControllerModelConfigurer { get; set; }
 
-        public AbpControllerAssemblySetting(string moduleName, Assembly assembly, bool useConventionalHttpVerbs)
+        public AbpControllerAssemblySetting(string moduleName, Assembly assembly)
         {
             ModuleName = moduleName;
             Assembly = assembly;
-            UseConventionalHttpVerbs = useConventionalHttpVerbs;
 
             TypePredicate = type => true;
             ControllerModelConfigurer = controller => { };

@@ -226,9 +226,7 @@ namespace Volo.Abp.AspNetCore.Mvc
 
         protected virtual string SelectHttpMethod(ActionModel action, AbpControllerAssemblySetting configuration)
         {
-            return configuration?.UseConventionalHttpVerbs == true
-                ? HttpMethodHelper.GetConventionalVerbForMethodName(action.ActionName)
-                : HttpMethodHelper.DefaultHttpVerb;
+            return HttpMethodHelper.GetConventionalVerbForMethodName(action.ActionName);
         }
 
         protected virtual void NormalizeSelectorRoutes(string moduleName, string controllerName, ActionModel action)
