@@ -13,10 +13,7 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         private static readonly ProxyGenerator ProxyGeneratorInstance = new ProxyGenerator();
 
-        public static IServiceCollection AddHttpClientProxies(
-            this IServiceCollection services,
-            Assembly assembly,
-            string remoteServiceName)
+        public static IServiceCollection AddHttpClientProxies(this IServiceCollection services, Assembly assembly, string remoteServiceName = RemoteServiceConfigurationDictionary.DefaultName)
         {
             //TODO: Add option to change type filter
 
@@ -32,12 +29,12 @@ namespace Microsoft.Extensions.DependencyInjection
             return services;
         }
 
-        public static IServiceCollection AddHttpClientProxy<T>(this IServiceCollection services, string remoteServiceName)
+        public static IServiceCollection AddHttpClientProxy<T>(this IServiceCollection services, string remoteServiceName = RemoteServiceConfigurationDictionary.DefaultName)
         {
             return services.AddHttpClientProxy(typeof(T), remoteServiceName);
         }
 
-        public static IServiceCollection AddHttpClientProxy(this IServiceCollection services, Type type, string remoteServiceName)
+        public static IServiceCollection AddHttpClientProxy(this IServiceCollection services, Type type, string remoteServiceName = RemoteServiceConfigurationDictionary.DefaultName)
         {
             services.Configure<AbpHttpClientOptions>(options =>
             {
