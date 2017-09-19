@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Xunit;
 
@@ -19,6 +20,12 @@ namespace Volo.Abp.Http.DynamicProxying
         public void IncrementValue()
         {
             _controller.IncrementValue(42).ShouldBe(43);
+        }
+
+        [Fact]
+        public async Task IncrementValueAsync()
+        {
+            (await _controller.IncrementValueAsync(42)).ShouldBe(43);
         }
     }
 }

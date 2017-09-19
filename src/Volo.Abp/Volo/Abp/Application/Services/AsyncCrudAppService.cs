@@ -72,7 +72,7 @@ namespace Volo.Abp.Application.Services
             AsyncQueryableExecuter = DefaultAsyncQueryableExecuter.Instance;
         }
 
-        public virtual async Task<TEntityDto> Get(TPrimaryKey id)
+        public virtual async Task<TEntityDto> GetAsync(TPrimaryKey id)
         {
             CheckGetPermission();
 
@@ -80,7 +80,7 @@ namespace Volo.Abp.Application.Services
             return MapToEntityDto(entity);
         }
 
-        public virtual async Task<PagedResultDto<TEntityDto>> GetList(TGetAllInput input)
+        public virtual async Task<PagedResultDto<TEntityDto>> GetListAsync(TGetAllInput input)
         {
             CheckGetAllPermission();
 
@@ -99,7 +99,7 @@ namespace Volo.Abp.Application.Services
             );
         }
 
-        public virtual async Task<TEntityDto> Create(TCreateInput input)
+        public virtual async Task<TEntityDto> CreateAsync(TCreateInput input)
         {
             CheckCreatePermission();
 
@@ -111,7 +111,7 @@ namespace Volo.Abp.Application.Services
             return MapToEntityDto(entity);
         }
 
-        public virtual async Task<TEntityDto> Update(TPrimaryKey id, TUpdateInput input)
+        public virtual async Task<TEntityDto> UpdateAsync(TPrimaryKey id, TUpdateInput input)
         {
             CheckUpdatePermission();
 
@@ -125,7 +125,7 @@ namespace Volo.Abp.Application.Services
             return MapToEntityDto(entity);
         }
 
-        public virtual Task Delete(TPrimaryKey id)
+        public virtual Task DeleteAsync(TPrimaryKey id)
         {
             CheckDeletePermission();
 

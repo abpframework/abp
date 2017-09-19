@@ -37,14 +37,14 @@ namespace Volo.Abp.Application.Services
         : IApplicationService
         where TEntityDto : IEntityDto<TPrimaryKey>
     {
-        Task<TEntityDto> Get(TPrimaryKey id);
+        Task<TEntityDto> GetAsync(TPrimaryKey id);
 
-        Task<PagedResultDto<TEntityDto>> GetList(TGetAllInput input);
+        Task<PagedResultDto<TEntityDto>> GetListAsync(TGetAllInput input);
 
-        Task<TEntityDto> Create(TCreateInput input);
+        Task<TEntityDto> CreateAsync(TCreateInput input);
 
-        Task<TEntityDto> Update(TPrimaryKey id, TUpdateInput input);
+        Task<TEntityDto> UpdateAsync(TPrimaryKey id, TUpdateInput input);
 
-        Task Delete(TPrimaryKey id);
+        Task DeleteAsync(TPrimaryKey id);
     }
 }

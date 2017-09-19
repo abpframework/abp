@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.Application.Services;
 using Volo.Abp.AspNetCore.Mvc;
 
@@ -14,6 +15,13 @@ namespace Volo.Abp.Http.DynamicProxying
         public int IncrementValue(int value)
         {
             return value + 1;
+        }
+
+        [HttpGet]
+        [Route("increment")]
+        public Task<int> IncrementValueAsync(int value)
+        {
+            return Task.FromResult(value + 1);
         }
     }
 }

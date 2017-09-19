@@ -28,7 +28,7 @@ namespace Volo.Abp.Http.DynamicProxying
         {
             var firstPerson = _personRepository.GetList().First();
 
-            var person = await _peopleAppService.Get(firstPerson.Id);
+            var person = await _peopleAppService.GetAsync(firstPerson.Id);
             person.ShouldNotBeNull();
             person.Id.ShouldBe(firstPerson.Id);
             person.Name.ShouldBe(firstPerson.Name);
@@ -37,7 +37,7 @@ namespace Volo.Abp.Http.DynamicProxying
         [Fact]
         public async Task GetList()
         {
-            var people = await _peopleAppService.GetList(new PagedAndSortedResultRequestDto());
+            var people = await _peopleAppService.GetListAsync(new PagedAndSortedResultRequestDto());
             people.TotalCount.ShouldBeGreaterThan(0);
             people.Items.Count.ShouldBe(people.TotalCount);
         }
@@ -47,7 +47,7 @@ namespace Volo.Abp.Http.DynamicProxying
         {
             var firstPerson = _personRepository.GetList().First();
 
-            await _peopleAppService.Delete(firstPerson.Id);
+            await _peopleAppService.DeleteAsync(firstPerson.Id);
 
             firstPerson = _personRepository.GetList().FirstOrDefault(p => p.Id == firstPerson.Id);
             firstPerson.ShouldBeNull();
@@ -58,7 +58,7 @@ namespace Volo.Abp.Http.DynamicProxying
         {
             var uniquePersonName = Guid.NewGuid().ToString();
 
-            var person = await _peopleAppService.Create(new PersonDto
+            var person = await _peopleAppService.CreateAsync(new PersonDto
                 {
                     Name = uniquePersonName,
                     Age = 42
@@ -80,7 +80,7 @@ namespace Volo.Abp.Http.DynamicProxying
             var firstPerson = _personRepository.GetList().First();
             var uniquePersonName = Guid.NewGuid().ToString();
 
-            var person = await _peopleAppService.Update(
+            var person = await _peopleAppService.UpdateAsync(
                 firstPerson.Id,
                 new PersonDto
                 {
