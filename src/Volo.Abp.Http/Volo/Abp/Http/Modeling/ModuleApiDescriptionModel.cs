@@ -10,9 +10,9 @@ namespace Volo.Abp.Http.Modeling
         /// <summary>
         /// "app".
         /// </summary>
-        public const string DefaultModuleName = "app";
+        public const string DefaultRootPath = "app";
 
-        public string Name { get; set; }
+        public string RootPath { get; set; }
 
         public IDictionary<string, ControllerApiDescriptionModel> Controllers { get; set; }
 
@@ -21,11 +21,11 @@ namespace Volo.Abp.Http.Modeling
             
         }
 
-        public static ModuleApiDescriptionModel Create(string name)
+        public static ModuleApiDescriptionModel Create(string rootPath)
         {
             return new ModuleApiDescriptionModel
             {
-                Name = name,
+                RootPath = rootPath,
                 Controllers = new Dictionary<string, ControllerApiDescriptionModel>()
             };
         }
@@ -34,7 +34,7 @@ namespace Volo.Abp.Http.Modeling
         {
             if (Controllers.ContainsKey(controller.ControllerName))
             {
-                throw new AbpException($"There is already a controller with name: {controller.ControllerName} in module: {Name}");
+                throw new AbpException($"There is already a controller with name: {controller.ControllerName} in module: {RootPath}");
             }
 
             return Controllers[controller.ControllerName] = controller;
@@ -47,7 +47,7 @@ namespace Volo.Abp.Http.Modeling
         
         public ModuleApiDescriptionModel CreateSubModel(string[] controllers, string[] actions)
         {
-            var subModel = Create(Name);
+            var subModel = Create(RootPath);
 
             foreach (var controller in Controllers.Values)
             {

@@ -4,7 +4,7 @@ namespace Volo.Abp.AspNetCore.Mvc
 {
     public class UrlActionNameNormalizerContext
     {
-        public string ModuleName { get; }
+        public string RootPath { get; }
 
         public string ControllerName { get; }
 
@@ -14,9 +14,9 @@ namespace Volo.Abp.AspNetCore.Mvc
 
         public string ActionNameInUrl { get; set; }
 
-        public UrlActionNameNormalizerContext(string moduleName, string controllerName, ActionModel action, string httpMethod, string actionNameInUrl)
+        public UrlActionNameNormalizerContext(string rootPath, string controllerName, ActionModel action, string httpMethod, string actionNameInUrl)
         {
-            ModuleName = moduleName;
+            RootPath = rootPath;
             ControllerName = controllerName;
             Action = action;
             HttpMethod = httpMethod;

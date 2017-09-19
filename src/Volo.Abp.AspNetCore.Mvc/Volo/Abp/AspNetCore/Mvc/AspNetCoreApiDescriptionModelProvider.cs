@@ -56,7 +56,7 @@ namespace Volo.Abp.AspNetCore.Mvc
         {
             var controllerType = apiDescription.ActionDescriptor.AsControllerActionDescriptor().ControllerTypeInfo.AsType();
 
-            var moduleModel = model.GetOrAddModule(GetModuleName(controllerType));
+            var moduleModel = model.GetOrAddModule(GetRootPath(controllerType));
 
             var controllerModel = moduleModel.GetOrAddController(GetControllerName(apiDescription), controllerType);
 
@@ -65,7 +65,7 @@ namespace Volo.Abp.AspNetCore.Mvc
             var uniqueMethodName = GetUniqueActionName(method);
             if (controllerModel.Actions.ContainsKey(uniqueMethodName))
             {
-                Logger.LogWarning($"Controller '{controllerModel.ControllerName}' contains more than one action with name '{uniqueMethodName}' for module '{moduleModel.Name}'. Ignored: " + method);
+                Logger.LogWarning($"Controller '{controllerModel.ControllerName}' contains more than one action with name '{uniqueMethodName}' for module '{moduleModel.RootPath}'. Ignored: " + method);
                 return;
             }
 
@@ -154,18 +154,18 @@ namespace Volo.Abp.AspNetCore.Mvc
             return modelNameProvider.Name;
         }
 
-        private string GetModuleName(Type controllerType)
+        private string GetRootPath(Type controllerType)
         {
             if (controllerType == null)
             {
-                return ModuleApiDescriptionModel.DefaultModuleName;
+                return ModuleApiDescriptionModel.DefaultRootPath;
             }
 
             foreach (var controllerSetting in _options.AppServiceControllers.ControllerAssemblySettings)
             {
                 if (Equals(controllerType.Assembly, controllerSetting.Assembly))
                 {
-                    return controllerSetting.ModuleName;
+                    return controllerSetting.RootPath;
                 }
             }
 
@@ -175,7 +175,7 @@ namespace Volo.Abp.AspNetCore.Mvc
                 return areaAttr.RouteValue;
             }
 
-            return ModuleApiDescriptionModel.DefaultModuleName;
+            return ModuleApiDescriptionModel.DefaultRootPath;
         }
     }
 }

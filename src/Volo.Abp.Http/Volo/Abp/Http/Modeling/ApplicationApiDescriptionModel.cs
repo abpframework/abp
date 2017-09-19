@@ -26,17 +26,17 @@ namespace Volo.Abp.Http.Modeling
 
         public ModuleApiDescriptionModel AddModule(ModuleApiDescriptionModel module)
         {
-            if (Modules.ContainsKey(module.Name))
+            if (Modules.ContainsKey(module.RootPath))
             {
-                throw new AbpException("There is already a module with same name: " + module.Name);
+                throw new AbpException("There is already a module with same root path: " + module.RootPath);
             }
 
-            return Modules[module.Name] = module;
+            return Modules[module.RootPath] = module;
         }
 
-        public ModuleApiDescriptionModel GetOrAddModule(string name)
+        public ModuleApiDescriptionModel GetOrAddModule(string rootPath)
         {
-            return Modules.GetOrAdd(name, () => ModuleApiDescriptionModel.Create(name));
+            return Modules.GetOrAdd(rootPath, () => ModuleApiDescriptionModel.Create(rootPath));
         }
 
         public ApplicationApiDescriptionModel CreateSubModel(string[] modules = null, string[] controllers = null, string[] actions = null)
@@ -45,7 +45,7 @@ namespace Volo.Abp.Http.Modeling
 
             foreach (var module in Modules.Values)
             {
-                if (modules == null || modules.Contains(module.Name))
+                if (modules == null || modules.Contains(module.RootPath))
                 {
                     subModel.AddModule(module.CreateSubModel(controllers, actions));
                 }

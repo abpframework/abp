@@ -8,16 +8,16 @@ namespace Volo.Abp.AspNetCore.Mvc
     {
         public Assembly Assembly { get; }
 
-        public string ModuleName { get; }
+        public string RootPath { get; }
 
         public Func<Type, bool> TypePredicate { get; set; }
 
         public Action<ControllerModel> ControllerModelConfigurer { get; set; }
 
-        public AbpControllerAssemblySetting(Assembly assembly, string moduleName)
+        public AbpControllerAssemblySetting(Assembly assembly, string rootPath)
         {
             Assembly = assembly;
-            ModuleName = moduleName;
+            RootPath = rootPath;
 
             TypePredicate = type => true;
             ControllerModelConfigurer = controller => { };
