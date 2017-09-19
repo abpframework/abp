@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.TestBase;
+﻿using Volo.Abp.TestBase;
 
 namespace Volo.Abp.Identity
 {
