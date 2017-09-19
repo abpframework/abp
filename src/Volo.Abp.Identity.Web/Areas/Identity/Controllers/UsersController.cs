@@ -8,9 +8,9 @@ namespace Volo.Abp.Identity.Web.Areas.Identity.Controllers
     [Area("Identity")]
     public class UsersController : AbpController
     {
-        private readonly IUserAppService _userAppService;
+        private readonly IIdentityUserAppService _userAppService;
 
-        public UsersController(IUserAppService userAppService)
+        public UsersController(IIdentityUserAppService userAppService)
         {
             _userAppService = userAppService;
         }

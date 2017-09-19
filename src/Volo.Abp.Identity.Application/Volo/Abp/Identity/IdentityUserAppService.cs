@@ -8,12 +8,12 @@ namespace Volo.Abp.Identity
 {
     //TODO: Consider a way of passing cancellation token to all async application service methods!
 
-    public class UserAppService : ApplicationService, IUserAppService
+    public class IdentityUserAppService : ApplicationService, IIdentityUserAppService
     {
         private readonly IdentityUserManager _userManager;
         private readonly IIdentityUserRepository _userRepository;
 
-        public UserAppService(IdentityUserManager userManager, IIdentityUserRepository userRepository)
+        public IdentityUserAppService(IdentityUserManager userManager, IIdentityUserRepository userRepository)
         {
             _userManager = userManager;
             _userRepository = userRepository;
