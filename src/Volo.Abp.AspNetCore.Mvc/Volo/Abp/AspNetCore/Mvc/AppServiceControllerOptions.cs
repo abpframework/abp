@@ -31,7 +31,7 @@ namespace Volo.Abp.AspNetCore.Mvc
 
         public AbpControllerAssemblySettingBuilder CreateFor(Assembly assembly, string moduleName = ModuleApiDescriptionModel.DefaultServiceModuleName)
         {
-            var setting = new AbpControllerAssemblySetting(moduleName, assembly);
+            var setting = new AbpControllerAssemblySetting(assembly, moduleName);
             ControllerAssemblySettings.Add(setting);
             return new AbpControllerAssemblySettingBuilder(setting);
         }
