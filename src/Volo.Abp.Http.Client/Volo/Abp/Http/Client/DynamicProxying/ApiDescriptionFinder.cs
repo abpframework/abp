@@ -25,14 +25,9 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
             foreach (var module in apiDescription.Modules.Values)
             {
-                if (module.Name != proxyConfig.ModuleName)
-                {
-                    continue;
-                }
-
                 foreach (var controller in module.Controllers.Values)
                 {
-                    if (controller.Interfaces.All(i => i.TypeAsString != proxyConfig.Type.FullName))
+                    if (!controller.Implements(proxyConfig.Type))
                     {
                         continue;
                     }

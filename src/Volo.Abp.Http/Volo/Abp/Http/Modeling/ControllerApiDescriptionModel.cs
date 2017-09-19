@@ -66,5 +66,10 @@ namespace Volo.Abp.Http.Modeling
 
             return subModel;
         }
+
+        public bool Implements(Type interfaceType)
+        {
+            return Interfaces.Any(i => i.TypeAsString == interfaceType.AssemblyQualifiedName);
+        }
     }
 }

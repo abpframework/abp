@@ -18,7 +18,7 @@ namespace Microsoft.Extensions.DependencyInjection
             this IServiceCollection services,
             Assembly assembly,
             string baseUrl,
-            string moduleName = ModuleApiDescriptionModel.DefaultServiceModuleName)
+            string moduleName = ModuleApiDescriptionModel.DefaultModuleName)
         {
             //TODO: Add option to change type filter
 
@@ -28,22 +28,22 @@ namespace Microsoft.Extensions.DependencyInjection
 
             foreach (var serviceType in serviceTypes)
             {
-                services.AddHttpClientProxy(serviceType, baseUrl, moduleName);
+                services.AddHttpClientProxy(serviceType, baseUrl);
             }
 
             return services;
         }
 
-        public static IServiceCollection AddHttpClientProxy<T>(this IServiceCollection services, string baseUrl, string moduleName = ModuleApiDescriptionModel.DefaultServiceModuleName)
+        public static IServiceCollection AddHttpClientProxy<T>(this IServiceCollection services, string baseUrl)
         {
-            return services.AddHttpClientProxy(typeof(T), baseUrl, moduleName);
+            return services.AddHttpClientProxy(typeof(T), baseUrl);
         }
 
-        public static IServiceCollection AddHttpClientProxy(this IServiceCollection services, Type type, string baseUrl, string moduleName = ModuleApiDescriptionModel.DefaultServiceModuleName)
+        public static IServiceCollection AddHttpClientProxy(this IServiceCollection services, Type type, string baseUrl)
         {
             services.Configure<AbpHttpClientOptions>(options =>
             {
-                options.HttpClientProxies[type] = new DynamicHttpClientProxyConfig(moduleName, baseUrl, type);
+                options.HttpClientProxies[type] = new DynamicHttpClientProxyConfig(baseUrl, type);
             });
 
             var interceptorType = typeof(DynamicHttpProxyInterceptor<>).MakeGenericType(type);

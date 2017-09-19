@@ -244,7 +244,7 @@ namespace Volo.Abp.AspNetCore.Mvc
         protected virtual string GetModuleNameOrDefault(Type controllerType)
         {
             return GetControllerSettingOrNull(controllerType)?.ModuleName ??
-                   ModuleApiDescriptionModel.DefaultServiceModuleName;
+                   ModuleApiDescriptionModel.DefaultModuleName;
         }
 
         [CanBeNull]

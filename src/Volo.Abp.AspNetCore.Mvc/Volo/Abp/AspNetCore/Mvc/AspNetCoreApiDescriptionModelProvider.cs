@@ -158,7 +158,7 @@ namespace Volo.Abp.AspNetCore.Mvc
         {
             if (controllerType == null)
             {
-                return ModuleApiDescriptionModel.DefaultServiceModuleName;
+                return ModuleApiDescriptionModel.DefaultModuleName;
             }
 
             foreach (var controllerSetting in _options.AppServiceControllers.ControllerAssemblySettings)
@@ -175,7 +175,7 @@ namespace Volo.Abp.AspNetCore.Mvc
                 return areaAttr.RouteValue;
             }
 
-            return ModuleApiDescriptionModel.DefaultServiceModuleName;
+            return ModuleApiDescriptionModel.DefaultModuleName;
         }
     }
 }

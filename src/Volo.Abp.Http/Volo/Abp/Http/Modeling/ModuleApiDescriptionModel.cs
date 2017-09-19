@@ -10,7 +10,7 @@ namespace Volo.Abp.Http.Modeling
         /// <summary>
         /// "app".
         /// </summary>
-        public const string DefaultServiceModuleName = "app";
+        public const string DefaultModuleName = "app";
 
         public string Name { get; set; }
 
