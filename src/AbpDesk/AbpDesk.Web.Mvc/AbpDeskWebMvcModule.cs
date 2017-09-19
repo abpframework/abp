@@ -19,6 +19,7 @@ using Volo.Abp.Identity.Web;
 using Volo.Abp.Modularity;
 using Volo.Abp.Timing;
 using Volo.Abp.Ui.Navigation;
+using Volo.Abp.Http.Client;
 
 namespace AbpDesk.Web.Mvc
 {
@@ -45,7 +46,8 @@ namespace AbpDesk.Web.Mvc
                 options.MenuContributors.Add(new MainMenuContributor());
             });
 
-            services.Configure<AbpIdentityHttpApiClientOptions>(configuration.GetSection("AbpIdentity:HttpApiClient"));
+            //TODO: Remove Http.Client reference later
+            services.Configure<RemoteServiceOptions>(configuration);
 
             services.AddMvc();
 

@@ -10,6 +10,12 @@ namespace Volo.Abp.Identity
         public override void ConfigureServices(IServiceCollection services)
         {
             services.AddAssemblyOf<AbpIdentityHttpApiModule>();
+
+            services.Configure<AbpAspNetCoreMvcOptions>(options =>
+            {
+                //TODO: We can move this call to services.AddAppServicesAsControllers(typeof(AbpIdentityApplicationContractsModule).Assembly, "identity");
+                options.AppServiceControllers.CreateFor(typeof(AbpIdentityApplicationModule).Assembly, "identity");
+            });
         }
     }
 }

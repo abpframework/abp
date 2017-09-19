@@ -14,9 +14,13 @@ namespace Volo.Abp.Http
         {
             services.AddAssemblyOf<AbpHttpTestModule>();
 
-            services.AddHttpClientProxies(typeof(TestAppModule).Assembly, "/");
+            services.AddHttpClientProxies(typeof(TestAppModule).Assembly, "Default");
+            services.AddHttpClientProxy<IRegularTestController>("Default");
 
-            services.AddHttpClientProxy<IRegularTestController>("/");
+            services.Configure<RemoteServiceOptions>(options =>
+            {
+                options.RemoteServices.Default = new RemoteServiceConfiguration("/");
+            });
         }
     }
 }

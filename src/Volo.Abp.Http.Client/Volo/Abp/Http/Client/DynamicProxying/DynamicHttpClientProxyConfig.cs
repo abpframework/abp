@@ -4,14 +4,14 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 {
     public class DynamicHttpClientProxyConfig
     {
-        public string BaseUrl { get; }
-
         public Type Type { get; }
 
-        public DynamicHttpClientProxyConfig(string baseUrl, Type type)
+        public string RemoteServiceName { get; }
+
+        public DynamicHttpClientProxyConfig(Type type, string remoteServiceName)
         {
-            BaseUrl = baseUrl;
             Type = type;
+            RemoteServiceName = remoteServiceName;
         }
     }
 }

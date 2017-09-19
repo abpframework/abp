@@ -6,7 +6,6 @@ using Volo.Abp.Application.Services;
 using Volo.Abp.Castle.DynamicProxy;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Http.Client.DynamicProxying;
-using Volo.Abp.Http.Modeling;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -17,8 +16,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddHttpClientProxies(
             this IServiceCollection services,
             Assembly assembly,
-            string baseUrl,
-            string moduleName = ModuleApiDescriptionModel.DefaultModuleName)
+            string remoteServiceName)
         {
             //TODO: Add option to change type filter
 
@@ -28,22 +26,22 @@ namespace Microsoft.Extensions.DependencyInjection
 
             foreach (var serviceType in serviceTypes)
             {
-                services.AddHttpClientProxy(serviceType, baseUrl);
+                services.AddHttpClientProxy(serviceType, remoteServiceName);
             }
 
             return services;
         }
 
-        public static IServiceCollection AddHttpClientProxy<T>(this IServiceCollection services, string baseUrl)
+        public static IServiceCollection AddHttpClientProxy<T>(this IServiceCollection services, string remoteServiceName)
         {
-            return services.AddHttpClientProxy(typeof(T), baseUrl);
+            return services.AddHttpClientProxy(typeof(T), remoteServiceName);
         }
 
-        public static IServiceCollection AddHttpClientProxy(this IServiceCollection services, Type type, string baseUrl)
+        public static IServiceCollection AddHttpClientProxy(this IServiceCollection services, Type type, string remoteServiceName)
         {
             services.Configure<AbpHttpClientOptions>(options =>
             {
-                options.HttpClientProxies[type] = new DynamicHttpClientProxyConfig(baseUrl, type);
+                options.HttpClientProxies[type] = new DynamicHttpClientProxyConfig(type, remoteServiceName);
             });
 
             var interceptorType = typeof(DynamicHttpProxyInterceptor<>).MakeGenericType(type);

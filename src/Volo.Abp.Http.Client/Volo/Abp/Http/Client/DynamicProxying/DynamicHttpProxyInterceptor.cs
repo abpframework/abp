@@ -21,7 +21,8 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
         private readonly IDynamicProxyHttpClientFactory _httpClientFactory;
         private readonly IApiDescriptionFinder _apiDescriptionFinder;
-        private readonly AbpHttpClientOptions _options;
+        private readonly RemoteServiceOptions _remoteServiceOptions;
+        private readonly AbpHttpClientOptions _clientOptions;
         private readonly IJsonSerializer _jsonSerializer;
 
         static DynamicHttpProxyInterceptor()
@@ -33,14 +34,16 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
         public DynamicHttpProxyInterceptor(
             IDynamicProxyHttpClientFactory httpClientFactory,
-            IOptions<AbpHttpClientOptions> options,
+            IOptions<AbpHttpClientOptions> clientOptions,
+            IOptionsSnapshot<RemoteServiceOptions> remoteServiceOptions,
             IApiDescriptionFinder apiDescriptionFinder,
             IJsonSerializer jsonSerializer)
         {
             _httpClientFactory = httpClientFactory;
             _apiDescriptionFinder = apiDescriptionFinder;
             _jsonSerializer = jsonSerializer;
-            _options = options.Value;
+            _clientOptions = clientOptions.Value;
+            _remoteServiceOptions = remoteServiceOptions.Value;
         }
 
         public override void Intercept(IAbpMethodInvocation invocation)
@@ -82,7 +85,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             using (var client = _httpClientFactory.Create())
             {
                 var proxyConfig = GetProxyConfig();
-                var action = await _apiDescriptionFinder.FindActionAsync(proxyConfig, invocation.Method);
+                var action = await _apiDescriptionFinder.FindActionAsync(proxyConfig, typeof(TService), invocation.Method);
                 var url = proxyConfig.BaseUrl + UrlBuilder.GenerateUrlWithParameters(action, invocation.ArgumentsDictionary);
 
                 var requestMessage = new HttpRequestMessage(action.GetHttpMethod(), url)
@@ -115,10 +118,14 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             }
         }
 
-        private DynamicHttpClientProxyConfig GetProxyConfig()
+        private RemoteServiceConfiguration GetProxyConfig()
         {
-            return _options.HttpClientProxies.GetOrDefault(typeof(TService))
+            var clientConfig = _clientOptions.HttpClientProxies.GetOrDefault(typeof(TService))
                    ?? throw new AbpException($"Could not get DynamicHttpClientProxyConfig for {typeof(TService).FullName}.");
+
+            return _remoteServiceOptions.RemoteServices.GetOrDefault(clientConfig.RemoteServiceName) 
+                ?? _remoteServiceOptions.RemoteServices.Default 
+                ?? throw new AbpException($"Could not get DynamicHttpClientProxyConfig for {typeof(TService).FullName}.");
         }
     }
 }

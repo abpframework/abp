@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
@@ -15,7 +16,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             _descriptionCache = descriptionCache;
         }
 
-        public async Task<ActionApiDescriptionModel> FindActionAsync(DynamicHttpClientProxyConfig proxyConfig, MethodInfo method)
+        public async Task<ActionApiDescriptionModel> FindActionAsync(RemoteServiceConfiguration proxyConfig, Type serviceType, MethodInfo method)
         {
             var apiDescription = await _descriptionCache.GetAsync(proxyConfig.BaseUrl);
 
@@ -27,7 +28,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             {
                 foreach (var controller in module.Controllers.Values)
                 {
-                    if (!controller.Implements(proxyConfig.Type))
+                    if (!controller.Implements(serviceType))
                     {
                         continue;
                     }
