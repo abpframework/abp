@@ -11,7 +11,7 @@ namespace Volo.Abp.Identity
         {
             services.AddAssemblyOf<AbpIdentityHttpApiClientModule>();
 
-            services.AddHttpClientProxy<AbpIdentityApplicationContractsModule>("AbpIdentity");
+            services.AddHttpClientProxies(typeof(AbpIdentityApplicationContractsModule).Assembly, "AbpIdentity");
         }
     }
 }
