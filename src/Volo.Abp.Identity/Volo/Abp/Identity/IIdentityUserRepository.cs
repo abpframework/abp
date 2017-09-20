@@ -25,5 +25,7 @@ namespace Volo.Abp.Identity
         Task<IList<IdentityUser>> GetListByNormalizedRoleNameAsync(string normalizedRoleName, CancellationToken cancellationToken);
 
         Task<List<IdentityUser>> GetListAsync(string sorting, int maxResultCount, int skipCount);
+
+        Task<List<IdentityRole>> GetRolesAsync(Guid userId);
     }
 }

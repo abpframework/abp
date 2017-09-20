@@ -2,7 +2,7 @@
 
 namespace Volo.Abp.Identity
 {
-    public class IdentityUserRoleInfoDto : EntityDto
+    public class IdentityRoleDto : EntityDto
     {
         public string Name { get; set; }
     }

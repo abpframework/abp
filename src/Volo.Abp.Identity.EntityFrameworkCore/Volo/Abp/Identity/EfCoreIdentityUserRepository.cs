@@ -82,5 +82,14 @@ namespace Volo.Abp.Identity
         {
             return await this.OrderBy(sorting ?? nameof(IdentityUser.UserName)).PageBy(skipCount, maxResultCount).ToListAsync();
         }
+
+        public async Task<List<IdentityRole>> GetRolesAsync(Guid userId)
+        {
+            var query = from userRole in DbContext.UserRoles
+                        join role in DbContext.Roles on userRole.RoleId equals role.Id
+                        select role;
+
+            return await query.ToListAsync();
+        }
     }
 }

@@ -7,6 +7,6 @@ namespace Volo.Abp.Identity
 {
     public interface IIdentityUserAppService : IAsyncCrudAppService<IdentityUserDto, Guid, PagedAndSortedResultRequestDto, IdentityUserCreateDto, IdentityUserUpdateDto>
     {
-
+        Task<ListResultDto<IdentityRoleDto>> GetRolesAsync(Guid id);
     }
 }

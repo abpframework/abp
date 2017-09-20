@@ -9,6 +9,10 @@ namespace Volo.Abp.Identity
         private readonly IIdentityUserRepository _userRepository;
         private readonly IIdentityRoleRepository _roleRepository;
 
+        private IdentityRole _adminRole;
+        private IdentityRole _moderator;
+        private IdentityRole _supporterRole;
+
         public AbpIdentityTestDataBuilder(
             IGuidGenerator guidGenerator,
             IIdentityUserRepository userRepository,
@@ -27,14 +31,20 @@ namespace Volo.Abp.Identity
 
         private void AddRoles()
         {
-            _roleRepository.Insert(new IdentityRole(_guidGenerator.Create(), "admin"));
-            _roleRepository.Insert(new IdentityRole(_guidGenerator.Create(), "moderator"));
-            _roleRepository.Insert(new IdentityRole(_guidGenerator.Create(), "supporter"));
+            _adminRole = new IdentityRole(_guidGenerator.Create(), "admin");
+            _moderator = new IdentityRole(_guidGenerator.Create(), "moderator");
+            _supporterRole = new IdentityRole(_guidGenerator.Create(), "supporter");
+
+            _roleRepository.Insert(_adminRole);
+            _roleRepository.Insert(_moderator);
+            _roleRepository.Insert(_supporterRole);
         }
 
         private void AddUsers()
         {
-            _userRepository.Insert(new IdentityUser(_guidGenerator.Create(), "john.nash"));
+            var john = new IdentityUser(_guidGenerator.Create(), "john.nash");
+            john.Roles.Add(new IdentityUserRole(_guidGenerator.Create(), john.Id, _moderator.Id));
+            _userRepository.Insert(john);
         }
     }
 }

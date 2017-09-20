@@ -67,6 +67,14 @@ namespace Volo.Abp.Identity
             await _userManager.DeleteAsync(user);
         }
 
+        public async Task<ListResultDto<IdentityRoleDto>> GetRolesAsync(Guid id)
+        {
+            var roles = await _userRepository.GetRolesAsync(id);
+            return new ListResultDto<IdentityRoleDto>(
+                ObjectMapper.Map<List<IdentityRole>, List<IdentityRoleDto>>(roles)
+            );
+        }
+
         private async Task UpdateUserByInput(IdentityUser user, IdentityUserCreateOrUpdateDtoBase input)
         {
             await _userManager.SetEmailAsync(user, input.Email);

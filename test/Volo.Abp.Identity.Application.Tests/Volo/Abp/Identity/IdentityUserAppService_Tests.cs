@@ -140,6 +140,23 @@ namespace Volo.Abp.Identity
             (await FindUserAsync("john.nash")).ShouldBeNull();
         }
 
+        [Fact]
+        public async Task GetRolesAsync()
+        {
+            //Arrange
+
+            var johnNash = await GetUserAsync("john.nash");
+
+            //Act
+
+            var result = await _identityUserAppService.GetRolesAsync(johnNash.Id);
+
+            //Assert
+
+            result.Items.Count.ShouldBe(1);
+            result.Items[0].Name.ShouldBe("moderator");
+        }
+
         private async Task<IdentityUser> GetUserAsync(string userName)
         {
             return (await _userRepository.GetListAsync()).First(u => u.UserName == userName);
