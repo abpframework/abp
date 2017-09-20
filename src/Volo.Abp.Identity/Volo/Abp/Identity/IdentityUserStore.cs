@@ -9,6 +9,7 @@ using JetBrains.Annotations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Guids;
 using Volo.Abp.Uow;
 
@@ -332,6 +333,8 @@ namespace Volo.Abp.Identity
                 throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, "Role {0} does not exist!", normalizedRoleName));
             }
 
+            await _userRepository.EnsureCollectionLoadedAsync(user, u => u.Roles, cancellationToken);
+
             user.AddRole(_guidGenerator, role.Id);
         }
 
@@ -359,6 +362,8 @@ namespace Volo.Abp.Identity
                 return;
             }
 
+            await _userRepository.EnsureCollectionLoadedAsync(user, u => u.Roles, cancellationToken);
+            
             user.RemoveRole(role.Id);
         }
 
@@ -402,15 +407,9 @@ namespace Volo.Abp.Identity
                 return false;
             }
 
-            return user.IsInRole(role.Id);
-        }
+            await _userRepository.EnsureCollectionLoadedAsync(user, u => u.Roles, cancellationToken);
 
-        /// <summary>
-        /// Dispose the store
-        /// </summary>
-        public void Dispose()
-        {
-            
+            return user.IsInRole(role.Id);
         }
 
         /// <summary>
@@ -1036,6 +1035,11 @@ namespace Volo.Abp.Identity
             Check.NotNull(user, nameof(user));
 
             return Task.FromResult(user.FindToken(loginProvider, name)?.Value);
+        }
+
+        public void Dispose()
+        {
+
         }
     }
 }

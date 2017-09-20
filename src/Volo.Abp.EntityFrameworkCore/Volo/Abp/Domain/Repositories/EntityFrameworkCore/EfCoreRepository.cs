@@ -20,7 +20,10 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
         }
     }
 
-    public class EfCoreRepository<TDbContext, TEntity, TPrimaryKey> : QueryableRepositoryBase<TEntity, TPrimaryKey>, IEfCoreRepository<TEntity, TPrimaryKey>
+    public class EfCoreRepository<TDbContext, TEntity, TPrimaryKey> : QueryableRepositoryBase<TEntity, TPrimaryKey>, 
+        IEfCoreRepository<TEntity, TPrimaryKey>,
+        ISupportsExplicitLoading<TEntity, TPrimaryKey>
+
         where TDbContext : AbpDbContext<TDbContext>
         where TEntity : class, IEntity<TPrimaryKey>
     {
@@ -116,6 +119,24 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
         public override Task<long> GetCountAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             return GetQueryable().LongCountAsync(cancellationToken);
+        }
+
+        public virtual Task EnsureCollectionLoadedAsync<TProperty>(
+            TEntity entity,
+            Expression<Func<TEntity, IEnumerable<TProperty>>> propertyExpression,
+            CancellationToken cancellationToken)
+            where TProperty : class
+        {
+            return DbContext.Entry(entity).Collection(propertyExpression).LoadAsync(cancellationToken);
+        }
+
+        public virtual Task EnsurePropertyLoadedAsync<TProperty>(
+            TEntity entity,
+            Expression<Func<TEntity, TProperty>> propertyExpression,
+            CancellationToken cancellationToken)
+            where TProperty : class
+        {
+            return DbContext.Entry(entity).Reference(propertyExpression).LoadAsync(cancellationToken);
         }
     }
 }

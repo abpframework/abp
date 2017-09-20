@@ -15,6 +15,6 @@ namespace Volo.Abp.Identity
         public bool LockoutEnabled { get; set; } //TODO: Optional?
 
         [CanBeNull]
-        public string[] Roles { get; set; }
+        public string[] RoleNames { get; set; }
     }
 }

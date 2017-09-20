@@ -131,6 +131,7 @@ namespace Volo.Abp.Identity
             UserName = userName;
             NormalizedUserName = userName.ToUpperInvariant();
             ConcurrencyStamp = Guid.NewGuid().ToString();
+            SecurityStamp = Guid.NewGuid().ToString();
 
             Roles = new Collection<IdentityUserRole>();
             Claims = new Collection<IdentityUserClaim>();

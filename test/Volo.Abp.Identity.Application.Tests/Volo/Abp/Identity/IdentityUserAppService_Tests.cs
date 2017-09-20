@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.Application.Dtos;
-using Volo.Abp.Domain.Repositories;
 using Xunit;
 
 namespace Volo.Abp.Identity
@@ -12,12 +11,12 @@ namespace Volo.Abp.Identity
     public class IdentityUserAppService_Tests : AbpIdentityApplicationTestBase
     {
         private readonly IIdentityUserAppService _identityUserAppService;
-        private readonly IRepository<IdentityUser> _userRepository;
+        private readonly IIdentityUserRepository _userRepository;
 
         public IdentityUserAppService_Tests()
         {
             _identityUserAppService = ServiceProvider.GetRequiredService<IIdentityUserAppService>();
-            _userRepository = ServiceProvider.GetRequiredService<IRepository<IdentityUser>>();
+            _userRepository = ServiceProvider.GetRequiredService<IIdentityUserRepository>();
         }
 
         [Fact]
@@ -65,7 +64,7 @@ namespace Volo.Abp.Identity
                 LockoutEnabled = true,
                 PhoneNumber = CreateRandomPhoneNumber(),
                 Password = "123qwe",
-                Roles = new[] {"moderator"}
+                RoleNames = new[] { "moderator" }
             };
 
             //Act
@@ -153,8 +152,34 @@ namespace Volo.Abp.Identity
 
             //Assert
 
-            result.Items.Count.ShouldBe(1);
-            result.Items[0].Name.ShouldBe("moderator");
+            result.Items.Count.ShouldBe(2);
+            result.Items.ShouldContain(r => r.Name == "moderator");
+            result.Items.ShouldContain(r => r.Name == "supporter");
+        }
+
+        [Fact]
+        public async Task UpdateRolesAsync()
+        {
+            //Arrange
+
+            var johnNash = await GetUserAsync("john.nash");
+
+            //Act
+
+            await _identityUserAppService.UpdateRolesAsync(
+                johnNash.Id,
+                new UpdateIdentityUserRolesDto
+                {
+                    RoleNames = new[] {"moderator", "admin"}
+                }
+            );
+
+            //Assert
+
+            var roleNames = await _userRepository.GetRoleNamesAsync(johnNash.Id);
+            roleNames.Count.ShouldBe(2);
+            roleNames.ShouldContain("admin");
+            roleNames.ShouldContain("moderator");
         }
 
         private async Task<IdentityUser> GetUserAsync(string userName)

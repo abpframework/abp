@@ -75,6 +75,12 @@ namespace Volo.Abp.Identity
             );
         }
 
+        public async Task UpdateRolesAsync(Guid id, UpdateIdentityUserRolesDto input)
+        {
+            var user = await _userManager.GetByIdAsync(id);
+            await _userManager.SetRolesAsync(user, input.RoleNames);
+        }
+
         private async Task UpdateUserByInput(IdentityUser user, IdentityUserCreateOrUpdateDtoBase input)
         {
             await _userManager.SetEmailAsync(user, input.Email);
@@ -82,9 +88,9 @@ namespace Volo.Abp.Identity
             await _userManager.SetTwoFactorEnabledAsync(user, input.TwoFactorEnabled);
             await _userManager.SetLockoutEnabledAsync(user, input.LockoutEnabled);
 
-            if (input.Roles != null)
+            if (input.RoleNames != null)
             {
-                await _userManager.SetRolesAsync(user, input.Roles);
+                await _userManager.SetRolesAsync(user, input.RoleNames);
             }
         }
     }

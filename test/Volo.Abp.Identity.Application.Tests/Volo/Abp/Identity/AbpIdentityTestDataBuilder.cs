@@ -44,6 +44,7 @@ namespace Volo.Abp.Identity
         {
             var john = new IdentityUser(_guidGenerator.Create(), "john.nash");
             john.Roles.Add(new IdentityUserRole(_guidGenerator.Create(), john.Id, _moderator.Id));
+            john.Roles.Add(new IdentityUserRole(_guidGenerator.Create(), john.Id, _supporterRole.Id));
             _userRepository.Insert(john);
         }
     }
