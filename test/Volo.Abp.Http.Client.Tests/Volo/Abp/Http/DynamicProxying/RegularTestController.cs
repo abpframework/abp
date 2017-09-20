@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.Application.Services;
 using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.Ui;
 
 namespace Volo.Abp.Http.DynamicProxying
 {
@@ -22,6 +23,13 @@ namespace Volo.Abp.Http.DynamicProxying
         public Task<int> IncrementValueAsync(int value)
         {
             return Task.FromResult(value + 1);
+        }
+
+        [HttpGet]
+        [Route("get-exception1")]
+        public Task GetException1Async()
+        {
+            throw new UserFriendlyException("This is an error message!");
         }
     }
 }

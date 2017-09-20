@@ -1,8 +1,10 @@
-﻿using System.Net;
+﻿using System.Collections.Generic;
+using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Primitives;
 using Volo.Abp.Authorization;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities;
@@ -47,6 +49,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
             }
 
             context.HttpContext.Response.StatusCode = GetStatusCode(context);
+            context.HttpContext.Response.Headers.Add(new KeyValuePair<string, StringValues>("_AbpErrorFormat", "true"));
 
             context.Result = new ObjectResult(
                 new RemoteServiceErrorResponse(

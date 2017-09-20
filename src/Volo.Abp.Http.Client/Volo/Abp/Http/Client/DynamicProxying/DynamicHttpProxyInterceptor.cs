@@ -94,12 +94,12 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                 };
 
                 AddHeaders(invocation, action, requestMessage);
-                
+
                 var response = await client.SendAsync(requestMessage);
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    throw new AbpException($"Remote service returns error! HttpStatusCode: {response.StatusCode}, ReasonPhrase: {response.ReasonPhrase}");
+                    await ThrowExceptionForResponseAsync(response);
                 }
 
                 return await response.Content.ReadAsStringAsync();
@@ -123,9 +123,24 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             var clientConfig = _clientOptions.HttpClientProxies.GetOrDefault(typeof(TService))
                    ?? throw new AbpException($"Could not get DynamicHttpClientProxyConfig for {typeof(TService).FullName}.");
 
-            return _remoteServiceOptions.RemoteServices.GetOrDefault(clientConfig.RemoteServiceName) 
-                ?? _remoteServiceOptions.RemoteServices.Default 
+            return _remoteServiceOptions.RemoteServices.GetOrDefault(clientConfig.RemoteServiceName)
+                ?? _remoteServiceOptions.RemoteServices.Default
                 ?? throw new AbpException($"Could not get DynamicHttpClientProxyConfig for {typeof(TService).FullName}.");
+        }
+
+
+        private async Task ThrowExceptionForResponseAsync(HttpResponseMessage response)
+        {
+            if (response.Headers.Contains("_AbpErrorFormat"))
+            {
+                var errorResponse = _jsonSerializer.Deserialize<RemoteServiceErrorResponse>(
+                    await response.Content.ReadAsStringAsync()
+                );
+
+                throw new AbpRemoteCallException(errorResponse.Error);
+            }
+
+            throw new AbpException($"Remote service returns error! HttpStatusCode: {response.StatusCode}, ReasonPhrase: {response.ReasonPhrase}");
         }
     }
 }

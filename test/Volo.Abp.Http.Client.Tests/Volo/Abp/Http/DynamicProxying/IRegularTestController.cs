@@ -7,5 +7,7 @@ namespace Volo.Abp.Http.DynamicProxying
         int IncrementValue(int value);
 
         Task<int> IncrementValueAsync(int value);
+
+        Task GetException1Async();
     }
 }
