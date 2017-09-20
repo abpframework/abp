@@ -13,21 +13,18 @@
         userOptions = userOptions || {};
 
         var options = $.extend(true, {}, abp.ajax.defaultOpts, userOptions);
+
         options.success = undefined;
         options.error = undefined;
 
         return $.Deferred(function ($dfd) {
             $.ajax(options)
                 .done(function (data, textStatus, jqXHR) {
-                    if (data.__abp) {
-                        abp.ajax.handleResponse(data, userOptions, $dfd, jqXHR);
-                    } else {
-                        $dfd.resolve(data);
-                        userOptions.success && userOptions.success(data);
-                    }
+                    $dfd.resolve(data);
+                    userOptions.success && userOptions.success(data);
                 }).fail(function (jqXHR) {
-                    if (jqXHR.responseJSON && jqXHR.responseJSON.__abp) {
-                        abp.ajax.handleResponse(jqXHR.responseJSON, userOptions, $dfd, jqXHR);
+                    if (jqXHR.getResponseHeader('_AbpErrorFormat') === 'true') {
+                        abp.ajax.handleAbpErrorResponse(jqXHR.responseJSON, userOptions, $dfd, jqXHR);
                     } else {
                         abp.ajax.handleNonAbpErrorResponse(jqXHR, userOptions, $dfd);
                     }
@@ -110,6 +107,27 @@
             userOptions.error && userOptions.error.apply(this, arguments);
         },
 
+        handleAbpErrorResponse: function (data, userOptions, $dfd, jqXHR) {
+            var messagePromise = null;
+
+            if (data.error) {
+                if (userOptions.abpHandleError !== false) {
+                    messagePromise = abp.ajax.showError(data.error);
+                }
+            } else {
+                data.error = abp.ajax.defaultError;
+            }
+
+            abp.ajax.logError(data.error);
+
+            $dfd && $dfd.reject(data.error, jqXHR);
+            userOptions.error && userOptions.error(data.error, jqXHR);
+
+            if (jqXHR.status === 401 && userOptions.abpHandleError !== false) {
+                abp.ajax.handleUnAuthorizedRequest(messagePromise);
+            }
+        },
+
         handleUnAuthorizedRequest: function (messagePromise, targetUrl) {
             if (messagePromise) {
                 messagePromise.done(function () {
@@ -117,44 +135,6 @@
                 });
             } else {
                 abp.ajax.handleTargetUrl(targetUrl);
-            }
-        },
-
-        handleResponse: function (data, userOptions, $dfd, jqXHR) {
-            if (data) {
-                if (data.success === true) {
-                    $dfd && $dfd.resolve(data.result, data, jqXHR);
-                    userOptions.success && userOptions.success(data.result, data, jqXHR);
-
-                    if (data.targetUrl) {
-                        abp.ajax.handleTargetUrl(data.targetUrl);
-                    }
-                } else if (data.success === false) {
-                    var messagePromise = null;
-
-                    if (data.error) {
-                        if (userOptions.abpHandleError !== false) {
-                            messagePromise = abp.ajax.showError(data.error);
-                        }
-                    } else {
-                        data.error = abp.ajax.defaultError;
-                    }
-
-                    abp.ajax.logError(data.error);
-
-                    $dfd && $dfd.reject(data.error, jqXHR);
-                    userOptions.error && userOptions.error(data.error, jqXHR);
-
-                    if (jqXHR.status === 401 && userOptions.abpHandleError !== false) {
-                        abp.ajax.handleUnAuthorizedRequest(messagePromise, data.targetUrl);
-                    }
-                } else { //not wrapped result
-                    $dfd && $dfd.resolve(data, null, jqXHR);
-                    userOptions.success && userOptions.success(data, null, jqXHR);
-                }
-            } else { //no data sent to back
-                $dfd && $dfd.resolve(jqXHR);
-                userOptions.success && userOptions.success(jqXHR);
             }
         },
 
@@ -193,44 +173,6 @@
     $(document).ajaxSend(function (event, request, settings) {
         return abp.ajax.ajaxSendHandler(event, request, settings);
     });
-
-    /* JQUERY PLUGIN ENHANCEMENTS ********************************************/
-
-    /* jQuery Form Plugin 
-     * http://www.malsup.com/jquery/form/
-     */
-
-    // abpAjaxForm -> uses ajaxForm ------------------------------------------
-
-    if ($.fn.ajaxForm) {
-        $.fn.abpAjaxForm = function (userOptions) {
-            userOptions = userOptions || {};
-
-            var options = $.extend({}, $.fn.abpAjaxForm.defaults, userOptions);
-
-            options.beforeSubmit = function () {
-                abp.ajax.blockUI(options);
-                userOptions.beforeSubmit && userOptions.beforeSubmit.apply(this, arguments);
-            };
-
-            options.success = function (data) {
-                abp.ajax.handleResponse(data, userOptions);
-            };
-
-            //TODO: Error?
-
-            options.complete = function () {
-                abp.ajax.unblockUI(options);
-                userOptions.complete && userOptions.complete.apply(this, arguments);
-            };
-
-            return this.ajaxForm(options);
-        };
-
-        $.fn.abpAjaxForm.defaults = {
-            method: 'POST'
-        };
-    }
 
     abp.event.on('abp.dynamicScriptsInitialized', function () {
         abp.ajax.defaultError.message = abp.localization.abpWeb('DefaultError');
