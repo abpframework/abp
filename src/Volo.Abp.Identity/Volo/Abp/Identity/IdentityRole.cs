@@ -52,6 +52,7 @@ namespace Volo.Abp.Identity
 
             Id = id;
             Name = name;
+            NormalizedName = name.ToUpperInvariant();
             ConcurrencyStamp = Guid.NewGuid().ToString();
 
             Claims = new Collection<IdentityRoleClaim>();

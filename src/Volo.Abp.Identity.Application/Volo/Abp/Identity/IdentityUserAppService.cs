@@ -28,19 +28,20 @@ namespace Volo.Abp.Identity
 
         public async Task<PagedResultDto<IdentityUserDto>> GetListAsync(PagedAndSortedResultRequestDto input)
         {
-            var userCount = (int) await _userRepository.GetCountAsync();
-            var userDtos = ObjectMapper.Map<List<IdentityUser>, List<IdentityUserDto>>(
-                await _userRepository.GetListAsync(input.Sorting, input.MaxResultCount, input.SkipCount)
-            );
+            var userCount = (int)await _userRepository.GetCountAsync();
+            var users = await _userRepository.GetListAsync(input.Sorting, input.MaxResultCount, input.SkipCount);
 
-            return new PagedResultDto<IdentityUserDto>(userCount, userDtos);
+            return new PagedResultDto<IdentityUserDto>(
+                userCount,
+                ObjectMapper.Map<List<IdentityUser>, List<IdentityUserDto>>(users)
+            );
         }
 
         public async Task<IdentityUserDto> CreateAsync(IdentityUserCreateDto input)
         {
             var user = new IdentityUser(GuidGenerator.Create(), input.UserName);
 
-            await UpdateUserProperties(input, user);
+            await UpdateUserByInput(user, input);
             await _userManager.AddPasswordAsync(user, input.Password);
             await _userManager.CreateAsync(user);
             await CurrentUnitOfWork.SaveChangesAsync();
@@ -53,7 +54,7 @@ namespace Volo.Abp.Identity
             var user = await _userManager.GetByIdAsync(id);
 
             await _userManager.SetUserNameAsync(user, input.UserName);
-            await UpdateUserProperties(input, user);
+            await UpdateUserByInput(user, input);
             await _userManager.UpdateAsync(user);
             await CurrentUnitOfWork.SaveChangesAsync();
 
@@ -66,12 +67,17 @@ namespace Volo.Abp.Identity
             await _userManager.DeleteAsync(user);
         }
 
-        private async Task UpdateUserProperties(IdentityUserCreateOrUpdateDtoBase input, IdentityUser user)
+        private async Task UpdateUserByInput(IdentityUser user, IdentityUserCreateOrUpdateDtoBase input)
         {
             await _userManager.SetEmailAsync(user, input.Email);
             await _userManager.SetPhoneNumberAsync(user, input.PhoneNumber);
             await _userManager.SetTwoFactorEnabledAsync(user, input.TwoFactorEnabled);
             await _userManager.SetLockoutEnabledAsync(user, input.LockoutEnabled);
+
+            if (input.Roles != null)
+            {
+                await _userManager.SetRolesAsync(user, input.Roles);
+            }
         }
     }
 }

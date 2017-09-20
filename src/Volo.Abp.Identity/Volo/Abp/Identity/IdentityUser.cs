@@ -101,8 +101,7 @@ namespace Volo.Abp.Identity
         /// <summary>
         /// Navigation property for the roles this user belongs to.
         /// </summary>
-        public virtual IReadOnlyList<IdentityUserRole> Roles => RolesCollection;
-        protected virtual List<IdentityUserRole> RolesCollection { get; set; }
+        public virtual ICollection<IdentityUserRole> Roles { get; protected set; }
 
         /// <summary>
         /// Navigation property for the claims this user possesses.
@@ -130,9 +129,10 @@ namespace Volo.Abp.Identity
 
             Id = id;
             UserName = userName;
+            NormalizedUserName = userName.ToUpperInvariant();
             ConcurrencyStamp = Guid.NewGuid().ToString();
 
-            RolesCollection = new List<IdentityUserRole>();
+            Roles = new Collection<IdentityUserRole>();
             Claims = new Collection<IdentityUserClaim>();
             Logins = new Collection<IdentityUserLogin>();
             Tokens = new Collection<IdentityUserToken>();
@@ -147,7 +147,7 @@ namespace Volo.Abp.Identity
                 return;
             }
 
-            RolesCollection.Add(new IdentityUserRole(guidGenerator.Create(), Id, roleId));
+            Roles.Add(new IdentityUserRole(guidGenerator.Create(), Id, roleId));
         }
 
         public void RemoveRole(Guid roleId)
@@ -159,7 +159,7 @@ namespace Volo.Abp.Identity
                 return;
             }
 
-            RolesCollection.RemoveAll(r => r.RoleId == roleId);
+            Roles.RemoveAll(r => r.RoleId == roleId);
         }
 
         public bool IsInRole(Guid roleId)

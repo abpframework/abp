@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -21,14 +23,14 @@ namespace Volo.Abp.Identity
             IServiceProvider services,
             ILogger<IdentityUserManager> logger)
             : base(
-                  store, 
-                  optionsAccessor, 
-                  passwordHasher, 
-                  userValidators, 
-                  passwordValidators, 
-                  keyNormalizer, 
-                  errors, 
-                  services, 
+                  store,
+                  optionsAccessor,
+                  passwordHasher,
+                  userValidators,
+                  passwordValidators,
+                  keyNormalizer,
+                  errors,
+                  services,
                   logger)
         {
 
@@ -43,6 +45,17 @@ namespace Volo.Abp.Identity
             }
 
             return user;
+        }
+
+        public async Task SetRolesAsync([NotNull] IdentityUser user, [NotNull] string[] roleNames)
+        {
+            Check.NotNull(user, nameof(user));
+            Check.NotNull(roleNames, nameof(roleNames));
+
+            var currentRoleNames = await GetRolesAsync(user);
+
+            await RemoveFromRolesAsync(user, currentRoleNames.Except(roleNames));
+            await AddToRolesAsync(user, roleNames.Except(currentRoleNames));
         }
     }
 }

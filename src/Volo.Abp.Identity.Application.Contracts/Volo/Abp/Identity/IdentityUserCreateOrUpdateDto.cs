@@ -1,4 +1,6 @@
-﻿namespace Volo.Abp.Identity
+﻿using JetBrains.Annotations;
+
+namespace Volo.Abp.Identity
 {
     public abstract class IdentityUserCreateOrUpdateDtoBase
     {
@@ -11,5 +13,8 @@
         public bool TwoFactorEnabled { get; set; } //TODO: Optional?
 
         public bool LockoutEnabled { get; set; } //TODO: Optional?
+
+        [CanBeNull]
+        public string[] Roles { get; set; }
     }
 }

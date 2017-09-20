@@ -14,7 +14,7 @@ namespace Volo.Abp.Identity
 {
     public class EfCoreIdentityUserRepository : EfCoreRepository<IdentityDbContext, IdentityUser>, IIdentityUserRepository
     {
-        public EfCoreIdentityUserRepository(IDbContextProvider<IdentityDbContext> dbContextProvider) 
+        public EfCoreIdentityUserRepository(IDbContextProvider<IdentityDbContext> dbContextProvider)
             : base(dbContextProvider)
         {
         }
@@ -71,16 +71,16 @@ namespace Volo.Abp.Identity
             }
 
             var query = from userrole in DbContext.UserRoles
-                join user in DbContext.Users on userrole.UserId equals user.Id
-                where userrole.RoleId.Equals(role.Id)
-                select user;
+                        join user in DbContext.Users on userrole.UserId equals user.Id
+                        where userrole.RoleId.Equals(role.Id)
+                        select user;
 
             return await query.ToListAsync(cancellationToken);
         }
 
         public async Task<List<IdentityUser>> GetListAsync(string sorting, int maxResultCount, int skipCount)
         {
-            return await this.OrderBy(sorting ?? "UserName").PageBy(skipCount, maxResultCount).ToListAsync();
+            return await this.OrderBy(sorting ?? nameof(IdentityUser.UserName)).PageBy(skipCount, maxResultCount).ToListAsync();
         }
     }
 }

@@ -21,9 +21,34 @@ namespace Volo.Abp.Identity
         }
 
         [Fact]
+        public async Task GetAsync()
+        {
+            //Arrange
+
+            var johnNash = await GetUserAsync("john.nash");
+
+            //Act
+
+            var result = await _identityUserAppService.GetAsync(johnNash.Id);
+
+            //Assert
+
+            result.Id.ShouldBe(johnNash.Id);
+            result.UserName.ShouldBe(johnNash.UserName);
+            result.Email.ShouldBe(johnNash.Email);
+            result.LockoutEnabled.ShouldBe(johnNash.LockoutEnabled);
+            result.PhoneNumber.ShouldBe(johnNash.PhoneNumber);
+        }
+
+        [Fact]
         public async Task GetListAsync()
         {
+            //Act
+
             var result = await _identityUserAppService.GetListAsync(new PagedAndSortedResultRequestDto());
+
+            //Assert
+
             result.TotalCount.ShouldBeGreaterThan(0);
             result.Items.Count.ShouldBeGreaterThan(0);
         }
@@ -39,7 +64,8 @@ namespace Volo.Abp.Identity
                 Email = CreateRandomEmail(),
                 LockoutEnabled = true,
                 PhoneNumber = CreateRandomPhoneNumber(),
-                Password = "123qwe"
+                Password = "123qwe",
+                Roles = new[] {"moderator"}
             };
 
             //Act
@@ -78,7 +104,6 @@ namespace Volo.Abp.Identity
                 Email = CreateRandomEmail()
             };
 
-
             //Act
 
             var result = await _identityUserAppService.UpdateAsync(johnNash.Id, input);
@@ -99,9 +124,30 @@ namespace Volo.Abp.Identity
             user.PhoneNumber.ShouldBe(input.PhoneNumber);
         }
 
+        [Fact]
+        public async Task DeleteAsync()
+        {
+            //Arrange
+
+            var johnNash = await GetUserAsync("john.nash");
+
+            //Act
+
+            await _identityUserAppService.DeleteAsync(johnNash.Id);
+
+            //Assert
+
+            (await FindUserAsync("john.nash")).ShouldBeNull();
+        }
+
         private async Task<IdentityUser> GetUserAsync(string userName)
         {
             return (await _userRepository.GetListAsync()).First(u => u.UserName == userName);
+        }
+
+        private async Task<IdentityUser> FindUserAsync(string userName)
+        {
+            return (await _userRepository.GetListAsync()).FirstOrDefault(u => u.UserName == userName);
         }
 
         private static string CreateRandomEmail()
