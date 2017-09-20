@@ -20,10 +20,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
+    <ProjectReference Include="..\..\Volo.Abp.Identity\Volo.Abp.Identity.Domain.csproj" />
     <ProjectReference Include="..\AbpDesk.Application\AbpDesk.Application.csproj" />
     <ProjectReference Include="..\AbpDesk.Application.Contracts\AbpDesk.Application.Contracts.csproj" />
     <ProjectReference Include="..\AbpDesk.EntityFrameworkCore\AbpDesk.EntityFrameworkCore.csproj" />
-    <ProjectReference Include="..\..\Volo.Abp.Identity\Volo.Abp.Identity.csproj" />
     <ProjectReference Include="..\..\Volo.Abp.Identity.EntityFrameworkCore\Volo.Abp.Identity.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\AbpDesk.MongoBlog\AbpDesk.MongoBlog.csproj" />
   </ItemGroup>

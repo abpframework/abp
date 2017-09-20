@@ -76,7 +76,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.TestBase", "src\Vo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AbpDesk.Web.Mvc", "src\AbpDesk\AbpDesk.Web.Mvc\AbpDesk.Web.Mvc.csproj", "{12E14D95-4ABA-4290-AB1D-CCF5EB158411}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Identity", "src\Volo.Abp.Identity\Volo.Abp.Identity.csproj", "{17DBB40A-243E-41F7-A672-FA316ECB1E33}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Identity.Domain", "src\Volo.Abp.Identity\Volo.Abp.Identity.Domain.csproj", "{17DBB40A-243E-41F7-A672-FA316ECB1E33}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Identity.EntityFrameworkCore", "src\Volo.Abp.Identity.EntityFrameworkCore\Volo.Abp.Identity.EntityFrameworkCore.csproj", "{439DFC0F-1BA2-464F-900E-EA7E18C08975}"
 EndProject
