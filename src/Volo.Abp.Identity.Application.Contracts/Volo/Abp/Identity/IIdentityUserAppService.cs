@@ -4,7 +4,7 @@ using Volo.Abp.Application.Services;
 
 namespace Volo.Abp.Identity
 {
-    public interface IIdentityUserAppService : IAsyncCrudAppService<IdentityUserDto, Guid, PagedAndSortedResultRequestDto, IdentityUserCreateOrUpdateDto>
+    public interface IIdentityUserAppService : IAsyncCrudAppService<IdentityUserDto, Guid, PagedAndSortedResultRequestDto, IdentityUserCreateDto, IdentityUserUpdateDto>
     {
         
     }

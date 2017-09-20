@@ -36,7 +36,7 @@ namespace Volo.Abp.Identity
             return new PagedResultDto<IdentityUserDto>(userCount, userDtos);
         }
 
-        public async Task<IdentityUserDto> CreateAsync(IdentityUserCreateOrUpdateDto input)
+        public async Task<IdentityUserDto> CreateAsync(IdentityUserCreateDto input)
         {
             var user = new IdentityUser(GuidGenerator.Create(), input.UserName);
 
@@ -48,7 +48,7 @@ namespace Volo.Abp.Identity
             return ObjectMapper.Map<IdentityUser, IdentityUserDto>(user);
         }
 
-        public async Task<IdentityUserDto> UpdateAsync(Guid id, IdentityUserCreateOrUpdateDto input)
+        public async Task<IdentityUserDto> UpdateAsync(Guid id, IdentityUserUpdateDto input)
         {
             var user = await _userManager.GetByIdAsync(id);
 
@@ -66,7 +66,7 @@ namespace Volo.Abp.Identity
             await _userManager.DeleteAsync(user);
         }
 
-        private async Task UpdateUserProperties(IdentityUserCreateOrUpdateDto input, IdentityUser user)
+        private async Task UpdateUserProperties(IdentityUserCreateOrUpdateDtoBase input, IdentityUser user)
         {
             await _userManager.SetEmailAsync(user, input.Email);
             await _userManager.SetPhoneNumberAsync(user, input.PhoneNumber);
