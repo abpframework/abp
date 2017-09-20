@@ -10,12 +10,12 @@ namespace Volo.Abp.Identity
 {
     public class IdentityUserAppService_Tests : AbpIdentityApplicationTestBase
     {
-        private readonly IIdentityUserAppService _identityUserAppService;
+        private readonly IIdentityUserAppService _userAppService;
         private readonly IIdentityUserRepository _userRepository;
 
         public IdentityUserAppService_Tests()
         {
-            _identityUserAppService = ServiceProvider.GetRequiredService<IIdentityUserAppService>();
+            _userAppService = ServiceProvider.GetRequiredService<IIdentityUserAppService>();
             _userRepository = ServiceProvider.GetRequiredService<IIdentityUserRepository>();
         }
 
@@ -28,7 +28,7 @@ namespace Volo.Abp.Identity
 
             //Act
 
-            var result = await _identityUserAppService.GetAsync(johnNash.Id);
+            var result = await _userAppService.GetAsync(johnNash.Id);
 
             //Assert
 
@@ -44,7 +44,7 @@ namespace Volo.Abp.Identity
         {
             //Act
 
-            var result = await _identityUserAppService.GetListAsync(new PagedAndSortedResultRequestDto());
+            var result = await _userAppService.GetListAsync(new PagedAndSortedResultRequestDto());
 
             //Assert
 
@@ -69,7 +69,7 @@ namespace Volo.Abp.Identity
 
             //Act
 
-            var result = await _identityUserAppService.CreateAsync(input);
+            var result = await _userAppService.CreateAsync(input);
 
             //Assert
 
@@ -105,7 +105,7 @@ namespace Volo.Abp.Identity
 
             //Act
 
-            var result = await _identityUserAppService.UpdateAsync(johnNash.Id, input);
+            var result = await _userAppService.UpdateAsync(johnNash.Id, input);
 
             //Assert
 
@@ -132,7 +132,7 @@ namespace Volo.Abp.Identity
 
             //Act
 
-            await _identityUserAppService.DeleteAsync(johnNash.Id);
+            await _userAppService.DeleteAsync(johnNash.Id);
 
             //Assert
 
@@ -148,7 +148,7 @@ namespace Volo.Abp.Identity
 
             //Act
 
-            var result = await _identityUserAppService.GetRolesAsync(johnNash.Id);
+            var result = await _userAppService.GetRolesAsync(johnNash.Id);
 
             //Assert
 
@@ -166,9 +166,9 @@ namespace Volo.Abp.Identity
 
             //Act
 
-            await _identityUserAppService.UpdateRolesAsync(
+            await _userAppService.UpdateRolesAsync(
                 johnNash.Id,
-                new UpdateIdentityUserRolesDto
+                new IdentityUserUpdateRolesDto
                 {
                     RoleNames = new[] {"moderator", "admin"}
                 }

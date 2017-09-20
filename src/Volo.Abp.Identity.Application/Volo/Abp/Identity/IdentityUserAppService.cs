@@ -28,12 +28,12 @@ namespace Volo.Abp.Identity
 
         public async Task<PagedResultDto<IdentityUserDto>> GetListAsync(PagedAndSortedResultRequestDto input)
         {
-            var userCount = (int)await _userRepository.GetCountAsync();
-            var users = await _userRepository.GetListAsync(input.Sorting, input.MaxResultCount, input.SkipCount);
+            var count = (int)await _userRepository.GetCountAsync();
+            var list = await _userRepository.GetListAsync(input.Sorting, input.MaxResultCount, input.SkipCount);
 
             return new PagedResultDto<IdentityUserDto>(
-                userCount,
-                ObjectMapper.Map<List<IdentityUser>, List<IdentityUserDto>>(users)
+                count,
+                ObjectMapper.Map<List<IdentityUser>, List<IdentityUserDto>>(list)
             );
         }
 
@@ -75,7 +75,7 @@ namespace Volo.Abp.Identity
             );
         }
 
-        public async Task UpdateRolesAsync(Guid id, UpdateIdentityUserRolesDto input)
+        public async Task UpdateRolesAsync(Guid id, IdentityUserUpdateRolesDto input)
         {
             var user = await _userManager.GetByIdAsync(id);
             await _userManager.SetRolesAsync(user, input.RoleNames);

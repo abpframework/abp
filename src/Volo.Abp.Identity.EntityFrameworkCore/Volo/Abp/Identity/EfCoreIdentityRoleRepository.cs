@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +20,11 @@ namespace Volo.Abp.Identity
         public Task<IdentityRole> FindByNormalizedNameAsync(string normalizedRoleName, CancellationToken cancellationToken)
         {
             return DbSet.FirstOrDefaultAsync(r => r.NormalizedName == normalizedRoleName, cancellationToken);
+        }
+
+        public async Task<List<IdentityRole>> GetListAsync(string sorting, int maxResultCount, int skipCount)
+        {
+            return await this.OrderBy(sorting ?? nameof(IdentityRole.Name)).PageBy(skipCount, maxResultCount).ToListAsync();
         }
     }
 }
