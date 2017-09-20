@@ -13,7 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.EntityFrameworkCore\Volo.Abp.EntityFrameworkCore.csproj" />
-    <ProjectReference Include="..\Volo.Abp.Identity\Volo.Abp.Identity.Domain.csproj" />
+    <ProjectReference Include="..\Volo.Abp.Identity.Domain\Volo.Abp.Identity.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>

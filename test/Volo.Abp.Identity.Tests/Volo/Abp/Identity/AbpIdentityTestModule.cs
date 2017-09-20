@@ -8,7 +8,7 @@ using Volo.Abp.Modularity;
 
 namespace Volo.Abp.Identity
 {
-    [DependsOn(typeof(AbpIdentityModule), typeof(AbpIdentityEntityFrameworkCoreModule))]
+    [DependsOn(typeof(AbpIdentityDomainModule), typeof(AbpIdentityEntityFrameworkCoreModule))]
     public class AbpIdentityTestModule : AbpModule
     {
         public override void ConfigureServices(IServiceCollection services)
