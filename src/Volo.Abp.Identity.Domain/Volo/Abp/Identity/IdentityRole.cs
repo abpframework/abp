@@ -13,9 +13,6 @@ namespace Volo.Abp.Identity
     /// </summary>
     public class IdentityRole : AggregateRoot, IHasConcurrencyStamp
     {
-        public const int MaxNameLength = 256;
-        public const int MaxNormalizedNameLength = MaxNameLength;
-
         /// <summary>
         /// Gets or sets the name for this role.
         /// </summary>

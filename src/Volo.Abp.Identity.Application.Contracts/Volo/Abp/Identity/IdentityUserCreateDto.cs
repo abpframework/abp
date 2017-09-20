@@ -2,10 +2,10 @@
 
 namespace Volo.Abp.Identity
 {
-    public class IdentityUserCreateDto: IdentityUserCreateOrUpdateDtoBase
+    public class IdentityUserCreateDto : IdentityUserCreateOrUpdateDtoBase
     {
         [Required]
-        [MaxLength(16)] //TODO: Create a shared dll of Identity and move consts to there for sharing!
+        [MaxLength(IdentityUserConsts.MaxPasswordLength)]
         public string Password { get; set; }
     }
 }

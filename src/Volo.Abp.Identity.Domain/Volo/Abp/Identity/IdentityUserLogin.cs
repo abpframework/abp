@@ -10,10 +10,6 @@ namespace Volo.Abp.Identity
     /// </summary>
     public class IdentityUserLogin : Entity
     {
-        public const int MaxLoginProviderLength = 64;
-        public const int MaxProviderKeyLength = 256;
-        public const int MaxProviderDisplayNameLength = 128;
-
         /// <summary>
         /// Gets or sets the of the primary key of the user associated with this login.
         /// </summary>

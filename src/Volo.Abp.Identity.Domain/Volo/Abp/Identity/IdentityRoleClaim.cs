@@ -10,9 +10,6 @@ namespace Volo.Abp.Identity
     /// </summary>
     public class IdentityRoleClaim : Entity
     {
-        public const int MaxClaimTypeLength = IdentityUserClaim.MaxClaimTypeLength;
-        public const int MaxClaimValueLength = IdentityUserClaim.MaxClaimValueLength;
-
         /// <summary>
         /// Gets or sets the of the primary key of the role associated with this claim.
         /// </summary>

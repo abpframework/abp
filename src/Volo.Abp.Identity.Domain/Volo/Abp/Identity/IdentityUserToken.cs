@@ -9,8 +9,6 @@ namespace Volo.Abp.Identity
     /// </summary>
     public class IdentityUserToken : Entity
     {
-        public const int MaxLoginProviderLength = 64;
-
         /// <summary>
         /// Gets or sets the primary key of the user that the token belongs to.
         /// </summary>

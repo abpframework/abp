@@ -3,6 +3,7 @@ using Volo.Abp.Modularity;
 
 namespace Volo.Abp.Identity
 {
+    [DependsOn(typeof(AbpIdentityDomainSharedModule))]
     public class AbpIdentityDomainModule : AbpModule
     {
         public override void ConfigureServices(IServiceCollection services)

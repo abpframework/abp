@@ -14,11 +14,6 @@ namespace Volo.Abp.Identity
 
     public class IdentityUser : AggregateRoot, IHasConcurrencyStamp
     {
-        public const int MaxUserNameLength = 256;
-        public const int MaxNormalizedUserNameLength = MaxUserNameLength;
-        public const int MaxEmailLength = 256;
-        public const int MaxNormalizedEmailLength = MaxEmailLength;
-
         /// <summary>
         /// Gets or sets the user name for this user.
         /// </summary>
@@ -96,7 +91,7 @@ namespace Volo.Abp.Identity
         /// </summary>
         public virtual int AccessFailedCount { get; protected internal set; }
 
-        //TODO: Can we make collections readonly collection, which will provide encapsulation but can work for all ORMs?
+        //TODO: Can we make collections readonly collection, which will provide encapsulation. But... can work for all ORMs?
 
         /// <summary>
         /// Navigation property for the roles this user belongs to.
