@@ -1,6 +1,6 @@
 ﻿namespace Volo.Abp.Http
 {
-    public abstract class RemoteServiceErrorResponse
+    public class RemoteServiceErrorResponse
     {
         public RemoteServiceErrorInfo Error { get; set; }
 
@@ -8,5 +8,10 @@
         /// A special signature of ABP.
         /// </summary>
         public bool __abp { get; } = true;
+
+        public RemoteServiceErrorResponse(RemoteServiceErrorInfo error)
+        {
+            Error = error;
+        }
     }
 }
