@@ -27,56 +27,18 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
             return errorInfo;
         }
 
-        private RemoteServiceErrorInfo CreateErrorInfoWithoutCode(Exception exception)
+        protected virtual RemoteServiceErrorInfo CreateErrorInfoWithoutCode(Exception exception)
         {
             if (SendAllExceptionsToClients)
             {
                 return CreateDetailedErrorInfoFromException(exception);
             }
 
-            if (exception is AggregateException && exception.InnerException != null)
-            {
-                var aggException = exception as AggregateException;
-                if (aggException.InnerException is UserFriendlyException ||
-                    aggException.InnerException is AbpValidationException)
-                {
-                    exception = aggException.InnerException;
-                }
-            }
-
-            if (exception is UserFriendlyException)
-            {
-                var userFriendlyException = exception as UserFriendlyException;
-                return new RemoteServiceErrorInfo(userFriendlyException.Message, userFriendlyException.Details);
-            }
-
-            if (exception is AbpValidationException)
-            {
-                return new RemoteServiceErrorInfo(L("ValidationError"))
-                {
-                    ValidationErrors = GetValidationErrorInfos(exception as AbpValidationException),
-                    Details = GetValidationErrorNarrative(exception as AbpValidationException)
-                };
-            }
+            exception = TryToGetActualException(exception);
 
             if (exception is EntityNotFoundException)
             {
-                var entityNotFoundException = exception as EntityNotFoundException;
-
-                if (entityNotFoundException.EntityType != null)
-                {
-                    return new RemoteServiceErrorInfo(
-                        string.Format(
-                            L("EntityNotFound"),
-                            entityNotFoundException.EntityType.Name,
-                            entityNotFoundException.Id
-                        )
-                    );
-                }
-
-                return new RemoteServiceErrorInfo(
-                    entityNotFoundException.Message
-                );
+                return CreateEntityNotFoundError(exception as EntityNotFoundException);
             }
 
             if (exception is AbpAuthorizationException)
@@ -85,11 +47,74 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
                 return new RemoteServiceErrorInfo(authorizationException.Message);
             }
 
-            return new RemoteServiceErrorInfo(L("InternalServerError"));
+            var errorInfo = new RemoteServiceErrorInfo();
+            
+            if (exception is IUserFriendlyException)
+            {
+                var userFriendlyException = exception as IUserFriendlyException;
+                errorInfo.Message = userFriendlyException.Message;
+                errorInfo.Details = userFriendlyException.Details;
+            }
+
+            if (exception is IHasValidationErrors)
+            {
+                if (errorInfo.Message.IsNullOrEmpty())
+                {
+                    errorInfo.Message = L("ValidationError");
+                }
+
+                if (errorInfo.Details.IsNullOrEmpty())
+                {
+                    errorInfo.Details = GetValidationErrorNarrative(exception as IHasValidationErrors);
+                }
+
+                errorInfo.ValidationErrors = GetValidationErrorInfos(exception as IHasValidationErrors);
+            }
+
+            if (errorInfo.Message.IsNullOrEmpty())
+            {
+                errorInfo.Message = L("InternalServerError");
+            }
+
+            return errorInfo;
+        }
+
+        protected virtual RemoteServiceErrorInfo CreateEntityNotFoundError(EntityNotFoundException exception)
+        {
+            if (exception.EntityType != null)
+            {
+                return new RemoteServiceErrorInfo(
+                    string.Format(
+                        L("EntityNotFound"),
+                        exception.EntityType.Name,
+                        exception.Id
+                    )
+                );
+            }
+
+            return new RemoteServiceErrorInfo(exception.Message);
+        }
+
+        protected virtual Exception TryToGetActualException(Exception exception)
+        {
+            if (exception is AggregateException && exception.InnerException != null)
+            {
+                var aggException = exception as AggregateException;
+
+                if (aggException.InnerException is IUserFriendlyException ||
+                    aggException.InnerException is AbpValidationException ||
+                    aggException.InnerException is EntityNotFoundException ||
+                    aggException.InnerException is AbpAuthorizationException)
+                {
+                    return aggException.InnerException;
+                }
+            }
+
+            return exception;
         }
 
 
-        private RemoteServiceErrorInfo CreateDetailedErrorInfoFromException(Exception exception)
+        protected virtual RemoteServiceErrorInfo CreateDetailedErrorInfoFromException(Exception exception)
         {
             var detailBuilder = new StringBuilder();
 
@@ -105,15 +130,15 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
             return errorInfo;
         }
 
-        private void AddExceptionToDetails(Exception exception, StringBuilder detailBuilder)
+        protected virtual void AddExceptionToDetails(Exception exception, StringBuilder detailBuilder)
         {
             //Exception Message
             detailBuilder.AppendLine(exception.GetType().Name + ": " + exception.Message);
 
             //Additional info for UserFriendlyException
-            if (exception is UserFriendlyException)
+            if (exception is IUserFriendlyException)
             {
-                var userFriendlyException = exception as UserFriendlyException;
+                var userFriendlyException = exception as IUserFriendlyException;
                 if (!string.IsNullOrEmpty(userFriendlyException.Details))
                 {
                     detailBuilder.AppendLine(userFriendlyException.Details);
@@ -158,7 +183,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
             }
         }
 
-        private RemoteServiceValidationErrorInfo[] GetValidationErrorInfos(AbpValidationException validationException)
+        protected virtual RemoteServiceValidationErrorInfo[] GetValidationErrorInfos(IHasValidationErrors validationException)
         {
             var validationErrorInfos = new List<RemoteServiceValidationErrorInfo>();
 
@@ -177,7 +202,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
             return validationErrorInfos.ToArray();
         }
 
-        private string GetValidationErrorNarrative(AbpValidationException validationException)
+        protected virtual string GetValidationErrorNarrative(IHasValidationErrors validationException)
         {
             var detailBuilder = new StringBuilder();
             detailBuilder.AppendLine(L("ValidationNarrativeTitle"));
@@ -191,7 +216,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
             return detailBuilder.ToString();
         }
 
-        private string L(string name)
+        protected virtual string L(string name)
         {
             //TODO: Localization?
             //try

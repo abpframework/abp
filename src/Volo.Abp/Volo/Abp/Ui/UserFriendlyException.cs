@@ -9,12 +9,12 @@ namespace Volo.Abp.Ui
     /// This exception type is directly shown to the user.
     /// </summary>
     [Serializable]
-    public class UserFriendlyException : AbpException, IHasLogLevel, IHasErrorCode
+    public class UserFriendlyException : AbpException, IHasLogLevel, IHasErrorCode, IUserFriendlyException
     {
         /// <summary>
         /// Additional information about the exception.
         /// </summary>
-        public string Details { get; private set; }
+        public string Details { get; set; }
 
         /// <summary>
         /// An arbitrary error code.
@@ -41,7 +41,7 @@ namespace Volo.Abp.Ui
         public UserFriendlyException(SerializationInfo serializationInfo, StreamingContext context)
             : base(serializationInfo, context)
         {
-
+            
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace Volo.Abp.Ui
         /// Constructor.
         /// </summary>
         /// <param name="message">Exception message</param>
-        /// <param name="severity">Exception severity</param>
+        /// <param name="logLevel">Exception severity</param>
         public UserFriendlyException(string message, LogLevel logLevel)
             : base(message)
         {

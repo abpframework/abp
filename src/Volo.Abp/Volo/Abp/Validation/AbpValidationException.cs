@@ -11,7 +11,7 @@ namespace Volo.Abp.Validation
     /// This exception type is used to throws validation exceptions.
     /// </summary>
     [Serializable]
-    public class AbpValidationException : AbpException, IHasLogLevel
+    public class AbpValidationException : AbpException, IHasLogLevel, IHasValidationErrors
     {
         /// <summary>
         /// Detailed list of validation errors for this exception.
