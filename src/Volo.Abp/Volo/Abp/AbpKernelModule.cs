@@ -5,6 +5,7 @@ using Volo.Abp.Modularity;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Reflection;
 using Volo.Abp.Uow;
+using Volo.Abp.Validation;
 
 namespace Volo.Abp
 {
@@ -13,6 +14,7 @@ namespace Volo.Abp
         public override void PreConfigureServices(IServiceCollection services)
         {
             services.OnRegistred(UnitOfWorkInterceptorRegistrar.RegisterIfNeeded);
+            services.OnRegistred(ValidationInterceptorRegistrar.RegisterIfNeeded);
             
             //TODO: Move to a dedicated class
             services.OnExposing(context =>
