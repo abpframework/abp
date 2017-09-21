@@ -43,7 +43,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
 
         private void HandleAndWrapException(ExceptionContext context)
         {
-            if (!ActionResultHelper.IsObjectResult(context.ActionDescriptor.GetMethodInfo().ReturnType))
+            if (!context.ActionDescriptor.IsControllerAction() || !ActionResultHelper.IsObjectResult(context.ActionDescriptor.GetMethodInfo().ReturnType))
             {
                 return;
             }

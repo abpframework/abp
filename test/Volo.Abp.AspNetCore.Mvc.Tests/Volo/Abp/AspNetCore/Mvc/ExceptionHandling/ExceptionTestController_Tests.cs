@@ -5,7 +5,7 @@ using Volo.Abp.Http;
 using Volo.Abp.Ui;
 using Xunit;
 
-namespace Volo.Abp.AspNetCore.Mvc
+namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
 {
     public class ExceptionTestController_Tests : AspNetCoreMvcTestBase
     {
