@@ -7,6 +7,8 @@ namespace Volo.Abp.Uow
 {
     internal class ChildUnitOfWork : IUnitOfWork
     {
+        public Guid Id => _parent.Id;
+
         public event EventHandler Completed;
         public event EventHandler<UnitOfWorkFailedEventArgs> Failed;
         public event EventHandler Disposed;
@@ -59,6 +61,11 @@ namespace Volo.Abp.Uow
         public void Dispose()
         {
 
+        }
+
+        public override string ToString()
+        {
+            return $"[UnitOfWork {Id}]";
         }
     }
 }

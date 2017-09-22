@@ -10,6 +10,6 @@ namespace Volo.Abp.Uow
         IDatabaseApi FindDatabaseApi([NotNull] string id);
 
         [NotNull]
-        IDatabaseApi GetOrAddDatabaseApi(string id, Func<IDatabaseApi> factory);
+        IDatabaseApi GetOrAddDatabaseApi([NotNull] string id, [NotNull] Func<IDatabaseApi> factory);
     }
 }

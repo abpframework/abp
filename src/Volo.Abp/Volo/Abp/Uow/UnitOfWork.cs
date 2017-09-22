@@ -8,6 +8,8 @@ namespace Volo.Abp.Uow
 {
     public class UnitOfWork : IUnitOfWork, ITransientDependency
     {
+        public Guid Id { get; } = Guid.NewGuid();
+
         public event EventHandler Completed;
         public event EventHandler<UnitOfWorkFailedEventArgs> Failed;
         public event EventHandler Disposed;
@@ -25,23 +27,6 @@ namespace Volo.Abp.Uow
             ServiceProvider = serviceProvider;
 
             _databaseApis = new Dictionary<string, IDatabaseApi>();
-        }
-
-        public void Dispose()
-        {
-            if (_isDisposed)
-            {
-                return;
-            }
-
-            _isDisposed = true;
-
-            if (!_isCompleted || _exception != null)
-            {
-                OnFailed(_exception);
-            }
-
-            OnDisposed();
         }
 
         public void SaveChanges()
@@ -122,6 +107,23 @@ namespace Volo.Abp.Uow
             Disposed.InvokeSafely(this);
         }
 
+        public void Dispose()
+        {
+            if (_isDisposed)
+            {
+                return;
+            }
+
+            _isDisposed = true;
+
+            if (!_isCompleted || _exception != null)
+            {
+                OnFailed(_exception);
+            }
+
+            OnDisposed();
+        }
+
         private void PreventMultipleComplete()
         {
             if (_isCompleted)
@@ -130,6 +132,11 @@ namespace Volo.Abp.Uow
             }
 
             _isCompleted = true;
+        }
+
+        public override string ToString()
+        {
+            return $"[UnitOfWork {Id}]";
         }
     }
 }

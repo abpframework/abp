@@ -7,6 +7,8 @@ namespace Volo.Abp.Uow
     //TODO: Find a better naming :(
     public interface IBasicUnitOfWork : IDisposable
     {
+        Guid Id { get; }
+
         event EventHandler Completed;
 
         event EventHandler<UnitOfWorkFailedEventArgs> Failed;
