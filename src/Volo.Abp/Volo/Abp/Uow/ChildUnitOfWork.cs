@@ -70,14 +70,14 @@ namespace Volo.Abp.Uow
             return Task.CompletedTask;
         }
         
-        public IDatabaseApi FindDatabaseApi(string id)
+        public IDatabaseApi FindDatabaseApi(string key)
         {
-            return _parent.FindDatabaseApi(id);
+            return _parent.FindDatabaseApi(key);
         }
 
-        public IDatabaseApi GetOrAddDatabaseApi(string id, Func<IDatabaseApi> factory)
+        public IDatabaseApi GetOrAddDatabaseApi(string key, Func<IDatabaseApi> factory)
         {
-            return _parent.GetOrAddDatabaseApi(id, factory);
+            return _parent.GetOrAddDatabaseApi(key, factory);
         }
         
         public void Dispose()

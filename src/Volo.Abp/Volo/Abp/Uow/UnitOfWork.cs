@@ -90,17 +90,17 @@ namespace Volo.Abp.Uow
             }
         }
 
-        public IDatabaseApi FindDatabaseApi(string id)
+        public IDatabaseApi FindDatabaseApi(string key)
         {
-            return _databaseApis.GetOrDefault(id);
+            return _databaseApis.GetOrDefault(key);
         }
 
-        public IDatabaseApi GetOrAddDatabaseApi(string id, Func<IDatabaseApi> factory)
+        public IDatabaseApi GetOrAddDatabaseApi(string key, Func<IDatabaseApi> factory)
         {
-            Check.NotNull(id, nameof(id));
+            Check.NotNull(key, nameof(key));
             Check.NotNull(factory, nameof(factory));
 
-            return _databaseApis.GetOrAdd(id, factory);
+            return _databaseApis.GetOrAdd(key, factory);
         }
 
         protected virtual void OnCompleted()
