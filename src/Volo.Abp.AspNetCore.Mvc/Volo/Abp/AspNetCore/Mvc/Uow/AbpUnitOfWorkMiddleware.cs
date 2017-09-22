@@ -4,7 +4,7 @@ using Volo.Abp.Uow;
 
 namespace Volo.Abp.AspNetCore.Mvc.Uow
 {
-    class AbpUnitOfWorkMiddleware
+    public class AbpUnitOfWorkMiddleware
     {
         private readonly RequestDelegate _next;
 

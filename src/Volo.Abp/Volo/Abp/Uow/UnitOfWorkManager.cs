@@ -17,9 +17,11 @@ namespace Volo.Abp.Uow
             _ambientUnitOfWork = ambientUnitOfWork;
         }
 
-        public IBasicUnitOfWork Begin()
+        public IBasicUnitOfWork Begin(UnitOfWorkStartOptions options)
         {
-            if (_ambientUnitOfWork.UnitOfWork != null)
+            Check.NotNull(options, nameof(options));
+
+            if (!options.RequiresNew && _ambientUnitOfWork.UnitOfWork != null)
             {
                 return new ChildUnitOfWork(_ambientUnitOfWork.UnitOfWork);
             }

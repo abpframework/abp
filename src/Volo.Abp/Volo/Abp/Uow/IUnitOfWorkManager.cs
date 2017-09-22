@@ -8,6 +8,21 @@ namespace Volo.Abp.Uow
         IUnitOfWork Current { get; }
 
         [NotNull]
-        IBasicUnitOfWork Begin();
+        IBasicUnitOfWork Begin([NotNull] UnitOfWorkStartOptions options);
+    }
+
+    public static class UnitOfWorkManagerExtensions
+    {
+        [NotNull]
+        public static IBasicUnitOfWork Begin(this IUnitOfWorkManager unitOfWorkManager)
+        {
+            return unitOfWorkManager.Begin(new UnitOfWorkStartOptions());
+        }
+
+        [NotNull]
+        public static IBasicUnitOfWork BeginNew(this IUnitOfWorkManager unitOfWorkManager)
+        {
+            return unitOfWorkManager.Begin(new UnitOfWorkStartOptions {RequiresNew = true});
+        }
     }
 }

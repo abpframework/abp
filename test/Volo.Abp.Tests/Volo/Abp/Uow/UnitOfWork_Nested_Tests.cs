@@ -7,17 +7,17 @@ using Xunit;
 
 namespace Volo.Abp.Uow
 {
-    public class UnitOfWork_Ambient_Scope_Tests : AbpIntegratedTest<IndependentEmptyModule>
+    public class UnitOfWork_Nested_Tests : AbpIntegratedTest<IndependentEmptyModule>
     {
         private readonly IUnitOfWorkManager _unitOfWorkManager;
 
-        public UnitOfWork_Ambient_Scope_Tests()
+        public UnitOfWork_Nested_Tests()
         {
             _unitOfWorkManager = ServiceProvider.GetRequiredService<IUnitOfWorkManager>();
         }
 
         [Fact]
-        public async Task UnitOfWorkManager_Current_Should_Set_Correctly()
+        public async Task Should_Create_Nested_UnitOfWorks()
         {
             _unitOfWorkManager.Current.ShouldBeNull();
 
@@ -26,10 +26,10 @@ namespace Volo.Abp.Uow
                 _unitOfWorkManager.Current.ShouldNotBeNull();
                 _unitOfWorkManager.Current.ShouldBe(uow1);
 
-                using (var uow2 = _unitOfWorkManager.Begin())
+                using (var uow2 = _unitOfWorkManager.BeginNew())
                 {
                     _unitOfWorkManager.Current.ShouldNotBeNull();
-                    _unitOfWorkManager.Current.Id.ShouldBe(uow1.Id);
+                    _unitOfWorkManager.Current.Id.ShouldNotBe(uow1.Id);
 
                     await uow2.CompleteAsync();
                 }
