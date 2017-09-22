@@ -32,33 +32,7 @@ namespace Volo.Abp.Uow
                 options.RequiresNew = true;
             }
 
-            var outerUow = _ambientUnitOfWork.UnitOfWork;
-
-            var scope = _serviceProvider.CreateScope();
-            IUnitOfWork unitOfWork;
-            try
-            {
-                unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
-
-                unitOfWork.SetOuter(outerUow);
-                unitOfWork.IsReserved = options.ReservationName != null;
-                unitOfWork.ReservationName = options.ReservationName;
-            }
-            catch
-            {
-                scope.Dispose();
-                throw;
-            }
-
-            _ambientUnitOfWork.SetUnitOfWork(unitOfWork);
-
-            unitOfWork.Disposed += (sender, args) =>
-            {
-                _ambientUnitOfWork.SetUnitOfWork(outerUow);
-                scope.Dispose();
-            };
-
-            return unitOfWork;
+            return CreateUnitOfWork(options);
         }
 
         public IBasicUnitOfWork BeginReserved(string reservationName)
@@ -66,7 +40,7 @@ namespace Volo.Abp.Uow
             Check.NotNull(reservationName, nameof(reservationName));
 
             var uow = _ambientUnitOfWork.UnitOfWork;
-            
+
             //Find reserved unit of work starting from current and going to outers
             while (uow != null && !uow.IsReservedFor(reservationName))
             {
@@ -85,7 +59,7 @@ namespace Volo.Abp.Uow
         private IUnitOfWork GetCurrentUnitOfWork()
         {
             var uow = _ambientUnitOfWork.UnitOfWork;
-            
+
             //Skip reserved unit of work
             while (uow != null && uow.IsReserved)
             {
@@ -93,6 +67,37 @@ namespace Volo.Abp.Uow
             }
 
             return uow;
+        }
+
+        private IUnitOfWork CreateUnitOfWork(UnitOfWorkStartOptions options)
+        {
+            var scope = _serviceProvider.CreateScope();
+
+            try
+            {
+                var outerUow = _ambientUnitOfWork.UnitOfWork;
+
+                var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
+
+                unitOfWork.SetOuter(outerUow);
+                unitOfWork.IsReserved = options.ReservationName != null;
+                unitOfWork.ReservationName = options.ReservationName;
+
+                _ambientUnitOfWork.SetUnitOfWork(unitOfWork);
+
+                unitOfWork.Disposed += (sender, args) =>
+                {
+                    _ambientUnitOfWork.SetUnitOfWork(outerUow);
+                    scope.Dispose();
+                };
+
+                return unitOfWork;
+            }
+            catch
+            {
+                scope.Dispose();
+                throw;
+            }
         }
     }
 }
