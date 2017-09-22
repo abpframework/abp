@@ -42,5 +42,36 @@ namespace Volo.Abp.Uow
 
             _unitOfWorkManager.Current.ShouldBeNull();
         }
+
+        [Fact]
+        public async Task UnitOfWorkManager_Reservation_Test()
+        {
+            _unitOfWorkManager.Current.ShouldBeNull();
+
+            using (var uow1 = _unitOfWorkManager.Reserve("Reservation1"))
+            {
+                _unitOfWorkManager.Current.ShouldBeNull();
+
+                using (var uow2 = _unitOfWorkManager.Begin())
+                {
+                    _unitOfWorkManager.Current.ShouldNotBeNull();
+                    _unitOfWorkManager.Current.Id.ShouldNotBe(uow1.Id);
+
+                    await uow2.CompleteAsync();
+                }
+
+                _unitOfWorkManager.Current.ShouldBeNull();
+
+                var reserverUow = _unitOfWorkManager.BeginReserved("Reservation1");
+
+                _unitOfWorkManager.Current.ShouldNotBeNull();
+                _unitOfWorkManager.Current.Id.ShouldBe(reserverUow.Id);
+                _unitOfWorkManager.Current.Id.ShouldBe(uow1.Id);
+
+                await uow1.CompleteAsync();
+            }
+
+            _unitOfWorkManager.Current.ShouldBeNull();
+        }
     }
 }

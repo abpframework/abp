@@ -9,6 +9,28 @@ namespace Volo.Abp.Uow
     {
         public Guid Id => _parent.Id;
 
+        public IUnitOfWork Outer
+        {
+            get => _parent.Outer;
+        }
+
+        public bool IsReserved
+        {
+            get => _parent.IsReserved;
+            set => _parent.IsReserved = value;
+        }
+
+        public string ReservationName
+        {
+            get => _parent.ReservationName;
+            set => _parent.ReservationName = value;
+        }
+
+        public void SetOuter(IUnitOfWork outer)
+        {
+            _parent.SetOuter(outer);
+        }
+
         public event EventHandler Completed;
         public event EventHandler<UnitOfWorkFailedEventArgs> Failed;
         public event EventHandler Disposed;

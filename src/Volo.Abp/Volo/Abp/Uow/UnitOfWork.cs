@@ -10,6 +10,17 @@ namespace Volo.Abp.Uow
     {
         public Guid Id { get; } = Guid.NewGuid();
 
+        public IUnitOfWork Outer { get; private set; }
+
+        public bool IsReserved { get; set; }
+
+        public string ReservationName { get; set; }
+
+        public void SetOuter(IUnitOfWork outer)
+        {
+            Outer = outer;
+        }
+
         public event EventHandler Completed;
         public event EventHandler<UnitOfWorkFailedEventArgs> Failed;
         public event EventHandler Disposed;
