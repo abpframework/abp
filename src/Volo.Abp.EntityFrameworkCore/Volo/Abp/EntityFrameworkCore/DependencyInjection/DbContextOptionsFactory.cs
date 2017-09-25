@@ -47,10 +47,10 @@ namespace Volo.Abp.EntityFrameworkCore.DependencyInjection
             return scope.ServiceProvider.GetRequiredService<IOptions<AbpDbContextOptions>>().Value;
         }
 
-        private static DbContextOptionsFactoryContext GetCreationContext<TDbContext>(IServiceProvider serviceProvider)
+        private static DbContextCreationContext GetCreationContext<TDbContext>(IServiceProvider serviceProvider)
             where TDbContext : AbpDbContext<TDbContext>
         {
-            var context = DbContextOptionsFactoryContext.Current;
+            var context = DbContextCreationContext.Current;
             if (context != null)
             {
                 return context;
@@ -59,7 +59,7 @@ namespace Volo.Abp.EntityFrameworkCore.DependencyInjection
             var connectionStringName = ConnectionStringNameAttribute.GetConnStringName<TDbContext>();
             var connectionString = serviceProvider.GetRequiredService<IConnectionStringResolver>().Resolve(connectionStringName);
 
-            return new DbContextOptionsFactoryContext(
+            return new DbContextCreationContext(
                 connectionStringName,
                 connectionString
             );

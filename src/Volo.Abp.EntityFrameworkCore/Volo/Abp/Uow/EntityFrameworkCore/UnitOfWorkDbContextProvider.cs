@@ -29,18 +29,24 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
 
             var connectionStringName = ConnectionStringNameAttribute.GetConnStringName<TDbContext>();
             var connectionString = _connectionStringResolver.Resolve(connectionStringName);
-            
+
             var dbContextKey = $"{typeof(TDbContext).FullName}_{connectionString}";
 
-            using (DbContextOptionsFactoryContext.Use(new DbContextOptionsFactoryContext(connectionStringName, connectionString)))
-            {
-                var databaseApi = unitOfWork.GetOrAddDatabaseApi(
-                    dbContextKey,
-                    () => new DbContextDatabaseApi<TDbContext>(
-                        unitOfWork.ServiceProvider.GetRequiredService<TDbContext>()
-                    ));
+            var databaseApi = unitOfWork.GetOrAddDatabaseApi(
+                dbContextKey,
+                () => new DbContextDatabaseApi<TDbContext>(
+                    CreateDbContext(unitOfWork, connectionStringName, connectionString)
+                ));
 
-                return ((DbContextDatabaseApi<TDbContext>)databaseApi).DbContext;
+            return ((DbContextDatabaseApi<TDbContext>)databaseApi).DbContext;
+        }
+
+        private static TDbContext CreateDbContext(IUnitOfWork unitOfWork, string connectionStringName, string connectionString)
+        {
+            var creationContext = new DbContextCreationContext(connectionStringName, connectionString);
+            using (DbContextCreationContext.Use(creationContext))
+            {
+                return unitOfWork.ServiceProvider.GetRequiredService<TDbContext>();
             }
         }
     }
