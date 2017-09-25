@@ -35,7 +35,15 @@ namespace Volo.Abp.Uow
             return CreateUnitOfWork(options);
         }
 
-        public IBasicUnitOfWork BeginReserved(string reservationName)
+        public void BeginReserved(string reservationName)
+        {
+            if (!TryBeginReserved(reservationName))
+            {
+                throw new AbpException($"Could not find a reserved unit of work with reservation name: {reservationName}");
+            }
+        }
+
+        public bool TryBeginReserved(string reservationName)
         {
             Check.NotNull(reservationName, nameof(reservationName));
 
@@ -49,11 +57,11 @@ namespace Volo.Abp.Uow
 
             if (uow == null)
             {
-                throw new AbpException($"Could not find a reserved unit of work with reservation name: {reservationName}");
+                return false;
             }
 
             uow.IsReserved = false;
-            return uow;
+            return true;
         }
 
         private IUnitOfWork GetCurrentUnitOfWork()

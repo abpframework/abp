@@ -62,10 +62,9 @@ namespace Volo.Abp.Uow
 
                 _unitOfWorkManager.Current.ShouldBeNull();
 
-                var reserverUow = _unitOfWorkManager.BeginReserved("Reservation1");
+                _unitOfWorkManager.BeginReserved("Reservation1");
 
                 _unitOfWorkManager.Current.ShouldNotBeNull();
-                _unitOfWorkManager.Current.Id.ShouldBe(reserverUow.Id);
                 _unitOfWorkManager.Current.Id.ShouldBe(uow1.Id);
 
                 await uow1.CompleteAsync();

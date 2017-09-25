@@ -18,8 +18,28 @@ namespace Volo.Abp.AspNetCore.Mvc.Uow
 
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            _unitOfWorkManager.BeginReserved(UnitOfWorkReservationName);
-            await next();
+            if (!context.ActionDescriptor.IsControllerAction())
+            {
+                await next();
+                return;
+            }
+
+            if (_unitOfWorkManager.TryBeginReserved(UnitOfWorkReservationName))
+            {
+                await next();
+                return;
+            }
+
+            //TODO: Check if disabled. Get and apply attributes to control UOW.
+
+            using (var uow = _unitOfWorkManager.Begin())
+            {
+                var result = await next();
+                if (result.Exception == null || result.ExceptionHandled)
+                {
+                    await uow.CompleteAsync(context.HttpContext.RequestAborted);
+                }
+            }
         }
     }
 }
