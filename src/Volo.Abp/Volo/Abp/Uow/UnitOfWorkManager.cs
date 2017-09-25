@@ -91,7 +91,7 @@ namespace Volo.Abp.Uow
                 unitOfWork.SetOuter(outerUow);
                 unitOfWork.IsReserved = options.ReservationName != null;
                 unitOfWork.ReservationName = options.ReservationName;
-                unitOfWork.SetOptions(options);
+                unitOfWork.SetOptions(options); //TODO: Should not call this for reservation?
 
                 _ambientUnitOfWork.SetUnitOfWork(unitOfWork);
 
