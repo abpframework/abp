@@ -6,7 +6,7 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace Volo.Abp.Uow.EntityFrameworkCore
 {
-    public class EfCoreTransactionApi : IEfCoreTransactionApi
+    public class EfCoreTransactionApi : ITransactionApi
     {
         public IDbContextTransaction DbContextTransaction { get; }
         public DbContext StarterDbContext { get; }

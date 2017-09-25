@@ -4,12 +4,12 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace Volo.Abp.Uow.EntityFrameworkCore
 {
-    public class DbContextDatabaseApi<TDbContext> : IDatabaseApi, ISupportsSavingChanges
+    public class EfCoreDatabaseApi<TDbContext> : IDatabaseApi, ISupportsSavingChanges
         where TDbContext : AbpDbContext<TDbContext>
     {
         public TDbContext DbContext { get; }
 
-        public DbContextDatabaseApi(TDbContext dbContext)
+        public EfCoreDatabaseApi(TDbContext dbContext)
         {
             DbContext = dbContext;
         }
