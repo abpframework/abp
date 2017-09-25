@@ -54,6 +54,24 @@ namespace Volo.Abp.Uow
             return false;
         }
 
+        public static UnitOfWorkAttribute GetUnitOfWorkAttributeOrNull(MethodInfo methodInfo)
+        {
+            var attrs = methodInfo.GetCustomAttributes(true).OfType<UnitOfWorkAttribute>().ToArray();
+            if (attrs.Length > 0)
+            {
+                return attrs[0];
+            }
+
+            attrs = methodInfo.DeclaringType.GetTypeInfo().GetCustomAttributes(true).OfType<UnitOfWorkAttribute>().ToArray();
+            if (attrs.Length > 0)
+            {
+                return attrs[0];
+            }
+            
+            return null;
+        }
+
+
         private static bool AnyMethodHasUnitOfWorkAttribute(TypeInfo implementationType)
         {
             return implementationType

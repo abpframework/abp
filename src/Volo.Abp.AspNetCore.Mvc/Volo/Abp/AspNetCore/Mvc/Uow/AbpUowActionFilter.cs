@@ -24,15 +24,25 @@ namespace Volo.Abp.AspNetCore.Mvc.Uow
                 return;
             }
 
-            if (_unitOfWorkManager.TryBeginReserved(UnitOfWorkReservationName))
+            var unitOfWorkAttr = UnitOfWorkHelper.GetUnitOfWorkAttributeOrNull(context.ActionDescriptor.GetMethodInfo());
+
+            if (unitOfWorkAttr?.IsDisabled == true)
             {
                 await next();
                 return;
             }
 
-            //TODO: Check if disabled. Get and apply attributes to control UOW.
+            var options = new UnitOfWorkStartOptions();
 
-            using (var uow = _unitOfWorkManager.Begin())
+            unitOfWorkAttr?.SetOptions(options);
+
+            if (_unitOfWorkManager.TryBeginReserved(UnitOfWorkReservationName, options))
+            {
+                await next();
+                return;
+            }
+
+            using (var uow = _unitOfWorkManager.Begin(options))
             {
                 var result = await next();
                 if (result.Exception == null || result.ExceptionHandled)

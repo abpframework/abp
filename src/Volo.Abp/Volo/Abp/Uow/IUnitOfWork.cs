@@ -4,6 +4,8 @@ namespace Volo.Abp.Uow
 {
     public interface IUnitOfWork : IBasicUnitOfWork, IDatabaseApiContainer
     {
+        UnitOfWorkStartOptions Options { get; }
+
         IUnitOfWork Outer { get; }
 
         bool IsReserved { get; set; }
@@ -11,5 +13,7 @@ namespace Volo.Abp.Uow
         string ReservationName { get; set; }
 
         void SetOuter([CanBeNull] IUnitOfWork outer);
+
+        void SetOptions(UnitOfWorkStartOptions options);
     }
 }

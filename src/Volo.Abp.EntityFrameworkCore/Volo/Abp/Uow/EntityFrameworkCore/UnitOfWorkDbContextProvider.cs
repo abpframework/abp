@@ -1,6 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.EntityFrameworkCore.DependencyInjection;
 
 namespace Volo.Abp.Uow.EntityFrameworkCore
 {
@@ -26,16 +27,21 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
                 throw new AbpException("A DbContext can only be created inside a unit of work!");
             }
 
-            var connectionString = _connectionStringResolver.Resolve<TDbContext>();
+            var connectionStringName = ConnectionStringNameAttribute.GetConnStringName<TDbContext>();
+            var connectionString = _connectionStringResolver.Resolve(connectionStringName);
+            
             var dbContextKey = $"{typeof(TDbContext).FullName}_{connectionString}";
 
-            var databaseApi = unitOfWork.GetOrAddDatabaseApi(
-                dbContextKey,
-                () => new DbContextDatabaseApi<TDbContext>(
-                    unitOfWork.ServiceProvider.GetRequiredService<TDbContext>()
-                ));
-            
-            return ((DbContextDatabaseApi<TDbContext>)databaseApi).DbContext;
+            using (DbContextOptionsFactoryContext.Use(new DbContextOptionsFactoryContext(connectionStringName, connectionString)))
+            {
+                var databaseApi = unitOfWork.GetOrAddDatabaseApi(
+                    dbContextKey,
+                    () => new DbContextDatabaseApi<TDbContext>(
+                        unitOfWork.ServiceProvider.GetRequiredService<TDbContext>()
+                    ));
+
+                return ((DbContextDatabaseApi<TDbContext>)databaseApi).DbContext;
+            }
         }
     }
 }

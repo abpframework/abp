@@ -10,6 +10,8 @@ namespace Volo.Abp.Uow
     {
         public Guid Id { get; } = Guid.NewGuid();
 
+        public UnitOfWorkStartOptions Options { get; private set; }
+
         public IUnitOfWork Outer { get; private set; }
 
         public bool IsReserved { get; set; }
@@ -19,6 +21,11 @@ namespace Volo.Abp.Uow
         public void SetOuter(IUnitOfWork outer)
         {
             Outer = outer;
+        }
+
+        public void SetOptions(UnitOfWorkStartOptions options)
+        {
+            Options = options;
         }
 
         public event EventHandler Completed;

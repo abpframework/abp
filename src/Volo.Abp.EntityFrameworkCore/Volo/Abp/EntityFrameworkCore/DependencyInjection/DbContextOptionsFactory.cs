@@ -12,13 +12,13 @@ namespace Volo.Abp.EntityFrameworkCore.DependencyInjection
         public static DbContextOptions<TDbContext> Create<TDbContext>(IServiceProvider serviceProvider)
             where TDbContext : AbpDbContext<TDbContext>
         {
-            var connectionStringName = ConnectionStringNameAttribute.GetConnStringName<TDbContext>();
-
             using (var scope = serviceProvider.CreateScope())
             {
+                var creationContext = GetCreationContext<TDbContext>(scope.ServiceProvider);
+
                 var context = new AbpDbContextConfigurationContext<TDbContext>(
-                    GetConnectionString(scope, connectionStringName),
-                    connectionStringName,
+                    creationContext.ConnectionString,
+                    creationContext.ConnectionStringName,
                     scope.ServiceProvider
                 );
 
@@ -47,9 +47,22 @@ namespace Volo.Abp.EntityFrameworkCore.DependencyInjection
             return scope.ServiceProvider.GetRequiredService<IOptions<AbpDbContextOptions>>().Value;
         }
 
-        private static string GetConnectionString(IServiceScope scope, string connectionStringName)
+        private static DbContextOptionsFactoryContext GetCreationContext<TDbContext>(IServiceProvider serviceProvider)
+            where TDbContext : AbpDbContext<TDbContext>
         {
-            return scope.ServiceProvider.GetRequiredService<IConnectionStringResolver>().Resolve(connectionStringName);
+            var context = DbContextOptionsFactoryContext.Current;
+            if (context != null)
+            {
+                return context;
+            }
+
+            var connectionStringName = ConnectionStringNameAttribute.GetConnStringName<TDbContext>();
+            var connectionString = serviceProvider.GetRequiredService<IConnectionStringResolver>().Resolve(connectionStringName);
+
+            return new DbContextOptionsFactoryContext(
+                connectionStringName,
+                connectionString
+            );
         }
     }
 }

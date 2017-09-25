@@ -28,5 +28,21 @@ namespace Volo.Abp.Uow
 
             return unitOfWorkManager.Begin(new UnitOfWorkStartOptions { ReservationName = reservationName });
         }
+
+        public static void BeginReserved([NotNull] this IUnitOfWorkManager unitOfWorkManager, [NotNull] string reservationName)
+        {
+            Check.NotNull(unitOfWorkManager, nameof(unitOfWorkManager));
+            Check.NotNull(reservationName, nameof(reservationName));
+
+            unitOfWorkManager.BeginReserved(reservationName, new UnitOfWorkStartOptions());
+        }
+
+        public static void TryBeginReserved([NotNull] this IUnitOfWorkManager unitOfWorkManager, [NotNull] string reservationName)
+        {
+            Check.NotNull(unitOfWorkManager, nameof(unitOfWorkManager));
+            Check.NotNull(reservationName, nameof(reservationName));
+
+            unitOfWorkManager.TryBeginReserved(reservationName, new UnitOfWorkStartOptions());
+        }
     }
 }
