@@ -1,9 +1,10 @@
 using System;
+using System.Data.Common;
 using System.Threading;
 
 namespace Volo.Abp.EntityFrameworkCore.DependencyInjection
 {
-    internal class DbContextCreationContext
+    public class DbContextCreationContext
     {
         public static DbContextCreationContext Current => _current.Value;
         private static readonly AsyncLocal<DbContextCreationContext> _current = new AsyncLocal<DbContextCreationContext>();
@@ -11,6 +12,8 @@ namespace Volo.Abp.EntityFrameworkCore.DependencyInjection
         public string ConnectionStringName { get; }
 
         public string ConnectionString { get; }
+
+        public DbConnection ExistingConnection { get; set; }
 
         public DbContextCreationContext(string connectionStringName, string connectionString)
         {

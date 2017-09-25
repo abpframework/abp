@@ -2,7 +2,7 @@
 
 namespace Volo.Abp.Uow
 {
-    public interface IUnitOfWork : IBasicUnitOfWork, IDatabaseApiContainer
+    public interface IUnitOfWork : IBasicUnitOfWork, IDatabaseApiContainer, ITransactionApiContainer
     {
         UnitOfWorkStartOptions Options { get; }
 

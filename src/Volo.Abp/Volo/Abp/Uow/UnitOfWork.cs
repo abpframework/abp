@@ -35,6 +35,7 @@ namespace Volo.Abp.Uow
         public IServiceProvider ServiceProvider { get; }
 
         private readonly Dictionary<string, IDatabaseApi> _databaseApis;
+        private readonly Dictionary<string, ITransactionApi> _transactionApis;
 
         private Exception _exception;
         private bool _isCompleted;
@@ -45,6 +46,7 @@ namespace Volo.Abp.Uow
             ServiceProvider = serviceProvider;
 
             _databaseApis = new Dictionary<string, IDatabaseApi>();
+            _transactionApis = new Dictionary<string, ITransactionApi>();
         }
 
         public void SaveChanges()
@@ -72,6 +74,7 @@ namespace Volo.Abp.Uow
             try
             {
                 SaveChanges();
+                CommitTransactions();
                 OnCompleted();
             }
             catch (Exception ex)
@@ -88,6 +91,7 @@ namespace Volo.Abp.Uow
             try
             {
                 await SaveChangesAsync(cancellationToken);
+                await CommitTransactionsAsync();
                 OnCompleted();
             }
             catch (Exception ex)
@@ -108,6 +112,26 @@ namespace Volo.Abp.Uow
             Check.NotNull(factory, nameof(factory));
 
             return _databaseApis.GetOrAdd(key, factory);
+        }
+
+        public ITransactionApi FindTransactionApi(string key)
+        {
+            Check.NotNull(key, nameof(key));
+
+            return _transactionApis.GetOrDefault(key);
+        }
+
+        public void AddTransactionApi(string key, ITransactionApi api)
+        {
+            Check.NotNull(key, nameof(key));
+            Check.NotNull(api, nameof(api));
+
+            if (_transactionApis.ContainsKey(key))
+            {
+                throw new AbpException("There is already a transaction API in this unit of work!");
+            }
+
+            _transactionApis.Add(key, api);
         }
 
         protected virtual void OnCompleted()
@@ -155,6 +179,22 @@ namespace Volo.Abp.Uow
         public override string ToString()
         {
             return $"[UnitOfWork {Id}]";
+        }
+
+        protected virtual void CommitTransactions()
+        {
+            foreach (var transaction in _transactionApis.Values)
+            {
+                transaction.Commit();
+            }
+        }
+
+        protected virtual async Task CommitTransactionsAsync()
+        {
+            foreach (var transaction in _transactionApis.Values)
+            {
+                await transaction.CommitAsync();
+            }
         }
     }
 }

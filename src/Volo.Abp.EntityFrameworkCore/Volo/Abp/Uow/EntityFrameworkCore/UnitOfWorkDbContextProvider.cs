@@ -1,3 +1,5 @@
+using System;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
@@ -5,18 +7,23 @@ using Volo.Abp.EntityFrameworkCore.DependencyInjection;
 
 namespace Volo.Abp.Uow.EntityFrameworkCore
 {
+    //TODO: Implement logic in DefaultDbContextResolver.Resolve in old ABP.
+
     public class UnitOfWorkDbContextProvider<TDbContext> : IDbContextProvider<TDbContext>
         where TDbContext : AbpDbContext<TDbContext>
     {
         private readonly IUnitOfWorkManager _unitOfWorkManager;
         private readonly IConnectionStringResolver _connectionStringResolver;
+        private readonly IEfCoreTransactionStrategy _transactionStrategy;
 
         public UnitOfWorkDbContextProvider(
             IUnitOfWorkManager unitOfWorkManager,
-            IConnectionStringResolver connectionStringResolver)
+            IConnectionStringResolver connectionStringResolver,
+            IEfCoreTransactionStrategy transactionStrategy)
         {
             _unitOfWorkManager = unitOfWorkManager;
             _connectionStringResolver = connectionStringResolver;
+            _transactionStrategy = transactionStrategy;
         }
 
         public TDbContext GetDbContext()
@@ -41,12 +48,30 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
             return ((DbContextDatabaseApi<TDbContext>)databaseApi).DbContext;
         }
 
-        private static TDbContext CreateDbContext(IUnitOfWork unitOfWork, string connectionStringName, string connectionString)
+        private TDbContext CreateDbContext(IUnitOfWork unitOfWork, string connectionStringName, string connectionString)
         {
             var creationContext = new DbContextCreationContext(connectionStringName, connectionString);
             using (DbContextCreationContext.Use(creationContext))
             {
-                return unitOfWork.ServiceProvider.GetRequiredService<TDbContext>();
+                TDbContext dbContext;
+
+                if (unitOfWork.Options.IsTransactional == true)
+                {
+                    dbContext = _transactionStrategy.CreateDbContext<TDbContext>(unitOfWork, creationContext);
+                }
+                else
+                {
+                    dbContext = unitOfWork.ServiceProvider.GetRequiredService<TDbContext>();
+                }
+
+                if (unitOfWork.Options.Timeout.HasValue &&
+                    dbContext.Database.IsRelational() &&
+                    !dbContext.Database.GetCommandTimeout().HasValue)
+                {
+                    dbContext.Database.SetCommandTimeout(unitOfWork.Options.Timeout.Value.TotalSeconds.To<int>());
+                }
+
+                return dbContext;
             }
         }
     }
