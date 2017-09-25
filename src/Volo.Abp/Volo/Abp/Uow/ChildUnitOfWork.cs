@@ -79,6 +79,11 @@ namespace Volo.Abp.Uow
             return _parent.FindDatabaseApi(key);
         }
 
+        public void AddDatabaseApi(string key, IDatabaseApi api)
+        {
+            _parent.AddDatabaseApi(key, api);
+        }
+
         public IDatabaseApi GetOrAddDatabaseApi(string key, Func<IDatabaseApi> factory)
         {
             return _parent.GetOrAddDatabaseApi(key, factory);
@@ -92,6 +97,11 @@ namespace Volo.Abp.Uow
         public void AddTransactionApi(string key, ITransactionApi api)
         {
             _parent.AddTransactionApi(key, api);
+        }
+
+        public ITransactionApi GetOrAddTransactionApi(string key, Func<ITransactionApi> factory)
+        {
+            return _parent.GetOrAddTransactionApi(key, factory);
         }
 
         public void Dispose()

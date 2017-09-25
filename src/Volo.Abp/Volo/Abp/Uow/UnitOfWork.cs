@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using JetBrains.Annotations;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
@@ -115,6 +114,19 @@ namespace Volo.Abp.Uow
             return _databaseApis.GetOrDefault(key);
         }
 
+        public void AddDatabaseApi(string key, IDatabaseApi api)
+        {
+            Check.NotNull(key, nameof(key));
+            Check.NotNull(api, nameof(api));
+
+            if (_databaseApis.ContainsKey(key))
+            {
+                throw new AbpException("There is already a database API in this unit of work with given key: " + key);
+            }
+
+            _databaseApis.Add(key, api);
+        }
+
         public IDatabaseApi GetOrAddDatabaseApi(string key, Func<IDatabaseApi> factory)
         {
             Check.NotNull(key, nameof(key));
@@ -137,10 +149,18 @@ namespace Volo.Abp.Uow
 
             if (_transactionApis.ContainsKey(key))
             {
-                throw new AbpException("There is already a transaction API in this unit of work!");
+                throw new AbpException("There is already a transaction API in this unit of work with given key: " + key);
             }
 
             _transactionApis.Add(key, api);
+        }
+
+        public ITransactionApi GetOrAddTransactionApi(string key, Func<ITransactionApi> factory)
+        {
+            Check.NotNull(key, nameof(key));
+            Check.NotNull(factory, nameof(factory));
+
+            return _transactionApis.GetOrAdd(key, factory);
         }
 
         protected virtual void OnCompleted()

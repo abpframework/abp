@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using System;
+using JetBrains.Annotations;
 
 namespace Volo.Abp.Uow
 {
@@ -8,5 +9,8 @@ namespace Volo.Abp.Uow
         ITransactionApi FindTransactionApi([NotNull] string key);
 
         void AddTransactionApi([NotNull] string key, [NotNull] ITransactionApi api);
+
+        [NotNull]
+        ITransactionApi GetOrAddTransactionApi([NotNull] string key, [NotNull] Func<ITransactionApi> factory);
     }
 }
