@@ -9,7 +9,7 @@ namespace Volo.Abp.Uow
     {
         public Guid Id => _parent.Id;
 
-        public UnitOfWorkStartOptions Options => _parent.Options;
+        public IUnitOfWorkStartOptions Options => _parent.Options;
 
         public IUnitOfWork Outer => _parent.Outer;
 

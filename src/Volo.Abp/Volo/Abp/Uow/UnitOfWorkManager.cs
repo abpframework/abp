@@ -1,5 +1,4 @@
 ﻿using System;
-using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
 
@@ -12,7 +11,9 @@ namespace Volo.Abp.Uow
         private readonly IServiceProvider _serviceProvider;
         private readonly IAmbientUnitOfWork _ambientUnitOfWork;
 
-        public UnitOfWorkManager(IServiceProvider serviceProvider, IAmbientUnitOfWork ambientUnitOfWork)
+        public UnitOfWorkManager(
+            IServiceProvider serviceProvider, 
+            IAmbientUnitOfWork ambientUnitOfWork)
         {
             _serviceProvider = serviceProvider;
             _ambientUnitOfWork = ambientUnitOfWork;

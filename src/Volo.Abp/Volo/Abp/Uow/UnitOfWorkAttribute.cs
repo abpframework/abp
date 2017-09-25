@@ -41,7 +41,7 @@ namespace Volo.Abp.Uow
         {
             if (IsTransactional.HasValue)
             {
-                options.IsTransactional = IsTransactional;
+                options.IsTransactional = IsTransactional.Value;
             }
 
             if (Timeout.HasValue)

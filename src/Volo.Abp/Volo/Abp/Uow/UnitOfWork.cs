@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
+using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Uow
@@ -10,23 +12,13 @@ namespace Volo.Abp.Uow
     {
         public Guid Id { get; } = Guid.NewGuid();
 
-        public UnitOfWorkStartOptions Options { get; private set; }
+        public IUnitOfWorkStartOptions Options { get; private set; }
 
         public IUnitOfWork Outer { get; private set; }
 
         public bool IsReserved { get; set; }
 
         public string ReservationName { get; set; }
-
-        public void SetOuter(IUnitOfWork outer)
-        {
-            Outer = outer;
-        }
-
-        public void SetOptions(UnitOfWorkStartOptions options)
-        {
-            Options = options;
-        }
 
         public event EventHandler Completed;
         public event EventHandler<UnitOfWorkFailedEventArgs> Failed;
@@ -36,17 +28,34 @@ namespace Volo.Abp.Uow
 
         private readonly Dictionary<string, IDatabaseApi> _databaseApis;
         private readonly Dictionary<string, ITransactionApi> _transactionApis;
+        private readonly UnitOfWorkOptions _defaultOptions;
 
         private Exception _exception;
         private bool _isCompleted;
         private bool _isDisposed;
 
-        public UnitOfWork(IServiceProvider serviceProvider)
+        public UnitOfWork(IServiceProvider serviceProvider, IOptions<UnitOfWorkOptions> options)
         {
             ServiceProvider = serviceProvider;
+            _defaultOptions = options.Value;
 
             _databaseApis = new Dictionary<string, IDatabaseApi>();
             _transactionApis = new Dictionary<string, ITransactionApi>();
+        }
+
+        public void SetOptions(UnitOfWorkStartOptions options)
+        {
+            if (Options != null)
+            {
+                throw new AbpException("Options must be set only once!");
+            }
+
+            Options = _defaultOptions.Normalize(options.Clone());
+        }
+
+        public void SetOuter(IUnitOfWork outer)
+        {
+            Outer = outer;
         }
 
         public void SaveChanges()
