@@ -1,4 +1,5 @@
 ﻿using System;
+using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
 
@@ -17,22 +18,38 @@ namespace Volo.Abp.Uow
             _ambientUnitOfWork = ambientUnitOfWork;
         }
 
-        public IBasicUnitOfWork Begin(UnitOfWorkStartOptions options)
+        public IBasicUnitOfWork Begin(UnitOfWorkStartOptions options, bool requiresNew = false)
         {
             Check.NotNull(options, nameof(options));
 
-            if (!options.RequiresNew && _ambientUnitOfWork.UnitOfWork != null && !_ambientUnitOfWork.UnitOfWork.IsReserved)
+            if (!requiresNew && _ambientUnitOfWork.UnitOfWork != null && !_ambientUnitOfWork.UnitOfWork.IsReserved)
             {
                 return new ChildUnitOfWork(_ambientUnitOfWork.UnitOfWork);
             }
 
-            if (_ambientUnitOfWork.UnitOfWork != null)
+            var unitOfWork = CreateNewUnitOfWork();
+            unitOfWork.SetOptions(options);
+
+            return unitOfWork;
+        }
+
+        public IBasicUnitOfWork Reserve(string reservationName, bool requiresNew = false)
+        {
+            Check.NotNull(reservationName, nameof(reservationName));
+
+            if (!requiresNew && 
+                _ambientUnitOfWork.UnitOfWork != null &&
+                _ambientUnitOfWork.UnitOfWork.IsReservedFor(reservationName))
             {
-                //Requires new because there is already a current UOW but it's reserved
-                options.RequiresNew = true;
+                return new ChildUnitOfWork(_ambientUnitOfWork.UnitOfWork);
             }
 
-            return CreateUnitOfWork(options);
+            var unitOfWork = CreateNewUnitOfWork();
+
+            unitOfWork.IsReserved = true;
+            unitOfWork.ReservationName = reservationName;
+
+            return unitOfWork;
         }
 
         public void BeginReserved(string reservationName, UnitOfWorkStartOptions options)
@@ -62,6 +79,7 @@ namespace Volo.Abp.Uow
 
             uow.IsReserved = false;
             uow.SetOptions(options);
+
             return true;
         }
 
@@ -78,10 +96,9 @@ namespace Volo.Abp.Uow
             return uow;
         }
 
-        private IUnitOfWork CreateUnitOfWork(UnitOfWorkStartOptions options)
+        private IUnitOfWork CreateNewUnitOfWork()
         {
             var scope = _serviceProvider.CreateScope();
-
             try
             {
                 var outerUow = _ambientUnitOfWork.UnitOfWork;
@@ -89,9 +106,6 @@ namespace Volo.Abp.Uow
                 var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
 
                 unitOfWork.SetOuter(outerUow);
-                unitOfWork.IsReserved = options.ReservationName != null;
-                unitOfWork.ReservationName = options.ReservationName;
-                unitOfWork.SetOptions(options); //TODO: Should not call this for reservation?
 
                 _ambientUnitOfWork.SetUnitOfWork(unitOfWork);
 

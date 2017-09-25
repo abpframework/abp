@@ -26,7 +26,7 @@ namespace Volo.Abp.Uow
                 _unitOfWorkManager.Current.ShouldNotBeNull();
                 _unitOfWorkManager.Current.ShouldBe(uow1);
 
-                using (var uow2 = _unitOfWorkManager.BeginNew())
+                using (var uow2 = _unitOfWorkManager.Begin(requiresNew: true))
                 {
                     _unitOfWorkManager.Current.ShouldNotBeNull();
                     _unitOfWorkManager.Current.Id.ShouldNotBe(uow1.Id);

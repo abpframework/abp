@@ -8,7 +8,10 @@ namespace Volo.Abp.Uow
         IUnitOfWork Current { get; }
 
         [NotNull]
-        IBasicUnitOfWork Begin([NotNull] UnitOfWorkStartOptions options);
+        IBasicUnitOfWork Begin([NotNull] UnitOfWorkStartOptions options, bool requiresNew = false);
+
+        [NotNull]
+        IBasicUnitOfWork Reserve([NotNull] string reservationName, bool requiresNew = false);
 
         void BeginReserved([NotNull] string reservationName, [NotNull] UnitOfWorkStartOptions options);
 
