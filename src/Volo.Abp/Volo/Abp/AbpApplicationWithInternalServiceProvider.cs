@@ -1,7 +1,6 @@
 using System;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.Modularity;
 
 namespace Volo.Abp
 {
@@ -37,12 +36,7 @@ namespace Volo.Abp
             ServiceScope = Services.BuildServiceProviderFromFactory().CreateScope();
             ServiceProvider = ServiceScope.ServiceProvider;
 
-            using (var scope = ServiceProvider.CreateScope())
-            {
-                ServiceProvider
-                    .GetRequiredService<IModuleManager>()
-                    .InitializeModules(new ApplicationInitializationContext(scope.ServiceProvider));
-            }
+            InitializeModules();
         }
 
         public override void Dispose()

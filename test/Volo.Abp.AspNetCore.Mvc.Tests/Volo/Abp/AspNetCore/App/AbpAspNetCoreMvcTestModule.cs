@@ -34,6 +34,8 @@ namespace Volo.Abp.AspNetCore.App
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             var app = context.GetApplicationBuilder();
+
+            app.UseUnitOfWork();
             app.UseMvcWithDefaultRoute();
         }
     }

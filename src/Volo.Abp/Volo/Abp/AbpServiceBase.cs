@@ -15,9 +15,9 @@ namespace Volo.Abp
 
         public IGuidGenerator GuidGenerator { get; set; }
 
-        protected IUnitOfWork CurrentUnitOfWork => UnitOfWorkManager?.Current;
-
         public ILoggerFactory LoggerFactory { get; set; }
+
+        protected IUnitOfWork CurrentUnitOfWork => UnitOfWorkManager?.Current;
 
         protected ILogger Logger => _lazyLogger.Value;
         private Lazy<ILogger> _lazyLogger => new Lazy<ILogger>(() => LoggerFactory?.CreateLogger(GetType().FullName) ?? NullLogger.Instance, true);

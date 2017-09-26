@@ -7,9 +7,11 @@ namespace Volo.Abp.Uow
     public interface IDatabaseApiContainer : IServiceProviderAccessor
     {
         [CanBeNull]
-        IDatabaseApi FindDatabaseApi([NotNull] string id);
+        IDatabaseApi FindDatabaseApi([NotNull] string key);
+
+        void AddDatabaseApi([NotNull] string key, [NotNull] IDatabaseApi api);
 
         [NotNull]
-        IDatabaseApi GetOrAddDatabaseApi(string id, Func<IDatabaseApi> factory);
+        IDatabaseApi GetOrAddDatabaseApi([NotNull] string key, [NotNull] Func<IDatabaseApi> factory);
     }
 }
