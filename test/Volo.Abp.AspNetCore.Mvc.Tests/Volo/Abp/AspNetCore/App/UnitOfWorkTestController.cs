@@ -12,6 +12,17 @@ namespace Volo.Abp.AspNetCore.App
         public ActionResult ActionRequiresUow()
         {
             CurrentUnitOfWork.ShouldNotBeNull();
+            CurrentUnitOfWork.Options.IsTransactional.ShouldBeFalse();
+
+            return Content("OK");
+        }
+
+        [HttpPost]
+        [Route("ActionRequiresUowPost")]
+        public ActionResult ActionRequiresUowPost()
+        {
+            CurrentUnitOfWork.ShouldNotBeNull();
+            CurrentUnitOfWork.Options.IsTransactional.ShouldBeTrue();
 
             return Content("OK");
         }
