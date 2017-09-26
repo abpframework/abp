@@ -32,7 +32,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Uow
                 return;
             }
 
-            var options = new UnitOfWorkStartOptions();
+            var options = new UnitOfWorkOptions();
 
             unitOfWorkAttr?.SetOptions(options);
 

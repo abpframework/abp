@@ -4,7 +4,7 @@ namespace Volo.Abp.Uow
 {
     public interface IUnitOfWork : IBasicUnitOfWork, IDatabaseApiContainer, ITransactionApiContainer
     {
-        IUnitOfWorkStartOptions Options { get; }
+        IUnitOfWorkOptions Options { get; }
 
         IUnitOfWork Outer { get; }
 
@@ -14,6 +14,6 @@ namespace Volo.Abp.Uow
 
         void SetOuter([CanBeNull] IUnitOfWork outer);
 
-        void SetOptions(UnitOfWorkStartOptions options);
+        void Initialize([NotNull] UnitOfWorkOptions options);
     }
 }

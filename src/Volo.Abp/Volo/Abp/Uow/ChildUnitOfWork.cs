@@ -9,7 +9,7 @@ namespace Volo.Abp.Uow
     {
         public Guid Id => _parent.Id;
 
-        public IUnitOfWorkStartOptions Options => _parent.Options;
+        public IUnitOfWorkOptions Options => _parent.Options;
 
         public IUnitOfWork Outer => _parent.Outer;
 
@@ -30,9 +30,9 @@ namespace Volo.Abp.Uow
             _parent.SetOuter(outer);
         }
 
-        public void SetOptions(UnitOfWorkStartOptions options)
+        public void Initialize(UnitOfWorkOptions options)
         {
-            _parent.SetOptions(options);
+            _parent.Initialize(options);
         }
 
         public event EventHandler Completed;

@@ -3,32 +3,25 @@ using System.Data;
 
 namespace Volo.Abp.Uow
 {
-    //TODO: Implement default options!
-    
-    /// <summary>
-    /// Global (default) unit of work options
-    /// </summary>
-    public class UnitOfWorkOptions
+    public class UnitOfWorkOptions : IUnitOfWorkOptions
     {
-        public UnitOfWorkTransactionBehavior TransactionBehavior { get; set; }
+        /// <summary>
+        /// Default: false.
+        /// </summary>
+        public bool IsTransactional { get; set; }
 
         public IsolationLevel? IsolationLevel { get; set; }
 
         public TimeSpan? Timeout { get; set; }
 
-        internal UnitOfWorkStartOptions Normalize(UnitOfWorkStartOptions options)
+        public UnitOfWorkOptions Clone()
         {
-            if (options.IsolationLevel == null)
+            return new UnitOfWorkOptions
             {
-                options.IsolationLevel = IsolationLevel;
-            }
-
-            if (options.Timeout == null)
-            {
-                options.Timeout = Timeout;
-            }
-
-            return options;
+                IsTransactional = IsTransactional,
+                IsolationLevel = IsolationLevel,
+                Timeout = Timeout
+            };
         }
     }
 }

@@ -9,7 +9,7 @@ namespace Volo.Abp.Uow
         {
             Check.NotNull(unitOfWorkManager, nameof(unitOfWorkManager));
 
-            return unitOfWorkManager.Begin(new UnitOfWorkStartOptions(), requiresNew);
+            return unitOfWorkManager.Begin(new UnitOfWorkOptions(), requiresNew);
         }
 
         public static void BeginReserved([NotNull] this IUnitOfWorkManager unitOfWorkManager, [NotNull] string reservationName)
@@ -17,7 +17,7 @@ namespace Volo.Abp.Uow
             Check.NotNull(unitOfWorkManager, nameof(unitOfWorkManager));
             Check.NotNull(reservationName, nameof(reservationName));
 
-            unitOfWorkManager.BeginReserved(reservationName, new UnitOfWorkStartOptions());
+            unitOfWorkManager.BeginReserved(reservationName, new UnitOfWorkOptions());
         }
 
         public static void TryBeginReserved([NotNull] this IUnitOfWorkManager unitOfWorkManager, [NotNull] string reservationName)
@@ -25,7 +25,7 @@ namespace Volo.Abp.Uow
             Check.NotNull(unitOfWorkManager, nameof(unitOfWorkManager));
             Check.NotNull(reservationName, nameof(reservationName));
 
-            unitOfWorkManager.TryBeginReserved(reservationName, new UnitOfWorkStartOptions());
+            unitOfWorkManager.TryBeginReserved(reservationName, new UnitOfWorkOptions());
         }
     }
 }

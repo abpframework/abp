@@ -37,7 +37,7 @@ namespace Volo.Abp.Uow
         /// </summary>
         public bool IsDisabled { get; set; }
 
-        public virtual void SetOptions(UnitOfWorkStartOptions options)
+        public virtual void SetOptions(UnitOfWorkOptions options)
         {
             if (IsTransactional.HasValue)
             {

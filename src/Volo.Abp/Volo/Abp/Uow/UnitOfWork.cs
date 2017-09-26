@@ -11,7 +11,7 @@ namespace Volo.Abp.Uow
     {
         public Guid Id { get; } = Guid.NewGuid();
 
-        public IUnitOfWorkStartOptions Options { get; private set; }
+        public IUnitOfWorkOptions Options { get; private set; }
 
         public IUnitOfWork Outer { get; private set; }
 
@@ -27,13 +27,13 @@ namespace Volo.Abp.Uow
 
         private readonly Dictionary<string, IDatabaseApi> _databaseApis;
         private readonly Dictionary<string, ITransactionApi> _transactionApis;
-        private readonly UnitOfWorkOptions _defaultOptions;
+        private readonly UnitOfWorkDefaultOptions _defaultOptions;
 
         private Exception _exception;
         private bool _isCompleted;
         private bool _isDisposed;
 
-        public UnitOfWork(IServiceProvider serviceProvider, IOptions<UnitOfWorkOptions> options)
+        public UnitOfWork(IServiceProvider serviceProvider, IOptions<UnitOfWorkDefaultOptions> options)
         {
             ServiceProvider = serviceProvider;
             _defaultOptions = options.Value;
@@ -42,11 +42,13 @@ namespace Volo.Abp.Uow
             _transactionApis = new Dictionary<string, ITransactionApi>();
         }
 
-        public void SetOptions(UnitOfWorkStartOptions options)
+        public void Initialize(UnitOfWorkOptions options)
         {
+            Check.NotNull(options, nameof(options));
+
             if (Options != null)
             {
-                throw new AbpException("Options must be set only once!");
+                throw new AbpException("This unit of work is already initialized before!");
             }
 
             Options = _defaultOptions.Normalize(options.Clone());

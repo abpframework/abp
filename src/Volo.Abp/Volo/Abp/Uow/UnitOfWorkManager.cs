@@ -19,7 +19,7 @@ namespace Volo.Abp.Uow
             _ambientUnitOfWork = ambientUnitOfWork;
         }
 
-        public IBasicUnitOfWork Begin(UnitOfWorkStartOptions options, bool requiresNew = false)
+        public IBasicUnitOfWork Begin(UnitOfWorkOptions options, bool requiresNew = false)
         {
             Check.NotNull(options, nameof(options));
 
@@ -29,7 +29,7 @@ namespace Volo.Abp.Uow
             }
 
             var unitOfWork = CreateNewUnitOfWork();
-            unitOfWork.SetOptions(options);
+            unitOfWork.Initialize(options);
 
             return unitOfWork;
         }
@@ -53,7 +53,7 @@ namespace Volo.Abp.Uow
             return unitOfWork;
         }
 
-        public void BeginReserved(string reservationName, UnitOfWorkStartOptions options)
+        public void BeginReserved(string reservationName, UnitOfWorkOptions options)
         {
             if (!TryBeginReserved(reservationName, options))
             {
@@ -61,7 +61,7 @@ namespace Volo.Abp.Uow
             }
         }
 
-        public bool TryBeginReserved(string reservationName, UnitOfWorkStartOptions options)
+        public bool TryBeginReserved(string reservationName, UnitOfWorkOptions options)
         {
             Check.NotNull(reservationName, nameof(reservationName));
 
@@ -79,7 +79,7 @@ namespace Volo.Abp.Uow
             }
 
             uow.IsReserved = false;
-            uow.SetOptions(options);
+            uow.Initialize(options);
 
             return true;
         }
