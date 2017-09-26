@@ -1,7 +1,6 @@
 ﻿using System;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.Modularity;
 
 namespace Volo.Abp
 {
@@ -25,12 +24,7 @@ namespace Volo.Abp
 
             ServiceProvider = serviceProvider;
 
-            using (var scope = ServiceProvider.CreateScope())
-            {
-                ServiceProvider
-                    .GetRequiredService<IModuleManager>()
-                    .InitializeModules(new ApplicationInitializationContext(scope.ServiceProvider));
-            }
+            InitializeModules();
         }
     }
 }

@@ -1,5 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Modularity
@@ -12,12 +16,18 @@ namespace Volo.Abp.Modularity
 
         public ModuleManager(
             IModuleContainer moduleContainer,
-            IEnumerable<IModuleLifecycleContributer> lifecycleContributers,
-            ILogger<ModuleManager> logger)
+            ILogger<ModuleManager> logger,
+            IOptions<ModuleLifecycleOptions> options,
+            IServiceProvider serviceProvider)
         {
             _moduleContainer = moduleContainer;
-            _lifecycleContributers = lifecycleContributers;
             _logger = logger;
+
+            _lifecycleContributers = options.Value
+                .Contributers
+                .Select(serviceProvider.GetRequiredService)
+                .Cast<IModuleLifecycleContributer>()
+                .ToArray();
         }
 
         public void InitializeModules(ApplicationInitializationContext context)

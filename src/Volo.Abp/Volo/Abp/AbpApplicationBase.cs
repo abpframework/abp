@@ -39,6 +39,18 @@ namespace Volo.Abp
             Modules = LoadModules(services, options);
         }
 
+        public virtual void Shutdown()
+        {
+            ServiceProvider
+                .GetRequiredService<IModuleManager>()
+                .ShutdownModules(new ApplicationShutdownContext());
+        }
+
+        public virtual void Dispose()
+        {
+
+        }
+
         private IReadOnlyList<IAbpModuleDescriptor> LoadModules(IServiceCollection services, AbpApplicationCreationOptions options)
         {
             return services
@@ -50,16 +62,14 @@ namespace Volo.Abp
                 );
         }
 
-        public virtual void Shutdown()
+        protected virtual void InitializeModules()
         {
-            ServiceProvider
-                .GetRequiredService<IModuleManager>()
-                .ShutdownModules(new ApplicationShutdownContext());
-        }
-
-        public virtual void Dispose()
-        {
-
+            using (var scope = ServiceProvider.CreateScope())
+            {
+                ServiceProvider
+                    .GetRequiredService<IModuleManager>()
+                    .InitializeModules(new ApplicationInitializationContext(scope.ServiceProvider));
+            }
         }
     }
 }

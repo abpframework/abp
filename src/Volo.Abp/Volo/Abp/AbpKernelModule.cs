@@ -37,6 +37,14 @@ namespace Volo.Abp
             services.AddAssemblyOf<AbpKernelModule>();
 
             services.TryAddObjectAccessor<IServiceProvider>();
+
+            services.Configure<ModuleLifecycleOptions>(options =>
+            {
+                options.Contributers.Add<OnPreApplicationInitializationModuleLifecycleContributer>();
+                options.Contributers.Add<OnApplicationInitializationModuleLifecycleContributer>();
+                options.Contributers.Add<OnPostApplicationInitializationModuleLifecycleContributer>();
+                options.Contributers.Add<OnApplicationShutdownModuleLifecycleContributer>();
+            });
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
