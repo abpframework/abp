@@ -9,5 +9,10 @@ namespace Volo.Abp.AspNetCore.App
         {
             return Content("Index-Result");
         }
+
+        public ActionResult About()
+        {
+            return View();
+        }
     }
 }

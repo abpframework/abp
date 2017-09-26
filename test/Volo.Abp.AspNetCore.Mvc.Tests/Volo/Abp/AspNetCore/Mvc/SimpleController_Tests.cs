@@ -8,13 +8,23 @@ namespace Volo.Abp.AspNetCore.Mvc
     public class SimpleController_Tests : AspNetCoreMvcTestBase
     {
         [Fact]
-        public async Task ActionResult_Return_Type_ContentResult_Return_Value()
+        public async Task ActionResult_ContentResult()
         {
             var result = await GetResponseAsStringAsync(
                 GetUrl<SimpleController>(nameof(SimpleController.Index))
             );
 
             result.ShouldBe("Index-Result");
+        }
+
+        [Fact]
+        public async Task ActionResult_ViewResult()
+        {
+            var result = await GetResponseAsStringAsync(
+                GetUrl<SimpleController>(nameof(SimpleController.About))
+            );
+
+            result.Trim().ShouldBe("<h2>About</h2>");
         }
     }
 }
