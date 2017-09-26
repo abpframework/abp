@@ -108,5 +108,36 @@ namespace Volo.Abp.Uow
             failed.ShouldBeTrue();
             disposed.ShouldBeTrue();
         }
+
+        [InlineData(true)]
+        [InlineData(false)]
+        [Theory]
+        public void Should_Trigger_Failed_If_Rolled_Back(bool callComplete)
+        {
+            var completed = false;
+            var failed = false;
+            var disposed = false;
+
+            Assert.Throws<Exception>(() =>
+            {
+                using (var uow = _unitOfWorkManager.Begin())
+                {
+                    uow.Completed += (sender, args) => completed = true;
+                    uow.Failed += (sender, args) => { failed = true; args.IsRolledback.ShouldBeTrue(); };
+                    uow.Disposed += (sender, args) => disposed = true;
+
+                    uow.Rollback();
+
+                    if (callComplete)
+                    {
+                        uow.Complete();
+                    }
+                }
+            }).Message.ShouldBe("test exception");
+
+            completed.ShouldBeFalse();
+            failed.ShouldBeTrue();
+            disposed.ShouldBeTrue();
+        }
     }
 }

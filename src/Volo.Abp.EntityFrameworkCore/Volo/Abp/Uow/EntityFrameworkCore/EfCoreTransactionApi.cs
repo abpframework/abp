@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -6,7 +7,7 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace Volo.Abp.Uow.EntityFrameworkCore
 {
-    public class EfCoreTransactionApi : ITransactionApi
+    public class EfCoreTransactionApi : ITransactionApi, ISupportsRollback
     {
         public IDbContextTransaction DbContextTransaction { get; }
         public DbContext StarterDbContext { get; }
@@ -43,6 +44,17 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
         public void Dispose()
         {
             DbContextTransaction.Dispose();
+        }
+
+        public void Rollback()
+        {
+            DbContextTransaction.Rollback();
+        }
+
+        public Task RollbackAsync(CancellationToken cancellationToken)
+        {
+            DbContextTransaction.Rollback();
+            return Task.CompletedTask;
         }
     }
 }

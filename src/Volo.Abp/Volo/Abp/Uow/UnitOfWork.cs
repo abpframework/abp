@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using JetBrains.Annotations;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
@@ -20,9 +19,9 @@ namespace Volo.Abp.Uow
 
         public string ReservationName { get; set; }
 
-        public event EventHandler Completed;
+        public event EventHandler<UnitOfWorkEventArgs> Completed;
         public event EventHandler<UnitOfWorkFailedEventArgs> Failed;
-        public event EventHandler Disposed;
+        public event EventHandler<UnitOfWorkEventArgs> Disposed;
 
         public IServiceProvider ServiceProvider { get; }
 
@@ -33,6 +32,7 @@ namespace Volo.Abp.Uow
         private Exception _exception;
         private bool _isCompleted;
         private bool _isDisposed;
+        private bool _isRolledback;
 
         public UnitOfWork(IServiceProvider serviceProvider, IOptions<UnitOfWorkDefaultOptions> options)
         {
@@ -90,7 +90,13 @@ namespace Volo.Abp.Uow
 
         public void Complete()
         {
+            if (_isRolledback)
+            {
+                return;
+            }
+
             PreventMultipleComplete();
+
             try
             {
                 SaveChanges();
@@ -106,6 +112,11 @@ namespace Volo.Abp.Uow
 
         public async Task CompleteAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
+            if (_isRolledback)
+            {
+                return;
+            }
+
             PreventMultipleComplete();
 
             try
@@ -118,6 +129,52 @@ namespace Volo.Abp.Uow
             {
                 _exception = ex;
                 throw;
+            }
+        }
+
+        public void Rollback()
+        {
+            if (_isRolledback)
+            {
+                return;
+            }
+
+            _isRolledback = true;
+
+            foreach (var databaseApi in _databaseApis.Values)
+            {
+                (databaseApi as ISupportsRollback)?.Rollback();
+            }
+
+            foreach (var transactionApi in _transactionApis.Values)
+            {
+                (transactionApi as ISupportsRollback)?.Rollback();
+            }
+        }
+
+        public async Task RollbackAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (_isRolledback)
+            {
+                return;
+            }
+
+            _isRolledback = true;
+
+            foreach (var databaseApi in _databaseApis.Values)
+            {
+                if (databaseApi is ISupportsRollback)
+                {
+                    await (databaseApi as ISupportsRollback).RollbackAsync(cancellationToken);
+                }
+            }
+
+            foreach (var transactionApi in _transactionApis.Values)
+            {
+                if (transactionApi is ISupportsRollback)
+                {
+                    await (transactionApi as ISupportsRollback).RollbackAsync(cancellationToken);
+                }
             }
         }
 
@@ -177,17 +234,17 @@ namespace Volo.Abp.Uow
 
         protected virtual void OnCompleted()
         {
-            Completed.InvokeSafely(this);
+            Completed.InvokeSafely(this, new UnitOfWorkEventArgs(this));
         }
 
-        protected virtual void OnFailed(Exception exception)
+        protected virtual void OnFailed()
         {
-            Failed.InvokeSafely(this, new UnitOfWorkFailedEventArgs(exception));
+            Failed.InvokeSafely(this, new UnitOfWorkFailedEventArgs(this, _exception, _isRolledback));
         }
 
         protected virtual void OnDisposed()
         {
-            Disposed.InvokeSafely(this);
+            Disposed.InvokeSafely(this, new UnitOfWorkEventArgs(this));
         }
 
         public void Dispose()
@@ -201,7 +258,7 @@ namespace Volo.Abp.Uow
 
             if (!_isCompleted || _exception != null)
             {
-                OnFailed(_exception);
+                OnFailed();
             }
 
             OnDisposed();

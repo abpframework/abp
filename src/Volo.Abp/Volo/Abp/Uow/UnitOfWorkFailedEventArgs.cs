@@ -6,7 +6,7 @@ namespace Volo.Abp.Uow
     /// <summary>
     /// Used as event arguments on <see cref="IUnitOfWork.Failed"/> event.
     /// </summary>
-    public class UnitOfWorkFailedEventArgs : EventArgs
+    public class UnitOfWorkFailedEventArgs : UnitOfWorkEventArgs
     {
         /// <summary>
         /// Exception that caused failure. This is set only if an error occured during <see cref="IUnitOfWork.Complete"/>.
@@ -17,12 +17,18 @@ namespace Volo.Abp.Uow
         public Exception Exception { get; }
 
         /// <summary>
+        /// True, if the unit of work is manually rolled back.
+        /// </summary>
+        public bool IsRolledback { get; }
+
+        /// <summary>
         /// Creates a new <see cref="UnitOfWorkFailedEventArgs"/> object.
         /// </summary>
-        /// <param name="exception">Exception that caused failure</param>
-        public UnitOfWorkFailedEventArgs([CanBeNull] Exception exception)
+        public UnitOfWorkFailedEventArgs([NotNull] IUnitOfWork unitOfWork, [CanBeNull] Exception exception, bool isRolledback)
+            : base(unitOfWork)
         {
             Exception = exception;
+            IsRolledback = isRolledback;
         }
     }
 }

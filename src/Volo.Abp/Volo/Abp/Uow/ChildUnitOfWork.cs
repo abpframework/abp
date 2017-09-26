@@ -17,9 +17,9 @@ namespace Volo.Abp.Uow
 
         public string ReservationName => _parent.ReservationName;
 
-        public event EventHandler Completed;
+        public event EventHandler<UnitOfWorkEventArgs> Completed;
         public event EventHandler<UnitOfWorkFailedEventArgs> Failed;
-        public event EventHandler Disposed;
+        public event EventHandler<UnitOfWorkEventArgs> Disposed;
 
         public IServiceProvider ServiceProvider => _parent.ServiceProvider;
 
@@ -60,17 +60,27 @@ namespace Volo.Abp.Uow
         {
             return _parent.SaveChangesAsync(cancellationToken);
         }
-        
+
         public void Complete()
         {
-            
+
         }
 
         public Task CompleteAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             return Task.CompletedTask;
         }
-        
+
+        public void Rollback()
+        {
+            _parent.Rollback();
+        }
+
+        public Task RollbackAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _parent.RollbackAsync(cancellationToken);
+        }
+
         public IDatabaseApi FindDatabaseApi(string key)
         {
             return _parent.FindDatabaseApi(key);

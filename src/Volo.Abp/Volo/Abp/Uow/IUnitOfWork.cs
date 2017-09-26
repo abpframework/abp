@@ -9,11 +9,11 @@ namespace Volo.Abp.Uow
     {
         Guid Id { get; }
 
-        event EventHandler Completed;
+        event EventHandler<UnitOfWorkEventArgs> Completed;
 
         event EventHandler<UnitOfWorkFailedEventArgs> Failed;
 
-        event EventHandler Disposed;
+        event EventHandler<UnitOfWorkEventArgs> Disposed;
 
         IUnitOfWorkOptions Options { get; }
 
@@ -36,5 +36,9 @@ namespace Volo.Abp.Uow
         void Complete();
 
         Task CompleteAsync(CancellationToken cancellationToken = default(CancellationToken));
+
+        void Rollback();
+
+        Task RollbackAsync(CancellationToken cancellationToken = default(CancellationToken));
     }
 }
