@@ -19,7 +19,7 @@ namespace Volo.Abp.Uow
             _ambientUnitOfWork = ambientUnitOfWork;
         }
 
-        public IBasicUnitOfWork Begin(UnitOfWorkOptions options, bool requiresNew = false)
+        public IUnitOfWork Begin(UnitOfWorkOptions options, bool requiresNew = false)
         {
             Check.NotNull(options, nameof(options));
 
@@ -34,7 +34,7 @@ namespace Volo.Abp.Uow
             return unitOfWork;
         }
 
-        public IBasicUnitOfWork Reserve(string reservationName, bool requiresNew = false)
+        public IUnitOfWork Reserve(string reservationName, bool requiresNew = false)
         {
             Check.NotNull(reservationName, nameof(reservationName));
 
@@ -46,9 +46,7 @@ namespace Volo.Abp.Uow
             }
 
             var unitOfWork = CreateNewUnitOfWork();
-
-            unitOfWork.IsReserved = true;
-            unitOfWork.ReservationName = reservationName;
+            unitOfWork.Reserve(reservationName);
 
             return unitOfWork;
         }
@@ -78,7 +76,6 @@ namespace Volo.Abp.Uow
                 return false;
             }
 
-            uow.IsReserved = false;
             uow.Initialize(options);
 
             return true;

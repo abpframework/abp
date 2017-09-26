@@ -5,7 +5,7 @@ namespace Volo.Abp.Uow
     public static class UnitOfWorkManagerExtensions
     {
         [NotNull]
-        public static IBasicUnitOfWork Begin([NotNull] this IUnitOfWorkManager unitOfWorkManager, bool requiresNew = false)
+        public static IUnitOfWork Begin([NotNull] this IUnitOfWorkManager unitOfWorkManager, bool requiresNew = false)
         {
             Check.NotNull(unitOfWorkManager, nameof(unitOfWorkManager));
 

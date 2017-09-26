@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
@@ -52,6 +53,15 @@ namespace Volo.Abp.Uow
             }
 
             Options = _defaultOptions.Normalize(options.Clone());
+            IsReserved = false;
+        }
+
+        public void Reserve(string reservationName)
+        {
+            Check.NotNull(reservationName, nameof(reservationName));
+
+            ReservationName = reservationName;
+            IsReserved = true;
         }
 
         public void SetOuter(IUnitOfWork outer)

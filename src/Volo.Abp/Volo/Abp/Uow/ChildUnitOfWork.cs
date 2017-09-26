@@ -13,27 +13,9 @@ namespace Volo.Abp.Uow
 
         public IUnitOfWork Outer => _parent.Outer;
 
-        public bool IsReserved
-        {
-            get => _parent.IsReserved;
-            set => _parent.IsReserved = value;
-        }
+        public bool IsReserved => _parent.IsReserved;
 
-        public string ReservationName
-        {
-            get => _parent.ReservationName;
-            set => _parent.ReservationName = value;
-        }
-
-        public void SetOuter(IUnitOfWork outer)
-        {
-            _parent.SetOuter(outer);
-        }
-
-        public void Initialize(UnitOfWorkOptions options)
-        {
-            _parent.Initialize(options);
-        }
+        public string ReservationName => _parent.ReservationName;
 
         public event EventHandler Completed;
         public event EventHandler<UnitOfWorkFailedEventArgs> Failed;
@@ -52,6 +34,21 @@ namespace Volo.Abp.Uow
             _parent.Completed += (sender, args) => { Completed.InvokeSafely(sender, args); };
             _parent.Failed += (sender, args) => { Failed.InvokeSafely(sender, args); };
             _parent.Disposed += (sender, args) => { Disposed.InvokeSafely(sender, args); };
+        }
+
+        public void SetOuter(IUnitOfWork outer)
+        {
+            _parent.SetOuter(outer);
+        }
+
+        public void Initialize(UnitOfWorkOptions options)
+        {
+            _parent.Initialize(options);
+        }
+
+        public void Reserve(string reservationName)
+        {
+            _parent.Reserve(reservationName);
         }
 
         public void SaveChanges()
