@@ -1,8 +1,8 @@
 ﻿using System.Reflection;
-using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Controllers;
+using Volo.Abp;
 
-namespace Volo.Abp.AspNetCore.Mvc
+namespace Microsoft.AspNetCore.Mvc.Abstractions
 {
     public static class ActionDescriptorExtensions
     {
