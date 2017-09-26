@@ -5,6 +5,7 @@ using Volo.Abp.Autofac;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.Modularity;
+using Volo.Abp.Uow;
 
 namespace Volo.Abp.Identity
 {
@@ -25,6 +26,11 @@ namespace Volo.Abp.Identity
                 {
                     context.DbContextOptions.UseInMemoryDatabase(databaseName);
                 });
+            });
+
+            services.Configure<UnitOfWorkDefaultOptions>(options =>
+            {
+                options.TransactionBehavior = UnitOfWorkTransactionBehavior.Disabled; //EF in-memory database does not support transactions
             });
         }
 

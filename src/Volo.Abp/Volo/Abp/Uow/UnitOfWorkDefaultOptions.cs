@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Reflection;
 
 namespace Volo.Abp.Uow
 {
@@ -29,6 +30,21 @@ namespace Volo.Abp.Uow
             }
 
             return options;
+        }
+
+        internal bool CalculateIsTransactional(bool autoValue)
+        {
+            switch (TransactionBehavior)
+            {
+                case UnitOfWorkTransactionBehavior.Enabled:
+                    return true;
+                case UnitOfWorkTransactionBehavior.Disabled:
+                    return false;
+                case UnitOfWorkTransactionBehavior.Auto:
+                    return autoValue;
+                default:
+                    throw new AbpException("Not implemented TransactionBehavior value: " + TransactionBehavior);
+            }
         }
     }
 }
