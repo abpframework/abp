@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-    <AssemblyName>Volo.Abp.Http.Tests</AssemblyName>
+    <AssemblyName>Volo.Abp.Http.Client.Tests</AssemblyName>
     <PackageId>Volo.Abp.Http.Client.Tests</PackageId>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
