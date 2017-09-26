@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
@@ -9,6 +10,7 @@ using Volo.Abp.DynamicProxy;
 using Volo.Abp.Http.Modeling;
 using Volo.Abp.Http.ProxyScripting.Generators;
 using Volo.Abp.Json;
+using Volo.Abp.Reflection;
 using Volo.Abp.Threading;
 
 namespace Volo.Abp.Http.Client.DynamicProxying
@@ -77,7 +79,15 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
         private async Task<T> MakeRequestAndGetResultAsync<T>(IAbpMethodInvocation invocation)
         {
-            return _jsonSerializer.Deserialize<T>(await MakeRequest(invocation));
+            var responseAsString = await MakeRequest(invocation);
+
+            //TODO: Think on that
+            if (TypeHelper.IsPrimitiveExtendedIncludingNullable(typeof(T), true))
+            {
+                return (T)Convert.ChangeType(responseAsString, typeof(T));
+            }
+
+            return _jsonSerializer.Deserialize<T>(responseAsString);
         }
 
         private async Task<string> MakeRequest(IAbpMethodInvocation invocation)
