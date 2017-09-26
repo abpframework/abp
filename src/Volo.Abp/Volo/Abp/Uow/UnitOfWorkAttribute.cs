@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Data;
+using System.Threading;
+using JetBrains.Annotations;
 
 namespace Volo.Abp.Uow
 {
@@ -37,7 +39,32 @@ namespace Volo.Abp.Uow
         /// </summary>
         public bool IsDisabled { get; set; }
 
-        public virtual void SetOptions(UnitOfWorkOptions options)
+        public UnitOfWorkAttribute()
+        {
+            
+        }
+
+        public UnitOfWorkAttribute(bool isTransactional)
+        {
+            IsTransactional = isTransactional;
+        }
+
+        public UnitOfWorkAttribute(bool isTransactional, IsolationLevel isolationLevel)
+        {
+            IsTransactional = isTransactional;
+            IsolationLevel = isolationLevel;
+        }
+
+        public UnitOfWorkAttribute(bool isTransactional, IsolationLevel isolationLevel, TimeSpan timeout)
+        {
+            IsTransactional = isTransactional;
+            IsolationLevel = isolationLevel;
+            Timeout = timeout;
+        }
+
+        //TODO: More constructors!
+
+        internal virtual void SetOptions(UnitOfWorkOptions options)
         {
             if (IsTransactional.HasValue)
             {

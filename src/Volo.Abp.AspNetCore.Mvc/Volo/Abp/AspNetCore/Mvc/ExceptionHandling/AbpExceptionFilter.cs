@@ -62,7 +62,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
             context.Exception = null; //Handled!
         }
 
-        private int GetStatusCode(ExceptionContext context)
+        private static int GetStatusCode(ExceptionContext context)
         {
             if (context.Exception is AbpAuthorizationException)
             {

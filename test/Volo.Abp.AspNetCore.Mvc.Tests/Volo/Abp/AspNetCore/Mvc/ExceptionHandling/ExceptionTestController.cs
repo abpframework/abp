@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Ui;
 
-namespace Volo.Abp.AspNetCore.App
+namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
 {
     [Route("api/exception-test")]
     public class ExceptionTestController : AbpController

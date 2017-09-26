@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Volo.Abp.Uow;
 
@@ -18,7 +19,16 @@ namespace Volo.Abp.AspNetCore.Mvc.Uow
             using (var uow = unitOfWorkManager.Reserve(AbpUowActionFilter.UnitOfWorkReservationName))
             {
                 await _next(httpContext);
-                await uow.CompleteAsync(httpContext.RequestAborted);
+
+                try
+                {
+                    await uow.CompleteAsync(httpContext.RequestAborted);
+                }
+                catch (Exception e)
+                {
+                    
+                    throw;
+                }
             }
         }
     }

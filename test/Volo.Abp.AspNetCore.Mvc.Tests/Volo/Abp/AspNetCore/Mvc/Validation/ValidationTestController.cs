@@ -2,9 +2,8 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Shouldly;
-using Volo.Abp.AspNetCore.Mvc;
 
-namespace Volo.Abp.AspNetCore.App
+namespace Volo.Abp.AspNetCore.Mvc.Validation
 {
     [Route("api/validation-test")]
     public class ValidationTestController : AbpController

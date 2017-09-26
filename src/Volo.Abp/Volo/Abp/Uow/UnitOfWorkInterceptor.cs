@@ -55,9 +55,12 @@ namespace Volo.Abp.Uow
 
             unitOfWorkAttribute?.SetOptions(options);
 
-            options.IsTransactional = _defaultOptions.CalculateIsTransactional(
-                autoValue: !invocation.Method.Name.StartsWith("Get", StringComparison.InvariantCultureIgnoreCase)
-            );
+            if (unitOfWorkAttribute?.IsTransactional == null)
+            {
+                options.IsTransactional = _defaultOptions.CalculateIsTransactional(
+                    autoValue: !invocation.Method.Name.StartsWith("Get", StringComparison.InvariantCultureIgnoreCase)
+                );
+            }
 
             return options;
         }

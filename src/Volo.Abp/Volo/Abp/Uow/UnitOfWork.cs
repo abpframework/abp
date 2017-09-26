@@ -43,7 +43,7 @@ namespace Volo.Abp.Uow
             _transactionApis = new Dictionary<string, ITransactionApi>();
         }
 
-        public void Initialize(UnitOfWorkOptions options)
+        public virtual void Initialize(UnitOfWorkOptions options)
         {
             Check.NotNull(options, nameof(options));
 
@@ -56,7 +56,7 @@ namespace Volo.Abp.Uow
             IsReserved = false;
         }
 
-        public void Reserve(string reservationName)
+        public virtual void Reserve(string reservationName)
         {
             Check.NotNull(reservationName, nameof(reservationName));
 
@@ -64,12 +64,12 @@ namespace Volo.Abp.Uow
             IsReserved = true;
         }
 
-        public void SetOuter(IUnitOfWork outer)
+        public virtual void SetOuter(IUnitOfWork outer)
         {
             Outer = outer;
         }
 
-        public void SaveChanges()
+        public virtual void SaveChanges()
         {
             foreach (var databaseApi in _databaseApis.Values)
             {
@@ -77,7 +77,7 @@ namespace Volo.Abp.Uow
             }
         }
 
-        public async Task SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             foreach (var databaseApi in _databaseApis.Values)
             {
@@ -88,7 +88,7 @@ namespace Volo.Abp.Uow
             }
         }
 
-        public void Complete()
+        public virtual void Complete()
         {
             if (_isRolledback)
             {
@@ -110,7 +110,7 @@ namespace Volo.Abp.Uow
             }
         }
 
-        public async Task CompleteAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task CompleteAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             if (_isRolledback)
             {
@@ -132,7 +132,7 @@ namespace Volo.Abp.Uow
             }
         }
 
-        public void Rollback()
+        public virtual void Rollback()
         {
             if (_isRolledback)
             {
@@ -152,7 +152,7 @@ namespace Volo.Abp.Uow
             }
         }
 
-        public async Task RollbackAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task RollbackAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             if (_isRolledback)
             {
@@ -247,7 +247,7 @@ namespace Volo.Abp.Uow
             Disposed.InvokeSafely(this, new UnitOfWorkEventArgs(this));
         }
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             if (_isDisposed)
             {

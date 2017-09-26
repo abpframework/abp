@@ -7,8 +7,7 @@ namespace Volo.Abp.TestApp.MemoryDb
 {
     public class TestAppMemoryDbContext : MemoryDbContext
     {
-        private static readonly Type[] EntityTypeList = new Type[]
-        {
+        private static readonly Type[] EntityTypeList = {
             typeof(Person)
         };
 
