@@ -118,22 +118,19 @@ namespace Volo.Abp.Uow
             var failed = false;
             var disposed = false;
 
-            Assert.Throws<Exception>(() =>
+            using (var uow = _unitOfWorkManager.Begin())
             {
-                using (var uow = _unitOfWorkManager.Begin())
+                uow.Completed += (sender, args) => completed = true;
+                uow.Failed += (sender, args) => { failed = true; args.IsRolledback.ShouldBeTrue(); };
+                uow.Disposed += (sender, args) => disposed = true;
+
+                uow.Rollback();
+
+                if (callComplete)
                 {
-                    uow.Completed += (sender, args) => completed = true;
-                    uow.Failed += (sender, args) => { failed = true; args.IsRolledback.ShouldBeTrue(); };
-                    uow.Disposed += (sender, args) => disposed = true;
-
-                    uow.Rollback();
-
-                    if (callComplete)
-                    {
-                        uow.Complete();
-                    }
+                    uow.Complete();
                 }
-            }).Message.ShouldBe("test exception");
+            }
 
             completed.ShouldBeFalse();
             failed.ShouldBeTrue();
