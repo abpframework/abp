@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Autofac;
+using Volo.Abp.EntityFrameworkCore.TestApp.SecondContext;
 using Volo.Abp.Modularity;
 using Volo.Abp.TestApp;
 using Volo.Abp.TestApp.EntityFrameworkCore;
@@ -11,6 +12,7 @@ namespace Volo.Abp.EntityFrameworkCore
     [DependsOn(typeof(AbpEntityFrameworkCoreModule))]
     [DependsOn(typeof(TestAppModule))]
     [DependsOn(typeof(AbpAutofacModule))]
+    [DependsOn(typeof(AbpEfCoreTestSecondContextModule))]
     public class AbpEntityFrameworkCoreTestModule : AbpModule
     {
         public override void ConfigureServices(IServiceCollection services)
@@ -18,6 +20,11 @@ namespace Volo.Abp.EntityFrameworkCore
             services.AddAssemblyOf<AbpEntityFrameworkCoreTestModule>();
 
             services.AddAbpDbContext<TestAppDbContext>(options =>
+            {
+                options.WithDefaultRepositories();
+            });
+
+            services.AddAbpDbContext<SecondDbContext>(options =>
             {
                 options.WithDefaultRepositories();
             });
@@ -36,7 +43,8 @@ namespace Volo.Abp.EntityFrameworkCore
 
         public override void OnPreApplicationInitialization(ApplicationInitializationContext context)
         {
-            context.ServiceProvider.GetRequiredService<TestAppDbContext>().Database.EnsureCreated();
+            context.ServiceProvider.GetRequiredService<TestAppDbContext>().Database.Migrate();
+            context.ServiceProvider.GetRequiredService<SecondDbContext>().Database.Migrate();
         }
     }
 }

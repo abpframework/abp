@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.EntityFrameworkCore.TestApp.SecondContext;
 using Volo.Abp.TestApp.Domain;
 using Xunit;
 
@@ -12,16 +13,24 @@ namespace Volo.Abp.EntityFrameworkCore.Repositories
     public class Basic_Repository_Tests : EntityFrameworkCoreTestBase
     {
         private readonly IRepository<Person> _personRepository;
+        private readonly IRepository<BookInSecondDbContext> _bookRepository;
 
         public Basic_Repository_Tests()
         {
             _personRepository = ServiceProvider.GetRequiredService<IRepository<Person>>();
+            _bookRepository = ServiceProvider.GetRequiredService<IRepository<BookInSecondDbContext>>();
         }
 
         [Fact]
-        public void GetList()
+        public void GetPersonList()
         {
             _personRepository.GetList().Any().ShouldBeTrue();
+        }
+
+        [Fact]
+        public void GetBookList()
+        {
+            _bookRepository.GetList().Any().ShouldBeTrue();
         }
 
         [Fact]

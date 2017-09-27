@@ -1,8 +1,10 @@
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using Volo.Abp.Domain.Entities;
 
 namespace Volo.Abp.TestApp.Domain
 {
+    [Table("AppPhones")]
     public class Phone : Entity<long>
     {
         public virtual Guid PersonId { get; set; }

@@ -138,8 +138,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Identity.Domain", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Identity.Domain.Shared", "src\Volo.Abp.Identity.Domain.Shared\Volo.Abp.Identity.Domain.Shared.csproj", "{DF676F73-3FC9-46CE-909A-2D75E19982AD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.EntityFrameworkCore.Tests", "test\Volo.Abp.EntityFrameworkCore.Tests\Volo.Abp.EntityFrameworkCore.Tests.csproj", "{3AF7C7F5-6513-47D4-8DD0-6E1AF14568D8}"
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleConsoleDemo", "test\SimpleConsoleDemo\SimpleConsoleDemo.csproj", "{2B48CF90-DBDB-469F-941C-5B5AECEEACE0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.EntityFrameworkCore.Tests", "test\Volo.Abp.EntityFrameworkCore.Tests\Volo.Abp.EntityFrameworkCore.Tests.csproj", "{3AF7C7F5-6513-47D4-8DD0-6E1AF14568D8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleConsoleDemo", "test\SimpleConsoleDemo\SimpleConsoleDemo.csproj", "{2B48CF90-DBDB-469F-941C-5B5AECEEACE0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.EntityFrameworkCore.Tests.SecondContext", "test\Volo.Abp.EntityFrameworkCore.Tests.SecondContext\Volo.Abp.EntityFrameworkCore.Tests.SecondContext.csproj", "{127FC2BF-DC40-4370-B845-16088328264C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -359,6 +362,10 @@ Global
 		{2B48CF90-DBDB-469F-941C-5B5AECEEACE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2B48CF90-DBDB-469F-941C-5B5AECEEACE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2B48CF90-DBDB-469F-941C-5B5AECEEACE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{127FC2BF-DC40-4370-B845-16088328264C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{127FC2BF-DC40-4370-B845-16088328264C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{127FC2BF-DC40-4370-B845-16088328264C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{127FC2BF-DC40-4370-B845-16088328264C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -426,6 +433,7 @@ Global
 		{DF676F73-3FC9-46CE-909A-2D75E19982AD} = {1895A5C9-50D4-4568-9A3A-14657E615A5E}
 		{3AF7C7F5-6513-47D4-8DD0-6E1AF14568D8} = {37087D1B-3693-4E96-983D-A69F210BDE53}
 		{2B48CF90-DBDB-469F-941C-5B5AECEEACE0} = {37087D1B-3693-4E96-983D-A69F210BDE53}
+		{127FC2BF-DC40-4370-B845-16088328264C} = {37087D1B-3693-4E96-983D-A69F210BDE53}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB97ECF4-9A84-433F-A80B-2A3285BDD1D5}

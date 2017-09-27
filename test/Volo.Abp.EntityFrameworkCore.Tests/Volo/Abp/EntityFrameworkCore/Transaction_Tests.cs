@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.EntityFrameworkCore.TestApp.SecondContext;
 using Volo.Abp.TestApp.Domain;
 using Volo.Abp.Uow;
 using Xunit;
@@ -12,11 +13,13 @@ namespace Volo.Abp.EntityFrameworkCore
     public class Transaction_Tests : EntityFrameworkCoreTestBase
     {
         private readonly IRepository<Person> _personRepository;
+        private readonly IRepository<BookInSecondDbContext> _bookRepository;
         private readonly IUnitOfWorkManager _unitOfWorkManager;
 
         public Transaction_Tests()
         {
             _personRepository = ServiceProvider.GetRequiredService<IRepository<Person>>();
+            _bookRepository = ServiceProvider.GetRequiredService<IRepository<BookInSecondDbContext>>();
             _unitOfWorkManager = ServiceProvider.GetRequiredService<IUnitOfWorkManager>();
         }
 
@@ -28,7 +31,7 @@ namespace Volo.Abp.EntityFrameworkCore
 
             try
             {
-                await WithUnitOfWorkAsync(async () =>
+                await WithUnitOfWorkAsync(new UnitOfWorkOptions { IsTransactional = true }, async () =>
                 {
                     await _personRepository.InsertAsync(new Person(personId, "Adam", 42));
                     throw new Exception(exceptionMessage);
@@ -48,15 +51,44 @@ namespace Volo.Abp.EntityFrameworkCore
         {
             var personId = Guid.NewGuid();
 
-            await WithUnitOfWorkAsync(async () =>
+            await WithUnitOfWorkAsync(new UnitOfWorkOptions { IsTransactional = true }, async () =>
             {
                 _unitOfWorkManager.Current.ShouldNotBeNull();
+
                 await _personRepository.InsertAsync(new Person(personId, "Adam", 42));
+
                 await _unitOfWorkManager.Current.RollbackAsync();
             });
 
             var person = await _personRepository.FindAsync(personId);
             person.ShouldBeNull();
+        }
+
+        [Fact]
+        public async Task Should_Rollback_Transaction_Manually_With_Double_DbContext_Transaction()
+        {
+            var personId = Guid.NewGuid();
+            var bookId = Guid.NewGuid();
+
+            using (var scope = ServiceProvider.CreateScope())
+            {
+                var uowManager = scope.ServiceProvider.GetRequiredService<IUnitOfWorkManager>();
+
+                using (uowManager.Begin(new UnitOfWorkOptions { IsTransactional = true }))
+                {
+                    _unitOfWorkManager.Current.ShouldNotBeNull();
+
+                    await _personRepository.InsertAsync(new Person(personId, "Adam", 42));
+                    await _bookRepository.InsertAsync(new BookInSecondDbContext { Id = bookId, Name = bookId.ToString() });
+
+                    await _unitOfWorkManager.Current.SaveChangesAsync();
+
+                    //Will automatically rollback since not called the Complete!
+                }
+            }
+
+            (await _personRepository.FindAsync(personId)).ShouldBeNull();
+            (await _bookRepository.FindAsync(bookId)).ShouldBeNull();
         }
     }
 }

@@ -141,15 +141,7 @@ namespace Volo.Abp.Uow
 
             _isRolledback = true;
 
-            foreach (var databaseApi in _databaseApis.Values)
-            {
-                (databaseApi as ISupportsRollback)?.Rollback();
-            }
-
-            foreach (var transactionApi in _transactionApis.Values)
-            {
-                (transactionApi as ISupportsRollback)?.Rollback();
-            }
+            RollbackAll();
         }
 
         public virtual async Task RollbackAsync(CancellationToken cancellationToken = default(CancellationToken))
@@ -161,21 +153,7 @@ namespace Volo.Abp.Uow
 
             _isRolledback = true;
 
-            foreach (var databaseApi in _databaseApis.Values)
-            {
-                if (databaseApi is ISupportsRollback)
-                {
-                    await (databaseApi as ISupportsRollback).RollbackAsync(cancellationToken);
-                }
-            }
-
-            foreach (var transactionApi in _transactionApis.Values)
-            {
-                if (transactionApi is ISupportsRollback)
-                {
-                    await (transactionApi as ISupportsRollback).RollbackAsync(cancellationToken);
-                }
-            }
+            await RollbackAllAsync(cancellationToken);
         }
 
         public IDatabaseApi FindDatabaseApi(string key)
@@ -256,12 +234,28 @@ namespace Volo.Abp.Uow
 
             _isDisposed = true;
 
+            DisposeTransactions();
+
             if (!_isCompleted || _exception != null)
             {
                 OnFailed();
             }
 
             OnDisposed();
+        }
+
+        private void DisposeTransactions()
+        {
+            foreach (var transactionApi in _transactionApis.Values)
+            {
+                try
+                {
+                    transactionApi.Dispose();
+                }
+                catch
+                {
+                }
+            }
         }
 
         private void PreventMultipleComplete()
@@ -274,9 +268,53 @@ namespace Volo.Abp.Uow
             _isCompleted = true;
         }
 
-        public override string ToString()
+
+        protected virtual void RollbackAll()
         {
-            return $"[UnitOfWork {Id}]";
+            foreach (var databaseApi in _databaseApis.Values)
+            {
+                try
+                {
+                    (databaseApi as ISupportsRollback)?.Rollback();
+                }
+                catch { }
+            }
+
+            foreach (var transactionApi in _transactionApis.Values)
+            {
+                try
+                {
+                    (transactionApi as ISupportsRollback)?.Rollback();
+                }
+                catch { }
+            }
+        }
+
+        protected virtual async Task RollbackAllAsync(CancellationToken cancellationToken)
+        {
+            foreach (var databaseApi in _databaseApis.Values)
+            {
+                if (databaseApi is ISupportsRollback)
+                {
+                    try
+                    {
+                        await (databaseApi as ISupportsRollback).RollbackAsync(cancellationToken);
+                    }
+                    catch { }
+                }
+            }
+
+            foreach (var transactionApi in _transactionApis.Values)
+            {
+                if (transactionApi is ISupportsRollback)
+                {
+                    try
+                    {
+                        await (transactionApi as ISupportsRollback).RollbackAsync(cancellationToken);
+                    }
+                    catch { }
+                }
+            }
         }
 
         protected virtual void CommitTransactions()
@@ -293,6 +331,11 @@ namespace Volo.Abp.Uow
             {
                 await transaction.CommitAsync();
             }
+        }
+
+        public override string ToString()
+        {
+            return $"[UnitOfWork {Id}]";
         }
     }
 }
