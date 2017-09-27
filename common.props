@@ -1,0 +1,16 @@
+<Project>
+  <PropertyGroup>
+    <Version>0.1.0</Version>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+    <PackageIconUrl>http://www.aspnetboilerplate.com/images/abp_nupkg.png</PackageIconUrl>
+    <PackageProjectUrl>http://abp.io</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/aspnetzero/abp/blob/master/LICENSE</PackageLicenseUrl>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/aspnetzero/abp/</RepositoryUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SourceLink.Create.CommandLine" Version="2.2.1" PrivateAssets="All" />
+  </ItemGroup>
+
+</Project>
