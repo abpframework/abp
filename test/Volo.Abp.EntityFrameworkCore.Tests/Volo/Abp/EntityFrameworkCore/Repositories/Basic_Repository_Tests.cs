@@ -14,11 +14,13 @@ namespace Volo.Abp.EntityFrameworkCore.Repositories
     {
         private readonly IRepository<Person> _personRepository;
         private readonly IRepository<BookInSecondDbContext> _bookRepository;
+        private readonly IRepository<PhoneInSecondDbContext, long> _phoneInSecondDbContextRepository;
 
         public Basic_Repository_Tests()
         {
             _personRepository = ServiceProvider.GetRequiredService<IRepository<Person>>();
             _bookRepository = ServiceProvider.GetRequiredService<IRepository<BookInSecondDbContext>>();
+            _phoneInSecondDbContextRepository = ServiceProvider.GetRequiredService<IRepository<PhoneInSecondDbContext, long>>();
         }
 
         [Fact]
@@ -31,6 +33,12 @@ namespace Volo.Abp.EntityFrameworkCore.Repositories
         public void GetBookList()
         {
             _bookRepository.GetList().Any().ShouldBeTrue();
+        }
+        
+        [Fact]
+        public void GetPhoneInSecondDbContextList()
+        {
+            _phoneInSecondDbContextRepository.GetList().Any().ShouldBeTrue();
         }
 
         [Fact]

@@ -6,6 +6,8 @@ namespace Volo.Abp.EntityFrameworkCore.TestApp.SecondContext
     {
         public DbSet<BookInSecondDbContext> Books { get; set; }
 
+        public DbSet<PhoneInSecondDbContext> Phones { get; set; }
+
         public SecondDbContext(DbContextOptions<SecondDbContext> options) 
             : base(options)
         {

@@ -11,9 +11,10 @@ using Volo.Abp.EntityFrameworkCore.TestApp.SecondContext;
 namespace Volo.Abp.EntityFrameworkCore.Tests.SecondContext.Migrations
 {
     [DbContext(typeof(SecondDbContext))]
-    partial class SecondDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170927100405_Added_PhoneInSecondDbContext")]
+    partial class Added_PhoneInSecondDbContext
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
