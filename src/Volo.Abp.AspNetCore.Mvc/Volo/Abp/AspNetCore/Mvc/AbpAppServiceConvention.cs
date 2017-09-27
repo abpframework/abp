@@ -240,12 +240,14 @@ namespace Volo.Abp.AspNetCore.Mvc
 
         protected virtual AttributeRouteModel CreateAbpServiceAttributeRouteModel(string rootPath, string controllerName, ActionModel action, string httpMethod)
         {
-            var url = CalculateUrl(rootPath, controllerName, action, httpMethod);
-
-            return new AttributeRouteModel(new RouteAttribute(url));
+            return new AttributeRouteModel(
+                new RouteAttribute(
+                    CalculateRouteTemplate(rootPath, controllerName, action, httpMethod)
+                )
+            );
         }
 
-        protected virtual string CalculateUrl(string rootPath, string controllerName, ActionModel action, string httpMethod)
+        protected virtual string CalculateRouteTemplate(string rootPath, string controllerName, ActionModel action, string httpMethod)
         {
             var url = $"api/{rootPath}/{controllerName.ToCamelCase()}";
 
@@ -254,7 +256,7 @@ namespace Volo.Abp.AspNetCore.Mvc
             {
                 url += "/{id}";
             }
-            
+
             //Add action name if needed
             var actionNameInUrl = NormalizeUrlActionName(rootPath, controllerName, action, httpMethod);
             if (!actionNameInUrl.IsNullOrEmpty())
