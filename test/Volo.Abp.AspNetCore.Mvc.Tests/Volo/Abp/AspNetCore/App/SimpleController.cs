@@ -14,5 +14,10 @@ namespace Volo.Abp.AspNetCore.App
         {
             return View();
         }
+
+        public ActionResult ExceptionOnRazor()
+        {
+            return View();
+        }
     }
 }

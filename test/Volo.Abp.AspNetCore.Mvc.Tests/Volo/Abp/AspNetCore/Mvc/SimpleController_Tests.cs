@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.AspNetCore.App;
+using Volo.Abp.Ui;
 using Xunit;
 
 namespace Volo.Abp.AspNetCore.Mvc
@@ -25,6 +26,17 @@ namespace Volo.Abp.AspNetCore.Mvc
             );
 
             result.Trim().ShouldBe("<h2>About</h2>");
+        }
+
+        [Fact]
+        public async Task ActionResult_ViewResult_Exception()
+        {
+            await Assert.ThrowsAsync<UserFriendlyException>(async () =>
+            {
+                await GetResponseAsStringAsync(
+                    GetUrl<SimpleController>(nameof(SimpleController.ExceptionOnRazor))
+                );
+            });
         }
     }
 }

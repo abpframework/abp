@@ -1,16 +1,12 @@
 ﻿using System.Collections.Generic;
-using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Primitives;
-using Volo.Abp.Authorization;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Domain.Entities;
 using Volo.Abp.Http;
-using Volo.Abp.Validation;
 
 namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
 {
@@ -21,10 +17,12 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
         //TODO: Use EventBus to trigger error handled event like in previous ABP
 
         private readonly IExceptionToErrorInfoConverter _errorInfoConverter;
+        private readonly HttpExceptionStatusCodeFinder _statusCodeFinder;
 
-        public AbpExceptionFilter(IExceptionToErrorInfoConverter errorInfoConverter)
+        public AbpExceptionFilter(IExceptionToErrorInfoConverter errorInfoConverter, HttpExceptionStatusCodeFinder statusCodeFinder)
         {
             _errorInfoConverter = errorInfoConverter;
+            _statusCodeFinder = statusCodeFinder;
 
             Logger = NullLogger<AbpExceptionFilter>.Instance;
         }
@@ -49,7 +47,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
                 return;
             }
 
-            context.HttpContext.Response.StatusCode = GetStatusCode(context);
+            context.HttpContext.Response.StatusCode = _statusCodeFinder.GetStatusCode(context.HttpContext, context.Exception);
             context.HttpContext.Response.Headers.Add(new KeyValuePair<string, StringValues>("_AbpErrorFormat", "true"));
 
             context.Result = new ObjectResult(
@@ -61,28 +59,6 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
             //EventBus.Trigger(this, new AbpHandledExceptionData(context.Exception));
 
             context.Exception = null; //Handled!
-        }
-
-        private static int GetStatusCode(ExceptionContext context)
-        {
-            if (context.Exception is AbpAuthorizationException)
-            {
-                return context.HttpContext.User.Identity.IsAuthenticated
-                    ? (int)HttpStatusCode.Forbidden
-                    : (int)HttpStatusCode.Unauthorized;
-            }
-
-            if (context.Exception is AbpValidationException)
-            {
-                return (int)HttpStatusCode.BadRequest;
-            }
-
-            if (context.Exception is EntityNotFoundException)
-            {
-                return (int)HttpStatusCode.NotFound;
-            }
-
-            return (int)HttpStatusCode.InternalServerError;
         }
     }
 }

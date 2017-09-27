@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Data;
-using System.Threading;
-using JetBrains.Annotations;
 
 namespace Volo.Abp.Uow
 {
