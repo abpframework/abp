@@ -1,26 +1,33 @@
 ﻿using System;
 using System.Reflection;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 
 namespace Volo.Abp.AspNetCore.Mvc
 {
     public class AbpControllerAssemblySetting
     {
+        [NotNull]
         public Assembly Assembly { get; }
 
+        [NotNull]
         public string RootPath { get; }
 
+        [CanBeNull]
         public Func<Type, bool> TypePredicate { get; set; }
 
+        [CanBeNull]
         public Action<ControllerModel> ControllerModelConfigurer { get; set; }
 
-        public AbpControllerAssemblySetting(Assembly assembly, string rootPath)
+        [CanBeNull]
+        public Func<UrlControllerNameNormalizerContext, string> UrlControllerNameNormalizer { get; set; }
+
+        public AbpControllerAssemblySetting([NotNull] Assembly assembly, [NotNull] string rootPath)
         {
+            Check.NotNull(assembly, rootPath);
+
             Assembly = assembly;
             RootPath = rootPath;
-
-            TypePredicate = type => true;
-            ControllerModelConfigurer = controller => { };
         }
     }
 }
