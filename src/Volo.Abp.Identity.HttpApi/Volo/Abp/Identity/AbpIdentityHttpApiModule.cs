@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Modularity;
 
@@ -13,7 +14,10 @@ namespace Volo.Abp.Identity
 
             services.Configure<AbpAspNetCoreMvcOptions>(options =>
             {
-                options.AppServiceControllers.CreateFor(typeof(AbpIdentityApplicationModule).Assembly, "identity");
+                options
+                    .AppServiceControllers
+                    .CreateFor(typeof(AbpIdentityApplicationModule).Assembly, "identity")
+                    .NormalizeControllerNameInUrl(context => context.ControllerName.RemovePreFix("Identity"));
             });
         }
     }

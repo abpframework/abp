@@ -35,7 +35,7 @@ namespace Volo.Abp.AspNetCore.Mvc
 
             //TODO: Move this to a lazy loaded field for efficiency.
             var configuration = _application.ServiceProvider.GetRequiredService<IOptions<AbpAspNetCoreMvcOptions>>().Value.AppServiceControllers.ControllerAssemblySettings.GetSettingOrNull(type);
-            return configuration != null && configuration.TypePredicate(type);
+            return configuration != null && (configuration.TypePredicate == null || configuration.TypePredicate(type));
         }
     }
 }

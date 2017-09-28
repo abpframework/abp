@@ -12,8 +12,6 @@ namespace Volo.Abp.AspNetCore.Mvc
 
         public List<Type> FormBodyBindingIgnoredTypes { get; }
         
-        public List<IUrlActionNameNormalizer> UrlActionNameNormalizers { get; }
-
         public AppServiceControllerOptions()
         {
             ControllerAssemblySettings = new ControllerAssemblySettingList();
@@ -21,11 +19,6 @@ namespace Volo.Abp.AspNetCore.Mvc
             FormBodyBindingIgnoredTypes = new List<Type>
             {
                 typeof(IFormFile)
-            };
-
-            UrlActionNameNormalizers = new List<IUrlActionNameNormalizer>
-            {
-                new DefaultUrlActionNameNormalizer()
             };
         }
 
