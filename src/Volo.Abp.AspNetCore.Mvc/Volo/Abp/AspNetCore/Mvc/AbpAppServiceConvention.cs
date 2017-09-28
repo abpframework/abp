@@ -214,7 +214,7 @@ namespace Volo.Abp.AspNetCore.Mvc
             return HttpMethodHelper.GetConventionalVerbForMethodName(action.ActionName);
         }
 
-        protected virtual void NormalizeSelectorRoutes(string rootPath, string controllerName, ActionModel action, AbpControllerAssemblySetting configuration)
+        protected virtual void NormalizeSelectorRoutes(string rootPath, string controllerName, ActionModel action, [CanBeNull] AbpControllerAssemblySetting configuration)
         {
             foreach (var selector in action.Selectors)
             {
@@ -238,7 +238,7 @@ namespace Volo.Abp.AspNetCore.Mvc
             return _options.AppServiceControllers.ControllerAssemblySettings.GetSettingOrNull(controllerType);
         }
 
-        protected virtual AttributeRouteModel CreateAbpServiceAttributeRouteModel(string rootPath, string controllerName, ActionModel action, string httpMethod, AbpControllerAssemblySetting configuration)
+        protected virtual AttributeRouteModel CreateAbpServiceAttributeRouteModel(string rootPath, string controllerName, ActionModel action, string httpMethod, [CanBeNull] AbpControllerAssemblySetting configuration)
         {
             return new AttributeRouteModel(
                 new RouteAttribute(
@@ -247,7 +247,7 @@ namespace Volo.Abp.AspNetCore.Mvc
             );
         }
 
-        protected virtual string CalculateRouteTemplate(string rootPath, string controllerName, ActionModel action, string httpMethod, AbpControllerAssemblySetting configuration)
+        protected virtual string CalculateRouteTemplate(string rootPath, string controllerName, ActionModel action, string httpMethod, [CanBeNull] AbpControllerAssemblySetting configuration)
         {
             var controllerNameInUrl = NormalizeUrlControllerName(rootPath, controllerName, action, httpMethod, configuration);
 
@@ -260,7 +260,7 @@ namespace Volo.Abp.AspNetCore.Mvc
             }
 
             //Add action name if needed
-            var actionNameInUrl = NormalizeUrlActionName(rootPath, controllerName, action, httpMethod);
+            var actionNameInUrl = NormalizeUrlActionName(rootPath, controllerName, action, httpMethod, configuration);
             if (!actionNameInUrl.IsNullOrEmpty())
             {
                 url += $"/{actionNameInUrl.ToCamelCase()}";
@@ -276,16 +276,26 @@ namespace Volo.Abp.AspNetCore.Mvc
             return url;
         }
 
-        protected virtual string NormalizeUrlActionName(string rootPath, string controllerName, ActionModel action, string httpMethod)
+        protected virtual string NormalizeUrlActionName(string rootPath, string controllerName, ActionModel action, string httpMethod, [CanBeNull] AbpControllerAssemblySetting configuration)
         {
-            var context = new UrlActionNameNormalizerContext(rootPath, controllerName, action, httpMethod, action.ActionName);
+            var actionNameInUrl = HttpMethodHelper
+                .RemoveHttpMethodPrefix(action.ActionName, httpMethod)
+                .RemovePostFix("Async");
 
-            foreach (var normalizer in _options.AppServiceControllers.UrlActionNameNormalizers)
+            if (configuration?.UrlActionNameNormalizer == null)
             {
-                normalizer.Normalize(context);
+                return actionNameInUrl;
             }
 
-            return context.ActionNameInUrl;
+            return configuration.UrlActionNameNormalizer(
+                new UrlActionNameNormalizerContext(
+                    rootPath,
+                    controllerName,
+                    action,
+                    actionNameInUrl,
+                    httpMethod
+                )
+            );
         }
 
         protected virtual string NormalizeUrlControllerName(string rootPath, string controllerName, ActionModel action, string httpMethod, [CanBeNull] AbpControllerAssemblySetting configuration)

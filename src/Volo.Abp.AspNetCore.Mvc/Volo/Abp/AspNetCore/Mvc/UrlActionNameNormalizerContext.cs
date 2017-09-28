@@ -10,18 +10,17 @@ namespace Volo.Abp.AspNetCore.Mvc
 
         public ActionModel Action { get; }
 
+        public string ActionNameInUrl { get; }
+
         public string HttpMethod { get; }
 
-        public string ActionNameInUrl { get; set; }
-
-        public UrlActionNameNormalizerContext(string rootPath, string controllerName, ActionModel action, string httpMethod, string actionNameInUrl)
+        public UrlActionNameNormalizerContext(string rootPath, string controllerName, ActionModel action, string actionNameInUrl, string httpMethod)
         {
             RootPath = rootPath;
             ControllerName = controllerName;
             Action = action;
-            HttpMethod = httpMethod;
-
             ActionNameInUrl = actionNameInUrl;
+            HttpMethod = httpMethod;
         }
     }
 }

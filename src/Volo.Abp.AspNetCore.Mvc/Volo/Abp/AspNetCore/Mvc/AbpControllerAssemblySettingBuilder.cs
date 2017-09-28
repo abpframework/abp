@@ -29,5 +29,11 @@ namespace Volo.Abp.AspNetCore.Mvc
             _setting.UrlControllerNameNormalizer = normalizer;
             return this;
         }
+
+        public AbpControllerAssemblySettingBuilder NormalizeActionNameInUrl(Func<UrlActionNameNormalizerContext, string> normalizer)
+        {
+            _setting.UrlActionNameNormalizer = normalizer;
+            return this;
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Modularity;
 using Volo.Abp.AspNetCore.Mvc;
@@ -24,8 +25,15 @@ namespace Volo.Abp.AspNetCore.App
 
             services.Configure<AbpAspNetCoreMvcOptions>(options =>
             {
-                options.AppServiceControllers.CreateFor(typeof(TestAppModule).Assembly);
-                options.AppServiceControllers.UrlActionNameNormalizers.Add(new PhoneBookUrlActionNameNormalizer());
+                options
+                    .AppServiceControllers
+                    .CreateFor(typeof(TestAppModule).Assembly)
+                    .NormalizeActionNameInUrl(
+                        context =>
+                            string.Equals(context.ActionNameInUrl, "phone", StringComparison.OrdinalIgnoreCase)
+                                ? "phones"
+                                : context.ActionNameInUrl
+                    );
             });
 
             services.AddAssemblyOf<AbpAspNetCoreMvcTestModule>();

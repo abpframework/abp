@@ -22,6 +22,9 @@ namespace Volo.Abp.AspNetCore.Mvc
         [CanBeNull]
         public Func<UrlControllerNameNormalizerContext, string> UrlControllerNameNormalizer { get; set; }
 
+        [CanBeNull]
+        public Func<UrlActionNameNormalizerContext, string> UrlActionNameNormalizer { get; set; }
+
         public AbpControllerAssemblySetting([NotNull] Assembly assembly, [NotNull] string rootPath)
         {
             Check.NotNull(assembly, rootPath);
