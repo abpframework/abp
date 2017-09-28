@@ -261,7 +261,7 @@ namespace Volo.Abp.AspNetCore.Mvc
             var actionNameInUrl = NormalizeUrlActionName(rootPath, controllerName, action, httpMethod);
             if (!actionNameInUrl.IsNullOrEmpty())
             {
-                url += $"/{actionNameInUrl}";
+                url += $"/{actionNameInUrl.ToCamelCase()}";
 
                 //Add secondary Id
                 var secondaryIds = action.Parameters.Where(p => p.ParameterName.EndsWith("Id", StringComparison.Ordinal)).ToList();
