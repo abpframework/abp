@@ -1,6 +1,4 @@
-﻿using System;
-using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Modularity;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Reflection;
@@ -35,9 +33,7 @@ namespace Volo.Abp
             services.AddLogging();
 
             services.AddAssemblyOf<AbpKernelModule>();
-
-            services.TryAddObjectAccessor<IServiceProvider>();
-
+            
             services.Configure<ModuleLifecycleOptions>(options =>
             {
                 options.Contributers.Add<OnPreApplicationInitializationModuleLifecycleContributer>();
@@ -45,11 +41,6 @@ namespace Volo.Abp
                 options.Contributers.Add<OnPostApplicationInitializationModuleLifecycleContributer>();
                 options.Contributers.Add<OnApplicationShutdownModuleLifecycleContributer>();
             });
-        }
-
-        public override void OnApplicationInitialization(ApplicationInitializationContext context)
-        {
-            context.ServiceProvider.GetRequiredService<ObjectAccessor<IServiceProvider>>().Value = context.ServiceProvider;
         }
     }
 }

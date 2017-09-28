@@ -22,7 +22,7 @@ namespace Volo.Abp
         {
             Check.NotNull(serviceProvider, nameof(serviceProvider));
 
-            ServiceProvider = serviceProvider;
+            SetServiceProvider(serviceProvider);
 
             InitializeModules();
         }
