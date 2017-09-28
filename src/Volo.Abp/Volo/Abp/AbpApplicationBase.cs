@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Internal;
 using Volo.Abp.Modularity;
 
@@ -12,7 +13,7 @@ namespace Volo.Abp
         [NotNull]
         public Type StartupModuleType { get; }
 
-        public IServiceProvider ServiceProvider { get; protected set; }
+        public IServiceProvider ServiceProvider { get; private set; }
 
         public IServiceCollection Services { get; }
 
@@ -28,6 +29,8 @@ namespace Volo.Abp
 
             StartupModuleType = startupModuleType;
             Services = services;
+
+            services.TryAddObjectAccessor<IServiceProvider>();
 
             var options = new AbpApplicationCreationOptions(services);
             optionsAction?.Invoke(options);
@@ -50,16 +53,11 @@ namespace Volo.Abp
         {
 
         }
-
-        private IReadOnlyList<IAbpModuleDescriptor> LoadModules(IServiceCollection services, AbpApplicationCreationOptions options)
+        
+        protected virtual void SetServiceProvider(IServiceProvider serviceProvider)
         {
-            return services
-                .GetSingletonInstance<IModuleLoader>()
-                .LoadModules(
-                    services,
-                    StartupModuleType,
-                    options.PlugInSources
-                );
+            ServiceProvider = serviceProvider;
+            ServiceProvider.GetRequiredService<ObjectAccessor<IServiceProvider>>().Value = ServiceProvider;
         }
 
         protected virtual void InitializeModules()
@@ -70,6 +68,17 @@ namespace Volo.Abp
                     .GetRequiredService<IModuleManager>()
                     .InitializeModules(new ApplicationInitializationContext(scope.ServiceProvider));
             }
+        }
+
+        private IReadOnlyList<IAbpModuleDescriptor> LoadModules(IServiceCollection services, AbpApplicationCreationOptions options)
+        {
+            return services
+                .GetSingletonInstance<IModuleLoader>()
+                .LoadModules(
+                    services,
+                    StartupModuleType,
+                    options.PlugInSources
+                );
         }
     }
 }

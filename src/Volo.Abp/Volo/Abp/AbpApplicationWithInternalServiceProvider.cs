@@ -34,8 +34,8 @@ namespace Volo.Abp
         public void Initialize()
         {
             ServiceScope = Services.BuildServiceProviderFromFactory().CreateScope();
-            ServiceProvider = ServiceScope.ServiceProvider;
-
+            SetServiceProvider(ServiceScope.ServiceProvider);
+            
             InitializeModules();
         }
 
