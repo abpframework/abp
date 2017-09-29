@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Http;
 using Volo.Abp.Http.Modeling;
 
@@ -22,11 +23,13 @@ namespace Volo.Abp.AspNetCore.Mvc
             };
         }
 
-        public AbpControllerAssemblySettingBuilder CreateFor(Assembly assembly, string rootPath = ModuleApiDescriptionModel.DefaultRootPath)
+        public AppServiceControllerOptions Create(Assembly assembly, [CanBeNull] Action<AbpControllerAssemblySetting> optionsAction = null)
         {
-            var setting = new AbpControllerAssemblySetting(assembly, rootPath);
+            var setting = new AbpControllerAssemblySetting(assembly, ModuleApiDescriptionModel.DefaultRootPath);
+            optionsAction?.Invoke(setting);
+            setting.Initialize();
             ControllerAssemblySettings.Add(setting);
-            return new AbpControllerAssemblySettingBuilder(setting);
+            return this;
         }
     }
 }

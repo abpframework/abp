@@ -25,15 +25,13 @@ namespace Volo.Abp.AspNetCore.App
 
             services.Configure<AbpAspNetCoreMvcOptions>(options =>
             {
-                options
-                    .AppServiceControllers
-                    .CreateFor(typeof(TestAppModule).Assembly)
-                    .NormalizeActionNameInUrl(
-                        context =>
-                            string.Equals(context.ActionNameInUrl, "phone", StringComparison.OrdinalIgnoreCase)
-                                ? "phones"
-                                : context.ActionNameInUrl
-                    );
+                options.AppServiceControllers.Create(typeof(TestAppModule).Assembly, opts =>
+                {
+                    opts.UrlActionNameNormalizer = context =>
+                        string.Equals(context.ActionNameInUrl, "phone", StringComparison.OrdinalIgnoreCase)
+                            ? "phones"
+                            : context.ActionNameInUrl;
+                });
             });
 
             services.AddAssemblyOf<AbpAspNetCoreMvcTestModule>();
