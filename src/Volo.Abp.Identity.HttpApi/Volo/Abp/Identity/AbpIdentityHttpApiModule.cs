@@ -18,10 +18,11 @@ namespace Volo.Abp.Identity
                 {
                     opts.RootPath = "identity";
                     opts.UrlControllerNameNormalizer = context => context.ControllerName.RemovePreFix("Identity");
-                    
-                    //
                 });
             });
+
+            //TODO: Allow to use Api Versioning's API to explicitly configure versioning for app services and other controllers,
+            //TODO: rather than implicitly doing it via AppServiceControllers.Create call above!
         }
     }
 }
