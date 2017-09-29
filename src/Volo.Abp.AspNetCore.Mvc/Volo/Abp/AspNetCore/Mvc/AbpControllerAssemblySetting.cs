@@ -16,7 +16,7 @@ namespace Volo.Abp.AspNetCore.Mvc
         public Assembly Assembly { get; }
 
         [NotNull]
-        public List<Type> ControllerTypes { get; }
+        public HashSet<Type> ControllerTypes { get; }
 
         [NotNull]
         public string RootPath
@@ -51,18 +51,21 @@ namespace Volo.Abp.AspNetCore.Mvc
             Assembly = assembly;
             RootPath = rootPath;
 
-            ControllerTypes = new List<Type>();
+            ControllerTypes = new HashSet<Type>();
 
             ApiVersion = new ApiVersion(1, 0);
         }
 
         public void Initialize()
         {
-            ControllerTypes.AddRange(
-                Assembly.GetTypes()
-                    .Where(IsRemoteService)
-                    .WhereIf(TypePredicate != null, TypePredicate)
-            );
+            var types = Assembly.GetTypes()
+                .Where(IsRemoteService)
+                .WhereIf(TypePredicate != null, TypePredicate);
+
+            foreach (var type in types)
+            {
+                ControllerTypes.Add(type);
+            }
         }
 
         private static bool IsRemoteService(Type type)

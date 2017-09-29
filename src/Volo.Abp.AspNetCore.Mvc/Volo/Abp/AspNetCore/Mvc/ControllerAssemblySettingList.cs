@@ -10,7 +10,7 @@ namespace Volo.Abp.AspNetCore.Mvc
         [CanBeNull]
         public AbpControllerAssemblySetting GetSettingOrNull(Type controllerType)
         {
-            return this.FirstOrDefault(controllerSetting => controllerSetting.Assembly == controllerType.Assembly);
+            return this.FirstOrDefault(controllerSetting => controllerSetting.ControllerTypes.Contains(controllerType));
         }
     }
 }

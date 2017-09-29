@@ -2,8 +2,6 @@ using System.Reflection;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Volo.Abp.Application.Services;
-using Volo.Abp.Reflection;
 
 namespace Volo.Abp.AspNetCore.Mvc
 {
@@ -18,29 +16,14 @@ namespace Volo.Abp.AspNetCore.Mvc
 
         protected override bool IsController(TypeInfo typeInfo)
         {
-            var type = typeInfo.AsType();
-
-            if (!typeof(IRemoteService).IsAssignableFrom(type) ||
-                !typeInfo.IsPublic || typeInfo.IsAbstract || typeInfo.IsGenericType)
-            {
-                return false;
-            }
-
-            var remoteServiceAttr = ReflectionHelper.GetSingleAttributeOrDefault<RemoteServiceAttribute>(typeInfo);
-
-            if (remoteServiceAttr != null && !remoteServiceAttr.IsEnabledFor(type))
-            {
-                return false;
-            }
-
             //TODO: Move this to a lazy loaded field for efficiency.
             var configuration = _application.ServiceProvider
                 .GetRequiredService<IOptions<AbpAspNetCoreMvcOptions>>().Value
                 .AppServiceControllers
                 .ControllerAssemblySettings
-                .GetSettingOrNull(type);
+                .GetSettingOrNull(typeInfo.AsType());
 
-            return configuration != null && (configuration.TypePredicate == null || configuration.TypePredicate(type));
+            return configuration != null;
         }
     }
 }

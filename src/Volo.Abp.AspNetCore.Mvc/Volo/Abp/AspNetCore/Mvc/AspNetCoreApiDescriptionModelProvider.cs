@@ -164,7 +164,7 @@ namespace Volo.Abp.AspNetCore.Mvc
 
             foreach (var controllerSetting in _options.AppServiceControllers.ControllerAssemblySettings)
             {
-                if (Equals(controllerType.Assembly, controllerSetting.Assembly))
+                if(controllerSetting.ControllerTypes.Contains(controllerType))
                 {
                     return controllerSetting.RootPath;
                 }

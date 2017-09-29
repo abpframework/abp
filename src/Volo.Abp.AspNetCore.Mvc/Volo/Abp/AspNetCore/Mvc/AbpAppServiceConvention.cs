@@ -37,11 +37,14 @@ namespace Volo.Abp.AspNetCore.Mvc
                 var controllerType = controller.ControllerType.AsType();
                 var configuration = GetControllerSettingOrNull(controllerType);
 
-                if (IsRemoteService(controllerType))
+                //TODO: We can remove different behaviour for ImplementsRemoteServiceInterface. If there is a configuration, then it should be applied!
+                //TODO: If so, we can rename AppServiceControllers to ConventionalControllers!
+                //TODO: But also consider AbpControllerAssemblySetting.IsRemoteService method too..!
+
+                if (ImplementsRemoteServiceInterface(controllerType))
                 {
                     controller.ControllerName = controller.ControllerName.RemovePostFix(ApplicationService.CommonPostfixes);
                     configuration?.ControllerModelConfigurer?.Invoke(controller);
-                    //ConfigureArea(controller, configuration);
                     ConfigureRemoteService(controller, configuration);
                 }
                 else
@@ -328,7 +331,7 @@ namespace Volo.Abp.AspNetCore.Mvc
             return selector.AttributeRouteModel == null && selector.ActionConstraints.IsNullOrEmpty();
         }
 
-        protected virtual bool IsRemoteService(Type controllerType)
+        protected virtual bool ImplementsRemoteServiceInterface(Type controllerType)
         {
             return typeof(IRemoteService).GetTypeInfo().IsAssignableFrom(controllerType);
         }
