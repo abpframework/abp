@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Modularity;
@@ -18,11 +19,11 @@ namespace Volo.Abp.Identity
                 {
                     opts.RootPath = "identity";
                     opts.UrlControllerNameNormalizer = context => context.ControllerName.RemovePreFix("Identity");
+                    opts.ApiVersions.Add(new ApiVersion(2, 0));
                 });
-            });
 
-            //TODO: Allow to use Api Versioning's API to explicitly configure versioning for app services and other controllers,
-            //TODO: rather than implicitly doing it via AppServiceControllers.Create call above!
+                options.AppServiceControllers.Create(typeof(AbpIdentityHttpApiModule).Assembly);
+            });
         }
     }
 }

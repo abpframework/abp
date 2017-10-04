@@ -5,6 +5,7 @@ using System.Reflection;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
+using Microsoft.AspNetCore.Mvc.Versioning;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Reflection;
 
@@ -42,7 +43,10 @@ namespace Volo.Abp.AspNetCore.Mvc
         [CanBeNull]
         public Func<UrlActionNameNormalizerContext, string> UrlActionNameNormalizer { get; set; }
 
-        public ApiVersion ApiVersion { get; set; }
+        public List<ApiVersion> ApiVersions { get; set; }
+
+        public Action<ApiVersioningOptions> ApiVersionConfigurer { get; set; }
+
 
         public AbpControllerAssemblySetting([NotNull] Assembly assembly, [NotNull] string rootPath)
         {
@@ -53,7 +57,7 @@ namespace Volo.Abp.AspNetCore.Mvc
 
             ControllerTypes = new HashSet<Type>();
 
-            ApiVersion = new ApiVersion(1, 0);
+            ApiVersions = new List<ApiVersion>();
         }
 
         public void Initialize()

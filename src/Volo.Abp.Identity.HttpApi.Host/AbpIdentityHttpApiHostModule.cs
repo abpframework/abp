@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -32,6 +33,8 @@ namespace Volo.Abp.Identity.HttpApi.Host
             var hostingEnvironment = services.GetSingletonInstance<IHostingEnvironment>(); //TOD: Move to BuildConfiguration method
             var configuration = BuildConfiguration(hostingEnvironment);
 
+            services.AddOptions(); //TODO: Remove later, for test purposes
+
             services.Configure<DbConnectionOptions>(configuration);
 
             services.Configure<AbpDbContextOptions>(options =>
@@ -55,7 +58,8 @@ namespace Volo.Abp.Identity.HttpApi.Host
             services.AddApiVersioning(o =>
             {
                 o.ReportApiVersions = true;
-                o.Conventions.Controller<AbpApiDefinitionController>().IsApiVersionNeutral();
+                o.Conventions.Controller<AbpApiDefinitionController>().IsApiVersionNeutral(); //TODO: This should be inside the framework!
+                //o.Conventions.Controller<AbpApiDefinitionController>().Action((MethodInfo)null).MapToApiVersion(new ApiVersion(1,1),).IsApiVersionNeutral();
                 //o.Conventions.Controller<AbpApiDefinitionController>().HasApiVersion(new ApiVersion(3, 0)); //We can do that based on controller's AbpApiVersion attribute!
                 o.AssumeDefaultVersionWhenUnspecified = true;
                 o.DefaultApiVersion = new ApiVersion(3, 0); //Default: 1.0 //We can not rely on that, application should do.
@@ -65,7 +69,7 @@ namespace Volo.Abp.Identity.HttpApi.Host
                 //o.Conventions.Controller<IdentityUserAppService>().HasApiVersion(2, 0);
                 //o.Conventions.Controller<IdentityRoleAppService>().IsApiVersionNeutral();
 
-                o.AddAbpModules(services);
+                o.ConfigureAbpModules(services);
             });
 
             services.AddSwaggerGen(
