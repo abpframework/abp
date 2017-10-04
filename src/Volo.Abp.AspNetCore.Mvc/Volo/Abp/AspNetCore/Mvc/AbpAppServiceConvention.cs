@@ -311,9 +311,7 @@ namespace Volo.Abp.AspNetCore.Mvc
             return configuration.UrlControllerNameNormalizer(
                 new UrlControllerNameNormalizerContext(
                     rootPath,
-                    controllerName,
-                    action,
-                    httpMethod
+                    controllerName
                 )
             );
         }
