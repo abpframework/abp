@@ -10,22 +10,22 @@ namespace Volo.Abp.Identity
     [Route("api/v{api-version:apiVersion}/identity/fixture")]
     public class FixtureController : AbpController, IRemoteService
     {
-        [HttpGet]
+        [HttpGet, MapToApiVersion("2.0")]
         public int Get()
+        {
+            return 41;
+        }
+
+        [HttpGet, MapToApiVersion("3.0")]
+        public int Get3()
         {
             return 42;
         }
 
-        //[HttpGet, MapToApiVersion("3.0")]
-        //public int Get3()
-        //{
-        //    return 42;
-        //}
-
         [HttpPost]
         public int Post()
         {
-            return 42;
+            return 43;
         }
     }
 }

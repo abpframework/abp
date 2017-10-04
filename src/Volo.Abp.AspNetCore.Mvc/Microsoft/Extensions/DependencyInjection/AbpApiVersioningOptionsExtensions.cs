@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Reflection;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.AspNetCore.Mvc.Versioning.Conventions;
 using Volo.Abp.AspNetCore.Mvc;
@@ -53,10 +54,13 @@ namespace Microsoft.Extensions.DependencyInjection
                 }
                 else
                 {
-                    typeof(ControllerApiVersionConventionBuilder<>)
-                        .MakeGenericType(controllerType)
-                        .GetMethod("IsApiVersionNeutral")
-                        .Invoke(controllerBuilder, null);
+                    if (!controllerType.IsDefined(typeof(ApiVersionAttribute), true))
+                    {
+                        typeof(ControllerApiVersionConventionBuilder<>)
+                            .MakeGenericType(controllerType)
+                            .GetMethod("IsApiVersionNeutral")
+                            .Invoke(controllerBuilder, null);
+                    }
                 }
             }
         }
