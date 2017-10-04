@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 
 namespace Volo.Abp.Http.Modeling
 {
@@ -20,7 +21,7 @@ namespace Volo.Abp.Http.Modeling
 
         }
 
-        public static ControllerApiDescriptionModel Create(string controllerName, Type type)
+        public static ControllerApiDescriptionModel Create(string controllerName, Type type, [CanBeNull] HashSet<Type> ignoredInterfaces = null)
         {
             return new ControllerApiDescriptionModel
             {
@@ -29,6 +30,7 @@ namespace Volo.Abp.Http.Modeling
                 Actions = new Dictionary<string, ActionApiDescriptionModel>(),
                 Interfaces = type
                     .GetInterfaces()
+                    .WhereIf(ignoredInterfaces != null, i => !i.IsGenericType && !ignoredInterfaces.Contains(i))
                     .Select(ControllerInterfaceApiDescriptionModel.Create)
                     .ToList()
             };

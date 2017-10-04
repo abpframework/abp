@@ -42,7 +42,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
         {
             using (var client = _httpClientFactory.Create())
             {
-                var response = await client.GetAsync(baseUrl + "api/abp/api-description");
+                var response = await client.GetAsync(baseUrl + "api/abp/api-definition");
                 if (!response.IsSuccessStatusCode)
                 {
                     throw new AbpException("Remote service returns error!");

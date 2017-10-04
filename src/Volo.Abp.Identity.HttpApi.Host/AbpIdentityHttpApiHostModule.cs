@@ -1,14 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
-using Microsoft.AspNetCore.Mvc.ApplicationModels;
-using Microsoft.AspNetCore.Mvc.RazorPages.Internal;
-using Microsoft.AspNetCore.Mvc.Versioning;
-using Microsoft.AspNetCore.Mvc.Versioning.Conventions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Examples;
 using Microsoft.Extensions.Configuration;
@@ -16,7 +9,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp.AspNetCore.Modularity;
-using Volo.Abp.AspNetCore.Mvc.ApiExploring;
 using Volo.Abp.Autofac;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
@@ -58,7 +50,6 @@ namespace Volo.Abp.Identity.HttpApi.Host
             services.AddApiVersioning(o =>
             {
                 o.ReportApiVersions = true;
-                o.Conventions.Controller<AbpApiDefinitionController>().IsApiVersionNeutral(); //TODO: This should be inside the framework!
                 //o.Conventions.Controller<AbpApiDefinitionController>().Action((MethodInfo)null).MapToApiVersion(new ApiVersion(1,1),).IsApiVersionNeutral();
                 //o.Conventions.Controller<AbpApiDefinitionController>().HasApiVersion(new ApiVersion(3, 0)); //We can do that based on controller's AbpApiVersion attribute!
                 o.AssumeDefaultVersionWhenUnspecified = true;

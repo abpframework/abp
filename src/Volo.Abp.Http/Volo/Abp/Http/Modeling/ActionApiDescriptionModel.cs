@@ -28,7 +28,7 @@ namespace Volo.Abp.Http.Modeling
 
         }
 
-        public static ActionApiDescriptionModel Create(MethodInfo method, string uniqueName, string url, string httpMethod = null)
+        public static ActionApiDescriptionModel Create(MethodInfo method, string uniqueName, string url, string httpMethod)
         {
             return new ActionApiDescriptionModel
             {

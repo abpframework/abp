@@ -46,8 +46,7 @@ namespace Volo.Abp.AspNetCore.Mvc
         public List<ApiVersion> ApiVersions { get; set; }
 
         public Action<ApiVersioningOptions> ApiVersionConfigurer { get; set; }
-
-
+        
         public AbpControllerAssemblySetting([NotNull] Assembly assembly, [NotNull] string rootPath)
         {
             Check.NotNull(assembly, rootPath);

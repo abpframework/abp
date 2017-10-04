@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -9,7 +10,6 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
-using Volo.Abp.Application.Services;
 using Volo.Abp.AspNetCore.Mvc.Utils;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Modeling;
@@ -22,13 +22,16 @@ namespace Volo.Abp.AspNetCore.Mvc
 
         private readonly IApiDescriptionGroupCollectionProvider _descriptionProvider;
         private readonly AbpAspNetCoreMvcOptions _options;
+        private readonly ApiDescriptionModelOptions _modelOptions;
 
         public AspNetCoreApiDescriptionModelProvider(
             IApiDescriptionGroupCollectionProvider descriptionProvider,
-            IOptions<AbpAspNetCoreMvcOptions> options)
+            IOptions<AbpAspNetCoreMvcOptions> options,
+            IOptions<ApiDescriptionModelOptions> modelOptions)
         {
             _descriptionProvider = descriptionProvider;
             _options = options.Value;
+            _modelOptions = modelOptions.Value;
 
             Logger = NullLogger<AspNetCoreApiDescriptionModelProvider>.Instance;
         }
@@ -59,7 +62,7 @@ namespace Volo.Abp.AspNetCore.Mvc
 
             var moduleModel = model.GetOrAddModule(GetRootPath(controllerType));
 
-            var controllerModel = moduleModel.GetOrAddController(GetControllerName(apiDescription), controllerType);
+            var controllerModel = moduleModel.GetOrAddController(controllerType.FullName, controllerType, _modelOptions.IgnoredInterfaces);
 
             var method = apiDescription.ActionDescriptor.GetMethodInfo();
 
@@ -78,12 +81,6 @@ namespace Volo.Abp.AspNetCore.Mvc
             ));
 
             AddParameterDescriptionsToModel(actionModel, method, apiDescription);
-        }
-
-        private static string GetControllerName(ApiDescription apiDescription)
-        {
-            return apiDescription.GroupName?.RemovePostFix(ApplicationService.CommonPostfixes) 
-                   ?? apiDescription.ActionDescriptor.AsControllerActionDescriptor().ControllerName;
         }
 
         private static string GetUniqueActionName(MethodInfo method)

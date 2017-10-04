@@ -12,10 +12,12 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.Modularity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.ViewComponents;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Volo.Abp.Http;
+using Volo.Abp.Http.Modeling;
 
 namespace Volo.Abp.AspNetCore.Mvc
 {
@@ -41,6 +43,21 @@ namespace Volo.Abp.AspNetCore.Mvc
                     )
                 )
             );
+
+            services.Configure<ApiDescriptionModelOptions>(options =>
+            {
+                options.IgnoredInterfaces.AddIfNotContains(typeof(IAsyncActionFilter));
+                options.IgnoredInterfaces.AddIfNotContains(typeof(IFilterMetadata));
+                options.IgnoredInterfaces.AddIfNotContains(typeof(IActionFilter));
+            });
+
+            services.Configure<AbpAspNetCoreMvcOptions>(options =>
+            {
+                options.AppServiceControllers.Create(typeof(AbpAspNetCoreMvcModule).Assembly, o =>
+                {
+                    o.RootPath = "abp";
+                });
+            });
         }
 
         public override void PostConfigureServices(IServiceCollection services)
