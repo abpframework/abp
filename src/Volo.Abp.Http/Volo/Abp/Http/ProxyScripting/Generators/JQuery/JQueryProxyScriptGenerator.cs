@@ -73,8 +73,8 @@ namespace Volo.Abp.Http.ProxyScripting.Generators.JQuery
         {
             var parameterList = ProxyScriptingJsFuncHelper.GenerateJsFuncParameterList(action, "ajaxParams");
 
-            script.AppendLine($"    // action '{action.NameOnClass.ToCamelCase()}'");
-            script.AppendLine($"    abp.services.{module.RootPath.Replace("/", ".").ToCamelCase()}.{controller.ControllerName.ToCamelCase()}{ProxyScriptingJsFuncHelper.WrapWithBracketsOrWithDotPrefix(action.NameOnClass.RemovePostFix("Async").ToCamelCase())} = function({parameterList}) {{");
+            script.AppendLine($"    // action '{action.Name.ToCamelCase()}'");
+            script.AppendLine($"    abp.services.{module.RootPath.Replace("/", ".").ToCamelCase()}.{controller.ControllerName.ToCamelCase()}{ProxyScriptingJsFuncHelper.WrapWithBracketsOrWithDotPrefix(action.Name.RemovePostFix("Async").ToCamelCase())} = function({parameterList}) {{");
             script.AppendLine("      return abp.ajax($.extend(true, {");
 
             AddAjaxCallParameters(script, controller, action);

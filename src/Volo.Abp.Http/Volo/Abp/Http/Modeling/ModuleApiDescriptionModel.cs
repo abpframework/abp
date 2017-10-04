@@ -41,9 +41,9 @@ namespace Volo.Abp.Http.Modeling
             return Controllers[controller.ControllerName] = controller;
         }
 
-        public ControllerApiDescriptionModel GetOrAddController(string name, Type type, [CanBeNull] HashSet<Type> ignoredInterfaces = null)
+        public ControllerApiDescriptionModel GetOrAddController(string uniqueName, string name, Type type, [CanBeNull] HashSet<Type> ignoredInterfaces = null)
         {
-            return Controllers.GetOrAdd(name, () => ControllerApiDescriptionModel.Create(name, type, ignoredInterfaces));
+            return Controllers.GetOrAdd(uniqueName, () => ControllerApiDescriptionModel.Create(name, type, ignoredInterfaces));
         }
         
         public ModuleApiDescriptionModel CreateSubModel(string[] controllers, string[] actions)

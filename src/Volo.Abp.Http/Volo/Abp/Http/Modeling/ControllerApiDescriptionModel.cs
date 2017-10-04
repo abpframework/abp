@@ -36,16 +36,16 @@ namespace Volo.Abp.Http.Modeling
             };
         }
 
-        public ActionApiDescriptionModel AddAction(ActionApiDescriptionModel action)
+        public ActionApiDescriptionModel AddAction(string uniqueName, ActionApiDescriptionModel action)
         {
-            if (Actions.ContainsKey(action.UniqueName))
+            if (Actions.ContainsKey(uniqueName))
             {
                 throw new AbpException(
-                    $"Can not add more than one action with same name to the same controller. Controller: {ControllerName}, Action: {action.UniqueName}."
-                    );
+                    $"Can not add more than one action with same name to the same controller. Controller: {ControllerName}, Action: {action.Name}."
+                );
             }
 
-            return Actions[action.UniqueName] = action;
+            return Actions[uniqueName] = action;
         }
 
         public ControllerApiDescriptionModel CreateSubModel(string[] actions)
@@ -58,11 +58,11 @@ namespace Volo.Abp.Http.Modeling
                 Actions = new Dictionary<string, ActionApiDescriptionModel>()
             };
 
-            foreach (var action in Actions.Values)
+            foreach (var action in Actions)
             {
-                if (actions == null || actions.Contains(action.UniqueName))
+                if (actions == null || actions.Contains(action.Key))
                 {
-                    subModel.AddAction(action);
+                    subModel.AddAction(action.Key, action.Value);
                 }
             }
 

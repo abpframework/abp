@@ -9,9 +9,7 @@ namespace Volo.Abp.Http.Modeling
     [Serializable]
     public class ActionApiDescriptionModel
     {
-        public string UniqueName { get; set; }
-
-        public string NameOnClass { get; set; }
+        public string Name { get; set; }
 
         public string HttpMethod { get; set; }
 
@@ -28,12 +26,11 @@ namespace Volo.Abp.Http.Modeling
 
         }
 
-        public static ActionApiDescriptionModel Create(MethodInfo method, string uniqueName, string url, string httpMethod)
+        public static ActionApiDescriptionModel Create(MethodInfo method, string url, string httpMethod)
         {
             return new ActionApiDescriptionModel
             {
-                UniqueName = uniqueName,
-                NameOnClass = method.Name,
+                Name = method.Name,
                 Url = url,
                 HttpMethod = httpMethod,
                 ReturnValue = ReturnValueApiDescriptionModel.Create(method.ReturnType),

@@ -35,7 +35,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
                     foreach (var action in controller.Actions.Values)
                     {
-                        if (action.NameOnClass == method.Name && action.ParametersOnMethod.Count == methodParameters.Length)
+                        if (action.Name == method.Name && action.ParametersOnMethod.Count == methodParameters.Length)
                         {
                             var found = true;
 

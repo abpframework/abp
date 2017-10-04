@@ -9,10 +9,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp.AspNetCore.Modularity;
+using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Autofac;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Identity.EntityFrameworkCore;
+using Volo.Abp.Identity.HttpApi.Host.VersioningTests.V1;
 using Volo.Abp.Modularity;
 
 namespace Volo.Abp.Identity.HttpApi.Host
@@ -24,8 +26,6 @@ namespace Volo.Abp.Identity.HttpApi.Host
         {
             var hostingEnvironment = services.GetSingletonInstance<IHostingEnvironment>(); //TOD: Move to BuildConfiguration method
             var configuration = BuildConfiguration(hostingEnvironment);
-
-            services.AddOptions(); //TODO: Remove later, for test purposes
 
             services.Configure<DbConnectionOptions>(configuration);
 
@@ -87,6 +87,20 @@ namespace Volo.Abp.Identity.HttpApi.Host
                     // integrate xml comments
                     //options.IncludeXmlComments(XmlCommentsFilePath); //TODO: Add XML comments!
                 });
+
+            services.Configure<AbpAspNetCoreMvcOptions>(options =>
+            {
+                options.AppServiceControllers.Create(typeof(AbpIdentityHttpApiHostModule).Assembly, o =>
+                {
+                    o.TypePredicate = t => t == typeof(CallsController);
+                });
+
+                options.AppServiceControllers.Create(typeof(AbpIdentityHttpApiHostModule).Assembly, o =>
+                {
+                    o.TypePredicate = t => t == typeof(Host.VersioningTests.V2.CallsController);
+                    o.RootPath = "app/compat";
+                });
+            });
 
             services.AddAssemblyOf<AbpIdentityHttpApiHostModule>();
         }

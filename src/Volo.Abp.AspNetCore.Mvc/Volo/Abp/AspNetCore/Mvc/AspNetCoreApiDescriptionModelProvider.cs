@@ -66,7 +66,7 @@ namespace Volo.Abp.AspNetCore.Mvc
 
             var moduleModel = model.GetOrAddModule(GetRootPath(controllerType, setting));
 
-            var controllerModel = moduleModel.GetOrAddController(CalculateControllerName(controllerType, setting), controllerType, _modelOptions.IgnoredInterfaces);
+            var controllerModel = moduleModel.GetOrAddController(controllerType.FullName, CalculateControllerName(controllerType, setting), controllerType, _modelOptions.IgnoredInterfaces);
 
             var method = apiDescription.ActionDescriptor.GetMethodInfo();
 
@@ -77,9 +77,8 @@ namespace Volo.Abp.AspNetCore.Mvc
                 return;
             }
 
-            var actionModel = controllerModel.AddAction(ActionApiDescriptionModel.Create(
+            var actionModel = controllerModel.AddAction(uniqueMethodName, ActionApiDescriptionModel.Create(
                 method,
-                uniqueMethodName,
                 apiDescription.RelativePath,
                 apiDescription.HttpMethod
             ));
@@ -101,7 +100,7 @@ namespace Volo.Abp.AspNetCore.Mvc
 
         private static string GetUniqueActionName(MethodInfo method)
         {
-            var methodNameBuilder = new StringBuilder(method.Name);
+            var methodNameBuilder = new StringBuilder(method.Name.RemovePostFix("Async"));
 
             var parameters = method.GetParameters();
             if (parameters.Any())
