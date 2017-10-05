@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
-using Volo.Abp.AspNetCore.Mvc.Versioning.App;
+using Volo.Abp.AspNetCore.Mvc.Versioning.App.Compat;
 using Xunit;
 
-namespace Volo.Abp.AspNetCore.Mvc.Versioning.Test
+namespace Volo.Abp.AspNetCore.Mvc.Versioning.Test.Compat
 {
     public class TodoAppService_Tests : AspNetCoreMvcVersioningTestBase
     {
@@ -17,7 +17,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Versioning.Test
         [Fact]
         public void Get()
         {
-            _todoAppService.Get(42).ShouldBe("42-2.0");
+            _todoAppService.Get(42).ShouldBe("Compat-42-1.0");
         }
     }
 }

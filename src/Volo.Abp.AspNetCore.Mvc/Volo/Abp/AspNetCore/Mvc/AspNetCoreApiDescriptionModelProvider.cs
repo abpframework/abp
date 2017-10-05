@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -80,7 +81,8 @@ namespace Volo.Abp.AspNetCore.Mvc
             var actionModel = controllerModel.AddAction(uniqueMethodName, ActionApiDescriptionModel.Create(
                 method,
                 apiDescription.RelativePath,
-                apiDescription.HttpMethod
+                apiDescription.HttpMethod,
+                setting?.ApiVersions.Select(v => v.ToString()).ToList() ?? new List<string>()
             ));
 
             AddParameterDescriptionsToModel(actionModel, method, apiDescription);

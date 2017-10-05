@@ -35,9 +35,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Volo\Abp\AspNetCore\Mvc\Versioning\App\Compat\" />
-  </ItemGroup>
 
   <!-- https://github.com/NuGet/Home/issues/4412. -->
   <Target Name="CopyDepsFiles" AfterTargets="Build" Condition="'$(TargetFramework)'!=''">

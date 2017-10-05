@@ -15,6 +15,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public static IServiceCollection AddHttpClientProxies(this IServiceCollection services, Assembly assembly, string remoteServiceName = RemoteServiceConfigurationDictionary.DefaultName)
         {
+            //TODO: Make a configuration option and add remoteServiceName inside it!
             //TODO: Add option to change type filter
 
             var serviceTypes = assembly.GetTypes().Where(t =>

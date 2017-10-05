@@ -43,7 +43,7 @@ namespace Volo.Abp.AspNetCore.Mvc
         [CanBeNull]
         public Func<UrlActionNameNormalizerContext, string> UrlActionNameNormalizer { get; set; }
 
-        public List<ApiVersion> ApiVersions { get; set; }
+        public List<ApiVersion> ApiVersions { get; }
 
         public Action<ApiVersioningOptions> ApiVersionConfigurer { get; set; }
         

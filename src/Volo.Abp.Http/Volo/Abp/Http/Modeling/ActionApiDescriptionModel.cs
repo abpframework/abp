@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
+using JetBrains.Annotations;
 
 namespace Volo.Abp.Http.Modeling
 {
@@ -15,6 +16,8 @@ namespace Volo.Abp.Http.Modeling
 
         public string Url { get; set; }
 
+        public IList<string> SupportedVersions { get; set; }
+
         public IList<MethodParameterApiDescriptionModel> ParametersOnMethod { get; set; }
 
         public IList<ParameterApiDescriptionModel> Parameters { get; set; }
@@ -26,8 +29,13 @@ namespace Volo.Abp.Http.Modeling
 
         }
 
-        public static ActionApiDescriptionModel Create(MethodInfo method, string url, string httpMethod)
+        public static ActionApiDescriptionModel Create([NotNull] MethodInfo method, [NotNull] string url, [NotNull] string httpMethod, [NotNull] IList<string> supportedVersions)
         {
+            Check.NotNull(method, nameof(method));
+            Check.NotNull(url, nameof(url));
+            Check.NotNull(httpMethod, nameof(httpMethod));
+            Check.NotNull(supportedVersions, nameof(supportedVersions));
+
             return new ActionApiDescriptionModel
             {
                 Name = method.Name,
@@ -38,7 +46,8 @@ namespace Volo.Abp.Http.Modeling
                 ParametersOnMethod = method
                     .GetParameters()
                     .Select(MethodParameterApiDescriptionModel.Create)
-                    .ToList()
+                    .ToList(),
+                SupportedVersions = supportedVersions
             };
         }
 
