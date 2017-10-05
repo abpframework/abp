@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
@@ -111,10 +112,10 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
                 var requestMessage = new HttpRequestMessage(action.GetHttpMethod(), url)
                 {
-                    Content = RequestPayloadBuilder.BuildContent(action, invocation.ArgumentsDictionary, _jsonSerializer)
+                    Content = RequestPayloadBuilder.BuildContent(action, invocation.ArgumentsDictionary, _jsonSerializer, apiVersion)
                 };
 
-                AddHeaders(invocation, action, requestMessage);
+                AddHeaders(invocation, action, requestMessage, apiVersion);
 
                 var response = await client.SendAsync(requestMessage);
 
@@ -155,9 +156,18 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             return action.SupportedVersions.Last(); //TODO: Ensure to get the latest version!
         }
 
-        private static void AddHeaders(IAbpMethodInvocation invocation, ActionApiDescriptionModel action, HttpRequestMessage requestMessage)
+        private static void AddHeaders(IAbpMethodInvocation invocation, ActionApiDescriptionModel action, HttpRequestMessage requestMessage, ApiVersionInfo apiVersion)
         {
-            foreach (var headerParameter in action.Parameters.Where(p => p.BindingSourceId == ParameterBindingSources.Header))
+            if (!apiVersion.Version.IsNullOrEmpty())
+            {
+                //TODO: What about other media types?
+                requestMessage.Headers.Add("accept", $"text/plain; v={apiVersion.Version}");
+                requestMessage.Headers.Add("accept", $"application/json; v={apiVersion.Version}");
+            }
+
+            var headers = action.Parameters.Where(p => p.BindingSourceId == ParameterBindingSources.Header).ToArray();
+            
+            foreach (var headerParameter in headers)
             {
                 var value = HttpActionParameterHelper.FindParameterValue(invocation.ArgumentsDictionary, headerParameter);
                 if (value != null)

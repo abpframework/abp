@@ -2,7 +2,7 @@
 
 namespace Volo.Abp.Http.Client.DynamicProxying
 {
-    internal class ApiVersionInfo
+    public class ApiVersionInfo  //TODO: Rename to not conflict with api versioning apis
     {
         public string BindingSource { get; }
         public string Version { get; }
