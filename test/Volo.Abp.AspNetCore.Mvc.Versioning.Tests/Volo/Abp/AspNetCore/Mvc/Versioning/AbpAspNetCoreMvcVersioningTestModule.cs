@@ -46,7 +46,8 @@ namespace Volo.Abp.AspNetCore.Mvc.Versioning
                 options.ReportApiVersions = true;
                 options.AssumeDefaultVersionWhenUnspecified = true;
 
-                options.ApiVersionReader = new QueryStringApiVersionReader("apiVersion");
+                //options.ApiVersionReader = new UrlSegmentApiVersionReader();
+                //options.ApiVersionReader = new MediaTypeApiVersionReader();
 
                 options.ConfigureAbp(services);
             });

@@ -84,7 +84,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
             if (apiVersion.ShouldSendInQueryString())
             {
-                AddQueryStringParameter(urlBuilder, isFirstParam, "apiVersion", apiVersion.Version);  //TODO: Constant!
+                AddQueryStringParameter(urlBuilder, isFirstParam, "api-version", apiVersion.Version);  //TODO: Constant!
             }
         }
 
