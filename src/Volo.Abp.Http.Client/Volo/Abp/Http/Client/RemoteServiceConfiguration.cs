@@ -11,9 +11,10 @@
             
         }
 
-        public RemoteServiceConfiguration(string baseUrl)
+        public RemoteServiceConfiguration(string baseUrl, string version = null)
         {
             BaseUrl = baseUrl;
+            Version = version;
         }
     }
 }

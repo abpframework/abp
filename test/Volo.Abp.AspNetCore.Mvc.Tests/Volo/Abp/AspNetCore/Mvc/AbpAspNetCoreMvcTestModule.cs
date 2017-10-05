@@ -2,14 +2,13 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Modularity;
-using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.TestBase;
 using Volo.Abp.Autofac;
 using Volo.Abp.MemoryDb;
 using Volo.Abp.Modularity;
 using Volo.Abp.TestApp;
 
-namespace Volo.Abp.AspNetCore.App
+namespace Volo.Abp.AspNetCore.Mvc
 {
     [DependsOn(
         typeof(AbpAspNetCoreTestBaseModule),

@@ -56,10 +56,20 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             }
             else
             {
-                invocation.ReturnValue = _jsonSerializer.Deserialize(
-                    invocation.Method.ReturnType,
-                    AsyncHelper.RunSync(() => MakeRequest(invocation))
-                );
+                var responseAsString = AsyncHelper.RunSync(() => MakeRequest(invocation));
+                
+                //TODO: Think on that
+                if (TypeHelper.IsPrimitiveExtendedIncludingNullable(invocation.Method.ReturnType, true))
+                {
+                    invocation.ReturnValue = Convert.ChangeType(responseAsString, invocation.Method.ReturnType);
+                }
+                else
+                {
+                    invocation.ReturnValue = _jsonSerializer.Deserialize(
+                        invocation.Method.ReturnType,
+                        responseAsString
+                    );
+                }
             }
         }
 

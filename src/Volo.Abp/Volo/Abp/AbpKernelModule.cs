@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.ApiVersioning;
 using Volo.Abp.Modularity;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Reflection;
@@ -33,6 +34,8 @@ namespace Volo.Abp
             services.AddLogging();
 
             services.AddAssemblyOf<AbpKernelModule>();
+
+            services.AddSingleton<IRequestedApiVersion>(NullRequestedApiVersion.Instance);
             
             services.Configure<ModuleLifecycleOptions>(options =>
             {

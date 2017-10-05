@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.12
+VisualStudioVersion = 15.0.26730.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}"
 EndProject
@@ -142,7 +142,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.EntityFrameworkCor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleConsoleDemo", "test\SimpleConsoleDemo\SimpleConsoleDemo.csproj", "{2B48CF90-DBDB-469F-941C-5B5AECEEACE0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.EntityFrameworkCore.Tests.SecondContext", "test\Volo.Abp.EntityFrameworkCore.Tests.SecondContext\Volo.Abp.EntityFrameworkCore.Tests.SecondContext.csproj", "{127FC2BF-DC40-4370-B845-16088328264C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.EntityFrameworkCore.Tests.SecondContext", "test\Volo.Abp.EntityFrameworkCore.Tests.SecondContext\Volo.Abp.EntityFrameworkCore.Tests.SecondContext.csproj", "{127FC2BF-DC40-4370-B845-16088328264C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Mvc.Versioning.Tests", "test\Volo.Abp.AspNetCore.Mvc.Versioning.Tests\Volo.Abp.AspNetCore.Mvc.Versioning.Tests.csproj", "{A8C8B76D-0869-4C11-AC55-DB9DD115788E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -366,6 +368,10 @@ Global
 		{127FC2BF-DC40-4370-B845-16088328264C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{127FC2BF-DC40-4370-B845-16088328264C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{127FC2BF-DC40-4370-B845-16088328264C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8C8B76D-0869-4C11-AC55-DB9DD115788E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8C8B76D-0869-4C11-AC55-DB9DD115788E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8C8B76D-0869-4C11-AC55-DB9DD115788E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8C8B76D-0869-4C11-AC55-DB9DD115788E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -434,6 +440,7 @@ Global
 		{3AF7C7F5-6513-47D4-8DD0-6E1AF14568D8} = {37087D1B-3693-4E96-983D-A69F210BDE53}
 		{2B48CF90-DBDB-469F-941C-5B5AECEEACE0} = {37087D1B-3693-4E96-983D-A69F210BDE53}
 		{127FC2BF-DC40-4370-B845-16088328264C} = {37087D1B-3693-4E96-983D-A69F210BDE53}
+		{A8C8B76D-0869-4C11-AC55-DB9DD115788E} = {37087D1B-3693-4E96-983D-A69F210BDE53}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB97ECF4-9A84-433F-A80B-2A3285BDD1D5}

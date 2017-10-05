@@ -3,19 +3,23 @@ using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.AspNetCore.Mvc.Versioning.Conventions;
+using Volo.Abp.ApiVersioning;
 using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.AspNetCore.Mvc.Versioning;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static class AbpApiVersioningOptionsExtensions
     {
-        public static void ConfigureAbpModules(this ApiVersioningOptions options, IServiceCollection services)
+        public static void ConfigureAbp(this ApiVersioningOptions options, IServiceCollection services)
         {
             //TODO: Use new builder will be released with Api Versioning 2.1 instead of reflection!
 
+            services.AddTransient<IRequestedApiVersion, HttpContextRequestedApiVersion>();
+
             services.Configure<AbpAspNetCoreMvcOptions>(op =>
             {
-                //TODO: Configuring api version should be done directly inside ConfigureAbpModules,
+                //TODO: Configuring api version should be done directly inside ConfigureAbp,
                 //TODO: not in a callback that will be called by MVC later! For that, we immediately need to controllerAssemblySettings
 
                 foreach (var setting in op.AppServiceControllers.ControllerAssemblySettings)

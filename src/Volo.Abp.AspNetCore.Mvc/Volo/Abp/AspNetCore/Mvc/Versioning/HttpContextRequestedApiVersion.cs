@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.ApiVersioning;
-using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.AspNetCore.Mvc.Versioning
 {
-    public class HttpContextRequestedApiVersion : IRequestedApiVersion, ITransientDependency
+    public class HttpContextRequestedApiVersion : IRequestedApiVersion
     {
         public string Current => _httpContextAccessor.HttpContext?.GetRequestedApiVersion().ToString();
 

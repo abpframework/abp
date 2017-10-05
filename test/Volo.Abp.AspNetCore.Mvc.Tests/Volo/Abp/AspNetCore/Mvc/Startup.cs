@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace Volo.Abp.AspNetCore.App
+namespace Volo.Abp.AspNetCore.Mvc
 {
     public class Startup
     {

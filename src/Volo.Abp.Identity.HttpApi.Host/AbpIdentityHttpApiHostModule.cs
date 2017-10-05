@@ -60,7 +60,7 @@ namespace Volo.Abp.Identity.HttpApi.Host
                 //o.Conventions.Controller<IdentityUserAppService>().HasApiVersion(2, 0);
                 //o.Conventions.Controller<IdentityRoleAppService>().IsApiVersionNeutral();
 
-                o.ConfigureAbpModules(services);
+                o.ConfigureAbp(services);
             });
 
             services.AddSwaggerGen(
