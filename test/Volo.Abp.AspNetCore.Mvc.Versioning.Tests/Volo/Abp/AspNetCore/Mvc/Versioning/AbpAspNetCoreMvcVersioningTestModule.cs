@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Modularity;
 using Volo.Abp.AspNetCore.TestBase;
@@ -42,6 +43,9 @@ namespace Volo.Abp.AspNetCore.Mvc.Versioning
             {
                 options.ReportApiVersions = true;
                 options.AssumeDefaultVersionWhenUnspecified = true;
+
+                //options.ApiVersionReader = new HeaderApiVersionReader("api-version"); //Supports header too
+                //options.ApiVersionReader = new MediaTypeApiVersionReader(); //Supports accept header too
 
                 options.ConfigureAbp(services);
             });

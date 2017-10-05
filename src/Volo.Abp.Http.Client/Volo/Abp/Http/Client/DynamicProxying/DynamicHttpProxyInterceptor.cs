@@ -163,6 +163,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                 //TODO: What about other media types?
                 requestMessage.Headers.Add("accept", $"text/plain; v={apiVersion.Version}");
                 requestMessage.Headers.Add("accept", $"application/json; v={apiVersion.Version}");
+                requestMessage.Headers.Add("api-version", apiVersion.Version);
             }
 
             var headers = action.Parameters.Where(p => p.BindingSourceId == ParameterBindingSources.Header).ToArray();
