@@ -35,7 +35,6 @@ namespace Volo.Abp.AspNetCore.Mvc.Versioning
                 {
                     opts.TypePredicate = t => t.Namespace == typeof(Volo.Abp.AspNetCore.Mvc.Versioning.App.Compat.TodoAppService).Namespace;
                     opts.ApiVersions.Add(new ApiVersion(1, 0));
-                    opts.RootPath = "app/compat";
                 });
             });
 
