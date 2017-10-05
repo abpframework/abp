@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Application.Services;
+using Volo.Abp.AspNetCore.Mvc.Conventions;
 using Volo.Abp.AspNetCore.Mvc.Utils;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Modeling;
@@ -88,7 +89,7 @@ namespace Volo.Abp.AspNetCore.Mvc
             AddParameterDescriptionsToModel(actionModel, method, apiDescription);
         }
 
-        private static string CalculateControllerName(Type controllerType, AbpControllerAssemblySetting setting)
+        private static string CalculateControllerName(Type controllerType, ConventionalControllerSetting setting)
         {
             var controllerName = controllerType.Name.RemovePostFix("Controller").RemovePostFix(ApplicationService.CommonPostfixes);
 
@@ -169,7 +170,7 @@ namespace Volo.Abp.AspNetCore.Mvc
             return modelNameProvider.Name;
         }
 
-        private static string GetRootPath([NotNull] Type controllerType, [CanBeNull] AbpControllerAssemblySetting setting)
+        private static string GetRootPath([NotNull] Type controllerType, [CanBeNull] ConventionalControllerSetting setting)
         {
             if (setting != null)
             {
@@ -186,9 +187,9 @@ namespace Volo.Abp.AspNetCore.Mvc
         }
 
         [CanBeNull]
-        private AbpControllerAssemblySetting FindSetting(Type controllerType)
+        private ConventionalControllerSetting FindSetting(Type controllerType)
         {
-            foreach (var controllerSetting in _options.AppServiceControllers.ControllerAssemblySettings)
+            foreach (var controllerSetting in _options.ConventionalControllers.ConventionalControllerSettings)
             {
                 if (controllerSetting.ControllerTypes.Contains(controllerType))
                 {

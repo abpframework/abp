@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Examples;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -90,12 +89,12 @@ namespace Volo.Abp.Identity.HttpApi.Host
 
             services.Configure<AbpAspNetCoreMvcOptions>(options =>
             {
-                options.AppServiceControllers.Create(typeof(AbpIdentityHttpApiHostModule).Assembly, o =>
+                options.ConventionalControllers.Create(typeof(AbpIdentityHttpApiHostModule).Assembly, o =>
                 {
                     o.TypePredicate = t => t == typeof(CallsController);
                 });
 
-                options.AppServiceControllers.Create(typeof(AbpIdentityHttpApiHostModule).Assembly, o =>
+                options.ConventionalControllers.Create(typeof(AbpIdentityHttpApiHostModule).Assembly, o =>
                 {
                     o.TypePredicate = t => t == typeof(Host.VersioningTests.V2.CallsController);
                     o.RootPath = "app/compat";

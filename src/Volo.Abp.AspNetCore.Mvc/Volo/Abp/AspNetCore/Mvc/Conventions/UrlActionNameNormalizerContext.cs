@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.ApplicationModels;
 
-namespace Volo.Abp.AspNetCore.Mvc
+namespace Volo.Abp.AspNetCore.Mvc.Conventions
 {
     public class UrlActionNameNormalizerContext
     {

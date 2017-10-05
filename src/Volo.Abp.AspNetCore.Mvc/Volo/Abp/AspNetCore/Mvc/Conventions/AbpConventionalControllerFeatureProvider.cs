@@ -3,13 +3,13 @@ using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
-namespace Volo.Abp.AspNetCore.Mvc
+namespace Volo.Abp.AspNetCore.Mvc.Conventions
 {
-    public class AbpAppServiceControllerFeatureProvider : ControllerFeatureProvider
+    public class AbpConventionalControllerFeatureProvider : ControllerFeatureProvider
     {
         private readonly IAbpApplication _application;
 
-        public AbpAppServiceControllerFeatureProvider(IAbpApplication application)
+        public AbpConventionalControllerFeatureProvider(IAbpApplication application)
         {
             _application = application;
         }
@@ -19,8 +19,8 @@ namespace Volo.Abp.AspNetCore.Mvc
             //TODO: Move this to a lazy loaded field for efficiency.
             var configuration = _application.ServiceProvider
                 .GetRequiredService<IOptions<AbpAspNetCoreMvcOptions>>().Value
-                .AppServiceControllers
-                .ControllerAssemblySettings
+                .ConventionalControllers
+                .ConventionalControllerSettings
                 .GetSettingOrNull(typeInfo.AsType());
 
             return configuration != null;

@@ -65,7 +65,7 @@ namespace AbpDesk.Web.Mvc
 
             services.Configure<AbpAspNetCoreMvcOptions>(options =>
             {
-                options.AppServiceControllers.Create(typeof(AbpDeskApplicationModule).Assembly);
+                options.ConventionalControllers.Create(typeof(AbpDeskApplicationModule).Assembly);
             });
         }
 

@@ -1,4 +1,4 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc
+﻿namespace Volo.Abp.AspNetCore.Mvc.Conventions
 {
     public class UrlControllerNameNormalizerContext
     {

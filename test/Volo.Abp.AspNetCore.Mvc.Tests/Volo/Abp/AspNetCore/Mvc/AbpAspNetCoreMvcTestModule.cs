@@ -24,7 +24,7 @@ namespace Volo.Abp.AspNetCore.Mvc
 
             services.Configure<AbpAspNetCoreMvcOptions>(options =>
             {
-                options.AppServiceControllers.Create(typeof(TestAppModule).Assembly, opts =>
+                options.ConventionalControllers.Create(typeof(TestAppModule).Assembly, opts =>
                 {
                     opts.UrlActionNameNormalizer = context =>
                         string.Equals(context.ActionNameInUrl, "phone", StringComparison.OrdinalIgnoreCase)

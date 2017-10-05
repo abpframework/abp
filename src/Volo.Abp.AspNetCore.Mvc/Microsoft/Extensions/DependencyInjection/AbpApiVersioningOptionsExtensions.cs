@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.AspNetCore.Mvc.Versioning.Conventions;
 using Volo.Abp.ApiVersioning;
 using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.AspNetCore.Mvc.Conventions;
 using Volo.Abp.AspNetCore.Mvc.Versioning;
 
 namespace Microsoft.Extensions.DependencyInjection
@@ -22,7 +23,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 //TODO: Configuring api version should be done directly inside ConfigureAbp,
                 //TODO: not in a callback that will be called by MVC later! For that, we immediately need to controllerAssemblySettings
 
-                foreach (var setting in op.AppServiceControllers.ControllerAssemblySettings)
+                foreach (var setting in op.ConventionalControllers.ConventionalControllerSettings)
                 {
                     if (setting.ApiVersionConfigurer == null)
                     {
@@ -36,7 +37,7 @@ namespace Microsoft.Extensions.DependencyInjection
             });
         }
 
-        private static void ConfigureApiVersionsByConvention(ApiVersioningOptions options, AbpControllerAssemblySetting setting)
+        private static void ConfigureApiVersionsByConvention(ApiVersioningOptions options, ConventionalControllerSetting setting)
         {
             foreach (var controllerType in setting.ControllerTypes)
             {

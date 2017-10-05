@@ -25,14 +25,14 @@ namespace Volo.Abp.AspNetCore.Mvc.Versioning
             services.Configure<AbpAspNetCoreMvcOptions>(options =>
             {
                 //2.0 Version
-                options.AppServiceControllers.Create(typeof(AbpAspNetCoreMvcVersioningTestModule).Assembly, opts =>
+                options.ConventionalControllers.Create(typeof(AbpAspNetCoreMvcVersioningTestModule).Assembly, opts =>
                 {
                     opts.TypePredicate = t => t.Namespace == typeof(Volo.Abp.AspNetCore.Mvc.Versioning.App.TodoAppService).Namespace;
                     opts.ApiVersions.Add(new ApiVersion(2, 0));
                 });
 
                 //1.0 Compatability version
-                options.AppServiceControllers.Create(typeof(AbpAspNetCoreMvcVersioningTestModule).Assembly, opts =>
+                options.ConventionalControllers.Create(typeof(AbpAspNetCoreMvcVersioningTestModule).Assembly, opts =>
                 {
                     opts.TypePredicate = t => t.Namespace == typeof(Volo.Abp.AspNetCore.Mvc.Versioning.App.Compat.TodoAppService).Namespace;
                     opts.ApiVersions.Add(new ApiVersion(1, 0));

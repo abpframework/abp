@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.ViewComponents;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Volo.Abp.AspNetCore.Mvc.Conventions;
 using Volo.Abp.Http;
 using Volo.Abp.Http.Modeling;
 
@@ -53,7 +54,7 @@ namespace Volo.Abp.AspNetCore.Mvc
 
             services.Configure<AbpAspNetCoreMvcOptions>(options =>
             {
-                options.AppServiceControllers.Create(typeof(AbpAspNetCoreMvcModule).Assembly, o =>
+                options.ConventionalControllers.Create(typeof(AbpAspNetCoreMvcModule).Assembly, o =>
                 {
                     o.RootPath = "abp";
                 });
@@ -77,7 +78,7 @@ namespace Volo.Abp.AspNetCore.Mvc
             var partManager = services.GetSingletonInstance<ApplicationPartManager>();
             var application = services.GetSingletonInstance<IAbpApplication>();
 
-            partManager.FeatureProviders.Add(new AbpAppServiceControllerFeatureProvider(application));
+            partManager.FeatureProviders.Add(new AbpConventionalControllerFeatureProvider(application));
 
             services.Configure<MvcOptions>(mvcOptions =>
             {
@@ -114,8 +115,8 @@ namespace Volo.Abp.AspNetCore.Mvc
                 .ServiceProvider
                 .GetRequiredService<IOptions<AbpAspNetCoreMvcOptions>>()
                 .Value
-                .AppServiceControllers
-                .ControllerAssemblySettings
+                .ConventionalControllers
+                .ConventionalControllerSettings
                 .Select(s => s.Assembly)
                 .Distinct();
 

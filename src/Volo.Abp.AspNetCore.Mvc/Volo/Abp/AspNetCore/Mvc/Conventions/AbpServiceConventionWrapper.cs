@@ -3,16 +3,16 @@ using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.AspNetCore.Mvc
+namespace Volo.Abp.AspNetCore.Mvc.Conventions
 {
     [DisableConventionalRegistration]
-    public class AbpAppServiceConventionWrapper : IApplicationModelConvention
+    public class AbpServiceConventionWrapper : IApplicationModelConvention
     {
-        private readonly Lazy<IAbpAppServiceConvention> _convention;
+        private readonly Lazy<IAbpServiceConvention> _convention;
 
-        public AbpAppServiceConventionWrapper(IServiceCollection services)
+        public AbpServiceConventionWrapper(IServiceCollection services)
         {
-            _convention = services.GetRequiredServiceLazy<IAbpAppServiceConvention>();
+            _convention = services.GetRequiredServiceLazy<IAbpServiceConvention>();
         }
 
         public void Apply(ApplicationModel application)

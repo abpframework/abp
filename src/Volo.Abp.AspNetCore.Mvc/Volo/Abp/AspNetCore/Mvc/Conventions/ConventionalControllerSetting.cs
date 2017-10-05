@@ -9,9 +9,9 @@ using Microsoft.AspNetCore.Mvc.Versioning;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Reflection;
 
-namespace Volo.Abp.AspNetCore.Mvc
+namespace Volo.Abp.AspNetCore.Mvc.Conventions
 {
-    public class AbpControllerAssemblySetting
+    public class ConventionalControllerSetting
     {
         [NotNull]
         public Assembly Assembly { get; }
@@ -47,7 +47,7 @@ namespace Volo.Abp.AspNetCore.Mvc
 
         public Action<ApiVersioningOptions> ApiVersionConfigurer { get; set; }
         
-        public AbpControllerAssemblySetting([NotNull] Assembly assembly, [NotNull] string rootPath)
+        public ConventionalControllerSetting([NotNull] Assembly assembly, [NotNull] string rootPath)
         {
             Check.NotNull(assembly, rootPath);
 
