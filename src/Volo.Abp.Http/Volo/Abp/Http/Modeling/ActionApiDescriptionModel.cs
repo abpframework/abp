@@ -52,5 +52,10 @@ namespace Volo.Abp.Http.Modeling
         {
             return HttpMethodHelper.ConvertToHttpMethod(HttpMethod);
         }
+
+        public override string ToString()
+        {
+            return $"[ActionApiDescriptionModel {Name}]";
+        }
     }
 }

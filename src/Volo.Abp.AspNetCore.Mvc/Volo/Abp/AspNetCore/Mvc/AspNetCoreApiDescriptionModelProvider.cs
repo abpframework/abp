@@ -100,7 +100,7 @@ namespace Volo.Abp.AspNetCore.Mvc
 
         private static string GetUniqueActionName(MethodInfo method)
         {
-            var methodNameBuilder = new StringBuilder(method.Name.RemovePostFix("Async"));
+            var methodNameBuilder = new StringBuilder(method.Name);
 
             var parameters = method.GetParameters();
             if (parameters.Any())

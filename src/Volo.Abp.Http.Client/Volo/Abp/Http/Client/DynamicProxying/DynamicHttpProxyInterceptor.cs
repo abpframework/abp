@@ -94,9 +94,11 @@ namespace Volo.Abp.Http.Client.DynamicProxying
         {
             using (var client = _httpClientFactory.Create())
             {
-                var proxyConfig = GetProxyConfig();
-                var action = await _apiDescriptionFinder.FindActionAsync(proxyConfig, typeof(TService), invocation.Method);
-                var url = proxyConfig.BaseUrl + UrlBuilder.GenerateUrlWithParameters(action, invocation.ArgumentsDictionary);
+                var baseUrl = GetBaseUrl();
+                var version = GetVersion(); //TODO: Add version to the request (querystring, media type, path value or custom header!)
+
+                var action = await _apiDescriptionFinder.FindActionAsync(baseUrl, typeof(TService), invocation.Method);
+                var url = baseUrl + UrlBuilder.GenerateUrlWithParameters(action, invocation.ArgumentsDictionary);
 
                 var requestMessage = new HttpRequestMessage(action.GetHttpMethod(), url)
                 {
@@ -128,16 +130,24 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             }
         }
 
-        private RemoteServiceConfiguration GetProxyConfig()
+        private string GetBaseUrl()
         {
             var clientConfig = _clientOptions.HttpClientProxies.GetOrDefault(typeof(TService))
-                   ?? throw new AbpException($"Could not get DynamicHttpClientProxyConfig for {typeof(TService).FullName}.");
+                               ?? throw new AbpException($"Could not get DynamicHttpClientProxyConfig for {typeof(TService).FullName}.");
 
-            return _remoteServiceOptions.RemoteServices.GetOrDefault(clientConfig.RemoteServiceName)
-                ?? _remoteServiceOptions.RemoteServices.Default
-                ?? throw new AbpException($"Could not get DynamicHttpClientProxyConfig for {typeof(TService).FullName}.");
+            return _remoteServiceOptions.RemoteServices.GetOrDefault(clientConfig.RemoteServiceName)?.BaseUrl
+                   ?? _remoteServiceOptions.RemoteServices.Default?.BaseUrl
+                   ?? throw new AbpException($"Could not find Base URL for {typeof(TService).FullName}.");
         }
 
+        private string GetVersion()
+        {
+            var clientConfig = _clientOptions.HttpClientProxies.GetOrDefault(typeof(TService))
+                               ?? throw new AbpException($"Could not get DynamicHttpClientProxyConfig for {typeof(TService).FullName}.");
+
+            return _remoteServiceOptions.RemoteServices.GetOrDefault(clientConfig.RemoteServiceName)?.Version
+                   ?? _remoteServiceOptions.RemoteServices.Default?.Version;
+        }
 
         private async Task ThrowExceptionForResponseAsync(HttpResponseMessage response)
         {

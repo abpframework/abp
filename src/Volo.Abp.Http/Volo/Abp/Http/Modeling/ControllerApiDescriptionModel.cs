@@ -73,5 +73,10 @@ namespace Volo.Abp.Http.Modeling
         {
             return Interfaces.Any(i => i.TypeAsString == interfaceType.GetFullNameWithAssemblyName());
         }
+
+        public override string ToString()
+        {
+            return $"[ControllerApiDescriptionModel {ControllerName}]";
+        }
     }
 }
