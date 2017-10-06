@@ -7,7 +7,7 @@ namespace Volo.Abp.Identity.V4
 {
     //TODO: This is just a test controller and will be removed later
     [ApiVersion("4.0")]
-    [Route("api/v{api-version:apiVersion}/identity/fixture")]
+    [Route("api/v{apiVersion:apiVersion}/identity/fixture")]
     public class FixtureController : AbpController, IRemoteService
     {
         private readonly IRequestedApiVersion _requestedApiVersion;

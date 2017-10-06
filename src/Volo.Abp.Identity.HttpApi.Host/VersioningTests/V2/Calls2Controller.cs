@@ -8,7 +8,7 @@ using Volo.Abp.Identity.HttpApi.Host.VersioningTests.V1;
 namespace Volo.Abp.Identity.HttpApi.Host.VersioningTests.V2
 {
     [ApiVersion("2.0")]
-    [Route("api/v{api-version:apiVersion}/calls")]
+    [Route("api/v{apiVersion:apiVersion}/calls")]
     public class CallsController : AbpController, IRemoteService
     {
         private static List<CallDto> _calls = new List<CallDto>

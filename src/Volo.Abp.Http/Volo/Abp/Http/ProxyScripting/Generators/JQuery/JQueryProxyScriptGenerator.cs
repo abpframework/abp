@@ -80,12 +80,40 @@ namespace Volo.Abp.Http.ProxyScripting.Generators.JQuery
             var parameterList = ProxyScriptingJsFuncHelper.GenerateJsFuncParameterList(action, "ajaxParams");
 
             script.AppendLine($"    {controllerName}{ProxyScriptingJsFuncHelper.WrapWithBracketsOrWithDotPrefix(normalizedActionName.RemovePostFix("Async").ToCamelCase())} = function({parameterList}) {{");
+
+            var versionParam = action.Parameters.FirstOrDefault(p => p.Name == "apiVersion" && p.BindingSourceId == ParameterBindingSources.Path) ??
+                               action.Parameters.FirstOrDefault(p => p.Name == "api-version" && p.BindingSourceId == ParameterBindingSources.Query);
+
+            if (versionParam != null)
+            {
+                var version = FindBestApiVersion(action);
+                script.AppendLine($"      var {ProxyScriptingJsFuncHelper.NormalizeJsVariableName(versionParam.Name)} = '{version}';");
+            }
+
             script.AppendLine("      return abp.ajax($.extend(true, {");
 
             AddAjaxCallParameters(script, action);
 
             script.AppendLine("      }, ajaxParams));;");
             script.AppendLine("    };");
+        }
+
+        private static string FindBestApiVersion(ActionApiDescriptionModel action)
+        {
+            //var configuredVersion = GetConfiguredApiVersion(); //TODO: Implement
+            string configuredVersion = null;
+
+            if (action.SupportedVersions.IsNullOrEmpty())
+            {
+                return configuredVersion ?? "1.0";
+            }
+
+            if (action.SupportedVersions.Contains(configuredVersion))
+            {
+                return configuredVersion;
+            }
+
+            return action.SupportedVersions.Last(); //TODO: Ensure to get the latest version!
         }
 
         private static void AddAjaxCallParameters(StringBuilder script, ActionApiDescriptionModel action)

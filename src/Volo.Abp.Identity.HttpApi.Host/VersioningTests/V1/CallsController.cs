@@ -1,13 +1,12 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.AspNetCore.Mvc;
 
 namespace Volo.Abp.Identity.HttpApi.Host.VersioningTests.V1
 {
     [ApiVersion("1.0")]
-    [Route("api/v{api-version:apiVersion}/calls")]
+    [Route("api/v{apiVersion:apiVersion}/calls")]
     public class CallsController : AbpController, IRemoteService
     {
         private static readonly List<CallDto> Calls = new List<CallDto>
@@ -21,10 +20,5 @@ namespace Volo.Abp.Identity.HttpApi.Host.VersioningTests.V1
         {
             return Calls;
         }
-    }
-
-    public class CallDto : EntityDto<int>
-    {
-        public string Number { get; set; }
     }
 }

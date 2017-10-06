@@ -84,7 +84,7 @@ namespace Volo.Abp.AspNetCore.Mvc
                 method,
                 apiDescription.RelativePath,
                 apiDescription.HttpMethod,
-                setting?.ApiVersions.Select(v => v.ToString()).ToList() ?? new List<string>()
+                setting?.ApiVersions.Select(v => v.ToString()).ToList() ?? new List<string>() //TODO: Also get from ApiVersion attributes if available..?
             ));
 
             AddParameterDescriptionsToModel(actionModel, method, apiDescription);

@@ -132,8 +132,8 @@ namespace Volo.Abp.Http.Client.DynamicProxying
         {
             var apiVersion = FindBestApiVersion(action);
 
-            //TODO: Make names configurable!
-            var versionParam = action.Parameters.FirstOrDefault(p => p.Name == "apiVersion") ??
+            //TODO: Make names configurable?
+            var versionParam = action.Parameters.FirstOrDefault(p => p.Name == "apiVersion" && p.BindingSourceId == ParameterBindingSources.Path) ??
                                action.Parameters.FirstOrDefault(p => p.Name == "api-version" && p.BindingSourceId == ParameterBindingSources.Query);
 
             return new ApiVersionInfo(versionParam?.BindingSourceId, apiVersion);
