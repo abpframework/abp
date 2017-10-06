@@ -10,6 +10,8 @@ namespace Volo.Abp.Http.Modeling
     [Serializable]
     public class ActionApiDescriptionModel
     {
+        public string UniqueName { get; set; }
+
         public string Name { get; set; }
 
         public string HttpMethod { get; set; }
@@ -29,8 +31,9 @@ namespace Volo.Abp.Http.Modeling
 
         }
 
-        public static ActionApiDescriptionModel Create([NotNull] MethodInfo method, [NotNull] string url, [NotNull] string httpMethod, [NotNull] IList<string> supportedVersions)
+        public static ActionApiDescriptionModel Create([NotNull] string uniqueName, [NotNull] MethodInfo method, [NotNull] string url, [NotNull] string httpMethod, [NotNull] IList<string> supportedVersions)
         {
+            Check.NotNull(uniqueName, nameof(uniqueName));
             Check.NotNull(method, nameof(method));
             Check.NotNull(url, nameof(url));
             Check.NotNull(httpMethod, nameof(httpMethod));
@@ -38,6 +41,7 @@ namespace Volo.Abp.Http.Modeling
 
             return new ActionApiDescriptionModel
             {
+                UniqueName = uniqueName,
                 Name = method.Name,
                 Url = url,
                 HttpMethod = httpMethod,

@@ -63,21 +63,23 @@ namespace Volo.Abp.Http.ProxyScripting.Generators.JQuery
 
             script.AppendLine($"    abp.utils.createNamespace(window, '{controllerName}');");
 
+            var normalizedActionNames = CalculateNormalizedActionNames(controller.Actions);
+
             foreach (var action in controller.Actions.Values)
             {
                 script.AppendLine();
-                AddActionScript(script, module, controllerName, controller, action);
+                AddActionScript(script, module, controllerName, controller, action, normalizedActionNames[action]);
             }
 
             script.AppendLine();
             script.AppendLine("  })();");
         }
 
-        private static void AddActionScript(StringBuilder script, ModuleApiDescriptionModel module, string controllerName, ControllerApiDescriptionModel controller, ActionApiDescriptionModel action)
+        private static void AddActionScript(StringBuilder script, ModuleApiDescriptionModel module, string controllerName, ControllerApiDescriptionModel controller, ActionApiDescriptionModel action, string normalizedActionName)
         {
             var parameterList = ProxyScriptingJsFuncHelper.GenerateJsFuncParameterList(action, "ajaxParams");
 
-            script.AppendLine($"    {controllerName}{ProxyScriptingJsFuncHelper.WrapWithBracketsOrWithDotPrefix(action.Name.RemovePostFix("Async").ToCamelCase())} = function({parameterList}) {{");
+            script.AppendLine($"    {controllerName}{ProxyScriptingJsFuncHelper.WrapWithBracketsOrWithDotPrefix(normalizedActionName.RemovePostFix("Async").ToCamelCase())} = function({parameterList}) {{");
             script.AppendLine("      return abp.ajax($.extend(true, {");
 
             AddAjaxCallParameters(script, controller, action);
@@ -123,6 +125,35 @@ namespace Volo.Abp.Http.ProxyScripting.Generators.JQuery
             }
             
             script.AppendLine();
+        }
+
+        private static Dictionary<ActionApiDescriptionModel, string> CalculateNormalizedActionNames(Dictionary<string, ActionApiDescriptionModel> actions)
+        {
+            var result = new Dictionary<ActionApiDescriptionModel, string>();
+
+            var actionsByName = new Dictionary<string, List<ActionApiDescriptionModel>>();
+
+            foreach (var action in actions.Values)
+            {
+                var actionName = action.Name.RemovePostFix("Async").ToCamelCase();
+                result[action] = actionName;
+                actionsByName.GetOrAdd(actionName, () => new List<ActionApiDescriptionModel>()).Add(action);
+            }
+
+            foreach (var actionByName in actionsByName)
+            {
+                if (actionByName.Value.Count <= 1)
+                {
+                    continue;
+                }
+
+                foreach (var action in actionByName.Value)
+                {
+                    result[action] = action.UniqueName;
+                }
+            }
+
+            return result;
         }
 
         private static string GetNormalizedTypeName(string typeWithAssemblyName)
