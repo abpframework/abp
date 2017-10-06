@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
@@ -56,10 +57,20 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             }
             else
             {
-                invocation.ReturnValue = _jsonSerializer.Deserialize(
-                    invocation.Method.ReturnType,
-                    AsyncHelper.RunSync(() => MakeRequest(invocation))
-                );
+                var responseAsString = AsyncHelper.RunSync(() => MakeRequest(invocation));
+
+                //TODO: Think on that
+                if (TypeHelper.IsPrimitiveExtendedIncludingNullable(invocation.Method.ReturnType, true))
+                {
+                    invocation.ReturnValue = Convert.ChangeType(responseAsString, invocation.Method.ReturnType);
+                }
+                else
+                {
+                    invocation.ReturnValue = _jsonSerializer.Deserialize(
+                        invocation.Method.ReturnType,
+                        responseAsString
+                    );
+                }
             }
         }
 
@@ -94,16 +105,17 @@ namespace Volo.Abp.Http.Client.DynamicProxying
         {
             using (var client = _httpClientFactory.Create())
             {
-                var proxyConfig = GetProxyConfig();
-                var action = await _apiDescriptionFinder.FindActionAsync(proxyConfig, typeof(TService), invocation.Method);
-                var url = proxyConfig.BaseUrl + UrlBuilder.GenerateUrlWithParameters(action, invocation.ArgumentsDictionary);
+                var baseUrl = GetBaseUrl();
+                var action = await _apiDescriptionFinder.FindActionAsync(baseUrl, typeof(TService), invocation.Method);
+                var apiVersion = GetApiVersionInfo(action);
+                var url = baseUrl + UrlBuilder.GenerateUrlWithParameters(action, invocation.ArgumentsDictionary, apiVersion);
 
                 var requestMessage = new HttpRequestMessage(action.GetHttpMethod(), url)
                 {
-                    Content = RequestPayloadBuilder.BuildContent(action, invocation.ArgumentsDictionary, _jsonSerializer)
+                    Content = RequestPayloadBuilder.BuildContent(action, invocation.ArgumentsDictionary, _jsonSerializer, apiVersion)
                 };
 
-                AddHeaders(invocation, action, requestMessage);
+                AddHeaders(invocation, action, requestMessage, apiVersion);
 
                 var response = await client.SendAsync(requestMessage);
 
@@ -116,9 +128,47 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             }
         }
 
-        private static void AddHeaders(IAbpMethodInvocation invocation, ActionApiDescriptionModel action, HttpRequestMessage requestMessage)
+        private ApiVersionInfo GetApiVersionInfo(ActionApiDescriptionModel action)
         {
-            foreach (var headerParameter in action.Parameters.Where(p => p.BindingSourceId == ParameterBindingSources.Header))
+            var apiVersion = FindBestApiVersion(action);
+
+            //TODO: Make names configurable?
+            var versionParam = action.Parameters.FirstOrDefault(p => p.Name == "apiVersion" && p.BindingSourceId == ParameterBindingSources.Path) ??
+                               action.Parameters.FirstOrDefault(p => p.Name == "api-version" && p.BindingSourceId == ParameterBindingSources.Query);
+
+            return new ApiVersionInfo(versionParam?.BindingSourceId, apiVersion);
+        }
+
+        private string FindBestApiVersion(ActionApiDescriptionModel action)
+        {
+            var configuredVersion = GetConfiguredApiVersion();
+
+            if (action.SupportedVersions.IsNullOrEmpty())
+            {
+                return configuredVersion ?? "1.0";
+            }
+
+            if (action.SupportedVersions.Contains(configuredVersion))
+            {
+                return configuredVersion;
+            }
+
+            return action.SupportedVersions.Last(); //TODO: Ensure to get the latest version!
+        }
+
+        private static void AddHeaders(IAbpMethodInvocation invocation, ActionApiDescriptionModel action, HttpRequestMessage requestMessage, ApiVersionInfo apiVersion)
+        {
+            if (!apiVersion.Version.IsNullOrEmpty())
+            {
+                //TODO: What about other media types?
+                requestMessage.Headers.Add("accept", $"text/plain; v={apiVersion.Version}");
+                requestMessage.Headers.Add("accept", $"application/json; v={apiVersion.Version}");
+                requestMessage.Headers.Add("api-version", apiVersion.Version);
+            }
+
+            var headers = action.Parameters.Where(p => p.BindingSourceId == ParameterBindingSources.Header).ToArray();
+            
+            foreach (var headerParameter in headers)
             {
                 var value = HttpActionParameterHelper.FindParameterValue(invocation.ArgumentsDictionary, headerParameter);
                 if (value != null)
@@ -128,16 +178,24 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             }
         }
 
-        private RemoteServiceConfiguration GetProxyConfig()
+        private string GetBaseUrl()
         {
             var clientConfig = _clientOptions.HttpClientProxies.GetOrDefault(typeof(TService))
-                   ?? throw new AbpException($"Could not get DynamicHttpClientProxyConfig for {typeof(TService).FullName}.");
+                               ?? throw new AbpException($"Could not get DynamicHttpClientProxyConfig for {typeof(TService).FullName}.");
 
-            return _remoteServiceOptions.RemoteServices.GetOrDefault(clientConfig.RemoteServiceName)
-                ?? _remoteServiceOptions.RemoteServices.Default
-                ?? throw new AbpException($"Could not get DynamicHttpClientProxyConfig for {typeof(TService).FullName}.");
+            return _remoteServiceOptions.RemoteServices.GetOrDefault(clientConfig.RemoteServiceName)?.BaseUrl
+                   ?? _remoteServiceOptions.RemoteServices.Default?.BaseUrl
+                   ?? throw new AbpException($"Could not find Base URL for {typeof(TService).FullName}.");
         }
 
+        private string GetConfiguredApiVersion()
+        {
+            var clientConfig = _clientOptions.HttpClientProxies.GetOrDefault(typeof(TService))
+                               ?? throw new AbpException($"Could not get DynamicHttpClientProxyConfig for {typeof(TService).FullName}.");
+
+            return _remoteServiceOptions.RemoteServices.GetOrDefault(clientConfig.RemoteServiceName)?.Version
+                   ?? _remoteServiceOptions.RemoteServices.Default?.Version;
+        }
 
         private async Task ThrowExceptionForResponseAsync(HttpResponseMessage response)
         {

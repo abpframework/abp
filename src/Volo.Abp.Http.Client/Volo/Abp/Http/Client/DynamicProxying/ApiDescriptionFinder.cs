@@ -16,9 +16,9 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             _descriptionCache = descriptionCache;
         }
 
-        public async Task<ActionApiDescriptionModel> FindActionAsync(RemoteServiceConfiguration proxyConfig, Type serviceType, MethodInfo method)
+        public async Task<ActionApiDescriptionModel> FindActionAsync(string baseUrl, Type serviceType, MethodInfo method)
         {
-            var apiDescription = await _descriptionCache.GetAsync(proxyConfig.BaseUrl);
+            var apiDescription = await _descriptionCache.GetAsync(baseUrl);
 
             //TODO: Cache finding?
 
@@ -35,7 +35,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
                     foreach (var action in controller.Actions.Values)
                     {
-                        if (action.NameOnClass == method.Name && action.ParametersOnMethod.Count == methodParameters.Length)
+                        if (action.Name == method.Name && action.ParametersOnMethod.Count == methodParameters.Length)
                         {
                             var found = true;
 

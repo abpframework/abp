@@ -9,17 +9,17 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 {
     internal static class UrlBuilder
     {
-        public static string GenerateUrlWithParameters(ActionApiDescriptionModel action, IReadOnlyDictionary<string, object> methodArguments)
+        public static string GenerateUrlWithParameters(ActionApiDescriptionModel action, IReadOnlyDictionary<string, object> methodArguments, ApiVersionInfo apiVersion)
         {
             var urlBuilder = new StringBuilder(action.Url);
 
-            ReplacePathVariables(urlBuilder, action.Parameters, methodArguments);
-            AddQueryStringParameters(urlBuilder, action.Parameters, methodArguments);
+            ReplacePathVariables(urlBuilder, action.Parameters, methodArguments, apiVersion);
+            AddQueryStringParameters(urlBuilder, action.Parameters, methodArguments, apiVersion);
 
             return urlBuilder.ToString();
         }
 
-        private static void ReplacePathVariables(StringBuilder urlBuilder, IList<ParameterApiDescriptionModel> actionParameters, IReadOnlyDictionary<string, object> methodArguments)
+        private static void ReplacePathVariables(StringBuilder urlBuilder, IList<ParameterApiDescriptionModel> actionParameters, IReadOnlyDictionary<string, object> methodArguments, ApiVersionInfo apiVersion)
         {
             var pathParameters = actionParameters
                 .Where(p => p.BindingSourceId == ParameterBindingSources.Path)
@@ -30,9 +30,15 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                 return;
             }
 
-            foreach (var pathParameter in pathParameters)
+            if (pathParameters.Any(p => p.Name == "apiVersion"))
+            {
+                urlBuilder = urlBuilder.Replace("{apiVersion}", apiVersion.Version);
+            }
+
+            foreach (var pathParameter in pathParameters.Where(p => p.Name != "apiVersion")) //TODO: Constant!
             {
                 var value = HttpActionParameterHelper.FindParameterValue(methodArguments, pathParameter);
+
                 if (value == null)
                 {
                     if (pathParameter.IsOptional)
@@ -55,18 +61,14 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             }
         }
 
-        private static void AddQueryStringParameters(StringBuilder urlBuilder, IList<ParameterApiDescriptionModel> actionParameters, IReadOnlyDictionary<string, object> methodArguments)
+        private static void AddQueryStringParameters(StringBuilder urlBuilder, IList<ParameterApiDescriptionModel> actionParameters, IReadOnlyDictionary<string, object> methodArguments, ApiVersionInfo apiVersion)
         {
             var queryStringParameters = actionParameters
                 .Where(p => p.BindingSourceId.IsIn(ParameterBindingSources.ModelBinding, ParameterBindingSources.Query))
                 .ToArray();
 
-            if (!queryStringParameters.Any())
-            {
-                return;
-            }
-
             var isFirstParam = true;
+
             foreach (var queryStringParameter in queryStringParameters)
             {
                 var value = HttpActionParameterHelper.FindParameterValue(methodArguments, queryStringParameter);
@@ -75,11 +77,21 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                     continue;
                 }
 
-                urlBuilder.Append(isFirstParam ? "?" : "&");
-                urlBuilder.Append(queryStringParameter.Name + "=" + System.Net.WebUtility.UrlEncode(value.ToString()));
+                AddQueryStringParameter(urlBuilder, isFirstParam, queryStringParameter.Name, value);
 
                 isFirstParam = false;
             }
+
+            if (apiVersion.ShouldSendInQueryString())
+            {
+                AddQueryStringParameter(urlBuilder, isFirstParam, "api-version", apiVersion.Version);  //TODO: Constant!
+            }
+        }
+
+        private static void AddQueryStringParameter(StringBuilder urlBuilder, bool isFirstParam, string name, object value)
+        {
+            urlBuilder.Append(isFirstParam ? "?" : "&");
+            urlBuilder.Append(name + "=" + System.Net.WebUtility.UrlEncode(value.ToString()));
         }
     }
 }

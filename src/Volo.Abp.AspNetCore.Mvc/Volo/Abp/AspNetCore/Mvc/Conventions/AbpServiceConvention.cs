@@ -14,13 +14,13 @@ using Volo.Abp.Http;
 using Volo.Abp.Http.Modeling;
 using Volo.Abp.Reflection;
 
-namespace Volo.Abp.AspNetCore.Mvc
+namespace Volo.Abp.AspNetCore.Mvc.Conventions
 {
-    public class AbpAppServiceConvention : IAbpAppServiceConvention, ITransientDependency
+    public class AbpServiceConvention : IAbpServiceConvention, ITransientDependency
     {
         private readonly AbpAspNetCoreMvcOptions _options;
 
-        public AbpAppServiceConvention(IOptions<AbpAspNetCoreMvcOptions> options)
+        public AbpServiceConvention(IOptions<AbpAspNetCoreMvcOptions> options)
         {
             _options = options.Value;
         }
@@ -37,11 +37,13 @@ namespace Volo.Abp.AspNetCore.Mvc
                 var controllerType = controller.ControllerType.AsType();
                 var configuration = GetControllerSettingOrNull(controllerType);
 
-                if (IsRemoteService(controllerType))
+                //TODO: We can remove different behaviour for ImplementsRemoteServiceInterface. If there is a configuration, then it should be applied!
+                //TODO: But also consider ConventionalControllerSetting.IsRemoteService method too..!
+
+                if (ImplementsRemoteServiceInterface(controllerType))
                 {
                     controller.ControllerName = controller.ControllerName.RemovePostFix(ApplicationService.CommonPostfixes);
                     configuration?.ControllerModelConfigurer?.Invoke(controller);
-                    //ConfigureArea(controller, configuration);
                     ConfigureRemoteService(controller, configuration);
                 }
                 else
@@ -55,7 +57,7 @@ namespace Volo.Abp.AspNetCore.Mvc
             }
         }
 
-        protected virtual void ConfigureRemoteService(ControllerModel controller, [CanBeNull] AbpControllerAssemblySetting configuration)
+        protected virtual void ConfigureRemoteService(ControllerModel controller, [CanBeNull] ConventionalControllerSetting configuration)
         {
             ConfigureApiExplorer(controller);
             ConfigureSelector(controller, configuration);
@@ -92,7 +94,7 @@ namespace Volo.Abp.AspNetCore.Mvc
 
         protected virtual bool CanUseFormBodyBinding(ActionModel action, ParameterModel parameter)
         {
-            if (_options.AppServiceControllers.FormBodyBindingIgnoredTypes.Any(t => t.IsAssignableFrom(parameter.ParameterInfo.ParameterType)))
+            if (_options.ConventionalControllers.FormBodyBindingIgnoredTypes.Any(t => t.IsAssignableFrom(parameter.ParameterInfo.ParameterType)))
             {
                 return false;
             }
@@ -165,7 +167,7 @@ namespace Volo.Abp.AspNetCore.Mvc
             }
         }
 
-        protected virtual void ConfigureSelector(ControllerModel controller, [CanBeNull] AbpControllerAssemblySetting configuration)
+        protected virtual void ConfigureSelector(ControllerModel controller, [CanBeNull] ConventionalControllerSetting configuration)
         {
             RemoveEmptySelectors(controller.Selectors);
 
@@ -182,7 +184,7 @@ namespace Volo.Abp.AspNetCore.Mvc
             }
         }
 
-        protected virtual void ConfigureSelector(string rootPath, string controllerName, ActionModel action, [CanBeNull] AbpControllerAssemblySetting configuration)
+        protected virtual void ConfigureSelector(string rootPath, string controllerName, ActionModel action, [CanBeNull] ConventionalControllerSetting configuration)
         {
             RemoveEmptySelectors(action.Selectors);
 
@@ -196,7 +198,7 @@ namespace Volo.Abp.AspNetCore.Mvc
             }
         }
 
-        protected virtual void AddAbpServiceSelector(string rootPath, string controllerName, ActionModel action, [CanBeNull] AbpControllerAssemblySetting configuration)
+        protected virtual void AddAbpServiceSelector(string rootPath, string controllerName, ActionModel action, [CanBeNull] ConventionalControllerSetting configuration)
         {
             var httpMethod = SelectHttpMethod(action, configuration);
 
@@ -209,12 +211,12 @@ namespace Volo.Abp.AspNetCore.Mvc
             action.Selectors.Add(abpServiceSelectorModel);
         }
 
-        protected virtual string SelectHttpMethod(ActionModel action, AbpControllerAssemblySetting configuration)
+        protected virtual string SelectHttpMethod(ActionModel action, ConventionalControllerSetting configuration)
         {
             return HttpMethodHelper.GetConventionalVerbForMethodName(action.ActionName);
         }
 
-        protected virtual void NormalizeSelectorRoutes(string rootPath, string controllerName, ActionModel action, [CanBeNull] AbpControllerAssemblySetting configuration)
+        protected virtual void NormalizeSelectorRoutes(string rootPath, string controllerName, ActionModel action, [CanBeNull] ConventionalControllerSetting configuration)
         {
             foreach (var selector in action.Selectors)
             {
@@ -233,12 +235,12 @@ namespace Volo.Abp.AspNetCore.Mvc
         }
 
         [CanBeNull]
-        protected virtual AbpControllerAssemblySetting GetControllerSettingOrNull(Type controllerType)
+        protected virtual ConventionalControllerSetting GetControllerSettingOrNull(Type controllerType)
         {
-            return _options.AppServiceControllers.ControllerAssemblySettings.GetSettingOrNull(controllerType);
+            return _options.ConventionalControllers.ConventionalControllerSettings.GetSettingOrNull(controllerType);
         }
 
-        protected virtual AttributeRouteModel CreateAbpServiceAttributeRouteModel(string rootPath, string controllerName, ActionModel action, string httpMethod, [CanBeNull] AbpControllerAssemblySetting configuration)
+        protected virtual AttributeRouteModel CreateAbpServiceAttributeRouteModel(string rootPath, string controllerName, ActionModel action, string httpMethod, [CanBeNull] ConventionalControllerSetting configuration)
         {
             return new AttributeRouteModel(
                 new RouteAttribute(
@@ -247,7 +249,7 @@ namespace Volo.Abp.AspNetCore.Mvc
             );
         }
 
-        protected virtual string CalculateRouteTemplate(string rootPath, string controllerName, ActionModel action, string httpMethod, [CanBeNull] AbpControllerAssemblySetting configuration)
+        protected virtual string CalculateRouteTemplate(string rootPath, string controllerName, ActionModel action, string httpMethod, [CanBeNull] ConventionalControllerSetting configuration)
         {
             var controllerNameInUrl = NormalizeUrlControllerName(rootPath, controllerName, action, httpMethod, configuration);
 
@@ -276,7 +278,7 @@ namespace Volo.Abp.AspNetCore.Mvc
             return url;
         }
 
-        protected virtual string NormalizeUrlActionName(string rootPath, string controllerName, ActionModel action, string httpMethod, [CanBeNull] AbpControllerAssemblySetting configuration)
+        protected virtual string NormalizeUrlActionName(string rootPath, string controllerName, ActionModel action, string httpMethod, [CanBeNull] ConventionalControllerSetting configuration)
         {
             var actionNameInUrl = HttpMethodHelper
                 .RemoveHttpMethodPrefix(action.ActionName, httpMethod)
@@ -298,7 +300,7 @@ namespace Volo.Abp.AspNetCore.Mvc
             );
         }
 
-        protected virtual string NormalizeUrlControllerName(string rootPath, string controllerName, ActionModel action, string httpMethod, [CanBeNull] AbpControllerAssemblySetting configuration)
+        protected virtual string NormalizeUrlControllerName(string rootPath, string controllerName, ActionModel action, string httpMethod, [CanBeNull] ConventionalControllerSetting configuration)
         {
             if(configuration?.UrlControllerNameNormalizer == null)
             {
@@ -308,9 +310,7 @@ namespace Volo.Abp.AspNetCore.Mvc
             return configuration.UrlControllerNameNormalizer(
                 new UrlControllerNameNormalizerContext(
                     rootPath,
-                    controllerName,
-                    action,
-                    httpMethod
+                    controllerName
                 )
             );
         }
@@ -328,7 +328,7 @@ namespace Volo.Abp.AspNetCore.Mvc
             return selector.AttributeRouteModel == null && selector.ActionConstraints.IsNullOrEmpty();
         }
 
-        protected virtual bool IsRemoteService(Type controllerType)
+        protected virtual bool ImplementsRemoteServiceInterface(Type controllerType)
         {
             return typeof(IRemoteService).GetTypeInfo().IsAssignableFrom(controllerType);
         }

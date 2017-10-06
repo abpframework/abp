@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 
 namespace Volo.Abp.Http.Modeling
 {
@@ -20,7 +21,7 @@ namespace Volo.Abp.Http.Modeling
 
         }
 
-        public static ControllerApiDescriptionModel Create(string controllerName, Type type)
+        public static ControllerApiDescriptionModel Create(string controllerName, Type type, [CanBeNull] HashSet<Type> ignoredInterfaces = null)
         {
             return new ControllerApiDescriptionModel
             {
@@ -29,21 +30,22 @@ namespace Volo.Abp.Http.Modeling
                 Actions = new Dictionary<string, ActionApiDescriptionModel>(),
                 Interfaces = type
                     .GetInterfaces()
+                    .WhereIf(ignoredInterfaces != null, i => !i.IsGenericType && !ignoredInterfaces.Contains(i))
                     .Select(ControllerInterfaceApiDescriptionModel.Create)
                     .ToList()
             };
         }
 
-        public ActionApiDescriptionModel AddAction(ActionApiDescriptionModel action)
+        public ActionApiDescriptionModel AddAction(string uniqueName, ActionApiDescriptionModel action)
         {
-            if (Actions.ContainsKey(action.UniqueName))
+            if (Actions.ContainsKey(uniqueName))
             {
                 throw new AbpException(
-                    $"Can not add more than one action with same name to the same controller. Controller: {ControllerName}, Action: {action.UniqueName}."
-                    );
+                    $"Can not add more than one action with same name to the same controller. Controller: {ControllerName}, Action: {action.Name}."
+                );
             }
 
-            return Actions[action.UniqueName] = action;
+            return Actions[uniqueName] = action;
         }
 
         public ControllerApiDescriptionModel CreateSubModel(string[] actions)
@@ -56,11 +58,11 @@ namespace Volo.Abp.Http.Modeling
                 Actions = new Dictionary<string, ActionApiDescriptionModel>()
             };
 
-            foreach (var action in Actions.Values)
+            foreach (var action in Actions)
             {
-                if (actions == null || actions.Contains(action.UniqueName))
+                if (actions == null || actions.Contains(action.Key))
                 {
-                    subModel.AddAction(action);
+                    subModel.AddAction(action.Key, action.Value);
                 }
             }
 
@@ -70,6 +72,11 @@ namespace Volo.Abp.Http.Modeling
         public bool Implements(Type interfaceType)
         {
             return Interfaces.Any(i => i.TypeAsString == interfaceType.GetFullNameWithAssemblyName());
+        }
+
+        public override string ToString()
+        {
+            return $"[ControllerApiDescriptionModel {ControllerName}]";
         }
     }
 }

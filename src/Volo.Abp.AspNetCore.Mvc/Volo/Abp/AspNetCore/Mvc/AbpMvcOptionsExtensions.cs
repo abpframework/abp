@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.AspNetCore.Mvc.Conventions;
 using Volo.Abp.AspNetCore.Mvc.ExceptionHandling;
 using Volo.Abp.AspNetCore.Mvc.Uow;
 using Volo.Abp.AspNetCore.Mvc.Validation;
@@ -17,7 +18,7 @@ namespace Volo.Abp.AspNetCore.Mvc
 
         private static void AddConventions(MvcOptions options, IServiceCollection services)
         {
-            options.Conventions.Add(new AbpAppServiceConventionWrapper(services));
+            options.Conventions.Add(new AbpServiceConventionWrapper(services));
         }
 
         private static void AddFilters(MvcOptions options)

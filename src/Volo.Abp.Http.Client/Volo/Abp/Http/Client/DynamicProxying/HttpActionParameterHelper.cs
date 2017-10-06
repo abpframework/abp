@@ -8,7 +8,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
     {
         public static object FindParameterValue(IReadOnlyDictionary<string, object> methodArguments, ParameterApiDescriptionModel apiParameter)
         {
-            var value = methodArguments[apiParameter.NameOnMethod];
+            var value =  methodArguments.GetOrDefault(apiParameter.NameOnMethod);
             if (value == null)
             {
                 return null;

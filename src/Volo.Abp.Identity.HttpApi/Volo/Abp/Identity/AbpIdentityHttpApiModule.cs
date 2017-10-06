@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Modularity;
@@ -14,10 +15,14 @@ namespace Volo.Abp.Identity
 
             services.Configure<AbpAspNetCoreMvcOptions>(options =>
             {
-                options
-                    .AppServiceControllers
-                    .CreateFor(typeof(AbpIdentityApplicationModule).Assembly, "identity")
-                    .NormalizeControllerNameInUrl(context => context.ControllerName.RemovePreFix("Identity"));
+                options.ConventionalControllers.Create(typeof(AbpIdentityApplicationModule).Assembly, opts =>
+                {
+                    opts.RootPath = "identity";
+                    opts.UrlControllerNameNormalizer = context => context.ControllerName.RemovePreFix("Identity");
+                    opts.ApiVersions.Add(new ApiVersion(2, 0));
+                });
+
+                options.ConventionalControllers.Create(typeof(AbpIdentityHttpApiModule).Assembly);
             });
         }
     }

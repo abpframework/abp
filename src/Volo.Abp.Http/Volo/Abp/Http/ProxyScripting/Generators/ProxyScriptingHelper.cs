@@ -47,7 +47,7 @@ namespace Volo.Abp.Http.ProxyScripting.Generators
             if (parameters.Length > 1)
             {
                 throw new AbpException(
-                    $"Only one complex type allowed as argument to a controller action that's binding source is 'Body'. But {action.UniqueName} ({action.Url}) contains more than one!"
+                    $"Only one complex type allowed as argument to a controller action that's binding source is 'Body'. But {action.Name} ({action.Url}) contains more than one!"
                 );
             }
 

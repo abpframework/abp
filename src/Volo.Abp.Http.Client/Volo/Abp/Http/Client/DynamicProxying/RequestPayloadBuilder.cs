@@ -12,10 +12,9 @@ namespace Volo.Abp.Http.Client.DynamicProxying
     public static class RequestPayloadBuilder
     {
         [CanBeNull]
-        public static HttpContent BuildContent(ActionApiDescriptionModel action,IReadOnlyDictionary<string, object> methodArguments, IJsonSerializer jsonSerializer)
+        public static HttpContent BuildContent(ActionApiDescriptionModel action,IReadOnlyDictionary<string, object> methodArguments, IJsonSerializer jsonSerializer, ApiVersionInfo apiVersion)
         {
             var body = GenerateBody(action, methodArguments, jsonSerializer);
-
             if (body != null)
             {
                 return new StringContent(body, Encoding.UTF8, "application/json"); //TODO: application/json to a constant

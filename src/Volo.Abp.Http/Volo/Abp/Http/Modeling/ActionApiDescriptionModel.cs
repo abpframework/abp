@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
+using JetBrains.Annotations;
 
 namespace Volo.Abp.Http.Modeling
 {
@@ -11,11 +12,13 @@ namespace Volo.Abp.Http.Modeling
     {
         public string UniqueName { get; set; }
 
-        public string NameOnClass { get; set; }
+        public string Name { get; set; }
 
         public string HttpMethod { get; set; }
 
         public string Url { get; set; }
+
+        public IList<string> SupportedVersions { get; set; }
 
         public IList<MethodParameterApiDescriptionModel> ParametersOnMethod { get; set; }
 
@@ -28,12 +31,18 @@ namespace Volo.Abp.Http.Modeling
 
         }
 
-        public static ActionApiDescriptionModel Create(MethodInfo method, string uniqueName, string url, string httpMethod = null)
+        public static ActionApiDescriptionModel Create([NotNull] string uniqueName, [NotNull] MethodInfo method, [NotNull] string url, [NotNull] string httpMethod, [NotNull] IList<string> supportedVersions)
         {
+            Check.NotNull(uniqueName, nameof(uniqueName));
+            Check.NotNull(method, nameof(method));
+            Check.NotNull(url, nameof(url));
+            Check.NotNull(httpMethod, nameof(httpMethod));
+            Check.NotNull(supportedVersions, nameof(supportedVersions));
+
             return new ActionApiDescriptionModel
             {
                 UniqueName = uniqueName,
-                NameOnClass = method.Name,
+                Name = method.Name,
                 Url = url,
                 HttpMethod = httpMethod,
                 ReturnValue = ReturnValueApiDescriptionModel.Create(method.ReturnType),
@@ -41,7 +50,8 @@ namespace Volo.Abp.Http.Modeling
                 ParametersOnMethod = method
                     .GetParameters()
                     .Select(MethodParameterApiDescriptionModel.Create)
-                    .ToList()
+                    .ToList(),
+                SupportedVersions = supportedVersions
             };
         }
 
@@ -54,6 +64,11 @@ namespace Volo.Abp.Http.Modeling
         public HttpMethod GetHttpMethod()
         {
             return HttpMethodHelper.ConvertToHttpMethod(HttpMethod);
+        }
+
+        public override string ToString()
+        {
+            return $"[ActionApiDescriptionModel {Name}]";
         }
     }
 }

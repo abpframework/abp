@@ -7,6 +7,6 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 {
     public interface IApiDescriptionFinder
     {
-        Task<ActionApiDescriptionModel> FindActionAsync(RemoteServiceConfiguration proxyConfig, Type serviceType, MethodInfo invocationMethod);
+        Task<ActionApiDescriptionModel> FindActionAsync(string baseUrl, Type serviceType, MethodInfo invocationMethod);
     }
 }

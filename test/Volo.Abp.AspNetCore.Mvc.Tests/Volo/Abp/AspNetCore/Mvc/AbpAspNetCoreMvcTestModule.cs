@@ -2,14 +2,13 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Modularity;
-using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.TestBase;
 using Volo.Abp.Autofac;
 using Volo.Abp.MemoryDb;
 using Volo.Abp.Modularity;
 using Volo.Abp.TestApp;
 
-namespace Volo.Abp.AspNetCore.App
+namespace Volo.Abp.AspNetCore.Mvc
 {
     [DependsOn(
         typeof(AbpAspNetCoreTestBaseModule),
@@ -25,15 +24,13 @@ namespace Volo.Abp.AspNetCore.App
 
             services.Configure<AbpAspNetCoreMvcOptions>(options =>
             {
-                options
-                    .AppServiceControllers
-                    .CreateFor(typeof(TestAppModule).Assembly)
-                    .NormalizeActionNameInUrl(
-                        context =>
-                            string.Equals(context.ActionNameInUrl, "phone", StringComparison.OrdinalIgnoreCase)
-                                ? "phones"
-                                : context.ActionNameInUrl
-                    );
+                options.ConventionalControllers.Create(typeof(TestAppModule).Assembly, opts =>
+                {
+                    opts.UrlActionNameNormalizer = context =>
+                        string.Equals(context.ActionNameInUrl, "phone", StringComparison.OrdinalIgnoreCase)
+                            ? "phones"
+                            : context.ActionNameInUrl;
+                });
             });
 
             services.AddAssemblyOf<AbpAspNetCoreMvcTestModule>();

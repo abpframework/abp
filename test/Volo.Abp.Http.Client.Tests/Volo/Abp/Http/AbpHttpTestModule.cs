@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.AspNetCore.App;
+using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Http.DynamicProxying;
 using Volo.Abp.Modularity;

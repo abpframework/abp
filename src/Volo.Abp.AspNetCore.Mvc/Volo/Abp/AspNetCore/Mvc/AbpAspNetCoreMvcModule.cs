@@ -12,10 +12,13 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.Modularity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.ViewComponents;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Volo.Abp.AspNetCore.Mvc.Conventions;
 using Volo.Abp.Http;
+using Volo.Abp.Http.Modeling;
 
 namespace Volo.Abp.AspNetCore.Mvc
 {
@@ -41,6 +44,21 @@ namespace Volo.Abp.AspNetCore.Mvc
                     )
                 )
             );
+
+            services.Configure<ApiDescriptionModelOptions>(options =>
+            {
+                options.IgnoredInterfaces.AddIfNotContains(typeof(IAsyncActionFilter));
+                options.IgnoredInterfaces.AddIfNotContains(typeof(IFilterMetadata));
+                options.IgnoredInterfaces.AddIfNotContains(typeof(IActionFilter));
+            });
+
+            services.Configure<AbpAspNetCoreMvcOptions>(options =>
+            {
+                options.ConventionalControllers.Create(typeof(AbpAspNetCoreMvcModule).Assembly, o =>
+                {
+                    o.RootPath = "abp";
+                });
+            });
         }
 
         public override void PostConfigureServices(IServiceCollection services)
@@ -60,7 +78,7 @@ namespace Volo.Abp.AspNetCore.Mvc
             var partManager = services.GetSingletonInstance<ApplicationPartManager>();
             var application = services.GetSingletonInstance<IAbpApplication>();
 
-            partManager.FeatureProviders.Add(new AbpAppServiceControllerFeatureProvider(application));
+            partManager.FeatureProviders.Add(new AbpConventionalControllerFeatureProvider(application));
 
             services.Configure<MvcOptions>(mvcOptions =>
             {
@@ -97,8 +115,8 @@ namespace Volo.Abp.AspNetCore.Mvc
                 .ServiceProvider
                 .GetRequiredService<IOptions<AbpAspNetCoreMvcOptions>>()
                 .Value
-                .AppServiceControllers
-                .ControllerAssemblySettings
+                .ConventionalControllers
+                .ConventionalControllerSettings
                 .Select(s => s.Assembly)
                 .Distinct();
 
