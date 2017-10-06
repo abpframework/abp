@@ -21,6 +21,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
+    <ProjectReference Include="..\..\Volo.Abp.Identity.Application\Volo.Abp.Identity.Application.csproj" />
+    <ProjectReference Include="..\..\Volo.Abp.Identity.EntityFrameworkCore\Volo.Abp.Identity.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\AbpDesk.Application.Contracts\AbpDesk.Application.Contracts.csproj" />
     <ProjectReference Include="..\..\Volo.Abp.AspNetCore.Mvc\Volo.Abp.AspNetCore.Mvc.csproj" />
     <ProjectReference Include="..\AbpDesk.EntityFrameworkCore\AbpDesk.EntityFrameworkCore.csproj" />
@@ -29,7 +31,6 @@
     <ProjectReference Include="..\..\Volo.Abp.AspNetCore.EmbeddedFiles\Volo.Abp.AspNetCore.EmbeddedFiles.csproj" />
     <ProjectReference Include="..\..\Volo.Abp.Identity.Web\Volo.Abp.Identity.Web.csproj" />
     <ProjectReference Include="..\..\Volo.Abp.MongoDB\Volo.Abp.MongoDB.csproj" />
-    <ProjectReference Include="..\..\Volo.Abp.Identity.HttpApi.Client\Volo.Abp.Identity.HttpApi.Client.csproj" />
   </ItemGroup>
 
   <ItemGroup>

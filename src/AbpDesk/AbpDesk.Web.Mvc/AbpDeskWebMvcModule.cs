@@ -15,11 +15,10 @@ using Volo.Abp.AspNetCore.Mvc.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.Autofac;
 using Volo.Abp.Identity;
+using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.Identity.Web;
 using Volo.Abp.Modularity;
-using Volo.Abp.Timing;
 using Volo.Abp.Ui.Navigation;
-using Volo.Abp.Http.Client;
 
 namespace AbpDesk.Web.Mvc
 {
@@ -28,7 +27,8 @@ namespace AbpDesk.Web.Mvc
         typeof(AbpAspNetCoreMvcUiBootstrapModule), 
         typeof(AbpDeskApplicationModule), 
         typeof(AbpDeskEntityFrameworkCoreModule),
-        typeof(AbpIdentityHttpApiClientModule),
+        typeof(AbpIdentityApplicationModule),
+        typeof(AbpIdentityEntityFrameworkCoreModule),
         typeof(AbpIdentityWebModule),
         typeof(AbpAutofacModule)
         )]
@@ -46,8 +46,7 @@ namespace AbpDesk.Web.Mvc
                 options.MenuContributors.Add(new MainMenuContributor());
             });
 
-            //TODO: Remove Http.Client reference later
-            services.Configure<RemoteServiceOptions>(configuration);
+            //services.Configure<RemoteServiceOptions>(configuration); //Needed when we use Volo.Abp.Identity.HttpApi.Client
 
             services.AddMvc();
 
