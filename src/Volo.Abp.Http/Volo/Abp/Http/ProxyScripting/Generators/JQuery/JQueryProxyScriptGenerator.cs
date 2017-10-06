@@ -45,14 +45,14 @@ namespace Volo.Abp.Http.ProxyScripting.Generators.JQuery
             foreach (var controller in module.Controllers.Values)
             {
                 script.AppendLine();
-                AddControllerScript(script, module, controller);
+                AddControllerScript(script, controller);
             }
 
             script.AppendLine();
             script.AppendLine("})();");
         }
 
-        private static void AddControllerScript(StringBuilder script, ModuleApiDescriptionModel module, ControllerApiDescriptionModel controller)
+        private static void AddControllerScript(StringBuilder script, ControllerApiDescriptionModel controller)
         {
             var controllerName = GetNormalizedTypeName(controller.TypeAsString);
 
@@ -68,27 +68,27 @@ namespace Volo.Abp.Http.ProxyScripting.Generators.JQuery
             foreach (var action in controller.Actions.Values)
             {
                 script.AppendLine();
-                AddActionScript(script, module, controllerName, controller, action, normalizedActionNames[action]);
+                AddActionScript(script, controllerName, action, normalizedActionNames[action]);
             }
 
             script.AppendLine();
             script.AppendLine("  })();");
         }
 
-        private static void AddActionScript(StringBuilder script, ModuleApiDescriptionModel module, string controllerName, ControllerApiDescriptionModel controller, ActionApiDescriptionModel action, string normalizedActionName)
+        private static void AddActionScript(StringBuilder script, string controllerName, ActionApiDescriptionModel action, string normalizedActionName)
         {
             var parameterList = ProxyScriptingJsFuncHelper.GenerateJsFuncParameterList(action, "ajaxParams");
 
             script.AppendLine($"    {controllerName}{ProxyScriptingJsFuncHelper.WrapWithBracketsOrWithDotPrefix(normalizedActionName.RemovePostFix("Async").ToCamelCase())} = function({parameterList}) {{");
             script.AppendLine("      return abp.ajax($.extend(true, {");
 
-            AddAjaxCallParameters(script, controller, action);
+            AddAjaxCallParameters(script, action);
 
             script.AppendLine("      }, ajaxParams));;");
             script.AppendLine("    };");
         }
 
-        private static void AddAjaxCallParameters(StringBuilder script, ControllerApiDescriptionModel controller, ActionApiDescriptionModel action)
+        private static void AddAjaxCallParameters(StringBuilder script, ActionApiDescriptionModel action)
         {
             var httpMethod = action.HttpMethod?.ToUpperInvariant() ?? "POST";
 
