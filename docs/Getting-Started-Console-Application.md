@@ -16,7 +16,7 @@ Install-Package Volo.Abp
 
 ### Create First ABP Module
 
-ABP is a modular framework and it requires a **root module** class derived from ``AbpModule``:
+ABP is a modular framework and it requires a **startup (root) module** class derived from ``AbpModule``:
 
 ````C#
 using Microsoft.Extensions.DependencyInjection;
@@ -34,7 +34,7 @@ namespace AbpConsoleDemo
 }
 ````
 
-``AppModule`` is a good name for the root module for a console application. A module class can register services to Dependency Injection by overriding ``ConfigureServices`` method as shown here. ``AddAssemblyOf<...>`` is a special extension method of ABP that registers all services in an assembly by convention (TODO: link to DI document). While this is optional, a module generally registers some of it's services.
+``AppModule`` is a good name for the startup module for a console application. A module class can register services to Dependency Injection by overriding ``ConfigureServices`` method as shown here. ``AddAssemblyOf<...>`` is a special extension method of ABP that registers all services in an assembly by convention (TODO: link to DI document). While this is optional, a module generally registers some of it's services.
 
 ### Initialize The Application
 
@@ -63,7 +63,7 @@ namespace AbpConsoleDemo
 
 ````
 
-``AbpApplicationFactory`` is used to create the application and load all modules taking ``AppModule`` as the root (starting) module. ``Initialize()`` method starts the application.
+``AbpApplicationFactory`` is used to create the application and load all modules taking ``AppModule`` as the startup module. ``Initialize()`` method starts the application.
 
 ### Hellow World!
 
