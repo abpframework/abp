@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp;
+using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.EmbeddedFiles;
 using Volo.Abp.AspNetCore.Modularity;
 using Volo.Abp.AspNetCore.Mvc;
@@ -24,12 +25,13 @@ namespace AbpDesk.Web.Mvc
 {
     [DependsOn(
         typeof(AbpAspNetCoreEmbeddedFilesModule),
-        typeof(AbpAspNetCoreMvcUiBootstrapModule), 
-        typeof(AbpDeskApplicationModule), 
+        typeof(AbpAspNetCoreMvcUiBootstrapModule),
+        typeof(AbpDeskApplicationModule),
         typeof(AbpDeskEntityFrameworkCoreModule),
         typeof(AbpIdentityHttpApiModule),
         typeof(AbpIdentityEntityFrameworkCoreModule),
         typeof(AbpIdentityWebModule),
+        typeof(AbpAccountWebModule),
         typeof(AbpAutofacModule)
         )]
     public class AbpDeskWebMvcModule : AbpModule
