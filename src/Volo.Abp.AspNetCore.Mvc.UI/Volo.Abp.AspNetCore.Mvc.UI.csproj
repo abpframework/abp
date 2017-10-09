@@ -11,7 +11,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Views\**\*.*" Exclude="bin\**;obj\**;**\*.xproj;packages\**;@(EmbeddedResource)" />
+    <EmbeddedResource Include="Views\Shared\Components\AbpMenu\AbpMenuViewComponent.cs" />
+    <EmbeddedResource Include="Views\Shared\Components\AbpScriptBundle\AbpStyleBundleViewComponent.cs" />
+    <EmbeddedResource Include="Views\Shared\Components\AbpScriptBundle\Default.cshtml" />
+    <EmbeddedResource Include="Views\Shared\Components\AbpStyleBundle\AbpStyleBundleViewComponent.cs" />
+    <EmbeddedResource Include="Views\Shared\Components\AbpStyleBundle\Default.cshtml" />
   </ItemGroup>
 
   <ItemGroup>

@@ -4,7 +4,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Bundling;
 using Volo.Abp.EmbeddedFiles;
 using Volo.Abp.Modularity;
-using Volo.Abp.Ui.Navigation;
 
 namespace Volo.Abp.AspNetCore.Mvc
 {
@@ -14,11 +13,6 @@ namespace Volo.Abp.AspNetCore.Mvc
         public override void ConfigureServices(IServiceCollection services)
         {
             services.AddAssemblyOf<AbpAspNetCoreMvcUiModule>();
-
-            services.Configure<NavigationOptions>(options =>
-            {
-                options.MenuContributors.Add(new EmbeddedDemoMainMenuContributor());
-            });
 
             services.Configure<EmbeddedFileOptions>(options =>
             {

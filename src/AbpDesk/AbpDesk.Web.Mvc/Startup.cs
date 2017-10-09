@@ -28,12 +28,13 @@ namespace AbpDesk.Web.Mvc
                 /* @halil: I added Abp.MongoDb package as a dependency to the main application in order to use the blog plugin.
                  * Otherwise, we should add all dependencies (Recursively) into plugin folder
                  * and load in correct order. We should carefully think on that problem in the future.
+                 * NOTE: Disabled 
                  */
-                options.PlugInSources.AddFolder(
-                    Path.Combine(
-                        _env.ContentRootPath,
-                        @"../Web_PlugIns/")
-                );
+                //options.PlugInSources.AddFolder(
+                //    Path.Combine(
+                //        _env.ContentRootPath,
+                //        @"../Web_PlugIns/")
+                //);
             });
 
             //TODO: This is needed because ASP.NET Core does not use IServiceProviderFactory!

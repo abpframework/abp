@@ -22,10 +22,12 @@ namespace AbpDesk.Web.Mvc.Navigation
                         .AddItem(
                             new ApplicationMenuItem("TicketManagement.Tickets", "Tickets", url: "/Tickets")
                         )
-                )
-                .AddItem(
-                    new ApplicationMenuItem("Blog", "Blog", url: "/Blog/Posts")
                 );
+            
+            //Disabled blog module. This should be inside the module!
+            //.AddItem(
+            //    new ApplicationMenuItem("Blog", "Blog", url: "/Blog/Posts")
+            //);
 
             return Task.CompletedTask;
         }
