@@ -11,13 +11,7 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Areas\**\*.*" Exclude="bin\**;obj\**;**\*.xproj;packages\**;@(EmbeddedResource)" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="wwwroot\libs\_identity\datatables\datatables.css" />
-    <EmbeddedResource Include="wwwroot\libs\_identity\datatables\datatables.js" />
-    <EmbeddedResource Include="wwwroot\libs\_identity\datatables\datatables.min.css" />
-    <EmbeddedResource Include="wwwroot\libs\_identity\datatables\datatables.min.js" />
+    <EmbeddedResource Include="wwwroot\**\*.*" Exclude="bin\**;obj\**;**\*.xproj;packages\**;@(EmbeddedResource)" />
   </ItemGroup>
 
   <ItemGroup>
