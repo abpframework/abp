@@ -2,5 +2,9 @@
   {
     "outputFile": "wwwroot/modules/identity/views/users/index.css",
     "inputFile": "wwwroot/modules/identity/views/users/index.less"
+  },
+  {
+    "outputFile": "wwwroot/modules/identity/views/users/index.es5.js",
+    "inputFile": "wwwroot/modules/identity/views/users/index.js"
   }
 ]
