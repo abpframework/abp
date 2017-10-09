@@ -1,5 +1,15 @@
 ﻿@model IReadOnlyList<Volo.Abp.Identity.IdentityUserDto>
 
+@section styles
+{
+    <link rel="stylesheet" type="text/css" href="~/libs/_identity/datatables/datatables.min.css" />
+}
+
+@section scripts
+{
+    <script type="text/javascript" src="~/libs/_identity/datatables/datatables.min.js"></script>
+}
+
 <h2>Users</h2>
 
 <ul class="ticket-list">

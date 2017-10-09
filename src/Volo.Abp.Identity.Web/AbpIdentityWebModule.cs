@@ -8,7 +8,9 @@ using Volo.Abp.Ui.Navigation;
 
 namespace Volo.Abp.Identity.Web
 {
-    [DependsOn(typeof(AbpAspNetCoreMvcModule), typeof(AbpIdentityApplicationContractsModule))]
+    [DependsOn(typeof(AbpAspNetCoreMvcModule))]
+    [DependsOn(typeof(AbpIdentityApplicationContractsModule))]
+    [DependsOn(typeof(AbpAspNetCoreMvcUiModule))]
     public class AbpIdentityWebModule : AbpModule
     {
         public override void ConfigureServices(IServiceCollection services)
@@ -27,8 +29,16 @@ namespace Volo.Abp.Identity.Web
                         "/Areas/",
                         GetType().GetTypeInfo().Assembly,
                         "Volo.Abp.Identity.Web.Areas"
-                        )
-                    );
+                    )
+                );
+
+                options.Sources.Add(
+                    new EmbeddedFileSet(
+                        "/",
+                        GetType().GetTypeInfo().Assembly,
+                        "Volo.Abp.Identity.Web.wwwroot"
+                    )
+                );
             });
         }
     }

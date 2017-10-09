@@ -26,9 +26,9 @@ namespace Volo.Abp.AspNetCore.Mvc
 
                 options.Sources.Add(
                     new EmbeddedFileSet(
-                        "/abp/",
+                        "/",
                         GetType().GetTypeInfo().Assembly,
-                        "Volo.Abp.AspNetCore.Mvc.wwwroot.abp"
+                        "Volo.Abp.AspNetCore.Mvc.wwwroot"
                     )
                 );
             });
@@ -37,7 +37,7 @@ namespace Volo.Abp.AspNetCore.Mvc
             {
                 options.ScriptBundles.Add("GlobalScripts", new[]
                 {
-                    "/abp/abp.js?_v" + DateTime.Now.Ticks
+                    "/libs/abp/abp.js?_v" + DateTime.Now.Ticks
                 });
             });
         }

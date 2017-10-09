@@ -10,7 +10,29 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Views\**\*.*;libs\**\*.*" Exclude="bin\**;obj\**;**\*.xproj;packages\**;@(EmbeddedResource)" />
+    <EmbeddedResource Include="Views\Shared\Components\AbpMenu\Default.cshtml" />
+    <EmbeddedResource Include="Views\Shared\_AppLayout.cshtml" />
+    <EmbeddedResource Include="Views\Shared\_AppLayout.css" />
+    <EmbeddedResource Include="Views\Shared\_ViewImports.cshtml" />
+    <EmbeddedResource Include="wwwroot\libs\bootstrap\css\bootstrap.css" />
+    <EmbeddedResource Include="wwwroot\libs\bootstrap\css\bootstrap.css.map" />
+    <EmbeddedResource Include="wwwroot\libs\bootstrap\css\bootstrap.min.css" />
+    <EmbeddedResource Include="wwwroot\libs\bootstrap\css\bootstrap.min.css.map" />
+    <EmbeddedResource Include="wwwroot\libs\bootstrap\js\bootstrap.js" />
+    <EmbeddedResource Include="wwwroot\libs\bootstrap\js\bootstrap.min.js" />
+    <EmbeddedResource Include="wwwroot\libs\jquery\jquery-3.1.1.js" />
+    <EmbeddedResource Include="wwwroot\libs\jquery\jquery-3.1.1.min.js" />
+    <EmbeddedResource Include="wwwroot\libs\jquery\jquery-3.1.1.min.map" />
+    <EmbeddedResource Include="wwwroot\libs\tether\css\tether-theme-arrows-dark.css" />
+    <EmbeddedResource Include="wwwroot\libs\tether\css\tether-theme-arrows-dark.min.css" />
+    <EmbeddedResource Include="wwwroot\libs\tether\css\tether-theme-arrows.css" />
+    <EmbeddedResource Include="wwwroot\libs\tether\css\tether-theme-arrows.min.css" />
+    <EmbeddedResource Include="wwwroot\libs\tether\css\tether-theme-basic.css" />
+    <EmbeddedResource Include="wwwroot\libs\tether\css\tether-theme-basic.min.css" />
+    <EmbeddedResource Include="wwwroot\libs\tether\css\tether.css" />
+    <EmbeddedResource Include="wwwroot\libs\tether\css\tether.min.css" />
+    <EmbeddedResource Include="wwwroot\libs\tether\js\tether.js" />
+    <EmbeddedResource Include="wwwroot\libs\tether\js\tether.min.js" />
   </ItemGroup>
 
   <ItemGroup>
