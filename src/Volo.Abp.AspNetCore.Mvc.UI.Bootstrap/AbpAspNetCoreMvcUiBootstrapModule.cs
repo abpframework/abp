@@ -16,8 +16,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap
             
             services.Configure<EmbeddedFileOptions>(options =>
             {
-                //TODO: Move libs under wwwroot!
-
                 options.Sources.Add(
                     new EmbeddedFileSet(
                         "/",
