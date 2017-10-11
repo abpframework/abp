@@ -24,7 +24,8 @@ namespace Volo.Abp.Identity
         //TODO: Why not return List instead of IList
         Task<IList<IdentityUser>> GetListByNormalizedRoleNameAsync(string normalizedRoleName, CancellationToken cancellationToken);
 
-        Task<List<IdentityUser>> GetListAsync(string sorting, int maxResultCount, int skipCount);
+        //TODO: DTO can be used instead of parameters
+        Task<List<IdentityUser>> GetListAsync(string sorting, int maxResultCount, int skipCount, string filter);
 
         Task<List<IdentityRole>> GetRolesAsync(Guid userId);
     }

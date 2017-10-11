@@ -1,34 +1,37 @@
-﻿@model IReadOnlyList<Volo.Abp.Identity.IdentityUserDto>
-
-@section styles {
+﻿@section styles {
     <!-- TODO: Use minified on production, normal in development -->
     <link rel="stylesheet" type="text/css" href="~/modules/identity/libs/datatables/datatables.min.css" />
     <link rel="stylesheet" type="text/css" href="~/modules/identity/views/users/index.css" />
 }
 
 @section scripts {
-    <script type="text/javascript" src="~/modules/identity/libs/datatables/datatables.min.js"></script>
+    <script type="text/javascript" src="~/modules/identity/libs/datatables/datatables.js"></script>
     <script type="text/javascript" src="~/modules/identity/views/users/index.js"></script>
 }
 
 <h2>Users</h2>
 
-<table id="IdentityUsersTable">
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary create-user" data-toggle="modal">
+    Create User
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="createUpdateUserModal" tabindex="-1" role="dialog" aria-labelledby="userModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+        </div>
+    </div>
+</div>
+
+<table id="IdentityUsersTable" class="table table-striped table-bordered table-hover nowrap">
     <thead>
-        <tr>
-            <th>Username</th>
-            <th>Email Address</th>
-            <th>Phone Number</th>
-        </tr>
+    <tr>
+        <th>Actions</th>
+        <th>Username</th>
+        <th>Email Address</th>
+        <th>Phone Number</th>
+    </tr>
     </thead>
-    <tbody>
-        @foreach (var user in Model)
-        {
-            <tr>
-                <td>@user.UserName</td>
-                <td>@user.Email</td>
-                <td>@(user.PhoneNumber ?? "-")</td>
-            </tr>
-        }
-    </tbody>
 </table>

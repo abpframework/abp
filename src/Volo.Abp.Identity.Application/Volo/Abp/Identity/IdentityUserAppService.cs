@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
@@ -12,11 +13,13 @@ namespace Volo.Abp.Identity
     {
         private readonly IdentityUserManager _userManager;
         private readonly IIdentityUserRepository _userRepository;
+        private readonly IIdentityRoleRepository _roleRepository;
 
-        public IdentityUserAppService(IdentityUserManager userManager, IIdentityUserRepository userRepository)
+        public IdentityUserAppService(IdentityUserManager userManager, IIdentityUserRepository userRepository, IIdentityRoleRepository roleRepository)
         {
             _userManager = userManager;
             _userRepository = userRepository;
+            _roleRepository = roleRepository;
         }
 
         public async Task<IdentityUserDto> GetAsync(Guid id)
@@ -26,10 +29,30 @@ namespace Volo.Abp.Identity
             );
         }
 
-        public async Task<PagedResultDto<IdentityUserDto>> GetListAsync(PagedAndSortedResultRequestDto input)
+        public async Task<IdentityUserCreateOrUpdateOutput> GetUserForCreateOrUpdateAsync(Guid id)
+        {
+            var userRoleDtos = ObjectMapper.Map<List<IdentityRole>, IdentityUserRoleDto[]>(await _roleRepository.GetListAsync());
+            var output = new IdentityUserCreateOrUpdateOutput
+            {
+                Roles = userRoleDtos
+            };
+
+            var user = await _userManager.GetByIdAsync(id);
+
+            output.User = ObjectMapper.Map<IdentityUser, IdentityUserDto>(user);
+
+            foreach (var userRoleDto in userRoleDtos)
+            {
+                userRoleDto.IsAssigned = await _userManager.IsInRoleAsync(user, userRoleDto.Name);
+            }
+
+            return output;
+        }
+
+        public async Task<PagedResultDto<IdentityUserDto>> GetListAsync(GetIdentityUsersInput input)
         {
             var count = (int)await _userRepository.GetCountAsync();
-            var list = await _userRepository.GetListAsync(input.Sorting, input.MaxResultCount, input.SkipCount);
+            var list = await _userRepository.GetListAsync(input.Sorting, input.MaxResultCount, input.SkipCount, input.Filter);
 
             return new PagedResultDto<IdentityUserDto>(
                 count,
