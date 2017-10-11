@@ -2,11 +2,14 @@
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.EmbeddedFiles;
+using Volo.Abp.Identity;
 using Volo.Abp.Modularity;
 
 namespace Volo.Abp.Account.Web
 {
+    [DependsOn(typeof(AbpIdentityDomainModule))]
     [DependsOn(typeof(AbpAspNetCoreMvcUiBootstrapModule))]
+    [DependsOn(typeof(AbpAccountApplicationContractsModule))]
     public class AbpAccountWebModule : AbpModule
     {
         public override void ConfigureServices(IServiceCollection services)

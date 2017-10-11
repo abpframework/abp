@@ -42,8 +42,7 @@ namespace Volo.Abp.Identity
             var user = new IdentityUser(GuidGenerator.Create(), input.UserName);
 
             await UpdateUserByInput(user, input);
-            await _userManager.AddPasswordAsync(user, input.Password);
-            await _userManager.CreateAsync(user);
+            await _userManager.CreateAsync(user, input.Password);
             await CurrentUnitOfWork.SaveChangesAsync();
 
             return ObjectMapper.Map<IdentityUser, IdentityUserDto>(user);

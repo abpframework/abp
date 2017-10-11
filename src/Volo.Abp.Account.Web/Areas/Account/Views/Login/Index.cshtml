@@ -1,21 +1,25 @@
 ﻿<div class="row">
-    <div class="col-md-3"> 
-        <form>
+    <div class="col-md-3">
+        <form asp-action="Index" method="post">
             <div class="form-group">
                 <label for="UsernameOrEmailAddress">Username or email address</label>
-                <input type="email" class="form-control" id="UsernameOrEmailAddress" aria-describedby="emailHelp">
+                <input type="text" class="form-control" id="UsernameOrEmailAddress" name="UsernameOrEmailAddress">
             </div>
             <div class="form-group">
                 <label for="Password">Password</label>
-                <input type="password" class="form-control" id="Password">
+                <input type="password" class="form-control" id="Password" name="Password">
             </div>
             <div class="form-check">
                 <label class="form-check-label">
-                    <input type="checkbox">
+                    <input type="checkbox" name="RememberMe" value="true" checked="checked">
                     Remember me
                 </label>
             </div>
             <button type="submit" class="btn btn-primary">Login</button>
         </form>
+
+        <div>
+            <a href="@Url.Action("Index", "Register", new { returnUrl = Context.Request.Query["returnUrl"], returnUrlHash = Context.Request.Query["returnUrlHash"] })">Register</a>
+        </div>
     </div>
 </div>

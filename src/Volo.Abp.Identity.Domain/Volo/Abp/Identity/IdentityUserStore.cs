@@ -418,13 +418,15 @@ namespace Volo.Abp.Identity
         /// <param name="user">The user whose claims should be retrieved.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
         /// <returns>A <see cref="Task{TResult}"/> that contains the claims granted to a user.</returns>
-        public virtual Task<IList<Claim>> GetClaimsAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task<IList<Claim>> GetClaimsAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
 
             Check.NotNull(user, nameof(user));
 
-            return Task.FromResult<IList<Claim>>(user.Claims.Select(c => c.ToClaim()).ToList());
+            await _userRepository.EnsureCollectionLoadedAsync(user, u => u.Claims, cancellationToken);
+
+            return user.Claims.Select(c => c.ToClaim()).ToList();
         }
 
         /// <summary>
@@ -434,16 +436,16 @@ namespace Volo.Abp.Identity
         /// <param name="claims">The claim to add to the user.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
         /// <returns>The <see cref="Task"/> that represents the asynchronous operation.</returns>
-        public virtual Task AddClaimsAsync([NotNull] IdentityUser user, [NotNull] IEnumerable<Claim> claims, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task AddClaimsAsync([NotNull] IdentityUser user, [NotNull] IEnumerable<Claim> claims, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
 
             Check.NotNull(user, nameof(user));
             Check.NotNull(claims, nameof(claims));
 
+            await _userRepository.EnsureCollectionLoadedAsync(user, u => u.Claims, cancellationToken);
+
             user.AddClaims(_guidGenerator, claims);
-            
-            return Task.CompletedTask;
         }
 
         /// <summary>
@@ -454,7 +456,7 @@ namespace Volo.Abp.Identity
         /// <param name="newClaim">The new claim replacing the <paramref name="claim"/>.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
         /// <returns>The <see cref="Task"/> that represents the asynchronous operation.</returns>
-        public virtual Task ReplaceClaimAsync([NotNull] IdentityUser user, [NotNull] Claim claim, [NotNull] Claim newClaim, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task ReplaceClaimAsync([NotNull] IdentityUser user, [NotNull] Claim claim, [NotNull] Claim newClaim, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -462,9 +464,9 @@ namespace Volo.Abp.Identity
             Check.NotNull(claim, nameof(claim));
             Check.NotNull(newClaim, nameof(newClaim));
 
-            user.ReplaceClaim(claim, newClaim);
+            await _userRepository.EnsureCollectionLoadedAsync(user, u => u.Claims, cancellationToken);
 
-            return Task.CompletedTask;
+            user.ReplaceClaim(claim, newClaim);
         }
 
         /// <summary>
@@ -474,16 +476,16 @@ namespace Volo.Abp.Identity
         /// <param name="claims">The claim to remove.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
         /// <returns>The <see cref="Task"/> that represents the asynchronous operation.</returns>
-        public virtual Task RemoveClaimsAsync([NotNull] IdentityUser user, [NotNull] IEnumerable<Claim> claims, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task RemoveClaimsAsync([NotNull] IdentityUser user, [NotNull] IEnumerable<Claim> claims, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
 
             Check.NotNull(user, nameof(user));
             Check.NotNull(claims, nameof(claims));
 
-            user.RemoveClaims(claims);
+            await _userRepository.EnsureCollectionLoadedAsync(user, u => u.Claims, cancellationToken);
 
-            return Task.CompletedTask;
+            user.RemoveClaims(claims);
         }
 
         /// <summary>
@@ -493,16 +495,16 @@ namespace Volo.Abp.Identity
         /// <param name="login">The login to add to the user.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
         /// <returns>The <see cref="Task"/> that represents the asynchronous operation.</returns>
-        public virtual Task AddLoginAsync([NotNull] IdentityUser user, [NotNull] UserLoginInfo login, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task AddLoginAsync([NotNull] IdentityUser user, [NotNull] UserLoginInfo login, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
 
             Check.NotNull(user, nameof(user));
             Check.NotNull(login, nameof(login));
 
-            user.AddLogin(_guidGenerator, login);
+            await _userRepository.EnsureCollectionLoadedAsync(user, u => u.Logins, cancellationToken);
 
-            return Task.CompletedTask;
+            user.AddLogin(_guidGenerator, login);
         }
 
         /// <summary>
@@ -513,7 +515,7 @@ namespace Volo.Abp.Identity
         /// <param name="providerKey">The key provided by the <paramref name="loginProvider"/> to identify a user.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
         /// <returns>The <see cref="Task"/> that represents the asynchronous operation.</returns>
-        public virtual Task RemoveLoginAsync([NotNull] IdentityUser user, [NotNull] string loginProvider, [NotNull] string providerKey, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task RemoveLoginAsync([NotNull] IdentityUser user, [NotNull] string loginProvider, [NotNull] string providerKey, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -521,9 +523,9 @@ namespace Volo.Abp.Identity
             Check.NotNull(loginProvider, nameof(loginProvider));
             Check.NotNull(providerKey, nameof(providerKey));
 
-            user.RemoveLogin(loginProvider, providerKey);
+            await _userRepository.EnsureCollectionLoadedAsync(user, u => u.Logins, cancellationToken);
 
-            return Task.CompletedTask;
+            user.RemoveLogin(loginProvider, providerKey);
         }
 
         /// <summary>
@@ -534,13 +536,15 @@ namespace Volo.Abp.Identity
         /// <returns>
         /// The <see cref="Task"/> for the asynchronous operation, containing a list of <see cref="UserLoginInfo"/> for the specified <paramref name="user"/>, if any.
         /// </returns>
-        public virtual Task<IList<UserLoginInfo>> GetLoginsAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task<IList<UserLoginInfo>> GetLoginsAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
 
             Check.NotNull(user, nameof(user));
 
-            return Task.FromResult<IList<UserLoginInfo>>(user.Logins.Select(l => l.ToUserLoginInfo()).ToList());
+            await _userRepository.EnsureCollectionLoadedAsync(user, u => u.Logins, cancellationToken);
+
+            return user.Logins.Select(l => l.ToUserLoginInfo()).ToList();
         }
 
         /// <summary>
@@ -990,15 +994,15 @@ namespace Volo.Abp.Identity
         /// <param name="value">The value of the token.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
         /// <returns>The <see cref="Task"/> that represents the asynchronous operation.</returns>
-        public virtual Task SetTokenAsync([NotNull] IdentityUser user, string loginProvider, string name, string value, CancellationToken cancellationToken)
+        public virtual async Task SetTokenAsync([NotNull] IdentityUser user, string loginProvider, string name, string value, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
             Check.NotNull(user, nameof(user));
 
-            user.SetToken(_guidGenerator, loginProvider, name, value);
+            await _userRepository.EnsureCollectionLoadedAsync(user, u => u.Tokens, cancellationToken);
 
-            return Task.CompletedTask;
+            user.SetToken(_guidGenerator, loginProvider, name, value);
         }
 
         /// <summary>
@@ -1009,15 +1013,15 @@ namespace Volo.Abp.Identity
         /// <param name="name">The name of the token.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
         /// <returns>The <see cref="Task"/> that represents the asynchronous operation.</returns>
-        public Task RemoveTokenAsync(IdentityUser user, string loginProvider, string name, CancellationToken cancellationToken)
+        public async Task RemoveTokenAsync(IdentityUser user, string loginProvider, string name, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
             Check.NotNull(user, nameof(user));
 
-            user.RemoveToken(loginProvider, name);
+            await _userRepository.EnsureCollectionLoadedAsync(user, u => u.Tokens, cancellationToken);
 
-            return Task.CompletedTask;
+            user.RemoveToken(loginProvider, name);
         }
 
         /// <summary>
@@ -1028,13 +1032,15 @@ namespace Volo.Abp.Identity
         /// <param name="name">The name of the token.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
         /// <returns>The <see cref="Task"/> that represents the asynchronous operation.</returns>
-        public Task<string> GetTokenAsync(IdentityUser user, string loginProvider, string name, CancellationToken cancellationToken)
+        public async Task<string> GetTokenAsync(IdentityUser user, string loginProvider, string name, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
             Check.NotNull(user, nameof(user));
 
-            return Task.FromResult(user.FindToken(loginProvider, name)?.Value);
+            await _userRepository.EnsureCollectionLoadedAsync(user, u => u.Tokens, cancellationToken);
+
+            return user.FindToken(loginProvider, name)?.Value;
         }
 
         public void Dispose()

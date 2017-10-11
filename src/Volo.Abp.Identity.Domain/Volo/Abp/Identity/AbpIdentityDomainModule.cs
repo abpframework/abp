@@ -9,7 +9,7 @@ namespace Volo.Abp.Identity
         public override void ConfigureServices(IServiceCollection services)
         {
             //TODO: How to configure options of AddIdentity (and return value)
-            services.AddIdentity<IdentityUser, IdentityRole>();
+            services.AddAbpIdentity();
             services.AddAssemblyOf<AbpIdentityDomainModule>();
         }
     }
