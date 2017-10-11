@@ -38,8 +38,6 @@ namespace Volo.Abp.Application.Services
     {
         Task<TEntityDto> GetAsync(TPrimaryKey id);
 
-        Task<TEntityDto> GetUserForCreateOrUpdateAsync(Guid id);
-
         Task<PagedResultDto<TEntityDto>> GetListAsync(TGetListInput input);
 
         Task<TEntityDto> CreateAsync(TCreateInput input);

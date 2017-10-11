@@ -2,7 +2,7 @@
 
 namespace Volo.Abp.Identity
 {
-    public class IdentityUserCreateOrUpdateOutput: EntityDto
+    public class IdentityUserCreateOrUpdateOutput
     {
         public IdentityUserDto User { get; set; }
 

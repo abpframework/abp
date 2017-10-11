@@ -29,7 +29,7 @@ namespace Volo.Abp.Identity
             );
         }
 
-        public async Task<IdentityUserCreateOrUpdateOutput> GetUserForCreateOrUpdateAsync(Guid id)
+        public async Task<IdentityUserCreateOrUpdateOutput> GetUserForCreateOrUpdateAsync(Guid? id)
         {
             var userRoleDtos = ObjectMapper.Map<List<IdentityRole>, IdentityUserRoleDto[]>(await _roleRepository.GetListAsync());
             var output = new IdentityUserCreateOrUpdateOutput
@@ -37,8 +37,9 @@ namespace Volo.Abp.Identity
                 Roles = userRoleDtos
             };
 
-            var user = await _userManager.GetByIdAsync(id);
+            if (!id.HasValue) return output;
 
+            var user = await _userManager.GetByIdAsync(id.Value);
             output.User = ObjectMapper.Map<IdentityUser, IdentityUserDto>(user);
 
             foreach (var userRoleDto in userRoleDtos)

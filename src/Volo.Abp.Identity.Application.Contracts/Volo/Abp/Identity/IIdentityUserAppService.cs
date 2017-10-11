@@ -10,5 +10,7 @@ namespace Volo.Abp.Identity
         Task<ListResultDto<IdentityRoleDto>> GetRolesAsync(Guid id);
 
         Task UpdateRolesAsync(Guid id, IdentityUserUpdateRolesDto input);
+
+        Task<IdentityUserCreateOrUpdateOutput> GetUserForCreateOrUpdateAsync(Guid? id);
     }
 }

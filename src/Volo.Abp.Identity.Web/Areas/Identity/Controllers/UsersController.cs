@@ -22,7 +22,9 @@ namespace Volo.Abp.Identity.Web.Areas.Identity.Controllers
 
         public async Task<ActionResult> _Create()
         {
-            return PartialView();
+            var identityUser = await _identityUserAppService.GetUserForCreateOrUpdateAsync(null);
+
+            return PartialView(identityUser);
         }
 
         public async Task<ActionResult> _Update(Guid id)

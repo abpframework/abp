@@ -1,5 +1,5 @@
 ﻿$(function () {
-    var identityUserAppService = volo.abp.identity.identityUser;
+    var _identityUserAppService = volo.abp.identity.identityUser;
 
     var dataTable = $('#IdentityUsersTable').DataTable({
         processing: true,
@@ -29,7 +29,7 @@
             }
 
             if (callback) {
-                identityUserAppService.getList(inputFilter).done(function (result) {
+                _identityUserAppService.getList(inputFilter).done(function (result) {
                     callback({
                         recordsTotal: result.totalCount,
                         recordsFiltered: result.totalCount,
@@ -85,7 +85,7 @@
         var id = $(this).data('id');
 
         if (confirm('Are you sure you want to delete?')) {
-            identityUserAppService.delete(id).done(function () {
+            _identityUserAppService.delete(id).done(function () {
                 dataTable.ajax.reload();
             });
         }
@@ -101,10 +101,11 @@
         var $createUserForm = $('#createUserForm');
         var user = $createUserForm.serializeFormToObject();
 
-        identityUserAppService.create(user).done(function () {
-            $('#createUpdateUserModal').modal('hide');
-
-            dataTable.ajax.reload();
+        _identityUserAppService.create(user).done(function (result) {
+            _identityUserAppService.updateRoles(result.id, { roleNames: findAssignedRoleNames() }).done(function () {
+                $('#createUpdateUserModal').modal('hide');
+                dataTable.ajax.reload();
+            });
         });
     });
 
@@ -112,14 +113,30 @@
         var $updateUserForm = $('#updateUserForm');
         var user = $updateUserForm.serializeFormToObject();
 
-        identityUserAppService.update(user.Id, user).done(function () {
-            $('#createUpdateUserModal').modal('hide');
-
-            dataTable.ajax.reload();
+        _identityUserAppService.update(user.Id, user).done(function (result) {
+            _identityUserAppService.updateRoles(result.id, { roleNames: findAssignedRoleNames() }).done(function () {
+                $('#createUpdateUserModal').modal('hide');
+                dataTable.ajax.reload();
+            });
         });
     });
 });
 
+
+function findAssignedRoleNames() {
+    var assignedRoleNames = [];
+
+    $(document).find('.user-role-checkbox-list input[type=checkbox]')
+        .each(function () {
+            if ($(this).is(':checked')) {
+                assignedRoleNames.push($(this).attr('name'));
+            }
+        });
+
+    return assignedRoleNames;
+}
+
+//TODO: move to common script file
 $.fn.serializeFormToObject = function () {
     //serialize to array
     var data = $(this).serializeArray();

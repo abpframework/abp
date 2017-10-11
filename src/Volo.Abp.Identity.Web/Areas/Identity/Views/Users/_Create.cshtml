@@ -1,4 +1,4 @@
-﻿@model Volo.Abp.Identity.IdentityUserDto
+﻿@model Volo.Abp.Identity.IdentityUserCreateOrUpdateOutput
 
 <div class="modal-header">
     <h5 class="modal-title" id="userModalLabel">Create User</h5>
@@ -7,21 +7,22 @@
     </button>
 </div>
 <div class="modal-body">
+    <form id="createUserForm">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" href="#userInformations" role="tab">User informations</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#roles" role="tab">Roles</a>
+            </li>
+        </ul>
 
-    <!-- Nav tabs -->
-    <ul class="nav nav-tabs" role="tablist">
-        <li class="nav-item">
-            <a class="nav-link active" data-toggle="tab" href="#userInformations" role="tab">User informations</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#roles" role="tab">Roles</a>
-        </li>
-    </ul>
+        <!-- Tab panes -->
+        <div class="tab-content pt-3">
 
-    <!-- Tab panes -->
-    <div class="tab-content">
-        <div class="tab-pane active" id="userInformations" role="tabpanel">
-            <form id="createUserForm">
+            <div class="tab-pane active" id="userInformations" role="tabpanel">
+
                 <div class="form-group">
                     <label for="userName">User name</label>
                     <input type="text" class="form-control" id="userName" name="UserName" placeholder="User name">
@@ -38,24 +39,24 @@
                     <label for="phoneNumber">Phone number</label>
                     <input type="tel" class="form-control" id="phoneNumber" name="PhoneNumber" placeholder="Phone number">
                 </div>
-            </form>
-        </div>
-        <div class="tab-pane" id="roles" role="tabpanel">
-            @foreach (var role in Model.Roles)
-            {
-                <div class="form-check">
-                    <label class="form-check-label">
-                        <input id="EditUser_@(role.RoleName)" class="form-check-input" type="checkbox" name="@(role.RoleName)" value="true" @Html.Raw(role.IsAssigned ? "checked=\"checked\"" : "")>
-                        <input class="form-check-input" type="checkbox" value="">
-                        @role.RoleName
-                    </label>
+
+            </div>
+            <div class="tab-pane" id="roles" role="tabpanel">
+                <div class="user-role-checkbox-list">
+                    @foreach (var role in Model.Roles)
+                    {
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                <input id="CreateUser_@(role.Name)" class="form-check-input" type="checkbox" name="@(role.Name)" value="true" @Html.Raw(role.IsAssigned ? "checked=\"checked\"" : "")>
+                                @role.Name
+                            </label>
+                        </div>
+                    }
                 </div>
-            }
+            </div>
+
         </div>
-    </div>
-
-
-
+    </form>
 </div>
 <div class="modal-footer">
     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
