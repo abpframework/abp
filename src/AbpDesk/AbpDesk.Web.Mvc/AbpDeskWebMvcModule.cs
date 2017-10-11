@@ -3,11 +3,15 @@ using AbpDesk.EntityFrameworkCore;
 using AbpDesk.Web.Mvc.Navigation;
 using AbpDesk.Web.Mvc.Temp;
 using Autofac;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp;
+using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.EmbeddedFiles;
 using Volo.Abp.AspNetCore.Modularity;
 using Volo.Abp.AspNetCore.Mvc;
@@ -24,12 +28,13 @@ namespace AbpDesk.Web.Mvc
 {
     [DependsOn(
         typeof(AbpAspNetCoreEmbeddedFilesModule),
-        typeof(AbpAspNetCoreMvcUiBootstrapModule), 
-        typeof(AbpDeskApplicationModule), 
+        typeof(AbpAspNetCoreMvcUiBootstrapModule),
+        typeof(AbpDeskApplicationModule),
         typeof(AbpDeskEntityFrameworkCoreModule),
         typeof(AbpIdentityHttpApiModule),
         typeof(AbpIdentityEntityFrameworkCoreModule),
         typeof(AbpIdentityWebModule),
+        typeof(AbpAccountWebModule),
         typeof(AbpAutofacModule)
         )]
     public class AbpDeskWebMvcModule : AbpModule
@@ -79,6 +84,8 @@ namespace AbpDesk.Web.Mvc
 
             app.UseStaticFiles();
             app.UseEmbeddedFiles();
+
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {

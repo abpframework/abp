@@ -1,11 +1,13 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc;
 
 namespace Volo.Abp.Identity.Web.Areas.Identity.Controllers
 {
     [Area("Identity")]
+    [Authorize]
     public class UsersController : AbpController
     {
         private readonly IIdentityUserAppService _identityUserAppService;

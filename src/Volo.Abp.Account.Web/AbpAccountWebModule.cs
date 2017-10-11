@@ -2,24 +2,19 @@
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.EmbeddedFiles;
-using Volo.Abp.Identity.Web.Navigation;
+using Volo.Abp.Identity;
 using Volo.Abp.Modularity;
-using Volo.Abp.Ui.Navigation;
 
-namespace Volo.Abp.Identity.Web
+namespace Volo.Abp.Account.Web
 {
-    [DependsOn(typeof(AbpIdentityApplicationContractsModule))]
+    [DependsOn(typeof(AbpIdentityDomainModule))]
     [DependsOn(typeof(AbpAspNetCoreMvcUiBootstrapModule))]
-    public class AbpIdentityWebModule : AbpModule
+    [DependsOn(typeof(AbpAccountApplicationContractsModule))]
+    public class AbpAccountWebModule : AbpModule
     {
         public override void ConfigureServices(IServiceCollection services)
         {
-            services.AddAssemblyOf<AbpIdentityWebModule>();
-
-            services.Configure<NavigationOptions>(options =>
-            {
-                options.MenuContributors.Add(new AbpIdentityWebMainMenuContributor());
-            });
+            services.AddAssemblyOf<AbpAccountWebModule>();
 
             services.Configure<EmbeddedFileOptions>(options =>
             {
@@ -27,7 +22,7 @@ namespace Volo.Abp.Identity.Web
                     new EmbeddedFileSet(
                         "/Areas/",
                         GetType().GetTypeInfo().Assembly,
-                        "Volo.Abp.Identity.Web.Areas"
+                        "Volo.Abp.Account.Web.Areas"
                     )
                 );
 
@@ -35,7 +30,7 @@ namespace Volo.Abp.Identity.Web
                     new EmbeddedFileSet(
                         "/",
                         GetType().GetTypeInfo().Assembly,
-                        "Volo.Abp.Identity.Web.wwwroot"
+                        "Volo.Abp.Account.Web.wwwroot"
                     )
                 );
             });
