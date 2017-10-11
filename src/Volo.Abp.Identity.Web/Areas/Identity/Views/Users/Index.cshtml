@@ -9,19 +9,15 @@
     <script type="text/javascript" src="~/modules/identity/views/users/index.js"></script>
 }
 
-<h2>Users</h2>
-
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary create-user" data-toggle="modal">
-    Create User
-</button>
-
-<!-- Modal -->
-<div class="modal fade" id="createUpdateUserModal" tabindex="-1" role="dialog" aria-labelledby="userModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-
-        </div>
+<div class="row">
+    <div class="col-md-6">
+        <h2>Users</h2>
+    </div>
+    <div class="col-md-6 text-right">
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary create-user" data-toggle="modal">
+            Create User
+        </button>
     </div>
 </div>
 
@@ -35,3 +31,12 @@
     </tr>
     </thead>
 </table>
+
+<!-- Modal -->
+<div class="modal fade" id="createUpdateUserModal" tabindex="-1" role="dialog" aria-labelledby="userModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+        </div>
+    </div>
+</div>

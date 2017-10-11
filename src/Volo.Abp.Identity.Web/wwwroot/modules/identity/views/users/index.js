@@ -2,8 +2,11 @@
     var _identityUserAppService = volo.abp.identity.identityUser;
 
     var dataTable = $('#IdentityUsersTable').DataTable({
-        processing: true,
+        paging: true,
         serverSide: true,
+        processing: true,
+        responsive: true,
+        order: [[1, "asc"]],
         ajax: function (requestData, callback, settings) {
             var inputFilter = {};
 
@@ -38,7 +41,6 @@
                 });
             }
         },
-        responsive: true,
         columnDefs: [
             {
                 targets: 0,
@@ -48,7 +50,7 @@
                 defaultContent: '',
                 render: function (list, type, record, meta) {
                     return '<div class="dropdown">' +
-                        '<button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
+                        '<button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
                         'Actions' +
                         '</button>' +
                         '<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">' +
