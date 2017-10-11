@@ -10,7 +10,7 @@ namespace Volo.Abp.MultiTenancy
 
         public bool Handled { get; set; }
 
-        internal bool ResolvedTenantOrHost()
+        internal bool HasResolvedTenantOrHost()
         {
             return Handled || TenantIdOrName != null;
         }

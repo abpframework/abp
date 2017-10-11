@@ -76,6 +76,8 @@ namespace Volo.Abp.MultiTenancy
                 return _tenantScopeProvider.CurrentScope.Tenant;
             }
 
+            //TODO: Get from ICurrentUser before resolvers and fail if resolvers find a different tenant!
+
             return GetCurrentTenantFromResolvers();
         }
 
@@ -94,7 +96,7 @@ namespace Volo.Abp.MultiTenancy
                 {
                     tenantResolver.Resolve(context);
 
-                    if (context.ResolvedTenantOrHost())
+                    if (context.HasResolvedTenantOrHost())
                     {
                         if (context.TenantIdOrName == null)
                         {

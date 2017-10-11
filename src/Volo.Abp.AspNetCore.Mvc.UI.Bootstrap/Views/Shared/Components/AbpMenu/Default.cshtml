@@ -1,6 +1,8 @@
 ﻿@using System.Threading.Tasks
+@using Volo.Abp.Session
 @using Volo.Abp.Ui.Navigation
-@model Volo.Abp.Ui.Navigation.ApplicationMenu
+@model ApplicationMenu
+@inject ICurrentUser CurrentUser
 <nav class="navbar navbar-toggleable-md navbar-inverse bg-inverse fixed-top">
     <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -33,11 +35,15 @@
             }
         </ul>
         
-        @if (Context.User?.Identity?.IsAuthenticated == true)
+        @if (CurrentUser.IsAuthenticated)
         {
             <div>
-                <a href="/Account/Logout">Logout</a> /* TODO: ?? */
+                <span style="color: #fff">@CurrentUser.UserName</span> (<a href="/Account/Logout">Logout</a>)
             </div>
+        }
+        else
+        {
+            <a href="/Account/Login">Login</a>
         }
     </div>
 </nav>
