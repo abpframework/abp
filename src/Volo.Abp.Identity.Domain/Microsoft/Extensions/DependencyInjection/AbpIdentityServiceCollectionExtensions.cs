@@ -24,10 +24,10 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddScoped<IdentityUserManager>();
             services.TryAddScoped(typeof(UserManager<IdentityUser>), provider => provider.GetService(typeof(IdentityUserManager)));
 
-            //AbpSecurityStampValidator TODO: We may need to add this in order to ValidateAsync principal!
-            //services.TryAddScoped<AbpSecurityStampValidator<TTenant, TRole, TUser>>();
-            //services.TryAddScoped(typeof(SecurityStampValidator<TUser>), provider => provider.GetService(typeof(AbpSecurityStampValidator<TTenant, TRole, TUser>)));
-            //services.TryAddScoped(typeof(ISecurityStampValidator), provider => provider.GetService(typeof(AbpSecurityStampValidator<TTenant, TRole, TUser>)));
+            //AbpSecurityStampValidator
+            services.TryAddScoped<AbpSecurityStampValidator>();
+            services.TryAddScoped(typeof(SecurityStampValidator<IdentityUser>), provider => provider.GetService(typeof(AbpSecurityStampValidator)));
+            services.TryAddScoped(typeof(ISecurityStampValidator), provider => provider.GetService(typeof(AbpSecurityStampValidator)));
 
             //AbpUserStore
             services.TryAddScoped<IdentityUserStore>();
