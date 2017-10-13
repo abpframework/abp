@@ -31,10 +31,5 @@ namespace Volo.Abp.Identity
             ).OrderBy(sorting ?? nameof(IdentityRole.Name))
             .PageBy(skipCount, maxResultCount).ToListAsync();
         }
-
-        public async Task<List<IdentityRole>> GetAllListAsync()
-        {
-            return await GetQueryable().ToListAsync();
-        }
     }
 }
