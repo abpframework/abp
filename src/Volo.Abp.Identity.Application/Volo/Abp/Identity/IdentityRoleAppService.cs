@@ -39,7 +39,7 @@ namespace Volo.Abp.Identity
 
         public async Task<List<IdentityRoleDto>> GetAllListAsync()
         {
-            var list = await _roleRepository.GetAllListAsync();
+            var list = await _roleRepository.GetListAsync();
 
             return ObjectMapper.Map<List<IdentityRole>, List<IdentityRoleDto>>(list);
         }
