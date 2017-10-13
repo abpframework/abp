@@ -99,6 +99,7 @@ namespace Volo.Abp.Identity
         {
             var query = from userRole in DbContext.UserRoles
                         join role in DbContext.Roles on userRole.RoleId equals role.Id
+                        where userRole.UserId == userId
                         select role;
 
             return await query.ToListAsync();

@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Collections.Generic;
+using AutoMapper;
 
 namespace Volo.Abp.Identity
 {
@@ -8,7 +9,7 @@ namespace Volo.Abp.Identity
         {
             CreateMap<IdentityUser, IdentityUserDto>();
             CreateMap<IdentityRole, IdentityRoleDto>();
-            CreateMap<IdentityRole, IdentityUserRoleDto>();
+            CreateMap<IdentityRoleDto, IdentityUserRoleDto>();
         }
     }
 }

@@ -13,13 +13,11 @@ namespace Volo.Abp.Identity
     {
         private readonly IdentityUserManager _userManager;
         private readonly IIdentityUserRepository _userRepository;
-        private readonly IIdentityRoleRepository _roleRepository;
 
-        public IdentityUserAppService(IdentityUserManager userManager, IIdentityUserRepository userRepository, IIdentityRoleRepository roleRepository)
+        public IdentityUserAppService(IdentityUserManager userManager, IIdentityUserRepository userRepository)
         {
             _userManager = userManager;
             _userRepository = userRepository;
-            _roleRepository = roleRepository;
         }
 
         public async Task<IdentityUserDto> GetAsync(Guid id)
@@ -27,27 +25,6 @@ namespace Volo.Abp.Identity
             return ObjectMapper.Map<IdentityUser, IdentityUserDto>(
                 await _userManager.GetByIdAsync(id)
             );
-        }
-
-        public async Task<IdentityUserCreateOrUpdateOutput> GetUserForCreateOrUpdateAsync(Guid? id)
-        {
-            var userRoleDtos = ObjectMapper.Map<List<IdentityRole>, IdentityUserRoleDto[]>(await _roleRepository.GetListAsync());
-            var output = new IdentityUserCreateOrUpdateOutput
-            {
-                Roles = userRoleDtos
-            };
-
-            if (!id.HasValue) return output;
-
-            var user = await _userManager.GetByIdAsync(id.Value);
-            output.User = ObjectMapper.Map<IdentityUser, IdentityUserDto>(user);
-
-            foreach (var userRoleDto in userRoleDtos)
-            {
-                userRoleDto.IsAssigned = await _userManager.IsInRoleAsync(user, userRoleDto.Name);
-            }
-
-            return output;
         }
 
         public async Task<PagedResultDto<IdentityUserDto>> GetListAsync(GetIdentityUsersInput input)

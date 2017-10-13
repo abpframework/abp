@@ -12,7 +12,7 @@ namespace Volo.Abp.Identity
         private readonly IIdentityRoleRepository _roleRepository;
 
         public IdentityRoleAppService(
-            IdentityRoleManager roleManager, 
+            IdentityRoleManager roleManager,
             IIdentityRoleRepository roleRepository)
         {
             _roleManager = roleManager;
@@ -26,15 +26,22 @@ namespace Volo.Abp.Identity
             );
         }
 
-        public async Task<PagedResultDto<IdentityRoleDto>> GetListAsync(PagedAndSortedResultRequestDto input)
+        public async Task<PagedResultDto<IdentityRoleDto>> GetListAsync(GetIdentityRolesInput input)
         {
             var count = (int)await _roleRepository.GetCountAsync();
-            var list = await _roleRepository.GetListAsync(input.Sorting, input.MaxResultCount, input.SkipCount);
+            var list = await _roleRepository.GetListAsync(input.Sorting, input.MaxResultCount, input.SkipCount, input.Filter);
 
             return new PagedResultDto<IdentityRoleDto>(
                 count,
                 ObjectMapper.Map<List<IdentityRole>, List<IdentityRoleDto>>(list)
             );
+        }
+
+        public async Task<List<IdentityRoleDto>> GetAllListAsync()
+        {
+            var list = await _roleRepository.GetAllListAsync();
+
+            return ObjectMapper.Map<List<IdentityRole>, List<IdentityRoleDto>>(list);
         }
 
         public async Task<IdentityRoleDto> CreateAsync(IdentityRoleCreateDto input)

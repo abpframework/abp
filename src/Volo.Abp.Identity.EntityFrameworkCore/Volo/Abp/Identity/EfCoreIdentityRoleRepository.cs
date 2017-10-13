@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Identity.EntityFrameworkCore;
+using System;
 
 namespace Volo.Abp.Identity
 {
@@ -22,9 +23,18 @@ namespace Volo.Abp.Identity
             return DbSet.FirstOrDefaultAsync(r => r.NormalizedName == normalizedRoleName, cancellationToken);
         }
 
-        public async Task<List<IdentityRole>> GetListAsync(string sorting, int maxResultCount, int skipCount)
+        public async Task<List<IdentityRole>> GetListAsync(string sorting, int maxResultCount, int skipCount, string filter)
         {
-            return await this.OrderBy(sorting ?? nameof(IdentityRole.Name)).PageBy(skipCount, maxResultCount).ToListAsync();
+            return await this.WhereIf(
+                !filter.IsNullOrWhiteSpace(),
+                r => r.Name.Contains(filter)
+            ).OrderBy(sorting ?? nameof(IdentityRole.Name))
+            .PageBy(skipCount, maxResultCount).ToListAsync();
+        }
+
+        public async Task<List<IdentityRole>> GetAllListAsync()
+        {
+            return await GetQueryable().ToListAsync();
         }
     }
 }

@@ -50,13 +50,13 @@
                 defaultContent: '',
                 render: function (list, type, record, meta) {
                     return '<div class="dropdown">' +
-                        '<button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
-                        'Actions' +
-                        '</button>' +
-                        '<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">' +
-                        '<a class="dropdown-item update-user" href="#" data-id="' + record.id + '">Edit</a>' +
-                        '<a class="dropdown-item delete-user" href="#" data-id="' + record.id + '">Delete</a>' +
-                        '</div>' +
+                            '<button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
+                                'Actions' +
+                            '</button>' +
+                            '<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">' +
+                                '<a class="dropdown-item update-user" href="#" data-id="' + record.id + '">Edit</a>' +
+                                '<a class="dropdown-item delete-user" href="#" data-id="' + record.id + '">Delete</a>' +
+                            '</div>' +
                         '</div>';
                 }
             },
@@ -75,15 +75,15 @@
         ]
     });
 
-    $(document).on('click', '.update-user', function () {
+    $('#IdentityUsersTable').on('click', '.update-user', function () {
         var id = $(this).data('id');
 
         $('#createUpdateUserModal').modal('show')
             .find('.modal-content')
-            .load(abp.appPath + 'Identity/Users/_Update', { id: id });
+            .load(abp.appPath + 'Identity/Users/Update', { id: id });
     });
 
-    $(document).on('click', '.delete-user', function () {
+    $('#IdentityUsersTable').on('click', '.delete-user', function () {
         var id = $(this).data('id');
 
         if (confirm('Are you sure you want to delete?')) {
@@ -96,30 +96,28 @@
     $('.create-user').click(function () {
         $('#createUpdateUserModal').modal('show')
             .find('.modal-content')
-            .load(abp.appPath + 'Identity/Users/_Create');
+            .load(abp.appPath + 'Identity/Users/Create');
     });
 
-    $(document).on('click', '#btnCreateUserSave', function () {
+    $('#createUpdateUserModal').on('click', '#btnCreateUserSave', function () {
         var $createUserForm = $('#createUserForm');
         var user = $createUserForm.serializeFormToObject();
+        user.RoleNames = findAssignedRoleNames();
 
-        _identityUserAppService.create(user).done(function (result) {
-            _identityUserAppService.updateRoles(result.id, { roleNames: findAssignedRoleNames() }).done(function () {
-                $('#createUpdateUserModal').modal('hide');
-                dataTable.ajax.reload();
-            });
+        _identityUserAppService.create(user).done(function () {
+            $('#createUpdateUserModal').modal('hide');
+            dataTable.ajax.reload();
         });
     });
 
-    $(document).on('click', '#btnUpdateUserSave', function () {
+    $('#createUpdateUserModal').on('click', '#btnUpdateUserSave', function () {
         var $updateUserForm = $('#updateUserForm');
         var user = $updateUserForm.serializeFormToObject();
+        user.RoleNames = findAssignedRoleNames();
 
-        _identityUserAppService.update(user.Id, user).done(function (result) {
-            _identityUserAppService.updateRoles(result.id, { roleNames: findAssignedRoleNames() }).done(function () {
-                $('#createUpdateUserModal').modal('hide');
-                dataTable.ajax.reload();
-            });
+        _identityUserAppService.update(user.Id, user).done(function () {
+            $('#createUpdateUserModal').modal('hide');
+            dataTable.ajax.reload();
         });
     });
 });

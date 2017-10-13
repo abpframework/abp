@@ -1,4 +1,4 @@
-﻿@model Volo.Abp.Identity.IdentityUserCreateOrUpdateOutput
+﻿@model Volo.Abp.Identity.Web.Areas.Identity.Controllers.CreateOrUpdateUserViewModel
 
 <div class="modal-header">
     <h5 class="modal-title" id="userModalLabel">Update User</h5>
@@ -45,7 +45,7 @@
                     {
                         <div class="form-check">
                             <label class="form-check-label">
-                                <input id="UpdateUser_@(role.Name)" class="form-check-input" type="checkbox" name="@(role.Name)" value="true" @Html.Raw(role.IsAssigned ? "checked=\"checked\"" : "")>
+                                <input id="CreateUser_@(role.Name)" class="form-check-input" type="checkbox" name="@(role.Name)" value="true" @Html.Raw(role.IsAssigned ? "checked=\"checked\"" : "")>
                                 @role.Name
                             </label>
                         </div>
