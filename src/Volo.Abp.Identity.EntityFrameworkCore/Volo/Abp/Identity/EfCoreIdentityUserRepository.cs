@@ -78,6 +78,18 @@ namespace Volo.Abp.Identity
             return await query.ToListAsync(cancellationToken);
         }
 
+        public async Task<List<IdentityUser>> GetListAsync(string sorting, int maxResultCount, int skipCount, string filter)
+        {
+            return await this.WhereIf(
+                    !filter.IsNullOrWhiteSpace(),
+                    u =>
+                        u.UserName.Contains(filter) ||
+                        u.Email.Contains(filter)
+                )
+                .OrderBy(sorting ?? nameof(IdentityUser.UserName))
+                .PageBy(skipCount, maxResultCount).ToListAsync();
+        }
+
         public async Task<List<IdentityUser>> GetListAsync(string sorting, int maxResultCount, int skipCount)
         {
             return await this.OrderBy(sorting ?? nameof(IdentityUser.UserName)).PageBy(skipCount, maxResultCount).ToListAsync();
@@ -87,6 +99,7 @@ namespace Volo.Abp.Identity
         {
             var query = from userRole in DbContext.UserRoles
                         join role in DbContext.Roles on userRole.RoleId equals role.Id
+                        where userRole.UserId == userId
                         select role;
 
             return await query.ToListAsync();

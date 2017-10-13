@@ -11,7 +11,16 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Areas\**\*.*" Exclude="bin\**;obj\**;**\*.xproj;packages\**;@(EmbeddedResource)" />
-    <EmbeddedResource Include="wwwroot\**\*.*" Exclude="bin\**;obj\**;**\*.xproj;packages\**;@(EmbeddedResource)" />
+    <EmbeddedResource Include="wwwroot\modules\identity\libs\datatables\datatables.css" />
+    <EmbeddedResource Include="wwwroot\modules\identity\libs\datatables\datatables.js" />
+    <EmbeddedResource Include="wwwroot\modules\identity\libs\datatables\datatables.min.css" />
+    <EmbeddedResource Include="wwwroot\modules\identity\libs\datatables\datatables.min.js" />
+    <EmbeddedResource Include="wwwroot\modules\identity\views\users\index.css" />
+    <EmbeddedResource Include="wwwroot\modules\identity\views\users\index.es5.js" />
+    <EmbeddedResource Include="wwwroot\modules\identity\views\users\index.es5.min.js" />
+    <EmbeddedResource Include="wwwroot\modules\identity\views\users\index.js" />
+    <EmbeddedResource Include="wwwroot\modules\identity\views\users\index.less" />
+    <EmbeddedResource Include="wwwroot\modules\identity\views\users\index.min.css" />
   </ItemGroup>
 
   <ItemGroup>

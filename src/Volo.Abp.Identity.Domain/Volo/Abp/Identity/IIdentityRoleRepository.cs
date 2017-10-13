@@ -9,6 +9,9 @@ namespace Volo.Abp.Identity
     {
         Task<IdentityRole> FindByNormalizedNameAsync(string normalizedRoleName, CancellationToken cancellationToken);
 
-        Task<List<IdentityRole>> GetListAsync(string sorting, int maxResultCount, int skipCount);
+        Task<List<IdentityRole>> GetListAsync(string sorting, int maxResultCount, int skipCount, string filter);
+
+        //TODO: remove after a better design
+        Task<List<IdentityRole>> GetAllListAsync();
     }
 }

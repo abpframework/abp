@@ -40,7 +40,7 @@ namespace Volo.Abp.Identity
         {
             //Act
 
-            var result = await _roleAppService.GetListAsync(new PagedAndSortedResultRequestDto());
+            var result = await _roleAppService.GetListAsync(new GetIdentityRolesInput());
 
             //Assert
 

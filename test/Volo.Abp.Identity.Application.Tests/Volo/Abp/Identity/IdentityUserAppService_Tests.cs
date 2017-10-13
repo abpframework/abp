@@ -44,7 +44,7 @@ namespace Volo.Abp.Identity
         {
             //Act
 
-            var result = await _userAppService.GetListAsync(new PagedAndSortedResultRequestDto());
+            var result = await _userAppService.GetListAsync(new GetIdentityUsersInput());
 
             //Assert
 
