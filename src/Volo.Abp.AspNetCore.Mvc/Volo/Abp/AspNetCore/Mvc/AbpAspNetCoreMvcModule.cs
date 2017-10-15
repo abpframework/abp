@@ -28,8 +28,6 @@ namespace Volo.Abp.AspNetCore.Mvc
     {
         public override void ConfigureServices(IServiceCollection services)
         {
-            services.AddAssemblyOf<AbpAspNetCoreMvcModule>();
-
             //Configure Razor
             services.Insert(0,
                 ServiceDescriptor.Singleton<IConfigureOptions<RazorViewEngineOptions>>(
@@ -59,6 +57,8 @@ namespace Volo.Abp.AspNetCore.Mvc
                     o.RootPath = "abp";
                 });
             });
+
+            services.AddAssemblyOf<AbpAspNetCoreMvcModule>();
         }
 
         public override void PostConfigureServices(IServiceCollection services)

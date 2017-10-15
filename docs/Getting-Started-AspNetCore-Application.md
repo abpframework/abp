@@ -125,7 +125,7 @@ namespace BasicAspNetCoreApplication.Controllers
 
 If you run the application, you will see a "Hello World!" message on the page.
 
-Devided ``HomeController`` from ``AbpController`` instead of standard ``Controller`` class. This is not required, but ``AbpController`` class has useful base properties and methods to make your development easier.
+Derived ``HomeController`` from ``AbpController`` instead of standard ``Controller`` class. This is not required, but ``AbpController`` class has useful base properties and methods to make your development easier.
 
 ### Using Autofac as Dependency Injection Framework
 
