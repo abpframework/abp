@@ -21,7 +21,7 @@ namespace Volo.Abp.AspNetCore.Mvc
         public override void ConfigureServices(IServiceCollection services)
         {
             services.AddLocalization(); //TODO: Move to AbpAspNetCoreMvcModule
-            services.AddMvc(); //TODO: Move to AbpAspNetCoreMvcModule
+            services.AddMvc().AddViewLocalization(); //TODO: Move to AbpAspNetCoreMvcModule
 
             services.Configure<AbpAspNetCoreMvcOptions>(options =>
             {
