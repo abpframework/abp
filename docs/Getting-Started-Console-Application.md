@@ -34,7 +34,9 @@ namespace AbpConsoleDemo
 }
 ````
 
-``AppModule`` is a good name for the startup module for a console application. A module class can register services to Dependency Injection by overriding ``ConfigureServices`` method as shown here. ``AddAssemblyOf<...>`` is a special extension method of ABP that registers all services in an assembly by convention (TODO: link to DI document). While this is optional, a module generally registers some services.
+``AppModule`` is a good name for the startup module for an application.
+
+A module class can register services to Dependency Injection by overriding ``ConfigureServices`` method as shown here. ``AddAssemblyOf<...>`` is a special extension method of ABP that registers all services in an assembly by convention (TODO: link to DI document). While this is optional, a module generally registers some services.
 
 ### Initialize The Application
 
