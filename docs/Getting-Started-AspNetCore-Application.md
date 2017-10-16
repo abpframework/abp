@@ -139,7 +139,18 @@ Replacing AspNet Core's DI system by Autofac and integrating to ABP is easy.
 Install-Package Volo.Abp.Autofac
 ````
 
-2. Change ``services.AddApplication<AppModule>();`` line in the ``Startup`` class as shown below:
+2. Add ``AbpAutofacModule`` Dependency
+
+````C#
+[DependsOn(typeof(AbpAspNetCoreMvcModule))]
+[DependsOn(typeof(AbpAutofacModule))] //Add dependency to ABP Autofac module
+public class AppModule : AbpModule
+{
+    ...
+}
+````
+
+3. Change ``services.AddApplication<AppModule>();`` line in the ``Startup`` class as shown below:
  
 ````C#
 services.AddApplication<AppModule>(options =>
