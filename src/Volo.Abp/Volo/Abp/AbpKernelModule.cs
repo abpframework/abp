@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.ApiVersioning;
+using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Reflection;
@@ -32,6 +33,9 @@ namespace Volo.Abp
         {
             services.AddOptions();
             services.AddLogging();
+            services.AddLocalization();
+
+            AbpStringLocalizerFactory.Replace(services);
 
             services.AddAssemblyOf<AbpKernelModule>();
 

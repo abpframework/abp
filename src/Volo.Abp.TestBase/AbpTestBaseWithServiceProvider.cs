@@ -88,5 +88,15 @@ namespace Volo.Abp.TestBase
                 }
             }
         }
+
+        protected virtual T GetService<T>()
+        {
+            return ServiceProvider.GetService<T>();
+        }
+
+        protected virtual T GetRequiredService<T>()
+        {
+            return ServiceProvider.GetRequiredService<T>();
+        }
     }
 }

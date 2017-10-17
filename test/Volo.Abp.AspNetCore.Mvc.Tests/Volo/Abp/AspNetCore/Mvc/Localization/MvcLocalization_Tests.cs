@@ -8,7 +8,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Localization
 {
     public class MvcLocalization_Tests : AspNetCoreMvcTestBase
     {
-        private readonly IStringLocalizer _localizer;
+        private readonly IStringLocalizer<MvcLocalization_Tests> _localizer;
 
         public MvcLocalization_Tests()
         {
