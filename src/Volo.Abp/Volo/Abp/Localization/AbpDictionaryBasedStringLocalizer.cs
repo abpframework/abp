@@ -10,6 +10,10 @@ namespace Volo.Abp.Localization
     {
         public LocalizationResource Resource { get; }
 
+        public LocalizedString this[string name] => GetLocalizedString(name, CultureInfo.CurrentUICulture.Name);
+
+        public LocalizedString this[string name, params object[] arguments] => GetLocalizedStringFormatted(name, CultureInfo.CurrentUICulture.Name, arguments);
+
         public AbpDictionaryBasedStringLocalizer(LocalizationResource resource)
         {
             Resource = resource;
@@ -22,18 +26,13 @@ namespace Volo.Abp.Localization
 
         public IStringLocalizer WithCulture(CultureInfo culture)
         {
-            throw new NotImplementedException();
+            return new CultureWrapperStringLocalizer(culture.Name, this);
         }
 
-        public LocalizedString this[string name] => GetLocalizedString(name, CultureInfo.CurrentUICulture.Name);
-
-        public LocalizedString this[string name, params object[] arguments]
+        protected virtual LocalizedString GetLocalizedStringFormatted(string name, string cultureName, params object[] arguments)
         {
-            get
-            {
-                var localizedString = this[name];
-                return new LocalizedString(name, string.Format(localizedString.Value, arguments, localizedString.ResourceNotFound, localizedString.SearchedLocation));
-            }
+            var localizedString = GetLocalizedString(name, cultureName);
+            return new LocalizedString(name, string.Format(localizedString.Value, arguments, localizedString.ResourceNotFound, localizedString.SearchedLocation));
         }
 
         protected virtual LocalizedString GetLocalizedString(string name, string cultureName)
@@ -98,7 +97,7 @@ namespace Volo.Abp.Localization
             return new LocalizedString(name, strDefault.Value);
         }
 
-        protected virtual IReadOnlyList<LocalizedString> GetAllStrings(string cultureName, bool includeDefaults = true)
+        protected virtual IReadOnlyList<LocalizedString> GetAllStrings(string cultureName, bool includeParentCultures = true)
         {
             //TODO: Can be optimized (example: if it's already default dictionary, skip overriding)
 
@@ -107,7 +106,7 @@ namespace Volo.Abp.Localization
             //Create a temp dictionary to build
             var allStrings = new Dictionary<string, LocalizedString>();
 
-            if (includeDefaults)
+            if (includeParentCultures)
             {
                 //Fill all strings from default dictionary
                 var defaultDictionary = Resource.DictionaryProvider.Dictionaries[Resource.DefaultCultureName]; //TODO: What if not contains a default dictionary?
@@ -151,6 +150,32 @@ namespace Volo.Abp.Localization
             return cultureName.Contains("-")
                 ? cultureName.Left(cultureName.IndexOf("-", StringComparison.Ordinal))
                 : cultureName;
+        }
+
+        public class CultureWrapperStringLocalizer : IStringLocalizer
+        {
+            private readonly string _cultureName;
+            private readonly AbpDictionaryBasedStringLocalizer _innerLocalizer;
+
+            LocalizedString IStringLocalizer.this[string name] => _innerLocalizer.GetLocalizedString(name, _cultureName);
+
+            LocalizedString IStringLocalizer.this[string name, params object[] arguments] => _innerLocalizer.GetLocalizedStringFormatted(name, _cultureName, arguments);
+
+            public CultureWrapperStringLocalizer(string cultureName, AbpDictionaryBasedStringLocalizer innerLocalizer)
+            {
+                _cultureName = cultureName;
+                _innerLocalizer = innerLocalizer;
+            }
+
+            public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures)
+            {
+                return _innerLocalizer.GetAllStrings(_cultureName, includeParentCultures);
+            }
+
+            public IStringLocalizer WithCulture(CultureInfo culture)
+            {
+                return new CultureWrapperStringLocalizer(culture.Name, _innerLocalizer);
+            }
         }
     }
 }
