@@ -6,8 +6,6 @@ using Microsoft.Extensions.Localization;
 
 namespace Volo.Abp.Localization
 {
-    //TODO: Remove old/unused methods!
-
     public class AbpDictionaryBasedStringLocalizer : IStringLocalizer
     {
         public LocalizationResource Resource { get; }
@@ -27,29 +25,20 @@ namespace Volo.Abp.Localization
             throw new NotImplementedException();
         }
 
-        LocalizedString IStringLocalizer.this[string name]
-        {
-            get { return GetString(name); }
-        }
+        public LocalizedString this[string name] => GetLocalizedString(name, CultureInfo.CurrentUICulture.Name);
 
-        LocalizedString IStringLocalizer.this[string name, params object[] arguments]
+        public LocalizedString this[string name, params object[] arguments]
         {
             get
             {
-                var localizedString = GetString(name);
+                var localizedString = this[name];
                 return new LocalizedString(name, string.Format(localizedString.Value, arguments, localizedString.ResourceNotFound, localizedString.SearchedLocation));
             }
         }
 
-        public LocalizedString GetString(string name)
+        protected virtual LocalizedString GetLocalizedString(string name, string cultureName)
         {
-            return GetString(name, CultureInfo.CurrentUICulture.Name);
-        }
-
-        /// <inheritdoc/>
-        public LocalizedString GetString(string name, string cultureName)
-        {
-            var value = GetStringOrNull(name, cultureName);
+            var value = GetLocalizedStringOrNull(name, cultureName);
 
             if (value == null)
             {
@@ -59,12 +48,7 @@ namespace Volo.Abp.Localization
             return value;
         }
 
-        public LocalizedString GetStringOrNull(string name, bool tryDefaults = true)
-        {
-            return GetStringOrNull(name, CultureInfo.CurrentUICulture.Name, tryDefaults);
-        }
-
-        public LocalizedString GetStringOrNull(string name, string cultureName, bool tryDefaults = true)
+        protected virtual LocalizedString GetLocalizedStringOrNull(string name, string cultureName, bool tryDefaults = true)
         {
             var dictionaries = Resource.DictionaryProvider.Dictionaries;
 
@@ -114,8 +98,7 @@ namespace Volo.Abp.Localization
             return new LocalizedString(name, strDefault.Value);
         }
 
-        /// <inheritdoc/>
-        public IReadOnlyList<LocalizedString> GetAllStrings(string cultureName, bool includeDefaults = true)
+        protected virtual IReadOnlyList<LocalizedString> GetAllStrings(string cultureName, bool includeDefaults = true)
         {
             //TODO: Can be optimized (example: if it's already default dictionary, skip overriding)
 
@@ -163,7 +146,7 @@ namespace Volo.Abp.Localization
             return allStrings.Values.ToImmutableList();
         }
 
-        private static string GetBaseCultureName(string cultureName)
+        protected virtual string GetBaseCultureName(string cultureName)
         {
             return cultureName.Contains("-")
                 ? cultureName.Left(cultureName.IndexOf("-", StringComparison.Ordinal))

@@ -46,11 +46,9 @@ namespace Volo.Abp.Localization
         {
             resource.Initialize(_serviceProvider);
 
-            //Use JSON/XML/...etc based provider that reads resource from source and creates a dictionary
             //Extend dictionary with extensions
             //Wrap reader by wrappers (like db wrapper which implement multitenancy/regions and so on...)
-
-
+            
             //Notes: Localizer will be cached, so wrappers are responsible to cache/invalidate themselves!
 
             var localizer = new AbpDictionaryBasedStringLocalizer(resource); //TODO: !!!

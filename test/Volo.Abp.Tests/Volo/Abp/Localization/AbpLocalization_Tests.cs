@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.Globalization;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Shouldly;
 using Volo.Abp.Localization.Source;
@@ -40,7 +41,17 @@ namespace Volo.Abp.Localization
                 _localizer["CarPlural"].Value.ShouldBe("Araba");
             }
         }
-        
+
+        [Fact]
+        public void Should_Get_Localized_Text_If_Defined_In_Requested_Culture()
+        {
+            _localizer.WithCulture(CultureInfo.GetCultureInfo("en"))["Car"].Value.ShouldBe("Car");
+            _localizer.WithCulture(CultureInfo.GetCultureInfo("en"))["CarPlural"].Value.ShouldBe("Cars");
+
+            _localizer.WithCulture(CultureInfo.GetCultureInfo("tr"))["CarPlural"].Value.ShouldBe("Araba");
+            _localizer.WithCulture(CultureInfo.GetCultureInfo("tr"))["CarPlural"].Value.ShouldBe("Araba");
+        }
+
         [DependsOn(typeof(AbpTestBaseModule))]
         public class TestModule : AbpModule
         {
