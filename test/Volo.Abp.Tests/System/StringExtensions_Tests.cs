@@ -1,5 +1,5 @@
 ﻿using Shouldly;
-using Volo.Abp.Globalization;
+using Volo.Abp.Localization;
 using Xunit;
 
 namespace System

@@ -4,7 +4,7 @@ using Volo.Abp.Modularity;
 
 namespace Volo.Abp.TestBase
 {
-    public class AbpIntegratedTest<TStartupModule> : AbpTestBaseWithServiceProvider, IDisposable
+    public abstract class AbpIntegratedTest<TStartupModule> : AbpTestBaseWithServiceProvider, IDisposable
         where TStartupModule : IAbpModule
     {
         protected IAbpApplication Application { get; }
@@ -54,8 +54,7 @@ namespace Volo.Abp.TestBase
         {
 	        return services.BuildServiceProviderFromFactory();
         }
-
-
+        
         public void Dispose()
         {
             Application.Shutdown();

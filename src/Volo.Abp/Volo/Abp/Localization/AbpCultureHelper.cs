@@ -2,7 +2,7 @@
 using System.Globalization;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.Globalization
+namespace Volo.Abp.Localization
 {
     public static class AbpCultureHelper
     {

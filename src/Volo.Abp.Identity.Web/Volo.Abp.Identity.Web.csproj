@@ -10,17 +10,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Areas\**\*.*" Exclude="bin\**;obj\**;**\*.xproj;packages\**;@(EmbeddedResource)" />
-    <EmbeddedResource Include="wwwroot\modules\identity\libs\datatables\datatables.css" />
-    <EmbeddedResource Include="wwwroot\modules\identity\libs\datatables\datatables.js" />
-    <EmbeddedResource Include="wwwroot\modules\identity\libs\datatables\datatables.min.css" />
-    <EmbeddedResource Include="wwwroot\modules\identity\libs\datatables\datatables.min.js" />
-    <EmbeddedResource Include="wwwroot\modules\identity\views\users\index.css" />
-    <EmbeddedResource Include="wwwroot\modules\identity\views\users\index.es5.js" />
-    <EmbeddedResource Include="wwwroot\modules\identity\views\users\index.es5.min.js" />
-    <EmbeddedResource Include="wwwroot\modules\identity\views\users\index.js" />
-    <EmbeddedResource Include="wwwroot\modules\identity\views\users\index.less" />
-    <EmbeddedResource Include="wwwroot\modules\identity\views\users\index.min.css" />
+    <EmbeddedResource Include="Areas\**\*.cshtml" />
+    <EmbeddedResource Include="Areas\**\*.js" />
+    <EmbeddedResource Include="Areas\**\*.json" />
+    <EmbeddedResource Include="Areas\**\*.css" />
+    <EmbeddedResource Include="wwwroot\**\*.*" />
   </ItemGroup>
 
   <ItemGroup>

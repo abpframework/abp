@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using AbpDesk.EntityFrameworkCore;
 using AbpDesk.Web.Mvc.Navigation;
 using AbpDesk.Web.Mvc.Temp;
@@ -8,6 +10,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp;
@@ -86,6 +89,21 @@ namespace AbpDesk.Web.Mvc
             app.UseEmbeddedFiles();
 
             app.UseAuthentication();
+
+            var cultures = new List<CultureInfo>
+            {
+                new CultureInfo("en"),
+                new CultureInfo("tr")
+            };
+
+            //TODO: Should we add this to the framework, or left it to the application?
+            //TODO: Should we add this as the first middleware (to support localization in all middlewares too)?
+            app.UseRequestLocalization(new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture("en"),
+                SupportedCultures = cultures,
+                SupportedUICultures = cultures
+            });
 
             app.UseMvc(routes =>
             {

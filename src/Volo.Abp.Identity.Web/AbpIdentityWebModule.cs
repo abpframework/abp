@@ -2,7 +2,9 @@
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.EmbeddedFiles;
+using Volo.Abp.Identity.Web.Areas.Identity.Localization.Resource;
 using Volo.Abp.Identity.Web.Navigation;
+using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.Ui.Navigation;
 
@@ -38,6 +40,11 @@ namespace Volo.Abp.Identity.Web
                         "Volo.Abp.Identity.Web.wwwroot"
                     )
                 );
+            });
+
+            services.Configure<AbpLocalizationOptions>(options =>
+            {
+                options.Resources.AddJson<IdentityResource>("en");
             });
         }
     }

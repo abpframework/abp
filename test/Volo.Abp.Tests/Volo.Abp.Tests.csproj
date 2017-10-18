@@ -16,6 +16,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Volo\Abp\Localization\Source\en.json" />
+    <None Remove="Volo\Abp\Localization\Source\tr.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Volo\Abp\Localization\Source\en.json" />
+    <EmbeddedResource Include="Volo\Abp\Localization\Source\tr.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
     <ProjectReference Include="..\AbpTestBase\AbpTestBase.csproj" />
     <ProjectReference Include="..\..\src\Volo.Abp\Volo.Abp.csproj" />
