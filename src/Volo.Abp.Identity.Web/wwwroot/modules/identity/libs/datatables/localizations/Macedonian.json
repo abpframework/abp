@@ -1,0 +1,21 @@
+
+
+{
+	"sProcessing":     "Процесирање...",
+	"sLengthMenu":     "Прикажи _MENU_ записи",
+	"sZeroRecords":    "Не се пронајдени записи",
+	"sEmptyTable":	   "Нема податоци во табелата",
+	"sLoadingRecords": "Вчитување...",
+	"sInfo":           "Прикажани _START_ до _END_ од _TOTAL_ записи",
+	"sInfoEmpty":      "Прикажани 0 до 0 од 0 записи",
+	"sInfoFiltered":   "(филтрирано од вкупно _MAX_ записи)",
+	"sInfoPostFix":    "",
+	"sSearch":         "Барај",
+	"sUrl": "",
+	"oPaginate": {
+		"sFirst":      "Почетна",
+		"sPrevious":   "Претходна",
+		"sNext":       "Следна",
+		"sLast":       "Последна"
+	}
+}

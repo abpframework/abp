@@ -1,7 +1,9 @@
-﻿@model Volo.Abp.Identity.Web.Areas.Identity.Controllers.CreateOrUpdateUserViewModel
-
+﻿@using Microsoft.Extensions.Localization
+@using Volo.Abp.Identity.Web.Areas.Identity.Localization.Resource
+@model Volo.Abp.Identity.Web.Areas.Identity.Models.CreateOrUpdateUserViewModel
+@inject IStringLocalizer<IdentityResource> Localizer
 <div class="modal-header">
-    <h5 class="modal-title" id="userModalLabel">Create User</h5>
+    <h5 class="modal-title" id="userModalLabel">@Localizer["CreateUser"]</h5>
     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
         <span aria-hidden="true">&times;</span>
     </button>
@@ -11,10 +13,10 @@
         <!-- Nav tabs -->
         <ul class="nav nav-tabs" role="tablist">
             <li class="nav-item">
-                <a class="nav-link active" data-toggle="tab" href="#userInformations" role="tab">User informations</a>
+                <a class="nav-link active" data-toggle="tab" href="#userInformations" role="tab">@Localizer["CreateUser"]</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" data-toggle="tab" href="#roles" role="tab">Roles</a>
+                <a class="nav-link" data-toggle="tab" href="#roles" role="tab">@Localizer["Roles"]</a>
             </li>
         </ul>
 
@@ -24,19 +26,19 @@
             <div class="tab-pane active" id="userInformations" role="tabpanel">
 
                 <div class="form-group">
-                    <label for="userName">User name</label>
+                    <label for="userName">@Localizer["UserName"]</label>
                     <input type="text" class="form-control" id="userName" name="UserName" placeholder="User name">
                 </div>
                 <div class="form-group">
-                    <label for="password">Password</label>
+                    <label for="password">@Localizer["Password"]</label>
                     <input type="password" class="form-control" id="password" name="Password" placeholder="Password">
                 </div>
                 <div class="form-group">
-                    <label for="email">Email address</label>
+                    <label for="email">@Localizer["EmailAddress"]</label>
                     <input type="email" class="form-control" id="email" name="Email" placeholder="Enter email">
                 </div>
                 <div class="form-group">
-                    <label for="phoneNumber">Phone number</label>
+                    <label for="phoneNumber">@Localizer["PhoneNumber"]</label>
                     <input type="tel" class="form-control" id="phoneNumber" name="PhoneNumber" placeholder="Phone number">
                 </div>
 
@@ -59,6 +61,6 @@
     </form>
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-    <button type="button" class="btn btn-primary" id="btnCreateUserSave">Save</button>
+    <button type="button" class="btn btn-secondary" data-dismiss="modal">@Localizer["Close"]</button>
+    <button type="button" class="btn btn-primary" id="btnCreateUserSave">@Localizer["Save"]</button>
 </div>

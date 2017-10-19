@@ -1,6 +1,16 @@
 ﻿{
   "culture": "tr",
   "texts": {
-    "Users": "Kullanıcılar"
+    "Users": "Kullanıcılar",
+    "CreateUser": "Kullanıcı oluştur",
+    "Actions": "İşlemler",
+    "UserName": "Kullanıcı adı",
+    "EmailAddress": "E-posta adresi",
+    "PhoneNumber": "Telefon numarası",
+    "UserInformations": "Kullanıcı bilgileri",
+    "Roles": "Roller",
+    "Close": "Kapat",
+    "Save": "Kaydet",
+    "Password": "Şifre"
   }
 }

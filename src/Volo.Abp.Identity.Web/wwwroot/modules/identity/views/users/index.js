@@ -2,10 +2,6 @@
     var _identityUserAppService = volo.abp.identity.identityUser;
 
     var dataTable = $('#IdentityUsersTable').DataTable({
-        paging: true,
-        serverSide: true,
-        processing: true,
-        responsive: true,
         order: [[1, "asc"]],
         ajax: function (requestData, callback, settings) {
             var inputFilter = {};
@@ -41,6 +37,7 @@
                 });
             }
         },
+        //TODO: localize strings after imlementation of js localization
         columnDefs: [
             {
                 targets: 0,
@@ -153,3 +150,29 @@ $.fn.serializeFormToObject = function () {
 
     return obj;
 };
+
+//TODO: move to common script file and also abp.localization is undefined
+/************************************************************************
+* Overrides default settings for datatables                             *
+*************************************************************************/
+(function ($) {
+    if (!$.fn.dataTable) {
+        return;
+    }
+
+    $.extend(true, $.fn.dataTable.defaults, {
+        language: {
+            url: '/modules/identity/libs/datatables/localizations/' + abp.localization.currentCulture.displayNameEnglish + '.json'
+        },
+        lengthMenu: [5, 10, 25, 50, 100, 250, 500],
+        pageLength: 10,
+        paging: true,
+        serverSide: true,
+        processing: true,
+        responsive: true,
+        pagingType: "bootstrap_full_number",
+        dom: 'rt<"bottom"ilp><"clear">',
+        order: []
+    });
+
+})(jQuery);
