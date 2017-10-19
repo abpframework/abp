@@ -1,0 +1,25 @@
+
+
+{
+	"sEmptyTable":     "Таблицада эч кандай берилиш жок",
+	"sInfo":           "Жалпы _TOTAL_ саптын ичинен _START_-саптан _END_-сапка чейинкилер",
+	"sInfoEmpty":      "Жалпы 0 саптын ичинен 0-саптан 0-сапка чейинкилер",
+	"sInfoFiltered":   "(жалпы _MAX_ саптан фильтрленди)",
+	"sInfoPostFix":    "",
+	"sInfoThousands":  " ",
+	"sLengthMenu":     "_MENU_ саптан көрсөт",
+	"sLoadingRecords": "Жүктөлүүдө...",
+	"sProcessing":     "Иштеп жатат...",
+	"sSearch":         "Издөө:",
+	"sZeroRecords":    "Туура келген бир да сап жок",
+	"oPaginate": {
+		"sFirst":    "Биринчи",
+		"sLast":     "Акыркы",
+		"sNext":     "Кийинки",
+		"sPrevious": "Мурунку"
+	},
+	"oAria": {
+		"sSortAscending":  ": иретте",
+		"sSortDescending": ": тескери иретте"
+	}
+}

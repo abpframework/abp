@@ -1,6 +1,16 @@
 {
   "culture": "en",
   "texts": {
-    "Users": "Users"
+    "Users": "Users",
+    "CreateUser": "Create user",
+    "Actions": "Actions",
+    "UserName": "User name",
+    "EmailAddress": "Email address",
+    "PhoneNumber": "Phone number",
+    "UserInformations": "User informations",
+    "Roles": "Roles",
+    "Close": "Close",
+    "Save": "Save",
+    "Password": "Password"
   }
 }
