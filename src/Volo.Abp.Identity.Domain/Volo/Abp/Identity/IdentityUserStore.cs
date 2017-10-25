@@ -173,7 +173,7 @@ namespace Volo.Abp.Identity
 
             Check.NotNull(user, nameof(user));
 
-            await _userRepository.InsertAsync(user);
+            await _userRepository.InsertAsync(user, AutoSaveChanges, cancellationToken);
             await SaveChanges(cancellationToken);
 
             return IdentityResult.Success;
@@ -193,7 +193,7 @@ namespace Volo.Abp.Identity
 
             try
             {
-                await _userRepository.UpdateAsync(user);
+                await _userRepository.UpdateAsync(user, cancellationToken);
                 await SaveChanges(cancellationToken);
             }
             catch (AbpDbConcurrencyException ex)
@@ -219,7 +219,7 @@ namespace Volo.Abp.Identity
 
             try
             {
-                await _userRepository.DeleteAsync(user);
+                await _userRepository.DeleteAsync(user, cancellationToken);
                 await SaveChanges(cancellationToken);
             }
             catch (AbpDbConcurrencyException ex)
