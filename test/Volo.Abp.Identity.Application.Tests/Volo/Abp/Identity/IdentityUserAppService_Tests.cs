@@ -63,7 +63,7 @@ namespace Volo.Abp.Identity
                 Email = CreateRandomEmail(),
                 LockoutEnabled = true,
                 PhoneNumber = CreateRandomPhoneNumber(),
-                Password = "123qwe",
+                Password = "123qwE4r*",
                 RoleNames = new[] { "moderator" }
             };
 

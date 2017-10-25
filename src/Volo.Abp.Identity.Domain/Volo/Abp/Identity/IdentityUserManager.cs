@@ -47,15 +47,26 @@ namespace Volo.Abp.Identity
             return user;
         }
 
-        public async Task SetRolesAsync([NotNull] IdentityUser user, [NotNull] IEnumerable<string> roleNames)
+        public async Task<IdentityResult> SetRolesAsync([NotNull] IdentityUser user, [NotNull] IEnumerable<string> roleNames)
         {
             Check.NotNull(user, nameof(user));
             Check.NotNull(roleNames, nameof(roleNames));
             
             var currentRoleNames = await GetRolesAsync(user);
 
-            await RemoveFromRolesAsync(user, currentRoleNames.Except(roleNames).Distinct());
-            await AddToRolesAsync(user, roleNames.Except(currentRoleNames).Distinct());
+            var result = await RemoveFromRolesAsync(user, currentRoleNames.Except(roleNames).Distinct());
+            if (!result.Succeeded)
+            {
+                return result;
+            }
+
+            result = await AddToRolesAsync(user, roleNames.Except(currentRoleNames).Distinct());
+            if (!result.Succeeded)
+            {
+                return result;
+            }
+
+            return IdentityResult.Success;
         }
     }
 }
