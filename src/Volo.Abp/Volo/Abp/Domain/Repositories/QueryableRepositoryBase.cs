@@ -5,7 +5,9 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Domain.Repositories
 {
@@ -23,6 +25,10 @@ namespace Volo.Abp.Domain.Repositories
         public virtual Expression Expression => GetQueryable().Expression;
 
         public virtual IQueryProvider Provider => GetQueryable().Provider;
+
+        public IDataFilter DataFilter { get; set; }
+
+        public ICurrentTenant CurrentTenant { get; set; }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
@@ -63,6 +69,22 @@ namespace Volo.Abp.Domain.Repositories
         public override long GetCount()
         {
             return GetQueryable().LongCount();
+        }
+
+        protected virtual IQueryable<TEntity> ApplyDataFilters(IQueryable<TEntity> query)
+        {
+            if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)))
+            {
+                query = query.WhereIf(DataFilter.IsEnabled<ISoftDelete>(), e => ((ISoftDelete)e).IsDeleted == false);
+            }
+
+            if (typeof(IMultiTenant).IsAssignableFrom(typeof(TEntity)))
+            {
+                var tenantId = CurrentTenant.Id;
+                query = query.WhereIf(DataFilter.IsEnabled<IMultiTenant>(), e => ((IMultiTenant)e).TenantId == tenantId);
+            }
+
+            return query;
         }
     }
 }

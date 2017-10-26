@@ -61,7 +61,7 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
 
         protected override IQueryable<TEntity> GetQueryable()
         {
-            return Collection.AsQueryable();
+            return ApplyDataFilters(Collection.AsQueryable());
         }
     }
 }
