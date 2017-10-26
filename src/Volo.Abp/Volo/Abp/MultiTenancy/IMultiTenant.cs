@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Volo.Abp.Domain.Entities
+namespace Volo.Abp.MultiTenancy
 {
     public interface IMultiTenant
     {

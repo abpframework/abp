@@ -12,10 +12,8 @@ namespace Volo.Abp.Identity
 {
     //Add Name and Surname properties?
 
-    public class IdentityUser : AggregateRoot, IHasConcurrencyStamp, IMultiTenant
+    public class IdentityUser : AggregateRoot, IHasConcurrencyStamp
     {
-        public Guid? TenantId { get; protected internal set; }
-
         /// <summary>
         /// Gets or sets the user name for this user.
         /// </summary>
