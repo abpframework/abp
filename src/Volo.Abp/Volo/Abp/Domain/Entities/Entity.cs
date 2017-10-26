@@ -5,13 +5,14 @@ using System.Reflection;
 namespace Volo.Abp.Domain.Entities
 {
     /// <summary>
-    /// A shortcut of <see cref="Entity{TPrimaryKey}"/> for default primary key type (<see cref="string"/>).
+    /// A shortcut of <see cref="Entity{TPrimaryKey}"/> for default primary key type (<see cref="Guid"/>).
     /// </summary>
     public abstract class Entity : Entity<Guid>, IEntity
     {
 
     }
 
+    /// <inheritdoc/>
     /// <summary>
     /// Basic implementation of IEntity interface.
     /// An entity can inherit this class of directly implement to IEntity interface.
@@ -19,15 +20,10 @@ namespace Volo.Abp.Domain.Entities
     /// <typeparam name="TPrimaryKey">Type of the primary key of the entity</typeparam>
     public abstract class Entity<TPrimaryKey> : IEntity<TPrimaryKey>
     {
-        /// <summary>
-        /// Unique identifier for this entity.
-        /// </summary>
+        /// <inheritdoc/>
         public virtual TPrimaryKey Id { get; set; }
 
-        /// <summary>
-        /// Checks if this entity is transient (it has not an Id).
-        /// </summary>
-        /// <returns>True, if this entity is transient</returns>
+        /// <inheritdoc/>
         public virtual bool IsTransient()
         {
             if (EqualityComparer<TPrimaryKey>.Default.Equals(Id, default(TPrimaryKey)))
@@ -87,7 +83,6 @@ namespace Volo.Abp.Domain.Entities
             return Id.GetHashCode();
         }
 
-        /// <inheritdoc/>
         public static bool operator ==(Entity<TPrimaryKey> left, Entity<TPrimaryKey> right)
         {
             if (Equals(left, null))
@@ -98,7 +93,6 @@ namespace Volo.Abp.Domain.Entities
             return left.Equals(right);
         }
 
-        /// <inheritdoc/>
         public static bool operator !=(Entity<TPrimaryKey> left, Entity<TPrimaryKey> right)
         {
             return !(left == right);

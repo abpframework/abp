@@ -2,12 +2,12 @@
 
 namespace Volo.Abp.Domain.Entities
 {
-    public class AggregateRoot : AggregateRoot<Guid>, IAggregateRoot
+    public abstract class AggregateRoot : AggregateRoot<Guid>, IAggregateRoot
     {
 
     }
 
-    public class AggregateRoot<TPrimaryKey> : Entity<TPrimaryKey>, IAggregateRoot<TPrimaryKey>
+    public abstract class AggregateRoot<TPrimaryKey> : Entity<TPrimaryKey>, IAggregateRoot<TPrimaryKey>
     {
 
     }
