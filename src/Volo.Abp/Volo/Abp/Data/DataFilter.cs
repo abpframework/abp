@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Data
@@ -59,11 +60,14 @@ namespace Volo.Abp.Data
             }
         }
 
-        private readonly AsyncLocal<DataFilterItem> _filter;
+        private readonly DataFilterOptions _options;
 
-        public DataFilter()
+        private readonly AsyncLocal<DataFilterState> _filter;
+
+        public DataFilter(IOptions<DataFilterOptions> options)
         {
-            _filter = new AsyncLocal<DataFilterItem>();
+            _options = options.Value;
+            _filter = new AsyncLocal<DataFilterState>();
         }
 
         public IDisposable Enable()
@@ -97,7 +101,7 @@ namespace Volo.Abp.Data
                 return;
             }
 
-            _filter.Value = new DataFilterItem { IsEnabled = true }; //TODO: Get from default setting!
+            _filter.Value = _options.DefaultStates.GetOrDefault(typeof(TFilter))?.Clone() ?? new DataFilterState(true);
         }
     }
 }
