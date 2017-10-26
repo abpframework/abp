@@ -3,7 +3,7 @@ using Volo.Abp.Http.ProxyScripting;
 
 namespace Volo.Abp.AspNetCore.Mvc.ProxyScripting
 {
-    //TODO: [DontWrapResult]
+    //TODO: abp area?
     //TODO: [DisableAuditing]
     public class AbpServiceProxiesController : AbpController
     {

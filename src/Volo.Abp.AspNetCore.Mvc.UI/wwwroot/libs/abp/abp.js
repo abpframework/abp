@@ -69,6 +69,44 @@
         abp.log.log(logObject, abp.log.levels.FATAL);
     };
 
+    /* LOCALIZATION ***********************************************/
+
+    abp.localization = abp.localization || {};
+
+    abp.localization.values = {};
+
+    abp.localization.localize = function (key, sourceName) {
+        sourceName = sourceName || abp.localization.defaultResourceName;
+
+        var source = abp.localization.values[sourceName];
+
+        if (!source) {
+            abp.log.warn('Could not find localization source: ' + sourceName);
+            return key;
+        }
+
+        var value = source[key];
+        if (value == undefined) {
+            return key;
+        }
+
+        var copiedArguments = Array.prototype.slice.call(arguments, 0);
+        copiedArguments.splice(1, 1);
+        copiedArguments[0] = value;
+
+        return abp.utils.formatString.apply(this, copiedArguments);
+    };
+
+    abp.localization.getResource = function (name) {
+        return function () {
+            var copiedArguments = Array.prototype.slice.call(arguments, 0);
+            copiedArguments.splice(1, 0, name);
+            return abp.localization.localize.apply(this, copiedArguments);
+        };
+    };
+
+    abp.localization.defaultResourceName = undefined;
+
     /* NOTIFICATION *********************************************/
     //Defines Notification API, not implements it
 
