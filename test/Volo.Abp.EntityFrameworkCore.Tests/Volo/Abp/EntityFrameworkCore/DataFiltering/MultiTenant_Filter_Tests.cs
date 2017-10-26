@@ -1,25 +1,29 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using Shouldly;
+using Volo.Abp.Data;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.TestApp;
 using Volo.Abp.TestApp.Domain;
 using Xunit;
 
-namespace Volo.Abp.EntityFrameworkCore.Repositories
+namespace Volo.Abp.EntityFrameworkCore.DataFiltering
 {
     public class MultiTenant_Filter_Tests : EntityFrameworkCoreTestBase
     {
         private ICurrentTenant _fakeCurrentTenant;
         private readonly IRepository<Person> _personRepository;
+        private readonly IDataFilter<IMultiTenant> _multiTenantFilter;
 
         public MultiTenant_Filter_Tests()
         {
             _personRepository = GetRequiredService<IRepository<Person>>();
+            _multiTenantFilter = GetRequiredService<IDataFilter<IMultiTenant>>();
         }
 
         protected override void AfterAddApplication(IServiceCollection services)
@@ -54,6 +58,23 @@ namespace Volo.Abp.EntityFrameworkCore.Repositories
 
             people = await _personRepository.GetListAsync();
             people.Count.ShouldBe(0);
+        }
+
+        [Fact]
+        public async Task Should_Get_All_People_When_MultiTenant_Filter_Is_Disabled()
+        {
+            List<Person> people;
+
+            using (_multiTenantFilter.Disable())
+            {
+                //Filter disabled manually
+                people = await _personRepository.GetListAsync();
+                people.Count.ShouldBe(3);
+            }
+
+            //Filter re-enabled automatically
+            people = await _personRepository.GetListAsync();
+            people.Count.ShouldBe(1);
         }
     }
 }

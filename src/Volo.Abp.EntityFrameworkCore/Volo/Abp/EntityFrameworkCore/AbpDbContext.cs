@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
@@ -21,12 +22,14 @@ namespace Volo.Abp.EntityFrameworkCore
     {
         public Guid? CurrentTenantId => CurrentTenant?.Id;
 
-        protected virtual bool IsMayHaveTenantFilterEnabled => true; //TODO: Change this when data filtering system is full implemented
-        protected virtual bool IsSoftDeleteFilterEnabled => true; //TODO: Change this when data filtering system is full implemented
+        protected virtual bool IsMayHaveTenantFilterEnabled => DataFilter.IsEnabled<IMultiTenant>();
+        protected virtual bool IsSoftDeleteFilterEnabled => DataFilter.IsEnabled<ISoftDelete>();
 
         public ICurrentTenant CurrentTenant { get; set; }
 
         public IGuidGenerator GuidGenerator { get; set; }
+
+        public IDataFilter DataFilter { get; set; }
 
         private static readonly MethodInfo ConfigureGlobalFiltersMethodInfo = typeof(AbpDbContext<TDbContext>).GetMethod(nameof(ConfigureGlobalFilters), BindingFlags.Instance | BindingFlags.NonPublic);
 
