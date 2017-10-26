@@ -22,6 +22,7 @@ namespace Volo.Abp.EntityFrameworkCore
         public Guid? CurrentTenantId => CurrentTenant?.Id;
 
         protected virtual bool IsMayHaveTenantFilterEnabled => true; //TODO: Change this when data filtering system is full implemented
+        protected virtual bool IsSoftDeleteFilterEnabled => true; //TODO: Change this when data filtering system is full implemented
 
         public ICurrentTenant CurrentTenant { get; set; }
 
@@ -115,7 +116,10 @@ namespace Volo.Abp.EntityFrameworkCore
                         CheckAndSetId(entry);
                         break;
                     case EntityState.Modified:
+                        HandleConcurrencyStamp(entry);
+                        break;
                     case EntityState.Deleted:
+                        CancelDeletionForSoftDelete(entry);
                         HandleConcurrencyStamp(entry);
                         break;
                 }
@@ -131,6 +135,18 @@ namespace Volo.Abp.EntityFrameworkCore
             }
 
             entity.ConcurrencyStamp = Guid.NewGuid().ToString();
+        }
+
+        protected virtual void CancelDeletionForSoftDelete(EntityEntry entry)
+        {
+            if (!(entry.Entity is ISoftDelete))
+            {
+                return;
+            }
+
+            entry.Reload();
+            entry.State = EntityState.Modified;
+            entry.Entity.As<ISoftDelete>().IsDeleted = true;
         }
 
         protected virtual void CheckAndSetId(EntityEntry entry)
@@ -178,6 +194,18 @@ namespace Volo.Abp.EntityFrameworkCore
             where TEntity : class
         {
             Expression<Func<TEntity, bool>> expression = null;
+
+            if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)))
+            {
+                /* This condition should normally be defined as below:
+                 * !IsSoftDeleteFilterEnabled || !((ISoftDelete) e).IsDeleted
+                 * But this causes a problem with EF Core (see https://github.com/aspnet/EntityFrameworkCore/issues/9502)
+                 * So, we made a workaround to make it working. It works same as above.
+                 */
+
+                Expression<Func<TEntity, bool>> softDeleteFilter = e => !((ISoftDelete)e).IsDeleted || ((ISoftDelete)e).IsDeleted != IsSoftDeleteFilterEnabled;
+                expression = expression == null ? softDeleteFilter : CombineExpressions(expression, softDeleteFilter);
+            }
 
             if (typeof(IMultiTenant).IsAssignableFrom(typeof(TEntity)))
             {

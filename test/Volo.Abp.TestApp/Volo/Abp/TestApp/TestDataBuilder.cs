@@ -30,6 +30,8 @@ namespace Volo.Abp.TestApp
 
             _personRepository.Insert(douglas);
 
+            _personRepository.Insert(new Person(Guid.NewGuid(), "John-Deleted", 33) { IsDeleted = true });
+
             var tenant1Person1 = new Person(Guid.NewGuid(), TenantId1 + "-Person1", 42, TenantId1);
             var tenant1Person2 = new Person(Guid.NewGuid(), TenantId1 + "-Person2", 43, TenantId1);
 

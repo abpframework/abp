@@ -5,7 +5,7 @@ using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.TestApp.Domain
 {
-    public class Person : AggregateRoot, IMultiTenant
+    public class Person : AggregateRoot, IMultiTenant, ISoftDelete
     {
         public virtual Guid? TenantId { get; set; }
 
@@ -14,6 +14,8 @@ namespace Volo.Abp.TestApp.Domain
         public virtual int Age { get; set; }
 
         public virtual Collection<Phone> Phones { get; set; }
+
+        public bool IsDeleted { get; set; }
 
         private Person()
         {
