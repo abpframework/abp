@@ -11,6 +11,7 @@
     "Roles": "Roller",
     "Close": "Kapat",
     "Save": "Kaydet",
-    "Password": "Şifre"
+    "Password": "Şifre",
+    "UserDeletionConfirmationMessage": "{0} kullanıcısı silinecektir. Onaylıyor musunuz?"
   }
 }

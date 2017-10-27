@@ -1,5 +1,6 @@
 ﻿$(function () {
     var _identityUserAppService = volo.abp.identity.identityUser;
+    var _localize = abp.localization.getResource('AbpIdentityWeb');
 
     var dataTable = $('#IdentityUsersTable').DataTable({
         order: [[1, "asc"]],
@@ -82,8 +83,9 @@
 
     $('#IdentityUsersTable').on('click', '.delete-user', function () {
         var id = $(this).data('id');
+        var userName = $(this).data('userName');
 
-        if (confirm('Are you sure you want to delete?')) {
+        if (confirm(_localize('UserDeletionConfirmationMessage', userName))) {
             _identityUserAppService.delete(id).done(function () {
                 dataTable.ajax.reload();
             });
@@ -160,9 +162,11 @@ $.fn.serializeFormToObject = function () {
         return;
     }
 
+    var currentLanguage = 'English'; //TODO: Get from current culture!
+
     $.extend(true, $.fn.dataTable.defaults, {
         language: {
-            url: '/modules/identity/libs/datatables/localizations/' + abp.localization.currentCulture.displayNameEnglish + '.json'
+            url: '/modules/identity/libs/datatables/localizations/' + currentLanguage + '.json'
         },
         lengthMenu: [5, 10, 25, 50, 100, 250, 500],
         pageLength: 10,

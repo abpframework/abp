@@ -66,7 +66,8 @@ namespace AbpDesk.Web.Mvc
             {
                 options.ScriptBundles.Add("GlobalScripts", new[]
                 {
-                    "/AbpServiceProxies/GetAll?_v=" + DateTime.Now.Ticks
+                    "/Abp/ApplicationConfigurationScript?_v=" + DateTime.Now.Ticks,
+                    "/Abp/ServiceProxyScript?_v=" + DateTime.Now.Ticks
                 });
             });
 

@@ -11,6 +11,7 @@
     "Roles": "Roles",
     "Close": "Close",
     "Save": "Save",
-    "Password": "Password"
+    "Password": "Password",
+    "UserDeletionConfirmationMessage":  "User '{0}' will be deleted. Do you confirm that?"
   }
 }

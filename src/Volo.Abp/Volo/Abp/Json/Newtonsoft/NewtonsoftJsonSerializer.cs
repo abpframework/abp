@@ -37,7 +37,7 @@ namespace Volo.Abp.Json.Newtonsoft
             
             if (camelCase)
             {
-                settings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                settings.ContractResolver = new CamelCaseExceptDictionaryKeysResolver();
             }
 
             if (indented)
@@ -46,6 +46,18 @@ namespace Volo.Abp.Json.Newtonsoft
             }
             
             return settings;
+        }
+
+        private class CamelCaseExceptDictionaryKeysResolver : CamelCasePropertyNamesContractResolver
+        {
+            protected override JsonDictionaryContract CreateDictionaryContract(Type objectType)
+            {
+                var contract = base.CreateDictionaryContract(objectType);
+
+                contract.DictionaryKeyResolver = propertyName => propertyName;
+
+                return contract;
+            }
         }
     }
 }
