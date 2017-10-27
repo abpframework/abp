@@ -29,10 +29,18 @@ namespace AbpDesk.Blogging
                 options.Sources.Add(
                     new EmbeddedFileSet(
                         "/Areas/",
-                        GetType().GetTypeInfo().Assembly,
+                        GetType().Assembly,
                         "Areas"
                         )
                     );
+
+                options.Sources.Add(
+                    new EmbeddedFileSet(
+                        "/",
+                        GetType().Assembly,
+                        "wwwroot" //TODO: This is not tested yet!
+                    )
+                );
             });
 
             services.AddAssemblyOf<AbpDeskMongoBlogModule>();

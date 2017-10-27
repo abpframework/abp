@@ -12,7 +12,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Areas\**\*.*" Exclude="bin\**;obj\**;**\*.xproj;packages\**;@(EmbeddedResource)" />
+    <EmbeddedResource Include="Areas\Blog\Controllers\PostsController.cs" />
+    <EmbeddedResource Include="Areas\Blog\Views\Posts\Index.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="wwwroot\modules\mongoblog\views\posts\index.scss" />
   </ItemGroup>
 
   <ItemGroup>

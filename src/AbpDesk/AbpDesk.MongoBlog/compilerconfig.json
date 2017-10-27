@@ -1,6 +1,6 @@
 ﻿[
   {
-    "outputFile": "Areas/Blog/Views/Posts/Index.css",
-    "inputFile": "Areas/Blog/Views/Posts/Index.scss"
+    "outputFile": "wwwroot/modules/mongoblog/views/posts/index.css",
+    "inputFile": "wwwroot/modules/mongoblog/views/posts/index.scss"
   }
 ]
