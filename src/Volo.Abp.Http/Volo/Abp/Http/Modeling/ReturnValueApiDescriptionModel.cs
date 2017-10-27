@@ -1,4 +1,5 @@
 ﻿using System;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.Http.Modeling
 {
@@ -9,14 +10,14 @@ namespace Volo.Abp.Http.Modeling
 
         private ReturnValueApiDescriptionModel()
         {
-            
+
         }
 
         public static ReturnValueApiDescriptionModel Create(Type type)
         {
             return new ReturnValueApiDescriptionModel
             {
-                TypeAsString = type.GetFullNameWithAssemblyName()
+                TypeAsString = AsyncHelper.UnwrapTask(type).GetFullNameWithAssemblyName()
             };
         }
     }

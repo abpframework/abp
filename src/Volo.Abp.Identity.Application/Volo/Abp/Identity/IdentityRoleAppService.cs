@@ -68,7 +68,12 @@ namespace Volo.Abp.Identity
 
         public async Task DeleteAsync(Guid id)
         {
-            var role = await _roleManager.GetByIdAsync(id);
+            var role = await _roleManager.FindByIdAsync(id.ToString());
+            if (role == null)
+            {
+                return;
+            }
+
             await _roleManager.DeleteAsync(role);
         }
     }

@@ -62,7 +62,12 @@ namespace Volo.Abp.Identity
 
         public async Task DeleteAsync(Guid id)
         {
-            var user = await _userManager.GetByIdAsync(id);
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            if (user == null)
+            {
+                return;
+            }
+
             CheckIdentityErrors(await _userManager.DeleteAsync(user));
         }
 

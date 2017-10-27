@@ -17,8 +17,36 @@ namespace Volo.Abp.Threading
         /// <param name="method">A method to check</param>
         public static bool IsAsync([NotNull] this MethodInfo method)
         {
-            return method.ReturnType == typeof(Task) ||
-                   (method.ReturnType.GetTypeInfo().IsGenericType && method.ReturnType.GetGenericTypeDefinition() == typeof(Task<>));
+            Check.NotNull(method, nameof(method));
+
+            return method.ReturnType.IsTaskOrTaskOfT();
+        }
+
+        public static bool IsTaskOrTaskOfT([NotNull] this Type type)
+        {
+            return type == typeof(Task) || type.GetTypeInfo().IsGenericType && type.GetGenericTypeDefinition() == typeof(Task<>);
+        }
+
+        /// <summary>
+        /// Returns void if given type is Task.
+        /// Return T, if given type is Task{T}.
+        /// Returns given type otherwise.
+        /// </summary>
+        public static Type UnwrapTask([NotNull] Type type)
+        {
+            Check.NotNull(type, nameof(type));
+
+            if (type == typeof(Task))
+            {
+                return typeof(void);
+            }
+
+            if (type.GetTypeInfo().IsGenericType && type.GetGenericTypeDefinition() == typeof(Task<>))
+            {
+                return type.GenericTypeArguments[0];
+            }
+
+            return type;
         }
 
         /// <summary>
