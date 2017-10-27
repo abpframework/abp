@@ -164,19 +164,20 @@ $.fn.serializeFormToObject = function () {
 
     var currentLanguage = 'English'; //TODO: Get from current culture!
 
-    $.extend(true, $.fn.dataTable.defaults, {
-        language: {
-            url: '/modules/identity/libs/datatables/localizations/' + currentLanguage + '.json'
-        },
-        lengthMenu: [5, 10, 25, 50, 100, 250, 500],
-        pageLength: 10,
-        paging: true,
-        serverSide: true,
-        processing: true,
-        responsive: true,
-        pagingType: "bootstrap_full_number",
-        dom: 'rt<"bottom"ilp><"clear">',
-        order: []
-    });
+    //TODO: This does not work!
+    //$.extend(true, $.fn.dataTable.defaults, {
+    //    language: {
+    //        url: '/modules/identity/libs/datatables/localizations/' + currentLanguage + '.json'
+    //    },
+    //    lengthMenu: [5, 10, 25, 50, 100, 250, 500],
+    //    pageLength: 10,
+    //    paging: true,
+    //    serverSide: true,
+    //    processing: true,
+    //    responsive: true,
+    //    pagingType: "bootstrap_full_number",
+    //    dom: 'rt<"bottom"ilp><"clear">',
+    //    order: []
+    //});
 
 })(jQuery);

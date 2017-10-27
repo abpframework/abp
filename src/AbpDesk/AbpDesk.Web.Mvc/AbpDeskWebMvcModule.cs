@@ -56,7 +56,7 @@ namespace AbpDesk.Web.Mvc
 
             //services.Configure<RemoteServiceOptions>(configuration); //Needed when we use Volo.Abp.Identity.HttpApi.Client
 
-            services.AddMvc();
+            services.AddMvc().AddViewLocalization(); //TODO: Move to AbpAspNetCoreMvcModule!
 
             services.AddAssemblyOf<AbpDeskWebMvcModule>();
 
