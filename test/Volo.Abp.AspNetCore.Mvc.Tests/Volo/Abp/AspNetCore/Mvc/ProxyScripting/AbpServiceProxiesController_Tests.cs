@@ -9,7 +9,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ProxyScripting
         [Fact]
         public async Task GetAll()
         {
-            var script = await GetResponseAsStringAsync("/AbpServiceProxies/GetAll");
+            var script = await GetResponseAsStringAsync("/Abp/ServiceProxyScript/");
             script.Length.ShouldBeGreaterThan(0);
         }
     }
