@@ -28,7 +28,7 @@ namespace Volo.Abp.VirtualFileSystem
         
         private static string NormalizeChars(string fileName)
         {
-            return fileName.Replace(".", "/").Replace("-", "_");
+            return fileName.Replace(".", "/");
         }
     }
 }

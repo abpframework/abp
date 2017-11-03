@@ -104,16 +104,10 @@ namespace Volo.Abp.VirtualFileSystem.Embedded
                 return resourceName;
             }
 
-            var folder = pathParts.Take(pathParts.Length - 2).Select(NormalizeFolderName).JoinAsString("/");
+            var folder = pathParts.Take(pathParts.Length - 2).JoinAsString("/");
             var fileName = pathParts[pathParts.Length - 2] + "." + pathParts[pathParts.Length - 1];
 
             return folder + "/" + fileName;
-        }
-
-        private static string NormalizeFolderName(string pathPart)
-        {
-            //TODO: Implement all rules of .NET
-            return pathPart.Replace('-', '_');
         }
 
         private static string CalculateFileName(string filePath)
