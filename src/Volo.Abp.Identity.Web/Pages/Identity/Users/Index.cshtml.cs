@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using Volo.Abp.AspNetCore.Mvc.RazorPages;
 
 namespace Volo.Abp.Identity.Web.Pages.Identity.Users
 {
-    public class IndexModel : PageModel
+    public class IndexModel : AbpPageModel
     {
         public void OnGet()
         {

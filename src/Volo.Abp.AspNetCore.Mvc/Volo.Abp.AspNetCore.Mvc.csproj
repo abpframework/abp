@@ -23,4 +23,8 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="2.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Volo\Abp\AspNetCore\Mvc\RazorPages\NewFolder\" />
+  </ItemGroup>
+
 </Project>

@@ -19,7 +19,6 @@ namespace AbpDesk.Web.Mvc.Pages.App.Tickets
 
         public async Task OnGetAsync(GetAllTicketsInput input)
         {
-            var uow = CurrentUnitOfWork;
             var result = await _ticketAppService.GetAll(input);
             Tickets = result.Items;
         }

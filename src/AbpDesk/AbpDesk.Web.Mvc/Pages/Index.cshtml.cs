@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using Volo.Abp.AspNetCore.Mvc.RazorPages;
 
 namespace AbpDesk.Web.Mvc.Pages
 {
-    public class IndexModel : PageModel
+    public class IndexModel : AbpPageModel
     {
         public void OnGet()
         {
