@@ -45,6 +45,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Uow
 
             var options = CreateOptions(context, unitOfWorkAttr);
 
+            //Trying to begin a reserved UOW by AbpUnitOfWorkMiddleware
             if (_unitOfWorkManager.TryBeginReserved(UnitOfWorkReservationName, options))
             {
                 var result = await next();
@@ -56,6 +57,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Uow
                 return;
             }
 
+            //Begin a new, independent unit of work
             using (var uow = _unitOfWorkManager.Begin(options))
             {
                 var result = await next();

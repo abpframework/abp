@@ -2,11 +2,11 @@
 using System.Threading.Tasks;
 using AbpDesk.Tickets;
 using AbpDesk.Tickets.Dtos;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+using Volo.Abp.AspNetCore.Mvc.RazorPages;
 
-namespace AbpDesk.Web.Mvc.Pages.Tickets
+namespace AbpDesk.Web.Mvc.Pages.App.Tickets
 {
-    public class IndexModel : PageModel
+    public class IndexModel : AbpPageModel
     {
         public IReadOnlyList<TicketDto> Tickets { get; set; }
         
@@ -19,6 +19,7 @@ namespace AbpDesk.Web.Mvc.Pages.Tickets
 
         public async Task OnGetAsync(GetAllTicketsInput input)
         {
+            var uow = CurrentUnitOfWork;
             var result = await _ticketAppService.GetAll(input);
             Tickets = result.Items;
         }
