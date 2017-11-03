@@ -20,7 +20,7 @@ namespace AbpDesk.Web.Mvc.Navigation
                 .AddItem(
                     new ApplicationMenuItem("TicketManagement", "Ticket Management")
                         .AddItem(
-                            new ApplicationMenuItem("TicketManagement.Tickets", "Tickets", url: "/Tickets")
+                            new ApplicationMenuItem("TicketManagement.Tickets", "Tickets", url: "/App/Tickets")
                         )
                 );
             
