@@ -33,14 +33,12 @@ namespace Volo.Abp.VirtualFileSystem.Embedded
 
         public string Name { get; }
 
-        public ManifestResourceInfo ManifestResourceInfo { get; }
-
         /// <summary>
         /// The time, in UTC.
         /// </summary>
         public DateTimeOffset LastModified { get; }
 
-        public bool IsDirectory { get; }
+        public bool IsDirectory => false;
 
         private readonly Assembly _assembly;
         private readonly string _resourcePath;
@@ -50,28 +48,19 @@ namespace Volo.Abp.VirtualFileSystem.Embedded
             string resourcePath,
             string physicalPath,
             string name,
-            DateTimeOffset lastModified,
-            bool isDirectory)
+            DateTimeOffset lastModified)
         {
             _assembly = assembly;
             _resourcePath = resourcePath;
 
             PhysicalPath = physicalPath;
             Name = name;
-
-            if (_resourcePath != null)
-            {
-                ManifestResourceInfo = _assembly.GetManifestResourceInfo(_resourcePath);
-            }
-
             LastModified = lastModified;
-            IsDirectory = isDirectory;
         }
 
         /// <inheritdoc />
         public Stream CreateReadStream()
         {
-
             var stream = _assembly.GetManifestResourceStream(_resourcePath);
 
             if (!_length.HasValue)

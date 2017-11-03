@@ -45,8 +45,7 @@ namespace Volo.Abp.VirtualFileSystem.Embedded
                     resourcePath,
                     fullPath,
                     CalculateFileName(fullPath),
-                    lastModificationTime,
-                    false
+                    lastModificationTime
                 );
             }
         }
@@ -58,13 +57,10 @@ namespace Volo.Abp.VirtualFileSystem.Embedded
                 return;
             }
 
-            files[directoryPath] = new EmbeddedResourceFileInfo( //TODO: Create a different simpler class!
-                Assembly,
-                null,
+            files[directoryPath] = new VirtualDirectoryFileInfo(
                 directoryPath,
                 CalculateFileName(directoryPath),
-                lastModificationTime,
-                true
+                lastModificationTime
             );
 
             if (directoryPath.Contains("/"))
