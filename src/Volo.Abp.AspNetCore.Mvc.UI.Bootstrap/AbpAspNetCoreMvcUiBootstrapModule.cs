@@ -2,8 +2,9 @@
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Bundling;
-using Volo.Abp.EmbeddedFiles;
 using Volo.Abp.Modularity;
+using Volo.Abp.VirtualFileSystem;
+using Volo.Abp.VirtualFileSystem.Embedded;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap
 {
@@ -14,9 +15,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap
         {
             services.AddAssemblyOf<AbpAspNetCoreMvcUiBootstrapModule>();
             
-            services.Configure<EmbeddedFileOptions>(options =>
+            services.Configure<VirtualFileSystemOptions>(options =>
             {
-                options.Sources.Add(
+                options.FileSets.Add(
                     new EmbeddedFileSet(
                         "/",
                         GetType().GetTypeInfo().Assembly,
@@ -24,7 +25,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap
                         )
                     );
 
-                options.Sources.Add(
+                options.FileSets.Add(
                     new EmbeddedFileSet(
                         "/Views/",
                         GetType().GetTypeInfo().Assembly,
@@ -47,7 +48,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap
                     "/libs/jquery/jquery-3.1.1.min.js",
                     "/libs/tether/js/tether.min.js",
                     "/libs/bootstrap/js/bootstrap.min.js",
-                    "/libs/abp/abp.jquery.js?_v" + DateTime.Now.Ticks //TODO: Move this to Volo.Abp.AspNetCore.Mvc.UI.. or to new jQuery package?
+                    "/libs/abp/abp-jquery.js?_v" + DateTime.Now.Ticks //TODO: Move this to Volo.Abp.AspNetCore.Mvc.UI.. or to new jQuery package?
                 });
             });
         }

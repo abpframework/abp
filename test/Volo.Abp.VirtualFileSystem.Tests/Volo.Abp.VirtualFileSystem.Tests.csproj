@@ -1,9 +1,9 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-    <AssemblyName>Volo.Abp.Tests</AssemblyName>
-    <PackageId>Volo.Abp.Tests</PackageId>
+    <AssemblyName>Volo.Abp.VirtualFileSystem.Tests</AssemblyName>
+    <PackageId>Volo.Abp.VirtualFileSystem.Tests</PackageId>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
@@ -12,27 +12,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Volo\Abp\Localization\Source\en.json" />
-    <None Remove="Volo\Abp\Localization\Source\tr.json" />
+    <EmbeddedResource Include="Volo\Abp\VirtualFileSystem\MyResources\js\jquery-3.1.1.min.js" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Volo\Abp\Localization\Source\en.json" />
-    <EmbeddedResource Include="Volo\Abp\Localization\Source\tr.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
     <ProjectReference Include="..\AbpTestBase\AbpTestBase.csproj" />
-    <ProjectReference Include="..\..\src\Volo.Abp\Volo.Abp.csproj" />
+    <ProjectReference Include="..\..\src\Volo.Abp.VirtualFileSystem\Volo.Abp.VirtualFileSystem.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
-  </ItemGroup>
-
+  
 </Project>

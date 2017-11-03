@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Volo.Abp.AspNetCore.EmbeddedFiles;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Modularity;
 using Microsoft.AspNetCore.Mvc;
@@ -17,6 +16,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.ViewComponents;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Volo.Abp.AspNetCore.Mvc.Conventions;
+using Volo.Abp.AspNetCore.Mvc.VirtualFileSystem;
 using Volo.Abp.Http;
 using Volo.Abp.Http.Modeling;
 
@@ -34,7 +34,7 @@ namespace Volo.Abp.AspNetCore.Mvc
                     new ConfigureOptions<RazorViewEngineOptions>(options =>
                         {
                             options.FileProviders.Add(
-                                new EmbeddedResourceViewFileProvider(
+                                new AspNetCoreVirtualViewFileProvider(
                                     services.GetSingletonInstance<IObjectAccessor<IServiceProvider>>()
                                 )
                             );

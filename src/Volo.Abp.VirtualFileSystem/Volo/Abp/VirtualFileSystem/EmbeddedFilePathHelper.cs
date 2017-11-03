@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Volo.Abp.EmbeddedFiles
+namespace Volo.Abp.VirtualFileSystem
 {
-    public static class EmbeddedFilePathHelper
+    internal static class VirtualFilePathHelper
     {
         public static string NormalizePath(string fullPath)
         {

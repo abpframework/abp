@@ -3,13 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using AbpDesk.EntityFrameworkCore;
 using AbpDesk.Web.Mvc.Navigation;
-using AbpDesk.Web.Mvc.Temp;
-using Autofac;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -40,7 +35,7 @@ namespace AbpDesk.Web.Mvc
         typeof(AbpAccountWebModule),
         typeof(AbpAutofacModule)
         )]
-    public class AbpDeskWebMvcModule : AbpModule
+    public class AbpDeskWebMvcModule : AbpModule //TODO: Rename to AbpDeskWebModule, change default namespace to AbpDesk.Web
     {
         public override void ConfigureServices(IServiceCollection services)
         {
@@ -59,8 +54,6 @@ namespace AbpDesk.Web.Mvc
             services.AddMvc().AddViewLocalization(); //TODO: Move to AbpAspNetCoreMvcModule!
 
             services.AddAssemblyOf<AbpDeskWebMvcModule>();
-
-            services.GetContainerBuilder().RegisterType<MyClassToTestAutofacCustomRegistration>();
 
             services.Configure<BundlingOptions>(options =>
             {
@@ -87,7 +80,7 @@ namespace AbpDesk.Web.Mvc
             }
 
             app.UseStaticFiles();
-            app.UseEmbeddedFiles();
+            app.UseVirtualFiles();
 
             app.UseAuthentication();
 

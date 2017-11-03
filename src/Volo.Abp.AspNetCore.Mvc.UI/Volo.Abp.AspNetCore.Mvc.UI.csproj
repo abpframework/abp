@@ -19,12 +19,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="wwwroot\libs\abp\abp.jquery.js" />
     <None Remove="wwwroot\libs\abp\abp.js" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="wwwroot\libs\abp\abp.jquery.js" />
+    <EmbeddedResource Include="wwwroot\libs\abp\abp-jquery.js" />
     <EmbeddedResource Include="wwwroot\libs\abp\abp.js" />
   </ItemGroup>
 

@@ -1,12 +1,12 @@
-﻿using System.Reflection;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
-using Volo.Abp.EmbeddedFiles;
 using Volo.Abp.Identity.Web.Areas.Identity.Localization.Resource;
 using Volo.Abp.Identity.Web.Navigation;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.Ui.Navigation;
+using Volo.Abp.VirtualFileSystem;
+using Volo.Abp.VirtualFileSystem.Embedded;
 
 namespace Volo.Abp.Identity.Web
 {
@@ -23,20 +23,28 @@ namespace Volo.Abp.Identity.Web
                 options.MenuContributors.Add(new AbpIdentityWebMainMenuContributor());
             });
 
-            services.Configure<EmbeddedFileOptions>(options =>
+            services.Configure<VirtualFileSystemOptions>(options =>
             {
-                options.Sources.Add(
+                options.FileSets.Add(
+                    new EmbeddedFileSet(
+                        "/Pages/",
+                        GetType().Assembly,
+                        "Volo.Abp.Identity.Web.Pages"
+                    )
+                );
+
+                options.FileSets.Add(
                     new EmbeddedFileSet(
                         "/Areas/",
-                        GetType().GetTypeInfo().Assembly,
+                        GetType().Assembly,
                         "Volo.Abp.Identity.Web.Areas"
                     )
                 );
 
-                options.Sources.Add(
+                options.FileSets.Add(
                     new EmbeddedFileSet(
                         "/",
-                        GetType().GetTypeInfo().Assembly,
+                        GetType().Assembly,
                         "Volo.Abp.Identity.Web.wwwroot"
                     )
                 );

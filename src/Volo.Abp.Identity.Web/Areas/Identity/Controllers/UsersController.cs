@@ -22,10 +22,10 @@ namespace Volo.Abp.Identity.Web.Areas.Identity.Controllers
             _identityRoleAppService = identityRoleAppService;
         }
 
-        public async Task<ActionResult> Index()
-        {
-            return View();
-        }
+        //public async Task<ActionResult> Index()
+        //{
+        //    return View();
+        //}
 
         public async Task<PartialViewResult> Create()
         {

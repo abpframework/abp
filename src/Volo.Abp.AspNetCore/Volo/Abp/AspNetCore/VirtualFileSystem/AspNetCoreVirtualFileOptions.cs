@@ -1,17 +1,17 @@
 ﻿using System.Collections.Generic;
 
-namespace Volo.Abp.AspNetCore.EmbeddedFiles
+namespace Volo.Abp.AspNetCore.VirtualFileSystem
 {
-    internal class AspNetCoreEmbeddedFileOptions
+    internal class AspNetCoreVirtualFileOptions //TODO: and use this!
     {
         public HashSet<string> IgnoredFileExtensions { get; }
 
-        public AspNetCoreEmbeddedFileOptions()
+        public AspNetCoreVirtualFileOptions()
         {
             IgnoredFileExtensions = new HashSet<string>
             {
-                "cshtml",
-                "config"
+                ".cshtml",
+                ".config"
             };
         }
     }

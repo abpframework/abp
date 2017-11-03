@@ -1,11 +1,11 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="..\..\common.props" />
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>Volo.Abp.AspNetCore</AssemblyName>
-    <PackageId>Volo.Abp.AspNetCore</PackageId>
+    <AssemblyName>Volo.Abp.VirtualFileSystem</AssemblyName>
+    <PackageId>Volo.Abp.VirtualFileSystem</PackageId>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
@@ -14,13 +14,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Volo.Abp.VirtualFileSystem\Volo.Abp.VirtualFileSystem.csproj" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Abstractions" Version="2.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Routing.Abstractions" Version="2.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.0.0" />
+    <ProjectReference Include="..\Volo.Abp\Volo.Abp.csproj" />
   </ItemGroup>
 
 </Project>

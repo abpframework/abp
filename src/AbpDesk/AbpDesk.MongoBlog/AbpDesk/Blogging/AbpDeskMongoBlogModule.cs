@@ -1,15 +1,15 @@
 ﻿using System.Linq;
-using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Domain.Repositories;
-using Volo.Abp.EmbeddedFiles;
 using Volo.Abp.Guids;
 using Volo.Abp.Modularity;
 using Volo.Abp.MongoDB;
 using Volo.Abp.Uow;
+using Volo.Abp.VirtualFileSystem;
+using Volo.Abp.VirtualFileSystem.Embedded;
 
 namespace AbpDesk.Blogging
 {
@@ -24,9 +24,9 @@ namespace AbpDesk.Blogging
                 options.WithDefaultRepositories();
             });
 
-            services.Configure<EmbeddedFileOptions>(options =>
+            services.Configure<VirtualFileSystemOptions>(options =>
             {
-                options.Sources.Add(
+                options.FileSets.Add(
                     new EmbeddedFileSet(
                         "/Areas/",
                         GetType().Assembly,
@@ -34,7 +34,7 @@ namespace AbpDesk.Blogging
                         )
                     );
 
-                options.Sources.Add(
+                options.FileSets.Add(
                     new EmbeddedFileSet(
                         "/",
                         GetType().Assembly,
