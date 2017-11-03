@@ -2,14 +2,13 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
-using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Uow;
 
 namespace Volo.Abp.AspNetCore.Mvc
 {
-    public abstract class AbpController : Controller, ITransientDependency
+    public abstract class AbpController : Controller
     {
         public IUnitOfWorkManager UnitOfWorkManager { get; set; }
 

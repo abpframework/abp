@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.ViewComponents;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Volo.Abp.AspNetCore.Mvc.Conventions;
+using Volo.Abp.AspNetCore.Mvc.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.VirtualFileSystem;
 using Volo.Abp.Http;
 using Volo.Abp.Http.Modeling;
@@ -26,6 +27,11 @@ namespace Volo.Abp.AspNetCore.Mvc
     [DependsOn(typeof(AbpAspNetCoreModule))]
     public class AbpAspNetCoreMvcModule : AbpModule
     {
+        public override void PreConfigureServices(IServiceCollection services)
+        {
+            services.AddConventionalRegistrar(new AbpAspNetCoreMvcConventionalRegistrar());
+        }
+
         public override void ConfigureServices(IServiceCollection services)
         {
             //Configure Razor

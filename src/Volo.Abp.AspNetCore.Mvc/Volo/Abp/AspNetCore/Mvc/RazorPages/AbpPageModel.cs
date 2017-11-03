@@ -2,14 +2,13 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
-using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Uow;
 
 namespace Volo.Abp.AspNetCore.Mvc.RazorPages
 {
-    public abstract class AbpPageModel : PageModel, ITransientDependency //TODO: Register PageModels by convention, instead of using ITransientDependency
+    public abstract class AbpPageModel : PageModel
     {
         public IUnitOfWorkManager UnitOfWorkManager { get; set; }
 
