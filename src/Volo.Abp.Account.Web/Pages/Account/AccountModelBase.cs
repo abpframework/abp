@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.AspNetCore.Mvc.RazorPages;
 using Volo.Abp.Ui;
 
-namespace Volo.Abp.Account.Web.Areas.Account.Controllers
+namespace Volo.Abp.Account.Web.Pages.Account
 {
-    public abstract class AccountControllerBase : AbpController
+    public abstract class AccountModelBase : AbpPageModel
     {
         protected RedirectResult RedirectSafely(string returnUrl, string returnUrlHash = null)
         {

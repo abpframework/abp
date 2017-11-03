@@ -1,6 +1,8 @@
-﻿<div class="row">
+﻿@page
+@model Volo.Abp.Account.Web.Pages.Account.LoginModel
+<div class="row">
     <div class="col-md-3">
-        <form asp-action="Index" method="post">
+        <form method="post">
             <div class="form-group">
                 <label for="UsernameOrEmailAddress">Username or email address</label>
                 <input type="text" class="form-control" id="UsernameOrEmailAddress" name="UsernameOrEmailAddress">
@@ -17,9 +19,9 @@
             </div>
             <button type="submit" class="btn btn-primary">Login</button>
         </form>
-
+        
         <div>
-            <a href="@Url.Action("Index", "Register", new { returnUrl = Context.Request.Query["returnUrl"], returnUrlHash = Context.Request.Query["returnUrlHash"] })">Register</a>
+            <a href="@Url.Page("./Register", new { returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash })">Register</a>
         </div>
     </div>
 </div>

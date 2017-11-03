@@ -29,6 +29,14 @@ namespace Volo.Abp.Account.Web
 
                 options.FileSets.Add(
                     new EmbeddedFileSet(
+                        "/Pages/",
+                        GetType().GetTypeInfo().Assembly,
+                        "Volo.Abp.Account.Web.Pages"
+                    )
+                );
+
+                options.FileSets.Add(
+                    new EmbeddedFileSet(
                         "/",
                         GetType().GetTypeInfo().Assembly,
                         "Volo.Abp.Account.Web.wwwroot"
