@@ -167,9 +167,9 @@ public class BlogModule : AbpModule
 }
 ````
 
-### Injection Dependencies
+### Injecting Dependencies
 
-There are 3 ways of injecting a service that is registered before.
+There are three common ways of using a service that is registered before.
 
 #### Contructor Injection
 
@@ -251,12 +251,12 @@ public class MyService : ITransientDependency
 
 #### Releasing/Disposing Services
 
-If you used constructor or property injection, you never need to release services. However, if you resolved service from ``IServiceProvider``, you may need to care about releasing services.
+If you used constructor or property injection, you never need to release services. However, if you resolved service from ``IServiceProvider``, you may need to care about releasing services in some cases.
 
-ASP.NET Core releases all services in the end of current HTTP request, even if you directly resolved from ``IServiceProvider`` (assuming you injected IServiceProvider itself). But, there are several cases where you may want to release/dispose manually resolved services:
+ASP.NET Core releases all services in the end of current HTTP request, even if you directly resolved from ``IServiceProvider`` (assuming you injected IServiceProvider). But, there are several cases where you may want to release/dispose manually resolved services:
 
-* Your code is executed outside of AspNet Core request and the executer hasn't handled the service scope
-* You may resolving services from the root service provider (while it's a bad practice).
+* Your code is executed outside of AspNet Core request and the executer hasn't handled the service scope.
+* You only have a reference to the root service provider.
 * You may want to immediately release & dispose services (for example, you may creating too many services with big memory usage and don't want to overuse memory).
 
 In any way, you can use such a code block to safely and immediately release services:
