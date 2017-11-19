@@ -1,0 +1,233 @@
+﻿## Dependency Injection
+
+ABP's Dependency Injection system is developed based on Microsoft's <a href="https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection" target="_blank">dependency injection extension</a> library (Microsoft.Extensions.DependencyInjection nuget package). So, it's documentation is valid in ABP too.
+
+### Modularity
+
+Since ABP is a modular framework, every module defines it's services and registers to dependency injection in a seperated place, in it's own <a href="Module-Development-Basics.md" target="_blank">module class</a>. Example:
+
+````C#
+public class BlogModule : AbpModule
+{
+    public override void ConfigureServices(IServiceCollection services)
+    {
+        //register dependencies here
+    }
+}
+````
+
+### Conventional Registration
+
+ABP introduces conventional service registration. To register all services of a module, you can simple call ``AddAssemblyOf`` extension method as shown below:
+
+````C#
+public class BlogModule : AbpModule
+{
+    public override void ConfigureServices(IServiceCollection services)
+    {
+        services.AddAssemblyOf<BlogModule>();
+    }
+}
+````
+
+``AddAssemblyOf`` extension method takes a type (generally the type of the module class) and registers all services in the same assembly with given type by convention. The section below explains conventions and configurations.
+
+#### Inheritly Registered Types
+
+Some specific types are registered to dependency injection by default. Examples:
+
+* Module classes implement ``IAbpModule`` interface are registered as singleton.
+* MVC controllers inherit ``Controller`` (or ``AbpController``) class are registered as transient.
+* MVC page models inherit ``PageModel`` (or ``AbpPageModel``) class are registered as transient.
+* MVC view components inherit ``ViewComponent`` (or ``AbpViewComponent``) class are registered as transient.
+* Application services implement ``IApplicationService`` interface (or inherit ``ApplicationService`` class) are registered as transient.
+* Repositories implement ``IRepository`` interface are registered as transient.
+* Domain services implement ``IDomainService`` interface are registered as transient.
+
+Example:
+
+````C#
+public class BlogPostAppService : ApplicationService
+{
+}
+````
+
+``BlogPostAppService`` is automatically registered with transient lifetime since it's derived from a known base class.
+
+#### Dependency Interfaces
+
+If you implement these interfaces, your class is registered to dependency injection automatically:
+
+* ``ITransient`` to register with transient lifetime.
+* ``ISingleton`` to register with singleton lifetime.
+* ``IScopedDependency`` to register with scoped lifetime.
+
+Example:
+
+````C#
+public class TaxCalculator : ITransientDependency
+{
+}
+````
+
+``TaxCalculator`` is automatically registered with transient lifetime since it implements ``ITransientDependency``.
+
+#### Dependency Attribute
+
+Another way of configuring a service for dependency injection is to use ``DependencyAttribute``. It has given properties:
+
+* ``Lifetime``: Lifetime of the registration: ``Singleton``, ``Transient`` or ``Scoped``.
+* ``TryRegister``: Set ``true`` to register the service only it's not registered before. Uses TryAdd... extension methods of IServiceCollection.
+* ``ReplaceServices``: Set ``true`` to replace services if they are already registered before. Uses Replace extension method of IServiceCollection.
+
+Example:
+
+````C#
+[Dependency(ServiceLifetime.Transient, ReplaceServices = true)]
+public class TaxCalculator
+{
+
+}
+
+````
+
+``Dependency`` attribute has higher priority then dependency interfaces if it defines the ``Lifetime`` property.
+
+#### ExposeServices Attribute 
+
+``ExposeServicesAttribute`` is used to control which services are provided by the related class. Example:
+
+````C#
+[ExposeServices(typeof(ITaxCalculator))]
+public class TaxCalculator: ICalculator, ITaxCalculator, ICanCalculate, ITransientDependency
+{
+
+}
+````
+
+``TaxCalculator`` class only exposes ``ITaxCalculator`` interface. That means you can only inject ``ITaxCalculator``, but can not inject ``TaxCalculator`` or ``ICalculator`` in your application.
+
+#### Exposed Services by Convention
+
+If you do not specify which services to expose, ABP expose services by convention. If you think the ``TaxCalculator`` defined above:
+
+* The class itself is exposed by default. That means you can inject it by ``TaxCalculator`` class.
+* Default interfaces are exposed by default. Default interfaces are determined by naming convention. In this example, ``ICalculator`` and ``ITaxCalculator`` are default interfaces of ``TaxCalculator``, but ``ICanCalculate`` is not.
+
+#### Combining All Together
+
+Combining attributes and interfaces is possible as long as it's meaningful.
+
+````C#
+[Dependency(ReplaceServices = true)]
+[ExposeServices(typeof(ITaxCalculator))]
+public class TaxCalculator : ITaxCalculator, ITransientDependency
+{
+
+}
+````
+
+#### Manually Registering
+
+In some cases, you may need to register a service to IServiceCollection manually, especially if you need to use custom factory methods or singleton instances. In that case, you can directly add services just as <a href="https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection" target="_blank">Microsoft documentation</a> describes. Example:
+
+````C#
+public class BlogModule : AbpModule
+{
+    public override void ConfigureServices(IServiceCollection services)
+    {
+        //Add services by convention
+        services.AddAssemblyOf<BlogModule>();
+
+        //Register an instance as singleton
+        services.AddSingleton<TaxCalculator>(new TaxCalculator(taxRatio: 0.18));
+
+        //Register a factory method that resolves from IServiceProvider
+        services.AddScoped<ITaxCalculator>(sp => sp.GetRequiredService<TaxCalculator>());
+    }
+}
+````
+
+Finally, you may want to add a single class or a few classes by ABP's conventions, but don't want to use ``AddAssemblyOf``. In that case, you can use ``AddType`` and ``AddTypes`` extension method which implements ABP's conventions for given type(s). Example:
+
+````C#
+public class BlogModule : AbpModule
+{
+    public override void ConfigureServices(IServiceCollection services)
+    {
+        //Add single type
+        services.AddType(typeof(TaxCalculator));
+
+        //Add multiple types in once call
+        services.AddTypes(typeof(TaxCalculator), typeof(MyOtherService));
+
+        //Add single type using generic shortcut
+        services.AddType<TaxCalculator>();
+    }
+}
+````
+
+### Injection Dependencies
+
+There are 3 ways of injecting a service that is registered before.
+
+#### Contructor Injection
+
+This is the most common way of injecting a service into a class. Example:
+
+````C#
+public class TaxAppService : ApplicationService
+{
+    private readonly ITaxCalculator _taxCalculator;
+
+    public TaxAppService(ITaxCalculator taxCalculator)
+    {
+        _taxCalculator = taxCalculator;
+    }
+
+    public void DoSomething()
+    {
+        //...use _taxCalculator...
+    }
+}
+````
+
+``TaxAppService`` gets ``ITaxCalculator`` in it's constructor. Dependency injection system automatically provides the requested service on the runtime.
+
+Constructor injection is preffered way of injecting dependencies to a class. In that way, the class can not be constructed unless all constructor-injected dependencies are provided. Thus, the class explicitly declares it's required services.
+
+#### Property Injection
+
+Property injection is not supported by Microsoft Dependency Injection library. However, ABP integates to 3rd-party DI providers (<a href="https://autofac.org/" target="_blank">Autofac</a>, for example) to make property injection possible. Example:
+
+````C#
+public class MyService : ITransientDependency
+{
+    public ILogger<MyService> Logger { get; set; }
+
+    public MyService()
+    {
+        Logger = NullLogger<MyService>.Instance;
+    }
+
+    public void DoSomething()
+    {
+        //...use Logger to write logs...
+    }
+}
+````
+
+For a property-injection dependency, you declare a public property with public setter. Thus, DI framework can set it after creating your class.
+
+Property injected dependencies are generally considered as **optional** dependencies. That means the service can properly work without them. ``Logger`` is such a dependency, ``MyService`` can continue to work without logging.
+
+To make the dependency properly optional, we generally set a default/fallback value to the dependency. In this sample, NullLogger is used as fallback. Thus, ``MyService`` can work but does not write logs if DI framework or you don't set Logger property after creating ``MyService``.
+
+One restriction of property injection is that you can not use the dependency in your constructor, since it's set after the object consturction.
+
+Property injection is also useful when you want to design a base class that has some common services injected by default. If you would use constructor injection, all derived classes should also inject depended services into their constructors which makes development harder. However, be carefully using property injection for non-optional services since it makes hard to see requirements of a class.
+
+#### Resolve Service from IServiceProvider
+
+TODO...
+
