@@ -32,7 +32,7 @@ public class BlogModule : AbpModule
 }
 ````
 
-You can register dependencies one by one as stated in Microsoft's documentation (TODO: link). ABP has also a **conventional dependency registration system** which allows you to register all services in your assembly automatically. ``ConfigureServices`` methods of most modules contain such an expression to register all services in given module:
+You can register dependencies one by one as stated in Microsoft's <a href="https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection" target="_blank">documentation</a>. ABP has also a **conventional dependency registration system** which allows you to register all services in your assembly automatically. ``ConfigureServices`` methods of most modules contain such an expression to register all services in given module:
 
 ````C#
 public class BlogModule : AbpModule
@@ -44,7 +44,7 @@ public class BlogModule : AbpModule
 }
 ````
 
-See Dependency Injection (TODO: link) documentation for more about the dependency injection system.
+See [Dependency Injection](Dependency-Injection.md) documentation for more about the dependency injection system.
 
 You can also configure other services and modules in this method. Example:
 

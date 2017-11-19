@@ -229,5 +229,44 @@ Property injection is also useful when you want to design a base class that has 
 
 #### Resolve Service from IServiceProvider
 
-TODO...
+You may want to resolve a service directly from ``IServiceProvider``. In that case, you can inject IServiceProvider into your class and use ``GetService`` method as shown below:
 
+````C#
+public class MyService : ITransientDependency
+{
+    private readonly IServiceProvider _serviceProvider;
+
+    public MyService(IServiceProvider serviceProvider)
+    {
+        _serviceProvider = serviceProvider;
+    }
+
+    public void DoSomething()
+    {
+        var taxCalculator = _serviceProvider.GetService<ITaxCalculator>();
+        //...
+    }
+}
+````
+
+#### Releasing/Disposing Services
+
+If you used constructor or property injection, you never need to release services. However, if you resolved service from ``IServiceProvider``, you may need to care about releasing services.
+
+ASP.NET Core releases all services in the end of current HTTP request, even if you directly resolved from ``IServiceProvider`` (assuming you injected IServiceProvider itself). But, there are several cases where you may want to release/dispose manually resolved services:
+
+* Your code is executed outside of AspNet Core request and the executer hasn't handled the service scope
+* You may resolving services from the root service provider (while it's a bad practice).
+* You may want to immediately release & dispose services (for example, you may creating too many services with big memory usage and don't want to overuse memory).
+
+In any way, you can use such a code block to safely and immediately release services:
+
+````C#
+using (var scope = _serviceProvider.CreateScope())
+{
+    var service1 = scope.ServiceProvider.GetService<IMyService1>();
+    var service2 = scope.ServiceProvider.GetService<IMyService2>();
+}
+````
+
+Both services are released when the created scope is disposed (at the end of the using block).
