@@ -18,8 +18,6 @@ public class BlogModule : AbpModule
 
 #### Configuring Dependency Injection & Other Modules
 
-You can override virtual methods of ``AbpModule`` to add your services to dependency injection system and configure other modules.
-
 ##### ConfigureServices Method
 
 ``ConfigureServices`` is the main method to add your services to dependency injection system and configure other modules. Example:
@@ -34,7 +32,7 @@ public class BlogModule : AbpModule
 }
 ````
 
-You can register dependencies one by one as stated in Microsoft's documentation (TODO: link). ABP has also a **conventional dependency registration system** which allows you to register all services in your assembly automatically. ``ConfigureServices`` of most modules contain such an expression to register all services in given module:
+You can register dependencies one by one as stated in Microsoft's documentation (TODO: link). ABP has also a **conventional dependency registration system** which allows you to register all services in your assembly automatically. ``ConfigureServices`` methods of most modules contain such an expression to register all services in given module:
 
 ````C#
 public class BlogModule : AbpModule
