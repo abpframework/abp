@@ -6,7 +6,7 @@
   *  <a href="Getting-Started-Console-Application.md" target="_blank">With Console Application</a>
   *  <a href="Getting-Started-AspNetCore-Application.md" target="_blank">With ASP.NET Core Web Application</a>
 * Fundamentals
-  * Dependency Injection
+  * <a href="Dependency-Injection.md" target="_blank">Dependency Injection</a>
 * Module Development
   * <a href="Module-Development-Basics.md" target="_blank">Basics</a>
   * Plug-In Modules
