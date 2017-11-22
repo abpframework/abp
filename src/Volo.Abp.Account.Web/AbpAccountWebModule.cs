@@ -1,10 +1,8 @@
-﻿using System.Reflection;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.Identity;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
-using Volo.Abp.VirtualFileSystem.Embedded;
 
 namespace Volo.Abp.Account.Web
 {
@@ -19,12 +17,7 @@ namespace Volo.Abp.Account.Web
 
             services.Configure<VirtualFileSystemOptions>(options =>
             {
-                options.FileSets.Add(
-                    new EmbeddedFileSet(
-                        GetType().Assembly,
-                        "Volo.Abp.Account.Web"
-                    )
-                );
+                options.FileSets.AddEmbedded<AbpAccountWebModule>("Volo.Abp.Account.Web");
             });
         }
     }

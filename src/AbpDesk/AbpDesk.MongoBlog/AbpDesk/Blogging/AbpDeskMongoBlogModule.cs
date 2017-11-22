@@ -9,7 +9,6 @@ using Volo.Abp.Modularity;
 using Volo.Abp.MongoDB;
 using Volo.Abp.Uow;
 using Volo.Abp.VirtualFileSystem;
-using Volo.Abp.VirtualFileSystem.Embedded;
 
 namespace AbpDesk.Blogging
 {
@@ -26,12 +25,7 @@ namespace AbpDesk.Blogging
 
             services.Configure<VirtualFileSystemOptions>(options =>
             {
-                options.FileSets.Add(
-                    new EmbeddedFileSet(
-                        GetType().Assembly,
-                        "" //TODO: This is not tested yet!
-                    )
-                );
+                options.FileSets.AddEmbedded<AbpDeskMongoBlogModule>(); //TODO: Test empty base namespace!
             });
 
             services.AddAssemblyOf<AbpDeskMongoBlogModule>();

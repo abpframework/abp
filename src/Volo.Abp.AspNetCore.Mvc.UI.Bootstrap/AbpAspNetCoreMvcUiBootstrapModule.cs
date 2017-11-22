@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Bundling;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
-using Volo.Abp.VirtualFileSystem.Embedded;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap
 {
@@ -17,12 +15,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap
             
             services.Configure<VirtualFileSystemOptions>(options =>
             {
-                options.FileSets.Add(
-                    new EmbeddedFileSet(
-                        GetType().Assembly,
-                        "Volo.Abp.AspNetCore.Mvc.UI.Bootstrap"
-                        )
-                    );
+                options.FileSets.AddEmbedded<AbpAspNetCoreMvcUiBootstrapModule>("Volo.Abp.AspNetCore.Mvc.UI.Bootstrap");
             });
 
             services.Configure<BundlingOptions>(options =>

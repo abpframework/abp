@@ -1,11 +1,9 @@
 ﻿using System.IO;
-using System.Reflection;
 using System.Text;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.Modularity;
 using Volo.Abp.TestBase;
-using Volo.Abp.VirtualFileSystem.Embedded;
 using Xunit;
 
 namespace Volo.Abp.VirtualFileSystem
@@ -42,12 +40,7 @@ namespace Volo.Abp.VirtualFileSystem
             {
                 services.Configure<VirtualFileSystemOptions>(options =>
                 {
-                    options.FileSets.Add(
-                        new EmbeddedFileSet(
-                            GetType().Assembly,
-                            "Volo.Abp.VirtualFileSystem.MyResources"
-                        )
-                    );
+                    options.FileSets.AddEmbedded<TestModule>("Volo.Abp.VirtualFileSystem.MyResources");
                 });
             }
         }

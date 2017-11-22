@@ -6,7 +6,6 @@ using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.Ui.Navigation;
 using Volo.Abp.VirtualFileSystem;
-using Volo.Abp.VirtualFileSystem.Embedded;
 
 namespace Volo.Abp.Identity.Web
 {
@@ -25,12 +24,7 @@ namespace Volo.Abp.Identity.Web
 
             services.Configure<VirtualFileSystemOptions>(options =>
             {
-                options.FileSets.Add(
-                    new EmbeddedFileSet(
-                        GetType().Assembly,
-                        "Volo.Abp.Identity.Web"
-                    )
-                );
+                options.FileSets.AddEmbedded<AbpIdentityWebModule>("Volo.Abp.Identity.Web");
             });
 
             services.Configure<AbpLocalizationOptions>(options =>

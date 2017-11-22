@@ -1,5 +1,5 @@
 ﻿using System;
-using System.IO;
+using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
@@ -11,8 +11,7 @@ namespace Volo.Abp.AspNetCore.VirtualFileSystem
 {
     public class AspNetCoreVirtualFileProvider : IFileProvider
     {
-        private readonly Lazy<IVirtualFileProvider> _virtualFileProvider;
-        private readonly Lazy<AspNetCoreVirtualFileOptions> _options;
+        private readonly Lazy<IFileProvider> _fileProvider;
         private readonly IObjectAccessor<IServiceProvider> _serviceProviderAccessor;
         private readonly string _contentPath;
 
@@ -26,13 +25,27 @@ namespace Volo.Abp.AspNetCore.VirtualFileSystem
         {
             _serviceProviderAccessor = serviceProviderAccessor;
 
-            _virtualFileProvider = new Lazy<IVirtualFileProvider>(
-                () => serviceProviderAccessor.Value.GetRequiredService<IVirtualFileProvider>(),
-                true
-            );
+            _fileProvider = new Lazy<IFileProvider>(
+                () =>
+                {
+                    var options = serviceProviderAccessor.Value.GetRequiredService<IOptions<VirtualFileSystemOptions>>().Value;
 
-            _options = new Lazy<AspNetCoreVirtualFileOptions>(
-                () => serviceProviderAccessor.Value.GetRequiredService<IOptions<AspNetCoreVirtualFileOptions>>().Value,
+                    IFileProvider fileProvider = serviceProviderAccessor.Value.GetRequiredService<IVirtualFileProvider>();
+
+                    if (options.FileSets.PhysicalPaths.Any())
+                    {
+                        var fileProviders = options.FileSets.PhysicalPaths
+                            .Select(p => new PhysicalFileProvider(p))
+                            .Cast<IFileProvider>()
+                            .ToList();
+
+                        fileProviders.Add(fileProvider);
+
+                        fileProvider = new CompositeFileProvider(fileProviders);
+                    }
+
+                    return fileProvider;
+                },
                 true
             );
         }
@@ -44,14 +57,12 @@ namespace Volo.Abp.AspNetCore.VirtualFileSystem
                 subpath = _contentPath + subpath;
             }
 
-            //TODO: Ignore files in _options.Value.IgnoredFileExtensions
-
             if (!IsInitialized())
             {
                 return new NotFoundFileInfo(subpath);
             }
 
-            return _virtualFileProvider.Value.GetFileInfo(subpath);
+            return _fileProvider.Value.GetFileInfo(subpath);
         }
 
         public IDirectoryContents GetDirectoryContents(string subpath)
@@ -61,14 +72,12 @@ namespace Volo.Abp.AspNetCore.VirtualFileSystem
                 subpath = _contentPath + subpath;
             }
 
-            //TODO: Ignore files in _options.Value.IgnoredFileExtensions
-
             if (!IsInitialized())
             {
                 return new NotFoundDirectoryContents();
             }
 
-            return _virtualFileProvider.Value.GetDirectoryContents(subpath);
+            return _fileProvider.Value.GetDirectoryContents(subpath);
         }
 
         public IChangeToken Watch(string filter)
@@ -78,7 +87,7 @@ namespace Volo.Abp.AspNetCore.VirtualFileSystem
                 return NullChangeToken.Singleton;
             }
 
-            return _virtualFileProvider.Value.Watch(filter);
+            return _fileProvider.Value.Watch(filter);
         }
 
         private bool IsInitialized()

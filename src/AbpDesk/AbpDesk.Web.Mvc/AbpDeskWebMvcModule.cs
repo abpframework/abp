@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using AbpDesk.EntityFrameworkCore;
 using AbpDesk.Web.Mvc.Navigation;
 using Microsoft.AspNetCore.Builder;
@@ -21,6 +22,7 @@ using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.Identity.Web;
 using Volo.Abp.Modularity;
 using Volo.Abp.Ui.Navigation;
+using Volo.Abp.VirtualFileSystem;
 
 namespace AbpDesk.Web.Mvc
 {
@@ -73,6 +75,20 @@ namespace AbpDesk.Web.Mvc
             {
                 options.ConventionalControllers.Create(typeof(AbpDeskApplicationModule).Assembly);
             });
+
+            var env = services.GetSingletonInstance<IHostingEnvironment>(); //TODO: Find a better way!
+
+
+            if (env.IsDevelopment())
+            {
+                services.Configure<VirtualFileSystemOptions>(options =>
+                {
+                    options.FileSets.ReplaceEmbeddedByPyhsical<AbpAspNetCoreMvcUiModule>(Path.Combine(env.ContentRootPath, "..\\..\\Volo.Abp.AspNetCore.Mvc.UI"));
+                    options.FileSets.ReplaceEmbeddedByPyhsical<AbpAspNetCoreMvcUiBootstrapModule>(Path.Combine(env.ContentRootPath, "..\\..\\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap"));
+                    options.FileSets.ReplaceEmbeddedByPyhsical<AbpAccountWebModule>(Path.Combine(env.ContentRootPath, "..\\..\\Volo.Abp.Account.Web"));
+                    options.FileSets.ReplaceEmbeddedByPyhsical<AbpIdentityWebModule>(Path.Combine(env.ContentRootPath, "..\\..\\Volo.Abp.Identity.Web"));
+                });
+            }
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
