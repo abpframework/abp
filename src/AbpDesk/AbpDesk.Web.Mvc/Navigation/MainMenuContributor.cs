@@ -22,6 +22,8 @@ namespace AbpDesk.Web.Mvc.Navigation
                         .AddItem(
                             new ApplicationMenuItem("TicketManagement.Tickets", "Tickets", url: "/App/Tickets")
                         )
+                ).AddItem(
+                    new ApplicationMenuItem("TodoList", "Todo List", url: "/App/Todo")
                 );
             
             //Disabled blog module. This should be inside the module!
