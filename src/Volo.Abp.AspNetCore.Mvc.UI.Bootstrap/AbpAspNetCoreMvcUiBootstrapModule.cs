@@ -19,7 +19,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap
             {
                 options.FileSets.Add(
                     new EmbeddedFileSet(
-                        "/",
                         GetType().Assembly,
                         "Volo.Abp.AspNetCore.Mvc.UI.Bootstrap"
                         )

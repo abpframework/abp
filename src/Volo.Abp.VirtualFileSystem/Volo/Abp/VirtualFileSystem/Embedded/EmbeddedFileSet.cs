@@ -3,23 +3,25 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using JetBrains.Annotations;
 using Microsoft.Extensions.FileProviders;
 
 namespace Volo.Abp.VirtualFileSystem.Embedded
 {
     public class EmbeddedFileSet : IVirtualFileSet
     {
-        public string RootPath { get; }
-
+        [NotNull]
         public Assembly Assembly { get; }
 
-        public string ResourceNamespace { get; }
+        [CanBeNull]
+        public string BaseNamespace { get; }
 
-        public EmbeddedFileSet(string rootPath, Assembly assembly, string resourceNamespace)
+        public EmbeddedFileSet([NotNull] Assembly assembly, string baseNamespace)
         {
-            RootPath = rootPath.EnsureEndsWith('/');
+            Check.NotNull(assembly, nameof(assembly));
+
             Assembly = assembly;
-            ResourceNamespace = resourceNamespace;
+            BaseNamespace = baseNamespace;
         }
 
         public void AddFiles(Dictionary<string, IFileInfo> files)
@@ -28,12 +30,12 @@ namespace Volo.Abp.VirtualFileSystem.Embedded
 
             foreach (var resourcePath in Assembly.GetManifestResourceNames())
             {
-                if (!resourcePath.StartsWith(ResourceNamespace))
+                if (!BaseNamespace.IsNullOrEmpty() && !resourcePath.StartsWith(BaseNamespace))
                 {
                     continue;
                 }
 
-                var fullPath = RootPath + ConvertToRelativePath(resourcePath);
+                var fullPath = ConvertToRelativePath(resourcePath).EnsureStartsWith('/');
 
                 if (fullPath.Contains("/"))
                 {
@@ -92,7 +94,10 @@ namespace Volo.Abp.VirtualFileSystem.Embedded
 
         private string ConvertToRelativePath(string resourceName)
         {
-            resourceName = resourceName.Substring(ResourceNamespace.Length + 1);
+            if (!BaseNamespace.IsNullOrEmpty())
+            {
+                resourceName = resourceName.Substring(BaseNamespace.Length + 1);
+            }
 
             var pathParts = resourceName.Split('.');
             if (pathParts.Length <= 2)

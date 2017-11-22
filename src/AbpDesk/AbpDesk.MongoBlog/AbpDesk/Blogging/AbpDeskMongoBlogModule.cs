@@ -28,7 +28,6 @@ namespace AbpDesk.Blogging
             {
                 options.FileSets.Add(
                     new EmbeddedFileSet(
-                        "/",
                         GetType().Assembly,
                         "" //TODO: This is not tested yet!
                     )

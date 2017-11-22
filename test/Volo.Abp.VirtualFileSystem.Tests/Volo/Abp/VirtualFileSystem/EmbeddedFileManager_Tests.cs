@@ -23,7 +23,7 @@ namespace Volo.Abp.VirtualFileSystem
         public void Should_Define_And_Get_Embedded_Resources()
         {
             //Act
-            var resource = _embeddedFileManager.GetFileInfo("/MyApp/MyResources/js/jquery-3.1.1.min.js");
+            var resource = _embeddedFileManager.GetFileInfo("/js/jquery-3.1.1.min.js");
 
             //Assert
             resource.ShouldNotBeNull();
@@ -44,7 +44,6 @@ namespace Volo.Abp.VirtualFileSystem
                 {
                     options.FileSets.Add(
                         new EmbeddedFileSet(
-                            "/MyApp/MyResources/",
                             GetType().Assembly,
                             "Volo.Abp.VirtualFileSystem.MyResources"
                         )

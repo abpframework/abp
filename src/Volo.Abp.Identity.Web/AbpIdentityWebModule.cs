@@ -27,7 +27,6 @@ namespace Volo.Abp.Identity.Web
             {
                 options.FileSets.Add(
                     new EmbeddedFileSet(
-                        "/",
                         GetType().Assembly,
                         "Volo.Abp.Identity.Web"
                     )
