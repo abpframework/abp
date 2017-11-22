@@ -12,7 +12,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Views\Shared\Components\AbpMenu\Default.cshtml" />
     <EmbeddedResource Include="Views\Shared\_AppLayout.cshtml" />
-    <EmbeddedResource Include="Views\Shared\_AppLayout.css" />
+    <EmbeddedResource Include="wwwroot\views\shared\_AppLayout.css" />
     <EmbeddedResource Include="Views\Shared\_ViewImports.cshtml" />
     <EmbeddedResource Include="wwwroot\libs\bootstrap\css\bootstrap.css" />
     <EmbeddedResource Include="wwwroot\libs\bootstrap\css\bootstrap.css.map" />

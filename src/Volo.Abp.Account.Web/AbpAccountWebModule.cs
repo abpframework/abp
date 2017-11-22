@@ -37,7 +37,7 @@ namespace Volo.Abp.Account.Web
 
                 options.FileSets.Add(
                     new EmbeddedFileSet(
-                        "/",
+                        "/wwwroot/",
                         GetType().GetTypeInfo().Assembly,
                         "Volo.Abp.Account.Web.wwwroot"
                     )

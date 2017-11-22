@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
@@ -13,11 +14,12 @@ namespace Volo.Abp.AspNetCore.VirtualFileSystem
         private readonly Lazy<IVirtualFileProvider> _virtualFileProvider;
         private readonly Lazy<AspNetCoreVirtualFileOptions> _options;
         private readonly IObjectAccessor<IServiceProvider> _serviceProviderAccessor;
+        private readonly string _contentPath;
 
-        public AspNetCoreVirtualFileProvider(IServiceProvider serviceProvider)
+        public AspNetCoreVirtualFileProvider(IServiceProvider serviceProvider, string contentPath = null)
             : this(new ObjectAccessor<IServiceProvider>(serviceProvider))
         {
-
+            _contentPath = contentPath;
         }
 
         public AspNetCoreVirtualFileProvider(IObjectAccessor<IServiceProvider> serviceProviderAccessor)
@@ -37,6 +39,11 @@ namespace Volo.Abp.AspNetCore.VirtualFileSystem
 
         public IFileInfo GetFileInfo(string subpath)
         {
+            if (_contentPath != null)
+            {
+                subpath = _contentPath + subpath;
+            }
+
             //TODO: Ignore files in _options.Value.IgnoredFileExtensions
 
             if (!IsInitialized())
@@ -49,6 +56,11 @@ namespace Volo.Abp.AspNetCore.VirtualFileSystem
 
         public IDirectoryContents GetDirectoryContents(string subpath)
         {
+            if (_contentPath != null)
+            {
+                subpath = _contentPath + subpath;
+            }
+
             //TODO: Ignore files in _options.Value.IgnoredFileExtensions
 
             if (!IsInitialized())

@@ -27,7 +27,7 @@ namespace Volo.Abp.AspNetCore.Mvc
 
                 options.FileSets.Add(
                     new EmbeddedFileSet(
-                        "/",
+                        "/wwwroot/",
                         GetType().GetTypeInfo().Assembly,
                         "Volo.Abp.AspNetCore.Mvc.wwwroot"
                     )

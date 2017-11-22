@@ -43,7 +43,7 @@ namespace Volo.Abp.Identity.Web
 
                 options.FileSets.Add(
                     new EmbeddedFileSet(
-                        "/",
+                        "/wwwroot/",
                         GetType().Assembly,
                         "Volo.Abp.Identity.Web.wwwroot"
                     )

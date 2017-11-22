@@ -36,7 +36,7 @@ namespace AbpDesk.Blogging
 
                 options.FileSets.Add(
                     new EmbeddedFileSet(
-                        "/",
+                        "/wwwroot/",
                         GetType().Assembly,
                         "wwwroot" //TODO: This is not tested yet!
                     )

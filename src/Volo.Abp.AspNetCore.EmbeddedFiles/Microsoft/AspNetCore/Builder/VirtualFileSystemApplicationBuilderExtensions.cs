@@ -10,7 +10,8 @@ namespace Microsoft.AspNetCore.Builder
                 new StaticFileOptions
                 {
                     FileProvider = new AspNetCoreVirtualFileProvider(
-                        app.ApplicationServices
+                        app.ApplicationServices,
+                        "/wwwroot"
                     )
                 }
             );
