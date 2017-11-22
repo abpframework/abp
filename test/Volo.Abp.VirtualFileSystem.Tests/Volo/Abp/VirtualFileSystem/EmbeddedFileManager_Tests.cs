@@ -45,7 +45,7 @@ namespace Volo.Abp.VirtualFileSystem
                     options.FileSets.Add(
                         new EmbeddedFileSet(
                             "/MyApp/MyResources/",
-                            GetType().GetTypeInfo().Assembly,
+                            GetType().Assembly,
                             "Volo.Abp.VirtualFileSystem.MyResources"
                         )
                     );

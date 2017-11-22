@@ -22,7 +22,7 @@ namespace Volo.Abp.Account.Web
                 options.FileSets.Add(
                     new EmbeddedFileSet(
                         "/",
-                        GetType().GetTypeInfo().Assembly,
+                        GetType().Assembly,
                         "Volo.Abp.Account.Web"
                     )
                 );
