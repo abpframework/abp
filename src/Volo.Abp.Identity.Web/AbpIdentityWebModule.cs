@@ -27,25 +27,9 @@ namespace Volo.Abp.Identity.Web
             {
                 options.FileSets.Add(
                     new EmbeddedFileSet(
-                        "/Pages/",
+                        "/",
                         GetType().Assembly,
-                        "Volo.Abp.Identity.Web.Pages"
-                    )
-                );
-
-                options.FileSets.Add(
-                    new EmbeddedFileSet(
-                        "/Areas/",
-                        GetType().Assembly,
-                        "Volo.Abp.Identity.Web.Areas"
-                    )
-                );
-
-                options.FileSets.Add(
-                    new EmbeddedFileSet(
-                        "/wwwroot/",
-                        GetType().Assembly,
-                        "Volo.Abp.Identity.Web.wwwroot"
+                        "Volo.Abp.Identity.Web"
                     )
                 );
             });

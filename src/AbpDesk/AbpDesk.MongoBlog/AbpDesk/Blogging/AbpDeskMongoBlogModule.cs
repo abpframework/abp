@@ -28,17 +28,9 @@ namespace AbpDesk.Blogging
             {
                 options.FileSets.Add(
                     new EmbeddedFileSet(
-                        "/Areas/",
+                        "/",
                         GetType().Assembly,
-                        "Areas"
-                        )
-                    );
-
-                options.FileSets.Add(
-                    new EmbeddedFileSet(
-                        "/wwwroot/",
-                        GetType().Assembly,
-                        "wwwroot" //TODO: This is not tested yet!
+                        "" //TODO: This is not tested yet!
                     )
                 );
             });

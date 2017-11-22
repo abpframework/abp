@@ -21,25 +21,9 @@ namespace Volo.Abp.Account.Web
             {
                 options.FileSets.Add(
                     new EmbeddedFileSet(
-                        "/Areas/",
+                        "/",
                         GetType().GetTypeInfo().Assembly,
-                        "Volo.Abp.Account.Web.Areas"
-                    )
-                );
-
-                options.FileSets.Add(
-                    new EmbeddedFileSet(
-                        "/Pages/",
-                        GetType().GetTypeInfo().Assembly,
-                        "Volo.Abp.Account.Web.Pages"
-                    )
-                );
-
-                options.FileSets.Add(
-                    new EmbeddedFileSet(
-                        "/wwwroot/",
-                        GetType().GetTypeInfo().Assembly,
-                        "Volo.Abp.Account.Web.wwwroot"
+                        "Volo.Abp.Account.Web"
                     )
                 );
             });

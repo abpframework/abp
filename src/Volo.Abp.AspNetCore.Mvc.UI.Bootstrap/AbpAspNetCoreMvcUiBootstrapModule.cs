@@ -19,17 +19,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap
             {
                 options.FileSets.Add(
                     new EmbeddedFileSet(
-                        "/wwwroot/",
+                        "/",
                         GetType().GetTypeInfo().Assembly,
-                        "Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.wwwroot"
-                        )
-                    );
-
-                options.FileSets.Add(
-                    new EmbeddedFileSet(
-                        "/Views/",
-                        GetType().GetTypeInfo().Assembly,
-                        "Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Views"
+                        "Volo.Abp.AspNetCore.Mvc.UI.Bootstrap"
                         )
                     );
             });

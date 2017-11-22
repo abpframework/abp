@@ -19,17 +19,9 @@ namespace Volo.Abp.AspNetCore.Mvc
             {
                 options.FileSets.Add(
                     new EmbeddedFileSet(
-                        "/Views/",
+                        "/",
                         GetType().GetTypeInfo().Assembly,
-                        "Volo.Abp.AspNetCore.Mvc.Views"
-                        )
-                    );
-
-                options.FileSets.Add(
-                    new EmbeddedFileSet(
-                        "/wwwroot/",
-                        GetType().GetTypeInfo().Assembly,
-                        "Volo.Abp.AspNetCore.Mvc.wwwroot"
+                        "Volo.Abp.AspNetCore.Mvc"
                     )
                 );
             });
