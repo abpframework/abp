@@ -10,7 +10,7 @@ namespace Volo.Abp.AspNetCore.VirtualFileSystem
 {
     public class AspNetCoreVirtualFileProvider : IFileProvider
     {
-        private readonly Lazy<IVirtualFileProvider> _embeddedResourceManager;
+        private readonly Lazy<IVirtualFileProvider> _virtualFileProvider;
         private readonly Lazy<AspNetCoreVirtualFileOptions> _options;
         private readonly IObjectAccessor<IServiceProvider> _serviceProviderAccessor;
 
@@ -24,7 +24,7 @@ namespace Volo.Abp.AspNetCore.VirtualFileSystem
         {
             _serviceProviderAccessor = serviceProviderAccessor;
 
-            _embeddedResourceManager = new Lazy<IVirtualFileProvider>(
+            _virtualFileProvider = new Lazy<IVirtualFileProvider>(
                 () => serviceProviderAccessor.Value.GetRequiredService<IVirtualFileProvider>(),
                 true
             );
@@ -44,7 +44,7 @@ namespace Volo.Abp.AspNetCore.VirtualFileSystem
                 return new NotFoundFileInfo(subpath);
             }
 
-            return _embeddedResourceManager.Value.GetFileInfo(subpath);
+            return _virtualFileProvider.Value.GetFileInfo(subpath);
         }
 
         public IDirectoryContents GetDirectoryContents(string subpath)
@@ -56,7 +56,7 @@ namespace Volo.Abp.AspNetCore.VirtualFileSystem
                 return new NotFoundDirectoryContents();
             }
 
-            return _embeddedResourceManager.Value.GetDirectoryContents(subpath);
+            return _virtualFileProvider.Value.GetDirectoryContents(subpath);
         }
 
         public IChangeToken Watch(string filter)
@@ -66,7 +66,7 @@ namespace Volo.Abp.AspNetCore.VirtualFileSystem
                 return NullChangeToken.Singleton;
             }
 
-            return _embeddedResourceManager.Value.Watch(filter);
+            return _virtualFileProvider.Value.Watch(filter);
         }
 
         private bool IsInitialized()
