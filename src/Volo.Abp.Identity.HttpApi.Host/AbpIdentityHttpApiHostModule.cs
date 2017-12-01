@@ -21,6 +21,17 @@ namespace Volo.Abp.Identity.HttpApi.Host
     [DependsOn(typeof(AbpIdentityHttpApiModule), typeof(AbpIdentityEntityFrameworkCoreModule), typeof(AbpAutofacModule))]
     public class AbpIdentityHttpApiHostModule : AbpModule
     {
+        public override void PreConfigureServices(IServiceCollection services)
+        {
+            services.PreConfigure<IMvcCoreBuilder>(builder =>
+            {
+                // add the versioned api explorer, which also adds IApiVersionDescriptionProvider service
+                // note: the specified format code will format the version as "'v'major[.minor][-status]"
+
+                builder.AddVersionedApiExplorer(o => o.GroupNameFormat = "'v'VVV");
+            });
+        }
+
         public override void ConfigureServices(IServiceCollection services)
         {
             var hostingEnvironment = services.GetSingletonInstance<IHostingEnvironment>(); //TOD: Move to BuildConfiguration method
@@ -35,15 +46,6 @@ namespace Volo.Abp.Identity.HttpApi.Host
                 {
                     context.DbContextOptions.UseSqlServer(context.ConnectionString);
                 });
-            });
-
-            // add the versioned api explorer, which also adds IApiVersionDescriptionProvider service
-            // note: the specified format code will format the version as "'v'major[.minor][-status]"
-            services.AddMvcCore().AddVersionedApiExplorer(o => o.GroupNameFormat = "'v'VVV");
-
-            services.AddMvc(options =>
-            {
-                
             });
 
             services.AddApiVersioning(o =>

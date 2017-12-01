@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Modularity;
 using Volo.Abp.AspNetCore.TestBase;
@@ -20,8 +19,6 @@ namespace Volo.Abp.AspNetCore.Mvc.Versioning
     {
         public override void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
-
             services.Configure<AbpAspNetCoreMvcOptions>(options =>
             {
                 //2.0 Version

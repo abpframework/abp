@@ -40,8 +40,6 @@ namespace BasicAspNetCoreApplication
     {
         public override void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
-
             services.AddAssemblyOf<AppModule>();
         }
 
@@ -63,7 +61,7 @@ namespace BasicAspNetCoreApplication
 
 ``AppModule`` is a good name for the startup module for an application.
 
-A module class can register services to Dependency Injection by overriding ``ConfigureServices`` method as shown here. ``AddAssemblyOf<...>`` is a special extension method of ABP that registers all services in an assembly by convention (TODO: link to DI document). While this is optional, a module generally registers some services.
+A module class can register services to Dependency Injection by overriding ``ConfigureServices`` method as shown here. ``AddAssemblyOf<...>`` is a special extension method of ABP that registers all services in an assembly by convention (see [dependency injection document](Dependency-Injection.md)). While this is optional, a module generally registers some services.
 
 ABP packages define module classes and a module can depend on another module. In the code above, our ``AppModule`` depends on ``AbpAspNetCoreMvcModule`` (defined by Volo.Abp.AspNetCore.Mvc package). It's common to add a ``DependsOn`` attribute after installing a new ABP nuget package.
 

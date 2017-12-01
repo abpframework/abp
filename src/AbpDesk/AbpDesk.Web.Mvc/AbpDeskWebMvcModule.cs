@@ -39,6 +39,19 @@ namespace AbpDesk.Web.Mvc
         )]
     public class AbpDeskWebMvcModule : AbpModule //TODO: Rename to AbpDeskWebModule, change default namespace to AbpDesk.Web
     {
+        public override void PreConfigureServices(IServiceCollection services)
+        {
+            services.PreConfigure<IMvcBuilder>(builder =>
+            {
+                builder
+                    .AddViewLocalization()
+                    .AddRazorPagesOptions(options =>
+                    {
+                        options.Conventions.AuthorizeFolder("/App");
+                    });
+            });
+        }
+
         public override void ConfigureServices(IServiceCollection services)
         {
             var hostingEnvironment = services.GetSingletonInstance<IHostingEnvironment>();
@@ -52,13 +65,6 @@ namespace AbpDesk.Web.Mvc
             });
 
             //services.Configure<RemoteServiceOptions>(configuration); //Needed when we use Volo.Abp.Identity.HttpApi.Client
-
-            services.AddMvc() //TODO: Move to AbpAspNetCoreMvcModule!
-                .AddViewLocalization()
-                .AddRazorPagesOptions(options =>
-                {
-                    options.Conventions.AuthorizeFolder("/App");
-                });
 
             services.AddAssemblyOf<AbpDeskWebMvcModule>();
 
@@ -77,7 +83,6 @@ namespace AbpDesk.Web.Mvc
             });
 
             var env = services.GetSingletonInstance<IHostingEnvironment>(); //TODO: Find a better way!
-
 
             if (env.IsDevelopment())
             {

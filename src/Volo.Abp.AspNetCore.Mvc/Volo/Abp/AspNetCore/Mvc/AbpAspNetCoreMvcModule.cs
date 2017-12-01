@@ -64,12 +64,13 @@ namespace Volo.Abp.AspNetCore.Mvc
                 });
             });
 
-            services.AddAssemblyOf<AbpAspNetCoreMvcModule>();
-        }
+            var mvcCoreBuilder = services.AddMvcCore();
+            services.GetPreConfigureActions<IMvcCoreBuilder>().Configure(mvcCoreBuilder);
 
-        public override void PostConfigureServices(IServiceCollection services)
-        {
-            //TODO: Consider to use services.AddMvc() and move this to ConfigureServices method! And also use .AddControllersAsServices and .AddViewComponentsAsServices...
+            var mvcBuilder = services.AddMvc().AddControllersAsServices();
+            services.GetPreConfigureActions<IMvcBuilder>().Configure(mvcBuilder);
+
+            //TODO: AddLocalization and AddViewLocalization by default..?
 
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.TryAddSingleton<IActionContextAccessor, ActionContextAccessor>();
@@ -90,6 +91,8 @@ namespace Volo.Abp.AspNetCore.Mvc
             {
                 mvcOptions.AddAbp(services);
             });
+
+            services.AddAssemblyOf<AbpAspNetCoreMvcModule>();
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
