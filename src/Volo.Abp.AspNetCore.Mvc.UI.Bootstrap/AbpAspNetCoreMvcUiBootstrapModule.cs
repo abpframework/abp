@@ -28,8 +28,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap
                 options.ScriptBundles.Add("GlobalScripts", new[]
                 {
                     "/libs/jquery/jquery-3.1.1.min.js",
-                    "/libs/tether/js/tether.min.js",
-                    "/libs/bootstrap/js/bootstrap.min.js",
+                    "/libs/bootstrap/js/bootstrap.bundle.min.js",
                     "/libs/vue/vue.js",
                     "/libs/abp/abp-jquery.js?_v" + DateTime.Now.Ticks
                 });
