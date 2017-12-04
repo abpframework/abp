@@ -26,4 +26,8 @@
     <ProjectReference Include="..\Volo.Abp.Identity.Application.Contracts\Volo.Abp.Identity.Application.Contracts.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\modules\identity\libs\" />
+  </ItemGroup>
+
 </Project>

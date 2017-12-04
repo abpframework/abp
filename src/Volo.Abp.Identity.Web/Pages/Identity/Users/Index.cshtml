@@ -5,13 +5,11 @@
 @inject IHtmlLocalizer<IdentityResource> L
 @section styles {
     <!-- TODO: Use minified on production, normal in development -->
-    <link rel="stylesheet" type="text/css" href="~/modules/identity/libs/datatables/datatables.css" />
     <link rel="stylesheet" type="text/css" href="~/modules/identity/views/users/index.css" />
 }
 
 @section scripts {
     <!-- TODO: Use minified on production, normal in development -->
-    <script type="text/javascript" src="~/modules/identity/libs/datatables/datatables.min.js"></script>
     <script type="text/javascript" src="~/modules/identity/views/users/index.js"></script>
 }
 
@@ -31,7 +29,7 @@
         </div>
     </div>
     <div class="card-body">
-        <table id="IdentityUsersTable" class="table table-striped table-bordered table-hover nowrap">
+        <table id="IdentityUsersTable" class="table table-striped nowrap">
             <thead>
             <tr>
                 <th>@L["Actions"]</th>

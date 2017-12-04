@@ -22,13 +22,17 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap
             {
                 options.StyleBundles.Add("GlobalStyles", new[]
                 {
-                    "/styles/mybstheme.css"
+                    "/libs/material/css/material.min.css",
+                    "/libs/datatables/datatables.css",
+                    "/styles/libs/datatables.css"
                 });
 
                 options.ScriptBundles.Add("GlobalScripts", new[]
                 {
                     "/libs/jquery/jquery-3.1.1.min.js",
                     "/libs/bootstrap/js/bootstrap.bundle.min.js",
+                    "/libs/material/js/material.min.js",
+                    "/libs/datatables/datatables.min.js",
                     "/libs/vue/vue.js",
                     "/libs/abp/abp-jquery.js?_v" + DateTime.Now.Ticks
                 });
