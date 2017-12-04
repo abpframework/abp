@@ -22,7 +22,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap
             {
                 options.StyleBundles.Add("GlobalStyles", new[]
                 {
-                    "/libs/bootstrap/css/bootstrap.min.css"
+                    "/styles/mybstheme.css"
                 });
 
                 options.ScriptBundles.Add("GlobalScripts", new[]

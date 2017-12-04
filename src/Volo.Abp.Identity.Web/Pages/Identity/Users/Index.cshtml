@@ -15,28 +15,34 @@
     <script type="text/javascript" src="~/modules/identity/views/users/index.js"></script>
 }
 
-<div class="row">
-    <div class="col-md-6">
-        <h2>@L["Users"]</h2>
+
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-md-6">
+                <h2>@L["Users"]</h2>
+            </div>
+            <div class="col-md-6 text-right">
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary create-user" data-toggle="modal">
+                    @L["CreateUser"]
+                </button>
+            </div>
+        </div>
     </div>
-    <div class="col-md-6 text-right">
-        <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary create-user" data-toggle="modal">
-            @L["CreateUser"]
-        </button>
+    <div class="card-body">
+        <table id="IdentityUsersTable" class="table table-striped table-bordered table-hover nowrap">
+            <thead>
+            <tr>
+                <th>@L["Actions"]</th>
+                <th>@L["UserName"]</th>
+                <th>@L["EmailAddress"]</th>
+                <th>@L["PhoneNumber"]</th>
+            </tr>
+            </thead>
+        </table>
     </div>
 </div>
-
-<table id="IdentityUsersTable" class="table table-striped table-bordered table-hover nowrap">
-    <thead>
-    <tr>
-        <th>@L["Actions"]</th>
-        <th>@L["UserName"]</th>
-        <th>@L["EmailAddress"]</th>
-        <th>@L["PhoneNumber"]</th>
-    </tr>
-    </thead>
-</table>
 
 <!-- Modal -->
 <div class="modal fade" id="createUpdateUserModal" tabindex="-1" role="dialog" aria-labelledby="userModalLabel" aria-hidden="true">
