@@ -23,7 +23,10 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Users
         public async Task OnGetAsync(Guid id)
         {
             EditingUser = await _identityUserAppService.GetAsync(id);
-            Roles = ObjectMapper.Map<List<IdentityRoleDto>, IdentityUserRoleDto[]>(await _identityRoleAppService.GetAllListAsync());
+            Roles = ObjectMapper.Map<List<IdentityRoleDto>, IdentityUserRoleDto[]>(
+                await _identityRoleAppService.GetAllListAsync()
+            );
+
             await SetAssignedRoles();
         }
 

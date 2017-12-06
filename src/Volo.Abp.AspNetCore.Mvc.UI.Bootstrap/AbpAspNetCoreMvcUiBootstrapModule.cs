@@ -22,6 +22,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap
             {
                 options.StyleBundles.Add("GlobalStyles", new[]
                 {
+                    "/libs/font-awesome/css/font-awesome.min.css",
                     "/libs/material/css/material.min.css",
                     "/libs/datatables/datatables.css",
                     "/styles/libs/datatables.css"
