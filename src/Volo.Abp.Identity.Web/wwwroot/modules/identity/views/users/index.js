@@ -1,44 +1,14 @@
 ﻿$(function () {
+    var _l = abp.localization.getResource('AbpIdentityWeb'); //TODO: AbpIdentityWeb to const
+
     var _identityUserAppService = volo.abp.identity.identityUser;
-    var _localize = abp.localization.getResource('AbpIdentityWeb');
 
-    var dataTable = $('#IdentityUsersTable').DataTable({
+    var _$wrapper = $('#IdentityUsersWrapper');
+    var _$table = _$wrapper.find('table');
+
+    var _dataTable = _$table.DataTable({
         order: [[1, "asc"]],
-        ajax: function (requestData, callback, settings) {
-            var inputFilter = {};
-
-            //set paging filters
-            if (settings.oInit.paging) {
-                inputFilter = $.extend(inputFilter, {
-                    maxResultCount: requestData.length,
-                    skipCount: requestData.start
-                });
-            }
-
-            //set sorting filter
-            if (requestData.order && requestData.order.length > 0) {
-                var orderingField = requestData.order[0];
-                if (requestData.columns[orderingField.column].data) {
-                    inputFilter.sorting = requestData.columns[orderingField.column].data + " " + orderingField.dir;
-                }
-            }
-
-            //set searching filter
-            if (requestData.search && requestData.search.value !== "") {
-                inputFilter.filter = requestData.search.value;
-            }
-
-            if (callback) {
-                _identityUserAppService.getList(inputFilter).done(function (result) {
-                    callback({
-                        recordsTotal: result.totalCount,
-                        recordsFiltered: result.totalCount,
-                        data: result.items
-                    });
-                });
-            }
-        },
-        //TODO: localize strings after imlementation of js localization
+        ajax: abp.libs.datatables.createAjax(_identityUserAppService.getList),
         columnDefs: [
             {
                 targets: 0,
@@ -73,30 +43,51 @@
         ]
     });
 
-    $('#IdentityUsersTable').on('click', '.update-user', function () {
+    //Update user command
+    _$table.on('click', '.update-user', function () {
         var id = $(this).data('id');
 
-        $('#createUpdateUserModal').modal('show')
+        $('#createUpdateUserModal')
+            .modal('show')
             .find('.modal-content')
             .load(abp.appPath + 'Identity/Users/Update', { id: id });
     });
 
-    $('#IdentityUsersTable').on('click', '.delete-user', function () {
+    //Delete user command
+    _$table.on('click', '.delete-user', function () {
         var id = $(this).data('id');
         var userName = $(this).data('userName');
 
-        if (confirm(_localize('UserDeletionConfirmationMessage', userName))) {
-            _identityUserAppService.delete(id).done(function () {
-                dataTable.ajax.reload();
-            });
+        if (confirm(_l('UserDeletionConfirmationMessage', userName))) {
+            _identityUserAppService
+                .delete(id)
+                .then(function() {
+                    _dataTable.ajax.reload();
+                });
         }
     });
 
-    $('.create-user').click(function () {
+    //Create user command
+    _$wrapper.find('.create-user-button').click(function () {
         $('#createUpdateUserModal').modal('show')
             .find('.modal-content')
             .load(abp.appPath + 'Identity/Users/Create');
     });
+
+    //TODO: btnCreateUserSave and btnUpdateUserSave clicks should be handled in the modals. We may consider to create a model manager as before
+
+    function findAssignedRoleNames() {
+        var assignedRoleNames = [];
+
+        $(document).find('.user-role-checkbox-list input[type=checkbox]')
+            .each(function () {
+                if ($(this).is(':checked')) {
+                    assignedRoleNames.push($(this).attr('name'));
+                }
+            });
+
+        return assignedRoleNames;
+    }
 
     $('#createUpdateUserModal').on('click', '#btnCreateUserSave', function () {
         var $createUserForm = $('#createUserForm');
@@ -105,7 +96,7 @@
 
         _identityUserAppService.create(user).done(function () {
             $('#createUpdateUserModal').modal('hide');
-            dataTable.ajax.reload();
+            _dataTable.ajax.reload();
         });
     });
 
@@ -116,68 +107,7 @@
 
         _identityUserAppService.update(user.Id, user).done(function () {
             $('#createUpdateUserModal').modal('hide');
-            dataTable.ajax.reload();
+            _dataTable.ajax.reload();
         });
     });
 });
-
-
-function findAssignedRoleNames() {
-    var assignedRoleNames = [];
-
-    $(document).find('.user-role-checkbox-list input[type=checkbox]')
-        .each(function () {
-            if ($(this).is(':checked')) {
-                assignedRoleNames.push($(this).attr('name'));
-            }
-        });
-
-    return assignedRoleNames;
-}
-
-//TODO: move to common script file
-$.fn.serializeFormToObject = function () {
-    //serialize to array
-    var data = $(this).serializeArray();
-
-    //add also disabled items
-    $(':disabled[name]', this)
-        .each(function () {
-            data.push({ name: this.name, value: $(this).val() });
-        });
-
-    //map to object
-    var obj = {};
-    data.map(function (x) { obj[x.name] = x.value; });
-
-    return obj;
-};
-
-//TODO: move to common script file and also abp.localization is undefined
-/************************************************************************
-* Overrides default settings for datatables                             *
-*************************************************************************/
-(function ($) {
-    if (!$.fn.dataTable) {
-        return;
-    }
-
-    var currentLanguage = 'English'; //TODO: Get from current culture!
-
-    //TODO: This does not work!
-    //$.extend(true, $.fn.dataTable.defaults, {
-    //    language: {
-    //        url: '/modules/identity/libs/datatables/localizations/' + currentLanguage + '.json'
-    //    },
-    //    lengthMenu: [5, 10, 25, 50, 100, 250, 500],
-    //    pageLength: 10,
-    //    paging: true,
-    //    serverSide: true,
-    //    processing: true,
-    //    responsive: true,
-    //    pagingType: "bootstrap_full_number",
-    //    dom: 'rt<"bottom"ilp><"clear">',
-    //    order: []
-    //});
-
-})(jQuery);

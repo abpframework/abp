@@ -10,11 +10,12 @@
 
 @section scripts {
     <!-- TODO: Use minified on production, normal in development -->
+    <script type="text/javascript" src="~/modules/identity/helpers/jquery.js"></script>
+    <script type="text/javascript" src="~/modules/identity/helpers/datatables_helper.js"></script>
     <script type="text/javascript" src="~/modules/identity/views/users/index.js"></script>
 }
 
-
-<div class="card">
+<div class="card" id="IdentityUsersWrapper">
     <div class="card-header">
         <div class="row">
             <div class="col-md-6">
@@ -22,21 +23,21 @@
             </div>
             <div class="col-md-6 text-right">
                 <!-- Button trigger modal -->
-                <button type="button" class="btn btn-primary create-user" data-toggle="modal">
+                <button type="button" class="btn btn-primary create-user-button" data-toggle="modal">
                     @L["CreateUser"]
                 </button>
             </div>
         </div>
     </div>
     <div class="card-body">
-        <table id="IdentityUsersTable" class="table table-striped nowrap">
+        <table class="table table-striped nowrap">
             <thead>
-            <tr>
-                <th>@L["Actions"]</th>
-                <th>@L["UserName"]</th>
-                <th>@L["EmailAddress"]</th>
-                <th>@L["PhoneNumber"]</th>
-            </tr>
+                <tr>
+                    <th>@L["Actions"]</th>
+                    <th>@L["UserName"]</th>
+                    <th>@L["EmailAddress"]</th>
+                    <th>@L["PhoneNumber"]</th>
+                </tr>
             </thead>
         </table>
     </div>

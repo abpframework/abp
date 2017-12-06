@@ -18,6 +18,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="wwwroot\modules\identity\helpers\datatables_helper.js" />
+    <None Remove="wwwroot\modules\identity\helpers\jquery.js" />
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Include="Pages\Identity\Users\Index.cshtml" />
   </ItemGroup>
 
