@@ -20,6 +20,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="Pages\Identity\Users\EditModal.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="wwwroot\modules\identity\helpers\datatables_helper.js" />
     <None Remove="wwwroot\modules\identity\helpers\jquery.js" />
   </ItemGroup>

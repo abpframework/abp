@@ -50,7 +50,7 @@
         $('#createUpdateUserModal')
             .modal('show')
             .find('.modal-content')
-            .load(abp.appPath + 'Identity/Users/Update', { id: id });
+            .load(abp.appPath + 'Identity/Users/EditModal?id=' + id);
     });
 
     //Delete user command
@@ -94,7 +94,7 @@
         var user = $createUserForm.serializeFormToObject();
         user.RoleNames = findAssignedRoleNames();
 
-        _identityUserAppService.create(user).done(function () {
+        _identityUserAppService.create(user).then(function () {
             $('#createUpdateUserModal').modal('hide');
             _dataTable.ajax.reload();
         });
@@ -105,7 +105,7 @@
         var user = $updateUserForm.serializeFormToObject();
         user.RoleNames = findAssignedRoleNames();
 
-        _identityUserAppService.update(user.Id, user).done(function () {
+        _identityUserAppService.update(user.Id, user).then(function () {
             $('#createUpdateUserModal').modal('hide');
             _dataTable.ajax.reload();
         });

@@ -1,7 +1,12 @@
-﻿@using Microsoft.Extensions.Localization
+﻿@page
+@using Microsoft.Extensions.Localization
 @using Volo.Abp.Identity.Web.Areas.Identity.Localization.Resource
-@model Volo.Abp.Identity.Web.Areas.Identity.Models.CreateOrUpdateUserViewModel
+@model Volo.Abp.Identity.Web.Pages.Identity.Users.EditModalModel
 @inject IStringLocalizer<IdentityResource> Localizer
+@{
+    Layout = null;
+}
+
 <div class="modal-header">
     <h5 class="modal-title" id="userModalLabel">@Localizer["UpdateUser"]</h5>
     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -25,19 +30,19 @@
 
             <div class="tab-pane active" id="userInformations" role="tabpanel">
 
-                <input type="hidden" name="Id" value="@Model.User.Id" />
+                <input type="hidden" name="Id" value="@Model.EditingUser.Id" />
 
                 <div class="form-group">
                     <label for="userName">@Localizer["UserName"]</label>
-                    <input type="text" class="form-control" id="userName" name="UserName" placeholder="User name" value="@Model.User.UserName">
+                    <input type="text" class="form-control" id="userName" name="UserName" placeholder="User name" value="@Model.EditingUser.UserName">
                 </div>
                 <div class="form-group">
                     <label for="email">@Localizer["EmailAddress"]</label>
-                    <input type="email" class="form-control" id="email" name="Email" placeholder="Enter email" value="@Model.User.Email">
+                    <input type="email" class="form-control" id="email" name="Email" placeholder="Enter email" value="@Model.EditingUser.Email">
                 </div>
                 <div class="form-group">
                     <label for="phoneNumber">@Localizer["PhoneNumber"]</label>
-                    <input type="tel" class="form-control" id="phoneNumber" name="PhoneNumber" placeholder="Phone number" value="@Model.User.PhoneNumber">
+                    <input type="tel" class="form-control" id="phoneNumber" name="PhoneNumber" placeholder="Phone number" value="@Model.EditingUser.PhoneNumber">
                 </div>
 
             </div>
