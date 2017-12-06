@@ -71,7 +71,7 @@
     _$wrapper.find('.create-user-button').click(function () {
         $('#createUpdateUserModal').modal('show')
             .find('.modal-content')
-            .load(abp.appPath + 'Identity/Users/Create');
+            .load(abp.appPath + 'Identity/Users/CreateModal');
     });
 
     //TODO: btnCreateUserSave and btnUpdateUserSave clicks should be handled in the modals. We may consider to create a model manager as before

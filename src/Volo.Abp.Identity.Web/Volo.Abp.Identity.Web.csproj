@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <Import Project="..\..\common.props" />
 
@@ -7,6 +7,7 @@
     <AssemblyName>Volo.Abp.Identity.Web</AssemblyName>
     <PackageId>Volo.Abp.Identity.Web</PackageId>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
+    <OutputType>Library</OutputType>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,15 +16,12 @@
     <EmbeddedResource Include="Areas\**\*.json" />
     <EmbeddedResource Include="Areas\**\*.css" />
     <EmbeddedResource Include="wwwroot\**\*.*" />
+    <EmbeddedResource Include="Pages\**\*.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
     <None Remove="wwwroot\modules\identity\helpers\datatables_helper.js" />
     <None Remove="wwwroot\modules\identity\helpers\jquery.js" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Pages\Identity\Users\Index.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
