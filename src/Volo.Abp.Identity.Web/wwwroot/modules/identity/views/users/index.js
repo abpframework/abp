@@ -3,6 +3,11 @@
 
     var _identityUserAppService = volo.abp.identity.identityUser;
 
+    var _editModal = new abp.ModalManager({
+        viewUrl: abp.appPath + 'Identity/Users/EditModal'//,
+        //scriptUrl: abp.appPath + 'view-resources/Areas/AppAreaName/Views/Users/_CreateOrEditModal.js'
+    });
+
     var _$wrapper = $('#IdentityUsersWrapper');
     var _$table = _$wrapper.find('table');
 
@@ -45,12 +50,9 @@
 
     //Update user command
     _$table.on('click', '.update-user', function () {
-        var id = $(this).data('id');
-
-        $('#createUpdateUserModal')
-            .modal('show')
-            .find('.modal-content')
-            .load(abp.appPath + 'Identity/Users/EditModal?id=' + id);
+        _editModal.open({
+            id: $(this).data('id')
+        });
     });
 
     //Delete user command
@@ -100,25 +102,7 @@
         });
     });
 
-    $('#createUpdateUserModal').on('click', '#btnUpdateUserSave', function () {
-        var $updateUserForm = $('#updateUserForm');
-
-        //TODO: Use ajaxform instead!
-
-        //$updateUserForm.ajaxForm(function () {
-        //    $('#createUpdateUserModal').modal('hide');
-        //    _dataTable.ajax.reload();
-        //});
-
-        //$updateUserForm.submit();
-
-        $.ajax({
-            url: $updateUserForm.attr('action'),
-            method: "POST",
-            data: $updateUserForm.serialize()
-        }).then(function () {
-            $('#createUpdateUserModal').modal('hide');
-            _dataTable.ajax.reload();
-        });
+    _editModal.onClose(function() { //TODO: Only refresh if saved!
+        _dataTable.ajax.reload();
     });
 });

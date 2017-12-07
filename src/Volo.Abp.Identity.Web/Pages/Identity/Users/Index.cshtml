@@ -4,14 +4,14 @@
 @using Volo.Abp.Identity.Web.Areas.Identity.Localization.Resource
 @inject IHtmlLocalizer<IdentityResource> L
 @section styles {
-    <!-- TODO: Use minified on production, normal in development -->
     <link rel="stylesheet" type="text/css" href="~/modules/identity/views/users/index.css" />
 }
 
 @section scripts {
-    <!-- TODO: Use minified on production, normal in development -->
     <script type="text/javascript" src="~/modules/identity/helpers/jquery.js"></script>
     <script type="text/javascript" src="~/modules/identity/helpers/datatables_helper.js"></script>
+    <script type="text/javascript" src="~/modules/identity/helpers/ResourceLoader.js"></script>
+    <script type="text/javascript" src="~/modules/identity/helpers/ModalManager.js"></script>
     <script type="text/javascript" src="~/modules/identity/views/users/index.js"></script>
 }
 
@@ -41,14 +41,5 @@
                 </tr>
             </thead>
         </table>
-    </div>
-</div>
-
-<!-- Modal -->
-<div class="modal fade" id="createUpdateUserModal" tabindex="-1" role="dialog" aria-labelledby="userModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-
-        </div>
     </div>
 </div>

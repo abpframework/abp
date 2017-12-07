@@ -22,6 +22,8 @@
   <ItemGroup>
     <Content Remove="Pages\Identity\Users\EditModal.cshtml" />
     <Content Remove="Pages\Identity\_ViewImports.cshtml" />
+    <Content Remove="wwwroot\modules\identity\helpers\ModalManager.js" />
+    <Content Remove="wwwroot\modules\identity\helpers\ResourceLoader.js" />
   </ItemGroup>
 
   <ItemGroup>
