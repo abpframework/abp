@@ -18,13 +18,13 @@
                 defaultContent: '',
                 render: function (list, type, record, meta) {
                     return '<div class="dropdown">' +
-                            '<button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
-                                'Actions' +
-                            '</button>' +
-                            '<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">' +
-                                '<a class="dropdown-item update-user" href="#" data-id="' + record.id + '">Edit</a>' +
-                                '<a class="dropdown-item delete-user" href="#" data-id="' + record.id + '">Delete</a>' +
-                            '</div>' +
+                        '<button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
+                        'Actions' +
+                        '</button>' +
+                        '<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">' +
+                        '<a class="dropdown-item update-user" href="#" data-id="' + record.id + '">Edit</a>' +
+                        '<a class="dropdown-item delete-user" href="#" data-id="' + record.id + '">Delete</a>' +
+                        '</div>' +
                         '</div>';
                 }
             },
@@ -61,7 +61,7 @@
         if (confirm(_l('UserDeletionConfirmationMessage', userName))) {
             _identityUserAppService
                 .delete(id)
-                .then(function() {
+                .then(function () {
                     _dataTable.ajax.reload();
                 });
         }
@@ -102,10 +102,21 @@
 
     $('#createUpdateUserModal').on('click', '#btnUpdateUserSave', function () {
         var $updateUserForm = $('#updateUserForm');
-        var user = $updateUserForm.serializeFormToObject();
-        user.RoleNames = findAssignedRoleNames();
 
-        _identityUserAppService.update(user.Id, user).then(function () {
+        //TODO: Use ajaxform instead!
+
+        //$updateUserForm.ajaxForm(function () {
+        //    $('#createUpdateUserModal').modal('hide');
+        //    _dataTable.ajax.reload();
+        //});
+
+        //$updateUserForm.submit();
+
+        $.ajax({
+            url: $updateUserForm.attr('action'),
+            method: "POST",
+            data: $updateUserForm.serialize()
+        }).then(function () {
             $('#createUpdateUserModal').modal('hide');
             _dataTable.ajax.reload();
         });

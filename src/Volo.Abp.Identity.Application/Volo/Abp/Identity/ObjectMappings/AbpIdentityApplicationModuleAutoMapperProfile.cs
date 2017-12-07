@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using AutoMapper;
+﻿using AutoMapper;
 
-namespace Volo.Abp.Identity
+namespace Volo.Abp.Identity.ObjectMappings
 {
     public class AbpIdentityApplicationModuleAutoMapperProfile : Profile
     {
@@ -9,7 +8,7 @@ namespace Volo.Abp.Identity
         {
             CreateMap<IdentityUser, IdentityUserDto>();
             CreateMap<IdentityRole, IdentityRoleDto>();
-            CreateMap<IdentityRoleDto, IdentityUserRoleDto>();
+            CreateMap<IdentityRoleDto, IdentityUserRoleDto>(); //TODO: This should be removed!
         }
     }
 }

@@ -10,6 +10,7 @@ namespace Volo.Abp.Identity
         public string UserName { get; set; }
 
         [MaxLength(IdentityUserConsts.MaxEmailLength)]
+        [EmailAddress]
         public string Email { get; set; }
 
         [MaxLength(IdentityUserConsts.MaxPhoneNumberLength)]
