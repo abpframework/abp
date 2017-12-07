@@ -49,14 +49,14 @@
     });
 
     //Update user command
-    _$table.on('click', '.update-user', function () {
+    _$table.on('click', '.update-user', function () { //TODO: To action list!
         _editModal.open({
             id: $(this).data('id')
         });
     });
 
     //Delete user command
-    _$table.on('click', '.delete-user', function () {
+    _$table.on('click', '.delete-user', function () { //TODO: To action list!
         var id = $(this).data('id');
         var userName = $(this).data('userName');
 

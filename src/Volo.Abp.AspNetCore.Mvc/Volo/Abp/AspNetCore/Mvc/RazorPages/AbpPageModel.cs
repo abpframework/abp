@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -22,5 +23,10 @@ namespace Volo.Abp.AspNetCore.Mvc.RazorPages
 
         protected ILogger Logger => _lazyLogger.Value;
         private Lazy<ILogger> _lazyLogger => new Lazy<ILogger>(() => LoggerFactory?.CreateLogger(GetType().FullName) ?? NullLogger.Instance, true);
+
+        protected virtual NoContentResult NoContent() //TODO: Is that true to return empty result like that?
+        {
+            return new NoContentResult();
+        }
     }
 }

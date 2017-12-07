@@ -28,23 +28,11 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Users
         public async Task OnGetAsync(Guid id)
         {
             UserInfo = ObjectMapper.Map<IdentityUserDto, UserInfoViewModel>(await _identityUserAppService.GetAsync(id));
-            
+
             Roles = ObjectMapper.Map<List<IdentityRoleDto>, AssignedRoleViewModel[]>(
                 await _identityRoleAppService.GetAllListAsync()
             );
 
-            await SetAssignedRoles();
-        }
-
-        public async Task OnPostAsync()
-        {
-            var input = ObjectMapper.Map<UserInfoViewModel, IdentityUserUpdateDto>(UserInfo);
-            input.RoleNames = Roles.Where(r => r.IsAssigned).Select(r => r.Name).ToArray();
-            await _identityUserAppService.UpdateAsync(UserInfo.Id, input);
-        }
-
-        private async Task SetAssignedRoles()
-        {
             var userRoleNames = (await _identityUserAppService.GetRolesAsync(UserInfo.Id)).Items.Select(r => r.Name).ToList();
             foreach (var role in Roles)
             {
@@ -53,6 +41,15 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Users
                     role.IsAssigned = true;
                 }
             }
+        }
+
+        public async Task<IActionResult> OnPostAsync()
+        {
+            var input = ObjectMapper.Map<UserInfoViewModel, IdentityUserUpdateDto>(UserInfo);
+            input.RoleNames = Roles.Where(r => r.IsAssigned).Select(r => r.Name).ToArray();
+            await _identityUserAppService.UpdateAsync(UserInfo.Id, input);
+
+            return NoContent();
         }
 
         public class UserInfoViewModel

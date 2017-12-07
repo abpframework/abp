@@ -1,5 +1,6 @@
 ﻿/**
  * TODO: Document & prepare typescript definitions
+ * TODO: Refactor & test more
  */
 var abp = abp || {};
 (function ($) {
@@ -7,46 +8,15 @@ var abp = abp || {};
     abp.modals = abp.modals || {};
 
     abp.ModalManager = (function () {
-
-        var _normalizeOptions = function (options) {
-            if (!options.modalId) {
-                options.modalId = 'Modal_' + (Math.floor((Math.random() * 1000000))) + new Date().getTime();
-            }
-        }
-
-        function _removeContainer(modalId) {
-            var _containerId = modalId + 'Container';
-            var _containerSelector = '#' + _containerId;
-
-            var $container = $(_containerSelector);
-            if ($container.length) {
-                $container.remove();
-            }
-        };
-
-        function _createContainer(modalId) {
-            _removeContainer(modalId);
-
-            var _containerId = modalId + 'Container';
-            return $('<div id="' + _containerId + '"></div>')
-                .append(
-                    '<div id="' + modalId + '" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">' +
-                    '  <div class="modal-dialog" role="document">' +
-                    '    <div class="modal-content"></div>' +
-                    '  </div>' +
-                    '</div>'
-                ).appendTo('body');
-        }
-
+        
         return function (options) {
 
-            _normalizeOptions(options);
-
             var _options = options;
+
+            var _$modalContainer = null;
             var _$modal = null;
             var _$form = null;
-            var _modalId = options.modalId;
-            var _modalSelector = '#' + _modalId;
+            var _modalId = 'Modal_' + (Math.floor((Math.random() * 1000000))) + new Date().getTime();
             var _modalObject = null;
 
             var _publicApi = null;
@@ -54,6 +24,16 @@ var abp = abp || {};
             var _getResultCallback = null;
 
             var _onCloseCallbacks = [];
+
+            function _removeContainer() {
+                _$modalContainer && _$modalContainer.remove();
+            };
+
+            function _createContainer() {
+                _removeContainer();
+                _$modalContainer = $('<div id="' + _modalId + 'Container' + '"></div>').appendTo('body');
+                return _$modalContainer;
+            }
 
             function _saveModal() {
                 if (_modalObject && _modalObject.save) {
@@ -64,7 +44,7 @@ var abp = abp || {};
             }
 
             function _initAndShowModal() {
-                _$modal = $(_modalSelector);
+                _$modal = _$modalContainer.find('.modal');
 
                 _$form = _$modal.find('form');
                 if (!_$form.length) {
@@ -123,11 +103,9 @@ var abp = abp || {};
                 _getResultCallback = getResultCallback;
 
                 _createContainer(_modalId)
-                    .find('.modal-content')
                     .load(options.viewUrl, $.param(_args), function (response, status, xhr) {
                         if (status == "error") {
-                            //abp.message.warn(abp.localization.abpWeb('InternalServerError'));
-                            //TODO: ERROR!
+                            //TODO: ERROR message!
                             return;
                         };
 

@@ -7,65 +7,73 @@
     Layout = null;
 }
 
-@* TODO: partial *@
-<div class="modal-header">
-    <h5 class="modal-title" id="userModalLabel">@Localizer["UpdateUser"]</h5>
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-    </button>
-</div>
+@* TODO: tag helpers for modal and tabs *@
 
-<div class="modal-body">
-    <form id="updateUserForm" method="post" asp-page="/Identity/Users/EditModal">
-        @* TODO: Remove id when model manager implemented *@
-        <!-- Nav tabs -->
-        <ul class="nav nav-tabs" role="tablist">
-            <li class="nav-item">
-                <a class="nav-link active" data-toggle="tab" href="#userInformations" role="tab">@Localizer["UserInformations"]</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" data-toggle="tab" href="#roles" role="tab">@Localizer["Roles"]</a>
-            </li>
-        </ul>
-
-        <!-- Tab panes -->
-        <div class="tab-content pt-3">
-
-            <div class="tab-pane active" id="userInformations" role="tabpanel">
-
-                <input asp-for="UserInfo.Id" />
-
-                <div class="form-group">
-                    <label asp-for="UserInfo.UserName"></label>
-                    <input asp-for="UserInfo.UserName" class="form-control" />
-                </div>
-                <div class="form-group">
-                    <label asp-for="UserInfo.Email"></label>
-                    <input asp-for="UserInfo.Email" class="form-control" />
-                </div>
-                <div class="form-group">
-                    <label asp-for="UserInfo.PhoneNumber"></label>
-                    <input asp-for="UserInfo.PhoneNumber" class="form-control" />
-                </div>
-
+<div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            
+            <div class="modal-header">
+                <h5 class="modal-title" id="userModalLabel">@Localizer["UpdateUser"]</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
-            <div class="tab-pane" id="roles" role="tabpanel">
-                <div class="user-role-checkbox-list">
-                    @for (var i = 0; i < Model.Roles.Length; i++)
-                    {
-                        <div class="form-check">
-                            <input asp-for="@Model.Roles[i].IsAssigned" class="form-check-input" />
-                            <label asp-for="@Model.Roles[i].IsAssigned">@Model.Roles[i].Name</label>
-                            <input asp-for="@Model.Roles[i].Name" />
+
+            <div class="modal-body">
+                <form id="updateUserForm" method="post" asp-page="/Identity/Users/EditModal">
+                    @* TODO: Remove id when model manager implemented *@
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab" href="#EditUser_UserInfoTab" role="tab">@Localizer["UserInformations"]</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#EditUser_RolesTab" role="tab">@Localizer["Roles"]</a>
+                        </li>
+                    </ul>
+
+                    <!-- Tab panes -->
+                    <div class="tab-content pt-3">
+
+                        <div class="tab-pane active" id="EditUser_UserInfoTab" role="tabpanel">
+
+                            <input asp-for="UserInfo.Id"/>
+
+                            <div class="form-group">
+                                <label asp-for="UserInfo.UserName"></label>
+                                <input asp-for="UserInfo.UserName" class="form-control"/>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="UserInfo.Email"></label>
+                                <input asp-for="UserInfo.Email" class="form-control"/>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="UserInfo.PhoneNumber"></label>
+                                <input asp-for="UserInfo.PhoneNumber" class="form-control"/>
+                            </div>
+
                         </div>
-                    }
-                </div>
+                        <div class="tab-pane" id="EditUser_RolesTab" role="tabpanel">
+                            @for (var i = 0; i < Model.Roles.Length; i++)
+                            {
+                                <div class="form-check">
+                                    <input asp-for="@Model.Roles[i].IsAssigned" class="form-check-input"/>
+                                    <label asp-for="@Model.Roles[i].IsAssigned">@Model.Roles[i].Name</label>
+                                    <input asp-for="@Model.Roles[i].Name"/>
+                                </div>
+                            }
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">@Localizer["Close"]</button>
+                <button type="submit" class="btn btn-primary" id="btnUpdateUserSave">@Localizer["Save"]</button>
             </div>
 
         </div>
-    </form>
-</div>
-<div class="modal-footer">
-    <button type="button" class="btn btn-secondary" data-dismiss="modal">@Localizer["Close"]</button>
-    <button type="submit" class="btn btn-primary" id="btnUpdateUserSave">@Localizer["Save"]</button>
+    </div>
 </div>
