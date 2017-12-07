@@ -7,73 +7,63 @@
     Layout = null;
 }
 
-@* TODO: tag helpers for modal and tabs *@
+@* TODO: tag helpers tabs *@
 
-<div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            
-            <div class="modal-header">
-                <h5 class="modal-title" id="userModalLabel">@Localizer["UpdateUser"]</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
+<abp-modal>
 
-            <div class="modal-body">
-                <form id="updateUserForm" method="post" asp-page="/Identity/Users/EditModal">
-                    @* TODO: Remove id when model manager implemented *@
-                    <!-- Nav tabs -->
-                    <ul class="nav nav-tabs" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active" data-toggle="tab" href="#EditUser_UserInfoTab" role="tab">@Localizer["UserInformations"]</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#EditUser_RolesTab" role="tab">@Localizer["Roles"]</a>
-                        </li>
-                    </ul>
+    <abp-modal-header></abp-modal-header>
 
-                    <!-- Tab panes -->
-                    <div class="tab-content pt-3">
+    <abp-modal-body>
+        
+        <form id="updateUserForm" method="post" asp-page="/Identity/Users/EditModal">
+            @* TODO: Remove id when model manager implemented *@
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" href="#EditUser_UserInfoTab" role="tab">@Localizer["UserInformations"]</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#EditUser_RolesTab" role="tab">@Localizer["Roles"]</a>
+                </li>
+            </ul>
 
-                        <div class="tab-pane active" id="EditUser_UserInfoTab" role="tabpanel">
+            <!-- Tab panes -->
+            <div class="tab-content pt-3">
 
-                            <input asp-for="UserInfo.Id"/>
+                <div class="tab-pane active" id="EditUser_UserInfoTab" role="tabpanel">
 
-                            <div class="form-group">
-                                <label asp-for="UserInfo.UserName"></label>
-                                <input asp-for="UserInfo.UserName" class="form-control"/>
-                            </div>
-                            <div class="form-group">
-                                <label asp-for="UserInfo.Email"></label>
-                                <input asp-for="UserInfo.Email" class="form-control"/>
-                            </div>
-                            <div class="form-group">
-                                <label asp-for="UserInfo.PhoneNumber"></label>
-                                <input asp-for="UserInfo.PhoneNumber" class="form-control"/>
-                            </div>
+                    <input asp-for="UserInfo.Id"/>
 
-                        </div>
-                        <div class="tab-pane" id="EditUser_RolesTab" role="tabpanel">
-                            @for (var i = 0; i < Model.Roles.Length; i++)
-                            {
-                                <div class="form-check">
-                                    <input asp-for="@Model.Roles[i].IsAssigned" class="form-check-input"/>
-                                    <label asp-for="@Model.Roles[i].IsAssigned">@Model.Roles[i].Name</label>
-                                    <input asp-for="@Model.Roles[i].Name"/>
-                                </div>
-                            }
-                        </div>
-
+                    <div class="form-group">
+                        <label asp-for="UserInfo.UserName"></label>
+                        <input asp-for="UserInfo.UserName" class="form-control"/>
                     </div>
-                </form>
-            </div>
+                    <div class="form-group">
+                        <label asp-for="UserInfo.Email"></label>
+                        <input asp-for="UserInfo.Email" class="form-control"/>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="UserInfo.PhoneNumber"></label>
+                        <input asp-for="UserInfo.PhoneNumber" class="form-control"/>
+                    </div>
 
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">@Localizer["Close"]</button>
-                <button type="submit" class="btn btn-primary" id="btnUpdateUserSave">@Localizer["Save"]</button>
-            </div>
+                </div>
+                <div class="tab-pane" id="EditUser_RolesTab" role="tabpanel">
+                    @for (var i = 0; i < Model.Roles.Length; i++)
+                    {
+                        <div class="form-check">
+                            <input asp-for="@Model.Roles[i].IsAssigned" class="form-check-input"/>
+                            <label asp-for="@Model.Roles[i].IsAssigned">@Model.Roles[i].Name</label>
+                            <input asp-for="@Model.Roles[i].Name"/>
+                        </div>
+                    }
+                </div>
 
-        </div>
-    </div>
-</div>
+            </div>
+        </form>
+
+    </abp-modal-body>
+    
+    <abp-modal-footer></abp-modal-footer>
+
+</abp-modal>
