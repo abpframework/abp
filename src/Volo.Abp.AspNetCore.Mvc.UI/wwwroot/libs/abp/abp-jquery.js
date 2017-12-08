@@ -24,7 +24,7 @@
                     userOptions.success && userOptions.success(data);
                 }).fail(function (jqXHR) {
                     if (jqXHR.getResponseHeader('_AbpErrorFormat') === 'true') {
-                        abp.ajax.handleAbpErrorResponse(jqXHR.responseJSON, userOptions, $dfd, jqXHR);
+                        abp.ajax.handleAbpErrorResponse(jqXHR, userOptions, $dfd);
                     } else {
                         abp.ajax.handleNonAbpErrorResponse(jqXHR, userOptions, $dfd);
                     }
@@ -82,46 +82,46 @@
             }
         },
 
+        handleErrorStatusCode: function (status) {
+            switch (status) {
+                case 401:
+                    abp.ajax.handleUnAuthorizedRequest(
+                        abp.ajax.showError(abp.ajax.defaultError401),
+                        abp.appPath
+                    );
+                    break;
+                case 403:
+                    abp.ajax.showError(abp.ajax.defaultError403);
+                    break;
+                case 404:
+                    abp.ajax.showError(abp.ajax.defaultError404);
+                    break;
+                default:
+                    abp.ajax.showError(abp.ajax.defaultError);
+                    break;
+            }
+        },
+
         handleNonAbpErrorResponse: function (jqXHR, userOptions, $dfd) {
             if (userOptions.abpHandleError !== false) {
-                switch (jqXHR.status) {
-                    case 401:
-                        abp.ajax.handleUnAuthorizedRequest(
-                            abp.ajax.showError(abp.ajax.defaultError401),
-                            abp.appPath
-                        );
-                        break;
-                    case 403:
-                        abp.ajax.showError(abp.ajax.defaultError403);
-                        break;
-                    case 404:
-                        abp.ajax.showError(abp.ajax.defaultError404);
-                        break;
-                    default:
-                        abp.ajax.showError(abp.ajax.defaultError);
-                        break;
-                }
+                abp.ajax.handleErrorStatusCode(jqXHR.status);
             }
 
             $dfd.reject.apply(this, arguments);
             userOptions.error && userOptions.error.apply(this, arguments);
         },
 
-        handleAbpErrorResponse: function (data, userOptions, $dfd, jqXHR) {
+        handleAbpErrorResponse: function (jqXHR, userOptions, $dfd) {
             var messagePromise = null;
 
-            if (data.error) {
-                if (userOptions.abpHandleError !== false) {
-                    messagePromise = abp.ajax.showError(data.error);
-                }
-            } else {
-                data.error = abp.ajax.defaultError;
+            if (userOptions.abpHandleError !== false) {
+                messagePromise = abp.ajax.showError(jqXHR.responseJSON.error);
             }
 
-            abp.ajax.logError(data.error);
+            abp.ajax.logError(jqXHR.responseJSON.error);
 
-            $dfd && $dfd.reject(data.error, jqXHR);
-            userOptions.error && userOptions.error(data.error, jqXHR);
+            $dfd && $dfd.reject(jqXHR.responseJSON.error, jqXHR);
+            userOptions.error && userOptions.error(jqXHR.responseJSON.error, jqXHR);
 
             if (jqXHR.status === 401 && userOptions.abpHandleError !== false) {
                 abp.ajax.handleUnAuthorizedRequest(messagePromise);

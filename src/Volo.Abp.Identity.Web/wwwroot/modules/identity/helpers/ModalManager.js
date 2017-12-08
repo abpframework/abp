@@ -68,6 +68,7 @@ var abp = abp || {};
                 if (_$form.length) {
                     if (_$form.attr('data-ajaxForm') !== 'false') {
                         _$form.ajaxForm({
+                            dataType: 'json',
                             beforeSubmit: function() {
                                 _setBusy(true);
                             },
@@ -75,8 +76,17 @@ var abp = abp || {};
                                 _publicApi.setResult.apply(_publicApi, arguments);
                                 _$modal.modal('hide');
                             },
-                            error: function() {
-                                //TODO: Handle error!
+                            error: function (jqXHR) {
+                                //TODO: Better and central error handling!
+                                if (jqXHR.getResponseHeader('_AbpErrorFormat') === 'true') {
+                                    abp.ajax.logError(jqXHR.responseJSON.error);
+                                    var messagePromise = abp.ajax.showError(jqXHR.responseJSON.error);
+                                    if (jqXHR.status === 401) {
+                                        abp.ajax.handleUnAuthorizedRequest(messagePromise);
+                                    }
+                                } else {
+                                    abp.ajax.handleErrorStatusCode(jqXHR.status);
+                                }
                             },
                             complete: function() {
                                 _setBusy(false);

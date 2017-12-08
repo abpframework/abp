@@ -14,8 +14,6 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
     {
         public ILogger<AbpExceptionFilter> Logger { get; set; }
 
-        //TODO: Use EventBus to trigger error handled event like in previous ABP
-
         private readonly IExceptionToErrorInfoConverter _errorInfoConverter;
         private readonly HttpExceptionStatusCodeFinder _statusCodeFinder;
 
@@ -29,24 +27,37 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
 
         public void OnException(ExceptionContext context)
         {
-            if (!context.ActionDescriptor.IsControllerAction())
+            if (!ShouldHandleException(context))
             {
                 return;
             }
 
-            //TODO: Create DontWrap attribute to control wrapping..?
-
             Logger.LogException(context.Exception);
+
             HandleAndWrapException(context);
+        }
+
+        private bool ShouldHandleException(ExceptionContext context)
+        {
+            if (context.ActionDescriptor.IsControllerAction() &&
+                ActionResultHelper.IsObjectResult(context.ActionDescriptor.GetMethodInfo().ReturnType))
+            {
+                //TODO: Create DontWrap attribute to control wrapping..?
+
+                return true;
+            }
+
+            var accept = context.HttpContext.Request.Headers["Accept"];
+            if (accept.ToString().Contains("application/json")) //TODO: Optimize
+            {
+                return true;
+            }
+
+            return false;
         }
 
         private void HandleAndWrapException(ExceptionContext context)
         {
-            if (!context.ActionDescriptor.IsControllerAction() || !ActionResultHelper.IsObjectResult(context.ActionDescriptor.GetMethodInfo().ReturnType))
-            {
-                return;
-            }
-
             context.HttpContext.Response.StatusCode = _statusCodeFinder.GetStatusCode(context.HttpContext, context.Exception);
             context.HttpContext.Response.Headers.Add(new KeyValuePair<string, StringValues>("_AbpErrorFormat", "true"));
 
@@ -56,7 +67,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
                 )
             );
 
-            //EventBus.Trigger(this, new AbpHandledExceptionData(context.Exception));
+            //TODO: Trigger an AbpExceptionHandled event or something like that.
 
             context.Exception = null; //Handled!
         }
