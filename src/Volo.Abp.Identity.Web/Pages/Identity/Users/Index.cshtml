@@ -15,22 +15,21 @@
     <script type="text/javascript" src="~/modules/identity/views/users/index.js"></script>
 }
 
-<div class="card" id="IdentityUsersWrapper">
-    <div class="card-header">
+<abp-card id="IdentityUsersWrapper">
+    <abp-card-header>
         <div class="row">
             <div class="col-md-6">
                 <h2>@L["Users"]</h2>
             </div>
             <div class="col-md-6 text-right">
-                <!-- Button trigger modal -->
-                <button type="button" class="btn btn-primary create-user-button" data-toggle="modal">
+                <button type="button" class="btn btn-primary create-user-button">
                     <i class="fa fa-plus" aria-hidden="true"></i>
                     @L["CreateUser"]
                 </button>
             </div>
         </div>
-    </div>
-    <div class="card-body">
+    </abp-card-header>
+    <abp-card-body>
         <table class="table table-striped nowrap">
             <thead>
                 <tr>
@@ -41,5 +40,5 @@
                 </tr>
             </thead>
         </table>
-    </div>
-</div>
+    </abp-card-body>
+</abp-card>
