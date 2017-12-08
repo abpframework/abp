@@ -3,6 +3,10 @@
 
     var _identityUserAppService = volo.abp.identity.identityUser;
 
+    var _createModal = new abp.ModalManager({
+        viewUrl: abp.appPath + 'Identity/Users/CreateModal'
+    });
+    
     var _editModal = new abp.ModalManager({
         viewUrl: abp.appPath + 'Identity/Users/EditModal'
     });
@@ -70,35 +74,11 @@
 
     //Create user command
     _$wrapper.find('.create-user-button').click(function () {
-        $('#createUpdateUserModal').modal('show')
-            .find('.modal-content')
-            .load(abp.appPath + 'Identity/Users/CreateModal');
+        _createModal.open();
     });
 
-    //TODO: btnCreateUserSave and btnUpdateUserSave clicks should be handled in the modals. We may consider to create a model manager as before
-
-    function findAssignedRoleNames() {
-        var assignedRoleNames = [];
-
-        $(document).find('.user-role-checkbox-list input[type=checkbox]')
-            .each(function () {
-                if ($(this).is(':checked')) {
-                    assignedRoleNames.push($(this).attr('name'));
-                }
-            });
-
-        return assignedRoleNames;
-    }
-
-    $('#createUpdateUserModal').on('click', '#btnCreateUserSave', function () {
-        var $createUserForm = $('#createUserForm');
-        var user = $createUserForm.serializeFormToObject();
-        user.RoleNames = findAssignedRoleNames();
-
-        _identityUserAppService.create(user).then(function () {
-            $('#createUpdateUserModal').modal('hide');
-            _dataTable.ajax.reload();
-        });
+    _createModal.onClose(function () { //TODO: Only refresh if saved!
+        _dataTable.ajax.reload();
     });
 
     _editModal.onClose(function() { //TODO: Only refresh if saved!

@@ -7,66 +7,62 @@
     Layout = null;
 }
 
-<div class="modal-header">
-    <h5 class="modal-title" id="userModalLabel">@Localizer["CreateUser"]</h5>
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-    </button>
-</div>
+<abp-modal>
 
-<div class="modal-body">
-    <form id="createUserForm">
-        <!-- Nav tabs -->
-        <ul class="nav nav-tabs" role="tablist">
-            <li class="nav-item">
-                <a class="nav-link active" data-toggle="tab" href="#userInformations" role="tab">@Localizer["CreateUser"]</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" data-toggle="tab" href="#roles" role="tab">@Localizer["Roles"]</a>
-            </li>
-        </ul>
+    <abp-modal-header title="@Localizer["NewUser"]"></abp-modal-header>
 
-        <!-- Tab panes -->
-        <div class="tab-content pt-3">
+    <abp-modal-body>
 
-            <div class="tab-pane active" id="userInformations" role="tabpanel">
+        <form method="post" asp-page="/Identity/Users/CreateModal">
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" href="#CreateUser_UserInfo" role="tab">@Localizer["CreateUser"]</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#CreateUser_RolesTab" role="tab">@Localizer["Roles"]</a>
+                </li>
+            </ul>
 
-                <div class="form-group">
-                    <label for="userName">@Localizer["UserName"]</label>
-                    <input type="text" class="form-control" id="userName" name="UserName" placeholder="User name">
+            <div class="tab-content pt-3">
+
+                <div class="tab-pane active" id="CreateUser_UserInfo" role="tabpanel">
+
+                    <div class="form-group">
+                        <label asp-for="UserInfo.UserName"></label>
+                        <input asp-for="UserInfo.UserName" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="UserInfo.Password"></label>
+                        <input asp-for="UserInfo.Password" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="UserInfo.Email"></label>
+                        <input asp-for="UserInfo.Email" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="UserInfo.PhoneNumber"></label>
+                        <input asp-for="UserInfo.PhoneNumber" class="form-control" />
+                    </div>
+
                 </div>
-                <div class="form-group">
-                    <label for="password">@Localizer["Password"]</label>
-                    <input type="password" class="form-control" id="password" name="Password" placeholder="Password">
-                </div>
-                <div class="form-group">
-                    <label for="email">@Localizer["EmailAddress"]</label>
-                    <input type="email" class="form-control" id="email" name="Email" placeholder="Enter email">
-                </div>
-                <div class="form-group">
-                    <label for="phoneNumber">@Localizer["PhoneNumber"]</label>
-                    <input type="tel" class="form-control" id="phoneNumber" name="PhoneNumber" placeholder="Phone number">
-                </div>
-
-            </div>
-            <div class="tab-pane" id="roles" role="tabpanel">
-                <div class="user-role-checkbox-list">
-                    @foreach (var role in Model.Roles)
+                <div class="tab-pane" id="CreateUser_RolesTab" role="tabpanel">
+                    @for (var i = 0; i < Model.Roles.Length; i++)
                     {
                         <div class="form-check">
-                            <label class="form-check-label">
-                                <input id="CreateUser_@(role.Name)" class="form-check-input" type="checkbox" name="@(role.Name)" value="true" @Html.Raw(role.IsAssigned ? "checked=\"checked\"" : "")>
-                                @role.Name
+                            <label asp-for="@Model.Roles[i].IsAssigned" class="form-check-label">
+                                <input asp-for="@Model.Roles[i].IsAssigned" class="form-check-input" />
+                                @Model.Roles[i].Name
                             </label>
                         </div>
+                        <input asp-for="@Model.Roles[i].Name" />
                     }
                 </div>
-            </div>
 
-        </div>
-    </form>
-</div>
-<div class="modal-footer">
-    <button type="button" class="btn btn-secondary" data-dismiss="modal">@Localizer["Close"]</button>
-    <button type="button" class="btn btn-primary" id="btnCreateUserSave">@Localizer["Save"]</button>
-</div>
+            </div>
+        </form>
+
+    </abp-modal-body>
+
+    <abp-modal-footer></abp-modal-footer>
+
+</abp-modal>

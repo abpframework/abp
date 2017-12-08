@@ -21,7 +21,9 @@ namespace Volo.Abp.AspNetCore.Mvc
 
             if (typeof(IActionResult).GetTypeInfo().IsAssignableFrom(returnType))
             {
-                if (typeof(JsonResult).GetTypeInfo().IsAssignableFrom(returnType) || typeof(ObjectResult).GetTypeInfo().IsAssignableFrom(returnType))
+                if (typeof(JsonResult).GetTypeInfo().IsAssignableFrom(returnType) || 
+                    typeof(ObjectResult).GetTypeInfo().IsAssignableFrom(returnType) ||
+                    typeof(NoContentResult).GetTypeInfo().IsAssignableFrom(returnType))
                 {
                     return true;
                 }
