@@ -10,6 +10,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Localization\Resource\en.json" />
+    <None Remove="Localization\Resource\tr.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Localization\Resource\tr.json">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Localization\Resource\en.json">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Localization\Resource\*.json" />
     <EmbeddedResource Include="Views\Shared\Components\AbpMenu\Default.cshtml" />
     <EmbeddedResource Include="Views\Shared\_AppLayout.cshtml" />
     <EmbeddedResource Include="wwwroot\libs\datatables\datatables.css" />

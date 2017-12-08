@@ -2,7 +2,7 @@
   "culture": "tr",
   "texts": {
     "Users": "Kullanıcılar",
-    "CreateUser": "Kullanıcı oluştur",
+    "NewUser": "Yeni kullanıcı",
     "Actions": "İşlemler",
     "UserName": "Kullanıcı adı",
     "EmailAddress": "E-posta adresi",

@@ -7,17 +7,14 @@
     Layout = null;
 }
 
-@* TODO: tag helpers tabs *@
-
 <abp-modal>
 
-    <abp-modal-header></abp-modal-header>
+    <abp-modal-header title="@Localizer["NewUser"]"></abp-modal-header>
 
     <abp-modal-body>
         
-        <form id="updateUserForm" method="post" asp-page="/Identity/Users/EditModal">
-            @* TODO: Remove id when model manager implemented *@
-            <!-- Nav tabs -->
+        <form method="post" asp-page="/Identity/Users/EditModal">
+            
             <ul class="nav nav-tabs" role="tablist">
                 <li class="nav-item">
                     <a class="nav-link active" data-toggle="tab" href="#EditUser_UserInfoTab" role="tab">@Localizer["UserInformations"]</a>
@@ -27,7 +24,6 @@
                 </li>
             </ul>
 
-            <!-- Tab panes -->
             <div class="tab-content pt-3">
 
                 <div class="tab-pane active" id="EditUser_UserInfoTab" role="tabpanel">
@@ -52,10 +48,12 @@
                     @for (var i = 0; i < Model.Roles.Length; i++)
                     {
                         <div class="form-check">
-                            <input asp-for="@Model.Roles[i].IsAssigned" class="form-check-input"/>
-                            <label asp-for="@Model.Roles[i].IsAssigned">@Model.Roles[i].Name</label>
-                            <input asp-for="@Model.Roles[i].Name"/>
+                            <label asp-for="@Model.Roles[i].IsAssigned" class="form-check-label">
+                                <input asp-for="@Model.Roles[i].IsAssigned" class="form-check-input" />
+                                @Model.Roles[i].Name
+                            </label>
                         </div>
+                        <input asp-for="@Model.Roles[i].Name"/>
                     }
                 </div>
 

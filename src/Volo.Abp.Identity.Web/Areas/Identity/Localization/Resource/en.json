@@ -2,7 +2,7 @@
   "culture": "en",
   "texts": {
     "Users": "Users",
-    "CreateUser": "Create user",
+    "NewUser": "New user",
     "Actions": "Actions",
     "UserName": "User name",
     "EmailAddress": "Email address",
@@ -12,6 +12,6 @@
     "Close": "Close",
     "Save": "Save",
     "Password": "Password",
-    "UserDeletionConfirmationMessage":  "User '{0}' will be deleted. Do you confirm that?"
+    "UserDeletionConfirmationMessage": "User '{0}' will be deleted. Do you confirm that?"
   }
 }

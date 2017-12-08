@@ -1,10 +1,12 @@
 ﻿using System.Text;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace Volo.Abp.AspNetCore.Mvc.TagHelpers
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
 {
     public class AbpModalHeaderTagHelper : TagHelper
     {
+        public string Title { get; set; }
+
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             output.TagName = "div";
@@ -16,7 +18,7 @@ namespace Volo.Abp.AspNetCore.Mvc.TagHelpers
         {
             var sb = new StringBuilder();
 
-            sb.AppendLine("    <h5 class=\"modal-title\">Modal Title</h5>");
+            sb.AppendLine("    <h5 class=\"modal-title\">" + Title + "</h5>");
             sb.AppendLine("    <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">");
             sb.AppendLine("        <span aria-hidden=\"true\">&times;</span>");
             sb.AppendLine("    </button>");

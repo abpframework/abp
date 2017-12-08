@@ -4,8 +4,7 @@
     var _identityUserAppService = volo.abp.identity.identityUser;
 
     var _editModal = new abp.ModalManager({
-        viewUrl: abp.appPath + 'Identity/Users/EditModal'//,
-        //scriptUrl: abp.appPath + 'view-resources/Areas/AppAreaName/Views/Users/_CreateOrEditModal.js'
+        viewUrl: abp.appPath + 'Identity/Users/EditModal'
     });
 
     var _$wrapper = $('#IdentityUsersWrapper');
