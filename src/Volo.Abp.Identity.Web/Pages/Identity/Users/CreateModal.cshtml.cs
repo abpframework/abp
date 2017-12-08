@@ -35,6 +35,8 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Users
 
         public async Task<NoContentResult> OnPostAsync()
         {
+            //TODO: ModelState.IsValid..?
+
             var input = ObjectMapper.Map<UserInfoViewModel, IdentityUserCreateDto>(UserInfo);
             input.RoleNames = Roles.Where(r => r.IsAssigned).Select(r => r.Name).ToArray();
 
@@ -54,8 +56,9 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Users
             [DataType(DataType.Password)]
             public string Password { get; set; }
 
-            [MaxLength(IdentityUserConsts.MaxEmailLength)]
+            [Required]
             [EmailAddress]
+            [MaxLength(IdentityUserConsts.MaxEmailLength)]
             public string Email { get; set; }
 
             [MaxLength(IdentityUserConsts.MaxPhoneNumberLength)]

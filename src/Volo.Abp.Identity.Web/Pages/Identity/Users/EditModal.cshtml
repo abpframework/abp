@@ -9,12 +9,12 @@
 
 <abp-modal>
 
-    <abp-modal-header title="@Localizer["NewUser"]"></abp-modal-header>
+    <form method="post" asp-page="/Identity/Users/EditModal">
 
-    <abp-modal-body>
-        
-        <form method="post" asp-page="/Identity/Users/EditModal">
-            
+        <abp-modal-header title="@Localizer["NewUser"]"></abp-modal-header>
+
+        <abp-modal-body>
+
             <ul class="nav nav-tabs" role="tablist">
                 <li class="nav-item">
                     <a class="nav-link active" data-toggle="tab" href="#EditUser_UserInfoTab" role="tab">@Localizer["UserInformations"]</a>
@@ -28,19 +28,22 @@
 
                 <div class="tab-pane active" id="EditUser_UserInfoTab" role="tabpanel">
 
-                    <input asp-for="UserInfo.Id"/>
+                    <input asp-for="UserInfo.Id" />
 
                     <div class="form-group">
                         <label asp-for="UserInfo.UserName"></label>
-                        <input asp-for="UserInfo.UserName" class="form-control"/>
+                        <input asp-for="UserInfo.UserName" class="form-control" />
+                        <span asp-validation-for="UserInfo.UserName" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="UserInfo.Email"></label>
-                        <input asp-for="UserInfo.Email" class="form-control"/>
+                        <input asp-for="UserInfo.Email" class="form-control" />
+                        <span asp-validation-for="UserInfo.Email" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="UserInfo.PhoneNumber"></label>
-                        <input asp-for="UserInfo.PhoneNumber" class="form-control"/>
+                        <input asp-for="UserInfo.PhoneNumber" class="form-control" />
+                        <span asp-validation-for="UserInfo.PhoneNumber" class="text-danger"></span>
                     </div>
 
                 </div>
@@ -53,15 +56,18 @@
                                 @Model.Roles[i].Name
                             </label>
                         </div>
-                        <input asp-for="@Model.Roles[i].Name"/>
+                        <input asp-for="@Model.Roles[i].Name" />
                     }
                 </div>
 
             </div>
-        </form>
 
-    </abp-modal-body>
-    
-    <abp-modal-footer></abp-modal-footer>
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+        </abp-modal-body>
+
+        <abp-modal-footer></abp-modal-footer>
+
+    </form>
 
 </abp-modal>

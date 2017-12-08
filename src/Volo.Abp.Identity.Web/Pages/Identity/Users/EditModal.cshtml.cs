@@ -46,6 +46,8 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Users
 
         public async Task<IActionResult> OnPostAsync()
         {
+            //TODO: ModelState.IsValid..?
+
             var input = ObjectMapper.Map<UserInfoViewModel, IdentityUserUpdateDto>(UserInfo);
             input.RoleNames = Roles.Where(r => r.IsAssigned).Select(r => r.Name).ToArray();
             await _identityUserAppService.UpdateAsync(UserInfo.Id, input);
@@ -62,8 +64,9 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Users
             [MaxLength(IdentityUserConsts.MaxUserNameLength)]
             public string UserName { get; set; }
 
-            [MaxLength(IdentityUserConsts.MaxEmailLength)]
+            [Required]
             [EmailAddress]
+            [MaxLength(IdentityUserConsts.MaxEmailLength)]
             public string Email { get; set; }
 
             [MaxLength(IdentityUserConsts.MaxPhoneNumberLength)]

@@ -3,6 +3,9 @@
  * TODO: Refactor & test more
  */
 var abp = abp || {};
+
+$.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only for the form we are working on! Also this should be decided by the form itself!
+
 (function ($) {
 
     abp.modals = abp.modals || {};
@@ -53,24 +56,23 @@ var abp = abp || {};
                 return _$modalContainer;
             }
 
-            function _saveModal() {
-                if (_modalObject && _modalObject.save) {
-                    _modalObject.save();
-                } else if (_$form) {
-                    _$form.submit();
-                }
-            }
-
             function _initAndShowModal() {
                 _$modal = _$modalContainer.find('.modal');
 
                 _$form = _$modal.find('form');
                 if (_$form.length) {
+                    $.validator.unobtrusive.parse(_$form);
                     if (_$form.attr('data-ajaxForm') !== 'false') {
+                        //TODO: Create abpAjaxForm to not repeat that code!
                         _$form.ajaxForm({
                             dataType: 'json',
-                            beforeSubmit: function() {
+                            beforeSubmit: function () {
+                                if ($.validator && !_$form.valid()) {
+                                    return false;
+                                }
+
                                 _setBusy(true);
+                                return true;
                             },
                             success: function() {
                                 _publicApi.setResult.apply(_publicApi, arguments);
@@ -117,21 +119,6 @@ var abp = abp || {};
                         _modalObject.init(_publicApi, _args);
                     }
                 }
-
-                _$modal.find('button[type=submit]').click(function () {
-                    _saveModal();
-                });
-
-                _$modal.find('.modal-body').keydown(function (e) {
-                    if (e.which === 13) {
-                        if (e.target.tagName.toLocaleLowerCase() === "textarea") {
-                            e.stopPropagation();
-                        } else {
-                            e.preventDefault();
-                            _saveModal();
-                        }
-                    }
-                });
                 
                 _$modal.modal('show');
             };
