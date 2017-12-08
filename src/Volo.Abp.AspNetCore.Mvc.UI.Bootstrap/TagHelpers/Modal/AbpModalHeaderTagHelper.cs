@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
 {
     public class AbpModalHeaderTagHelper : TagHelper
     {
@@ -10,7 +10,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             output.TagName = "div";
-            output.Attributes.Add("class", "modal-header"); //TODO: Append class if any exists
+            output.Attributes.AddClass("modal-header");
             output.Content.SetHtmlContent(CreateContent());
         }
 

@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
 {
     public class AbpModalTagHelper : TagHelper
     {

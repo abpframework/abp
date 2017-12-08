@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Localization.Resource;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
 {
     public class AbpModalFooterTagHelper : TagHelper
     {
@@ -17,7 +17,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             output.TagName = "div";
-            output.Attributes.Add("class", "modal-footer"); //TODO: Append class if any exists
+            output.Attributes.AddClass("modal-footer");
             output.Content.SetHtmlContent(CreateContent());
         }
 
@@ -26,7 +26,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
             var sb = new StringBuilder();
 
             sb.AppendLine("<button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">" + _localizer["Close"] + "</button>");
-            sb.AppendLine("<button type=\"submit\" class=\"btn btn-primary\" id=\"btnUpdateUserSave\">" + _localizer["Save"] + "</button>");
+            sb.AppendLine("<button type=\"submit\" class=\"btn btn-primary\" data-busy-text=\""+ _localizer["SavingWithThreeDot"] + "\"><i class=\"fa fa-check\"></i> <span>" + _localizer["Save"] + "</span></button>");
 
             return sb.ToString();
         }

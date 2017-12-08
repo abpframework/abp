@@ -2,6 +2,7 @@
   "culture": "tr",
   "texts": {
     "Close": "Kapat",
-    "Save": "Kaydet"
+    "Save": "Kaydet",
+    "SavingWithThreeDot": "Kaydediliyor..."
   }
 }

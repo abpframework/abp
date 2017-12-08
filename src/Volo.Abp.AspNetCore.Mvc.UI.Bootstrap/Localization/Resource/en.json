@@ -2,6 +2,7 @@
   "culture": "en",
   "texts": {
     "Close": "Close",
-    "Save": "Save"
+    "Save": "Save",
+    "SavingWithThreeDot": "Saving..."
   }
 }

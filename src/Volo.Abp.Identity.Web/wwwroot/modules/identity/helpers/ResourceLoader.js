@@ -1,6 +1,8 @@
 ﻿/**
  * abp.ResourceLoader can be used to load scripts when needed.
  * It ensures that every script is only loaded once.
+ * 
+ * TODO: Add a loadStyle method
  */
 var abp = abp || {};
 (function ($) {

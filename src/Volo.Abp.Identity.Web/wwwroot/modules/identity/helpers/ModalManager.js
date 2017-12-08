@@ -6,9 +6,26 @@ var abp = abp || {};
 (function ($) {
 
     abp.modals = abp.modals || {};
-
+    
     abp.ModalManager = (function () {
-        
+
+        var CallbackList = function() { //TODO: To a seperated file
+            var _callbacks = [];
+
+            return {
+                add: function(callback) {
+                    _callbacks.push(callback);
+                },
+
+                triggerAll: function(thisObj, argumentList) {
+                    for (var i = 0; i < _callbacks.length; i++) {
+                        _callbacks[i].apply(thisObj, argumentList);
+                    }
+                }
+
+            }
+        };
+
         return function (options) {
 
             var _options = options;
@@ -16,14 +33,15 @@ var abp = abp || {};
             var _$modalContainer = null;
             var _$modal = null;
             var _$form = null;
+
             var _modalId = 'Modal_' + (Math.floor((Math.random() * 1000000))) + new Date().getTime();
             var _modalObject = null;
 
             var _publicApi = null;
             var _args = null;
-            var _getResultCallback = null;
 
-            var _onCloseCallbacks = [];
+            var _onCloseCallbacks = new CallbackList();
+            var _onResultCallbacks = new CallbackList();
 
             function _removeContainer() {
                 _$modalContainer && _$modalContainer.remove();
@@ -47,12 +65,26 @@ var abp = abp || {};
                 _$modal = _$modalContainer.find('.modal');
 
                 _$form = _$modal.find('form');
-                if (!_$form.length) {
+                if (_$form.length) {
+                    if (_$form.attr('data-ajaxForm') !== 'false') {
+                        _$form.ajaxForm({
+                            beforeSubmit: function() {
+                                _setBusy(true);
+                            },
+                            success: function() {
+                                _publicApi.setResult.apply(_publicApi, arguments);
+                                _$modal.modal('hide');
+                            },
+                            error: function() {
+                                //TODO: Handle error!
+                            },
+                            complete: function() {
+                                _setBusy(false);
+                            }
+                        });
+                    }
+                } else {
                     _$form = null;
-                } else if (_options.ajaxForm !== false) { //TODO: This option should be set by the modal or modal class!
-                    _$form.ajaxForm(function() {
-                        _$modal.modal('hide');
-                    });
                 }
 
                 _$modal.modal({
@@ -60,11 +92,8 @@ var abp = abp || {};
                 });
 
                 _$modal.on('hidden.bs.modal', function () {
-                    _removeContainer(_modalId);
-
-                    for (var i = 0; i < _onCloseCallbacks.length; i++) {
-                        _onCloseCallbacks[i]();
-                    }
+                    _removeContainer();
+                    _onCloseCallbacks.triggerAll(_publicApi);
                 });
 
                 _$modal.on('shown.bs.modal', function () {
@@ -97,15 +126,14 @@ var abp = abp || {};
                 _$modal.modal('show');
             };
 
-            var _open = function (args, getResultCallback) {
+            var _open = function (args) {
 
                 _args = args || {};
-                _getResultCallback = getResultCallback;
 
                 _createContainer(_modalId)
                     .load(options.viewUrl, $.param(_args), function (response, status, xhr) {
-                        if (status == "error") {
-                            //TODO: ERROR message!
+                        if (status === "error") {
+                            //TODO: Handle!
                             return;
                         };
 
@@ -128,7 +156,11 @@ var abp = abp || {};
             };
 
             var _onClose = function (onCloseCallback) {
-                _onCloseCallbacks.push(onCloseCallback);
+                _onCloseCallbacks.add(onCloseCallback);
+            }
+
+            var _onResult = function (callback) {
+                _onResultCallbacks.add(callback);
             }
 
             function _setBusy(isBusy) {
@@ -157,6 +189,10 @@ var abp = abp || {};
                     return _$modal;
                 },
 
+                getForm: function () {
+                    return _$form;
+                },
+
                 getArgs: function () {
                     return _args;
                 },
@@ -167,11 +203,13 @@ var abp = abp || {};
 
                 setBusy: _setBusy,
 
-                setResult: function() {
-                    _getResultCallback && _getResultCallback.apply(_publicApi, arguments);
+                setResult: function () {
+                    _onResultCallbacks.triggerAll(_publicApi, arguments);
                 },
 
-                onClose: _onClose
+                onClose: _onClose,
+
+                onResult: _onResult
             }
 
             return _publicApi;

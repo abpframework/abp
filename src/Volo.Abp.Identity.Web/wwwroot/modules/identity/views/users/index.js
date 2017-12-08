@@ -13,9 +13,6 @@
     
     var app = new Vue({
         el: '#IdentityUsersWrapper',
-        data: {
-            
-        },
         methods: {
             openCreateModal: function () {
                 _createModal.open();
@@ -86,11 +83,11 @@
             }
         });
 
-        _createModal.onClose(function () { //TODO: Only refresh if saved!
+        _createModal.onResult(function () {
             _dataTable.ajax.reload();
         });
 
-        _editModal.onClose(function () { //TODO: Only refresh if saved!
+        _editModal.onResult(function () {
             _dataTable.ajax.reload();
         });
     });
