@@ -2,7 +2,7 @@
 @using Microsoft.Extensions.Localization
 @using Volo.Abp.Identity.Web.Areas.Identity.Localization.Resource
 @model Volo.Abp.Identity.Web.Pages.Identity.Users.EditModalModel
-@inject IStringLocalizer<IdentityResource> Localizer
+@inject IStringLocalizer<IdentityResource> L
 @{
     Layout = null;
 }
@@ -11,16 +11,16 @@
 
     <form method="post" asp-page="/Identity/Users/EditModal">
 
-        <abp-modal-header title="@Localizer["NewUser"]"></abp-modal-header>
+        <abp-modal-header title="@L["NewUser"]"></abp-modal-header>
 
         <abp-modal-body>
 
             <ul class="nav nav-tabs" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link active" data-toggle="tab" href="#EditUser_UserInfoTab" role="tab">@Localizer["UserInformations"]</a>
+                    <a class="nav-link active" data-toggle="tab" href="#EditUser_UserInfoTab" role="tab">@L["UserInformations"]</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="#EditUser_RolesTab" role="tab">@Localizer["Roles"]</a>
+                    <a class="nav-link" data-toggle="tab" href="#EditUser_RolesTab" role="tab">@L["Roles"]</a>
                 </li>
             </ul>
 
