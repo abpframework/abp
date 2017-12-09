@@ -7,9 +7,9 @@
     Layout = null;
 }
 
-<abp-modal>
+<form method="post" asp-page="/Identity/Users/EditModal">
 
-    <form method="post" asp-page="/Identity/Users/EditModal">
+    <abp-modal>
 
         <abp-modal-header title="@L["NewUser"]"></abp-modal-header>
 
@@ -68,6 +68,6 @@
 
         <abp-modal-footer></abp-modal-footer>
 
-    </form>
+    </abp-modal>
 
-</abp-modal>
+</form>

@@ -7,7 +7,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
     {
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            //TODO: Remove abp-modal HTML element which is unnecessary!
+            output.TagName = null;
             output.PreContent.SetHtmlContent(CreatePreContent());
             output.PostContent.SetHtmlContent(CreatePostContent());
         }

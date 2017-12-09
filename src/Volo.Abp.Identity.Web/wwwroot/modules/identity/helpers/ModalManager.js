@@ -58,10 +58,10 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
 
             function _initAndShowModal() {
                 _$modal = _$modalContainer.find('.modal');
+                _$form = _$modalContainer.find('form');
 
-                _$form = _$modal.find('form');
                 if (_$form.length) {
-                    $.validator.unobtrusive.parse(_$form);
+                    $.validator.unobtrusive.parse(_$form); //TODO: We should do a more common system to initialize component on ajax-loaded DOM elements. validator.unobtrusive.parse is only one thing to do.
                     if (_$form.attr('data-ajaxForm') !== 'false') {
                         //TODO: Create abpAjaxForm to not repeat that code!
                         _$form.ajaxForm({
