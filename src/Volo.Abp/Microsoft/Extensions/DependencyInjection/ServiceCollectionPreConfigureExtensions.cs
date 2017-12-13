@@ -12,6 +12,12 @@ namespace Microsoft.Extensions.DependencyInjection
             return services;
         }
 
+        public static TOptions ExecutePreConfiguredActions<TOptions>(this IServiceCollection services, TOptions options)
+        {
+            services.GetPreConfigureActions<TOptions>().Configure(options);
+            return options;
+        }
+
         public static PreConfigureActionList<TOptions> GetPreConfigureActions<TOptions>(this IServiceCollection services)
         {
             var actionList = services.GetSingletonInstanceOrNull<IObjectAccessor<PreConfigureActionList<TOptions>>>()?.Value;

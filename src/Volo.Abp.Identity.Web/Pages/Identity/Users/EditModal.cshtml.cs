@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.RazorPages;
@@ -62,14 +61,17 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Users
 
             [Required]
             [MaxLength(IdentityUserConsts.MaxUserNameLength)]
+            [Display(Name = "UserName")]
             public string UserName { get; set; }
 
             [Required]
             [EmailAddress]
             [MaxLength(IdentityUserConsts.MaxEmailLength)]
+            [Display(Name = "EmailAddress")]
             public string Email { get; set; }
 
             [MaxLength(IdentityUserConsts.MaxPhoneNumberLength)]
+            [Display(Name = "PhoneNumber")]
             public string PhoneNumber { get; set; }
         }
 

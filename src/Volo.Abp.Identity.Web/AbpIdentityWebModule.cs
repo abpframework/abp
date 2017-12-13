@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Identity.Web.Areas.Identity.Localization.Resource;
@@ -15,6 +18,14 @@ namespace Volo.Abp.Identity.Web
     [DependsOn(typeof(AbpAspNetCoreMvcUiBootstrapModule))]
     public class AbpIdentityWebModule : AbpModule
     {
+        public override void PreConfigureServices(IServiceCollection services)
+        {
+            services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
+            {
+                options.AddAssemblyResource(typeof(IdentityResource));
+            });
+        }
+
         public override void ConfigureServices(IServiceCollection services)
         {
             services.AddAssemblyOf<AbpIdentityWebModule>();

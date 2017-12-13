@@ -49,19 +49,23 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Users
         {
             [Required]
             [MaxLength(IdentityUserConsts.MaxUserNameLength)]
+            [Display(Name = "UserName")]
             public string UserName { get; set; }
 
             [Required]
             [MaxLength(IdentityUserConsts.MaxPasswordLength)]
             [DataType(DataType.Password)]
+            [Display(Name = "Password")]
             public string Password { get; set; }
 
             [Required]
             [EmailAddress]
             [MaxLength(IdentityUserConsts.MaxEmailLength)]
+            [Display(Name = "EmailAddress")]
             public string Email { get; set; }
 
             [MaxLength(IdentityUserConsts.MaxPhoneNumberLength)]
+            [Display(Name = "PhoneNumber")]
             public string PhoneNumber { get; set; }
         }
 

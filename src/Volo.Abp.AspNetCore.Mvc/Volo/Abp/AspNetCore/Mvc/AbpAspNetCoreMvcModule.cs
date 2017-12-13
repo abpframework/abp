@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Mvc.ViewComponents;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Volo.Abp.AspNetCore.Mvc.Conventions;
 using Volo.Abp.AspNetCore.Mvc.DependencyInjection;
+using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.VirtualFileSystem;
 using Volo.Abp.Http;
 using Volo.Abp.Http.Modeling;
@@ -65,12 +66,23 @@ namespace Volo.Abp.AspNetCore.Mvc
             });
 
             var mvcCoreBuilder = services.AddMvcCore();
-            services.GetPreConfigureActions<IMvcCoreBuilder>().Configure(mvcCoreBuilder);
+            services.ExecutePreConfiguredActions(mvcCoreBuilder);
 
-            var mvcBuilder = services.AddMvc().AddControllersAsServices();
-            services.GetPreConfigureActions<IMvcBuilder>().Configure(mvcBuilder);
+            var mvcBuilder = services.AddMvc()
+                .AddDataAnnotationsLocalization(options =>
+                {
+                    var assemblyResources = services.ExecutePreConfiguredActions(new AbpMvcDataAnnotationsLocalizationOptions()).AssemblyResources;
 
-            //TODO: AddLocalization and AddViewLocalization by default..?
+                    options.DataAnnotationLocalizerProvider = (type, factory) =>
+                    {
+                        var resourceType = assemblyResources.GetOrDefault(type.Assembly);
+                        return factory.Create(resourceType ?? type);
+                    };
+                });
+
+            services.ExecutePreConfiguredActions(mvcBuilder);
+
+            //TODO: AddViewLocalization by default..?
 
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.TryAddSingleton<IActionContextAccessor, ActionContextAccessor>();
