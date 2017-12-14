@@ -47,13 +47,13 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Users
 
         public class UserInfoViewModel
         {
-            [Required(ErrorMessage = "The {0} field is required.")]
+            [Required]
             [MaxLength(IdentityUserConsts.MaxUserNameLength)]
             [Display(Name = "UserName")]
             public string UserName { get; set; }
 
             [Required]
-            [MaxLength(IdentityUserConsts.MaxPasswordLength, ErrorMessage = "The field {0} must be a string or array type with a maximum length of '{1}'.")]
+            [MaxLength(IdentityUserConsts.MaxPasswordLength)]
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
             public string Password { get; set; }
