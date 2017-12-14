@@ -12,6 +12,8 @@
     "Close": "Close",
     "Save": "Save",
     "Password": "Password",
-    "UserDeletionConfirmationMessage": "User '{0}' will be deleted. Do you confirm that?"
+    "UserDeletionConfirmationMessage": "User '{0}' will be deleted. Do you confirm that?",
+    "MaxLengthKey": "The field {0} must be a string or array type with a maximum length of '{1}'.",
+    "The {0} field is required.": "The {0} field is required."
   }
 }

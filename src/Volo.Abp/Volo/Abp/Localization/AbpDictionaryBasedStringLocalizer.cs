@@ -32,7 +32,7 @@ namespace Volo.Abp.Localization
         protected virtual LocalizedString GetLocalizedStringFormatted(string name, string cultureName, params object[] arguments)
         {
             var localizedString = GetLocalizedString(name, cultureName);
-            return new LocalizedString(name, string.Format(localizedString.Value, arguments, localizedString.ResourceNotFound, localizedString.SearchedLocation));
+            return new LocalizedString(name, string.Format(localizedString.Value, arguments), localizedString.ResourceNotFound, localizedString.SearchedLocation);
         }
 
         protected virtual LocalizedString GetLocalizedString(string name, string cultureName)

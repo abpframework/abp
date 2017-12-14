@@ -12,6 +12,8 @@
     "Close": "Kapat",
     "Save": "Kaydet",
     "Password": "Şifre",
-    "UserDeletionConfirmationMessage": "{0} kullanıcısı silinecektir. Onaylıyor musunuz?"
+    "UserDeletionConfirmationMessage": "{0} kullanıcısı silinecektir. Onaylıyor musunuz?",
+    "The field {0} must be a string or array type with a maximum length of '{1}'.": "{0} alanı en fazla '{1}' karakter uzunluğunda olmalıdır.",
+    "The {0} field is required.": "{0} alanı zorunludur."
   }
 }
