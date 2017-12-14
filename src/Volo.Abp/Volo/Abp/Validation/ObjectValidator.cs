@@ -1,5 +1,6 @@
 using System.Collections;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
@@ -20,9 +21,11 @@ namespace Volo.Abp.Validation
             _options = options.Value;
         }
 
-        public virtual void Validate(IAbpValidationResult validationResult, object validatingObject)
+        public virtual void Validate(object validatingObject, string name = null, bool allowNull = false)
         {
-            AddValidatationErrors(validationResult, validatingObject);
+            var validationResult = new AbpValidationResult();
+
+            AddValidatationErrors(validationResult, validatingObject, name, allowNull);
 
             if (validationResult.Errors.Any())
             {
@@ -31,10 +34,26 @@ namespace Volo.Abp.Validation
                     validationResult.Errors
                 );
             }
+
+            foreach (var objectToBeNormalized in validationResult.ObjectsToBeNormalized)
+            {
+                objectToBeNormalized.Normalize();
+            }
         }
 
-        public virtual void AddValidatationErrors(IAbpValidationResult validationResult, object validatingObject)
+        public virtual void AddValidatationErrors(IAbpValidationResult validationResult, object validatingObject, string name = null, bool allowNull = false)
         {
+            if (validatingObject == null && !allowNull)
+            {
+                validationResult.Errors.Add(
+                    name == null
+                        ? new ValidationResult("Given object is null!")
+                        : new ValidationResult(name + " is null!", new[] { name })
+                );
+
+                return;
+            }
+
             ValidateObjectRecursively(validationResult, validatingObject, 1);
         }
 

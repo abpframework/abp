@@ -5,9 +5,9 @@ using Volo.Abp.Validation;
 namespace Volo.Abp.AspNetCore.Mvc.Validation
 {
     [ExposeServices(typeof(IMvcModelObjectValidator))]
-    public class MvcModelObjectValidator : ObjectValidator, IMvcModelObjectValidator
+    public class MvcModelValidator : ObjectValidator, IMvcModelObjectValidator
     {
-        public MvcModelObjectValidator(IOptions<AbpValidationOptions> options) 
+        public MvcModelValidator(IOptions<AbpValidationOptions> options) 
             : base(options, NullDataAnnotationValidator.Instance)
         {
         }

@@ -95,19 +95,11 @@ namespace Volo.Abp.Validation
 
         protected virtual void AddMethodParameterValidationErrors(IAbpValidationResult context, ParameterInfo parameterInfo, object parameterValue)
         {
-            if (parameterValue == null)
-            {
-                if (!parameterInfo.IsOptional &&
-                    !parameterInfo.IsOut &&
-                    !TypeHelper.IsPrimitiveExtendedIncludingNullable(parameterInfo.ParameterType, includeEnums: true))
-                {
-                    context.Errors.Add(new ValidationResult(parameterInfo.Name + " is null!", new[] { parameterInfo.Name }));
-                }
+            var allowNulls = parameterInfo.IsOptional ||
+                             parameterInfo.IsOut ||
+                             TypeHelper.IsPrimitiveExtendedIncludingNullable(parameterInfo.ParameterType, includeEnums: true);
 
-                return;
-            }
-
-            _objectValidator.AddValidatationErrors(context, parameterValue);
+            _objectValidator.AddValidatationErrors(context, parameterValue, parameterInfo.Name, allowNulls);
         }
     }
 }
