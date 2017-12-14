@@ -4,6 +4,6 @@ namespace Volo.Abp.Validation
     {
         void Validate(object validatingObject, string name = null, bool allowNull = false);
 
-        void AddValidatationErrors(IAbpValidationResult validationResult, object validatingObject, string name = null, bool allowNull = false);
+        void AddErrors(IAbpValidationResult validationResult, object validatingObject, string name = null, bool allowNull = false);
     }
 }

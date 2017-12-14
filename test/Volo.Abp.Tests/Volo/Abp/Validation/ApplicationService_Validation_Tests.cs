@@ -135,22 +135,6 @@ namespace Volo.Abp.Validation
         }
 
         [Fact]
-        public void Should_Normalize_Nested_Dtos()
-        {
-            var input = new MyMethod7Input
-            {
-                Inner = new MyMethod7Input.MyMethod7InputInner
-                {
-                    Value = 10
-                }
-            };
-
-            _myAppService.MyMethod7(input);
-
-            input.Inner.Value.ShouldBe(12);
-        }
-
-        [Fact]
         public void Should_Stop_Recursive_Validation_In_A_Constant_Depth()
         {
             _myAppService.MyMethod8(new MyClassWithRecursiveReference { Value = "42" }).Result.ShouldBe(42);
@@ -180,7 +164,6 @@ namespace Volo.Abp.Validation
             MyMethodOutput MyMethod4_2(MyMethod4Input input);
             MyMethodOutput MyMethod5(MyMethod5Input input);
             MyMethodOutput MyMethod6(MyMethod6Input input);
-            MyMethodOutput MyMethod7(MyMethod7Input input);
             MyMethodOutput MyMethod8(MyClassWithRecursiveReference input);
             void MyMethodWithNullableEnum(MyEnum? value);
         }
@@ -219,11 +202,6 @@ namespace Volo.Abp.Validation
             }
 
             public MyMethodOutput MyMethod6(MyMethod6Input input)
-            {
-                return new MyMethodOutput { Result = 42 };
-            }
-
-            public MyMethodOutput MyMethod7(MyMethod7Input input)
             {
                 return new MyMethodOutput { Result = 42 };
             }
@@ -294,26 +272,6 @@ namespace Volo.Abp.Validation
                 if (MyIntValue < 18)
                 {
                     yield return new ValidationResult("MyIntValue must be greather than or equal to 18");
-                }
-            }
-        }
-
-        public class MyMethod7Input : IShouldNormalize
-        {
-            public MyMethod7InputInner Inner { get; set; }
-
-            public void Normalize()
-            {
-                Inner.Value++;
-            }
-
-            public class MyMethod7InputInner : IShouldNormalize
-            {
-                public int Value { get; set; }
-
-                public void Normalize()
-                {
-                    Value++;
                 }
             }
         }

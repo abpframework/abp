@@ -15,7 +15,6 @@ namespace Volo.Abp.Validation
             Method = method;
             ParameterValues = parameterValues;
             Parameters = method.GetParameters();
-
         }
     }
 }

@@ -7,12 +7,9 @@ namespace Volo.Abp.Validation
     {
         public List<ValidationResult> Errors { get; }
 
-        public List<IShouldNormalize> ObjectsToBeNormalized { get; }
-
         public AbpValidationResult()
         {
             Errors = new List<ValidationResult>();
-            ObjectsToBeNormalized = new List<IShouldNormalize>();
         }
     }
 }

@@ -35,8 +35,7 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Users
 
         public async Task<NoContentResult> OnPostAsync()
         {
-            ObjectValidator.Validate(UserInfo, nameof(UserInfo));
-            ObjectValidator.Validate(Roles, nameof(Roles));
+            ValidateModel();
 
             var input = ObjectMapper.Map<UserInfoViewModel, IdentityUserCreateDto>(UserInfo);
             input.RoleNames = Roles.Where(r => r.IsAssigned).Select(r => r.Name).ToArray();

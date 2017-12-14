@@ -6,7 +6,5 @@ namespace Volo.Abp.Validation
     public interface IAbpValidationResult
     {
         List<ValidationResult> Errors { get; }
-
-        List<IShouldNormalize> ObjectsToBeNormalized { get; }
     }
 }

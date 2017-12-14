@@ -8,9 +8,9 @@ namespace Volo.Abp.AspNetCore.Mvc.Validation
 {
     public class AbpValidationActionFilter : IAsyncActionFilter, ITransientDependency
     {
-        private readonly MvcActionInvocationValidator _validator;
+        private readonly ModelStateValidator _validator;
 
-        public AbpValidationActionFilter(MvcActionInvocationValidator validator)
+        public AbpValidationActionFilter(ModelStateValidator validator)
         {
             _validator = validator;
         }
@@ -28,7 +28,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Validation
 
             using (AbpCrossCuttingConcerns.Applying(context.Controller, AbpCrossCuttingConcerns.Validation))
             {
-                _validator.Validate(new MvcActionInvocationValidationContext(context));
+                _validator.Validate(context.ModelState);
                 await next();
             }
         }

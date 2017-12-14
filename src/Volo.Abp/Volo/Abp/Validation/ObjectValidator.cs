@@ -25,23 +25,18 @@ namespace Volo.Abp.Validation
         {
             var validationResult = new AbpValidationResult();
 
-            AddValidatationErrors(validationResult, validatingObject, name, allowNull);
+            AddErrors(validationResult, validatingObject, name, allowNull);
 
             if (validationResult.Errors.Any())
             {
                 throw new AbpValidationException(
-                    "Method arguments are not valid! See ValidationErrors for details.",
+                    "Object state is not valid! See ValidationErrors for details.",
                     validationResult.Errors
                 );
             }
-
-            foreach (var objectToBeNormalized in validationResult.ObjectsToBeNormalized)
-            {
-                objectToBeNormalized.Normalize();
-            }
         }
 
-        public virtual void AddValidatationErrors(IAbpValidationResult validationResult, object validatingObject, string name = null, bool allowNull = false)
+        public virtual void AddErrors(IAbpValidationResult validationResult, object validatingObject, string name = null, bool allowNull = false)
         {
             if (validatingObject == null && !allowNull)
             {
@@ -69,7 +64,7 @@ namespace Volo.Abp.Validation
                 return;
             }
 
-            _dataAnnotationValidator.AddDataAnnotationAttributeErrors(context, validatingObject);
+            _dataAnnotationValidator.AddErrors(context, validatingObject);
 
             //Validate items of enumerable
             if (validatingObject is IEnumerable && !(validatingObject is IQueryable))
@@ -78,12 +73,6 @@ namespace Volo.Abp.Validation
                 {
                     ValidateObjectRecursively(context, item, currentDepth + 1);
                 }
-            }
-
-            //Add list to be normalized later
-            if (validatingObject is IShouldNormalize)
-            {
-                context.ObjectsToBeNormalized.Add(validatingObject as IShouldNormalize);
             }
 
             //Do not recursively validate for enumerable objects

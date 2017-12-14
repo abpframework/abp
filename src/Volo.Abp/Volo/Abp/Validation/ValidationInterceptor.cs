@@ -6,9 +6,9 @@ namespace Volo.Abp.Validation
 {
     public class ValidationInterceptor : AbpInterceptor, ITransientDependency
     {
-        private readonly MethodInvocationValidator _validator;
+        private readonly IMethodInvocationValidator _validator;
 
-        public ValidationInterceptor(MethodInvocationValidator validator)
+        public ValidationInterceptor(IMethodInvocationValidator validator)
         {
             _validator = validator;
         }
@@ -28,13 +28,12 @@ namespace Volo.Abp.Validation
 
         protected virtual void Validate(IAbpMethodInvocation invocation)
         {
-            _validator
-                .Validate(
-                    new MethodInvocationValidationContext(
-                        invocation.Method,
-                        invocation.Arguments
-                    )
-                );
+            _validator.Validate(
+                new MethodInvocationValidationContext(
+                    invocation.Method,
+                    invocation.Arguments
+                )
+            );
         }
     }
 }

@@ -8,10 +8,25 @@ namespace Volo.Abp.Validation
 {
     public class DataAnnotationValidator : IDataAnnotationValidator, ITransientDependency
     {
+        public void Validate(object validatingObject)
+        {
+            var validationResult = new AbpValidationResult();
+
+            AddErrors(validationResult, validatingObject);
+
+            if (validationResult.Errors.Any())
+            {
+                throw new AbpValidationException(
+                    "Object state is not valid! See ValidationErrors for details.",
+                    validationResult.Errors
+                );
+            }
+        }
+
         /// <summary>
         /// Checks all properties for DataAnnotations attributes.
         /// </summary>
-        public virtual void AddDataAnnotationAttributeErrors(IAbpValidationResult validationResult, object validatingObject)
+        public virtual void AddErrors(IAbpValidationResult validationResult, object validatingObject)
         {
             var properties = TypeDescriptor.GetProperties(validatingObject).Cast<PropertyDescriptor>();
             foreach (var property in properties)

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Volo.Abp.AspNetCore.Mvc.Validation;
 using Volo.Abp.Guids;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Uow;
@@ -20,7 +21,7 @@ namespace Volo.Abp.AspNetCore.Mvc.RazorPages
 
         public ILoggerFactory LoggerFactory { get; set; }
 
-        public IObjectValidator ObjectValidator { get; set; }
+        public IModelStateValidator ModelValidator { get; set; }
 
         protected IUnitOfWork CurrentUnitOfWork => UnitOfWorkManager?.Current;
         
@@ -30,6 +31,11 @@ namespace Volo.Abp.AspNetCore.Mvc.RazorPages
         protected virtual NoContentResult NoContent() //TODO: Is that true to return empty result like that?
         {
             return new NoContentResult();
+        }
+
+        protected virtual void ValidateModel()
+        {
+            ModelValidator?.Validate(ModelState);
         }
     }
 }

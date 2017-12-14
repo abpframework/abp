@@ -2,6 +2,8 @@ namespace Volo.Abp.Validation
 {
     public interface IDataAnnotationValidator
     {
-        void AddDataAnnotationAttributeErrors(IAbpValidationResult validationResult, object validatingObject);
+        void Validate(object validatingObject);
+
+        void AddErrors(IAbpValidationResult validationResult, object validatingObject);
     }
 }
