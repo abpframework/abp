@@ -1,6 +1,4 @@
-﻿using System;
-using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.Aspects;
+﻿using Volo.Abp.Aspects;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DynamicProxy;
 
@@ -8,11 +6,11 @@ namespace Volo.Abp.Validation
 {
     public class ValidationInterceptor : AbpInterceptor, ITransientDependency
     {
-        private readonly IServiceProvider _serviceProvider;
+        private readonly MethodInvocationValidator _validator;
 
-        public ValidationInterceptor(IServiceProvider serviceProvider)
+        public ValidationInterceptor(MethodInvocationValidator validator)
         {
-            _serviceProvider = serviceProvider;
+            _validator = validator;
         }
 
         public override void Intercept(IAbpMethodInvocation invocation)
@@ -23,14 +21,20 @@ namespace Volo.Abp.Validation
                 return;
             }
 
-            using (var scope = _serviceProvider.CreateScope())
-            {
-                var validator = scope.ServiceProvider.GetRequiredService<MethodInvocationValidator>();
-                validator.Initialize(invocation.Method, invocation.Arguments);
-                validator.Validate();
-            }
+            Validate(invocation);
 
             invocation.Proceed();
+        }
+
+        protected virtual void Validate(IAbpMethodInvocation invocation)
+        {
+            _validator
+                .Validate(
+                    new MethodInvocationValidationContext(
+                        invocation.Method,
+                        invocation.Arguments
+                    )
+                );
         }
     }
 }

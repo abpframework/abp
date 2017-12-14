@@ -1,8 +1,6 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Aspects;
 using Volo.Abp.DependencyInjection;
 
@@ -10,17 +8,18 @@ namespace Volo.Abp.AspNetCore.Mvc.Validation
 {
     public class AbpValidationActionFilter : IAsyncActionFilter, ITransientDependency
     {
-        private readonly IServiceProvider _serviceProvider;
+        private readonly MvcActionInvocationValidator _validator;
 
-        public AbpValidationActionFilter(IServiceProvider serviceProvider)
+        public AbpValidationActionFilter(MvcActionInvocationValidator validator)
         {
-            _serviceProvider = serviceProvider;
+            _validator = validator;
         }
 
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
             //TODO: Configuration to disable validation for controllers..?
-            if (!context.ActionDescriptor.IsControllerAction() || 
+
+            if (!context.ActionDescriptor.IsControllerAction() ||
                 !ActionResultHelper.IsObjectResult(context.ActionDescriptor.GetMethodInfo().ReturnType))
             {
                 await next();
@@ -29,13 +28,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Validation
 
             using (AbpCrossCuttingConcerns.Applying(context.Controller, AbpCrossCuttingConcerns.Validation))
             {
-                using (var scope = _serviceProvider.CreateScope())
-                {
-                    var validator = scope.ServiceProvider.GetRequiredService<MvcActionInvocationValidator>();
-                    validator.Initialize(context);
-                    validator.Validate();
-                }
-
+                _validator.Validate(new MvcActionInvocationValidationContext(context));
                 await next();
             }
         }
