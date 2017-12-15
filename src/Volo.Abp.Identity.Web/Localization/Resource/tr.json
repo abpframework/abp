@@ -10,6 +10,8 @@
     "UserInformations": "Kullanıcı bilgileri",
     "Roles": "Roller",
     "Close": "Kapat",
+    "Delete": "Sil",
+    "Edit": "Düzenle",
     "Save": "Kaydet",
     "Password": "Şifre",
     "UserDeletionConfirmationMessage": "{0} kullanıcısı silinecektir. Onaylıyor musunuz?",

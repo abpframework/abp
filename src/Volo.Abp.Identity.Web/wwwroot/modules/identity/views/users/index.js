@@ -38,11 +38,11 @@
                     render: function (list, type, record, meta) {
                         return '<div class="dropdown">' +
                             '<button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
-                            'Actions' +
+                            l('Actions') +
                             '</button>' +
                             '<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">' +
-                            '<a class="dropdown-item update-user" href="#" data-id="' + record.id + '">Edit</a>' +
-                            '<a class="dropdown-item delete-user" href="#" data-id="' + record.id + '">Delete</a>' +
+                            '<a class="dropdown-item update-user" href="#" data-id="' + record.id + '">' + l('Edit') + '</a>' +
+                            '<a class="dropdown-item delete-user" href="#" data-id="' + record.id + '">' + l('Delete') + '</a>' +
                             '</div>' +
                             '</div>';
                     }
