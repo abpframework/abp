@@ -6,6 +6,6 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 {
     public interface IApiDescriptionCache
     {
-        Task<ApplicationApiDescriptionModel> GetAsync(string baseUrl, CancellationToken cancellationToken = default(CancellationToken));
+        Task<ApplicationApiDescriptionModel> GetAsync(string baseUrl, CancellationToken cancellationToken = default);
     }
 }

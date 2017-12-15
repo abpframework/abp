@@ -19,7 +19,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Utils
                     
                     if (EqualityComparer<T>.Default.Equals(sourceItem, destinationItem))
                     {
-                        parentItem = default(T);
+                        parentItem = default;
                         currentMethodParamIndex++;
                     }
                     else
@@ -32,7 +32,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Utils
                     }
                 }
 
-                var resultItem = EqualityComparer<T>.Default.Equals(parentItem, default(T)) ? sourceItem : parentItem;
+                var resultItem = EqualityComparer<T>.Default.Equals(parentItem, default) ? sourceItem : parentItem;
                 result.Add(resultItem);
             }
 

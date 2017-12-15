@@ -44,7 +44,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             return await (await Collection.FindAsync(Builders<TEntity>.Filter.Empty, cancellationToken: cancellationToken)).ToListAsync(cancellationToken);
         }
 
-        public override async Task<TEntity> GetAsync(TPrimaryKey id, CancellationToken cancellationToken = default(CancellationToken))
+        public override async Task<TEntity> GetAsync(TPrimaryKey id, CancellationToken cancellationToken = default)
         {
             var entity = await FindAsync(id, cancellationToken);
 
@@ -62,7 +62,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             return entity;
         }
 
-        public override async Task<TEntity> InsertAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default(CancellationToken))
+        public override async Task<TEntity> InsertAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             await Collection.InsertOneAsync(entity, cancellationToken: cancellationToken);
             return entity;
@@ -75,7 +75,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             return entity;
         }
 
-        public override async Task<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default(CancellationToken))
+        public override async Task<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
             var filter = Builders<TEntity>.Filter.Eq(e => e.Id, entity.Id);
             await Collection.ReplaceOneAsync(filter, entity, cancellationToken: cancellationToken);
@@ -99,18 +99,18 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             Collection.DeleteOne(filter);
         }
 
-        public override Task DeleteAsync(TPrimaryKey id, CancellationToken cancellationToken = default(CancellationToken))
+        public override Task DeleteAsync(TPrimaryKey id, CancellationToken cancellationToken = default)
         {
             var filter = Builders<TEntity>.Filter.Eq(e => e.Id, id);
             return Collection.DeleteOneAsync(filter, cancellationToken: cancellationToken);
         }
 
-        public override Task DeleteAsync(TEntity entity, CancellationToken cancellationToken = default(CancellationToken))
+        public override Task DeleteAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
             return DeleteAsync(entity.Id, cancellationToken);
         }
 
-        public override Task DeleteAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default(CancellationToken))
+        public override Task DeleteAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
         {
             var filter = Builders<TEntity>.Filter.Where(predicate);
             return Collection.DeleteOneAsync(filter, cancellationToken: cancellationToken);
@@ -121,7 +121,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             return Collection.AsQueryable();
         }
 
-        public override Task<long> GetCountAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public override Task<long> GetCountAsync(CancellationToken cancellationToken = default)
         {
             return Collection.CountAsync(Builders<TEntity>.Filter.Empty, cancellationToken: cancellationToken);
         }

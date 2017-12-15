@@ -24,7 +24,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             _asyncLock = new AsyncLock();
         }
 
-        public async Task<ApplicationApiDescriptionModel> GetAsync(string baseUrl, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<ApplicationApiDescriptionModel> GetAsync(string baseUrl, CancellationToken cancellationToken = default)
         {
             using (await _asyncLock.LockAsync(cancellationToken))
             {
