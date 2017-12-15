@@ -46,6 +46,14 @@ namespace Volo.Abp.AutoMapper
                         }
                     }
 
+                    void ValidateAll(IConfigurationProvider config)
+                    {
+                        foreach (var profileType in options.ValidatingProfiles)
+                        {
+                            config.AssertConfigurationIsValid(((Profile)Activator.CreateInstance(profileType)).ProfileName);
+                        }
+                    }
+
                     if (options.UseStaticMapper)
                     {
                         //We should prevent duplicate mapping in an application, since Mapper is static.
@@ -55,6 +63,8 @@ namespace Volo.Abp.AutoMapper
                             {
                                 ConfigureAll(new AbpAutoMapperConfigurationContext(mapperConfigurationExpression, scope.ServiceProvider));
                             });
+
+                            ValidateAll(Mapper.Configuration);
 
                             _createdMappingsBefore = true;
                         }
@@ -67,6 +77,8 @@ namespace Volo.Abp.AutoMapper
                         {
                             ConfigureAll(new AbpAutoMapperConfigurationContext(mapperConfigurationExpression, scope.ServiceProvider));
                         });
+
+                        ValidateAll(config);
 
                         scope.ServiceProvider.GetRequiredService<MapperAccessor>().Mapper = config.CreateMapper();
                     }

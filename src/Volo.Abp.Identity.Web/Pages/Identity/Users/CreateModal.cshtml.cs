@@ -67,6 +67,12 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Users
             [MaxLength(IdentityUserConsts.MaxPhoneNumberLength)]
             [Display(Name = "PhoneNumber")]
             public string PhoneNumber { get; set; }
+
+            [Display(Name = "TwoFactorVerification")]
+            public bool TwoFactorEnabled { get; set; } = true;
+
+            [Display(Name = "AccountLockoutOnFailedLoginAttempts")]
+            public bool LockoutEnabled { get; set; } = true;
         }
 
         public class AssignedRoleViewModel

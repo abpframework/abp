@@ -17,9 +17,9 @@ namespace Volo.Abp.Identity
         [MaxLength(IdentityUserConsts.MaxPhoneNumberLength)]
         public string PhoneNumber { get; set; }
 
-        public bool TwoFactorEnabled { get; set; } //TODO: Optional?
+        public bool TwoFactorEnabled { get; set; }
 
-        public bool LockoutEnabled { get; set; } //TODO: Optional?
+        public bool LockoutEnabled { get; set; }
 
         [CanBeNull]
         public string[] RoleNames { get; set; }

@@ -37,7 +37,7 @@ namespace Volo.Abp.TestBase
 
         protected virtual void BeforeAddApplication(IServiceCollection services)
         {
-
+            
         }
 
         protected virtual void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)

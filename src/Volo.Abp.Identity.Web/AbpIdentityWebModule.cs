@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.AspNetCore.Mvc;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AutoMapper;
@@ -47,10 +45,7 @@ namespace Volo.Abp.Identity.Web
 
             services.Configure<AbpAutoMapperOptions>(options =>
             {
-                options.Configurators.Add(context =>
-                {
-                    context.MapperConfiguration.AddProfile<AbpIdentityWebAutoMapperProfile>();
-                });
+                options.AddProfile<AbpIdentityWebAutoMapperProfile>(true);
             });
         }
     }

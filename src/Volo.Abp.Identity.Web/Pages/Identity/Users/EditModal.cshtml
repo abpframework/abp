@@ -45,6 +45,18 @@
                         <input asp-for="UserInfo.PhoneNumber" class="form-control" />
                         <span asp-validation-for="UserInfo.PhoneNumber" class="text-danger"></span>
                     </div>
+                    <div class="form-check">
+                        <label asp-for="@Model.UserInfo.LockoutEnabled" class="form-check-label">
+                            <input asp-for="@Model.UserInfo.LockoutEnabled" class="form-check-input" />
+                            @Html.DisplayNameFor(m => m.UserInfo.LockoutEnabled)
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <label asp-for="@Model.UserInfo.TwoFactorEnabled" class="form-check-label">
+                            <input asp-for="@Model.UserInfo.TwoFactorEnabled" class="form-check-input" />
+                            @Html.DisplayNameFor(m => m.UserInfo.TwoFactorEnabled)
+                        </label>
+                    </div>
 
                 </div>
                 <div class="tab-pane" id="EditUser_RolesTab" role="tabpanel">
