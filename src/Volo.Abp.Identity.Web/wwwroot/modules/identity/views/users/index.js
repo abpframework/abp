@@ -1,6 +1,6 @@
 ﻿(function() {
     
-    var _l = abp.localization.getResource('AbpIdentity'); //TODO: AbpIdentityWeb to const
+    var l = abp.localization.getResource('AbpIdentity');
     var _identityUserAppService = volo.abp.identity.identityUser;
 
     var _editModal = new abp.ModalManager({
@@ -74,7 +74,7 @@
             var id = $(this).data('id');
             var userName = $(this).data('userName');
 
-            if (confirm(_l('UserDeletionConfirmationMessage', userName))) {
+            if (confirm(l('UserDeletionConfirmationMessage', userName))) {
                 _identityUserAppService
                     .delete(id)
                     .then(function () {
