@@ -7,6 +7,6 @@ namespace Volo.Abp.Uow
     {
         void SaveChanges();
 
-        Task SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));
+        Task SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 }

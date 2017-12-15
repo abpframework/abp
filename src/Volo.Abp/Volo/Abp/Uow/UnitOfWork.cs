@@ -77,7 +77,7 @@ namespace Volo.Abp.Uow
             }
         }
 
-        public virtual async Task SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             foreach (var databaseApi in _databaseApis.Values)
             {
@@ -110,7 +110,7 @@ namespace Volo.Abp.Uow
             }
         }
 
-        public virtual async Task CompleteAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task CompleteAsync(CancellationToken cancellationToken = default)
         {
             if (_isRolledback)
             {
@@ -144,7 +144,7 @@ namespace Volo.Abp.Uow
             RollbackAll();
         }
 
-        public virtual async Task RollbackAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task RollbackAsync(CancellationToken cancellationToken = default)
         {
             if (_isRolledback)
             {

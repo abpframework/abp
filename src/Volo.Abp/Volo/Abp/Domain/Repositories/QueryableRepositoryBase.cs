@@ -60,7 +60,7 @@ namespace Volo.Abp.Domain.Repositories
             }
         }
 
-        public virtual Task DeleteAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task DeleteAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
         {
             Delete(predicate);
             return Task.CompletedTask;

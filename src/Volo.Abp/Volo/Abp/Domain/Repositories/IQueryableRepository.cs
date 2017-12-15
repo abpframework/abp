@@ -34,6 +34,6 @@ namespace Volo.Abp.Domain.Repositories
         /// </summary>
         /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
         /// <param name="predicate">A condition to filter entities</param>
-        Task DeleteAsync([NotNull] Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default(CancellationToken));
+        Task DeleteAsync([NotNull] Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default);
     }
 }

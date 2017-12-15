@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
 {
@@ -45,14 +46,14 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
             return DbSet.AsQueryable();
         }
 
-        public override Task<List<TEntity>> GetListAsync(CancellationToken cancellationToken = new CancellationToken())
+        public override Task<List<TEntity>> GetListAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            return DbSet.ToListAsync(cancellationToken);
+            return DbSet.ToListAsync(CancellationTokenProvider.FallbackToProvider(cancellationToken));
         }
 
         public override async Task<TEntity> GetAsync(TPrimaryKey id, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var entity = await FindAsync(id, cancellationToken);
+            var entity = await FindAsync(id, CancellationTokenProvider.FallbackToProvider(cancellationToken));
 
             if (entity == null)
             {
@@ -69,7 +70,7 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
 
         public override Task<TEntity> FindAsync(TPrimaryKey id, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return DbSet.FindAsync(new object[] { id }, cancellationToken);
+            return DbSet.FindAsync(new object[] { id }, CancellationTokenProvider.FallbackToProvider(cancellationToken));
         }
 
         public override TEntity Insert(TEntity entity, bool autoSave = false)
@@ -90,7 +91,7 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
 
             if (autoSave)
             {
-                await DbContext.SaveChangesAsync(cancellationToken);
+                await DbContext.SaveChangesAsync(CancellationTokenProvider.FallbackToProvider(cancellationToken));
             }
 
             return savedEntity;
@@ -109,7 +110,7 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
 
         public override async Task DeleteAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var entities = await GetQueryable().Where(predicate).ToListAsync(cancellationToken);
+            var entities = await GetQueryable().Where(predicate).ToListAsync(CancellationTokenProvider.FallbackToProvider(cancellationToken));
             foreach (var entity in entities)
             {
                 DbSet.Remove(entity);
@@ -118,25 +119,25 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
 
         public override Task<long> GetCountAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            return GetQueryable().LongCountAsync(cancellationToken);
+            return GetQueryable().LongCountAsync(CancellationTokenProvider.FallbackToProvider(cancellationToken));
         }
 
         public virtual Task EnsureCollectionLoadedAsync<TProperty>(
             TEntity entity,
             Expression<Func<TEntity, IEnumerable<TProperty>>> propertyExpression,
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken = default(CancellationToken))
             where TProperty : class
         {
-            return DbContext.Entry(entity).Collection(propertyExpression).LoadAsync(cancellationToken);
+            return DbContext.Entry(entity).Collection(propertyExpression).LoadAsync(CancellationTokenProvider.FallbackToProvider(cancellationToken));
         }
 
         public virtual Task EnsurePropertyLoadedAsync<TProperty>(
             TEntity entity,
             Expression<Func<TEntity, TProperty>> propertyExpression,
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken = default(CancellationToken))
             where TProperty : class
         {
-            return DbContext.Entry(entity).Reference(propertyExpression).LoadAsync(cancellationToken);
+            return DbContext.Entry(entity).Reference(propertyExpression).LoadAsync(CancellationTokenProvider.FallbackToProvider(cancellationToken));
         }
     }
 }

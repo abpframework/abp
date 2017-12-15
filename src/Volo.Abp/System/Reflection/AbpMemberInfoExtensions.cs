@@ -28,7 +28,7 @@ namespace System.Reflection
                 return (TAttribute)attrs[0];
             }
 
-            return default(TAttribute);
+            return default;
         }
 
 

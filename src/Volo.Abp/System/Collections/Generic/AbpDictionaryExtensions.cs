@@ -22,7 +22,7 @@ namespace System.Collections.Generic
                 return true;
             }
 
-            value = default(T);
+            value = default;
             return false;
         }
 
@@ -37,7 +37,7 @@ namespace System.Collections.Generic
         public static TValue GetOrDefault<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key)
         {
             TValue obj;
-            return dictionary.TryGetValue(key, out obj) ? obj : default(TValue);
+            return dictionary.TryGetValue(key, out obj) ? obj : default;
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace System.Collections.Generic
         public static TValue GetOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key)
         {
             TValue obj;
-            return dictionary.TryGetValue(key, out obj) ? obj : default(TValue);
+            return dictionary.TryGetValue(key, out obj) ? obj : default;
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace System.Collections.Generic
         public static TValue GetOrDefault<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> dictionary, TKey key)
         {
             TValue obj;
-            return dictionary.TryGetValue(key, out obj) ? obj : default(TValue);
+            return dictionary.TryGetValue(key, out obj) ? obj : default;
         }
 
         /// <summary>

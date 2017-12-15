@@ -15,7 +15,7 @@ namespace Volo.Abp.Domain.Repositories
             this IRepository<TEntity, TPrimaryKey> repository,
             TEntity entity,
             Expression<Func<TEntity, IEnumerable<TProperty>>> propertyExpression,
-            CancellationToken cancellationToken = default(CancellationToken)
+            CancellationToken cancellationToken = default
         )
             where TEntity : class, IEntity<TPrimaryKey>
             where TProperty : class
@@ -42,7 +42,7 @@ namespace Volo.Abp.Domain.Repositories
             this IRepository<TEntity, TPrimaryKey> repository,
             TEntity entity,
             Expression<Func<TEntity, TProperty>> propertyExpression,
-            CancellationToken cancellationToken = default(CancellationToken)
+            CancellationToken cancellationToken = default
         )
             where TEntity : class, IEntity<TPrimaryKey>
             where TProperty : class

@@ -56,7 +56,7 @@ namespace Volo.Abp.Uow
             _parent.SaveChanges();
         }
 
-        public Task SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public Task SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             return _parent.SaveChangesAsync(cancellationToken);
         }
@@ -66,7 +66,7 @@ namespace Volo.Abp.Uow
 
         }
 
-        public Task CompleteAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public Task CompleteAsync(CancellationToken cancellationToken = default)
         {
             return Task.CompletedTask;
         }
@@ -76,7 +76,7 @@ namespace Volo.Abp.Uow
             _parent.Rollback();
         }
 
-        public Task RollbackAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public Task RollbackAsync(CancellationToken cancellationToken = default)
         {
             return _parent.RollbackAsync(cancellationToken);
         }

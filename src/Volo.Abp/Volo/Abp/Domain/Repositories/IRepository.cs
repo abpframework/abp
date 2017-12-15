@@ -33,7 +33,7 @@ namespace Volo.Abp.Domain.Repositories
         /// </summary>
         /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
         /// <returns>List of entities</returns>
-        Task<List<TEntity>> GetListAsync(CancellationToken cancellationToken = default(CancellationToken));
+        Task<List<TEntity>> GetListAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets an entity with given primary key.
@@ -52,7 +52,7 @@ namespace Volo.Abp.Domain.Repositories
         /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
         /// <returns>Entity</returns>
         [NotNull]
-        Task<TEntity> GetAsync(TPrimaryKey id, CancellationToken cancellationToken = default(CancellationToken));
+        Task<TEntity> GetAsync(TPrimaryKey id, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets an entity with given primary key or null if not found.
@@ -68,7 +68,7 @@ namespace Volo.Abp.Domain.Repositories
         /// <param name="id">Primary key of the entity to get</param>
         /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
         /// <returns>Entity or null</returns>
-        Task<TEntity> FindAsync(TPrimaryKey id, CancellationToken cancellationToken = default(CancellationToken));
+        Task<TEntity> FindAsync(TPrimaryKey id, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Inserts a new entity.
@@ -91,7 +91,7 @@ namespace Volo.Abp.Domain.Repositories
         /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
         /// <param name="entity">Inserted entity</param>
         [NotNull]
-        Task<TEntity> InsertAsync([NotNull] TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default(CancellationToken));
+        Task<TEntity> InsertAsync([NotNull] TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Updates an existing entity.
@@ -106,7 +106,7 @@ namespace Volo.Abp.Domain.Repositories
         /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
         /// <param name="entity">Entity</param>
         [NotNull]
-        Task<TEntity> UpdateAsync([NotNull] TEntity entity, CancellationToken cancellationToken = default(CancellationToken));
+        Task<TEntity> UpdateAsync([NotNull] TEntity entity, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Deletes an entity.
@@ -119,7 +119,7 @@ namespace Volo.Abp.Domain.Repositories
         /// </summary>
         /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
         /// <param name="entity">Entity to be deleted</param>
-        Task DeleteAsync([NotNull] TEntity entity, CancellationToken cancellationToken = default(CancellationToken));
+        Task DeleteAsync([NotNull] TEntity entity, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Deletes an entity by primary key.
@@ -132,7 +132,7 @@ namespace Volo.Abp.Domain.Repositories
         /// </summary>
         /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
         /// <param name="id">Primary key of the entity</param>
-        Task DeleteAsync(TPrimaryKey id, CancellationToken cancellationToken = default(CancellationToken));
+        Task DeleteAsync(TPrimaryKey id, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Get list of all entities without any filtering.
@@ -145,6 +145,6 @@ namespace Volo.Abp.Domain.Repositories
         /// </summary>
         /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
         /// <returns>List of entities</returns>
-        Task<long> GetCountAsync(CancellationToken cancellationToken = default(CancellationToken));
+        Task<long> GetCountAsync(CancellationToken cancellationToken = default);
     }
 }

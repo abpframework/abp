@@ -26,7 +26,7 @@ namespace Volo.Abp.Domain.Entities
         /// <inheritdoc/>
         public virtual bool IsTransient()
         {
-            if (EqualityComparer<TPrimaryKey>.Default.Equals(Id, default(TPrimaryKey)))
+            if (EqualityComparer<TPrimaryKey>.Default.Equals(Id, default))
             {
                 return true;
             }

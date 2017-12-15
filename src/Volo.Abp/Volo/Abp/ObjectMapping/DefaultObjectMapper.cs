@@ -19,7 +19,7 @@ namespace Volo.Abp.ObjectMapping
         {
             if (source == null)
             {
-                return default(TDestination);
+                return default;
             }
 
             //Check if a specific mapper is registered
@@ -39,7 +39,7 @@ namespace Volo.Abp.ObjectMapping
         {
             if (source == null)
             {
-                return default(TDestination);
+                return default;
             }
 
             //Check if a specific mapper is registered

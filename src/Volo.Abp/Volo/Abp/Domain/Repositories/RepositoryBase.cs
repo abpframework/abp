@@ -4,6 +4,7 @@ using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.Domain.Repositories
 {
@@ -16,6 +17,13 @@ namespace Volo.Abp.Domain.Repositories
     public abstract class RepositoryBase<TEntity, TPrimaryKey> : IRepository<TEntity, TPrimaryKey>
         where TEntity : class, IEntity<TPrimaryKey>
     {
+        public ICancellationTokenProvider CancellationTokenProvider { get; set; }
+
+        protected RepositoryBase()
+        {
+            CancellationTokenProvider = NullCancellationTokenProvider.Instance;
+        }
+
         public abstract List<TEntity> GetList();
 
         public virtual Task<List<TEntity>> GetListAsync(CancellationToken cancellationToken = new CancellationToken())
@@ -35,35 +43,35 @@ namespace Volo.Abp.Domain.Repositories
             return entity;
         }
 
-        public virtual Task<TEntity> GetAsync(TPrimaryKey id, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<TEntity> GetAsync(TPrimaryKey id, CancellationToken cancellationToken = default)
         {
             return Task.FromResult(Get(id));
         }
 
         public abstract TEntity Find(TPrimaryKey id);
 
-        public virtual Task<TEntity> FindAsync(TPrimaryKey id, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<TEntity> FindAsync(TPrimaryKey id, CancellationToken cancellationToken = default)
         {
             return Task.FromResult(Find(id));
         }
 
         public abstract TEntity Insert(TEntity entity, bool autoSave = false);
 
-        public virtual Task<TEntity> InsertAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<TEntity> InsertAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             return Task.FromResult(Insert(entity, autoSave));
         }
 
         public abstract TEntity Update(TEntity entity);
 
-        public virtual Task<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
             return Task.FromResult(Update(entity));
         }
 
         public abstract void Delete(TEntity entity);
 
-        public virtual Task DeleteAsync(TEntity entity, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task DeleteAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
             Delete(entity);
             return Task.CompletedTask;
@@ -80,7 +88,7 @@ namespace Volo.Abp.Domain.Repositories
             Delete(entity);
         }
 
-        public virtual Task DeleteAsync(TPrimaryKey id, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task DeleteAsync(TPrimaryKey id, CancellationToken cancellationToken = default)
         {
             Delete(id);
             return Task.CompletedTask;
@@ -88,7 +96,7 @@ namespace Volo.Abp.Domain.Repositories
 
         public abstract long GetCount();
 
-        public virtual Task<long> GetCountAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<long> GetCountAsync(CancellationToken cancellationToken = default)
         {
             return Task.FromResult(GetCount());
         }

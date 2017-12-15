@@ -31,14 +31,14 @@ namespace Volo.Abp.Uow
 
         void SaveChanges();
 
-        Task SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));
+        Task SaveChangesAsync(CancellationToken cancellationToken = default);
 
         void Complete();
 
-        Task CompleteAsync(CancellationToken cancellationToken = default(CancellationToken));
+        Task CompleteAsync(CancellationToken cancellationToken = default);
 
         void Rollback();
 
-        Task RollbackAsync(CancellationToken cancellationToken = default(CancellationToken));
+        Task RollbackAsync(CancellationToken cancellationToken = default);
     }
 }

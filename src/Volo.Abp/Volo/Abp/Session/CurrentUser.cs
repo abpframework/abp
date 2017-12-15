@@ -46,7 +46,7 @@ namespace Volo.Abp.Session
             var value = FindClaimValue(claimType);
             if (value == null)
             {
-                return default(T);
+                return default;
             }
 
             return value.To<T>();

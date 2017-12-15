@@ -5,6 +5,7 @@ using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Reflection;
+using Volo.Abp.Threading;
 using Volo.Abp.Uow;
 using Volo.Abp.Validation;
 
@@ -40,6 +41,7 @@ namespace Volo.Abp
 
             services.AddAssemblyOf<AbpKernelModule>();
 
+            services.AddSingleton<ICancellationTokenProvider>(NullCancellationTokenProvider.Instance);
             services.AddSingleton<IRequestedApiVersion>(NullRequestedApiVersion.Instance);
             services.AddSingleton(typeof(IDataFilter<>), typeof(DataFilter<>));
             
