@@ -11,12 +11,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Areas\**\*.cshtml" />
-    <EmbeddedResource Include="Areas\**\*.js" />
-    <EmbeddedResource Include="Areas\**\*.json" />
-    <EmbeddedResource Include="Areas\**\*.css" />
     <EmbeddedResource Include="wwwroot\**\*.*" />
     <EmbeddedResource Include="Pages\**\*.cshtml" />
+    <EmbeddedResource Include="Localization\Resource\*.json" />
   </ItemGroup>
 
   <ItemGroup>

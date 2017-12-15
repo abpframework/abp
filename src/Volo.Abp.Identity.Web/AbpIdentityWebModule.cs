@@ -2,7 +2,7 @@
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AutoMapper;
-using Volo.Abp.Identity.Web.Areas.Identity.Localization.Resource;
+using Volo.Abp.Identity.Web.Localization.Resource;
 using Volo.Abp.Identity.Web.Navigation;
 using Volo.Abp.Identity.Web.ObjectMappings;
 using Volo.Abp.Localization;
@@ -14,6 +14,7 @@ namespace Volo.Abp.Identity.Web
 {
     [DependsOn(typeof(AbpIdentityApplicationContractsModule))]
     [DependsOn(typeof(AbpAspNetCoreMvcUiBootstrapModule))]
+    [DependsOn(typeof(AbpAutoMapperModule))]
     public class AbpIdentityWebModule : AbpModule
     {
         public override void PreConfigureServices(IServiceCollection services)

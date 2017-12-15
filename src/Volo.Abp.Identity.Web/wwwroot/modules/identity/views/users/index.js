@@ -1,6 +1,6 @@
 ﻿(function() {
     
-    var _l = abp.localization.getResource('AbpIdentityWeb'); //TODO: AbpIdentityWeb to const
+    var _l = abp.localization.getResource('AbpIdentity'); //TODO: AbpIdentityWeb to const
     var _identityUserAppService = volo.abp.identity.identityUser;
 
     var _editModal = new abp.ModalManager({
