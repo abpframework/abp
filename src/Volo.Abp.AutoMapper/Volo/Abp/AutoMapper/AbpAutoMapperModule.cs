@@ -22,11 +22,6 @@ namespace Volo.Abp.AutoMapper
             var mapperAccessor = new MapperAccessor();
             services.AddSingleton<IMapperAccessor>(_ => mapperAccessor);
             services.AddSingleton<MapperAccessor>(_ => mapperAccessor);
-
-            services.Configure<AbpAutoMapperOptions>(options =>
-            {
-                options.Configurators.Add(CreateCoreMappings);
-            });
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
@@ -102,15 +97,6 @@ namespace Volo.Abp.AutoMapper
                 logger.LogDebug(type.FullName);
                 context.MapperConfiguration.CreateAutoAttributeMaps(type);
             }
-        }
-
-        private void CreateCoreMappings(IAbpAutoMapperConfigurationContext context)
-        {
-            //Will be done when localization system completed
-            //var localizationContext = IocManager.Resolve<ILocalizationContext>();
-
-            //configuration.CreateMap<ILocalizableString, string>().ConvertUsing(ls => ls?.Localize(localizationContext));
-            //configuration.CreateMap<LocalizableString, string>().ConvertUsing(ls => ls == null ? null : localizationContext.LocalizationManager.GetString(ls));
         }
     }
 }
