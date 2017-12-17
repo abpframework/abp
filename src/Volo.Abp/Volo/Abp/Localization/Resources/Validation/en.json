@@ -1,0 +1,7 @@
+{
+  "culture": "en",
+  "texts": {
+    "The field {0} must be a string or array type with a maximum length of '{1}'.": "The field {0} must be a string or array type with a maximum length of '{1}'.",
+    "The {0} field is required.": "The {0} field is required."
+  }
+}

@@ -14,6 +14,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Volo\Abp\Localization\Resources\**\*.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Volo\Abp\Localization\Resources\Validation\en.json">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Volo\Abp\Localization\Resources\Validation\tr.json">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.0.0" />
     <PackageReference Include="Microsoft.Extensions.Localization" Version="2.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="2.0.0" />

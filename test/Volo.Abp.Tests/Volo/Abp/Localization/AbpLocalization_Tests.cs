@@ -112,7 +112,8 @@ namespace Volo.Abp.Localization
                 {
                     options.Resources.AddJson<LocalizationTestValidationResource>("en");
                     options.Resources.AddJson<LocalizationTestCountryNamesResource>("en");
-                    
+
+                    //TODO: Declare base type by attribute
                     options.Resources.AddJson<LocalizationTestResource>("en")
                         .InheritFrom(
                             typeof(LocalizationTestValidationResource),

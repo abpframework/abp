@@ -2,6 +2,7 @@
 using Volo.Abp.ApiVersioning;
 using Volo.Abp.Data;
 using Volo.Abp.Localization;
+using Volo.Abp.Localization.Resources.Validation;
 using Volo.Abp.Modularity;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Reflection;
@@ -51,6 +52,11 @@ namespace Volo.Abp
                 options.Contributers.Add<OnApplicationInitializationModuleLifecycleContributer>();
                 options.Contributers.Add<OnPostApplicationInitializationModuleLifecycleContributer>();
                 options.Contributers.Add<OnApplicationShutdownModuleLifecycleContributer>();
+            });
+
+            services.Configure<AbpLocalizationOptions>(options =>
+            {
+                options.Resources.AddJson<AbpValidationResource>("en");
             });
         }
     }
