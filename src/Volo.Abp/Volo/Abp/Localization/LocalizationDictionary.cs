@@ -43,6 +43,14 @@ namespace Volo.Abp.Localization
             return _dictionary.Values.ToImmutableList();
         }
 
+        public void Extend(ILocalizationDictionary dictionary)
+        {
+            foreach (var localizedString in dictionary.GetAllStrings())
+            {
+                this[localizedString.Name] = localizedString;
+            }
+        }
+
         /// <inheritdoc/>
         public virtual IEnumerator<LocalString> GetEnumerator()
         {

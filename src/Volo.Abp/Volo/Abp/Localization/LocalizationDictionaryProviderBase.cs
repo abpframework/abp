@@ -34,15 +34,7 @@ namespace Volo.Abp.Localization
             }
             else
             {
-                Overwrite(existingDictionary, dictionary);
-            }
-        }
-
-        protected virtual void Overwrite(ILocalizationDictionary existingDictionary, ILocalizationDictionary dictionary)
-        {
-            foreach (var localizedString in dictionary.GetAllStrings())
-            {
-                existingDictionary[localizedString.Name] = localizedString;
+                existingDictionary.Extend(dictionary);
             }
         }
     }

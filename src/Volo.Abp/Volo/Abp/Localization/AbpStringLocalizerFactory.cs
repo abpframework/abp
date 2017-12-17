@@ -48,9 +48,10 @@ namespace Volo.Abp.Localization
             
             //Notes: Localizer will be cached, so wrappers are responsible to cache/invalidate themselves!
 
-            var baseLocalizers = resource.BaseResourceTypes.Select(Create).ToList();
-
-            var localizer = new AbpDictionaryBasedStringLocalizer(resource, baseLocalizers);
+            var localizer = new AbpDictionaryBasedStringLocalizer(
+                resource,
+                resource.BaseResourceTypes.Select(Create).ToList()
+            );
 
             //TODO: Wrap with DB provider or other premium sources
 
