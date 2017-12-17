@@ -12,8 +12,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Volo\Abp\Localization\SourceExt\*.json" />
-    <EmbeddedResource Include="Volo\Abp\Localization\Source\*.json" />
+    <EmbeddedResource Include="Volo\Abp\Localization\**\*.json" />
   </ItemGroup>
 
   <ItemGroup>

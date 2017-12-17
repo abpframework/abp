@@ -44,12 +44,13 @@ namespace Volo.Abp.Localization
         {
             resource.Initialize(_serviceProvider);
 
-            //Extend dictionary with extensions
             //Wrap reader by wrappers (like db wrapper which implement multitenancy/regions and so on...)
             
             //Notes: Localizer will be cached, so wrappers are responsible to cache/invalidate themselves!
 
-            var localizer = new AbpDictionaryBasedStringLocalizer(resource);
+            var baseLocalizers = resource.BaseResourceTypes.Select(Create).ToList();
+
+            var localizer = new AbpDictionaryBasedStringLocalizer(resource, baseLocalizers);
 
             //TODO: Wrap with DB provider or other premium sources
 

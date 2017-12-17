@@ -10,18 +10,11 @@ namespace Volo.Abp.Localization
 
         public string DefaultCultureName { get; set; }
 
-        public ILocalizationDictionaryProvider DictionaryProvider
-        {
-            get => _dictionaryProvider;
-            set
-            {
-                Check.NotNull(value, nameof(value));
-                _dictionaryProvider = value;
-            }
-        }
-        private ILocalizationDictionaryProvider _dictionaryProvider;
+        public ILocalizationDictionaryProvider DictionaryProvider { get; }
 
         public List<ILocalizationDictionaryProvider> Extensions { get; }
+
+        public List<Type> BaseResourceTypes { get; }
 
         public LocalizationResource([NotNull] Type resourceType, [NotNull] string defaultCultureName, [NotNull] ILocalizationDictionaryProvider dictionaryProvider)
         {
@@ -33,6 +26,7 @@ namespace Volo.Abp.Localization
             DefaultCultureName = defaultCultureName;
             DictionaryProvider = dictionaryProvider;
 
+            BaseResourceTypes = new List<Type>();
             Extensions = new List<ILocalizationDictionaryProvider>();
         }
 

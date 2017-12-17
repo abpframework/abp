@@ -2,6 +2,8 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Shouldly;
+using Volo.Abp.Localization.Base.CountryNames;
+using Volo.Abp.Localization.Base.Validation;
 using Volo.Abp.Localization.Source;
 using Volo.Abp.Localization.SourceExt;
 using Volo.Abp.Modularity;
@@ -58,12 +60,36 @@ namespace Volo.Abp.Localization
 
             using (AbpCultureHelper.Use("tr"))
             {
-                _localizer["SeeYou"].Value.ShouldBe("See you"); //Not defined in tr
+                _localizer["SeeYou"].Value.ShouldBe("See you"); //Not defined in tr, getting from default lang
             }
 
             using (AbpCultureHelper.Use("it"))
             {
                 _localizer["SeeYou"].Value.ShouldBe("Ci vediamo");
+            }
+        }
+
+        [Fact]
+        public void Should_Get_From_Inherited_Texts()
+        {
+            using (AbpCultureHelper.Use("en"))
+            {
+                _localizer["USA"].Value.ShouldBe("United States of America"); //Inherited from CountryNames/en.json
+                _localizer["ThisFieldIsRequired"].Value.ShouldBe("This field is required"); //Inherited from Validation/en.json
+            }
+
+            using (AbpCultureHelper.Use("tr"))
+            {
+                _localizer["USA"].Value.ShouldBe("Amerika Birleşik Devletleri"); //Inherited from CountryNames/tr.json
+            }
+        }
+
+        [Fact]
+        public void Should_Override_Inherited_Text()
+        {
+            using (AbpCultureHelper.Use("en"))
+            {
+                _localizer["MaxLenghtErrorMessage", 42].Value.ShouldBe("This field's length can be maximum of '42' chars"); //Overriden in Source/en.json
             }
         }
 
@@ -84,7 +110,15 @@ namespace Volo.Abp.Localization
             {
                 services.Configure<AbpLocalizationOptions>(options =>
                 {
-                    options.Resources.AddJson<LocalizationTestResource>("en");
+                    options.Resources.AddJson<LocalizationTestValidationResource>("en");
+                    options.Resources.AddJson<LocalizationTestCountryNamesResource>("en");
+                    
+                    options.Resources.AddJson<LocalizationTestResource>("en")
+                        .InheritFrom(
+                            typeof(LocalizationTestValidationResource),
+                            typeof(LocalizationTestCountryNamesResource)
+                        );
+
                     options.Resources.ExtendWithJson<LocalizationTestResource, LocalizationTestResourceExt>();
                 });
             }

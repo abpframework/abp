@@ -10,13 +10,16 @@ namespace Volo.Abp.Localization
     {
         public LocalizationResource Resource { get; }
 
-        public LocalizedString this[string name] => GetLocalizedString(name, CultureInfo.CurrentUICulture.Name);
+        public List<IStringLocalizer> BaseLocalizers { get; }
 
-        public LocalizedString this[string name, params object[] arguments] => GetLocalizedStringFormatted(name, CultureInfo.CurrentUICulture.Name, arguments);
+        public virtual LocalizedString this[string name] => GetLocalizedString(name);
 
-        public AbpDictionaryBasedStringLocalizer(LocalizationResource resource)
+        public virtual LocalizedString this[string name, params object[] arguments] => GetLocalizedStringFormatted(name, arguments);
+
+        public AbpDictionaryBasedStringLocalizer(LocalizationResource resource, List<IStringLocalizer> baseLocalizers)
         {
             Resource = resource;
+            BaseLocalizers = baseLocalizers;
         }
 
         public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures)
@@ -29,10 +32,20 @@ namespace Volo.Abp.Localization
             return new CultureWrapperStringLocalizer(culture.Name, this);
         }
 
+        protected virtual LocalizedString GetLocalizedStringFormatted(string name, params object[] arguments)
+        {
+            return GetLocalizedStringFormatted(name, CultureInfo.CurrentUICulture.Name, arguments);
+        }
+
         protected virtual LocalizedString GetLocalizedStringFormatted(string name, string cultureName, params object[] arguments)
         {
             var localizedString = GetLocalizedString(name, cultureName);
             return new LocalizedString(name, string.Format(localizedString.Value, arguments), localizedString.ResourceNotFound, localizedString.SearchedLocation);
+        }
+
+        protected virtual LocalizedString GetLocalizedString(string name)
+        {
+            return GetLocalizedString(name, CultureInfo.CurrentUICulture.Name);
         }
 
         protected virtual LocalizedString GetLocalizedString(string name, string cultureName)
@@ -41,7 +54,16 @@ namespace Volo.Abp.Localization
 
             if (value == null)
             {
-                return new LocalizedString(name, name, true);
+                foreach (var baseLocalizer in BaseLocalizers)
+                {
+                    var baseLocalizedString = baseLocalizer.WithCulture(CultureInfo.GetCultureInfo(cultureName))[name];
+                    if (baseLocalizedString != null && !baseLocalizedString.ResourceNotFound)
+                    {
+                        return baseLocalizedString;
+                    }
+                }
+
+                return new LocalizedString(name, name, resourceNotFound: true);
             }
 
             return value;

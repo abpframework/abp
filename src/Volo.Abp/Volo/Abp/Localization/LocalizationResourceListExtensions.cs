@@ -6,7 +6,7 @@ namespace Volo.Abp.Localization
 {
     public static class LocalizationResourceListExtensions
     {
-        public static void AddJson<TResource>([NotNull] this LocalizationResourceDictionary resourceDictionary, [NotNull] string defaultCultureName)
+        public static LocalizationResource AddJson<TResource>([NotNull] this LocalizationResourceDictionary resourceDictionary, [NotNull] string defaultCultureName)
         {
             Check.NotNull(resourceDictionary, nameof(resourceDictionary));
             Check.NotNull(defaultCultureName, nameof(defaultCultureName));
@@ -18,7 +18,7 @@ namespace Volo.Abp.Localization
                 throw new AbpException("There is already a resource with given type: " + resourceType.AssemblyQualifiedName);
             }
 
-            resourceDictionary[resourceType] = new LocalizationResource(
+            return resourceDictionary[resourceType] = new LocalizationResource(
                 resourceType,
                 defaultCultureName,
                 new JsonEmbeddedFileLocalizationDictionaryProvider(
