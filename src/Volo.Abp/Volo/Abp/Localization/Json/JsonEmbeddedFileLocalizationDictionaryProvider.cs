@@ -17,7 +17,7 @@ namespace Volo.Abp.Localization.Json
             _rootNamespace = rootNamespace;
         }
 
-        public override void Initialize(LocalizationResource resource)
+        public override void Initialize()
         {
             var resourceNames = _assembly.GetManifestResourceNames();
             foreach (var resourceName in resourceNames)
@@ -31,7 +31,7 @@ namespace Volo.Abp.Localization.Json
                         var dictionary = CreateJsonLocalizationDictionary(jsonString);
                         if (Dictionaries.ContainsKey(dictionary.CultureName))
                         {
-                            throw new AbpException(resource.ResourceType.FullName + " source contains more than one dictionary for the culture: " + dictionary.CultureName);
+                            throw new AbpException($"{resourceName} dictionary has a culture name '{dictionary.CultureName}' which is already defined!");
                         }
 
                         Dictionaries[dictionary.CultureName] = dictionary;
@@ -40,9 +40,9 @@ namespace Volo.Abp.Localization.Json
             }
         }
 
-        protected virtual JsonLocalizationDictionary CreateJsonLocalizationDictionary(string jsonString)
+        protected virtual ILocalizationDictionary CreateJsonLocalizationDictionary(string jsonString)
         {
-            return JsonLocalizationDictionary.BuildFromJsonString(jsonString);
+            return JsonLocalizationDictionaryBuilder.BuildFromJsonString(jsonString);
         }
     }
 }

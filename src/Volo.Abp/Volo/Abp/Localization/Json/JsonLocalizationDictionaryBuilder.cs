@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -13,22 +12,13 @@ namespace Volo.Abp.Localization.Json
     /// <remarks>
     ///     Use static Build methods to create instance of this class.
     /// </remarks>
-    public class JsonLocalizationDictionary : LocalizationDictionary
+    public class JsonLocalizationDictionaryBuilder
     {
         /// <summary>
-        ///     Private constructor.
-        /// </summary>
-        /// <param name="cultureName">Culture of the dictionary</param>
-        private JsonLocalizationDictionary(string cultureName)
-            : base(cultureName)
-        {
-        }
-
-        /// <summary>
-        ///     Builds an <see cref="JsonLocalizationDictionary" /> from given file.
+        ///     Builds an <see cref="JsonLocalizationDictionaryBuilder" /> from given file.
         /// </summary>
         /// <param name="filePath">Path of the file</param>
-        public static JsonLocalizationDictionary BuildFromFile(string filePath)
+        public static ILocalizationDictionary BuildFromFile(string filePath)
         {
             try
             {
@@ -41,10 +31,10 @@ namespace Volo.Abp.Localization.Json
         }
 
         /// <summary>
-        ///     Builds an <see cref="JsonLocalizationDictionary" /> from given json string.
+        ///     Builds an <see cref="JsonLocalizationDictionaryBuilder" /> from given json string.
         /// </summary>
         /// <param name="jsonString">Json string</param>
-        public static JsonLocalizationDictionary BuildFromJsonString(string jsonString)
+        public static ILocalizationDictionary BuildFromJsonString(string jsonString)
         {
             JsonLocalizationFile jsonFile;
             try
@@ -67,7 +57,7 @@ namespace Volo.Abp.Localization.Json
                 throw new AbpException("Culture is empty in language json file.");
             }
 
-            var dictionary = new JsonLocalizationDictionary(cultureCode);
+            var dictionary = new LocalizationDictionary(cultureCode);
             var dublicateNames = new List<string>();
             foreach (var item in jsonFile.Texts)
             {
@@ -76,7 +66,7 @@ namespace Volo.Abp.Localization.Json
                     throw new AbpException("The key is empty in given json string.");
                 }
 
-                if (dictionary.Contains(item.Key))
+                if (dictionary.GetOrNull(item.Key) != null)
                 {
                     dublicateNames.Add(item.Key);
                 }

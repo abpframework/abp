@@ -33,7 +33,7 @@ namespace Volo.Abp.Localization
 
         public virtual void Initialize(IServiceProvider serviceProvider) //TODO: Create a LocalizationResourceInitializationContext!
         {
-            DictionaryProvider.Initialize(this);
+            DictionaryProvider.Initialize();
         }
     }
 }

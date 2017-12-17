@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Globalization;
 
 namespace Volo.Abp.Localization
 {
@@ -11,17 +10,13 @@ namespace Volo.Abp.Localization
     public class LocalizationDictionary : ILocalizationDictionary, IEnumerable<LocalString>
     {
         /// <inheritdoc/>
-        public string CultureName { get; private set; }
+        public string CultureName { get; }
 
         /// <inheritdoc/>
         public virtual LocalString this[string name]
         {
-            get
-            {
-                var localizedString = GetOrNull(name);
-                return localizedString == null ? null : localizedString;
-            }
-            set { _dictionary[name] = value; }
+            get => GetOrNull(name);
+            set => _dictionary[name] = value;
         }
 
         private readonly Dictionary<string, LocalString> _dictionary;
@@ -39,8 +34,7 @@ namespace Volo.Abp.Localization
         /// <inheritdoc/>
         public virtual LocalString GetOrNull(string name)
         {
-            LocalString localizedString;
-            return _dictionary.TryGetValue(name, out localizedString) ? localizedString : null;
+            return _dictionary.GetOrDefault(name);
         }
 
         /// <inheritdoc/>
