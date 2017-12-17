@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Shouldly;
 using Volo.Abp.Localization.Source;
+using Volo.Abp.Localization.SourceExt;
 using Volo.Abp.Modularity;
 using Volo.Abp.TestBase;
 using Xunit;
@@ -40,6 +41,30 @@ namespace Volo.Abp.Localization
                 _localizer["Car"].Value.ShouldBe("Araba");
                 _localizer["CarPlural"].Value.ShouldBe("Araba");
             }
+
+            using (AbpCultureHelper.Use("it"))
+            {
+                _localizer["Car"].Value.ShouldBe("Auto");
+            }
+        }
+
+        [Fact]
+        public void Should_Get_Extension_Texts()
+        {
+            using (AbpCultureHelper.Use("en"))
+            {
+                _localizer["SeeYou"].Value.ShouldBe("See you");
+            }
+
+            using (AbpCultureHelper.Use("tr"))
+            {
+                _localizer["SeeYou"].Value.ShouldBe("See you"); //Not defined in tr
+            }
+
+            using (AbpCultureHelper.Use("it"))
+            {
+                _localizer["SeeYou"].Value.ShouldBe("Ci vediamo");
+            }
         }
 
         [Fact]
@@ -48,7 +73,7 @@ namespace Volo.Abp.Localization
             _localizer.WithCulture(CultureInfo.GetCultureInfo("en"))["Car"].Value.ShouldBe("Car");
             _localizer.WithCulture(CultureInfo.GetCultureInfo("en"))["CarPlural"].Value.ShouldBe("Cars");
 
-            _localizer.WithCulture(CultureInfo.GetCultureInfo("tr"))["CarPlural"].Value.ShouldBe("Araba");
+            _localizer.WithCulture(CultureInfo.GetCultureInfo("tr"))["Car"].Value.ShouldBe("Araba");
             _localizer.WithCulture(CultureInfo.GetCultureInfo("tr"))["CarPlural"].Value.ShouldBe("Araba");
         }
 
@@ -60,6 +85,7 @@ namespace Volo.Abp.Localization
                 services.Configure<AbpLocalizationOptions>(options =>
                 {
                     options.Resources.AddJson<LocalizationTestResource>("en");
+                    options.Resources.ExtendWithJson<LocalizationTestResource, LocalizationTestResourceExt>();
                 });
             }
         }

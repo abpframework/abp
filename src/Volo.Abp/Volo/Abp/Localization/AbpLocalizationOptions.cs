@@ -2,11 +2,11 @@
 {
     public class AbpLocalizationOptions
     {
-        public LocalizationResourceList Resources { get; }
+        public LocalizationResourceDictionary Resources { get; }
 
         public AbpLocalizationOptions()
         {
-            Resources = new LocalizationResourceList();
+            Resources = new LocalizationResourceDictionary();
         }
     }
 }

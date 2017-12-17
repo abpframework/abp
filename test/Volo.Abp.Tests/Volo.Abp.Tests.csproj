@@ -12,13 +12,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Volo\Abp\Localization\Source\en.json" />
-    <None Remove="Volo\Abp\Localization\Source\tr.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Volo\Abp\Localization\Source\en.json" />
-    <EmbeddedResource Include="Volo\Abp\Localization\Source\tr.json" />
+    <EmbeddedResource Include="Volo\Abp\Localization\SourceExt\*.json" />
+    <EmbeddedResource Include="Volo\Abp\Localization\Source\*.json" />
   </ItemGroup>
 
   <ItemGroup>

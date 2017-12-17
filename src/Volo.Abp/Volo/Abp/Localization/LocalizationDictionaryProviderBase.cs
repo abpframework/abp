@@ -17,19 +17,30 @@ namespace Volo.Abp.Localization
         {
         }
 
-        public void Extend(ILocalizationDictionary dictionary)
+        public virtual void Extend(ILocalizationDictionaryProvider dictionaryProvider)
         {
-            //Add
-            ILocalizationDictionary existingDictionary;
-            if (!Dictionaries.TryGetValue(dictionary.CultureName, out existingDictionary))
+            foreach (var dictionary in dictionaryProvider.Dictionaries.Values)
+            {
+                Extend(dictionary);
+            }
+        }
+
+        protected virtual void Extend(ILocalizationDictionary dictionary)
+        {
+            var existingDictionary = Dictionaries.GetOrDefault(dictionary.CultureName);
+            if (existingDictionary == null)
             {
                 Dictionaries[dictionary.CultureName] = dictionary;
-                return;
             }
+            else
+            {
+                Overwrite(existingDictionary, dictionary);
+            }
+        }
 
-            //Override
-            var localizedStrings = dictionary.GetAllStrings();
-            foreach (var localizedString in localizedStrings)
+        protected virtual void Overwrite(ILocalizationDictionary existingDictionary, ILocalizationDictionary dictionary)
+        {
+            foreach (var localizedString in dictionary.GetAllStrings())
             {
                 existingDictionary[localizedString.Name] = localizedString;
             }

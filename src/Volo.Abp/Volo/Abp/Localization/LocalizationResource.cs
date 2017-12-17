@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using JetBrains.Annotations;
 
 namespace Volo.Abp.Localization
@@ -20,6 +21,8 @@ namespace Volo.Abp.Localization
         }
         private ILocalizationDictionaryProvider _dictionaryProvider;
 
+        public List<ILocalizationDictionaryProvider> Extensions { get; }
+
         public LocalizationResource([NotNull] Type resourceType, [NotNull] string defaultCultureName, [NotNull] ILocalizationDictionaryProvider dictionaryProvider)
         {
             Check.NotNull(resourceType, nameof(resourceType));
@@ -29,11 +32,19 @@ namespace Volo.Abp.Localization
             ResourceType = resourceType;
             DefaultCultureName = defaultCultureName;
             DictionaryProvider = dictionaryProvider;
+
+            Extensions = new List<ILocalizationDictionaryProvider>();
         }
 
         public virtual void Initialize(IServiceProvider serviceProvider) //TODO: Create a LocalizationResourceInitializationContext!
         {
             DictionaryProvider.Initialize();
+
+            foreach (var extension in Extensions)
+            {
+                extension.Initialize();
+                DictionaryProvider.Extend(extension);
+            }
         }
     }
 }

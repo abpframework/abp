@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
-using Volo.Abp.Localization.Json;
 
 namespace Volo.Abp.Localization
 {
@@ -29,17 +29,15 @@ namespace Volo.Abp.Localization
             _localizerCache = new ConcurrentDictionary<Type, AbpDictionaryBasedStringLocalizer>();;
         }
 
-        public virtual IStringLocalizer Create(Type resourceSource)
+        public virtual IStringLocalizer Create(Type resourceType)
         {
-            //TODO: Optimize!
-
-            var localizationResource = _abpLocalizationOptions.Resources.FirstOrDefault(l => l.ResourceType == resourceSource);
+            var localizationResource = _abpLocalizationOptions.Resources.GetOrDefault(resourceType);
             if (localizationResource == null)
             {
-                return _innerFactory.Create(resourceSource);
+                return _innerFactory.Create(resourceType);
             }
 
-            return _localizerCache.GetOrAdd(resourceSource, _ => CreateAbpStringLocalizer(localizationResource));
+            return _localizerCache.GetOrAdd(resourceType, _ => CreateAbpStringLocalizer(localizationResource));
         }
 
         private AbpDictionaryBasedStringLocalizer CreateAbpStringLocalizer(LocalizationResource resource)

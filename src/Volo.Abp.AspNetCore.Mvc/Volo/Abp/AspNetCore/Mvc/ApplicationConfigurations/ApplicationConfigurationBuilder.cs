@@ -37,7 +37,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
 
             var localizationConfig = new ApplicationLocalizationConfigurationDto();
 
-            foreach (var resource in _localizationOptions.Resources)
+            foreach (var resource in _localizationOptions.Resources.Values)
             {
                 var dictionary = new Dictionary<string, string>();
 

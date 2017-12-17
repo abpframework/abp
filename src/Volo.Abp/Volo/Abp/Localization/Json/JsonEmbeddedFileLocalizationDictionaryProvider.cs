@@ -19,10 +19,12 @@ namespace Volo.Abp.Localization.Json
 
         public override void Initialize()
         {
+            var rootNameSpaceWithDot = _rootNamespace + ".";
+
             var resourceNames = _assembly.GetManifestResourceNames();
             foreach (var resourceName in resourceNames)
             {
-                if (resourceName.StartsWith(_rootNamespace))
+                if (resourceName.StartsWith(rootNameSpaceWithDot))
                 {
                     using (var stream = _assembly.GetManifestResourceStream(resourceName))
                     {
