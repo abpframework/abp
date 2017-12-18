@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Runtime.Serialization;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.Logging;
@@ -11,7 +12,7 @@ namespace Volo.Abp.Validation
     /// This exception type is used to throws validation exceptions.
     /// </summary>
     [Serializable]
-    public class AbpValidationException : AbpException, IHasLogLevel, IHasValidationErrors
+    public class AbpValidationException : AbpException, IHasLogLevel, IHasValidationErrors, IExceptionCanLogDetails
     {
         /// <summary>
         /// Detailed list of validation errors for this exception.
@@ -76,6 +77,26 @@ namespace Volo.Abp.Validation
         {
             ValidationErrors = new List<ValidationResult>();
             LogLevel = LogLevel.Warning;
+        }
+
+        public void LogDetails(ILogger logger)
+        {
+            if (ValidationErrors.IsNullOrEmpty())
+            {
+                return;
+            }
+
+            logger.LogWithLevel(LogLevel, "There are " + ValidationErrors.Count + " validation errors:");
+            foreach (var validationResult in ValidationErrors)
+            {
+                var memberNames = "";
+                if (validationResult.MemberNames != null && validationResult.MemberNames.Any())
+                {
+                    memberNames = " (" + string.Join(", ", validationResult.MemberNames) + ")";
+                }
+
+                logger.LogWithLevel(LogLevel, validationResult.ErrorMessage + memberNames);
+            }
         }
     }
 }

@@ -111,7 +111,7 @@ namespace Volo.Abp.Reflection
         /// <summary>
         /// Gets value of a property by it's full path from given object
         /// </summary>
-        internal static object GetValueByPath(object obj, Type objectType, string propertyPath)
+        public static object GetValueByPath(object obj, Type objectType, string propertyPath)
         {
             var value = obj;
             var currentType = objectType;

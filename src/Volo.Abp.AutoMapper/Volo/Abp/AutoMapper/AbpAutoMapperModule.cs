@@ -10,6 +10,7 @@ using Volo.Abp.Reflection;
 
 namespace Volo.Abp.AutoMapper
 {
+    [DependsOn(typeof(AbpCommonModule))]
     public class AbpAutoMapperModule : AbpModule
     {
         private static volatile bool _createdMappingsBefore;

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Volo.Abp.Logging;
-using Volo.Abp.Validation;
 
 namespace Microsoft.Extensions.Logging
 {
@@ -63,42 +61,37 @@ namespace Microsoft.Extensions.Logging
             var logLevel = (ex as IHasLogLevel)?.LogLevel ?? LogLevel.Error;
 
             logger.LogWithLevel(logLevel, ex.Message, ex);
-            LogValidationErrors(logger, ex);
+            LogDetails(logger, ex);
         }
 
-        private static void LogValidationErrors(ILogger logger, Exception exception)
+        private static void LogDetails(ILogger logger, Exception exception)
         {
-            //Try to find inner validation exception
-            if (exception is AggregateException && exception.InnerException != null)
+            var loggingExceptions = new List<IExceptionCanLogDetails>();
+
+            if (exception is IExceptionCanLogDetails)
+            {
+                loggingExceptions.Add(exception as IExceptionCanLogDetails);
+            }
+            else if (exception is AggregateException && exception.InnerException != null)
             {
                 var aggException = exception as AggregateException;
-                if (aggException.InnerException is AbpValidationException)
+                if (aggException.InnerException is IExceptionCanLogDetails)
                 {
-                    exception = aggException.InnerException;
+                    loggingExceptions.Add(aggException.InnerException as IExceptionCanLogDetails);
+                }
+
+                foreach (var innerException in aggException.InnerExceptions)
+                {
+                    if (innerException is IExceptionCanLogDetails)
+                    {
+                        loggingExceptions.AddIfNotContains(innerException as IExceptionCanLogDetails);
+                    }
                 }
             }
 
-            if (!(exception is AbpValidationException))
+            foreach (var ex in loggingExceptions)
             {
-                return;
-            }
-
-            var validationException = exception as AbpValidationException;
-            if (validationException.ValidationErrors.IsNullOrEmpty())
-            {
-                return;
-            }
-
-            logger.LogWithLevel(validationException.LogLevel, "There are " + validationException.ValidationErrors.Count + " validation errors:");
-            foreach (var validationResult in validationException.ValidationErrors)
-            {
-                var memberNames = "";
-                if (validationResult.MemberNames != null && validationResult.MemberNames.Any())
-                {
-                    memberNames = " (" + string.Join(", ", validationResult.MemberNames) + ")";
-                }
-
-                logger.LogWithLevel(validationException.LogLevel, validationResult.ErrorMessage + memberNames);
+                ex.LogDetails(logger);
             }
         }
     }
