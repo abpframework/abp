@@ -38,7 +38,7 @@ namespace Volo.Abp.Identity.Web
             {
                 options.FileSets.AddEmbedded<AbpIdentityWebModule>("Volo.Abp.Identity.Web");
             });
-
+            
             services.Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources.AddJson<IdentityResource>("en");

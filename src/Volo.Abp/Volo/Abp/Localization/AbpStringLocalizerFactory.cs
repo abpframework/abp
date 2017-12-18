@@ -43,19 +43,10 @@ namespace Volo.Abp.Localization
         private AbpDictionaryBasedStringLocalizer CreateAbpStringLocalizer(LocalizationResource resource)
         {
             resource.Initialize(_serviceProvider);
-
-            //Wrap reader by wrappers (like db wrapper which implement multitenancy/regions and so on...)
-            
-            //Notes: Localizer will be cached, so wrappers are responsible to cache/invalidate themselves!
-
-            var localizer = new AbpDictionaryBasedStringLocalizer(
+            return new AbpDictionaryBasedStringLocalizer(
                 resource,
                 resource.BaseResourceTypes.Select(Create).ToList()
             );
-
-            //TODO: Wrap with DB provider or other premium sources
-
-            return localizer;
         }
 
         public virtual IStringLocalizer Create(string baseName, string location)

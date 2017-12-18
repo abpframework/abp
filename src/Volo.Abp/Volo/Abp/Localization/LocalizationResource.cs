@@ -17,7 +17,10 @@ namespace Volo.Abp.Localization
 
         public List<Type> BaseResourceTypes { get; }
 
-        public LocalizationResource([NotNull] Type resourceType, [NotNull] string defaultCultureName, [NotNull] ILocalizationDictionaryProvider dictionaryProvider)
+        public LocalizationResource(
+            [NotNull] Type resourceType, 
+            [NotNull] string defaultCultureName, 
+            [NotNull] ILocalizationDictionaryProvider dictionaryProvider)
         {
             Check.NotNull(resourceType, nameof(resourceType));
             Check.NotNull(defaultCultureName, nameof(defaultCultureName));
@@ -33,13 +36,15 @@ namespace Volo.Abp.Localization
             AddBaseResourceTypes();
         }
 
-        public virtual void Initialize(IServiceProvider serviceProvider) //TODO: Create a LocalizationResourceInitializationContext!
+        public virtual void Initialize(IServiceProvider serviceProvider)
         {
-            DictionaryProvider.Initialize();
+            var context = new LocalizationResourceInitializationContext(serviceProvider);
+
+            DictionaryProvider.Initialize(context);
 
             foreach (var extension in Extensions)
             {
-                extension.Initialize();
+                extension.Initialize(context);
                 DictionaryProvider.Extend(extension);
             }
         }

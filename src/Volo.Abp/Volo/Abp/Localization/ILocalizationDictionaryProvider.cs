@@ -6,7 +6,7 @@ namespace Volo.Abp.Localization
     {
         IDictionary<string, ILocalizationDictionary> Dictionaries { get; }
 
-        void Initialize();
+        void Initialize(LocalizationResourceInitializationContext context);
 
         void Extend(ILocalizationDictionaryProvider dictionaryProvider);
     }

@@ -26,7 +26,7 @@ namespace Volo.Abp.Localization.Json
             }
             catch (Exception ex)
             {
-                throw new AbpException("Invalid localization file format! " + filePath, ex);
+                throw new AbpException("Invalid localization file format: " + filePath, ex);
             }
         }
 

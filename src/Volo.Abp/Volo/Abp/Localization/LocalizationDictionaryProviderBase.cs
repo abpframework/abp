@@ -11,7 +11,7 @@ namespace Volo.Abp.Localization
             Dictionaries = new Dictionary<string, ILocalizationDictionary>();
         }
 
-        public virtual void Initialize()
+        public virtual void Initialize(LocalizationResourceInitializationContext context)
         {
         }
 
