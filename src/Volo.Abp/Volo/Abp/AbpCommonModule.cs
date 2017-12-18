@@ -8,10 +8,12 @@ using Volo.Abp.Reflection;
 using Volo.Abp.Threading;
 using Volo.Abp.Uow;
 using Volo.Abp.Validation;
+using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp
 {
     [DependsOn(typeof(AbpLocalizationModule))]
+    [DependsOn(typeof(AbpVirtualFileSystemModule))]
     public class AbpCommonModule : AbpModule
     {
         public override void PreConfigureServices(IServiceCollection services)
