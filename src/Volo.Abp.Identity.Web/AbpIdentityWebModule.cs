@@ -6,7 +6,6 @@ using Volo.Abp.Identity.Web.Localization.Resource;
 using Volo.Abp.Identity.Web.Navigation;
 using Volo.Abp.Identity.Web.ObjectMappings;
 using Volo.Abp.Localization;
-using Volo.Abp.Localization.Resources.Validation;
 using Volo.Abp.Modularity;
 using Volo.Abp.Ui.Navigation;
 using Volo.Abp.VirtualFileSystem;
@@ -42,9 +41,7 @@ namespace Volo.Abp.Identity.Web
 
             services.Configure<AbpLocalizationOptions>(options =>
             {
-                //TODO: Declare base type by attribute
-                options.Resources.AddJson<IdentityResource>("en")
-                    .InheritFrom(typeof(AbpValidationResource));
+                options.Resources.AddJson<IdentityResource>("en");
             });
 
             services.Configure<AbpAutoMapperOptions>(options =>

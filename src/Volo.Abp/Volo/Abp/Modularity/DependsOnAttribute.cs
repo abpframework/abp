@@ -25,7 +25,6 @@ namespace Volo.Abp.Modularity
             DependedModuleTypes = dependedModuleTypes ?? new Type[0];
         }
 
-        [NotNull]
         public virtual Type[] GetDependedModuleTypes()
         {
             return DependedModuleTypes;

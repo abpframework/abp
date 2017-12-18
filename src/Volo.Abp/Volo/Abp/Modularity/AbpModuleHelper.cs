@@ -22,7 +22,6 @@ namespace Volo.Abp.Modularity
             var dependencies = new List<Type>();
 
             var dependencyDescriptors = moduleType
-                .GetTypeInfo()
                 .GetCustomAttributes()
                 .OfType<IDependedModuleTypesProvider>();
 

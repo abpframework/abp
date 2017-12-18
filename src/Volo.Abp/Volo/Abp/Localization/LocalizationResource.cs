@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using JetBrains.Annotations;
 
 namespace Volo.Abp.Localization
@@ -28,6 +29,8 @@ namespace Volo.Abp.Localization
 
             BaseResourceTypes = new List<Type>();
             Extensions = new List<ILocalizationDictionaryProvider>();
+
+            AddBaseResourceTypes();
         }
 
         public virtual void Initialize(IServiceProvider serviceProvider) //TODO: Create a LocalizationResourceInitializationContext!
@@ -38,6 +41,21 @@ namespace Volo.Abp.Localization
             {
                 extension.Initialize();
                 DictionaryProvider.Extend(extension);
+            }
+        }
+
+        protected virtual void AddBaseResourceTypes()
+        {
+            var descriptors = ResourceType
+                .GetCustomAttributes(true)
+                .OfType<IInheritedResourceTypesProvider>();
+
+            foreach (var descriptor in descriptors)
+            {
+                foreach (var baseResourceType in descriptor.GetInheritedModuleTypes())
+                {
+                    BaseResourceTypes.AddIfNotContains(baseResourceType);
+                }
             }
         }
     }
