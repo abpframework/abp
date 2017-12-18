@@ -32,6 +32,7 @@ namespace Volo.Abp.Ui.Navigation
             mainMenu.Items[1].Items[2].Name.ShouldBe("Administration.DashboardSettings");
         }
 
+        [DependsOn(typeof(AbpCommonModule))]
         public class TestModule : AbpModule
         {
             public override void ConfigureServices(IServiceCollection services)

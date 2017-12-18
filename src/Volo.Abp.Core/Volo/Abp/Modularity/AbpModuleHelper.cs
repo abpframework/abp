@@ -11,7 +11,6 @@ namespace Volo.Abp.Modularity
         {
             var moduleTypes = new List<Type>();
             AddModuleAndDependenciesResursively(moduleTypes, startupModuleType);
-            moduleTypes.AddIfNotContains(typeof(AbpKernelModule));
             return moduleTypes;
         }
 

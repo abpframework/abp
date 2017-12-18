@@ -124,7 +124,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// Returns a <see cref="Lazy{T}"/> to resolve a service from given <see cref="IServiceCollection"/>
         /// once dependency injection registration phase completed.
         /// </summary>
-        internal static Lazy<T> GetServiceLazy<T>(this IServiceCollection services)
+        public static Lazy<T> GetServiceLazy<T>(this IServiceCollection services)
         {
             return new Lazy<T>(services.GetService<T>, true);
         }
@@ -133,7 +133,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// Returns a <see cref="Lazy{T}"/> to resolve a service from given <see cref="IServiceCollection"/>
         /// once dependency injection registration phase completed.
         /// </summary>
-        internal static Lazy<object> GetServiceLazy(this IServiceCollection services, Type type)
+        public static Lazy<object> GetServiceLazy(this IServiceCollection services, Type type)
         {
             return new Lazy<object>(() => services.GetService(type), true);
         }
@@ -142,7 +142,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// Returns a <see cref="Lazy{T}"/> to resolve a service from given <see cref="IServiceCollection"/>
         /// once dependency injection registration phase completed.
         /// </summary>
-        internal static Lazy<T> GetRequiredServiceLazy<T>(this IServiceCollection services)
+        public static Lazy<T> GetRequiredServiceLazy<T>(this IServiceCollection services)
         {
             return new Lazy<T>(services.GetRequiredService<T>, true);
         }
@@ -151,7 +151,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// Returns a <see cref="Lazy{T}"/> to resolve a service from given <see cref="IServiceCollection"/>
         /// once dependency injection registration phase completed.
         /// </summary>
-        internal static Lazy<object> GetRequiredServiceLazy(this IServiceCollection services, Type type)
+        public static Lazy<object> GetRequiredServiceLazy(this IServiceCollection services, Type type)
         {
             return new Lazy<object>(() => services.GetRequiredService(type), true);
         }

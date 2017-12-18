@@ -16,7 +16,7 @@ namespace Volo.Abp.Reflection
             var fakeAssemblyFinder = Substitute.For<IAssemblyFinder>();
             fakeAssemblyFinder.Assemblies.Returns(new List<Assembly>
             {
-                typeof(AbpKernelModule).Assembly,
+                typeof(AbpCommonModule).Assembly,
                 typeof(TypeFinder_Tests).Assembly
             });
 
@@ -26,7 +26,7 @@ namespace Volo.Abp.Reflection
 
             //Assert
 
-            typeFinder.Types.ShouldContain(typeof(AbpKernelModule));
+            typeFinder.Types.ShouldContain(typeof(AbpCommonModule));
             typeFinder.Types.ShouldContain(typeof(TypeFinder_Tests));
         }
     }

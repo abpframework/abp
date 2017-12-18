@@ -4,7 +4,11 @@ using Volo.Abp.Modularity;
 
 namespace AbpDesk
 {
-    [DependsOn(typeof(AbpDeskDomainModule), typeof(AbpAutoMapperModule))]
+    [DependsOn(
+        typeof(AbpDeskDomainModule), 
+        typeof(AbpDeskApplicationContractsModule), 
+        typeof(AbpAutoMapperModule)
+        )]
     public class AbpDeskApplicationModule : AbpModule
     {
         public override void ConfigureServices(IServiceCollection services)

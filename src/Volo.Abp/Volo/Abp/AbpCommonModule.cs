@@ -12,7 +12,7 @@ using Volo.Abp.Validation;
 
 namespace Volo.Abp
 {
-    public class AbpKernelModule : AbpModule
+    public class AbpCommonModule : AbpModule
     {
         public override void PreConfigureServices(IServiceCollection services)
         {
@@ -34,30 +34,18 @@ namespace Volo.Abp
 
         public override void ConfigureServices(IServiceCollection services)
         {
-            services.AddOptions();
-            services.AddLogging();
-            services.AddLocalization();
-
             AbpStringLocalizerFactory.Replace(services);
-
-            services.AddAssemblyOf<AbpKernelModule>();
 
             services.AddSingleton<ICancellationTokenProvider>(NullCancellationTokenProvider.Instance);
             services.AddSingleton<IRequestedApiVersion>(NullRequestedApiVersion.Instance);
             services.AddSingleton(typeof(IDataFilter<>), typeof(DataFilter<>));
             
-            services.Configure<ModuleLifecycleOptions>(options =>
-            {
-                options.Contributers.Add<OnPreApplicationInitializationModuleLifecycleContributer>();
-                options.Contributers.Add<OnApplicationInitializationModuleLifecycleContributer>();
-                options.Contributers.Add<OnPostApplicationInitializationModuleLifecycleContributer>();
-                options.Contributers.Add<OnApplicationShutdownModuleLifecycleContributer>();
-            });
-
             services.Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources.AddJson<AbpValidationResource>("en");
             });
+
+            services.AddAssemblyOf<AbpCommonModule>();
         }
     }
 }

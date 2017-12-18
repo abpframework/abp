@@ -73,7 +73,6 @@ namespace Volo.Abp.Modularity
         protected virtual List<IAbpModuleDescriptor> SortByDependency(List<IAbpModuleDescriptor> modules, Type startupModuleType)
         {
             var sortedModules = modules.SortByDependencies(m => m.Dependencies);
-            sortedModules.MoveItem(m => m.Type == typeof(AbpKernelModule), 0);
             sortedModules.MoveItem(m => m.Type == startupModuleType, modules.Count - 1);
             return sortedModules;
         }

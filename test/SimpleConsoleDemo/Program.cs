@@ -30,6 +30,7 @@ namespace SimpleConsoleDemo
         }
     }
 
+    [DependsOn(typeof(AbpCommonModule))]
     public class MyConsoleModule : AbpModule
     {
         public override void ConfigureServices(IServiceCollection services)

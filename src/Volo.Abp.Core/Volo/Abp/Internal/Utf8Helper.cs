@@ -3,7 +3,7 @@ using System.Text;
 
 namespace Volo.Abp.Internal
 {
-    internal static class Utf8Helper
+    public static class Utf8Helper
     {
         public static string ReadStringFromStream(Stream stream)
         {

@@ -7,6 +7,13 @@ namespace Volo.Abp.Internal
 {
     internal static class InternalServiceCollectionExtensions
     {
+        internal static void AddCoreServices(this IServiceCollection services)
+        {
+            services.AddOptions();
+            services.AddLogging();
+            services.AddLocalization();
+        }
+
         internal static void AddCoreAbpServices(this IServiceCollection services, IAbpApplication abpApplication)
         {
             var moduleLoader = new ModuleLoader();
@@ -16,6 +23,16 @@ namespace Volo.Abp.Internal
             services.TryAddSingleton<IModuleLoader>(moduleLoader);
             services.TryAddSingleton<IAssemblyFinder>(assemblyFinder);
             services.TryAddSingleton<ITypeFinder>(typeFinder);
+
+            services.AddAssemblyOf<IAbpApplication>();
+
+            services.Configure<ModuleLifecycleOptions>(options =>
+            {
+                options.Contributers.Add<OnPreApplicationInitializationModuleLifecycleContributer>();
+                options.Contributers.Add<OnApplicationInitializationModuleLifecycleContributer>();
+                options.Contributers.Add<OnPostApplicationInitializationModuleLifecycleContributer>();
+                options.Contributers.Add<OnApplicationShutdownModuleLifecycleContributer>();
+            });
         }
     }
 }
