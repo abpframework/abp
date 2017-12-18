@@ -104,6 +104,7 @@ namespace Volo.Abp.Localization
         }
 
         [DependsOn(typeof(AbpTestBaseModule))]
+        [DependsOn(typeof(AbpLocalizationModule))]
         public class TestModule : AbpModule
         {
             public override void ConfigureServices(IServiceCollection services)

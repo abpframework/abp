@@ -2,7 +2,6 @@
 using Volo.Abp.ApiVersioning;
 using Volo.Abp.Data;
 using Volo.Abp.Localization;
-using Volo.Abp.Localization.Resources.Validation;
 using Volo.Abp.Modularity;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Reflection;
@@ -12,6 +11,7 @@ using Volo.Abp.Validation;
 
 namespace Volo.Abp
 {
+    [DependsOn(typeof(AbpLocalizationModule))]
     public class AbpCommonModule : AbpModule
     {
         public override void PreConfigureServices(IServiceCollection services)
@@ -34,17 +34,10 @@ namespace Volo.Abp
 
         public override void ConfigureServices(IServiceCollection services)
         {
-            AbpStringLocalizerFactory.Replace(services);
-
             services.AddSingleton<ICancellationTokenProvider>(NullCancellationTokenProvider.Instance);
             services.AddSingleton<IRequestedApiVersion>(NullRequestedApiVersion.Instance);
             services.AddSingleton(typeof(IDataFilter<>), typeof(DataFilter<>));
             
-            services.Configure<AbpLocalizationOptions>(options =>
-            {
-                options.Resources.AddJson<AbpValidationResource>("en");
-            });
-
             services.AddAssemblyOf<AbpCommonModule>();
         }
     }

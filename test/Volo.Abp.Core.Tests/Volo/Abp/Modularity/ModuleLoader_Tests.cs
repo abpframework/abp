@@ -12,14 +12,12 @@ namespace Volo.Abp.Modularity
         {
             var moduleLoader = new ModuleLoader();
             var modules = moduleLoader.LoadModules(new ServiceCollection(), typeof(MyStartupModule), new PlugInSourceList());
-            modules.Length.ShouldBe(3);
-            modules[0].Type.ShouldBe(typeof(AbpCommonModule));
-            modules[1].Type.ShouldBe(typeof(IndependentEmptyModule));
-            modules[2].Type.ShouldBe(typeof(MyStartupModule));
+            modules.Length.ShouldBe(2);
+            modules[0].Type.ShouldBe(typeof(IndependentEmptyModule));
+            modules[1].Type.ShouldBe(typeof(MyStartupModule));
         }
 
         [DependsOn(typeof(IndependentEmptyModule))]
-        [DependsOn(typeof(AbpCommonModule))]
         public class MyStartupModule : IAbpModule
         {
             public void ConfigureServices(IServiceCollection services)
