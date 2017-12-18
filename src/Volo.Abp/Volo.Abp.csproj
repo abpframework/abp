@@ -18,29 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Volo\Abp\Localization\Resources\Validation\en.json">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Include="Volo\Abp\Localization\Resources\Validation\tr.json">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Localization" Version="2.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Options" Version="2.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="2.0.0" />
-    <PackageReference Include="Nito.AsyncEx.Coordination" Version="1.0.2" />
-    <PackageReference Include="System.ComponentModel.Annotations" Version="4.4.0" />
-    <PackageReference Include="System.Collections.Immutable" Version="1.4.0" />
-    <PackageReference Include="System.Runtime.Loader" Version="4.3.0" />
-    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.0.7.6" />
-    <PackageReference Include="System.Linq.Queryable" Version="4.3.0" />
-    <PackageReference Include="JetBrains.Annotations" Version="11.0.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
-    <PackageReference Include="Nito.AsyncEx.Context" Version="1.1.0" />
+    <ProjectReference Include="..\Volo.Abp.Core\Volo.Abp.Core.csproj" />
   </ItemGroup>
 
 </Project>
