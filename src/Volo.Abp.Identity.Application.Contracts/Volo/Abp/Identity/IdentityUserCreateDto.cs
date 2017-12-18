@@ -5,7 +5,7 @@ namespace Volo.Abp.Identity
     public class IdentityUserCreateDto : IdentityUserCreateOrUpdateDtoBase
     {
         [Required]
-        [MaxLength(IdentityUserConsts.MaxPasswordLength)]
+        [StringLength(IdentityUserConsts.MaxPasswordLength)]
         public string Password { get; set; }
     }
 }

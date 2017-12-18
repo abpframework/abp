@@ -5,7 +5,7 @@ namespace Volo.Abp.Identity
     public class IdentityRoleCreateOrUpdateDtoBase
     {
         [Required]
-        [MaxLength(IdentityRoleConsts.MaxNameLength)]
+        [StringLength(IdentityRoleConsts.MaxNameLength)]
         public string Name { get; set; }
     }
 }

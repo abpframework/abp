@@ -6,15 +6,15 @@ namespace Volo.Abp.Identity
     public abstract class IdentityUserCreateOrUpdateDtoBase
     {
         [Required]
-        [MaxLength(IdentityUserConsts.MaxUserNameLength)]
+        [StringLength(IdentityUserConsts.MaxUserNameLength)]
         public string UserName { get; set; }
 
         [Required]
         [EmailAddress]
-        [MaxLength(IdentityUserConsts.MaxEmailLength)]
+        [StringLength(IdentityUserConsts.MaxEmailLength)]
         public string Email { get; set; }
 
-        [MaxLength(IdentityUserConsts.MaxPhoneNumberLength)]
+        [StringLength(IdentityUserConsts.MaxPhoneNumberLength)]
         public string PhoneNumber { get; set; }
 
         public bool TwoFactorEnabled { get; set; }

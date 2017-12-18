@@ -4,8 +4,6 @@ namespace Volo.Abp.Localization
 {
     public abstract class LocalizationDictionaryProviderBase : ILocalizationDictionaryProvider
     {
-        public ILocalizationDictionary DefaultDictionary { get; protected set; }
-
         public IDictionary<string, ILocalizationDictionary> Dictionaries { get; }
 
         protected LocalizationDictionaryProviderBase()

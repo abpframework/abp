@@ -60,17 +60,17 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Users
             public Guid Id { get; set; }
 
             [Required]
-            [MaxLength(IdentityUserConsts.MaxUserNameLength)]
+            [StringLength(IdentityUserConsts.MaxUserNameLength)]
             [Display(Name = "UserName")]
             public string UserName { get; set; }
 
             [Required]
             [EmailAddress]
-            [MaxLength(IdentityUserConsts.MaxEmailLength)]
+            [StringLength(IdentityUserConsts.MaxEmailLength)]
             [Display(Name = "EmailAddress")]
             public string Email { get; set; }
 
-            [MaxLength(IdentityUserConsts.MaxPhoneNumberLength)]
+            [StringLength(IdentityUserConsts.MaxPhoneNumberLength)]
             [Display(Name = "PhoneNumber")]
             public string PhoneNumber { get; set; }
 

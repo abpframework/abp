@@ -17,7 +17,7 @@ namespace Volo.Abp.Localization.Json
             _rootNamespace = rootNamespace;
         }
 
-        public override void Initialize()
+        public override void Initialize() //TODO: Extract initialization to a factory..?
         {
             var rootNameSpaceWithDot = _rootNamespace + ".";
 

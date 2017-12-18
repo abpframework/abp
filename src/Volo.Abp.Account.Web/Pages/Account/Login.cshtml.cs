@@ -59,11 +59,11 @@ namespace Volo.Abp.Account.Web.Pages.Account
         public class PostInput
         {
             [Required]
-            [MaxLength(255)]
+            [StringLength(255)]
             public string UserNameOrEmailAddress { get; set; }
 
             [Required]
-            [MaxLength(32)]
+            [StringLength(32)]
             public string Password { get; set; }
 
             public bool RememberMe { get; set; }
