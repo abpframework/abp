@@ -41,7 +41,7 @@ namespace Volo.Abp.VirtualFileSystem
             if (_options.FileSets.PhysicalPaths.Any())
             {
                 var fileProviders = _options.FileSets.PhysicalPaths
-                    .Select(p => new PhysicalFileProvider(p))
+                    .Select(rootPath => new PhysicalFileProvider(rootPath))
                     .Cast<IFileProvider>()
                     .ToList();
 

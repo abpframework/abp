@@ -11,7 +11,7 @@ namespace Volo.Abp.Localization
     {
         /// <inheritdoc/>
         public string CultureName { get; }
-
+        
         /// <inheritdoc/>
         public virtual LocalString this[string name]
         {
@@ -49,6 +49,11 @@ namespace Volo.Abp.Localization
             {
                 this[localizedString.Name] = localizedString;
             }
+        }
+
+        public void Clear()
+        {
+            _dictionary.Clear();
         }
 
         /// <inheritdoc/>

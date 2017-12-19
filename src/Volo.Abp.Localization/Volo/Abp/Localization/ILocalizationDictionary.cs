@@ -29,5 +29,7 @@ namespace Volo.Abp.Localization
         IReadOnlyList<LocalString> GetAllStrings();
 
         void Extend(ILocalizationDictionary dictionary);
+
+        void Clear();
     }
 }

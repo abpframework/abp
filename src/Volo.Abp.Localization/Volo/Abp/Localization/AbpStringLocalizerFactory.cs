@@ -20,13 +20,14 @@ namespace Volo.Abp.Localization
         //TODO: It's better to use decorator pattern for IStringLocalizerFactory instead of getting ResourceManagerStringLocalizerFactory as a dependency.
         public AbpStringLocalizerFactory(
             ResourceManagerStringLocalizerFactory innerFactory,
-            IOptions<AbpLocalizationOptions> abpLocalizationOptions, IServiceProvider serviceProvider)
+            IOptions<AbpLocalizationOptions> abpLocalizationOptions,
+            IServiceProvider serviceProvider)
         {
             _innerFactory = innerFactory;
             _serviceProvider = serviceProvider;
             _abpLocalizationOptions = abpLocalizationOptions.Value;
 
-            _localizerCache = new ConcurrentDictionary<Type, AbpDictionaryBasedStringLocalizer>();;
+            _localizerCache = new ConcurrentDictionary<Type, AbpDictionaryBasedStringLocalizer>();
         }
 
         public virtual IStringLocalizer Create(Type resourceType)
@@ -42,7 +43,8 @@ namespace Volo.Abp.Localization
 
         private AbpDictionaryBasedStringLocalizer CreateAbpStringLocalizer(LocalizationResource resource)
         {
-            resource.Initialize(_serviceProvider);
+            resource.Initialize(_serviceProvider); //TODO: Use CreateScope?
+
             return new AbpDictionaryBasedStringLocalizer(
                 resource,
                 resource.BaseResourceTypes.Select(Create).ToList()

@@ -38,15 +38,40 @@ namespace Volo.Abp.Localization
 
         public virtual void Initialize(IServiceProvider serviceProvider)
         {
+            //TODO: We should refactor here to create a better design!
+
             var context = new LocalizationResourceInitializationContext(serviceProvider);
 
-            DictionaryProvider.Initialize(context);
+            InitializeDictionaryProvider(context);
+            InitializeExtensions(context);
 
+            DictionaryProvider.Updated += (sender, args) =>
+            {
+                InitializeExtensions(context);
+            };
+
+            foreach (var extension in Extensions)
+            {
+                extension.Updated += (sender, args) =>
+                {
+                    InitializeDictionaryProvider(context);
+                    InitializeExtensions(context);
+                };
+            }
+        }
+
+        private void InitializeExtensions(LocalizationResourceInitializationContext context)
+        {
             foreach (var extension in Extensions)
             {
                 extension.Initialize(context);
                 DictionaryProvider.Extend(extension);
             }
+        }
+
+        private void InitializeDictionaryProvider(LocalizationResourceInitializationContext context)
+        {
+            DictionaryProvider.Initialize(context);
         }
 
         protected virtual void AddBaseResourceTypes()

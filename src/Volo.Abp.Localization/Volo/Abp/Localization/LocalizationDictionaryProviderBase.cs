@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Volo.Abp.Localization
@@ -5,6 +6,8 @@ namespace Volo.Abp.Localization
     public abstract class LocalizationDictionaryProviderBase : ILocalizationDictionaryProvider
     {
         public IDictionary<string, ILocalizationDictionary> Dictionaries { get; }
+
+        public event EventHandler Updated;
 
         protected LocalizationDictionaryProviderBase()
         {
@@ -34,6 +37,11 @@ namespace Volo.Abp.Localization
             {
                 existingDictionary.Extend(dictionary);
             }
+        }
+
+        protected virtual void OnUpdated()
+        {
+            Updated.InvokeSafely(this);
         }
     }
 }

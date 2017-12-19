@@ -17,7 +17,7 @@ namespace Volo.Abp.Localization.VirtualFiles.Json
             return file.Name.EndsWith(".json", StringComparison.OrdinalIgnoreCase);
         }
 
-        protected override ILocalizationDictionary CreateDictionary(string jsonString)
+        protected override ILocalizationDictionary CreateDictionaryFromFileContent(string jsonString)
         {
             return JsonLocalizationDictionaryBuilder.BuildFromJsonString(jsonString); //TODO: Use composition over inheritance!
         }
