@@ -12,7 +12,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Volo\Abp\VirtualFileSystem\MyResources\js\jquery-3.1.1.min.js" />
+    <EmbeddedResource Include="Volo\Abp\VirtualFileSystem\MyResources\js\jquery-3-1-1-min.js" />
   </ItemGroup>
 
   <ItemGroup>

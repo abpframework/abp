@@ -8,11 +8,11 @@ using Xunit;
 
 namespace Volo.Abp.VirtualFileSystem
 {
-    public class EmbeddedFileManager_Tests : AbpIntegratedTest<EmbeddedFileManager_Tests.TestModule>
+    public class VirtualFileProvider_Tests : AbpIntegratedTest<VirtualFileProvider_Tests.TestModule>
     {
         private readonly IVirtualFileProvider _embeddedFileManager;
 
-        public EmbeddedFileManager_Tests()
+        public VirtualFileProvider_Tests()
         {
             _embeddedFileManager = ServiceProvider.GetRequiredService<IVirtualFileProvider>();
         }
@@ -21,7 +21,7 @@ namespace Volo.Abp.VirtualFileSystem
         public void Should_Define_And_Get_Embedded_Resources()
         {
             //Act
-            var resource = _embeddedFileManager.GetFileInfo("/js/jquery-3.1.1.min.js");
+            var resource = _embeddedFileManager.GetFileInfo("/js/jquery-3-1-1-min.js");
 
             //Assert
             resource.ShouldNotBeNull();
@@ -29,7 +29,7 @@ namespace Volo.Abp.VirtualFileSystem
 
             using (var stream = resource.CreateReadStream())
             {
-                Encoding.UTF8.GetString(stream.GetAllBytes()).ShouldBe("//jquery-3.1.1.min.js-contents");
+                Encoding.UTF8.GetString(stream.GetAllBytes()).ShouldBe("//jquery-3-1-1-min.js-contents");
             }
         }
 

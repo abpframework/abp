@@ -10,15 +10,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="Localization\Resources\AbpBootstrap\tr.json">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Include="Localization\Resources\AbpBootstrap\en.json">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
     <EmbeddedResource Include="Localization\Resources\**\*.json" />
     <EmbeddedResource Include="Views\**\*.cshtml" />
     <EmbeddedResource Include="wwwroot\**\*.*" />

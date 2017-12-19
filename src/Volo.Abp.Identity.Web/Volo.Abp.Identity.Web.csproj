@@ -17,25 +17,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="Pages\Identity\Users\EditModal.cshtml" />
-    <Content Remove="Pages\Identity\_ViewImports.cshtml" />
-    <Content Remove="wwwroot\modules\identity\helpers\ModalManager.js" />
-    <Content Remove="wwwroot\modules\identity\helpers\ResourceLoader.js" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="wwwroot\modules\identity\helpers\datatables_helper.js" />
-    <None Remove="wwwroot\modules\identity\helpers\jquery.js" />
-  </ItemGroup>
-  
-  <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.csproj" />
     <ProjectReference Include="..\Volo.Abp.Identity.Application.Contracts\Volo.Abp.Identity.Application.Contracts.csproj" />
     <ProjectReference Include="..\Volo.Abp.AutoMapper\Volo.Abp.AutoMapper.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="wwwroot\modules\identity\libs\" />
   </ItemGroup>
 
 </Project>

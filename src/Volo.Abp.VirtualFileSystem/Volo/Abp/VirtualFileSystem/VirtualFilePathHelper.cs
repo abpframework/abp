@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Volo.Abp.VirtualFileSystem
 {
     internal static class VirtualFilePathHelper
     {
+        //TODO: Optimize this class!
+
         public static string NormalizePath(string fullPath)
         {
             var fileName = fullPath;
@@ -28,7 +32,14 @@ namespace Volo.Abp.VirtualFileSystem
         
         private static string NormalizeChars(string fileName)
         {
-            return fileName.Replace(".", "/");
+            var folderParts = fileName.Replace(".", "/").Split("/");
+
+            if (folderParts.Length == 1)
+            {
+                return folderParts[0];
+            }
+
+            return folderParts.Take(folderParts.Length - 1).Select(s => s.Replace("-", "_")).JoinAsString("/") + "/" + folderParts.Last();
         }
     }
 }

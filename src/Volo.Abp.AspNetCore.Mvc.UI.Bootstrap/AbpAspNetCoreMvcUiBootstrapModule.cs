@@ -29,21 +29,21 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap
             {
                 options.StyleBundles.Add("GlobalStyles", new[]
                 {
-                    "/libs/font-awesome/css/font-awesome.min.css",
-                    "/libs/material/css/material.min.css",
+                    "/libs/font-awesome/css/font-awesome-min.css",
+                    "/libs/material/css/material-min.css",
                     "/libs/datatables/datatables.css",
                     "/styles/libs/datatables.css"
                 });
 
                 options.ScriptBundles.Add("GlobalScripts", new[]
                 {
-                    "/libs/jquery/jquery-3.1.1.min.js",
-                    "/libs/bootstrap/js/bootstrap.bundle.min.js",
-                    "/libs/jquery-validation/jquery.validate.js",
-                    "/libs/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js",
-                    "/libs/jquery-form/jquery.form.min.js",
-                    "/libs/material/js/material.min.js",
-                    "/libs/datatables/datatables.min.js",
+                    "/libs/jquery/jquery-3-1-1-min.js",
+                    "/libs/bootstrap/js/bootstrap-bundle-min.js",
+                    "/libs/jquery-validation/jquery-validate.js",
+                    "/libs/jquery-validation-unobtrusive/jquery-validate-unobtrusive.js",
+                    "/libs/jquery-form/jquery-form-min.js",
+                    "/libs/material/js/material-min.js",
+                    "/libs/datatables/datatables-min.js",
                     "/libs/vue/vue.js",
                     "/libs/abp/abp-jquery.js?_v" + DateTime.Now.Ticks
                 });
