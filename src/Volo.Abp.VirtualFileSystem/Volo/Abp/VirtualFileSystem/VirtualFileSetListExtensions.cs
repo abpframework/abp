@@ -8,14 +8,15 @@ namespace Volo.Abp.VirtualFileSystem
 {
     public static class VirtualFileSetListExtensions
     {
-        public static void AddEmbedded<T>([NotNull] this VirtualFileSetList list, [CanBeNull] string baseNamespace = null)
+        public static void AddEmbedded<T>([NotNull] this VirtualFileSetList list, [CanBeNull] string baseNamespace = null, string baseFolderInProject = null)
         {
             Check.NotNull(list, nameof(list));
 
             list.Add(
                 new EmbeddedFileSet(
                     typeof(T).Assembly,
-                    baseNamespace
+                    baseNamespace,
+                    baseFolderInProject
                 )
             );
         }

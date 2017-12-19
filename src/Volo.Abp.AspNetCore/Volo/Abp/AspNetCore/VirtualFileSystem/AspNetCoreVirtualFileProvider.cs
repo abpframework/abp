@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
-using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.VirtualFileSystem;
@@ -24,28 +22,8 @@ namespace Volo.Abp.AspNetCore.VirtualFileSystem
         public AspNetCoreVirtualFileProvider(IObjectAccessor<IServiceProvider> serviceProviderAccessor)
         {
             _serviceProviderAccessor = serviceProviderAccessor;
-
             _fileProvider = new Lazy<IFileProvider>(
-                () =>
-                {
-                    var options = serviceProviderAccessor.Value.GetRequiredService<IOptions<VirtualFileSystemOptions>>().Value;
-
-                    IFileProvider fileProvider = serviceProviderAccessor.Value.GetRequiredService<IVirtualFileProvider>();
-
-                    if (options.FileSets.PhysicalPaths.Any())
-                    {
-                        var fileProviders = options.FileSets.PhysicalPaths
-                            .Select(p => new PhysicalFileProvider(p))
-                            .Cast<IFileProvider>()
-                            .ToList();
-
-                        fileProviders.Add(fileProvider);
-
-                        fileProvider = new CompositeFileProvider(fileProviders);
-                    }
-
-                    return fileProvider;
-                },
+                () => serviceProviderAccessor.Value.GetRequiredService<IVirtualFileProvider>(),
                 true
             );
         }

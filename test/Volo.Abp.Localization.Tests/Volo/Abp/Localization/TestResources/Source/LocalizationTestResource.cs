@@ -1,7 +1,7 @@
-﻿using Volo.Abp.Localization.Base.CountryNames;
-using Volo.Abp.Localization.Base.Validation;
+﻿using Volo.Abp.Localization.TestResources.Base.CountryNames;
+using Volo.Abp.Localization.TestResources.Base.Validation;
 
-namespace Volo.Abp.Localization.Source
+namespace Volo.Abp.Localization.TestResources.Source
 {
     [InheritResource(typeof(LocalizationTestValidationResource))]
     [InheritResource(typeof(LocalizationTestCountryNamesResource))]

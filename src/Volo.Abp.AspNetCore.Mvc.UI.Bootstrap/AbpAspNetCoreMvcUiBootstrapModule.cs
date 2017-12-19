@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Bundling;
-using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Localization.Resource;
+using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Localization.Resources.AbpBootstrap;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
@@ -22,7 +22,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap
 
             services.Configure<AbpLocalizationOptions>(options =>
             {
-                options.Resources.AddJson<AbpBootstrapResource>("en");
+                options.Resources.AddVirtualJson<AbpBootstrapResource>("en", "/Localization/Resources/AbpBootstrap");
             });
 
             services.Configure<BundlingOptions>(options =>

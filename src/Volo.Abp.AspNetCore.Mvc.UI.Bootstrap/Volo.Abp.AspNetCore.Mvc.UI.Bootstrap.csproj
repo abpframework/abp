@@ -10,101 +10,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Localization\Resource\en.json" />
-    <None Remove="Localization\Resource\tr.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Localization\Resource\tr.json">
+    <Content Include="Localization\Resources\AbpBootstrap\tr.json">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Include="Localization\Resource\en.json">
+    <Content Include="Localization\Resources\AbpBootstrap\en.json">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Localization\Resource\*.json" />
-    <EmbeddedResource Include="Views\Shared\Components\AbpMenu\Default.cshtml" />
-    <EmbeddedResource Include="Views\Shared\_AppLayout.cshtml" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\datatables.css" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\datatables.js" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\datatables.min.css" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\datatables.min.js" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Afrikaans.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Albanian.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Arabic.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Armenian.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Azerbaijan.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Bangla.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Basque.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Belarusian.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Bulgarian.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Catalan.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Chinese (Simplified, China).json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Chinese-traditional.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Croatian.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Czech.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Danish.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Dutch.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\English.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Estonian.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Filipino.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Finnish.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\French.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Galician.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Georgian.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\German.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Greek.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Gujarati.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Hebrew.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Hindi.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Hungarian.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Icelandic.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Indonesian-Alternative.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Indonesian.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Irish.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Italian.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Japanese.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Kazakh.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Korean.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Kyrgyz.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Latvian.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Lithuanian.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Macedonian.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Malay.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Mongolian.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Nepali.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Norwegian-Bokmal.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Norwegian-Nynorsk.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Pashto.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Persian.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Polish.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Portuguese (Brazil).json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Portuguese.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Romanian.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Russian.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Serbian.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Sinhala.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Slovak.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Slovenian.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Spanish.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Swahili.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Swedish.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Tamil.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\telugu.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Thai.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Turkish.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Ukrainian.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Urdu.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Uzbek.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Vietnamese.json" />
-    <EmbeddedResource Include="wwwroot\libs\datatables\localizations\Welsh.json" />
-    <EmbeddedResource Include="wwwroot\views\shared\_AppLayout.css" />
-    <EmbeddedResource Include="Views\Shared\_ViewImports.cshtml" />
-    <EmbeddedResource Include="wwwroot\libs\jquery\jquery-3.1.1.js" />
-    <EmbeddedResource Include="wwwroot\libs\jquery\jquery-3.1.1.min.js" />
-    <EmbeddedResource Include="wwwroot\libs\jquery\jquery-3.1.1.min.map" />
+    <EmbeddedResource Include="Localization\Resources\**\*.json" />
+    <EmbeddedResource Include="Views\**\*.cshtml" />
+    <EmbeddedResource Include="wwwroot\**\*.*" />
   </ItemGroup>
 
   <ItemGroup>

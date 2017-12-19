@@ -2,7 +2,7 @@
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AutoMapper;
-using Volo.Abp.Identity.Web.Localization.Resource;
+using Volo.Abp.Identity.Web.Localization.Resources.AbpIdentity;
 using Volo.Abp.Identity.Web.Navigation;
 using Volo.Abp.Identity.Web.ObjectMappings;
 using Volo.Abp.Localization;
@@ -41,7 +41,8 @@ namespace Volo.Abp.Identity.Web
             
             services.Configure<AbpLocalizationOptions>(options =>
             {
-                options.Resources.AddJson<IdentityResource>("en");
+                //options.Resources.AddVirtual<IdentityResource>("en");
+                options.Resources.AddVirtualJson<IdentityResource>("en", "/Localization/Resources/AbpIdentity");
             });
 
             services.Configure<AbpAutoMapperOptions>(options =>

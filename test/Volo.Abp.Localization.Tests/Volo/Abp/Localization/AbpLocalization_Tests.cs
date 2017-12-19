@@ -2,12 +2,12 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Shouldly;
-using Volo.Abp.Localization.Base.CountryNames;
-using Volo.Abp.Localization.Base.Validation;
-using Volo.Abp.Localization.Source;
-using Volo.Abp.Localization.SourceExt;
+using Volo.Abp.Localization.TestResources.Base.CountryNames;
+using Volo.Abp.Localization.TestResources.Base.Validation;
+using Volo.Abp.Localization.TestResources.Source;
 using Volo.Abp.Modularity;
 using Volo.Abp.TestBase;
+using Volo.Abp.VirtualFileSystem;
 using Xunit;
 
 namespace Volo.Abp.Localization
@@ -109,12 +109,17 @@ namespace Volo.Abp.Localization
         {
             public override void ConfigureServices(IServiceCollection services)
             {
+                services.Configure<VirtualFileSystemOptions>(options =>
+                {
+                    options.FileSets.AddEmbedded<TestModule>();
+                });
+
                 services.Configure<AbpLocalizationOptions>(options =>
                 {
-                    options.Resources.AddJson<LocalizationTestValidationResource>("en");
-                    options.Resources.AddJson<LocalizationTestCountryNamesResource>("en");
-                    options.Resources.AddJson<LocalizationTestResource>("en");
-                    options.Resources.ExtendWithJson<LocalizationTestResource, LocalizationTestResourceExt>();
+                    options.Resources.AddVirtualJson<LocalizationTestValidationResource>("en", "/Volo/Abp/Localization/TestResources/Base/Validation");
+                    options.Resources.AddVirtualJson<LocalizationTestCountryNamesResource>("en", "/Volo/Abp/Localization/TestResources/Base/CountryNames");
+                    options.Resources.AddVirtualJson<LocalizationTestResource>("en", "/Volo/Abp/Localization/TestResources/Source");
+                    options.Resources.ExtendWithVirtualJson<LocalizationTestResource>("/Volo/Abp/Localization/TestResources/SourceExt");
                 });
             }
         }

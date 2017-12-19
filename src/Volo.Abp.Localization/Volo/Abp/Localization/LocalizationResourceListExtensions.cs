@@ -1,15 +1,23 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using JetBrains.Annotations;
 using Volo.Abp.Localization.Json;
+using Volo.Abp.Localization.VirtualFiles.Json;
 
 namespace Volo.Abp.Localization
 {
     public static class LocalizationResourceListExtensions
     {
-        public static LocalizationResource AddJson<TResource>([NotNull] this LocalizationResourceDictionary resourceDictionary, [NotNull] string defaultCultureName)
+        public static LocalizationResource AddVirtualJson<TResource>(
+            [NotNull] this LocalizationResourceDictionary resourceDictionary,
+            [NotNull] string defaultCultureName,
+            [NotNull] string virtualPath)
         {
             Check.NotNull(resourceDictionary, nameof(resourceDictionary));
             Check.NotNull(defaultCultureName, nameof(defaultCultureName));
+            Check.NotNull(virtualPath, nameof(virtualPath));
+
+            virtualPath = virtualPath.EnsureStartsWith('/');
 
             var resourceType = typeof(TResource);
 
@@ -22,18 +30,18 @@ namespace Volo.Abp.Localization
                 resourceType,
                 defaultCultureName,
                 new JsonEmbeddedFileLocalizationDictionaryProvider(
-                    resourceType.Assembly,
-                    resourceType.Namespace
+                    virtualPath
                 )
             );
         }
 
-        public static void ExtendWithJson<TResource, TResourceExt>([NotNull] this LocalizationResourceDictionary resourceDictionary)
+        public static void ExtendWithVirtualJson<TResource>(
+            [NotNull] this LocalizationResourceDictionary resourceDictionary,
+            [NotNull] string virtualPath)
         {
             Check.NotNull(resourceDictionary, nameof(resourceDictionary));
 
             var resourceType = typeof(TResource);
-            var resourceExtType = typeof(TResourceExt);
 
             var resource = resourceDictionary.GetOrDefault(resourceType);
             if (resource == null)
@@ -42,8 +50,7 @@ namespace Volo.Abp.Localization
             }
 
             resource.Extensions.Add(new JsonEmbeddedFileLocalizationDictionaryProvider(
-                resourceExtType.Assembly,
-                resourceExtType.Namespace
+                virtualPath
             ));
         }
     }

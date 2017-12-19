@@ -19,7 +19,10 @@ namespace Volo.Abp.VirtualFileSystem.Embedded
         [CanBeNull]
         public string BaseFolderInProject { get; }
 
-        public EmbeddedFileSet([NotNull] Assembly assembly, [CanBeNull] string baseNamespace, [CanBeNull] string baseFolderInProject = null)
+        public EmbeddedFileSet(
+            [NotNull] Assembly assembly, 
+            [CanBeNull] string baseNamespace, 
+            [CanBeNull] string baseFolderInProject = null)
         {
             Check.NotNull(assembly, nameof(assembly));
 

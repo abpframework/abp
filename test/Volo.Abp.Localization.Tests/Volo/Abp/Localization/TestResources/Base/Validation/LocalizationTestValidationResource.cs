@@ -1,4 +1,4 @@
-﻿namespace Volo.Abp.Localization.Base.Validation
+﻿namespace Volo.Abp.Localization.TestResources.Base.Validation
 {
     public sealed class LocalizationTestValidationResource
     {

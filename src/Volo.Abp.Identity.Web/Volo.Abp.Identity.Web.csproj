@@ -13,7 +13,7 @@
   <ItemGroup>
     <EmbeddedResource Include="wwwroot\**\*.*" />
     <EmbeddedResource Include="Pages\**\*.cshtml" />
-    <EmbeddedResource Include="Localization\Resource\*.json" />
+    <EmbeddedResource Include="Localization\Resources\**\*.json" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,7 +27,7 @@
     <None Remove="wwwroot\modules\identity\helpers\datatables_helper.js" />
     <None Remove="wwwroot\modules\identity\helpers\jquery.js" />
   </ItemGroup>
-
+  
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.csproj" />
     <ProjectReference Include="..\Volo.Abp.Identity.Application.Contracts\Volo.Abp.Identity.Application.Contracts.csproj" />
