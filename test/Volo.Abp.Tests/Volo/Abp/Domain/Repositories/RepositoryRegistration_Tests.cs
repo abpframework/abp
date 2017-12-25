@@ -16,7 +16,7 @@ namespace Volo.Abp.Domain.Repositories
 
             var services = new ServiceCollection();
 
-            var options = new CommonDbContextRegistrationOptions();
+            var options = new TestDbContextRegistrationOptions();
             options.WithDefaultRepositories();
 
             //Act
@@ -37,7 +37,7 @@ namespace Volo.Abp.Domain.Repositories
 
             var services = new ServiceCollection();
 
-            var options = new CommonDbContextRegistrationOptions();
+            var options = new TestDbContextRegistrationOptions();
             options.WithDefaultRepositories(true);
 
             //Act
@@ -58,7 +58,7 @@ namespace Volo.Abp.Domain.Repositories
 
             var services = new ServiceCollection();
 
-            var options = new CommonDbContextRegistrationOptions();
+            var options = new TestDbContextRegistrationOptions();
             options
                 .WithDefaultRepositories(true)
                 .WithCustomRepository<MyTestAggregateRootWithDefaultPk, MyTestAggregateRootWithDefaultPkCustomRepository>();
@@ -81,7 +81,7 @@ namespace Volo.Abp.Domain.Repositories
 
             var services = new ServiceCollection();
 
-            var options = new CommonDbContextRegistrationOptions();
+            var options = new TestDbContextRegistrationOptions();
             options
                 .WithDefaultRepositories(true)
                 .WithDefaultRepositoryClasses(typeof(MyTestCustomBaseRepository<,>), typeof(MyTestCustomBaseRepository<>));
@@ -193,5 +193,9 @@ namespace Volo.Abp.Domain.Repositories
 
         }
 
+        public class TestDbContextRegistrationOptions : CommonDbContextRegistrationOptions
+        {
+            
+        }
     }
 }

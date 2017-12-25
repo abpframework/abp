@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.Reflection;
 
 namespace Volo.Abp.Domain.Repositories
 {
@@ -33,7 +34,7 @@ namespace Volo.Abp.Domain.Repositories
         {
             foreach (var entityType in GetEntityTypes(dbContextType))
             {
-                if (!Options.ShouldRegisterDefaultRepositoryFor(entityType))
+                if (!ShouldRegisterDefaultRepositoryFor(entityType))
                 {
                     continue;
                 }
@@ -62,6 +63,26 @@ namespace Volo.Abp.Domain.Repositories
             }
 
             services.AddDefaultRepository(entityType, repositoryImplementationType);
+        }
+
+        public bool ShouldRegisterDefaultRepositoryFor(Type entityType)
+        {
+            if (!Options.RegisterDefaultRepositories)
+            {
+                return false;
+            }
+
+            if (Options.CustomRepositories.ContainsKey(entityType))
+            {
+                return false;
+            }
+
+            if (!Options.IncludeAllEntitiesForDefaultRepositories && !ReflectionHelper.IsAssignableToGenericType(entityType, typeof(IAggregateRoot<>)))
+            {
+                return false;
+            }
+
+            return true;
         }
 
         protected abstract IEnumerable<Type> GetEntityTypes(Type dbContextType);

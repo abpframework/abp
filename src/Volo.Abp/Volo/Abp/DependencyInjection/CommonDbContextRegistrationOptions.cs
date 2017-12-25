@@ -7,7 +7,10 @@ using Volo.Abp.Reflection;
 
 namespace Volo.Abp.Data
 {
-    public class CommonDbContextRegistrationOptions : ICommonDbContextRegistrationOptionsBuilder
+    /// <summary>
+    /// This is a base class for dbcoUse derived
+    /// </summary>
+    public abstract class CommonDbContextRegistrationOptions : ICommonDbContextRegistrationOptionsBuilder
     {
         public bool SpecifiedDefaultRepositoryTypes => DefaultRepositoryImplementationType != null && DefaultRepositoryImplementationTypeWithDefaultPrimaryKey != null;
         

@@ -15,6 +15,7 @@ namespace Volo.Abp
     [DependsOn(typeof(AbpLocalizationModule))]
     [DependsOn(typeof(AbpVirtualFileSystemModule))]
     [DependsOn(typeof(AbpApiVersioningAbstractionsModule))]
+    [DependsOn(typeof(AbpDataModule))]
     public class AbpCommonModule : AbpModule
     {
         public override void PreConfigureServices(IServiceCollection services)
@@ -38,8 +39,7 @@ namespace Volo.Abp
         public override void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<ICancellationTokenProvider>(NullCancellationTokenProvider.Instance);
-            services.AddSingleton(typeof(IDataFilter<>), typeof(DataFilter<>));
-            
+
             services.AddAssemblyOf<AbpCommonModule>();
         }
     }
