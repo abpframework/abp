@@ -7,6 +7,7 @@ using Volo.Abp.TestApp.Application.Dto;
 namespace Volo.Abp.TestApp
 {
     [DependsOn(typeof(AbpAutoMapperModule))]
+    [DependsOn(typeof(AbpCommonModule))]
     public class TestAppModule : AbpModule
     {
         public override void ConfigureServices(IServiceCollection services)

@@ -1,11 +1,11 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="..\..\common.props" />
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>Volo.Abp.AutoMapper</AssemblyName>
-    <PackageId>Volo.Abp.AutoMapper</PackageId>
+    <AssemblyName>Volo.Abp.ObjectMapping</AssemblyName>
+    <PackageId>Volo.Abp.ObjectMapping</PackageId>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
@@ -14,11 +14,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Volo.Abp.ObjectMapping\Volo.Abp.ObjectMapping.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="6.1.1" />
+    <ProjectReference Include="..\Volo.Abp.Core\Volo.Abp.Core.csproj" />
   </ItemGroup>
 
 </Project>

@@ -4,6 +4,7 @@ using Volo.Abp.Modularity;
 namespace Volo.Abp.AutoMapper
 {
     [DependsOn(typeof(AbpAutoMapperModule))]
+    [DependsOn(typeof(AbpCommonModule))]
     public class AutoMapperTestModule : AbpModule
     {
         public override void ConfigureServices(IServiceCollection services)

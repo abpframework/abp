@@ -5,7 +5,6 @@ using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectMapping;
-using Volo.Abp.Reflection;
 using Volo.Abp.Threading;
 using Volo.Abp.Uow;
 using Volo.Abp.Validation;
@@ -18,24 +17,13 @@ namespace Volo.Abp
     [DependsOn(typeof(AbpApiVersioningAbstractionsModule))]
     [DependsOn(typeof(AbpDataModule))]
     [DependsOn(typeof(AbpMultiTenancyAbstractionsModule))]
+    [DependsOn(typeof(AbpObjectMappingModule))]
     public class AbpCommonModule : AbpModule
     {
         public override void PreConfigureServices(IServiceCollection services)
         {
             services.OnRegistred(UnitOfWorkInterceptorRegistrar.RegisterIfNeeded);
             services.OnRegistred(ValidationInterceptorRegistrar.RegisterIfNeeded);
-            
-            //TODO: Move to a dedicated class
-            services.OnExposing(context =>
-            {
-                //Register types for IObjectMapper<TSource, TDestination> if implements
-                context.ExposedTypes.AddRange(
-                    ReflectionHelper.GetImplementedGenericTypes(
-                        context.ImplementationType,
-                        typeof(IObjectMapper<,>)
-                    )
-                );
-            });
         }
 
         public override void ConfigureServices(IServiceCollection services)

@@ -19,6 +19,7 @@
     <ProjectReference Include="..\Volo.Abp.Data\Volo.Abp.Data.csproj" />
     <ProjectReference Include="..\Volo.Abp.Localization\Volo.Abp.Localization.csproj" />
     <ProjectReference Include="..\Volo.Abp.MultiTenancy.Abstractions\Volo.Abp.MultiTenancy.Abstractions.csproj" />
+    <ProjectReference Include="..\Volo.Abp.ObjectMapping\Volo.Abp.ObjectMapping.csproj" />
     <ProjectReference Include="..\Volo.Abp.VirtualFileSystem\Volo.Abp.VirtualFileSystem.csproj" />
   </ItemGroup>
 

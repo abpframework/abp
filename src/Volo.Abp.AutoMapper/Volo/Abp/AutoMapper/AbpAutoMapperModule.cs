@@ -6,11 +6,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Modularity;
+using Volo.Abp.ObjectMapping;
 using Volo.Abp.Reflection;
 
 namespace Volo.Abp.AutoMapper
 {
-    [DependsOn(typeof(AbpCommonModule))]
+    [DependsOn(typeof(AbpObjectMappingModule))]
     public class AbpAutoMapperModule : AbpModule
     {
         private static volatile bool _createdMappingsBefore;

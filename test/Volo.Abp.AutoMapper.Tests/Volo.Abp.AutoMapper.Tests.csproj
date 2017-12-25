@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Volo.Abp.AutoMapper\Volo.Abp.AutoMapper.csproj" />
+    <ProjectReference Include="..\..\src\Volo.Abp\Volo.Abp.csproj" />
     <ProjectReference Include="..\AbpTestBase\AbpTestBase.csproj" />
   </ItemGroup>
 
