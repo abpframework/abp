@@ -146,7 +146,9 @@ namespace Volo.Abp.Validation
             _myAppService.MyMethodWithNullableEnum(null);
         }
 
+        [DependsOn(typeof(AbpCommonModule))] //TODO: Do not depend on AbpCommonModule for this test project.
         [DependsOn(typeof(AbpAutofacModule))]
+        [DependsOn(typeof(AbpValidationModule))]
         public class ValidationTestModule : AbpModule
         {
             public override void ConfigureServices(IServiceCollection services)

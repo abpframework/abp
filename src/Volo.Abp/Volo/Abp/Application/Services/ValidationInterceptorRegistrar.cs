@@ -1,7 +1,7 @@
-﻿using Volo.Abp.Application.Services;
-using Volo.Abp.DependencyInjection;
+﻿using Volo.Abp.DependencyInjection;
+using Volo.Abp.Validation;
 
-namespace Volo.Abp.Validation
+namespace Volo.Abp.Application.Services
 {
     public static class ValidationInterceptorRegistrar
     {

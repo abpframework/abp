@@ -4,8 +4,10 @@ using JetBrains.Annotations;
 
 namespace Volo.Abp.Aspects
 {
-    internal static class AbpCrossCuttingConcerns
+    public static class AbpCrossCuttingConcerns
     {
+        //TODO: Move these constants to their own assemblies!
+
         public const string Auditing = "AbpAuditing";
         public const string Validation = "AbpValidation";
         public const string UnitOfWork = "AbpUnitOfWork";

@@ -7,7 +7,6 @@ using Volo.Abp.AspNetCore.Mvc.Validation;
 using Volo.Abp.Guids;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Uow;
-using Volo.Abp.Validation;
 
 namespace Volo.Abp.AspNetCore.Mvc.RazorPages
 {

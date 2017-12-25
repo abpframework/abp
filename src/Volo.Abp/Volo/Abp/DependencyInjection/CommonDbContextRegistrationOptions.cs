@@ -5,7 +5,7 @@ using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Reflection;
 
-namespace Volo.Abp.Data
+namespace Volo.Abp.DependencyInjection
 {
     /// <summary>
     /// This is a base class for dbcoUse derived
