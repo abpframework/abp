@@ -14,7 +14,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Volo.Abp\Volo.Abp.csproj" />
+    <ProjectReference Include="..\Volo.Abp.Data\Volo.Abp.Data.csproj" />
+    <ProjectReference Include="..\Volo.Abp.MultiTenancy.Abstractions\Volo.Abp.MultiTenancy.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

@@ -3,6 +3,7 @@ using Volo.Abp.ApiVersioning;
 using Volo.Abp.Data;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Reflection;
 using Volo.Abp.Threading;
@@ -16,6 +17,7 @@ namespace Volo.Abp
     [DependsOn(typeof(AbpVirtualFileSystemModule))]
     [DependsOn(typeof(AbpApiVersioningAbstractionsModule))]
     [DependsOn(typeof(AbpDataModule))]
+    [DependsOn(typeof(AbpMultiTenancyAbstractionsModule))]
     public class AbpCommonModule : AbpModule
     {
         public override void PreConfigureServices(IServiceCollection services)
