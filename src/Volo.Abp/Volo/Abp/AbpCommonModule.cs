@@ -7,6 +7,7 @@ using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Security;
+using Volo.Abp.Session;
 using Volo.Abp.Threading;
 using Volo.Abp.Uow;
 using Volo.Abp.Validation;
@@ -22,6 +23,7 @@ namespace Volo.Abp
     [DependsOn(typeof(AbpObjectMappingModule))]
     [DependsOn(typeof(AbpValidationModule))]
     [DependsOn(typeof(AbpSecurityModule))]
+    [DependsOn(typeof(AbpSessionModule))]
     public class AbpCommonModule : AbpModule
     {
         public override void PreConfigureServices(IServiceCollection services)
