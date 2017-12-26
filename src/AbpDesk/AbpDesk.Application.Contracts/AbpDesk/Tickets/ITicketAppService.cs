@@ -10,7 +10,5 @@ namespace AbpDesk.Tickets
         Task<ListResultDto<TicketDto>> GetAll(GetAllTicketsInput input);
 
         ListResultDto<TicketDto> GetAll2(GetAllTicketsInput input);
-
-        void TestException();
     }
 }

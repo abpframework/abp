@@ -2,11 +2,13 @@
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Bundling;
 using Volo.Abp.Modularity;
+using Volo.Abp.Ui.Navigation;
 using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.AspNetCore.Mvc
 {
     [DependsOn(typeof(AbpAspNetCoreMvcModule))]
+    [DependsOn(typeof(AbpUiNavigationModule))]
     public class AbpAspNetCoreMvcUiModule : AbpModule
     {
         public override void ConfigureServices(IServiceCollection services)

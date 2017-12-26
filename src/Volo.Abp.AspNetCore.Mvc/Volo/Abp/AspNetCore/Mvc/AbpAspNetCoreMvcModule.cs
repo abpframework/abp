@@ -21,12 +21,14 @@ using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.VirtualFileSystem;
 using Volo.Abp.Http;
 using Volo.Abp.Http.Modeling;
+using Volo.Abp.Ui;
 
 namespace Volo.Abp.AspNetCore.Mvc
 {
     [DependsOn(typeof(AbpHttpModule))]
     [DependsOn(typeof(AbpDddModule))] //TODO: Ideally, AbpAspNetCoreMvcModule should not depend on Ddd module...?
     [DependsOn(typeof(AbpAspNetCoreModule))]
+    [DependsOn(typeof(AbpUiModule))]
     public class AbpAspNetCoreMvcModule : AbpModule
     {
         public override void PreConfigureServices(IServiceCollection services)

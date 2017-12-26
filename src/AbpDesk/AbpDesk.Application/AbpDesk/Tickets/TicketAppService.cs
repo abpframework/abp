@@ -7,7 +7,6 @@ using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Linq;
-using Volo.Abp.Ui;
 
 namespace AbpDesk.Tickets
 {
@@ -51,11 +50,6 @@ namespace AbpDesk.Tickets
             return new ListResultDto<TicketDto>(
                 ObjectMapper.Map<List<Ticket>, List<TicketDto>>(tickets)
             );
-        }
-
-        public void TestException()
-        {
-            throw new UserFriendlyException("a user friendly message!");
         }
     }
 }
