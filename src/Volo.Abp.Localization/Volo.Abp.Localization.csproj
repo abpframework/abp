@@ -12,9 +12,13 @@
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <RootNamespace />
   </PropertyGroup>
-
+  
   <ItemGroup>
     <EmbeddedResource Include="Volo\Abp\Localization\Resources\**\*.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
   </ItemGroup>
 
   <ItemGroup>
