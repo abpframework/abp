@@ -86,13 +86,13 @@ namespace AbpDesk.Web.Mvc
 
             if (env.IsDevelopment())
             {
-                //services.Configure<VirtualFileSystemOptions>(options =>
-                //{
-                //    options.FileSets.ReplaceEmbeddedByPyhsical<AbpAspNetCoreMvcUiModule>(Path.Combine(env.ContentRootPath, "..\\..\\Volo.Abp.AspNetCore.Mvc.UI"));
-                //    options.FileSets.ReplaceEmbeddedByPyhsical<AbpAspNetCoreMvcUiBootstrapModule>(Path.Combine(env.ContentRootPath, "..\\..\\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap"));
-                //    options.FileSets.ReplaceEmbeddedByPyhsical<AbpAccountWebModule>(Path.Combine(env.ContentRootPath, "..\\..\\Volo.Abp.Account.Web"));
-                //    options.FileSets.ReplaceEmbeddedByPyhsical<AbpIdentityWebModule>(Path.Combine(env.ContentRootPath, "..\\..\\Volo.Abp.Identity.Web"));
-                //});
+                services.Configure<VirtualFileSystemOptions>(options =>
+                {
+                    options.FileSets.ReplaceEmbeddedByPyhsical<AbpAspNetCoreMvcUiModule>(Path.Combine(env.ContentRootPath, "..\\..\\Volo.Abp.AspNetCore.Mvc.UI"));
+                    options.FileSets.ReplaceEmbeddedByPyhsical<AbpAspNetCoreMvcUiBootstrapModule>(Path.Combine(env.ContentRootPath, "..\\..\\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap"));
+                    options.FileSets.ReplaceEmbeddedByPyhsical<AbpAccountWebModule>(Path.Combine(env.ContentRootPath, "..\\..\\Volo.Abp.Account.Web"));
+                    options.FileSets.ReplaceEmbeddedByPyhsical<AbpIdentityWebModule>(Path.Combine(env.ContentRootPath, "..\\..\\Volo.Abp.Identity.Web"));
+                });
             }
         }
 
