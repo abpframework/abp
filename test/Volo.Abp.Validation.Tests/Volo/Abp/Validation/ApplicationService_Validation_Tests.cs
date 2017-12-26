@@ -11,7 +11,7 @@ using Xunit;
 
 namespace Volo.Abp.Validation
 {
-    public class ApplicationService_Validation_Tests : AbpIntegratedTest<ApplicationService_Validation_Tests.ValidationTestModule>
+    public class ApplicationService_Validation_Tests : AbpIntegratedTest<ApplicationService_Validation_Tests.TestModule>
     {
         private readonly IMyAppService _myAppService;
 
@@ -149,7 +149,8 @@ namespace Volo.Abp.Validation
         [DependsOn(typeof(AbpCommonModule))] //TODO: Do not depend on AbpCommonModule for this test project.
         [DependsOn(typeof(AbpAutofacModule))]
         [DependsOn(typeof(AbpValidationModule))]
-        public class ValidationTestModule : AbpModule
+        [DependsOn(typeof(AbpDddModule))]
+        public class TestModule : AbpModule
         {
             public override void ConfigureServices(IServiceCollection services)
             {

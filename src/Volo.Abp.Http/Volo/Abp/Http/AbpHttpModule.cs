@@ -5,6 +5,7 @@ using Volo.Abp.Modularity;
 
 namespace Volo.Abp.Http
 {
+    [DependsOn(typeof(AbpHttpAbstractionsModule))]
     public class AbpHttpModule : AbpModule
     {
         public override void ConfigureServices(IServiceCollection services)

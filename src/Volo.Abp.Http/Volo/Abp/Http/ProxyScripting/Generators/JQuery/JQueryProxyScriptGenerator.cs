@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Volo.Abp.Application.Services;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Modeling;
 
@@ -12,6 +11,9 @@ namespace Volo.Abp.Http.ProxyScripting.Generators.JQuery
 
     public class JQueryProxyScriptGenerator : IProxyScriptGenerator, ITransientDependency
     {
+        //TODO: Should move this to Ddd package by adding an option to AbpHttpAbstractions module. Also duplicated of ApplicationService.CommonPostfixes
+        private static string[] AppServiceCommonPostfixes { get; } = { "AppService", "ApplicationService", "Service" };
+
         /// <summary>
         /// "jquery".
         /// </summary>
@@ -189,7 +191,7 @@ namespace Volo.Abp.Http.ProxyScripting.Generators.JQuery
             return CamelCaseWithNamespace(
                 typeWithAssemblyName.Split(",")[0]
                     .Trim()
-                    .RemovePostFix(ApplicationService.CommonPostfixes)
+                    .RemovePostFix(AppServiceCommonPostfixes)
                     .RemovePostFix("Controller")
             );
         }

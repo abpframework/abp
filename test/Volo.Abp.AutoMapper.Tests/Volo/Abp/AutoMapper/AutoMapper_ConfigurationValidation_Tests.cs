@@ -8,7 +8,7 @@ using IObjectMapper = Volo.Abp.ObjectMapping.IObjectMapper;
 
 namespace Volo.Abp.AutoMapper
 {
-    public class AutoMapper_ConfigurationValidation_Tests : AbpIntegratedTest<AutoMapper_ConfigurationValidation_Tests.Module>
+    public class AutoMapper_ConfigurationValidation_Tests : AbpIntegratedTest<AutoMapper_ConfigurationValidation_Tests.TestModule>
     {
         private readonly IObjectMapper _objectMapper;
 
@@ -26,7 +26,7 @@ namespace Volo.Abp.AutoMapper
 
         [DependsOn(typeof(AbpCommonModule))]
         [DependsOn(typeof(AbpAutoMapperModule))]
-        public class Module : AbpModule
+        public class TestModule : AbpModule
         {
             public override void ConfigureServices(IServiceCollection services)
             {

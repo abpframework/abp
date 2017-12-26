@@ -1,13 +1,12 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
-using Volo.Abp.Modularity;
 using Volo.Abp.TestBase;
 using Xunit;
 
 namespace Volo.Abp.Uow
 {
-    public class UnitOfWork_Events_Tests : AbpIntegratedTest<AbpCommonModule>
+    public class UnitOfWork_Events_Tests : AbpIntegratedTest<AbpDddModule>
     {
         private readonly IUnitOfWorkManager _unitOfWorkManager;
 

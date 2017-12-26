@@ -3,6 +3,7 @@ using Volo.Abp.Modularity;
 
 namespace Volo.Abp.AutoMapper
 {
+    [DependsOn(typeof(AbpDddModule))]
     [DependsOn(typeof(AbpAutoMapperModule))]
     [DependsOn(typeof(AbpCommonModule))]
     public class AutoMapperTestModule : AbpModule

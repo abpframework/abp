@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.AspNetCore\Volo.Abp.AspNetCore.csproj" />
+    <ProjectReference Include="..\Volo.Abp.Ddd\Volo.Abp.Ddd.csproj" />
     <ProjectReference Include="..\Volo.Abp.Http\Volo.Abp.Http.csproj" />
   </ItemGroup>
 

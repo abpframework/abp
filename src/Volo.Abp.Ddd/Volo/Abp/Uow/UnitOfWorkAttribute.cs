@@ -62,7 +62,7 @@ namespace Volo.Abp.Uow
 
         //TODO: More constructors!
 
-        internal virtual void SetOptions(UnitOfWorkOptions options)
+        public virtual void SetOptions(UnitOfWorkOptions options)
         {
             if (IsTransactional.HasValue)
             {

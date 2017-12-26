@@ -25,6 +25,7 @@ using Volo.Abp.Http.Modeling;
 namespace Volo.Abp.AspNetCore.Mvc
 {
     [DependsOn(typeof(AbpHttpModule))]
+    [DependsOn(typeof(AbpDddModule))] //TODO: Ideally, AbpAspNetCoreMvcModule should not depend on Ddd module...?
     [DependsOn(typeof(AbpAspNetCoreModule))]
     public class AbpAspNetCoreMvcModule : AbpModule
     {

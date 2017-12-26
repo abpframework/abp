@@ -6,7 +6,7 @@ using Volo.Abp.Domain.Repositories;
 
 namespace Volo.Abp.Uow
 {
-    internal static class UnitOfWorkHelper
+    public static class UnitOfWorkHelper
     {
         public static bool IsUnitOfWorkType(TypeInfo implementationType)
         {

@@ -32,7 +32,7 @@ namespace Volo.Abp.Uow
             return options;
         }
 
-        internal bool CalculateIsTransactional(bool autoValue)
+        public bool CalculateIsTransactional(bool autoValue)
         {
             switch (TransactionBehavior)
             {
