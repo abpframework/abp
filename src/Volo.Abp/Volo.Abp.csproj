@@ -15,8 +15,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.ApiVersioning.Abstractions\Volo.Abp.ApiVersioning.Abstractions.csproj" />
+    <ProjectReference Include="..\Volo.Abp.Authorization\Volo.Abp.Authorization.csproj" />
     <ProjectReference Include="..\Volo.Abp.Core\Volo.Abp.Core.csproj" />
     <ProjectReference Include="..\Volo.Abp.Data\Volo.Abp.Data.csproj" />
+    <ProjectReference Include="..\Volo.Abp.Json\Volo.Abp.Json.csproj" />
     <ProjectReference Include="..\Volo.Abp.Localization\Volo.Abp.Localization.csproj" />
     <ProjectReference Include="..\Volo.Abp.MultiTenancy.Abstractions\Volo.Abp.MultiTenancy.Abstractions.csproj" />
     <ProjectReference Include="..\Volo.Abp.ObjectMapping\Volo.Abp.ObjectMapping.csproj" />
