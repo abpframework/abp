@@ -16,6 +16,8 @@ namespace Volo.Abp.Identity.Web.Navigation
                 .AddItem(
                     new ApplicationMenuItem("Identity", "Identity")
                         .AddItem(new ApplicationMenuItem("Users", "Users", url: "/Identity/Users"))
+                        .AddItem(new ApplicationMenuItem("Roles", "Roles", url: "/Identity/Roles"))
+
                 );
 
             return Task.CompletedTask;

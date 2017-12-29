@@ -17,6 +17,19 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="Pages\Identity\Roles\Index.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="wwwroot\modules\identity\views\roles\index.css" />
+    <EmbeddedResource Remove="wwwroot\modules\identity\views\roles\index.es5.js" />
+    <EmbeddedResource Remove="wwwroot\modules\identity\views\roles\index.es5.min.js" />
+    <EmbeddedResource Remove="wwwroot\modules\identity\views\roles\index.js" />
+    <EmbeddedResource Remove="wwwroot\modules\identity\views\roles\index.less" />
+    <EmbeddedResource Remove="wwwroot\modules\identity\views\roles\index.min.css" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.csproj" />
     <ProjectReference Include="..\Volo.Abp.Identity.Application.Contracts\Volo.Abp.Identity.Application.Contracts.csproj" />
     <ProjectReference Include="..\Volo.Abp.AutoMapper\Volo.Abp.AutoMapper.csproj" />
