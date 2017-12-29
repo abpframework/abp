@@ -1,0 +1,37 @@
+﻿@page
+@using Microsoft.Extensions.Localization
+@using Volo.Abp.Identity.Web.Localization.Resources.AbpIdentity
+@model Volo.Abp.Identity.Web.Pages.Identity.Roles.EditModalModel
+@inject IStringLocalizer<IdentityResource> L
+@{
+    Layout = null;
+}
+
+<form method="post" asp-page="/Identity/Roles/EditModal">
+
+    <abp-modal>
+
+        <abp-modal-header title="@L["Edit"]"></abp-modal-header>
+
+        <abp-modal-body>
+
+                <div class="tab-pane active" id="EditUser_UserInfoTab" role="tabpanel">
+
+                    <input asp-for="RoleInfo.Id" />
+
+                    <div class="form-group">
+                        <label asp-for="RoleInfo.Name"></label>
+                        <input asp-for="RoleInfo.Name" class="form-control" />
+                        <span asp-validation-for="RoleInfo.Name" class="text-danger"></span>
+                    </div>
+                </div>
+
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+        </abp-modal-body>
+
+        <abp-modal-footer></abp-modal-footer>
+
+    </abp-modal>
+
+</form>

@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="Pages\Identity\Roles\EditModal.cshtml" />
     <Content Remove="Pages\Identity\Roles\Index.cshtml" />
   </ItemGroup>
 

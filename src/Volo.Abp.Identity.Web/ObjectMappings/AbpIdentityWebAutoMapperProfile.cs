@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using Volo.Abp.Identity.Web.Pages.Identity.Roles;
 using Volo.Abp.Identity.Web.Pages.Identity.Users;
+using EditModalModel = Volo.Abp.Identity.Web.Pages.Identity.Users.EditModalModel;
 
 namespace Volo.Abp.Identity.Web.ObjectMappings
 {
@@ -16,6 +18,9 @@ namespace Volo.Abp.Identity.Web.ObjectMappings
 
             CreateMap<IdentityRoleDto, EditModalModel.AssignedRoleViewModel>()
                 .ForMember(dest => dest.IsAssigned, opt => opt.Ignore());
+
+            CreateMap<IdentityRoleDto, RoleInfoModel>();
+
 
             //CreateModal
 
