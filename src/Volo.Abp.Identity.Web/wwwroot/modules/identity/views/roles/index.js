@@ -11,6 +11,14 @@
         viewUrl: abp.appPath + 'Identity/Roles/CreateModal'
     });
 
+    var app = new Vue({
+        el: '#IdentityRolesWrapper',
+        methods: {
+            openCreateModal: function () {
+                _createModal.open();
+            }
+        }
+    });
 
     $(function () {
 
@@ -48,7 +56,7 @@
                                     return true;
                                 },
                                 action: function (data) {
-                                    if (confirm(l('UserDeletionConfirmationMessage', data.record.userName))) {
+                                    if (confirm(l('UserDeletionConfirmationMessage', data.record.name))) {
                                         _identityRoleAppService
                                             .delete(data.record.id)
                                             .then(function () {
