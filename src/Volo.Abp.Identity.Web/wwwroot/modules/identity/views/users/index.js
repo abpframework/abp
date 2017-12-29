@@ -3,13 +3,8 @@
     var l = abp.localization.getResource('AbpIdentity');
     var _identityUserAppService = volo.abp.identity.identityUser;
 
-    var _editModal = new abp.ModalManager({
-        viewUrl: abp.appPath + 'Identity/Users/EditModal'
-    });
-
-    var _createModal = new abp.ModalManager({
-        viewUrl: abp.appPath + 'Identity/Users/CreateModal'
-    });
+    var _editModal = new abp.ModalManager(abp.appPath + 'Identity/Users/EditModal');
+    var _createModal = new abp.ModalManager(abp.appPath + 'Identity/Users/CreateModal');
 
     var app = new Vue({
         el: '#IdentityUsersWrapper',
@@ -30,42 +25,44 @@
             ajax: abp.libs.datatables.createAjax(_identityUserAppService.getList),
             columnDefs: [
                 {
+                    //TODO: Can we eleminate targets, data, orderable, autoWidth, defaultContent fields or make these values default
                     targets: 0,
                     data: null,
                     orderable: false,
                     autoWidth: false,
                     defaultContent: '',
                     rowAction: {
-                        text: '<i class="fa fa-cog"></i> ' + l('Actions') + ' <span class="caret"></span>',
+                        text: '<i class="fa fa-cog"></i> ' + l('Actions') + ' <span class="caret"></span>', //TODO: Add icon option and set text as only l('Actions')
                         items:
-                        [
-                            {
-                                text: l('Edit'),
-                                visible: function () {
-                                    return true;
+                            [
+                                {
+                                    //TODO: Allow to add icon
+                                    text: l('Edit'),
+                                    visible: function () { //TODO: Allow visible to be a boolean for simple cases
+                                        return true;
+                                    },
+                                    action: function (data) {
+                                        _editModal.open({
+                                            id: data.record.id
+                                        });
+                                    }
                                 },
-                                action: function (data) {
-                                    _editModal.open({
-                                        id: data.record.id
-                                    });
-                                }
-                            },
-                            {
-                                text: l('Delete'),
-                                visible: function () {
-                                    return true;
-                                },
-                                action: function (data) {
-                                    if (confirm(l('UserDeletionConfirmationMessage', data.record.userName))) {
-                                        _identityUserAppService
-                                            .delete(data.record.id)
-                                            .then(function () {
-                                                _dataTable.ajax.reload();
-                                            });
+                                {
+                                    text: l('Delete'),
+                                    visible: function () {
+                                        return true;
+                                    },
+                                    action: function (data) {
+                                        if (confirm(l('UserDeletionConfirmationMessage', data.record.userName))) {
+                                            _identityUserAppService
+                                                .delete(data.record.id)
+                                                .then(function () {
+                                                    _dataTable.ajax.reload();
+                                                });
+                                        }
                                     }
                                 }
-                            }
-                        ]
+                            ]
                     }
                 },
                 {
@@ -81,7 +78,7 @@
                     data: "phoneNumber"
                 }
             ]
-        }); 
+        });
 
         _createModal.onResult(function () {
             _dataTable.ajax.reload();

@@ -31,6 +31,12 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
 
         return function (options) {
 
+            if (typeof options === 'string') {
+                options = {
+                    viewUrl: options
+                };
+            }
+
             var _options = options;
 
             var _$modalContainer = null;
