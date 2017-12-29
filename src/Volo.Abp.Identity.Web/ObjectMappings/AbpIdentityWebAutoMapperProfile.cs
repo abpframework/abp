@@ -36,14 +36,13 @@ namespace Volo.Abp.Identity.Web.ObjectMappings
         private void CreateRoleMappings()
         {
             //List
-            CreateMap<IdentityRoleDto, RoleInfoModel>();
+            CreateMap<IdentityRoleDto, EditModalModel.RoleInfoModel>();
 
             //CreateModal
-            CreateMap<CreateModalModel.CreateRoleInfoModel, IdentityRoleCreateDto>();
+            CreateMap<CreateModalModel.RoleInfoModel, IdentityRoleCreateDto>();
 
             //EditModal
-            CreateMap<RoleInfoModel, IdentityRoleUpdateDto>();
+            CreateMap<EditModalModel.RoleInfoModel, IdentityRoleUpdateDto>();
         }
-
     }
 }
