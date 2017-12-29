@@ -19,11 +19,19 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Roles
 
         public async Task OnGetAsync(Guid id)
         {
-            var role = await _identityRoleAppService.GetAsync(id);
-            RoleInfo =  ObjectMapper.Map<IdentityRoleDto, RoleInfoModel>(role);
+            RoleInfo = ObjectMapper.Map<IdentityRoleDto, RoleInfoModel>(
+                await _identityRoleAppService.GetAsync(id)
+            );
         }
 
-        
+        public async Task<IActionResult> OnPostAsync()
+        {
+            ValidateModel();
 
+            var input = ObjectMapper.Map<RoleInfoModel, IdentityRoleUpdateDto>(RoleInfo);
+            await _identityRoleAppService.UpdateAsync(RoleInfo.Id, input);
+
+            return NoContent();
+        }
     }
 }
