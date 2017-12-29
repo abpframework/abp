@@ -15,7 +15,6 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Roles
         public CreateModalModel(IIdentityRoleAppService identityRoleAppService)
         {
             _identityRoleAppService = identityRoleAppService;
-            RoleModel = new RoleInfoModel();
         }
 
         public async Task<IActionResult> OnPostAsync()
