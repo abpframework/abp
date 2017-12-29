@@ -1,0 +1,32 @@
+﻿@page
+@using Microsoft.Extensions.Localization
+@using Volo.Abp.Identity.Web.Localization.Resources.AbpIdentity
+@model Volo.Abp.Identity.Web.Pages.Identity.Roles.CreateModalModel
+@inject IStringLocalizer<IdentityResource> L
+@{
+    Layout = null;
+}
+
+<form method="post" asp-page="/Identity/Roles/CreateModal">
+
+    <abp-modal>
+
+        <abp-modal-header title="@L["NewRole"]"></abp-modal-header>
+
+        <abp-modal-body>
+
+            <div class="form-group">
+                <label asp-for="RoleModel.Name"></label>
+                <input asp-for="RoleModel.Name" class="form-control"/>
+                <span asp-validation-for="RoleModel.Name" class="text-danger"></span>
+            </div>
+
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+        </abp-modal-body>
+
+        <abp-modal-footer></abp-modal-footer>
+
+    </abp-modal>
+
+</form>

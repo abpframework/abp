@@ -1,10 +1,10 @@
 ﻿@page
-@model Volo.Abp.Identity.Web.Pages.Identity.Users.IndexModel
+@model Volo.Abp.Identity.Web.Pages.Identity.Roles.IndexModel
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.Abp.Identity.Web.Localization.Resources.AbpIdentity
 @inject IHtmlLocalizer<IdentityResource> L
 @section styles {
-    <link rel="stylesheet" type="text/css" href="~/modules/identity/views/users/index.css" />
+    <link rel="stylesheet" type="text/css" href="~/modules/identity/views/roles/index.css" />
 }
 
 @section scripts {
@@ -12,19 +12,19 @@
     <script type="text/javascript" src="~/modules/identity/helpers/datatables.extensions.js"></script>
     <script type="text/javascript" src="~/modules/identity/helpers/ResourceLoader.js"></script>
     <script type="text/javascript" src="~/modules/identity/helpers/ModalManager.js"></script>
-    <script type="text/javascript" src="~/modules/identity/views/users/index.js"></script>
+    <script type="text/javascript" src="~/modules/identity/views/roles/index.js"></script>
 }
 
-<abp-card id="IdentityUsersWrapper">
+<abp-card id="IdentityRolesWrapper">
     <abp-card-header>
         <div class="row">
             <div class="col-md-6">
-                <h2>@L["Users"]</h2>
+                <h2>@L["Roles"]</h2>
             </div>
             <div class="col-md-6 text-right">
                 <button type="button" class="btn btn-primary" v-on:click="openCreateModal">
                     <i class="fa fa-plus" aria-hidden="true"></i>
-                    @L["NewUser"]
+                    @L["NewRole"]
                 </button>
             </div>
         </div>
@@ -35,8 +35,6 @@
                 <tr>
                     <th>@L["Actions"]</th>
                     <th>@L["RoleName"]</th>
-                    <th>@L["EmailAddress"]</th>
-                    <th>@L["PhoneNumber"]</th>
                 </tr>
             </thead>
         </table>

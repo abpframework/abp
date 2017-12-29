@@ -16,6 +16,10 @@
     "Password": "Şifre",
     "UserDeletionConfirmationMessage": "{0} kullanıcısı silinecektir. Onaylıyor musunuz?",
     "TwoFactorVerification": "İki aşamalı doğrumala",
-    "AccountLockoutOnFailedLoginAttempts": "Başarısız giriş denemeleri sonrası hesabı kilitleme"
+    "AccountLockoutOnFailedLoginAttempts": "Başarısız giriş denemeleri sonrası hesabı kilitleme",
+    "NewRole": "Yeni rol",
+    "RoleName": "Rol adı",
+    "CreationTime": "Oluşturma zamanı"
+
   }
 }

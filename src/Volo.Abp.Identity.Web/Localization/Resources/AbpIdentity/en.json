@@ -16,6 +16,10 @@
     "Password": "Password",
     "UserDeletionConfirmationMessage": "User '{0}' will be deleted. Do you confirm that?",
     "TwoFactorVerification": "Two factor verification",
-    "AccountLockoutOnFailedLoginAttempts": "Locking account after failed login attempts"
+    "AccountLockoutOnFailedLoginAttempts": "Locking account after failed login attempts",
+    "NewRole": "New role",
+    "RoleName": "Role name",
+    "CreationTime": "Creation time"
+
   }
 }
