@@ -8,7 +8,6 @@ namespace Volo.Abp.Identity.ObjectMappings
         {
             CreateMap<IdentityUser, IdentityUserDto>();
             CreateMap<IdentityRole, IdentityRoleDto>();
-            CreateMap<IdentityRoleDto, IdentityUserRoleDto>(); //TODO: This should be removed!
         }
     }
 }

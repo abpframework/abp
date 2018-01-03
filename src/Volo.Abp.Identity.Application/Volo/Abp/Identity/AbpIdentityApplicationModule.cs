@@ -5,7 +5,11 @@ using Volo.Abp.Modularity;
 
 namespace Volo.Abp.Identity
 {
-    [DependsOn(typeof(AbpIdentityDomainModule), typeof(AbpIdentityApplicationContractsModule), typeof(AbpAutoMapperModule))]
+    [DependsOn(
+        typeof(AbpIdentityDomainModule), 
+        typeof(AbpIdentityApplicationContractsModule), 
+        typeof(AbpAutoMapperModule)
+        )]
     public class AbpIdentityApplicationModule : AbpModule
     {
         public override void ConfigureServices(IServiceCollection services)
@@ -14,10 +18,7 @@ namespace Volo.Abp.Identity
 
             services.Configure<AbpAutoMapperOptions>(options =>
             {
-                options.Configurators.Add(context =>
-                {
-                    context.MapperConfiguration.AddProfile<AbpIdentityApplicationModuleAutoMapperProfile>();
-                });
+                options.AddProfile<AbpIdentityApplicationModuleAutoMapperProfile>();
             });
         }
     }
