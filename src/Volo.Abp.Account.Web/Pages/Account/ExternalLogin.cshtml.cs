@@ -82,18 +82,18 @@ namespace Volo.Abp.Account.Web.Pages.Account
             // If the user does not have an account, then ask the user to create an account.
             ReturnUrl = returnUrl;
             LoginProvider = info.LoginProvider;
-            if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Email))
+            var success = await CreateUserAsync(returnUrl, returnUrlHash);
+
+            if (success)
             {
-                Input = new InputModel
-                {
-                    Email = info.Principal.FindFirstValue(ClaimTypes.Email)
-                };
+                return RedirectSafely(returnUrl, returnUrlHash);
             }
+
             return Page();
         }
 
         [UnitOfWork]
-        public virtual async Task<IActionResult> OnPostConfirmationAsync(string returnUrl = null, string returnUrlHash = null)
+        public virtual async Task<bool> CreateUserAsync(string returnUrl = null, string returnUrlHash = null)
         {
             if (ModelState.IsValid)
             {
@@ -104,7 +104,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
                     throw new ApplicationException("Error loading external login information during confirmation.");
                 }
 
-                var user = new IdentityUser(GuidGenerator.Create(), Input.Email);
+                var user = new IdentityUser(GuidGenerator.Create(), info.Principal.FindFirstValue(ClaimTypes.Email));
 
                 var result = await _userManager.CreateAsync(user);
 
@@ -117,17 +117,18 @@ namespace Volo.Abp.Account.Web.Pages.Account
                     {
                         await _signInManager.SignInAsync(user, isPersistent: false);
 
-                        return RedirectSafely(returnUrl, returnUrlHash);
+                        return true;
                     }
                 }
+
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
 
-            ReturnUrl = returnUrl;
-            return Page();
+            return false;
+
         }
     }
 }
