@@ -66,6 +66,20 @@ namespace AbpDesk.Web.Mvc
 
             //services.Configure<RemoteServiceOptions>(configuration); //Needed when we use Volo.Abp.Identity.HttpApi.Client
 
+            //Adding Facebook authentication
+            if (bool.Parse(configuration["Authentication:Facebook:IsEnabled"]))
+            {
+                services.AddAuthentication().AddFacebook(options =>
+                {
+                    options.AppId = configuration["Authentication:Facebook:AppId"];
+                    options.AppSecret = configuration["Authentication:Facebook:AppSecret"];
+
+                    options.Scope.Add("email");
+                    options.Scope.Add("public_profile");
+                });
+            }
+
+
             services.AddAssemblyOf<AbpDeskWebMvcModule>();
 
             services.Configure<BundlingOptions>(options =>

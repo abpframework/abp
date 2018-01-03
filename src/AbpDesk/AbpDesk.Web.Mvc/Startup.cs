@@ -1,12 +1,10 @@
 ﻿using System;
-using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Volo.Abp;
-using Volo.Abp.Modularity.PlugIns;
 
 namespace AbpDesk.Web.Mvc
 {
@@ -36,15 +34,6 @@ namespace AbpDesk.Web.Mvc
                 //        @"../Web_PlugIns/")
                 //);
             });
-
-
-            services.AddAuthentication().AddFacebook(facebookOptions =>
-            {
-                facebookOptions.AppId = "911417875702990";
-                facebookOptions.AppSecret = "adea0bff222ae340d8fb0ce3e6275d6b";
-            });
-
-
 
             //TODO: This is needed because ASP.NET Core does not use IServiceProviderFactory!
             return services.BuildServiceProviderFromFactory();
