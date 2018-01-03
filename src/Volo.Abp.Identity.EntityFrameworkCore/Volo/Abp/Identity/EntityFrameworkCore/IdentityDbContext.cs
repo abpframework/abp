@@ -63,7 +63,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         {
             base.OnModelCreating(builder);
 
-            //Split configuration to dedicated classes
+            //TODO: Split configuration to dedicated classes (probably a resuable extension method)
 
             builder.Entity<IdentityUser>(b =>
             {

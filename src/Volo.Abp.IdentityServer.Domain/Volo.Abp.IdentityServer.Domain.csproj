@@ -14,17 +14,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Volo.Abp.AutoMapper\Volo.Abp.AutoMapper.csproj" />
     <ProjectReference Include="..\Volo.Abp.Ddd\Volo.Abp.Ddd.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="IdentityServer4" Version="2.0.5" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Volo\Abp\IdentityServer\Clients\" />
-    <Folder Include="Volo\Abp\IdentityServer\ApiResources\" />
-    <Folder Include="Volo\Abp\IdentityServer\IdentityResources\" />
   </ItemGroup>
 
 </Project>
