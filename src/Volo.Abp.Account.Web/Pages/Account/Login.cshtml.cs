@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Volo.Abp.Identity;
 using Volo.Abp.Ui;
 using Volo.Abp.Uow;
@@ -44,10 +45,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
             ReturnUrl = returnUrl;
             ReturnUrlHash = returnUrl;
 
-            if (!ModelState.IsValid)
-            {
-                throw new NotImplementedException();
-            }
+            ValidateModel();
 
             var result = await _signInManager.PasswordSignInAsync(
                 input.UserNameOrEmailAddress,
@@ -61,56 +59,53 @@ namespace Volo.Abp.Account.Web.Pages.Account
                 throw new UserFriendlyException("Login failed!"); //TODO: Handle other cases, do not throw exception
             }
 
-            //TODO: Use LocalRedirect and Url.GetLocalUrl methods instead of a custom one!
             return RedirectSafely(returnUrl, returnUrlHash);
         }
         
         [UnitOfWork]
-        public virtual IActionResult OnPostExternalLogin(string provider, string returnUrl = null)
+        public virtual IActionResult OnPostExternalLogin(string provider, string returnUrl = "", string returnUrlHash = "")
         {
-            // Request a redirect to the external login provider.
-            var redirectUrl = Url.Page("./Login", pageHandler: "ExternalLoginCallback", values: new { returnUrl });
+            var redirectUrl = Url.Page("./Login", pageHandler: "ExternalLoginCallback", values: new { returnUrl, returnUrlHash });
+
             var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+
             return new ChallengeResult(provider, properties);
         }
 
         [UnitOfWork]
-        public virtual async Task<IActionResult> OnGetExternalLoginCallbackAsync(string returnUrl = null, string returnUrlHash = "", string remoteError = null)
+        public virtual async Task<IActionResult> OnGetExternalLoginCallbackAsync(string returnUrl = "", string returnUrlHash = "", string remoteError = null)
         {
             if (remoteError != null)
             {
+                Logger.LogWarning($"External login callback error: {remoteError}");
                 return RedirectToPage("./Login");
             }
 
-            var info = await _signInManager.GetExternalLoginInfoAsync();
-            if (info == null)
+            var loginInfo = await _signInManager.GetExternalLoginInfoAsync();
+            if (loginInfo == null)
             {
+                Logger.LogWarning("External login info is not available");
                 return RedirectToPage("./Login");
             }
 
-            // Sign in the user with this external login provider if the user already has a login.
-            var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
-            if (result.Succeeded)
-            {
-                return RedirectSafely(returnUrl, returnUrlHash);
-            }
+            var result = await _signInManager.ExternalLoginSignInAsync(
+                loginInfo.LoginProvider,
+                loginInfo.ProviderKey,
+                isPersistent: false,
+                bypassTwoFactor: true
+            );
 
             if (result.IsLockedOut)
             {
                 throw new UserFriendlyException("Cannot proceed because user is locked out!");
             }
 
-            ReturnUrl = returnUrl;
+            //TODO: Handle other cases
 
-            //User does not have an account, create an account.
-            await CreateUserAsync();
-            return RedirectSafely(returnUrl, returnUrlHash);
-        }
-
-        [UnitOfWork]
-        protected virtual async Task CreateUserAsync()
-        {
-            ValidateModel();
+            if (result.Succeeded)
+            {
+                return RedirectSafely(returnUrl, returnUrlHash);
+            }
 
             // Get the information about the user from the external login provider
             var info = await _signInManager.GetExternalLoginInfoAsync();
@@ -119,6 +114,14 @@ namespace Volo.Abp.Account.Web.Pages.Account
                 throw new ApplicationException("Error loading external login information during confirmation.");
             }
 
+            var user = await CreateExternalUserAsync(info);
+
+            await _signInManager.SignInAsync(user, false);
+            return RedirectSafely(returnUrl, returnUrlHash);
+        }
+
+        private async Task<IdentityUser> CreateExternalUserAsync(ExternalLoginInfo info)
+        {
             var emailAddress = info.Principal.FindFirstValue(ClaimTypes.Email);
 
             var user = new IdentityUser(GuidGenerator.Create(), emailAddress);
@@ -127,7 +130,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
             CheckIdentityErrors(await _userManager.SetEmailAsync(user, emailAddress));
             CheckIdentityErrors(await _userManager.AddLoginAsync(user, info));
 
-            await _signInManager.SignInAsync(user, false);
+            return user;
         }
 
         public class PostInput
