@@ -5,8 +5,9 @@ using Volo.Abp.Modularity;
 
 namespace Volo.Abp.IdentityServer
 {
-    [DependsOn(typeof(AbpAutoMapperModule))]
+    [DependsOn(typeof(AbpIdentityServerDomainSharedModule))]
     [DependsOn(typeof(AbpDddModule))]
+    [DependsOn(typeof(AbpAutoMapperModule))]
     public class AbpIdentityServerDomainModule : AbpModule
     {
         public override void ConfigureServices(IServiceCollection services)
