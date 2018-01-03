@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.Identity;
+using Volo.Abp.Ui;
 using Volo.Abp.Uow;
 
 namespace Volo.Abp.Account.Web.Pages.Account
@@ -61,6 +62,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
                 ErrorMessage = $"Error from external provider: {remoteError}";
                 return RedirectToPage("./Login");
             }
+
             var info = await _signInManager.GetExternalLoginInfoAsync();
             if (info == null)
             {
@@ -76,12 +78,13 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
             if (result.IsLockedOut)
             {
-                return RedirectToPage("./Lockout");
+                throw new UserFriendlyException("Cannot proceed because user is locked out!");
             }
 
-            // If the user does not have an account, then ask the user to create an account.
             ReturnUrl = returnUrl;
             LoginProvider = info.LoginProvider;
+
+            //User does not have an account, create an account.
             var success = await CreateUserAsync(returnUrl, returnUrlHash);
 
             if (success)
@@ -95,40 +98,41 @@ namespace Volo.Abp.Account.Web.Pages.Account
         [UnitOfWork]
         public virtual async Task<bool> CreateUserAsync(string returnUrl = null, string returnUrlHash = null)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                // Get the information about the user from the external login provider
-                var info = await _signInManager.GetExternalLoginInfoAsync();
-                if (info == null)
-                {
-                    throw new ApplicationException("Error loading external login information during confirmation.");
-                }
+                return false;
+            }
 
-                var user = new IdentityUser(GuidGenerator.Create(), info.Principal.FindFirstValue(ClaimTypes.Email));
+            // Get the information about the user from the external login provider
+            var info = await _signInManager.GetExternalLoginInfoAsync();
+            if (info == null)
+            {
+                throw new ApplicationException("Error loading external login information during confirmation.");
+            }
 
-                var result = await _userManager.CreateAsync(user);
+            var user = new IdentityUser(GuidGenerator.Create(), info.Principal.FindFirstValue(ClaimTypes.Email));
 
-                //CheckIdentityErrors( await _userManager.CreateAsync(user));
+            var result = await _userManager.CreateAsync(user);
 
+            //todo: needs to check identity errors?
+            //CheckIdentityErrors( await _userManager.CreateAsync(user));
+
+            if (result.Succeeded)
+            {
+                result = await _userManager.AddLoginAsync(user, info);
                 if (result.Succeeded)
                 {
-                    result = await _userManager.AddLoginAsync(user, info);
-                    if (result.Succeeded)
-                    {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-
-                        return true;
-                    }
-                }
-
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(string.Empty, error.Description);
+                    await _signInManager.SignInAsync(user, false);
+                    return true;
                 }
             }
 
-            return false;
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
 
+            return false;
         }
     }
 }
