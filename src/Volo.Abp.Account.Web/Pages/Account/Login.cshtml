@@ -1,27 +1,61 @@
 ﻿@page
 @model Volo.Abp.Account.Web.Pages.Account.LoginModel
 <div class="row">
-    <div class="col-md-3">
-        <form method="post">
-            <div class="form-group">
-                <label for="UsernameOrEmailAddress">Username or email address</label>
-                <input type="text" class="form-control" id="UsernameOrEmailAddress" name="UsernameOrEmailAddress">
+    <div class="col-md-6">
+        <div class="col-md-4">
+            <form method="post">
+                <div class="form-group">
+                    <label for="UsernameOrEmailAddress">Username or email address</label>
+                    <input type="text" class="form-control" id="UsernameOrEmailAddress" name="UsernameOrEmailAddress">
+                </div>
+                <div class="form-group">
+                    <label for="Password">Password</label>
+                    <input type="password" class="form-control" id="Password" name="Password">
+                </div>
+                <div class="form-check">
+                    <label class="form-check-label">
+                        <input type="checkbox" name="RememberMe" value="true" checked="checked">
+                        Remember me
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-primary">Login</button>
+            </form>
+
+            <div style="padding-top: 20px">
+                <a href="@Url.Page("./Register", new { returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash })">Register</a>
             </div>
-            <div class="form-group">
-                <label for="Password">Password</label>
-                <input type="password" class="form-control" id="Password" name="Password">
-            </div>
-            <div class="form-check">
-                <label class="form-check-label">
-                    <input type="checkbox" name="RememberMe" value="true" checked="checked">
-                    Remember me
-                </label>
-            </div>
-            <button type="submit" class="btn btn-primary">Login</button>
-        </form>
-        
-        <div>
-            <a href="@Url.Page("./Register", new { returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash })">Register</a>
         </div>
     </div>
+    
+    <div class="col-md-6 col-md-offset-2">
+        <section>
+            <h4>Use another service to log in.</h4>
+            <hr />
+            @{
+                if ((Model.ExternalLogins?.Count ?? 0) == 0)
+                {
+                    <div>
+                        <p>
+                            There are no external authentication services configured. See <a href="https://go.microsoft.com/fwlink/?LinkID=532715">this article</a>
+                            for details on setting up this ASP.NET application to support logging in via external services.
+                        </p>
+                    </div>
+                }
+                else
+                {
+                    <form asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                        <div>
+                            <p>
+                                @foreach (var provider in Model.ExternalLogins)
+                                {
+                                    <button type="submit" class="btn btn-default" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                                }
+                            </p>
+                        </div>
+                    </form>
+                }
+            }
+        </section>
+    </div>
+
 </div>

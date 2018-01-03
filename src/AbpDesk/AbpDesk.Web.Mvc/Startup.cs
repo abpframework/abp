@@ -37,6 +37,15 @@ namespace AbpDesk.Web.Mvc
                 //);
             });
 
+
+            services.AddAuthentication().AddFacebook(facebookOptions =>
+            {
+                facebookOptions.AppId = "911417875702990";
+                facebookOptions.AppSecret = "adea0bff222ae340d8fb0ce3e6275d6b";
+            });
+
+
+
             //TODO: This is needed because ASP.NET Core does not use IServiceProviderFactory!
             return services.BuildServiceProviderFromFactory();
         }
