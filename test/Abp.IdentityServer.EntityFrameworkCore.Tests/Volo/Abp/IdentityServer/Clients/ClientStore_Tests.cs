@@ -32,6 +32,7 @@ namespace Volo.Abp.IdentityServer.Clients
             client.ShouldNotBeNull();
             client.ClientId.ShouldBe("42");
             client.ProtocolType.ShouldBe("TestProtocol-42");
+            client.AllowedCorsOrigins.ShouldContain("Origin1");
         }
     }
 }

@@ -104,6 +104,8 @@ namespace Volo.Abp.IdentityServer.Clients
         public Client(Guid id)
         {
             Id = id;
+
+            AllowedCorsOrigins = new List<ClientCorsOrigin>();
         }
     }
 }

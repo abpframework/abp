@@ -1,4 +1,5 @@
-﻿using Volo.Abp.DependencyInjection;
+﻿using System.Collections.Generic;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
 using Volo.Abp.IdentityServer.Clients;
 
@@ -29,6 +30,13 @@ namespace Volo.Abp.IdentityServer
                 ClientId = "42",
                 ProtocolType = "TestProtocol-42"
             };
+
+            client42.AllowedCorsOrigins.Add(
+                new ClientCorsOrigin(_guidGenerator.Create())
+                {
+                    Origin = "Origin1"
+                }
+            );
             
             _clientRepository.Insert(client42);
         }
