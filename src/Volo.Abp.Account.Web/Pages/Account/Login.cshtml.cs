@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.Identity;
@@ -15,6 +18,8 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
         public string ReturnUrlHash { get; set; }  //TODO: Try to automatically bind from querystring!
 
+        public IList<AuthenticationScheme> ExternalLogins { get; set; }
+
         private readonly SignInManager<IdentityUser> _signInManager;
 
         public LoginModel(SignInManager<IdentityUser> signInManager)
@@ -22,10 +27,11 @@ namespace Volo.Abp.Account.Web.Pages.Account
             _signInManager = signInManager;
         }
 
-        public void OnGet(string returnUrl = "", string returnUrlHash = "")
+        public async Task OnGetAsync(string returnUrl = "", string returnUrlHash = "")
         {
             ReturnUrl = returnUrl;
             ReturnUrlHash = returnUrl;
+            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
 
         //TODO: Bind input to a property instead of getting as parameter..?

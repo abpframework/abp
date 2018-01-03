@@ -37,7 +37,10 @@ namespace Volo.Abp.Identity
         public async Task<IdentityUser> FindByLoginAsync(string loginProvider, string providerKey, CancellationToken cancellationToken)
         {
             //TODO: This should be changed since loginProvider, providerKey are not PKs.
-            var userLogin = await DbContext.UserLogins.FindAsync(new object[] { loginProvider, providerKey }, cancellationToken);
+            var userLogin = await DbContext.UserLogins
+                .Where(login => login.LoginProvider == loginProvider && login.ProviderKey == providerKey)
+                .FirstOrDefaultAsync(cancellationToken);
+
             if (userLogin == null)
             {
                 return null;
