@@ -8,9 +8,9 @@ namespace Volo.Abp.AspNetCore.Mvc.Validation
 {
     public class AbpValidationActionFilter : IAsyncActionFilter, ITransientDependency
     {
-        private readonly ModelStateValidator _validator;
+        private readonly IModelStateValidator _validator;
 
-        public AbpValidationActionFilter(ModelStateValidator validator)
+        public AbpValidationActionFilter(IModelStateValidator validator)
         {
             _validator = validator;
         }
