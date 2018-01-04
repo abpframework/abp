@@ -40,6 +40,7 @@ namespace Volo.Abp.Validation
                 throw new Exception("Method parameter count does not match with argument count!");
             }
 
+            //todo: consider to remove this condition
             if (context.Errors.Any() && HasSingleNullArgument(context))
             {
                 ThrowValidationError(context);
@@ -90,7 +91,7 @@ namespace Volo.Abp.Validation
                              parameterInfo.IsOut ||
                              TypeHelper.IsPrimitiveExtendedIncludingNullable(parameterInfo.ParameterType, includeEnums: true);
 
-            _objectValidator.AddErrors(context, parameterValue, parameterInfo.Name, allowNulls);
+            context.Errors.AddRange(_objectValidator.GetErrors(parameterValue, parameterInfo.Name, allowNulls));
         }
     }
 }

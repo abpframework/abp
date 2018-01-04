@@ -10,53 +10,61 @@ namespace Volo.Abp.Validation
     {
         public void Validate(object validatingObject)
         {
-            var validationResult = new AbpValidationResult();
+            var errors = GetErrors(validatingObject);
 
-            AddErrors(validationResult, validatingObject);
-
-            if (validationResult.Errors.Any())
+            if (errors.Any())
             {
                 throw new AbpValidationException(
                     "Object state is not valid! See ValidationErrors for details.",
-                    validationResult.Errors
+                    errors
                 );
             }
         }
 
         /// <summary>
-        /// Checks all properties for DataAnnotations attributes.
+        /// Gets all errors from properties for DataAnnotations attributes and IValidatableObject interface.
         /// </summary>
-        public virtual void AddErrors(IAbpValidationResult validationResult, object validatingObject)
+        public virtual List<ValidationResult> GetErrors(object validatingObject)
         {
+            var errors = new List<ValidationResult>();
             var properties = TypeDescriptor.GetProperties(validatingObject).Cast<PropertyDescriptor>();
+
             foreach (var property in properties)
             {
-                var validationAttributes = property.Attributes.OfType<ValidationAttribute>().ToArray();
-                if (validationAttributes.IsNullOrEmpty())
-                {
-                    continue;
-                }
-
-                var validationContext = new ValidationContext(validatingObject)
-                {
-                    DisplayName = property.DisplayName,
-                    MemberName = property.Name
-                };
-
-                foreach (var attribute in validationAttributes)
-                {
-                    var result = attribute.GetValidationResult(property.GetValue(validatingObject), validationContext);
-                    if (result != null)
-                    {
-                        validationResult.Errors.Add(result);
-                    }
-                }
+                AddPropertyErrors(validatingObject, property, errors);
             }
 
-            if (validatingObject is IValidatableObject)
+            if (validatingObject is IValidatableObject validatableObject)
             {
-                var results = (validatingObject as IValidatableObject).Validate(new ValidationContext(validatingObject));
-                validationResult.Errors.AddRange(results);
+                errors.AddRange(
+                    validatableObject.Validate(new ValidationContext(validatableObject))
+                );
+            }
+
+            return errors;
+        }
+
+        protected virtual void AddPropertyErrors(object validatingObject, PropertyDescriptor property, List<ValidationResult> errors)
+        {
+            var validationAttributes = property.Attributes.OfType<ValidationAttribute>().ToArray();
+            if (validationAttributes.IsNullOrEmpty())
+            {
+                return;
+            }
+
+            var validationContext = new ValidationContext(validatingObject)
+            {
+                DisplayName = property.DisplayName,
+                MemberName = property.Name
+            };
+
+            foreach (var attribute in validationAttributes)
+            {
+                var result = attribute.GetValidationResult(property.GetValue(validatingObject), validationContext);
+                if (result != null)
+                {
+                    errors.Add(result);
+                }
             }
         }
     }

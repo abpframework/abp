@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -8,7 +9,7 @@ using Volo.Abp.Reflection;
 
 namespace Volo.Abp.Validation
 {
-    public class ObjectValidator : ITransientDependency, IObjectValidator
+    public class ObjectValidator : IObjectValidator, ITransientDependency
     {
         private const int MaxRecursiveParameterValidationDepth = 8;
 
@@ -23,36 +24,38 @@ namespace Volo.Abp.Validation
 
         public virtual void Validate(object validatingObject, string name = null, bool allowNull = false)
         {
-            var validationResult = new AbpValidationResult();
+            var errors = GetErrors(validatingObject, name, allowNull);
 
-            AddErrors(validationResult, validatingObject, name, allowNull);
-
-            if (validationResult.Errors.Any())
+            if (errors.Any())
             {
                 throw new AbpValidationException(
                     "Object state is not valid! See ValidationErrors for details.",
-                    validationResult.Errors
+                    errors
                 );
             }
         }
 
-        public virtual void AddErrors(IAbpValidationResult validationResult, object validatingObject, string name = null, bool allowNull = false)
+        public virtual List<ValidationResult> GetErrors(object validatingObject, string name = null, bool allowNull = false)
         {
+            var errors = new List<ValidationResult>();
+
             if (validatingObject == null && !allowNull)
             {
-                validationResult.Errors.Add(
+                errors.Add(
                     name == null
                         ? new ValidationResult("Given object is null!")
                         : new ValidationResult(name + " is null!", new[] { name })
                 );
 
-                return;
+                return errors;
             }
 
-            ValidateObjectRecursively(validationResult, validatingObject, 1);
+            ValidateObjectRecursively(errors, validatingObject, currentDepth: 1);
+
+            return errors;
         }
 
-        protected virtual void ValidateObjectRecursively(IAbpValidationResult context, object validatingObject, int currentDepth)
+        protected virtual void ValidateObjectRecursively(List<ValidationResult> errors, object validatingObject, int currentDepth)
         {
             if (currentDepth > MaxRecursiveParameterValidationDepth)
             {
@@ -64,20 +67,19 @@ namespace Volo.Abp.Validation
                 return;
             }
 
-            _dataAnnotationValidator.AddErrors(context, validatingObject);
+            errors.AddRange(_dataAnnotationValidator.GetErrors(validatingObject));
 
             //Validate items of enumerable
-            if (validatingObject is IEnumerable && !(validatingObject is IQueryable))
-            {
-                foreach (var item in (validatingObject as IEnumerable))
-                {
-                    ValidateObjectRecursively(context, item, currentDepth + 1);
-                }
-            }
-
-            //Do not recursively validate for enumerable objects
             if (validatingObject is IEnumerable)
             {
+                if (!(validatingObject is IQueryable))
+                {
+                    foreach (var item in (validatingObject as IEnumerable))
+                    {
+                        ValidateObjectRecursively(errors, item, currentDepth + 1);
+                    }
+                }
+
                 return;
             }
 
@@ -102,7 +104,7 @@ namespace Volo.Abp.Validation
                     continue;
                 }
 
-                ValidateObjectRecursively(context, property.GetValue(validatingObject), currentDepth + 1);
+                ValidateObjectRecursively(errors, property.GetValue(validatingObject), currentDepth + 1);
             }
         }
     }
