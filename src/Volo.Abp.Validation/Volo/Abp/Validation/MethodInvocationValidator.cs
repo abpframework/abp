@@ -89,7 +89,7 @@ namespace Volo.Abp.Validation
         {
             var allowNulls = parameterInfo.IsOptional ||
                              parameterInfo.IsOut ||
-                             TypeHelper.IsPrimitiveExtendedIncludingNullable(parameterInfo.ParameterType, includeEnums: true);
+                             TypeHelper.IsPrimitiveExtended(parameterInfo.ParameterType, includeEnums: true);
 
             context.Errors.AddRange(_objectValidator.GetErrors(parameterValue, parameterInfo.Name, allowNulls));
         }

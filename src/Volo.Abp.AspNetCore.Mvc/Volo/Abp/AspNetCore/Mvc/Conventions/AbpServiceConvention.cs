@@ -81,7 +81,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Conventions
                         continue;
                     }
 
-                    if (!TypeHelper.IsPrimitiveExtendedIncludingNullable(prm.ParameterInfo.ParameterType))
+                    if (!TypeHelper.IsPrimitiveExtended(prm.ParameterInfo.ParameterType))
                     {
                         if (CanUseFormBodyBinding(action, prm))
                         {

@@ -60,7 +60,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                 var responseAsString = AsyncHelper.RunSync(() => MakeRequest(invocation));
 
                 //TODO: Think on that
-                if (TypeHelper.IsPrimitiveExtendedIncludingNullable(invocation.Method.ReturnType, true))
+                if (TypeHelper.IsPrimitiveExtended(invocation.Method.ReturnType, true))
                 {
                     invocation.ReturnValue = Convert.ChangeType(responseAsString, invocation.Method.ReturnType);
                 }
@@ -93,7 +93,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             var responseAsString = await MakeRequest(invocation);
 
             //TODO: Think on that
-            if (TypeHelper.IsPrimitiveExtendedIncludingNullable(typeof(T), true))
+            if (TypeHelper.IsPrimitiveExtended(typeof(T), true))
             {
                 return (T)Convert.ChangeType(responseAsString, typeof(T));
             }

@@ -86,7 +86,7 @@ namespace Volo.Abp.Validation
             var validatingObjectType = validatingObject.GetType();
 
             //Do not recursively validate for primitive objects
-            if (TypeHelper.IsPrimitiveExtendedIncludingNullable(validatingObjectType))
+            if (TypeHelper.IsPrimitiveExtended(validatingObjectType))
             {
                 return;
             }
