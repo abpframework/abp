@@ -20,9 +20,12 @@ using Volo.Abp.Autofac;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.Identity.Web;
+using Volo.Abp.IdentityServer;
+using Volo.Abp.IdentityServer.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 using Volo.Abp.Ui.Navigation;
 using Volo.Abp.VirtualFileSystem;
+using Volo.Abp.IdentityServer.Jwt;
 
 namespace AbpDesk.Web.Mvc
 {
@@ -35,7 +38,9 @@ namespace AbpDesk.Web.Mvc
         typeof(AbpIdentityEntityFrameworkCoreModule),
         typeof(AbpIdentityWebModule),
         typeof(AbpAccountWebModule),
-        typeof(AbpAutofacModule)
+        typeof(AbpAutofacModule),
+        typeof(AbpIdentityServerDomainModule),
+        typeof(AbpIdentityServerEntityFrameworkCoreModule)
         )]
     public class AbpDeskWebMvcModule : AbpModule //TODO: Rename to AbpDeskWebModule, change default namespace to AbpDesk.Web
     {
@@ -68,18 +73,26 @@ namespace AbpDesk.Web.Mvc
 
             var authentication = services.AddAuthentication();
 
-            //Adding Facebook authentication (TODO: Move to Account module as much as possible)
-            if (bool.Parse(configuration["Authentication:Facebook:IsEnabled"]))
+            authentication.AddIdentityServerAuthentication("Bearer", options =>
             {
-                authentication.AddFacebook(options =>
-                {
-                    options.AppId = configuration["Authentication:Facebook:AppId"];
-                    options.AppSecret = configuration["Authentication:Facebook:AppSecret"];
+                options.Authority = "http://localhost:59980";
+                options.RequireHttpsMetadata = false;
 
-                    options.Scope.Add("email");
-                    options.Scope.Add("public_profile");
-                });
-            }
+                options.ApiName = "api1";
+            });
+
+            ////Adding Facebook authentication (TODO: Move to Account module as much as possible)
+            //if (bool.Parse(configuration["Authentication:Facebook:IsEnabled"]))
+            //{
+            //    authentication.AddFacebook(options =>
+            //    {
+            //        options.AppId = configuration["Authentication:Facebook:AppId"];
+            //        options.AppSecret = configuration["Authentication:Facebook:AppSecret"];
+
+            //        options.Scope.Add("email");
+            //        options.Scope.Add("public_profile");
+            //    });
+            //}
 
             services.AddAssemblyOf<AbpDeskWebMvcModule>();
 
@@ -123,7 +136,11 @@ namespace AbpDesk.Web.Mvc
             app.UseStaticFiles();
             app.UseVirtualFiles();
 
+            app.UseIdentityServer();
+
             app.UseAuthentication();
+
+            app.UseJwtTokenMiddleware("Bearer"); //TODO: It would be better without that, however it requires to use Bearer as default auth schema.
 
             var cultures = new List<CultureInfo>
             {
@@ -160,6 +177,6 @@ namespace AbpDesk.Web.Mvc
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
 
             return builder.Build();
-        }
+        }   
     }
 }

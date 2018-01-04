@@ -218,6 +218,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.IdentityServer.Dom
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.IdentityServer.Application", "src\Volo.Abp.IdentityServer.Application\Volo.Abp.IdentityServer.Application.csproj", "{2794C2A5-C633-41E3-8B47-0659E72D8C9B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AbpDesk.ConsoleClient", "src\AbpDesk\AbpDesk.ConsoleClient\AbpDesk.ConsoleClient.csproj", "{93B574B5-2827-4E0A-86FB-B07EF40BB39F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -580,6 +582,10 @@ Global
 		{2794C2A5-C633-41E3-8B47-0659E72D8C9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2794C2A5-C633-41E3-8B47-0659E72D8C9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2794C2A5-C633-41E3-8B47-0659E72D8C9B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93B574B5-2827-4E0A-86FB-B07EF40BB39F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93B574B5-2827-4E0A-86FB-B07EF40BB39F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93B574B5-2827-4E0A-86FB-B07EF40BB39F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93B574B5-2827-4E0A-86FB-B07EF40BB39F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -685,6 +691,7 @@ Global
 		{253C20C0-1F46-410A-ACFE-2F375491E6D2} = {324B920F-5BBA-46D8-BDC6-E1FA5EFE3733}
 		{C386A083-4190-4567-B4E3-95D1C800A298} = {324B920F-5BBA-46D8-BDC6-E1FA5EFE3733}
 		{2794C2A5-C633-41E3-8B47-0659E72D8C9B} = {324B920F-5BBA-46D8-BDC6-E1FA5EFE3733}
+		{93B574B5-2827-4E0A-86FB-B07EF40BB39F} = {1187F469-0063-4065-9419-A1D956C80145}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB97ECF4-9A84-433F-A80B-2A3285BDD1D5}

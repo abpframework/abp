@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.IdentityServer.Clients;
 using Volo.Abp.Modularity;
 
 namespace Volo.Abp.IdentityServer.EntityFrameworkCore
@@ -13,7 +14,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
             services.AddAbpDbContext<IdentityServerDbContext>(options =>
             {
                 options.WithDefaultRepositories();
-                //options.WithCustomRepository<IdentityUser, EfCoreIdentityUserRepository>();
+                options.WithCustomRepository<Client, ClientRepository>();
             });
 
             services.AddAssemblyOf<AbpIdentityServerEntityFrameworkCoreModule>();
