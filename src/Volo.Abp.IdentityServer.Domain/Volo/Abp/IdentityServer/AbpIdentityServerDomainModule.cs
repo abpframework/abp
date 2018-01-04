@@ -14,7 +14,7 @@ namespace Volo.Abp.IdentityServer
         {
             services.Configure<AbpAutoMapperOptions>(options =>
             {
-                options.AddProfile<ClientAutoMapperProfile>(/*TODO: validate: true*/);
+                options.AddProfile<ClientAutoMapperProfile>(validate: true);
             });
 
             services.AddAssemblyOf<AbpIdentityServerDomainModule>();
