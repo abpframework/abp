@@ -3,9 +3,6 @@ using System.Reflection;
 
 namespace Volo.Abp.Reflection
 {
-    /// <summary>
-    /// Some simple type-checking methods used internally.
-    /// </summary>
     public static class TypeHelper
     {
         public static bool IsFunc(object obj)
@@ -29,39 +26,41 @@ namespace Volo.Abp.Reflection
             return obj != null && obj.GetType() == typeof(Func<TReturn>);
         }
 
-        public static bool IsPrimitiveExtendedIncludingNullable(Type type, bool includeEnums = false)
+        public static bool IsPrimitiveExtended(Type type, bool includeNullables = true, bool includeEnums = false)
         {
-            if (IsPrimitiveExtended(type, includeEnums))
+            if (IsPrimitiveExtendedInternal(type, includeEnums))
             {
                 return true;
             }
 
-            if (type.GetTypeInfo().IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
+            if (includeNullables && 
+                type.IsGenericType && 
+                type.GetGenericTypeDefinition() == typeof(Nullable<>))
             {
-                return IsPrimitiveExtended(type.GenericTypeArguments[0], includeEnums);
+                return IsPrimitiveExtendedInternal(type.GenericTypeArguments[0], includeEnums);
             }
 
             return false;
         }
 
-        private static bool IsPrimitiveExtended(Type type, bool includeEnums)
+        private static bool IsPrimitiveExtendedInternal(Type type, bool includeEnums)
         {
-            if (type.GetTypeInfo().IsPrimitive)
+            if (type.IsPrimitive)
             {
                 return true;
             }
 
-            if (includeEnums && type.GetTypeInfo().IsEnum)
+            if (includeEnums && type.IsEnum)
             {
                 return true;
             }
 
-            return type == typeof (string) ||
-                   type == typeof (decimal) ||
-                   type == typeof (DateTime) ||
-                   type == typeof (DateTimeOffset) ||
-                   type == typeof (TimeSpan) ||
-                   type == typeof (Guid);
+            return type == typeof(string) ||
+                   type == typeof(decimal) ||
+                   type == typeof(DateTime) ||
+                   type == typeof(DateTimeOffset) ||
+                   type == typeof(TimeSpan) ||
+                   type == typeof(Guid);
         }
     }
 }
