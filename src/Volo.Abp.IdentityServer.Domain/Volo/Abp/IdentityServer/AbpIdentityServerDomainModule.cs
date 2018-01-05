@@ -33,8 +33,8 @@ namespace Volo.Abp.IdentityServer
 
             //TODO: Remove in-memory stores once EF Core stores are fully completed.
             identityServerBuilder.AddDeveloperSigningCredential()
-                //.AddInMemoryClients(IdentityServerConfig.GetClients())
-                //.AddInMemoryApiResources(IdentityServerConfig.GetApiResources())
+                .AddInMemoryClients(IdentityServerConfig.GetClients())
+                .AddInMemoryApiResources(IdentityServerConfig.GetApiResources())
                 .AddAbpIdentityServer();
 
             services.ExecutePreConfiguredActions(identityServerBuilder);
