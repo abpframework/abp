@@ -67,7 +67,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
 
             builder.Entity<IdentityUser>(b =>
             {
-                b.ToTable("IdentityUsers");
+                b.ToTable("IdentityUsers"); //TODO: Make all table and schema names changeable
 
                 b.Property(u => u.UserName).IsRequired().HasMaxLength(IdentityUserConsts.MaxUserNameLength);
                 b.Property(u => u.NormalizedUserName).IsRequired().HasMaxLength(IdentityUserConsts.MaxNormalizedUserNameLength);
@@ -96,8 +96,8 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             {
                 b.ToTable("IdentityRoles");
 
-                b.Property(u => u.Name).IsRequired().HasMaxLength(IdentityRoleConsts.MaxNameLength);
-                b.Property(u => u.NormalizedName).IsRequired().HasMaxLength(IdentityRoleConsts.MaxNormalizedNameLength);
+                b.Property(r => r.Name).IsRequired().HasMaxLength(IdentityRoleConsts.MaxNameLength);
+                b.Property(r => r.NormalizedName).IsRequired().HasMaxLength(IdentityRoleConsts.MaxNormalizedNameLength);
 
                 b.HasMany(r => r.Claims).WithOne().HasForeignKey(rc => rc.RoleId).IsRequired();
 
@@ -131,8 +131,8 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 b.HasOne<IdentityRole>().WithMany().HasForeignKey(ur => ur.RoleId).IsRequired();
                 b.HasOne<IdentityUser>().WithMany(u => u.Roles).HasForeignKey(ur => ur.UserId).IsRequired();
 
-                b.HasIndex(r => new { r.UserId, r.RoleId });
-                b.HasIndex(r => new { r.RoleId, r.UserId });
+                b.HasIndex(ur => new { ur.UserId, ur.RoleId });
+                b.HasIndex(ur => new { ur.RoleId, ur.UserId });
             });
 
             builder.Entity<IdentityUserLogin>(b =>

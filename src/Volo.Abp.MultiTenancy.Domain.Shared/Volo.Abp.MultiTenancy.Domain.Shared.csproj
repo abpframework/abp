@@ -4,8 +4,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>Volo.Abp.MultiTenancy.EntityFrameworkCore</AssemblyName>
-    <PackageId>Volo.Abp.MultiTenancy.EntityFrameworkCore</PackageId>
+    <AssemblyName>Volo.Abp.MultiTenancy.Domain.Shared</AssemblyName>
+    <PackageId>Volo.Abp.MultiTenancy.Domain.Shared</PackageId>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
@@ -14,12 +14,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Volo.Abp.EntityFrameworkCore\Volo.Abp.EntityFrameworkCore.csproj" />
-    <ProjectReference Include="..\Volo.Abp.MultiTenancy.Domain\Volo.Abp.MultiTenancy.Domain.csproj" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.0.0" />
+    <ProjectReference Include="..\Volo.Abp.Core\Volo.Abp.Core.csproj" />
   </ItemGroup>
 
 </Project>

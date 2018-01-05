@@ -4,8 +4,9 @@ using Volo.Abp.Modularity;
 
 namespace Volo.Abp.MultiTenancy
 {
-    [DependsOn(typeof(AbpDataModule))]
     [DependsOn(typeof(AbpMultiTenancyAbstractionsModule))]
+    [DependsOn(typeof(AbpMultiTenancyDomainSharedModule))]
+    [DependsOn(typeof(AbpDataModule))]
     [DependsOn(typeof(AbpDddModule))]
     public class AbpMultiTenancyDomainModule : AbpModule
     {

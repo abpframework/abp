@@ -1,13 +1,13 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.Identity
+namespace Volo.Abp.MultiTenancy
 {
-    public class AbpIdentityDomainSharedModule : AbpModule
+    public class AbpMultiTenancyDomainSharedModule : AbpModule
     {
         public override void ConfigureServices(IServiceCollection services)
         {
-            services.AddAssemblyOf<AbpIdentityDomainSharedModule>();
+            services.AddAssemblyOf<AbpMultiTenancyDomainSharedModule>();
         }
     }
 }
