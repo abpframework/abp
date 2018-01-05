@@ -7,7 +7,9 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class AbpEfCoreServiceCollectionExtensions
     {
-        public static IServiceCollection AddAbpDbContext<TDbContext>(this IServiceCollection services, Action<IAbpDbContextRegistrationOptionsBuilder> optionsBuilder = null) //Created overload instead of default parameter
+        public static IServiceCollection AddAbpDbContext<TDbContext>(
+            this IServiceCollection services, 
+            Action<IAbpDbContextRegistrationOptionsBuilder> optionsBuilder = null)
             where TDbContext : AbpDbContext<TDbContext>
         {
             services.AddMemoryCache();

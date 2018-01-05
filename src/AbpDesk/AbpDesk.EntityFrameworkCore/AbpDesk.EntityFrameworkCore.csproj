@@ -12,6 +12,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Volo.Abp.MultiTenancy.EntityFrameworkCore\Volo.Abp.MultiTenancy.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\AbpDesk.Domain\AbpDesk.Domain.csproj" />
     <ProjectReference Include="..\..\Volo.Abp.EntityFrameworkCore\Volo.Abp.EntityFrameworkCore.csproj" />
   </ItemGroup>

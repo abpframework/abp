@@ -2,13 +2,19 @@
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.MultiTenancy;
+using Volo.Abp.MultiTenancy.EntityFrameworkCore;
 
 namespace AbpDesk.EntityFrameworkCore
 {
     [ConnectionStringName(ConnectionStrings.DefaultConnectionStringName)] //Explicitly declares this module always uses the default connection string
-    public class AbpDeskDbContext : AbpDbContext<AbpDeskDbContext>
+    public class AbpDeskDbContext : AbpDbContext<AbpDeskDbContext>, IMultiTenancyDbContext
     {
         public DbSet<Ticket> Tickets { get; set; }
+
+        public DbSet<Tenant> Tenants { get; set; }
+
+        public DbSet<TenantConnectionString> TenantConnectionStrings { get; set; }
 
         public AbpDeskDbContext(DbContextOptions<AbpDeskDbContext> options) 
             : base(options)
@@ -19,6 +25,8 @@ namespace AbpDesk.EntityFrameworkCore
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            this.ConfigureAbpMultiTenancy(modelBuilder);
 
             //Use different classes to map each entity type?
             modelBuilder.Entity<Ticket>(b =>

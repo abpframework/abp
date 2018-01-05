@@ -5,7 +5,7 @@ using Volo.Abp.EntityFrameworkCore;
 namespace Volo.Abp.Uow.EntityFrameworkCore
 {
     public class EfCoreDatabaseApi<TDbContext> : IDatabaseApi, ISupportsSavingChanges
-        where TDbContext : AbpDbContext<TDbContext>
+        where TDbContext : IEfCoreDbContext
     {
         public TDbContext DbContext { get; }
 
