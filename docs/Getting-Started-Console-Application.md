@@ -1,5 +1,7 @@
 ﻿## Getting Started ABP With Console Application
 
+This tutorial explains how to start ABP from scratch with minimal dependencies. You generally want to start with a ***startup template*** (TODO: link).
+
 ### Create A New Project
 
 Create a new Regular .Net Core Console Application from Visual Studio:
@@ -8,10 +10,10 @@ Create a new Regular .Net Core Console Application from Visual Studio:
 
 ### Install Volo.Abp Package
 
-Volo.Abp is the core nuget package to create ABP based applications. So, install it to your project:
+Volo.Abp.Core is the core nuget package to create ABP based applications. So, install it to your project:
 
 ````
-Install-Package Volo.Abp
+Install-Package Volo.Abp.Core
 ````
 
 ### Create First ABP Module
@@ -88,7 +90,7 @@ namespace AbpConsoleDemo
 
 ````
 
-``ITransientDependency`` is a special interface of ABP that automatically registers the service as transient (TODO: link to MS DI documentation and ABP DI documentation).
+``ITransientDependency`` is a special interface of ABP that automatically registers the service as transient (see [dependency injection document](Dependency-Injection.md)).
 
 Now, we can resolve the ``HelloWorldService`` and say hello. Change the Program.cs as shown below:
 

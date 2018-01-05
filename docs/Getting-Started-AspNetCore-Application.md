@@ -1,5 +1,7 @@
 ﻿## Getting Started ABP With AspNet Core MVC Web Application
 
+This tutorial explains how to start ABP from scratch with minimal dependencies. You generally want to start with a ***startup template*** (TODO: link).
+
 ### Create A New Project
 
 1. Create a new empty AspNet Core Web Application from Visual Studio:
@@ -129,7 +131,7 @@ Derived ``HomeController`` from ``AbpController`` instead of standard ``Controll
 
 While AspNet Core's Dependency Injection (DI) system is fine for basic requirements, Autofac provides advanced features like Property Injection and Method Interception which are required by ABP to perform advanced application framework features.
 
-Replacing AspNet Core's DI system by Autofac and integrating to ABP is easy.
+Replacing AspNet Core's DI system by Autofac and integrating to ABP is pretty easy.
 
 1. Install Volo.Abp.Autofac package
 
@@ -149,7 +151,7 @@ public class AppModule : AbpModule
 ````
 
 3. Change ``services.AddApplication<AppModule>();`` line in the ``Startup`` class as shown below:
- 
+
 ````C#
 services.AddApplication<AppModule>(options =>
 {
