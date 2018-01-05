@@ -5,6 +5,7 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.MultiTenancy
 {
+    //TODO: Move to another package.
     [Dependency(TryRegister = true)]
     public class ConfigurationTenantStore : ITenantStore, ITransientDependency
     {

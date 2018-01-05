@@ -12,8 +12,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Volo.Abp.MultiTenancy.Domain\Volo.Abp.MultiTenancy.Domain.csproj" />
     <ProjectReference Include="..\AbpTestBase\AbpTestBase.csproj" />
-    <ProjectReference Include="..\..\src\Volo.Abp.MultiTenancy\Volo.Abp.MultiTenancy.csproj" />
   </ItemGroup>
 
   <ItemGroup>

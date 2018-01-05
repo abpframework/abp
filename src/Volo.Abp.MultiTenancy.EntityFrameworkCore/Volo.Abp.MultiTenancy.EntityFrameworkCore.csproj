@@ -1,11 +1,11 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="..\..\common.props" />
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>Volo.Abp.MultiTenancy</AssemblyName>
-    <PackageId>Volo.Abp.MultiTenancy</PackageId>
+    <AssemblyName>Volo.Abp.MultiTenancy.EntityFrameworkCore</AssemblyName>
+    <PackageId>Volo.Abp.MultiTenancy.EntityFrameworkCore</PackageId>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
@@ -14,9 +14,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Volo.Abp.Data\Volo.Abp.Data.csproj" />
-    <ProjectReference Include="..\Volo.Abp.Ddd\Volo.Abp.Ddd.csproj" />
-    <ProjectReference Include="..\Volo.Abp.MultiTenancy.Abstractions\Volo.Abp.MultiTenancy.Abstractions.csproj" />
+    <ProjectReference Include="..\Volo.Abp.MultiTenancy.Domain\Volo.Abp.MultiTenancy.Domain.csproj" />
   </ItemGroup>
 
 </Project>

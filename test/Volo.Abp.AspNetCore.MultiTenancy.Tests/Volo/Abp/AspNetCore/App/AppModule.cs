@@ -13,7 +13,8 @@ namespace Volo.Abp.AspNetCore.App
 {
     [DependsOn(
         typeof(AbpAspNetCoreMultiTenancyModule),
-        typeof(AbpAspNetCoreTestBaseModule)
+        typeof(AbpAspNetCoreTestBaseModule),
+        typeof(AbpMultiTenancyDomainModule)
         )]
     public class AppModule : AbpModule
     {

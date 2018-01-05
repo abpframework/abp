@@ -4,7 +4,7 @@ using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.AspNetCore.MultiTenancy
 {
-    [DependsOn(typeof(AbpMultiTenancyModule), typeof(AbpAspNetCoreModule))]
+    [DependsOn(typeof(AbpMultiTenancyAbstractionsModule), typeof(AbpAspNetCoreModule))]
     public class AbpAspNetCoreMultiTenancyModule : AbpModule
     {
         public override void ConfigureServices(IServiceCollection services)

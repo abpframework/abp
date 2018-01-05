@@ -2,7 +2,7 @@
 
 namespace Volo.Abp.MultiTenancy
 {
-    [DependsOn(typeof(AbpMultiTenancyModule))]
+    [DependsOn(typeof(AbpMultiTenancyDomainModule))]
     public class MultiTenancyTestModule : AbpModule
     {
         

@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Volo.Abp.AspNetCore.MultiTenancy\Volo.Abp.AspNetCore.MultiTenancy.csproj" />
+    <ProjectReference Include="..\..\src\Volo.Abp.MultiTenancy.Domain\Volo.Abp.MultiTenancy.Domain.csproj" />
     <ProjectReference Include="..\Volo.Abp.AspNetCore.Tests\Volo.Abp.AspNetCore.Tests.csproj" />
   </ItemGroup>
 

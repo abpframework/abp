@@ -4,8 +4,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>Volo.Abp.AspNetCore.MultiTenancy</AssemblyName>
-    <PackageId>Volo.Abp.AspNetCore.MultiTenancy</PackageId>
+    <AssemblyName>Volo.Abp.MultiTenancy.Domain</AssemblyName>
+    <PackageId>Volo.Abp.MultiTenancy.Domain</PackageId>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
@@ -14,7 +14,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Volo.Abp.AspNetCore\Volo.Abp.AspNetCore.csproj" />
+    <ProjectReference Include="..\Volo.Abp.Data\Volo.Abp.Data.csproj" />
+    <ProjectReference Include="..\Volo.Abp.Ddd\Volo.Abp.Ddd.csproj" />
     <ProjectReference Include="..\Volo.Abp.MultiTenancy.Abstractions\Volo.Abp.MultiTenancy.Abstractions.csproj" />
   </ItemGroup>
 
