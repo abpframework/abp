@@ -17,7 +17,7 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
                 return null;
             }
 
-            var tenantIdKey = context.GetAspNetCoreMultiTenancyOptions().TenantIdKey;
+            var tenantIdKey = context.GetAspNetCoreMultiTenancyOptions().TenantKey;
 
             var tenantIdHeader = httpContext.Request.Headers[tenantIdKey];
             if (tenantIdHeader == string.Empty || tenantIdHeader.Count < 1)

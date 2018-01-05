@@ -3,13 +3,13 @@
     public class AspNetCoreMultiTenancyOptions
     {
         /// <summary>
-        /// Default: "__tenantId".
+        /// Default: "__tenant".
         /// </summary>
-        public string TenantIdKey { get; set; }
+        public string TenantKey { get; set; }
 
         public AspNetCoreMultiTenancyOptions()
         {
-            TenantIdKey = "__tenantId";
+            TenantKey = "__tenant";
         }
     }
 }

@@ -13,6 +13,7 @@ using Volo.Abp;
 using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.EmbeddedFiles;
 using Volo.Abp.AspNetCore.Modularity;
+using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
@@ -41,7 +42,8 @@ namespace AbpDesk.Web.Mvc
         typeof(AbpAccountWebModule),
         typeof(AbpAutofacModule),
         typeof(AbpIdentityServerDomainModule),
-        typeof(AbpIdentityServerEntityFrameworkCoreModule)
+        typeof(AbpIdentityServerEntityFrameworkCoreModule),
+        typeof(AbpAspNetCoreMultiTenancyModule)
         )]
     public class AbpDeskWebMvcModule : AbpModule //TODO: Rename to AbpDeskWebModule, change default namespace to AbpDesk.Web
     {
@@ -65,7 +67,21 @@ namespace AbpDesk.Web.Mvc
 
             AbpDeskDbConfigurer.Configure(services, configuration);
 
-            services.Configure<ConfigurationTenantStoreOptions>(configuration);
+            //TODO: Getting from appsettings.json didn't worked somehow.
+            services.Configure<ConfigurationTenantStoreOptions>(options =>
+            {
+                options.Tenants = new[]
+                {
+                    new TenantInformation(
+                        Guid.Parse("446a5211-3d72-4339-9adc-845151f8ada0"),
+                        "acme"
+                    ),
+                    new TenantInformation(
+                        Guid.Parse("25388015-ef1c-4355-9c18-f6b6ddbaf89d"),
+                        "volosoft"
+                    )
+                };
+            });
 
             services.Configure<NavigationOptions>(options =>
             {

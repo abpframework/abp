@@ -314,10 +314,19 @@ namespace MyCompany.MyProject
 
 Volo.Abp.AspNetCore.MultiTenancy package adds following tenant resolvers to determine current tenant from current web request (ordered by priority). These resolvers are added and work out of the box:
 
-* **QueryStringTenantResolver**: Tries to find current tenant id from query string parameter. Parameter name is "__tenantId" by default.
-* **RouteTenantResolver**: Tries to find current tenant id from route (URL path). Variable name is "__tenantId" by default. So, if you defined a route with this variable, then it can determine the current tenant from the route.
-* **HeaderTenantResolver**: Tries to find current tenant id from HTTP header. Header name is "__tenantId" by default.
-* **CookieTenantResolver**: Tries to find current tenant id from cookie values. Cookie name is "__tenantId" by default.
+* **QueryStringTenantResolver**: Tries to find current tenant id from query string parameter. Parameter name is "__tenant" by default.
+* **RouteTenantResolver**: Tries to find current tenant id from route (URL path). Variable name is "__tenant" by default. So, if you defined a route with this variable, then it can determine the current tenant from the route.
+* **HeaderTenantResolver**: Tries to find current tenant id from HTTP header. Header name is "__tenant" by default.
+* **CookieTenantResolver**: Tries to find current tenant id from cookie values. Cookie name is "__tenant" by default.
+
+"__tenant" parameter name can be changed using AspNetCoreMultiTenancyOptions. Example:
+
+````C#
+services.Configure<AspNetCoreMultiTenancyOptions>(options =>
+{
+    options.TenantKey = "MyTenantKey";
+});
+````
 
 ##### Domain Tenant Resolver
 
