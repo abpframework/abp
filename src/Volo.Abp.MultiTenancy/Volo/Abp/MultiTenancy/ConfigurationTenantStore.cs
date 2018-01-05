@@ -3,7 +3,7 @@ using System.Linq;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.MultiTenancy.ConfigurationStore
+namespace Volo.Abp.MultiTenancy
 {
     [Dependency(TryRegister = true)]
     public class ConfigurationTenantStore : ITenantStore, ITransientDependency

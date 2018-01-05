@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Primitives;
 using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.AspNetCore.MultiTenancy
@@ -26,12 +27,18 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
 
             if (tenantIdHeader.Count > 1)
             {
-                context.ServiceProvider.GetRequiredService<ILogger<HeaderTenantResolver>>().LogWarning(
-                    $"HTTP request includes more than one {tenantIdKey} header value. First one will be used. All of them: {tenantIdHeader.JoinAsString(", ")}"
-                    );
+                Log(context, $"HTTP request includes more than one {tenantIdKey} header value. First one will be used. All of them: {tenantIdHeader.JoinAsString(", ")}");
             }
 
             return tenantIdHeader.First();
+        }
+
+        protected virtual void Log(ITenantResolveContext context, string text)
+        {
+            context
+                .ServiceProvider
+                .GetRequiredService<ILogger<HeaderTenantResolver>>()
+                .LogWarning(text);
         }
     }
 }

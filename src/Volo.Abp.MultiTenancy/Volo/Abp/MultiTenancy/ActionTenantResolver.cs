@@ -3,11 +3,11 @@ using JetBrains.Annotations;
 
 namespace Volo.Abp.MultiTenancy
 {
-    public class SimpleTenantResolver : ITenantResolver
+    public class ActionTenantResolver : ITenantResolver
     {
         private readonly Action<ITenantResolveContext> _resolveAction;
 
-        public SimpleTenantResolver([NotNull] Action<ITenantResolveContext> resolveAction)
+        public ActionTenantResolver([NotNull] Action<ITenantResolveContext> resolveAction)
         {
             Check.NotNull(resolveAction, nameof(resolveAction));
 

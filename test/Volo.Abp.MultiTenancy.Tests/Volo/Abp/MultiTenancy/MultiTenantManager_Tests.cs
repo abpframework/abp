@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
-using Volo.Abp.MultiTenancy.ConfigurationStore;
 using Xunit;
 
 namespace Volo.Abp.MultiTenancy
@@ -43,7 +42,7 @@ namespace Volo.Abp.MultiTenancy
         {
             services.Configure<MultiTenancyOptions>(options =>
             {
-                options.TenantResolvers.Add(new SimpleTenantResolver(context =>
+                options.TenantResolvers.Add(new ActionTenantResolver(context =>
                 {
                     if (_tenantToBeResolved == _tenantA)
                     {
@@ -51,7 +50,7 @@ namespace Volo.Abp.MultiTenancy
                     }
                 }));
 
-                options.TenantResolvers.Add(new SimpleTenantResolver(context =>
+                options.TenantResolvers.Add(new ActionTenantResolver(context =>
                 {
                     if (_tenantToBeResolved == _tenantB)
                     {

@@ -5,6 +5,8 @@ using Volo.Abp.Text.Formatting;
 
 namespace Volo.Abp.AspNetCore.MultiTenancy
 {
+    //TODO: Create a better domain format. We can accept regex for example.
+
     public class DomainTenantResolver : HttpTenantResolverBase
     {
         private readonly string _domainFormat;
@@ -22,7 +24,7 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
             }
 
             var hostName = httpContext.Request.Host.Host.RemovePreFix("http://", "https://");
-            var extractResult = FormattedStringValueExtracter.Extract(hostName, _domainFormat, true);
+            var extractResult = FormattedStringValueExtracter.Extract(hostName, _domainFormat, ignoreCase: true);
 
             if (!extractResult.IsMatch)
             {

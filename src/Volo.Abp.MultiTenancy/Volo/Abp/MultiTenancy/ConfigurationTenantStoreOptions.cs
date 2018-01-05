@@ -1,4 +1,4 @@
-﻿namespace Volo.Abp.MultiTenancy.ConfigurationStore
+﻿namespace Volo.Abp.MultiTenancy
 {
     public class ConfigurationTenantStoreOptions
     {

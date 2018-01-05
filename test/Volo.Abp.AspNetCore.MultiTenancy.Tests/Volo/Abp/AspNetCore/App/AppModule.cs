@@ -12,7 +12,7 @@ using Volo.Abp.MultiTenancy;
 namespace Volo.Abp.AspNetCore.App
 {
     [DependsOn(
-        typeof(AbpAspNetMultiTenancyModule),
+        typeof(AbpAspNetCoreMultiTenancyModule),
         typeof(AbpAspNetCoreTestBaseModule)
         )]
     public class AppModule : AbpModule

@@ -5,7 +5,7 @@ using Volo.Abp.MultiTenancy;
 namespace Volo.Abp.AspNetCore.MultiTenancy
 {
     [DependsOn(typeof(AbpMultiTenancyModule), typeof(AbpAspNetCoreModule))]
-    public class AbpAspNetMultiTenancyModule : AbpModule
+    public class AbpAspNetCoreMultiTenancyModule : AbpModule
     {
         public override void ConfigureServices(IServiceCollection services)
         {
@@ -17,7 +17,7 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
                 options.TenantResolvers.Insert(3, new CookieTenantResolver());
             });
 
-            services.AddAssemblyOf<AbpAspNetMultiTenancyModule>();
+            services.AddAssemblyOf<AbpAspNetCoreMultiTenancyModule>();
         }
     }
 }
