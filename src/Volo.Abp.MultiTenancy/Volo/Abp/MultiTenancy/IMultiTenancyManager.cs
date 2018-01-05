@@ -11,7 +11,5 @@ namespace Volo.Abp.MultiTenancy
         IDisposable ChangeTenant(Guid? tenantId);
 
         IDisposable ChangeTenant([CanBeNull] string name);
-
-        IDisposable ChangeToHost();
     }
 }

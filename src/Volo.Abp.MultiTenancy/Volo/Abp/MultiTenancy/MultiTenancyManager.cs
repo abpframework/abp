@@ -36,7 +36,7 @@ namespace Volo.Abp.MultiTenancy
         {
             if (tenantId == null)
             {
-                return ChangeToHost();
+                return _tenantScopeProvider.EnterScope(null);
             }
 
             var tenant = _tenantStore.Find(tenantId.Value);
@@ -52,7 +52,7 @@ namespace Volo.Abp.MultiTenancy
         {
             if (name == null)
             {
-                return ChangeToHost();
+                return _tenantScopeProvider.EnterScope(null);
             }
 
             var tenant = _tenantStore.Find(name);
@@ -62,11 +62,6 @@ namespace Volo.Abp.MultiTenancy
             }
 
             return _tenantScopeProvider.EnterScope(tenant);
-        }
-
-        public IDisposable ChangeToHost()
-        {
-            return _tenantScopeProvider.EnterScope(null);
         }
 
         protected virtual TenantInformation GetCurrentTenant()
