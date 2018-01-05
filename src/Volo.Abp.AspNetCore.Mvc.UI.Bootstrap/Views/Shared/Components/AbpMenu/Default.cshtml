@@ -1,8 +1,9 @@
-﻿@using System.Threading.Tasks
+﻿@using Volo.Abp.MultiTenancy
 @using Volo.Abp.Session
 @using Volo.Abp.Ui.Navigation
 @model ApplicationMenu
 @inject ICurrentUser CurrentUser
+@inject ICurrentTenant CurrentTenant
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
     <a class="navbar-brand" href="#"><i>Project</i>Name</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,6 +35,17 @@
             }
         </ul>
         
+        @if (CurrentTenant.Id == null)
+        {
+            <span>no-tenant</span>
+        }
+        else
+        {
+            <span>@CurrentTenant.Id.ToString()</span>
+        }
+        
+        &nbsp;|&nbsp;
+
         @if (CurrentUser.IsAuthenticated)
         {
             <div>

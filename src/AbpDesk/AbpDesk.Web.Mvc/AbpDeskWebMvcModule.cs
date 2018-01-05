@@ -26,6 +26,7 @@ using Volo.Abp.Modularity;
 using Volo.Abp.Ui.Navigation;
 using Volo.Abp.VirtualFileSystem;
 using Volo.Abp.IdentityServer.Jwt;
+using Volo.Abp.MultiTenancy;
 
 namespace AbpDesk.Web.Mvc
 {
@@ -63,6 +64,8 @@ namespace AbpDesk.Web.Mvc
             var configuration = BuildConfiguration(hostingEnvironment);
 
             AbpDeskDbConfigurer.Configure(services, configuration);
+
+            services.Configure<ConfigurationTenantStoreOptions>(configuration);
 
             services.Configure<NavigationOptions>(options =>
             {
@@ -110,16 +113,14 @@ namespace AbpDesk.Web.Mvc
                 options.ConventionalControllers.Create(typeof(AbpDeskApplicationModule).Assembly);
             });
 
-            var env = services.GetSingletonInstance<IHostingEnvironment>(); //TODO: Find a better way!
-
-            if (env.IsDevelopment())
+            if (hostingEnvironment.IsDevelopment())
             {
                 services.Configure<VirtualFileSystemOptions>(options =>
                 {
-                    options.FileSets.ReplaceEmbeddedByPyhsical<AbpAspNetCoreMvcUiModule>(Path.Combine(env.ContentRootPath, "..\\..\\Volo.Abp.AspNetCore.Mvc.UI"));
-                    options.FileSets.ReplaceEmbeddedByPyhsical<AbpAspNetCoreMvcUiBootstrapModule>(Path.Combine(env.ContentRootPath, "..\\..\\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap"));
-                    options.FileSets.ReplaceEmbeddedByPyhsical<AbpAccountWebModule>(Path.Combine(env.ContentRootPath, "..\\..\\Volo.Abp.Account.Web"));
-                    options.FileSets.ReplaceEmbeddedByPyhsical<AbpIdentityWebModule>(Path.Combine(env.ContentRootPath, "..\\..\\Volo.Abp.Identity.Web"));
+                    options.FileSets.ReplaceEmbeddedByPyhsical<AbpAspNetCoreMvcUiModule>(Path.Combine(hostingEnvironment.ContentRootPath, "..\\..\\Volo.Abp.AspNetCore.Mvc.UI"));
+                    options.FileSets.ReplaceEmbeddedByPyhsical<AbpAspNetCoreMvcUiBootstrapModule>(Path.Combine(hostingEnvironment.ContentRootPath, "..\\..\\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap"));
+                    options.FileSets.ReplaceEmbeddedByPyhsical<AbpAccountWebModule>(Path.Combine(hostingEnvironment.ContentRootPath, "..\\..\\Volo.Abp.Account.Web"));
+                    options.FileSets.ReplaceEmbeddedByPyhsical<AbpIdentityWebModule>(Path.Combine(hostingEnvironment.ContentRootPath, "..\\..\\Volo.Abp.Identity.Web"));
                 });
             }
         }
