@@ -6,7 +6,8 @@ namespace Volo.Abp.MultiTenancy
 {
     [DependsOn(typeof(AbpDataModule))]
     [DependsOn(typeof(AbpMultiTenancyAbstractionsModule))]
-    public class AbpMultiTenancyModule : AbpModule
+    [DependsOn(typeof(AbpDddModule))]
+    public class AbpMultiTenancyModule : AbpModule //TODO: This should be Volo.Abp.MultiTenancy.Domain!
     {
         public override void ConfigureServices(IServiceCollection services)
         {

@@ -11,6 +11,6 @@ namespace Volo.Abp.MultiTenancy
         [CanBeNull]
         TenantScope CurrentScope { get; }
 
-        IDisposable EnterScope([CanBeNull] TenantInformation tenant);
+        IDisposable EnterScope([CanBeNull] Tenant tenant);
     }
 }

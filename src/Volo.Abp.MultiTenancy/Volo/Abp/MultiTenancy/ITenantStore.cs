@@ -6,9 +6,9 @@ namespace Volo.Abp.MultiTenancy
     public interface ITenantStore
     {
         [CanBeNull]
-        TenantInformation Find(string name);
+        Tenant Find(string name);
 
         [CanBeNull]
-        TenantInformation Find(Guid id);
+        Tenant Find(Guid id);
     }
 }

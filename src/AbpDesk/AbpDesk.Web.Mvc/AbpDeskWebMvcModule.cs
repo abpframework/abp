@@ -72,11 +72,11 @@ namespace AbpDesk.Web.Mvc
             {
                 options.Tenants = new[]
                 {
-                    new TenantInformation(
+                    new Tenant(
                         Guid.Parse("446a5211-3d72-4339-9adc-845151f8ada0"),
                         "acme"
                     ),
-                    new TenantInformation(
+                    new Tenant(
                         Guid.Parse("25388015-ef1c-4355-9c18-f6b6ddbaf89d"),
                         "volosoft"
                     )

@@ -19,7 +19,7 @@ namespace Volo.Abp.AspNetCore.App
     {
         public override void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<MultiTenancyOptions>(options =>
+            services.Configure<TenantResolveOptions>(options =>
             {
                 options.AddDomainTenantResolver("{0}.abp.io");
             });
@@ -28,7 +28,7 @@ namespace Volo.Abp.AspNetCore.App
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             var app = context.GetApplicationBuilder();
-
+            
             app.Run(async (ctx) =>
             {
                 var manager = ctx.RequestServices.GetRequiredService<IMultiTenancyManager>();

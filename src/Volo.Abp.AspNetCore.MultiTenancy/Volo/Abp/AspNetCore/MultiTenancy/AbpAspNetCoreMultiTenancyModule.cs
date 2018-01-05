@@ -9,7 +9,7 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
     {
         public override void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<MultiTenancyOptions>(options =>
+            services.Configure<TenantResolveOptions>(options =>
             {
                 options.TenantResolvers.Insert(0, new QueryStringTenantResolver());
                 options.TenantResolvers.Insert(1, new RouteTenantResolver());

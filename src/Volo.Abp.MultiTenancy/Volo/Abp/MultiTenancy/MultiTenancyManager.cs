@@ -8,20 +8,22 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.MultiTenancy
 {
+    //TODO: This is very similar to ITenantScopeProvider. Consider to unify them!
+
     public class MultiTenancyManager : IMultiTenancyManager, ITransientDependency
     {
-        public TenantInformation CurrentTenant => GetCurrentTenant();
+        public Tenant CurrentTenant => GetCurrentTenant();
 
         private readonly IServiceProvider _serviceProvider;
         private readonly ITenantScopeProvider _tenantScopeProvider;
         private readonly ITenantStore _tenantStore;
-        private readonly MultiTenancyOptions _options;
+        private readonly TenantResolveOptions _options;
         private readonly ILogger<MultiTenancyManager> _logger;
 
         public MultiTenancyManager(
             IServiceProvider serviceProvider,
             ITenantScopeProvider tenantScopeProvider,
-            IOptions<MultiTenancyOptions> options,
+            IOptions<TenantResolveOptions> options,
             ITenantStore tenantStore, 
             ILogger<MultiTenancyManager> logger)
         {
@@ -64,7 +66,7 @@ namespace Volo.Abp.MultiTenancy
             return _tenantScopeProvider.EnterScope(tenant);
         }
 
-        protected virtual TenantInformation GetCurrentTenant()
+        protected virtual Tenant GetCurrentTenant()
         {
             if (_tenantScopeProvider.CurrentScope != null)
             {
@@ -76,7 +78,7 @@ namespace Volo.Abp.MultiTenancy
             return GetCurrentTenantFromResolvers();
         }
 
-        protected virtual TenantInformation GetCurrentTenantFromResolvers()
+        protected virtual Tenant GetCurrentTenantFromResolvers() //TODO: This should go to another class
         {
             if (!_options.TenantResolvers.Any())
             {
@@ -118,7 +120,7 @@ namespace Volo.Abp.MultiTenancy
         }
 
         [CanBeNull]
-        private TenantInformation GetValidatedTenantOrNull([NotNull] string tenantIdOrName)
+        private Tenant GetValidatedTenantOrNull([NotNull] string tenantIdOrName)
         {
             Guid tenantId;
             if (Guid.TryParse(tenantIdOrName, out tenantId))

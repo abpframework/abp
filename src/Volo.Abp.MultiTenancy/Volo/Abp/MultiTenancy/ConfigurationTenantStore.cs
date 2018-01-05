@@ -15,12 +15,12 @@ namespace Volo.Abp.MultiTenancy
             _options = options.Value;
         }
 
-        public TenantInformation Find(string name)
+        public Tenant Find(string name)
         {
             return _options.Tenants.FirstOrDefault(t => t.Name == name);
         }
 
-        public TenantInformation Find(Guid id)
+        public Tenant Find(Guid id)
         {
             return _options.Tenants.FirstOrDefault(t => t.Id == id);
         }

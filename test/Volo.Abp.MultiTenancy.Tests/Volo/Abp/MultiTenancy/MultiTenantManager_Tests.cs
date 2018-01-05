@@ -32,15 +32,15 @@ namespace Volo.Abp.MultiTenancy
             {
                 options.Tenants = new[]
                 {
-                    new TenantInformation(Guid.NewGuid(), _tenantA),
-                    new TenantInformation(Guid.NewGuid(), _tenantB)
+                    new Tenant(Guid.NewGuid(), _tenantA),
+                    new Tenant(Guid.NewGuid(), _tenantB)
                 };
             });
         }
 
         protected override void AfterAddApplication(IServiceCollection services)
         {
-            services.Configure<MultiTenancyOptions>(options =>
+            services.Configure<TenantResolveOptions>(options =>
             {
                 options.TenantResolvers.Add(new ActionTenantResolver(context =>
                 {

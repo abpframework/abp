@@ -2,11 +2,11 @@
 {
     public class ConfigurationTenantStoreOptions
     {
-        public TenantInformation[] Tenants { get; set; }
+        public Tenant[] Tenants { get; set; }
 
         public ConfigurationTenantStoreOptions()
         {
-            Tenants = new TenantInformation[0];
+            Tenants = new Tenant[0];
         }
     }
 }
