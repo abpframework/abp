@@ -8,11 +8,11 @@ namespace Volo.Abp.IdentityServer.Clients
 {
     public class IdentityResourceStore_Tests : AbpIdentityServerTestBase
     {
-        private readonly IResourceStore _persistedGrantStore;
+        private readonly IResourceStore _resourceStore;
 
         public IdentityResourceStore_Tests()
         {
-            _persistedGrantStore = ServiceProvider.GetRequiredService<IResourceStore>();
+            _resourceStore = ServiceProvider.GetRequiredService<IResourceStore>();
         }
  
         //too:WRITE TESTS

@@ -5,7 +5,6 @@ using IdentityServer4.Models;
 using IdentityServer4.Stores;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
-using Volo.Abp.Uow;
 using Xunit;
 
 namespace Volo.Abp.IdentityServer.Clients
@@ -13,12 +12,10 @@ namespace Volo.Abp.IdentityServer.Clients
     public class PersistentGrantStore_Tests : AbpIdentityServerTestBase
     {
         private readonly IPersistedGrantStore _persistedGrantStore;
-        private readonly IUnitOfWorkManager _unitOfWorkManager;
 
         public PersistentGrantStore_Tests()
         {
             _persistedGrantStore = ServiceProvider.GetRequiredService<IPersistedGrantStore>();
-            _unitOfWorkManager = ServiceProvider.GetRequiredService<IUnitOfWorkManager>();
         }
 
         [Fact]
