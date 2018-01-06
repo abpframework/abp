@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Linq;
-using JetBrains.Annotations;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.MultiTenancy
@@ -14,24 +10,21 @@ namespace Volo.Abp.MultiTenancy
     {
         public Tenant CurrentTenant => GetCurrentTenant();
 
-        private readonly IServiceProvider _serviceProvider;
         private readonly ITenantScopeProvider _tenantScopeProvider;
         private readonly ITenantStore _tenantStore;
-        private readonly TenantResolveOptions _options;
         private readonly ILogger<MultiTenancyManager> _logger;
+        private readonly ITenantResolver _tenantResolver;
 
         public MultiTenancyManager(
-            IServiceProvider serviceProvider,
             ITenantScopeProvider tenantScopeProvider,
-            IOptions<TenantResolveOptions> options,
-            ITenantStore tenantStore, 
-            ILogger<MultiTenancyManager> logger)
+            ITenantStore tenantStore,
+            ILogger<MultiTenancyManager> logger,
+            ITenantResolver tenantResolver)
         {
-            _serviceProvider = serviceProvider;
             _tenantScopeProvider = tenantScopeProvider;
             _tenantStore = tenantStore;
             _logger = logger;
-            _options = options.Value;
+            _tenantResolver = tenantResolver;
         }
 
         public IDisposable ChangeTenant(Guid? tenantId)
@@ -75,60 +68,39 @@ namespace Volo.Abp.MultiTenancy
 
             //TODO: Get from ICurrentUser before resolvers and fail if resolvers find a different tenant!
 
-            return GetCurrentTenantFromResolvers();
+            return ResolveTenant();
         }
 
-        protected virtual Tenant GetCurrentTenantFromResolvers() //TODO: This should go to another class
+        protected virtual Tenant ResolveTenant()
         {
-            if (!_options.TenantResolvers.Any())
+            var tenantIdOrName = _tenantResolver.ResolveTenantIdOrName();
+            if (tenantIdOrName == null)
             {
                 return null;
             }
 
-            using (var serviceScope = _serviceProvider.CreateScope())
-            {
-                var context = new TenantResolveContext(serviceScope.ServiceProvider);
+            Tenant tenant;
 
-                foreach (var tenantResolver in _options.TenantResolvers)
+            //Try to find by id
+            if (Guid.TryParse(tenantIdOrName, out var tenantId))
+            {
+                tenant = _tenantStore.Find(tenantId);
+                if (tenant != null)
                 {
-                    tenantResolver.Resolve(context);
-
-                    if (context.HasResolvedTenantOrHost())
-                    {
-                        if (context.TenantIdOrName == null)
-                        {
-                            //Resolved host!
-                            return null;
-                        }
-
-                        var tenant = GetValidatedTenantOrNull(context.TenantIdOrName);
-                        if (tenant != null)
-                        {
-                            return tenant;
-                        }
-
-                        _logger.LogWarning($"Resolved tenancy name '{context.TenantIdOrName}' by '{tenantResolver.GetType().FullName}' but could not find in current tenant store.");
-                        context.TenantIdOrName = null;
-                    }
-
-                    context.Handled = false;
+                    return tenant;
                 }
-
-                //Could not find a tenant
-                return null;
             }
-        }
 
-        [CanBeNull]
-        private Tenant GetValidatedTenantOrNull([NotNull] string tenantIdOrName)
-        {
-            Guid tenantId;
-            if (Guid.TryParse(tenantIdOrName, out tenantId))
+            //Try to find by name
+            tenant = _tenantStore.Find(tenantIdOrName);
+            if (tenant != null)
             {
-                return _tenantStore.Find(tenantId);
+                return tenant;
             }
 
-            return _tenantStore.Find(tenantIdOrName);
+            //Could not found!
+            _logger.LogWarning($"Resolved tenancy id or name '{tenantIdOrName}' but could not find in the tenant store.");
+            return null;
         }
     }
 }

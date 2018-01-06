@@ -6,11 +6,11 @@ namespace Volo.Abp.MultiTenancy
     public class TenantResolveOptions
     {
         [NotNull]
-        public List<ITenantResolver> TenantResolvers { get; }
+        public List<ITenantResolveContributer> TenantResolvers { get; }
 
         public TenantResolveOptions()
         {
-            TenantResolvers = new List<ITenantResolver>();
+            TenantResolvers = new List<ITenantResolveContributer>();
         }
     }
 }

@@ -8,7 +8,7 @@ using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.AspNetCore.MultiTenancy
 {
-    public class HeaderTenantResolver : HttpTenantResolverBase
+    public class HeaderTenantResolveContributer : HttpTenantResolveContributerBase
     {
         protected override string GetTenantIdOrNameFromHttpContextOrNull(ITenantResolveContext context, HttpContext httpContext)
         {
@@ -37,7 +37,7 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
         {
             context
                 .ServiceProvider
-                .GetRequiredService<ILogger<HeaderTenantResolver>>()
+                .GetRequiredService<ILogger<HeaderTenantResolveContributer>>()
                 .LogWarning(text);
         }
     }

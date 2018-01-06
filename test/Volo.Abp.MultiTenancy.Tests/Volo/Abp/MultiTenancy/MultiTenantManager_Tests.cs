@@ -42,7 +42,7 @@ namespace Volo.Abp.MultiTenancy
         {
             services.Configure<TenantResolveOptions>(options =>
             {
-                options.TenantResolvers.Add(new ActionTenantResolver(context =>
+                options.TenantResolvers.Add(new ActionTenantResolveContributer(context =>
                 {
                     if (_tenantToBeResolved == _tenantA)
                     {
@@ -50,7 +50,7 @@ namespace Volo.Abp.MultiTenancy
                     }
                 }));
 
-                options.TenantResolvers.Add(new ActionTenantResolver(context =>
+                options.TenantResolvers.Add(new ActionTenantResolveContributer(context =>
                 {
                     if (_tenantToBeResolved == _tenantB)
                     {

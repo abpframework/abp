@@ -1,7 +1,16 @@
+using JetBrains.Annotations;
+
 namespace Volo.Abp.MultiTenancy
 {
     public interface ITenantResolver
     {
-        void Resolve(ITenantResolveContext context);
+        /// <summary>
+        /// Tries to resolve current tenant using registered <see cref="ITenantResolveContributer"/> implementations.
+        /// </summary>
+        /// <returns>
+        /// Tenant id, unique name or null (if could not resolve).
+        /// </returns>
+        [CanBeNull]
+        string ResolveTenantIdOrName();
     }
 }

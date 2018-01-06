@@ -6,7 +6,7 @@ namespace Volo.Abp.MultiTenancy
     {
         public static void AddDomainTenantResolver(this TenantResolveOptions options, string domainFormat)
         {
-            options.TenantResolvers.Insert(0, new DomainTenantResolver(domainFormat));
+            options.TenantResolvers.Insert(0, new DomainTenantResolveContributer(domainFormat));
         }
     }
 }
