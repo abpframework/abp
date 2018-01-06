@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using IdentityServer4.Models;
 using Volo.Abp.Domain.Repositories;
 using ApiResource = Volo.Abp.IdentityServer.ApiResources.ApiResource;
 

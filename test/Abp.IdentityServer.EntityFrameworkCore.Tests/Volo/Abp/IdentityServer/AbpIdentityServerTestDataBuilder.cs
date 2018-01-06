@@ -3,29 +3,34 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
 using Volo.Abp.IdentityServer.Clients;
 using Volo.Abp.IdentityServer.Grants;
+using Volo.Abp.IdentityServer.IdentityResources;
 
 namespace Volo.Abp.IdentityServer
 {
     public class AbpIdentityServerTestDataBuilder : ITransientDependency
     {
+        private readonly IGuidGenerator _guidGenerator;
         private readonly IClientRepository _clientRepository;
         private readonly IPersistentGrantRepository _persistentGrantRepository;
-        private readonly IGuidGenerator _guidGenerator;
+        private readonly IIdentityResourceRepository _identityResourceRepository;
 
         public AbpIdentityServerTestDataBuilder(
-            IClientRepository clientRepository, 
-            IGuidGenerator guidGenerator, 
-            IPersistentGrantRepository persistentGrantRepository)
+            IClientRepository clientRepository,
+            IGuidGenerator guidGenerator,
+            IPersistentGrantRepository persistentGrantRepository,
+            IIdentityResourceRepository identityResourceRepository)
         {
             _clientRepository = clientRepository;
             _guidGenerator = guidGenerator;
             _persistentGrantRepository = persistentGrantRepository;
+            _identityResourceRepository = identityResourceRepository;
         }
 
         public void Build()
         {
             AddClients();
             AddPersistentGrants();
+            //AddIdentityResources();
         }
 
         private void AddClients()
@@ -42,7 +47,7 @@ namespace Volo.Abp.IdentityServer
                     Origin = "Origin1"
                 }
             );
-            
+
             _clientRepository.Insert(client42);
         }
 
@@ -56,7 +61,6 @@ namespace Volo.Abp.IdentityServer
                 SubjectId = "TestSubject",
                 Data = "TestData-38"
             });
-
 
             _persistentGrantRepository.Insert(new PersistedGrant(_guidGenerator.Create())
             {
@@ -84,7 +88,28 @@ namespace Volo.Abp.IdentityServer
                 SubjectId = "TestSubject-X",
                 Data = "TestData-35"
             });
-
         }
+
+        //private void AddIdentityResources()
+        //{
+        //    _identityResourceRepository.Insert(new IdentityResource(_guidGenerator.Create())
+        //    {
+        //        Enabled = true,
+        //        Description = "Test-Identity-Resource-Description-1",
+        //        DisplayName = "Test-Identity-Resource-DisplayName-1",
+        //        Name = "Test-Identity-Resource-Name-1",
+        //        Required = true,
+        //        ShowInDiscoveryDocument = true,
+        //        Emphasize = true,
+        //        UserClaims = new List<IdentityClaim>
+        //        {
+        //            new IdentityClaim(_guidGenerator.Create())
+        //            {
+        //                Type = "Test-Identity-Resource-1-IdentityClaim-Type-1",
+        //                IdentityResourceId = _guidGenerator.Create(),
+        //            }
+        //        }
+        //    });
+        //}
     }
 }

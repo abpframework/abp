@@ -14,7 +14,13 @@ namespace Volo.Abp.IdentityServer.Clients
         {
             _resourceStore = ServiceProvider.GetRequiredService<IResourceStore>();
         }
- 
-        //too:WRITE TESTS
+
+        [Fact]
+        public async Task FindApiResourceAsync_Should_Return_Null_If_Not_Found()
+        {
+            var resource = await _resourceStore.FindApiResourceAsync("non-existing-name");
+            resource.ShouldBeNull();
+        }
+         
     }
 }
