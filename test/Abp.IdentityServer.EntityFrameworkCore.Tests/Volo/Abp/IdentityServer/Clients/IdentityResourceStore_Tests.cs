@@ -57,5 +57,22 @@ namespace Volo.Abp.IdentityServer.Clients
             apiResources[0].Scopes.GroupBy(x=>x.Name).Count().ShouldBe(1);
             apiResources[0].Scopes.GroupBy(x=>x.Name).First().Key.ShouldBe("Test-ApiResource-ApiScope-Name-1");
         }
+
+        [Fact]
+        public async Task FindIdentityResourcesByScopeAsync_Should_Return_For_Given_Scopes()
+        {
+            //Act
+            var identityResourcesByScope = await _resourceStore.FindIdentityResourcesByScopeAsync(new List<string>
+            {
+                "Test-Identity-Resource-Name-1"
+            });
+
+            //Assert
+            var resourcesByScope = identityResourcesByScope as IdentityResource[] ?? identityResourcesByScope.ToArray();
+            resourcesByScope.Length.ShouldBe(1);
+            resourcesByScope.First().DisplayName.ShouldBe("Test-Identity-Resource-DisplayName-1");
+            resourcesByScope.First().Description.ShouldBe("Test-Identity-Resource-Description-1");
+            resourcesByScope.First().Required.ShouldBe(true);
+        }
     }
 }

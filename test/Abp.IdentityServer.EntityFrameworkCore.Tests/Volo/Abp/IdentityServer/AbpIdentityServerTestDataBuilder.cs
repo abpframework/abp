@@ -34,8 +34,8 @@ namespace Volo.Abp.IdentityServer
         {
             AddClients();
             AddPersistentGrants();
-            //AddIdentityResources();
             AddApiResources();
+            AddIdentityResources();
         }
 
         private void AddClients()
@@ -125,26 +125,25 @@ namespace Volo.Abp.IdentityServer
             });
         }
 
-        //private void AddIdentityResources()
-        //{
-        //    _identityResourceRepository.Insert(new IdentityResource(_guidGenerator.Create())
-        //    {
-        //        Enabled = true,
-        //        Description = "Test-Identity-Resource-Description-1",
-        //        DisplayName = "Test-Identity-Resource-DisplayName-1",
-        //        Name = "Test-Identity-Resource-Name-1",
-        //        Required = true,
-        //        ShowInDiscoveryDocument = true,
-        //        Emphasize = true,
-        //        UserClaims = new List<IdentityClaim>
-        //        {
-        //            new IdentityClaim(_guidGenerator.Create())
-        //            {
-        //                Type = "Test-Identity-Resource-1-IdentityClaim-Type-1",
-        //                IdentityResourceId = _guidGenerator.Create(),
-        //            }
-        //        }
-        //    });
-        //}
+        private void AddIdentityResources()
+        {
+            _identityResourceRepository.Insert(new IdentityResource(_guidGenerator.Create())
+            {
+                Enabled = true,
+                Description = "Test-Identity-Resource-Description-1",
+                DisplayName = "Test-Identity-Resource-DisplayName-1",
+                Name = "Test-Identity-Resource-Name-1",
+                Required = true,
+                ShowInDiscoveryDocument = true,
+                Emphasize = true,
+                UserClaims = new List<IdentityClaim>
+                {
+                    new IdentityClaim(_guidGenerator.Create())
+                    {
+                        Type = "Test-Identity-Resource-1-IdentityClaim-Type-1"
+                    }
+                }
+            });
+        }
     }
 }
