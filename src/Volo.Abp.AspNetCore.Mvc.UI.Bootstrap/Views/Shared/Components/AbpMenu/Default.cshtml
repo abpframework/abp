@@ -34,16 +34,16 @@
                 }
             }
         </ul>
-        
-        @if (CurrentTenant.Id == null)
+
+        @if (CurrentTenant.IsAvailable)
         {
-            <span>no-tenant</span>
+            <span>@CurrentTenant.Name?.ToString()</span>
         }
         else
         {
-            <span>@CurrentTenant.Id.ToString()</span>
+            <span>no-tenant</span>
         }
-        
+
         &nbsp;|&nbsp;
 
         @if (CurrentUser.IsAuthenticated)
