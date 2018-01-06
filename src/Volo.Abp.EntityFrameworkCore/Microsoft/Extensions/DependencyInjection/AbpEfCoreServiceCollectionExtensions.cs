@@ -14,14 +14,24 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.AddMemoryCache();
 
+            var options = new AbpDbContextRegistrationOptions(typeof(TDbContext));
+            optionsBuilder?.Invoke(options);
+
             services.TryAddTransient<TDbContext>();
             services.TryAddTransient(DbContextOptionsFactory.Create<TDbContext>);
 
-            var options = new AbpDbContextRegistrationOptions();
-            optionsBuilder?.Invoke(options);
+            if (options.DefaultRepositoryDbContextType != typeof(TDbContext))
+            {
+                services.TryAddTransient(options.DefaultRepositoryDbContextType, typeof(TDbContext));
+            }
+
+            foreach (var dbContextType in options.ReplacedDbContextTypes)
+            {
+                services.Replace(ServiceDescriptor.Transient(dbContextType, typeof(TDbContext)));
+            }
 
             new EfCoreRepositoryRegistrar(options)
-                .AddRepositories(services, typeof(TDbContext));
+                .AddRepositories(services);
 
             return services;
         }

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Autofac;
 using Volo.Abp.EntityFrameworkCore.TestApp.SecondContext;
+using Volo.Abp.EntityFrameworkCore.TestApp.ThirdDbContext;
 using Volo.Abp.Modularity;
 using Volo.Abp.TestApp;
 using Volo.Abp.TestApp.EntityFrameworkCore;
@@ -21,12 +22,8 @@ namespace Volo.Abp.EntityFrameworkCore
 
             services.AddAbpDbContext<TestAppDbContext>(options =>
             {
-                options.WithDefaultRepositories();
-            });
-
-            services.AddAbpDbContext<SecondDbContext>(options =>
-            {
-                options.WithDefaultRepositories();
+                options.AddDefaultRepositories();
+                options.ReplaceDbContext<IThirdDbContext>();
             });
 
             var inMemorySqlite = new SqliteConnection("Data Source=:memory:");

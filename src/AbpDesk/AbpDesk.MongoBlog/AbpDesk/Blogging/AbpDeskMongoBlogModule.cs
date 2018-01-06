@@ -20,7 +20,7 @@ namespace AbpDesk.Blogging
         {
             services.AddMongoDbContext<AbpDeskMongoDbContext>(options =>
             {
-                options.WithDefaultRepositories();
+                options.AddDefaultRepositories();
             });
 
             services.Configure<VirtualFileSystemOptions>(options =>

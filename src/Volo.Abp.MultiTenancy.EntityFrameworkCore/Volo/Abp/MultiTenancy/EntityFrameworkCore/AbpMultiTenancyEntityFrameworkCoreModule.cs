@@ -12,7 +12,7 @@ namespace Volo.Abp.MultiTenancy.EntityFrameworkCore
         {
             services.AddAbpDbContext<MultiTenancyDbContext>(options =>
             {
-                options.WithDefaultRepositories();
+                options.AddDefaultRepositories<IMultiTenancyDbContext>();
             });
 
             services.AddAssemblyOf<AbpMultiTenancyEntityFrameworkCoreModule>();

@@ -17,12 +17,12 @@ namespace Volo.Abp.Domain.Repositories
 
             var services = new ServiceCollection();
 
-            var options = new TestDbContextRegistrationOptions();
-            options.WithDefaultRepositories();
+            var options = new TestDbContextRegistrationOptions(typeof(MyFakeDbContext));
+            options.AddDefaultRepositories();
 
             //Act
 
-            new MyTestRepositoryRegistrar(options).AddRepositories(services, typeof(MyFakeDbContext));
+            new MyTestRepositoryRegistrar(options).AddRepositories(services);
 
             //Assert
 
@@ -38,12 +38,12 @@ namespace Volo.Abp.Domain.Repositories
 
             var services = new ServiceCollection();
 
-            var options = new TestDbContextRegistrationOptions();
-            options.WithDefaultRepositories(true);
+            var options = new TestDbContextRegistrationOptions(typeof(MyFakeDbContext));
+            options.AddDefaultRepositories(true);
 
             //Act
 
-            new MyTestRepositoryRegistrar(options).AddRepositories(services, typeof(MyFakeDbContext));
+            new MyTestRepositoryRegistrar(options).AddRepositories(services);
 
             //Assert
 
@@ -59,14 +59,14 @@ namespace Volo.Abp.Domain.Repositories
 
             var services = new ServiceCollection();
 
-            var options = new TestDbContextRegistrationOptions();
+            var options = new TestDbContextRegistrationOptions(typeof(MyFakeDbContext));
             options
-                .WithDefaultRepositories(true)
-                .WithCustomRepository<MyTestAggregateRootWithDefaultPk, MyTestAggregateRootWithDefaultPkCustomRepository>();
+                .AddDefaultRepositories(true)
+                .AddCustomRepository<MyTestAggregateRootWithDefaultPk, MyTestAggregateRootWithDefaultPkCustomRepository>();
 
             //Act
 
-            new MyTestRepositoryRegistrar(options).AddRepositories(services, typeof(MyFakeDbContext));
+            new MyTestRepositoryRegistrar(options).AddRepositories(services);
 
             //Assert
 
@@ -82,14 +82,14 @@ namespace Volo.Abp.Domain.Repositories
 
             var services = new ServiceCollection();
 
-            var options = new TestDbContextRegistrationOptions();
+            var options = new TestDbContextRegistrationOptions(typeof(MyFakeDbContext));
             options
-                .WithDefaultRepositories(true)
-                .WithDefaultRepositoryClasses(typeof(MyTestCustomBaseRepository<,>), typeof(MyTestCustomBaseRepository<>));
+                .AddDefaultRepositories(true)
+                .SetDefaultRepositoryClasses(typeof(MyTestCustomBaseRepository<,>), typeof(MyTestCustomBaseRepository<>));
 
             //Act
 
-            new MyTestRepositoryRegistrar(options).AddRepositories(services, typeof(MyFakeDbContext));
+            new MyTestRepositoryRegistrar(options).AddRepositories(services);
 
             //Assert
 
@@ -196,7 +196,10 @@ namespace Volo.Abp.Domain.Repositories
 
         public class TestDbContextRegistrationOptions : CommonDbContextRegistrationOptions
         {
-            
+            public TestDbContextRegistrationOptions(Type originalDbContextType) 
+                : base(originalDbContextType)
+            {
+            }
         }
     }
 }

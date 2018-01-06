@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.EntityFrameworkCore.TestApp.ThirdDbContext;
 using Volo.Abp.Modularity;
 
 namespace Volo.Abp.EntityFrameworkCore.TestApp.SecondContext
@@ -8,6 +9,16 @@ namespace Volo.Abp.EntityFrameworkCore.TestApp.SecondContext
     {
         public override void ConfigureServices(IServiceCollection services)
         {
+            services.AddAbpDbContext<SecondDbContext>(options =>
+            {
+                options.AddDefaultRepositories();
+            });
+
+            services.AddAbpDbContext<ThirdDbContext.ThirdDbContext>(options =>
+            {
+                options.AddDefaultRepositories<IThirdDbContext>();
+            });
+
             services.AddAssemblyOf<AbpEfCoreTestSecondContextModule>();
         }
 
