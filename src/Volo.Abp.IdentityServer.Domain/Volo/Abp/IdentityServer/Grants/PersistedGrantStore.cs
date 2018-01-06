@@ -23,7 +23,7 @@ namespace Volo.Abp.IdentityServer.Grants
         public virtual async Task StoreAsync(IdentityServer4.Models.PersistedGrant grant)
         {
             var entity = _objectMapper.Map<IdentityServer4.Models.PersistedGrant, PersistedGrant>(grant);
-            var existing = _persistentGrantRepository.FindByKeyAsync(grant.Key);
+            var existing =  await _persistentGrantRepository.FindByKeyAsync(grant.Key);
             if (existing == null)
             {
                 await _persistentGrantRepository.InsertAsync(entity);

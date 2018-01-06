@@ -23,7 +23,7 @@ namespace Volo.Abp.IdentityServer.Clients
                 .ForMember(dest => dest.ApiSecrets, opt => opt.MapFrom(src => src.Secrets));
 
 
-            CreateMap<PersistedGrant, IdentityServer4.Models.PersistedGrant>();
+            CreateMap<PersistedGrant, IdentityServer4.Models.PersistedGrant>().ReverseMap();
 
             CreateMap<IdentityResource, IdentityServer4.Models.IdentityResource>();
 

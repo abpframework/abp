@@ -48,16 +48,14 @@ namespace Volo.Abp.IdentityServer
 
         private void AddPersistentGrants()
         {
-            var persistentGrant38 = new PersistedGrant(_guidGenerator.Create())
+            _persistentGrantRepository.Insert(new PersistedGrant(_guidGenerator.Create())
             {
                 Key = "38",
                 ClientId = "TestClientId-38",
                 Type = "TestType-38",
                 SubjectId = "TestSubject-38",
                 Data = "TestData-38"
-            };
-
-            _persistentGrantRepository.Insert(persistentGrant38);
+            });
         }
     }
 }
