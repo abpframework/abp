@@ -53,9 +53,38 @@ namespace Volo.Abp.IdentityServer
                 Key = "38",
                 ClientId = "TestClientId-38",
                 Type = "TestType-38",
-                SubjectId = "TestSubject-38",
+                SubjectId = "TestSubject",
                 Data = "TestData-38"
             });
+
+
+            _persistentGrantRepository.Insert(new PersistedGrant(_guidGenerator.Create())
+            {
+                Key = "37",
+                ClientId = "TestClientId-37",
+                Type = "TestType-37",
+                SubjectId = "TestSubject",
+                Data = "TestData-37"
+            });
+
+            _persistentGrantRepository.Insert(new PersistedGrant(_guidGenerator.Create())
+            {
+                Key = "36",
+                ClientId = "TestClientId-X",
+                Type = "TestType-36",
+                SubjectId = "TestSubject-X",
+                Data = "TestData-36"
+            });
+
+            _persistentGrantRepository.Insert(new PersistedGrant(_guidGenerator.Create())
+            {
+                Key = "35",
+                ClientId = "TestClientId-X",
+                Type = "TestType-35",
+                SubjectId = "TestSubject-X",
+                Data = "TestData-35"
+            });
+
         }
     }
 }
