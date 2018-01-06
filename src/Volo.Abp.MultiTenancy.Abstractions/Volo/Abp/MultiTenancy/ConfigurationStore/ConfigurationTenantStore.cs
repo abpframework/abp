@@ -3,7 +3,7 @@ using System.Linq;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.MultiTenancy
+namespace Volo.Abp.MultiTenancy.ConfigurationStore
 {
     //TODO: Move to another package.
     [Dependency(TryRegister = true)]
@@ -16,12 +16,12 @@ namespace Volo.Abp.MultiTenancy
             _options = options.Value;
         }
 
-        public Tenant Find(string name)
+        public TenantInfo Find(string name)
         {
             return _options.Tenants.FirstOrDefault(t => t.Name == name);
         }
 
-        public Tenant Find(Guid id)
+        public TenantInfo Find(Guid id)
         {
             return _options.Tenants.FirstOrDefault(t => t.Id == id);
         }

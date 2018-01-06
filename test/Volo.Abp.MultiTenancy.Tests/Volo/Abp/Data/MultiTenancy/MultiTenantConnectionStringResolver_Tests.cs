@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.MultiTenancy.ConfigurationStore;
 using Xunit;
 
 namespace Volo.Abp.Data.MultiTenancy
@@ -30,18 +30,17 @@ namespace Volo.Abp.Data.MultiTenancy
 
             services.Configure<ConfigurationTenantStoreOptions>(options =>
             {
-                var tenant1Id = Guid.NewGuid();
                 options.Tenants = new[]
                 {
-                    new Tenant(tenant1Id, "tenant1")
+                    new TenantInfo(Guid.NewGuid(), "tenant1")
                     {
                         ConnectionStrings =
                         {
-                            new TenantConnectionString(tenant1Id,ConnectionStrings.DefaultConnectionStringName, "tenant1-default-value"),
-                            new TenantConnectionString(tenant1Id,"db1", "tenant1-db1-value")
-                        }
+                            { ConnectionStrings.DefaultConnectionStringName, "tenant1-default-value"},
+                            {"db1", "tenant1-db1-value"}
+}
                     },
-                    new Tenant(Guid.NewGuid(), "tenant2")
+                    new TenantInfo(Guid.NewGuid(), "tenant2")
                 };
             });
         }

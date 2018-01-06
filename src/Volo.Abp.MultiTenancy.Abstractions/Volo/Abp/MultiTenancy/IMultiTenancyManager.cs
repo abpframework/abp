@@ -6,7 +6,7 @@ namespace Volo.Abp.MultiTenancy
     public interface IMultiTenancyManager
     {
         [CanBeNull]
-        Tenant CurrentTenant { get; }
+        TenantInfo CurrentTenant { get; }
 
         IDisposable ChangeTenant(Guid? tenantId);
 

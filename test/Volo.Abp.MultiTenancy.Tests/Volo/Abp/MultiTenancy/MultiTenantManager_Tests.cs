@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
+using Volo.Abp.MultiTenancy.ConfigurationStore;
 using Xunit;
 
 namespace Volo.Abp.MultiTenancy
@@ -32,8 +33,8 @@ namespace Volo.Abp.MultiTenancy
             {
                 options.Tenants = new[]
                 {
-                    new Tenant(Guid.NewGuid(), _tenantA),
-                    new Tenant(Guid.NewGuid(), _tenantB)
+                    new TenantInfo(Guid.NewGuid(), _tenantA),
+                    new TenantInfo(Guid.NewGuid(), _tenantB)
                 };
             });
         }

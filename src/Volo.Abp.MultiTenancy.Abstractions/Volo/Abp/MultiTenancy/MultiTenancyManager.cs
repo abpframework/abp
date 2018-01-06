@@ -8,7 +8,7 @@ namespace Volo.Abp.MultiTenancy
 
     public class MultiTenancyManager : IMultiTenancyManager, ITransientDependency
     {
-        public Tenant CurrentTenant => GetCurrentTenant();
+        public TenantInfo CurrentTenant => GetCurrentTenant();
 
         private readonly ITenantScopeProvider _tenantScopeProvider;
         private readonly ITenantStore _tenantStore;
@@ -59,7 +59,7 @@ namespace Volo.Abp.MultiTenancy
             return _tenantScopeProvider.EnterScope(tenant);
         }
 
-        protected virtual Tenant GetCurrentTenant()
+        protected virtual TenantInfo GetCurrentTenant()
         {
             if (_tenantScopeProvider.CurrentScope != null)
             {
@@ -71,7 +71,7 @@ namespace Volo.Abp.MultiTenancy
             return ResolveTenant();
         }
 
-        protected virtual Tenant ResolveTenant()
+        protected virtual TenantInfo ResolveTenant()
         {
             var tenantIdOrName = _tenantResolver.ResolveTenantIdOrName();
             if (tenantIdOrName == null)
@@ -79,7 +79,7 @@ namespace Volo.Abp.MultiTenancy
                 return null;
             }
 
-            Tenant tenant;
+            TenantInfo tenant;
 
             //Try to find by id
             if (Guid.TryParse(tenantIdOrName, out var tenantId))

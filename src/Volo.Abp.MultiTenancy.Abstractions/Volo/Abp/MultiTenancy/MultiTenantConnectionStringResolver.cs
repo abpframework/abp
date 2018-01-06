@@ -31,12 +31,12 @@ namespace Volo.Abp.MultiTenancy
             //Requesting default connection string
             if (connectionStringName == null)
             {
-                return tenant.FindDefaultConnectionString() ??
+                return tenant.ConnectionStrings.Default ??
                        Options.ConnectionStrings.Default;
             }
 
             //Requesting specific connection string
-            var connString = tenant.FindConnectionString(connectionStringName);
+            var connString = tenant.ConnectionStrings.GetOrDefault(connectionStringName);
             if (connString != null)
             {
                 return connString;
@@ -53,7 +53,7 @@ namespace Volo.Abp.MultiTenancy
                 return connStringInOptions;
             }
 
-            return tenant.FindDefaultConnectionString() ??
+            return tenant.ConnectionStrings.Default ??
                    Options.ConnectionStrings.Default;
         }
     }

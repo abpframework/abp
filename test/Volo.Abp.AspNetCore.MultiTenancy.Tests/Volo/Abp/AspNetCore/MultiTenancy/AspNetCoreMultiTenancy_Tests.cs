@@ -7,6 +7,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 using Shouldly;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.MultiTenancy.ConfigurationStore;
 using Xunit;
 
 namespace Volo.Abp.AspNetCore.MultiTenancy
@@ -31,7 +32,7 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
                 {
                     options.Tenants = new[]
                     {
-                        new Tenant(_testTenantId, _testTenantName)
+                        new TenantInfo(_testTenantId, _testTenantName)
                     };
                 });
             });

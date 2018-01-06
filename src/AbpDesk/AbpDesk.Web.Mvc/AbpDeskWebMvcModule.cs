@@ -28,6 +28,7 @@ using Volo.Abp.Ui.Navigation;
 using Volo.Abp.VirtualFileSystem;
 using Volo.Abp.IdentityServer.Jwt;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.MultiTenancy.ConfigurationStore;
 
 namespace AbpDesk.Web.Mvc
 {
@@ -72,11 +73,11 @@ namespace AbpDesk.Web.Mvc
             {
                 options.Tenants = new[]
                 {
-                    new Tenant(
+                    new TenantInfo(
                         Guid.Parse("446a5211-3d72-4339-9adc-845151f8ada0"),
                         "acme"
                     ),
-                    new Tenant(
+                    new TenantInfo(
                         Guid.Parse("25388015-ef1c-4355-9c18-f6b6ddbaf89d"),
                         "volosoft"
                     )

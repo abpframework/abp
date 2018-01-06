@@ -19,7 +19,7 @@ namespace Volo.Abp.MultiTenancy
             _currentScope = new AsyncLocal<TenantScope>();
         }
 
-        public IDisposable EnterScope(Tenant tenant)
+        public IDisposable EnterScope(TenantInfo tenant)
         {
             var parentScope = CurrentScope;
             CurrentScope = new TenantScope(tenant);
