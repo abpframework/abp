@@ -1,24 +1,30 @@
 ﻿using System;
+using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
+using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.MultiTenancy
 {
-    //TODO: This is very similar to ITenantScopeProvider. Consider to unify them!
-
-    public class MultiTenancyManager : IMultiTenancyManager, ITransientDependency
+    public class CurrentTenant : ICurrentTenant, ITransientDependency
     {
-        public TenantInfo CurrentTenant => GetCurrentTenant();
+        public bool IsAvailable => Id.HasValue;
 
-        private readonly ITenantScopeProvider _tenantScopeProvider;
+        public Guid? Id => GetCurrentTenant()?.Id;
+
+        public string Name => GetCurrentTenant()?.Name;
+
+        public ConnectionStrings ConnectionStrings => GetCurrentTenant()?.ConnectionStrings;
+
+        private readonly TenantScopeProvider _tenantScopeProvider;
         private readonly ITenantStore _tenantStore;
-        private readonly ILogger<MultiTenancyManager> _logger;
+        private readonly ILogger<CurrentTenant> _logger;
         private readonly ITenantResolver _tenantResolver;
 
-        public MultiTenancyManager(
-            ITenantScopeProvider tenantScopeProvider,
+        public CurrentTenant(
+            TenantScopeProvider tenantScopeProvider,
             ITenantStore tenantStore,
-            ILogger<MultiTenancyManager> logger,
+            ILogger<CurrentTenant> logger,
             ITenantResolver tenantResolver)
         {
             _tenantScopeProvider = tenantScopeProvider;
@@ -27,23 +33,23 @@ namespace Volo.Abp.MultiTenancy
             _tenantResolver = tenantResolver;
         }
 
-        public IDisposable ChangeTenant(Guid? tenantId)
+        public IDisposable Change(Guid? id)
         {
-            if (tenantId == null)
+            if (id == null)
             {
                 return _tenantScopeProvider.EnterScope(null);
             }
 
-            var tenant = _tenantStore.Find(tenantId.Value);
+            var tenant = _tenantStore.Find(id.Value);
             if (tenant == null)
             {
-                throw new AbpException("There is no tenant with given tenant id: " + tenantId.Value);
+                throw new AbpException("There is no tenant with given tenant id: " + id.Value);
             }
 
             return _tenantScopeProvider.EnterScope(tenant);
         }
 
-        public IDisposable ChangeTenant(string name)
+        public IDisposable Change(string name)
         {
             if (name == null)
             {
@@ -59,6 +65,7 @@ namespace Volo.Abp.MultiTenancy
             return _tenantScopeProvider.EnterScope(tenant);
         }
 
+        [CanBeNull]
         protected virtual TenantInfo GetCurrentTenant()
         {
             if (_tenantScopeProvider.CurrentScope != null)
@@ -71,6 +78,7 @@ namespace Volo.Abp.MultiTenancy
             return ResolveTenant();
         }
 
+        [CanBeNull]
         protected virtual TenantInfo ResolveTenant()
         {
             var tenantIdOrName = _tenantResolver.ResolveTenantIdOrName();

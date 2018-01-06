@@ -37,7 +37,6 @@ namespace Volo.Abp.EntityFrameworkCore
             : base(options)
         {
             GuidGenerator = SimpleGuidGenerator.Instance;
-            CurrentTenant = NullCurrentTenant.Instance;
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

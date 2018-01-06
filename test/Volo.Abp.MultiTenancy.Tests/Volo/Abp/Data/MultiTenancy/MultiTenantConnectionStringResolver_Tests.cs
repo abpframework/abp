@@ -9,12 +9,12 @@ namespace Volo.Abp.Data.MultiTenancy
 {
     public class MultiTenantConnectionStringResolver_Tests : MultiTenancyTestBase
     {
-        private readonly IMultiTenancyManager _multiTenancyManager;
+        private readonly ICurrentTenant _currentTenant;
         private readonly IConnectionStringResolver _connectionResolver;
 
         public MultiTenantConnectionStringResolver_Tests()
         {
-            _multiTenancyManager = ServiceProvider.GetRequiredService<IMultiTenancyManager>();
+            _currentTenant = ServiceProvider.GetRequiredService<ICurrentTenant>();
 
             _connectionResolver = ServiceProvider.GetRequiredService<IConnectionStringResolver>();
             _connectionResolver.ShouldBeOfType<MultiTenantConnectionStringResolver>();
@@ -53,7 +53,7 @@ namespace Volo.Abp.Data.MultiTenancy
             _connectionResolver.Resolve("db1").ShouldBe("db1-default-value");
 
             //Overrided connection strings for tenant1
-            using (_multiTenancyManager.ChangeTenant("tenant1"))
+            using (_currentTenant.Change("tenant1"))
             {
                 _connectionResolver.Resolve().ShouldBe("tenant1-default-value");
                 _connectionResolver.Resolve("db1").ShouldBe("tenant1-db1-value");
@@ -64,7 +64,7 @@ namespace Volo.Abp.Data.MultiTenancy
             _connectionResolver.Resolve("db1").ShouldBe("db1-default-value");
 
             //Undefined connection strings for tenant2
-            using (_multiTenancyManager.ChangeTenant("tenant2"))
+            using (_currentTenant.Change("tenant2"))
             {
                 _connectionResolver.Resolve().ShouldBe("default-value");
                 _connectionResolver.Resolve("db1").ShouldBe("db1-default-value");

@@ -32,12 +32,12 @@ namespace Volo.Abp.AspNetCore.App
             
             app.Run(async (ctx) =>
             {
-                var manager = ctx.RequestServices.GetRequiredService<IMultiTenancyManager>();
+                var currentTenant = ctx.RequestServices.GetRequiredService<ICurrentTenant>();
                 var jsonSerializer = ctx.RequestServices.GetRequiredService<IJsonSerializer>();
 
                 var dictionary = new Dictionary<string, string>
                 {
-                    ["TenantId"] = manager.CurrentTenant == null ? "" : manager.CurrentTenant.Id.ToString()
+                    ["TenantId"] = currentTenant.IsAvailable ? currentTenant.Id.ToString() : ""
                 };
 
                 var result = jsonSerializer.Serialize(dictionary, camelCase: false);

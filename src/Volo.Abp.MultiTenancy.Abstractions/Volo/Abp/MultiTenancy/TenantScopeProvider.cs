@@ -4,17 +4,17 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.MultiTenancy
 {
-    public class AsyncLocalTenantScopeProvider : ITenantScopeProvider, ISingletonDependency
+    public class TenantScopeProvider : ISingletonDependency
     {
         public TenantScope CurrentScope
         {
-            get { return _currentScope.Value; }
-            private set { _currentScope.Value = value; }
+            get => _currentScope.Value;
+            private set => _currentScope.Value = value;
         }
 
         private readonly AsyncLocal<TenantScope> _currentScope;
 
-        public AsyncLocalTenantScopeProvider()
+        public TenantScopeProvider()
         {
             _currentScope = new AsyncLocal<TenantScope>();
         }

@@ -8,22 +8,22 @@ namespace Volo.Abp.MultiTenancy
     [Dependency(ReplaceServices = true)]
     public class MultiTenantConnectionStringResolver : DefaultConnectionStringResolver
     {
-        private readonly IMultiTenancyManager _multiTenancyManager;
+        private readonly ICurrentTenant _currentTenant;
 
         public MultiTenantConnectionStringResolver(
             IOptionsSnapshot<DbConnectionOptions> options,
-            IMultiTenancyManager multiTenancyManager)
+            ICurrentTenant currentTenant)
             : base(options)
         {
-            _multiTenancyManager = multiTenancyManager;
+            _currentTenant = currentTenant;
         }
 
         public override string Resolve(string connectionStringName = null)
         {
-            var tenant = _multiTenancyManager.CurrentTenant;
+            var tenantConnectionStrings = _currentTenant.ConnectionStrings;
 
             //No current tenant, fallback to default logic
-            if (tenant == null)
+            if (tenantConnectionStrings == null)
             {
                 return base.Resolve(connectionStringName);
             }
@@ -31,12 +31,12 @@ namespace Volo.Abp.MultiTenancy
             //Requesting default connection string
             if (connectionStringName == null)
             {
-                return tenant.ConnectionStrings.Default ??
+                return tenantConnectionStrings.Default ??
                        Options.ConnectionStrings.Default;
             }
 
             //Requesting specific connection string
-            var connString = tenant.ConnectionStrings.GetOrDefault(connectionStringName);
+            var connString = tenantConnectionStrings.GetOrDefault(connectionStringName);
             if (connString != null)
             {
                 return connString;
@@ -53,7 +53,7 @@ namespace Volo.Abp.MultiTenancy
                 return connStringInOptions;
             }
 
-            return tenant.ConnectionStrings.Default ??
+            return tenantConnectionStrings.Default ??
                    Options.ConnectionStrings.Default;
         }
     }
