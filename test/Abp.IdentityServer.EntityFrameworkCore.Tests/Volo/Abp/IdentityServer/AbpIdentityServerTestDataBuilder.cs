@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
+using Volo.Abp.IdentityServer.ApiResources;
 using Volo.Abp.IdentityServer.Clients;
 using Volo.Abp.IdentityServer.Grants;
 using Volo.Abp.IdentityServer.IdentityResources;
@@ -13,17 +14,20 @@ namespace Volo.Abp.IdentityServer
         private readonly IClientRepository _clientRepository;
         private readonly IPersistentGrantRepository _persistentGrantRepository;
         private readonly IIdentityResourceRepository _identityResourceRepository;
+        private readonly IApiResourceRepository _apiResourceRepository;
 
         public AbpIdentityServerTestDataBuilder(
             IClientRepository clientRepository,
             IGuidGenerator guidGenerator,
             IPersistentGrantRepository persistentGrantRepository,
-            IIdentityResourceRepository identityResourceRepository)
+            IIdentityResourceRepository identityResourceRepository,
+            IApiResourceRepository apiResourceRepository)
         {
             _clientRepository = clientRepository;
             _guidGenerator = guidGenerator;
             _persistentGrantRepository = persistentGrantRepository;
             _identityResourceRepository = identityResourceRepository;
+            _apiResourceRepository = apiResourceRepository;
         }
 
         public void Build()
@@ -31,6 +35,7 @@ namespace Volo.Abp.IdentityServer
             AddClients();
             AddPersistentGrants();
             //AddIdentityResources();
+            AddApiResources();
         }
 
         private void AddClients()
@@ -87,6 +92,36 @@ namespace Volo.Abp.IdentityServer
                 Type = "TestType-35",
                 SubjectId = "TestSubject-X",
                 Data = "TestData-35"
+            });
+        }
+
+        private void AddApiResources()
+        {
+            _apiResourceRepository.Insert(new ApiResource(_guidGenerator.Create())
+            {
+                Name = "Test-ApiResource-Name-1",
+                Enabled = true,
+                Description = "Test-ApiResource-Description-1",
+                DisplayName = "Test-ApiResource-DisplayName-1",
+                Secrets = new List<ApiSecret>
+                {
+                    new ApiSecret(_guidGenerator.Create())
+                },
+                UserClaims = new List<ApiResourceClaim>
+                {
+                    new ApiResourceClaim(_guidGenerator.Create())
+                    {
+                        Type = "Test-ApiResource-Claim-Type-1"
+                    }
+                },
+                Scopes = new List<ApiScope>
+                {
+                    new ApiScope(_guidGenerator.Create())
+                    {
+                        Name = "Test-ApiResource-ApiScope-Name-1",
+                        DisplayName = "Test-ApiResource-ApiScope-DisplayName-1"
+                    }
+                }
             });
         }
 

@@ -1,4 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using IdentityServer4.Models;
 using IdentityServer4.Stores;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
@@ -18,9 +21,41 @@ namespace Volo.Abp.IdentityServer.Clients
         [Fact]
         public async Task FindApiResourceAsync_Should_Return_Null_If_Not_Found()
         {
+            //Act
             var resource = await _resourceStore.FindApiResourceAsync("non-existing-name");
+
+            //Assert
             resource.ShouldBeNull();
         }
-         
+
+        [Fact]
+        public async Task FindApiResourceAsync_Should_Return_If_Found()
+        {
+            //Act
+            var apiResource = await _resourceStore.FindApiResourceAsync("Test-ApiResource-Name-1");
+
+            //Assert
+            apiResource.ShouldNotBe(null);
+            apiResource.Name.ShouldBe("Test-ApiResource-Name-1");
+            apiResource.Description.ShouldBe("Test-ApiResource-Description-1");
+            apiResource.DisplayName.ShouldBe("Test-ApiResource-DisplayName-1");
+        }
+
+        [Fact]
+        public async Task FindApiResourcesByScopeAsync_Should_Return_If_Found()
+        {
+            //Act
+            var apiResourcesByScope = await _resourceStore.FindApiResourcesByScopeAsync(new List<string>
+            {
+                "Test-ApiResource-ApiScope-Name-1"
+            });
+
+            //Assert
+            var apiResources = apiResourcesByScope as ApiResource[] ?? apiResourcesByScope.ToArray();
+            apiResources.ShouldNotBe(null);
+
+            apiResources[0].Scopes.GroupBy(x=>x.Name).Count().ShouldBe(1);
+            apiResources[0].Scopes.GroupBy(x=>x.Name).First().Key.ShouldBe("Test-ApiResource-ApiScope-Name-1");
+        }
     }
 }
