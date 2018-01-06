@@ -11,7 +11,7 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
     //TODO: Implement logic in DefaultDbContextResolver.Resolve in old ABP.
 
     public class UnitOfWorkDbContextProvider<TDbContext> : IDbContextProvider<TDbContext>
-        where TDbContext : AbpDbContext<TDbContext>
+        where TDbContext : IEfCoreDbContext
     {
         private readonly IUnitOfWorkManager _unitOfWorkManager;
         private readonly IConnectionStringResolver _connectionStringResolver;
@@ -100,7 +100,7 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
 
                 var dbContext = unitOfWork.ServiceProvider.GetRequiredService<TDbContext>();
 
-                if (dbContext.HasRelationalTransactionManager())
+                if (dbContext.As<DbContext>().HasRelationalTransactionManager())
                 {
                     dbContext.Database.UseTransaction(activeTransaction.DbContextTransaction.GetDbTransaction());
                 }

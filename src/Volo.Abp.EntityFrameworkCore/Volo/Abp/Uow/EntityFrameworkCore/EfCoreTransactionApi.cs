@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,14 +11,14 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
     public class EfCoreTransactionApi : ITransactionApi, ISupportsRollback
     {
         public IDbContextTransaction DbContextTransaction { get; }
-        public DbContext StarterDbContext { get; }
-        public List<DbContext> AttendedDbContexts { get; }
+        public IEfCoreDbContext StarterDbContext { get; }
+        public List<IEfCoreDbContext> AttendedDbContexts { get; }
 
-        public EfCoreTransactionApi(IDbContextTransaction dbContextTransaction, DbContext starterDbContext)
+        public EfCoreTransactionApi(IDbContextTransaction dbContextTransaction, IEfCoreDbContext starterDbContext)
         {
             DbContextTransaction = dbContextTransaction;
             StarterDbContext = starterDbContext;
-            AttendedDbContexts = new List<DbContext>();
+            AttendedDbContexts = new List<IEfCoreDbContext>();
         }
 
         public void Commit()
@@ -26,7 +27,7 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
 
             foreach (var dbContext in AttendedDbContexts)
             {
-                if (dbContext.HasRelationalTransactionManager())
+                if (dbContext.As<DbContext>().HasRelationalTransactionManager())
                 {
                     continue; //Relational databases use the shared transaction
                 }

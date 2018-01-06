@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Extensions.Options;
+using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.MultiTenancy;
 
-namespace Volo.Abp.Data.MultiTenancy
+namespace Volo.Abp.MultiTenancy
 {
     [Dependency(ReplaceServices = true)]
     public class MultiTenantConnectionStringResolver : DefaultConnectionStringResolver

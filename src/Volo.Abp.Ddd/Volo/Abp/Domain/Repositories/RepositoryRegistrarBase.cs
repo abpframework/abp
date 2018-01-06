@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Reflection;
@@ -18,7 +17,7 @@ namespace Volo.Abp.Domain.Repositories
             Options = options;
         }
 
-        public virtual void AddRepositories(IServiceCollection services, Type dbContextType)
+        public virtual void AddRepositories(IServiceCollection services)
         {
             foreach (var customRepository in Options.CustomRepositories)
             {
@@ -27,24 +26,24 @@ namespace Volo.Abp.Domain.Repositories
 
             if (Options.RegisterDefaultRepositories)
             {
-                RegisterDefaultRepositories(services, dbContextType);
+                RegisterDefaultRepositories(services);
             }
         }
 
-        protected virtual void RegisterDefaultRepositories(IServiceCollection services, Type dbContextType)
+        protected virtual void RegisterDefaultRepositories(IServiceCollection services)
         {
-            foreach (var entityType in GetEntityTypes(dbContextType))
+            foreach (var entityType in GetEntityTypes(Options.DefaultRepositoryDbContextType))
             {
                 if (!ShouldRegisterDefaultRepositoryFor(entityType))
                 {
                     continue;
                 }
 
-                RegisterDefaultRepository(services, dbContextType, entityType);
+                RegisterDefaultRepository(services, entityType);
             }
         }
 
-        protected void RegisterDefaultRepository(IServiceCollection services, Type dbContextType, Type entityType)
+        protected void RegisterDefaultRepository(IServiceCollection services, Type entityType)
         {
             var primaryKeyType = EntityHelper.GetPrimaryKeyType(entityType);
             var isDefaultPrimaryKey = primaryKeyType == typeof(Guid);
@@ -59,8 +58,8 @@ namespace Volo.Abp.Domain.Repositories
             else
             {
                 repositoryImplementationType = isDefaultPrimaryKey
-                    ? GetRepositoryTypeForDefaultPk(dbContextType, entityType)
-                    : GetRepositoryType(dbContextType, entityType, primaryKeyType);
+                    ? GetRepositoryTypeForDefaultPk(Options.DefaultRepositoryDbContextType, entityType)
+                    : GetRepositoryType(Options.DefaultRepositoryDbContextType, entityType, primaryKeyType);
             }
 
             services.AddDefaultRepository(entityType, repositoryImplementationType);

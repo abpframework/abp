@@ -17,7 +17,7 @@ using Volo.Abp.Uow;
 
 namespace Volo.Abp.EntityFrameworkCore
 {
-    public abstract class AbpDbContext<TDbContext> : DbContext
+    public abstract class AbpDbContext<TDbContext> : DbContext, IEfCoreDbContext
         where TDbContext : DbContext
     {
         public Guid? CurrentTenantId => CurrentTenant?.Id;

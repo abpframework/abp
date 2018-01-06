@@ -10,6 +10,11 @@ namespace Volo.Abp.MultiTenancy.EntityFrameworkCore
     {
         public override void ConfigureServices(IServiceCollection services)
         {
+            services.AddAbpDbContext<MultiTenancyDbContext>(options =>
+            {
+                options.AddDefaultRepositories<IMultiTenancyDbContext>();
+            });
+
             services.AddAssemblyOf<AbpMultiTenancyEntityFrameworkCoreModule>();
         }
     }

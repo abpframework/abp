@@ -14,6 +14,7 @@ namespace Volo.Abp.TestApp
         public override void ConfigureServices(IServiceCollection services)
         {
             ConfigureAutoMapper(services);
+
             services.AddAssemblyOf<TestAppModule>();
         }
 

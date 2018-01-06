@@ -22,7 +22,7 @@ namespace Volo.Abp.MemoryDb
 
             services.AddMemoryDbContext<TestAppMemoryDbContext>(options =>
             {
-                options.WithDefaultRepositories();
+                options.AddDefaultRepositories();
             });
 
             services.AddAssemblyOf<AbpMemoryDbModule>();

@@ -12,8 +12,12 @@ namespace Volo.Abp.DependencyInjection
     /// </summary>
     public abstract class CommonDbContextRegistrationOptions : ICommonDbContextRegistrationOptionsBuilder
     {
-        public bool SpecifiedDefaultRepositoryTypes => DefaultRepositoryImplementationType != null && DefaultRepositoryImplementationTypeWithDefaultPrimaryKey != null;
-        
+        public Type OriginalDbContextType { get; }
+
+        public List<Type> ReplacedDbContextTypes { get; }
+
+        public Type DefaultRepositoryDbContextType { get; protected set; }
+
         public Type DefaultRepositoryImplementationType { get; private set; }
 
         public Type DefaultRepositoryImplementationTypeWithDefaultPrimaryKey { get; private set; }
@@ -24,12 +28,34 @@ namespace Volo.Abp.DependencyInjection
 
         public Dictionary<Type, Type> CustomRepositories { get; }
 
-        public CommonDbContextRegistrationOptions()
+        public bool SpecifiedDefaultRepositoryTypes => DefaultRepositoryImplementationType != null && DefaultRepositoryImplementationTypeWithDefaultPrimaryKey != null;
+
+        protected CommonDbContextRegistrationOptions(Type originalDbContextType)
         {
+            OriginalDbContextType = originalDbContextType;
+            DefaultRepositoryDbContextType = originalDbContextType;
             CustomRepositories = new Dictionary<Type, Type>();
+            ReplacedDbContextTypes = new List<Type>();
         }
 
-        public ICommonDbContextRegistrationOptionsBuilder WithDefaultRepositories(bool includeAllEntities = false)
+        public ICommonDbContextRegistrationOptionsBuilder ReplaceDbContext<TOtherDbContext>()
+        {
+            return ReplaceDbContext(typeof(TOtherDbContext));
+        }
+
+        public ICommonDbContextRegistrationOptionsBuilder ReplaceDbContext(Type otherDbContextType)
+        {
+            if (!otherDbContextType.IsAssignableFrom(OriginalDbContextType))
+            {
+                throw new AbpException($"{OriginalDbContextType.AssemblyQualifiedName} should inherit/implement {otherDbContextType.AssemblyQualifiedName}!");
+            }
+
+            ReplacedDbContextTypes.Add(otherDbContextType);
+
+            return this;
+        }
+
+        public ICommonDbContextRegistrationOptionsBuilder AddDefaultRepositories(bool includeAllEntities = false)
         {
             RegisterDefaultRepositories = true;
             IncludeAllEntitiesForDefaultRepositories = includeAllEntities;
@@ -37,14 +63,31 @@ namespace Volo.Abp.DependencyInjection
             return this;
         }
 
-        public ICommonDbContextRegistrationOptionsBuilder WithCustomRepository<TEntity, TRepository>()
+        public ICommonDbContextRegistrationOptionsBuilder AddDefaultRepositories<TDefaultRepositoryDbContext>(bool includeAllEntities = false)
+        {
+            return AddDefaultRepositories(typeof(TDefaultRepositoryDbContext), includeAllEntities);
+        }
+
+        public ICommonDbContextRegistrationOptionsBuilder AddDefaultRepositories(Type defaultRepositoryDbContextType, bool includeAllEntities = false)
+        {
+            if (!defaultRepositoryDbContextType.IsAssignableFrom(OriginalDbContextType))
+            {
+                throw new AbpException($"{OriginalDbContextType.AssemblyQualifiedName} should inherit/implement {defaultRepositoryDbContextType.AssemblyQualifiedName}!");
+            }
+
+            DefaultRepositoryDbContextType = defaultRepositoryDbContextType;
+
+            return this;
+        }
+
+        public ICommonDbContextRegistrationOptionsBuilder AddCustomRepository<TEntity, TRepository>()
         {
             WithCustomRepository(typeof(TEntity), typeof(TRepository));
 
             return this;
         }
 
-        public ICommonDbContextRegistrationOptionsBuilder WithDefaultRepositoryClasses([NotNull] Type repositoryImplementationType, [NotNull] Type repositoryImplementationTypeWithDefaultPrimaryKey)
+        public ICommonDbContextRegistrationOptionsBuilder SetDefaultRepositoryClasses([NotNull] Type repositoryImplementationType, [NotNull] Type repositoryImplementationTypeWithDefaultPrimaryKey)
         {
             Check.NotNull(repositoryImplementationType, nameof(repositoryImplementationType));
             Check.NotNull(repositoryImplementationTypeWithDefaultPrimaryKey, nameof(repositoryImplementationTypeWithDefaultPrimaryKey));

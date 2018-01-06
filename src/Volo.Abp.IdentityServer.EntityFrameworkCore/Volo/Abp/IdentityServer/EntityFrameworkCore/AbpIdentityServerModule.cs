@@ -13,8 +13,8 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
         {
             services.AddAbpDbContext<IdentityServerDbContext>(options =>
             {
-                options.WithDefaultRepositories();
-                options.WithCustomRepository<Client, ClientRepository>();
+                options.AddDefaultRepositories();
+                options.AddCustomRepository<Client, ClientRepository>();
             });
 
             services.AddAssemblyOf<AbpIdentityServerEntityFrameworkCoreModule>();
