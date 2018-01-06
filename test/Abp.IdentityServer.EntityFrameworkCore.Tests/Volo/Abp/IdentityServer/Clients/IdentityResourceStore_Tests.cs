@@ -54,8 +54,8 @@ namespace Volo.Abp.IdentityServer.Clients
             var apiResources = apiResourcesByScope as ApiResource[] ?? apiResourcesByScope.ToArray();
             apiResources.ShouldNotBe(null);
 
-            apiResources[0].Scopes.GroupBy(x=>x.Name).Count().ShouldBe(1);
-            apiResources[0].Scopes.GroupBy(x=>x.Name).First().Key.ShouldBe("Test-ApiResource-ApiScope-Name-1");
+            apiResources[0].Scopes.GroupBy(x => x.Name).Count().ShouldBe(1);
+            apiResources[0].Scopes.GroupBy(x => x.Name).First().Key.ShouldBe("Test-ApiResource-ApiScope-Name-1");
         }
 
         [Fact]
@@ -73,6 +73,20 @@ namespace Volo.Abp.IdentityServer.Clients
             resourcesByScope.First().DisplayName.ShouldBe("Test-Identity-Resource-DisplayName-1");
             resourcesByScope.First().Description.ShouldBe("Test-Identity-Resource-Description-1");
             resourcesByScope.First().Required.ShouldBe(true);
+        }
+
+        [Fact]
+        public async Task GetAllResourcesAsync_Should_Return()
+        {
+            //Act
+            var resources = await _resourceStore.GetAllResourcesAsync();
+
+            //Assert
+            resources.ShouldNotBe(null);
+            resources.ApiResources.Count.ShouldBe(1);
+            resources.ApiResources.First().Name.ShouldBe("Test-ApiResource-Name-1");
+            resources.IdentityResources.First().Name.ShouldBe("Test-Identity-Resource-Name-1");
+            resources.IdentityResources.First().Required.ShouldBe(true);
         }
     }
 }
