@@ -5,7 +5,7 @@ using Volo.Abp.Data;
 namespace Volo.Abp.MultiTenancy
 {
     [Serializable]
-    public class TenantInfo
+    public class TenantInfo //TODO: Add a custom data to TenantInfo and make it available in ICurrentTenant
     {
         public Guid Id { get; }
 
