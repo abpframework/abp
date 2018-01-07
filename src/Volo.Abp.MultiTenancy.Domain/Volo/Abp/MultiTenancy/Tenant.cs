@@ -8,9 +8,9 @@ namespace Volo.Abp.MultiTenancy
 {
     public class Tenant : AggregateRoot
     {
-        public string Name { get; protected set; }
+        public virtual string Name { get; protected set; }
 
-        public List<TenantConnectionString> ConnectionStrings { get; protected set; }
+        public virtual List<TenantConnectionString> ConnectionStrings { get; protected set; }
 
         protected Tenant()
         {

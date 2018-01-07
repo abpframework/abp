@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.MultiTenancy
 {
@@ -9,52 +12,72 @@ namespace Volo.Abp.MultiTenancy
     public class MultiTenantConnectionStringResolver : DefaultConnectionStringResolver
     {
         private readonly ICurrentTenant _currentTenant;
+        private readonly IServiceProvider _serviceProvider;
 
         public MultiTenantConnectionStringResolver(
             IOptionsSnapshot<DbConnectionOptions> options,
-            ICurrentTenant currentTenant)
+            ICurrentTenant currentTenant,
+            IServiceProvider serviceProvider)
             : base(options)
         {
             _currentTenant = currentTenant;
+            _serviceProvider = serviceProvider;
         }
 
         public override string Resolve(string connectionStringName = null)
         {
-            var tenantConnectionStrings = _currentTenant.ConnectionStrings;
-
             //No current tenant, fallback to default logic
-            if (tenantConnectionStrings == null)
+            if (_currentTenant.Id == null)
             {
                 return base.Resolve(connectionStringName);
             }
 
-            //Requesting default connection string
-            if (connectionStringName == null)
+            using (var serviceScope = _serviceProvider.CreateScope())
             {
-                return tenantConnectionStrings.Default ??
+                var tenantStore = serviceScope
+                    .ServiceProvider
+                    .GetRequiredService<ITenantStore>();
+
+                var tenant = AsyncHelper.RunSync(() => tenantStore.FindAsync(_currentTenant.Id.Value)); //TODO: Can we avoid from RunSync?
+
+                if (tenant == null)
+                {
+                    return base.Resolve(connectionStringName);
+                }
+
+                if (tenant.ConnectionStrings == null)
+                {
+                    return base.Resolve(connectionStringName);
+                }
+
+                //Requesting default connection string
+                if (connectionStringName == null)
+                {
+                    return tenant.ConnectionStrings.Default ??
+                           Options.ConnectionStrings.Default;
+                }
+
+                //Requesting specific connection string
+                var connString = tenant.ConnectionStrings.GetOrDefault(connectionStringName);
+                if (connString != null)
+                {
+                    return connString;
+                }
+
+                /* Requested a specific connection string, but it's not specified for the tenant.
+                 * - If it's specified in options, use it.
+                 * - If not, use tenant's default conn string.
+                 */
+
+                var connStringInOptions = Options.ConnectionStrings.GetOrDefault(connectionStringName);
+                if (connStringInOptions != null)
+                {
+                    return connStringInOptions;
+                }
+
+                return tenant.ConnectionStrings.Default ??
                        Options.ConnectionStrings.Default;
             }
-
-            //Requesting specific connection string
-            var connString = tenantConnectionStrings.GetOrDefault(connectionStringName);
-            if (connString != null)
-            {
-                return connString;
-            }
-
-            /* Requested a specific connection string, but it's not specified for the tenant.
-             * - If it's specified in options, use it.
-             * - If not, use tenant's default conn string.
-             */
-                   
-            var connStringInOptions = Options.ConnectionStrings.GetOrDefault(connectionStringName);
-            if (connStringInOptions != null)
-            {
-                return connStringInOptions;
-            }
-
-            return tenantConnectionStrings.Default ??
-                   Options.ConnectionStrings.Default;
         }
     }
 }

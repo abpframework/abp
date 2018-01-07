@@ -86,6 +86,10 @@ namespace MyCompany.MyProject
 }
 ````
 
+#### Change Current Tenant
+
+TODO: ...
+
 ### Volo.Abp.MultiTenancy Package
 
 Volo.Abp.MultiTenancy is the actual package that makes your application multi-tenant. Install it into your project using PMC:
@@ -309,6 +313,16 @@ namespace MyCompany.MyProject
     }
 }
 ````
+
+#### Multi-Tenancy Middleware
+
+Volo.Abp.AspNetCore.MultiTenancy package includes the multi-tenancy middleware...
+
+````C#
+app.UseMultiTenancy();
+````
+
+TODO:...
 
 #### Determining Current Tenant From Web Request
 

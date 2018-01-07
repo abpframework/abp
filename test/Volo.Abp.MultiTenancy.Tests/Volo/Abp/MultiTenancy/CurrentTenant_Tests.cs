@@ -10,9 +10,8 @@ namespace Volo.Abp.MultiTenancy
     {
         private readonly ICurrentTenant _currentTenant;
 
-        private readonly string _tenantA = "A";
-        private readonly string _tenantB = "B";
-        private string _tenantToBeResolved;
+        private readonly Guid _tenantAId = Guid.NewGuid();
+        private readonly Guid _tenantBId = Guid.NewGuid();
 
         public CurrentTenant_Tests()
         {
@@ -33,87 +32,36 @@ namespace Volo.Abp.MultiTenancy
             {
                 options.Tenants = new[]
                 {
-                    new TenantInfo(Guid.NewGuid(), _tenantA),
-                    new TenantInfo(Guid.NewGuid(), _tenantB)
+                    new TenantInfo(_tenantAId, "A"),
+                    new TenantInfo(_tenantAId, "B")
                 };
             });
         }
 
-        protected override void AfterAddApplication(IServiceCollection services)
+        [Fact]
+        public void Should_Get_Null_If_Not_Set()
         {
-            services.Configure<TenantResolveOptions>(options =>
-            {
-                options.TenantResolvers.Add(new ActionTenantResolveContributer(context =>
-                {
-                    if (_tenantToBeResolved == _tenantA)
-                    {
-                        context.TenantIdOrName = _tenantA;
-                    }
-                }));
-
-                options.TenantResolvers.Add(new ActionTenantResolveContributer(context =>
-                {
-                    if (_tenantToBeResolved == _tenantB)
-                    {
-                        context.TenantIdOrName = _tenantB;
-                    }
-                }));
-            });
+            _currentTenant.Id.ShouldBeNull();
         }
 
         [Fact]
-        public void Should_Get_Current_Tenant_From_Single_Resolver()
-        {
-            //Arrange
-
-            _tenantToBeResolved = _tenantA;
-
-            //Assert
-
-            Assert.NotNull(_currentTenant.Id);
-            _currentTenant.Name.ShouldBe(_tenantA);
-        }
-
-        [Fact]
-        public void Should_Get_Current_Tenant_From_Multiple_Resolvers()
-        {
-            //Arrange
-
-            _tenantToBeResolved = _tenantB;
-
-            //Assert
-
-            Assert.NotNull(_currentTenant.Id);
-            _currentTenant.Name.ShouldBe(_tenantB);
-        }
-
-        [Fact]
-        public void Should_Get_Changed_Tenant_If_Wanted()
+        public void Should_Get_Changed_Tenant_If()
         {
             _currentTenant.Id.ShouldBe(null);
 
-            _tenantToBeResolved = _tenantB;
-
-            Assert.NotNull(_currentTenant.Id);
-            _currentTenant.Name.ShouldBe(_tenantB);
-
-            using (_currentTenant.Change(_tenantA))
+            using (_currentTenant.Change(_tenantAId))
             {
-                Assert.NotNull(_currentTenant.Id);
-                _currentTenant.Name.ShouldBe(_tenantA);
+                _currentTenant.Id.ShouldBe(_tenantAId);
 
-                using (_currentTenant.Change(_tenantB))
+                using (_currentTenant.Change(_tenantBId))
                 {
-                    Assert.NotNull(_currentTenant.Id);
-                    _currentTenant.Name.ShouldBe(_tenantB);
+                    _currentTenant.Id.ShouldBe(_tenantBId);
                 }
 
-                Assert.NotNull(_currentTenant.Id);
-                _currentTenant.Name.ShouldBe(_tenantA);
+                _currentTenant.Id.ShouldBe(_tenantAId);
             }
 
-            Assert.NotNull(_currentTenant.Id);
-            _currentTenant.Name.ShouldBe(_tenantB);
+            _currentTenant.Id.ShouldBeNull();
         }
     }
 }

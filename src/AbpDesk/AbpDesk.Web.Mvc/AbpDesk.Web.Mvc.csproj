@@ -27,7 +27,6 @@
     <ProjectReference Include="..\..\Volo.Abp.Identity.HttpApi\Volo.Abp.Identity.HttpApi.csproj" />
     <ProjectReference Include="..\..\Volo.Abp.IdentityServer.Domain\Volo.Abp.IdentityServer.Domain.csproj" />
     <ProjectReference Include="..\..\Volo.Abp.IdentityServer.EntityFrameworkCore\Volo.Abp.IdentityServer.EntityFrameworkCore.csproj" />
-    <ProjectReference Include="..\..\Volo.Abp.MultiTenancy.Domain\Volo.Abp.MultiTenancy.Domain.csproj" />
     <ProjectReference Include="..\AbpDesk.Application.Contracts\AbpDesk.Application.Contracts.csproj" />
     <ProjectReference Include="..\..\Volo.Abp.AspNetCore.Mvc\Volo.Abp.AspNetCore.Mvc.csproj" />
     <ProjectReference Include="..\AbpDesk.EntityFrameworkCore\AbpDesk.EntityFrameworkCore.csproj" />

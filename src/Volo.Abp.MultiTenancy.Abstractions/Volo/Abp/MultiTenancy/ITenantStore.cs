@@ -1,14 +1,12 @@
 ﻿using System;
-using JetBrains.Annotations;
+using System.Threading.Tasks;
 
 namespace Volo.Abp.MultiTenancy
 {
     public interface ITenantStore
     {
-        [CanBeNull]
-        TenantInfo Find(string name);
+        Task<TenantInfo> FindAsync(string name);
 
-        [CanBeNull]
-        TenantInfo Find(Guid id);
+        Task<TenantInfo> FindAsync(Guid id);
     }
 }

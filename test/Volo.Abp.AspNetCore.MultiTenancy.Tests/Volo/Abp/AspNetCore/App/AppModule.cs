@@ -13,8 +13,7 @@ namespace Volo.Abp.AspNetCore.App
 {
     [DependsOn(
         typeof(AbpAspNetCoreMultiTenancyModule),
-        typeof(AbpAspNetCoreTestBaseModule),
-        typeof(AbpMultiTenancyDomainModule)
+        typeof(AbpAspNetCoreTestBaseModule)
         )]
     public class AppModule : AbpModule
     {
@@ -29,7 +28,9 @@ namespace Volo.Abp.AspNetCore.App
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             var app = context.GetApplicationBuilder();
-            
+
+            app.UseMultiTenancy();
+
             app.Run(async (ctx) =>
             {
                 var currentTenant = ctx.RequestServices.GetRequiredService<ICurrentTenant>();

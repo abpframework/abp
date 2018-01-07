@@ -2,7 +2,8 @@
 
 namespace Volo.Abp.MultiTenancy
 {
-    [DependsOn(typeof(AbpMultiTenancyDomainModule))]
+    //TODO: Renaming this project to Volo.Abp.MultiTenancy.Tests would be better!
+    [DependsOn(typeof(AbpMultiTenancyAbstractionsModule))]
     public class MultiTenancyTestModule : AbpModule
     {
         

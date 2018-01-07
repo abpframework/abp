@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
@@ -16,14 +17,14 @@ namespace Volo.Abp.MultiTenancy.ConfigurationStore
             _options = options.Value;
         }
 
-        public TenantInfo Find(string name)
+        public Task<TenantInfo> FindAsync(string name)
         {
-            return _options.Tenants.FirstOrDefault(t => t.Name == name);
+            return Task.FromResult(_options.Tenants.FirstOrDefault(t => t.Name == name));
         }
 
-        public TenantInfo Find(Guid id)
+        public Task<TenantInfo> FindAsync(Guid id)
         {
-            return _options.Tenants.FirstOrDefault(t => t.Id == id);
+            return Task.FromResult(_options.Tenants.FirstOrDefault(t => t.Id == id));
         }
     }
 }

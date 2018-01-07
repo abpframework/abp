@@ -27,8 +27,6 @@ using Volo.Abp.Modularity;
 using Volo.Abp.Ui.Navigation;
 using Volo.Abp.VirtualFileSystem;
 using Volo.Abp.IdentityServer.Jwt;
-using Volo.Abp.MultiTenancy;
-using Volo.Abp.MultiTenancy.ConfigurationStore;
 
 namespace AbpDesk.Web.Mvc
 {
@@ -67,22 +65,6 @@ namespace AbpDesk.Web.Mvc
             var configuration = BuildConfiguration(hostingEnvironment);
 
             AbpDeskDbConfigurer.Configure(services, configuration);
-
-            //TODO: Getting from appsettings.json didn't worked somehow.
-            services.Configure<ConfigurationTenantStoreOptions>(options =>
-            {
-                options.Tenants = new[]
-                {
-                    new TenantInfo(
-                        Guid.Parse("446a5211-3d72-4339-9adc-845151f8ada0"),
-                        "acme"
-                    ),
-                    new TenantInfo(
-                        Guid.Parse("25388015-ef1c-4355-9c18-f6b6ddbaf89d"),
-                        "volosoft"
-                    )
-                };
-            });
 
             services.Configure<NavigationOptions>(options =>
             {
@@ -153,6 +135,8 @@ namespace AbpDesk.Web.Mvc
 
             app.UseStaticFiles();
             app.UseVirtualFiles();
+
+            app.UseMultiTenancy();
 
             app.UseIdentityServer();
 

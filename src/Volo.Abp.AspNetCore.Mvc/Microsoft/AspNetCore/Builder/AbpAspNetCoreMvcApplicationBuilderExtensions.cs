@@ -12,7 +12,7 @@ namespace Microsoft.AspNetCore.Builder
                 .UseMiddleware<AbpUnitOfWorkMiddleware>();
         }
 
-        public static IApplicationBuilder UseAbpExceptionHandling(this IApplicationBuilder app)
+        public static IApplicationBuilder UseAbpExceptionHandling(this IApplicationBuilder app) //TODO: Should this go to
         {
             //Prevent multiple add
             if (app.Properties.ContainsKey("_AbpExceptionHandlingMiddleware_Added")) //TODO: Constant
