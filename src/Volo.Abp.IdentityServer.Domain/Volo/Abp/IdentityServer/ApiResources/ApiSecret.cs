@@ -4,7 +4,7 @@ namespace Volo.Abp.IdentityServer.ApiResources
 {
     public class ApiSecret : Secret
     {
-        public virtual string ApiResourceId { get; set; }
+        public virtual Guid ApiResourceId { get; set; }
 
         protected ApiSecret()
         {
