@@ -2,6 +2,8 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Ui;
@@ -14,28 +16,37 @@ namespace AbpDesk.Web.Mvc.Controllers
     public class MultiTenancyController : AbpController
     {
         private readonly ITenantStore _tenantStore;
+        private readonly AspNetCoreMultiTenancyOptions _options;
 
-        public MultiTenancyController(ITenantStore tenantStore)
+        public MultiTenancyController(ITenantStore tenantStore, IOptions<AspNetCoreMultiTenancyOptions> options)
         {
             _tenantStore = tenantStore;
+            _options = options.Value;
         }
 
         public async Task<ActionResult> SwitchTenant(string tenant = "")
         {
-            var tenantInfo = await FindTenantAsync(tenant);
-            if (tenantInfo == null)
+            if (tenant.IsNullOrEmpty())
             {
-                throw new UserFriendlyException("Unknown tenant: " + tenant);
+                HttpContext.Response.Cookies.Delete(_options.TenantKey);
             }
-
-            HttpContext.Response.Cookies.Append(
-                "__tenant",
-                tenantInfo.Id.ToString(),
-                new CookieOptions
+            else
+            {
+                var tenantInfo = await FindTenantAsync(tenant);
+                if (tenantInfo == null)
                 {
-                    Expires = DateTimeOffset.Now.AddYears(1)
+                    throw new UserFriendlyException("Unknown tenant: " + tenant);
                 }
-            );
+
+                HttpContext.Response.Cookies.Append(
+                    _options.TenantKey,
+                    tenantInfo.Id.ToString(),
+                    new CookieOptions
+                    {
+                        Expires = DateTimeOffset.Now.AddYears(1)
+                    }
+                );
+            }
 
             return Redirect("/");
         }
