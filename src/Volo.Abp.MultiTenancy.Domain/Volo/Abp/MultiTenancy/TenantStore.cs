@@ -5,6 +5,8 @@ using Volo.Abp.ObjectMapping;
 
 namespace Volo.Abp.MultiTenancy
 {
+    //TODO: This class should use caching instead of querying everytime!
+
     public class TenantStore : ITenantStore, ITransientDependency
     {
         private readonly ITenantRepository _tenantRepository;
