@@ -12,5 +12,7 @@
   * <a href="Module-Development-Basics.md" target="_blank">Basics</a>
   * Plug-In Modules
   * Best Practices
+* Data Access
+  * [Entity Framework Core Integration](Entity-Framework-Core.md)
 * Presentation (User Interface)
   * Localization
