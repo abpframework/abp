@@ -4,7 +4,6 @@ using Volo.Abp.Guids;
 using Volo.Abp.IdentityServer.ApiResources;
 using Volo.Abp.IdentityServer.Clients;
 using Volo.Abp.IdentityServer.Grants;
-using Volo.Abp.IdentityServer.IdentityResources;
 
 namespace Volo.Abp.IdentityServer
 {
@@ -13,20 +12,17 @@ namespace Volo.Abp.IdentityServer
         private readonly IGuidGenerator _guidGenerator;
         private readonly IClientRepository _clientRepository;
         private readonly IPersistentGrantRepository _persistentGrantRepository;
-        private readonly IIdentityResourceRepository _identityResourceRepository;
         private readonly IApiResourceRepository _apiResourceRepository;
 
         public AbpIdentityServerTestDataBuilder(
             IClientRepository clientRepository,
             IGuidGenerator guidGenerator,
             IPersistentGrantRepository persistentGrantRepository,
-            IIdentityResourceRepository identityResourceRepository,
             IApiResourceRepository apiResourceRepository)
         {
             _clientRepository = clientRepository;
             _guidGenerator = guidGenerator;
             _persistentGrantRepository = persistentGrantRepository;
-            _identityResourceRepository = identityResourceRepository;
             _apiResourceRepository = apiResourceRepository;
         }
 
@@ -35,7 +31,6 @@ namespace Volo.Abp.IdentityServer
             AddClients();
             AddPersistentGrants();
             AddApiResources();
-            AddIdentityResources();
         }
 
         private void AddClients()
@@ -120,27 +115,6 @@ namespace Volo.Abp.IdentityServer
                     {
                         Name = "Test-ApiResource-ApiScope-Name-1",
                         DisplayName = "Test-ApiResource-ApiScope-DisplayName-1"
-                    }
-                }
-            });
-        }
-
-        private void AddIdentityResources()
-        {
-            _identityResourceRepository.Insert(new IdentityResource(_guidGenerator.Create())
-            {
-                Enabled = true,
-                Description = "Test-Identity-Resource-Description-1",
-                DisplayName = "Test-Identity-Resource-DisplayName-1",
-                Name = "Test-Identity-Resource-Name-1",
-                Required = true,
-                ShowInDiscoveryDocument = true,
-                Emphasize = true,
-                UserClaims = new List<IdentityClaim>
-                {
-                    new IdentityClaim(_guidGenerator.Create())
-                    {
-                        Type = "Test-Identity-Resource-1-IdentityClaim-Type-1"
                     }
                 }
             });

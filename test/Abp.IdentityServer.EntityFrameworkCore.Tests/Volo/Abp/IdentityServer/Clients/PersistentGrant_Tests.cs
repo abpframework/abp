@@ -126,6 +126,5 @@ namespace Volo.Abp.IdentityServer.Clients
             persistedGrants.ShouldNotBe(null);
             persistedGrants.Length.ShouldBe(0);
         }
-
     }
 }
