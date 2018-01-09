@@ -40,10 +40,10 @@ namespace Volo.Abp.IdentityServer.IdentityResources
         public virtual async Task<Resources> GetAllResourcesAsync()
         {
             var result = await _identityResourceRepository.GetAllResourcesAsync();
-            return new Resources
-            (
-                result.Resources.Result.Select(y => _objectMapper.Map<IdentityResource, IdentityServer4.Models.IdentityResource>(y)),
-                result.IdentityResources.Result.Select(x => _objectMapper.Map<ApiResources.ApiResource, ApiResource>(x))
+
+            return new Resources(
+                result.IdentityResources.Result.Select(y => _objectMapper.Map<IdentityResource, IdentityServer4.Models.IdentityResource>(y)),
+                result.ApiResources.Result.Select(x => _objectMapper.Map<ApiResources.ApiResource, ApiResource>(x))
             );
         }
     }

@@ -59,7 +59,7 @@ namespace Volo.Abp.IdentityServer
             return apis.FirstOrDefaultAsync();
         }
 
-        public Task<ApiResources.ApiResources> GetAllResourcesAsync()
+        public Task<ApiResources.ApiAndIdentityResources> GetAllResourcesAsync()
         {
             var identity = DbContext.IdentityResources
                 .Include(x => x.UserClaims);
@@ -70,7 +70,7 @@ namespace Volo.Abp.IdentityServer
                 .ThenInclude(s => s.UserClaims)
                 .Include(x => x.UserClaims);
 
-            return Task.FromResult(new ApiResources.ApiResources(identity.ToArrayAsync(), apis.ToArrayAsync()));
+            return Task.FromResult(new ApiResources.ApiAndIdentityResources(identity.ToArrayAsync(), apis.ToArrayAsync()));
         }
     }
 }

@@ -13,6 +13,6 @@ namespace Volo.Abp.IdentityServer.IdentityResources
 
         Task<ApiResource> FindApiResourceAsync(string name);
 
-        Task<ApiResources.ApiResources> GetAllResourcesAsync();
+        Task<ApiResources.ApiAndIdentityResources> GetAllResourcesAsync();
     }
 }
