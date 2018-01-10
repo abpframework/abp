@@ -171,7 +171,6 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
                 identityResource.HasIndex(x => x.Name).IsUnique();
 
-
                 identityResource.HasMany(x => x.UserClaims).WithOne().HasForeignKey(x => x.IdentityResourceId).IsRequired();
             });
 

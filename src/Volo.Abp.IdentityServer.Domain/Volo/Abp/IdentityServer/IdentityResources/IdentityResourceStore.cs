@@ -42,8 +42,8 @@ namespace Volo.Abp.IdentityServer.IdentityResources
             var result = await _identityResourceRepository.GetAllResourcesAsync();
 
             return new Resources(
-                result.IdentityResources.Result.Select(y => _objectMapper.Map<IdentityResource, IdentityServer4.Models.IdentityResource>(y)),
-                result.ApiResources.Result.Select(x => _objectMapper.Map<ApiResources.ApiResource, ApiResource>(x))
+                _objectMapper.Map<IdentityResource[], IdentityServer4.Models.IdentityResource[]>(result.IdentityResources),
+                _objectMapper.Map<ApiResources.ApiResource[], ApiResource[]>(result.ApiResources)
             );
         }
     }

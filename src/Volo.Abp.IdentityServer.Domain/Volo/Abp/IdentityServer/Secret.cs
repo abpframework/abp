@@ -8,22 +8,26 @@ namespace Volo.Abp.IdentityServer
 
     public abstract class Secret : Entity
     {
-        public virtual string Description { get; set; }
+        public virtual string Description { get; protected set; }
 
-        public virtual string Value { get; set; }
+        public virtual string Value { get; protected set; }
 
-        public virtual DateTime? Expiration { get; set; }
+        public virtual DateTime? Expiration { get; protected set; }
 
-        public virtual string Type { get; set; } = IdentityServerConstants.SecretTypes.SharedSecret;
+        public virtual string Type { get; protected set; }
 
         protected Secret()
         {
 
         }
 
-        protected Secret(Guid id)
+        protected Secret(Guid id, string value, DateTime? expiration = null, string type = IdentityServerConstants.SecretTypes.SharedSecret, string description = null)
         {
             Id = id;
+            Value = value;
+            Expiration = expiration;
+            Type = type;
+            Description = description;
         }
     }
 }

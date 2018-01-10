@@ -18,48 +18,46 @@ namespace Volo.Abp.IdentityServer
 
         }
 
-        public Task<List<IdentityResource>> FindIdentityResourcesByScopeAsync(string[] scopeNames)
+        public async Task<List<IdentityResource>> FindIdentityResourcesByScopeAsync(string[] scopeNames)
         {
             var query = from identityResource in DbSet.Include(x => x.UserClaims)
                         where scopeNames.Contains(identityResource.Name)
                         select identityResource;
 
-            return query.ToListAsync();
+            return await query.ToListAsync();
         }
 
-        public Task<List<ApiResource>> FindApiResourcesByScopeAsync(string[] scopeNames)
+        public async Task<List<ApiResource>> FindApiResourcesByScopeAsync(string[] scopeNames)
         {
-            var names = scopeNames.ToArray();
-
             var query = from api in DbContext.ApiResources
-                        where api.Scopes.Any(x => names.Contains(x.Name))
+                        where api.Scopes.Any(x => scopeNames.Contains(x.Name))
                         select api;
 
-            var apis = query
+            query = query
                 .Include(x => x.Secrets)
                 .Include(x => x.Scopes)
                 .ThenInclude(s => s.UserClaims)
                 .Include(x => x.UserClaims);
 
-            return apis.ToListAsync();
+            return await query.ToListAsync();
         }
 
-        public Task<ApiResource> FindApiResourceAsync(string name)
+        public async Task<ApiResource> FindApiResourceAsync(string name)
         {
             var query = from apiResource in DbContext.ApiResources
                         where apiResource.Name == name
                         select apiResource;
 
-            var apis = query
+            query = query
                 .Include(x => x.Secrets)
                 .Include(x => x.Scopes)
                 .ThenInclude(s => s.UserClaims)
                 .Include(x => x.UserClaims);
 
-            return apis.FirstOrDefaultAsync();
+            return await query.FirstOrDefaultAsync();
         }
 
-        public Task<ApiResources.ApiAndIdentityResources> GetAllResourcesAsync()
+        public async Task<ApiResources.ApiAndIdentityResources> GetAllResourcesAsync()
         {
             var identity = DbContext.IdentityResources
                 .Include(x => x.UserClaims);
@@ -70,7 +68,10 @@ namespace Volo.Abp.IdentityServer
                 .ThenInclude(s => s.UserClaims)
                 .Include(x => x.UserClaims);
 
-            return Task.FromResult(new ApiResources.ApiAndIdentityResources(identity.ToArrayAsync(), apis.ToArrayAsync()));
+            return new ApiResources.ApiAndIdentityResources(
+                await identity.ToArrayAsync(),
+                await apis.ToArrayAsync()
+            );
         }
     }
 }
