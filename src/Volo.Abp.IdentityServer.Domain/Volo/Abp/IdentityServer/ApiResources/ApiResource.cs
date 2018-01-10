@@ -40,6 +40,15 @@ namespace Volo.Abp.IdentityServer.ApiResources
             Secrets = new List<ApiSecret>();
             Scopes = new List<ApiScope>();
             UserClaims = new List<ApiResourceClaim>();
+
+            //TODO: Use IGuidGenerator!
+            //TODO: Add a good ctor to ApiScope
+            Scopes.Add(new ApiScope(Guid.NewGuid())
+            {
+                Name = name,
+                DisplayName = displayName,
+                Description = description
+            });
         }
     }
 }

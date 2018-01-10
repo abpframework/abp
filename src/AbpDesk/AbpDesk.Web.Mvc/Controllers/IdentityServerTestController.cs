@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using IdentityServer4.Models;
+using IdentityServer4.Stores;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.IdentityServer.ApiResources;
@@ -15,11 +16,22 @@ namespace AbpDesk.Web.Mvc.Controllers
     {
         private readonly IClientRepository _clientRepository;
         private readonly IApiResourceRepository _apiResourceRepository;
+        private readonly IResourceStore _resourceStore;
 
-        public IdentityServerTestController(IClientRepository clientRepository, IApiResourceRepository apiResourceRepository)
+        public IdentityServerTestController(
+            IClientRepository clientRepository, 
+            IApiResourceRepository apiResourceRepository,
+            IResourceStore resourceStore)
         {
             _clientRepository = clientRepository;
             _apiResourceRepository = apiResourceRepository;
+            _resourceStore = resourceStore;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Get()
+        {
+            return Content("Resources: " + (await _resourceStore.FindApiResourceAsync("api1")).Name);
         }
 
         [HttpGet]

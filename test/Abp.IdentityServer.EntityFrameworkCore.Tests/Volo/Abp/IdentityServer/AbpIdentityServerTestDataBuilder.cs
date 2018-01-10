@@ -1,10 +1,15 @@
 ﻿using System.Collections.Generic;
+using IdentityServer4.Models;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
 using Volo.Abp.IdentityServer.ApiResources;
 using Volo.Abp.IdentityServer.Clients;
 using Volo.Abp.IdentityServer.Grants;
 using Volo.Abp.IdentityServer.IdentityResources;
+using ApiResource = Volo.Abp.IdentityServer.ApiResources.ApiResource;
+using Client = Volo.Abp.IdentityServer.Clients.Client;
+using IdentityResource = Volo.Abp.IdentityServer.IdentityResources.IdentityResource;
+using PersistedGrant = Volo.Abp.IdentityServer.Grants.PersistedGrant;
 
 namespace Volo.Abp.IdentityServer
 {
@@ -40,18 +45,20 @@ namespace Volo.Abp.IdentityServer
 
         private void AddClients()
         {
-            var client42 = new Client(_guidGenerator.Create())
+            var client42 = new Client(_guidGenerator.Create(), "42")
             {
-                ClientId = "42",
                 ProtocolType = "TestProtocol-42"
             };
 
             client42.AllowedCorsOrigins.Add(
                 new ClientCorsOrigin(_guidGenerator.Create())
                 {
-                    Origin = "Origin1"
+                    Origin = "Origin1",
+                    ClientId = client42.Id
                 }
             );
+
+            client42.AddAllowedScope(_guidGenerator, "api1");
 
             _clientRepository.Insert(client42);
         }
@@ -97,24 +104,23 @@ namespace Volo.Abp.IdentityServer
 
         private void AddApiResources()
         {
-            _apiResourceRepository.Insert(new ApiResource(_guidGenerator.Create())
+            _apiResourceRepository.Insert(new ApiResource(_guidGenerator.Create(), "Test-ApiResource-Name-1")
             {
-                Name = "Test-ApiResource-Name-1",
                 Enabled = true,
                 Description = "Test-ApiResource-Description-1",
                 DisplayName = "Test-ApiResource-DisplayName-1",
-                Secrets = new List<ApiSecret>
+                Secrets = 
                 {
-                    new ApiSecret(_guidGenerator.Create())
+                    new ApiSecret(_guidGenerator.Create(), "secret".Sha256())
                 },
-                UserClaims = new List<ApiResourceClaim>
+                UserClaims =
                 {
                     new ApiResourceClaim(_guidGenerator.Create())
                     {
                         Type = "Test-ApiResource-Claim-Type-1"
                     }
                 },
-                Scopes = new List<ApiScope>
+                Scopes =
                 {
                     new ApiScope(_guidGenerator.Create())
                     {

@@ -2,6 +2,7 @@
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Identity;
 using Volo.Abp.IdentityServer.Clients;
+using Volo.Abp.IdentityServer.Temp;
 using Volo.Abp.Modularity;
 using Volo.Abp.Security;
 
@@ -30,8 +31,10 @@ namespace Volo.Abp.IdentityServer
         {
             var identityServerBuilder = services.AddIdentityServer();
 
-            //TODO: Remove in-memory stores once EF Core stores are fully completed.
-            identityServerBuilder.AddDeveloperSigningCredential()
+            identityServerBuilder
+                .AddDeveloperSigningCredential()
+                //.AddInMemoryApiResources(IdentityServerConfig.GetApiResources())
+                //.AddInMemoryClients(IdentityServerConfig.GetClients())
                 .AddAbpIdentityServer();
 
             services.ExecutePreConfiguredActions(identityServerBuilder);

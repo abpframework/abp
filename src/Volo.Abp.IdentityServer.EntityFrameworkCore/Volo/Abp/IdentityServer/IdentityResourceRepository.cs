@@ -11,9 +11,12 @@ using IdentityResource = Volo.Abp.IdentityServer.IdentityResources.IdentityResou
 
 namespace Volo.Abp.IdentityServer
 {
+    //TODO: This is not true implementation! This repository works for 2 different aggregate root!
+
     public class IdentityResourceRepository : EfCoreRepository<IdentityServerDbContext, IdentityResource>, IIdentityResourceRepository
     {
-        public IdentityResourceRepository(IDbContextProvider<IdentityServerDbContext> dbContextProvider) : base(dbContextProvider)
+        public IdentityResourceRepository(IDbContextProvider<IdentityServerDbContext> dbContextProvider) 
+            : base(dbContextProvider)
         {
 
         }
@@ -35,9 +38,9 @@ namespace Volo.Abp.IdentityServer
 
             query = query
                 .Include(x => x.Secrets)
+                .Include(x => x.UserClaims)
                 .Include(x => x.Scopes)
-                .ThenInclude(s => s.UserClaims)
-                .Include(x => x.UserClaims);
+                    .ThenInclude(s => s.UserClaims);
 
             return await query.ToListAsync();
         }
@@ -50,9 +53,9 @@ namespace Volo.Abp.IdentityServer
 
             query = query
                 .Include(x => x.Secrets)
+                .Include(x => x.UserClaims)
                 .Include(x => x.Scopes)
-                .ThenInclude(s => s.UserClaims)
-                .Include(x => x.UserClaims);
+                    .ThenInclude(s => s.UserClaims);
 
             return await query.FirstOrDefaultAsync();
         }
@@ -64,9 +67,9 @@ namespace Volo.Abp.IdentityServer
 
             var apis = DbContext.ApiResources
                 .Include(x => x.Secrets)
+                .Include(x => x.UserClaims)
                 .Include(x => x.Scopes)
-                .ThenInclude(s => s.UserClaims)
-                .Include(x => x.UserClaims);
+                    .ThenInclude(s => s.UserClaims);
 
             return new ApiResources.ApiAndIdentityResources(
                 await identity.ToArrayAsync(),

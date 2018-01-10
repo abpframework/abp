@@ -54,8 +54,7 @@ namespace Volo.Abp.IdentityServer.Clients
             var apiResources = apiResourcesByScope as ApiResource[] ?? apiResourcesByScope.ToArray();
             apiResources.ShouldNotBe(null);
 
-            apiResources[0].Scopes.GroupBy(x => x.Name).Count().ShouldBe(1);
-            apiResources[0].Scopes.GroupBy(x => x.Name).First().Key.ShouldBe("Test-ApiResource-ApiScope-Name-1");
+            apiResources[0].Scopes.GroupBy(x => x.Name).Count().ShouldBe(2);
         }
 
         [Fact]
