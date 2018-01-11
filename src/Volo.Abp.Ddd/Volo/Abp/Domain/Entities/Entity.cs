@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Reflection;
 
 namespace Volo.Abp.Domain.Entities
@@ -26,23 +25,7 @@ namespace Volo.Abp.Domain.Entities
         /// <inheritdoc/>
         public virtual bool IsTransient()
         {
-            if (EqualityComparer<TPrimaryKey>.Default.Equals(Id, default))
-            {
-                return true;
-            }
-
-            //Workaround for EF Core since it sets int/long to min value when attaching to dbcontext
-            if (typeof(TPrimaryKey) == typeof(int))
-            {
-                return Convert.ToInt32(Id) <= 0;
-            }
-
-            if (typeof(TPrimaryKey) == typeof(long))
-            {
-                return Convert.ToInt64(Id) <= 0;
-            }
-
-            return false;
+            return EntityHelper.IsTransient(this);
         }
 
         /// <inheritdoc/>
