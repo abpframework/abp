@@ -26,7 +26,7 @@ namespace Volo.Abp.Domain.Repositories
 
         public abstract List<TEntity> GetList();
 
-        public virtual Task<List<TEntity>> GetListAsync(CancellationToken cancellationToken = new CancellationToken())
+        public virtual Task<List<TEntity>> GetListAsync(CancellationToken cancellationToken = default)
         {
             return Task.FromResult(GetList());
         }
