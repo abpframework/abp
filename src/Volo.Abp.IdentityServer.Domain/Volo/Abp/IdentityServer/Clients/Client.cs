@@ -136,18 +136,18 @@ namespace Volo.Abp.IdentityServer.Clients
             Properties = new List<ClientProperty>();
         }
 
-        public virtual void AddGrantType(IGuidGenerator guidGenerator, string grantType)
+        public virtual void AddGrantType(string grantType)
         {
             AllowedGrantTypes.Add(
-                new ClientGrantType(guidGenerator.Create(), Id, grantType)
+                new ClientGrantType(Id, grantType)
             );
         }
 
-        public virtual void AddGrantTypes(IGuidGenerator guidGenerator, IEnumerable<string> grantTypes)
+        public virtual void AddGrantTypes(IEnumerable<string> grantTypes)
         {
             AllowedGrantTypes.AddRange(
                 grantTypes.Select(
-                    grantType => new ClientGrantType(guidGenerator.Create(), Id, grantType)
+                    grantType => new ClientGrantType(Id, grantType)
                 )
             );
         }

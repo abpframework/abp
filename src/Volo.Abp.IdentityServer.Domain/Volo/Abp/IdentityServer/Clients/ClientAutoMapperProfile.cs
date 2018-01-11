@@ -11,6 +11,8 @@ namespace Volo.Abp.IdentityServer.Clients
     {
         public ClientAutoMapperProfile()
         {
+            //TODO: Reverse maps will not used probably. Remove those will not used
+
             CreateMap<Client, IdentityServer4.Models.Client>();
 
             CreateMap<ClientCorsOrigin, string>()
@@ -18,10 +20,8 @@ namespace Volo.Abp.IdentityServer.Clients
                 .ReverseMap()
                 .ForMember(dest => dest.Origin, opt => opt.MapFrom(src => src));
 
-
             CreateMap<ApiResource, IdentityServer4.Models.ApiResource>()
                 .ForMember(dest => dest.ApiSecrets, opt => opt.MapFrom(src => src.Secrets));
-
 
             CreateMap<PersistedGrant, IdentityServer4.Models.PersistedGrant>().ReverseMap();
 

@@ -42,6 +42,8 @@ namespace Volo.Abp.Domain.Values
 
         public override int GetHashCode()
         {
+            //TODO: Can we cache the hash value assuming value objects are always immutable? We can make a Reset-like method to reset it's mutated.
+
             const int index = 1;
             const int initialHasCode = 31;
 
