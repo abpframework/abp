@@ -112,27 +112,27 @@ namespace Volo.Abp.Domain.Repositories
         /// Deletes an entity.
         /// </summary>
         /// <param name="entity">Entity to be deleted</param>
-        void Delete([NotNull] TEntity entity);
+        void Delete([NotNull] TEntity entity); //TODO: Return true if deleted
 
         /// <summary>
         /// Deletes an entity.
         /// </summary>
         /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
         /// <param name="entity">Entity to be deleted</param>
-        Task DeleteAsync([NotNull] TEntity entity, CancellationToken cancellationToken = default);
+        Task DeleteAsync([NotNull] TEntity entity, CancellationToken cancellationToken = default); //TODO: Return true if deleted
 
         /// <summary>
         /// Deletes an entity by primary key.
         /// </summary>
         /// <param name="id">Primary key of the entity</param>
-        void Delete(TPrimaryKey id);
+        void Delete(TPrimaryKey id); //TODO: Return true if deleted
 
         /// <summary>
         /// Deletes an entity by primary key.
         /// </summary>
         /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
         /// <param name="id">Primary key of the entity</param>
-        Task DeleteAsync(TPrimaryKey id, CancellationToken cancellationToken = default);
+        Task DeleteAsync(TPrimaryKey id, CancellationToken cancellationToken = default);  //TODO: Return true if deleted
 
         /// <summary>
         /// Get list of all entities without any filtering.

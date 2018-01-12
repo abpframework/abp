@@ -41,7 +41,7 @@ namespace Volo.Abp.DependencyInjection
         /// </summary>
         /// <typeparam name="TEntity">Entity type</typeparam>
         /// <typeparam name="TRepository">Repository type</typeparam>
-        ICommonDbContextRegistrationOptionsBuilder AddCustomRepository<TEntity, TRepository>();
+        ICommonDbContextRegistrationOptionsBuilder AddCustomRepository<TEntity, TRepository>(); //TODO: Rename to AddRepository!
 
         /// <summary>
         /// Uses given class(es) for default repositories.
