@@ -25,7 +25,7 @@ namespace Volo.Abp.Domain.Entities
         /// This method is exists to help developers who want to directly implement <see cref="IEntity{TPrimaryKey}.IsTransient"/>
         /// but want to use default IsTransient implementation as a shortcut.
         /// </summary>
-        public static bool IsTransient<TPrimaryKey>(IEntity<TPrimaryKey> entity)
+        public static bool IsTransient<TPrimaryKey>(IEntity<TPrimaryKey> entity) // TODO: Completely remove IsTransient
         {
             if (EqualityComparer<TPrimaryKey>.Default.Equals(entity.Id, default))
             {

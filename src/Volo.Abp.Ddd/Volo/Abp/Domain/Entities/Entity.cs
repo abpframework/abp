@@ -23,12 +23,6 @@ namespace Volo.Abp.Domain.Entities
         public virtual TPrimaryKey Id { get; set; }
 
         /// <inheritdoc/>
-        public virtual bool IsTransient()
-        {
-            return EntityHelper.IsTransient(this);
-        }
-
-        /// <inheritdoc/>
         public override bool Equals(object obj)
         {
             if (obj == null || !(obj is Entity<TPrimaryKey>))
@@ -44,7 +38,7 @@ namespace Volo.Abp.Domain.Entities
 
             //Transient objects are not considered as equal
             var other = (Entity<TPrimaryKey>)obj;
-            if (IsTransient() && other.IsTransient())
+            if (EntityHelper.IsTransient(this) && EntityHelper.IsTransient(other))
             {
                 return false;
             }

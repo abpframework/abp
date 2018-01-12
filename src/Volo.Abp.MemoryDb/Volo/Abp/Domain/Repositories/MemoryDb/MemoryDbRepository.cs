@@ -42,7 +42,7 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
         {
             if (typeof(TPrimaryKey) == typeof(int) || typeof(TPrimaryKey) == typeof(long) || typeof(TPrimaryKey) == typeof(Guid))
             {
-                if (entity.IsTransient())
+                if (EntityHelper.IsTransient(entity))
                 {
                     entity.Id = Database.GenerateNextId<TEntity, TPrimaryKey>();
                 }
