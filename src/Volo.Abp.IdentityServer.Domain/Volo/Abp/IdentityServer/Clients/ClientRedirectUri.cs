@@ -3,7 +3,7 @@ using Volo.Abp.Domain.Entities;
 
 namespace Volo.Abp.IdentityServer.Clients
 {
-    public class ClientRedirectUri : Entity
+    public class ClientRedirectUri : Entity<Guid>
     {
         public virtual string RedirectUri { get; set; }
 

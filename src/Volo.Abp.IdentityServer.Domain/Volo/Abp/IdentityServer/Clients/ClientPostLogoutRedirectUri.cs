@@ -3,7 +3,7 @@ using Volo.Abp.Domain.Entities;
 
 namespace Volo.Abp.IdentityServer.Clients
 {
-    public class ClientPostLogoutRedirectUri : Entity
+    public class ClientPostLogoutRedirectUri : Entity<Guid>
     {
         public virtual string PostLogoutRedirectUri { get; set; }
 

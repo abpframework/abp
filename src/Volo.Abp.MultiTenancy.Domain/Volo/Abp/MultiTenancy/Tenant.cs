@@ -6,7 +6,7 @@ using Volo.Abp.Domain.Entities;
 
 namespace Volo.Abp.MultiTenancy
 {
-    public class Tenant : AggregateRoot
+    public class Tenant : AggregateRoot<Guid>
     {
         public virtual string Name { get; protected set; }
 

@@ -1,15 +1,7 @@
-using System;
 using Volo.Abp.Application.Dtos;
 
 namespace Volo.Abp.Application.Services
 {
-    public interface ICrudAppService<TEntityDto>
-        : ICrudAppService<TEntityDto, Guid>
-        where TEntityDto : IEntityDto<Guid>
-    {
-
-    }
-
     public interface ICrudAppService<TEntityDto, in TPrimaryKey>
         : ICrudAppService<TEntityDto, TPrimaryKey, PagedAndSortedResultRequestDto>
         where TEntityDto : IEntityDto<TPrimaryKey>

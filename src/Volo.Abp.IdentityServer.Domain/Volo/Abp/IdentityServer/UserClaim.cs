@@ -5,7 +5,7 @@ namespace Volo.Abp.IdentityServer
 {
     //TODO: Eleminate UserClaim class for simplicity.
 
-    public abstract class UserClaim : Entity
+    public abstract class UserClaim : Entity<Guid>
     {
         public virtual string Type { get; set; }
 

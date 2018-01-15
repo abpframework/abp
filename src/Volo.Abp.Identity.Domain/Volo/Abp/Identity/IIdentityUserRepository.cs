@@ -8,7 +8,7 @@ using Volo.Abp.Domain.Repositories;
 
 namespace Volo.Abp.Identity
 {
-    public interface IIdentityUserRepository : IRepository<IdentityUser>
+    public interface IIdentityUserRepository : IRepository<IdentityUser, Guid>
     {
         Task<IdentityUser> FindByNormalizedUserNameAsync([NotNull] string normalizedUserName, CancellationToken cancellationToken);
 

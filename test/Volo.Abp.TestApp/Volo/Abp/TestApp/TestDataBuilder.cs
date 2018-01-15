@@ -10,9 +10,9 @@ namespace Volo.Abp.TestApp
         public static Guid TenantId1 { get; } = new Guid("55687dce-595c-41b4-a024-2a5e991ac8f4");
         public static Guid TenantId2 { get; } = new Guid("f522d19f-5a86-4278-98fb-0577319c544a");
 
-        private readonly IRepository<Person> _personRepository;
+        private readonly IRepository<Person, Guid> _personRepository;
 
-        public TestDataBuilder(IRepository<Person> personRepository)
+        public TestDataBuilder(IRepository<Person, Guid> personRepository)
         {
             _personRepository = personRepository;
         }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities;
 using Xunit;
@@ -127,7 +126,7 @@ namespace Volo.Abp.Domain.Repositories
 
         public class MyFakeDbContext { }
 
-        public class MyTestAggregateRootWithDefaultPk : AggregateRoot
+        public class MyTestAggregateRootWithDefaultPk : AggregateRoot<Guid>
         {
             
         }
@@ -137,7 +136,7 @@ namespace Volo.Abp.Domain.Repositories
 
         }
 
-        public class MyTestDefaultRepository<TEntity> : MyTestDefaultRepository<TEntity, Guid>, IRepository<TEntity>
+        public class MyTestDefaultRepository<TEntity> : MyTestDefaultRepository<TEntity, Guid>
             where TEntity : class, IEntity<Guid>
         {
             
@@ -182,7 +181,7 @@ namespace Volo.Abp.Domain.Repositories
 
         }
 
-        public class MyTestCustomBaseRepository<TEntity> : MyTestCustomBaseRepository<TEntity, Guid>, IRepository<TEntity>
+        public class MyTestCustomBaseRepository<TEntity> : MyTestCustomBaseRepository<TEntity, Guid>
             where TEntity : class, IEntity<Guid>
         {
 

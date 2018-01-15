@@ -11,7 +11,7 @@ namespace Volo.Abp.Identity
     /// <summary>
     /// Represents a role in the identity system
     /// </summary>
-    public class IdentityRole : AggregateRoot, IHasConcurrencyStamp
+    public class IdentityRole : AggregateRoot<Guid>, IHasConcurrencyStamp
     {
         /// <summary>
         /// Gets or sets the name for this role.

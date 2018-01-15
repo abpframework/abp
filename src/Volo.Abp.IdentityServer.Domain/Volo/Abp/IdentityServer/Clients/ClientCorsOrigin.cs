@@ -3,7 +3,7 @@ using Volo.Abp.Domain.Entities;
 
 namespace Volo.Abp.IdentityServer.Clients
 {
-    public class ClientCorsOrigin : Entity
+    public class ClientCorsOrigin : Entity<Guid>
     {
         public virtual string Origin { get; set; }
 

@@ -1,9 +1,10 @@
-﻿using JetBrains.Annotations;
+﻿using System;
+using JetBrains.Annotations;
 using Volo.Abp.Domain.Entities;
 
 namespace AbpDesk.Blogging
 {
-    public class BlogPostComment : Entity
+    public class BlogPostComment : Entity<Guid>
     {
         [NotNull]
         public virtual string Name { get; protected set; }

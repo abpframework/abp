@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -9,7 +10,7 @@ using Volo.Abp.IdentityServer.Grants;
 
 namespace Volo.Abp.IdentityServer
 {
-    public class PersistentGrantRepository : EfCoreRepository<IdentityServerDbContext, PersistedGrant>, IPersistentGrantRepository
+    public class PersistentGrantRepository : EfCoreRepository<IdentityServerDbContext, PersistedGrant, Guid>, IPersistentGrantRepository
     {
         public PersistentGrantRepository(IDbContextProvider<IdentityServerDbContext> dbContextProvider) : base(dbContextProvider)
         {

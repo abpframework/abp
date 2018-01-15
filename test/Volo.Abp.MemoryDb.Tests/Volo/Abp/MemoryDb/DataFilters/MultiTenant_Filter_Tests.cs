@@ -17,12 +17,12 @@ namespace Volo.Abp.MemoryDb.DataFilters
     public class MemoryDb_MultiTenant_Filter_Tests : MemoryDbTestBase
     {
         private ICurrentTenant _fakeCurrentTenant;
-        private readonly IRepository<Person> _personRepository;
+        private readonly IRepository<Person, Guid> _personRepository;
         private readonly IDataFilter<IMultiTenant> _multiTenantFilter;
 
         public MemoryDb_MultiTenant_Filter_Tests()
         {
-            _personRepository = GetRequiredService<IRepository<Person>>();
+            _personRepository = GetRequiredService<IRepository<Person, Guid>>();
             _multiTenantFilter = GetRequiredService<IDataFilter<IMultiTenant>>();
         }
 

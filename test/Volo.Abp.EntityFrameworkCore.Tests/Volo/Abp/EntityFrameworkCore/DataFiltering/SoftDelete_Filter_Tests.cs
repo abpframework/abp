@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Shouldly;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Repositories;
@@ -9,12 +10,12 @@ namespace Volo.Abp.EntityFrameworkCore.DataFiltering
 {
     public class SoftDelete_Filter_Tests : EntityFrameworkCoreTestBase
     {
-        private readonly IRepository<Person> _personRepository;
+        private readonly IRepository<Person, Guid> _personRepository;
         private readonly IDataFilter _dataFilter;
 
         public SoftDelete_Filter_Tests()
         {
-            _personRepository = GetRequiredService<IRepository<Person>>();
+            _personRepository = GetRequiredService<IRepository<Person, Guid>>();
             _dataFilter = GetRequiredService<IDataFilter>();
         }
 

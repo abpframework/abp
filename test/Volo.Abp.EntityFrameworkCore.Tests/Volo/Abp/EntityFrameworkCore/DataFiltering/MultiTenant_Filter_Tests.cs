@@ -17,12 +17,12 @@ namespace Volo.Abp.EntityFrameworkCore.DataFiltering
     public class MultiTenant_Filter_Tests : EntityFrameworkCoreTestBase
     {
         private ICurrentTenant _fakeCurrentTenant;
-        private readonly IRepository<Person> _personRepository;
+        private readonly IRepository<Person, Guid> _personRepository;
         private readonly IDataFilter<IMultiTenant> _multiTenantFilter;
 
         public MultiTenant_Filter_Tests()
         {
-            _personRepository = GetRequiredService<IRepository<Person>>();
+            _personRepository = GetRequiredService<IRepository<Person, Guid>>();
             _multiTenantFilter = GetRequiredService<IDataFilter<IMultiTenant>>();
         }
 

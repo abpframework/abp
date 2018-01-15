@@ -7,7 +7,7 @@ using Volo.Abp.MultiTenancy.EntityFrameworkCore;
 
 namespace Volo.Abp.MultiTenancy
 {
-    public class EfCoreTenantRepository : EfCoreRepository<IMultiTenancyDbContext, Tenant>, ITenantRepository
+    public class EfCoreTenantRepository : EfCoreRepository<IMultiTenancyDbContext, Tenant, Guid>, ITenantRepository
     {
         public EfCoreTenantRepository(IDbContextProvider<IMultiTenancyDbContext> dbContextProvider)
             : base(dbContextProvider)

@@ -1,8 +1,9 @@
-﻿using Volo.Abp.Domain.Repositories;
+﻿using System;
+using Volo.Abp.Domain.Repositories;
 
 namespace Volo.Abp.IdentityServer.ApiResources
 {
-    public interface IApiResourceRepository : IRepository<ApiResource>
+    public interface IApiResourceRepository : IRepository<ApiResource, Guid>
     {
 
     }

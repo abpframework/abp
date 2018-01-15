@@ -8,7 +8,7 @@ namespace Volo.Abp.Identity
     /// <summary>
     /// Represents a login and its associated provider for a user.
     /// </summary>
-    public class IdentityUserLogin : Entity
+    public class IdentityUserLogin : Entity<Guid>
     {
         /// <summary>
         /// Gets or sets the of the primary key of the user associated with this login.

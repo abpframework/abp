@@ -12,7 +12,7 @@ namespace Volo.Abp.Identity
 {
     //Add Name and Surname properties?
 
-    public class IdentityUser : AggregateRoot, IHasConcurrencyStamp
+    public class IdentityUser : AggregateRoot<Guid>, IHasConcurrencyStamp
     {
         /// <summary>
         /// Gets or sets the user name for this user.
