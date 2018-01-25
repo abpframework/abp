@@ -1,9 +1,8 @@
-﻿using Volo.Abp.Application.Dtos;
-using Volo.Abp.TestApp.Domain;
+﻿using Volo.Abp.TestApp.Domain;
 
 namespace Volo.Abp.TestApp.Application.Dto
 {
-    public class PhoneDto : EntityDto<long>
+    public class PhoneDto
     {
         public string Number { get; set; }
 

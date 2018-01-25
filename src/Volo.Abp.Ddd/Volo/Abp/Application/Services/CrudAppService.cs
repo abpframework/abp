@@ -1,23 +1,10 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 
 namespace Volo.Abp.Application.Services
 {
-    public abstract class CrudAppService<TEntity, TEntityDto>
-        : CrudAppService<TEntity, TEntityDto, Guid>
-        where TEntity : class, IEntity<Guid>
-        where TEntityDto : IEntityDto<Guid>
-    {
-        protected CrudAppService(IQueryableRepository<TEntity, Guid> repository)
-            : base(repository)
-        {
-
-        }
-    }
-
     public abstract class CrudAppService<TEntity, TEntityDto, TPrimaryKey>
         : CrudAppService<TEntity, TEntityDto, TPrimaryKey, PagedAndSortedResultRequestDto>
         where TEntity : class, IEntity<TPrimaryKey>

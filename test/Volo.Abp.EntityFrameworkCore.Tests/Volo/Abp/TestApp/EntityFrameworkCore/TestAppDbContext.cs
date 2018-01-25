@@ -16,5 +16,15 @@ namespace Volo.Abp.TestApp.EntityFrameworkCore
         {
 
         }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Phone>(b =>
+            {
+                b.HasKey(p => new {p.PersonId, p.Number});
+            });
+        }
     }
 }

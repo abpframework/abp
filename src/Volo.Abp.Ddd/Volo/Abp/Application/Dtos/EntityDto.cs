@@ -1,33 +1,14 @@
-using System;
-
 namespace Volo.Abp.Application.Dtos
 {
-    public class EntityDto : EntityDto<Guid>, IEntityDto
+    public class EntityDto : IEntityDto //TODO: Consider to delete this class
     {
-        /// <summary>
-        /// Creates a new <see cref="EntityDto"/> object.
-        /// </summary>
-        public EntityDto()
+        public override string ToString()
         {
-
-        }
-
-        /// <summary>
-        /// Creates a new <see cref="EntityDto"/> object.
-        /// </summary>
-        /// <param name="id">Id of the entity</param>
-        public EntityDto(Guid id)
-            : base(id)
-        {
-
+            return $"[DTO: {GetType().Name}]";
         }
     }
 
-    /// <summary>
-    /// Implements common properties for entity based DTOs.
-    /// </summary>
-    /// <typeparam name="TPrimaryKey">Type of the primary key</typeparam>
-    public class EntityDto<TPrimaryKey> : IEntityDto<TPrimaryKey>
+    public class EntityDto<TPrimaryKey> : EntityDto, IEntityDto<TPrimaryKey>
     {
         /// <summary>
         /// Id of the entity.
@@ -53,7 +34,7 @@ namespace Volo.Abp.Application.Dtos
 
         public override string ToString()
         {
-            return $"[{GetType().Name}] Id = {Id}";
+            return $"[DTO: {GetType().Name}] Id = {Id}";
         }
     }
 }

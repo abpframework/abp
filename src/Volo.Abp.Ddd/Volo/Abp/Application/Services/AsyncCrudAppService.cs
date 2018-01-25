@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Entities;
@@ -8,18 +7,6 @@ using Volo.Abp.Linq;
 
 namespace Volo.Abp.Application.Services
 {
-    public abstract class AsyncCrudAppService<TEntity, TEntityDto>
-        : AsyncCrudAppService<TEntity, TEntityDto, Guid>
-        where TEntity : class, IEntity<Guid>
-        where TEntityDto : IEntityDto<Guid>
-    {
-        protected AsyncCrudAppService(IQueryableRepository<TEntity, Guid> repository)
-            : base(repository)
-        {
-
-        }
-    }
-
     public abstract class AsyncCrudAppService<TEntity, TEntityDto, TPrimaryKey>
         : AsyncCrudAppService<TEntity, TEntityDto, TPrimaryKey, PagedAndSortedResultRequestDto>
         where TEntity : class, IEntity<TPrimaryKey>
@@ -49,7 +36,7 @@ namespace Volo.Abp.Application.Services
         where TGetAllInput : IPagedAndSortedResultRequest
         where TEntity : class, IEntity<TPrimaryKey>
         where TEntityDto : IEntityDto<TPrimaryKey>
-       where TCreateInput : IEntityDto<TPrimaryKey>
+        where TCreateInput : IEntityDto<TPrimaryKey>
     {
         protected AsyncCrudAppService(IQueryableRepository<TEntity, TPrimaryKey> repository)
             : base(repository)

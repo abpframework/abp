@@ -12,7 +12,7 @@ namespace Volo.Abp.TestApp.Application
 
         Task<PhoneDto> AddPhone(Guid id, PhoneDto phoneDto);
 
-        Task RemovePhone(Guid id, long phoneId);
+        Task RemovePhone(Guid id, string number);
 
         Task<GetWithComplexTypeInput> GetWithComplexType(GetWithComplexTypeInput input);
     }

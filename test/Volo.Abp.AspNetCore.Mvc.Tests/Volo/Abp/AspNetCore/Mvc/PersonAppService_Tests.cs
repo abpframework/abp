@@ -163,10 +163,10 @@ namespace Volo.Abp.AspNetCore.Mvc
             var douglas = _personRepository.First(p => p.Name == "Douglas");
             var firstPhone = douglas.Phones.First();
 
-            await Client.DeleteAsync($"/api/app/people/{douglas.Id}/phones/{firstPhone.Id}");
+            await Client.DeleteAsync($"/api/app/people/{douglas.Id}/phones?number={firstPhone.Number}");
 
             douglas = _personRepository.First(p => p.Name == "Douglas");
-            douglas.Phones.Any(p => p.Id == firstPhone.Id).ShouldBeFalse();
+            douglas.Phones.Any(p => p.Number == firstPhone.Number).ShouldBeFalse();
         }
     }
 }

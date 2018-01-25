@@ -5,7 +5,11 @@ namespace Volo.Abp.Domain.Entities
     /// <inheritdoc/>
     public abstract class Entity : IEntity
     {
-
+        /// <inheritdoc/>
+        public override string ToString()
+        {
+            return $"[ENTITY: {GetType().Name}]";
+        }
     }
 
     /// <inheritdoc cref="IEntity{TPrimaryKey}" />
@@ -75,7 +79,7 @@ namespace Volo.Abp.Domain.Entities
         /// <inheritdoc/>
         public override string ToString()
         {
-            return $"[{GetType().Name} {Id}]";
+            return $"[ENTITY: {GetType().Name}] Id = {Id}";
         }
     }
 }

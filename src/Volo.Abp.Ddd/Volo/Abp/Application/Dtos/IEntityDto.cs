@@ -1,24 +1,12 @@
-﻿using System;
-
-namespace Volo.Abp.Application.Dtos
+﻿namespace Volo.Abp.Application.Dtos
 {
-    /// <summary>
-    /// A shortcut of <see cref="IEntityDto{TPrimaryKey}"/> for default primary key type (<see cref="Guid"/>).
-    /// </summary>
-    public interface IEntityDto : IEntityDto<Guid>
+    public interface IEntityDto
     {
 
     }
 
-    /// <summary>
-    /// Defines common properties for entity based DTOs.
-    /// </summary>
-    /// <typeparam name="TPrimaryKey"></typeparam>
-    public interface IEntityDto<TPrimaryKey>
+    public interface IEntityDto<TPrimaryKey> : IEntityDto
     {
-        /// <summary>
-        /// Id of the entity.
-        /// </summary>
         TPrimaryKey Id { get; set; }
     }
 }

@@ -5,7 +5,7 @@ using Volo.Abp.Domain.Entities;
 namespace Volo.Abp.TestApp.Domain
 {
     [Table("AppPhones")]
-    public class Phone : Entity<long>
+    public class Phone : Entity
     {
         public virtual Guid PersonId { get; set; }
 
