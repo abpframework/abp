@@ -8,11 +8,11 @@ using Volo.Abp.Domain.Entities;
 
 namespace Volo.Abp.Domain.Repositories
 {
-    public interface IQueryableRepository<TEntity> : IQueryableRepository<TEntity, Guid>, IRepository<TEntity>
-        where TEntity : class, IEntity<Guid>
-    {
+    //public interface IQueryableRepository<TEntity> : IQueryableRepository<TEntity, Guid>, IRepository<TEntity>
+    //    where TEntity : class, IEntity<Guid>
+    //{
 
-    }
+    //}
 
     public interface IQueryableRepository<TEntity, TPrimaryKey> : IRepository<TEntity, TPrimaryKey>, IQueryable<TEntity>
         where TEntity : class, IEntity<TPrimaryKey>

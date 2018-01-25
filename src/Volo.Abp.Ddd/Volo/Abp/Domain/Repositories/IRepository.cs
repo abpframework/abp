@@ -13,11 +13,11 @@ namespace Volo.Abp.Domain.Repositories
 
     }
 
-    public interface IRepository<TEntity> : IRepository<TEntity, Guid>
-        where TEntity : class, IEntity<Guid>
-    {
+    //public interface IRepository<TEntity> : IRepository<TEntity, Guid>
+    //    where TEntity : class, IEntity<Guid>
+    //{
         
-    }
+    //}
 
     public interface IRepository<TEntity, TPrimaryKey> : IRepository
         where TEntity : class, IEntity<TPrimaryKey>

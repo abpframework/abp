@@ -8,11 +8,11 @@ using Volo.Abp.Threading;
 
 namespace Volo.Abp.Domain.Repositories
 {
-    public abstract class RepositoryBase<TEntity> : RepositoryBase<TEntity, Guid>, IRepository<TEntity>
-        where TEntity : class, IEntity<Guid>
-    {
+    //public abstract class RepositoryBase<TEntity> : RepositoryBase<TEntity, Guid>, IRepository<TEntity>
+    //    where TEntity : class, IEntity<Guid>
+    //{
 
-    }
+    //}
 
     public abstract class RepositoryBase<TEntity, TPrimaryKey> : IRepository<TEntity, TPrimaryKey>
         where TEntity : class, IEntity<TPrimaryKey>

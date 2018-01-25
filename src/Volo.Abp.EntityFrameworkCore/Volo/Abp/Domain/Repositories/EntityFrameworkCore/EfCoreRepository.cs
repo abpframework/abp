@@ -11,15 +11,15 @@ using Volo.Abp.Threading;
 
 namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
 {
-    public class EfCoreRepository<TDbContext, TEntity> : EfCoreRepository<TDbContext, TEntity, Guid>, IEfCoreRepository<TEntity>
-        where TDbContext : IEfCoreDbContext
-        where TEntity : class, IEntity<Guid>
-    {
-        public EfCoreRepository(IDbContextProvider<TDbContext> dbContextProvider)
-            : base(dbContextProvider)
-        {
-        }
-    }
+    //public class EfCoreRepository<TDbContext, TEntity> : EfCoreRepository<TDbContext, TEntity, Guid>, IEfCoreRepository<TEntity>
+    //    where TDbContext : IEfCoreDbContext
+    //    where TEntity : class, IEntity<Guid>
+    //{
+    //    public EfCoreRepository(IDbContextProvider<TDbContext> dbContextProvider)
+    //        : base(dbContextProvider)
+    //    {
+    //    }
+    //}
 
     public class EfCoreRepository<TDbContext, TEntity, TPrimaryKey> : QueryableRepositoryBase<TEntity, TPrimaryKey>, 
         IEfCoreRepository<TEntity, TPrimaryKey>,

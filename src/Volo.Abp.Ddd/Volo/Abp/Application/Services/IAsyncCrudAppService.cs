@@ -1,16 +1,8 @@
-using System;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 
 namespace Volo.Abp.Application.Services
 {
-    public interface IAsyncCrudAppService<TEntityDto>
-        : IAsyncCrudAppService<TEntityDto, Guid>
-        where TEntityDto : IEntityDto<Guid>
-    {
-
-    }
-
     public interface IAsyncCrudAppService<TEntityDto, in TPrimaryKey>
         : IAsyncCrudAppService<TEntityDto, TPrimaryKey, PagedAndSortedResultRequestDto>
         where TEntityDto : IEntityDto<TPrimaryKey>

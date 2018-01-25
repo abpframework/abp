@@ -18,11 +18,6 @@ namespace Volo.Abp.MemoryDb.DependencyInjection
             return memoryDbContext.GetEntityTypes();
         }
 
-        protected override Type GetRepositoryTypeForDefaultPk(Type dbContextType, Type entityType)
-        {
-            return typeof(MemoryDbRepository<,>).MakeGenericType(dbContextType, entityType);
-        }
-
         protected override Type GetRepositoryType(Type dbContextType, Type entityType, Type primaryKeyType)
         {
             return typeof(MemoryDbRepository<,,>).MakeGenericType(dbContextType, entityType, primaryKeyType);

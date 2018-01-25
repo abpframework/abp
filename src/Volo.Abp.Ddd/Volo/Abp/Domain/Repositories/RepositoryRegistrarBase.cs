@@ -46,20 +46,22 @@ namespace Volo.Abp.Domain.Repositories
         protected void RegisterDefaultRepository(IServiceCollection services, Type entityType)
         {
             var primaryKeyType = EntityHelper.GetPrimaryKeyType(entityType);
-            var isDefaultPrimaryKey = primaryKeyType == typeof(Guid);
+            //var isDefaultPrimaryKey = primaryKeyType == typeof(Guid);
 
             Type repositoryImplementationType;
             if (Options.SpecifiedDefaultRepositoryTypes)
             {
-                repositoryImplementationType = isDefaultPrimaryKey
-                    ? Options.DefaultRepositoryImplementationTypeWithDefaultPrimaryKey.MakeGenericType(entityType)
-                    : Options.DefaultRepositoryImplementationType.MakeGenericType(entityType, primaryKeyType);
+                repositoryImplementationType = Options.DefaultRepositoryImplementationType.MakeGenericType(entityType, primaryKeyType);
+                //repositoryImplementationType = isDefaultPrimaryKey
+                //    ? Options.DefaultRepositoryImplementationTypeWithDefaultPrimaryKey.MakeGenericType(entityType)
+                //    : Options.DefaultRepositoryImplementationType.MakeGenericType(entityType, primaryKeyType);
             }
             else
             {
-                repositoryImplementationType = isDefaultPrimaryKey
-                    ? GetRepositoryTypeForDefaultPk(Options.DefaultRepositoryDbContextType, entityType)
-                    : GetRepositoryType(Options.DefaultRepositoryDbContextType, entityType, primaryKeyType);
+                repositoryImplementationType = GetRepositoryType(Options.DefaultRepositoryDbContextType, entityType, primaryKeyType);
+                //repositoryImplementationType = isDefaultPrimaryKey
+                //    ? GetRepositoryTypeForDefaultPk(Options.DefaultRepositoryDbContextType, entityType)
+                //    : GetRepositoryType(Options.DefaultRepositoryDbContextType, entityType, primaryKeyType);
             }
 
             services.AddDefaultRepository(entityType, repositoryImplementationType);
@@ -87,7 +89,7 @@ namespace Volo.Abp.Domain.Repositories
 
         protected abstract IEnumerable<Type> GetEntityTypes(Type dbContextType);
 
-        protected abstract Type GetRepositoryTypeForDefaultPk(Type dbContextType, Type entityType);
+        //protected abstract Type GetRepositoryTypeForDefaultPk(Type dbContextType, Type entityType);
 
         protected abstract Type GetRepositoryType(Type dbContextType, Type entityType, Type primaryKeyType);
     }

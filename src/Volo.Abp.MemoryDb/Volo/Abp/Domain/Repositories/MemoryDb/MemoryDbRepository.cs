@@ -6,15 +6,15 @@ using Volo.Abp.MemoryDb;
 
 namespace Volo.Abp.Domain.Repositories.MemoryDb
 {
-    public class MemoryDbRepository<TMemoryDbContext, TEntity> : MemoryDbRepository<TMemoryDbContext, TEntity, Guid>, IMemoryDbRepository<TEntity>
-        where TMemoryDbContext : MemoryDbContext
-        where TEntity : class, IEntity<Guid>
-    {
-        public MemoryDbRepository(IMemoryDatabaseProvider<TMemoryDbContext> databaseProvider)
-            : base(databaseProvider)
-        {
-        }
-    }
+    //public class MemoryDbRepository<TMemoryDbContext, TEntity> : MemoryDbRepository<TMemoryDbContext, TEntity, Guid>, IMemoryDbRepository<TEntity>
+    //    where TMemoryDbContext : MemoryDbContext
+    //    where TEntity : class, IEntity<Guid>
+    //{
+    //    public MemoryDbRepository(IMemoryDatabaseProvider<TMemoryDbContext> databaseProvider)
+    //        : base(databaseProvider)
+    //    {
+    //    }
+    //}
 
     public class MemoryDbRepository<TMemoryDbContext, TEntity, TPrimaryKey> : QueryableRepositoryBase<TEntity, TPrimaryKey>, IMemoryDbRepository<TEntity, TPrimaryKey> 
         where TMemoryDbContext : MemoryDbContext

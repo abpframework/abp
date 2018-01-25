@@ -21,13 +21,13 @@ namespace Volo.Abp.AspNetCore.Mvc
 
     public class PersonAppService_Tests : AspNetCoreMvcTestBase
     {
-        private readonly IQueryableRepository<Person> _personRepository;
+        private readonly IQueryableRepository<Person, Guid> _personRepository;
         private readonly IJsonSerializer _jsonSerializer;
         private readonly IObjectMapper _objectMapper;
 
         public PersonAppService_Tests()
         {
-            _personRepository = ServiceProvider.GetRequiredService<IQueryableRepository<Person>>();
+            _personRepository = ServiceProvider.GetRequiredService<IQueryableRepository<Person, Guid>>();
             _jsonSerializer = ServiceProvider.GetRequiredService<IJsonSerializer>();
             _objectMapper = ServiceProvider.GetRequiredService<IObjectMapper>();
         }

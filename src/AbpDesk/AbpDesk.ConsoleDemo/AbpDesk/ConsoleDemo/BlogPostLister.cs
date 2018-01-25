@@ -9,11 +9,11 @@ namespace AbpDesk.ConsoleDemo
 {
     public class BlogPostLister : ITransientDependency
     {
-        private readonly IQueryableRepository<BlogPost> _blogPostRepository;
+        private readonly IQueryableRepository<BlogPost, Guid> _blogPostRepository;
         private readonly IGuidGenerator _guidGenerator;
 
         public BlogPostLister(
-            IQueryableRepository<BlogPost> blogPostRepository,
+            IQueryableRepository<BlogPost, Guid> blogPostRepository,
             IGuidGenerator guidGenerator)
         {
             _blogPostRepository = blogPostRepository;

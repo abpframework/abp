@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.Data;
@@ -10,12 +11,12 @@ namespace Volo.Abp.MemoryDb.DataFilters
 {
     public class MemoryDb_SoftDelete_DataFilter_Tests : MemoryDbTestBase
     {
-        private readonly IQueryableRepository<Person> _personRepository;
+        private readonly IQueryableRepository<Person, Guid> _personRepository;
         private readonly IDataFilter _dataFilter;
 
         public MemoryDb_SoftDelete_DataFilter_Tests()
         {
-            _personRepository = ServiceProvider.GetRequiredService<IQueryableRepository<Person>>();
+            _personRepository = ServiceProvider.GetRequiredService<IQueryableRepository<Person, Guid>>();
             _dataFilter = GetRequiredService<IDataFilter>();
         }
 

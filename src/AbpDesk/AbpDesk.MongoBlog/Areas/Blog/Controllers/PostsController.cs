@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using AbpDesk.Blogging;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc;
@@ -9,9 +10,9 @@ namespace Areas.Blog.Controllers
     [Area("Blog")]
     public class PostsController : AbpController
     {
-        private readonly IQueryableRepository<BlogPost> _blogPostRepository;
+        private readonly IQueryableRepository<BlogPost, Guid> _blogPostRepository;
 
-        public PostsController(IQueryableRepository<BlogPost> blogPostRepository)
+        public PostsController(IQueryableRepository<BlogPost, Guid> blogPostRepository)
         {
             _blogPostRepository = blogPostRepository;
         }

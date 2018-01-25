@@ -11,11 +11,11 @@ using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Domain.Repositories
 {
-    public abstract class QueryableRepositoryBase<TEntity> : QueryableRepositoryBase<TEntity, Guid>, IQueryableRepository<TEntity>
-        where TEntity : class, IEntity<Guid>
-    {
+    //public abstract class QueryableRepositoryBase<TEntity> : QueryableRepositoryBase<TEntity, Guid>, IQueryableRepository<TEntity>
+    //    where TEntity : class, IEntity<Guid>
+    //{
         
-    }
+    //}
 
     public abstract class QueryableRepositoryBase<TEntity, TPrimaryKey> : RepositoryBase<TEntity, TPrimaryKey>, IQueryableRepository<TEntity, TPrimaryKey>
         where TEntity : class, IEntity<TPrimaryKey>

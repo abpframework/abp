@@ -6,7 +6,7 @@ using Volo.Abp.TestApp.Application.Dto;
 
 namespace Volo.Abp.TestApp.Application
 {
-    public interface IPeopleAppService : IAsyncCrudAppService<PersonDto>
+    public interface IPeopleAppService : IAsyncCrudAppService<PersonDto, Guid>
     {
         Task<ListResultDto<PhoneDto>> GetPhones(Guid id, GetPersonPhonesFilter filter);
 

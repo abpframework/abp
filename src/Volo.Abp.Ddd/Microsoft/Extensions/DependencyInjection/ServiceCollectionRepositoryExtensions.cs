@@ -14,10 +14,10 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             AddDefaultRepositoryForGenericPrimaryKey(services, entityType, repositoryImplementationType);
 
-            if (BothSupportsDefaultPrimaryKey(entityType, repositoryImplementationType))
-            {
-                AddDefaultRepositoryForDefaultPrimaryKey(services, entityType, repositoryImplementationType);
-            }
+            //if (BothSupportsDefaultPrimaryKey(entityType, repositoryImplementationType))
+            //{
+            //    AddDefaultRepositoryForDefaultPrimaryKey(services, entityType, repositoryImplementationType);
+            //}
         }
 
         private static void AddDefaultRepositoryForGenericPrimaryKey(IServiceCollection services, Type entityType, Type repositoryImplementationType)
@@ -41,29 +41,29 @@ namespace Microsoft.Extensions.DependencyInjection
             }
         }
 
-        private static void AddDefaultRepositoryForDefaultPrimaryKey(IServiceCollection services, Type entityType, Type repositoryImplementationType)
-        {
-            //IRepository<TEntity>
-            var repositoryInterfaceWithDefaultPrimaryKey = typeof(IRepository<>).MakeGenericType(entityType);
-            if (!repositoryInterfaceWithDefaultPrimaryKey.GetTypeInfo().IsAssignableFrom(repositoryImplementationType))
-            {
-                throw new AbpException($"Given repositoryImplementationType ({repositoryImplementationType}) must implement {repositoryInterfaceWithDefaultPrimaryKey}");
-            }
+        //private static void AddDefaultRepositoryForDefaultPrimaryKey(IServiceCollection services, Type entityType, Type repositoryImplementationType)
+        //{
+        //    //IRepository<TEntity>
+        //    var repositoryInterfaceWithDefaultPrimaryKey = typeof(IRepository<>).MakeGenericType(entityType);
+        //    if (!repositoryInterfaceWithDefaultPrimaryKey.GetTypeInfo().IsAssignableFrom(repositoryImplementationType))
+        //    {
+        //        throw new AbpException($"Given repositoryImplementationType ({repositoryImplementationType}) must implement {repositoryInterfaceWithDefaultPrimaryKey}");
+        //    }
 
-            services.TryAddTransient(repositoryInterfaceWithDefaultPrimaryKey, repositoryImplementationType);
+        //    services.TryAddTransient(repositoryInterfaceWithDefaultPrimaryKey, repositoryImplementationType);
 
-            //IQueryableRepository<TEntity>
-            var queryableRepositoryInterfaceWithDefaultPrimaryKey = typeof(IQueryableRepository<>).MakeGenericType(entityType);
-            if (queryableRepositoryInterfaceWithDefaultPrimaryKey.GetTypeInfo().IsAssignableFrom(repositoryImplementationType))
-            {
-                services.TryAddTransient(queryableRepositoryInterfaceWithDefaultPrimaryKey, repositoryImplementationType);
-            }
-        }
+        //    //IQueryableRepository<TEntity>
+        //    var queryableRepositoryInterfaceWithDefaultPrimaryKey = typeof(IQueryableRepository<>).MakeGenericType(entityType);
+        //    if (queryableRepositoryInterfaceWithDefaultPrimaryKey.GetTypeInfo().IsAssignableFrom(repositoryImplementationType))
+        //    {
+        //        services.TryAddTransient(queryableRepositoryInterfaceWithDefaultPrimaryKey, repositoryImplementationType);
+        //    }
+        //}
 
-        private static bool BothSupportsDefaultPrimaryKey(Type entityType, Type repositoryImplementationType)
-        {
-            return typeof(IEntity<Guid>).GetTypeInfo().IsAssignableFrom(entityType) &&
-                   ReflectionHelper.IsAssignableToGenericType(repositoryImplementationType, typeof(IRepository<>));
-        }
+        //private static bool BothSupportsDefaultPrimaryKey(Type entityType, Type repositoryImplementationType)
+        //{
+        //    return typeof(IEntity<Guid>).GetTypeInfo().IsAssignableFrom(entityType) &&
+        //           ReflectionHelper.IsAssignableToGenericType(repositoryImplementationType, typeof(IRepository<>));
+        //}
     }
 }

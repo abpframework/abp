@@ -27,10 +27,10 @@ namespace Volo.Abp.Identity
             (ServiceProvider.GetRequiredService<IIdentityUserRepository>() is EfCoreIdentityUserRepository).ShouldBeTrue();
 
             (ServiceProvider.GetRequiredService<IRepository<IdentityUser, Guid>>() is EfCoreIdentityUserRepository).ShouldBeTrue();
-            (ServiceProvider.GetRequiredService<IRepository<IdentityUser>>() is EfCoreIdentityUserRepository).ShouldBeTrue();
+            //(ServiceProvider.GetRequiredService<IRepository<IdentityUser>>() is EfCoreIdentityUserRepository).ShouldBeTrue();
 
             (ServiceProvider.GetRequiredService<IQueryableRepository<IdentityUser, Guid>>() is EfCoreIdentityUserRepository).ShouldBeTrue();
-            (ServiceProvider.GetRequiredService<IQueryableRepository<IdentityUser>>() is EfCoreIdentityUserRepository).ShouldBeTrue();
+            //(ServiceProvider.GetRequiredService<IQueryableRepository<IdentityUser>>() is EfCoreIdentityUserRepository).ShouldBeTrue();
         }
     }
 }

@@ -2,13 +2,13 @@
 
 namespace Volo.Abp.Domain.Entities
 {
-    /// <summary>
-    /// A shortcut of <see cref="IEntity{TPrimaryKey}"/> for default primary key type (<see cref="string"/>).
-    /// </summary>
-    public interface IEntity : IEntity<Guid>
-    {
+    ///// <summary>
+    ///// A shortcut of <see cref="IEntity{TPrimaryKey}"/> for default primary key type (<see cref="string"/>).
+    ///// </summary>
+    //public interface IEntity : IEntity<Guid>
+    //{
 
-    }
+    //}
 
     /// <summary>
     /// Defines interface for base entity type. All entities in the system must implement this interface.

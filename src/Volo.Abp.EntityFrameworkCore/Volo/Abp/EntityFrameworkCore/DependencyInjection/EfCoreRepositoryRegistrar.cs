@@ -17,10 +17,10 @@ namespace Volo.Abp.EntityFrameworkCore.DependencyInjection
             return DbContextHelper.GetEntityTypes(dbContextType);
         }
 
-        protected override Type GetRepositoryTypeForDefaultPk(Type dbContextType, Type entityType)
-        {
-            return typeof(EfCoreRepository<,>).MakeGenericType(dbContextType, entityType);
-        }
+        //protected override Type GetRepositoryTypeForDefaultPk(Type dbContextType, Type entityType)
+        //{
+        //    return typeof(EfCoreRepository<,>).MakeGenericType(dbContextType, entityType);
+        //}
 
         protected override Type GetRepositoryType(Type dbContextType, Type entityType, Type primaryKeyType)
         {

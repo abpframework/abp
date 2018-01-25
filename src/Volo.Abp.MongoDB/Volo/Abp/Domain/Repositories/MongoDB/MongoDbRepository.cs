@@ -10,15 +10,15 @@ using Volo.Abp.MongoDB;
 
 namespace Volo.Abp.Domain.Repositories.MongoDB
 {
-    public class MongoDbRepository<TMongoDbContext, TEntity> : MongoDbRepository<TMongoDbContext, TEntity, Guid>, IMongoDbRepository<TEntity>
-        where TMongoDbContext : AbpMongoDbContext
-        where TEntity : class, IEntity<Guid>
-    {
-        public MongoDbRepository(IMongoDatabaseProvider<TMongoDbContext> databaseProvider)
-            : base(databaseProvider)
-        {
-        }
-    }
+    //public class MongoDbRepository<TMongoDbContext, TEntity> : MongoDbRepository<TMongoDbContext, TEntity, Guid>, IMongoDbRepository<TEntity>
+    //    where TMongoDbContext : AbpMongoDbContext
+    //    where TEntity : class, IEntity<Guid>
+    //{
+    //    public MongoDbRepository(IMongoDatabaseProvider<TMongoDbContext> databaseProvider)
+    //        : base(databaseProvider)
+    //    {
+    //    }
+    //}
 
     public class MongoDbRepository<TMongoDbContext, TEntity, TPrimaryKey> : QueryableRepositoryBase<TEntity, TPrimaryKey>, IMongoDbRepository<TEntity, TPrimaryKey> 
         where TMongoDbContext : AbpMongoDbContext

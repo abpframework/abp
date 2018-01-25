@@ -20,7 +20,7 @@ namespace Volo.Abp.DependencyInjection
 
         public Type DefaultRepositoryImplementationType { get; private set; }
 
-        public Type DefaultRepositoryImplementationTypeWithDefaultPrimaryKey { get; private set; }
+        //public Type DefaultRepositoryImplementationTypeWithDefaultPrimaryKey { get; private set; }
 
         public bool RegisterDefaultRepositories { get; private set; }
 
@@ -28,7 +28,7 @@ namespace Volo.Abp.DependencyInjection
 
         public Dictionary<Type, Type> CustomRepositories { get; }
 
-        public bool SpecifiedDefaultRepositoryTypes => DefaultRepositoryImplementationType != null && DefaultRepositoryImplementationTypeWithDefaultPrimaryKey != null;
+        public bool SpecifiedDefaultRepositoryTypes => DefaultRepositoryImplementationType != null; // && DefaultRepositoryImplementationTypeWithDefaultPrimaryKey != null;
 
         protected CommonDbContextRegistrationOptions(Type originalDbContextType)
         {
@@ -87,13 +87,11 @@ namespace Volo.Abp.DependencyInjection
             return this;
         }
 
-        public ICommonDbContextRegistrationOptionsBuilder SetDefaultRepositoryClasses([NotNull] Type repositoryImplementationType, [NotNull] Type repositoryImplementationTypeWithDefaultPrimaryKey)
+        public ICommonDbContextRegistrationOptionsBuilder SetDefaultRepositoryClasses([NotNull] Type repositoryImplementationType)
         {
             Check.NotNull(repositoryImplementationType, nameof(repositoryImplementationType));
-            Check.NotNull(repositoryImplementationTypeWithDefaultPrimaryKey, nameof(repositoryImplementationTypeWithDefaultPrimaryKey));
 
             DefaultRepositoryImplementationType = repositoryImplementationType;
-            DefaultRepositoryImplementationTypeWithDefaultPrimaryKey = repositoryImplementationTypeWithDefaultPrimaryKey;
 
             return this;
         }
