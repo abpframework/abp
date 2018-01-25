@@ -37,13 +37,6 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             DatabaseProvider = databaseProvider;
         }
 
-        //TODO: Override other methods?
-
-        public override async Task<List<TEntity>> GetListAsync(CancellationToken cancellationToken = new CancellationToken())
-        {
-            return await (await Collection.FindAsync(Builders<TEntity>.Filter.Empty, cancellationToken: cancellationToken)).ToListAsync(cancellationToken);
-        }
-
         public override async Task<TEntity> GetAsync(TPrimaryKey id, CancellationToken cancellationToken = default)
         {
             var entity = await FindAsync(id, cancellationToken);
@@ -119,11 +112,6 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
         protected override IQueryable<TEntity> GetQueryable()
         {
             return Collection.AsQueryable();
-        }
-
-        public override Task<long> GetCountAsync(CancellationToken cancellationToken = default)
-        {
-            return Collection.CountAsync(Builders<TEntity>.Filter.Empty, cancellationToken: cancellationToken);
         }
     }
 }

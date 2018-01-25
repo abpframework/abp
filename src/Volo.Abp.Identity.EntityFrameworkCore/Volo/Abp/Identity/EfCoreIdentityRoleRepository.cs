@@ -30,5 +30,10 @@ namespace Volo.Abp.Identity
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync();
         }
+
+        public async Task<long> GetCountAsync(CancellationToken cancellationToken = default)
+        {
+            return await this.LongCountAsync(cancellationToken);
+        }
     }
 }

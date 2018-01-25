@@ -1,23 +1,15 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 
 namespace Volo.Abp.Domain.Entities
 {
-    ///// <summary>
-    ///// A shortcut of <see cref="Entity{TPrimaryKey}"/> for default primary key type (<see cref="Guid"/>).
-    ///// </summary>
-    //public abstract class Entity : Entity<Guid>, IEntity
-    //{
-
-    //}
-
     /// <inheritdoc/>
-    /// <summary>
-    /// Basic implementation of IEntity interface.
-    /// An entity can inherit this class of directly implement to IEntity interface.
-    /// </summary>
-    /// <typeparam name="TPrimaryKey">Type of the primary key of the entity</typeparam>
-    public abstract class Entity<TPrimaryKey> : IEntity<TPrimaryKey>
+    public abstract class Entity : IEntity
+    {
+
+    }
+
+    /// <inheritdoc cref="IEntity{TPrimaryKey}" />
+    public abstract class Entity<TPrimaryKey> : Entity, IEntity<TPrimaryKey>
     {
         /// <inheritdoc/>
         public virtual TPrimaryKey Id { get; set; }
@@ -57,6 +49,11 @@ namespace Volo.Abp.Domain.Entities
         /// <inheritdoc/>
         public override int GetHashCode()
         {
+            if (Id == null)
+            {
+                return 0;
+            }
+
             return Id.GetHashCode();
         }
 

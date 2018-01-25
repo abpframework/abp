@@ -1,20 +1,19 @@
-﻿using System;
-
-namespace Volo.Abp.Domain.Entities
+﻿namespace Volo.Abp.Domain.Entities
 {
-    ///// <summary>
-    ///// A shortcut of <see cref="IEntity{TPrimaryKey}"/> for default primary key type (<see cref="string"/>).
-    ///// </summary>
-    //public interface IEntity : IEntity<Guid>
-    //{
+    /// <summary>
+    /// Defines an entity. It's primary key may not be "Id" or it mah have a composite primary key.
+    /// Use <see cref="IEntity{TPrimaryKey}"/> where possible for better integration to repositories and other structures in the framework.
+    /// </summary>
+    public interface IEntity
+    {
 
-    //}
+    }
 
     /// <summary>
-    /// Defines interface for base entity type. All entities in the system must implement this interface.
+    /// Defines an entity with a single primary key with "Id" property.
     /// </summary>
     /// <typeparam name="TPrimaryKey">Type of the primary key of the entity</typeparam>
-    public interface IEntity<TPrimaryKey>
+    public interface IEntity<TPrimaryKey> : IEntity
     {
         /// <summary>
         /// Unique identifier for this entity.

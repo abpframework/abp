@@ -107,5 +107,10 @@ namespace Volo.Abp.Identity
 
             return await query.ToListAsync();
         }
+
+        public async Task<long> GetCountAsync(CancellationToken cancellationToken = default)
+        {
+            return await this.LongCountAsync(cancellationToken);
+        }
     }
 }

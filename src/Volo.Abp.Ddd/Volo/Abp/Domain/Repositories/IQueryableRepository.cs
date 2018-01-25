@@ -8,14 +8,8 @@ using Volo.Abp.Domain.Entities;
 
 namespace Volo.Abp.Domain.Repositories
 {
-    //public interface IQueryableRepository<TEntity> : IQueryableRepository<TEntity, Guid>, IRepository<TEntity>
-    //    where TEntity : class, IEntity<Guid>
-    //{
-
-    //}
-
-    public interface IQueryableRepository<TEntity, TPrimaryKey> : IRepository<TEntity, TPrimaryKey>, IQueryable<TEntity>
-        where TEntity : class, IEntity<TPrimaryKey>
+    public interface IQueryableRepository<TEntity> : IRepository<TEntity>, IQueryable<TEntity>
+        where TEntity : class, IEntity
     {
         /// <summary>
         /// Deletes many entities by function.
@@ -35,5 +29,10 @@ namespace Volo.Abp.Domain.Repositories
         /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
         /// <param name="predicate">A condition to filter entities</param>
         Task DeleteAsync([NotNull] Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default);
+    }
+
+    public interface IQueryableRepository<TEntity, TPrimaryKey> : IQueryableRepository<TEntity>, IRepository<TEntity, TPrimaryKey>
+        where TEntity : class, IEntity<TPrimaryKey>
+    {
     }
 }

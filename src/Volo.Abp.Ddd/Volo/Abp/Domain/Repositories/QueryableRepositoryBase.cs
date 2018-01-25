@@ -11,24 +11,14 @@ using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Domain.Repositories
 {
-    //public abstract class QueryableRepositoryBase<TEntity> : QueryableRepositoryBase<TEntity, Guid>, IQueryableRepository<TEntity>
-    //    where TEntity : class, IEntity<Guid>
-    //{
-        
-    //}
-
-    public abstract class QueryableRepositoryBase<TEntity, TPrimaryKey> : RepositoryBase<TEntity, TPrimaryKey>, IQueryableRepository<TEntity, TPrimaryKey>
-        where TEntity : class, IEntity<TPrimaryKey>
+    public abstract class QueryableRepositoryBase<TEntity> : RepositoryBase<TEntity>, IQueryableRepository<TEntity>
+        where TEntity : class, IEntity
     {
         public virtual Type ElementType => GetQueryable().ElementType;
 
         public virtual Expression Expression => GetQueryable().Expression;
 
         public virtual IQueryProvider Provider => GetQueryable().Provider;
-
-        public IDataFilter DataFilter { get; set; }
-
-        public ICurrentTenant CurrentTenant { get; set; }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
@@ -41,16 +31,6 @@ namespace Volo.Abp.Domain.Repositories
         }
 
         protected abstract IQueryable<TEntity> GetQueryable();
-
-        public override List<TEntity> GetList()
-        {
-            return GetQueryable().ToList();
-        }
-
-        public override TEntity Find(TPrimaryKey id)
-        {
-            return GetQueryable().FirstOrDefault(CreateEqualityExpressionForId(id));
-        }
 
         public virtual void Delete(Expression<Func<TEntity, bool>> predicate)
         {
@@ -65,10 +45,57 @@ namespace Volo.Abp.Domain.Repositories
             Delete(predicate);
             return Task.CompletedTask;
         }
+    }
 
-        public override long GetCount()
+    public abstract class QueryableRepositoryBase<TEntity, TPrimaryKey> : QueryableRepositoryBase<TEntity>, IQueryableRepository<TEntity, TPrimaryKey>
+        where TEntity : class, IEntity<TPrimaryKey>
+    {
+        public IDataFilter DataFilter { get; set; }
+
+        public ICurrentTenant CurrentTenant { get; set; }
+
+        public virtual TEntity Find(TPrimaryKey id)
         {
-            return GetQueryable().LongCount();
+            return GetQueryable().FirstOrDefault(CreateEqualityExpressionForId(id));
+        }
+
+        public virtual TEntity Get(TPrimaryKey id)
+        {
+            var entity = Find(id);
+
+            if (entity == null)
+            {
+                throw new EntityNotFoundException(typeof(TEntity), id);
+            }
+
+            return entity;
+        }
+
+        public virtual Task<TEntity> GetAsync(TPrimaryKey id, CancellationToken cancellationToken = default)
+        {
+            return Task.FromResult(Get(id));
+        }
+
+        public virtual Task<TEntity> FindAsync(TPrimaryKey id, CancellationToken cancellationToken = default)
+        {
+            return Task.FromResult(Find(id));
+        }
+
+        public virtual void Delete(TPrimaryKey id)
+        {
+            var entity = Find(id);
+            if (entity == null)
+            {
+                return;
+            }
+
+            Delete(entity);
+        }
+
+        public virtual Task DeleteAsync(TPrimaryKey id, CancellationToken cancellationToken = default)
+        {
+            Delete(id);
+            return Task.CompletedTask;
         }
 
         protected virtual IQueryable<TEntity> ApplyDataFilters(IQueryable<TEntity> query)
@@ -85,6 +112,17 @@ namespace Volo.Abp.Domain.Repositories
             }
 
             return query;
+        }
+
+        protected static Expression<Func<TEntity, bool>> CreateEqualityExpressionForId(TPrimaryKey id)
+        {
+            var lambdaParam = Expression.Parameter(typeof(TEntity));
+            var lambdaBody = Expression.Equal(
+                Expression.PropertyOrField(lambdaParam, "Id"),
+                Expression.Constant(id, typeof(TPrimaryKey))
+            );
+
+            return Expression.Lambda<Func<TEntity, bool>>(lambdaBody, lambdaParam);
         }
     }
 }
