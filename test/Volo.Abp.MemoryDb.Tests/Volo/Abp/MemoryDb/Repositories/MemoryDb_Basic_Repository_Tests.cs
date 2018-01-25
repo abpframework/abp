@@ -20,7 +20,7 @@ namespace Volo.Abp.MemoryDb.Repositories
         [Fact]
         public void GetList()
         {
-            var people = _personRepository.GetList();
+            var people = _personRepository.ToList();
             people.Count.ShouldBeGreaterThan(0);
         }
 

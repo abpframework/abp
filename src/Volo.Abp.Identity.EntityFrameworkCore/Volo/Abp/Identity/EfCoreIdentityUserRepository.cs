@@ -81,7 +81,7 @@ namespace Volo.Abp.Identity
             return await query.ToListAsync(cancellationToken);
         }
 
-        public async Task<List<IdentityUser>> GetListAsync(string sorting, int maxResultCount, int skipCount, string filter)
+        public async Task<List<IdentityUser>> GetListAsync(string sorting, int maxResultCount, int skipCount, string filter, CancellationToken cancellationToken = default)
         {
             return await this.WhereIf(
                     !filter.IsNullOrWhiteSpace(),
@@ -90,7 +90,7 @@ namespace Volo.Abp.Identity
                         u.Email.Contains(filter)
                 )
                 .OrderBy(sorting ?? nameof(IdentityUser.UserName))
-                .PageBy(skipCount, maxResultCount).ToListAsync();
+                .PageBy(skipCount, maxResultCount).ToListAsync(cancellationToken);
         }
 
         public async Task<List<IdentityUser>> GetListAsync(string sorting, int maxResultCount, int skipCount)

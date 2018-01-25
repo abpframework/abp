@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Domain.Entities;
 using Xunit;
 
 namespace Volo.Abp.Identity
@@ -184,12 +185,18 @@ namespace Volo.Abp.Identity
 
         private async Task<IdentityUser> GetUserAsync(string userName)
         {
-            return (await _userRepository.GetListAsync()).First(u => u.UserName == userName);
+            var user =  await FindUserAsync(userName);
+            if (user == null)
+            {
+                throw new EntityNotFoundException();
+            }
+
+            return user;
         }
 
         private async Task<IdentityUser> FindUserAsync(string userName)
         {
-            return (await _userRepository.GetListAsync()).FirstOrDefault(u => u.UserName == userName);
+            return await _userRepository.FindByNormalizedUserNameAsync(userName.ToUpperInvariant());
         }
 
         private static string CreateRandomEmail()

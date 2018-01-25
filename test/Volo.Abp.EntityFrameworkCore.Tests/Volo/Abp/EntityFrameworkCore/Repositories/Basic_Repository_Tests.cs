@@ -12,44 +12,56 @@ namespace Volo.Abp.EntityFrameworkCore.Repositories
 {
     public class Basic_Repository_Tests : EntityFrameworkCoreTestBase
     {
-        private readonly IRepository<Person, Guid> _personRepository;
-        private readonly IRepository<BookInSecondDbContext, Guid> _bookRepository;
-        private readonly IRepository<PhoneInSecondDbContext, long> _phoneInSecondDbContextRepository;
+        private readonly IQueryableRepository<Person, Guid> _personRepository;
+        private readonly IQueryableRepository<BookInSecondDbContext, Guid> _bookRepository;
+        private readonly IQueryableRepository<PhoneInSecondDbContext, long> _phoneInSecondDbContextRepository;
 
         public Basic_Repository_Tests()
         {
-            _personRepository = ServiceProvider.GetRequiredService<IRepository<Person, Guid>>();
-            _bookRepository = ServiceProvider.GetRequiredService<IRepository<BookInSecondDbContext, Guid>>();
-            _phoneInSecondDbContextRepository = ServiceProvider.GetRequiredService<IRepository<PhoneInSecondDbContext, long>>();
+            _personRepository = ServiceProvider.GetRequiredService<IQueryableRepository<Person, Guid>>();
+            _bookRepository = ServiceProvider.GetRequiredService<IQueryableRepository<BookInSecondDbContext, Guid>>();
+            _phoneInSecondDbContextRepository = ServiceProvider.GetRequiredService<IQueryableRepository<PhoneInSecondDbContext, long>>();
         }
 
         [Fact]
         public void GetPersonList()
         {
-            _personRepository.GetList().Any().ShouldBeTrue();
+            WithUnitOfWork(() =>
+            {
+                _personRepository.Any().ShouldBeTrue();
+            });
         }
 
         [Fact]
         public void GetBookList()
         {
-            _bookRepository.GetList().Any().ShouldBeTrue();
+            WithUnitOfWork(() =>
+            {
+                _bookRepository.Any().ShouldBeTrue();
+            });
         }
         
         [Fact]
         public void GetPhoneInSecondDbContextList()
         {
-            _phoneInSecondDbContextRepository.GetList().Any().ShouldBeTrue();
+            WithUnitOfWork(() =>
+            {
+                _phoneInSecondDbContextRepository.Any().ShouldBeTrue();
+            });
         }
 
         [Fact]
         public async Task InsertAsync()
         {
-            var personId = Guid.NewGuid();
+            await WithUnitOfWorkAsync(async () =>
+            {
+                var personId = Guid.NewGuid();
 
-            await _personRepository.InsertAsync(new Person(personId, "Adam", 42));
+                await _personRepository.InsertAsync(new Person(personId, "Adam", 42));
 
-            var person = await _personRepository.FindAsync(personId);
-            person.ShouldNotBeNull();
+                var person = await _personRepository.FindAsync(personId);
+                person.ShouldNotBeNull();
+            });
         }
     }
 }

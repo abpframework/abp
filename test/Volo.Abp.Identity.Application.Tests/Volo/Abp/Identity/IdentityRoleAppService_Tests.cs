@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 using Shouldly;
-using Volo.Abp.Application.Dtos;
 
 namespace Volo.Abp.Identity
 {

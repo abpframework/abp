@@ -23,13 +23,12 @@ namespace Volo.Abp.Identity
             return DbSet.FirstOrDefaultAsync(r => r.NormalizedName == normalizedRoleName, cancellationToken);
         }
 
-        public async Task<List<IdentityRole>> GetListAsync(string sorting, int maxResultCount, int skipCount, string filter)
+        public async Task<List<IdentityRole>> GetListAsync(string sorting = null, int maxResultCount = int.MaxValue, int skipCount = 0)
         {
-            return await this.WhereIf(
-                !filter.IsNullOrWhiteSpace(),
-                r => r.Name.Contains(filter)
-            ).OrderBy(sorting ?? nameof(IdentityRole.Name))
-            .PageBy(skipCount, maxResultCount).ToListAsync();
+            return await this
+                .OrderBy(sorting ?? nameof(IdentityRole.Name))
+                .PageBy(skipCount, maxResultCount)
+                .ToListAsync();
         }
     }
 }

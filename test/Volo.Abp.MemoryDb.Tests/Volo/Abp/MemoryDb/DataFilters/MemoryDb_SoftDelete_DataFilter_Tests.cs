@@ -24,33 +24,33 @@ namespace Volo.Abp.MemoryDb.DataFilters
         public void Should_Get_Deleted_Entities_When_Filter_Is_Disabled()
         {
             //Soft delete is enabled by default
-            var people = _personRepository.GetList();
+            var people = _personRepository.ToList();
             people.Any(p => !p.IsDeleted).ShouldBeTrue();
             people.Any(p => p.IsDeleted).ShouldBeFalse();
 
             using (_dataFilter.Disable<ISoftDelete>())
             {
                 //Soft delete is disabled
-                people = _personRepository.GetList();
+                people = _personRepository.ToList();
                 people.Any(p => !p.IsDeleted).ShouldBeTrue();
                 people.Any(p => p.IsDeleted).ShouldBeTrue();
 
                 using (_dataFilter.Enable<ISoftDelete>())
                 {
                     //Soft delete is enabled again
-                    people = _personRepository.GetList();
+                    people = _personRepository.ToList();
                     people.Any(p => !p.IsDeleted).ShouldBeTrue();
                     people.Any(p => p.IsDeleted).ShouldBeFalse();
                 }
 
                 //Soft delete is disabled (restored previous state)
-                people = _personRepository.GetList();
+                people = _personRepository.ToList();
                 people.Any(p => !p.IsDeleted).ShouldBeTrue();
                 people.Any(p => p.IsDeleted).ShouldBeTrue();
             }
 
             //Soft delete is enabled (restored previous state)
-            people = _personRepository.GetList();
+            people = _personRepository.ToList();
             people.Any(p => !p.IsDeleted).ShouldBeTrue();
             people.Any(p => p.IsDeleted).ShouldBeFalse();
         }

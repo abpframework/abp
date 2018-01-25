@@ -10,6 +10,8 @@ namespace Volo.Abp.Identity
     {
         Task<IdentityRole> FindByNormalizedNameAsync(string normalizedRoleName, CancellationToken cancellationToken);
 
-        Task<List<IdentityRole>> GetListAsync(string sorting, int maxResultCount, int skipCount, string filter);
+        Task<List<IdentityRole>> GetListAsync(string sorting = null, int maxResultCount = int.MaxValue, int skipCount = 0);
+
+        Task<long> GetCountAsync(CancellationToken cancellationToken = default);
     }
 }

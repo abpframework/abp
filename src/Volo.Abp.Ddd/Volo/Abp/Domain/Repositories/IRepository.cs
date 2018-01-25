@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Volo.Abp.DependencyInjection;
@@ -22,19 +20,6 @@ namespace Volo.Abp.Domain.Repositories
     public interface IRepository<TEntity, TPrimaryKey> : IRepository
         where TEntity : class, IEntity<TPrimaryKey>
     {
-        /// <summary>
-        /// Get list of all entities without any filtering.
-        /// </summary>
-        /// <returns>List of entities</returns>
-        List<TEntity> GetList();
-
-        /// <summary>
-        /// Get list of all entities without any filtering.
-        /// </summary>
-        /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
-        /// <returns>List of entities</returns>
-        Task<List<TEntity>> GetListAsync(CancellationToken cancellationToken = default);
-
         /// <summary>
         /// Gets an entity with given primary key.
         /// Throws <see cref="EntityNotFoundException"/> if can not find an entity with given id.
@@ -60,7 +45,7 @@ namespace Volo.Abp.Domain.Repositories
         /// <param name="id">Primary key of the entity to get</param>
         /// <returns>Entity or null</returns>
         [CanBeNull]
-        TEntity Find(TPrimaryKey id);
+        TEntity Find(TPrimaryKey id); //TODO: Rename to FirstOrDefault..?
 
         /// <summary>
         /// Gets an entity with given primary key or null if not found.
@@ -133,18 +118,5 @@ namespace Volo.Abp.Domain.Repositories
         /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
         /// <param name="id">Primary key of the entity</param>
         Task DeleteAsync(TPrimaryKey id, CancellationToken cancellationToken = default);  //TODO: Return true if deleted
-
-        /// <summary>
-        /// Get list of all entities without any filtering.
-        /// </summary>
-        /// <returns>List of entities</returns>
-        long GetCount();
-
-        /// <summary>
-        /// Get list of all entities without any filtering.
-        /// </summary>
-        /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
-        /// <returns>List of entities</returns>
-        Task<long> GetCountAsync(CancellationToken cancellationToken = default);
     }
 }
