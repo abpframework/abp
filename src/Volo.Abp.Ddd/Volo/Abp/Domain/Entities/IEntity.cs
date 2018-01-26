@@ -18,6 +18,6 @@
         /// <summary>
         /// Unique identifier for this entity.
         /// </summary>
-        TKey Id { get; set; }
+        TKey Id { get; set; } //TODO: Consider to remove setter and make it protected in Entity class
     }
 }
