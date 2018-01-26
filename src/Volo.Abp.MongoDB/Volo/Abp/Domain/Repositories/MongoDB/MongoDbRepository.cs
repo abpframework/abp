@@ -81,9 +81,9 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
         }
     }
 
-    public class MongoDbRepository<TMongoDbContext, TEntity, TPrimaryKey> : MongoDbRepository<TMongoDbContext, TEntity>, IMongoDbRepository<TEntity, TPrimaryKey>
+    public class MongoDbRepository<TMongoDbContext, TEntity, TKey> : MongoDbRepository<TMongoDbContext, TEntity>, IMongoDbRepository<TEntity, TKey>
         where TMongoDbContext : AbpMongoDbContext
-        where TEntity : class, IEntity<TPrimaryKey>
+        where TEntity : class, IEntity<TKey>
     {
         public MongoDbRepository(IMongoDatabaseProvider<TMongoDbContext> databaseProvider)
             : base(databaseProvider)
@@ -91,7 +91,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
 
         }
 
-        public virtual TEntity Get(TPrimaryKey id)
+        public virtual TEntity Get(TKey id)
         {
             var entity = Find(id);
 
@@ -103,7 +103,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             return entity;
         }
 
-        public virtual async Task<TEntity> GetAsync(TPrimaryKey id, CancellationToken cancellationToken = default)
+        public virtual async Task<TEntity> GetAsync(TKey id, CancellationToken cancellationToken = default)
         {
             var entity = await FindAsync(id, cancellationToken);
 
@@ -115,22 +115,22 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             return entity;
         }
 
-        public virtual void Delete(TPrimaryKey id)
+        public virtual void Delete(TKey id)
         {
             Collection.DeleteOne(CreateEntityFilter(id));
         }
 
-        public virtual Task DeleteAsync(TPrimaryKey id, CancellationToken cancellationToken = default)
+        public virtual Task DeleteAsync(TKey id, CancellationToken cancellationToken = default)
         {
             return Collection.DeleteOneAsync(CreateEntityFilter(id), cancellationToken);
         }
 
-        public virtual async Task<TEntity> FindAsync(TPrimaryKey id, CancellationToken cancellationToken = default)
+        public virtual async Task<TEntity> FindAsync(TKey id, CancellationToken cancellationToken = default)
         {
             return await Collection.Find(CreateEntityFilter(id)).FirstOrDefaultAsync(cancellationToken);
         }
 
-        public virtual TEntity Find(TPrimaryKey id)
+        public virtual TEntity Find(TKey id)
         {
             return Collection.Find(CreateEntityFilter(id)).FirstOrDefault();
         }
@@ -140,7 +140,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             return Builders<TEntity>.Filter.Eq(e => e.Id, entity.Id);
         }
 
-        private static FilterDefinition<TEntity> CreateEntityFilter(TPrimaryKey id)
+        private static FilterDefinition<TEntity> CreateEntityFilter(TKey id)
         {
             return Builders<TEntity>.Filter.Eq(e => e.Id, id);
         }

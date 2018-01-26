@@ -16,20 +16,20 @@ namespace Volo.Abp.Domain.Entities
             return typeof(IEntity).IsAssignableFrom(type);
         }
 
-        public static bool IsTransient<TPrimaryKey>(IEntity<TPrimaryKey> entity) // TODO: Completely remove IsTransient
+        public static bool IsTransient<TKey>(IEntity<TKey> entity) // TODO: Completely remove IsTransient
         {
-            if (EqualityComparer<TPrimaryKey>.Default.Equals(entity.Id, default))
+            if (EqualityComparer<TKey>.Default.Equals(entity.Id, default))
             {
                 return true;
             }
 
             //Workaround for EF Core since it sets int/long to min value when attaching to dbcontext
-            if (typeof(TPrimaryKey) == typeof(int))
+            if (typeof(TKey) == typeof(int))
             {
                 return Convert.ToInt32(entity.Id) <= 0;
             }
 
-            if (typeof(TPrimaryKey) == typeof(long))
+            if (typeof(TKey) == typeof(long))
             {
                 return Convert.ToInt64(entity.Id) <= 0;
             }
@@ -39,7 +39,7 @@ namespace Volo.Abp.Domain.Entities
 
         /// <summary>
         /// Tries to find the primary key type of the given entity type.
-        /// May return null if given type does not implement <see cref="IEntity{TPrimaryKey}"/>
+        /// May return null if given type does not implement <see cref="IEntity{TKey}"/>
         /// </summary>
         [CanBeNull]
         public static Type FindPrimaryKeyType<TEntity>()
@@ -50,7 +50,7 @@ namespace Volo.Abp.Domain.Entities
 
         /// <summary>
         /// Tries to find the primary key type of the given entity type.
-        /// May return null if given type does not implement <see cref="IEntity{TPrimaryKey}"/>
+        /// May return null if given type does not implement <see cref="IEntity{TKey}"/>
         /// </summary>
         [CanBeNull]
         public static Type FindPrimaryKeyType([NotNull] Type entityType)
@@ -71,13 +71,13 @@ namespace Volo.Abp.Domain.Entities
             return null;
         }
 
-        public static Expression<Func<TEntity, bool>> CreateEqualityExpressionForId<TEntity, TPrimaryKey>(TPrimaryKey id)
-            where TEntity : IEntity<TPrimaryKey>
+        public static Expression<Func<TEntity, bool>> CreateEqualityExpressionForId<TEntity, TKey>(TKey id)
+            where TEntity : IEntity<TKey>
         {
             var lambdaParam = Expression.Parameter(typeof(TEntity));
             var lambdaBody = Expression.Equal(
                 Expression.PropertyOrField(lambdaParam, "Id"),
-                Expression.Constant(id, typeof(TPrimaryKey))
+                Expression.Constant(id, typeof(TKey))
             );
 
             return Expression.Lambda<Func<TEntity, bool>>(lambdaBody, lambdaParam);

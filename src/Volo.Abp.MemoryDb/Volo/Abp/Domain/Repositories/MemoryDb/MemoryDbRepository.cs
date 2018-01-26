@@ -45,9 +45,9 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
         }
     }
 
-    public class MemoryDbRepository<TMemoryDbContext, TEntity, TPrimaryKey> : MemoryDbRepository<TMemoryDbContext, TEntity>, IMemoryDbRepository<TEntity, TPrimaryKey> 
+    public class MemoryDbRepository<TMemoryDbContext, TEntity, TKey> : MemoryDbRepository<TMemoryDbContext, TEntity>, IMemoryDbRepository<TEntity, TKey> 
         where TMemoryDbContext : MemoryDbContext
-        where TEntity : class, IEntity<TPrimaryKey>
+        where TEntity : class, IEntity<TKey>
     {
         public MemoryDbRepository(IMemoryDatabaseProvider<TMemoryDbContext> databaseProvider)
             : base(databaseProvider)
@@ -62,21 +62,21 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
 
         private void SetIdIfNeeded(TEntity entity)
         {
-            if (typeof(TPrimaryKey) == typeof(int) || typeof(TPrimaryKey) == typeof(long) || typeof(TPrimaryKey) == typeof(Guid))
+            if (typeof(TKey) == typeof(int) || typeof(TKey) == typeof(long) || typeof(TKey) == typeof(Guid))
             {
                 if (EntityHelper.IsTransient(entity))
                 {
-                    entity.Id = Database.GenerateNextId<TEntity, TPrimaryKey>();
+                    entity.Id = Database.GenerateNextId<TEntity, TKey>();
                 }
             }
         }
 
-        public virtual TEntity Find(TPrimaryKey id)
+        public virtual TEntity Find(TKey id)
         {
-            return GetQueryable().FirstOrDefault(EntityHelper.CreateEqualityExpressionForId<TEntity, TPrimaryKey>(id));
+            return GetQueryable().FirstOrDefault(EntityHelper.CreateEqualityExpressionForId<TEntity, TKey>(id));
         }
 
-        public virtual TEntity Get(TPrimaryKey id)
+        public virtual TEntity Get(TKey id)
         {
             var entity = Find(id);
 
@@ -88,17 +88,17 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
             return entity;
         }
 
-        public virtual Task<TEntity> GetAsync(TPrimaryKey id, CancellationToken cancellationToken = default)
+        public virtual Task<TEntity> GetAsync(TKey id, CancellationToken cancellationToken = default)
         {
             return Task.FromResult(Get(id));
         }
 
-        public virtual Task<TEntity> FindAsync(TPrimaryKey id, CancellationToken cancellationToken = default)
+        public virtual Task<TEntity> FindAsync(TKey id, CancellationToken cancellationToken = default)
         {
             return Task.FromResult(Find(id));
         }
 
-        public virtual void Delete(TPrimaryKey id)
+        public virtual void Delete(TKey id)
         {
             var entity = Find(id);
             if (entity == null)
@@ -109,7 +109,7 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
             Delete(entity);
         }
 
-        public virtual Task DeleteAsync(TPrimaryKey id, CancellationToken cancellationToken = default)
+        public virtual Task DeleteAsync(TKey id, CancellationToken cancellationToken = default)
         {
             Delete(id);
             return Task.CompletedTask;

@@ -12,16 +12,16 @@ namespace Volo.Abp.Domain.Entities
         }
     }
 
-    /// <inheritdoc cref="IEntity{TPrimaryKey}" />
-    public abstract class Entity<TPrimaryKey> : Entity, IEntity<TPrimaryKey>
+    /// <inheritdoc cref="IEntity{TKey}" />
+    public abstract class Entity<TKey> : Entity, IEntity<TKey>
     {
         /// <inheritdoc/>
-        public virtual TPrimaryKey Id { get; set; }
+        public virtual TKey Id { get; set; }
 
         /// <inheritdoc/>
         public override bool Equals(object obj)
         {
-            if (obj == null || !(obj is Entity<TPrimaryKey>))
+            if (obj == null || !(obj is Entity<TKey>))
             {
                 return false;
             }
@@ -33,7 +33,7 @@ namespace Volo.Abp.Domain.Entities
             }
 
             //Transient objects are not considered as equal
-            var other = (Entity<TPrimaryKey>)obj;
+            var other = (Entity<TKey>)obj;
             if (EntityHelper.IsTransient(this) && EntityHelper.IsTransient(other))
             {
                 return false;
@@ -61,7 +61,7 @@ namespace Volo.Abp.Domain.Entities
             return Id.GetHashCode();
         }
 
-        public static bool operator ==(Entity<TPrimaryKey> left, Entity<TPrimaryKey> right)
+        public static bool operator ==(Entity<TKey> left, Entity<TKey> right)
         {
             if (Equals(left, null))
             {
@@ -71,7 +71,7 @@ namespace Volo.Abp.Domain.Entities
             return left.Equals(right);
         }
 
-        public static bool operator !=(Entity<TPrimaryKey> left, Entity<TPrimaryKey> right)
+        public static bool operator !=(Entity<TKey> left, Entity<TKey> right)
         {
             return !(left == right);
         }

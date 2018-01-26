@@ -95,12 +95,12 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
         }
     }
 
-    public class EfCoreRepository<TDbContext, TEntity, TPrimaryKey> : EfCoreRepository<TDbContext, TEntity>, 
-        IEfCoreRepository<TEntity, TPrimaryKey>,
-        ISupportsExplicitLoading<TEntity, TPrimaryKey>
+    public class EfCoreRepository<TDbContext, TEntity, TKey> : EfCoreRepository<TDbContext, TEntity>, 
+        IEfCoreRepository<TEntity, TKey>,
+        ISupportsExplicitLoading<TEntity, TKey>
 
         where TDbContext : IEfCoreDbContext
-        where TEntity : class, IEntity<TPrimaryKey>
+        where TEntity : class, IEntity<TKey>
     {
         public EfCoreRepository(IDbContextProvider<TDbContext> dbContextProvider) 
             : base(dbContextProvider)
@@ -108,7 +108,7 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
 
         }
 
-        public TEntity Get(TPrimaryKey id)
+        public TEntity Get(TKey id)
         {
             var entity = Find(id);
 
@@ -120,7 +120,7 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
             return entity;
         }
 
-        public virtual async Task<TEntity> GetAsync(TPrimaryKey id, CancellationToken cancellationToken = default)
+        public virtual async Task<TEntity> GetAsync(TKey id, CancellationToken cancellationToken = default)
         {
             var entity = await FindAsync(id, GetCancellationToken(cancellationToken));
 
@@ -132,17 +132,17 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
             return entity;
         }
 
-        public virtual TEntity Find(TPrimaryKey id)
+        public virtual TEntity Find(TKey id)
         {
             return DbSet.Find(id);
         }
 
-        public virtual Task<TEntity> FindAsync(TPrimaryKey id, CancellationToken cancellationToken = default)
+        public virtual Task<TEntity> FindAsync(TKey id, CancellationToken cancellationToken = default)
         {
             return DbSet.FindAsync(new object[] { id }, GetCancellationToken(cancellationToken));
         }
 
-        public virtual void Delete(TPrimaryKey id)
+        public virtual void Delete(TKey id)
         {
             var entity = Find(id);
             if (entity == null)
@@ -153,7 +153,7 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
             Delete(entity);
         }
 
-        public virtual Task DeleteAsync(TPrimaryKey id, CancellationToken cancellationToken = default)
+        public virtual Task DeleteAsync(TKey id, CancellationToken cancellationToken = default)
         {
             Delete(id);
             return Task.CompletedTask;

@@ -2,39 +2,39 @@ using Volo.Abp.Application.Dtos;
 
 namespace Volo.Abp.Application.Services
 {
-    public interface ICrudAppService<TEntityDto, in TPrimaryKey>
-        : ICrudAppService<TEntityDto, TPrimaryKey, PagedAndSortedResultRequestDto>
-        where TEntityDto : IEntityDto<TPrimaryKey>
+    public interface ICrudAppService<TEntityDto, in TKey>
+        : ICrudAppService<TEntityDto, TKey, PagedAndSortedResultRequestDto>
+        where TEntityDto : IEntityDto<TKey>
     {
 
     }
 
-    public interface ICrudAppService<TEntityDto, in TPrimaryKey, in TGetListInput>
-        : ICrudAppService<TEntityDto, TPrimaryKey, TGetListInput, TEntityDto, TEntityDto>
-        where TEntityDto : IEntityDto<TPrimaryKey>
+    public interface ICrudAppService<TEntityDto, in TKey, in TGetListInput>
+        : ICrudAppService<TEntityDto, TKey, TGetListInput, TEntityDto, TEntityDto>
+        where TEntityDto : IEntityDto<TKey>
     {
 
     }
 
-    public interface ICrudAppService<TEntityDto, in TPrimaryKey, in TGetListInput, in TCreateInput>
-        : ICrudAppService<TEntityDto, TPrimaryKey, TGetListInput, TCreateInput, TCreateInput>
-        where TEntityDto : IEntityDto<TPrimaryKey>
+    public interface ICrudAppService<TEntityDto, in TKey, in TGetListInput, in TCreateInput>
+        : ICrudAppService<TEntityDto, TKey, TGetListInput, TCreateInput, TCreateInput>
+        where TEntityDto : IEntityDto<TKey>
     {
 
     }
 
-    public interface ICrudAppService<TEntityDto, in TPrimaryKey, in TGetListInput, in TCreateInput, in TUpdateInput>
+    public interface ICrudAppService<TEntityDto, in TKey, in TGetListInput, in TCreateInput, in TUpdateInput>
         : IApplicationService
-        where TEntityDto : IEntityDto<TPrimaryKey>
+        where TEntityDto : IEntityDto<TKey>
     {
-        TEntityDto Get(TPrimaryKey id);
+        TEntityDto Get(TKey id);
 
         PagedResultDto<TEntityDto> GetAll(TGetListInput input);
 
         TEntityDto Create(TCreateInput input);
 
-        TEntityDto Update(TPrimaryKey id, TUpdateInput input);
+        TEntityDto Update(TKey id, TUpdateInput input);
 
-        void Delete(TPrimaryKey id);
+        void Delete(TKey id);
     }
 }

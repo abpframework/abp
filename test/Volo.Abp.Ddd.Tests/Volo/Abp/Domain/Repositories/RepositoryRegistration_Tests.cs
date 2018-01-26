@@ -169,35 +169,35 @@ namespace Volo.Abp.Domain.Repositories
             }
         }
 
-        public class MyTestDefaultRepository<TEntity, TPrimaryKey> : MyTestDefaultRepository<TEntity>, IRepository<TEntity, TPrimaryKey>
-            where TEntity : class, IEntity<TPrimaryKey>
+        public class MyTestDefaultRepository<TEntity, TKey> : MyTestDefaultRepository<TEntity>, IRepository<TEntity, TKey>
+            where TEntity : class, IEntity<TKey>
         {
-            public TEntity Get(TPrimaryKey id)
+            public TEntity Get(TKey id)
             {
                 throw new NotImplementedException();
             }
 
-            public Task<TEntity> GetAsync(TPrimaryKey id, CancellationToken cancellationToken = default)
+            public Task<TEntity> GetAsync(TKey id, CancellationToken cancellationToken = default)
             {
                 throw new NotImplementedException();
             }
 
-            public TEntity Find(TPrimaryKey id)
+            public TEntity Find(TKey id)
             {
                 throw new NotImplementedException();
             }
 
-            public Task<TEntity> FindAsync(TPrimaryKey id, CancellationToken cancellationToken = default)
+            public Task<TEntity> FindAsync(TKey id, CancellationToken cancellationToken = default)
             {
                 throw new NotImplementedException();
             }
 
-            public void Delete(TPrimaryKey id)
+            public void Delete(TKey id)
             {
                 throw new NotImplementedException();
             }
 
-            public Task DeleteAsync(TPrimaryKey id, CancellationToken cancellationToken = default)
+            public Task DeleteAsync(TKey id, CancellationToken cancellationToken = default)
             {
                 throw new NotImplementedException();
             }
@@ -214,8 +214,8 @@ namespace Volo.Abp.Domain.Repositories
 
         }
 
-        public class MyTestCustomBaseRepository<TEntity, TPrimaryKey> : MyTestDefaultRepository<TEntity, TPrimaryKey>
-            where TEntity : class, IEntity<TPrimaryKey>
+        public class MyTestCustomBaseRepository<TEntity, TKey> : MyTestDefaultRepository<TEntity, TKey>
+            where TEntity : class, IEntity<TKey>
         {
 
         }

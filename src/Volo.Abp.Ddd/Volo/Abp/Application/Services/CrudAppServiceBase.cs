@@ -11,11 +11,11 @@ namespace Volo.Abp.Application.Services
     /// This is a common base class for CrudAppService and AsyncCrudAppService classes.
     /// Inherit either from CrudAppService or AsyncCrudAppService, not from this class.
     /// </summary>
-    public abstract class CrudAppServiceBase<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput> : ApplicationService
-        where TEntity : class, IEntity<TPrimaryKey>
-        where TEntityDto : IEntityDto<TPrimaryKey>
+    public abstract class CrudAppServiceBase<TEntity, TEntityDto, TKey, TGetAllInput, TCreateInput, TUpdateInput> : ApplicationService
+        where TEntity : class, IEntity<TKey>
+        where TEntityDto : IEntityDto<TKey>
     {
-        protected IQueryableRepository<TEntity, TPrimaryKey> Repository { get; }
+        protected IQueryableRepository<TEntity, TKey> Repository { get; }
         
         protected virtual string GetPermissionName { get; set; }
 
@@ -27,7 +27,7 @@ namespace Volo.Abp.Application.Services
 
         protected virtual string DeletePermissionName { get; set; }
 
-        protected CrudAppServiceBase(IQueryableRepository<TEntity, TPrimaryKey> repository)
+        protected CrudAppServiceBase(IQueryableRepository<TEntity, TKey> repository)
         {
             Repository = repository;
         }
@@ -119,7 +119,7 @@ namespace Volo.Abp.Application.Services
         }
 
         /// <summary>
-        /// Sets Id value for the entity if <see cref="TPrimaryKey"/> is <see cref="Guid"/>.
+        /// Sets Id value for the entity if <see cref="TKey"/> is <see cref="Guid"/>.
         /// It's used while creating a new entity.
         /// </summary>
         protected virtual void SetIdForGuids(TEntity entity)

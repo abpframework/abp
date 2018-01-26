@@ -68,15 +68,15 @@ namespace Volo.Abp.Domain.Repositories
         }
     }
 
-    public abstract class QueryableRepositoryBase<TEntity, TPrimaryKey> : QueryableRepositoryBase<TEntity>, IQueryableRepository<TEntity, TPrimaryKey>
-        where TEntity : class, IEntity<TPrimaryKey>
+    public abstract class QueryableRepositoryBase<TEntity, TKey> : QueryableRepositoryBase<TEntity>, IQueryableRepository<TEntity, TKey>
+        where TEntity : class, IEntity<TKey>
     {
-        public virtual TEntity Find(TPrimaryKey id)
+        public virtual TEntity Find(TKey id)
         {
-            return GetQueryable().FirstOrDefault(EntityHelper.CreateEqualityExpressionForId<TEntity, TPrimaryKey>(id));
+            return GetQueryable().FirstOrDefault(EntityHelper.CreateEqualityExpressionForId<TEntity, TKey>(id));
         }
 
-        public virtual TEntity Get(TPrimaryKey id)
+        public virtual TEntity Get(TKey id)
         {
             var entity = Find(id);
 
@@ -88,17 +88,17 @@ namespace Volo.Abp.Domain.Repositories
             return entity;
         }
 
-        public virtual Task<TEntity> GetAsync(TPrimaryKey id, CancellationToken cancellationToken = default)
+        public virtual Task<TEntity> GetAsync(TKey id, CancellationToken cancellationToken = default)
         {
             return Task.FromResult(Get(id));
         }
 
-        public virtual Task<TEntity> FindAsync(TPrimaryKey id, CancellationToken cancellationToken = default)
+        public virtual Task<TEntity> FindAsync(TKey id, CancellationToken cancellationToken = default)
         {
             return Task.FromResult(Find(id));
         }
 
-        public virtual void Delete(TPrimaryKey id)
+        public virtual void Delete(TKey id)
         {
             var entity = Find(id);
             if (entity == null)
@@ -109,7 +109,7 @@ namespace Volo.Abp.Domain.Repositories
             Delete(entity);
         }
 
-        public virtual Task DeleteAsync(TPrimaryKey id, CancellationToken cancellationToken = default)
+        public virtual Task DeleteAsync(TKey id, CancellationToken cancellationToken = default)
         {
             Delete(id);
             return Task.CompletedTask;

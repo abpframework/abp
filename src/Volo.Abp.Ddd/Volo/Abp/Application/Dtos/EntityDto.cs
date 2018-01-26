@@ -8,15 +8,15 @@ namespace Volo.Abp.Application.Dtos
         }
     }
 
-    public class EntityDto<TPrimaryKey> : EntityDto, IEntityDto<TPrimaryKey>
+    public class EntityDto<TKey> : EntityDto, IEntityDto<TKey>
     {
         /// <summary>
         /// Id of the entity.
         /// </summary>
-        public TPrimaryKey Id { get; set; }
+        public TKey Id { get; set; }
 
         /// <summary>
-        /// Creates a new <see cref="EntityDto{TPrimaryKey}"/> object.
+        /// Creates a new <see cref="EntityDto{TKey}"/> object.
         /// </summary>
         public EntityDto()
         {
@@ -24,10 +24,10 @@ namespace Volo.Abp.Application.Dtos
         }
 
         /// <summary>
-        /// Creates a new <see cref="EntityDto{TPrimaryKey}"/> object.
+        /// Creates a new <see cref="EntityDto{TKey}"/> object.
         /// </summary>
         /// <param name="id">Id of the entity</param>
-        public EntityDto(TPrimaryKey id)
+        public EntityDto(TKey id)
         {
             Id = id;
         }

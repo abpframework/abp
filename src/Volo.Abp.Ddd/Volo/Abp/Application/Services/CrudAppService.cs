@@ -5,56 +5,56 @@ using Volo.Abp.Domain.Repositories;
 
 namespace Volo.Abp.Application.Services
 {
-    public abstract class CrudAppService<TEntity, TEntityDto, TPrimaryKey>
-        : CrudAppService<TEntity, TEntityDto, TPrimaryKey, PagedAndSortedResultRequestDto>
-        where TEntity : class, IEntity<TPrimaryKey>
-        where TEntityDto : IEntityDto<TPrimaryKey>
+    public abstract class CrudAppService<TEntity, TEntityDto, TKey>
+        : CrudAppService<TEntity, TEntityDto, TKey, PagedAndSortedResultRequestDto>
+        where TEntity : class, IEntity<TKey>
+        where TEntityDto : IEntityDto<TKey>
     {
-        protected CrudAppService(IQueryableRepository<TEntity, TPrimaryKey> repository)
+        protected CrudAppService(IQueryableRepository<TEntity, TKey> repository)
             : base(repository)
         {
 
         }
     }
 
-    public abstract class CrudAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput>
-        : CrudAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TEntityDto, TEntityDto>
-        where TEntity : class, IEntity<TPrimaryKey>
-        where TEntityDto : IEntityDto<TPrimaryKey>
+    public abstract class CrudAppService<TEntity, TEntityDto, TKey, TGetAllInput>
+        : CrudAppService<TEntity, TEntityDto, TKey, TGetAllInput, TEntityDto, TEntityDto>
+        where TEntity : class, IEntity<TKey>
+        where TEntityDto : IEntityDto<TKey>
     {
-        protected CrudAppService(IQueryableRepository<TEntity, TPrimaryKey> repository)
+        protected CrudAppService(IQueryableRepository<TEntity, TKey> repository)
             : base(repository)
         {
 
         }
     }
 
-    public abstract class CrudAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput>
-        : CrudAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TCreateInput>
-        where TEntity : class, IEntity<TPrimaryKey>
-        where TEntityDto : IEntityDto<TPrimaryKey>
-        where TCreateInput : IEntityDto<TPrimaryKey>
+    public abstract class CrudAppService<TEntity, TEntityDto, TKey, TGetAllInput, TCreateInput>
+        : CrudAppService<TEntity, TEntityDto, TKey, TGetAllInput, TCreateInput, TCreateInput>
+        where TEntity : class, IEntity<TKey>
+        where TEntityDto : IEntityDto<TKey>
+        where TCreateInput : IEntityDto<TKey>
     {
-        protected CrudAppService(IQueryableRepository<TEntity, TPrimaryKey> repository)
+        protected CrudAppService(IQueryableRepository<TEntity, TKey> repository)
             : base(repository)
         {
 
         }
     }
 
-    public abstract class CrudAppService<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
-       : CrudAppServiceBase<TEntity, TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>,
-        ICrudAppService<TEntityDto, TPrimaryKey, TGetAllInput, TCreateInput, TUpdateInput>
-           where TEntity : class, IEntity<TPrimaryKey>
-           where TEntityDto : IEntityDto<TPrimaryKey>
+    public abstract class CrudAppService<TEntity, TEntityDto, TKey, TGetAllInput, TCreateInput, TUpdateInput>
+       : CrudAppServiceBase<TEntity, TEntityDto, TKey, TGetAllInput, TCreateInput, TUpdateInput>,
+        ICrudAppService<TEntityDto, TKey, TGetAllInput, TCreateInput, TUpdateInput>
+           where TEntity : class, IEntity<TKey>
+           where TEntityDto : IEntityDto<TKey>
     {
-        protected CrudAppService(IQueryableRepository<TEntity, TPrimaryKey> repository)
+        protected CrudAppService(IQueryableRepository<TEntity, TKey> repository)
             : base(repository)
         {
 
         }
 
-        public virtual TEntityDto Get(TPrimaryKey id)
+        public virtual TEntityDto Get(TKey id)
         {
             CheckGetPermission();
 
@@ -93,7 +93,7 @@ namespace Volo.Abp.Application.Services
             return MapToEntityDto(entity);
         }
 
-        public virtual TEntityDto Update(TPrimaryKey id, TUpdateInput input)
+        public virtual TEntityDto Update(TKey id, TUpdateInput input)
         {
             CheckUpdatePermission();
 
@@ -105,14 +105,14 @@ namespace Volo.Abp.Application.Services
             return MapToEntityDto(entity);
         }
 
-        public virtual void Delete(TPrimaryKey id)
+        public virtual void Delete(TKey id)
         {
             CheckDeletePermission();
 
             Repository.Delete(id);
         }
 
-        protected virtual TEntity GetEntityById(TPrimaryKey id)
+        protected virtual TEntity GetEntityById(TKey id)
         {
             return Repository.Get(id);
         }

@@ -7,25 +7,25 @@ namespace Volo.Abp.Domain.Repositories
 {
     public static class MemoryDbCoreRepositoryExtensions
     {
-        public static IMemoryDatabase GetDatabase<TEntity, TPrimaryKey>(this IRepository<TEntity, TPrimaryKey> repository)
-            where TEntity : class, IEntity<TPrimaryKey>
+        public static IMemoryDatabase GetDatabase<TEntity, TKey>(this IRepository<TEntity, TKey> repository)
+            where TEntity : class, IEntity<TKey>
         {
             return repository.ToMemoryDbRepository().Database;
         }
 
-        public static List<TEntity> GetCollection<TEntity, TPrimaryKey>(this IRepository<TEntity, TPrimaryKey> repository)
-            where TEntity : class, IEntity<TPrimaryKey>
+        public static List<TEntity> GetCollection<TEntity, TKey>(this IRepository<TEntity, TKey> repository)
+            where TEntity : class, IEntity<TKey>
         {
             return repository.ToMemoryDbRepository().Collection;
         }
 
-        public static IMemoryDbRepository<TEntity, TPrimaryKey> ToMemoryDbRepository<TEntity, TPrimaryKey>(this IRepository<TEntity, TPrimaryKey> repository)
-            where TEntity : class, IEntity<TPrimaryKey>
+        public static IMemoryDbRepository<TEntity, TKey> ToMemoryDbRepository<TEntity, TKey>(this IRepository<TEntity, TKey> repository)
+            where TEntity : class, IEntity<TKey>
         {
-            var memoryDbRepository = repository as IMemoryDbRepository<TEntity, TPrimaryKey>;
+            var memoryDbRepository = repository as IMemoryDbRepository<TEntity, TKey>;
             if (memoryDbRepository == null)
             {
-                throw new ArgumentException("Given repository does not implement " + typeof(IMemoryDbRepository<TEntity, TPrimaryKey>).AssemblyQualifiedName, nameof(repository));
+                throw new ArgumentException("Given repository does not implement " + typeof(IMemoryDbRepository<TEntity, TKey>).AssemblyQualifiedName, nameof(repository));
             }
 
             return memoryDbRepository;

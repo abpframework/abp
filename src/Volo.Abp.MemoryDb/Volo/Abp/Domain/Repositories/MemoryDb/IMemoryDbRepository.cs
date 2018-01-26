@@ -11,8 +11,8 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
         List<TEntity> Collection { get; }
     }
 
-    public interface IMemoryDbRepository<TEntity, TPrimaryKey> : IMemoryDbRepository<TEntity>, IQueryableRepository<TEntity, TPrimaryKey>
-        where TEntity : class, IEntity<TPrimaryKey>
+    public interface IMemoryDbRepository<TEntity, TKey> : IMemoryDbRepository<TEntity>, IQueryableRepository<TEntity, TKey>
+        where TEntity : class, IEntity<TKey>
     {
 
     }

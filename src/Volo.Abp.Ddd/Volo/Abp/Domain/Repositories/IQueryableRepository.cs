@@ -31,8 +31,8 @@ namespace Volo.Abp.Domain.Repositories
         Task DeleteAsync([NotNull] Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default);
     }
 
-    public interface IQueryableRepository<TEntity, TPrimaryKey> : IQueryableRepository<TEntity>, IRepository<TEntity, TPrimaryKey>
-        where TEntity : class, IEntity<TPrimaryKey>
+    public interface IQueryableRepository<TEntity, TKey> : IQueryableRepository<TEntity>, IRepository<TEntity, TKey>
+        where TEntity : class, IEntity<TKey>
     {
     }
 }

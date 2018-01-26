@@ -5,8 +5,8 @@
 
     }
 
-    public interface IEntityDto<TPrimaryKey> : IEntityDto
+    public interface IEntityDto<TKey> : IEntityDto
     {
-        TPrimaryKey Id { get; set; }
+        TKey Id { get; set; }
     }
 }

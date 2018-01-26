@@ -7,8 +7,8 @@
 
     }
 
-    /// <inheritdoc cref="IAggregateRoot{TPrimaryKey}" />
-    public abstract class AggregateRoot<TPrimaryKey> : Entity<TPrimaryKey>, IAggregateRoot<TPrimaryKey>
+    /// <inheritdoc cref="IAggregateRoot{TKey}" />
+    public abstract class AggregateRoot<TKey> : Entity<TKey>, IAggregateRoot<TKey>
     {
 
     }

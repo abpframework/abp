@@ -57,7 +57,7 @@ namespace Volo.Abp.Domain.Repositories
             if (primaryKeyType == null)
             {
                 return Options.SpecifiedDefaultRepositoryTypes
-                    ? Options.DefaultRepositoryImplementationTypeWithoutPrimaryKey.MakeGenericType(entityType)
+                    ? Options.DefaultRepositoryImplementationTypeWithouTKey.MakeGenericType(entityType)
                     : GetRepositoryType(Options.DefaultRepositoryDbContextType, entityType);
             }
 

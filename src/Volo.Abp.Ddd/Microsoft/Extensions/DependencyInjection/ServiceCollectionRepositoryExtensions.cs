@@ -31,14 +31,14 @@ namespace Microsoft.Extensions.DependencyInjection
 
             if (primaryKeyType != null)
             {
-                //IRepository<TEntity, TPrimaryKey>
+                //IRepository<TEntity, TKey>
                 var repositoryInterface = typeof(IRepository<,>).MakeGenericType(entityType, primaryKeyType);
                 if (repositoryInterface.GetTypeInfo().IsAssignableFrom(repositoryImplementationType))
                 {
                     services.TryAddTransient(repositoryInterface, repositoryImplementationType);
                 }
 
-                //IQueryableRepository<TEntity, TPrimaryKey>
+                //IQueryableRepository<TEntity, TKey>
                 var queryableRepositoryInterface = typeof(IQueryableRepository<,>).MakeGenericType(entityType, primaryKeyType);
                 if (queryableRepositoryInterface.GetTypeInfo().IsAssignableFrom(repositoryImplementationType))
                 {

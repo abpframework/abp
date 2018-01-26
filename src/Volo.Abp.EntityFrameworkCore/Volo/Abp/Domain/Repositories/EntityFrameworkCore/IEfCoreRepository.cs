@@ -11,8 +11,8 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
         DbSet<TEntity> DbSet { get; }
     }
 
-    public interface IEfCoreRepository<TEntity, TPrimaryKey> : IEfCoreRepository<TEntity>, IQueryableRepository<TEntity, TPrimaryKey>
-        where TEntity : class, IEntity<TPrimaryKey>
+    public interface IEfCoreRepository<TEntity, TKey> : IEfCoreRepository<TEntity>, IQueryableRepository<TEntity, TKey>
+        where TEntity : class, IEntity<TKey>
     {
 
     }

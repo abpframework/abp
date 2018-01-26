@@ -13,8 +13,8 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
         string CollectionName { get; }
     }
 
-    public interface IMongoDbRepository<TEntity, TPrimaryKey> : IMongoDbRepository<TEntity>, IQueryableRepository<TEntity, TPrimaryKey>
-        where TEntity : class, IEntity<TPrimaryKey>
+    public interface IMongoDbRepository<TEntity, TKey> : IMongoDbRepository<TEntity>, IQueryableRepository<TEntity, TKey>
+        where TEntity : class, IEntity<TKey>
     {
 
     }

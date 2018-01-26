@@ -7,31 +7,31 @@ namespace Volo.Abp.Domain.Repositories
 {
     public static class MongoDbCoreRepositoryExtensions
     {
-        public static IMongoDatabase GetDatabase<TEntity, TPrimaryKey>(this IRepository<TEntity, TPrimaryKey> repository)
-            where TEntity : class, IEntity<TPrimaryKey>
+        public static IMongoDatabase GetDatabase<TEntity, TKey>(this IRepository<TEntity, TKey> repository)
+            where TEntity : class, IEntity<TKey>
         {
             return repository.ToMongoDbRepository().Database;
         }
 
-        public static IMongoCollection<TEntity> GetCollection<TEntity, TPrimaryKey>(this IRepository<TEntity, TPrimaryKey> repository)
-            where TEntity : class, IEntity<TPrimaryKey>
+        public static IMongoCollection<TEntity> GetCollection<TEntity, TKey>(this IRepository<TEntity, TKey> repository)
+            where TEntity : class, IEntity<TKey>
         {
             return repository.ToMongoDbRepository().Collection;
         }
 
-        public static string GetCollectionName<TEntity, TPrimaryKey>(this IRepository<TEntity, TPrimaryKey> repository)
-            where TEntity : class, IEntity<TPrimaryKey>
+        public static string GetCollectionName<TEntity, TKey>(this IRepository<TEntity, TKey> repository)
+            where TEntity : class, IEntity<TKey>
         {
             return repository.ToMongoDbRepository().CollectionName;
         }
 
-        public static IMongoDbRepository<TEntity, TPrimaryKey> ToMongoDbRepository<TEntity, TPrimaryKey>(this IRepository<TEntity, TPrimaryKey> repository)
-            where TEntity : class, IEntity<TPrimaryKey>
+        public static IMongoDbRepository<TEntity, TKey> ToMongoDbRepository<TEntity, TKey>(this IRepository<TEntity, TKey> repository)
+            where TEntity : class, IEntity<TKey>
         {
-            var mongoDbRepository = repository as IMongoDbRepository<TEntity, TPrimaryKey>;
+            var mongoDbRepository = repository as IMongoDbRepository<TEntity, TKey>;
             if (mongoDbRepository == null)
             {
-                throw new ArgumentException("Given repository does not implement " + typeof(IMongoDbRepository<TEntity, TPrimaryKey>).AssemblyQualifiedName, nameof(repository));
+                throw new ArgumentException("Given repository does not implement " + typeof(IMongoDbRepository<TEntity, TKey>).AssemblyQualifiedName, nameof(repository));
             }
 
             return mongoDbRepository;
