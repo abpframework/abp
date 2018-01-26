@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities;
-using Volo.Abp.Reflection;
 
 namespace Volo.Abp.Domain.Repositories
 {
@@ -45,24 +44,26 @@ namespace Volo.Abp.Domain.Repositories
 
         protected void RegisterDefaultRepository(IServiceCollection services, Type entityType)
         {
-            var primaryKeyType = EntityHelper.GetPrimaryKeyType(entityType);
-            var isDefaultPrimaryKey = primaryKeyType == typeof(Guid);
+            services.AddDefaultRepository(
+                entityType,
+                GetDefaultRepositoryImplementationType(entityType)
+            );
+        }
 
-            Type repositoryImplementationType;
-            if (Options.SpecifiedDefaultRepositoryTypes)
+        private Type GetDefaultRepositoryImplementationType(Type entityType)
+        {
+            var primaryKeyType = EntityHelper.FindPrimaryKeyType(entityType);
+
+            if (primaryKeyType == null)
             {
-                repositoryImplementationType = isDefaultPrimaryKey
-                    ? Options.DefaultRepositoryImplementationTypeWithDefaultPrimaryKey.MakeGenericType(entityType)
-                    : Options.DefaultRepositoryImplementationType.MakeGenericType(entityType, primaryKeyType);
-            }
-            else
-            {
-                repositoryImplementationType = isDefaultPrimaryKey
-                    ? GetRepositoryTypeForDefaultPk(Options.DefaultRepositoryDbContextType, entityType)
-                    : GetRepositoryType(Options.DefaultRepositoryDbContextType, entityType, primaryKeyType);
+                return Options.SpecifiedDefaultRepositoryTypes
+                    ? Options.DefaultRepositoryImplementationTypeWithouTKey.MakeGenericType(entityType)
+                    : GetRepositoryType(Options.DefaultRepositoryDbContextType, entityType);
             }
 
-            services.AddDefaultRepository(entityType, repositoryImplementationType);
+            return Options.SpecifiedDefaultRepositoryTypes
+                ? Options.DefaultRepositoryImplementationType.MakeGenericType(entityType, primaryKeyType)
+                : GetRepositoryType(Options.DefaultRepositoryDbContextType, entityType, primaryKeyType);
         }
 
         public bool ShouldRegisterDefaultRepositoryFor(Type entityType)
@@ -77,7 +78,7 @@ namespace Volo.Abp.Domain.Repositories
                 return false;
             }
 
-            if (!Options.IncludeAllEntitiesForDefaultRepositories && !ReflectionHelper.IsAssignableToGenericType(entityType, typeof(IAggregateRoot<>)))
+            if (!Options.IncludeAllEntitiesForDefaultRepositories && !typeof(IAggregateRoot).IsAssignableFrom(entityType))
             {
                 return false;
             }
@@ -87,7 +88,7 @@ namespace Volo.Abp.Domain.Repositories
 
         protected abstract IEnumerable<Type> GetEntityTypes(Type dbContextType);
 
-        protected abstract Type GetRepositoryTypeForDefaultPk(Type dbContextType, Type entityType);
+        protected abstract Type GetRepositoryType(Type dbContextType, Type entityType);
 
         protected abstract Type GetRepositoryType(Type dbContextType, Type entityType, Type primaryKeyType);
     }

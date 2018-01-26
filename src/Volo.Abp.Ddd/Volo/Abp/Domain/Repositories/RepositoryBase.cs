@@ -1,37 +1,82 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
-using Volo.Abp.Threading;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Domain.Repositories
 {
-    public abstract class RepositoryBase<TEntity> : RepositoryBase<TEntity, Guid>, IRepository<TEntity>
-        where TEntity : class, IEntity<Guid>
+    public abstract class RepositoryBase<TEntity> : BasicRepositoryBase<TEntity>, IRepository<TEntity>
+        where TEntity : class, IEntity
     {
+        public IDataFilter DataFilter { get; set; }
 
+        public ICurrentTenant CurrentTenant { get; set; }
+
+        public virtual Type ElementType => GetQueryable().ElementType;
+
+        public virtual Expression Expression => GetQueryable().Expression;
+
+        public virtual IQueryProvider Provider => GetQueryable().Provider;
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        public IEnumerator<TEntity> GetEnumerator()
+        {
+            return GetQueryable().GetEnumerator();
+        }
+
+        protected abstract IQueryable<TEntity> GetQueryable();
+
+        public virtual void Delete(Expression<Func<TEntity, bool>> predicate)
+        {
+            foreach (var entity in GetQueryable().Where(predicate).ToList())
+            {
+                Delete(entity);
+            }
+        }
+
+        public virtual Task DeleteAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
+        {
+            Delete(predicate);
+            return Task.CompletedTask;
+        }
+
+        //TODO: Is that needed..?
+        protected virtual IQueryable<TEntity> ApplyDataFilters(IQueryable<TEntity> query)
+        {
+            if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)))
+            {
+                query = query.WhereIf(DataFilter.IsEnabled<ISoftDelete>(), e => ((ISoftDelete)e).IsDeleted == false);
+            }
+
+            if (typeof(IMultiTenant).IsAssignableFrom(typeof(TEntity)))
+            {
+                var tenantId = CurrentTenant.Id;
+                query = query.WhereIf(DataFilter.IsEnabled<IMultiTenant>(), e => ((IMultiTenant)e).TenantId == tenantId);
+            }
+
+            return query;
+        }
     }
 
-    public abstract class RepositoryBase<TEntity, TPrimaryKey> : IRepository<TEntity, TPrimaryKey>
-        where TEntity : class, IEntity<TPrimaryKey>
+    public abstract class RepositoryBase<TEntity, TKey> : RepositoryBase<TEntity>, IRepository<TEntity, TKey>
+        where TEntity : class, IEntity<TKey>
     {
-        public ICancellationTokenProvider CancellationTokenProvider { get; set; }
-
-        protected RepositoryBase()
+        public virtual TEntity Find(TKey id)
         {
-            CancellationTokenProvider = NullCancellationTokenProvider.Instance;
+            return GetQueryable().FirstOrDefault(EntityHelper.CreateEqualityExpressionForId<TEntity, TKey>(id));
         }
 
-        public abstract List<TEntity> GetList();
-
-        public virtual Task<List<TEntity>> GetListAsync(CancellationToken cancellationToken = default)
-        {
-            return Task.FromResult(GetList());
-        }
-
-        public virtual TEntity Get(TPrimaryKey id)
+        public virtual TEntity Get(TKey id)
         {
             var entity = Find(id);
 
@@ -43,41 +88,17 @@ namespace Volo.Abp.Domain.Repositories
             return entity;
         }
 
-        public virtual Task<TEntity> GetAsync(TPrimaryKey id, CancellationToken cancellationToken = default)
+        public virtual Task<TEntity> GetAsync(TKey id, CancellationToken cancellationToken = default)
         {
             return Task.FromResult(Get(id));
         }
 
-        public abstract TEntity Find(TPrimaryKey id);
-
-        public virtual Task<TEntity> FindAsync(TPrimaryKey id, CancellationToken cancellationToken = default)
+        public virtual Task<TEntity> FindAsync(TKey id, CancellationToken cancellationToken = default)
         {
             return Task.FromResult(Find(id));
         }
 
-        public abstract TEntity Insert(TEntity entity, bool autoSave = false);
-
-        public virtual Task<TEntity> InsertAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default)
-        {
-            return Task.FromResult(Insert(entity, autoSave));
-        }
-
-        public abstract TEntity Update(TEntity entity);
-
-        public virtual Task<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
-        {
-            return Task.FromResult(Update(entity));
-        }
-
-        public abstract void Delete(TEntity entity);
-
-        public virtual Task DeleteAsync(TEntity entity, CancellationToken cancellationToken = default)
-        {
-            Delete(entity);
-            return Task.CompletedTask;
-        }
-
-        public virtual void Delete(TPrimaryKey id)
+        public virtual void Delete(TKey id)
         {
             var entity = Find(id);
             if (entity == null)
@@ -88,29 +109,10 @@ namespace Volo.Abp.Domain.Repositories
             Delete(entity);
         }
 
-        public virtual Task DeleteAsync(TPrimaryKey id, CancellationToken cancellationToken = default)
+        public virtual Task DeleteAsync(TKey id, CancellationToken cancellationToken = default)
         {
             Delete(id);
             return Task.CompletedTask;
-        }
-
-        public abstract long GetCount();
-
-        public virtual Task<long> GetCountAsync(CancellationToken cancellationToken = default)
-        {
-            return Task.FromResult(GetCount());
-        }
-
-        protected static Expression<Func<TEntity, bool>> CreateEqualityExpressionForId(TPrimaryKey id)
-        {
-            var lambdaParam = Expression.Parameter(typeof(TEntity));
-
-            var lambdaBody = Expression.Equal(
-                Expression.PropertyOrField(lambdaParam, "Id"),
-                Expression.Constant(id, typeof(TPrimaryKey))
-                );
-
-            return Expression.Lambda<Func<TEntity, bool>>(lambdaBody, lambdaParam);
         }
     }
 }

@@ -14,15 +14,15 @@ using Xunit;
 
 namespace Volo.Abp.EntityFrameworkCore.DataFiltering
 {
-    public class MultiTenant_Filter_Tests : EntityFrameworkCoreTestBase
+    public class MultiTenant_Filter_Tests : EntityFrameworkCoreTestBase //TODO: This class is same of Volo.Abp.MemoryDb.DataFilters.MemoryDb_MultiTenant_Filter_Tests. Can we share source code?
     {
         private ICurrentTenant _fakeCurrentTenant;
-        private readonly IRepository<Person> _personRepository;
+        private readonly IRepository<Person, Guid> _personRepository;
         private readonly IDataFilter<IMultiTenant> _multiTenantFilter;
 
         public MultiTenant_Filter_Tests()
         {
-            _personRepository = GetRequiredService<IRepository<Person>>();
+            _personRepository = GetRequiredService<IRepository<Person, Guid>>();
             _multiTenantFilter = GetRequiredService<IDataFilter<IMultiTenant>>();
         }
 
@@ -33,48 +33,54 @@ namespace Volo.Abp.EntityFrameworkCore.DataFiltering
         }
 
         [Fact]
-        public async Task Should_Get_Person_For_Current_Tenant()
+        public void Should_Get_Person_For_Current_Tenant()
         {
-            //TenantId = null
+            WithUnitOfWork(() =>
+            {
+                //TenantId = null
 
-            _fakeCurrentTenant.Id.Returns((Guid?)null);
+                _fakeCurrentTenant.Id.Returns((Guid?)null);
 
-            var people = await _personRepository.GetListAsync();
-            people.Count.ShouldBe(1);
-            people.Any(p => p.Name == "Douglas").ShouldBeTrue();
+                var people = _personRepository.ToList();
+                people.Count.ShouldBe(1);
+                people.Any(p => p.Name == "Douglas").ShouldBeTrue();
 
-            //TenantId = TestDataBuilder.TenantId1
+                //TenantId = TestDataBuilder.TenantId1
 
-            _fakeCurrentTenant.Id.Returns(TestDataBuilder.TenantId1);
+                _fakeCurrentTenant.Id.Returns(TestDataBuilder.TenantId1);
 
-            people = await _personRepository.GetListAsync();
-            people.Count.ShouldBe(2);
-            people.Any(p => p.Name == TestDataBuilder.TenantId1 + "-Person1").ShouldBeTrue();
-            people.Any(p => p.Name == TestDataBuilder.TenantId1 + "-Person2").ShouldBeTrue();
+                people = _personRepository.ToList();
+                people.Count.ShouldBe(2);
+                people.Any(p => p.Name == TestDataBuilder.TenantId1 + "-Person1").ShouldBeTrue();
+                people.Any(p => p.Name == TestDataBuilder.TenantId1 + "-Person2").ShouldBeTrue();
 
-            //TenantId = TestDataBuilder.TenantId2
+                //TenantId = TestDataBuilder.TenantId2
 
-            _fakeCurrentTenant.Id.Returns(TestDataBuilder.TenantId2);
+                _fakeCurrentTenant.Id.Returns(TestDataBuilder.TenantId2);
 
-            people = await _personRepository.GetListAsync();
-            people.Count.ShouldBe(0);
+                people = _personRepository.ToList();
+                people.Count.ShouldBe(0);
+            });
         }
 
         [Fact]
-        public async Task Should_Get_All_People_When_MultiTenant_Filter_Is_Disabled()
+        public void Should_Get_All_People_When_MultiTenant_Filter_Is_Disabled()
         {
-            List<Person> people;
-
-            using (_multiTenantFilter.Disable())
+            WithUnitOfWork(() =>
             {
-                //Filter disabled manually
-                people = await _personRepository.GetListAsync();
-                people.Count.ShouldBe(3);
-            }
+                List<Person> people;
 
-            //Filter re-enabled automatically
-            people = await _personRepository.GetListAsync();
-            people.Count.ShouldBe(1);
+                using (_multiTenantFilter.Disable())
+                {
+                    //Filter disabled manually
+                    people = _personRepository.ToList();
+                    people.Count.ShouldBe(3);
+                }
+
+                //Filter re-enabled automatically
+                people = _personRepository.ToList();
+                people.Count.ShouldBe(1);
+            });
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Linq;
 using AbpDesk.Blogging;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc;
@@ -9,16 +10,16 @@ namespace Areas.Blog.Controllers
     [Area("Blog")]
     public class PostsController : AbpController
     {
-        private readonly IQueryableRepository<BlogPost> _blogPostRepository;
+        private readonly IRepository<BlogPost, Guid> _blogPostRepository;
 
-        public PostsController(IQueryableRepository<BlogPost> blogPostRepository)
+        public PostsController(IRepository<BlogPost, Guid> blogPostRepository)
         {
             _blogPostRepository = blogPostRepository;
         }
 
-        public async Task<ActionResult> Index()
+        public ActionResult Index()
         {
-            var posts = await _blogPostRepository.GetListAsync(HttpContext.RequestAborted);
+            var posts = _blogPostRepository.ToList(); //TODO: async..?
             return View(posts);
         }
     }

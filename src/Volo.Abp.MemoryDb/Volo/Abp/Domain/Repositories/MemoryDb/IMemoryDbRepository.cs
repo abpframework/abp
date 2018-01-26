@@ -1,20 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Volo.Abp.Domain.Entities;
 
 namespace Volo.Abp.Domain.Repositories.MemoryDb
 {
-    public interface IMemoryDbRepository<TEntity> : IMemoryDbRepository<TEntity, Guid>, IQueryableRepository<TEntity>
-        where TEntity : class, IEntity<Guid>
-    {
-        
-    }
-
-    public interface IMemoryDbRepository<TEntity, TPrimaryKey> : IQueryableRepository<TEntity, TPrimaryKey>
-        where TEntity : class, IEntity<TPrimaryKey>
+    public interface IMemoryDbRepository<TEntity> : IRepository<TEntity>
+        where TEntity : class, IEntity
     {
         IMemoryDatabase Database { get; }
 
         List<TEntity> Collection { get; }
+    }
+
+    public interface IMemoryDbRepository<TEntity, TKey> : IMemoryDbRepository<TEntity>, IRepository<TEntity, TKey>
+        where TEntity : class, IEntity<TKey>
+    {
+
     }
 }

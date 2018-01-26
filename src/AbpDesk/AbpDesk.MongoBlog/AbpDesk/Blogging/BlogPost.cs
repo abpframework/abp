@@ -6,7 +6,7 @@ using Volo.Abp.Domain.Entities;
 
 namespace AbpDesk.Blogging
 {
-    public class BlogPost : AggregateRoot
+    public class BlogPost : AggregateRoot<Guid>
     {
         public virtual string Title { get; protected set; }
 

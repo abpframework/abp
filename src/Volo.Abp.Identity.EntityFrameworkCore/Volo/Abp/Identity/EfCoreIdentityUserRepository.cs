@@ -12,7 +12,7 @@ using Volo.Abp.Identity.EntityFrameworkCore;
 
 namespace Volo.Abp.Identity
 {
-    public class EfCoreIdentityUserRepository : EfCoreRepository<IdentityDbContext, IdentityUser>, IIdentityUserRepository
+    public class EfCoreIdentityUserRepository : EfCoreRepository<IdentityDbContext, IdentityUser, Guid>, IIdentityUserRepository
     {
         public EfCoreIdentityUserRepository(IDbContextProvider<IdentityDbContext> dbContextProvider)
             : base(dbContextProvider)
@@ -81,7 +81,7 @@ namespace Volo.Abp.Identity
             return await query.ToListAsync(cancellationToken);
         }
 
-        public async Task<List<IdentityUser>> GetListAsync(string sorting, int maxResultCount, int skipCount, string filter)
+        public async Task<List<IdentityUser>> GetListAsync(string sorting, int maxResultCount, int skipCount, string filter, CancellationToken cancellationToken = default)
         {
             return await this.WhereIf(
                     !filter.IsNullOrWhiteSpace(),
@@ -90,7 +90,7 @@ namespace Volo.Abp.Identity
                         u.Email.Contains(filter)
                 )
                 .OrderBy(sorting ?? nameof(IdentityUser.UserName))
-                .PageBy(skipCount, maxResultCount).ToListAsync();
+                .PageBy(skipCount, maxResultCount).ToListAsync(cancellationToken);
         }
 
         public async Task<List<IdentityUser>> GetListAsync(string sorting, int maxResultCount, int skipCount)
@@ -106,6 +106,11 @@ namespace Volo.Abp.Identity
                         select role;
 
             return await query.ToListAsync();
+        }
+
+        public async Task<long> GetCountAsync(CancellationToken cancellationToken = default)
+        {
+            return await this.LongCountAsync(cancellationToken);
         }
     }
 }

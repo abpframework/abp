@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories;
 
 namespace Volo.Abp.IdentityServer.Grants
 {
-    public interface IPersistentGrantRepository : IRepository<PersistedGrant>
+    public interface IPersistentGrantRepository : IBasicRepository<PersistedGrant, Guid>
     {
         Task<PersistedGrant> FindByKeyAsync(string key);
 

@@ -3,7 +3,7 @@ using Volo.Abp.Domain.Entities;
 
 namespace Volo.Abp.IdentityServer.Clients
 {
-    public class ClientIdPRestriction : Entity
+    public class ClientIdPRestriction : Entity<Guid>
     {
         public virtual string Provider { get; set; }
 

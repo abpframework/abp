@@ -6,7 +6,7 @@ namespace Volo.Abp.Identity
     /// <summary>
     /// Represents the link between a user and a role.
     /// </summary>
-    public class IdentityUserRole : Entity
+    public class IdentityUserRole : Entity<Guid>
     {
         /// <summary>
         /// Gets or sets the primary key of the user that is linked to a role.

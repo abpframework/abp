@@ -8,7 +8,7 @@ namespace Volo.Abp.Identity
     /// <summary>
     /// Represents a claim that a user possesses. 
     /// </summary>
-    public class IdentityUserClaim : Entity
+    public class IdentityUserClaim : Entity<Guid>
     {
         /// <summary>
         /// Gets or sets the primary key of the user associated with this claim.

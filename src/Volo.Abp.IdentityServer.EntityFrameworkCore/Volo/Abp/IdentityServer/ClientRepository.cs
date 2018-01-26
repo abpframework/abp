@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
@@ -7,7 +8,7 @@ using Volo.Abp.IdentityServer.EntityFrameworkCore;
 
 namespace Volo.Abp.IdentityServer
 {
-    public class ClientRepository : EfCoreRepository<IdentityServerDbContext, Client>, IClientRepository
+    public class ClientRepository : EfCoreRepository<IdentityServerDbContext, Client, Guid>, IClientRepository
     {
         public ClientRepository(IDbContextProvider<IdentityServerDbContext> dbContextProvider) : base(dbContextProvider)
         {

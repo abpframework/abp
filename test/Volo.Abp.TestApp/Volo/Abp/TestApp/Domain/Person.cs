@@ -1,11 +1,13 @@
 using System;
 using System.Collections.ObjectModel;
+using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.Domain.Repositories;
 using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.TestApp.Domain
 {
-    public class Person : AggregateRoot, IMultiTenant, ISoftDelete
+    public class Person : AggregateRoot<Guid>, IMultiTenant, ISoftDelete
     {
         public virtual Guid? TenantId { get; set; }
 

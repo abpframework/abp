@@ -7,30 +7,16 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.EntityFrameworkCore;
-using Volo.Abp.Threading;
 
 namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
 {
-    public class EfCoreRepository<TDbContext, TEntity> : EfCoreRepository<TDbContext, TEntity, Guid>, IEfCoreRepository<TEntity>
+    public class EfCoreRepository<TDbContext, TEntity> : RepositoryBase<TEntity>, IEfCoreRepository<TEntity>
         where TDbContext : IEfCoreDbContext
-        where TEntity : class, IEntity<Guid>
-    {
-        public EfCoreRepository(IDbContextProvider<TDbContext> dbContextProvider)
-            : base(dbContextProvider)
-        {
-        }
-    }
-
-    public class EfCoreRepository<TDbContext, TEntity, TPrimaryKey> : QueryableRepositoryBase<TEntity, TPrimaryKey>, 
-        IEfCoreRepository<TEntity, TPrimaryKey>,
-        ISupportsExplicitLoading<TEntity, TPrimaryKey>
-
-        where TDbContext : IEfCoreDbContext
-        where TEntity : class, IEntity<TPrimaryKey>
+        where TEntity : class, IEntity
     {
         public virtual DbSet<TEntity> DbSet => DbContext.Set<TEntity>();
 
-        DbContext IEfCoreRepository<TEntity, TPrimaryKey>.DbContext => DbContext.As<DbContext>();
+        DbContext IEfCoreRepository<TEntity>.DbContext => DbContext.As<DbContext>();
 
         protected virtual TDbContext DbContext => _dbContextProvider.GetDbContext();
 
@@ -40,39 +26,7 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
         {
             _dbContextProvider = dbContextProvider;
         }
-
-        protected override IQueryable<TEntity> GetQueryable()
-        {
-            return DbSet.AsQueryable();
-        }
-
-        public override Task<List<TEntity>> GetListAsync(CancellationToken cancellationToken = default)
-        {
-            return DbSet.ToListAsync(CancellationTokenProvider.FallbackToProvider(cancellationToken));
-        }
-
-        public override async Task<TEntity> GetAsync(TPrimaryKey id, CancellationToken cancellationToken = default)
-        {
-            var entity = await FindAsync(id, CancellationTokenProvider.FallbackToProvider(cancellationToken));
-
-            if (entity == null)
-            {
-                throw new EntityNotFoundException(typeof(TEntity), id);
-            }
-
-            return entity;
-        }
-
-        public override TEntity Find(TPrimaryKey id)
-        {
-            return DbSet.Find(id);
-        }
-
-        public override Task<TEntity> FindAsync(TPrimaryKey id, CancellationToken cancellationToken = default)
-        {
-            return DbSet.FindAsync(new object[] { id }, CancellationTokenProvider.FallbackToProvider(cancellationToken));
-        }
-
+        
         public override TEntity Insert(TEntity entity, bool autoSave = false)
         {
             var savedEntity = DbSet.Add(entity).Entity;
@@ -91,7 +45,7 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
 
             if (autoSave)
             {
-                await DbContext.SaveChangesAsync(CancellationTokenProvider.FallbackToProvider(cancellationToken));
+                await DbContext.SaveChangesAsync(GetCancellationToken(cancellationToken));
             }
 
             return savedEntity;
@@ -108,18 +62,18 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
             DbSet.Remove(entity);
         }
 
+        protected override IQueryable<TEntity> GetQueryable()
+        {
+            return DbSet.AsQueryable();
+        }
+
         public override async Task DeleteAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
         {
-            var entities = await GetQueryable().Where(predicate).ToListAsync(CancellationTokenProvider.FallbackToProvider(cancellationToken));
+            var entities = await GetQueryable().Where(predicate).ToListAsync(GetCancellationToken(cancellationToken));
             foreach (var entity in entities)
             {
                 DbSet.Remove(entity);
             }
-        }
-
-        public override Task<long> GetCountAsync(CancellationToken cancellationToken = default)
-        {
-            return GetQueryable().LongCountAsync(CancellationTokenProvider.FallbackToProvider(cancellationToken));
         }
 
         public virtual Task EnsureCollectionLoadedAsync<TProperty>(
@@ -128,7 +82,7 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
             CancellationToken cancellationToken = default)
             where TProperty : class
         {
-            return DbContext.Entry(entity).Collection(propertyExpression).LoadAsync(CancellationTokenProvider.FallbackToProvider(cancellationToken));
+            return DbContext.Entry(entity).Collection(propertyExpression).LoadAsync(GetCancellationToken(cancellationToken));
         }
 
         public virtual Task EnsurePropertyLoadedAsync<TProperty>(
@@ -137,7 +91,72 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
             CancellationToken cancellationToken = default)
             where TProperty : class
         {
-            return DbContext.Entry(entity).Reference(propertyExpression).LoadAsync(CancellationTokenProvider.FallbackToProvider(cancellationToken));
+            return DbContext.Entry(entity).Reference(propertyExpression).LoadAsync(GetCancellationToken(cancellationToken));
+        }
+    }
+
+    public class EfCoreRepository<TDbContext, TEntity, TKey> : EfCoreRepository<TDbContext, TEntity>, 
+        IEfCoreRepository<TEntity, TKey>,
+        ISupportsExplicitLoading<TEntity, TKey>
+
+        where TDbContext : IEfCoreDbContext
+        where TEntity : class, IEntity<TKey>
+    {
+        public EfCoreRepository(IDbContextProvider<TDbContext> dbContextProvider) 
+            : base(dbContextProvider)
+        {
+
+        }
+
+        public TEntity Get(TKey id)
+        {
+            var entity = Find(id);
+
+            if (entity == null)
+            {
+                throw new EntityNotFoundException(typeof(TEntity), id);
+            }
+
+            return entity;
+        }
+
+        public virtual async Task<TEntity> GetAsync(TKey id, CancellationToken cancellationToken = default)
+        {
+            var entity = await FindAsync(id, GetCancellationToken(cancellationToken));
+
+            if (entity == null)
+            {
+                throw new EntityNotFoundException(typeof(TEntity), id);
+            }
+
+            return entity;
+        }
+
+        public virtual TEntity Find(TKey id)
+        {
+            return DbSet.Find(id);
+        }
+
+        public virtual Task<TEntity> FindAsync(TKey id, CancellationToken cancellationToken = default)
+        {
+            return DbSet.FindAsync(new object[] { id }, GetCancellationToken(cancellationToken));
+        }
+
+        public virtual void Delete(TKey id)
+        {
+            var entity = Find(id);
+            if (entity == null)
+            {
+                return;
+            }
+
+            Delete(entity);
+        }
+
+        public virtual Task DeleteAsync(TKey id, CancellationToken cancellationToken = default)
+        {
+            Delete(id);
+            return Task.CompletedTask;
         }
     }
 }

@@ -5,7 +5,7 @@ using Volo.Abp.Domain.Entities;
 
 namespace Volo.Abp.IdentityServer.ApiResources
 {
-    public class ApiResource : AggregateRoot
+    public class ApiResource : AggregateRoot<Guid>
     {
         public virtual bool Enabled { get; set; }
 

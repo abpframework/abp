@@ -8,25 +8,27 @@ using Volo.Abp.Domain.Repositories;
 
 namespace Volo.Abp.Identity
 {
-    public interface IIdentityUserRepository : IRepository<IdentityUser>
+    public interface IIdentityUserRepository : IBasicRepository<IdentityUser, Guid>
     {
-        Task<IdentityUser> FindByNormalizedUserNameAsync([NotNull] string normalizedUserName, CancellationToken cancellationToken);
+        Task<IdentityUser> FindByNormalizedUserNameAsync([NotNull] string normalizedUserName, CancellationToken cancellationToken = default);
 
         Task<List<string>> GetRoleNamesAsync(Guid userId);
 
-        Task<IdentityUser> FindByLoginAsync([NotNull] string loginProvider, [NotNull] string providerKey, CancellationToken cancellationToken);
+        Task<IdentityUser> FindByLoginAsync([NotNull] string loginProvider, [NotNull] string providerKey, CancellationToken cancellationToken = default);
 
-        Task<IdentityUser> FindByNormalizedEmailAsync([NotNull] string normalizedEmail, CancellationToken cancellationToken);
-
-        //TODO: Why not return List instead of IList
-        Task<IList<IdentityUser>> GetListByClaimAsync(Claim claim, CancellationToken cancellationToken);
+        Task<IdentityUser> FindByNormalizedEmailAsync([NotNull] string normalizedEmail, CancellationToken cancellationToken = default);
 
         //TODO: Why not return List instead of IList
-        Task<IList<IdentityUser>> GetListByNormalizedRoleNameAsync(string normalizedRoleName, CancellationToken cancellationToken);
+        Task<IList<IdentityUser>> GetListByClaimAsync(Claim claim, CancellationToken cancellationToken = default);
+
+        //TODO: Why not return List instead of IList
+        Task<IList<IdentityUser>> GetListByNormalizedRoleNameAsync(string normalizedRoleName, CancellationToken cancellationToken = default);
 
         //TODO: DTO can be used instead of parameters
-        Task<List<IdentityUser>> GetListAsync(string sorting, int maxResultCount, int skipCount, string filter);
+        Task<List<IdentityUser>> GetListAsync(string sorting, int maxResultCount, int skipCount, string filter, CancellationToken cancellationToken = default);
 
         Task<List<IdentityRole>> GetRolesAsync(Guid userId);
+
+        Task<long> GetCountAsync(CancellationToken cancellationToken = default);
     }
 }

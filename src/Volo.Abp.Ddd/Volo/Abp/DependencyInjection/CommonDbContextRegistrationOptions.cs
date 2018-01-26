@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using JetBrains.Annotations;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Reflection;
@@ -20,7 +19,7 @@ namespace Volo.Abp.DependencyInjection
 
         public Type DefaultRepositoryImplementationType { get; private set; }
 
-        public Type DefaultRepositoryImplementationTypeWithDefaultPrimaryKey { get; private set; }
+        public Type DefaultRepositoryImplementationTypeWithouTKey { get; private set; }
 
         public bool RegisterDefaultRepositories { get; private set; }
 
@@ -28,7 +27,7 @@ namespace Volo.Abp.DependencyInjection
 
         public Dictionary<Type, Type> CustomRepositories { get; }
 
-        public bool SpecifiedDefaultRepositoryTypes => DefaultRepositoryImplementationType != null && DefaultRepositoryImplementationTypeWithDefaultPrimaryKey != null;
+        public bool SpecifiedDefaultRepositoryTypes => DefaultRepositoryImplementationType != null && DefaultRepositoryImplementationTypeWithouTKey != null;
 
         protected CommonDbContextRegistrationOptions(Type originalDbContextType)
         {
@@ -80,34 +79,37 @@ namespace Volo.Abp.DependencyInjection
             return this;
         }
 
-        public ICommonDbContextRegistrationOptionsBuilder AddCustomRepository<TEntity, TRepository>()
+        public ICommonDbContextRegistrationOptionsBuilder AddRepository<TEntity, TRepository>()
         {
-            WithCustomRepository(typeof(TEntity), typeof(TRepository));
+            AddCustomRepository(typeof(TEntity), typeof(TRepository));
 
             return this;
         }
 
-        public ICommonDbContextRegistrationOptionsBuilder SetDefaultRepositoryClasses([NotNull] Type repositoryImplementationType, [NotNull] Type repositoryImplementationTypeWithDefaultPrimaryKey)
+        public ICommonDbContextRegistrationOptionsBuilder SetDefaultRepositoryClasses(
+            Type repositoryImplementationType,
+            Type repositoryImplementationTypeWithouTKey
+            )
         {
             Check.NotNull(repositoryImplementationType, nameof(repositoryImplementationType));
-            Check.NotNull(repositoryImplementationTypeWithDefaultPrimaryKey, nameof(repositoryImplementationTypeWithDefaultPrimaryKey));
+            Check.NotNull(repositoryImplementationTypeWithouTKey, nameof(repositoryImplementationTypeWithouTKey));
 
             DefaultRepositoryImplementationType = repositoryImplementationType;
-            DefaultRepositoryImplementationTypeWithDefaultPrimaryKey = repositoryImplementationTypeWithDefaultPrimaryKey;
+            DefaultRepositoryImplementationTypeWithouTKey = repositoryImplementationTypeWithouTKey;
 
             return this;
         }
 
-        private void WithCustomRepository(Type entityType, Type repositoryType)
+        private void AddCustomRepository(Type entityType, Type repositoryType)
         {
-            if (!ReflectionHelper.IsAssignableToGenericType(entityType, typeof(IEntity<>)))
+            if (!typeof(IEntity).IsAssignableFrom(entityType))
             {
                 throw new AbpException($"Given entityType is not an entity: {entityType.AssemblyQualifiedName}. It must implement {typeof(IEntity<>).AssemblyQualifiedName}.");
             }
 
-            if (!ReflectionHelper.IsAssignableToGenericType(repositoryType, typeof(IRepository<,>)))
+            if (!ReflectionHelper.IsAssignableToGenericType(repositoryType, typeof(IBasicRepository<>)))
             {
-                throw new AbpException($"Given repositoryType is not a repository: {entityType.AssemblyQualifiedName}. It must implement {typeof(IRepository<,>).AssemblyQualifiedName}.");
+                throw new AbpException($"Given repositoryType is not a repository: {entityType.AssemblyQualifiedName}. It must implement {typeof(IBasicRepository<>).AssemblyQualifiedName}.");
             }
 
             CustomRepositories[entityType] = repositoryType;
@@ -125,7 +127,7 @@ namespace Volo.Abp.DependencyInjection
                 return false;
             }
 
-            if (!IncludeAllEntitiesForDefaultRepositories && !ReflectionHelper.IsAssignableToGenericType(entityType, typeof(IAggregateRoot<>)))
+            if (!IncludeAllEntitiesForDefaultRepositories && !typeof(IAggregateRoot).IsAssignableFrom(entityType))
             {
                 return false;
             }

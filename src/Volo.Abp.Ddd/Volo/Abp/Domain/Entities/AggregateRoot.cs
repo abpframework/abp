@@ -1,13 +1,14 @@
-﻿using System;
-
-namespace Volo.Abp.Domain.Entities
+﻿namespace Volo.Abp.Domain.Entities
 {
-    public abstract class AggregateRoot : AggregateRoot<Guid>, IAggregateRoot
+
+    /// <inheritdoc cref="IAggregateRoot" />
+    public abstract class AggregateRoot : IAggregateRoot
     {
 
     }
 
-    public abstract class AggregateRoot<TPrimaryKey> : Entity<TPrimaryKey>, IAggregateRoot<TPrimaryKey>
+    /// <inheritdoc cref="IAggregateRoot{TKey}" />
+    public abstract class AggregateRoot<TKey> : Entity<TKey>, IAggregateRoot<TKey>
     {
 
     }

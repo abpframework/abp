@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
@@ -10,19 +9,9 @@ using Volo.Abp.MongoDB;
 
 namespace Volo.Abp.Domain.Repositories.MongoDB
 {
-    public class MongoDbRepository<TMongoDbContext, TEntity> : MongoDbRepository<TMongoDbContext, TEntity, Guid>, IMongoDbRepository<TEntity>
+    public class MongoDbRepository<TMongoDbContext, TEntity> : RepositoryBase<TEntity>, IMongoDbRepository<TEntity>
         where TMongoDbContext : AbpMongoDbContext
-        where TEntity : class, IEntity<Guid>
-    {
-        public MongoDbRepository(IMongoDatabaseProvider<TMongoDbContext> databaseProvider)
-            : base(databaseProvider)
-        {
-        }
-    }
-
-    public class MongoDbRepository<TMongoDbContext, TEntity, TPrimaryKey> : QueryableRepositoryBase<TEntity, TPrimaryKey>, IMongoDbRepository<TEntity, TPrimaryKey> 
-        where TMongoDbContext : AbpMongoDbContext
-        where TEntity : class, IEntity<TPrimaryKey>
+        where TEntity : class, IEntity
     {
         public virtual string CollectionName => DatabaseProvider.DbContext.GetCollectionName<TEntity>();
 
@@ -37,25 +26,6 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             DatabaseProvider = databaseProvider;
         }
 
-        //TODO: Override other methods?
-
-        public override async Task<List<TEntity>> GetListAsync(CancellationToken cancellationToken = new CancellationToken())
-        {
-            return await (await Collection.FindAsync(Builders<TEntity>.Filter.Empty, cancellationToken: cancellationToken)).ToListAsync(cancellationToken);
-        }
-
-        public override async Task<TEntity> GetAsync(TPrimaryKey id, CancellationToken cancellationToken = default)
-        {
-            var entity = await FindAsync(id, cancellationToken);
-
-            if (entity == null)
-            {
-                throw new EntityNotFoundException(typeof(TEntity), id);
-            }
-
-            return entity;
-        }
-        
         public override TEntity Insert(TEntity entity, bool autoSave = false)
         {
             Collection.InsertOne(entity);
@@ -70,50 +40,34 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
 
         public override TEntity Update(TEntity entity)
         {
-            var filter = Builders<TEntity>.Filter.Eq(e => e.Id, entity.Id);
-            Collection.ReplaceOne(filter, entity);
+            Collection.ReplaceOne(CreateEntityFilter(entity), entity);
             return entity;
         }
 
         public override async Task<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
-            var filter = Builders<TEntity>.Filter.Eq(e => e.Id, entity.Id);
-            await Collection.ReplaceOneAsync(filter, entity, cancellationToken: cancellationToken);
+            await Collection.ReplaceOneAsync(CreateEntityFilter(entity), entity, cancellationToken: cancellationToken);
             return entity;
         }
 
         public override void Delete(TEntity entity)
         {
-            Delete(entity.Id);
+            Collection.DeleteOne(CreateEntityFilter(entity));
         }
 
-        public override void Delete(TPrimaryKey id)
+        public override async Task DeleteAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
-            var filter = Builders<TEntity>.Filter.Eq(e => e.Id, id);
-            Collection.DeleteOne(filter);
+            await Collection.DeleteOneAsync(CreateEntityFilter(entity), cancellationToken);
         }
 
         public override void Delete(Expression<Func<TEntity, bool>> predicate)
         {
-            var filter = Builders<TEntity>.Filter.Where(predicate);
-            Collection.DeleteOne(filter);
+            Collection.DeleteMany(Builders<TEntity>.Filter.Where(predicate));
         }
 
-        public override Task DeleteAsync(TPrimaryKey id, CancellationToken cancellationToken = default)
+        public override async Task DeleteAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
         {
-            var filter = Builders<TEntity>.Filter.Eq(e => e.Id, id);
-            return Collection.DeleteOneAsync(filter, cancellationToken: cancellationToken);
-        }
-
-        public override Task DeleteAsync(TEntity entity, CancellationToken cancellationToken = default)
-        {
-            return DeleteAsync(entity.Id, cancellationToken);
-        }
-
-        public override Task DeleteAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
-        {
-            var filter = Builders<TEntity>.Filter.Where(predicate);
-            return Collection.DeleteOneAsync(filter, cancellationToken: cancellationToken);
+            await Collection.DeleteManyAsync(Builders<TEntity>.Filter.Where(predicate), cancellationToken);
         }
 
         protected override IQueryable<TEntity> GetQueryable()
@@ -121,9 +75,74 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             return Collection.AsQueryable();
         }
 
-        public override Task<long> GetCountAsync(CancellationToken cancellationToken = default)
+        protected virtual FilterDefinition<TEntity> CreateEntityFilter(TEntity entity)
         {
-            return Collection.CountAsync(Builders<TEntity>.Filter.Empty, cancellationToken: cancellationToken);
+            throw new NotImplementedException("CreateEntityFilter is not implemented for MongoDb by default. It should be overrided and implemented by deriving classes!");
+        }
+    }
+
+    public class MongoDbRepository<TMongoDbContext, TEntity, TKey> : MongoDbRepository<TMongoDbContext, TEntity>, IMongoDbRepository<TEntity, TKey>
+        where TMongoDbContext : AbpMongoDbContext
+        where TEntity : class, IEntity<TKey>
+    {
+        public MongoDbRepository(IMongoDatabaseProvider<TMongoDbContext> databaseProvider)
+            : base(databaseProvider)
+        {
+
+        }
+
+        public virtual TEntity Get(TKey id)
+        {
+            var entity = Find(id);
+
+            if (entity == null)
+            {
+                throw new EntityNotFoundException(typeof(TEntity), id);
+            }
+
+            return entity;
+        }
+
+        public virtual async Task<TEntity> GetAsync(TKey id, CancellationToken cancellationToken = default)
+        {
+            var entity = await FindAsync(id, cancellationToken);
+
+            if (entity == null)
+            {
+                throw new EntityNotFoundException(typeof(TEntity), id);
+            }
+
+            return entity;
+        }
+
+        public virtual void Delete(TKey id)
+        {
+            Collection.DeleteOne(CreateEntityFilter(id));
+        }
+
+        public virtual Task DeleteAsync(TKey id, CancellationToken cancellationToken = default)
+        {
+            return Collection.DeleteOneAsync(CreateEntityFilter(id), cancellationToken);
+        }
+
+        public virtual async Task<TEntity> FindAsync(TKey id, CancellationToken cancellationToken = default)
+        {
+            return await Collection.Find(CreateEntityFilter(id)).FirstOrDefaultAsync(cancellationToken);
+        }
+
+        public virtual TEntity Find(TKey id)
+        {
+            return Collection.Find(CreateEntityFilter(id)).FirstOrDefault();
+        }
+
+        protected override FilterDefinition<TEntity> CreateEntityFilter(TEntity entity)
+        {
+            return Builders<TEntity>.Filter.Eq(e => e.Id, entity.Id);
+        }
+
+        private static FilterDefinition<TEntity> CreateEntityFilter(TKey id)
+        {
+            return Builders<TEntity>.Filter.Eq(e => e.Id, id);
         }
     }
 }

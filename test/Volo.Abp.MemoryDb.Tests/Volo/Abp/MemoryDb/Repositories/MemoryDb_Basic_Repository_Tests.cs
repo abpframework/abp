@@ -10,17 +10,17 @@ namespace Volo.Abp.MemoryDb.Repositories
 {
     public class MemoryDb_Basic_Repository_Tests : MemoryDbTestBase
     {
-        private readonly IQueryableRepository<Person> _personRepository;
+        private readonly IRepository<Person, Guid> _personRepository;
 
         public MemoryDb_Basic_Repository_Tests()
         {
-            _personRepository = ServiceProvider.GetRequiredService<IQueryableRepository<Person>>();
+            _personRepository = ServiceProvider.GetRequiredService<IRepository<Person, Guid>>();
         }
 
         [Fact]
         public void GetList()
         {
-            var people = _personRepository.GetList();
+            var people = _personRepository.ToList();
             people.Count.ShouldBeGreaterThan(0);
         }
 

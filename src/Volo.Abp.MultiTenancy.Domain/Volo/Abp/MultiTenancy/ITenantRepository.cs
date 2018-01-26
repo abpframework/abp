@@ -4,7 +4,7 @@ using Volo.Abp.Domain.Repositories;
 
 namespace Volo.Abp.MultiTenancy
 {
-    public interface ITenantRepository : IRepository<Tenant>
+    public interface ITenantRepository : IBasicRepository<Tenant, Guid>
     {
         Task<Tenant> FindByNameIncludeDetailsAsync(string name);
 

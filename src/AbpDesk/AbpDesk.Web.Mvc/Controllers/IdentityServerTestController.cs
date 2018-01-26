@@ -38,7 +38,7 @@ namespace AbpDesk.Web.Mvc.Controllers
         [Route("create")]
         public async Task<IActionResult> CreateClient(string clientId)
         {
-            var apiResource = (await _apiResourceRepository.GetListAsync()).FirstOrDefault(ar => ar.Name == "api1");
+            var apiResource = await _apiResourceRepository.FindByNameAsync("api1");
 
             if (apiResource == null)
             {

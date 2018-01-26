@@ -12,11 +12,11 @@ namespace AbpDesk.Tickets
 {
     public class TicketAppService : ApplicationService, ITicketAppService
     {
-        private readonly IQueryableRepository<Ticket, int> _ticketRepository;
+        private readonly IRepository<Ticket, int> _ticketRepository;
         private readonly IAsyncQueryableExecuter _asyncQueryableExecuter;
 
         public TicketAppService(
-            IQueryableRepository<Ticket, int> ticketRepository,
+            IRepository<Ticket, int> ticketRepository,
             IAsyncQueryableExecuter asyncQueryableExecuter)
         {
             _ticketRepository = ticketRepository;

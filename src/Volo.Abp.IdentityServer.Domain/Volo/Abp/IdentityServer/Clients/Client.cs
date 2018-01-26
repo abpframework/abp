@@ -8,7 +8,7 @@ using Volo.Abp.Guids;
 
 namespace Volo.Abp.IdentityServer.Clients
 {
-    public class Client : AggregateRoot
+    public class Client : AggregateRoot<Guid>
     {
         public virtual string ClientId { get; set; }
 

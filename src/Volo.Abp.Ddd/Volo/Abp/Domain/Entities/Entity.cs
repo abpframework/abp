@@ -1,37 +1,27 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 
 namespace Volo.Abp.Domain.Entities
 {
-    /// <summary>
-    /// A shortcut of <see cref="Entity{TPrimaryKey}"/> for default primary key type (<see cref="Guid"/>).
-    /// </summary>
-    public abstract class Entity : Entity<Guid>, IEntity
+    /// <inheritdoc/>
+    public abstract class Entity : IEntity
     {
-
+        /// <inheritdoc/>
+        public override string ToString()
+        {
+            return $"[ENTITY: {GetType().Name}]";
+        }
     }
 
-    /// <inheritdoc/>
-    /// <summary>
-    /// Basic implementation of IEntity interface.
-    /// An entity can inherit this class of directly implement to IEntity interface.
-    /// </summary>
-    /// <typeparam name="TPrimaryKey">Type of the primary key of the entity</typeparam>
-    public abstract class Entity<TPrimaryKey> : IEntity<TPrimaryKey>
+    /// <inheritdoc cref="IEntity{TKey}" />
+    public abstract class Entity<TKey> : Entity, IEntity<TKey>
     {
         /// <inheritdoc/>
-        public virtual TPrimaryKey Id { get; set; }
-
-        /// <inheritdoc/>
-        public virtual bool IsTransient()
-        {
-            return EntityHelper.IsTransient(this);
-        }
+        public virtual TKey Id { get; set; }
 
         /// <inheritdoc/>
         public override bool Equals(object obj)
         {
-            if (obj == null || !(obj is Entity<TPrimaryKey>))
+            if (obj == null || !(obj is Entity<TKey>))
             {
                 return false;
             }
@@ -43,8 +33,8 @@ namespace Volo.Abp.Domain.Entities
             }
 
             //Transient objects are not considered as equal
-            var other = (Entity<TPrimaryKey>)obj;
-            if (IsTransient() && other.IsTransient())
+            var other = (Entity<TKey>)obj;
+            if (EntityHelper.IsTransient(this) && EntityHelper.IsTransient(other))
             {
                 return false;
             }
@@ -63,10 +53,15 @@ namespace Volo.Abp.Domain.Entities
         /// <inheritdoc/>
         public override int GetHashCode()
         {
+            if (Id == null)
+            {
+                return 0;
+            }
+
             return Id.GetHashCode();
         }
 
-        public static bool operator ==(Entity<TPrimaryKey> left, Entity<TPrimaryKey> right)
+        public static bool operator ==(Entity<TKey> left, Entity<TKey> right)
         {
             if (Equals(left, null))
             {
@@ -76,7 +71,7 @@ namespace Volo.Abp.Domain.Entities
             return left.Equals(right);
         }
 
-        public static bool operator !=(Entity<TPrimaryKey> left, Entity<TPrimaryKey> right)
+        public static bool operator !=(Entity<TKey> left, Entity<TKey> right)
         {
             return !(left == right);
         }
@@ -84,7 +79,7 @@ namespace Volo.Abp.Domain.Entities
         /// <inheritdoc/>
         public override string ToString()
         {
-            return $"[{GetType().Name} {Id}]";
+            return $"[ENTITY: {GetType().Name}] Id = {Id}";
         }
     }
 }

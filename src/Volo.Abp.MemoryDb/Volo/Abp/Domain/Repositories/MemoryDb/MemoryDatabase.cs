@@ -21,11 +21,11 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
             return _sets.GetOrAdd(typeof(TEntity), _ => new List<TEntity>()) as List<TEntity>;
         }
 
-        public TPrimaryKey GenerateNextId<TEntity, TPrimaryKey>()
+        public TKey GenerateNextId<TEntity, TKey>()
         {
             return _idGenerators
                 .GetOrAdd(typeof(TEntity), () => new InMemoryIdGenerator())
-                .GenerateNext<TPrimaryKey>();
+                .GenerateNext<TKey>();
         }
     }
 }

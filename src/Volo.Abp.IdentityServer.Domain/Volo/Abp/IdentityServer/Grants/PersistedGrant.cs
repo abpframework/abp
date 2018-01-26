@@ -3,7 +3,7 @@ using Volo.Abp.Domain.Entities;
 
 namespace Volo.Abp.IdentityServer.Grants
 {
-    public class PersistedGrant : AggregateRoot
+    public class PersistedGrant : AggregateRoot<Guid>
     {
         public virtual string Key { get; set; }
 

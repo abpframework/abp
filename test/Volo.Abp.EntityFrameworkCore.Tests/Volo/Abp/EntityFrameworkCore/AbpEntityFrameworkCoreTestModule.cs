@@ -22,7 +22,7 @@ namespace Volo.Abp.EntityFrameworkCore
 
             services.AddAbpDbContext<TestAppDbContext>(options =>
             {
-                options.AddDefaultRepositories();
+                options.AddDefaultRepositories(true);
                 options.ReplaceDbContext<IThirdDbContext>();
             });
 

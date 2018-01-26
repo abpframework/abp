@@ -1,30 +1,23 @@
-﻿using System;
-
-namespace Volo.Abp.Domain.Entities
+﻿namespace Volo.Abp.Domain.Entities
 {
     /// <summary>
-    /// A shortcut of <see cref="IEntity{TPrimaryKey}"/> for default primary key type (<see cref="string"/>).
+    /// Defines an entity. It's primary key may not be "Id" or it mah have a composite primary key.
+    /// Use <see cref="IEntity{TKey}"/> where possible for better integration to repositories and other structures in the framework.
     /// </summary>
-    public interface IEntity : IEntity<Guid>
+    public interface IEntity
     {
 
     }
 
     /// <summary>
-    /// Defines interface for base entity type. All entities in the system must implement this interface.
+    /// Defines an entity with a single primary key with "Id" property.
     /// </summary>
-    /// <typeparam name="TPrimaryKey">Type of the primary key of the entity</typeparam>
-    public interface IEntity<TPrimaryKey>
+    /// <typeparam name="TKey">Type of the primary key of the entity</typeparam>
+    public interface IEntity<TKey> : IEntity
     {
         /// <summary>
         /// Unique identifier for this entity.
         /// </summary>
-        TPrimaryKey Id { get; set; }
-
-        /// <summary>
-        /// Checks if this entity is transient (not persisted to database and it has not an <see cref="Id"/>).
-        /// </summary>
-        /// <returns>True, if this entity is transient</returns>
-        bool IsTransient();
+        TKey Id { get; set; } //TODO: Consider to remove setter and make it protected in Entity class
     }
 }

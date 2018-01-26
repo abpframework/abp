@@ -12,5 +12,15 @@ namespace Volo.Abp.EntityFrameworkCore.TestApp.SecondContext
             : base(options)
         {
         }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<PhoneInSecondDbContext>(b =>
+            {
+                b.HasKey(p => new { p.PersonId, p.Number });
+            });
+        }
     }
 }

@@ -11,11 +11,11 @@ namespace AbpDesk.ConsoleDemo
     public class UserLister : ITransientDependency
     {
         private readonly IdentityUserManager _userManager;
-        private readonly IQueryableRepository<IdentityUser> _userRepository;
+        private readonly IRepository<IdentityUser, Guid> _userRepository;
 
         public UserLister(
             IdentityUserManager userManager,
-            IQueryableRepository<IdentityUser> userRepository)
+            IRepository<IdentityUser, Guid> userRepository)
         {
             _userManager = userManager;
             _userRepository = userRepository;

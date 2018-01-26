@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System;
+using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.EntityFrameworkCore.TestApp.ThirdDbContext;
@@ -9,11 +10,11 @@ namespace Volo.Abp.EntityFrameworkCore
 {
     public class DbContext_Replace_Tests : EntityFrameworkCoreTestBase
     {
-        private readonly IRepository<ThirdDbContextDummyEntity> _dummyRepository;
+        private readonly IBasicRepository<ThirdDbContextDummyEntity, Guid> _dummyRepository;
 
         public DbContext_Replace_Tests()
         {
-            _dummyRepository = ServiceProvider.GetRequiredService<IRepository<ThirdDbContextDummyEntity>>();
+            _dummyRepository = ServiceProvider.GetRequiredService<IBasicRepository<ThirdDbContextDummyEntity, Guid>>();
         }
 
         [Fact]

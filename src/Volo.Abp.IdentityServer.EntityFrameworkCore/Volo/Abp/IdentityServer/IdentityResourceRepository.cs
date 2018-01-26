@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +14,7 @@ namespace Volo.Abp.IdentityServer
 {
     //TODO: This is not true implementation! This repository works for 2 different aggregate root!
 
-    public class IdentityResourceRepository : EfCoreRepository<IdentityServerDbContext, IdentityResource>, IIdentityResourceRepository
+    public class IdentityResourceRepository : EfCoreRepository<IdentityServerDbContext, IdentityResource, Guid>, IIdentityResourceRepository
     {
         public IdentityResourceRepository(IDbContextProvider<IdentityServerDbContext> dbContextProvider) 
             : base(dbContextProvider)

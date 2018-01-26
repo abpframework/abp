@@ -16,7 +16,7 @@ namespace Volo.Abp.EntityFrameworkCore
                 from property in dbContextType.GetTypeInfo().GetProperties(BindingFlags.Public | BindingFlags.Instance)
                 where
                     ReflectionHelper.IsAssignableToGenericType(property.PropertyType, typeof(DbSet<>)) &&
-                    ReflectionHelper.IsAssignableToGenericType(property.PropertyType.GenericTypeArguments[0], typeof(IEntity<>))
+                    typeof(IEntity).IsAssignableFrom(property.PropertyType.GenericTypeArguments[0])
                 select property.PropertyType.GenericTypeArguments[0];
         }
     }

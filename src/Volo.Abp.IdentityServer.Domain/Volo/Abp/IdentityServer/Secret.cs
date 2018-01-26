@@ -6,7 +6,7 @@ namespace Volo.Abp.IdentityServer
 {
     //TODO: Eleminate Secret class for simplicity.
 
-    public abstract class Secret : Entity
+    public abstract class Secret : Entity<Guid>
     {
         public virtual string Description { get; protected set; }
 

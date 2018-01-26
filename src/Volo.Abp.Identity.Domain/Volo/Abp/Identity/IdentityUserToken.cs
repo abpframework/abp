@@ -7,7 +7,7 @@ namespace Volo.Abp.Identity
     /// <summary>
     /// Represents an authentication token for a user.
     /// </summary>
-    public class IdentityUserToken : Entity
+    public class IdentityUserToken : Entity<Guid>
     {
         /// <summary>
         /// Gets or sets the primary key of the user that the token belongs to.

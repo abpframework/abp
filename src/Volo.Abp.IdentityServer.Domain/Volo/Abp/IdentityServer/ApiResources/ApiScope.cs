@@ -4,7 +4,7 @@ using Volo.Abp.Domain.Entities;
 
 namespace Volo.Abp.IdentityServer.ApiResources
 {
-    public class ApiScope : Entity
+    public class ApiScope : Entity<Guid>
     {
         public virtual string Name { get; set; }
 

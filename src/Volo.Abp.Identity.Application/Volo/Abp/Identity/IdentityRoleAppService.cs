@@ -26,10 +26,10 @@ namespace Volo.Abp.Identity
             );
         }
 
-        public async Task<PagedResultDto<IdentityRoleDto>> GetListAsync(GetIdentityRolesInput input)
+        public async Task<PagedResultDto<IdentityRoleDto>> GetListAsync(GetIdentityRolesInput input) //TODO: Remove input
         {
-            var count = (int)await _roleRepository.GetCountAsync();
-            var list = await _roleRepository.GetListAsync(input.Sorting, input.MaxResultCount, input.SkipCount, input.Filter);
+            var count = (int) await _roleRepository.GetCountAsync();
+            var list = await _roleRepository.GetListAsync();
 
             return new PagedResultDto<IdentityRoleDto>(
                 count,

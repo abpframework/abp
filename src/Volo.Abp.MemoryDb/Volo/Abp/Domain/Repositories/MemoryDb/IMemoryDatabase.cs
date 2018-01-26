@@ -6,6 +6,6 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
     {
         List<TEntity> Collection<TEntity>();
 
-        TPrimaryKey GenerateNextId<TEntity, TPrimaryKey>();
+        TKey GenerateNextId<TEntity, TKey>();
     }
 }
