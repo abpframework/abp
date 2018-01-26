@@ -47,7 +47,7 @@ namespace AbpDesk.Blogging
 
                 using (var uow = scope.ServiceProvider.GetRequiredService<IUnitOfWorkManager>().Begin())
                 {
-                    var blogPostRepository = scope.ServiceProvider.GetRequiredService<IQueryableRepository<BlogPost, Guid>>();
+                    var blogPostRepository = scope.ServiceProvider.GetRequiredService<IRepository<BlogPost, Guid>>();
                     if (blogPostRepository.Any())
                     {
                         logger.LogInformation($"No need to seed database since there are already {blogPostRepository.Count()} blog posts!");

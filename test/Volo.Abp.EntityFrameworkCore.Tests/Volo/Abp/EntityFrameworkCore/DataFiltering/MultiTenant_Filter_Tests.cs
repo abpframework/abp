@@ -17,12 +17,12 @@ namespace Volo.Abp.EntityFrameworkCore.DataFiltering
     public class MultiTenant_Filter_Tests : EntityFrameworkCoreTestBase //TODO: This class is same of Volo.Abp.MemoryDb.DataFilters.MemoryDb_MultiTenant_Filter_Tests. Can we share source code?
     {
         private ICurrentTenant _fakeCurrentTenant;
-        private readonly IQueryableRepository<Person, Guid> _personRepository;
+        private readonly IRepository<Person, Guid> _personRepository;
         private readonly IDataFilter<IMultiTenant> _multiTenantFilter;
 
         public MultiTenant_Filter_Tests()
         {
-            _personRepository = GetRequiredService<IQueryableRepository<Person, Guid>>();
+            _personRepository = GetRequiredService<IRepository<Person, Guid>>();
             _multiTenantFilter = GetRequiredService<IDataFilter<IMultiTenant>>();
         }
 

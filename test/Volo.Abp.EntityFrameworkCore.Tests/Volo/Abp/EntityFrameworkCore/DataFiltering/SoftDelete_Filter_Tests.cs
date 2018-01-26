@@ -10,12 +10,12 @@ namespace Volo.Abp.EntityFrameworkCore.DataFiltering
 {
     public class SoftDelete_Filter_Tests : EntityFrameworkCoreTestBase
     {
-        private readonly IQueryableRepository<Person, Guid> _personRepository;
+        private readonly IRepository<Person, Guid> _personRepository;
         private readonly IDataFilter _dataFilter;
 
         public SoftDelete_Filter_Tests()
         {
-            _personRepository = GetRequiredService<IQueryableRepository<Person, Guid>>();
+            _personRepository = GetRequiredService<IRepository<Person, Guid>>();
             _dataFilter = GetRequiredService<IDataFilter>();
         }
 

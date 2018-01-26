@@ -9,7 +9,7 @@ using Volo.Abp.MongoDB;
 
 namespace Volo.Abp.Domain.Repositories.MongoDB
 {
-    public class MongoDbRepository<TMongoDbContext, TEntity> : QueryableRepositoryBase<TEntity>, IMongoDbRepository<TEntity>
+    public class MongoDbRepository<TMongoDbContext, TEntity> : RepositoryBase<TEntity>, IMongoDbRepository<TEntity>
         where TMongoDbContext : AbpMongoDbContext
         where TEntity : class, IEntity
     {

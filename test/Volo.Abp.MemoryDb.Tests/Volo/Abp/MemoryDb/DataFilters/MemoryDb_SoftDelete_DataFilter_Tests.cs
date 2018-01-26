@@ -11,12 +11,12 @@ namespace Volo.Abp.MemoryDb.DataFilters
 {
     public class MemoryDb_SoftDelete_DataFilter_Tests : MemoryDbTestBase
     {
-        private readonly IQueryableRepository<Person, Guid> _personRepository;
+        private readonly IRepository<Person, Guid> _personRepository;
         private readonly IDataFilter _dataFilter;
 
         public MemoryDb_SoftDelete_DataFilter_Tests()
         {
-            _personRepository = ServiceProvider.GetRequiredService<IQueryableRepository<Person, Guid>>();
+            _personRepository = ServiceProvider.GetRequiredService<IRepository<Person, Guid>>();
             _dataFilter = GetRequiredService<IDataFilter>();
         }
 

@@ -15,12 +15,12 @@ namespace Volo.Abp.Http.DynamicProxying
     public class PersonAppServiceClientProxy_Tests : AbpHttpTestBase
     {
         private readonly IPeopleAppService _peopleAppService;
-        private readonly IQueryableRepository<Person, Guid> _personRepository;
+        private readonly IRepository<Person, Guid> _personRepository;
 
         public PersonAppServiceClientProxy_Tests()
         {
             _peopleAppService = ServiceProvider.GetRequiredService<IPeopleAppService>();
-            _personRepository = ServiceProvider.GetRequiredService<IQueryableRepository<Person, Guid>>();
+            _personRepository = ServiceProvider.GetRequiredService<IRepository<Person, Guid>>();
         }
 
         [Fact]

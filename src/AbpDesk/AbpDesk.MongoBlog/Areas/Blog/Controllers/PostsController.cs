@@ -10,9 +10,9 @@ namespace Areas.Blog.Controllers
     [Area("Blog")]
     public class PostsController : AbpController
     {
-        private readonly IQueryableRepository<BlogPost, Guid> _blogPostRepository;
+        private readonly IRepository<BlogPost, Guid> _blogPostRepository;
 
-        public PostsController(IQueryableRepository<BlogPost, Guid> blogPostRepository)
+        public PostsController(IRepository<BlogPost, Guid> blogPostRepository)
         {
             _blogPostRepository = blogPostRepository;
         }

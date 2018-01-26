@@ -3,7 +3,7 @@ using Volo.Abp.Domain.Entities;
 
 namespace Volo.Abp.Domain.Repositories.MemoryDb
 {
-    public interface IMemoryDbRepository<TEntity> : IQueryableRepository<TEntity>
+    public interface IMemoryDbRepository<TEntity> : IRepository<TEntity>
         where TEntity : class, IEntity
     {
         IMemoryDatabase Database { get; }
@@ -11,7 +11,7 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
         List<TEntity> Collection { get; }
     }
 
-    public interface IMemoryDbRepository<TEntity, TKey> : IMemoryDbRepository<TEntity>, IQueryableRepository<TEntity, TKey>
+    public interface IMemoryDbRepository<TEntity, TKey> : IMemoryDbRepository<TEntity>, IRepository<TEntity, TKey>
         where TEntity : class, IEntity<TKey>
     {
 

@@ -10,7 +10,7 @@ namespace Volo.Abp.Application.Services
         where TEntity : class, IEntity<TKey>
         where TEntityDto : IEntityDto<TKey>
     {
-        protected CrudAppService(IQueryableRepository<TEntity, TKey> repository)
+        protected CrudAppService(IRepository<TEntity, TKey> repository)
             : base(repository)
         {
 
@@ -22,7 +22,7 @@ namespace Volo.Abp.Application.Services
         where TEntity : class, IEntity<TKey>
         where TEntityDto : IEntityDto<TKey>
     {
-        protected CrudAppService(IQueryableRepository<TEntity, TKey> repository)
+        protected CrudAppService(IRepository<TEntity, TKey> repository)
             : base(repository)
         {
 
@@ -35,7 +35,7 @@ namespace Volo.Abp.Application.Services
         where TEntityDto : IEntityDto<TKey>
         where TCreateInput : IEntityDto<TKey>
     {
-        protected CrudAppService(IQueryableRepository<TEntity, TKey> repository)
+        protected CrudAppService(IRepository<TEntity, TKey> repository)
             : base(repository)
         {
 
@@ -48,7 +48,7 @@ namespace Volo.Abp.Application.Services
            where TEntity : class, IEntity<TKey>
            where TEntityDto : IEntityDto<TKey>
     {
-        protected CrudAppService(IQueryableRepository<TEntity, TKey> repository)
+        protected CrudAppService(IRepository<TEntity, TKey> repository)
             : base(repository)
         {
 

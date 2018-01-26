@@ -8,7 +8,7 @@ using Volo.Abp.MemoryDb;
 
 namespace Volo.Abp.Domain.Repositories.MemoryDb
 {
-    public class MemoryDbRepository<TMemoryDbContext, TEntity> : QueryableRepositoryBase<TEntity>, IMemoryDbRepository<TEntity>
+    public class MemoryDbRepository<TMemoryDbContext, TEntity> : RepositoryBase<TEntity>, IMemoryDbRepository<TEntity>
         where TMemoryDbContext : MemoryDbContext
         where TEntity : class, IEntity
     {

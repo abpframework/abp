@@ -10,7 +10,7 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
 {
-    public class EfCoreRepository<TDbContext, TEntity> : QueryableRepositoryBase<TEntity>, IEfCoreRepository<TEntity>
+    public class EfCoreRepository<TDbContext, TEntity> : RepositoryBase<TEntity>, IEfCoreRepository<TEntity>
         where TDbContext : IEfCoreDbContext
         where TEntity : class, IEntity
     {

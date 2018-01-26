@@ -1,4 +1,7 @@
-﻿using System.Threading;
+﻿using System;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Volo.Abp.DependencyInjection;
@@ -14,110 +17,31 @@ namespace Volo.Abp.Domain.Repositories
 
     }
 
-    public interface IRepository<TEntity> : IRepository
+    public interface IRepository<TEntity> : IBasicRepository<TEntity>, IQueryable<TEntity>
         where TEntity : class, IEntity
     {
         /// <summary>
-        /// Inserts a new entity.
+        /// Deletes many entities by function.
+        /// Notice that: All entities fits to given predicate are retrieved and deleted.
+        /// This may cause major performance problems if there are too many entities with
+        /// given predicate.
         /// </summary>
-        /// <param name="entity">Inserted entity</param>
-        /// <param name="autoSave">
-        /// Set true to automatically save changes to database.
-        /// This can be used to set database generated Id of an entity for some ORMs (like Entity Framework).
-        /// </param>
-        [NotNull]
-        TEntity Insert([NotNull] TEntity entity, bool autoSave = false);
+        /// <param name="predicate">A condition to filter entities</param>
+        void Delete([NotNull] Expression<Func<TEntity, bool>> predicate);
 
         /// <summary>
-        /// Inserts a new entity.
-        /// </summary>
-        /// <param name="autoSave">
-        /// Set true to automatically save changes to database.
-        /// This can be used to set database generated Id of an entity for some ORMs (like Entity Framework).
-        /// </param>
-        /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
-        /// <param name="entity">Inserted entity</param>
-        [NotNull]
-        Task<TEntity> InsertAsync([NotNull] TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default);
-
-        /// <summary>
-        /// Updates an existing entity.
-        /// </summary>
-        /// <param name="entity">Entity</param>
-        [NotNull]
-        TEntity Update([NotNull] TEntity entity);
-
-        /// <summary>
-        /// Updates an existing entity. 
+        /// Deletes many entities by function.
+        /// Notice that: All entities fits to given predicate are retrieved and deleted.
+        /// This may cause major performance problems if there are too many entities with
+        /// given predicate.
         /// </summary>
         /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
-        /// <param name="entity">Entity</param>
-        [NotNull]
-        Task<TEntity> UpdateAsync([NotNull] TEntity entity, CancellationToken cancellationToken = default);
-
-        /// <summary>
-        /// Deletes an entity.
-        /// </summary>
-        /// <param name="entity">Entity to be deleted</param>
-        void Delete([NotNull] TEntity entity); //TODO: Return true if deleted
-
-        /// <summary>
-        /// Deletes an entity.
-        /// </summary>
-        /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
-        /// <param name="entity">Entity to be deleted</param>
-        Task DeleteAsync([NotNull] TEntity entity, CancellationToken cancellationToken = default); //TODO: Return true if deleted
+        /// <param name="predicate">A condition to filter entities</param>
+        Task DeleteAsync([NotNull] Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default);
     }
 
-    public interface IRepository<TEntity, TKey> : IRepository<TEntity>
+    public interface IRepository<TEntity, TKey> : IRepository<TEntity>, IBasicRepository<TEntity, TKey>
         where TEntity : class, IEntity<TKey>
     {
-        /// <summary>
-        /// Gets an entity with given primary key.
-        /// Throws <see cref="EntityNotFoundException"/> if can not find an entity with given id.
-        /// </summary>
-        /// <param name="id">Primary key of the entity to get</param>
-        /// <returns>Entity</returns>
-        [NotNull]
-        TEntity Get(TKey id);
-
-        /// <summary>
-        /// Gets an entity with given primary key.
-        /// Throws <see cref="EntityNotFoundException"/> if can not find an entity with given id.
-        /// </summary>
-        /// <param name="id">Primary key of the entity to get</param>
-        /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
-        /// <returns>Entity</returns>
-        [NotNull]
-        Task<TEntity> GetAsync(TKey id, CancellationToken cancellationToken = default);
-
-        /// <summary>
-        /// Gets an entity with given primary key or null if not found.
-        /// </summary>
-        /// <param name="id">Primary key of the entity to get</param>
-        /// <returns>Entity or null</returns>
-        [CanBeNull]
-        TEntity Find(TKey id);
-
-        /// <summary>
-        /// Gets an entity with given primary key or null if not found.
-        /// </summary>
-        /// <param name="id">Primary key of the entity to get</param>
-        /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
-        /// <returns>Entity or null</returns>
-        Task<TEntity> FindAsync(TKey id, CancellationToken cancellationToken = default);
-
-        /// <summary>
-        /// Deletes an entity by primary key.
-        /// </summary>
-        /// <param name="id">Primary key of the entity</param>
-        void Delete(TKey id); //TODO: Return true if deleted
-
-        /// <summary>
-        /// Deletes an entity by primary key.
-        /// </summary>
-        /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
-        /// <param name="id">Primary key of the entity</param>
-        Task DeleteAsync(TKey id, CancellationToken cancellationToken = default);  //TODO: Return true if deleted
     }
 }

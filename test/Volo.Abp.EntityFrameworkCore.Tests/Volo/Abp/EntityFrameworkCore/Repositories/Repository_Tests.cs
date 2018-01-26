@@ -12,15 +12,15 @@ namespace Volo.Abp.EntityFrameworkCore.Repositories
 {
     public class Repository_Tests : EntityFrameworkCoreTestBase
     {
-        private readonly IQueryableRepository<Person, Guid> _personRepository;
-        private readonly IQueryableRepository<BookInSecondDbContext, Guid> _bookRepository;
-        private readonly IQueryableRepository<PhoneInSecondDbContext> _phoneInSecondDbContextRepository;
+        private readonly IRepository<Person, Guid> _personRepository;
+        private readonly IRepository<BookInSecondDbContext, Guid> _bookRepository;
+        private readonly IRepository<PhoneInSecondDbContext> _phoneInSecondDbContextRepository;
 
         public Repository_Tests()
         {
-            _personRepository = ServiceProvider.GetRequiredService<IQueryableRepository<Person, Guid>>();
-            _bookRepository = ServiceProvider.GetRequiredService<IQueryableRepository<BookInSecondDbContext, Guid>>();
-            _phoneInSecondDbContextRepository = ServiceProvider.GetRequiredService<IQueryableRepository<PhoneInSecondDbContext>>();
+            _personRepository = ServiceProvider.GetRequiredService<IRepository<Person, Guid>>();
+            _bookRepository = ServiceProvider.GetRequiredService<IRepository<BookInSecondDbContext, Guid>>();
+            _phoneInSecondDbContextRepository = ServiceProvider.GetRequiredService<IRepository<PhoneInSecondDbContext>>();
         }
 
         [Fact]

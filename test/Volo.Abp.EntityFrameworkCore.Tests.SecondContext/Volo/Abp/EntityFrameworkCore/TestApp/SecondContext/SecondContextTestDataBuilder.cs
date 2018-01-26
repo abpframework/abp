@@ -7,10 +7,10 @@ namespace Volo.Abp.EntityFrameworkCore.TestApp.SecondContext
 {
     public class SecondContextTestDataBuilder : ITransientDependency
     {
-        private readonly IRepository<BookInSecondDbContext, Guid> _bookRepository;
+        private readonly IBasicRepository<BookInSecondDbContext, Guid> _bookRepository;
         private readonly IGuidGenerator _guidGenerator;
 
-        public SecondContextTestDataBuilder(IRepository<BookInSecondDbContext, Guid> bookRepository, IGuidGenerator guidGenerator)
+        public SecondContextTestDataBuilder(IBasicRepository<BookInSecondDbContext, Guid> bookRepository, IGuidGenerator guidGenerator)
         {
             _bookRepository = bookRepository;
             _guidGenerator = guidGenerator;

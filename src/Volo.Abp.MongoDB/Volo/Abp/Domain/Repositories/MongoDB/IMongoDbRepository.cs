@@ -3,7 +3,7 @@ using Volo.Abp.Domain.Entities;
 
 namespace Volo.Abp.Domain.Repositories.MongoDB
 {
-    public interface IMongoDbRepository<TEntity> : IQueryableRepository<TEntity>
+    public interface IMongoDbRepository<TEntity> : IRepository<TEntity>
         where TEntity : class, IEntity
     {
         IMongoDatabase Database { get; }
@@ -13,7 +13,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
         string CollectionName { get; }
     }
 
-    public interface IMongoDbRepository<TEntity, TKey> : IMongoDbRepository<TEntity>, IQueryableRepository<TEntity, TKey>
+    public interface IMongoDbRepository<TEntity, TKey> : IMongoDbRepository<TEntity>, IRepository<TEntity, TKey>
         where TEntity : class, IEntity<TKey>
     {
 

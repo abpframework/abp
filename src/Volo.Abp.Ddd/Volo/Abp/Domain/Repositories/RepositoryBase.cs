@@ -1,51 +1,81 @@
-﻿using System.Threading;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading;
 using System.Threading.Tasks;
+using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
-using Volo.Abp.Threading;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Domain.Repositories
 {
-    public abstract class RepositoryBase<TEntity> : IRepository<TEntity>
+    public abstract class RepositoryBase<TEntity> : BasicRepositoryBase<TEntity>, IRepository<TEntity>
         where TEntity : class, IEntity
     {
-        public ICancellationTokenProvider CancellationTokenProvider { get; set; }
+        public IDataFilter DataFilter { get; set; }
 
-        protected RepositoryBase()
+        public ICurrentTenant CurrentTenant { get; set; }
+
+        public virtual Type ElementType => GetQueryable().ElementType;
+
+        public virtual Expression Expression => GetQueryable().Expression;
+
+        public virtual IQueryProvider Provider => GetQueryable().Provider;
+
+        IEnumerator IEnumerable.GetEnumerator()
         {
-            CancellationTokenProvider = NullCancellationTokenProvider.Instance;
+            return GetEnumerator();
         }
 
-        public abstract TEntity Insert(TEntity entity, bool autoSave = false);
-
-        public virtual Task<TEntity> InsertAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default)
+        public IEnumerator<TEntity> GetEnumerator()
         {
-            return Task.FromResult(Insert(entity, autoSave));
+            return GetQueryable().GetEnumerator();
         }
 
-        public abstract TEntity Update(TEntity entity);
+        protected abstract IQueryable<TEntity> GetQueryable();
 
-        public virtual Task<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
+        public virtual void Delete(Expression<Func<TEntity, bool>> predicate)
         {
-            return Task.FromResult(Update(entity));
+            foreach (var entity in GetQueryable().Where(predicate).ToList())
+            {
+                Delete(entity);
+            }
         }
 
-        public abstract void Delete(TEntity entity);
-
-        public virtual Task DeleteAsync(TEntity entity, CancellationToken cancellationToken = default)
+        public virtual Task DeleteAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
         {
-            Delete(entity);
+            Delete(predicate);
             return Task.CompletedTask;
         }
 
-        protected virtual CancellationToken GetCancellationToken(CancellationToken prefferedValue = default)
+        //TODO: Is that needed..?
+        protected virtual IQueryable<TEntity> ApplyDataFilters(IQueryable<TEntity> query)
         {
-            return CancellationTokenProvider.FallbackToProvider(prefferedValue);
+            if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)))
+            {
+                query = query.WhereIf(DataFilter.IsEnabled<ISoftDelete>(), e => ((ISoftDelete)e).IsDeleted == false);
+            }
+
+            if (typeof(IMultiTenant).IsAssignableFrom(typeof(TEntity)))
+            {
+                var tenantId = CurrentTenant.Id;
+                query = query.WhereIf(DataFilter.IsEnabled<IMultiTenant>(), e => ((IMultiTenant)e).TenantId == tenantId);
+            }
+
+            return query;
         }
     }
 
     public abstract class RepositoryBase<TEntity, TKey> : RepositoryBase<TEntity>, IRepository<TEntity, TKey>
         where TEntity : class, IEntity<TKey>
     {
+        public virtual TEntity Find(TKey id)
+        {
+            return GetQueryable().FirstOrDefault(EntityHelper.CreateEqualityExpressionForId<TEntity, TKey>(id));
+        }
+
         public virtual TEntity Get(TKey id)
         {
             var entity = Find(id);
@@ -62,8 +92,6 @@ namespace Volo.Abp.Domain.Repositories
         {
             return Task.FromResult(Get(id));
         }
-
-        public abstract TEntity Find(TKey id);
 
         public virtual Task<TEntity> FindAsync(TKey id, CancellationToken cancellationToken = default)
         {

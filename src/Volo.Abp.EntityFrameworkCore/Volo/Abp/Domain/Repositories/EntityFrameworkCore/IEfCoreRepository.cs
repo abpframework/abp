@@ -3,7 +3,7 @@ using Volo.Abp.Domain.Entities;
 
 namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
 {
-    public interface IEfCoreRepository<TEntity> : IQueryableRepository<TEntity>
+    public interface IEfCoreRepository<TEntity> : IRepository<TEntity>
         where TEntity : class, IEntity
     {
         DbContext DbContext { get; }
@@ -11,7 +11,7 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
         DbSet<TEntity> DbSet { get; }
     }
 
-    public interface IEfCoreRepository<TEntity, TKey> : IEfCoreRepository<TEntity>, IQueryableRepository<TEntity, TKey>
+    public interface IEfCoreRepository<TEntity, TKey> : IEfCoreRepository<TEntity>, IRepository<TEntity, TKey>
         where TEntity : class, IEntity<TKey>
     {
 

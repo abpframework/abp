@@ -12,7 +12,7 @@ namespace Volo.Abp.Domain.Repositories
     public static class RepositoryExtensions
     {
         public static async Task EnsureCollectionLoadedAsync<TEntity, TKey, TProperty>(
-            this IRepository<TEntity, TKey> repository,
+            this IBasicRepository<TEntity, TKey> repository,
             TEntity entity,
             Expression<Func<TEntity, IEnumerable<TProperty>>> propertyExpression,
             CancellationToken cancellationToken = default
@@ -28,7 +28,7 @@ namespace Volo.Abp.Domain.Repositories
         }
 
         public static void EnsureCollectionLoaded<TEntity, TKey, TProperty>(
-            this IRepository<TEntity, TKey> repository,
+            this IBasicRepository<TEntity, TKey> repository,
             TEntity entity,
             Expression<Func<TEntity, IEnumerable<TProperty>>> propertyExpression
         )
@@ -39,7 +39,7 @@ namespace Volo.Abp.Domain.Repositories
         }
 
         public static async Task EnsurePropertyLoadedAsync<TEntity, TKey, TProperty>(
-            this IRepository<TEntity, TKey> repository,
+            this IBasicRepository<TEntity, TKey> repository,
             TEntity entity,
             Expression<Func<TEntity, TProperty>> propertyExpression,
             CancellationToken cancellationToken = default
@@ -55,7 +55,7 @@ namespace Volo.Abp.Domain.Repositories
         }
 
         public static void EnsurePropertyLoaded<TEntity, TKey, TProperty>(
-            this IRepository<TEntity, TKey> repository,
+            this IBasicRepository<TEntity, TKey> repository,
             TEntity entity,
             Expression<Func<TEntity, TProperty>> propertyExpression
         )

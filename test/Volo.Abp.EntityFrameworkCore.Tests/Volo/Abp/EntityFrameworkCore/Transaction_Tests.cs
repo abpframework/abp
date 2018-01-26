@@ -12,14 +12,14 @@ namespace Volo.Abp.EntityFrameworkCore
 {
     public class Transaction_Tests : EntityFrameworkCoreTestBase
     {
-        private readonly IRepository<Person, Guid> _personRepository;
-        private readonly IRepository<BookInSecondDbContext, Guid> _bookRepository;
+        private readonly IBasicRepository<Person, Guid> _personRepository;
+        private readonly IBasicRepository<BookInSecondDbContext, Guid> _bookRepository;
         private readonly IUnitOfWorkManager _unitOfWorkManager;
 
         public Transaction_Tests()
         {
-            _personRepository = ServiceProvider.GetRequiredService<IRepository<Person, Guid>>();
-            _bookRepository = ServiceProvider.GetRequiredService<IRepository<BookInSecondDbContext, Guid>>();
+            _personRepository = ServiceProvider.GetRequiredService<IBasicRepository<Person, Guid>>();
+            _bookRepository = ServiceProvider.GetRequiredService<IBasicRepository<BookInSecondDbContext, Guid>>();
             _unitOfWorkManager = ServiceProvider.GetRequiredService<IUnitOfWorkManager>();
         }
 

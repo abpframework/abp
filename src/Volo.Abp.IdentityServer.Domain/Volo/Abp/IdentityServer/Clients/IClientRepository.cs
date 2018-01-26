@@ -5,7 +5,7 @@ using Volo.Abp.Domain.Repositories;
 
 namespace Volo.Abp.IdentityServer.Clients
 {
-    public interface IClientRepository : IRepository<Client, Guid>
+    public interface IClientRepository : IBasicRepository<Client, Guid>
     {
         Task<Client> FindByCliendIdIncludingAllAsync([NotNull] string clientId);
     }

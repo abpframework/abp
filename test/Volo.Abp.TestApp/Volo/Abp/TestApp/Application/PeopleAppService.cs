@@ -12,7 +12,7 @@ namespace Volo.Abp.TestApp.Application
 {
     public class PeopleAppService : AsyncCrudAppService<Person, PersonDto, Guid>, IPeopleAppService
     {
-        public PeopleAppService(IQueryableRepository<Person, Guid> repository) 
+        public PeopleAppService(IRepository<Person, Guid> repository) 
             : base(repository)
         {
 

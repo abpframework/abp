@@ -12,7 +12,7 @@ namespace Volo.Abp.Application.Services
         where TEntity : class, IEntity<TKey>
         where TEntityDto : IEntityDto<TKey>
     {
-        protected AsyncCrudAppService(IQueryableRepository<TEntity, TKey> repository)
+        protected AsyncCrudAppService(IRepository<TEntity, TKey> repository)
             : base(repository)
         {
 
@@ -24,7 +24,7 @@ namespace Volo.Abp.Application.Services
         where TEntity : class, IEntity<TKey>
         where TEntityDto : IEntityDto<TKey>
     {
-        protected AsyncCrudAppService(IQueryableRepository<TEntity, TKey> repository)
+        protected AsyncCrudAppService(IRepository<TEntity, TKey> repository)
             : base(repository)
         {
 
@@ -38,7 +38,7 @@ namespace Volo.Abp.Application.Services
         where TEntityDto : IEntityDto<TKey>
         where TCreateInput : IEntityDto<TKey>
     {
-        protected AsyncCrudAppService(IQueryableRepository<TEntity, TKey> repository)
+        protected AsyncCrudAppService(IRepository<TEntity, TKey> repository)
             : base(repository)
         {
 
@@ -53,7 +53,7 @@ namespace Volo.Abp.Application.Services
     {
         public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; }
 
-        protected AsyncCrudAppService(IQueryableRepository<TEntity, TKey> repository)
+        protected AsyncCrudAppService(IRepository<TEntity, TKey> repository)
             :base(repository)
         {
             AsyncQueryableExecuter = DefaultAsyncQueryableExecuter.Instance;

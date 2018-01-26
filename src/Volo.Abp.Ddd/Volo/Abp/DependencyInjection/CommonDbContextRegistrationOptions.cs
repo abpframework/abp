@@ -107,9 +107,9 @@ namespace Volo.Abp.DependencyInjection
                 throw new AbpException($"Given entityType is not an entity: {entityType.AssemblyQualifiedName}. It must implement {typeof(IEntity<>).AssemblyQualifiedName}.");
             }
 
-            if (!ReflectionHelper.IsAssignableToGenericType(repositoryType, typeof(IRepository<>)))
+            if (!ReflectionHelper.IsAssignableToGenericType(repositoryType, typeof(IBasicRepository<>)))
             {
-                throw new AbpException($"Given repositoryType is not a repository: {entityType.AssemblyQualifiedName}. It must implement {typeof(IRepository<>).AssemblyQualifiedName}.");
+                throw new AbpException($"Given repositoryType is not a repository: {entityType.AssemblyQualifiedName}. It must implement {typeof(IBasicRepository<>).AssemblyQualifiedName}.");
             }
 
             CustomRepositories[entityType] = repositoryType;

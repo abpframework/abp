@@ -7,19 +7,19 @@ namespace Volo.Abp.Domain.Repositories
 {
     public static class MemoryDbCoreRepositoryExtensions
     {
-        public static IMemoryDatabase GetDatabase<TEntity, TKey>(this IRepository<TEntity, TKey> repository)
+        public static IMemoryDatabase GetDatabase<TEntity, TKey>(this IBasicRepository<TEntity, TKey> repository)
             where TEntity : class, IEntity<TKey>
         {
             return repository.ToMemoryDbRepository().Database;
         }
 
-        public static List<TEntity> GetCollection<TEntity, TKey>(this IRepository<TEntity, TKey> repository)
+        public static List<TEntity> GetCollection<TEntity, TKey>(this IBasicRepository<TEntity, TKey> repository)
             where TEntity : class, IEntity<TKey>
         {
             return repository.ToMemoryDbRepository().Collection;
         }
 
-        public static IMemoryDbRepository<TEntity, TKey> ToMemoryDbRepository<TEntity, TKey>(this IRepository<TEntity, TKey> repository)
+        public static IMemoryDbRepository<TEntity, TKey> ToMemoryDbRepository<TEntity, TKey>(this IBasicRepository<TEntity, TKey> repository)
             where TEntity : class, IEntity<TKey>
         {
             var memoryDbRepository = repository as IMemoryDbRepository<TEntity, TKey>;

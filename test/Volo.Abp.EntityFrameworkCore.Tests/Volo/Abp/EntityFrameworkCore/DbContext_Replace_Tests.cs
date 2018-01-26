@@ -10,11 +10,11 @@ namespace Volo.Abp.EntityFrameworkCore
 {
     public class DbContext_Replace_Tests : EntityFrameworkCoreTestBase
     {
-        private readonly IRepository<ThirdDbContextDummyEntity, Guid> _dummyRepository;
+        private readonly IBasicRepository<ThirdDbContextDummyEntity, Guid> _dummyRepository;
 
         public DbContext_Replace_Tests()
         {
-            _dummyRepository = ServiceProvider.GetRequiredService<IRepository<ThirdDbContextDummyEntity, Guid>>();
+            _dummyRepository = ServiceProvider.GetRequiredService<IBasicRepository<ThirdDbContextDummyEntity, Guid>>();
         }
 
         [Fact]

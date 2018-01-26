@@ -5,7 +5,7 @@ using Volo.Abp.Domain.Repositories;
 
 namespace Volo.Abp.IdentityServer.Grants
 {
-    public interface IPersistentGrantRepository : IRepository<PersistedGrant, Guid>
+    public interface IPersistentGrantRepository : IBasicRepository<PersistedGrant, Guid>
     {
         Task<PersistedGrant> FindByKeyAsync(string key);
 

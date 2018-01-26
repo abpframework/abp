@@ -15,7 +15,7 @@ namespace Volo.Abp.Application.Services
         where TEntity : class, IEntity<TKey>
         where TEntityDto : IEntityDto<TKey>
     {
-        protected IQueryableRepository<TEntity, TKey> Repository { get; }
+        protected IRepository<TEntity, TKey> Repository { get; }
         
         protected virtual string GetPermissionName { get; set; }
 
@@ -27,7 +27,7 @@ namespace Volo.Abp.Application.Services
 
         protected virtual string DeletePermissionName { get; set; }
 
-        protected CrudAppServiceBase(IQueryableRepository<TEntity, TKey> repository)
+        protected CrudAppServiceBase(IRepository<TEntity, TKey> repository)
         {
             Repository = repository;
         }

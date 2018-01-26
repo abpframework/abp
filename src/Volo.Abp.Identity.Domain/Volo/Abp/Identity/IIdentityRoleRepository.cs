@@ -6,7 +6,7 @@ using Volo.Abp.Domain.Repositories;
 
 namespace Volo.Abp.Identity
 {
-    public interface IIdentityRoleRepository : IRepository<IdentityRole, Guid>
+    public interface IIdentityRoleRepository : IBasicRepository<IdentityRole, Guid>
     {
         Task<IdentityRole> FindByNormalizedNameAsync(string normalizedRoleName, CancellationToken cancellationToken);
 
