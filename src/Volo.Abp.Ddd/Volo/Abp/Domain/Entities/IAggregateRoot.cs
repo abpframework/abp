@@ -13,7 +13,7 @@
     /// Defines an aggregate root with a single primary key with "Id" property.
     /// </summary>
     /// <typeparam name="TPrimaryKey">Type of the primary key of the entity</typeparam>
-    public interface IAggregateRoot<TPrimaryKey> : IAggregateRoot, IEntity<TPrimaryKey>
+    public interface IAggregateRoot<TPrimaryKey> : IEntity<TPrimaryKey>, IAggregateRoot
     {
 
     }

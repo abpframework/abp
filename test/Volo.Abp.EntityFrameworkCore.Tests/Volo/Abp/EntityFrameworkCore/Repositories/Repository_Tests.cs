@@ -10,17 +10,17 @@ using Xunit;
 
 namespace Volo.Abp.EntityFrameworkCore.Repositories
 {
-    public class Basic_Repository_Tests : EntityFrameworkCoreTestBase
+    public class Repository_Tests : EntityFrameworkCoreTestBase
     {
         private readonly IQueryableRepository<Person, Guid> _personRepository;
         private readonly IQueryableRepository<BookInSecondDbContext, Guid> _bookRepository;
-        private readonly IQueryableRepository<PhoneInSecondDbContext, long> _phoneInSecondDbContextRepository;
+        private readonly IQueryableRepository<PhoneInSecondDbContext> _phoneInSecondDbContextRepository;
 
-        public Basic_Repository_Tests()
+        public Repository_Tests()
         {
             _personRepository = ServiceProvider.GetRequiredService<IQueryableRepository<Person, Guid>>();
             _bookRepository = ServiceProvider.GetRequiredService<IQueryableRepository<BookInSecondDbContext, Guid>>();
-            _phoneInSecondDbContextRepository = ServiceProvider.GetRequiredService<IQueryableRepository<PhoneInSecondDbContext, long>>();
+            _phoneInSecondDbContextRepository = ServiceProvider.GetRequiredService<IQueryableRepository<PhoneInSecondDbContext>>();
         }
 
         [Fact]

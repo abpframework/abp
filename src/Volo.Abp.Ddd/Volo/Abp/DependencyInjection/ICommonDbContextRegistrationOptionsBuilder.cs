@@ -1,4 +1,5 @@
 using System;
+using JetBrains.Annotations;
 
 namespace Volo.Abp.DependencyInjection
 {
@@ -41,14 +42,15 @@ namespace Volo.Abp.DependencyInjection
         /// </summary>
         /// <typeparam name="TEntity">Entity type</typeparam>
         /// <typeparam name="TRepository">Repository type</typeparam>
-        ICommonDbContextRegistrationOptionsBuilder AddCustomRepository<TEntity, TRepository>(); //TODO: Rename to AddRepository!
+        ICommonDbContextRegistrationOptionsBuilder AddRepository<TEntity, TRepository>();
 
         /// <summary>
         /// Uses given class(es) for default repositories.
         /// </summary>
         /// <param name="repositoryImplementationType">Repository implementation type</param>
+        /// <param name="repositoryImplementationTypeWithoutPrimaryKey">Repository implementation type (without primary key)</param>
         /// <returns></returns>
-        ICommonDbContextRegistrationOptionsBuilder SetDefaultRepositoryClasses(Type repositoryImplementationType);
+        ICommonDbContextRegistrationOptionsBuilder SetDefaultRepositoryClasses([NotNull] Type repositoryImplementationType, [NotNull] Type repositoryImplementationTypeWithoutPrimaryKey);
 
         /// <summary>
         /// Replaces given DbContext type with this DbContext type.

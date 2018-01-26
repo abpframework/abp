@@ -19,6 +19,11 @@ namespace Volo.Abp.MongoDB.DependencyInjection
             return mongoDbContext.GetMappings().Select(m => m.EntityType);
         }
 
+        protected override Type GetRepositoryType(Type dbContextType, Type entityType)
+        {
+            throw new NotImplementedException();
+        }
+
         protected override Type GetRepositoryType(Type dbContextType, Type entityType, Type primaryKeyType)
         {
             return typeof(MongoDbRepository<,,>).MakeGenericType(dbContextType, entityType, primaryKeyType);

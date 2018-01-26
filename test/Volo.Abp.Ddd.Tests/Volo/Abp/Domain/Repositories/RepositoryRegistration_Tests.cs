@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities;
@@ -25,8 +27,10 @@ namespace Volo.Abp.Domain.Repositories
 
             //Assert
 
-            //services.ShouldContainTransient(typeof(IRepository<MyTestAggregateRootWithDefaultPk>), typeof(MyTestDefaultRepository<MyTestAggregateRootWithDefaultPk>));
+            services.ShouldContainTransient(typeof(IRepository<MyTestAggregateRootWithoutPk>), typeof(MyTestDefaultRepository<MyTestAggregateRootWithoutPk>));
+            services.ShouldContainTransient(typeof(IRepository<MyTestAggregateRootWithGuidPk>), typeof(MyTestDefaultRepository<MyTestAggregateRootWithGuidPk, Guid>));
             services.ShouldContainTransient(typeof(IRepository<MyTestAggregateRootWithGuidPk, Guid>), typeof(MyTestDefaultRepository<MyTestAggregateRootWithGuidPk, Guid>));
+
             services.ShouldNotContainService(typeof(IRepository<MyTestEntityWithInt32Pk, int>));
         }
 
@@ -46,8 +50,10 @@ namespace Volo.Abp.Domain.Repositories
 
             //Assert
 
-            //services.ShouldContainTransient(typeof(IRepository<MyTestAggregateRootWithDefaultPk>), typeof(MyTestDefaultRepository<MyTestAggregateRootWithDefaultPk>));
+            services.ShouldContainTransient(typeof(IRepository<MyTestAggregateRootWithoutPk>), typeof(MyTestDefaultRepository<MyTestAggregateRootWithoutPk>));
+            services.ShouldContainTransient(typeof(IRepository<MyTestAggregateRootWithGuidPk>), typeof(MyTestDefaultRepository<MyTestAggregateRootWithGuidPk, Guid>));
             services.ShouldContainTransient(typeof(IRepository<MyTestAggregateRootWithGuidPk, Guid>), typeof(MyTestDefaultRepository<MyTestAggregateRootWithGuidPk, Guid>));
+            services.ShouldContainTransient(typeof(IRepository<MyTestEntityWithInt32Pk>), typeof(MyTestDefaultRepository<MyTestEntityWithInt32Pk, int>));
             services.ShouldContainTransient(typeof(IRepository<MyTestEntityWithInt32Pk, int>), typeof(MyTestDefaultRepository<MyTestEntityWithInt32Pk, int>));
         }
 
@@ -61,7 +67,7 @@ namespace Volo.Abp.Domain.Repositories
             var options = new TestDbContextRegistrationOptions(typeof(MyFakeDbContext));
             options
                 .AddDefaultRepositories(true)
-                .AddCustomRepository<MyTestAggregateRootWithGuidPk, MyTestAggregateRootWithDefaultPkCustomRepository>();
+                .AddRepository<MyTestAggregateRootWithGuidPk, MyTestAggregateRootWithDefaultPkCustomRepository>();
 
             //Act
 
@@ -69,7 +75,8 @@ namespace Volo.Abp.Domain.Repositories
 
             //Assert
 
-            //services.ShouldContainTransient(typeof(IRepository<MyTestAggregateRootWithDefaultPk>), typeof(MyTestAggregateRootWithDefaultPkCustomRepository));
+            services.ShouldContainTransient(typeof(IRepository<MyTestAggregateRootWithoutPk>), typeof(MyTestDefaultRepository<MyTestAggregateRootWithoutPk>));
+            services.ShouldContainTransient(typeof(IRepository<MyTestAggregateRootWithGuidPk>), typeof(MyTestAggregateRootWithDefaultPkCustomRepository));
             services.ShouldContainTransient(typeof(IRepository<MyTestAggregateRootWithGuidPk, Guid>), typeof(MyTestAggregateRootWithDefaultPkCustomRepository));
             services.ShouldContainTransient(typeof(IRepository<MyTestEntityWithInt32Pk, int>), typeof(MyTestDefaultRepository<MyTestEntityWithInt32Pk, int>));
         }
@@ -84,7 +91,7 @@ namespace Volo.Abp.Domain.Repositories
             var options = new TestDbContextRegistrationOptions(typeof(MyFakeDbContext));
             options
                 .AddDefaultRepositories(true)
-                .SetDefaultRepositoryClasses(typeof(MyTestCustomBaseRepository<,>));
+                .SetDefaultRepositoryClasses(typeof(MyTestCustomBaseRepository<,>), typeof(MyTestCustomBaseRepository<>));
 
             //Act
 
@@ -92,14 +99,15 @@ namespace Volo.Abp.Domain.Repositories
 
             //Assert
 
-            //services.ShouldContainTransient(typeof(IRepository<MyTestAggregateRootWithDefaultPk>), typeof(MyTestCustomBaseRepository<MyTestAggregateRootWithDefaultPk>));
+            services.ShouldContainTransient(typeof(IRepository<MyTestAggregateRootWithoutPk>), typeof(MyTestCustomBaseRepository<MyTestAggregateRootWithoutPk>));
+            services.ShouldContainTransient(typeof(IRepository<MyTestAggregateRootWithGuidPk>), typeof(MyTestCustomBaseRepository<MyTestAggregateRootWithGuidPk, Guid>));
             services.ShouldContainTransient(typeof(IRepository<MyTestAggregateRootWithGuidPk, Guid>), typeof(MyTestCustomBaseRepository<MyTestAggregateRootWithGuidPk, Guid>));
             services.ShouldContainTransient(typeof(IRepository<MyTestEntityWithInt32Pk, int>), typeof(MyTestCustomBaseRepository<MyTestEntityWithInt32Pk, int>));
         }
 
         public class MyTestRepositoryRegistrar : RepositoryRegistrarBase<CommonDbContextRegistrationOptions>
         {
-            public MyTestRepositoryRegistrar(CommonDbContextRegistrationOptions options) 
+            public MyTestRepositoryRegistrar(CommonDbContextRegistrationOptions options)
                 : base(options)
             {
             }
@@ -109,14 +117,15 @@ namespace Volo.Abp.Domain.Repositories
                 return new[]
                 {
                     typeof(MyTestEntityWithInt32Pk),
-                    typeof(MyTestAggregateRootWithGuidPk)
+                    typeof(MyTestAggregateRootWithGuidPk),
+                    typeof(MyTestAggregateRootWithoutPk)
                 };
             }
 
-            //protected override Type GetRepositoryTypeForDefaultPk(Type dbContextType, Type entityType)
-            //{
-            //    return typeof(MyTestDefaultRepository<>).MakeGenericType(entityType);
-            //}
+            protected override Type GetRepositoryType(Type dbContextType, Type entityType)
+            {
+                return typeof(MyTestDefaultRepository<>).MakeGenericType(entityType);
+            }
 
             protected override Type GetRepositoryType(Type dbContextType, Type entityType, Type primaryKeyType)
             {
@@ -128,7 +137,7 @@ namespace Volo.Abp.Domain.Repositories
 
         public class MyTestAggregateRootWithGuidPk : AggregateRoot<Guid>
         {
-            
+
         }
 
         public class MyTestEntityWithInt32Pk : Entity<int>
@@ -136,20 +145,14 @@ namespace Volo.Abp.Domain.Repositories
 
         }
 
-        //public class MyTestDefaultRepository<TEntity> : MyTestDefaultRepository<TEntity, Guid>
-        //    where TEntity : class, IEntity<Guid>
-        //{
-            
-        //}
-
-        public class MyTestDefaultRepository<TEntity, TPrimaryKey> : RepositoryBase<TEntity, TPrimaryKey>
-            where TEntity : class, IEntity<TPrimaryKey>
+        public class MyTestAggregateRootWithoutPk : AggregateRoot
         {
-            public override TEntity Find(TPrimaryKey id)
-            {
-                throw new NotImplementedException();
-            }
+            public string MyId { get; set; }
+        }
 
+        public class MyTestDefaultRepository<TEntity> : RepositoryBase<TEntity>
+            where TEntity : class, IEntity
+        {
             public override TEntity Insert(TEntity entity, bool autoSave = false)
             {
                 throw new NotImplementedException();
@@ -166,7 +169,47 @@ namespace Volo.Abp.Domain.Repositories
             }
         }
 
+        public class MyTestDefaultRepository<TEntity, TPrimaryKey> : MyTestDefaultRepository<TEntity>, IRepository<TEntity, TPrimaryKey>
+            where TEntity : class, IEntity<TPrimaryKey>
+        {
+            public TEntity Get(TPrimaryKey id)
+            {
+                throw new NotImplementedException();
+            }
+
+            public Task<TEntity> GetAsync(TPrimaryKey id, CancellationToken cancellationToken = default)
+            {
+                throw new NotImplementedException();
+            }
+
+            public TEntity Find(TPrimaryKey id)
+            {
+                throw new NotImplementedException();
+            }
+
+            public Task<TEntity> FindAsync(TPrimaryKey id, CancellationToken cancellationToken = default)
+            {
+                throw new NotImplementedException();
+            }
+
+            public void Delete(TPrimaryKey id)
+            {
+                throw new NotImplementedException();
+            }
+
+            public Task DeleteAsync(TPrimaryKey id, CancellationToken cancellationToken = default)
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         public class MyTestAggregateRootWithDefaultPkCustomRepository : MyTestDefaultRepository<MyTestAggregateRootWithGuidPk, Guid>
+        {
+
+        }
+
+        public class MyTestCustomBaseRepository<TEntity> : MyTestDefaultRepository<TEntity>
+            where TEntity : class, IEntity
         {
 
         }
@@ -179,7 +222,7 @@ namespace Volo.Abp.Domain.Repositories
 
         public class TestDbContextRegistrationOptions : CommonDbContextRegistrationOptions
         {
-            public TestDbContextRegistrationOptions(Type originalDbContextType) 
+            public TestDbContextRegistrationOptions(Type originalDbContextType)
                 : base(originalDbContextType)
             {
             }

@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Reflection;
 using JetBrains.Annotations;
-using Volo.Abp.Reflection;
 
 namespace Volo.Abp.Domain.Entities
 {
@@ -13,18 +13,9 @@ namespace Volo.Abp.Domain.Entities
     {
         public static bool IsEntity([NotNull] Type type)
         {
-            return ReflectionHelper.IsAssignableToGenericType(type, typeof (IEntity<>));
+            return typeof(IEntity).IsAssignableFrom(type);
         }
 
-        /// <summary>
-        /// Default implementation of <see cref="Entity{TPrimaryKey}.IsTransient"/>.
-        /// 
-        /// This method is not used normally if given entity is derived from <see cref="Entity{TPrimaryKey}"/>.
-        /// Just directly call <see cref="Entity{TPrimaryKey}.IsTransient"/>.
-        /// 
-        /// This method is exists to help developers who want to directly implement <see cref="IEntity{TPrimaryKey}.IsTransient"/>
-        /// but want to use default IsTransient implementation as a shortcut.
-        /// </summary>
         public static bool IsTransient<TPrimaryKey>(IEntity<TPrimaryKey> entity) // TODO: Completely remove IsTransient
         {
             if (EqualityComparer<TPrimaryKey>.Default.Equals(entity.Id, default))
@@ -46,25 +37,50 @@ namespace Volo.Abp.Domain.Entities
             return false;
         }
 
-        public static Type GetPrimaryKeyType<TEntity>()
+        /// <summary>
+        /// Tries to find the primary key type of the given entity type.
+        /// May return null if given type does not implement <see cref="IEntity{TPrimaryKey}"/>
+        /// </summary>
+        [CanBeNull]
+        public static Type FindPrimaryKeyType<TEntity>()
+            where TEntity : IEntity
         {
-            return GetPrimaryKeyType(typeof (TEntity));
+            return FindPrimaryKeyType(typeof(TEntity));
         }
 
         /// <summary>
-        /// Gets primary key type of given entity type
+        /// Tries to find the primary key type of the given entity type.
+        /// May return null if given type does not implement <see cref="IEntity{TPrimaryKey}"/>
         /// </summary>
-        public static Type GetPrimaryKeyType([NotNull] Type entityType)
+        [CanBeNull]
+        public static Type FindPrimaryKeyType([NotNull] Type entityType)
         {
+            if (!typeof(IEntity).IsAssignableFrom(entityType))
+            {
+                throw new AbpException($"Given {nameof(entityType)} is not an entity. It should implement {typeof(IEntity).AssemblyQualifiedName}!");
+            }
+
             foreach (var interfaceType in entityType.GetTypeInfo().GetInterfaces())
             {
-                if (interfaceType.GetTypeInfo().IsGenericType && interfaceType.GetGenericTypeDefinition() == typeof (IEntity<>))
+                if (interfaceType.GetTypeInfo().IsGenericType && interfaceType.GetGenericTypeDefinition() == typeof(IEntity<>))
                 {
                     return interfaceType.GenericTypeArguments[0];
                 }
             }
 
-            throw new AbpException("Can not find primary key type of given entity type: " + entityType + ". Be sure that this entity type implements " + typeof(IEntity<>).AssemblyQualifiedName);
+            return null;
+        }
+
+        public static Expression<Func<TEntity, bool>> CreateEqualityExpressionForId<TEntity, TPrimaryKey>(TPrimaryKey id)
+            where TEntity : IEntity<TPrimaryKey>
+        {
+            var lambdaParam = Expression.Parameter(typeof(TEntity));
+            var lambdaBody = Expression.Equal(
+                Expression.PropertyOrField(lambdaParam, "Id"),
+                Expression.Constant(id, typeof(TPrimaryKey))
+            );
+
+            return Expression.Lambda<Func<TEntity, bool>>(lambdaBody, lambdaParam);
         }
     }
 }

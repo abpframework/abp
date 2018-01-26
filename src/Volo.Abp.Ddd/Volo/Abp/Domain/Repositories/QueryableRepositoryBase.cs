@@ -14,6 +14,10 @@ namespace Volo.Abp.Domain.Repositories
     public abstract class QueryableRepositoryBase<TEntity> : RepositoryBase<TEntity>, IQueryableRepository<TEntity>
         where TEntity : class, IEntity
     {
+        public IDataFilter DataFilter { get; set; }
+
+        public ICurrentTenant CurrentTenant { get; set; }
+
         public virtual Type ElementType => GetQueryable().ElementType;
 
         public virtual Expression Expression => GetQueryable().Expression;
@@ -45,18 +49,31 @@ namespace Volo.Abp.Domain.Repositories
             Delete(predicate);
             return Task.CompletedTask;
         }
+
+        //TODO: Is that needed..?
+        protected virtual IQueryable<TEntity> ApplyDataFilters(IQueryable<TEntity> query)
+        {
+            if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)))
+            {
+                query = query.WhereIf(DataFilter.IsEnabled<ISoftDelete>(), e => ((ISoftDelete)e).IsDeleted == false);
+            }
+
+            if (typeof(IMultiTenant).IsAssignableFrom(typeof(TEntity)))
+            {
+                var tenantId = CurrentTenant.Id;
+                query = query.WhereIf(DataFilter.IsEnabled<IMultiTenant>(), e => ((IMultiTenant)e).TenantId == tenantId);
+            }
+
+            return query;
+        }
     }
 
     public abstract class QueryableRepositoryBase<TEntity, TPrimaryKey> : QueryableRepositoryBase<TEntity>, IQueryableRepository<TEntity, TPrimaryKey>
         where TEntity : class, IEntity<TPrimaryKey>
     {
-        public IDataFilter DataFilter { get; set; }
-
-        public ICurrentTenant CurrentTenant { get; set; }
-
         public virtual TEntity Find(TPrimaryKey id)
         {
-            return GetQueryable().FirstOrDefault(CreateEqualityExpressionForId(id));
+            return GetQueryable().FirstOrDefault(EntityHelper.CreateEqualityExpressionForId<TEntity, TPrimaryKey>(id));
         }
 
         public virtual TEntity Get(TPrimaryKey id)
@@ -96,33 +113,6 @@ namespace Volo.Abp.Domain.Repositories
         {
             Delete(id);
             return Task.CompletedTask;
-        }
-
-        protected virtual IQueryable<TEntity> ApplyDataFilters(IQueryable<TEntity> query)
-        {
-            if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)))
-            {
-                query = query.WhereIf(DataFilter.IsEnabled<ISoftDelete>(), e => ((ISoftDelete)e).IsDeleted == false);
-            }
-
-            if (typeof(IMultiTenant).IsAssignableFrom(typeof(TEntity)))
-            {
-                var tenantId = CurrentTenant.Id;
-                query = query.WhereIf(DataFilter.IsEnabled<IMultiTenant>(), e => ((IMultiTenant)e).TenantId == tenantId);
-            }
-
-            return query;
-        }
-
-        protected static Expression<Func<TEntity, bool>> CreateEqualityExpressionForId(TPrimaryKey id)
-        {
-            var lambdaParam = Expression.Parameter(typeof(TEntity));
-            var lambdaBody = Expression.Equal(
-                Expression.PropertyOrField(lambdaParam, "Id"),
-                Expression.Constant(id, typeof(TPrimaryKey))
-            );
-
-            return Expression.Lambda<Func<TEntity, bool>>(lambdaBody, lambdaParam);
         }
     }
 }

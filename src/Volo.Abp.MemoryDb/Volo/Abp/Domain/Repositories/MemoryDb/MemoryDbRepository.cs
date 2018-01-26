@@ -1,24 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.MemoryDb;
 
 namespace Volo.Abp.Domain.Repositories.MemoryDb
 {
-    //public class MemoryDbRepository<TMemoryDbContext, TEntity> : MemoryDbRepository<TMemoryDbContext, TEntity, Guid>, IMemoryDbRepository<TEntity>
-    //    where TMemoryDbContext : MemoryDbContext
-    //    where TEntity : class, IEntity<Guid>
-    //{
-    //    public MemoryDbRepository(IMemoryDatabaseProvider<TMemoryDbContext> databaseProvider)
-    //        : base(databaseProvider)
-    //    {
-    //    }
-    //}
-
-    public class MemoryDbRepository<TMemoryDbContext, TEntity, TPrimaryKey> : QueryableRepositoryBase<TEntity, TPrimaryKey>, IMemoryDbRepository<TEntity, TPrimaryKey> 
+    public class MemoryDbRepository<TMemoryDbContext, TEntity> : QueryableRepositoryBase<TEntity>, IMemoryDbRepository<TEntity>
         where TMemoryDbContext : MemoryDbContext
-        where TEntity : class, IEntity<TPrimaryKey>
+        where TEntity : class, IEntity
     {
         public virtual List<TEntity> Collection => Database.Collection<TEntity>();
 
@@ -33,9 +25,39 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
 
         public override TEntity Insert(TEntity entity, bool autoSave = false)
         {
-            SetIdIfNeeded(entity);
             Collection.Add(entity);
             return entity;
+        }
+
+        public override TEntity Update(TEntity entity)
+        {
+            return entity;
+        }
+
+        public override void Delete(TEntity entity)
+        {
+            Collection.Remove(entity);
+        }
+
+        protected override IQueryable<TEntity> GetQueryable()
+        {
+            return ApplyDataFilters(Collection.AsQueryable());
+        }
+    }
+
+    public class MemoryDbRepository<TMemoryDbContext, TEntity, TPrimaryKey> : MemoryDbRepository<TMemoryDbContext, TEntity>, IMemoryDbRepository<TEntity, TPrimaryKey> 
+        where TMemoryDbContext : MemoryDbContext
+        where TEntity : class, IEntity<TPrimaryKey>
+    {
+        public MemoryDbRepository(IMemoryDatabaseProvider<TMemoryDbContext> databaseProvider)
+            : base(databaseProvider)
+        {
+        }
+
+        public override TEntity Insert(TEntity entity, bool autoSave = false)
+        {
+            SetIdIfNeeded(entity);
+            return base.Insert(entity, autoSave);
         }
 
         private void SetIdIfNeeded(TEntity entity)
@@ -49,19 +71,48 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
             }
         }
 
-        public override TEntity Update(TEntity entity)
+        public virtual TEntity Find(TPrimaryKey id)
         {
-            return entity;
-        }
-        
-        public override void Delete(TEntity entity)
-        {
-            Collection.Remove(entity);
+            return GetQueryable().FirstOrDefault(EntityHelper.CreateEqualityExpressionForId<TEntity, TPrimaryKey>(id));
         }
 
-        protected override IQueryable<TEntity> GetQueryable()
+        public virtual TEntity Get(TPrimaryKey id)
         {
-            return ApplyDataFilters(Collection.AsQueryable());
+            var entity = Find(id);
+
+            if (entity == null)
+            {
+                throw new EntityNotFoundException(typeof(TEntity), id);
+            }
+
+            return entity;
+        }
+
+        public virtual Task<TEntity> GetAsync(TPrimaryKey id, CancellationToken cancellationToken = default)
+        {
+            return Task.FromResult(Get(id));
+        }
+
+        public virtual Task<TEntity> FindAsync(TPrimaryKey id, CancellationToken cancellationToken = default)
+        {
+            return Task.FromResult(Find(id));
+        }
+
+        public virtual void Delete(TPrimaryKey id)
+        {
+            var entity = Find(id);
+            if (entity == null)
+            {
+                return;
+            }
+
+            Delete(entity);
+        }
+
+        public virtual Task DeleteAsync(TPrimaryKey id, CancellationToken cancellationToken = default)
+        {
+            Delete(id);
+            return Task.CompletedTask;
         }
     }
 }

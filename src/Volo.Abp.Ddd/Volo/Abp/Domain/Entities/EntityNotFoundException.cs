@@ -28,6 +28,15 @@ namespace Volo.Abp.Domain.Entities
         /// <summary>
         /// Creates a new <see cref="EntityNotFoundException"/> object.
         /// </summary>
+        public EntityNotFoundException(Type entityType)
+            : this(entityType, null, null)
+        {
+
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="EntityNotFoundException"/> object.
+        /// </summary>
         public EntityNotFoundException(Type entityType, object id)
             : this(entityType, id, null)
         {
