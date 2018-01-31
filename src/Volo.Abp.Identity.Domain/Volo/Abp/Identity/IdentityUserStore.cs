@@ -504,7 +504,7 @@ namespace Volo.Abp.Identity
 
             await _userRepository.EnsureCollectionLoadedAsync(user, u => u.Logins, cancellationToken);
 
-            user.AddLogin(_guidGenerator, login);
+            user.AddLogin(login);
         }
 
         /// <summary>

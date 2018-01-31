@@ -8,7 +8,7 @@ namespace Volo.Abp.Identity
     /// <summary>
     /// Represents a login and its associated provider for a user.
     /// </summary>
-    public class IdentityUserLogin : Entity<Guid>
+    public class IdentityUserLogin : Entity
     {
         /// <summary>
         /// Gets or sets the of the primary key of the user associated with this login.
@@ -35,20 +35,19 @@ namespace Volo.Abp.Identity
             
         }
 
-        protected internal IdentityUserLogin(Guid id, Guid userId, [NotNull] string loginProvider, [NotNull] string providerKey, string providerDisplayName)
+        protected internal IdentityUserLogin(Guid userId, [NotNull] string loginProvider, [NotNull] string providerKey, string providerDisplayName)
         {
             Check.NotNull(loginProvider, nameof(loginProvider));
             Check.NotNull(providerKey, nameof(providerKey));
 
-            Id = id;
             UserId = userId;
             LoginProvider = loginProvider;
             ProviderKey = providerKey;
             ProviderDisplayName = providerDisplayName;
         }
 
-        public IdentityUserLogin(Guid id, Guid userId, [NotNull] UserLoginInfo login)
-            : this(id, userId, login.LoginProvider, login.ProviderKey, login.ProviderDisplayName)
+        protected internal IdentityUserLogin(Guid userId, [NotNull] UserLoginInfo login)
+            : this(userId, login.LoginProvider, login.ProviderKey, login.ProviderDisplayName)
         {
 
         }

@@ -88,11 +88,12 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             {
                 b.ToTable(tablePrefix + "UserLogins", schema);
 
+                b.HasKey(x => new {x.UserId, x.LoginProvider});
+
                 b.Property(ul => ul.LoginProvider).HasMaxLength(IdentityUserLoginConsts.MaxLoginProviderLength).IsRequired();
                 b.Property(ul => ul.ProviderKey).HasMaxLength(IdentityUserLoginConsts.MaxProviderKeyLength).IsRequired();
                 b.Property(ul => ul.ProviderDisplayName).HasMaxLength(IdentityUserLoginConsts.MaxProviderDisplayNameLength);
 
-                b.HasIndex(l => new { l.UserId, l.LoginProvider, l.ProviderKey });
                 b.HasIndex(l => new { l.LoginProvider, l.ProviderKey });
             });
 

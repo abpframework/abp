@@ -211,12 +211,11 @@ namespace Volo.Abp.Identity
             Claims.RemoveAll(c => c.ClaimValue == claim.Value && c.ClaimType == claim.Type);
         }
 
-        public void AddLogin([NotNull] IGuidGenerator guidGenerator, [NotNull] UserLoginInfo login)
+        public void AddLogin([NotNull] UserLoginInfo login)
         {
-            Check.NotNull(guidGenerator, nameof(guidGenerator));
             Check.NotNull(login, nameof(login));
 
-            Logins.Add(new IdentityUserLogin(guidGenerator.Create(), Id, login));
+            Logins.Add(new IdentityUserLogin(Id, login));
         }
 
         public void RemoveLogin([NotNull] string loginProvider, [NotNull] string providerKey)
