@@ -7,7 +7,7 @@ namespace Volo.Abp.Identity
     /// <summary>
     /// Represents an authentication token for a user.
     /// </summary>
-    public class IdentityUserToken : Entity<Guid>
+    public class IdentityUserToken : Entity
     {
         /// <summary>
         /// Gets or sets the primary key of the user that the token belongs to.
@@ -34,12 +34,11 @@ namespace Volo.Abp.Identity
             
         }
 
-        protected internal IdentityUserToken(Guid id, Guid userId, [NotNull] string loginProvider, [NotNull] string name, string value)
+        protected internal IdentityUserToken(Guid userId, [NotNull] string loginProvider, [NotNull] string name, string value)
         {
             Check.NotNull(loginProvider, nameof(loginProvider));
             Check.NotNull(name, nameof(name));
 
-            Id = id;
             UserId = userId;
             LoginProvider = loginProvider;
             Name = name;

@@ -55,7 +55,7 @@ namespace Volo.Abp.Identity
             Claims = new Collection<IdentityRoleClaim>();
         }
 
-        public void AddClaim([NotNull] IGuidGenerator guidGenerator, [NotNull] Claim claim)
+        public virtual void AddClaim([NotNull] IGuidGenerator guidGenerator, [NotNull] Claim claim)
         {
             Check.NotNull(guidGenerator, nameof(guidGenerator));
             Check.NotNull(claim, nameof(claim));
@@ -63,7 +63,7 @@ namespace Volo.Abp.Identity
             Claims.Add(new IdentityRoleClaim(guidGenerator.Create(), Id, claim));
         }
 
-        public void AddClaims([NotNull] IGuidGenerator guidGenerator, [NotNull] IEnumerable<Claim> claims)
+        public virtual void AddClaims([NotNull] IGuidGenerator guidGenerator, [NotNull] IEnumerable<Claim> claims)
         {
             Check.NotNull(guidGenerator, nameof(guidGenerator));
             Check.NotNull(claims, nameof(claims));
@@ -74,7 +74,7 @@ namespace Volo.Abp.Identity
             }
         }
 
-        public void RemoveClaim([NotNull] Claim claim)
+        public virtual void RemoveClaim([NotNull] Claim claim)
         {
             Check.NotNull(claim, nameof(claim));
 

@@ -101,9 +101,10 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             {
                 b.ToTable(tablePrefix + "UserTokens", schema);
 
-                b.Property(ul => ul.LoginProvider).HasMaxLength(IdentityUserTokenConsts.MaxLoginProviderLength).IsRequired();
+                b.HasKey(l => new { l.UserId, l.LoginProvider, l.Name });
 
-                b.HasIndex(l => new { l.UserId, l.LoginProvider, l.Name });
+                b.Property(ul => ul.LoginProvider).HasMaxLength(IdentityUserTokenConsts.MaxLoginProviderLength).IsRequired();
+                b.Property(ul => ul.LoginProvider).HasMaxLength(IdentityUserTokenConsts.MaxNameLength).IsRequired();
             });
         }
     }

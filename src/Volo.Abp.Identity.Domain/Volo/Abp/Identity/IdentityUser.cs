@@ -132,7 +132,7 @@ namespace Volo.Abp.Identity
             Tokens = new Collection<IdentityUserToken>();
         }
 
-        public void AddRole(Guid roleId)
+        public virtual void AddRole(Guid roleId)
         {
             Check.NotNull(roleId, nameof(roleId));
 
@@ -144,7 +144,7 @@ namespace Volo.Abp.Identity
             Roles.Add(new IdentityUserRole(Id, roleId));
         }
 
-        public void RemoveRole(Guid roleId)
+        public virtual void RemoveRole(Guid roleId)
         {
             Check.NotNull(roleId, nameof(roleId));
 
@@ -156,14 +156,14 @@ namespace Volo.Abp.Identity
             Roles.RemoveAll(r => r.RoleId == roleId);
         }
 
-        public bool IsInRole(Guid roleId)
+        public virtual bool IsInRole(Guid roleId)
         {
             Check.NotNull(roleId, nameof(roleId));
 
             return Roles.Any(r => r.RoleId == roleId);
         }
 
-        public void AddClaim([NotNull] IGuidGenerator guidGenerator, [NotNull] Claim claim)
+        public virtual void AddClaim([NotNull] IGuidGenerator guidGenerator, [NotNull] Claim claim)
         {
             Check.NotNull(guidGenerator, nameof(guidGenerator));
             Check.NotNull(claim, nameof(claim));
@@ -171,7 +171,7 @@ namespace Volo.Abp.Identity
             Claims.Add(new IdentityUserClaim(guidGenerator.Create(), Id, claim));
         }
 
-        public void AddClaims([NotNull] IGuidGenerator guidGenerator, [NotNull] IEnumerable<Claim> claims)
+        public virtual void AddClaims([NotNull] IGuidGenerator guidGenerator, [NotNull] IEnumerable<Claim> claims)
         {
             Check.NotNull(guidGenerator, nameof(guidGenerator));
             Check.NotNull(claims, nameof(claims));
@@ -182,7 +182,7 @@ namespace Volo.Abp.Identity
             }
         }
 
-        public void ReplaceClaim([NotNull] Claim claim, [NotNull] Claim newClaim)
+        public virtual void ReplaceClaim([NotNull] Claim claim, [NotNull] Claim newClaim)
         {
             Check.NotNull(claim, nameof(claim));
             Check.NotNull(newClaim, nameof(newClaim));
@@ -194,7 +194,7 @@ namespace Volo.Abp.Identity
             }
         }
 
-        public void RemoveClaims([NotNull] IEnumerable<Claim> claims)
+        public virtual void RemoveClaims([NotNull] IEnumerable<Claim> claims)
         {
             Check.NotNull(claims, nameof(claims));
 
@@ -204,21 +204,21 @@ namespace Volo.Abp.Identity
             }
         }
 
-        public void RemoveClaim([NotNull] Claim claim)
+        public virtual void RemoveClaim([NotNull] Claim claim)
         {
             Check.NotNull(claim, nameof(claim));
 
             Claims.RemoveAll(c => c.ClaimValue == claim.Value && c.ClaimType == claim.Type);
         }
 
-        public void AddLogin([NotNull] UserLoginInfo login)
+        public virtual void AddLogin([NotNull] UserLoginInfo login)
         {
             Check.NotNull(login, nameof(login));
 
             Logins.Add(new IdentityUserLogin(Id, login));
         }
 
-        public void RemoveLogin([NotNull] string loginProvider, [NotNull] string providerKey)
+        public virtual void RemoveLogin([NotNull] string loginProvider, [NotNull] string providerKey)
         {
             Check.NotNull(loginProvider, nameof(loginProvider));
             Check.NotNull(providerKey, nameof(providerKey));
@@ -227,17 +227,17 @@ namespace Volo.Abp.Identity
         }
 
         [CanBeNull]
-        public IdentityUserToken FindToken(string loginProvider, string name)
+        public virtual IdentityUserToken FindToken(string loginProvider, string name)
         {
             return Tokens.FirstOrDefault(t => t.LoginProvider == loginProvider && t.Name == name);
         }
 
-        public void SetToken(IGuidGenerator guidGenerator, string loginProvider, string name, string value)
+        public virtual void SetToken(string loginProvider, string name, string value)
         {
             var token = FindToken(loginProvider, name);
             if (token == null)
             {
-                Tokens.Add(new IdentityUserToken(guidGenerator.Create(), Id, loginProvider, name, value));
+                Tokens.Add(new IdentityUserToken(Id, loginProvider, name, value));
             }
             else
             {
@@ -245,7 +245,7 @@ namespace Volo.Abp.Identity
             }
         }
 
-        public void RemoveToken(string loginProvider, string name)
+        public virtual void RemoveToken(string loginProvider, string name)
         {
             Tokens.RemoveAll(t => t.LoginProvider == loginProvider && t.Name == name);
         }
