@@ -1,22 +1,26 @@
 ﻿using System;
+using JetBrains.Annotations;
 using Volo.Abp.Domain.Entities;
 
 namespace Volo.Abp.IdentityServer.Clients
 {
-    public class ClientCorsOrigin : Entity<Guid>
+    public class ClientCorsOrigin : Entity
     {
-        public virtual string Origin { get; set; }
+        public virtual Guid ClientId { get; protected set; }
 
-        public virtual Guid ClientId { get; set; }
+        public virtual string Origin { get; protected set; }
 
         protected ClientCorsOrigin()
         {
             
         }
 
-        public ClientCorsOrigin(Guid id)
+        protected internal ClientCorsOrigin(Guid clientId, [NotNull] string origin)
         {
-            Id = id;
+            Check.NotNull(origin, nameof(origin));
+
+            ClientId = clientId;
+            Origin = origin;
         }
     }
 }

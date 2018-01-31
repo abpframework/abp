@@ -98,12 +98,16 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
             {
                 redirectUri.ToTable(TablePrefix + "ClientRedirectUris");
 
+                redirectUri.HasKey(x => new {x.ClientId, x.RedirectUri});
+
                 redirectUri.Property(x => x.RedirectUri).HasMaxLength(ClientRedirectUriConsts.RedirectUriMaxLength).IsRequired();
             });
 
             builder.Entity<ClientPostLogoutRedirectUri>(postLogoutRedirectUri =>
             {
                 postLogoutRedirectUri.ToTable(TablePrefix + "ClientPostLogoutRedirectUris");
+
+                postLogoutRedirectUri.HasKey(x => new {x.ClientId, x.PostLogoutRedirectUri});
 
                 postLogoutRedirectUri.Property(x => x.PostLogoutRedirectUri).HasMaxLength(ClientPostLogoutRedirectUriConsts.PostLogoutRedirectUriMaxLength).IsRequired();
             });
@@ -146,6 +150,8 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
             builder.Entity<ClientCorsOrigin>(corsOrigin =>
             {
                 corsOrigin.ToTable(TablePrefix + "ClientCorsOrigins");
+
+                corsOrigin.HasKey(x => new {x.ClientId, x.Origin});
 
                 corsOrigin.Property(x => x.Origin).HasMaxLength(ClientCorsOriginConsts.OriginMaxLength).IsRequired();
             });

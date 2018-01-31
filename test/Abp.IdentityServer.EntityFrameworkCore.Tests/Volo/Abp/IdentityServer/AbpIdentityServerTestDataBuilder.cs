@@ -49,14 +49,8 @@ namespace Volo.Abp.IdentityServer
             {
                 ProtocolType = "TestProtocol-42"
             };
-
-            client42.AllowedCorsOrigins.Add(
-                new ClientCorsOrigin(_guidGenerator.Create())
-                {
-                    Origin = "Origin1",
-                    ClientId = client42.Id
-                }
-            );
+            
+            client42.AddCorsOrigin("Origin1");
 
             client42.AddScope("api1");
 

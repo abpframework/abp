@@ -1,22 +1,26 @@
 ﻿using System;
+using JetBrains.Annotations;
 using Volo.Abp.Domain.Entities;
 
 namespace Volo.Abp.IdentityServer.Clients
 {
-    public class ClientRedirectUri : Entity<Guid>
+    public class ClientRedirectUri : Entity
     {
-        public virtual string RedirectUri { get; set; }
+        public virtual Guid ClientId { get; protected set; }
 
-        public virtual Guid ClientId { get; set; }
+        public virtual string RedirectUri { get; protected set; }
 
         protected ClientRedirectUri()
         {
 
         }
 
-        public ClientRedirectUri(Guid id)
+        protected internal ClientRedirectUri(Guid clientId, [NotNull] string redirectUri)
         {
-            Id = id;
+            Check.NotNull(redirectUri, nameof(redirectUri));
+
+            ClientId = clientId;
+            RedirectUri = redirectUri;
         }
     }
 }

@@ -1,22 +1,26 @@
 ﻿using System;
+using JetBrains.Annotations;
 using Volo.Abp.Domain.Entities;
 
 namespace Volo.Abp.IdentityServer.Clients
 {
     public class ClientPostLogoutRedirectUri : Entity<Guid>
     {
-        public virtual string PostLogoutRedirectUri { get; set; }
+        public virtual Guid ClientId { get; protected set; }
 
-        public virtual Guid ClientId { get; set; }
+        public virtual string PostLogoutRedirectUri { get; protected set; }
         
         protected ClientPostLogoutRedirectUri()
         {
 
         }
 
-        public ClientPostLogoutRedirectUri(Guid id)
+        protected internal ClientPostLogoutRedirectUri(Guid clientId, [NotNull] string postLogoutRedirectUri)
         {
-            Id = id;
+            Check.NotNull(postLogoutRedirectUri, nameof(postLogoutRedirectUri));
+
+            ClientId = clientId;
+            PostLogoutRedirectUri = postLogoutRedirectUri;
         }
     }
 }

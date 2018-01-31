@@ -138,9 +138,7 @@ namespace Volo.Abp.IdentityServer.Clients
 
         public virtual void AddGrantType(string grantType)
         {
-            AllowedGrantTypes.Add(
-                new ClientGrantType(Id, grantType)
-            );
+            AllowedGrantTypes.Add(new ClientGrantType(Id, grantType));
         }
 
         public virtual void AddGrantTypes(IEnumerable<string> grantTypes)
@@ -154,14 +152,27 @@ namespace Volo.Abp.IdentityServer.Clients
 
         public virtual void AddSecret(string value, DateTime? expiration = null, string type = IdentityServerConstants.SecretTypes.SharedSecret, string description = null)
         {
-            ClientSecrets.Add(
-                new ClientSecret(Id, value, expiration, type, description)
-            );
+            ClientSecrets.Add(new ClientSecret(Id, value, expiration, type, description));
         }
 
         public virtual void AddScope(string scope)
         {
             AllowedScopes.Add(new ClientScope(Id, scope));
+        }
+
+        public virtual void AddCorsOrigin(string origin)
+        {
+            AllowedCorsOrigins.Add(new ClientCorsOrigin(Id, origin));
+        }
+
+        public virtual void AddRedirectUri(string redirectUri)
+        {
+            RedirectUris.Add(new ClientRedirectUri(Id, redirectUri));
+        }
+
+        public virtual void AddPostLogoutRedirectUri(string postLogoutRedirectUri)
+        {
+            PostLogoutRedirectUris.Add(new ClientPostLogoutRedirectUri(Id, postLogoutRedirectUri));
         }
     }
 }
