@@ -11,9 +11,10 @@ using Volo.Abp.IdentityServer.EntityFrameworkCore;
 namespace Volo.Abp.IdentityServer.EntityFrameworkCore.Migrations
 {
     [DbContext(typeof(IdentityServerDbContext))]
-    partial class IdentityServerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180131140336_IdentityServer_Revisions")]
+    partial class IdentityServer_Revisions
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
