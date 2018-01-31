@@ -4,7 +4,7 @@ using Volo.Abp.Domain.Entities;
 
 namespace Volo.Abp.IdentityServer.Clients
 {
-    public class ClientPostLogoutRedirectUri : Entity<Guid>
+    public class ClientPostLogoutRedirectUri : Entity
     {
         public virtual Guid ClientId { get; protected set; }
 

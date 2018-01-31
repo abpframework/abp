@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using IdentityServer4;
 using IdentityServer4.Models;
+using JetBrains.Annotations;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Guids;
 
@@ -101,8 +102,10 @@ namespace Volo.Abp.IdentityServer.Clients
 
         }
 
-        public Client(Guid id, string clientId)
+        public Client(Guid id, [NotNull] string clientId)
         {
+            Check.NotNull(clientId, nameof(clientId));
+
             Id = id;
             ClientId = clientId;
 
@@ -136,7 +139,7 @@ namespace Volo.Abp.IdentityServer.Clients
             Properties = new List<ClientProperty>();
         }
 
-        public virtual void AddGrantType(string grantType)
+        public virtual void AddGrantType([NotNull] string grantType)
         {
             AllowedGrantTypes.Add(new ClientGrantType(Id, grantType));
         }
@@ -150,29 +153,44 @@ namespace Volo.Abp.IdentityServer.Clients
             );
         }
 
-        public virtual void AddSecret(string value, DateTime? expiration = null, string type = IdentityServerConstants.SecretTypes.SharedSecret, string description = null)
+        public virtual void AddSecret([NotNull] string value, DateTime? expiration = null, string type = IdentityServerConstants.SecretTypes.SharedSecret, string description = null)
         {
             ClientSecrets.Add(new ClientSecret(Id, value, expiration, type, description));
         }
 
-        public virtual void AddScope(string scope)
+        public virtual void AddScope([NotNull] string scope)
         {
             AllowedScopes.Add(new ClientScope(Id, scope));
         }
 
-        public virtual void AddCorsOrigin(string origin)
+        public virtual void AddCorsOrigin([NotNull] string origin)
         {
             AllowedCorsOrigins.Add(new ClientCorsOrigin(Id, origin));
         }
 
-        public virtual void AddRedirectUri(string redirectUri)
+        public virtual void AddRedirectUri([NotNull] string redirectUri)
         {
             RedirectUris.Add(new ClientRedirectUri(Id, redirectUri));
         }
 
-        public virtual void AddPostLogoutRedirectUri(string postLogoutRedirectUri)
+        public virtual void AddPostLogoutRedirectUri([NotNull] string postLogoutRedirectUri)
         {
             PostLogoutRedirectUris.Add(new ClientPostLogoutRedirectUri(Id, postLogoutRedirectUri));
+        }
+
+        public virtual void AddIdentityProviderRestriction([NotNull] string provider)
+        {
+            IdentityProviderRestrictions.Add(new ClientIdPRestriction(Id, provider));
+        }
+
+        public virtual void AddProperty([NotNull] string key)
+        {
+            Properties.Add(new ClientProperty(Id, key));
+        }
+
+        public virtual void AddClaim(IGuidGenerator guidGenerator, [NotNull] string type, string value)
+        {
+            Claims.Add(new ClientClaim(guidGenerator.Create(), Id, type, value));
         }
     }
 }

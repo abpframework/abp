@@ -1,4 +1,5 @@
 ﻿using System;
+using JetBrains.Annotations;
 using Volo.Abp.Domain.Entities;
 
 namespace Volo.Abp.IdentityServer.Clients
@@ -14,8 +15,10 @@ namespace Volo.Abp.IdentityServer.Clients
 
         }
 
-        protected internal ClientGrantType(Guid clientId, string grantType)
+        protected internal ClientGrantType(Guid clientId, [NotNull] string grantType)
         {
+            Check.NotNull(grantType, nameof(grantType));
+
             ClientId = clientId;
             GrantType = grantType;
         }

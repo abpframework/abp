@@ -14,7 +14,7 @@ namespace Volo.Abp.IdentityServer.Clients
         }
 
         protected internal ClientSecret(
-            Guid clientId, 
+            Guid clientId,
             [NotNull] string value,
             DateTime? expiration = null,
             string type = IdentityServerConstants.SecretTypes.SharedSecret,

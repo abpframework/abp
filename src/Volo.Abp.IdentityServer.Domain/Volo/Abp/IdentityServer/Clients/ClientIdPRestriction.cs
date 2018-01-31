@@ -1,22 +1,26 @@
 ﻿using System;
+using JetBrains.Annotations;
 using Volo.Abp.Domain.Entities;
 
 namespace Volo.Abp.IdentityServer.Clients
 {
-    public class ClientIdPRestriction : Entity<Guid>
+    public class ClientIdPRestriction : Entity
     {
-        public virtual string Provider { get; set; }
-
         public virtual Guid ClientId { get; set; }
+
+        public virtual string Provider { get; set; }
 
         protected ClientIdPRestriction()
         {
 
         }
 
-        public ClientIdPRestriction(Guid id)
+        protected internal ClientIdPRestriction(Guid clientId, [NotNull] string provider)
         {
-            Id = id;
+            Check.NotNull(provider, nameof(provider));
+
+            ClientId = clientId;
+            Provider = provider;
         }
     }
 }

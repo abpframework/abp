@@ -144,6 +144,8 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
             {
                 idPRestriction.ToTable(TablePrefix + "ClientIdPRestrictions");
 
+                idPRestriction.HasKey(x => new {x.ClientId, x.Provider});
+
                 idPRestriction.Property(x => x.Provider).HasMaxLength(ClientIdPRestrictionConsts.ProviderMaxLength).IsRequired();
             });
 
@@ -159,6 +161,8 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
             builder.Entity<ClientProperty>(property =>
             {
                 property.ToTable(TablePrefix + "ClientProperties");
+
+                property.HasKey(x => new {x.ClientId, x.Key});
 
                 property.Property(x => x.Key).HasMaxLength(ClientPropertyConsts.KeyMaxLength).IsRequired();
                 property.Property(x => x.Value).HasMaxLength(ClientPropertyConsts.ValueMaxLength).IsRequired();
