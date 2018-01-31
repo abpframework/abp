@@ -120,14 +120,11 @@ namespace Volo.Abp.IdentityServer
 
         private void AddIdentityResources()
         {
-            var identityResource = new IdentityResource(_guidGenerator.Create())
+            var identityResource = new IdentityResource(_guidGenerator.Create(), "Test-Identity-Resource-Name-1")
             {
-                Enabled = true,
                 Description = "Test-Identity-Resource-Description-1",
                 DisplayName = "Test-Identity-Resource-DisplayName-1",
-                Name = "Test-Identity-Resource-Name-1",
                 Required = true,
-                ShowInDiscoveryDocument = true,
                 Emphasize = true
             };
 

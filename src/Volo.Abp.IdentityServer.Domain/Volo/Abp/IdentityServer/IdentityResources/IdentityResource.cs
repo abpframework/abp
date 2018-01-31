@@ -7,19 +7,19 @@ namespace Volo.Abp.IdentityServer.IdentityResources
 {
     public class IdentityResource : AggregateRoot<Guid>
     {
-        public virtual bool Enabled { get; set; } = true;
-
         public virtual string Name { get; set; }
 
         public virtual string DisplayName { get; set; }
 
         public virtual string Description { get; set; }
 
+        public virtual bool Enabled { get; set; }
+
         public virtual bool Required { get; set; }
 
         public virtual bool Emphasize { get; set; }
 
-        public virtual bool ShowInDiscoveryDocument { get; set; } = true;
+        public virtual bool ShowInDiscoveryDocument { get; set; }
 
         public virtual List<IdentityClaim> UserClaims { get; set; }
 
@@ -28,10 +28,27 @@ namespace Volo.Abp.IdentityServer.IdentityResources
 
         }
 
-        public IdentityResource(Guid id)
+        public IdentityResource(
+            Guid id, 
+            [NotNull] string name, 
+            string displayName = null, 
+            string description = null, 
+            bool enabled = true, 
+            bool required = false, 
+            bool emphasize = false, 
+            bool showInDiscoveryDocument = true)
         {
-            Id = id;
+            Check.NotNull(name, nameof(name));
 
+            Id = id;
+            Name = name;
+            DisplayName = displayName;
+            Description = description;
+            Enabled = enabled;
+            Required = required;
+            Emphasize = emphasize;
+            ShowInDiscoveryDocument = showInDiscoveryDocument;
+            
             UserClaims = new List<IdentityClaim>();
         }
 
