@@ -253,12 +253,9 @@ namespace Volo.Abp.Identity
             Tokens.RemoveAll(t => t.LoginProvider == loginProvider && t.Name == name);
         }
 
-        /// <summary>
-        /// Returns the username for this user.
-        /// </summary>
         public override string ToString()
         {
-            return $"{base.ToString()} UserName = {UserName}";
+            return $"{base.ToString()}, UserName = {UserName}";
         }
     }
 }

@@ -18,7 +18,7 @@ namespace Volo.Abp.MultiTenancy.EntityFrameworkCore
         {
             base.OnModelCreating(builder);
 
-            this.ConfigureAbpMultiTenancy(builder);
+            this.ConfigureMultiTenancy(builder);
         }
     }
 }

@@ -4,7 +4,7 @@ namespace Volo.Abp.MultiTenancy.EntityFrameworkCore
 {
     public static class MultiTenancyDbContextModelCreatingExtensions
     {
-        public static void ConfigureAbpMultiTenancy(this IMultiTenancyDbContext dbContext, ModelBuilder builder)
+        public static void ConfigureMultiTenancy(this IMultiTenancyDbContext dbContext, ModelBuilder builder)
         {
             builder.Entity<Tenant>(b =>
             {

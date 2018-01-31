@@ -26,7 +26,7 @@ namespace AbpDesk.EntityFrameworkCore
         {
             base.OnModelCreating(modelBuilder);
 
-            this.ConfigureAbpMultiTenancy(modelBuilder);
+            this.ConfigureMultiTenancy(modelBuilder);
 
             //Use different classes to map each entity type?
             modelBuilder.Entity<Ticket>(b =>

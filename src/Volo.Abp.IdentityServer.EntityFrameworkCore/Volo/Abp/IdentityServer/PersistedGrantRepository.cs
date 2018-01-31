@@ -10,9 +10,9 @@ using Volo.Abp.IdentityServer.Grants;
 
 namespace Volo.Abp.IdentityServer
 {
-    public class PersistentGrantRepository : EfCoreRepository<IdentityServerDbContext, PersistedGrant, Guid>, IPersistentGrantRepository
+    public class PersistentGrantRepository : EfCoreRepository<IIdentityServerDbContext, PersistedGrant, Guid>, IPersistentGrantRepository
     {
-        public PersistentGrantRepository(IDbContextProvider<IdentityServerDbContext> dbContextProvider) : base(dbContextProvider)
+        public PersistentGrantRepository(IDbContextProvider<IIdentityServerDbContext> dbContextProvider) : base(dbContextProvider)
         {
 
         }

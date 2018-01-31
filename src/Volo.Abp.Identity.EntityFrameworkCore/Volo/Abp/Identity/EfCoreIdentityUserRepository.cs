@@ -12,9 +12,9 @@ using Volo.Abp.Identity.EntityFrameworkCore;
 
 namespace Volo.Abp.Identity
 {
-    public class EfCoreIdentityUserRepository : EfCoreRepository<IdentityDbContext, IdentityUser, Guid>, IIdentityUserRepository
+    public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext, IdentityUser, Guid>, IIdentityUserRepository
     {
-        public EfCoreIdentityUserRepository(IDbContextProvider<IdentityDbContext> dbContextProvider)
+        public EfCoreIdentityUserRepository(IDbContextProvider<IIdentityDbContext> dbContextProvider)
             : base(dbContextProvider)
         {
         }

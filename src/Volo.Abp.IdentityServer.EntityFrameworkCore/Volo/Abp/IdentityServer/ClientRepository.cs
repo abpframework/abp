@@ -8,9 +8,9 @@ using Volo.Abp.IdentityServer.EntityFrameworkCore;
 
 namespace Volo.Abp.IdentityServer
 {
-    public class ClientRepository : EfCoreRepository<IdentityServerDbContext, Client, Guid>, IClientRepository
+    public class ClientRepository : EfCoreRepository<IIdentityServerDbContext, Client, Guid>, IClientRepository
     {
-        public ClientRepository(IDbContextProvider<IdentityServerDbContext> dbContextProvider) : base(dbContextProvider)
+        public ClientRepository(IDbContextProvider<IIdentityServerDbContext> dbContextProvider) : base(dbContextProvider)
         {
 
         }

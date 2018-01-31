@@ -9,9 +9,9 @@ using Volo.Abp.IdentityServer.EntityFrameworkCore;
 
 namespace Volo.Abp.IdentityServer
 {
-    public class ApiResourceRepository : EfCoreRepository<IdentityServerDbContext, ApiResource, Guid>, IApiResourceRepository
+    public class ApiResourceRepository : EfCoreRepository<IIdentityServerDbContext, ApiResource, Guid>, IApiResourceRepository
     {
-        public ApiResourceRepository(IDbContextProvider<IdentityServerDbContext> dbContextProvider) : base(dbContextProvider)
+        public ApiResourceRepository(IDbContextProvider<IIdentityServerDbContext> dbContextProvider) : base(dbContextProvider)
         {
 
         }

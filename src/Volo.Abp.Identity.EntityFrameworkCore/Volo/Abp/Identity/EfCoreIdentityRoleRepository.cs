@@ -11,9 +11,9 @@ using System;
 
 namespace Volo.Abp.Identity
 {
-    public class EfCoreIdentityRoleRepository : EfCoreRepository<IdentityDbContext, IdentityRole, Guid>, IIdentityRoleRepository
+    public class EfCoreIdentityRoleRepository : EfCoreRepository<IIdentityDbContext, IdentityRole, Guid>, IIdentityRoleRepository
     {
-        public EfCoreIdentityRoleRepository(IDbContextProvider<IdentityDbContext> dbContextProvider)
+        public EfCoreIdentityRoleRepository(IDbContextProvider<IIdentityDbContext> dbContextProvider)
             : base(dbContextProvider)
         {
         }

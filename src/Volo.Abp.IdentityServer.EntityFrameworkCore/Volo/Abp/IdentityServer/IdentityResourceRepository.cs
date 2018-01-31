@@ -14,9 +14,9 @@ namespace Volo.Abp.IdentityServer
 {
     //TODO: This is not true implementation! This repository works for 2 different aggregate root!
 
-    public class IdentityResourceRepository : EfCoreRepository<IdentityServerDbContext, IdentityResource, Guid>, IIdentityResourceRepository
+    public class IdentityResourceRepository : EfCoreRepository<IIdentityServerDbContext, IdentityResource, Guid>, IIdentityResourceRepository
     {
-        public IdentityResourceRepository(IDbContextProvider<IdentityServerDbContext> dbContextProvider) 
+        public IdentityResourceRepository(IDbContextProvider<IIdentityServerDbContext> dbContextProvider) 
             : base(dbContextProvider)
         {
 
