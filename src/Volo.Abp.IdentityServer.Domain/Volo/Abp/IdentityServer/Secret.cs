@@ -1,29 +1,33 @@
 ﻿using System;
 using IdentityServer4;
+using JetBrains.Annotations;
 using Volo.Abp.Domain.Entities;
 
 namespace Volo.Abp.IdentityServer
 {
-    //TODO: Eleminate Secret class for simplicity.
-
-    public abstract class Secret : Entity<Guid>
+    public abstract class Secret : Entity
     {
-        public virtual string Description { get; protected set; }
-
-        public virtual string Value { get; protected set; }
-
-        public virtual DateTime? Expiration { get; protected set; }
-
         public virtual string Type { get; protected set; }
+
+        public virtual string Value { get; set; }
+
+        public virtual string Description { get; set; }
+
+        public virtual DateTime? Expiration { get; set; }
 
         protected Secret()
         {
 
         }
 
-        protected Secret(Guid id, string value, DateTime? expiration = null, string type = IdentityServerConstants.SecretTypes.SharedSecret, string description = null)
+        protected Secret(
+            [NotNull] string value, 
+            DateTime? expiration = null, 
+            string type = IdentityServerConstants.SecretTypes.SharedSecret, 
+            string description = null)
         {
-            Id = id;
+            Check.NotNull(value, nameof(value));
+
             Value = value;
             Expiration = expiration;
             Type = type;

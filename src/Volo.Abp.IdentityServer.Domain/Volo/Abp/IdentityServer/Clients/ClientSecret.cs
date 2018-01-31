@@ -1,5 +1,6 @@
 ﻿using System;
 using IdentityServer4;
+using JetBrains.Annotations;
 
 namespace Volo.Abp.IdentityServer.Clients
 {
@@ -12,8 +13,17 @@ namespace Volo.Abp.IdentityServer.Clients
 
         }
 
-        public ClientSecret(Guid id, Guid clientId, string value, DateTime? expiration = null, string type = IdentityServerConstants.SecretTypes.SharedSecret, string description = null)
-            : base(id, value, expiration, type, description)
+        protected internal ClientSecret(
+            Guid clientId, 
+            [NotNull] string value,
+            DateTime? expiration = null,
+            string type = IdentityServerConstants.SecretTypes.SharedSecret,
+            string description = null
+            ) : base(
+                  value, 
+                  expiration, 
+                  type, 
+                  description)
         {
             ClientId = clientId;
         }

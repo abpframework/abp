@@ -49,7 +49,7 @@ namespace AbpDesk.Web.Mvc.Controllers
             var client = new Client(GuidGenerator.Create(), clientId);
 
             client.AddGrantTypes(GrantTypes.ClientCredentials);
-            client.AddSecret(GuidGenerator, "secret".Sha256());
+            client.AddSecret("secret".Sha256());
             client.AddAllowedScope(GuidGenerator, "api1"); //TODO: Why not with Id..?
 
             await _clientRepository.InsertAsync(client);

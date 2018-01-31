@@ -1,22 +1,22 @@
-﻿using System;
+﻿using JetBrains.Annotations;
 using Volo.Abp.Domain.Entities;
 
 namespace Volo.Abp.IdentityServer
 {
-    //TODO: Eleminate UserClaim class for simplicity.
-
-    public abstract class UserClaim : Entity<Guid>
+    public abstract class UserClaim : Entity
     {
-        public virtual string Type { get; set; }
+        public virtual string Type { get; protected set; }
 
         protected UserClaim()
         {
 
         }
 
-        protected UserClaim(Guid id)
+        protected UserClaim([NotNull] string type)
         {
-            Id = id;
+            Check.NotNull(type, nameof(type));
+
+            Type = type;
         }
     }
 }

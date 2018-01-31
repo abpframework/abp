@@ -1,21 +1,31 @@
 ﻿using System;
 using IdentityServer4;
+using JetBrains.Annotations;
 
 namespace Volo.Abp.IdentityServer.ApiResources
 {
     public class ApiSecret : Secret
     {
-        public virtual Guid ApiResourceId { get; set; }
+        public virtual Guid ApiResourceId { get; protected set; }
 
         protected ApiSecret()
         {
             
         }
 
-        public ApiSecret(Guid id, string value, DateTime? expiration = null, string type = IdentityServerConstants.SecretTypes.SharedSecret, string description = null)
-            : base(id, value, expiration, type, description)
+        protected internal ApiSecret(
+            Guid apiResourceId,
+            [NotNull] string value, 
+            DateTime? expiration = null, 
+            string type = IdentityServerConstants.SecretTypes.SharedSecret, 
+            string description = null
+            ) : base(
+                value, 
+                expiration, 
+                type, 
+                description)
         {
-            
+            ApiResourceId = apiResourceId;
         }
     }
 }

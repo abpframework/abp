@@ -1,6 +1,7 @@
-﻿using Volo.Abp.IdentityServer.IdentityResources;
+﻿using Volo.Abp.IdentityServer.ApiResources;
+using Volo.Abp.IdentityServer.IdentityResources;
 
-namespace Volo.Abp.IdentityServer.ApiResources
+namespace Volo.Abp.IdentityServer
 {
     public class ApiAndIdentityResources
     {

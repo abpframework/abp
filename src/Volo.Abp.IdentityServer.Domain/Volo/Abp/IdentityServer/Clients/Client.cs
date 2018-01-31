@@ -152,10 +152,10 @@ namespace Volo.Abp.IdentityServer.Clients
             );
         }
 
-        public virtual void AddSecret(IGuidGenerator guidGenerator, string value, DateTime? expiration = null, string type = IdentityServerConstants.SecretTypes.SharedSecret, string description = null)
+        public virtual void AddSecret(string value, DateTime? expiration = null, string type = IdentityServerConstants.SecretTypes.SharedSecret, string description = null)
         {
             ClientSecrets.Add(
-                new ClientSecret(guidGenerator.Create(), Id, value, expiration, type, description)
+                new ClientSecret(Id, value, expiration, type, description)
             );
         }
 

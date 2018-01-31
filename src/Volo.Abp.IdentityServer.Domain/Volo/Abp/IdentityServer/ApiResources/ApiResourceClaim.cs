@@ -1,4 +1,5 @@
 ﻿using System;
+using JetBrains.Annotations;
 
 namespace Volo.Abp.IdentityServer.ApiResources
 {
@@ -11,10 +12,10 @@ namespace Volo.Abp.IdentityServer.ApiResources
             
         }
 
-        public ApiResourceClaim(Guid id)
-            : base(id)
+        protected internal ApiResourceClaim(Guid apiResourceId, [NotNull] string type)
+            : base(type)
         {
-            
+            ApiResourceId = apiResourceId;
         }
     }
 }

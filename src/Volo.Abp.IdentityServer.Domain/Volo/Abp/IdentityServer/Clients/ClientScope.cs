@@ -5,9 +5,9 @@ namespace Volo.Abp.IdentityServer.Clients
 {
     public class ClientScope : Entity<Guid>
     {
-        public virtual string Scope { get; protected set; }
-
         public virtual Guid ClientId { get; protected set; }
+
+        public virtual string Scope { get; protected set; }
 
         protected ClientScope()
         {

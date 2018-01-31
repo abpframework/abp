@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using Volo.Abp.Domain.Entities;
 
 namespace Volo.Abp.IdentityServer.IdentityResources
@@ -20,7 +21,7 @@ namespace Volo.Abp.IdentityServer.IdentityResources
 
         public virtual bool ShowInDiscoveryDocument { get; set; } = true;
 
-        public virtual List<IdentityClaim> UserClaims { get; set; } //TODO: Rename to Claims..?
+        public virtual List<IdentityClaim> UserClaims { get; set; }
 
         protected IdentityResource()
         {
@@ -30,6 +31,13 @@ namespace Volo.Abp.IdentityServer.IdentityResources
         public IdentityResource(Guid id)
         {
             Id = id;
+
+            UserClaims = new List<IdentityClaim>();
+        }
+
+        public virtual void AddUserClaim([NotNull] string type)
+        {
+            UserClaims.Add(new IdentityClaim(Id, type));
         }
     }
 }

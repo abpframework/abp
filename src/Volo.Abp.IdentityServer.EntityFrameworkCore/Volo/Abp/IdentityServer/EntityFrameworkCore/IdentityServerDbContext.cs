@@ -9,15 +9,23 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 {
     public class IdentityServerDbContext : AbpDbContext<IdentityServerDbContext>
     {
-        public const string TablePrefix = "AbpIds";
-
-        public DbSet<Client> Clients { get; set; }
-
-        public DbSet<PersistedGrant> PersistedGrants { get; set; }
+        public const string TablePrefix = "IdentityServer"; //TODO: Make configurable
 
         public DbSet<ApiResource> ApiResources { get; set; }
 
+        public DbSet<ApiSecret> ApiSecrets { get; set; }
+
+        public DbSet<ApiResourceClaim> ApiResourceClaims { get; set; }
+
+        public DbSet<ApiScope> ApiScopes { get; set; }
+
+        public DbSet<ApiScopeClaim> ApiScopeClaims { get; set; }
+
         public DbSet<IdentityResource> IdentityResources { get; set; }
+
+        public DbSet<IdentityClaim> IdentityClaims { get; set; }
+
+        public DbSet<Client> Clients { get; set; }
 
         public DbSet<ClientGrantType> ClientGrantTypes { get; set; }
 
@@ -37,16 +45,8 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
         public DbSet<ClientProperty> ClientProperties { get; set; }
 
-        public DbSet<IdentityClaim> IdentityClaims { get; set; }
-        
-        public DbSet<ApiSecret> ApiSecrets { get; set; }
+        public DbSet<PersistedGrant> PersistedGrants { get; set; }
 
-        public DbSet<ApiResourceClaim> ApiResourceClaims { get; set; }
-
-        public DbSet<ApiScope> ApiScopes { get; set; }
-
-        public DbSet<ApiScopeClaim> ApiScopeClaims { get; set; }
-            
         public IdentityServerDbContext(DbContextOptions<IdentityServerDbContext> options)
             : base(options)
         {
@@ -120,9 +120,11 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
             {
                 secret.ToTable(TablePrefix + "ClientSecrets");
 
-                secret.Property(x => x.Value).HasMaxLength(ClientSecretConsts.ValueMaxLength).IsRequired();
-                secret.Property(x => x.Type).HasMaxLength(ClientSecretConsts.TypeMaxLength);
-                secret.Property(x => x.Description).HasMaxLength(ClientSecretConsts.DescriptionMaxLength);
+                secret.HasKey(x => new { x.ClientId, x.Type, x.Value });
+
+                secret.Property(x => x.Type).HasMaxLength(SecretConsts.TypeMaxLength).IsRequired();
+                secret.Property(x => x.Value).HasMaxLength(SecretConsts.ValueMaxLength).IsRequired();
+                secret.Property(x => x.Description).HasMaxLength(SecretConsts.DescriptionMaxLength);
             });
 
             builder.Entity<ClientClaim>(claim =>
@@ -180,15 +182,15 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 identityResource.Property(x => x.Description).HasMaxLength(IdentityResourceConsts.DescriptionMaxLength);
 
                 identityResource.HasMany(x => x.UserClaims).WithOne().HasForeignKey(x => x.IdentityResourceId).IsRequired();
-
-                identityResource.HasIndex(x => x.Name).IsUnique();
             });
 
             builder.Entity<IdentityClaim>(claim =>
             {
                 claim.ToTable(TablePrefix + "IdentityClaims");
 
-                claim.Property(x => x.Type).HasMaxLength(IdentityClaimConsts.TypeMaxLength).IsRequired();
+                claim.HasKey(x => new {x.IdentityResourceId, x.Type});
+
+                claim.Property(x => x.Type).HasMaxLength(UserClaimConsts.TypeMaxLength).IsRequired();
             });
 
             builder.Entity<ApiResource>(apiResource =>
@@ -202,44 +204,49 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 apiResource.HasMany(x => x.Secrets).WithOne().HasForeignKey(x => x.ApiResourceId).IsRequired();
                 apiResource.HasMany(x => x.Scopes).WithOne().HasForeignKey(x => x.ApiResourceId).IsRequired();
                 apiResource.HasMany(x => x.UserClaims).WithOne().HasForeignKey(x => x.ApiResourceId).IsRequired();
-
-                apiResource.HasIndex(x => x.Name).IsUnique();
             });
 
             builder.Entity<ApiSecret>(apiSecret =>
             {
                 apiSecret.ToTable(TablePrefix + "ApiSecrets");
 
-                apiSecret.Property(x => x.Description).HasMaxLength(ApiSecretConsts.DescriptionMaxLength);
-                apiSecret.Property(x => x.Value).HasMaxLength(ApiSecretConsts.ValueMaxLength);
-                apiSecret.Property(x => x.Type).HasMaxLength(ApiSecretConsts.TypeMaxLength);
+                apiSecret.HasKey(x => new { x.ApiResourceId, x.Type, x.Value });
+
+                apiSecret.Property(x => x.Type).HasMaxLength(SecretConsts.TypeMaxLength).IsRequired();
+                apiSecret.Property(x => x.Value).HasMaxLength(SecretConsts.ValueMaxLength).IsRequired();
+                apiSecret.Property(x => x.Description).HasMaxLength(SecretConsts.DescriptionMaxLength);
             });
 
             builder.Entity<ApiResourceClaim>(apiClaim =>
             {
                 apiClaim.ToTable(TablePrefix + "ApiClaims");
 
-                apiClaim.Property(x => x.Type).HasMaxLength(ApiResourceClaimConsts.TypeMaxLength).IsRequired();
+                apiClaim.HasKey(x => new {x.ApiResourceId, x.Type});
+
+                apiClaim.Property(x => x.Type).HasMaxLength(UserClaimConsts.TypeMaxLength).IsRequired();
             });
 
             builder.Entity<ApiScope>(apiScope =>
             {
                 apiScope.ToTable(TablePrefix + "ApiScopes");
 
+                apiScope.HasKey(x => new { x.ApiResourceId, x.Name });
+
                 apiScope.Property(x => x.Name).HasMaxLength(ApiScopeConsts.NameMaxLength).IsRequired();
                 apiScope.Property(x => x.DisplayName).HasMaxLength(ApiScopeConsts.DisplayNameMaxLength);
                 apiScope.Property(x => x.Description).HasMaxLength(ApiScopeConsts.DescriptionMaxLength);
 
-                apiScope.HasMany(x => x.UserClaims).WithOne().HasForeignKey(x => x.ApiScopeId).IsRequired();
-
-                apiScope.HasIndex(x => x.Name).IsUnique();
+                apiScope.HasMany(x => x.UserClaims).WithOne().HasForeignKey(x => new { x.ApiResourceId, x.Name }).IsRequired();
             });
 
             builder.Entity<ApiScopeClaim>(apiScopeClaim =>
             {
                 apiScopeClaim.ToTable(TablePrefix + "ApiScopeClaims");
 
-                apiScopeClaim.Property(x => x.Type).HasMaxLength(ApiScopeClaimConsts.TypeMaxLength).IsRequired();
+                apiScopeClaim.HasKey(x => new {x.ApiResourceId, x.Name, x.Type});
+
+                apiScopeClaim.Property(x => x.Type).HasMaxLength(UserClaimConsts.TypeMaxLength).IsRequired();
+                apiScopeClaim.Property(x => x.Name).HasMaxLength(ApiScopeConsts.NameMaxLength).IsRequired();
             });
         }
     }

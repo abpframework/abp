@@ -1,19 +1,27 @@
 ﻿using System;
+using JetBrains.Annotations;
 
 namespace Volo.Abp.IdentityServer.ApiResources
 {
     public class ApiScopeClaim : UserClaim
     {
-        public virtual Guid ApiScopeId { get; set; }
+        public Guid ApiResourceId { get; protected set; }
+
+        [NotNull]
+        public string Name { get; protected set; }
 
         protected ApiScopeClaim()
         {
 
         }
 
-        protected ApiScopeClaim(Guid id)
-            : base(id)
+        protected internal ApiScopeClaim(Guid apiResourceId, [NotNull] string name, [NotNull] string type)
+            : base(type)
         {
+            Check.NotNull(name, nameof(name));
+
+            ApiResourceId = apiResourceId;
+            Name = name;
         }
     }
 }

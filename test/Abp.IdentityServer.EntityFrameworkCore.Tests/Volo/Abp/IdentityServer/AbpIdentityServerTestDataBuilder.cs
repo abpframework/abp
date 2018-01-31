@@ -104,36 +104,23 @@ namespace Volo.Abp.IdentityServer
 
         private void AddApiResources()
         {
-            _apiResourceRepository.Insert(new ApiResource(_guidGenerator.Create(), "Test-ApiResource-Name-1")
+            var apiResource = new ApiResource(_guidGenerator.Create(), "Test-ApiResource-Name-1")
             {
                 Enabled = true,
                 Description = "Test-ApiResource-Description-1",
-                DisplayName = "Test-ApiResource-DisplayName-1",
-                Secrets = 
-                {
-                    new ApiSecret(_guidGenerator.Create(), "secret".Sha256())
-                },
-                UserClaims =
-                {
-                    new ApiResourceClaim(_guidGenerator.Create())
-                    {
-                        Type = "Test-ApiResource-Claim-Type-1"
-                    }
-                },
-                Scopes =
-                {
-                    new ApiScope(_guidGenerator.Create())
-                    {
-                        Name = "Test-ApiResource-ApiScope-Name-1",
-                        DisplayName = "Test-ApiResource-ApiScope-DisplayName-1"
-                    }
-                }
-            });
+                DisplayName = "Test-ApiResource-DisplayName-1"
+            };
+
+            apiResource.AddSecret("secret".Sha256());
+            apiResource.AddScope("Test-ApiResource-ApiScope-Name-1", "Test-ApiResource-ApiScope-DisplayName-1");
+            apiResource.AddUserClaim("Test-ApiResource-Claim-Type-1");
+
+            _apiResourceRepository.Insert(apiResource);
         }
 
         private void AddIdentityResources()
         {
-            _identityResourceRepository.Insert(new IdentityResource(_guidGenerator.Create())
+            var identityResource = new IdentityResource(_guidGenerator.Create())
             {
                 Enabled = true,
                 Description = "Test-Identity-Resource-Description-1",
@@ -141,15 +128,12 @@ namespace Volo.Abp.IdentityServer
                 Name = "Test-Identity-Resource-Name-1",
                 Required = true,
                 ShowInDiscoveryDocument = true,
-                Emphasize = true,
-                UserClaims = new List<IdentityClaim>
-                {
-                    new IdentityClaim(_guidGenerator.Create())
-                    {
-                        Type = "Test-Identity-Resource-1-IdentityClaim-Type-1"
-                    }
-                }
-            });
+                Emphasize = true
+            };
+
+            identityResource.AddUserClaim("Test-Identity-Resource-1-IdentityClaim-Type-1");
+
+            _identityResourceRepository.Insert(identityResource);
         }
     }
 }
