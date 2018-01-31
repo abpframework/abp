@@ -10,8 +10,6 @@ using Volo.Abp.Guids;
 
 namespace Volo.Abp.Identity
 {
-    //Add Name and Surname properties?
-
     public class IdentityUser : AggregateRoot<Guid>, IHasConcurrencyStamp
     {
         /// <summary>
@@ -134,7 +132,7 @@ namespace Volo.Abp.Identity
             Tokens = new Collection<IdentityUserToken>();
         }
 
-        public void AddRole(IGuidGenerator guidGenerator, Guid roleId)
+        public void AddRole(Guid roleId)
         {
             Check.NotNull(roleId, nameof(roleId));
 
@@ -143,7 +141,7 @@ namespace Volo.Abp.Identity
                 return;
             }
 
-            Roles.Add(new IdentityUserRole(guidGenerator.Create(), Id, roleId));
+            Roles.Add(new IdentityUserRole(Id, roleId));
         }
 
         public void RemoveRole(Guid roleId)

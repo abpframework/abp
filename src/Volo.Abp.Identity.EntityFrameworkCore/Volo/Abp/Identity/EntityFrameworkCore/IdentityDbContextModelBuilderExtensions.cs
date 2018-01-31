@@ -76,10 +76,11 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             {
                 b.ToTable(tablePrefix + "UserRoles", schema);
 
+                b.HasKey(ur => new {ur.UserId, ur.RoleId});
+
                 b.HasOne<IdentityRole>().WithMany().HasForeignKey(ur => ur.RoleId).IsRequired();
                 b.HasOne<IdentityUser>().WithMany(u => u.Roles).HasForeignKey(ur => ur.UserId).IsRequired();
 
-                b.HasIndex(ur => new { ur.UserId, ur.RoleId });
                 b.HasIndex(ur => new { ur.RoleId, ur.UserId });
             });
 

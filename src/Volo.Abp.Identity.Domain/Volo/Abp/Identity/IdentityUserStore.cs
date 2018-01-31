@@ -335,7 +335,7 @@ namespace Volo.Abp.Identity
 
             await _userRepository.EnsureCollectionLoadedAsync(user, u => u.Roles, cancellationToken);
 
-            user.AddRole(_guidGenerator, role.Id);
+            user.AddRole(role.Id);
         }
 
         /// <summary>

@@ -81,13 +81,9 @@ namespace Volo.Abp.Identity
             Claims.RemoveAll(c => c.ClaimType == claim.Type && c.ClaimValue == claim.Value);
         }
 
-        /// <summary>
-        /// Returns the name of the role.
-        /// </summary>
-        /// <returns>The name of the role.</returns>
         public override string ToString()
         {
-            return Name;
+            return $"{base.ToString()}, Name = {Name}";
         }
     }
 }
