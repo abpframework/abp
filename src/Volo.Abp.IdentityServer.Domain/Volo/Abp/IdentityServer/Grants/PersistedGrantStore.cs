@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using IdentityServer4.Stores;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Guids;
 using Volo.Abp.ObjectMapping;
 
 namespace Volo.Abp.IdentityServer.Grants
@@ -11,11 +12,13 @@ namespace Volo.Abp.IdentityServer.Grants
     {
         private readonly IPersistentGrantRepository _persistentGrantRepository;
         private readonly IObjectMapper _objectMapper;
+        private readonly IGuidGenerator _guidGenerator;
 
-        public PersistedGrantStore(IPersistentGrantRepository persistentGrantRepository, IObjectMapper objectMapper)
+        public PersistedGrantStore(IPersistentGrantRepository persistentGrantRepository, IObjectMapper objectMapper, IGuidGenerator guidGenerator)
         {
             _persistentGrantRepository = persistentGrantRepository;
             _objectMapper = objectMapper;
+            _guidGenerator = guidGenerator;
         }
 
         public virtual async Task StoreAsync(IdentityServer4.Models.PersistedGrant grant)
@@ -24,6 +27,7 @@ namespace Volo.Abp.IdentityServer.Grants
             var existing =  await _persistentGrantRepository.FindByKeyAsync(grant.Key);
             if (existing == null)
             {
+                entity.Id = _guidGenerator.Create();
                 await _persistentGrantRepository.InsertAsync(entity);
             }
             else

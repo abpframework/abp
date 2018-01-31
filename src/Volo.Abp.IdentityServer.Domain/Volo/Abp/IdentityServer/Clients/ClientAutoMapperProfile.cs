@@ -23,6 +23,7 @@ namespace Volo.Abp.IdentityServer.Clients
             CreateMap<ApiResource, IdentityServer4.Models.ApiResource>()
                 .ForMember(dest => dest.ApiSecrets, opt => opt.MapFrom(src => src.Secrets));
 
+            //TODO: Why PersistedGrant mapping is in this profile?
             CreateMap<PersistedGrant, IdentityServer4.Models.PersistedGrant>().ReverseMap();
 
             CreateMap<IdentityResource, IdentityServer4.Models.IdentityResource>();

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Builder;
 
 namespace Volo.Abp.IdentityServer.Jwt
 {
-    //TODO: Can we move this to another package..?
+    //TODO: Should we move this to another package..?
 
     public static class JwtTokenMiddleware
     {
