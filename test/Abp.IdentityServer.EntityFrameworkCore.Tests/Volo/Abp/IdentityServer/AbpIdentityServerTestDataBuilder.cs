@@ -58,7 +58,7 @@ namespace Volo.Abp.IdentityServer
                 }
             );
 
-            client42.AddAllowedScope(_guidGenerator, "api1");
+            client42.AddScope("api1");
 
             _clientRepository.Insert(client42);
         }

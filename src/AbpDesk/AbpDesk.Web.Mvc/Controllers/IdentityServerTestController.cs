@@ -50,7 +50,7 @@ namespace AbpDesk.Web.Mvc.Controllers
 
             client.AddGrantTypes(GrantTypes.ClientCredentials);
             client.AddSecret("secret".Sha256());
-            client.AddAllowedScope(GuidGenerator, "api1"); //TODO: Why not with Id..?
+            client.AddScope("api1");
 
             await _clientRepository.InsertAsync(client);
 

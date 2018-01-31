@@ -2,6 +2,6 @@
 {
     public class ClientScopeConsts
     {
-        public const int ScopeMaxLength = 200;
+        public const int ScopeMaxLength = 196;
     }
 }

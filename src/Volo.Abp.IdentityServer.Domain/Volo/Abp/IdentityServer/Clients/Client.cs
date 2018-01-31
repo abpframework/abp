@@ -26,7 +26,7 @@ namespace Volo.Abp.IdentityServer.Clients
 
         public virtual bool RequireClientSecret { get; set; }
 
-        public virtual bool RequireConsent { get; set; } = true;
+        public virtual bool RequireConsent { get; set; }
 
         public virtual bool AllowRememberConsent { get; set; }
 
@@ -159,9 +159,9 @@ namespace Volo.Abp.IdentityServer.Clients
             );
         }
 
-        public virtual void AddAllowedScope(IGuidGenerator guidGenerator, string scope)
+        public virtual void AddScope(string scope)
         {
-            AllowedScopes.Add(new ClientScope(guidGenerator.Create(), Id, scope));
+            AllowedScopes.Add(new ClientScope(Id, scope));
         }
     }
 }

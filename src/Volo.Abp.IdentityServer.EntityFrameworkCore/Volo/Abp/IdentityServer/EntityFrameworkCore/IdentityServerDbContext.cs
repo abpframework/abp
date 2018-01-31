@@ -113,6 +113,8 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
             {
                 scope.ToTable(TablePrefix + "ClientScopes");
 
+                scope.HasKey(x => new {x.ClientId, x.Scope});
+
                 scope.Property(x => x.Scope).HasMaxLength(ClientScopeConsts.ScopeMaxLength).IsRequired();
             });
 
