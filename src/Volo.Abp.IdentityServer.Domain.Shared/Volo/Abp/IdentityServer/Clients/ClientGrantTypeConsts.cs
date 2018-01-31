@@ -2,6 +2,6 @@
 {
     public class ClientGrantTypeConsts
     {
-        public const int GrantTypeMaxLength = 250;
+        public const int GrantTypeMaxLength = 196;
     }
 }

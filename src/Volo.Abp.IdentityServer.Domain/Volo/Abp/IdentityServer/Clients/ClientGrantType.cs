@@ -1,20 +1,20 @@
 ﻿using System;
-using Volo.Abp.Domain.Values;
+using Volo.Abp.Domain.Entities;
 
 namespace Volo.Abp.IdentityServer.Clients
 {
-    public class ClientGrantType : ValueObject<ClientGrantType>
+    public class ClientGrantType : Entity
     {
-        public virtual string GrantType { get; protected set; }
-
         public virtual Guid ClientId { get; protected set; }
+
+        public virtual string GrantType { get; protected set; }
 
         protected ClientGrantType()
         {
 
         }
 
-        public ClientGrantType(Guid clientId, string grantType)
+        protected internal ClientGrantType(Guid clientId, string grantType)
         {
             ClientId = clientId;
             GrantType = grantType;
