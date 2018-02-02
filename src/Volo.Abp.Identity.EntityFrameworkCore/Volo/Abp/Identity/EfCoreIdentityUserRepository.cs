@@ -90,7 +90,8 @@ namespace Volo.Abp.Identity
                         u.Email.Contains(filter)
                 )
                 .OrderBy(sorting ?? nameof(IdentityUser.UserName))
-                .PageBy(skipCount, maxResultCount).ToListAsync(cancellationToken);
+                .PageBy(skipCount, maxResultCount)
+                .ToListAsync(cancellationToken);
         }
 
         public async Task<List<IdentityUser>> GetListAsync(string sorting, int maxResultCount, int skipCount)

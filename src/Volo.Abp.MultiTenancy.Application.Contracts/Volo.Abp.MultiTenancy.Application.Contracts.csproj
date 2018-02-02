@@ -1,11 +1,11 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="..\..\common.props" />
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>Volo.Abp.MultiTenancy.Domain</AssemblyName>
-    <PackageId>Volo.Abp.MultiTenancy.Domain</PackageId>
+    <AssemblyName>Volo.Abp.MultiTenancy.Application.Contracts</AssemblyName>
+    <PackageId>Volo.Abp.MultiTenancy.Application.Contracts</PackageId>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
@@ -14,12 +14,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Volo.Abp.AutoMapper\Volo.Abp.AutoMapper.csproj" />
-    <ProjectReference Include="..\Volo.Abp.Data\Volo.Abp.Data.csproj" />
     <ProjectReference Include="..\Volo.Abp.Ddd\Volo.Abp.Ddd.csproj" />
-    <ProjectReference Include="..\Volo.Abp.MultiTenancy.Abstractions\Volo.Abp.MultiTenancy.Abstractions.csproj" />
     <ProjectReference Include="..\Volo.Abp.MultiTenancy.Domain.Shared\Volo.Abp.MultiTenancy.Domain.Shared.csproj" />
-    <ProjectReference Include="..\Volo.Abp.UI\Volo.Abp.UI.csproj" />
   </ItemGroup>
 
 </Project>

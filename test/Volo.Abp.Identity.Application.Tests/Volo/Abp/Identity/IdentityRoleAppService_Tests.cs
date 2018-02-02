@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 using Shouldly;
 
@@ -14,8 +13,8 @@ namespace Volo.Abp.Identity
 
         public IdentityRoleAppService_Tests()
         {
-            _roleAppService = ServiceProvider.GetRequiredService<IIdentityRoleAppService>();
-            _roleRepository = ServiceProvider.GetRequiredService<IIdentityRoleRepository>();
+            _roleAppService = GetRequiredService<IIdentityRoleAppService>();
+            _roleRepository = GetRequiredService<IIdentityRoleRepository>();
         }
 
         [Fact]

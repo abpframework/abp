@@ -2,6 +2,7 @@
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Data;
 using Volo.Abp.Modularity;
+using Volo.Abp.Ui;
 
 namespace Volo.Abp.MultiTenancy
 {
@@ -10,6 +11,7 @@ namespace Volo.Abp.MultiTenancy
     [DependsOn(typeof(AbpDataModule))]
     [DependsOn(typeof(AbpDddModule))]
     [DependsOn(typeof(AbpAutoMapperModule))]
+    [DependsOn(typeof(AbpUiModule))] //TODO: It's not good to depend on the UI module. However, UserFriendlyException is inside it!
     public class AbpMultiTenancyDomainModule : AbpModule
     {
         public override void ConfigureServices(IServiceCollection services)

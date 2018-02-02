@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AutoMapper;
-using Volo.Abp.Identity.ObjectMappings;
 using Volo.Abp.Modularity;
 
 namespace Volo.Abp.Identity

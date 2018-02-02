@@ -4,7 +4,7 @@ using Volo.Abp.Domain.Entities;
 
 namespace Volo.Abp.MultiTenancy
 {
-    public class TenantConnectionString : Entity<Guid> //TODO: PK should be TenantId + Name (so, inherit from Entity)
+    public class TenantConnectionString : Entity
     {
         public virtual Guid TenantId { get; protected set; }
 

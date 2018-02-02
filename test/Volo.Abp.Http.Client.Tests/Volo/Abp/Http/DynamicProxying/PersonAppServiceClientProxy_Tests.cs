@@ -39,7 +39,7 @@ namespace Volo.Abp.Http.DynamicProxying
         {
             var people = await _peopleAppService.GetListAsync(new PagedAndSortedResultRequestDto());
             people.TotalCount.ShouldBeGreaterThan(0);
-            people.Items.Count.ShouldBe(people.TotalCount);
+            people.Items.Count.ShouldBe((int) people.TotalCount);
         }
 
         [Fact]

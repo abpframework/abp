@@ -11,7 +11,7 @@ namespace Volo.Abp.Application.Dtos
     public class PagedResultDto<T> : ListResultDto<T>, IPagedResult<T>
     {
         /// <inheritdoc />
-        public int TotalCount { get; set; }
+        public long TotalCount { get; set; } //TODO: Can be a long value..?
 
         /// <summary>
         /// Creates a new <see cref="PagedResultDto{T}"/> object.
@@ -26,7 +26,7 @@ namespace Volo.Abp.Application.Dtos
         /// </summary>
         /// <param name="totalCount">Total count of Items</param>
         /// <param name="items">List of items in current page</param>
-        public PagedResultDto(int totalCount, IReadOnlyList<T> items)
+        public PagedResultDto(long totalCount, IReadOnlyList<T> items)
             : base(items)
         {
             TotalCount = totalCount;

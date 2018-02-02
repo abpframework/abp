@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
-using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Entities;
 using Xunit;
 
@@ -16,8 +13,8 @@ namespace Volo.Abp.Identity
 
         public IdentityUserAppService_Tests()
         {
-            _userAppService = ServiceProvider.GetRequiredService<IIdentityUserAppService>();
-            _userRepository = ServiceProvider.GetRequiredService<IIdentityUserRepository>();
+            _userAppService = GetRequiredService<IIdentityUserAppService>();
+            _userRepository = GetRequiredService<IIdentityUserRepository>();
         }
 
         [Fact]

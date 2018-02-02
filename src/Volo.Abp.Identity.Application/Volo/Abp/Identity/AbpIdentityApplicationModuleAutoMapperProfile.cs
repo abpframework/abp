@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 
-namespace Volo.Abp.Identity.ObjectMappings
+namespace Volo.Abp.Identity
 {
     public class AbpIdentityApplicationModuleAutoMapperProfile : Profile
     {

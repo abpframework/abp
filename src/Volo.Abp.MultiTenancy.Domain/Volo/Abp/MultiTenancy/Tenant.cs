@@ -17,8 +17,10 @@ namespace Volo.Abp.MultiTenancy
             
         }
 
-        public Tenant(Guid id, [NotNull] string name)
+        protected internal Tenant(Guid id, [NotNull] string name)
         {
+            Check.NotNull(name, nameof(name));
+
             Id = id;
             Name = name;
 
@@ -35,6 +37,13 @@ namespace Volo.Abp.MultiTenancy
         public virtual string FindConnectionString(string name)
         {
             return ConnectionStrings.FirstOrDefault(c => c.Name == name)?.Value;
+        }
+
+        internal void SetName([NotNull] string name)
+        {
+            Check.NotNull(name, nameof(name));
+
+            Name = name;
         }
     }
 }

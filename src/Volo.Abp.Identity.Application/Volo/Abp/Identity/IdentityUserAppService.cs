@@ -27,7 +27,7 @@ namespace Volo.Abp.Identity
 
         public async Task<PagedResultDto<IdentityUserDto>> GetListAsync(GetIdentityUsersInput input)
         {
-            var count = (int)await _userRepository.GetCountAsync();
+            var count = await _userRepository.GetCountAsync();
             var list = await _userRepository.GetListAsync(input.Sorting, input.MaxResultCount, input.SkipCount, input.Filter);
 
             return new PagedResultDto<IdentityUserDto>(
