@@ -27,6 +27,8 @@ using Volo.Abp.Modularity;
 using Volo.Abp.Ui.Navigation;
 using Volo.Abp.VirtualFileSystem;
 using Volo.Abp.IdentityServer.Jwt;
+using Volo.Abp.MultiTenancy;
+using Volo.Abp.MultiTenancy.Web;
 
 namespace AbpDesk.Web.Mvc
 {
@@ -42,7 +44,9 @@ namespace AbpDesk.Web.Mvc
         typeof(AbpAutofacModule),
         typeof(AbpIdentityServerDomainModule),
         typeof(AbpIdentityServerEntityFrameworkCoreModule),
-        typeof(AbpAspNetCoreMultiTenancyModule)
+        typeof(AbpAspNetCoreMultiTenancyModule),
+        typeof(AbpMultiTenancyWebModule),
+        typeof(AbpMultiTenancyApplicationModule)
         )]
     public class AbpDeskWebMvcModule : AbpModule //TODO: Rename to AbpDeskWebModule, change default namespace to AbpDesk.Web
     {
@@ -120,6 +124,7 @@ namespace AbpDesk.Web.Mvc
                     options.FileSets.ReplaceEmbeddedByPyhsical<AbpAspNetCoreMvcUiBootstrapModule>(Path.Combine(hostingEnvironment.ContentRootPath, "..\\..\\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap"));
                     options.FileSets.ReplaceEmbeddedByPyhsical<AbpAccountWebModule>(Path.Combine(hostingEnvironment.ContentRootPath, "..\\..\\Volo.Abp.Account.Web"));
                     options.FileSets.ReplaceEmbeddedByPyhsical<AbpIdentityWebModule>(Path.Combine(hostingEnvironment.ContentRootPath, "..\\..\\Volo.Abp.Identity.Web"));
+                    options.FileSets.ReplaceEmbeddedByPyhsical<AbpMultiTenancyWebModule>(Path.Combine(hostingEnvironment.ContentRootPath, "..\\..\\Volo.Abp.MultiTenancy.Web"));
                 });
             }
         }

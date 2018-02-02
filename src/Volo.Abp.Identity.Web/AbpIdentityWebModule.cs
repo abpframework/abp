@@ -41,7 +41,6 @@ namespace Volo.Abp.Identity.Web
             
             services.Configure<AbpLocalizationOptions>(options =>
             {
-                //options.Resources.AddVirtual<IdentityResource>("en");
                 options.Resources.AddVirtualJson<IdentityResource>("en", "/Localization/Resources/AbpIdentity");
             });
 

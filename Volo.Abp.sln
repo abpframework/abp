@@ -234,13 +234,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.MultiTenancy.Domai
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.MultiTenancy.Domain.Shared", "src\Volo.Abp.MultiTenancy.Domain.Shared\Volo.Abp.MultiTenancy.Domain.Shared.csproj", "{4605A64C-B4E0-4A04-9BF2-501027375258}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.MultiTenancy.Application.Contracts", "src\Volo.Abp.MultiTenancy.Application.Contracts\Volo.Abp.MultiTenancy.Application.Contracts.csproj", "{6A99C679-EA3B-4324-8D6B-89DB8C7D3DA0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.MultiTenancy.Application.Contracts", "src\Volo.Abp.MultiTenancy.Application.Contracts\Volo.Abp.MultiTenancy.Application.Contracts.csproj", "{6A99C679-EA3B-4324-8D6B-89DB8C7D3DA0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.MultiTenancy.Application", "src\Volo.Abp.MultiTenancy.Application\Volo.Abp.MultiTenancy.Application.csproj", "{FCEC7C9D-067F-452B-98C9-1878F7EA02EB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.MultiTenancy.Application", "src\Volo.Abp.MultiTenancy.Application\Volo.Abp.MultiTenancy.Application.csproj", "{FCEC7C9D-067F-452B-98C9-1878F7EA02EB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Abp.MultiTenancy", "Abp.MultiTenancy", "{3CE22CAC-4B27-4EEC-A35E-C01219ED6E99}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.MultiTenancy.Application.Tests", "test\Volo.Abp.MultiTenancy.Application.Tests\Volo.Abp.MultiTenancy.Application.Tests.csproj", "{B65973F1-9EE0-4914-B6F2-D88F753E1D21}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.MultiTenancy.Application.Tests", "test\Volo.Abp.MultiTenancy.Application.Tests\Volo.Abp.MultiTenancy.Application.Tests.csproj", "{B65973F1-9EE0-4914-B6F2-D88F753E1D21}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.MultiTenancy.Web", "src\Volo.Abp.MultiTenancy.Web\Volo.Abp.MultiTenancy.Web.csproj", "{0808036D-065B-4525-BF30-CBCEA062F8E9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -628,6 +630,10 @@ Global
 		{B65973F1-9EE0-4914-B6F2-D88F753E1D21}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B65973F1-9EE0-4914-B6F2-D88F753E1D21}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B65973F1-9EE0-4914-B6F2-D88F753E1D21}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0808036D-065B-4525-BF30-CBCEA062F8E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0808036D-065B-4525-BF30-CBCEA062F8E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0808036D-065B-4525-BF30-CBCEA062F8E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0808036D-065B-4525-BF30-CBCEA062F8E9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -745,6 +751,7 @@ Global
 		{FCEC7C9D-067F-452B-98C9-1878F7EA02EB} = {CA154803-3589-47B3-B7CB-B18F94FE1EB6}
 		{3CE22CAC-4B27-4EEC-A35E-C01219ED6E99} = {447C8A77-E5F0-4538-8687-7383196D04EA}
 		{B65973F1-9EE0-4914-B6F2-D88F753E1D21} = {3CE22CAC-4B27-4EEC-A35E-C01219ED6E99}
+		{0808036D-065B-4525-BF30-CBCEA062F8E9} = {CA154803-3589-47B3-B7CB-B18F94FE1EB6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB97ECF4-9A84-433F-A80B-2A3285BDD1D5}
