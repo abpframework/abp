@@ -3,7 +3,7 @@ using Volo.Abp.Identity.Web.Pages.Identity.Roles;
 using CreateUserModalModel = Volo.Abp.Identity.Web.Pages.Identity.Users.CreateModalModel;
 using EditUserModalModel = Volo.Abp.Identity.Web.Pages.Identity.Users.EditModalModel;
 
-namespace Volo.Abp.Identity.Web.ObjectMappings
+namespace Volo.Abp.Identity.Web
 {
     public class AbpIdentityWebAutoMapperProfile : Profile
     {

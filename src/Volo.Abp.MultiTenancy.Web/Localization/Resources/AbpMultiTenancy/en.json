@@ -1,6 +1,7 @@
 {
   "culture": "en",
   "texts": {
-
+    "NewTenant": "New tenant",
+    "TenantName": "Tenant name"
   }
 }

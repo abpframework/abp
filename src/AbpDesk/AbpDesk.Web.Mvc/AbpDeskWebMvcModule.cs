@@ -46,7 +46,7 @@ namespace AbpDesk.Web.Mvc
         typeof(AbpIdentityServerEntityFrameworkCoreModule),
         typeof(AbpAspNetCoreMultiTenancyModule),
         typeof(AbpMultiTenancyWebModule),
-        typeof(AbpMultiTenancyApplicationModule)
+        typeof(AbpMultiTenancyHttpApiModule)
         )]
     public class AbpDeskWebMvcModule : AbpModule //TODO: Rename to AbpDeskWebModule, change default namespace to AbpDesk.Web
     {

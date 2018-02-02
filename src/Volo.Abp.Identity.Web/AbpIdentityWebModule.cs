@@ -4,7 +4,6 @@ using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Identity.Web.Localization.Resources.AbpIdentity;
 using Volo.Abp.Identity.Web.Navigation;
-using Volo.Abp.Identity.Web.ObjectMappings;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.Ui.Navigation;
@@ -46,7 +45,7 @@ namespace Volo.Abp.Identity.Web
 
             services.Configure<AbpAutoMapperOptions>(options =>
             {
-                options.AddProfile<AbpIdentityWebAutoMapperProfile>(true);
+                options.AddProfile<AbpIdentityWebAutoMapperProfile>(validate: true);
             });
         }
     }

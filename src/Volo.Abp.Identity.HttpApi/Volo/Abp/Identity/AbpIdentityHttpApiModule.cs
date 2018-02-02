@@ -14,11 +14,14 @@ namespace Volo.Abp.Identity
 
             services.Configure<AbpAspNetCoreMvcOptions>(options =>
             {
-                options.ConventionalControllers.Create(typeof(AbpIdentityApplicationModule).Assembly, opts =>
-                {
-                    opts.RootPath = "identity";
-                    opts.UrlControllerNameNormalizer = context => context.ControllerName.RemovePreFix("Identity");
-                });
+                options.ConventionalControllers.Create(
+                    typeof(AbpIdentityApplicationModule).Assembly,
+                    opts =>
+                    {
+                        opts.RootPath = "identity";
+                        opts.UrlControllerNameNormalizer = context => context.ControllerName.RemovePreFix("Identity");
+                    }
+                );
             });
         }
     }
