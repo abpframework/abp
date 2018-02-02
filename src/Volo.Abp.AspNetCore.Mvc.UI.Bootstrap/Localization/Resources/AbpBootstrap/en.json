@@ -3,6 +3,9 @@
   "texts": {
     "Close": "Close",
     "Save": "Save",
-    "SavingWithThreeDot": "Saving..."
+    "SavingWithThreeDot": "Saving...",
+    "Actions": "Actions",
+    "Delete": "Delete",
+    "Edit": "Edit"
   }
 }

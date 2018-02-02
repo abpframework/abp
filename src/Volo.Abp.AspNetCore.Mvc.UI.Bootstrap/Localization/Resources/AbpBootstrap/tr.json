@@ -1,8 +1,11 @@
-{
+﻿{
   "culture": "tr",
   "texts": {
     "Close": "Kapat",
     "Save": "Kaydet",
-    "SavingWithThreeDot": "Kaydediliyor..."
+    "SavingWithThreeDot": "Kaydediliyor...",
+    "Actions": "İşlemler",
+    "Delete": "Sil",
+    "Edit": "Düzenle"
   }
 }

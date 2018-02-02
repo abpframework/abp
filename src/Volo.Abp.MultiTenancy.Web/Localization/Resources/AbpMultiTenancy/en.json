@@ -1,7 +1,9 @@
 {
   "culture": "en",
   "texts": {
+    "Tenants": "Tenants",
     "NewTenant": "New tenant",
-    "TenantName": "Tenant name"
+    "TenantName": "Tenant name",
+    "TenantDeletionConfirmationMessage": "Tenant '{0}' will be deleted. Do you confirm that?"
   }
 }

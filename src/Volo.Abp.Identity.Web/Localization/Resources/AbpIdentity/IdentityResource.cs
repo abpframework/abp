@@ -1,10 +1,13 @@
-﻿using Volo.Abp.Localization;
+﻿using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Localization.Resources.AbpBootstrap;
+using Volo.Abp.Localization;
 using Volo.Abp.Localization.Resources.AbpValidation;
 
 namespace Volo.Abp.Identity.Web.Localization.Resources.AbpIdentity
 {
+    [InheritResource(
+        typeof(AbpValidationResource), 
+        typeof(AbpBootstrapResource))]
     [ShortLocalizationResourceName("AbpIdentity")]
-    [InheritResource(typeof(AbpValidationResource))]
     public class IdentityResource //TODO: Rename to AbpIdentityResource
     {
         

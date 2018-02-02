@@ -3,23 +3,16 @@
   "texts": {
     "Users": "Users",
     "NewUser": "New user",
-    "Actions": "Actions",
     "UserName": "User name",
     "EmailAddress": "Email address",
     "PhoneNumber": "Phone number",
     "UserInformations": "User informations",
     "Roles": "Roles",
-    "Close": "Close",
-    "Delete": "Delete",
-    "Edit": "Edit",
-    "Save": "Save",
     "Password": "Password",
     "UserDeletionConfirmationMessage": "User '{0}' will be deleted. Do you confirm that?",
     "TwoFactorVerification": "Two factor verification",
     "AccountLockoutOnFailedLoginAttempts": "Locking account after failed login attempts",
     "NewRole": "New role",
-    "RoleName": "Role name",
-    "CreationTime": "Creation time"
-
+    "RoleName": "Role name"
   }
 }
