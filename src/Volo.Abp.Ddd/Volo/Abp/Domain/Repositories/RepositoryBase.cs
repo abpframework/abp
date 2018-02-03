@@ -50,7 +50,6 @@ namespace Volo.Abp.Domain.Repositories
             return Task.CompletedTask;
         }
 
-        //TODO: Is that needed..?
         protected virtual IQueryable<TEntity> ApplyDataFilters(IQueryable<TEntity> query)
         {
             if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)))

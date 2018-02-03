@@ -19,24 +19,23 @@ namespace Volo.Abp.Identity
         {
         }
 
-        public Task<IdentityUser> FindByNormalizedUserNameAsync(string normalizedUserName, CancellationToken cancellationToken)
+        public virtual async Task<IdentityUser> FindByNormalizedUserNameAsync(string normalizedUserName, CancellationToken cancellationToken)
         {
-            return DbSet.FirstOrDefaultAsync(u => u.NormalizedUserName == normalizedUserName, cancellationToken);
+            return await DbSet.FirstOrDefaultAsync(u => u.NormalizedUserName == normalizedUserName, cancellationToken);
         }
 
-        public Task<List<string>> GetRoleNamesAsync(Guid userId)
+        public virtual async Task<List<string>> GetRoleNamesAsync(Guid userId)
         {
             var query = from userRole in DbContext.UserRoles
                         join role in DbContext.Roles on userRole.RoleId equals role.Id
                         where userRole.UserId.Equals(userId)
                         select role.Name;
 
-            return query.ToListAsync();
+            return await query.ToListAsync();
         }
 
-        public async Task<IdentityUser> FindByLoginAsync(string loginProvider, string providerKey, CancellationToken cancellationToken)
+        public virtual async Task<IdentityUser> FindByLoginAsync(string loginProvider, string providerKey, CancellationToken cancellationToken)
         {
-            //TODO: This should be changed since loginProvider, providerKey are not PKs.
             var userLogin = await DbContext.UserLogins
                 .Where(login => login.LoginProvider == loginProvider && login.ProviderKey == providerKey)
                 .FirstOrDefaultAsync(cancellationToken);
@@ -49,12 +48,12 @@ namespace Volo.Abp.Identity
             return await DbSet.FindAsync(new object[] { userLogin.UserId }, cancellationToken);
         }
 
-        public Task<IdentityUser> FindByNormalizedEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
+        public virtual async Task<IdentityUser> FindByNormalizedEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
         {
-            return DbSet.FirstOrDefaultAsync(u => u.NormalizedEmail == normalizedEmail, cancellationToken);
+            return await DbSet.FirstOrDefaultAsync(u => u.NormalizedEmail == normalizedEmail, cancellationToken);
         }
 
-        public async Task<IList<IdentityUser>> GetListByClaimAsync(Claim claim, CancellationToken cancellationToken)
+        public virtual async Task<IList<IdentityUser>> GetListByClaimAsync(Claim claim, CancellationToken cancellationToken)
         {
             var query = from userclaims in DbContext.UserClaims
                         join user in DbContext.Users on userclaims.UserId equals user.Id
@@ -64,7 +63,7 @@ namespace Volo.Abp.Identity
             return await query.ToListAsync(cancellationToken);
         }
 
-        public async Task<IList<IdentityUser>> GetListByNormalizedRoleNameAsync(string normalizedRoleName, CancellationToken cancellationToken)
+        public virtual async Task<IList<IdentityUser>> GetListByNormalizedRoleNameAsync(string normalizedRoleName, CancellationToken cancellationToken)
         {
             var role = await DbContext.Roles.Where(x => x.NormalizedName == normalizedRoleName).FirstOrDefaultAsync(cancellationToken);
 
@@ -81,7 +80,7 @@ namespace Volo.Abp.Identity
             return await query.ToListAsync(cancellationToken);
         }
 
-        public async Task<List<IdentityUser>> GetListAsync(string sorting, int maxResultCount, int skipCount, string filter, CancellationToken cancellationToken = default)
+        public virtual async Task<List<IdentityUser>> GetListAsync(string sorting, int maxResultCount, int skipCount, string filter, CancellationToken cancellationToken = default)
         {
             return await this.WhereIf(
                     !filter.IsNullOrWhiteSpace(),
@@ -94,12 +93,12 @@ namespace Volo.Abp.Identity
                 .ToListAsync(cancellationToken);
         }
 
-        public async Task<List<IdentityUser>> GetListAsync(string sorting, int maxResultCount, int skipCount)
+        public virtual async Task<List<IdentityUser>> GetListAsync(string sorting, int maxResultCount, int skipCount)
         {
             return await this.OrderBy(sorting ?? nameof(IdentityUser.UserName)).PageBy(skipCount, maxResultCount).ToListAsync();
         }
 
-        public async Task<List<IdentityRole>> GetRolesAsync(Guid userId)
+        public virtual async Task<List<IdentityRole>> GetRolesAsync(Guid userId)
         {
             var query = from userRole in DbContext.UserRoles
                         join role in DbContext.Roles on userRole.RoleId equals role.Id
@@ -109,7 +108,7 @@ namespace Volo.Abp.Identity
             return await query.ToListAsync();
         }
 
-        public async Task<long> GetCountAsync(CancellationToken cancellationToken = default)
+        public virtual async Task<long> GetCountAsync(CancellationToken cancellationToken = default)
         {
             return await this.LongCountAsync(cancellationToken);
         }

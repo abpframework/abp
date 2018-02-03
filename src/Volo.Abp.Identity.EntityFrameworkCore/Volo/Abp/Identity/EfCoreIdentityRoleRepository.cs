@@ -18,12 +18,12 @@ namespace Volo.Abp.Identity
         {
         }
 
-        public Task<IdentityRole> FindByNormalizedNameAsync(string normalizedRoleName, CancellationToken cancellationToken)
+        public virtual async Task<IdentityRole> FindByNormalizedNameAsync(string normalizedRoleName, CancellationToken cancellationToken)
         {
-            return DbSet.FirstOrDefaultAsync(r => r.NormalizedName == normalizedRoleName, cancellationToken);
+            return await DbSet.FirstOrDefaultAsync(r => r.NormalizedName == normalizedRoleName, cancellationToken);
         }
 
-        public async Task<List<IdentityRole>> GetListAsync(string sorting = null, int maxResultCount = int.MaxValue, int skipCount = 0)
+        public virtual async Task<List<IdentityRole>> GetListAsync(string sorting = null, int maxResultCount = int.MaxValue, int skipCount = 0)
         {
             return await this
                 .OrderBy(sorting ?? nameof(IdentityRole.Name))
@@ -31,7 +31,7 @@ namespace Volo.Abp.Identity
                 .ToListAsync();
         }
 
-        public async Task<long> GetCountAsync(CancellationToken cancellationToken = default)
+        public virtual async Task<long> GetCountAsync(CancellationToken cancellationToken = default)
         {
             return await this.LongCountAsync(cancellationToken);
         }

@@ -60,7 +60,7 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
             return base.Insert(entity, autoSave);
         }
 
-        private void SetIdIfNeeded(TEntity entity)
+        protected virtual void SetIdIfNeeded(TEntity entity)
         {
             if (typeof(TKey) == typeof(int) || typeof(TKey) == typeof(long) || typeof(TKey) == typeof(Guid))
             {

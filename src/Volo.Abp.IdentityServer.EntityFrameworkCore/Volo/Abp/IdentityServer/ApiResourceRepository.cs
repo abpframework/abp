@@ -16,7 +16,7 @@ namespace Volo.Abp.IdentityServer
 
         }
 
-        public async Task<ApiResource> FindByNameAsync(string name, CancellationToken cancellationToken = default)
+        public virtual async Task<ApiResource> FindByNameAsync(string name, CancellationToken cancellationToken = default)
         {
             return await this.FirstOrDefaultAsync(ar => ar.Name == name, cancellationToken);
         }

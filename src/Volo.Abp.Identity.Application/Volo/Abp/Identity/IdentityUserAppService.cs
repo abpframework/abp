@@ -5,8 +5,6 @@ using Volo.Abp.Application.Dtos;
 
 namespace Volo.Abp.Identity
 {
-    //TODO: Consider a way of passing cancellation token to all async application service methods!
-
     public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppService
     {
         private readonly IdentityUserManager _userManager;

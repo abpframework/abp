@@ -15,9 +15,9 @@ namespace Volo.Abp.IdentityServer
 
         }
 
-        public Task<Client> FindByCliendIdIncludingAllAsync(string clientId)
+        public virtual async Task<Client> FindByCliendIdIncludingAllAsync(string clientId)
         {
-            return DbSet
+            return await DbSet
                 .Include(x => x.AllowedGrantTypes)
                 .Include(x => x.RedirectUris)
                 .Include(x => x.PostLogoutRedirectUris)

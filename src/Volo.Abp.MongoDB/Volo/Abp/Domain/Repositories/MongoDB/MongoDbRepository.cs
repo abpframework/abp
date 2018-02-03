@@ -140,7 +140,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             return Builders<TEntity>.Filter.Eq(e => e.Id, entity.Id);
         }
 
-        private static FilterDefinition<TEntity> CreateEntityFilter(TKey id)
+        protected virtual FilterDefinition<TEntity> CreateEntityFilter(TKey id)
         {
             return Builders<TEntity>.Filter.Eq(e => e.Id, id);
         }

@@ -76,22 +76,22 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
             }
         }
 
-        public virtual Task EnsureCollectionLoadedAsync<TProperty>(
+        public virtual async Task EnsureCollectionLoadedAsync<TProperty>(
             TEntity entity,
             Expression<Func<TEntity, IEnumerable<TProperty>>> propertyExpression,
             CancellationToken cancellationToken = default)
             where TProperty : class
         {
-            return DbContext.Entry(entity).Collection(propertyExpression).LoadAsync(GetCancellationToken(cancellationToken));
+            await DbContext.Entry(entity).Collection(propertyExpression).LoadAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual Task EnsurePropertyLoadedAsync<TProperty>(
+        public virtual async Task EnsurePropertyLoadedAsync<TProperty>(
             TEntity entity,
             Expression<Func<TEntity, TProperty>> propertyExpression,
             CancellationToken cancellationToken = default)
             where TProperty : class
         {
-            return DbContext.Entry(entity).Reference(propertyExpression).LoadAsync(GetCancellationToken(cancellationToken));
+            await DbContext.Entry(entity).Reference(propertyExpression).LoadAsync(GetCancellationToken(cancellationToken));
         }
     }
 
@@ -108,7 +108,7 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
 
         }
 
-        public TEntity Get(TKey id)
+        public virtual TEntity Get(TKey id)
         {
             var entity = Find(id);
 
@@ -137,9 +137,9 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
             return DbSet.Find(id);
         }
 
-        public virtual Task<TEntity> FindAsync(TKey id, CancellationToken cancellationToken = default)
+        public virtual async Task<TEntity> FindAsync(TKey id, CancellationToken cancellationToken = default)
         {
-            return DbSet.FindAsync(new object[] { id }, GetCancellationToken(cancellationToken));
+            return await DbSet.FindAsync(new object[] { id }, GetCancellationToken(cancellationToken));
         }
 
         public virtual void Delete(TKey id)
