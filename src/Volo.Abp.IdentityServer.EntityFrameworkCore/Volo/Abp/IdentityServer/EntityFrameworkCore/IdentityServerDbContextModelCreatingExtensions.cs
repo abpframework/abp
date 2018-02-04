@@ -1,5 +1,4 @@
-﻿using System;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.IdentityServer.ApiResources;
 using Volo.Abp.IdentityServer.Clients;
@@ -10,9 +9,14 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 {
     public static class IdentityServerDbContextModelCreatingExtensions
     {
-        public static void ConfigureIdentityServer(this IIdentityServerDbContext dbContext, ModelBuilder builder, string tablePrefix = "", [CanBeNull] string schema = null)
+        public static void ConfigureIdentityServer(
+            this ModelBuilder builder, 
+            [CanBeNull] string tablePrefix = AbpIdentityServerConsts.DefaultDbTablePrefix, 
+            [CanBeNull] string schema = AbpIdentityServerConsts.DefaultDbSchema)
         {
-            if (tablePrefix.IsNullOrWhiteSpace())
+            Check.NotNull(builder, nameof(builder));
+
+            if (tablePrefix == null)
             {
                 tablePrefix = "";
             }

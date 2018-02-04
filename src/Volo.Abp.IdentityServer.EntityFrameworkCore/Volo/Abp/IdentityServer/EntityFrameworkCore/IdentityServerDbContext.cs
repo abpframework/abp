@@ -9,9 +9,9 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 {
     public class IdentityServerDbContext : AbpDbContext<IdentityServerDbContext>, IIdentityServerDbContext
     {
-        public static string TablePrefix { get; set; } = "IdentityServer";
+        public static string TablePrefix { get; set; } = AbpIdentityServerConsts.DefaultDbTablePrefix;
 
-        public static string Schema { get; set; }
+        public static string Schema { get; set; } = AbpIdentityServerConsts.DefaultDbSchema;
 
         public DbSet<ApiResource> ApiResources { get; set; }
 
@@ -58,8 +58,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-
-            this.ConfigureIdentityServer(builder, TablePrefix, Schema);
+            builder.ConfigureIdentityServer(TablePrefix, Schema);
         }
     }
 }
