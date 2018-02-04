@@ -1,4 +1,3 @@
-using System;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,9 +5,14 @@ namespace Volo.Abp.MultiTenancy.EntityFrameworkCore
 {
     public static class MultiTenancyDbContextModelCreatingExtensions
     {
-        public static void ConfigureMultiTenancy(this IMultiTenancyDbContext dbContext, ModelBuilder builder, string tablePrefix = "", [CanBeNull] string schema = null)
+        public static void ConfigureMultiTenancy(
+            this ModelBuilder builder,
+            [CanBeNull]string tablePrefix = AbpMultiTenancyConsts.DefaultDbTablePrefix,
+            [CanBeNull] string schema = AbpMultiTenancyConsts.DefaultDbSchema)
         {
-            if (tablePrefix.IsNullOrWhiteSpace())
+            Check.NotNull(builder, nameof(builder));
+
+            if (tablePrefix == null)
             {
                 tablePrefix = "";
             }
@@ -28,7 +32,7 @@ namespace Volo.Abp.MultiTenancy.EntityFrameworkCore
             {
                 b.ToTable(tablePrefix + "TenantConnectionStrings", schema);
 
-                b.HasKey(x => new {x.TenantId, x.Name});
+                b.HasKey(x => new { x.TenantId, x.Name });
 
                 b.Property(cs => cs.Name).IsRequired().HasMaxLength(TenantConnectionStringConsts.MaxNameLength);
                 b.Property(cs => cs.Value).IsRequired().HasMaxLength(TenantConnectionStringConsts.MaxValueLength);

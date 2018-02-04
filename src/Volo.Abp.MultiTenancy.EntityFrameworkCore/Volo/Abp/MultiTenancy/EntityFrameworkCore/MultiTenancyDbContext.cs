@@ -5,9 +5,9 @@ namespace Volo.Abp.MultiTenancy.EntityFrameworkCore
 {
     public class MultiTenancyDbContext : AbpDbContext<MultiTenancyDbContext>, IMultiTenancyDbContext
     {
-        public static string TablePrefix { get; set; } = "Mt";
+        public static string TablePrefix { get; set; } = AbpMultiTenancyConsts.DefaultDbTablePrefix;
 
-        public static string Schema { get; set; }
+        public static string Schema { get; set; } = AbpMultiTenancyConsts.DefaultDbSchema;
 
         public DbSet<Tenant> Tenants { get; set; }
 
@@ -22,7 +22,7 @@ namespace Volo.Abp.MultiTenancy.EntityFrameworkCore
         {
             base.OnModelCreating(builder);
 
-            this.ConfigureMultiTenancy(builder, TablePrefix, Schema);
+            builder.ConfigureMultiTenancy(TablePrefix, Schema);
         }
     }
 }
