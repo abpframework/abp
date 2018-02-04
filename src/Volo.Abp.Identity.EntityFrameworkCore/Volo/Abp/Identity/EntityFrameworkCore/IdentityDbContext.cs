@@ -8,9 +8,9 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
     /// </summary>
     public class IdentityDbContext : AbpDbContext<IdentityDbContext>, IIdentityDbContext
     {
-        public static string TablePrefix { get; set; } = "Identity";
+        public static string TablePrefix { get; set; } = AbpIdentityConsts.DefaultDbTablePrefix;
 
-        public static string Schema { get; set; }
+        public static string Schema { get; set; } = AbpIdentityConsts.DefaultDbSchema;
 
         /// <summary>
         /// Gets or sets the <see cref="DbSet{TEntity}"/> of Users.
@@ -66,8 +66,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-
-            this.ConfigureIdentity(builder, TablePrefix, Schema);
+            builder.ConfigureAbpIdentity(TablePrefix, Schema);
         }
     }
 }

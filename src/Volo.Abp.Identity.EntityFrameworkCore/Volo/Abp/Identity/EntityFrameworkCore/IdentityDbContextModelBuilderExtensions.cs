@@ -1,14 +1,18 @@
-﻿using System;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 
 namespace Volo.Abp.Identity.EntityFrameworkCore
 {
     public static class IdentityDbContextModelBuilderExtensions
     {
-        public static void ConfigureIdentity(this IIdentityDbContext dbContext, ModelBuilder builder, string tablePrefix = "", [CanBeNull] string schema = null)
+        public static void ConfigureAbpIdentity(
+            [NotNull] this ModelBuilder builder, 
+            [CanBeNull] string tablePrefix = AbpIdentityConsts.DefaultDbTablePrefix, 
+            [CanBeNull] string schema = AbpIdentityConsts.DefaultDbSchema)
         {
-            if (tablePrefix.IsNullOrWhiteSpace())
+            Check.NotNull(builder, nameof(builder));
+
+            if (tablePrefix == null)
             {
                 tablePrefix = "";
             }
@@ -40,18 +44,6 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 b.HasIndex(u => u.NormalizedEmail);
             });
 
-            builder.Entity<IdentityRole>(b =>
-            {
-                b.ToTable(tablePrefix + "Roles", schema);
-
-                b.Property(r => r.Name).IsRequired().HasMaxLength(IdentityRoleConsts.MaxNameLength);
-                b.Property(r => r.NormalizedName).IsRequired().HasMaxLength(IdentityRoleConsts.MaxNormalizedNameLength);
-
-                b.HasMany(r => r.Claims).WithOne().HasForeignKey(rc => rc.RoleId).IsRequired();
-
-                b.HasIndex(r => r.NormalizedName);
-            });
-
             builder.Entity<IdentityUserClaim>(b =>
             {
                 b.ToTable(tablePrefix + "UserClaims", schema);
@@ -62,21 +54,11 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 b.HasIndex(uc => uc.UserId);
             });
 
-            builder.Entity<IdentityRoleClaim>(b =>
-            {
-                b.ToTable(tablePrefix + "RoleClaims", schema);
-
-                b.Property(uc => uc.ClaimType).HasMaxLength(IdentityRoleClaimConsts.MaxClaimTypeLength).IsRequired();
-                b.Property(uc => uc.ClaimValue).HasMaxLength(IdentityRoleClaimConsts.MaxClaimValueLength);
-
-                b.HasIndex(uc => uc.RoleId);
-            });
-
             builder.Entity<IdentityUserRole>(b =>
             {
                 b.ToTable(tablePrefix + "UserRoles", schema);
 
-                b.HasKey(ur => new {ur.UserId, ur.RoleId});
+                b.HasKey(ur => new { ur.UserId, ur.RoleId });
 
                 b.HasOne<IdentityRole>().WithMany().HasForeignKey(ur => ur.RoleId).IsRequired();
                 b.HasOne<IdentityUser>().WithMany(u => u.Roles).HasForeignKey(ur => ur.UserId).IsRequired();
@@ -88,7 +70,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             {
                 b.ToTable(tablePrefix + "UserLogins", schema);
 
-                b.HasKey(x => new {x.UserId, x.LoginProvider});
+                b.HasKey(x => new { x.UserId, x.LoginProvider });
 
                 b.Property(ul => ul.LoginProvider).HasMaxLength(IdentityUserLoginConsts.MaxLoginProviderLength).IsRequired();
                 b.Property(ul => ul.ProviderKey).HasMaxLength(IdentityUserLoginConsts.MaxProviderKeyLength).IsRequired();
@@ -105,6 +87,28 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
 
                 b.Property(ul => ul.LoginProvider).HasMaxLength(IdentityUserTokenConsts.MaxLoginProviderLength).IsRequired();
                 b.Property(ul => ul.LoginProvider).HasMaxLength(IdentityUserTokenConsts.MaxNameLength).IsRequired();
+            });
+
+            builder.Entity<IdentityRole>(b =>
+            {
+                b.ToTable(tablePrefix + "Roles", schema);
+
+                b.Property(r => r.Name).IsRequired().HasMaxLength(IdentityRoleConsts.MaxNameLength);
+                b.Property(r => r.NormalizedName).IsRequired().HasMaxLength(IdentityRoleConsts.MaxNormalizedNameLength);
+
+                b.HasMany(r => r.Claims).WithOne().HasForeignKey(rc => rc.RoleId).IsRequired();
+
+                b.HasIndex(r => r.NormalizedName);
+            });
+
+            builder.Entity<IdentityRoleClaim>(b =>
+            {
+                b.ToTable(tablePrefix + "RoleClaims", schema);
+
+                b.Property(uc => uc.ClaimType).HasMaxLength(IdentityRoleClaimConsts.MaxClaimTypeLength).IsRequired();
+                b.Property(uc => uc.ClaimValue).HasMaxLength(IdentityRoleClaimConsts.MaxClaimValueLength);
+
+                b.HasIndex(uc => uc.RoleId);
             });
         }
     }
