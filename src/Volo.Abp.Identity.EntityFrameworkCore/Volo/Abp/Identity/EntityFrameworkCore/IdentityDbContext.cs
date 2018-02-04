@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 
 namespace Volo.Abp.Identity.EntityFrameworkCore
@@ -6,6 +7,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
     /// <summary>
     /// Base class for the Entity Framework database context used for identity.
     /// </summary>
+    [ConnectionStringName("AbpIdentity")]
     public class IdentityDbContext : AbpDbContext<IdentityDbContext>, IIdentityDbContext
     {
         public static string TablePrefix { get; set; } = AbpIdentityConsts.DefaultDbTablePrefix;
