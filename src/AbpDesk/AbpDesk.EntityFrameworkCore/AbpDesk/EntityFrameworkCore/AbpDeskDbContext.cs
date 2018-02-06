@@ -26,7 +26,7 @@ namespace AbpDesk.EntityFrameworkCore
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.ConfigureMultiTenancy(MultiTenancyDbContext.TablePrefix, MultiTenancyDbContext.Schema);
+            modelBuilder.ConfigureMultiTenancy();
 
             //Use different classes to map each entity type, as a better practice?
             modelBuilder.Entity<Ticket>(b =>

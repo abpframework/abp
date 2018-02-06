@@ -21,7 +21,7 @@ namespace Volo.Abp.MultiTenancy
             return SetCurrent(id);
         }
 
-        public IDisposable Clear()
+        public IDisposable Clear() //TODO: Remove
         {
             return Change(null);
         }
