@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Settings
 {
-    public class SettingManager : ISettingManager
+    public class SettingManager : ISettingManager, ITransientDependency
     {
         public Task<string> GetOrNullAsync(string name)
         {
