@@ -12,7 +12,7 @@ namespace Volo.Abp.Settings
     {
         protected ISettingDefinitionManager SettingDefinitionManager { get; }
 
-        protected Lazy<List<ISettingContributor>> Contributors { get; }
+        protected Lazy<List<ISettingValueProvider>> Providers { get; }
 
         protected SettingOptions Options { get; }
 
@@ -28,10 +28,10 @@ namespace Volo.Abp.Settings
             SettingDefinitionManager = settingDefinitionManager;
             Options = options.Value;
 
-            Contributors = new Lazy<List<ISettingContributor>>(
+            Providers = new Lazy<List<ISettingValueProvider>>(
                 () => Options
-                    .Contributors
-                    .Select(c => serviceProvider.GetRequiredService(c) as ISettingContributor)
+                    .ValueProviders
+                    .Select(c => serviceProvider.GetRequiredService(c) as ISettingValueProvider)
                     .ToList(),
                 true
             );
@@ -42,7 +42,7 @@ namespace Volo.Abp.Settings
             Check.NotNull(name, nameof(name));
 
             var setting = SettingDefinitionManager.Get(name);
-            var contributors = Enumerable.Reverse(Contributors.Value);
+            var contributors = Enumerable.Reverse(Providers.Value);
 
             foreach (var contributor in contributors)
             {
@@ -62,18 +62,18 @@ namespace Volo.Abp.Settings
             Check.NotNull(entityType, nameof(entityType));
 
             var setting = SettingDefinitionManager.Get(name);
-            var contributors = Enumerable
-                .Reverse(Contributors.Value)
+            var providers = Enumerable
+                .Reverse(Providers.Value)
                 .SkipWhile(c => c.EntityType != entityType);
 
             if (!fallback)
             {
-                contributors = contributors.TakeWhile(c => c.EntityType == entityType);
+                providers = providers.TakeWhile(c => c.EntityType == entityType);
             }
 
-            foreach (var contributor in contributors)
+            foreach (var provider in providers)
             {
-                var value = await contributor.GetOrNullAsync(setting, entityId);
+                var value = await provider.GetOrNullAsync(setting, entityId);
                 if (value != null)
                 {
                     return value;

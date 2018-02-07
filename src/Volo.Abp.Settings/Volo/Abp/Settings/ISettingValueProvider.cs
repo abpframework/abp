@@ -3,7 +3,7 @@ using JetBrains.Annotations;
 
 namespace Volo.Abp.Settings
 {
-    public interface ISettingContributor
+    public interface ISettingValueProvider
     {
         string EntityType { get; }
 

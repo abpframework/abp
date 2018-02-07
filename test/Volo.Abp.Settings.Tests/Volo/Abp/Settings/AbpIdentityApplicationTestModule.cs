@@ -39,7 +39,7 @@ namespace Volo.Abp.Settings
 
             services.Configure<SettingOptions>(options =>
             {
-                options.Providers.Add<TestSettingProvider>();
+                options.DefinitionProviders.Add<TestSettingDefinitionProvider>();
             });
         }
 

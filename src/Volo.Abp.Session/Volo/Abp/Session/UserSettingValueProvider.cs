@@ -6,7 +6,7 @@ namespace Volo.Abp.Session
 {
     //TODO: Optimization: Get all settings and cache it!
 
-    public class UserSettingContributor : SettingContributor
+    public class UserSettingValueProvider : SettingValueProvider
     {
         public const string DefaultEntityType = "User";
 
@@ -14,7 +14,7 @@ namespace Volo.Abp.Session
 
         protected ICurrentUser CurrentUser { get; }
 
-        public UserSettingContributor(ISettingStore settingStore, ICurrentUser currentUser)
+        public UserSettingValueProvider(ISettingStore settingStore, ICurrentUser currentUser)
             : base(settingStore)
         {
             CurrentUser = currentUser;

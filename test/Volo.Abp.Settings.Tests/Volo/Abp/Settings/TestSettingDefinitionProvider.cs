@@ -1,6 +1,6 @@
 ﻿namespace Volo.Abp.Settings
 {
-    public class TestSettingProvider : SettingProvider
+    public class TestSettingDefinitionProvider : SettingDefinitionProvider
     {
         public override void Define(ISettingDefinitionContext context)
         {

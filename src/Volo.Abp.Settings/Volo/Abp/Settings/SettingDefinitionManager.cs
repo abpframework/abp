@@ -9,7 +9,7 @@ namespace Volo.Abp.Settings
 {
     public class SettingDefinitionManager : ISettingDefinitionManager, ISingletonDependency
     {
-        protected Lazy<List<ISettingProvider>> Providers { get; }
+        protected Lazy<List<ISettingDefinitionProvider>> Providers { get; }
 
         protected Lazy<IDictionary<string, SettingDefinition>> SettingDefinitions { get; }
 
@@ -24,7 +24,7 @@ namespace Volo.Abp.Settings
             _serviceProvider = serviceProvider;
             Options = options.Value;
 
-            Providers = new Lazy<List<ISettingProvider>>(CreateSettingProviders, true);
+            Providers = new Lazy<List<ISettingDefinitionProvider>>(CreateSettingProviders, true);
             SettingDefinitions = new Lazy<IDictionary<string, SettingDefinition>>(CreateSettingDefinitions, true);
         }
 
@@ -47,11 +47,11 @@ namespace Volo.Abp.Settings
             return SettingDefinitions.Value.GetOrDefault(name);
         }
 
-        private List<ISettingProvider> CreateSettingProviders()
+        private List<ISettingDefinitionProvider> CreateSettingProviders()
         {
             return Options
-                .Providers
-                .Select(p => _serviceProvider.GetRequiredService(p) as ISettingProvider)
+                .DefinitionProviders
+                .Select(p => _serviceProvider.GetRequiredService(p) as ISettingDefinitionProvider)
                 .ToList();
         }
 

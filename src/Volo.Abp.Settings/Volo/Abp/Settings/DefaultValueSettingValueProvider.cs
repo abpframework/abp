@@ -2,18 +2,19 @@
 
 namespace Volo.Abp.Settings
 {
-    public class DefaultStoreSettingContributor : SettingContributor
+    public class DefaultValueSettingValueProvider : SettingValueProvider
     {
         public override string EntityType => null;
 
-        public DefaultStoreSettingContributor(ISettingStore settingStore) 
+        public DefaultValueSettingValueProvider(ISettingStore settingStore) 
             : base(settingStore)
         {
+
         }
 
         public override Task<string> GetOrNullAsync(SettingDefinition setting, string entityId)
         {
-            return SettingStore.GetOrNullAsync(setting.Name, null, null);
+            return Task.FromResult(setting.DefaultValue);
         }
     }
 }

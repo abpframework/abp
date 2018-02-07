@@ -2,7 +2,7 @@
 
 namespace Volo.Abp.Settings
 {
-    public abstract class SettingProvider : ISettingProvider, ISingletonDependency
+    public abstract class SettingDefinitionProvider : ISettingDefinitionProvider, ISingletonDependency
     {
         public abstract void Define(ISettingDefinitionContext context);
     }

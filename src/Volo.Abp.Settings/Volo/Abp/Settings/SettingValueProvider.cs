@@ -3,13 +3,13 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Settings
 {
-    public abstract class SettingContributor : ISettingContributor, ISingletonDependency
+    public abstract class SettingValueProvider : ISettingValueProvider, ISingletonDependency
     {
         public abstract string EntityType { get; }
 
         protected ISettingStore SettingStore { get; }
 
-        protected SettingContributor(ISettingStore settingStore)
+        protected SettingValueProvider(ISettingStore settingStore)
         {
             SettingStore = settingStore;
         }

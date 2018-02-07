@@ -24,8 +24,8 @@ namespace Volo.Abp.Settings
             _settingRepository.InsertAsync(new Setting(_guidGenerator.Create(), "MySetting1", "42"));
 
             _settingRepository.InsertAsync(new Setting(_guidGenerator.Create(), "MySetting2", "default-store-value"));
-            _settingRepository.InsertAsync(new Setting(_guidGenerator.Create(), "MySetting2", "user1-store-value", UserSettingContributor.DefaultEntityType, User1Id.ToString()));
-            _settingRepository.InsertAsync(new Setting(_guidGenerator.Create(), "MySetting2", "user2-store-value", UserSettingContributor.DefaultEntityType, User2Id.ToString()));
+            _settingRepository.InsertAsync(new Setting(_guidGenerator.Create(), "MySetting2", "user1-store-value", UserSettingValueProvider.DefaultEntityType, User1Id.ToString()));
+            _settingRepository.InsertAsync(new Setting(_guidGenerator.Create(), "MySetting2", "user2-store-value", UserSettingValueProvider.DefaultEntityType, User2Id.ToString()));
         }
     }
 }

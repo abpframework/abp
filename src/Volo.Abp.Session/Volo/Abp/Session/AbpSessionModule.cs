@@ -13,7 +13,7 @@ namespace Volo.Abp.Session
         {
             services.Configure<SettingOptions>(options =>
             {
-                options.Contributors.Add<UserSettingContributor>();
+                options.ValueProviders.Add<UserSettingValueProvider>();
             });
 
             services.AddAssemblyOf<AbpSessionModule>();
