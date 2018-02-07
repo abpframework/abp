@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Volo.Abp.Settings;
 
 namespace Volo.Abp.Session
@@ -19,19 +20,19 @@ namespace Volo.Abp.Session
             CurrentUser = currentUser;
         }
 
-        public override async Task<string> GetOrNullAsync(string name, bool fallback)
+        public override async Task<string> GetOrNullAsync(SettingDefinition setting, string entityId)
         {
-            if (CurrentUser.Id == null)
+            if (entityId == null)
             {
-                return null;
+                if (CurrentUser.Id == null)
+                {
+                    return null;
+                }
+
+                entityId = CurrentUser.Id.ToString();
             }
 
-            return await SettingStore.GetOrNullAsync(name, EntityType, CurrentUser.Id.Value.ToString());
-        }
-
-        public override async Task<string> GetOrNullAsync(string name, string entityId, bool fallback = true)
-        {
-            return await SettingStore.GetOrNullAsync(name, EntityType, entityId);
+            return await SettingStore.GetOrNullAsync(setting.Name, EntityType, entityId);
         }
     }
 }

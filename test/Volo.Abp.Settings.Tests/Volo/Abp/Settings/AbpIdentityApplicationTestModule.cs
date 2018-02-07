@@ -4,12 +4,16 @@ using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Autofac;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Modularity;
+using Volo.Abp.Session;
 using Volo.Abp.Settings.EntityFrameworkCore;
 using Volo.Abp.Uow;
 
 namespace Volo.Abp.Settings
 {
-    [DependsOn(typeof(AbpSettingsEntityFrameworkCoreModule), typeof(AbpAutofacModule))]
+    [DependsOn(
+        typeof(AbpSettingsEntityFrameworkCoreModule), 
+        typeof(AbpSessionModule),
+        typeof(AbpAutofacModule))]
     public class AbpSettingsTestModule : AbpModule
     {
         public override void ConfigureServices(IServiceCollection services)

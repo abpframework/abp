@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using JetBrains.Annotations;
 
 namespace Volo.Abp.Settings
 {
@@ -6,8 +7,6 @@ namespace Volo.Abp.Settings
     {
         string EntityType { get; }
 
-        Task<string> GetOrNullAsync(string name, bool fallback);
-
-        Task<string> GetOrNullAsync(string name, string entityId, bool fallback = true);
+        Task<string> GetOrNullAsync(SettingDefinition setting, [CanBeNull] string entityId);
     }
 }

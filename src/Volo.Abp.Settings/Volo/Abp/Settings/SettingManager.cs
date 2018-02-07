@@ -37,18 +37,15 @@ namespace Volo.Abp.Settings
             );
         }
 
-        public Task<string> GetOrNullAsync(string name, bool fallback = true)
+        public async Task<string> GetOrNullAsync(string name)
         {
-            return GetOrNullAsync(name, null, null, fallback);
-        }
+            Check.NotNull(name, nameof(name));
 
-        public async Task<string> GetOrNullAsync(string name, string entityType, string entityId, bool fallback = true)
-        {
-            var settingDefinition = SettingDefinitionManager.Get(name);
+            var setting = SettingDefinitionManager.Get(name);
 
-            foreach (var contributor in GetContributors(entityType, fallback))
+            foreach (var contributor in Enumerable.Reverse(Contributors.Value))
             {
-                var value = await GetContributorValue(contributor, name, entityId, fallback);
+                var value = await contributor.GetOrNullAsync(setting, null);
                 if (value != null)
                 {
                     return value;
@@ -61,17 +58,42 @@ namespace Volo.Abp.Settings
                 return defaultStoreValue;
             }
 
+            return setting.DefaultValue;
+        }
+
+        public virtual async Task<string> GetOrNullAsync(string name, string entityType, string entityId, bool fallback = true)
+        {
+            Check.NotNull(name, nameof(name));
+            Check.NotNull(entityType, nameof(entityType));
+
+            var setting = SettingDefinitionManager.Get(name);
+
+            foreach (var contributor in GetFilteredContributors(entityType, fallback))
+            {
+                var value = await contributor.GetOrNullAsync(setting, entityId);
+                if (value != null)
+                {
+                    return value;
+                }
+            }
+
             if (!fallback)
             {
                 return null;
             }
 
-            return settingDefinition.DefaultValue;
+            var defaultStoreValue = await SettingStore.GetOrNullAsync(name, null, null);
+            if (defaultStoreValue != null)
+            {
+                return defaultStoreValue;
+            }
+
+            return setting.DefaultValue;
         }
-        
+
         public Task<List<SettingValue>> GetAllAsync()
         {
-            throw new System.NotImplementedException();
+            return GetAllAsync(null, null);
         }
 
         public Task<List<SettingValue>> GetAllAsync(string entityType, string entityId, bool fallback = true)
@@ -79,36 +101,21 @@ namespace Volo.Abp.Settings
             throw new System.NotImplementedException();
         }
 
-        public Task SetAsync(string name, string value)
+        public Task SetAsync(string name, string value, bool forceToSet = false)
         {
             throw new System.NotImplementedException();
         }
 
-        public Task SetAsync(string name, string value, string entityType, string entityId)
+        public Task SetAsync(string name, string value, string entityType, string entityId, bool forceToSet = false)
         {
             throw new System.NotImplementedException();
         }
 
-        private static async Task<string> GetContributorValue(ISettingContributor contributor, string name, string entityId, bool fallback)
+        private IEnumerable<ISettingContributor> GetFilteredContributors(string entityType, bool fallback)
         {
-            if (entityId != null)
-            {
-                return await contributor.GetOrNullAsync(name, entityId, fallback);
-            }
-            else
-            {
-                return await contributor.GetOrNullAsync(name, fallback);
-            }
-        }
-
-        private IEnumerable<ISettingContributor> GetContributors(string entityType, bool fallback)
-        {
-            var contributors = Enumerable.Reverse(Contributors.Value);
-
-            if (entityType != null)
-            {
-                contributors = contributors.SkipWhile(c => c.EntityType != entityType);
-            }
+            var contributors = Enumerable
+                .Reverse(Contributors.Value)
+                .SkipWhile(c => c.EntityType != entityType);
 
             if (!fallback)
             {

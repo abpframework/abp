@@ -29,10 +29,9 @@ namespace Volo.Abp.Settings
         }
 
         [Fact]
-        public async Task Should_Get_From_Store_Without_Entity_Props()
+        public async Task Should_Get_Base_Store_Value()
         {
-            var value = await _settingManager.GetOrNullAsync("MySetting1");
-            value.ShouldBe("42");
+            (await _settingManager.GetOrNullAsync("MySetting1")).ShouldBe("42");
         }
     }
 }

@@ -1,20 +1,21 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 
 namespace Volo.Abp.Settings
 {
     public interface ISettingManager
     {
-        Task<string> GetOrNullAsync(string name, bool fallback = true);
+        Task<string> GetOrNullAsync([NotNull]string name);
 
-        Task<string> GetOrNullAsync(string name, string entityType, string entityId, bool fallback = true);
+        Task<string> GetOrNullAsync([NotNull]string name, [NotNull] string entityType, string entityId, bool fallback = true);
 
         Task<List<SettingValue>> GetAllAsync();
 
-        Task<List<SettingValue>> GetAllAsync(string entityType, string entityId, bool fallback = true);
+        Task<List<SettingValue>> GetAllAsync([NotNull] string entityType, string entityId, bool fallback = true);
 
-        Task SetAsync(string name, string value);
+        Task SetAsync([NotNull] string name, string value, bool forceToSet = false);
 
-        Task SetAsync(string name, string value, string entityType, string entityId);
+        Task SetAsync([NotNull] string name, string value, [NotNull] string entityType, string entityId, bool forceToSet = false);
     }
 }

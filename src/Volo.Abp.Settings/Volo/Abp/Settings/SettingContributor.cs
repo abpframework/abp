@@ -14,8 +14,6 @@ namespace Volo.Abp.Settings
             SettingStore = settingStore;
         }
 
-        public abstract Task<string> GetOrNullAsync(string name, bool fallback);
-
-        public abstract Task<string> GetOrNullAsync(string name, string entityId, bool fallback = true);
+        public abstract Task<string> GetOrNullAsync(SettingDefinition setting, string entityId);
     }
 }
