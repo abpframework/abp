@@ -87,7 +87,7 @@ namespace Volo.Abp.Settings
 
         public Task<List<SettingValue>> GetAllAsync()
         {
-            return GetAllAsync(null, null);
+            throw new System.NotImplementedException();
         }
 
         public Task<List<SettingValue>> GetAllAsync(string entityType, string entityId, bool fallback = true)
