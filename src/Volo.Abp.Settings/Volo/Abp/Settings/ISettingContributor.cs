@@ -4,6 +4,6 @@ namespace Volo.Abp.Settings
 {
     public interface ISettingContributor
     {
-        Task<string> GetOrNull(string name, string entityType, string entityId, bool fallback = true);
+        Task<string> GetOrNullAsync(string name, string entityType, string entityId, bool fallback = true);
     }
 }

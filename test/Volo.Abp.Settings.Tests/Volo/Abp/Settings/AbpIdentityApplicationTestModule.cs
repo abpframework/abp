@@ -32,6 +32,11 @@ namespace Volo.Abp.Settings
             {
                 options.TransactionBehavior = UnitOfWorkTransactionBehavior.Disabled; //EF in-memory database does not support transactions
             });
+
+            services.Configure<SettingOptions>(options =>
+            {
+                options.Providers.Add<TestSettingProvider>();
+            });
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)

@@ -10,12 +10,18 @@ namespace Volo.Abp.Settings
 {
     public class SettingManager : ISettingManager, ISingletonDependency
     {
+        protected ISettingDefinitionManager SettingDefinitionManager { get; }
+
         protected Lazy<List<ISettingContributor>> Contributors { get; }
 
         protected SettingOptions Options { get; }
 
-        public SettingManager(IOptions<SettingOptions> options, IServiceProvider serviceProvider)
+        public SettingManager(
+            IOptions<SettingOptions> options, 
+            IServiceProvider serviceProvider, 
+            ISettingDefinitionManager settingDefinitionManager)
         {
+            SettingDefinitionManager = settingDefinitionManager;
             Options = options.Value;
 
             Contributors = new Lazy<List<ISettingContributor>>(
@@ -32,18 +38,20 @@ namespace Volo.Abp.Settings
             return GetOrNullAsync(name, null, null);
         }
 
-        public Task<string> GetOrNullAsync(string name, string entityType, string entityId, bool fallback = true)
+        public async Task<string> GetOrNullAsync(string name, string entityType, string entityId, bool fallback = true)
         {
+            var settingDefinition = SettingDefinitionManager.Get(name);
+
             foreach (var contributor in Contributors.Value)
             {
-                var value = contributor.GetOrNull(name, entityType, entityId, fallback);
+                var value = await contributor.GetOrNullAsync(name, entityType, entityId, fallback);
                 if (value != null)
                 {
                     return value;
                 }
             }
 
-            return null;
+            return settingDefinition.DefaultValue;
         }
 
         public Task<List<SettingValue>> GetAllAsync()

@@ -12,7 +12,7 @@ namespace Volo.Abp.Settings
             _settingStore = settingStore;
         }
         
-        public async Task<string> GetOrNull(string name, string entityType, string entityId, bool fallback = true)
+        public async Task<string> GetOrNullAsync(string name, string entityType, string entityId, bool fallback = true)
         {
             //TODO: Optimization: Get all settings and cache it!
             return await _settingStore.GetOrNullAsync(name, null, null);
