@@ -33,6 +33,18 @@ namespace Volo.Abp.Settings
         }
 
         [Fact]
+        public async Task Should_Fallback_To_Default_Store_Value_When_No_Value_For_Given_User()
+        {
+            (await _settingManager.GetOrNullForUserAsync("MySetting2", Guid.NewGuid())).ShouldBe("default-store-value");
+        }
+
+        [Fact]
+        public async Task Should_Not_Fallback_To_Default_Store_Value_When_No_Value_For_Given_User_But_Specified_Fallback_As_False()
+        {
+            (await _settingManager.GetOrNullForUserAsync("MySetting2", Guid.NewGuid(), fallback: false)).ShouldBeNull();
+        }
+
+        [Fact]
         public async Task Should_Get_From_Store_For_Current_User()
         {
             _currentUserId = AbpIdentityTestDataBuilder.User1Id;
@@ -43,15 +55,34 @@ namespace Volo.Abp.Settings
         }
 
         [Fact]
-        public async Task Should_Fallback_To_Default_Store_Value_When_No_Value_For_Given_User()
+        public async Task Should_Fallback_To_Default_Store_Value_When_No_Value_For_Current_User()
         {
-            (await _settingManager.GetOrNullForUserAsync("MySetting2", Guid.NewGuid())).ShouldBe("default-store-value");
+            _currentUserId = Guid.NewGuid();
+            (await _settingManager.GetOrNullAsync("MySetting2")).ShouldBe("default-store-value");
         }
 
         [Fact]
-        public async Task Should_Not_Fallback_To_Default_Store_Value_When_No_Value_For_Given_User_But_Specified_Fallback_As_False()
+        public async Task Should_Get_From_Store_For_Current_User_With_GetOrNullForCurrentUserAsync()
         {
-            (await _settingManager.GetOrNullForUserAsync("MySetting2", Guid.NewGuid(), fallback: false)).ShouldBeNull();
+            _currentUserId = AbpIdentityTestDataBuilder.User1Id;
+            (await _settingManager.GetOrNullForCurrentUserAsync("MySetting2")).ShouldBe("user1-store-value");
+
+            _currentUserId = AbpIdentityTestDataBuilder.User2Id;
+            (await _settingManager.GetOrNullForCurrentUserAsync("MySetting2")).ShouldBe("user2-store-value");
+        }
+
+        [Fact]
+        public async Task Should_Fallback_To_Default_Store_Value_When_No_Value_For_Current_User_With_GetOrNullForCurrentUserAsync()
+        {
+            _currentUserId = Guid.NewGuid();
+            (await _settingManager.GetOrNullAsync("MySetting2")).ShouldBe("default-store-value");
+        }
+
+        [Fact]
+        public async Task Should_Not_Fallback_To_Default_Store_Value_When_No_Value_For_Current_User_But_Specified_Fallback_As_False()
+        {
+            _currentUserId = Guid.NewGuid();
+            (await _settingManager.GetOrNullForCurrentUserAsync("MySetting2", fallback: false)).ShouldBeNull();
         }
     }
 }

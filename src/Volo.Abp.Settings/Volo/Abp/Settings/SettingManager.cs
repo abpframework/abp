@@ -37,12 +37,11 @@ namespace Volo.Abp.Settings
             );
         }
 
-        public async Task<string> GetOrNullAsync(string name)
+        public virtual async Task<string> GetOrNullAsync(string name)
         {
             Check.NotNull(name, nameof(name));
 
             var setting = SettingDefinitionManager.Get(name);
-
             var contributors = Enumerable.Reverse(Contributors.Value);
 
             foreach (var contributor in contributors)
@@ -63,7 +62,6 @@ namespace Volo.Abp.Settings
             Check.NotNull(entityType, nameof(entityType));
 
             var setting = SettingDefinitionManager.Get(name);
-
             var contributors = Enumerable
                 .Reverse(Contributors.Value)
                 .SkipWhile(c => c.EntityType != entityType);
@@ -85,22 +83,22 @@ namespace Volo.Abp.Settings
             return null;
         }
 
-        public Task<List<SettingValue>> GetAllAsync()
+        public virtual Task<List<SettingValue>> GetAllAsync()
         {
             throw new System.NotImplementedException();
         }
 
-        public Task<List<SettingValue>> GetAllAsync(string entityType, string entityId, bool fallback = true)
+        public virtual Task<List<SettingValue>> GetAllAsync(string entityType, string entityId, bool fallback = true)
         {
             throw new System.NotImplementedException();
         }
 
-        public Task SetAsync(string name, string value, bool forceToSet = false)
+        public virtual Task SetAsync(string name, string value, bool forceToSet = false)
         {
             throw new System.NotImplementedException();
         }
 
-        public Task SetAsync(string name, string value, string entityType, string entityId, bool forceToSet = false)
+        public virtual Task SetAsync(string name, string value, string entityType, string entityId, bool forceToSet = false)
         {
             throw new System.NotImplementedException();
         }

@@ -7,6 +7,6 @@ namespace Volo.Abp.Settings
     {
         string EntityType { get; }
 
-        Task<string> GetOrNullAsync(SettingDefinition setting, [CanBeNull] string entityId);
+        Task<string> GetOrNullAsync([NotNull] SettingDefinition setting, [CanBeNull] string entityId);
     }
 }
