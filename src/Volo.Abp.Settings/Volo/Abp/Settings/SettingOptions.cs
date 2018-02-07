@@ -4,14 +4,18 @@ namespace Volo.Abp.Settings
 {
     public class SettingOptions
     {
-        public ITypeList<ISettingContributor> Contributors { get; }
-
         public ITypeList<ISettingProvider> Providers { get; set; }
+
+        public ITypeList<ISettingContributor> Contributors { get; }
 
         public SettingOptions()
         {
-            Contributors = new TypeList<ISettingContributor>();
             Providers = new TypeList<ISettingProvider>();
+            Contributors = new TypeList<ISettingContributor>
+            {
+                typeof(DefaultValueSettingContributor),
+                typeof(DefaultStoreSettingContributor)
+            };
         }
     }
 }
