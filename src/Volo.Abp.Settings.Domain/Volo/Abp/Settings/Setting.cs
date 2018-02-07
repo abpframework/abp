@@ -1,14 +1,11 @@
 ﻿using System;
 using JetBrains.Annotations;
 using Volo.Abp.Domain.Entities;
-using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Settings
 {
-    public class Setting : Entity<Guid>, IMultiTenant
+    public class Setting : Entity<Guid>
     {
-        public virtual Guid? TenantId { get; protected set; }
-
         [NotNull]
         public virtual string Name { get; protected set; }
 
@@ -31,8 +28,7 @@ namespace Volo.Abp.Settings
             [NotNull] string name, 
             [NotNull] string value, 
             [CanBeNull] string entityType = null, 
-            [CanBeNull] string entityId = null, 
-            Guid? tenantId = null)
+            [CanBeNull] string entityId = null)
         {
             Check.NotNull(name, nameof(name));
             Check.NotNull(value, nameof(value));
@@ -42,7 +38,6 @@ namespace Volo.Abp.Settings
             Value = value;
             EntityType = entityType;
             EntityId = entityId;
-            TenantId = tenantId;
         }
     }
 }

@@ -1,11 +1,32 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Settings
 {
-    public class SettingManager : ISettingManager, ITransientDependency
+    public class SettingManager : ISettingManager, ISingletonDependency
     {
+        protected Lazy<List<ISettingContributor>> Contributors { get; }
+
+        protected SettingOptions Options { get; }
+
+        public SettingManager(IOptions<SettingOptions> options, IServiceProvider serviceProvider)
+        {
+            Options = options.Value;
+
+            Contributors = new Lazy<List<ISettingContributor>>(
+                () => Options
+                    .Contributors
+                    .Select(c => serviceProvider.GetRequiredService(c) as ISettingContributor)
+                    .ToList(),
+                true
+            );
+        }
+
         public Task<string> GetOrNullAsync(string name)
         {
             return GetOrNullAsync(name, null, null);
@@ -13,11 +34,9 @@ namespace Volo.Abp.Settings
 
         public Task<string> GetOrNullAsync(string name, string entityType, string entityId, bool fallback = true)
         {
-            var contributors = new List<ISettingContributor>();
-
-            foreach (var contributor in contributors)
+            foreach (var contributor in Contributors.Value)
             {
-                var value = contributor.GetOrNull(name);
+                var value = contributor.GetOrNull(name, entityType, entityId, fallback);
                 if (value != null)
                 {
                     return value;

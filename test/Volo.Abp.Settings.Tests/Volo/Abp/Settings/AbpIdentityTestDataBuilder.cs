@@ -17,7 +17,6 @@ namespace Volo.Abp.Settings
         public void Build()
         {
             _settingRepository.InsertAsync(new Setting(_guidGenerator.Create(), "MySetting1", "42"));
-            _settingRepository.InsertAsync(new Setting(_guidGenerator.Create(), "MySetting2", "55"));
         }
     }
 }

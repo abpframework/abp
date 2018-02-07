@@ -1,4 +1,6 @@
-﻿using Xunit;
+﻿using System.Threading.Tasks;
+using Shouldly;
+using Xunit;
 
 namespace Volo.Abp.Settings
 {
@@ -12,9 +14,10 @@ namespace Volo.Abp.Settings
         }
 
         [Fact]
-        public void Test1()
+        public async Task Test1()
         {
-            
+            var value = await _settingManager.GetOrNullAsync("MySetting1");
+            value.ShouldBe("42");
         }
     }
 }

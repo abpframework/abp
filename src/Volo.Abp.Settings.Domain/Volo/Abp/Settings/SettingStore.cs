@@ -25,7 +25,7 @@ namespace Volo.Abp.Settings
             var setting = await _settingRepository.FindAsync(name, entityType, entityId);
             if (setting == null)
             {
-                setting = new Setting(GuidGenerator.Create(), name, value, entityType, entityId, CurrentTenant.Id);
+                setting = new Setting(GuidGenerator.Create(), name, value, entityType, entityId);
                 await _settingRepository.InsertAsync(setting);
             }
 
