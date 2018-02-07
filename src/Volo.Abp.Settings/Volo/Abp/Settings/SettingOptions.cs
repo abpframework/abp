@@ -10,11 +10,7 @@ namespace Volo.Abp.Settings
 
         public SettingOptions()
         {
-            Contributors = new TypeList<ISettingContributor>
-            {
-                typeof(DefaultSettingContributor)
-            };
-
+            Contributors = new TypeList<ISettingContributor>();
             Providers = new TypeList<ISettingProvider>();
         }
     }

@@ -30,6 +30,8 @@ namespace Volo.Abp.Settings
 
         public virtual SettingDefinition Get(string name)
         {
+            Check.NotNull(name, nameof(name));
+
             var settingDefinition = GetOrNull(name);
 
             if (settingDefinition == null)

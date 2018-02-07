@@ -1,7 +1,10 @@
-﻿namespace Volo.Abp.Settings
+﻿using JetBrains.Annotations;
+
+namespace Volo.Abp.Settings
 {
     public interface ISettingDefinitionManager
     {
-        SettingDefinition Get(string name);
+        [NotNull]
+        SettingDefinition Get([NotNull] string name);
     }
 }
