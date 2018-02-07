@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 
 namespace Volo.Abp.Settings
 {
@@ -14,6 +15,11 @@ namespace Volo.Abp.Settings
         public virtual SettingDefinition GetOrNull(string name)
         {
             return Settings.GetOrDefault(name);
+        }
+
+        public virtual IReadOnlyList<SettingDefinition> GetAll()
+        {
+            return Settings.Values.ToImmutableList();
         }
 
         public virtual void Add(params SettingDefinition[] definitions)

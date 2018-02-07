@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
@@ -83,14 +84,55 @@ namespace Volo.Abp.Settings
             return null;
         }
 
-        public virtual Task<List<SettingValue>> GetAllAsync()
+        public virtual async Task<List<SettingValue>> GetAllAsync()
         {
-            throw new System.NotImplementedException();
+            var settingValues = new Dictionary<string, SettingValue>();
+            var settingDefinitions = SettingDefinitionManager.GetAll();
+
+            foreach (var provider in Providers.Value)
+            {
+                foreach (var setting in settingDefinitions)
+                {
+                    var value = await provider.GetOrNullAsync(setting, null);
+                    if (value != null)
+                    {
+                        settingValues[setting.Name] = new SettingValue(setting.Name, value);
+                    }
+                }
+            }
+
+            return settingValues.Values.ToList();
         }
 
-        public virtual Task<List<SettingValue>> GetAllAsync(string entityType, string entityId, bool fallback = true)
+        public virtual async Task<List<SettingValue>> GetAllAsync(string entityType, string entityId, bool fallback = true)
         {
-            throw new System.NotImplementedException();
+            Check.NotNull(entityType, nameof(entityType));
+
+            var settingValues = new Dictionary<string, SettingValue>();
+            var settingDefinitions = SettingDefinitionManager.GetAll();
+            var providers = Enumerable.Reverse(Providers.Value)
+                .SkipWhile(c => c.EntityType != entityType);
+
+            if (!fallback)
+            {
+                providers = providers.TakeWhile(c => c.EntityType == entityType);
+            }
+
+            providers = providers.Reverse();
+
+            foreach (var provider in providers)
+            {
+                foreach (var setting in settingDefinitions)
+                {
+                    var value = await provider.GetOrNullAsync(setting, entityId);
+                    if (value != null)
+                    {
+                        settingValues[setting.Name] = new SettingValue(setting.Name, value);
+                    }
+                }
+            }
+
+            return settingValues.Values.ToList();
         }
 
         public virtual Task SetAsync(string name, string value, bool forceToSet = false)

@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using System.Collections.Generic;
+using JetBrains.Annotations;
 
 namespace Volo.Abp.Settings
 {
@@ -6,5 +7,7 @@ namespace Volo.Abp.Settings
     {
         [NotNull]
         SettingDefinition Get([NotNull] string name);
+
+        IReadOnlyList<SettingDefinition> GetAll();
     }
 }

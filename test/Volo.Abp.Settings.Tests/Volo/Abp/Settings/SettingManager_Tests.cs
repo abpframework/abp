@@ -33,5 +33,14 @@ namespace Volo.Abp.Settings
         {
             (await _settingManager.GetOrNullAsync("MySetting1")).ShouldBe("42");
         }
+
+        [Fact]
+        public async Task Should_Get_All_Base_Store_Values()
+        {
+            var settingValues = await _settingManager.GetAllAsync();
+            settingValues.ShouldContain(sv => sv.Name == "MySetting1" && sv.Value == "42");
+            settingValues.ShouldContain(sv => sv.Name == "MySetting2" && sv.Value == "default-store-value");
+            settingValues.ShouldContain(sv => sv.Name == "SettingNotSetInStore" && sv.Value == "default-value");
+        }
     }
 }

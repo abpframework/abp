@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -40,6 +41,11 @@ namespace Volo.Abp.Settings
             }
 
             return settingDefinition;
+        }
+
+        public IReadOnlyList<SettingDefinition> GetAll()
+        {
+            return SettingDefinitions.Value.Values.ToImmutableList();
         }
 
         public virtual SettingDefinition GetOrNull(string name)
