@@ -38,5 +38,14 @@ namespace Volo.Abp.Settings
             var setting = await _settingRepository.GetListAsync(entityType, entityId);
             return setting.Select(s => new SettingValue(s.Name, s.Value)).ToList();
         }
+
+        public async Task DeleteAsync(string name, string entityType, string entityId)
+        {
+            var setting = await _settingRepository.FindAsync(name, entityType, entityId);
+            if (setting != null)
+            {
+                await _settingRepository.DeleteAsync(setting);
+            }
+        }
     }
 }

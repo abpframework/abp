@@ -8,13 +8,13 @@ using Xunit;
 
 namespace Volo.Abp.Settings
 {
-    public class SettingManager_User_GetValue_Tests: AbpSettingsTestBase
+    public class SettingManager_User_Tests: AbpSettingsTestBase
     {
         private Guid _currentUserId;
 
         private readonly ISettingManager _settingManager;
 
-        public SettingManager_User_GetValue_Tests()
+        public SettingManager_User_Tests()
         {
             _settingManager = GetRequiredService<ISettingManager>();
         }

@@ -11,5 +11,7 @@ namespace Volo.Abp.Settings
         Task SetAsync([NotNull] string name, [NotNull] string value, [CanBeNull] string entityType, [CanBeNull] string entityId);
 
         Task<List<SettingValue>> GetListAsync([CanBeNull] string entityType, [CanBeNull] string entityId);
+
+        Task DeleteAsync([NotNull] string name, [CanBeNull]string entityType, [CanBeNull]string entityId);
     }
 }

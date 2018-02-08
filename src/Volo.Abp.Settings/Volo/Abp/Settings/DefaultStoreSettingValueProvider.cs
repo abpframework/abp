@@ -15,5 +15,15 @@ namespace Volo.Abp.Settings
         {
             return SettingStore.GetOrNullAsync(setting.Name, null, null);
         }
+
+        public override Task SetAsync(SettingDefinition setting, string value, string entityId)
+        {
+            return SettingStore.SetAsync(setting.Name, value, null, null);
+        }
+
+        public override Task ClearAsync(SettingDefinition setting, string entityId)
+        {
+            return SettingStore.DeleteAsync(setting.Name, null, null);
+        }
     }
 }

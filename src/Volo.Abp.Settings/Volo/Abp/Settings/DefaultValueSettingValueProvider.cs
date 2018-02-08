@@ -16,5 +16,17 @@ namespace Volo.Abp.Settings
         {
             return Task.FromResult(setting.DefaultValue);
         }
+
+        public override Task SetAsync(SettingDefinition setting, string value, string entityId)
+        {
+            setting.DefaultValue = value;
+            return Task.CompletedTask;
+        }
+
+        public override Task ClearAsync(SettingDefinition setting, string entityId)
+        {
+            setting.DefaultValue = null;
+            return Task.CompletedTask;
+        }
     }
 }

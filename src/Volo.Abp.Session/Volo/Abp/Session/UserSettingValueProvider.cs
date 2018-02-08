@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Volo.Abp.Settings;
 
 namespace Volo.Abp.Session
@@ -33,6 +32,16 @@ namespace Volo.Abp.Session
             }
 
             return await SettingStore.GetOrNullAsync(setting.Name, EntityType, entityId);
+        }
+
+        public override Task SetAsync(SettingDefinition setting, string value, string entityId)
+        {
+            return SettingStore.SetAsync(setting.Name, value, EntityType, entityId);
+        }
+
+        public override Task ClearAsync(SettingDefinition setting, string entityId)
+        {
+            return SettingStore.DeleteAsync(setting.Name, EntityType, entityId);
         }
     }
 }

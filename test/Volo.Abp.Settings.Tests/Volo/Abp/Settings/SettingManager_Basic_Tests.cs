@@ -4,11 +4,11 @@ using Xunit;
 
 namespace Volo.Abp.Settings
 {
-    public class SettingManager_Tests : AbpSettingsTestBase
+    public class SettingManager_Basic_Tests : AbpSettingsTestBase
     {
         private readonly ISettingManager _settingManager;
 
-        public SettingManager_Tests()
+        public SettingManager_Basic_Tests()
         {
             _settingManager = GetRequiredService<ISettingManager>();
         }
@@ -41,6 +41,15 @@ namespace Volo.Abp.Settings
             settingValues.ShouldContain(sv => sv.Name == "MySetting1" && sv.Value == "42");
             settingValues.ShouldContain(sv => sv.Name == "MySetting2" && sv.Value == "default-store-value");
             settingValues.ShouldContain(sv => sv.Name == "SettingNotSetInStore" && sv.Value == "default-value");
+        }
+
+        [Fact]
+        public async Task Should_Set_Value()
+        {
+            await _settingManager.SetAsync("MySetting1", "43");
+
+            (await _settingManager.GetOrNullAsync("MySetting1")).ShouldBe("43");
+            //TODO: Also check database!
         }
     }
 }

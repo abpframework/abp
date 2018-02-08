@@ -38,34 +38,31 @@ namespace Volo.Abp.Settings
             );
         }
 
-        public virtual async Task<string> GetOrNullAsync(string name)
+        public virtual Task<string> GetOrNullAsync(string name)
         {
             Check.NotNull(name, nameof(name));
 
-            var setting = SettingDefinitionManager.Get(name);
-            var contributors = Enumerable.Reverse(Providers.Value);
-
-            foreach (var contributor in contributors)
-            {
-                var value = await contributor.GetOrNullAsync(setting, null);
-                if (value != null)
-                {
-                    return value;
-                }
-            }
-
-            return null;
+            return GetOrNullInternalAsync(name, null, null);
         }
 
-        public virtual async Task<string> GetOrNullAsync(string name, string entityType, string entityId, bool fallback = true)
+        public virtual Task<string> GetOrNullAsync(string name, string entityType, string entityId, bool fallback = true)
         {
             Check.NotNull(name, nameof(name));
             Check.NotNull(entityType, nameof(entityType));
+            
+            return GetOrNullInternalAsync(name, entityType, entityId, fallback);
+        }
 
+        public virtual async Task<string> GetOrNullInternalAsync(string name, string entityType, string entityId, bool fallback = true)
+        {
             var setting = SettingDefinitionManager.Get(name);
             var providers = Enumerable
-                .Reverse(Providers.Value)
-                .SkipWhile(c => c.EntityType != entityType);
+                .Reverse(Providers.Value);
+
+            if (entityType != null)
+            {
+                providers = providers.SkipWhile(c => c.EntityType != entityType);
+            }
 
             if (!fallback)
             {
@@ -137,12 +134,56 @@ namespace Volo.Abp.Settings
 
         public virtual Task SetAsync(string name, string value, bool forceToSet = false)
         {
-            throw new System.NotImplementedException();
+            Check.NotNull(name, nameof(name));
+
+            return SetInternalAsync(name, value, null, null, forceToSet);
         }
 
         public virtual Task SetAsync(string name, string value, string entityType, string entityId, bool forceToSet = false)
         {
-            throw new System.NotImplementedException();
+            Check.NotNull(name, nameof(name));
+            Check.NotNull(entityType, nameof(entityType));
+
+            return SetInternalAsync(name, value, entityType, entityId, forceToSet);
+        }
+
+        protected virtual async Task SetInternalAsync(string name, string value, string entityType, string entityId, bool forceToSet = false)
+        {
+            var setting = SettingDefinitionManager.Get(name);
+
+            if (!forceToSet)
+            {
+                var currentValue = await GetOrNullInternalAsync(name, entityType, entityId);
+                if (currentValue == value)
+                {
+                    return;
+                }
+            }
+
+            var providers = Enumerable
+                .Reverse(Providers.Value)
+                .SkipWhile(p => p.EntityType != entityType)
+                .ToList();
+
+            if (!providers.Any())
+            {
+                return;
+            }
+
+            if (value == null)
+            {
+                foreach (var provider in providers)
+                {
+                    await provider.ClearAsync(setting, entityId);
+                }
+            }
+            else
+            {
+                foreach (var provider in providers)
+                {
+                    await provider.SetAsync(setting, value, entityId);
+                }
+            }
         }
     }
 }
