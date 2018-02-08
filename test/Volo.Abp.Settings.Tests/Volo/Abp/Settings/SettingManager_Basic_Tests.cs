@@ -44,12 +44,12 @@ namespace Volo.Abp.Settings
         }
 
         [Fact]
-        public async Task Should_Set_Value()
+        public async Task Should_Set_Global_Value()
         {
-            await _settingManager.SetAsync("MySetting1", "43");
+            await _settingManager.SetGlobalAsync("MySetting1", "43");
 
+            (await _settingManager.GetOrNullGlobalAsync("MySetting1")).ShouldBe("43");
             (await _settingManager.GetOrNullAsync("MySetting1")).ShouldBe("43");
-            //TODO: Also check database!
         }
     }
 }

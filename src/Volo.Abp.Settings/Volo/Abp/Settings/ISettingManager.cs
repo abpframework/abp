@@ -14,8 +14,6 @@ namespace Volo.Abp.Settings
 
         Task<List<SettingValue>> GetAllAsync([NotNull] string entityType, [CanBeNull] string entityId, bool fallback = true);
 
-        Task SetAsync([NotNull] string name, [CanBeNull] string value, bool forceToSet = false);
-
         Task SetAsync([NotNull] string name, [CanBeNull] string value, [NotNull] string entityType, [CanBeNull] string entityId, bool forceToSet = false);
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
@@ -130,13 +129,6 @@ namespace Volo.Abp.Settings
             }
 
             return settingValues.Values.ToList();
-        }
-
-        public virtual Task SetAsync(string name, string value, bool forceToSet = false)
-        {
-            Check.NotNull(name, nameof(name));
-
-            return SetInternalAsync(name, value, null, null, forceToSet);
         }
 
         public virtual Task SetAsync(string name, string value, string entityType, string entityId, bool forceToSet = false)

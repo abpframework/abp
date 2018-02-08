@@ -14,7 +14,7 @@ namespace Volo.Abp.Settings
             ValueProviders = new TypeList<ISettingValueProvider>
             {
                 typeof(DefaultValueSettingValueProvider),
-                typeof(DefaultStoreSettingValueProvider)
+                typeof(GlobalSettingValueProvider)
             };
         }
     }
