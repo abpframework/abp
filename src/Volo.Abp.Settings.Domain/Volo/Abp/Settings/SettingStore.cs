@@ -28,15 +28,17 @@ namespace Volo.Abp.Settings
                 setting = new Setting(GuidGenerator.Create(), name, value, providerName, providerKey);
                 await _settingRepository.InsertAsync(setting);
             }
-
-            setting.Value = value;
-            await _settingRepository.UpdateAsync(setting);
+            else
+            {
+                setting.Value = value;
+                await _settingRepository.UpdateAsync(setting);
+            }
         }
 
         public async Task<List<SettingValue>> GetListAsync(string providerName, string providerKey)
         {
-            var setting = await _settingRepository.GetListAsync(providerName, providerKey);
-            return setting.Select(s => new SettingValue(s.Name, s.Value)).ToList();
+            var settings = await _settingRepository.GetListAsync(providerName, providerKey);
+            return settings.Select(s => new SettingValue(s.Name, s.Value)).ToList();
         }
 
         public async Task DeleteAsync(string name, string providerName, string providerKey)

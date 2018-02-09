@@ -6,7 +6,7 @@ namespace Volo.Abp.Permissions
 {
     public interface IPermissionStore
     {
-        Task<bool?> GetOrNullAsync([NotNull] string name, [CanBeNull] string providerName, [CanBeNull] string providerKey);
+        Task<bool?> IsGrantedAsync([NotNull] string name, [CanBeNull] string providerName, [CanBeNull] string providerKey);
 
         Task SetAsync([NotNull] string name, bool isGranted, [CanBeNull] string providerName, [CanBeNull] string providerKey);
 

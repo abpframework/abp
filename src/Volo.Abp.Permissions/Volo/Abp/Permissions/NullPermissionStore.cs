@@ -15,7 +15,7 @@ namespace Volo.Abp.Permissions
             Logger = NullLogger<NullPermissionStore>.Instance;
         }
 
-        public Task<bool?> GetOrNullAsync(string name, string providerName, string providerKey)
+        public Task<bool?> IsGrantedAsync(string name, string providerName, string providerKey)
         {
             return Task.FromResult((bool?)null);
         }
