@@ -109,15 +109,11 @@ namespace Volo.Abp.Settings
         {
             await _settingManager.SetForUserAsync(AbpIdentityTestDataBuilder.User1Id, "MySetting2", null);
 
-            UsingDbContext(context =>
-            {
-                context.Settings.Count(
-                    s =>
-                        s.EntityType == UserSettingValueProvider.DefaultEntityType &&
-                        s.EntityId == AbpIdentityTestDataBuilder.User1Id.ToString() &&
-                        s.Name == "MySetting2"
-                ).ShouldBe(0);
-            });
+            GetSettingsFromDbContext(
+                UserSettingValueProvider.DefaultEntityType,
+                AbpIdentityTestDataBuilder.User1Id.ToString(),
+                "MySetting2"
+            ).Count.ShouldBe(0);
         }
 
         [Fact]
@@ -131,17 +127,50 @@ namespace Volo.Abp.Settings
             (await _settingManager.GetOrNullForUserAsync("MySetting2", AbpIdentityTestDataBuilder.User1Id))
                 .ShouldBe("user1-new-store-value");
 
-            UsingDbContext(context =>
-            {
-                var setting = context.Settings.Single(
-                    s =>
-                        s.EntityType == UserSettingValueProvider.DefaultEntityType &&
-                        s.EntityId == AbpIdentityTestDataBuilder.User1Id.ToString() &&
-                        s.Name == "MySetting2"
-                );
+            GetSettingsFromDbContext(
+                UserSettingValueProvider.DefaultEntityType,
+                AbpIdentityTestDataBuilder.User1Id.ToString(),
+                "MySetting2"
+            ).Single().Value.ShouldBe("user1-new-store-value");
+        }
 
-                setting.Value.ShouldBe("user1-new-store-value");
-            });
+        [Fact]
+        public async Task Should_Delete_Setting_Record_When_Set_To_Fallback_Value()
+        {
+            await _settingManager.SetForUserAsync(
+                AbpIdentityTestDataBuilder.User1Id,
+                "MySetting2",
+                "default-store-value"
+            );
+
+            GetSettingsFromDbContext(
+                UserSettingValueProvider.DefaultEntityType,
+                AbpIdentityTestDataBuilder.User1Id.ToString(),
+                "MySetting2"
+            ).Count.ShouldBe(0);
+
+            (await _settingManager.GetOrNullForUserAsync("MySetting2", AbpIdentityTestDataBuilder.User1Id))
+                .ShouldBe("default-store-value");
+        }
+
+        [Fact]
+        public async Task Should_Not_Delete_Setting_Record_When_Set_To_Fallback_Value_If_Forced()
+        {
+            await _settingManager.SetForUserAsync(
+                AbpIdentityTestDataBuilder.User1Id,
+                "MySetting2",
+                "default-store-value",
+                forceToSet: true
+            );
+
+            GetSettingsFromDbContext(
+                UserSettingValueProvider.DefaultEntityType,
+                AbpIdentityTestDataBuilder.User1Id.ToString(),
+                "MySetting2"
+            ).Single().Value.ShouldBe("default-store-value");
+
+            (await _settingManager.GetOrNullForUserAsync("MySetting2", AbpIdentityTestDataBuilder.User1Id))
+                .ShouldBe("default-store-value");
         }
     }
 }

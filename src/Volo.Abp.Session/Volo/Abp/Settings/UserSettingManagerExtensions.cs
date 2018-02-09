@@ -28,14 +28,14 @@ namespace Volo.Abp.Settings
             return settingManager.GetAllAsync(UserSettingValueProvider.DefaultEntityType, null, fallback);
         }
 
-        public static Task SetForUserAsync(this ISettingManager settingManager, Guid userId, [NotNull] string name, [CanBeNull] string value)
+        public static Task SetForUserAsync(this ISettingManager settingManager, Guid userId, [NotNull] string name, [CanBeNull] string value, bool forceToSet = false)
         {
-            return settingManager.SetAsync(name, value, UserSettingValueProvider.DefaultEntityType, userId.ToString());
+            return settingManager.SetAsync(name, value, UserSettingValueProvider.DefaultEntityType, userId.ToString(), forceToSet);
         }
 
-        public static Task SetForCurrentUserAsync(this ISettingManager settingManager, [NotNull] string name, [CanBeNull] string value)
+        public static Task SetForCurrentUserAsync(this ISettingManager settingManager, [NotNull] string name, [CanBeNull] string value, bool forceToSet = false)
         {
-            return settingManager.SetAsync(name, value, UserSettingValueProvider.DefaultEntityType, null);
+            return settingManager.SetAsync(name, value, UserSettingValueProvider.DefaultEntityType, null, forceToSet);
         }
     }
 }

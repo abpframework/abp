@@ -138,15 +138,6 @@ namespace Volo.Abp.Settings
 
             var setting = SettingDefinitionManager.Get(name);
 
-            if (!forceToSet)
-            {
-                var currentValue = await GetOrNullInternalAsync(name, entityType, entityId);
-                if (currentValue == value)
-                {
-                    return;
-                }
-            }
-
             var providers = Enumerable
                 .Reverse(Providers.Value)
                 .SkipWhile(p => p.EntityType != entityType)
@@ -156,6 +147,20 @@ namespace Volo.Abp.Settings
             {
                 return;
             }
+
+            //Clear the value if it's same as it's fallback value
+            if (providers.Count > 1 && !forceToSet && value != null)
+            {
+                var fallbackValue = await GetOrNullInternalAsync(name, providers[1].EntityType, entityId);
+                if (fallbackValue == value)
+                {
+                    value = null;
+                }
+            }
+
+            providers = providers
+                .TakeWhile(p => p.EntityType == entityType)
+                .ToList();
 
             if (value == null)
             {

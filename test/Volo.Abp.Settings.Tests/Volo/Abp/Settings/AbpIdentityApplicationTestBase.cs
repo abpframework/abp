@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Volo.Abp.Session;
 using Volo.Abp.Settings.EntityFrameworkCore;
 using Volo.Abp.TestBase;
 
@@ -27,5 +30,16 @@ namespace Volo.Abp.Settings
             }
         }
 
+        protected List<Setting> GetSettingsFromDbContext(string entityType, string entityId, string name)
+        {
+            return UsingDbContext(context =>
+                context.Settings.Where(
+                    s =>
+                        s.EntityType == UserSettingValueProvider.DefaultEntityType &&
+                        s.EntityId == AbpIdentityTestDataBuilder.User1Id.ToString() &&
+                        s.Name == "MySetting2"
+                ).ToList()
+            );
+        }
     }
 }
