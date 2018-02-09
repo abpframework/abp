@@ -30,8 +30,8 @@ namespace Volo.Abp.Settings
         [Fact]
         public async Task Should_Get_From_Store_For_Given_User()
         {
-            (await _settingManager.GetOrNullForUserAsync("MySetting2", AbpIdentityTestDataBuilder.User1Id)).ShouldBe("user1-store-value");
-            (await _settingManager.GetOrNullForUserAsync("MySetting2", AbpIdentityTestDataBuilder.User2Id)).ShouldBe("user2-store-value");
+            (await _settingManager.GetOrNullForUserAsync("MySetting2", AbpSettingTestDataBuilder.User1Id)).ShouldBe("user1-store-value");
+            (await _settingManager.GetOrNullForUserAsync("MySetting2", AbpSettingTestDataBuilder.User2Id)).ShouldBe("user2-store-value");
         }
 
         [Fact]
@@ -49,10 +49,10 @@ namespace Volo.Abp.Settings
         [Fact]
         public async Task Should_Get_From_Store_For_Current_User()
         {
-            _currentUserId = AbpIdentityTestDataBuilder.User1Id;
+            _currentUserId = AbpSettingTestDataBuilder.User1Id;
             (await _settingManager.GetOrNullAsync("MySetting2")).ShouldBe("user1-store-value");
 
-            _currentUserId = AbpIdentityTestDataBuilder.User2Id;
+            _currentUserId = AbpSettingTestDataBuilder.User2Id;
             (await _settingManager.GetOrNullAsync("MySetting2")).ShouldBe("user2-store-value");
         }
 
@@ -66,10 +66,10 @@ namespace Volo.Abp.Settings
         [Fact]
         public async Task Should_Get_From_Store_For_Current_User_With_GetOrNullForCurrentUserAsync()
         {
-            _currentUserId = AbpIdentityTestDataBuilder.User1Id;
+            _currentUserId = AbpSettingTestDataBuilder.User1Id;
             (await _settingManager.GetOrNullForCurrentUserAsync("MySetting2")).ShouldBe("user1-store-value");
 
-            _currentUserId = AbpIdentityTestDataBuilder.User2Id;
+            _currentUserId = AbpSettingTestDataBuilder.User2Id;
             (await _settingManager.GetOrNullForCurrentUserAsync("MySetting2")).ShouldBe("user2-store-value");
         }
 
@@ -90,7 +90,7 @@ namespace Volo.Abp.Settings
         [Fact]
         public async Task Should_Get_All_From_Store_For_Given_User()
         {
-            var settingValues = await _settingManager.GetAllForUserAsync(AbpIdentityTestDataBuilder.User1Id);
+            var settingValues = await _settingManager.GetAllForUserAsync(AbpSettingTestDataBuilder.User1Id);
             settingValues.ShouldContain(sv => sv.Name == "MySetting1" && sv.Value == "42");
             settingValues.ShouldContain(sv => sv.Name == "MySetting2" && sv.Value == "user1-store-value");
             settingValues.ShouldContain(sv => sv.Name == "SettingNotSetInStore" && sv.Value == "default-value");
@@ -99,7 +99,7 @@ namespace Volo.Abp.Settings
         [Fact]
         public async Task Should_Get_All_From_Store_For_Given_User_Without_Fallback()
         {
-            var settingValues = await _settingManager.GetAllForUserAsync(AbpIdentityTestDataBuilder.User1Id, fallback: false);
+            var settingValues = await _settingManager.GetAllForUserAsync(AbpSettingTestDataBuilder.User1Id, fallback: false);
             settingValues.ShouldContain(sv => sv.Name == "MySetting2" && sv.Value == "user1-store-value");
             settingValues.ShouldContain(sv => sv.Name == "MySettingWithoutInherit" && sv.Value == "user1-store-value");
             settingValues.ShouldNotContain(sv => sv.Name == "MySetting1");
@@ -108,11 +108,11 @@ namespace Volo.Abp.Settings
         [Fact]
         public async Task Should_Delete_Setting_Record_When_Set_To_Null()
         {
-            await _settingManager.SetForUserAsync(AbpIdentityTestDataBuilder.User1Id, "MySetting2", null);
+            await _settingManager.SetForUserAsync(AbpSettingTestDataBuilder.User1Id, "MySetting2", null);
 
             GetSettingsFromDbContext(
                 UserSettingValueProvider.ProviderName,
-                AbpIdentityTestDataBuilder.User1Id.ToString(),
+                AbpSettingTestDataBuilder.User1Id.ToString(),
                 "MySetting2"
             ).Count.ShouldBe(0);
         }
@@ -120,17 +120,17 @@ namespace Volo.Abp.Settings
         [Fact]
         public async Task Should_Change_User_Setting()
         {
-            (await _settingManager.GetOrNullForUserAsync("MySetting2", AbpIdentityTestDataBuilder.User1Id))
+            (await _settingManager.GetOrNullForUserAsync("MySetting2", AbpSettingTestDataBuilder.User1Id))
                 .ShouldBe("user1-store-value");
 
-            await _settingManager.SetForUserAsync(AbpIdentityTestDataBuilder.User1Id, "MySetting2", "user1-new-store-value");
+            await _settingManager.SetForUserAsync(AbpSettingTestDataBuilder.User1Id, "MySetting2", "user1-new-store-value");
 
-            (await _settingManager.GetOrNullForUserAsync("MySetting2", AbpIdentityTestDataBuilder.User1Id))
+            (await _settingManager.GetOrNullForUserAsync("MySetting2", AbpSettingTestDataBuilder.User1Id))
                 .ShouldBe("user1-new-store-value");
 
             GetSettingsFromDbContext(
                 UserSettingValueProvider.ProviderName,
-                AbpIdentityTestDataBuilder.User1Id.ToString(),
+                AbpSettingTestDataBuilder.User1Id.ToString(),
                 "MySetting2"
             ).Single().Value.ShouldBe("user1-new-store-value");
         }
@@ -139,18 +139,18 @@ namespace Volo.Abp.Settings
         public async Task Should_Delete_Setting_Record_When_Set_To_Fallback_Value()
         {
             await _settingManager.SetForUserAsync(
-                AbpIdentityTestDataBuilder.User1Id,
+                AbpSettingTestDataBuilder.User1Id,
                 "MySetting2",
                 "default-store-value"
             );
 
             GetSettingsFromDbContext(
                 UserSettingValueProvider.ProviderName,
-                AbpIdentityTestDataBuilder.User1Id.ToString(),
+                AbpSettingTestDataBuilder.User1Id.ToString(),
                 "MySetting2"
             ).Count.ShouldBe(0);
 
-            (await _settingManager.GetOrNullForUserAsync("MySetting2", AbpIdentityTestDataBuilder.User1Id))
+            (await _settingManager.GetOrNullForUserAsync("MySetting2", AbpSettingTestDataBuilder.User1Id))
                 .ShouldBe("default-store-value");
         }
 
@@ -158,7 +158,7 @@ namespace Volo.Abp.Settings
         public async Task Should_Not_Delete_Setting_Record_When_Set_To_Fallback_Value_If_Forced()
         {
             await _settingManager.SetForUserAsync(
-                AbpIdentityTestDataBuilder.User1Id,
+                AbpSettingTestDataBuilder.User1Id,
                 "MySetting2",
                 "default-store-value",
                 forceToSet: true
@@ -166,19 +166,19 @@ namespace Volo.Abp.Settings
 
             GetSettingsFromDbContext(
                 UserSettingValueProvider.ProviderName,
-                AbpIdentityTestDataBuilder.User1Id.ToString(),
+                AbpSettingTestDataBuilder.User1Id.ToString(),
                 "MySetting2"
             ).Single().Value.ShouldBe("default-store-value");
 
-            (await _settingManager.GetOrNullForUserAsync("MySetting2", AbpIdentityTestDataBuilder.User1Id))
+            (await _settingManager.GetOrNullForUserAsync("MySetting2", AbpSettingTestDataBuilder.User1Id))
                 .ShouldBe("default-store-value");
         }
 
         [Fact]
         public async Task Should_Get_For_Given_User_For_Non_Inherited_Setting()
         {
-            (await _settingManager.GetOrNullForUserAsync("MySettingWithoutInherit", AbpIdentityTestDataBuilder.User1Id)).ShouldBe("user1-store-value");
-            (await _settingManager.GetOrNullForUserAsync("MySettingWithoutInherit", AbpIdentityTestDataBuilder.User2Id)).ShouldBeNull(); //Does not inherit!
+            (await _settingManager.GetOrNullForUserAsync("MySettingWithoutInherit", AbpSettingTestDataBuilder.User1Id)).ShouldBe("user1-store-value");
+            (await _settingManager.GetOrNullForUserAsync("MySettingWithoutInherit", AbpSettingTestDataBuilder.User2Id)).ShouldBeNull(); //Does not inherit!
             (await _settingManager.GetOrNullGlobalAsync("MySettingWithoutInherit")).ShouldBe("default-store-value");
         }
     }

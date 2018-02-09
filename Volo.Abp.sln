@@ -268,6 +268,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Permissions.Domain
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Permissions.EntityFrameworkCore", "src\Volo.Abp.Permissions.EntityFrameworkCore\Volo.Abp.Permissions.EntityFrameworkCore.csproj", "{2300E155-2621-4FCF-BD44-B61BA5A92B82}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Permissions.Tests", "test\Volo.Abp.Permissions.Tests\Volo.Abp.Permissions.Tests.csproj", "{7B4D2BEB-DE3E-4533-8CD4-7BBB30414647}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -698,6 +700,10 @@ Global
 		{2300E155-2621-4FCF-BD44-B61BA5A92B82}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2300E155-2621-4FCF-BD44-B61BA5A92B82}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2300E155-2621-4FCF-BD44-B61BA5A92B82}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B4D2BEB-DE3E-4533-8CD4-7BBB30414647}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B4D2BEB-DE3E-4533-8CD4-7BBB30414647}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B4D2BEB-DE3E-4533-8CD4-7BBB30414647}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B4D2BEB-DE3E-4533-8CD4-7BBB30414647}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -828,6 +834,7 @@ Global
 		{D77E0662-8404-43C5-9C46-6289EA207A40} = {055F4AC0-46C4-4E99-89CD-0F30D4A97382}
 		{E4D0326C-515D-46FA-AF7E-1AC32155BD03} = {055F4AC0-46C4-4E99-89CD-0F30D4A97382}
 		{2300E155-2621-4FCF-BD44-B61BA5A92B82} = {055F4AC0-46C4-4E99-89CD-0F30D4A97382}
+		{7B4D2BEB-DE3E-4533-8CD4-7BBB30414647} = {37087D1B-3693-4E96-983D-A69F210BDE53}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB97ECF4-9A84-433F-A80B-2A3285BDD1D5}

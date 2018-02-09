@@ -36,7 +36,7 @@ namespace Volo.Abp.Settings
                 context.Settings.Where(
                     s =>
                         s.ProviderName == UserSettingValueProvider.ProviderName &&
-                        s.ProviderKey == AbpIdentityTestDataBuilder.User1Id.ToString() &&
+                        s.ProviderKey == AbpSettingTestDataBuilder.User1Id.ToString() &&
                         s.Name == "MySetting2"
                 ).ToList()
             );
