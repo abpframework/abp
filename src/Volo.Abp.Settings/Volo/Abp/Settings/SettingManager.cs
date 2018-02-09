@@ -48,7 +48,7 @@ namespace Volo.Abp.Settings
         {
             Check.NotNull(name, nameof(name));
             Check.NotNull(entityType, nameof(entityType));
-            
+
             return GetOrNullInternalAsync(name, entityType, entityId, fallback);
         }
 
@@ -63,7 +63,7 @@ namespace Volo.Abp.Settings
                 providers = providers.SkipWhile(c => c.EntityType != entityType);
             }
 
-            if (!fallback)
+            if (!fallback || !setting.IsInherited)
             {
                 providers = providers.TakeWhile(c => c.EntityType == entityType);
             }
@@ -114,16 +114,29 @@ namespace Volo.Abp.Settings
                 providers = providers.TakeWhile(c => c.EntityType == entityType);
             }
 
-            providers = providers.Reverse();
+            var providerList = providers.Reverse().ToList();
 
-            foreach (var provider in providers)
+            if (providerList.Any())
             {
                 foreach (var setting in settingDefinitions)
                 {
-                    var value = await provider.GetOrNullAsync(setting, entityId);
-                    if (value != null)
+                    if (setting.IsInherited)
                     {
-                        settingValues[setting.Name] = new SettingValue(setting.Name, value);
+                        foreach (var provider in providerList)
+                        {
+                            var value = await provider.GetOrNullAsync(setting, entityId);
+                            if (value != null)
+                            {
+                                settingValues[setting.Name] = new SettingValue(setting.Name, value);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        settingValues[setting.Name] = new SettingValue(
+                            setting.Name,
+                            await providerList[0].GetOrNullAsync(setting, entityId)
+                        );
                     }
                 }
             }
@@ -148,9 +161,9 @@ namespace Volo.Abp.Settings
                 return;
             }
 
-            //Clear the value if it's same as it's fallback value
-            if (providers.Count > 1 && !forceToSet && value != null)
+            if (providers.Count > 1 && !forceToSet && setting.IsInherited && value != null)
             {
+                //Clear the value if it's same as it's fallback value
                 var fallbackValue = await GetOrNullInternalAsync(name, providers[1].EntityType, entityId);
                 if (fallbackValue == value)
                 {
@@ -160,7 +173,7 @@ namespace Volo.Abp.Settings
 
             providers = providers
                 .TakeWhile(p => p.EntityType == entityType)
-                .ToList();
+                .ToList(); //Getting list for case of there are more than one provider with same EntityType
 
             if (value == null)
             {

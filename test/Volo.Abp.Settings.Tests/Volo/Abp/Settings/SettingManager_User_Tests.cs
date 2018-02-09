@@ -100,8 +100,9 @@ namespace Volo.Abp.Settings
         public async Task Should_Get_All_From_Store_For_Given_User_Without_Fallback()
         {
             var settingValues = await _settingManager.GetAllForUserAsync(AbpIdentityTestDataBuilder.User1Id, fallback: false);
-            settingValues.Count.ShouldBe(1);
             settingValues.ShouldContain(sv => sv.Name == "MySetting2" && sv.Value == "user1-store-value");
+            settingValues.ShouldContain(sv => sv.Name == "MySettingWithoutInherit" && sv.Value == "user1-store-value");
+            settingValues.ShouldNotContain(sv => sv.Name == "MySetting1");
         }
 
         [Fact]
@@ -171,6 +172,14 @@ namespace Volo.Abp.Settings
 
             (await _settingManager.GetOrNullForUserAsync("MySetting2", AbpIdentityTestDataBuilder.User1Id))
                 .ShouldBe("default-store-value");
+        }
+
+        [Fact]
+        public async Task Should_Get_For_Given_User_For_Non_Inherited_Setting()
+        {
+            (await _settingManager.GetOrNullForUserAsync("MySettingWithoutInherit", AbpIdentityTestDataBuilder.User1Id)).ShouldBe("user1-store-value");
+            (await _settingManager.GetOrNullForUserAsync("MySettingWithoutInherit", AbpIdentityTestDataBuilder.User2Id)).ShouldBeNull(); //Does not inherit!
+            (await _settingManager.GetOrNullGlobalAsync("MySettingWithoutInherit")).ShouldBe("default-store-value");
         }
     }
 }
