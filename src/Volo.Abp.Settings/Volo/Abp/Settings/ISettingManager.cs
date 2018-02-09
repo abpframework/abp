@@ -8,12 +8,12 @@ namespace Volo.Abp.Settings
     {
         Task<string> GetOrNullAsync([NotNull]string name);
 
-        Task<string> GetOrNullAsync([NotNull]string name, [NotNull] string entityType, [CanBeNull] string entityId, bool fallback = true);
+        Task<string> GetOrNullAsync([NotNull]string name, [NotNull] string providerName, [CanBeNull] string providerKey, bool fallback = true);
 
         Task<List<SettingValue>> GetAllAsync();
 
-        Task<List<SettingValue>> GetAllAsync([NotNull] string entityType, [CanBeNull] string entityId, bool fallback = true);
+        Task<List<SettingValue>> GetAllAsync([NotNull] string providerName, [CanBeNull] string providerKey, bool fallback = true);
 
-        Task SetAsync([NotNull] string name, [CanBeNull] string value, [NotNull] string entityType, [CanBeNull] string entityId, bool forceToSet = false);
+        Task SetAsync([NotNull] string name, [CanBeNull] string value, [NotNull] string providerName, [CanBeNull] string providerKey, bool forceToSet = false);
     }
 }

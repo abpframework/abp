@@ -5,12 +5,12 @@ namespace Volo.Abp.Settings
 {
     public interface ISettingValueProvider
     {
-        string EntityType { get; }
+        string Name { get; }
 
-        Task<string> GetOrNullAsync([NotNull] SettingDefinition setting, [CanBeNull] string entityId);
+        Task<string> GetOrNullAsync([NotNull] SettingDefinition setting, [CanBeNull] string providerKey);
 
-        Task SetAsync([NotNull] SettingDefinition setting, [NotNull] string value, [CanBeNull] string entityId);
+        Task SetAsync([NotNull] SettingDefinition setting, [NotNull] string value, [CanBeNull] string providerKey);
 
-        Task ClearAsync([NotNull] SettingDefinition setting, [CanBeNull] string entityId);
+        Task ClearAsync([NotNull] SettingDefinition setting, [CanBeNull] string providerKey);
     }
 }

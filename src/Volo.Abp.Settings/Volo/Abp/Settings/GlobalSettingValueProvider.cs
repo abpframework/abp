@@ -4,28 +4,28 @@ namespace Volo.Abp.Settings
 {
     public class GlobalSettingValueProvider : SettingValueProvider
     {
-        public const string DefaultEntityType = "Global";
+        public const string ProviderName = "Global";
 
-        public override string EntityType => DefaultEntityType;
+        public override string Name => ProviderName;
 
         public GlobalSettingValueProvider(ISettingStore settingStore) 
             : base(settingStore)
         {
         }
 
-        public override Task<string> GetOrNullAsync(SettingDefinition setting, string entityId)
+        public override Task<string> GetOrNullAsync(SettingDefinition setting, string providerKey)
         {
-            return SettingStore.GetOrNullAsync(setting.Name, EntityType, null);
+            return SettingStore.GetOrNullAsync(setting.Name, Name, null);
         }
 
-        public override Task SetAsync(SettingDefinition setting, string value, string entityId)
+        public override Task SetAsync(SettingDefinition setting, string value, string providerKey)
         {
-            return SettingStore.SetAsync(setting.Name, value, EntityType, null);
+            return SettingStore.SetAsync(setting.Name, value, Name, null);
         }
 
-        public override Task ClearAsync(SettingDefinition setting, string entityId)
+        public override Task ClearAsync(SettingDefinition setting, string providerKey)
         {
-            return SettingStore.DeleteAsync(setting.Name, EntityType, null);
+            return SettingStore.DeleteAsync(setting.Name, Name, null);
         }
     }
 }

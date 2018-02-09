@@ -5,7 +5,7 @@ namespace Volo.Abp.Settings
 {
     public abstract class SettingValueProvider : ISettingValueProvider, ISingletonDependency
     {
-        public abstract string EntityType { get; }
+        public abstract string Name { get; }
 
         protected ISettingStore SettingStore { get; }
 
@@ -14,10 +14,10 @@ namespace Volo.Abp.Settings
             SettingStore = settingStore;
         }
 
-        public abstract Task<string> GetOrNullAsync(SettingDefinition setting, string entityId);
+        public abstract Task<string> GetOrNullAsync(SettingDefinition setting, string providerKey);
 
-        public abstract Task SetAsync(SettingDefinition setting, string value, string entityId);
+        public abstract Task SetAsync(SettingDefinition setting, string value, string providerKey);
 
-        public abstract Task ClearAsync(SettingDefinition setting, string entityId);
+        public abstract Task ClearAsync(SettingDefinition setting, string providerKey);
     }
 }

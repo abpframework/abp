@@ -7,8 +7,8 @@ namespace Volo.Abp.Settings
 {
     public interface ISettingRepository : IBasicRepository<Setting, Guid>
     {
-        Task<Setting> FindAsync(string name, string entityType, string entityId);
+        Task<Setting> FindAsync(string name, string providerName, string providerKey);
 
-        Task<List<Setting>> GetListAsync(string entityType, string entityId);
+        Task<List<Setting>> GetListAsync(string providerName, string providerKey);
     }
 }

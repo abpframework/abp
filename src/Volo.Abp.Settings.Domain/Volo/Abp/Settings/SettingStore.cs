@@ -14,18 +14,18 @@ namespace Volo.Abp.Settings
             _settingRepository = settingRepository;
         }
 
-        public async Task<string> GetOrNullAsync(string name, string entityType, string entityId)
+        public async Task<string> GetOrNullAsync(string name, string providerName, string providerKey)
         {
-            var setting = await _settingRepository.FindAsync(name, entityType, entityId);
+            var setting = await _settingRepository.FindAsync(name, providerName, providerKey);
             return setting?.Value;
         }
 
-        public async Task SetAsync(string name, string value, string entityType, string entityId)
+        public async Task SetAsync(string name, string value, string providerName, string providerKey)
         {
-            var setting = await _settingRepository.FindAsync(name, entityType, entityId);
+            var setting = await _settingRepository.FindAsync(name, providerName, providerKey);
             if (setting == null)
             {
-                setting = new Setting(GuidGenerator.Create(), name, value, entityType, entityId);
+                setting = new Setting(GuidGenerator.Create(), name, value, providerName, providerKey);
                 await _settingRepository.InsertAsync(setting);
             }
 
@@ -33,15 +33,15 @@ namespace Volo.Abp.Settings
             await _settingRepository.UpdateAsync(setting);
         }
 
-        public async Task<List<SettingValue>> GetListAsync(string entityType, string entityId)
+        public async Task<List<SettingValue>> GetListAsync(string providerName, string providerKey)
         {
-            var setting = await _settingRepository.GetListAsync(entityType, entityId);
+            var setting = await _settingRepository.GetListAsync(providerName, providerKey);
             return setting.Select(s => new SettingValue(s.Name, s.Value)).ToList();
         }
 
-        public async Task DeleteAsync(string name, string entityType, string entityId)
+        public async Task DeleteAsync(string name, string providerName, string providerKey)
         {
-            var setting = await _settingRepository.FindAsync(name, entityType, entityId);
+            var setting = await _settingRepository.FindAsync(name, providerName, providerKey);
             if (setting != null)
             {
                 await _settingRepository.DeleteAsync(setting);

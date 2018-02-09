@@ -13,10 +13,10 @@ namespace Volo.Abp.Settings
         public virtual string Value { get; internal set; }
 
         [CanBeNull]
-        public virtual string EntityType { get; protected set; }
+        public virtual string ProviderName { get; protected set; }
 
         [CanBeNull]
-        public virtual string EntityId { get; protected set; }
+        public virtual string ProviderKey { get; protected set; }
 
         protected Setting()
         {
@@ -27,8 +27,8 @@ namespace Volo.Abp.Settings
             Guid id, 
             [NotNull] string name, 
             [NotNull] string value, 
-            [CanBeNull] string entityType = null, 
-            [CanBeNull] string entityId = null)
+            [CanBeNull] string providerName = null, 
+            [CanBeNull] string providerKey = null)
         {
             Check.NotNull(name, nameof(name));
             Check.NotNull(value, nameof(value));
@@ -36,8 +36,8 @@ namespace Volo.Abp.Settings
             Id = id;
             Name = name;
             Value = value;
-            EntityType = entityType;
-            EntityId = entityId;
+            ProviderName = providerName;
+            ProviderKey = providerKey;
         }
     }
 }

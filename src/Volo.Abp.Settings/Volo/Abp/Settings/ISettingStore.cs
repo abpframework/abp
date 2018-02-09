@@ -6,12 +6,12 @@ namespace Volo.Abp.Settings
 {
     public interface ISettingStore
     {
-        Task<string> GetOrNullAsync([NotNull] string name, [CanBeNull] string entityType, [CanBeNull] string entityId);
+        Task<string> GetOrNullAsync([NotNull] string name, [CanBeNull] string providerName, [CanBeNull] string providerKey);
 
-        Task SetAsync([NotNull] string name, [NotNull] string value, [CanBeNull] string entityType, [CanBeNull] string entityId);
+        Task SetAsync([NotNull] string name, [NotNull] string value, [CanBeNull] string providerName, [CanBeNull] string providerKey);
 
-        Task<List<SettingValue>> GetListAsync([CanBeNull] string entityType, [CanBeNull] string entityId);
+        Task<List<SettingValue>> GetListAsync([CanBeNull] string providerName, [CanBeNull] string providerKey);
 
-        Task DeleteAsync([NotNull] string name, [CanBeNull]string entityType, [CanBeNull]string entityId);
+        Task DeleteAsync([NotNull] string name, [CanBeNull]string providerName, [CanBeNull]string providerKey);
     }
 }

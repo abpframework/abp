@@ -111,7 +111,7 @@ namespace Volo.Abp.Settings
             await _settingManager.SetForUserAsync(AbpIdentityTestDataBuilder.User1Id, "MySetting2", null);
 
             GetSettingsFromDbContext(
-                UserSettingValueProvider.DefaultEntityType,
+                UserSettingValueProvider.ProviderName,
                 AbpIdentityTestDataBuilder.User1Id.ToString(),
                 "MySetting2"
             ).Count.ShouldBe(0);
@@ -129,7 +129,7 @@ namespace Volo.Abp.Settings
                 .ShouldBe("user1-new-store-value");
 
             GetSettingsFromDbContext(
-                UserSettingValueProvider.DefaultEntityType,
+                UserSettingValueProvider.ProviderName,
                 AbpIdentityTestDataBuilder.User1Id.ToString(),
                 "MySetting2"
             ).Single().Value.ShouldBe("user1-new-store-value");
@@ -145,7 +145,7 @@ namespace Volo.Abp.Settings
             );
 
             GetSettingsFromDbContext(
-                UserSettingValueProvider.DefaultEntityType,
+                UserSettingValueProvider.ProviderName,
                 AbpIdentityTestDataBuilder.User1Id.ToString(),
                 "MySetting2"
             ).Count.ShouldBe(0);
@@ -165,7 +165,7 @@ namespace Volo.Abp.Settings
             );
 
             GetSettingsFromDbContext(
-                UserSettingValueProvider.DefaultEntityType,
+                UserSettingValueProvider.ProviderName,
                 AbpIdentityTestDataBuilder.User1Id.ToString(),
                 "MySetting2"
             ).Single().Value.ShouldBe("default-store-value");

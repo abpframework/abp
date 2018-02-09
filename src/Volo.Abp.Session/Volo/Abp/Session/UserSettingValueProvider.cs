@@ -7,9 +7,9 @@ namespace Volo.Abp.Session
 
     public class UserSettingValueProvider : SettingValueProvider
     {
-        public const string DefaultEntityType = "User";
+        public const string ProviderName = "User";
 
-        public override string EntityType => DefaultEntityType;
+        public override string Name => ProviderName;
 
         protected ICurrentUser CurrentUser { get; }
 
@@ -19,29 +19,29 @@ namespace Volo.Abp.Session
             CurrentUser = currentUser;
         }
 
-        public override async Task<string> GetOrNullAsync(SettingDefinition setting, string entityId)
+        public override async Task<string> GetOrNullAsync(SettingDefinition setting, string providerKey)
         {
-            if (entityId == null)
+            if (providerKey == null)
             {
                 if (CurrentUser.Id == null)
                 {
                     return null;
                 }
 
-                entityId = CurrentUser.Id.ToString();
+                providerKey = CurrentUser.Id.ToString();
             }
 
-            return await SettingStore.GetOrNullAsync(setting.Name, EntityType, entityId);
+            return await SettingStore.GetOrNullAsync(setting.Name, Name, providerKey);
         }
 
-        public override Task SetAsync(SettingDefinition setting, string value, string entityId)
+        public override Task SetAsync(SettingDefinition setting, string value, string providerKey)
         {
-            return SettingStore.SetAsync(setting.Name, value, EntityType, entityId);
+            return SettingStore.SetAsync(setting.Name, value, Name, providerKey);
         }
 
-        public override Task ClearAsync(SettingDefinition setting, string entityId)
+        public override Task ClearAsync(SettingDefinition setting, string providerKey)
         {
-            return SettingStore.DeleteAsync(setting.Name, EntityType, entityId);
+            return SettingStore.DeleteAsync(setting.Name, Name, providerKey);
         }
     }
 }

@@ -15,14 +15,14 @@ namespace Volo.Abp.Settings.EntityFrameworkCore
         {
         }
 
-        public async Task<Setting> FindAsync(string name, string entityType, string entityId)
+        public async Task<Setting> FindAsync(string name, string providerName, string providerKey)
         {
-            return await DbSet.FirstOrDefaultAsync(s => s.Name == name && s.EntityType == entityType && s.EntityId == entityId);
+            return await DbSet.FirstOrDefaultAsync(s => s.Name == name && s.ProviderName == providerName && s.ProviderKey == providerKey);
         }
 
-        public async Task<List<Setting>> GetListAsync(string entityType, string entityId)
+        public async Task<List<Setting>> GetListAsync(string providerName, string providerKey)
         {
-            return await DbSet.Where(s => s.EntityType == entityType && s.EntityId == entityId).ToListAsync();
+            return await DbSet.Where(s => s.ProviderName == providerName && s.ProviderKey == providerKey).ToListAsync();
         }
     }
 }

@@ -35,8 +35,8 @@ namespace Volo.Abp.Settings
             return UsingDbContext(context =>
                 context.Settings.Where(
                     s =>
-                        s.EntityType == UserSettingValueProvider.DefaultEntityType &&
-                        s.EntityId == AbpIdentityTestDataBuilder.User1Id.ToString() &&
+                        s.ProviderName == UserSettingValueProvider.ProviderName &&
+                        s.ProviderKey == AbpIdentityTestDataBuilder.User1Id.ToString() &&
                         s.Name == "MySetting2"
                 ).ToList()
             );

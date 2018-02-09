@@ -21,14 +21,14 @@ namespace Volo.Abp.Settings
 
         public void Build()
         {
-            _settingRepository.InsertAsync(new Setting(_guidGenerator.Create(), "MySetting1", "42", GlobalSettingValueProvider.DefaultEntityType));
+            _settingRepository.InsertAsync(new Setting(_guidGenerator.Create(), "MySetting1", "42", GlobalSettingValueProvider.ProviderName));
 
-            _settingRepository.InsertAsync(new Setting(_guidGenerator.Create(), "MySetting2", "default-store-value", GlobalSettingValueProvider.DefaultEntityType));
-            _settingRepository.InsertAsync(new Setting(_guidGenerator.Create(), "MySetting2", "user1-store-value", UserSettingValueProvider.DefaultEntityType, User1Id.ToString()));
-            _settingRepository.InsertAsync(new Setting(_guidGenerator.Create(), "MySetting2", "user2-store-value", UserSettingValueProvider.DefaultEntityType, User2Id.ToString()));
+            _settingRepository.InsertAsync(new Setting(_guidGenerator.Create(), "MySetting2", "default-store-value", GlobalSettingValueProvider.ProviderName));
+            _settingRepository.InsertAsync(new Setting(_guidGenerator.Create(), "MySetting2", "user1-store-value", UserSettingValueProvider.ProviderName, User1Id.ToString()));
+            _settingRepository.InsertAsync(new Setting(_guidGenerator.Create(), "MySetting2", "user2-store-value", UserSettingValueProvider.ProviderName, User2Id.ToString()));
 
-            _settingRepository.InsertAsync(new Setting(_guidGenerator.Create(), "MySettingWithoutInherit", "default-store-value", GlobalSettingValueProvider.DefaultEntityType));
-            _settingRepository.InsertAsync(new Setting(_guidGenerator.Create(), "MySettingWithoutInherit", "user1-store-value", UserSettingValueProvider.DefaultEntityType, User1Id.ToString()));
+            _settingRepository.InsertAsync(new Setting(_guidGenerator.Create(), "MySettingWithoutInherit", "default-store-value", GlobalSettingValueProvider.ProviderName));
+            _settingRepository.InsertAsync(new Setting(_guidGenerator.Create(), "MySettingWithoutInherit", "user1-store-value", UserSettingValueProvider.ProviderName, User1Id.ToString()));
         }
     }
 }
