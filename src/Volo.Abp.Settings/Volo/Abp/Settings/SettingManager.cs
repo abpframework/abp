@@ -131,16 +131,11 @@ namespace Volo.Abp.Settings
             return settingValues.Values.ToList();
         }
 
-        public virtual Task SetAsync(string name, string value, string entityType, string entityId, bool forceToSet = false)
+        public virtual async Task SetAsync(string name, string value, string entityType, string entityId, bool forceToSet = false)
         {
             Check.NotNull(name, nameof(name));
             Check.NotNull(entityType, nameof(entityType));
 
-            return SetInternalAsync(name, value, entityType, entityId, forceToSet);
-        }
-
-        protected virtual async Task SetInternalAsync(string name, string value, string entityType, string entityId, bool forceToSet = false)
-        {
             var setting = SettingDefinitionManager.Get(name);
 
             if (!forceToSet)

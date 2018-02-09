@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
@@ -101,6 +102,46 @@ namespace Volo.Abp.Settings
             var settingValues = await _settingManager.GetAllForUserAsync(AbpIdentityTestDataBuilder.User1Id, fallback: false);
             settingValues.Count.ShouldBe(1);
             settingValues.ShouldContain(sv => sv.Name == "MySetting2" && sv.Value == "user1-store-value");
+        }
+
+        [Fact]
+        public async Task Should_Delete_Setting_Record_When_Set_To_Null()
+        {
+            await _settingManager.SetForUserAsync(AbpIdentityTestDataBuilder.User1Id, "MySetting2", null);
+
+            UsingDbContext(context =>
+            {
+                context.Settings.Count(
+                    s =>
+                        s.EntityType == UserSettingValueProvider.DefaultEntityType &&
+                        s.EntityId == AbpIdentityTestDataBuilder.User1Id.ToString() &&
+                        s.Name == "MySetting2"
+                ).ShouldBe(0);
+            });
+        }
+
+        [Fact]
+        public async Task Should_Change_User_Setting()
+        {
+            (await _settingManager.GetOrNullForUserAsync("MySetting2", AbpIdentityTestDataBuilder.User1Id))
+                .ShouldBe("user1-store-value");
+
+            await _settingManager.SetForUserAsync(AbpIdentityTestDataBuilder.User1Id, "MySetting2", "user1-new-store-value");
+
+            (await _settingManager.GetOrNullForUserAsync("MySetting2", AbpIdentityTestDataBuilder.User1Id))
+                .ShouldBe("user1-new-store-value");
+
+            UsingDbContext(context =>
+            {
+                var setting = context.Settings.Single(
+                    s =>
+                        s.EntityType == UserSettingValueProvider.DefaultEntityType &&
+                        s.EntityId == AbpIdentityTestDataBuilder.User1Id.ToString() &&
+                        s.Name == "MySetting2"
+                );
+
+                setting.Value.ShouldBe("user1-new-store-value");
+            });
         }
     }
 }
