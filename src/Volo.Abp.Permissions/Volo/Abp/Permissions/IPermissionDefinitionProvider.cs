@@ -1,4 +1,4 @@
-﻿namespace Volo.Abp.Authorization.Permissions
+﻿namespace Volo.Abp.Permissions
 {
     public interface IPermissionDefinitionProvider
     {

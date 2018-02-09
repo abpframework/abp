@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Authorization.Permissions
+namespace Volo.Abp.Permissions
 {
     public class PermissionManager : IPermissionManager, ISingletonDependency
     {

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.Authorization.Permissions
+namespace Volo.Abp.Permissions
 {
     public interface IPermissionDefinitionManager
     {

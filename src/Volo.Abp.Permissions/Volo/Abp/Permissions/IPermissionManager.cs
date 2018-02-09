@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.Authorization.Permissions
+namespace Volo.Abp.Permissions
 {
     //TODO: Change fallback to inherit?
 

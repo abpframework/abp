@@ -1,6 +1,6 @@
 ﻿using Volo.Abp.Collections;
 
-namespace Volo.Abp.Authorization.Permissions
+namespace Volo.Abp.Permissions
 {
     public class PermissionOptions
     {
