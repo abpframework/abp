@@ -9,6 +9,7 @@ using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Security;
 using Volo.Abp.Session;
+using Volo.Abp.Settings;
 using Volo.Abp.Validation;
 using Volo.Abp.VirtualFileSystem;
 
@@ -20,6 +21,7 @@ namespace Volo.Abp
     [DependsOn(typeof(AbpObjectMappingModule))]
     [DependsOn(typeof(AbpSecurityModule))]
     [DependsOn(typeof(AbpSessionModule))]
+    [DependsOn(typeof(AbpSettingsModule))]
     [DependsOn(typeof(AbpDataModule))]
     [DependsOn(typeof(AbpJsonModule))]
     [DependsOn(typeof(AbpVirtualFileSystemModule))]
