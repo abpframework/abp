@@ -12,7 +12,7 @@ namespace Volo.Abp.Localization
             ResourceTypes = resourceTypes ?? new Type[0];
         }
 
-        public Type[] GetInheritedModuleTypes()
+        public virtual Type[] GetInheritedResourceTypes()
         {
             return ResourceTypes;
         }

@@ -14,7 +14,7 @@
 
         /// <summary>
         /// Can clients see this setting and it's value.
-        /// It maybe dangerous for some settings to be visible to clients (such as email server password).
+        /// It maybe dangerous for some settings to be visible to clients (such as an email server password).
         /// Default: false.
         /// </summary>
         public bool IsVisibleToClients { get; set; }

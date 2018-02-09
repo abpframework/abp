@@ -6,6 +6,6 @@ namespace Volo.Abp.Localization
     public interface IInheritedResourceTypesProvider
     {
         [NotNull]
-        Type[] GetInheritedModuleTypes();
+        Type[] GetInheritedResourceTypes();
     }
 }
