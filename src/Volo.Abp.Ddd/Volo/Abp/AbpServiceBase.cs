@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Guids;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Uow;
 
@@ -16,6 +17,8 @@ namespace Volo.Abp
         public IGuidGenerator GuidGenerator { get; set; }
 
         public ILoggerFactory LoggerFactory { get; set; }
+
+        public ICurrentTenant CurrentTenant { get; set; }
 
         protected IUnitOfWork CurrentUnitOfWork => UnitOfWorkManager?.Current;
 

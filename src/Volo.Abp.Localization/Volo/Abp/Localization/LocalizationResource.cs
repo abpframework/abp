@@ -82,7 +82,7 @@ namespace Volo.Abp.Localization
 
             foreach (var descriptor in descriptors)
             {
-                foreach (var baseResourceType in descriptor.GetInheritedModuleTypes())
+                foreach (var baseResourceType in descriptor.GetInheritedResourceTypes())
                 {
                     BaseResourceTypes.AddIfNotContains(baseResourceType);
                 }
