@@ -30,6 +30,8 @@
         /// </summary>
         public object CustomData { get; set; }
 
+        //TODO: Add Properties dictionary for custom stuff (and remove CustomData)
+
         public SettingDefinition(
             string name,
             string defaultValue = null,

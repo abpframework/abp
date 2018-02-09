@@ -33,17 +33,17 @@ namespace Volo.Abp.Settings
         {
             Check.NotNull(name, nameof(name));
 
-            var settingDefinition = GetOrNull(name);
+            var setting = GetOrNull(name);
 
-            if (settingDefinition == null)
+            if (setting == null)
             {
                 throw new AbpException("Undefined setting: " + name);
             }
 
-            return settingDefinition;
+            return setting;
         }
 
-        public IReadOnlyList<SettingDefinition> GetAll()
+        public virtual IReadOnlyList<SettingDefinition> GetAll()
         {
             return SettingDefinitions.Value.Values.ToImmutableList();
         }
@@ -53,7 +53,7 @@ namespace Volo.Abp.Settings
             return SettingDefinitions.Value.GetOrDefault(name);
         }
 
-        private List<ISettingDefinitionProvider> CreateSettingProviders()
+        protected virtual List<ISettingDefinitionProvider> CreateSettingProviders()
         {
             return Options
                 .DefinitionProviders
@@ -61,7 +61,7 @@ namespace Volo.Abp.Settings
                 .ToList();
         }
 
-        private IDictionary<string, SettingDefinition> CreateSettingDefinitions()
+        protected virtual IDictionary<string, SettingDefinition> CreateSettingDefinitions()
         {
             var settings = new Dictionary<string, SettingDefinition>();
 

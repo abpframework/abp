@@ -16,15 +16,11 @@ namespace Volo.Abp.Settings
 
         protected SettingOptions Options { get; }
 
-        protected ISettingStore SettingStore { get; }
-
         public SettingManager(
             IOptions<SettingOptions> options,
             IServiceProvider serviceProvider,
-            ISettingDefinitionManager settingDefinitionManager,
-            ISettingStore settingStore)
+            ISettingDefinitionManager settingDefinitionManager)
         {
-            SettingStore = settingStore;
             SettingDefinitionManager = settingDefinitionManager;
             Options = options.Value;
 
