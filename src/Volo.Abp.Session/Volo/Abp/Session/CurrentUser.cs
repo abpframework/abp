@@ -6,7 +6,7 @@ using Volo.Abp.Security.Claims;
 
 namespace Volo.Abp.Session
 {
-    public class CurrentUser : ICurrentUser, ITransientDependency //TODO: Singleton?
+    public class CurrentUser : ICurrentUser, ITransientDependency
     {
         public virtual bool IsAuthenticated => Id.HasValue;
 
@@ -14,7 +14,7 @@ namespace Volo.Abp.Session
         {
             get
             {
-                var value = FindClaimValue(AbpClaimTypes.UserId);
+                var value = this.FindClaimValue(AbpClaimTypes.UserId);
                 if (value == null)
                 {
                     return null;
@@ -24,9 +24,9 @@ namespace Volo.Abp.Session
             }
         }
 
-        public virtual string UserName => FindClaimValue(AbpClaimTypes.UserName);
+        public virtual string UserName => this.FindClaimValue(AbpClaimTypes.UserName);
 
-        public virtual string Email => FindClaimValue(AbpClaimTypes.Email);
+        public virtual string Email => this.FindClaimValue(AbpClaimTypes.Email);
 
         private readonly ICurrentPrincipalAccessor _principalAccessor;
 
@@ -38,23 +38,6 @@ namespace Volo.Abp.Session
         public virtual Claim FindClaim(string claimType)
         {
             return _principalAccessor.Principal?.Claims.FirstOrDefault(c => c.Type == claimType);
-        }
-
-        public virtual T FindClaimValue<T>(string claimType)
-            where T : struct
-        {
-            var value = FindClaimValue(claimType);
-            if (value == null)
-            {
-                return default;
-            }
-
-            return value.To<T>();
-        }
-
-        public virtual string FindClaimValue(string claimType)
-        {
-            return FindClaim(claimType)?.Value;
         }
     }
 }

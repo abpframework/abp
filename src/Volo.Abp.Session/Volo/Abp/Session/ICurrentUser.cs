@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Security.Claims;
+using JetBrains.Annotations;
 
 namespace Volo.Abp.Session
 {
@@ -7,17 +8,16 @@ namespace Volo.Abp.Session
     {
         bool IsAuthenticated { get; }
 
+        [CanBeNull]
         Guid? Id { get; }
 
+        [CanBeNull]
         string UserName { get; }
 
+        [CanBeNull]
         string Email { get; }
 
+        [CanBeNull]
         Claim FindClaim(string claimType);
-
-        string FindClaimValue(string claimType);
-
-        T FindClaimValue<T>(string claimType)
-            where T : struct;
     }
 }
