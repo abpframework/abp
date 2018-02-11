@@ -11,7 +11,7 @@ namespace Volo.Abp.Settings
 {
     public class SettingManager_User_Tests: AbpSettingsTestBase
     {
-        private Guid _currentUserId;
+        private Guid? _currentUserId;
 
         private readonly ISettingManager _settingManager;
 

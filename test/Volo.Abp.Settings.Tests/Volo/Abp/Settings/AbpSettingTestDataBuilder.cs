@@ -7,8 +7,8 @@ namespace Volo.Abp.Settings
 {
     public class AbpSettingTestDataBuilder : ITransientDependency
     {
-        public static Guid User1Id = Guid.NewGuid();
-        public static Guid User2Id = Guid.NewGuid();
+        public static Guid User1Id { get; } = Guid.NewGuid();
+        public static Guid User2Id { get; } = Guid.NewGuid();
 
         private readonly ISettingRepository _settingRepository;
         private readonly IGuidGenerator _guidGenerator;

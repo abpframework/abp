@@ -22,7 +22,10 @@
 
         public PermissionDefinition CreateChild(string name)
         {
-            return new PermissionDefinition(name) {Parent = this};
+            return new PermissionDefinition(name)
+            {
+                Parent = this
+            };
         }
     }
 }

@@ -14,9 +14,17 @@ namespace Volo.Abp.Permissions
         }
 
         [Fact]
-        public async Task Test1()
+        public async Task Should_Throw_Exception_If_Permission_Is_Not_Defined()
         {
-            _permissionManager.ShouldNotBeNull();
+            await Assert.ThrowsAsync<AbpException>(async () =>
+                await _permissionManager.IsGrantedAsync("UndefinedPermissionName")
+            );
+        }
+
+        [Fact]
+        public async Task Should_Return_False_As_Default_For_Any_Permission()
+        {
+            (await _permissionManager.IsGrantedAsync("MyPermission1")).ShouldBeFalse();
         }
     }
 }
