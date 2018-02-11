@@ -8,25 +8,25 @@ namespace Volo.Abp.Text.Formatting
         [Fact]
         public void Test_Matched()
         {
-            Test_Matched(
+            Test_Matched_Internal(
                 "My name is Neo.",
                 "My name is {0}.",
                 new NameValue("0", "Neo")
                 );
 
-            Test_Matched(
+            Test_Matched_Internal(
                 "User halil does not exist.",
                 "User {0} does not exist.",
                 new NameValue("0", "halil")
                 );
 
-            Test_Matched(
+            Test_Matched_Internal(
                 "abp.io",
                 "{domain}",
                 new NameValue("domain", "abp.io")
             );
 
-            Test_Matched(
+            Test_Matched_Internal(
                 "http://acme.abp.io/gaming/Index.html",
                 "http://{TENANCY_NAME}.abp.io/{AREA}/Index.html",
                 new NameValue("TENANCY_NAME", "acme"),
@@ -37,22 +37,22 @@ namespace Volo.Abp.Text.Formatting
         [Fact]
         public void Test_Not_Matched()
         {
-            Test_Not_Matched(
+            Test_Not_Matched_Internal(
                 "My name is Neo.",
                 "My name is Marry."
                 );
 
-            Test_Not_Matched(
+            Test_Not_Matched_Internal(
                 "Role {0} does not exist.",
                 "User name {0} is invalid, can only contain letters or digits."
                 );
 
-            Test_Not_Matched(
+            Test_Not_Matched_Internal(
                 "{0} cannot be null or empty.",
                 "Incorrect password."
                 );
 
-            Test_Not_Matched(
+            Test_Not_Matched_Internal(
                 "Incorrect password.",
                 "{0} cannot be null or empty."
                 );
@@ -66,7 +66,7 @@ namespace Volo.Abp.Text.Formatting
             values[0].ShouldBe("halil");
         }
 
-        private static void Test_Matched(string str, string format, params NameValue[] expectedPairs)
+        private static void Test_Matched_Internal(string str, string format, params NameValue[] expectedPairs)
         {
             var result = FormattedStringValueExtracter.Extract(str, format);
             result.IsMatch.ShouldBe(true);
@@ -89,7 +89,7 @@ namespace Volo.Abp.Text.Formatting
             }
         }
 
-        private void Test_Not_Matched(string str, string format)
+        private void Test_Not_Matched_Internal(string str, string format)
         {
             var result = FormattedStringValueExtracter.Extract(str, format);
             result.IsMatch.ShouldBe(false);
