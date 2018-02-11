@@ -5,7 +5,7 @@ using Volo.Abp.Session;
 
 namespace Volo.Abp.Settings
 {
-    public class AbpSettingTestDataBuilder : ITransientDependency
+    public class SettingTestDataBuilder : ITransientDependency
     {
         public static Guid User1Id { get; } = Guid.NewGuid();
         public static Guid User2Id { get; } = Guid.NewGuid();
@@ -13,7 +13,7 @@ namespace Volo.Abp.Settings
         private readonly ISettingRepository _settingRepository;
         private readonly IGuidGenerator _guidGenerator;
 
-        public AbpSettingTestDataBuilder(ISettingRepository settingRepository, IGuidGenerator guidGenerator)
+        public SettingTestDataBuilder(ISettingRepository settingRepository, IGuidGenerator guidGenerator)
         {
             _settingRepository = settingRepository;
             _guidGenerator = guidGenerator;

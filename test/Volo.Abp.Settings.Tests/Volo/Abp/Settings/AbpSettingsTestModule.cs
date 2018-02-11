@@ -53,7 +53,7 @@ namespace Volo.Abp.Settings
             using (var scope = context.ServiceProvider.CreateScope())
             {
                 scope.ServiceProvider
-                    .GetRequiredService<AbpSettingTestDataBuilder>()
+                    .GetRequiredService<SettingTestDataBuilder>()
                     .Build();
             }
         }

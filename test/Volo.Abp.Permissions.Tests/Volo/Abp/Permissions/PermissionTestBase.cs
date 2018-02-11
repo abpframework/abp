@@ -7,7 +7,7 @@ using Volo.Abp.TestBase;
 
 namespace Volo.Abp.Permissions
 {
-    public class AbpPermissionTestBase : AbpIntegratedTest<AbpPermissionTestModule>
+    public class PermissionTestBase : AbpIntegratedTest<AbpPermissionTestModule>
     {
         protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
         {
@@ -36,7 +36,7 @@ namespace Volo.Abp.Permissions
                 context.PermissionGrants.Where(
                     s =>
                         s.ProviderName == UserSettingValueProvider.ProviderName &&
-                        s.ProviderKey == AbpPermissionTestDataBuilder.User1Id.ToString() &&
+                        s.ProviderKey == PermissionTestDataBuilder.User1Id.ToString() &&
                         s.Name == "MySetting2"
                 ).ToList()
             );

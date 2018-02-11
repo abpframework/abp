@@ -8,7 +8,7 @@ using Xunit;
 
 namespace Volo.Abp.Permissions
 {
-    public class PermissionManager_User_Tests : AbpPermissionTestBase
+    public class PermissionManager_User_Tests : PermissionTestBase
     {
         private readonly IPermissionManager _permissionManager;
 
@@ -31,14 +31,14 @@ namespace Volo.Abp.Permissions
         {
             (await _permissionManager.IsGrantedForUserAsync(
                 "MyPermission1",
-                AbpPermissionTestDataBuilder.User1Id
+                PermissionTestDataBuilder.User1Id
             )).ShouldBeTrue();
         }
 
         [Fact]
         public async Task Should_Return_True_For_Granted_Current_User()
         {
-            _currentUserId = AbpPermissionTestDataBuilder.User1Id;
+            _currentUserId = PermissionTestDataBuilder.User1Id;
 
             (await _permissionManager.IsGrantedForCurrentUserAsync(
                 "MyPermission1"
@@ -50,14 +50,14 @@ namespace Volo.Abp.Permissions
         {
             (await _permissionManager.IsGrantedForUserAsync(
                 "MyPermission1",
-                AbpPermissionTestDataBuilder.User2Id
+                PermissionTestDataBuilder.User2Id
             )).ShouldBeFalse();
         }
 
         [Fact]
         public async Task Should_Return_False_For_Non_Granted_Current_User()
         {
-            _currentUserId = AbpPermissionTestDataBuilder.User2Id;
+            _currentUserId = PermissionTestDataBuilder.User2Id;
 
             (await _permissionManager.IsGrantedForCurrentUserAsync(
                 "MyPermission1"
@@ -70,6 +70,50 @@ namespace Volo.Abp.Permissions
             (await _permissionManager.IsGrantedForCurrentUserAsync(
                 "MyPermission1"
             )).ShouldBeFalse();
+        }
+
+        [Fact]
+        public async Task Should_Get_List_Of_Granted_Permissions_For_A_User()
+        {
+            //User1
+            var permission = await _permissionManager.GetAllForUserAsync(PermissionTestDataBuilder.User1Id);
+            permission.Count.ShouldBeGreaterThan(0);
+            permission.ShouldContain(p => p.Name == "MyPermission1" && p.IsGranted);
+
+            //User2
+            permission = await _permissionManager.GetAllForUserAsync(PermissionTestDataBuilder.User2Id);
+            permission.Count.ShouldBe(0);
+        }
+
+        [Fact]
+        public async Task Should_Get_List_Of_Granted_Permissions_For_Current_User()
+        {
+            //User1
+            _currentUserId = PermissionTestDataBuilder.User1Id;
+            var permission = await _permissionManager.GetAllForCurrentUserAsync();
+            permission.Count.ShouldBeGreaterThan(0);
+            permission.ShouldContain(p => p.Name == "MyPermission1" && p.IsGranted);
+
+            //User2
+            _currentUserId = PermissionTestDataBuilder.User2Id;
+            permission = await _permissionManager.GetAllForCurrentUserAsync();
+            permission.Count.ShouldBe(0);
+        }
+
+        [Fact]
+        public async Task Should_Grant_Permission_For_A_User()
+        {
+            (await _permissionManager.IsGrantedForUserAsync(
+                "MyPermission1",
+                PermissionTestDataBuilder.User2Id
+            )).ShouldBeFalse();
+
+            await _permissionManager.SetForUserAsync(PermissionTestDataBuilder.User2Id, "MyPermission1", true);
+
+            (await _permissionManager.IsGrantedForUserAsync(
+                "MyPermission1",
+                PermissionTestDataBuilder.User2Id
+            )).ShouldBeTrue();
         }
     }
 }

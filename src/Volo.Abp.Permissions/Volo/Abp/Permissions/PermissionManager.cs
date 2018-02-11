@@ -80,6 +80,9 @@ namespace Volo.Abp.Permissions
             return false;
         }
 
+        //TODO: Should also return for non-granted permissions!
+        //TODO: Create a method for getting only granted permissions!
+
         public virtual async Task<List<PermissionGrantInfo>> GetAllAsync()
         {
             var permissionGrantInfos = new Dictionary<string, PermissionGrantInfo>();

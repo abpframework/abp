@@ -5,7 +5,7 @@ using Volo.Abp.Session;
 
 namespace Volo.Abp.Permissions
 {
-    public class AbpPermissionTestDataBuilder : ITransientDependency
+    public class PermissionTestDataBuilder : ITransientDependency
     {
         public static Guid User1Id { get; } = Guid.NewGuid();
         public static Guid User2Id { get; } = Guid.NewGuid();
@@ -13,7 +13,7 @@ namespace Volo.Abp.Permissions
         private readonly IPermissionGrantRepository _permissionGrantRepository;
         private readonly IGuidGenerator _guidGenerator;
 
-        public AbpPermissionTestDataBuilder(IGuidGenerator guidGenerator, IPermissionGrantRepository permissionGrantRepository)
+        public PermissionTestDataBuilder(IGuidGenerator guidGenerator, IPermissionGrantRepository permissionGrantRepository)
         {
             _guidGenerator = guidGenerator;
             _permissionGrantRepository = permissionGrantRepository;

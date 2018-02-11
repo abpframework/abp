@@ -7,7 +7,7 @@ using Volo.Abp.TestBase;
 
 namespace Volo.Abp.Settings
 {
-    public class AbpSettingsTestBase : AbpIntegratedTest<AbpSettingsTestModule>
+    public class SettingsTestBase : AbpIntegratedTest<AbpSettingsTestModule>
     {
         protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
         {
@@ -36,7 +36,7 @@ namespace Volo.Abp.Settings
                 context.Settings.Where(
                     s =>
                         s.ProviderName == UserSettingValueProvider.ProviderName &&
-                        s.ProviderKey == AbpSettingTestDataBuilder.User1Id.ToString() &&
+                        s.ProviderKey == SettingTestDataBuilder.User1Id.ToString() &&
                         s.Name == "MySetting2"
                 ).ToList()
             );

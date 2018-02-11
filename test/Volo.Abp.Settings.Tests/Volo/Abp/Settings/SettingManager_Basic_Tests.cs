@@ -4,7 +4,7 @@ using Xunit;
 
 namespace Volo.Abp.Settings
 {
-    public class SettingManager_Basic_Tests : AbpSettingsTestBase
+    public class SettingManager_Basic_Tests : SettingsTestBase
     {
         private readonly ISettingManager _settingManager;
 

@@ -4,7 +4,7 @@ using Xunit;
 
 namespace Volo.Abp.Permissions
 {
-    public class PermissionManager_Basic_Tests : AbpPermissionTestBase
+    public class PermissionManager_Basic_Tests : PermissionTestBase
     {
         private readonly IPermissionManager _permissionManager;
 

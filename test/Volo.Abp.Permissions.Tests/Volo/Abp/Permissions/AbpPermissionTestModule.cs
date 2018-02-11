@@ -53,7 +53,7 @@ namespace Volo.Abp.Permissions
             using (var scope = context.ServiceProvider.CreateScope())
             {
                 scope.ServiceProvider
-                    .GetRequiredService<AbpPermissionTestDataBuilder>()
+                    .GetRequiredService<PermissionTestDataBuilder>()
                     .Build();
             }
         }
