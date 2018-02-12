@@ -9,10 +9,10 @@ namespace Volo.Abp.Permissions
         [NotNull]
         public virtual string Name { get; protected set; }
 
-        [CanBeNull]
+        [NotNull]
         public virtual string ProviderName { get; protected set; }
 
-        [CanBeNull]
+        [NotNull]
         public virtual string ProviderKey { get; protected set; }
 
         protected PermissionGrant()
@@ -23,8 +23,8 @@ namespace Volo.Abp.Permissions
         public PermissionGrant(
             Guid id,
             [NotNull] string name,
-            [CanBeNull] string providerName = null,
-            [CanBeNull] string providerKey = null)
+            [NotNull] string providerName ,
+            [NotNull] string providerKey)
         {
             Check.NotNull(name, nameof(name));
 

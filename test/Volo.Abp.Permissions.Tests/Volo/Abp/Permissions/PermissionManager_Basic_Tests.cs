@@ -4,27 +4,27 @@ using Xunit;
 
 namespace Volo.Abp.Permissions
 {
-    public class PermissionManager_Basic_Tests : PermissionTestBase
+    public class PermissionChecker_Basic_Tests : PermissionTestBase
     {
-        private readonly IPermissionManager _permissionManager;
+        private readonly IPermissionChecker _permissionChecker;
 
-        public PermissionManager_Basic_Tests()
+        public PermissionChecker_Basic_Tests()
         {
-            _permissionManager = GetRequiredService<IPermissionManager>();
+            _permissionChecker = GetRequiredService<IPermissionChecker>();
         }
 
         [Fact]
         public async Task Should_Throw_Exception_If_Permission_Is_Not_Defined()
         {
             await Assert.ThrowsAsync<AbpException>(async () =>
-                await _permissionManager.IsGrantedAsync("UndefinedPermissionName")
+                await _permissionChecker.IsGrantedAsync("UndefinedPermissionName")
             );
         }
 
         [Fact]
         public async Task Should_Return_False_As_Default_For_Any_Permission()
         {
-            (await _permissionManager.IsGrantedAsync("MyPermission1")).ShouldBeFalse();
+            (await _permissionChecker.IsGrantedAsync("MyPermission1")).ShouldBeFalse();
         }
     }
 }

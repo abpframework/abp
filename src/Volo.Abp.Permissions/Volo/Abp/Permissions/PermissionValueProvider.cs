@@ -22,10 +22,12 @@ namespace Volo.Abp.Permissions
             PermissionStore = permissionStore;
         }
 
-        public abstract Task<bool?> IsGrantedAsync(PermissionDefinition permission, string providerName, string providerKey);
+        //public abstract Task<bool?> IsGrantedAsync(PermissionDefinition permission, string providerName, string providerKey);
 
-        public abstract Task SetAsync(PermissionDefinition permission, bool isGranted, string providerKey);
+        //public abstract Task SetAsync(PermissionDefinition permission, bool isGranted, string providerKey);
 
-        public abstract Task ClearAsync(PermissionDefinition permission, string providerKey);
+        //public abstract Task ClearAsync(PermissionDefinition permission, string providerKey);
+
+        public abstract Task<bool> IsGrantedAsync(PermissionDefinition permission);
     }
 }

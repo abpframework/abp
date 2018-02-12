@@ -1,10 +1,12 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Modularity;
+using Volo.Abp.Permissions;
 
 namespace Volo.Abp.Identity
 {
-    [DependsOn(typeof(AbpIdentityDomainSharedModule))]
+    [DependsOn(typeof(AbpPermissionsDomainModule))]
     [DependsOn(typeof(AbpDddModule))]
+    [DependsOn(typeof(AbpIdentityDomainSharedModule))]
     public class AbpIdentityDomainModule : AbpModule
     {
         public override void ConfigureServices(IServiceCollection services)
