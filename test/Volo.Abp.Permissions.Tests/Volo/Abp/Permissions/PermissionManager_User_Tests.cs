@@ -82,7 +82,8 @@ namespace Volo.Abp.Permissions
 
             //User2
             permission = await _permissionManager.GetAllForUserAsync(PermissionTestDataBuilder.User2Id);
-            permission.Count.ShouldBe(0);
+            permission.Count.ShouldBeGreaterThan(0);
+            permission.ShouldContain(p => p.Name == "MyPermission1" && !p.IsGranted);
         }
 
         [Fact]
@@ -97,7 +98,8 @@ namespace Volo.Abp.Permissions
             //User2
             _currentUserId = PermissionTestDataBuilder.User2Id;
             permission = await _permissionManager.GetAllForCurrentUserAsync();
-            permission.Count.ShouldBe(0);
+            permission.Count.ShouldBeGreaterThan(0);
+            permission.ShouldContain(p => p.Name == "MyPermission1" && !p.IsGranted);
         }
 
         [Fact]

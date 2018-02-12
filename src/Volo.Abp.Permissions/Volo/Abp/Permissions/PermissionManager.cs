@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
@@ -83,32 +84,15 @@ namespace Volo.Abp.Permissions
         //TODO: Should also return for non-granted permissions!
         //TODO: Create a method for getting only granted permissions!
 
-        public virtual async Task<List<PermissionGrantInfo>> GetAllAsync()
+        public virtual Task<List<PermissionGrantInfo>> GetAllAsync()
         {
-            var permissionGrantInfos = new Dictionary<string, PermissionGrantInfo>();
-            var permissionDefinitions = PermissionDefinitionManager.GetAll();
-
-            foreach (var provider in Providers.Value)
-            {
-                foreach (var permission in permissionDefinitions)
-                {
-                    var value = await provider.IsGrantedAsync(permission, null);
-                    if (value != null)
-                    {
-                        permissionGrantInfos[permission.Name] = new PermissionGrantInfo(permission.Name, value.Value);
-                    }
-                }
-            }
-
-            return permissionGrantInfos.Values.ToList();
+            return GetAllFromProvidersAsync(Providers.Value, null);
         }
 
         public virtual async Task<List<PermissionGrantInfo>> GetAllAsync(string providerName, string providerKey, bool fallback = true)
         {
             Check.NotNull(providerName, nameof(providerName));
 
-            var permissionGrantInfos = new Dictionary<string, PermissionGrantInfo>();
-            var permissionDefinitions = PermissionDefinitionManager.GetAll();
             var providers = Enumerable.Reverse(Providers.Value)
                 .SkipWhile(c => c.Name != providerName);
 
@@ -119,22 +103,7 @@ namespace Volo.Abp.Permissions
 
             var providerList = providers.Reverse().ToList();
 
-            if (providerList.Any())
-            {
-                foreach (var permission in permissionDefinitions)
-                {
-                    foreach (var provider in providerList)
-                    {
-                        var value = await provider.IsGrantedAsync(permission, providerKey);
-                        if (value != null)
-                        {
-                            permissionGrantInfos[permission.Name] = new PermissionGrantInfo(permission.Name, value.Value);
-                        }
-                    }
-                }
-            }
-
-            return permissionGrantInfos.Values.ToList();
+            return await GetAllFromProvidersAsync(providerList, providerKey);
         }
 
         public virtual async Task SetAsync(string name, bool? isGranted, string providerName, string providerKey, bool forceToSet = false)
@@ -166,7 +135,7 @@ namespace Volo.Abp.Permissions
 
             providers = providers
                 .TakeWhile(p => p.Name == providerName)
-                .ToList(); //Getting list for case of there are more than one provider with same EntityType
+                .ToList(); //Getting list for case of there are more than one provider with same name
 
             if (isGranted == null)
             {
@@ -182,6 +151,29 @@ namespace Volo.Abp.Permissions
                     await provider.SetAsync(permission, isGranted.Value, providerKey);
                 }
             }
+        }
+
+        protected virtual async Task<List<PermissionGrantInfo>> GetAllFromProvidersAsync([NotNull] List<IPermissionValueProvider> providers, [CanBeNull] string providerKey)
+        {
+            var permissionDefinitions = PermissionDefinitionManager.GetAll();
+            var permissionGrantInfos = new Dictionary<string, PermissionGrantInfo>();
+
+            foreach (var permission in permissionDefinitions)
+            {
+                permissionGrantInfos[permission.Name] = new PermissionGrantInfo(permission.Name, false);
+
+                foreach (var provider in providers)
+                {
+                    var value = await provider.IsGrantedAsync(permission, providerKey);
+                    if (value != null)
+                    {
+                        permissionGrantInfos[permission.Name] =
+                            new PermissionGrantInfo(permission.Name, value.Value, provider.Name);
+                    }
+                }
+            }
+
+            return permissionGrantInfos.Values.ToList();
         }
     }
 }

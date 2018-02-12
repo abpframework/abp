@@ -8,12 +8,15 @@ namespace Volo.Abp.Permissions
 
         public bool IsGranted { get; }
 
-        public PermissionGrantInfo([NotNull] string name, bool isGranted)
+        public string ProviderName { get; }
+
+        public PermissionGrantInfo([NotNull] string name, bool isGranted, [CanBeNull] string providerName = null)
         {
             Check.NotNull(name, nameof(name));
 
             Name = name;
             IsGranted = isGranted;
+            ProviderName = providerName;
         }
     }
 }
