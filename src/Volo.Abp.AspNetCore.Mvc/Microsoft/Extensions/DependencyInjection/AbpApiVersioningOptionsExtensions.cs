@@ -41,30 +41,20 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             foreach (var controllerType in setting.ControllerTypes)
             {
-                var controllerBuilder = typeof(ApiVersionConventionBuilder)
-                    .GetMethod(nameof(ApiVersionConventionBuilder.Controller),
-                        BindingFlags.Instance | BindingFlags.Public)
-                    .MakeGenericMethod(controllerType)
-                    .Invoke(options.Conventions, null);
+                var controllerBuilder = options.Conventions.Controller(controllerType);
 
                 if (setting.ApiVersions.Any())
                 {
                     foreach (var apiVersion in setting.ApiVersions)
                     {
-                        typeof(ControllerApiVersionConventionBuilder<>)
-                            .MakeGenericType(controllerType)
-                            .GetMethod("HasApiVersion")
-                            .Invoke(controllerBuilder, new object[] {apiVersion});
+                        controllerBuilder.HasApiVersion(apiVersion);
                     }
                 }
                 else
                 {
                     if (!controllerType.IsDefined(typeof(ApiVersionAttribute), true))
                     {
-                        typeof(ControllerApiVersionConventionBuilder<>)
-                            .MakeGenericType(controllerType)
-                            .GetMethod("IsApiVersionNeutral")
-                            .Invoke(controllerBuilder, null);
+                        controllerBuilder.IsApiVersionNeutral();
                     }
                 }
             }
