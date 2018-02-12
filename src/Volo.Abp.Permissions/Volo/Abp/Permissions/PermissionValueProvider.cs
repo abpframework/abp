@@ -1,4 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Permissions
@@ -7,7 +10,12 @@ namespace Volo.Abp.Permissions
     {
         public abstract string Name { get; }
 
+        public ILoggerFactory LoggerFactory { get; set; }
+
         protected IPermissionStore PermissionStore { get; }
+
+        protected ILogger Logger => _lazyLogger.Value;
+        private Lazy<ILogger> _lazyLogger => new Lazy<ILogger>(() => LoggerFactory?.CreateLogger(GetType().FullName) ?? NullLogger.Instance, true);
 
         protected PermissionValueProvider(IPermissionStore permissionStore)
         {

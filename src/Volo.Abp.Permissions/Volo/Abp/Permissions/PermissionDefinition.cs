@@ -27,5 +27,10 @@
                 Parent = this
             };
         }
+
+        public override string ToString()
+        {
+            return $"[Permission {Name}]";
+        }
     }
 }

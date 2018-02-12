@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Volo.Abp.Permissions;
 
 namespace Volo.Abp.Session
@@ -19,26 +21,61 @@ namespace Volo.Abp.Session
 
         public override async Task<bool?> IsGrantedAsync(PermissionDefinition permission, string providerName, string providerKey)
         {
-            if (providerKey == null)
+            var userId = ParseOrGetCurrentUser(providerName, providerKey);
+            if (userId == null)
             {
-                if (CurrentUser.Id == null)
-                {
-                    return null;
-                }
-
-                providerKey = CurrentUser.Id.ToString();
+                return null;
             }
 
-            return await PermissionStore.IsGrantedAsync(permission.Name, Name, providerKey);
+            return await PermissionStore.IsGrantedAsync(permission.Name, Name, userId.ToString());
+        }
+
+        protected virtual Guid? ParseOrGetCurrentUser(string providerName, string providerKey)
+        {
+            if (providerName == null)
+            {
+                return CurrentUser.Id;
+            }
+
+            if (providerName == Name)
+            {
+                if (providerKey == null)
+                {
+                    return CurrentUser.Id;
+                }
+
+                if (!Guid.TryParse(providerKey, out var result))
+                {
+                    throw new AbpException("UserId should be a Guid!");
+                }
+
+                return result;
+            }
+
+            return null;
         }
 
         public override Task SetAsync(PermissionDefinition permission, bool isGranted, string providerKey)
         {
-            return PermissionStore.SetAsync(permission.Name, isGranted, Name, providerKey);
+            var userId = ParseOrGetCurrentUser(Name, providerKey);
+            if (userId == null)
+            {
+                Logger.LogWarning($"Could not set the permission '{permission}' because the user id is not available!");
+                return Task.CompletedTask;
+            }
+
+            return PermissionStore.SetAsync(permission.Name, isGranted, Name, userId.ToString());
         }
 
         public override Task ClearAsync(PermissionDefinition permission, string providerKey)
         {
+            var userId = ParseOrGetCurrentUser(Name, providerKey);
+            if (userId == null)
+            {
+                Logger.LogWarning($"Could not clear the permission '{permission}' because the user id is not available!");
+                return Task.CompletedTask;
+            }
+
             return PermissionStore.DeleteAsync(permission.Name, Name, providerKey);
         }
     }
