@@ -16,6 +16,6 @@ namespace Volo.Abp.Permissions
 
         Task<List<PermissionGrantInfo>> GetAllAsync([NotNull] string providerName, [CanBeNull] string providerKey, bool fallback = true);
 
-        Task SetAsync([NotNull] string name, bool? isGranted, [NotNull] string providerName, [CanBeNull] string providerKey, bool forceToSet = false);
+        Task SetAsync([NotNull] string name, bool isGranted, [NotNull] string providerName, [CanBeNull] string providerKey, bool forceToSet = false);
     }
 }

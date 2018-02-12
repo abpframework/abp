@@ -25,7 +25,6 @@ namespace Volo.Abp.Permissions
                 new PermissionGrant(
                     _guidGenerator.Create(),
                     "MyPermission1",
-                    true,
                     UserPermissionValueProvider.ProviderName,
                     User1Id.ToString()
                 )

@@ -28,12 +28,12 @@ namespace Volo.Abp.Permissions
             return permissionManager.GetAllAsync(UserPermissionValueProvider.ProviderName, null, fallback);
         }
 
-        public static Task SetForUserAsync(this IPermissionManager permissionManager, Guid userId, [NotNull] string name, bool? isGranted, bool forceToSet = false)
+        public static Task SetForUserAsync(this IPermissionManager permissionManager, Guid userId, [NotNull] string name, bool isGranted, bool forceToSet = false)
         {
             return permissionManager.SetAsync(name, isGranted, UserPermissionValueProvider.ProviderName, userId.ToString(), forceToSet);
         }
 
-        public static Task SetForCurrentUserAsync(this IPermissionManager permissionManager, [NotNull] string name, bool? isGranted, bool forceToSet = false)
+        public static Task SetForCurrentUserAsync(this IPermissionManager permissionManager, [NotNull] string name, bool isGranted, bool forceToSet = false)
         {
             return permissionManager.SetAsync(name, isGranted, UserPermissionValueProvider.ProviderName, null, forceToSet);
         }

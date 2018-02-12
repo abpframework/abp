@@ -15,23 +15,23 @@ namespace Volo.Abp.Permissions
             Logger = NullLogger<NullPermissionStore>.Instance;
         }
 
-        public Task<bool?> IsGrantedAsync(string name, string providerName, string providerKey)
+        public Task<bool> IsGrantedAsync(string name, string providerName, string providerKey)
         {
-            return Task.FromResult((bool?)null);
+            return Task.FromResult(false);
         }
 
-        public Task SetAsync(string name, bool isGranted, string providerName, string providerKey)
+        public Task AddAsync(string name, string providerName, string providerKey)
         {
             Logger.LogWarning($"Setting the grant value for {name} is not possible because current permission store is {nameof(NullPermissionStore)}");
             return Task.CompletedTask;
         }
 
-        public Task<List<PermissionGrantInfo>> GetListAsync(string providerName, string providerKey)
+        public Task<List<string>> GetAllGrantedAsync(string providerName, string providerKey)
         {
-            return Task.FromResult(new List<PermissionGrantInfo>());
+            return Task.FromResult(new List<string>());
         }
 
-        public Task DeleteAsync(string name, string providerName, string providerKey)
+        public Task RemoveAsync(string name, string providerName, string providerKey)
         {
             return Task.CompletedTask;
         }

@@ -103,7 +103,7 @@ namespace Volo.Abp.Permissions
             return await GetAllFromProvidersAsync(providerList, providerKey);
         }
 
-        public virtual async Task SetAsync(string name, bool? isGranted, string providerName, string providerKey, bool forceToSet = false)
+        public virtual async Task SetAsync(string name, bool isGranted, string providerName, string providerKey, bool forceToSet = false)
         {
             Check.NotNull(name, nameof(name));
             Check.NotNull(providerName, nameof(providerName));
@@ -126,7 +126,7 @@ namespace Volo.Abp.Permissions
                 var fallbackValue = await IsGrantedInternalAsync(name, providers[1].Name, providerKey);
                 if (fallbackValue == isGranted)
                 {
-                    isGranted = null;
+                    return;
                 }
             }
 
@@ -134,19 +134,9 @@ namespace Volo.Abp.Permissions
                 .TakeWhile(p => p.Name == providerName)
                 .ToList(); //Getting list for case of there are more than one provider with same name
 
-            if (isGranted == null)
+            foreach (var provider in providers)
             {
-                foreach (var provider in providers)
-                {
-                    await provider.ClearAsync(permission, providerKey);
-                }
-            }
-            else
-            {
-                foreach (var provider in providers)
-                {
-                    await provider.SetAsync(permission, isGranted.Value, providerKey);
-                }
+                await provider.SetAsync(permission, isGranted, providerKey);
             }
         }
 

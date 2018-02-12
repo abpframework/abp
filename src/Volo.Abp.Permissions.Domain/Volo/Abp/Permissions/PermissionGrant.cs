@@ -9,8 +9,6 @@ namespace Volo.Abp.Permissions
         [NotNull]
         public virtual string Name { get; protected set; }
 
-        public virtual bool IsGranted { get; internal set; }
-
         [CanBeNull]
         public virtual string ProviderName { get; protected set; }
 
@@ -25,7 +23,6 @@ namespace Volo.Abp.Permissions
         public PermissionGrant(
             Guid id,
             [NotNull] string name,
-            bool isGranted,
             [CanBeNull] string providerName = null,
             [CanBeNull] string providerKey = null)
         {
@@ -33,7 +30,6 @@ namespace Volo.Abp.Permissions
 
             Id = id;
             Name = name;
-            IsGranted = isGranted;
             ProviderName = providerName;
             ProviderKey = providerKey;
         }

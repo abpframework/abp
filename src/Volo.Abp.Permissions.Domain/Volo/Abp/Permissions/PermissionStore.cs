@@ -14,34 +14,31 @@ namespace Volo.Abp.Permissions
             _permissionGrantRepository = permissionGrantRepository;
         }
 
-        public async Task<bool?> IsGrantedAsync(string name, string providerName, string providerKey)
+        public async Task<bool> IsGrantedAsync(string name, string providerName, string providerKey)
         {
-            var permissionGrant = await _permissionGrantRepository.FindAsync(name, providerName, providerKey);
-            return permissionGrant?.IsGranted;
+            return await _permissionGrantRepository.FindAsync(name, providerName, providerKey) != null;
         }
 
-        public async Task SetAsync(string name, bool isGranted, string providerName, string providerKey)
+        public async Task AddAsync(string name, string providerName, string providerKey)
         {
             var permissionGrant = await _permissionGrantRepository.FindAsync(name, providerName, providerKey);
-            if (permissionGrant == null)
+            if (permissionGrant != null)
             {
-                permissionGrant = new PermissionGrant(GuidGenerator.Create(), name, isGranted, providerName, providerKey);
-                await _permissionGrantRepository.InsertAsync(permissionGrant);
+                return;
             }
-            else
-            {
-                permissionGrant.IsGranted = isGranted;
-                await _permissionGrantRepository.UpdateAsync(permissionGrant);
-            }
+
+            await _permissionGrantRepository.InsertAsync(
+                new PermissionGrant(GuidGenerator.Create(), name, providerName, providerKey)
+            );
         }
 
-        public async Task<List<PermissionGrantInfo>> GetListAsync(string providerName, string providerKey)
+        public async Task<List<string>> GetAllGrantedAsync(string providerName, string providerKey)
         {
             var permissionGrants = await _permissionGrantRepository.GetListAsync(providerName, providerKey);
-            return permissionGrants.Select(s => new PermissionGrantInfo(s.Name, s.IsGranted)).ToList();
+            return permissionGrants.Select(s => s.Name).ToList();
         }
 
-        public async Task DeleteAsync(string name, string providerName, string providerKey)
+        public async Task RemoveAsync(string name, string providerName, string providerKey)
         {
             var permissionGrant = await _permissionGrantRepository.FindAsync(name, providerName, providerKey);
             if (permissionGrant != null)

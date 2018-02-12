@@ -64,7 +64,16 @@ namespace Volo.Abp.Session
                 return Task.CompletedTask;
             }
 
-            return PermissionStore.SetAsync(permission.Name, isGranted, Name, userId.ToString());
+            //TODO: Seperate SetAsync to AddGrant / RemoveGrant
+
+            if (isGranted)
+            {
+                return PermissionStore.AddAsync(permission.Name, Name, userId.ToString());
+            }
+            else
+            {
+                return PermissionStore.RemoveAsync(permission.Name, Name, userId.ToString());
+            }
         }
 
         public override Task ClearAsync(PermissionDefinition permission, string providerKey)
@@ -76,7 +85,7 @@ namespace Volo.Abp.Session
                 return Task.CompletedTask;
             }
 
-            return PermissionStore.DeleteAsync(permission.Name, Name, providerKey);
+            return PermissionStore.RemoveAsync(permission.Name, Name, providerKey);
         }
     }
 }
