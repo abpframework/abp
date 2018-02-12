@@ -50,7 +50,7 @@ namespace Volo.Abp.Permissions
             Check.NotNull(name, nameof(name));
             Check.NotNull(providerName, nameof(providerName));
 
-            return IsGrantedInternalAsync(name, providerName, providerKey, fallback);
+            return IsGrantedInternalAsync(name, providerName, providerKey);
         }
 
         public virtual async Task<bool> IsGrantedInternalAsync(string name, string providerName, string providerKey, bool fallback = true)
@@ -71,7 +71,7 @@ namespace Volo.Abp.Permissions
 
             foreach (var provider in providers)
             {
-                var value = await provider.IsGrantedAsync(permission, providerKey);
+                var value = await provider.IsGrantedAsync(permission, providerName, providerKey);
                 if (value != null)
                 {
                     return value.Value;
@@ -150,7 +150,9 @@ namespace Volo.Abp.Permissions
             }
         }
 
-        protected virtual async Task<List<PermissionGrantInfo>> GetAllFromProvidersAsync([NotNull] List<IPermissionValueProvider> providers, [CanBeNull] string providerKey)
+        protected virtual async Task<List<PermissionGrantInfo>> GetAllFromProvidersAsync(
+            [NotNull] List<IPermissionValueProvider> providers,
+            [CanBeNull] string providerKey)
         {
             var permissionDefinitions = PermissionDefinitionManager.GetAll();
             var permissionGrantInfos = new Dictionary<string, PermissionGrantInfo>();
@@ -161,7 +163,7 @@ namespace Volo.Abp.Permissions
 
                 foreach (var provider in providers)
                 {
-                    var value = await provider.IsGrantedAsync(permission, providerKey);
+                    var value = await provider.IsGrantedAsync(permission, provider.Name, providerKey);
                     if (value != null)
                     {
                         permissionGrantInfos[permission.Name] =

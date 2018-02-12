@@ -17,7 +17,7 @@ namespace Volo.Abp.Session
             CurrentUser = currentUser;
         }
 
-        public override async Task<bool?> IsGrantedAsync(PermissionDefinition permission, string providerKey)
+        public override async Task<bool?> IsGrantedAsync(PermissionDefinition permission, string providerName, string providerKey)
         {
             if (providerKey == null)
             {
