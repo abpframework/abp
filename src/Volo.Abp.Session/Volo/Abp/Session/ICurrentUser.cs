@@ -17,7 +17,15 @@ namespace Volo.Abp.Session
         [CanBeNull]
         string Email { get; }
 
+        [NotNull]
+        string[] Roles { get; }
+
         [CanBeNull]
         Claim FindClaim(string claimType);
+
+        [NotNull]
+        Claim[] FindClaims(string claimType);
+
+        bool IsInRole(string roleName);
     }
 }

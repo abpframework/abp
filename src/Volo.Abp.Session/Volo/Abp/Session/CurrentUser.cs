@@ -8,6 +8,8 @@ namespace Volo.Abp.Session
 {
     public class CurrentUser : ICurrentUser, ITransientDependency
     {
+        private static readonly Claim[] EmptyClaimsArray = new Claim[0];
+
         public virtual bool IsAuthenticated => Id.HasValue;
 
         public virtual Guid? Id
@@ -28,6 +30,8 @@ namespace Volo.Abp.Session
 
         public virtual string Email => this.FindClaimValue(AbpClaimTypes.Email);
 
+        public virtual string[] Roles => FindClaims(AbpClaimTypes.Role).Select(c => c.Value).ToArray();
+
         private readonly ICurrentPrincipalAccessor _principalAccessor;
 
         public CurrentUser(ICurrentPrincipalAccessor principalAccessor)
@@ -38,6 +42,16 @@ namespace Volo.Abp.Session
         public virtual Claim FindClaim(string claimType)
         {
             return _principalAccessor.Principal?.Claims.FirstOrDefault(c => c.Type == claimType);
+        }
+
+        public virtual Claim[] FindClaims(string claimType)
+        {
+            return _principalAccessor.Principal?.Claims.Where(c => c.Type == claimType).ToArray() ?? EmptyClaimsArray;
+        }
+
+        public bool IsInRole(string roleName)
+        {
+            return FindClaims(AbpClaimTypes.Role).Any(c => c.Value == roleName);
         }
     }
 }
