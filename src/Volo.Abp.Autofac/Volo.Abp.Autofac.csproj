@@ -14,7 +14,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Autofac.Extras.DynamicProxy" Version="4.3.0" />
+    <PackageReference Include="Autofac.Extras.DynamicProxy" Version="4.4.0" />
   </ItemGroup>
 
   <ItemGroup>
