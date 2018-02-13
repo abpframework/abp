@@ -12,7 +12,8 @@ namespace Volo.Abp.Permissions
     {
         protected IPermissionDefinitionManager PermissionDefinitionManager { get; }
 
-        protected Lazy<List<IPermissionValueProvider>> Providers { get; }
+        protected List<IPermissionValueProvider> Providers => _lazyProviders.Value;
+        private readonly Lazy<List<IPermissionValueProvider>> _lazyProviders;
 
         protected PermissionOptions Options { get; }
 
@@ -24,7 +25,7 @@ namespace Volo.Abp.Permissions
             PermissionDefinitionManager = permissionDefinitionManager;
             Options = options.Value;
 
-            Providers = new Lazy<List<IPermissionValueProvider>>(
+            _lazyProviders = new Lazy<List<IPermissionValueProvider>>(
                 () => Options
                     .ValueProviders
                     .Select(c => serviceProvider.GetRequiredService(c) as IPermissionValueProvider)
@@ -33,11 +34,11 @@ namespace Volo.Abp.Permissions
             );
         }
 
-        public async Task<bool> IsGrantedAsync(string name)
+        public virtual async Task<bool> IsGrantedAsync(string name)
         {
             var permission = PermissionDefinitionManager.Get(name);
 
-            foreach (var provider in Providers.Value)
+            foreach (var provider in Providers)
             {
                 if (await provider.IsGrantedAsync(permission))
                 {
@@ -61,9 +62,9 @@ namespace Volo.Abp.Permissions
             return permissionGrantInfos.Values.ToList();
         }
 
-        private async Task<PermissionGrantInfo> GetPermissionGrantInfo(PermissionDefinition permission)
+        protected virtual async Task<PermissionGrantInfo> GetPermissionGrantInfo(PermissionDefinition permission)
         {
-            foreach (var provider in Providers.Value)
+            foreach (var provider in Providers)
             {
                 if (await provider.IsGrantedAsync(permission))
                 {

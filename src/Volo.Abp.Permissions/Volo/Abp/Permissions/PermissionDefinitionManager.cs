@@ -10,9 +10,11 @@ namespace Volo.Abp.Permissions
 {
     public class PermissionDefinitionManager : IPermissionDefinitionManager, ISingletonDependency
     {
-        protected Lazy<List<IPermissionDefinitionProvider>> Providers { get; }
+        protected List<IPermissionDefinitionProvider> Providers => _lazyProviders.Value;
+        private readonly Lazy<List<IPermissionDefinitionProvider>> _lazyProviders;
 
-        protected Lazy<IDictionary<string, PermissionDefinition>> PermissionDefinitions { get; }
+        protected IDictionary<string, PermissionDefinition> PermissionDefinitions => _lazyPermissionDefinitions.Value;
+        private readonly Lazy<IDictionary<string, PermissionDefinition>> _lazyPermissionDefinitions;
 
         protected PermissionOptions Options { get; }
 
@@ -25,8 +27,8 @@ namespace Volo.Abp.Permissions
             _serviceProvider = serviceProvider;
             Options = options.Value;
 
-            Providers = new Lazy<List<IPermissionDefinitionProvider>>(CreatePermissionProviders, true);
-            PermissionDefinitions = new Lazy<IDictionary<string, PermissionDefinition>>(CreatePermissionDefinitions, true);
+            _lazyProviders = new Lazy<List<IPermissionDefinitionProvider>>(CreatePermissionProviders, true);
+            _lazyPermissionDefinitions = new Lazy<IDictionary<string, PermissionDefinition>>(CreatePermissionDefinitions, true);
         }
 
         public virtual PermissionDefinition Get(string name)
@@ -45,12 +47,12 @@ namespace Volo.Abp.Permissions
 
         public virtual IReadOnlyList<PermissionDefinition> GetAll()
         {
-            return PermissionDefinitions.Value.Values.ToImmutableList();
+            return PermissionDefinitions.Values.ToImmutableList();
         }
 
         public virtual PermissionDefinition GetOrNull(string name)
         {
-            return PermissionDefinitions.Value.GetOrDefault(name);
+            return PermissionDefinitions.GetOrDefault(name);
         }
 
         protected virtual List<IPermissionDefinitionProvider> CreatePermissionProviders()
@@ -65,7 +67,7 @@ namespace Volo.Abp.Permissions
         {
             var permissions = new Dictionary<string, PermissionDefinition>();
 
-            foreach (var provider in Providers.Value)
+            foreach (var provider in Providers)
             {
                 provider.Define(new PermissionDefinitionContext(permissions));
             }
