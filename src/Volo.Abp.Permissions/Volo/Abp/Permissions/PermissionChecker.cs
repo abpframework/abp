@@ -34,19 +34,11 @@ namespace Volo.Abp.Permissions
             );
         }
 
-        public virtual async Task<bool> IsGrantedAsync(string name)
+        public Task<PermissionGrantInfo> CheckAsync(string name)
         {
             var permission = PermissionDefinitionManager.Get(name);
 
-            foreach (var provider in Providers)
-            {
-                if (await provider.IsGrantedAsync(permission))
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            return GetPermissionGrantInfo(permission);
         }
 
         public virtual async Task<List<PermissionGrantInfo>> GetAllAsync()
@@ -66,9 +58,10 @@ namespace Volo.Abp.Permissions
         {
             foreach (var provider in Providers)
             {
-                if (await provider.IsGrantedAsync(permission))
+                var result = await provider.CheckAsync(permission);
+                if (result.IsGranted)
                 {
-                    return new PermissionGrantInfo(permission.Name, true, provider.Name);
+                    return new PermissionGrantInfo(permission.Name, true, provider.Name, result.ProviderKey);
                 }
             }
 

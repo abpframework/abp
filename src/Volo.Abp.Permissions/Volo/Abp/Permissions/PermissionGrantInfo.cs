@@ -10,13 +10,16 @@ namespace Volo.Abp.Permissions
 
         public string ProviderName { get; }
 
-        public PermissionGrantInfo([NotNull] string name, bool isGranted, [CanBeNull] string providerName = null)
+        public string ProviderKey { get; }
+
+        public PermissionGrantInfo([NotNull] string name, bool isGranted, [CanBeNull] string providerName = null, [CanBeNull] string providerKey = null)
         {
             Check.NotNull(name, nameof(name));
 
             Name = name;
             IsGranted = isGranted;
             ProviderName = providerName;
+            ProviderKey = providerKey;
         }
     }
 }

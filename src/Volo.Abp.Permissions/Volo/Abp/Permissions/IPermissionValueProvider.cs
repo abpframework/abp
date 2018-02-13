@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using JetBrains.Annotations;
 
 namespace Volo.Abp.Permissions
 {
@@ -7,10 +6,6 @@ namespace Volo.Abp.Permissions
     {
         string Name { get; }
 
-        //Task SetAsync([NotNull] PermissionDefinition permission, bool isGranted, [CanBeNull] string providerKey);
-
-        //Task ClearAsync([NotNull] PermissionDefinition permission, [CanBeNull] string providerKey);
-
-        Task<bool> IsGrantedAsync(PermissionDefinition permission);
+        Task<PermissionValueProviderGrantInfo> CheckAsync(PermissionDefinition permission);
     }
 }

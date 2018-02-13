@@ -17,14 +17,17 @@ namespace Volo.Abp.Session
             CurrentUser = currentUser;
         }
 
-        public override async Task<bool> IsGrantedAsync(PermissionDefinition permission)
+        public override async Task<PermissionValueProviderGrantInfo> CheckAsync(PermissionDefinition permission)
         {
             if (CurrentUser.Id == null)
             {
-                return false;
+                return PermissionValueProviderGrantInfo.NonGranted;
             }
 
-            return await PermissionStore.IsGrantedAsync(permission.Name, Name, CurrentUser.Id.Value.ToString());
+            return new PermissionValueProviderGrantInfo(
+                await PermissionStore.IsGrantedAsync(permission.Name, Name, CurrentUser.Id.Value.ToString()),
+                CurrentUser.Id.ToString()
+            );
         }
     }
 }
