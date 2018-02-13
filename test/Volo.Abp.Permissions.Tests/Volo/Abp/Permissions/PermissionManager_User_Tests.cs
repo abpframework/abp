@@ -86,22 +86,6 @@ namespace Volo.Abp.Permissions
         //    permission.ShouldContain(p => p.Name == "MyPermission1" && !p.IsGranted);
         //}
 
-        [Fact]
-        public async Task Should_Get_List_Of_Granted_Permissions_For_Current_User()
-        {
-            //User1
-            _currentUserId = PermissionTestDataBuilder.User1Id;
-            var permission = await _permissionChecker.GetAllAsync();
-            permission.Count.ShouldBeGreaterThan(0);
-            permission.ShouldContain(p => p.Name == "MyPermission1" && p.IsGranted && p.ProviderName == UserPermissionValueProvider.ProviderName);
-
-            //User2
-            _currentUserId = PermissionTestDataBuilder.User2Id;
-            permission = await _permissionChecker.GetAllAsync();
-            permission.Count.ShouldBeGreaterThan(0);
-            permission.ShouldContain(p => p.Name == "MyPermission1" && !p.IsGranted);
-        }
-
         //[Fact]
         //public async Task Should_Grant_Permission_For_A_User()
         //{

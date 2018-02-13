@@ -258,17 +258,23 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Settings.Domain.Sh
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Abp.Settings", "Abp.Settings", "{D62B8D43-B8D9-4FC6-97E2-DC54CD765915}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Permissions", "src\Volo.Abp.Permissions\Volo.Abp.Permissions.csproj", "{0FDD21F9-9E73-4DB5-8356-A110D3FBDB1D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Permissions", "src\Volo.Abp.Permissions\Volo.Abp.Permissions.csproj", "{0FDD21F9-9E73-4DB5-8356-A110D3FBDB1D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Abp.Permissions", "Abp.Permissions", "{055F4AC0-46C4-4E99-89CD-0F30D4A97382}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Permissions.Domain", "src\Volo.Abp.Permissions.Domain\Volo.Abp.Permissions.Domain.csproj", "{D77E0662-8404-43C5-9C46-6289EA207A40}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Permissions.Domain", "src\Volo.Abp.Permissions.Domain\Volo.Abp.Permissions.Domain.csproj", "{D77E0662-8404-43C5-9C46-6289EA207A40}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Permissions.Domain.Shared", "src\Volo.Abp.Permissions.Domain.Shared\Volo.Abp.Permissions.Domain.Shared.csproj", "{E4D0326C-515D-46FA-AF7E-1AC32155BD03}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Permissions.Domain.Shared", "src\Volo.Abp.Permissions.Domain.Shared\Volo.Abp.Permissions.Domain.Shared.csproj", "{E4D0326C-515D-46FA-AF7E-1AC32155BD03}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Permissions.EntityFrameworkCore", "src\Volo.Abp.Permissions.EntityFrameworkCore\Volo.Abp.Permissions.EntityFrameworkCore.csproj", "{2300E155-2621-4FCF-BD44-B61BA5A92B82}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Permissions.EntityFrameworkCore", "src\Volo.Abp.Permissions.EntityFrameworkCore\Volo.Abp.Permissions.EntityFrameworkCore.csproj", "{2300E155-2621-4FCF-BD44-B61BA5A92B82}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Permissions.Tests", "test\Volo.Abp.Permissions.Tests\Volo.Abp.Permissions.Tests.csproj", "{7B4D2BEB-DE3E-4533-8CD4-7BBB30414647}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Permissions.Web", "src\Volo.Abp.Permissions.Web\Volo.Abp.Permissions.Web.csproj", "{8859CFE4-BC7F-4F29-B6B5-A9457435CC32}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Permissions.Application.Contracts", "src\Volo.Abp.Permissions.Application.Contracts\Volo.Abp.Permissions.Application.Contracts.csproj", "{837ABFF5-66EE-486A-8023-8DD3EE7D7D96}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Permissions.Application", "src\Volo.Abp.Permissions.Application\Volo.Abp.Permissions.Application.csproj", "{90197499-CBB6-4C8C-90E6-8718CD755C04}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -704,6 +710,18 @@ Global
 		{7B4D2BEB-DE3E-4533-8CD4-7BBB30414647}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7B4D2BEB-DE3E-4533-8CD4-7BBB30414647}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7B4D2BEB-DE3E-4533-8CD4-7BBB30414647}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8859CFE4-BC7F-4F29-B6B5-A9457435CC32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8859CFE4-BC7F-4F29-B6B5-A9457435CC32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8859CFE4-BC7F-4F29-B6B5-A9457435CC32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8859CFE4-BC7F-4F29-B6B5-A9457435CC32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{837ABFF5-66EE-486A-8023-8DD3EE7D7D96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{837ABFF5-66EE-486A-8023-8DD3EE7D7D96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{837ABFF5-66EE-486A-8023-8DD3EE7D7D96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{837ABFF5-66EE-486A-8023-8DD3EE7D7D96}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90197499-CBB6-4C8C-90E6-8718CD755C04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90197499-CBB6-4C8C-90E6-8718CD755C04}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90197499-CBB6-4C8C-90E6-8718CD755C04}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90197499-CBB6-4C8C-90E6-8718CD755C04}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -835,6 +853,9 @@ Global
 		{E4D0326C-515D-46FA-AF7E-1AC32155BD03} = {055F4AC0-46C4-4E99-89CD-0F30D4A97382}
 		{2300E155-2621-4FCF-BD44-B61BA5A92B82} = {055F4AC0-46C4-4E99-89CD-0F30D4A97382}
 		{7B4D2BEB-DE3E-4533-8CD4-7BBB30414647} = {37087D1B-3693-4E96-983D-A69F210BDE53}
+		{8859CFE4-BC7F-4F29-B6B5-A9457435CC32} = {055F4AC0-46C4-4E99-89CD-0F30D4A97382}
+		{837ABFF5-66EE-486A-8023-8DD3EE7D7D96} = {055F4AC0-46C4-4E99-89CD-0F30D4A97382}
+		{90197499-CBB6-4C8C-90E6-8718CD755C04} = {055F4AC0-46C4-4E99-89CD-0F30D4A97382}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB97ECF4-9A84-433F-A80B-2A3285BDD1D5}

@@ -16,5 +16,7 @@ namespace Volo.Abp.Application.Services
           - AbpSession
           - ...
          */
+
+        //TODO: Add IPermissionChecker (but before split layers of DDD!)
     }
 }

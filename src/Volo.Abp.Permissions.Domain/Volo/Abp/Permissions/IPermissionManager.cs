@@ -10,7 +10,7 @@ namespace Volo.Abp.Permissions
 
         Task<List<string>> GetAllGrantedAsync([NotNull] string providerName, [NotNull] string providerKey);
 
-        Task GrantAsync( [NotNull] string providerName, [NotNull] string providerKey, [NotNull] string name);
+        Task GrantAsync([NotNull] string name, [NotNull] string providerName, [NotNull] string providerKey);
 
         Task RevokeAsync([NotNull] string name, [NotNull] string providerName, [NotNull] string providerKey);
     }

@@ -8,7 +8,7 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Permissions
 {
-    public class PermissionChecker : IPermissionChecker, ITransientDependency
+    public class PermissionChecker : IPermissionChecker, ISingletonDependency
     {
         protected IPermissionDefinitionManager PermissionDefinitionManager { get; }
 
@@ -39,19 +39,6 @@ namespace Volo.Abp.Permissions
             var permission = PermissionDefinitionManager.Get(name);
 
             return GetPermissionGrantInfo(permission);
-        }
-
-        public virtual async Task<List<PermissionGrantInfo>> GetAllAsync()
-        {
-            var permissionDefinitions = PermissionDefinitionManager.GetAll();
-            var permissionGrantInfos = new Dictionary<string, PermissionGrantInfo>();
-
-            foreach (var permission in permissionDefinitions)
-            {
-                permissionGrantInfos[permission.Name] = await GetPermissionGrantInfo(permission);
-            }
-
-            return permissionGrantInfos.Values.ToList();
         }
 
         protected virtual async Task<PermissionGrantInfo> GetPermissionGrantInfo(PermissionDefinition permission)

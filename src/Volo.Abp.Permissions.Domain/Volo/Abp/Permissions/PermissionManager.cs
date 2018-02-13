@@ -41,11 +41,11 @@ namespace Volo.Abp.Permissions
                 .ToList();
         }
 
-        public async Task GrantAsync(string providerName, string providerKey, string name)
+        public async Task GrantAsync(string name, string providerName, string providerKey)
         {
+            Check.NotNull(name, nameof(name));
             Check.NotNull(providerName, nameof(providerName));
             Check.NotNull(providerKey, nameof(providerKey));
-            Check.NotNull(name, nameof(name));
 
             if (await IsGrantedAsync(providerName, providerKey, name))
             {

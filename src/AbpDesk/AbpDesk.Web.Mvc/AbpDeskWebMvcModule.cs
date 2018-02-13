@@ -79,6 +79,8 @@ namespace AbpDesk.Web.Mvc
 
             var authentication = services.AddAuthentication();
 
+            services.AddAuthorization();
+
             authentication.AddIdentityServerAuthentication("Bearer", options =>
             {
                 options.Authority = "http://localhost:59980";
