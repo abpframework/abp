@@ -1,19 +1,22 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 
 namespace Volo.Abp.Permissions
 {
     public class PermissionDefinitionContext : IPermissionDefinitionContext
     {
-        protected Dictionary<string, PermissionDefinition> Permissions { get; }
+        internal Dictionary<string, PermissionDefinition> Permissions { get; }
 
-        public PermissionDefinitionContext(Dictionary<string, PermissionDefinition> permissions)
+        public PermissionDefinitionContext()
         {
-            Permissions = permissions;
+            Permissions = new Dictionary<string, PermissionDefinition>();
         }
 
         public virtual PermissionDefinition GetOrNull(string name)
         {
+            Check.NotNull(name, nameof(name));
+
             return Permissions.GetOrDefault(name);
         }
 
@@ -22,16 +25,45 @@ namespace Volo.Abp.Permissions
             return Permissions.Values.ToImmutableList();
         }
 
-        public virtual void Add(params PermissionDefinition[] definitions)
+        public virtual PermissionDefinition Add(string name)
         {
-            if (definitions.IsNullOrEmpty())
+            Check.NotNull(name, nameof(name));
+
+            if (Permissions.ContainsKey(name))
             {
-                return;
+                throw new AbpException($"There is already an existing permission with name: {name}");
             }
 
-            foreach (var definition in definitions)
+            return Permissions[name] = new PermissionDefinition(name);
+        }
+
+        internal void HandleNewChildren()
+        {
+            Permissions.Values
+                .SelectMany(p => p.Children)
+                .ToList()
+                .ForEach(AddPermissionRecursively);
+        }
+
+        private void AddPermissionRecursively(PermissionDefinition permission)
+        {
+            //Prevent multiple adding of same named permission.
+            if (Permissions.TryGetValue(permission.Name, out var existingPermission))
             {
-                Permissions[definition.Name] = definition;
+                if (existingPermission != permission)
+                {
+                    throw new AbpException("Duplicate permission name detected for " + permission.Name);
+                }
+            }
+            else
+            {
+                Permissions[permission.Name] = permission;
+            }
+
+            //Add child permissions (recursive call)
+            foreach (var childPermission in permission.Children)
+            {
+                AddPermissionRecursively(childPermission);
             }
         }
     }

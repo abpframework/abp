@@ -21,6 +21,7 @@ namespace Volo.Abp.Session
             services.Configure<PermissionOptions>(options =>
             {
                 options.ValueProviders.Add<UserPermissionValueProvider>();
+                options.ValueProviders.Add<RolePermissionValueProvider>();
             });
 
             services.AddAssemblyOf<AbpSessionModule>();

@@ -1,4 +1,7 @@
-﻿namespace Volo.Abp.Permissions
+﻿using System.Collections.Generic;
+using System.Collections.Immutable;
+
+namespace Volo.Abp.Permissions
 {
     public class PermissionDefinition
     {
@@ -13,19 +16,41 @@
         /// </summary>
         public PermissionDefinition Parent { get; private set; }
 
-        //TODO: Add Properties dictionary for custom stuff
+        public IReadOnlyList<PermissionDefinition> Children => _children.ToImmutableList();
+        private readonly List<PermissionDefinition> _children;
 
-        public PermissionDefinition(string name)
+        public Dictionary<string, object> Properties { get; set; }
+
+        /// <summary>
+        /// Gets/sets a key-value on the <see cref="Properties"/>.
+        /// </summary>
+        /// <param name="name">Name of the property</param>
+        /// <returns>
+        /// Returns the value in the <see cref="Properties"/> dictionary by given <see cref="name"/>.
+        /// Returns null if given <see cref="name"/> is not present in the <see cref="Properties"/> dictionary.
+        /// </returns>
+        public object this[string name]
         {
-            Name = name;
+            get => Properties.GetOrDefault(name);
+            set => Properties[name] = value;
         }
 
-        public PermissionDefinition CreateChild(string name)
+        protected internal PermissionDefinition(string name)
         {
-            return new PermissionDefinition(name)
+            Name = name;
+            _children = new List<PermissionDefinition>();
+        }
+
+        public virtual PermissionDefinition AddChild(string name)
+        {
+            var child = new PermissionDefinition(name)
             {
                 Parent = this
             };
+
+            _children.Add(child);
+
+            return child;
         }
 
         public override string ToString()

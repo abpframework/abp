@@ -1,9 +1,11 @@
-﻿namespace Volo.Abp.Permissions
+﻿using JetBrains.Annotations;
+
+namespace Volo.Abp.Permissions
 {
     public interface IPermissionDefinitionContext
     {
-        PermissionDefinition GetOrNull(string name);
+        PermissionDefinition GetOrNull([NotNull] string name);
 
-        void Add(params PermissionDefinition[] definitions);
+        PermissionDefinition Add([NotNull] string name);
     }
 }

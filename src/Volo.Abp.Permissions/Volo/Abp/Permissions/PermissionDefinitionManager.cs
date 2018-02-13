@@ -65,14 +65,15 @@ namespace Volo.Abp.Permissions
 
         protected virtual IDictionary<string, PermissionDefinition> CreatePermissionDefinitions()
         {
-            var permissions = new Dictionary<string, PermissionDefinition>();
+            var context = new PermissionDefinitionContext();
 
             foreach (var provider in Providers)
             {
-                provider.Define(new PermissionDefinitionContext(permissions));
+                provider.Define(context);
+                context.HandleNewChildren();
             }
 
-            return permissions;
+            return context.Permissions;
         }
     }
 }
