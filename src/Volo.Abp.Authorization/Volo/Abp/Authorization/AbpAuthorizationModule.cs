@@ -7,6 +7,11 @@ namespace Volo.Abp.Authorization
     {
         public override void ConfigureServices(IServiceCollection services)
         {
+            services.AddAuthorization(options =>
+            {
+                
+            });
+
             services.AddAssemblyOf<AbpAuthorizationModule>();
         }
     }

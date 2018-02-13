@@ -1,9 +1,11 @@
 ﻿@page
 @using AbpDesk.Web.Mvc.Pages.App.Tickets
+@using Volo.Abp.Session
 @model AbpDesk.Web.Mvc.Pages.App.Tickets.IndexModel
+@inject ICurrentUser CurrentUser;
 
 @section styles
-{
+    {
     <link rel="stylesheet" type="text/css" href="~/global-styles.css" />
 }
 
@@ -16,5 +18,20 @@
             <h3>@ticket.Title</h3>
             <p>@ticket.Body</p>
         </li>
+    }
+</ul>
+
+<p>
+    Roles: @CurrentUser.Roles.JoinAsString(", ") <br />
+    IsInRole Supporter: @User.IsInRole("Supporter") <br />
+    IsInRole Supporter: @CurrentUser.IsInRole("Supporter")
+</p>
+
+<h4>Claims</h4>
+
+<ul>
+    @foreach (var claim in User.Claims)
+    {
+        <li>@claim.Type : @claim.Value</li>
     }
 </ul>

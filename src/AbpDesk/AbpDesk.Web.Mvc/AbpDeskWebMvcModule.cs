@@ -79,7 +79,13 @@ namespace AbpDesk.Web.Mvc
 
             var authentication = services.AddAuthentication();
 
-            services.AddAuthorization();
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("RequirePhoneNumber", policy =>
+                {
+                    policy.RequireClaim("phone_number");
+                });
+            });
 
             authentication.AddIdentityServerAuthentication("Bearer", options =>
             {
