@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Volo.Abp.Permissions.Web.Pages.AbpPermissions;
 
 namespace Volo.Abp.Permissions.Web
 {
@@ -6,11 +7,9 @@ namespace Volo.Abp.Permissions.Web
     {
         public AbpPermissionsWebAutoMapperProfile()
         {
-        }
-
-        private void CreatePermissionMappings()
-        {
-            //...
+            CreateMap<PermissionGroupDto, PermissionManagementModal.PermissionGroupViewModel>();
+            CreateMap<PermissionGrantInfoDto, PermissionManagementModal.PermissionGrantInfoViewModel>();
+            CreateMap<ProviderInfoDto, PermissionManagementModal.ProviderInfoViewModel>();
         }
     }
 }

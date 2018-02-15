@@ -2,6 +2,7 @@
 
     var l = abp.localization.getResource('AbpIdentity');
     var _identityRoleAppService = volo.abp.identity.identityRole;
+    var _permissionsModal = new abp.ModalManager(abp.appPath + 'AbpPermissions/PermissionManagementModal');
 
     var _editModal = new abp.ModalManager({
         viewUrl: abp.appPath + 'Identity/Roles/EditModal'
@@ -38,34 +39,46 @@
                     rowAction: {
                         text: '<i class="fa fa-cog"></i> ' + l('Actions') + ' <span class="caret"></span>',
                         items:
-                        [
-                            {
-                                text: l('Edit'),
-                                visible: function () {
-                                    return true;
+                            [
+                                {
+                                    text: l('Edit'),
+                                    visible: function () {
+                                        return true;
+                                    },
+                                    action: function (data) {
+                                        _editModal.open({
+                                            id: data.record.id
+                                        });
+                                    }
                                 },
-                                action: function (data) {
-                                    _editModal.open({
-                                        id: data.record.id
-                                    });
-                                }
-                            },
-                            {
-                                text: l('Delete'),
-                                visible: function () {
-                                    return true;
+                                {
+                                    text: 'Permissions', //TODO: Localize
+                                    visible: function () {
+                                        return true;
+                                    },
+                                    action: function (data) {
+                                        _permissionsModal.open({
+                                            providerName: 'Role',
+                                            providerKey: data.record.name
+                                        });
+                                    }
                                 },
-                                action: function (data) {
-                                    if (confirm(l('UserDeletionConfirmationMessage', data.record.name))) {
-                                        _identityRoleAppService
-                                            .delete(data.record.id)
-                                            .then(function () {
-                                                _dataTable.ajax.reload();
-                                            });
+                                {
+                                    text: l('Delete'),
+                                    visible: function () {
+                                        return true;
+                                    },
+                                    action: function (data) {
+                                        if (confirm(l('UserDeletionConfirmationMessage', data.record.name))) {
+                                            _identityRoleAppService
+                                                .delete(data.record.id)
+                                                .then(function () {
+                                                    _dataTable.ajax.reload();
+                                                });
+                                        }
                                     }
                                 }
-                            }
-                        ]
+                            ]
                     }
                 },
                 {

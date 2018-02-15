@@ -1,0 +1,57 @@
+﻿@page
+@using Volo.Abp.Permissions.Web.Pages.AbpPermissions
+@model PermissionManagementModal
+@{
+    Layout = null;
+}
+
+<form method="post" asp-page="/AbpPermissions/PermissionManagementModal">
+
+    <abp-modal>
+
+        <abp-modal-header title="Permissions"></abp-modal-header>
+
+        <abp-modal-body>
+
+            <input asp-for="@Model.ProviderKey" />
+            <input asp-for="@Model.ProviderName" />
+
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                        @for (var i = 0; i < Model.Groups.Count; i++)
+                {
+                    var normalizedGroupName = Model.Groups[i].Name.Replace(".", "_");
+                    <a class="nav-link @(i == 0 ? "active" : "")" id="v-pills-tab-@normalizedGroupName" data-toggle="pill" href="#v-pills-@normalizedGroupName" role="tab" aria-controls="v-pills-@normalizedGroupName" aria-selected="false">@Model.Groups[i].DisplayName</a>
+        }
+                    </div>
+                </div>
+                <div class="col-sm-9">
+                    <div class="tab-content" id="v-pills-tabContent">
+                        @for (var i = 0; i < Model.Groups.Count; i++)
+                {
+                    var normalizedGroupName = Model.Groups[i].Name.Replace(".", "_");
+                    <div class="tab-pane fade @(i == 0 ? "show active" : "")" id="v-pills-@normalizedGroupName" role="tabpanel" aria-labelledby="v-pills-tab-@normalizedGroupName">
+                        @for (var j = 0; j < Model.Groups[i].Permissions.Count; j++)
+                {
+                    <div class="form-check">
+                        <label asp-for="@Model.Groups[i].Permissions[j].IsGranted" class="form-check-label">
+                            <input asp-for="@Model.Groups[i].Permissions[j].IsGranted" class="form-check-input" />
+                            @Model.Groups[i].Permissions[j].DisplayName
+                        </label>
+                    </div>
+                    <input asp-for="@Model.Groups[i].Permissions[j].Name" />
+        }
+                    </div>
+        }
+                    </div>
+                </div>
+            </div>
+
+        </abp-modal-body>
+
+        <abp-modal-footer></abp-modal-footer>
+
+    </abp-modal>
+
+</form>

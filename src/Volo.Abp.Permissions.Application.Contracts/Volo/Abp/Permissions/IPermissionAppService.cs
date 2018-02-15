@@ -9,7 +9,7 @@ namespace Volo.Abp.Permissions
     {
         Task<PermissionGrantInfoDto> GetAsync([NotNull] string name, [NotNull] string providerName, [NotNull] string providerKey);
 
-        Task<List<PermissionGrantInfoDto>> GetListAsync([NotNull] string providerName, [NotNull] string providerKey);
+        Task<GetPermissionListResultDto> GetListAsync([NotNull] string providerName, [NotNull] string providerKey);
 
         Task UpdateAsync([NotNull] string providerName, [NotNull] string providerKey, UpdatePermissionsDto input);
     }

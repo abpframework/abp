@@ -17,8 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Remove="Localization\Resources\AbpPermissions\en.json" />
-    <EmbeddedResource Remove="Localization\Resources\AbpPermissions\tr.json" />
+    <EmbeddedResource Remove="Pages\AbpPermissions\_ViewImports.cshtml" />
   </ItemGroup>
 
   <ItemGroup>

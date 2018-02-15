@@ -6,6 +6,7 @@ using Volo.Abp.Identity.Web.Localization.Resources.AbpIdentity;
 using Volo.Abp.Identity.Web.Navigation;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
+using Volo.Abp.Permissions.Web;
 using Volo.Abp.Ui.Navigation;
 using Volo.Abp.VirtualFileSystem;
 
@@ -14,6 +15,7 @@ namespace Volo.Abp.Identity.Web
     [DependsOn(typeof(AbpIdentityApplicationContractsModule))]
     [DependsOn(typeof(AbpAspNetCoreMvcUiBootstrapModule))]
     [DependsOn(typeof(AbpAutoMapperModule))]
+    [DependsOn(typeof(AbpPermissionsWebModule))]
     public class AbpIdentityWebModule : AbpModule
     {
         public override void PreConfigureServices(IServiceCollection services)
