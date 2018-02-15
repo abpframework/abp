@@ -21,6 +21,8 @@ namespace Volo.Abp.Permissions
 
         public async Task<GetPermissionListResultDto> GetListAsync(string providerName, string providerKey)
         {
+            var permissionInfos = await _permissionManager.GetAllAsync(providerName, providerKey);
+            
             return new GetPermissionListResultDto
             {
                 Groups = new List<PermissionGroupDto>

@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using AbpDesk.EntityFrameworkCore;
 using AbpDesk.Web.Mvc.Navigation;
+using AbpDesk.Web.Mvc.Permissions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Localization;
@@ -76,6 +77,11 @@ namespace AbpDesk.Web.Mvc
             services.Configure<NavigationOptions>(options =>
             {
                 options.MenuContributors.Add(new MainMenuContributor());
+            });
+
+            services.Configure<PermissionOptions>(options =>
+            {
+                options.DefinitionProviders.Add<AbpDeskPermissionDefinitionProvider>();
             });
 
             //services.Configure<RemoteServiceOptions>(configuration); //Needed when we use Volo.Abp.Identity.HttpApi.Client

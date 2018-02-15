@@ -11,22 +11,25 @@ namespace Volo.Abp.Permissions
 
         public static Task<bool> IsGrantedForUserAsync(this IPermissionManager permissionManager, [NotNull] string name, Guid userId)
         {
-            return permissionManager.IsGrantedAsync(name, ProviderName, userId.ToString());
+            throw new NotImplementedException();
+            //return permissionManager.GetAsync(name, ProviderName, userId.ToString());
         }
 
-        public static Task<List<string>> GetAllGrantedForUserAsync(this IPermissionManager permissionManager, Guid userId)
+        public static Task<List<PermissionWithGrantedProviders>> GetAllAsync(this IPermissionManager permissionManager, Guid userId)
         {
-            return permissionManager.GetAllGrantedAsync(ProviderName, userId.ToString());
+            return permissionManager.GetAllAsync(ProviderName, userId.ToString());
         }
         
         public static Task GrantForUserAsync(this IPermissionManager permissionManager, Guid userId, [NotNull] string name)
         {
-            return permissionManager.GrantAsync(name, ProviderName, userId.ToString());
+            throw new NotImplementedException();
+            //return permissionManager.GrantAsync(name, ProviderName, userId.ToString());
         }
 
         public static Task RevokeForUserAsync(this IPermissionManager permissionManager, Guid userId, [NotNull] string name)
         {
-            return permissionManager.RevokeAsync(name, ProviderName, userId.ToString());
+            throw new NotImplementedException();
+            //return permissionManager.RevokeAsync(name, ProviderName, userId.ToString());
         }
     }
 }

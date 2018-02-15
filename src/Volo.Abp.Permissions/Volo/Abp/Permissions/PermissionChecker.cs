@@ -12,10 +12,11 @@ namespace Volo.Abp.Permissions
     {
         protected IPermissionDefinitionManager PermissionDefinitionManager { get; }
 
-        protected List<IPermissionValueProvider> Providers => _lazyProviders.Value;
-        private readonly Lazy<List<IPermissionValueProvider>> _lazyProviders;
+        protected IReadOnlyList<IPermissionValueProvider> ValueProviders => _lazyProviders.Value;
 
         protected PermissionOptions Options { get; }
+
+        private readonly Lazy<List<IPermissionValueProvider>> _lazyProviders;
 
         public PermissionChecker(
             IOptions<PermissionOptions> options,
@@ -34,6 +35,7 @@ namespace Volo.Abp.Permissions
             );
         }
 
+
         public Task<PermissionGrantInfo> CheckAsync(string name)
         {
             var permission = PermissionDefinitionManager.Get(name);
@@ -43,7 +45,7 @@ namespace Volo.Abp.Permissions
 
         protected virtual async Task<PermissionGrantInfo> GetPermissionGrantInfo(PermissionDefinition permission)
         {
-            foreach (var provider in Providers)
+            foreach (var provider in ValueProviders)
             {
                 var result = await provider.CheckAsync(permission);
                 if (result.IsGranted)

@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
-using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Permissions
 {
-    public abstract class PermissionValueProvider : IPermissionValueProvider, ISingletonDependency
+    public abstract class PermissionValueProvider : IPermissionValueProvider
     {
         public abstract string Name { get; }
 
