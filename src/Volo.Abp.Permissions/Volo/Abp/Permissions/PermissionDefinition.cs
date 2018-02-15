@@ -19,7 +19,7 @@ namespace Volo.Abp.Permissions
         public IReadOnlyList<PermissionDefinition> Children => _children.ToImmutableList();
         private readonly List<PermissionDefinition> _children;
 
-        public Dictionary<string, object> Properties { get; set; }
+        public Dictionary<string, object> Properties { get; }
 
         /// <summary>
         /// Gets/sets a key-value on the <see cref="Properties"/>.
@@ -38,6 +38,8 @@ namespace Volo.Abp.Permissions
         protected internal PermissionDefinition(string name)
         {
             Name = name;
+
+            Properties = new Dictionary<string, object>();
             _children = new List<PermissionDefinition>();
         }
 
@@ -55,7 +57,7 @@ namespace Volo.Abp.Permissions
 
         public override string ToString()
         {
-            return $"[Permission {Name}]";
+            return $"[{nameof(PermissionDefinition)} {Name}]";
         }
     }
 }

@@ -4,8 +4,8 @@ namespace Volo.Abp.Permissions
 {
     public interface IPermissionDefinitionContext
     {
-        PermissionDefinition GetOrNull([NotNull] string name);
+        //TODO: Add Get methods to find and modify a permission or group.
 
-        PermissionDefinition Add([NotNull] string name);
+        PermissionGroupDefinition AddGroup([NotNull] string name);
     }
 }

@@ -4,9 +4,11 @@
     {
         public override void Define(IPermissionDefinitionContext context)
         {
-            context.Add("MyPermission1");
+            var testGroup = context.AddGroup("TestGroup");
 
-            var myPermission2 = context.Add("MyPermission2");
+            testGroup.AddPermission("MyPermission1");
+
+            var myPermission2 = testGroup.AddPermission("MyPermission2");
             myPermission2.AddChild("MyPermission2.ChildPermission1");
         }
     }

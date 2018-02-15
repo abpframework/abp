@@ -8,10 +8,14 @@ namespace Volo.Abp.Permissions
     public class PermissionAppService : ApplicationService, IPermissionAppService
     {
         private readonly IPermissionManager _permissionManager;
+        private readonly IPermissionDefinitionManager _permissionDefinitionManager;
 
-        public PermissionAppService(IPermissionManager permissionManager)
+        public PermissionAppService(
+            IPermissionManager permissionManager, 
+            IPermissionDefinitionManager permissionDefinitionManager)
         {
             _permissionManager = permissionManager;
+            _permissionDefinitionManager = permissionDefinitionManager;
         }
 
         public async Task<PermissionGrantInfoDto> GetAsync(string name, string providerName, string providerKey)
@@ -21,109 +25,50 @@ namespace Volo.Abp.Permissions
 
         public async Task<GetPermissionListResultDto> GetListAsync(string providerName, string providerKey)
         {
-            var permissionInfos = await _permissionManager.GetAllAsync(providerName, providerKey);
-            
-            return new GetPermissionListResultDto
+            var result = new GetPermissionListResultDto
             {
-                Groups = new List<PermissionGroupDto>
-                {
-                    new PermissionGroupDto
-                    {
-                        Name = "Volo.Calendar",
-                        DisplayName = "Calendar",
-                        Permissions = new List<PermissionGrantInfoDto>
-                        {
-                            new PermissionGrantInfoDto
-                            {
-                                Name = "CalendarManagement",
-                                DisplayName = "Calendar management",
-                                ParentName = null,
-                                IsGranted = true,
-                                Providers = new List<ProviderInfoDto>
-                                {
-                                    new ProviderInfoDto
-                                    {
-                                        ProviderKey = "Role",
-                                        ProviderName = "Moderator"
-                                    },
-                                    new ProviderInfoDto
-                                    {
-                                        ProviderKey = "OU",
-                                        ProviderName = "44238045-6f18-44cd-8f1f-4e2d61ef1c81"
-                                    }
-                                }
-                            },
-                            new PermissionGrantInfoDto
-                            {
-                                Name = "CreateNewCalendar",
-                                DisplayName = "Create new calendar",
-                                ParentName = "CalendarManagement",
-                                IsGranted = true,
-                                Providers = new List<ProviderInfoDto>
-                                {
-                                    new ProviderInfoDto
-                                    {
-                                        ProviderKey = "User",
-                                        ProviderName = "bb3c2a2f-118d-4d2e-b1d5-e07f3b0a917c"
-                                    }
-                                }
-                            },
-                            new PermissionGrantInfoDto
-                            {
-                                Name = "DeleteExistingCalendars",
-                                DisplayName = "Delete existing calendars",
-                                ParentName = "CalendarManagement",
-                                IsGranted = false
-                            }
-                        }
-                    },
-                    new PermissionGroupDto
-                    {
-                        Name = "Volo.Identity",
-                        DisplayName = "Identity",
-                        Permissions = new List<PermissionGrantInfoDto>
-                        {
-                            new PermissionGrantInfoDto
-                            {
-                                Name = "UserManagement",
-                                DisplayName = "User management",
-                                ParentName = null,
-                                IsGranted = true,
-                                Providers = new List<ProviderInfoDto>
-                                {
-                                    new ProviderInfoDto
-                                    {
-                                        ProviderKey = "Role",
-                                        ProviderName = "Administrator"
-                                    }
-                                }
-                            },
-                            new PermissionGrantInfoDto
-                            {
-                                Name = "CreateNewUser",
-                                DisplayName = "Create new user",
-                                ParentName = "UserManagement",
-                                IsGranted = true,
-                                Providers = new List<ProviderInfoDto>
-                                {
-                                    new ProviderInfoDto
-                                    {
-                                        ProviderKey = "User",
-                                        ProviderName = "bb3c2a2f-118d-4d2e-b1d5-e07f3b0a917c"
-                                    }
-                                }
-                            },
-                            new PermissionGrantInfoDto
-                            {
-                                Name = "DeleteExistingUsers",
-                                DisplayName = "Delete existing users",
-                                ParentName = "UserManagement",
-                                IsGranted = false
-                            }
-                        }
-                    }
-                }
+                Groups = new List<PermissionGroupDto>()
             };
+
+            foreach (var group in _permissionDefinitionManager.GetGroups())
+            {
+                var groupDto = new PermissionGroupDto
+                {
+                    Name = group.Name,
+                    DisplayName = group.Name, //TODO: DisplayName
+                    Permissions = new List<PermissionGrantInfoDto>()
+                };
+
+                foreach (var permission in group.GetPermissionsWithChildren())
+                {
+                    var grantInfoDto = new PermissionGrantInfoDto
+                    {
+                        Name = permission.Name,
+                        DisplayName = permission.Name, //TODO: Add DisplayName to permission definition
+                        ParentName = permission.Parent?.Name,
+                        Providers = new List<ProviderInfoDto>()
+                    };
+
+                    var grantInfo = await _permissionManager.GetAsync(permission.Name, providerName, providerKey);
+
+                    grantInfoDto.IsGranted = grantInfo.IsGranted;
+
+                    foreach (var provider in grantInfo.Providers)
+                    {
+                        grantInfoDto.Providers.Add(new ProviderInfoDto
+                        {
+                            ProviderName = provider.Name,
+                            ProviderKey = provider.Key,
+                        });
+                    }
+
+                    groupDto.Permissions.Add(grantInfoDto);
+                }
+
+                result.Groups.Add(groupDto);
+            }
+
+            return result;
         }
 
         public async Task UpdateAsync(string providerName, string providerKey, UpdatePermissionsDto input)

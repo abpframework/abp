@@ -104,28 +104,38 @@ namespace Volo.Abp.Permissions
         //    await PermissionGrantRepository.DeleteAsync(grant);
         //}
 
+        public async Task<PermissionWithGrantedProviders> GetAsync(string name, string providerName, string providerKey)
+        {
+            return await GetInternalAsync(PermissionDefinitionManager.Get(name), providerName, providerKey);
+        }
+
         public async Task<List<PermissionWithGrantedProviders>> GetAllAsync(string providerName, string providerKey)
         {
             var results = new List<PermissionWithGrantedProviders>();
 
-            foreach (var permissionDefinition in PermissionDefinitionManager.GetAll())
+            foreach (var permissionDefinition in PermissionDefinitionManager.GetPermissions())
             {
-                var result = new PermissionWithGrantedProviders(permissionDefinition.Name, false);
-
-                foreach (var provider in ManagementProviders)
-                {
-                    var providerResult = await provider.CheckAsync(permissionDefinition.Name, providerName, providerKey);
-                    if (providerResult.IsGranted)
-                    {
-                        result.IsGranted = true;
-                        result.Providers.Add(new PermissionValueProviderInfo(provider.Name, providerResult.ProviderKey));
-                    }
-                }
-
-                results.Add(result);
+                results.Add(await GetInternalAsync(permissionDefinition, providerName, providerKey));
             }
 
             return results;
+        }
+
+        public async Task<PermissionWithGrantedProviders> GetInternalAsync(PermissionDefinition permissionDefinition, string providerName, string providerKey)
+        {
+            var result = new PermissionWithGrantedProviders(permissionDefinition.Name, false);
+
+            foreach (var provider in ManagementProviders)
+            {
+                var providerResult = await provider.CheckAsync(permissionDefinition.Name, providerName, providerKey);
+                if (providerResult.IsGranted)
+                {
+                    result.IsGranted = true;
+                    result.Providers.Add(new PermissionValueProviderInfo(provider.Name, providerResult.ProviderKey));
+                }
+            }
+
+            return result;
         }
     }
 }

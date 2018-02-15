@@ -6,7 +6,7 @@ namespace Volo.Abp.Permissions
 {
     public interface IPermissionManager
     {
-        //Task<PermissionWithGrantedProviders> GetAsync([NotNull]string name, [NotNull] string providerName, [NotNull] string providerKey);
+        Task<PermissionWithGrantedProviders> GetAsync(string name, string providerName, string providerKey);
 
         Task<List<PermissionWithGrantedProviders>> GetAllAsync([NotNull] string providerName, [NotNull] string providerKey);
 

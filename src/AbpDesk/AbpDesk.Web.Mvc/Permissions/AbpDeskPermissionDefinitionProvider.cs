@@ -2,17 +2,26 @@
 
 namespace AbpDesk.Web.Mvc.Permissions
 {
-    public class AbpDeskPermissionDefinitionProvider : IPermissionDefinitionProvider
+    public class AbpDeskPermissionDefinitionProvider : PermissionDefinitionProvider
     {
-        public void Define(IPermissionDefinitionContext context)
+        public override void Define(IPermissionDefinitionContext context)
         {
-            var tickets = context.Add("AbpDesk.Tickets");
+            var abpDeskGroup = context.AddGroup("AbpDesk");
+
+            var tickets = abpDeskGroup.AddPermission("AbpDesk.Tickets");
             tickets.AddChild("AbpDesk.Tickets.Reply");
             tickets.AddChild("AbpDesk.Tickets.Close");
 
-            var customers = context.Add("AbpDesk.Customers");
+            var customers = abpDeskGroup.AddPermission("AbpDesk.Customers");
             customers.AddChild("AbpDesk.Customers.Create");
             customers.AddChild("AbpDesk.Customers.Delete");
+
+            var identityGroup = context.AddGroup("Identity");
+
+            var userManagement = identityGroup.AddPermission("Identity.UserManagement");
+            userManagement.AddChild("Identity.UserManagement.Create");
+            userManagement.AddChild("Identity.UserManagement.Update");
+            userManagement.AddChild("Identity.UserManagement.Delete");
         }
     }
 }

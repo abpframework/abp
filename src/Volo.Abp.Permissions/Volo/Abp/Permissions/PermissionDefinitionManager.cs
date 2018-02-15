@@ -13,8 +13,11 @@ namespace Volo.Abp.Permissions
         protected List<IPermissionDefinitionProvider> Providers => _lazyProviders.Value;
         private readonly Lazy<List<IPermissionDefinitionProvider>> _lazyProviders;
 
+        protected IDictionary<string, PermissionGroupDefinition> PermissionGroupDefinitions => _lazyPermissionGroupDefinitions.Value;
+        private readonly Lazy<Dictionary<string, PermissionGroupDefinition>> _lazyPermissionGroupDefinitions;
+
         protected IDictionary<string, PermissionDefinition> PermissionDefinitions => _lazyPermissionDefinitions.Value;
-        private readonly Lazy<IDictionary<string, PermissionDefinition>> _lazyPermissionDefinitions;
+        private readonly Lazy<Dictionary<string, PermissionDefinition>> _lazyPermissionDefinitions;
 
         protected PermissionOptions Options { get; }
 
@@ -28,7 +31,8 @@ namespace Volo.Abp.Permissions
             Options = options.Value;
 
             _lazyProviders = new Lazy<List<IPermissionDefinitionProvider>>(CreatePermissionProviders, true);
-            _lazyPermissionDefinitions = new Lazy<IDictionary<string, PermissionDefinition>>(CreatePermissionDefinitions, true);
+            _lazyPermissionDefinitions = new Lazy<Dictionary<string, PermissionDefinition>>(CreatePermissionDefinitions, true);
+            _lazyPermissionGroupDefinitions = new Lazy<Dictionary<string, PermissionGroupDefinition>>(CreatePermissionGroupDefinitions, true);
         }
 
         public virtual PermissionDefinition Get(string name)
@@ -45,9 +49,14 @@ namespace Volo.Abp.Permissions
             return permission;
         }
 
-        public virtual IReadOnlyList<PermissionDefinition> GetAll()
+        public virtual IReadOnlyList<PermissionDefinition> GetPermissions()
         {
             return PermissionDefinitions.Values.ToImmutableList();
+        }
+
+        public IReadOnlyList<PermissionGroupDefinition> GetGroups()
+        {
+            return PermissionGroupDefinitions.Values.ToImmutableList();
         }
 
         public virtual PermissionDefinition GetOrNull(string name)
@@ -63,17 +72,46 @@ namespace Volo.Abp.Permissions
                 .ToList();
         }
 
-        protected virtual IDictionary<string, PermissionDefinition> CreatePermissionDefinitions()
+        protected virtual Dictionary<string, PermissionDefinition> CreatePermissionDefinitions()
+        {
+            var permissions = new Dictionary<string, PermissionDefinition>();
+
+            foreach (var groupDefinition in PermissionGroupDefinitions.Values)
+            {
+                foreach (var permission in groupDefinition.Permissions)
+                {
+                    AddPermissionToDictionaryRecursively(permissions, permission);
+                }
+            }
+
+            return permissions;
+        }
+
+        protected virtual void AddPermissionToDictionaryRecursively(Dictionary<string, PermissionDefinition> permissions, PermissionDefinition permission)
+        {
+            if (permissions.ContainsKey(permission.Name))
+            {
+                throw new AbpException("Duplicate permission name: " + permission.Name);
+            }
+
+            permissions[permission.Name] = permission;
+
+            foreach (var child in permission.Children)
+            {
+                AddPermissionToDictionaryRecursively(permissions, child);
+            }
+        }
+
+        protected virtual Dictionary<string, PermissionGroupDefinition> CreatePermissionGroupDefinitions()
         {
             var context = new PermissionDefinitionContext();
 
             foreach (var provider in Providers)
             {
                 provider.Define(context);
-                context.HandleNewChildren();
             }
 
-            return context.Permissions;
+            return context.Groups;
         }
     }
 }
