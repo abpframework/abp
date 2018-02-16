@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
 
-namespace Volo.Abp.Permissions
+namespace Volo.Abp.Authorization.Permissions
 {
     public class PermissionGroupDefinition //TODO: Consider to make possible a group have sub groups
     {

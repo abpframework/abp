@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Permissions
+namespace Volo.Abp.Authorization.Permissions
 {
     public class NullPermissionStore : IPermissionStore, ISingletonDependency
     {

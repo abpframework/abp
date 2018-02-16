@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
 
@@ -44,9 +45,9 @@ namespace Volo.Abp.Permissions
             );
         }
 
-        public async Task<PermissionWithGrantedProviders> GetAsync(string name, string providerName, string providerKey)
+        public async Task<PermissionWithGrantedProviders> GetAsync(string permissionName, string providerName, string providerKey)
         {
-            return await GetInternalAsync(PermissionDefinitionManager.Get(name), providerName, providerKey);
+            return await GetInternalAsync(PermissionDefinitionManager.Get(permissionName), providerName, providerKey);
         }
 
         public async Task<List<PermissionWithGrantedProviders>> GetAllAsync(string providerName, string providerKey)
@@ -61,9 +62,9 @@ namespace Volo.Abp.Permissions
             return results;
         }
 
-        public async Task SetAsync(string name, string providerName, string providerKey, bool isGranted)
+        public async Task SetAsync(string permissionName, string providerName, string providerKey, bool isGranted)
         {
-            var currentGrantInfo = await GetAsync(name, providerName, providerKey);
+            var currentGrantInfo = await GetAsync(permissionName, providerName, providerKey);
             if (currentGrantInfo.IsGranted == isGranted)
             {
                 return;
@@ -72,7 +73,7 @@ namespace Volo.Abp.Permissions
             if (currentGrantInfo.IsGranted == false)
             {
                 var provider = ManagementProviders.FirstOrDefault(m => m.Name == providerName);
-                await provider.GrantAsync(name, providerKey);
+                await provider.GrantAsync(permissionName, providerKey);
             }
             else
             {
@@ -82,7 +83,7 @@ namespace Volo.Abp.Permissions
                 }
 
                 var provider = ManagementProviders.FirstOrDefault(m => m.Name == providerName);
-                await provider.RevokeAsync(name, providerKey);
+                await provider.RevokeAsync(permissionName, providerKey);
             }
         }
 

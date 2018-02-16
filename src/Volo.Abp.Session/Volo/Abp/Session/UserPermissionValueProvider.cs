@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Volo.Abp.Permissions;
+using Volo.Abp.Authorization.Permissions;
 
 namespace Volo.Abp.Session
 {

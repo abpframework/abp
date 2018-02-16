@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Shouldly;
+using Volo.Abp.Authorization.Permissions;
 using Xunit;
 
 namespace Volo.Abp.Permissions

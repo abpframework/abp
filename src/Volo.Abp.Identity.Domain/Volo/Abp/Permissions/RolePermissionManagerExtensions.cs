@@ -8,6 +8,13 @@ namespace Volo.Abp.Permissions
 {
     public static class RolePermissionManagerExtensions
     {
+        public static Task<PermissionWithGrantedProviders> GetForRoleAsync([NotNull] this IPermissionManager permissionManager, string roleName, string permissionName)
+        {
+            Check.NotNull(permissionManager, nameof(permissionManager));
+
+            return permissionManager.GetAsync(permissionName, RolePermissionManagementProvider.ProviderName, roleName);
+        }
+
         public static Task<List<PermissionWithGrantedProviders>> GetAllForRoleAsync([NotNull] this IPermissionManager permissionManager, string roleName)
         {
             Check.NotNull(permissionManager, nameof(permissionManager));
@@ -15,11 +22,11 @@ namespace Volo.Abp.Permissions
             return permissionManager.GetAllAsync(RolePermissionManagementProvider.ProviderName, roleName);
         }
 
-        public static Task SetForRoleAsync([NotNull] this IPermissionManager permissionManager, string roleName, [NotNull] string name, bool isGranted)
+        public static Task SetForRoleAsync([NotNull] this IPermissionManager permissionManager, string roleName, [NotNull] string permissionName, bool isGranted)
         {
             Check.NotNull(permissionManager, nameof(permissionManager));
 
-            return permissionManager.SetAsync(name, RolePermissionManagementProvider.ProviderName, roleName, isGranted);
+            return permissionManager.SetAsync(permissionName, RolePermissionManagementProvider.ProviderName, roleName, isGranted);
         }
     }
 }

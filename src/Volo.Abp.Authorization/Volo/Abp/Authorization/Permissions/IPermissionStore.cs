@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.Permissions
+namespace Volo.Abp.Authorization.Permissions
 {
     public interface IPermissionStore
     {

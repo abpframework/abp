@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
 
-namespace Volo.Abp.Permissions
+namespace Volo.Abp.Authorization.Permissions
 {
     public class PermissionDefinitionContext : IPermissionDefinitionContext
     {

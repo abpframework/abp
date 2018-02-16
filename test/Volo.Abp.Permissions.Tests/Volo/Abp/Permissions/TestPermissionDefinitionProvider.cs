@@ -1,4 +1,6 @@
-﻿namespace Volo.Abp.Permissions
+﻿using Volo.Abp.Authorization.Permissions;
+
+namespace Volo.Abp.Permissions
 {
     public class TestPermissionDefinitionProvider : PermissionDefinitionProvider
     {

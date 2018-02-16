@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using Shouldly;
+using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Session;
 using Xunit;
 

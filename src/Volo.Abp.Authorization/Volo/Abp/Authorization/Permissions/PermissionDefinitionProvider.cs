@@ -1,4 +1,4 @@
-﻿namespace Volo.Abp.Permissions
+﻿namespace Volo.Abp.Authorization.Permissions
 {
     public abstract class PermissionDefinitionProvider : IPermissionDefinitionProvider
     {

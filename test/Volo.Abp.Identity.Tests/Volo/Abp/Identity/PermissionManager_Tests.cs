@@ -41,6 +41,22 @@ namespace Volo.Abp.Identity
         }
 
         [Fact]
+        public async Task Should_Grant_Permission_To_Role()
+        {
+            (await _permissionManager.GetForRoleAsync("supporter", TestPermissionNames.MyPermission2)).IsGranted.ShouldBeFalse();
+            await _permissionManager.SetForRoleAsync("supporter", TestPermissionNames.MyPermission2, true);
+            (await _permissionManager.GetForRoleAsync("supporter", TestPermissionNames.MyPermission2)).IsGranted.ShouldBeTrue();
+        }
+
+        [Fact]
+        public async Task Should_Revoke_Permission_From_Role()
+        {
+            (await _permissionManager.GetForRoleAsync("moderator", TestPermissionNames.MyPermission1)).IsGranted.ShouldBeTrue();
+            await _permissionManager.SetForRoleAsync("moderator", TestPermissionNames.MyPermission1, false);
+            (await _permissionManager.GetForRoleAsync("moderator", TestPermissionNames.MyPermission1)).IsGranted.ShouldBeFalse();
+        }
+
+        [Fact]
         public async Task Users_Should_Have_Configured_Values()
         {
             //administrator

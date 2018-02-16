@@ -1,4 +1,5 @@
-﻿using Volo.Abp.Permissions;
+﻿using Volo.Abp.Authorization.Permissions;
+using Volo.Abp.Permissions;
 
 namespace AbpDesk.Web.Mvc.Permissions
 {

@@ -36,7 +36,7 @@ namespace AbpDesk.Web.Mvc.Controllers
             return Content("OK: AllowedPermission");
         }
         
-        [RequirePermission("NotAllowedPermission")]
+        [RequiresPermission("NotAllowedPermission")]
         public ContentResult NotAllowedPermissionTest()
         {
             return Content("OK: NotAllowedPermission");

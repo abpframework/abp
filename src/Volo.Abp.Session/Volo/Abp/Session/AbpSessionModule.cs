@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Authorization;
+using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Modularity;
-using Volo.Abp.Permissions;
 using Volo.Abp.Security;
 using Volo.Abp.Settings;
 
@@ -8,7 +9,7 @@ namespace Volo.Abp.Session
 {
     [DependsOn(typeof(AbpSecurityModule))]
     [DependsOn(typeof(AbpSettingsModule))]
-    [DependsOn(typeof(AbpPermissionsModule))]
+    [DependsOn(typeof(AbpAuthorizationModule))]
     public class AbpSessionModule : AbpModule
     {
         public override void ConfigureServices(IServiceCollection services)
