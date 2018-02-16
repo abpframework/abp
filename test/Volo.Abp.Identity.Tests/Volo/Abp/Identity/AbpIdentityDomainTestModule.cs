@@ -5,13 +5,16 @@ using Volo.Abp.Autofac;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.Modularity;
+using Volo.Abp.Permissions;
+using Volo.Abp.Permissions.EntityFrameworkCore;
 using Volo.Abp.Uow;
 
 namespace Volo.Abp.Identity
 {
     [DependsOn(
         typeof(AbpIdentityDomainModule), 
-        typeof(AbpIdentityEntityFrameworkCoreModule), 
+        typeof(AbpIdentityEntityFrameworkCoreModule),
+        typeof(AbpPermissionsEntityFrameworkCoreModule),
         typeof(AbpAutofacModule))]
     public class AbpIdentityDomainTestModule : AbpModule
     {
@@ -32,6 +35,11 @@ namespace Volo.Abp.Identity
             services.Configure<UnitOfWorkDefaultOptions>(options =>
             {
                 options.TransactionBehavior = UnitOfWorkTransactionBehavior.Disabled; //EF in-memory database does not support transactions
+            });
+
+            services.Configure<PermissionOptions>(options =>
+            {
+                options.DefinitionProviders.Add<IdentityTestPermissionDefinitionProvider>();
             });
 
             services.AddAssemblyOf<AbpIdentityDomainTestModule>();

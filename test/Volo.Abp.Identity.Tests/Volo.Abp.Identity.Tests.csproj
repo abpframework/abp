@@ -14,6 +14,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
     <ProjectReference Include="..\..\src\Volo.Abp.Identity.Domain\Volo.Abp.Identity.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Volo.Abp.Permissions.EntityFrameworkCore\Volo.Abp.Permissions.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\AbpTestBase\AbpTestBase.csproj" />
     <ProjectReference Include="..\..\src\Volo.Abp.Identity.EntityFrameworkCore\Volo.Abp.Identity.EntityFrameworkCore.csproj" />
   </ItemGroup>
