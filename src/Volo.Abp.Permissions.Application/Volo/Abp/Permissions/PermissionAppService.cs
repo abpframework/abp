@@ -18,12 +18,7 @@ namespace Volo.Abp.Permissions
             _permissionDefinitionManager = permissionDefinitionManager;
         }
 
-        public async Task<PermissionGrantInfoDto> GetAsync(string name, string providerName, string providerKey)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<GetPermissionListResultDto> GetListAsync(string providerName, string providerKey)
+        public async Task<GetPermissionListResultDto> GetAsync(string providerName, string providerKey)
         {
             var result = new GetPermissionListResultDto
             {
