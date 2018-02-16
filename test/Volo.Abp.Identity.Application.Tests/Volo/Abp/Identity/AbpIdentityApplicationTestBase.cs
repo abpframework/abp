@@ -1,12 +1,7 @@
-﻿using Volo.Abp.TestBase;
-
-namespace Volo.Abp.Identity
+﻿namespace Volo.Abp.Identity
 {
-    public class AbpIdentityApplicationTestBase : AbpIntegratedTest<AbpIdentityApplicationTestModule>
+    public class AbpIdentityApplicationTestBase : AbpIdentityCommonTestBase<AbpIdentityApplicationTestModule>
     {
-        protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
-        {
-            options.UseAutofac();
-        }
+
     }
 }

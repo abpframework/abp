@@ -2,12 +2,12 @@
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.Domain.Repositories;
-using Volo.Abp.TestBase;
+using Volo.Abp.DynamicProxy;
 using Xunit;
 
 namespace Volo.Abp.Identity
 {
-    public class Initialize_Tests : AbpIntegratedTest<AbpIdentityTestModule>
+    public class Identity_Repository_Resolve_Tests : AbpIdentityDomainTestBase
     {
         [Fact]
         public void Should_Resolve_UserManager()
@@ -24,12 +24,13 @@ namespace Volo.Abp.Identity
         [Fact] //Move this test to Volo.Abp.EntityFrameworkCore.Tests since it's actually testing the EF Core repository registration!
         public void Should_Resolve_Repositories()
         {
-            (ServiceProvider.GetRequiredService<IIdentityUserRepository>() is EfCoreIdentityUserRepository).ShouldBeTrue();
+            var x = ServiceProvider.GetRequiredService<IIdentityUserRepository>();
+            (ProxyHelper.UnProxy(ServiceProvider.GetRequiredService<IIdentityUserRepository>()) is EfCoreIdentityUserRepository).ShouldBeTrue();
 
-            (ServiceProvider.GetRequiredService<IBasicRepository<IdentityUser, Guid>>() is EfCoreIdentityUserRepository).ShouldBeTrue();
+            (ProxyHelper.UnProxy(ServiceProvider.GetRequiredService<IBasicRepository<IdentityUser, Guid>>()) is EfCoreIdentityUserRepository).ShouldBeTrue();
             //(ServiceProvider.GetRequiredService<IRepository<IdentityUser>>() is EfCoreIdentityUserRepository).ShouldBeTrue();
 
-            (ServiceProvider.GetRequiredService<IRepository<IdentityUser, Guid>>() is EfCoreIdentityUserRepository).ShouldBeTrue();
+            (ProxyHelper.UnProxy(ServiceProvider.GetRequiredService<IRepository<IdentityUser, Guid>>()) is EfCoreIdentityUserRepository).ShouldBeTrue();
             //(ServiceProvider.GetRequiredService<IQueryableRepository<IdentityUser>>() is EfCoreIdentityUserRepository).ShouldBeTrue();
         }
     }
