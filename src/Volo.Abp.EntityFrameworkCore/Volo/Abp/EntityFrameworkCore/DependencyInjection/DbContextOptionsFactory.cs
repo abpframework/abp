@@ -16,8 +16,9 @@ namespace Volo.Abp.EntityFrameworkCore.DependencyInjection
 
             var context = new AbpDbContextConfigurationContext<TDbContext>(
                 creationContext.ConnectionString,
+                serviceProvider,
                 creationContext.ConnectionStringName,
-                serviceProvider
+                creationContext.ExistingConnection
             );
 
             var dbContextOptions = GetDbContextOptions<TDbContext>(serviceProvider);
