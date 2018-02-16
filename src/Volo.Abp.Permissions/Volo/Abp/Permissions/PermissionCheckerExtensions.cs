@@ -8,5 +8,7 @@ namespace Volo.Abp.Permissions
         {
             return (await permissionChecker.CheckAsync(name)).IsGranted;
         }
+
+        //TODO: Add sync extensions
     }
 }

@@ -7,7 +7,9 @@ namespace Volo.Abp.Identity
 {
     public class RolePermissionManagementProvider : PermissionManagementProvider
     {
-        public override string Name => "Role";
+        public const string ProviderName = "Role";
+
+        public override string Name => ProviderName;
 
         private readonly IIdentityUserRepository _identityUserRepository;
 
@@ -39,8 +41,8 @@ namespace Volo.Abp.Identity
 
                 foreach (var roleName in roleNames)
                 {
-                    var pg = await PermissionGrantRepository.FindAsync(name, providerName, roleName);
-                    if (pg != null)
+                    var permissionGrant = await PermissionGrantRepository.FindAsync(name, providerName, roleName);
+                    if (permissionGrant != null)
                     {
                         return new PermissionValueProviderGrantInfo(true, roleName);
                     }

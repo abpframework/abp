@@ -1,33 +1,22 @@
-﻿using System.Threading.Tasks;
-using Volo.Abp.Guids;
+﻿using Volo.Abp.Guids;
 using Volo.Abp.Permissions;
 
 namespace Volo.Abp.Identity
 {
     public class UserPermissionManagementProvider : PermissionManagementProvider
     {
-        public override string Name => "User";
+        public const string ProviderName = "User"; //TODO: Share a common string with UserPermissionValueProvider (same is true for the role)
+
+        public override string Name => ProviderName;
 
         public UserPermissionManagementProvider(IPermissionGrantRepository 
             permissionGrantRepository, 
             IGuidGenerator guidGenerator) 
             : base(
-                permissionGrantRepository, 
+                permissionGrantRepository,
                 guidGenerator)
         {
-        }
 
-        public override async Task<PermissionValueProviderGrantInfo> CheckAsync(string name, string providerName, string providerKey)
-        {
-            if (providerName != Name)
-            {
-                return PermissionValueProviderGrantInfo.NonGranted;
-            }
-
-            return new PermissionValueProviderGrantInfo(
-                await PermissionGrantRepository.FindAsync(name, providerName, providerKey) != null,
-                providerKey
-            );
         }
     }
 }

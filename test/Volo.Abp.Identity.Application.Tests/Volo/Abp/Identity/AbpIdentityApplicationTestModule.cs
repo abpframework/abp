@@ -9,7 +9,10 @@ using Volo.Abp.Uow;
 
 namespace Volo.Abp.Identity
 {
-    [DependsOn(typeof(AbpIdentityApplicationModule), typeof(AbpIdentityEntityFrameworkCoreModule), typeof(AbpAutofacModule))]
+    [DependsOn(
+        typeof(AbpIdentityApplicationModule), 
+        typeof(AbpIdentityEntityFrameworkCoreModule), 
+        typeof(AbpAutofacModule))]
     public class AbpIdentityApplicationTestModule : AbpModule
     {
         public override void ConfigureServices(IServiceCollection services)

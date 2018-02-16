@@ -6,13 +6,13 @@ using Volo.Abp.Identity;
 
 namespace Volo.Abp.Permissions
 {
-    public static class UserPermissionManagerExtensions
+    public static class RolePermissionManagerExtensions
     {
-        public static Task<List<PermissionWithGrantedProviders>> GetAllForUserAsync([NotNull] this IPermissionManager permissionManager, Guid userId)
+        public static Task<List<PermissionWithGrantedProviders>> GetAllForRoleAsync([NotNull] this IPermissionManager permissionManager, string roleName)
         {
             Check.NotNull(permissionManager, nameof(permissionManager));
 
-            return permissionManager.GetAllAsync(UserPermissionManagementProvider.ProviderName, userId.ToString());
+            return permissionManager.GetAllAsync(RolePermissionManagementProvider.ProviderName, roleName);
         }
 
         public static Task SetForUserAsync([NotNull] this IPermissionManager permissionManager, Guid userId, [NotNull] string name, bool isGranted)

@@ -20,7 +20,18 @@ namespace Volo.Abp.Permissions
         }
 
 
-        public abstract Task<PermissionValueProviderGrantInfo> CheckAsync(string name, string providerName, string providerKey);
+        public virtual async Task<PermissionValueProviderGrantInfo> CheckAsync(string name, string providerName, string providerKey)
+        {
+            if (providerName != Name)
+            {
+                return PermissionValueProviderGrantInfo.NonGranted;
+            }
+
+            return new PermissionValueProviderGrantInfo(
+                await PermissionGrantRepository.FindAsync(name, providerName, providerKey) != null,
+                providerKey
+            );
+        }
 
         public virtual async Task GrantAsync(string name, string providerKey)
         {
