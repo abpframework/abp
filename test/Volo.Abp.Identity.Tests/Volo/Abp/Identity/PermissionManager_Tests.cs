@@ -41,7 +41,7 @@ namespace Volo.Abp.Identity
         }
 
         [Fact]
-        public async Task User_Should_Have_Configured_Values()
+        public async Task Users_Should_Have_Configured_Values()
         {
             //administrator
             var user = GetUserAsync("administrator");
@@ -49,6 +49,20 @@ namespace Volo.Abp.Identity
             UserShouldHavePermission(grantInfos, user.Id, TestPermissionNames.MyPermission1, "admin");
             UserShouldHavePermission(grantInfos, user.Id, TestPermissionNames.MyPermission2, "admin");
             UserShouldHavePermission(grantInfos, user.Id, TestPermissionNames.MyPermission2_ChildPermission1, "admin");
+
+            //john.nash
+            user = GetUserAsync("john.nash");
+            grantInfos = await _permissionManager.GetAllForUserAsync(user.Id);
+            UserShouldHavePermission(grantInfos, user.Id, TestPermissionNames.MyPermission1, "moderator", "supporter");
+            UserShouldHavePermission(grantInfos, user.Id, TestPermissionNames.MyPermission2, "moderator");
+            ShouldNotHavePermission(grantInfos, TestPermissionNames.MyPermission2_ChildPermission1);
+
+            //john.nash
+            user = GetUserAsync("david");
+            grantInfos = await _permissionManager.GetAllForUserAsync(user.Id);
+            UserShouldHavePermission(grantInfos, user.Id, TestPermissionNames.MyPermission1);
+            ShouldNotHavePermission(grantInfos, TestPermissionNames.MyPermission2);
+            ShouldNotHavePermission(grantInfos, TestPermissionNames.MyPermission2_ChildPermission1);
         }
 
         private static void RoleShouldHavePermission(List<PermissionWithGrantedProviders> grantInfos, string roleName, string permissionName)
@@ -64,20 +78,20 @@ namespace Volo.Abp.Identity
             );
         }
 
+        private static void UserShouldHavePermission(List<PermissionWithGrantedProviders> grantInfos, Guid userId, string permissionName, params string[] inheritedRolesForThisPermission)
+        {
+            grantInfos.ShouldContain(
+                p => p.Name == permissionName &&
+                     p.IsGranted
+            );
+        }
+
         private static void ShouldNotHavePermission(List<PermissionWithGrantedProviders> grantInfos, string permissionName)
         {
             grantInfos.ShouldContain(
                 p => p.Name == permissionName &&
                      !p.IsGranted &&
                      p.Providers.Count == 0
-            );
-        }
-
-        private static void UserShouldHavePermission(List<PermissionWithGrantedProviders> grantInfos, Guid userId, string permissionName, params string[] inheritedRolesForThisPermission)
-        {
-            grantInfos.ShouldContain(
-                p => p.Name == permissionName &&
-                     p.IsGranted
             );
         }
     }
