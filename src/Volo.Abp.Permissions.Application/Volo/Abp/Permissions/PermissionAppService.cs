@@ -73,7 +73,10 @@ namespace Volo.Abp.Permissions
 
         public async Task UpdateAsync(string providerName, string providerKey, UpdatePermissionsDto input)
         {
-            
+            foreach (var permission in input.Permissions)
+            {
+                await _permissionManager.SetAsync(permission.Name, providerName, providerKey, permission.IsGranted);
+            }
         }
     }
 }

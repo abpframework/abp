@@ -1,21 +1,23 @@
 ﻿using System.Threading.Tasks;
-using Volo.Abp.DependencyInjection;
+using Volo.Abp.Guids;
 using Volo.Abp.Permissions;
 
 namespace Volo.Abp.Identity
 {
-    public class UserPermissionManagementProvider : IPermissionManagementProvider, ITransientDependency
+    public class UserPermissionManagementProvider : PermissionManagementProvider
     {
-        public string Name => "User";
+        public override string Name => "User";
 
-        private readonly IPermissionGrantRepository _permissionGrantRepository;
-
-        public UserPermissionManagementProvider(IPermissionGrantRepository permissionGrantRepository)
+        public UserPermissionManagementProvider(IPermissionGrantRepository 
+            permissionGrantRepository, 
+            IGuidGenerator guidGenerator) 
+            : base(
+                permissionGrantRepository, 
+                guidGenerator)
         {
-            _permissionGrantRepository = permissionGrantRepository;
         }
 
-        public async Task<PermissionValueProviderGrantInfo> CheckAsync(string name, string providerName, string providerKey)
+        public override async Task<PermissionValueProviderGrantInfo> CheckAsync(string name, string providerName, string providerKey)
         {
             if (providerName != Name)
             {
@@ -23,7 +25,7 @@ namespace Volo.Abp.Identity
             }
 
             return new PermissionValueProviderGrantInfo(
-                await _permissionGrantRepository.FindAsync(name, providerName, providerKey) != null,
+                await PermissionGrantRepository.FindAsync(name, providerName, providerKey) != null,
                 providerKey
             );
         }
