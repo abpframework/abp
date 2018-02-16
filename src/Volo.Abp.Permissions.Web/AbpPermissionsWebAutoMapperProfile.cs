@@ -8,7 +8,9 @@ namespace Volo.Abp.Permissions.Web
         public AbpPermissionsWebAutoMapperProfile()
         {
             CreateMap<PermissionGroupDto, PermissionManagementModal.PermissionGroupViewModel>();
+
             CreateMap<PermissionGrantInfoDto, PermissionManagementModal.PermissionGrantInfoViewModel>();
+
             CreateMap<ProviderInfoDto, PermissionManagementModal.ProviderInfoViewModel>();
         }
     }

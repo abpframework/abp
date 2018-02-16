@@ -67,6 +67,11 @@ namespace Volo.Abp.Permissions.Web.Pages.AbpPermissions
             public string DisplayName { get; set; }
 
             public List<PermissionGrantInfoViewModel> Permissions { get; set; }
+
+            public string GetNormalizedGroupName()
+            {
+                return Name.Replace(".", "_");
+            }
         }
 
         public class PermissionGrantInfoViewModel
@@ -82,6 +87,28 @@ namespace Volo.Abp.Permissions.Web.Pages.AbpPermissions
             public bool IsGranted { get; set; }
 
             public List<ProviderInfoViewModel> Providers { get; set; }
+
+            public bool IsDisabled(string currentProviderName)
+            {
+                return IsGranted && Providers.All(p => p.ProviderName != currentProviderName);
+            }
+
+            public string GetShownName(string currentProviderName)
+            {
+                if (!IsDisabled(currentProviderName))
+                {
+                    return DisplayName;
+                }
+
+                return string.Format(
+                    "{0} <span class=\"text-muted\">({1})</span>",
+                    DisplayName,
+                    Providers
+                        .Where(p => p.ProviderName != currentProviderName)
+                        .Select(p => p.ProviderName)
+                        .JoinAsString(", ")
+                );
+            }
         }
 
         public class ProviderInfoViewModel
