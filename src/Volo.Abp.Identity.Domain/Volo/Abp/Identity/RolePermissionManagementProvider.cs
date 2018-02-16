@@ -41,7 +41,7 @@ namespace Volo.Abp.Identity
 
                 foreach (var roleName in roleNames)
                 {
-                    var permissionGrant = await PermissionGrantRepository.FindAsync(name, providerName, roleName);
+                    var permissionGrant = await PermissionGrantRepository.FindAsync(name, Name, roleName);
                     if (permissionGrant != null)
                     {
                         return new PermissionValueProviderGrantInfo(true, roleName);

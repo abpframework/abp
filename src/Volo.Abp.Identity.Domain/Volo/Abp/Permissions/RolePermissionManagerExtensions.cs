@@ -15,11 +15,11 @@ namespace Volo.Abp.Permissions
             return permissionManager.GetAllAsync(RolePermissionManagementProvider.ProviderName, roleName);
         }
 
-        public static Task SetForUserAsync([NotNull] this IPermissionManager permissionManager, Guid userId, [NotNull] string name, bool isGranted)
+        public static Task SetForRoleAsync([NotNull] this IPermissionManager permissionManager, string roleName, [NotNull] string name, bool isGranted)
         {
             Check.NotNull(permissionManager, nameof(permissionManager));
 
-            return permissionManager.SetAsync(name, UserPermissionManagementProvider.ProviderName, userId.ToString(), isGranted);
+            return permissionManager.SetAsync(name, RolePermissionManagementProvider.ProviderName, roleName, isGranted);
         }
     }
 }

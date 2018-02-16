@@ -1,4 +1,7 @@
-﻿using Volo.Abp.Modularity;
+﻿using System;
+using System.Linq;
+using Volo.Abp.Identity.EntityFrameworkCore;
+using Volo.Abp.Modularity;
 using Volo.Abp.TestBase;
 
 namespace Volo.Abp.Identity
@@ -9,6 +12,28 @@ namespace Volo.Abp.Identity
         protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
         {
             options.UseAutofac();
+        }
+
+
+        protected virtual IdentityUser GetUserAsync(string userName)
+        {
+            return UsingDbContext(context => context.Users.FirstOrDefault(u => u.UserName == userName));
+        }
+
+        protected virtual void UsingDbContext(Action<IIdentityDbContext> action)
+        {
+            using (var dbContext = GetRequiredService<IIdentityDbContext>())
+            {
+                action.Invoke(dbContext);
+            }
+        }
+
+        protected virtual T UsingDbContext<T>(Func<IIdentityDbContext, T> action)
+        {
+            using (var dbContext = GetRequiredService<IIdentityDbContext>())
+            {
+                return action.Invoke(dbContext);
+            }
         }
     }
 }
