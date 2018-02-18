@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using AbpDesk.EntityFrameworkCore;
 using AbpDesk.Web.Mvc.Navigation;
+using AbpDesk.Web.Mvc.Permissions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Localization;
@@ -17,6 +18,7 @@ using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
+using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Autofac;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.EntityFrameworkCore;
@@ -29,6 +31,8 @@ using Volo.Abp.VirtualFileSystem;
 using Volo.Abp.IdentityServer.Jwt;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.MultiTenancy.Web;
+using Volo.Abp.Permissions;
+using Volo.Abp.Permissions.Web;
 
 namespace AbpDesk.Web.Mvc
 {
@@ -46,7 +50,8 @@ namespace AbpDesk.Web.Mvc
         typeof(AbpIdentityServerEntityFrameworkCoreModule),
         typeof(AbpAspNetCoreMultiTenancyModule),
         typeof(AbpMultiTenancyWebModule),
-        typeof(AbpMultiTenancyHttpApiModule)
+        typeof(AbpMultiTenancyHttpApiModule),
+        typeof(AbpPermissionsApplicationModule)
         )]
     public class AbpDeskWebMvcModule : AbpModule //TODO: Rename to AbpDeskWebModule, change default namespace to AbpDesk.Web
     {
@@ -75,9 +80,22 @@ namespace AbpDesk.Web.Mvc
                 options.MenuContributors.Add(new MainMenuContributor());
             });
 
+            services.Configure<PermissionOptions>(options =>
+            {
+                options.DefinitionProviders.Add<AbpDeskPermissionDefinitionProvider>();
+            });
+
             //services.Configure<RemoteServiceOptions>(configuration); //Needed when we use Volo.Abp.Identity.HttpApi.Client
 
             var authentication = services.AddAuthentication();
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("RequirePhoneNumber", policy =>
+                {
+                    policy.RequireClaim("phone_number");
+                });
+            });
 
             authentication.AddIdentityServerAuthentication("Bearer", options =>
             {
@@ -125,6 +143,7 @@ namespace AbpDesk.Web.Mvc
                     options.FileSets.ReplaceEmbeddedByPyhsical<AbpAccountWebModule>(Path.Combine(hostingEnvironment.ContentRootPath, "..\\..\\Volo.Abp.Account.Web"));
                     options.FileSets.ReplaceEmbeddedByPyhsical<AbpIdentityWebModule>(Path.Combine(hostingEnvironment.ContentRootPath, "..\\..\\Volo.Abp.Identity.Web"));
                     options.FileSets.ReplaceEmbeddedByPyhsical<AbpMultiTenancyWebModule>(Path.Combine(hostingEnvironment.ContentRootPath, "..\\..\\Volo.Abp.MultiTenancy.Web"));
+                    options.FileSets.ReplaceEmbeddedByPyhsical<AbpPermissionsWebModule>(Path.Combine(hostingEnvironment.ContentRootPath, "..\\..\\Volo.Abp.Permissions.Web"));
                 });
             }
         }

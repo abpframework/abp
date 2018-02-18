@@ -32,7 +32,13 @@ namespace Volo.Abp.AspNetCore.TestBase
         protected virtual IWebHostBuilder CreateWebHostBuilder()
         {
             return new WebHostBuilder()
-                .UseStartup<TStartup>();
+                .UseStartup<TStartup>()
+                .ConfigureServices(ConfigureServices);
+        }
+
+        protected virtual void ConfigureServices(WebHostBuilderContext context, IServiceCollection services)
+        {
+            
         }
 
         protected virtual TestServer CreateTestServer(IWebHostBuilder builder)

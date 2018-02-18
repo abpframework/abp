@@ -19,7 +19,7 @@ namespace Volo.Abp.Permissions.EntityFrameworkCore
 
             builder.Entity<PermissionGrant>(b =>
             {
-                b.ToTable(tablePrefix + "Permissions", schema);
+                b.ToTable(tablePrefix + "PermissionGrants", schema);
 
                 b.Property(x => x.Name).HasMaxLength(PermissionGrantConsts.MaxNameLength).IsRequired();
                 b.Property(x => x.ProviderName).HasMaxLength(PermissionGrantConsts.MaxProviderNameLength).IsRequired();

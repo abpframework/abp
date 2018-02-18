@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Modularity;
+using Volo.Abp.AspNetCore.Mvc.Authorization;
 using Volo.Abp.AspNetCore.TestBase;
+using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Autofac;
 using Volo.Abp.MemoryDb;
 using Volo.Abp.Modularity;
@@ -30,6 +32,14 @@ namespace Volo.Abp.AspNetCore.Mvc
         {
             services.AddLocalization(); //TODO: Move to the framework..?
 
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("MyClaimTestPolicy", policy =>
+                {
+                    policy.RequireClaim("MyCustomClaimType", "42");
+                });
+            });
+
             services.Configure<AbpAspNetCoreMvcOptions>(options =>
             {
                 options.ConventionalControllers.Create(typeof(TestAppModule).Assembly, opts =>
@@ -41,6 +51,11 @@ namespace Volo.Abp.AspNetCore.Mvc
                 });
             });
 
+            services.Configure<PermissionOptions>(options =>
+            {
+                options.DefinitionProviders.Add<TestPermissionDefinitionProvider>();
+            });
+
             services.AddAssemblyOf<AbpAspNetCoreMvcTestModule>();
         }
 
@@ -48,6 +63,7 @@ namespace Volo.Abp.AspNetCore.Mvc
         {
             var app = context.GetApplicationBuilder();
 
+            app.UseMiddleware<FakeAuthenticationMiddleware>();
             app.UseUnitOfWork();
             app.UseMvcWithDefaultRoute();
         }

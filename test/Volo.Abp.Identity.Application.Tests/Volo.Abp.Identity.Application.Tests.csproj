@@ -16,6 +16,7 @@
     <ProjectReference Include="..\AbpTestBase\AbpTestBase.csproj" />
     <ProjectReference Include="..\..\src\Volo.Abp.Identity.Application\Volo.Abp.Identity.Application.csproj" />
     <ProjectReference Include="..\..\src\Volo.Abp.Identity.EntityFrameworkCore\Volo.Abp.Identity.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\Volo.Abp.Identity.Tests\Volo.Abp.Identity.Tests.csproj" />
   </ItemGroup>
 
   <ItemGroup>

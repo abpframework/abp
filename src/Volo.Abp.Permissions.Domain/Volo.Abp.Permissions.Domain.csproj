@@ -14,9 +14,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Volo.Abp.Authorization\Volo.Abp.Authorization.csproj" />
     <ProjectReference Include="..\Volo.Abp.Ddd\Volo.Abp.Ddd.csproj" />
     <ProjectReference Include="..\Volo.Abp.Permissions.Domain.Shared\Volo.Abp.Permissions.Domain.Shared.csproj" />
-    <ProjectReference Include="..\Volo.Abp.Permissions\Volo.Abp.Permissions.csproj" />
   </ItemGroup>
 
 </Project>

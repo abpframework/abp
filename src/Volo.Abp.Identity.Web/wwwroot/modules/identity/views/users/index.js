@@ -5,6 +5,7 @@
 
     var _editModal = new abp.ModalManager(abp.appPath + 'Identity/Users/EditModal');
     var _createModal = new abp.ModalManager(abp.appPath + 'Identity/Users/CreateModal');
+    var _permissionsModal = new abp.ModalManager(abp.appPath + 'AbpPermissions/PermissionManagementModal');
 
     var app = new Vue({
         el: '#IdentityUsersWrapper',
@@ -44,6 +45,18 @@
                                     action: function (data) {
                                         _editModal.open({
                                             id: data.record.id
+                                        });
+                                    }
+                                },
+                                {
+                                    text: 'Permissions', //TODO: Localize
+                                    visible: function () {
+                                        return true;
+                                    },
+                                    action: function (data) {
+                                        _permissionsModal.open({
+                                            providerName: 'User',
+                                            providerKey: data.record.id
                                         });
                                     }
                                 },

@@ -18,7 +18,18 @@ namespace AbpDesk.EntityFrameworkCore
                 //Configures all dbcontextes to use Sql Server with calculated connection string
                 options.Configure(context =>
                 {
-                    context.DbContextOptions.UseSqlServer(context.ConnectionString);
+                    //TODO: Create an extension method to AbpDbContextConfigurationContext to use SqlServer in single line call! Example:
+                    /* context.UseSqlServer(opional action to configure sqlserver) 
+                     * This internally makes the if below!
+                     */
+                    if (context.ExistingConnection != null)
+                    {
+                        context.DbContextOptions.UseSqlServer(context.ExistingConnection);
+                    }
+                    else
+                    {
+                        context.DbContextOptions.UseSqlServer(context.ConnectionString);
+                    }
                 });
             });
         }

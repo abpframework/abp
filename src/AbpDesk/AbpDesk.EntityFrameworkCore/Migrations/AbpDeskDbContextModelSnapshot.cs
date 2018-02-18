@@ -17,7 +17,7 @@ namespace AbpDesk.EntityFrameworkCore.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.0.0-rtm-26452")
+                .HasAnnotation("ProductVersion", "2.0.1-rtm-125")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("AbpDesk.Tickets.Ticket", b =>
@@ -51,31 +51,50 @@ namespace AbpDesk.EntityFrameworkCore.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Name");
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("MtTenants");
                 });
 
             modelBuilder.Entity("Volo.Abp.MultiTenancy.TenantConnectionString", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<Guid>("TenantId");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(256);
-
-                    b.Property<Guid>("TenantId");
+                        .HasMaxLength(128);
 
                     b.Property<string>("Value")
                         .IsRequired()
                         .HasMaxLength(1024);
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("TenantId");
+                    b.HasKey("TenantId", "Name");
 
                     b.ToTable("MtTenantConnectionStrings");
+                });
+
+            modelBuilder.Entity("Volo.Abp.Permissions.PermissionGrant", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(128);
+
+                    b.Property<string>("ProviderKey")
+                        .IsRequired()
+                        .HasMaxLength(64);
+
+                    b.Property<string>("ProviderName")
+                        .IsRequired()
+                        .HasMaxLength(64);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name", "ProviderName", "ProviderKey");
+
+                    b.ToTable("AbpPermissionGrants");
                 });
 
             modelBuilder.Entity("Volo.Abp.MultiTenancy.TenantConnectionString", b =>

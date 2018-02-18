@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Modularity;
 
 namespace Volo.Abp.Authorization
@@ -7,6 +8,10 @@ namespace Volo.Abp.Authorization
     {
         public override void ConfigureServices(IServiceCollection services)
         {
+            services.AddAuthorization();
+
+            services.AddSingleton<IAuthorizationHandler, PermissionRequirementHandler>();
+
             services.AddAssemblyOf<AbpAuthorizationModule>();
         }
     }
