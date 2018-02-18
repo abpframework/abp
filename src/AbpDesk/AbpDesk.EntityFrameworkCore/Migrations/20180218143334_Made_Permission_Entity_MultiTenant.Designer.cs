@@ -11,9 +11,10 @@ using System;
 namespace AbpDesk.EntityFrameworkCore.Migrations
 {
     [DbContext(typeof(AbpDeskDbContext))]
-    partial class AbpDeskDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180218143334_Made_Permission_Entity_MultiTenant")]
+    partial class Made_Permission_Entity_MultiTenant
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -1,4 +1,5 @@
 ﻿using Volo.Abp.Guids;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.Permissions;
 
 namespace Volo.Abp.Identity
@@ -11,10 +12,12 @@ namespace Volo.Abp.Identity
 
         public UserPermissionManagementProvider(IPermissionGrantRepository 
             permissionGrantRepository, 
-            IGuidGenerator guidGenerator) 
+            IGuidGenerator guidGenerator,
+            ICurrentTenant currentTenant) 
             : base(
                 permissionGrantRepository,
-                guidGenerator)
+                guidGenerator,
+                currentTenant)
         {
 
         }

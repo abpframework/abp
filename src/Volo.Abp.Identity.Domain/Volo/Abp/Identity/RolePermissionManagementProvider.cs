@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Guids;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.Permissions;
 
 namespace Volo.Abp.Identity
@@ -17,10 +18,12 @@ namespace Volo.Abp.Identity
         public RolePermissionManagementProvider(
             IPermissionGrantRepository permissionGrantRepository,
             IGuidGenerator guidGenerator,
-            IIdentityUserRepository identityUserRepository)
+            IIdentityUserRepository identityUserRepository,
+            ICurrentTenant currentTenant)
             : base(
                 permissionGrantRepository,
-                guidGenerator)
+                guidGenerator,
+                currentTenant)
         {
             _identityUserRepository = identityUserRepository;
         }

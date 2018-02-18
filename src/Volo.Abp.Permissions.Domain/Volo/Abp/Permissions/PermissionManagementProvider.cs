@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Guids;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Permissions
 {
@@ -12,12 +13,16 @@ namespace Volo.Abp.Permissions
 
         protected IGuidGenerator GuidGenerator { get; }
 
+        protected ICurrentTenant CurrentTenant { get; }
+
         protected PermissionManagementProvider(
             IPermissionGrantRepository permissionGrantRepository, 
-            IGuidGenerator guidGenerator)
+            IGuidGenerator guidGenerator,
+            ICurrentTenant currentTenant)
         {
             PermissionGrantRepository = permissionGrantRepository;
             GuidGenerator = guidGenerator;
+            CurrentTenant = currentTenant;
         }
 
 
@@ -47,7 +52,8 @@ namespace Volo.Abp.Permissions
                     GuidGenerator.Create(),
                     name,
                     Name,
-                    providerKey
+                    providerKey,
+                    CurrentTenant.Id
                 )
             );
         }
