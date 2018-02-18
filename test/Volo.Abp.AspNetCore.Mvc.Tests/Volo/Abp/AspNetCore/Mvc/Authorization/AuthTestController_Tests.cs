@@ -7,7 +7,6 @@ using Volo.Abp.Autofac;
 using Volo.Abp.MemoryDb;
 using Volo.Abp.Modularity;
 using Volo.Abp.Security.Claims;
-using Volo.Abp.Session;
 using Xunit;
 
 namespace Volo.Abp.AspNetCore.Mvc.Authorization
@@ -72,6 +71,18 @@ namespace Volo.Abp.AspNetCore.Mvc.Authorization
             await Assert.ThrowsAsync<InvalidOperationException>(async () =>
                 await GetResponseAsStringAsync("/AuthTest/CustomPolicyTest")
             );
+        }
+
+        [Fact]
+        public async Task Should_Authorize_For_Defined_And_Allowed_Permission()
+        {
+            _fakeRequiredService.Claims.AddRange(new[]
+            {
+                new Claim(AbpClaimTypes.UserId, AuthTestController.FakeUserId.ToString())
+            });
+
+            var result = await GetResponseAsStringAsync("/AuthTest/PermissionTest");
+            result.ShouldBe("OK");
         }
     }
 }

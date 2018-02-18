@@ -37,8 +37,6 @@ namespace Volo.Abp.Authorization.Permissions
 
         public virtual PermissionDefinition Get(string name)
         {
-            Check.NotNull(name, nameof(name));
-
             var permission = GetOrNull(name);
 
             if (permission == null)
@@ -49,6 +47,13 @@ namespace Volo.Abp.Authorization.Permissions
             return permission;
         }
 
+        public virtual PermissionDefinition GetOrNull(string name)
+        {
+            Check.NotNull(name, nameof(name));
+
+            return PermissionDefinitions.GetOrDefault(name);
+        }
+
         public virtual IReadOnlyList<PermissionDefinition> GetPermissions()
         {
             return PermissionDefinitions.Values.ToImmutableList();
@@ -57,11 +62,6 @@ namespace Volo.Abp.Authorization.Permissions
         public IReadOnlyList<PermissionGroupDefinition> GetGroups()
         {
             return PermissionGroupDefinitions.Values.ToImmutableList();
-        }
-
-        public virtual PermissionDefinition GetOrNull(string name)
-        {
-            return PermissionDefinitions.GetOrDefault(name);
         }
 
         protected virtual List<IPermissionDefinitionProvider> CreatePermissionProviders()

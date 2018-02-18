@@ -8,6 +8,9 @@ namespace Volo.Abp.Authorization.Permissions
         [NotNull]
         PermissionDefinition Get([NotNull] string name);
 
+        [CanBeNull]
+        PermissionDefinition GetOrNull([NotNull] string name);
+
         IReadOnlyList<PermissionDefinition> GetPermissions();
 
         IReadOnlyList<PermissionGroupDefinition> GetGroups();

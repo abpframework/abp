@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Modularity;
 using Volo.Abp.AspNetCore.Mvc.Authorization;
 using Volo.Abp.AspNetCore.TestBase;
+using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Autofac;
 using Volo.Abp.MemoryDb;
 using Volo.Abp.Modularity;
@@ -48,6 +49,11 @@ namespace Volo.Abp.AspNetCore.Mvc
                             ? "phones"
                             : context.ActionNameInUrl;
                 });
+            });
+
+            services.Configure<PermissionOptions>(options =>
+            {
+                options.DefinitionProviders.Add<TestPermissionDefinitionProvider>();
             });
 
             services.AddAssemblyOf<AbpAspNetCoreMvcTestModule>();

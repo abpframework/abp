@@ -8,23 +8,9 @@ namespace Volo.Abp.Authorization
     {
         public override void ConfigureServices(IServiceCollection services)
         {
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("AllowedPermission", policy =>
-                {
-                    policy.Requirements.Add(new RequiresPermissionRequirement
-                    {
-                        PermissionName = "AllowedPermission"
-                    });
-                });
+            services.AddAuthorization();
 
-                options.AddPolicy("NotAllowedPermission", policy =>
-                {
-                    policy.Requirements.Add(new RequiresPermissionRequirement { PermissionName = "NotAllowedPermission" });
-                });
-            });
-
-            services.AddSingleton<IAuthorizationHandler, RequiresPermissionHandler>();
+            services.AddSingleton<IAuthorizationHandler, PermissionRequirementHandler>();
 
             services.AddAssemblyOf<AbpAuthorizationModule>();
         }
