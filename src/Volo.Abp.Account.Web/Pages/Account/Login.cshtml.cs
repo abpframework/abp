@@ -124,7 +124,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
         {
             var emailAddress = info.Principal.FindFirstValue(ClaimTypes.Email);
 
-            var user = new IdentityUser(GuidGenerator.Create(), emailAddress);
+            var user = new IdentityUser(GuidGenerator.Create(), emailAddress, CurrentTenant.Id);
 
             CheckIdentityErrors(await _userManager.CreateAsync(user));
             CheckIdentityErrors(await _userManager.SetEmailAsync(user, emailAddress));

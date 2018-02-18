@@ -2,14 +2,17 @@ using System;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Identity;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Identity
 {
     /// <summary>
     /// Represents a login and its associated provider for a user.
     /// </summary>
-    public class IdentityUserLogin : Entity
+    public class IdentityUserLogin : Entity, IMultiTenant
     {
+        public virtual Guid? TenantId { get; protected set; }
+
         /// <summary>
         /// Gets or sets the of the primary key of the user associated with this login.
         /// </summary>
@@ -35,7 +38,12 @@ namespace Volo.Abp.Identity
             
         }
 
-        protected internal IdentityUserLogin(Guid userId, [NotNull] string loginProvider, [NotNull] string providerKey, string providerDisplayName)
+        protected internal IdentityUserLogin(
+            Guid userId, 
+            [NotNull] string loginProvider, 
+            [NotNull] string providerKey, 
+            string providerDisplayName,
+            Guid? tenantId)
         {
             Check.NotNull(loginProvider, nameof(loginProvider));
             Check.NotNull(providerKey, nameof(providerKey));
@@ -44,12 +52,20 @@ namespace Volo.Abp.Identity
             LoginProvider = loginProvider;
             ProviderKey = providerKey;
             ProviderDisplayName = providerDisplayName;
+            TenantId = tenantId;
         }
 
-        protected internal IdentityUserLogin(Guid userId, [NotNull] UserLoginInfo login)
-            : this(userId, login.LoginProvider, login.ProviderKey, login.ProviderDisplayName)
+        protected internal IdentityUserLogin(
+            Guid userId, 
+            [NotNull] UserLoginInfo login,
+            Guid? tenantId)
+            : this(
+                  userId, 
+                  login.LoginProvider, 
+                  login.ProviderKey, 
+                  login.ProviderDisplayName,
+                  tenantId)
         {
-
         }
 
         public UserLoginInfo ToUserLoginInfo()

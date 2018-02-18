@@ -36,7 +36,7 @@ namespace Volo.Abp.Identity
 
         public async Task<IdentityUserDto> CreateAsync(IdentityUserCreateDto input)
         {
-            var user = new IdentityUser(GuidGenerator.Create(), input.UserName);
+            var user = new IdentityUser(GuidGenerator.Create(), input.UserName, CurrentTenant.Id);
 
             CheckIdentityErrors(await _userManager.CreateAsync(user, input.Password));
             await UpdateUserByInput(user, input);

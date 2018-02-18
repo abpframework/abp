@@ -2,11 +2,14 @@
 using System.Security.Claims;
 using JetBrains.Annotations;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Identity
 {
-    public abstract class IdentityClaim : Entity<Guid>
+    public abstract class IdentityClaim : Entity<Guid>, IMultiTenant
     {
+        public virtual Guid? TenantId { get; protected set; }
+
         /// <summary>
         /// Gets or sets the claim type for this claim.
         /// </summary>
@@ -22,19 +25,20 @@ namespace Volo.Abp.Identity
 
         }
 
-        protected internal IdentityClaim(Guid id, [NotNull] Claim claim)
-            : this(id, claim.Type, claim.Value)
+        protected internal IdentityClaim(Guid id, [NotNull] Claim claim, Guid? tenantId)
+            : this(id, claim.Type, claim.Value, tenantId)
         {
 
         }
 
-        protected internal IdentityClaim(Guid id, [NotNull] string claimType, string claimValue)
+        protected internal IdentityClaim(Guid id, [NotNull] string claimType, string claimValue, Guid? tenantId)
         {
             Check.NotNull(claimType, nameof(claimType));
 
             Id = id;
             ClaimType = claimType;
             ClaimValue = claimValue;
+            TenantId = tenantId;
         }
 
         /// <summary>

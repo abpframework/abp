@@ -7,11 +7,14 @@ using JetBrains.Annotations;
 using Microsoft.AspNetCore.Identity;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Guids;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Identity
 {
-    public class IdentityUser : AggregateRoot<Guid>, IHasConcurrencyStamp
+    public class IdentityUser : AggregateRoot<Guid>, IHasConcurrencyStamp, IMultiTenant
     {
+        public virtual Guid? TenantId { get; protected set; }
+
         /// <summary>
         /// Gets or sets the user name for this user.
         /// </summary>
@@ -116,11 +119,12 @@ namespace Volo.Abp.Identity
 
         }
 
-        public IdentityUser(Guid id, [NotNull] string userName)
+        public IdentityUser(Guid id, [NotNull] string userName, Guid? tenantId = null)
         {
             Check.NotNull(userName, nameof(userName));
 
             Id = id;
+            TenantId = tenantId;
             UserName = userName;
             NormalizedUserName = userName.ToUpperInvariant();
             ConcurrencyStamp = Guid.NewGuid().ToString();
@@ -141,7 +145,7 @@ namespace Volo.Abp.Identity
                 return;
             }
 
-            Roles.Add(new IdentityUserRole(Id, roleId));
+            Roles.Add(new IdentityUserRole(Id, roleId, TenantId));
         }
 
         public virtual void RemoveRole(Guid roleId)
@@ -168,7 +172,7 @@ namespace Volo.Abp.Identity
             Check.NotNull(guidGenerator, nameof(guidGenerator));
             Check.NotNull(claim, nameof(claim));
 
-            Claims.Add(new IdentityUserClaim(guidGenerator.Create(), Id, claim));
+            Claims.Add(new IdentityUserClaim(guidGenerator.Create(), Id, claim, TenantId));
         }
 
         public virtual void AddClaims([NotNull] IGuidGenerator guidGenerator, [NotNull] IEnumerable<Claim> claims)
@@ -215,7 +219,7 @@ namespace Volo.Abp.Identity
         {
             Check.NotNull(login, nameof(login));
 
-            Logins.Add(new IdentityUserLogin(Id, login));
+            Logins.Add(new IdentityUserLogin(Id, login, TenantId));
         }
 
         public virtual void RemoveLogin([NotNull] string loginProvider, [NotNull] string providerKey)
@@ -237,7 +241,7 @@ namespace Volo.Abp.Identity
             var token = FindToken(loginProvider, name);
             if (token == null)
             {
-                Tokens.Add(new IdentityUserToken(Id, loginProvider, name, value));
+                Tokens.Add(new IdentityUserToken(Id, loginProvider, name, value, TenantId));
             }
             else
             {

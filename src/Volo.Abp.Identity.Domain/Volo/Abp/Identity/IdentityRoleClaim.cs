@@ -19,14 +19,30 @@ namespace Volo.Abp.Identity
 
         }
 
-        protected internal IdentityRoleClaim(Guid id, Guid roleId, [NotNull] Claim claim)
-            : base(id, claim)
+        protected internal IdentityRoleClaim(
+            Guid id, 
+            Guid roleId, 
+            [NotNull] Claim claim,
+            Guid? tenantId)
+            : base(
+                  id, 
+                  claim,
+                  tenantId)
         {
             RoleId = roleId;
         }
 
-        protected internal IdentityRoleClaim(Guid id, Guid roleId, [NotNull] string claimType, string claimValue)
-            : base(id, claimType, claimValue)
+        protected internal IdentityRoleClaim(
+            Guid id, 
+            Guid roleId, 
+            [NotNull] string claimType, 
+            string claimValue,
+            Guid? tenantId)
+            : base(
+                  id, 
+                  claimType, 
+                  claimValue,
+                  tenantId)
         {
             RoleId = roleId;
         }

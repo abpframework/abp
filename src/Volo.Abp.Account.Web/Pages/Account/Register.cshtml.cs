@@ -38,7 +38,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
                 throw new NotImplementedException();
             }
 
-            var user = new IdentityUser(GuidGenerator.Create(), input.UserName);
+            var user = new IdentityUser(GuidGenerator.Create(), input.UserName, CurrentTenant.Id);
 
             var result = await _userManager.CreateAsync(user, input.Password);
 

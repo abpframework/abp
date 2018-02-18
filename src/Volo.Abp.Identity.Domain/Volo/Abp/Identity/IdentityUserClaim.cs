@@ -19,15 +19,14 @@ namespace Volo.Abp.Identity
 
         }
 
-        protected internal IdentityUserClaim(Guid id, Guid userId, [NotNull] Claim claim)
-            : base(id, claim)
+        protected internal IdentityUserClaim(Guid id, Guid userId, [NotNull] Claim claim, Guid? tenantId)
+            : base(id, claim, tenantId)
         {
             UserId = userId;
-
         }
 
-        protected internal IdentityUserClaim(Guid id, Guid userId, [NotNull] string claimType, string claimValue)
-            : base(id, claimType, claimValue)
+        protected internal IdentityUserClaim(Guid id, Guid userId, [NotNull] string claimType, string claimValue, Guid? tenantId)
+            : base(id, claimType, claimValue, tenantId)
         {
             UserId = userId;
         }

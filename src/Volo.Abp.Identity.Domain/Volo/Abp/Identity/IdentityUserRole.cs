@@ -1,13 +1,16 @@
 using System;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Identity
 {
     /// <summary>
     /// Represents the link between a user and a role.
     /// </summary>
-    public class IdentityUserRole : Entity
+    public class IdentityUserRole : Entity, IMultiTenant
     {
+        public virtual Guid? TenantId { get; protected set; }
+
         /// <summary>
         /// Gets or sets the primary key of the user that is linked to a role.
         /// </summary>
@@ -23,10 +26,11 @@ namespace Volo.Abp.Identity
             
         }
 
-        protected internal IdentityUserRole(Guid userId, Guid roleId)
+        protected internal IdentityUserRole(Guid userId, Guid roleId, Guid? tenantId)
         {
             UserId = userId;
             RoleId = roleId;
+            TenantId = tenantId;
         }
     }
 }

@@ -46,7 +46,7 @@ namespace Volo.Abp.Identity
 
         public async Task<IdentityRoleDto> CreateAsync(IdentityRoleCreateDto input)
         {
-            var role = new IdentityRole(GuidGenerator.Create(), input.Name);
+            var role = new IdentityRole(GuidGenerator.Create(), input.Name, CurrentTenant.Id);
 
             await _roleManager.CreateAsync(role);
             await CurrentUnitOfWork.SaveChangesAsync();
