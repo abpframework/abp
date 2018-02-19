@@ -16,6 +16,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.Core\Volo.Abp.Core.csproj" />
     <ProjectReference Include="..\Volo.Abp.Data\Volo.Abp.Data.csproj" />
+    <ProjectReference Include="..\Volo.Abp.EventBus\Volo.Abp.EventBus.csproj" />
     <ProjectReference Include="..\Volo.Abp.Guids\Volo.Abp.Guids.csproj" />
     <ProjectReference Include="..\Volo.Abp.Http.Abstractions\Volo.Abp.Http.Abstractions.csproj" />
     <ProjectReference Include="..\Volo.Abp.MultiTenancy.Abstractions\Volo.Abp.MultiTenancy.Abstractions.csproj" />

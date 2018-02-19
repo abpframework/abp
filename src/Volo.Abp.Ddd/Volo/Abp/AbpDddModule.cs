@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Data;
+using Volo.Abp.EventBus;
 using Volo.Abp.Guids;
 using Volo.Abp.Http;
 using Volo.Abp.Http.Modeling;
@@ -19,6 +20,7 @@ namespace Volo.Abp
     [DependsOn(typeof(AbpObjectMappingModule))]
     [DependsOn(typeof(AbpMultiTenancyAbstractionsModule))]
     [DependsOn(typeof(AbpThreadingModule))]
+    [DependsOn(typeof(AbpEventBusModule))]
     [DependsOn(typeof(AbpValidationModule))]
     [DependsOn(typeof(AbpHttpAbstractionsModule))]
     public class AbpDddModule : AbpModule
