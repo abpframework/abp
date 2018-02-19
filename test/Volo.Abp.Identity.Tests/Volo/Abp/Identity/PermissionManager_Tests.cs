@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Shouldly;
+using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Permissions;
 using Volo.Abp.Session;
 using Xunit;
@@ -12,10 +13,12 @@ namespace Volo.Abp.Identity
     public class PermissionManager_Tests : AbpIdentityDomainTestBase
     {
         private readonly IPermissionManager _permissionManager;
+        private readonly IPermissionStore _permissionStore;
 
         public PermissionManager_Tests()
         {
             _permissionManager = GetRequiredService<IPermissionManager>();
+            _permissionStore = GetRequiredService<IPermissionStore>();
         }
 
         [Fact]
@@ -44,8 +47,12 @@ namespace Volo.Abp.Identity
         public async Task Should_Grant_Permission_To_Role()
         {
             (await _permissionManager.GetForRoleAsync("supporter", TestPermissionNames.MyPermission2)).IsGranted.ShouldBeFalse();
+            (await _permissionStore.IsGrantedAsync(TestPermissionNames.MyPermission2, RolePermissionValueProvider.ProviderName, "supporter")).ShouldBeFalse();
+
             await _permissionManager.SetForRoleAsync("supporter", TestPermissionNames.MyPermission2, true);
+
             (await _permissionManager.GetForRoleAsync("supporter", TestPermissionNames.MyPermission2)).IsGranted.ShouldBeTrue();
+            (await _permissionStore.IsGrantedAsync(TestPermissionNames.MyPermission2, RolePermissionValueProvider.ProviderName, "supporter")).ShouldBeTrue();
         }
 
         [Fact]

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.ApiVersioning;
 using Volo.Abp.Authorization;
+using Volo.Abp.Caching;
 using Volo.Abp.Data;
 using Volo.Abp.Json;
 using Volo.Abp.Localization;
@@ -27,6 +28,7 @@ namespace Volo.Abp
     [DependsOn(typeof(AbpVirtualFileSystemModule))]
     [DependsOn(typeof(AbpApiVersioningAbstractionsModule))]
     [DependsOn(typeof(AbpMultiTenancyAbstractionsModule))]
+    [DependsOn(typeof(AbpCachingModule))]
     public class AbpCommonModule : AbpModule
     {
         public override void ConfigureServices(IServiceCollection services)
