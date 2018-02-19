@@ -9,12 +9,13 @@ using Volo.Abp.Threading;
 
 namespace Volo.Abp.Permissions
 {
-    /* TODOS:
-     * - Wrap distributed cache?
+    /* TODO:
+     * - Cache Invalidation (via entity events - eventbus)
+     * - Wrap distributed cache
      *   - Add multi-tenancy
      *   - Add _cancellationTokenProvider support
      *   - Add object serialization support
-     *   - Add cache invalidation support..? Maybe it's not cache's job!
+     * - Wrap in-memory cache!
      */
 
     public class PermissionStore : AbpServiceBase, IPermissionStore, ITransientDependency
@@ -47,11 +48,11 @@ namespace Volo.Abp.Permissions
 
         private string CalculateCacheKey(string name, string providerName, string providerKey)
         {
-            var key = "P:" + providerName + "_K:" + providerKey + "N:" + name;
+            var key = "P:" + providerName + "#K:" + providerKey + "#N:" + name;
 
             if (_currentTenant.Id.HasValue)
             {
-                key = "T:" + _currentTenant.Id + "_" + key;
+                key = "T:" + _currentTenant.Id + "#" + key;
             }
 
             return key;

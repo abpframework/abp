@@ -276,6 +276,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Permissions.Applic
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Caching", "src\Volo.Abp.Caching\Volo.Abp.Caching.csproj", "{A5B650AB-A67F-4A4C-9F81-7B5471CA1331}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.EventBus", "src\Volo.Abp.EventBus\Volo.Abp.EventBus.csproj", "{D9455AE7-2E0C-4647-9880-F5831BCEE3D8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -722,6 +724,10 @@ Global
 		{A5B650AB-A67F-4A4C-9F81-7B5471CA1331}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A5B650AB-A67F-4A4C-9F81-7B5471CA1331}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A5B650AB-A67F-4A4C-9F81-7B5471CA1331}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9455AE7-2E0C-4647-9880-F5831BCEE3D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9455AE7-2E0C-4647-9880-F5831BCEE3D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9455AE7-2E0C-4647-9880-F5831BCEE3D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9455AE7-2E0C-4647-9880-F5831BCEE3D8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -856,6 +862,7 @@ Global
 		{837ABFF5-66EE-486A-8023-8DD3EE7D7D96} = {055F4AC0-46C4-4E99-89CD-0F30D4A97382}
 		{90197499-CBB6-4C8C-90E6-8718CD755C04} = {055F4AC0-46C4-4E99-89CD-0F30D4A97382}
 		{A5B650AB-A67F-4A4C-9F81-7B5471CA1331} = {4C753F64-0C93-4D65-96C2-A40893AFC1E8}
+		{D9455AE7-2E0C-4647-9880-F5831BCEE3D8} = {4C753F64-0C93-4D65-96C2-A40893AFC1E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB97ECF4-9A84-433F-A80B-2A3285BDD1D5}
