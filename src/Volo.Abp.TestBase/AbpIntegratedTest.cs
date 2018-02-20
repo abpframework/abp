@@ -11,7 +11,9 @@ namespace Volo.Abp.TestBase
 
         protected override IServiceProvider ServiceProvider => Application.ServiceProvider;
 
-        protected IServiceScope MainServiceScope { get; }
+        protected IServiceProvider RootServiceProvider { get; }
+
+        protected IServiceScope TestServiceScope { get; }
 
         public AbpIntegratedTest()
         {
@@ -24,10 +26,10 @@ namespace Volo.Abp.TestBase
 
             AfterAddApplication(services);
 
-            MainServiceScope = CreateServiceProvider(services).CreateScope();
-            var serviceProvider = MainServiceScope.ServiceProvider;
+            RootServiceProvider = CreateServiceProvider(services);
+            TestServiceScope = RootServiceProvider.CreateScope();
 
-            application.Initialize(serviceProvider);
+            application.Initialize(TestServiceScope.ServiceProvider);
         }
 
         protected virtual IServiceCollection CreateServiceCollection()
@@ -58,7 +60,7 @@ namespace Volo.Abp.TestBase
         public void Dispose()
         {
             Application.Shutdown();
-            MainServiceScope.Dispose();
+            TestServiceScope.Dispose();
             Application.Dispose();
         }
     }
