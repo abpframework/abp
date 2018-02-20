@@ -1,12 +1,14 @@
+using Volo.Abp.TestBase;
+
 namespace Volo.Abp.EventBus
 {
-    public abstract class EventBusTestBase
+    public abstract class EventBusTestBase : AbpIntegratedTest<EventBusTestModule>
     {
         protected IEventBus EventBus;
 
         protected EventBusTestBase()
         {
-            EventBus = new EventBus();
+            EventBus = GetRequiredService<IEventBus>();
         }
     }
 }
