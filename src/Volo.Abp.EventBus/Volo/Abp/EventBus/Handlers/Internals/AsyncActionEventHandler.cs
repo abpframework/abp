@@ -15,7 +15,7 @@ namespace Volo.Abp.EventBus.Handlers.Internals
         /// <summary>
         /// Function to handle the event.
         /// </summary>
-        public Func<TEventData, Task> Action { get; private set; }
+        public Func<TEventData, Task> Action { get; }
 
         /// <summary>
         /// Creates a new instance of <see cref="AsyncActionEventHandler{TEventData}"/>.
