@@ -10,18 +10,10 @@ namespace Volo.Abp.EventBus.Factories
     /// </summary>
     public class IocHandlerFactory : IEventHandlerFactory
     {
-        /// <summary>
-        /// Type of the handler.
-        /// </summary>
         public Type HandlerType { get; }
 
         private readonly IServiceProvider _iocResolver;
 
-        /// <summary>
-        /// Creates a new instance of <see cref="IocHandlerFactory"/> class.
-        /// </summary>
-        /// <param name="iocResolver"></param>
-        /// <param name="handlerType">Type of the handler</param>
         public IocHandlerFactory(IServiceProvider iocResolver, Type handlerType)
         {
             _iocResolver = iocResolver;
@@ -42,10 +34,6 @@ namespace Volo.Abp.EventBus.Factories
             return HandlerType;
         }
 
-        /// <summary>
-        /// Releases handler object using Ioc container.
-        /// </summary>
-        /// <param name="handler">Handler to be released</param>
         public void ReleaseHandler(IEventHandler handler)
         {
             //TODO: Scope!!!

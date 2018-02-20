@@ -10,5 +10,10 @@ namespace Volo.Abp.EventBus
         {
             EventBus = GetRequiredService<IEventBus>();
         }
+
+        protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
+        {
+            options.UseAutofac();
+        }
     }
 }

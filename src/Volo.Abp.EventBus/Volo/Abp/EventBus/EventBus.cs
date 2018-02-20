@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus.Factories;
 using Volo.Abp.EventBus.Factories.Internals;
@@ -23,11 +24,6 @@ namespace Volo.Abp.EventBus
     public class EventBus : IEventBus, ISingletonDependency
     {
         /// <summary>
-        /// Gets the default <see cref="EventBus"/> instance.
-        /// </summary>
-        public static EventBus Instance { get; } = new EventBus();
-
-        /// <summary>
         /// Reference to the Logger.
         /// </summary>
         public ILogger<EventBus> Logger { get; set; }
@@ -37,16 +33,38 @@ namespace Volo.Abp.EventBus
         /// Key: Type of the event
         /// Value: List of handler factories
         /// </summary>
-        private readonly ConcurrentDictionary<Type, List<IEventHandlerFactory>> _handlerFactories;
+        protected ConcurrentDictionary<Type, List<IEventHandlerFactory>> HandlerFactories { get; }
 
-        /// <summary>
-        /// Creates a new <see cref="EventBus"/> instance.
-        /// Instead of creating a new instace, you can use <see cref="Instance"/> to use Global <see cref="EventBus"/>.
-        /// </summary>
-        public EventBus()
+        protected EventBusOptions Options { get; }
+
+        public EventBus(IOptions<EventBusOptions> options, IServiceProvider serviceProvider)
         {
-            _handlerFactories = new ConcurrentDictionary<Type, List<IEventHandlerFactory>>();
+            Options = options.Value;
             Logger = NullLogger<EventBus>.Instance;
+            HandlerFactories = new ConcurrentDictionary<Type, List<IEventHandlerFactory>>();
+
+            RegisterHandlersInOptions(serviceProvider);
+        }
+
+        protected virtual void RegisterHandlersInOptions(IServiceProvider serviceProvider)
+        {
+            foreach (var handler in Options.Handlers)
+            {
+                var interfaces = handler.GetInterfaces();
+                foreach (var @interface in interfaces)
+                {
+                    if (!typeof(IEventHandler).GetTypeInfo().IsAssignableFrom(@interface))
+                    {
+                        continue;
+                    }
+
+                    var genericArgs = @interface.GetGenericArguments();
+                    if (genericArgs.Length == 1)
+                    {
+                        Register(genericArgs[0], new IocHandlerFactory(serviceProvider, handler));
+                    }
+                }
+            }
         }
 
         /// <inheritdoc/>
@@ -416,7 +434,7 @@ namespace Volo.Abp.EventBus
         {
             var handlerFactoryList = new List<EventTypeWithEventHandlerFactories>();
 
-            foreach (var handlerFactory in _handlerFactories.Where(hf => ShouldTriggerEventForHandler(eventType, hf.Key)))
+            foreach (var handlerFactory in HandlerFactories.Where(hf => ShouldTriggerEventForHandler(eventType, hf.Key)))
             {
                 handlerFactoryList.Add(new EventTypeWithEventHandlerFactories(handlerFactory.Key, handlerFactory.Value));
             }
@@ -443,7 +461,7 @@ namespace Volo.Abp.EventBus
 
         private List<IEventHandlerFactory> GetOrCreateHandlerFactories(Type eventType)
         {
-            return _handlerFactories.GetOrAdd(eventType, (type) => new List<IEventHandlerFactory>());
+            return HandlerFactories.GetOrAdd(eventType, (type) => new List<IEventHandlerFactory>());
         }
 
         private class EventTypeWithEventHandlerFactories
