@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
+using Volo.Abp.Serialization;
 using Volo.Abp.Threading;
 
 namespace Volo.Abp.Caching
@@ -10,35 +11,49 @@ namespace Volo.Abp.Caching
         where TCacheItem : class
     {
         protected IDistributedCache Cache { get; }
-
-        public ICancellationTokenProvider CancellationTokenProvider { get; }
+        protected ICancellationTokenProvider CancellationTokenProvider { get; }
+        protected IObjectSerializer ObjectSerializer { get; }
 
         public DistributedCache(
             IDistributedCache cache,
-            ICancellationTokenProvider cancellationTokenProvider)
+            ICancellationTokenProvider cancellationTokenProvider,
+            IObjectSerializer objectSerializer)
         {
             Cache = cache;
             CancellationTokenProvider = cancellationTokenProvider;
+            ObjectSerializer = objectSerializer;
         }
 
-        public async Task<TCacheItem> GetAsync(string key, CancellationToken token = default)
+        public async Task<TCacheItem> GetAsync(
+            string key, 
+            CancellationToken token = default)
         {
-            var cachedValue = await Cache.GetAsync(key, CancellationTokenProvider.FallbackToProvider(token));
-            if (cachedValue == null)
+            var cachedBytes = await Cache.GetAsync(key, CancellationTokenProvider.FallbackToProvider(token));
+            if (cachedBytes == null)
             {
                 return null;
             }
 
-            throw new NotImplementedException();
+            return ObjectSerializer.Deserialize<TCacheItem>(cachedBytes);
         }
 
-        public Task SetAsync(string key, TCacheItem value, DistributedCacheEntryOptions options = null,
+        public Task SetAsync(
+            string key, 
+            TCacheItem value, 
+            DistributedCacheEntryOptions options = null, 
             CancellationToken token = default)
         {
-            throw new System.NotImplementedException();
+            return Cache.SetAsync(
+                key,
+                ObjectSerializer.Serialize(value),
+                options ?? new DistributedCacheEntryOptions { SlidingExpiration = TimeSpan.FromMinutes(20) }, //TODO: implement per cache item and global defaults!!!
+                CancellationTokenProvider.FallbackToProvider(token)
+            );
         }
 
-        public Task RemoveAsync(string key, CancellationToken token = default)
+        public Task RemoveAsync(
+            string key, 
+            CancellationToken token = default)
         {
             return Cache.RemoveAsync(key, CancellationTokenProvider.FallbackToProvider(token));
         }
