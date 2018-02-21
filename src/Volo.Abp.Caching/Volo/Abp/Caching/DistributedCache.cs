@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.Serialization;
 using Volo.Abp.Threading;
 
@@ -10,23 +12,35 @@ namespace Volo.Abp.Caching
     public class DistributedCache<TCacheItem> : IDistributedCache<TCacheItem>
         where TCacheItem : class
     {
+        protected string CacheName { get; set; }
+
+        protected bool IgnoreMultiTenancy { get; set; }
+
         protected IDistributedCache Cache { get; }
+
         protected ICancellationTokenProvider CancellationTokenProvider { get; }
+
         protected IObjectSerializer ObjectSerializer { get; }
+
+        protected ICurrentTenant CurrentTenant { get; }
 
         public DistributedCache(
             IDistributedCache cache,
             ICancellationTokenProvider cancellationTokenProvider,
-            IObjectSerializer objectSerializer)
+            IObjectSerializer objectSerializer, 
+            ICurrentTenant currentTenant)
         {
             Cache = cache;
             CancellationTokenProvider = cancellationTokenProvider;
             ObjectSerializer = objectSerializer;
+            CurrentTenant = currentTenant;
+
+            SetDefaultOptions();
         }
 
-        public TCacheItem Get(string key)
+        public virtual TCacheItem Get(string key)
         {
-            var cachedBytes = Cache.Get(key);
+            var cachedBytes = Cache.Get(NormalizeKey(key));
             if (cachedBytes == null)
             {
                 return null;
@@ -35,9 +49,9 @@ namespace Volo.Abp.Caching
             return ObjectSerializer.Deserialize<TCacheItem>(cachedBytes);
         }
 
-        public async Task<TCacheItem> GetAsync(string key, CancellationToken token = default)
+        public virtual async Task<TCacheItem> GetAsync(string key, CancellationToken token = default)
         {
-            var cachedBytes = await Cache.GetAsync(key, CancellationTokenProvider.FallbackToProvider(token));
+            var cachedBytes = await Cache.GetAsync(NormalizeKey(key), CancellationTokenProvider.FallbackToProvider(token));
             if (cachedBytes == null)
             {
                 return null;
@@ -46,43 +60,69 @@ namespace Volo.Abp.Caching
             return ObjectSerializer.Deserialize<TCacheItem>(cachedBytes);
         }
 
-        public void Set(string key, TCacheItem value, DistributedCacheEntryOptions options)
+        public virtual void Set(string key, TCacheItem value, DistributedCacheEntryOptions options)
         {
             Cache.Set(
-                key,
+                NormalizeKey(key),
                 ObjectSerializer.Serialize(value),
                 options ?? new DistributedCacheEntryOptions { SlidingExpiration = TimeSpan.FromMinutes(20) } //TODO: implement per cache item and global defaults!!!
             );
         }
 
-        public Task SetAsync(string key, TCacheItem value, DistributedCacheEntryOptions options = null, CancellationToken token = default)
+        public virtual Task SetAsync(string key, TCacheItem value, DistributedCacheEntryOptions options = null, CancellationToken token = default)
         {
             return Cache.SetAsync(
-                key,
+                NormalizeKey(key),
                 ObjectSerializer.Serialize(value),
                 options ?? new DistributedCacheEntryOptions { SlidingExpiration = TimeSpan.FromMinutes(20) }, //TODO: implement per cache item and global defaults!!!
                 CancellationTokenProvider.FallbackToProvider(token)
             );
         }
 
-        public void Refresh(string key)
+        public virtual void Refresh(string key)
         {
-            Cache.Refresh(key);
+            Cache.Refresh(NormalizeKey(key));
         }
 
-        public Task RefreshAsync(string key, CancellationToken token = default)
+        public virtual Task RefreshAsync(string key, CancellationToken token = default)
         {
-            return Cache.RefreshAsync(key, CancellationTokenProvider.FallbackToProvider(token));
+            return Cache.RefreshAsync(NormalizeKey(key), CancellationTokenProvider.FallbackToProvider(token));
         }
 
-        public void Remove(string key)
+        public virtual void Remove(string key)
         {
-            Cache.Remove(key);
+            Cache.Remove(NormalizeKey(key));
         }
 
-        public Task RemoveAsync(string key, CancellationToken token = default)
+        public virtual Task RemoveAsync(string key, CancellationToken token = default)
         {
-            return Cache.RemoveAsync(key, CancellationTokenProvider.FallbackToProvider(token));
+            return Cache.RemoveAsync(NormalizeKey(key), CancellationTokenProvider.FallbackToProvider(token));
+        }
+
+        protected virtual string NormalizeKey(string key)
+        {
+            var normalizedKey = "c:" + CacheName + ",k:" + key;
+
+            if (!IgnoreMultiTenancy && CurrentTenant.Id.HasValue)
+            {
+                normalizedKey = "t:" + CurrentTenant.Id.Value + "," + normalizedKey;
+            }
+
+            return normalizedKey;
+        }
+
+        protected virtual void SetDefaultOptions()
+        {
+            //CacheName
+            var cacheNameAttribute = typeof(TCacheItem)
+                .GetCustomAttributes(true)
+                .OfType<CacheNameAttribute>()
+                .FirstOrDefault();
+
+            CacheName = cacheNameAttribute != null ? cacheNameAttribute.Name : typeof(TCacheItem).Name;
+
+            //IgnoreMultiTenancy
+            IgnoreMultiTenancy = typeof(TCacheItem).IsDefined(typeof(IgnoreMultiTenancyAttribute), true);
         }
     }
 }
