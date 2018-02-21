@@ -11,6 +11,7 @@ using Volo.Abp.Threading;
 
 namespace Volo.Abp.Permissions
 {
+    //TODO: Extract cache invalidate logic to another class
     public class PermissionStore : AbpServiceBase, IPermissionStore, IAsyncEventHandler<EntityChangedEventData<PermissionGrant>>, ITransientDependency
     {
         private readonly IPermissionGrantRepository _permissionGrantRepository;

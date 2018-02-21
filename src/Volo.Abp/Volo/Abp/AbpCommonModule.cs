@@ -9,6 +9,7 @@ using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Security;
+using Volo.Abp.Serialization;
 using Volo.Abp.Session;
 using Volo.Abp.Settings;
 using Volo.Abp.Validation;
@@ -29,6 +30,7 @@ namespace Volo.Abp
     [DependsOn(typeof(AbpApiVersioningAbstractionsModule))]
     [DependsOn(typeof(AbpMultiTenancyAbstractionsModule))]
     [DependsOn(typeof(AbpCachingModule))]
+    [DependsOn(typeof(AbpSerializationModule))]
     public class AbpCommonModule : AbpModule
     {
         public override void ConfigureServices(IServiceCollection services)
