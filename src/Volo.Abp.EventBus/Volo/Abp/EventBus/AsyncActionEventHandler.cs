@@ -7,21 +7,21 @@ namespace Volo.Abp.EventBus
     /// <summary>
     /// This event handler is an adapter to be able to use an action as <see cref="IAsyncEventHandler{TEventData}"/> implementation.
     /// </summary>
-    /// <typeparam name="TEventData">Event type</typeparam>
-    internal class AsyncActionEventHandler<TEventData> :
-        IAsyncEventHandler<TEventData>,
+    /// <typeparam name="TEvent">Event type</typeparam>
+    internal class AsyncActionEventHandler<TEvent> :
+        IAsyncEventHandler<TEvent>,
         ITransientDependency
     {
         /// <summary>
         /// Function to handle the event.
         /// </summary>
-        public Func<TEventData, Task> Action { get; }
+        public Func<TEvent, Task> Action { get; }
 
         /// <summary>
         /// Creates a new instance of <see cref="AsyncActionEventHandler{TEventData}"/>.
         /// </summary>
         /// <param name="handler">Action to handle the event</param>
-        public AsyncActionEventHandler(Func<TEventData, Task> handler)
+        public AsyncActionEventHandler(Func<TEvent, Task> handler)
         {
             Action = handler;
         }
@@ -30,7 +30,7 @@ namespace Volo.Abp.EventBus
         /// Handles the event.
         /// </summary>
         /// <param name="eventData"></param>
-        public async Task HandleEventAsync(TEventData eventData)
+        public async Task HandleEventAsync(TEvent eventData)
         {
             await Action(eventData);
         }

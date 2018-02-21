@@ -12,27 +12,27 @@ namespace Volo.Abp.EventBus
             
         }
 
-        public IDisposable Register<TEventData>(Action<TEventData> action) where TEventData : class
+        public IDisposable Register<TEvent>(Action<TEvent> action) where TEvent : class
         {
             return NullDisposable.Instance;
         }
 
-        public IDisposable AsyncRegister<TEventData>(Func<TEventData, Task> action) where TEventData : class
+        public IDisposable AsyncRegister<TEvent>(Func<TEvent, Task> action) where TEvent : class
         {
             return NullDisposable.Instance;
         }
 
-        public IDisposable Register<TEventData>(IEventHandler<TEventData> handler) where TEventData : class
+        public IDisposable Register<TEvent>(IEventHandler<TEvent> handler) where TEvent : class
         {
             return NullDisposable.Instance;
         }
 
-        public IDisposable AsyncRegister<TEventData>(IAsyncEventHandler<TEventData> handler) where TEventData : class
+        public IDisposable AsyncRegister<TEvent>(IAsyncEventHandler<TEvent> handler) where TEvent : class
         {
             return NullDisposable.Instance;
         }
 
-        public IDisposable Register<TEventData, THandler>() where TEventData : class where THandler : IEventHandler, new()
+        public IDisposable Register<TEvent, THandler>() where TEvent : class where THandler : IEventHandler, new()
         {
             return NullDisposable.Instance;
         }
@@ -42,7 +42,7 @@ namespace Volo.Abp.EventBus
             return NullDisposable.Instance;
         }
 
-        public IDisposable Register<TEventData>(IEventHandlerFactory factory) where TEventData : class
+        public IDisposable Register<TEvent>(IEventHandlerFactory factory) where TEvent : class
         {
             return NullDisposable.Instance;
         }
@@ -52,22 +52,22 @@ namespace Volo.Abp.EventBus
             return NullDisposable.Instance;
         }
 
-        public void Unregister<TEventData>(Action<TEventData> action) where TEventData : class
+        public void Unregister<TEvent>(Action<TEvent> action) where TEvent : class
         {
 
         }
 
-        public void AsyncUnregister<TEventData>(Func<TEventData, Task> action) where TEventData : class
-        {
-            
-        }
-
-        public void Unregister<TEventData>(IEventHandler<TEventData> handler) where TEventData : class
+        public void AsyncUnregister<TEvent>(Func<TEvent, Task> action) where TEvent : class
         {
             
         }
 
-        public void AsyncUnregister<TEventData>(IAsyncEventHandler<TEventData> handler) where TEventData : class
+        public void Unregister<TEvent>(IEventHandler<TEvent> handler) where TEvent : class
+        {
+            
+        }
+
+        public void AsyncUnregister<TEvent>(IAsyncEventHandler<TEvent> handler) where TEvent : class
         {
             
         }
@@ -77,7 +77,7 @@ namespace Volo.Abp.EventBus
             
         }
 
-        public void Unregister<TEventData>(IEventHandlerFactory factory) where TEventData : class
+        public void Unregister<TEvent>(IEventHandlerFactory factory) where TEvent : class
         {
             
         }
@@ -87,7 +87,7 @@ namespace Volo.Abp.EventBus
             
         }
 
-        public void UnregisterAll<TEventData>() where TEventData : class
+        public void UnregisterAll<TEvent>() where TEvent : class
         {
             
         }
@@ -97,7 +97,7 @@ namespace Volo.Abp.EventBus
             
         }
 
-        public void Trigger<TEventData>(TEventData eventData) where TEventData : class
+        public void Trigger<TEvent>(TEvent eventData) where TEvent : class
         {
             
         }
@@ -107,7 +107,7 @@ namespace Volo.Abp.EventBus
             
         }
 
-        public Task TriggerAsync<TEventData>(TEventData eventData) where TEventData : class
+        public Task TriggerAsync<TEvent>(TEvent eventData) where TEvent : class
         {
             return Task.CompletedTask;
         }

@@ -5,13 +5,13 @@ namespace Volo.Abp.EventBus
     /// <summary>
     /// Defines an interface of a class that handles events asynchrounously of type <see cref="IAsyncEventHandler{TEventData}"/>.
     /// </summary>
-    /// <typeparam name="TEventData">Event type to handle</typeparam>
-    public interface IAsyncEventHandler<in TEventData> : IEventHandler
+    /// <typeparam name="TEvent">Event type to handle</typeparam>
+    public interface IAsyncEventHandler<in TEvent> : IEventHandler
     {
         /// <summary>
         /// Handler handles the event by implementing this method.
         /// </summary>
         /// <param name="eventData">Event data</param>
-        Task HandleEventAsync(TEventData eventData);
+        Task HandleEventAsync(TEvent eventData);
     }
 }

@@ -3,22 +3,15 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Domain.Entities.Events;
+using Volo.Abp.EventBus;
 using Volo.Abp.Json;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Threading;
 
 namespace Volo.Abp.Permissions
 {
-    /* TODO:
-     * - Cache Invalidation (via entity events - eventbus)
-     * - Wrap distributed cache
-     *   - Add multi-tenancy
-     *   - Add _cancellationTokenProvider support
-     *   - Add object serialization support
-     * - Wrap in-memory cache!
-     */
-
-    public class PermissionStore : AbpServiceBase, IPermissionStore, ITransientDependency
+    public class PermissionStore : AbpServiceBase, IPermissionStore, IAsyncEventHandler<EntityChangedEventData<PermissionGrant>>, ITransientDependency
     {
         private readonly IPermissionGrantRepository _permissionGrantRepository;
         private readonly ICurrentTenant _currentTenant;
@@ -42,25 +35,24 @@ namespace Volo.Abp.Permissions
 
         public async Task<bool> IsGrantedAsync(string name, string providerName, string providerKey)
         {
-            return await _permissionGrantRepository.FindAsync(name, providerName, providerKey) != null;
-            //return (await GetCacheItemAsync(name, providerName, providerKey)).IsGranted; //TODO: Use cache when invalidation is possible!
+            return (await GetCacheItemAsync(name, providerName, providerKey)).IsGranted;
+        }
+        
+        public virtual Task HandleEventAsync(EntityChangedEventData<PermissionGrant> eventData)
+        {
+            return _distributedCache.RemoveAsync(
+                CalculateCacheKey(
+                    eventData.Entity.Name,
+                    eventData.Entity.ProviderName,
+                    eventData.Entity.ProviderKey,
+                    eventData.Entity.TenantId
+                )
+            );
         }
 
-        private string CalculateCacheKey(string name, string providerName, string providerKey)
+        protected virtual async Task<PermissionGrantCacheItem> GetCacheItemAsync(string name, string providerName, string providerKey)
         {
-            var key = "P:" + providerName + "#K:" + providerKey + "#N:" + name;
-
-            if (_currentTenant.Id.HasValue)
-            {
-                key = "T:" + _currentTenant.Id + "#" + key;
-            }
-
-            return key;
-        }
-
-        private async Task<PermissionGrantCacheItem> GetCacheItemAsync(string name, string providerName, string providerKey)
-        {
-            var cacheKey = CalculateCacheKey(name, providerName, providerKey);
+            var cacheKey = CalculateCacheKey(name, providerName, providerKey, _currentTenant.Id);
             var cachedString = await _distributedCache.GetStringAsync(cacheKey, _cancellationTokenProvider.Token);
 
             if (cachedString != null)
@@ -81,6 +73,18 @@ namespace Volo.Abp.Permissions
             );
 
             return cacheItem;
+        }
+        
+        protected virtual string CalculateCacheKey(string name, string providerName, string providerKey, Guid? tenantId)
+        {
+            var key = "N:" + "PermissionGrant" + "#P:" + providerName + "#K:" + providerKey + "#N:" + name;
+
+            if (tenantId.HasValue)
+            {
+                key += "#T:" + tenantId.Value;
+            }
+
+            return key;
         }
     }
 }

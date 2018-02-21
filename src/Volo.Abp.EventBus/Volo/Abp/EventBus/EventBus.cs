@@ -64,36 +64,36 @@ namespace Volo.Abp.EventBus
         }
 
         /// <inheritdoc/>
-        public IDisposable Register<TEventData>(Action<TEventData> action)
-            where TEventData : class
+        public IDisposable Register<TEvent>(Action<TEvent> action)
+            where TEvent : class
         {
-            return Register(typeof(TEventData), new ActionEventHandler<TEventData>(action));
+            return Register(typeof(TEvent), new ActionEventHandler<TEvent>(action));
         }
 
         /// <inheritdoc/>
-        public IDisposable AsyncRegister<TEventData>(Func<TEventData, Task> action) where TEventData : class
+        public IDisposable AsyncRegister<TEvent>(Func<TEvent, Task> action) where TEvent : class
         {
-            return Register(typeof(TEventData), new AsyncActionEventHandler<TEventData>(action));
+            return Register(typeof(TEvent), new AsyncActionEventHandler<TEvent>(action));
         }
 
         /// <inheritdoc/>
-        public IDisposable Register<TEventData>(IEventHandler<TEventData> handler) where TEventData : class
+        public IDisposable Register<TEvent>(IEventHandler<TEvent> handler) where TEvent : class
         {
-            return Register(typeof(TEventData), handler);
+            return Register(typeof(TEvent), handler);
         }
 
         /// <inheritdoc/>
-        public IDisposable AsyncRegister<TEventData>(IAsyncEventHandler<TEventData> handler) where TEventData : class
+        public IDisposable AsyncRegister<TEvent>(IAsyncEventHandler<TEvent> handler) where TEvent : class
         {
-            return Register(typeof(TEventData), handler);
+            return Register(typeof(TEvent), handler);
         }
 
         /// <inheritdoc/>
-        public IDisposable Register<TEventData, THandler>()
-            where TEventData : class
+        public IDisposable Register<TEvent, THandler>()
+            where TEvent : class
             where THandler : IEventHandler, new()
         {
-            return Register(typeof(TEventData), new TransientEventHandlerFactory<THandler>());
+            return Register(typeof(TEvent), new TransientEventHandlerFactory<THandler>());
         }
 
         /// <inheritdoc/>
@@ -103,9 +103,9 @@ namespace Volo.Abp.EventBus
         }
 
         /// <inheritdoc/>
-        public IDisposable Register<TEventData>(IEventHandlerFactory factory) where TEventData : class
+        public IDisposable Register<TEvent>(IEventHandlerFactory factory) where TEvent : class
         {
-            return Register(typeof(TEventData), factory);
+            return Register(typeof(TEvent), factory);
         }
 
         /// <inheritdoc/>
@@ -118,11 +118,11 @@ namespace Volo.Abp.EventBus
         }
 
         /// <inheritdoc/>
-        public void Unregister<TEventData>(Action<TEventData> action) where TEventData : class
+        public void Unregister<TEvent>(Action<TEvent> action) where TEvent : class
         {
             Check.NotNull(action, nameof(action));
 
-            GetOrCreateHandlerFactories(typeof(TEventData))
+            GetOrCreateHandlerFactories(typeof(TEvent))
                 .Locking(factories =>
                 {
                     factories.RemoveAll(
@@ -134,7 +134,7 @@ namespace Volo.Abp.EventBus
                                 return false;
                             }
 
-                            var actionHandler = singleInstanceFactory.HandlerInstance as ActionEventHandler<TEventData>;
+                            var actionHandler = singleInstanceFactory.HandlerInstance as ActionEventHandler<TEvent>;
                             if (actionHandler == null)
                             {
                                 return false;
@@ -146,11 +146,11 @@ namespace Volo.Abp.EventBus
         }
 
         /// <inheritdoc/>
-        public void AsyncUnregister<TEventData>(Func<TEventData, Task> action) where TEventData : class
+        public void AsyncUnregister<TEvent>(Func<TEvent, Task> action) where TEvent : class
         {
             Check.NotNull(action, nameof(action));
 
-            GetOrCreateHandlerFactories(typeof(TEventData))
+            GetOrCreateHandlerFactories(typeof(TEvent))
                 .Locking(factories =>
                 {
                     factories.RemoveAll(
@@ -162,7 +162,7 @@ namespace Volo.Abp.EventBus
                                 return false;
                             }
 
-                            var actionHandler = singleInstanceFactory.HandlerInstance as AsyncActionEventHandler<TEventData>;
+                            var actionHandler = singleInstanceFactory.HandlerInstance as AsyncActionEventHandler<TEvent>;
                             if (actionHandler == null)
                             {
                                 return false;
@@ -174,15 +174,15 @@ namespace Volo.Abp.EventBus
         }
 
         /// <inheritdoc/>
-        public void Unregister<TEventData>(IEventHandler<TEventData> handler) where TEventData : class
+        public void Unregister<TEvent>(IEventHandler<TEvent> handler) where TEvent : class
         {
-            Unregister(typeof(TEventData), handler);
+            Unregister(typeof(TEvent), handler);
         }
 
         /// <inheritdoc/>
-        public void AsyncUnregister<TEventData>(IAsyncEventHandler<TEventData> handler) where TEventData : class
+        public void AsyncUnregister<TEvent>(IAsyncEventHandler<TEvent> handler) where TEvent : class
         {
-            Unregister(typeof(TEventData), handler);
+            Unregister(typeof(TEvent), handler);
         }
 
         /// <inheritdoc/>
@@ -200,9 +200,9 @@ namespace Volo.Abp.EventBus
         }
 
         /// <inheritdoc/>
-        public void Unregister<TEventData>(IEventHandlerFactory factory) where TEventData : class
+        public void Unregister<TEvent>(IEventHandlerFactory factory) where TEvent : class
         {
-            Unregister(typeof(TEventData), factory);
+            Unregister(typeof(TEvent), factory);
         }
 
         /// <inheritdoc/>
@@ -212,9 +212,9 @@ namespace Volo.Abp.EventBus
         }
 
         /// <inheritdoc/>
-        public void UnregisterAll<TEventData>() where TEventData : class
+        public void UnregisterAll<TEvent>() where TEvent : class
         {
-            UnregisterAll(typeof(TEventData));
+            UnregisterAll(typeof(TEvent));
         }
 
         /// <inheritdoc/>
@@ -224,9 +224,9 @@ namespace Volo.Abp.EventBus
         }
 
         /// <inheritdoc/>
-        public void Trigger<TEventData>(TEventData eventData) where TEventData : class
+        public void Trigger<TEvent>(TEvent eventData) where TEvent : class
         {
-            Trigger(typeof(TEventData), eventData);
+            Trigger(typeof(TEvent), eventData);
         }
 
         /// <inheritdoc/>
@@ -284,9 +284,9 @@ namespace Volo.Abp.EventBus
         }
 
         /// <inheritdoc/>
-        public Task TriggerAsync<TEventData>(TEventData eventData) where TEventData : class
+        public Task TriggerAsync<TEvent>(TEvent eventData) where TEvent : class
         {
-            return TriggerAsync(typeof(TEventData), eventData);
+            return TriggerAsync(typeof(TEvent), eventData);
         }
 
         /// <inheritdoc/>

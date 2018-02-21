@@ -15,45 +15,45 @@ namespace Volo.Abp.EventBus
         /// Given action is called for all event occurrences.
         /// </summary>
         /// <param name="action">Action to handle events</param>
-        /// <typeparam name="TEventData">Event type</typeparam>
-        IDisposable Register<TEventData>(Action<TEventData> action) 
-            where TEventData : class;
+        /// <typeparam name="TEvent">Event type</typeparam>
+        IDisposable Register<TEvent>(Action<TEvent> action) 
+            where TEvent : class;
 
         /// <summary>
         /// Registers to an event.
         /// Given action is called for all event occurrences.
         /// </summary>
         /// <param name="action">Action to handle events</param>
-        /// <typeparam name="TEventData">Event type</typeparam>
-        IDisposable AsyncRegister<TEventData>(Func<TEventData, Task> action) 
-            where TEventData : class;
+        /// <typeparam name="TEvent">Event type</typeparam>
+        IDisposable AsyncRegister<TEvent>(Func<TEvent, Task> action) 
+            where TEvent : class;
 
         /// <summary>
         /// Registers to an event. 
         /// Same (given) instance of the handler is used for all event occurrences.
         /// </summary>
-        /// <typeparam name="TEventData">Event type</typeparam>
+        /// <typeparam name="TEvent">Event type</typeparam>
         /// <param name="handler">Object to handle the event</param>
-        IDisposable Register<TEventData>(IEventHandler<TEventData> handler) 
-            where TEventData : class;
+        IDisposable Register<TEvent>(IEventHandler<TEvent> handler) 
+            where TEvent : class;
 
         /// <summary>
         /// Registers to an event. 
         /// Same (given) instance of the async handler is used for all event occurrences.
         /// </summary>
-        /// <typeparam name="TEventData">Event type</typeparam>
+        /// <typeparam name="TEvent">Event type</typeparam>
         /// <param name="handler">Object to handle the event</param>
-        IDisposable AsyncRegister<TEventData>(IAsyncEventHandler<TEventData> handler)
-            where TEventData : class;
+        IDisposable AsyncRegister<TEvent>(IAsyncEventHandler<TEvent> handler)
+            where TEvent : class;
 
         /// <summary>
         /// Registers to an event.
         /// A new instance of <see cref="THandler"/> object is created for every event occurrence.
         /// </summary>
-        /// <typeparam name="TEventData">Event type</typeparam>
+        /// <typeparam name="TEvent">Event type</typeparam>
         /// <typeparam name="THandler">Type of the event handler</typeparam>
-        IDisposable Register<TEventData, THandler>()
-            where TEventData : class 
+        IDisposable Register<TEvent, THandler>()
+            where TEvent : class 
             where THandler : IEventHandler, new();
 
         /// <summary>
@@ -68,10 +68,10 @@ namespace Volo.Abp.EventBus
         /// Registers to an event.
         /// Given factory is used to create/release handlers
         /// </summary>
-        /// <typeparam name="TEventData">Event type</typeparam>
+        /// <typeparam name="TEvent">Event type</typeparam>
         /// <param name="factory">A factory to create/release handlers</param>
-        IDisposable Register<TEventData>(IEventHandlerFactory factory) 
-            where TEventData : class;
+        IDisposable Register<TEvent>(IEventHandlerFactory factory) 
+            where TEvent : class;
 
         /// <summary>
         /// Registers to an event.
@@ -87,34 +87,34 @@ namespace Volo.Abp.EventBus
         /// <summary>
         /// Unregisters from an event.
         /// </summary>
-        /// <typeparam name="TEventData">Event type</typeparam>
+        /// <typeparam name="TEvent">Event type</typeparam>
         /// <param name="action"></param>
-        void Unregister<TEventData>(Action<TEventData> action) 
-            where TEventData : class;
+        void Unregister<TEvent>(Action<TEvent> action) 
+            where TEvent : class;
 
         /// <summary>
         /// Unregisters from an event.
         /// </summary>
-        /// <typeparam name="TEventData">Event type</typeparam>
+        /// <typeparam name="TEvent">Event type</typeparam>
         /// <param name="action"></param>
-        void AsyncUnregister<TEventData>(Func<TEventData, Task> action)
-            where TEventData : class;
+        void AsyncUnregister<TEvent>(Func<TEvent, Task> action)
+            where TEvent : class;
 
         /// <summary>
         /// Unregisters from an event.
         /// </summary>
-        /// <typeparam name="TEventData">Event type</typeparam>
+        /// <typeparam name="TEvent">Event type</typeparam>
         /// <param name="handler">Handler object that is registered before</param>
-        void Unregister<TEventData>(IEventHandler<TEventData> handler)
-            where TEventData : class;
+        void Unregister<TEvent>(IEventHandler<TEvent> handler)
+            where TEvent : class;
 
         /// <summary>
         /// Unregisters from an event.
         /// </summary>
-        /// <typeparam name="TEventData">Event type</typeparam>
+        /// <typeparam name="TEvent">Event type</typeparam>
         /// <param name="handler">Handler object that is registered before</param>
-        void AsyncUnregister<TEventData>(IAsyncEventHandler<TEventData> handler) 
-            where TEventData : class;
+        void AsyncUnregister<TEvent>(IAsyncEventHandler<TEvent> handler) 
+            where TEvent : class;
 
         /// <summary>
         /// Unregisters from an event.
@@ -126,10 +126,10 @@ namespace Volo.Abp.EventBus
         /// <summary>
         /// Unregisters from an event.
         /// </summary>
-        /// <typeparam name="TEventData">Event type</typeparam>
+        /// <typeparam name="TEvent">Event type</typeparam>
         /// <param name="factory">Factory object that is registered before</param>
-        void Unregister<TEventData>(IEventHandlerFactory factory) 
-            where TEventData : class;
+        void Unregister<TEvent>(IEventHandlerFactory factory) 
+            where TEvent : class;
 
         /// <summary>
         /// Unregisters from an event.
@@ -141,9 +141,9 @@ namespace Volo.Abp.EventBus
         /// <summary>
         /// Unregisters all event handlers of given event type.
         /// </summary>
-        /// <typeparam name="TEventData">Event type</typeparam>
-        void UnregisterAll<TEventData>() 
-            where TEventData : class;
+        /// <typeparam name="TEvent">Event type</typeparam>
+        void UnregisterAll<TEvent>() 
+            where TEvent : class;
 
         /// <summary>
         /// Unregisters all event handlers of given event type.
@@ -158,10 +158,10 @@ namespace Volo.Abp.EventBus
         /// <summary>
         /// Triggers an event.
         /// </summary>
-        /// <typeparam name="TEventData">Event type</typeparam>
+        /// <typeparam name="TEvent">Event type</typeparam>
         /// <param name="eventData">Related data for the event</param>
-        void Trigger<TEventData>(TEventData eventData) 
-            where TEventData : class;
+        void Trigger<TEvent>(TEvent eventData) 
+            where TEvent : class;
 
         /// <summary>
         /// Triggers an event.
@@ -173,11 +173,11 @@ namespace Volo.Abp.EventBus
         /// <summary>
         /// Triggers an event asynchronously.
         /// </summary>
-        /// <typeparam name="TEventData">Event type</typeparam>
+        /// <typeparam name="TEvent">Event type</typeparam>
         /// <param name="eventData">Related data for the event</param>
         /// <returns>The task to handle async operation</returns>
-        Task TriggerAsync<TEventData>(TEventData eventData) 
-            where TEventData : class;
+        Task TriggerAsync<TEvent>(TEvent eventData) 
+            where TEvent : class;
 
         /// <summary>
         /// Triggers an event asynchronously.
