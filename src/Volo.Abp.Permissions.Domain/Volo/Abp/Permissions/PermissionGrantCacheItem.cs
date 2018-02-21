@@ -19,5 +19,10 @@ namespace Volo.Abp.Permissions
             Name = name;
             IsGranted = isGranted;
         }
+
+        public static string CalculateCacheKey(string name, string providerName, string providerKey)
+        {
+            return "pn:" + providerName + ",pk:" + providerKey + ",n:" + name;
+        }
     }
 }
