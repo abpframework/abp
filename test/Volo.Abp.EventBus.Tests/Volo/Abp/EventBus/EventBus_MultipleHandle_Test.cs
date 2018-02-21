@@ -2,7 +2,6 @@
 using Shouldly;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Entities.Events;
-using Volo.Abp.EventBus.Handlers;
 using Xunit;
 
 namespace Volo.Abp.EventBus

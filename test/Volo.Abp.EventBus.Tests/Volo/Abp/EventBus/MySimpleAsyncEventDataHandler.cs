@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.EventBus.Handlers;
 
 namespace Volo.Abp.EventBus
 {

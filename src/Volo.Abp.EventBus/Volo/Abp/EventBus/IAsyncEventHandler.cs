@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Volo.Abp.EventBus.Handlers
+namespace Volo.Abp.EventBus
 {
     /// <summary>
     /// Defines an interface of a class that handles events asynchrounously of type <see cref="IAsyncEventHandler{TEventData}"/>.

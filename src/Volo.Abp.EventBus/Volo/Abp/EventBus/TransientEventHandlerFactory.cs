@@ -1,7 +1,6 @@
 using System;
-using Volo.Abp.EventBus.Handlers;
 
-namespace Volo.Abp.EventBus.Factories.Internals
+namespace Volo.Abp.EventBus
 {
     /// <summary>
     /// This <see cref="IEventHandlerFactory"/> implementation is used to handle events
@@ -17,26 +16,18 @@ namespace Volo.Abp.EventBus.Factories.Internals
         /// Creates a new instance of the handler object.
         /// </summary>
         /// <returns>The handler object</returns>
-        public IEventHandler GetHandler()
+        public IEventHandlerDisposeWrapper GetHandler()
         {
-            return new THandler();
+            var handler = new THandler();
+            return new EventHandlerDisposeWrapper(
+                handler,
+                () => (handler as IDisposable)?.Dispose()
+            );
         }
 
         public Type GetHandlerType()
         {
             return typeof(THandler);
-        }
-
-        /// <summary>
-        /// Disposes the handler object if it's <see cref="IDisposable"/>. Does nothing if it's not.
-        /// </summary>
-        /// <param name="handler">Handler to be released</param>
-        public void ReleaseHandler(IEventHandler handler)
-        {
-            if (handler is IDisposable)
-            {
-                (handler as IDisposable).Dispose();
-            }
         }
     }
 }

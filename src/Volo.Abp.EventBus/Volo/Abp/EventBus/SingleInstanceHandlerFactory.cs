@@ -1,8 +1,7 @@
 using System;
 using Volo.Abp.DynamicProxy;
-using Volo.Abp.EventBus.Handlers;
 
-namespace Volo.Abp.EventBus.Factories.Internals
+namespace Volo.Abp.EventBus
 {
     /// <summary>
     /// This <see cref="IEventHandlerFactory"/> implementation is used to handle events
@@ -16,7 +15,7 @@ namespace Volo.Abp.EventBus.Factories.Internals
         /// <summary>
         /// The event handler instance.
         /// </summary>
-        public IEventHandler HandlerInstance { get; private set; }
+        public IEventHandler HandlerInstance { get; }
 
         /// <summary>
         /// 
@@ -27,19 +26,14 @@ namespace Volo.Abp.EventBus.Factories.Internals
             HandlerInstance = handler;
         }
 
-        public IEventHandler GetHandler()
+        public IEventHandlerDisposeWrapper GetHandler()
         {
-            return HandlerInstance;
+            return new EventHandlerDisposeWrapper(HandlerInstance);
         }
 
         public Type GetHandlerType()
         {
             return ProxyHelper.UnProxy(HandlerInstance).GetType();
-        }
-
-        public void ReleaseHandler(IEventHandler handler)
-        {
-            
         }
     }
 }

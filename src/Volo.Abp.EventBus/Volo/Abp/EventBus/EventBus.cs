@@ -10,10 +10,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.EventBus.Factories;
-using Volo.Abp.EventBus.Factories.Internals;
-using Volo.Abp.EventBus.Handlers;
-using Volo.Abp.EventBus.Handlers.Internals;
 using Volo.Abp.Threading;
 
 namespace Volo.Abp.EventBus
@@ -61,14 +57,14 @@ namespace Volo.Abp.EventBus
                     var genericArgs = @interface.GetGenericArguments();
                     if (genericArgs.Length == 1)
                     {
-                        Register(genericArgs[0], new IocHandlerFactory(serviceProvider, handler));
+                        Register(genericArgs[0], new IocEventHandlerFactory(serviceProvider, handler));
                     }
                 }
             }
         }
 
         /// <inheritdoc/>
-        public IDisposable Register<TEventData>(Action<TEventData> action) 
+        public IDisposable Register<TEventData>(Action<TEventData> action)
             where TEventData : class
         {
             return Register(typeof(TEventData), new ActionEventHandler<TEventData>(action));
@@ -351,68 +347,53 @@ namespace Volo.Abp.EventBus
 
         private void TriggerHandlingException(IEventHandlerFactory handlerFactory, Type eventType, object eventData, List<Exception> exceptions)
         {
-            var eventHandler = handlerFactory.GetHandler();
-            try
+            using (var eventHandlerWrapper = handlerFactory.GetHandler())
             {
-                if (eventHandler == null)
+                try
                 {
-                    throw new ArgumentNullException($"Registered event handler for event type {eventType.Name} is null!");
+                    var handlerType = typeof(IEventHandler<>).MakeGenericType(eventType);
+
+                    var method = handlerType.GetMethod(
+                        "HandleEvent",
+                        new[] { eventType }
+                    );
+
+                    method.Invoke(eventHandlerWrapper.EventHandler, new[] { eventData });
                 }
-
-                var handlerType = typeof(IEventHandler<>).MakeGenericType(eventType);
-
-                var method = handlerType.GetMethod(
-                    "HandleEvent",
-                    new[] { eventType }
-                );
-
-                method.Invoke(eventHandler, new[] { eventData });
-            }
-            catch (TargetInvocationException ex)
-            {
-                exceptions.Add(ex.InnerException);
-            }
-            catch (Exception ex)
-            {
-                exceptions.Add(ex);
-            }
-            finally
-            {
-                handlerFactory.ReleaseHandler(eventHandler);
+                catch (TargetInvocationException ex)
+                {
+                    exceptions.Add(ex.InnerException);
+                }
+                catch (Exception ex)
+                {
+                    exceptions.Add(ex);
+                }
             }
         }
 
         private async Task TriggerAsyncHandlingException(IEventHandlerFactory asyncHandlerFactory, Type eventType, object eventData, List<Exception> exceptions)
         {
-            var asyncEventHandler = asyncHandlerFactory.GetHandler();
-
-            try
+            using (var eventHandlerWrapper = asyncHandlerFactory.GetHandler())
             {
-                if (asyncEventHandler == null)
+                try
                 {
-                    throw new ArgumentNullException($"Registered async event handler for event type {eventType.Name} is null!");
+                    var asyncHandlerType = typeof(IAsyncEventHandler<>).MakeGenericType(eventType);
+
+                    var method = asyncHandlerType.GetMethod(
+                        "HandleEventAsync",
+                        new[] { eventType }
+                    );
+
+                    await (Task)method.Invoke(eventHandlerWrapper.EventHandler, new[] { eventData });
                 }
-
-                var asyncHandlerType = typeof(IAsyncEventHandler<>).MakeGenericType(eventType);
-
-                var method = asyncHandlerType.GetMethod(
-                    "HandleEventAsync",
-                    new[] { eventType }
-                );
-
-                await (Task)method.Invoke(asyncEventHandler, new[] { eventData });
-            }
-            catch (TargetInvocationException ex)
-            {
-                exceptions.Add(ex.InnerException);
-            }
-            catch (Exception ex)
-            {
-                exceptions.Add(ex);
-            }
-            finally
-            {
-                asyncHandlerFactory.ReleaseHandler(asyncEventHandler);
+                catch (TargetInvocationException ex)
+                {
+                    exceptions.Add(ex.InnerException);
+                }
+                catch (Exception ex)
+                {
+                    exceptions.Add(ex);
+                }
             }
         }
 

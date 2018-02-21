@@ -1,4 +1,4 @@
-namespace Volo.Abp.EventBus.Handlers
+namespace Volo.Abp.EventBus
 {
     /// <summary>
     /// Undirect base interface for all event handlers.

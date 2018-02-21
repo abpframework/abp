@@ -1,22 +1,21 @@
 using System;
 using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.EventBus.Handlers;
 
-namespace Volo.Abp.EventBus.Factories
+namespace Volo.Abp.EventBus
 {
     /// <summary>
     /// This <see cref="IEventHandlerFactory"/> implementation is used to get/release
     /// handlers using Ioc.
     /// </summary>
-    public class IocHandlerFactory : IEventHandlerFactory
+    public class IocEventHandlerFactory : IEventHandlerFactory
     {
         public Type HandlerType { get; }
 
-        private readonly IServiceProvider _iocResolver;
+        private readonly IServiceProvider _serviceProvider;
 
-        public IocHandlerFactory(IServiceProvider iocResolver, Type handlerType)
+        public IocEventHandlerFactory(IServiceProvider serviceProvider, Type handlerType)
         {
-            _iocResolver = iocResolver;
+            _serviceProvider = serviceProvider;
             HandlerType = handlerType;
         }
 
@@ -24,20 +23,18 @@ namespace Volo.Abp.EventBus.Factories
         /// Resolves handler object from Ioc container.
         /// </summary>
         /// <returns>Resolved handler object</returns>
-        public IEventHandler GetHandler()
+        public IEventHandlerDisposeWrapper GetHandler()
         {
-            return (IEventHandler)_iocResolver.GetRequiredService(HandlerType);
+            var scope = _serviceProvider.CreateScope();
+            return new EventHandlerDisposeWrapper(
+                (IEventHandler) scope.ServiceProvider.GetRequiredService(HandlerType),
+                () => scope.Dispose()
+            );
         }
 
         public Type GetHandlerType()
         {
             return HandlerType;
-        }
-
-        public void ReleaseHandler(IEventHandler handler)
-        {
-            //TODO: Scope!!!
-            //_iocResolver.Release(handler);
         }
     }
 }

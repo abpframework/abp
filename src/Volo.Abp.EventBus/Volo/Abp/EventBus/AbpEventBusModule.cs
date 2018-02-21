@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.EventBus.Handlers;
 using Volo.Abp.Modularity;
 
 namespace Volo.Abp.EventBus

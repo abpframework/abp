@@ -1,7 +1,7 @@
 using System;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.EventBus.Handlers.Internals
+namespace Volo.Abp.EventBus
 {
     /// <summary>
     /// This event handler is an adapter to be able to use an action as <see cref="IEventHandler{TEventData}"/> implementation.

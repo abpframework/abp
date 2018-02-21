@@ -1,7 +1,6 @@
 using System;
-using Volo.Abp.EventBus.Handlers;
 
-namespace Volo.Abp.EventBus.Factories
+namespace Volo.Abp.EventBus
 {
     /// <summary>
     /// Defines an interface for factories those are responsible to create/get and release of event handlers.
@@ -12,18 +11,12 @@ namespace Volo.Abp.EventBus.Factories
         /// Gets an event handler.
         /// </summary>
         /// <returns>The event handler</returns>
-        IEventHandler GetHandler();
+        IEventHandlerDisposeWrapper GetHandler();
 
         /// <summary>
         /// Gets type of the handler (without creating an instance).
         /// </summary>
         /// <returns></returns>
         Type GetHandlerType();
-
-        /// <summary>
-        /// Releases an event handler.
-        /// </summary>
-        /// <param name="handler">Handle to be released</param>
-        void ReleaseHandler(IEventHandler handler);
     }
 }

@@ -1,7 +1,5 @@
 using System;
 using System.Threading.Tasks;
-using Volo.Abp.EventBus.Factories;
-using Volo.Abp.EventBus.Handlers;
 
 namespace Volo.Abp.EventBus
 {

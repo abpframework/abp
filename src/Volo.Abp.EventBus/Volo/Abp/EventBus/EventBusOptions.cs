@@ -1,5 +1,4 @@
 using Volo.Abp.Collections;
-using Volo.Abp.EventBus.Handlers;
 
 namespace Volo.Abp.EventBus
 {

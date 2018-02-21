@@ -1,6 +1,6 @@
 using System;
 
-namespace Volo.Abp.EventBus.Factories.Internals
+namespace Volo.Abp.EventBus
 {
     /// <summary>
     /// Used to unregister a <see cref="IEventHandlerFactory"/> on <see cref="Dispose"/> method.
