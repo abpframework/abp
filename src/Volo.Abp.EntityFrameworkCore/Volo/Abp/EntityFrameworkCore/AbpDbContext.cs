@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Linq.Expressions;
@@ -10,6 +11,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.Domain.Entities.Events;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Reflection;
@@ -31,12 +33,15 @@ namespace Volo.Abp.EntityFrameworkCore
 
         public IDataFilter DataFilter { get; set; }
 
+        public IEntityChangeEventHelper EntityChangeEventHelper { get; set; }
+
         private static readonly MethodInfo ConfigureGlobalFiltersMethodInfo = typeof(AbpDbContext<TDbContext>).GetMethod(nameof(ConfigureGlobalFilters), BindingFlags.Instance | BindingFlags.NonPublic);
 
         protected AbpDbContext(DbContextOptions<TDbContext> options)
             : base(options)
         {
             GuidGenerator = SimpleGuidGenerator.Instance;
+            EntityChangeEventHelper = NullEntityChangeEventHelper.Instance;
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -56,12 +61,14 @@ namespace Volo.Abp.EntityFrameworkCore
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
         {
             ChangeTracker.DetectChanges();
-            ApplyAbpConcepts();
 
             try
             {
-                ChangeTracker.AutoDetectChangesEnabled = false;
-                return base.SaveChanges(acceptAllChangesOnSuccess);
+                ChangeTracker.AutoDetectChangesEnabled = false; //TODO: Why this is needed?
+                var changeReport = ApplyAbpConcepts();
+                var result = base.SaveChanges(acceptAllChangesOnSuccess);
+                EntityChangeEventHelper.TriggerEvents(changeReport);
+                return result;
             }
             catch (DbUpdateConcurrencyException ex)
             {
@@ -76,12 +83,14 @@ namespace Volo.Abp.EntityFrameworkCore
         public override async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
         {
             ChangeTracker.DetectChanges();
-            ApplyAbpConcepts();
 
             try
             {
-                ChangeTracker.AutoDetectChangesEnabled = false;
-                return await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+                ChangeTracker.AutoDetectChangesEnabled = false; //TODO: Why this is needed?
+                var changeReport = ApplyAbpConcepts();
+                var result = await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+                await EntityChangeEventHelper.TriggerEventsAsync(changeReport);
+                return result;
             }
             catch (DbUpdateConcurrencyException ex)
             {
@@ -106,26 +115,80 @@ namespace Volo.Abp.EntityFrameworkCore
                 .IsConcurrencyToken = true;
         }
 
-        protected virtual void ApplyAbpConcepts()
+        protected virtual EntityChangeReport ApplyAbpConcepts()
         {
             /* Implement other concepts from ABP v1.x */
 
-            foreach (var entry in ChangeTracker.Entries())
+            var changeReport = new EntityChangeReport();
+
+            foreach (var entry in ChangeTracker.Entries().ToList())
             {
-                switch (entry.State)
-                {
-                    case EntityState.Added:
-                        CheckAndSetId(entry);
-                        break;
-                    case EntityState.Modified:
-                        HandleConcurrencyStamp(entry);
-                        break;
-                    case EntityState.Deleted:
-                        CancelDeletionForSoftDelete(entry);
-                        HandleConcurrencyStamp(entry);
-                        break;
-                }
+                ApplyAbpConcepts(entry, changeReport);
             }
+
+            return changeReport;
+        }
+
+        protected virtual void ApplyAbpConcepts(EntityEntry entry, EntityChangeReport changeReport)
+        {
+            switch (entry.State)
+            {
+                case EntityState.Added:
+                    ApplyAbpConceptsForAddedEntity(entry, changeReport);
+                    break;
+                case EntityState.Modified:
+                    ApplyAbpConceptsForModifiedEntity(entry, changeReport);
+                    break;
+                case EntityState.Deleted:
+                    ApplyAbpConceptsForDeletedEntity(entry, changeReport);
+                    break;
+            }
+
+            AddDomainEvents(changeReport.DomainEvents, entry.Entity);
+        }
+
+        protected virtual void ApplyAbpConceptsForAddedEntity(EntityEntry entry, EntityChangeReport changeReport)
+        {
+            CheckAndSetId(entry);
+            changeReport.ChangedEntities.Add(new EntityChangeEntry(entry.Entity, EntityChangeType.Created));
+        }
+
+        protected virtual void ApplyAbpConceptsForModifiedEntity(EntityEntry entry, EntityChangeReport changeReport)
+        {
+            HandleConcurrencyStamp(entry);
+
+            if (entry.Entity is ISoftDelete && entry.Entity.As<ISoftDelete>().IsDeleted)
+            {
+                changeReport.ChangedEntities.Add(new EntityChangeEntry(entry.Entity, EntityChangeType.Deleted));
+            }
+            else
+            {
+                changeReport.ChangedEntities.Add(new EntityChangeEntry(entry.Entity, EntityChangeType.Updated));
+            }
+        }
+
+        protected virtual void ApplyAbpConceptsForDeletedEntity(EntityEntry entry, EntityChangeReport changeReport)
+        {
+            CancelDeletionForSoftDelete(entry);
+            HandleConcurrencyStamp(entry);
+            changeReport.ChangedEntities.Add(new EntityChangeEntry(entry.Entity, EntityChangeType.Deleted));
+        }
+
+        protected virtual void AddDomainEvents(List<DomainEventEntry> domainEvents, object entityAsObj)
+        {
+            var generatesDomainEventsEntity = entityAsObj as IGeneratesDomainEvents;
+            if (generatesDomainEventsEntity == null)
+            {
+                return;
+            }
+
+            if (generatesDomainEventsEntity.DomainEvents.IsNullOrEmpty())
+            {
+                return;
+            }
+
+            domainEvents.AddRange(generatesDomainEventsEntity.DomainEvents.Select(eventData => new DomainEventEntry(entityAsObj, eventData)));
+            generatesDomainEventsEntity.DomainEvents.Clear();
         }
 
         protected virtual void HandleConcurrencyStamp(EntityEntry entry)
@@ -219,7 +282,7 @@ namespace Volo.Abp.EntityFrameworkCore
                 Expression<Func<TEntity, bool>> multiTenantFilter = e => ((IMultiTenant)e).TenantId == CurrentTenantId || (((IMultiTenant)e).TenantId == CurrentTenantId) == IsMayHaveTenantFilterEnabled;
                 expression = expression == null ? multiTenantFilter : CombineExpressions(expression, multiTenantFilter);
             }
-            
+
             return expression;
         }
 
