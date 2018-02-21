@@ -114,7 +114,7 @@ namespace Volo.Abp.EventBus
             GetOrCreateHandlerFactories(eventType)
                 .Locking(factories => factories.Add(factory));
 
-            return new FactoryUnregistrar(this, eventType, factory);
+            return new EventHandlerFactoryUnregistrar(this, eventType, factory);
         }
 
         /// <inheritdoc/>
