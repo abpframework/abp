@@ -24,9 +24,18 @@ namespace Volo.Abp.Caching
             ObjectSerializer = objectSerializer;
         }
 
-        public async Task<TCacheItem> GetAsync(
-            string key, 
-            CancellationToken token = default)
+        public TCacheItem Get(string key)
+        {
+            var cachedBytes = Cache.Get(key);
+            if (cachedBytes == null)
+            {
+                return null;
+            }
+
+            return ObjectSerializer.Deserialize<TCacheItem>(cachedBytes);
+        }
+
+        public async Task<TCacheItem> GetAsync(string key, CancellationToken token = default)
         {
             var cachedBytes = await Cache.GetAsync(key, CancellationTokenProvider.FallbackToProvider(token));
             if (cachedBytes == null)
@@ -37,11 +46,16 @@ namespace Volo.Abp.Caching
             return ObjectSerializer.Deserialize<TCacheItem>(cachedBytes);
         }
 
-        public Task SetAsync(
-            string key, 
-            TCacheItem value, 
-            DistributedCacheEntryOptions options = null, 
-            CancellationToken token = default)
+        public void Set(string key, TCacheItem value, DistributedCacheEntryOptions options)
+        {
+            Cache.Set(
+                key,
+                ObjectSerializer.Serialize(value),
+                options ?? new DistributedCacheEntryOptions { SlidingExpiration = TimeSpan.FromMinutes(20) } //TODO: implement per cache item and global defaults!!!
+            );
+        }
+
+        public Task SetAsync(string key, TCacheItem value, DistributedCacheEntryOptions options = null, CancellationToken token = default)
         {
             return Cache.SetAsync(
                 key,
@@ -51,9 +65,22 @@ namespace Volo.Abp.Caching
             );
         }
 
-        public Task RemoveAsync(
-            string key, 
-            CancellationToken token = default)
+        public void Refresh(string key)
+        {
+            Cache.Refresh(key);
+        }
+
+        public Task RefreshAsync(string key, CancellationToken token = default)
+        {
+            return Cache.RefreshAsync(key, CancellationTokenProvider.FallbackToProvider(token));
+        }
+
+        public void Remove(string key)
+        {
+            Cache.Remove(key);
+        }
+
+        public Task RemoveAsync(string key, CancellationToken token = default)
         {
             return Cache.RemoveAsync(key, CancellationTokenProvider.FallbackToProvider(token));
         }

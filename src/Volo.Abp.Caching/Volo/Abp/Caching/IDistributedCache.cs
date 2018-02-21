@@ -8,9 +8,19 @@ namespace Volo.Abp.Caching
     public interface IDistributedCache<TCacheItem>
         where TCacheItem : class
     {
+        TCacheItem Get(
+            string key
+        );
+
         Task<TCacheItem> GetAsync(
             [NotNull] string key,
             CancellationToken token = default
+        );
+
+        void Set(
+            string key,
+            TCacheItem value,
+            DistributedCacheEntryOptions options
         );
 
         Task SetAsync(
@@ -18,6 +28,19 @@ namespace Volo.Abp.Caching
             [NotNull] TCacheItem value,
             [CanBeNull] DistributedCacheEntryOptions options = null,
             CancellationToken token = default
+        );
+
+        void Refresh(
+            string key
+        );
+
+        Task RefreshAsync(
+            string key,
+            CancellationToken token = default
+        );
+
+        void Remove(
+            string key
         );
 
         Task RemoveAsync(
