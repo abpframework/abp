@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 
 namespace Volo.Abp.Identity
 {
+    [Authorize(IdentityPermissions.Roles.Default)]
     public class IdentityRoleAppService : ApplicationService, IIdentityRoleAppService
     {
         private readonly IdentityRoleManager _roleManager;
@@ -26,7 +28,7 @@ namespace Volo.Abp.Identity
             );
         }
 
-        public async Task<PagedResultDto<IdentityRoleDto>> GetListAsync(GetIdentityRolesInput input) //TODO: Remove input
+        public async Task<PagedResultDto<IdentityRoleDto>> GetListAsync(GetIdentityRolesInput input) //TODO: Remove this method since it's not used
         {
             var count = (int) await _roleRepository.GetCountAsync();
             var list = await _roleRepository.GetListAsync();
@@ -37,13 +39,14 @@ namespace Volo.Abp.Identity
             );
         }
 
-        public async Task<List<IdentityRoleDto>> GetAllListAsync()
+        public async Task<List<IdentityRoleDto>> GetAllListAsync() //TODO: Rename to GetList (however it's not possible because of the design of the IAsyncCrudAppService)
         {
             var list = await _roleRepository.GetListAsync();
 
             return ObjectMapper.Map<List<IdentityRole>, List<IdentityRoleDto>>(list);
         }
 
+        [Authorize(IdentityPermissions.Roles.Create)]
         public async Task<IdentityRoleDto> CreateAsync(IdentityRoleCreateDto input)
         {
             var role = new IdentityRole(GuidGenerator.Create(), input.Name, CurrentTenant.Id);
@@ -54,6 +57,7 @@ namespace Volo.Abp.Identity
             return ObjectMapper.Map<IdentityRole, IdentityRoleDto>(role);
         }
 
+        [Authorize(IdentityPermissions.Roles.Update)]
         public async Task<IdentityRoleDto> UpdateAsync(Guid id, IdentityRoleUpdateDto input)
         {
             var role = await _roleManager.GetByIdAsync(id);
@@ -66,6 +70,7 @@ namespace Volo.Abp.Identity
             return ObjectMapper.Map<IdentityRole, IdentityRoleDto>(role);
         }
 
+        [Authorize(IdentityPermissions.Roles.Delete)]
         public async Task DeleteAsync(Guid id)
         {
             var role = await _roleManager.FindByIdAsync(id.ToString());

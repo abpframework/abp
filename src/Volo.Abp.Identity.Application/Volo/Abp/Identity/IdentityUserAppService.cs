@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
 
 namespace Volo.Abp.Identity
 {
+    [Authorize(IdentityPermissions.Users.Default)]
     public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppService
     {
         private readonly IdentityUserManager _userManager;
@@ -34,6 +36,15 @@ namespace Volo.Abp.Identity
             );
         }
 
+        public async Task<ListResultDto<IdentityRoleDto>> GetRolesAsync(Guid id)
+        {
+            var roles = await _userRepository.GetRolesAsync(id);
+            return new ListResultDto<IdentityRoleDto>(
+                ObjectMapper.Map<List<IdentityRole>, List<IdentityRoleDto>>(roles)
+            );
+        }
+
+        [Authorize(IdentityPermissions.Users.Create)]
         public async Task<IdentityUserDto> CreateAsync(IdentityUserCreateDto input)
         {
             var user = new IdentityUser(GuidGenerator.Create(), input.UserName, CurrentTenant.Id);
@@ -46,6 +57,7 @@ namespace Volo.Abp.Identity
             return ObjectMapper.Map<IdentityUser, IdentityUserDto>(user);
         }
 
+        [Authorize(IdentityPermissions.Users.Update)]
         public async Task<IdentityUserDto> UpdateAsync(Guid id, IdentityUserUpdateDto input)
         {
             var user = await _userManager.GetByIdAsync(id);
@@ -58,6 +70,7 @@ namespace Volo.Abp.Identity
             return ObjectMapper.Map<IdentityUser, IdentityUserDto>(user);
         }
 
+        [Authorize(IdentityPermissions.Users.Delete)]
         public async Task DeleteAsync(Guid id)
         {
             var user = await _userManager.FindByIdAsync(id.ToString());
@@ -69,14 +82,7 @@ namespace Volo.Abp.Identity
             CheckIdentityErrors(await _userManager.DeleteAsync(user));
         }
 
-        public async Task<ListResultDto<IdentityRoleDto>> GetRolesAsync(Guid id)
-        {
-            var roles = await _userRepository.GetRolesAsync(id);
-            return new ListResultDto<IdentityRoleDto>(
-                ObjectMapper.Map<List<IdentityRole>, List<IdentityRoleDto>>(roles)
-            );
-        }
-
+        [Authorize(IdentityPermissions.Users.Update)]
         public async Task UpdateRolesAsync(Guid id, IdentityUserUpdateRolesDto input)
         {
             var user = await _userManager.GetByIdAsync(id);
