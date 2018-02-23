@@ -16,7 +16,7 @@ namespace Volo.Abp.Permissions
         protected ICurrentTenant CurrentTenant { get; }
 
         protected PermissionManagementProvider(
-            IPermissionGrantRepository permissionGrantRepository, 
+            IPermissionGrantRepository permissionGrantRepository,
             IGuidGenerator guidGenerator,
             ICurrentTenant currentTenant)
         {
@@ -39,10 +39,17 @@ namespace Volo.Abp.Permissions
             );
         }
 
-        public virtual async Task GrantAsync(string name, string providerKey)
+        public virtual Task SetAsync(string name, string providerKey, bool isGranted)
         {
-            var grant = await PermissionGrantRepository.FindAsync(name, Name, providerKey);
-            if (grant != null)
+            return isGranted
+                ? GrantAsync(name, providerKey)
+                : RevokeAsync(name, providerKey);
+        }
+
+        protected virtual async Task GrantAsync(string name, string providerKey)
+        {
+            var permissionGrant = await PermissionGrantRepository.FindAsync(name, Name, providerKey);
+            if (permissionGrant != null)
             {
                 return;
             }
@@ -58,15 +65,15 @@ namespace Volo.Abp.Permissions
             );
         }
 
-        public virtual async Task RevokeAsync(string name, string providerKey)
+        protected virtual async Task RevokeAsync(string name, string providerKey)
         {
-            var grant = await PermissionGrantRepository.FindAsync(name, Name, providerKey);
-            if (grant == null)
+            var permissionGrant = await PermissionGrantRepository.FindAsync(name, Name, providerKey);
+            if (permissionGrant == null)
             {
                 return;
             }
 
-            await PermissionGrantRepository.DeleteAsync(grant);
+            await PermissionGrantRepository.DeleteAsync(permissionGrant);
         }
     }
 }

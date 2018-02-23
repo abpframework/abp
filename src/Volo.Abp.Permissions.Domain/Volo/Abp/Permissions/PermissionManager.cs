@@ -76,14 +76,7 @@ namespace Volo.Abp.Permissions
                 throw new AbpException("Unknown permission management provider: " + providerName);
             }
 
-            if (currentGrantInfo.IsGranted == false)
-            {
-                await provider.GrantAsync(permissionName, providerKey);
-            }
-            else
-            {
-                await provider.RevokeAsync(permissionName, providerKey);
-            }
+            await provider.SetAsync(permissionName, providerKey, isGranted);
         }
 
         public async Task<PermissionWithGrantedProviders> GetInternalAsync(PermissionDefinition permissionDefinition, string providerName, string providerKey)

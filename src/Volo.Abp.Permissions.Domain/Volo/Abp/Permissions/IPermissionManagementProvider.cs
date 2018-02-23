@@ -11,10 +11,6 @@ namespace Volo.Abp.Permissions
 
         Task<PermissionValueProviderGrantInfo> CheckAsync([NotNull] string name, [NotNull] string providerName, [NotNull] string providerKey);
 
-        //TODO: Instead of GrantAsync/RevokeAsync add SetAsync
-
-        Task GrantAsync([NotNull] string name, [NotNull] string providerKey);
-
-        Task RevokeAsync([NotNull] string name, [NotNull] string providerKey);
+        Task SetAsync([NotNull] string name, [NotNull] string providerKey, bool isGranted);
     }
 }
