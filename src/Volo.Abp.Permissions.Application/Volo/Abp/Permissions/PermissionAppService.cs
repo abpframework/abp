@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Authorization.Permissions;
 
 namespace Volo.Abp.Permissions
 {
+    [Authorize(PermissionPermissions.Permissions.Default)]
     public class PermissionAppService : ApplicationService, IPermissionAppService
     {
         private readonly IPermissionManager _permissionManager;
@@ -66,6 +68,7 @@ namespace Volo.Abp.Permissions
             return result;
         }
 
+        [Authorize(PermissionPermissions.Permissions.Update)]
         public async Task UpdateAsync(string providerName, string providerKey, UpdatePermissionsDto input)
         {
             foreach (var permission in input.Permissions)
