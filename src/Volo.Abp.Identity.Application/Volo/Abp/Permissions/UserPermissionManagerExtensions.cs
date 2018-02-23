@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
-using Volo.Abp.Identity;
+using Volo.Abp.Session;
 
 namespace Volo.Abp.Permissions
 {
@@ -12,14 +12,14 @@ namespace Volo.Abp.Permissions
         {
             Check.NotNull(permissionManager, nameof(permissionManager));
 
-            return permissionManager.GetAllAsync(UserPermissionManagementProvider.ProviderName, userId.ToString());
+            return permissionManager.GetAllAsync(UserPermissionValueProvider.ProviderName, userId.ToString());
         }
 
         public static Task SetForUserAsync([NotNull] this IPermissionManager permissionManager, Guid userId, [NotNull] string name, bool isGranted)
         {
             Check.NotNull(permissionManager, nameof(permissionManager));
 
-            return permissionManager.SetAsync(name, UserPermissionManagementProvider.ProviderName, userId.ToString(), isGranted);
+            return permissionManager.SetAsync(name, UserPermissionValueProvider.ProviderName, userId.ToString(), isGranted);
         }
     }
 }

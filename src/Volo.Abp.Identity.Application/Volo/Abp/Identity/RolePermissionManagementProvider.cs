@@ -4,14 +4,13 @@ using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Permissions;
+using Volo.Abp.Session;
 
 namespace Volo.Abp.Identity
 {
     public class RolePermissionManagementProvider : PermissionManagementProvider
     {
-        public const string ProviderName = "Role";
-
-        public override string Name => ProviderName;
+        public override string Name => RolePermissionValueProvider.ProviderName;
 
         private readonly IIdentityUserRepository _identityUserRepository;
 

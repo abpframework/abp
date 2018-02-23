@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
-using Volo.Abp.Identity;
+using Volo.Abp.Session;
 
 namespace Volo.Abp.Permissions
 {
@@ -12,21 +11,21 @@ namespace Volo.Abp.Permissions
         {
             Check.NotNull(permissionManager, nameof(permissionManager));
 
-            return permissionManager.GetAsync(permissionName, RolePermissionManagementProvider.ProviderName, roleName);
+            return permissionManager.GetAsync(permissionName, RolePermissionValueProvider.ProviderName, roleName);
         }
 
         public static Task<List<PermissionWithGrantedProviders>> GetAllForRoleAsync([NotNull] this IPermissionManager permissionManager, string roleName)
         {
             Check.NotNull(permissionManager, nameof(permissionManager));
 
-            return permissionManager.GetAllAsync(RolePermissionManagementProvider.ProviderName, roleName);
+            return permissionManager.GetAllAsync(RolePermissionValueProvider.ProviderName, roleName);
         }
 
         public static Task SetForRoleAsync([NotNull] this IPermissionManager permissionManager, string roleName, [NotNull] string permissionName, bool isGranted)
         {
             Check.NotNull(permissionManager, nameof(permissionManager));
 
-            return permissionManager.SetAsync(permissionName, RolePermissionManagementProvider.ProviderName, roleName, isGranted);
+            return permissionManager.SetAsync(permissionName, RolePermissionValueProvider.ProviderName, roleName, isGranted);
         }
     }
 }
