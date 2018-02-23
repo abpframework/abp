@@ -34,8 +34,7 @@ namespace Volo.Abp.Authorization.Permissions
                 true
             );
         }
-
-
+        
         public Task<PermissionGrantInfo> CheckAsync(string name)
         {
             var permission = PermissionDefinitionManager.Get(name);

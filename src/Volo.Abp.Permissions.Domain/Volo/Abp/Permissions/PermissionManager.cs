@@ -70,19 +70,18 @@ namespace Volo.Abp.Permissions
                 return;
             }
 
+            var provider = ManagementProviders.FirstOrDefault(m => m.Name == providerName);
+            if (provider == null)
+            {
+                throw new AbpException("Unknown permission management provider: " + providerName);
+            }
+
             if (currentGrantInfo.IsGranted == false)
             {
-                var provider = ManagementProviders.FirstOrDefault(m => m.Name == providerName);
                 await provider.GrantAsync(permissionName, providerKey);
             }
             else
             {
-                if (currentGrantInfo.Providers.All(p => p.Name != providerName))
-                {
-                    return;
-                }
-
-                var provider = ManagementProviders.FirstOrDefault(m => m.Name == providerName);
                 await provider.RevokeAsync(permissionName, providerKey);
             }
         }
