@@ -31,6 +31,9 @@ namespace Volo.Abp.Permissions.Web.Pages.AbpPermissions
 
         public async Task OnGetAsync()
         {
+            ValidateModel();
+            await CheckPolicyAsync(PermissionPermissions.Permissions.Default);
+
             var result = await _permissionAppService.GetAsync(ProviderName, ProviderKey);
             Groups = ObjectMapper.Map<List<PermissionGroupDto>, List<PermissionGroupViewModel>>(result.Groups);
         }
@@ -38,6 +41,7 @@ namespace Volo.Abp.Permissions.Web.Pages.AbpPermissions
         public async Task<IActionResult> OnPostAsync()
         {
             ValidateModel();
+            await CheckPolicyAsync(PermissionPermissions.Permissions.Update);
 
             var updatePermissionDtos = Groups
                 .SelectMany(g => g.Permissions)
