@@ -18,6 +18,7 @@ namespace Volo.Abp.Identity
         {
             services.Configure<PermissionManagementOptions>(options =>
             {
+                options.ManagementProviders.Add<UserPermissionManagementProvider>();
                 options.ManagementProviders.Add<RolePermissionManagementProvider>();
             });
 
