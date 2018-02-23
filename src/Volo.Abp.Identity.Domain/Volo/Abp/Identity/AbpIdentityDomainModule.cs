@@ -11,12 +11,6 @@ namespace Volo.Abp.Identity
     {
         public override void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<PermissionManagementOptions>(options =>
-            {
-                options.ManagementProviders.Add<UserPermissionManagementProvider>();
-                options.ManagementProviders.Add<RolePermissionManagementProvider>();
-            });
-
             var identityBuilder = services.AddAbpIdentity();
             services.ExecutePreConfiguredActions(identityBuilder);
 
