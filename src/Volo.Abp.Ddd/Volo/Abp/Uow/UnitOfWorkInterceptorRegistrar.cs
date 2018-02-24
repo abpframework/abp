@@ -9,8 +9,7 @@ namespace Volo.Abp.Uow
         {
             if (UnitOfWorkHelper.IsUnitOfWorkType(context.ImplementationType.GetTypeInfo()))
             {
-                //TODO: Notice that it may add the interceptor more than one for every exposed service type!?
-                context.Interceptors.Add<UnitOfWorkInterceptor>();
+                context.Interceptors.TryAdd<UnitOfWorkInterceptor>();
             }
         }
     }

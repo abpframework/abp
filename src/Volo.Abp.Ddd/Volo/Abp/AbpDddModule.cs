@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Application.Services;
+using Volo.Abp.Authorization;
 using Volo.Abp.Data;
 using Volo.Abp.EventBus;
 using Volo.Abp.Guids;
@@ -15,6 +16,8 @@ using Volo.Abp.Validation;
 
 namespace Volo.Abp
 {
+    //TODO: Consider to split this DDD package by layers!
+
     [DependsOn(typeof(AbpGuidsModule))]
     [DependsOn(typeof(AbpDataModule))]
     [DependsOn(typeof(AbpObjectMappingModule))]
@@ -22,6 +25,7 @@ namespace Volo.Abp
     [DependsOn(typeof(AbpThreadingModule))]
     [DependsOn(typeof(AbpEventBusModule))]
     [DependsOn(typeof(AbpValidationModule))]
+    [DependsOn(typeof(AbpAuthorizationModule))]
     [DependsOn(typeof(AbpHttpAbstractionsModule))]
     public class AbpDddModule : AbpModule
     {
@@ -29,6 +33,7 @@ namespace Volo.Abp
         {
             services.OnRegistred(UnitOfWorkInterceptorRegistrar.RegisterIfNeeded);
             services.OnRegistred(ValidationInterceptorRegistrar.RegisterIfNeeded);
+            services.OnRegistred(AuthorizationInterceptorRegistrar.RegisterIfNeeded);
         }
 
         public override void ConfigureServices(IServiceCollection services)

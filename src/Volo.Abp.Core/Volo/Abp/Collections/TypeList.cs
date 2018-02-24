@@ -60,6 +60,16 @@ namespace Volo.Abp.Collections
             _typeList.Add(typeof(T));
         }
 
+        public void TryAdd<T>() where T : TBaseType
+        {
+            if (Contains<T>())
+            {
+                return;
+            }
+
+            Add<T>();
+        }
+
         /// <inheritdoc/>
         public void Add(Type item)
         {
