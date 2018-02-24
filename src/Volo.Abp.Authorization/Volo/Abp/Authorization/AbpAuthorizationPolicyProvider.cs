@@ -24,7 +24,6 @@ namespace Volo.Abp.Authorization
             var permission = _permissionDefinitionManager.GetOrNull(policyName);
 
             if (permission == null)
-
             {
                 return await base.GetPolicyAsync(policyName);
             }

@@ -16,13 +16,21 @@ namespace Volo.Abp.Authorization
 
         public async Task CheckAsync(MethodInvocationAuthorizationContext context)
         {
-            //TODO: Fully implement! (allow anonymous... etc.)
+            if (AllowAnonymous(context))
+            {
+                return;
+            }
 
             var authorizationAttributes = GetAuthorizationDataAttributes(context);
             foreach (var authorizationAttribute in authorizationAttributes)
             {
                 await CheckAsync(authorizationAttribute);
             }
+        }
+
+        protected virtual bool AllowAnonymous(MethodInvocationAuthorizationContext context)
+        {
+            return context.Method.GetCustomAttributes(true).OfType<IAllowAnonymous>().Any();
         }
 
         protected virtual IAuthorizeData[] GetAuthorizationDataAttributes(MethodInvocationAuthorizationContext context)
