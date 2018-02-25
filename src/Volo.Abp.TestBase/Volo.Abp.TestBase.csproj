@@ -10,7 +10,7 @@
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <RootNamespace>Volo.Abp.TestBase</RootNamespace>
+    <RootNamespace />
   </PropertyGroup>
 
   <ItemGroup>

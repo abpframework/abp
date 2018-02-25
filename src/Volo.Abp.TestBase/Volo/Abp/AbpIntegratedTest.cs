@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.TestBase
+namespace Volo.Abp
 {
     public abstract class AbpIntegratedTest<TStartupModule> : AbpTestBaseWithServiceProvider, IDisposable
         where TStartupModule : IAbpModule
@@ -15,7 +15,7 @@ namespace Volo.Abp.TestBase
 
         protected IServiceScope TestServiceScope { get; }
 
-        public AbpIntegratedTest()
+        protected AbpIntegratedTest()
         {
             var services = CreateServiceCollection();
 
@@ -57,7 +57,7 @@ namespace Volo.Abp.TestBase
 	        return services.BuildServiceProviderFromFactory();
         }
         
-        public void Dispose()
+        public virtual void Dispose()
         {
             Application.Shutdown();
             TestServiceScope.Dispose();

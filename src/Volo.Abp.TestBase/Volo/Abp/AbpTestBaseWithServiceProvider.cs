@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Volo.Abp.TestBase
+namespace Volo.Abp
 {
     public abstract class AbpTestBaseWithServiceProvider
     {

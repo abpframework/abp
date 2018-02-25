@@ -9,11 +9,14 @@ namespace Volo.Abp.Identity
         typeof(AbpIdentityApplicationModule), 
         typeof(AbpIdentityEntityFrameworkCoreModule), 
         typeof(AbpAutofacModule),
-        typeof(AbpIdentityDomainTestModule))]
+        typeof(AbpIdentityDomainTestModule),
+        typeof(AbpTestBaseModule)
+        )]
     public class AbpIdentityApplicationTestModule : AbpModule
     {
         public override void ConfigureServices(IServiceCollection services)
         {
+            services.AddAlwaysAllowPermissionChecker();
             services.AddAssemblyOf<AbpIdentityApplicationTestModule>();
         }
     }
