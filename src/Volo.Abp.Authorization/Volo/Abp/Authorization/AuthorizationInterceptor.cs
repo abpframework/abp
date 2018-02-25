@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Aspects;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DynamicProxy;

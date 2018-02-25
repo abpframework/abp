@@ -35,10 +35,15 @@ namespace Volo.Abp.Authorization
 
         protected virtual IAuthorizeData[] GetAuthorizationDataAttributes(MethodInvocationAuthorizationContext context)
         {
-            return context.Method
+            var classAttributes = context.Method.DeclaringType
                 .GetCustomAttributes(true)
-                .OfType<IAuthorizeData>()
-                .ToArray();
+                .OfType<IAuthorizeData>();
+
+            var methodAttributes = context.Method
+                .GetCustomAttributes(true)
+                .OfType<IAuthorizeData>();
+
+            return classAttributes.Union(methodAttributes).ToArray();
         }
 
         protected async Task CheckAsync(IAuthorizeData authorizationAttribute)

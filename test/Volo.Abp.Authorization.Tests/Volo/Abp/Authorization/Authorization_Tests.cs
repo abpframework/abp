@@ -1,0 +1,34 @@
+﻿using System.Threading.Tasks;
+using Volo.Abp.Authorization.TestServices;
+using Xunit;
+
+namespace Volo.Abp.Authorization
+{
+    public class Authorization_Tests : AuthorizationTestBase
+    {
+        private readonly IMyAuthorizedService1 _myAuthorizedService1;
+
+        public Authorization_Tests()
+        {
+            _myAuthorizedService1 = GetRequiredService<IMyAuthorizedService1>();
+        }
+
+        [Fact]
+        public void Should_Not_Allow_To_Call_Method_If_Has_No_Permission_ProtectedByClass()
+        {
+            Assert.Throws<AbpAuthorizationException>(() =>
+            {
+                _myAuthorizedService1.ProtectedByClass();
+            });
+        }
+
+        [Fact]
+        public async Task Should_Not_Allow_To_Call_Method_If_Has_No_Permission_ProtectedByClass_Async()
+        {
+            await Assert.ThrowsAsync<AbpAuthorizationException>(async () =>
+            {
+                await _myAuthorizedService1.ProtectedByClassAsync();
+            });
+        }
+    }
+}
