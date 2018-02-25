@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Shouldly;
 using Volo.Abp.Authorization.TestServices;
 using Xunit;
 
@@ -29,6 +30,18 @@ namespace Volo.Abp.Authorization
             {
                 await _myAuthorizedService1.ProtectedByClassAsync();
             });
+        }
+
+        [Fact]
+        public void Should_Allow_To_Call_Anonymous_Method()
+        {
+            _myAuthorizedService1.Anonymous().ShouldBe(42);
+        }
+
+        [Fact]
+        public async Task Should_Allow_To_Call_Anonymous_Method_Async()
+        {
+            (await _myAuthorizedService1.AnonymousAsync()).ShouldBe(42);
         }
     }
 }
