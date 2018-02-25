@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Autofac;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Modularity;
 using Volo.Abp.TestBase;
 using Xunit;
@@ -148,16 +149,26 @@ namespace Volo.Abp.Validation
 
         [DependsOn(typeof(AbpAutofacModule))]
         [DependsOn(typeof(AbpValidationModule))]
-        [DependsOn(typeof(AbpDddModule))]
         public class TestModule : AbpModule
         {
+            public override void PreConfigureServices(IServiceCollection services)
+            {
+                services.OnRegistred(context =>
+                {
+                    if (typeof(IMyAppService).IsAssignableFrom(context.ImplementationType))
+                    {
+                        context.Interceptors.TryAdd<ValidationInterceptor>();
+                    }
+                });
+            }
+
             public override void ConfigureServices(IServiceCollection services)
             {
                 services.AddType<MyAppService>();
             }
         }
 
-        public interface IMyAppService : IApplicationService
+        public interface IMyAppService
         {
             MyMethodOutput MyMethod(MyMethodInput input);
             MyMethodOutput MyMethod2(MyMethod2Input input);
@@ -170,7 +181,7 @@ namespace Volo.Abp.Validation
             void MyMethodWithNullableEnum(MyEnum? value);
         }
 
-        public class MyAppService : ApplicationService, IMyAppService
+        public class MyAppService : IMyAppService, ITransientDependency
         {
             public MyMethodOutput MyMethod(MyMethodInput input)
             {
