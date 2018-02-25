@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Modularity;
 
 namespace Volo.Abp.MultiTenancy
@@ -9,6 +10,11 @@ namespace Volo.Abp.MultiTenancy
     {
         public override void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<PermissionOptions>(options =>
+            {
+                options.DefinitionProviders.Add<AbpTenantManagementPermissionDefinitionProvider>();
+            });
+
             services.AddAssemblyOf<AbpMultiTenancyApplicationContractsModule>();
         }
     }

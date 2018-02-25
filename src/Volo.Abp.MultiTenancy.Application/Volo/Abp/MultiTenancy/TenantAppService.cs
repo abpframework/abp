@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
 
 namespace Volo.Abp.MultiTenancy
 {
+    [Authorize(TenantManagementPermissions.Tenants.Default)]
     public class TenantAppService : MultiTenancyAppServiceBase, ITenantAppService
     {
         private readonly ITenantRepository _tenantRepository;
@@ -34,6 +36,7 @@ namespace Volo.Abp.MultiTenancy
             );
         }
 
+        [Authorize(TenantManagementPermissions.Tenants.Create)]
         public async Task<TenantDto> CreateAsync(TenantCreateDto input)
         {
             var tenant = await _tenantManager.CreateAsync(input.Name);
@@ -41,6 +44,7 @@ namespace Volo.Abp.MultiTenancy
             return ObjectMapper.Map<Tenant, TenantDto>(tenant);
         }
 
+        [Authorize(TenantManagementPermissions.Tenants.Update)]
         public async Task<TenantDto> UpdateAsync(Guid id, TenantUpdateDto input)
         {
             var tenant = await _tenantRepository.GetAsync(id);
@@ -49,6 +53,7 @@ namespace Volo.Abp.MultiTenancy
             return ObjectMapper.Map<Tenant, TenantDto>(tenant);
         }
 
+        [Authorize(TenantManagementPermissions.Tenants.Delete)]
         public async Task DeleteAsync(Guid id)
         {
             var tenant = await _tenantRepository.FindAsync(id);
