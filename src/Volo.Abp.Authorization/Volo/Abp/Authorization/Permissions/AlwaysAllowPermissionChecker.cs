@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace Volo.Abp.Authorization.Permissions
 {
@@ -11,6 +12,11 @@ namespace Volo.Abp.Authorization.Permissions
     public class AlwaysAllowPermissionChecker : IPermissionChecker
     {
         public Task<PermissionGrantInfo> CheckAsync(string name)
+        {
+            return Task.FromResult(new PermissionGrantInfo(name, true, "AlwaysAllow"));
+        }
+
+        public Task<PermissionGrantInfo> CheckAsync(ClaimsPrincipal claimsPrincipal, string name)
         {
             return Task.FromResult(new PermissionGrantInfo(name, true, "AlwaysAllow"));
         }

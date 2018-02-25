@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Modularity;
 using Volo.Abp.Security;
 
@@ -13,6 +14,12 @@ namespace Volo.Abp.Authorization
             services.AddAuthorization();
 
             services.AddSingleton<IAuthorizationHandler, PermissionRequirementHandler>();
+
+            services.Configure<PermissionOptions>(options =>
+            {
+                options.ValueProviders.Add<UserPermissionValueProvider>();
+                options.ValueProviders.Add<RolePermissionValueProvider>();
+            });
 
             services.AddAssemblyOf<AbpAuthorizationModule>();
         }

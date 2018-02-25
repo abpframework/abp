@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Security.Claims;
 
 namespace Volo.Abp.Authorization.Permissions
 {
@@ -14,6 +17,8 @@ namespace Volo.Abp.Authorization.Permissions
 
         protected IReadOnlyList<IPermissionValueProvider> ValueProviders => _lazyProviders.Value;
 
+        protected ICurrentPrincipalAccessor PrincipalAccessor { get; }
+
         protected PermissionOptions Options { get; }
 
         private readonly Lazy<List<IPermissionValueProvider>> _lazyProviders;
@@ -21,8 +26,10 @@ namespace Volo.Abp.Authorization.Permissions
         public PermissionChecker(
             IOptions<PermissionOptions> options,
             IServiceProvider serviceProvider,
+            ICurrentPrincipalAccessor principalAccessor,
             IPermissionDefinitionManager permissionDefinitionManager)
         {
+            PrincipalAccessor = principalAccessor;
             PermissionDefinitionManager = permissionDefinitionManager;
             Options = options.Value;
 
@@ -35,25 +42,30 @@ namespace Volo.Abp.Authorization.Permissions
             );
         }
         
-        public Task<PermissionGrantInfo> CheckAsync(string name)
+        public virtual Task<PermissionGrantInfo> CheckAsync(string name)
         {
-            var permission = PermissionDefinitionManager.Get(name);
-
-            return GetPermissionGrantInfo(permission);
+            return CheckAsync(PrincipalAccessor.Principal, name);
         }
 
-        protected virtual async Task<PermissionGrantInfo> GetPermissionGrantInfo(PermissionDefinition permission)
+        public virtual async Task<PermissionGrantInfo> CheckAsync(ClaimsPrincipal claimsPrincipal, string name)
         {
+            Check.NotNull(name, nameof(name));
+
+            var context = new PermissionValueCheckContext(
+                PermissionDefinitionManager.Get(name),
+                claimsPrincipal
+            );
+
             foreach (var provider in ValueProviders)
             {
-                var result = await provider.CheckAsync(permission);
+                var result = await provider.CheckAsync(context);
                 if (result.IsGranted)
                 {
-                    return new PermissionGrantInfo(permission.Name, true, provider.Name, result.ProviderKey);
+                    return new PermissionGrantInfo(context.Permission.Name, true, provider.Name, result.ProviderKey);
                 }
             }
 
-            return new PermissionGrantInfo(permission.Name, false);
+            return new PermissionGrantInfo(context.Permission.Name, false);
         }
     }
 }

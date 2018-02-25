@@ -17,7 +17,7 @@ namespace Volo.Abp.Authorization
             AuthorizationHandlerContext context,
             PermissionRequirement requirement)
         {
-            if (await _permissionChecker.IsGrantedAsync(requirement.PermissionName))
+            if (await _permissionChecker.IsGrantedAsync(context.User, requirement.PermissionName))
             {
                 context.Succeed(requirement);
             }

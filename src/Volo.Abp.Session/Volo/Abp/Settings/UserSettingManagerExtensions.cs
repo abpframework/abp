@@ -6,6 +6,8 @@ using Volo.Abp.Session;
 
 namespace Volo.Abp.Settings
 {
+    //TODO: Consider to move to another package?
+
     public static class UserSettingManagerExtensions
     {
         public static Task<string> GetOrNullForUserAsync(this ISettingManager settingManager, [NotNull] string name, Guid userId, bool fallback = true)

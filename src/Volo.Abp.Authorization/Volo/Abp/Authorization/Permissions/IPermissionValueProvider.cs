@@ -7,6 +7,6 @@ namespace Volo.Abp.Authorization.Permissions
     {
         string Name { get; }
 
-        Task<PermissionValueProviderGrantInfo> CheckAsync(PermissionDefinition permission);
+        Task<PermissionValueProviderGrantInfo> CheckAsync(PermissionValueCheckContext context);
     }
 }

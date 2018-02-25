@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using Volo.Abp.Authorization.Permissions;
+using Volo.Abp.Security.Claims;
 
-namespace Volo.Abp.Session
+namespace Volo.Abp.Authorization.Permissions
 {
     public class RolePermissionValueProvider : PermissionValueProvider
     {
@@ -10,24 +10,23 @@ namespace Volo.Abp.Session
 
         public override string Name => ProviderName;
 
-        protected ICurrentUser CurrentUser { get; }
-
-        public RolePermissionValueProvider(IPermissionStore permissionStore, ICurrentUser currentUser)
+        public RolePermissionValueProvider(IPermissionStore permissionStore)
             : base(permissionStore)
         {
-            CurrentUser = currentUser;
+
         }
 
-        public override async Task<PermissionValueProviderGrantInfo> CheckAsync(PermissionDefinition permission)
+        public override async Task<PermissionValueProviderGrantInfo> CheckAsync(PermissionValueCheckContext context)
         {
-            if (CurrentUser.Id == null || !CurrentUser.Roles.Any())
+            var roles = context.Principal?.FindAll(AbpClaimTypes.Role).Select(c => c.Value).ToArray();
+            if (roles == null || !roles.Any())
             {
                 return PermissionValueProviderGrantInfo.NonGranted;
             }
 
-            foreach (var role in CurrentUser.Roles)
+            foreach (var role in roles)
             {
-                if (await PermissionStore.IsGrantedAsync(permission.Name, Name, role))
+                if (await PermissionStore.IsGrantedAsync(context.Permission.Name, Name, role))
                 {
                     return new PermissionValueProviderGrantInfo(true, role);
                 }

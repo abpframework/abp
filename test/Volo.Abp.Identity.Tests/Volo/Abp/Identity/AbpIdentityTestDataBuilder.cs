@@ -1,4 +1,5 @@
-﻿using Volo.Abp.DependencyInjection;
+﻿using Volo.Abp.Authorization.Permissions;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
 using Volo.Abp.Permissions;
 using Volo.Abp.Session;

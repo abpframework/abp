@@ -14,8 +14,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Volo.Abp.Authorization\Volo.Abp.Authorization.csproj" />
-    <ProjectReference Include="..\Volo.Abp.Core\Volo.Abp.Core.csproj" />
     <ProjectReference Include="..\Volo.Abp.Security\Volo.Abp.Security.csproj" />
     <ProjectReference Include="..\Volo.Abp.Settings\Volo.Abp.Settings.csproj" />
   </ItemGroup>

@@ -1,4 +1,5 @@
-﻿using Volo.Abp.Guids;
+﻿using Volo.Abp.Authorization.Permissions;
+using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Permissions;
 using Volo.Abp.Session;
