@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
-using NSubstitute;
 using Shouldly;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Security.Claims;
-using Volo.Abp.Session;
 using Xunit;
 
 namespace Volo.Abp.Permissions
