@@ -1,6 +1,5 @@
 ﻿using System;
 using Volo.Abp.MultiTenancy.EntityFrameworkCore;
-using Volo.Abp.TestBase;
 
 namespace Volo.Abp.MultiTenancy
 {

@@ -12,13 +12,12 @@ namespace Volo.Abp.MultiTenancy
     [DependsOn(
         typeof(AbpMultiTenancyApplicationModule), 
         typeof(AbpMultiTenancyEntityFrameworkCoreModule), 
+        typeof(AbpTestBaseModule),
         typeof(AbpAutofacModule))]
     public class AbpMultiTenancyApplicationTestModule : AbpModule
     {
         public override void ConfigureServices(IServiceCollection services)
         {
-            services.AddAssemblyOf<AbpMultiTenancyApplicationTestModule>();
-
             services.AddEntityFrameworkInMemoryDatabase();
 
             var databaseName = Guid.NewGuid().ToString();
@@ -35,6 +34,10 @@ namespace Volo.Abp.MultiTenancy
             {
                 options.TransactionBehavior = UnitOfWorkTransactionBehavior.Disabled; //EF in-memory database does not support transactions
             });
+
+            services.AddAlwaysAllowPermissionChecker();
+
+            services.AddAssemblyOf<AbpMultiTenancyApplicationTestModule>();
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
