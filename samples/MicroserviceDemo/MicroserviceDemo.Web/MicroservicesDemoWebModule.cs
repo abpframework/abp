@@ -11,20 +11,25 @@ using Volo.Abp.AspNetCore.Mvc.Bundling;
 using Volo.Abp.Autofac;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.Http.Client;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.Identity.Web;
 using Volo.Abp.Modularity;
+using Volo.Abp.Permissions;
 using Volo.Abp.Permissions.EntityFrameworkCore;
+using Volo.Abp.Permissions.Web;
 
 namespace MicroserviceDemo.Web
 {
     [DependsOn(typeof(AbpAutofacModule))]
+    [DependsOn(typeof(AbpHttpClientModule))]
     [DependsOn(typeof(AbpPermissionsEntityFrameworkCoreModule))]
     [DependsOn(typeof(AbpIdentityHttpApiModule))]
     [DependsOn(typeof(AbpIdentityWebModule))]
     [DependsOn(typeof(AbpIdentityEntityFrameworkCoreModule))]
     [DependsOn(typeof(AbpAccountWebModule))]
+    [DependsOn(typeof(AbpPermissionsWebModule))]
     public class MicroservicesDemoWebModule : AbpModule
     {
         public override void PreConfigureServices(IServiceCollection services)
@@ -70,10 +75,13 @@ namespace MicroserviceDemo.Web
                 {
                     "/Abp/ApplicationConfigurationScript?_v=" + DateTime.Now.Ticks,
                     "/Abp/ServiceProxyScript?_v=" + DateTime.Now.Ticks
-                });
+                }); 
             });
 
             services.AddAuthentication();
+
+            services.AddHttpClientProxies(typeof(AbpPermissionsApplicationContractsModule).Assembly, "AbpPermissions"); //TODO: Create permission http client module and remove this one
+            services.Configure<RemoteServiceOptions>(configuration);
 
             services.AddAssemblyOf<MicroservicesDemoWebModule>();
         }

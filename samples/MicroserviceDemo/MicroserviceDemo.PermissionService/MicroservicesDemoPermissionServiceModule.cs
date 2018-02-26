@@ -60,6 +60,8 @@ namespace MicroserviceDemo.PermissionService
                     options.DocInclusionPredicate((docName, description) => true);
                 });
 
+            services.AddAlwaysAllowPermissionChecker(); //TODO: Remove when add authentication!
+
             services.AddAssemblyOf<MicroservicesDemoPermissionServiceModule>();
         }
 
