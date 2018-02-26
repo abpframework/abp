@@ -4,8 +4,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>Volo.Abp.Navigation</AssemblyName>
-    <PackageId>Volo.Abp.Navigation</PackageId>
+    <AssemblyName>Volo.Abp.UI.Navigation</AssemblyName>
+    <PackageId>Volo.Abp.UI.Navigation</PackageId>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
