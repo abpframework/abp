@@ -38,7 +38,6 @@ $projects = (
     "Volo.Abp.Identity.EntityFrameworkCore",
     "Volo.Abp.Identity.HttpApi",
     "Volo.Abp.Identity.HttpApi.Client",
-    "Volo.Abp.Identity.HttpApi.Host",
     "Volo.Abp.Identity.Web",    
     "Volo.Abp.IdentityServer.Application",
     "Volo.Abp.IdentityServer.Application.Contracts",

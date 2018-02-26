@@ -6,6 +6,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Volo.Abp.Account.Web</AssemblyName>
     <PackageId>Volo.Abp.Account.Web</PackageId>
+    <IsPackable>true</IsPackable>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>

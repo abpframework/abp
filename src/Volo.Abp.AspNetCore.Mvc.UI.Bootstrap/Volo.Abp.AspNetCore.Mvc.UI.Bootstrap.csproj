@@ -6,6 +6,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Volo.Abp.AspNetCore.Mvc.UI.Bootstrap</AssemblyName>
     <PackageId>Volo.Abp.AspNetCore.Mvc.UI.Bootstrap</PackageId>
+    <IsPackable>true</IsPackable>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
     <OutputType>Library</OutputType>
   </PropertyGroup>
