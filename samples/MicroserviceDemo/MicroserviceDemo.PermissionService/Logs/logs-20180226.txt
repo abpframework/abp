@@ -1,0 +1,444 @@
+2018-02-26 14:20:04.138 +03:00 [Information] Loaded modules:
+2018-02-26 14:20:04.190 +03:00 [Information] - Volo.Abp.Security.AbpSecurityModule
+2018-02-26 14:20:04.190 +03:00 [Information] - Volo.Abp.Authorization.AbpAuthorizationModule
+2018-02-26 14:20:04.190 +03:00 [Information] - Volo.Abp.Guids.AbpGuidsModule
+2018-02-26 14:20:04.190 +03:00 [Information] - Volo.Abp.Data.AbpDataModule
+2018-02-26 14:20:04.190 +03:00 [Information] - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2018-02-26 14:20:04.190 +03:00 [Information] - Volo.Abp.Settings.AbpSettingsModule
+2018-02-26 14:20:04.190 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyAbstractionsModule
+2018-02-26 14:20:04.190 +03:00 [Information] - Volo.Abp.Threading.AbpThreadingModule
+2018-02-26 14:20:04.190 +03:00 [Information] - Volo.Abp.EventBus.AbpEventBusModule
+2018-02-26 14:20:04.190 +03:00 [Information] - Volo.Abp.Validation.AbpValidationModule
+2018-02-26 14:20:04.190 +03:00 [Information] - Volo.Abp.Http.AbpHttpAbstractionsModule
+2018-02-26 14:20:04.191 +03:00 [Information] - Volo.Abp.AbpDddModule
+2018-02-26 14:20:04.191 +03:00 [Information] - Volo.Abp.Permissions.AbpPermissionsDomainSharedModule
+2018-02-26 14:20:04.191 +03:00 [Information] - Volo.Abp.Serialization.AbpSerializationModule
+2018-02-26 14:20:04.191 +03:00 [Information] - Volo.Abp.Caching.AbpCachingModule
+2018-02-26 14:20:04.191 +03:00 [Information] - Volo.Abp.Timing.AbpTimingModule
+2018-02-26 14:20:04.191 +03:00 [Information] - Volo.Abp.Json.AbpJsonModule
+2018-02-26 14:20:04.191 +03:00 [Information] - Volo.Abp.Permissions.AbpPermissionsDomainModule
+2018-02-26 14:20:04.191 +03:00 [Information] - Volo.Abp.Permissions.AbpPermissionsApplicationContractsModule
+2018-02-26 14:20:04.191 +03:00 [Information] - Volo.Abp.Permissions.AbpPermissionsApplicationModule
+2018-02-26 14:20:04.191 +03:00 [Information] - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2018-02-26 14:20:04.191 +03:00 [Information] - Volo.Abp.Localization.AbpLocalizationModule
+2018-02-26 14:20:04.191 +03:00 [Information] - Volo.Abp.Session.AbpSessionModule
+2018-02-26 14:20:04.191 +03:00 [Information] - Volo.Abp.ApiVersioning.AbpApiVersioningAbstractionsModule
+2018-02-26 14:20:04.191 +03:00 [Information] - Volo.Abp.AbpCommonModule
+2018-02-26 14:20:04.191 +03:00 [Information] - Volo.Abp.EntityFrameworkCore.AbpEntityFrameworkCoreModule
+2018-02-26 14:20:04.191 +03:00 [Information] - Volo.Abp.Permissions.EntityFrameworkCore.AbpPermissionsEntityFrameworkCoreModule
+2018-02-26 14:20:04.191 +03:00 [Information] - Volo.Abp.Http.AbpHttpModule
+2018-02-26 14:20:04.191 +03:00 [Information] - Volo.Abp.AspNetCore.AbpAspNetCoreModule
+2018-02-26 14:20:04.191 +03:00 [Information] - Volo.Abp.Ui.AbpUiModule
+2018-02-26 14:20:04.191 +03:00 [Information] - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcModule
+2018-02-26 14:20:04.191 +03:00 [Information] - MicroserviceDemo.PermissionService.MicroservicesDemoPermissionServiceModule
+2018-02-26 14:20:04.206 +03:00 [Information] Initialized all modules.
+2018-02-26 14:20:32.540 +03:00 [Information] Loaded modules:
+2018-02-26 14:20:32.582 +03:00 [Information] - Volo.Abp.Security.AbpSecurityModule
+2018-02-26 14:20:32.582 +03:00 [Information] - Volo.Abp.Authorization.AbpAuthorizationModule
+2018-02-26 14:20:32.582 +03:00 [Information] - Volo.Abp.Guids.AbpGuidsModule
+2018-02-26 14:20:32.582 +03:00 [Information] - Volo.Abp.Data.AbpDataModule
+2018-02-26 14:20:32.582 +03:00 [Information] - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2018-02-26 14:20:32.582 +03:00 [Information] - Volo.Abp.Settings.AbpSettingsModule
+2018-02-26 14:20:32.582 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyAbstractionsModule
+2018-02-26 14:20:32.582 +03:00 [Information] - Volo.Abp.Threading.AbpThreadingModule
+2018-02-26 14:20:32.583 +03:00 [Information] - Volo.Abp.EventBus.AbpEventBusModule
+2018-02-26 14:20:32.583 +03:00 [Information] - Volo.Abp.Validation.AbpValidationModule
+2018-02-26 14:20:32.583 +03:00 [Information] - Volo.Abp.Http.AbpHttpAbstractionsModule
+2018-02-26 14:20:32.583 +03:00 [Information] - Volo.Abp.AbpDddModule
+2018-02-26 14:20:32.583 +03:00 [Information] - Volo.Abp.Permissions.AbpPermissionsDomainSharedModule
+2018-02-26 14:20:32.583 +03:00 [Information] - Volo.Abp.Serialization.AbpSerializationModule
+2018-02-26 14:20:32.583 +03:00 [Information] - Volo.Abp.Caching.AbpCachingModule
+2018-02-26 14:20:32.583 +03:00 [Information] - Volo.Abp.Timing.AbpTimingModule
+2018-02-26 14:20:32.583 +03:00 [Information] - Volo.Abp.Json.AbpJsonModule
+2018-02-26 14:20:32.583 +03:00 [Information] - Volo.Abp.Permissions.AbpPermissionsDomainModule
+2018-02-26 14:20:32.583 +03:00 [Information] - Volo.Abp.Permissions.AbpPermissionsApplicationContractsModule
+2018-02-26 14:20:32.583 +03:00 [Information] - Volo.Abp.Permissions.AbpPermissionsApplicationModule
+2018-02-26 14:20:32.583 +03:00 [Information] - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2018-02-26 14:20:32.583 +03:00 [Information] - Volo.Abp.Localization.AbpLocalizationModule
+2018-02-26 14:20:32.583 +03:00 [Information] - Volo.Abp.Session.AbpSessionModule
+2018-02-26 14:20:32.583 +03:00 [Information] - Volo.Abp.ApiVersioning.AbpApiVersioningAbstractionsModule
+2018-02-26 14:20:32.583 +03:00 [Information] - Volo.Abp.AbpCommonModule
+2018-02-26 14:20:32.583 +03:00 [Information] - Volo.Abp.EntityFrameworkCore.AbpEntityFrameworkCoreModule
+2018-02-26 14:20:32.583 +03:00 [Information] - Volo.Abp.Permissions.EntityFrameworkCore.AbpPermissionsEntityFrameworkCoreModule
+2018-02-26 14:20:32.583 +03:00 [Information] - Volo.Abp.Http.AbpHttpModule
+2018-02-26 14:20:32.583 +03:00 [Information] - Volo.Abp.AspNetCore.AbpAspNetCoreModule
+2018-02-26 14:20:32.583 +03:00 [Information] - Volo.Abp.Ui.AbpUiModule
+2018-02-26 14:20:32.583 +03:00 [Information] - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcModule
+2018-02-26 14:20:32.583 +03:00 [Information] - MicroserviceDemo.PermissionService.MicroservicesDemoPermissionServiceModule
+2018-02-26 14:20:32.594 +03:00 [Information] Initialized all modules.
+2018-02-26 14:28:34.616 +03:00 [Information] Loaded modules:
+2018-02-26 14:28:34.664 +03:00 [Information] - Volo.Abp.Security.AbpSecurityModule
+2018-02-26 14:28:34.664 +03:00 [Information] - Volo.Abp.Authorization.AbpAuthorizationModule
+2018-02-26 14:28:34.665 +03:00 [Information] - Volo.Abp.Guids.AbpGuidsModule
+2018-02-26 14:28:34.665 +03:00 [Information] - Volo.Abp.Data.AbpDataModule
+2018-02-26 14:28:34.665 +03:00 [Information] - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2018-02-26 14:28:34.665 +03:00 [Information] - Volo.Abp.Settings.AbpSettingsModule
+2018-02-26 14:28:34.665 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyAbstractionsModule
+2018-02-26 14:28:34.665 +03:00 [Information] - Volo.Abp.Threading.AbpThreadingModule
+2018-02-26 14:28:34.665 +03:00 [Information] - Volo.Abp.EventBus.AbpEventBusModule
+2018-02-26 14:28:34.665 +03:00 [Information] - Volo.Abp.Validation.AbpValidationModule
+2018-02-26 14:28:34.665 +03:00 [Information] - Volo.Abp.Http.AbpHttpAbstractionsModule
+2018-02-26 14:28:34.665 +03:00 [Information] - Volo.Abp.AbpDddModule
+2018-02-26 14:28:34.665 +03:00 [Information] - Volo.Abp.Permissions.AbpPermissionsDomainSharedModule
+2018-02-26 14:28:34.666 +03:00 [Information] - Volo.Abp.Serialization.AbpSerializationModule
+2018-02-26 14:28:34.666 +03:00 [Information] - Volo.Abp.Caching.AbpCachingModule
+2018-02-26 14:28:34.666 +03:00 [Information] - Volo.Abp.Timing.AbpTimingModule
+2018-02-26 14:28:34.666 +03:00 [Information] - Volo.Abp.Json.AbpJsonModule
+2018-02-26 14:28:34.666 +03:00 [Information] - Volo.Abp.Permissions.AbpPermissionsDomainModule
+2018-02-26 14:28:34.666 +03:00 [Information] - Volo.Abp.Permissions.AbpPermissionsApplicationContractsModule
+2018-02-26 14:28:34.666 +03:00 [Information] - Volo.Abp.Permissions.AbpPermissionsApplicationModule
+2018-02-26 14:28:34.666 +03:00 [Information] - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2018-02-26 14:28:34.666 +03:00 [Information] - Volo.Abp.Localization.AbpLocalizationModule
+2018-02-26 14:28:34.666 +03:00 [Information] - Volo.Abp.Session.AbpSessionModule
+2018-02-26 14:28:34.666 +03:00 [Information] - Volo.Abp.ApiVersioning.AbpApiVersioningAbstractionsModule
+2018-02-26 14:28:34.667 +03:00 [Information] - Volo.Abp.AbpCommonModule
+2018-02-26 14:28:34.667 +03:00 [Information] - Volo.Abp.EntityFrameworkCore.AbpEntityFrameworkCoreModule
+2018-02-26 14:28:34.667 +03:00 [Information] - Volo.Abp.Permissions.EntityFrameworkCore.AbpPermissionsEntityFrameworkCoreModule
+2018-02-26 14:28:34.667 +03:00 [Information] - Volo.Abp.Http.AbpHttpModule
+2018-02-26 14:28:34.667 +03:00 [Information] - Volo.Abp.AspNetCore.AbpAspNetCoreModule
+2018-02-26 14:28:34.667 +03:00 [Information] - Volo.Abp.Ui.AbpUiModule
+2018-02-26 14:28:34.667 +03:00 [Information] - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcModule
+2018-02-26 14:28:34.667 +03:00 [Information] - MicroserviceDemo.PermissionService.MicroservicesDemoPermissionServiceModule
+2018-02-26 14:28:35.005 +03:00 [Information] Initialized all modules.
+2018-02-26 14:28:35.379 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63908/  
+2018-02-26 14:28:35.545 +03:00 [Information] Executing action method "Volo.Abp.Identity.HttpApi.Host.Controllers.HomeController.Index (MicroserviceDemo.PermissionService)" with arguments (null) - ModelState is Valid
+2018-02-26 14:28:35.559 +03:00 [Information] Executing RedirectResult, redirecting to "/swagger".
+2018-02-26 14:28:35.565 +03:00 [Information] Executed action "Volo.Abp.Identity.HttpApi.Host.Controllers.HomeController.Index (MicroserviceDemo.PermissionService)" in 44.6454ms
+2018-02-26 14:28:35.570 +03:00 [Information] Request finished in 205.9559ms 302 
+2018-02-26 14:28:35.585 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63908/swagger  
+2018-02-26 14:28:35.586 +03:00 [Information] Request finished in 1.6656ms 301 
+2018-02-26 14:28:35.594 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63908/swagger/  
+2018-02-26 14:28:35.613 +03:00 [Information] Request finished in 18.0859ms 200 text/html
+2018-02-26 14:28:35.647 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63908/swagger/swagger-ui.css  
+2018-02-26 14:28:35.650 +03:00 [Information] Sending file. Request path: '"/swagger-ui.css"'. Physical path: '"N/A"'
+2018-02-26 14:28:35.650 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63908/swagger/swagger-ui-bundle.js  
+2018-02-26 14:28:35.651 +03:00 [Information] Sending file. Request path: '"/swagger-ui-bundle.js"'. Physical path: '"N/A"'
+2018-02-26 14:28:35.651 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63908/swagger/swagger-ui-standalone-preset.js  
+2018-02-26 14:28:35.651 +03:00 [Information] Sending file. Request path: '"/swagger-ui-standalone-preset.js"'. Physical path: '"N/A"'
+2018-02-26 14:28:35.654 +03:00 [Information] Request finished in 7.3121ms 200 text/css
+2018-02-26 14:28:35.673 +03:00 [Information] Request finished in 21.8157ms 200 application/javascript
+2018-02-26 14:28:35.705 +03:00 [Information] Request finished in 54.5353ms 200 application/javascript
+2018-02-26 14:28:41.463 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63908/swagger/favicon-16x16.png  
+2018-02-26 14:28:41.463 +03:00 [Information] Sending file. Request path: '"/favicon-16x16.png"'. Physical path: '"N/A"'
+2018-02-26 14:28:41.464 +03:00 [Information] Request finished in 1.7601ms 200 image/png
+2018-02-26 14:28:41.852 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63908/swagger/v1/swagger.json  
+2018-02-26 14:28:42.018 +03:00 [Error] Connection id ""0HLBT1G9E99SA"", Request id ""0HLBT1G9E99SA:00000002"": An unhandled exception was thrown by the application.
+System.NotSupportedException: Ambiguous HTTP method for action - Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc). Actions require an explicit HttpMethod binding for Swagger 2.0
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.CreatePathItem(IEnumerable`1 apiDescriptions, ISchemaRegistry schemaRegistry)
+   at System.Linq.Enumerable.ToDictionary[TSource,TKey,TElement](IEnumerable`1 source, Func`2 keySelector, Func`2 elementSelector, IEqualityComparer`1 comparer)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwagger(String documentName, String host, String basePath, String[] schemes)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.<Invoke>d__6.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Server.IISIntegration.IISMiddleware.<Invoke>d__11.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Hosting.Internal.RequestServicesContainerMiddleware.<Invoke>d__3.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.Frame`1.<ProcessRequestsAsync>d__2.MoveNext()
+2018-02-26 14:28:42.022 +03:00 [Information] Request finished in 169.9037ms 500 
+2018-02-26 14:29:02.649 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63908/swagger/v1/swagger.json  
+2018-02-26 14:29:02.670 +03:00 [Error] Connection id ""0HLBT1G9E99S9"", Request id ""0HLBT1G9E99S9:00000002"": An unhandled exception was thrown by the application.
+System.NotSupportedException: Ambiguous HTTP method for action - Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc). Actions require an explicit HttpMethod binding for Swagger 2.0
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.CreatePathItem(IEnumerable`1 apiDescriptions, ISchemaRegistry schemaRegistry)
+   at System.Linq.Enumerable.ToDictionary[TSource,TKey,TElement](IEnumerable`1 source, Func`2 keySelector, Func`2 elementSelector, IEqualityComparer`1 comparer)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwagger(String documentName, String host, String basePath, String[] schemes)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.<Invoke>d__6.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Server.IISIntegration.IISMiddleware.<Invoke>d__11.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Hosting.Internal.RequestServicesContainerMiddleware.<Invoke>d__3.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.Frame`1.<ProcessRequestsAsync>d__2.MoveNext()
+2018-02-26 14:29:02.675 +03:00 [Information] Request finished in 26.5424ms 500 
+2018-02-26 14:29:02.710 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63908/favicon.ico  
+2018-02-26 14:29:02.711 +03:00 [Information] Request finished in 1.3872ms 404 
+2018-02-26 14:29:21.136 +03:00 [Information] Loaded modules:
+2018-02-26 14:29:21.185 +03:00 [Information] - Volo.Abp.Security.AbpSecurityModule
+2018-02-26 14:29:21.185 +03:00 [Information] - Volo.Abp.Authorization.AbpAuthorizationModule
+2018-02-26 14:29:21.185 +03:00 [Information] - Volo.Abp.Guids.AbpGuidsModule
+2018-02-26 14:29:21.185 +03:00 [Information] - Volo.Abp.Data.AbpDataModule
+2018-02-26 14:29:21.185 +03:00 [Information] - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2018-02-26 14:29:21.185 +03:00 [Information] - Volo.Abp.Settings.AbpSettingsModule
+2018-02-26 14:29:21.185 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyAbstractionsModule
+2018-02-26 14:29:21.185 +03:00 [Information] - Volo.Abp.Threading.AbpThreadingModule
+2018-02-26 14:29:21.186 +03:00 [Information] - Volo.Abp.EventBus.AbpEventBusModule
+2018-02-26 14:29:21.186 +03:00 [Information] - Volo.Abp.Validation.AbpValidationModule
+2018-02-26 14:29:21.186 +03:00 [Information] - Volo.Abp.Http.AbpHttpAbstractionsModule
+2018-02-26 14:29:21.186 +03:00 [Information] - Volo.Abp.AbpDddModule
+2018-02-26 14:29:21.186 +03:00 [Information] - Volo.Abp.Permissions.AbpPermissionsDomainSharedModule
+2018-02-26 14:29:21.186 +03:00 [Information] - Volo.Abp.Serialization.AbpSerializationModule
+2018-02-26 14:29:21.186 +03:00 [Information] - Volo.Abp.Caching.AbpCachingModule
+2018-02-26 14:29:21.186 +03:00 [Information] - Volo.Abp.Timing.AbpTimingModule
+2018-02-26 14:29:21.186 +03:00 [Information] - Volo.Abp.Json.AbpJsonModule
+2018-02-26 14:29:21.186 +03:00 [Information] - Volo.Abp.Permissions.AbpPermissionsDomainModule
+2018-02-26 14:29:21.186 +03:00 [Information] - Volo.Abp.Permissions.AbpPermissionsApplicationContractsModule
+2018-02-26 14:29:21.186 +03:00 [Information] - Volo.Abp.Permissions.AbpPermissionsApplicationModule
+2018-02-26 14:29:21.186 +03:00 [Information] - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2018-02-26 14:29:21.187 +03:00 [Information] - Volo.Abp.Localization.AbpLocalizationModule
+2018-02-26 14:29:21.187 +03:00 [Information] - Volo.Abp.Session.AbpSessionModule
+2018-02-26 14:29:21.187 +03:00 [Information] - Volo.Abp.ApiVersioning.AbpApiVersioningAbstractionsModule
+2018-02-26 14:29:21.187 +03:00 [Information] - Volo.Abp.AbpCommonModule
+2018-02-26 14:29:21.187 +03:00 [Information] - Volo.Abp.EntityFrameworkCore.AbpEntityFrameworkCoreModule
+2018-02-26 14:29:21.187 +03:00 [Information] - Volo.Abp.Permissions.EntityFrameworkCore.AbpPermissionsEntityFrameworkCoreModule
+2018-02-26 14:29:21.187 +03:00 [Information] - Volo.Abp.Http.AbpHttpModule
+2018-02-26 14:29:21.187 +03:00 [Information] - Volo.Abp.AspNetCore.AbpAspNetCoreModule
+2018-02-26 14:29:21.187 +03:00 [Information] - Volo.Abp.Ui.AbpUiModule
+2018-02-26 14:29:21.187 +03:00 [Information] - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcModule
+2018-02-26 14:29:21.187 +03:00 [Information] - MicroserviceDemo.PermissionService.MicroservicesDemoPermissionServiceModule
+2018-02-26 14:29:21.530 +03:00 [Information] Initialized all modules.
+2018-02-26 14:29:21.876 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63908/  
+2018-02-26 14:29:22.084 +03:00 [Information] Executing action method "Volo.Abp.Identity.HttpApi.Host.Controllers.HomeController.Index (MicroserviceDemo.PermissionService)" with arguments (null) - ModelState is Valid
+2018-02-26 14:29:22.097 +03:00 [Information] Executing RedirectResult, redirecting to "/swagger".
+2018-02-26 14:29:22.102 +03:00 [Information] Executed action "Volo.Abp.Identity.HttpApi.Host.Controllers.HomeController.Index (MicroserviceDemo.PermissionService)" in 43.8705ms
+2018-02-26 14:29:22.108 +03:00 [Information] Request finished in 247.6639ms 302 
+2018-02-26 14:29:22.122 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63908/swagger/  
+2018-02-26 14:29:22.141 +03:00 [Information] Request finished in 19.3294ms 200 text/html
+2018-02-26 14:29:22.545 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63908/swagger/v1/swagger.json  
+2018-02-26 14:29:22.712 +03:00 [Error] Connection id ""0HLBT1GN9RAE1"", Request id ""0HLBT1GN9RAE1:00000003"": An unhandled exception was thrown by the application.
+System.NotSupportedException: Ambiguous HTTP method for action - Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc). Actions require an explicit HttpMethod binding for Swagger 2.0
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.CreatePathItem(IEnumerable`1 apiDescriptions, ISchemaRegistry schemaRegistry)
+   at System.Linq.Enumerable.ToDictionary[TSource,TKey,TElement](IEnumerable`1 source, Func`2 keySelector, Func`2 elementSelector, IEqualityComparer`1 comparer)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwagger(String documentName, String host, String basePath, String[] schemes)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.<Invoke>d__6.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Server.IISIntegration.IISMiddleware.<Invoke>d__11.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Hosting.Internal.RequestServicesContainerMiddleware.<Invoke>d__3.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.Frame`1.<ProcessRequestsAsync>d__2.MoveNext()
+2018-02-26 14:29:22.718 +03:00 [Information] Request finished in 172.8574ms 500 
+2018-02-26 14:32:43.757 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63908/swagger/  
+2018-02-26 14:32:43.758 +03:00 [Information] Request finished in 1.143ms 200 text/html
+2018-02-26 14:32:43.798 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63908/swagger/swagger-ui.css  
+2018-02-26 14:32:43.803 +03:00 [Information] The file "/swagger-ui.css" was not modified
+2018-02-26 14:32:43.804 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63908/swagger/swagger-ui-bundle.js  
+2018-02-26 14:32:43.804 +03:00 [Information] The file "/swagger-ui-bundle.js" was not modified
+2018-02-26 14:32:43.805 +03:00 [Information] Request finished in 1.1682ms 304 application/javascript
+2018-02-26 14:32:43.805 +03:00 [Information] Request finished in 6.9221ms 304 text/css
+2018-02-26 14:32:43.805 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63908/swagger/swagger-ui-standalone-preset.js  
+2018-02-26 14:32:43.806 +03:00 [Information] The file "/swagger-ui-standalone-preset.js" was not modified
+2018-02-26 14:32:43.806 +03:00 [Information] Request finished in 0.6504ms 304 application/javascript
+2018-02-26 14:32:48.918 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63908/swagger/v1/swagger.json  
+2018-02-26 14:32:48.944 +03:00 [Error] Connection id ""0HLBT1GN9RAE3"", Request id ""0HLBT1GN9RAE3:00000002"": An unhandled exception was thrown by the application.
+System.NotSupportedException: Ambiguous HTTP method for action - Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc). Actions require an explicit HttpMethod binding for Swagger 2.0
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.CreatePathItem(IEnumerable`1 apiDescriptions, ISchemaRegistry schemaRegistry)
+   at System.Linq.Enumerable.ToDictionary[TSource,TKey,TElement](IEnumerable`1 source, Func`2 keySelector, Func`2 elementSelector, IEqualityComparer`1 comparer)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwagger(String documentName, String host, String basePath, String[] schemes)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.<Invoke>d__6.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Server.IISIntegration.IISMiddleware.<Invoke>d__11.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Hosting.Internal.RequestServicesContainerMiddleware.<Invoke>d__3.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.Frame`1.<ProcessRequestsAsync>d__2.MoveNext()
+2018-02-26 14:32:48.952 +03:00 [Information] Request finished in 33.7377ms 500 
+2018-02-26 14:35:54.011 +03:00 [Information] Loaded modules:
+2018-02-26 14:35:54.052 +03:00 [Information] - Volo.Abp.Security.AbpSecurityModule
+2018-02-26 14:35:54.052 +03:00 [Information] - Volo.Abp.Authorization.AbpAuthorizationModule
+2018-02-26 14:35:54.053 +03:00 [Information] - Volo.Abp.Guids.AbpGuidsModule
+2018-02-26 14:35:54.053 +03:00 [Information] - Volo.Abp.Data.AbpDataModule
+2018-02-26 14:35:54.053 +03:00 [Information] - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2018-02-26 14:35:54.053 +03:00 [Information] - Volo.Abp.Settings.AbpSettingsModule
+2018-02-26 14:35:54.053 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyAbstractionsModule
+2018-02-26 14:35:54.053 +03:00 [Information] - Volo.Abp.Threading.AbpThreadingModule
+2018-02-26 14:35:54.053 +03:00 [Information] - Volo.Abp.EventBus.AbpEventBusModule
+2018-02-26 14:35:54.053 +03:00 [Information] - Volo.Abp.Validation.AbpValidationModule
+2018-02-26 14:35:54.053 +03:00 [Information] - Volo.Abp.Http.AbpHttpAbstractionsModule
+2018-02-26 14:35:54.053 +03:00 [Information] - Volo.Abp.AbpDddModule
+2018-02-26 14:35:54.053 +03:00 [Information] - Volo.Abp.Permissions.AbpPermissionsDomainSharedModule
+2018-02-26 14:35:54.053 +03:00 [Information] - Volo.Abp.Serialization.AbpSerializationModule
+2018-02-26 14:35:54.053 +03:00 [Information] - Volo.Abp.Caching.AbpCachingModule
+2018-02-26 14:35:54.054 +03:00 [Information] - Volo.Abp.Timing.AbpTimingModule
+2018-02-26 14:35:54.054 +03:00 [Information] - Volo.Abp.Json.AbpJsonModule
+2018-02-26 14:35:54.054 +03:00 [Information] - Volo.Abp.Permissions.AbpPermissionsDomainModule
+2018-02-26 14:35:54.054 +03:00 [Information] - Volo.Abp.Permissions.AbpPermissionsApplicationContractsModule
+2018-02-26 14:35:54.054 +03:00 [Information] - Volo.Abp.Permissions.AbpPermissionsApplicationModule
+2018-02-26 14:35:54.054 +03:00 [Information] - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2018-02-26 14:35:54.054 +03:00 [Information] - Volo.Abp.Localization.AbpLocalizationModule
+2018-02-26 14:35:54.054 +03:00 [Information] - Volo.Abp.Session.AbpSessionModule
+2018-02-26 14:35:54.054 +03:00 [Information] - Volo.Abp.ApiVersioning.AbpApiVersioningAbstractionsModule
+2018-02-26 14:35:54.054 +03:00 [Information] - Volo.Abp.AbpCommonModule
+2018-02-26 14:35:54.054 +03:00 [Information] - Volo.Abp.EntityFrameworkCore.AbpEntityFrameworkCoreModule
+2018-02-26 14:35:54.054 +03:00 [Information] - Volo.Abp.Permissions.EntityFrameworkCore.AbpPermissionsEntityFrameworkCoreModule
+2018-02-26 14:35:54.054 +03:00 [Information] - Volo.Abp.Http.AbpHttpModule
+2018-02-26 14:35:54.054 +03:00 [Information] - Volo.Abp.AspNetCore.AbpAspNetCoreModule
+2018-02-26 14:35:54.054 +03:00 [Information] - Volo.Abp.Ui.AbpUiModule
+2018-02-26 14:35:54.055 +03:00 [Information] - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcModule
+2018-02-26 14:35:54.055 +03:00 [Information] - MicroserviceDemo.PermissionService.MicroservicesDemoPermissionServiceModule
+2018-02-26 14:35:54.409 +03:00 [Information] Initialized all modules.
+2018-02-26 14:35:54.769 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63908/swagger/  
+2018-02-26 14:35:54.809 +03:00 [Information] Request finished in 54.9317ms 200 text/html
+2018-02-26 14:35:54.846 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63908/swagger/swagger-ui.css  
+2018-02-26 14:35:54.850 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63908/swagger/swagger-ui-bundle.js  
+2018-02-26 14:35:54.851 +03:00 [Information] The file "/swagger-ui.css" was not modified
+2018-02-26 14:35:54.851 +03:00 [Information] The file "/swagger-ui-bundle.js" was not modified
+2018-02-26 14:35:54.854 +03:00 [Information] Request finished in 8.1588ms 304 text/css
+2018-02-26 14:35:54.854 +03:00 [Information] Request finished in 3.9658ms 304 application/javascript
+2018-02-26 14:35:54.856 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63908/swagger/swagger-ui-standalone-preset.js  
+2018-02-26 14:35:54.857 +03:00 [Information] The file "/swagger-ui-standalone-preset.js" was not modified
+2018-02-26 14:35:54.860 +03:00 [Information] Request finished in 3.1892ms 304 application/javascript
+2018-02-26 14:35:55.323 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63908/swagger/v1/swagger.json  
+2018-02-26 14:35:55.572 +03:00 [Error] Connection id ""0HLBT1KCCOV04"", Request id ""0HLBT1KCCOV04:00000003"": An unhandled exception was thrown by the application.
+System.NotSupportedException: Ambiguous HTTP method for action - Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc). Actions require an explicit HttpMethod binding for Swagger 2.0
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.CreatePathItem(IEnumerable`1 apiDescriptions, ISchemaRegistry schemaRegistry)
+   at System.Linq.Enumerable.ToDictionary[TSource,TKey,TElement](IEnumerable`1 source, Func`2 keySelector, Func`2 elementSelector, IEqualityComparer`1 comparer)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwagger(String documentName, String host, String basePath, String[] schemes)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.<Invoke>d__6.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Server.IISIntegration.IISMiddleware.<Invoke>d__11.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Hosting.Internal.RequestServicesContainerMiddleware.<Invoke>d__3.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.Frame`1.<ProcessRequestsAsync>d__2.MoveNext()
+2018-02-26 14:35:55.577 +03:00 [Information] Request finished in 253.6773ms 500 
+2018-02-26 14:38:13.966 +03:00 [Information] Loaded modules:
+2018-02-26 14:38:14.015 +03:00 [Information] - Volo.Abp.Security.AbpSecurityModule
+2018-02-26 14:38:14.015 +03:00 [Information] - Volo.Abp.Authorization.AbpAuthorizationModule
+2018-02-26 14:38:14.015 +03:00 [Information] - Volo.Abp.Guids.AbpGuidsModule
+2018-02-26 14:38:14.016 +03:00 [Information] - Volo.Abp.Data.AbpDataModule
+2018-02-26 14:38:14.016 +03:00 [Information] - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2018-02-26 14:38:14.016 +03:00 [Information] - Volo.Abp.Settings.AbpSettingsModule
+2018-02-26 14:38:14.016 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyAbstractionsModule
+2018-02-26 14:38:14.016 +03:00 [Information] - Volo.Abp.Threading.AbpThreadingModule
+2018-02-26 14:38:14.016 +03:00 [Information] - Volo.Abp.EventBus.AbpEventBusModule
+2018-02-26 14:38:14.016 +03:00 [Information] - Volo.Abp.Validation.AbpValidationModule
+2018-02-26 14:38:14.016 +03:00 [Information] - Volo.Abp.Http.AbpHttpAbstractionsModule
+2018-02-26 14:38:14.016 +03:00 [Information] - Volo.Abp.AbpDddModule
+2018-02-26 14:38:14.017 +03:00 [Information] - Volo.Abp.Permissions.AbpPermissionsDomainSharedModule
+2018-02-26 14:38:14.017 +03:00 [Information] - Volo.Abp.Serialization.AbpSerializationModule
+2018-02-26 14:38:14.017 +03:00 [Information] - Volo.Abp.Caching.AbpCachingModule
+2018-02-26 14:38:14.017 +03:00 [Information] - Volo.Abp.Timing.AbpTimingModule
+2018-02-26 14:38:14.017 +03:00 [Information] - Volo.Abp.Json.AbpJsonModule
+2018-02-26 14:38:14.017 +03:00 [Information] - Volo.Abp.Permissions.AbpPermissionsDomainModule
+2018-02-26 14:38:14.017 +03:00 [Information] - Volo.Abp.Permissions.AbpPermissionsApplicationContractsModule
+2018-02-26 14:38:14.017 +03:00 [Information] - Volo.Abp.Permissions.AbpPermissionsApplicationModule
+2018-02-26 14:38:14.017 +03:00 [Information] - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2018-02-26 14:38:14.017 +03:00 [Information] - Volo.Abp.Localization.AbpLocalizationModule
+2018-02-26 14:38:14.017 +03:00 [Information] - Volo.Abp.Session.AbpSessionModule
+2018-02-26 14:38:14.017 +03:00 [Information] - Volo.Abp.ApiVersioning.AbpApiVersioningAbstractionsModule
+2018-02-26 14:38:14.017 +03:00 [Information] - Volo.Abp.AbpCommonModule
+2018-02-26 14:38:14.018 +03:00 [Information] - Volo.Abp.EntityFrameworkCore.AbpEntityFrameworkCoreModule
+2018-02-26 14:38:14.018 +03:00 [Information] - Volo.Abp.Permissions.EntityFrameworkCore.AbpPermissionsEntityFrameworkCoreModule
+2018-02-26 14:38:14.018 +03:00 [Information] - Volo.Abp.Http.AbpHttpModule
+2018-02-26 14:38:14.018 +03:00 [Information] - Volo.Abp.AspNetCore.AbpAspNetCoreModule
+2018-02-26 14:38:14.018 +03:00 [Information] - Volo.Abp.Ui.AbpUiModule
+2018-02-26 14:38:14.018 +03:00 [Information] - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcModule
+2018-02-26 14:38:14.018 +03:00 [Information] - MicroserviceDemo.PermissionService.MicroservicesDemoPermissionServiceModule
+2018-02-26 14:38:14.368 +03:00 [Information] Initialized all modules.
+2018-02-26 14:38:14.738 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63908/  
+2018-02-26 14:38:14.910 +03:00 [Information] Executing action method "Volo.Abp.Identity.HttpApi.Host.Controllers.HomeController.Index (MicroserviceDemo.PermissionService)" with arguments (null) - ModelState is Valid
+2018-02-26 14:38:14.923 +03:00 [Information] Executing RedirectResult, redirecting to "/swagger".
+2018-02-26 14:38:14.929 +03:00 [Information] Executed action "Volo.Abp.Identity.HttpApi.Host.Controllers.HomeController.Index (MicroserviceDemo.PermissionService)" in 45.7042ms
+2018-02-26 14:38:14.935 +03:00 [Information] Request finished in 212.7279ms 302 
+2018-02-26 14:38:14.952 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63908/swagger/  
+2018-02-26 14:38:14.958 +03:00 [Information] Sending file. Request path: '"/index.html"'. Physical path: '"N/A"'
+2018-02-26 14:38:14.963 +03:00 [Information] Request finished in 10.9269ms 200 text/html
+2018-02-26 14:38:14.999 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63908/swagger/css/typography.css  
+2018-02-26 14:38:15.000 +03:00 [Information] Sending file. Request path: '"/css/typography.css"'. Physical path: '"N/A"'
+2018-02-26 14:38:15.001 +03:00 [Information] Request finished in 1.8897ms 200 text/css
+2018-02-26 14:38:15.003 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63908/swagger/css/reset.css  
+2018-02-26 14:38:15.004 +03:00 [Information] Sending file. Request path: '"/css/reset.css"'. Physical path: '"N/A"'
+2018-02-26 14:38:15.004 +03:00 [Information] Request finished in 1.5069ms 200 text/css
+2018-02-26 14:38:15.005 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63908/swagger/css/screen.css  
+2018-02-26 14:38:15.005 +03:00 [Information] Sending file. Request path: '"/css/screen.css"'. Physical path: '"N/A"'
+2018-02-26 14:38:15.006 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63908/swagger/css/print.css  
+2018-02-26 14:38:15.007 +03:00 [Information] Sending file. Request path: '"/css/print.css"'. Physical path: '"N/A"'
+2018-02-26 14:38:15.007 +03:00 [Information] Request finished in 1.433ms 200 text/css
+2018-02-26 14:38:15.008 +03:00 [Information] Request finished in 2.405ms 200 text/css
+2018-02-26 14:38:15.013 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63908/swagger/lib/object-assign-pollyfill.js  
+2018-02-26 14:38:15.014 +03:00 [Information] Sending file. Request path: '"/lib/object-assign-pollyfill.js"'. Physical path: '"N/A"'
+2018-02-26 14:38:15.015 +03:00 [Information] Request finished in 1.7994ms 200 application/javascript
+2018-02-26 14:38:15.015 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63908/swagger/lib/jquery-1.8.0.min.js  
+2018-02-26 14:38:15.016 +03:00 [Information] Sending file. Request path: '"/lib/jquery-1.8.0.min.js"'. Physical path: '"N/A"'
+2018-02-26 14:38:15.016 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63908/swagger/lib/jquery.slideto.min.js  
+2018-02-26 14:38:15.017 +03:00 [Information] Sending file. Request path: '"/lib/jquery.slideto.min.js"'. Physical path: '"N/A"'
+2018-02-26 14:38:15.018 +03:00 [Information] Request finished in 1.7644ms 200 application/javascript
+2018-02-26 14:38:15.029 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63908/swagger/lib/jquery.wiggle.min.js  
+2018-02-26 14:38:15.030 +03:00 [Information] Sending file. Request path: '"/lib/jquery.wiggle.min.js"'. Physical path: '"N/A"'
+2018-02-26 14:38:15.030 +03:00 [Information] Request finished in 1.1712ms 200 application/javascript
+2018-02-26 14:38:15.041 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63908/swagger/lib/jquery.ba-bbq.min.js  
+2018-02-26 14:38:15.041 +03:00 [Information] Sending file. Request path: '"/lib/jquery.ba-bbq.min.js"'. Physical path: '"N/A"'
+2018-02-26 14:38:15.042 +03:00 [Information] Request finished in 1.232ms 200 application/javascript
+2018-02-26 14:38:15.042 +03:00 [Information] Request finished in 27.2107ms 200 application/javascript
+2018-02-26 14:38:15.043 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63908/swagger/lib/handlebars-4.0.5.js  
+2018-02-26 14:38:15.044 +03:00 [Information] Sending file. Request path: '"/lib/handlebars-4.0.5.js"'. Physical path: '"N/A"'
+2018-02-26 14:38:15.046 +03:00 [Information] Request finished in 3.566ms 200 application/javascript
+2018-02-26 14:38:15.048 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63908/swagger/lib/lodash.min.js  
+2018-02-26 14:38:15.049 +03:00 [Information] Sending file. Request path: '"/lib/lodash.min.js"'. Physical path: '"N/A"'
+2018-02-26 14:38:15.050 +03:00 [Information] Request finished in 3.0631ms 200 application/javascript
+2018-02-26 14:38:15.072 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63908/swagger/lib/backbone-min.js  
+2018-02-26 14:38:15.073 +03:00 [Information] Sending file. Request path: '"/lib/backbone-min.js"'. Physical path: '"N/A"'
+2018-02-26 14:38:15.075 +03:00 [Information] Request finished in 1.7785ms 200 application/javascript
+2018-02-26 14:38:15.078 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63908/swagger/swagger-ui.min.js  
+2018-02-26 14:38:15.078 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63908/swagger/lib/highlight.9.1.0.pack_extended.js  
+2018-02-26 14:38:15.078 +03:00 [Information] Sending file. Request path: '"/lib/highlight.9.1.0.pack_extended.js"'. Physical path: '"N/A"'
+2018-02-26 14:38:15.078 +03:00 [Information] Sending file. Request path: '"/swagger-ui.min.js"'. Physical path: '"N/A"'
+2018-02-26 14:38:15.078 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63908/swagger/lib/highlight.9.1.0.pack.js  
+2018-02-26 14:38:15.078 +03:00 [Information] Request finished in 0.8236ms 200 application/javascript
+2018-02-26 14:38:15.079 +03:00 [Information] Sending file. Request path: '"/lib/highlight.9.1.0.pack.js"'. Physical path: '"N/A"'
+2018-02-26 14:38:15.079 +03:00 [Information] Request finished in 1.14ms 200 application/javascript
+2018-02-26 14:38:15.083 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63908/swagger/lib/jsoneditor.min.js  
+2018-02-26 14:38:15.083 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63908/swagger/lib/marked.js  
+2018-02-26 14:38:15.084 +03:00 [Information] Sending file. Request path: '"/lib/marked.js"'. Physical path: '"N/A"'
+2018-02-26 14:38:15.084 +03:00 [Information] Sending file. Request path: '"/lib/jsoneditor.min.js"'. Physical path: '"N/A"'
+2018-02-26 14:38:15.085 +03:00 [Information] Request finished in 1.5069ms 200 application/javascript
+2018-02-26 14:38:15.087 +03:00 [Information] Request finished in 3.8854ms 200 application/javascript
+2018-02-26 14:38:15.091 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63908/swagger/lib/swagger-oauth.js  
+2018-02-26 14:38:15.092 +03:00 [Information] Sending file. Request path: '"/lib/swagger-oauth.js"'. Physical path: '"N/A"'
+2018-02-26 14:38:15.092 +03:00 [Information] Request finished in 15.2301ms 200 application/javascript
+2018-02-26 14:38:15.093 +03:00 [Information] Request finished in 1.4766ms 200 application/javascript
+2018-02-26 14:38:15.135 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63908/swagger/images/logo_small.png  
+2018-02-26 14:38:15.136 +03:00 [Information] Sending file. Request path: '"/images/logo_small.png"'. Physical path: '"N/A"'
+2018-02-26 14:38:15.137 +03:00 [Information] Request finished in 1.8195ms 200 image/png
+2018-02-26 14:38:15.287 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63908/swagger/images/favicon-16x16.png  
+2018-02-26 14:38:15.288 +03:00 [Information] Sending file. Request path: '"/images/favicon-16x16.png"'. Physical path: '"N/A"'
+2018-02-26 14:38:15.288 +03:00 [Information] Request finished in 0.7333ms 200 image/png
+2018-02-26 14:38:15.304 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63908/swagger/v1/swagger.json  
+2018-02-26 14:38:15.468 +03:00 [Error] Connection id ""0HLBT1LM3D57G"", Request id ""0HLBT1LM3D57G:00000004"": An unhandled exception was thrown by the application.
+System.NotSupportedException: Ambiguous HTTP method for action - Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc). Actions require an explicit HttpMethod binding for Swagger
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.CreatePathItem(IEnumerable`1 apiDescriptions, ISchemaRegistry schemaRegistry)
+   at System.Linq.Enumerable.ToDictionary[TSource,TKey,TElement](IEnumerable`1 source, Func`2 keySelector, Func`2 elementSelector, IEqualityComparer`1 comparer)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwagger(String documentName, String host, String basePath, String[] schemes)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.<Invoke>d__6.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Server.IISIntegration.IISMiddleware.<Invoke>d__11.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Hosting.Internal.RequestServicesContainerMiddleware.<Invoke>d__3.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.Frame`1.<ProcessRequestsAsync>d__2.MoveNext()
+2018-02-26 14:38:15.474 +03:00 [Information] Request finished in 169.958ms 500 

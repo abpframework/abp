@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
+  <Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml" />
+  <Default Extension="psmdcp" ContentType="application/vnd.openxmlformats-package.core-properties+xml" />
+  <Default Extension="pdb" ContentType="application/octet" />
+  <Default Extension="dll" ContentType="application/octet" />
+  <Default Extension="cshtml" ContentType="application/octet" />
+  <Default Extension="json" ContentType="application/octet" />
+  <Default Extension="nuspec" ContentType="application/octet" />
+</Types>

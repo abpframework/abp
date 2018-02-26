@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>Volo.Abp.Account.Web</id>
+    <version>0.2.0</version>
+    <authors>Volo.Abp.Account.Web</authors>
+    <owners>Volo.Abp.Account.Web</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <licenseUrl>https://github.com/aspnetzero/abp/blob/master/LICENSE</licenseUrl>
+    <projectUrl>http://abp.io/</projectUrl>
+    <iconUrl>http://www.aspnetboilerplate.com/images/abp_nupkg.png</iconUrl>
+    <description>Package Description</description>
+    <repository type="git" url="https://github.com/aspnetzero/abp/" />
+    <dependencies>
+      <group targetFramework=".NETStandard2.0">
+        <dependency id="Volo.Abp.Account.Application.Contracts" version="0.2.0" exclude="Build,Analyzers" />
+        <dependency id="Volo.Abp.AspNetCore.Mvc.UI.Bootstrap" version="0.2.0" exclude="Build,Analyzers" />
+        <dependency id="Volo.Abp.Identity.Domain" version="0.2.0" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+    <contentFiles>
+      <files include="any/netstandard2.0/Pages/Account/Login.cshtml" buildAction="Content" />
+      <files include="any/netstandard2.0/Pages/Account/Register.cshtml" buildAction="Content" />
+      <files include="any/netstandard2.0/Properties/launchSettings.json" buildAction="Content" />
+    </contentFiles>
+  </metadata>
+</package>

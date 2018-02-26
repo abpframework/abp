@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore;
+﻿using System.IO;
 using Microsoft.AspNetCore.Hosting;
 
 namespace MicroserviceDemo.PermissionService
@@ -7,11 +7,14 @@ namespace MicroserviceDemo.PermissionService
     {
         public static void Main(string[] args)
         {
-            BuildWebHost(args).Run();
+            BuildWebHostInternal(args).Run();
         }
 
-        public static IWebHost BuildWebHost(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
+        public static IWebHost BuildWebHostInternal(string[] args) =>
+            new WebHostBuilder()
+                .UseKestrel()
+                .UseContentRoot(Directory.GetCurrentDirectory())
+                .UseIISIntegration()
                 .UseStartup<Startup>()
                 .Build();
     }

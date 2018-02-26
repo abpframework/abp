@@ -7,6 +7,8 @@ using Volo.Abp.VirtualFileSystem;
 
 namespace Microsoft.AspNetCore.Builder
 {
+    //TODO: Volo.Abp.AspNetCore.EmbeddedFiles package should be referenced by the projects using embedded resources..?
+
     public static class VirtualFileSystemApplicationBuilderExtensions
     {
         public static void UseVirtualFiles(this IApplicationBuilder app)

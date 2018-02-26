@@ -60,7 +60,7 @@ namespace AbpDesk.Web.Mvc
             services.PreConfigure<IMvcBuilder>(builder =>
             {
                 builder
-                    .AddViewLocalization()
+                    .AddViewLocalization() //TODO: Move to the framework!
                     .AddRazorPagesOptions(options =>
                     {
                         options.Conventions.AuthorizeFolder("/App");
@@ -122,6 +122,7 @@ namespace AbpDesk.Web.Mvc
 
             services.Configure<BundlingOptions>(options =>
             {
+                //TODO: To the framework!
                 options.ScriptBundles.Add("GlobalScripts", new[]
                 {
                     "/Abp/ApplicationConfigurationScript?_v=" + DateTime.Now.Ticks,

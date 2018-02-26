@@ -1,0 +1,45 @@
+﻿@page
+@model Volo.Abp.Account.Web.Pages.Account.LoginModel
+<div class="row">
+    <div class="col-md-6">
+        <div class="col-md-4">
+            <form method="post">
+                <div class="form-group">
+                    <label for="UsernameOrEmailAddress">Username or email address</label>
+                    <input type="text" class="form-control" id="UsernameOrEmailAddress" name="UsernameOrEmailAddress">
+                </div>
+                <div class="form-group">
+                    <label for="Password">Password</label>
+                    <input type="password" class="form-control" id="Password" name="Password">
+                </div>
+                <div class="form-check">
+                    <label class="form-check-label">
+                        <input type="checkbox" name="RememberMe" value="true" checked="checked">
+                        Remember me
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-primary">Login</button>
+            </form>
+
+            <div style="padding-top: 20px">
+                <a href="@Url.Page("./Register", new { returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash })">Register</a>
+            </div>
+        </div>
+    </div>
+
+    @if (Model.ExternalLogins.Any())
+    {
+        <div class="col-md-6">
+            <h4>Use another service to log in.</h4>
+            <form asp-page="./Login" asp-page-handler="ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" asp-route-returnUrlHash="@Model.ReturnUrlHash" method="post">
+                <div>
+                    @foreach (var provider in Model.ExternalLogins)
+                    {
+                        <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                    }
+                </div>
+            </form>
+        </div>
+    }
+
+</div>

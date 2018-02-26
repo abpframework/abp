@@ -16,6 +16,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ProxyScripting
             _proxyScriptManager = proxyScriptManager;
         }
 
+        [HttpGet]
         [Produces("text/javascript", "text/plain")]
         public string GetAll(ServiceProxyGenerationModel model)
         {
