@@ -1,8 +1,0 @@
-version: '3'
-
-services:
-  microservicedemo.web:
-    image: microservicedemo.web
-    build:
-      context: .
-      dockerfile: MicroserviceDemo.Web/Dockerfile
