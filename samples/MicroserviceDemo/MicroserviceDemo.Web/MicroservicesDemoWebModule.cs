@@ -55,6 +55,12 @@ namespace MicroserviceDemo.Web
                         context.DbContextOptions.UseSqlServer(context.ConnectionString);
                     }
                 });
+
+                //TODO: This should not be neededn when we fix the conn string name problem for interfaces
+                options.Configure<AbpPermissionsDbContext>(context =>
+                {
+                    context.DbContextOptions.UseSqlServer(configuration.GetConnectionString("AbpPermissions"));
+                });
             });
 
             services.Configure<BundlingOptions>(options =>
@@ -66,6 +72,8 @@ namespace MicroserviceDemo.Web
                     "/Abp/ServiceProxyScript?_v=" + DateTime.Now.Ticks
                 });
             });
+
+            services.AddAuthentication();
 
             services.AddAssemblyOf<MicroservicesDemoWebModule>();
         }
@@ -81,6 +89,8 @@ namespace MicroserviceDemo.Web
 
             app.UseStaticFiles();
             app.UseVirtualFiles();
+
+            app.UseAuthentication();
 
             app.UseMvcWithDefaultRoute();
         }
