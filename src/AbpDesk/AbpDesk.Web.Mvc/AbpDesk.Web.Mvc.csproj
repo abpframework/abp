@@ -30,6 +30,7 @@
     <ProjectReference Include="..\..\Volo.Abp.MultiTenancy.HttpApi\Volo.Abp.MultiTenancy.HttpApi.csproj" />
     <ProjectReference Include="..\..\Volo.Abp.MultiTenancy.Web\Volo.Abp.MultiTenancy.Web.csproj" />
     <ProjectReference Include="..\..\Volo.Abp.Permissions.Application\Volo.Abp.Permissions.Application.csproj" />
+    <ProjectReference Include="..\..\Volo.Abp.Permissions.HttpApi\Volo.Abp.Permissions.HttpApi.csproj" />
     <ProjectReference Include="..\AbpDesk.Application.Contracts\AbpDesk.Application.Contracts.csproj" />
     <ProjectReference Include="..\..\Volo.Abp.AspNetCore.Mvc\Volo.Abp.AspNetCore.Mvc.csproj" />
     <ProjectReference Include="..\AbpDesk.EntityFrameworkCore\AbpDesk.EntityFrameworkCore.csproj" />
