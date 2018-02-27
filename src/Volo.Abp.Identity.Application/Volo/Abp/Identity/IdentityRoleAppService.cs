@@ -51,12 +51,14 @@ namespace Volo.Abp.Identity
             return ObjectMapper.Map<List<IdentityRole>, List<IdentityRoleDto>>(list);
         }
 
+        [Authorize(IdentityPermissions.Users.ManagePermissions)]
         public async Task<GetPermissionListResultDto> GetPermissionsAsync(Guid id)
         {
             var role = await _roleRepository.GetAsync(id);
             return await _permissionAppServiceHelper.GetAsync(RolePermissionValueProvider.ProviderName, role.Name); //TODO: User normalized role name instad of name?
         }
 
+        [Authorize(IdentityPermissions.Users.ManagePermissions)]
         public async Task UpdatePermissionsAsync(Guid id, UpdatePermissionsDto input)
         {
             var role = await _roleRepository.GetAsync(id);

@@ -12,11 +12,13 @@ namespace Volo.Abp.Identity
             rolesPermission.AddChild(IdentityPermissions.Roles.Create);
             rolesPermission.AddChild(IdentityPermissions.Roles.Update);
             rolesPermission.AddChild(IdentityPermissions.Roles.Delete);
+            rolesPermission.AddChild(IdentityPermissions.Roles.ManagePermissions);
 
             var usersPermission = identityGroup.AddPermission(IdentityPermissions.Users.Default);
             usersPermission.AddChild(IdentityPermissions.Users.Create);
             usersPermission.AddChild(IdentityPermissions.Users.Update);
             usersPermission.AddChild(IdentityPermissions.Users.Delete);
+            rolesPermission.AddChild(IdentityPermissions.Users.ManagePermissions);
         }
     }
 }

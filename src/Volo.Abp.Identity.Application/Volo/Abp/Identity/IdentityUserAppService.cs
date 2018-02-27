@@ -96,11 +96,13 @@ namespace Volo.Abp.Identity
             CheckIdentityErrors(await _userManager.SetRolesAsync(user, input.RoleNames));
         }
 
+        [Authorize(IdentityPermissions.Users.ManagePermissions)]
         public async Task<GetPermissionListResultDto> GetPermissionsAsync(Guid id)
         {
             return await _permissionAppServiceHelper.GetAsync(UserPermissionValueProvider.ProviderName, id.ToString());
         }
 
+        [Authorize(IdentityPermissions.Users.ManagePermissions)]
         public async Task UpdatePermissionsAsync(Guid id, UpdatePermissionsDto input)
         {
             await _permissionAppServiceHelper.UpdateAsync(UserPermissionValueProvider.ProviderName, id.ToString(), input);

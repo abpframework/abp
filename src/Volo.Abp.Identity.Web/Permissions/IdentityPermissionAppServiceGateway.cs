@@ -20,7 +20,7 @@ namespace Volo.Abp.Identity.Web.Permissions
             _roleAppService = roleAppService;
         }
 
-        public async Task<GetPermissionListResultDto> GetAsync(string providerName, string providerKey)
+        public virtual async Task<GetPermissionListResultDto> GetAsync(string providerName, string providerKey)
         {
             switch (providerName)
             {
@@ -33,7 +33,7 @@ namespace Volo.Abp.Identity.Web.Permissions
             }
         }
 
-        public async Task UpdateAsync(string providerName, string providerKey, UpdatePermissionsDto input)
+        public virtual async Task UpdateAsync(string providerName, string providerKey, UpdatePermissionsDto input)
         {
             switch (providerName)
             {
