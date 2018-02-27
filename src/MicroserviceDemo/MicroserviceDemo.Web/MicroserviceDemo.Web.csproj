@@ -14,6 +14,7 @@
     <PackageReference Include="Serilog.Sinks.RollingFile" Version="3.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.2" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="2.1.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,6 +26,7 @@
     <ProjectReference Include="..\..\Volo.Abp.Identity.HttpApi\Volo.Abp.Identity.HttpApi.csproj" />
     <ProjectReference Include="..\..\Volo.Abp.Identity.Web\Volo.Abp.Identity.Web.csproj" />
     <ProjectReference Include="..\..\Volo.Abp.MultiTenancy.HttpApi.Client\Volo.Abp.MultiTenancy.HttpApi.Client.csproj" />
+    <ProjectReference Include="..\..\Volo.Abp.MultiTenancy.HttpApi.Proxy\Volo.Abp.MultiTenancy.HttpApi.Proxy.csproj" />
     <ProjectReference Include="..\..\Volo.Abp.MultiTenancy.Web\Volo.Abp.MultiTenancy.Web.csproj" />
     <ProjectReference Include="..\..\Volo.Abp.Permissions.EntityFrameworkCore\Volo.Abp.Permissions.EntityFrameworkCore.csproj" />
   </ItemGroup>

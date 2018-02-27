@@ -17,7 +17,7 @@ namespace Volo.Abp.Castle.DynamicProxy
 
         public Type[] GenericArguments => Invocation.GenericArguments;
 
-        public object TargetObject => Invocation.InvocationTarget;
+        public object TargetObject => Invocation.InvocationTarget ?? Invocation.MethodInvocationTarget;
 
         public MethodInfo Method => Invocation.MethodInvocationTarget ?? Invocation.Method;
 

@@ -4,8 +4,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>Volo.Abp.Http.Client</AssemblyName>
-    <PackageId>Volo.Abp.Http.Client</PackageId>
+    <AssemblyName>Volo.Abp.MultiTenancy.HttpApi.Proxy</AssemblyName>
+    <PackageId>Volo.Abp.MultiTenancy.HttpApi.Proxy</PackageId>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
@@ -14,9 +14,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Volo.Abp.Castle.Core\Volo.Abp.Castle.Core.csproj" />
-    <ProjectReference Include="..\Volo.Abp.Http\Volo.Abp.Http.csproj" />
-    <ProjectReference Include="..\Volo.Abp.Validation\Volo.Abp.Validation.csproj" />
+    <ProjectReference Include="..\Volo.Abp.AspNetCore.Mvc\Volo.Abp.AspNetCore.Mvc.csproj" />
+    <ProjectReference Include="..\Volo.Abp.MultiTenancy.Application.Contracts\Volo.Abp.MultiTenancy.Application.Contracts.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Net.Http" Version="4.3.3" />
   </ItemGroup>
 
 </Project>

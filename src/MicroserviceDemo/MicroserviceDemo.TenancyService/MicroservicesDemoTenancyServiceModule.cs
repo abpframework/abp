@@ -49,6 +49,10 @@ namespace MicroserviceDemo.TenancyService
                     options.DocInclusionPredicate((docName, description) => true);
                 });
 
+            services.AddAuthentication();
+
+            services.AddAlwaysAllowPermissionChecker();
+
             services.AddAssemblyOf<MicroservicesDemoTenancyServiceModule>();
         }
 
@@ -63,6 +67,8 @@ namespace MicroserviceDemo.TenancyService
             {
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "Multi-Tenancy API");
             });
+
+            app.UseAuthentication();
 
             app.UseMvcWithDefaultRoute();
         }

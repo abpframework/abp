@@ -156,7 +156,6 @@ namespace Volo.Abp.AspNetCore.Mvc
                     continue;
                 }
 
-
                 partManager.ApplicationParts.Add(new AssemblyPart(moduleAssembly));
             }
         }

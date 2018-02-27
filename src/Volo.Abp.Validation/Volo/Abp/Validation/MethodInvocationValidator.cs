@@ -60,8 +60,13 @@ namespace Volo.Abp.Validation
             {
                 return false;
             }
+            
+            if (ReflectionHelper.GetSingleAttributeOfMemberOrDeclaringTypeOrDefault<DisableValidationAttribute>(context.Method) != null)
+            {
+                return true;
+            }
 
-            return ReflectionHelper.GetSingleAttributeOfMemberOrDeclaringTypeOrDefault<DisableValidationAttribute>(context.Method) != null;
+            return false;
         }
 
         protected virtual bool HasSingleNullArgument(MethodInvocationValidationContext context)

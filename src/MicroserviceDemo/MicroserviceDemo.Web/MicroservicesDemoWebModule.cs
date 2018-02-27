@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Modularity;
@@ -31,6 +32,7 @@ namespace MicroserviceDemo.Web
     [DependsOn(typeof(AbpIdentityEntityFrameworkCoreModule))]
     [DependsOn(typeof(AbpAccountWebModule))]
     [DependsOn(typeof(AbpMultiTenancyHttpApiClientModule))]
+    [DependsOn(typeof(AbpMultiTenancyHttpApiProxyModule))]
     [DependsOn(typeof(AbpMultiTenancyWebModule))]
     public class MicroservicesDemoWebModule : AbpModule
     {
@@ -85,6 +87,13 @@ namespace MicroserviceDemo.Web
             services.AddHttpClientProxies(typeof(AbpPermissionsApplicationContractsModule).Assembly, "AbpPermissions"); //TODO: Create permission http client module and remove this one
             services.Configure<RemoteServiceOptions>(configuration);
 
+            services.AddSwaggerGen(
+                options =>
+                {
+                    options.SwaggerDoc("v1", new Info { Title = "Microservice Test Web API", Version = "v1" });
+                    options.DocInclusionPredicate((docName, description) => true);
+                });
+
             services.AddAssemblyOf<MicroservicesDemoWebModule>();
         }
 
@@ -99,6 +108,12 @@ namespace MicroserviceDemo.Web
 
             app.UseStaticFiles();
             app.UseVirtualFiles();
+
+            app.UseSwagger();
+            app.UseSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Microservice Test Web API");
+            });
 
             app.UseAuthentication();
 

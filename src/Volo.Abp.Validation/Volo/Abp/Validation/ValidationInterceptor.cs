@@ -30,6 +30,7 @@ namespace Volo.Abp.Validation
         {
             _validator.Validate(
                 new MethodInvocationValidationContext(
+                    invocation.TargetObject,
                     invocation.Method,
                     invocation.Arguments
                 )

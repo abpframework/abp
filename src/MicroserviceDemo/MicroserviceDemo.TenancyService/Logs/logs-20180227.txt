@@ -309,3 +309,590 @@
 2018-02-27 13:34:28.761 +03:00 [Information] Request finished in 0.6752ms 304 image/png
 2018-02-27 13:34:28.781 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/v1/swagger.json  
 2018-02-27 13:34:29.095 +03:00 [Information] Request finished in 313.8835ms 200 application/json
+2018-02-27 13:57:45.371 +03:00 [Information] Loaded modules:
+2018-02-27 13:57:45.422 +03:00 [Information] - Volo.Abp.Castle.AbpCastleCoreModule
+2018-02-27 13:57:45.422 +03:00 [Information] - Volo.Abp.Autofac.AbpAutofacModule
+2018-02-27 13:57:45.422 +03:00 [Information] - Volo.Abp.Data.AbpDataModule
+2018-02-27 13:57:45.422 +03:00 [Information] - Volo.Abp.Settings.AbpSettingsModule
+2018-02-27 13:57:45.422 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyAbstractionsModule
+2018-02-27 13:57:45.422 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyDomainSharedModule
+2018-02-27 13:57:45.422 +03:00 [Information] - Volo.Abp.Guids.AbpGuidsModule
+2018-02-27 13:57:45.422 +03:00 [Information] - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2018-02-27 13:57:45.423 +03:00 [Information] - Volo.Abp.Threading.AbpThreadingModule
+2018-02-27 13:57:45.423 +03:00 [Information] - Volo.Abp.EventBus.AbpEventBusModule
+2018-02-27 13:57:45.423 +03:00 [Information] - Volo.Abp.Validation.AbpValidationModule
+2018-02-27 13:57:45.423 +03:00 [Information] - Volo.Abp.Security.AbpSecurityModule
+2018-02-27 13:57:45.423 +03:00 [Information] - Volo.Abp.Authorization.AbpAuthorizationModule
+2018-02-27 13:57:45.423 +03:00 [Information] - Volo.Abp.Http.AbpHttpAbstractionsModule
+2018-02-27 13:57:45.423 +03:00 [Information] - Volo.Abp.AbpDddModule
+2018-02-27 13:57:45.423 +03:00 [Information] - Volo.Abp.AutoMapper.AbpAutoMapperModule
+2018-02-27 13:57:45.423 +03:00 [Information] - Volo.Abp.Ui.AbpUiModule
+2018-02-27 13:57:45.423 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyDomainModule
+2018-02-27 13:57:45.423 +03:00 [Information] - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2018-02-27 13:57:45.423 +03:00 [Information] - Volo.Abp.Localization.AbpLocalizationModule
+2018-02-27 13:57:45.424 +03:00 [Information] - Volo.Abp.Session.AbpSessionModule
+2018-02-27 13:57:45.424 +03:00 [Information] - Volo.Abp.Timing.AbpTimingModule
+2018-02-27 13:57:45.424 +03:00 [Information] - Volo.Abp.Json.AbpJsonModule
+2018-02-27 13:57:45.424 +03:00 [Information] - Volo.Abp.ApiVersioning.AbpApiVersioningAbstractionsModule
+2018-02-27 13:57:45.424 +03:00 [Information] - Volo.Abp.Serialization.AbpSerializationModule
+2018-02-27 13:57:45.424 +03:00 [Information] - Volo.Abp.Caching.AbpCachingModule
+2018-02-27 13:57:45.424 +03:00 [Information] - Volo.Abp.AbpCommonModule
+2018-02-27 13:57:45.424 +03:00 [Information] - Volo.Abp.EntityFrameworkCore.AbpEntityFrameworkCoreModule
+2018-02-27 13:57:45.424 +03:00 [Information] - Volo.Abp.MultiTenancy.EntityFrameworkCore.AbpMultiTenancyEntityFrameworkCoreModule
+2018-02-27 13:57:45.424 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyApplicationContractsModule
+2018-02-27 13:57:45.424 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyApplicationModule
+2018-02-27 13:57:45.424 +03:00 [Information] - Volo.Abp.Http.AbpHttpModule
+2018-02-27 13:57:45.425 +03:00 [Information] - Volo.Abp.AspNetCore.AbpAspNetCoreModule
+2018-02-27 13:57:45.425 +03:00 [Information] - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcModule
+2018-02-27 13:57:45.425 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyHttpApiModule
+2018-02-27 13:57:45.425 +03:00 [Information] - MicroserviceDemo.TenancyService.MicroservicesDemoTenancyServiceModule
+2018-02-27 13:57:46.124 +03:00 [Information] Initialized all modules.
+2018-02-27 13:57:46.384 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/  
+2018-02-27 13:57:46.570 +03:00 [Information] Executing action method "Volo.Abp.Identity.HttpApi.Host.Controllers.HomeController.Index (MicroserviceDemo.TenancyService)" with arguments (null) - ModelState is Valid
+2018-02-27 13:57:46.584 +03:00 [Information] Executing RedirectResult, redirecting to "/swagger".
+2018-02-27 13:57:46.591 +03:00 [Information] Executed action "Volo.Abp.Identity.HttpApi.Host.Controllers.HomeController.Index (MicroserviceDemo.TenancyService)" in 44.2302ms
+2018-02-27 13:57:46.597 +03:00 [Information] Request finished in 228.254ms 302 
+2018-02-27 13:57:46.612 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/  
+2018-02-27 13:57:46.621 +03:00 [Information] Sending file. Request path: '"/index.html"'. Physical path: '"N/A"'
+2018-02-27 13:57:46.628 +03:00 [Information] Request finished in 15.5834ms 200 text/html
+2018-02-27 13:57:46.906 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/v1/swagger.json  
+2018-02-27 13:57:47.199 +03:00 [Information] Request finished in 293.3262ms 200 application/json
+2018-02-27 13:57:59.804 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/  
+2018-02-27 13:57:59.805 +03:00 [Information] Sending file. Request path: '"/index.html"'. Physical path: '"N/A"'
+2018-02-27 13:57:59.806 +03:00 [Information] Request finished in 1.9829ms 200 text/html
+2018-02-27 13:57:59.855 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/css/typography.css  
+2018-02-27 13:57:59.856 +03:00 [Information] The file "/css/typography.css" was not modified
+2018-02-27 13:57:59.857 +03:00 [Information] Request finished in 2.9844ms 304 text/css
+2018-02-27 13:57:59.861 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/css/print.css  
+2018-02-27 13:57:59.861 +03:00 [Information] The file "/css/print.css" was not modified
+2018-02-27 13:57:59.862 +03:00 [Information] Request finished in 0.8026ms 304 text/css
+2018-02-27 13:57:59.868 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/css/reset.css  
+2018-02-27 13:57:59.869 +03:00 [Information] The file "/css/reset.css" was not modified
+2018-02-27 13:57:59.869 +03:00 [Information] Request finished in 0.8527ms 304 text/css
+2018-02-27 13:57:59.875 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/css/screen.css  
+2018-02-27 13:57:59.876 +03:00 [Information] The file "/css/screen.css" was not modified
+2018-02-27 13:57:59.876 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/lib/object-assign-pollyfill.js  
+2018-02-27 13:57:59.876 +03:00 [Information] Request finished in 0.7543ms 304 text/css
+2018-02-27 13:57:59.876 +03:00 [Information] The file "/lib/object-assign-pollyfill.js" was not modified
+2018-02-27 13:57:59.876 +03:00 [Information] Request finished in 0.6162ms 304 application/javascript
+2018-02-27 13:57:59.877 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/lib/jquery.slideto.min.js  
+2018-02-27 13:57:59.877 +03:00 [Information] The file "/lib/jquery.slideto.min.js" was not modified
+2018-02-27 13:57:59.879 +03:00 [Information] Request finished in 2.3703ms 304 application/javascript
+2018-02-27 13:57:59.884 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/lib/jquery-1.8.0.min.js  
+2018-02-27 13:57:59.885 +03:00 [Information] The file "/lib/jquery-1.8.0.min.js" was not modified
+2018-02-27 13:57:59.885 +03:00 [Information] Request finished in 3.1709ms 304 application/javascript
+2018-02-27 13:57:59.900 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/lib/jquery.wiggle.min.js  
+2018-02-27 13:57:59.901 +03:00 [Information] The file "/lib/jquery.wiggle.min.js" was not modified
+2018-02-27 13:57:59.902 +03:00 [Information] Request finished in 1.9162ms 304 application/javascript
+2018-02-27 13:57:59.914 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/lib/jquery.ba-bbq.min.js  
+2018-02-27 13:57:59.915 +03:00 [Information] The file "/lib/jquery.ba-bbq.min.js" was not modified
+2018-02-27 13:57:59.915 +03:00 [Information] Request finished in 2.0133ms 304 application/javascript
+2018-02-27 13:57:59.922 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/lib/handlebars-4.0.5.js  
+2018-02-27 13:57:59.923 +03:00 [Information] The file "/lib/handlebars-4.0.5.js" was not modified
+2018-02-27 13:57:59.923 +03:00 [Information] Request finished in 0.7988ms 304 application/javascript
+2018-02-27 13:57:59.943 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/lib/lodash.min.js  
+2018-02-27 13:57:59.944 +03:00 [Information] The file "/lib/lodash.min.js" was not modified
+2018-02-27 13:57:59.944 +03:00 [Information] Request finished in 1.6395ms 304 application/javascript
+2018-02-27 13:57:59.949 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/swagger-ui.min.js  
+2018-02-27 13:57:59.949 +03:00 [Information] The file "/swagger-ui.min.js" was not modified
+2018-02-27 13:57:59.950 +03:00 [Information] Request finished in 0.8458ms 304 application/javascript
+2018-02-27 13:57:59.951 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/lib/jsoneditor.min.js  
+2018-02-27 13:57:59.951 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/lib/backbone-min.js  
+2018-02-27 13:57:59.951 +03:00 [Information] The file "/lib/jsoneditor.min.js" was not modified
+2018-02-27 13:57:59.951 +03:00 [Information] The file "/lib/backbone-min.js" was not modified
+2018-02-27 13:57:59.952 +03:00 [Information] Request finished in 0.697ms 304 application/javascript
+2018-02-27 13:57:59.952 +03:00 [Information] Request finished in 1.3316ms 304 application/javascript
+2018-02-27 13:57:59.959 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/lib/highlight.9.1.0.pack.js  
+2018-02-27 13:57:59.960 +03:00 [Information] The file "/lib/highlight.9.1.0.pack.js" was not modified
+2018-02-27 13:57:59.961 +03:00 [Information] Request finished in 7.431ms 304 application/javascript
+2018-02-27 13:57:59.961 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/lib/highlight.9.1.0.pack_extended.js  
+2018-02-27 13:57:59.962 +03:00 [Information] The file "/lib/highlight.9.1.0.pack_extended.js" was not modified
+2018-02-27 13:57:59.962 +03:00 [Information] Request finished in 0.6996ms 304 application/javascript
+2018-02-27 13:57:59.964 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/lib/marked.js  
+2018-02-27 13:57:59.964 +03:00 [Information] The file "/lib/marked.js" was not modified
+2018-02-27 13:57:59.965 +03:00 [Information] Request finished in 0.8278ms 304 application/javascript
+2018-02-27 13:57:59.979 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/lib/swagger-oauth.js  
+2018-02-27 13:57:59.980 +03:00 [Information] The file "/lib/swagger-oauth.js" was not modified
+2018-02-27 13:57:59.980 +03:00 [Information] Request finished in 0.8167ms 304 application/javascript
+2018-02-27 13:58:00.266 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/images/logo_small.png  
+2018-02-27 13:58:00.267 +03:00 [Information] The file "/images/logo_small.png" was not modified
+2018-02-27 13:58:00.267 +03:00 [Information] Request finished in 1.1161ms 304 image/png
+2018-02-27 13:58:00.335 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/v1/swagger.json  
+2018-02-27 13:58:00.342 +03:00 [Information] Request finished in 7.2385ms 200 application/json
+2018-02-27 14:49:12.896 +03:00 [Information] Loaded modules:
+2018-02-27 14:49:12.939 +03:00 [Information] - Volo.Abp.Castle.AbpCastleCoreModule
+2018-02-27 14:49:12.939 +03:00 [Information] - Volo.Abp.Autofac.AbpAutofacModule
+2018-02-27 14:49:12.940 +03:00 [Information] - Volo.Abp.Data.AbpDataModule
+2018-02-27 14:49:12.940 +03:00 [Information] - Volo.Abp.Settings.AbpSettingsModule
+2018-02-27 14:49:12.940 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyAbstractionsModule
+2018-02-27 14:49:12.940 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyDomainSharedModule
+2018-02-27 14:49:12.940 +03:00 [Information] - Volo.Abp.Guids.AbpGuidsModule
+2018-02-27 14:49:12.940 +03:00 [Information] - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2018-02-27 14:49:12.940 +03:00 [Information] - Volo.Abp.Threading.AbpThreadingModule
+2018-02-27 14:49:12.940 +03:00 [Information] - Volo.Abp.EventBus.AbpEventBusModule
+2018-02-27 14:49:12.940 +03:00 [Information] - Volo.Abp.Validation.AbpValidationModule
+2018-02-27 14:49:12.940 +03:00 [Information] - Volo.Abp.Security.AbpSecurityModule
+2018-02-27 14:49:12.941 +03:00 [Information] - Volo.Abp.Authorization.AbpAuthorizationModule
+2018-02-27 14:49:12.941 +03:00 [Information] - Volo.Abp.Http.AbpHttpAbstractionsModule
+2018-02-27 14:49:12.941 +03:00 [Information] - Volo.Abp.AbpDddModule
+2018-02-27 14:49:12.941 +03:00 [Information] - Volo.Abp.AutoMapper.AbpAutoMapperModule
+2018-02-27 14:49:12.941 +03:00 [Information] - Volo.Abp.Ui.AbpUiModule
+2018-02-27 14:49:12.941 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyDomainModule
+2018-02-27 14:49:12.941 +03:00 [Information] - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2018-02-27 14:49:12.941 +03:00 [Information] - Volo.Abp.Localization.AbpLocalizationModule
+2018-02-27 14:49:12.941 +03:00 [Information] - Volo.Abp.Session.AbpSessionModule
+2018-02-27 14:49:12.941 +03:00 [Information] - Volo.Abp.Timing.AbpTimingModule
+2018-02-27 14:49:12.941 +03:00 [Information] - Volo.Abp.Json.AbpJsonModule
+2018-02-27 14:49:12.942 +03:00 [Information] - Volo.Abp.ApiVersioning.AbpApiVersioningAbstractionsModule
+2018-02-27 14:49:12.942 +03:00 [Information] - Volo.Abp.Serialization.AbpSerializationModule
+2018-02-27 14:49:12.942 +03:00 [Information] - Volo.Abp.Caching.AbpCachingModule
+2018-02-27 14:49:12.942 +03:00 [Information] - Volo.Abp.AbpCommonModule
+2018-02-27 14:49:12.942 +03:00 [Information] - Volo.Abp.EntityFrameworkCore.AbpEntityFrameworkCoreModule
+2018-02-27 14:49:12.942 +03:00 [Information] - Volo.Abp.MultiTenancy.EntityFrameworkCore.AbpMultiTenancyEntityFrameworkCoreModule
+2018-02-27 14:49:12.942 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyApplicationContractsModule
+2018-02-27 14:49:12.942 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyApplicationModule
+2018-02-27 14:49:12.942 +03:00 [Information] - Volo.Abp.Http.AbpHttpModule
+2018-02-27 14:49:12.942 +03:00 [Information] - Volo.Abp.AspNetCore.AbpAspNetCoreModule
+2018-02-27 14:49:12.942 +03:00 [Information] - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcModule
+2018-02-27 14:49:12.943 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyHttpApiModule
+2018-02-27 14:49:12.943 +03:00 [Information] - MicroserviceDemo.TenancyService.MicroservicesDemoTenancyServiceModule
+2018-02-27 14:49:13.560 +03:00 [Information] Initialized all modules.
+2018-02-27 14:49:13.914 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/api/abp/api-definition  
+2018-02-27 14:49:14.089 +03:00 [Information] Executing action method "Volo.Abp.AspNetCore.Mvc.ApiExploring.AbpApiDefinitionController.Get (Volo.Abp.AspNetCore.Mvc)" with arguments (null) - ModelState is Valid
+2018-02-27 14:49:14.153 +03:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-02-27 14:49:14.212 +03:00 [Information] Executed action "Volo.Abp.AspNetCore.Mvc.ApiExploring.AbpApiDefinitionController.Get (Volo.Abp.AspNetCore.Mvc)" in 155.5818ms
+2018-02-27 14:49:14.215 +03:00 [Information] Request finished in 314.8884ms 200 application/json; charset=utf-8
+2018-02-27 14:49:14.372 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/api/multi-tenancy/tenant?SkipCount=0&MaxResultCount=10&api-version=1.0  
+2018-02-27 14:49:14.424 +03:00 [Information] Authorization failed for user: null.
+2018-02-27 14:49:14.425 +03:00 [Information] Authorization failed for the request at filter '"Microsoft.AspNetCore.Mvc.Authorization.AuthorizeFilter"'.
+2018-02-27 14:49:14.428 +03:00 [Information] Executing ChallengeResult with authentication schemes ([]).
+2018-02-27 14:49:14.431 +03:00 [Information] Executed action "Volo.Abp.MultiTenancy.TenantAppService.GetListAsync (Volo.Abp.MultiTenancy.Application)" in 35.8994ms
+2018-02-27 14:49:14.491 +03:00 [Error] Connection id ""0HLBTR0FOK5M8"", Request id ""0HLBTR0FOK5M8:00000002"": An unhandled exception was thrown by the application.
+System.InvalidOperationException: No authenticationScheme was specified, and there was no DefaultChallengeScheme found.
+   at Microsoft.AspNetCore.Authentication.AuthenticationService.<ChallengeAsync>d__11.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Mvc.ChallengeResult.<ExecuteResultAsync>d__14.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.<InvokeResultAsync>d__19.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.<InvokeFilterPipelineAsync>d__17.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.<InvokeAsync>d__15.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Builder.RouterMiddleware.<Invoke>d__4.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.<Invoke>d__6.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Server.IISIntegration.IISMiddleware.<Invoke>d__11.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Hosting.Internal.RequestServicesContainerMiddleware.<Invoke>d__3.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.Frame`1.<ProcessRequestsAsync>d__2.MoveNext()
+2018-02-27 14:49:14.501 +03:00 [Information] Request finished in 129.1386ms 500 
+2018-02-27 14:56:01.155 +03:00 [Information] Loaded modules:
+2018-02-27 14:56:01.206 +03:00 [Information] - Volo.Abp.Castle.AbpCastleCoreModule
+2018-02-27 14:56:01.206 +03:00 [Information] - Volo.Abp.Autofac.AbpAutofacModule
+2018-02-27 14:56:01.206 +03:00 [Information] - Volo.Abp.Data.AbpDataModule
+2018-02-27 14:56:01.206 +03:00 [Information] - Volo.Abp.Settings.AbpSettingsModule
+2018-02-27 14:56:01.206 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyAbstractionsModule
+2018-02-27 14:56:01.206 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyDomainSharedModule
+2018-02-27 14:56:01.206 +03:00 [Information] - Volo.Abp.Guids.AbpGuidsModule
+2018-02-27 14:56:01.206 +03:00 [Information] - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2018-02-27 14:56:01.206 +03:00 [Information] - Volo.Abp.Threading.AbpThreadingModule
+2018-02-27 14:56:01.206 +03:00 [Information] - Volo.Abp.EventBus.AbpEventBusModule
+2018-02-27 14:56:01.206 +03:00 [Information] - Volo.Abp.Validation.AbpValidationModule
+2018-02-27 14:56:01.206 +03:00 [Information] - Volo.Abp.Security.AbpSecurityModule
+2018-02-27 14:56:01.206 +03:00 [Information] - Volo.Abp.Authorization.AbpAuthorizationModule
+2018-02-27 14:56:01.206 +03:00 [Information] - Volo.Abp.Http.AbpHttpAbstractionsModule
+2018-02-27 14:56:01.206 +03:00 [Information] - Volo.Abp.AbpDddModule
+2018-02-27 14:56:01.207 +03:00 [Information] - Volo.Abp.AutoMapper.AbpAutoMapperModule
+2018-02-27 14:56:01.207 +03:00 [Information] - Volo.Abp.Ui.AbpUiModule
+2018-02-27 14:56:01.207 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyDomainModule
+2018-02-27 14:56:01.207 +03:00 [Information] - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2018-02-27 14:56:01.207 +03:00 [Information] - Volo.Abp.Localization.AbpLocalizationModule
+2018-02-27 14:56:01.207 +03:00 [Information] - Volo.Abp.Session.AbpSessionModule
+2018-02-27 14:56:01.207 +03:00 [Information] - Volo.Abp.Timing.AbpTimingModule
+2018-02-27 14:56:01.207 +03:00 [Information] - Volo.Abp.Json.AbpJsonModule
+2018-02-27 14:56:01.207 +03:00 [Information] - Volo.Abp.ApiVersioning.AbpApiVersioningAbstractionsModule
+2018-02-27 14:56:01.207 +03:00 [Information] - Volo.Abp.Serialization.AbpSerializationModule
+2018-02-27 14:56:01.207 +03:00 [Information] - Volo.Abp.Caching.AbpCachingModule
+2018-02-27 14:56:01.207 +03:00 [Information] - Volo.Abp.AbpCommonModule
+2018-02-27 14:56:01.207 +03:00 [Information] - Volo.Abp.EntityFrameworkCore.AbpEntityFrameworkCoreModule
+2018-02-27 14:56:01.207 +03:00 [Information] - Volo.Abp.MultiTenancy.EntityFrameworkCore.AbpMultiTenancyEntityFrameworkCoreModule
+2018-02-27 14:56:01.207 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyApplicationContractsModule
+2018-02-27 14:56:01.207 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyApplicationModule
+2018-02-27 14:56:01.207 +03:00 [Information] - Volo.Abp.Http.AbpHttpModule
+2018-02-27 14:56:01.207 +03:00 [Information] - Volo.Abp.AspNetCore.AbpAspNetCoreModule
+2018-02-27 14:56:01.207 +03:00 [Information] - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcModule
+2018-02-27 14:56:01.208 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyHttpApiModule
+2018-02-27 14:56:01.208 +03:00 [Information] - MicroserviceDemo.TenancyService.MicroservicesDemoTenancyServiceModule
+2018-02-27 14:56:01.964 +03:00 [Information] Initialized all modules.
+2018-02-27 14:56:02.317 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/  
+2018-02-27 14:56:02.502 +03:00 [Information] Executing action method "Volo.Abp.Identity.HttpApi.Host.Controllers.HomeController.Index (MicroserviceDemo.TenancyService)" with arguments (null) - ModelState is Valid
+2018-02-27 14:56:02.513 +03:00 [Information] Executing RedirectResult, redirecting to "/swagger".
+2018-02-27 14:56:02.520 +03:00 [Information] Executed action "Volo.Abp.Identity.HttpApi.Host.Controllers.HomeController.Index (MicroserviceDemo.TenancyService)" in 41.229ms
+2018-02-27 14:56:02.526 +03:00 [Information] Request finished in 232.1609ms 302 
+2018-02-27 14:56:02.543 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/  
+2018-02-27 14:56:02.551 +03:00 [Information] Sending file. Request path: '"/index.html"'. Physical path: '"N/A"'
+2018-02-27 14:56:02.556 +03:00 [Information] Request finished in 13.7386ms 200 text/html
+2018-02-27 14:56:02.789 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/v1/swagger.json  
+2018-02-27 14:56:03.137 +03:00 [Information] Request finished in 347.8877ms 200 application/json
+2018-02-27 14:56:31.549 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/api/abp/api-definition  
+2018-02-27 14:56:31.568 +03:00 [Information] Executing action method "Volo.Abp.AspNetCore.Mvc.ApiExploring.AbpApiDefinitionController.Get (Volo.Abp.AspNetCore.Mvc)" with arguments (null) - ModelState is Valid
+2018-02-27 14:56:31.601 +03:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-02-27 14:56:31.634 +03:00 [Information] Executed action "Volo.Abp.AspNetCore.Mvc.ApiExploring.AbpApiDefinitionController.Get (Volo.Abp.AspNetCore.Mvc)" in 75.1058ms
+2018-02-27 14:56:31.635 +03:00 [Information] Request finished in 86.279ms 200 application/json; charset=utf-8
+2018-02-27 14:56:31.748 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/api/multi-tenancy/tenant?SkipCount=0&MaxResultCount=10&api-version=1.0  
+2018-02-27 14:56:31.798 +03:00 [Information] Authorization was successful for user: null.
+2018-02-27 14:56:31.848 +03:00 [Information] Executing action method "Volo.Abp.MultiTenancy.TenantAppService.GetListAsync (Volo.Abp.MultiTenancy.Application)" with arguments (["Volo.Abp.MultiTenancy.GetTenantsInput"]) - ModelState is Valid
+2018-02-27 14:56:32.304 +03:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-02-27 14:56:32.317 +03:00 [Information] Executed action "Volo.Abp.MultiTenancy.TenantAppService.GetListAsync (Volo.Abp.MultiTenancy.Application)" in 545.4624ms
+2018-02-27 14:56:32.317 +03:00 [Information] Request finished in 569.5626ms 500 application/json; charset=utf-8
+2018-02-27 14:57:42.419 +03:00 [Information] Loaded modules:
+2018-02-27 14:57:42.491 +03:00 [Information] - Volo.Abp.Castle.AbpCastleCoreModule
+2018-02-27 14:57:42.498 +03:00 [Information] - Volo.Abp.Autofac.AbpAutofacModule
+2018-02-27 14:57:42.505 +03:00 [Information] - Volo.Abp.Data.AbpDataModule
+2018-02-27 14:57:42.513 +03:00 [Information] - Volo.Abp.Settings.AbpSettingsModule
+2018-02-27 14:57:42.520 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyAbstractionsModule
+2018-02-27 14:57:42.526 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyDomainSharedModule
+2018-02-27 14:57:42.534 +03:00 [Information] - Volo.Abp.Guids.AbpGuidsModule
+2018-02-27 14:57:42.540 +03:00 [Information] - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2018-02-27 14:57:42.548 +03:00 [Information] - Volo.Abp.Threading.AbpThreadingModule
+2018-02-27 14:57:42.555 +03:00 [Information] - Volo.Abp.EventBus.AbpEventBusModule
+2018-02-27 14:57:42.562 +03:00 [Information] - Volo.Abp.Validation.AbpValidationModule
+2018-02-27 14:57:42.569 +03:00 [Information] - Volo.Abp.Security.AbpSecurityModule
+2018-02-27 14:57:42.576 +03:00 [Information] - Volo.Abp.Authorization.AbpAuthorizationModule
+2018-02-27 14:57:42.583 +03:00 [Information] - Volo.Abp.Http.AbpHttpAbstractionsModule
+2018-02-27 14:57:42.588 +03:00 [Information] - Volo.Abp.AbpDddModule
+2018-02-27 14:57:42.594 +03:00 [Information] - Volo.Abp.AutoMapper.AbpAutoMapperModule
+2018-02-27 14:57:42.606 +03:00 [Information] - Volo.Abp.Ui.AbpUiModule
+2018-02-27 14:57:42.617 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyDomainModule
+2018-02-27 14:57:42.632 +03:00 [Information] - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2018-02-27 14:57:42.640 +03:00 [Information] - Volo.Abp.Localization.AbpLocalizationModule
+2018-02-27 14:57:42.647 +03:00 [Information] - Volo.Abp.Session.AbpSessionModule
+2018-02-27 14:57:42.654 +03:00 [Information] - Volo.Abp.Timing.AbpTimingModule
+2018-02-27 14:57:42.664 +03:00 [Information] - Volo.Abp.Json.AbpJsonModule
+2018-02-27 14:57:42.672 +03:00 [Information] - Volo.Abp.ApiVersioning.AbpApiVersioningAbstractionsModule
+2018-02-27 14:57:42.683 +03:00 [Information] - Volo.Abp.Serialization.AbpSerializationModule
+2018-02-27 14:57:42.696 +03:00 [Information] - Volo.Abp.Caching.AbpCachingModule
+2018-02-27 14:57:42.704 +03:00 [Information] - Volo.Abp.AbpCommonModule
+2018-02-27 14:57:42.711 +03:00 [Information] - Volo.Abp.EntityFrameworkCore.AbpEntityFrameworkCoreModule
+2018-02-27 14:57:42.718 +03:00 [Information] - Volo.Abp.MultiTenancy.EntityFrameworkCore.AbpMultiTenancyEntityFrameworkCoreModule
+2018-02-27 14:57:42.723 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyApplicationContractsModule
+2018-02-27 14:57:42.730 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyApplicationModule
+2018-02-27 14:57:42.736 +03:00 [Information] - Volo.Abp.Http.AbpHttpModule
+2018-02-27 14:57:42.741 +03:00 [Information] - Volo.Abp.AspNetCore.AbpAspNetCoreModule
+2018-02-27 14:57:42.746 +03:00 [Information] - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcModule
+2018-02-27 14:57:42.751 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyHttpApiModule
+2018-02-27 14:57:42.756 +03:00 [Information] - MicroserviceDemo.TenancyService.MicroservicesDemoTenancyServiceModule
+2018-02-27 14:57:43.659 +03:00 [Information] Initialized all modules.
+2018-02-27 14:57:44.390 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/  
+2018-02-27 14:57:44.760 +03:00 [Information] Executing action method "Volo.Abp.Identity.HttpApi.Host.Controllers.HomeController.Index (MicroserviceDemo.TenancyService)" with arguments (null) - ModelState is Valid
+2018-02-27 14:57:44.777 +03:00 [Information] Executing RedirectResult, redirecting to "/swagger".
+2018-02-27 14:57:44.791 +03:00 [Information] Executed action "Volo.Abp.Identity.HttpApi.Host.Controllers.HomeController.Index (MicroserviceDemo.TenancyService)" in 159.5986ms
+2018-02-27 14:57:44.819 +03:00 [Information] Request finished in 453.4389ms 302 
+2018-02-27 14:57:44.847 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/  
+2018-02-27 14:57:44.860 +03:00 [Information] Sending file. Request path: '"/index.html"'. Physical path: '"N/A"'
+2018-02-27 14:57:44.874 +03:00 [Information] Request finished in 26.6621ms 200 text/html
+2018-02-27 14:57:45.058 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/v1/swagger.json  
+2018-02-27 14:57:45.373 +03:00 [Information] Request finished in 324.5008ms 200 application/json
+2018-02-27 14:58:52.162 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/api/abp/api-definition  
+2018-02-27 14:58:52.304 +03:00 [Information] Executing action method "Volo.Abp.AspNetCore.Mvc.ApiExploring.AbpApiDefinitionController.Get (Volo.Abp.AspNetCore.Mvc)" with arguments (null) - ModelState is Valid
+2018-02-27 14:58:52.340 +03:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-02-27 14:58:52.381 +03:00 [Information] Executed action "Volo.Abp.AspNetCore.Mvc.ApiExploring.AbpApiDefinitionController.Get (Volo.Abp.AspNetCore.Mvc)" in 117.8795ms
+2018-02-27 14:58:52.393 +03:00 [Information] Request finished in 226.0491ms 200 application/json; charset=utf-8
+2018-02-27 14:58:52.549 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/api/multi-tenancy/tenant?SkipCount=0&MaxResultCount=10&api-version=1.0  
+2018-02-27 14:58:52.599 +03:00 [Information] Authorization was successful for user: null.
+2018-02-27 14:58:52.699 +03:00 [Information] Executing action method "Volo.Abp.MultiTenancy.TenantAppService.GetListAsync (Volo.Abp.MultiTenancy.Application)" with arguments (["Volo.Abp.MultiTenancy.GetTenantsInput"]) - ModelState is Valid
+2018-02-27 14:59:00.072 +03:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-02-27 14:59:00.101 +03:00 [Information] Executed action "Volo.Abp.MultiTenancy.TenantAppService.GetListAsync (Volo.Abp.MultiTenancy.Application)" in 7516.9328ms
+2018-02-27 14:59:00.114 +03:00 [Information] Request finished in 7559.2134ms 500 application/json; charset=utf-8
+2018-02-27 14:59:23.203 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/api/multi-tenancy/tenant?SkipCount=0&MaxResultCount=10&api-version=1.0  
+2018-02-27 14:59:23.211 +03:00 [Information] Authorization was successful for user: null.
+2018-02-27 14:59:23.262 +03:00 [Information] Executing action method "Volo.Abp.MultiTenancy.TenantAppService.GetListAsync (Volo.Abp.MultiTenancy.Application)" with arguments (["Volo.Abp.MultiTenancy.GetTenantsInput"]) - ModelState is Valid
+2018-02-27 15:00:09.654 +03:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-02-27 15:00:09.669 +03:00 [Information] Executed action "Volo.Abp.MultiTenancy.TenantAppService.GetListAsync (Volo.Abp.MultiTenancy.Application)" in 46451.0519ms
+2018-02-27 15:00:09.679 +03:00 [Information] Request finished in 46479.0525ms 500 application/json; charset=utf-8
+2018-02-27 15:02:20.880 +03:00 [Information] Loaded modules:
+2018-02-27 15:02:20.937 +03:00 [Information] - Volo.Abp.Castle.AbpCastleCoreModule
+2018-02-27 15:02:20.937 +03:00 [Information] - Volo.Abp.Autofac.AbpAutofacModule
+2018-02-27 15:02:20.937 +03:00 [Information] - Volo.Abp.Data.AbpDataModule
+2018-02-27 15:02:20.937 +03:00 [Information] - Volo.Abp.Settings.AbpSettingsModule
+2018-02-27 15:02:20.937 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyAbstractionsModule
+2018-02-27 15:02:20.937 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyDomainSharedModule
+2018-02-27 15:02:20.938 +03:00 [Information] - Volo.Abp.Guids.AbpGuidsModule
+2018-02-27 15:02:20.938 +03:00 [Information] - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2018-02-27 15:02:20.938 +03:00 [Information] - Volo.Abp.Threading.AbpThreadingModule
+2018-02-27 15:02:20.938 +03:00 [Information] - Volo.Abp.EventBus.AbpEventBusModule
+2018-02-27 15:02:20.938 +03:00 [Information] - Volo.Abp.Validation.AbpValidationModule
+2018-02-27 15:02:20.938 +03:00 [Information] - Volo.Abp.Security.AbpSecurityModule
+2018-02-27 15:02:20.938 +03:00 [Information] - Volo.Abp.Authorization.AbpAuthorizationModule
+2018-02-27 15:02:20.938 +03:00 [Information] - Volo.Abp.Http.AbpHttpAbstractionsModule
+2018-02-27 15:02:20.938 +03:00 [Information] - Volo.Abp.AbpDddModule
+2018-02-27 15:02:20.938 +03:00 [Information] - Volo.Abp.AutoMapper.AbpAutoMapperModule
+2018-02-27 15:02:20.938 +03:00 [Information] - Volo.Abp.Ui.AbpUiModule
+2018-02-27 15:02:20.938 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyDomainModule
+2018-02-27 15:02:20.938 +03:00 [Information] - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2018-02-27 15:02:20.938 +03:00 [Information] - Volo.Abp.Localization.AbpLocalizationModule
+2018-02-27 15:02:20.938 +03:00 [Information] - Volo.Abp.Session.AbpSessionModule
+2018-02-27 15:02:20.939 +03:00 [Information] - Volo.Abp.Timing.AbpTimingModule
+2018-02-27 15:02:20.939 +03:00 [Information] - Volo.Abp.Json.AbpJsonModule
+2018-02-27 15:02:20.939 +03:00 [Information] - Volo.Abp.ApiVersioning.AbpApiVersioningAbstractionsModule
+2018-02-27 15:02:20.939 +03:00 [Information] - Volo.Abp.Serialization.AbpSerializationModule
+2018-02-27 15:02:20.939 +03:00 [Information] - Volo.Abp.Caching.AbpCachingModule
+2018-02-27 15:02:20.939 +03:00 [Information] - Volo.Abp.AbpCommonModule
+2018-02-27 15:02:20.939 +03:00 [Information] - Volo.Abp.EntityFrameworkCore.AbpEntityFrameworkCoreModule
+2018-02-27 15:02:20.939 +03:00 [Information] - Volo.Abp.MultiTenancy.EntityFrameworkCore.AbpMultiTenancyEntityFrameworkCoreModule
+2018-02-27 15:02:20.939 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyApplicationContractsModule
+2018-02-27 15:02:20.939 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyApplicationModule
+2018-02-27 15:02:20.939 +03:00 [Information] - Volo.Abp.Http.AbpHttpModule
+2018-02-27 15:02:20.939 +03:00 [Information] - Volo.Abp.AspNetCore.AbpAspNetCoreModule
+2018-02-27 15:02:20.939 +03:00 [Information] - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcModule
+2018-02-27 15:02:20.940 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyHttpApiModule
+2018-02-27 15:02:20.940 +03:00 [Information] - MicroserviceDemo.TenancyService.MicroservicesDemoTenancyServiceModule
+2018-02-27 15:02:21.627 +03:00 [Information] Initialized all modules.
+2018-02-27 15:02:22.040 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/  
+2018-02-27 15:02:22.236 +03:00 [Information] Executing action method "Volo.Abp.Identity.HttpApi.Host.Controllers.HomeController.Index (MicroserviceDemo.TenancyService)" with arguments (null) - ModelState is Valid
+2018-02-27 15:02:22.250 +03:00 [Information] Executing RedirectResult, redirecting to "/swagger".
+2018-02-27 15:02:22.255 +03:00 [Information] Executed action "Volo.Abp.Identity.HttpApi.Host.Controllers.HomeController.Index (MicroserviceDemo.TenancyService)" in 54.4882ms
+2018-02-27 15:02:22.261 +03:00 [Information] Request finished in 236.2007ms 302 
+2018-02-27 15:02:22.277 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/  
+2018-02-27 15:02:22.287 +03:00 [Information] Sending file. Request path: '"/index.html"'. Physical path: '"N/A"'
+2018-02-27 15:02:22.293 +03:00 [Information] Request finished in 16.6525ms 200 text/html
+2018-02-27 15:02:22.525 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/v1/swagger.json  
+2018-02-27 15:02:22.846 +03:00 [Information] Request finished in 320.6149ms 200 application/json
+2018-02-27 15:02:36.225 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/api/multi-tenancy/tenant?SkipCount=0&MaxResultCount=100  
+2018-02-27 15:02:36.277 +03:00 [Information] Authorization was successful for user: null.
+2018-02-27 15:02:36.316 +03:00 [Information] Executing action method "Volo.Abp.MultiTenancy.TenantAppService.GetListAsync (Volo.Abp.MultiTenancy.Application)" with arguments (["Volo.Abp.MultiTenancy.GetTenantsInput"]) - ModelState is Valid
+2018-02-27 15:02:37.387 +03:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-02-27 15:02:37.405 +03:00 [Information] Executed action "Volo.Abp.MultiTenancy.TenantAppService.GetListAsync (Volo.Abp.MultiTenancy.Application)" in 1149.6659ms
+2018-02-27 15:02:37.405 +03:00 [Information] Request finished in 1180.5151ms 500 application/json; charset=utf-8
+2018-02-27 15:04:12.356 +03:00 [Information] Loaded modules:
+2018-02-27 15:04:12.452 +03:00 [Information] - Volo.Abp.Castle.AbpCastleCoreModule
+2018-02-27 15:04:12.457 +03:00 [Information] - Volo.Abp.Autofac.AbpAutofacModule
+2018-02-27 15:04:12.466 +03:00 [Information] - Volo.Abp.Data.AbpDataModule
+2018-02-27 15:04:12.479 +03:00 [Information] - Volo.Abp.Settings.AbpSettingsModule
+2018-02-27 15:04:12.490 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyAbstractionsModule
+2018-02-27 15:04:12.499 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyDomainSharedModule
+2018-02-27 15:04:12.506 +03:00 [Information] - Volo.Abp.Guids.AbpGuidsModule
+2018-02-27 15:04:12.512 +03:00 [Information] - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2018-02-27 15:04:12.518 +03:00 [Information] - Volo.Abp.Threading.AbpThreadingModule
+2018-02-27 15:04:12.523 +03:00 [Information] - Volo.Abp.EventBus.AbpEventBusModule
+2018-02-27 15:04:12.529 +03:00 [Information] - Volo.Abp.Validation.AbpValidationModule
+2018-02-27 15:04:12.539 +03:00 [Information] - Volo.Abp.Security.AbpSecurityModule
+2018-02-27 15:04:12.552 +03:00 [Information] - Volo.Abp.Authorization.AbpAuthorizationModule
+2018-02-27 15:04:12.561 +03:00 [Information] - Volo.Abp.Http.AbpHttpAbstractionsModule
+2018-02-27 15:04:12.566 +03:00 [Information] - Volo.Abp.AbpDddModule
+2018-02-27 15:04:12.572 +03:00 [Information] - Volo.Abp.AutoMapper.AbpAutoMapperModule
+2018-02-27 15:04:12.578 +03:00 [Information] - Volo.Abp.Ui.AbpUiModule
+2018-02-27 15:04:12.583 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyDomainModule
+2018-02-27 15:04:12.589 +03:00 [Information] - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2018-02-27 15:04:12.595 +03:00 [Information] - Volo.Abp.Localization.AbpLocalizationModule
+2018-02-27 15:04:12.603 +03:00 [Information] - Volo.Abp.Session.AbpSessionModule
+2018-02-27 15:04:12.613 +03:00 [Information] - Volo.Abp.Timing.AbpTimingModule
+2018-02-27 15:04:12.622 +03:00 [Information] - Volo.Abp.Json.AbpJsonModule
+2018-02-27 15:04:12.632 +03:00 [Information] - Volo.Abp.ApiVersioning.AbpApiVersioningAbstractionsModule
+2018-02-27 15:04:12.641 +03:00 [Information] - Volo.Abp.Serialization.AbpSerializationModule
+2018-02-27 15:04:12.652 +03:00 [Information] - Volo.Abp.Caching.AbpCachingModule
+2018-02-27 15:04:12.660 +03:00 [Information] - Volo.Abp.AbpCommonModule
+2018-02-27 15:04:12.667 +03:00 [Information] - Volo.Abp.EntityFrameworkCore.AbpEntityFrameworkCoreModule
+2018-02-27 15:04:12.685 +03:00 [Information] - Volo.Abp.MultiTenancy.EntityFrameworkCore.AbpMultiTenancyEntityFrameworkCoreModule
+2018-02-27 15:04:12.692 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyApplicationContractsModule
+2018-02-27 15:04:12.701 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyApplicationModule
+2018-02-27 15:04:12.716 +03:00 [Information] - Volo.Abp.Http.AbpHttpModule
+2018-02-27 15:04:12.723 +03:00 [Information] - Volo.Abp.AspNetCore.AbpAspNetCoreModule
+2018-02-27 15:04:12.730 +03:00 [Information] - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcModule
+2018-02-27 15:04:12.736 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyHttpApiModule
+2018-02-27 15:04:12.742 +03:00 [Information] - MicroserviceDemo.TenancyService.MicroservicesDemoTenancyServiceModule
+2018-02-27 15:04:13.604 +03:00 [Information] Initialized all modules.
+2018-02-27 15:04:14.330 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/  
+2018-02-27 15:04:14.711 +03:00 [Information] Executing action method "Volo.Abp.Identity.HttpApi.Host.Controllers.HomeController.Index (MicroserviceDemo.TenancyService)" with arguments (null) - ModelState is Valid
+2018-02-27 15:04:14.732 +03:00 [Information] Executing RedirectResult, redirecting to "/swagger".
+2018-02-27 15:04:14.745 +03:00 [Information] Executed action "Volo.Abp.Identity.HttpApi.Host.Controllers.HomeController.Index (MicroserviceDemo.TenancyService)" in 167.1588ms
+2018-02-27 15:04:14.778 +03:00 [Information] Request finished in 472.0162ms 302 
+2018-02-27 15:04:14.802 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/  
+2018-02-27 15:04:14.822 +03:00 [Information] Sending file. Request path: '"/index.html"'. Physical path: '"N/A"'
+2018-02-27 15:04:14.841 +03:00 [Information] Request finished in 35.0484ms 200 text/html
+2018-02-27 15:04:15.029 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/v1/swagger.json  
+2018-02-27 15:04:15.365 +03:00 [Information] Request finished in 341.8533ms 200 application/json
+2018-02-27 15:04:18.538 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/api/multi-tenancy/tenant?SkipCount=0&MaxResultCount=100  
+2018-02-27 15:04:18.647 +03:00 [Information] Authorization was successful for user: null.
+2018-02-27 15:04:18.758 +03:00 [Information] Executing action method "Volo.Abp.MultiTenancy.TenantAppService.GetListAsync (Volo.Abp.MultiTenancy.Application)" with arguments (["Volo.Abp.MultiTenancy.GetTenantsInput"]) - ModelState is Valid
+2018-02-27 15:04:30.522 +03:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-02-27 15:04:30.553 +03:00 [Information] Executed action "Volo.Abp.MultiTenancy.TenantAppService.GetListAsync (Volo.Abp.MultiTenancy.Application)" in 11944.5371ms
+2018-02-27 15:04:30.565 +03:00 [Information] Request finished in 12024.4953ms 500 application/json; charset=utf-8
+2018-02-27 15:04:39.718 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/api/multi-tenancy/tenant?SkipCount=0&MaxResultCount=100  
+2018-02-27 15:04:39.728 +03:00 [Information] Authorization was successful for user: null.
+2018-02-27 15:04:39.773 +03:00 [Information] Executing action method "Volo.Abp.MultiTenancy.TenantAppService.GetListAsync (Volo.Abp.MultiTenancy.Application)" with arguments (["Volo.Abp.MultiTenancy.GetTenantsInput"]) - ModelState is Valid
+2018-02-27 15:09:57.216 +03:00 [Information] Loaded modules:
+2018-02-27 15:09:57.298 +03:00 [Information] - Volo.Abp.Castle.AbpCastleCoreModule
+2018-02-27 15:09:57.303 +03:00 [Information] - Volo.Abp.Autofac.AbpAutofacModule
+2018-02-27 15:09:57.309 +03:00 [Information] - Volo.Abp.Data.AbpDataModule
+2018-02-27 15:09:57.316 +03:00 [Information] - Volo.Abp.Settings.AbpSettingsModule
+2018-02-27 15:09:57.322 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyAbstractionsModule
+2018-02-27 15:09:57.331 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyDomainSharedModule
+2018-02-27 15:09:57.338 +03:00 [Information] - Volo.Abp.Guids.AbpGuidsModule
+2018-02-27 15:09:57.344 +03:00 [Information] - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2018-02-27 15:09:57.351 +03:00 [Information] - Volo.Abp.Threading.AbpThreadingModule
+2018-02-27 15:09:57.358 +03:00 [Information] - Volo.Abp.EventBus.AbpEventBusModule
+2018-02-27 15:09:57.365 +03:00 [Information] - Volo.Abp.Validation.AbpValidationModule
+2018-02-27 15:09:57.371 +03:00 [Information] - Volo.Abp.Security.AbpSecurityModule
+2018-02-27 15:09:57.380 +03:00 [Information] - Volo.Abp.Authorization.AbpAuthorizationModule
+2018-02-27 15:09:57.388 +03:00 [Information] - Volo.Abp.Http.AbpHttpAbstractionsModule
+2018-02-27 15:09:57.399 +03:00 [Information] - Volo.Abp.AbpDddModule
+2018-02-27 15:09:57.411 +03:00 [Information] - Volo.Abp.AutoMapper.AbpAutoMapperModule
+2018-02-27 15:09:57.421 +03:00 [Information] - Volo.Abp.Ui.AbpUiModule
+2018-02-27 15:09:57.429 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyDomainModule
+2018-02-27 15:09:57.439 +03:00 [Information] - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2018-02-27 15:09:57.445 +03:00 [Information] - Volo.Abp.Localization.AbpLocalizationModule
+2018-02-27 15:09:57.452 +03:00 [Information] - Volo.Abp.Session.AbpSessionModule
+2018-02-27 15:09:57.458 +03:00 [Information] - Volo.Abp.Timing.AbpTimingModule
+2018-02-27 15:09:57.463 +03:00 [Information] - Volo.Abp.Json.AbpJsonModule
+2018-02-27 15:09:57.468 +03:00 [Information] - Volo.Abp.ApiVersioning.AbpApiVersioningAbstractionsModule
+2018-02-27 15:09:57.473 +03:00 [Information] - Volo.Abp.Serialization.AbpSerializationModule
+2018-02-27 15:09:57.479 +03:00 [Information] - Volo.Abp.Caching.AbpCachingModule
+2018-02-27 15:09:57.484 +03:00 [Information] - Volo.Abp.AbpCommonModule
+2018-02-27 15:09:57.489 +03:00 [Information] - Volo.Abp.EntityFrameworkCore.AbpEntityFrameworkCoreModule
+2018-02-27 15:09:57.497 +03:00 [Information] - Volo.Abp.MultiTenancy.EntityFrameworkCore.AbpMultiTenancyEntityFrameworkCoreModule
+2018-02-27 15:09:57.504 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyApplicationContractsModule
+2018-02-27 15:09:57.510 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyApplicationModule
+2018-02-27 15:09:57.517 +03:00 [Information] - Volo.Abp.Http.AbpHttpModule
+2018-02-27 15:09:57.524 +03:00 [Information] - Volo.Abp.AspNetCore.AbpAspNetCoreModule
+2018-02-27 15:09:57.533 +03:00 [Information] - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcModule
+2018-02-27 15:09:57.540 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyHttpApiModule
+2018-02-27 15:09:57.547 +03:00 [Information] - MicroserviceDemo.TenancyService.MicroservicesDemoTenancyServiceModule
+2018-02-27 15:09:58.442 +03:00 [Information] Initialized all modules.
+2018-02-27 15:09:59.228 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/  
+2018-02-27 15:09:59.228 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/api/multi-tenancy/tenant?SkipCount=0&MaxResultCount=100  
+2018-02-27 15:09:59.706 +03:00 [Information] Executing action method "Volo.Abp.Identity.HttpApi.Host.Controllers.HomeController.Index (MicroserviceDemo.TenancyService)" with arguments (null) - ModelState is Valid
+2018-02-27 15:09:59.717 +03:00 [Information] Authorization was successful for user: null.
+2018-02-27 15:09:59.750 +03:00 [Information] Executing RedirectResult, redirecting to "/swagger".
+2018-02-27 15:09:59.778 +03:00 [Information] Executed action "Volo.Abp.Identity.HttpApi.Host.Controllers.HomeController.Index (MicroserviceDemo.TenancyService)" in 225.9166ms
+2018-02-27 15:09:59.810 +03:00 [Information] Request finished in 643.3714ms 302 
+2018-02-27 15:09:59.843 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/  
+2018-02-27 15:09:59.908 +03:00 [Information] Executing action method "Volo.Abp.MultiTenancy.TenantAppService.GetListAsync (Volo.Abp.MultiTenancy.Application)" with arguments (["Volo.Abp.MultiTenancy.GetTenantsInput"]) - ModelState is Valid
+2018-02-27 15:10:49.552 +03:00 [Information] Loaded modules:
+2018-02-27 15:10:49.593 +03:00 [Information] - Volo.Abp.Castle.AbpCastleCoreModule
+2018-02-27 15:10:49.593 +03:00 [Information] - Volo.Abp.Autofac.AbpAutofacModule
+2018-02-27 15:10:49.593 +03:00 [Information] - Volo.Abp.Data.AbpDataModule
+2018-02-27 15:10:49.593 +03:00 [Information] - Volo.Abp.Settings.AbpSettingsModule
+2018-02-27 15:10:49.594 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyAbstractionsModule
+2018-02-27 15:10:49.594 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyDomainSharedModule
+2018-02-27 15:10:49.594 +03:00 [Information] - Volo.Abp.Guids.AbpGuidsModule
+2018-02-27 15:10:49.594 +03:00 [Information] - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2018-02-27 15:10:49.594 +03:00 [Information] - Volo.Abp.Threading.AbpThreadingModule
+2018-02-27 15:10:49.594 +03:00 [Information] - Volo.Abp.EventBus.AbpEventBusModule
+2018-02-27 15:10:49.594 +03:00 [Information] - Volo.Abp.Validation.AbpValidationModule
+2018-02-27 15:10:49.594 +03:00 [Information] - Volo.Abp.Security.AbpSecurityModule
+2018-02-27 15:10:49.594 +03:00 [Information] - Volo.Abp.Authorization.AbpAuthorizationModule
+2018-02-27 15:10:49.595 +03:00 [Information] - Volo.Abp.Http.AbpHttpAbstractionsModule
+2018-02-27 15:10:49.595 +03:00 [Information] - Volo.Abp.AbpDddModule
+2018-02-27 15:10:49.595 +03:00 [Information] - Volo.Abp.AutoMapper.AbpAutoMapperModule
+2018-02-27 15:10:49.595 +03:00 [Information] - Volo.Abp.Ui.AbpUiModule
+2018-02-27 15:10:49.595 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyDomainModule
+2018-02-27 15:10:49.595 +03:00 [Information] - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2018-02-27 15:10:49.595 +03:00 [Information] - Volo.Abp.Localization.AbpLocalizationModule
+2018-02-27 15:10:49.595 +03:00 [Information] - Volo.Abp.Session.AbpSessionModule
+2018-02-27 15:10:49.595 +03:00 [Information] - Volo.Abp.Timing.AbpTimingModule
+2018-02-27 15:10:49.595 +03:00 [Information] - Volo.Abp.Json.AbpJsonModule
+2018-02-27 15:10:49.595 +03:00 [Information] - Volo.Abp.ApiVersioning.AbpApiVersioningAbstractionsModule
+2018-02-27 15:10:49.595 +03:00 [Information] - Volo.Abp.Serialization.AbpSerializationModule
+2018-02-27 15:10:49.595 +03:00 [Information] - Volo.Abp.Caching.AbpCachingModule
+2018-02-27 15:10:49.596 +03:00 [Information] - Volo.Abp.AbpCommonModule
+2018-02-27 15:10:49.596 +03:00 [Information] - Volo.Abp.EntityFrameworkCore.AbpEntityFrameworkCoreModule
+2018-02-27 15:10:49.596 +03:00 [Information] - Volo.Abp.MultiTenancy.EntityFrameworkCore.AbpMultiTenancyEntityFrameworkCoreModule
+2018-02-27 15:10:49.596 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyApplicationContractsModule
+2018-02-27 15:10:49.596 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyApplicationModule
+2018-02-27 15:10:49.596 +03:00 [Information] - Volo.Abp.Http.AbpHttpModule
+2018-02-27 15:10:49.596 +03:00 [Information] - Volo.Abp.AspNetCore.AbpAspNetCoreModule
+2018-02-27 15:10:49.596 +03:00 [Information] - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcModule
+2018-02-27 15:10:49.596 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyHttpApiModule
+2018-02-27 15:10:49.596 +03:00 [Information] - MicroserviceDemo.TenancyService.MicroservicesDemoTenancyServiceModule
+2018-02-27 15:10:50.230 +03:00 [Information] Initialized all modules.
+2018-02-27 15:10:50.542 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/favicon.ico  
+2018-02-27 15:10:50.542 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/favicon.ico  
+2018-02-27 15:10:50.675 +03:00 [Information] Request finished in 147.8263ms 404 
+2018-02-27 15:10:50.675 +03:00 [Information] Request finished in 147.8263ms 404 
+2018-02-27 15:12:56.327 +03:00 [Information] Loaded modules:
+2018-02-27 15:12:56.374 +03:00 [Information] - Volo.Abp.Castle.AbpCastleCoreModule
+2018-02-27 15:12:56.377 +03:00 [Information] - Volo.Abp.Autofac.AbpAutofacModule
+2018-02-27 15:12:56.380 +03:00 [Information] - Volo.Abp.Data.AbpDataModule
+2018-02-27 15:12:56.384 +03:00 [Information] - Volo.Abp.Settings.AbpSettingsModule
+2018-02-27 15:12:56.387 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyAbstractionsModule
+2018-02-27 15:12:56.391 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyDomainSharedModule
+2018-02-27 15:12:56.394 +03:00 [Information] - Volo.Abp.Guids.AbpGuidsModule
+2018-02-27 15:12:56.397 +03:00 [Information] - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2018-02-27 15:12:56.400 +03:00 [Information] - Volo.Abp.Threading.AbpThreadingModule
+2018-02-27 15:12:56.404 +03:00 [Information] - Volo.Abp.EventBus.AbpEventBusModule
+2018-02-27 15:12:56.407 +03:00 [Information] - Volo.Abp.Validation.AbpValidationModule
+2018-02-27 15:12:56.410 +03:00 [Information] - Volo.Abp.Security.AbpSecurityModule
+2018-02-27 15:12:56.414 +03:00 [Information] - Volo.Abp.Authorization.AbpAuthorizationModule
+2018-02-27 15:12:56.417 +03:00 [Information] - Volo.Abp.Http.AbpHttpAbstractionsModule
+2018-02-27 15:12:56.421 +03:00 [Information] - Volo.Abp.AbpDddModule
+2018-02-27 15:12:56.424 +03:00 [Information] - Volo.Abp.AutoMapper.AbpAutoMapperModule
+2018-02-27 15:12:56.428 +03:00 [Information] - Volo.Abp.Ui.AbpUiModule
+2018-02-27 15:12:56.431 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyDomainModule
+2018-02-27 15:12:56.434 +03:00 [Information] - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2018-02-27 15:12:56.438 +03:00 [Information] - Volo.Abp.Localization.AbpLocalizationModule
+2018-02-27 15:12:56.441 +03:00 [Information] - Volo.Abp.Session.AbpSessionModule
+2018-02-27 15:12:56.444 +03:00 [Information] - Volo.Abp.Timing.AbpTimingModule
+2018-02-27 15:12:56.447 +03:00 [Information] - Volo.Abp.Json.AbpJsonModule
+2018-02-27 15:12:56.451 +03:00 [Information] - Volo.Abp.ApiVersioning.AbpApiVersioningAbstractionsModule
+2018-02-27 15:12:56.454 +03:00 [Information] - Volo.Abp.Serialization.AbpSerializationModule
+2018-02-27 15:12:56.458 +03:00 [Information] - Volo.Abp.Caching.AbpCachingModule
+2018-02-27 15:12:56.461 +03:00 [Information] - Volo.Abp.AbpCommonModule
+2018-02-27 15:12:56.464 +03:00 [Information] - Volo.Abp.EntityFrameworkCore.AbpEntityFrameworkCoreModule
+2018-02-27 15:12:56.467 +03:00 [Information] - Volo.Abp.MultiTenancy.EntityFrameworkCore.AbpMultiTenancyEntityFrameworkCoreModule
+2018-02-27 15:12:56.470 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyApplicationContractsModule
+2018-02-27 15:12:56.474 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyApplicationModule
+2018-02-27 15:12:56.477 +03:00 [Information] - Volo.Abp.Http.AbpHttpModule
+2018-02-27 15:12:56.480 +03:00 [Information] - Volo.Abp.AspNetCore.AbpAspNetCoreModule
+2018-02-27 15:12:56.483 +03:00 [Information] - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcModule
+2018-02-27 15:12:56.486 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyHttpApiModule
+2018-02-27 15:12:56.490 +03:00 [Information] - MicroserviceDemo.TenancyService.MicroservicesDemoTenancyServiceModule
+2018-02-27 15:12:57.338 +03:00 [Information] Initialized all modules.
+2018-02-27 15:12:58.049 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/  
+2018-02-27 15:12:58.421 +03:00 [Information] Executing action method "Volo.Abp.Identity.HttpApi.Host.Controllers.HomeController.Index (MicroserviceDemo.TenancyService)" with arguments (null) - ModelState is Valid
+2018-02-27 15:12:58.436 +03:00 [Information] Executing RedirectResult, redirecting to "/swagger".
+2018-02-27 15:12:58.447 +03:00 [Information] Executed action "Volo.Abp.Identity.HttpApi.Host.Controllers.HomeController.Index (MicroserviceDemo.TenancyService)" in 145.1937ms
+2018-02-27 15:12:58.477 +03:00 [Information] Request finished in 454.4533ms 302 
+2018-02-27 15:12:58.498 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/  
+2018-02-27 15:12:58.509 +03:00 [Information] Sending file. Request path: '"/index.html"'. Physical path: '"N/A"'
+2018-02-27 15:12:58.520 +03:00 [Information] Request finished in 19.7892ms 200 text/html
+2018-02-27 15:12:58.696 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/v1/swagger.json  
+2018-02-27 15:12:58.966 +03:00 [Information] Request finished in 273.0213ms 200 application/json
+2018-02-27 15:13:23.526 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/api/multi-tenancy/tenant?SkipCount=0&MaxResultCount=100  
+2018-02-27 15:13:23.592 +03:00 [Information] Authorization was successful for user: null.
+2018-02-27 15:13:23.848 +03:00 [Information] Executing action method "Volo.Abp.MultiTenancy.TenantAppService.GetListAsync (Volo.Abp.MultiTenancy.Application)" with arguments (["Volo.Abp.MultiTenancy.GetTenantsInput"]) - ModelState is Valid
+2018-02-27 15:13:25.954 +03:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-02-27 15:13:25.968 +03:00 [Information] Executed action "Volo.Abp.MultiTenancy.TenantAppService.GetListAsync (Volo.Abp.MultiTenancy.Application)" in 2405.9933ms
+2018-02-27 15:13:25.975 +03:00 [Information] Request finished in 2447.5568ms 200 application/json; charset=utf-8
+2018-02-27 15:14:12.099 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/api/abp/api-definition  
+2018-02-27 15:14:12.150 +03:00 [Information] Executing action method "Volo.Abp.AspNetCore.Mvc.ApiExploring.AbpApiDefinitionController.Get (Volo.Abp.AspNetCore.Mvc)" with arguments (null) - ModelState is Valid
+2018-02-27 15:14:12.189 +03:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-02-27 15:14:12.224 +03:00 [Information] Executed action "Volo.Abp.AspNetCore.Mvc.ApiExploring.AbpApiDefinitionController.Get (Volo.Abp.AspNetCore.Mvc)" in 115.4723ms
+2018-02-27 15:14:12.248 +03:00 [Information] Request finished in 130.3129ms 200 application/json; charset=utf-8
+2018-02-27 15:14:12.447 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/api/multi-tenancy/tenant?SkipCount=0&MaxResultCount=10&api-version=1.0  
+2018-02-27 15:14:12.453 +03:00 [Information] Authorization was successful for user: null.
+2018-02-27 15:14:12.491 +03:00 [Information] Executing action method "Volo.Abp.MultiTenancy.TenantAppService.GetListAsync (Volo.Abp.MultiTenancy.Application)" with arguments (["Volo.Abp.MultiTenancy.GetTenantsInput"]) - ModelState is Valid
+2018-02-27 15:14:13.194 +03:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-02-27 15:14:13.202 +03:00 [Information] Executed action "Volo.Abp.MultiTenancy.TenantAppService.GetListAsync (Volo.Abp.MultiTenancy.Application)" in 746.9837ms
+2018-02-27 15:14:13.214 +03:00 [Information] Request finished in 759.9103ms 200 application/json; charset=utf-8
