@@ -1,18 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Volo.Abp.Application.Services;
 using Volo.Abp.Authorization.Permissions;
+using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Permissions
 {
-    [Authorize(PermissionPermissions.Permissions.Default)]
-    public class PermissionAppService : ApplicationService, IPermissionAppService
+    public class PermissionAppServiceHelper : IPermissionAppServiceHelper, ITransientDependency
     {
         private readonly IPermissionManager _permissionManager;
         private readonly IPermissionDefinitionManager _permissionDefinitionManager;
 
-        public PermissionAppService(
+        public PermissionAppServiceHelper(
             IPermissionManager permissionManager, 
             IPermissionDefinitionManager permissionDefinitionManager)
         {
@@ -68,7 +66,6 @@ namespace Volo.Abp.Permissions
             return result;
         }
 
-        [Authorize(PermissionPermissions.Permissions.Update)]
         public async Task UpdateAsync(string providerName, string providerKey, UpdatePermissionsDto input)
         {
             foreach (var permission in input.Permissions)

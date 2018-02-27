@@ -17,6 +17,7 @@
     <ProjectReference Include="..\Volo.Abp.AutoMapper\Volo.Abp.AutoMapper.csproj" />
     <ProjectReference Include="..\Volo.Abp.Identity.Application.Contracts\Volo.Abp.Identity.Application.Contracts.csproj" />
     <ProjectReference Include="..\Volo.Abp.Identity.Domain\Volo.Abp.Identity.Domain.csproj" />
+    <ProjectReference Include="..\Volo.Abp.Permissions.Application\Volo.Abp.Permissions.Application.csproj" />
     <ProjectReference Include="..\Volo.Abp.Session\Volo.Abp.Session.csproj" />
   </ItemGroup>
 

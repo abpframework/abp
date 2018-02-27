@@ -9,7 +9,7 @@ namespace Volo.Abp.Permissions.Web.Pages.AbpPermissions
 {
     public class PermissionManagementModal : AbpPageModel
     {
-        private readonly IPermissionAppService _permissionAppService;
+        private readonly IPermissionAppServiceGateway _permissionAppServiceGateway;
 
         [Required]
         [HiddenInput]
@@ -24,24 +24,22 @@ namespace Volo.Abp.Permissions.Web.Pages.AbpPermissions
         [BindProperty]
         public List<PermissionGroupViewModel> Groups { get; set; }
 
-        public PermissionManagementModal(IPermissionAppService permissionAppService)
+        public PermissionManagementModal(IPermissionAppServiceGateway permissionAppServiceGateway)
         {
-            _permissionAppService = permissionAppService;
+            _permissionAppServiceGateway = permissionAppServiceGateway;
         }
 
         public async Task OnGetAsync()
         {
             ValidateModel();
-            await CheckPolicyAsync(PermissionPermissions.Permissions.Default);
 
-            var result = await _permissionAppService.GetAsync(ProviderName, ProviderKey);
+            var result = await _permissionAppServiceGateway.GetAsync(ProviderName, ProviderKey);
             Groups = ObjectMapper.Map<List<PermissionGroupDto>, List<PermissionGroupViewModel>>(result.Groups);
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
             ValidateModel();
-            await CheckPolicyAsync(PermissionPermissions.Permissions.Update);
 
             var updatePermissionDtos = Groups
                 .SelectMany(g => g.Permissions)
@@ -52,7 +50,7 @@ namespace Volo.Abp.Permissions.Web.Pages.AbpPermissions
                 })
                 .ToArray();
 
-            await _permissionAppService.UpdateAsync(
+            await _permissionAppServiceGateway.UpdateAsync(
                 ProviderName,
                 ProviderKey,
                 new UpdatePermissionsDto

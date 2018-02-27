@@ -10,7 +10,8 @@ namespace Volo.Abp.Identity
         typeof(AbpIdentityDomainModule), 
         typeof(AbpIdentityApplicationContractsModule), 
         typeof(AbpAutoMapperModule),
-        typeof(AbpSessionModule)
+        typeof(AbpSessionModule),
+        typeof(AbpPermissionsApplicationModule)
         )]
     public class AbpIdentityApplicationModule : AbpModule
     {

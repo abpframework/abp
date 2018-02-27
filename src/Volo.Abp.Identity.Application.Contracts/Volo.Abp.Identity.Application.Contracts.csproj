@@ -17,6 +17,7 @@
     <ProjectReference Include="..\Volo.Abp.Authorization\Volo.Abp.Authorization.csproj" />
     <ProjectReference Include="..\Volo.Abp.Ddd\Volo.Abp.Ddd.csproj" />
     <ProjectReference Include="..\Volo.Abp.Identity.Domain.Shared\Volo.Abp.Identity.Domain.Shared.csproj" />
+    <ProjectReference Include="..\Volo.Abp.Permissions.Application.Contracts\Volo.Abp.Permissions.Application.Contracts.csproj" />
   </ItemGroup>
 
 </Project>

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Authorization.Permissions;
+using Volo.Abp.Permissions;
 
 namespace Volo.Abp.Identity
 {
@@ -11,11 +13,16 @@ namespace Volo.Abp.Identity
     {
         private readonly IdentityUserManager _userManager;
         private readonly IIdentityUserRepository _userRepository;
+        private readonly IPermissionAppServiceHelper _permissionAppServiceHelper;
 
-        public IdentityUserAppService(IdentityUserManager userManager, IIdentityUserRepository userRepository)
+        public IdentityUserAppService(
+            IdentityUserManager userManager, 
+            IIdentityUserRepository userRepository,
+            IPermissionAppServiceHelper permissionAppServiceHelper)
         {
             _userManager = userManager;
             _userRepository = userRepository;
+            _permissionAppServiceHelper = permissionAppServiceHelper;
         }
 
         public async Task<IdentityUserDto> GetAsync(Guid id)
@@ -89,6 +96,16 @@ namespace Volo.Abp.Identity
             CheckIdentityErrors(await _userManager.SetRolesAsync(user, input.RoleNames));
         }
 
+        public async Task<GetPermissionListResultDto> GetPermissionsAsync(Guid id)
+        {
+            return await _permissionAppServiceHelper.GetAsync(UserPermissionValueProvider.ProviderName, id.ToString());
+        }
+
+        public async Task UpdatePermissionsAsync(Guid id, UpdatePermissionsDto input)
+        {
+            await _permissionAppServiceHelper.UpdateAsync(UserPermissionValueProvider.ProviderName, id.ToString(), input);
+        }
+        
         private async Task UpdateUserByInput(IdentityUser user, IdentityUserCreateOrUpdateDtoBase input)
         {
             CheckIdentityErrors(await _userManager.SetEmailAsync(user, input.Email));

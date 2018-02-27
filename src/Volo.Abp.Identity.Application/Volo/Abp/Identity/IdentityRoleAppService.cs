@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
+using Volo.Abp.Authorization.Permissions;
+using Volo.Abp.Permissions;
 
 namespace Volo.Abp.Identity
 {
@@ -12,13 +14,16 @@ namespace Volo.Abp.Identity
     {
         private readonly IdentityRoleManager _roleManager;
         private readonly IIdentityRoleRepository _roleRepository;
+        private readonly IPermissionAppServiceHelper _permissionAppServiceHelper;
 
         public IdentityRoleAppService(
             IdentityRoleManager roleManager,
-            IIdentityRoleRepository roleRepository)
+            IIdentityRoleRepository roleRepository, 
+            IPermissionAppServiceHelper permissionAppServiceHelper)
         {
             _roleManager = roleManager;
             _roleRepository = roleRepository;
+            _permissionAppServiceHelper = permissionAppServiceHelper;
         }
 
         public async Task<IdentityRoleDto> GetAsync(Guid id)
@@ -44,6 +49,18 @@ namespace Volo.Abp.Identity
             var list = await _roleRepository.GetListAsync();
 
             return ObjectMapper.Map<List<IdentityRole>, List<IdentityRoleDto>>(list);
+        }
+
+        public async Task<GetPermissionListResultDto> GetPermissionsAsync(Guid id)
+        {
+            var role = await _roleRepository.GetAsync(id);
+            return await _permissionAppServiceHelper.GetAsync(RolePermissionValueProvider.ProviderName, role.Name); //TODO: User normalized role name instad of name?
+        }
+
+        public async Task UpdatePermissionsAsync(Guid id, UpdatePermissionsDto input)
+        {
+            var role = await _roleRepository.GetAsync(id);
+            await _permissionAppServiceHelper.UpdateAsync(RolePermissionValueProvider.ProviderName, role.Name, input);
         }
 
         [Authorize(IdentityPermissions.Roles.Create)]
