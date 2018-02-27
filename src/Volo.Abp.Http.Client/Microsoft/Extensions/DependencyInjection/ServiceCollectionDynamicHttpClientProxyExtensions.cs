@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using Castle.DynamicProxy;
-using Volo.Abp.Application.Services;
+using Volo.Abp;
 using Volo.Abp.Castle.DynamicProxy;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Http.Client.DynamicProxying;
