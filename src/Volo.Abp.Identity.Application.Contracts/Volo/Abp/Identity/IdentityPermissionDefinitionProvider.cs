@@ -18,7 +18,7 @@ namespace Volo.Abp.Identity
             usersPermission.AddChild(IdentityPermissions.Users.Create);
             usersPermission.AddChild(IdentityPermissions.Users.Update);
             usersPermission.AddChild(IdentityPermissions.Users.Delete);
-            rolesPermission.AddChild(IdentityPermissions.Users.ManagePermissions);
+            usersPermission.AddChild(IdentityPermissions.Users.ManagePermissions);
         }
     }
 }
