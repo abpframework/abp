@@ -24,8 +24,9 @@
     <ProjectReference Include="..\..\Volo.Abp.Identity.EntityFrameworkCore\Volo.Abp.Identity.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\..\Volo.Abp.Identity.HttpApi\Volo.Abp.Identity.HttpApi.csproj" />
     <ProjectReference Include="..\..\Volo.Abp.Identity.Web\Volo.Abp.Identity.Web.csproj" />
+    <ProjectReference Include="..\..\Volo.Abp.MultiTenancy.HttpApi.Client\Volo.Abp.MultiTenancy.HttpApi.Client.csproj" />
+    <ProjectReference Include="..\..\Volo.Abp.MultiTenancy.Web\Volo.Abp.MultiTenancy.Web.csproj" />
     <ProjectReference Include="..\..\Volo.Abp.Permissions.EntityFrameworkCore\Volo.Abp.Permissions.EntityFrameworkCore.csproj" />
-    <ProjectReference Include="..\..\Volo.Abp.Permissions.Web\Volo.Abp.Permissions.Web.csproj" />
   </ItemGroup>
 
 </Project>

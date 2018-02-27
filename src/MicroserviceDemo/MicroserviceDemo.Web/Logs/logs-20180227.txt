@@ -1,0 +1,200 @@
+2018-02-27 13:34:15.207 +03:00 [Information] Loaded modules:
+2018-02-27 13:34:15.255 +03:00 [Information] - Volo.Abp.Castle.AbpCastleCoreModule
+2018-02-27 13:34:15.255 +03:00 [Information] - Volo.Abp.Autofac.AbpAutofacModule
+2018-02-27 13:34:15.255 +03:00 [Information] - Volo.Abp.Http.AbpHttpAbstractionsModule
+2018-02-27 13:34:15.255 +03:00 [Information] - Volo.Abp.Timing.AbpTimingModule
+2018-02-27 13:34:15.255 +03:00 [Information] - Volo.Abp.Json.AbpJsonModule
+2018-02-27 13:34:15.255 +03:00 [Information] - Volo.Abp.Http.AbpHttpModule
+2018-02-27 13:34:15.255 +03:00 [Information] - Volo.Abp.Http.Client.AbpHttpClientModule
+2018-02-27 13:34:15.255 +03:00 [Information] - Volo.Abp.Security.AbpSecurityModule
+2018-02-27 13:34:15.256 +03:00 [Information] - Volo.Abp.Authorization.AbpAuthorizationModule
+2018-02-27 13:34:15.256 +03:00 [Information] - Volo.Abp.Guids.AbpGuidsModule
+2018-02-27 13:34:15.256 +03:00 [Information] - Volo.Abp.Data.AbpDataModule
+2018-02-27 13:34:15.256 +03:00 [Information] - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2018-02-27 13:34:15.256 +03:00 [Information] - Volo.Abp.Settings.AbpSettingsModule
+2018-02-27 13:34:15.256 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyAbstractionsModule
+2018-02-27 13:34:15.256 +03:00 [Information] - Volo.Abp.Threading.AbpThreadingModule
+2018-02-27 13:34:15.256 +03:00 [Information] - Volo.Abp.EventBus.AbpEventBusModule
+2018-02-27 13:34:15.256 +03:00 [Information] - Volo.Abp.Validation.AbpValidationModule
+2018-02-27 13:34:15.257 +03:00 [Information] - Volo.Abp.AbpDddModule
+2018-02-27 13:34:15.257 +03:00 [Information] - Volo.Abp.Permissions.AbpPermissionsDomainSharedModule
+2018-02-27 13:34:15.257 +03:00 [Information] - Volo.Abp.Serialization.AbpSerializationModule
+2018-02-27 13:34:15.257 +03:00 [Information] - Volo.Abp.Caching.AbpCachingModule
+2018-02-27 13:34:15.257 +03:00 [Information] - Volo.Abp.Permissions.AbpPermissionsDomainModule
+2018-02-27 13:34:15.257 +03:00 [Information] - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2018-02-27 13:34:15.257 +03:00 [Information] - Volo.Abp.Localization.AbpLocalizationModule
+2018-02-27 13:34:15.257 +03:00 [Information] - Volo.Abp.Session.AbpSessionModule
+2018-02-27 13:34:15.257 +03:00 [Information] - Volo.Abp.ApiVersioning.AbpApiVersioningAbstractionsModule
+2018-02-27 13:34:15.257 +03:00 [Information] - Volo.Abp.AbpCommonModule
+2018-02-27 13:34:15.257 +03:00 [Information] - Volo.Abp.EntityFrameworkCore.AbpEntityFrameworkCoreModule
+2018-02-27 13:34:15.257 +03:00 [Information] - Volo.Abp.Permissions.EntityFrameworkCore.AbpPermissionsEntityFrameworkCoreModule
+2018-02-27 13:34:15.257 +03:00 [Information] - Volo.Abp.Identity.AbpIdentityDomainSharedModule
+2018-02-27 13:34:15.257 +03:00 [Information] - Volo.Abp.Identity.AbpIdentityDomainModule
+2018-02-27 13:34:15.257 +03:00 [Information] - Volo.Abp.Permissions.AbpPermissionsApplicationContractsModule
+2018-02-27 13:34:15.257 +03:00 [Information] - Volo.Abp.Identity.AbpIdentityApplicationContractsModule
+2018-02-27 13:34:15.257 +03:00 [Information] - Volo.Abp.AutoMapper.AbpAutoMapperModule
+2018-02-27 13:34:15.257 +03:00 [Information] - Volo.Abp.Permissions.AbpPermissionsApplicationModule
+2018-02-27 13:34:15.257 +03:00 [Information] - Volo.Abp.Identity.AbpIdentityApplicationModule
+2018-02-27 13:34:15.258 +03:00 [Information] - Volo.Abp.AspNetCore.AbpAspNetCoreModule
+2018-02-27 13:34:15.258 +03:00 [Information] - Volo.Abp.Ui.AbpUiModule
+2018-02-27 13:34:15.258 +03:00 [Information] - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcModule
+2018-02-27 13:34:15.258 +03:00 [Information] - Volo.Abp.Identity.AbpIdentityHttpApiModule
+2018-02-27 13:34:15.258 +03:00 [Information] - Volo.Abp.Ui.Navigation.AbpUiNavigationModule
+2018-02-27 13:34:15.258 +03:00 [Information] - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcUiModule
+2018-02-27 13:34:15.258 +03:00 [Information] - Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.AbpAspNetCoreMvcUiBootstrapModule
+2018-02-27 13:34:15.258 +03:00 [Information] - Volo.Abp.Permissions.Web.AbpPermissionsWebModule
+2018-02-27 13:34:15.258 +03:00 [Information] - Volo.Abp.Identity.Web.AbpIdentityWebModule
+2018-02-27 13:34:15.258 +03:00 [Information] - Volo.Abp.Identity.EntityFrameworkCore.AbpIdentityEntityFrameworkCoreModule
+2018-02-27 13:34:15.258 +03:00 [Information] - Volo.Abp.Account.AbpAccountApplicationContractsModule
+2018-02-27 13:34:15.258 +03:00 [Information] - Volo.Abp.Account.Web.AbpAccountWebModule
+2018-02-27 13:34:15.258 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyDomainSharedModule
+2018-02-27 13:34:15.258 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyApplicationContractsModule
+2018-02-27 13:34:15.258 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyHttpApiClientModule
+2018-02-27 13:34:15.258 +03:00 [Information] - Volo.Abp.MultiTenancy.Web.AbpMultiTenancyWebModule
+2018-02-27 13:34:15.258 +03:00 [Information] - MicroserviceDemo.Web.MicroservicesDemoWebModule
+2018-02-27 13:34:15.958 +03:00 [Information] Initialized all modules.
+2018-02-27 13:34:16.193 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/  
+2018-02-27 13:34:16.241 +03:00 [Information] "Identity.Application" was not authenticated. Failure message: "Unprotect ticket failed"
+2018-02-27 13:34:19.526 +03:00 [Information] Executing handler method "OnGet" with arguments (null) - ModelState is Valid
+2018-02-27 13:34:20.589 +03:00 [Information] Executed action "/Index" in 1070.9466ms
+2018-02-27 13:34:20.594 +03:00 [Information] Request finished in 4417.4723ms 200 text/html; charset=utf-8
+2018-02-27 13:34:20.623 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/font-awesome/css/font-awesome-min.css  
+2018-02-27 13:34:20.630 +03:00 [Information] Sending file. Request path: '"/libs/font-awesome/css/font-awesome-min.css"'. Physical path: '"/wwwroot/libs/font_awesome/css/font-awesome-min.css"'
+2018-02-27 13:34:20.632 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/datatables/datatables.css  
+2018-02-27 13:34:20.632 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/material/css/material-min.css  
+2018-02-27 13:34:20.632 +03:00 [Information] Sending file. Request path: '"/libs/datatables/datatables.css"'. Physical path: '"/wwwroot/libs/datatables/datatables.css"'
+2018-02-27 13:34:20.633 +03:00 [Information] Sending file. Request path: '"/libs/material/css/material-min.css"'. Physical path: '"/wwwroot/libs/material/css/material-min.css"'
+2018-02-27 13:34:20.635 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/styles/libs/datatables.css  
+2018-02-27 13:34:20.635 +03:00 [Information] Request finished in 3.2773ms 200 text/css
+2018-02-27 13:34:20.635 +03:00 [Information] Request finished in 12.2568ms 200 text/css
+2018-02-27 13:34:20.635 +03:00 [Information] Sending file. Request path: '"/styles/libs/datatables.css"'. Physical path: '"/wwwroot/styles/libs/datatables.css"'
+2018-02-27 13:34:20.636 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/abp/abp.js?_v636553352599936541  
+2018-02-27 13:34:20.636 +03:00 [Information] Request finished in 0.8308ms 200 text/css
+2018-02-27 13:34:20.636 +03:00 [Information] Sending file. Request path: '"/libs/abp/abp.js"'. Physical path: '"/wwwroot/libs/abp/abp.js"'
+2018-02-27 13:34:20.635 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/views/shared/_AppLayout.css  
+2018-02-27 13:34:20.644 +03:00 [Information] Request finished in 9.2146ms 200 application/javascript
+2018-02-27 13:34:20.645 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/jquery/jquery-3-1-1-min.js  
+2018-02-27 13:34:20.648 +03:00 [Information] Sending file. Request path: '"/libs/jquery/jquery-3-1-1-min.js"'. Physical path: '"/wwwroot/libs/jquery/jquery-3-1-1-min.js"'
+2018-02-27 13:34:20.653 +03:00 [Information] Sending file. Request path: '"/views/shared/_AppLayout.css"'. Physical path: '"/wwwroot/views/shared/_AppLayout.css"'
+2018-02-27 13:34:20.655 +03:00 [Information] Request finished in 22.6958ms 200 text/css
+2018-02-27 13:34:20.655 +03:00 [Information] Request finished in 9.6354ms 200 application/javascript
+2018-02-27 13:34:20.656 +03:00 [Information] Request finished in 19.6305ms 200 text/css
+2018-02-27 13:34:20.662 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/jquery-validation/jquery-validate.js  
+2018-02-27 13:34:20.664 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/bootstrap/js/bootstrap-bundle-min.js  
+2018-02-27 13:34:20.664 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/jquery-validation-unobtrusive/jquery-validate-unobtrusive.js  
+2018-02-27 13:34:20.665 +03:00 [Information] Sending file. Request path: '"/libs/bootstrap/js/bootstrap-bundle-min.js"'. Physical path: '"/wwwroot/libs/bootstrap/js/bootstrap-bundle-min.js"'
+2018-02-27 13:34:20.665 +03:00 [Information] Sending file. Request path: '"/libs/jquery-validation-unobtrusive/jquery-validate-unobtrusive.js"'. Physical path: '"/wwwroot/libs/jquery_validation_unobtrusive/jquery-validate-unobtrusive.js"'
+2018-02-27 13:34:20.666 +03:00 [Information] Sending file. Request path: '"/libs/jquery-validation/jquery-validate.js"'. Physical path: '"/wwwroot/libs/jquery_validation/jquery-validate.js"'
+2018-02-27 13:34:20.667 +03:00 [Information] Request finished in 1.4223ms 200 application/javascript
+2018-02-27 13:34:20.668 +03:00 [Information] Request finished in 6.1061ms 200 application/javascript
+2018-02-27 13:34:20.670 +03:00 [Information] Request finished in 4.8121ms 200 application/javascript
+2018-02-27 13:34:20.670 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/jquery-form/jquery-form-min.js  
+2018-02-27 13:34:20.671 +03:00 [Information] Sending file. Request path: '"/libs/jquery-form/jquery-form-min.js"'. Physical path: '"/wwwroot/libs/jquery_form/jquery-form-min.js"'
+2018-02-27 13:34:20.671 +03:00 [Information] Request finished in 1.7994ms 200 application/javascript
+2018-02-27 13:34:20.679 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/material/js/material-min.js  
+2018-02-27 13:34:20.680 +03:00 [Information] Sending file. Request path: '"/libs/material/js/material-min.js"'. Physical path: '"/wwwroot/libs/material/js/material-min.js"'
+2018-02-27 13:34:20.681 +03:00 [Information] Request finished in 3.188ms 200 application/javascript
+2018-02-27 13:34:20.688 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/abp/abp-jquery.js?_v636553352599967745  
+2018-02-27 13:34:20.688 +03:00 [Information] Sending file. Request path: '"/libs/abp/abp-jquery.js"'. Physical path: '"/wwwroot/libs/abp/abp-jquery.js"'
+2018-02-27 13:34:20.689 +03:00 [Information] Request finished in 0.7534ms 200 application/javascript
+2018-02-27 13:34:20.694 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/Abp/ServiceProxyScript?_v=636553352599971431  
+2018-02-27 13:34:20.695 +03:00 [Information] "Identity.Application" was not authenticated. Failure message: "Unprotect ticket failed"
+2018-02-27 13:34:20.699 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/Abp/ApplicationConfigurationScript?_v=636553352599971401  
+2018-02-27 13:34:20.700 +03:00 [Information] "Identity.Application" was not authenticated. Failure message: "Unprotect ticket failed"
+2018-02-27 13:34:20.706 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/datatables/datatables-min.js  
+2018-02-27 13:34:20.707 +03:00 [Information] Sending file. Request path: '"/libs/datatables/datatables-min.js"'. Physical path: '"/wwwroot/libs/datatables/datatables-min.js"'
+2018-02-27 13:34:20.710 +03:00 [Information] Request finished in 3.5335ms 200 application/javascript
+2018-02-27 13:34:20.715 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/vue/vue.js  
+2018-02-27 13:34:20.715 +03:00 [Information] Sending file. Request path: '"/libs/vue/vue.js"'. Physical path: '"/wwwroot/libs/vue/vue.js"'
+2018-02-27 13:34:20.731 +03:00 [Information] Request finished in 17.8383ms 200 application/javascript
+2018-02-27 13:34:20.793 +03:00 [Information] Executing action method "Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc)" with arguments (null) - ModelState is Valid
+2018-02-27 13:34:20.819 +03:00 [Information] Executing action method "Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc)" with arguments (["Volo.Abp.AspNetCore.Mvc.ProxyScripting.ServiceProxyGenerationModel"]) - ModelState is Valid
+2018-02-27 13:34:21.062 +03:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-02-27 13:34:21.063 +03:00 [Information] Executed action "Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc)" in 347.9411ms
+2018-02-27 13:34:21.063 +03:00 [Information] Request finished in 364.4316ms 200 text/plain; charset=utf-8
+2018-02-27 13:34:21.108 +03:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-02-27 13:34:21.108 +03:00 [Information] Executed action "Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc)" in 338.0393ms
+2018-02-27 13:34:21.109 +03:00 [Information] Request finished in 415.279ms 200 text/plain; charset=utf-8
+2018-02-27 13:34:31.486 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/MultiTenancy/Tenants  
+2018-02-27 13:34:31.487 +03:00 [Information] "Identity.Application" was not authenticated. Failure message: "Unprotect ticket failed"
+2018-02-27 13:34:31.699 +03:00 [Information] Executing handler method "OnGet" with arguments (null) - ModelState is Valid
+2018-02-27 13:34:31.729 +03:00 [Information] Executed action "/MultiTenancy/Tenants/Index" in 31.1206ms
+2018-02-27 13:34:31.730 +03:00 [Information] Request finished in 243.9251ms 200 text/html; charset=utf-8
+2018-02-27 13:34:31.770 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/font-awesome/css/font-awesome-min.css  
+2018-02-27 13:34:31.771 +03:00 [Information] Sending file. Request path: '"/libs/font-awesome/css/font-awesome-min.css"'. Physical path: '"/wwwroot/libs/font_awesome/css/font-awesome-min.css"'
+2018-02-27 13:34:31.771 +03:00 [Information] Request finished in 1.2144ms 200 text/css
+2018-02-27 13:34:31.773 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/material/css/material-min.css  
+2018-02-27 13:34:31.773 +03:00 [Information] Sending file. Request path: '"/libs/material/css/material-min.css"'. Physical path: '"/wwwroot/libs/material/css/material-min.css"'
+2018-02-27 13:34:31.776 +03:00 [Information] Request finished in 2.9729ms 200 text/css
+2018-02-27 13:34:31.788 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/datatables/datatables.css  
+2018-02-27 13:34:31.789 +03:00 [Information] Sending file. Request path: '"/libs/datatables/datatables.css"'. Physical path: '"/wwwroot/libs/datatables/datatables.css"'
+2018-02-27 13:34:31.789 +03:00 [Information] Request finished in 1.7875ms 200 text/css
+2018-02-27 13:34:31.789 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/styles/libs/datatables.css  
+2018-02-27 13:34:31.790 +03:00 [Information] Sending file. Request path: '"/styles/libs/datatables.css"'. Physical path: '"/wwwroot/styles/libs/datatables.css"'
+2018-02-27 13:34:31.790 +03:00 [Information] Request finished in 1.4056ms 200 text/css
+2018-02-27 13:34:31.793 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/views/shared/_AppLayout.css  
+2018-02-27 13:34:31.794 +03:00 [Information] Sending file. Request path: '"/views/shared/_AppLayout.css"'. Physical path: '"/wwwroot/views/shared/_AppLayout.css"'
+2018-02-27 13:34:31.795 +03:00 [Information] Request finished in 1.4702ms 200 text/css
+2018-02-27 13:34:31.796 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/modules/multi-tenancy/views/tenants/index.css  
+2018-02-27 13:34:31.797 +03:00 [Information] Sending file. Request path: '"/modules/multi-tenancy/views/tenants/index.css"'. Physical path: '"/wwwroot/modules/multi_tenancy/views/tenants/index.css"'
+2018-02-27 13:34:31.798 +03:00 [Information] Request finished in 1.527ms 200 text/css
+2018-02-27 13:34:31.806 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/jquery-validation-unobtrusive/jquery-validate-unobtrusive.js  
+2018-02-27 13:34:31.807 +03:00 [Information] Sending file. Request path: '"/libs/jquery-validation-unobtrusive/jquery-validate-unobtrusive.js"'. Physical path: '"/wwwroot/libs/jquery_validation_unobtrusive/jquery-validate-unobtrusive.js"'
+2018-02-27 13:34:31.808 +03:00 [Information] Request finished in 1.4642ms 200 application/javascript
+2018-02-27 13:34:31.809 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/jquery/jquery-3-1-1-min.js  
+2018-02-27 13:34:31.810 +03:00 [Information] Sending file. Request path: '"/libs/jquery/jquery-3-1-1-min.js"'. Physical path: '"/wwwroot/libs/jquery/jquery-3-1-1-min.js"'
+2018-02-27 13:34:31.811 +03:00 [Information] Request finished in 2.2292ms 200 application/javascript
+2018-02-27 13:34:31.818 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/bootstrap/js/bootstrap-bundle-min.js  
+2018-02-27 13:34:31.818 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/jquery-form/jquery-form-min.js  
+2018-02-27 13:34:31.819 +03:00 [Information] Sending file. Request path: '"/libs/jquery-form/jquery-form-min.js"'. Physical path: '"/wwwroot/libs/jquery_form/jquery-form-min.js"'
+2018-02-27 13:34:31.819 +03:00 [Information] Sending file. Request path: '"/libs/bootstrap/js/bootstrap-bundle-min.js"'. Physical path: '"/wwwroot/libs/bootstrap/js/bootstrap-bundle-min.js"'
+2018-02-27 13:34:31.819 +03:00 [Information] Request finished in 0.9831ms 200 application/javascript
+2018-02-27 13:34:31.820 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/abp/abp.js?_v636553352599936541  
+2018-02-27 13:34:31.822 +03:00 [Information] Request finished in 3.3868ms 200 application/javascript
+2018-02-27 13:34:31.823 +03:00 [Information] Sending file. Request path: '"/libs/abp/abp.js"'. Physical path: '"/wwwroot/libs/abp/abp.js"'
+2018-02-27 13:34:31.823 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/jquery-validation/jquery-validate.js  
+2018-02-27 13:34:31.824 +03:00 [Information] Request finished in 4.2883ms 200 application/javascript
+2018-02-27 13:34:31.826 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/material/js/material-min.js  
+2018-02-27 13:34:31.826 +03:00 [Information] Sending file. Request path: '"/libs/material/js/material-min.js"'. Physical path: '"/wwwroot/libs/material/js/material-min.js"'
+2018-02-27 13:34:31.827 +03:00 [Information] Request finished in 0.9129ms 200 application/javascript
+2018-02-27 13:34:31.827 +03:00 [Information] Sending file. Request path: '"/libs/jquery-validation/jquery-validate.js"'. Physical path: '"/wwwroot/libs/jquery_validation/jquery-validate.js"'
+2018-02-27 13:34:31.828 +03:00 [Information] Request finished in 4.8382ms 200 application/javascript
+2018-02-27 13:34:31.835 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/datatables/datatables-min.js  
+2018-02-27 13:34:31.836 +03:00 [Information] Sending file. Request path: '"/libs/datatables/datatables-min.js"'. Physical path: '"/wwwroot/libs/datatables/datatables-min.js"'
+2018-02-27 13:34:31.837 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/abp/abp-jquery.js?_v636553352599967745  
+2018-02-27 13:34:31.838 +03:00 [Information] Sending file. Request path: '"/libs/abp/abp-jquery.js"'. Physical path: '"/wwwroot/libs/abp/abp-jquery.js"'
+2018-02-27 13:34:31.839 +03:00 [Information] Request finished in 3.773ms 200 application/javascript
+2018-02-27 13:34:31.840 +03:00 [Information] Request finished in 5.6349ms 200 application/javascript
+2018-02-27 13:34:31.840 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/vue/vue.js  
+2018-02-27 13:34:31.841 +03:00 [Information] Sending file. Request path: '"/libs/vue/vue.js"'. Physical path: '"/wwwroot/libs/vue/vue.js"'
+2018-02-27 13:34:31.846 +03:00 [Information] Request finished in 12.0396ms 200 application/javascript
+2018-02-27 13:34:31.847 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/Abp/ServiceProxyScript?_v=636553352599971431  
+2018-02-27 13:34:31.849 +03:00 [Information] "Identity.Application" was not authenticated. Failure message: "Unprotect ticket failed"
+2018-02-27 13:34:31.849 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/Abp/ApplicationConfigurationScript?_v=636553352599971401  
+2018-02-27 13:34:31.851 +03:00 [Information] "Identity.Application" was not authenticated. Failure message: "Unprotect ticket failed"
+2018-02-27 13:34:31.853 +03:00 [Information] Executing action method "Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc)" with arguments (null) - ModelState is Valid
+2018-02-27 13:34:31.856 +03:00 [Information] Executing action method "Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc)" with arguments (["Volo.Abp.AspNetCore.Mvc.ProxyScripting.ServiceProxyGenerationModel"]) - ModelState is Valid
+2018-02-27 13:34:31.857 +03:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-02-27 13:34:31.857 +03:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-02-27 13:34:31.857 +03:00 [Information] Executed action "Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc)" in 5.5211ms
+2018-02-27 13:34:31.857 +03:00 [Information] Executed action "Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc)" in 3.8867ms
+2018-02-27 13:34:31.857 +03:00 [Information] Request finished in 9.9741ms 200 text/plain; charset=utf-8
+2018-02-27 13:34:31.858 +03:00 [Information] Request finished in 9.1068ms 200 text/plain; charset=utf-8
+2018-02-27 13:34:31.863 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/abp/helpers/jquery.js  
+2018-02-27 13:34:31.863 +03:00 [Information] Sending file. Request path: '"/abp/helpers/jquery.js"'. Physical path: '"/wwwroot/abp/helpers/jquery.js"'
+2018-02-27 13:34:31.864 +03:00 [Information] Request finished in 1.4881ms 200 application/javascript
+2018-02-27 13:34:31.952 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/abp/helpers/datatables.extensions.js  
+2018-02-27 13:34:31.953 +03:00 [Information] Sending file. Request path: '"/abp/helpers/datatables.extensions.js"'. Physical path: '"/wwwroot/abp/helpers/datatables/extensions.js"'
+2018-02-27 13:34:31.953 +03:00 [Information] Request finished in 0.9318ms 200 application/javascript
+2018-02-27 13:34:31.958 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/abp/helpers/ResourceLoader.js  
+2018-02-27 13:34:31.958 +03:00 [Information] Sending file. Request path: '"/abp/helpers/ResourceLoader.js"'. Physical path: '"/wwwroot/abp/helpers/ResourceLoader.js"'
+2018-02-27 13:34:31.959 +03:00 [Information] Request finished in 1.1712ms 200 application/javascript
+2018-02-27 13:34:31.966 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/abp/helpers/ModalManager.js  
+2018-02-27 13:34:31.966 +03:00 [Information] Sending file. Request path: '"/abp/helpers/ModalManager.js"'. Physical path: '"/wwwroot/abp/helpers/ModalManager.js"'
+2018-02-27 13:34:31.966 +03:00 [Information] Request finished in 0.7778ms 200 application/javascript
+2018-02-27 13:34:31.978 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/modules/multi-tenancy/views/tenants/index.js  
+2018-02-27 13:34:31.978 +03:00 [Information] Sending file. Request path: '"/modules/multi-tenancy/views/tenants/index.js"'. Physical path: '"/wwwroot/modules/multi_tenancy/views/tenants/index.js"'
+2018-02-27 13:34:31.979 +03:00 [Information] Request finished in 1.1379ms 200 application/javascript
+2018-02-27 13:34:32.236 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/font-awesome/fonts/fontawesome-webfont.woff2?v=4.7.0  
+2018-02-27 13:34:32.237 +03:00 [Information] Sending file. Request path: '"/libs/font-awesome/fonts/fontawesome-webfont.woff2"'. Physical path: '"/wwwroot/libs/font_awesome/fonts/fontawesome-webfont.woff2"'
+2018-02-27 13:34:32.238 +03:00 [Information] Request finished in 1.976ms 200 font/woff2

@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
-using Volo.Abp.Permissions.EntityFrameworkCore;
+using Volo.Abp.MultiTenancy.EntityFrameworkCore;
 
-namespace MicroserviceDemo.PermissionService.Db
+namespace MicroserviceDemo.TenancyService.Db
 {
     public class MigrationDbContext : AbpDbContext<MigrationDbContext>
     {
@@ -15,7 +15,7 @@ namespace MicroserviceDemo.PermissionService.Db
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.ConfigureAbpPermissions();
+            modelBuilder.ConfigureMultiTenancy();
         }
     }
 }

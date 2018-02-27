@@ -1,0 +1,311 @@
+2018-02-27 13:16:54.058 +03:00 [Information] Loaded modules:
+2018-02-27 13:16:54.106 +03:00 [Information] - Volo.Abp.Castle.AbpCastleCoreModule
+2018-02-27 13:16:54.106 +03:00 [Information] - Volo.Abp.Autofac.AbpAutofacModule
+2018-02-27 13:16:54.106 +03:00 [Information] - Volo.Abp.Data.AbpDataModule
+2018-02-27 13:16:54.106 +03:00 [Information] - Volo.Abp.Settings.AbpSettingsModule
+2018-02-27 13:16:54.106 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyAbstractionsModule
+2018-02-27 13:16:54.106 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyDomainSharedModule
+2018-02-27 13:16:54.106 +03:00 [Information] - Volo.Abp.Guids.AbpGuidsModule
+2018-02-27 13:16:54.106 +03:00 [Information] - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2018-02-27 13:16:54.107 +03:00 [Information] - Volo.Abp.Threading.AbpThreadingModule
+2018-02-27 13:16:54.107 +03:00 [Information] - Volo.Abp.EventBus.AbpEventBusModule
+2018-02-27 13:16:54.107 +03:00 [Information] - Volo.Abp.Validation.AbpValidationModule
+2018-02-27 13:16:54.107 +03:00 [Information] - Volo.Abp.Security.AbpSecurityModule
+2018-02-27 13:16:54.107 +03:00 [Information] - Volo.Abp.Authorization.AbpAuthorizationModule
+2018-02-27 13:16:54.107 +03:00 [Information] - Volo.Abp.Http.AbpHttpAbstractionsModule
+2018-02-27 13:16:54.107 +03:00 [Information] - Volo.Abp.AbpDddModule
+2018-02-27 13:16:54.107 +03:00 [Information] - Volo.Abp.AutoMapper.AbpAutoMapperModule
+2018-02-27 13:16:54.107 +03:00 [Information] - Volo.Abp.Ui.AbpUiModule
+2018-02-27 13:16:54.107 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyDomainModule
+2018-02-27 13:16:54.107 +03:00 [Information] - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2018-02-27 13:16:54.107 +03:00 [Information] - Volo.Abp.Localization.AbpLocalizationModule
+2018-02-27 13:16:54.107 +03:00 [Information] - Volo.Abp.Session.AbpSessionModule
+2018-02-27 13:16:54.107 +03:00 [Information] - Volo.Abp.Timing.AbpTimingModule
+2018-02-27 13:16:54.107 +03:00 [Information] - Volo.Abp.Json.AbpJsonModule
+2018-02-27 13:16:54.107 +03:00 [Information] - Volo.Abp.ApiVersioning.AbpApiVersioningAbstractionsModule
+2018-02-27 13:16:54.108 +03:00 [Information] - Volo.Abp.Serialization.AbpSerializationModule
+2018-02-27 13:16:54.108 +03:00 [Information] - Volo.Abp.Caching.AbpCachingModule
+2018-02-27 13:16:54.108 +03:00 [Information] - Volo.Abp.AbpCommonModule
+2018-02-27 13:16:54.108 +03:00 [Information] - Volo.Abp.EntityFrameworkCore.AbpEntityFrameworkCoreModule
+2018-02-27 13:16:54.108 +03:00 [Information] - Volo.Abp.MultiTenancy.EntityFrameworkCore.AbpMultiTenancyEntityFrameworkCoreModule
+2018-02-27 13:16:54.108 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyApplicationContractsModule
+2018-02-27 13:16:54.108 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyApplicationModule
+2018-02-27 13:16:54.108 +03:00 [Information] - Volo.Abp.Http.AbpHttpModule
+2018-02-27 13:16:54.108 +03:00 [Information] - Volo.Abp.AspNetCore.AbpAspNetCoreModule
+2018-02-27 13:16:54.108 +03:00 [Information] - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcModule
+2018-02-27 13:16:54.108 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyHttpApiModule
+2018-02-27 13:16:54.108 +03:00 [Information] - MicroserviceDemo.TenancyService.MicroservicesDemoTenancyServiceModule
+2018-02-27 13:16:54.947 +03:00 [Information] Initialized all modules.
+2018-02-27 13:19:00.722 +03:00 [Information] Loaded modules:
+2018-02-27 13:19:00.764 +03:00 [Information] - Volo.Abp.Castle.AbpCastleCoreModule
+2018-02-27 13:19:00.765 +03:00 [Information] - Volo.Abp.Autofac.AbpAutofacModule
+2018-02-27 13:19:00.765 +03:00 [Information] - Volo.Abp.Data.AbpDataModule
+2018-02-27 13:19:00.765 +03:00 [Information] - Volo.Abp.Settings.AbpSettingsModule
+2018-02-27 13:19:00.765 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyAbstractionsModule
+2018-02-27 13:19:00.765 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyDomainSharedModule
+2018-02-27 13:19:00.765 +03:00 [Information] - Volo.Abp.Guids.AbpGuidsModule
+2018-02-27 13:19:00.765 +03:00 [Information] - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2018-02-27 13:19:00.765 +03:00 [Information] - Volo.Abp.Threading.AbpThreadingModule
+2018-02-27 13:19:00.765 +03:00 [Information] - Volo.Abp.EventBus.AbpEventBusModule
+2018-02-27 13:19:00.765 +03:00 [Information] - Volo.Abp.Validation.AbpValidationModule
+2018-02-27 13:19:00.765 +03:00 [Information] - Volo.Abp.Security.AbpSecurityModule
+2018-02-27 13:19:00.765 +03:00 [Information] - Volo.Abp.Authorization.AbpAuthorizationModule
+2018-02-27 13:19:00.765 +03:00 [Information] - Volo.Abp.Http.AbpHttpAbstractionsModule
+2018-02-27 13:19:00.765 +03:00 [Information] - Volo.Abp.AbpDddModule
+2018-02-27 13:19:00.765 +03:00 [Information] - Volo.Abp.AutoMapper.AbpAutoMapperModule
+2018-02-27 13:19:00.765 +03:00 [Information] - Volo.Abp.Ui.AbpUiModule
+2018-02-27 13:19:00.765 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyDomainModule
+2018-02-27 13:19:00.765 +03:00 [Information] - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2018-02-27 13:19:00.765 +03:00 [Information] - Volo.Abp.Localization.AbpLocalizationModule
+2018-02-27 13:19:00.765 +03:00 [Information] - Volo.Abp.Session.AbpSessionModule
+2018-02-27 13:19:00.765 +03:00 [Information] - Volo.Abp.Timing.AbpTimingModule
+2018-02-27 13:19:00.765 +03:00 [Information] - Volo.Abp.Json.AbpJsonModule
+2018-02-27 13:19:00.765 +03:00 [Information] - Volo.Abp.ApiVersioning.AbpApiVersioningAbstractionsModule
+2018-02-27 13:19:00.765 +03:00 [Information] - Volo.Abp.Serialization.AbpSerializationModule
+2018-02-27 13:19:00.765 +03:00 [Information] - Volo.Abp.Caching.AbpCachingModule
+2018-02-27 13:19:00.765 +03:00 [Information] - Volo.Abp.AbpCommonModule
+2018-02-27 13:19:00.765 +03:00 [Information] - Volo.Abp.EntityFrameworkCore.AbpEntityFrameworkCoreModule
+2018-02-27 13:19:00.765 +03:00 [Information] - Volo.Abp.MultiTenancy.EntityFrameworkCore.AbpMultiTenancyEntityFrameworkCoreModule
+2018-02-27 13:19:00.766 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyApplicationContractsModule
+2018-02-27 13:19:00.766 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyApplicationModule
+2018-02-27 13:19:00.766 +03:00 [Information] - Volo.Abp.Http.AbpHttpModule
+2018-02-27 13:19:00.766 +03:00 [Information] - Volo.Abp.AspNetCore.AbpAspNetCoreModule
+2018-02-27 13:19:00.766 +03:00 [Information] - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcModule
+2018-02-27 13:19:00.766 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyHttpApiModule
+2018-02-27 13:19:00.766 +03:00 [Information] - MicroserviceDemo.TenancyService.MicroservicesDemoTenancyServiceModule
+2018-02-27 13:19:01.414 +03:00 [Information] Initialized all modules.
+2018-02-27 13:20:39.741 +03:00 [Information] Loaded modules:
+2018-02-27 13:20:39.783 +03:00 [Information] - Volo.Abp.Castle.AbpCastleCoreModule
+2018-02-27 13:20:39.784 +03:00 [Information] - Volo.Abp.Autofac.AbpAutofacModule
+2018-02-27 13:20:39.784 +03:00 [Information] - Volo.Abp.Data.AbpDataModule
+2018-02-27 13:20:39.784 +03:00 [Information] - Volo.Abp.Settings.AbpSettingsModule
+2018-02-27 13:20:39.784 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyAbstractionsModule
+2018-02-27 13:20:39.784 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyDomainSharedModule
+2018-02-27 13:20:39.784 +03:00 [Information] - Volo.Abp.Guids.AbpGuidsModule
+2018-02-27 13:20:39.784 +03:00 [Information] - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2018-02-27 13:20:39.784 +03:00 [Information] - Volo.Abp.Threading.AbpThreadingModule
+2018-02-27 13:20:39.784 +03:00 [Information] - Volo.Abp.EventBus.AbpEventBusModule
+2018-02-27 13:20:39.784 +03:00 [Information] - Volo.Abp.Validation.AbpValidationModule
+2018-02-27 13:20:39.784 +03:00 [Information] - Volo.Abp.Security.AbpSecurityModule
+2018-02-27 13:20:39.784 +03:00 [Information] - Volo.Abp.Authorization.AbpAuthorizationModule
+2018-02-27 13:20:39.785 +03:00 [Information] - Volo.Abp.Http.AbpHttpAbstractionsModule
+2018-02-27 13:20:39.785 +03:00 [Information] - Volo.Abp.AbpDddModule
+2018-02-27 13:20:39.785 +03:00 [Information] - Volo.Abp.AutoMapper.AbpAutoMapperModule
+2018-02-27 13:20:39.785 +03:00 [Information] - Volo.Abp.Ui.AbpUiModule
+2018-02-27 13:20:39.785 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyDomainModule
+2018-02-27 13:20:39.785 +03:00 [Information] - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2018-02-27 13:20:39.785 +03:00 [Information] - Volo.Abp.Localization.AbpLocalizationModule
+2018-02-27 13:20:39.785 +03:00 [Information] - Volo.Abp.Session.AbpSessionModule
+2018-02-27 13:20:39.785 +03:00 [Information] - Volo.Abp.Timing.AbpTimingModule
+2018-02-27 13:20:39.785 +03:00 [Information] - Volo.Abp.Json.AbpJsonModule
+2018-02-27 13:20:39.785 +03:00 [Information] - Volo.Abp.ApiVersioning.AbpApiVersioningAbstractionsModule
+2018-02-27 13:20:39.785 +03:00 [Information] - Volo.Abp.Serialization.AbpSerializationModule
+2018-02-27 13:20:39.785 +03:00 [Information] - Volo.Abp.Caching.AbpCachingModule
+2018-02-27 13:20:39.786 +03:00 [Information] - Volo.Abp.AbpCommonModule
+2018-02-27 13:20:39.786 +03:00 [Information] - Volo.Abp.EntityFrameworkCore.AbpEntityFrameworkCoreModule
+2018-02-27 13:20:39.786 +03:00 [Information] - Volo.Abp.MultiTenancy.EntityFrameworkCore.AbpMultiTenancyEntityFrameworkCoreModule
+2018-02-27 13:20:39.786 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyApplicationContractsModule
+2018-02-27 13:20:39.786 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyApplicationModule
+2018-02-27 13:20:39.786 +03:00 [Information] - Volo.Abp.Http.AbpHttpModule
+2018-02-27 13:20:39.786 +03:00 [Information] - Volo.Abp.AspNetCore.AbpAspNetCoreModule
+2018-02-27 13:20:39.786 +03:00 [Information] - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcModule
+2018-02-27 13:20:39.786 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyHttpApiModule
+2018-02-27 13:20:39.786 +03:00 [Information] - MicroserviceDemo.TenancyService.MicroservicesDemoTenancyServiceModule
+2018-02-27 13:20:40.484 +03:00 [Information] Initialized all modules.
+2018-02-27 13:20:40.727 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/  
+2018-02-27 13:20:40.890 +03:00 [Information] Executing action method "Volo.Abp.Identity.HttpApi.Host.Controllers.HomeController.Index (MicroserviceDemo.TenancyService)" with arguments (null) - ModelState is Valid
+2018-02-27 13:20:40.899 +03:00 [Information] Executing RedirectResult, redirecting to "/swagger".
+2018-02-27 13:20:40.904 +03:00 [Information] Executed action "Volo.Abp.Identity.HttpApi.Host.Controllers.HomeController.Index (MicroserviceDemo.TenancyService)" in 38.9775ms
+2018-02-27 13:20:40.910 +03:00 [Information] Request finished in 199.3981ms 302 
+2018-02-27 13:20:40.920 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger  
+2018-02-27 13:20:40.923 +03:00 [Information] Request finished in 3.0126ms 301 
+2018-02-27 13:20:40.930 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/  
+2018-02-27 13:20:40.935 +03:00 [Information] Sending file. Request path: '"/index.html"'. Physical path: '"N/A"'
+2018-02-27 13:20:40.940 +03:00 [Information] Request finished in 9.6063ms 200 text/html
+2018-02-27 13:20:40.970 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/css/typography.css  
+2018-02-27 13:20:40.971 +03:00 [Information] Sending file. Request path: '"/css/typography.css"'. Physical path: '"N/A"'
+2018-02-27 13:20:40.971 +03:00 [Information] Request finished in 1.3932ms 200 text/css
+2018-02-27 13:20:40.972 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/css/screen.css  
+2018-02-27 13:20:40.973 +03:00 [Information] Sending file. Request path: '"/css/screen.css"'. Physical path: '"N/A"'
+2018-02-27 13:20:40.975 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/css/reset.css  
+2018-02-27 13:20:40.975 +03:00 [Information] Request finished in 2.2254ms 200 text/css
+2018-02-27 13:20:40.975 +03:00 [Information] Sending file. Request path: '"/css/reset.css"'. Physical path: '"N/A"'
+2018-02-27 13:20:40.976 +03:00 [Information] Request finished in 1.152ms 200 text/css
+2018-02-27 13:20:40.980 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/lib/jquery-1.8.0.min.js  
+2018-02-27 13:20:40.980 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/css/print.css  
+2018-02-27 13:20:40.980 +03:00 [Information] Sending file. Request path: '"/css/print.css"'. Physical path: '"N/A"'
+2018-02-27 13:20:40.980 +03:00 [Information] Sending file. Request path: '"/lib/jquery-1.8.0.min.js"'. Physical path: '"N/A"'
+2018-02-27 13:20:40.981 +03:00 [Information] Request finished in 0.8813ms 200 text/css
+2018-02-27 13:20:40.981 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/lib/object-assign-pollyfill.js  
+2018-02-27 13:20:40.982 +03:00 [Information] Sending file. Request path: '"/lib/object-assign-pollyfill.js"'. Physical path: '"N/A"'
+2018-02-27 13:20:40.983 +03:00 [Information] Request finished in 1.4766ms 200 application/javascript
+2018-02-27 13:20:40.987 +03:00 [Information] Request finished in 6.1895ms 200 application/javascript
+2018-02-27 13:20:40.988 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/lib/jquery.slideto.min.js  
+2018-02-27 13:20:40.988 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/lib/jquery.wiggle.min.js  
+2018-02-27 13:20:40.989 +03:00 [Information] Sending file. Request path: '"/lib/jquery.wiggle.min.js"'. Physical path: '"N/A"'
+2018-02-27 13:20:40.989 +03:00 [Information] Sending file. Request path: '"/lib/jquery.slideto.min.js"'. Physical path: '"N/A"'
+2018-02-27 13:20:40.989 +03:00 [Information] Request finished in 1.0541ms 200 application/javascript
+2018-02-27 13:20:40.994 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/lib/jquery.ba-bbq.min.js  
+2018-02-27 13:20:40.994 +03:00 [Information] Sending file. Request path: '"/lib/jquery.ba-bbq.min.js"'. Physical path: '"N/A"'
+2018-02-27 13:20:40.995 +03:00 [Information] Request finished in 1.1041ms 200 application/javascript
+2018-02-27 13:20:40.999 +03:00 [Information] Request finished in 3.5784ms 200 application/javascript
+2018-02-27 13:20:41.006 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/lib/highlight.9.1.0.pack_extended.js  
+2018-02-27 13:20:41.006 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/lib/handlebars-4.0.5.js  
+2018-02-27 13:20:41.006 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/lib/lodash.min.js  
+2018-02-27 13:20:41.006 +03:00 [Information] Sending file. Request path: '"/lib/highlight.9.1.0.pack_extended.js"'. Physical path: '"N/A"'
+2018-02-27 13:20:41.006 +03:00 [Information] Sending file. Request path: '"/lib/handlebars-4.0.5.js"'. Physical path: '"N/A"'
+2018-02-27 13:20:41.006 +03:00 [Information] Sending file. Request path: '"/lib/lodash.min.js"'. Physical path: '"N/A"'
+2018-02-27 13:20:41.006 +03:00 [Information] Request finished in 0.7791ms 200 application/javascript
+2018-02-27 13:20:41.007 +03:00 [Information] Request finished in 1.1563ms 200 application/javascript
+2018-02-27 13:20:41.008 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/swagger-ui.min.js  
+2018-02-27 13:20:41.010 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/lib/highlight.9.1.0.pack.js  
+2018-02-27 13:20:41.010 +03:00 [Information] Sending file. Request path: '"/lib/highlight.9.1.0.pack.js"'. Physical path: '"N/A"'
+2018-02-27 13:20:41.010 +03:00 [Information] Request finished in 0.8219ms 200 application/javascript
+2018-02-27 13:20:41.012 +03:00 [Information] Sending file. Request path: '"/swagger-ui.min.js"'. Physical path: '"N/A"'
+2018-02-27 13:20:41.017 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/lib/backbone-min.js  
+2018-02-27 13:20:41.017 +03:00 [Information] Sending file. Request path: '"/lib/backbone-min.js"'. Physical path: '"N/A"'
+2018-02-27 13:20:41.017 +03:00 [Information] Request finished in 0.8069ms 200 application/javascript
+2018-02-27 13:20:41.021 +03:00 [Information] Request finished in 15.2947ms 200 application/javascript
+2018-02-27 13:20:41.021 +03:00 [Information] Request finished in 13.328ms 200 application/javascript
+2018-02-27 13:20:41.115 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/lib/jsoneditor.min.js  
+2018-02-27 13:20:41.116 +03:00 [Information] Sending file. Request path: '"/lib/jsoneditor.min.js"'. Physical path: '"N/A"'
+2018-02-27 13:20:41.118 +03:00 [Information] Request finished in 2.6261ms 200 application/javascript
+2018-02-27 13:20:41.119 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/lib/marked.js  
+2018-02-27 13:20:41.119 +03:00 [Information] Sending file. Request path: '"/lib/marked.js"'. Physical path: '"N/A"'
+2018-02-27 13:20:41.120 +03:00 [Information] Request finished in 1.1965ms 200 application/javascript
+2018-02-27 13:20:41.123 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/lib/swagger-oauth.js  
+2018-02-27 13:20:41.125 +03:00 [Information] Sending file. Request path: '"/lib/swagger-oauth.js"'. Physical path: '"N/A"'
+2018-02-27 13:20:41.125 +03:00 [Information] Request finished in 2.7206ms 200 application/javascript
+2018-02-27 13:20:41.138 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/images/logo_small.png  
+2018-02-27 13:20:41.138 +03:00 [Information] Sending file. Request path: '"/images/logo_small.png"'. Physical path: '"N/A"'
+2018-02-27 13:20:41.139 +03:00 [Information] Request finished in 0.8616ms 200 image/png
+2018-02-27 13:20:41.268 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/images/favicon-16x16.png  
+2018-02-27 13:20:41.268 +03:00 [Information] Sending file. Request path: '"/images/favicon-16x16.png"'. Physical path: '"N/A"'
+2018-02-27 13:20:41.269 +03:00 [Information] Request finished in 0.8604ms 200 image/png
+2018-02-27 13:20:41.288 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/v1/swagger.json  
+2018-02-27 13:20:41.539 +03:00 [Information] Request finished in 251.1205ms 200 application/json
+2018-02-27 13:20:52.263 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/images/throbber.gif  
+2018-02-27 13:20:52.263 +03:00 [Information] Sending file. Request path: '"/images/throbber.gif"'. Physical path: '"N/A"'
+2018-02-27 13:20:52.264 +03:00 [Information] Request finished in 0.8997ms 200 image/gif
+2018-02-27 13:20:52.268 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/Abp/ApplicationConfigurationScript  
+2018-02-27 13:20:52.286 +03:00 [Information] Executing action method "Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc)" with arguments (null) - ModelState is Valid
+2018-02-27 13:20:52.369 +03:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-02-27 13:20:52.370 +03:00 [Information] Executed action "Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc)" in 89.1993ms
+2018-02-27 13:20:52.371 +03:00 [Information] Request finished in 103.3378ms 200 text/plain; charset=utf-8
+2018-02-27 13:21:04.659 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/Abp/ServiceProxyScript?UseCache=true  
+2018-02-27 13:21:04.706 +03:00 [Information] Executing action method "Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc)" with arguments (["Volo.Abp.AspNetCore.Mvc.ProxyScripting.ServiceProxyGenerationModel"]) - ModelState is Valid
+2018-02-27 13:21:04.760 +03:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-02-27 13:21:04.760 +03:00 [Information] Executed action "Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc)" in 81.0285ms
+2018-02-27 13:21:04.760 +03:00 [Information] Request finished in 101.7893ms 200 text/plain; charset=utf-8
+2018-02-27 13:21:21.290 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/api/abp/application-configuration  
+2018-02-27 13:21:21.296 +03:00 [Information] Executing action method "Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationController.Get (Volo.Abp.AspNetCore.Mvc)" with arguments (null) - ModelState is Valid
+2018-02-27 13:21:21.297 +03:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-02-27 13:21:21.301 +03:00 [Information] Executed action "Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationController.Get (Volo.Abp.AspNetCore.Mvc)" in 5.5583ms
+2018-02-27 13:21:21.302 +03:00 [Information] Request finished in 11.6077ms 200 application/json; charset=utf-8
+2018-02-27 13:21:32.534 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/api/abp/api-definition  
+2018-02-27 13:21:32.538 +03:00 [Information] Executing action method "Volo.Abp.AspNetCore.Mvc.ApiExploring.AbpApiDefinitionController.Get (Volo.Abp.AspNetCore.Mvc)" with arguments (null) - ModelState is Valid
+2018-02-27 13:21:32.540 +03:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-02-27 13:21:32.560 +03:00 [Information] Executed action "Volo.Abp.AspNetCore.Mvc.ApiExploring.AbpApiDefinitionController.Get (Volo.Abp.AspNetCore.Mvc)" in 22.588ms
+2018-02-27 13:21:32.560 +03:00 [Information] Request finished in 26.8605ms 200 application/json; charset=utf-8
+2018-02-27 13:28:39.013 +03:00 [Information] Request starting HTTP/1.1 POST http://127.0.0.1:31738/iisintegration  0
+2018-02-27 13:28:39.014 +03:00 [Information] Request finished in 0.8787ms 202 
+2018-02-27 13:34:27.480 +03:00 [Information] Loaded modules:
+2018-02-27 13:34:27.522 +03:00 [Information] - Volo.Abp.Castle.AbpCastleCoreModule
+2018-02-27 13:34:27.522 +03:00 [Information] - Volo.Abp.Autofac.AbpAutofacModule
+2018-02-27 13:34:27.522 +03:00 [Information] - Volo.Abp.Data.AbpDataModule
+2018-02-27 13:34:27.522 +03:00 [Information] - Volo.Abp.Settings.AbpSettingsModule
+2018-02-27 13:34:27.522 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyAbstractionsModule
+2018-02-27 13:34:27.522 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyDomainSharedModule
+2018-02-27 13:34:27.522 +03:00 [Information] - Volo.Abp.Guids.AbpGuidsModule
+2018-02-27 13:34:27.523 +03:00 [Information] - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2018-02-27 13:34:27.523 +03:00 [Information] - Volo.Abp.Threading.AbpThreadingModule
+2018-02-27 13:34:27.523 +03:00 [Information] - Volo.Abp.EventBus.AbpEventBusModule
+2018-02-27 13:34:27.523 +03:00 [Information] - Volo.Abp.Validation.AbpValidationModule
+2018-02-27 13:34:27.523 +03:00 [Information] - Volo.Abp.Security.AbpSecurityModule
+2018-02-27 13:34:27.523 +03:00 [Information] - Volo.Abp.Authorization.AbpAuthorizationModule
+2018-02-27 13:34:27.523 +03:00 [Information] - Volo.Abp.Http.AbpHttpAbstractionsModule
+2018-02-27 13:34:27.523 +03:00 [Information] - Volo.Abp.AbpDddModule
+2018-02-27 13:34:27.523 +03:00 [Information] - Volo.Abp.AutoMapper.AbpAutoMapperModule
+2018-02-27 13:34:27.523 +03:00 [Information] - Volo.Abp.Ui.AbpUiModule
+2018-02-27 13:34:27.523 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyDomainModule
+2018-02-27 13:34:27.523 +03:00 [Information] - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2018-02-27 13:34:27.523 +03:00 [Information] - Volo.Abp.Localization.AbpLocalizationModule
+2018-02-27 13:34:27.524 +03:00 [Information] - Volo.Abp.Session.AbpSessionModule
+2018-02-27 13:34:27.524 +03:00 [Information] - Volo.Abp.Timing.AbpTimingModule
+2018-02-27 13:34:27.524 +03:00 [Information] - Volo.Abp.Json.AbpJsonModule
+2018-02-27 13:34:27.524 +03:00 [Information] - Volo.Abp.ApiVersioning.AbpApiVersioningAbstractionsModule
+2018-02-27 13:34:27.524 +03:00 [Information] - Volo.Abp.Serialization.AbpSerializationModule
+2018-02-27 13:34:27.524 +03:00 [Information] - Volo.Abp.Caching.AbpCachingModule
+2018-02-27 13:34:27.524 +03:00 [Information] - Volo.Abp.AbpCommonModule
+2018-02-27 13:34:27.524 +03:00 [Information] - Volo.Abp.EntityFrameworkCore.AbpEntityFrameworkCoreModule
+2018-02-27 13:34:27.524 +03:00 [Information] - Volo.Abp.MultiTenancy.EntityFrameworkCore.AbpMultiTenancyEntityFrameworkCoreModule
+2018-02-27 13:34:27.524 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyApplicationContractsModule
+2018-02-27 13:34:27.524 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyApplicationModule
+2018-02-27 13:34:27.524 +03:00 [Information] - Volo.Abp.Http.AbpHttpModule
+2018-02-27 13:34:27.525 +03:00 [Information] - Volo.Abp.AspNetCore.AbpAspNetCoreModule
+2018-02-27 13:34:27.525 +03:00 [Information] - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcModule
+2018-02-27 13:34:27.525 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyHttpApiModule
+2018-02-27 13:34:27.525 +03:00 [Information] - MicroserviceDemo.TenancyService.MicroservicesDemoTenancyServiceModule
+2018-02-27 13:34:28.177 +03:00 [Information] Initialized all modules.
+2018-02-27 13:34:28.463 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/  
+2018-02-27 13:34:28.487 +03:00 [Information] Sending file. Request path: '"/index.html"'. Physical path: '"N/A"'
+2018-02-27 13:34:28.494 +03:00 [Information] Request finished in 46.1866ms 200 text/html
+2018-02-27 13:34:28.535 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/css/typography.css  
+2018-02-27 13:34:28.537 +03:00 [Information] The file "/css/typography.css" was not modified
+2018-02-27 13:34:28.539 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/css/reset.css  
+2018-02-27 13:34:28.540 +03:00 [Information] The file "/css/reset.css" was not modified
+2018-02-27 13:34:28.540 +03:00 [Information] Request finished in 3.3479ms 304 text/css
+2018-02-27 13:34:28.540 +03:00 [Information] Request finished in 5.8354ms 304 text/css
+2018-02-27 13:34:28.541 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/css/screen.css  
+2018-02-27 13:34:28.543 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/lib/object-assign-pollyfill.js  
+2018-02-27 13:34:28.543 +03:00 [Information] The file "/lib/object-assign-pollyfill.js" was not modified
+2018-02-27 13:34:28.544 +03:00 [Information] Request finished in 1.0831ms 304 application/javascript
+2018-02-27 13:34:28.544 +03:00 [Information] The file "/css/screen.css" was not modified
+2018-02-27 13:34:28.544 +03:00 [Information] Request finished in 3.4976ms 304 text/css
+2018-02-27 13:34:28.547 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/css/print.css  
+2018-02-27 13:34:28.548 +03:00 [Information] The file "/css/print.css" was not modified
+2018-02-27 13:34:28.548 +03:00 [Information] Request finished in 1.1777ms 304 text/css
+2018-02-27 13:34:28.554 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/lib/jquery.wiggle.min.js  
+2018-02-27 13:34:28.555 +03:00 [Information] The file "/lib/jquery.wiggle.min.js" was not modified
+2018-02-27 13:34:28.555 +03:00 [Information] Request finished in 0.8159ms 304 application/javascript
+2018-02-27 13:34:28.555 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/lib/jquery-1.8.0.min.js  
+2018-02-27 13:34:28.555 +03:00 [Information] The file "/lib/jquery-1.8.0.min.js" was not modified
+2018-02-27 13:34:28.556 +03:00 [Information] Request finished in 0.8351ms 304 application/javascript
+2018-02-27 13:34:28.556 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/lib/jquery.ba-bbq.min.js  
+2018-02-27 13:34:28.556 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/lib/jquery.slideto.min.js  
+2018-02-27 13:34:28.556 +03:00 [Information] The file "/lib/jquery.ba-bbq.min.js" was not modified
+2018-02-27 13:34:28.557 +03:00 [Information] The file "/lib/jquery.slideto.min.js" was not modified
+2018-02-27 13:34:28.557 +03:00 [Information] Request finished in 1.87ms 304 application/javascript
+2018-02-27 13:34:28.558 +03:00 [Information] Request finished in 1.6994ms 304 application/javascript
+2018-02-27 13:34:28.559 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/lib/handlebars-4.0.5.js  
+2018-02-27 13:34:28.559 +03:00 [Information] The file "/lib/handlebars-4.0.5.js" was not modified
+2018-02-27 13:34:28.559 +03:00 [Information] Request finished in 0.91ms 304 application/javascript
+2018-02-27 13:34:28.561 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/lib/lodash.min.js  
+2018-02-27 13:34:28.562 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/lib/backbone-min.js  
+2018-02-27 13:34:28.563 +03:00 [Information] The file "/lib/backbone-min.js" was not modified
+2018-02-27 13:34:28.563 +03:00 [Information] Request finished in 1.3136ms 304 application/javascript
+2018-02-27 13:34:28.562 +03:00 [Information] The file "/lib/lodash.min.js" was not modified
+2018-02-27 13:34:28.564 +03:00 [Information] Request finished in 2.724ms 304 application/javascript
+2018-02-27 13:34:28.564 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/swagger-ui.min.js  
+2018-02-27 13:34:28.564 +03:00 [Information] The file "/swagger-ui.min.js" was not modified
+2018-02-27 13:34:28.565 +03:00 [Information] Request finished in 0.5952ms 304 application/javascript
+2018-02-27 13:34:28.566 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/lib/highlight.9.1.0.pack.js  
+2018-02-27 13:34:28.567 +03:00 [Information] The file "/lib/highlight.9.1.0.pack.js" was not modified
+2018-02-27 13:34:28.568 +03:00 [Information] Request finished in 1.3705ms 304 application/javascript
+2018-02-27 13:34:28.571 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/lib/jsoneditor.min.js  
+2018-02-27 13:34:28.572 +03:00 [Information] The file "/lib/jsoneditor.min.js" was not modified
+2018-02-27 13:34:28.572 +03:00 [Information] Request finished in 1.0164ms 304 application/javascript
+2018-02-27 13:34:28.572 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/lib/highlight.9.1.0.pack_extended.js  
+2018-02-27 13:34:28.573 +03:00 [Information] The file "/lib/highlight.9.1.0.pack_extended.js" was not modified
+2018-02-27 13:34:28.574 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/lib/swagger-oauth.js  
+2018-02-27 13:34:28.574 +03:00 [Information] Request finished in 1.5159ms 304 application/javascript
+2018-02-27 13:34:28.574 +03:00 [Information] The file "/lib/swagger-oauth.js" was not modified
+2018-02-27 13:34:28.575 +03:00 [Information] Request finished in 0.9989ms 304 application/javascript
+2018-02-27 13:34:28.576 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/lib/marked.js  
+2018-02-27 13:34:28.576 +03:00 [Information] The file "/lib/marked.js" was not modified
+2018-02-27 13:34:28.577 +03:00 [Information] Request finished in 0.7684ms 304 application/javascript
+2018-02-27 13:34:28.760 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/images/logo_small.png  
+2018-02-27 13:34:28.761 +03:00 [Information] The file "/images/logo_small.png" was not modified
+2018-02-27 13:34:28.761 +03:00 [Information] Request finished in 0.6752ms 304 image/png
+2018-02-27 13:34:28.781 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:63877/swagger/v1/swagger.json  
+2018-02-27 13:34:29.095 +03:00 [Information] Request finished in 313.8835ms 200 application/json

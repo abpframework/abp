@@ -17,7 +17,14 @@ namespace Volo.Abp.Authorization
 
         public override void Intercept(IAbpMethodInvocation invocation)
         {
-            AsyncHelper.RunSync(() => InterceptAsync(invocation));
+            if (AbpCrossCuttingConcerns.IsApplied(invocation.TargetObject, AbpCrossCuttingConcerns.Authorization))
+            {
+                invocation.Proceed();
+                return;
+            }
+
+            AsyncHelper.RunSync(() => AuthorizeAsync(invocation));
+            invocation.Proceed();
         }
 
         public override async Task InterceptAsync(IAbpMethodInvocation invocation)

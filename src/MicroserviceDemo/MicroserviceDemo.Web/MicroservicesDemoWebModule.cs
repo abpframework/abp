@@ -16,9 +16,10 @@ using Volo.Abp.Identity;
 using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.Identity.Web;
 using Volo.Abp.Modularity;
+using Volo.Abp.MultiTenancy;
+using Volo.Abp.MultiTenancy.Web;
 using Volo.Abp.Permissions;
 using Volo.Abp.Permissions.EntityFrameworkCore;
-using Volo.Abp.Permissions.Web;
 
 namespace MicroserviceDemo.Web
 {
@@ -29,7 +30,8 @@ namespace MicroserviceDemo.Web
     [DependsOn(typeof(AbpIdentityWebModule))]
     [DependsOn(typeof(AbpIdentityEntityFrameworkCoreModule))]
     [DependsOn(typeof(AbpAccountWebModule))]
-    [DependsOn(typeof(AbpPermissionsWebModule))]
+    [DependsOn(typeof(AbpMultiTenancyHttpApiClientModule))]
+    [DependsOn(typeof(AbpMultiTenancyWebModule))]
     public class MicroservicesDemoWebModule : AbpModule
     {
         public override void PreConfigureServices(IServiceCollection services)

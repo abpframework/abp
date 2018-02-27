@@ -1,22 +1,36 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
+﻿using System;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Serilog;
+using Volo.Abp;
 
 namespace MicroserviceDemo.TenancyService
 {
     public class Startup
     {
-        public void ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            services.AddApplication<MicroservicesDemoTenancyServiceModule>(options =>
+            {
+                options.UseAutofac();
+            });
+
+            return services.BuildServiceProviderFromFactory();
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
         {
-            app.Run(async (context) =>
-            {
-                await context.Response.WriteAsync("Tenancy microservice!");
-            });
+            loggerFactory
+                .AddConsole()
+                .AddDebug()
+                .AddSerilog(new LoggerConfiguration()
+                    .Enrich.FromLogContext()
+                    .WriteTo.RollingFile("Logs/logs.txt")
+                    .CreateLogger()
+                );
+
+            app.InitializeApplication();
         }
     }
 }
