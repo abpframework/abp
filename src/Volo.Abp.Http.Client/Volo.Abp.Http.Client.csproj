@@ -16,7 +16,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.Castle.Core\Volo.Abp.Castle.Core.csproj" />
     <ProjectReference Include="..\Volo.Abp.Http\Volo.Abp.Http.csproj" />
-    <ProjectReference Include="..\Volo.Abp.Validation\Volo.Abp.Validation.csproj" />
   </ItemGroup>
 
 </Project>

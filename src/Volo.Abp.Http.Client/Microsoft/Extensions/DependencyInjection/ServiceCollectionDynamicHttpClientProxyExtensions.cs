@@ -2,12 +2,10 @@
 using System.Linq;
 using System.Reflection;
 using Castle.DynamicProxy;
-using Volo.Abp;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Castle.DynamicProxy;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Http.Client.DynamicProxying;
-using Volo.Abp.Validation;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -53,13 +51,6 @@ namespace Microsoft.Extensions.DependencyInjection
                 serviceProvider => ProxyGeneratorInstance
                     .CreateInterfaceProxyWithoutTarget(
                         type,
-                        new ProxyGenerationOptions
-                        {
-                            AdditionalAttributes =
-                            {
-                                CustomAttributeInfo.FromExpression(() => new DisableValidationAttribute())
-                            }
-                        },
                         (IInterceptor) serviceProvider.GetRequiredService(interceptorAdapterType)
                     )
             );
