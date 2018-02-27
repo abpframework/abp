@@ -7953,3 +7953,1444 @@ Volo.Abp.AbpException: Remote service returns error!
    at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
    at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.<Invoke>d__7.MoveNext()
 2018-02-26 16:35:03.532 +03:00 [Information] Request finished in 903.0967ms 500 text/html; charset=utf-8
+2018-02-26 17:14:16.587 +03:00 [Information] Loaded modules:
+2018-02-26 17:14:16.630 +03:00 [Information] - Volo.Abp.Castle.AbpCastleCoreModule
+2018-02-26 17:14:16.630 +03:00 [Information] - Volo.Abp.Autofac.AbpAutofacModule
+2018-02-26 17:14:16.630 +03:00 [Information] - Volo.Abp.Http.AbpHttpAbstractionsModule
+2018-02-26 17:14:16.630 +03:00 [Information] - Volo.Abp.Timing.AbpTimingModule
+2018-02-26 17:14:16.631 +03:00 [Information] - Volo.Abp.Json.AbpJsonModule
+2018-02-26 17:14:16.631 +03:00 [Information] - Volo.Abp.Http.AbpHttpModule
+2018-02-26 17:14:16.631 +03:00 [Information] - Volo.Abp.Http.Client.AbpHttpClientModule
+2018-02-26 17:14:16.631 +03:00 [Information] - Volo.Abp.Security.AbpSecurityModule
+2018-02-26 17:14:16.631 +03:00 [Information] - Volo.Abp.Authorization.AbpAuthorizationModule
+2018-02-26 17:14:16.631 +03:00 [Information] - Volo.Abp.Guids.AbpGuidsModule
+2018-02-26 17:14:16.631 +03:00 [Information] - Volo.Abp.Data.AbpDataModule
+2018-02-26 17:14:16.631 +03:00 [Information] - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2018-02-26 17:14:16.631 +03:00 [Information] - Volo.Abp.Settings.AbpSettingsModule
+2018-02-26 17:14:16.631 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyAbstractionsModule
+2018-02-26 17:14:16.631 +03:00 [Information] - Volo.Abp.Threading.AbpThreadingModule
+2018-02-26 17:14:16.631 +03:00 [Information] - Volo.Abp.EventBus.AbpEventBusModule
+2018-02-26 17:14:16.631 +03:00 [Information] - Volo.Abp.Validation.AbpValidationModule
+2018-02-26 17:14:16.631 +03:00 [Information] - Volo.Abp.AbpDddModule
+2018-02-26 17:14:16.631 +03:00 [Information] - Volo.Abp.Permissions.AbpPermissionsDomainSharedModule
+2018-02-26 17:14:16.631 +03:00 [Information] - Volo.Abp.Serialization.AbpSerializationModule
+2018-02-26 17:14:16.631 +03:00 [Information] - Volo.Abp.Caching.AbpCachingModule
+2018-02-26 17:14:16.631 +03:00 [Information] - Volo.Abp.Permissions.AbpPermissionsDomainModule
+2018-02-26 17:14:16.631 +03:00 [Information] - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2018-02-26 17:14:16.632 +03:00 [Information] - Volo.Abp.Localization.AbpLocalizationModule
+2018-02-26 17:14:16.632 +03:00 [Information] - Volo.Abp.Session.AbpSessionModule
+2018-02-26 17:14:16.632 +03:00 [Information] - Volo.Abp.ApiVersioning.AbpApiVersioningAbstractionsModule
+2018-02-26 17:14:16.632 +03:00 [Information] - Volo.Abp.AbpCommonModule
+2018-02-26 17:14:16.632 +03:00 [Information] - Volo.Abp.EntityFrameworkCore.AbpEntityFrameworkCoreModule
+2018-02-26 17:14:16.632 +03:00 [Information] - Volo.Abp.Permissions.EntityFrameworkCore.AbpPermissionsEntityFrameworkCoreModule
+2018-02-26 17:14:16.632 +03:00 [Information] - Volo.Abp.Identity.AbpIdentityDomainSharedModule
+2018-02-26 17:14:16.632 +03:00 [Information] - Volo.Abp.Identity.AbpIdentityDomainModule
+2018-02-26 17:14:16.632 +03:00 [Information] - Volo.Abp.Identity.AbpIdentityApplicationContractsModule
+2018-02-26 17:14:16.632 +03:00 [Information] - Volo.Abp.AutoMapper.AbpAutoMapperModule
+2018-02-26 17:14:16.632 +03:00 [Information] - Volo.Abp.Identity.AbpIdentityApplicationModule
+2018-02-26 17:14:16.632 +03:00 [Information] - Volo.Abp.AspNetCore.AbpAspNetCoreModule
+2018-02-26 17:14:16.632 +03:00 [Information] - Volo.Abp.Ui.AbpUiModule
+2018-02-26 17:14:16.632 +03:00 [Information] - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcModule
+2018-02-26 17:14:16.632 +03:00 [Information] - Volo.Abp.Identity.AbpIdentityHttpApiModule
+2018-02-26 17:14:16.632 +03:00 [Information] - Volo.Abp.Ui.Navigation.AbpUiNavigationModule
+2018-02-26 17:14:16.632 +03:00 [Information] - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcUiModule
+2018-02-26 17:14:16.633 +03:00 [Information] - Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.AbpAspNetCoreMvcUiBootstrapModule
+2018-02-26 17:14:16.633 +03:00 [Information] - Volo.Abp.Permissions.AbpPermissionsApplicationContractsModule
+2018-02-26 17:14:16.633 +03:00 [Information] - Volo.Abp.Permissions.Web.AbpPermissionsWebModule
+2018-02-26 17:14:16.633 +03:00 [Information] - Volo.Abp.Identity.Web.AbpIdentityWebModule
+2018-02-26 17:14:16.633 +03:00 [Information] - Volo.Abp.Identity.EntityFrameworkCore.AbpIdentityEntityFrameworkCoreModule
+2018-02-26 17:14:16.633 +03:00 [Information] - Volo.Abp.Account.AbpAccountApplicationContractsModule
+2018-02-26 17:14:16.633 +03:00 [Information] - Volo.Abp.Account.Web.AbpAccountWebModule
+2018-02-26 17:14:16.633 +03:00 [Information] - MicroserviceDemo.Web.MicroservicesDemoWebModule
+2018-02-26 17:14:17.241 +03:00 [Information] Initialized all modules.
+2018-02-26 17:14:17.400 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/  
+2018-02-26 17:14:18.472 +03:00 [Information] AuthenticationScheme: "Identity.Application" was successfully authenticated.
+2018-02-26 17:14:21.878 +03:00 [Information] Executing handler method "OnGet" with arguments (null) - ModelState is Valid
+2018-02-26 17:14:23.108 +03:00 [Information] Executed action "/Index" in 1239.9879ms
+2018-02-26 17:14:23.113 +03:00 [Information] Request finished in 5727.2553ms 200 text/html; charset=utf-8
+2018-02-26 17:14:23.149 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/font-awesome/css/font-awesome-min.css  
+2018-02-26 17:14:23.153 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/material/css/material-min.css  
+2018-02-26 17:14:23.157 +03:00 [Information] Sending file. Request path: '"/libs/font-awesome/css/font-awesome-min.css"'. Physical path: '"/wwwroot/libs/font_awesome/css/font-awesome-min.css"'
+2018-02-26 17:14:23.157 +03:00 [Information] Sending file. Request path: '"/libs/material/css/material-min.css"'. Physical path: '"/wwwroot/libs/material/css/material-min.css"'
+2018-02-26 17:14:23.160 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/styles/libs/datatables.css  
+2018-02-26 17:14:23.160 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/abp/abp.js?_v636552620624744509  
+2018-02-26 17:14:23.160 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/datatables/datatables.css  
+2018-02-26 17:14:23.160 +03:00 [Information] Sending file. Request path: '"/styles/libs/datatables.css"'. Physical path: '"/wwwroot/styles/libs/datatables.css"'
+2018-02-26 17:14:23.160 +03:00 [Information] Sending file. Request path: '"/libs/abp/abp.js"'. Physical path: '"/wwwroot/libs/abp/abp.js"'
+2018-02-26 17:14:23.161 +03:00 [Information] Sending file. Request path: '"/libs/datatables/datatables.css"'. Physical path: '"/wwwroot/libs/datatables/datatables.css"'
+2018-02-26 17:14:23.161 +03:00 [Information] Request finished in 12.188ms 200 text/css
+2018-02-26 17:14:23.161 +03:00 [Information] Request finished in 1.3709ms 200 application/javascript
+2018-02-26 17:14:23.161 +03:00 [Information] Request finished in 1.5031ms 200 text/css
+2018-02-26 17:14:23.161 +03:00 [Information] Request finished in 1.3769ms 200 text/css
+2018-02-26 17:14:23.163 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/views/shared/_AppLayout.css  
+2018-02-26 17:14:23.164 +03:00 [Information] Sending file. Request path: '"/views/shared/_AppLayout.css"'. Physical path: '"/wwwroot/views/shared/_AppLayout.css"'
+2018-02-26 17:14:23.165 +03:00 [Information] Request finished in 1.6553ms 200 text/css
+2018-02-26 17:14:23.171 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/jquery-validation/jquery-validate.js  
+2018-02-26 17:14:23.171 +03:00 [Information] Sending file. Request path: '"/libs/jquery-validation/jquery-validate.js"'. Physical path: '"/wwwroot/libs/jquery_validation/jquery-validate.js"'
+2018-02-26 17:14:23.173 +03:00 [Information] Request finished in 2.121ms 200 application/javascript
+2018-02-26 17:14:23.175 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/bootstrap/js/bootstrap-bundle-min.js  
+2018-02-26 17:14:23.176 +03:00 [Information] Sending file. Request path: '"/libs/bootstrap/js/bootstrap-bundle-min.js"'. Physical path: '"/wwwroot/libs/bootstrap/js/bootstrap-bundle-min.js"'
+2018-02-26 17:14:23.176 +03:00 [Information] Request finished in 23.1401ms 200 text/css
+2018-02-26 17:14:23.178 +03:00 [Information] Request finished in 2.6863ms 200 application/javascript
+2018-02-26 17:14:23.181 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/jquery/jquery-3-1-1-min.js  
+2018-02-26 17:14:23.182 +03:00 [Information] Sending file. Request path: '"/libs/jquery/jquery-3-1-1-min.js"'. Physical path: '"/wwwroot/libs/jquery/jquery-3-1-1-min.js"'
+2018-02-26 17:14:23.185 +03:00 [Information] Request finished in 5.2244ms 200 application/javascript
+2018-02-26 17:14:23.186 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/jquery-validation-unobtrusive/jquery-validate-unobtrusive.js  
+2018-02-26 17:14:23.187 +03:00 [Information] Sending file. Request path: '"/libs/jquery-validation-unobtrusive/jquery-validate-unobtrusive.js"'. Physical path: '"/wwwroot/libs/jquery_validation_unobtrusive/jquery-validate-unobtrusive.js"'
+2018-02-26 17:14:23.187 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/jquery-form/jquery-form-min.js  
+2018-02-26 17:14:23.188 +03:00 [Information] Request finished in 2.2416ms 200 application/javascript
+2018-02-26 17:14:23.189 +03:00 [Information] Sending file. Request path: '"/libs/jquery-form/jquery-form-min.js"'. Physical path: '"/wwwroot/libs/jquery_form/jquery-form-min.js"'
+2018-02-26 17:14:23.191 +03:00 [Information] Request finished in 3.7178ms 200 application/javascript
+2018-02-26 17:14:23.196 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/material/js/material-min.js  
+2018-02-26 17:14:23.198 +03:00 [Information] Sending file. Request path: '"/libs/material/js/material-min.js"'. Physical path: '"/wwwroot/libs/material/js/material-min.js"'
+2018-02-26 17:14:23.198 +03:00 [Information] Request finished in 2.4045ms 200 application/javascript
+2018-02-26 17:14:23.202 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/datatables/datatables-min.js  
+2018-02-26 17:14:23.203 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/vue/vue.js  
+2018-02-26 17:14:23.204 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/abp/abp-jquery.js?_v636552620624764682  
+2018-02-26 17:14:23.207 +03:00 [Information] Sending file. Request path: '"/libs/vue/vue.js"'. Physical path: '"/wwwroot/libs/vue/vue.js"'
+2018-02-26 17:14:23.210 +03:00 [Information] Sending file. Request path: '"/libs/abp/abp-jquery.js"'. Physical path: '"/wwwroot/libs/abp/abp-jquery.js"'
+2018-02-26 17:14:23.210 +03:00 [Information] Sending file. Request path: '"/libs/datatables/datatables-min.js"'. Physical path: '"/wwwroot/libs/datatables/datatables-min.js"'
+2018-02-26 17:14:23.210 +03:00 [Information] Request finished in 7.0747ms 200 application/javascript
+2018-02-26 17:14:23.214 +03:00 [Information] Request finished in 10.6314ms 200 application/javascript
+2018-02-26 17:14:23.215 +03:00 [Information] Request finished in 13.7591ms 200 application/javascript
+2018-02-26 17:14:23.226 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/Abp/ApplicationConfigurationScript?_v=636552620624770766  
+2018-02-26 17:14:23.226 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/Abp/ServiceProxyScript?_v=636552620624770822  
+2018-02-26 17:14:23.231 +03:00 [Information] AuthenticationScheme: "Identity.Application" was successfully authenticated.
+2018-02-26 17:14:23.233 +03:00 [Information] AuthenticationScheme: "Identity.Application" was successfully authenticated.
+2018-02-26 17:14:23.328 +03:00 [Information] Executing action method "Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc)" with arguments (null) - ModelState is Valid
+2018-02-26 17:14:23.403 +03:00 [Information] Executing action method "Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc)" with arguments (["Volo.Abp.AspNetCore.Mvc.ProxyScripting.ServiceProxyGenerationModel"]) - ModelState is Valid
+2018-02-26 17:14:23.697 +03:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-02-26 17:14:23.698 +03:00 [Information] Executed action "Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc)" in 435.7468ms
+2018-02-26 17:14:23.698 +03:00 [Information] Request finished in 473.1473ms 200 text/plain; charset=utf-8
+2018-02-26 17:14:23.761 +03:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-02-26 17:14:23.762 +03:00 [Information] Executed action "Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc)" in 431.0219ms
+2018-02-26 17:14:23.762 +03:00 [Information] Request finished in 537.1564ms 200 text/plain; charset=utf-8
+2018-02-26 17:14:28.894 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/Identity/Roles  
+2018-02-26 17:14:28.898 +03:00 [Information] AuthenticationScheme: "Identity.Application" was successfully authenticated.
+2018-02-26 17:14:29.306 +03:00 [Information] Executing handler method "OnGet" with arguments (null) - ModelState is Valid
+2018-02-26 17:14:29.341 +03:00 [Information] Executed action "/Identity/Roles/Index" in 41.9094ms
+2018-02-26 17:14:29.342 +03:00 [Information] Request finished in 447.5953ms 200 text/html; charset=utf-8
+2018-02-26 17:14:29.394 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/font-awesome/css/font-awesome-min.css  
+2018-02-26 17:14:29.395 +03:00 [Information] Sending file. Request path: '"/libs/font-awesome/css/font-awesome-min.css"'. Physical path: '"/wwwroot/libs/font_awesome/css/font-awesome-min.css"'
+2018-02-26 17:14:29.395 +03:00 [Information] Request finished in 1.2037ms 200 text/css
+2018-02-26 17:14:29.399 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/material/css/material-min.css  
+2018-02-26 17:14:29.399 +03:00 [Information] Sending file. Request path: '"/libs/material/css/material-min.css"'. Physical path: '"/wwwroot/libs/material/css/material-min.css"'
+2018-02-26 17:14:29.403 +03:00 [Information] Request finished in 4.0898ms 200 text/css
+2018-02-26 17:14:29.409 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/datatables/datatables.css  
+2018-02-26 17:14:29.410 +03:00 [Information] Sending file. Request path: '"/libs/datatables/datatables.css"'. Physical path: '"/wwwroot/libs/datatables/datatables.css"'
+2018-02-26 17:14:29.410 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/styles/libs/datatables.css  
+2018-02-26 17:14:29.410 +03:00 [Information] Request finished in 1.1678ms 200 text/css
+2018-02-26 17:14:29.411 +03:00 [Information] Sending file. Request path: '"/styles/libs/datatables.css"'. Physical path: '"/wwwroot/styles/libs/datatables.css"'
+2018-02-26 17:14:29.412 +03:00 [Information] Request finished in 2.3772ms 200 text/css
+2018-02-26 17:14:29.416 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/views/shared/_AppLayout.css  
+2018-02-26 17:14:29.417 +03:00 [Information] Sending file. Request path: '"/views/shared/_AppLayout.css"'. Physical path: '"/wwwroot/views/shared/_AppLayout.css"'
+2018-02-26 17:14:29.417 +03:00 [Information] Request finished in 1.6297ms 200 text/css
+2018-02-26 17:14:29.420 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/modules/identity/views/roles/index.css  
+2018-02-26 17:14:29.422 +03:00 [Information] Sending file. Request path: '"/modules/identity/views/roles/index.css"'. Physical path: '"/wwwroot/modules/identity/views/roles/index.css"'
+2018-02-26 17:14:29.423 +03:00 [Information] Request finished in 3.1349ms 200 text/css
+2018-02-26 17:14:29.423 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/abp/abp.js?_v636552620624744509  
+2018-02-26 17:14:29.426 +03:00 [Information] Sending file. Request path: '"/libs/abp/abp.js"'. Physical path: '"/wwwroot/libs/abp/abp.js"'
+2018-02-26 17:14:29.427 +03:00 [Information] Request finished in 5.0259ms 200 application/javascript
+2018-02-26 17:14:29.429 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/bootstrap/js/bootstrap-bundle-min.js  
+2018-02-26 17:14:29.429 +03:00 [Information] Sending file. Request path: '"/libs/bootstrap/js/bootstrap-bundle-min.js"'. Physical path: '"/wwwroot/libs/bootstrap/js/bootstrap-bundle-min.js"'
+2018-02-26 17:14:29.429 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/jquery/jquery-3-1-1-min.js  
+2018-02-26 17:14:29.430 +03:00 [Information] Sending file. Request path: '"/libs/jquery/jquery-3-1-1-min.js"'. Physical path: '"/wwwroot/libs/jquery/jquery-3-1-1-min.js"'
+2018-02-26 17:14:29.431 +03:00 [Information] Request finished in 1.8537ms 200 application/javascript
+2018-02-26 17:14:29.432 +03:00 [Information] Request finished in 3.09ms 200 application/javascript
+2018-02-26 17:14:29.433 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/jquery-validation/jquery-validate.js  
+2018-02-26 17:14:29.434 +03:00 [Information] Sending file. Request path: '"/libs/jquery-validation/jquery-validate.js"'. Physical path: '"/wwwroot/libs/jquery_validation/jquery-validate.js"'
+2018-02-26 17:14:29.438 +03:00 [Information] Request finished in 2.0017ms 200 application/javascript
+2018-02-26 17:14:29.439 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/jquery-validation-unobtrusive/jquery-validate-unobtrusive.js  
+2018-02-26 17:14:29.443 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/jquery-form/jquery-form-min.js  
+2018-02-26 17:14:29.443 +03:00 [Information] Sending file. Request path: '"/libs/jquery-validation-unobtrusive/jquery-validate-unobtrusive.js"'. Physical path: '"/wwwroot/libs/jquery_validation_unobtrusive/jquery-validate-unobtrusive.js"'
+2018-02-26 17:14:29.444 +03:00 [Information] Sending file. Request path: '"/libs/jquery-form/jquery-form-min.js"'. Physical path: '"/wwwroot/libs/jquery_form/jquery-form-min.js"'
+2018-02-26 17:14:29.444 +03:00 [Information] Request finished in 4.8758ms 200 application/javascript
+2018-02-26 17:14:29.444 +03:00 [Information] Request finished in 1.6835ms 200 application/javascript
+2018-02-26 17:14:29.450 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/material/js/material-min.js  
+2018-02-26 17:14:29.451 +03:00 [Information] Sending file. Request path: '"/libs/material/js/material-min.js"'. Physical path: '"/wwwroot/libs/material/js/material-min.js"'
+2018-02-26 17:14:29.451 +03:00 [Information] Request finished in 1.5454ms 200 application/javascript
+2018-02-26 17:14:29.457 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/datatables/datatables-min.js  
+2018-02-26 17:14:29.457 +03:00 [Information] Sending file. Request path: '"/libs/datatables/datatables-min.js"'. Physical path: '"/wwwroot/libs/datatables/datatables-min.js"'
+2018-02-26 17:14:29.461 +03:00 [Information] Request finished in 4.1181ms 200 application/javascript
+2018-02-26 17:14:29.470 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/vue/vue.js  
+2018-02-26 17:14:29.471 +03:00 [Information] Sending file. Request path: '"/libs/vue/vue.js"'. Physical path: '"/wwwroot/libs/vue/vue.js"'
+2018-02-26 17:14:29.477 +03:00 [Information] Request finished in 6.9558ms 200 application/javascript
+2018-02-26 17:14:29.491 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/abp/abp-jquery.js?_v636552620624764682  
+2018-02-26 17:14:29.492 +03:00 [Information] Sending file. Request path: '"/libs/abp/abp-jquery.js"'. Physical path: '"/wwwroot/libs/abp/abp-jquery.js"'
+2018-02-26 17:14:29.492 +03:00 [Information] Request finished in 1.1777ms 200 application/javascript
+2018-02-26 17:14:29.552 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/Abp/ApplicationConfigurationScript?_v=636552620624770766  
+2018-02-26 17:14:29.555 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/Abp/ServiceProxyScript?_v=636552620624770822  
+2018-02-26 17:14:29.556 +03:00 [Information] AuthenticationScheme: "Identity.Application" was successfully authenticated.
+2018-02-26 17:14:29.557 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/abp/helpers/jquery.js  
+2018-02-26 17:14:29.557 +03:00 [Information] Executing action method "Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc)" with arguments (null) - ModelState is Valid
+2018-02-26 17:14:29.558 +03:00 [Information] Sending file. Request path: '"/abp/helpers/jquery.js"'. Physical path: '"/wwwroot/abp/helpers/jquery.js"'
+2018-02-26 17:14:29.558 +03:00 [Information] AuthenticationScheme: "Identity.Application" was successfully authenticated.
+2018-02-26 17:14:29.558 +03:00 [Information] Request finished in 1.1866ms 200 application/javascript
+2018-02-26 17:14:29.559 +03:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-02-26 17:14:29.559 +03:00 [Information] Executed action "Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc)" in 2.6299ms
+2018-02-26 17:14:29.560 +03:00 [Information] Request finished in 7.277ms 200 text/plain; charset=utf-8
+2018-02-26 17:14:29.560 +03:00 [Information] Executing action method "Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc)" with arguments (["Volo.Abp.AspNetCore.Mvc.ProxyScripting.ServiceProxyGenerationModel"]) - ModelState is Valid
+2018-02-26 17:14:29.561 +03:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-02-26 17:14:29.561 +03:00 [Information] Executed action "Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc)" in 2.6547ms
+2018-02-26 17:14:29.561 +03:00 [Information] Request finished in 6.2669ms 200 text/plain; charset=utf-8
+2018-02-26 17:14:29.575 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/abp/helpers/datatables.extensions.js  
+2018-02-26 17:14:29.575 +03:00 [Information] Sending file. Request path: '"/abp/helpers/datatables.extensions.js"'. Physical path: '"/wwwroot/abp/helpers/datatables/extensions.js"'
+2018-02-26 17:14:29.576 +03:00 [Information] Request finished in 0.9788ms 200 application/javascript
+2018-02-26 17:14:29.576 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/abp/helpers/ResourceLoader.js  
+2018-02-26 17:14:29.577 +03:00 [Information] Sending file. Request path: '"/abp/helpers/ResourceLoader.js"'. Physical path: '"/wwwroot/abp/helpers/ResourceLoader.js"'
+2018-02-26 17:14:29.577 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/abp/helpers/ModalManager.js  
+2018-02-26 17:14:29.577 +03:00 [Information] Request finished in 0.9164ms 200 application/javascript
+2018-02-26 17:14:29.578 +03:00 [Information] Sending file. Request path: '"/abp/helpers/ModalManager.js"'. Physical path: '"/wwwroot/abp/helpers/ModalManager.js"'
+2018-02-26 17:14:29.578 +03:00 [Information] Request finished in 1.1588ms 200 application/javascript
+2018-02-26 17:14:29.584 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/modules/identity/views/roles/index.js  
+2018-02-26 17:14:29.584 +03:00 [Information] Sending file. Request path: '"/modules/identity/views/roles/index.js"'. Physical path: '"/wwwroot/modules/identity/views/roles/index.js"'
+2018-02-26 17:14:29.585 +03:00 [Information] Request finished in 1.563ms 200 application/javascript
+2018-02-26 17:14:29.840 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/font-awesome/fonts/fontawesome-webfont.woff2?v=4.7.0  
+2018-02-26 17:14:29.841 +03:00 [Information] Sending file. Request path: '"/libs/font-awesome/fonts/fontawesome-webfont.woff2"'. Physical path: '"/wwwroot/libs/font_awesome/fonts/fontawesome-webfont.woff2"'
+2018-02-26 17:14:29.842 +03:00 [Information] Request finished in 2.0167ms 200 font/woff2
+2018-02-26 17:14:30.027 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/api/identity/role application/json 
+2018-02-26 17:14:30.030 +03:00 [Information] AuthenticationScheme: "Identity.Application" was successfully authenticated.
+2018-02-26 17:14:30.251 +03:00 [Information] Authorization was successful for user: "hikalkan".
+2018-02-26 17:14:30.282 +03:00 [Information] Executing action method "Volo.Abp.Identity.IdentityRoleAppService.GetListAsync (Volo.Abp.Identity.Application)" with arguments (["Volo.Abp.Identity.GetIdentityRolesInput"]) - ModelState is Valid
+2018-02-26 17:14:30.944 +03:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-02-26 17:14:30.970 +03:00 [Information] Executed action "Volo.Abp.Identity.IdentityRoleAppService.GetListAsync (Volo.Abp.Identity.Application)" in 930.801ms
+2018-02-26 17:14:30.970 +03:00 [Information] Request finished in 943.5492ms 200 application/json; charset=utf-8
+2018-02-26 17:14:32.670 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/AbpPermissions/PermissionManagementModal?providerName=Role&providerKey=admin  
+2018-02-26 17:14:32.673 +03:00 [Information] AuthenticationScheme: "Identity.Application" was successfully authenticated.
+2018-02-26 17:14:33.308 +03:00 [Information] Executing handler method "OnGetAsync" with arguments (null) - ModelState is Valid
+2018-02-26 17:14:33.324 +03:00 [Information] Authorization was successful for user: "hikalkan".
+2018-02-26 17:14:33.973 +03:00 [Information] Executed action "/AbpPermissions/PermissionManagementModal" in 700.4807ms
+2018-02-26 17:14:34.040 +03:00 [Error] An unhandled exception has occurred while executing the request
+Volo.Abp.Http.Client.AbpRemoteCallException: InternalServerError
+   at Volo.Abp.Http.Client.DynamicProxying.DynamicHttpProxyInterceptor`1.<ThrowExceptionForResponseAsync>d__19.MoveNext() in D:\Github\abp\src\Volo.Abp.Http.Client\Volo\Abp\Http\Client\DynamicProxying\DynamicHttpProxyInterceptor.cs:line 211
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Volo.Abp.Http.Client.DynamicProxying.DynamicHttpProxyInterceptor`1.<MakeRequest>d__13.MoveNext() in D:\Github\abp\src\Volo.Abp.Http.Client\Volo\Abp\Http\Client\DynamicProxying\DynamicHttpProxyInterceptor.cs:line 127
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Volo.Abp.Http.Client.DynamicProxying.DynamicHttpProxyInterceptor`1.<MakeRequestAndGetResultAsync>d__12`1.MoveNext() in D:\Github\abp\src\Volo.Abp.Http.Client\Volo\Abp\Http\Client\DynamicProxying\DynamicHttpProxyInterceptor.cs:line 93
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Volo.Abp.Threading.InternalAsyncHelper.<AwaitTaskWithPreActionAndPostActionAndFinallyAndGetResult>d__7`1.MoveNext() in D:\Github\abp\src\Volo.Abp.Core\Volo\Abp\Threading\InternalAsyncHelper.cs:line 164
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Volo.Abp.Permissions.Web.Pages.AbpPermissions.PermissionManagementModal.<OnGetAsync>d__14.MoveNext() in D:\Github\abp\src\Volo.Abp.Permissions.Web\Pages\AbpPermissions\PermissionManagementModal.cshtml.cs:line 37
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Mvc.RazorPages.Internal.ExecutorFactory.NonGenericTaskHandlerMethod.<Execute>d__2.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at Microsoft.AspNetCore.Mvc.RazorPages.Internal.PageActionInvoker.<InvokeHandlerMethodAsync>d__29.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Mvc.RazorPages.Internal.PageActionInvoker.<InvokeNextPageFilterAsync>d__31.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at Microsoft.AspNetCore.Mvc.RazorPages.Internal.PageActionInvoker.Rethrow(PageHandlerExecutedContext context)
+   at Microsoft.AspNetCore.Mvc.RazorPages.Internal.PageActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.RazorPages.Internal.PageActionInvoker.<InvokeInnerFilterAsync>d__22.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.<InvokeNextExceptionFilterAsync>d__23.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.Rethrow(ExceptionContext context)
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.<InvokeNextResourceFilter>d__22.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.Rethrow(ResourceExecutedContext context)
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.<InvokeFilterPipelineAsync>d__17.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.<InvokeAsync>d__15.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Builder.RouterMiddleware.<Invoke>d__4.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.<Invoke>d__6.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.<Invoke>d__7.MoveNext()
+2018-02-26 17:14:34.163 +03:00 [Information] Request finished in 1492.9669ms 500 text/html; charset=utf-8
+2018-02-26 17:16:28.572 +03:00 [Information] Loaded modules:
+2018-02-26 17:16:28.616 +03:00 [Information] - Volo.Abp.Castle.AbpCastleCoreModule
+2018-02-26 17:16:28.616 +03:00 [Information] - Volo.Abp.Autofac.AbpAutofacModule
+2018-02-26 17:16:28.616 +03:00 [Information] - Volo.Abp.Http.AbpHttpAbstractionsModule
+2018-02-26 17:16:28.616 +03:00 [Information] - Volo.Abp.Timing.AbpTimingModule
+2018-02-26 17:16:28.616 +03:00 [Information] - Volo.Abp.Json.AbpJsonModule
+2018-02-26 17:16:28.616 +03:00 [Information] - Volo.Abp.Http.AbpHttpModule
+2018-02-26 17:16:28.617 +03:00 [Information] - Volo.Abp.Http.Client.AbpHttpClientModule
+2018-02-26 17:16:28.617 +03:00 [Information] - Volo.Abp.Security.AbpSecurityModule
+2018-02-26 17:16:28.617 +03:00 [Information] - Volo.Abp.Authorization.AbpAuthorizationModule
+2018-02-26 17:16:28.617 +03:00 [Information] - Volo.Abp.Guids.AbpGuidsModule
+2018-02-26 17:16:28.617 +03:00 [Information] - Volo.Abp.Data.AbpDataModule
+2018-02-26 17:16:28.617 +03:00 [Information] - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2018-02-26 17:16:28.617 +03:00 [Information] - Volo.Abp.Settings.AbpSettingsModule
+2018-02-26 17:16:28.617 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyAbstractionsModule
+2018-02-26 17:16:28.617 +03:00 [Information] - Volo.Abp.Threading.AbpThreadingModule
+2018-02-26 17:16:28.617 +03:00 [Information] - Volo.Abp.EventBus.AbpEventBusModule
+2018-02-26 17:16:28.617 +03:00 [Information] - Volo.Abp.Validation.AbpValidationModule
+2018-02-26 17:16:28.617 +03:00 [Information] - Volo.Abp.AbpDddModule
+2018-02-26 17:16:28.617 +03:00 [Information] - Volo.Abp.Permissions.AbpPermissionsDomainSharedModule
+2018-02-26 17:16:28.617 +03:00 [Information] - Volo.Abp.Serialization.AbpSerializationModule
+2018-02-26 17:16:28.618 +03:00 [Information] - Volo.Abp.Caching.AbpCachingModule
+2018-02-26 17:16:28.618 +03:00 [Information] - Volo.Abp.Permissions.AbpPermissionsDomainModule
+2018-02-26 17:16:28.618 +03:00 [Information] - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2018-02-26 17:16:28.618 +03:00 [Information] - Volo.Abp.Localization.AbpLocalizationModule
+2018-02-26 17:16:28.618 +03:00 [Information] - Volo.Abp.Session.AbpSessionModule
+2018-02-26 17:16:28.618 +03:00 [Information] - Volo.Abp.ApiVersioning.AbpApiVersioningAbstractionsModule
+2018-02-26 17:16:28.618 +03:00 [Information] - Volo.Abp.AbpCommonModule
+2018-02-26 17:16:28.618 +03:00 [Information] - Volo.Abp.EntityFrameworkCore.AbpEntityFrameworkCoreModule
+2018-02-26 17:16:28.618 +03:00 [Information] - Volo.Abp.Permissions.EntityFrameworkCore.AbpPermissionsEntityFrameworkCoreModule
+2018-02-26 17:16:28.618 +03:00 [Information] - Volo.Abp.Identity.AbpIdentityDomainSharedModule
+2018-02-26 17:16:28.618 +03:00 [Information] - Volo.Abp.Identity.AbpIdentityDomainModule
+2018-02-26 17:16:28.618 +03:00 [Information] - Volo.Abp.Identity.AbpIdentityApplicationContractsModule
+2018-02-26 17:16:28.618 +03:00 [Information] - Volo.Abp.AutoMapper.AbpAutoMapperModule
+2018-02-26 17:16:28.618 +03:00 [Information] - Volo.Abp.Identity.AbpIdentityApplicationModule
+2018-02-26 17:16:28.619 +03:00 [Information] - Volo.Abp.AspNetCore.AbpAspNetCoreModule
+2018-02-26 17:16:28.619 +03:00 [Information] - Volo.Abp.Ui.AbpUiModule
+2018-02-26 17:16:28.619 +03:00 [Information] - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcModule
+2018-02-26 17:16:28.619 +03:00 [Information] - Volo.Abp.Identity.AbpIdentityHttpApiModule
+2018-02-26 17:16:28.619 +03:00 [Information] - Volo.Abp.Ui.Navigation.AbpUiNavigationModule
+2018-02-26 17:16:28.619 +03:00 [Information] - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcUiModule
+2018-02-26 17:16:28.619 +03:00 [Information] - Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.AbpAspNetCoreMvcUiBootstrapModule
+2018-02-26 17:16:28.619 +03:00 [Information] - Volo.Abp.Permissions.AbpPermissionsApplicationContractsModule
+2018-02-26 17:16:28.619 +03:00 [Information] - Volo.Abp.Permissions.Web.AbpPermissionsWebModule
+2018-02-26 17:16:28.619 +03:00 [Information] - Volo.Abp.Identity.Web.AbpIdentityWebModule
+2018-02-26 17:16:28.619 +03:00 [Information] - Volo.Abp.Identity.EntityFrameworkCore.AbpIdentityEntityFrameworkCoreModule
+2018-02-26 17:16:28.619 +03:00 [Information] - Volo.Abp.Account.AbpAccountApplicationContractsModule
+2018-02-26 17:16:28.619 +03:00 [Information] - Volo.Abp.Account.Web.AbpAccountWebModule
+2018-02-26 17:16:28.619 +03:00 [Information] - MicroserviceDemo.Web.MicroservicesDemoWebModule
+2018-02-26 17:16:29.276 +03:00 [Information] Initialized all modules.
+2018-02-26 17:16:29.596 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/  
+2018-02-26 17:16:29.793 +03:00 [Information] AuthenticationScheme: "Identity.Application" was successfully authenticated.
+2018-02-26 17:16:33.033 +03:00 [Information] Executing handler method "OnGet" with arguments (null) - ModelState is Valid
+2018-02-26 17:16:34.203 +03:00 [Information] Executed action "/Index" in 1177.7055ms
+2018-02-26 17:16:34.208 +03:00 [Information] Request finished in 4626.4097ms 200 text/html; charset=utf-8
+2018-02-26 17:16:34.239 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/font-awesome/css/font-awesome-min.css  
+2018-02-26 17:16:34.244 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/material/css/material-min.css  
+2018-02-26 17:16:34.244 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/datatables/datatables.css  
+2018-02-26 17:16:34.245 +03:00 [Information] Sending file. Request path: '"/libs/font-awesome/css/font-awesome-min.css"'. Physical path: '"/wwwroot/libs/font_awesome/css/font-awesome-min.css"'
+2018-02-26 17:16:34.245 +03:00 [Information] Sending file. Request path: '"/libs/datatables/datatables.css"'. Physical path: '"/wwwroot/libs/datatables/datatables.css"'
+2018-02-26 17:16:34.245 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/styles/libs/datatables.css  
+2018-02-26 17:16:34.245 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/views/shared/_AppLayout.css  
+2018-02-26 17:16:34.246 +03:00 [Information] Sending file. Request path: '"/styles/libs/datatables.css"'. Physical path: '"/wwwroot/styles/libs/datatables.css"'
+2018-02-26 17:16:34.245 +03:00 [Information] Sending file. Request path: '"/libs/material/css/material-min.css"'. Physical path: '"/wwwroot/libs/material/css/material-min.css"'
+2018-02-26 17:16:34.246 +03:00 [Information] Sending file. Request path: '"/views/shared/_AppLayout.css"'. Physical path: '"/wwwroot/views/shared/_AppLayout.css"'
+2018-02-26 17:16:34.252 +03:00 [Information] Request finished in 6.7745ms 200 text/css
+2018-02-26 17:16:34.252 +03:00 [Information] Request finished in 7.9172ms 200 text/css
+2018-02-26 17:16:34.252 +03:00 [Information] Request finished in 7.1342ms 200 text/css
+2018-02-26 17:16:34.257 +03:00 [Information] Request finished in 18.8582ms 200 text/css
+2018-02-26 17:16:34.263 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/abp/abp.js?_v636552621935998713  
+2018-02-26 17:16:34.265 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/jquery/jquery-3-1-1-min.js  
+2018-02-26 17:16:34.266 +03:00 [Information] Sending file. Request path: '"/libs/abp/abp.js"'. Physical path: '"/wwwroot/libs/abp/abp.js"'
+2018-02-26 17:16:34.266 +03:00 [Information] Request finished in 3.3359ms 200 application/javascript
+2018-02-26 17:16:34.271 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/jquery-validation/jquery-validate.js  
+2018-02-26 17:16:34.272 +03:00 [Information] Sending file. Request path: '"/libs/jquery-validation/jquery-validate.js"'. Physical path: '"/wwwroot/libs/jquery_validation/jquery-validate.js"'
+2018-02-26 17:16:34.273 +03:00 [Information] Request finished in 2.2369ms 200 application/javascript
+2018-02-26 17:16:34.274 +03:00 [Information] Sending file. Request path: '"/libs/jquery/jquery-3-1-1-min.js"'. Physical path: '"/wwwroot/libs/jquery/jquery-3-1-1-min.js"'
+2018-02-26 17:16:34.274 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/jquery-validation-unobtrusive/jquery-validate-unobtrusive.js  
+2018-02-26 17:16:34.275 +03:00 [Information] Sending file. Request path: '"/libs/jquery-validation-unobtrusive/jquery-validate-unobtrusive.js"'. Physical path: '"/wwwroot/libs/jquery_validation_unobtrusive/jquery-validate-unobtrusive.js"'
+2018-02-26 17:16:34.276 +03:00 [Information] Request finished in 1.0536ms 200 application/javascript
+2018-02-26 17:16:34.278 +03:00 [Information] Request finished in 34.0614ms 200 text/css
+2018-02-26 17:16:34.278 +03:00 [Information] Request finished in 15.4889ms 200 application/javascript
+2018-02-26 17:16:34.286 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/bootstrap/js/bootstrap-bundle-min.js  
+2018-02-26 17:16:34.287 +03:00 [Information] Sending file. Request path: '"/libs/bootstrap/js/bootstrap-bundle-min.js"'. Physical path: '"/wwwroot/libs/bootstrap/js/bootstrap-bundle-min.js"'
+2018-02-26 17:16:34.287 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/jquery-form/jquery-form-min.js  
+2018-02-26 17:16:34.287 +03:00 [Information] Sending file. Request path: '"/libs/jquery-form/jquery-form-min.js"'. Physical path: '"/wwwroot/libs/jquery_form/jquery-form-min.js"'
+2018-02-26 17:16:34.288 +03:00 [Information] Request finished in 5.7127ms 200 application/javascript
+2018-02-26 17:16:34.288 +03:00 [Information] Request finished in 3.2457ms 200 application/javascript
+2018-02-26 17:16:34.299 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/datatables/datatables-min.js  
+2018-02-26 17:16:34.299 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/material/js/material-min.js  
+2018-02-26 17:16:34.300 +03:00 [Information] Sending file. Request path: '"/libs/material/js/material-min.js"'. Physical path: '"/wwwroot/libs/material/js/material-min.js"'
+2018-02-26 17:16:34.300 +03:00 [Information] Sending file. Request path: '"/libs/datatables/datatables-min.js"'. Physical path: '"/wwwroot/libs/datatables/datatables-min.js"'
+2018-02-26 17:16:34.301 +03:00 [Information] Request finished in 2.2929ms 200 application/javascript
+2018-02-26 17:16:34.304 +03:00 [Information] Request finished in 4.3144ms 200 application/javascript
+2018-02-26 17:16:34.305 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/vue/vue.js  
+2018-02-26 17:16:34.308 +03:00 [Information] Sending file. Request path: '"/libs/vue/vue.js"'. Physical path: '"/wwwroot/libs/vue/vue.js"'
+2018-02-26 17:16:34.310 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/abp/abp-jquery.js?_v636552621936030804  
+2018-02-26 17:16:34.311 +03:00 [Information] Sending file. Request path: '"/libs/abp/abp-jquery.js"'. Physical path: '"/wwwroot/libs/abp/abp-jquery.js"'
+2018-02-26 17:16:34.311 +03:00 [Information] Request finished in 1.4676ms 200 application/javascript
+2018-02-26 17:16:34.314 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/Abp/ApplicationConfigurationScript?_v=636552621936036589  
+2018-02-26 17:16:34.317 +03:00 [Information] Request finished in 12.3398ms 200 application/javascript
+2018-02-26 17:16:34.326 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/Abp/ServiceProxyScript?_v=636552621936036628  
+2018-02-26 17:16:34.326 +03:00 [Information] AuthenticationScheme: "Identity.Application" was successfully authenticated.
+2018-02-26 17:16:34.330 +03:00 [Information] AuthenticationScheme: "Identity.Application" was successfully authenticated.
+2018-02-26 17:16:34.415 +03:00 [Information] Executing action method "Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc)" with arguments (null) - ModelState is Valid
+2018-02-26 17:16:34.530 +03:00 [Information] Executing action method "Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc)" with arguments (["Volo.Abp.AspNetCore.Mvc.ProxyScripting.ServiceProxyGenerationModel"]) - ModelState is Valid
+2018-02-26 17:16:34.779 +03:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-02-26 17:16:34.781 +03:00 [Information] Executed action "Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc)" in 427.9558ms
+2018-02-26 17:16:34.781 +03:00 [Information] Request finished in 467.8485ms 200 text/plain; charset=utf-8
+2018-02-26 17:16:34.847 +03:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-02-26 17:16:34.847 +03:00 [Information] Executed action "Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc)" in 407.3639ms
+2018-02-26 17:16:34.848 +03:00 [Information] Request finished in 523.6103ms 200 text/plain; charset=utf-8
+2018-02-26 17:16:37.069 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/Identity/Users  
+2018-02-26 17:16:37.072 +03:00 [Information] AuthenticationScheme: "Identity.Application" was successfully authenticated.
+2018-02-26 17:16:37.370 +03:00 [Information] Executing handler method "OnGet" with arguments (null) - ModelState is Valid
+2018-02-26 17:16:37.415 +03:00 [Information] Executed action "/Identity/Users/Index" in 52.4087ms
+2018-02-26 17:16:37.415 +03:00 [Information] Request finished in 346.3063ms 200 text/html; charset=utf-8
+2018-02-26 17:16:37.455 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/font-awesome/css/font-awesome-min.css  
+2018-02-26 17:16:37.455 +03:00 [Information] Sending file. Request path: '"/libs/font-awesome/css/font-awesome-min.css"'. Physical path: '"/wwwroot/libs/font_awesome/css/font-awesome-min.css"'
+2018-02-26 17:16:37.456 +03:00 [Information] Request finished in 0.9348ms 200 text/css
+2018-02-26 17:16:37.461 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/material/css/material-min.css  
+2018-02-26 17:16:37.462 +03:00 [Information] Sending file. Request path: '"/libs/material/css/material-min.css"'. Physical path: '"/wwwroot/libs/material/css/material-min.css"'
+2018-02-26 17:16:37.463 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/datatables/datatables.css  
+2018-02-26 17:16:37.466 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/styles/libs/datatables.css  
+2018-02-26 17:16:37.467 +03:00 [Information] Request finished in 5.318ms 200 text/css
+2018-02-26 17:16:37.467 +03:00 [Information] Sending file. Request path: '"/libs/datatables/datatables.css"'. Physical path: '"/wwwroot/libs/datatables/datatables.css"'
+2018-02-26 17:16:37.467 +03:00 [Information] Sending file. Request path: '"/styles/libs/datatables.css"'. Physical path: '"/wwwroot/styles/libs/datatables.css"'
+2018-02-26 17:16:37.467 +03:00 [Information] Request finished in 1.1221ms 200 text/css
+2018-02-26 17:16:37.468 +03:00 [Information] Request finished in 4.9045ms 200 text/css
+2018-02-26 17:16:37.473 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/views/shared/_AppLayout.css  
+2018-02-26 17:16:37.473 +03:00 [Information] Sending file. Request path: '"/views/shared/_AppLayout.css"'. Physical path: '"/wwwroot/views/shared/_AppLayout.css"'
+2018-02-26 17:16:37.474 +03:00 [Information] Request finished in 1.424ms 200 text/css
+2018-02-26 17:16:37.477 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/modules/identity/views/users/index.css  
+2018-02-26 17:16:37.479 +03:00 [Information] Sending file. Request path: '"/modules/identity/views/users/index.css"'. Physical path: '"/wwwroot/modules/identity/views/users/index.css"'
+2018-02-26 17:16:37.481 +03:00 [Information] Request finished in 4.6723ms 200 text/css
+2018-02-26 17:16:37.484 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/jquery/jquery-3-1-1-min.js  
+2018-02-26 17:16:37.485 +03:00 [Information] Sending file. Request path: '"/libs/jquery/jquery-3-1-1-min.js"'. Physical path: '"/wwwroot/libs/jquery/jquery-3-1-1-min.js"'
+2018-02-26 17:16:37.485 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/abp/abp.js?_v636552621935998713  
+2018-02-26 17:16:37.486 +03:00 [Information] Request finished in 2.5593ms 200 application/javascript
+2018-02-26 17:16:37.490 +03:00 [Information] Sending file. Request path: '"/libs/abp/abp.js"'. Physical path: '"/wwwroot/libs/abp/abp.js"'
+2018-02-26 17:16:37.492 +03:00 [Information] Request finished in 6.9943ms 200 application/javascript
+2018-02-26 17:16:37.503 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/bootstrap/js/bootstrap-bundle-min.js  
+2018-02-26 17:16:37.504 +03:00 [Information] Sending file. Request path: '"/libs/bootstrap/js/bootstrap-bundle-min.js"'. Physical path: '"/wwwroot/libs/bootstrap/js/bootstrap-bundle-min.js"'
+2018-02-26 17:16:37.505 +03:00 [Information] Request finished in 4.8134ms 200 application/javascript
+2018-02-26 17:16:37.519 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/jquery-validation-unobtrusive/jquery-validate-unobtrusive.js  
+2018-02-26 17:16:37.519 +03:00 [Information] Sending file. Request path: '"/libs/jquery-validation-unobtrusive/jquery-validate-unobtrusive.js"'. Physical path: '"/wwwroot/libs/jquery_validation_unobtrusive/jquery-validate-unobtrusive.js"'
+2018-02-26 17:16:37.520 +03:00 [Information] Request finished in 1.155ms 200 application/javascript
+2018-02-26 17:16:37.521 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/jquery-validation/jquery-validate.js  
+2018-02-26 17:16:37.521 +03:00 [Information] Sending file. Request path: '"/libs/jquery-validation/jquery-validate.js"'. Physical path: '"/wwwroot/libs/jquery_validation/jquery-validate.js"'
+2018-02-26 17:16:37.522 +03:00 [Information] Request finished in 1.8516ms 200 application/javascript
+2018-02-26 17:16:37.533 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/material/js/material-min.js  
+2018-02-26 17:16:37.533 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/jquery-form/jquery-form-min.js  
+2018-02-26 17:16:37.533 +03:00 [Information] Sending file. Request path: '"/libs/jquery-form/jquery-form-min.js"'. Physical path: '"/wwwroot/libs/jquery_form/jquery-form-min.js"'
+2018-02-26 17:16:37.533 +03:00 [Information] Sending file. Request path: '"/libs/material/js/material-min.js"'. Physical path: '"/wwwroot/libs/material/js/material-min.js"'
+2018-02-26 17:16:37.534 +03:00 [Information] Request finished in 0.768ms 200 application/javascript
+2018-02-26 17:16:37.534 +03:00 [Information] Request finished in 1.0374ms 200 application/javascript
+2018-02-26 17:16:37.536 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/datatables/datatables-min.js  
+2018-02-26 17:16:37.537 +03:00 [Information] Sending file. Request path: '"/libs/datatables/datatables-min.js"'. Physical path: '"/wwwroot/libs/datatables/datatables-min.js"'
+2018-02-26 17:16:37.541 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/abp/abp-jquery.js?_v636552621936030804  
+2018-02-26 17:16:37.541 +03:00 [Information] Request finished in 9.3583ms 200 application/javascript
+2018-02-26 17:16:37.542 +03:00 [Information] Sending file. Request path: '"/libs/abp/abp-jquery.js"'. Physical path: '"/wwwroot/libs/abp/abp-jquery.js"'
+2018-02-26 17:16:37.542 +03:00 [Information] Request finished in 0.9335ms 200 application/javascript
+2018-02-26 17:16:37.543 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/vue/vue.js  
+2018-02-26 17:16:37.544 +03:00 [Information] Sending file. Request path: '"/libs/vue/vue.js"'. Physical path: '"/wwwroot/libs/vue/vue.js"'
+2018-02-26 17:16:37.548 +03:00 [Information] Request finished in 6.9781ms 200 application/javascript
+2018-02-26 17:16:37.549 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/Abp/ApplicationConfigurationScript?_v=636552621936036589  
+2018-02-26 17:16:37.552 +03:00 [Information] AuthenticationScheme: "Identity.Application" was successfully authenticated.
+2018-02-26 17:16:37.555 +03:00 [Information] Executing action method "Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc)" with arguments (null) - ModelState is Valid
+2018-02-26 17:16:37.555 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/abp/helpers/jquery.js  
+2018-02-26 17:16:37.555 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/Abp/ServiceProxyScript?_v=636552621936036628  
+2018-02-26 17:16:37.555 +03:00 [Information] Sending file. Request path: '"/abp/helpers/jquery.js"'. Physical path: '"/wwwroot/abp/helpers/jquery.js"'
+2018-02-26 17:16:37.555 +03:00 [Information] Request finished in 0.8368ms 200 application/javascript
+2018-02-26 17:16:37.556 +03:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-02-26 17:16:37.556 +03:00 [Information] Executed action "Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc)" in 3.0528ms
+2018-02-26 17:16:37.556 +03:00 [Information] Request finished in 8.4064ms 200 text/plain; charset=utf-8
+2018-02-26 17:16:37.560 +03:00 [Information] AuthenticationScheme: "Identity.Application" was successfully authenticated.
+2018-02-26 17:16:37.562 +03:00 [Information] Executing action method "Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc)" with arguments (["Volo.Abp.AspNetCore.Mvc.ProxyScripting.ServiceProxyGenerationModel"]) - ModelState is Valid
+2018-02-26 17:16:37.563 +03:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-02-26 17:16:37.563 +03:00 [Information] Executed action "Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc)" in 2.5435ms
+2018-02-26 17:16:37.564 +03:00 [Information] Request finished in 8.7156ms 200 text/plain; charset=utf-8
+2018-02-26 17:16:37.598 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/abp/helpers/datatables.extensions.js  
+2018-02-26 17:16:37.598 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/abp/helpers/ResourceLoader.js  
+2018-02-26 17:16:37.599 +03:00 [Information] Sending file. Request path: '"/abp/helpers/datatables.extensions.js"'. Physical path: '"/wwwroot/abp/helpers/datatables/extensions.js"'
+2018-02-26 17:16:37.599 +03:00 [Information] Request finished in 1.1772ms 200 application/javascript
+2018-02-26 17:16:37.599 +03:00 [Information] Sending file. Request path: '"/abp/helpers/ResourceLoader.js"'. Physical path: '"/wwwroot/abp/helpers/ResourceLoader.js"'
+2018-02-26 17:16:37.600 +03:00 [Information] Request finished in 1.7759ms 200 application/javascript
+2018-02-26 17:16:37.603 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/abp/helpers/ModalManager.js  
+2018-02-26 17:16:37.603 +03:00 [Information] Sending file. Request path: '"/abp/helpers/ModalManager.js"'. Physical path: '"/wwwroot/abp/helpers/ModalManager.js"'
+2018-02-26 17:16:37.604 +03:00 [Information] Request finished in 1.1503ms 200 application/javascript
+2018-02-26 17:16:37.612 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/modules/identity/views/users/index.js  
+2018-02-26 17:16:37.613 +03:00 [Information] Sending file. Request path: '"/modules/identity/views/users/index.js"'. Physical path: '"/wwwroot/modules/identity/views/users/index.js"'
+2018-02-26 17:16:37.613 +03:00 [Information] Request finished in 1.2978ms 200 application/javascript
+2018-02-26 17:16:37.809 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/font-awesome/fonts/fontawesome-webfont.woff2?v=4.7.0  
+2018-02-26 17:16:37.810 +03:00 [Information] Sending file. Request path: '"/libs/font-awesome/fonts/fontawesome-webfont.woff2"'. Physical path: '"/wwwroot/libs/font_awesome/fonts/fontawesome-webfont.woff2"'
+2018-02-26 17:16:37.811 +03:00 [Information] Request finished in 2.4148ms 200 font/woff2
+2018-02-26 17:16:37.951 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/api/identity/user application/json 
+2018-02-26 17:16:37.954 +03:00 [Information] AuthenticationScheme: "Identity.Application" was successfully authenticated.
+2018-02-26 17:16:38.799 +03:00 [Information] Authorization was successful for user: "hikalkan".
+2018-02-26 17:16:38.815 +03:00 [Information] Executing action method "Volo.Abp.Identity.IdentityUserAppService.GetListAsync (Volo.Abp.Identity.Application)" with arguments (["Volo.Abp.Identity.GetIdentityUsersInput"]) - ModelState is Valid
+2018-02-26 17:16:39.513 +03:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-02-26 17:16:39.544 +03:00 [Information] Executed action "Volo.Abp.Identity.IdentityUserAppService.GetListAsync (Volo.Abp.Identity.Application)" in 1580.7559ms
+2018-02-26 17:16:39.544 +03:00 [Information] Request finished in 1593.2548ms 200 application/json; charset=utf-8
+2018-02-26 17:16:40.242 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/Identity/Roles  
+2018-02-26 17:16:40.245 +03:00 [Information] AuthenticationScheme: "Identity.Application" was successfully authenticated.
+2018-02-26 17:16:40.454 +03:00 [Information] Executing handler method "OnGet" with arguments (null) - ModelState is Valid
+2018-02-26 17:16:40.480 +03:00 [Information] Executed action "/Identity/Roles/Index" in 27.0606ms
+2018-02-26 17:16:40.481 +03:00 [Information] Request finished in 239.1463ms 200 text/html; charset=utf-8
+2018-02-26 17:16:40.522 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/font-awesome/css/font-awesome-min.css  
+2018-02-26 17:16:40.522 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/material/css/material-min.css  
+2018-02-26 17:16:40.522 +03:00 [Information] Sending file. Request path: '"/libs/font-awesome/css/font-awesome-min.css"'. Physical path: '"/wwwroot/libs/font_awesome/css/font-awesome-min.css"'
+2018-02-26 17:16:40.522 +03:00 [Information] Request finished in 1.0323ms 200 text/css
+2018-02-26 17:16:40.523 +03:00 [Information] Sending file. Request path: '"/libs/material/css/material-min.css"'. Physical path: '"/wwwroot/libs/material/css/material-min.css"'
+2018-02-26 17:16:40.523 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/datatables/datatables.css  
+2018-02-26 17:16:40.523 +03:00 [Information] Sending file. Request path: '"/libs/datatables/datatables.css"'. Physical path: '"/wwwroot/libs/datatables/datatables.css"'
+2018-02-26 17:16:40.524 +03:00 [Information] Request finished in 0.8065ms 200 text/css
+2018-02-26 17:16:40.525 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/styles/libs/datatables.css  
+2018-02-26 17:16:40.525 +03:00 [Information] Sending file. Request path: '"/styles/libs/datatables.css"'. Physical path: '"/wwwroot/styles/libs/datatables.css"'
+2018-02-26 17:16:40.526 +03:00 [Information] Request finished in 0.9318ms 200 text/css
+2018-02-26 17:16:40.526 +03:00 [Information] Request finished in 4.2327ms 200 text/css
+2018-02-26 17:16:40.542 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/views/shared/_AppLayout.css  
+2018-02-26 17:16:40.543 +03:00 [Information] Sending file. Request path: '"/views/shared/_AppLayout.css"'. Physical path: '"/wwwroot/views/shared/_AppLayout.css"'
+2018-02-26 17:16:40.545 +03:00 [Information] Request finished in 3.2346ms 200 text/css
+2018-02-26 17:16:40.546 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/modules/identity/views/roles/index.css  
+2018-02-26 17:16:40.547 +03:00 [Information] Sending file. Request path: '"/modules/identity/views/roles/index.css"'. Physical path: '"/wwwroot/modules/identity/views/roles/index.css"'
+2018-02-26 17:16:40.548 +03:00 [Information] Request finished in 1.5223ms 200 text/css
+2018-02-26 17:16:40.549 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/abp/abp.js?_v636552621935998713  
+2018-02-26 17:16:40.550 +03:00 [Information] Sending file. Request path: '"/libs/abp/abp.js"'. Physical path: '"/wwwroot/libs/abp/abp.js"'
+2018-02-26 17:16:40.551 +03:00 [Information] Request finished in 2.3772ms 200 application/javascript
+2018-02-26 17:16:40.552 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/jquery/jquery-3-1-1-min.js  
+2018-02-26 17:16:40.554 +03:00 [Information] Sending file. Request path: '"/libs/jquery/jquery-3-1-1-min.js"'. Physical path: '"/wwwroot/libs/jquery/jquery-3-1-1-min.js"'
+2018-02-26 17:16:40.555 +03:00 [Information] Request finished in 4.8254ms 200 application/javascript
+2018-02-26 17:16:40.556 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/bootstrap/js/bootstrap-bundle-min.js  
+2018-02-26 17:16:40.557 +03:00 [Information] Sending file. Request path: '"/libs/bootstrap/js/bootstrap-bundle-min.js"'. Physical path: '"/wwwroot/libs/bootstrap/js/bootstrap-bundle-min.js"'
+2018-02-26 17:16:40.558 +03:00 [Information] Request finished in 2.2886ms 200 application/javascript
+2018-02-26 17:16:40.562 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/jquery-validation/jquery-validate.js  
+2018-02-26 17:16:40.563 +03:00 [Information] Sending file. Request path: '"/libs/jquery-validation/jquery-validate.js"'. Physical path: '"/wwwroot/libs/jquery_validation/jquery-validate.js"'
+2018-02-26 17:16:40.563 +03:00 [Information] Request finished in 0.9985ms 200 application/javascript
+2018-02-26 17:16:40.569 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/jquery-validation-unobtrusive/jquery-validate-unobtrusive.js  
+2018-02-26 17:16:40.573 +03:00 [Information] Sending file. Request path: '"/libs/jquery-validation-unobtrusive/jquery-validate-unobtrusive.js"'. Physical path: '"/wwwroot/libs/jquery_validation_unobtrusive/jquery-validate-unobtrusive.js"'
+2018-02-26 17:16:40.574 +03:00 [Information] Request finished in 4.9079ms 200 application/javascript
+2018-02-26 17:16:40.591 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/material/js/material-min.js  
+2018-02-26 17:16:40.592 +03:00 [Information] Sending file. Request path: '"/libs/material/js/material-min.js"'. Physical path: '"/wwwroot/libs/material/js/material-min.js"'
+2018-02-26 17:16:40.592 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/jquery-form/jquery-form-min.js  
+2018-02-26 17:16:40.592 +03:00 [Information] Request finished in 1.1255ms 200 application/javascript
+2018-02-26 17:16:40.593 +03:00 [Information] Sending file. Request path: '"/libs/jquery-form/jquery-form-min.js"'. Physical path: '"/wwwroot/libs/jquery_form/jquery-form-min.js"'
+2018-02-26 17:16:40.594 +03:00 [Information] Request finished in 2.1026ms 200 application/javascript
+2018-02-26 17:16:40.658 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/datatables/datatables-min.js  
+2018-02-26 17:16:40.659 +03:00 [Information] Sending file. Request path: '"/libs/datatables/datatables-min.js"'. Physical path: '"/wwwroot/libs/datatables/datatables-min.js"'
+2018-02-26 17:16:40.660 +03:00 [Information] Request finished in 2.1535ms 200 application/javascript
+2018-02-26 17:16:40.663 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/vue/vue.js  
+2018-02-26 17:16:40.664 +03:00 [Information] Sending file. Request path: '"/libs/vue/vue.js"'. Physical path: '"/wwwroot/libs/vue/vue.js"'
+2018-02-26 17:16:40.667 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/abp/abp-jquery.js?_v636552621936030804  
+2018-02-26 17:16:40.667 +03:00 [Information] Sending file. Request path: '"/libs/abp/abp-jquery.js"'. Physical path: '"/wwwroot/libs/abp/abp-jquery.js"'
+2018-02-26 17:16:40.668 +03:00 [Information] Request finished in 1.1777ms 200 application/javascript
+2018-02-26 17:16:40.668 +03:00 [Information] Request finished in 5.1029ms 200 application/javascript
+2018-02-26 17:16:40.670 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/Abp/ApplicationConfigurationScript?_v=636552621936036589  
+2018-02-26 17:16:40.676 +03:00 [Information] AuthenticationScheme: "Identity.Application" was successfully authenticated.
+2018-02-26 17:16:40.676 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/Abp/ServiceProxyScript?_v=636552621936036628  
+2018-02-26 17:16:40.677 +03:00 [Information] Executing action method "Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc)" with arguments (null) - ModelState is Valid
+2018-02-26 17:16:40.678 +03:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-02-26 17:16:40.679 +03:00 [Information] Executed action "Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc)" in 2.0304ms
+2018-02-26 17:16:40.680 +03:00 [Information] AuthenticationScheme: "Identity.Application" was successfully authenticated.
+2018-02-26 17:16:40.680 +03:00 [Information] Request finished in 9.5601ms 200 text/plain; charset=utf-8
+2018-02-26 17:16:40.681 +03:00 [Information] Executing action method "Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc)" with arguments (["Volo.Abp.AspNetCore.Mvc.ProxyScripting.ServiceProxyGenerationModel"]) - ModelState is Valid
+2018-02-26 17:16:40.681 +03:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-02-26 17:16:40.682 +03:00 [Information] Executed action "Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc)" in 1.5677ms
+2018-02-26 17:16:40.682 +03:00 [Information] Request finished in 5.9419ms 200 text/plain; charset=utf-8
+2018-02-26 17:16:40.687 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/abp/helpers/ResourceLoader.js  
+2018-02-26 17:16:40.687 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/abp/helpers/jquery.js  
+2018-02-26 17:16:40.687 +03:00 [Information] Sending file. Request path: '"/abp/helpers/ResourceLoader.js"'. Physical path: '"/wwwroot/abp/helpers/ResourceLoader.js"'
+2018-02-26 17:16:40.688 +03:00 [Information] Sending file. Request path: '"/abp/helpers/jquery.js"'. Physical path: '"/wwwroot/abp/helpers/jquery.js"'
+2018-02-26 17:16:40.688 +03:00 [Information] Request finished in 1.1272ms 200 application/javascript
+2018-02-26 17:16:40.688 +03:00 [Information] Request finished in 1.1554ms 200 application/javascript
+2018-02-26 17:16:40.688 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/abp/helpers/datatables.extensions.js  
+2018-02-26 17:16:40.689 +03:00 [Information] Sending file. Request path: '"/abp/helpers/datatables.extensions.js"'. Physical path: '"/wwwroot/abp/helpers/datatables/extensions.js"'
+2018-02-26 17:16:40.689 +03:00 [Information] Request finished in 0.8351ms 200 application/javascript
+2018-02-26 17:16:40.690 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/abp/helpers/ModalManager.js  
+2018-02-26 17:16:40.690 +03:00 [Information] Sending file. Request path: '"/abp/helpers/ModalManager.js"'. Physical path: '"/wwwroot/abp/helpers/ModalManager.js"'
+2018-02-26 17:16:40.691 +03:00 [Information] Request finished in 1.1272ms 200 application/javascript
+2018-02-26 17:16:40.701 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/modules/identity/views/roles/index.js  
+2018-02-26 17:16:40.702 +03:00 [Information] Sending file. Request path: '"/modules/identity/views/roles/index.js"'. Physical path: '"/wwwroot/modules/identity/views/roles/index.js"'
+2018-02-26 17:16:40.702 +03:00 [Information] Request finished in 1.7785ms 200 application/javascript
+2018-02-26 17:16:41.098 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/font-awesome/fonts/fontawesome-webfont.woff2?v=4.7.0  
+2018-02-26 17:16:41.099 +03:00 [Information] Sending file. Request path: '"/libs/font-awesome/fonts/fontawesome-webfont.woff2"'. Physical path: '"/wwwroot/libs/font_awesome/fonts/fontawesome-webfont.woff2"'
+2018-02-26 17:16:41.101 +03:00 [Information] Request finished in 2.9451ms 200 font/woff2
+2018-02-26 17:16:41.342 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/api/identity/role application/json 
+2018-02-26 17:16:41.345 +03:00 [Information] AuthenticationScheme: "Identity.Application" was successfully authenticated.
+2018-02-26 17:16:41.360 +03:00 [Information] Authorization was successful for user: "hikalkan".
+2018-02-26 17:16:41.368 +03:00 [Information] Executing action method "Volo.Abp.Identity.IdentityRoleAppService.GetListAsync (Volo.Abp.Identity.Application)" with arguments (["Volo.Abp.Identity.GetIdentityRolesInput"]) - ModelState is Valid
+2018-02-26 17:16:41.450 +03:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-02-26 17:16:41.458 +03:00 [Information] Executed action "Volo.Abp.Identity.IdentityRoleAppService.GetListAsync (Volo.Abp.Identity.Application)" in 103.7556ms
+2018-02-26 17:16:41.459 +03:00 [Information] Request finished in 116.3396ms 200 application/json; charset=utf-8
+2018-02-26 17:16:42.903 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/AbpPermissions/PermissionManagementModal?providerName=Role&providerKey=admin  
+2018-02-26 17:16:42.906 +03:00 [Information] AuthenticationScheme: "Identity.Application" was successfully authenticated.
+2018-02-26 17:16:43.410 +03:00 [Information] Executing handler method "OnGetAsync" with arguments (null) - ModelState is Valid
+2018-02-26 17:16:43.432 +03:00 [Information] Authorization was successful for user: "hikalkan".
+2018-02-26 17:16:44.280 +03:00 [Information] Executed action "/AbpPermissions/PermissionManagementModal" in 909.9393ms
+2018-02-26 17:16:44.280 +03:00 [Information] Request finished in 1377.2063ms 200 text/html; charset=utf-8
+2018-02-26 17:16:55.522 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/Identity/Users  
+2018-02-26 17:16:55.524 +03:00 [Information] AuthenticationScheme: "Identity.Application" was successfully authenticated.
+2018-02-26 17:16:55.525 +03:00 [Information] Executing handler method "OnGet" with arguments (null) - ModelState is Valid
+2018-02-26 17:16:55.527 +03:00 [Information] Executed action "/Identity/Users/Index" in 2.5995ms
+2018-02-26 17:16:55.528 +03:00 [Information] Request finished in 6.1078ms 200 text/html; charset=utf-8
+2018-02-26 17:16:55.572 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/material/css/material-min.css  
+2018-02-26 17:16:55.572 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/font-awesome/css/font-awesome-min.css  
+2018-02-26 17:16:55.573 +03:00 [Information] Sending file. Request path: '"/libs/material/css/material-min.css"'. Physical path: '"/wwwroot/libs/material/css/material-min.css"'
+2018-02-26 17:16:55.573 +03:00 [Information] Sending file. Request path: '"/libs/font-awesome/css/font-awesome-min.css"'. Physical path: '"/wwwroot/libs/font_awesome/css/font-awesome-min.css"'
+2018-02-26 17:16:55.573 +03:00 [Information] Request finished in 1.2191ms 200 text/css
+2018-02-26 17:16:55.577 +03:00 [Information] Request finished in 4.3751ms 200 text/css
+2018-02-26 17:16:55.578 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/styles/libs/datatables.css  
+2018-02-26 17:16:55.578 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/datatables/datatables.css  
+2018-02-26 17:16:55.579 +03:00 [Information] Sending file. Request path: '"/styles/libs/datatables.css"'. Physical path: '"/wwwroot/styles/libs/datatables.css"'
+2018-02-26 17:16:55.579 +03:00 [Information] Sending file. Request path: '"/libs/datatables/datatables.css"'. Physical path: '"/wwwroot/libs/datatables/datatables.css"'
+2018-02-26 17:16:55.579 +03:00 [Information] Request finished in 0.9827ms 200 text/css
+2018-02-26 17:16:55.579 +03:00 [Information] Request finished in 1.2217ms 200 text/css
+2018-02-26 17:16:55.580 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/views/shared/_AppLayout.css  
+2018-02-26 17:16:55.580 +03:00 [Information] Sending file. Request path: '"/views/shared/_AppLayout.css"'. Physical path: '"/wwwroot/views/shared/_AppLayout.css"'
+2018-02-26 17:16:55.580 +03:00 [Information] Request finished in 0.8296ms 200 text/css
+2018-02-26 17:16:55.584 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/modules/identity/views/users/index.css  
+2018-02-26 17:16:55.585 +03:00 [Information] Sending file. Request path: '"/modules/identity/views/users/index.css"'. Physical path: '"/wwwroot/modules/identity/views/users/index.css"'
+2018-02-26 17:16:55.586 +03:00 [Information] Request finished in 1.9418ms 200 text/css
+2018-02-26 17:16:55.610 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/abp/abp.js?_v636552621935998713  
+2018-02-26 17:16:55.611 +03:00 [Information] Sending file. Request path: '"/libs/abp/abp.js"'. Physical path: '"/wwwroot/libs/abp/abp.js"'
+2018-02-26 17:16:55.611 +03:00 [Information] Request finished in 0.9874ms 200 application/javascript
+2018-02-26 17:16:55.630 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/jquery/jquery-3-1-1-min.js  
+2018-02-26 17:16:55.631 +03:00 [Information] Sending file. Request path: '"/libs/jquery/jquery-3-1-1-min.js"'. Physical path: '"/wwwroot/libs/jquery/jquery-3-1-1-min.js"'
+2018-02-26 17:16:55.633 +03:00 [Information] Request finished in 2.071ms 200 application/javascript
+2018-02-26 17:16:55.637 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/bootstrap/js/bootstrap-bundle-min.js  
+2018-02-26 17:16:55.637 +03:00 [Information] Sending file. Request path: '"/libs/bootstrap/js/bootstrap-bundle-min.js"'. Physical path: '"/wwwroot/libs/bootstrap/js/bootstrap-bundle-min.js"'
+2018-02-26 17:16:55.640 +03:00 [Information] Request finished in 1.8623ms 200 application/javascript
+2018-02-26 17:16:55.651 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/jquery-validation/jquery-validate.js  
+2018-02-26 17:16:55.652 +03:00 [Information] Sending file. Request path: '"/libs/jquery-validation/jquery-validate.js"'. Physical path: '"/wwwroot/libs/jquery_validation/jquery-validate.js"'
+2018-02-26 17:16:55.654 +03:00 [Information] Request finished in 3.0178ms 200 application/javascript
+2018-02-26 17:16:55.660 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/jquery-validation-unobtrusive/jquery-validate-unobtrusive.js  
+2018-02-26 17:16:55.661 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/jquery-form/jquery-form-min.js  
+2018-02-26 17:16:55.661 +03:00 [Information] Sending file. Request path: '"/libs/jquery-validation-unobtrusive/jquery-validate-unobtrusive.js"'. Physical path: '"/wwwroot/libs/jquery_validation_unobtrusive/jquery-validate-unobtrusive.js"'
+2018-02-26 17:16:55.661 +03:00 [Information] Sending file. Request path: '"/libs/jquery-form/jquery-form-min.js"'. Physical path: '"/wwwroot/libs/jquery_form/jquery-form-min.js"'
+2018-02-26 17:16:55.662 +03:00 [Information] Request finished in 1.1849ms 200 application/javascript
+2018-02-26 17:16:55.662 +03:00 [Information] Request finished in 1.6853ms 200 application/javascript
+2018-02-26 17:16:55.671 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/material/js/material-min.js  
+2018-02-26 17:16:55.672 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/vue/vue.js  
+2018-02-26 17:16:55.672 +03:00 [Information] Sending file. Request path: '"/libs/vue/vue.js"'. Physical path: '"/wwwroot/libs/vue/vue.js"'
+2018-02-26 17:16:55.672 +03:00 [Information] Sending file. Request path: '"/libs/material/js/material-min.js"'. Physical path: '"/wwwroot/libs/material/js/material-min.js"'
+2018-02-26 17:16:55.673 +03:00 [Information] Request finished in 3.6541ms 200 application/javascript
+2018-02-26 17:16:55.685 +03:00 [Information] Request finished in 13.0821ms 200 application/javascript
+2018-02-26 17:16:55.686 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/datatables/datatables-min.js  
+2018-02-26 17:16:55.687 +03:00 [Information] Sending file. Request path: '"/libs/datatables/datatables-min.js"'. Physical path: '"/wwwroot/libs/datatables/datatables-min.js"'
+2018-02-26 17:16:55.690 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/abp/abp-jquery.js?_v636552621936030804  
+2018-02-26 17:16:55.690 +03:00 [Information] Sending file. Request path: '"/libs/abp/abp-jquery.js"'. Physical path: '"/wwwroot/libs/abp/abp-jquery.js"'
+2018-02-26 17:16:55.691 +03:00 [Information] Request finished in 1.1529ms 200 application/javascript
+2018-02-26 17:16:55.693 +03:00 [Information] Request finished in 6.4354ms 200 application/javascript
+2018-02-26 17:16:55.698 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/Abp/ApplicationConfigurationScript?_v=636552621936036589  
+2018-02-26 17:16:55.704 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/Abp/ServiceProxyScript?_v=636552621936036628  
+2018-02-26 17:16:55.706 +03:00 [Information] AuthenticationScheme: "Identity.Application" was successfully authenticated.
+2018-02-26 17:16:55.707 +03:00 [Information] Executing action method "Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc)" with arguments (null) - ModelState is Valid
+2018-02-26 17:16:55.708 +03:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-02-26 17:16:55.709 +03:00 [Information] AuthenticationScheme: "Identity.Application" was successfully authenticated.
+2018-02-26 17:16:55.709 +03:00 [Information] Executed action "Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc)" in 2.3716ms
+2018-02-26 17:16:55.709 +03:00 [Information] Request finished in 12.0024ms 200 text/plain; charset=utf-8
+2018-02-26 17:16:55.711 +03:00 [Information] Executing action method "Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc)" with arguments (["Volo.Abp.AspNetCore.Mvc.ProxyScripting.ServiceProxyGenerationModel"]) - ModelState is Valid
+2018-02-26 17:16:55.711 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/abp/helpers/jquery.js  
+2018-02-26 17:16:55.711 +03:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-02-26 17:16:55.712 +03:00 [Information] Executed action "Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc)" in 2.4999ms
+2018-02-26 17:16:55.712 +03:00 [Information] Request finished in 13.0791ms 200 text/plain; charset=utf-8
+2018-02-26 17:16:55.713 +03:00 [Information] Sending file. Request path: '"/abp/helpers/jquery.js"'. Physical path: '"/wwwroot/abp/helpers/jquery.js"'
+2018-02-26 17:16:55.713 +03:00 [Information] Request finished in 2.5829ms 200 application/javascript
+2018-02-26 17:16:55.725 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/abp/helpers/datatables.extensions.js  
+2018-02-26 17:16:55.726 +03:00 [Information] Sending file. Request path: '"/abp/helpers/datatables.extensions.js"'. Physical path: '"/wwwroot/abp/helpers/datatables/extensions.js"'
+2018-02-26 17:16:55.727 +03:00 [Information] Request finished in 1.7922ms 200 application/javascript
+2018-02-26 17:16:55.727 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/abp/helpers/ResourceLoader.js  
+2018-02-26 17:16:55.739 +03:00 [Information] Sending file. Request path: '"/abp/helpers/ResourceLoader.js"'. Physical path: '"/wwwroot/abp/helpers/ResourceLoader.js"'
+2018-02-26 17:16:55.740 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/abp/helpers/ModalManager.js  
+2018-02-26 17:16:55.740 +03:00 [Information] Request finished in 12.6015ms 200 application/javascript
+2018-02-26 17:16:55.741 +03:00 [Information] Sending file. Request path: '"/abp/helpers/ModalManager.js"'. Physical path: '"/wwwroot/abp/helpers/ModalManager.js"'
+2018-02-26 17:16:55.741 +03:00 [Information] Request finished in 1.2495ms 200 application/javascript
+2018-02-26 17:16:55.744 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/modules/identity/views/users/index.js  
+2018-02-26 17:16:55.751 +03:00 [Information] Sending file. Request path: '"/modules/identity/views/users/index.js"'. Physical path: '"/wwwroot/modules/identity/views/users/index.js"'
+2018-02-26 17:16:55.755 +03:00 [Information] Request finished in 11.313ms 200 application/javascript
+2018-02-26 17:16:56.055 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/font-awesome/fonts/fontawesome-webfont.woff2?v=4.7.0  
+2018-02-26 17:16:56.056 +03:00 [Information] Sending file. Request path: '"/libs/font-awesome/fonts/fontawesome-webfont.woff2"'. Physical path: '"/wwwroot/libs/font_awesome/fonts/fontawesome-webfont.woff2"'
+2018-02-26 17:16:56.057 +03:00 [Information] Request finished in 1.7806ms 200 font/woff2
+2018-02-26 17:16:56.164 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/api/identity/user application/json 
+2018-02-26 17:16:56.169 +03:00 [Information] AuthenticationScheme: "Identity.Application" was successfully authenticated.
+2018-02-26 17:16:56.186 +03:00 [Information] Authorization was successful for user: "hikalkan".
+2018-02-26 17:16:56.189 +03:00 [Information] Executing action method "Volo.Abp.Identity.IdentityUserAppService.GetListAsync (Volo.Abp.Identity.Application)" with arguments (["Volo.Abp.Identity.GetIdentityUsersInput"]) - ModelState is Valid
+2018-02-26 17:16:56.201 +03:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-02-26 17:16:56.202 +03:00 [Information] Executed action "Volo.Abp.Identity.IdentityUserAppService.GetListAsync (Volo.Abp.Identity.Application)" in 32.5168ms
+2018-02-26 17:16:56.202 +03:00 [Information] Request finished in 37.698ms 200 application/json; charset=utf-8
+2018-02-26 17:16:58.268 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/AbpPermissions/PermissionManagementModal?providerName=User&providerKey=71054539-0e48-af28-5e7a-39e4e42d8ea5  
+2018-02-26 17:16:58.271 +03:00 [Information] AuthenticationScheme: "Identity.Application" was successfully authenticated.
+2018-02-26 17:16:58.273 +03:00 [Information] Executing handler method "OnGetAsync" with arguments (null) - ModelState is Valid
+2018-02-26 17:16:58.274 +03:00 [Information] Authorization was successful for user: "hikalkan".
+2018-02-26 17:16:58.303 +03:00 [Information] Executed action "/AbpPermissions/PermissionManagementModal" in 31.8129ms
+2018-02-26 17:16:58.303 +03:00 [Information] Request finished in 35.3777ms 200 text/html; charset=utf-8
+2018-02-26 17:17:02.482 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/Identity/Roles  
+2018-02-26 17:17:02.485 +03:00 [Information] AuthenticationScheme: "Identity.Application" was successfully authenticated.
+2018-02-26 17:17:02.486 +03:00 [Information] Executing handler method "OnGet" with arguments (null) - ModelState is Valid
+2018-02-26 17:17:02.488 +03:00 [Information] Executed action "/Identity/Roles/Index" in 2.5542ms
+2018-02-26 17:17:02.488 +03:00 [Information] Request finished in 5.93ms 200 text/html; charset=utf-8
+2018-02-26 17:17:02.535 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/font-awesome/css/font-awesome-min.css  
+2018-02-26 17:17:02.536 +03:00 [Information] Sending file. Request path: '"/libs/font-awesome/css/font-awesome-min.css"'. Physical path: '"/wwwroot/libs/font_awesome/css/font-awesome-min.css"'
+2018-02-26 17:17:02.536 +03:00 [Information] Request finished in 0.9621ms 200 text/css
+2018-02-26 17:17:02.537 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/material/css/material-min.css  
+2018-02-26 17:17:02.537 +03:00 [Information] Sending file. Request path: '"/libs/material/css/material-min.css"'. Physical path: '"/wwwroot/libs/material/css/material-min.css"'
+2018-02-26 17:17:02.541 +03:00 [Information] Request finished in 3.5916ms 200 text/css
+2018-02-26 17:17:02.575 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/datatables/datatables.css  
+2018-02-26 17:17:02.576 +03:00 [Information] Sending file. Request path: '"/libs/datatables/datatables.css"'. Physical path: '"/wwwroot/libs/datatables/datatables.css"'
+2018-02-26 17:17:02.577 +03:00 [Information] Request finished in 1.5813ms 200 text/css
+2018-02-26 17:17:02.580 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/styles/libs/datatables.css  
+2018-02-26 17:17:02.581 +03:00 [Information] Sending file. Request path: '"/styles/libs/datatables.css"'. Physical path: '"/wwwroot/styles/libs/datatables.css"'
+2018-02-26 17:17:02.581 +03:00 [Information] Request finished in 1.5925ms 200 text/css
+2018-02-26 17:17:02.585 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/views/shared/_AppLayout.css  
+2018-02-26 17:17:02.586 +03:00 [Information] Sending file. Request path: '"/views/shared/_AppLayout.css"'. Physical path: '"/wwwroot/views/shared/_AppLayout.css"'
+2018-02-26 17:17:02.587 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/modules/identity/views/roles/index.css  
+2018-02-26 17:17:02.588 +03:00 [Information] Request finished in 1.4253ms 200 text/css
+2018-02-26 17:17:02.588 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/abp/abp.js?_v636552621935998713  
+2018-02-26 17:17:02.591 +03:00 [Information] Sending file. Request path: '"/libs/abp/abp.js"'. Physical path: '"/wwwroot/libs/abp/abp.js"'
+2018-02-26 17:17:02.591 +03:00 [Information] Request finished in 3.0969ms 200 application/javascript
+2018-02-26 17:17:02.593 +03:00 [Information] Sending file. Request path: '"/modules/identity/views/roles/index.css"'. Physical path: '"/wwwroot/modules/identity/views/roles/index.css"'
+2018-02-26 17:17:02.595 +03:00 [Information] Request finished in 6.2909ms 200 text/css
+2018-02-26 17:17:02.596 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/jquery-validation-unobtrusive/jquery-validate-unobtrusive.js  
+2018-02-26 17:17:02.598 +03:00 [Information] Sending file. Request path: '"/libs/jquery-validation-unobtrusive/jquery-validate-unobtrusive.js"'. Physical path: '"/wwwroot/libs/jquery_validation_unobtrusive/jquery-validate-unobtrusive.js"'
+2018-02-26 17:17:02.598 +03:00 [Information] Request finished in 1.8422ms 200 application/javascript
+2018-02-26 17:17:02.599 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/bootstrap/js/bootstrap-bundle-min.js  
+2018-02-26 17:17:02.600 +03:00 [Information] Sending file. Request path: '"/libs/bootstrap/js/bootstrap-bundle-min.js"'. Physical path: '"/wwwroot/libs/bootstrap/js/bootstrap-bundle-min.js"'
+2018-02-26 17:17:02.601 +03:00 [Information] Request finished in 2.2767ms 200 application/javascript
+2018-02-26 17:17:02.603 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/jquery/jquery-3-1-1-min.js  
+2018-02-26 17:17:02.603 +03:00 [Information] Sending file. Request path: '"/libs/jquery/jquery-3-1-1-min.js"'. Physical path: '"/wwwroot/libs/jquery/jquery-3-1-1-min.js"'
+2018-02-26 17:17:02.605 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/jquery-validation/jquery-validate.js  
+2018-02-26 17:17:02.605 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/jquery-form/jquery-form-min.js  
+2018-02-26 17:17:02.605 +03:00 [Information] Sending file. Request path: '"/libs/jquery-form/jquery-form-min.js"'. Physical path: '"/wwwroot/libs/jquery_form/jquery-form-min.js"'
+2018-02-26 17:17:02.606 +03:00 [Information] Sending file. Request path: '"/libs/jquery-validation/jquery-validate.js"'. Physical path: '"/wwwroot/libs/jquery_validation/jquery-validate.js"'
+2018-02-26 17:17:02.606 +03:00 [Information] Request finished in 0.948ms 200 application/javascript
+2018-02-26 17:17:02.607 +03:00 [Information] Request finished in 2.2643ms 200 application/javascript
+2018-02-26 17:17:02.608 +03:00 [Information] Request finished in 2.715ms 200 application/javascript
+2018-02-26 17:17:02.614 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/material/js/material-min.js  
+2018-02-26 17:17:02.615 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/datatables/datatables-min.js  
+2018-02-26 17:17:02.615 +03:00 [Information] Sending file. Request path: '"/libs/datatables/datatables-min.js"'. Physical path: '"/wwwroot/libs/datatables/datatables-min.js"'
+2018-02-26 17:17:02.618 +03:00 [Information] Request finished in 2.5221ms 200 application/javascript
+2018-02-26 17:17:02.618 +03:00 [Information] Sending file. Request path: '"/libs/material/js/material-min.js"'. Physical path: '"/wwwroot/libs/material/js/material-min.js"'
+2018-02-26 17:17:02.619 +03:00 [Information] Request finished in 5.3856ms 200 application/javascript
+2018-02-26 17:17:02.626 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/abp/abp-jquery.js?_v636552621936030804  
+2018-02-26 17:17:02.627 +03:00 [Information] Sending file. Request path: '"/libs/abp/abp-jquery.js"'. Physical path: '"/wwwroot/libs/abp/abp-jquery.js"'
+2018-02-26 17:17:02.627 +03:00 [Information] Request finished in 1.5463ms 200 application/javascript
+2018-02-26 17:17:02.628 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/vue/vue.js  
+2018-02-26 17:17:02.629 +03:00 [Information] Sending file. Request path: '"/libs/vue/vue.js"'. Physical path: '"/wwwroot/libs/vue/vue.js"'
+2018-02-26 17:17:02.641 +03:00 [Information] Request finished in 7.1765ms 200 application/javascript
+2018-02-26 17:17:02.649 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/Abp/ApplicationConfigurationScript?_v=636552621936036589  
+2018-02-26 17:17:02.656 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/abp/helpers/jquery.js  
+2018-02-26 17:17:02.656 +03:00 [Information] AuthenticationScheme: "Identity.Application" was successfully authenticated.
+2018-02-26 17:17:02.657 +03:00 [Information] Sending file. Request path: '"/abp/helpers/jquery.js"'. Physical path: '"/wwwroot/abp/helpers/jquery.js"'
+2018-02-26 17:17:02.657 +03:00 [Information] Executing action method "Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc)" with arguments (null) - ModelState is Valid
+2018-02-26 17:17:02.657 +03:00 [Information] Request finished in 1.5805ms 200 application/javascript
+2018-02-26 17:17:02.659 +03:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-02-26 17:17:02.660 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/abp/helpers/datatables.extensions.js  
+2018-02-26 17:17:02.660 +03:00 [Information] Executed action "Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc)" in 3.4796ms
+2018-02-26 17:17:02.660 +03:00 [Information] Sending file. Request path: '"/abp/helpers/datatables.extensions.js"'. Physical path: '"/wwwroot/abp/helpers/datatables/extensions.js"'
+2018-02-26 17:17:02.661 +03:00 [Information] Request finished in 0.8458ms 200 application/javascript
+2018-02-26 17:17:02.661 +03:00 [Information] Request finished in 11.3767ms 200 text/plain; charset=utf-8
+2018-02-26 17:17:02.666 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/Abp/ServiceProxyScript?_v=636552621936036628  
+2018-02-26 17:17:02.671 +03:00 [Information] AuthenticationScheme: "Identity.Application" was successfully authenticated.
+2018-02-26 17:17:02.672 +03:00 [Information] Executing action method "Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc)" with arguments (["Volo.Abp.AspNetCore.Mvc.ProxyScripting.ServiceProxyGenerationModel"]) - ModelState is Valid
+2018-02-26 17:17:02.673 +03:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-02-26 17:17:02.673 +03:00 [Information] Executed action "Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc)" in 1.6066ms
+2018-02-26 17:17:02.673 +03:00 [Information] Request finished in 7.4622ms 200 text/plain; charset=utf-8
+2018-02-26 17:17:02.680 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/abp/helpers/ResourceLoader.js  
+2018-02-26 17:17:02.680 +03:00 [Information] Sending file. Request path: '"/abp/helpers/ResourceLoader.js"'. Physical path: '"/wwwroot/abp/helpers/ResourceLoader.js"'
+2018-02-26 17:17:02.680 +03:00 [Information] Request finished in 1.004ms 200 application/javascript
+2018-02-26 17:17:02.682 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/modules/identity/views/roles/index.js  
+2018-02-26 17:17:02.683 +03:00 [Information] Sending file. Request path: '"/modules/identity/views/roles/index.js"'. Physical path: '"/wwwroot/modules/identity/views/roles/index.js"'
+2018-02-26 17:17:02.683 +03:00 [Information] Request finished in 1.3564ms 200 application/javascript
+2018-02-26 17:17:02.685 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/abp/helpers/ModalManager.js  
+2018-02-26 17:17:02.686 +03:00 [Information] Sending file. Request path: '"/abp/helpers/ModalManager.js"'. Physical path: '"/wwwroot/abp/helpers/ModalManager.js"'
+2018-02-26 17:17:02.687 +03:00 [Information] Request finished in 4.7518ms 200 application/javascript
+2018-02-26 17:17:03.022 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/font-awesome/fonts/fontawesome-webfont.woff2?v=4.7.0  
+2018-02-26 17:17:03.023 +03:00 [Information] Sending file. Request path: '"/libs/font-awesome/fonts/fontawesome-webfont.woff2"'. Physical path: '"/wwwroot/libs/font_awesome/fonts/fontawesome-webfont.woff2"'
+2018-02-26 17:17:03.025 +03:00 [Information] Request finished in 2.0128ms 200 font/woff2
+2018-02-26 17:17:03.087 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/api/identity/role application/json 
+2018-02-26 17:17:03.091 +03:00 [Information] AuthenticationScheme: "Identity.Application" was successfully authenticated.
+2018-02-26 17:17:03.092 +03:00 [Information] Authorization was successful for user: "hikalkan".
+2018-02-26 17:17:03.095 +03:00 [Information] Executing action method "Volo.Abp.Identity.IdentityRoleAppService.GetListAsync (Volo.Abp.Identity.Application)" with arguments (["Volo.Abp.Identity.GetIdentityRolesInput"]) - ModelState is Valid
+2018-02-26 17:17:03.106 +03:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-02-26 17:17:03.107 +03:00 [Information] Executed action "Volo.Abp.Identity.IdentityRoleAppService.GetListAsync (Volo.Abp.Identity.Application)" in 15.4991ms
+2018-02-26 17:17:03.107 +03:00 [Information] Request finished in 19.9641ms 200 application/json; charset=utf-8
+2018-02-26 17:17:15.907 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/AbpPermissions/PermissionManagementModal?providerName=Role&providerKey=admin  
+2018-02-26 17:17:15.911 +03:00 [Information] AuthenticationScheme: "Identity.Application" was successfully authenticated.
+2018-02-26 17:17:15.913 +03:00 [Information] Executing handler method "OnGetAsync" with arguments (null) - ModelState is Valid
+2018-02-26 17:17:15.914 +03:00 [Information] Authorization was successful for user: "hikalkan".
+2018-02-26 17:17:15.941 +03:00 [Information] Executed action "/AbpPermissions/PermissionManagementModal" in 29.5315ms
+2018-02-26 17:17:15.941 +03:00 [Information] Request finished in 33.9507ms 200 text/html; charset=utf-8
+2018-02-26 17:17:18.486 +03:00 [Information] Request starting HTTP/1.1 POST http://localhost:61144/AbpPermissions/PermissionManagementModal application/x-www-form-urlencoded; charset=UTF-8 592
+2018-02-26 17:17:18.489 +03:00 [Information] AuthenticationScheme: "Identity.Application" was successfully authenticated.
+2018-02-26 17:17:18.516 +03:00 [Information] Executing handler method "OnPostAsync" with arguments (null) - ModelState is Valid
+2018-02-26 17:17:18.528 +03:00 [Information] Authorization failed for user: "hikalkan".
+2018-02-26 17:17:18.570 +03:00 [Warning] Authorization failed! Given policy has not granted: AbpPermissions.Permissions.Update
+Volo.Abp.Authorization.AbpAuthorizationException: Authorization failed! Given policy has not granted: AbpPermissions.Permissions.Update
+   at Volo.Abp.Authorization.AbpAuthorizationService.<CheckAsync>d__2.MoveNext() in D:\Github\abp\src\Volo.Abp.Authorization\Volo\Abp\Authorization\AbpAuthorizationService.cs:line 36
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Volo.Abp.Permissions.Web.Pages.AbpPermissions.PermissionManagementModal.<OnPostAsync>d__15.MoveNext() in D:\Github\abp\src\Volo.Abp.Permissions.Web\Pages\AbpPermissions\PermissionManagementModal.cshtml.cs:line 44
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at Microsoft.AspNetCore.Mvc.RazorPages.Internal.ExecutorFactory.GenericTaskHandlerMethod.<Convert>d__4`1.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at Microsoft.AspNetCore.Mvc.RazorPages.Internal.ExecutorFactory.GenericTaskHandlerMethod.<Execute>d__3.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at Microsoft.AspNetCore.Mvc.RazorPages.Internal.PageActionInvoker.<InvokeHandlerMethodAsync>d__29.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Mvc.RazorPages.Internal.PageActionInvoker.<InvokeNextPageFilterAsync>d__31.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at Microsoft.AspNetCore.Mvc.RazorPages.Internal.PageActionInvoker.Rethrow(PageHandlerExecutedContext context)
+   at Microsoft.AspNetCore.Mvc.RazorPages.Internal.PageActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.RazorPages.Internal.PageActionInvoker.<InvokeInnerFilterAsync>d__22.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.<InvokeNextExceptionFilterAsync>d__23.MoveNext()
+2018-02-26 17:17:18.588 +03:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.RazorPages.PageContext".
+2018-02-26 17:17:18.595 +03:00 [Information] Executed action "/AbpPermissions/PermissionManagementModal" in 106.0977ms
+2018-02-26 17:17:18.597 +03:00 [Information] Request finished in 111.3046ms 403 application/json; charset=utf-8
+2018-02-26 17:17:57.421 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/AbpPermissions/PermissionManagementModal?providerName=Role&providerKey=admin  
+2018-02-26 17:17:57.424 +03:00 [Information] AuthenticationScheme: "Identity.Application" was successfully authenticated.
+2018-02-26 17:17:57.426 +03:00 [Information] Executing handler method "OnGetAsync" with arguments (null) - ModelState is Valid
+2018-02-26 17:17:57.428 +03:00 [Information] Authorization was successful for user: "hikalkan".
+2018-02-26 17:17:57.456 +03:00 [Information] Executed action "/AbpPermissions/PermissionManagementModal" in 31.1617ms
+2018-02-26 17:17:57.456 +03:00 [Information] Request finished in 35.5073ms 200 text/html; charset=utf-8
+2018-02-26 17:18:00.128 +03:00 [Information] Request starting HTTP/1.1 POST http://localhost:61144/AbpPermissions/PermissionManagementModal application/x-www-form-urlencoded; charset=UTF-8 544
+2018-02-26 17:18:00.131 +03:00 [Information] AuthenticationScheme: "Identity.Application" was successfully authenticated.
+2018-02-26 17:18:00.135 +03:00 [Information] Executing handler method "OnPostAsync" with arguments (null) - ModelState is Valid
+2018-02-26 17:18:00.136 +03:00 [Information] Authorization failed for user: "hikalkan".
+2018-02-26 17:18:00.161 +03:00 [Warning] Authorization failed! Given policy has not granted: AbpPermissions.Permissions.Update
+Volo.Abp.Authorization.AbpAuthorizationException: Authorization failed! Given policy has not granted: AbpPermissions.Permissions.Update
+   at Volo.Abp.Authorization.AbpAuthorizationService.<CheckAsync>d__2.MoveNext() in D:\Github\abp\src\Volo.Abp.Authorization\Volo\Abp\Authorization\AbpAuthorizationService.cs:line 36
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Volo.Abp.Permissions.Web.Pages.AbpPermissions.PermissionManagementModal.<OnPostAsync>d__15.MoveNext() in D:\Github\abp\src\Volo.Abp.Permissions.Web\Pages\AbpPermissions\PermissionManagementModal.cshtml.cs:line 44
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at Microsoft.AspNetCore.Mvc.RazorPages.Internal.ExecutorFactory.GenericTaskHandlerMethod.<Convert>d__4`1.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at Microsoft.AspNetCore.Mvc.RazorPages.Internal.ExecutorFactory.GenericTaskHandlerMethod.<Execute>d__3.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at Microsoft.AspNetCore.Mvc.RazorPages.Internal.PageActionInvoker.<InvokeHandlerMethodAsync>d__29.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Mvc.RazorPages.Internal.PageActionInvoker.<InvokeNextPageFilterAsync>d__31.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at Microsoft.AspNetCore.Mvc.RazorPages.Internal.PageActionInvoker.Rethrow(PageHandlerExecutedContext context)
+   at Microsoft.AspNetCore.Mvc.RazorPages.Internal.PageActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.RazorPages.Internal.PageActionInvoker.<InvokeInnerFilterAsync>d__22.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.<InvokeNextExceptionFilterAsync>d__23.MoveNext()
+2018-02-26 17:18:00.172 +03:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.RazorPages.PageContext".
+2018-02-26 17:18:00.173 +03:00 [Information] Executed action "/AbpPermissions/PermissionManagementModal" in 40.8181ms
+2018-02-26 17:18:00.173 +03:00 [Information] Request finished in 44.7792ms 403 application/json; charset=utf-8
+2018-02-26 17:18:04.799 +03:00 [Information] Request starting HTTP/1.1 POST http://localhost:61144/AbpPermissions/PermissionManagementModal application/x-www-form-urlencoded; charset=UTF-8 544
+2018-02-26 17:18:04.802 +03:00 [Information] AuthenticationScheme: "Identity.Application" was successfully authenticated.
+2018-02-26 17:18:04.805 +03:00 [Information] Executing handler method "OnPostAsync" with arguments (null) - ModelState is Valid
+2018-02-26 17:18:04.806 +03:00 [Information] Authorization failed for user: "hikalkan".
+2018-02-26 17:18:04.830 +03:00 [Warning] Authorization failed! Given policy has not granted: AbpPermissions.Permissions.Update
+Volo.Abp.Authorization.AbpAuthorizationException: Authorization failed! Given policy has not granted: AbpPermissions.Permissions.Update
+   at Volo.Abp.Authorization.AbpAuthorizationService.<CheckAsync>d__2.MoveNext() in D:\Github\abp\src\Volo.Abp.Authorization\Volo\Abp\Authorization\AbpAuthorizationService.cs:line 36
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Volo.Abp.Permissions.Web.Pages.AbpPermissions.PermissionManagementModal.<OnPostAsync>d__15.MoveNext() in D:\Github\abp\src\Volo.Abp.Permissions.Web\Pages\AbpPermissions\PermissionManagementModal.cshtml.cs:line 44
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at Microsoft.AspNetCore.Mvc.RazorPages.Internal.ExecutorFactory.GenericTaskHandlerMethod.<Convert>d__4`1.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at Microsoft.AspNetCore.Mvc.RazorPages.Internal.ExecutorFactory.GenericTaskHandlerMethod.<Execute>d__3.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at Microsoft.AspNetCore.Mvc.RazorPages.Internal.PageActionInvoker.<InvokeHandlerMethodAsync>d__29.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Mvc.RazorPages.Internal.PageActionInvoker.<InvokeNextPageFilterAsync>d__31.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at Microsoft.AspNetCore.Mvc.RazorPages.Internal.PageActionInvoker.Rethrow(PageHandlerExecutedContext context)
+   at Microsoft.AspNetCore.Mvc.RazorPages.Internal.PageActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.RazorPages.Internal.PageActionInvoker.<InvokeInnerFilterAsync>d__22.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.<InvokeNextExceptionFilterAsync>d__23.MoveNext()
+2018-02-26 17:18:04.837 +03:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.RazorPages.PageContext".
+2018-02-26 17:18:04.838 +03:00 [Information] Executed action "/AbpPermissions/PermissionManagementModal" in 34.8928ms
+2018-02-26 17:18:04.838 +03:00 [Information] Request finished in 39.1328ms 403 application/json; charset=utf-8
+2018-02-26 17:18:09.439 +03:00 [Information] Request starting HTTP/1.1 POST http://localhost:61144/AbpPermissions/PermissionManagementModal application/x-www-form-urlencoded; charset=UTF-8 544
+2018-02-26 17:18:09.442 +03:00 [Information] AuthenticationScheme: "Identity.Application" was successfully authenticated.
+2018-02-26 17:18:09.444 +03:00 [Information] Executing handler method "OnPostAsync" with arguments (null) - ModelState is Valid
+2018-02-26 17:18:09.445 +03:00 [Information] Authorization failed for user: "hikalkan".
+2018-02-26 17:18:09.467 +03:00 [Warning] Authorization failed! Given policy has not granted: AbpPermissions.Permissions.Update
+Volo.Abp.Authorization.AbpAuthorizationException: Authorization failed! Given policy has not granted: AbpPermissions.Permissions.Update
+   at Volo.Abp.Authorization.AbpAuthorizationService.<CheckAsync>d__2.MoveNext() in D:\Github\abp\src\Volo.Abp.Authorization\Volo\Abp\Authorization\AbpAuthorizationService.cs:line 36
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Volo.Abp.Permissions.Web.Pages.AbpPermissions.PermissionManagementModal.<OnPostAsync>d__15.MoveNext() in D:\Github\abp\src\Volo.Abp.Permissions.Web\Pages\AbpPermissions\PermissionManagementModal.cshtml.cs:line 44
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at Microsoft.AspNetCore.Mvc.RazorPages.Internal.ExecutorFactory.GenericTaskHandlerMethod.<Convert>d__4`1.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at Microsoft.AspNetCore.Mvc.RazorPages.Internal.ExecutorFactory.GenericTaskHandlerMethod.<Execute>d__3.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at Microsoft.AspNetCore.Mvc.RazorPages.Internal.PageActionInvoker.<InvokeHandlerMethodAsync>d__29.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Mvc.RazorPages.Internal.PageActionInvoker.<InvokeNextPageFilterAsync>d__31.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at Microsoft.AspNetCore.Mvc.RazorPages.Internal.PageActionInvoker.Rethrow(PageHandlerExecutedContext context)
+   at Microsoft.AspNetCore.Mvc.RazorPages.Internal.PageActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.RazorPages.Internal.PageActionInvoker.<InvokeInnerFilterAsync>d__22.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.<InvokeNextExceptionFilterAsync>d__23.MoveNext()
+2018-02-26 17:18:09.476 +03:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.RazorPages.PageContext".
+2018-02-26 17:18:09.476 +03:00 [Information] Executed action "/AbpPermissions/PermissionManagementModal" in 33.8335ms
+2018-02-26 17:18:09.476 +03:00 [Information] Request finished in 37.4851ms 403 application/json; charset=utf-8
+2018-02-26 17:18:12.428 +03:00 [Information] Request starting HTTP/1.1 POST http://localhost:61144/AbpPermissions/PermissionManagementModal application/x-www-form-urlencoded; charset=UTF-8 592
+2018-02-26 17:18:12.432 +03:00 [Information] AuthenticationScheme: "Identity.Application" was successfully authenticated.
+2018-02-26 17:18:12.435 +03:00 [Information] Executing handler method "OnPostAsync" with arguments (null) - ModelState is Valid
+2018-02-26 17:18:12.436 +03:00 [Information] Authorization failed for user: "hikalkan".
+2018-02-26 17:18:12.458 +03:00 [Warning] Authorization failed! Given policy has not granted: AbpPermissions.Permissions.Update
+Volo.Abp.Authorization.AbpAuthorizationException: Authorization failed! Given policy has not granted: AbpPermissions.Permissions.Update
+   at Volo.Abp.Authorization.AbpAuthorizationService.<CheckAsync>d__2.MoveNext() in D:\Github\abp\src\Volo.Abp.Authorization\Volo\Abp\Authorization\AbpAuthorizationService.cs:line 36
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Volo.Abp.Permissions.Web.Pages.AbpPermissions.PermissionManagementModal.<OnPostAsync>d__15.MoveNext() in D:\Github\abp\src\Volo.Abp.Permissions.Web\Pages\AbpPermissions\PermissionManagementModal.cshtml.cs:line 44
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at Microsoft.AspNetCore.Mvc.RazorPages.Internal.ExecutorFactory.GenericTaskHandlerMethod.<Convert>d__4`1.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at Microsoft.AspNetCore.Mvc.RazorPages.Internal.ExecutorFactory.GenericTaskHandlerMethod.<Execute>d__3.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at Microsoft.AspNetCore.Mvc.RazorPages.Internal.PageActionInvoker.<InvokeHandlerMethodAsync>d__29.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Mvc.RazorPages.Internal.PageActionInvoker.<InvokeNextPageFilterAsync>d__31.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at Microsoft.AspNetCore.Mvc.RazorPages.Internal.PageActionInvoker.Rethrow(PageHandlerExecutedContext context)
+   at Microsoft.AspNetCore.Mvc.RazorPages.Internal.PageActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.RazorPages.Internal.PageActionInvoker.<InvokeInnerFilterAsync>d__22.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.<InvokeNextExceptionFilterAsync>d__23.MoveNext()
+2018-02-26 17:18:12.467 +03:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.RazorPages.PageContext".
+2018-02-26 17:18:12.468 +03:00 [Information] Executed action "/AbpPermissions/PermissionManagementModal" in 35.1686ms
+2018-02-26 17:18:12.468 +03:00 [Information] Request finished in 39.9359ms 403 application/json; charset=utf-8
+2018-02-26 17:18:25.199 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/AbpPermissions/PermissionManagementModal?providerName=Role&providerKey=admin  
+2018-02-26 17:18:25.204 +03:00 [Information] AuthenticationScheme: "Identity.Application" was successfully authenticated.
+2018-02-26 17:18:25.206 +03:00 [Information] Executing handler method "OnGetAsync" with arguments (null) - ModelState is Valid
+2018-02-26 17:18:25.207 +03:00 [Information] Authorization was successful for user: "hikalkan".
+2018-02-26 17:18:25.239 +03:00 [Information] Executed action "/AbpPermissions/PermissionManagementModal" in 35.3709ms
+2018-02-26 17:18:25.240 +03:00 [Information] Request finished in 40.6817ms 200 text/html; charset=utf-8
+2018-02-26 17:19:16.554 +03:00 [Information] Loaded modules:
+2018-02-26 17:19:16.598 +03:00 [Information] - Volo.Abp.Castle.AbpCastleCoreModule
+2018-02-26 17:19:16.598 +03:00 [Information] - Volo.Abp.Autofac.AbpAutofacModule
+2018-02-26 17:19:16.598 +03:00 [Information] - Volo.Abp.Http.AbpHttpAbstractionsModule
+2018-02-26 17:19:16.598 +03:00 [Information] - Volo.Abp.Timing.AbpTimingModule
+2018-02-26 17:19:16.598 +03:00 [Information] - Volo.Abp.Json.AbpJsonModule
+2018-02-26 17:19:16.598 +03:00 [Information] - Volo.Abp.Http.AbpHttpModule
+2018-02-26 17:19:16.598 +03:00 [Information] - Volo.Abp.Http.Client.AbpHttpClientModule
+2018-02-26 17:19:16.598 +03:00 [Information] - Volo.Abp.Security.AbpSecurityModule
+2018-02-26 17:19:16.598 +03:00 [Information] - Volo.Abp.Authorization.AbpAuthorizationModule
+2018-02-26 17:19:16.598 +03:00 [Information] - Volo.Abp.Guids.AbpGuidsModule
+2018-02-26 17:19:16.598 +03:00 [Information] - Volo.Abp.Data.AbpDataModule
+2018-02-26 17:19:16.598 +03:00 [Information] - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2018-02-26 17:19:16.599 +03:00 [Information] - Volo.Abp.Settings.AbpSettingsModule
+2018-02-26 17:19:16.599 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyAbstractionsModule
+2018-02-26 17:19:16.599 +03:00 [Information] - Volo.Abp.Threading.AbpThreadingModule
+2018-02-26 17:19:16.599 +03:00 [Information] - Volo.Abp.EventBus.AbpEventBusModule
+2018-02-26 17:19:16.599 +03:00 [Information] - Volo.Abp.Validation.AbpValidationModule
+2018-02-26 17:19:16.599 +03:00 [Information] - Volo.Abp.AbpDddModule
+2018-02-26 17:19:16.599 +03:00 [Information] - Volo.Abp.Permissions.AbpPermissionsDomainSharedModule
+2018-02-26 17:19:16.599 +03:00 [Information] - Volo.Abp.Serialization.AbpSerializationModule
+2018-02-26 17:19:16.599 +03:00 [Information] - Volo.Abp.Caching.AbpCachingModule
+2018-02-26 17:19:16.599 +03:00 [Information] - Volo.Abp.Permissions.AbpPermissionsDomainModule
+2018-02-26 17:19:16.599 +03:00 [Information] - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2018-02-26 17:19:16.599 +03:00 [Information] - Volo.Abp.Localization.AbpLocalizationModule
+2018-02-26 17:19:16.599 +03:00 [Information] - Volo.Abp.Session.AbpSessionModule
+2018-02-26 17:19:16.599 +03:00 [Information] - Volo.Abp.ApiVersioning.AbpApiVersioningAbstractionsModule
+2018-02-26 17:19:16.599 +03:00 [Information] - Volo.Abp.AbpCommonModule
+2018-02-26 17:19:16.599 +03:00 [Information] - Volo.Abp.EntityFrameworkCore.AbpEntityFrameworkCoreModule
+2018-02-26 17:19:16.599 +03:00 [Information] - Volo.Abp.Permissions.EntityFrameworkCore.AbpPermissionsEntityFrameworkCoreModule
+2018-02-26 17:19:16.599 +03:00 [Information] - Volo.Abp.Identity.AbpIdentityDomainSharedModule
+2018-02-26 17:19:16.600 +03:00 [Information] - Volo.Abp.Identity.AbpIdentityDomainModule
+2018-02-26 17:19:16.600 +03:00 [Information] - Volo.Abp.Identity.AbpIdentityApplicationContractsModule
+2018-02-26 17:19:16.600 +03:00 [Information] - Volo.Abp.AutoMapper.AbpAutoMapperModule
+2018-02-26 17:19:16.600 +03:00 [Information] - Volo.Abp.Identity.AbpIdentityApplicationModule
+2018-02-26 17:19:16.600 +03:00 [Information] - Volo.Abp.AspNetCore.AbpAspNetCoreModule
+2018-02-26 17:19:16.600 +03:00 [Information] - Volo.Abp.Ui.AbpUiModule
+2018-02-26 17:19:16.600 +03:00 [Information] - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcModule
+2018-02-26 17:19:16.600 +03:00 [Information] - Volo.Abp.Identity.AbpIdentityHttpApiModule
+2018-02-26 17:19:16.600 +03:00 [Information] - Volo.Abp.Ui.Navigation.AbpUiNavigationModule
+2018-02-26 17:19:16.600 +03:00 [Information] - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcUiModule
+2018-02-26 17:19:16.600 +03:00 [Information] - Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.AbpAspNetCoreMvcUiBootstrapModule
+2018-02-26 17:19:16.600 +03:00 [Information] - Volo.Abp.Permissions.AbpPermissionsApplicationContractsModule
+2018-02-26 17:19:16.600 +03:00 [Information] - Volo.Abp.Permissions.Web.AbpPermissionsWebModule
+2018-02-26 17:19:16.600 +03:00 [Information] - Volo.Abp.Identity.Web.AbpIdentityWebModule
+2018-02-26 17:19:16.600 +03:00 [Information] - Volo.Abp.Identity.EntityFrameworkCore.AbpIdentityEntityFrameworkCoreModule
+2018-02-26 17:19:16.600 +03:00 [Information] - Volo.Abp.Account.AbpAccountApplicationContractsModule
+2018-02-26 17:19:16.600 +03:00 [Information] - Volo.Abp.Account.Web.AbpAccountWebModule
+2018-02-26 17:19:16.600 +03:00 [Information] - MicroserviceDemo.Web.MicroservicesDemoWebModule
+2018-02-26 17:19:17.252 +03:00 [Information] Initialized all modules.
+2018-02-26 17:19:17.451 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/  
+2018-02-26 17:19:17.657 +03:00 [Information] AuthenticationScheme: "Identity.Application" was successfully authenticated.
+2018-02-26 17:19:21.036 +03:00 [Information] Executing handler method "OnGet" with arguments (null) - ModelState is Valid
+2018-02-26 17:19:22.166 +03:00 [Information] Executed action "/Index" in 1142.5993ms
+2018-02-26 17:19:22.174 +03:00 [Information] Request finished in 4737.4317ms 200 text/html; charset=utf-8
+2018-02-26 17:19:22.477 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/font-awesome/css/font-awesome-min.css  
+2018-02-26 17:19:22.484 +03:00 [Information] The file "/libs/font-awesome/css/font-awesome-min.css" was not modified
+2018-02-26 17:19:22.488 +03:00 [Information] Request finished in 10.4907ms 304 text/css
+2018-02-26 17:19:22.492 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/material/css/material-min.css  
+2018-02-26 17:19:22.493 +03:00 [Information] The file "/libs/material/css/material-min.css" was not modified
+2018-02-26 17:19:22.493 +03:00 [Information] Request finished in 1.2298ms 304 text/css
+2018-02-26 17:19:22.497 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/datatables/datatables.css  
+2018-02-26 17:19:22.498 +03:00 [Information] The file "/libs/datatables/datatables.css" was not modified
+2018-02-26 17:19:22.498 +03:00 [Information] Request finished in 1.0258ms 304 text/css
+2018-02-26 17:19:22.506 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/abp/abp.js?_v636552623615740705  
+2018-02-26 17:19:22.508 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/styles/libs/datatables.css  
+2018-02-26 17:19:22.508 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/views/shared/_AppLayout.css  
+2018-02-26 17:19:22.508 +03:00 [Information] Sending file. Request path: '"/libs/abp/abp.js"'. Physical path: '"/wwwroot/libs/abp/abp.js"'
+2018-02-26 17:19:22.508 +03:00 [Information] The file "/styles/libs/datatables.css" was not modified
+2018-02-26 17:19:22.508 +03:00 [Information] The file "/views/shared/_AppLayout.css" was not modified
+2018-02-26 17:19:22.508 +03:00 [Information] Request finished in 0.7321ms 304 text/css
+2018-02-26 17:19:22.509 +03:00 [Information] Request finished in 0.7581ms 304 text/css
+2018-02-26 17:19:22.511 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/bootstrap/js/bootstrap-bundle-min.js  
+2018-02-26 17:19:22.512 +03:00 [Information] The file "/libs/bootstrap/js/bootstrap-bundle-min.js" was not modified
+2018-02-26 17:19:22.512 +03:00 [Information] Request finished in 1.0237ms 304 application/javascript
+2018-02-26 17:19:22.513 +03:00 [Information] Request finished in 6.801ms 200 application/javascript
+2018-02-26 17:19:22.514 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/jquery-validation-unobtrusive/jquery-validate-unobtrusive.js  
+2018-02-26 17:19:22.515 +03:00 [Information] The file "/libs/jquery-validation-unobtrusive/jquery-validate-unobtrusive.js" was not modified
+2018-02-26 17:19:22.515 +03:00 [Information] Request finished in 1.5369ms 304 application/javascript
+2018-02-26 17:19:22.516 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/jquery-validation/jquery-validate.js  
+2018-02-26 17:19:22.516 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/jquery/jquery-3-1-1-min.js  
+2018-02-26 17:19:22.516 +03:00 [Information] The file "/libs/jquery-validation/jquery-validate.js" was not modified
+2018-02-26 17:19:22.516 +03:00 [Information] The file "/libs/jquery/jquery-3-1-1-min.js" was not modified
+2018-02-26 17:19:22.517 +03:00 [Information] Request finished in 0.8013ms 304 application/javascript
+2018-02-26 17:19:22.517 +03:00 [Information] Request finished in 1.6044ms 304 application/javascript
+2018-02-26 17:19:22.523 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/material/js/material-min.js  
+2018-02-26 17:19:22.523 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/jquery-form/jquery-form-min.js  
+2018-02-26 17:19:22.524 +03:00 [Information] The file "/libs/material/js/material-min.js" was not modified
+2018-02-26 17:19:22.524 +03:00 [Information] Request finished in 0.9296ms 304 application/javascript
+2018-02-26 17:19:22.525 +03:00 [Information] The file "/libs/jquery-form/jquery-form-min.js" was not modified
+2018-02-26 17:19:22.525 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/vue/vue.js  
+2018-02-26 17:19:22.525 +03:00 [Information] Request finished in 1.7494ms 304 application/javascript
+2018-02-26 17:19:22.525 +03:00 [Information] The file "/libs/vue/vue.js" was not modified
+2018-02-26 17:19:22.526 +03:00 [Information] Request finished in 0.8441ms 304 application/javascript
+2018-02-26 17:19:22.526 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/Abp/ApplicationConfigurationScript?_v=636552623615780710  
+2018-02-26 17:19:22.527 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/abp/abp-jquery.js?_v636552623615775373  
+2018-02-26 17:19:22.528 +03:00 [Information] Sending file. Request path: '"/libs/abp/abp-jquery.js"'. Physical path: '"/wwwroot/libs/abp/abp-jquery.js"'
+2018-02-26 17:19:22.528 +03:00 [Information] Request finished in 0.9886ms 200 application/javascript
+2018-02-26 17:19:22.529 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/datatables/datatables-min.js  
+2018-02-26 17:19:22.529 +03:00 [Information] The file "/libs/datatables/datatables-min.js" was not modified
+2018-02-26 17:19:22.529 +03:00 [Information] Request finished in 0.877ms 304 application/javascript
+2018-02-26 17:19:22.533 +03:00 [Information] AuthenticationScheme: "Identity.Application" was successfully authenticated.
+2018-02-26 17:19:22.538 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/Abp/ServiceProxyScript?_v=636552623615780740  
+2018-02-26 17:19:22.543 +03:00 [Information] AuthenticationScheme: "Identity.Application" was successfully authenticated.
+2018-02-26 17:19:22.617 +03:00 [Information] Executing action method "Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc)" with arguments (null) - ModelState is Valid
+2018-02-26 17:19:22.685 +03:00 [Information] Executing action method "Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc)" with arguments (["Volo.Abp.AspNetCore.Mvc.ProxyScripting.ServiceProxyGenerationModel"]) - ModelState is Valid
+2018-02-26 17:19:22.884 +03:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-02-26 17:19:22.885 +03:00 [Information] Executed action "Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc)" in 326.9015ms
+2018-02-26 17:19:22.885 +03:00 [Information] Request finished in 359.2589ms 200 text/plain; charset=utf-8
+2018-02-26 17:19:22.943 +03:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-02-26 17:19:22.943 +03:00 [Information] Executed action "Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc)" in 318.661ms
+2018-02-26 17:19:22.943 +03:00 [Information] Request finished in 404.9409ms 200 text/plain; charset=utf-8
+2018-02-26 17:19:28.316 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/Identity/Users  
+2018-02-26 17:19:28.318 +03:00 [Information] AuthenticationScheme: "Identity.Application" was successfully authenticated.
+2018-02-26 17:19:28.532 +03:00 [Information] Executing handler method "OnGet" with arguments (null) - ModelState is Valid
+2018-02-26 17:19:28.572 +03:00 [Information] Executed action "/Identity/Users/Index" in 46.6946ms
+2018-02-26 17:19:28.572 +03:00 [Information] Request finished in 256.5039ms 200 text/html; charset=utf-8
+2018-02-26 17:19:28.643 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/modules/identity/views/users/index.css  
+2018-02-26 17:19:28.644 +03:00 [Information] Sending file. Request path: '"/modules/identity/views/users/index.css"'. Physical path: '"/wwwroot/modules/identity/views/users/index.css"'
+2018-02-26 17:19:28.645 +03:00 [Information] Request finished in 2.0034ms 200 text/css
+2018-02-26 17:19:28.686 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/Abp/ApplicationConfigurationScript?_v=636552623615780710  
+2018-02-26 17:19:28.686 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/abp/helpers/jquery.js  
+2018-02-26 17:19:28.687 +03:00 [Information] The file "/abp/helpers/jquery.js" was not modified
+2018-02-26 17:19:28.687 +03:00 [Information] Request finished in 1.0049ms 304 application/javascript
+2018-02-26 17:19:28.688 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/Abp/ServiceProxyScript?_v=636552623615780740  
+2018-02-26 17:19:28.689 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/abp/helpers/datatables.extensions.js  
+2018-02-26 17:19:28.689 +03:00 [Information] The file "/abp/helpers/datatables.extensions.js" was not modified
+2018-02-26 17:19:28.690 +03:00 [Information] Request finished in 1.1058ms 304 application/javascript
+2018-02-26 17:19:28.690 +03:00 [Information] AuthenticationScheme: "Identity.Application" was successfully authenticated.
+2018-02-26 17:19:28.691 +03:00 [Information] AuthenticationScheme: "Identity.Application" was successfully authenticated.
+2018-02-26 17:19:28.692 +03:00 [Information] Executing action method "Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc)" with arguments (null) - ModelState is Valid
+2018-02-26 17:19:28.693 +03:00 [Information] Executing action method "Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc)" with arguments (["Volo.Abp.AspNetCore.Mvc.ProxyScripting.ServiceProxyGenerationModel"]) - ModelState is Valid
+2018-02-26 17:19:28.693 +03:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-02-26 17:19:28.694 +03:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-02-26 17:19:28.694 +03:00 [Information] Executed action "Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc)" in 2.9335ms
+2018-02-26 17:19:28.694 +03:00 [Information] Executed action "Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc)" in 2.7304ms
+2018-02-26 17:19:28.694 +03:00 [Information] Request finished in 8.2028ms 200 text/plain; charset=utf-8
+2018-02-26 17:19:28.694 +03:00 [Information] Request finished in 6.8635ms 200 text/plain; charset=utf-8
+2018-02-26 17:19:28.696 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/abp/helpers/ModalManager.js  
+2018-02-26 17:19:28.697 +03:00 [Information] The file "/abp/helpers/ModalManager.js" was not modified
+2018-02-26 17:19:28.700 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/modules/identity/views/users/index.js  
+2018-02-26 17:19:28.703 +03:00 [Information] Request finished in 5.4865ms 304 application/javascript
+2018-02-26 17:19:28.703 +03:00 [Information] The file "/modules/identity/views/users/index.js" was not modified
+2018-02-26 17:19:28.705 +03:00 [Information] Request finished in 4.6308ms 304 application/javascript
+2018-02-26 17:19:28.714 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/abp/helpers/ResourceLoader.js  
+2018-02-26 17:19:28.714 +03:00 [Information] The file "/abp/helpers/ResourceLoader.js" was not modified
+2018-02-26 17:19:28.715 +03:00 [Information] Request finished in 1.1045ms 304 application/javascript
+2018-02-26 17:19:28.732 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/font-awesome/fonts/fontawesome-webfont.woff2?v=4.7.0  
+2018-02-26 17:19:28.733 +03:00 [Information] The file "/libs/font-awesome/fonts/fontawesome-webfont.woff2" was not modified
+2018-02-26 17:19:28.734 +03:00 [Information] Request finished in 5.0892ms 304 font/woff2
+2018-02-26 17:19:28.946 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/api/identity/user application/json 
+2018-02-26 17:19:28.949 +03:00 [Information] AuthenticationScheme: "Identity.Application" was successfully authenticated.
+2018-02-26 17:19:29.667 +03:00 [Information] Authorization was successful for user: "hikalkan".
+2018-02-26 17:19:29.686 +03:00 [Information] Executing action method "Volo.Abp.Identity.IdentityUserAppService.GetListAsync (Volo.Abp.Identity.Application)" with arguments (["Volo.Abp.Identity.GetIdentityUsersInput"]) - ModelState is Valid
+2018-02-26 17:19:30.459 +03:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-02-26 17:19:30.519 +03:00 [Information] Executed action "Volo.Abp.Identity.IdentityUserAppService.GetListAsync (Volo.Abp.Identity.Application)" in 1561.1236ms
+2018-02-26 17:19:30.519 +03:00 [Information] Request finished in 1573.5242ms 200 application/json; charset=utf-8
+2018-02-26 17:19:31.125 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/Identity/Roles  
+2018-02-26 17:19:31.128 +03:00 [Information] AuthenticationScheme: "Identity.Application" was successfully authenticated.
+2018-02-26 17:19:31.418 +03:00 [Information] Executing handler method "OnGet" with arguments (null) - ModelState is Valid
+2018-02-26 17:19:31.445 +03:00 [Information] Executed action "/Identity/Roles/Index" in 27.602ms
+2018-02-26 17:19:31.446 +03:00 [Information] Request finished in 320.8971ms 200 text/html; charset=utf-8
+2018-02-26 17:19:31.496 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/material/css/material-min.css  
+2018-02-26 17:19:31.496 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/font-awesome/css/font-awesome-min.css  
+2018-02-26 17:19:31.497 +03:00 [Information] Sending file. Request path: '"/libs/material/css/material-min.css"'. Physical path: '"/wwwroot/libs/material/css/material-min.css"'
+2018-02-26 17:19:31.497 +03:00 [Information] Sending file. Request path: '"/libs/font-awesome/css/font-awesome-min.css"'. Physical path: '"/wwwroot/libs/font_awesome/css/font-awesome-min.css"'
+2018-02-26 17:19:31.498 +03:00 [Information] Request finished in 1.4971ms 200 text/css
+2018-02-26 17:19:31.501 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/datatables/datatables.css  
+2018-02-26 17:19:31.501 +03:00 [Information] Sending file. Request path: '"/libs/datatables/datatables.css"'. Physical path: '"/wwwroot/libs/datatables/datatables.css"'
+2018-02-26 17:19:31.502 +03:00 [Information] Request finished in 1.1811ms 200 text/css
+2018-02-26 17:19:31.507 +03:00 [Information] Request finished in 10.7738ms 200 text/css
+2018-02-26 17:19:31.515 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/styles/libs/datatables.css  
+2018-02-26 17:19:31.516 +03:00 [Information] Sending file. Request path: '"/styles/libs/datatables.css"'. Physical path: '"/wwwroot/styles/libs/datatables.css"'
+2018-02-26 17:19:31.517 +03:00 [Information] Request finished in 4.3246ms 200 text/css
+2018-02-26 17:19:31.519 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/views/shared/_AppLayout.css  
+2018-02-26 17:19:31.519 +03:00 [Information] Sending file. Request path: '"/views/shared/_AppLayout.css"'. Physical path: '"/wwwroot/views/shared/_AppLayout.css"'
+2018-02-26 17:19:31.520 +03:00 [Information] Request finished in 1.2858ms 200 text/css
+2018-02-26 17:19:31.524 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/modules/identity/views/roles/index.css  
+2018-02-26 17:19:31.524 +03:00 [Information] Sending file. Request path: '"/modules/identity/views/roles/index.css"'. Physical path: '"/wwwroot/modules/identity/views/roles/index.css"'
+2018-02-26 17:19:31.525 +03:00 [Information] Request finished in 1.1794ms 200 text/css
+2018-02-26 17:19:31.530 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/abp/abp.js?_v636552623615740705  
+2018-02-26 17:19:31.531 +03:00 [Information] Sending file. Request path: '"/libs/abp/abp.js"'. Physical path: '"/wwwroot/libs/abp/abp.js"'
+2018-02-26 17:19:31.532 +03:00 [Information] Request finished in 1.7858ms 200 application/javascript
+2018-02-26 17:19:31.542 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/jquery/jquery-3-1-1-min.js  
+2018-02-26 17:19:31.542 +03:00 [Information] Sending file. Request path: '"/libs/jquery/jquery-3-1-1-min.js"'. Physical path: '"/wwwroot/libs/jquery/jquery-3-1-1-min.js"'
+2018-02-26 17:19:31.545 +03:00 [Information] Request finished in 3.6173ms 200 application/javascript
+2018-02-26 17:19:31.550 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/jquery-validation/jquery-validate.js  
+2018-02-26 17:19:31.551 +03:00 [Information] Sending file. Request path: '"/libs/jquery-validation/jquery-validate.js"'. Physical path: '"/wwwroot/libs/jquery_validation/jquery-validate.js"'
+2018-02-26 17:19:31.551 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/bootstrap/js/bootstrap-bundle-min.js  
+2018-02-26 17:19:31.551 +03:00 [Information] Sending file. Request path: '"/libs/bootstrap/js/bootstrap-bundle-min.js"'. Physical path: '"/wwwroot/libs/bootstrap/js/bootstrap-bundle-min.js"'
+2018-02-26 17:19:31.551 +03:00 [Information] Request finished in 1.7118ms 200 application/javascript
+2018-02-26 17:19:31.553 +03:00 [Information] Request finished in 2.3643ms 200 application/javascript
+2018-02-26 17:19:31.554 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/jquery-validation-unobtrusive/jquery-validate-unobtrusive.js  
+2018-02-26 17:19:31.554 +03:00 [Information] Sending file. Request path: '"/libs/jquery-validation-unobtrusive/jquery-validate-unobtrusive.js"'. Physical path: '"/wwwroot/libs/jquery_validation_unobtrusive/jquery-validate-unobtrusive.js"'
+2018-02-26 17:19:31.555 +03:00 [Information] Request finished in 1.0755ms 200 application/javascript
+2018-02-26 17:19:31.558 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/jquery-form/jquery-form-min.js  
+2018-02-26 17:19:31.558 +03:00 [Information] Sending file. Request path: '"/libs/jquery-form/jquery-form-min.js"'. Physical path: '"/wwwroot/libs/jquery_form/jquery-form-min.js"'
+2018-02-26 17:19:31.559 +03:00 [Information] Request finished in 1.0229ms 200 application/javascript
+2018-02-26 17:19:31.561 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/material/js/material-min.js  
+2018-02-26 17:19:31.563 +03:00 [Information] Sending file. Request path: '"/libs/material/js/material-min.js"'. Physical path: '"/wwwroot/libs/material/js/material-min.js"'
+2018-02-26 17:19:31.565 +03:00 [Information] Request finished in 3.6661ms 200 application/javascript
+2018-02-26 17:19:31.573 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/datatables/datatables-min.js  
+2018-02-26 17:19:31.574 +03:00 [Information] Sending file. Request path: '"/libs/datatables/datatables-min.js"'. Physical path: '"/wwwroot/libs/datatables/datatables-min.js"'
+2018-02-26 17:19:31.575 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/abp/abp-jquery.js?_v636552623615775373  
+2018-02-26 17:19:31.575 +03:00 [Information] Sending file. Request path: '"/libs/abp/abp-jquery.js"'. Physical path: '"/wwwroot/libs/abp/abp-jquery.js"'
+2018-02-26 17:19:31.576 +03:00 [Information] Request finished in 1.2713ms 200 application/javascript
+2018-02-26 17:19:31.583 +03:00 [Information] Request finished in 9.901ms 200 application/javascript
+2018-02-26 17:19:31.586 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/vue/vue.js  
+2018-02-26 17:19:31.587 +03:00 [Information] Sending file. Request path: '"/libs/vue/vue.js"'. Physical path: '"/wwwroot/libs/vue/vue.js"'
+2018-02-26 17:19:31.588 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/abp/helpers/jquery.js  
+2018-02-26 17:19:31.588 +03:00 [Information] Sending file. Request path: '"/abp/helpers/jquery.js"'. Physical path: '"/wwwroot/abp/helpers/jquery.js"'
+2018-02-26 17:19:31.589 +03:00 [Information] Request finished in 1.0365ms 200 application/javascript
+2018-02-26 17:19:31.592 +03:00 [Information] Request finished in 6.0548ms 200 application/javascript
+2018-02-26 17:19:31.592 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/Abp/ServiceProxyScript?_v=636552623615780740  
+2018-02-26 17:19:31.592 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/Abp/ApplicationConfigurationScript?_v=636552623615780710  
+2018-02-26 17:19:31.593 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/abp/helpers/datatables.extensions.js  
+2018-02-26 17:19:31.594 +03:00 [Information] Sending file. Request path: '"/abp/helpers/datatables.extensions.js"'. Physical path: '"/wwwroot/abp/helpers/datatables/extensions.js"'
+2018-02-26 17:19:31.595 +03:00 [Information] Request finished in 1.7083ms 200 application/javascript
+2018-02-26 17:19:31.597 +03:00 [Information] AuthenticationScheme: "Identity.Application" was successfully authenticated.
+2018-02-26 17:19:31.597 +03:00 [Information] AuthenticationScheme: "Identity.Application" was successfully authenticated.
+2018-02-26 17:19:31.599 +03:00 [Information] Executing action method "Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc)" with arguments (["Volo.Abp.AspNetCore.Mvc.ProxyScripting.ServiceProxyGenerationModel"]) - ModelState is Valid
+2018-02-26 17:19:31.599 +03:00 [Information] Executing action method "Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc)" with arguments (null) - ModelState is Valid
+2018-02-26 17:19:31.599 +03:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-02-26 17:19:31.600 +03:00 [Information] Executed action "Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc)" in 1.394ms
+2018-02-26 17:19:31.600 +03:00 [Information] Request finished in 7.7299ms 200 text/plain; charset=utf-8
+2018-02-26 17:19:31.601 +03:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-02-26 17:19:31.602 +03:00 [Information] Executed action "Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc)" in 4.3511ms
+2018-02-26 17:19:31.602 +03:00 [Information] Request finished in 10.2512ms 200 text/plain; charset=utf-8
+2018-02-26 17:19:31.604 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/abp/helpers/ResourceLoader.js  
+2018-02-26 17:19:31.605 +03:00 [Information] Sending file. Request path: '"/abp/helpers/ResourceLoader.js"'. Physical path: '"/wwwroot/abp/helpers/ResourceLoader.js"'
+2018-02-26 17:19:31.606 +03:00 [Information] Request finished in 2.2121ms 200 application/javascript
+2018-02-26 17:19:31.607 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/abp/helpers/ModalManager.js  
+2018-02-26 17:19:31.607 +03:00 [Information] Sending file. Request path: '"/abp/helpers/ModalManager.js"'. Physical path: '"/wwwroot/abp/helpers/ModalManager.js"'
+2018-02-26 17:19:31.611 +03:00 [Information] Request finished in 4.2096ms 200 application/javascript
+2018-02-26 17:19:31.619 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/modules/identity/views/roles/index.js  
+2018-02-26 17:19:31.620 +03:00 [Information] Sending file. Request path: '"/modules/identity/views/roles/index.js"'. Physical path: '"/wwwroot/modules/identity/views/roles/index.js"'
+2018-02-26 17:19:31.621 +03:00 [Information] Request finished in 1.6609ms 200 application/javascript
+2018-02-26 17:19:31.908 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/font-awesome/fonts/fontawesome-webfont.woff2?v=4.7.0  
+2018-02-26 17:19:31.908 +03:00 [Information] Sending file. Request path: '"/libs/font-awesome/fonts/fontawesome-webfont.woff2"'. Physical path: '"/wwwroot/libs/font_awesome/fonts/fontawesome-webfont.woff2"'
+2018-02-26 17:19:31.910 +03:00 [Information] Request finished in 1.9842ms 200 font/woff2
+2018-02-26 17:19:32.223 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/api/identity/role application/json 
+2018-02-26 17:19:32.226 +03:00 [Information] AuthenticationScheme: "Identity.Application" was successfully authenticated.
+2018-02-26 17:19:32.241 +03:00 [Information] Authorization was successful for user: "hikalkan".
+2018-02-26 17:19:32.246 +03:00 [Information] Executing action method "Volo.Abp.Identity.IdentityRoleAppService.GetListAsync (Volo.Abp.Identity.Application)" with arguments (["Volo.Abp.Identity.GetIdentityRolesInput"]) - ModelState is Valid
+2018-02-26 17:19:32.322 +03:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-02-26 17:19:32.330 +03:00 [Information] Executed action "Volo.Abp.Identity.IdentityRoleAppService.GetListAsync (Volo.Abp.Identity.Application)" in 95.4201ms
+2018-02-26 17:19:32.330 +03:00 [Information] Request finished in 107.3207ms 200 application/json; charset=utf-8
+2018-02-26 17:19:33.881 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/AbpPermissions/PermissionManagementModal?providerName=Role&providerKey=admin  
+2018-02-26 17:19:33.884 +03:00 [Information] AuthenticationScheme: "Identity.Application" was successfully authenticated.
+2018-02-26 17:19:34.379 +03:00 [Information] Executing handler method "OnGetAsync" with arguments (null) - ModelState is Valid
+2018-02-26 17:19:34.391 +03:00 [Information] Authorization was successful for user: "hikalkan".
+2018-02-26 17:19:35.209 +03:00 [Information] Executed action "/AbpPermissions/PermissionManagementModal" in 860.0596ms
+2018-02-26 17:19:35.209 +03:00 [Information] Request finished in 1328.438ms 200 text/html; charset=utf-8
+2018-02-26 17:19:38.025 +03:00 [Information] Request starting HTTP/1.1 POST http://localhost:61144/AbpPermissions/PermissionManagementModal application/x-www-form-urlencoded; charset=UTF-8 592
+2018-02-26 17:19:38.028 +03:00 [Information] AuthenticationScheme: "Identity.Application" was successfully authenticated.
+2018-02-26 17:19:38.060 +03:00 [Information] Executing handler method "OnPostAsync" with arguments (null) - ModelState is Valid
+2018-02-26 17:19:38.073 +03:00 [Information] Authorization was successful for user: "hikalkan".
+2018-02-26 17:19:38.384 +03:00 [Error] InternalServerError
+Volo.Abp.Http.Client.AbpRemoteCallException: InternalServerError
+   at Volo.Abp.Http.Client.DynamicProxying.DynamicHttpProxyInterceptor`1.<ThrowExceptionForResponseAsync>d__19.MoveNext() in D:\Github\abp\src\Volo.Abp.Http.Client\Volo\Abp\Http\Client\DynamicProxying\DynamicHttpProxyInterceptor.cs:line 211
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Volo.Abp.Http.Client.DynamicProxying.DynamicHttpProxyInterceptor`1.<MakeRequest>d__13.MoveNext() in D:\Github\abp\src\Volo.Abp.Http.Client\Volo\Abp\Http\Client\DynamicProxying\DynamicHttpProxyInterceptor.cs:line 127
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Volo.Abp.Permissions.Web.Pages.AbpPermissions.PermissionManagementModal.<OnPostAsync>d__15.MoveNext() in D:\Github\abp\src\Volo.Abp.Permissions.Web\Pages\AbpPermissions\PermissionManagementModal.cshtml.cs:line 64
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at Microsoft.AspNetCore.Mvc.RazorPages.Internal.ExecutorFactory.GenericTaskHandlerMethod.<Convert>d__4`1.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at Microsoft.AspNetCore.Mvc.RazorPages.Internal.ExecutorFactory.GenericTaskHandlerMethod.<Execute>d__3.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at Microsoft.AspNetCore.Mvc.RazorPages.Internal.PageActionInvoker.<InvokeHandlerMethodAsync>d__29.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Mvc.RazorPages.Internal.PageActionInvoker.<InvokeNextPageFilterAsync>d__31.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at Microsoft.AspNetCore.Mvc.RazorPages.Internal.PageActionInvoker.Rethrow(PageHandlerExecutedContext context)
+   at Microsoft.AspNetCore.Mvc.RazorPages.Internal.PageActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.RazorPages.Internal.PageActionInvoker.<InvokeInnerFilterAsync>d__22.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.<InvokeNextExceptionFilterAsync>d__23.MoveNext()
+2018-02-26 17:19:38.402 +03:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.RazorPages.PageContext".
+2018-02-26 17:19:38.410 +03:00 [Information] Executed action "/AbpPermissions/PermissionManagementModal" in 381.6408ms
+2018-02-26 17:19:38.411 +03:00 [Information] Request finished in 386.5402ms 500 application/json; charset=utf-8
+2018-02-26 17:38:53.831 +03:00 [Information] Loaded modules:
+2018-02-26 17:38:53.875 +03:00 [Information] - Volo.Abp.Castle.AbpCastleCoreModule
+2018-02-26 17:38:53.876 +03:00 [Information] - Volo.Abp.Autofac.AbpAutofacModule
+2018-02-26 17:38:53.876 +03:00 [Information] - Volo.Abp.Http.AbpHttpAbstractionsModule
+2018-02-26 17:38:53.876 +03:00 [Information] - Volo.Abp.Timing.AbpTimingModule
+2018-02-26 17:38:53.876 +03:00 [Information] - Volo.Abp.Json.AbpJsonModule
+2018-02-26 17:38:53.876 +03:00 [Information] - Volo.Abp.Http.AbpHttpModule
+2018-02-26 17:38:53.876 +03:00 [Information] - Volo.Abp.Http.Client.AbpHttpClientModule
+2018-02-26 17:38:53.876 +03:00 [Information] - Volo.Abp.Security.AbpSecurityModule
+2018-02-26 17:38:53.876 +03:00 [Information] - Volo.Abp.Authorization.AbpAuthorizationModule
+2018-02-26 17:38:53.876 +03:00 [Information] - Volo.Abp.Guids.AbpGuidsModule
+2018-02-26 17:38:53.877 +03:00 [Information] - Volo.Abp.Data.AbpDataModule
+2018-02-26 17:38:53.877 +03:00 [Information] - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2018-02-26 17:38:53.877 +03:00 [Information] - Volo.Abp.Settings.AbpSettingsModule
+2018-02-26 17:38:53.877 +03:00 [Information] - Volo.Abp.MultiTenancy.AbpMultiTenancyAbstractionsModule
+2018-02-26 17:38:53.877 +03:00 [Information] - Volo.Abp.Threading.AbpThreadingModule
+2018-02-26 17:38:53.877 +03:00 [Information] - Volo.Abp.EventBus.AbpEventBusModule
+2018-02-26 17:38:53.877 +03:00 [Information] - Volo.Abp.Validation.AbpValidationModule
+2018-02-26 17:38:53.877 +03:00 [Information] - Volo.Abp.AbpDddModule
+2018-02-26 17:38:53.877 +03:00 [Information] - Volo.Abp.Permissions.AbpPermissionsDomainSharedModule
+2018-02-26 17:38:53.877 +03:00 [Information] - Volo.Abp.Serialization.AbpSerializationModule
+2018-02-26 17:38:53.878 +03:00 [Information] - Volo.Abp.Caching.AbpCachingModule
+2018-02-26 17:38:53.878 +03:00 [Information] - Volo.Abp.Permissions.AbpPermissionsDomainModule
+2018-02-26 17:38:53.878 +03:00 [Information] - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2018-02-26 17:38:53.878 +03:00 [Information] - Volo.Abp.Localization.AbpLocalizationModule
+2018-02-26 17:38:53.878 +03:00 [Information] - Volo.Abp.Session.AbpSessionModule
+2018-02-26 17:38:53.878 +03:00 [Information] - Volo.Abp.ApiVersioning.AbpApiVersioningAbstractionsModule
+2018-02-26 17:38:53.878 +03:00 [Information] - Volo.Abp.AbpCommonModule
+2018-02-26 17:38:53.878 +03:00 [Information] - Volo.Abp.EntityFrameworkCore.AbpEntityFrameworkCoreModule
+2018-02-26 17:38:53.878 +03:00 [Information] - Volo.Abp.Permissions.EntityFrameworkCore.AbpPermissionsEntityFrameworkCoreModule
+2018-02-26 17:38:53.878 +03:00 [Information] - Volo.Abp.Identity.AbpIdentityDomainSharedModule
+2018-02-26 17:38:53.878 +03:00 [Information] - Volo.Abp.Identity.AbpIdentityDomainModule
+2018-02-26 17:38:53.878 +03:00 [Information] - Volo.Abp.Identity.AbpIdentityApplicationContractsModule
+2018-02-26 17:38:53.878 +03:00 [Information] - Volo.Abp.AutoMapper.AbpAutoMapperModule
+2018-02-26 17:38:53.878 +03:00 [Information] - Volo.Abp.Identity.AbpIdentityApplicationModule
+2018-02-26 17:38:53.879 +03:00 [Information] - Volo.Abp.AspNetCore.AbpAspNetCoreModule
+2018-02-26 17:38:53.879 +03:00 [Information] - Volo.Abp.Ui.AbpUiModule
+2018-02-26 17:38:53.879 +03:00 [Information] - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcModule
+2018-02-26 17:38:53.879 +03:00 [Information] - Volo.Abp.Identity.AbpIdentityHttpApiModule
+2018-02-26 17:38:53.879 +03:00 [Information] - Volo.Abp.Ui.Navigation.AbpUiNavigationModule
+2018-02-26 17:38:53.879 +03:00 [Information] - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcUiModule
+2018-02-26 17:38:53.879 +03:00 [Information] - Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.AbpAspNetCoreMvcUiBootstrapModule
+2018-02-26 17:38:53.879 +03:00 [Information] - Volo.Abp.Permissions.AbpPermissionsApplicationContractsModule
+2018-02-26 17:38:53.879 +03:00 [Information] - Volo.Abp.Permissions.Web.AbpPermissionsWebModule
+2018-02-26 17:38:53.879 +03:00 [Information] - Volo.Abp.Identity.Web.AbpIdentityWebModule
+2018-02-26 17:38:53.879 +03:00 [Information] - Volo.Abp.Identity.EntityFrameworkCore.AbpIdentityEntityFrameworkCoreModule
+2018-02-26 17:38:53.879 +03:00 [Information] - Volo.Abp.Account.AbpAccountApplicationContractsModule
+2018-02-26 17:38:53.879 +03:00 [Information] - Volo.Abp.Account.Web.AbpAccountWebModule
+2018-02-26 17:38:53.880 +03:00 [Information] - MicroserviceDemo.Web.MicroservicesDemoWebModule
+2018-02-26 17:38:54.490 +03:00 [Information] Initialized all modules.
+2018-02-26 17:38:54.829 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/  
+2018-02-26 17:38:55.020 +03:00 [Information] AuthenticationScheme: "Identity.Application" was successfully authenticated.
+2018-02-26 17:38:58.018 +03:00 [Information] Executing handler method "OnGet" with arguments (null) - ModelState is Valid
+2018-02-26 17:38:59.127 +03:00 [Information] Executed action "/Index" in 1116.9772ms
+2018-02-26 17:38:59.133 +03:00 [Information] Request finished in 4318.2932ms 200 text/html; charset=utf-8
+2018-02-26 17:38:59.166 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/abp/abp.js?_v636552635385376091  
+2018-02-26 17:38:59.172 +03:00 [Information] Sending file. Request path: '"/libs/abp/abp.js"'. Physical path: '"/wwwroot/libs/abp/abp.js"'
+2018-02-26 17:38:59.176 +03:00 [Information] Request finished in 10.261ms 200 application/javascript
+2018-02-26 17:38:59.186 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/libs/abp/abp-jquery.js?_v636552635385407518  
+2018-02-26 17:38:59.187 +03:00 [Information] Sending file. Request path: '"/libs/abp/abp-jquery.js"'. Physical path: '"/wwwroot/libs/abp/abp-jquery.js"'
+2018-02-26 17:38:59.187 +03:00 [Information] Request finished in 1.7314ms 200 application/javascript
+2018-02-26 17:38:59.188 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/Abp/ApplicationConfigurationScript?_v=636552635385412979  
+2018-02-26 17:38:59.190 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/Abp/ServiceProxyScript?_v=636552635385413009  
+2018-02-26 17:38:59.195 +03:00 [Information] AuthenticationScheme: "Identity.Application" was successfully authenticated.
+2018-02-26 17:38:59.195 +03:00 [Information] AuthenticationScheme: "Identity.Application" was successfully authenticated.
+2018-02-26 17:38:59.248 +03:00 [Information] Executing action method "Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc)" with arguments (null) - ModelState is Valid
+2018-02-26 17:38:59.300 +03:00 [Information] Executing action method "Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc)" with arguments (["Volo.Abp.AspNetCore.Mvc.ProxyScripting.ServiceProxyGenerationModel"]) - ModelState is Valid
+2018-02-26 17:38:59.531 +03:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-02-26 17:38:59.532 +03:00 [Information] Executed action "Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc)" in 324.7095ms
+2018-02-26 17:38:59.533 +03:00 [Information] Request finished in 345.7538ms 200 text/plain; charset=utf-8
+2018-02-26 17:38:59.599 +03:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-02-26 17:38:59.600 +03:00 [Information] Executed action "Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc)" in 350.4458ms
+2018-02-26 17:38:59.600 +03:00 [Information] Request finished in 410.0982ms 200 text/plain; charset=utf-8
+2018-02-26 17:39:22.292 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/Identity/Roles  
+2018-02-26 17:39:22.297 +03:00 [Information] AuthenticationScheme: "Identity.Application" was successfully authenticated.
+2018-02-26 17:39:22.587 +03:00 [Information] Executing handler method "OnGet" with arguments (null) - ModelState is Valid
+2018-02-26 17:39:22.621 +03:00 [Information] Executed action "/Identity/Roles/Index" in 40.065ms
+2018-02-26 17:39:22.621 +03:00 [Information] Request finished in 329.2206ms 200 text/html; charset=utf-8
+2018-02-26 17:39:22.668 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/modules/identity/views/roles/index.css  
+2018-02-26 17:39:22.672 +03:00 [Information] The file "/modules/identity/views/roles/index.css" was not modified
+2018-02-26 17:39:22.677 +03:00 [Information] Request finished in 8.332ms 304 text/css
+2018-02-26 17:39:22.687 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/Abp/ApplicationConfigurationScript?_v=636552635385412979  
+2018-02-26 17:39:22.691 +03:00 [Information] AuthenticationScheme: "Identity.Application" was successfully authenticated.
+2018-02-26 17:39:22.693 +03:00 [Information] Executing action method "Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc)" with arguments (null) - ModelState is Valid
+2018-02-26 17:39:22.694 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/Abp/ServiceProxyScript?_v=636552635385413009  
+2018-02-26 17:39:22.695 +03:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-02-26 17:39:22.695 +03:00 [Information] Executed action "Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc)" in 2.9463ms
+2018-02-26 17:39:22.696 +03:00 [Information] Request finished in 9.1937ms 200 text/plain; charset=utf-8
+2018-02-26 17:39:22.699 +03:00 [Information] AuthenticationScheme: "Identity.Application" was successfully authenticated.
+2018-02-26 17:39:22.701 +03:00 [Information] Executing action method "Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc)" with arguments (["Volo.Abp.AspNetCore.Mvc.ProxyScripting.ServiceProxyGenerationModel"]) - ModelState is Valid
+2018-02-26 17:39:22.702 +03:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-02-26 17:39:22.702 +03:00 [Information] Executed action "Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc)" in 2.7749ms
+2018-02-26 17:39:22.703 +03:00 [Information] Request finished in 8.601ms 200 text/plain; charset=utf-8
+2018-02-26 17:39:22.703 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/modules/identity/views/roles/index.js  
+2018-02-26 17:39:22.704 +03:00 [Information] The file "/modules/identity/views/roles/index.js" was not modified
+2018-02-26 17:39:22.704 +03:00 [Information] Request finished in 1.2238ms 304 application/javascript
+2018-02-26 17:39:22.882 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/api/identity/role application/json 
+2018-02-26 17:39:22.886 +03:00 [Information] AuthenticationScheme: "Identity.Application" was successfully authenticated.
+2018-02-26 17:39:23.505 +03:00 [Information] Authorization was successful for user: "hikalkan".
+2018-02-26 17:39:23.520 +03:00 [Information] Executing action method "Volo.Abp.Identity.IdentityRoleAppService.GetListAsync (Volo.Abp.Identity.Application)" with arguments (["Volo.Abp.Identity.GetIdentityRolesInput"]) - ModelState is Valid
+2018-02-26 17:39:24.232 +03:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-02-26 17:39:24.257 +03:00 [Information] Executed action "Volo.Abp.Identity.IdentityRoleAppService.GetListAsync (Volo.Abp.Identity.Application)" in 1363.9633ms
+2018-02-26 17:39:24.257 +03:00 [Information] Request finished in 1374.7324ms 200 application/json; charset=utf-8
+2018-02-26 17:39:25.657 +03:00 [Information] Request starting HTTP/1.1 GET http://localhost:61144/AbpPermissions/PermissionManagementModal?providerName=Role&providerKey=admin  
+2018-02-26 17:39:25.660 +03:00 [Information] AuthenticationScheme: "Identity.Application" was successfully authenticated.
+2018-02-26 17:39:26.192 +03:00 [Information] Executing handler method "OnGetAsync" with arguments (null) - ModelState is Valid
+2018-02-26 17:39:26.206 +03:00 [Information] Authorization was successful for user: "hikalkan".
+2018-02-26 17:39:26.915 +03:00 [Information] Executed action "/AbpPermissions/PermissionManagementModal" in 761.835ms
+2018-02-26 17:39:26.915 +03:00 [Information] Request finished in 1258.4561ms 200 text/html; charset=utf-8
+2018-02-26 17:39:29.294 +03:00 [Information] Request starting HTTP/1.1 POST http://localhost:61144/AbpPermissions/PermissionManagementModal application/x-www-form-urlencoded; charset=UTF-8 592
+2018-02-26 17:39:29.298 +03:00 [Information] AuthenticationScheme: "Identity.Application" was successfully authenticated.
+2018-02-26 17:39:29.332 +03:00 [Information] Executing handler method "OnPostAsync" with arguments (null) - ModelState is Valid
+2018-02-26 17:39:29.343 +03:00 [Information] Authorization was successful for user: "hikalkan".
+2018-02-26 17:39:29.632 +03:00 [Error] InternalServerError
+Volo.Abp.Http.Client.AbpRemoteCallException: InternalServerError
+   at Volo.Abp.Http.Client.DynamicProxying.DynamicHttpProxyInterceptor`1.<ThrowExceptionForResponseAsync>d__19.MoveNext() in D:\Github\abp\src\Volo.Abp.Http.Client\Volo\Abp\Http\Client\DynamicProxying\DynamicHttpProxyInterceptor.cs:line 211
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Volo.Abp.Http.Client.DynamicProxying.DynamicHttpProxyInterceptor`1.<MakeRequest>d__13.MoveNext() in D:\Github\abp\src\Volo.Abp.Http.Client\Volo\Abp\Http\Client\DynamicProxying\DynamicHttpProxyInterceptor.cs:line 127
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Volo.Abp.Permissions.Web.Pages.AbpPermissions.PermissionManagementModal.<OnPostAsync>d__15.MoveNext() in D:\Github\abp\src\Volo.Abp.Permissions.Web\Pages\AbpPermissions\PermissionManagementModal.cshtml.cs:line 64
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at Microsoft.AspNetCore.Mvc.RazorPages.Internal.ExecutorFactory.GenericTaskHandlerMethod.<Convert>d__4`1.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at Microsoft.AspNetCore.Mvc.RazorPages.Internal.ExecutorFactory.GenericTaskHandlerMethod.<Execute>d__3.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at Microsoft.AspNetCore.Mvc.RazorPages.Internal.PageActionInvoker.<InvokeHandlerMethodAsync>d__29.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Mvc.RazorPages.Internal.PageActionInvoker.<InvokeNextPageFilterAsync>d__31.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at Microsoft.AspNetCore.Mvc.RazorPages.Internal.PageActionInvoker.Rethrow(PageHandlerExecutedContext context)
+   at Microsoft.AspNetCore.Mvc.RazorPages.Internal.PageActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.RazorPages.Internal.PageActionInvoker.<InvokeInnerFilterAsync>d__22.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.<InvokeNextExceptionFilterAsync>d__23.MoveNext()
+2018-02-26 17:39:29.651 +03:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.RazorPages.PageContext".
+2018-02-26 17:39:29.657 +03:00 [Information] Executed action "/AbpPermissions/PermissionManagementModal" in 358.4011ms
+2018-02-26 17:39:29.659 +03:00 [Information] Request finished in 364.674ms 500 application/json; charset=utf-8

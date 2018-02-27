@@ -3,21 +3,24 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Modularity;
 using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.Autofac;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 using Volo.Abp.Permissions;
 using Volo.Abp.Permissions.EntityFrameworkCore;
 
 namespace MicroserviceDemo.PermissionService
 {
+    [DependsOn(typeof(AbpAutofacModule))]
     [DependsOn(typeof(AbpPermissionsApplicationModule))]
     [DependsOn(typeof(AbpPermissionsEntityFrameworkCoreModule))]
     [DependsOn(typeof(AbpAspNetCoreMvcModule))]
+    [DependsOn(typeof(AbpIdentityEntityFrameworkCoreModule))]
     public class MicroservicesDemoPermissionServiceModule : AbpModule
     {
         public override void ConfigureServices(IServiceCollection services)
@@ -40,6 +43,12 @@ namespace MicroserviceDemo.PermissionService
                         context.DbContextOptions.UseSqlServer(context.ConnectionString);
                     }
                 });
+
+                //TODO: This should not be neededn when we fix the conn string name problem for interfaces
+                options.Configure<IdentityDbContext>(context =>
+                {
+                    context.DbContextOptions.UseSqlServer(configuration.GetConnectionString("AbpIdentity"));
+                });
             });
 
             services.Configure<AbpAspNetCoreMvcOptions>(options => //TODO: Will be moved to the AbpPermissionsHttpApiModule when it's available!
@@ -53,12 +62,12 @@ namespace MicroserviceDemo.PermissionService
                 );
             });
 
-            services.AddSwaggerGen(
-                options =>
-                {
-                    options.SwaggerDoc("v1", new Info { Title = "Permissions API", Version = "v1" });
-                    options.DocInclusionPredicate((docName, description) => true);
-                });
+            //services.AddSwaggerGen(
+            //    options =>
+            //    {
+            //        options.SwaggerDoc("v1", new Info { Title = "Permissions API", Version = "v1" });
+            //        options.DocInclusionPredicate((docName, description) => true);
+            //    });
 
             services.AddAlwaysAllowPermissionChecker(); //TODO: Remove when add authentication!
 
@@ -71,12 +80,12 @@ namespace MicroserviceDemo.PermissionService
 
             app.UseStaticFiles();
 
-            app.UseSwagger();
-            app.UseSwaggerUI(options =>
-            {
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Permissions API");
-            });
-
+            //app.UseSwagger();
+            //app.UseSwaggerUI(options =>
+            //{
+            //    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Permissions API");
+            //});
+            
             app.UseMvcWithDefaultRoute();
         }
 
