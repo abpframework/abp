@@ -11,7 +11,7 @@ using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.MultiTenancy.Web
 {
-    [DependsOn(typeof(AbpMultiTenancyApplicationContractsModule))]
+    [DependsOn(typeof(AbpMultiTenancyHttpApiModule))]
     [DependsOn(typeof(AbpAspNetCoreMvcUiBootstrapModule))]
     [DependsOn(typeof(AbpAutoMapperModule))]
     public class AbpMultiTenancyWebModule : AbpModule

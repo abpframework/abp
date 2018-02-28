@@ -32,7 +32,6 @@ namespace MicroserviceDemo.Web
     [DependsOn(typeof(AbpIdentityEntityFrameworkCoreModule))]
     [DependsOn(typeof(AbpAccountWebModule))]
     [DependsOn(typeof(AbpMultiTenancyHttpApiClientModule))]
-    [DependsOn(typeof(AbpMultiTenancyHttpApiProxyModule))]
     [DependsOn(typeof(AbpMultiTenancyWebModule))]
     public class MicroservicesDemoWebModule : AbpModule
     {

@@ -19,7 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.AspNetCore.Mvc\Volo.Abp.AspNetCore.Mvc.csproj" />
-    <ProjectReference Include="..\Volo.Abp.MultiTenancy.Application\Volo.Abp.MultiTenancy.Application.csproj" />
+    <ProjectReference Include="..\Volo.Abp.MultiTenancy.Application.Contracts\Volo.Abp.MultiTenancy.Application.Contracts.csproj" />
   </ItemGroup>
 
 </Project>

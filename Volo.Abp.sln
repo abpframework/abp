@@ -288,9 +288,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Serialization.Test
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Authorization.Tests", "test\Volo.Abp.Authorization.Tests\Volo.Abp.Authorization.Tests.csproj", "{B10E37A1-43A1-4042-BAAA-F589302958D5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Permissions.HttpApi", "src\Volo.Abp.Permissions.HttpApi\Volo.Abp.Permissions.HttpApi.csproj", "{94FBE061-CA28-4BDA-9E80-C65EE7E92637}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Permissions.HttpApi", "src\Volo.Abp.Permissions.HttpApi\Volo.Abp.Permissions.HttpApi.csproj", "{94FBE061-CA28-4BDA-9E80-C65EE7E92637}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Permissions.HttpApi.Client", "src\Volo.Abp.Permissions.HttpApi.Client\Volo.Abp.Permissions.HttpApi.Client.csproj", "{01852E73-E8F8-4460-8BBF-9D20C8909366}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Permissions.HttpApi.Client", "src\Volo.Abp.Permissions.HttpApi.Client\Volo.Abp.Permissions.HttpApi.Client.csproj", "{01852E73-E8F8-4460-8BBF-9D20C8909366}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MicroserviceDemo", "MicroserviceDemo", "{3510E248-DC9F-4A07-8134-02E7F5CC5783}"
 EndProject
@@ -298,9 +298,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroserviceDemo.Web", "src
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroserviceDemo.TenancyService", "src\MicroserviceDemo\MicroserviceDemo.TenancyService\MicroserviceDemo.TenancyService.csproj", "{067627C7-6891-453A-A219-35141733D776}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.MultiTenancy.HttpApi.Client", "src\Volo.Abp.MultiTenancy.HttpApi.Client\Volo.Abp.MultiTenancy.HttpApi.Client.csproj", "{76D24E2C-8DB0-48B7-9FC4-02231B8B9F39}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.MultiTenancy.HttpApi.Proxy", "src\Volo.Abp.MultiTenancy.HttpApi.Proxy\Volo.Abp.MultiTenancy.HttpApi.Proxy.csproj", "{3465B957-0F3A-4BAE-B1A7-EC3D6DCC8A65}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.MultiTenancy.HttpApi.Client", "src\Volo.Abp.MultiTenancy.HttpApi.Client\Volo.Abp.MultiTenancy.HttpApi.Client.csproj", "{76D24E2C-8DB0-48B7-9FC4-02231B8B9F39}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -792,10 +790,6 @@ Global
 		{76D24E2C-8DB0-48B7-9FC4-02231B8B9F39}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{76D24E2C-8DB0-48B7-9FC4-02231B8B9F39}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{76D24E2C-8DB0-48B7-9FC4-02231B8B9F39}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3465B957-0F3A-4BAE-B1A7-EC3D6DCC8A65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3465B957-0F3A-4BAE-B1A7-EC3D6DCC8A65}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3465B957-0F3A-4BAE-B1A7-EC3D6DCC8A65}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3465B957-0F3A-4BAE-B1A7-EC3D6DCC8A65}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -942,7 +936,6 @@ Global
 		{258B4E36-BF5B-484D-B10E-7D5AF868FA44} = {3510E248-DC9F-4A07-8134-02E7F5CC5783}
 		{067627C7-6891-453A-A219-35141733D776} = {3510E248-DC9F-4A07-8134-02E7F5CC5783}
 		{76D24E2C-8DB0-48B7-9FC4-02231B8B9F39} = {CA154803-3589-47B3-B7CB-B18F94FE1EB6}
-		{3465B957-0F3A-4BAE-B1A7-EC3D6DCC8A65} = {CA154803-3589-47B3-B7CB-B18F94FE1EB6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB97ECF4-9A84-433F-A80B-2A3285BDD1D5}

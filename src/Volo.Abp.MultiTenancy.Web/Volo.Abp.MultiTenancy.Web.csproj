@@ -19,8 +19,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.csproj" />
-    <ProjectReference Include="..\Volo.Abp.MultiTenancy.Application.Contracts\Volo.Abp.MultiTenancy.Application.Contracts.csproj" />
     <ProjectReference Include="..\Volo.Abp.AutoMapper\Volo.Abp.AutoMapper.csproj" />
+    <ProjectReference Include="..\Volo.Abp.MultiTenancy.HttpApi\Volo.Abp.MultiTenancy.HttpApi.csproj" />
   </ItemGroup>
 
 </Project>

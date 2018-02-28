@@ -18,6 +18,7 @@ namespace MicroserviceDemo.TenancyService
     [DependsOn(typeof(AbpAutofacModule))]
     [DependsOn(typeof(AbpMultiTenancyEntityFrameworkCoreModule))]
     [DependsOn(typeof(AbpMultiTenancyHttpApiModule))]
+    [DependsOn(typeof(AbpMultiTenancyApplicationModule))]
     public class MicroservicesDemoTenancyServiceModule : AbpModule
     {
         public override void ConfigureServices(IServiceCollection services)
