@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.AspNetCore.EmbeddedFiles;
 using Volo.Abp.AspNetCore.Mvc.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Localization.Resources.AbpBootstrap;
 using Volo.Abp.Localization;
@@ -9,6 +10,7 @@ using Volo.Abp.VirtualFileSystem;
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap
 {
     [DependsOn(typeof(AbpAspNetCoreMvcUiModule))]
+    [DependsOn(typeof(AbpAspNetCoreEmbeddedFilesModule))]
     public class AbpAspNetCoreMvcUiBootstrapModule : AbpModule
     {
         public override void ConfigureServices(IServiceCollection services)

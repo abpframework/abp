@@ -144,10 +144,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Abp.Account", "Abp.Account"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Account.Web", "src\Volo.Abp.Account.Web\Volo.Abp.Account.Web.csproj", "{F7DDF25E-58B1-4F68-AEDA-4F2FB4F4467B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Account.Application", "src\Volo.Abp.Account.Application\Volo.Abp.Account.Application.csproj", "{723709F9-09FB-4715-A5D2-DAC8833D8CF7}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Account.Application.Contracts", "src\Volo.Abp.Account.Application.Contracts\Volo.Abp.Account.Application.Contracts.csproj", "{3E62ED84-8792-4DA6-9B0A-AADEA183C2B3}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.VirtualFileSystem", "src\Volo.Abp.VirtualFileSystem\Volo.Abp.VirtualFileSystem.csproj", "{6E6A7554-3488-45AB-BC0E-9BDE1F19789D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.VirtualFileSystem.Tests", "test\Volo.Abp.VirtualFileSystem.Tests\Volo.Abp.VirtualFileSystem.Tests.csproj", "{F79B6D80-C79B-4C13-9221-CA2345983743}"
@@ -299,6 +295,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroserviceDemo.TenancyService", "src\MicroserviceDemo\MicroserviceDemo.TenancyService\MicroserviceDemo.TenancyService.csproj", "{067627C7-6891-453A-A219-35141733D776}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.MultiTenancy.HttpApi.Client", "src\Volo.Abp.MultiTenancy.HttpApi.Client\Volo.Abp.MultiTenancy.HttpApi.Client.csproj", "{76D24E2C-8DB0-48B7-9FC4-02231B8B9F39}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroserviceDemo.AuthServer", "src\MicroserviceDemo\MicroserviceDemo.AuthServer\MicroserviceDemo.AuthServer.csproj", "{A177B8B7-ACAD-4F75-B6D4-B72F7BC2E40A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Account.Web.IdentityServer", "src\Volo.Abp.Account.Web.IdentityServer\Volo.Abp.Account.Web.IdentityServer.csproj", "{E4AB8A4F-BB59-4BDB-B915-877CE97D8113}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -522,14 +522,6 @@ Global
 		{F7DDF25E-58B1-4F68-AEDA-4F2FB4F4467B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F7DDF25E-58B1-4F68-AEDA-4F2FB4F4467B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F7DDF25E-58B1-4F68-AEDA-4F2FB4F4467B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{723709F9-09FB-4715-A5D2-DAC8833D8CF7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{723709F9-09FB-4715-A5D2-DAC8833D8CF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{723709F9-09FB-4715-A5D2-DAC8833D8CF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{723709F9-09FB-4715-A5D2-DAC8833D8CF7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3E62ED84-8792-4DA6-9B0A-AADEA183C2B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3E62ED84-8792-4DA6-9B0A-AADEA183C2B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3E62ED84-8792-4DA6-9B0A-AADEA183C2B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3E62ED84-8792-4DA6-9B0A-AADEA183C2B3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6E6A7554-3488-45AB-BC0E-9BDE1F19789D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6E6A7554-3488-45AB-BC0E-9BDE1F19789D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6E6A7554-3488-45AB-BC0E-9BDE1F19789D}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -790,6 +782,14 @@ Global
 		{76D24E2C-8DB0-48B7-9FC4-02231B8B9F39}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{76D24E2C-8DB0-48B7-9FC4-02231B8B9F39}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{76D24E2C-8DB0-48B7-9FC4-02231B8B9F39}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A177B8B7-ACAD-4F75-B6D4-B72F7BC2E40A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A177B8B7-ACAD-4F75-B6D4-B72F7BC2E40A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A177B8B7-ACAD-4F75-B6D4-B72F7BC2E40A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A177B8B7-ACAD-4F75-B6D4-B72F7BC2E40A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E4AB8A4F-BB59-4BDB-B915-877CE97D8113}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4AB8A4F-BB59-4BDB-B915-877CE97D8113}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4AB8A4F-BB59-4BDB-B915-877CE97D8113}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4AB8A4F-BB59-4BDB-B915-877CE97D8113}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -858,8 +858,6 @@ Global
 		{A8C8B76D-0869-4C11-AC55-DB9DD115788E} = {37087D1B-3693-4E96-983D-A69F210BDE53}
 		{DB012309-74FD-4D5A-B843-DD77BF053BF4} = {3B481ACC-5BB3-4189-880C-5F7A27EAEB70}
 		{F7DDF25E-58B1-4F68-AEDA-4F2FB4F4467B} = {DB012309-74FD-4D5A-B843-DD77BF053BF4}
-		{723709F9-09FB-4715-A5D2-DAC8833D8CF7} = {DB012309-74FD-4D5A-B843-DD77BF053BF4}
-		{3E62ED84-8792-4DA6-9B0A-AADEA183C2B3} = {DB012309-74FD-4D5A-B843-DD77BF053BF4}
 		{6E6A7554-3488-45AB-BC0E-9BDE1F19789D} = {4C753F64-0C93-4D65-96C2-A40893AFC1E8}
 		{F79B6D80-C79B-4C13-9221-CA2345983743} = {37087D1B-3693-4E96-983D-A69F210BDE53}
 		{A7A97BFD-48FA-45D1-8423-031BA30BEAA1} = {4C753F64-0C93-4D65-96C2-A40893AFC1E8}
@@ -936,6 +934,8 @@ Global
 		{258B4E36-BF5B-484D-B10E-7D5AF868FA44} = {3510E248-DC9F-4A07-8134-02E7F5CC5783}
 		{067627C7-6891-453A-A219-35141733D776} = {3510E248-DC9F-4A07-8134-02E7F5CC5783}
 		{76D24E2C-8DB0-48B7-9FC4-02231B8B9F39} = {CA154803-3589-47B3-B7CB-B18F94FE1EB6}
+		{A177B8B7-ACAD-4F75-B6D4-B72F7BC2E40A} = {3510E248-DC9F-4A07-8134-02E7F5CC5783}
+		{E4AB8A4F-BB59-4BDB-B915-877CE97D8113} = {DB012309-74FD-4D5A-B843-DD77BF053BF4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB97ECF4-9A84-433F-A80B-2A3285BDD1D5}
