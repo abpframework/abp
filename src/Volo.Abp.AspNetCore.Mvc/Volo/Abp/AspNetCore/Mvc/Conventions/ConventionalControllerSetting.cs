@@ -73,19 +73,23 @@ namespace Volo.Abp.AspNetCore.Mvc.Conventions
 
         private static bool IsRemoteService(Type type)
         {
-            if (!typeof(IRemoteService).IsAssignableFrom(type) || !type.IsPublic || type.IsAbstract || type.IsGenericType)
+            if (!type.IsPublic || type.IsAbstract || type.IsGenericType)
             {
                 return false;
             }
 
             var remoteServiceAttr = ReflectionHelper.GetSingleAttributeOrDefault<RemoteServiceAttribute>(type);
-
             if (remoteServiceAttr != null && !remoteServiceAttr.IsEnabledFor(type))
             {
                 return false;
             }
 
-            return true;
+            if (typeof(IRemoteService).IsAssignableFrom(type))
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

@@ -230,8 +230,19 @@ namespace Volo.Abp.AspNetCore.Mvc.Conventions
 
         protected virtual string GetRootPathOrDefault(Type controllerType)
         {
-            return GetControllerSettingOrNull(controllerType)?.RootPath ??
-                   ModuleApiDescriptionModel.DefaultRootPath;
+            var controllerSetting = GetControllerSettingOrNull(controllerType);
+            if (controllerSetting?.RootPath != null)
+            {
+                return GetControllerSettingOrNull(controllerType)?.RootPath;
+            }
+
+            var areaAttribute = controllerType.GetCustomAttributes().OfType<AreaAttribute>().FirstOrDefault();
+            if (areaAttribute.RouteValue != null)
+            {
+                return areaAttribute.RouteValue;
+            }
+
+            return ModuleApiDescriptionModel.DefaultRootPath;
         }
 
         [CanBeNull]

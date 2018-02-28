@@ -2,10 +2,13 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Application.Services;
 
 namespace Volo.Abp.MultiTenancy
 {
     [Controller]
+    [RemoteService]
+    [Area("multi-tenancy")]
     public class TenantController : ITenantAppService //TODO: Throws exception on validation if we inherit from Controller
     {
         private readonly ITenantAppService _service;
