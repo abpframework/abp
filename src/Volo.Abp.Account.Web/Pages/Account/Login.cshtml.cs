@@ -23,7 +23,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
 
         private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly IdentityUserManager _userManager; //TODO: We should not use domain from presentation..?
+        private readonly IdentityUserManager _userManager;
 
         public LoginModel(SignInManager<IdentityUser> signInManager, IdentityUserManager userManager)
         {
