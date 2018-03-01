@@ -23,6 +23,7 @@ using Volo.Abp.Uow;
 
 namespace Volo.Abp.Account.Web.Pages.Account
 {
+    //TODO: Inherit from LoginModel of Account.Web project. We should design it as extensible.
     public class IdsLoginModel : AccountModelBase
     {
         [HiddenInput]

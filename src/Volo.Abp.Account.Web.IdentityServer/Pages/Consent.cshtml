@@ -1,0 +1,76 @@
+﻿@page
+@using Volo.Abp.Account.Web.Pages
+@using Volo.Abp.Account.Web.Pages.Account
+@model ConsentModel
+<abp-card id="IdentityServerConsentWrapper">
+    <abp-card-header>
+        <div class="row">
+            <div class="col-md-12">
+                <h2>
+                    @if (Model.ClientLogoUrl != null)
+                    {
+                        <img src="@Model.ClientLogoUrl">
+                    }
+                    @Model.ClientName
+                    <small>is requesting your permission</small>
+                </h2>
+            </div>
+        </div>
+    </abp-card-header>
+    <abp-card-body>
+        <form method="post" asp-page="/Account/Consent">
+            <input type="hidden" asp-for="ReturnUrl" />
+            <input type="hidden" asp-for="ReturnUrlHash" />
+
+            <div>Uncheck the permissions you do not wish to grant.</div>
+
+            @if (Model.IdentityScopes.Any())
+            {
+                <h3>Personal Information</h3>
+
+                <ul class="list-group">
+                    @foreach (var scope in Model.IdentityScopes)
+                    {
+                        @Html.Partial("Account/_ScopeListItem", scope)
+                    }
+                </ul>
+            }
+
+            @if (Model.ResourceScopes.Any())
+            {
+                <h3>Application Access</h3>
+
+                <ul class="list-group">
+                    @foreach (var scope in Model.ResourceScopes)
+                    {
+                        @Html.Partial("Account/_ScopeListItem", scope)
+                    }
+                </ul>
+            }
+
+            @if (Model.AllowRememberConsent)
+            {
+                <div class="form-check">
+                    <label asp-for="@Model.ConsentInput.RememberConsent" class="form-check-label">
+                        <input asp-for="@Model.ConsentInput.RememberConsent" class="form-check-input" />
+                        <strong>Remember My Decision</strong>
+                    </label>
+                </div>
+            }
+
+            <div>
+                <button name="UserDecision" value="yes" class="btn btn-primary" autofocus>Yes, Allow</button>
+                <button name="UserDecision" value="no" class="btn">No, Do Not Allow</button>
+                @if (Model.ClientUrl != null)
+                {
+                    <a class="pull-right btn btn-secondary" target="_blank" href="@Model.ClientUrl">
+                        <strong>@Model.ClientName</strong>
+                    </a>
+                }
+            </div>
+
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+        </form>
+    </abp-card-body>
+</abp-card>

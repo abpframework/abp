@@ -296,9 +296,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroserviceDemo.TenancySer
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.MultiTenancy.HttpApi.Client", "src\Volo.Abp.MultiTenancy.HttpApi.Client\Volo.Abp.MultiTenancy.HttpApi.Client.csproj", "{76D24E2C-8DB0-48B7-9FC4-02231B8B9F39}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroserviceDemo.AuthServer", "src\MicroserviceDemo\MicroserviceDemo.AuthServer\MicroserviceDemo.AuthServer.csproj", "{A177B8B7-ACAD-4F75-B6D4-B72F7BC2E40A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroserviceDemo.AuthServer", "src\MicroserviceDemo\MicroserviceDemo.AuthServer\MicroserviceDemo.AuthServer.csproj", "{A177B8B7-ACAD-4F75-B6D4-B72F7BC2E40A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Account.Web.IdentityServer", "src\Volo.Abp.Account.Web.IdentityServer\Volo.Abp.Account.Web.IdentityServer.csproj", "{E4AB8A4F-BB59-4BDB-B915-877CE97D8113}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Account.Web.IdentityServer", "src\Volo.Abp.Account.Web.IdentityServer\Volo.Abp.Account.Web.IdentityServer.csproj", "{E4AB8A4F-BB59-4BDB-B915-877CE97D8113}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
