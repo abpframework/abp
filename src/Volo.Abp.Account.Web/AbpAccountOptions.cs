@@ -2,6 +2,9 @@
 {
     public class AbpAccountOptions
     {
+        /// <summary>
+        /// Default value: <see cref="Microsoft.AspNetCore.Server.IISIntegration.IISDefaults.AuthenticationScheme"/>.
+        /// </summary>
         public string WindowsAuthenticationSchemeName { get; set; }
 
         public AbpAccountOptions()

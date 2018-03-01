@@ -4,7 +4,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Principal;
 using System.Threading.Tasks;
+using IdentityModel;
 using IdentityServer4.Events;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
@@ -164,13 +166,18 @@ namespace Volo.Abp.Account.Web.Pages.Account
         }
         
         [UnitOfWork]
-        public virtual IActionResult OnPostExternalLogin(string provider, string returnUrl = "", string returnUrlHash = "")
+        public virtual async Task<IActionResult> OnPostExternalLogin(string provider)
         {
-            var redirectUrl = Url.Page("./Login", pageHandler: "ExternalLoginCallback", values: new { returnUrl, returnUrlHash });
+            if (_accountOptions.WindowsAuthenticationSchemeName == provider)
+            {
+                return await ProcessWindowsLoginAsync();
+            }
 
+            var redirectUrl = Url.Page("./Login", pageHandler: "ExternalLoginCallback", values: new { ReturnUrl, ReturnUrlHash });
             var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+            properties.Items["scheme"] = provider;
 
-            return new ChallengeResult(provider, properties);
+            return Challenge(properties, provider);
         }
 
         [UnitOfWork]
@@ -232,6 +239,48 @@ namespace Volo.Abp.Account.Web.Pages.Account
             CheckIdentityErrors(await _userManager.AddLoginAsync(user, info));
 
             return user;
+        }
+
+        private async Task<IActionResult> ProcessWindowsLoginAsync()
+        {
+            var result = await HttpContext.AuthenticateAsync(_accountOptions.WindowsAuthenticationSchemeName);
+            if (!(result?.Principal is WindowsPrincipal windowsPrincipal))
+            {
+                return Challenge(_accountOptions.WindowsAuthenticationSchemeName);
+            }
+
+            var props = new AuthenticationProperties
+            {
+                RedirectUri = Url.Page("./Login", pageHandler: "ExternalLoginCallback", values: new { ReturnUrl, ReturnUrlHash }),
+                Items =
+                {
+                    {"scheme", _accountOptions.WindowsAuthenticationSchemeName},
+                }
+            };
+
+            var identity = new ClaimsIdentity(_accountOptions.WindowsAuthenticationSchemeName);
+            identity.AddClaim(new Claim(JwtClaimTypes.Subject, windowsPrincipal.Identity.Name));
+            identity.AddClaim(new Claim(JwtClaimTypes.Name, windowsPrincipal.Identity.Name));
+
+            //TODO: Consider to add Windows groups the the identity
+            //if (_accountOptions.IncludeWindowsGroups)
+            //{
+            //    var windowsIdentity = windowsPrincipal.Identity as WindowsIdentity;
+            //    if (windowsIdentity != null)
+            //    {
+            //        var groups = windowsIdentity.Groups?.Translate(typeof(NTAccount));
+            //        var roles = groups.Select(x => new Claim(JwtClaimTypes.Role, x.Value));
+            //        identity.AddClaims(roles);
+            //    }
+            //}
+
+            await HttpContext.SignInAsync(
+                IdentityServer4.IdentityServerConstants.ExternalCookieAuthenticationScheme,
+                new ClaimsPrincipal(identity),
+                props
+            );
+
+            return RedirectSafely(props.RedirectUri);
         }
 
         public class LoginInputModel
