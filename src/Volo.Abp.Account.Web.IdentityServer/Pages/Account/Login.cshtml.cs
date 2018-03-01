@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using IdentityServer4.Events;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
@@ -12,6 +14,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Volo.Abp.Account.Web.Auth;
 using Volo.Abp.Identity;
 using Volo.Abp.Ui;
 using Volo.Abp.Uow;
@@ -46,6 +49,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
         private readonly IAuthenticationSchemeProvider _schemeProvider;
         private readonly AbpAccountOptions _accountOptions;
         private readonly IClientStore _clientStore;
+        private readonly IEventService _identityServerEvents;
 
         public IdsLoginModel(
             SignInManager<IdentityUser> signInManager, 
@@ -53,13 +57,15 @@ namespace Volo.Abp.Account.Web.Pages.Account
             IIdentityServerInteractionService interaction, 
             IAuthenticationSchemeProvider schemeProvider, 
             IOptions<AbpAccountOptions> accountOptions, 
-            IClientStore clientStore)
+            IClientStore clientStore, 
+            IEventService identityServerEvents)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _interaction = interaction;
             _schemeProvider = schemeProvider;
             _clientStore = clientStore;
+            _identityServerEvents = identityServerEvents;
             _accountOptions = accountOptions.Value;
         }
 
@@ -120,7 +126,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
                 var context = await _interaction.GetAuthorizationContextAsync(ReturnUrl);
                 if (context == null)
                 {
-                    return RedirectSafely("~/");
+                    return Redirect("~/");
                 }
 
                 await _interaction.GrantConsentAsync(context, ConsentResponse.Denied);
@@ -136,12 +142,23 @@ namespace Volo.Abp.Account.Web.Pages.Account
                 true
             );
 
+            //TODO: Find a way of getting user's id from the logged in user and do not query it again like that!
+            var user = await _userManager.FindByNameAsync(LoginInput.UserNameOrEmailAddress) ??
+                       await _userManager.FindByEmailAsync(LoginInput.UserNameOrEmailAddress);
+
             if (!result.Succeeded)
             {
+                await _identityServerEvents.RaiseAsync(new UserLoginFailureEvent(LoginInput.UserNameOrEmailAddress, "Login failed: " + result.GetResultAsString()));
                 throw new UserFriendlyException("Login failed!"); //TODO: Handle other cases, do not throw exception
             }
 
-            //var user = _userManager.FindByIdAsync(result.)
+            Debug.Assert(user != null, nameof(user) + " != null");
+            await _identityServerEvents.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id.ToString(), user.UserName)); //TODO: Use user's name once implemented
+
+            if (!_interaction.IsValidReturnUrl(ReturnUrl))
+            {
+                return Redirect("~/");
+            }
 
             return RedirectSafely(ReturnUrl, ReturnUrlHash);
         }
