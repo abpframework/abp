@@ -13,6 +13,7 @@ using Volo.Abp.Autofac;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Identity.EntityFrameworkCore;
+using Volo.Abp.IdentityServer;
 using Volo.Abp.IdentityServer.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
@@ -58,7 +59,15 @@ namespace MicroserviceDemo.AuthServer
                 });
             }
 
-            services.AddAuthorization();
+            services.AddAuthentication()
+                .AddFacebook(options =>
+                {
+                    options.AppId = configuration["Authentication:Facebook:AppId"];
+                    options.AppSecret = configuration["Authentication:Facebook:AppSecret"];
+
+                    options.Scope.Add("email");
+                    options.Scope.Add("public_profile");
+                });
 
             services.AddAssemblyOf<MicroservicesAuthServerModule>();
         }
@@ -75,7 +84,7 @@ namespace MicroserviceDemo.AuthServer
             app.UseStaticFiles();
             app.UseVirtualFiles();
 
-            app.UseAuthentication();
+            app.UseIdentityServer(); //This internally adds .UseAuthentication() (we should be carefully about that)
 
             app.UseMvc(routes =>
             {

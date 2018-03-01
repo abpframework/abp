@@ -33,8 +33,6 @@ namespace Volo.Abp.IdentityServer
 
             identityServerBuilder
                 .AddDeveloperSigningCredential()
-                //.AddInMemoryApiResources(IdentityServerConfig.GetApiResources())
-                //.AddInMemoryClients(IdentityServerConfig.GetClients())
                 .AddAbpIdentityServer();
 
             services.ExecutePreConfiguredActions(identityServerBuilder);
