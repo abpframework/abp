@@ -1,0 +1,61 @@
+﻿@page
+@model Volo.Abp.Account.Web.Pages.Account.IdsLoginModel
+<div class="row">
+    
+    @if (Model.EnableLocalLogin)
+    {
+        <div class="col-md-6">
+            <div class="col-md-4">
+                <form method="post" asp-page="/Account/Login">
+                    <input asp-for="ReturnUrl" />
+                    <input asp-for="ReturnUrlHash" />
+                    <div class="form-group">
+                        <label asp-for="LoginInput.UserNameOrEmailAddress"></label>
+                        <input asp-for="LoginInput.UserNameOrEmailAddress" class="form-control" />
+                        <span asp-validation-for="LoginInput.UserNameOrEmailAddress" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="LoginInput.Password"></label>
+                        <input asp-for="LoginInput.Password" class="form-control" />
+                        <span asp-validation-for="LoginInput.Password" class="text-danger"></span>
+                    </div>
+                    <div class="form-check">
+                        <label asp-for="LoginInput.RememberMe" class="form-check-label">
+                            <input asp-for="LoginInput.RememberMe" class="form-check-input" />
+                            @Html.DisplayNameFor(m => m.LoginInput.RememberMe)
+                        </label>
+                    </div>
+                    <button type="submit" class="btn btn-primary" name="Action" value="Login">Login</button>
+                    <button type="button" class="btn btn-secondary" name="Action" value="Cancel">Cancel</button>
+                </form>
+
+                <div style="padding-top: 20px">
+                    <a href="@Url.Page("./Register", new {returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash})">Register</a>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (Model.VisibleExternalProviders.Any())
+    {
+        <div class="col-md-6">
+            <h4>Use another service to log in.</h4>
+            <form asp-page="./Login" asp-page-handler="ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" asp-route-returnUrlHash="@Model.ReturnUrlHash" method="post">
+                <div>
+                    @foreach (var provider in Model.VisibleExternalProviders)
+                    {
+                        <button type="submit" class="btn btn-primary" name="provider" value="@provider.AuthenticationScheme" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                    }
+                </div>
+            </form>
+        </div>
+    }
+    
+    @if (!Model.EnableLocalLogin && !Model.VisibleExternalProviders.Any())
+    {
+        <div class="alert alert-warning">
+            <strong>Invalid login request</strong>
+            There are no login schemes configured for this client.
+        </div>
+    }
+</div>

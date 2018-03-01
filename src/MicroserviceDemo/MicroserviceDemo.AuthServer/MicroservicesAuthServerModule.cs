@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System.IO;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -6,12 +7,15 @@ using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Modularity;
+using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.Autofac;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.IdentityServer.EntityFrameworkCore;
 using Volo.Abp.Modularity;
+using Volo.Abp.VirtualFileSystem;
 
 namespace MicroserviceDemo.AuthServer
 {
@@ -42,6 +46,17 @@ namespace MicroserviceDemo.AuthServer
                     }
                 });
             });
+
+            if (hostingEnvironment.IsDevelopment())
+            {
+                services.Configure<VirtualFileSystemOptions>(options =>
+                {
+                    options.FileSets.ReplaceEmbeddedByPyhsical<AbpAspNetCoreMvcUiModule>(Path.Combine(hostingEnvironment.ContentRootPath, "..\\..\\Volo.Abp.AspNetCore.Mvc.UI"));
+                    options.FileSets.ReplaceEmbeddedByPyhsical<AbpAspNetCoreMvcUiBootstrapModule>(Path.Combine(hostingEnvironment.ContentRootPath, "..\\..\\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap"));
+                    options.FileSets.ReplaceEmbeddedByPyhsical<AbpAccountWebModule>(Path.Combine(hostingEnvironment.ContentRootPath, "..\\..\\Volo.Abp.Account.Web"));
+                    options.FileSets.ReplaceEmbeddedByPyhsical<AbpAccountWebIdentityServerModule>(Path.Combine(hostingEnvironment.ContentRootPath, "..\\..\\Volo.Abp.Account.Web.IdentityServer"));
+                });
+            }
 
             services.AddAssemblyOf<MicroservicesAuthServerModule>();
         }
