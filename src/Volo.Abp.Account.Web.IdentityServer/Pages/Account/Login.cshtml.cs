@@ -183,6 +183,11 @@ namespace Volo.Abp.Account.Web.Pages.Account
         [UnitOfWork]
         public virtual async Task<IActionResult> OnGetExternalLoginCallbackAsync(string returnUrl = "", string returnUrlHash = "", string remoteError = null)
         {
+            //TODO: Did not implemented Identity Server 4 sample for this method (see ExternalLoginCallback in Quickstart of IDS4 sample)
+            /* Also did not implement these:
+             * - Logout(string logoutId)
+             */
+
             if (remoteError != null)
             {
                 Logger.LogWarning($"External login callback error: {remoteError}");
@@ -208,12 +213,12 @@ namespace Volo.Abp.Account.Web.Pages.Account
                 throw new UserFriendlyException("Cannot proceed because user is locked out!");
             }
 
-            //TODO: Handle other cases
-
             if (result.Succeeded)
             {
                 return RedirectSafely(returnUrl, returnUrlHash);
             }
+
+            //TODO: Handle other cases for result!
 
             // Get the information about the user from the external login provider
             var info = await _signInManager.GetExternalLoginInfoAsync();
