@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using IdentityServer4.Models;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
 using Microsoft.AspNetCore.Authentication;
@@ -112,8 +113,20 @@ namespace Volo.Abp.Account.Web.Pages.Account
         }
 
         [UnitOfWork] //TODO: Will be removed when we implement action filter
-        public virtual async Task<IActionResult> OnPostAsync()
+        public virtual async Task<IActionResult> OnPostAsync(string action)
         {
+            if (action == "Cancel")
+            {
+                var context = await _interaction.GetAuthorizationContextAsync(ReturnUrl);
+                if (context == null)
+                {
+                    return RedirectSafely("~/");
+                }
+
+                await _interaction.GrantConsentAsync(context, ConsentResponse.Denied);
+                return RedirectSafely(ReturnUrl);
+            }
+
             ValidateModel();
 
             var result = await _signInManager.PasswordSignInAsync(
@@ -127,6 +140,8 @@ namespace Volo.Abp.Account.Web.Pages.Account
             {
                 throw new UserFriendlyException("Login failed!"); //TODO: Handle other cases, do not throw exception
             }
+
+            //var user = _userManager.FindByIdAsync(result.)
 
             return RedirectSafely(ReturnUrl, ReturnUrlHash);
         }

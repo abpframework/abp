@@ -58,6 +58,8 @@ namespace MicroserviceDemo.AuthServer
                 });
             }
 
+            services.AddAuthorization();
+
             services.AddAssemblyOf<MicroservicesAuthServerModule>();
         }
 
@@ -73,7 +75,19 @@ namespace MicroserviceDemo.AuthServer
             app.UseStaticFiles();
             app.UseVirtualFiles();
 
-            app.UseMvcWithDefaultRoute();
+            app.UseAuthentication();
+
+            app.UseMvc(routes =>
+            {
+                //TODO: Can we make an extension method for adding these two routes inside the framework?
+                routes.MapRoute(
+                    name: "defaultWithArea",
+                    template: "{area}/{controller=Home}/{action=Index}/{id?}");
+
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Home}/{action=Index}/{id?}");
+            });
         }
 
         private static IConfigurationRoot BuildConfiguration(IHostingEnvironment env)
