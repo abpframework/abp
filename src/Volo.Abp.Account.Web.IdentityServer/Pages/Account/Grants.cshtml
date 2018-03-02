@@ -71,7 +71,7 @@
                     }
                 </div>
                 <div class="col-sm-2">
-                    <form asp-action="Revoke">
+                    <form asp-page="./Grants" asp-page-handler="Revoke" method="post">
                         <input type="hidden" name="clientId" value="@grant.ClientId">
                         <button class="btn btn-danger">Revoke Access</button>
                     </form>
