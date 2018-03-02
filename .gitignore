@@ -258,3 +258,4 @@ src/AbpDesk/AbpDesk.Web.Mvc/Logs
 src/MicroserviceDemo/MicroserviceDemo.Web/Logs/*.txt
 src/MicroserviceDemo/MicroserviceDemo.TenantService/Logs/*.txt
 src/MicroserviceDemo/MicroserviceDemo.AuthServer/Logs/*.txt
+src/MicroserviceDemo/MicroserviceDemo.TenancyService/Logs/*.txt
