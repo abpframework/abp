@@ -25,20 +25,23 @@
 
         var _$wrapper = $('#IdentityRolesWrapper');
         var _$table = _$wrapper.find('table');
+        var _$dataTable;
 
-        var _dataTable = _$table.DataTable({
-            order: [[1, "asc"]],
-            ajax: abp.libs.datatables.createAjax(_identityRoleAppService.getList),
-            columnDefs: [
-                {
-                    targets: 0,
-                    data: null,
-                    orderable: false,
-                    autoWidth: false,
-                    defaultContent: '',
-                    rowAction: {
-                        text: '<i class="fa fa-cog"></i> ' + l('Actions') + ' <span class="caret"></span>',
-                        items:
+        $.when($.fn.dataTable.defaults.languageFileReady).then(function () {
+
+            _$dataTable = _$table.DataTable({
+                order: [[1, "asc"]],
+                ajax: abp.libs.datatables.createAjax(_identityRoleAppService.getList),
+                columnDefs: [
+                    {
+                        targets: 0,
+                        data: null,
+                        orderable: false,
+                        autoWidth: false,
+                        defaultContent: '',
+                        rowAction: {
+                            text: '<i class="fa fa-cog"></i> ' + l('Actions') + ' <span class="caret"></span>',
+                            items:
                             [
                                 {
                                     text: l('Edit'),
@@ -79,21 +82,23 @@
                                     }
                                 }
                             ]
+                        }
+                    },
+                    {
+                        targets: 1,
+                        data: "name"
                     }
-                },
-                {
-                    targets: 1,
-                    data: "name"
-                }
-            ]
+                ]
+            });
+
         });
 
         _createModal.onResult(function () {
-            _dataTable.ajax.reload();
+            _$dataTable.ajax.reload();
         });
 
         _editModal.onResult(function () {
-            _dataTable.ajax.reload();
+            _$dataTable.ajax.reload();
         });
     });
 

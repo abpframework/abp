@@ -12,7 +12,9 @@
 
 @section scripts {
     <script type="text/javascript" src="~/abp/helpers/jquery.js"></script>
+    <script type="text/javascript" src="~/libs/datatables/datatables-min.js"></script>
     <script type="text/javascript" src="~/abp/helpers/datatables.extensions.js"></script>
+    <script type="text/javascript" src="~/abp/helpers/datatables.defaults.js"></script>
     <script type="text/javascript" src="~/abp/helpers/ResourceLoader.js"></script>
     <script type="text/javascript" src="~/abp/helpers/ModalManager.js"></script>
     <script type="text/javascript" src="~/modules/multi-tenancy/views/tenants/index.js"></script>
@@ -35,10 +37,10 @@
     <abp-card-body>
         <table class="table table-striped nowrap">
             <thead>
-            <tr>
-                <th>@L["Actions"]</th>
-                <th>@L["TenantName"]</th>
-            </tr>
+                <tr>
+                    <th>@L["Actions"]</th>
+                    <th>@L["TenantName"]</th>
+                </tr>
             </thead>
         </table>
     </abp-card-body>

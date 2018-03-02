@@ -19,7 +19,7 @@
     "AccountLockoutOnFailedLoginAttempts": "Başarısız giriş denemeleri sonrası hesabı kilitleme",
     "NewRole": "Yeni rol",
     "RoleName": "Rol adı",
-    "CreationTime": "Oluşturma zamanı"
-
+    "CreationTime": "Oluşturma zamanı",
+    "Permissions": "Yetkiler"
   }
 }

@@ -45,7 +45,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap
                     "/libs/jquery-validation-unobtrusive/jquery-validate-unobtrusive.js",
                     "/libs/jquery-form/jquery-form-min.js",
                     "/libs/material/js/material-min.js",
-                    "/libs/datatables/datatables-min.js",
                     "/libs/vue/vue.js",
                     "/libs/abp/abp-jquery.js?_v" + DateTime.Now.Ticks
                 });

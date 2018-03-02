@@ -18,3 +18,35 @@ table.dataTable thead .sorting::before, table.dataTable thead .sorting_asc::befo
 table.dataTable thead .sorting::after, table.dataTable thead .sorting_asc::after, table.dataTable thead .sorting_desc::after, table.dataTable thead .sorting_asc_disabled::after, table.dataTable thead .sorting_desc_disabled::after {
   bottom: 1.5em; }
 
+div.dataTables_wrapper div.dataTables_paginate ul.pagination > li {
+  margin-right: 5px; }
+
+div.dataTables_wrapper div.dataTables_paginate ul.pagination > li > a {
+  display: inline-block;
+  cursor: pointer !important;
+  height: 2.25rem;
+  width: 2.25rem;
+  padding: 8px 0 0;
+  border-radius: 50%;
+  position: relative;
+  -moz-justify-content: center;
+  -ms-justify-content: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 1rem;
+  font-weight: 400;
+  background-color: #9c27b0;
+  color: #ffffff;
+  opacity: 1 !important; }
+
+div.dataTables_wrapper .table td, .table th {
+  vertical-align: middle; }
+

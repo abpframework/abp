@@ -13,6 +13,11 @@
     "TwoFactorVerification": "Two factor verification",
     "AccountLockoutOnFailedLoginAttempts": "Locking account after failed login attempts",
     "NewRole": "New role",
-    "RoleName": "Role name"
+    "RoleName": "Role name",
+    "CreationTime": "Creation time",
+    "Edit": "Edit",
+    "Permissions": "Permissions",
+    "Delete": "Delete"
+
   }
 }

@@ -19,6 +19,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\abp\helpers\datatables.defaults.js" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.AspNetCore.EmbeddedFiles\Volo.Abp.AspNetCore.EmbeddedFiles.csproj" />
     <ProjectReference Include="..\Volo.Abp.AspNetCore.Mvc.UI\Volo.Abp.AspNetCore.Mvc.UI.csproj" />
   </ItemGroup>

@@ -1,4 +1,5 @@
-﻿@using Volo.Abp.Ui.Navigation
+﻿@using System.Globalization
+@using Volo.Abp.Ui.Navigation
 @{
     Layout = null;
 }
@@ -11,15 +12,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <title>ABP Web Application</title>
-    
+
     <!-- Add Material font (Roboto) and Material icon as needed -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <vc:abp-style-bundle name="GlobalStyles"></vc:abp-style-bundle>
-    
-    <link rel="stylesheet" type="text/css" href="~/views/shared/_AppLayout.css"/>
-    
+
+    <link rel="stylesheet" type="text/css" href="~/views/shared/_AppLayout.css" />
+
     @RenderSection("styles", false)
 </head>
 <body>
@@ -32,7 +33,12 @@
     </div>
 
     <vc:abp-script-bundle name="GlobalScripts"></vc:abp-script-bundle>
-    
+
+    <script type="text/javascript">
+        abp.localization.currentCulture = $.extend({}, abp.localization.currentCulture, { displayNameEnglish: 'Turkish' });
+    </script>
+
+
     @RenderSection("scripts", false)
 
 </body>
