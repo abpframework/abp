@@ -31,10 +31,9 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination > li {
 div.dataTables_wrapper div.dataTables_paginate ul.pagination > li > a {
     display: inline-block;
     cursor: pointer !important;
-    height: 2.25rem;
-    width: 2.25rem;
+    height: 2rem;
+    width: 2rem;
     padding: 8px 0 0;
-    border-radius: 50%;
     position: relative;
     -moz-justify-content: center;
     -ms-justify-content: center;
@@ -48,14 +47,35 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination > li > a {
     align-items: center;
     text-align: center;
     vertical-align: middle;
-    font-size: 1rem;
-    font-weight: 400;
     background-color: #9c27b0;
     color: #ffffff;
-    opacity: 1 !important
+    border-radius: 50%;
+    box-shadow: 0 0 4px 0 rgba(0,0,0,.14), 0 3px 4px 0 rgba(0,0,0,.12), 0 1px 5px 0 rgba(0,0,0,.2);
+}
+
+div.dataTables_wrapper div.dataTables_paginate ul.pagination > li > a:hover {
+    text-decoration: none !important;
+}
+
+div.dataTables_wrapper .table td, .table th {
+    vertical-align: middle;
 }
 
 
-div.dataTables_wrapper .table td, .table th {
-     vertical-align: middle;
+div.dataTables_wrapper .dataTables_info {
+    display: inline-block;
+}
+
+div.dataTables_wrapper .dataTables_paginate {
+    display: inline-block;
+    float: right;
+}
+
+div.dataTables_wrapper .dataTables_length select {
+    text-align-last: center;
+}
+
+
+div.dataTables_wrapper .pagination {
+    padding: 0;
 }

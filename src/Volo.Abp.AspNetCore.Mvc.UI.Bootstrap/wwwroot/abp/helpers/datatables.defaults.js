@@ -27,7 +27,7 @@
                     responsive: true,
                     searching: false,
                     pagingType: "bootstrap_full_number",
-                    dom: 'rt<"bottom"ilp><"clear">',
+                    dom: '<"H"lfr>t<"F"ip><"clear">',
                     order: []
                 });
 
