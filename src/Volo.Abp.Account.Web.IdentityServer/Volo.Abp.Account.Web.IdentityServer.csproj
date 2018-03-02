@@ -18,11 +18,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Pages\**\*.*" Exclude="*.cs" />
   </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Remove="Pages\_ViewImports.cshtml" />
-  </ItemGroup>
-
+  
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.Account.Web\Volo.Abp.Account.Web.csproj" />
     <ProjectReference Include="..\Volo.Abp.IdentityServer.Domain\Volo.Abp.IdentityServer.Domain.csproj" />
