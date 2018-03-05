@@ -6,12 +6,16 @@ using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Modularity;
+using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Autofac;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.MultiTenancy.EntityFrameworkCore;
+using Volo.Abp.Permissions.EntityFrameworkCore;
+using Volo.Abp.Security.Claims;
+using Volo.Abp.Threading;
 
 namespace MicroserviceDemo.TenancyService
 {
@@ -19,6 +23,7 @@ namespace MicroserviceDemo.TenancyService
     [DependsOn(typeof(AbpMultiTenancyEntityFrameworkCoreModule))]
     [DependsOn(typeof(AbpMultiTenancyHttpApiModule))]
     [DependsOn(typeof(AbpMultiTenancyApplicationModule))]
+    [DependsOn(typeof(AbpPermissionsEntityFrameworkCoreModule))]
     public class MicroservicesDemoTenancyServiceModule : AbpModule
     {
         public override void ConfigureServices(IServiceCollection services)
@@ -50,9 +55,21 @@ namespace MicroserviceDemo.TenancyService
                     options.DocInclusionPredicate((docName, description) => true);
                 });
 
-            services.AddAuthentication();
+            services.AddAuthentication("Bearer")
+                .AddIdentityServerAuthentication(options =>
+                {
+                    options.Authority = "http://localhost:54307";
+                    options.RequireHttpsMetadata = false;
 
-            services.AddAlwaysAllowPermissionChecker();
+                    options.ApiName = "multi-tenancy-api";
+
+                    //This should be automatically done :(
+                    options.InboundJwtClaimTypeMap["sub"] = AbpClaimTypes.UserId;
+                    options.InboundJwtClaimTypeMap["role"] = AbpClaimTypes.Role;
+                    options.InboundJwtClaimTypeMap["email"] = AbpClaimTypes.Email;
+                });
+
+            //services.AddAlwaysAllowPermissionChecker();
 
             services.AddAssemblyOf<MicroservicesDemoTenancyServiceModule>();
         }
@@ -60,6 +77,9 @@ namespace MicroserviceDemo.TenancyService
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             var app = context.GetApplicationBuilder();
+
+            var store = context.ServiceProvider.GetRequiredService<IPermissionStore>();
+            var xx = AsyncHelper.RunSync(() => store.IsGrantedAsync("AbpTenantManagement.Tenants", "Role", "admin"));
 
             app.UseStaticFiles();
 
