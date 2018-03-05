@@ -21,9 +21,11 @@
 
             @{
                 var accessToken = await HttpContextAccessor.HttpContext.GetTokenAsync("access_token");
+                var refreshToken = await HttpContextAccessor.HttpContext.GetTokenAsync("refresh_token");
             }
 
-            @accessToken <br />
+            accessToken = @accessToken <br />
+            refreshToken = @refreshToken <br />
 
         </abp-card-body>
     </abp-card>

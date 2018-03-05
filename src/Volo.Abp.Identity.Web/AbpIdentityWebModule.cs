@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AutoMapper;
@@ -28,8 +29,6 @@ namespace Volo.Abp.Identity.Web
 
         public override void ConfigureServices(IServiceCollection services)
         {
-            services.AddAssemblyOf<AbpIdentityWebModule>();
-
             services.Configure<NavigationOptions>(options =>
             {
                 options.MenuContributors.Add(new AbpIdentityWebMainMenuContributor());
@@ -39,7 +38,7 @@ namespace Volo.Abp.Identity.Web
             {
                 options.FileSets.AddEmbedded<AbpIdentityWebModule>("Volo.Abp.Identity.Web");
             });
-            
+
             services.Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources.AddVirtualJson<IdentityResource>("en", "/Localization/Resources/AbpIdentity");
@@ -49,6 +48,18 @@ namespace Volo.Abp.Identity.Web
             {
                 options.AddProfile<AbpIdentityWebAutoMapperProfile>(validate: true);
             });
+
+            services.Configure<RazorPagesOptions>(options =>
+            {
+                options.Conventions.AuthorizePage("/Identity/Users/Index", IdentityPermissions.Users.Default);
+                options.Conventions.AuthorizePage("/Identity/Users/CreateModal", IdentityPermissions.Users.Create);
+                options.Conventions.AuthorizePage("/Identity/Users/EditModal", IdentityPermissions.Users.Update);
+                options.Conventions.AuthorizePage("/Identity/Roles/Index", IdentityPermissions.Roles.Default);
+                options.Conventions.AuthorizePage("/Identity/Roles/CreateModal", IdentityPermissions.Roles.Create);
+                options.Conventions.AuthorizePage("/Identity/Roles/EditModal", IdentityPermissions.Roles.Update);
+            });
+
+            services.AddAssemblyOf<AbpIdentityWebModule>();
         }
     }
 }

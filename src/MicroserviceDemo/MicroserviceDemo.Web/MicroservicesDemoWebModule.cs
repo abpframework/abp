@@ -2,10 +2,10 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.OAuth.Claims;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Azure.KeyVault.WebKey;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,7 +13,6 @@ using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
-using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Modularity;
 using Volo.Abp.AspNetCore.Mvc.Bundling;
 using Volo.Abp.Autofac;
@@ -26,19 +25,16 @@ using Volo.Abp.Identity.Web;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.MultiTenancy.Web;
-using Volo.Abp.Permissions;
 using Volo.Abp.Permissions.EntityFrameworkCore;
 using Volo.Abp.Security.Claims;
 
 namespace MicroserviceDemo.Web
 {
     [DependsOn(typeof(AbpAutofacModule))]
-    [DependsOn(typeof(AbpHttpClientModule))]
     [DependsOn(typeof(AbpPermissionsEntityFrameworkCoreModule))]
     [DependsOn(typeof(AbpIdentityHttpApiModule))]
     [DependsOn(typeof(AbpIdentityWebModule))]
     [DependsOn(typeof(AbpIdentityEntityFrameworkCoreModule))]
-    [DependsOn(typeof(AbpAccountWebModule))]
     [DependsOn(typeof(AbpMultiTenancyHttpApiClientModule))]
     [DependsOn(typeof(AbpMultiTenancyWebModule))]
     public class MicroservicesDemoWebModule : AbpModule
@@ -82,20 +78,17 @@ namespace MicroserviceDemo.Web
                     "/Abp/ServiceProxyScript?_v=" + DateTime.Now.Ticks
                 }); 
             });
-
-            var xxx = JwtSecurityTokenHandler.DefaultInboundClaimTypeMap;
-
-            //JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear(); //TODO: Try to understand if this is really needed?
+            
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
             services.AddAuthentication(options =>
                 {
-                    //options.DefaultScheme = IdentityConstants.ApplicationScheme;
-                    //options.DefaultChallengeScheme = "oidc";
+                    options.DefaultScheme = IdentityConstants.ApplicationScheme;
+                    options.DefaultChallengeScheme = "oidc";
                 })
-                //.AddCookie(IdentityConstants.ApplicationScheme)
                 .AddOpenIdConnect("oidc", options =>
                 {
-                    //options.SignInScheme = IdentityConstants.ApplicationScheme;
+                    options.SignInScheme = IdentityConstants.ApplicationScheme;
 
                     options.Authority = "http://localhost:54307";
                     options.RequireHttpsMetadata = false;
@@ -109,13 +102,21 @@ namespace MicroserviceDemo.Web
 
                     options.Scope.Add("openid");
                     options.Scope.Add("profile");
+                    options.Scope.Add("role");
                     options.Scope.Add("email");
                     options.Scope.Add("phone");
                     options.Scope.Add("multi-tenancy-api");
-                    options.Scope.Add("offline_access");
+                    //options.Scope.Add("offline_access");
 
-                    options.ClaimActions.MapUniqueJsonKey(AbpClaimTypes.UserName, "name");
-                    options.ClaimActions.MapUniqueJsonKey(AbpClaimTypes.Email, "email");
+                    options.ClaimActions.MapUniqueJsonKey("email_verified", "email_verified");
+                    options.ClaimActions.MapUniqueJsonKey("phone_number", "phone_number");
+                    options.ClaimActions.MapUniqueJsonKey("phone_number_verified", "phone_number_verified");
+                    options.ClaimActions.MapUniqueJsonKey("role", "role");
+
+                    AbpClaimTypes.UserName = "name";
+                    AbpClaimTypes.Email = "email";
+                    AbpClaimTypes.Role = "role";
+                    AbpClaimTypes.UserId = "sub";
 
                     options.SecurityTokenValidator = new MyJwtSecurityTokenHandler();
                 });
