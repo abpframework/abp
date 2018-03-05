@@ -36,14 +36,6 @@ namespace MicroserviceDemo.Web
     [DependsOn(typeof(AbpAspNetCoreAuthenticationOAuthModule))]
     public class MicroservicesDemoWebModule : AbpModule
     {
-        public override void PreConfigureServices(IServiceCollection services)
-        {
-            services.PreConfigure<IMvcBuilder>(builder =>
-            {
-                builder.AddViewLocalization(); //TODO: To the framework!
-            });
-        }
-
         public override void ConfigureServices(IServiceCollection services)
         {
             var hostingEnvironment = services.GetSingletonInstance<IHostingEnvironment>();

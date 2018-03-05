@@ -12,6 +12,8 @@ namespace Microsoft.AspNetCore.Authentication.OAuth.Claims
             claimActions.MapJsonKey(AbpClaimTypes.EmailVerified, "email_verified");
             claimActions.MapJsonKey(AbpClaimTypes.PhoneNumber, "phone_number");
             claimActions.MapJsonKey(AbpClaimTypes.PhoneNumberVerified, "phone_number_verified");
+            claimActions.DeleteClaim("name");
+            claimActions.DeleteClaim("email");
         }
     }
 }

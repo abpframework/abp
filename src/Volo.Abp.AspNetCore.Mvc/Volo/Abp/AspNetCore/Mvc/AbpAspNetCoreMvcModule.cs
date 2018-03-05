@@ -81,7 +81,8 @@ namespace Volo.Abp.AspNetCore.Mvc
                         var resourceType = assemblyResources.GetOrDefault(type.Assembly);
                         return factory.Create(resourceType ?? type);
                     };
-                });
+                })
+                .AddViewLocalization(); //TODO: How to configure from the application? Also, consider to move to a UI module since APIs does not care about it.
 
             services.ExecutePreConfiguredActions(mvcBuilder);
 
