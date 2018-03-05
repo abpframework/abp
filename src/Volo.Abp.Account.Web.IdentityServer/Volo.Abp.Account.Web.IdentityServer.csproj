@@ -18,14 +18,10 @@
   <ItemGroup>
     <EmbeddedResource Include="Pages\**\*.*" Exclude="*.cs" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Areas\Account\Controllers\" />
-    <Folder Include="Pages\" />
-  </ItemGroup>
-
+  
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.Account.Web\Volo.Abp.Account.Web.csproj" />
+    <ProjectReference Include="..\Volo.Abp.IdentityServer.Domain\Volo.Abp.IdentityServer.Domain.csproj" />
   </ItemGroup>
 
 </Project>

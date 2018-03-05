@@ -1,0 +1,82 @@
+﻿@page
+@using Volo.Abp.Account.Web.Pages.Account
+@model GrantsModel
+    
+@* TODO: Should work on the page HTML, copy/pasted from IDS4 samples *@
+
+<div class="grants">
+    <div class="row page-header">
+        <div class="col-sm-10">
+            <h1>
+                Client Application Access
+            </h1>
+            <div>Below is the list of applications you have given access to and the names of the resources they have access to.</div>
+        </div>
+    </div>
+    @if (Model.Grants.Any() == false)
+    {
+        <div class="row">
+            <div class="col-sm-8">
+                <div class="alert alert-info">
+                    You have not given access to any applications
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        foreach (var grant in Model.Grants)
+        {
+            <div class="row grant">
+                <div class="col-sm-2">
+                    @if (grant.ClientLogoUrl != null)
+                    {
+                        <img src="@grant.ClientLogoUrl">
+                    }
+                </div>
+                <div class="col-sm-8">
+                    <div class="clientname">@grant.ClientName</div>
+                    <div>
+                        <span class="created">Created:</span> @grant.Created.ToString("yyyy-MM-dd")
+                    </div>
+                    @if (grant.Expires.HasValue)
+                    {
+                        <div>
+                            <span class="expires">Expires:</span> @grant.Expires.Value.ToString("yyyy-MM-dd")
+                        </div>
+                    }
+                    @if (grant.IdentityGrantNames.Any())
+                    {
+                        <div>
+                            <div class="granttype">Identity Grants</div>
+                            <ul>
+                                @foreach (var name in grant.IdentityGrantNames)
+                                {
+                                    <li>@name</li>
+                                }
+                            </ul>
+                        </div>
+                    }
+                    @if (grant.ApiGrantNames.Any())
+                    {
+                        <div>
+                            <div class="granttype">API Grants</div>
+                            <ul>
+                                @foreach (var name in grant.ApiGrantNames)
+                                {
+                                    <li>@name</li>
+                                }
+                            </ul>
+                        </div>
+                    }
+                </div>
+                <div class="col-sm-2">
+                    <form asp-page="./Grants" asp-page-handler="Revoke" method="post">
+                        <input type="hidden" name="clientId" value="@grant.ClientId">
+                        <button class="btn btn-danger">Revoke Access</button>
+                    </form>
+                </div>
+            </div>
+        }
+    }
+</div>

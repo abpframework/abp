@@ -20,14 +20,6 @@ namespace Volo.Abp.AspNetCore.Mvc
         )]
     public class AbpAspNetCoreMvcTestModule : AbpModule
     {
-        public override void PreConfigureServices(IServiceCollection services)
-        {
-            services.PreConfigure<IMvcBuilder>(builder =>
-            {
-                builder.AddViewLocalization();
-            });
-        }
-
         public override void ConfigureServices(IServiceCollection services)
         {
             services.AddLocalization(); //TODO: Move to the framework..?

@@ -61,7 +61,6 @@ namespace AbpDesk.Web.Mvc
             services.PreConfigure<IMvcBuilder>(builder =>
             {
                 builder
-                    .AddViewLocalization() //TODO: Move to the framework!
                     .AddRazorPagesOptions(options =>
                     {
                         options.Conventions.AuthorizeFolder("/App");

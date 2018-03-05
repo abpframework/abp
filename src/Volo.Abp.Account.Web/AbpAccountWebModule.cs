@@ -12,12 +12,12 @@ namespace Volo.Abp.Account.Web
     {
         public override void ConfigureServices(IServiceCollection services)
         {
-            services.AddAssemblyOf<AbpAccountWebModule>();
-
             services.Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpAccountWebModule>("Volo.Abp.Account.Web");
             });
+
+            services.AddAssemblyOf<AbpAccountWebModule>();
         }
     }
 }

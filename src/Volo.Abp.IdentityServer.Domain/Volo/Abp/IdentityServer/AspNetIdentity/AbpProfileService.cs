@@ -9,26 +9,37 @@ namespace Volo.Abp.IdentityServer.AspNetIdentity
 {
     //TODO: Implement multi-tenancy as like in old ABP
 
-    public class AbpProfileService : ProfileService<IdentityUser> 
+    public class AbpProfileService : ProfileService<IdentityUser>
     {
+        private readonly IUnitOfWorkManager _unitOfWorkManager;
+
         public AbpProfileService(
             IdentityUserManager userManager,
-            IUserClaimsPrincipalFactory<IdentityUser> claimsFactory
-        ) : base(userManager, claimsFactory)
+            IUserClaimsPrincipalFactory<IdentityUser> claimsFactory,
+            IUnitOfWorkManager unitOfWorkManager)
+            : base(userManager, claimsFactory)
         {
-
+            _unitOfWorkManager = unitOfWorkManager;
         }
 
         [UnitOfWork]
         public override async Task GetProfileDataAsync(ProfileDataRequestContext context)
         {
-            await base.GetProfileDataAsync(context);
+            using (var uow = _unitOfWorkManager.Begin())
+            {
+                await base.GetProfileDataAsync(context);
+                await uow.CompleteAsync();
+            }
         }
 
         [UnitOfWork]
         public override async Task IsActiveAsync(IsActiveContext context)
         {
-            await base.IsActiveAsync(context);
+            using (var uow = _unitOfWorkManager.Begin())
+            {
+                await base.IsActiveAsync(context);
+                await uow.CompleteAsync();
+            }
         }
     }
 }

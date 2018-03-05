@@ -1,12 +1,15 @@
 ﻿using System;
+using Microsoft.AspNetCore.Authentication.OAuth.Claims;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
-using Volo.Abp.Account.Web;
+using Volo.Abp.AspNetCore.Authentication.OAuth;
 using Volo.Abp.AspNetCore.Modularity;
 using Volo.Abp.AspNetCore.Mvc.Bundling;
 using Volo.Abp.Autofac;
@@ -19,30 +22,20 @@ using Volo.Abp.Identity.Web;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.MultiTenancy.Web;
-using Volo.Abp.Permissions;
 using Volo.Abp.Permissions.EntityFrameworkCore;
 
 namespace MicroserviceDemo.Web
 {
     [DependsOn(typeof(AbpAutofacModule))]
-    [DependsOn(typeof(AbpHttpClientModule))]
     [DependsOn(typeof(AbpPermissionsEntityFrameworkCoreModule))]
     [DependsOn(typeof(AbpIdentityHttpApiModule))]
     [DependsOn(typeof(AbpIdentityWebModule))]
     [DependsOn(typeof(AbpIdentityEntityFrameworkCoreModule))]
-    [DependsOn(typeof(AbpAccountWebModule))]
     [DependsOn(typeof(AbpMultiTenancyHttpApiClientModule))]
     [DependsOn(typeof(AbpMultiTenancyWebModule))]
+    [DependsOn(typeof(AbpAspNetCoreAuthenticationOAuthModule))]
     public class MicroservicesDemoWebModule : AbpModule
     {
-        public override void PreConfigureServices(IServiceCollection services)
-        {
-            services.PreConfigure<IMvcBuilder>(builder =>
-            {
-                builder.AddViewLocalization(); //TODO: To the framework!
-            });
-        }
-
         public override void ConfigureServices(IServiceCollection services)
         {
             var hostingEnvironment = services.GetSingletonInstance<IHostingEnvironment>();
@@ -74,8 +67,34 @@ namespace MicroserviceDemo.Web
                     "/Abp/ServiceProxyScript?_v=" + DateTime.Now.Ticks
                 }); 
             });
+            
+            services.AddAuthentication(options =>
+                {
+                    options.DefaultScheme = IdentityConstants.ApplicationScheme;
+                    options.DefaultChallengeScheme = "oidc";
+                })
+                .AddOpenIdConnect("oidc", options =>
+                {
+                    options.SignInScheme = IdentityConstants.ApplicationScheme;
 
-            services.AddAuthentication();
+                    options.Authority = "http://localhost:54307";
+                    options.RequireHttpsMetadata = false;
+
+                    options.ClientId = "client";
+                    options.ClientSecret = "secret";
+
+                    options.ResponseType = OpenIdConnectResponseType.CodeIdToken;
+
+                    options.SaveTokens = true;
+                    options.GetClaimsFromUserInfoEndpoint = true;
+
+                    options.Scope.Add("role");
+                    options.Scope.Add("email");
+                    options.Scope.Add("phone");
+                    options.Scope.Add("multi-tenancy-api");
+
+                    options.ClaimActions.MapAbpClaimTypes();
+                });
 
             services.Configure<RemoteServiceOptions>(configuration);
 
@@ -109,7 +128,16 @@ namespace MicroserviceDemo.Web
 
             app.UseAuthentication();
 
-            app.UseMvcWithDefaultRoute();
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "defaultWithArea",
+                    template: "{area}/{controller=Home}/{action=Index}/{id?}");
+
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Home}/{action=Index}/{id?}");
+            });
         }
 
         private static IConfigurationRoot BuildConfiguration(IHostingEnvironment env)

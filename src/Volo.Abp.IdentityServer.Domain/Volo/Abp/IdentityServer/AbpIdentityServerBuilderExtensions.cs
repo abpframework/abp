@@ -10,7 +10,7 @@ using Volo.Abp.Security.Claims;
 
 namespace Volo.Abp.IdentityServer
 {
-    public static class AbpZeroIdentityServerBuilderExtensions
+    public static class AbpIdentityServerBuilderExtensions
     {
         public static IIdentityServerBuilder AddAbpIdentityServer(
             this IIdentityServerBuilder builder, 
@@ -31,6 +31,7 @@ namespace Volo.Abp.IdentityServer
                 AbpClaimTypes.UserId = JwtClaimTypes.Subject;
                 AbpClaimTypes.UserName = JwtClaimTypes.Name;
                 AbpClaimTypes.Role = JwtClaimTypes.Role;
+                AbpClaimTypes.Email = JwtClaimTypes.Email;
             }
 
             if (options.UpdateJwtSecurityTokenHandlerDefaultInboundClaimTypeMap)
@@ -38,6 +39,7 @@ namespace Volo.Abp.IdentityServer
                 JwtSecurityTokenHandler.DefaultInboundClaimTypeMap[AbpClaimTypes.UserId] = AbpClaimTypes.UserId;
                 JwtSecurityTokenHandler.DefaultInboundClaimTypeMap[AbpClaimTypes.UserName] = AbpClaimTypes.UserName;
                 JwtSecurityTokenHandler.DefaultInboundClaimTypeMap[AbpClaimTypes.Role] = AbpClaimTypes.Role;
+                JwtSecurityTokenHandler.DefaultInboundClaimTypeMap[AbpClaimTypes.Email] = AbpClaimTypes.Email;
             }
 
             return builder;

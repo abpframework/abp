@@ -2,7 +2,6 @@
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Identity;
 using Volo.Abp.IdentityServer.Clients;
-using Volo.Abp.IdentityServer.Temp;
 using Volo.Abp.Modularity;
 using Volo.Abp.Security;
 
@@ -22,19 +21,23 @@ namespace Volo.Abp.IdentityServer
                 options.AddProfile<ClientAutoMapperProfile>(validate: true);
             });
 
-            services.AddAssemblyOf<AbpIdentityServerDomainModule>();
-
             AddIdentityServer(services);
+
+            services.AddAssemblyOf<AbpIdentityServerDomainModule>();
         }
 
         private static void AddIdentityServer(IServiceCollection services)
         {
-            var identityServerBuilder = services.AddIdentityServer();
+            var identityServerBuilder = services.AddIdentityServer(options =>
+            {
+                options.Events.RaiseErrorEvents = true;
+                options.Events.RaiseInformationEvents = true;
+                options.Events.RaiseFailureEvents = true;
+                options.Events.RaiseSuccessEvents = true;
+            });
 
             identityServerBuilder
-                .AddDeveloperSigningCredential()
-                //.AddInMemoryApiResources(IdentityServerConfig.GetApiResources())
-                //.AddInMemoryClients(IdentityServerConfig.GetClients())
+                .AddDeveloperSigningCredential() //TODO: Should be able to change this!
                 .AddAbpIdentityServer();
 
             services.ExecutePreConfiguredActions(identityServerBuilder);
