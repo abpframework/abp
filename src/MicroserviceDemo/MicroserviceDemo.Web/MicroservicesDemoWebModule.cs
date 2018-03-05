@@ -79,7 +79,7 @@ namespace MicroserviceDemo.Web
                 }); 
             });
             
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+            //JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
             services.AddAuthentication(options =>
                 {
@@ -100,23 +100,28 @@ namespace MicroserviceDemo.Web
                     options.SaveTokens = true;
                     options.GetClaimsFromUserInfoEndpoint = true;
 
-                    options.Scope.Add("openid");
-                    options.Scope.Add("profile");
+                    //options.Scope.Add("openid");
+                    //options.Scope.Add("profile");
                     options.Scope.Add("role");
                     options.Scope.Add("email");
                     options.Scope.Add("phone");
                     options.Scope.Add("multi-tenancy-api");
                     //options.Scope.Add("offline_access");
 
-                    options.ClaimActions.MapUniqueJsonKey("email_verified", "email_verified");
+                    options.ClaimActions.MapJsonKey(AbpClaimTypes.Role, "role");
+                    options.ClaimActions.MapJsonKey(AbpClaimTypes.Email, "email");
+                    options.ClaimActions.MapJsonKey(AbpClaimTypes.UserId, "sub");
+                    options.ClaimActions.MapJsonKey(AbpClaimTypes.UserName, "name");
+                    options.ClaimActions.MapUniqueJsonKey("email_verified", "email_verified"); //TODO: Can we add claims types to AbpClaimTypes
                     options.ClaimActions.MapUniqueJsonKey("phone_number", "phone_number");
                     options.ClaimActions.MapUniqueJsonKey("phone_number_verified", "phone_number_verified");
-                    options.ClaimActions.MapUniqueJsonKey("role", "role");
 
-                    AbpClaimTypes.UserName = "name";
-                    AbpClaimTypes.Email = "email";
-                    AbpClaimTypes.Role = "role";
-                    AbpClaimTypes.UserId = "sub";
+                    //options.TokenValidationParameters.RoleClaimType = AbpClaimTypes.
+
+                    //AbpClaimTypes.UserName = "name";
+                    //AbpClaimTypes.Email = "email";
+                    //AbpClaimTypes.Role = "role";
+                    //AbpClaimTypes.UserId = "sub";
 
                     options.SecurityTokenValidator = new MyJwtSecurityTokenHandler();
                 });
