@@ -302,6 +302,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Account.Web.Identi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroserviceDemo.ConsoleClient", "src\MicroserviceDemo\MicroserviceDemo.ConsoleClient\MicroserviceDemo.ConsoleClient.csproj", "{CD4E755D-D47C-45B1-AFB3-3444FF2E2E39}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Authentication.OAuth", "src\Volo.Abp.AspNetCore.Authentication.OAuth\Volo.Abp.AspNetCore.Authentication.OAuth.csproj", "{A1C792B7-0DBF-460D-9158-A1A68A2D9C1A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -796,6 +798,10 @@ Global
 		{CD4E755D-D47C-45B1-AFB3-3444FF2E2E39}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CD4E755D-D47C-45B1-AFB3-3444FF2E2E39}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CD4E755D-D47C-45B1-AFB3-3444FF2E2E39}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1C792B7-0DBF-460D-9158-A1A68A2D9C1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1C792B7-0DBF-460D-9158-A1A68A2D9C1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1C792B7-0DBF-460D-9158-A1A68A2D9C1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1C792B7-0DBF-460D-9158-A1A68A2D9C1A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -943,6 +949,7 @@ Global
 		{A177B8B7-ACAD-4F75-B6D4-B72F7BC2E40A} = {3510E248-DC9F-4A07-8134-02E7F5CC5783}
 		{E4AB8A4F-BB59-4BDB-B915-877CE97D8113} = {DB012309-74FD-4D5A-B843-DD77BF053BF4}
 		{CD4E755D-D47C-45B1-AFB3-3444FF2E2E39} = {3510E248-DC9F-4A07-8134-02E7F5CC5783}
+		{A1C792B7-0DBF-460D-9158-A1A68A2D9C1A} = {C4C6961D-01CC-49A5-8B96-2A36E71CF01F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB97ECF4-9A84-433F-A80B-2A3285BDD1D5}

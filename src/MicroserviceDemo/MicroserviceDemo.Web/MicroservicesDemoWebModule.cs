@@ -1,5 +1,5 @@
 ﻿using System;
-using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.OAuth.Claims;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
+using Volo.Abp.AspNetCore.Authentication.OAuth;
 using Volo.Abp.AspNetCore.Modularity;
 using Volo.Abp.AspNetCore.Mvc.Bundling;
 using Volo.Abp.Autofac;
@@ -22,7 +23,6 @@ using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.MultiTenancy.Web;
 using Volo.Abp.Permissions.EntityFrameworkCore;
-using Volo.Abp.Security.Claims;
 
 namespace MicroserviceDemo.Web
 {
@@ -33,6 +33,7 @@ namespace MicroserviceDemo.Web
     [DependsOn(typeof(AbpIdentityEntityFrameworkCoreModule))]
     [DependsOn(typeof(AbpMultiTenancyHttpApiClientModule))]
     [DependsOn(typeof(AbpMultiTenancyWebModule))]
+    [DependsOn(typeof(AbpAspNetCoreAuthenticationOAuthModule))]
     public class MicroservicesDemoWebModule : AbpModule
     {
         public override void PreConfigureServices(IServiceCollection services)
@@ -89,6 +90,7 @@ namespace MicroserviceDemo.Web
 
                     options.ClientId = "client";
                     options.ClientSecret = "secret";
+
                     options.ResponseType = OpenIdConnectResponseType.CodeIdToken;
 
                     options.SaveTokens = true;
@@ -99,15 +101,7 @@ namespace MicroserviceDemo.Web
                     options.Scope.Add("phone");
                     options.Scope.Add("multi-tenancy-api");
 
-                    options.ClaimActions.MapJsonKey(AbpClaimTypes.Role, "role");
-                    options.ClaimActions.MapJsonKey(AbpClaimTypes.Email, "email");
-                    options.ClaimActions.MapJsonKey(AbpClaimTypes.UserId, "sub");
-                    options.ClaimActions.MapJsonKey(AbpClaimTypes.UserName, "name");
-
-                    //TODO: Can we add claims types to AbpClaimTypes
-                    options.ClaimActions.MapUniqueJsonKey("email_verified", "email_verified");
-                    options.ClaimActions.MapUniqueJsonKey("phone_number", "phone_number");
-                    options.ClaimActions.MapUniqueJsonKey("phone_number_verified", "phone_number_verified");
+                    options.ClaimActions.MapAbpClaimTypes();
                 });
 
             services.Configure<RemoteServiceOptions>(configuration);
