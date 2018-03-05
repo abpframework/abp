@@ -70,7 +70,7 @@ namespace MicroserviceDemo.Web
             
             services.AddAuthentication(options =>
                 {
-                    options.DefaultScheme = IdentityConstants.ApplicationScheme;
+                    //options.DefaultScheme = IdentityConstants.ApplicationScheme;
                     options.DefaultChallengeScheme = "oidc";
                 })
                 .AddOpenIdConnect("oidc", options =>
