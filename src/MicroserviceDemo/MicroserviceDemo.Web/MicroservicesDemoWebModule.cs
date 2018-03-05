@@ -1,16 +1,12 @@
 ﻿using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Azure.KeyVault.WebKey;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
-using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Modularity;
@@ -79,8 +75,6 @@ namespace MicroserviceDemo.Web
                 }); 
             });
             
-            //JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-
             services.AddAuthentication(options =>
                 {
                     options.DefaultScheme = IdentityConstants.ApplicationScheme;
@@ -100,30 +94,20 @@ namespace MicroserviceDemo.Web
                     options.SaveTokens = true;
                     options.GetClaimsFromUserInfoEndpoint = true;
 
-                    //options.Scope.Add("openid");
-                    //options.Scope.Add("profile");
                     options.Scope.Add("role");
                     options.Scope.Add("email");
                     options.Scope.Add("phone");
                     options.Scope.Add("multi-tenancy-api");
-                    //options.Scope.Add("offline_access");
 
                     options.ClaimActions.MapJsonKey(AbpClaimTypes.Role, "role");
                     options.ClaimActions.MapJsonKey(AbpClaimTypes.Email, "email");
                     options.ClaimActions.MapJsonKey(AbpClaimTypes.UserId, "sub");
                     options.ClaimActions.MapJsonKey(AbpClaimTypes.UserName, "name");
-                    options.ClaimActions.MapUniqueJsonKey("email_verified", "email_verified"); //TODO: Can we add claims types to AbpClaimTypes
+
+                    //TODO: Can we add claims types to AbpClaimTypes
+                    options.ClaimActions.MapUniqueJsonKey("email_verified", "email_verified");
                     options.ClaimActions.MapUniqueJsonKey("phone_number", "phone_number");
                     options.ClaimActions.MapUniqueJsonKey("phone_number_verified", "phone_number_verified");
-
-                    //options.TokenValidationParameters.RoleClaimType = AbpClaimTypes.
-
-                    //AbpClaimTypes.UserName = "name";
-                    //AbpClaimTypes.Email = "email";
-                    //AbpClaimTypes.Role = "role";
-                    //AbpClaimTypes.UserId = "sub";
-
-                    options.SecurityTokenValidator = new MyJwtSecurityTokenHandler();
                 });
 
             services.Configure<RemoteServiceOptions>(configuration);
@@ -178,17 +162,6 @@ namespace MicroserviceDemo.Web
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
 
             return builder.Build();
-        }
-    }
-
-    public class MyJwtSecurityTokenHandler : JwtSecurityTokenHandler
-    {
-        protected override ClaimsIdentity CreateClaimsIdentity(JwtSecurityToken jwt, string issuer,
-            TokenValidationParameters validationParameters)
-        {
-            var xxx = base.CreateClaimsIdentity(jwt, issuer, validationParameters);
-
-            return xxx;
         }
     }
 }
