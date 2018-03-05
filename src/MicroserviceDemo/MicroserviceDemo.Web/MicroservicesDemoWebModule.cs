@@ -1,9 +1,16 @@
 ﻿using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.OAuth.Claims;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
@@ -21,6 +28,7 @@ using Volo.Abp.MultiTenancy;
 using Volo.Abp.MultiTenancy.Web;
 using Volo.Abp.Permissions;
 using Volo.Abp.Permissions.EntityFrameworkCore;
+using Volo.Abp.Security.Claims;
 
 namespace MicroserviceDemo.Web
 {
@@ -75,28 +83,41 @@ namespace MicroserviceDemo.Web
                 }); 
             });
 
+            var xxx = JwtSecurityTokenHandler.DefaultInboundClaimTypeMap;
+
+            //JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear(); //TODO: Try to understand if this is really needed?
+
             services.AddAuthentication(options =>
                 {
-                    options.DefaultScheme = "Cookies";
-                    options.DefaultChallengeScheme = "oidc";
+                    //options.DefaultScheme = IdentityConstants.ApplicationScheme;
+                    //options.DefaultChallengeScheme = "oidc";
                 })
-                .AddCookie("Cookies")
+                //.AddCookie(IdentityConstants.ApplicationScheme)
                 .AddOpenIdConnect("oidc", options =>
                 {
-                    options.SignInScheme = "Cookies";
+                    //options.SignInScheme = IdentityConstants.ApplicationScheme;
 
                     options.Authority = "http://localhost:54307";
                     options.RequireHttpsMetadata = false;
 
-                    options.ClientId = "mvc";
+                    options.ClientId = "client";
                     options.ClientSecret = "secret";
-                    options.ResponseType = "code id_token";
+                    options.ResponseType = OpenIdConnectResponseType.CodeIdToken;
 
                     options.SaveTokens = true;
                     options.GetClaimsFromUserInfoEndpoint = true;
 
-                    options.Scope.Add("api1");
+                    options.Scope.Add("openid");
+                    options.Scope.Add("profile");
+                    options.Scope.Add("email");
+                    options.Scope.Add("phone");
+                    options.Scope.Add("multi-tenancy-api");
                     options.Scope.Add("offline_access");
+
+                    options.ClaimActions.MapUniqueJsonKey(AbpClaimTypes.UserName, "name");
+                    options.ClaimActions.MapUniqueJsonKey(AbpClaimTypes.Email, "email");
+
+                    options.SecurityTokenValidator = new MyJwtSecurityTokenHandler();
                 });
 
             services.Configure<RemoteServiceOptions>(configuration);
@@ -151,6 +172,17 @@ namespace MicroserviceDemo.Web
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
 
             return builder.Build();
+        }
+    }
+
+    public class MyJwtSecurityTokenHandler : JwtSecurityTokenHandler
+    {
+        protected override ClaimsIdentity CreateClaimsIdentity(JwtSecurityToken jwt, string issuer,
+            TokenValidationParameters validationParameters)
+        {
+            var xxx = base.CreateClaimsIdentity(jwt, issuer, validationParameters);
+
+            return xxx;
         }
     }
 }

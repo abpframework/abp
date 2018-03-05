@@ -13,7 +13,6 @@ using Volo.Abp.Autofac;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Identity.EntityFrameworkCore;
-using Volo.Abp.IdentityServer;
 using Volo.Abp.IdentityServer.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
@@ -46,6 +45,12 @@ namespace MicroserviceDemo.AuthServer
                         context.DbContextOptions.UseSqlServer(context.ConnectionString);
                     }
                 });
+            });
+
+            services.Configure<IISOptions>(iis =>
+            {
+                iis.AuthenticationDisplayName = "Windows";
+                iis.AutomaticAuthentication = false;
             });
 
             if (hostingEnvironment.IsDevelopment())

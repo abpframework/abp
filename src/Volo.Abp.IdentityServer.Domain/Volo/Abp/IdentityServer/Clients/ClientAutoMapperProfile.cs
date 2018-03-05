@@ -28,6 +28,11 @@ namespace Volo.Abp.IdentityServer.Clients
 
             CreateMap<IdentityResource, IdentityServer4.Models.IdentityResource>();
 
+            CreateMap<UserClaim, string>()
+                .ConstructUsing(src => src.Type)
+                .ReverseMap()
+                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src));
+
             CreateMap<ApiSecret, IdentityServer4.Models.Secret>();
 
             CreateMap<ApiScope, IdentityServer4.Models.Scope>();

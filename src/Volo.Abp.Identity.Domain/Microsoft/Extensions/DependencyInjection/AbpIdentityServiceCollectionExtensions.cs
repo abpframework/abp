@@ -37,7 +37,8 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddScoped<IdentityRoleStore>();
             services.TryAddScoped(typeof(IRoleStore<IdentityRole>), provider => provider.GetService(typeof(IdentityRoleStore)));
 
-            return services.AddIdentity<IdentityUser, IdentityRole>(setupAction);
+            return services.AddIdentity<IdentityUser, IdentityRole>(setupAction)
+                .AddDefaultTokenProviders();
             //return services.AddIdentityCore<IdentityUser>(setupAction);
         }
     }

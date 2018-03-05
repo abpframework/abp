@@ -1,11 +1,14 @@
 ﻿@page
+@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Http
 @model MicroserviceDemo.Web.Pages.IndexModel
+@inject IHttpContextAccessor HttpContextAccessor
 <p>
     <abp-card>
         <abp-card-header></abp-card-header>
         <abp-card-body>
             <a href="~/Account/Login">Login</a>
-            
+
             @if (User.Identity.IsAuthenticated)
             {
                 foreach (var claim in User.Claims)
@@ -13,6 +16,14 @@
                     <div>@claim.Type = @claim.Value</div>
                 }
             }
+
+            <hr />
+
+            @{
+                var accessToken = await HttpContextAccessor.HttpContext.GetTokenAsync("access_token");
+            }
+
+            @accessToken <br />
 
         </abp-card-body>
     </abp-card>

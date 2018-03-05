@@ -10,7 +10,7 @@ using Volo.Abp.Security.Claims;
 
 namespace Volo.Abp.IdentityServer
 {
-    public static class AbpZeroIdentityServerBuilderExtensions
+    public static class AbpIdentityServerBuilderExtensions
     {
         public static IIdentityServerBuilder AddAbpIdentityServer(
             this IIdentityServerBuilder builder, 

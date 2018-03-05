@@ -133,7 +133,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
                 }
 
                 await _interaction.GrantConsentAsync(context, ConsentResponse.Denied);
-                return RedirectSafely(ReturnUrl);
+                return Redirect(ReturnUrl);
             }
 
             ValidateModel();
@@ -163,7 +163,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
                 return Redirect("~/");
             }
 
-            return RedirectSafely(ReturnUrl, ReturnUrlHash);
+            return Redirect(ReturnUrl); //ReturnUrlHash?
         }
         
         [UnitOfWork]

@@ -1,30 +1,20 @@
 ﻿@using Volo.Abp.Account.Web.Pages
 @using Volo.Abp.Account.Web.Pages.Account
-@model Volo.Abp.Account.Web.Pages.ConsentModel.ScopeViewModel
-    
+@model ConsentModel.ScopeViewModel
 @* TODO: Should re-format this, just made copy/paste *@
-
 <li class="list-group-item">
-    <label>
-        <input class="consent-scopecheck"
-               type="checkbox"
-               name="ScopesConsented"
-               id="scopes_@Model.Name"
-               value="@Model.Name"
-               checked="@Model.Checked"
-               disabled="@Model.Required" />
-        @if (Model.Required)
-        {
-            <input type="hidden"
-                   name="ScopesConsented"
-                   value="@Model.Name" />
-        }
-        <strong>@Model.DisplayName</strong>
-        @if (Model.Emphasize)
-        {
-            <span class="glyphicon glyphicon-exclamation-sign"></span>
-        }
-    </label>
+    <div class="form-check">
+        <label asp-for="Checked" class="form-check-label">
+            <input asp-for="Checked" class="form-check-input" disabled="@Model.Required" />
+            @Html.DisplayNameFor(m => m.Checked)
+            <input asp-for="Name" type="hidden" />
+            <strong>@Model.DisplayName</strong>
+            @if (Model.Emphasize)
+            {
+                <span class="glyphicon glyphicon-exclamation-sign"></span>
+            }
+        </label>
+    </div>
     @if (Model.Required)
     {
         <span><em>(required)</em></span>

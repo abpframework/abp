@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.Identity;
+using Volo.Abp.Security.Claims;
 using Volo.Abp.Ui;
 using Volo.Abp.Uow;
 
@@ -122,7 +123,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
         private async Task<IdentityUser> CreateExternalUserAsync(ExternalLoginInfo info)
         {
-            var emailAddress = info.Principal.FindFirstValue(ClaimTypes.Email);
+            var emailAddress = info.Principal.FindFirstValue(AbpClaimTypes.Email);
 
             var user = new IdentityUser(GuidGenerator.Create(), emailAddress, CurrentTenant.Id);
 
