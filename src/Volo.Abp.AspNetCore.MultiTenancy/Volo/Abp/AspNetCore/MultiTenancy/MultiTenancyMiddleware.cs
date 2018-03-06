@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Http;
 using Volo.Abp.MultiTenancy;
 
@@ -27,13 +28,18 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
 
         public async Task Invoke(HttpContext httpContext)
         {
-            //TODO: Try-catch and return "unknown tenant" if found tenant is not in the store..?
+            using (SetCurrentTenant(await ResolveCurrentTenantAsync()))
+            {
+                await _next(httpContext);
+            }
+        }
 
+        private async Task<TenantInfo> ResolveCurrentTenantAsync()
+        {
             var tenantIdOrName = _tenantResolver.ResolveTenantIdOrName();
             if (tenantIdOrName == null)
             {
-                await _next(httpContext);
-                return;
+                return null;
             }
 
             var tenant = await FindTenantAsync(tenantIdOrName);
@@ -42,10 +48,7 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
                 throw new AbpException("There is no tenant with given tenant id or name: " + tenantIdOrName);
             }
 
-            using (SetCurrent(tenant))
-            {
-                await _next(httpContext);
-            }
+            return tenant;
         }
 
         private async Task<TenantInfo> FindTenantAsync(string tenantIdOrName)
@@ -60,7 +63,7 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
             }
         }
 
-        private IDisposable SetCurrent(TenantInfo tenant)
+        private IDisposable SetCurrentTenant([CanBeNull] TenantInfo tenant)
         {
             var parentScope = _currentTenantIdAccessor.Current;
             _currentTenantIdAccessor.Current = new TenantIdWrapper(tenant?.Id);

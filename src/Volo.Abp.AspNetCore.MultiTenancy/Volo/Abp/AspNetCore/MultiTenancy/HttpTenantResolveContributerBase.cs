@@ -29,7 +29,7 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
             }
         }
 
-        private void ResolveFromHttpContext(ITenantResolveContext context, HttpContext httpContext)
+        protected virtual void ResolveFromHttpContext(ITenantResolveContext context, HttpContext httpContext)
         {
             var tenantIdOrName = GetTenantIdOrNameFromHttpContextOrNull(context, httpContext);
             if (!tenantIdOrName.IsNullOrEmpty())

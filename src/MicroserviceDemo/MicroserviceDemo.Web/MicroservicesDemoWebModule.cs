@@ -127,8 +127,6 @@ namespace MicroserviceDemo.Web
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseMultiTenancy();
-
             app.UseStaticFiles();
             app.UseVirtualFiles();
 
@@ -139,6 +137,8 @@ namespace MicroserviceDemo.Web
             });
 
             app.UseAuthentication();
+
+            app.UseMultiTenancy();
 
             app.UseMvc(routes =>
             {

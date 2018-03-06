@@ -14,10 +14,11 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
         {
             services.Configure<TenantResolveOptions>(options =>
             {
-                options.TenantResolvers.Insert(0, new QueryStringTenantResolveContributer());
-                options.TenantResolvers.Insert(1, new RouteTenantResolveContributer());
-                options.TenantResolvers.Insert(2, new HeaderTenantResolveContributer());
-                options.TenantResolvers.Insert(3, new CookieTenantResolveContributer());
+                options.TenantResolvers.Insert(0, new ClaimsHttpTenantResolveContributer());
+                options.TenantResolvers.Insert(1, new QueryStringTenantResolveContributer());
+                options.TenantResolvers.Insert(2, new RouteTenantResolveContributer());
+                options.TenantResolvers.Insert(3, new HeaderTenantResolveContributer());
+                options.TenantResolvers.Insert(4, new CookieTenantResolveContributer());
             });
 
             services.AddAssemblyOf<AbpAspNetCoreMultiTenancyModule>();
