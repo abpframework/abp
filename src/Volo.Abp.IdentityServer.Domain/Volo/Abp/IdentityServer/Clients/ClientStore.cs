@@ -1,11 +1,10 @@
 ﻿using System.Threading.Tasks;
 using IdentityServer4.Stores;
-using Volo.Abp.DependencyInjection;
 using Volo.Abp.ObjectMapping;
 
 namespace Volo.Abp.IdentityServer.Clients
 {
-    public class ClientStore : IClientStore, ITransientDependency
+    public class ClientStore : IClientStore
     {
         private readonly IClientRepository _clientRepository;
         private readonly IObjectMapper _objectMapper;

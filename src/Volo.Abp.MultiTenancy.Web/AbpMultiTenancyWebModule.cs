@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AutoMapper;
@@ -26,8 +27,6 @@ namespace Volo.Abp.MultiTenancy.Web
 
         public override void ConfigureServices(IServiceCollection services)
         {
-            services.AddAssemblyOf<AbpMultiTenancyWebModule>();
-
             services.Configure<NavigationOptions>(options =>
             {
                 options.MenuContributors.Add(new AbpMultiTenancyWebMainMenuContributor());
@@ -47,6 +46,15 @@ namespace Volo.Abp.MultiTenancy.Web
             {
                 options.AddProfile<AbpMultiTenancyWebAutoMapperProfile>(validate: true);
             });
+
+            services.Configure<RazorPagesOptions>(options =>
+            {
+                options.Conventions.AuthorizePage("/MultiTenancy/Tenants/Index", TenantManagementPermissions.Tenants.Default);
+                options.Conventions.AuthorizePage("/MultiTenancy/Tenants/CreateModal", TenantManagementPermissions.Tenants.Create);
+                options.Conventions.AuthorizePage("/MultiTenancy/Tenants/EditModal", TenantManagementPermissions.Tenants.Update);
+            });
+
+            services.AddAssemblyOf<AbpMultiTenancyWebModule>();
         }
     }
 }

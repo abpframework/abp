@@ -3,14 +3,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using IdentityServer4.Models;
 using IdentityServer4.Stores;
-using Volo.Abp.DependencyInjection;
 using Volo.Abp.IdentityServer.IdentityResources;
 using Volo.Abp.ObjectMapping;
 using IdentityResource = Volo.Abp.IdentityServer.IdentityResources.IdentityResource;
 
 namespace Volo.Abp.IdentityServer
 {
-    public class ResourceStore : IResourceStore, ITransientDependency
+    public class ResourceStore : IResourceStore
     {
         private readonly IIdentityResourceRepository _identityResourceRepository;
         private readonly IObjectMapper _objectMapper;

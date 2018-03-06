@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Identity;
+using Volo.Abp.IdentityServer.AspNetIdentity;
 using Volo.Abp.IdentityServer.Clients;
 using Volo.Abp.Modularity;
 using Volo.Abp.Security;
@@ -38,6 +39,8 @@ namespace Volo.Abp.IdentityServer
 
             identityServerBuilder
                 .AddDeveloperSigningCredential() //TODO: Should be able to change this!
+                .AddClientStore<ClientStore>()
+                .AddResourceStore<ResourceStore>()
                 .AddAbpIdentityServer();
 
             services.ExecutePreConfiguredActions(identityServerBuilder);
