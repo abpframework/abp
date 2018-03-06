@@ -31,18 +31,15 @@ namespace Autofac.Builder
             }
 
             registrationBuilder = registrationBuilder.EnablePropertyInjection(moduleContainer, implementationType);
-            registrationBuilder = registrationBuilder.InvokeRegistrationActions(registrationActionList, serviceType);
+            registrationBuilder = registrationBuilder.InvokeRegistrationActions(registrationActionList, serviceType, implementationType);
 
             return registrationBuilder;
         }
 
-        private static IRegistrationBuilder<TLimit, TConcreteReflectionActivatorData, TRegistrationStyle> InvokeRegistrationActions<TLimit, TConcreteReflectionActivatorData, TRegistrationStyle>(
-                this IRegistrationBuilder<TLimit, TConcreteReflectionActivatorData, TRegistrationStyle> registrationBuilder, 
-                ServiceRegistrationActionList registrationActionList,
-                Type serviceType) 
+        private static IRegistrationBuilder<TLimit, TConcreteReflectionActivatorData, TRegistrationStyle> InvokeRegistrationActions<TLimit, TConcreteReflectionActivatorData, TRegistrationStyle>(this IRegistrationBuilder<TLimit, TConcreteReflectionActivatorData, TRegistrationStyle> registrationBuilder, ServiceRegistrationActionList registrationActionList, Type serviceType, Type implementationType) 
             where TConcreteReflectionActivatorData : ConcreteReflectionActivatorData
         {
-            var serviceRegistredArgs = new OnServiceRegistredContext(serviceType);
+            var serviceRegistredArgs = new OnServiceRegistredContext(serviceType, implementationType);
 
             foreach (var registrationAction in registrationActionList)
             {

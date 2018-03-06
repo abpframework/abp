@@ -1,6 +1,4 @@
-﻿using Volo.Abp.TestBase;
-
-namespace Volo.Abp.IdentityServer
+﻿namespace Volo.Abp.IdentityServer
 {
     public class AbpIdentityServerTestBase : AbpIntegratedTest<AbpIdentityServerTestEntityFrameworkCoreModule>
     {
