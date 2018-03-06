@@ -38,7 +38,7 @@ namespace MicroserviceDemo.Web.Controllers
 
             var client = new HttpClient();
             client.SetBearerToken(accessToken);
-            var content = await client.GetStringAsync("http://localhost:63877/identity");
+            var content = await client.GetStringAsync("http://abp-test-tenancy.com:63877/identity");
 
             ViewBag.Json = JObject.Parse(content).ToString();
             return View("json");
@@ -46,12 +46,12 @@ namespace MicroserviceDemo.Web.Controllers
 
         public async Task<IActionResult> CallApiUsingClientCredentials()
         {
-            var tokenClient = new TokenClient("http://localhost:54307/connect/token", "client", "secret");
+            var tokenClient = new TokenClient("http://abp-test-authserver.com:54307/connect/token", "client", "secret");
             var tokenResponse = await tokenClient.RequestClientCredentialsAsync("multi-tenancy-api");
 
             var client = new HttpClient();
             client.SetBearerToken(tokenResponse.AccessToken);
-            var content = await client.GetStringAsync("http://localhost:63877/identity");
+            var content = await client.GetStringAsync("http://abp-test-tenancy.com:63877/identity");
 
             ViewBag.Json = JObject.Parse(content).ToString();
             return View("json");

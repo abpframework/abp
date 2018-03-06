@@ -3,7 +3,7 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:63877/",
+      "applicationUrl": "http://abp-test-tenancy.com:63877/",
       "sslPort": 0
     }
   },
@@ -21,7 +21,7 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "http://localhost:63878/"
+      "applicationUrl": "http://abp-test-tenancy.com:63878/"
     }
   }
 }

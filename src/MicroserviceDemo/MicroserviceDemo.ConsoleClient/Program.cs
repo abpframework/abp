@@ -16,7 +16,7 @@ namespace MicroserviceDemo.ConsoleClient
         private static async Task RunDemo()
         {
             // discover endpoints from metadata
-            var disco = await DiscoveryClient.GetAsync("http://localhost:54307");
+            var disco = await DiscoveryClient.GetAsync("http://abp-test-authserver.com:54307");
             if (disco.IsError)
             {
                 Console.WriteLine(disco.Error);
@@ -39,7 +39,7 @@ namespace MicroserviceDemo.ConsoleClient
             var client = new HttpClient();
             client.SetBearerToken(tokenResponse.AccessToken);
 
-            var response = await client.GetAsync("http://localhost:63877/api/multi-tenancy/tenant?SkipCount=0&MaxResultCount=100");
+            var response = await client.GetAsync("http://abp-test-tenancy.com:63877/api/multi-tenancy/tenant?SkipCount=0&MaxResultCount=100");
             if (!response.IsSuccessStatusCode)
             {
                 Console.WriteLine(response.StatusCode);

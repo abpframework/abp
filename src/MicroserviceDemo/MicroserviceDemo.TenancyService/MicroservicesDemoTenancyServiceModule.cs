@@ -58,7 +58,7 @@ namespace MicroserviceDemo.TenancyService
             services.AddAuthentication("Bearer")
                 .AddIdentityServerAuthentication(options =>
                 {
-                    options.Authority = "http://localhost:54307";
+                    options.Authority = "http://abp-test-authserver.com:54307";
                     options.RequireHttpsMetadata = false;
 
                     options.ApiName = "multi-tenancy-api";

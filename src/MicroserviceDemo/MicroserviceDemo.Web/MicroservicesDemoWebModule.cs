@@ -80,7 +80,7 @@ namespace MicroserviceDemo.Web
                 {
                     options.SignInScheme = IdentityConstants.ApplicationScheme;
 
-                    options.Authority = "http://localhost:54307";
+                    options.Authority = "http://abp-test-authserver.com:54307";
                     options.RequireHttpsMetadata = false;
 
                     options.ClientId = "client";
