@@ -20,10 +20,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Remove="Pages\Account\_ViewImports.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Server.IISIntegration" Version="2.0.1" />
   </ItemGroup>
 
