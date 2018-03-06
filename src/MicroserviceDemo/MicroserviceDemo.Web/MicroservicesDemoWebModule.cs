@@ -105,6 +105,13 @@ namespace MicroserviceDemo.Web
                     options.DocInclusionPredicate((docName, description) => true);
                 });
 
+            services.AddDistributedSqlServerCache(options =>
+            {
+                options.ConnectionString = configuration.GetConnectionString("SqlServerCache");
+                options.SchemaName = "dbo";
+                options.TableName = "TestCache";
+            });
+
             services.AddAssemblyOf<MicroservicesDemoWebModule>();
         }
 

@@ -69,7 +69,12 @@ namespace MicroserviceDemo.TenancyService
                     options.InboundJwtClaimTypeMap["email"] = AbpClaimTypes.Email;
                 });
 
-            //services.AddAlwaysAllowPermissionChecker();
+            services.AddDistributedSqlServerCache(options =>
+            {
+                options.ConnectionString = configuration.GetConnectionString("SqlServerCache");
+                options.SchemaName = "dbo";
+                options.TableName = "TestCache";
+            });
 
             services.AddAssemblyOf<MicroservicesDemoTenancyServiceModule>();
         }

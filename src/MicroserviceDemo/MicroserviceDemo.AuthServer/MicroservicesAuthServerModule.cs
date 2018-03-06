@@ -74,6 +74,13 @@ namespace MicroserviceDemo.AuthServer
                     options.Scope.Add("public_profile");
                 });
 
+            services.AddDistributedSqlServerCache(options =>
+            {
+                options.ConnectionString = configuration.GetConnectionString("SqlServerCache");
+                options.SchemaName = "dbo";
+                options.TableName = "TestCache";
+            });
+
             services.AddAssemblyOf<MicroservicesAuthServerModule>();
         }
 
