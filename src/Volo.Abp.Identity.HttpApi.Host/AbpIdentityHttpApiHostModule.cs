@@ -18,7 +18,11 @@ using Volo.Abp.Modularity;
 
 namespace Volo.Abp.Identity.HttpApi.Host
 {
-    [DependsOn(typeof(AbpIdentityHttpApiModule), typeof(AbpIdentityEntityFrameworkCoreModule), typeof(AbpAutofacModule))]
+    [DependsOn(
+        typeof(AbpIdentityApplicationModule),
+        typeof(AbpIdentityEntityFrameworkCoreModule),
+        typeof(AbpIdentityHttpApiModule), 
+        typeof(AbpAutofacModule))]
     public class AbpIdentityHttpApiHostModule : AbpModule
     {
         public override void PreConfigureServices(IServiceCollection services)

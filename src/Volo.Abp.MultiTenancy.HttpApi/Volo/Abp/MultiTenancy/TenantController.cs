@@ -19,27 +19,27 @@ namespace Volo.Abp.MultiTenancy
             _service = service;
         }
 
-        public Task<TenantDto> GetAsync(Guid id)
+        public virtual Task<TenantDto> GetAsync(Guid id)
         {
             return _service.GetAsync(id);
         }
 
-        public Task<PagedResultDto<TenantDto>> GetListAsync(GetTenantsInput input)
+        public virtual Task<PagedResultDto<TenantDto>> GetListAsync(GetTenantsInput input)
         {
             return _service.GetListAsync(input);
         }
 
-        public Task<TenantDto> CreateAsync(TenantCreateDto input)
+        public virtual Task<TenantDto> CreateAsync(TenantCreateDto input)
         {
             return _service.CreateAsync(input);
         }
 
-        public Task<TenantDto> UpdateAsync(Guid id, TenantUpdateDto input)
+        public virtual Task<TenantDto> UpdateAsync(Guid id, TenantUpdateDto input)
         {
             return _service.UpdateAsync(id, input);
         }
 
-        public Task DeleteAsync(Guid id)
+        public virtual Task DeleteAsync(Guid id)
         {
             return _service.DeleteAsync(id);
         }

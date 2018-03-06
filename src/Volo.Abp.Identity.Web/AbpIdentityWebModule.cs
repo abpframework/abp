@@ -13,7 +13,7 @@ using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.Identity.Web
 {
-    [DependsOn(typeof(AbpIdentityApplicationContractsModule))]
+    [DependsOn(typeof(AbpIdentityHttpApiModule))]
     [DependsOn(typeof(AbpAspNetCoreMvcUiBootstrapModule))]
     [DependsOn(typeof(AbpAutoMapperModule))]
     [DependsOn(typeof(AbpPermissionsWebModule))]

@@ -28,7 +28,7 @@ namespace MicroserviceDemo.Web
 {
     [DependsOn(typeof(AbpAutofacModule))]
     [DependsOn(typeof(AbpPermissionsEntityFrameworkCoreModule))]
-    [DependsOn(typeof(AbpIdentityHttpApiModule))]
+    [DependsOn(typeof(AbpIdentityApplicationModule))]
     [DependsOn(typeof(AbpIdentityWebModule))]
     [DependsOn(typeof(AbpIdentityEntityFrameworkCoreModule))]
     [DependsOn(typeof(AbpMultiTenancyHttpApiClientModule))]
