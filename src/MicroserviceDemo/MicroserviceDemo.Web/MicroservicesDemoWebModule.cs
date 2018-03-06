@@ -11,6 +11,7 @@ using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Authentication.OAuth;
 using Volo.Abp.AspNetCore.Modularity;
+using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc.Bundling;
 using Volo.Abp.Autofac;
 using Volo.Abp.Data;
@@ -21,6 +22,7 @@ using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.Identity.Web;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.MultiTenancy.EntityFrameworkCore;
 using Volo.Abp.MultiTenancy.Web;
 using Volo.Abp.Permissions.EntityFrameworkCore;
 
@@ -34,6 +36,8 @@ namespace MicroserviceDemo.Web
     [DependsOn(typeof(AbpMultiTenancyHttpApiClientModule))]
     [DependsOn(typeof(AbpMultiTenancyWebModule))]
     [DependsOn(typeof(AbpAspNetCoreAuthenticationOAuthModule))]
+    [DependsOn(typeof(AbpAspNetCoreMultiTenancyModule))]
+    [DependsOn(typeof(AbpMultiTenancyEntityFrameworkCoreModule))]
     public class MicroservicesDemoWebModule : AbpModule
     {
         public override void ConfigureServices(IServiceCollection services)
@@ -70,7 +74,6 @@ namespace MicroserviceDemo.Web
             
             services.AddAuthentication(options =>
                 {
-                    //options.DefaultScheme = IdentityConstants.ApplicationScheme;
                     options.DefaultChallengeScheme = "oidc";
                 })
                 .AddOpenIdConnect("oidc", options =>
@@ -123,6 +126,8 @@ namespace MicroserviceDemo.Web
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseMultiTenancy();
 
             app.UseStaticFiles();
             app.UseVirtualFiles();

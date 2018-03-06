@@ -27,11 +27,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Volo.Abp.AspNetCore.Authentication.OAuth\Volo.Abp.AspNetCore.Authentication.OAuth.csproj" />
+    <ProjectReference Include="..\..\Volo.Abp.AspNetCore.MultiTenancy\Volo.Abp.AspNetCore.MultiTenancy.csproj" />
     <ProjectReference Include="..\..\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
     <ProjectReference Include="..\..\Volo.Abp.Identity.Application\Volo.Abp.Identity.Application.csproj" />
     <ProjectReference Include="..\..\Volo.Abp.Identity.EntityFrameworkCore\Volo.Abp.Identity.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\..\Volo.Abp.Identity.HttpApi\Volo.Abp.Identity.HttpApi.csproj" />
     <ProjectReference Include="..\..\Volo.Abp.Identity.Web\Volo.Abp.Identity.Web.csproj" />
+    <ProjectReference Include="..\..\Volo.Abp.MultiTenancy.EntityFrameworkCore\Volo.Abp.MultiTenancy.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\..\Volo.Abp.MultiTenancy.HttpApi.Client\Volo.Abp.MultiTenancy.HttpApi.Client.csproj" />
     <ProjectReference Include="..\..\Volo.Abp.MultiTenancy.Web\Volo.Abp.MultiTenancy.Web.csproj" />
     <ProjectReference Include="..\..\Volo.Abp.Permissions.EntityFrameworkCore\Volo.Abp.Permissions.EntityFrameworkCore.csproj" />

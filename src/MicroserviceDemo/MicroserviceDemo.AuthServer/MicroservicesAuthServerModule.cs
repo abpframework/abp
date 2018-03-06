@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Modularity;
+using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.Autofac;
@@ -15,6 +16,7 @@ using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.IdentityServer.EntityFrameworkCore;
 using Volo.Abp.Modularity;
+using Volo.Abp.MultiTenancy.EntityFrameworkCore;
 using Volo.Abp.VirtualFileSystem;
 
 namespace MicroserviceDemo.AuthServer
@@ -23,6 +25,8 @@ namespace MicroserviceDemo.AuthServer
     [DependsOn(typeof(AbpIdentityEntityFrameworkCoreModule))]
     [DependsOn(typeof(AbpIdentityServerEntityFrameworkCoreModule))]
     [DependsOn(typeof(AbpAccountWebIdentityServerModule))]
+    [DependsOn(typeof(AbpAspNetCoreMultiTenancyModule))]
+    [DependsOn(typeof(AbpMultiTenancyEntityFrameworkCoreModule))]
     public class MicroservicesAuthServerModule : AbpModule
     {
         public override void ConfigureServices(IServiceCollection services)
@@ -92,6 +96,8 @@ namespace MicroserviceDemo.AuthServer
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseMultiTenancy();
 
             app.UseStaticFiles();
             app.UseVirtualFiles();
