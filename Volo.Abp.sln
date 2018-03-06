@@ -284,10 +284,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Serialization.Test
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Authorization.Tests", "test\Volo.Abp.Authorization.Tests\Volo.Abp.Authorization.Tests.csproj", "{B10E37A1-43A1-4042-BAAA-F589302958D5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Permissions.HttpApi", "src\Volo.Abp.Permissions.HttpApi\Volo.Abp.Permissions.HttpApi.csproj", "{94FBE061-CA28-4BDA-9E80-C65EE7E92637}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Permissions.HttpApi.Client", "src\Volo.Abp.Permissions.HttpApi.Client\Volo.Abp.Permissions.HttpApi.Client.csproj", "{01852E73-E8F8-4460-8BBF-9D20C8909366}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MicroserviceDemo", "MicroserviceDemo", "{3510E248-DC9F-4A07-8134-02E7F5CC5783}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroserviceDemo.Web", "src\MicroserviceDemo\MicroserviceDemo.Web\MicroserviceDemo.Web.csproj", "{258B4E36-BF5B-484D-B10E-7D5AF868FA44}"
@@ -300,11 +296,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroserviceDemo.AuthServer
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Account.Web.IdentityServer", "src\Volo.Abp.Account.Web.IdentityServer\Volo.Abp.Account.Web.IdentityServer.csproj", "{E4AB8A4F-BB59-4BDB-B915-877CE97D8113}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroserviceDemo.ConsoleClient", "src\MicroserviceDemo\MicroserviceDemo.ConsoleClient\MicroserviceDemo.ConsoleClient.csproj", "{CD4E755D-D47C-45B1-AFB3-3444FF2E2E39}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroserviceDemo.ConsoleClient", "src\MicroserviceDemo\MicroserviceDemo.ConsoleClient\MicroserviceDemo.ConsoleClient.csproj", "{CD4E755D-D47C-45B1-AFB3-3444FF2E2E39}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Authentication.OAuth", "src\Volo.Abp.AspNetCore.Authentication.OAuth\Volo.Abp.AspNetCore.Authentication.OAuth.csproj", "{A1C792B7-0DBF-460D-9158-A1A68A2D9C1A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AspNetCore.Authentication.OAuth", "src\Volo.Abp.AspNetCore.Authentication.OAuth\Volo.Abp.AspNetCore.Authentication.OAuth.csproj", "{A1C792B7-0DBF-460D-9158-A1A68A2D9C1A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Authentication.OAuth.Tests", "test\Volo.Abp.AspNetCore.Authentication.OAuth.Tests\Volo.Abp.AspNetCore.Authentication.OAuth.Tests.csproj", "{627B88DB-BDCF-4D92-8454-EFE95F4AFB7A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AspNetCore.Authentication.OAuth.Tests", "test\Volo.Abp.AspNetCore.Authentication.OAuth.Tests\Volo.Abp.AspNetCore.Authentication.OAuth.Tests.csproj", "{627B88DB-BDCF-4D92-8454-EFE95F4AFB7A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -768,14 +764,6 @@ Global
 		{B10E37A1-43A1-4042-BAAA-F589302958D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B10E37A1-43A1-4042-BAAA-F589302958D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B10E37A1-43A1-4042-BAAA-F589302958D5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{94FBE061-CA28-4BDA-9E80-C65EE7E92637}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{94FBE061-CA28-4BDA-9E80-C65EE7E92637}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{94FBE061-CA28-4BDA-9E80-C65EE7E92637}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{94FBE061-CA28-4BDA-9E80-C65EE7E92637}.Release|Any CPU.Build.0 = Release|Any CPU
-		{01852E73-E8F8-4460-8BBF-9D20C8909366}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{01852E73-E8F8-4460-8BBF-9D20C8909366}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{01852E73-E8F8-4460-8BBF-9D20C8909366}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{01852E73-E8F8-4460-8BBF-9D20C8909366}.Release|Any CPU.Build.0 = Release|Any CPU
 		{258B4E36-BF5B-484D-B10E-7D5AF868FA44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{258B4E36-BF5B-484D-B10E-7D5AF868FA44}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{258B4E36-BF5B-484D-B10E-7D5AF868FA44}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -946,8 +934,6 @@ Global
 		{38EF3EC8-9915-4216-B646-4BEE07006943} = {4C753F64-0C93-4D65-96C2-A40893AFC1E8}
 		{65FB5893-7CB6-4694-A692-7E666E347D29} = {37087D1B-3693-4E96-983D-A69F210BDE53}
 		{B10E37A1-43A1-4042-BAAA-F589302958D5} = {37087D1B-3693-4E96-983D-A69F210BDE53}
-		{94FBE061-CA28-4BDA-9E80-C65EE7E92637} = {055F4AC0-46C4-4E99-89CD-0F30D4A97382}
-		{01852E73-E8F8-4460-8BBF-9D20C8909366} = {055F4AC0-46C4-4E99-89CD-0F30D4A97382}
 		{3510E248-DC9F-4A07-8134-02E7F5CC5783} = {282A5684-F573-47BB-B044-10F3F710E22A}
 		{258B4E36-BF5B-484D-B10E-7D5AF868FA44} = {3510E248-DC9F-4A07-8134-02E7F5CC5783}
 		{067627C7-6891-453A-A219-35141733D776} = {3510E248-DC9F-4A07-8134-02E7F5CC5783}
