@@ -152,7 +152,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
                 {
                     return Redirect("~/");
                 }
-
+                
                 await _interaction.GrantConsentAsync(context, ConsentResponse.Denied);
                 return Redirect(ReturnUrl);
             }

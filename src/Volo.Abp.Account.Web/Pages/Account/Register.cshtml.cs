@@ -51,8 +51,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
             await _signInManager.SignInAsync(user, isPersistent: false);
 
-            //TODO: Use LocalRedirect and Url.GetLocalUrl methods instead of a custom one!
-            return RedirectSafely(returnUrl, returnUrlHash);
+            return Redirect(returnUrl); //TODO: How to ensure safety? IdentityServer requires it however it should be checked somehow!
         }
 
         public class PostInput
