@@ -20,6 +20,7 @@
   </ItemGroup>
   
   <ItemGroup>
+    <ProjectReference Include="..\..\Volo.Abp.AspNetCore.MultiTenancy\Volo.Abp.AspNetCore.MultiTenancy.csproj" />
     <ProjectReference Include="..\..\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
     <ProjectReference Include="..\..\Volo.Abp.MultiTenancy.Application\Volo.Abp.MultiTenancy.Application.csproj" />
     <ProjectReference Include="..\..\Volo.Abp.MultiTenancy.EntityFrameworkCore\Volo.Abp.MultiTenancy.EntityFrameworkCore.csproj" />

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Identity;
@@ -8,11 +9,16 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Services;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.Identity
 {
     public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
     {
+        protected override CancellationToken CancellationToken => _cancellationTokenProvider.Token;
+
+        private readonly ICancellationTokenProvider _cancellationTokenProvider;
+
         public IdentityUserManager(
             IdentityUserStore store,
             IOptions<IdentityOptions> optionsAccessor,
@@ -21,7 +27,8 @@ namespace Volo.Abp.Identity
             IEnumerable<IPasswordValidator<IdentityUser>> passwordValidators,
             ILookupNormalizer keyNormalizer, IdentityErrorDescriber errors,
             IServiceProvider services,
-            ILogger<IdentityUserManager> logger)
+            ILogger<IdentityUserManager> logger,
+            ICancellationTokenProvider cancellationTokenProvider)
             : base(
                   store,
                   optionsAccessor,
@@ -33,7 +40,7 @@ namespace Volo.Abp.Identity
                   services,
                   logger)
         {
-
+            _cancellationTokenProvider = cancellationTokenProvider;
         }
 
         public async Task<IdentityUser> GetByIdAsync(Guid id)

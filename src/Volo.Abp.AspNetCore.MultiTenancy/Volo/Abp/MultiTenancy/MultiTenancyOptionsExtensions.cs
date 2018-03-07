@@ -1,4 +1,5 @@
-﻿using Volo.Abp.AspNetCore.MultiTenancy;
+﻿using System.Collections.Generic;
+using Volo.Abp.AspNetCore.MultiTenancy;
 
 namespace Volo.Abp.MultiTenancy
 {
@@ -6,7 +7,10 @@ namespace Volo.Abp.MultiTenancy
     {
         public static void AddDomainTenantResolver(this TenantResolveOptions options, string domainFormat)
         {
-            options.TenantResolvers.Insert(0, new DomainTenantResolveContributer(domainFormat));
+            options.TenantResolvers.InsertAfter(
+                r => r is CurrentClaimsPrincipalTenantResolveContributer,
+                new DomainTenantResolveContributer(domainFormat)
+            );
         }
     }
 }

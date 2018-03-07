@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.OAuth.Claims;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -69,9 +70,9 @@ namespace MicroserviceDemo.Web
                 {
                     "/Abp/ApplicationConfigurationScript?_v=" + DateTime.Now.Ticks,
                     "/Abp/ServiceProxyScript?_v=" + DateTime.Now.Ticks
-                }); 
+                });
             });
-            
+
             services.AddAuthentication(options =>
                 {
                     options.DefaultChallengeScheme = "oidc";
@@ -97,6 +98,19 @@ namespace MicroserviceDemo.Web
                     options.Scope.Add("multi-tenancy-api");
 
                     options.ClaimActions.MapAbpClaimTypes();
+
+                    options.Events.OnRedirectToIdentityProvider += context =>
+                    {
+                        //TODO: ...
+
+                        var tenantId = context.HttpContext.RequestServices.GetRequiredService<ICurrentTenant>().Id?.ToString();
+                        if (!tenantId.IsNullOrEmpty())
+                        {
+                            context.ProtocolMessage.Parameters[TenantResolverConsts.DefaultTenantKey] = tenantId;
+                        }
+
+                        return Task.CompletedTask;
+                    };
                 });
 
             services.Configure<RemoteServiceOptions>(configuration);

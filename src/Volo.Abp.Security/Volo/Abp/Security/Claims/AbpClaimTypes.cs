@@ -42,5 +42,10 @@ namespace Volo.Abp.Security.Claims
         /// Default: "phone_number_verified".
         /// </summary>
         public static string PhoneNumberVerified { get; set; } = "phone_number_verified";
+
+        /// <summary>
+        /// Default: "phone_number_verified".
+        /// </summary>
+        public static string TenantId { get; set; } = "tenantid";
     }
 }

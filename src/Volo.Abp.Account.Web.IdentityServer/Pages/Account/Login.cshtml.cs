@@ -18,13 +18,14 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Account.Web.Auth;
 using Volo.Abp.Identity;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.Ui;
 using Volo.Abp.Uow;
 
 namespace Volo.Abp.Account.Web.Pages.Account
 {
     //TODO: Inherit from LoginModel of Account.Web project. We should design it as extensible.
-    public class IdsLoginModel : AccountModelBase
+    public class IdentityServerLoginModel : AccountModelBase
     {
         [HiddenInput]
         [BindProperty(SupportsGet = true)]
@@ -54,13 +55,13 @@ namespace Volo.Abp.Account.Web.Pages.Account
         private readonly IClientStore _clientStore;
         private readonly IEventService _identityServerEvents;
 
-        public IdsLoginModel(
-            SignInManager<IdentityUser> signInManager, 
-            IdentityUserManager userManager, 
-            IIdentityServerInteractionService interaction, 
-            IAuthenticationSchemeProvider schemeProvider, 
-            IOptions<AbpAccountOptions> accountOptions, 
-            IClientStore clientStore, 
+        public IdentityServerLoginModel(
+            SignInManager<IdentityUser> signInManager,
+            IdentityUserManager userManager,
+            IIdentityServerInteractionService interaction,
+            IAuthenticationSchemeProvider schemeProvider,
+            IOptions<AbpAccountOptions> accountOptions,
+            IClientStore clientStore,
             IEventService identityServerEvents)
         {
             _signInManager = signInManager;
@@ -77,12 +78,32 @@ namespace Volo.Abp.Account.Web.Pages.Account
             LoginInput = new LoginInputModel();
 
             var context = await _interaction.GetAuthorizationContextAsync(ReturnUrl);
-            LoginInput.UserNameOrEmailAddress = context?.LoginHint;
+
+            if (context != null)
+            {
+                LoginInput.UserNameOrEmailAddress = context.LoginHint;
+
+                //TODO: Reference AspNetCore MultiTenancy module and use options to get the tenant key!
+                var tenant = context.Parameters[TenantResolverConsts.DefaultTenantKey];
+                if (tenant.IsNullOrEmpty())
+                {
+                    if (Request.Cookies.ContainsKey(TenantResolverConsts.DefaultTenantKey))
+                    {
+                        CurrentTenant.Change(null);
+                        Response.Cookies.Delete(TenantResolverConsts.DefaultTenantKey);
+                    }
+                }
+                else
+                {
+                    CurrentTenant.Change(Guid.Parse(tenant));
+                    Response.Cookies.Append(TenantResolverConsts.DefaultTenantKey, tenant);
+                }
+            }
 
             if (context?.IdP != null)
             {
                 LoginInput.UserNameOrEmailAddress = context.LoginHint;
-                ExternalProviders = new[] {new ExternalProviderModel {AuthenticationScheme = context.IdP}};
+                ExternalProviders = new[] { new ExternalProviderModel { AuthenticationScheme = context.IdP } };
                 return;
             }
 
@@ -111,7 +132,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
                     }
                 }
             }
-            
+
             ExternalProviders = providers.ToArray();
 
             if (IsExternalLoginOnly)
@@ -131,7 +152,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
                 {
                     return Redirect("~/");
                 }
-
+                
                 await _interaction.GrantConsentAsync(context, ConsentResponse.Denied);
                 return Redirect(ReturnUrl);
             }
@@ -165,7 +186,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
             return Redirect(ReturnUrl); //ReturnUrlHash?
         }
-        
+
         [UnitOfWork]
         public virtual async Task<IActionResult> OnPostExternalLogin(string provider)
         {

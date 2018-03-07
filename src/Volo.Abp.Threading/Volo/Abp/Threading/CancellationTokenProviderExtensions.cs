@@ -6,7 +6,9 @@ namespace Volo.Abp.Threading
     {
         public static CancellationToken FallbackToProvider(this ICancellationTokenProvider provider, CancellationToken prefferedValue = default)
         {
-            return prefferedValue == default ? provider.Token : prefferedValue;
+            return prefferedValue == default || prefferedValue == CancellationToken.None
+                ? provider.Token
+                : prefferedValue;
         }
     }
 }

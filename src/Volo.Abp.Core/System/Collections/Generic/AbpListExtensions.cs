@@ -9,6 +9,54 @@ namespace System.Collections.Generic
     /// </summary>
     public static class AbpListExtensions
     {
+        public static int FindIndex<T>(this IList<T> source, Predicate<T> selector)
+        {
+            for (var i = 0; i < source.Count; ++i)
+            {
+                if (selector(source[i]))
+                {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
+        public static void AddFirst<T>(this IList<T> source, T item)
+        {
+            source.Insert(0, item);
+        }
+
+        public static void AddLast<T>(this IList<T> source, T item)
+        {
+            source.Insert(source.Count, item);
+        }
+
+        public static void InsertAfter<T>(this IList<T> source, Predicate<T> selector, T item)
+        {
+            var index = source.FindIndex(selector);
+            if (index < 0)
+            {
+                source.AddFirst(item);
+                return;
+            }
+
+            source.Insert(index + 1, item);
+        }
+
+
+        public static void InsertBefore<T>(this IList<T> source, Predicate<T> selector, T item)
+        {
+            var index = source.FindIndex(selector);
+            if (index < 0)
+            {
+                source.AddLast(item);
+                return;
+            }
+
+            source.Insert(index, item);
+        }
+
         public static void MoveItem<T>(this List<T> source, Predicate<T> selector, int targetIndex)
         {
             if (!targetIndex.IsBetween(0, source.Count - 1))

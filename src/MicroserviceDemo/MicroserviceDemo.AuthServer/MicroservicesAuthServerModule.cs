@@ -97,10 +97,11 @@ namespace MicroserviceDemo.AuthServer
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseMultiTenancy();
-
             app.UseStaticFiles();
             app.UseVirtualFiles();
+
+            app.UseAuthentication(); //TODO: This makes it twice since UseIdentityServer also internally adds UseAuthentication!
+            app.UseMultiTenancy();
 
             app.UseIdentityServer(); //This internally adds .UseAuthentication() (we should be carefully about that)
 
