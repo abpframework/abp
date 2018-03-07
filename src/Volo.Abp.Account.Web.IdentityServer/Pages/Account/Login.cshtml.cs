@@ -25,7 +25,7 @@ using Volo.Abp.Uow;
 namespace Volo.Abp.Account.Web.Pages.Account
 {
     //TODO: Inherit from LoginModel of Account.Web project. We should design it as extensible.
-    public class IdsLoginModel : AccountModelBase
+    public class IdentityServerLoginModel : AccountModelBase
     {
         [HiddenInput]
         [BindProperty(SupportsGet = true)]
@@ -55,7 +55,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
         private readonly IClientStore _clientStore;
         private readonly IEventService _identityServerEvents;
 
-        public IdsLoginModel(
+        public IdentityServerLoginModel(
             SignInManager<IdentityUser> signInManager,
             IdentityUserManager userManager,
             IIdentityServerInteractionService interaction,
@@ -83,17 +83,20 @@ namespace Volo.Abp.Account.Web.Pages.Account
             {
                 LoginInput.UserNameOrEmailAddress = context.LoginHint;
 
-                //TODO: !!! Always exchanging tenant id, not name!
+                //TODO: Reference AspNetCore MultiTenancy module and use options to get the tenant key!
                 var tenant = context.Parameters[TenantResolverConsts.DefaultTenantKey];
                 if (tenant.IsNullOrEmpty())
                 {
-                    Response.Cookies.Delete(TenantResolverConsts.DefaultTenantKey);
-                    CurrentTenant.Change(null);
+                    if (Request.Cookies.ContainsKey(TenantResolverConsts.DefaultTenantKey))
+                    {
+                        CurrentTenant.Change(null);
+                        Response.Cookies.Delete(TenantResolverConsts.DefaultTenantKey);
+                    }
                 }
                 else
                 {
-                    Response.Cookies.Append(TenantResolverConsts.DefaultTenantKey, tenant);
                     CurrentTenant.Change(Guid.Parse(tenant));
+                    Response.Cookies.Append(TenantResolverConsts.DefaultTenantKey, tenant);
                 }
             }
 

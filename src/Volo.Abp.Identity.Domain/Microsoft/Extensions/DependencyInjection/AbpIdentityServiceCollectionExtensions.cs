@@ -5,8 +5,6 @@ using Volo.Abp.Identity;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
-    //TODO: AspNetUserManager overrides CancellationToken so we can make same functionality available!
-
     public static class AbpIdentityServiceCollectionExtensions
     {
         public static IdentityBuilder AddAbpIdentity(this IServiceCollection services)
@@ -36,9 +34,10 @@ namespace Microsoft.Extensions.DependencyInjection
             //AbpRoleStore
             services.TryAddScoped<IdentityRoleStore>();
             services.TryAddScoped(typeof(IRoleStore<IdentityRole>), provider => provider.GetService(typeof(IdentityRoleStore)));
-
+            
             return services.AddIdentity<IdentityUser, IdentityRole>(setupAction)
-                .AddDefaultTokenProviders();
+                .AddDefaultTokenProviders()
+                .AddClaimsPrincipalFactory<AbpUserClaimsPrincipalFactory>();
             //return services.AddIdentityCore<IdentityUser>(setupAction);
         }
     }

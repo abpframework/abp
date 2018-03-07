@@ -8,7 +8,7 @@ using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Ui;
 
-namespace MicroserviceDemo.Web.Controllers
+namespace MicroserviceDemo.AuthServer.Controllers
 {
     /* TODO: This is temporary solution to switch tenant.
      */
