@@ -26,7 +26,7 @@ namespace MicroserviceDemo.Web
                 .AddDebug()
                 .AddSerilog(new LoggerConfiguration()
                     .Enrich.FromLogContext()
-                    .WriteTo.RollingFile("Logs/logs.txt")
+                    .WriteTo.File("Logs/logs.txt")
                     .CreateLogger()
                 );
 

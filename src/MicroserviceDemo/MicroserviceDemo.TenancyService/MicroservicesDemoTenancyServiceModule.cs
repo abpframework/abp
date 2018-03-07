@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Modularity;
-using Volo.Abp.Authorization.Permissions;
+using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.Autofac;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
@@ -15,7 +15,6 @@ using Volo.Abp.MultiTenancy;
 using Volo.Abp.MultiTenancy.EntityFrameworkCore;
 using Volo.Abp.Permissions.EntityFrameworkCore;
 using Volo.Abp.Security.Claims;
-using Volo.Abp.Threading;
 
 namespace MicroserviceDemo.TenancyService
 {
@@ -24,6 +23,7 @@ namespace MicroserviceDemo.TenancyService
     [DependsOn(typeof(AbpMultiTenancyHttpApiModule))]
     [DependsOn(typeof(AbpMultiTenancyApplicationModule))]
     [DependsOn(typeof(AbpPermissionsEntityFrameworkCoreModule))]
+    [DependsOn(typeof(AbpAspNetCoreMultiTenancyModule))]
     public class MicroservicesDemoTenancyServiceModule : AbpModule
     {
         public override void ConfigureServices(IServiceCollection services)
@@ -83,9 +83,6 @@ namespace MicroserviceDemo.TenancyService
         {
             var app = context.GetApplicationBuilder();
 
-            var store = context.ServiceProvider.GetRequiredService<IPermissionStore>();
-            var xx = AsyncHelper.RunSync(() => store.IsGrantedAsync("AbpTenantManagement.Tenants", "Role", "admin"));
-
             app.UseStaticFiles();
 
             app.UseSwagger();
@@ -95,6 +92,8 @@ namespace MicroserviceDemo.TenancyService
             });
 
             app.UseAuthentication();
+
+            app.UseMultiTenancy();
 
             app.UseMvcWithDefaultRoute();
         }

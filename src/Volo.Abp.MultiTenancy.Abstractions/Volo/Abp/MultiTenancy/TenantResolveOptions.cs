@@ -10,7 +10,10 @@ namespace Volo.Abp.MultiTenancy
 
         public TenantResolveOptions()
         {
-            TenantResolvers = new List<ITenantResolveContributer>();
+            TenantResolvers = new List<ITenantResolveContributer>
+            {
+                new CurrentClaimsPrincipalTenantResolveContributer()
+            };
         }
     }
 }
