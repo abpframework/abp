@@ -1,8 +1,12 @@
 ﻿@page
 @model Volo.Abp.Identity.Web.Pages.Identity.Users.IndexModel
+@using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.Authorization
+@using Volo.Abp.Identity
 @using Volo.Abp.Identity.Web.Localization.Resources.AbpIdentity
 @inject IHtmlLocalizer<IdentityResource> L
+@inject IAuthorizationService Authorization
 @section styles {
     <link rel="stylesheet" type="text/css" href="~/modules/identity/views/users/index.css" />
 }
@@ -22,10 +26,13 @@
                 <h2>@L["Users"]</h2>
             </div>
             <div class="col-md-6 text-right">
-                <button type="button" class="btn btn-primary" v-on:click="openCreateModal">
-                    <i class="fa fa-plus" aria-hidden="true"></i>
-                    @L["NewUser"]
-                </button>
+                @if (await Authorization.IsGrantedAsync(IdentityPermissions.Users.Create))
+                {
+                    <button type="button" class="btn btn-primary" v-on:click="openCreateModal">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                        @L["NewUser"]
+                    </button>
+                }
             </div>
         </div>
     </abp-card-header>

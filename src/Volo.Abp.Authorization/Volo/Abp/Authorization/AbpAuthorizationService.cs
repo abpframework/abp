@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -10,6 +11,10 @@ namespace Volo.Abp.Authorization
     [Dependency(ReplaceServices = true)]
     public class AbpAuthorizationService : DefaultAuthorizationService, IAbpAuthorizationService, ITransientDependency
     {
+        public IServiceProvider ServiceProvider { get; }
+
+        public ClaimsPrincipal CurrentPrincipal => _currentPrincipalAccessor.Principal;
+
         private readonly ICurrentPrincipalAccessor _currentPrincipalAccessor;
 
         public AbpAuthorizationService(
@@ -19,7 +24,8 @@ namespace Volo.Abp.Authorization
             IAuthorizationHandlerContextFactory contextFactory, 
             IAuthorizationEvaluator evaluator, 
             IOptions<AuthorizationOptions> options,
-            ICurrentPrincipalAccessor currentPrincipalAccessor)
+            ICurrentPrincipalAccessor currentPrincipalAccessor, 
+            IServiceProvider serviceProvider)
             : base(
                 policyProvider,
                 handlers, 
@@ -29,15 +35,7 @@ namespace Volo.Abp.Authorization
                 options)
         {
             _currentPrincipalAccessor = currentPrincipalAccessor;
-        }
-
-        public async Task CheckAsync(string policyName)
-        {
-            var result = await AuthorizeAsync(_currentPrincipalAccessor.Principal, null, policyName);
-            if (!result.Succeeded)
-            {
-                throw new AbpAuthorizationException("Authorization failed! Given policy has not granted: " + policyName);
-            }
+            ServiceProvider = serviceProvider;
         }
     }
 }

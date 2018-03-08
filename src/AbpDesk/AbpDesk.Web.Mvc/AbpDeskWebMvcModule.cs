@@ -41,7 +41,6 @@ namespace AbpDesk.Web.Mvc
         typeof(AbpAspNetCoreMvcUiBootstrapModule),
         typeof(AbpDeskApplicationModule),
         typeof(AbpDeskEntityFrameworkCoreModule),
-        typeof(AbpIdentityHttpApiModule),
         typeof(AbpIdentityEntityFrameworkCoreModule),
         typeof(AbpIdentityWebModule),
         typeof(AbpAccountWebModule),

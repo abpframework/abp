@@ -43,7 +43,7 @@ namespace MicroserviceDemo.Web
     {
         public override void ConfigureServices(IServiceCollection services)
         {
-            var hostingEnvironment = services.GetSingletonInstance<IHostingEnvironment>();
+            var hostingEnvironment = services.GetSingletonInstance<IHostingEnvironment>(); //TODO: Create an extension method, like GetHostingEnvironment() ?
             var configuration = BuildConfiguration(hostingEnvironment);
 
             services.Configure<DbConnectionOptions>(configuration);
@@ -166,6 +166,7 @@ namespace MicroserviceDemo.Web
             });
         }
 
+        //TODO: Create an extension method to IHostingEnvironment for that?
         private static IConfigurationRoot BuildConfiguration(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()

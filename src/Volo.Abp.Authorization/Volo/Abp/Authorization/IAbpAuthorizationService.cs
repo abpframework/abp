@@ -1,10 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Authorization
 {
-    public interface IAbpAuthorizationService : IAuthorizationService
+    public interface IAbpAuthorizationService : IAuthorizationService, IServiceProviderAccessor
     {
-        Task CheckAsync(string policyName);
+        ClaimsPrincipal CurrentPrincipal { get; }
     }
 }

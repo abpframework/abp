@@ -1,26 +1,34 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Ui.Navigation;
 
 namespace Volo.Abp.Identity.Web.Navigation
 {
     public class AbpIdentityWebMainMenuContributor : IMenuContributor
     {
-        public Task ConfigureMenuAsync(MenuConfigurationContext context)
+        public async Task ConfigureMenuAsync(MenuConfigurationContext context)
         {
             if (context.Menu.Name != StandardMenus.Main)
             {
-                return Task.CompletedTask;
+                return;
             }
 
-            context.Menu
-                .AddItem(
-                    new ApplicationMenuItem("Identity", "Identity")
-                        .AddItem(new ApplicationMenuItem("Users", "Users", url: "/Identity/Users"))
-                        .AddItem(new ApplicationMenuItem("Roles", "Roles", url: "/Identity/Roles"))
+            var permissionChecker = context.ServiceProvider.GetRequiredService<IPermissionChecker>();
 
-                );
+            var identityMenuItem = new ApplicationMenuItem("Identity", "Identity");
 
-            return Task.CompletedTask;
+            context.Menu.AddItem(identityMenuItem);
+
+            if (await permissionChecker.IsGrantedAsync(IdentityPermissions.Roles.Default))
+            {
+                identityMenuItem.AddItem(new ApplicationMenuItem("Roles", "Roles", url: "/Identity/Roles"));
+            }
+
+            if (await permissionChecker.IsGrantedAsync(IdentityPermissions.Users.Default))
+            {
+                identityMenuItem.AddItem(new ApplicationMenuItem("Users", "Users", url: "/Identity/Users"));
+            }
         }
     }
 }
