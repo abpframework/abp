@@ -1,8 +1,6 @@
 ﻿using System.Linq;
 using System.Reflection;
 using JetBrains.Annotations;
-using Volo.Abp.Application.Services;
-using Volo.Abp.Domain.Repositories;
 
 namespace Volo.Abp.Uow
 {
@@ -17,8 +15,7 @@ namespace Volo.Abp.Uow
             }
 
             //Conventional classes
-            if (typeof(IApplicationService).GetTypeInfo().IsAssignableFrom(implementationType) ||
-                typeof(IRepository).GetTypeInfo().IsAssignableFrom(implementationType))
+            if (typeof(IUnitOfWorkEnabled).GetTypeInfo().IsAssignableFrom(implementationType))
             {
                 return true;
             }
@@ -48,9 +45,8 @@ namespace Volo.Abp.Uow
                     return !unitOfWorkAttribute.IsDisabled;
                 }
 
-                //Conventional classes //TODO: Make this extendible to add new conventions!
-                if (typeof(IApplicationService).GetTypeInfo().IsAssignableFrom(methodInfo.DeclaringType) ||
-                    typeof(IRepository).GetTypeInfo().IsAssignableFrom(methodInfo.DeclaringType))
+                //Conventional classes
+                if (typeof(IUnitOfWorkEnabled).GetTypeInfo().IsAssignableFrom(methodInfo.DeclaringType))
                 {
                     unitOfWorkAttribute = null;
                     return true;
@@ -77,8 +73,7 @@ namespace Volo.Abp.Uow
             
             return null;
         }
-
-
+        
         private static bool AnyMethodHasUnitOfWorkAttribute(TypeInfo implementationType)
         {
             return implementationType

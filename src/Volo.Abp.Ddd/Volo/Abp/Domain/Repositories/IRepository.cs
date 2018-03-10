@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.Uow;
 
 namespace Volo.Abp.Domain.Repositories
 {
     /// <summary>
     /// Just to mark a class as repository.
     /// </summary>
-    public interface IRepository : ITransientDependency
+    public interface IRepository : ITransientDependency, IUnitOfWorkEnabled
     {
 
     }
