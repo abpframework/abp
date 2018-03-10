@@ -16,7 +16,7 @@ namespace Volo.Abp.Domain.Entities
             return typeof(IEntity).IsAssignableFrom(type);
         }
 
-        public static bool IsTransient<TKey>(IEntity<TKey> entity) // TODO: Completely remove IsTransient
+        public static bool HasDefaultId<TKey>(IEntity<TKey> entity)
         {
             if (EqualityComparer<TKey>.Default.Equals(entity.Id, default))
             {

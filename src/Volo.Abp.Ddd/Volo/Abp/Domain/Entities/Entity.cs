@@ -36,7 +36,7 @@ namespace Volo.Abp.Domain.Entities
 
             //Transient objects are not considered as equal
             var other = (Entity<TKey>)obj;
-            if (EntityHelper.IsTransient(this) && EntityHelper.IsTransient(other))
+            if (EntityHelper.HasDefaultId(this) && EntityHelper.HasDefaultId(other))
             {
                 return false;
             }
