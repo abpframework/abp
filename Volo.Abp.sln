@@ -34,8 +34,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{6D893E48
 		build\build.ps1 = build\build.ps1
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp", "src\Volo.Abp\Volo.Abp.csproj", "{FC5F7372-EA60-4052-B943-0EE070221CC1}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AbpTestBase", "test\AbpTestBase\AbpTestBase.csproj", "{1020F5FD-6A97-40C2-AFCA-EBDF641DF111}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AspNetCore", "src\Volo.Abp.AspNetCore\Volo.Abp.AspNetCore.csproj", "{02BE03BA-3411-448C-AB61-CB36407CC49A}"
@@ -306,7 +304,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Uow.Tests", "test\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Ddd.Domain", "src\Volo.Abp.Ddd.Domain\Volo.Abp.Ddd.Domain.csproj", "{D1318094-7907-4826-B5F3-CFFC741F235F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Ddd.Application", "src\Volo.Abp.Ddd.Application\Volo.Abp.Ddd.Application.csproj", "{5AB7E368-1CC8-401D-9952-6CA6779305E7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Ddd.Application", "src\Volo.Abp.Ddd.Application\Volo.Abp.Ddd.Application.csproj", "{5AB7E368-1CC8-401D-9952-6CA6779305E7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -314,10 +312,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{FC5F7372-EA60-4052-B943-0EE070221CC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FC5F7372-EA60-4052-B943-0EE070221CC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FC5F7372-EA60-4052-B943-0EE070221CC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FC5F7372-EA60-4052-B943-0EE070221CC1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1020F5FD-6A97-40C2-AFCA-EBDF641DF111}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1020F5FD-6A97-40C2-AFCA-EBDF641DF111}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1020F5FD-6A97-40C2-AFCA-EBDF641DF111}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -827,7 +821,6 @@ Global
 		{146F561E-C7B8-4166-9383-47E1BC1A2E62} = {447C8A77-E5F0-4538-8687-7383196D04EA}
 		{0BEA55D6-E0B8-40DD-A256-B34C4DD990A5} = {CBCC288A-53C3-402F-99F7-E468738560F5}
 		{6D893E48-0739-401A-9AD1-286BCB6E5517} = {CBCC288A-53C3-402F-99F7-E468738560F5}
-		{FC5F7372-EA60-4052-B943-0EE070221CC1} = {4C753F64-0C93-4D65-96C2-A40893AFC1E8}
 		{1020F5FD-6A97-40C2-AFCA-EBDF641DF111} = {447C8A77-E5F0-4538-8687-7383196D04EA}
 		{02BE03BA-3411-448C-AB61-CB36407CC49A} = {C4C6961D-01CC-49A5-8B96-2A36E71CF01F}
 		{B1D860BB-6EC6-4BAE-ADAA-C2AEC2FFB510} = {37087D1B-3693-4E96-983D-A69F210BDE53}

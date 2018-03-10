@@ -8,7 +8,6 @@ using Volo.Abp.TestApp.Application.Dto;
 namespace Volo.Abp.TestApp
 {
     [DependsOn(typeof(AbpAutoMapperModule))]
-    [DependsOn(typeof(AbpCommonModule))]
     [DependsOn(typeof(AbpDddApplicationModule))]
     public class TestAppModule : AbpModule
     {

@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Volo.Abp\Volo.Abp.csproj" />
+    <ProjectReference Include="..\..\src\Volo.Abp.Core\Volo.Abp.Core.csproj" />
   </ItemGroup>
 
 </Project>

@@ -14,7 +14,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Volo.Abp.AutoMapper\Volo.Abp.AutoMapper.csproj" />
     <ProjectReference Include="..\..\src\Volo.Abp.Ddd.Application\Volo.Abp.Ddd.Application.csproj" />
-    <ProjectReference Include="..\..\src\Volo.Abp\Volo.Abp.csproj" />
   </ItemGroup>
 
 </Project>
