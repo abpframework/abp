@@ -41,6 +41,7 @@ namespace AbpDesk.Web.Mvc
         typeof(AbpAspNetCoreMvcUiBootstrapModule),
         typeof(AbpDeskApplicationModule),
         typeof(AbpDeskEntityFrameworkCoreModule),
+        typeof(AbpIdentityApplicationModule),
         typeof(AbpIdentityEntityFrameworkCoreModule),
         typeof(AbpIdentityWebModule),
         typeof(AbpAccountWebModule),
@@ -49,7 +50,7 @@ namespace AbpDesk.Web.Mvc
         typeof(AbpIdentityServerEntityFrameworkCoreModule),
         typeof(AbpAspNetCoreMultiTenancyModule),
         typeof(AbpMultiTenancyWebModule),
-        typeof(AbpMultiTenancyHttpApiModule),
+        typeof(AbpMultiTenancyApplicationModule),
         typeof(AbpPermissionsApplicationModule)
         )]
     public class AbpDeskWebMvcModule : AbpModule //TODO: Rename to AbpDeskWebModule, change default namespace to AbpDesk.Web

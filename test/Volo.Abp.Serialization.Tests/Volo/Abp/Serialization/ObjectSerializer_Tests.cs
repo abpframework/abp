@@ -1,6 +1,5 @@
 ﻿using Shouldly;
 using Volo.Abp.Serialization.Objects;
-using Volo.Abp.TestBase;
 using Xunit;
 
 namespace Volo.Abp.Serialization

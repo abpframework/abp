@@ -15,7 +15,6 @@ using Volo.Abp.Domain.Entities.Events;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Reflection;
-using Volo.Abp.Uow;
 
 namespace Volo.Abp.EntityFrameworkCore
 {

@@ -1,5 +1,3 @@
-using Volo.Abp.TestBase;
-
 namespace Volo.Abp.EventBus
 {
     public abstract class EventBusTestBase : AbpIntegratedTest<EventBusTestModule>

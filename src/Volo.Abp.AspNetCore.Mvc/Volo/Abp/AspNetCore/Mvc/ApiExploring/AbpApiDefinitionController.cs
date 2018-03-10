@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Volo.Abp.Application.Services;
 using Volo.Abp.Http.Modeling;
 
 namespace Volo.Abp.AspNetCore.Mvc.ApiExploring

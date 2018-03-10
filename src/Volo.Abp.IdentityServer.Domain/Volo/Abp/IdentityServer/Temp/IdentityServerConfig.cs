@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using IdentityServer4.Models;
-
-namespace Volo.Abp.IdentityServer.Temp
+﻿namespace Volo.Abp.IdentityServer.Temp
 {
     //TODO: Remove!
     //internal static class IdentityServerConfig

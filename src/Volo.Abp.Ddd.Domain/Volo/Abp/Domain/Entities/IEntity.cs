@@ -1,7 +1,7 @@
 ﻿namespace Volo.Abp.Domain.Entities
 {
     /// <summary>
-    /// Defines an entity. It's primary key may not be "Id" or it mah have a composite primary key.
+    /// Defines an entity. It's primary key may not be "Id" or it may have a composite primary key.
     /// Use <see cref="IEntity{TKey}"/> where possible for better integration to repositories and other structures in the framework.
     /// </summary>
     public interface IEntity
@@ -18,6 +18,6 @@
         /// <summary>
         /// Unique identifier for this entity.
         /// </summary>
-        TKey Id { get; set; } //TODO: Consider to remove setter and make it protected in Entity class
+        TKey Id { get; set; }
     }
 }

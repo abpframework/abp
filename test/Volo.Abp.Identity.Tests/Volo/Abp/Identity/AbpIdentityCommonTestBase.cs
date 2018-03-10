@@ -2,7 +2,6 @@
 using System.Linq;
 using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.Modularity;
-using Volo.Abp.TestBase;
 
 namespace Volo.Abp.Identity
 {

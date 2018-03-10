@@ -1,5 +1,3 @@
-using Volo.Abp.TestBase;
-
 namespace Volo.Abp.TestApp
 {
     public class TestAppTestBase : AbpIntegratedTest<TestAppTestModule>

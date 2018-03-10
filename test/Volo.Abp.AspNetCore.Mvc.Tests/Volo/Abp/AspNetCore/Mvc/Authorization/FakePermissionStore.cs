@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Session;
 
 namespace Volo.Abp.AspNetCore.Mvc.Authorization
 {

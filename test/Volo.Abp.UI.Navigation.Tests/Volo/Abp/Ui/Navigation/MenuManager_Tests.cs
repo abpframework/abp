@@ -2,7 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.Modularity;
-using Volo.Abp.TestBase;
 using System.Collections.Generic;
 using Xunit;
 

@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
-using Volo.Abp.Application.Services;
 using Volo.Abp.Autofac;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Modularity;
-using Volo.Abp.TestBase;
 using Xunit;
 
 namespace Volo.Abp.Validation

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Volo.Abp.Permissions.EntityFrameworkCore;
 using Volo.Abp.Session;
-using Volo.Abp.TestBase;
 
 namespace Volo.Abp.Permissions
 {

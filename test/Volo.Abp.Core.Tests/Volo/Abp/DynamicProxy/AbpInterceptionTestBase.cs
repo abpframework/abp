@@ -2,7 +2,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.Modularity;
-using Volo.Abp.TestBase;
 using Xunit;
 
 namespace Volo.Abp.DynamicProxy

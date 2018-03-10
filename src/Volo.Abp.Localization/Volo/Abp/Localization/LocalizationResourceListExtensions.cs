@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
-using Volo.Abp.Localization.Json;
 using Volo.Abp.Localization.VirtualFiles.Json;
 
 namespace Volo.Abp.Localization

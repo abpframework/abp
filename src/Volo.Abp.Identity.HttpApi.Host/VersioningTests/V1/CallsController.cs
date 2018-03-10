@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using Volo.Abp.Application.Services;
 using Volo.Abp.AspNetCore.Mvc;
 
 namespace Volo.Abp.Identity.HttpApi.Host.VersioningTests.V1

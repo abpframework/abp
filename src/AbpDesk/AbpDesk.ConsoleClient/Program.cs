@@ -2,7 +2,6 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using IdentityModel.Client;
-using Newtonsoft.Json.Linq;
 
 namespace AbpDesk.ConsoleClient
 {

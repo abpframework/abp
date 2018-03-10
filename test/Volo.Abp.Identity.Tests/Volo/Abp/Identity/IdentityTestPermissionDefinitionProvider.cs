@@ -1,5 +1,4 @@
 ﻿using Volo.Abp.Authorization.Permissions;
-using Volo.Abp.Permissions;
 
 namespace Volo.Abp.Identity
 {

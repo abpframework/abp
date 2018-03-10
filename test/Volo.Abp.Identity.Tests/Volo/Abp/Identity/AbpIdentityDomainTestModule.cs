@@ -6,7 +6,6 @@ using Volo.Abp.Autofac;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.Modularity;
-using Volo.Abp.Permissions;
 using Volo.Abp.Permissions.EntityFrameworkCore;
 using Volo.Abp.Uow;
 

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using IdentityServer4.Models;
+﻿using IdentityServer4.Models;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
 using Volo.Abp.IdentityServer.ApiResources;

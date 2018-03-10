@@ -1,6 +1,4 @@
-﻿using Volo.Abp.TestBase;
-
-namespace Volo.Abp.Authorization
+﻿namespace Volo.Abp.Authorization
 {
     public class AuthorizationTestBase : AbpIntegratedTest<AbpAuthorizationTestModule>
     {

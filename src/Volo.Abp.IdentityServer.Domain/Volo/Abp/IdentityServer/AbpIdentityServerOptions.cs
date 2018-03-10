@@ -1,5 +1,3 @@
-using System.IdentityModel.Tokens.Jwt;
-
 namespace Volo.Abp.IdentityServer
 {
     public class AbpIdentityServerOptions

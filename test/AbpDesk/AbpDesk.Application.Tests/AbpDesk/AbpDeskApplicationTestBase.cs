@@ -2,7 +2,6 @@ using AbpDesk.EntityFrameworkCore;
 using AbpDesk.Tickets;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp;
-using Volo.Abp.TestBase;
 
 namespace AbpDesk
 {
