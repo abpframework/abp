@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Application;
 using Volo.Abp.Modularity;
 using Volo.Abp.TestApp.Domain;
 using Volo.Abp.AutoMapper;
@@ -8,7 +9,7 @@ namespace Volo.Abp.TestApp
 {
     [DependsOn(typeof(AbpAutoMapperModule))]
     [DependsOn(typeof(AbpCommonModule))]
-    [DependsOn(typeof(AbpDddModule))]
+    [DependsOn(typeof(AbpDddApplicationModule))]
     public class TestAppModule : AbpModule
     {
         public override void ConfigureServices(IServiceCollection services)

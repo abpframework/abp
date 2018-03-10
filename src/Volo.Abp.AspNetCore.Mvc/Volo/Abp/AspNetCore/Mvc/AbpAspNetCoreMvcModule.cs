@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.ViewComponents;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Volo.Abp.Application;
 using Volo.Abp.AspNetCore.Mvc.Conventions;
 using Volo.Abp.AspNetCore.Mvc.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Localization;
@@ -26,7 +27,7 @@ using Volo.Abp.Ui;
 namespace Volo.Abp.AspNetCore.Mvc
 {
     [DependsOn(typeof(AbpHttpModule))]
-    [DependsOn(typeof(AbpDddModule))] //TODO: Ideally, AbpAspNetCoreMvcModule should not depend on Ddd module...?
+    [DependsOn(typeof(AbpDddApplicationModule))] //TODO: Ideally, AbpAspNetCoreMvcModule should not depend on Ddd module...?
     [DependsOn(typeof(AbpAspNetCoreModule))]
     [DependsOn(typeof(AbpUiModule))]
     public class AbpAspNetCoreMvcModule : AbpModule

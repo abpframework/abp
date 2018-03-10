@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Application;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Data;
 using Volo.Abp.Modularity;
@@ -9,7 +10,7 @@ namespace Volo.Abp.MultiTenancy
     [DependsOn(typeof(AbpMultiTenancyAbstractionsModule))]
     [DependsOn(typeof(AbpMultiTenancyDomainSharedModule))]
     [DependsOn(typeof(AbpDataModule))]
-    [DependsOn(typeof(AbpDddModule))]
+    [DependsOn(typeof(AbpDddApplicationModule))]
     [DependsOn(typeof(AbpAutoMapperModule))]
     [DependsOn(typeof(AbpUiModule))] //TODO: It's not good to depend on the UI module. However, UserFriendlyException is inside it!
     public class AbpMultiTenancyDomainModule : AbpModule

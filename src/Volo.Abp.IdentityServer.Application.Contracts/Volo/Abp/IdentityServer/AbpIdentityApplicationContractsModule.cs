@@ -1,9 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Application;
 using Volo.Abp.Modularity;
 
 namespace Volo.Abp.IdentityServer
 {
-    [DependsOn(typeof(AbpDddModule))]
+    [DependsOn(typeof(AbpDddApplicationModule))]
     [DependsOn(typeof(AbpIdentityServerDomainSharedModule))]
     public class AbpIdentityServerApplicationContractsModule : AbpModule
     {

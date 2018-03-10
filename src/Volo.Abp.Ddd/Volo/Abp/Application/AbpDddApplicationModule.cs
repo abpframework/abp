@@ -2,34 +2,23 @@
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Authorization;
-using Volo.Abp.Data;
-using Volo.Abp.EventBus;
-using Volo.Abp.Guids;
+using Volo.Abp.Domain;
 using Volo.Abp.Http;
 using Volo.Abp.Http.Modeling;
 using Volo.Abp.Modularity;
-using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectMapping;
-using Volo.Abp.Threading;
-using Volo.Abp.Uow;
+using Volo.Abp.Session;
 using Volo.Abp.Validation;
 
-namespace Volo.Abp
+namespace Volo.Abp.Application
 {
-    //TODO: Consider to split this DDD package by layers!
-
-    [DependsOn(typeof(AbpGuidsModule))]
-    [DependsOn(typeof(AbpDataModule))]
+    [DependsOn(typeof(AbpDddDomainModule))]
+    [DependsOn(typeof(AbpSessionModule))]
     [DependsOn(typeof(AbpObjectMappingModule))]
-    [DependsOn(typeof(AbpMultiTenancyAbstractionsModule))]
-    [DependsOn(typeof(AbpThreadingModule))]
-    [DependsOn(typeof(AbpEventBusModule))]
     [DependsOn(typeof(AbpValidationModule))]
     [DependsOn(typeof(AbpAuthorizationModule))]
-    [DependsOn(typeof(AbpGuidsModule))]
-    [DependsOn(typeof(AbpUnitOfWorkModule))]
     [DependsOn(typeof(AbpHttpAbstractionsModule))]
-    public class AbpDddModule : AbpModule
+    public class AbpDddApplicationModule : AbpModule
     {
         public override void ConfigureServices(IServiceCollection services)
         {
@@ -39,7 +28,7 @@ namespace Volo.Abp
                 options.IgnoredInterfaces.AddIfNotContains(typeof(IApplicationService));
             });
 
-            services.AddAssemblyOf<AbpDddModule>();
+            services.AddAssemblyOf<AbpDddApplicationModule>();
         }
     }
 }

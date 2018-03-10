@@ -306,6 +306,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Uow", "src\Volo.Ab
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Uow.Tests", "test\Volo.Abp.Uow.Tests\Volo.Abp.Uow.Tests.csproj", "{9FC49D82-04E5-4170-8618-682BD3350910}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Ddd.Domain", "src\Volo.Abp.Ddd.Domain\Volo.Abp.Ddd.Domain.csproj", "{D1318094-7907-4826-B5F3-CFFC741F235F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -808,6 +810,10 @@ Global
 		{9FC49D82-04E5-4170-8618-682BD3350910}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9FC49D82-04E5-4170-8618-682BD3350910}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9FC49D82-04E5-4170-8618-682BD3350910}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1318094-7907-4826-B5F3-CFFC741F235F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1318094-7907-4826-B5F3-CFFC741F235F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1318094-7907-4826-B5F3-CFFC741F235F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1318094-7907-4826-B5F3-CFFC741F235F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -957,6 +963,7 @@ Global
 		{627B88DB-BDCF-4D92-8454-EFE95F4AFB7A} = {37087D1B-3693-4E96-983D-A69F210BDE53}
 		{23C5849D-4C09-4588-AE32-E31F03B7ED63} = {4C753F64-0C93-4D65-96C2-A40893AFC1E8}
 		{9FC49D82-04E5-4170-8618-682BD3350910} = {37087D1B-3693-4E96-983D-A69F210BDE53}
+		{D1318094-7907-4826-B5F3-CFFC741F235F} = {4C753F64-0C93-4D65-96C2-A40893AFC1E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB97ECF4-9A84-433F-A80B-2A3285BDD1D5}

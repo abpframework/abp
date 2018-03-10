@@ -6,7 +6,7 @@
     /// marked as IsDeleted = true in the database,
     /// but can not be retrieved to the application normally.
     /// </summary>
-    public interface ISoftDelete //TODO: Move to another assembly. Data?
+    public interface ISoftDelete //TODO: Move to another assembly?
     {
         /// <summary>
         /// Used to mark an Entity as 'Deleted'. 

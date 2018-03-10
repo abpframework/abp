@@ -1,9 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Application;
 using Volo.Abp.Modularity;
 
 namespace Volo.Abp.Permissions
 {
-    [DependsOn(typeof(AbpDddModule))]
+    [DependsOn(typeof(AbpDddApplicationModule))]
     [DependsOn(typeof(AbpPermissionsDomainSharedModule))]
     public class AbpPermissionsApplicationContractsModule : AbpModule
     {

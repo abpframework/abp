@@ -1,10 +1,11 @@
 ﻿using Volo.Abp;
+using Volo.Abp.Application;
 using Volo.Abp.Modularity;
 
 namespace AbpDesk
 {
     [DependsOn(typeof(AbpCommonModule))]
-    [DependsOn(typeof(AbpDddModule))]
+    [DependsOn(typeof(AbpDddApplicationModule))]
     public class AbpDeskApplicationContractsModule : AbpModule
     {
 

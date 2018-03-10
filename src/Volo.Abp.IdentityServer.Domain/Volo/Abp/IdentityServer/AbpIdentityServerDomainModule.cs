@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Application;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Identity;
 using Volo.Abp.IdentityServer.AspNetIdentity;
@@ -9,7 +10,7 @@ using Volo.Abp.Security;
 namespace Volo.Abp.IdentityServer
 {
     [DependsOn(typeof(AbpIdentityServerDomainSharedModule))]
-    [DependsOn(typeof(AbpDddModule))]
+    [DependsOn(typeof(AbpDddApplicationModule))]
     [DependsOn(typeof(AbpAutoMapperModule))]
     [DependsOn(typeof(AbpIdentityDomainModule))]
     [DependsOn(typeof(AbpSecurityModule))]

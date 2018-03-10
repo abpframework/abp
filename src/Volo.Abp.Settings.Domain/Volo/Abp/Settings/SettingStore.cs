@@ -2,16 +2,19 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Guids;
 
 namespace Volo.Abp.Settings
 {
-    public class SettingStore : AbpServiceBase, ISettingStore, ITransientDependency
+    public class SettingStore : ISettingStore, ITransientDependency
     {
         private readonly ISettingRepository _settingRepository;
+        private readonly IGuidGenerator _guidGenerator;
 
-        public SettingStore(ISettingRepository settingRepository)
+        public SettingStore(ISettingRepository settingRepository, IGuidGenerator guidGenerator)
         {
             _settingRepository = settingRepository;
+            _guidGenerator = guidGenerator;
         }
 
         public async Task<string> GetOrNullAsync(string name, string providerName, string providerKey)
@@ -25,7 +28,7 @@ namespace Volo.Abp.Settings
             var setting = await _settingRepository.FindAsync(name, providerName, providerKey);
             if (setting == null)
             {
-                setting = new Setting(GuidGenerator.Create(), name, value, providerName, providerKey);
+                setting = new Setting(_guidGenerator.Create(), name, value, providerName, providerKey);
                 await _settingRepository.InsertAsync(setting);
             }
             else
