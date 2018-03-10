@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.ViewComponents;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Volo.Abp.ApiVersioning;
 using Volo.Abp.Application;
 using Volo.Abp.AspNetCore.Mvc.Conventions;
 using Volo.Abp.AspNetCore.Mvc.DependencyInjection;
@@ -22,13 +23,16 @@ using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.VirtualFileSystem;
 using Volo.Abp.Http;
 using Volo.Abp.Http.Modeling;
+using Volo.Abp.Localization;
 using Volo.Abp.Ui;
 
 namespace Volo.Abp.AspNetCore.Mvc
 {
+    [DependsOn(typeof(AbpAspNetCoreModule))]
+    [DependsOn(typeof(AbpLocalizationModule))]
+    [DependsOn(typeof(AbpApiVersioningAbstractionsModule))]
     [DependsOn(typeof(AbpHttpModule))]
     [DependsOn(typeof(AbpDddApplicationModule))]
-    [DependsOn(typeof(AbpAspNetCoreModule))]
     [DependsOn(typeof(AbpUiModule))]
     public class AbpAspNetCoreMvcModule : AbpModule
     {
