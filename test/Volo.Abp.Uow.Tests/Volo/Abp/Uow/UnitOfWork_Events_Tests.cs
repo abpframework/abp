@@ -5,7 +5,7 @@ using Xunit;
 
 namespace Volo.Abp.Uow
 {
-    public class UnitOfWork_Events_Tests : AbpIntegratedTest<AbpDddModule>
+    public class UnitOfWork_Events_Tests : AbpIntegratedTest<AbpUnitOfWorkModule>
     {
         private readonly IUnitOfWorkManager _unitOfWorkManager;
 

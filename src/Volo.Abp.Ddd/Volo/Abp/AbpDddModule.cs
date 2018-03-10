@@ -26,12 +26,13 @@ namespace Volo.Abp
     [DependsOn(typeof(AbpEventBusModule))]
     [DependsOn(typeof(AbpValidationModule))]
     [DependsOn(typeof(AbpAuthorizationModule))]
+    [DependsOn(typeof(AbpGuidsModule))]
+    [DependsOn(typeof(AbpUnitOfWorkModule))]
     [DependsOn(typeof(AbpHttpAbstractionsModule))]
     public class AbpDddModule : AbpModule
     {
         public override void PreConfigureServices(IServiceCollection services)
         {
-            services.OnRegistred(UnitOfWorkInterceptorRegistrar.RegisterIfNeeded);
             services.OnRegistred(ValidationInterceptorRegistrar.RegisterIfNeeded);
             services.OnRegistred(AuthorizationInterceptorRegistrar.RegisterIfNeeded);
         }

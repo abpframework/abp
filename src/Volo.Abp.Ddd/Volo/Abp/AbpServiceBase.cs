@@ -8,7 +8,7 @@ using Volo.Abp.Uow;
 
 namespace Volo.Abp
 {
-    public abstract class AbpServiceBase
+    public abstract class AbpServiceBase //TODO: This is not so related to DDD, can we move to another package or completely remove it..?
     {
         public IUnitOfWorkManager UnitOfWorkManager { get; set; }
 

@@ -23,6 +23,7 @@
     <ProjectReference Include="..\Volo.Abp.MultiTenancy.Abstractions\Volo.Abp.MultiTenancy.Abstractions.csproj" />
     <ProjectReference Include="..\Volo.Abp.ObjectMapping\Volo.Abp.ObjectMapping.csproj" />
     <ProjectReference Include="..\Volo.Abp.Threading\Volo.Abp.Threading.csproj" />
+    <ProjectReference Include="..\Volo.Abp.Uow\Volo.Abp.Uow.csproj" />
     <ProjectReference Include="..\Volo.Abp.Validation\Volo.Abp.Validation.csproj" />
   </ItemGroup>
 
