@@ -9,6 +9,11 @@ namespace Volo.Abp.Authorization
     [DependsOn(typeof(AbpSecurityModule))]
     public class AbpAuthorizationModule : AbpModule
     {
+        public override void PreConfigureServices(IServiceCollection services)
+        {
+            services.OnRegistred(AuthorizationInterceptorRegistrar.RegisterIfNeeded);
+        }
+
         public override void ConfigureServices(IServiceCollection services)
         {
             services.AddAuthorization();

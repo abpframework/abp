@@ -31,12 +31,6 @@ namespace Volo.Abp
     [DependsOn(typeof(AbpHttpAbstractionsModule))]
     public class AbpDddModule : AbpModule
     {
-        public override void PreConfigureServices(IServiceCollection services)
-        {
-            services.OnRegistred(ValidationInterceptorRegistrar.RegisterIfNeeded);
-            services.OnRegistred(AuthorizationInterceptorRegistrar.RegisterIfNeeded);
-        }
-
         public override void ConfigureServices(IServiceCollection services)
         {
             services.Configure<ApiDescriptionModelOptions>(options =>
