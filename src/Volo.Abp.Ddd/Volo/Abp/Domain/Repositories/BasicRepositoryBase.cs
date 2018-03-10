@@ -22,16 +22,16 @@ namespace Volo.Abp.Domain.Repositories
             return Task.FromResult(Insert(entity, autoSave));
         }
 
-        public abstract TEntity Update(TEntity entity);
+        public abstract TEntity Update(TEntity entity, bool autoSave = false);
 
-        public virtual Task<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
+        public virtual Task<TEntity> UpdateAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             return Task.FromResult(Update(entity));
         }
 
-        public abstract void Delete(TEntity entity);
+        public abstract void Delete(TEntity entity, bool autoSave = false);
 
-        public virtual Task DeleteAsync(TEntity entity, CancellationToken cancellationToken = default)
+        public virtual Task DeleteAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             Delete(entity);
             return Task.CompletedTask;
@@ -70,7 +70,7 @@ namespace Volo.Abp.Domain.Repositories
             return Task.FromResult(Find(id));
         }
 
-        public virtual void Delete(TKey id)
+        public virtual void Delete(TKey id, bool autoSave = false)
         {
             var entity = Find(id);
             if (entity == null)
@@ -81,7 +81,7 @@ namespace Volo.Abp.Domain.Repositories
             Delete(entity);
         }
 
-        public virtual Task DeleteAsync(TKey id, CancellationToken cancellationToken = default)
+        public virtual Task DeleteAsync(TKey id, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             Delete(id);
             return Task.CompletedTask;

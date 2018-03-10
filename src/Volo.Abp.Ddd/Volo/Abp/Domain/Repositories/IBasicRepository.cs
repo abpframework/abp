@@ -13,8 +13,8 @@ namespace Volo.Abp.Domain.Repositories
         /// </summary>
         /// <param name="entity">Inserted entity</param>
         /// <param name="autoSave">
-        /// Set true to automatically save changes to database.
-        /// This can be used to set database generated Id of an entity for some ORMs (like Entity Framework).
+        /// Set true to automatically save entity to database.
+        /// This is useful for ORMs / database APIs those only saves changes with an explicit method call.
         /// </param>
         [NotNull]
         TEntity Insert([NotNull] TEntity entity, bool autoSave = false);
@@ -24,7 +24,7 @@ namespace Volo.Abp.Domain.Repositories
         /// </summary>
         /// <param name="autoSave">
         /// Set true to automatically save changes to database.
-        /// This can be used to set database generated Id of an entity for some ORMs (like Entity Framework).
+        /// This is useful for ORMs / database APIs those only saves changes with an explicit method call.
         /// </param>
         /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
         /// <param name="entity">Inserted entity</param>
@@ -35,29 +35,45 @@ namespace Volo.Abp.Domain.Repositories
         /// Updates an existing entity.
         /// </summary>
         /// <param name="entity">Entity</param>
+        /// <param name="autoSave">
+        /// Set true to automatically save changes to database.
+        /// This is useful for ORMs / database APIs those only saves changes with an explicit method call.
+        /// </param>
         [NotNull]
-        TEntity Update([NotNull] TEntity entity);
+        TEntity Update([NotNull] TEntity entity, bool autoSave = false);
 
         /// <summary>
         /// Updates an existing entity. 
         /// </summary>
+        /// <param name="autoSave">
+        /// Set true to automatically save changes to database.
+        /// This is useful for ORMs / database APIs those only saves changes with an explicit method call.
+        /// </param>
         /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
         /// <param name="entity">Entity</param>
         [NotNull]
-        Task<TEntity> UpdateAsync([NotNull] TEntity entity, CancellationToken cancellationToken = default);
+        Task<TEntity> UpdateAsync([NotNull] TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Deletes an entity.
         /// </summary>
         /// <param name="entity">Entity to be deleted</param>
-        void Delete([NotNull] TEntity entity); //TODO: Return true if deleted
+        /// <param name="autoSave">
+        /// Set true to automatically save changes to database.
+        /// This is useful for ORMs / database APIs those only saves changes with an explicit method call.
+        /// </param>
+        void Delete([NotNull] TEntity entity, bool autoSave = false); //TODO: Return true if deleted
 
         /// <summary>
         /// Deletes an entity.
         /// </summary>
+        /// <param name="entity">Entity to be deleted</param>
+        /// <param name="autoSave">
+        /// Set true to automatically save changes to database.
+        /// This is useful for ORMs / database APIs those only saves changes with an explicit method call.
+        /// </param>
         /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
-        /// <param name="entity">Entity to be deleted</param>
-        Task DeleteAsync([NotNull] TEntity entity, CancellationToken cancellationToken = default); //TODO: Return true if deleted
+        Task DeleteAsync([NotNull] TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default); //TODO: Return true if deleted
     }
 
     public interface IBasicRepository<TEntity, TKey> : IBasicRepository<TEntity>
@@ -102,13 +118,21 @@ namespace Volo.Abp.Domain.Repositories
         /// Deletes an entity by primary key.
         /// </summary>
         /// <param name="id">Primary key of the entity</param>
-        void Delete(TKey id); //TODO: Return true if deleted
+        /// <param name="autoSave">
+        /// Set true to automatically save changes to database.
+        /// This is useful for ORMs / database APIs those only saves changes with an explicit method call.
+        /// </param>
+        void Delete(TKey id, bool autoSave = false); //TODO: Return true if deleted
 
         /// <summary>
         /// Deletes an entity by primary key.
         /// </summary>
-        /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
         /// <param name="id">Primary key of the entity</param>
-        Task DeleteAsync(TKey id, CancellationToken cancellationToken = default);  //TODO: Return true if deleted
+        /// <param name="autoSave">
+        /// Set true to automatically save changes to database.
+        /// This is useful for ORMs / database APIs those only saves changes with an explicit method call.
+        /// </param>
+        /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
+        Task DeleteAsync(TKey id, bool autoSave = false, CancellationToken cancellationToken = default);  //TODO: Return true if deleted
     }
 }

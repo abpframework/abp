@@ -158,12 +158,12 @@ namespace Volo.Abp.Domain.Repositories
                 throw new NotImplementedException();
             }
 
-            public override TEntity Update(TEntity entity)
+            public override TEntity Update(TEntity entity, bool autoSave = false)
             {
                 throw new NotImplementedException();
             }
 
-            public override void Delete(TEntity entity)
+            public override void Delete(TEntity entity, bool autoSave = false)
             {
                 throw new NotImplementedException();
             }
@@ -192,12 +192,12 @@ namespace Volo.Abp.Domain.Repositories
                 throw new NotImplementedException();
             }
 
-            public void Delete(TKey id)
+            public void Delete(TKey id, bool autoSave = false)
             {
                 throw new NotImplementedException();
             }
 
-            public Task DeleteAsync(TKey id, CancellationToken cancellationToken = default)
+            public Task DeleteAsync(TKey id, bool autoSave = false, CancellationToken cancellationToken = default)
             {
                 throw new NotImplementedException();
             }

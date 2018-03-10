@@ -38,24 +38,24 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             return entity;
         }
 
-        public override TEntity Update(TEntity entity)
+        public override TEntity Update(TEntity entity, bool autoSave = false)
         {
             Collection.ReplaceOne(CreateEntityFilter(entity), entity);
             return entity;
         }
 
-        public override async Task<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
+        public override async Task<TEntity> UpdateAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             await Collection.ReplaceOneAsync(CreateEntityFilter(entity), entity, cancellationToken: cancellationToken);
             return entity;
         }
 
-        public override void Delete(TEntity entity)
+        public override void Delete(TEntity entity, bool autoSave = false)
         {
             Collection.DeleteOne(CreateEntityFilter(entity));
         }
 
-        public override async Task DeleteAsync(TEntity entity, CancellationToken cancellationToken = default)
+        public override async Task DeleteAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             await Collection.DeleteOneAsync(CreateEntityFilter(entity), cancellationToken);
         }
@@ -115,12 +115,12 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             return entity;
         }
 
-        public virtual void Delete(TKey id)
+        public virtual void Delete(TKey id, bool autoSave = false)
         {
             Collection.DeleteOne(CreateEntityFilter(id));
         }
 
-        public virtual Task DeleteAsync(TKey id, CancellationToken cancellationToken = default)
+        public virtual Task DeleteAsync(TKey id, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             return Collection.DeleteOneAsync(CreateEntityFilter(id), cancellationToken);
         }

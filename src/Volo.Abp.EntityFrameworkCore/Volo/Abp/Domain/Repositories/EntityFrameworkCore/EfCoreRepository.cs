@@ -51,15 +51,52 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
             return savedEntity;
         }
 
-        public override TEntity Update(TEntity entity)
+        public override TEntity Update(TEntity entity, bool autoSave = false)
         {
             DbContext.Attach(entity);
-            return DbContext.Update(entity).Entity;
+
+            var updatedEntity = DbContext.Update(entity).Entity;
+
+            if (autoSave)
+            {
+                DbContext.SaveChanges();
+            }
+
+            return updatedEntity;
         }
 
-        public override void Delete(TEntity entity)
+        public override async Task<TEntity> UpdateAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default)
+        {
+            DbContext.Attach(entity);
+
+            var updatedEntity = DbContext.Update(entity).Entity;
+
+            if (autoSave)
+            {
+                await DbContext.SaveChangesAsync(cancellationToken);
+            }
+
+            return updatedEntity;
+        }
+
+        public override void Delete(TEntity entity, bool autoSave = false)
         {
             DbSet.Remove(entity);
+
+            if (autoSave)
+            {
+                DbContext.SaveChanges();
+            }
+        }
+
+        public override async Task DeleteAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default)
+        {
+            DbSet.Remove(entity);
+
+            if (autoSave)
+            {
+                await DbContext.SaveChangesAsync(cancellationToken);
+            }
         }
 
         protected override IQueryable<TEntity> GetQueryable()
@@ -142,7 +179,7 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
             return await DbSet.FindAsync(new object[] { id }, GetCancellationToken(cancellationToken));
         }
 
-        public virtual void Delete(TKey id)
+        public virtual void Delete(TKey id, bool autoSave = false)
         {
             var entity = Find(id);
             if (entity == null)
@@ -150,13 +187,18 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
                 return;
             }
 
-            Delete(entity);
+            Delete(entity, autoSave);
         }
 
-        public virtual Task DeleteAsync(TKey id, CancellationToken cancellationToken = default)
+        public virtual async Task DeleteAsync(TKey id, bool autoSave = false, CancellationToken cancellationToken = default)
         {
-            Delete(id);
-            return Task.CompletedTask;
+            var entity = await FindAsync(id, cancellationToken);
+            if (entity == null)
+            {
+                return;
+            }
+
+            await DeleteAsync(entity, autoSave, cancellationToken);
         }
     }
 }

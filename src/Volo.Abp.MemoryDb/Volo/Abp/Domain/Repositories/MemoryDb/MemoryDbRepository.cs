@@ -29,12 +29,12 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
             return entity;
         }
 
-        public override TEntity Update(TEntity entity)
+        public override TEntity Update(TEntity entity, bool autoSave = false)
         {
             return entity;
         }
 
-        public override void Delete(TEntity entity)
+        public override void Delete(TEntity entity, bool autoSave = false)
         {
             Collection.Remove(entity);
         }
@@ -98,7 +98,7 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
             return Task.FromResult(Find(id));
         }
 
-        public virtual void Delete(TKey id)
+        public virtual void Delete(TKey id, bool autoSave = false)
         {
             var entity = Find(id);
             if (entity == null)
@@ -109,7 +109,7 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
             Delete(entity);
         }
 
-        public virtual Task DeleteAsync(TKey id, CancellationToken cancellationToken = default)
+        public virtual Task DeleteAsync(TKey id, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             Delete(id);
             return Task.CompletedTask;

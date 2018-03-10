@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
+using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Guids;
-using Volo.Abp.Uow;
 
 namespace Volo.Abp.Identity
 {
@@ -48,36 +48,20 @@ namespace Volo.Abp.Identity
         private readonly IGuidGenerator _guidGenerator;
         private readonly ILogger<IdentityRoleStore> _logger;
         private readonly IIdentityUserRepository _userRepository;
-        private readonly IUnitOfWorkManager _unitOfWorkManager;
 
         public IdentityUserStore(
-            IUnitOfWorkManager unitOfWorkManager,
             IIdentityUserRepository userRepository,
             IIdentityRoleRepository roleRepository,
             IGuidGenerator guidGenerator,
             ILogger<IdentityRoleStore> logger,
             IdentityErrorDescriber describer = null)
         {
-            _unitOfWorkManager = unitOfWorkManager;
             _userRepository = userRepository;
             _roleRepository = roleRepository;
             _guidGenerator = guidGenerator;
             _logger = logger;
 
             ErrorDescriber = describer ?? new IdentityErrorDescriber();
-        }
-
-        /// <summary>Saves the current store.</summary>
-        /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
-        /// <returns>The <see cref="Task"/> that represents the asynchronous operation.</returns>
-        protected Task SaveChanges(CancellationToken cancellationToken)
-        {
-            if (!AutoSaveChanges || _unitOfWorkManager.Current == null)
-            {
-                return Task.CompletedTask;
-            }
-
-            return _unitOfWorkManager.Current.SaveChangesAsync(cancellationToken);
         }
 
         /// <summary>
@@ -174,7 +158,6 @@ namespace Volo.Abp.Identity
             Check.NotNull(user, nameof(user));
 
             await _userRepository.InsertAsync(user, AutoSaveChanges, cancellationToken);
-            await SaveChanges(cancellationToken);
 
             return IdentityResult.Success;
         }
@@ -193,8 +176,7 @@ namespace Volo.Abp.Identity
 
             try
             {
-                await _userRepository.UpdateAsync(user, cancellationToken);
-                await SaveChanges(cancellationToken);
+                await _userRepository.UpdateAsync(user, AutoSaveChanges, cancellationToken);
             }
             catch (AbpDbConcurrencyException ex)
             {
@@ -219,8 +201,7 @@ namespace Volo.Abp.Identity
 
             try
             {
-                await _userRepository.DeleteAsync(user, cancellationToken);
-                await SaveChanges(cancellationToken);
+                await _userRepository.DeleteAsync(user, AutoSaveChanges, cancellationToken);
             }
             catch (AbpDbConcurrencyException ex)
             {

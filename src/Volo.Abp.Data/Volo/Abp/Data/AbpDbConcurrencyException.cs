@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Volo.Abp.Uow
+namespace Volo.Abp.Data
 {
     public class AbpDbConcurrencyException : AbpException
     {

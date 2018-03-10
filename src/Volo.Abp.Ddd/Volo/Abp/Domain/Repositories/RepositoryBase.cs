@@ -97,7 +97,7 @@ namespace Volo.Abp.Domain.Repositories
             return Task.FromResult(Find(id));
         }
 
-        public virtual void Delete(TKey id)
+        public virtual void Delete(TKey id, bool autoSave = false)
         {
             var entity = Find(id);
             if (entity == null)
@@ -108,7 +108,7 @@ namespace Volo.Abp.Domain.Repositories
             Delete(entity);
         }
 
-        public virtual Task DeleteAsync(TKey id, CancellationToken cancellationToken = default)
+        public virtual Task DeleteAsync(TKey id, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             Delete(id);
             return Task.CompletedTask;

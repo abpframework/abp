@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
+using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Guids;
-using Volo.Abp.Uow;
 
 namespace Volo.Abp.Identity
 {
@@ -23,7 +23,6 @@ namespace Volo.Abp.Identity
         ITransientDependency
     {
         private readonly IIdentityRoleRepository _roleRepository;
-        private readonly IUnitOfWorkManager _unitOfWorkManager;
         private readonly ILogger<IdentityRoleStore> _logger;
         private readonly IGuidGenerator _guidGenerator;
 
@@ -31,13 +30,11 @@ namespace Volo.Abp.Identity
         /// Constructs a new instance of <see cref="IdentityRoleStore"/>.
         /// </summary>
         public IdentityRoleStore(
-            IUnitOfWorkManager unitOfWorkManager,
             IIdentityRoleRepository roleRepository, 
             ILogger<IdentityRoleStore> logger,
             IGuidGenerator guidGenerator,
             IdentityErrorDescriber describer = null)
         {
-            _unitOfWorkManager = unitOfWorkManager;
             _roleRepository = roleRepository;
             _logger = logger;
             _guidGenerator = guidGenerator;
@@ -58,19 +55,6 @@ namespace Volo.Abp.Identity
         /// </value>
         public bool AutoSaveChanges { get; set; } = true;
 
-        /// <summary>Saves the current store.</summary>
-        /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
-        /// <returns>The <see cref="Task"/> that represents the asynchronous operation.</returns>
-        protected Task SaveChanges(CancellationToken cancellationToken)
-        {
-            if (!AutoSaveChanges || _unitOfWorkManager.Current == null)
-            {
-                return Task.CompletedTask;
-            }
-
-            return _unitOfWorkManager.Current.SaveChangesAsync(cancellationToken);
-        }
-
         /// <summary>
         /// Creates a new role in a store as an asynchronous operation.
         /// </summary>
@@ -83,8 +67,7 @@ namespace Volo.Abp.Identity
 
             Check.NotNull(role, nameof(role));
 
-            await _roleRepository.InsertAsync(role, cancellationToken: cancellationToken);
-            await SaveChanges(cancellationToken);
+            await _roleRepository.InsertAsync(role, AutoSaveChanges, cancellationToken);
 
             return IdentityResult.Success;
         }
@@ -101,11 +84,9 @@ namespace Volo.Abp.Identity
 
             Check.NotNull(role, nameof(role));
 
-            await _roleRepository.UpdateAsync(role, cancellationToken);
-
             try
             {
-                await SaveChanges(cancellationToken);
+                await _roleRepository.UpdateAsync(role, AutoSaveChanges, cancellationToken);
             }
             catch (AbpDbConcurrencyException ex)
             {
@@ -130,8 +111,7 @@ namespace Volo.Abp.Identity
 
             try
             {
-                await _roleRepository.DeleteAsync(role, cancellationToken);
-                await SaveChanges(cancellationToken);
+                await _roleRepository.DeleteAsync(role, AutoSaveChanges, cancellationToken);
             }
             catch (AbpDbConcurrencyException ex)
             {
