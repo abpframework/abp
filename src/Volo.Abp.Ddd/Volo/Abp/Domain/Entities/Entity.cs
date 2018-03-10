@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Domain.Entities
 {
@@ -43,6 +45,13 @@ namespace Volo.Abp.Domain.Entities
             var typeOfThis = GetType().GetTypeInfo();
             var typeOfOther = other.GetType().GetTypeInfo();
             if (!typeOfThis.IsAssignableFrom(typeOfOther) && !typeOfOther.IsAssignableFrom(typeOfThis))
+            {
+                return false;
+            }
+
+            //Different tenants may have an entity with same Id.
+            if (this is IMultiTenant && other is IMultiTenant &&
+                this.As<IMultiTenant>().TenantId != other.As<IMultiTenant>().TenantId)
             {
                 return false;
             }

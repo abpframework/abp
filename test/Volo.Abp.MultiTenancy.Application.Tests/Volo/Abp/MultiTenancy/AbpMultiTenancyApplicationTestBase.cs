@@ -3,7 +3,7 @@ using Volo.Abp.MultiTenancy.EntityFrameworkCore;
 
 namespace Volo.Abp.MultiTenancy
 {
-    public class AbpMultiTenancyApplicationTestBase : AbpIntegratedTest<AbpMultiTenancyApplicationTestModule>
+    public abstract class AbpMultiTenancyApplicationTestBase : AbpIntegratedTest<AbpMultiTenancyApplicationTestModule>
     {
         protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
         {
