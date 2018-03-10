@@ -14,8 +14,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Volo.Abp.Ddd\Volo.Abp.Ddd.csproj" />
-    <ProjectReference Include="..\Volo.Abp\Volo.Abp.csproj" />
+    <ProjectReference Include="..\Volo.Abp.Ddd.Domain\Volo.Abp.Ddd.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>

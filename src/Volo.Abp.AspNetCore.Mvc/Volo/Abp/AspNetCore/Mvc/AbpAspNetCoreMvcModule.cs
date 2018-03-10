@@ -27,7 +27,7 @@ using Volo.Abp.Ui;
 namespace Volo.Abp.AspNetCore.Mvc
 {
     [DependsOn(typeof(AbpHttpModule))]
-    [DependsOn(typeof(AbpDddApplicationModule))] //TODO: Ideally, AbpAspNetCoreMvcModule should not depend on Ddd module...?
+    [DependsOn(typeof(AbpDddApplicationModule))]
     [DependsOn(typeof(AbpAspNetCoreModule))]
     [DependsOn(typeof(AbpUiModule))]
     public class AbpAspNetCoreMvcModule : AbpModule

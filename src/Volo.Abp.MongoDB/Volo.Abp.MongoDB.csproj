@@ -14,12 +14,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Volo.Abp.Ddd\Volo.Abp.Ddd.csproj" />
-    <ProjectReference Include="..\Volo.Abp\Volo.Abp.csproj" />
+    <PackageReference Include="MongoDB.Driver" Version="2.5.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="MongoDB.Driver" Version="2.5.0" />
+    <ProjectReference Include="..\Volo.Abp.Ddd.Domain\Volo.Abp.Ddd.Domain.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,12 +1,12 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.Application;
+using Volo.Abp.Domain;
 using Volo.Abp.Modularity;
 using Volo.Abp.Permissions;
 
 namespace Volo.Abp.Identity
 {
     [DependsOn(typeof(AbpPermissionsDomainModule))]
-    [DependsOn(typeof(AbpDddApplicationModule))]
+    [DependsOn(typeof(AbpDddDomainModule))]
     [DependsOn(typeof(AbpIdentityDomainSharedModule))]
     public class AbpIdentityDomainModule : AbpModule
     {

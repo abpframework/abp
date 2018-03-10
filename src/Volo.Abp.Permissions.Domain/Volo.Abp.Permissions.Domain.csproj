@@ -16,7 +16,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.Authorization\Volo.Abp.Authorization.csproj" />
     <ProjectReference Include="..\Volo.Abp.Caching\Volo.Abp.Caching.csproj" />
-    <ProjectReference Include="..\Volo.Abp.Ddd\Volo.Abp.Ddd.csproj" />
+    <ProjectReference Include="..\Volo.Abp.Ddd.Domain\Volo.Abp.Ddd.Domain.csproj" />
     <ProjectReference Include="..\Volo.Abp.Json\Volo.Abp.Json.csproj" />
     <ProjectReference Include="..\Volo.Abp.Permissions.Domain.Shared\Volo.Abp.Permissions.Domain.Shared.csproj" />
   </ItemGroup>

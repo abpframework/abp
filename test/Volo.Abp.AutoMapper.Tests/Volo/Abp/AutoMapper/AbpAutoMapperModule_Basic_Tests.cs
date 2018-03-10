@@ -3,7 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.AutoMapper.SampleClasses;
 using Volo.Abp.ObjectMapping;
-using Volo.Abp.TestBase;
 using Xunit;
 
 namespace Volo.Abp.AutoMapper

@@ -4,8 +4,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>Volo.Abp.Ddd</AssemblyName>
-    <PackageId>Volo.Abp.Ddd</PackageId>
+    <AssemblyName>Volo.Abp.Ddd.Application</AssemblyName>
+    <PackageId>Volo.Abp.Ddd.Application</PackageId>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>

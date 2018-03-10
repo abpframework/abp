@@ -1,8 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.Application;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.Domain;
 using Volo.Abp.Identity;
-using Volo.Abp.IdentityServer.AspNetIdentity;
 using Volo.Abp.IdentityServer.Clients;
 using Volo.Abp.Modularity;
 using Volo.Abp.Security;
@@ -10,7 +9,7 @@ using Volo.Abp.Security;
 namespace Volo.Abp.IdentityServer
 {
     [DependsOn(typeof(AbpIdentityServerDomainSharedModule))]
-    [DependsOn(typeof(AbpDddApplicationModule))]
+    [DependsOn(typeof(AbpDddDomainModule))]
     [DependsOn(typeof(AbpAutoMapperModule))]
     [DependsOn(typeof(AbpIdentityDomainModule))]
     [DependsOn(typeof(AbpSecurityModule))]

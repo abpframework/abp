@@ -12,7 +12,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Volo.Abp.Ddd\Volo.Abp.Ddd.csproj" />
+    <ProjectReference Include="..\..\Volo.Abp.Ddd.Application\Volo.Abp.Ddd.Application.csproj" />
     <ProjectReference Include="..\..\Volo.Abp\Volo.Abp.csproj" />
   </ItemGroup>
 

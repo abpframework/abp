@@ -2,7 +2,6 @@
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
 using Volo.Abp.Permissions;
-using Volo.Abp.Session;
 
 namespace Volo.Abp.Identity
 {

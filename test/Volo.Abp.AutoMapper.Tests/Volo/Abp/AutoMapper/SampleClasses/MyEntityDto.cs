@@ -1,11 +1,12 @@
 ﻿using System;
-using Volo.Abp.Application.Dtos;
 
 namespace Volo.Abp.AutoMapper.SampleClasses
 {
     [AutoMap(typeof(MyEntity))]
-    public class MyEntityDto : EntityDto<Guid>
+    public class MyEntityDto
     {
+        public Guid Id { get; set; }
+
         public int Number { get; set; }
     }
 }
