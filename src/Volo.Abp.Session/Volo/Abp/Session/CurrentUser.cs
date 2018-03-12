@@ -28,7 +28,13 @@ namespace Volo.Abp.Session
 
         public virtual string UserName => this.FindClaimValue(AbpClaimTypes.UserName);
 
+        public virtual string PhoneNumber => this.FindClaimValue(AbpClaimTypes.PhoneNumber);
+
+        public virtual bool PhoneNumberVerified => string.Equals(this.FindClaimValue(AbpClaimTypes.PhoneNumberVerified), "true", StringComparison.InvariantCultureIgnoreCase);
+
         public virtual string Email => this.FindClaimValue(AbpClaimTypes.Email);
+
+        public virtual bool EmailVerified => string.Equals(this.FindClaimValue(AbpClaimTypes.EmailVerified), "true", StringComparison.InvariantCultureIgnoreCase);
 
         public virtual string[] Roles => FindClaims(AbpClaimTypes.Role).Select(c => c.Value).ToArray();
 

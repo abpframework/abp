@@ -15,7 +15,14 @@ namespace Volo.Abp.Session
         string UserName { get; }
 
         [CanBeNull]
+        string PhoneNumber { get; }
+
+        bool PhoneNumberVerified { get; }
+
+        [CanBeNull]
         string Email { get; }
+
+        bool EmailVerified { get; }
 
         [NotNull]
         string[] Roles { get; }
