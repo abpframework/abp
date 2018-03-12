@@ -20,6 +20,7 @@
     <ProjectReference Include="..\Volo.Abp.Guids\Volo.Abp.Guids.csproj" />
     <ProjectReference Include="..\Volo.Abp.MultiTenancy.Abstractions\Volo.Abp.MultiTenancy.Abstractions.csproj" />
     <ProjectReference Include="..\Volo.Abp.Threading\Volo.Abp.Threading.csproj" />
+    <ProjectReference Include="..\Volo.Abp.Timing\Volo.Abp.Timing.csproj" />
     <ProjectReference Include="..\Volo.Abp.Uow\Volo.Abp.Uow.csproj" />
   </ItemGroup>
 

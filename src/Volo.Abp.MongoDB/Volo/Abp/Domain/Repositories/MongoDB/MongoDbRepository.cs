@@ -60,12 +60,12 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             await Collection.DeleteOneAsync(CreateEntityFilter(entity), cancellationToken);
         }
 
-        public override void Delete(Expression<Func<TEntity, bool>> predicate)
+        public override void Delete(Expression<Func<TEntity, bool>> predicate, bool autoSave = false)
         {
             Collection.DeleteMany(Builders<TEntity>.Filter.Where(predicate));
         }
 
-        public override async Task DeleteAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
+        public override async Task DeleteAsync(Expression<Func<TEntity, bool>> predicate, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             await Collection.DeleteManyAsync(Builders<TEntity>.Filter.Where(predicate), cancellationToken);
         }

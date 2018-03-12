@@ -2,11 +2,14 @@ using System;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Guids;
+using Volo.Abp.Timing;
 
 namespace Volo.Abp.Domain.Services
 {
     public abstract class DomainService : IDomainService
     {
+        public IClock Clock { get; set; }
+
         public IGuidGenerator GuidGenerator { get; set; }
 
         public ILoggerFactory LoggerFactory { get; set; }

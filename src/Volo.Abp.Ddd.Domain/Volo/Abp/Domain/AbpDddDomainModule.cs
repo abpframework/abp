@@ -5,6 +5,7 @@ using Volo.Abp.Guids;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Threading;
+using Volo.Abp.Timing;
 using Volo.Abp.Uow;
 
 namespace Volo.Abp.Domain
@@ -15,8 +16,8 @@ namespace Volo.Abp.Domain
         typeof(AbpGuidsModule),
         typeof(AbpMultiTenancyAbstractionsModule),
         typeof(AbpThreadingModule),
-        typeof(AbpUnitOfWorkModule)
-        )]
+        typeof(AbpTimingModule),
+        typeof(AbpUnitOfWorkModule))]
     public class AbpDddDomainModule : AbpModule
     {
         public override void ConfigureServices(IServiceCollection services)

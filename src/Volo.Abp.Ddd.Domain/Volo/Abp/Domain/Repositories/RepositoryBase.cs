@@ -36,7 +36,7 @@ namespace Volo.Abp.Domain.Repositories
 
         protected abstract IQueryable<TEntity> GetQueryable();
 
-        public virtual void Delete(Expression<Func<TEntity, bool>> predicate)
+        public virtual void Delete(Expression<Func<TEntity, bool>> predicate, bool autoSave = false)
         {
             foreach (var entity in GetQueryable().Where(predicate).ToList())
             {
@@ -44,7 +44,7 @@ namespace Volo.Abp.Domain.Repositories
             }
         }
 
-        public virtual Task DeleteAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
+        public virtual Task DeleteAsync(Expression<Func<TEntity, bool>> predicate, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             Delete(predicate);
             return Task.CompletedTask;

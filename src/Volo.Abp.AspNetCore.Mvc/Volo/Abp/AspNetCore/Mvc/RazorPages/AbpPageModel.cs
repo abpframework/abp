@@ -11,6 +11,7 @@ using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Session;
+using Volo.Abp.Timing;
 using Volo.Abp.Uow;
 
 namespace Volo.Abp.AspNetCore.Mvc.RazorPages
@@ -34,7 +35,9 @@ namespace Volo.Abp.AspNetCore.Mvc.RazorPages
         public IAuthorizationService AuthorizationService { get; set; }
 
         protected IUnitOfWork CurrentUnitOfWork => UnitOfWorkManager?.Current;
-        
+
+        public IClock Clock { get; set; }
+
         protected ILogger Logger => _lazyLogger.Value;
         private Lazy<ILogger> _lazyLogger => new Lazy<ILogger>(() => LoggerFactory?.CreateLogger(GetType().FullName) ?? NullLogger.Instance, true);
 

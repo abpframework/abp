@@ -104,12 +104,27 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
             return DbSet.AsQueryable();
         }
 
-        public override async Task DeleteAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
+        public override void Delete(Expression<Func<TEntity, bool>> predicate, bool autoSave = false)
+        {
+            base.Delete(predicate, autoSave);
+
+            if (autoSave)
+            {
+                DbContext.SaveChanges();
+            }
+        }
+
+        public override async Task DeleteAsync(Expression<Func<TEntity, bool>> predicate, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             var entities = await GetQueryable().Where(predicate).ToListAsync(GetCancellationToken(cancellationToken));
             foreach (var entity in entities)
             {
                 DbSet.Remove(entity);
+            }
+
+            if (autoSave)
+            {
+                await DbContext.SaveChangesAsync(cancellationToken);
             }
         }
 

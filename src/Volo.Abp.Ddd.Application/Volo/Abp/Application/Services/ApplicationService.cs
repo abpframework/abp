@@ -8,6 +8,7 @@ using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Session;
+using Volo.Abp.Timing;
 using Volo.Abp.Uow;
 
 namespace Volo.Abp.Application.Services
@@ -32,6 +33,8 @@ namespace Volo.Abp.Application.Services
         public ICurrentTenant CurrentTenant { get; set; }
 
         public ICurrentUser CurrentUser { get; set; }
+
+        public IClock Clock { get; set; }
 
         public IAuthorizationService AuthorizationService { get; set; }
 
