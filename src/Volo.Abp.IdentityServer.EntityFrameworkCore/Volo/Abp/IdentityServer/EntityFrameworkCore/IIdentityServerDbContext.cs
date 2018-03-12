@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.IdentityServer.ApiResources;
 using Volo.Abp.IdentityServer.Clients;
@@ -7,6 +8,7 @@ using Volo.Abp.IdentityServer.IdentityResources;
 
 namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 {
+    [ConnectionStringName("AbpIdentityServer")]
     public interface IIdentityServerDbContext : IEfCoreDbContext
     {
         DbSet<ApiResource> ApiResources { get; set; }
