@@ -62,6 +62,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
             builder.ConfigureAbpIdentity(TablePrefix, Schema);
         }
     }

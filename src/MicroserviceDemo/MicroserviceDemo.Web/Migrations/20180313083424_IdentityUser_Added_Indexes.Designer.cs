@@ -11,9 +11,10 @@ using System;
 namespace MicroserviceDemo.Web.Migrations
 {
     [DbContext(typeof(MigrationDbContext))]
-    partial class MigrationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180313083424_IdentityUser_Added_Indexes")]
+    partial class IdentityUser_Added_Indexes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

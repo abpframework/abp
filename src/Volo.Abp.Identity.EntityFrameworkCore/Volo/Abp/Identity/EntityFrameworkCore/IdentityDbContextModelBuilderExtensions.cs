@@ -17,20 +17,22 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 tablePrefix = "";
             }
 
+            //TODO: Set column names for all EF Core mappings as did for some of the user properties below (this is needed for table splitting scenario):
+
             builder.Entity<IdentityUser>(b =>
             {
                 b.ToTable(tablePrefix + "Users", schema);
-
-                b.Property(u => u.UserName).IsRequired().HasMaxLength(IdentityUserConsts.MaxUserNameLength);
+                
+                b.Property(u => u.UserName).IsRequired().HasMaxLength(IdentityUserConsts.MaxUserNameLength).HasColumnName("UserName");
                 b.Property(u => u.NormalizedUserName).IsRequired().HasMaxLength(IdentityUserConsts.MaxNormalizedUserNameLength);
-                b.Property(u => u.Email).HasMaxLength(IdentityUserConsts.MaxEmailLength);
+                b.Property(u => u.Email).HasMaxLength(IdentityUserConsts.MaxEmailLength).HasColumnName("Email");
                 b.Property(u => u.NormalizedEmail).HasMaxLength(IdentityUserConsts.MaxNormalizedEmailLength);
-                b.Property(u => u.PhoneNumber).HasMaxLength(IdentityUserConsts.MaxPhoneNumberLength);
+                b.Property(u => u.PhoneNumber).HasMaxLength(IdentityUserConsts.MaxPhoneNumberLength).HasColumnName("PhoneNumber");
                 b.Property(u => u.PasswordHash).HasMaxLength(IdentityUserConsts.MaxPasswordHashLength);
                 b.Property(u => u.SecurityStamp).IsRequired().HasMaxLength(IdentityUserConsts.MaxSecurityStampLength);
                 b.Property(u => u.ConcurrencyStamp).IsRequired().HasMaxLength(IdentityUserConsts.MaxConcurrencyStampLength);
-                b.Property(u => u.EmailConfirmed).HasDefaultValue(false);
-                b.Property(u => u.PhoneNumberConfirmed).HasDefaultValue(false);
+                b.Property(u => u.EmailConfirmed).HasDefaultValue(false).HasColumnName("EmailConfirmed");
+                b.Property(u => u.PhoneNumberConfirmed).HasDefaultValue(false).HasColumnName("PhoneNumberConfirmed");
                 b.Property(u => u.TwoFactorEnabled).HasDefaultValue(false);
                 b.Property(u => u.LockoutEnabled).HasDefaultValue(false);
                 b.Property(u => u.AccessFailedCount).HasDefaultValue(0);
@@ -42,6 +44,8 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
 
                 b.HasIndex(u => u.NormalizedUserName);
                 b.HasIndex(u => u.NormalizedEmail);
+                b.HasIndex(u => u.UserName);
+                b.HasIndex(u => u.Email);
             });
 
             builder.Entity<IdentityUserClaim>(b =>
