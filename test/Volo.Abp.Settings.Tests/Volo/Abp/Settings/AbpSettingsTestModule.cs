@@ -4,15 +4,15 @@ using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Autofac;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Modularity;
-using Volo.Abp.Session;
 using Volo.Abp.Settings.EntityFrameworkCore;
 using Volo.Abp.Uow;
+using Volo.Abp.Users;
 
 namespace Volo.Abp.Settings
 {
     [DependsOn(
         typeof(AbpSettingsEntityFrameworkCoreModule), 
-        typeof(AbpSessionModule),
+        typeof(AbpUsersModule),
         typeof(AbpAutofacModule))]
     public class AbpSettingsTestModule : AbpModule
     {

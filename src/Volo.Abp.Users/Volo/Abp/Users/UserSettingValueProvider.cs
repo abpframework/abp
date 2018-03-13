@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Volo.Abp.Settings;
 
-namespace Volo.Abp.Session
+namespace Volo.Abp.Users
 {
     //TODO: Optimization: Get all settings and cache it!
 

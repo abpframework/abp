@@ -7,9 +7,9 @@ using Volo.Abp.Aspects;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectMapping;
-using Volo.Abp.Session;
 using Volo.Abp.Timing;
 using Volo.Abp.Uow;
+using Volo.Abp.Users;
 
 namespace Volo.Abp.Application.Services
 {

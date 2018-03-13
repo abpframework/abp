@@ -3,11 +3,11 @@ using Volo.Abp.Modularity;
 using Volo.Abp.Security;
 using Volo.Abp.Settings;
 
-namespace Volo.Abp.Session
+namespace Volo.Abp.Users
 {
     [DependsOn(typeof(AbpSecurityModule))]
     [DependsOn(typeof(AbpSettingsModule))]
-    public class AbpSessionModule : AbpModule
+    public class AbpUsersModule : AbpModule
     {
         public override void ConfigureServices(IServiceCollection services)
         {
@@ -16,7 +16,7 @@ namespace Volo.Abp.Session
                 options.ValueProviders.Add<UserSettingValueProvider>();
             });
 
-            services.AddAssemblyOf<AbpSessionModule>();
+            services.AddAssemblyOf<AbpUsersModule>();
         }
     }
 }

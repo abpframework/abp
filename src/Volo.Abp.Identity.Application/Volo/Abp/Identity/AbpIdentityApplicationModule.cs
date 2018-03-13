@@ -2,7 +2,7 @@
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
 using Volo.Abp.Permissions;
-using Volo.Abp.Session;
+using Volo.Abp.Users;
 
 namespace Volo.Abp.Identity
 {
@@ -10,7 +10,7 @@ namespace Volo.Abp.Identity
         typeof(AbpIdentityDomainModule), 
         typeof(AbpIdentityApplicationContractsModule), 
         typeof(AbpAutoMapperModule),
-        typeof(AbpSessionModule),
+        typeof(AbpUsersModule),
         typeof(AbpPermissionsApplicationModule)
         )]
     public class AbpIdentityApplicationModule : AbpModule

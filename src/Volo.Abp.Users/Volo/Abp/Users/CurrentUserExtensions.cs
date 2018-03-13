@@ -1,7 +1,7 @@
 ﻿using System;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.Session
+namespace Volo.Abp.Users
 {
     public static class CurrentUserExtensions
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
-using Volo.Abp.Session;
+using Volo.Abp.Users;
 
 namespace Volo.Abp.Settings
 {

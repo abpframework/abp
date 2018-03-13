@@ -4,7 +4,7 @@ using System.Security.Claims;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Security.Claims;
 
-namespace Volo.Abp.Session
+namespace Volo.Abp.Users
 {
     public class CurrentUser : ICurrentUser, ITransientDependency
     {

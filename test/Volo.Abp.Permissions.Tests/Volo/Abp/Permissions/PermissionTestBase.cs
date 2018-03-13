@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Volo.Abp.Permissions.EntityFrameworkCore;
-using Volo.Abp.Session;
+using Volo.Abp.Users;
 
 namespace Volo.Abp.Permissions
 {

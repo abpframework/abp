@@ -1,7 +1,7 @@
 ﻿using System;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
-using Volo.Abp.Session;
+using Volo.Abp.Users;
 
 namespace Volo.Abp.Settings
 {

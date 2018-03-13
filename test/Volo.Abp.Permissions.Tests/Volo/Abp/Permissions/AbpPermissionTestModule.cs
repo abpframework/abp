@@ -6,14 +6,14 @@ using Volo.Abp.Autofac;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 using Volo.Abp.Permissions.EntityFrameworkCore;
-using Volo.Abp.Session;
 using Volo.Abp.Uow;
+using Volo.Abp.Users;
 
 namespace Volo.Abp.Permissions
 {
     [DependsOn(
         typeof(AbpPermissionsEntityFrameworkCoreModule), 
-        typeof(AbpSessionModule),
+        typeof(AbpUsersModule),
         typeof(AbpAutofacModule))]
     public class AbpPermissionTestModule : AbpModule
     {

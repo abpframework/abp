@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Volo.Abp.Session;
 using Volo.Abp.Settings.EntityFrameworkCore;
+using Volo.Abp.Users;
 
 namespace Volo.Abp.Settings
 {

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using Shouldly;
-using Volo.Abp.Session;
+using Volo.Abp.Users;
 using Xunit;
 
 namespace Volo.Abp.Settings
