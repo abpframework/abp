@@ -2,8 +2,10 @@
 {
     public interface IAuditPropertySetter
     {
-        void SetCreationAuditProperties(object targetObject);
+        void SetCreationProperties(object targetObject);
 
-        void SetModificationAuditProperties(object auditedObject);
+        void SetModificationProperties(object targetObject);
+
+        void SetDeletionProperties(object targetObject);
     }
 }

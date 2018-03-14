@@ -8,9 +8,7 @@ namespace Volo.Abp.Auditing
     public class AuditPropertySetter : IAuditPropertySetter, ITransientDependency
     {
         protected ICurrentUser CurrentUser { get; }
-
         protected ICurrentTenant CurrentTenant { get; }
-
         protected IClock Clock { get; }
 
         public AuditPropertySetter(
@@ -23,7 +21,7 @@ namespace Volo.Abp.Auditing
             Clock = clock;
         }
 
-        public void SetCreationAuditProperties(object targetObject)
+        public void SetCreationProperties(object targetObject)
         {
             if (!(targetObject is IHasCreationTime objectWithCreationTime))
             {
@@ -69,14 +67,14 @@ namespace Volo.Abp.Auditing
             creationAuditedObject.CreatorId = CurrentUser.Id;
         }
 
-        public void SetModificationAuditProperties(object auditedObject)
+        public void SetModificationProperties(object targetObject)
         {
-            if (auditedObject is IHasModificationTime objectWithModificationTime)
+            if (targetObject is IHasModificationTime objectWithModificationTime)
             {
                 objectWithModificationTime.LastModificationTime = Clock.Now;
             }
 
-            if (!(auditedObject is IModificationAudited modificationAuditedObject))
+            if (!(targetObject is IModificationAudited modificationAuditedObject))
             {
                 return;
             }
@@ -106,6 +104,44 @@ namespace Volo.Abp.Auditing
              */
 
             modificationAuditedObject.LastModifierId = CurrentUser.Id;
+        }
+
+        public void SetDeletionProperties(object targetObject)
+        {
+            if (targetObject is IHasDeletionTime objectWithDeletionTime)
+            {
+                if (objectWithDeletionTime.DeletionTime == null)
+                {
+                    objectWithDeletionTime.DeletionTime = Clock.Now;
+                }
+            }
+
+            if (!(targetObject is IDeletionAudited deletionAuditedObject))
+            {
+                return;
+            }
+
+            if (deletionAuditedObject.DeleterId != null)
+            {
+                return;
+            }
+
+            if (!CurrentUser.Id.HasValue)
+            {
+                deletionAuditedObject.DeleterId = null;
+                return;
+            }
+
+            if (deletionAuditedObject is IMultiTenant multiTenantEntity)
+            {
+                if (multiTenantEntity.TenantId != CurrentUser.TenantId)
+                {
+                    deletionAuditedObject.DeleterId = null;
+                    return;
+                }
+            }
+
+            deletionAuditedObject.DeleterId = CurrentUser.Id;
         }
     }
 }

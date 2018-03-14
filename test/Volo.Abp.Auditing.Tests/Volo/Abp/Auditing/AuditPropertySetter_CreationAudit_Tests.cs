@@ -9,13 +9,13 @@ namespace Volo.Abp.Auditing
         [Fact]
         public void Should_Do_Nothing_For_Non_Audited_Entity()
         {
-            AuditPropertySetter.SetCreationAuditProperties(new MyEmptyObject());
+            AuditPropertySetter.SetCreationProperties(new MyEmptyObject());
         }
 
         [Fact]
         public void Should_Set_CreationTime()
         {
-            AuditPropertySetter.SetCreationAuditProperties(TargetObject);
+            AuditPropertySetter.SetCreationProperties(TargetObject);
 
             TargetObject.CreationTime.ShouldBe(Now);
         }
@@ -23,7 +23,7 @@ namespace Volo.Abp.Auditing
         [Fact]
         public void Should_Not_Set_CreatorId_If_Current_User_Is_Not_Available()
         {
-            AuditPropertySetter.SetCreationAuditProperties(TargetObject);
+            AuditPropertySetter.SetCreationProperties(TargetObject);
 
             TargetObject.CreationTime.ShouldBe(Now);
             TargetObject.CreatorId.ShouldBe(null);
@@ -34,7 +34,7 @@ namespace Volo.Abp.Auditing
         {
             CurrentUserId = Guid.NewGuid();
 
-            AuditPropertySetter.SetCreationAuditProperties(TargetObject);
+            AuditPropertySetter.SetCreationProperties(TargetObject);
 
             TargetObject.CreationTime.ShouldBe(Now);
             TargetObject.CreatorId.ShouldBe(CurrentUserId);
@@ -48,7 +48,7 @@ namespace Volo.Abp.Auditing
             CurrentUserId = Guid.NewGuid();
             TargetObject.CreatorId = oldCreatorUserId;
 
-            AuditPropertySetter.SetCreationAuditProperties(TargetObject);
+            AuditPropertySetter.SetCreationProperties(TargetObject);
 
             TargetObject.CreationTime.ShouldBe(Now);
             TargetObject.CreatorId.ShouldBe(oldCreatorUserId);
@@ -63,7 +63,7 @@ namespace Volo.Abp.Auditing
             CurrentUserTenantId = CurrentTenantId;
             TargetObject.TenantId = CurrentTenantId;
 
-            AuditPropertySetter.SetCreationAuditProperties(TargetObject);
+            AuditPropertySetter.SetCreationProperties(TargetObject);
 
             TargetObject.CreationTime.ShouldBe(Now);
             TargetObject.CreatorId.ShouldBe(CurrentUserId);
@@ -78,7 +78,7 @@ namespace Volo.Abp.Auditing
             CurrentUserTenantId = CurrentTenantId;
             TargetObject.TenantId = Guid.NewGuid();
 
-            AuditPropertySetter.SetCreationAuditProperties(TargetObject);
+            AuditPropertySetter.SetCreationProperties(TargetObject);
 
             TargetObject.CreationTime.ShouldBe(Now);
             TargetObject.CreatorId.ShouldBe(null);

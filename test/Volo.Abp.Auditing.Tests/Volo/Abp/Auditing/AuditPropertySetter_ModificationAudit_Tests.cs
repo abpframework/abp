@@ -9,13 +9,13 @@ namespace Volo.Abp.Auditing
         [Fact]
         public void Should_Do_Nothing_For_Non_Audited_Entity()
         {
-            AuditPropertySetter.SetModificationAuditProperties(new MyEmptyObject());
+            AuditPropertySetter.SetModificationProperties(new MyEmptyObject());
         }
 
         [Fact]
         public void Should_Set_LastModificationTime()
         {
-            AuditPropertySetter.SetModificationAuditProperties(TargetObject);
+            AuditPropertySetter.SetModificationProperties(TargetObject);
 
             TargetObject.LastModificationTime.ShouldBe(Now);
         }
@@ -25,7 +25,7 @@ namespace Volo.Abp.Auditing
         {
             TargetObject.LastModifierId = Guid.NewGuid();
 
-            AuditPropertySetter.SetModificationAuditProperties(TargetObject);
+            AuditPropertySetter.SetModificationProperties(TargetObject);
 
             TargetObject.LastModificationTime.ShouldBe(Now);
             TargetObject.LastModifierId.ShouldBe(null);
@@ -36,7 +36,7 @@ namespace Volo.Abp.Auditing
         {
             CurrentUserId = Guid.NewGuid();
 
-            AuditPropertySetter.SetModificationAuditProperties(TargetObject);
+            AuditPropertySetter.SetModificationProperties(TargetObject);
 
             TargetObject.LastModificationTime.ShouldBe(Now);
             TargetObject.LastModifierId.ShouldBe(CurrentUserId);
@@ -48,7 +48,7 @@ namespace Volo.Abp.Auditing
             CurrentUserId = Guid.NewGuid();
             TargetObject.LastModifierId = Guid.NewGuid();
 
-            AuditPropertySetter.SetModificationAuditProperties(TargetObject);
+            AuditPropertySetter.SetModificationProperties(TargetObject);
 
             TargetObject.LastModificationTime.ShouldBe(Now);
             TargetObject.LastModifierId.ShouldBe(CurrentUserId);
@@ -63,7 +63,7 @@ namespace Volo.Abp.Auditing
             CurrentUserTenantId = CurrentTenantId;
             TargetObject.TenantId = CurrentTenantId;
 
-            AuditPropertySetter.SetModificationAuditProperties(TargetObject);
+            AuditPropertySetter.SetModificationProperties(TargetObject);
 
             TargetObject.LastModificationTime.ShouldBe(Now);
             TargetObject.LastModifierId.ShouldBe(CurrentUserId);
@@ -78,7 +78,7 @@ namespace Volo.Abp.Auditing
             TargetObject.TenantId = Guid.NewGuid();
             TargetObject.LastModifierId = Guid.NewGuid();
 
-            AuditPropertySetter.SetModificationAuditProperties(TargetObject);
+            AuditPropertySetter.SetModificationProperties(TargetObject);
 
             TargetObject.LastModificationTime.ShouldBe(Now);
             TargetObject.LastModifierId.ShouldBe(null);

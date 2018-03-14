@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Volo.Abp.Auditing;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Entities.Events;
@@ -24,6 +25,7 @@ namespace Volo.Abp.EntityFrameworkCore
         public Guid? CurrentTenantId => CurrentTenant?.Id;
 
         protected virtual bool IsMayHaveTenantFilterEnabled => DataFilter.IsEnabled<IMultiTenant>();
+
         protected virtual bool IsSoftDeleteFilterEnabled => DataFilter.IsEnabled<ISoftDelete>();
 
         public ICurrentTenant CurrentTenant { get; set; }
@@ -33,6 +35,8 @@ namespace Volo.Abp.EntityFrameworkCore
         public IDataFilter DataFilter { get; set; }
 
         public IEntityChangeEventHelper EntityChangeEventHelper { get; set; }
+
+        public IAuditPropertySetter AuditPropertySetter { get; set; }
 
         private static readonly MethodInfo ConfigureGlobalFiltersMethodInfo = typeof(AbpDbContext<TDbContext>).GetMethod(nameof(ConfigureGlobalFilters), BindingFlags.Instance | BindingFlags.NonPublic);
 
@@ -149,15 +153,18 @@ namespace Volo.Abp.EntityFrameworkCore
         protected virtual void ApplyAbpConceptsForAddedEntity(EntityEntry entry, EntityChangeReport changeReport)
         {
             CheckAndSetId(entry);
+            SetCreationAuditProperties(entry);
             changeReport.ChangedEntities.Add(new EntityChangeEntry(entry.Entity, EntityChangeType.Created));
         }
 
         protected virtual void ApplyAbpConceptsForModifiedEntity(EntityEntry entry, EntityChangeReport changeReport)
         {
             HandleConcurrencyStamp(entry);
+            SetModificationAuditProperties(entry);
 
             if (entry.Entity is ISoftDelete && entry.Entity.As<ISoftDelete>().IsDeleted)
             {
+                SetDeletionAuditProperties(entry);
                 changeReport.ChangedEntities.Add(new EntityChangeEntry(entry.Entity, EntityChangeType.Deleted));
             }
             else
@@ -170,6 +177,7 @@ namespace Volo.Abp.EntityFrameworkCore
         {
             CancelDeletionForSoftDelete(entry);
             HandleConcurrencyStamp(entry);
+            SetDeletionAuditProperties(entry);
             changeReport.ChangedEntities.Add(new EntityChangeEntry(entry.Entity, EntityChangeType.Deleted));
         }
 
@@ -229,6 +237,21 @@ namespace Volo.Abp.EntityFrameworkCore
                     entity.Id = GuidGenerator.Create();
                 }
             }
+        }
+
+        protected virtual void SetCreationAuditProperties(EntityEntry entry)
+        {
+            AuditPropertySetter.SetCreationProperties(entry.Entity);
+        }
+
+        protected virtual void SetModificationAuditProperties(EntityEntry entry)
+        {
+            AuditPropertySetter.SetModificationProperties(entry.Entity);
+        }
+
+        protected virtual void SetDeletionAuditProperties(EntityEntry entry)
+        {
+            AuditPropertySetter.SetDeletionProperties(entry.Entity);
         }
 
         protected void ConfigureGlobalFilters<TEntity>(ModelBuilder modelBuilder, IMutableEntityType entityType)
