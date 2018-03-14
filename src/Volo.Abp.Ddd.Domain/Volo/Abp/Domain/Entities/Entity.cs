@@ -5,6 +5,7 @@ using Volo.Abp.MultiTenancy;
 namespace Volo.Abp.Domain.Entities
 {
     /// <inheritdoc/>
+    [Serializable]
     public abstract class Entity : IEntity
     {
         /// <inheritdoc/>
@@ -15,6 +16,7 @@ namespace Volo.Abp.Domain.Entities
     }
 
     /// <inheritdoc cref="IEntity{TKey}" />
+    [Serializable]
     public abstract class Entity<TKey> : Entity, IEntity<TKey>
     {
         /// <inheritdoc/>
