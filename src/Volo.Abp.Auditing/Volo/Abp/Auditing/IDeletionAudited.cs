@@ -10,7 +10,7 @@ namespace Volo.Abp.Auditing
         /// <summary>
         /// Id of the deleter user.
         /// </summary>
-        Guid? DeleterUserId { get; set; }
+        Guid? DeleterId { get; set; }
     }
 
     /// <summary>
@@ -22,6 +22,6 @@ namespace Volo.Abp.Auditing
         /// <summary>
         /// Reference to the deleter user.
         /// </summary>
-        TUser DeleterUser { get; set; }
+        TUser Deleter { get; set; }
     }
 }

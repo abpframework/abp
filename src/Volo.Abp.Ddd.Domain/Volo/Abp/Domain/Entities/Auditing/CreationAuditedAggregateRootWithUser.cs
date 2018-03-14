@@ -11,7 +11,7 @@ namespace Volo.Abp.Domain.Entities.Auditing
     public abstract class CreationAuditedAggregateRootWithUser<TUser> : CreationAuditedAggregateRoot, ICreationAudited<TUser>
     {
         /// <inheritdoc />
-        public virtual TUser CreatorUser { get; set; }
+        public virtual TUser Creator { get; set; }
     }
 
     /// <summary>
@@ -23,6 +23,6 @@ namespace Volo.Abp.Domain.Entities.Auditing
     public abstract class CreationAuditedAggregateRootWithUser<TPrimaryKey, TUser> : CreationAuditedAggregateRoot<TPrimaryKey>, ICreationAudited<TUser>
     {
         /// <inheritdoc />
-        public virtual TUser CreatorUser { get; set; }
+        public virtual TUser Creator { get; set; }
     }
 }

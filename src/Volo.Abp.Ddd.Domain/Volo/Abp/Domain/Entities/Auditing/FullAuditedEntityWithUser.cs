@@ -12,13 +12,13 @@ namespace Volo.Abp.Domain.Entities.Auditing
         where TUser : IEntity<long>
     {
         /// <inheritdoc />
-        public virtual TUser DeleterUser { get; set; }
+        public virtual TUser Deleter { get; set; }
 
         /// <inheritdoc />
-        public TUser CreatorUser { get; set; }
+        public TUser Creator { get; set; }
 
         /// <inheritdoc />
-        public TUser LastModifierUser { get; set; }
+        public TUser LastModifier { get; set; }
     }
 
     /// <summary>
@@ -31,12 +31,12 @@ namespace Volo.Abp.Domain.Entities.Auditing
         where TUser : IEntity<long>
     {
         /// <inheritdoc />
-        public virtual TUser DeleterUser { get; set; }
+        public virtual TUser Deleter { get; set; }
 
         /// <inheritdoc />
-        public TUser CreatorUser { get; set; }
+        public TUser Creator { get; set; }
         
         /// <inheritdoc />
-        public TUser LastModifierUser { get; set; }
+        public TUser LastModifier { get; set; }
     }
 }

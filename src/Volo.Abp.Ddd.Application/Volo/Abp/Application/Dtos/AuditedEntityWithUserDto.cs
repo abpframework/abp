@@ -11,10 +11,10 @@ namespace Volo.Abp.Application.Dtos
     public abstract class AuditedEntityWithUserDto<TUserDto> : AuditedEntityDto, IAudited<TUserDto>
     {
         /// <inheritdoc />
-        public TUserDto CreatorUser { get; set; }
+        public TUserDto Creator { get; set; }
 
         /// <inheritdoc />
-        public TUserDto LastModifierUser { get; set; }
+        public TUserDto LastModifier { get; set; }
     }
 
     /// <summary>
@@ -26,9 +26,9 @@ namespace Volo.Abp.Application.Dtos
     public abstract class AuditedEntityWithUserDto<TPrimaryKey, TUserDto> : AuditedEntityDto<TPrimaryKey>, IAudited<TUserDto>
     {
         /// <inheritdoc />
-        public TUserDto CreatorUser { get; set; }
+        public TUserDto Creator { get; set; }
 
         /// <inheritdoc />
-        public TUserDto LastModifierUser { get; set; }
+        public TUserDto LastModifier { get; set; }
     }
 }

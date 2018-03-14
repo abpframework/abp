@@ -13,7 +13,7 @@ namespace Volo.Abp.Application.Dtos
         public bool IsDeleted { get; set; }
 
         /// <inheritdoc />
-        public Guid? DeleterUserId { get; set; }
+        public Guid? DeleterId { get; set; }
 
         /// <inheritdoc />
         public DateTime? DeletionTime { get; set; }
@@ -30,7 +30,7 @@ namespace Volo.Abp.Application.Dtos
         public bool IsDeleted { get; set; }
 
         /// <inheritdoc />
-        public Guid? DeleterUserId { get; set; }
+        public Guid? DeleterId { get; set; }
 
         /// <inheritdoc />
         public DateTime? DeletionTime { get; set; }

@@ -10,7 +10,7 @@ namespace Volo.Abp.Auditing
         /// <summary>
         /// Id of the creator user.
         /// </summary>
-        Guid? CreatorUserId { get; set; }
+        Guid? CreatorId { get; set; }
     }
 
     /// <summary>
@@ -22,6 +22,6 @@ namespace Volo.Abp.Auditing
         /// <summary>
         /// Reference to the creator user.
         /// </summary>
-        TUser CreatorUser { get; set; }
+        TUser Creator { get; set; }
     }
 }

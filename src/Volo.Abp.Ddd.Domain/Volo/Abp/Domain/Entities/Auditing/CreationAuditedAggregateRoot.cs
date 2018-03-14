@@ -13,7 +13,7 @@ namespace Volo.Abp.Domain.Entities.Auditing
         public virtual DateTime CreationTime { get; set; }
 
         /// <inheritdoc />
-        public virtual Guid? CreatorUserId { get; set; }
+        public virtual Guid? CreatorId { get; set; }
     }
 
     /// <summary>
@@ -27,6 +27,6 @@ namespace Volo.Abp.Domain.Entities.Auditing
         public virtual DateTime CreationTime { get; set; }
 
         /// <inheritdoc />
-        public virtual Guid? CreatorUserId { get; set; }
+        public virtual Guid? CreatorId { get; set; }
     }
 }

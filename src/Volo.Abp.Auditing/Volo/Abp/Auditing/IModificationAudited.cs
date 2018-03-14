@@ -10,7 +10,7 @@ namespace Volo.Abp.Auditing
         /// <summary>
         /// Last modifier user for this entity.
         /// </summary>
-        Guid? LastModifierUserId { get; set; }
+        Guid? LastModifierId { get; set; }
     }
 
     /// <summary>
@@ -22,6 +22,6 @@ namespace Volo.Abp.Auditing
         /// <summary>
         /// Reference to the last modifier user of this entity.
         /// </summary>
-        TUser LastModifierUser { get; set; }
+        TUser LastModifier { get; set; }
     }
 }
