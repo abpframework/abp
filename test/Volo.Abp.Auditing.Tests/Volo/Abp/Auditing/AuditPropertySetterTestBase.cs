@@ -43,8 +43,14 @@ namespace Volo.Abp.Auditing
             );
         }
 
-        public class MyAuditedObject : IFullAudited
+        public class MyEmptyObject
         {
+            
+        }
+
+        public class MyAuditedObject : IMultiTenant, IFullAudited
+        {
+            public Guid? TenantId { get; set; }
             public DateTime CreationTime { get; set; }
             public Guid? CreatorId { get; set; }
             public DateTime? LastModificationTime { get; set; }
