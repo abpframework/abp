@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 
 namespace Volo.Abp.Application.Dtos
 {
+    [Serializable]
     public class ListResultDto<T> : IListResult<T>
     {
         /// <inheritdoc />
