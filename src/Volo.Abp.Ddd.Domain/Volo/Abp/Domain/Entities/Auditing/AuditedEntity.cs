@@ -13,7 +13,7 @@ namespace Volo.Abp.Domain.Entities.Auditing
         public virtual DateTime? LastModificationTime { get; set; }
 
         /// <inheritdoc />
-        public virtual long? LastModifierUserId { get; set; }
+        public virtual Guid? LastModifierUserId { get; set; }
     }
 
     /// <summary>
@@ -27,6 +27,6 @@ namespace Volo.Abp.Domain.Entities.Auditing
         public virtual DateTime? LastModificationTime { get; set; }
 
         /// <inheritdoc />
-        public virtual long? LastModifierUserId { get; set; }
+        public virtual Guid? LastModifierUserId { get; set; }
     }
 }

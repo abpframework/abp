@@ -1,3 +1,5 @@
+using System;
+
 namespace Volo.Abp.Auditing
 {
     /// <summary>
@@ -8,7 +10,7 @@ namespace Volo.Abp.Auditing
         /// <summary>
         /// Id of the creator user.
         /// </summary>
-        long? CreatorUserId { get; set; }
+        Guid? CreatorUserId { get; set; }
     }
 
     /// <summary>

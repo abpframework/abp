@@ -13,7 +13,7 @@ namespace Volo.Abp.Application.Dtos
         public DateTime CreationTime { get; set; }
 
         /// <inheritdoc />
-        public long? CreatorUserId { get; set; }
+        public Guid? CreatorUserId { get; set; }
     }
 
     /// <summary>
@@ -27,6 +27,6 @@ namespace Volo.Abp.Application.Dtos
         public DateTime CreationTime { get; set; }
 
         /// <inheritdoc />
-        public long? CreatorUserId { get; set; }
+        public Guid? CreatorUserId { get; set; }
     }
 }

@@ -13,7 +13,7 @@ namespace Volo.Abp.Domain.Entities.Auditing
         public virtual bool IsDeleted { get; set; }
 
         /// <inheritdoc />
-        public virtual long? DeleterUserId { get; set; }
+        public virtual Guid? DeleterUserId { get; set; }
 
         /// <inheritdoc />
         public virtual DateTime? DeletionTime { get; set; }
@@ -30,7 +30,7 @@ namespace Volo.Abp.Domain.Entities.Auditing
         public virtual bool IsDeleted { get; set; }
 
         /// <inheritdoc />
-        public virtual long? DeleterUserId { get; set; }
+        public virtual Guid? DeleterUserId { get; set; }
 
         /// <inheritdoc />
         public virtual DateTime? DeletionTime { get; set; }

@@ -13,7 +13,7 @@ namespace Volo.Abp.Application.Dtos
         public DateTime? LastModificationTime { get; set; }
 
         /// <inheritdoc />
-        public long? LastModifierUserId { get; set; }
+        public Guid? LastModifierUserId { get; set; }
     }
 
     /// <summary>
@@ -27,6 +27,6 @@ namespace Volo.Abp.Application.Dtos
         public DateTime? LastModificationTime { get; set; }
 
         /// <inheritdoc />
-        public long? LastModifierUserId { get; set; }
+        public Guid? LastModifierUserId { get; set; }
     }
 }

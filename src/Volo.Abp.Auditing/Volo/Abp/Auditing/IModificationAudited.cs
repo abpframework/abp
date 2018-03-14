@@ -1,3 +1,5 @@
+using System;
+
 namespace Volo.Abp.Auditing
 {
     /// <summary>
@@ -8,7 +10,7 @@ namespace Volo.Abp.Auditing
         /// <summary>
         /// Last modifier user for this entity.
         /// </summary>
-        long? LastModifierUserId { get; set; }
+        Guid? LastModifierUserId { get; set; }
     }
 
     /// <summary>
