@@ -8,12 +8,12 @@ namespace Volo.Abp.Users
     {
         private static readonly Task<IUserInfo> NullUserResult = Task.FromResult((IUserInfo) null);
 
-        public Task<IUserInfo> FindUserByIdAsync(Guid id)
+        public Task<IUserInfo> FindByIdAsync(Guid id)
         {
             return NullUserResult;
         }
 
-        public Task<IUserInfo> FindUserByUserNameAsync(string userName)
+        public Task<IUserInfo> FindByUserNameAsync(string userName)
         {
             return NullUserResult;
         }

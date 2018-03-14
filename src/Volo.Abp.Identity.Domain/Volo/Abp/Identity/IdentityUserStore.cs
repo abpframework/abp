@@ -29,8 +29,14 @@ namespace Volo.Abp.Identity
         IUserPhoneNumberStore<IdentityUser>,
         IUserTwoFactorStore<IdentityUser>,
         IUserAuthenticationTokenStore<IdentityUser>,
+        IUserAuthenticatorKeyStore<IdentityUser>,
+        IUserTwoFactorRecoveryCodeStore<IdentityUser>,
         ITransientDependency
     {
+        private const string InternalLoginProvider = "[AspNetUserStore]";
+        private const string AuthenticatorKeyTokenName = "AuthenticatorKey";
+        private const string RecoveryCodeTokenName = "RecoveryCodes";
+
         /// <summary>
         /// Gets or sets the <see cref="IdentityErrorDescriber"/> for any error that occurred with the current operation.
         /// </summary>
@@ -1022,6 +1028,76 @@ namespace Volo.Abp.Identity
             await _userRepository.EnsureCollectionLoadedAsync(user, u => u.Tokens, cancellationToken);
 
             return user.FindToken(loginProvider, name)?.Value;
+        }
+
+        public Task SetAuthenticatorKeyAsync(IdentityUser user, string key, CancellationToken cancellationToken)
+        {
+            return SetTokenAsync(user, InternalLoginProvider, AuthenticatorKeyTokenName, key, cancellationToken);
+        }
+
+        public Task<string> GetAuthenticatorKeyAsync(IdentityUser user, CancellationToken cancellationToken)
+        {
+            return GetTokenAsync(user, InternalLoginProvider, AuthenticatorKeyTokenName, cancellationToken);
+        }
+
+        /// <summary>
+        /// Returns how many recovery code are still valid for a user.
+        /// </summary>
+        /// <param name="user">The user who owns the recovery code.</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
+        /// <returns>The number of valid recovery codes for the user..</returns>
+        public virtual async Task<int> CountCodesAsync(IdentityUser user, CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            Check.NotNull(user, nameof(user));
+
+            var mergedCodes = await GetTokenAsync(user, InternalLoginProvider, RecoveryCodeTokenName, cancellationToken) ?? "";
+            if (mergedCodes.Length > 0)
+            {
+                return mergedCodes.Split(';').Length;
+            }
+
+            return 0;
+        }
+
+        /// <summary>
+        /// Updates the recovery codes for the user while invalidating any previous recovery codes.
+        /// </summary>
+        /// <param name="user">The user to store new recovery codes for.</param>
+        /// <param name="recoveryCodes">The new recovery codes for the user.</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
+        /// <returns>The new recovery codes for the user.</returns>
+        public virtual Task ReplaceCodesAsync(IdentityUser user, IEnumerable<string> recoveryCodes, CancellationToken cancellationToken)
+        {
+            var mergedCodes = string.Join(";", recoveryCodes);
+            return SetTokenAsync(user, InternalLoginProvider, RecoveryCodeTokenName, mergedCodes, cancellationToken);
+        }
+
+        /// <summary>
+        /// Returns whether a recovery code is valid for a user. Note: recovery codes are only valid
+        /// once, and will be invalid after use.
+        /// </summary>
+        /// <param name="user">The user who owns the recovery code.</param>
+        /// <param name="code">The recovery code to use.</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
+        /// <returns>True if the recovery code was found for the user.</returns>
+        public virtual async Task<bool> RedeemCodeAsync(IdentityUser user, string code, CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            Check.NotNull(user, nameof(user));
+            Check.NotNull(code, nameof(code));
+
+            var mergedCodes = await GetTokenAsync(user, InternalLoginProvider, RecoveryCodeTokenName, cancellationToken) ?? "";
+            var splitCodes = mergedCodes.Split(';');
+            if (splitCodes.Contains(code))
+            {
+                var updatedCodes = new List<string>(splitCodes.Where(s => s != code));
+                await ReplaceCodesAsync(user, updatedCodes, cancellationToken);
+                return true;
+            }
+            return false;
         }
 
         public void Dispose()

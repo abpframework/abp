@@ -5,9 +5,9 @@ namespace Volo.Abp.Users
 {
     public interface IUserLookupService
     {
-        Task<IUserInfo> FindUserByIdAsync(Guid id);
+        Task<IUserInfo> FindByIdAsync(Guid id);
 
-        Task<IUserInfo> FindUserByUserNameAsync(string userName);
+        Task<IUserInfo> FindByUserNameAsync(string userName);
 
         //TODO: Searching users...
     }

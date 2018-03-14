@@ -17,12 +17,12 @@ namespace Volo.Abp.Identity
             _lookupNormalizer = lookupNormalizer;
         }
 
-        public async Task<IUserInfo> FindUserByIdAsync(Guid id)
+        public async Task<IUserInfo> FindByIdAsync(Guid id)
         {
             return (await _userRepository.FindAsync(id)).ToUserInfo();
         }
 
-        public async Task<IUserInfo> FindUserByUserNameAsync(string userName)
+        public async Task<IUserInfo> FindByUserNameAsync(string userName)
         {
             return (await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize(userName))).ToUserInfo();
         }
