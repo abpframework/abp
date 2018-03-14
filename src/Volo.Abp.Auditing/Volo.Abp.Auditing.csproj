@@ -14,8 +14,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Volo.Abp.Core\Volo.Abp.Core.csproj" />
     <ProjectReference Include="..\Volo.Abp.Data\Volo.Abp.Data.csproj" />
+    <ProjectReference Include="..\Volo.Abp.MultiTenancy.Abstractions\Volo.Abp.MultiTenancy.Abstractions.csproj" />
+    <ProjectReference Include="..\Volo.Abp.Timing\Volo.Abp.Timing.csproj" />
+    <ProjectReference Include="..\Volo.Abp.Users\Volo.Abp.Users.csproj" />
   </ItemGroup>
 
 </Project>

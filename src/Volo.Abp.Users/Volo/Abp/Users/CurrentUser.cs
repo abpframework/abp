@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Principal;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Security.Claims;
 
@@ -12,19 +13,7 @@ namespace Volo.Abp.Users
 
         public virtual bool IsAuthenticated => Id.HasValue;
 
-        public virtual Guid? Id
-        {
-            get
-            {
-                var value = this.FindClaimValue(AbpClaimTypes.UserId);
-                if (value == null)
-                {
-                    return null;
-                }
-
-                return Guid.Parse(value);
-            }
-        }
+        public virtual Guid? Id => _principalAccessor.Principal?.FindUserId();
 
         public virtual string UserName => this.FindClaimValue(AbpClaimTypes.UserName);
 
@@ -35,6 +24,8 @@ namespace Volo.Abp.Users
         public virtual string Email => this.FindClaimValue(AbpClaimTypes.Email);
 
         public virtual bool EmailVerified => string.Equals(this.FindClaimValue(AbpClaimTypes.EmailVerified), "true", StringComparison.InvariantCultureIgnoreCase);
+
+        public virtual Guid? TenantId => _principalAccessor.Principal?.FindTenantId();
 
         public virtual string[] Roles => FindClaims(AbpClaimTypes.Role).Select(c => c.Value).ToArray();
 

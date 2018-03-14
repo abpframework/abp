@@ -16,13 +16,15 @@ namespace Volo.Abp.Users
 
         [CanBeNull]
         string PhoneNumber { get; }
-
+        
         bool PhoneNumberVerified { get; }
 
         [CanBeNull]
         string Email { get; }
 
         bool EmailVerified { get; }
+
+        Guid? TenantId { get; }
 
         [NotNull]
         string[] Roles { get; }
