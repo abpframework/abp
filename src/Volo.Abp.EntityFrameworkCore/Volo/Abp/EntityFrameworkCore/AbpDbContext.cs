@@ -274,6 +274,11 @@ namespace Volo.Abp.EntityFrameworkCore
                 return true;
             }
 
+            if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)))
+            {
+                return true;
+            }
+
             return false;
         }
 
