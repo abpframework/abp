@@ -42,7 +42,7 @@ namespace Volo.Abp.Domain.Repositories
             }
         }
 
-        protected void RegisterDefaultRepository(IServiceCollection services, Type entityType)
+        protected virtual void RegisterDefaultRepository(IServiceCollection services, Type entityType)
         {
             services.AddDefaultRepository(
                 entityType,
@@ -50,7 +50,7 @@ namespace Volo.Abp.Domain.Repositories
             );
         }
 
-        private Type GetDefaultRepositoryImplementationType(Type entityType)
+        protected virtual Type GetDefaultRepositoryImplementationType(Type entityType)
         {
             var primaryKeyType = EntityHelper.FindPrimaryKeyType(entityType);
 
@@ -66,7 +66,7 @@ namespace Volo.Abp.Domain.Repositories
                 : GetRepositoryType(Options.DefaultRepositoryDbContextType, entityType, primaryKeyType);
         }
 
-        public bool ShouldRegisterDefaultRepositoryFor(Type entityType)
+        protected virtual bool ShouldRegisterDefaultRepositoryFor(Type entityType)
         {
             if (!Options.RegisterDefaultRepositories)
             {

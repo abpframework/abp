@@ -11,7 +11,7 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static IServiceCollection AddDefaultRepository(this IServiceCollection services, Type entityType, Type repositoryImplementationType)
         {
-            //IRepository<TEntity>
+            //IBasicRepository<TEntity>
             var repositoryInterfaceWithoutPk = typeof(IBasicRepository<>).MakeGenericType(entityType);
             if (!repositoryInterfaceWithoutPk.IsAssignableFrom(repositoryImplementationType))
             {
@@ -20,7 +20,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.TryAddTransient(repositoryInterfaceWithoutPk, repositoryImplementationType);
 
-            //IQueryableRepository<TEntity>
+            //IRepository<TEntity>
             var queryableRepositoryInterfaceWithPk = typeof(IRepository<>).MakeGenericType(entityType);
             if (repositoryInterfaceWithoutPk.IsAssignableFrom(repositoryImplementationType))
             {
@@ -31,14 +31,14 @@ namespace Microsoft.Extensions.DependencyInjection
 
             if (primaryKeyType != null)
             {
-                //IRepository<TEntity, TKey>
+                //IBasicRepository<TEntity, TKey>
                 var repositoryInterface = typeof(IBasicRepository<,>).MakeGenericType(entityType, primaryKeyType);
                 if (repositoryInterface.GetTypeInfo().IsAssignableFrom(repositoryImplementationType))
                 {
                     services.TryAddTransient(repositoryInterface, repositoryImplementationType);
                 }
 
-                //IQueryableRepository<TEntity, TKey>
+                //IRepository<TEntity, TKey>
                 var queryableRepositoryInterface = typeof(IRepository<,>).MakeGenericType(entityType, primaryKeyType);
                 if (queryableRepositoryInterface.GetTypeInfo().IsAssignableFrom(repositoryImplementationType))
                 {
