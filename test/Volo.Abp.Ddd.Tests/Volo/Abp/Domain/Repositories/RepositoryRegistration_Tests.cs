@@ -109,6 +109,30 @@ namespace Volo.Abp.Domain.Repositories
         }
 
         [Fact]
+        public void Should_Not_Register_Custom_Repository_If_Does_Not_Implement_Standard_Interfaces()
+        {
+            //Arrange
+
+            var services = new ServiceCollection();
+
+            var options = new TestDbContextRegistrationOptions(typeof(MyFakeDbContext));
+            options
+                .AddDefaultRepositories(true)
+                .AddRepository<MyTestAggregateRootWithGuidPk, MyTestAggregateRootWithDefaultPkEmptyRepository>();
+
+            //Act
+
+            new MyTestRepositoryRegistrar(options).AddRepositories(services);
+
+            //Assert
+
+            services.ShouldNotContainService(typeof(IBasicRepository<MyTestAggregateRootWithGuidPk>));
+            services.ShouldNotContainService(typeof(IRepository<MyTestAggregateRootWithGuidPk>));
+            services.ShouldNotContainService(typeof(IBasicRepository<MyTestAggregateRootWithGuidPk, Guid>));
+            services.ShouldNotContainService(typeof(IRepository<MyTestAggregateRootWithGuidPk, Guid>));
+        }
+
+        [Fact]
         public void Should_Register_Default_Repositories_With_Custom_Base()
         {
             //Arrange
@@ -244,11 +268,6 @@ namespace Volo.Abp.Domain.Repositories
             }
         }
 
-        public class MyTestAggregateRootWithDefaultPkCustomRepository : MyTestDefaultRepository<MyTestAggregateRootWithGuidPk, Guid>
-        {
-
-        }
-
         public class MyTestCustomBaseRepository<TEntity> : MyTestDefaultRepository<TEntity>
             where TEntity : class, IEntity
         {
@@ -257,6 +276,21 @@ namespace Volo.Abp.Domain.Repositories
 
         public class MyTestCustomBaseRepository<TEntity, TKey> : MyTestDefaultRepository<TEntity, TKey>
             where TEntity : class, IEntity<TKey>
+        {
+
+        }
+
+        public class MyTestAggregateRootWithDefaultPkCustomRepository : MyTestDefaultRepository<MyTestAggregateRootWithGuidPk, Guid>
+        {
+
+        }
+
+        public interface IMyTestAggregateRootWithDefaultPkEmptyRepository : IRepository
+        {
+
+        }
+
+        public class MyTestAggregateRootWithDefaultPkEmptyRepository : IMyTestAggregateRootWithDefaultPkEmptyRepository
         {
 
         }
