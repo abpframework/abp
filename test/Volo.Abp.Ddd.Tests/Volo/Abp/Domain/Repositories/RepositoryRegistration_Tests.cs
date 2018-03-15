@@ -29,17 +29,25 @@ namespace Volo.Abp.Domain.Repositories
             //Assert
 
             //MyTestAggregateRootWithoutPk
+            services.ShouldContainTransient(typeof(IReadOnlyRepository<MyTestAggregateRootWithoutPk>), typeof(MyTestDefaultRepository<MyTestAggregateRootWithoutPk>));
             services.ShouldContainTransient(typeof(IBasicRepository<MyTestAggregateRootWithoutPk>), typeof(MyTestDefaultRepository<MyTestAggregateRootWithoutPk>));
             services.ShouldContainTransient(typeof(IRepository<MyTestAggregateRootWithoutPk>), typeof(MyTestDefaultRepository<MyTestAggregateRootWithoutPk>));
 
             //MyTestAggregateRootWithGuidPk
+            services.ShouldContainTransient(typeof(IReadOnlyRepository<MyTestAggregateRootWithGuidPk>), typeof(MyTestDefaultRepository<MyTestAggregateRootWithGuidPk, Guid>));
             services.ShouldContainTransient(typeof(IBasicRepository<MyTestAggregateRootWithGuidPk>), typeof(MyTestDefaultRepository<MyTestAggregateRootWithGuidPk, Guid>));
             services.ShouldContainTransient(typeof(IRepository<MyTestAggregateRootWithGuidPk>), typeof(MyTestDefaultRepository<MyTestAggregateRootWithGuidPk, Guid>));
+            services.ShouldContainTransient(typeof(IReadOnlyRepository<MyTestAggregateRootWithGuidPk, Guid>), typeof(MyTestDefaultRepository<MyTestAggregateRootWithGuidPk, Guid>));
             services.ShouldContainTransient(typeof(IBasicRepository<MyTestAggregateRootWithGuidPk, Guid>), typeof(MyTestDefaultRepository<MyTestAggregateRootWithGuidPk, Guid>));
             services.ShouldContainTransient(typeof(IRepository<MyTestAggregateRootWithGuidPk, Guid>), typeof(MyTestDefaultRepository<MyTestAggregateRootWithGuidPk, Guid>));
 
             //MyTestEntityWithInt32Pk
+            services.ShouldNotContainService(typeof(IReadOnlyRepository<MyTestEntityWithInt32Pk>));
+            services.ShouldNotContainService(typeof(IBasicRepository<MyTestEntityWithInt32Pk>));
+            services.ShouldNotContainService(typeof(IRepository<MyTestEntityWithInt32Pk>));
+            services.ShouldNotContainService(typeof(IReadOnlyRepository<MyTestEntityWithInt32Pk, int>));
             services.ShouldNotContainService(typeof(IBasicRepository<MyTestEntityWithInt32Pk, int>));
+            services.ShouldNotContainService(typeof(IRepository<MyTestEntityWithInt32Pk, int>));
         }
 
         [Fact]
