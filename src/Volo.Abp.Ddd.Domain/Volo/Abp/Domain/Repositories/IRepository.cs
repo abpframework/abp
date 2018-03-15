@@ -13,12 +13,12 @@ namespace Volo.Abp.Domain.Repositories
     /// <summary>
     /// Just to mark a class as repository.
     /// </summary>
-    public interface IRepository : ITransientDependency, IUnitOfWorkEnabled
+    public interface IRepository : IUnitOfWorkEnabled, ITransientDependency
     {
 
     }
 
-    public interface IRepository<TEntity> : IBasicRepository<TEntity>, IQueryable<TEntity>
+    public interface IRepository<TEntity> : IReadOnlyRepository<TEntity>, IBasicRepository<TEntity>
         where TEntity : class, IEntity
     {
         /// <summary>
@@ -49,7 +49,7 @@ namespace Volo.Abp.Domain.Repositories
         Task DeleteAsync([NotNull] Expression<Func<TEntity, bool>> predicate, bool autoSave = false, CancellationToken cancellationToken = default);
     }
 
-    public interface IRepository<TEntity, TKey> : IRepository<TEntity>, IBasicRepository<TEntity, TKey>
+    public interface IRepository<TEntity, TKey> : IRepository<TEntity>, IReadOnlyRepository<TEntity, TKey>, IBasicRepository<TEntity, TKey>
         where TEntity : class, IEntity<TKey>
     {
     }
