@@ -107,6 +107,60 @@
 
     abp.localization.defaultResourceName = undefined;
 
+    /* AUTHORIZATION **********************************************/
+
+    abp.auth = abp.auth || {};
+
+    abp.auth.policies = abp.auth.policies || {};
+
+    abp.auth.grantedPolicies = abp.auth.grantedPolicies || {};
+
+    abp.auth.isGranted = function (policyName) {
+        return abp.auth.policies[policyName] != undefined && abp.auth.grantedPolicies[policyName] != undefined;
+    };
+
+    abp.auth.isAnyGranted = function () {
+        if (!arguments || arguments.length <= 0) {
+            return true;
+        }
+
+        for (var i = 0; i < arguments.length; i++) {
+            if (abp.auth.isGranted(arguments[i])) {
+                return true;
+            }
+        }
+
+        return false;
+    };
+
+    abp.auth.areAllGranted = function () {
+        if (!arguments || arguments.length <= 0) {
+            return true;
+        }
+
+        for (var i = 0; i < arguments.length; i++) {
+            if (!abp.auth.isGranted(arguments[i])) {
+                return false;
+            }
+        }
+
+        return true;
+    };
+
+    abp.auth.tokenCookieName = 'Abp.AuthToken';
+
+    abp.auth.setToken = function (authToken, expireDate) {
+        abp.utils.setCookieValue(abp.auth.tokenCookieName, authToken, expireDate, abp.appPath, abp.domain);
+    };
+
+    abp.auth.getToken = function () {
+        return abp.utils.getCookieValue(abp.auth.tokenCookieName);
+    }
+
+    abp.auth.clearToken = function () {
+        abp.auth.setToken();
+    }
+
     /* NOTIFICATION *********************************************/
     //Defines Notification API, not implements it
 

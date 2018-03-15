@@ -25,8 +25,9 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
         [Produces("text/javascript", "text/plain")]
         public async Task<string> Get()
         {
-            var config = await _configurationBuilder.Get();
-            return CreateAbpExtendScript(config);
+            return CreateAbpExtendScript(
+                await _configurationBuilder.GetAsync()
+            );
         }
 
         private string CreateAbpExtendScript(ApplicationConfigurationDto config)

@@ -16,7 +16,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
         [HttpGet]
         public Task<ApplicationConfigurationDto> Get()
         {
-            return _configurationBuilder.Get();
+            return _configurationBuilder.GetAsync();
         }
     }
 }

@@ -4,6 +4,6 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
 {
     public interface IApplicationConfigurationBuilder
     {
-        Task<ApplicationConfigurationDto> Get();
+        Task<ApplicationConfigurationDto> GetAsync();
     }
 }
