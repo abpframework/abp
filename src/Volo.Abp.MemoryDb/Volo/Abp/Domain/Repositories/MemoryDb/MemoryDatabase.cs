@@ -8,12 +8,12 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
     {
         private readonly ConcurrentDictionary<Type, object> _sets;
 
-        private readonly ConcurrentDictionary<Type, InMemoryIdGenerator> _idGenerators;
+        private readonly ConcurrentDictionary<Type, InMemoryIdGenerator> _entityIdGenerators;
 
         public MemoryDatabase()
         {
             _sets = new ConcurrentDictionary<Type, object>();
-            _idGenerators = new ConcurrentDictionary<Type, InMemoryIdGenerator>();
+            _entityIdGenerators = new ConcurrentDictionary<Type, InMemoryIdGenerator>();
         }
 
         public List<TEntity> Collection<TEntity>()
@@ -23,7 +23,7 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
 
         public TKey GenerateNextId<TEntity, TKey>()
         {
-            return _idGenerators
+            return _entityIdGenerators
                 .GetOrAdd(typeof(TEntity), () => new InMemoryIdGenerator())
                 .GenerateNext<TKey>();
         }

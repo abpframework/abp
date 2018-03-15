@@ -16,6 +16,7 @@ namespace Volo.Abp.Identity.Web.Navigation
 
             var permissionChecker = context.ServiceProvider.GetRequiredService<IPermissionChecker>();
 
+            //TODO: We should not add this if none of the children available. Alternatively, we can handle it on menu rendering (would be simpler).
             var identityMenuItem = new ApplicationMenuItem("Identity", "Identity");
 
             context.Menu.AddItem(identityMenuItem);
