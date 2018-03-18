@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
-  <Relationship Type="http://schemas.microsoft.com/packaging/2010/07/manifest" Target="/Volo.Abp.Account.Web.nuspec" Id="Rfdd677b0690f4393" />
-  <Relationship Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="/package/services/metadata/core-properties/d0b9dbb571f046678dd82d6354463c78.psmdcp" Id="Redc92efae9c749d6" />
-</Relationships>
