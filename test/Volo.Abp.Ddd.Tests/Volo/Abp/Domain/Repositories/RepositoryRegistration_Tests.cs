@@ -67,18 +67,24 @@ namespace Volo.Abp.Domain.Repositories
             //Assert
 
             //MyTestAggregateRootWithoutPk
+            services.ShouldContainTransient(typeof(IReadOnlyRepository<MyTestAggregateRootWithoutPk>), typeof(MyTestDefaultRepository<MyTestAggregateRootWithoutPk>));
             services.ShouldContainTransient(typeof(IBasicRepository<MyTestAggregateRootWithoutPk>), typeof(MyTestDefaultRepository<MyTestAggregateRootWithoutPk>));
             services.ShouldContainTransient(typeof(IRepository<MyTestAggregateRootWithoutPk>), typeof(MyTestDefaultRepository<MyTestAggregateRootWithoutPk>));
 
             //MyTestAggregateRootWithGuidPk
+            services.ShouldContainTransient(typeof(IReadOnlyRepository<MyTestAggregateRootWithGuidPk>), typeof(MyTestDefaultRepository<MyTestAggregateRootWithGuidPk, Guid>));
             services.ShouldContainTransient(typeof(IBasicRepository<MyTestAggregateRootWithGuidPk>), typeof(MyTestDefaultRepository<MyTestAggregateRootWithGuidPk, Guid>));
             services.ShouldContainTransient(typeof(IRepository<MyTestAggregateRootWithGuidPk>), typeof(MyTestDefaultRepository<MyTestAggregateRootWithGuidPk, Guid>));
+            services.ShouldContainTransient(typeof(IReadOnlyRepository<MyTestAggregateRootWithGuidPk, Guid>), typeof(MyTestDefaultRepository<MyTestAggregateRootWithGuidPk, Guid>));
             services.ShouldContainTransient(typeof(IBasicRepository<MyTestAggregateRootWithGuidPk, Guid>), typeof(MyTestDefaultRepository<MyTestAggregateRootWithGuidPk, Guid>));
             services.ShouldContainTransient(typeof(IRepository<MyTestAggregateRootWithGuidPk, Guid>), typeof(MyTestDefaultRepository<MyTestAggregateRootWithGuidPk, Guid>));
 
             //MyTestEntityWithInt32Pk
+            services.ShouldContainTransient(typeof(IReadOnlyRepository<MyTestEntityWithInt32Pk>), typeof(MyTestDefaultRepository<MyTestEntityWithInt32Pk, int>));
             services.ShouldContainTransient(typeof(IBasicRepository<MyTestEntityWithInt32Pk>), typeof(MyTestDefaultRepository<MyTestEntityWithInt32Pk, int>));
             services.ShouldContainTransient(typeof(IRepository<MyTestEntityWithInt32Pk>), typeof(MyTestDefaultRepository<MyTestEntityWithInt32Pk, int>));
+            services.ShouldContainTransient(typeof(IReadOnlyRepository<MyTestEntityWithInt32Pk, int>), typeof(MyTestDefaultRepository<MyTestEntityWithInt32Pk, int>));
+            services.ShouldContainTransient(typeof(IReadOnlyBasicRepository<MyTestEntityWithInt32Pk, int>), typeof(MyTestDefaultRepository<MyTestEntityWithInt32Pk, int>));
             services.ShouldContainTransient(typeof(IBasicRepository<MyTestEntityWithInt32Pk, int>), typeof(MyTestDefaultRepository<MyTestEntityWithInt32Pk, int>));
             services.ShouldContainTransient(typeof(IRepository<MyTestEntityWithInt32Pk, int>), typeof(MyTestDefaultRepository<MyTestEntityWithInt32Pk, int>));
         }
@@ -106,12 +112,20 @@ namespace Volo.Abp.Domain.Repositories
             services.ShouldContainTransient(typeof(IRepository<MyTestAggregateRootWithoutPk>), typeof(MyTestDefaultRepository<MyTestAggregateRootWithoutPk>));
 
             //MyTestAggregateRootWithGuidPk
+            services.ShouldContainTransient(typeof(IReadOnlyRepository<MyTestAggregateRootWithGuidPk>), typeof(MyTestAggregateRootWithDefaultPkCustomRepository));
             services.ShouldContainTransient(typeof(IBasicRepository<MyTestAggregateRootWithGuidPk>), typeof(MyTestAggregateRootWithDefaultPkCustomRepository));
             services.ShouldContainTransient(typeof(IRepository<MyTestAggregateRootWithGuidPk>), typeof(MyTestAggregateRootWithDefaultPkCustomRepository));
+            services.ShouldContainTransient(typeof(IReadOnlyRepository<MyTestAggregateRootWithGuidPk, Guid>), typeof(MyTestAggregateRootWithDefaultPkCustomRepository));
+            services.ShouldContainTransient(typeof(IReadOnlyBasicRepository<MyTestAggregateRootWithGuidPk, Guid>), typeof(MyTestAggregateRootWithDefaultPkCustomRepository));
             services.ShouldContainTransient(typeof(IBasicRepository<MyTestAggregateRootWithGuidPk, Guid>), typeof(MyTestAggregateRootWithDefaultPkCustomRepository));
             services.ShouldContainTransient(typeof(IRepository<MyTestAggregateRootWithGuidPk, Guid>), typeof(MyTestAggregateRootWithDefaultPkCustomRepository));
 
             //MyTestEntityWithInt32Pk
+            services.ShouldContainTransient(typeof(IReadOnlyRepository<MyTestEntityWithInt32Pk>), typeof(MyTestDefaultRepository<MyTestEntityWithInt32Pk, int>));
+            services.ShouldContainTransient(typeof(IBasicRepository<MyTestEntityWithInt32Pk>), typeof(MyTestDefaultRepository<MyTestEntityWithInt32Pk, int>));
+            services.ShouldContainTransient(typeof(IRepository<MyTestEntityWithInt32Pk>), typeof(MyTestDefaultRepository<MyTestEntityWithInt32Pk, int>));
+            services.ShouldContainTransient(typeof(IReadOnlyRepository<MyTestEntityWithInt32Pk, int>), typeof(MyTestDefaultRepository<MyTestEntityWithInt32Pk, int>));
+            services.ShouldContainTransient(typeof(IReadOnlyBasicRepository<MyTestEntityWithInt32Pk, int>), typeof(MyTestDefaultRepository<MyTestEntityWithInt32Pk, int>));
             services.ShouldContainTransient(typeof(IBasicRepository<MyTestEntityWithInt32Pk, int>), typeof(MyTestDefaultRepository<MyTestEntityWithInt32Pk, int>));
             services.ShouldContainTransient(typeof(IRepository<MyTestEntityWithInt32Pk, int>), typeof(MyTestDefaultRepository<MyTestEntityWithInt32Pk, int>));
         }
