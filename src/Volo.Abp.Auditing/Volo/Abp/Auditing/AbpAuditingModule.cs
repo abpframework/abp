@@ -2,8 +2,8 @@
 using Volo.Abp.Data;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Security;
 using Volo.Abp.Timing;
-using Volo.Abp.Users;
 
 namespace Volo.Abp.Auditing
 {
@@ -11,7 +11,7 @@ namespace Volo.Abp.Auditing
     [DependsOn(
         typeof(AbpDataModule),
         typeof(AbpTimingModule),
-        typeof(AbpUsersModule),
+        typeof(AbpSecurityModule),
         typeof(AbpMultiTenancyAbstractionsModule)
         )]
     public class AbpAuditingModule : AbpModule

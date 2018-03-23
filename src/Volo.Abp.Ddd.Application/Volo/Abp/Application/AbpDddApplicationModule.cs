@@ -7,13 +7,13 @@ using Volo.Abp.Http;
 using Volo.Abp.Http.Modeling;
 using Volo.Abp.Modularity;
 using Volo.Abp.ObjectMapping;
-using Volo.Abp.Users;
+using Volo.Abp.Security;
 using Volo.Abp.Validation;
 
 namespace Volo.Abp.Application
 {
     [DependsOn(typeof(AbpDddDomainModule))]
-    [DependsOn(typeof(AbpUsersModule))]
+    [DependsOn(typeof(AbpSecurityModule))]
     [DependsOn(typeof(AbpObjectMappingModule))]
     [DependsOn(typeof(AbpValidationModule))]
     [DependsOn(typeof(AbpAuthorizationModule))]

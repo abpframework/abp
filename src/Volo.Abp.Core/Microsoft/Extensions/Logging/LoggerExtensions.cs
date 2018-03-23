@@ -56,11 +56,14 @@ namespace Microsoft.Extensions.Logging
             }
         }
 
-        public static void LogException(this ILogger logger, Exception ex)
+        public static void LogException(this ILogger logger, Exception ex, LogLevel? level = null)
         {
-            var logLevel = (ex as IHasLogLevel)?.LogLevel ?? LogLevel.Error;
+            logger.LogWithLevel(
+                level ?? (ex as IHasLogLevel)?.LogLevel ?? LogLevel.Error,
+                ex.Message,
+                ex
+            );
 
-            logger.LogWithLevel(logLevel, ex.Message, ex);
             LogDetails(logger, ex);
         }
 
