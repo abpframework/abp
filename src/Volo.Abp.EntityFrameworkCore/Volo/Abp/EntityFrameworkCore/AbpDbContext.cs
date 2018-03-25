@@ -22,7 +22,7 @@ namespace Volo.Abp.EntityFrameworkCore
     public abstract class AbpDbContext<TDbContext> : DbContext, IEfCoreDbContext
         where TDbContext : DbContext
     {
-        public Guid? CurrentTenantId => CurrentTenant?.Id;
+        public virtual Guid? CurrentTenantId => CurrentTenant?.Id;
 
         protected virtual bool IsMayHaveTenantFilterEnabled => DataFilter.IsEnabled<IMultiTenant>();
 
