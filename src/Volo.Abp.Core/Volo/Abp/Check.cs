@@ -20,6 +20,17 @@ namespace Volo.Abp
         }
 
         [ContractAnnotation("value:null => halt")]
+        public static T NotNull<T>(T value, [InvokerParameterName] [NotNull] string parameterName, string message)
+        {
+            if (value == null)
+            {
+                throw new ArgumentNullException(parameterName, message);
+            }
+
+            return value;
+        }
+
+        [ContractAnnotation("value:null => halt")]
         public static string NotNullOrWhiteSpace(string value, [InvokerParameterName] [NotNull] string parameterName)
         {
             if (value.IsNullOrWhiteSpace())

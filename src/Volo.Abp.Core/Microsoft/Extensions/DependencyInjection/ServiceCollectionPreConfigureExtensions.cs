@@ -12,6 +12,12 @@ namespace Microsoft.Extensions.DependencyInjection
             return services;
         }
 
+        public static TOptions ExecutePreConfiguredActions<TOptions>(this IServiceCollection services)
+            where TOptions : new()
+        {
+            return services.ExecutePreConfiguredActions(new TOptions());
+        }
+
         public static TOptions ExecutePreConfiguredActions<TOptions>(this IServiceCollection services, TOptions options)
         {
             services.GetPreConfigureActions<TOptions>().Configure(options);

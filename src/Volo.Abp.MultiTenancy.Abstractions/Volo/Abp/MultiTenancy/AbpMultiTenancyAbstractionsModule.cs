@@ -7,7 +7,7 @@ namespace Volo.Abp.MultiTenancy
 {
     [DependsOn(typeof(AbpDataModule))]
     [DependsOn(typeof(AbpSettingsModule))]
-    public class AbpMultiTenancyAbstractionsModule : AbpModule
+    public class AbpMultiTenancyAbstractionsModule : AbpModule //TODO: Rename to AbpMultiTenancyModule
     {
         public override void ConfigureServices(IServiceCollection services)
         {
