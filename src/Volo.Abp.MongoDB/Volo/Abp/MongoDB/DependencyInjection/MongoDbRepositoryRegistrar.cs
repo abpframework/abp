@@ -15,7 +15,8 @@ namespace Volo.Abp.MongoDB.DependencyInjection
 
         protected override IEnumerable<Type> GetEntityTypes(Type dbContextType)
         {
-            var mongoDbContext = (IAbpMongoDbContext)Activator.CreateInstance(dbContextType);
+            //TODO: Instead of getting from Options.OriginalDbContextType, we may consider to add entities as properties to the dbcontext, just like EF Core!
+            var mongoDbContext = (IAbpMongoDbContext)Activator.CreateInstance(Options.OriginalDbContextType);
             return mongoDbContext.GetMappings().Select(m => m.EntityType);
         }
 
