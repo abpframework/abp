@@ -115,7 +115,8 @@ namespace Autofac.Extensions.DependencyInjection
                         builder
                             .RegisterGeneric(service.ImplementationType)
                             .As(service.ServiceType)
-                            .ConfigureLifecycle(service.Lifetime);
+                            .ConfigureLifecycle(service.Lifetime)
+                            .ConfigureAbpConventions(moduleContainer, registrationActionList);
                     }
                     else
                     {
