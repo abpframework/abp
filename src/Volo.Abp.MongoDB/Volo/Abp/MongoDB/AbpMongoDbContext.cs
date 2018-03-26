@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Volo.Abp.MongoDB
 {
-    public abstract class AbpMongoDbContext
+    public abstract class AbpMongoDbContext : IAbpMongoDbContext
     {
         private static readonly MongoEntityMapping[] EmptyTypeList = new MongoEntityMapping[0];
 
@@ -23,12 +23,12 @@ namespace Volo.Abp.MongoDB
             return EmptyTypeList;
         }
 
-        public string GetCollectionName<T>()
+        public virtual string GetCollectionName<T>()
         {
             return GetMapping<T>().CollectionName;
         }
 
-        private MongoEntityMapping GetMapping<T>()
+        protected virtual MongoEntityMapping GetMapping<T>()
         {
             var mapping = _mappingsByType.Value.GetOrDefault(typeof(T));
             if (mapping == null)

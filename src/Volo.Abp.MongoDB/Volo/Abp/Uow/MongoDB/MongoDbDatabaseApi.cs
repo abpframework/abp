@@ -2,7 +2,7 @@
 
 namespace Volo.Abp.Uow.MongoDB
 {
-    public class MongoDbDatabaseApi: IDatabaseApi
+    public class MongoDbDatabaseApi : IDatabaseApi
     {
         public IMongoDatabase Database { get; }
 

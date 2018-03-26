@@ -10,7 +10,7 @@ using Volo.Abp.MongoDB;
 namespace Volo.Abp.Domain.Repositories.MongoDB
 {
     public class MongoDbRepository<TMongoDbContext, TEntity> : RepositoryBase<TEntity>, IMongoDbRepository<TEntity>
-        where TMongoDbContext : AbpMongoDbContext
+        where TMongoDbContext : IAbpMongoDbContext
         where TEntity : class, IEntity
     {
         public virtual string CollectionName => DatabaseProvider.DbContext.GetCollectionName<TEntity>();
@@ -82,7 +82,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
     }
 
     public class MongoDbRepository<TMongoDbContext, TEntity, TKey> : MongoDbRepository<TMongoDbContext, TEntity>, IMongoDbRepository<TEntity, TKey>
-        where TMongoDbContext : AbpMongoDbContext
+        where TMongoDbContext : IAbpMongoDbContext
         where TEntity : class, IEntity<TKey>
     {
         public MongoDbRepository(IMongoDatabaseProvider<TMongoDbContext> databaseProvider)

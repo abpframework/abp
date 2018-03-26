@@ -5,7 +5,7 @@ using Volo.Abp.MongoDB;
 namespace Volo.Abp.Uow.MongoDB
 {
     public class UnitOfWorkMongoDatabaseProvider<TMongoDbContext> : IMongoDatabaseProvider<TMongoDbContext>
-        where TMongoDbContext : AbpMongoDbContext
+        where TMongoDbContext : IAbpMongoDbContext
     {
         public TMongoDbContext DbContext { get; }
         

@@ -3,7 +3,7 @@
 namespace Volo.Abp.MongoDB
 {
     public interface IMongoDatabaseProvider<TMongoDbContext>
-        where TMongoDbContext : AbpMongoDbContext
+        where TMongoDbContext : IAbpMongoDbContext
     {
         TMongoDbContext DbContext { get; }
 
