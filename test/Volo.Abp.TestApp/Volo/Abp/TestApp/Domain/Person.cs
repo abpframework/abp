@@ -15,7 +15,7 @@ namespace Volo.Abp.TestApp.Domain
 
         public virtual Collection<Phone> Phones { get; set; }
 
-        public bool IsDeleted { get; set; }
+        public virtual bool IsDeleted { get; set; }
 
         private Person()
         {
@@ -32,7 +32,7 @@ namespace Volo.Abp.TestApp.Domain
             Phones = new Collection<Phone>();
         }
 
-        public void ChangeName(string name)
+        public virtual void ChangeName(string name)
         {
             Check.NotNullOrWhiteSpace(name, nameof(name));
 
