@@ -10,17 +10,22 @@ using Xunit;
 
 namespace Volo.Abp.EntityFrameworkCore.Repositories
 {
+    //TODO: Remove WithUnitOfWork
+    //TODO: Share same abstract base class for repository tests (with mongodb and others)
+
     public class Repository_Tests : EntityFrameworkCoreTestBase
     {
         private readonly IRepository<Person, Guid> _personRepository;
         private readonly IRepository<BookInSecondDbContext, Guid> _bookRepository;
         private readonly IRepository<PhoneInSecondDbContext> _phoneInSecondDbContextRepository;
+        private readonly ICityRepository _cityRepository;
 
         public Repository_Tests()
         {
             _personRepository = ServiceProvider.GetRequiredService<IRepository<Person, Guid>>();
             _bookRepository = ServiceProvider.GetRequiredService<IRepository<BookInSecondDbContext, Guid>>();
             _phoneInSecondDbContextRepository = ServiceProvider.GetRequiredService<IRepository<PhoneInSecondDbContext>>();
+            _cityRepository = GetRequiredService<ICityRepository>();
         }
 
         [Fact]
@@ -48,6 +53,13 @@ namespace Volo.Abp.EntityFrameworkCore.Repositories
             {
                 _phoneInSecondDbContextRepository.Any().ShouldBeTrue();
             });
+        }
+
+        [Fact]
+        public async Task GetPeopleInTheCityAsync()
+        {
+            var people = await _cityRepository.GetPeopleInTheCityAsync("London");
+            people.Count.ShouldBeGreaterThan(0);
         }
 
         [Fact]

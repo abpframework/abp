@@ -9,6 +9,8 @@ namespace Volo.Abp.TestApp.Domain
     {
         public virtual Guid? TenantId { get; set; }
 
+        public virtual Guid? CityId { get; set; }
+
         public virtual string Name { get; private set; }
 
         public virtual int Age { get; set; }
@@ -22,12 +24,13 @@ namespace Volo.Abp.TestApp.Domain
             
         }
 
-        public Person(Guid id, string name, int age, Guid? tenantId = null)
+        public Person(Guid id, string name, int age, Guid? tenantId = null, Guid? cityId = null)
         {
             Id = id;
             Name = name;
             Age = age;
             TenantId = tenantId;
+            CityId = cityId;
 
             Phones = new Collection<Phone>();
         }

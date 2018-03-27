@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
@@ -17,6 +19,12 @@ namespace Volo.Abp.TestApp.EntityFrameworkCore
         public async Task<City> FindByNameAsync(string name)
         {
             return await this.FirstOrDefaultAsync(c => c.Name == name);
+        }
+
+        public async Task<List<Person>> GetPeopleInTheCityAsync(string cityName)
+        {
+            var city = await FindByNameAsync(cityName);
+            return await DbContext.People.Where(p => p.CityId == city.Id).ToListAsync();
         }
     }
 }

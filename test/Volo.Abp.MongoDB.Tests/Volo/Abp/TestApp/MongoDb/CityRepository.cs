@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using MongoDB.Driver;
 using Volo.Abp.Domain.Repositories.MongoDB;
@@ -18,6 +19,15 @@ namespace Volo.Abp.TestApp.MongoDb
         public async Task<City> FindByNameAsync(string name)
         {
             return await (await Collection.FindAsync(c => c.Name == name)).FirstOrDefaultAsync();
+        }
+
+        public async Task<List<Person>> GetPeopleInTheCityAsync(string cityName)
+        {
+            var city = await FindByNameAsync(cityName);
+
+            throw new NotImplementedException();
+
+            //return await DbContext.People.Where(p => p.CityId == city.Id).ToListAsync();
         }
     }
 }

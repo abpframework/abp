@@ -9,8 +9,11 @@ namespace Volo.Abp.TestApp
     {
         public static Guid TenantId1 { get; } = new Guid("55687dce-595c-41b4-a024-2a5e991ac8f4");
         public static Guid TenantId2 { get; } = new Guid("f522d19f-5a86-4278-98fb-0577319c544a");
-        public static Guid UserDouglasId { get; } = Guid.NewGuid();
-        public static Guid UserJohnDeletedId { get; } = Guid.NewGuid();
+        public static Guid UserDouglasId { get; } = new Guid("1fcf46b2-28c3-48d0-8bac-fa53268a2775");
+        public static Guid UserJohnDeletedId { get; } = new Guid("1e28ca9f-df84-4f39-83fe-f5450ecbf5d4");
+
+        public static Guid IstanbulCityId { get; } = new Guid("4d734a0e-3e6b-4bad-bb43-ef8cf1b09633");
+        public static Guid LondonCityId { get; } = new Guid("27237527-605e-4652-a2a5-68e0e512da36");
 
         private readonly IBasicRepository<Person, Guid> _personRepository;
         private readonly ICityRepository _cityRepository;
@@ -33,8 +36,8 @@ namespace Volo.Abp.TestApp
         {
             _cityRepository.Insert(new City(Guid.NewGuid(), "Tokyo"));
             _cityRepository.Insert(new City(Guid.NewGuid(), "Madrid"));
-            _cityRepository.Insert(new City(Guid.NewGuid(), "London"));
-            _cityRepository.Insert(new City(Guid.NewGuid(), "Istanbul"));
+            _cityRepository.Insert(new City(LondonCityId, "London"));
+            _cityRepository.Insert(new City(IstanbulCityId, "Istanbul"));
             _cityRepository.Insert(new City(Guid.NewGuid(), "Paris"));
             _cityRepository.Insert(new City(Guid.NewGuid(), "Washington"));
             _cityRepository.Insert(new City(Guid.NewGuid(), "Sao Paulo"));
@@ -46,7 +49,7 @@ namespace Volo.Abp.TestApp
 
         private void AddPeople()
         {
-            var douglas = new Person(UserDouglasId, "Douglas", 42);
+            var douglas = new Person(UserDouglasId, "Douglas", 42, cityId: LondonCityId);
             douglas.Phones.Add(new Phone(douglas.Id, "123456789"));
             douglas.Phones.Add(new Phone(douglas.Id, "123456780", PhoneType.Home));
 
