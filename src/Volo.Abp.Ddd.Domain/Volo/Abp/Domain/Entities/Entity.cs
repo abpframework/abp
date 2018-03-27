@@ -22,6 +22,16 @@ namespace Volo.Abp.Domain.Entities
         /// <inheritdoc/>
         public virtual TKey Id { get; set; }
 
+        protected Entity()
+        {
+
+        }
+
+        protected Entity(TKey id)
+        {
+            Id = id;
+        }
+
         /// <inheritdoc/>
         public override bool Equals(object obj)
         {

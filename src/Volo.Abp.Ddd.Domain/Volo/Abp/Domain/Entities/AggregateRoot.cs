@@ -21,5 +21,16 @@ namespace Volo.Abp.Domain.Entities
         public virtual ICollection<object> DomainEvents => _domainEvents ?? (_domainEvents = new Collection<object>());
 
         private ICollection<object> _domainEvents;
+
+        protected AggregateRoot()
+        {
+            
+        }
+
+        protected AggregateRoot(TKey id)
+            : base(id)
+        {
+
+        }
     }
 }

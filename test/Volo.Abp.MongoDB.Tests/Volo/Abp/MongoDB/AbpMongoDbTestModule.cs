@@ -4,6 +4,7 @@ using Volo.Abp.Autofac;
 using Volo.Abp.Data;
 using Volo.Abp.Modularity;
 using Volo.Abp.TestApp;
+using Volo.Abp.TestApp.Domain;
 using Volo.Abp.TestApp.MongoDb;
 
 namespace Volo.Abp.MongoDB
@@ -30,6 +31,7 @@ namespace Volo.Abp.MongoDB
             services.AddMongoDbContext<TestAppMongoDbContext>(options =>
             {
                 options.AddDefaultRepositories<ITestAppMongoDbContext>();
+                options.AddRepository<City, CityRepository>();
             });
 
             services.AddAssemblyOf<AbpMongoDbTestModule>();

@@ -1,5 +1,7 @@
 ﻿using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Autofac;
 using Volo.Abp.EntityFrameworkCore.TestApp.SecondContext;
@@ -26,14 +28,13 @@ namespace Volo.Abp.EntityFrameworkCore
                 options.ReplaceDbContext<IThirdDbContext>();
             });
 
-            var inMemorySqlite = new SqliteConnection("Data Source=:memory:");
-            inMemorySqlite.Open();
+            var sqliteConnection = CreateDatabaseAndGetConnection();
 
             services.Configure<AbpDbContextOptions>(options =>
             {
                 options.Configure(context =>
                 {
-                    context.DbContextOptions.UseSqlite(inMemorySqlite);
+                    context.DbContextOptions.UseSqlite(sqliteConnection);
                 });
             });
         }
@@ -42,6 +43,20 @@ namespace Volo.Abp.EntityFrameworkCore
         {
             context.ServiceProvider.GetRequiredService<TestAppDbContext>().Database.Migrate();
             context.ServiceProvider.GetRequiredService<SecondDbContext>().Database.Migrate();
+        }
+
+        private static SqliteConnection CreateDatabaseAndGetConnection()
+        {
+            var connection = new SqliteConnection("Data Source=:memory:");
+            connection.Open();
+
+            var options = new DbContextOptionsBuilder<TestAppDbContext>().UseSqlite(connection).Options;
+            using (var context = new TestAppDbContext(options))
+            {
+                context.GetService<IRelationalDatabaseCreator>().CreateTables();
+            }
+
+            return connection;
         }
     }
 }

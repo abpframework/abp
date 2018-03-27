@@ -13,15 +13,35 @@ namespace Volo.Abp.TestApp
         public static Guid UserJohnDeletedId { get; } = Guid.NewGuid();
 
         private readonly IBasicRepository<Person, Guid> _personRepository;
+        private readonly ICityRepository _cityRepository;
 
-        public TestDataBuilder(IBasicRepository<Person, Guid> personRepository)
+        public TestDataBuilder(
+            IBasicRepository<Person, Guid> personRepository, 
+            ICityRepository cityRepository)
         {
             _personRepository = personRepository;
+            _cityRepository = cityRepository;
         }
 
         public void Build()
         {
+            AddCities();
             AddPeople();
+        }
+
+        private void AddCities()
+        {
+            _cityRepository.Insert(new City(Guid.NewGuid(), "Tokyo"));
+            _cityRepository.Insert(new City(Guid.NewGuid(), "Madrid"));
+            _cityRepository.Insert(new City(Guid.NewGuid(), "London"));
+            _cityRepository.Insert(new City(Guid.NewGuid(), "Istanbul"));
+            _cityRepository.Insert(new City(Guid.NewGuid(), "Paris"));
+            _cityRepository.Insert(new City(Guid.NewGuid(), "Washington"));
+            _cityRepository.Insert(new City(Guid.NewGuid(), "Berlin"));
+            _cityRepository.Insert(new City(Guid.NewGuid(), "Amsterdam"));
+            _cityRepository.Insert(new City(Guid.NewGuid(), "Beijing"));
+            _cityRepository.Insert(new City(Guid.NewGuid(), "Rome"));
+            _cityRepository.Insert(new City(Guid.NewGuid(), "Sao Paulo"));
         }
 
         private void AddPeople()

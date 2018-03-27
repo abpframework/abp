@@ -9,6 +9,8 @@ namespace Volo.Abp.TestApp.EntityFrameworkCore
     {
         public DbSet<Person> People { get; set; }
 
+        public DbSet<City> Cities { get; set; }
+
         public DbSet<ThirdDbContextDummyEntity> DummyEntities { get; set; }
 
         public TestAppDbContext(DbContextOptions<TestAppDbContext> options) 
