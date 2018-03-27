@@ -37,11 +37,11 @@ namespace Volo.Abp.TestApp
             _cityRepository.Insert(new City(Guid.NewGuid(), "Istanbul"));
             _cityRepository.Insert(new City(Guid.NewGuid(), "Paris"));
             _cityRepository.Insert(new City(Guid.NewGuid(), "Washington"));
+            _cityRepository.Insert(new City(Guid.NewGuid(), "Sao Paulo"));
             _cityRepository.Insert(new City(Guid.NewGuid(), "Berlin"));
             _cityRepository.Insert(new City(Guid.NewGuid(), "Amsterdam"));
             _cityRepository.Insert(new City(Guid.NewGuid(), "Beijing"));
             _cityRepository.Insert(new City(Guid.NewGuid(), "Rome"));
-            _cityRepository.Insert(new City(Guid.NewGuid(), "Sao Paulo"));
         }
 
         private void AddPeople()

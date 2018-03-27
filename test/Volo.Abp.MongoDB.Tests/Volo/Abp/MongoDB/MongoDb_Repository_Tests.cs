@@ -12,10 +12,12 @@ namespace Volo.Abp.MongoDB
     public class MongoDb_Repository_Tests : MongoDbTestBase
     {
         private readonly IRepository<Person, Guid> _personRepository;
+        private readonly ICityRepository _cityRepository;
 
         public MongoDb_Repository_Tests()
         {
             _personRepository = GetRequiredService<IRepository<Person, Guid>>();
+            _cityRepository = GetRequiredService<ICityRepository>();
         }
 
         [Fact]
@@ -79,6 +81,14 @@ namespace Volo.Abp.MongoDB
             person.Name.ShouldBe("New Person");
             person.Phones.Count.ShouldBe(1);
             person.Phones.Any(p => p.PersonId == person.Id && p.Number == "1234567890").ShouldBeTrue();
+        }
+
+        [Fact]
+        public async Task Custom_Repository_Method()
+        {
+            var city = await _cityRepository.FindByNameAsync("Istanbul");
+            city.ShouldNotBeNull();
+            city.Name.ShouldBe("Istanbul");
         }
     }
 }
