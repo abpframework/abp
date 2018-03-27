@@ -5,10 +5,14 @@ using Volo.Abp.TestApp.MemoryDb;
 using Volo.Abp.Data;
 using Volo.Abp.Autofac;
 using Volo.Abp.TestApp;
+using Volo.Abp.TestApp.Domain;
 
 namespace Volo.Abp.MemoryDb
 {
-    [DependsOn(typeof(TestAppModule), typeof(AbpMemoryDbModule), typeof(AbpAutofacModule))]
+    [DependsOn(
+        typeof(TestAppModule), 
+        typeof(AbpMemoryDbModule), 
+        typeof(AbpAutofacModule))]
     public class AbpMemoryDbTestModule : AbpModule
     {
         public override void ConfigureServices(IServiceCollection services)
@@ -23,9 +27,10 @@ namespace Volo.Abp.MemoryDb
             services.AddMemoryDbContext<TestAppMemoryDbContext>(options =>
             {
                 options.AddDefaultRepositories();
+                options.AddRepository<City, CityRepository>();
             });
 
-            services.AddAssemblyOf<AbpMemoryDbModule>();
+            services.AddAssemblyOf<AbpMemoryDbTestModule>();
         }
     }
 }

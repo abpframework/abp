@@ -12,6 +12,8 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
         where TMemoryDbContext : MemoryDbContext
         where TEntity : class, IEntity
     {
+        //TODO: Add dbcontext just like mongodb implementation!
+
         public virtual List<TEntity> Collection => Database.Collection<TEntity>();
 
         public virtual IMemoryDatabase Database => DatabaseProvider.GetDatabase();
