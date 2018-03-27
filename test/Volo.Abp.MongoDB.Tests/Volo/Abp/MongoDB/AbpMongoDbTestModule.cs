@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Mongo2Go;
-using Volo.Abp.Autofac;
 using Volo.Abp.Data;
 using Volo.Abp.Modularity;
 using Volo.Abp.TestApp;
@@ -10,9 +9,7 @@ using Volo.Abp.TestApp.MongoDb;
 namespace Volo.Abp.MongoDB
 {
     [DependsOn(
-        typeof(AbpAutofacModule),
         typeof(AbpMongoDbModule),
-        typeof(AbpTestBaseModule),
         typeof(TestAppModule)
         )]
     public class AbpMongoDbTestModule : AbpModule
