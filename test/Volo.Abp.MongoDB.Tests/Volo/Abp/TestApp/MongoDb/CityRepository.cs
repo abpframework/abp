@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 using Volo.Abp.Domain.Repositories.MongoDB;
 using Volo.Abp.MongoDB;
 using Volo.Abp.TestApp.Domain;
@@ -10,8 +11,8 @@ namespace Volo.Abp.TestApp.MongoDb
 {
     public class CityRepository : MongoDbRepository<ITestAppMongoDbContext, City, Guid>, ICityRepository
     {
-        public CityRepository(IMongoDatabaseProvider<ITestAppMongoDbContext> databaseProvider)
-            : base(databaseProvider)
+        public CityRepository(IMongoDbContextProvider<ITestAppMongoDbContext> dbContextProvider)
+            : base(dbContextProvider)
         {
 
         }
@@ -24,10 +25,7 @@ namespace Volo.Abp.TestApp.MongoDb
         public async Task<List<Person>> GetPeopleInTheCityAsync(string cityName)
         {
             var city = await FindByNameAsync(cityName);
-
-            throw new NotImplementedException();
-
-            //return await DbContext.People.Where(p => p.CityId == city.Id).ToListAsync();
+            return await DbContext.People.AsQueryable().Where(p => p.CityId == city.Id).ToListAsync();
         }
     }
 }

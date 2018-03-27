@@ -90,5 +90,12 @@ namespace Volo.Abp.MongoDB
             city.ShouldNotBeNull();
             city.Name.ShouldBe("Istanbul");
         }
+
+        [Fact]
+        public async Task Should_Access_To_Other_Collections_In_Same_Context_In_A_Custom_Method()
+        {
+            var people = await _cityRepository.GetPeopleInTheCityAsync("London");
+            people.Count.ShouldBeGreaterThan(0);
+        }
     }
 }

@@ -1,28 +1,25 @@
-﻿using MongoDB.Driver;
+﻿using Microsoft.Extensions.DependencyInjection;
+using MongoDB.Driver;
 using Volo.Abp.Data;
 using Volo.Abp.MongoDB;
 
 namespace Volo.Abp.Uow.MongoDB
 {
-    public class UnitOfWorkMongoDatabaseProvider<TMongoDbContext> : IMongoDatabaseProvider<TMongoDbContext>
+    public class UnitOfWorkMongoDbContextProvider<TMongoDbContext> : IMongoDbContextProvider<TMongoDbContext>
         where TMongoDbContext : IAbpMongoDbContext
     {
-        public TMongoDbContext DbContext { get; }
-        
         private readonly IUnitOfWorkManager _unitOfWorkManager;
         private readonly IConnectionStringResolver _connectionStringResolver;
 
-        public UnitOfWorkMongoDatabaseProvider(
+        public UnitOfWorkMongoDbContextProvider(
             IUnitOfWorkManager unitOfWorkManager,
-            IConnectionStringResolver connectionStringResolver,
-            TMongoDbContext dbContext)
+            IConnectionStringResolver connectionStringResolver)
         {
             _unitOfWorkManager = unitOfWorkManager;
             _connectionStringResolver = connectionStringResolver;
-            DbContext = dbContext;
         }
 
-        public IMongoDatabase GetDatabase()
+        public TMongoDbContext GetDbContext()
         {
             var unitOfWork = _unitOfWorkManager.Current;
             if (unitOfWork == null)
@@ -48,11 +45,19 @@ namespace Volo.Abp.Uow.MongoDB
             //TODO: Create only single MongoDbClient per connection string in an application (extract MongoClientCache for example).
             var databaseApi = unitOfWork.GetOrAddDatabaseApi(
                 dbContextKey,
-                () => new MongoDbDatabaseApi(
-                    new MongoClient(connectionString).GetDatabase(databaseName)
-                ));
+                () =>
+                {
+                    var database = new MongoClient(connectionString).GetDatabase(databaseName);
 
-            return ((MongoDbDatabaseApi)databaseApi).Database;
+                    var dbContext = unitOfWork.ServiceProvider.GetRequiredService<TMongoDbContext>();
+
+                    var abpDbContext = unitOfWork.ServiceProvider.GetRequiredService<TMongoDbContext>().ToAbpMongoDbContext();
+                    abpDbContext.InitializeDatabase(database);
+
+                    return new MongoDbDatabaseApi<TMongoDbContext>(dbContext);
+                });
+
+            return ((MongoDbDatabaseApi<TMongoDbContext>)databaseApi).DbContext;
         }
     }
 }

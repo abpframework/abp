@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using MongoDB.Driver;
 
 namespace Volo.Abp.MongoDB
 {
@@ -8,10 +9,14 @@ namespace Volo.Abp.MongoDB
     {
         private static readonly MongoEntityMapping[] EmptyTypeList = new MongoEntityMapping[0];
 
+        public IMongoDatabase Database { get; private set; }
+
         private readonly Lazy<Dictionary<Type, MongoEntityMapping>> _mappingsByType;
 
         protected AbpMongoDbContext()
         {
+            //TODO: Cache model/mappings
+
             _mappingsByType = new Lazy<Dictionary<Type, MongoEntityMapping>>(() =>
             {
                 return GetMappings().ToDictionary(m => m.EntityType);
@@ -21,6 +26,11 @@ namespace Volo.Abp.MongoDB
         public virtual IReadOnlyList<MongoEntityMapping> GetMappings()
         {
             return EmptyTypeList;
+        }
+
+        public virtual IMongoCollection<T> Collection<T>()
+        {
+            return Database.GetCollection<T>(GetCollectionName<T>());
         }
 
         public virtual string GetCollectionName<T>()
@@ -37,6 +47,11 @@ namespace Volo.Abp.MongoDB
             }
 
             return mapping;
+        }
+
+        public void InitializeDatabase(IMongoDatabase database)
+        {
+            Database = database;
         }
     }
 }

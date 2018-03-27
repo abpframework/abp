@@ -9,11 +9,14 @@ namespace Volo.Abp.TestApp.MongoDb
     [ConnectionStringName("TestApp")]
     public class TestAppMongoDbContext : AbpMongoDbContext, ITestAppMongoDbContext
     {
-        public IMongoCollection<Person> People { get; set; }
+        //TODO: We can set collections automatically, lik EF Core
+        //TODO: We can get collection names conventionally, or by an attribute
 
-        public IMongoCollection<City> Cities { get; set; }
+        public IMongoCollection<Person> People => Collection<Person>();
 
-        //TODO: Default implementation should read mogo collections from the context!
+        public IMongoCollection<City> Cities => Collection<City>();
+
+        //TODO: Default implementation should read IMongoCollections from the context!
         //GetMappings should send a context and we add to it. Rename to ConfigureMappings.
 
         public override IReadOnlyList<MongoEntityMapping> GetMappings()

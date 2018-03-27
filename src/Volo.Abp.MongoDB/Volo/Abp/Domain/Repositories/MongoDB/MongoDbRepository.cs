@@ -13,17 +13,19 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
         where TMongoDbContext : IAbpMongoDbContext
         where TEntity : class, IEntity
     {
-        public virtual string CollectionName => DatabaseProvider.DbContext.GetCollectionName<TEntity>();
+        public virtual string CollectionName => DbContext.GetCollectionName<TEntity>();
 
-        public virtual IMongoCollection<TEntity> Collection => Database.GetCollection<TEntity>(CollectionName);
+        public virtual IMongoCollection<TEntity> Collection => DbContext.Collection<TEntity>();
 
-        public virtual IMongoDatabase Database => DatabaseProvider.GetDatabase();
+        public virtual IMongoDatabase Database => DbContext.Database;
 
-        protected IMongoDatabaseProvider<TMongoDbContext> DatabaseProvider { get; }
+        public virtual TMongoDbContext DbContext => DbContextProvider.GetDbContext();
 
-        public MongoDbRepository(IMongoDatabaseProvider<TMongoDbContext> databaseProvider)
+        protected IMongoDbContextProvider<TMongoDbContext> DbContextProvider { get; }
+
+        public MongoDbRepository(IMongoDbContextProvider<TMongoDbContext> dbContextProvider)
         {
-            DatabaseProvider = databaseProvider;
+            DbContextProvider = dbContextProvider;
         }
 
         public override TEntity Insert(TEntity entity, bool autoSave = false)
@@ -85,8 +87,8 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
         where TMongoDbContext : IAbpMongoDbContext
         where TEntity : class, IEntity<TKey>
     {
-        public MongoDbRepository(IMongoDatabaseProvider<TMongoDbContext> databaseProvider)
-            : base(databaseProvider)
+        public MongoDbRepository(IMongoDbContextProvider<TMongoDbContext> dbContextProvider)
+            : base(dbContextProvider)
         {
 
         }

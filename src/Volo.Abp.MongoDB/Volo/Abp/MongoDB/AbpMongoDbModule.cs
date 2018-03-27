@@ -11,7 +11,7 @@ namespace Volo.Abp.MongoDB
     {
         public override void ConfigureServices(IServiceCollection services)
         {
-            services.TryAddTransient(typeof(IMongoDatabaseProvider<>), typeof(UnitOfWorkMongoDatabaseProvider<>));
+            services.TryAddTransient(typeof(IMongoDbContextProvider<>), typeof(UnitOfWorkMongoDbContextProvider<>));
             services.AddAssemblyOf<AbpMongoDbModule>();
         }
     }

@@ -1,14 +1,12 @@
-﻿using MongoDB.Driver;
-
-namespace Volo.Abp.Uow.MongoDB
+﻿namespace Volo.Abp.Uow.MongoDB
 {
-    public class MongoDbDatabaseApi : IDatabaseApi
+    public class MongoDbDatabaseApi<TMongoDbContext> : IDatabaseApi
     {
-        public IMongoDatabase Database { get; }
+        public TMongoDbContext DbContext { get; }
 
-        public MongoDbDatabaseApi(IMongoDatabase database)
+        public MongoDbDatabaseApi(TMongoDbContext dbContext)
         {
-            Database = database;
+            DbContext = dbContext;
         }
     }
 }
