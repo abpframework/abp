@@ -20,7 +20,6 @@ namespace Volo.Abp.TestApp.Testing
             CityRepository = GetRequiredService<ICityRepository>();
         }
 
-
         [Fact]
         public async Task FindAsync_Should_Return_Null_For_Not_Found_Entity()
         {
@@ -49,6 +48,17 @@ namespace Volo.Abp.TestApp.Testing
             var city = await CityRepository.FindByNameAsync("Istanbul");
             city.ShouldNotBeNull();
             city.Name.ShouldBe("Istanbul");
+        }
+
+        [Fact]
+        public virtual async Task InsertAsync()
+        {
+            var personId = Guid.NewGuid();
+
+            await PersonRepository.InsertAsync(new Person(personId, "Adam", 42));
+
+            var person = await PersonRepository.FindAsync(personId);
+            person.ShouldNotBeNull();
         }
     }
 }

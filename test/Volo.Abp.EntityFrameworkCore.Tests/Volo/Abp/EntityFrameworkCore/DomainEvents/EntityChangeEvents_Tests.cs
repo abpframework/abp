@@ -6,7 +6,7 @@ using Volo.Abp.EventBus;
 using Volo.Abp.TestApp.Domain;
 using Xunit;
 
-namespace Volo.Abp.EntityFrameworkCore
+namespace Volo.Abp.EntityFrameworkCore.DomainEvents
 {
     public class EntityChangeEvents_Tests : EntityFrameworkCoreTestBase
     {

@@ -1,16 +1,17 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.EntityFrameworkCore.TestApp.SecondContext;
 using Volo.Abp.TestApp.Domain;
+using Volo.Abp.TestApp.Testing;
 using Volo.Abp.Uow;
 using Xunit;
 
-namespace Volo.Abp.EntityFrameworkCore
+namespace Volo.Abp.EntityFrameworkCore.Transactions
 {
-    public class Transaction_Tests : EntityFrameworkCoreTestBase
+    public class Transaction_Tests : TestAppTestBase<AbpEntityFrameworkCoreTestModule>
     {
         private readonly IBasicRepository<Person, Guid> _personRepository;
         private readonly IBasicRepository<BookInSecondDbContext, Guid> _bookRepository;

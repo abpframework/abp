@@ -1,23 +1,24 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using Shouldly;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.EventBus;
+using Volo.Abp.Modularity;
 using Volo.Abp.TestApp.Domain;
 using Xunit;
 
-namespace Volo.Abp.EntityFrameworkCore
+namespace Volo.Abp.TestApp.Testing
 {
-    public class DomainEvents_Tests : EntityFrameworkCoreTestBase
+    public abstract class DomainEvents_Tests<TStartupModule> : TestAppTestBase<TStartupModule> where TStartupModule : IAbpModule
     {
-        private readonly IRepository<Person, Guid> _personRepository;
-        private readonly IEventBus _eventBus;
+        protected readonly IRepository<Person, Guid> PersonRepository;
+        protected readonly IEventBus EventBus;
 
-        public DomainEvents_Tests()
+        protected DomainEvents_Tests()
         {
-            _personRepository = GetRequiredService<IRepository<Person, Guid>>();
-            _eventBus = GetRequiredService<IEventBus>();
+            PersonRepository = GetRequiredService<IRepository<Person, Guid>>();
+            EventBus = GetRequiredService<IEventBus>();
         }
 
         [Fact]
@@ -27,7 +28,7 @@ namespace Volo.Abp.EntityFrameworkCore
 
             var isTriggered = false;
 
-            _eventBus.Register<PersonNameChangedEvent>((data) =>
+            EventBus.Register<PersonNameChangedEvent>((data) =>
             {
                 data.OldName.ShouldBe("Douglas");
                 data.Person.Name.ShouldBe("Douglas-Changed");
@@ -38,9 +39,9 @@ namespace Volo.Abp.EntityFrameworkCore
 
             await WithUnitOfWorkAsync(async () =>
             {
-                var dougles = await _personRepository.SingleAsync(b => b.Name == "Douglas");
+                var dougles = PersonRepository.Single(b => b.Name == "Douglas");
                 dougles.ChangeName("Douglas-Changed");
-                await _personRepository.UpdateAsync(dougles);
+                await PersonRepository.UpdateAsync(dougles);
             });
 
             //Assert
