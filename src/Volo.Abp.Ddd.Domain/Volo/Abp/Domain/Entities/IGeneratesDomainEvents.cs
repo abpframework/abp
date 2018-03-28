@@ -2,8 +2,12 @@
 
 namespace Volo.Abp.Domain.Entities
 {
+    //TODO: Re-consider this interface
+
     public interface IGeneratesDomainEvents
     {
-        ICollection<object> DomainEvents { get; }
+        IEnumerable<object> GetDomainEvents();
+
+        void ClearDomainEvents();
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Repositories;
@@ -22,7 +23,27 @@ namespace Volo.Abp.TestApp.Testing
         }
 
         [Fact]
-        public void Should_Not_Get_Deleted_Entities_By_Default()
+        public void Should_Not_Get_Deleted_Entities_Linq()
+        {
+            WithUnitOfWork(() =>
+            {
+                var person = PersonRepository.FirstOrDefault(p => p.Name == "John-Deleted");
+                person.ShouldBeNull();
+            });
+        }
+
+        [Fact]
+        public async Task Should_Not_Get_Deleted_Entities_By_Id()
+        {
+            await WithUnitOfWorkAsync(async () =>
+            {
+                var person = await PersonRepository.FindAsync(TestDataBuilder.UserJohnDeletedId);
+                person.ShouldBeNull();
+            });
+        }
+
+        [Fact]
+        public void Should_Not_Get_Deleted_Entities_By_Default_ToList()
         {
             WithUnitOfWork(() =>
             {

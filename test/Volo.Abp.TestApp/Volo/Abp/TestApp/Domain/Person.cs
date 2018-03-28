@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.MultiTenancy;
@@ -41,7 +42,7 @@ namespace Volo.Abp.TestApp.Domain
 
             var oldName = Name;
             Name = name;
-            DomainEvents.Add(new PersonNameChangedEvent{Person = this, OldName =  oldName});
+            AddDomainEvent(new PersonNameChangedEvent{Person = this, OldName =  oldName});
         }
     }
 }

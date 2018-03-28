@@ -1,26 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Volo.Abp.Domain.Entities
 {
     [Serializable]
     public abstract class AggregateRoot : Entity, IAggregateRoot
     {
-        [NotMapped] //TODO: Better to handle in EF Core layer, or just use get/set methods instead of a property?
-        public virtual ICollection<object> DomainEvents => _domainEvents ?? (_domainEvents = new Collection<object>());
+        private readonly ICollection<object> _domainEvents = new Collection<object>();
 
-        private ICollection<object> _domainEvents;
+        protected virtual void AddDomainEvent(object eventData)
+        {
+            _domainEvents.Add(eventData);
+        }
+
+        public virtual IEnumerable<object> GetDomainEvents()
+        {
+            return _domainEvents;
+        }
+
+        public virtual void ClearDomainEvents()
+        {
+            _domainEvents.Clear();
+        }
     }
 
     [Serializable]
     public abstract class AggregateRoot<TKey> : Entity<TKey>, IAggregateRoot<TKey>
     {
-        [NotMapped] //TODO: Better to handle in EF Core layer, or just use get/set methods instead of a property??
-        public virtual ICollection<object> DomainEvents => _domainEvents ?? (_domainEvents = new Collection<object>());
-
-        private ICollection<object> _domainEvents;
+        private readonly ICollection<object> _domainEvents = new Collection<object>();
 
         protected AggregateRoot()
         {
@@ -31,6 +39,21 @@ namespace Volo.Abp.Domain.Entities
             : base(id)
         {
 
+        }
+
+        protected virtual void AddDomainEvent(object eventData)
+        {
+            _domainEvents.Add(eventData);
+        }
+
+        public virtual IEnumerable<object> GetDomainEvents()
+        {
+            return _domainEvents;
+        }
+
+        public virtual void ClearDomainEvents()
+        {
+            _domainEvents.Clear();
         }
     }
 }

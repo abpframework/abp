@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
@@ -6,6 +7,7 @@ using System.Threading.Tasks;
 using MongoDB.Driver;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.MongoDB;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Domain.Repositories.MongoDB
 {
@@ -74,7 +76,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
 
         protected override IQueryable<TEntity> GetQueryable()
         {
-            return Collection.AsQueryable();
+            return ApplyDataFilters(Collection.AsQueryable());
         }
 
         protected virtual FilterDefinition<TEntity> CreateEntityFilter(TEntity entity)
@@ -117,6 +119,16 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             return entity;
         }
 
+        public virtual async Task<TEntity> FindAsync(TKey id, CancellationToken cancellationToken = default)
+        {
+            return await Collection.Find(CreateEntityFilter(id, true)).FirstOrDefaultAsync(cancellationToken);
+        }
+
+        public virtual TEntity Find(TKey id)
+        {
+            return Collection.Find(CreateEntityFilter(id, true)).FirstOrDefault();
+        }
+
         public virtual void Delete(TKey id, bool autoSave = false)
         {
             Collection.DeleteOne(CreateEntityFilter(id));
@@ -127,24 +139,38 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             return Collection.DeleteOneAsync(CreateEntityFilter(id), cancellationToken);
         }
 
-        public virtual async Task<TEntity> FindAsync(TKey id, CancellationToken cancellationToken = default)
-        {
-            return await Collection.Find(CreateEntityFilter(id)).FirstOrDefaultAsync(cancellationToken);
-        }
-
-        public virtual TEntity Find(TKey id)
-        {
-            return Collection.Find(CreateEntityFilter(id)).FirstOrDefault();
-        }
-
         protected override FilterDefinition<TEntity> CreateEntityFilter(TEntity entity)
         {
             return Builders<TEntity>.Filter.Eq(e => e.Id, entity.Id);
         }
 
-        protected virtual FilterDefinition<TEntity> CreateEntityFilter(TKey id)
+        protected virtual FilterDefinition<TEntity> CreateEntityFilter(TKey id, bool applyFilters = false)
         {
-            return Builders<TEntity>.Filter.Eq(e => e.Id, id);
+            var filters = new List<FilterDefinition<TEntity>>
+            {
+                Builders<TEntity>.Filter.Eq(e => e.Id, id)
+            };
+
+            if (applyFilters)
+            {
+                AddGlobalFilters(filters);
+            }
+
+            return Builders<TEntity>.Filter.And(filters);
+        }
+
+        protected virtual void AddGlobalFilters(List<FilterDefinition<TEntity>> filters)
+        {
+            if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)) && DataFilter.IsEnabled<ISoftDelete>())
+            {
+                filters.Add(Builders<TEntity>.Filter.Eq(e => ((ISoftDelete) e).IsDeleted, false));
+            }
+
+            if (typeof(IMultiTenant).IsAssignableFrom(typeof(TEntity)))
+            {
+                var tenantId = CurrentTenant.Id;
+                filters.Add(Builders<TEntity>.Filter.Eq(e => ((IMultiTenant) e).TenantId, tenantId));
+            }
         }
     }
 }

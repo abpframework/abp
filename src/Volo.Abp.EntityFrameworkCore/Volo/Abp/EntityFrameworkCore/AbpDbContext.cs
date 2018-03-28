@@ -189,13 +189,14 @@ namespace Volo.Abp.EntityFrameworkCore
                 return;
             }
 
-            if (generatesDomainEventsEntity.DomainEvents.IsNullOrEmpty())
+            var entityEvents = generatesDomainEventsEntity.GetDomainEvents().ToArray();
+            if (entityEvents.IsNullOrEmpty())
             {
                 return;
             }
 
-            domainEvents.AddRange(generatesDomainEventsEntity.DomainEvents.Select(eventData => new DomainEventEntry(entityAsObj, eventData)));
-            generatesDomainEventsEntity.DomainEvents.Clear();
+            domainEvents.AddRange(entityEvents.Select(eventData => new DomainEventEntry(entityAsObj, eventData)));
+            generatesDomainEventsEntity.ClearDomainEvents();
         }
 
         protected virtual void HandleConcurrencyStamp(EntityEntry entry)

@@ -76,7 +76,7 @@ namespace Volo.Abp.Domain.Entities
         {
             var lambdaParam = Expression.Parameter(typeof(TEntity));
             var lambdaBody = Expression.Equal(
-                Expression.PropertyOrField(lambdaParam, "Id"),
+                Expression.PropertyOrField(lambdaParam, nameof(Entity<TKey>.Id)),
                 Expression.Constant(id, typeof(TKey))
             );
 

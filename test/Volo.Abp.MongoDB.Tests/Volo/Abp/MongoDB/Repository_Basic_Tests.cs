@@ -9,7 +9,7 @@ using Xunit;
 
 namespace Volo.Abp.MongoDB
 {
-    public class MongoDb_Repository_Basic_Tests : Repository_Basic_Tests<AbpMongoDbTestModule>
+    public class Repository_Basic_Tests : Repository_Basic_Tests<AbpMongoDbTestModule>
     {
         [Fact]
         public async Task GetAsync()
