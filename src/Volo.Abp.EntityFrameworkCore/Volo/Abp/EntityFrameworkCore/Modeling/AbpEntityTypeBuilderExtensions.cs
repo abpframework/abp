@@ -12,11 +12,12 @@ namespace Volo.Abp.EntityFrameworkCore.Modeling
         public static void ConfigureExtraProperties<T>(this EntityTypeBuilder<T> b)
             where T : class, IHasExtraProperties
         {
-            b.Property(u => u.ExtraProperties)
+            b.Property(x => x.ExtraProperties)
                 .HasConversion(
                     d => JsonConvert.SerializeObject(d, Formatting.None),
                     s => JsonConvert.DeserializeObject<Dictionary<string, object>>(s)
-                );
+                )
+                .HasColumnName(nameof(IHasExtraProperties.ExtraProperties));
         }
 
         public static void ConfigureSoftDelete<T>(this EntityTypeBuilder<T> b)
