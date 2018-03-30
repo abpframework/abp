@@ -41,7 +41,6 @@ namespace Volo.Abp.EntityFrameworkCore
 
         public override void OnPreApplicationInitialization(ApplicationInitializationContext context)
         {
-            context.ServiceProvider.GetRequiredService<TestAppDbContext>().Database.Migrate();
             context.ServiceProvider.GetRequiredService<SecondDbContext>().Database.Migrate();
         }
 
@@ -50,12 +49,11 @@ namespace Volo.Abp.EntityFrameworkCore
             var connection = new SqliteConnection("Data Source=:memory:");
             connection.Open();
 
-            var options = new DbContextOptionsBuilder<TestAppDbContext>().UseSqlite(connection).Options;
-            using (var context = new TestAppDbContext(options))
+            using (var context = new TestMigrationsDbContext(new DbContextOptionsBuilder<TestMigrationsDbContext>().UseSqlite(connection).Options))
             {
                 context.GetService<IRelationalDatabaseCreator>().CreateTables();
             }
-
+            
             return connection;
         }
     }
