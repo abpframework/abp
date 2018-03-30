@@ -79,5 +79,7 @@ namespace Volo.Abp.EntityFrameworkCore.Modeling
             b.ConfigureAudited();
             b.ConfigureDeletionAudited();
         }
+
+        //TODO: Add other interfaces (IMultiTenant, IAudited<TUser>...)
     }
 }
