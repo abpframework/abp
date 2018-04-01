@@ -22,9 +22,9 @@ namespace Volo.Abp.EntityFrameworkCore
     public abstract class AbpDbContext<TDbContext> : DbContext, IEfCoreDbContext
         where TDbContext : DbContext
     {
-        public virtual Guid? CurrentTenantId => CurrentTenant?.Id;
+        protected virtual Guid? CurrentTenantId => CurrentTenant?.Id;
 
-        protected virtual bool IsMayHaveTenantFilterEnabled => DataFilter.IsEnabled<IMultiTenant>();
+        protected virtual bool IsMultiTenantFilterEnabled => DataFilter.IsEnabled<IMultiTenant>();
 
         protected virtual bool IsSoftDeleteFilterEnabled => DataFilter.IsEnabled<ISoftDelete>();
 
@@ -307,7 +307,7 @@ namespace Volo.Abp.EntityFrameworkCore
                  * But this causes a problem with EF Core (see https://github.com/aspnet/EntityFrameworkCore/issues/9502)
                  * So, we made a workaround to make it working. It works same as above.
                  */
-                Expression<Func<TEntity, bool>> multiTenantFilter = e => ((IMultiTenant)e).TenantId == CurrentTenantId || (((IMultiTenant)e).TenantId == CurrentTenantId) == IsMayHaveTenantFilterEnabled;
+                Expression<Func<TEntity, bool>> multiTenantFilter = e => ((IMultiTenant)e).TenantId == CurrentTenantId || (((IMultiTenant)e).TenantId == CurrentTenantId) == IsMultiTenantFilterEnabled;
                 expression = expression == null ? multiTenantFilter : CombineExpressions(expression, multiTenantFilter);
             }
 

@@ -11,7 +11,5 @@ namespace Volo.Abp.MultiTenancy
         Guid? Id { get; }
 
         IDisposable Change(Guid? id);
-
-        IDisposable Clear();
     }
 }

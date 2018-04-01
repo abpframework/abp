@@ -21,11 +21,6 @@ namespace Volo.Abp.MultiTenancy
             return SetCurrent(id);
         }
 
-        public IDisposable Clear() //TODO: Remove
-        {
-            return Change(null);
-        }
-
         private IDisposable SetCurrent(Guid? tenantId)
         {
             var parentScope = _currentTenantIdAccessor.Current;
