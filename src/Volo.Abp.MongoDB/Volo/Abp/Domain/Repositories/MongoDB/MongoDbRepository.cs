@@ -15,8 +15,6 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
         where TMongoDbContext : IAbpMongoDbContext
         where TEntity : class, IEntity
     {
-        public virtual string CollectionName => DbContext.GetCollectionName<TEntity>();
-
         public virtual IMongoCollection<TEntity> Collection => DbContext.Collection<TEntity>();
 
         public virtual IMongoDatabase Database => DbContext.Database;

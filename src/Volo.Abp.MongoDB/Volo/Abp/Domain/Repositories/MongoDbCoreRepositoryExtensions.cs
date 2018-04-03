@@ -19,12 +19,6 @@ namespace Volo.Abp.Domain.Repositories
             return repository.ToMongoDbRepository().Collection;
         }
 
-        public static string GetCollectionName<TEntity, TKey>(this IBasicRepository<TEntity, TKey> repository)
-            where TEntity : class, IEntity<TKey>
-        {
-            return repository.ToMongoDbRepository().CollectionName;
-        }
-
         public static IMongoDbRepository<TEntity, TKey> ToMongoDbRepository<TEntity, TKey>(this IBasicRepository<TEntity, TKey> repository)
             where TEntity : class, IEntity<TKey>
         {

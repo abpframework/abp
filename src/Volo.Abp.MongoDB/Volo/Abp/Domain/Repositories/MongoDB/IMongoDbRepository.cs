@@ -9,8 +9,6 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
         IMongoDatabase Database { get; }
 
         IMongoCollection<TEntity> Collection { get; }
-
-        string CollectionName { get; }
     }
 
     public interface IMongoDbRepository<TEntity, TKey> : IMongoDbRepository<TEntity>, IRepository<TEntity, TKey>

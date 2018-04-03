@@ -1,31 +1,22 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using MongoDB.Driver;
 
 namespace Volo.Abp.MongoDB
 {
     public abstract class AbpMongoDbContext : IAbpMongoDbContext
     {
-        private static readonly MongoEntityMapping[] EmptyTypeList = new MongoEntityMapping[0];
+        public IMongoModelSource ModelSource { get; set; }
 
         public IMongoDatabase Database { get; private set; }
 
-        private readonly Lazy<Dictionary<Type, MongoEntityMapping>> _mappingsByType;
-
-        protected AbpMongoDbContext()
+        protected internal virtual void CreateModel(IMongoModelBuilder modelBuilder)
         {
-            //TODO: Cache model/mappings
 
-            _mappingsByType = new Lazy<Dictionary<Type, MongoEntityMapping>>(() =>
-            {
-                return GetMappings().ToDictionary(m => m.EntityType);
-            }, true);
         }
 
-        public virtual IReadOnlyList<MongoEntityMapping> GetMappings()
+        public virtual void InitializeDatabase(IMongoDatabase database)
         {
-            return EmptyTypeList;
+            Database = database;
         }
 
         public virtual IMongoCollection<T> Collection<T>()
@@ -33,25 +24,21 @@ namespace Volo.Abp.MongoDB
             return Database.GetCollection<T>(GetCollectionName<T>());
         }
 
-        public virtual string GetCollectionName<T>()
+        protected virtual string GetCollectionName<T>()
         {
-            return GetMapping<T>().CollectionName;
+            return GetEntityModel<T>().CollectionName;
         }
 
-        protected virtual MongoEntityMapping GetMapping<T>()
+        protected virtual IMongoEntityModel GetEntityModel<TEntity>()
         {
-            var mapping = _mappingsByType.Value.GetOrDefault(typeof(T));
-            if (mapping == null)
+            var model = ModelSource.GetModel(this).Entities.GetOrDefault(typeof(TEntity));
+
+            if (model == null)
             {
-                throw new AbpException("Unmapped entity type: " + typeof(T).AssemblyQualifiedName);
+                throw new AbpException("Could not find a model for given entity type: " + typeof(TEntity).AssemblyQualifiedName);
             }
 
-            return mapping;
-        }
-
-        public void InitializeDatabase(IMongoDatabase database)
-        {
-            Database = database;
+            return model;
         }
     }
 }

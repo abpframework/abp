@@ -10,6 +10,7 @@ namespace Volo.Abp.EntityFrameworkCore.DependencyInjection
         public EfCoreRepositoryRegistrar(AbpDbContextRegistrationOptions options)
             : base(options)
         {
+
         }
 
         protected override IEnumerable<Type> GetEntityTypes(Type dbContextType)
