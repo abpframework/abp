@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.MongoDB;
 using Volo.Abp.MultiTenancy;
@@ -73,6 +74,11 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
         }
 
         protected override IQueryable<TEntity> GetQueryable()
+        {
+            return ApplyDataFilters(Collection.AsQueryable());
+        }
+
+        protected virtual IMongoQueryable<TEntity> GetMongoQueryable()
         {
             return ApplyDataFilters(Collection.AsQueryable());
         }
