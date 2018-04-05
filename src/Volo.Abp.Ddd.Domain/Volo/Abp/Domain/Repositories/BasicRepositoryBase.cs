@@ -46,9 +46,9 @@ namespace Volo.Abp.Domain.Repositories
     public abstract class BasicRepositoryBase<TEntity, TKey> : BasicRepositoryBase<TEntity>, IBasicRepository<TEntity, TKey>
         where TEntity : class, IEntity<TKey>
     {
-        public virtual TEntity Get(TKey id)
+        public virtual TEntity Get(TKey id, bool includeDetails = true)
         {
-            var entity = Find(id);
+            var entity = Find(id, includeDetails);
 
             if (entity == null)
             {
@@ -58,16 +58,16 @@ namespace Volo.Abp.Domain.Repositories
             return entity;
         }
 
-        public virtual Task<TEntity> GetAsync(TKey id, CancellationToken cancellationToken = default)
+        public virtual Task<TEntity> GetAsync(TKey id, bool includeDetails = true, CancellationToken cancellationToken = default)
         {
-            return Task.FromResult(Get(id));
+            return Task.FromResult(Get(id, includeDetails));
         }
 
-        public abstract TEntity Find(TKey id);
+        public abstract TEntity Find(TKey id, bool includeDetails = true);
 
-        public virtual Task<TEntity> FindAsync(TKey id, CancellationToken cancellationToken = default)
+        public virtual Task<TEntity> FindAsync(TKey id, bool includeDetails = true, CancellationToken cancellationToken = default)
         {
-            return Task.FromResult(Find(id));
+            return Task.FromResult(Find(id, includeDetails));
         }
 
         public virtual void Delete(TKey id, bool autoSave = false)

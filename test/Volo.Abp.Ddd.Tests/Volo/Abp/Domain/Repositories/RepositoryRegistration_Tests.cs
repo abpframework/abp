@@ -259,22 +259,22 @@ namespace Volo.Abp.Domain.Repositories
         public class MyTestDefaultRepository<TEntity, TKey> : MyTestDefaultRepository<TEntity>, IRepository<TEntity, TKey>
             where TEntity : class, IEntity<TKey>
         {
-            public TEntity Get(TKey id)
+            public TEntity Get(TKey id, bool includeDetails = true)
             {
                 throw new NotImplementedException();
             }
 
-            public Task<TEntity> GetAsync(TKey id, CancellationToken cancellationToken = default)
+            public Task<TEntity> GetAsync(TKey id, bool includeDetails = true, CancellationToken cancellationToken = default)
             {
                 throw new NotImplementedException();
             }
 
-            public TEntity Find(TKey id)
+            public TEntity Find(TKey id, bool includeDetails = true)
             {
                 throw new NotImplementedException();
             }
 
-            public Task<TEntity> FindAsync(TKey id, CancellationToken cancellationToken = default)
+            public Task<TEntity> FindAsync(TKey id, bool includeDetails = true, CancellationToken cancellationToken = default)
             {
                 throw new NotImplementedException();
             }

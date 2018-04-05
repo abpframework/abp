@@ -13,34 +13,38 @@ namespace Volo.Abp.Domain.Repositories
         /// Throws <see cref="EntityNotFoundException"/> if can not find an entity with given id.
         /// </summary>
         /// <param name="id">Primary key of the entity to get</param>
+        /// <param name="includeDetails">Set true to include all children of this entity</param>
         /// <returns>Entity</returns>
         [NotNull]
-        TEntity Get(TKey id);
+        TEntity Get(TKey id, bool includeDetails = true);
 
         /// <summary>
         /// Gets an entity with given primary key.
         /// Throws <see cref="EntityNotFoundException"/> if can not find an entity with given id.
         /// </summary>
         /// <param name="id">Primary key of the entity to get</param>
+        /// <param name="includeDetails">Set true to include all children of this entity</param>
         /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
         /// <returns>Entity</returns>
         [NotNull]
-        Task<TEntity> GetAsync(TKey id, CancellationToken cancellationToken = default);
+        Task<TEntity> GetAsync(TKey id, bool includeDetails = true, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets an entity with given primary key or null if not found.
         /// </summary>
         /// <param name="id">Primary key of the entity to get</param>
+        /// <param name="includeDetails">Set true to include all children of this entity</param>
         /// <returns>Entity or null</returns>
         [CanBeNull]
-        TEntity Find(TKey id);
+        TEntity Find(TKey id, bool includeDetails = true);
 
         /// <summary>
         /// Gets an entity with given primary key or null if not found.
         /// </summary>
         /// <param name="id">Primary key of the entity to get</param>
+        /// <param name="includeDetails">Set true to include all children of this entity</param>
         /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
         /// <returns>Entity or null</returns>
-        Task<TEntity> FindAsync(TKey id, CancellationToken cancellationToken = default);
+        Task<TEntity> FindAsync(TKey id, bool includeDetails = true, CancellationToken cancellationToken = default);
     }
 }

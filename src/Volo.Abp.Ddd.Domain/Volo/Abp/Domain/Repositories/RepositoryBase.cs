@@ -40,13 +40,13 @@ namespace Volo.Abp.Domain.Repositories
         {
             foreach (var entity in GetQueryable().Where(predicate).ToList())
             {
-                Delete(entity);
+                Delete(entity, autoSave);
             }
         }
 
         public virtual Task DeleteAsync(Expression<Func<TEntity, bool>> predicate, bool autoSave = false, CancellationToken cancellationToken = default)
         {
-            Delete(predicate);
+            Delete(predicate, autoSave);
             return Task.CompletedTask;
         }
 
@@ -66,19 +66,26 @@ namespace Volo.Abp.Domain.Repositories
 
             return query;
         }
+
+        protected virtual IQueryable<TEntity> IncludeDetails(IQueryable<TEntity> queryable)
+        {
+            return queryable;
+        }
     }
 
     public abstract class RepositoryBase<TEntity, TKey> : RepositoryBase<TEntity>, IRepository<TEntity, TKey>
         where TEntity : class, IEntity<TKey>
     {
-        public virtual TEntity Find(TKey id)
+        public virtual TEntity Find(TKey id, bool includeDetails = true)
         {
-            return GetQueryable().FirstOrDefault(EntityHelper.CreateEqualityExpressionForId<TEntity, TKey>(id));
+            return includeDetails
+                ? IncludeDetails(GetQueryable()).FirstOrDefault(EntityHelper.CreateEqualityExpressionForId<TEntity, TKey>(id))
+                : GetQueryable().FirstOrDefault(EntityHelper.CreateEqualityExpressionForId<TEntity, TKey>(id));
         }
 
-        public virtual TEntity Get(TKey id)
+        public virtual TEntity Get(TKey id, bool includeDetails = true)
         {
-            var entity = Find(id);
+            var entity = Find(id, includeDetails);
 
             if (entity == null)
             {
@@ -88,30 +95,30 @@ namespace Volo.Abp.Domain.Repositories
             return entity;
         }
 
-        public virtual Task<TEntity> GetAsync(TKey id, CancellationToken cancellationToken = default)
+        public virtual Task<TEntity> GetAsync(TKey id, bool includeDetails = true, CancellationToken cancellationToken = default)
         {
-            return Task.FromResult(Get(id));
+            return Task.FromResult(Get(id, includeDetails));
         }
 
-        public virtual Task<TEntity> FindAsync(TKey id, CancellationToken cancellationToken = default)
+        public virtual Task<TEntity> FindAsync(TKey id, bool includeDetails = true, CancellationToken cancellationToken = default)
         {
-            return Task.FromResult(Find(id));
+            return Task.FromResult(Find(id, includeDetails));
         }
 
         public virtual void Delete(TKey id, bool autoSave = false)
         {
-            var entity = Find(id);
+            var entity = Find(id, includeDetails: false);
             if (entity == null)
             {
                 return;
             }
 
-            Delete(entity);
+            Delete(entity, autoSave);
         }
 
         public virtual Task DeleteAsync(TKey id, bool autoSave = false, CancellationToken cancellationToken = default)
         {
-            Delete(id);
+            Delete(id, autoSave);
             return Task.CompletedTask;
         }
     }

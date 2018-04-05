@@ -99,9 +99,9 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
 
         }
 
-        public virtual TEntity Get(TKey id)
+        public virtual TEntity Get(TKey id, bool includeDetails = true)
         {
-            var entity = Find(id);
+            var entity = Find(id, includeDetails);
 
             if (entity == null)
             {
@@ -111,9 +111,9 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             return entity;
         }
 
-        public virtual async Task<TEntity> GetAsync(TKey id, CancellationToken cancellationToken = default)
+        public virtual async Task<TEntity> GetAsync(TKey id, bool includeDetails = true, CancellationToken cancellationToken = default)
         {
-            var entity = await FindAsync(id, cancellationToken);
+            var entity = await FindAsync(id, includeDetails, cancellationToken);
 
             if (entity == null)
             {
@@ -123,12 +123,12 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             return entity;
         }
 
-        public virtual async Task<TEntity> FindAsync(TKey id, CancellationToken cancellationToken = default)
+        public virtual async Task<TEntity> FindAsync(TKey id, bool includeDetails = true, CancellationToken cancellationToken = default)
         {
             return await Collection.Find(CreateEntityFilter(id, true)).FirstOrDefaultAsync(cancellationToken);
         }
 
-        public virtual TEntity Find(TKey id)
+        public virtual TEntity Find(TKey id, bool includeDetails = true)
         {
             return Collection.Find(CreateEntityFilter(id, true)).FirstOrDefault();
         }
