@@ -5,7 +5,7 @@ using System.Collections.ObjectModel;
 namespace Volo.Abp.Domain.Entities
 {
     [Serializable]
-    public abstract class AggregateRoot : Entity, IAggregateRoot
+    public abstract class AggregateRoot : Entity, IAggregateRoot, IGeneratesDomainEvents
     {
         private readonly ICollection<object> _domainEvents = new Collection<object>();
 
@@ -26,7 +26,7 @@ namespace Volo.Abp.Domain.Entities
     }
 
     [Serializable]
-    public abstract class AggregateRoot<TKey> : Entity<TKey>, IAggregateRoot<TKey>
+    public abstract class AggregateRoot<TKey> : Entity<TKey>, IAggregateRoot<TKey>, IGeneratesDomainEvents
     {
         private readonly ICollection<object> _domainEvents = new Collection<object>();
 
