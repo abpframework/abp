@@ -8,6 +8,7 @@ using Volo.Abp.Http.Modeling;
 using Volo.Abp.Modularity;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Security;
+using Volo.Abp.Uow;
 using Volo.Abp.Validation;
 
 namespace Volo.Abp.Application
@@ -26,6 +27,8 @@ namespace Volo.Abp.Application
             {
                 options.IgnoredInterfaces.AddIfNotContains(typeof(IRemoteService));
                 options.IgnoredInterfaces.AddIfNotContains(typeof(IApplicationService));
+                options.IgnoredInterfaces.AddIfNotContains(typeof(IUnitOfWorkEnabled)); //TODO: Move to it's own module if possible?
+                options.IgnoredInterfaces.AddIfNotContains(typeof(IAuthorizationEnabled)); //TODO: Move to it's own module if possible?
             });
 
             services.AddAssemblyOf<AbpDddApplicationModule>();

@@ -1,8 +1,9 @@
 ﻿using Volo.Abp.ApiVersioning;
+using Volo.Abp.Application.Services;
 
 namespace Volo.Abp.AspNetCore.Mvc.Versioning.App
 {
-    public class TodoAppService : ITodoAppService
+    public class TodoAppService : ApplicationService, ITodoAppService
     {
         private readonly IRequestedApiVersion _requestedApiVersion;
 
