@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using JetBrains.Annotations;
 
 namespace Volo.Abp.Users
@@ -21,6 +22,13 @@ namespace Volo.Abp.Users
             }
 
             return value.To<T>();
+        }
+
+        public static Guid GetId(this ICurrentUser currentUser)
+        {
+            Debug.Assert(currentUser.Id != null, "currentUser.Id != null");
+
+            return currentUser.Id.Value;
         }
     }
 }
