@@ -13,12 +13,13 @@ namespace Volo.Abp.DependencyInjection
             var types = AssemblyHelper
                 .GetAllTypes(assembly)
                 .Where(
-                    type => type.IsClass &&
+                    type => type != null &&
+                            type.IsClass &&
                             !type.IsAbstract &&
                             !type.IsGenericType
-                );
+                ).ToArray();
 
-            AddTypes(services, types.ToArray());
+            AddTypes(services, types);
         }
 
         public virtual void AddTypes(IServiceCollection services, params Type[] types)
