@@ -4,7 +4,7 @@ namespace Microsoft.AspNetCore.Hosting
 {
     public static class AbpHostingEnvironmentExtensions
     {
-        public static IConfigurationRoot GetConfiguration(IHostingEnvironment env, string fileName = "appsettings")
+        public static IConfigurationRoot BuildConfiguration(this IHostingEnvironment env, string fileName = "appsettings")
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
