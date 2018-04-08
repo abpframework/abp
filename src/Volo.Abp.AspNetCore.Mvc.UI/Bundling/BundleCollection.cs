@@ -13,7 +13,8 @@ namespace Volo.Abp.AspNetCore.Mvc.Bundling
 
         public void Add(string bundleName, string[] files)
         {
-            _bundles.GetOrAdd(bundleName, () => new List<string>()).AddRange(files);
+            var list = _bundles.GetOrAdd(bundleName, () => new List<string>());
+            list.AddRange(files);
         }
 
         public List<string> GetFiles(string bundleName)

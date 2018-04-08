@@ -47,7 +47,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap
                     "/libs/material/js/material-min.js",
                     "/libs/datatables/datatables-min.js",
                     "/libs/vue/vue.js",
-                    "/libs/abp/abp-jquery.js?_v" + DateTime.Now.Ticks
+                    "/libs/abp/abp-jquery.js?_v" + DateTime.Now.Ticks,
+
+                    "/Abp/ApplicationConfigurationScript?_v=" + DateTime.Now.Ticks,
+                    "/Abp/ServiceProxyScript?_v=" + DateTime.Now.Ticks
                 });
             });
         }
