@@ -1,15 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+using Volo.Abp;
+using Volo.Abp.Authorization;
 
-namespace Volo.Abp.Authorization
+namespace Microsoft.AspNetCore.Authorization
 {
     public static class AbpAuthorizationServiceExtensions
     {
         public static Task<AuthorizationResult> AuthorizeAsync(this IAuthorizationService authorizationService, string policyName)
         {
-            return authorizationService.AuthorizeAsync(
-                authorizationService.AsAbpAuthorizationService().CurrentPrincipal,
+            return AuthorizeAsync(authorizationService, authorizationService.AsAbpAuthorizationService().CurrentPrincipal,
                 policyName
             );
         }
@@ -34,8 +34,7 @@ namespace Volo.Abp.Authorization
 
         public static Task<AuthorizationResult> AuthorizeAsync(this IAuthorizationService authorizationService, AuthorizationPolicy policy)
         {
-            return authorizationService.AuthorizeAsync(
-                authorizationService.AsAbpAuthorizationService().CurrentPrincipal,
+            return AuthorizeAsync(authorizationService, authorizationService.AsAbpAuthorizationService().CurrentPrincipal,
                 policy
             );
         }

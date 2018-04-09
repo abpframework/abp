@@ -25,17 +25,22 @@ namespace Volo.Abp.Authorization
 
         public override async Task<AuthorizationPolicy> GetPolicyAsync(string policyName)
         {
-            var permission = _permissionDefinitionManager.GetOrNull(policyName);
-
-            if (permission == null)
+            var policy = await base.GetPolicyAsync(policyName);
+            if (policy != null)
             {
-                return await base.GetPolicyAsync(policyName);
+                return policy;
             }
 
-            //TODO: Optimize & Cache!
-            var policyBuilder = new AuthorizationPolicyBuilder(Array.Empty<string>());
-            policyBuilder.Requirements.Add(new PermissionRequirement(policyName));
-            return policyBuilder.Build();
+            var permission = _permissionDefinitionManager.GetOrNull(policyName);
+            if (permission != null)
+            {
+                //TODO: Optimize & Cache!
+                var policyBuilder = new AuthorizationPolicyBuilder(Array.Empty<string>());
+                policyBuilder.Requirements.Add(new PermissionRequirement(policyName));
+                return policyBuilder.Build();
+            }
+
+            return null;
         }
 
         public Task<List<string>> GetPoliciesNamesAsync()
