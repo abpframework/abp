@@ -21,23 +21,53 @@ namespace Volo.Abp.EntityFrameworkCore.DependencyInjection
                 creationContext.ExistingConnection
             );
 
-            var dbContextOptions = GetDbContextOptions<TDbContext>(serviceProvider);
+            var options = GetDbContextOptions<TDbContext>(serviceProvider);
 
-            var configureAction = dbContextOptions.ConfigureActions.GetOrDefault(typeof(TDbContext));
+            PreConfigure(options, context);
+            Configure(options, context);
+
+            return context.DbContextOptions.Options;
+        }
+
+        private static void PreConfigure<TDbContext>(
+            AbpDbContextOptions options,
+            AbpDbContextConfigurationContext<TDbContext> context)
+            where TDbContext : AbpDbContext<TDbContext>
+        {
+            foreach (var defaultPreConfigureAction in options.DefaultPreConfigureActions)
+            {
+                defaultPreConfigureAction.Invoke(context);
+            }
+
+            var preConfigureActions = options.PreConfigureActions.GetOrDefault(typeof(TDbContext));
+            if (!preConfigureActions.IsNullOrEmpty())
+            {
+                foreach (var preConfigureAction in preConfigureActions)
+                {
+                    ((Action<AbpDbContextConfigurationContext<TDbContext>>)preConfigureAction).Invoke(context);
+                }
+            }
+        }
+
+        private static void Configure<TDbContext>(
+            AbpDbContextOptions options,
+            AbpDbContextConfigurationContext<TDbContext> context)
+            where TDbContext : AbpDbContext<TDbContext>
+        {
+            var configureAction = options.ConfigureActions.GetOrDefault(typeof(TDbContext));
             if (configureAction != null)
             {
                 ((Action<AbpDbContextConfigurationContext<TDbContext>>)configureAction).Invoke(context);
             }
-            else if (dbContextOptions.DefaultConfigureAction != null)
+            else if (options.DefaultConfigureAction != null)
             {
-                dbContextOptions.DefaultConfigureAction.Invoke(context);
+                options.DefaultConfigureAction.Invoke(context);
             }
             else
             {
-                throw new AbpException($"No configuration found for {typeof(DbContext).AssemblyQualifiedName}! Use services.Configure<AbpDbContextOptions>(...) to configure it.");
+                throw new AbpException(
+                    $"No configuration found for {typeof(DbContext).AssemblyQualifiedName}! Use services.Configure<AbpDbContextOptions>(...) to configure it.");
             }
-
-            return context.DbContextOptions.Options;
         }
 
         private static AbpDbContextOptions GetDbContextOptions<TDbContext>(IServiceProvider serviceProvider)
