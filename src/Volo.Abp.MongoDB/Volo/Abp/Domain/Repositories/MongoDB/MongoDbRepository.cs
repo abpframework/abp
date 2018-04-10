@@ -12,6 +12,8 @@ using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Domain.Repositories.MongoDB
 {
+    //TODO: Use GetCancellationToken() method!
+
     public class MongoDbRepository<TMongoDbContext, TEntity> : RepositoryBase<TEntity>, IMongoDbRepository<TEntity>
         where TMongoDbContext : IAbpMongoDbContext
         where TEntity : class, IEntity
