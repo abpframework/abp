@@ -19,9 +19,9 @@ namespace Volo.Abp.Domain.Entities.Auditing
     /// <summary>
     /// This class can be used to simplify implementing <see cref="ICreationAudited"/> for aggregate roots.
     /// </summary>
-    /// <typeparam name="TPrimaryKey">Type of the primary key of the entity</typeparam>
+    /// <typeparam name="TKey">Type of the primary key of the entity</typeparam>
     [Serializable]
-    public abstract class CreationAuditedAggregateRoot<TPrimaryKey> : AggregateRoot<TPrimaryKey>, ICreationAudited
+    public abstract class CreationAuditedAggregateRoot<TKey> : AggregateRoot<TKey>, ICreationAudited
     {
         /// <inheritdoc />
         public virtual DateTime CreationTime { get; set; }

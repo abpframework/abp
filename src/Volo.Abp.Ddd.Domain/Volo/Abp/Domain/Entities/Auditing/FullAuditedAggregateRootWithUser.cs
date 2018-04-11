@@ -24,10 +24,10 @@ namespace Volo.Abp.Domain.Entities.Auditing
     /// <summary>
     /// Implements <see cref="IFullAudited{TUser}"/> to be a base class for full-audited aggregate roots.
     /// </summary>
-    /// <typeparam name="TPrimaryKey">Type of the primary key of the entity</typeparam>
+    /// <typeparam name="TKey">Type of the primary key of the entity</typeparam>
     /// <typeparam name="TUser">Type of the user</typeparam>
     [Serializable]
-    public abstract class FullAuditedAggregateRootWithUser<TPrimaryKey, TUser> : FullAuditedAggregateRoot<TPrimaryKey>, IFullAudited<TUser>
+    public abstract class FullAuditedAggregateRootWithUser<TKey, TUser> : FullAuditedAggregateRoot<TKey>, IFullAudited<TUser>
         where TUser : IEntity<long>
     {
         /// <inheritdoc />

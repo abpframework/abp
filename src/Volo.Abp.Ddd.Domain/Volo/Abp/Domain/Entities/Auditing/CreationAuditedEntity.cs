@@ -19,9 +19,9 @@ namespace Volo.Abp.Domain.Entities.Auditing
     /// <summary>
     /// This class can be used to simplify implementing <see cref="ICreationAudited"/> for an entity.
     /// </summary>
-    /// <typeparam name="TPrimaryKey">Type of the primary key of the entity</typeparam>
+    /// <typeparam name="TKey">Type of the primary key of the entity</typeparam>
     [Serializable]
-    public abstract class CreationAuditedEntity<TPrimaryKey> : Entity<TPrimaryKey>, ICreationAudited
+    public abstract class CreationAuditedEntity<TKey> : Entity<TKey>, ICreationAudited
     {
         /// <inheritdoc />
         public virtual DateTime CreationTime { get; set; }

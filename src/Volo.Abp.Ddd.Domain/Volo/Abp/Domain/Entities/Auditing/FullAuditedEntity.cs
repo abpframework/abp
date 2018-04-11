@@ -22,9 +22,9 @@ namespace Volo.Abp.Domain.Entities.Auditing
     /// <summary>
     /// Implements <see cref="IFullAudited"/> to be a base class for full-audited entities.
     /// </summary>
-    /// <typeparam name="TPrimaryKey">Type of the primary key of the entity</typeparam>
+    /// <typeparam name="TKey">Type of the primary key of the entity</typeparam>
     [Serializable]
-    public abstract class FullAuditedEntity<TPrimaryKey> : AuditedEntity<TPrimaryKey>, IFullAudited
+    public abstract class FullAuditedEntity<TKey> : AuditedEntity<TKey>, IFullAudited
     {
         /// <inheritdoc />
         public virtual bool IsDeleted { get; set; }
