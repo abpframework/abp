@@ -13,8 +13,6 @@ namespace Microsoft.Extensions.DependencyInjection
             var options = new MemoryDbContextRegistrationOptions(typeof(TMemoryDbContext));
             optionsBuilder?.Invoke(options);
 
-            services.AddSingleton<TMemoryDbContext>();
-
             if (options.DefaultRepositoryDbContextType != typeof(TMemoryDbContext))
             {
                 services.TryAddSingleton(options.DefaultRepositoryDbContextType, sp => sp.GetRequiredService<TMemoryDbContext>());

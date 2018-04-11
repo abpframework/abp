@@ -17,13 +17,7 @@ namespace Microsoft.Extensions.DependencyInjection
             var options = new AbpDbContextRegistrationOptions(typeof(TDbContext));
             optionsBuilder?.Invoke(options);
 
-            services.TryAddTransient<TDbContext>();
             services.TryAddTransient(DbContextOptionsFactory.Create<TDbContext>);
-
-            if (options.DefaultRepositoryDbContextType != typeof(TDbContext))
-            {
-                services.TryAddTransient(options.DefaultRepositoryDbContextType, typeof(TDbContext));
-            }
 
             foreach (var dbContextType in options.ReplacedDbContextTypes)
             {

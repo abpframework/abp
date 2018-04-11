@@ -31,7 +31,7 @@ namespace Volo.Abp.Domain.Repositories
 
         protected virtual void RegisterDefaultRepositories(IServiceCollection services)
         {
-            foreach (var entityType in GetEntityTypes(Options.DefaultRepositoryDbContextType))
+            foreach (var entityType in GetEntityTypes(Options.OriginalDbContextType))
             {
                 if (!ShouldRegisterDefaultRepositoryFor(entityType))
                 {

@@ -1,9 +1,10 @@
 using System.Collections.Generic;
 using MongoDB.Driver;
+using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.MongoDB
 {
-    public abstract class AbpMongoDbContext : IAbpMongoDbContext
+    public abstract class AbpMongoDbContext : IAbpMongoDbContext, ITransientDependency
     {
         public IMongoModelSource ModelSource { get; set; }
 

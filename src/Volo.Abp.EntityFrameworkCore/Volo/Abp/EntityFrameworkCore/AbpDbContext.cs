@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Volo.Abp.Auditing;
 using Volo.Abp.Data;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Entities.Events;
 using Volo.Abp.Guids;
@@ -19,7 +20,7 @@ using Volo.Abp.Reflection;
 
 namespace Volo.Abp.EntityFrameworkCore
 {
-    public abstract class AbpDbContext<TDbContext> : DbContext, IEfCoreDbContext
+    public abstract class AbpDbContext<TDbContext> : DbContext, IEfCoreDbContext, ITransientDependency
         where TDbContext : DbContext
     {
         protected virtual Guid? CurrentTenantId => CurrentTenant?.Id;

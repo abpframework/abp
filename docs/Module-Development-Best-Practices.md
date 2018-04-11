@@ -160,7 +160,7 @@ public static string Schema { get; set; } = AbpIdentityConsts.DefaultDbSchema;
 
 ###### Model Mapping
 
-- **Do** explicitly configure all entities by overriding the `OnModelCreating` method of the `DbContext`. Example:
+- **Do** explicitly **configure all entities** by overriding the `OnModelCreating` method of the `DbContext`. Example:
 
 ````C#
 protected override void OnModelCreating(ModelBuilder builder)
@@ -175,7 +175,7 @@ protected override void OnModelCreating(ModelBuilder builder)
 }
 ````
 
-- **Do not** configure model directly in the  `OnModelCreating` method. Instead, create an extension method for `ModelBuilder`. Use Configure*ModuleName* as the method name. Example:
+- **Do not** configure model directly in the  `OnModelCreating` method. Instead, create an **extension method** for `ModelBuilder`. Use Configure*ModuleName* as the method name. Example:
 
 ````C#
 public static class IdentityDbContextModelBuilderExtensions
@@ -206,7 +206,7 @@ public static class IdentityDbContextModelBuilderExtensions
 }
 ````
 
-* Do create a configuration options class by inheriting from the `ModelBuilderConfigurationOptions`. Example:
+* **Do** create a **configuration options** class by inheriting from the `ModelBuilderConfigurationOptions`. Example:
 
 ````C#
 public class IdentityModelBuilderConfigurationOptions : ModelBuilderConfigurationOptions
@@ -219,12 +219,93 @@ public class IdentityModelBuilderConfigurationOptions : ModelBuilderConfiguratio
 }
 ````
 
-###### Module Class
-
-Define
-
 ###### Repository Implementation
 
-- ​
+- **Do** **inherit** the repository from the `EfCoreRepository<TDbContext, TEntity, TKey>` class and implement the corresponding repository interface. Example:
+
+````C#
+public class EfCoreIdentityUserRepository
+    : EfCoreRepository<IIdentityDbContext, IdentityUser, Guid>, IIdentityUserRepository
+{
+    public EfCoreIdentityUserRepository(
+        IDbContextProvider<IIdentityDbContext> dbContextProvider)
+        : base(dbContextProvider)
+    {
+    }
+}
+````
+
+* **Do** pass the `cancellationToken` to EF Core using the `GetCancellationToken` helper method. Example:
+
+````C#
+public virtual async Task<IdentityUser> FindByNormalizedUserNameAsync(
+    string normalizedUserName, 
+    bool includeDetails = true,
+    CancellationToken cancellationToken = default)
+{
+    return await DbSet
+        .IncludeDetails(includeDetails)
+        .FirstOrDefaultAsync(
+            u => u.NormalizedUserName == normalizedUserName,
+            GetCancellationToken(cancellationToken)
+        );
+}
+````
+
+`GetCancellationToken` fallbacks to the `ICancellationTokenProvider.Token` to obtain the cancellation token if it is not provided by the caller code.
+
+- **Do** create a `IncludeDetails` **extension method** for the `IQueryable<TEntity>` for each aggregate root which has **sub collections**. Example:
+
+````C#
+public static IQueryable<IdentityUser> IncludeDetails(
+    this IQueryable<IdentityUser> queryable,
+    bool include = true)
+{
+    if (!include)
+    {
+        return queryable;
+    }
+
+    return queryable
+        .Include(x => x.Roles)
+        .Include(x => x.Logins)
+        .Include(x => x.Claims)
+        .Include(x => x.Tokens);
+}
+````
+
+* **Do** use the `IncludeDetails` extension method in the repository methods just like used in the example code above (see FindByNormalizedUserNameAsync).
+
+- **Do** override `IncludeDetails` method of the repository for aggregates root which have **sub collections**. Example:
+
+````C#
+protected override IQueryable<IdentityUser> IncludeDetails(IQueryable<IdentityUser> queryable)
+{
+    return queryable.IncludeDetails(); //uses the extension method defined above
+}
+````
+
+###### Module Class
+
+- **Do** define a module class for the Entity Framework Core integration package.
+- **Do** add `DbContext` to the `IServiceCollection` using the `AddAbpDbContext<TDbContext>` method.
+- **Do** add implemented repositories to the options for the `AddAbpDbContext<TDbContext>` method. Example:
+
+````C#
+[DependsOn(typeof(AbpIdentityDomainModule))]
+public class AbpIdentityEntityFrameworkCoreModule : AbpModule
+{
+    public override void ConfigureServices(IServiceCollection services)
+    {
+        services.AddAbpDbContext<IdentityDbContext>(options =>
+        {
+            options.AddRepository<IdentityUser, EfCoreIdentityUserRepository>();
+            options.AddRepository<IdentityRole, EfCoreIdentityRoleRepository>();
+        });
+
+        services.AddAssemblyOf<AbpIdentityEntityFrameworkCoreModule>();
+    }
+}
+````
 
 ##### MongoDB

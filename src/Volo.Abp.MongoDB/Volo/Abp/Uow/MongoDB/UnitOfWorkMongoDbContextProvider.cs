@@ -51,8 +51,7 @@ namespace Volo.Abp.Uow.MongoDB
 
                     var dbContext = unitOfWork.ServiceProvider.GetRequiredService<TMongoDbContext>();
 
-                    var abpDbContext = unitOfWork.ServiceProvider.GetRequiredService<TMongoDbContext>().ToAbpMongoDbContext();
-                    abpDbContext.InitializeDatabase(database);
+                    dbContext.ToAbpMongoDbContext().InitializeDatabase(database);
 
                     return new MongoDbDatabaseApi<TMongoDbContext>(dbContext);
                 });

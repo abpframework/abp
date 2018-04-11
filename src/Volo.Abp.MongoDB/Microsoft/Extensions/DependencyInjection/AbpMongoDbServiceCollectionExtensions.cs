@@ -13,16 +13,9 @@ namespace Microsoft.Extensions.DependencyInjection
             var options = new MongoDbContextRegistrationOptions(typeof(TMongoDbContext));
             optionsBuilder?.Invoke(options);
 
-            services.TryAddSingleton<TMongoDbContext>();
-
-            if (options.DefaultRepositoryDbContextType != typeof(TMongoDbContext))
-            {
-                services.TryAddSingleton(options.DefaultRepositoryDbContextType, sp => sp.GetRequiredService<TMongoDbContext>());
-            }
-
             foreach (var dbContextType in options.ReplacedDbContextTypes)
             {
-                services.Replace(ServiceDescriptor.Singleton(dbContextType, sp => sp.GetRequiredService<TMongoDbContext>()));
+                services.Replace(ServiceDescriptor.Transient(dbContextType, typeof(TMongoDbContext)));
             }
 
             new MongoDbRepositoryRegistrar(options)
