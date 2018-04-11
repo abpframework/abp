@@ -13,7 +13,7 @@ Also, this guide is mostly usable for the **application development**.
 ### Guides
 
 * Domain Layer
-  * Entities
+  * [Entities](Entities.md)
   * [Repositories](Repositories.md)
   * Domain Services
 * Application Layer
