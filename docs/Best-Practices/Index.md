@@ -15,10 +15,10 @@ Also, this guide is mostly usable for the **application development**.
 * Domain Layer
   * [Entities](Entities.md)
   * [Repositories](Repositories.md)
-  * Domain Services
+  * [Domain Services](Domain-Services.md)
 * Application Layer
-  * Application Services
-  * Data Transfer Objects
+  * [Application Services](Application-Services.md)
+  * [Data Transfer Objects](Data-Transfer-Objects.md)
 * Data Access
   * [Entity Framework Core Integration](Entity-Framework-Core-Integration.md)
   * [MongoDB Integration](MongoDB-Integration.md)
