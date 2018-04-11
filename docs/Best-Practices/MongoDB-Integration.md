@@ -1,12 +1,12 @@
 ﻿## MongoDB Integration
 
-* Do define a separated `DbContext` interface and class for each module.
+* Do define a separated `MongoDbContext` interface and class for each module.
 
 ### MongoDbContext Interface
 
 - **Do** define an **interface** for the `MongoDbContext` that inherits from `IAbpMongoDbContext`.
 - **Do** add a `ConnectionStringName` **attribute** to the `MongoDbContext` interface.
-- **Do** add `IMongoCollection<TEntity>` **properties** to the `MongoDbContext` interface for only aggregate roots. Example:
+- **Do** add `IMongoCollection<TEntity>` **properties** to the `MongoDbContext` interface only for the aggregate roots. Example:
 
 ````C#
 [ConnectionStringName("AbpIdentity")]
@@ -48,7 +48,7 @@ Used the same constant defined for the EF Core integration table prefix in this 
 
 ### Collection Mapping
 
-- **Do** explicitly **configure all entities** by overriding the `CreateModel` method of the `MongoDbContext`. Example:
+- **Do** explicitly **configure all aggregate roots** by overriding the `CreateModel` method of the `MongoDbContext`. Example:
 
 ```c#
 protected override void CreateModel(IMongoModelBuilder modelBuilder)
@@ -62,7 +62,7 @@ protected override void CreateModel(IMongoModelBuilder modelBuilder)
 }
 ```
 
-- **Do not** configure model directly in the  `CreateModel` method. Instead, create an **extension method** for `IMongoModelBuilder`. Use Configure*ModuleName* as the method name. Example:
+- **Do not** configure model directly in the  `CreateModel` method. Instead, create an **extension method** for the `IMongoModelBuilder`. Use Configure*ModuleName* as the method name. Example:
 
 ```c#
 public static class AbpIdentityMongoDbContextExtensions
@@ -129,7 +129,7 @@ public static class AbpIdentityBsonClassMap
 }
 ````
 
-`BsonClassMap` works with static methods. So, it is only needed to configure entities once in an application. `OneTimeRunner` guarantees it in a thread safe manner. Such a mapping above ensures that unit test properly run. This code will be called by the **module class** below.
+`BsonClassMap` works with static methods. So, it is only needed to configure entities once in an application. `OneTimeRunner` guarantees that it runs in a thread safe manner and only once in the application life. Such a mapping above ensures that unit test properly run. This code will be called by the **module class** below.
 
 ### Repository Implementation
 
@@ -170,7 +170,7 @@ public async Task<IdentityUser> FindByNormalizedUserNameAsync(
 * **Do** use the `GetMongoQueryable()` method to obtain an `IQueryable<TEntity>` to perform queries  wherever possible. Because;
   *  `GetMongoQueryable()` method automatically uses the `ApplyDataFilters` method to filter the data based on the current data filters (like soft delete and multi-tenancy).
   * Using `IQueryable<TEntity>` makes the code as much as similar to the EF Core repository implementation and easy to write and read.
-* **Do** implement data filtering if the `GetMongoQueryable()` method is not possible to use.
+* **Do** implement data filtering if it is not possible to use the `GetMongoQueryable()` method.
 
 ### Module Class
 
