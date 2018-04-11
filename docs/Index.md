@@ -11,7 +11,7 @@
 * Module Development
   * <a href="Module-Development-Basics.md" target="_blank">Basics</a>
   * Plug-In Modules
-  * Best Practices
+  * [Best Practices](Best-Practices/Index.md)
 * Domain Driven Design
   * Domain Layer
     * [Entities & Aggregate Roots](Entities.md)

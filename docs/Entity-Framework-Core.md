@@ -100,9 +100,9 @@ TODO: Example
 
 TODO...
 
-### Advanced Topics
+### Best Practices
 
-We will cover advanced techniques especially used to develop reusable modules and modular applications.
+See [best practices](Best-Practices/) for EF Core integration.
 
 #### Set Base DbContext Class or Interface for Default Repositories
 
