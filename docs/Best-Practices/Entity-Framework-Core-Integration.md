@@ -2,7 +2,9 @@
 
 > See [Entity Framework Core Integration document](../Entity-Framework-Core.md) for the basics of the EF Core integration.
 
-- Do define a separated `DbContext` interface and class for each module.
+- **Do** define a separated `DbContext` interface and class for each module.
+- **Do not** rely on lazy loading on the application development.
+- **Do not** enable lazy loading for the `DbContext`.
 
 ### DbContext Interface
 
