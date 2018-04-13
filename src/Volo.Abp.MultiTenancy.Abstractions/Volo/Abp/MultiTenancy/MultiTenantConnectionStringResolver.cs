@@ -40,12 +40,7 @@ namespace Volo.Abp.MultiTenancy
 
                 var tenant = AsyncHelper.RunSync(() => tenantStore.FindAsync(_currentTenant.Id.Value)); //TODO: Can we avoid from RunSync?
 
-                if (tenant == null)
-                {
-                    return base.Resolve(connectionStringName);
-                }
-
-                if (tenant.ConnectionStrings == null)
+                if (tenant?.ConnectionStrings == null)
                 {
                     return base.Resolve(connectionStringName);
                 }

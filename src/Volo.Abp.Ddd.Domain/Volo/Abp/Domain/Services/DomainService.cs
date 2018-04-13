@@ -2,6 +2,7 @@ using System;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Guids;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.Timing;
 
 namespace Volo.Abp.Domain.Services
@@ -13,6 +14,8 @@ namespace Volo.Abp.Domain.Services
         public IGuidGenerator GuidGenerator { get; set; }
 
         public ILoggerFactory LoggerFactory { get; set; }
+        
+        public ICurrentTenant CurrentTenant { get; set; }
 
         protected ILogger Logger => _lazyLogger.Value;
         private Lazy<ILogger> _lazyLogger => new Lazy<ILogger>(() => LoggerFactory?.CreateLogger(GetType().FullName) ?? NullLogger.Instance, true);
