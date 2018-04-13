@@ -22,6 +22,11 @@ namespace Volo.Abp.Domain.Entities.Events
             
         }
 
+        public void TriggerEntityCreatedEvent(object entity)
+        {
+            
+        }
+
         public void TriggerEntityCreatedEventOnUowCompleted(object entity)
         {
             
@@ -32,12 +37,22 @@ namespace Volo.Abp.Domain.Entities.Events
             
         }
 
+        public void TriggerEntityUpdatedEvent(object entity)
+        {
+            
+        }
+
         public void TriggerEntityUpdatedEventOnUowCompleted(object entity)
         {
             
         }
 
         public void TriggerEntityDeletingEvent(object entity)
+        {
+            
+        }
+
+        public void TriggerEntityDeletedEvent(object entity)
         {
             
         }

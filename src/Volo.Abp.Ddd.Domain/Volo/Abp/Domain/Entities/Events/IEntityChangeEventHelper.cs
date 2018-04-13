@@ -13,13 +13,19 @@ namespace Volo.Abp.Domain.Entities.Events
 
         void TriggerEntityCreatingEvent(object entity);
 
+        void TriggerEntityCreatedEvent(object entity);
+
         void TriggerEntityCreatedEventOnUowCompleted(object entity);
 
         void TriggerEntityUpdatingEvent(object entity);
-        
+
+        void TriggerEntityUpdatedEvent(object entity);
+
         void TriggerEntityUpdatedEventOnUowCompleted(object entity);
 
         void TriggerEntityDeletingEvent(object entity);
+
+        void TriggerEntityDeletedEvent(object entity);
         
         void TriggerEntityDeletedEventOnUowCompleted(object entity);
     }

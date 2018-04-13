@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.Domain.Entities.Events;
+using Volo.Abp.DynamicProxy;
+using Volo.Abp.EventBus;
 using Volo.Abp.MongoDB;
 using Volo.Abp.MultiTenancy;
 
@@ -26,14 +29,28 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
 
         protected IMongoDbContextProvider<TMongoDbContext> DbContextProvider { get; }
 
+        public IEventBus EventBus { get; set; }
+
+        public IEntityChangeEventHelper EntityChangeEventHelper { get; set; }
+
         public MongoDbRepository(IMongoDbContextProvider<TMongoDbContext> dbContextProvider)
         {
             DbContextProvider = dbContextProvider;
+
+            EventBus = NullEventBus.Instance;
+            EntityChangeEventHelper = NullEntityChangeEventHelper.Instance;
         }
 
         public override TEntity Insert(TEntity entity, bool autoSave = false)
         {
+            EntityChangeEventHelper.TriggerEntityCreatingEvent(entity);
+
+            TriggerDomainEvents(entity);
+
             Collection.InsertOne(entity);
+
+            EntityChangeEventHelper.TriggerEntityCreatedEventOnUowCompleted(entity);
+
             return entity;
         }
 
@@ -42,20 +59,32 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             bool autoSave = false, 
             CancellationToken cancellationToken = default)
         {
+            EntityChangeEventHelper.TriggerEntityCreatingEvent(entity);
+
+            TriggerDomainEvents(entity);
+
             await Collection.InsertOneAsync(
                 entity,
                 cancellationToken: GetCancellationToken(cancellationToken)
             );
+
+            EntityChangeEventHelper.TriggerEntityCreatedEventOnUowCompleted(entity);
 
             return entity;
         }
 
         public override TEntity Update(TEntity entity, bool autoSave = false)
         {
+            EntityChangeEventHelper.TriggerEntityUpdatingEvent(entity);
+
+            TriggerDomainEvents(entity);
+
             Collection.ReplaceOne(
                 CreateEntityFilter(entity),
                 entity
             );
+
+            EntityChangeEventHelper.TriggerEntityUpdatedEvent(entity);
 
             return entity;
         }
@@ -65,20 +94,30 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             bool autoSave = false, 
             CancellationToken cancellationToken = default)
         {
+            EntityChangeEventHelper.TriggerEntityUpdatingEvent(entity);
+
+            TriggerDomainEvents(entity);
+
             await Collection.ReplaceOneAsync(
                 CreateEntityFilter(entity),
                 entity,
                 cancellationToken: GetCancellationToken(cancellationToken)
             );
 
+            EntityChangeEventHelper.TriggerEntityUpdatedEvent(entity);
+
             return entity;
         }
 
         public override void Delete(TEntity entity, bool autoSave = false)
         {
+            EntityChangeEventHelper.TriggerEntityDeletingEvent(entity);
+
             Collection.DeleteOne(
                 CreateEntityFilter(entity)
             );
+
+            EntityChangeEventHelper.TriggerEntityDeletedEvent(entity);
         }
 
         public override async Task DeleteAsync(
@@ -86,14 +125,20 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             bool autoSave = false, 
             CancellationToken cancellationToken = default)
         {
+            EntityChangeEventHelper.TriggerEntityDeletingEvent(entity);
+
             await Collection.DeleteOneAsync(
                 CreateEntityFilter(entity),
                 GetCancellationToken(cancellationToken)
             );
+
+            EntityChangeEventHelper.TriggerEntityDeletedEvent(entity);
         }
 
         public override void Delete(Expression<Func<TEntity, bool>> predicate, bool autoSave = false)
         {
+            //TODO: How to handle entity deletion event, soft delete and other stuff?
+
             Collection.DeleteMany(
                 Builders<TEntity>.Filter.Where(predicate)
             );
@@ -104,6 +149,8 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             bool autoSave = false, 
             CancellationToken cancellationToken = default)
         {
+            //TODO: How to handle entity deletion event, soft delete and other stuff?
+
             await Collection.DeleteManyAsync(
                 Builders<TEntity>.Filter.Where(predicate),
                 GetCancellationToken(cancellationToken)
@@ -130,6 +177,28 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
                 $"{nameof(CreateEntityFilter)} is not implemented for MongoDB by default. " +
                 $"It should be overrided and implemented by the deriving class!"
             );
+        }
+
+        protected virtual void TriggerDomainEvents(object entity) //TODO: TriggerDomainEventsAsync..?
+        {
+            var generatesDomainEventsEntity = entity as IGeneratesDomainEvents;
+            if (generatesDomainEventsEntity == null)
+            {
+                return;
+            }
+
+            var entityEvents = generatesDomainEventsEntity.GetDomainEvents().ToArray();
+            if (entityEvents.IsNullOrEmpty())
+            {
+                return;
+            }
+
+            foreach (var entityEvent in entityEvents)
+            {
+                EventBus.Trigger(entityEvent.GetType(), entityEvent);
+            }
+
+            generatesDomainEventsEntity.ClearDomainEvents();
         }
     }
 

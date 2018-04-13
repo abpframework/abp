@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.DynamicProxy;
 using Volo.Abp.EventBus;
 using Volo.Abp.Uow;
 
@@ -51,6 +52,11 @@ namespace Volo.Abp.Domain.Entities.Events
             TriggerEventWithEntity(typeof(EntityCreatingEventData<>), entity, true);
         }
 
+        public void TriggerEntityCreatedEvent(object entity)
+        {
+            TriggerEventWithEntity(typeof(EntityCreatedEventData<>), entity, true);
+        }
+
         public virtual void TriggerEntityCreatedEventOnUowCompleted(object entity)
         {
             TriggerEventWithEntity(typeof(EntityCreatedEventData<>), entity, false);
@@ -61,6 +67,11 @@ namespace Volo.Abp.Domain.Entities.Events
             TriggerEventWithEntity(typeof(EntityUpdatingEventData<>), entity, true);
         }
 
+        public void TriggerEntityUpdatedEvent(object entity)
+        {
+            TriggerEventWithEntity(typeof(EntityUpdatedEventData<>), entity, true);
+        }
+
         public virtual void TriggerEntityUpdatedEventOnUowCompleted(object entity)
         {
             TriggerEventWithEntity(typeof(EntityUpdatedEventData<>), entity, false);
@@ -69,6 +80,11 @@ namespace Volo.Abp.Domain.Entities.Events
         public virtual void TriggerEntityDeletingEvent(object entity)
         {
             TriggerEventWithEntity(typeof(EntityDeletingEventData<>), entity, true);
+        }
+
+        public void TriggerEntityDeletedEvent(object entity)
+        {
+            TriggerEventWithEntity(typeof(EntityDeletedEventData<>), entity, true);
         }
 
         public virtual void TriggerEntityDeletedEventOnUowCompleted(object entity)
@@ -116,7 +132,7 @@ namespace Volo.Abp.Domain.Entities.Events
 
         protected virtual void TriggerEventWithEntity(Type genericEventType, object entity, bool triggerInCurrentUnitOfWork)
         {
-            var entityType = entity.GetType();
+            var entityType = ProxyHelper.UnProxy(entity).GetType();
             var eventType = genericEventType.MakeGenericType(entityType);
 
             if (triggerInCurrentUnitOfWork || _unitOfWorkManager.Current == null)
