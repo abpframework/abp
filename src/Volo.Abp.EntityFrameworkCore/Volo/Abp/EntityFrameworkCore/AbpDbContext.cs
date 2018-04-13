@@ -39,7 +39,12 @@ namespace Volo.Abp.EntityFrameworkCore
 
         public IAuditPropertySetter AuditPropertySetter { get; set; }
 
-        private static readonly MethodInfo ConfigureGlobalFiltersMethodInfo = typeof(AbpDbContext<TDbContext>).GetMethod(nameof(ConfigureGlobalFilters), BindingFlags.Instance | BindingFlags.NonPublic);
+        private static readonly MethodInfo ConfigureGlobalFiltersMethodInfo
+            = typeof(AbpDbContext<TDbContext>)
+                .GetMethod(
+                    nameof(ConfigureGlobalFilters),
+                    BindingFlags.Instance | BindingFlags.NonPublic
+                );
 
         protected AbpDbContext(DbContextOptions<TDbContext> options)
             : base(options)
@@ -121,8 +126,6 @@ namespace Volo.Abp.EntityFrameworkCore
 
         protected virtual EntityChangeReport ApplyAbpConcepts()
         {
-            /* Implement other concepts from ABP v1.x */
-
             var changeReport = new EntityChangeReport();
 
             foreach (var entry in ChangeTracker.Entries().ToList())
