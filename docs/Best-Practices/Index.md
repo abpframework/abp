@@ -12,6 +12,8 @@ Also, this guide is mostly usable for the **application development**.
 
 ### Guides
 
+* Overall
+  * [Module Architecture](Module-Architecture.md)
 * Domain Layer
   * [Entities](Entities.md)
   * [Repositories](Repositories.md)
