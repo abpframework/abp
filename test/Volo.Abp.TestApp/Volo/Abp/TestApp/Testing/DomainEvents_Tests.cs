@@ -10,7 +10,8 @@ using Xunit;
 
 namespace Volo.Abp.TestApp.Testing
 {
-    public abstract class DomainEvents_Tests<TStartupModule> : TestAppTestBase<TStartupModule> where TStartupModule : IAbpModule
+    public abstract class DomainEvents_Tests<TStartupModule> : TestAppTestBase<TStartupModule> 
+        where TStartupModule : IAbpModule
     {
         protected readonly IRepository<Person, Guid> PersonRepository;
         protected readonly IEventBus EventBus;

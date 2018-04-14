@@ -8,7 +8,6 @@ using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Entities.Events;
-using Volo.Abp.DynamicProxy;
 using Volo.Abp.EventBus;
 using Volo.Abp.MongoDB;
 using Volo.Abp.MultiTenancy;
@@ -43,13 +42,17 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
 
         public override TEntity Insert(TEntity entity, bool autoSave = false)
         {
+            /* EntityCreatedEvent (OnUowCompleted) is triggered as the first because it should be
+             * triggered before other events triggered inside an EntityCreating event handler.
+             * This is also true for other "ed" & "ing" events.
+             */
+
+            EntityChangeEventHelper.TriggerEntityCreatedEventOnUowCompleted(entity);
             EntityChangeEventHelper.TriggerEntityCreatingEvent(entity);
 
             TriggerDomainEvents(entity);
 
             Collection.InsertOne(entity);
-
-            EntityChangeEventHelper.TriggerEntityCreatedEventOnUowCompleted(entity);
 
             return entity;
         }
@@ -59,6 +62,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             bool autoSave = false, 
             CancellationToken cancellationToken = default)
         {
+            EntityChangeEventHelper.TriggerEntityCreatedEventOnUowCompleted(entity);
             EntityChangeEventHelper.TriggerEntityCreatingEvent(entity);
 
             TriggerDomainEvents(entity);
@@ -68,13 +72,12 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
                 cancellationToken: GetCancellationToken(cancellationToken)
             );
 
-            EntityChangeEventHelper.TriggerEntityCreatedEventOnUowCompleted(entity);
-
             return entity;
         }
 
         public override TEntity Update(TEntity entity, bool autoSave = false)
         {
+            EntityChangeEventHelper.TriggerEntityUpdatedEventOnUowCompleted(entity);
             EntityChangeEventHelper.TriggerEntityUpdatingEvent(entity);
 
             TriggerDomainEvents(entity);
@@ -84,8 +87,6 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
                 entity
             );
 
-            EntityChangeEventHelper.TriggerEntityUpdatedEvent(entity);
-
             return entity;
         }
 
@@ -94,6 +95,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             bool autoSave = false, 
             CancellationToken cancellationToken = default)
         {
+            EntityChangeEventHelper.TriggerEntityUpdatedEventOnUowCompleted(entity);
             EntityChangeEventHelper.TriggerEntityUpdatingEvent(entity);
 
             TriggerDomainEvents(entity);
@@ -104,20 +106,17 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
                 cancellationToken: GetCancellationToken(cancellationToken)
             );
 
-            EntityChangeEventHelper.TriggerEntityUpdatedEvent(entity);
-
             return entity;
         }
 
         public override void Delete(TEntity entity, bool autoSave = false)
         {
+            EntityChangeEventHelper.TriggerEntityDeletedEventOnUowCompleted(entity);
             EntityChangeEventHelper.TriggerEntityDeletingEvent(entity);
 
             Collection.DeleteOne(
                 CreateEntityFilter(entity)
             );
-
-            EntityChangeEventHelper.TriggerEntityDeletedEvent(entity);
         }
 
         public override async Task DeleteAsync(
@@ -125,14 +124,13 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             bool autoSave = false, 
             CancellationToken cancellationToken = default)
         {
+            EntityChangeEventHelper.TriggerEntityDeletedEventOnUowCompleted(entity);
             EntityChangeEventHelper.TriggerEntityDeletingEvent(entity);
 
             await Collection.DeleteOneAsync(
                 CreateEntityFilter(entity),
                 GetCancellationToken(cancellationToken)
             );
-
-            EntityChangeEventHelper.TriggerEntityDeletedEvent(entity);
         }
 
         public override void Delete(Expression<Func<TEntity, bool>> predicate, bool autoSave = false)

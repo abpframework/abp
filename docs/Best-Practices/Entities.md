@@ -4,7 +4,7 @@
 
 Every aggregate root is also an entity. So, these rules are valid for aggregate roots too unless aggregate root rules override them.
 
-- **Do** define repository interfaces in the **domain layer**.
+- **Do** define entities in the **domain layer**.
 
 #### Primary Constructor
 
