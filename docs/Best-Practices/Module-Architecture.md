@@ -1,29 +1,63 @@
 ﻿## Module Architecture Best Practices & Conventions
 
-### Introduction
-
-TODO
-
 ### Solution Structure
 
 * **Do** create a separated Visual Studio solution for every module.
 * **Do** name the solution as *CompanyName.ModuleName* (for core ABP packages, it's Volo.Abp.ModuleName).
 * **Do** develop the module as layered, so it has several projects (packages) those are related to each other.
-  * Every package has its own module definition file and explicitly adds [DependsOn] attribute for the depended packages/modules.
+  * Every package has its own module definition file and explicitly declare dependencies for the depended packages/modules.
+
+### Layers & Packages
+
+The following diagram shows the packages of a well-layered module and dependencies of those packages between them:
+
+![module-layers-and-packages](../images/module-layers-and-packages.jpg)
+
+The ultimate goal is to allow an application to use the module in a flexible manner. Example applications:
+
+* **A)** For a **monolithic** application;
+  * Adds references to the **Web** and the **Application** packages.
+  * Adds a reference to one of the **EF Core** or **MongoDB** packages based on preference.
+  * The result;
+    * The application **can show UI** of the module.
+    * It hosts the **application** and **domain** layers in the **same process** (that's why it needs to have a reference to a database integration package).
+    * This application also **serves** the module's **HTTP API** (since it includes the HttpApi package through the Web package).
+* **B)** For an application that just serves the module as a **microservice**;
+  * Adds a reference to **HttpApi** and **Application** packages.
+  * Adds a reference to one of the **EF Core** or the **MongoDB** packages based on preference.
+  * The result;
+    * The application **can not show UI** of the module since it does not have a reference to the Web package.
+    * It hosts the **application** and **domain** layers in the **same process** (that's why it needs to have a reference to a database integration package).
+    * This application **serves** the module's **HTTP API** (as the main goal of the application).
+* **C)** For an application that shows the module **UI** but does not host the application and just uses it as a remote service (that is hosted by the application A or B);
+  * Adds a reference to the **Web** and the **HttpApi.Client** packages.
+  * This application also serves the module API (since it includes the HttpApi package through the Web package)
+  * The result;
+    * The application **can show UI** of the module.
+    * It does not host the application and domain layers of the module in the same process. Instead, uses it as a **remote service**.
+    * This application also **serves** the module's **HTTP API** (since it includes the HttpApi package through the Web package).
+* **D)** For a **client** application (or microservice) that just uses the module as a remote service (that is hosted by the application A, B or C);
+  * Adds a reference to the **HttpApi.Client** package.
+  * The result;
+    * The application can use all the functionality of the module as a **remote client**.
+    * The application is just a client and **can not serve** the **HTTP API** of the module.
+    * The application is just a client and **can not show** the **UI** of the module.
+
+Next section describes the packages in more details.
 
 #### Domain Layer
 
 * **Do** divide the domain layer into two projects:
-  * **Domain shared** package, named as *CompanyName.ModuleName.Domain.Shared*, contains constants, enums and other types those can be safely shared with the all layers of the module. This package can also be shared to 3rd-party clients. It can not contain entities, repositories, domain services or any other business objects.
-  * **Domain** package, named as *CompanyName.ModuleName.Domain*, contains entities, repository interfaces, domain service interfaces and their implementations and other domain objects.
+  * **Domain shared** package, named as *CompanyName.ModuleName.Domain.Shared*, that contains constants, enums and other types those can be safely shared with the all layers of the module. This package can also be shared to 3rd-party clients. It can not contain entities, repositories, domain services or any other business objects.
+  * **Domain** package, named as *CompanyName.ModuleName.Domain*, that contains entities, repository interfaces, domain service interfaces and their implementations and other domain objects.
     * Domain package depends on the **domain share** package.
 
 #### Application Layer
 
 * **Do** divide the application layer into two projects:
-  * **Application contracts** package, named as *CompanyName.ModuleName.Application.Contracts*, contains application service interfaces and related data transfer objects.
+  * **Application contracts** package, named as *CompanyName.ModuleName.Application.Contracts*, that contains application service interfaces and related data transfer objects.
     * Application contract package depends on the **domain shared** package.
-  * **Application** package, named as *CompanyName.ModuleName.Application*, contains application service implementations.
+  * **Application** package, named as *CompanyName.ModuleName.Application*, that contains application service implementations.
     * Application package depends on the **domain** and the **application contracts** packages.
 
 #### Infrastructure Layer
@@ -37,5 +71,12 @@ TODO
 
 * **Do** create an **HTTP API** package, named as *CompanyName.ModuleName.HttpApi*, to develop a REST style HTTP API for the module.
   * HTTP API package only depends on the **application contracts** package. It does not depend on the application package.
-  * ...
-* Do create an **HTTP API Client** package, named as *CompanyName.ModuleName.HttpApi.Client*,...
+  * **Do** create a Controller for each application service (generally by implementing their interfaces). These controllers uses the application service interfaces to delegate the actions.
+* **Do** create an **HTTP API Client** package, named as *CompanyName.ModuleName.HttpApi.Client*, to provide client services for the HTTP API package. Those client services implement application interfaces as clients to a remote endpoint.
+  * HTTP API package only depends on the **application contracts** package.
+  * **Do** use dynamic HTTP C# client proxy feature of the ABP framework.
+
+#### Web Layer
+
+* Do create a **Web** package, named as *CompanyName.ModuleName.Web*, that contains pages, views, scripts, styles, images and other UI components.
+  * Web package only depends on the **HTTP API** module.
