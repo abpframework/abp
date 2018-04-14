@@ -29,6 +29,11 @@ namespace Volo.Abp.Domain.Repositories
             return GetQueryable();
         }
 
+        public virtual IQueryable<TEntity> WithDetails(params Expression<Func<TEntity, object>>[] propertySelectors)
+        {
+            return GetQueryable();
+        }
+
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();

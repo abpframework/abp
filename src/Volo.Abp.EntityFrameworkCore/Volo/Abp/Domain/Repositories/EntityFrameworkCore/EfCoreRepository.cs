@@ -168,6 +168,21 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
 
             return EntityOptions.DefaultWithDetailsFunc(GetQueryable());
         }
+
+        public override IQueryable<TEntity> WithDetails(params Expression<Func<TEntity, object>>[] propertySelectors)
+        {
+            var query = GetQueryable();
+
+            if (!propertySelectors.IsNullOrEmpty())
+            {
+                foreach (var propertySelector in propertySelectors)
+                {
+                    query = query.Include(propertySelector);
+                }
+            }
+
+            return query;
+        }
     }
 
     public class EfCoreRepository<TDbContext, TEntity, TKey> : EfCoreRepository<TDbContext, TEntity>, 

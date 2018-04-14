@@ -48,5 +48,16 @@ namespace Volo.Abp.TestApp.Testing
                 person.Phones.Count.ShouldBe(2);
             });
         }
+
+        [Fact]
+        public void WithDetails_Explicit()
+        {
+            WithUnitOfWork(() =>
+            {
+                var person = PersonRepository.WithDetails(p => p.Phones).Single(p => p.Id == TestDataBuilder.UserDouglasId);
+                person.Name.ShouldBe("Douglas");
+                person.Phones.Count.ShouldBe(2);
+            });
+        }
     }
 }
