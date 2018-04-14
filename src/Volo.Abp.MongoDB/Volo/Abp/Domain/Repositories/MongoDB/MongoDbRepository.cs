@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
+using Volo.Abp.Auditing;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Entities.Events;
 using Volo.Abp.EventBus;
@@ -34,6 +35,8 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
         public IEntityChangeEventHelper EntityChangeEventHelper { get; set; }
 
         public IGuidGenerator GuidGenerator { get; set; }
+
+        public IAuditPropertySetter AuditPropertySetter { get; set; }
 
         public MongoDbRepository(IMongoDbContextProvider<TMongoDbContext> dbContextProvider)
         {
@@ -174,6 +177,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
         protected virtual void ApplyAbpConceptsForAddedEntity(TEntity entity)
         {
             CheckAndSetId(entity);
+            SetCreationAuditProperties(entity);
             EntityChangeEventHelper.TriggerEntityCreatedEventOnUowCompleted(entity);
             EntityChangeEventHelper.TriggerEntityCreatingEvent(entity);
             TriggerDomainEvents(entity);
@@ -181,6 +185,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
 
         protected virtual void ApplyAbpConceptsForUpdatedEntity(TEntity entity)
         {
+            SetModificationAuditProperties(entity);
             EntityChangeEventHelper.TriggerEntityUpdatedEventOnUowCompleted(entity);
             EntityChangeEventHelper.TriggerEntityUpdatingEvent(entity);
             TriggerDomainEvents(entity);
@@ -188,6 +193,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
 
         private void ApplyAbpConceptsForDeletedEntity(TEntity entity)
         {
+            SetDeletionAuditProperties(entity);
             EntityChangeEventHelper.TriggerEntityDeletedEventOnUowCompleted(entity);
             EntityChangeEventHelper.TriggerEntityDeletingEvent(entity);
             TriggerDomainEvents(entity);
@@ -199,6 +205,21 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             {
                 entityWithGuidId.Id = GuidGenerator.Create();
             }
+        }
+
+        protected virtual void SetCreationAuditProperties(TEntity entity)
+        {
+            AuditPropertySetter.SetCreationProperties(entity);
+        }
+
+        protected virtual void SetModificationAuditProperties(TEntity entity)
+        {
+            AuditPropertySetter.SetModificationProperties(entity);
+        }
+
+        protected virtual void SetDeletionAuditProperties(TEntity entity)
+        {
+            AuditPropertySetter.SetDeletionProperties(entity);
         }
 
         protected virtual void TriggerDomainEvents(object entity) //TODO: TriggerDomainEventsAsync..?
