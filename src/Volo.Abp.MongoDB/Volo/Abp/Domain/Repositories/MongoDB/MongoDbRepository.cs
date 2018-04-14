@@ -9,12 +9,13 @@ using MongoDB.Driver.Linq;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Entities.Events;
 using Volo.Abp.EventBus;
+using Volo.Abp.Guids;
 using Volo.Abp.MongoDB;
 using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Domain.Repositories.MongoDB
 {
-    public class MongoDbRepository<TMongoDbContext, TEntity> 
+    public class MongoDbRepository<TMongoDbContext, TEntity>
         : RepositoryBase<TEntity>,
         IMongoDbRepository<TEntity>
         where TMongoDbContext : IAbpMongoDbContext
@@ -31,6 +32,8 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
         public IEventBus EventBus { get; set; }
 
         public IEntityChangeEventHelper EntityChangeEventHelper { get; set; }
+
+        public IGuidGenerator GuidGenerator { get; set; }
 
         public MongoDbRepository(IMongoDbContextProvider<TMongoDbContext> dbContextProvider)
         {
@@ -55,8 +58,8 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
         }
 
         public override async Task<TEntity> InsertAsync(
-            TEntity entity, 
-            bool autoSave = false, 
+            TEntity entity,
+            bool autoSave = false,
             CancellationToken cancellationToken = default)
         {
             ApplyAbpConceptsForAddedEntity(entity); //TODO: async?
@@ -82,8 +85,8 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
         }
 
         public override async Task<TEntity> UpdateAsync(
-            TEntity entity, 
-            bool autoSave = false, 
+            TEntity entity,
+            bool autoSave = false,
             CancellationToken cancellationToken = default)
         {
             ApplyAbpConceptsForUpdatedEntity(entity);
@@ -107,8 +110,8 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
         }
 
         public override async Task DeleteAsync(
-            TEntity entity, 
-            bool autoSave = false, 
+            TEntity entity,
+            bool autoSave = false,
             CancellationToken cancellationToken = default)
         {
             ApplyAbpConceptsForDeletedEntity(entity);
@@ -132,8 +135,8 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
         }
 
         public override async Task DeleteAsync(
-            Expression<Func<TEntity, bool>> predicate, 
-            bool autoSave = false, 
+            Expression<Func<TEntity, bool>> predicate,
+            bool autoSave = false,
             CancellationToken cancellationToken = default)
         {
             var entities = await GetMongoQueryable()
@@ -170,6 +173,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
 
         protected virtual void ApplyAbpConceptsForAddedEntity(TEntity entity)
         {
+            CheckAndSetId(entity);
             EntityChangeEventHelper.TriggerEntityCreatedEventOnUowCompleted(entity);
             EntityChangeEventHelper.TriggerEntityCreatingEvent(entity);
             TriggerDomainEvents(entity);
@@ -187,6 +191,14 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             EntityChangeEventHelper.TriggerEntityDeletedEventOnUowCompleted(entity);
             EntityChangeEventHelper.TriggerEntityDeletingEvent(entity);
             TriggerDomainEvents(entity);
+        }
+
+        protected virtual void CheckAndSetId(TEntity entity)
+        {
+            if (entity is IEntity<Guid> entityWithGuidId && entityWithGuidId.Id == default)
+            {
+                entityWithGuidId.Id = GuidGenerator.Create();
+            }
         }
 
         protected virtual void TriggerDomainEvents(object entity) //TODO: TriggerDomainEventsAsync..?
@@ -212,8 +224,8 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
         }
     }
 
-    public class MongoDbRepository<TMongoDbContext, TEntity, TKey> 
-        : MongoDbRepository<TMongoDbContext, TEntity>, 
+    public class MongoDbRepository<TMongoDbContext, TEntity, TKey>
+        : MongoDbRepository<TMongoDbContext, TEntity>,
         IMongoDbRepository<TEntity, TKey>
         where TMongoDbContext : IAbpMongoDbContext
         where TEntity : class, IEntity<TKey>
@@ -237,8 +249,8 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
         }
 
         public virtual async Task<TEntity> GetAsync(
-            TKey id, 
-            bool includeDetails = true, 
+            TKey id,
+            bool includeDetails = true,
             CancellationToken cancellationToken = default)
         {
             var entity = await FindAsync(id, includeDetails, cancellationToken);
@@ -252,8 +264,8 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
         }
 
         public virtual async Task<TEntity> FindAsync(
-            TKey id, 
-            bool includeDetails = true, 
+            TKey id,
+            bool includeDetails = true,
             CancellationToken cancellationToken = default)
         {
             return await Collection
@@ -272,8 +284,8 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
         }
 
         public virtual Task DeleteAsync(
-            TKey id, 
-            bool autoSave = false, 
+            TKey id,
+            bool autoSave = false,
             CancellationToken cancellationToken = default)
         {
             return Collection.DeleteOneAsync(
@@ -306,13 +318,13 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
         {
             if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)) && DataFilter.IsEnabled<ISoftDelete>())
             {
-                filters.Add(Builders<TEntity>.Filter.Eq(e => ((ISoftDelete) e).IsDeleted, false));
+                filters.Add(Builders<TEntity>.Filter.Eq(e => ((ISoftDelete)e).IsDeleted, false));
             }
 
             if (typeof(IMultiTenant).IsAssignableFrom(typeof(TEntity)))
             {
                 var tenantId = CurrentTenant.Id;
-                filters.Add(Builders<TEntity>.Filter.Eq(e => ((IMultiTenant) e).TenantId, tenantId));
+                filters.Add(Builders<TEntity>.Filter.Eq(e => ((IMultiTenant)e).TenantId, tenantId));
             }
         }
     }
