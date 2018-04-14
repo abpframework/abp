@@ -23,6 +23,24 @@ namespace Volo.Abp.Auditing
 
         public void SetCreationProperties(object targetObject)
         {
+            SetCreationTime(targetObject);
+            SetCreatorId(targetObject);
+        }
+
+        public void SetModificationProperties(object targetObject)
+        {
+            SetLastModificationTime(targetObject);
+            SetLastModifierId(targetObject);
+        }
+
+        public void SetDeletionProperties(object targetObject)
+        {
+            SetDeletionTime(targetObject);
+            SetDeleterId(targetObject);
+        }
+
+        private void SetCreationTime(object targetObject)
+        {
             if (!(targetObject is IHasCreationTime objectWithCreationTime))
             {
                 return;
@@ -32,7 +50,10 @@ namespace Volo.Abp.Auditing
             {
                 objectWithCreationTime.CreationTime = Clock.Now;
             }
+        }
 
+        private void SetCreatorId(object targetObject)
+        {
             if (!(targetObject is ICreationAudited creationAuditedObject))
             {
                 return;
@@ -66,14 +87,17 @@ namespace Volo.Abp.Auditing
 
             creationAuditedObject.CreatorId = CurrentUser.Id;
         }
-
-        public void SetModificationProperties(object targetObject)
+        
+        private void SetLastModificationTime(object targetObject)
         {
             if (targetObject is IHasModificationTime objectWithModificationTime)
             {
                 objectWithModificationTime.LastModificationTime = Clock.Now;
             }
+        }
 
+        private void SetLastModifierId(object targetObject)
+        {
             if (!(targetObject is IModificationAudited modificationAuditedObject))
             {
                 return;
@@ -106,7 +130,7 @@ namespace Volo.Abp.Auditing
             modificationAuditedObject.LastModifierId = CurrentUser.Id;
         }
 
-        public void SetDeletionProperties(object targetObject)
+        private void SetDeletionTime(object targetObject)
         {
             if (targetObject is IHasDeletionTime objectWithDeletionTime)
             {
@@ -115,7 +139,10 @@ namespace Volo.Abp.Auditing
                     objectWithDeletionTime.DeletionTime = Clock.Now;
                 }
             }
+        }
 
+        private void SetDeleterId(object targetObject)
+        {
             if (!(targetObject is IDeletionAudited deletionAuditedObject))
             {
                 return;
