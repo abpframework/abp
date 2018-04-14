@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.EntityFrameworkCore.TestApp.SecondContext;
+using Volo.Abp.TestApp;
 using Volo.Abp.TestApp.Testing;
 using Xunit;
 
@@ -35,6 +37,17 @@ namespace Volo.Abp.EntityFrameworkCore.Repositories
             WithUnitOfWork(() =>
             {
                 _phoneInSecondDbContextRepository.Any().ShouldBeTrue();
+            });
+        }
+
+        [Fact]
+        public void EfCore_Include_Extension()
+        {
+            WithUnitOfWork(() =>
+            {
+                var person = PersonRepository.Include(p => p.Phones).Single(p => p.Id == TestDataBuilder.UserDouglasId);
+                person.Name.ShouldBe("Douglas");
+                person.Phones.Count.ShouldBe(2);
             });
         }
     }

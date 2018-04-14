@@ -20,11 +20,32 @@ namespace Volo.Abp.TestApp.Testing
         }
 
         [Fact]
-        public void GetPersonList()
+        public void Any()
         {
             WithUnitOfWork(() =>
             {
                 PersonRepository.Any().ShouldBeTrue();
+            });
+        }
+
+        [Fact]
+        public void Single()
+        {
+            WithUnitOfWork(() =>
+            {
+                var person = PersonRepository.Single(p => p.Id == TestDataBuilder.UserDouglasId);
+                person.Name.ShouldBe("Douglas");
+            });
+        }
+
+        [Fact]
+        public void WithDetails()
+        {
+            WithUnitOfWork(() =>
+            {
+                var person = PersonRepository.WithDetails().Single(p => p.Id == TestDataBuilder.UserDouglasId);
+                person.Name.ShouldBe("Douglas");
+                person.Phones.Count.ShouldBe(2);
             });
         }
     }

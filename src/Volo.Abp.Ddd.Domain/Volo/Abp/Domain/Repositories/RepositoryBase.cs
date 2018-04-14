@@ -24,6 +24,11 @@ namespace Volo.Abp.Domain.Repositories
 
         public virtual IQueryProvider Provider => GetQueryable().Provider;
 
+        public virtual IQueryable<TEntity> WithDetails()
+        {
+            return GetQueryable();
+        }
+
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
@@ -66,11 +71,6 @@ namespace Volo.Abp.Domain.Repositories
 
             return query;
         }
-
-        protected virtual IQueryable<TEntity> IncludeDetails(IQueryable<TEntity> queryable)
-        {
-            return queryable;
-        }
     }
 
     public abstract class RepositoryBase<TEntity, TKey> : RepositoryBase<TEntity>, IRepository<TEntity, TKey>
@@ -79,7 +79,7 @@ namespace Volo.Abp.Domain.Repositories
         public virtual TEntity Find(TKey id, bool includeDetails = true)
         {
             return includeDetails
-                ? IncludeDetails(GetQueryable()).FirstOrDefault(EntityHelper.CreateEqualityExpressionForId<TEntity, TKey>(id))
+                ? WithDetails().FirstOrDefault(EntityHelper.CreateEqualityExpressionForId<TEntity, TKey>(id))
                 : GetQueryable().FirstOrDefault(EntityHelper.CreateEqualityExpressionForId<TEntity, TKey>(id));
         }
 

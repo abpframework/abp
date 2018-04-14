@@ -159,14 +159,14 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
             await DbContext.Entry(entity).Reference(propertyExpression).LoadAsync(GetCancellationToken(cancellationToken));
         }
 
-        protected override IQueryable<TEntity> IncludeDetails(IQueryable<TEntity> queryable)
+        public override IQueryable<TEntity> WithDetails()
         {
             if (EntityOptions.IncludeDetailsFunc == null)
             {
-                return base.IncludeDetails(queryable);
+                return base.WithDetails();
             }
 
-            return EntityOptions.IncludeDetailsFunc(queryable);
+            return EntityOptions.IncludeDetailsFunc(GetQueryable());
         }
     }
 
@@ -210,14 +210,14 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
         public virtual TEntity Find(TKey id, bool includeDetails = true)
         {
             return includeDetails
-                ? IncludeDetails(DbSet).FirstOrDefault(EntityHelper.CreateEqualityExpressionForId<TEntity, TKey>(id))
+                ? WithDetails().FirstOrDefault(EntityHelper.CreateEqualityExpressionForId<TEntity, TKey>(id))
                 : DbSet.Find(id);
         }
 
         public virtual async Task<TEntity> FindAsync(TKey id, bool includeDetails = true, CancellationToken cancellationToken = default)
         {
             return includeDetails
-                ? await IncludeDetails(DbSet).FirstOrDefaultAsync(EntityHelper.CreateEqualityExpressionForId<TEntity, TKey>(id), GetCancellationToken(cancellationToken))
+                ? await WithDetails().FirstOrDefaultAsync(EntityHelper.CreateEqualityExpressionForId<TEntity, TKey>(id), GetCancellationToken(cancellationToken))
                 : await DbSet.FindAsync(new object[] { id }, GetCancellationToken(cancellationToken));
         }
 
