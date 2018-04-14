@@ -1,10 +1,13 @@
 using System;
 using JetBrains.Annotations;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Volo.Abp.DependencyInjection
 {
     public interface ICommonDbContextRegistrationOptionsBuilder
     {
+        IServiceCollection Services { get; }
+
         /// <summary>
         /// Registers default repositories for this DbContext. 
         /// </summary>

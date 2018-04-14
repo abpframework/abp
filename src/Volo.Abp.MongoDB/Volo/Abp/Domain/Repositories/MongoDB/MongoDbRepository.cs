@@ -77,7 +77,19 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
 
         public override TEntity Update(TEntity entity, bool autoSave = false)
         {
-            ApplyAbpConceptsForUpdatedEntity(entity);
+            SetModificationAuditProperties(entity);
+
+            if (entity is ISoftDelete softDeleteEntity && softDeleteEntity.IsDeleted)
+            {
+                SetDeletionAuditProperties(entity);
+                TriggerEntityDeleteEvents(entity);
+            }
+            else
+            {
+                TriggerEntityUpdateEvents(entity);
+            }
+
+            TriggerDomainEvents(entity);
 
             Collection.ReplaceOne(
                 CreateEntityFilter(entity),
@@ -92,7 +104,19 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             bool autoSave = false,
             CancellationToken cancellationToken = default)
         {
-            ApplyAbpConceptsForUpdatedEntity(entity);
+            SetModificationAuditProperties(entity);
+
+            if (entity is ISoftDelete softDeleteEntity && softDeleteEntity.IsDeleted)
+            {
+                SetDeletionAuditProperties(entity);
+                TriggerEntityDeleteEvents(entity);
+            }
+            else
+            {
+                TriggerEntityUpdateEvents(entity);
+            }
+
+            TriggerDomainEvents(entity);
 
             await Collection.ReplaceOneAsync(
                 CreateEntityFilter(entity),
@@ -200,25 +224,33 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
         {
             CheckAndSetId(entity);
             SetCreationAuditProperties(entity);
+            TriggerEntityCreateEvents(entity);
+            TriggerDomainEvents(entity);
+        }
+
+        private void TriggerEntityCreateEvents(TEntity entity)
+        {
             EntityChangeEventHelper.TriggerEntityCreatedEventOnUowCompleted(entity);
             EntityChangeEventHelper.TriggerEntityCreatingEvent(entity);
-            TriggerDomainEvents(entity);
         }
 
-        protected virtual void ApplyAbpConceptsForUpdatedEntity(TEntity entity)
+        protected virtual void TriggerEntityUpdateEvents(TEntity entity)
         {
-            SetModificationAuditProperties(entity);
             EntityChangeEventHelper.TriggerEntityUpdatedEventOnUowCompleted(entity);
             EntityChangeEventHelper.TriggerEntityUpdatingEvent(entity);
+        }
+
+        protected virtual void ApplyAbpConceptsForDeletedEntity(TEntity entity)
+        {
+            SetDeletionAuditProperties(entity);
+            TriggerEntityDeleteEvents(entity);
             TriggerDomainEvents(entity);
         }
 
-        private void ApplyAbpConceptsForDeletedEntity(TEntity entity)
+        protected virtual void TriggerEntityDeleteEvents(TEntity entity)
         {
-            SetDeletionAuditProperties(entity);
             EntityChangeEventHelper.TriggerEntityDeletedEventOnUowCompleted(entity);
             EntityChangeEventHelper.TriggerEntityDeletingEvent(entity);
-            TriggerDomainEvents(entity);
         }
 
         protected virtual void CheckAndSetId(TEntity entity)

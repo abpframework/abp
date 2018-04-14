@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
-using Volo.Abp.Reflection;
 
 namespace Volo.Abp.DependencyInjection
 {
@@ -12,6 +12,8 @@ namespace Volo.Abp.DependencyInjection
     public abstract class CommonDbContextRegistrationOptions : ICommonDbContextRegistrationOptionsBuilder
     {
         public Type OriginalDbContextType { get; }
+
+        public IServiceCollection Services { get; }
 
         public List<Type> ReplacedDbContextTypes { get; }
 
@@ -29,9 +31,10 @@ namespace Volo.Abp.DependencyInjection
 
         public bool SpecifiedDefaultRepositoryTypes => DefaultRepositoryImplementationType != null && DefaultRepositoryImplementationTypeWithouTKey != null;
 
-        protected CommonDbContextRegistrationOptions(Type originalDbContextType)
+        protected CommonDbContextRegistrationOptions(Type originalDbContextType, IServiceCollection services)
         {
             OriginalDbContextType = originalDbContextType;
+            Services = services;
             DefaultRepositoryDbContextType = originalDbContextType;
             CustomRepositories = new Dictionary<Type, Type>();
             ReplacedDbContextTypes = new List<Type>();

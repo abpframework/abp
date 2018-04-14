@@ -10,7 +10,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddMongoDbContext<TMongoDbContext>(this IServiceCollection services, Action<IMongoDbContextRegistrationOptionsBuilder> optionsBuilder = null) //Created overload instead of default parameter
             where TMongoDbContext : AbpMongoDbContext
         {
-            var options = new MongoDbContextRegistrationOptions(typeof(TMongoDbContext));
+            var options = new MongoDbContextRegistrationOptions(typeof(TMongoDbContext), services);
             optionsBuilder?.Invoke(options);
 
             foreach (var dbContextType in options.ReplacedDbContextTypes)
@@ -18,8 +18,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 services.Replace(ServiceDescriptor.Transient(dbContextType, typeof(TMongoDbContext)));
             }
 
-            new MongoDbRepositoryRegistrar(options)
-                .AddRepositories(services);
+            new MongoDbRepositoryRegistrar(options).AddRepositories();
 
             return services;
         }

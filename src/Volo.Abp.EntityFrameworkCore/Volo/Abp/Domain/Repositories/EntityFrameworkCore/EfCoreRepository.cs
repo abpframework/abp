@@ -5,8 +5,11 @@ using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.EntityFrameworkCore.DependencyInjection;
 
 namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
 {
@@ -20,11 +23,21 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
 
         protected virtual TDbContext DbContext => _dbContextProvider.GetDbContext();
 
+        protected virtual EntityOptions<TEntity> EntityOptions => _entityOptionsLazy.Value;
+
         private readonly IDbContextProvider<TDbContext> _dbContextProvider;
+        private readonly Lazy<EntityOptions<TEntity>> _entityOptionsLazy;
 
         public EfCoreRepository(IDbContextProvider<TDbContext> dbContextProvider)
         {
             _dbContextProvider = dbContextProvider;
+
+            _entityOptionsLazy = new Lazy<EntityOptions<TEntity>>(
+                () => ServiceProvider
+                          .GetRequiredService<IOptions<EntityOptions>>()
+                          .Value
+                          .GetOrNull<TEntity>() ?? EntityOptions<TEntity>.Empty
+            );
         }
         
         public override TEntity Insert(TEntity entity, bool autoSave = false)
@@ -144,6 +157,16 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
             where TProperty : class
         {
             await DbContext.Entry(entity).Reference(propertyExpression).LoadAsync(GetCancellationToken(cancellationToken));
+        }
+
+        protected override IQueryable<TEntity> IncludeDetails(IQueryable<TEntity> queryable)
+        {
+            if (EntityOptions.IncludeDetailsFunc == null)
+            {
+                return base.IncludeDetails(queryable);
+            }
+
+            return EntityOptions.IncludeDetailsFunc(queryable);
         }
     }
 

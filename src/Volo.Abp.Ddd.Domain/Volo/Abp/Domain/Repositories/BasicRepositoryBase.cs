@@ -1,13 +1,17 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Threading;
 
 namespace Volo.Abp.Domain.Repositories
 {
-    public abstract class BasicRepositoryBase<TEntity> : IBasicRepository<TEntity>
+    public abstract class BasicRepositoryBase<TEntity> : IBasicRepository<TEntity>, IServiceProviderAccessor
         where TEntity : class, IEntity
     {
+        public IServiceProvider ServiceProvider { get; set; }
+
         public ICancellationTokenProvider CancellationTokenProvider { get; set; }
 
         protected BasicRepositoryBase()

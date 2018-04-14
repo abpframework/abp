@@ -81,8 +81,7 @@ namespace Volo.Abp.TestApp.Testing
             douglas.LastModificationTime.Value.ShouldBeLessThanOrEqualTo(Clock.Now);
             douglas.LastModifierId.ShouldBe(CurrentUserId);
         }
-
-
+        
         [Theory]
         [InlineData(null)]
         [InlineData("4b2790fc-3f51-43d5-88a1-a92d96a9e6ea")]

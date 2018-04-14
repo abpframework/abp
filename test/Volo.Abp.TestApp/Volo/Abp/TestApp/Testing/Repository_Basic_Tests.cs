@@ -21,6 +21,14 @@ namespace Volo.Abp.TestApp.Testing
         }
 
         [Fact]
+        public async Task GetAsync()
+        {
+            var person = await PersonRepository.GetAsync(TestDataBuilder.UserDouglasId);
+            person.Name.ShouldBe("Douglas");
+            person.Phones.Count.ShouldBe(2);
+        }
+
+        [Fact]
         public async Task FindAsync_Should_Return_Null_For_Not_Found_Entity()
         {
             var person = await PersonRepository.FindAsync(Guid.NewGuid());

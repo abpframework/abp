@@ -12,14 +12,6 @@ namespace Volo.Abp.MongoDB.Repositories
     public class Repository_Basic_Tests : Repository_Basic_Tests<AbpMongoDbTestModule>
     {
         [Fact]
-        public async Task GetAsync()
-        {
-            var person = await PersonRepository.GetAsync(TestDataBuilder.UserDouglasId);
-            person.Name.ShouldBe("Douglas");
-            person.Phones.Count.ShouldBe(2);
-        }
-
-        [Fact]
         public void Linq_Queries()
         {
             PersonRepository.FirstOrDefault(p => p.Name == "Douglas").ShouldNotBeNull();

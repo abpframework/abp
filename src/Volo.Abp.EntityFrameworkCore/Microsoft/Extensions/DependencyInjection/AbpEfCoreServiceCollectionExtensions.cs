@@ -14,7 +14,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.AddMemoryCache();
 
-            var options = new AbpDbContextRegistrationOptions(typeof(TDbContext));
+            var options = new AbpDbContextRegistrationOptions(typeof(TDbContext), services);
             optionsBuilder?.Invoke(options);
 
             services.TryAddTransient(DbContextOptionsFactory.Create<TDbContext>);
@@ -24,8 +24,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 services.Replace(ServiceDescriptor.Transient(dbContextType, typeof(TDbContext)));
             }
 
-            new EfCoreRepositoryRegistrar(options)
-                .AddRepositories(services);
+            new EfCoreRepositoryRegistrar(options).AddRepositories();
 
             return services;
         }

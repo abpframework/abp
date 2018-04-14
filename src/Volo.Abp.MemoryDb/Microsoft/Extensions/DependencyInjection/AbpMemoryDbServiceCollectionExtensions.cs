@@ -10,7 +10,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddMemoryDbContext<TMemoryDbContext>(this IServiceCollection services, Action<IMemoryDbContextRegistrationOptionsBuilder> optionsBuilder = null)
             where TMemoryDbContext : MemoryDbContext
         {
-            var options = new MemoryDbContextRegistrationOptions(typeof(TMemoryDbContext));
+            var options = new MemoryDbContextRegistrationOptions(typeof(TMemoryDbContext), services);
             optionsBuilder?.Invoke(options);
 
             if (options.DefaultRepositoryDbContextType != typeof(TMemoryDbContext))
@@ -23,8 +23,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 services.Replace(ServiceDescriptor.Singleton(dbContextType, sp => sp.GetRequiredService<TMemoryDbContext>()));
             }
 
-            new MemoryDbRepositoryRegistrar(options)
-                .AddRepositories(services);
+            new MemoryDbRepositoryRegistrar(options).AddRepositories();
 
             return services;
         }

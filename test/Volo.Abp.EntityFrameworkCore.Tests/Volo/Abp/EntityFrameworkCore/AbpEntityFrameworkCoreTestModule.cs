@@ -8,6 +8,7 @@ using Volo.Abp.EntityFrameworkCore.TestApp.SecondContext;
 using Volo.Abp.EntityFrameworkCore.TestApp.ThirdDbContext;
 using Volo.Abp.Modularity;
 using Volo.Abp.TestApp;
+using Volo.Abp.TestApp.Domain;
 using Volo.Abp.TestApp.EntityFrameworkCore;
 
 namespace Volo.Abp.EntityFrameworkCore
@@ -26,6 +27,11 @@ namespace Volo.Abp.EntityFrameworkCore
             {
                 options.AddDefaultRepositories(true);
                 options.ReplaceDbContext<IThirdDbContext>();
+
+                options.Entity<Person>(opt =>
+                {
+                    opt.IncludeDetailsFunc = q => q.Include(p => p.Phones);
+                });
             });
 
             var sqliteConnection = CreateDatabaseAndGetConnection();
