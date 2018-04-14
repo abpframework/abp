@@ -1,12 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Volo.Abp.Domain.Entities;
+using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.TestApp.Domain
 {
-    public class Person : AggregateRoot<Guid>, IMultiTenant, ISoftDelete
+    public class Person : FullAuditedAggregateRoot<Guid>, IMultiTenant
     {
         public virtual Guid? TenantId { get; set; }
 
@@ -17,8 +16,6 @@ namespace Volo.Abp.TestApp.Domain
         public virtual int Age { get; set; }
 
         public virtual Collection<Phone> Phones { get; set; }
-
-        public virtual bool IsDeleted { get; set; }
 
         private Person()
         {

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Shouldly;
@@ -7,7 +7,7 @@ using Volo.Abp.TestApp.Domain;
 using Volo.Abp.TestApp.Testing;
 using Xunit;
 
-namespace Volo.Abp.MongoDB
+namespace Volo.Abp.MongoDB.Repositories
 {
     public class Repository_Basic_Tests : Repository_Basic_Tests<AbpMongoDbTestModule>
     {
