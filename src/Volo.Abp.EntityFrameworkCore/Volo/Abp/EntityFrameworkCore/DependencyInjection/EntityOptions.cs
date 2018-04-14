@@ -11,7 +11,7 @@ namespace Volo.Abp.EntityFrameworkCore.DependencyInjection
     {
         public static EntityOptions<TEntity> Empty { get; } = new EntityOptions<TEntity>();
 
-        public Func<IQueryable<TEntity>, IQueryable<TEntity>> IncludeDetailsFunc { get; set; }
+        public Func<IQueryable<TEntity>, IQueryable<TEntity>> DefaultWithDetailsFunc { get; set; }
     }
 
     public class EntityOptions

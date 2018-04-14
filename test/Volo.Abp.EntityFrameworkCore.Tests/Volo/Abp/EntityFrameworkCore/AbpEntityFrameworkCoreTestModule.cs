@@ -30,7 +30,7 @@ namespace Volo.Abp.EntityFrameworkCore
 
                 options.Entity<Person>(opt =>
                 {
-                    opt.IncludeDetailsFunc = q => q.Include(p => p.Phones);
+                    opt.DefaultWithDetailsFunc = q => q.Include(p => p.Phones);
                 });
             });
 

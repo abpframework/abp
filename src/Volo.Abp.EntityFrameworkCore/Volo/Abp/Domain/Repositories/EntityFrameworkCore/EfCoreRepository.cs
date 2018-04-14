@@ -161,12 +161,12 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
 
         public override IQueryable<TEntity> WithDetails()
         {
-            if (EntityOptions.IncludeDetailsFunc == null)
+            if (EntityOptions.DefaultWithDetailsFunc == null)
             {
                 return base.WithDetails();
             }
 
-            return EntityOptions.IncludeDetailsFunc(GetQueryable());
+            return EntityOptions.DefaultWithDetailsFunc(GetQueryable());
         }
     }
 
