@@ -107,9 +107,20 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
         {
             ApplyAbpConceptsForDeletedEntity(entity);
 
-            Collection.DeleteOne(
-                CreateEntityFilter(entity)
-            );
+            if (entity is ISoftDelete softDeleteEntity)
+            {
+                softDeleteEntity.IsDeleted = true;
+                Collection.ReplaceOne(
+                    CreateEntityFilter(entity),
+                    entity
+                );
+            }
+            else
+            {
+                Collection.DeleteOne(
+                    CreateEntityFilter(entity)
+                );
+            }
         }
 
         public override async Task DeleteAsync(
@@ -119,10 +130,22 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
         {
             ApplyAbpConceptsForDeletedEntity(entity);
 
-            await Collection.DeleteOneAsync(
-                CreateEntityFilter(entity),
-                GetCancellationToken(cancellationToken)
-            );
+            if (entity is ISoftDelete softDeleteEntity)
+            {
+                softDeleteEntity.IsDeleted = true;
+                await Collection.ReplaceOneAsync(
+                    CreateEntityFilter(entity),
+                    entity,
+                    cancellationToken: GetCancellationToken(cancellationToken)
+                );
+            }
+            else
+            {
+                await Collection.DeleteOneAsync(
+                    CreateEntityFilter(entity),
+                    GetCancellationToken(cancellationToken)
+                );
+            }
         }
 
         public override void Delete(Expression<Func<TEntity, bool>> predicate, bool autoSave = false)
@@ -169,8 +192,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
         protected virtual FilterDefinition<TEntity> CreateEntityFilter(TEntity entity)
         {
             throw new NotImplementedException(
-                $"{nameof(CreateEntityFilter)} is not implemented for MongoDB by default. " +
-                $"It should be overrided and implemented by the deriving class!"
+                $"{nameof(CreateEntityFilter)} is not implemented for MongoDB by default. It should be overrided and implemented by the deriving class!"
             );
         }
 
@@ -222,7 +244,8 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             AuditPropertySetter.SetDeletionProperties(entity);
         }
 
-        protected virtual void TriggerDomainEvents(object entity) //TODO: TriggerDomainEventsAsync..?
+        //TODO: TriggerDomainEventsAsync..?
+        protected virtual void TriggerDomainEvents(object entity)
         {
             var generatesDomainEventsEntity = entity as IGeneratesDomainEvents;
             if (generatesDomainEventsEntity == null)
