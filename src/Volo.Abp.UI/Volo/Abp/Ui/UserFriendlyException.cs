@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.Logging;
 
-namespace Volo.Abp.Ui
+namespace Volo.Abp.UI
 {
     /// <summary>
     /// This exception type is directly shown to the user.

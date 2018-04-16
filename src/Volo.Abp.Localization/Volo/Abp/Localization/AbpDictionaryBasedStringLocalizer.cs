@@ -131,7 +131,12 @@ namespace Volo.Abp.Localization
             if (includeParentCultures)
             {
                 //Fill all strings from default dictionary
-                var defaultDictionary = Resource.DictionaryProvider.Dictionaries[Resource.DefaultCultureName]; //TODO: What if not contains a default dictionary?
+                var defaultDictionary = Resource.DictionaryProvider.Dictionaries.GetOrDefault(Resource.DefaultCultureName); //TODO: What if not contains a default dictionary?
+                if (defaultDictionary == null)
+                {
+                    throw new Exception($"{Resource.DefaultCultureName} not found for {Resource.ResourceType.FullName}");
+                }
+
                 if (defaultDictionary != null)
                 {
                     foreach (var defaultDictString in defaultDictionary.GetAllStrings())

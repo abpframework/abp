@@ -6,7 +6,7 @@ using Volo.Abp.Authorization;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Http;
-using Volo.Abp.Ui;
+using Volo.Abp.UI;
 using Volo.Abp.Validation;
 
 namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling

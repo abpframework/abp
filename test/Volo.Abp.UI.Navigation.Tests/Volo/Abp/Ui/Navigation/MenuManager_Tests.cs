@@ -5,7 +5,7 @@ using Volo.Abp.Modularity;
 using System.Collections.Generic;
 using Xunit;
 
-namespace Volo.Abp.Ui.Navigation
+namespace Volo.Abp.UI.Navigation
 {
     public class MenuManager_Tests : AbpIntegratedTest<MenuManager_Tests.TestModule>
     {

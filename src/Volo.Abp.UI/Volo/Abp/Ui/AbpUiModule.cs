@@ -2,9 +2,13 @@
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
+using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.Ui
+namespace Volo.Abp.UI
 {
+    [DependsOn(
+        typeof(AbpLocalizationModule)
+    )]
     public class AbpUiModule : AbpModule
     {
         public override void ConfigureServices(IServiceCollection services)
@@ -12,6 +16,11 @@ namespace Volo.Abp.Ui
             services.Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources.AddVirtualJson<AbpUiResource>("en", "/Localization/Resources/AbpUi");
+            });
+
+            services.Configure<VirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.AddEmbedded<AbpUiModule>("");
             });
 
             services.AddAssemblyOf<AbpUiModule>();

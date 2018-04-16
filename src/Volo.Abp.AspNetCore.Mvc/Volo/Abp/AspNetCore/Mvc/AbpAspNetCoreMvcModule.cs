@@ -24,7 +24,7 @@ using Volo.Abp.AspNetCore.VirtualFileSystem;
 using Volo.Abp.Http;
 using Volo.Abp.Http.Modeling;
 using Volo.Abp.Localization;
-using Volo.Abp.Ui;
+using Volo.Abp.UI;
 
 namespace Volo.Abp.AspNetCore.Mvc
 {

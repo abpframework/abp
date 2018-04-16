@@ -1,4 +1,4 @@
-namespace Volo.Abp.Ui
+namespace Volo.Abp.UI
 {
     /* TODO:
      * - define an interface to split Details, like IHasExceptionDetails
