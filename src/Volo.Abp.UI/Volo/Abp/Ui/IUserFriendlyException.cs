@@ -1,5 +1,9 @@
 namespace Volo.Abp.Ui
 {
+    /* TODO:
+     * - define an interface to split Details, like IHasExceptionDetails
+     */
+
     public interface IUserFriendlyException
     {
         string Message { get; }

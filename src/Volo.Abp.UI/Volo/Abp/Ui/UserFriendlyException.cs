@@ -9,7 +9,7 @@ namespace Volo.Abp.Ui
     /// This exception type is directly shown to the user.
     /// </summary>
     [Serializable]
-    public class UserFriendlyException : AbpException, IHasLogLevel, IHasErrorCode, IUserFriendlyException
+    public class UserFriendlyException : ApplicationException, IHasLogLevel, IHasErrorCode, IUserFriendlyException
     {
         /// <summary>
         /// Additional information about the exception.
