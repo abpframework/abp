@@ -32,7 +32,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap
                 options.StyleBundles.Add("GlobalStyles", new[]
                 {
                     "/libs/font-awesome/css/font-awesome-min.css",
-                    "/libs/material/css/material-min.css",
+                    //"/libs/material/css/material-min.css",
+                    "/libs/bootstrap/css/bootstrap-min.css",
                     "/libs/datatables/datatables.css",
                     "/styles/libs/datatables.css"
                 });
@@ -44,7 +45,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap
                     "/libs/jquery-validation/jquery-validate.js",
                     "/libs/jquery-validation-unobtrusive/jquery-validate-unobtrusive.js",
                     "/libs/jquery-form/jquery-form-min.js",
-                    "/libs/material/js/material-min.js",
+                    //"/libs/material/js/material-min.js",
                     "/libs/datatables/datatables-min.js",
                     "/libs/vue/vue.js",
                     "/libs/abp/abp-jquery.js?_v" + DateTime.Now.Ticks,

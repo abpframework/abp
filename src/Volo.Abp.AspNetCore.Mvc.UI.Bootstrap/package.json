@@ -1,6 +1,6 @@
 {
   "version": "0.2.0",
-  "name": "volo.abp.aspnetcore.mvc.ui.bootstrap",
+  "name": "@abp/aspnetcore.mvc.ui.bootstrap",
   "private": true,
   "devDependencies": {},
   "dependencies": {
