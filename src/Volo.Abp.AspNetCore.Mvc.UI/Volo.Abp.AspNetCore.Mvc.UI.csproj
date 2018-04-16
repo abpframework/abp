@@ -11,20 +11,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Views\Shared\Components\AbpMenu\AbpMenuViewComponent.cs" />
-    <EmbeddedResource Include="Views\Shared\Components\AbpScriptBundle\AbpStyleBundleViewComponent.cs" />
-    <EmbeddedResource Include="Views\Shared\Components\AbpScriptBundle\Default.cshtml" />
-    <EmbeddedResource Include="Views\Shared\Components\AbpStyleBundle\AbpStyleBundleViewComponent.cs" />
-    <EmbeddedResource Include="Views\Shared\Components\AbpStyleBundle\Default.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="wwwroot\libs\abp\abp.js" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="wwwroot\libs\abp\abp-jquery.js" />
-    <EmbeddedResource Include="wwwroot\libs\abp\abp.js" />
+    <EmbeddedResource Include="wwwroot\**\*.*" />
+    <EmbeddedResource Include="Views\**\*.cshtml" />
   </ItemGroup>
 
   <ItemGroup>

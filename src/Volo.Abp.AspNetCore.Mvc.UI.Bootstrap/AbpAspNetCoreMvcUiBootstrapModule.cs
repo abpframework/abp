@@ -2,8 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.EmbeddedFiles;
 using Volo.Abp.AspNetCore.Mvc.Bundling;
-using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Localization.Resources.AbpBootstrap;
-using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 
@@ -20,11 +18,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap
             services.Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpAspNetCoreMvcUiBootstrapModule>("Volo.Abp.AspNetCore.Mvc.UI.Bootstrap");
-            });
-
-            services.Configure<AbpLocalizationOptions>(options =>
-            {
-                options.Resources.AddVirtualJson<AbpBootstrapResource>("en", "/Localization/Resources/AbpBootstrap");
             });
 
             services.Configure<BundlingOptions>(options =>

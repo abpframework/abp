@@ -1,15 +1,15 @@
 ﻿using System.Text;
+using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Localization;
-using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Localization.Resources.AbpBootstrap;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
 {
     public class AbpModalFooterTagHelper : TagHelper
     {
-        private readonly IStringLocalizer<AbpBootstrapResource> _localizer;
+        private readonly IStringLocalizer<AbpUiResource> _localizer;
 
-        public AbpModalFooterTagHelper(IStringLocalizer<AbpBootstrapResource> localizer)
+        public AbpModalFooterTagHelper(IStringLocalizer<AbpUiResource> localizer)
         {
             _localizer = localizer;
         }
