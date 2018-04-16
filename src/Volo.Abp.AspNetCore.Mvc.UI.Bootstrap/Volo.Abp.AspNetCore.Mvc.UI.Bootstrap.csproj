@@ -13,7 +13,6 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Localization\Resources\**\*.json" />
-    <EmbeddedResource Include="Views\**\*.cshtml" />
     <EmbeddedResource Include="Pages\**\*.cshtml" />
     <EmbeddedResource Include="wwwroot\**\*.*" />
   </ItemGroup>
