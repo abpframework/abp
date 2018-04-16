@@ -4,6 +4,12 @@
   "private": true,
   "devDependencies": {},
   "dependencies": {
-    "bootstrap": "^4.1.0"
+    "bootstrap": "^4.1.0",
+    "datatables.net-dt": "^1.10.16",
+    "font-awesome": "^4.7.0",
+    "jquery": "^3.3.1",
+    "jquery-form": "^4.2.2",
+    "jquery-validation": "^1.17.0",
+    "jquery-validation-unobtrusive": "^3.2.9"
   }
 }
