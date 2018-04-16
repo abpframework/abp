@@ -15,7 +15,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Views.Shared.Components.AbpMenu
 
         public async Task<IViewComponentResult> InvokeAsync(string menuName = StandardMenus.Main, string viewName = "Default")
         {
-            var menu = await _menuManager.GetAsync(StandardMenus.Main);
+            var menu = await _menuManager.GetAsync(menuName);
             return View(viewName, menu);
         }
     }
