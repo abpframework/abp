@@ -1,9 +1,9 @@
 {
   "version": "0.2.0",
-  "name": "@abp/aspnetcore.mvc.ui.bootstrap",
-  "private": true,
-  "devDependencies": {},
+  "name": "@abp/aspnetcore.mvc.ui.theme.basic",
+  "private": false,
   "dependencies": {
+    "@abp/aspnetcore.mvc.ui": "^0.2.0",
     "bootstrap": "^4.1.0",
     "font-awesome": "^4.7.0",
     "jquery": "^3.3.1",

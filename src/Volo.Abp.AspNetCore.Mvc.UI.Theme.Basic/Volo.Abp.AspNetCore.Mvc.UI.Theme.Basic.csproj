@@ -18,6 +18,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="npm-package\package.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="npm-package\package.json">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.csproj" />
   </ItemGroup>
 
