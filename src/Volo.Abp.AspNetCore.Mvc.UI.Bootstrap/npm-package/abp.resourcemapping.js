@@ -21,6 +21,11 @@
         "@node_modules/font-awesome/css/font-awesome.css": "@libs/font-awesome/css/",
         "@node_modules/font-awesome/fonts/*.*": "@libs/font-awesome/fonts/",
 
+        //Datatables
+        "@node_modules/datatables.net/js/jquery.dataTables.js": "@libs/datatables.net/js/",
+        "@node_modules/datatables.net-bs4/css/dataTables.bootstrap4.css": "@libs/datatables.net-bs4/css/",
+        "@node_modules/datatables.net-bs4/js/dataTables.bootstrap4.js": "@libs/datatables.net-bs4/js/",
+
         //Vue
         "@node_modules/vue/dist/vue.js": "@libs/vue/dist/"
     }

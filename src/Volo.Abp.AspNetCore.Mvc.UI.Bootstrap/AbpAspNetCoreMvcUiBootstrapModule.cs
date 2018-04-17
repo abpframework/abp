@@ -26,7 +26,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap
                 {
                     "/libs/font-awesome/css/font-awesome.css",
                     "/libs/bootstrap/dist/css/bootstrap.css",
-                    "/libs/datatables/datatables.css",
+                    "/libs/datatables.net-bs4/css/dataTables.bootstrap4.css",
                     "/styles/libs/datatables.css"
                 });
 
@@ -38,7 +38,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap
                     "/libs/jquery-validation/dist/jquery.validate.js",
                     "/libs/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js",
                     "/libs/jquery-form/dist/jquery.form.min.js",
-                    "/libs/datatables/datatables-min.js",
+                    "/libs/datatables.net/js/jquery.dataTables.js",
+                    "/libs/datatables.net-bs4/js/dataTables.bootstrap4.js",
                     "/libs/vue/dist/vue.js",
                     "/libs/abp/abp-jquery.js?_v" + DateTime.Now.Ticks,
                     "/Abp/ApplicationConfigurationScript?_v=" + DateTime.Now.Ticks,
