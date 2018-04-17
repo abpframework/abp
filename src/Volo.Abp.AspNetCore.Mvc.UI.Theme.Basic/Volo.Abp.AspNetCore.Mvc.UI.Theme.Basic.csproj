@@ -32,15 +32,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="compilerconfig.json">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Include="web.config">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.csproj" />
   </ItemGroup>
 
