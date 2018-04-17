@@ -18,6 +18,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="npm-package\node_modules\**" />
+    <EmbeddedResource Remove="npm-package\node_modules\**" />
+    <None Remove="npm-package\node_modules\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="npm-package\package.json" />
   </ItemGroup>
 
