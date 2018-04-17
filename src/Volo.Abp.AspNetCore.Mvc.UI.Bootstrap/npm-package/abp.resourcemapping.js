@@ -19,6 +19,9 @@
 
         //Font-Awesome
         "@node_modules/font-awesome/css/font-awesome.css": "@libs/font-awesome/css/",
-        "@node_modules/font-awesome/fonts/*.*": "@libs/font-awesome/fonts/"
+        "@node_modules/font-awesome/fonts/*.*": "@libs/font-awesome/fonts/",
+
+        //Vue
+        "@node_modules/vue/dist/vue.js": "@libs/vue/dist/"
     }
 }
