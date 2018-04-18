@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.Modularity;
@@ -26,6 +25,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic
                     "/libs/font-awesome/css/font-awesome.css",
                     "/libs/bootstrap/css/bootstrap.css",
                     "/libs/datatables.net-bs4/css/dataTables.bootstrap4.css",
+
                     "/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables.css"
                 });
 
@@ -33,17 +33,20 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic
                 options.ScriptBundles.Add("GlobalScripts", new[]
                 {
                     "/libs/jquery/jquery.js",
-                    "/libs/abp/jquery/abp.ajax.js",
-                    "/libs/abp/jquery/abp.resource-loader.js",
-                    "/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery/jquery-extensions.js",
                     "/libs/bootstrap/js/bootstrap.bundle.js",
                     "/libs/jquery-validation/dist/jquery.validate.js",
                     "/libs/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js",
                     "/libs/jquery-form/jquery.form.min.js",
                     "/libs/datatables.net/js/jquery.dataTables.js",
                     "/libs/datatables.net-bs4/js/dataTables.bootstrap4.js",
+
+                    "/libs/abp/core/src/abp.js",
+                    "/libs/abp/jquery/abp.ajax.js",
+                    "/libs/abp/jquery/abp.resource-loader.js",
+                    "/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery/jquery-extensions.js",
                     "/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/abp.modal-manager.js",
                     "/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables-extensions.js",
+
                     "/Abp/ApplicationConfigurationScript",
                     "/Abp/ServiceProxyScript"
                 });
