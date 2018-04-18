@@ -1,9 +1,5 @@
 ﻿[
   {
-    "outputFile": "wwwroot/styles/mybstheme.css",
-    "inputFile": "wwwroot/styles/mybstheme.scss"
-  },
-  {
     "outputFile": "wwwroot/styles/libs/datatables.css",
     "inputFile": "wwwroot/styles/libs/datatables.scss"
   }
