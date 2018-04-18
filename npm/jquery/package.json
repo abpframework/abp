@@ -1,0 +1,8 @@
+{
+  "version": "0.2.1",
+  "name": "@abp/jquery",
+  "dependencies": {
+    "@abp/core": "^0.2.1",
+    "jquery": "^3.3.1"
+  }
+}

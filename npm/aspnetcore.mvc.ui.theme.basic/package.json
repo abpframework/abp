@@ -1,0 +1,7 @@
+{
+  "version": "0.2.1",
+  "name": "@abp/aspnetcore.mvc.ui.theme.basic",
+  "dependencies": {
+    "@abp/aspnetcore.mvc.ui.theme.shared": "^0.2.1"
+  }
+}
