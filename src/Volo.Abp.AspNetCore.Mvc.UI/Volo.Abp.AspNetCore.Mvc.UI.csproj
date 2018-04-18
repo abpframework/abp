@@ -16,22 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="npm-package\node_modules\**" />
-    <EmbeddedResource Remove="npm-package\node_modules\**" />
-    <None Remove="npm-package\node_modules\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="npm-package\package.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="npm-package\package.json">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.AspNetCore.Mvc\Volo.Abp.AspNetCore.Mvc.csproj" />
     <ProjectReference Include="..\Volo.Abp.UI.Navigation\Volo.Abp.UI.Navigation.csproj" />
   </ItemGroup>

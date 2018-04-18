@@ -24,25 +24,28 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic
                 options.StyleBundles.Add("GlobalStyles", new[]
                 {
                     "/libs/font-awesome/css/font-awesome.css",
-                    "/libs/bootstrap/dist/css/bootstrap.css",
+                    "/libs/bootstrap/css/bootstrap.css",
                     "/libs/datatables.net-bs4/css/dataTables.bootstrap4.css",
-                    "/styles/libs/datatables.css"
+                    "/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables.css"
                 });
 
                 //TODO: Handle ticks stuff for all files
                 options.ScriptBundles.Add("GlobalScripts", new[]
                 {
-                    "/libs/jquery/dist/jquery.js",
-                    "/libs/bootstrap/dist/js/bootstrap.bundle.js",
+                    "/libs/jquery/jquery.js",
+                    "/libs/abp/jquery/abp.ajax.js",
+                    "/libs/abp/jquery/abp.resource-loader.js",
+                    "/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery/jquery-extensions.js",
+                    "/libs/bootstrap/js/bootstrap.bundle.js",
                     "/libs/jquery-validation/dist/jquery.validate.js",
-                    "/libs/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js",
-                    "/libs/jquery-form/dist/jquery.form.min.js",
+                    "/libs/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js",
+                    "/libs/jquery-form/jquery.form.min.js",
                     "/libs/datatables.net/js/jquery.dataTables.js",
                     "/libs/datatables.net-bs4/js/dataTables.bootstrap4.js",
-                    "/libs/vue/dist/vue.js",
-                    "/libs/abp/abp-jquery.js?_v" + DateTime.Now.Ticks,
-                    "/Abp/ApplicationConfigurationScript?_v=" + DateTime.Now.Ticks,
-                    "/Abp/ServiceProxyScript?_v=" + DateTime.Now.Ticks
+                    "/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/abp.modal-manager.js",
+                    "/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables-extensions.js",
+                    "/Abp/ApplicationConfigurationScript",
+                    "/Abp/ServiceProxyScript"
                 });
             });
 

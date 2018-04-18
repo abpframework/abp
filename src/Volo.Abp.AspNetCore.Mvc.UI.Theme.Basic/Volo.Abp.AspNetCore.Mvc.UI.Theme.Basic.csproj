@@ -19,15 +19,8 @@
     <EmbeddedResource Include="Views\**\*.cshtml" />
     <EmbeddedResource Include="wwwroot\**\*.*" />
   </ItemGroup>
-
+  
   <ItemGroup>
-    <Compile Remove="npm-package\node_modules\**" />
-    <EmbeddedResource Remove="npm-package\node_modules\**" />
-    <None Remove="npm-package\node_modules\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="compilerconfig.json" />
     <None Remove="web.config" />
   </ItemGroup>
 
