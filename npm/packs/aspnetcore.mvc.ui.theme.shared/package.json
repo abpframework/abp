@@ -1,18 +1,18 @@
 {
-  "version": "0.2.1",
+  "version": "0.2.2",
   "name": "@abp/aspnetcore.mvc.ui.theme.shared",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/aspnetcore.mvc.ui": "^0.2.1",
-    "@abp/jquery": "^0.2.1",
+    "@abp/aspnetcore.mvc.ui": "^0.2.2",
+    "@abp/jquery": "^0.2.2",
     "bootstrap": "^4.1.0",
+    "datatables.net": "^1.10.16",
+    "datatables.net-bs4": "^1.10.16",
     "font-awesome": "^4.7.0",
     "jquery-form": "^4.2.2",
     "jquery-validation": "^1.17.0",
-    "jquery-validation-unobtrusive": "^3.2.9",
-    "datatables.net": "^1.10.16",
-    "datatables.net-bs4": "^1.10.16"
+    "jquery-validation-unobtrusive": "^3.2.9"
   }
 }
