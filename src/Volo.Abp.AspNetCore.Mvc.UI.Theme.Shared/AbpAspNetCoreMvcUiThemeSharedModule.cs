@@ -33,13 +33,13 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared
                 {
                     "/libs/jquery/jquery.js",
                     "/libs/bootstrap/js/bootstrap.bundle.js",
-                    "/libs/jquery-validation/dist/jquery.validate.js",
+                    "/libs/jquery-validation/jquery.validate.js",
                     "/libs/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js",
                     "/libs/jquery-form/jquery.form.min.js",
                     "/libs/datatables.net/js/jquery.dataTables.js",
                     "/libs/datatables.net-bs4/js/dataTables.bootstrap4.js",
 
-                    "/libs/abp/core/src/abp.js",
+                    "/libs/abp/core/abp.js",
                     "/libs/abp/jquery/abp.ajax.js",
                     "/libs/abp/jquery/abp.resource-loader.js",
                     "/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery/jquery-extensions.js",
