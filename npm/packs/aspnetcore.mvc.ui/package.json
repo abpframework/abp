@@ -1,6 +1,9 @@
 {
   "version": "0.2.1",
   "name": "@abp/aspnetcore.mvc.ui",
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "ansi-colors": "^1.1.0",
     "gulp": "^3.9.1",

@@ -1,6 +1,9 @@
 {
   "version": "0.2.1",
   "name": "@abp/jquery",
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "@abp/core": "^0.2.1",
     "jquery": "^3.3.1"

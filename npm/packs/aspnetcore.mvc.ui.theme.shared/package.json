@@ -1,6 +1,9 @@
 {
   "version": "0.2.1",
   "name": "@abp/aspnetcore.mvc.ui.theme.shared",
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "@abp/aspnetcore.mvc.ui": "^0.2.1",
     "@abp/jquery": "^0.2.1",

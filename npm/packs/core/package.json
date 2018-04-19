@@ -1,6 +1,9 @@
 {
   "version": "0.2.1",
   "name": "@abp/core",
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     
   }
