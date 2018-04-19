@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Volo.Abp.AspNetCore.Mvc.Bundling;
+using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 
 namespace Volo.Abp.AspNetCore.Mvc.Views.Shared.Components.AbpStyleBundle
 {

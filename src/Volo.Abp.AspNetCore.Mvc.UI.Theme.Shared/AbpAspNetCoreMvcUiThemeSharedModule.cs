@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.AspNetCore.Mvc.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
+using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 
@@ -44,10 +44,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared
                     "/libs/abp/jquery/abp.resource-loader.js",
                     "/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery/jquery-extensions.js",
                     "/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/abp.modal-manager.js",
-                    "/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables-extensions.js",
-
-                    "/Abp/ApplicationConfigurationScript",
-                    "/Abp/ServiceProxyScript"
+                    "/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables-extensions.js"
                 });
             });
 

@@ -1,4 +1,4 @@
-namespace Volo.Abp.AspNetCore.Mvc.Bundling
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 {
     public class BundlingOptions
     {
