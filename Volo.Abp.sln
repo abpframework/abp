@@ -170,13 +170,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.MongoDB.Tests", "t
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.EntityFrameworkCore.SqlServer", "src\Volo.Abp.EntityFrameworkCore.SqlServer\Volo.Abp.EntityFrameworkCore.SqlServer.csproj", "{6EABA98D-0B71-4ED7-A939-AFDA106D1151}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.EventBus.Distributed", "src\Volo.Abp.EventBus.Distributed\Volo.Abp.EventBus.Distributed.csproj", "{CFC98B88-8CCC-469B-8D60-482D3C94A690}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.EventBus.Distributed", "src\Volo.Abp.EventBus.Distributed\Volo.Abp.EventBus.Distributed.csproj", "{CFC98B88-8CCC-469B-8D60-482D3C94A690}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.EventBus.Distributed.RabbitMQ", "src\Volo.Abp.EventBus.Distributed.RabbitMQ\Volo.Abp.EventBus.Distributed.RabbitMQ.csproj", "{468C3DCB-8C00-40E7-AE51-0738EAAB312A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.EventBus.Distributed.RabbitMQ", "src\Volo.Abp.EventBus.Distributed.RabbitMQ\Volo.Abp.EventBus.Distributed.RabbitMQ.csproj", "{468C3DCB-8C00-40E7-AE51-0738EAAB312A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.EventBus.Distributed.Tests", "test\Volo.Abp.EventBus.Distributed.Tests\Volo.Abp.EventBus.Distributed.Tests.csproj", "{0AE814CE-E155-4259-8746-262D174AB510}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.EventBus.Distributed.Tests", "test\Volo.Abp.EventBus.Distributed.Tests\Volo.Abp.EventBus.Distributed.Tests.csproj", "{0AE814CE-E155-4259-8746-262D174AB510}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic", "src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.csproj", "{2F5EE6D9-511B-4998-BD62-0B9F03E02432}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic", "src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.csproj", "{2F5EE6D9-511B-4998-BD62-0B9F03E02432}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared", "src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.csproj", "{86A3BB43-8FA2-4CC2-BAD0-A86C6C9D9585}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -496,6 +498,10 @@ Global
 		{2F5EE6D9-511B-4998-BD62-0B9F03E02432}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2F5EE6D9-511B-4998-BD62-0B9F03E02432}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2F5EE6D9-511B-4998-BD62-0B9F03E02432}.Release|Any CPU.Build.0 = Release|Any CPU
+		{86A3BB43-8FA2-4CC2-BAD0-A86C6C9D9585}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{86A3BB43-8FA2-4CC2-BAD0-A86C6C9D9585}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{86A3BB43-8FA2-4CC2-BAD0-A86C6C9D9585}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{86A3BB43-8FA2-4CC2-BAD0-A86C6C9D9585}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -581,6 +587,7 @@ Global
 		{468C3DCB-8C00-40E7-AE51-0738EAAB312A} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{0AE814CE-E155-4259-8746-262D174AB510} = {447C8A77-E5F0-4538-8687-7383196D04EA}
 		{2F5EE6D9-511B-4998-BD62-0B9F03E02432} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
+		{86A3BB43-8FA2-4CC2-BAD0-A86C6C9D9585} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB97ECF4-9A84-433F-A80B-2A3285BDD1D5}

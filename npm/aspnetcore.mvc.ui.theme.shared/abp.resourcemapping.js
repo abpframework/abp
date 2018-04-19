@@ -15,8 +15,8 @@
         "@node_modules/jquery-form/dist/jquery.form.min.js": "@libs/jquery-form/",
 
         //jQuery-Validation
-        "@node_modules/jquery-validation/dist/jquery.validate.js": "@libs/jquery-validation/dist/", //TODO: do not use dist on destination
-        "@node_modules/jquery-validation/dist/localization/*.*": "@libs/jquery-validation/dist/localization/", //TODO: do not use dist on destination
+        "@node_modules/jquery-validation/dist/jquery.validate.js": "@libs/jquery-validation/",
+        "@node_modules/jquery-validation/dist/localization/*.*": "@libs/jquery-validation/localization/",
 
         //jQuery-Validation-Unobtrusive
         "@node_modules/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js": "@libs/jquery-validation-unobtrusive/",

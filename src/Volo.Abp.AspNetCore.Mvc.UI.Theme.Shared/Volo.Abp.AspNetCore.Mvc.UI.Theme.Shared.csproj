@@ -4,8 +4,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic</AssemblyName>
-    <PackageId>Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic</PackageId>
+    <AssemblyName>Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared</AssemblyName>
+    <PackageId>Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared</PackageId>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
@@ -15,17 +15,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Pages\**\*.cshtml" />
-    <EmbeddedResource Include="Views\**\*.cshtml" />
     <EmbeddedResource Include="wwwroot\**\*.*" />
   </ItemGroup>
-  
+
   <ItemGroup>
-    <None Remove="web.config" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <ProjectReference Include="..\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.csproj" />
+    <ProjectReference Include="..\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.csproj" />
   </ItemGroup>
 
 </Project>
