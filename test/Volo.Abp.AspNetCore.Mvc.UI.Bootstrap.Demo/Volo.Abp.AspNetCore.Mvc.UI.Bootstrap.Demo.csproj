@@ -3,11 +3,16 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
+    <AssemblyName>Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo</AssemblyName>
+    <PackageId>Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo</PackageId>
+    <PreserveCompilationContext>true</PreserveCompilationContext>
+    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
-    <PreserveCompilationContext>true</PreserveCompilationContext>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
-    <MvcRazorCompileOnPublish>false</MvcRazorCompileOnPublish>
   </PropertyGroup>
 
   <ItemGroup>

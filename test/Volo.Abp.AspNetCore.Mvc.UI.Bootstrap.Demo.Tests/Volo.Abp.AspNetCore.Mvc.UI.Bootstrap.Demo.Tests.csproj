@@ -19,7 +19,6 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.0.3" />
-    <PackageReference Include="System.Net.Http" Version="4.3.3" />
   </ItemGroup>
 
   <ItemGroup>
