@@ -7,6 +7,8 @@
 <h2>Cards</h2>
 
 @*
+    <h4># Example</h4>
+
     <div class="demo-with-code">
         <div class="demo-area">
         </div>
@@ -80,6 +82,55 @@
     &lt;abp-card-body&gt;
         &lt;abp-card-title&gt;Card title&lt;/abp-card-title&gt;
         &lt;abp-card-text&gt;Some quick example text to build on the card title and make up the bulk of the card's content.&lt;/abp-card-text&gt;
+        &lt;a href="#" class="btn btn-primary"&gt;Go somewhere&lt;/a&gt;
+    &lt;/abp-card-body&gt;
+&lt;/abp-card&gt;
+</pre>
+    </div>
+</div>
+
+<h4># Example</h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+        <abp-card class="text-center">
+            <abp-card-header>
+                <ul class="nav nav-tabs card-header-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Active</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Link</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" href="#">Disabled</a>
+                    </li>
+                </ul>
+            </abp-card-header>
+            <abp-card-body title="Special title treatment">
+                <abp-card-text>With supporting text below as a natural lead-in to additional content.</abp-card-text>
+                <a href="#" class="btn btn-primary">Go somewhere</a>
+            </abp-card-body>
+        </abp-card>
+    </div>
+    <div class="code-area">
+        <pre>
+&lt;abp-card class="text-center"&gt;
+    &lt;abp-card-header&gt;
+        &lt;ul class="nav nav-tabs card-header-tabs"&gt;
+            &lt;li class="nav-item"&gt;
+                &lt;a class="nav-link active" href="#"&gt;Active&lt;/a&gt;
+            &lt;/li&gt;
+            &lt;li class="nav-item"&gt;
+                &lt;a class="nav-link" href="#"&gt;Link&lt;/a&gt;
+            &lt;/li&gt;
+            &lt;li class="nav-item"&gt;
+                &lt;a class="nav-link disabled" href="#"&gt;Disabled&lt;/a&gt;
+            &lt;/li&gt;
+        &lt;/ul&gt;
+    &lt;/abp-card-header&gt;
+    &lt;abp-card-body title="Special title treatment"&gt;
+        &lt;abp-card-text&gt;With supporting text below as a natural lead-in to additional content.&lt;/abp-card-text&gt;
         &lt;a href="#" class="btn btn-primary"&gt;Go somewhere&lt;/a&gt;
     &lt;/abp-card-body&gt;
 &lt;/abp-card&gt;
