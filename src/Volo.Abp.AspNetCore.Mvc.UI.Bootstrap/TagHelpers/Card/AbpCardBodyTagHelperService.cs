@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Razor.TagHelpers;
+﻿using System;
+using Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Card
@@ -9,6 +10,16 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Card
         {
             output.TagName = "div";
             output.Attributes.AddClass("card-body");
+
+            //if (!TagHelper.Title.IsNullOrWhiteSpace())
+            //{
+            //    //TODO...
+            //}
+
+            //if (!TagHelper.Subtitle.IsNullOrWhiteSpace())
+            //{
+            //    //TODO...
+            //}
         }
     }
 }

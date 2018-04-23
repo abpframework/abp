@@ -44,13 +44,23 @@
                 <abp-card-title>Card title</abp-card-title>
                 <abp-card-subtitle class="mb-2 text-muted">Card subtitle</abp-card-subtitle>
                 <abp-card-text>Some quick example text to build on the card title and make up the bulk of the card's content.</abp-card-text>
-                <a href="#" class="card-link">Card link</a>
-                <a href="#" class="card-link">Another link</a>
+                <a abp-card-link href="#">Card link</a>
+                <a abp-card-link href="#">Another link</a>
             </abp-card-body>
         </abp-card>
     </div>
     <div class="code-area">
-        <pre></pre>
+        <pre>
+&lt;abp-card style="width: 18rem;"&gt;
+    &lt;abp-card-body&gt;
+        &lt;abp-card-title&gt;Card title&lt;/abp-card-title&gt;
+        &lt;abp-card-subtitle class="mb-2 text-muted"&gt;Card subtitle&lt;/abp-card-subtitle&gt;
+        &lt;abp-card-text&gt;Some quick example text to build on the card title and make up the bulk of the card's content.&lt;/abp-card-text&gt;
+        &lt;a abp-card-link href="#"&gt;Card link&lt;/a&gt;
+        &lt;a abp-card-link href="#"&gt;Another link&lt;/a&gt;
+    &lt;/abp-card-body&gt;
+&lt;/abp-card&gt;
+</pre>
     </div>
 </div>
 
@@ -58,25 +68,25 @@
 
 <div class="demo-with-code">
     <div class="demo-area">
-        <div class="card" style="width: 18rem;">
+        <abp-card style="width: 18rem;">
             <img class="card-img-top" src="~/imgs/demo/300x200.png" alt="Card image cap">
-            <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            <abp-card-body>
+                <abp-card-title>Card title</abp-card-title>
+                <abp-card-text>Some quick example text to build on the card title and make up the bulk of the card's content.</abp-card-text>
                 <a href="#" class="btn btn-primary">Go somewhere</a>
-            </div>
-        </div>
+            </abp-card-body>
+        </abp-card>
     </div>
     <div class="code-area">
-<pre>
-&lt;div class="card" style="width: 18rem;"&gt;
-    &lt;img class="card-img-top" src=".../100px180/" alt="Card image cap"&gt;
-    &lt;div class="card-body"&gt;
-        &lt;h5 class="card-title"&gt;Card title&lt;/h5&gt;
-        &lt;p class="card-text"&gt;Some quick example text to build on the card title and make up the bulk of the card's content.&lt;/p&gt;
+        <pre>
+&lt;abp-card style="width: 18rem;"&gt;
+    &lt;img class="card-img-top" src="~/imgs/demo/300x200.png" alt="Card image cap"&gt;
+    &lt;abp-card-body&gt;
+        &lt;abp-card-title&gt;Card title&lt;/abp-card-title&gt;
+        &lt;abp-card-text&gt;Some quick example text to build on the card title and make up the bulk of the card's content.&lt;/abp-card-text&gt;
         &lt;a href="#" class="btn btn-primary"&gt;Go somewhere&lt;/a&gt;
-    &lt;/div&gt;
-&lt;/div&gt;
+    &lt;/abp-card-body&gt;
+&lt;/abp-card&gt;
 </pre>
     </div>
 </div>
