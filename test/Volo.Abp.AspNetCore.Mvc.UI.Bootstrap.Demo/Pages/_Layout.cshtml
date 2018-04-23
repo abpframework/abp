@@ -1,0 +1,35 @@
+﻿@{
+    Layout = null;
+    var title = "ABP Bootstrap Demo";
+    if (ViewData["Title"] != null)
+    {
+        title += " | " + ViewData["Title"];
+    }
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>@title</title>
+
+    <vc:abp-style-bundle name="GlobalStyles"></vc:abp-style-bundle>
+    <link href="~/css/demo.min.css" rel="stylesheet" /> @* TODO: Add to the GlobalStyles bundle! *@
+
+    @RenderSection("styles", false)
+</head>
+<body>
+
+    <div class="container-fluid">
+        @RenderBody()
+    </div>
+
+    <vc:abp-script-bundle name="GlobalScripts"></vc:abp-script-bundle>
+
+    @RenderSection("scripts", false)
+
+</body>
+</html>
