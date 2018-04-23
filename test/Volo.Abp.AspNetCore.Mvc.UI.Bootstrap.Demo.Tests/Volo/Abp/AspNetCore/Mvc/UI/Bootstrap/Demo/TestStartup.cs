@@ -4,13 +4,13 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace Volo.Abp.AspNetCore.Mvc
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo
 {
-    public class Startup
+    public class TestStartup
     {
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.AddApplication<AbpAspNetCoreMvcTestModule>(options =>
+            services.AddApplication<AbpAspNetCoreMvcUiBootstrapDemoTestModule>(options =>
             {
                 options.UseAutofac();
             });

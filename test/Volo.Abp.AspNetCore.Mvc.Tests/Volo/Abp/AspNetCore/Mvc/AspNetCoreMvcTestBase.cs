@@ -20,7 +20,7 @@ namespace Volo.Abp.AspNetCore.Mvc
                 .UseContentRoot(contentRootPath);
         }
 
-        private string CalculateContentRootPath(string projectFileName, string contentPath)
+        private static string CalculateContentRootPath(string projectFileName, string contentPath)
         {
             var currentDirectory = Directory.GetCurrentDirectory();
             while (!ContainsFile(currentDirectory, projectFileName))
@@ -31,7 +31,7 @@ namespace Volo.Abp.AspNetCore.Mvc
             return Path.Combine(currentDirectory, contentPath);
         }
 
-        private bool ContainsFile(string currentDirectory, string projectFileName)
+        private static bool ContainsFile(string currentDirectory, string projectFileName)
         {
             return Directory
                 .GetFiles(currentDirectory, "*.*", SearchOption.TopDirectoryOnly)
