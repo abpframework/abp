@@ -1,13 +1,10 @@
-﻿using Microsoft.AspNetCore.Razor.TagHelpers;
-
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Card
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Card
 {
-    public class AbpCardHeaderTagHelper : TagHelper
+    public class AbpCardHeaderTagHelper : TagHelper<AbpCardHeaderTagHelperService>
     {
-        public override void Process(TagHelperContext context, TagHelperOutput output)
+        public AbpCardHeaderTagHelper(AbpCardHeaderTagHelperService tagHelperService) 
+            : base(tagHelperService)
         {
-            output.TagName = "div";
-            output.Attributes.AddClass("card-header");
         }
     }
 }
