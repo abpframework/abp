@@ -4,8 +4,11 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
 {
-    public interface ITagHelperService : ITransientDependency
+    public interface IAbpTagHelperService<TTagHelper> : ITransientDependency
+        where TTagHelper : TagHelper
     {
+        TTagHelper TagHelper { get; set; }
+
         int Order { get; }
 
         void Init(TagHelperContext context);

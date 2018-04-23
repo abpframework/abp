@@ -3,12 +3,13 @@ using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Card
 {
-    public class AbpCardHeaderTagHelperService : AbpTagHelperService<AbpCardHeaderTagHelper>
+    public class AbpCardTitleTagHelperService : AbpTagHelperService<AbpCardTitleTagHelper>
     {
+
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            output.TagName = "div";
-            output.Attributes.AddClass("card-header");
+            output.TagName = TagHelper.Heading.ToHtmlTag();
+            output.Attributes.AddClass("card-title");
         }
     }
 }

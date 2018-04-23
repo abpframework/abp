@@ -3,8 +3,11 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
 {
-    public class TagHelperService : ITagHelperService
+    public class AbpTagHelperService<TTagHelper> : IAbpTagHelperService<TTagHelper>
+        where TTagHelper : TagHelper
     {
+        public TTagHelper TagHelper { get; set; }
+        
         public virtual int Order { get; }
 
         public virtual void Init(TagHelperContext context)
