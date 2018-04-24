@@ -1,14 +1,11 @@
-﻿using Microsoft.AspNetCore.Razor.TagHelpers;
-using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
-
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
 {
-    public class AbpModalBodyTagHelper : TagHelper
+    public class AbpModalBodyTagHelper : AbpTagHelper<AbpModalBodyTagHelper, AbpModalBodyTagHelperService>
     {
-        public override void Process(TagHelperContext context, TagHelperOutput output)
+        public AbpModalBodyTagHelper(AbpModalBodyTagHelperService tagHelperService)
+            : base(tagHelperService)
         {
-            output.TagName = "div";
-            output.Attributes.AddClass("modal-body");
+
         }
     }
 }
