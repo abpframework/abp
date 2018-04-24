@@ -1,0 +1,55 @@
+﻿@page
+@model Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components.ButtonsModel
+@{
+    ViewData["Title"] = "Buttons";
+}
+
+<h2>Buttons</h2>
+
+<p>Based on <a href="http://getbootstrap.com/docs/4.1/components/buttons/" target="_blank"> Bootstrap button</a>.</p>
+
+<h4># Example</h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+        <abp-button>Default</abp-button>
+        <abp-button button-type="Primary">Primary</abp-button>
+        <abp-button button-type="Secondary">Secondary</abp-button>
+        <abp-button button-type="Success">Success</abp-button>
+        <abp-button button-type="Danger">Danger</abp-button>
+        <abp-button button-type="Warning">Warning</abp-button>
+        <abp-button button-type="Info">Info</abp-button>
+        <abp-button button-type="Light">Light</abp-button>
+        <abp-button button-type="Dark">Dark</abp-button>
+        <abp-button button-type="Link">Link</abp-button>
+    </div>
+    <div class="code-area">
+        <pre>
+&lt;abp-button&gt;Default&lt;/abp-button&gt;
+&lt;abp-button button-type="Primary"&gt;Primary&lt;/abp-button&gt;
+&lt;abp-button button-type="Secondary"&gt;Secondary&lt;/abp-button&gt;
+&lt;abp-button button-type="Success"&gt;Success&lt;/abp-button&gt;
+&lt;abp-button button-type="Danger"&gt;Danger&lt;/abp-button&gt;
+&lt;abp-button button-type="Warning"&gt;Warning&lt;/abp-button&gt;
+&lt;abp-button button-type="Info"&gt;Info&lt;/abp-button&gt;
+&lt;abp-button button-type="Light"&gt;Light&lt;/abp-button&gt;
+&lt;abp-button button-type="Dark"&gt;Dark&lt;/abp-button&gt;
+&lt;abp-button button-type="Link"&gt;Link&lt;/abp-button&gt;
+</pre>
+    </div>
+</div>
+
+<h4># Example</h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+        <a abp-button="Primary" href="#">Link</a>
+        <abp-button button-type="Primary" type="submit">Button</abp-button>
+        <input abp-button="Primary" value="Input" />
+        <input abp-button="Primary" type="submit" value="Submit" />
+        <input abp-button="Primary" type="reset" value="Reset" />
+    </div>
+    <div class="code-area">
+        <pre></pre>
+    </div>
+</div>

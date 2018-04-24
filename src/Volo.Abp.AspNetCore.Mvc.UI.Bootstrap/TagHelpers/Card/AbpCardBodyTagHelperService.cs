@@ -16,7 +16,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Card
             ProcessSubtitle(output);
         }
 
-        private void ProcessTitle(TagHelperOutput output)
+        protected virtual void ProcessTitle(TagHelperOutput output)
         {
             if (!TagHelper.Title.IsNullOrWhiteSpace())
             {
@@ -27,7 +27,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Card
             }
         }
 
-        private void ProcessSubtitle(TagHelperOutput output)
+        protected virtual void ProcessSubtitle(TagHelperOutput output)
         {
             if (!TagHelper.Subtitle.IsNullOrWhiteSpace())
             {
