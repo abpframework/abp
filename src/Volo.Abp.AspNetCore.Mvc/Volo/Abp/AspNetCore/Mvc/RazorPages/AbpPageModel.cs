@@ -3,10 +3,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.AspNetCore.Mvc.Validation;
-using Volo.Abp.Authorization;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectMapping;
@@ -54,6 +54,16 @@ namespace Volo.Abp.AspNetCore.Mvc.RazorPages
         protected virtual Task CheckPolicyAsync(string policyName)
         {
             return AuthorizationService.CheckAsync(policyName);
+        }
+
+        protected virtual PartialViewResult PartialView<TModel>(string viewName, TModel model)
+        {
+            return new PartialViewResult
+            {
+                ViewName = viewName,
+                ViewData = new ViewDataDictionary<TModel>(ViewData, model),
+                TempData = TempData
+            };
         }
     }
 }
