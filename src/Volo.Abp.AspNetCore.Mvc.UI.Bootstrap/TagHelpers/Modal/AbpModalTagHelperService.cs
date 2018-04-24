@@ -12,7 +12,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
             output.PostContent.SetHtmlContent(CreatePostContent());
         }
 
-        private string CreatePreContent()
+        protected virtual string CreatePreContent()
         {
             var sb = new StringBuilder();
 
@@ -23,7 +23,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
             return sb.ToString();
         }
 
-        private string CreatePostContent()
+        protected virtual string CreatePostContent()
         {
             var sb = new StringBuilder();
 
