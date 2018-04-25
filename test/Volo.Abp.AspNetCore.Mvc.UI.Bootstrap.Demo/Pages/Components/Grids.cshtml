@@ -1,7 +1,7 @@
 ﻿@page
 @model Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components.GridsModel
 @{
-    ViewData["Title"] = "Cards";
+    ViewData["Title"] = "Grids";
 }
 
 <h2>Cards</h2>
@@ -71,7 +71,7 @@
             <abp-row>
                 <abp-column>One of three columns</abp-column>
                 <abp-column>One of three columns</abp-column>
-                <abp-break-col/>
+                <abp-break-col />
                 <abp-column>One of three columns</abp-column>
             </abp-row>
         </abp-container>
@@ -89,6 +89,175 @@
         &lt;div class=&quot;w-100&quot;&gt;&lt;/div&gt;
          &lt;div class=&quot;col&quot;&gt;
              One of three columns
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+</pre>
+    </div>
+</div>
+
+<h4># Vertical alignment Example</h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+        <abp-container>
+            <abp-row v-align="Start">
+                <abp-column>One of three columns</abp-column>
+                <abp-column>One of three columns</abp-column>
+                <abp-column>One of three columns</abp-column>
+            </abp-row>
+            <abp-row v-align="Center">
+                <abp-column>One of three columns</abp-column>
+                <abp-column>One of three columns</abp-column>
+                <abp-column>One of three columns</abp-column>
+            </abp-row>
+            <abp-row v-align="End">
+                <abp-column>One of three columns</abp-column>
+                <abp-column>One of three columns</abp-column>
+                <abp-column>One of three columns</abp-column>
+            </abp-row>
+        </abp-container>
+    </div>
+    <div class="code-area">
+        <pre>
+&lt;div class=&quot;container&quot;&gt;
+     &lt;div class=&quot;row align-items-start&quot;&gt;
+        &lt;div class=&quot;col&quot;&gt;
+             One of three columns
+        &lt;/div&gt;
+        &lt;div class=&quot;col&quot;&gt;
+            One of three columns
+        &lt;/div&gt;
+        &lt;div class=&quot;col&quot;&gt;
+            One of three columns
+        &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;row align-items-center&quot;&gt;
+        &lt;div class=&quot;col&quot;&gt;
+            One of three columns
+        &lt;/div&gt;
+        &lt;div class=&quot;col&quot;&gt;
+            One of three columns
+        &lt;/div&gt;
+        &lt;div class=&quot;col&quot;&gt;
+            One of three columns
+        &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;row align-items-end&quot;&gt;
+        &lt;div class=&quot;col&quot;&gt;
+            One of three columns
+        &lt;/div&gt;
+        &lt;div class=&quot;col&quot;&gt;
+            One of three columns
+        &lt;/div&gt;
+       &lt;div class=&quot;col&quot;&gt;
+        One of three columns
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+</pre>
+    </div>
+</div>
+
+<h4># Vertical alignment Example 2</h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+        <abp-container>
+            <abp-row>
+                <abp-column v-align="Start">One of three columns</abp-column>
+                <abp-column v-align="Center">One of three columns</abp-column>
+                <abp-column v-align="End">One of three columns</abp-column>
+            </abp-row>
+        </abp-container>
+    </div>
+    <div class="code-area">
+        <pre>
+&lt;div class=&quot;container&quot;&gt;
+    &lt;div class=&quot;row&quot;&gt;
+        &lt;div class=&quot;col align-self-start&quot;&gt;
+            One of three columns
+        &lt;/div&gt;
+        &lt;div class=&quot;col align-self-center&quot;&gt;
+            One of three columns
+        &lt;/div&gt;
+        &lt;div class=&quot;col align-self-end&quot;&gt;
+             One of three columns
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+</pre>
+    </div>
+</div>
+
+<h4># Horizontal alignment Example</h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+        <abp-container>
+            <abp-row h-align="Start">
+                <abp-column size="4">One of three columns</abp-column>
+                <abp-column size="4">One of three columns</abp-column>
+            </abp-row>
+            <abp-row h-align="Center">
+                <abp-column size="4">One of three columns</abp-column>
+                <abp-column size="4">One of three columns</abp-column>
+            </abp-row>
+            <abp-row h-align="End">
+                <abp-column size="4">One of three columns</abp-column>
+                <abp-column size="4">One of three columns</abp-column>
+            </abp-row>
+            <abp-row h-align="Around">
+                <abp-column size="4">One of three columns</abp-column>
+                <abp-column size="4">One of three columns</abp-column>
+            </abp-row>
+            <abp-row h-align="Between">
+                <abp-column size="4">One of three columns</abp-column>
+                <abp-column size="4">One of three columns</abp-column>
+            </abp-row>
+        </abp-container>
+    </div>
+    <div class="code-area">
+        <pre>
+&lt;div class=&quot;container&quot;&gt;
+    &lt;div class=&quot;row justify-content-start&quot;&gt;
+        &lt;div class=&quot;col-4&quot;&gt;
+             One of two columns
+         &lt;/div&gt;
+         &lt;div class=&quot;col-4&quot;&gt;
+             One of two columns
+         &lt;/div&gt;
+    &lt;/div&gt;
+     &lt;div class=&quot;row justify-content-center&quot;&gt;
+        &lt;div class=&quot;col-4&quot;&gt;
+             One of two columns
+         &lt;/div&gt;
+         &lt;div class=&quot;col-4&quot;&gt;
+             One of two columns
+         &lt;/div&gt;
+    &lt;/div&gt;
+     &lt;div class=&quot;row justify-content-end&quot;&gt;
+        &lt;div class=&quot;col-4&quot;&gt;
+             One of two columns
+         &lt;/div&gt;
+         &lt;div class=&quot;col-4&quot;&gt;
+             One of two columns
+         &lt;/div&gt;
+    &lt;/div&gt;
+     &lt;div class=&quot;row justify-content-around&quot;&gt;
+         &lt;div class=&quot;col-4&quot;&gt;
+            One of two columns
+         &lt;/div&gt;
+                 &lt;div class=&quot;col-4&quot;&gt;
+             One of two columns
+         &lt;/div&gt;
+     &lt;/div&gt;
+    &lt;div class=&quot;row justify-content-between&quot;&gt;
+        &lt;div class=&quot;col-4&quot;&gt;
+            One of two columns
+        &lt;/div&gt;
+        &lt;div class=&quot;col-4&quot;&gt;
+             One of two columns
         &lt;/div&gt;
     &lt;/div&gt;
 &lt;/div&gt;
@@ -147,7 +316,7 @@
 
 <div class="demo-with-code">
     <div class="demo-area">
-        
+
         <abp-row>
             <abp-column> .col-md-4</abp-column>
             <abp-column offset="md-4">.col-md-4 .offset-md-4</abp-column>

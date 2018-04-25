@@ -12,6 +12,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid
             output.TagName = "div";
 
             ProcessColClass(output);
+            ProcessVerticalAlign(output);
             ProcessColumnOrder(output);
             ProcessOffset(output);
         }
