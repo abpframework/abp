@@ -1,8 +1,6 @@
 ﻿/**
- * abp.ResourceLoader can be used to load scripts when needed.
- * It ensures that every script is only loaded once.
- * 
- * TODO: Add a loadStyle method
+ * abp.ResourceLoader can be used to load a script/style file from a URL on demand.
+ * It ensures that a script/style is only loaded once.
  */
 var abp = abp || {};
 (function ($) {
@@ -15,7 +13,8 @@ var abp = abp || {};
     };
 
     /* UrlInfo class */
-    function UrlInfo() {
+    function UrlInfo(url) {
+        this.url = url;
         this.state = UrlStates.LOADING;
         this.loadCallbacks = [];
         this.failCallbacks = [];
@@ -60,29 +59,66 @@ var abp = abp || {};
 
         var _urlInfos = {};
 
-        var _loadScript = function (url, loadCallback, failCallback) {
+        function getCacheKey(url) {
+            return url;
+        }
 
-            var urlInfo = _urlInfos[url];
+        function appendTimeToUrl(url) {
+
+            if (url.indexOf('?') < 0) {
+                url += '?';
+            } else {
+                url += '&';
+            }
+
+            url += '_=' + new Date().getTime();
+
+            return url;
+        }
+
+        var _loadFromUrl = function (url, loadCallback, failCallback, serverLoader) {
+
+            var cacheKey = getCacheKey(url);
+
+            var urlInfo = _urlInfos[cacheKey];
 
             if (urlInfo) {
                 urlInfo.handleCallbacks(loadCallback, failCallback);
                 return;
             }
 
-            _urlInfos[url] = urlInfo = new UrlInfo();
+            _urlInfos[cacheKey] = urlInfo = new UrlInfo(url);
             urlInfo.addCallbacks(loadCallback, failCallback);
 
-            $.getScript(url)
-                .done(function (script, textStatus) {
-                    urlInfo.succeed();
-                })
-                .fail(function (jqxhr, settings, exception) {
-                    urlInfo.failed();
-                });
+            serverLoader(urlInfo);
+        };
+
+        var _loadScript = function (url, loadCallback, failCallback) {
+            _loadFromUrl(url, loadCallback, failCallback, function(urlInfo) {
+                $.getScript(url)
+                    .done(function () {
+                        urlInfo.succeed();
+                    })
+                    .fail(function () {
+                        urlInfo.failed();
+                    });
+            });
+        };
+
+        var _loadStyle = function (url) {
+            _loadFromUrl(url, undefined, undefined, function (urlInfo) {
+                
+                $('<link/>', {
+                    rel: 'stylesheet',
+                    type: 'text/css',
+                    href: appendTimeToUrl(url)
+                }).appendTo('head');
+            });
         };
 
         return {
-            loadScript: _loadScript
+            loadScript: _loadScript,
+            loadStyle: _loadStyle
         }
     })();
 
