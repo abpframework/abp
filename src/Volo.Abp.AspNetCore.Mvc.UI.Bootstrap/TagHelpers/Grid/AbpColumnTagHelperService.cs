@@ -9,17 +9,24 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid
     {
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            output.Attributes.AddClass("col");
+            output.TagName = "div";
 
-            SetBreakpoint(output);
+            ProcessColClass(output);
         }
 
-        protected virtual void SetBreakpoint(TagHelperOutput output)
+        protected virtual void ProcessColClass(TagHelperOutput output)
         {
-            if (!string.IsNullOrWhiteSpace(TagHelper.Breakpoint))
+            output.Attributes.AddClass("col" + (string.IsNullOrWhiteSpace(TagHelper.Size)? "" : "-" + TagHelper.Size));
+        }
+
+        protected virtual void ProcessVerticalAlign(TagHelperOutput output)
+        {
+            if (TagHelper.VAlign == VerticalAlign.Default)
             {
-                output.Attributes.AddClass("col-"+TagHelper.Breakpoint);
+                return;
             }
+
+            output.Attributes.AddClass("align-self-" + TagHelper.VAlign.ToString().ToLowerInvariant());
         }
     }
 }

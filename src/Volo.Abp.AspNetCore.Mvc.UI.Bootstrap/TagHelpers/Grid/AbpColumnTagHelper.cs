@@ -2,7 +2,9 @@
 {
     public class AbpColumnTagHelper : AbpTagHelper<AbpColumnTagHelper, AbpColumnTagHelperService>
     {
-        public string Breakpoint { get; set; }
+        public string Size { get; set; }
+
+        public VerticalAlign VAlign { get; set; } = VerticalAlign.Default;
 
         public AbpColumnTagHelper(AbpColumnTagHelperService tagHelperService)
             : base(tagHelperService)
