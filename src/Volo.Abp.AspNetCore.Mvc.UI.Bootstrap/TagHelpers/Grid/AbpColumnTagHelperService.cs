@@ -30,14 +30,18 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid
 
         protected virtual void ProcessSizeClass(TagHelperOutput output, ColumnSize size, string breakpoint)
         {
-            if (size == ColumnSize.Empty)
+            if (size == ColumnSize.Undefined)
             {
                 return;
             }
 
             var classString = "col" + breakpoint;
 
-            if (size != ColumnSize.C)
+            if (size == ColumnSize.Auto)
+            {
+                classString += "-auto";
+            }
+            else if (size != ColumnSize._)
             {
                 classString += "-" + size.ToString("D");
             }
@@ -47,14 +51,14 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid
 
         protected virtual void ProcessOffsetClass(TagHelperOutput output, ColumnSize size, string breakpoint)
         {
-            if (size == ColumnSize.Empty)
+            if (size == ColumnSize.Undefined)
             {
                 return;
             }
 
             var classString = "offset" + breakpoint;
 
-            if (size == ColumnSize.C)
+            if (size == ColumnSize._)
             {
                 classString += "-0";
             }
@@ -78,7 +82,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid
 
         protected virtual void ProcessColumnOrder(TagHelperOutput output)
         {
-            if (TagHelper.ColumnOrder == ColumnOrder.Empty)
+            if (TagHelper.ColumnOrder == ColumnOrder.Undefined)
             {
                 return;
             }
