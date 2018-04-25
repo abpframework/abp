@@ -12,6 +12,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid
             output.TagName = "div";
 
             ProcessColClass(output);
+            ProcessColumnOrder(output);
         }
 
         protected virtual void ProcessColClass(TagHelperOutput output)
@@ -27,6 +28,16 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid
             }
 
             output.Attributes.AddClass("align-self-" + TagHelper.VAlign.ToString().ToLowerInvariant());
+        }
+
+        protected virtual void ProcessColumnOrder(TagHelperOutput output)
+        {
+            if (string.IsNullOrWhiteSpace(TagHelper.ColumnOrder))
+            {
+                return;
+            }
+
+            output.Attributes.AddClass("order-" + TagHelper.ColumnOrder.ToLowerInvariant());
         }
     }
 }
