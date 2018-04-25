@@ -48,7 +48,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid
                 return;
             }
 
-            output.Attributes.AddClass("Offset-" + TagHelper.Offset.ToLowerInvariant());
+            output.Attributes.AddClass("offset-" + TagHelper.Offset.ToLowerInvariant());
         }
     }
 }

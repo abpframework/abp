@@ -1,0 +1,182 @@
+﻿@page
+@model Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components.GridsModel
+@{
+    ViewData["Title"] = "Cards";
+}
+
+<h2>Cards</h2>
+
+@*
+    <h4># Example</h4>
+
+    <div class="demo-with-code">
+        <div class="demo-area">
+        </div>
+        <div class="code-area">
+    <pre></pre>
+        </div>
+    </div>
+*@
+
+<p>Based on <a href="http://getbootstrap.com/docs/4.1/layout/grid/" target="_blank"> Bootstrap grid</a>.</p>
+
+<h4># Example</h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+        <abp-container>
+            <abp-row>
+                <abp-column size="sm-6">One of two columns</abp-column>
+                <abp-column size="sm-6">One of two columns</abp-column>
+            </abp-row>
+            <abp-row>
+                <abp-column size="sm-4">One of three columns</abp-column>
+                <abp-column size="sm-4">One of three columns</abp-column>
+                <abp-column size="sm-4">One of three columns</abp-column>
+            </abp-row>
+        </abp-container>
+    </div>
+    <div class="code-area">
+        <pre>
+&lt;div class=&quot;container&quot;&gt;
+    &lt;div class=&quot;row&quot;&gt;
+        &lt;div class=&quot;col-sm-6&quot;&gt;
+             One of two columns
+        &lt;/div&gt;
+        &lt;div class=&quot;col-sm-6&quot;&gt;
+             One of two columns
+        &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;row&quot;&gt;
+        &lt;div class=&quot;col-sm-4&quot;&gt;
+              One of three columns
+        &lt;/div&gt;
+        &lt;div class=&quot;col-sm-4&quot;&gt;
+             One of three columns
+        &lt;/div&gt;
+        &lt;div class=&quot;col-sm-4&quot;&gt;
+             One of three columns
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+</pre>
+    </div>
+</div>
+
+<h4># Break Column Example</h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+        <abp-container>
+            <abp-row>
+                <abp-column>One of three columns</abp-column>
+                <abp-column>One of three columns</abp-column>
+                <abp-break-col/>
+                <abp-column>One of three columns</abp-column>
+            </abp-row>
+        </abp-container>
+    </div>
+    <div class="code-area">
+        <pre>
+&lt;div class=&quot;container&quot;&gt;
+    &lt;div class=&quot;row&quot;&gt;
+         &lt;div class=&quot;col&quot;&gt;
+             One of three columns
+         &lt;/div&gt;
+         &lt;div class=&quot;col&quot;&gt;
+             One of three columns
+        &lt;/div&gt;
+        &lt;div class=&quot;w-100&quot;&gt;&lt;/div&gt;
+         &lt;div class=&quot;col&quot;&gt;
+             One of three columns
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+</pre>
+    </div>
+</div>
+
+<h4># Order Example</h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+        <abp-container>
+            <abp-row>
+                <abp-column> First, but unordered</abp-column>
+                <abp-column order="12">Second, but last</abp-column>
+                <abp-column order="1">Third, but first</abp-column>
+            </abp-row>
+            <abp-row>
+                <abp-column> First, but unordered</abp-column>
+                <abp-column order="last">Second, but last</abp-column>
+                <abp-column order="first">Third, but first</abp-column>
+            </abp-row>
+        </abp-container>
+    </div>
+    <div class="code-area">
+        <pre>
+&lt;div class=&quot;container&quot;&gt;
+    &lt;div class=&quot;row&quot;&gt;
+        &lt;div class=&quot;col&quot;&gt;
+          First, but unordered
+        &lt;/div&gt;
+        &lt;div class=&quot;col order-12&quot;&gt;
+            Second, but last
+        &lt;/div&gt;
+        &lt;div class=&quot;col order-1&quot;&gt;
+             Third, but first
+         &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;row&quot;&gt;
+        &lt;div class=&quot;col&quot;&gt;
+          First, but unordered
+        &lt;/div&gt;
+        &lt;div class=&quot;col order-last&quot;&gt;
+            Second, but last
+        &lt;/div&gt;
+        &lt;div class=&quot;col order-first&quot;&gt;
+             Third, but first
+         &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+</pre>
+    </div>
+</div>
+
+<h4># Offset Example</h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+        
+        <abp-row>
+            <abp-column> .col-md-4</abp-column>
+            <abp-column offset="md-4">.col-md-4 .offset-md-4</abp-column>
+        </abp-row>
+        <abp-row>
+            <abp-column offset="md-3">.col-md-3 .offset-md-3</abp-column>
+            <abp-column offset="md-3">.col-md-3 .offset-md-3</abp-column>
+        </abp-row>
+        <abp-row>
+            <abp-column offset="md-3">.col-md-6 .offset-md-3</abp-column>
+        </abp-row>
+    </div>
+    <div class="code-area">
+        <pre>
+&lt;div class=&quot;row&quot;&gt;
+     &lt;div class=&quot;col-md-4&quot;&gt;.col-md-4&lt;/div&gt;
+     &lt;div class=&quot;col-md-4 offset-md-4&quot;&gt;.col-md-4 .offset-md-4&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;row&quot;&gt;
+    &lt;div class=&quot;col-md-3 offset-md-3&quot;&gt;.col-md-3 .offset-md-3&lt;/div&gt;
+    &lt;div class=&quot;col-md-3 offset-md-3&quot;&gt;.col-md-3 .offset-md-3&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;row&quot;&gt;
+     &lt;div class=&quot;col-md-6 offset-md-3&quot;&gt;.col-md-6 .offset-md-3&lt;/div&gt;
+&lt;/div&gt;
+</pre>
+    </div>
+</div>
+
+<hr />
+
+<a asp-page="../">&lt; back</a>
