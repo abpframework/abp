@@ -6,6 +6,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid
     {
         public string Size { get; set; }
 
+        public string Offset { get; set; }
+
         [HtmlAttributeName("order")]
         public string ColumnOrder { get; set; }
 

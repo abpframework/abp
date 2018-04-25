@@ -13,6 +13,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid
 
             ProcessColClass(output);
             ProcessColumnOrder(output);
+            ProcessOffset(output);
         }
 
         protected virtual void ProcessColClass(TagHelperOutput output)
@@ -38,6 +39,16 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid
             }
 
             output.Attributes.AddClass("order-" + TagHelper.ColumnOrder.ToLowerInvariant());
+        }
+
+        protected virtual void ProcessOffset(TagHelperOutput output)
+        {
+            if (string.IsNullOrWhiteSpace(TagHelper.Offset))
+            {
+                return;
+            }
+
+            output.Attributes.AddClass("Offset-" + TagHelper.Offset.ToLowerInvariant());
         }
     }
 }
