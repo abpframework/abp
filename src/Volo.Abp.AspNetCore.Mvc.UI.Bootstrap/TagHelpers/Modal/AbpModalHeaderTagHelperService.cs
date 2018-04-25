@@ -13,7 +13,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
             output.Content.SetHtmlContent(CreateContent());
         }
 
-        private string CreateContent()
+        protected virtual string CreateContent()
         {
             var sb = new StringBuilder();
 

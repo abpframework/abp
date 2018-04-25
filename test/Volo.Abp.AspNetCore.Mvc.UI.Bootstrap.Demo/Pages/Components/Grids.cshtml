@@ -1,0 +1,266 @@
+﻿@page
+@model Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components.GridsModel
+@{
+    ViewData["Title"] = "Grids";
+}
+
+<h2>Grids</h2>
+
+<p>Based on <a href="http://getbootstrap.com/docs/4.1/layout/grid/" target="_blank"> Bootstrap grid</a>.</p>
+
+<h4># Example</h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+        <abp-container>
+            <abp-row>
+                <abp-column size-sm="_6">One of two columns</abp-column>
+                <abp-column size-sm="_6">One of two columns</abp-column>
+            </abp-row>
+            <abp-row>
+                <abp-column size-sm="_4">One of three columns</abp-column>
+                <abp-column size-sm="_4">One of three columns</abp-column>
+                <abp-column size-sm="_4">One of three columns</abp-column>
+            </abp-row>
+        </abp-container>
+    </div>
+    <div class="code-area">
+        <pre>
+&lt;abp-container&gt;
+     &lt;abp-row&gt;
+         &lt;abp-column size-sm=&quot;C6&quot;&gt;One of two columns&lt;/abp-column&gt;
+         &lt;abp-column size-sm=&quot;C6&quot;&gt;One of two columns&lt;/abp-column&gt;
+     &lt;/abp-row&gt;
+     &lt;abp-row&gt;
+         &lt;abp-column size-sm=&quot;C4&quot;&gt;One of three columns&lt;/abp-column&gt;
+         &lt;abp-column size-sm=&quot;C4&quot;&gt;One of three columns&lt;/abp-column&gt;
+         &lt;abp-column size-sm=&quot;C4&quot;&gt;One of three columns&lt;/abp-column&gt;
+     &lt;/abp-row&gt;
+&lt;/abp-container&gt;
+</pre>
+    </div>
+</div>
+
+<h4># Break Column Example</h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+        <abp-container>
+            <abp-row>
+                <abp-column>One of three columns</abp-column>
+                <abp-column>One of three columns</abp-column>
+                <abp-col-break /> @* TODO: abp-column-break *@
+                <abp-column>One of three columns</abp-column>
+            </abp-row>
+        </abp-container>
+    </div>
+    <div class="code-area">
+        <pre>
+ &lt;abp-container&gt;
+     &lt;abp-row&gt;
+         &lt;abp-column&gt;One of three columns&lt;/abp-column&gt;
+         &lt;abp-column&gt;One of three columns&lt;/abp-column&gt;
+         &lt;abp-col-break /&gt; @* TODO: abp-column-break *@
+         &lt;abp-column&gt;One of three columns&lt;/abp-column&gt;
+     &lt;/abp-row&gt;
+ &lt;/abp-container&gt;
+</pre>
+    </div>
+</div>
+
+<h4># Vertical alignment Example</h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+        <abp-container>
+            <abp-row v-align="Start">
+                <abp-column>One of three columns</abp-column>
+                <abp-column>One of three columns</abp-column>
+                <abp-column>One of three columns</abp-column>
+            </abp-row>
+            <abp-row v-align="Center">
+                <abp-column>One of three columns</abp-column>
+                <abp-column>One of three columns</abp-column>
+                <abp-column>One of three columns</abp-column>
+            </abp-row>
+            <abp-row v-align="End">
+                <abp-column>One of three columns</abp-column>
+                <abp-column>One of three columns</abp-column>
+                <abp-column>One of three columns</abp-column>
+            </abp-row>
+        </abp-container>
+    </div>
+    <div class="code-area">
+        <pre>
+&lt;abp-container&gt;
+     &lt;abp-row v-align=&quot;Start&quot;&gt;
+        &lt;abp-column&gt;One of three columns&lt;/abp-column&gt;
+        &lt;abp-column&gt;One of three columns&lt;/abp-column&gt;
+        &lt;abp-column&gt;One of three columns&lt;/abp-column&gt;
+     &lt;/abp-row&gt;
+     &lt;abp-row v-align=&quot;Center&quot;&gt;
+         &lt;abp-column&gt;One of three columns&lt;/abp-column&gt;
+         &lt;abp-column&gt;One of three columns&lt;/abp-column&gt;
+         &lt;abp-column&gt;One of three columns&lt;/abp-column&gt;
+     &lt;/abp-row&gt;
+     &lt;abp-row v-align=&quot;End&quot;&gt;
+         &lt;abp-column&gt;One of three columns&lt;/abp-column&gt;
+         &lt;abp-column&gt;One of three columns&lt;/abp-column&gt;
+         &lt;abp-column&gt;One of three columns&lt;/abp-column&gt;
+     &lt;/abp-row&gt;
+ &lt;/abp-container&gt;
+</pre>
+    </div>
+</div>
+
+<h4># Vertical alignment Example 2</h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+        <abp-container>
+            <abp-row>
+                <abp-column v-align="Start">One of three columns</abp-column>
+                <abp-column v-align="Center">One of three columns</abp-column>
+                <abp-column v-align="End">One of three columns</abp-column>
+            </abp-row>
+        </abp-container>
+    </div>
+    <div class="code-area">
+        <pre>
+ &lt;abp-container&gt;
+    &lt;abp-row&gt;
+        &lt;abp-column v-align=&quot;Start&quot;&gt;One of three columns&lt;/abp-column&gt;
+        &lt;abp-column v-align=&quot;Center&quot;&gt;One of three columns&lt;/abp-column&gt;
+        &lt;abp-column v-align=&quot;End&quot;&gt;One of three columns&lt;/abp-column&gt;
+     &lt;/abp-row&gt;
+ &lt;/abp-container&gt;
+</pre>
+    </div>
+</div>
+
+<h4># Horizontal alignment Example</h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+        <abp-container>
+            <abp-row h-align="Start">
+                <abp-column size="_4">One of three columns</abp-column>
+                <abp-column size="_4">One of three columns</abp-column>
+            </abp-row>
+            <abp-row h-align="Center">
+                <abp-column size="_4">One of three columns</abp-column>
+                <abp-column size="_4">One of three columns</abp-column>
+            </abp-row>
+            <abp-row h-align="End">
+                <abp-column size="_4">One of three columns</abp-column>
+                <abp-column size="_4">One of three columns</abp-column>
+            </abp-row>
+            <abp-row h-align="Around">
+                <abp-column size="_4">One of three columns</abp-column>
+                <abp-column size="_4">One of three columns</abp-column>
+            </abp-row>
+            <abp-row h-align="Between">
+                <abp-column size="_4">One of three columns</abp-column>
+                <abp-column size="_4">One of three columns</abp-column>
+            </abp-row>
+        </abp-container>
+    </div>
+    <div class="code-area">
+        <pre>
+ &lt;abp-container&gt;
+    &lt;abp-row h-align=&quot;Start&quot;&gt;
+        &lt;abp-column size=&quot;C4&quot;&gt;One of three columns&lt;/abp-column&gt;
+        &lt;abp-column size=&quot;C4&quot;&gt;One of three columns&lt;/abp-column&gt;
+    &lt;/abp-row&gt;
+    &lt;abp-row h-align=&quot;Center&quot;&gt;
+        &lt;abp-column size=&quot;C4&quot;&gt;One of three columns&lt;/abp-column&gt;
+        &lt;abp-column size=&quot;C4&quot;&gt;One of three columns&lt;/abp-column&gt;
+    &lt;/abp-row&gt;
+    &lt;abp-row h-align=&quot;End&quot;&gt;
+        &lt;abp-column size=&quot;C4&quot;&gt;One of three columns&lt;/abp-column&gt;
+        &lt;abp-column size=&quot;C4&quot;&gt;One of three columns&lt;/abp-column&gt;
+    &lt;/abp-row&gt;
+        &lt;abp-row h-align=&quot;Around&quot;&gt;
+        &lt;abp-column size=&quot;C4&quot;&gt;One of three columns&lt;/abp-column&gt;
+        &lt;abp-column size=&quot;C4&quot;&gt;One of three columns&lt;/abp-column&gt;
+    &lt;/abp-row&gt;
+    &lt;abp-row h-align=&quot;Between&quot;&gt;
+        &lt;abp-column size=&quot;C4&quot;&gt;One of three columns&lt;/abp-column&gt;
+        &lt;abp-column size=&quot;C4&quot;&gt;One of three columns&lt;/abp-column&gt;
+    &lt;/abp-row&gt;
+ &lt;/abp-container&gt;
+</pre>
+    </div>
+</div>
+
+<h4># Order Example</h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+        <abp-container>
+            <abp-row>
+                <abp-column> First, but unordered</abp-column>
+                <abp-column order="_12">Second, but last</abp-column>
+                <abp-column order="_1">Third, but first</abp-column>
+            </abp-row>
+            <abp-row>
+                <abp-column> First, but unordered</abp-column>
+                <abp-column order="Last">Second, but last</abp-column>
+                <abp-column order="First">Third, but first</abp-column>
+            </abp-row>
+        </abp-container>
+    </div>
+    <div class="code-area">
+        <pre>
+ &lt;abp-container&gt;
+    &lt;abp-row&gt;
+        &lt;abp-column&gt; First, but unordered&lt;/abp-column&gt;
+        &lt;abp-column order=&quot;C12&quot;&gt;Second, but last&lt;/abp-column&gt;
+        &lt;abp-column order=&quot;C1&quot;&gt;Third, but first&lt;/abp-column&gt;
+    &lt;/abp-row&gt;
+    &lt;abp-row&gt;
+        &lt;abp-column&gt; First, but unordered&lt;/abp-column&gt;
+        &lt;abp-column order=&quot;Last&quot;&gt;Second, but last&lt;/abp-column&gt;
+        &lt;abp-column order=&quot;First&quot;&gt;Third, but first&lt;/abp-column&gt;
+    &lt;/abp-row&gt;
+ &lt;/abp-container&gt;
+</pre>
+    </div>
+</div>
+
+<h4># Offset Example</h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+        <abp-row>
+            <abp-column> .col-md-4</abp-column>
+            <abp-column size-md="_4" offset-md="_4">.col-md-4 .offset-md-4</abp-column>
+        </abp-row>
+        <abp-row>
+            <abp-column size-md="_3" offset-md="_3">.col-md-3 .offset-md-3</abp-column>
+            <abp-column size-md="_3" offset-md="_3">.col-md-3 .offset-md-3</abp-column>
+        </abp-row>
+        <abp-row>
+            <abp-column size-md="_6" offset-md="_3">.col-md-6 .offset-md-3</abp-column>
+        </abp-row>
+    </div>
+    <div class="code-area">
+        <pre>
+ &lt;abp-row&gt;
+    &lt;abp-column&gt; .col-md-4&lt;/abp-column&gt;
+    &lt;abp-column size-md=&quot;C4&quot; offset-md=&quot;C4&quot;&gt;.col-md-4 .offset-md-4&lt;/abp-column&gt;
+ &lt;/abp-row&gt;
+ &lt;abp-row&gt;
+    &lt;abp-column size-md=&quot;C3&quot; offset-md=&quot;C3&quot;&gt;.col-md-3 .offset-md-3&lt;/abp-column&gt;
+    &lt;abp-column size-md=&quot;C3&quot; offset-md=&quot;C3&quot;&gt;.col-md-3 .offset-md-3&lt;/abp-column&gt;
+ &lt;/abp-row&gt;
+ &lt;abp-row&gt;
+    &lt;abp-column size-md=&quot;C6&quot; offset-md=&quot;C3&quot;&gt;.col-md-6 .offset-md-3&lt;/abp-column&gt;
+ &lt;/abp-row&gt;
+</pre>
+    </div>
+</div>
+
+<hr />
+
+<a asp-page="../">&lt; back</a>
