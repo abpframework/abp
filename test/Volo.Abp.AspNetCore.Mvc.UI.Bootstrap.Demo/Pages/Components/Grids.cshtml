@@ -14,39 +14,29 @@
     <div class="demo-area">
         <abp-container>
             <abp-row>
-                <abp-column size="sm-6">One of two columns</abp-column>
-                <abp-column size="sm-6">One of two columns</abp-column>
+                <abp-column size-sm="C6">One of two columns</abp-column>
+                <abp-column size-sm="C6">One of two columns</abp-column>
             </abp-row>
             <abp-row>
-                <abp-column size="sm-4">One of three columns</abp-column>
-                <abp-column size="sm-4">One of three columns</abp-column>
-                <abp-column size="sm-4">One of three columns</abp-column>
+                <abp-column size-sm="C4">One of three columns</abp-column>
+                <abp-column size-sm="C4">One of three columns</abp-column>
+                <abp-column size-sm="C4">One of three columns</abp-column>
             </abp-row>
         </abp-container>
     </div>
     <div class="code-area">
         <pre>
-&lt;div class=&quot;container&quot;&gt;
-    &lt;div class=&quot;row&quot;&gt;
-        &lt;div class=&quot;col-sm-6&quot;&gt;
-             One of two columns
-        &lt;/div&gt;
-        &lt;div class=&quot;col-sm-6&quot;&gt;
-             One of two columns
-        &lt;/div&gt;
-    &lt;/div&gt;
-    &lt;div class=&quot;row&quot;&gt;
-        &lt;div class=&quot;col-sm-4&quot;&gt;
-              One of three columns
-        &lt;/div&gt;
-        &lt;div class=&quot;col-sm-4&quot;&gt;
-             One of three columns
-        &lt;/div&gt;
-        &lt;div class=&quot;col-sm-4&quot;&gt;
-             One of three columns
-        &lt;/div&gt;
-    &lt;/div&gt;
-&lt;/div&gt;
+&lt;abp-container&gt;
+     &lt;abp-row&gt;
+         &lt;abp-column size-sm=&quot;C6&quot;&gt;One of two columns&lt;/abp-column&gt;
+         &lt;abp-column size-sm=&quot;C6&quot;&gt;One of two columns&lt;/abp-column&gt;
+     &lt;/abp-row&gt;
+     &lt;abp-row&gt;
+         &lt;abp-column size-sm=&quot;C4&quot;&gt;One of three columns&lt;/abp-column&gt;
+         &lt;abp-column size-sm=&quot;C4&quot;&gt;One of three columns&lt;/abp-column&gt;
+         &lt;abp-column size-sm=&quot;C4&quot;&gt;One of three columns&lt;/abp-column&gt;
+     &lt;/abp-row&gt;
+&lt;/abp-container&gt;
 </pre>
     </div>
 </div>
@@ -59,27 +49,21 @@
             <abp-row>
                 <abp-column>One of three columns</abp-column>
                 <abp-column>One of three columns</abp-column>
-                <abp-break-col />
+                <abp-col-break /> @* TODO: abp-column-break *@
                 <abp-column>One of three columns</abp-column>
             </abp-row>
         </abp-container>
     </div>
     <div class="code-area">
         <pre>
-&lt;div class=&quot;container&quot;&gt;
-    &lt;div class=&quot;row&quot;&gt;
-         &lt;div class=&quot;col&quot;&gt;
-             One of three columns
-         &lt;/div&gt;
-         &lt;div class=&quot;col&quot;&gt;
-             One of three columns
-        &lt;/div&gt;
-        &lt;div class=&quot;w-100&quot;&gt;&lt;/div&gt;
-         &lt;div class=&quot;col&quot;&gt;
-             One of three columns
-        &lt;/div&gt;
-    &lt;/div&gt;
-&lt;/div&gt;
+ &lt;abp-container&gt;
+     &lt;abp-row&gt;
+         &lt;abp-column&gt;One of three columns&lt;/abp-column&gt;
+         &lt;abp-column&gt;One of three columns&lt;/abp-column&gt;
+         &lt;abp-col-break /&gt; @* TODO: abp-column-break *@
+         &lt;abp-column&gt;One of three columns&lt;/abp-column&gt;
+     &lt;/abp-row&gt;
+ &lt;/abp-container&gt;
 </pre>
     </div>
 </div>
@@ -108,41 +92,23 @@
     </div>
     <div class="code-area">
         <pre>
-&lt;div class=&quot;container&quot;&gt;
-     &lt;div class=&quot;row align-items-start&quot;&gt;
-        &lt;div class=&quot;col&quot;&gt;
-             One of three columns
-        &lt;/div&gt;
-        &lt;div class=&quot;col&quot;&gt;
-            One of three columns
-        &lt;/div&gt;
-        &lt;div class=&quot;col&quot;&gt;
-            One of three columns
-        &lt;/div&gt;
-    &lt;/div&gt;
-    &lt;div class=&quot;row align-items-center&quot;&gt;
-        &lt;div class=&quot;col&quot;&gt;
-            One of three columns
-        &lt;/div&gt;
-        &lt;div class=&quot;col&quot;&gt;
-            One of three columns
-        &lt;/div&gt;
-        &lt;div class=&quot;col&quot;&gt;
-            One of three columns
-        &lt;/div&gt;
-    &lt;/div&gt;
-    &lt;div class=&quot;row align-items-end&quot;&gt;
-        &lt;div class=&quot;col&quot;&gt;
-            One of three columns
-        &lt;/div&gt;
-        &lt;div class=&quot;col&quot;&gt;
-            One of three columns
-        &lt;/div&gt;
-       &lt;div class=&quot;col&quot;&gt;
-        One of three columns
-        &lt;/div&gt;
-    &lt;/div&gt;
-&lt;/div&gt;
+&lt;abp-container&gt;
+     &lt;abp-row v-align=&quot;Start&quot;&gt;
+        &lt;abp-column&gt;One of three columns&lt;/abp-column&gt;
+        &lt;abp-column&gt;One of three columns&lt;/abp-column&gt;
+        &lt;abp-column&gt;One of three columns&lt;/abp-column&gt;
+     &lt;/abp-row&gt;
+     &lt;abp-row v-align=&quot;Center&quot;&gt;
+         &lt;abp-column&gt;One of three columns&lt;/abp-column&gt;
+         &lt;abp-column&gt;One of three columns&lt;/abp-column&gt;
+         &lt;abp-column&gt;One of three columns&lt;/abp-column&gt;
+     &lt;/abp-row&gt;
+     &lt;abp-row v-align=&quot;End&quot;&gt;
+         &lt;abp-column&gt;One of three columns&lt;/abp-column&gt;
+         &lt;abp-column&gt;One of three columns&lt;/abp-column&gt;
+         &lt;abp-column&gt;One of three columns&lt;/abp-column&gt;
+     &lt;/abp-row&gt;
+ &lt;/abp-container&gt;
 </pre>
     </div>
 </div>
@@ -161,19 +127,13 @@
     </div>
     <div class="code-area">
         <pre>
-&lt;div class=&quot;container&quot;&gt;
-    &lt;div class=&quot;row&quot;&gt;
-        &lt;div class=&quot;col align-self-start&quot;&gt;
-            One of three columns
-        &lt;/div&gt;
-        &lt;div class=&quot;col align-self-center&quot;&gt;
-            One of three columns
-        &lt;/div&gt;
-        &lt;div class=&quot;col align-self-end&quot;&gt;
-             One of three columns
-        &lt;/div&gt;
-    &lt;/div&gt;
-&lt;/div&gt;
+ &lt;abp-container&gt;
+    &lt;abp-row&gt;
+        &lt;abp-column v-align=&quot;Start&quot;&gt;One of three columns&lt;/abp-column&gt;
+        &lt;abp-column v-align=&quot;Center&quot;&gt;One of three columns&lt;/abp-column&gt;
+        &lt;abp-column v-align=&quot;End&quot;&gt;One of three columns&lt;/abp-column&gt;
+     &lt;/abp-row&gt;
+ &lt;/abp-container&gt;
 </pre>
     </div>
 </div>
@@ -184,71 +144,51 @@
     <div class="demo-area">
         <abp-container>
             <abp-row h-align="Start">
-                <abp-column size="4">One of three columns</abp-column>
-                <abp-column size="4">One of three columns</abp-column>
+                <abp-column size="C4">One of three columns</abp-column>
+                <abp-column size="C4">One of three columns</abp-column>
             </abp-row>
             <abp-row h-align="Center">
-                <abp-column size="4">One of three columns</abp-column>
-                <abp-column size="4">One of three columns</abp-column>
+                <abp-column size="C4">One of three columns</abp-column>
+                <abp-column size="C4">One of three columns</abp-column>
             </abp-row>
             <abp-row h-align="End">
-                <abp-column size="4">One of three columns</abp-column>
-                <abp-column size="4">One of three columns</abp-column>
+                <abp-column size="C4">One of three columns</abp-column>
+                <abp-column size="C4">One of three columns</abp-column>
             </abp-row>
             <abp-row h-align="Around">
-                <abp-column size="4">One of three columns</abp-column>
-                <abp-column size="4">One of three columns</abp-column>
+                <abp-column size="C4">One of three columns</abp-column>
+                <abp-column size="C4">One of three columns</abp-column>
             </abp-row>
             <abp-row h-align="Between">
-                <abp-column size="4">One of three columns</abp-column>
-                <abp-column size="4">One of three columns</abp-column>
+                <abp-column size="C4">One of three columns</abp-column>
+                <abp-column size="C4">One of three columns</abp-column>
             </abp-row>
         </abp-container>
     </div>
     <div class="code-area">
         <pre>
-&lt;div class=&quot;container&quot;&gt;
-    &lt;div class=&quot;row justify-content-start&quot;&gt;
-        &lt;div class=&quot;col-4&quot;&gt;
-             One of two columns
-         &lt;/div&gt;
-         &lt;div class=&quot;col-4&quot;&gt;
-             One of two columns
-         &lt;/div&gt;
-    &lt;/div&gt;
-     &lt;div class=&quot;row justify-content-center&quot;&gt;
-        &lt;div class=&quot;col-4&quot;&gt;
-             One of two columns
-         &lt;/div&gt;
-         &lt;div class=&quot;col-4&quot;&gt;
-             One of two columns
-         &lt;/div&gt;
-    &lt;/div&gt;
-     &lt;div class=&quot;row justify-content-end&quot;&gt;
-        &lt;div class=&quot;col-4&quot;&gt;
-             One of two columns
-         &lt;/div&gt;
-         &lt;div class=&quot;col-4&quot;&gt;
-             One of two columns
-         &lt;/div&gt;
-    &lt;/div&gt;
-     &lt;div class=&quot;row justify-content-around&quot;&gt;
-         &lt;div class=&quot;col-4&quot;&gt;
-            One of two columns
-         &lt;/div&gt;
-                 &lt;div class=&quot;col-4&quot;&gt;
-             One of two columns
-         &lt;/div&gt;
-     &lt;/div&gt;
-    &lt;div class=&quot;row justify-content-between&quot;&gt;
-        &lt;div class=&quot;col-4&quot;&gt;
-            One of two columns
-        &lt;/div&gt;
-        &lt;div class=&quot;col-4&quot;&gt;
-             One of two columns
-        &lt;/div&gt;
-    &lt;/div&gt;
-&lt;/div&gt;
+ &lt;abp-container&gt;
+    &lt;abp-row h-align=&quot;Start&quot;&gt;
+        &lt;abp-column size=&quot;C4&quot;&gt;One of three columns&lt;/abp-column&gt;
+        &lt;abp-column size=&quot;C4&quot;&gt;One of three columns&lt;/abp-column&gt;
+    &lt;/abp-row&gt;
+    &lt;abp-row h-align=&quot;Center&quot;&gt;
+        &lt;abp-column size=&quot;C4&quot;&gt;One of three columns&lt;/abp-column&gt;
+        &lt;abp-column size=&quot;C4&quot;&gt;One of three columns&lt;/abp-column&gt;
+    &lt;/abp-row&gt;
+    &lt;abp-row h-align=&quot;End&quot;&gt;
+        &lt;abp-column size=&quot;C4&quot;&gt;One of three columns&lt;/abp-column&gt;
+        &lt;abp-column size=&quot;C4&quot;&gt;One of three columns&lt;/abp-column&gt;
+    &lt;/abp-row&gt;
+        &lt;abp-row h-align=&quot;Around&quot;&gt;
+        &lt;abp-column size=&quot;C4&quot;&gt;One of three columns&lt;/abp-column&gt;
+        &lt;abp-column size=&quot;C4&quot;&gt;One of three columns&lt;/abp-column&gt;
+    &lt;/abp-row&gt;
+    &lt;abp-row h-align=&quot;Between&quot;&gt;
+        &lt;abp-column size=&quot;C4&quot;&gt;One of three columns&lt;/abp-column&gt;
+        &lt;abp-column size=&quot;C4&quot;&gt;One of three columns&lt;/abp-column&gt;
+    &lt;/abp-row&gt;
+ &lt;/abp-container&gt;
 </pre>
     </div>
 </div>
@@ -260,42 +200,30 @@
         <abp-container>
             <abp-row>
                 <abp-column> First, but unordered</abp-column>
-                <abp-column order="12">Second, but last</abp-column>
-                <abp-column order="1">Third, but first</abp-column>
+                <abp-column order="C12">Second, but last</abp-column>
+                <abp-column order="C1">Third, but first</abp-column>
             </abp-row>
             <abp-row>
                 <abp-column> First, but unordered</abp-column>
-                <abp-column order="last">Second, but last</abp-column>
-                <abp-column order="first">Third, but first</abp-column>
+                <abp-column order="Last">Second, but last</abp-column>
+                <abp-column order="First">Third, but first</abp-column>
             </abp-row>
         </abp-container>
     </div>
     <div class="code-area">
         <pre>
-&lt;div class=&quot;container&quot;&gt;
-    &lt;div class=&quot;row&quot;&gt;
-        &lt;div class=&quot;col&quot;&gt;
-          First, but unordered
-        &lt;/div&gt;
-        &lt;div class=&quot;col order-12&quot;&gt;
-            Second, but last
-        &lt;/div&gt;
-        &lt;div class=&quot;col order-1&quot;&gt;
-             Third, but first
-         &lt;/div&gt;
-    &lt;/div&gt;
-    &lt;div class=&quot;row&quot;&gt;
-        &lt;div class=&quot;col&quot;&gt;
-          First, but unordered
-        &lt;/div&gt;
-        &lt;div class=&quot;col order-last&quot;&gt;
-            Second, but last
-        &lt;/div&gt;
-        &lt;div class=&quot;col order-first&quot;&gt;
-             Third, but first
-         &lt;/div&gt;
-    &lt;/div&gt;
-&lt;/div&gt;
+ &lt;abp-container&gt;
+    &lt;abp-row&gt;
+        &lt;abp-column&gt; First, but unordered&lt;/abp-column&gt;
+        &lt;abp-column order=&quot;C12&quot;&gt;Second, but last&lt;/abp-column&gt;
+        &lt;abp-column order=&quot;C1&quot;&gt;Third, but first&lt;/abp-column&gt;
+    &lt;/abp-row&gt;
+    &lt;abp-row&gt;
+        &lt;abp-column&gt; First, but unordered&lt;/abp-column&gt;
+        &lt;abp-column order=&quot;Last&quot;&gt;Second, but last&lt;/abp-column&gt;
+        &lt;abp-column order=&quot;First&quot;&gt;Third, but first&lt;/abp-column&gt;
+    &lt;/abp-row&gt;
+ &lt;/abp-container&gt;
 </pre>
     </div>
 </div>
@@ -304,32 +232,31 @@
 
 <div class="demo-with-code">
     <div class="demo-area">
-
         <abp-row>
             <abp-column> .col-md-4</abp-column>
-            <abp-column offset="md-4">.col-md-4 .offset-md-4</abp-column>
+            <abp-column size-md="C4" offset-md="C4">.col-md-4 .offset-md-4</abp-column>
         </abp-row>
         <abp-row>
-            <abp-column offset="md-3">.col-md-3 .offset-md-3</abp-column>
-            <abp-column offset="md-3">.col-md-3 .offset-md-3</abp-column>
+            <abp-column size-md="C3" offset-md="C3">.col-md-3 .offset-md-3</abp-column>
+            <abp-column size-md="C3" offset-md="C3">.col-md-3 .offset-md-3</abp-column>
         </abp-row>
         <abp-row>
-            <abp-column offset="md-3">.col-md-6 .offset-md-3</abp-column>
+            <abp-column size-md="C6" offset-md="C3">.col-md-6 .offset-md-3</abp-column>
         </abp-row>
     </div>
     <div class="code-area">
         <pre>
-&lt;div class=&quot;row&quot;&gt;
-     &lt;div class=&quot;col-md-4&quot;&gt;.col-md-4&lt;/div&gt;
-     &lt;div class=&quot;col-md-4 offset-md-4&quot;&gt;.col-md-4 .offset-md-4&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;row&quot;&gt;
-    &lt;div class=&quot;col-md-3 offset-md-3&quot;&gt;.col-md-3 .offset-md-3&lt;/div&gt;
-    &lt;div class=&quot;col-md-3 offset-md-3&quot;&gt;.col-md-3 .offset-md-3&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;row&quot;&gt;
-     &lt;div class=&quot;col-md-6 offset-md-3&quot;&gt;.col-md-6 .offset-md-3&lt;/div&gt;
-&lt;/div&gt;
+ &lt;abp-row&gt;
+    &lt;abp-column&gt; .col-md-4&lt;/abp-column&gt;
+    &lt;abp-column size-md=&quot;C4&quot; offset-md=&quot;C4&quot;&gt;.col-md-4 .offset-md-4&lt;/abp-column&gt;
+ &lt;/abp-row&gt;
+ &lt;abp-row&gt;
+    &lt;abp-column size-md=&quot;C3&quot; offset-md=&quot;C3&quot;&gt;.col-md-3 .offset-md-3&lt;/abp-column&gt;
+    &lt;abp-column size-md=&quot;C3&quot; offset-md=&quot;C3&quot;&gt;.col-md-3 .offset-md-3&lt;/abp-column&gt;
+ &lt;/abp-row&gt;
+ &lt;abp-row&gt;
+    &lt;abp-column size-md=&quot;C6&quot; offset-md=&quot;C3&quot;&gt;.col-md-6 .offset-md-3&lt;/abp-column&gt;
+ &lt;/abp-row&gt;
 </pre>
     </div>
 </div>

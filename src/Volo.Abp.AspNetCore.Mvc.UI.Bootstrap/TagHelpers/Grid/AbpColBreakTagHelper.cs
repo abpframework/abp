@@ -2,9 +2,9 @@
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid
 {
-    public class AbpBreakColTagHelper : AbpTagHelper<AbpBreakColTagHelper, AbpBreakColTagHelperService>
+    public class AbpColBreakTagHelper : AbpTagHelper<AbpColBreakTagHelper, AbpColBreakTagHelperService>
     {
-        public AbpBreakColTagHelper(AbpBreakColTagHelperService tagHelperService)
+        public AbpColBreakTagHelper(AbpColBreakTagHelperService tagHelperService)
             : base(tagHelperService)
         {
 
