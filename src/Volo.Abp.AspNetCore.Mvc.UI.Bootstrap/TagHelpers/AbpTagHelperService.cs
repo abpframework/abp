@@ -30,9 +30,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
             return Task.CompletedTask;
         }
 
-        protected string RenderInputTagHelper(TagHelperAttributeList attributeList, AbpTagHelper abpTagHelper, HtmlEncoder htmlEncoder)
+        protected string RenderInputTagHelper(TagHelperAttributeList attributeList, AbpTagHelper abpTagHelper, HtmlEncoder htmlEncoder, string tagName = "div")
         {
-            var innerOutput = new TagHelperOutput("div", attributeList, (useCachedResult, encoder) => Task.Run<TagHelperContent>(() => new DefaultTagHelperContent()))
+            var innerOutput = new TagHelperOutput(tagName, attributeList, (useCachedResult, encoder) => Task.Run<TagHelperContent>(() => new DefaultTagHelperContent()))
             {
                 TagMode = TagMode.SelfClosing
             };
