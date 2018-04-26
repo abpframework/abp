@@ -10,6 +10,10 @@
             var $icon = $button.find('i');
             var $buttonInnerSpan = $button.find('span');
 
+            if (isBusy === undefined) {
+                isBusy = true;
+            }
+
             if (isBusy) {
                 if ($button.hasClass('button-busy')) {
                     return;
@@ -75,5 +79,7 @@
 
         return obj;
     };
+
+
 
 })(jQuery);
