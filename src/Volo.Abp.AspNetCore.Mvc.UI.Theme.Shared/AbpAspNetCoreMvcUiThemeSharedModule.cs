@@ -44,7 +44,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared
                     "/libs/abp/jquery/abp.ajax.js",
                     "/libs/abp/jquery/abp.resource-loader.js",
                     "/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery/jquery-extensions.js",
-                    "/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/abp.modal-manager.js",
+                    "/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/dom-event-handlers.js",
+                    "/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/modal-manager.js",
                     "/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables-extensions.js"
                 });
             });
