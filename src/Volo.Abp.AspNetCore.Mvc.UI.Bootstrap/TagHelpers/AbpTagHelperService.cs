@@ -1,4 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text.Encodings.Web;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
@@ -24,6 +28,29 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
         {
             Process(context, output);
             return Task.CompletedTask;
+        }
+
+        protected string RenderInputTagHelper(TagHelperAttributeList attributeList, AbpTagHelper abpTagHelper, HtmlEncoder htmlEncoder)
+        {
+            var innerOutput = new TagHelperOutput("div", attributeList, (useCachedResult, encoder) => Task.Run<TagHelperContent>(() => new DefaultTagHelperContent()))
+            {
+                TagMode = TagMode.SelfClosing
+            };
+
+            var innerContext = new TagHelperContext(attributeList, new Dictionary<object, object>(), Guid.NewGuid().ToString());
+
+            abpTagHelper.Process(innerContext, innerOutput);
+
+            return RenderTagHelperOutput(innerOutput, htmlEncoder);
+        }
+
+        protected string RenderTagHelperOutput(TagHelperOutput output, HtmlEncoder htmlEncoder)
+        {
+            using (var writer = new StringWriter())
+            {
+                output.WriteTo(writer, htmlEncoder);
+                return writer.ToString();
+            }
         }
     }
 }
