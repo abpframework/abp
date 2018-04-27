@@ -11,7 +11,7 @@ namespace Volo.Abp.Http
         /// <summary>
         /// Error code.
         /// </summary>
-        public int Code { get; set; }
+        public string Code { get; set; }
 
         /// <summary>
         /// Error message.
@@ -39,52 +39,13 @@ namespace Volo.Abp.Http
         /// <summary>
         /// Creates a new instance of <see cref="RemoteServiceErrorInfo"/>.
         /// </summary>
+        /// <param name="code">Error code</param>
+        /// <param name="details">Error details</param>
         /// <param name="message">Error message</param>
-        public RemoteServiceErrorInfo(string message)
+        public RemoteServiceErrorInfo(string message, string details = null, string code = null)
         {
             Message = message;
-        }
-
-        /// <summary>
-        /// Creates a new instance of <see cref="RemoteServiceErrorInfo"/>.
-        /// </summary>
-        /// <param name="code">Error code</param>
-        public RemoteServiceErrorInfo(int code)
-        {
-            Code = code;
-        }
-
-        /// <summary>
-        /// Creates a new instance of <see cref="RemoteServiceErrorInfo"/>.
-        /// </summary>
-        /// <param name="code">Error code</param>
-        /// <param name="message">Error message</param>
-        public RemoteServiceErrorInfo(int code, string message)
-            : this(message)
-        {
-            Code = code;
-        }
-
-        /// <summary>
-        /// Creates a new instance of <see cref="RemoteServiceErrorInfo"/>.
-        /// </summary>
-        /// <param name="message">Error message</param>
-        /// <param name="details">Error details</param>
-        public RemoteServiceErrorInfo(string message, string details)
-            : this(message)
-        {
             Details = details;
-        }
-
-        /// <summary>
-        /// Creates a new instance of <see cref="RemoteServiceErrorInfo"/>.
-        /// </summary>
-        /// <param name="code">Error code</param>
-        /// <param name="message">Error message</param>
-        /// <param name="details">Error details</param>
-        public RemoteServiceErrorInfo(int code, string message, string details)
-            : this(message, details)
-        {
             Code = code;
         }
     }

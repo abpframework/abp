@@ -19,7 +19,7 @@ namespace Volo.Abp.UI
         /// <summary>
         /// An arbitrary error code.
         /// </summary>
-        public int Code { get; set; }
+        public string Code { get; set; }
 
         /// <summary>
         /// Severity of the exception.
@@ -68,35 +68,12 @@ namespace Volo.Abp.UI
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="code">Error code</param>
-        /// <param name="message">Exception message</param>
-        public UserFriendlyException(int code, string message)
-            : this(message)
-        {
-            Code = code;
-        }
-
-        /// <summary>
-        /// Constructor.
-        /// </summary>
         /// <param name="message">Exception message</param>
         /// <param name="details">Additional information about the exception</param>
         public UserFriendlyException(string message, string details)
             : this(message)
         {
             Details = details;
-        }
-
-        /// <summary>
-        /// Constructor.
-        /// </summary>
-        /// <param name="code">Error code</param>
-        /// <param name="message">Exception message</param>
-        /// <param name="details">Additional information about the exception</param>
-        public UserFriendlyException(int code, string message, string details)
-            : this(message, details)
-        {
-            Code = code;
         }
 
         /// <summary>
