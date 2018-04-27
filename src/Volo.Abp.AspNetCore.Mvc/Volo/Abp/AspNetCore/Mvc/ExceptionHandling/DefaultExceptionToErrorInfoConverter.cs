@@ -119,7 +119,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
 
             var stringLocalizer = _stringLocalizerFactory.Create(localizationResourceType);
             var localizedString = stringLocalizer[exceptionWithErrorCode.Code];
-            if (!localizedString.ResourceNotFound)
+            if (localizedString.ResourceNotFound)
             {
                 return;
             }
