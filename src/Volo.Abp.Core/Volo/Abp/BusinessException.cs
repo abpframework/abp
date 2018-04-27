@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Serialization;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.ExceptionHandling;
 using Volo.Abp.Logging;
@@ -13,18 +14,25 @@ namespace Volo.Abp
 
         public LogLevel LogLevel { get; set; } = LogLevel.Warning;
 
-        public override string Message => base.Message ?? Code;
-
         public BusinessException()
         {
             
         }
 
-        public BusinessException(string code, string message = null, string details = null)
-            : base(message)
+        public BusinessException(string code = null, string message = null, string details = null, Exception innerException = null)
+            : base(message, innerException)
         {
             Code = code;
             Details = details;
+        }
+
+        /// <summary>
+        /// Constructor for serializing.
+        /// </summary>
+        public BusinessException(SerializationInfo serializationInfo, StreamingContext context)
+            : base(serializationInfo, context)
+        {
+
         }
     }
 }

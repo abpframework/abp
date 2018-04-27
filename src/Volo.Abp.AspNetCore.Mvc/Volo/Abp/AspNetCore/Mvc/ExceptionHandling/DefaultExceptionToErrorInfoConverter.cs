@@ -98,13 +98,13 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
 
         protected virtual void TryToLocalizeExceptionMessage(Exception exception, RemoteServiceErrorInfo errorInfo)
         {
-            //TODO: For test purpose
             if (!(exception is IHasErrorCode exceptionWithErrorCode))
             {
                 return;
             }
 
-            if (!exceptionWithErrorCode.Code.Contains(":"))
+            if (exceptionWithErrorCode.Code.IsNullOrWhiteSpace() ||
+                !exceptionWithErrorCode.Code.Contains(":"))
             {
                 return;
             }
@@ -119,7 +119,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
 
             var stringLocalizer = _stringLocalizerFactory.Create(localizationResourceType);
             var localizedString = stringLocalizer[exceptionWithErrorCode.Code];
-            if (localizedString.ResourceNotFound)
+            if (!localizedString.ResourceNotFound)
             {
                 return;
             }
@@ -268,15 +268,6 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
         protected virtual string L(string name)
         {
             //TODO: Localization?
-            //try
-            //{
-            //    return _localizationManager.GetString(AbpWebConsts.LocalizaionSourceName, name);
-            //}
-            //catch (Exception)
-            //{
-            //    return name;
-            //}
-
             return name;
         }
     }
