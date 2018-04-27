@@ -124,7 +124,17 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
                 return;
             }
 
-            errorInfo.Message = localizedString.Value;
+            var localizedValue = localizedString.Value;
+
+            if (exception.Data != null && exception.Data.Count > 0)
+            {
+                foreach (var key in exception.Data.Keys)
+                {
+                    localizedValue = localizedValue.Replace("{" + key + "}", exception.Data[key].ToString());
+                }
+            }
+
+            errorInfo.Message = localizedValue;
         }
 
         protected virtual RemoteServiceErrorInfo CreateEntityNotFoundError(EntityNotFoundException exception)
