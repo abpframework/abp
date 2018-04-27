@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Options;
 using Volo.Abp.Authorization;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.ExceptionHandling;
 using Volo.Abp.Http;
+using Volo.Abp.Localization.ExceptionHandling;
 using Volo.Abp.UI;
 using Volo.Abp.Validation;
 
@@ -15,7 +18,18 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
     public class DefaultExceptionToErrorInfoConverter : IExceptionToErrorInfoConverter, ITransientDependency
     {
         public bool SendAllExceptionsToClients { get; set; } = false;
-                
+
+        private readonly ExceptionHandlingLocalizationOptions _localizationOptions;
+        private readonly IStringLocalizerFactory _stringLocalizerFactory;
+
+        public DefaultExceptionToErrorInfoConverter(
+            IOptions<ExceptionHandlingLocalizationOptions> localizationOptions,
+            IStringLocalizerFactory stringLocalizerFactory)
+        {
+            _stringLocalizerFactory = stringLocalizerFactory;
+            _localizationOptions = localizationOptions.Value;
+        }
+
         public RemoteServiceErrorInfo Convert(Exception exception)
         {
             var errorInfo = CreateErrorInfoWithoutCode(exception);
@@ -72,11 +86,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
                 errorInfo.ValidationErrors = GetValidationErrorInfos(exception as IHasValidationErrors);
             }
 
-            //TODO: For test purpose
-            if (exception is IBusinessException)
-            {
-                errorInfo.Message = (exception as IBusinessException).Code;
-            }
+            TryToLocalizeExceptionMessage(exception, errorInfo);
 
             if (errorInfo.Message.IsNullOrEmpty())
             {
@@ -84,6 +94,37 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
             }
 
             return errorInfo;
+        }
+
+        protected virtual void TryToLocalizeExceptionMessage(Exception exception, RemoteServiceErrorInfo errorInfo)
+        {
+            //TODO: For test purpose
+            if (!(exception is IHasErrorCode exceptionWithErrorCode))
+            {
+                return;
+            }
+
+            if (!exceptionWithErrorCode.Code.Contains(":"))
+            {
+                return;
+            }
+
+            var codeNamespace = exceptionWithErrorCode.Code.Split(':')[0];
+
+            var localizationResourceType = _localizationOptions.CodeNamespaceMappings.GetOrDefault(codeNamespace);
+            if (localizationResourceType == null)
+            {
+                return;
+            }
+
+            var stringLocalizer = _stringLocalizerFactory.Create(localizationResourceType);
+            var localizedString = stringLocalizer[exceptionWithErrorCode.Code];
+            if (localizedString.ResourceNotFound)
+            {
+                return;
+            }
+
+            errorInfo.Message = localizedString.Value;
         }
 
         protected virtual RemoteServiceErrorInfo CreateEntityNotFoundError(EntityNotFoundException exception)
@@ -111,7 +152,8 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
                 if (aggException.InnerException is IUserFriendlyException ||
                     aggException.InnerException is AbpValidationException ||
                     aggException.InnerException is EntityNotFoundException ||
-                    aggException.InnerException is AbpAuthorizationException)
+                    aggException.InnerException is AbpAuthorizationException ||
+                    aggException.InnerException is BusinessException)
                 {
                     return aggException.InnerException;
                 }

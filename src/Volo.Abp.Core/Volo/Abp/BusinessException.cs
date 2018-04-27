@@ -13,6 +13,8 @@ namespace Volo.Abp
 
         public LogLevel LogLevel { get; set; } = LogLevel.Warning;
 
+        public override string Message => base.Message ?? Code;
+
         public BusinessException()
         {
             
