@@ -42,6 +42,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components
         [DisplayName("City")]
         public Cities City { get; set; }
 
+        public Person Person { get; set; }
+
         public List<SelectListItem> Countries { get; } = new List<SelectListItem>
         {
             new SelectListItem { Value = "MX", Text = "Mexico" },
@@ -62,5 +64,22 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components
         Istanbul,
         NewJersey,
         Moscow
+    }
+
+    public class Person
+    {
+        public string Name { get; set; }
+
+        public int Age { get; set; }
+
+        public Cities City { get; set; }
+
+        public Phone Phone { get; set; }
+    }
+
+    public class Phone
+    {
+        public string Number { get; set; }
+        public string Name { get; set; }
     }
 }

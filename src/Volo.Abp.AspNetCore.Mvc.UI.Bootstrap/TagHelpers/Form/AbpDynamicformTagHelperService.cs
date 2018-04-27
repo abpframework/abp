@@ -9,25 +9,23 @@ using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 {
-    public class AbpFormGroupTagHelperService : AbpTagHelperService<AbpFormGroupTagHelper>
+    public class AbpDynamicFormTagHelperService : AbpTagHelperService<AbpDynamicFormTagHelper>
     {
         private readonly HtmlEncoder _htmlEncoder;
         private readonly AbpInputTagHelper _abpInputTagHelper;
+        private readonly AbpSelectTagHelper _abpSelectTagHelper;
 
-        public AbpFormGroupTagHelperService(HtmlEncoder htmlEncoder, AbpInputTagHelper abpInputTagHelper)
+        public AbpDynamicFormTagHelperService(HtmlEncoder htmlEncoder, AbpInputTagHelper abpInputTagHelper, AbpSelectTagHelper abpSelectTagHelper)
         {
             _htmlEncoder = htmlEncoder;
             _abpInputTagHelper = abpInputTagHelper;
+            _abpSelectTagHelper = abpSelectTagHelper;
         }
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            output.TagName = "div";
-            output.Attributes.AddClass("form-group");
-            if (TagHelper.Checkbox)
-            {
-                output.Attributes.AddClass("form-check");
-            }
+            var model = TagHelper.Model;
+
         }
 
     }
