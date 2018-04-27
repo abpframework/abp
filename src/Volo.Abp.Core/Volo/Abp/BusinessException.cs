@@ -19,7 +19,11 @@ namespace Volo.Abp
             
         }
 
-        public BusinessException(string code = null, string message = null, string details = null, Exception innerException = null)
+        public BusinessException(
+            string code = null, 
+            string message = null, 
+            string details = null, 
+            Exception innerException = null)
             : base(message, innerException)
         {
             Code = code;
@@ -33,6 +37,12 @@ namespace Volo.Abp
             : base(serializationInfo, context)
         {
 
+        }
+
+        public BusinessException WithData(string name, object value)
+        {
+            Data[name] = value;
+            return this;
         }
     }
 }
