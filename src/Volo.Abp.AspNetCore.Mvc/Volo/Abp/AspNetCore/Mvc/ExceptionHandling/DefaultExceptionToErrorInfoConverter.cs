@@ -19,11 +19,11 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
     {
         public bool SendAllExceptionsToClients { get; set; } = false;
 
-        private readonly ExceptionHandlingLocalizationOptions _localizationOptions;
+        private readonly ExceptionLocalizationOptions _localizationOptions;
         private readonly IStringLocalizerFactory _stringLocalizerFactory;
 
         public DefaultExceptionToErrorInfoConverter(
-            IOptions<ExceptionHandlingLocalizationOptions> localizationOptions,
+            IOptions<ExceptionLocalizationOptions> localizationOptions,
             IStringLocalizerFactory stringLocalizerFactory)
         {
             _stringLocalizerFactory = stringLocalizerFactory;

@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace Volo.Abp.Localization.ExceptionHandling
 {
-    public class ExceptionHandlingLocalizationOptions
+    public class ExceptionLocalizationOptions
     {
         public Dictionary<string, Type> CodeNamespaceMappings { get; }
 
-        public ExceptionHandlingLocalizationOptions()
+        public ExceptionLocalizationOptions()
         {
             CodeNamespaceMappings = new Dictionary<string, Type>();
         }
