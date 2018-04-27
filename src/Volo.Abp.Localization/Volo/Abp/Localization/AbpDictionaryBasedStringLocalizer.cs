@@ -104,7 +104,7 @@ namespace Volo.Abp.Localization
             }
 
             //Try to get from default language
-            var defaultDictionary = Resource.DictionaryProvider.Dictionaries[Resource.DefaultCultureName]; //TODO: What if not contains a default dictionary?
+            var defaultDictionary = dictionaries.GetOrDefault(Resource.DefaultCultureName); //TODO: What if not contains a default dictionary?
             if (defaultDictionary == null)
             {
                 return null;
@@ -131,12 +131,7 @@ namespace Volo.Abp.Localization
             if (includeParentCultures)
             {
                 //Fill all strings from default dictionary
-                var defaultDictionary = Resource.DictionaryProvider.Dictionaries.GetOrDefault(Resource.DefaultCultureName); //TODO: What if not contains a default dictionary?
-                if (defaultDictionary == null)
-                {
-                    throw new Exception($"{Resource.DefaultCultureName} not found for {Resource.ResourceType.FullName}");
-                }
-
+                var defaultDictionary = dictionaries.GetOrDefault(Resource.DefaultCultureName);
                 if (defaultDictionary != null)
                 {
                     foreach (var defaultDictString in defaultDictionary.GetAllStrings())
@@ -148,8 +143,7 @@ namespace Volo.Abp.Localization
                 //Overwrite all strings from the language based on country culture
                 if (cultureName.Contains("-"))
                 {
-                    ILocalizationDictionary langDictionary;
-                    if (dictionaries.TryGetValue(GetBaseCultureName(cultureName), out langDictionary))
+                    if (dictionaries.TryGetValue(GetBaseCultureName(cultureName), out var langDictionary))
                     {
                         foreach (var langString in langDictionary.GetAllStrings())
                         {
@@ -160,8 +154,7 @@ namespace Volo.Abp.Localization
             }
 
             //Overwrite all strings from the original dictionary
-            ILocalizationDictionary originalDictionary;
-            if (dictionaries.TryGetValue(cultureName, out originalDictionary))
+            if (dictionaries.TryGetValue(cultureName, out var originalDictionary))
             {
                 foreach (var originalLangString in originalDictionary.GetAllStrings())
                 {
