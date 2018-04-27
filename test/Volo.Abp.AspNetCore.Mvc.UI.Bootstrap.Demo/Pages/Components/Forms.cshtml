@@ -12,24 +12,53 @@
 
 <div class="demo-with-code">
     <div class="demo-area">
-        <abp-form-group>
-            <abp-input type="text"/>
-        </abp-form-group>
-        <abp-form-group checkbox="true">
-            <input type="checkbox" class="form-check-input" id="exampleCheck1">
-            <label class="form-check-label" for="exampleCheck1">Check me out</label>
-        </abp-form-group>
+        <form method="post" action="#">
+            <abp-form-group>
+                <abp-input asp-for="@Model.Name" />
+            </abp-form-group>
+            <abp-form-group>
+                <abp-input asp-for="@Model.Password" />
+            </abp-form-group>
+            <abp-form-group>
+                <abp-input asp-for="@Model.PhoneNumber" />
+            </abp-form-group>
+            <abp-form-group>
+                <abp-input asp-for="@Model.EmailAddress" />
+            </abp-form-group>
+            <abp-form-group>
+                <abp-input asp-for="@Model.Count" />
+            </abp-form-group>
+            <abp-form-group>
+                <abp-input asp-for="@Model.Day" />
+            </abp-form-group>
+            <abp-form-group>
+                <abp-input asp-for="@Model.IsActive" />
+            </abp-form-group>
+        </form>
     </div>
     <div class="code-area">
         <pre>       
         &lt;abp-form-group&gt;
-            &lt;abp-input type=&quot;text&quot;/&gt;
+            &lt;abp-input asp-for=&quot;@Model.Name&quot; /&gt;
         &lt;/abp-form-group&gt;
-        &lt;abp-form-group checkbox=&quot;true&quot;&gt;
-            &lt;input type=&quot;checkbox&quot; class=&quot;form-check-input&quot; id=&quot;exampleCheck1&quot;&gt;
-            &lt;label class=&quot;form-check-label&quot; for=&quot;exampleCheck1&quot;&gt;Check me out&lt;/label&gt;
+        &lt;abp-form-group&gt;
+            &lt;abp-input asp-for=&quot;@Model.Password&quot; /&gt;
+        &lt;/abp-form-group&gt;
+        &lt;abp-form-group&gt;
+            &lt;abp-input asp-for=&quot;@Model.PhoneNumber&quot; /&gt;
+        &lt;/abp-form-group&gt;
+        &lt;abp-form-group&gt;
+            &lt;abp-input asp-for=&quot;@Model.EmailAddress&quot; /&gt;
+        &lt;/abp-form-group&gt;
+        &lt;abp-form-group&gt;
+            &lt;abp-input asp-for=&quot;@Model.Count&quot; /&gt;
+        &lt;/abp-form-group&gt;
+        &lt;abp-form-group&gt;
+            &lt;abp-input asp-for=&quot;@Model.Day&quot; /&gt;
+        &lt;/abp-form-group&gt;
+        &lt;abp-form-group&gt;
+            &lt;abp-input asp-for=&quot;@Model.IsActive&quot; /&gt;
         &lt;/abp-form-group&gt;
         </pre>
     </div>
 </div>
-

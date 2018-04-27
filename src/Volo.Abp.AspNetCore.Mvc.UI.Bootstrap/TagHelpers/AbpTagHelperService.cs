@@ -30,7 +30,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
             return Task.CompletedTask;
         }
 
-        protected string RenderInputTagHelper(TagHelperAttributeList attributeList, AbpTagHelper abpTagHelper, HtmlEncoder htmlEncoder, string tagName = "div")
+        protected TagHelperOutput GetInnerTagHelper(TagHelperAttributeList attributeList, TagHelper tagHelper, string tagName = "div")
         {
             var innerOutput = new TagHelperOutput(tagName, attributeList, (useCachedResult, encoder) => Task.Run<TagHelperContent>(() => new DefaultTagHelperContent()))
             {
@@ -39,7 +39,21 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
 
             var innerContext = new TagHelperContext(attributeList, new Dictionary<object, object>(), Guid.NewGuid().ToString());
 
-            abpTagHelper.Process(innerContext, innerOutput);
+            tagHelper.Process(innerContext, innerOutput);
+
+            return innerOutput;
+        }
+
+        protected string RenderTagHelper(TagHelperAttributeList attributeList, TagHelper tagHelper, HtmlEncoder htmlEncoder, string tagName = "div")
+        {
+            var innerOutput = new TagHelperOutput(tagName, attributeList, (useCachedResult, encoder) => Task.Run<TagHelperContent>(() => new DefaultTagHelperContent()))
+            {
+                TagMode = TagMode.SelfClosing
+            };
+
+            var innerContext = new TagHelperContext(attributeList, new Dictionary<object, object>(), Guid.NewGuid().ToString());
+
+            tagHelper.Process(innerContext, innerOutput);
 
             return RenderTagHelperOutput(innerOutput, htmlEncoder);
         }

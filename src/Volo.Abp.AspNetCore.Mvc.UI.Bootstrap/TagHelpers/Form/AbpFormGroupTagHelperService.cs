@@ -35,8 +35,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             //    {"Type", "Text"},
             //    {"Placeholder", "plcHlder"}
             //};
-            
-            //output.Content.AppendHtml(RenderInputTagHelper(attributes, _abpInputTagHelper, _htmlEncoder));
+
+            //output.Content.AppendHtml(RenderTagHelper(attributes, _abpInputTagHelper, _htmlEncoder));
 
         }
 
