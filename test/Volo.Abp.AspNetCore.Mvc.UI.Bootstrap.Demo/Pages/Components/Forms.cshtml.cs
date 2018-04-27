@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components
 {
@@ -9,34 +12,55 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components
     {
         [Required]
         [DisplayName("Name")]
-        public string Name = "MyName";
+        public string Name { get; set; }
 
         [Required]
         [EmailAddress]
         [DisplayName("Email")]
-        public string EmailAddress = "info@volosoft.com";
+        public string EmailAddress { get; set; }
 
-        [DisplayName("Password")]
         [DataType(DataType.Password)]
-        public string Password = "MyPass";
+        public string Password { get; set; } = "MyPass";
 
         [Phone]
         [DisplayName("Phone Number")]
-        public string PhoneNumber = "05069231382";
+        public string PhoneNumber { get; set; }
 
         [DisplayName("Count")]
-        public int Count = 42;
+        public int Count { get; set; }
 
         [DataType(DataType.Date)]
         [DisplayName("Day")]
-        public DateTime Day = DateTime.Today;
+        public DateTime Day { get; set; }
         
         [DisplayName("Is Active")]
-        public bool IsActive = true;
+        public bool IsActive { get; set; }
+
+        [DisplayName("Country")]
+        public string Country { get; set; }
+
+        [DisplayName("City")]
+        public Cities City { get; set; }
+
+        public List<SelectListItem> Countries { get; } = new List<SelectListItem>
+        {
+            new SelectListItem { Value = "MX", Text = "Mexico" },
+            new SelectListItem { Value = "CA", Text = "Canada" },
+            new SelectListItem { Value = "US", Text = "USA"  },
+        };
 
         public void OnGet()
         {
+            Name = "MyName";
+            Day = DateTime.Today;
 
         }
+    }
+
+    public enum Cities
+    {
+        Istanbul,
+        NewJersey,
+        Moscow
     }
 }

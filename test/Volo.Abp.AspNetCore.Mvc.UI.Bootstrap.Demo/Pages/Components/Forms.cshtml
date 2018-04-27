@@ -1,4 +1,5 @@
 ﻿@page
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components
 @model Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components.FormsModel
 @{
     ViewData["Title"] = "Forms";
@@ -13,6 +14,12 @@
 <div class="demo-with-code">
     <div class="demo-area">
         <form method="post" action="#">
+            <abp-form-group>
+                <abp-select asp-for="@Model.Country" asp-items="@Model.Countries"></abp-select>
+            </abp-form-group>
+            <abp-form-group>
+                <abp-select asp-for="@Model.City" asp-items="@Html.GetEnumSelectList(typeof(Cities))"></abp-select>
+            </abp-form-group>
             <abp-form-group>
                 <abp-input asp-for="@Model.Name" />
             </abp-form-group>
@@ -38,27 +45,35 @@
     </div>
     <div class="code-area">
         <pre>       
-        &lt;abp-form-group&gt;
-            &lt;abp-input asp-for=&quot;@Model.Name&quot; /&gt;
-        &lt;/abp-form-group&gt;
-        &lt;abp-form-group&gt;
-            &lt;abp-input asp-for=&quot;@Model.Password&quot; /&gt;
-        &lt;/abp-form-group&gt;
-        &lt;abp-form-group&gt;
-            &lt;abp-input asp-for=&quot;@Model.PhoneNumber&quot; /&gt;
-        &lt;/abp-form-group&gt;
-        &lt;abp-form-group&gt;
-            &lt;abp-input asp-for=&quot;@Model.EmailAddress&quot; /&gt;
-        &lt;/abp-form-group&gt;
-        &lt;abp-form-group&gt;
-            &lt;abp-input asp-for=&quot;@Model.Count&quot; /&gt;
-        &lt;/abp-form-group&gt;
-        &lt;abp-form-group&gt;
-            &lt;abp-input asp-for=&quot;@Model.Day&quot; /&gt;
-        &lt;/abp-form-group&gt;
-        &lt;abp-form-group&gt;
-            &lt;abp-input asp-for=&quot;@Model.IsActive&quot; /&gt;
-        &lt;/abp-form-group&gt;
+        &lt;form method=&quot;post&quot; action=&quot;#&quot;&gt;
+            &lt;abp-form-group&gt;
+                &lt;abp-select asp-for=&quot;@Model.Country&quot; asp-items=&quot;@Model.Countries&quot;&gt;&lt;/abp-select&gt;
+            &lt;/abp-form-group&gt;
+            &lt;abp-form-group&gt;
+                &lt;abp-select asp-for=&quot;@Model.City&quot; asp-items=&quot;@Html.GetEnumSelectList(typeof(Cities))&quot;&gt;&lt;/abp-select&gt;
+            &lt;/abp-form-group&gt;
+            &lt;abp-form-group&gt;
+                &lt;abp-input asp-for=&quot;@Model.Name&quot; /&gt;
+            &lt;/abp-form-group&gt;
+            &lt;abp-form-group&gt;
+                &lt;abp-input asp-for=&quot;@Model.Password&quot; /&gt;
+            &lt;/abp-form-group&gt;
+            &lt;abp-form-group&gt;
+                &lt;abp-input asp-for=&quot;@Model.PhoneNumber&quot; /&gt;
+            &lt;/abp-form-group&gt;
+            &lt;abp-form-group&gt;
+                &lt;abp-input asp-for=&quot;@Model.EmailAddress&quot; /&gt;
+            &lt;/abp-form-group&gt;
+            &lt;abp-form-group&gt;
+                &lt;abp-input asp-for=&quot;@Model.Count&quot; /&gt;
+            &lt;/abp-form-group&gt;
+            &lt;abp-form-group&gt;
+                &lt;abp-input asp-for=&quot;@Model.Day&quot; /&gt;
+            &lt;/abp-form-group&gt;
+            &lt;abp-form-group&gt;
+                &lt;abp-input asp-for=&quot;@Model.IsActive&quot; /&gt;
+            &lt;/abp-form-group&gt;
+        &lt;/form&gt;
         </pre>
     </div>
 </div>

@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Linq;
+using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -11,12 +12,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 {
     public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
     {
-        private readonly HtmlEncoder _htmlEncoder;
         private readonly IHtmlGenerator _generator;
 
-        public AbpInputTagHelperService(HtmlEncoder htmlEncoder, IHtmlGenerator generator)
+        public AbpInputTagHelperService(IHtmlGenerator generator)
         {
-            _htmlEncoder = htmlEncoder;
             _generator = generator;
         }
 
@@ -29,18 +28,19 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         protected virtual void ProcessAttributes(TagHelperOutput output)
         {
-            var inputTagHelperOutput = GetAttributes();
+            output.Attributes.RemoveAll("asp-for");
+
+            var inputTagHelperOutput = GetAttributes(output);
 
             foreach (var tagHelperAttribute in inputTagHelperOutput.Attributes)
             {
                 output.Attributes.Add(tagHelperAttribute);
             }
 
-            output.Attributes.RemoveAll("asp-for");
             output.Attributes.Add("class", "form-control");
         }
 
-        protected virtual TagHelperOutput GetAttributes()
+        protected virtual TagHelperOutput GetAttributes(TagHelperOutput output)
         {
             var inputTagHelper = new InputTagHelper(_generator)
             {
