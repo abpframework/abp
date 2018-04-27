@@ -12,6 +12,8 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
     {
         public virtual int GetStatusCode(HttpContext httpContext, Exception exception)
         {
+            //TODO: If the exception has error code than we can determine the exception from it!
+
             if (exception is AbpAuthorizationException)
             {
                 return httpContext.User.Identity.IsAuthenticated
@@ -27,6 +29,11 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
             if (exception is EntityNotFoundException)
             {
                 return (int)HttpStatusCode.NotFound;
+            }
+
+            if (exception is IBusinessException)
+            {
+                return (int)HttpStatusCode.Forbidden;
             }
 
             return (int)HttpStatusCode.InternalServerError;

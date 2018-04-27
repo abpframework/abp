@@ -5,6 +5,7 @@ using System.Text;
 using Volo.Abp.Authorization;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.ExceptionHandling;
 using Volo.Abp.Http;
 using Volo.Abp.UI;
 using Volo.Abp.Validation;
@@ -52,7 +53,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
             if (exception is IUserFriendlyException)
             {
                 var userFriendlyException = exception as IUserFriendlyException;
-                errorInfo.Message = userFriendlyException.Message;
+                errorInfo.Message = exception.Message;
                 errorInfo.Details = userFriendlyException.Details;
             }
 
@@ -69,6 +70,12 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
                 }
 
                 errorInfo.ValidationErrors = GetValidationErrorInfos(exception as IHasValidationErrors);
+            }
+
+            //TODO: For test purpose
+            if (exception is IBusinessException)
+            {
+                errorInfo.Message = (exception as IBusinessException).Code;
             }
 
             if (errorInfo.Message.IsNullOrEmpty())

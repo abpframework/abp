@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -47,8 +48,12 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
                 return true;
             }
 
-            var accept = context.HttpContext.Request.Headers["Accept"];
-            if (accept.ToString().Contains("application/json")) //TODO: Optimize
+            if (context.HttpContext.Request.Headers["Accept"].ToString().Contains("application/json")) //TODO: Optimize?
+            {
+                return true;
+            }
+
+            if (context.HttpContext.Request.IsAjax())
             {
                 return true;
             }

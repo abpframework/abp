@@ -1,4 +1,4 @@
-﻿namespace Volo.Abp
+﻿namespace Volo.Abp.ExceptionHandling
 {
     public interface IHasErrorCode
     {

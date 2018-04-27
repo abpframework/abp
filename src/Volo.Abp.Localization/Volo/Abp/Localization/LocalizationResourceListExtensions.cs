@@ -40,6 +40,30 @@ namespace Volo.Abp.Localization
         {
             Check.NotNull(resourceDictionary, nameof(resourceDictionary));
 
+            GetResource<TResource>(resourceDictionary).Extensions.Add(
+                new JsonEmbeddedFileLocalizationDictionaryProvider(
+                    virtualPath
+                )
+            );
+        }
+
+        public static void AddBaseTypes<TResource>(
+            [NotNull] this LocalizationResourceDictionary resourceDictionary,
+            [NotNull] params Type[] types)
+        {
+            Check.NotNull(resourceDictionary, nameof(resourceDictionary));
+            Check.NotNull(types, nameof(types));
+
+            var resource = GetResource<TResource>(resourceDictionary);
+
+            foreach (var type in types)
+            {
+                resource.BaseResourceTypes.AddIfNotContains(type);
+            }
+        }
+
+        private static LocalizationResource GetResource<TResource>(LocalizationResourceDictionary resourceDictionary)
+        {
             var resourceType = typeof(TResource);
 
             var resource = resourceDictionary.GetOrDefault(resourceType);
@@ -48,9 +72,7 @@ namespace Volo.Abp.Localization
                 throw new AbpException("Can not find a resource with given type: " + resourceType.AssemblyQualifiedName);
             }
 
-            resource.Extensions.Add(new JsonEmbeddedFileLocalizationDictionaryProvider(
-                virtualPath
-            ));
+            return resource;
         }
     }
 }

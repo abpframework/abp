@@ -1,6 +1,7 @@
 using System;
 using System.Runtime.Serialization;
 using Microsoft.Extensions.Logging;
+using Volo.Abp.ExceptionHandling;
 using Volo.Abp.Logging;
 
 namespace Volo.Abp.UI
