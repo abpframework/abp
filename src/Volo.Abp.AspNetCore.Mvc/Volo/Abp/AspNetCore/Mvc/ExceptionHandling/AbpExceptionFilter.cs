@@ -16,9 +16,11 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
         public ILogger<AbpExceptionFilter> Logger { get; set; }
 
         private readonly IExceptionToErrorInfoConverter _errorInfoConverter;
-        private readonly HttpExceptionStatusCodeFinder _statusCodeFinder;
+        private readonly IHttpExceptionStatusCodeFinder _statusCodeFinder;
 
-        public AbpExceptionFilter(IExceptionToErrorInfoConverter errorInfoConverter, HttpExceptionStatusCodeFinder statusCodeFinder)
+        public AbpExceptionFilter(
+            IExceptionToErrorInfoConverter errorInfoConverter,
+            IHttpExceptionStatusCodeFinder statusCodeFinder)
         {
             _errorInfoConverter = errorInfoConverter;
             _statusCodeFinder = statusCodeFinder;
@@ -63,7 +65,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
 
         protected virtual void HandleAndWrapException(ExceptionContext context)
         {
-            context.HttpContext.Response.StatusCode = _statusCodeFinder.GetStatusCode(context.HttpContext, context.Exception);
+            context.HttpContext.Response.StatusCode = (int)_statusCodeFinder.GetStatusCode(context.HttpContext, context.Exception);
             context.HttpContext.Response.Headers.Add(new KeyValuePair<string, StringValues>("_AbpErrorFormat", "true"));
 
             context.Result = new ObjectResult(

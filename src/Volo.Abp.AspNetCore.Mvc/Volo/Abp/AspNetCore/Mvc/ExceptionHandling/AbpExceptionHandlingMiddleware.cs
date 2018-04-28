@@ -60,11 +60,11 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
             _logger.LogException(exception);
 
             var errorInfoConverter = httpContext.RequestServices.GetRequiredService<IExceptionToErrorInfoConverter>();
-            var statusCodeFinder = httpContext.RequestServices.GetRequiredService<HttpExceptionStatusCodeFinder>();
+            var statusCodeFinder = httpContext.RequestServices.GetRequiredService<IHttpExceptionStatusCodeFinder>();
             var jsonSerializer = httpContext.RequestServices.GetRequiredService<IJsonSerializer>();
 
             httpContext.Response.Clear();
-            httpContext.Response.StatusCode = statusCodeFinder.GetStatusCode(httpContext, exception);
+            httpContext.Response.StatusCode = (int)statusCodeFinder.GetStatusCode(httpContext, exception);
             httpContext.Response.OnStarting(_clearCacheHeadersDelegate, httpContext.Response);
             httpContext.Response.Headers.Add(new KeyValuePair<string, StringValues>("_AbpErrorFormat", "true"));  //TODO: Constant
 

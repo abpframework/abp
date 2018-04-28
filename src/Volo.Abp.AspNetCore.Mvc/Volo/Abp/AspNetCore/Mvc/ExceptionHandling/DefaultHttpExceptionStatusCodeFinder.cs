@@ -8,35 +8,35 @@ using Volo.Abp.Validation;
 
 namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
 {
-    public class HttpExceptionStatusCodeFinder : ITransientDependency
+    public class DefaultHttpExceptionStatusCodeFinder : IHttpExceptionStatusCodeFinder, ITransientDependency
     {
-        public virtual int GetStatusCode(HttpContext httpContext, Exception exception)
+        public virtual HttpStatusCode GetStatusCode(HttpContext httpContext, Exception exception)
         {
             //TODO: If the exception has error code than we can determine the exception from it!
 
             if (exception is AbpAuthorizationException)
             {
                 return httpContext.User.Identity.IsAuthenticated
-                    ? (int)HttpStatusCode.Forbidden
-                    : (int)HttpStatusCode.Unauthorized;
+                    ? HttpStatusCode.Forbidden
+                    : HttpStatusCode.Unauthorized;
             }
 
             if (exception is AbpValidationException)
             {
-                return (int)HttpStatusCode.BadRequest;
+                return HttpStatusCode.BadRequest;
             }
 
             if (exception is EntityNotFoundException)
             {
-                return (int)HttpStatusCode.NotFound;
+                return HttpStatusCode.NotFound;
             }
 
             if (exception is IBusinessException)
             {
-                return (int)HttpStatusCode.Forbidden;
+                return HttpStatusCode.Forbidden;
             }
 
-            return (int)HttpStatusCode.InternalServerError;
+            return HttpStatusCode.InternalServerError;
         }
     }
 }
