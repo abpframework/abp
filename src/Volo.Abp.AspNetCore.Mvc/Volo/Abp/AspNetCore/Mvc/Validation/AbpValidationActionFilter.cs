@@ -20,7 +20,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Validation
             //TODO: Configuration to disable validation for controllers..?
 
             if (!context.ActionDescriptor.IsControllerAction() ||
-                !ActionResultHelper.IsObjectResult(context.ActionDescriptor.GetMethodInfo().ReturnType))
+                !context.ActionDescriptor.HasObjectResult())
             {
                 await next();
                 return;

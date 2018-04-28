@@ -1,37 +1,35 @@
 using System;
-using System.Reflection;
-using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.AspNetCore.Mvc
 {
     public static class ActionResultHelper
     {
+        public static List<Type> ObjectResultTypes { get; } 
+
+        static ActionResultHelper()
+        {
+            ObjectResultTypes = new List<Type>
+            {
+                typeof(JsonResult),
+                typeof(ObjectResult),
+                typeof(NoContentResult)
+            };
+        }
+
         public static bool IsObjectResult(Type returnType)
         {
-            //Get the actual return type (unwrap Task)
-            if (returnType == typeof(Task))
+            returnType = AsyncHelper.UnwrapTask(returnType);
+
+            if (!typeof(IActionResult).IsAssignableFrom(returnType))
             {
-                returnType = typeof(void);
-            }
-            else if (returnType.GetTypeInfo().IsGenericType && returnType.GetGenericTypeDefinition() == typeof(Task<>))
-            {
-                returnType = returnType.GenericTypeArguments[0];
+                return true;
             }
 
-            if (typeof(IActionResult).GetTypeInfo().IsAssignableFrom(returnType))
-            {
-                if (typeof(JsonResult).GetTypeInfo().IsAssignableFrom(returnType) || 
-                    typeof(ObjectResult).GetTypeInfo().IsAssignableFrom(returnType) ||
-                    typeof(NoContentResult).GetTypeInfo().IsAssignableFrom(returnType))
-                {
-                    return true;
-                }
-
-                return false;
-            }
-
-            return true;
+            return ObjectResultTypes.Any(t => t.IsAssignableFrom(returnType));
         }
     }
 }

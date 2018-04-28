@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Net.Http;
-using System.Reflection;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Options;
@@ -35,7 +33,10 @@ namespace Volo.Abp.AspNetCore.Mvc.Uow
             var methodInfo = context.ActionDescriptor.GetMethodInfo();
             var unitOfWorkAttr = UnitOfWorkHelper.GetUnitOfWorkAttributeOrNull(methodInfo);
 
-            SetAbpActionInfoToHttpContext(context.HttpContext, methodInfo);
+            context.HttpContext.Items["_AbpActionInfo"] = new AbpActionInfoInHttpContext
+            {
+                IsObjectResult = context.ActionDescriptor.HasObjectResult()
+            };
 
             if (unitOfWorkAttr?.IsDisabled == true)
             {
@@ -66,14 +67,6 @@ namespace Volo.Abp.AspNetCore.Mvc.Uow
                     await uow.CompleteAsync(context.HttpContext.RequestAborted);
                 }
             }
-        }
-
-        private static void SetAbpActionInfoToHttpContext(HttpContext context, MethodInfo methodInfo)
-        {
-            context.Items["_AbpActionInfo"] = new AbpActionInfoInHttpContext
-            {
-                IsObjectResult = ActionResultHelper.IsObjectResult(methodInfo.ReturnType)
-            };
         }
 
         private UnitOfWorkOptions CreateOptions(ActionExecutingContext context, UnitOfWorkAttribute unitOfWorkAttribute)

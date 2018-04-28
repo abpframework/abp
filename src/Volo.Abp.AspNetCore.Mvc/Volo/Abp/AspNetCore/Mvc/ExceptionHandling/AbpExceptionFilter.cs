@@ -26,7 +26,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
             Logger = NullLogger<AbpExceptionFilter>.Instance;
         }
 
-        public void OnException(ExceptionContext context)
+        public virtual void OnException(ExceptionContext context)
         {
             if (!ShouldHandleException(context))
             {
@@ -38,13 +38,13 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
             HandleAndWrapException(context);
         }
 
-        private bool ShouldHandleException(ExceptionContext context)
+        protected virtual bool ShouldHandleException(ExceptionContext context)
         {
-            if (context.ActionDescriptor.IsControllerAction() &&
-                ActionResultHelper.IsObjectResult(context.ActionDescriptor.GetMethodInfo().ReturnType))
-            {
-                //TODO: Create DontWrap attribute to control wrapping..?
+            //TODO: Create DontWrap attribute to control wrapping..?
 
+            if (context.ActionDescriptor.IsControllerAction() &&
+                context.ActionDescriptor.HasObjectResult())
+            {
                 return true;
             }
             
@@ -61,7 +61,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
             return false;
         }
 
-        private void HandleAndWrapException(ExceptionContext context)
+        protected virtual void HandleAndWrapException(ExceptionContext context)
         {
             context.HttpContext.Response.StatusCode = _statusCodeFinder.GetStatusCode(context.HttpContext, context.Exception);
             context.HttpContext.Response.Headers.Add(new KeyValuePair<string, StringValues>("_AbpErrorFormat", "true"));

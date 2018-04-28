@@ -1,6 +1,8 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Volo.Abp;
+using Volo.Abp.AspNetCore.Mvc;
 
 namespace Microsoft.AspNetCore.Mvc.Abstractions
 {
@@ -19,6 +21,16 @@ namespace Microsoft.AspNetCore.Mvc.Abstractions
         public static MethodInfo GetMethodInfo(this ActionDescriptor actionDescriptor)
         {
             return actionDescriptor.AsControllerActionDescriptor().MethodInfo;
+        }
+
+        public static Type GetReturnType(this ActionDescriptor actionDescriptor)
+        {
+            return actionDescriptor.GetMethodInfo().ReturnType;
+        }
+
+        public static bool HasObjectResult(this ActionDescriptor actionDescriptor)
+        {
+            return ActionResultHelper.IsObjectResult(actionDescriptor.GetReturnType());
         }
 
         public static bool IsControllerAction(this ActionDescriptor actionDescriptor)
