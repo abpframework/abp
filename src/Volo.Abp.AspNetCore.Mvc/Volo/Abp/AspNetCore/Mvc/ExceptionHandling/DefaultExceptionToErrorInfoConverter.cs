@@ -111,7 +111,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
 
             var codeNamespace = exceptionWithErrorCode.Code.Split(':')[0];
 
-            var localizationResourceType = _localizationOptions.CodeNamespaceMappings.GetOrDefault(codeNamespace);
+            var localizationResourceType = _localizationOptions.ErrorCodeNamespaceMappings.GetOrDefault(codeNamespace);
             if (localizationResourceType == null)
             {
                 return;

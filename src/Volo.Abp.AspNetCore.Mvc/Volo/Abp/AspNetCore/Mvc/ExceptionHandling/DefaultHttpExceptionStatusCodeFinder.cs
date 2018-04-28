@@ -1,18 +1,38 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
 using Volo.Abp.Authorization;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.ExceptionHandling;
 using Volo.Abp.Validation;
 
 namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
 {
     public class DefaultHttpExceptionStatusCodeFinder : IHttpExceptionStatusCodeFinder, ITransientDependency
     {
+        protected ExceptionHttpStatusCodeOptions Options { get; }
+
+        public DefaultHttpExceptionStatusCodeFinder(
+            IOptions<ExceptionHttpStatusCodeOptions> options)
+        {
+            Options = options.Value;
+        }
+
         public virtual HttpStatusCode GetStatusCode(HttpContext httpContext, Exception exception)
         {
             //TODO: If the exception has error code than we can determine the exception from it!
+
+            if (exception is IHasErrorCode exceptionWithErrorCode && 
+                !exceptionWithErrorCode.Code.IsNullOrWhiteSpace())
+            {
+                if (Options.ErrorCodeToHttpStatusCodeMappings.TryGetValue(exceptionWithErrorCode.Code, out var status))
+                {
+                    return status;
+                }
+            }
 
             if (exception is AbpAuthorizationException)
             {
