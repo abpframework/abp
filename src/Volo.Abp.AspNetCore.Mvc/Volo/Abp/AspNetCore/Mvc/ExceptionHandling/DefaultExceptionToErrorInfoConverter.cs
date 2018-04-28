@@ -66,9 +66,8 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
             
             if (exception is IUserFriendlyException)
             {
-                var userFriendlyException = exception as IUserFriendlyException;
                 errorInfo.Message = exception.Message;
-                errorInfo.Details = userFriendlyException.Details;
+                errorInfo.Details = (exception as IHasErrorDetails)?.Details;
             }
 
             if (exception is IHasValidationErrors)
@@ -195,12 +194,13 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
             detailBuilder.AppendLine(exception.GetType().Name + ": " + exception.Message);
 
             //Additional info for UserFriendlyException
-            if (exception is IUserFriendlyException)
+            if (exception is IUserFriendlyException && 
+                exception is IHasErrorDetails)
             {
-                var userFriendlyException = exception as IUserFriendlyException;
-                if (!string.IsNullOrEmpty(userFriendlyException.Details))
+                var details = ((IHasErrorDetails) exception).Details;
+                if (!details.IsNullOrEmpty())
                 {
-                    detailBuilder.AppendLine(userFriendlyException.Details);
+                    detailBuilder.AppendLine(details);
                 }
             }
 
