@@ -47,8 +47,8 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
 
                 return true;
             }
-
-            if (context.HttpContext.Request.Headers["Accept"].ToString().Contains("application/json")) //TODO: Optimize?
+            
+            if (context.HttpContext.Request.CanAccept(MimeTypes.Application.Json))
             {
                 return true;
             }
