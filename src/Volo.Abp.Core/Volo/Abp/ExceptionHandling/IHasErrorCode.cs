@@ -2,6 +2,6 @@
 {
     public interface IHasErrorCode
     {
-        string Code { get; set; }
+        string Code { get; }
     }
 }
