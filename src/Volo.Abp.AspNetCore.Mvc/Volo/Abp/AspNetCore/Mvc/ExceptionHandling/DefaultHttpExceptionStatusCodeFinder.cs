@@ -23,8 +23,6 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
 
         public virtual HttpStatusCode GetStatusCode(HttpContext httpContext, Exception exception)
         {
-            //TODO: If the exception has error code than we can determine the exception from it!
-
             if (exception is IHasErrorCode exceptionWithErrorCode && 
                 !exceptionWithErrorCode.Code.IsNullOrWhiteSpace())
             {

@@ -58,13 +58,26 @@ namespace Microsoft.Extensions.Logging
 
         public static void LogException(this ILogger logger, Exception ex, LogLevel? level = null)
         {
-            logger.LogWithLevel(
-                level ?? (ex as IHasLogLevel)?.LogLevel ?? LogLevel.Error,
-                ex.Message,
-                ex
-            );
+            var selectedLevel = level ?? ex.GetLogLevel();
 
+            logger.LogWithLevel(selectedLevel, ex.Message, ex);
             LogDetails(logger, ex);
+            LogData(logger, ex, selectedLevel);
+        }
+
+        private static void LogData(ILogger logger, Exception exception, LogLevel logLevel)
+        {
+            if (exception.Data == null || exception.Data.Count <= 0)
+            {
+                return;
+            }
+
+            logger.LogWithLevel(logLevel, "---------- Exception Data ----------");
+
+            foreach (var key in exception.Data.Keys)
+            {
+                logger.LogWithLevel(logLevel, $"{key} = {exception.Data[key]}");
+            }
         }
 
         private static void LogDetails(ILogger logger, Exception exception)

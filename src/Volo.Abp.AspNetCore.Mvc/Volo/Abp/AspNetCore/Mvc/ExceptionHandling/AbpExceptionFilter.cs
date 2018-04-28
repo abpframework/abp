@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
@@ -8,6 +9,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Primitives;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http;
+using Volo.Abp.Json;
 
 namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
 {
@@ -17,13 +19,16 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
 
         private readonly IExceptionToErrorInfoConverter _errorInfoConverter;
         private readonly IHttpExceptionStatusCodeFinder _statusCodeFinder;
+        private readonly IJsonSerializer _jsonSerializer;
 
         public AbpExceptionFilter(
             IExceptionToErrorInfoConverter errorInfoConverter,
-            IHttpExceptionStatusCodeFinder statusCodeFinder)
+            IHttpExceptionStatusCodeFinder statusCodeFinder, 
+            IJsonSerializer jsonSerializer)
         {
             _errorInfoConverter = errorInfoConverter;
             _statusCodeFinder = statusCodeFinder;
+            _jsonSerializer = jsonSerializer;
 
             Logger = NullLogger<AbpExceptionFilter>.Instance;
         }
@@ -34,8 +39,6 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
             {
                 return;
             }
-
-            Logger.LogException(context.Exception);
 
             HandleAndWrapException(context);
         }
@@ -65,20 +68,21 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
 
         protected virtual void HandleAndWrapException(ExceptionContext context)
         {
-            context.HttpContext.Response.Headers.Add(AbpHttpConsts.AbpErrorFormat, "true");
-
-            context.HttpContext.Response.StatusCode = 
-                (int)_statusCodeFinder.GetStatusCode(context.HttpContext, context.Exception);
-
-            context.Result = new ObjectResult(
-                new RemoteServiceErrorResponse(
-                    _errorInfoConverter.Convert(context.Exception)
-                )
-            );
-
             //TODO: Trigger an AbpExceptionHandled event or something like that.
 
+            context.HttpContext.Response.Headers.Add(AbpHttpConsts.AbpErrorFormat, "true");
+            context.HttpContext.Response.StatusCode = (int)_statusCodeFinder.GetStatusCode(context.HttpContext, context.Exception);
+
+            var remoteServiceErrorInfo = _errorInfoConverter.Convert(context.Exception);
+
+            context.Result = new ObjectResult(new RemoteServiceErrorResponse(remoteServiceErrorInfo));
             context.Exception = null; //Handled!
+
+            var logLevel = context.Exception.GetLogLevel();
+
+            Logger.LogWithLevel(logLevel, $"---------- {nameof(RemoteServiceErrorInfo)} ----------");
+            Logger.LogWithLevel(logLevel, _jsonSerializer.Serialize(remoteServiceErrorInfo, indented: true));
+            Logger.LogException(context.Exception, logLevel);
         }
     }
 }
