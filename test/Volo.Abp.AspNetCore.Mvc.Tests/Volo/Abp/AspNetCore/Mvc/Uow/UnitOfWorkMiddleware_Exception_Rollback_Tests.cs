@@ -24,7 +24,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Uow
         {
             var response = await GetResponseAsync("/api/unitofwork-test/ExceptionOnComplete", HttpStatusCode.InternalServerError);
 
-            response.Headers.GetValues("_AbpErrorFormat").FirstOrDefault().ShouldBe("true");
+            response.Headers.GetValues(AbpHttpConsts.AbpErrorFormat).FirstOrDefault().ShouldBe("true");
 
             var resultAsString = await response.Content.ReadAsStringAsync();
 

@@ -65,8 +65,10 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
 
         protected virtual void HandleAndWrapException(ExceptionContext context)
         {
-            context.HttpContext.Response.StatusCode = (int)_statusCodeFinder.GetStatusCode(context.HttpContext, context.Exception);
-            context.HttpContext.Response.Headers.Add(new KeyValuePair<string, StringValues>("_AbpErrorFormat", "true"));
+            context.HttpContext.Response.Headers.Add(AbpHttpConsts.AbpErrorFormat, "true");
+
+            context.HttpContext.Response.StatusCode = 
+                (int)_statusCodeFinder.GetStatusCode(context.HttpContext, context.Exception);
 
             context.Result = new ObjectResult(
                 new RemoteServiceErrorResponse(

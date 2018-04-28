@@ -66,7 +66,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
             httpContext.Response.Clear();
             httpContext.Response.StatusCode = (int)statusCodeFinder.GetStatusCode(httpContext, exception);
             httpContext.Response.OnStarting(_clearCacheHeadersDelegate, httpContext.Response);
-            httpContext.Response.Headers.Add(new KeyValuePair<string, StringValues>("_AbpErrorFormat", "true"));  //TODO: Constant
+            httpContext.Response.Headers.Add(AbpHttpConsts.AbpErrorFormat, "true");
 
             await httpContext.Response.WriteAsync(
                 jsonSerializer.Serialize(

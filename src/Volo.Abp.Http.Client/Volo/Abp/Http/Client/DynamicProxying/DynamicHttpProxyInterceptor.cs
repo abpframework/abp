@@ -209,7 +209,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
         private async Task ThrowExceptionForResponseAsync(HttpResponseMessage response)
         {
-            if (response.Headers.Contains("_AbpErrorFormat"))
+            if (response.Headers.Contains(AbpHttpConsts.AbpErrorFormat))
             {
                 var errorResponse = _jsonSerializer.Deserialize<RemoteServiceErrorResponse>(
                     await response.Content.ReadAsStringAsync()
