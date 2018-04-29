@@ -102,6 +102,39 @@ public class MyService
 }
 ````
 
+#### Dealing Embedded Files On The Development
 
+Embedding a file into a module assembly and using it from another project by just referencing the assembly (or adding a nuget package) is very valuable for creating a re-usable module. However, it makes a bit hard to develop the module itself.
 
-s
+Assume that you are developing a module that contains an embedded javascript file. Whenever you change the file you must re-compile the project, re-start the application and refresh the browser page to take the change. Obviously, it is very time consuming and tedious.
+
+What if the application could directly use the physical file in the development time? Thus, you could just refresh the browser page to see any change in the javascript file. `ReplaceEmbeddedByPyhsical` method makes that possible. 
+
+The example below shows an application depends on a module (`MyModule`) that contains embedded files and the application can reach the source code of the module on the development time. 
+
+````C#
+[DependsOn(typeof(MyModule))]
+public class MyWebAppModule : AbpModule
+{
+    public override void ConfigureServices(IServiceCollection services)
+    {
+        var hostingEnvironment = services.GetHostingEnvironment();
+
+        if (hostingEnvironment.IsDevelopment()) //only for development time
+        {
+            services.Configure<VirtualFileSystemOptions>(options =>
+            {
+                //ReplaceEmbeddedByPyhsical gets the root folder of the MyModule project
+                options.FileSets.ReplaceEmbeddedByPyhsical<MyModule>(
+                    Path.Combine(hostingEnvironment.ContentRootPath, "..\\MyModuleProject")
+                );
+            });
+        }
+
+        //...
+    }
+}
+````
+
+The code above assumes that `MyWebAppModule` and `MyModule` are two different projects in a Visual Studio solution and `MyWebAppModule` depends on the `MyModule`.
+
