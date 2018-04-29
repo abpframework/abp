@@ -9,7 +9,7 @@
   * <a href="Dependency-Injection.md" target="_blank">Dependency Injection</a>
   * [Virtual File System](Virtual-File-System.md)
   * [Localization](Localization.md)
-  * Exception Handling
+  * [Exception Handling](Exception-Handling.md)
 * [Multi Tenancy](Multi-Tenancy.md)
 * Module Development
   * <a href="Module-Development-Basics.md" target="_blank">Basics</a>
