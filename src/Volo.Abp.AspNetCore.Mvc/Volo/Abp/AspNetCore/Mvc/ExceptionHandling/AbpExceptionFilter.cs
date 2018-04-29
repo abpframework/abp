@@ -76,13 +76,14 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
             var remoteServiceErrorInfo = _errorInfoConverter.Convert(context.Exception);
 
             context.Result = new ObjectResult(new RemoteServiceErrorResponse(remoteServiceErrorInfo));
-            context.Exception = null; //Handled!
 
             var logLevel = context.Exception.GetLogLevel();
 
             Logger.LogWithLevel(logLevel, $"---------- {nameof(RemoteServiceErrorInfo)} ----------");
             Logger.LogWithLevel(logLevel, _jsonSerializer.Serialize(remoteServiceErrorInfo, indented: true));
             Logger.LogException(context.Exception, logLevel);
+
+            context.Exception = null; //Handled!
         }
     }
 }
