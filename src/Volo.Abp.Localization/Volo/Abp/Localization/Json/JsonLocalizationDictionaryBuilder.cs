@@ -6,13 +6,7 @@ using Newtonsoft.Json.Serialization;
 
 namespace Volo.Abp.Localization.Json
 {
-    /// <summary>
-    ///     This class is used to build a localization dictionary from json.
-    /// </summary>
-    /// <remarks>
-    ///     Use static Build methods to create instance of this class.
-    /// </remarks>
-    public class JsonLocalizationDictionaryBuilder
+    public static class JsonLocalizationDictionaryBuilder
     {
         /// <summary>
         ///     Builds an <see cref="JsonLocalizationDictionaryBuilder" /> from given file.

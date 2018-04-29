@@ -147,4 +147,17 @@ Getting the localized text on the server side is pretty standard. So, you can re
 
 ##### Client Side
 
-TODO...
+ABP provides JavaScript services to use the same localized texts in the client side.
+
+Get a localization resource:
+
+````js
+var testResource = abp.localization.getResource('Test');
+````
+
+Localize a string:
+
+````js
+var str = testResource('HelloWorld');
+````
+

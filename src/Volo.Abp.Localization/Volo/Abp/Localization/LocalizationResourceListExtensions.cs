@@ -40,7 +40,7 @@ namespace Volo.Abp.Localization
         {
             Check.NotNull(resourceDictionary, nameof(resourceDictionary));
 
-            GetResource<TResource>(resourceDictionary).Extensions.Add(
+            resourceDictionary.GetResource<TResource>().Extensions.Add(
                 new JsonEmbeddedFileLocalizationDictionaryProvider(
                     virtualPath
                 )
@@ -54,7 +54,7 @@ namespace Volo.Abp.Localization
             Check.NotNull(resourceDictionary, nameof(resourceDictionary));
             Check.NotNull(types, nameof(types));
 
-            var resource = GetResource<TResource>(resourceDictionary);
+            var resource = resourceDictionary.GetResource<TResource>();
 
             foreach (var type in types)
             {
@@ -62,7 +62,7 @@ namespace Volo.Abp.Localization
             }
         }
 
-        private static LocalizationResource GetResource<TResource>(LocalizationResourceDictionary resourceDictionary)
+        public static LocalizationResource GetResource<TResource>(this LocalizationResourceDictionary resourceDictionary)
         {
             var resourceType = typeof(TResource);
 
