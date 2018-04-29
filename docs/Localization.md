@@ -1,6 +1,6 @@
 ## Localization
 
-ABP's localization system is built on top of the `Microsoft.Extensions.Localization` package and compatible with the [Microsoft's localization documentation](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/localization).
+ABP's localization system is seamlessly integrated to the `Microsoft.Extensions.Localization` package and compatible with the [Microsoft's localization documentation](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/localization). It adds some useful features and enhancements to make it easier to use in real life application scenarios.
 
 ### Volo.Abp.Localization Package
 
@@ -143,7 +143,36 @@ If an extension file defines the same localized string, it overrides the string.
 
 ##### Server Side
 
-Getting the localized text on the server side is pretty standard. So, you can refer to the [Microsoft's localization documentation](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/localization).
+Getting the localized text on the server side is pretty standard.
+
+###### Simplest Usage In A Class
+
+````C#
+public class MyService
+{
+    private readonly IStringLocalizer<TestResource> _localizer;
+
+    public MyService(IStringLocalizer<TestResource> localizer)
+    {
+        _localizer = localizer;
+    }
+
+    public void Foo()
+    {
+        var str = _localizer["HelloWorld"];
+    }
+}
+````
+
+###### Simplest Usage In A Razor View/Page
+
+````c#
+@inject IHtmlLocalizer<TestResource> Localizer
+
+<h1>@Localizer["HelloWorld"]</h1>
+````
+
+Refer to the [Microsoft's localization documentation](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/localization) for details about using localization on the server side.
 
 ##### Client Side
 
@@ -160,4 +189,3 @@ Localize a string:
 ````js
 var str = testResource('HelloWorld');
 ````
-
