@@ -3,7 +3,7 @@
 ABP provides a built-in infrastructure and offers a standard model to exception handling for a web application.
 
 * Automatically **handles all exceptions** and sends a standard **formatted error message** to the client for an API/AJAX request.
-* Automatically hides **internal infrastructure errors**.
+* Automatically hides **internal infrastructure errors** and returns a standard error message.
 * Provides configuration option to **localize** exception messages.
 * Automatically maps standard exceptions to **HTTP status codes** and provides configuration option to map custom exceptions.
 
@@ -85,7 +85,7 @@ Error **details** in an optional field of the JSON error message. Thrown `Except
 
 #### Logging
 
-Caught exceptions are automatically logged.
+Caught exceptions are automatically logged. 
 
 ##### Log Level
 
@@ -114,16 +114,25 @@ public class MyException : Exception, IExceptionWithSelfLogging
 }
 ````
 
+> `ILogger.LogException` extension methods is used to write exception logs. You can use the same extension method when needed.
 
+### Conventional Exception Classes
 
-TODO:
+There are some **conventional** exception classes you can **directly throw** or **derive** your own exception types when needed.
 
-Exception Interfaces (IHasLogLevel, ICanLogDetails, IHasErrorCode... etc.)
+* `BusinessException`: Indicates a business exception (rather than infrastructure exceptions). You can instead implement the `IBusinessException` interface.
+* `UserFriendlyException`: Indicates an exception that can be **directly shown to the user** (without hiding or localizing). You can instead implement the `IUserFriendlyException` interface.
 
-Pre-Defined Base Exception Classes
+### Built-In Exceptions
 
-Standard Exception classes (AbpValidationException)
+Some exception types are automatically thrown by the framework.
 
-Exception Localization
+* `AbpAuthorizationException` is thrown if the current user has no permission to perform the requested operation. See authorization document (TODO: link) for more.
+* `AbpValidationException` is thrown if the input of the current request is not valid. See validation document (TODO: link) for more.
+* `EntityNotFoundException` is thrown if the requested entity is not available. This is mostly thrown by [repositories](Repositories.md).
 
-HTTP Status Code Mapping
+You can also throw these type of exceptions in your code (while it's rarely needed).
+
+### Exception Localization
+
+### HTTP Status Code Mapping

@@ -6,7 +6,12 @@ using Volo.Abp.Logging;
 
 namespace Volo.Abp
 {
-    public class BusinessException : Exception, IBusinessException, IHasErrorDetails, IHasLogLevel
+    [Serializable]
+    public class BusinessException : Exception, 
+        IBusinessException,
+        IHasErrorCode,
+        IHasErrorDetails, 
+        IHasLogLevel
     {
         public string Code { get; set; }
 

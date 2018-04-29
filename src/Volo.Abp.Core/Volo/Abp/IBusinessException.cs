@@ -1,8 +1,6 @@
-﻿using Volo.Abp.ExceptionHandling;
-
-namespace Volo.Abp
+﻿namespace Volo.Abp
 {
-    public interface IBusinessException : IHasErrorCode
+    public interface IBusinessException
     {
         
     }

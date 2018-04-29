@@ -4,7 +4,7 @@ using Volo.Abp.Logging;
 
 namespace Microsoft.Extensions.Logging
 {
-    public static class LoggerExtensions
+    public static class AbpLoggerExtensions
     {
         public static void LogWithLevel(this ILogger logger, LogLevel logLevel, string message)
         {
