@@ -120,8 +120,11 @@ public class MyException : Exception, IExceptionWithSelfLogging
 
 There are some **conventional** exception classes you can **directly throw** or **derive** your own exception types when needed.
 
-* `BusinessException`: Indicates a business exception (rather than infrastructure exceptions). You can instead implement the `IBusinessException` interface.
-* `UserFriendlyException`: Indicates an exception that can be **directly shown to the user** (without hiding or localizing). You can instead implement the `IUserFriendlyException` interface.
+#### Business Exception
+
+Most of your own exceptions will be business exceptions. The `IBusinessException` interface is used to mark an exception as a business exception.
+
+`BusinessException` implements the `IBusinessException` interface in addition to the `IHasErrorCode`, `IHasErrorDetails` and `IHasLogLevel` interfaces. Default log level is `Warning`.
 
 ### Built-In Exceptions
 
@@ -135,4 +138,8 @@ You can also throw these type of exceptions in your code (while it's rarely need
 
 ### Exception Localization
 
+TODO
+
 ### HTTP Status Code Mapping
+
+TODO

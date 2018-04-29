@@ -6,10 +6,13 @@ using Volo.Abp.Logging;
 
 namespace Volo.Abp.UI
 {
+    //TODO: Remove UserFriendlyException. Instead use BusinessException.
+
     /// <summary>
     /// This exception type is directly shown to the user.
     /// </summary>
     [Serializable]
+    [Obsolete("Use BusinessException")]
     public class UserFriendlyException : ApplicationException, 
         IUserFriendlyException, 
         IHasLogLevel, 
@@ -30,14 +33,13 @@ namespace Volo.Abp.UI
         /// Severity of the exception.
         /// Default: Warn.
         /// </summary>
-        public LogLevel LogLevel { get; set; }
+        public LogLevel LogLevel { get; set; } = LogLevel.Warning;
 
         /// <summary>
         /// Constructor.
         /// </summary>
         public UserFriendlyException()
         {
-            LogLevel = LogLevel.Warning;
         }
 
         /// <summary>
@@ -56,7 +58,6 @@ namespace Volo.Abp.UI
         public UserFriendlyException(string message)
             : base(message)
         {
-            LogLevel = LogLevel.Warning;
         }
 
         /// <summary>
@@ -89,7 +90,6 @@ namespace Volo.Abp.UI
         public UserFriendlyException(string message, Exception innerException)
             : base(message, innerException)
         {
-            LogLevel = LogLevel.Warning;
         }
 
         /// <summary>
