@@ -82,32 +82,32 @@ namespace Microsoft.Extensions.Logging
 
         private static void LogDetails(ILogger logger, Exception exception)
         {
-            var loggingExceptions = new List<IExceptionCanLogDetails>();
+            var loggingExceptions = new List<IExceptionWithSelfLogging>();
 
-            if (exception is IExceptionCanLogDetails)
+            if (exception is IExceptionWithSelfLogging)
             {
-                loggingExceptions.Add(exception as IExceptionCanLogDetails);
+                loggingExceptions.Add(exception as IExceptionWithSelfLogging);
             }
             else if (exception is AggregateException && exception.InnerException != null)
             {
                 var aggException = exception as AggregateException;
-                if (aggException.InnerException is IExceptionCanLogDetails)
+                if (aggException.InnerException is IExceptionWithSelfLogging)
                 {
-                    loggingExceptions.Add(aggException.InnerException as IExceptionCanLogDetails);
+                    loggingExceptions.Add(aggException.InnerException as IExceptionWithSelfLogging);
                 }
 
                 foreach (var innerException in aggException.InnerExceptions)
                 {
-                    if (innerException is IExceptionCanLogDetails)
+                    if (innerException is IExceptionWithSelfLogging)
                     {
-                        loggingExceptions.AddIfNotContains(innerException as IExceptionCanLogDetails);
+                        loggingExceptions.AddIfNotContains(innerException as IExceptionWithSelfLogging);
                     }
                 }
             }
 
             foreach (var ex in loggingExceptions)
             {
-                ex.LogDetails(logger);
+                ex.Log(logger);
             }
         }
     }

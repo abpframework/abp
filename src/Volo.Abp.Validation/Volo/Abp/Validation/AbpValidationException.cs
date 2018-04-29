@@ -12,7 +12,10 @@ namespace Volo.Abp.Validation
     /// This exception type is used to throws validation exceptions.
     /// </summary>
     [Serializable]
-    public class AbpValidationException : AbpException, IHasLogLevel, IHasValidationErrors, IExceptionCanLogDetails
+    public class AbpValidationException : AbpException, 
+        IHasLogLevel, 
+        IHasValidationErrors, 
+        IExceptionWithSelfLogging
     {
         /// <summary>
         /// Detailed list of validation errors for this exception.
@@ -79,7 +82,7 @@ namespace Volo.Abp.Validation
             LogLevel = LogLevel.Warning;
         }
 
-        public void LogDetails(ILogger logger)
+        public void Log(ILogger logger)
         {
             if (ValidationErrors.IsNullOrEmpty())
             {
