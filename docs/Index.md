@@ -7,7 +7,7 @@
   *  <a href="Getting-Started-AspNetCore-Application.md" target="_blank">With ASP.NET Core Web Application</a>
 * Fundamentals
   * <a href="Dependency-Injection.md" target="_blank">Dependency Injection</a>
-  * Virtual File System
+  * [Virtual File System](Virtual-File-System.md)
   * Localization
   * Exception Handling
 * [Multi Tenancy](Multi-Tenancy.md)

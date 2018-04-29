@@ -3,24 +3,25 @@ using System.Text;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.Modularity;
+using Volo.Abp.VirtualFileSystem.Embedded;
 using Xunit;
 
 namespace Volo.Abp.VirtualFileSystem
 {
     public class VirtualFileProvider_Tests : AbpIntegratedTest<VirtualFileProvider_Tests.TestModule>
     {
-        private readonly IVirtualFileProvider _embeddedFileManager;
+        private readonly IVirtualFileProvider _virtualFileProvider;
 
         public VirtualFileProvider_Tests()
         {
-            _embeddedFileManager = ServiceProvider.GetRequiredService<IVirtualFileProvider>();
+            _virtualFileProvider = ServiceProvider.GetRequiredService<IVirtualFileProvider>();
         }
 
         [Fact]
         public void Should_Define_And_Get_Embedded_Resources()
         {
             //Act
-            var resource = _embeddedFileManager.GetFileInfo("/js/jquery-3-1-1-min.js");
+            var resource = _virtualFileProvider.GetFileInfo("/js/jquery-3-1-1-min.js");
 
             //Assert
             resource.ShouldNotBeNull();

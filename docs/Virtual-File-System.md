@@ -30,9 +30,21 @@ namespace MyCompany.MyProject
 
 #### Registering Embedded Files
 
+A file should be first marked as embedded resource to embed the file into the assembly. The easiest way to do it is to select the file from the **Solution Explorer** and set **Build Action** to **Embedded Resource** from the **Properties** window. Example:
 
+![build-action-embedded-resource-sample](images/build-action-embedded-resource-sample.png)
 
-A file should be first registered in order to use it in the application. Example:
+If you want to add multiple files, this can be tedious. Alternatively, you can directly edit your **.csproj** file:
+
+````C#
+<ItemGroup>
+  <None Remove="MyResources\**\*.*" />
+</ItemGroup>
+````
+
+This configuration recursively adds all files under the **MyResources** folder of the project (including the files you will add in the future).
+
+Then the module should configure `VirtualFileSystemOptions` to register embedded files to the virtual file system. Example:
 
 ````C#
 using Microsoft.Extensions.DependencyInjection;
@@ -58,6 +70,38 @@ namespace MyCompany.MyProject
 }
 ````
 
-AddEmbedded extension method takes a
+`AddEmbedded` extension method takes a class, finds all embedded files from the assembly of the given class and register to the virtual file system. It's a shortcut and could be written as shown below:
+
+````C#
+options.FileSets.Add(new EmbeddedFileSet(typeof(MyModule).Assembly));
+````
+
+#### Getting Virtual Files: IVirtualFileProvider
+
+After embedding a file into an assembly and registering to the virtual file system, `IVirtualFileProvider` can be used to get files or directory contents:
+
+````C#
+public class MyService
+{
+    private readonly IVirtualFileProvider _virtualFileProvider;
+
+    public MyService(IVirtualFileProvider virtualFileProvider)
+    {
+        _virtualFileProvider = virtualFileProvider;
+    }
+
+    public void Foo()
+    {
+        //Getting a single file
+        var file = _virtualFileProvider.GetFileInfo("/MyResources/js/test.js");
+        var fileContent = file.ReadAsString(); //ReadAsString is an extension method of ABP
+
+        //Getting all files/directories under a directory
+        var directoryContents = _virtualFileProvider.GetDirectoryContents("/MyResources/js");
+    }
+}
+````
+
+
 
 s
