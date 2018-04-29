@@ -46,8 +46,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.MongoDB", "src\Vol
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AspNetCore.Mvc.UI", "src\Volo.Abp.AspNetCore.Mvc.UI\Volo.Abp.AspNetCore.Mvc.UI.csproj", "{BF9AB22C-F48D-4DDE-A894-BC28EB37166B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AspNetCore.EmbeddedFiles", "src\Volo.Abp.AspNetCore.EmbeddedFiles\Volo.Abp.AspNetCore.EmbeddedFiles.csproj", "{B6182BF1-9EC6-403D-A42C-D6441CF7B390}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AspNetCore.Mvc.UI.Bootstrap", "src\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.csproj", "{C761A3F7-787D-4C7E-A41C-5FAB07F6B774}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Autofac", "src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj", "{CECE1288-B5A1-4A6B-BEE0-331861F94983}"
@@ -182,9 +180,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AspNetCore.Mvc.UI.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AspNetCore.Mvc.UI.Tests", "test\Volo.Abp.AspNetCore.Mvc.UI.Tests\Volo.Abp.AspNetCore.Mvc.UI.Tests.csproj", "{7E0517E0-AE09-4E10-8469-308F065F2F43}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo", "test\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.csproj", "{57E29185-6DAF-4A41-8CE0-3F07EE3E289A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo", "test\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.csproj", "{57E29185-6DAF-4A41-8CE0-3F07EE3E289A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Tests", "test\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Tests\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Tests.csproj", "{869F7453-7DDC-4915-B92C-7861466AB68B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Tests", "test\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Tests\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Tests.csproj", "{869F7453-7DDC-4915-B92C-7861466AB68B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -240,10 +238,6 @@ Global
 		{BF9AB22C-F48D-4DDE-A894-BC28EB37166B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BF9AB22C-F48D-4DDE-A894-BC28EB37166B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BF9AB22C-F48D-4DDE-A894-BC28EB37166B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B6182BF1-9EC6-403D-A42C-D6441CF7B390}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B6182BF1-9EC6-403D-A42C-D6441CF7B390}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B6182BF1-9EC6-403D-A42C-D6441CF7B390}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B6182BF1-9EC6-403D-A42C-D6441CF7B390}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C761A3F7-787D-4C7E-A41C-5FAB07F6B774}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C761A3F7-787D-4C7E-A41C-5FAB07F6B774}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C761A3F7-787D-4C7E-A41C-5FAB07F6B774}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -539,7 +533,6 @@ Global
 		{8CECCEAF-F0D8-4257-96BA-EACF4763AF42} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{B31FFAE3-5DAC-4E51-BD17-F7446B741A36} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{BF9AB22C-F48D-4DDE-A894-BC28EB37166B} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
-		{B6182BF1-9EC6-403D-A42C-D6441CF7B390} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{C761A3F7-787D-4C7E-A41C-5FAB07F6B774} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{CECE1288-B5A1-4A6B-BEE0-331861F94983} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{053F7446-0545-482E-9F29-9C96B926966C} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}

@@ -24,6 +24,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Routing.Abstractions" Version="2.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.0.2" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.0.2" />
   </ItemGroup>
 
 </Project>

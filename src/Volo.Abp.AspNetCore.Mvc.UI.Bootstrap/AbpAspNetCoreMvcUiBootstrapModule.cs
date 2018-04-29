@@ -1,12 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.AspNetCore.EmbeddedFiles;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap
 {
     [DependsOn(typeof(AbpAspNetCoreMvcUiModule))]
-    [DependsOn(typeof(AbpAspNetCoreEmbeddedFilesModule))]
     public class AbpAspNetCoreMvcUiBootstrapModule : AbpModule
     {
         public override void ConfigureServices(IServiceCollection services)

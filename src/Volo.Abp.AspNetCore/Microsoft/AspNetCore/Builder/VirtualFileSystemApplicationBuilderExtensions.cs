@@ -15,20 +15,7 @@ namespace Microsoft.AspNetCore.Builder
                 app.ApplicationServices,
                 "/wwwroot"
             );
-
-            ////TODO: This should not be needed!!!
-            //if (options.FileSets.PhysicalPaths.Any())
-            //{
-            //    var fileProviders = options.FileSets.PhysicalPaths
-            //        .Select(p => new PhysicalFileProvider(p))
-            //        .Cast<IFileProvider>()
-            //        .ToList();
-
-            //    fileProviders.Add(fileProvider);
-
-            //    fileProvider = new CompositeFileProvider(fileProviders);
-            //}
-
+            
             app.UseStaticFiles(
                 new StaticFileOptions
                 {
