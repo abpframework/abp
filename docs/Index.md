@@ -8,7 +8,7 @@
 * Fundamentals
   * <a href="Dependency-Injection.md" target="_blank">Dependency Injection</a>
   * [Virtual File System](Virtual-File-System.md)
-  * Localization
+  * [Localization](Localization.md)
   * Exception Handling
 * [Multi Tenancy](Multi-Tenancy.md)
 * Module Development

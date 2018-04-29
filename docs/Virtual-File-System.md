@@ -4,7 +4,7 @@ Virtual File System makes possible to manage files those are not physically exis
 
 ### Volo.Abp.VirtualFileSystem Package
 
-Volo.Abp.VirtualFileSystem it the core package of the virtual file system. Install it to your project using the package manager console (PMC):
+Volo.Abp.VirtualFileSystem is the core package of the virtual file system. Install it to your project using the package manager console (PMC):
 
 ```
 Install-Package Volo.Abp.VirtualFileSystem
