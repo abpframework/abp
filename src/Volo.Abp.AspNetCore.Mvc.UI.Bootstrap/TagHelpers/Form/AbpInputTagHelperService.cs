@@ -32,14 +32,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             var isCheckbox = IsInputCheckbox(inputTag.Attributes);
             var label = GetLabelAsHtml(inputTag, isCheckbox);
 
-            var content = isCheckbox ?
-                inputHtml + Environment.NewLine + label :
-                label + Environment.NewLine + inputHtml;
+            var content = GetContent(label, inputHtml, isCheckbox);
 
-            content ="<div class=\""+(isCheckbox ? "form-check" : "form-group") +"\">" + Environment.NewLine + content + Environment.NewLine + "</div>";
-
-
-            //var order = GetAttribute<DisplayOrder>(TagHelper.AspFor.ModelExplorer);
+            var order = GetAttribute<DisplayOrder>(TagHelper.AspFor.ModelExplorer);
 
             var list = context.Items["InputGroupContents"] as List<InputGroupContent>;
 
@@ -48,11 +43,20 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 list.Add(new InputGroupContent
                 {
                     Html = content,
-                    Order = TagHelper.FieldOrder ?? 999
+                    Order = order?.Number ?? 0
                 });
             }
 
             output.SuppressOutput();
+        }
+
+        protected virtual string GetContent(string label, string inputHtml, bool isCheckbox)
+        {
+            var content = isCheckbox ?
+                inputHtml + Environment.NewLine + label :
+                label + Environment.NewLine + inputHtml;
+
+            return "<div class=\"" + (isCheckbox ? "form-check" : "form-group") + "\">" + Environment.NewLine + content + Environment.NewLine + "</div>";
         }
 
         protected virtual TagHelperOutput GetInputTag(TagHelperContext context)

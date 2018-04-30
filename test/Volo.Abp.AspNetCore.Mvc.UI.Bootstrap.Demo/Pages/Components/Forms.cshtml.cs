@@ -74,6 +74,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components
         public string Name { get; set; }
 
         [Required]
+        [DisplayOrder(61)]
         [DisplayName("Age")]
         public int Age { get; set; }
 
@@ -81,13 +82,13 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components
         [DisplayName("City")]
         public Cities City { get; set; }
 
-        [DisplayOrder(51)]
         public Phone Phone { get; set; }
 
         [DataType(DataType.Date)]
         [DisplayName("Day")]
         public DateTime Day { get; set; }
 
+        [DisplayOrder(51)]
         [DisplayName("Is Active")]
         public bool IsActive { get; set; }
 
@@ -102,7 +103,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components
         public string Number { get; set; }
 
         [Required]
-        [DisplayName("Name")]
+        [DisplayOrder(71)]
+        [DisplayName("PhoneName")]
         public string Name { get; set; }
     }
 }

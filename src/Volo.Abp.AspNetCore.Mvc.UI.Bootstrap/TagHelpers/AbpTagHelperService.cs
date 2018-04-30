@@ -71,7 +71,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
         
         public static T GetAttribute<T>(ModelExplorer property) where T : Attribute
         {
-            var xd1 = property.Container.ModelType.GetTypeInfo();
+            //var xd1 = property.Container.ModelType.GetTypeInfo();
+            //var xd2 = xd1.GetProperty(property.Metadata.PropertyName);
+
+            var xd1 = property.Metadata.ContainerType.GetTypeInfo();
             var xd2 = xd1.GetProperty(property.Metadata.PropertyName);
 
             if (xd2 == null)
