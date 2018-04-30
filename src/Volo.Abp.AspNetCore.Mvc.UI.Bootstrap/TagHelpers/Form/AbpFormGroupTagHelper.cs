@@ -1,6 +1,4 @@
-﻿using JetBrains.Annotations;
-
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 {
     public class AbpFormGroupTagHelper : AbpTagHelper<AbpFormGroupTagHelper, AbpFormGroupTagHelperService>
     {
