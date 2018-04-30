@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Encodings.Web;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
@@ -11,20 +12,19 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
     {
         private readonly HtmlEncoder _htmlEncoder;
         private readonly AbpInputTagHelper _abpInputTagHelper;
-        private readonly AbpSelectTagHelper _abpSelectTagHelper;
+        private const string SelectItemsPostFix = "selectitems";
 
-        public AbpDynamicFormTagHelperService(HtmlEncoder htmlEncoder, AbpInputTagHelper abpInputTagHelper, AbpSelectTagHelper abpSelectTagHelper)
+        public AbpDynamicFormTagHelperService(HtmlEncoder htmlEncoder, AbpInputTagHelper abpInputTagHelper)
         {
             _htmlEncoder = htmlEncoder;
             _abpInputTagHelper = abpInputTagHelper;
-            _abpSelectTagHelper = abpSelectTagHelper;
         }
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             output.TagName = "form";
-            output.Attributes.Add("method","post");
-            output.Attributes.Add("action","#");
+            output.Attributes.Add("method", "post");
+            output.Attributes.Add("action", "#");
 
             var innerhtml = GetInnerHtmlContent();
 
@@ -38,19 +38,19 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
             foreach (var model in models)
             {
-                innerHtmlcontent += ProcessField(model);
+                innerHtmlcontent += ProcessInputGroup(model);
             }
 
             return innerHtmlcontent;
         }
 
-        protected virtual string ProcessField(ModelExpression model)
+        protected virtual string ProcessInputGroup(ModelExpression model)
         {
             _abpInputTagHelper.AspFor = model;
             _abpInputTagHelper.Label = "";
             _abpInputTagHelper.ViewContext = TagHelper.ViewContext;
 
-            return RenderTagHelper(new TagHelperAttributeList(), _abpInputTagHelper,_htmlEncoder,"div",TagMode.StartTagAndEndTag)
+            return RenderTagHelper(new TagHelperAttributeList(), _abpInputTagHelper, _htmlEncoder, "div", TagMode.StartTagAndEndTag)
                     + Environment.NewLine;
         }
 

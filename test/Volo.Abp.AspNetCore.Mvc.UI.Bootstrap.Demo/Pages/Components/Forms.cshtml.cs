@@ -71,10 +71,16 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components
 
     public class Person
     {
+        [Required]
+        [DisplayName("Name")]
         public string Name { get; set; }
 
+        [Required]
+        [DisplayName("Age")]
         public int Age { get; set; }
 
+        [Required]
+        [DisplayName("City")]
         public Cities City { get; set; }
 
         public Phone Phone { get; set; }
@@ -85,11 +91,26 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components
 
         [DisplayName("Is Active")]
         public bool IsActive { get; set; }
+
+        [DisplayName("Country")]
+        public string Country { get; set; }
+
+        public List<SelectListItem> CountrySelectItems { get; } = new List<SelectListItem>
+        {
+            new SelectListItem { Value = "MX", Text = "Mexico" },
+            new SelectListItem { Value = "CA", Text = "Canada" },
+            new SelectListItem { Value = "US", Text = "USA"  },
+        };
     }
 
     public class Phone
     {
+        [Required]
+        [DisplayName("Number")]
         public string Number { get; set; }
+
+        [Required]
+        [DisplayName("Name")]
         public string Name { get; set; }
     }
 }
