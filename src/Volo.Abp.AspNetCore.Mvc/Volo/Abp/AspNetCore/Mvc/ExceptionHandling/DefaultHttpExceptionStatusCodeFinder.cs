@@ -49,6 +49,11 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
                 return HttpStatusCode.NotFound;
             }
 
+            if (exception is NotImplementedException)
+            {
+                return HttpStatusCode.NotImplemented;
+            }
+
             if (exception is IBusinessException)
             {
                 return HttpStatusCode.Forbidden;

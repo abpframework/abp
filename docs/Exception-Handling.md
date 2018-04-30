@@ -70,7 +70,7 @@ Error **details** in an optional field of the JSON error message. Thrown `Except
     "code": "App:010046",
     "message": "Your request is not valid, please correct and try again!",
     "validationErrors": [{
-      "message": "Username should be unique. 'john' is already taken by another user!",
+      "message": "Username should be minimum lenght of 3.",
       "members": ["userName"]
     },
     {
@@ -116,11 +116,7 @@ public class MyException : Exception, IExceptionWithSelfLogging
 
 > `ILogger.LogException` extension methods is used to write exception logs. You can use the same extension method when needed.
 
-### Conventional Exception Classes
-
-There are some **conventional** exception classes you can **directly throw** or **derive** your own exception types when needed.
-
-#### Business Exception
+### Business Exceptions
 
 Most of your own exceptions will be business exceptions. The `IBusinessException` interface is used to mark an exception as a business exception.
 
@@ -129,10 +125,10 @@ Most of your own exceptions will be business exceptions. The `IBusinessException
 Usually you have an error code related to a particular business exception. Example:
 
 ````C#
-throw new BusinessException(QaDomainErrorCodes.CanNotVoteYourOwnAnswer);
+throw new BusinessException(QaErrorCodes.CanNotVoteYourOwnAnswer);
 ````
 
-`QaDomainErrorCodes.CanNotVoteYourOwnAnswer` is just a `const string`. Such an error code format is suggested:
+`QaErrorCodes.CanNotVoteYourOwnAnswer` is just a `const string`. Such an error code format is suggested:
 
 ````
 <code-namespace>:<error-code>
@@ -146,20 +142,66 @@ Volo.Qa:010002
 
 `Volo.Qa` is the code-namespace here. code-namespace is then will be used while **localizing** exception messages.
 
+* You can **directly throw** a `BusinessException` or **derive** your own exception types from it when needed.
+* All properties are optional for the `BusinessException` class. But you generally set either `ErrorCode` or  `Message` property.
+
 ### Exception Localization
 
-One problem is how to localize error messages while sending to clients. The simplest solution could be localizing it while throwing the exception. Example:
+One problem with throwing exception is how to localize error messages while sending to clients. ABP offers two models and their variants.
+
+#### User Friendly Exception
+
+If an exception implements the `IUserFriendlyException` interface, then ABP does not change it's `Message` and `Details` properties and directly send to the client.
+
+`UserFriendlyException` class is the built-in implementation of the `IUserFriendlyException` interface. Example usage:
 
 ````C#
-throw new BusinessException(message: _stringLocalizer["ErrorMessageKey"]);
+throw new UserFriendlyException(
+    "Username should be unique!"
+);
 ````
 
-However, this approach has a few problems:
+In this way, **no need to localization** at all. If you want to localize the message, you can inject and use the standard **string localizer** (see the [localization document](Localization.md)). Example:
 
-* It requires to **inject string localizer** everywhere and always use it while throwing business exceptions.
+````C#
+throw new UserFriendlyException(_stringLocalizer["UserNameShouldBeUniqueMessage"]);
+````
+
+Then define it in the **localization resource** for each language. Example:
+
+````json
+{
+  "culture": "en",
+  "texts": {
+    "UserNameShouldBeUniqueMessage": "Username should be unique!"
+  }
+}
+````
+
+String localizer already supports **parameterized messages**. Example:
+
+````C#
+throw new UserFriendlyException(_stringLocalizer["UserNameShouldBeUniqueMessage", "john"]);
+````
+
+Then the localization text can be:
+
+````json
+"UserNameShouldBeUniqueMessage": "Username should be unique! '{0}' is already taken!"
+````
+
+* The `IUserFriendlyException` interface is derived from the `IBusinessException` and the `UserFriendlyException` class is derived from the `BusinessException` class.
+
+#### Using Error Codes
+
+`UserFriendlyException` is fine, but has a few problems in advanced usages:
+
+* It requires to **inject string localizer** everywhere and always use it while throwing exceptions.
 * Some of the cases, it may **not possible** to inject the string localizer (in a static context or in an entity method).
 
-One solution is configuring the localization in the module level and the error code as the localization key.
+Instead of localizing the message while throwing the exception, you can separate the process using **error codes**.
+
+First, define the **code-namespace** to **localization resource** mapping in the module configuration:
 
 ````C#
 services.Configure<ExceptionLocalizationOptions>(options =>
@@ -168,7 +210,7 @@ services.Configure<ExceptionLocalizationOptions>(options =>
 });
 ````
 
-Then any of the exceptions with `Volo.Qa` namespace will be localized using the given localization resource. The localization resource can have an entry with the error code key. Example:
+Then any of the exceptions with `Volo.Qa` namespace will be localized using the given localization resource. The localization resource should have an entry with the error code key. Example:
 
 ````json
 {
@@ -179,9 +221,16 @@ Then any of the exceptions with `Volo.Qa` namespace will be localized using the 
 }
 ````
 
-Defining error messages in the localization texts is optional. If not defined, a default error message is returned by the framework.
+Then a business exception can be thrown with the error code:
 
-#### Parametric Messages
+````C#
+throw new BusinessException(QaDomainErrorCodes.CanNotVoteYourOwnAnswer);
+````
+
+* Throwing any exception implementing the `IHasErrorCode` interface behaves the same. So, the error code localization approach is not unique to the `BusinessException` class.
+* Defining localized string is not required for an error message. If not defined, ABP sends the default error message to the client. It does not use the `Message` property of the exception! if you want that, use the `UserFriendlyException` (or use an exception type that implements the `IUserFriendlyException` interface).
+
+##### Using Message Parameters
 
 If you have a parameterized error message, then you can set it with the exception's `Data` property. Example:
 
@@ -203,22 +252,44 @@ throw new BusinessException("App:010046")
     .WithData("UserName", "john");
 ````
 
-Then the localized text can contain a parameter named `UserName`:
+Then the localized text can contain the`UserName` parameter:
 
 ````json
 {
   "culture": "en",
   "texts": {
-    "App:010046": "Username should be unique. '{UserName}' is already taken by another user!"
+    "App:010046": "Username should be unique. '{UserName}' is already taken!"
   }
 }
 ````
 
-
+* `WithData` can be chained for more than one parameter (like `.WithData(...).WithData(...)`).
 
 ### HTTP Status Code Mapping
 
-TODO
+ABP tries to automatically determine the most suitable HTTP status code for common exception types by following these rules:
+
+* For the `AbpAuthorizationException`:
+  * Returns `401` (unauthorized) if user has not logged in.
+  * Returns `403` (forbidden) if user has logged in.
+* Returns `400` (bad request) for the `AbpValidationException`.
+* Returns `404` (not found) for the `EntityNotFoundException`.
+* Returns `403` (forbidden) for the `IBusinessException` (and `IUserFriendlyException` since it extends the `IBusinessException`).
+* Returns `501` (not implemented) for the `NotImplementedException`.
+* Returns `500` (internal server error) for other exceptions (those are assumed as infrastructure exceptions).
+
+The `IHttpExceptionStatusCodeFinder` is used to automatically determine the HTTP status code. Default implementation is the `DefaultHttpExceptionStatusCodeFinder` class. It can be replaced or extended if needed.
+
+#### Custom Mappings
+
+Automatic HTTP status code determination can be overrided by custom mappings. Example:
+
+````C#
+services.Configure<ExceptionHttpStatusCodeOptions>(options =>
+{
+    options.Map("Volo.Qa:010002", HttpStatusCode.Conflict);
+});
+````
 
 ### Built-In Exceptions
 
