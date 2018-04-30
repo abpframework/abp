@@ -17,22 +17,19 @@ namespace Volo.Abp
 
         public string Details { get; set; }
 
-        public LogLevel LogLevel { get; set; } = LogLevel.Warning;
-
-        public BusinessException()
-        {
-            
-        }
+        public LogLevel LogLevel { get; set; }
 
         public BusinessException(
             string code = null, 
             string message = null, 
             string details = null, 
-            Exception innerException = null)
+            Exception innerException = null,
+            LogLevel logLevel = LogLevel.Warning)
             : base(message, innerException)
         {
             Code = code;
             Details = details;
+            LogLevel = logLevel;
         }
 
         /// <summary>
