@@ -9,7 +9,7 @@
 
 <p>Based on <a href="http://getbootstrap.com/docs/4.1/components/forms/" target="_blank"> Bootstrap form</a>.</p>
 
-<h4># Example</h4>
+<h4># Dynamic Form Example</h4>
 
 <div class="demo-with-code">
     <div class="demo-area">
@@ -24,11 +24,15 @@
         </pre>
     </div>
 </div>
+
+
+<h4># Input Group Example</h4>
+
 <div class="demo-with-code">
     <div class="demo-area">
         <form method="post" action="#">
-            <abp-input asp-for="@Model.Name"/>
-            <abp-input asp-for="@Model.Password" label="Password"/>
+            <abp-input asp-for="@Model.Name" />
+            <abp-input asp-for="@Model.Password" label="Password" />
             <abp-input asp-for="@Model.IsActive" />
             <abp-input asp-for="@Model.PhoneNumber" />
             <abp-input asp-for="@Model.EmailAddress" />

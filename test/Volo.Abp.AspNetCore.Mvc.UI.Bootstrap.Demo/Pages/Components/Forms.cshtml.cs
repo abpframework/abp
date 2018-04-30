@@ -51,11 +51,14 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components
             new SelectListItem { Value = "US", Text = "USA"  },
         };
 
+        public static IEnumerable<SelectListItem> EnumCityList;
+
         public void OnGet()
         {
             Name = "MyName";
             Day = DateTime.Today;
-
+            //var htmlHelper = new HtmlHelper();
+            //EnumCityList = htmlHelper.GetEnumSelectList(typeof(Cities));
         }
     }
 
@@ -75,6 +78,13 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components
         public Cities City { get; set; }
 
         public Phone Phone { get; set; }
+
+        [DataType(DataType.Date)]
+        [DisplayName("Day")]
+        public DateTime Day { get; set; }
+
+        [DisplayName("Is Active")]
+        public bool IsActive { get; set; }
     }
 
     public class Phone
