@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
@@ -30,28 +32,28 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
             return Task.CompletedTask;
         }
 
-        protected TagHelperOutput GetInnerTagHelper(TagHelperAttributeList attributeList, TagHelper tagHelper, string tagName = "div", TagMode tagMode = TagMode.SelfClosing)
+        protected TagHelperOutput GetInnerTagHelper(TagHelperAttributeList attributeList, TagHelperContext context, TagHelper tagHelper, string tagName = "div", TagMode tagMode = TagMode.SelfClosing)
         {
             var innerOutput = new TagHelperOutput(tagName, attributeList, (useCachedResult, encoder) => Task.Run<TagHelperContent>(() => new DefaultTagHelperContent()))
             {
                 TagMode = tagMode
             };
 
-            var innerContext = new TagHelperContext(attributeList, new Dictionary<object, object>(), Guid.NewGuid().ToString());
+            var innerContext = new TagHelperContext(attributeList, context.Items, Guid.NewGuid().ToString());
 
             tagHelper.Process(innerContext, innerOutput);
 
             return innerOutput;
         }
 
-        protected string RenderTagHelper(TagHelperAttributeList attributeList, TagHelper tagHelper, HtmlEncoder htmlEncoder, string tagName = "div", TagMode tagMode = TagMode.SelfClosing)
+        protected string RenderTagHelper(TagHelperAttributeList attributeList, TagHelperContext context, TagHelper tagHelper, HtmlEncoder htmlEncoder, string tagName = "div", TagMode tagMode = TagMode.SelfClosing)
         {
             var innerOutput = new TagHelperOutput(tagName, attributeList, (useCachedResult, encoder) => Task.Run<TagHelperContent>(() => new DefaultTagHelperContent()))
             {
                 TagMode = tagMode
             };
 
-            var innerContext = new TagHelperContext(attributeList, new Dictionary<object, object>(), Guid.NewGuid().ToString());
+            var innerContext = new TagHelperContext(attributeList, context.Items, Guid.NewGuid().ToString());
 
             tagHelper.Process(innerContext, innerOutput);
 
@@ -65,6 +67,21 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
                 output.WriteTo(writer, htmlEncoder);
                 return writer.ToString();
             }
+        }
+        
+        public static T GetAttribute<T>(ModelExplorer property) where T : Attribute
+        {
+            var xd1 = property.Container.ModelType.GetTypeInfo();
+            var xd2 = xd1.GetProperty(property.Metadata.PropertyName);
+
+            if (xd2 == null)
+            {
+                return null;
+            }
+
+            var attribute = xd2 .GetCustomAttribute<T>();
+
+            return attribute;
         }
     }
 }

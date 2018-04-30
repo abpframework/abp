@@ -16,7 +16,8 @@
         <abp-dynamic-form model="@Model.Person">
 
             <abp-input asp-for="@Model.Person.Name" />
-            <abp-input asp-for="@Model.Person.Age" />
+            <abp-input asp-for="@Model.Person.Age" order="9999" />
+            <abp-input asp-for="@Model.Person.Phone.Number" order="1" />
         </abp-dynamic-form>
     </div>
     <div class="code-area">
@@ -28,7 +29,7 @@
 </div>
 
 
-<h4># Input Group Example</h4>
+@*<h4># Input Group Example</h4>
 
 <div class="demo-with-code">
     <div class="demo-area">
@@ -59,7 +60,7 @@
         &lt;/form&gt;
         </pre>
     </div>
-</div>
+</div>*@
 
 @*<div class="demo-with-code">
         <div class="demo-area">

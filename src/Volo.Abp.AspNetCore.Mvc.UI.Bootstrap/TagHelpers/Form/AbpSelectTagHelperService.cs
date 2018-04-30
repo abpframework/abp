@@ -28,7 +28,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             SetDivAttributes(output);
             output.TagMode = TagMode.StartTagAndEndTag;
 
-            var selectTag = GetSelectTag();
+            var selectTag = GetSelectTag(context);
 
             var seelctAsHtml = RenderTagHelperOutput(selectTag, _encoder);
             var labelAsHtml = GetLabelAsHtml(selectTag);
@@ -44,7 +44,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             output.Attributes.Add("class", "form-group");
         }
 
-        protected virtual TagHelperOutput GetSelectTag()
+        protected virtual TagHelperOutput GetSelectTag(TagHelperContext context)
         {
             var selectTagHelper = new SelectTagHelper(_generator)
             {
@@ -54,7 +54,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             };
 
             var attributes = new TagHelperAttributeList { new TagHelperAttribute("class", "form-control") };
-            var inputTagHelperOutput = GetInnerTagHelper(attributes, selectTagHelper, "select", TagMode.StartTagAndEndTag); ;
+            var inputTagHelperOutput = GetInnerTagHelper(attributes, context,selectTagHelper, "select", TagMode.StartTagAndEndTag); ;
 
             inputTagHelperOutput.Attributes.Add("class", "form-control");
 

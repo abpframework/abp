@@ -13,7 +13,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
     {
         private readonly HtmlEncoder _htmlEncoder;
         private readonly AbpInputTagHelper _abpInputTagHelper;
-        private const string SelectItemsPostFix = "selectitems";
 
         public AbpDynamicFormTagHelperService(HtmlEncoder htmlEncoder, AbpInputTagHelper abpInputTagHelper)
         {
@@ -23,44 +22,45 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
+            var list = new List<InputGroupContent>();
+            context.Items.Add("InputGroupContents", list);
+
             output.TagName = "form";
             output.Attributes.Add("method", "post");
             output.Attributes.Add("action", "#");
 
-            var inputsAsHtml = await GetInputsAsHtml(output);
 
-            output.PreContent.SetHtmlContent(inputsAsHtml);
+            await output.GetChildContentAsync();
+            ProcessFields(context, output);
+
+            foreach (var itemConfig in list.OrderBy(o => o.Order))
+            {
+                output.PostContent.SetHtmlContent(output.PostContent.GetContent() + itemConfig.Html);
+            }
         }
 
-        protected virtual async Task<string> GetInputsAsHtml(TagHelperOutput output)
+        protected virtual void ProcessFields(TagHelperContext context, TagHelperOutput output)
         {
-            var inputsAsHtml = "";
-            var models = await GetModels(output);
+            var models = GetModels(context, output);
 
             foreach (var model in models)
             {
-                inputsAsHtml += ProcessInputGroup(model);
+                ProcessInputGroup(context, model);
             }
-
-            return inputsAsHtml;
         }
 
-        protected virtual async Task<List<ModelExpression>> GetModels(TagHelperOutput output)
+        protected virtual List<ModelExpression> GetModels(TagHelperContext context, TagHelperOutput output)
         {
-
-            var models = ExploreModelsRecursively(new List<ModelExpression>(), TagHelper.Model.ModelExplorer);
-
-            return await RemoveOverridenFieldsAndGetModels(output, models);
+            return ExploreModelsRecursively(new List<ModelExpression>(), TagHelper.Model.ModelExplorer);
         }
 
-        protected virtual string ProcessInputGroup(ModelExpression model)
+        protected virtual void ProcessInputGroup(TagHelperContext context, ModelExpression model)
         {
             _abpInputTagHelper.AspFor = model;
             _abpInputTagHelper.Label = "";
             _abpInputTagHelper.ViewContext = TagHelper.ViewContext;
 
-            return RenderTagHelper(new TagHelperAttributeList(), _abpInputTagHelper, _htmlEncoder, "div", TagMode.StartTagAndEndTag)
-                    + Environment.NewLine;
+            RenderTagHelper(new TagHelperAttributeList(), context, _abpInputTagHelper, _htmlEncoder, "div", TagMode.StartTagAndEndTag);
         }
 
         protected virtual List<ModelExpression> ExploreModelsRecursively(List<ModelExpression> list, ModelExplorer model)
@@ -105,12 +105,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                    type == typeof(int) ||
                    type == typeof(long) ||
                    type.IsEnum;
-        }
-
-        protected virtual async Task<List<ModelExpression>> RemoveOverridenFieldsAndGetModels(TagHelperOutput output, List<ModelExpression> models)
-        {
-            var overridenFormElementsProcessed = (await output.GetChildContentAsync()).GetContent();
-            return models.Where(m => !overridenFormElementsProcessed.Contains("id=\"" + m.Name.Replace('.','_') + "\"")).ToList();
         }
     }
 }

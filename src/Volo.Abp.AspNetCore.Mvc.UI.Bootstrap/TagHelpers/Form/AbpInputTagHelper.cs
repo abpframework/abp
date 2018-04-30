@@ -11,6 +11,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         public string Label { get; set; }
 
+        [HtmlAttributeName("order")]
+        public int? FieldOrder { get; set; }
+
         [HtmlAttributeNotBound]
         [ViewContext]
         public ViewContext ViewContext { get; set; }

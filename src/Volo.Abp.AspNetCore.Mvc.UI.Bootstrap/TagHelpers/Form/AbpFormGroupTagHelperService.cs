@@ -6,15 +6,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 {
     public class AbpFormGroupTagHelperService : AbpTagHelperService<AbpFormGroupTagHelper>
     {
-        private readonly HtmlEncoder _htmlEncoder;
-        private readonly AbpInputTagHelper _abpInputTagHelper;
-
-        public AbpFormGroupTagHelperService(HtmlEncoder htmlEncoder, AbpInputTagHelper abpInputTagHelper)
-        {
-            _htmlEncoder = htmlEncoder;
-            _abpInputTagHelper = abpInputTagHelper;
-        }
-
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             output.TagName = "div";
@@ -24,6 +15,5 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 output.Attributes.AddClass("form-check");
             }
         }
-
     }
 }

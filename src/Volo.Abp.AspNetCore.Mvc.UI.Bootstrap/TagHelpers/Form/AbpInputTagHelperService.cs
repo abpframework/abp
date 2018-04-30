@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text.Encodings.Web;
 using Localization.Resources.AbpUi;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
@@ -24,32 +27,35 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            output.TagName = "div";
-            output.TagMode = TagMode.StartTagAndEndTag;
-            
-            var inputTag = GetInputTag();
+            var inputTag = GetInputTag(context);
             var inputHtml = RenderTagHelperOutput(inputTag, _encoder);
             var isCheckbox = IsInputCheckbox(inputTag.Attributes);
-
             var label = GetLabelAsHtml(inputTag, isCheckbox);
 
             var content = isCheckbox ?
                 inputHtml + Environment.NewLine + label :
                 label + Environment.NewLine + inputHtml;
 
-            output.Content.SetHtmlContent(content);
+            content ="<div class=\""+(isCheckbox ? "form-check" : "form-group") +"\">" + Environment.NewLine + content + Environment.NewLine + "</div>";
 
-            SetDivAttributes(output, isCheckbox);
+
+            //var order = GetAttribute<DisplayOrder>(TagHelper.AspFor.ModelExplorer);
+
+            var list = context.Items["InputGroupContents"] as List<InputGroupContent>;
+
+            if (list != null && !list.Any(igc =>igc.Html.Contains("id=\"" + TagHelper.AspFor.Name.Replace('.', '_') + "\"")))
+            {
+                list.Add(new InputGroupContent
+                {
+                    Html = content,
+                    Order = TagHelper.FieldOrder ?? 999
+                });
+            }
+
+            output.SuppressOutput();
         }
-        
-        protected virtual void SetDivAttributes(TagHelperOutput output, bool isCheckbox)
-        {
-            output.Attributes.RemoveAll("asp-for");
 
-            output.Attributes.Add("class", isCheckbox ? " form-check" : "form-group");
-        }
-
-        protected virtual TagHelperOutput GetInputTag()
+        protected virtual TagHelperOutput GetInputTag(TagHelperContext context)
         {
             var inputTagHelper = new InputTagHelper(_generator)
             {
@@ -57,8 +63,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 ViewContext = TagHelper.ViewContext
             };
 
-            var inputTagHelperOutput = GetInnerTagHelper(new TagHelperAttributeList(), inputTagHelper, "input"); ;
-            
+            var inputTagHelperOutput = GetInnerTagHelper(new TagHelperAttributeList(), context, inputTagHelper, "input");
+
             inputTagHelperOutput.Attributes.Add("class",
                 IsInputCheckbox(inputTagHelperOutput.Attributes) ? "form-check-input" : "form-control");
 
