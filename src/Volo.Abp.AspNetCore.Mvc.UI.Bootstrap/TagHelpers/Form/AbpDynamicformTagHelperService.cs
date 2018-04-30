@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Encodings.Web;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
@@ -20,28 +21,36 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             _abpInputTagHelper = abpInputTagHelper;
         }
 
-        public override void Process(TagHelperContext context, TagHelperOutput output)
+        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
             output.TagName = "form";
             output.Attributes.Add("method", "post");
             output.Attributes.Add("action", "#");
 
-            var innerhtml = GetInnerHtmlContent();
+            var inputsAsHtml = await GetInputsAsHtml(output);
 
-            output.PreContent.SetHtmlContent(innerhtml);
+            output.PreContent.SetHtmlContent(inputsAsHtml);
         }
 
-        protected virtual string GetInnerHtmlContent()
+        protected virtual async Task<string> GetInputsAsHtml(TagHelperOutput output)
         {
-            var innerHtmlcontent = "";
-            var models = ExploreModelsRecursively(new List<ModelExpression>(), TagHelper.Model.ModelExplorer);
+            var inputsAsHtml = "";
+            var models = await GetModels(output);
 
             foreach (var model in models)
             {
-                innerHtmlcontent += ProcessInputGroup(model);
+                inputsAsHtml += ProcessInputGroup(model);
             }
 
-            return innerHtmlcontent;
+            return inputsAsHtml;
+        }
+
+        protected virtual async Task<List<ModelExpression>> GetModels(TagHelperOutput output)
+        {
+
+            var models = ExploreModelsRecursively(new List<ModelExpression>(), TagHelper.Model.ModelExplorer);
+
+            return await RemoveOverridenFieldsAndGetModels(output, models);
         }
 
         protected virtual string ProcessInputGroup(ModelExpression model)
@@ -67,7 +76,16 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         protected virtual ModelExpression ModelExplorerToModelExpressionConverter(ModelExplorer explorer)
         {
-            return new ModelExpression(explorer.Metadata.PropertyName, explorer);
+            var temp = explorer;
+            var propertyName = explorer.Metadata.PropertyName;
+            
+            while (temp?.Container?.Metadata?.PropertyName != null)
+            {
+                temp = temp.Container;
+                propertyName = temp.Metadata.PropertyName + "." + propertyName;
+            }
+            
+            return new ModelExpression(propertyName, explorer);
         }
 
         protected virtual bool IsCsharpClassOrPrimitive(Type type)
@@ -76,17 +94,23 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                    type.IsValueType ||
                    type == typeof(DateTime) ||
                    type == typeof(ValueType) ||
-                   type == typeof(String) ||
-                   type == typeof(Decimal) ||
-                   type == typeof(Double) ||
+                   type == typeof(string) ||
+                   type == typeof(decimal) ||
+                   type == typeof(double) ||
                    type == typeof(Guid) ||
                    type == typeof(TimeSpan) ||
                    type == typeof(DateTimeOffset) ||
-                   type == typeof(Single) ||
-                   type == typeof(Int16) ||
-                   type == typeof(Int32) ||
-                   type == typeof(Int64) ||
+                   type == typeof(float) ||
+                   type == typeof(short) ||
+                   type == typeof(int) ||
+                   type == typeof(long) ||
                    type.IsEnum;
+        }
+
+        protected virtual async Task<List<ModelExpression>> RemoveOverridenFieldsAndGetModels(TagHelperOutput output, List<ModelExpression> models)
+        {
+            var overridenFormElementsProcessed = (await output.GetChildContentAsync()).GetContent();
+            return models.Where(m => !overridenFormElementsProcessed.Contains("id=\"" + m.Name.Replace('.','_') + "\"")).ToList();
         }
     }
 }
