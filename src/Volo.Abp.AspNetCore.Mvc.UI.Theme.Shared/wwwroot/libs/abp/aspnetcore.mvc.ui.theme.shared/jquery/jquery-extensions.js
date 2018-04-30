@@ -80,6 +80,14 @@
         return obj;
     };
 
-
+    $.fn.focusEndOfText = function () {
+        return this.each(function () {
+            var $this = $(this);
+            setTimeout(function () {
+                $this.focus();
+                $this[0].selectionStart = $this[0].selectionEnd = 10000;
+            }, 0);
+        });
+    };
 
 })(jQuery);
