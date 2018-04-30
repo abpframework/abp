@@ -70,7 +70,7 @@ Error **details** in an optional field of the JSON error message. Thrown `Except
     "code": "App:010046",
     "message": "Your request is not valid, please correct and try again!",
     "validationErrors": [{
-      "message": "Username should be unique. 'john' is taken by another user!",
+      "message": "Username should be unique. 'john' is already taken by another user!",
       "members": ["userName"]
     },
     {
@@ -126,20 +126,106 @@ Most of your own exceptions will be business exceptions. The `IBusinessException
 
 `BusinessException` implements the `IBusinessException` interface in addition to the `IHasErrorCode`, `IHasErrorDetails` and `IHasLogLevel` interfaces. Default log level is `Warning`.
 
-### Built-In Exceptions
+Usually you have an error code related to a particular business exception. Example:
 
-Some exception types are automatically thrown by the framework.
+````C#
+throw new BusinessException(QaDomainErrorCodes.CanNotVoteYourOwnAnswer);
+````
 
-* `AbpAuthorizationException` is thrown if the current user has no permission to perform the requested operation. See authorization document (TODO: link) for more.
-* `AbpValidationException` is thrown if the input of the current request is not valid. See validation document (TODO: link) for more.
-* `EntityNotFoundException` is thrown if the requested entity is not available. This is mostly thrown by [repositories](Repositories.md).
+`QaDomainErrorCodes.CanNotVoteYourOwnAnswer` is just a `const string`. Such an error code format is suggested:
 
-You can also throw these type of exceptions in your code (while it's rarely needed).
+````
+<code-namespace>:<error-code>
+````
+
+**code-namespace** is a **unique value** specific to your module/application. Example:
+
+````
+Volo.Qa:010002
+````
+
+`Volo.Qa` is the code-namespace here. code-namespace is then will be used while **localizing** exception messages.
 
 ### Exception Localization
 
-TODO
+One problem is how to localize error messages while sending to clients. The simplest solution could be localizing it while throwing the exception. Example:
+
+````C#
+throw new BusinessException(message: _stringLocalizer["ErrorMessageKey"]);
+````
+
+However, this approach has a few problems:
+
+* It requires to **inject string localizer** everywhere and always use it while throwing business exceptions.
+* Some of the cases, it may **not possible** to inject the string localizer (in a static context or in an entity method).
+
+One solution is configuring the localization in the module level and the error code as the localization key.
+
+````C#
+services.Configure<ExceptionLocalizationOptions>(options =>
+{
+    options.MapCodeNamespace("Volo.Qa", typeof(QaResource));
+});
+````
+
+Then any of the exceptions with `Volo.Qa` namespace will be localized using the given localization resource. The localization resource can have an entry with the error code key. Example:
+
+````json
+{
+  "culture": "en",
+  "texts": {
+    "Volo.Qa:010002": "You can not vote your own answer!"
+  }
+}
+````
+
+Defining error messages in the localization texts is optional. If not defined, a default error message is returned by the framework.
+
+#### Parametric Messages
+
+If you have a parameterized error message, then you can set it with the exception's `Data` property. Example:
+
+````C#
+throw new BusinessException("App:010046")
+{
+    Data =
+    {
+        {"UserName", "john"}
+    }
+};
+
+````
+
+Fortunately there is a shortcut for it:
+
+````C#
+throw new BusinessException("App:010046")
+    .WithData("UserName", "john");
+````
+
+Then the localized text can contain a parameter named `UserName`:
+
+````json
+{
+  "culture": "en",
+  "texts": {
+    "App:010046": "Username should be unique. '{UserName}' is already taken by another user!"
+  }
+}
+````
+
+
 
 ### HTTP Status Code Mapping
 
 TODO
+
+### Built-In Exceptions
+
+Some exception types are automatically thrown by the framework.
+
+- `AbpAuthorizationException` is thrown if the current user has no permission to perform the requested operation. See authorization document (TODO: link) for more.
+- `AbpValidationException` is thrown if the input of the current request is not valid. See validation document (TODO: link) for more.
+- `EntityNotFoundException` is thrown if the requested entity is not available. This is mostly thrown by [repositories](Repositories.md).
+
+You can also throw these type of exceptions in your code (while it's rarely needed).
