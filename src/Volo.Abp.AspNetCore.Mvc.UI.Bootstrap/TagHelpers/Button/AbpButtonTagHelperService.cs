@@ -20,13 +20,20 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             output.TagName = "button";
-
-            AddType(output);
-            AddButtonClasses(output);
-            AddButtonBusyText(context, output);
+            NormalizeTagStyle(context, output);
+            AddType(context, output);
+            AddClasses(context, output);
+            AddIcon(context, output);
+            AddText(context, output);
+            AddBusyText(context, output);
         }
 
-        private static void AddType(TagHelperOutput output)
+        protected virtual void NormalizeTagStyle(TagHelperContext context, TagHelperOutput output)
+        {
+            output.TagMode = TagMode.StartTagAndEndTag;
+        }
+
+        protected virtual void AddType(TagHelperContext context, TagHelperOutput output)
         {
             if (output.Attributes.ContainsName("type"))
             {
@@ -36,7 +43,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button
             output.Attributes.Add("type", "button");
         }
 
-        private void AddButtonClasses(TagHelperOutput output)
+        protected virtual void AddClasses(TagHelperContext context, TagHelperOutput output)
         {
             output.Attributes.AddClass("btn");
 
@@ -46,7 +53,27 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button
             }
         }
 
-        protected virtual void AddButtonBusyText(TagHelperContext context, TagHelperOutput output)
+        protected virtual void AddIcon(TagHelperContext context, TagHelperOutput output)
+        {
+            if (TagHelper.Icon.IsNullOrWhiteSpace())
+            {
+                return;
+            }
+
+            output.Content.AppendHtml($"<i class=\"fa fa-{TagHelper.Icon}\"></i> ");
+        }
+
+        protected virtual void AddText(TagHelperContext context, TagHelperOutput output)
+        {
+            if (TagHelper.Text.IsNullOrWhiteSpace())
+            {
+                return;
+            }
+
+            output.Content.AppendHtml($"<span>{TagHelper.Text}</span>");
+        }
+
+        protected virtual void AddBusyText(TagHelperContext context, TagHelperOutput output)
         {
             var busyText = TagHelper.BusyText ?? L["ProcessingWithThreeDot"];
             if (busyText.IsNullOrWhiteSpace())
