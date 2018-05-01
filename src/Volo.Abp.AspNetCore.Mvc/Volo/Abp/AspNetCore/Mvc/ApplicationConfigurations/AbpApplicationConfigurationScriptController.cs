@@ -35,9 +35,11 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
             var script = new StringBuilder();
 
             script.AppendLine("(function(){");
-
+            script.AppendLine();
             script.AppendLine($"$.extend(true, abp, {_jsonSerializer.Serialize(config, indented: Debugger.IsAttached)})");
-
+            script.AppendLine();
+            script.AppendLine("abp.event.trigger('abp.configurationInitialized');");
+            script.AppendLine();
             script.Append("})();");
 
             return script.ToString();
