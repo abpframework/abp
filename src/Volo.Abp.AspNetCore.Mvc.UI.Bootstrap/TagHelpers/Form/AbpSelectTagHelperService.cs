@@ -32,11 +32,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             var content = GetContent(labelAsHtml,seelctAsHtml);
 
             var order = GetAttribute<DisplayOrder>(TagHelper.AspFor.ModelExplorer);
-            var list = context.Items["InputGroupContents"] as List<InputGroupContent>;
+            var list = context.Items["InputGroupContents"] as List<FormGroupContent>;
 
             if (list != null && !list.Any(igc => igc.Html.Contains("id=\"" + TagHelper.AspFor.Name.Replace('.', '_') + "\"")))
             {
-                list.Add(new InputGroupContent
+                list.Add(new FormGroupContent
                 {
                     Html = content,
                     Order = order?.Number ?? 0

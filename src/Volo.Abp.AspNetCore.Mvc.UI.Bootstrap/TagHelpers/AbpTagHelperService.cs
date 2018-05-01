@@ -12,6 +12,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
     public abstract class AbpTagHelperService<TTagHelper> : IAbpTagHelperService<TTagHelper>
         where TTagHelper : TagHelper
     {
+        protected const string FormGroupContents = "FormGroupContents";
+
         public TTagHelper TagHelper { get; set; }
         
         public virtual int Order { get; }

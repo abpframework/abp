@@ -25,23 +25,37 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            var list = new List<InputGroupContent>();
-            context.Items.Add("InputGroupContents", list);
-
-            output.TagName = "form";
-            output.Attributes.Add("method", "post");
-            output.Attributes.Add("action", "#");
-
-
+            var list = InitilizeFormGroupContentsContext(context);
+            
             await output.GetChildContentAsync();
+
             ProcessFields(context, output);
 
+            SetContent(output,list);
+        }
+
+        protected virtual void SetContent(TagHelperOutput output, List<FormGroupContent> list)
+        {
             foreach (var itemConfig in list.OrderBy(o => o.Order))
             {
                 output.PostContent.SetHtmlContent(output.PostContent.GetContent() + itemConfig.Html);
             }
         }
 
+        protected virtual void SetFormAttributes(TagHelperOutput output)
+        {
+            output.TagName = "form";
+            output.Attributes.Add("method", "post");
+            output.Attributes.Add("action", "#");
+        }
+
+        protected virtual List<FormGroupContent> InitilizeFormGroupContentsContext(TagHelperContext context)
+        {
+            var list = new List<FormGroupContent>();
+            context.Items.Add(FormGroupContents, list);
+            return list;
+        }
+        
         protected virtual void ProcessFields(TagHelperContext context, TagHelperOutput output)
         {
             var models = GetModels(context, output);
@@ -87,6 +101,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             if (IsCsharpClassOrPrimitive(model.ModelType))
             {
                 list.Add(ModelExplorerToModelExpressionConverter(model));
+
                 return list;
             }
 

@@ -1,6 +1,6 @@
 ﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 {
-    public class InputGroupContent
+    public class FormGroupContent
     {
         public string Html { get; set; }
 
