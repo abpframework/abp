@@ -24,6 +24,12 @@
         //Datatables
         "@node_modules/datatables.net/js/jquery.dataTables.js": "@libs/datatables.net/js/",
         "@node_modules/datatables.net-bs4/css/dataTables.bootstrap4.css": "@libs/datatables.net-bs4/css/",
-        "@node_modules/datatables.net-bs4/js/dataTables.bootstrap4.js": "@libs/datatables.net-bs4/js/"
+        "@node_modules/datatables.net-bs4/js/dataTables.bootstrap4.js": "@libs/datatables.net-bs4/js/",
+        
+        //Sweetalert
+        "@node_modules/sweetalert/dist/*.*": "@libs/sweetalert/",
+        
+        //Toastr
+        "@node_modules/toastr/build/*.*": "@libs/toastr/"
     }
 }

@@ -13,6 +13,8 @@
     "font-awesome": "^4.7.0",
     "jquery-form": "^4.2.2",
     "jquery-validation": "^1.17.0",
-    "jquery-validation-unobtrusive": "^3.2.9"
+    "jquery-validation-unobtrusive": "^3.2.9",
+    "sweetalert": "^2.1.0",
+    "toastr": "^2.1.4"
   }
 }
