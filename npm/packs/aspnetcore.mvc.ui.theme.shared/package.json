@@ -1,12 +1,12 @@
 {
-  "version": "0.2.2",
+  "version": "0.2.3",
   "name": "@abp/aspnetcore.mvc.ui.theme.shared",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/aspnetcore.mvc.ui": "^0.2.2",
-    "@abp/jquery": "^0.2.2",
+    "@abp/aspnetcore.mvc.ui": "^0.2.3",
+    "@abp/jquery": "^0.2.3",
     "bootstrap": "^4.1.0",
     "datatables.net": "^1.10.16",
     "datatables.net-bs4": "^1.10.16",

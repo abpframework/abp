@@ -25,6 +25,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared
                     "/libs/font-awesome/css/font-awesome.css",
                     "/libs/bootstrap/css/bootstrap.css",
                     "/libs/datatables.net-bs4/css/dataTables.bootstrap4.css",
+                    "/libs/toastr/toastr.min.css",
 
                     "/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables.css"
                 });
@@ -38,6 +39,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared
                     "/libs/jquery-form/jquery.form.min.js",
                     "/libs/datatables.net/js/jquery.dataTables.js",
                     "/libs/datatables.net-bs4/js/dataTables.bootstrap4.js",
+                    "/libs/sweetalert/sweetalert.min.js",
+                    "/libs/toastr/toastr.min.js",
 
                     "/libs/abp/core/abp.js",
                     "/libs/abp/jquery/abp.dom.js",
