@@ -11,11 +11,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components
 {
     public class FormsModel : PageModel
     {
-        public PersonViewModel Ahmet { get; set; } = new PersonViewModel();
+        public PersonViewModel John { get; set; } = new PersonViewModel();
 
         public void OnGet()
         {
-            Ahmet = new PersonViewModel
+            John = new PersonViewModel
             {
                 Name = "ahmet",
                 Age = 65,
