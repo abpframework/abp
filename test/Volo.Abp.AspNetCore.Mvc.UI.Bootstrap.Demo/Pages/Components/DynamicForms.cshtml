@@ -1,28 +1,24 @@
 ﻿@page
 @using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components
-@model FormsModel
+@model DynamicFormsModel
 
 @{
      ViewData["Title"] = "Forms";
 }
 
-<h2>Forms</h2>
+<h2>Dynamic Forms</h2>
 
-<p>Based on <a href="http://getbootstrap.com/docs/4.1/components/forms/" target="_blank"> Bootstrap form</a>.</p>
-
-<h4># Dynamic Form Example</h4>
+<h4># Example</h4>
 
 <div class="demo-with-code">
     <div class="demo-area">
-        <abp-dynamic-form asp-model="@Model.John">
-
-        </abp-dynamic-form>
+        <abp-dynamic-form asp-model="@Model.PersonInput" />
     </div>
     <div class="code-area">
-        <pre>       
-        &lt;abp-dynamic-form asp-model=&quot;Model.John&quot; &gt;
-        &lt;/abp-dynamic-form&gt;
-        </pre>
+        <pre>
+&lt;abp-dynamic-form asp-model=&quot;Model.PersonInput&quot; &gt;
+&lt;/abp-dynamic-form&gt;
+</pre>
     </div>
 </div>
 

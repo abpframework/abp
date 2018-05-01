@@ -25,6 +25,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
+            output.TagMode = TagMode.StartTagAndEndTag;
+
             var list = InitilizeFormGroupContentsContext(context);
             
             await output.GetChildContentAsync();
