@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
 {
@@ -36,7 +37,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
             return Task.CompletedTask;
         }
 
-        protected virtual TagHelperOutput GetInnerTagHelper(TagHelperAttributeList attributeList, TagHelperContext context, TagHelper tagHelper, string tagName = "div", TagMode tagMode = TagMode.SelfClosing)
+        protected virtual TagHelperOutput GetInnerTagHelper(TagHelperAttributeList attributeList, TagHelperContext context, TagHelper tagHelper, string tagName = "div", TagMode tagMode = TagMode.SelfClosing, bool runAsync = false)
         {
             var innerOutput = new TagHelperOutput(tagName, attributeList, (useCachedResult, encoder) => Task.Run<TagHelperContent>(() => new DefaultTagHelperContent()))
             {
@@ -45,14 +46,21 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
 
             var innerContext = new TagHelperContext(attributeList, context.Items, Guid.NewGuid().ToString());
 
-            tagHelper.Process(innerContext, innerOutput);
+            if (runAsync)
+            {
+                AsyncHelper.RunSync(() => tagHelper.ProcessAsync(innerContext, innerOutput));
+            }
+            else
+            {
+                tagHelper.Process(innerContext, innerOutput);
+            }
 
             return innerOutput;
         }
 
-        protected virtual string RenderTagHelper(TagHelperAttributeList attributeList, TagHelperContext context, TagHelper tagHelper, HtmlEncoder htmlEncoder, string tagName = "div", TagMode tagMode = TagMode.SelfClosing)
+        protected virtual string RenderTagHelper(TagHelperAttributeList attributeList, TagHelperContext context, TagHelper tagHelper, HtmlEncoder htmlEncoder, string tagName = "div", TagMode tagMode = TagMode.SelfClosing, bool runAsync = false)
         {
-            var innerOutput = GetInnerTagHelper(attributeList, context, tagHelper, tagName, tagMode);
+            var innerOutput = GetInnerTagHelper(attributeList, context, tagHelper, tagName, tagMode, runAsync);
 
             return RenderTagHelperOutput(innerOutput, htmlEncoder);
         }

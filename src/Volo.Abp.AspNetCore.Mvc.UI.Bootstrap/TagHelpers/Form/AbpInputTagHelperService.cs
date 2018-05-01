@@ -54,9 +54,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 ViewContext = TagHelper.ViewContext
             };
 
-            var attributeList = new TagHelperAttributeList { { "class", "form-control" } };
+            var attributeList = new TagHelperAttributeList { { "class", "text-danger" } };
 
-            return RenderTagHelper(attributeList, context, validationMessageTagHelper, _encoder, "span", TagMode.StartTagAndEndTag);
+            return RenderTagHelper(attributeList, context, validationMessageTagHelper, _encoder, "span", TagMode.StartTagAndEndTag, true);
         }
 
         protected virtual string GetContent(string label, string inputHtml, string validation, bool isCheckbox)
@@ -65,7 +65,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 inputHtml + Environment.NewLine + label :
                 label + Environment.NewLine + inputHtml;
 
-            return "<div class=\"" + (isCheckbox ? "form-check" : "form-group") + "\">" + 
+            return "<div class=\"" + (isCheckbox ? "form-check" : "form-group") + "\">" +
                    Environment.NewLine + innerContent + Environment.NewLine +
                    Environment.NewLine + validation + Environment.NewLine +
                    "</div>";

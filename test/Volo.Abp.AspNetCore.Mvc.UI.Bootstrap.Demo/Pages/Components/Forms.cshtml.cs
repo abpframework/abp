@@ -40,6 +40,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components
         [Required]
         [DisplayOrder(61)]
         [DisplayName("Age")]
+        [Range(1, 100)]
         public int Age { get; set; }
 
         [Required]
