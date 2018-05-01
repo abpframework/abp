@@ -65,8 +65,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
             return inputTagHelperOutput;
         }
-
-
+        
         protected virtual string GetLabelAsHtml(TagHelperOutput selectTag)
         {
             if (string.IsNullOrEmpty(TagHelper.Label) && string.IsNullOrEmpty(TagHelper.AspFor.Metadata.DisplayName))
