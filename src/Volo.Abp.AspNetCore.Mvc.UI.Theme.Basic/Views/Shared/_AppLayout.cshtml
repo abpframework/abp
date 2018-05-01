@@ -1,6 +1,9 @@
-﻿@using Volo.Abp.UI.Navigation
+﻿@using Volo.Abp.AspNetCore.Mvc.AntiForgery
+@using Volo.Abp.UI.Navigation
+@inject IAbpAntiForgeryManager AbpAntiForgeryManager
 @{
     Layout = null;
+    AbpAntiForgeryManager.SetCookie();
 }
 
 <!DOCTYPE html>

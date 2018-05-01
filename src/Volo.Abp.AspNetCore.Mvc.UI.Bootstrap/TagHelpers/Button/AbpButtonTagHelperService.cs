@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Razor.TagHelpers;
+﻿using System;
+using Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button
@@ -14,6 +15,12 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button
             if (TagHelper.ButtonType != AbpButtonType.Default)
             {
                 output.Attributes.AddClass("btn-" + TagHelper.ButtonType.ToString().ToLowerInvariant());
+            }
+
+            if (string.Equals(output.Attributes["type"]?.Value.ToString(), "submit", StringComparison.OrdinalIgnoreCase) &&
+                !output.Attributes.ContainsName("data-busy-text"))
+            {
+                output.Attributes.SetAttribute("data-busy-text", "Processing...");
             }
         }
     }
