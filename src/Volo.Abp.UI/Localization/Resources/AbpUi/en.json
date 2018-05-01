@@ -1,6 +1,18 @@
 {
   "culture": "en",
   "texts": {
+    "InternalServerErrorMessage": "An internal error occurred during your request!",
+    "ValidationErrorMessage": "Your request is not valid!",
+    "ValidationNarrativeErrorMessageTitle": "The following errors were detected during validation.",
+    "DefaultErrorMessage": "An error has occurred!",
+    "DefaultErrorMessage401": "You are not authenticated! You should sign in to perform this operation.",
+    "DefaultErrorMessage403": "You are not allowed to perform this operation!",
+    "DefaultErrorMessage404": "The resource requested could not found on the server!",
+    "EntityNotFoundErrorMessage": "There is no entity {0} with id = {1}!",
+    "AreYouSure": "Are you sure?",
+    "Cancel": "Cancel",
+    "Yes": "Yes",
+    "No": "No",
     "Close": "Close",
     "Save": "Save",
     "SavingWithThreeDot": "Saving...",

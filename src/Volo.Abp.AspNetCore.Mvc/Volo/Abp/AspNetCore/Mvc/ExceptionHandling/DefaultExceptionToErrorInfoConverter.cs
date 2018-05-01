@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Localization.Resources.AbpUi;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Authorization;
@@ -19,15 +20,18 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
     {
         public bool SendAllExceptionsToClients { get; set; } = false;
 
-        private readonly ExceptionLocalizationOptions _localizationOptions;
-        private readonly IStringLocalizerFactory _stringLocalizerFactory;
+        protected ExceptionLocalizationOptions LocalizationOptions { get; }
+        protected IStringLocalizerFactory StringLocalizerFactory { get; }
+        protected IStringLocalizer<AbpUiResource> L { get; }
 
         public DefaultExceptionToErrorInfoConverter(
             IOptions<ExceptionLocalizationOptions> localizationOptions,
-            IStringLocalizerFactory stringLocalizerFactory)
+            IStringLocalizerFactory stringLocalizerFactory,
+            IStringLocalizer<AbpUiResource> abpUiStringLocalizer)
         {
-            _stringLocalizerFactory = stringLocalizerFactory;
-            _localizationOptions = localizationOptions.Value;
+            StringLocalizerFactory = stringLocalizerFactory;
+            L = abpUiStringLocalizer;
+            LocalizationOptions = localizationOptions.Value;
         }
 
         public RemoteServiceErrorInfo Convert(Exception exception)
@@ -74,7 +78,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
             {
                 if (errorInfo.Message.IsNullOrEmpty())
                 {
-                    errorInfo.Message = L("ValidationError");
+                    errorInfo.Message = L["ValidationErrorMessage"];
                 }
 
                 if (errorInfo.Details.IsNullOrEmpty())
@@ -89,7 +93,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
 
             if (errorInfo.Message.IsNullOrEmpty())
             {
-                errorInfo.Message = L("InternalServerError");
+                errorInfo.Message = L["InternalServerErrorMessage"];
             }
 
             return errorInfo;
@@ -110,13 +114,13 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
 
             var codeNamespace = exceptionWithErrorCode.Code.Split(':')[0];
 
-            var localizationResourceType = _localizationOptions.ErrorCodeNamespaceMappings.GetOrDefault(codeNamespace);
+            var localizationResourceType = LocalizationOptions.ErrorCodeNamespaceMappings.GetOrDefault(codeNamespace);
             if (localizationResourceType == null)
             {
                 return;
             }
 
-            var stringLocalizer = _stringLocalizerFactory.Create(localizationResourceType);
+            var stringLocalizer = StringLocalizerFactory.Create(localizationResourceType);
             var localizedString = stringLocalizer[exceptionWithErrorCode.Code];
             if (localizedString.ResourceNotFound)
             {
@@ -142,7 +146,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
             {
                 return new RemoteServiceErrorInfo(
                     string.Format(
-                        L("EntityNotFound"),
+                        L["EntityNotFoundErrorMessage"],
                         exception.EntityType.Name,
                         exception.Id
                     )
@@ -264,7 +268,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
         protected virtual string GetValidationErrorNarrative(IHasValidationErrors validationException)
         {
             var detailBuilder = new StringBuilder();
-            detailBuilder.AppendLine(L("ValidationNarrativeTitle"));
+            detailBuilder.AppendLine(L["ValidationNarrativeErrorMessageTitle"]);
 
             foreach (var validationResult in validationException.ValidationErrors)
             {
@@ -273,12 +277,6 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
             }
 
             return detailBuilder.ToString();
-        }
-
-        protected virtual string L(string name)
-        {
-            //TODO: Localization?
-            return name;
         }
     }
 }

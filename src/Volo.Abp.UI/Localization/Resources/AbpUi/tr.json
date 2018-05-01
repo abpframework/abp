@@ -1,6 +1,18 @@
 ﻿{
   "culture": "tr",
   "texts": {
+    "InternalServerErrorMessage": "Sayfa işlenirken sunucu tarafında beklenmedik bir hata oluştu!",
+    "ValidationErrorMessage": "İşleminiz geçerli değil!",
+    "ValidationNarrativeErrorMessageTitle": "Aşağıdaki hatalar doğrulama sırasında tespit edilmiştir.",
+    "DefaultErrorMessage": "Bir hata oluştu!",
+    "DefaultErrorMessage401": "Giriş yapılmamış! Bu işlemi gerçekleştirmek için uygulamaya giriş yapmalısınız.",
+    "DefaultErrorMessage403": "Bu işlemi gerçekleştirmek için gereken izne sahip değilsiniz!",
+    "DefaultErrorMessage404": "İstenilen kaynak sunucuda bulunamadı!",
+    "EntityNotFoundErrorMessage": "Id değeri {1} olan {0} türünden bir nesne bulunamadı!",
+    "AreYouSure": "Emin misiniz?",
+    "Cancel": "Vazgeç",
+    "Yes": "Evet",
+    "No": "Hayır",
     "Close": "Kapat",
     "Save": "Kaydet",
     "SavingWithThreeDot": "Kaydediliyor...",
