@@ -4,6 +4,8 @@
     {
         public AbpButtonType ButtonType { get; set; } = AbpButtonType.Default;
 
+        public string BusyText { get; set; }
+
         public AbpButtonTagHelper(AbpButtonTagHelperService service) 
             : base(service)
         {

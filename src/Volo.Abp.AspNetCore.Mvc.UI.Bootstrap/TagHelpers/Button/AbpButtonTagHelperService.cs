@@ -20,28 +20,41 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             output.TagName = "button";
+
+            AddType(output);
+            AddButtonClasses(output);
+            AddButtonBusyText(context, output);
+        }
+
+        private static void AddType(TagHelperOutput output)
+        {
+            if (output.Attributes.ContainsName("type"))
+            {
+                return;
+            }
+
             output.Attributes.Add("type", "button");
+        }
+
+        private void AddButtonClasses(TagHelperOutput output)
+        {
             output.Attributes.AddClass("btn");
 
             if (TagHelper.ButtonType != AbpButtonType.Default)
             {
                 output.Attributes.AddClass("btn-" + TagHelper.ButtonType.ToString().ToLowerInvariant());
             }
-
-            AddButtonBusyText(context, output);
         }
 
         protected virtual void AddButtonBusyText(TagHelperContext context, TagHelperOutput output)
         {
-            if (output.Attributes.ContainsName(DataBusyTextAttributeName))
+            var busyText = TagHelper.BusyText ?? L["ProcessingWithThreeDot"];
+            if (busyText.IsNullOrWhiteSpace())
             {
                 return;
             }
 
-            if (string.Equals(output.Attributes["type"]?.Value.ToString(), "submit", StringComparison.OrdinalIgnoreCase))
-            {
-                output.Attributes.SetAttribute(DataBusyTextAttributeName, L["ProcessingWithThreeDot"]);
-            }
+            output.Attributes.SetAttribute(DataBusyTextAttributeName, busyText);
         }
     }
 }
