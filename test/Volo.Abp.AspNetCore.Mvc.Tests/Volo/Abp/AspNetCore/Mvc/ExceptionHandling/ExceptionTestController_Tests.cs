@@ -12,7 +12,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
         [Fact]
         public async Task Should_Return_RemoteServiceErrorResponse_For_UserFriendlyException_For_Void_Return_Value()
         {
-            var result = await GetResponseAsObjectAsync<RemoteServiceErrorResponse>("/api/exception-test/UserFriendlyException1", HttpStatusCode.InternalServerError);
+            var result = await GetResponseAsObjectAsync<RemoteServiceErrorResponse>("/api/exception-test/UserFriendlyException1", HttpStatusCode.Forbidden);
             result.Error.ShouldNotBeNull();
             result.Error.Message.ShouldBe("This is a sample exception!");
         }

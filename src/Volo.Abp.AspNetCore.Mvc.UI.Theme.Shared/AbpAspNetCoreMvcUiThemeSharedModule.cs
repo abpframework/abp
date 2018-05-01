@@ -51,7 +51,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared
                     "/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/dom-event-handlers.js",
                     "/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/modal-manager.js",
                     "/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables-extensions.js",
-                    "/libs/abp/aspnetcore.mvc.ui.theme.shared/sweetalert/abp-sweetalert.js"
+                    "/libs/abp/aspnetcore.mvc.ui.theme.shared/sweetalert/abp-sweetalert.js",
+                    "/libs/abp/aspnetcore.mvc.ui.theme.shared/sweetalert/abp-toastr.js"
                 });
             });
 

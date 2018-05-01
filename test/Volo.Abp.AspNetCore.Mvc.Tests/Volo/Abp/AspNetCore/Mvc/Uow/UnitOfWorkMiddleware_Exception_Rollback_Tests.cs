@@ -14,7 +14,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Uow
         [Fact]
         public async Task Should_Rollback_Transaction_For_Handled_Exceptions()
         {
-            var result = await GetResponseAsObjectAsync<RemoteServiceErrorResponse>("/api/unitofwork-test/HandledException", HttpStatusCode.InternalServerError);
+            var result = await GetResponseAsObjectAsync<RemoteServiceErrorResponse>("/api/unitofwork-test/HandledException", HttpStatusCode.Forbidden);
             result.Error.ShouldNotBeNull();
             result.Error.Message.ShouldBe("This is a sample exception!");
         }
@@ -22,7 +22,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Uow
         [Fact]
         public async Task Should_Gracefully_Handle_Exceptions_On_Complete()
         {
-            var response = await GetResponseAsync("/api/unitofwork-test/ExceptionOnComplete", HttpStatusCode.InternalServerError);
+            var response = await GetResponseAsync("/api/unitofwork-test/ExceptionOnComplete", HttpStatusCode.Forbidden);
 
             response.Headers.GetValues(AbpHttpConsts.AbpErrorFormat).FirstOrDefault().ShouldBe("true");
 
