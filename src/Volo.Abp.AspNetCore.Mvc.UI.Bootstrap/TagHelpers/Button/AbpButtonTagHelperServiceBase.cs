@@ -42,7 +42,18 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button
                 return;
             }
 
-            output.Content.AppendHtml($"<i class=\"fa fa-{TagHelper.Icon}\"></i> ");
+            output.Content.AppendHtml($"<i class=\"{GetIconClass(context, output)}\"></i> ");
+        }
+
+        protected virtual string GetIconClass(TagHelperContext context, TagHelperOutput output)
+        {
+            switch (TagHelper.IconType)
+            {
+                case FontIconType.FontAwesome:
+                    return "fa fa-" + TagHelper.Icon;
+                default:
+                    return TagHelper.Icon;
+            }
         }
 
         protected virtual void AddText(TagHelperContext context, TagHelperOutput output)
