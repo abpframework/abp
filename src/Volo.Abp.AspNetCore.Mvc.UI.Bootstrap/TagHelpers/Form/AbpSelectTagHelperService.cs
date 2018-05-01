@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.Encodings.Web;
 using Localization.Resources.AbpUi;
@@ -24,24 +25,34 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            output.TagName = "div";
-            SetDivAttributes(output);
-            output.TagMode = TagMode.StartTagAndEndTag;
-
             var selectTag = GetSelectTag(context);
 
             var seelctAsHtml = RenderTagHelperOutput(selectTag, _encoder);
             var labelAsHtml = GetLabelAsHtml(selectTag);
-            var content = labelAsHtml + Environment.NewLine + seelctAsHtml;
+            var content = GetContent(labelAsHtml,seelctAsHtml);
 
-            output.Content.SetHtmlContent(content);
+            var order = GetAttribute<DisplayOrder>(TagHelper.AspFor.ModelExplorer);
+            var list = context.Items["InputGroupContents"] as List<InputGroupContent>;
+
+            if (list != null && !list.Any(igc => igc.Html.Contains("id=\"" + TagHelper.AspFor.Name.Replace('.', '_') + "\"")))
+            {
+                list.Add(new InputGroupContent
+                {
+                    Html = content,
+                    Order = order?.Number ?? 0
+                });
+            }
+
+            output.SuppressOutput();
         }
 
-        protected virtual void SetDivAttributes(TagHelperOutput output)
+
+
+        protected virtual string GetContent(string label, string inputHtml)
         {
-            output.Attributes.RemoveAll("asp-for");
-            output.Attributes.RemoveAll("asp-items");
-            output.Attributes.Add("class", "form-group");
+            var innerContent = label + Environment.NewLine + inputHtml;
+
+            return "<div class=\"form-group\">" + Environment.NewLine + innerContent + Environment.NewLine + "</div>";
         }
 
         protected virtual TagHelperOutput GetSelectTag(TagHelperContext context)

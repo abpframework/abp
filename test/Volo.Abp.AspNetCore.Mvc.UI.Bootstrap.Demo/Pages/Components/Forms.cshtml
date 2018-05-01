@@ -1,8 +1,9 @@
 ﻿@page
 @using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components
-@model Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components.FormsModel
+@model FormsModel
+
 @{
-    ViewData["Title"] = "Forms";
+     ViewData["Title"] = "Forms";
 }
 
 <h2>Forms</h2>
@@ -13,11 +14,8 @@
 
 <div class="demo-with-code">
     <div class="demo-area">
-        <abp-dynamic-form model="@Model.Person">
+        <abp-dynamic-form asp-model="@Model.Ahmet">
 
-            <abp-input asp-for="@Model.Person.Name" />
-            <abp-input asp-for="@Model.Person.Age" />
-            <abp-input asp-for="@Model.Person.Phone.Number" />
         </abp-dynamic-form>
     </div>
     <div class="code-area">
@@ -31,36 +29,36 @@
 
 @*<h4># Input Group Example</h4>
 
-<div class="demo-with-code">
-    <div class="demo-area">
-        <form method="post" action="#">
-            <abp-input asp-for="@Model.Name" />
-            <abp-input asp-for="@Model.Password" label="Password" />
-            <abp-input asp-for="@Model.IsActive" />
-            <abp-input asp-for="@Model.PhoneNumber" />
-            <abp-input asp-for="@Model.EmailAddress" />
-            <abp-input asp-for="@Model.Count" />
-            <abp-input asp-for="@Model.Day" />
-            <abp-select asp-for="@Model.Country" asp-items="@Model.Countries" label="Country"></abp-select>
-            <abp-select asp-for="@Model.City" asp-items="@Html.GetEnumSelectList(typeof(Cities))"></abp-select>
-        </form>
-    </div>
-    <div class="code-area">
-        <pre>       
-        &lt;form method=&quot;post&quot; action=&quot;#&quot;&gt;
-            &lt;abp-input asp-for=&quot;Model.Name&quot;/&gt;
-            &lt;abp-input asp-for=&quot;Model.Password&quot; label=&quot;Password&quot;/&gt;
-            &lt;abp-input asp-for=&quot;Model.IsActive&quot; /&gt;
-            &lt;abp-input asp-for=&quot;Model.PhoneNumber&quot; /&gt;
-            &lt;abp-input asp-for=&quot;Model.EmailAddress&quot; /&gt;
-            &lt;abp-input asp-for=&quot;Model.Count&quot; /&gt;
-            &lt;abp-input asp-for=&quot;Model.Day&quot; /&gt;
-            &lt;abp-select asp-for=&quot;Model.Country&quot; asp-items=&quot;Model.Countries&quot; label=&quot;Country&quot;&gt;&lt;/abp-select&gt;
-            &lt;abp-select asp-for=&quot;Model.City&quot; asp-items=&quot;Html.GetEnumSelectList(typeof(Cities))&quot;&gt;&lt;/abp-select&gt;
-        &lt;/form&gt;
-        </pre>
-    </div>
-</div>*@
+    <div class="demo-with-code">
+        <div class="demo-area">
+            <form method="post" action="#">
+                <abp-input asp-for="@Model.Name" />
+                <abp-input asp-for="@Model.Password" label="Password" />
+                <abp-input asp-for="@Model.IsActive" />
+                <abp-input asp-for="@Model.PhoneNumber" />
+                <abp-input asp-for="@Model.EmailAddress" />
+                <abp-input asp-for="@Model.Count" />
+                <abp-input asp-for="@Model.Day" />
+                <abp-select asp-for="@Model.Country" asp-items="@Model.Countries" label="Country"></abp-select>
+                <abp-select asp-for="@Model.City" asp-items="@Html.GetEnumSelectList(typeof(Cities))"></abp-select>
+            </form>
+        </div>
+        <div class="code-area">
+            <pre>
+            &lt;form method=&quot;post&quot; action=&quot;#&quot;&gt;
+                &lt;abp-input asp-for=&quot;Model.Name&quot;/&gt;
+                &lt;abp-input asp-for=&quot;Model.Password&quot; label=&quot;Password&quot;/&gt;
+                &lt;abp-input asp-for=&quot;Model.IsActive&quot; /&gt;
+                &lt;abp-input asp-for=&quot;Model.PhoneNumber&quot; /&gt;
+                &lt;abp-input asp-for=&quot;Model.EmailAddress&quot; /&gt;
+                &lt;abp-input asp-for=&quot;Model.Count&quot; /&gt;
+                &lt;abp-input asp-for=&quot;Model.Day&quot; /&gt;
+                &lt;abp-select asp-for=&quot;Model.Country&quot; asp-items=&quot;Model.Countries&quot; label=&quot;Country&quot;&gt;&lt;/abp-select&gt;
+                &lt;abp-select asp-for=&quot;Model.City&quot; asp-items=&quot;Html.GetEnumSelectList(typeof(Cities))&quot;&gt;&lt;/abp-select&gt;
+            &lt;/form&gt;
+            </pre>
+        </div>
+    </div>*@
 
 @*<div class="demo-with-code">
         <div class="demo-area">

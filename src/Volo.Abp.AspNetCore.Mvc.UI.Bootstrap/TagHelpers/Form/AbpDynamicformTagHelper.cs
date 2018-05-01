@@ -6,8 +6,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 {
     public class AbpDynamicFormTagHelper : AbpTagHelper<AbpDynamicFormTagHelper, AbpDynamicFormTagHelperService>
     {
+        [HtmlAttributeName("asp-model")]
         public ModelExpression Model { get; set; }
-
         
         [HtmlAttributeNotBound]
         [ViewContext]

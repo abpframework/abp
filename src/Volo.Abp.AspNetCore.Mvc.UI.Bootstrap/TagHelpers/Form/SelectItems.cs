@@ -13,41 +13,15 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
     {
         public string ItemsListPropertyName { get; set; }
 
-        public Type EnumType { get; set; }
-
         public SelectType SelectType { get; set; } = SelectType.Dropdown;
 
         public IEnumerable<SelectListItem> GetItems(ModelExplorer explorer)
         {
-            if (IsEnumItem())
-            {
-                return GetItemsFromEnum();
-            }
-            else
-            {
-                return GetItemsFromListField(explorer);
-            }
-        }
-
-        private IEnumerable<SelectListItem> GetItemsFromListField(ModelExplorer explorer)
-        {
-            var properties = explorer.Properties.Where(p => p.Metadata.PropertyName.Equals(ItemsListPropertyName)).ToList();
+            var properties = explorer.Container.Properties.Where(p => p.Metadata.PropertyName.Equals(ItemsListPropertyName)).ToList();
 
             return properties.Count > 0
                 ? properties.First().Model as IEnumerable<SelectListItem>
-                : new List<SelectListItem>();
-        }
-
-        private IEnumerable<SelectListItem> GetItemsFromEnum()
-        {
-            var enumItems = EnumType.GetTypeInfo().GetMembers(BindingFlags.Public | BindingFlags.Static);
-
-            return enumItems.Select((t, i) => new SelectListItem() { Value = i.ToString(), Text = t.Name }).ToList();
-        }
-
-        private bool IsEnumItem()
-        {
-            return EnumType != null && EnumType.GetTypeInfo().IsEnum;
+                : null;
         }
     }
 }

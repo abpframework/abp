@@ -52,11 +52,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         protected virtual string GetContent(string label, string inputHtml, bool isCheckbox)
         {
-            var content = isCheckbox ?
+            var innerContent = isCheckbox ?
                 inputHtml + Environment.NewLine + label :
                 label + Environment.NewLine + inputHtml;
 
-            return "<div class=\"" + (isCheckbox ? "form-check" : "form-group") + "\">" + Environment.NewLine + content + Environment.NewLine + "</div>";
+            return "<div class=\"" + (isCheckbox ? "form-check" : "form-group") + "\">" + Environment.NewLine + innerContent + Environment.NewLine + "</div>";
         }
 
         protected virtual TagHelperOutput GetInputTag(TagHelperContext context)
