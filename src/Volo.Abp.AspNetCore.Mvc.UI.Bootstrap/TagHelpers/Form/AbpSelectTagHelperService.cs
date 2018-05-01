@@ -25,28 +25,23 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            var selectTag = GetSelectTag(context);
+            var html = GetFormInputGroupAsHtml(context, output);
+            
+            var order = GetInputOrder(TagHelper.AspFor.ModelExplorer);
 
-            var seelctAsHtml = RenderTagHelperOutput(selectTag, _encoder);
-            var labelAsHtml = GetLabelAsHtml(selectTag);
-            var content = GetContent(labelAsHtml,seelctAsHtml);
-
-            var order = GetAttribute<DisplayOrder>(TagHelper.AspFor.ModelExplorer);
-            var list = context.Items["InputGroupContents"] as List<FormGroupContent>;
-
-            if (list != null && !list.Any(igc => igc.Html.Contains("id=\"" + TagHelper.AspFor.Name.Replace('.', '_') + "\"")))
-            {
-                list.Add(new FormGroupContent
-                {
-                    Html = content,
-                    Order = order?.Number ?? 0
-                });
-            }
+            AddGroupToFormGroupContents(context, TagHelper.AspFor.Name, html, order);
 
             output.SuppressOutput();
         }
+        
+        protected virtual string GetFormInputGroupAsHtml(TagHelperContext context, TagHelperOutput output)
+        {
+            var selectTag = GetSelectTag(context);
+            var selectAsHtml = RenderTagHelperOutput(selectTag, _encoder);
+            var label = GetLabelAsHtml(selectTag);
 
-
+            return GetContent(label, selectAsHtml);
+        }
 
         protected virtual string GetContent(string label, string inputHtml)
         {
@@ -63,9 +58,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 Items = TagHelper.AspItems,
                 ViewContext = TagHelper.ViewContext
             };
-
-            var attributes = new TagHelperAttributeList { new TagHelperAttribute("class", "form-control") };
-            var inputTagHelperOutput = GetInnerTagHelper(attributes, context,selectTagHelper, "select", TagMode.StartTagAndEndTag); ;
+            
+            var inputTagHelperOutput = GetInnerTagHelper(new TagHelperAttributeList(), context,selectTagHelper, "select", TagMode.StartTagAndEndTag); ;
 
             inputTagHelperOutput.Attributes.Add("class", "form-control");
 
@@ -80,16 +74,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 return "";
             }
 
-            var label = GetLabelText();
-            var idAttr = selectTag.Attributes.FirstOrDefault(a => a.Name == "id");
-            var idAttrAsString = "";
-
-            if (idAttr != null)
-            {
-                idAttrAsString = "for=\"" + idAttr.Value + "\"";
-            }
-
-            return "<label " + idAttrAsString + ">" + _localizer[label] + "</label>";
+            return "<label " + GetIdAttributeAsString(selectTag) + ">" + _localizer[GetLabelText()] + "</label>";
         }
 
         protected virtual string GetLabelText()

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
@@ -75,6 +76,39 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
             return context.Items[FormGroupContents] as List<FormGroupContent>;
         }
 
+        protected virtual string GetIdAttributeAsString(TagHelperOutput inputTag)
+        {
+            var idAttr = inputTag.Attributes.FirstOrDefault(a => a.Name == "id");
 
+            return idAttr != null ? "for=\"" + idAttr.Value + "\"" : "";
+        }
+
+        protected virtual int GetInputOrder(ModelExplorer explorer)
+        {
+            return GetAttribute<DisplayOrder>(explorer)?.Number ?? 0;
+        }
+
+        protected virtual void AddGroupToFormGroupContents(TagHelperContext context, string propertyName, string html, int order)
+        {
+            var list = GetFormGroupContentsList(context);
+
+            if (list != null && !list.Any(igc => igc.Html.Contains("id=\"" + propertyName.Replace('.', '_') + "\"")))
+            {
+                list.Add(new FormGroupContent
+                {
+                    Html = html,
+                    Order = order
+                });
+            }
+        }
+
+        protected virtual string GetFormInputGroupAsHtml(TagHelperContext context, TagHelperOutput output)
+        {
+            var inputTag = GetInputTag(context, out var isCheckbox);
+            var inputHtml = RenderTagHelperOutput(inputTag, _encoder);
+            var label = GetLabelAsHtml(inputTag, isCheckbox);
+
+            return GetContent(label, inputHtml, isCheckbox);
+        }
     }
 }

@@ -29,28 +29,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
         {
             var html = GetFormInputGroupAsHtml(context, output);
 
-            var order = GetInputOrder();
+            var order = GetInputOrder(TagHelper.AspFor.ModelExplorer);
 
-            AddGroupToFormGroupContents(GetFormGroupContentsList(context), html, order);
+            AddGroupToFormGroupContents(context,TagHelper.AspFor.Name, html, order);
 
             output.SuppressOutput();
-        }
-
-        protected virtual int GetInputOrder()
-        {
-            return GetAttribute<DisplayOrder>(TagHelper.AspFor.ModelExplorer)?.Number ?? 0;
-        }
-
-        protected virtual void AddGroupToFormGroupContents(List<FormGroupContent> list, string html, int order)
-        {
-            if (list != null && !list.Any(igc => igc.Html.Contains("id=\"" + TagHelper.AspFor.Name.Replace('.', '_') + "\"")))
-            {
-                list.Add(new FormGroupContent
-                {
-                    Html = html,
-                    Order = order
-                });
-            }
         }
 
         protected virtual string GetFormInputGroupAsHtml(TagHelperContext context, TagHelperOutput output)
@@ -98,12 +81,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             {
                 return "";
             }
-
-            var label = GetLabelValue();
+            
             var checkboxClass = isCheckbox ? "class=\"form-check-label\" " : "";
 
             return "<label " + checkboxClass + GetIdAttributeAsString(inputTag) + ">"
-                   + _localizer[label] +
+                   + _localizer[GetLabelValue()] +
                    "</label>";
         }
 
@@ -112,13 +94,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             return string.IsNullOrEmpty(TagHelper.Label) ?
                 TagHelper.AspFor.Metadata.DisplayName :
                 TagHelper.Label;
-        }
-
-        protected virtual string GetIdAttributeAsString(TagHelperOutput inputTag)
-        {
-            var idAttr = inputTag.Attributes.FirstOrDefault(a => a.Name == "id");
-
-            return idAttr != null ? "for=\"" + idAttr.Value + "\"" : "";
         }
     }
 }
