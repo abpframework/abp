@@ -7,25 +7,27 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 {
     public class AbpDynamicFormTagHelperService : AbpTagHelperService<AbpDynamicFormTagHelper>
     {
         private readonly HtmlEncoder _htmlEncoder;
-        private readonly AbpInputTagHelper _abpInputTagHelper;
-        private readonly AbpSelectTagHelper _abpSelectTagHelper;
+        private readonly IServiceProvider _serviceProvider;
 
-        public AbpDynamicFormTagHelperService(HtmlEncoder htmlEncoder, AbpInputTagHelper abpInputTagHelper, AbpSelectTagHelper abpSelectTagHelper)
+        public AbpDynamicFormTagHelperService(
+            HtmlEncoder htmlEncoder, 
+            IServiceProvider serviceProvider)
         {
             _htmlEncoder = htmlEncoder;
-            _abpInputTagHelper = abpInputTagHelper;
-            _abpSelectTagHelper = abpSelectTagHelper;
+            _serviceProvider = serviceProvider;
         }
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            output.TagMode = TagMode.StartTagAndEndTag;
+            NormalizeTagMode(context, output);
 
             SetFormAttributes(output);
 
@@ -38,28 +40,28 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             SetContent(output,list);
         }
 
-        protected virtual void SetContent(TagHelperOutput output, List<FormGroupContent> list)
+        protected virtual void NormalizeTagMode(TagHelperContext context, TagHelperOutput output)
         {
-            foreach (var itemConfig in list.OrderBy(o => o.Order))
-            {
-                output.PostContent.SetHtmlContent(output.PostContent.GetContent() + itemConfig.Html);
-            }
+            output.TagMode = TagMode.StartTagAndEndTag;
         }
 
         protected virtual void SetFormAttributes(TagHelperOutput output)
         {
-            if (!output.Attributes.ContainsName("method"))
-            {
-                output.Attributes.Add("method", "post");
-            }
-
-
+            output.Attributes.AddIfNotContains("method", "post");
         }
 
-        protected virtual List<FormGroupContent> InitilizeFormGroupContentsContext(TagHelperContext context)
+        protected virtual void SetContent(TagHelperOutput output, List<FormGroupItem> list)
         {
-            var list = new List<FormGroupContent>();
-            context.Items.Add(FormGroupContents, list);
+            foreach (var itemConfig in list.OrderBy(o => o.Order))
+            {
+                output.PostContent.SetHtmlContent(output.PostContent.GetContent() + itemConfig.HtmlContent);
+            }
+        }
+
+        protected virtual List<FormGroupItem> InitilizeFormGroupContentsContext(TagHelperContext context)
+        {
+            var list = new List<FormGroupItem>();
+            context.Items.Add(FormGroupContentsKey, list);
             return list;
         }
         
@@ -81,21 +83,23 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         protected virtual void ProcessSelectGroup(TagHelperContext context, ModelExpression model, IEnumerable<SelectListItem> selectItems)
         {
-            _abpSelectTagHelper.AspFor = model;
-            _abpSelectTagHelper.AspItems = selectItems;
-            _abpSelectTagHelper.Label = "";
-            _abpSelectTagHelper.ViewContext = TagHelper.ViewContext;
+            var abpSelectTagHelper = _serviceProvider.GetRequiredService<AbpSelectTagHelper>();
+            abpSelectTagHelper.AspFor = model;
+            abpSelectTagHelper.AspItems = selectItems;
+            abpSelectTagHelper.Label = "";
+            abpSelectTagHelper.ViewContext = TagHelper.ViewContext;
 
-            RenderTagHelper(new TagHelperAttributeList(), context, _abpSelectTagHelper, _htmlEncoder, "div", TagMode.StartTagAndEndTag);
+            RenderTagHelper(new TagHelperAttributeList(), context, abpSelectTagHelper, _htmlEncoder, "div", TagMode.StartTagAndEndTag);
         }
 
         protected virtual void ProcessInputGroup(TagHelperContext context, ModelExpression model)
         {
-            _abpInputTagHelper.AspFor = model;
-            _abpInputTagHelper.Label = "";
-            _abpInputTagHelper.ViewContext = TagHelper.ViewContext;
+            var abpInputTagHelper = _serviceProvider.GetRequiredService<AbpInputTagHelper>();
+            abpInputTagHelper.AspFor = model;
+            abpInputTagHelper.Label = "";
+            abpInputTagHelper.ViewContext = TagHelper.ViewContext;
 
-            RenderTagHelper(new TagHelperAttributeList(), context, _abpInputTagHelper, _htmlEncoder, "div", TagMode.StartTagAndEndTag);
+            RenderTagHelper(new TagHelperAttributeList(), context, abpInputTagHelper, _htmlEncoder, "div", TagMode.StartTagAndEndTag);
         }
 
         protected virtual List<ModelExpression> GetModels(TagHelperContext context, TagHelperOutput output)

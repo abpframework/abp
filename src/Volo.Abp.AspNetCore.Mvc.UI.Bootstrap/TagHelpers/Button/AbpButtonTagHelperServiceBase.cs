@@ -9,13 +9,13 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button
     {
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            NormalizeTagStyle(context, output);
+            NormalizeTagMode(context, output);
             AddClasses(context, output);
             AddIcon(context, output);
             AddText(context, output);
         }
 
-        protected virtual void NormalizeTagStyle(TagHelperContext context, TagHelperOutput output)
+        protected virtual void NormalizeTagMode(TagHelperContext context, TagHelperOutput output)
         {
             output.TagMode = TagMode.StartTagAndEndTag;
         }

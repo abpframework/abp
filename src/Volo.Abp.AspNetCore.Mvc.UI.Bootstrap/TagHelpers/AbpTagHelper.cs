@@ -1,10 +1,11 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Threading;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
 {
-    public abstract class AbpTagHelper : TagHelper
+    public abstract class AbpTagHelper : TagHelper //, ITransientDependency
     {
         
     }

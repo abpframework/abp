@@ -15,7 +15,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
     public abstract class AbpTagHelperService<TTagHelper> : IAbpTagHelperService<TTagHelper>
         where TTagHelper : TagHelper
     {
-        protected const string FormGroupContents = "FormGroupContents";
+        protected const string FormGroupContentsKey = "FormGroupContents";
 
         public TTagHelper TagHelper { get; set; }
 
@@ -79,9 +79,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
             return property?.Metadata?.ContainerType?.GetTypeInfo()?.GetProperty(property.Metadata.PropertyName)?.GetCustomAttribute<T>();
         }
 
-        protected virtual List<FormGroupContent> GetFormGroupContentsList(TagHelperContext context)
+        protected virtual List<FormGroupItem> GetFormGroupContentsList(TagHelperContext context)
         {
-            return context.Items[FormGroupContents] as List<FormGroupContent>;
+            return context.Items[FormGroupContentsKey] as List<FormGroupItem>;
         }
 
         protected virtual string GetIdAttributeAsString(TagHelperOutput inputTag)
@@ -100,11 +100,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
         {
             var list = GetFormGroupContentsList(context);
 
-            if (list != null && !list.Any(igc => igc.Html.Contains("id=\"" + propertyName.Replace('.', '_') + "\"")))
+            if (list != null && !list.Any(igc => igc.HtmlContent.Contains("id=\"" + propertyName.Replace('.', '_') + "\"")))
             {
-                list.Add(new FormGroupContent
+                list.Add(new FormGroupItem
                 {
-                    Html = html,
+                    HtmlContent = html,
                     Order = order
                 });
             }

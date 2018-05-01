@@ -40,5 +40,13 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHel
             //Can be optimized?
             attributes.SetAttribute("class", classAttribute.Value.ToString().Split(' ').RemoveAll(c => c == className).JoinAsString(" "));
         }
+
+        public static void AddIfNotContains(this TagHelperAttributeList attributes, string name, object value)
+        {
+            if (!attributes.ContainsName("method"))
+            {
+                attributes.Add("method", "post");
+            }
+        }
     }
 }
