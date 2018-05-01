@@ -101,14 +101,5 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
                 });
             }
         }
-
-        protected virtual string GetFormInputGroupAsHtml(TagHelperContext context, TagHelperOutput output)
-        {
-            var inputTag = GetInputTag(context, out var isCheckbox);
-            var inputHtml = RenderTagHelperOutput(inputTag, _encoder);
-            var label = GetLabelAsHtml(inputTag, isCheckbox);
-
-            return GetContent(label, inputHtml, isCheckbox);
-        }
     }
 }
