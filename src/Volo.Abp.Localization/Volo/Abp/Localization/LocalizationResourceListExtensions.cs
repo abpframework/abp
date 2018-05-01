@@ -9,11 +9,10 @@ namespace Volo.Abp.Localization
     {
         public static LocalizationResource AddVirtualJson<TResource>(
             [NotNull] this LocalizationResourceDictionary resourceDictionary,
-            [NotNull] string defaultCultureName,
+            [CanBeNull] string defaultCultureName, //TODO: defaultCultureName should be optional (and second argument) because it's not required for the LocalizationResource!
             [NotNull] string virtualPath)
         {
             Check.NotNull(resourceDictionary, nameof(resourceDictionary));
-            Check.NotNull(defaultCultureName, nameof(defaultCultureName));
             Check.NotNull(virtualPath, nameof(virtualPath));
 
             virtualPath = virtualPath.EnsureStartsWith('/');

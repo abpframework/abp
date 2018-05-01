@@ -7,28 +7,29 @@ namespace Volo.Abp.Localization
 {
     public class LocalizationResource
     {
+        [NotNull]
         public Type ResourceType { get; }
 
+        [CanBeNull]
         public string DefaultCultureName { get; set; }
 
+        [NotNull]
         public ILocalizationDictionaryProvider DictionaryProvider { get; }
 
+        [NotNull]
         public List<ILocalizationDictionaryProvider> Extensions { get; }
 
+        [NotNull]
         public List<Type> BaseResourceTypes { get; }
 
         public LocalizationResource(
             [NotNull] Type resourceType, 
-            [NotNull] string defaultCultureName, 
+            [CanBeNull] string defaultCultureName, //TODO: defaultCultureName should be optional (and second argument) because it's not required for the LocalizationResource!
             [NotNull] ILocalizationDictionaryProvider dictionaryProvider)
         {
-            Check.NotNull(resourceType, nameof(resourceType));
-            Check.NotNull(defaultCultureName, nameof(defaultCultureName));
-            Check.NotNull(dictionaryProvider, nameof(dictionaryProvider));
-
-            ResourceType = resourceType;
+            ResourceType = Check.NotNull(resourceType, nameof(resourceType));
+            DictionaryProvider = Check.NotNull(dictionaryProvider, nameof(dictionaryProvider));
             DefaultCultureName = defaultCultureName;
-            DictionaryProvider = dictionaryProvider;
 
             BaseResourceTypes = new List<Type>();
             Extensions = new List<ILocalizationDictionaryProvider>();
