@@ -3,9 +3,11 @@
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button
 {
     [HtmlTargetElement("abp-button", TagStructure = TagStructure.NormalOrSelfClosing)]
-    public class AbpButtonTagHelper : AbpTagHelper<AbpButtonTagHelper, AbpButtonTagHelperService>
+    public class AbpButtonTagHelper : AbpTagHelper<AbpButtonTagHelper, AbpButtonTagHelperService>, IButtonTagHelperBase
     {
         public AbpButtonType ButtonType { get; set; } = AbpButtonType.Default;
+
+        public AbpButtonSize Size { get; set; } = AbpButtonSize.Default;
 
         public string BusyText { get; set; }
 

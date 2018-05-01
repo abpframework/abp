@@ -7,6 +7,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHel
     {
         public static void AddClass(this TagHelperAttributeList attributes, string className)
         {
+            if (string.IsNullOrWhiteSpace(className))
+            {
+                return;
+            }
+
             var classAttribute = attributes["class"];
             if (classAttribute == null)
             {
@@ -21,6 +26,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHel
 
         public static void RemoveClass(this TagHelperAttributeList attributes, string className)
         {
+            if (string.IsNullOrWhiteSpace(className))
+            {
+                return;
+            }
+
             var classAttribute = attributes["class"];
             if (classAttribute == null)
             {
