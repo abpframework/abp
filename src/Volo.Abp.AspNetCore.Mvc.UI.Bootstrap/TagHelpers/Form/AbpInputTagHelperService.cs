@@ -16,13 +16,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
     {
         private readonly IHtmlGenerator _generator;
         private readonly HtmlEncoder _encoder;
-        private readonly IStringLocalizer<AbpUiResource> _localizer;
 
-        public AbpInputTagHelperService(IHtmlGenerator generator, HtmlEncoder encoder, IStringLocalizer<AbpUiResource> localizer)
+        public AbpInputTagHelperService(IHtmlGenerator generator, HtmlEncoder encoder)
         {
             _generator = generator;
             _encoder = encoder;
-            _localizer = localizer;
         }
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
@@ -102,7 +100,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             var checkboxClass = isCheckbox ? "class=\"form-check-label\" " : "";
 
             return "<label " + checkboxClass + GetIdAttributeAsString(inputTag) + ">"
-                   + _localizer[GetLabelValue()] +
+                   + GetLabelValue() +
                    "</label>";
         }
 

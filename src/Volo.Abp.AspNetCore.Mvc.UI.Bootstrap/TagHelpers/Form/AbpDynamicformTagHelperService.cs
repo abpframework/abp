@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -27,11 +28,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
+            var list = InitilizeFormGroupContentsContext(context);
+
             NormalizeTagMode(context, output);
 
             SetFormAttributes(output);
-
-            var list = InitilizeFormGroupContentsContext(context);
             
             await output.GetChildContentAsync();
 
@@ -50,19 +51,23 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             output.Attributes.AddIfNotContains("method", "post");
         }
 
-        protected virtual void SetContent(TagHelperOutput output, List<FormGroupItem> list)
+        protected virtual void SetContent(TagHelperOutput output, List<FormGroupItem> items)
         {
-            foreach (var itemConfig in list.OrderBy(o => o.Order))
+            var postContentBuilder = new StringBuilder(output.PostContent.GetContent());
+
+            foreach (var item in items.OrderBy(o => o.Order))
             {
-                output.PostContent.SetHtmlContent(output.PostContent.GetContent() + itemConfig.HtmlContent);
+                postContentBuilder.AppendLine(item.HtmlContent);
             }
+
+            output.PostContent.SetHtmlContent(postContentBuilder.ToString());
         }
 
         protected virtual List<FormGroupItem> InitilizeFormGroupContentsContext(TagHelperContext context)
         {
-            var list = new List<FormGroupItem>();
-            context.Items.Add(FormGroupContentsKey, list);
-            return list;
+            var items = new List<FormGroupItem>();
+            context.Items[FormGroupContents] = items;
+            return items;
         }
         
         protected virtual void ProcessFields(TagHelperContext context, TagHelperOutput output)

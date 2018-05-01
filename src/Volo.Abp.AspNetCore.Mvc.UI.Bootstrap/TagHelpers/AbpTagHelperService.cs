@@ -15,7 +15,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
     public abstract class AbpTagHelperService<TTagHelper> : IAbpTagHelperService<TTagHelper>
         where TTagHelper : TagHelper
     {
-        protected const string FormGroupContentsKey = "FormGroupContents";
+        protected const string FormGroupContents = "FormGroupContents";
 
         public TTagHelper TagHelper { get; set; }
 
@@ -81,7 +81,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
 
         protected virtual List<FormGroupItem> GetFormGroupContentsList(TagHelperContext context)
         {
-            return context.Items[FormGroupContentsKey] as List<FormGroupItem>;
+            return context.Items[FormGroupContents] as List<FormGroupItem>;
         }
 
         protected virtual string GetIdAttributeAsString(TagHelperOutput inputTag)
