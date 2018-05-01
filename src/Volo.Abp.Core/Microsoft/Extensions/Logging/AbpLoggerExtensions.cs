@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Volo.Abp.ExceptionHandling;
 using Volo.Abp.Logging;
 
 namespace Microsoft.Extensions.Logging
@@ -61,8 +62,22 @@ namespace Microsoft.Extensions.Logging
             var selectedLevel = level ?? ex.GetLogLevel();
 
             logger.LogWithLevel(selectedLevel, ex.Message, ex);
-            LogDetails(logger, ex);
+            LogKnownProperties(logger, ex, selectedLevel);
+            LogSelfLogging(logger, ex);
             LogData(logger, ex, selectedLevel);
+        }
+
+        private static void LogKnownProperties(ILogger logger, Exception exception, LogLevel logLevel)
+        {
+            if (exception is IHasErrorCode exceptionWithErrorCode)
+            {
+                logger.LogWithLevel(logLevel, "Code:" + exceptionWithErrorCode.Code);
+            }
+
+            if (exception is IHasErrorDetails exceptionWithErrorDetails)
+            {
+                logger.LogWithLevel(logLevel, "Details:" + exceptionWithErrorDetails.Details);
+            }
         }
 
         private static void LogData(ILogger logger, Exception exception, LogLevel logLevel)
@@ -80,7 +95,7 @@ namespace Microsoft.Extensions.Logging
             }
         }
 
-        private static void LogDetails(ILogger logger, Exception exception)
+        private static void LogSelfLogging(ILogger logger, Exception exception)
         {
             var loggingExceptions = new List<IExceptionWithSelfLogging>();
 
