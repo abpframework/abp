@@ -9,9 +9,14 @@
         var options = $.extend({}, $.fn.abpAjaxForm.defaults, userOptions);
 
         options.beforeSubmit = function (arr, $form) {
-            userOptions.beforeSubmit && userOptions.beforeSubmit.apply(this, arguments);
-            $form.find("button[type='submit']").buttonBusy(true);
-            //TODO: Disable other buttons..?
+            var retVal = userOptions.beforeSubmit && userOptions.beforeSubmit.apply(this, arguments);
+
+            if (retVal !== false) {
+                $form.find("button[type='submit']").buttonBusy(true);
+                //TODO: Disable other buttons..?
+            }
+
+            return retVal;
         };
 
         options.error = function (jqXhr) {

@@ -22,4 +22,8 @@
     <ProjectReference Include="..\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\libs\abp\aspnetcore.mvc.ui.theme.shared\toastr\" />
+  </ItemGroup>
+
 </Project>
