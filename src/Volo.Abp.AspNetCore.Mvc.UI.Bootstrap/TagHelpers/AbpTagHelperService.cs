@@ -6,6 +6,7 @@ using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
 {
@@ -15,7 +16,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
         protected const string FormGroupContents = "FormGroupContents";
 
         public TTagHelper TagHelper { get; set; }
-        
+
         public virtual int Order { get; }
 
         public virtual void Init(TagHelperContext context)
@@ -34,7 +35,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
             return Task.CompletedTask;
         }
 
-        protected TagHelperOutput GetInnerTagHelper(TagHelperAttributeList attributeList, TagHelperContext context, TagHelper tagHelper, string tagName = "div", TagMode tagMode = TagMode.SelfClosing)
+        protected virtual TagHelperOutput GetInnerTagHelper(TagHelperAttributeList attributeList, TagHelperContext context, TagHelper tagHelper, string tagName = "div", TagMode tagMode = TagMode.SelfClosing)
         {
             var innerOutput = new TagHelperOutput(tagName, attributeList, (useCachedResult, encoder) => Task.Run<TagHelperContent>(() => new DefaultTagHelperContent()))
             {
@@ -48,21 +49,14 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
             return innerOutput;
         }
 
-        protected string RenderTagHelper(TagHelperAttributeList attributeList, TagHelperContext context, TagHelper tagHelper, HtmlEncoder htmlEncoder, string tagName = "div", TagMode tagMode = TagMode.SelfClosing)
+        protected virtual string RenderTagHelper(TagHelperAttributeList attributeList, TagHelperContext context, TagHelper tagHelper, HtmlEncoder htmlEncoder, string tagName = "div", TagMode tagMode = TagMode.SelfClosing)
         {
-            var innerOutput = new TagHelperOutput(tagName, attributeList, (useCachedResult, encoder) => Task.Run<TagHelperContent>(() => new DefaultTagHelperContent()))
-            {
-                TagMode = tagMode
-            };
-
-            var innerContext = new TagHelperContext(attributeList, context.Items, Guid.NewGuid().ToString());
-
-            tagHelper.Process(innerContext, innerOutput);
+            var innerOutput = GetInnerTagHelper(attributeList, context, tagHelper, tagName, tagMode);
 
             return RenderTagHelperOutput(innerOutput, htmlEncoder);
         }
 
-        protected string RenderTagHelperOutput(TagHelperOutput output, HtmlEncoder htmlEncoder)
+        protected virtual string RenderTagHelperOutput(TagHelperOutput output, HtmlEncoder htmlEncoder)
         {
             using (var writer = new StringWriter())
             {
@@ -70,10 +64,17 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
                 return writer.ToString();
             }
         }
-        
-        public static T GetAttribute<T>(ModelExplorer property) where T : Attribute
+
+        protected virtual T GetAttribute<T>(ModelExplorer property) where T : Attribute
         {
             return property?.Metadata?.ContainerType?.GetTypeInfo()?.GetProperty(property.Metadata.PropertyName)?.GetCustomAttribute<T>();
         }
+
+        protected virtual List<FormGroupContent> GetFormGroupContentsList(TagHelperContext context)
+        {
+            return context.Items[FormGroupContents] as List<FormGroupContent>;
+        }
+
+
     }
 }

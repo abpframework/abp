@@ -27,27 +27,39 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            var inputTag = GetInputTag(context);
-            var inputHtml = RenderTagHelperOutput(inputTag, _encoder);
-            var isCheckbox = IsInputCheckbox(inputTag.Attributes);
-            var label = GetLabelAsHtml(inputTag, isCheckbox);
+            var html = GetFormInputGroupAsHtml(context, output);
 
-            var content = GetContent(label, inputHtml, isCheckbox);
+            var order = GetInputOrder();
 
-            var order = GetAttribute<DisplayOrder>(TagHelper.AspFor.ModelExplorer);
+            AddGroupToFormGroupContents(GetFormGroupContentsList(context), html, order);
 
-            var list = context.Items["InputGroupContents"] as List<FormGroupContent>;
+            output.SuppressOutput();
+        }
 
-            if (list != null && !list.Any(igc =>igc.Html.Contains("id=\"" + TagHelper.AspFor.Name.Replace('.', '_') + "\"")))
+        protected virtual int GetInputOrder()
+        {
+            return GetAttribute<DisplayOrder>(TagHelper.AspFor.ModelExplorer)?.Number ?? 0;
+        }
+
+        protected virtual void AddGroupToFormGroupContents(List<FormGroupContent> list, string html, int order)
+        {
+            if (list != null && !list.Any(igc => igc.Html.Contains("id=\"" + TagHelper.AspFor.Name.Replace('.', '_') + "\"")))
             {
                 list.Add(new FormGroupContent
                 {
-                    Html = content,
-                    Order = order?.Number ?? 0
+                    Html = html,
+                    Order = order
                 });
             }
+        }
 
-            output.SuppressOutput();
+        protected virtual string GetFormInputGroupAsHtml(TagHelperContext context, TagHelperOutput output)
+        {
+            var inputTag = GetInputTag(context, out var isCheckbox);
+            var inputHtml = RenderTagHelperOutput(inputTag, _encoder);
+            var label = GetLabelAsHtml(inputTag, isCheckbox);
+
+            return GetContent(label, inputHtml, isCheckbox);
         }
 
         protected virtual string GetContent(string label, string inputHtml, bool isCheckbox)
@@ -59,7 +71,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             return "<div class=\"" + (isCheckbox ? "form-check" : "form-group") + "\">" + Environment.NewLine + innerContent + Environment.NewLine + "</div>";
         }
 
-        protected virtual TagHelperOutput GetInputTag(TagHelperContext context)
+        protected virtual TagHelperOutput GetInputTag(TagHelperContext context, out bool isCheckbox)
         {
             var inputTagHelper = new InputTagHelper(_generator)
             {
@@ -68,9 +80,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             };
 
             var inputTagHelperOutput = GetInnerTagHelper(new TagHelperAttributeList(), context, inputTagHelper, "input");
+            isCheckbox = IsInputCheckbox(inputTagHelperOutput.Attributes);
 
-            inputTagHelperOutput.Attributes.Add("class",
-                IsInputCheckbox(inputTagHelperOutput.Attributes) ? "form-check-input" : "form-control");
+            inputTagHelperOutput.Attributes.Add("class", isCheckbox ? "form-check-input" : "form-control");
 
             return inputTagHelperOutput;
         }
@@ -87,25 +99,26 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 return "";
             }
 
-            var label = GetLabelText();
-            var idAttr = inputTag.Attributes.FirstOrDefault(a => a.Name == "id");
-            var idAttrAsString = "";
-
-            if (idAttr != null)
-            {
-                idAttrAsString = "for=\"" + idAttr.Value + "\"";
-            }
-
+            var label = GetLabelValue();
             var checkboxClass = isCheckbox ? "class=\"form-check-label\" " : "";
 
-            return "<label " + checkboxClass + idAttrAsString + ">" + _localizer[label] + "</label>";
+            return "<label " + checkboxClass + GetIdAttributeAsString(inputTag) + ">"
+                   + _localizer[label] +
+                   "</label>";
         }
 
-        protected virtual string GetLabelText()
+        protected virtual string GetLabelValue()
         {
             return string.IsNullOrEmpty(TagHelper.Label) ?
                 TagHelper.AspFor.Metadata.DisplayName :
                 TagHelper.Label;
+        }
+
+        protected virtual string GetIdAttributeAsString(TagHelperOutput inputTag)
+        {
+            var idAttr = inputTag.Attributes.FirstOrDefault(a => a.Name == "id");
+
+            return idAttr != null ? "for=\"" + idAttr.Value + "\"" : "";
         }
     }
 }
