@@ -156,23 +156,23 @@
                     abp.ui.clearBusy(options.blockUI);
                 }
             }
-        }//,
+        },
 
-        //ajaxSendHandler: function (event, request, settings) {
-        //    var token = abp.security.antiForgery.getToken();
-        //    if (!token) {
-        //        return;
-        //    }
+        ajaxSendHandler: function (event, request, settings) {
+            var token = abp.security.antiForgery.getToken();
+            if (!token) {
+                return;
+            }
 
-        //    if (!settings.headers || settings.headers[abp.security.antiForgery.tokenHeaderName] === undefined) {
-        //        request.setRequestHeader(abp.security.antiForgery.tokenHeaderName, token);
-        //    }
-        //}
+            if (!settings.headers || settings.headers[abp.security.antiForgery.tokenHeaderName] === undefined) {
+                request.setRequestHeader(abp.security.antiForgery.tokenHeaderName, token);
+            }
+        }
     });
 
-    //$(document).ajaxSend(function (event, request, settings) {
-    //    return abp.ajax.ajaxSendHandler(event, request, settings);
-    //});
+    $(document).ajaxSend(function (event, request, settings) {
+        return abp.ajax.ajaxSendHandler(event, request, settings);
+    });
 
     //abp.event.on('abp.dynamicScriptsInitialized', function () {
     //    abp.ajax.defaultError.message = abp.localization.abpWeb('DefaultError');
