@@ -64,7 +64,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components
 
             public List<SelectListItem> Countries { get; set; } = new List<SelectListItem>
             {
-                new SelectListItem { Value = "MX", Text = "Mexico" },
+                new SelectListItem { Value = "MX", Text = "Mexico"},
                 new SelectListItem { Value = "CA", Text = "Canada" },
                 new SelectListItem { Value = "US", Text = "USA"  },
             };

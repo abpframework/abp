@@ -2,12 +2,12 @@
 # yarn lockfile v1
 
 
-"@abp/aspnetcore.mvc.ui.theme.shared@^0.2.2":
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/@abp/aspnetcore.mvc.ui.theme.shared/-/aspnetcore.mvc.ui.theme.shared-0.2.2.tgz#b70db21e5385e328171ace61171db00d86941609"
+"@abp/aspnetcore.mvc.ui.theme.shared@^0.2.3":
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/@abp/aspnetcore.mvc.ui.theme.shared/-/aspnetcore.mvc.ui.theme.shared-0.2.3.tgz#aaab6c13f38a07d5876ab0e9b40aa6409c0d21c1"
   dependencies:
-    "@abp/aspnetcore.mvc.ui" "^0.2.2"
-    "@abp/jquery" "^0.2.2"
+    "@abp/aspnetcore.mvc.ui" "^0.2.3"
+    "@abp/jquery" "^0.2.3"
     bootstrap "^4.1.0"
     datatables.net "^1.10.16"
     datatables.net-bs4 "^1.10.16"
@@ -15,10 +15,12 @@
     jquery-form "^4.2.2"
     jquery-validation "^1.17.0"
     jquery-validation-unobtrusive "^3.2.9"
+    sweetalert "^2.1.0"
+    toastr "^2.1.4"
 
-"@abp/aspnetcore.mvc.ui@^0.2.2":
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/@abp/aspnetcore.mvc.ui/-/aspnetcore.mvc.ui-0.2.2.tgz#d7ce7653aefad4b4d21abd293854abd333f70c69"
+"@abp/aspnetcore.mvc.ui@^0.2.3":
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/@abp/aspnetcore.mvc.ui/-/aspnetcore.mvc.ui-0.2.3.tgz#3e16e6fced400b92632d07e99145f010d8f44534"
   dependencies:
     ansi-colors "^1.1.0"
     extend-object "^1.0.0"
@@ -27,15 +29,15 @@
     path "^0.12.7"
     rimraf "^2.6.2"
 
-"@abp/core@^0.2.2":
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/@abp/core/-/core-0.2.2.tgz#4e879b146eab4a887d1e4b0091979cb8cfee1c6d"
+"@abp/core@^0.2.3":
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/@abp/core/-/core-0.2.3.tgz#82988f31d2cdd88dbda7e969d495d46c2d4e3f40"
 
-"@abp/jquery@^0.2.2":
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/@abp/jquery/-/jquery-0.2.2.tgz#55054b4760585ae046b1d0547ad81815b4e40bb9"
+"@abp/jquery@^0.2.3":
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/@abp/jquery/-/jquery-0.2.3.tgz#93d31db0cc781623f90300fd53c397e634d9c7da"
   dependencies:
-    "@abp/core" "^0.2.2"
+    "@abp/core" "^0.2.3"
     jquery "^3.3.1"
 
 ansi-colors@^1.1.0:
@@ -295,6 +297,10 @@ end-of-stream@~0.1.5:
   resolved "https://registry.yarnpkg.com/end-of-stream/-/end-of-stream-0.1.5.tgz#8e177206c3c80837d85632e8b9359dfe8b2f6eaf"
   dependencies:
     once "~1.3.0"
+
+es6-object-assign@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/es6-object-assign/-/es6-object-assign-1.1.0.tgz#c2c3582656247c39ea107cb1e6652b6f9f24523c"
 
 escape-string-regexp@^1.0.2:
   version "1.0.5"
@@ -800,7 +806,7 @@ jquery-validation@>=1.16, jquery-validation@^1.17.0:
   dependencies:
     jquery "^1.7 || ^2.0 || ^3.1"
 
-jquery@>=1.7, jquery@>=1.7.2, jquery@>=1.8, "jquery@^1.7 || ^2.0 || ^3.1", jquery@^3.3.1:
+jquery@>=1.12.0, jquery@>=1.7, jquery@>=1.7.2, jquery@>=1.8, "jquery@^1.7 || ^2.0 || ^3.1", jquery@^3.3.1:
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.3.1.tgz#958ce29e81c9790f31be7792df5d4d95fc57fbca"
 
@@ -1164,6 +1170,10 @@ process@^0.11.1:
   version "0.11.10"
   resolved "https://registry.yarnpkg.com/process/-/process-0.11.10.tgz#7332300e840161bda3e69a1d1d91a7d4bc16f182"
 
+promise-polyfill@^6.0.2:
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/promise-polyfill/-/promise-polyfill-6.1.0.tgz#dfa96943ea9c121fca4de9b5868cb39d3472e057"
+
 "readable-stream@>=1.0.33-1 <1.1.0-0":
   version "1.0.34"
   resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-1.0.34.tgz#125820e34bc842d2f2aaafafe4c2916ee32c157c"
@@ -1379,6 +1389,13 @@ supports-color@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/supports-color/-/supports-color-2.0.0.tgz#535d045ce6b6363fa40117084629995e9df324c7"
 
+sweetalert@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/sweetalert/-/sweetalert-2.1.0.tgz#d605dec840058fa8ad4a1f7c2c8c194bc72c27fa"
+  dependencies:
+    es6-object-assign "^1.1.0"
+    promise-polyfill "^6.0.2"
+
 through2@^0.6.1:
   version "0.6.5"
   resolved "https://registry.yarnpkg.com/through2/-/through2-0.6.5.tgz#41ab9c67b29d57209071410e1d7a7a968cd3ad48"
@@ -1424,6 +1441,12 @@ to-regex@^3.0.1, to-regex@^3.0.2:
     extend-shallow "^3.0.2"
     regex-not "^1.0.2"
     safe-regex "^1.1.0"
+
+toastr@^2.1.4:
+  version "2.1.4"
+  resolved "https://registry.yarnpkg.com/toastr/-/toastr-2.1.4.tgz#8b43be64fb9d0c414871446f2db8e8ca4e95f181"
+  dependencies:
+    jquery ">=1.12.0"
 
 unc-path-regex@^0.1.2:
   version "0.1.2"

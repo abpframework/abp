@@ -27,6 +27,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
         {
             output.TagMode = TagMode.StartTagAndEndTag;
 
+            SetFormAttributes(output);
+
             var list = InitilizeFormGroupContentsContext(context);
             
             await output.GetChildContentAsync();
@@ -46,9 +48,12 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         protected virtual void SetFormAttributes(TagHelperOutput output)
         {
-            output.TagName = "form";
-            output.Attributes.Add("method", "post");
-            output.Attributes.Add("action", "#");
+            if (!output.Attributes.ContainsName("method"))
+            {
+                output.Attributes.Add("method", "post");
+            }
+
+
         }
 
         protected virtual List<FormGroupContent> InitilizeFormGroupContentsContext(TagHelperContext context)

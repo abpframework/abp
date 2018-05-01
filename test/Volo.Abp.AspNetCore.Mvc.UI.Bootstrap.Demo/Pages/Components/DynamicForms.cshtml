@@ -12,7 +12,20 @@
 
 <div class="demo-with-code">
     <div class="demo-area">
-        <abp-dynamic-form asp-model="@Model.PersonInput" />
+        <form abp-dynamic-form="@Model.PersonInput" asp-antiforgery="true">
+            <abp-button type="submit" button-type="Primary" text="Submit" />
+        </form>
+        <hr />
+        <h5>Posted Values:</h5>
+        <div>
+            Name: @Model.PersonInput.Name <br />
+            City: @Model.PersonInput.City <br />
+            Phone.Name: @Model.PersonInput.Phone.Name <br />
+            Phone.Number: @Model.PersonInput.Phone.Number <br />
+            Day: @Model.PersonInput.Day.ToString("yyyy-MM-dd") <br />
+            Country: @Model.PersonInput.Country <br />
+            IsActive: @Model.PersonInput.IsActive <br />
+        </div>
     </div>
     <div class="code-area">
         <pre>

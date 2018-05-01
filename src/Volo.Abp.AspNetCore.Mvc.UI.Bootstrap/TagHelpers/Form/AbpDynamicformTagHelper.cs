@@ -4,10 +4,10 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 {
-    [HtmlTargetElement("abp-dynamic-form", TagStructure = TagStructure.NormalOrSelfClosing)]
+    [HtmlTargetElement("form", Attributes = "abp-dynamic-form", TagStructure = TagStructure.NormalOrSelfClosing)]
     public class AbpDynamicFormTagHelper : AbpTagHelper<AbpDynamicFormTagHelper, AbpDynamicFormTagHelperService>
     {
-        [HtmlAttributeName("asp-model")]
+        [HtmlAttributeName("abp-dynamic-form")]
         public ModelExpression Model { get; set; }
         
         [HtmlAttributeNotBound]

@@ -156,33 +156,35 @@ var abp = abp || {};
                     abp.ui.clearBusy(options.blockUI);
                 }
             }
-        }//,
+        },
 
-        //ajaxSendHandler: function (event, request, settings) {
-        //    var token = abp.security.antiForgery.getToken();
-        //    if (!token) {
-        //        return;
-        //    }
+        ajaxSendHandler: function (event, request, settings) {
+            var token = abp.security.antiForgery.getToken();
+            if (!token) {
+                return;
+            }
 
-        //    if (!settings.headers || settings.headers[abp.security.antiForgery.tokenHeaderName] === undefined) {
-        //        request.setRequestHeader(abp.security.antiForgery.tokenHeaderName, token);
-        //    }
-        //}
+            if (!settings.headers || settings.headers[abp.security.antiForgery.tokenHeaderName] === undefined) {
+                request.setRequestHeader(abp.security.antiForgery.tokenHeaderName, token);
+            }
+        }
     });
 
-    //$(document).ajaxSend(function (event, request, settings) {
-    //    return abp.ajax.ajaxSendHandler(event, request, settings);
-    //});
+    $(document).ajaxSend(function (event, request, settings) {
+        return abp.ajax.ajaxSendHandler(event, request, settings);
+    });
 
-    //abp.event.on('abp.dynamicScriptsInitialized', function () {
-    //    abp.ajax.defaultError.message = abp.localization.abpWeb('DefaultError');
-    //    abp.ajax.defaultError.details = abp.localization.abpWeb('DefaultErrorDetail');
-    //    abp.ajax.defaultError401.message = abp.localization.abpWeb('DefaultError401');
-    //    abp.ajax.defaultError401.details = abp.localization.abpWeb('DefaultErrorDetail401');
-    //    abp.ajax.defaultError403.message = abp.localization.abpWeb('DefaultError403');
-    //    abp.ajax.defaultError403.details = abp.localization.abpWeb('DefaultErrorDetail403');
-    //    abp.ajax.defaultError404.message = abp.localization.abpWeb('DefaultError404');
-    //    abp.ajax.defaultError404.details = abp.localization.abpWeb('DefaultErrorDetail404');
-    //});
+    abp.event.on('abp.configurationInitialized', function () {
+        var l = abp.localization.getResource('AbpUi');
+
+        abp.ajax.defaultError.message = l('DefaultErrorMessage');
+        abp.ajax.defaultError.details = l('DefaultErrorMessageDetail');
+        abp.ajax.defaultError401.message = l('DefaultErrorMessage401');
+        abp.ajax.defaultError401.details = l('DefaultErrorMessage401Detail');
+        abp.ajax.defaultError403.message = l('DefaultErrorMessage403');
+        abp.ajax.defaultError403.details = l('DefaultErrorMessage403Detail');
+        abp.ajax.defaultError404.message = l('DefaultErrorMessage404');
+        abp.ajax.defaultError404.details = l('DefaultErrorMessage404Detail');
+    });
 
 })(jQuery);
