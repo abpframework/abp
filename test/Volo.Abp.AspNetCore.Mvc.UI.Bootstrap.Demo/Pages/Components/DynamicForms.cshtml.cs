@@ -16,9 +16,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components
         
         public List<SelectListItem> Countries { get; set; } = new List<SelectListItem>
         {
-            new SelectListItem { Value = "MX", Text = "Mexico"},
             new SelectListItem { Value = "CA", Text = "Canada"},
             new SelectListItem { Value = "US", Text = "USA"  },
+            new SelectListItem { Value = "UK", Text = "United Kingdom"},
+            new SelectListItem { Value = "RU", Text = "Russia"}
         };
 
         public void OnGet()
@@ -87,9 +88,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components
 
         public enum Cities
         {
-            Istanbul,
             NewJersey,
-            Moscow
+            Moscow,
+            Istanbul,
+            London,
+            Beijing
         }
     }
 }

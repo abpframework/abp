@@ -3,7 +3,7 @@
 @model DynamicFormsModel
 
 @{
-     ViewData["Title"] = "Forms";
+    ViewData["Title"] = "Forms";
 }
 
 <h2>Dynamic Forms</h2>
@@ -12,7 +12,7 @@
 
 <div class="demo-with-code">
     <div class="demo-area">
-        <abp-dynamic-form abp-model="@Model.PersonInput"/>
+        <abp-dynamic-form abp-model="@Model.PersonInput" />
         <hr />
         <h5>Posted Values:</h5>
         <div>
@@ -64,7 +64,7 @@
 
 <div class="demo-with-code">
     <div class="demo-area">
-        <abp-dynamic-form abp-model="@Model.PersonInput" submit-button="true"/>
+        <abp-dynamic-form abp-model="@Model.PersonInput" submit-button="true" />
         <hr />
         <h5>Posted Values:</h5>
         <div>
@@ -89,24 +89,41 @@
 <div class="demo-with-code">
     <div class="demo-area">
         <form method="post">
-            <abp-input asp-for="@Model.PersonInput.Name"/>
-            <abp-select asp-for="@Model.PersonInput.Country" label="Where Do you live?"/>
-            <abp-input asp-for="@Model.PersonInput.Phone.Number"/>
+            <abp-input asp-for="@Model.PersonInput.Name" />
+            <abp-input asp-for="@Model.PersonInput.Age" />
+            <abp-input asp-for="@Model.PersonInput.IsActive" />
+            <abp-input asp-for="@Model.PersonInput.Day" />
+            <abp-select asp-for="@Model.PersonInput.City" />
+            <abp-select asp-for="@Model.PersonInput.Country" label="Where Do you live?" />
+            <abp-input asp-for="@Model.PersonInput.Phone.Number" />
+            <abp-input asp-for="@Model.PersonInput.Phone.Name" />
+            <abp-button type="submit" button-type="Primary" text="Submit" />
         </form>
         <hr />
         <h5>Posted Values:</h5>
         <div>
             Name: @Model.PersonInput.Name <br />
+            Age: @Model.PersonInput.Age <br />
+            Is Active: @Model.PersonInput.IsActive <br />
+            Day: @Model.PersonInput.Day <br />
+            City: @Model.PersonInput.City <br />
             Country: @Model.PersonInput.Country <br />
             Phone.Number: @Model.PersonInput.Phone.Number <br />
+            Phone.Name: @Model.PersonInput.Phone.Name <br />
         </div>
     </div>
     <div class="code-area">
         <pre>
 &lt;form method=&quot;post&quot;&gt;
-    &lt;abp-input asp-for=&quot;Model.PersonInput.Name&quot;/&gt;
-    &lt;abp-input asp-for=&quot;Model.PersonInput.Country&quot; label=&quot;Where Do you live?&quot;/&gt;
-    &lt;abp-input asp-for=&quot;Model.PersonInput.Phone.Number&quot;/&gt;
+    &lt;abp-input asp-for=&quot;Model.PersonInput.Name&quot; /&gt;
+    &lt;abp-input asp-for=&quot;Model.PersonInput.Age&quot; /&gt;
+    &lt;abp-input asp-for=&quot;Model.PersonInput.IsActive&quot; /&gt;
+    &lt;abp-input asp-for=&quot;Model.PersonInput.Day&quot; /&gt;
+    &lt;abp-select asp-for=&quot;Model.PersonInput.City&quot; /&gt;
+    &lt;abp-select asp-for=&quot;Model.PersonInput.Country&quot; label=&quot;Where Do you live?&quot; /&gt;
+    &lt;abp-input asp-for=&quot;Model.PersonInput.Phone.Number&quot; /&gt;
+    &lt;abp-input asp-for=&quot;Model.PersonInput.Phone.Name&quot; /&gt;
+    &lt;abp-button type=&quot;submit&quot; button-type=&quot;Primary&quot; text=&quot;Submit&quot; /&gt;
 &lt;/form&gt;
 </pre>
     </div>
