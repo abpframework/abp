@@ -1,4 +1,4 @@
-﻿(function() {
+﻿(function($) {
     
     abp.dom.onNodeAdded(function (args) {
         args.$el.findWithSelf('[data-toggle="tooltip"]').tooltip({
@@ -8,6 +8,13 @@
         args.$el.findWithSelf('[data-toggle="popover"]').popover({
             container: 'body'
         });
+
+        var $forms = args.$el.findWithSelf('form');
+        if ($forms.length) {
+            $forms.each(function() {
+                $.validator.unobtrusive.parse($(this));
+            });
+        }
     });
 
     abp.dom.onNodeRemoved(function (args) {
@@ -26,4 +33,4 @@
         });
     });
 
-})();
+})(jQuery);
