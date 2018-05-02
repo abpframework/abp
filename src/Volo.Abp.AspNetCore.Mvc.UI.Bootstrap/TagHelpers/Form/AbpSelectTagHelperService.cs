@@ -83,7 +83,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
         {
             var selectItems = TagHelper.AspItems?.ToList();
 
-            if (TagHelper.AspItems == null && !GetSelectItemsIfProvidedByEnum(context, output, TagHelper.AspFor.ModelExplorer, out selectItems) && !GetSelectItemsIfProvidedFromAttribute(context, output, TagHelper.AspFor.ModelExplorer, out selectItems))
+            if (TagHelper.AspItems == null &&
+                !GetSelectItemsIfProvidedByEnum(context, output, TagHelper.AspFor.ModelExplorer, out selectItems) &&
+                !GetSelectItemsIfProvidedFromAttribute(context, output, TagHelper.AspFor.ModelExplorer, out selectItems))
             {
                 throw new Exception("No items provided for select attribute.");
             }
@@ -120,7 +122,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         protected virtual bool GetSelectItemsIfProvidedFromAttribute(TagHelperContext context, TagHelperOutput output, ModelExplorer explorer, out List<SelectListItem> selectItems)
         {
-            selectItems = GetAttribute<SelectItems>(explorer)?.GetItems(explorer, explorer.Model.ToString())?.ToList();
+            selectItems = GetAttribute<SelectItems>(explorer)?.GetItems(explorer)?.ToList();
 
             return selectItems != null;
         }
@@ -144,12 +146,18 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
         {
             if (TagHelper.AspFor.ModelExplorer.Metadata.IsEnum)
             {
-                var baseType = TagHelper.AspFor.ModelExplorer.Model.GetType().GetEnumUnderlyingType();
+                var baseType = TagHelper.AspFor.ModelExplorer.Model?.GetType().GetEnumUnderlyingType();
+
+                if (baseType == null)
+                {
+                    return null;
+                }
+
                 var valueAsString = Convert.ChangeType(TagHelper.AspFor.ModelExplorer.Model, baseType);
                 return valueAsString != null ? valueAsString.ToString() : "";
             }
 
-            return TagHelper.AspFor.ModelExplorer.Model.ToString();
+            return TagHelper.AspFor.ModelExplorer.Model?.ToString();
         }
     }
 }

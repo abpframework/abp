@@ -47,7 +47,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components
         {
             [Required]
             [DisplayName("Name")]
-            public string Name { get; set; } = "MyName";
+            public string Name { get; set; }
 
             [Required]
             [DisplayName("Age")]
