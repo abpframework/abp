@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text.Encodings.Web;
 using Localization.Resources.AbpUi;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
@@ -31,7 +33,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             var order = GetInputOrder(TagHelper.AspFor.ModelExplorer);
 
             AddGroupToFormGroupContents(context, TagHelper.AspFor.Name, SurroundInnerHtmlAndGet(innerHtml), order, out var surpress);
-            
+
             if (surpress)
             {
                 output.SuppressOutput();
@@ -44,7 +46,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 output.Content.SetHtmlContent(innerHtml);
             }
         }
-        
+
         protected virtual string GetFormInputGroupAsHtml(TagHelperContext context, TagHelperOutput output)
         {
             var selectTag = GetSelectTag(context);
@@ -61,20 +63,29 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         protected virtual TagHelperOutput GetSelectTag(TagHelperContext context)
         {
+            var selectItems = TagHelper.AspItems?.ToList();
+
+            if (TagHelper.AspItems == null && !GetSelectItemsIfProvidedByEnum(TagHelper.AspFor.ModelExplorer, out selectItems) && !GetSelectItemsIfProvidedFromAttribute(TagHelper.AspFor.ModelExplorer, out selectItems))
+            {
+                throw new Exception("No items provided for select attribute.");
+            }
+
+            SetSelectedValue(TagHelper.AspFor.ModelExplorer.Model.ToString(), selectItems);
+
             var selectTagHelper = new SelectTagHelper(_generator)
             {
                 For = TagHelper.AspFor,
-                Items = TagHelper.AspItems,
+                Items = selectItems,
                 ViewContext = TagHelper.ViewContext
             };
-            
-            var inputTagHelperOutput = GetInnerTagHelper(new TagHelperAttributeList(), context,selectTagHelper, "select", TagMode.StartTagAndEndTag); ;
+
+            var inputTagHelperOutput = GetInnerTagHelper(new TagHelperAttributeList(), context, selectTagHelper, "select", TagMode.StartTagAndEndTag); ;
 
             inputTagHelperOutput.Attributes.Add("class", "form-control");
 
             return inputTagHelperOutput;
         }
-        
+
         protected virtual string GetLabelAsHtml(TagHelperOutput selectTag)
         {
             if (string.IsNullOrEmpty(TagHelper.Label) && string.IsNullOrEmpty(TagHelper.AspFor.Metadata.DisplayName))
@@ -90,6 +101,34 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             return string.IsNullOrEmpty(TagHelper.Label) ?
                 TagHelper.AspFor.Metadata.DisplayName :
                 TagHelper.Label;
+        }
+
+        protected virtual bool GetSelectItemsIfProvidedByEnum(ModelExplorer explorer, out List<SelectListItem> selectItems)
+        {
+            selectItems = explorer.Metadata.IsEnum ? explorer.ModelType.GetTypeInfo().GetMembers(BindingFlags.Public | BindingFlags.Static)
+                .Select((t, i) => new SelectListItem { Value = i.ToString(), Text = t.Name }).ToList() : null;
+
+            return selectItems != null;
+        }
+
+        protected virtual bool GetSelectItemsIfProvidedFromAttribute(ModelExplorer explorer, out List<SelectListItem> selectItems)
+        {
+            selectItems = GetAttribute<SelectItems>(explorer)?.GetItems(explorer, explorer.Model.ToString())?.ToList();
+
+            return selectItems != null;
+        }
+
+        protected virtual void SetSelectedValue(string selectedValue, List<SelectListItem> selectItems)
+        {
+            if (!selectItems.Any(si => si.Selected))
+            {
+                var itemToBeSelected = selectItems.FirstOrDefault(si => si.Value.ToString() == selectedValue);
+
+                if (itemToBeSelected != null)
+                {
+                    itemToBeSelected.Selected = true;
+                }
+            }
         }
     }
 }

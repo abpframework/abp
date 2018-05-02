@@ -32,22 +32,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
             var selectItems = (properties.First().Model as IEnumerable<SelectListItem>).ToList();
             
-            SetSelectedValue(selectedValue, selectItems);
-
             return selectItems;
-        }
-
-        private static void SetSelectedValue(string selectedValue, List<SelectListItem> selectItems)
-        {
-            if (!selectItems.Any(si => si.Selected))
-            {
-                var itemToBeSelected = selectItems.FirstOrDefault(si => si.Value.ToString() == selectedValue);
-
-                if (itemToBeSelected != null)
-                {
-                    itemToBeSelected.Selected = true;
-                }
-            }
         }
     }
 }
