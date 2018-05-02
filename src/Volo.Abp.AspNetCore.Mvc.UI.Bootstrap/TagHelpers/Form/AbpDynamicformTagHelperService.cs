@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,13 +17,16 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
     public class AbpDynamicFormTagHelperService : AbpTagHelperService<AbpDynamicFormTagHelper>
     {
         private readonly HtmlEncoder _htmlEncoder;
+        private readonly IHtmlGenerator _htmlGenerator;
         private readonly IServiceProvider _serviceProvider;
 
         public AbpDynamicFormTagHelperService(
             HtmlEncoder htmlEncoder, 
+            IHtmlGenerator htmlGenerator,
             IServiceProvider serviceProvider)
         {
             _htmlEncoder = htmlEncoder;
+            _htmlGenerator = htmlGenerator;
             _serviceProvider = serviceProvider;
         }
 
@@ -31,19 +35,48 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             var list = InitilizeFormGroupContentsContext(context);
 
             NormalizeTagMode(context, output);
-
-            SetFormAttributes(output);
             
             await output.GetChildContentAsync();
+
+            await ConvertToMvcForm(context, output);
 
             ProcessFields(context, output);
 
             SetContent(output,list);
+
+            SetFormAttributes(output);
+        }
+
+        protected virtual async Task ConvertToMvcForm(TagHelperContext context, TagHelperOutput output)
+        {
+            var formTagHelper = new FormTagHelper(_htmlGenerator)
+            {
+                Action = TagHelper.Action,
+                Controller = TagHelper.Controller,
+                Area = TagHelper.Area,
+                Page = TagHelper.Page,
+                PageHandler = TagHelper.PageHandler,
+                Antiforgery = TagHelper.Antiforgery,
+                Fragment = TagHelper.Fragment,
+                Route = TagHelper.Route,
+                Method = TagHelper.Method,
+                RouteValues = TagHelper.RouteValues,
+                ViewContext = TagHelper.ViewContext
+            };
+            
+            var formTagOutput = GetInnerTagHelper(output.Attributes, context, formTagHelper, "form", TagMode.StartTagAndEndTag);
+
+            await formTagOutput.GetChildContentAsync();
+
+            output.PostContent.SetHtmlContent(output.PostContent.GetContent() + formTagOutput.PostContent.GetContent());
+            output.PreContent.SetHtmlContent(output.PreContent.GetContent() + formTagOutput.PreContent.GetContent());
+            output.Content.SetHtmlContent(output.Content.GetContent() + formTagOutput.Content.GetContent());
         }
 
         protected virtual void NormalizeTagMode(TagHelperContext context, TagHelperOutput output)
         {
             output.TagMode = TagMode.StartTagAndEndTag;
+            output.TagName = "form";
         }
 
         protected virtual void SetFormAttributes(TagHelperOutput output)
@@ -53,14 +86,14 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         protected virtual void SetContent(TagHelperOutput output, List<FormGroupItem> items)
         {
-            var postContentBuilder = new StringBuilder(output.PostContent.GetContent());
+            var preContentBuilder = new StringBuilder(output.PreContent.GetContent());
 
             foreach (var item in items.OrderBy(o => o.Order))
             {
-                postContentBuilder.AppendLine(item.HtmlContent);
+                preContentBuilder.AppendLine(item.HtmlContent);
             }
 
-            output.PostContent.SetHtmlContent(postContentBuilder.ToString());
+            output.PreContent.SetHtmlContent(preContentBuilder.ToString());
         }
 
         protected virtual List<FormGroupItem> InitilizeFormGroupContentsContext(TagHelperContext context)

@@ -22,6 +22,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components
                 {
                     Name = "John",
                     Age = 65,
+                    Country = "CA",
                     Phone = new PhoneModel { Number = "326346231", Name = "MyPhone" }
                 };
             }

@@ -12,9 +12,11 @@
 
 <div class="demo-with-code">
     <div class="demo-area">
-        <form abp-dynamic-form="@Model.PersonInput" asp-antiforgery="true">
+        <abp-dynamic-form abp-model="@Model.PersonInput" asp-antiforgery="true" asp-controller="Demo" asp-action="Register">
             <abp-button type="submit" button-type="Primary" text="Submit" />
-            @*<abp-input asp-for="PersonInput.Name"></abp-input>*@
+            <abp-input asp-for="PersonInput.Name" label="xd"></abp-input>
+        </abp-dynamic-form>
+        <form asp-antiforgery="true" asp-controller="Demo" asp-action="Register">
         </form>
         <hr />
         <h5>Posted Values:</h5>
