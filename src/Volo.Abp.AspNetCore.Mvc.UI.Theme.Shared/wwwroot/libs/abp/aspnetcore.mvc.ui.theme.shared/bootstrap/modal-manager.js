@@ -65,39 +65,15 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
             function _initAndShowModal() {
                 _$modal = _$modalContainer.find('.modal');
                 _$form = _$modalContainer.find('form');
-
                 if (_$form.length) {
                     $.validator.unobtrusive.parse(_$form); //TODO: We should do a more common system to initialize component on ajax-loaded DOM elements. validator.unobtrusive.parse is only one thing to do.
                     if (_$form.attr('data-ajaxForm') !== 'false') {
                         //TODO: Create abpAjaxForm to not repeat that code!
-                        _$form.ajaxForm({
+                        _$form.abpAjaxForm({
                             dataType: 'json',
-                            beforeSubmit: function () {
-                                if ($.validator && !_$form.valid()) {
-                                    return false;
-                                }
-
-                                _setBusy(true);
-                                return true;
-                            },
                             success: function() {
                                 _publicApi.setResult.apply(_publicApi, arguments);
                                 _$modal.modal('hide');
-                            },
-                            error: function (jqXHR) {
-                                //TODO: Better and central error handling!
-                                if (jqXHR.getResponseHeader('_AbpErrorFormat') === 'true') {
-                                    abp.ajax.logError(jqXHR.responseJSON.error);
-                                    var messagePromise = abp.ajax.showError(jqXHR.responseJSON.error);
-                                    if (jqXHR.status === 401) {
-                                        abp.ajax.handleUnAuthorizedRequest(messagePromise);
-                                    }
-                                } else {
-                                    abp.ajax.handleErrorStatusCode(jqXHR.status);
-                                }
-                            },
-                            complete: function() {
-                                _setBusy(false);
                             }
                         });
                     }
@@ -166,14 +142,6 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
                 _onResultCallbacks.add(callback);
             }
 
-            function _setBusy(isBusy) {
-                if (!_$modal) {
-                    return;
-                }
-
-                _$modal.find('.modal-footer button').buttonBusy(isBusy);
-            }
-
             _publicApi = {
 
                 open: _open,
@@ -203,8 +171,6 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
                 getOptions: function() {
                     return _options;
                 },
-
-                setBusy: _setBusy,
 
                 setResult: function () {
                     _onResultCallbacks.triggerAll(_publicApi, arguments);
