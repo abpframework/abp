@@ -1,6 +1,6 @@
 ﻿(function ($) {
 
-    function enableAjaxForm($forms, validate) {
+    function enableFormFeatures($forms, validate) {
         if ($forms.length) {
             $forms.each(function () {
                 var $form = $(this);
@@ -41,7 +41,7 @@
             container: 'body'
         });
 
-        enableAjaxForm(args.$el.findWithSelf('form'), true);
+        enableFormFeatures(args.$el.findWithSelf('form'), true);
     });
 
     abp.dom.onNodeRemoved(function (args) {
@@ -59,7 +59,7 @@
             container: 'body'
         });
 
-        enableAjaxForm($('form'));
+        enableFormFeatures($('form'));
     });
 
 })(jQuery);
