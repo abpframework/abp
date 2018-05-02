@@ -1,0 +1,6 @@
+﻿@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars
+@model Toolbar
+@foreach (var toolbarItem in Model.Items)
+{
+    <text>@(await Component.InvokeAsync(toolbarItem.ComponentType))</text>
+}

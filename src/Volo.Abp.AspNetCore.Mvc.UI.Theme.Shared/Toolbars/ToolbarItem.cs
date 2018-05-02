@@ -1,0 +1,20 @@
+﻿using System;
+using JetBrains.Annotations;
+
+namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars
+{
+    public class ToolbarItem
+    {
+        public Type ComponentType
+        {
+            get => _componentType;
+            set => _componentType = Check.NotNull(value, nameof(value));
+        }
+        private Type _componentType;
+
+        public ToolbarItem([NotNull] Type componentType)
+        {
+            ComponentType = Check.NotNull(componentType, nameof(componentType));
+        }
+    }
+}

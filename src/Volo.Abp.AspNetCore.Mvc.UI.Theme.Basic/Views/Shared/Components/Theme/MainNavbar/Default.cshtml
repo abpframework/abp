@@ -1,6 +1,6 @@
 ﻿@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Views.Shared.Components.Theme.MainNavbar.Brand
 @using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Views.Shared.Components.Theme.MainNavbar.Menu
-@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Views.Shared.Components.Theme.MainNavbar.Tools
+@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Views.Shared.Components.Theme.MainNavbar.Toolbar
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" id="main-navbar">
     @(await Component.InvokeAsync<MainNavbarBrandViewComponent>())
     <button class="navbar-toggler" type="button" data-toggle="collapse" 
@@ -14,8 +14,7 @@
         </ul>
 
         <span id="main-navbar-tools">
-            @(await Component.InvokeAsync<MainNavbarToolsViewComponent>())
-
+            @(await Component.InvokeAsync<MainNavbarToolbarViewComponent>())
         </span>
     </div>
 </nav>
