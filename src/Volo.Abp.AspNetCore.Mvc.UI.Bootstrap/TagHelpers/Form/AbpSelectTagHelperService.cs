@@ -70,7 +70,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 throw new Exception("No items provided for select attribute.");
             }
 
-            SetSelectedValue(TagHelper.AspFor.ModelExplorer.Model.ToString(), selectItems);
+            SetSelectedValue(selectItems);
 
             var selectTagHelper = new SelectTagHelper(_generator)
             {
@@ -118,8 +118,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             return selectItems != null;
         }
 
-        protected virtual void SetSelectedValue(string selectedValue, List<SelectListItem> selectItems)
+        protected virtual void SetSelectedValue(List<SelectListItem> selectItems)
         {
+            var selectedValue = GetSelectedValue();
+
             if (!selectItems.Any(si => si.Selected))
             {
                 var itemToBeSelected = selectItems.FirstOrDefault(si => si.Value.ToString() == selectedValue);
@@ -129,6 +131,18 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                     itemToBeSelected.Selected = true;
                 }
             }
+        }
+
+        protected virtual string GetSelectedValue()
+        {
+            if (TagHelper.AspFor.ModelExplorer.Metadata.IsEnum)
+            {
+                var baseType = TagHelper.AspFor.ModelExplorer.Model.GetType().GetEnumUnderlyingType();
+                var valueAsString = Convert.ChangeType(TagHelper.AspFor.ModelExplorer.Model, baseType);
+                return valueAsString != null ? valueAsString.ToString() : "";
+            }
+
+            return TagHelper.AspFor.ModelExplorer.Model.ToString();
         }
     }
 }
