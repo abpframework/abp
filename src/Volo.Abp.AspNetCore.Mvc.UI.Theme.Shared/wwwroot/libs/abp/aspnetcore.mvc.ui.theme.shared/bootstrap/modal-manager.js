@@ -66,18 +66,19 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
                 _$modal = _$modalContainer.find('.modal');
                 _$form = _$modalContainer.find('form');
                 if (_$form.length) {
-                    if (_$form.attr('data-ajaxForm') !== 'false') {
-                        _$form.abpAjaxForm({
-                            success: function() {
-                                _publicApi.setResult.apply(_publicApi, arguments);
-                                _$modal.modal('hide');
-                            }
-                        });
+                    if (_$form.attr('data-ajaxForm') === undefined || _$form.attr('data-ajaxForm') === false) {
+                        _$form.abpAjaxForm();
                     }
+
+                    _$form.on('abp-ajax-success',
+                        function() {
+                            _publicApi.setResult.apply(_publicApi, arguments);
+                            _$modal.modal('hide');
+                        });
                 } else {
                     _$form = null;
                 }
-
+                
                 _$modal.modal({
                     backdrop: 'static'
                 });

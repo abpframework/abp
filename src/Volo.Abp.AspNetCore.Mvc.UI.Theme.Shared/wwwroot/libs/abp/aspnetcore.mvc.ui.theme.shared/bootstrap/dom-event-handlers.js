@@ -1,5 +1,21 @@
-﻿(function($) {
-    
+﻿(function ($) {
+
+    function enableAjaxForm($forms, validate) {
+        if ($forms.length) {
+            $forms.each(function () {
+                var $form = $(this);
+
+                if (validate === true) {
+                    $.validator.unobtrusive.parse($form);
+                }
+
+                if ($form.attr('data-ajaxForm') === 'true') {
+                    $form.abpAjaxForm();
+                }
+            });
+        }
+    }
+
     abp.dom.onNodeAdded(function (args) {
         args.$el.findWithSelf('[data-toggle="tooltip"]').tooltip({
             container: 'body'
@@ -9,12 +25,7 @@
             container: 'body'
         });
 
-        var $forms = args.$el.findWithSelf('form');
-        if ($forms.length) {
-            $forms.each(function() {
-                $.validator.unobtrusive.parse($(this));
-            });
-        }
+        enableAjaxForm(args.$el.findWithSelf('form'), true);
     });
 
     abp.dom.onNodeRemoved(function (args) {
@@ -31,6 +42,8 @@
         $('[data-toggle="popover"]').popover({
             container: 'body'
         });
+
+        enableAjaxForm($('form'));
     });
 
 })(jQuery);
