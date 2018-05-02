@@ -70,7 +70,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
             output.PostContent.SetHtmlContent(output.PostContent.GetContent() + formTagOutput.PostContent.GetContent());
             output.PreContent.SetHtmlContent(output.PreContent.GetContent() + formTagOutput.PreContent.GetContent());
-            output.Content.SetHtmlContent(output.Content.GetContent() + formTagOutput.Content.GetContent());
         }
 
         protected virtual void NormalizeTagMode(TagHelperContext context, TagHelperOutput output)
