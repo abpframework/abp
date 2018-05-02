@@ -23,6 +23,9 @@
     "Actions": "Actions",
     "Delete": "Delete",
     "Edit": "Edit",
-    "ProcessingWithThreeDot": "Processing..."
+    "ProcessingWithThreeDot": "Processing...",
+    "Login": "Login",
+    "Register": "Register",
+    "Logout": "Log out"
   }
 }

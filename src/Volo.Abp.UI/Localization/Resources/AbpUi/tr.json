@@ -23,6 +23,9 @@
     "Actions": "İşlemler",
     "Delete": "Sil",
     "Edit": "Düzenle",
-    "ProcessingWithThreeDot": "İşleniyor..."
+    "ProcessingWithThreeDot": "İşleniyor...",
+    "Login": "Giriş",
+    "Register": "Kaydol",
+    "Logout": "Çıkış"
   }
 }

@@ -1,15 +1,18 @@
-﻿@using Volo.Abp.MultiTenancy
+﻿@using Localization.Resources.AbpUi
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.MultiTenancy
 @using Volo.Abp.UI.Navigation
 @using Volo.Abp.Users
 @model ApplicationMenu
 @inject ICurrentUser CurrentUser
 @inject ICurrentTenant CurrentTenant
+@inject IHtmlLocalizer<AbpUiResource> L
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
     <a class="navbar-brand" href="~/"><i>Project</i>Name</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar-collapse-area" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+    <div class="collapse navbar-collapse" id="main-navbar-collapse-area">
         <ul class="navbar-nav mr-auto">
             @foreach (var menuItem in Model.Items)
             {
@@ -35,21 +38,21 @@
             }
         </ul>
 
-        @if (CurrentTenant.IsAvailable)
+        @*@if (CurrentTenant.IsAvailable)
         {
             <span>@CurrentTenant.Id?.ToString()</span>
         }
         else
         {
             <span>no-tenant</span>
-        }
+        }*@
 
         &nbsp;|&nbsp;
 
         @if (CurrentUser.IsAuthenticated)
         {
             <div>
-                <span style="color: #fff">@CurrentUser.UserName</span> (<a href="/Account/Logout">Logout</a>)
+                <span style="color: #fff">@CurrentUser.UserName</span> (<a href="/Account/Logout">@L["Logout"]</a>)
             </div>
         }
         else
