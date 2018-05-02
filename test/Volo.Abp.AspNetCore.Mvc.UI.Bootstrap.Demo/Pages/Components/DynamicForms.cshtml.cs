@@ -47,7 +47,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components
         {
             [Required]
             [DisplayName("Name")]
-            public string Name { get; set; } = "MyName";
+            public string Name { get; set; }
 
             [Required]
             [DisplayName("Age")]
@@ -71,6 +71,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components
             [DisplayName("Country")]
             [SelectItems(ItemsListPropertyName = nameof(Countries))]
             public string Country { get; set; }
+
+            [DisplayName("Country")]
+            [SelectItems(ItemsListPropertyName = nameof(Countries))]
+            public IEnumerable<string> MultiCountry { get; set; }
         }
 
         public class PhoneModel
