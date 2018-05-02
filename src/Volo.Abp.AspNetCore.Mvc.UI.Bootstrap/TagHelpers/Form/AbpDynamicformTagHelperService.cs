@@ -47,7 +47,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
             SetFormAttributes(output);
 
-            SetSubmitButton(context, output);
+            if (TagHelper.SubmitButton ?? false)
+            {
+                SetSubmitButton(context, output);
+            }
         }
 
         protected virtual async Task ConvertToMvcForm(TagHelperContext context, TagHelperOutput output)
