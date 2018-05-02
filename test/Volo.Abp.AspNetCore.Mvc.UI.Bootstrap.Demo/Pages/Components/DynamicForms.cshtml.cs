@@ -40,7 +40,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components
             public string Name { get; set; } = "MyName";
 
             [Required]
-            [DisplayOrder(61)]
             [DisplayName("Age")]
             [Range(1, 100)]
             public int Age { get; set; }
@@ -53,9 +52,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components
 
             [DataType(DataType.Date)]
             [DisplayName("Day")]
+            [DisplayOrder(10003)]
             public DateTime Day { get; set; }
-
-            [DisplayOrder(51)]
+            
             [DisplayName("Is Active")]
             public bool IsActive { get; set; }
 
@@ -74,11 +73,12 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components
         public class PhoneModel
         {
             [Required]
+            [DisplayOrder(10002)]
             [DisplayName("Number")]
             public string Number { get; set; }
 
             [Required]
-            [DisplayOrder(71)]
+            [DisplayOrder(10001)]
             [DisplayName("PhoneName")]
             public string Name { get; set; }
         }

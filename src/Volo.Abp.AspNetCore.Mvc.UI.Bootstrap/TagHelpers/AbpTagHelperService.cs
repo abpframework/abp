@@ -97,7 +97,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
 
         protected virtual int GetInputOrder(ModelExplorer explorer)
         {
-            return GetAttribute<DisplayOrder>(explorer)?.Number ?? 0;
+            return GetAttribute<DisplayOrder>(explorer)?.Number ?? DisplayOrder.Default;
         }
 
         protected virtual void AddGroupToFormGroupContents(TagHelperContext context, string propertyName, string html, int order)

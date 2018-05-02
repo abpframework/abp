@@ -14,7 +14,7 @@
     <div class="demo-area">
         <abp-dynamic-form abp-model="@Model.PersonInput" asp-antiforgery="true" asp-controller="Demo" asp-action="Register">
             <abp-button type="submit" button-type="Primary" text="Submit" />
-            <abp-input asp-for="PersonInput.Name" label="xd"></abp-input>
+            <abp-input asp-for="@Model.PersonInput.Phone.Number" label="Phone Number"/>
         </abp-dynamic-form>
         <form asp-antiforgery="true" asp-controller="Demo" asp-action="Register">
         </form>
