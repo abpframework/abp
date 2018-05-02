@@ -1,4 +1,5 @@
 ﻿@using Volo.Abp.AspNetCore.Mvc.AntiForgery
+@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Views.Shared.Components.Theme.MainNavbar
 @using Volo.Abp.UI.Navigation
 @inject IAbpAntiForgeryManager AbpAntiForgeryManager
 @{
@@ -23,8 +24,7 @@
 </head>
 <body>
 
-    <!-- We should pass all optional parapeters because of a bug in MVC -->
-    <vc:abp-menu menu-name="@StandardMenus.Main" view-name="Default"></vc:abp-menu>
+    @(await Component.InvokeAsync<MainNavbarViewComponent>())
 
     <div class="container-fluid">
         @RenderBody()

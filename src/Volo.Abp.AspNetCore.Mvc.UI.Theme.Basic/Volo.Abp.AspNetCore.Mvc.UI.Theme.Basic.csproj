@@ -21,14 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="Pages\Error\Index.cshtml" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <None Remove="web.config" />
-  </ItemGroup>
-  
-  <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.csproj" />
   </ItemGroup>
 

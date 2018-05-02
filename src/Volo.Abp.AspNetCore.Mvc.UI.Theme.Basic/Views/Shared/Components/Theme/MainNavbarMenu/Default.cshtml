@@ -1,0 +1,24 @@
+﻿@using Volo.Abp.UI.Navigation
+@model ApplicationMenu
+@foreach (var menuItem in Model.Items)
+{
+    if (menuItem.IsLeaf)
+    {
+        <li class="nav-item @(menuItem.IsDisabled ? "disabled" : "")">
+            <!-- active -->
+            <a class="nav-link" href="@(menuItem.Url ?? "#")">@menuItem.DisplayName</a> @*<span class="sr-only">(current)</span>*@
+        </li>
+    }
+    else
+    {
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="Menu_@(menuItem.Name)" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">@menuItem.DisplayName</a>
+            <div class="dropdown-menu" aria-labelledby="Menu_@(menuItem.Name)">
+                @foreach (var childMenuItem in menuItem.Items)
+                {
+                    <a class="dropdown-item" href="@(childMenuItem.Url ?? "#")">@childMenuItem.DisplayName</a>
+                }
+            </div>
+        </li>
+    }
+}
