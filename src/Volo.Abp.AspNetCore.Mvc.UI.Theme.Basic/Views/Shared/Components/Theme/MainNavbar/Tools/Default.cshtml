@@ -1,0 +1,15 @@
+﻿@using Localization.Resources.AbpUi
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.MultiTenancy
+@using Volo.Abp.Users
+@inject ICurrentUser CurrentUser
+@inject ICurrentTenant CurrentTenant
+@inject IHtmlLocalizer<AbpUiResource> L
+@if (CurrentUser.IsAuthenticated)
+{
+    <span style="color: #fff">@CurrentUser.UserName</span> <text>(<a href="/Account/Logout">@L["Logout"]</a>)</text>
+}
+else
+{
+    <a href="/Account/Login">Login</a>
+}

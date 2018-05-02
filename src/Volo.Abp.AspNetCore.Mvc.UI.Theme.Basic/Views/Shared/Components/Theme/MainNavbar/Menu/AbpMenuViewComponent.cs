@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.UI.Navigation;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Views.Shared.Components.Theme.MainNavbarMenu
+namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Views.Shared.Components.Theme.MainNavbar.Menu
 {
     public class MainNavbarMenuViewComponent : AbpViewComponent
     {
@@ -16,7 +16,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Views.Shared.Components.Theme.M
         public async Task<IViewComponentResult> InvokeAsync()
         {
             var menu = await _menuManager.GetAsync(StandardMenus.Main);
-            return View("~/Views/Shared/Components/Theme/MainNavbarMenu/Default.cshtml", menu);
+            return View("~/Views/Shared/Components/Theme/MainNavbar/Menu/Default.cshtml", menu);
         }
     }
 }
