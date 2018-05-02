@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button;
@@ -170,7 +171,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         protected virtual List<ModelExpression> ExploreModelsRecursively(List<ModelExpression> list, ModelExplorer model)
         {
-            if (IsCsharpClassOrPrimitive(model.ModelType))
+            if (IsCsharpClassOrPrimitive(model.ModelType) || IsListOfCsharpClassOrPrimitive(model.ModelType))
             {
                 list.Add(ModelExplorerToModelExpressionConverter(model));
 
@@ -199,8 +200,25 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             return new ModelExpression(propertyName, explorer);
         }
 
+        protected virtual bool IsListOfCsharpClassOrPrimitive(Type type)
+        {
+            var genericType = type.GenericTypeArguments.FirstOrDefault();
+
+            if (genericType == null || !IsCsharpClassOrPrimitive(genericType))
+            {
+                return false;
+            }
+
+            return type.ToString().StartsWith("System.Collections.Generic.IEnumerable`") || type.ToString().StartsWith("System.Collections.Generic.List`");
+        }
+
         protected virtual bool IsCsharpClassOrPrimitive(Type type)
         {
+            if (type == null)
+            {
+                return false;
+            }
+
             return type.IsPrimitive ||
                    type.IsValueType ||
                    type == typeof(DateTime) ||
