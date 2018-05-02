@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Threading;
@@ -21,7 +22,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
         protected AbpTagHelper(TService service)
         {
             Service = service;
-            Service.TagHelper = (TTagHelper)this;
+            Service.As<AbpTagHelperService<TTagHelper>>().TagHelper = (TTagHelper)this;
         }
 
         public override void Init(TagHelperContext context)

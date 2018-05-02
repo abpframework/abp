@@ -17,7 +17,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
     {
         protected const string FormGroupContents = "FormGroupContents";
 
-        public TTagHelper TagHelper { get; set; }
+        public TTagHelper TagHelper { get; internal set; }
 
         public virtual int Order { get; }
 

@@ -7,7 +7,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
     public interface IAbpTagHelperService<TTagHelper> : ITransientDependency
         where TTagHelper : TagHelper
     {
-        TTagHelper TagHelper { get; set; }
+        TTagHelper TagHelper { get; }
 
         int Order { get; }
 
