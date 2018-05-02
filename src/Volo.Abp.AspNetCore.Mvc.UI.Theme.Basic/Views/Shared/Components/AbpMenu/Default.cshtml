@@ -9,10 +9,10 @@
 @inject IHtmlLocalizer<AbpUiResource> L
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
     <a class="navbar-brand" href="~/"><i>Project</i>Name</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar-collapse-area" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar-collapse" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="main-navbar-collapse-area">
+    <div class="collapse navbar-collapse" id="main-navbar-collapse">
         <ul class="navbar-nav mr-auto">
             @foreach (var menuItem in Model.Items)
             {
@@ -38,26 +38,15 @@
             }
         </ul>
 
-        @*@if (CurrentTenant.IsAvailable)
-        {
-            <span>@CurrentTenant.Id?.ToString()</span>
-        }
-        else
-        {
-            <span>no-tenant</span>
-        }*@
-
-        &nbsp;|&nbsp;
-
-        @if (CurrentUser.IsAuthenticated)
-        {
-            <div>
-                <span style="color: #fff">@CurrentUser.UserName</span> (<a href="/Account/Logout">@L["Logout"]</a>)
-            </div>
-        }
-        else
-        {
-            <a href="/Account/Login">Login</a>
-        }
+        <span id="main-navbar-tools">
+            @if (CurrentUser.IsAuthenticated)
+            {
+                <span style="color: #fff">@CurrentUser.UserName</span> <text>(<a href="/Account/Logout">@L["Logout"]</a>)</text>
+            }
+            else
+            {
+                <a href="/Account/Login">Login</a>
+            }
+        </span>
     </div>
 </nav>
