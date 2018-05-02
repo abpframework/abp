@@ -22,7 +22,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
         private readonly IServiceProvider _serviceProvider;
 
         public AbpDynamicFormTagHelperService(
-            HtmlEncoder htmlEncoder, 
+            HtmlEncoder htmlEncoder,
             IHtmlGenerator htmlGenerator,
             IServiceProvider serviceProvider)
         {
@@ -33,19 +33,19 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            var list = InitilizeFormGroupContentsContext(context);
+            var list = InitilizeFormGroupContentsContext(context, output);
 
             NormalizeTagMode(context, output);
-            
+
             await output.GetChildContentAsync();
 
             await ConvertToMvcForm(context, output);
 
             ProcessFields(context, output);
 
-            SetContent(output,list);
+            SetContent(output, list);
 
-            SetFormAttributes(output);
+            SetFormAttributes(context, output);
 
             SetSubmitButton(context, output);
         }
@@ -66,7 +66,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 RouteValues = TagHelper.RouteValues,
                 ViewContext = TagHelper.ViewContext
             };
-            
+
             var formTagOutput = GetInnerTagHelper(output.Attributes, context, formTagHelper, "form", TagMode.StartTagAndEndTag);
 
             await formTagOutput.GetChildContentAsync();
@@ -81,7 +81,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             output.TagName = "form";
         }
 
-        protected virtual void SetFormAttributes(TagHelperOutput output)
+        protected virtual void SetFormAttributes(TagHelperContext context, TagHelperOutput output)
         {
             output.Attributes.AddIfNotContains("method", "post");
         }
@@ -110,13 +110,13 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             output.PostContent.SetHtmlContent(output.PostContent.GetContent() + buttonHtml);
         }
 
-        protected virtual List<FormGroupItem> InitilizeFormGroupContentsContext(TagHelperContext context)
+        protected virtual List<FormGroupItem> InitilizeFormGroupContentsContext(TagHelperContext context, TagHelperOutput output)
         {
             var items = new List<FormGroupItem>();
             context.Items[FormGroupContents] = items;
             return items;
         }
-        
+
         protected virtual void ProcessFields(TagHelperContext context, TagHelperOutput output)
         {
             var models = GetModels(context, output);
@@ -125,15 +125,15 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             {
                 if (IsSelectGroup(context, model))
                 {
-                    ProcessSelectGroup(context, model);
+                    ProcessSelectGroup(context, output, model);
                     continue;
                 }
 
-                ProcessInputGroup(context, model);
+                ProcessInputGroup(context, output, model);
             }
         }
 
-        protected virtual void ProcessSelectGroup(TagHelperContext context, ModelExpression model)
+        protected virtual void ProcessSelectGroup(TagHelperContext context, TagHelperOutput output, ModelExpression model)
         {
             var abpSelectTagHelper = _serviceProvider.GetRequiredService<AbpSelectTagHelper>();
             abpSelectTagHelper.AspFor = model;
@@ -154,7 +154,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             return RenderTagHelper(attributes, context, abpButtonTagHelper, _htmlEncoder, "button", TagMode.StartTagAndEndTag);
         }
 
-        protected virtual void ProcessInputGroup(TagHelperContext context, ModelExpression model)
+        protected virtual void ProcessInputGroup(TagHelperContext context, TagHelperOutput output, ModelExpression model)
         {
             var abpInputTagHelper = _serviceProvider.GetRequiredService<AbpInputTagHelper>();
             abpInputTagHelper.AspFor = model;

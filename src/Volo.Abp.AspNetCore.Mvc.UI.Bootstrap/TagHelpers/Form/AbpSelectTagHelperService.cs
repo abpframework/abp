@@ -32,7 +32,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
             var order = GetInputOrder(TagHelper.AspFor.ModelExplorer);
 
-            AddGroupToFormGroupContents(context, TagHelper.AspFor.Name, SurroundInnerHtmlAndGet(innerHtml), order, out var surpress);
+            AddGroupToFormGroupContents(context, TagHelper.AspFor.Name, SurroundInnerHtmlAndGet(context, output, innerHtml), order, out var surpress);
 
             if (surpress)
             {
@@ -49,28 +49,21 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         protected virtual string GetFormInputGroupAsHtml(TagHelperContext context, TagHelperOutput output)
         {
-            var selectTag = GetSelectTag(context);
+            var selectTag = GetSelectTag(context, output);
             var selectAsHtml = RenderTagHelperOutput(selectTag, _encoder);
-            var label = GetLabelAsHtml(selectTag);
+            var label = GetLabelAsHtml(context, output, selectTag);
 
             return label + Environment.NewLine + selectAsHtml;
         }
 
-        protected virtual string SurroundInnerHtmlAndGet(string innerHtml)
+        protected virtual string SurroundInnerHtmlAndGet(TagHelperContext context, TagHelperOutput output, string innerHtml)
         {
             return "<div class=\"form-group\">" + Environment.NewLine + innerHtml + Environment.NewLine + "</div>";
         }
 
-        protected virtual TagHelperOutput GetSelectTag(TagHelperContext context)
+        protected virtual TagHelperOutput GetSelectTag(TagHelperContext context, TagHelperOutput output)
         {
-            var selectItems = TagHelper.AspItems?.ToList();
-
-            if (TagHelper.AspItems == null && !GetSelectItemsIfProvidedByEnum(TagHelper.AspFor.ModelExplorer, out selectItems) && !GetSelectItemsIfProvidedFromAttribute(TagHelper.AspFor.ModelExplorer, out selectItems))
-            {
-                throw new Exception("No items provided for select attribute.");
-            }
-
-            SetSelectedValue(selectItems);
+            var selectItems = GetSelectItems(context, output);
 
             var selectTagHelper = new SelectTagHelper(_generator)
             {
@@ -79,14 +72,28 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 ViewContext = TagHelper.ViewContext
             };
 
-            var inputTagHelperOutput = GetInnerTagHelper(new TagHelperAttributeList(), context, selectTagHelper, "select", TagMode.StartTagAndEndTag); ;
+            var inputTagHelperOutput = GetInnerTagHelper(new TagHelperAttributeList(), context, selectTagHelper, "select", TagMode.StartTagAndEndTag);
 
             inputTagHelperOutput.Attributes.Add("class", "form-control");
 
             return inputTagHelperOutput;
         }
 
-        protected virtual string GetLabelAsHtml(TagHelperOutput selectTag)
+        protected virtual List<SelectListItem> GetSelectItems(TagHelperContext context, TagHelperOutput output)
+        {
+            var selectItems = TagHelper.AspItems?.ToList();
+
+            if (TagHelper.AspItems == null && !GetSelectItemsIfProvidedByEnum(context, output, TagHelper.AspFor.ModelExplorer, out selectItems) && !GetSelectItemsIfProvidedFromAttribute(context, output, TagHelper.AspFor.ModelExplorer, out selectItems))
+            {
+                throw new Exception("No items provided for select attribute.");
+            }
+
+            SetSelectedValue(context, output, selectItems);
+
+            return selectItems;
+        }
+
+        protected virtual string GetLabelAsHtml(TagHelperContext context, TagHelperOutput output, TagHelperOutput selectTag)
         {
             if (string.IsNullOrEmpty(TagHelper.Label) && string.IsNullOrEmpty(TagHelper.AspFor.Metadata.DisplayName))
             {
@@ -103,7 +110,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 TagHelper.Label;
         }
 
-        protected virtual bool GetSelectItemsIfProvidedByEnum(ModelExplorer explorer, out List<SelectListItem> selectItems)
+        protected virtual bool GetSelectItemsIfProvidedByEnum(TagHelperContext context, TagHelperOutput output, ModelExplorer explorer, out List<SelectListItem> selectItems)
         {
             selectItems = explorer.Metadata.IsEnum ? explorer.ModelType.GetTypeInfo().GetMembers(BindingFlags.Public | BindingFlags.Static)
                 .Select((t, i) => new SelectListItem { Value = i.ToString(), Text = t.Name }).ToList() : null;
@@ -111,16 +118,16 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             return selectItems != null;
         }
 
-        protected virtual bool GetSelectItemsIfProvidedFromAttribute(ModelExplorer explorer, out List<SelectListItem> selectItems)
+        protected virtual bool GetSelectItemsIfProvidedFromAttribute(TagHelperContext context, TagHelperOutput output, ModelExplorer explorer, out List<SelectListItem> selectItems)
         {
             selectItems = GetAttribute<SelectItems>(explorer)?.GetItems(explorer, explorer.Model.ToString())?.ToList();
 
             return selectItems != null;
         }
 
-        protected virtual void SetSelectedValue(List<SelectListItem> selectItems)
+        protected virtual void SetSelectedValue(TagHelperContext context, TagHelperOutput output, List<SelectListItem> selectItems)
         {
-            var selectedValue = GetSelectedValue();
+            var selectedValue = GetSelectedValue(context, output);
 
             if (!selectItems.Any(si => si.Selected))
             {
@@ -133,7 +140,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             }
         }
 
-        protected virtual string GetSelectedValue()
+        protected virtual string GetSelectedValue(TagHelperContext context, TagHelperOutput output)
         {
             if (TagHelper.AspFor.ModelExplorer.Metadata.IsEnum)
             {
