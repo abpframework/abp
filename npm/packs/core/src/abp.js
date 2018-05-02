@@ -236,7 +236,7 @@
         }
 
         return $.Deferred(function ($dfd) {
-            $dfd.resolve();
+            $dfd.resolve(result);
         });
     };
 

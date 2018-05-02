@@ -236,7 +236,7 @@ var abp = abp || {};
         }
 
         return $.Deferred(function ($dfd) {
-            $dfd.resolve();
+            $dfd.resolve(result);
         });
     };
 

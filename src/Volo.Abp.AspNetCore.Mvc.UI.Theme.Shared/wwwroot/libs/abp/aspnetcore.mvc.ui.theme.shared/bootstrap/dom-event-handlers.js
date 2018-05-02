@@ -9,6 +9,22 @@
                     $.validator.unobtrusive.parse($form);
                 }
 
+                var confirmText = $form.attr('data-confirm');
+                if (confirmText) {
+                    $form.submit(function(e) {
+                        if (!$form.data('abp-confirmed')) {
+                            e.preventDefault();
+                            abp.message.confirm(confirmText).done(function(accepted) {
+                                if (accepted) {
+                                    $form.data('abp-confirmed', true);
+                                    $form.submit();
+                                    $form.data('abp-confirmed', undefined);
+                                }
+                            });
+                        }
+                    });
+                }
+
                 if ($form.attr('data-ajaxForm') === 'true') {
                     $form.abpAjaxForm();
                 }
