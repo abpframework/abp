@@ -79,12 +79,15 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
             return property?.Metadata?.ContainerType?.GetTypeInfo()?.GetProperty(property.Metadata.PropertyName)?.GetCustomAttribute<T>();
         }
 
-        protected virtual List<FormGroupItem> GetFormGroupContentsList(TagHelperContext context)
+        protected virtual List<FormGroupItem> GetFormGroupContentsList(TagHelperContext context, out bool surpress)
         {
             if (!context.Items.ContainsKey(FormGroupContents))
             {
+                surpress = false;
                 return new List<FormGroupItem>();
             }
+
+            surpress = true;
             return context.Items[FormGroupContents] as List<FormGroupItem>;
         }
 
@@ -100,9 +103,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
             return GetAttribute<DisplayOrder>(explorer)?.Number ?? DisplayOrder.Default;
         }
 
-        protected virtual void AddGroupToFormGroupContents(TagHelperContext context, string propertyName, string html, int order)
+        protected virtual void AddGroupToFormGroupContents(TagHelperContext context, string propertyName, string html, int order, out bool surpress)
         {
-            var list = GetFormGroupContentsList(context);
+            var list = GetFormGroupContentsList(context, out surpress);
 
             if (list != null && !list.Any(igc => igc.HtmlContent.Contains("id=\"" + propertyName.Replace('.', '_') + "\"")))
             {

@@ -6,7 +6,7 @@ using Volo.Abp.Threading;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
 {
-    public abstract class AbpTagHelper : TagHelper //, ITransientDependency
+    public abstract class AbpTagHelper : TagHelper, ITransientDependency
     {
         
     }

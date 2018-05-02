@@ -15,13 +15,39 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         public SelectType SelectType { get; set; } = SelectType.Dropdown;
 
-        public IEnumerable<SelectListItem> GetItems(ModelExplorer explorer)
+        public IEnumerable<SelectListItem> GetItems(ModelExplorer explorer, string selectedValue)
         {
             var properties = explorer.Container.Properties.Where(p => p.Metadata.PropertyName.Equals(ItemsListPropertyName)).ToList();
 
-            return properties.Count > 0
-                ? properties.First().Model as IEnumerable<SelectListItem>
-                : null;
+            while (properties.Count == 0)
+            {
+                explorer = explorer.Container;
+                properties = explorer.Container.Properties.Where(p => p.Metadata.PropertyName.Equals(ItemsListPropertyName)).ToList();
+
+                if (explorer.Container == null)
+                {
+                    return null;
+                }
+            }
+
+            var selectItems = (properties.First().Model as IEnumerable<SelectListItem>).ToList();
+            
+            SetSelectedValue(selectedValue, selectItems);
+
+            return selectItems;
+        }
+
+        private static void SetSelectedValue(string selectedValue, List<SelectListItem> selectItems)
+        {
+            if (!selectItems.Any(si => si.Selected))
+            {
+                var itemToBeSelected = selectItems.FirstOrDefault(si => si.Value.ToString() == selectedValue);
+
+                if (itemToBeSelected != null)
+                {
+                    itemToBeSelected.Selected = true;
+                }
+            }
         }
     }
 }

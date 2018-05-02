@@ -5252,3 +5252,1640 @@ Parameter name: attributeName
 2018-05-02 10:34:54.983 +03:00 [INF] Request finished in 242.8136ms 304 application/javascript
 2018-05-02 10:35:40.276 +03:00 [INF] Request starting HTTP/1.1 POST http://127.0.0.1:12624/iisintegration  0
 2018-05-02 10:35:40.309 +03:00 [INF] Request finished in 6.7074ms 202 
+2018-05-02 10:48:59.812 +03:00 [INF] Loaded modules:
+2018-05-02 10:48:59.864 +03:00 [INF] - Volo.Abp.Threading.AbpThreadingModule
+2018-05-02 10:48:59.869 +03:00 [INF] - Volo.Abp.Security.AbpSecurityModule
+2018-05-02 10:48:59.875 +03:00 [INF] - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2018-05-02 10:48:59.880 +03:00 [INF] - Volo.Abp.AspNetCore.AbpAspNetCoreModule
+2018-05-02 10:48:59.886 +03:00 [INF] - Volo.Abp.Localization.AbpLocalizationModule
+2018-05-02 10:48:59.893 +03:00 [INF] - Volo.Abp.ApiVersioning.AbpApiVersioningAbstractionsModule
+2018-05-02 10:48:59.899 +03:00 [INF] - Volo.Abp.Http.AbpHttpAbstractionsModule
+2018-05-02 10:48:59.906 +03:00 [INF] - Volo.Abp.Timing.AbpTimingModule
+2018-05-02 10:48:59.912 +03:00 [INF] - Volo.Abp.Json.AbpJsonModule
+2018-05-02 10:48:59.917 +03:00 [INF] - Volo.Abp.Http.AbpHttpModule
+2018-05-02 10:48:59.922 +03:00 [INF] - Volo.Abp.Data.AbpDataModule
+2018-05-02 10:48:59.927 +03:00 [INF] - Volo.Abp.Settings.AbpSettingsModule
+2018-05-02 10:48:59.932 +03:00 [INF] - Volo.Abp.MultiTenancy.AbpMultiTenancyAbstractionsModule
+2018-05-02 10:48:59.936 +03:00 [INF] - Volo.Abp.Auditing.AbpAuditingModule
+2018-05-02 10:48:59.941 +03:00 [INF] - Volo.Abp.EventBus.AbpEventBusModule
+2018-05-02 10:48:59.946 +03:00 [INF] - Volo.Abp.Guids.AbpGuidsModule
+2018-05-02 10:48:59.950 +03:00 [INF] - Volo.Abp.Uow.AbpUnitOfWorkModule
+2018-05-02 10:48:59.955 +03:00 [INF] - Volo.Abp.Domain.AbpDddDomainModule
+2018-05-02 10:48:59.960 +03:00 [INF] - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2018-05-02 10:48:59.965 +03:00 [INF] - Volo.Abp.Validation.AbpValidationModule
+2018-05-02 10:48:59.969 +03:00 [INF] - Volo.Abp.Authorization.AbpAuthorizationModule
+2018-05-02 10:48:59.975 +03:00 [INF] - Volo.Abp.Application.AbpDddApplicationModule
+2018-05-02 10:48:59.979 +03:00 [INF] - Volo.Abp.UI.AbpUiModule
+2018-05-02 10:48:59.984 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcModule
+2018-05-02 10:48:59.988 +03:00 [INF] - Volo.Abp.UI.Navigation.AbpUiNavigationModule
+2018-05-02 10:48:59.993 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.AbpAspNetCoreMvcUiModule
+2018-05-02 10:49:00.000 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.AbpAspNetCoreMvcUiBootstrapModule
+2018-05-02 10:49:00.007 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.AbpAspNetCoreMvcUiThemeSharedModule
+2018-05-02 10:49:00.012 +03:00 [INF] - Volo.Abp.Castle.AbpCastleCoreModule
+2018-05-02 10:49:00.017 +03:00 [INF] - Volo.Abp.Autofac.AbpAutofacModule
+2018-05-02 10:49:00.022 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.AbpAspNetCoreMvcUiBootstrapDemoModule
+2018-05-02 10:49:00.236 +03:00 [INF] Initialized all modules.
+2018-05-02 10:49:00.532 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/  
+2018-05-02 10:49:03.807 +03:00 [INF] Executing handler method OnGet with arguments (null) - ModelState is "Valid"
+2018-05-02 10:49:04.813 +03:00 [INF] Executed action /Index in 1014.1512ms
+2018-05-02 10:49:04.828 +03:00 [INF] Request finished in 4314.5214ms 200 text/html; charset=utf-8
+2018-05-02 10:49:04.859 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables.css  
+2018-05-02 10:49:04.915 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/sweetalert/sweetalert.min.js  
+2018-05-02 10:49:04.920 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/jquery/abp.dom.js  
+2018-05-02 10:49:04.992 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/jquery/abp.ajax.js  
+2018-05-02 10:49:05.005 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/toastr/toastr.min.css  
+2018-05-02 10:49:05.079 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables.css'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/datatables/datatables.css'
+2018-05-02 10:49:05.129 +03:00 [INF] The file /libs/abp/jquery/abp.dom.js was not modified
+2018-05-02 10:49:05.177 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/toastr/toastr.min.js  
+2018-05-02 10:49:05.178 +03:00 [INF] The file /libs/abp/jquery/abp.ajax.js was not modified
+2018-05-02 10:49:05.202 +03:00 [INF] The file /libs/toastr/toastr.min.css was not modified
+2018-05-02 10:49:05.253 +03:00 [INF] The file /libs/sweetalert/sweetalert.min.js was not modified
+2018-05-02 10:49:05.271 +03:00 [INF] Request finished in 352.1006ms 304 application/javascript
+2018-05-02 10:49:05.288 +03:00 [INF] Request finished in 352.9798ms 304 application/javascript
+2018-05-02 10:49:05.366 +03:00 [INF] Request finished in 394.6189ms 304 application/javascript
+2018-05-02 10:49:05.392 +03:00 [INF] Request finished in 322.98ms 304 text/css
+2018-05-02 10:49:05.415 +03:00 [INF] The file /libs/toastr/toastr.min.js was not modified
+2018-05-02 10:49:05.441 +03:00 [INF] Request finished in 363.0027ms 200 text/css
+2018-05-02 10:49:05.443 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery-form/jquery-form-extensions.js  
+2018-05-02 10:49:05.480 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery-form/jquery-form-extensions.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/jquery_form/jquery-form-extensions.js'
+2018-05-02 10:49:05.497 +03:00 [INF] Request finished in 522.5696ms 304 application/javascript
+2018-05-02 10:49:05.498 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/modal-manager.js  
+2018-05-02 10:49:05.541 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/dom-event-handlers.js  
+2018-05-02 10:49:05.611 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery/jquery-extensions.js  
+2018-05-02 10:49:05.618 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/jquery/abp.resource-loader.js  
+2018-05-02 10:49:05.626 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/modal-manager.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/bootstrap/modal-manager.js'
+2018-05-02 10:49:05.631 +03:00 [INF] Request finished in 147.8946ms 200 application/javascript
+2018-05-02 10:49:05.634 +03:00 [INF] The file /libs/abp/jquery/abp.resource-loader.js was not modified
+2018-05-02 10:49:05.718 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables-extensions.js  
+2018-05-02 10:49:05.720 +03:00 [INF] Request finished in 237.2436ms 200 application/javascript
+2018-05-02 10:49:05.765 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery/jquery-extensions.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/jquery/jquery-extensions.js'
+2018-05-02 10:49:05.789 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/dom-event-handlers.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/bootstrap/dom-event-handlers.js'
+2018-05-02 10:49:05.803 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/sweetalert/abp-sweetalert.js  
+2018-05-02 10:49:05.847 +03:00 [INF] Request finished in 207.8002ms 304 application/javascript
+2018-05-02 10:49:05.880 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables-extensions.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/datatables/datatables-extensions.js'
+2018-05-02 10:49:05.885 +03:00 [INF] Request finished in 421.9448ms 200 application/javascript
+2018-05-02 10:49:05.915 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/sweetalert/abp-sweetalert.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/sweetalert/abp-sweetalert.js'
+2018-05-02 10:49:05.945 +03:00 [INF] Request finished in 317.9566ms 200 application/javascript
+2018-05-02 10:49:05.974 +03:00 [INF] Request finished in 255.4339ms 200 application/javascript
+2018-05-02 10:49:05.975 +03:00 [INF] Request finished in 335.8ms 200 application/javascript
+2018-05-02 10:49:06.030 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/toastr/abp-toastr.js  
+2018-05-02 10:49:06.038 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/toastr/abp-toastr.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/toastr/abp-toastr.js'
+2018-05-02 10:49:06.057 +03:00 [INF] Request finished in 189.9178ms 200 application/javascript
+2018-05-02 10:49:12.069 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/Components/DynamicForms  
+2018-05-02 10:49:12.440 +03:00 [INF] Executing handler method OnGet with arguments (null) - ModelState is "Valid"
+2018-05-02 10:49:12.740 +03:00 [INF] Executed action /Components/DynamicForms in 339.2309ms
+2018-05-02 10:49:12.872 +03:00 [ERR] An unhandled exception has occurred while executing the request
+System.InvalidOperationException: No service for type 'Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button.AbpButtonTagHelper' has been registered.
+   at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService(IServiceProvider provider, Type serviceType)
+   at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService[T](IServiceProvider provider)
+   at Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form.AbpDynamicFormTagHelperService.ProcessSubmitButtonAndGetContent(TagHelperContext context, TagHelperOutput output) in D:\github\abp\src\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap\TagHelpers\Form\AbpDynamicformTagHelperService.cs:line 144
+   at Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form.AbpDynamicFormTagHelperService.SetSubmitButton(TagHelperContext context, TagHelperOutput output) in D:\github\abp\src\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap\TagHelpers\Form\AbpDynamicformTagHelperService.cs:line 103
+   at Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form.AbpDynamicFormTagHelperService.<ProcessAsync>d__4.MoveNext() in D:\github\abp\src\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap\TagHelpers\Form\AbpDynamicformTagHelperService.cs:line 50
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Razor.Runtime.TagHelpers.TagHelperRunner.<RunAsync>d__0.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at AspNetCore._Pages_Components_DynamicForms_cshtml.<ExecuteAsync>d__16.MoveNext() in D:\github\abp\test\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo\Pages\Components\DynamicForms.cshtml:line 15
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Mvc.Razor.RazorView.<RenderPageCoreAsync>d__16.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Mvc.Razor.RazorView.<RenderPageAsync>d__15.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at Microsoft.AspNetCore.Mvc.Razor.RazorView.<RenderAsync>d__14.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Mvc.ViewFeatures.ViewExecutor.<ExecuteAsync>d__22.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.<InvokeResultAsync>d__19.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.<InvokeNextResultFilterAsync>d__24.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.Rethrow(ResultExecutedContext context)
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.<InvokeNextResourceFilter>d__22.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.Rethrow(ResourceExecutedContext context)
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.<InvokeFilterPipelineAsync>d__17.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.<InvokeAsync>d__15.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Builder.RouterMiddleware.<Invoke>d__4.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.<Invoke>d__7.MoveNext()
+2018-05-02 10:49:12.964 +03:00 [INF] Request finished in 894.1755ms 500 text/html; charset=utf-8
+2018-05-02 10:50:23.000 +03:00 [INF] Request starting HTTP/1.1 POST http://127.0.0.1:16100/iisintegration  0
+2018-05-02 10:50:23.007 +03:00 [INF] Request finished in 6.0963ms 202 
+2018-05-02 10:51:18.584 +03:00 [INF] Loaded modules:
+2018-05-02 10:51:18.644 +03:00 [INF] - Volo.Abp.Threading.AbpThreadingModule
+2018-05-02 10:51:18.653 +03:00 [INF] - Volo.Abp.Security.AbpSecurityModule
+2018-05-02 10:51:18.660 +03:00 [INF] - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2018-05-02 10:51:18.667 +03:00 [INF] - Volo.Abp.AspNetCore.AbpAspNetCoreModule
+2018-05-02 10:51:18.674 +03:00 [INF] - Volo.Abp.Localization.AbpLocalizationModule
+2018-05-02 10:51:18.680 +03:00 [INF] - Volo.Abp.ApiVersioning.AbpApiVersioningAbstractionsModule
+2018-05-02 10:51:18.688 +03:00 [INF] - Volo.Abp.Http.AbpHttpAbstractionsModule
+2018-05-02 10:51:18.694 +03:00 [INF] - Volo.Abp.Timing.AbpTimingModule
+2018-05-02 10:51:18.700 +03:00 [INF] - Volo.Abp.Json.AbpJsonModule
+2018-05-02 10:51:18.706 +03:00 [INF] - Volo.Abp.Http.AbpHttpModule
+2018-05-02 10:51:18.711 +03:00 [INF] - Volo.Abp.Data.AbpDataModule
+2018-05-02 10:51:18.717 +03:00 [INF] - Volo.Abp.Settings.AbpSettingsModule
+2018-05-02 10:51:18.723 +03:00 [INF] - Volo.Abp.MultiTenancy.AbpMultiTenancyAbstractionsModule
+2018-05-02 10:51:18.729 +03:00 [INF] - Volo.Abp.Auditing.AbpAuditingModule
+2018-05-02 10:51:18.736 +03:00 [INF] - Volo.Abp.EventBus.AbpEventBusModule
+2018-05-02 10:51:18.742 +03:00 [INF] - Volo.Abp.Guids.AbpGuidsModule
+2018-05-02 10:51:18.748 +03:00 [INF] - Volo.Abp.Uow.AbpUnitOfWorkModule
+2018-05-02 10:51:18.755 +03:00 [INF] - Volo.Abp.Domain.AbpDddDomainModule
+2018-05-02 10:51:18.760 +03:00 [INF] - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2018-05-02 10:51:18.765 +03:00 [INF] - Volo.Abp.Validation.AbpValidationModule
+2018-05-02 10:51:18.772 +03:00 [INF] - Volo.Abp.Authorization.AbpAuthorizationModule
+2018-05-02 10:51:18.798 +03:00 [INF] - Volo.Abp.Application.AbpDddApplicationModule
+2018-05-02 10:51:18.803 +03:00 [INF] - Volo.Abp.UI.AbpUiModule
+2018-05-02 10:51:18.808 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcModule
+2018-05-02 10:51:18.814 +03:00 [INF] - Volo.Abp.UI.Navigation.AbpUiNavigationModule
+2018-05-02 10:51:18.818 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.AbpAspNetCoreMvcUiModule
+2018-05-02 10:51:18.823 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.AbpAspNetCoreMvcUiBootstrapModule
+2018-05-02 10:51:18.828 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.AbpAspNetCoreMvcUiThemeSharedModule
+2018-05-02 10:51:18.839 +03:00 [INF] - Volo.Abp.Castle.AbpCastleCoreModule
+2018-05-02 10:51:18.845 +03:00 [INF] - Volo.Abp.Autofac.AbpAutofacModule
+2018-05-02 10:51:18.851 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.AbpAspNetCoreMvcUiBootstrapDemoModule
+2018-05-02 10:51:19.159 +03:00 [INF] Initialized all modules.
+2018-05-02 10:51:19.707 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/  
+2018-05-02 10:51:24.422 +03:00 [INF] Executing handler method OnGet with arguments (null) - ModelState is "Valid"
+2018-05-02 10:51:25.895 +03:00 [INF] Executed action /Index in 1472.5843ms
+2018-05-02 10:51:25.961 +03:00 [INF] Request finished in 6232.765ms 200 text/html; charset=utf-8
+2018-05-02 10:51:26.012 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery/jquery-extensions.js  
+2018-05-02 10:51:26.048 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery-form/jquery-form-extensions.js  
+2018-05-02 10:51:26.073 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/modal-manager.js  
+2018-05-02 10:51:26.167 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables-extensions.js  
+2018-05-02 10:51:26.187 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery/jquery-extensions.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/jquery/jquery-extensions.js'
+2018-05-02 10:51:26.200 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/modal-manager.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/bootstrap/modal-manager.js'
+2018-05-02 10:51:26.255 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery-form/jquery-form-extensions.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/jquery_form/jquery-form-extensions.js'
+2018-05-02 10:51:26.258 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/dom-event-handlers.js  
+2018-05-02 10:51:26.269 +03:00 [INF] Request finished in 223.4302ms 200 application/javascript
+2018-05-02 10:51:26.309 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables.css  
+2018-05-02 10:51:26.317 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/dom-event-handlers.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/bootstrap/dom-event-handlers.js'
+2018-05-02 10:51:26.328 +03:00 [INF] Request finished in 208.3065ms 200 application/javascript
+2018-05-02 10:51:26.346 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables-extensions.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/datatables/datatables-extensions.js'
+2018-05-02 10:51:26.411 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/sweetalert/abp-sweetalert.js  
+2018-05-02 10:51:26.420 +03:00 [INF] Request finished in 270.5059ms 200 application/javascript
+2018-05-02 10:51:26.441 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables.css'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/datatables/datatables.css'
+2018-05-02 10:51:26.464 +03:00 [INF] Request finished in 325.9187ms 200 application/javascript
+2018-05-02 10:51:26.488 +03:00 [INF] Request finished in 350.7309ms 200 application/javascript
+2018-05-02 10:51:26.515 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/toastr/abp-toastr.js  
+2018-05-02 10:51:26.518 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/sweetalert/abp-sweetalert.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/sweetalert/abp-sweetalert.js'
+2018-05-02 10:51:26.541 +03:00 [INF] Request finished in 177.0499ms 200 application/javascript
+2018-05-02 10:51:26.591 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/toastr/abp-toastr.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/toastr/abp-toastr.js'
+2018-05-02 10:51:26.625 +03:00 [INF] Request finished in 225.6791ms 200 application/javascript
+2018-05-02 10:51:26.628 +03:00 [INF] Request finished in 322.7264ms 200 text/css
+2018-05-02 10:51:28.133 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/Components/DynamicForms  
+2018-05-02 10:51:28.641 +03:00 [INF] Executing handler method OnGet with arguments (null) - ModelState is "Valid"
+2018-05-02 10:51:28.927 +03:00 [INF] Executed action /Components/DynamicForms in 335.07300000000004ms
+2018-05-02 10:51:28.941 +03:00 [INF] Request finished in 805.2259ms 200 text/html; charset=utf-8
+2018-05-02 10:51:28.981 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables.css  
+2018-05-02 10:51:29.021 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables.css was not modified
+2018-05-02 10:51:29.110 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery-form/jquery-form-extensions.js  
+2018-05-02 10:51:29.164 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables-extensions.js  
+2018-05-02 10:51:29.171 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery/jquery-extensions.js  
+2018-05-02 10:51:29.203 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/dom-event-handlers.js  
+2018-05-02 10:51:29.228 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/jquery-form/jquery-form-extensions.js was not modified
+2018-05-02 10:51:29.254 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/modal-manager.js  
+2018-05-02 10:51:29.260 +03:00 [INF] Request finished in 98.3421ms 304 text/css
+2018-05-02 10:51:29.268 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables-extensions.js was not modified
+2018-05-02 10:51:29.311 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/modal-manager.js was not modified
+2018-05-02 10:51:29.322 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/dom-event-handlers.js was not modified
+2018-05-02 10:51:29.420 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/sweetalert/abp-sweetalert.js  
+2018-05-02 10:51:29.515 +03:00 [INF] Request finished in 286.6927ms 304 application/javascript
+2018-05-02 10:51:29.517 +03:00 [INF] Request finished in 221.2009ms 304 application/javascript
+2018-05-02 10:51:29.538 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/sweetalert/abp-sweetalert.js was not modified
+2018-05-02 10:51:29.573 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/jquery/jquery-extensions.js was not modified
+2018-05-02 10:51:29.575 +03:00 [INF] Request finished in 243.2408ms 304 application/javascript
+2018-05-02 10:51:29.598 +03:00 [INF] Request finished in 315.0166ms 304 application/javascript
+2018-05-02 10:51:29.665 +03:00 [INF] Request finished in 568.2063ms 304 application/javascript
+2018-05-02 10:51:29.669 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/toastr/abp-toastr.js  
+2018-05-02 10:51:29.694 +03:00 [INF] Request finished in 206.4527ms 304 application/javascript
+2018-05-02 10:51:29.742 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/toastr/abp-toastr.js was not modified
+2018-05-02 10:51:29.753 +03:00 [INF] Request finished in 174.4289ms 304 application/javascript
+2018-05-02 10:51:56.549 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/Components/DynamicForms  
+2018-05-02 10:51:56.764 +03:00 [INF] Executing handler method OnGet with arguments (null) - ModelState is "Valid"
+2018-05-02 10:51:56.811 +03:00 [INF] Executed action /Components/DynamicForms in 46.618500000000004ms
+2018-05-02 10:51:56.821 +03:00 [INF] Request finished in 267.781ms 200 text/html; charset=utf-8
+2018-05-02 10:51:56.888 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/font-awesome/css/font-awesome.css  
+2018-05-02 10:51:56.899 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/css/demo.min.css  
+2018-05-02 10:51:56.935 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/bootstrap/css/bootstrap.css  
+2018-05-02 10:51:56.938 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/datatables.net-bs4/css/dataTables.bootstrap4.css  
+2018-05-02 10:51:56.946 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/toastr/toastr.min.css  
+2018-05-02 10:51:56.976 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables.css  
+2018-05-02 10:51:56.984 +03:00 [INF] The file /libs/bootstrap/css/bootstrap.css was not modified
+2018-05-02 10:51:57.029 +03:00 [INF] The file /libs/font-awesome/css/font-awesome.css was not modified
+2018-05-02 10:51:57.037 +03:00 [INF] The file /css/demo.min.css was not modified
+2018-05-02 10:51:57.055 +03:00 [INF] Request finished in 153.6031ms 304 text/css
+2018-05-02 10:51:57.055 +03:00 [INF] The file /libs/datatables.net-bs4/css/dataTables.bootstrap4.css was not modified
+2018-05-02 10:51:57.074 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables.css was not modified
+2018-05-02 10:51:57.079 +03:00 [INF] The file /libs/toastr/toastr.min.css was not modified
+2018-05-02 10:51:57.090 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/jquery/jquery.js  
+2018-05-02 10:51:57.105 +03:00 [INF] Request finished in 193.6728ms 304 text/css
+2018-05-02 10:51:57.166 +03:00 [INF] Request finished in 202.8289ms 304 text/css
+2018-05-02 10:51:57.169 +03:00 [INF] Request finished in 216.0394ms 304 text/css
+2018-05-02 10:51:57.221 +03:00 [INF] Request finished in 234.1655ms 304 text/css
+2018-05-02 10:51:57.244 +03:00 [INF] Request finished in 226.7315ms 304 text/css
+2018-05-02 10:51:57.289 +03:00 [INF] The file /libs/jquery/jquery.js was not modified
+2018-05-02 10:51:57.368 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/jquery-validation/jquery.validate.js  
+2018-05-02 10:51:57.419 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/jquery-form/jquery.form.min.js  
+2018-05-02 10:51:57.442 +03:00 [INF] Request finished in 224.0584ms 304 application/javascript
+2018-05-02 10:51:57.468 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js  
+2018-05-02 10:51:57.515 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/bootstrap/js/bootstrap.bundle.js  
+2018-05-02 10:51:57.521 +03:00 [INF] The file /libs/jquery-form/jquery.form.min.js was not modified
+2018-05-02 10:51:57.560 +03:00 [INF] The file /libs/jquery-validation/jquery.validate.js was not modified
+2018-05-02 10:51:57.605 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/datatables.net-bs4/js/dataTables.bootstrap4.js  
+2018-05-02 10:51:57.631 +03:00 [INF] The file /libs/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js was not modified
+2018-05-02 10:51:57.663 +03:00 [INF] The file /libs/bootstrap/js/bootstrap.bundle.js was not modified
+2018-05-02 10:51:57.665 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/datatables.net/js/jquery.dataTables.js  
+2018-05-02 10:51:57.762 +03:00 [INF] The file /libs/datatables.net/js/jquery.dataTables.js was not modified
+2018-05-02 10:51:57.774 +03:00 [INF] Request finished in 319.1415ms 304 application/javascript
+2018-05-02 10:51:57.775 +03:00 [INF] Request finished in 369.3424ms 304 application/javascript
+2018-05-02 10:51:57.780 +03:00 [INF] Request finished in 253.9731ms 304 application/javascript
+2018-05-02 10:51:57.828 +03:00 [INF] The file /libs/datatables.net-bs4/js/dataTables.bootstrap4.js was not modified
+2018-05-02 10:51:57.894 +03:00 [INF] Request finished in 393.1996ms 304 application/javascript
+2018-05-02 10:51:57.920 +03:00 [INF] Request finished in 440.2411ms 304 application/javascript
+2018-05-02 10:51:57.947 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/sweetalert/sweetalert.min.js  
+2018-05-02 10:51:57.956 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/toastr/toastr.min.js  
+2018-05-02 10:51:57.959 +03:00 [INF] Request finished in 303.9704ms 304 application/javascript
+2018-05-02 10:51:57.970 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/jquery/abp.dom.js  
+2018-05-02 10:51:57.995 +03:00 [INF] The file /libs/sweetalert/sweetalert.min.js was not modified
+2018-05-02 10:51:58.062 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/jquery/abp.ajax.js  
+2018-05-02 10:51:58.139 +03:00 [INF] Request finished in 139.9744ms 304 application/javascript
+2018-05-02 10:51:58.173 +03:00 [INF] The file /libs/toastr/toastr.min.js was not modified
+2018-05-02 10:51:58.187 +03:00 [INF] The file /libs/abp/jquery/abp.ajax.js was not modified
+2018-05-02 10:51:58.221 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/core/abp.js  
+2018-05-02 10:51:58.224 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/jquery/abp.resource-loader.js  
+2018-05-02 10:51:58.248 +03:00 [INF] The file /libs/abp/jquery/abp.dom.js was not modified
+2018-05-02 10:51:58.342 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery/jquery-extensions.js  
+2018-05-02 10:51:58.347 +03:00 [INF] Request finished in 446.3289ms 304 application/javascript
+2018-05-02 10:51:58.372 +03:00 [INF] Request finished in 367.0049ms 304 application/javascript
+2018-05-02 10:51:58.395 +03:00 [INF] The file /libs/abp/core/abp.js was not modified
+2018-05-02 10:51:58.403 +03:00 [INF] Request finished in 235.6567ms 304 application/javascript
+2018-05-02 10:51:58.439 +03:00 [INF] The file /libs/abp/jquery/abp.resource-loader.js was not modified
+2018-05-02 10:51:58.457 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/jquery/jquery-extensions.js was not modified
+2018-05-02 10:51:58.528 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/dom-event-handlers.js  
+2018-05-02 10:51:58.533 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery-form/jquery-form-extensions.js  
+2018-05-02 10:51:58.533 +03:00 [INF] Request finished in 471.4237ms 304 application/javascript
+2018-05-02 10:51:58.616 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/jquery-form/jquery-form-extensions.js was not modified
+2018-05-02 10:51:58.667 +03:00 [INF] Request finished in 355.5392ms 304 application/javascript
+2018-05-02 10:51:58.669 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/dom-event-handlers.js was not modified
+2018-05-02 10:51:58.691 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/modal-manager.js  
+2018-05-02 10:51:58.715 +03:00 [INF] Request finished in 266.014ms 304 application/javascript
+2018-05-02 10:51:58.769 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables-extensions.js  
+2018-05-02 10:51:58.814 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/modal-manager.js was not modified
+2018-05-02 10:51:58.815 +03:00 [INF] Request finished in 254.1134ms 304 application/javascript
+2018-05-02 10:51:58.861 +03:00 [INF] Request finished in 199.5703ms 304 application/javascript
+2018-05-02 10:51:58.883 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/sweetalert/abp-sweetalert.js  
+2018-05-02 10:51:58.929 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/toastr/abp-toastr.js  
+2018-05-02 10:51:58.980 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/sweetalert/abp-sweetalert.js was not modified
+2018-05-02 10:51:59.073 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/toastr/abp-toastr.js was not modified
+2018-05-02 10:51:59.096 +03:00 [INF] Request finished in 390.9575ms 304 application/javascript
+2018-05-02 10:51:59.119 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables-extensions.js was not modified
+2018-05-02 10:51:59.173 +03:00 [INF] Request finished in 420.484ms 304 application/javascript
+2018-05-02 10:51:59.175 +03:00 [INF] Request finished in 234.529ms 304 application/javascript
+2018-05-02 10:51:59.197 +03:00 [INF] Request finished in 400.711ms 304 application/javascript
+2018-05-02 10:52:00.706 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/bootstrap/css/bootstrap.css  
+2018-05-02 10:52:00.712 +03:00 [INF] Sending file. Request path: '/libs/bootstrap/css/bootstrap.css'. Physical path: 'D:\github\abp\test\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo\wwwroot\libs\bootstrap\css\bootstrap.css'
+2018-05-02 10:52:00.733 +03:00 [INF] Request finished in 25.2017ms 200 text/css
+2018-05-02 10:53:43.614 +03:00 [INF] Request starting HTTP/1.1 POST http://localhost:49211/Demo/Register application/x-www-form-urlencoded 385
+2018-05-02 10:53:43.626 +03:00 [INF] Request finished in 10.6882ms 404 
+2018-05-02 10:53:45.681 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/Components/DynamicForms  
+2018-05-02 10:53:45.687 +03:00 [INF] Executing handler method OnGet with arguments (null) - ModelState is "Valid"
+2018-05-02 10:53:45.708 +03:00 [INF] Executed action /Components/DynamicForms in 19.7635ms
+2018-05-02 10:53:45.714 +03:00 [INF] Request finished in 31.245ms 200 text/html; charset=utf-8
+2018-05-02 10:54:18.462 +03:00 [INF] Request starting HTTP/1.1 POST http://127.0.0.1:10192/iisintegration  0
+2018-05-02 10:54:18.468 +03:00 [INF] Request finished in 5.9248ms 202 
+2018-05-02 10:54:49.286 +03:00 [INF] Loaded modules:
+2018-05-02 10:54:49.339 +03:00 [INF] - Volo.Abp.Threading.AbpThreadingModule
+2018-05-02 10:54:49.346 +03:00 [INF] - Volo.Abp.Security.AbpSecurityModule
+2018-05-02 10:54:49.351 +03:00 [INF] - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2018-05-02 10:54:49.356 +03:00 [INF] - Volo.Abp.AspNetCore.AbpAspNetCoreModule
+2018-05-02 10:54:49.361 +03:00 [INF] - Volo.Abp.Localization.AbpLocalizationModule
+2018-05-02 10:54:49.367 +03:00 [INF] - Volo.Abp.ApiVersioning.AbpApiVersioningAbstractionsModule
+2018-05-02 10:54:49.372 +03:00 [INF] - Volo.Abp.Http.AbpHttpAbstractionsModule
+2018-05-02 10:54:49.377 +03:00 [INF] - Volo.Abp.Timing.AbpTimingModule
+2018-05-02 10:54:49.382 +03:00 [INF] - Volo.Abp.Json.AbpJsonModule
+2018-05-02 10:54:49.387 +03:00 [INF] - Volo.Abp.Http.AbpHttpModule
+2018-05-02 10:54:49.391 +03:00 [INF] - Volo.Abp.Data.AbpDataModule
+2018-05-02 10:54:49.397 +03:00 [INF] - Volo.Abp.Settings.AbpSettingsModule
+2018-05-02 10:54:49.401 +03:00 [INF] - Volo.Abp.MultiTenancy.AbpMultiTenancyAbstractionsModule
+2018-05-02 10:54:49.407 +03:00 [INF] - Volo.Abp.Auditing.AbpAuditingModule
+2018-05-02 10:54:49.412 +03:00 [INF] - Volo.Abp.EventBus.AbpEventBusModule
+2018-05-02 10:54:49.418 +03:00 [INF] - Volo.Abp.Guids.AbpGuidsModule
+2018-05-02 10:54:49.423 +03:00 [INF] - Volo.Abp.Uow.AbpUnitOfWorkModule
+2018-05-02 10:54:49.428 +03:00 [INF] - Volo.Abp.Domain.AbpDddDomainModule
+2018-05-02 10:54:49.433 +03:00 [INF] - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2018-05-02 10:54:49.442 +03:00 [INF] - Volo.Abp.Validation.AbpValidationModule
+2018-05-02 10:54:49.464 +03:00 [INF] - Volo.Abp.Authorization.AbpAuthorizationModule
+2018-05-02 10:54:49.471 +03:00 [INF] - Volo.Abp.Application.AbpDddApplicationModule
+2018-05-02 10:54:49.479 +03:00 [INF] - Volo.Abp.UI.AbpUiModule
+2018-05-02 10:54:49.486 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcModule
+2018-05-02 10:54:49.490 +03:00 [INF] - Volo.Abp.UI.Navigation.AbpUiNavigationModule
+2018-05-02 10:54:49.498 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.AbpAspNetCoreMvcUiModule
+2018-05-02 10:54:49.504 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.AbpAspNetCoreMvcUiBootstrapModule
+2018-05-02 10:54:49.512 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.AbpAspNetCoreMvcUiThemeSharedModule
+2018-05-02 10:54:49.520 +03:00 [INF] - Volo.Abp.Castle.AbpCastleCoreModule
+2018-05-02 10:54:49.530 +03:00 [INF] - Volo.Abp.Autofac.AbpAutofacModule
+2018-05-02 10:54:49.537 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.AbpAspNetCoreMvcUiBootstrapDemoModule
+2018-05-02 10:54:49.778 +03:00 [INF] Initialized all modules.
+2018-05-02 10:54:50.285 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/  
+2018-05-02 10:54:53.829 +03:00 [INF] Executing handler method OnGet with arguments (null) - ModelState is "Valid"
+2018-05-02 10:54:54.793 +03:00 [INF] Executed action /Index in 976.3898ms
+2018-05-02 10:54:54.807 +03:00 [INF] Request finished in 4544.0882ms 200 text/html; charset=utf-8
+2018-05-02 10:54:54.910 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables-extensions.js  
+2018-05-02 10:54:54.915 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery-form/jquery-form-extensions.js  
+2018-05-02 10:54:54.923 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/modal-manager.js  
+2018-05-02 10:54:54.929 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables.css  
+2018-05-02 10:54:54.936 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery/jquery-extensions.js  
+2018-05-02 10:54:54.942 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/dom-event-handlers.js  
+2018-05-02 10:54:54.990 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/jquery-form/jquery-form-extensions.js was not modified
+2018-05-02 10:54:55.018 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables-extensions.js was not modified
+2018-05-02 10:54:55.039 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/dom-event-handlers.js was not modified
+2018-05-02 10:54:55.061 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/jquery/jquery-extensions.js was not modified
+2018-05-02 10:54:55.093 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/modal-manager.js was not modified
+2018-05-02 10:54:55.130 +03:00 [INF] Request finished in 188.277ms 304 application/javascript
+2018-05-02 10:54:55.130 +03:00 [INF] Request finished in 173.2418ms 304 application/javascript
+2018-05-02 10:54:55.176 +03:00 [INF] Request finished in 199.945ms 304 application/javascript
+2018-05-02 10:54:55.185 +03:00 [INF] Request finished in 232.0209ms 304 application/javascript
+2018-05-02 10:54:55.232 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables.css was not modified
+2018-05-02 10:54:55.233 +03:00 [INF] Request finished in 263.6ms 304 application/javascript
+2018-05-02 10:54:55.257 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/toastr/abp-toastr.js  
+2018-05-02 10:54:55.260 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/sweetalert/abp-sweetalert.js  
+2018-05-02 10:54:55.334 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/sweetalert/abp-sweetalert.js was not modified
+2018-05-02 10:54:55.339 +03:00 [INF] Request finished in 347.731ms 304 text/css
+2018-05-02 10:54:55.411 +03:00 [INF] Request finished in 91.9319ms 304 application/javascript
+2018-05-02 10:54:55.413 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/toastr/abp-toastr.js was not modified
+2018-05-02 10:54:55.446 +03:00 [INF] Request finished in 205.2078ms 304 application/javascript
+2018-05-02 10:54:56.948 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/Components/DynamicForms  
+2018-05-02 10:54:57.320 +03:00 [INF] Executing handler method OnGet with arguments (null) - ModelState is "Valid"
+2018-05-02 10:54:57.525 +03:00 [INF] Executed action /Components/DynamicForms in 254.04840000000002ms
+2018-05-02 10:54:57.533 +03:00 [INF] Request finished in 583.1132ms 200 text/html; charset=utf-8
+2018-05-02 10:55:28.643 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/bootstrap/css/bootstrap.css  
+2018-05-02 10:55:28.650 +03:00 [INF] Sending file. Request path: '/libs/bootstrap/css/bootstrap.css'. Physical path: 'D:\github\abp\test\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo\wwwroot\libs\bootstrap\css\bootstrap.css'
+2018-05-02 10:55:28.692 +03:00 [INF] Request finished in 47.6025ms 200 text/css
+2018-05-02 10:59:23.393 +03:00 [INF] Request starting HTTP/1.1 POST http://127.0.0.1:13038/iisintegration  0
+2018-05-02 10:59:23.427 +03:00 [INF] Request finished in 5.8812ms 202 
+2018-05-02 11:05:17.402 +03:00 [INF] Loaded modules:
+2018-05-02 11:05:17.455 +03:00 [INF] - Volo.Abp.Threading.AbpThreadingModule
+2018-05-02 11:05:17.460 +03:00 [INF] - Volo.Abp.Security.AbpSecurityModule
+2018-05-02 11:05:17.466 +03:00 [INF] - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2018-05-02 11:05:17.473 +03:00 [INF] - Volo.Abp.AspNetCore.AbpAspNetCoreModule
+2018-05-02 11:05:17.480 +03:00 [INF] - Volo.Abp.Localization.AbpLocalizationModule
+2018-05-02 11:05:17.486 +03:00 [INF] - Volo.Abp.ApiVersioning.AbpApiVersioningAbstractionsModule
+2018-05-02 11:05:17.491 +03:00 [INF] - Volo.Abp.Http.AbpHttpAbstractionsModule
+2018-05-02 11:05:17.496 +03:00 [INF] - Volo.Abp.Timing.AbpTimingModule
+2018-05-02 11:05:17.502 +03:00 [INF] - Volo.Abp.Json.AbpJsonModule
+2018-05-02 11:05:17.509 +03:00 [INF] - Volo.Abp.Http.AbpHttpModule
+2018-05-02 11:05:17.518 +03:00 [INF] - Volo.Abp.Data.AbpDataModule
+2018-05-02 11:05:17.526 +03:00 [INF] - Volo.Abp.Settings.AbpSettingsModule
+2018-05-02 11:05:17.533 +03:00 [INF] - Volo.Abp.MultiTenancy.AbpMultiTenancyAbstractionsModule
+2018-05-02 11:05:17.540 +03:00 [INF] - Volo.Abp.Auditing.AbpAuditingModule
+2018-05-02 11:05:17.547 +03:00 [INF] - Volo.Abp.EventBus.AbpEventBusModule
+2018-05-02 11:05:17.554 +03:00 [INF] - Volo.Abp.Guids.AbpGuidsModule
+2018-05-02 11:05:17.560 +03:00 [INF] - Volo.Abp.Uow.AbpUnitOfWorkModule
+2018-05-02 11:05:17.567 +03:00 [INF] - Volo.Abp.Domain.AbpDddDomainModule
+2018-05-02 11:05:17.573 +03:00 [INF] - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2018-05-02 11:05:17.579 +03:00 [INF] - Volo.Abp.Validation.AbpValidationModule
+2018-05-02 11:05:17.586 +03:00 [INF] - Volo.Abp.Authorization.AbpAuthorizationModule
+2018-05-02 11:05:17.594 +03:00 [INF] - Volo.Abp.Application.AbpDddApplicationModule
+2018-05-02 11:05:17.600 +03:00 [INF] - Volo.Abp.UI.AbpUiModule
+2018-05-02 11:05:17.607 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcModule
+2018-05-02 11:05:17.613 +03:00 [INF] - Volo.Abp.UI.Navigation.AbpUiNavigationModule
+2018-05-02 11:05:17.620 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.AbpAspNetCoreMvcUiModule
+2018-05-02 11:05:17.627 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.AbpAspNetCoreMvcUiBootstrapModule
+2018-05-02 11:05:17.633 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.AbpAspNetCoreMvcUiThemeSharedModule
+2018-05-02 11:05:17.639 +03:00 [INF] - Volo.Abp.Castle.AbpCastleCoreModule
+2018-05-02 11:05:17.645 +03:00 [INF] - Volo.Abp.Autofac.AbpAutofacModule
+2018-05-02 11:05:17.650 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.AbpAspNetCoreMvcUiBootstrapDemoModule
+2018-05-02 11:05:17.880 +03:00 [INF] Initialized all modules.
+2018-05-02 11:05:18.801 +03:00 [INF] Request starting HTTP/1.1 POST http://127.0.0.1:33175/iisintegration  0
+2018-05-02 11:05:18.834 +03:00 [INF] Request finished in 56.0653ms 202 
+2018-05-02 11:06:09.070 +03:00 [INF] Loaded modules:
+2018-05-02 11:06:09.114 +03:00 [INF] - Volo.Abp.Threading.AbpThreadingModule
+2018-05-02 11:06:09.120 +03:00 [INF] - Volo.Abp.Security.AbpSecurityModule
+2018-05-02 11:06:09.124 +03:00 [INF] - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2018-05-02 11:06:09.129 +03:00 [INF] - Volo.Abp.AspNetCore.AbpAspNetCoreModule
+2018-05-02 11:06:09.134 +03:00 [INF] - Volo.Abp.Localization.AbpLocalizationModule
+2018-05-02 11:06:09.159 +03:00 [INF] - Volo.Abp.ApiVersioning.AbpApiVersioningAbstractionsModule
+2018-05-02 11:06:09.163 +03:00 [INF] - Volo.Abp.Http.AbpHttpAbstractionsModule
+2018-05-02 11:06:09.167 +03:00 [INF] - Volo.Abp.Timing.AbpTimingModule
+2018-05-02 11:06:09.171 +03:00 [INF] - Volo.Abp.Json.AbpJsonModule
+2018-05-02 11:06:09.176 +03:00 [INF] - Volo.Abp.Http.AbpHttpModule
+2018-05-02 11:06:09.179 +03:00 [INF] - Volo.Abp.Data.AbpDataModule
+2018-05-02 11:06:09.185 +03:00 [INF] - Volo.Abp.Settings.AbpSettingsModule
+2018-05-02 11:06:09.191 +03:00 [INF] - Volo.Abp.MultiTenancy.AbpMultiTenancyAbstractionsModule
+2018-05-02 11:06:09.196 +03:00 [INF] - Volo.Abp.Auditing.AbpAuditingModule
+2018-05-02 11:06:09.202 +03:00 [INF] - Volo.Abp.EventBus.AbpEventBusModule
+2018-05-02 11:06:09.207 +03:00 [INF] - Volo.Abp.Guids.AbpGuidsModule
+2018-05-02 11:06:09.212 +03:00 [INF] - Volo.Abp.Uow.AbpUnitOfWorkModule
+2018-05-02 11:06:09.218 +03:00 [INF] - Volo.Abp.Domain.AbpDddDomainModule
+2018-05-02 11:06:09.224 +03:00 [INF] - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2018-05-02 11:06:09.230 +03:00 [INF] - Volo.Abp.Validation.AbpValidationModule
+2018-05-02 11:06:09.235 +03:00 [INF] - Volo.Abp.Authorization.AbpAuthorizationModule
+2018-05-02 11:06:09.239 +03:00 [INF] - Volo.Abp.Application.AbpDddApplicationModule
+2018-05-02 11:06:09.243 +03:00 [INF] - Volo.Abp.UI.AbpUiModule
+2018-05-02 11:06:09.248 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcModule
+2018-05-02 11:06:09.252 +03:00 [INF] - Volo.Abp.UI.Navigation.AbpUiNavigationModule
+2018-05-02 11:06:09.257 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.AbpAspNetCoreMvcUiModule
+2018-05-02 11:06:09.262 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.AbpAspNetCoreMvcUiBootstrapModule
+2018-05-02 11:06:09.267 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.AbpAspNetCoreMvcUiThemeSharedModule
+2018-05-02 11:06:09.271 +03:00 [INF] - Volo.Abp.Castle.AbpCastleCoreModule
+2018-05-02 11:06:09.276 +03:00 [INF] - Volo.Abp.Autofac.AbpAutofacModule
+2018-05-02 11:06:09.281 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.AbpAspNetCoreMvcUiBootstrapDemoModule
+2018-05-02 11:06:09.488 +03:00 [INF] Initialized all modules.
+2018-05-02 11:06:09.975 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/  
+2018-05-02 11:06:13.118 +03:00 [INF] Executing handler method OnGet with arguments (null) - ModelState is "Valid"
+2018-05-02 11:06:14.057 +03:00 [INF] Executed action /Index in 949.4592ms
+2018-05-02 11:06:14.069 +03:00 [INF] Request finished in 4113.2464ms 200 text/html; charset=utf-8
+2018-05-02 11:06:14.103 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables.css  
+2018-05-02 11:06:14.113 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/sweetalert/sweetalert.min.js  
+2018-05-02 11:06:14.128 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/jquery/abp.dom.js  
+2018-05-02 11:06:14.227 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables.css'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/datatables/datatables.css'
+2018-05-02 11:06:14.232 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/toastr/toastr.min.js  
+2018-05-02 11:06:14.266 +03:00 [INF] The file /libs/abp/jquery/abp.dom.js was not modified
+2018-05-02 11:06:14.270 +03:00 [INF] The file /libs/sweetalert/sweetalert.min.js was not modified
+2018-05-02 11:06:14.294 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/jquery/abp.ajax.js  
+2018-05-02 11:06:14.298 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/toastr/toastr.min.css  
+2018-05-02 11:06:14.410 +03:00 [INF] Request finished in 186.1508ms 304 application/javascript
+2018-05-02 11:06:14.411 +03:00 [INF] Request finished in 200.2003ms 304 application/javascript
+2018-05-02 11:06:14.435 +03:00 [INF] The file /libs/toastr/toastr.min.js was not modified
+2018-05-02 11:06:14.481 +03:00 [INF] The file /libs/toastr/toastr.min.css was not modified
+2018-05-02 11:06:14.498 +03:00 [INF] The file /libs/abp/jquery/abp.ajax.js was not modified
+2018-05-02 11:06:14.501 +03:00 [INF] Request finished in 216.5688ms 200 text/css
+2018-05-02 11:06:14.513 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/jquery/abp.resource-loader.js  
+2018-05-02 11:06:14.548 +03:00 [INF] Request finished in 259.3459ms 304 text/css
+2018-05-02 11:06:14.590 +03:00 [INF] The file /libs/abp/jquery/abp.resource-loader.js was not modified
+2018-05-02 11:06:14.614 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery/jquery-extensions.js  
+2018-05-02 11:06:14.636 +03:00 [INF] Request finished in 354.0566ms 304 application/javascript
+2018-05-02 11:06:14.707 +03:00 [INF] Request finished in 382.4878ms 304 application/javascript
+2018-05-02 11:06:14.708 +03:00 [INF] Request finished in 110.3223ms 304 application/javascript
+2018-05-02 11:06:14.715 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/modal-manager.js  
+2018-05-02 11:06:14.770 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery-form/jquery-form-extensions.js  
+2018-05-02 11:06:14.781 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/dom-event-handlers.js  
+2018-05-02 11:06:14.807 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery/jquery-extensions.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/jquery/jquery-extensions.js'
+2018-05-02 11:06:14.853 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery-form/jquery-form-extensions.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/jquery_form/jquery-form-extensions.js'
+2018-05-02 11:06:14.862 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables-extensions.js  
+2018-05-02 11:06:14.958 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/dom-event-handlers.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/bootstrap/dom-event-handlers.js'
+2018-05-02 11:06:14.962 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/sweetalert/abp-sweetalert.js  
+2018-05-02 11:06:14.968 +03:00 [INF] Request finished in 302.3706ms 200 application/javascript
+2018-05-02 11:06:14.978 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/modal-manager.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/bootstrap/modal-manager.js'
+2018-05-02 11:06:14.996 +03:00 [INF] Request finished in 312.7185ms 200 application/javascript
+2018-05-02 11:06:15.042 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/sweetalert/abp-sweetalert.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/sweetalert/abp-sweetalert.js'
+2018-05-02 11:06:15.065 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables-extensions.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/datatables/datatables-extensions.js'
+2018-05-02 11:06:15.104 +03:00 [INF] Request finished in 277.0653ms 200 application/javascript
+2018-05-02 11:06:15.131 +03:00 [INF] Request finished in 391.5464ms 200 application/javascript
+2018-05-02 11:06:15.132 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/toastr/abp-toastr.js  
+2018-05-02 11:06:15.182 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/toastr/abp-toastr.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/toastr/abp-toastr.js'
+2018-05-02 11:06:15.199 +03:00 [INF] Request finished in 359.9917ms 200 application/javascript
+2018-05-02 11:06:15.223 +03:00 [INF] Request finished in 348.7984ms 200 application/javascript
+2018-05-02 11:06:15.231 +03:00 [INF] Request finished in 163.1774ms 200 application/javascript
+2018-05-02 11:06:22.967 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/Components/DynamicForms  
+2018-05-02 11:06:23.331 +03:00 [INF] Executing handler method OnGet with arguments (null) - ModelState is "Valid"
+2018-05-02 11:06:23.543 +03:00 [INF] Executed action /Components/DynamicForms in 248.3176ms
+2018-05-02 11:06:23.550 +03:00 [INF] Request finished in 583.1461ms 200 text/html; charset=utf-8
+2018-05-02 11:06:23.580 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables.css  
+2018-05-02 11:06:23.595 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables.css was not modified
+2018-05-02 11:06:23.627 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/dom-event-handlers.js  
+2018-05-02 11:06:23.651 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery-form/jquery-form-extensions.js  
+2018-05-02 11:06:23.653 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables-extensions.js  
+2018-05-02 11:06:23.655 +03:00 [INF] Request finished in 25.1359ms 304 text/css
+2018-05-02 11:06:23.668 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery/jquery-extensions.js  
+2018-05-02 11:06:23.682 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/dom-event-handlers.js was not modified
+2018-05-02 11:06:23.695 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/modal-manager.js  
+2018-05-02 11:06:23.707 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/jquery/jquery-extensions.js was not modified
+2018-05-02 11:06:23.762 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/jquery-form/jquery-form-extensions.js was not modified
+2018-05-02 11:06:23.767 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables-extensions.js was not modified
+2018-05-02 11:06:23.779 +03:00 [INF] Request finished in 87.9224ms 304 application/javascript
+2018-05-02 11:06:23.810 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/modal-manager.js was not modified
+2018-05-02 11:06:23.838 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/sweetalert/abp-sweetalert.js  
+2018-05-02 11:06:23.872 +03:00 [INF] Request finished in 163.0354ms 304 application/javascript
+2018-05-02 11:06:23.894 +03:00 [INF] Request finished in 166.2739ms 304 application/javascript
+2018-05-02 11:06:23.925 +03:00 [INF] Request finished in 206.324ms 304 application/javascript
+2018-05-02 11:06:23.930 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/sweetalert/abp-sweetalert.js was not modified
+2018-05-02 11:06:23.940 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/toastr/abp-toastr.js  
+2018-05-02 11:06:23.948 +03:00 [INF] Request finished in 136.3404ms 304 application/javascript
+2018-05-02 11:06:24.026 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/toastr/abp-toastr.js was not modified
+2018-05-02 11:06:24.027 +03:00 [INF] Request finished in 269.9033ms 304 application/javascript
+2018-05-02 11:06:24.036 +03:00 [INF] Request finished in 129.8497ms 304 application/javascript
+2018-05-02 11:13:57.525 +03:00 [INF] Request starting HTTP/1.1 POST http://127.0.0.1:4490/iisintegration  0
+2018-05-02 11:13:57.561 +03:00 [INF] Request finished in 6.4213ms 202 
+2018-05-02 11:14:43.892 +03:00 [INF] Loaded modules:
+2018-05-02 11:14:43.934 +03:00 [INF] - Volo.Abp.Threading.AbpThreadingModule
+2018-05-02 11:14:43.939 +03:00 [INF] - Volo.Abp.Security.AbpSecurityModule
+2018-05-02 11:14:43.943 +03:00 [INF] - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2018-05-02 11:14:43.948 +03:00 [INF] - Volo.Abp.AspNetCore.AbpAspNetCoreModule
+2018-05-02 11:14:43.952 +03:00 [INF] - Volo.Abp.Localization.AbpLocalizationModule
+2018-05-02 11:14:43.957 +03:00 [INF] - Volo.Abp.ApiVersioning.AbpApiVersioningAbstractionsModule
+2018-05-02 11:14:43.963 +03:00 [INF] - Volo.Abp.Http.AbpHttpAbstractionsModule
+2018-05-02 11:14:43.967 +03:00 [INF] - Volo.Abp.Timing.AbpTimingModule
+2018-05-02 11:14:43.972 +03:00 [INF] - Volo.Abp.Json.AbpJsonModule
+2018-05-02 11:14:43.976 +03:00 [INF] - Volo.Abp.Http.AbpHttpModule
+2018-05-02 11:14:43.981 +03:00 [INF] - Volo.Abp.Data.AbpDataModule
+2018-05-02 11:14:43.986 +03:00 [INF] - Volo.Abp.Settings.AbpSettingsModule
+2018-05-02 11:14:43.991 +03:00 [INF] - Volo.Abp.MultiTenancy.AbpMultiTenancyAbstractionsModule
+2018-05-02 11:14:43.997 +03:00 [INF] - Volo.Abp.Auditing.AbpAuditingModule
+2018-05-02 11:14:44.001 +03:00 [INF] - Volo.Abp.EventBus.AbpEventBusModule
+2018-05-02 11:14:44.007 +03:00 [INF] - Volo.Abp.Guids.AbpGuidsModule
+2018-05-02 11:14:44.011 +03:00 [INF] - Volo.Abp.Uow.AbpUnitOfWorkModule
+2018-05-02 11:14:44.016 +03:00 [INF] - Volo.Abp.Domain.AbpDddDomainModule
+2018-05-02 11:14:44.020 +03:00 [INF] - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2018-05-02 11:14:44.024 +03:00 [INF] - Volo.Abp.Validation.AbpValidationModule
+2018-05-02 11:14:44.028 +03:00 [INF] - Volo.Abp.Authorization.AbpAuthorizationModule
+2018-05-02 11:14:44.032 +03:00 [INF] - Volo.Abp.Application.AbpDddApplicationModule
+2018-05-02 11:14:44.036 +03:00 [INF] - Volo.Abp.UI.AbpUiModule
+2018-05-02 11:14:44.040 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcModule
+2018-05-02 11:14:44.043 +03:00 [INF] - Volo.Abp.UI.Navigation.AbpUiNavigationModule
+2018-05-02 11:14:44.048 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.AbpAspNetCoreMvcUiModule
+2018-05-02 11:14:44.052 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.AbpAspNetCoreMvcUiBootstrapModule
+2018-05-02 11:14:44.056 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.AbpAspNetCoreMvcUiThemeSharedModule
+2018-05-02 11:14:44.060 +03:00 [INF] - Volo.Abp.Castle.AbpCastleCoreModule
+2018-05-02 11:14:44.064 +03:00 [INF] - Volo.Abp.Autofac.AbpAutofacModule
+2018-05-02 11:14:44.068 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.AbpAspNetCoreMvcUiBootstrapDemoModule
+2018-05-02 11:14:44.257 +03:00 [INF] Initialized all modules.
+2018-05-02 11:14:44.684 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/  
+2018-05-02 11:14:47.930 +03:00 [INF] Executing handler method OnGet with arguments (null) - ModelState is "Valid"
+2018-05-02 11:14:48.861 +03:00 [INF] Executed action /Index in 941.42730000000006ms
+2018-05-02 11:14:48.872 +03:00 [INF] Request finished in 4207.3426ms 200 text/html; charset=utf-8
+2018-05-02 11:14:48.907 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables.css  
+2018-05-02 11:14:48.942 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/dom-event-handlers.js  
+2018-05-02 11:14:48.995 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/modal-manager.js  
+2018-05-02 11:14:49.041 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery/jquery-extensions.js  
+2018-05-02 11:14:49.043 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables.css'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/datatables/datatables.css'
+2018-05-02 11:14:49.049 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery-form/jquery-form-extensions.js  
+2018-05-02 11:14:49.057 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables-extensions.js  
+2018-05-02 11:14:49.101 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery/jquery-extensions.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/jquery/jquery-extensions.js'
+2018-05-02 11:14:49.113 +03:00 [INF] Request finished in 163.3797ms 200 text/css
+2018-05-02 11:14:49.124 +03:00 [INF] Request finished in 198.4726ms 200 application/javascript
+2018-05-02 11:14:49.149 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/dom-event-handlers.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/bootstrap/dom-event-handlers.js'
+2018-05-02 11:14:49.174 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/modal-manager.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/bootstrap/modal-manager.js'
+2018-05-02 11:14:49.175 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery-form/jquery-form-extensions.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/jquery_form/jquery-form-extensions.js'
+2018-05-02 11:14:49.211 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables-extensions.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/datatables/datatables-extensions.js'
+2018-05-02 11:14:49.264 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/sweetalert/abp-sweetalert.js  
+2018-05-02 11:14:49.286 +03:00 [INF] Request finished in 270.0568ms 200 application/javascript
+2018-05-02 11:14:49.352 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/toastr/abp-toastr.js  
+2018-05-02 11:14:49.353 +03:00 [INF] Request finished in 268.0748ms 200 application/javascript
+2018-05-02 11:14:49.376 +03:00 [INF] Request finished in 267.122ms 200 application/javascript
+2018-05-02 11:14:49.425 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/sweetalert/abp-sweetalert.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/sweetalert/abp-sweetalert.js'
+2018-05-02 11:14:49.426 +03:00 [INF] Request finished in 303.7322ms 200 application/javascript
+2018-05-02 11:14:49.438 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/toastr/abp-toastr.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/toastr/abp-toastr.js'
+2018-05-02 11:14:49.508 +03:00 [INF] Request finished in 277.8193ms 200 application/javascript
+2018-05-02 11:14:49.509 +03:00 [INF] Request finished in 267.5099ms 200 application/javascript
+2018-05-02 11:14:50.847 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/Components/DynamicForms  
+2018-05-02 11:14:51.194 +03:00 [INF] Executing handler method OnGet with arguments (null) - ModelState is "Valid"
+2018-05-02 11:22:26.878 +03:00 [INF] Loaded modules:
+2018-05-02 11:22:26.914 +03:00 [INF] - Volo.Abp.Threading.AbpThreadingModule
+2018-05-02 11:22:26.920 +03:00 [INF] - Volo.Abp.Security.AbpSecurityModule
+2018-05-02 11:22:26.926 +03:00 [INF] - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2018-05-02 11:22:26.931 +03:00 [INF] - Volo.Abp.AspNetCore.AbpAspNetCoreModule
+2018-05-02 11:22:26.937 +03:00 [INF] - Volo.Abp.Localization.AbpLocalizationModule
+2018-05-02 11:22:26.942 +03:00 [INF] - Volo.Abp.ApiVersioning.AbpApiVersioningAbstractionsModule
+2018-05-02 11:22:26.947 +03:00 [INF] - Volo.Abp.Http.AbpHttpAbstractionsModule
+2018-05-02 11:22:26.952 +03:00 [INF] - Volo.Abp.Timing.AbpTimingModule
+2018-05-02 11:22:26.958 +03:00 [INF] - Volo.Abp.Json.AbpJsonModule
+2018-05-02 11:22:26.963 +03:00 [INF] - Volo.Abp.Http.AbpHttpModule
+2018-05-02 11:22:26.969 +03:00 [INF] - Volo.Abp.Data.AbpDataModule
+2018-05-02 11:22:26.973 +03:00 [INF] - Volo.Abp.Settings.AbpSettingsModule
+2018-05-02 11:22:26.978 +03:00 [INF] - Volo.Abp.MultiTenancy.AbpMultiTenancyAbstractionsModule
+2018-05-02 11:22:26.983 +03:00 [INF] - Volo.Abp.Auditing.AbpAuditingModule
+2018-05-02 11:22:26.987 +03:00 [INF] - Volo.Abp.EventBus.AbpEventBusModule
+2018-05-02 11:22:26.992 +03:00 [INF] - Volo.Abp.Guids.AbpGuidsModule
+2018-05-02 11:22:26.996 +03:00 [INF] - Volo.Abp.Uow.AbpUnitOfWorkModule
+2018-05-02 11:22:27.002 +03:00 [INF] - Volo.Abp.Domain.AbpDddDomainModule
+2018-05-02 11:22:27.006 +03:00 [INF] - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2018-05-02 11:22:27.010 +03:00 [INF] - Volo.Abp.Validation.AbpValidationModule
+2018-05-02 11:22:27.014 +03:00 [INF] - Volo.Abp.Authorization.AbpAuthorizationModule
+2018-05-02 11:22:27.018 +03:00 [INF] - Volo.Abp.Application.AbpDddApplicationModule
+2018-05-02 11:22:27.021 +03:00 [INF] - Volo.Abp.UI.AbpUiModule
+2018-05-02 11:22:27.025 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcModule
+2018-05-02 11:22:27.029 +03:00 [INF] - Volo.Abp.UI.Navigation.AbpUiNavigationModule
+2018-05-02 11:22:27.035 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.AbpAspNetCoreMvcUiModule
+2018-05-02 11:22:27.039 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.AbpAspNetCoreMvcUiBootstrapModule
+2018-05-02 11:22:27.044 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.AbpAspNetCoreMvcUiThemeSharedModule
+2018-05-02 11:22:27.048 +03:00 [INF] - Volo.Abp.Castle.AbpCastleCoreModule
+2018-05-02 11:22:27.053 +03:00 [INF] - Volo.Abp.Autofac.AbpAutofacModule
+2018-05-02 11:22:27.057 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.AbpAspNetCoreMvcUiBootstrapDemoModule
+2018-05-02 11:22:27.300 +03:00 [INF] Initialized all modules.
+2018-05-02 11:22:27.701 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/  
+2018-05-02 11:22:31.171 +03:00 [INF] Executing handler method OnGet with arguments (null) - ModelState is "Valid"
+2018-05-02 11:22:32.225 +03:00 [INF] Executed action /Index in 1064.1357ms
+2018-05-02 11:22:32.241 +03:00 [INF] Request finished in 4563.9868ms 200 text/html; charset=utf-8
+2018-05-02 11:22:32.353 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/sweetalert/sweetalert.min.js  
+2018-05-02 11:22:32.455 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/jquery/abp.dom.js  
+2018-05-02 11:22:32.456 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables.css  
+2018-05-02 11:22:32.488 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/toastr/toastr.min.js  
+2018-05-02 11:22:32.494 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/toastr/toastr.min.css  
+2018-05-02 11:22:32.495 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/jquery/abp.ajax.js  
+2018-05-02 11:22:32.500 +03:00 [INF] The file /libs/sweetalert/sweetalert.min.js was not modified
+2018-05-02 11:22:32.506 +03:00 [INF] The file /libs/toastr/toastr.min.css was not modified
+2018-05-02 11:22:32.555 +03:00 [INF] The file /libs/abp/jquery/abp.dom.js was not modified
+2018-05-02 11:22:32.580 +03:00 [INF] The file /libs/toastr/toastr.min.js was not modified
+2018-05-02 11:22:32.605 +03:00 [INF] The file /libs/abp/jquery/abp.ajax.js was not modified
+2018-05-02 11:22:32.642 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables.css'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/datatables/datatables.css'
+2018-05-02 11:22:32.677 +03:00 [INF] Request finished in 269.6014ms 304 application/javascript
+2018-05-02 11:22:32.678 +03:00 [INF] Request finished in 295.348ms 304 application/javascript
+2018-05-02 11:22:32.700 +03:00 [INF] Request finished in 215.3569ms 304 text/css
+2018-05-02 11:22:32.721 +03:00 [INF] Request finished in 295.348ms 304 application/javascript
+2018-05-02 11:22:32.790 +03:00 [INF] Request finished in 295.3475ms 304 application/javascript
+2018-05-02 11:22:32.868 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/dom-event-handlers.js  
+2018-05-02 11:22:32.872 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/jquery/abp.resource-loader.js  
+2018-05-02 11:22:32.872 +03:00 [INF] Request finished in 434.0596ms 200 text/css
+2018-05-02 11:22:32.901 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/modal-manager.js  
+2018-05-02 11:22:32.931 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery-form/jquery-form-extensions.js  
+2018-05-02 11:22:32.980 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery/jquery-extensions.js  
+2018-05-02 11:22:32.986 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/dom-event-handlers.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/bootstrap/dom-event-handlers.js'
+2018-05-02 11:22:33.095 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery/jquery-extensions.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/jquery/jquery-extensions.js'
+2018-05-02 11:22:33.100 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery-form/jquery-form-extensions.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/jquery_form/jquery-form-extensions.js'
+2018-05-02 11:22:33.114 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/modal-manager.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/bootstrap/modal-manager.js'
+2018-05-02 11:22:33.120 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables-extensions.js  
+2018-05-02 11:22:33.142 +03:00 [INF] The file /libs/abp/jquery/abp.resource-loader.js was not modified
+2018-05-02 11:22:33.153 +03:00 [INF] Request finished in 263.2318ms 200 application/javascript
+2018-05-02 11:22:33.191 +03:00 [INF] Request finished in 283.5414ms 200 application/javascript
+2018-05-02 11:22:33.238 +03:00 [INF] Request finished in 250.2758ms 200 application/javascript
+2018-05-02 11:22:33.292 +03:00 [INF] Request finished in 375.0632ms 304 application/javascript
+2018-05-02 11:22:33.294 +03:00 [INF] Request finished in 347.4347ms 200 application/javascript
+2018-05-02 11:22:33.295 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/sweetalert/abp-sweetalert.js  
+2018-05-02 11:22:33.319 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables-extensions.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/datatables/datatables-extensions.js'
+2018-05-02 11:22:33.397 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/toastr/abp-toastr.js  
+2018-05-02 11:22:33.401 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/sweetalert/abp-sweetalert.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/sweetalert/abp-sweetalert.js'
+2018-05-02 11:22:33.402 +03:00 [INF] Request finished in 386.3365ms 200 application/javascript
+2018-05-02 11:22:33.446 +03:00 [INF] Request finished in 210.0949ms 200 application/javascript
+2018-05-02 11:22:33.448 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/toastr/abp-toastr.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/toastr/abp-toastr.js'
+2018-05-02 11:22:33.463 +03:00 [INF] Request finished in 108.5523ms 200 application/javascript
+2018-05-02 11:24:02.882 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/Components/DynamicForms  
+2018-05-02 11:24:03.417 +03:00 [INF] Executing handler method OnGet with arguments (null) - ModelState is "Valid"
+2018-05-02 11:24:03.624 +03:00 [INF] Executed action /Components/DynamicForms in 239.58450000000002ms
+2018-05-02 11:24:03.633 +03:00 [INF] Request finished in 747.3379ms 200 text/html; charset=utf-8
+2018-05-02 11:24:03.662 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables.css  
+2018-05-02 11:24:03.679 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables.css was not modified
+2018-05-02 11:24:03.730 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/modal-manager.js  
+2018-05-02 11:24:03.735 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/dom-event-handlers.js  
+2018-05-02 11:24:03.796 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables-extensions.js  
+2018-05-02 11:24:03.820 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/dom-event-handlers.js was not modified
+2018-05-02 11:24:03.825 +03:00 [INF] Request finished in 31.4854ms 304 text/css
+2018-05-02 11:24:03.837 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery/jquery-extensions.js  
+2018-05-02 11:24:03.874 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery-form/jquery-form-extensions.js  
+2018-05-02 11:24:03.881 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/jquery/jquery-extensions.js was not modified
+2018-05-02 11:24:03.886 +03:00 [INF] Request finished in 143.0252ms 304 application/javascript
+2018-05-02 11:24:03.978 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/modal-manager.js was not modified
+2018-05-02 11:24:03.982 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables-extensions.js was not modified
+2018-05-02 11:24:03.993 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/jquery-form/jquery-form-extensions.js was not modified
+2018-05-02 11:24:04.004 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/sweetalert/abp-sweetalert.js  
+2018-05-02 11:24:04.022 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/toastr/abp-toastr.js  
+2018-05-02 11:24:04.093 +03:00 [INF] Request finished in 204.7353ms 304 application/javascript
+2018-05-02 11:24:04.120 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/sweetalert/abp-sweetalert.js was not modified
+2018-05-02 11:24:04.142 +03:00 [INF] Request finished in 297.0752ms 304 application/javascript
+2018-05-02 11:24:04.152 +03:00 [INF] Request finished in 315.6187ms 304 application/javascript
+2018-05-02 11:24:04.153 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/toastr/abp-toastr.js was not modified
+2018-05-02 11:24:04.183 +03:00 [INF] Request finished in 299.6543ms 304 application/javascript
+2018-05-02 11:24:04.215 +03:00 [INF] Request finished in 223.7471ms 304 application/javascript
+2018-05-02 11:24:04.221 +03:00 [INF] Request finished in 286.4314ms 304 application/javascript
+2018-05-02 11:35:27.867 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/Components/DynamicForms  
+2018-05-02 11:35:27.883 +03:00 [INF] Executing handler method OnGet with arguments (null) - ModelState is "Valid"
+2018-05-02 11:36:15.573 +03:00 [INF] Executed action /Components/DynamicForms in 47695.1512ms
+2018-05-02 11:36:15.581 +03:00 [INF] Request finished in 47709.8969ms 200 text/html; charset=utf-8
+2018-05-02 11:36:15.611 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/font-awesome/css/font-awesome.css  
+2018-05-02 11:36:15.750 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/datatables.net-bs4/css/dataTables.bootstrap4.css  
+2018-05-02 11:36:15.787 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/css/demo.min.css  
+2018-05-02 11:36:15.810 +03:00 [INF] The file /libs/font-awesome/css/font-awesome.css was not modified
+2018-05-02 11:36:15.871 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/bootstrap/css/bootstrap.css  
+2018-05-02 11:36:15.872 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables.css  
+2018-05-02 11:36:15.904 +03:00 [INF] Request finished in 212.8279ms 304 text/css
+2018-05-02 11:36:15.927 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/toastr/toastr.min.css  
+2018-05-02 11:36:15.970 +03:00 [INF] The file /libs/datatables.net-bs4/css/dataTables.bootstrap4.css was not modified
+2018-05-02 11:36:15.992 +03:00 [INF] The file /css/demo.min.css was not modified
+2018-05-02 11:36:16.006 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/jquery/jquery.js  
+2018-05-02 11:36:16.031 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables.css was not modified
+2018-05-02 11:36:16.033 +03:00 [INF] The file /libs/bootstrap/css/bootstrap.css was not modified
+2018-05-02 11:36:16.108 +03:00 [INF] The file /libs/jquery/jquery.js was not modified
+2018-05-02 11:36:16.109 +03:00 [INF] The file /libs/toastr/toastr.min.css was not modified
+2018-05-02 11:36:16.137 +03:00 [INF] Request finished in 369.5699ms 304 text/css
+2018-05-02 11:36:16.166 +03:00 [INF] Request finished in 430.0698ms 304 text/css
+2018-05-02 11:36:16.167 +03:00 [INF] Request finished in 427.2342ms 304 text/css
+2018-05-02 11:36:16.198 +03:00 [INF] Request finished in 387.7682ms 304 text/css
+2018-05-02 11:36:16.267 +03:00 [INF] Request finished in 506.4957ms 304 text/css
+2018-05-02 11:36:16.382 +03:00 [INF] Request finished in 181.5028ms 304 application/javascript
+2018-05-02 11:36:16.385 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/bootstrap/js/bootstrap.bundle.js  
+2018-05-02 11:36:16.388 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js  
+2018-05-02 11:36:16.453 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/jquery-form/jquery.form.min.js  
+2018-05-02 11:36:16.478 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/jquery-validation/jquery.validate.js  
+2018-05-02 11:36:16.578 +03:00 [INF] The file /libs/jquery-form/jquery.form.min.js was not modified
+2018-05-02 11:36:16.600 +03:00 [INF] The file /libs/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js was not modified
+2018-05-02 11:36:16.646 +03:00 [INF] The file /libs/bootstrap/js/bootstrap.bundle.js was not modified
+2018-05-02 11:36:16.670 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/datatables.net/js/jquery.dataTables.js  
+2018-05-02 11:36:16.693 +03:00 [INF] The file /libs/jquery-validation/jquery.validate.js was not modified
+2018-05-02 11:36:16.703 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/datatables.net-bs4/js/dataTables.bootstrap4.js  
+2018-05-02 11:36:16.730 +03:00 [INF] Request finished in 448.482ms 304 application/javascript
+2018-05-02 11:36:16.732 +03:00 [INF] Request finished in 386.8698ms 304 application/javascript
+2018-05-02 11:36:16.760 +03:00 [INF] Request finished in 447.9415ms 304 application/javascript
+2018-05-02 11:36:16.786 +03:00 [INF] Request finished in 309.9247ms 304 application/javascript
+2018-05-02 11:36:16.840 +03:00 [INF] The file /libs/datatables.net-bs4/js/dataTables.bootstrap4.js was not modified
+2018-05-02 11:36:16.864 +03:00 [INF] The file /libs/datatables.net/js/jquery.dataTables.js was not modified
+2018-05-02 11:36:16.945 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/core/abp.js  
+2018-05-02 11:36:16.998 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/toastr/toastr.min.js  
+2018-05-02 11:36:17.064 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/sweetalert/sweetalert.min.js  
+2018-05-02 11:36:17.069 +03:00 [INF] Request finished in 428.7754ms 304 application/javascript
+2018-05-02 11:36:17.073 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/jquery/abp.dom.js  
+2018-05-02 11:36:17.074 +03:00 [INF] The file /libs/abp/core/abp.js was not modified
+2018-05-02 11:36:17.096 +03:00 [INF] Request finished in 358.696ms 304 application/javascript
+2018-05-02 11:36:17.130 +03:00 [INF] The file /libs/abp/jquery/abp.dom.js was not modified
+2018-05-02 11:36:17.202 +03:00 [INF] The file /libs/sweetalert/sweetalert.min.js was not modified
+2018-05-02 11:36:17.288 +03:00 [INF] Request finished in 340.3466ms 304 application/javascript
+2018-05-02 11:36:17.333 +03:00 [INF] The file /libs/toastr/toastr.min.js was not modified
+2018-05-02 11:36:17.367 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/jquery/abp.resource-loader.js  
+2018-05-02 11:36:17.393 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/jquery/abp.ajax.js  
+2018-05-02 11:36:17.441 +03:00 [INF] Request finished in 368.4294ms 304 application/javascript
+2018-05-02 11:36:17.513 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery/jquery-extensions.js  
+2018-05-02 11:36:17.536 +03:00 [INF] Request finished in 268.8111ms 304 application/javascript
+2018-05-02 11:36:17.536 +03:00 [INF] Request finished in 520.9698ms 304 application/javascript
+2018-05-02 11:36:17.586 +03:00 [INF] The file /libs/abp/jquery/abp.ajax.js was not modified
+2018-05-02 11:36:17.615 +03:00 [INF] The file /libs/abp/jquery/abp.resource-loader.js was not modified
+2018-05-02 11:36:17.681 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery-form/jquery-form-extensions.js  
+2018-05-02 11:36:17.682 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/jquery/jquery-extensions.js was not modified
+2018-05-02 11:36:17.748 +03:00 [INF] Request finished in 463.9743ms 304 application/javascript
+2018-05-02 11:36:17.776 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/dom-event-handlers.js  
+2018-05-02 11:36:17.783 +03:00 [INF] Request finished in 242.4086ms 304 application/javascript
+2018-05-02 11:36:17.808 +03:00 [INF] Request finished in 459.9157ms 304 application/javascript
+2018-05-02 11:36:17.851 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/modal-manager.js  
+2018-05-02 11:36:17.927 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/jquery-form/jquery-form-extensions.js was not modified
+2018-05-02 11:36:17.949 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/dom-event-handlers.js was not modified
+2018-05-02 11:36:17.966 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/toastr/abp-toastr.js  
+2018-05-02 11:36:17.966 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/modal-manager.js was not modified
+2018-05-02 11:36:18.023 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/sweetalert/abp-sweetalert.js  
+2018-05-02 11:36:18.069 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables-extensions.js  
+2018-05-02 11:36:18.093 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/toastr/abp-toastr.js was not modified
+2018-05-02 11:36:18.099 +03:00 [INF] Request finished in 340.8375ms 304 application/javascript
+2018-05-02 11:36:18.164 +03:00 [INF] Request finished in 462.7269ms 304 application/javascript
+2018-05-02 11:36:18.188 +03:00 [INF] Request finished in 367.5467ms 304 application/javascript
+2018-05-02 11:36:18.192 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/sweetalert/abp-sweetalert.js was not modified
+2018-05-02 11:36:18.214 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables-extensions.js was not modified
+2018-05-02 11:36:18.263 +03:00 [INF] Request finished in 243.213ms 304 application/javascript
+2018-05-02 11:36:18.310 +03:00 [INF] Request finished in 309.3543ms 304 application/javascript
+2018-05-02 11:36:18.335 +03:00 [INF] Request finished in 385.4676ms 304 application/javascript
+2018-05-02 11:36:22.960 +03:00 [INF] Request starting HTTP/1.1 POST http://127.0.0.1:17128/iisintegration  0
+2018-05-02 11:36:22.967 +03:00 [INF] Request finished in 5.7166ms 202 
+2018-05-02 11:37:09.449 +03:00 [INF] Loaded modules:
+2018-05-02 11:37:09.484 +03:00 [INF] - Volo.Abp.Threading.AbpThreadingModule
+2018-05-02 11:37:09.488 +03:00 [INF] - Volo.Abp.Security.AbpSecurityModule
+2018-05-02 11:37:09.492 +03:00 [INF] - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2018-05-02 11:37:09.496 +03:00 [INF] - Volo.Abp.AspNetCore.AbpAspNetCoreModule
+2018-05-02 11:37:09.500 +03:00 [INF] - Volo.Abp.Localization.AbpLocalizationModule
+2018-05-02 11:37:09.504 +03:00 [INF] - Volo.Abp.ApiVersioning.AbpApiVersioningAbstractionsModule
+2018-05-02 11:37:09.510 +03:00 [INF] - Volo.Abp.Http.AbpHttpAbstractionsModule
+2018-05-02 11:37:09.514 +03:00 [INF] - Volo.Abp.Timing.AbpTimingModule
+2018-05-02 11:37:09.518 +03:00 [INF] - Volo.Abp.Json.AbpJsonModule
+2018-05-02 11:37:09.522 +03:00 [INF] - Volo.Abp.Http.AbpHttpModule
+2018-05-02 11:37:09.526 +03:00 [INF] - Volo.Abp.Data.AbpDataModule
+2018-05-02 11:37:09.531 +03:00 [INF] - Volo.Abp.Settings.AbpSettingsModule
+2018-05-02 11:37:09.537 +03:00 [INF] - Volo.Abp.MultiTenancy.AbpMultiTenancyAbstractionsModule
+2018-05-02 11:37:09.543 +03:00 [INF] - Volo.Abp.Auditing.AbpAuditingModule
+2018-05-02 11:37:09.548 +03:00 [INF] - Volo.Abp.EventBus.AbpEventBusModule
+2018-05-02 11:37:09.554 +03:00 [INF] - Volo.Abp.Guids.AbpGuidsModule
+2018-05-02 11:37:09.559 +03:00 [INF] - Volo.Abp.Uow.AbpUnitOfWorkModule
+2018-05-02 11:37:09.563 +03:00 [INF] - Volo.Abp.Domain.AbpDddDomainModule
+2018-05-02 11:37:09.568 +03:00 [INF] - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2018-05-02 11:37:09.572 +03:00 [INF] - Volo.Abp.Validation.AbpValidationModule
+2018-05-02 11:37:09.578 +03:00 [INF] - Volo.Abp.Authorization.AbpAuthorizationModule
+2018-05-02 11:37:09.587 +03:00 [INF] - Volo.Abp.Application.AbpDddApplicationModule
+2018-05-02 11:37:09.592 +03:00 [INF] - Volo.Abp.UI.AbpUiModule
+2018-05-02 11:37:09.597 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcModule
+2018-05-02 11:37:09.603 +03:00 [INF] - Volo.Abp.UI.Navigation.AbpUiNavigationModule
+2018-05-02 11:37:09.611 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.AbpAspNetCoreMvcUiModule
+2018-05-02 11:37:09.620 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.AbpAspNetCoreMvcUiBootstrapModule
+2018-05-02 11:37:09.626 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.AbpAspNetCoreMvcUiThemeSharedModule
+2018-05-02 11:37:09.631 +03:00 [INF] - Volo.Abp.Castle.AbpCastleCoreModule
+2018-05-02 11:37:09.636 +03:00 [INF] - Volo.Abp.Autofac.AbpAutofacModule
+2018-05-02 11:37:09.641 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.AbpAspNetCoreMvcUiBootstrapDemoModule
+2018-05-02 11:37:09.882 +03:00 [INF] Initialized all modules.
+2018-05-02 11:37:10.405 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/  
+2018-05-02 11:37:13.645 +03:00 [INF] Executing handler method OnGet with arguments (null) - ModelState is "Valid"
+2018-05-02 11:37:14.625 +03:00 [INF] Executed action /Index in 992.6626ms
+2018-05-02 11:37:14.641 +03:00 [INF] Request finished in 4257.212ms 200 text/html; charset=utf-8
+2018-05-02 11:37:23.967 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/Components/DynamicForms  
+2018-05-02 11:37:24.325 +03:00 [INF] Executing handler method OnGet with arguments (null) - ModelState is "Valid"
+2018-05-02 11:37:24.519 +03:00 [INF] Executed action /Components/DynamicForms in 226.4326ms
+2018-05-02 11:37:24.527 +03:00 [INF] Request finished in 558.6457ms 200 text/html; charset=utf-8
+2018-05-02 11:38:08.385 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/Components/DynamicForms  
+2018-05-02 11:38:08.402 +03:00 [INF] Executing handler method OnGet with arguments (null) - ModelState is "Valid"
+2018-05-02 11:38:55.576 +03:00 [INF] Executed action /Components/DynamicForms in 47165.8766ms
+2018-05-02 11:38:55.671 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/Components/DynamicForms  
+2018-05-02 11:38:55.672 +03:00 [INF] Request finished in 47196.668ms 200 text/html; charset=utf-8
+2018-05-02 11:38:55.679 +03:00 [INF] Executing handler method OnGet with arguments (null) - ModelState is "Valid"
+2018-05-02 11:39:00.095 +03:00 [INF] Executed action /Components/DynamicForms in 4416.2196ms
+2018-05-02 11:39:00.104 +03:00 [INF] Request finished in 4521.0592ms 200 text/html; charset=utf-8
+2018-05-02 11:39:00.203 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/font-awesome/css/font-awesome.css  
+2018-05-02 11:39:00.207 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/bootstrap/css/bootstrap.css  
+2018-05-02 11:39:00.317 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/datatables.net-bs4/css/dataTables.bootstrap4.css  
+2018-05-02 11:39:00.339 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/toastr/toastr.min.css  
+2018-05-02 11:39:00.365 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables.css  
+2018-05-02 11:39:00.369 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/css/demo.min.css  
+2018-05-02 11:39:00.406 +03:00 [INF] The file /libs/bootstrap/css/bootstrap.css was not modified
+2018-05-02 11:39:00.435 +03:00 [INF] The file /libs/toastr/toastr.min.css was not modified
+2018-05-02 11:39:00.492 +03:00 [INF] The file /libs/font-awesome/css/font-awesome.css was not modified
+2018-05-02 11:39:00.526 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables.css'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/datatables/datatables.css'
+2018-05-02 11:39:00.550 +03:00 [INF] Request finished in 309.7956ms 304 text/css
+2018-05-02 11:39:00.552 +03:00 [INF] Request finished in 228.4643ms 304 text/css
+2018-05-02 11:39:00.597 +03:00 [INF] The file /css/demo.min.css was not modified
+2018-05-02 11:39:00.649 +03:00 [INF] The file /libs/datatables.net-bs4/css/dataTables.bootstrap4.css was not modified
+2018-05-02 11:39:00.743 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/jquery/jquery.js  
+2018-05-02 11:39:00.766 +03:00 [INF] Request finished in 279.4071ms 304 text/css
+2018-05-02 11:39:00.837 +03:00 [INF] Request finished in 376.9808ms 304 text/css
+2018-05-02 11:39:00.949 +03:00 [INF] Request finished in 336.6895ms 200 text/css
+2018-05-02 11:39:00.998 +03:00 [INF] Request finished in 445.672ms 304 text/css
+2018-05-02 11:39:00.999 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/jquery-validation/jquery.validate.js  
+2018-05-02 11:39:01.022 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/bootstrap/js/bootstrap.bundle.js  
+2018-05-02 11:39:01.068 +03:00 [INF] The file /libs/jquery/jquery.js was not modified
+2018-05-02 11:39:01.080 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/jquery-form/jquery.form.min.js  
+2018-05-02 11:39:01.142 +03:00 [INF] The file /libs/jquery-validation/jquery.validate.js was not modified
+2018-05-02 11:39:01.200 +03:00 [INF] The file /libs/bootstrap/js/bootstrap.bundle.js was not modified
+2018-05-02 11:39:01.221 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/datatables.net/js/jquery.dataTables.js  
+2018-05-02 11:39:01.239 +03:00 [INF] Request finished in 409.2855ms 304 application/javascript
+2018-05-02 11:39:01.261 +03:00 [INF] The file /libs/jquery-form/jquery.form.min.js was not modified
+2018-05-02 11:39:01.293 +03:00 [INF] Request finished in 238.2965ms 304 application/javascript
+2018-05-02 11:39:01.300 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js  
+2018-05-02 11:39:01.309 +03:00 [INF] Request finished in 545.8996ms 304 application/javascript
+2018-05-02 11:39:01.372 +03:00 [INF] The file /libs/datatables.net/js/jquery.dataTables.js was not modified
+2018-05-02 11:39:01.373 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/datatables.net-bs4/js/dataTables.bootstrap4.js  
+2018-05-02 11:39:01.402 +03:00 [INF] Request finished in 468.7318ms 304 application/javascript
+2018-05-02 11:39:01.518 +03:00 [INF] The file /libs/datatables.net-bs4/js/dataTables.bootstrap4.js was not modified
+2018-05-02 11:39:01.566 +03:00 [INF] The file /libs/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js was not modified
+2018-05-02 11:39:01.614 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/sweetalert/sweetalert.min.js  
+2018-05-02 11:39:01.704 +03:00 [INF] Request finished in 326.3078ms 304 application/javascript
+2018-05-02 11:39:01.707 +03:00 [INF] Request finished in 469.1414ms 304 application/javascript
+2018-05-02 11:39:01.736 +03:00 [INF] Request finished in 228.5528ms 304 application/javascript
+2018-05-02 11:39:01.805 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/toastr/toastr.min.js  
+2018-05-02 11:39:01.806 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/core/abp.js  
+2018-05-02 11:39:01.811 +03:00 [INF] The file /libs/sweetalert/sweetalert.min.js was not modified
+2018-05-02 11:39:01.833 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/jquery/abp.dom.js  
+2018-05-02 11:39:01.941 +03:00 [INF] The file /libs/abp/core/abp.js was not modified
+2018-05-02 11:39:01.993 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/jquery/abp.ajax.js  
+2018-05-02 11:39:02.018 +03:00 [INF] The file /libs/toastr/toastr.min.js was not modified
+2018-05-02 11:39:02.040 +03:00 [INF] Request finished in 474.8953ms 304 application/javascript
+2018-05-02 11:39:02.046 +03:00 [INF] The file /libs/abp/jquery/abp.ajax.js was not modified
+2018-05-02 11:39:02.073 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/jquery/abp.resource-loader.js  
+2018-05-02 11:39:02.106 +03:00 [INF] Request finished in 491.5995ms 304 application/javascript
+2018-05-02 11:39:02.198 +03:00 [INF] The file /libs/abp/jquery/abp.dom.js was not modified
+2018-05-02 11:39:02.220 +03:00 [INF] The file /libs/abp/jquery/abp.resource-loader.js was not modified
+2018-05-02 11:39:02.243 +03:00 [INF] Request finished in 623.0358ms 304 application/javascript
+2018-05-02 11:39:02.246 +03:00 [INF] Request finished in 178.2566ms 304 application/javascript
+2018-05-02 11:39:02.295 +03:00 [INF] Request finished in 467.7525ms 304 application/javascript
+2018-05-02 11:39:02.391 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery/jquery-extensions.js  
+2018-05-02 11:39:02.503 +03:00 [INF] Request finished in 459.7117ms 304 application/javascript
+2018-05-02 11:39:02.547 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery-form/jquery-form-extensions.js  
+2018-05-02 11:39:02.548 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/dom-event-handlers.js  
+2018-05-02 11:39:02.598 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery/jquery-extensions.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/jquery/jquery-extensions.js'
+2018-05-02 11:39:02.638 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/modal-manager.js  
+2018-05-02 11:39:02.640 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/dom-event-handlers.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/bootstrap/dom-event-handlers.js'
+2018-05-02 11:39:02.665 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery-form/jquery-form-extensions.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/jquery_form/jquery-form-extensions.js'
+2018-05-02 11:39:02.770 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/modal-manager.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/bootstrap/modal-manager.js'
+2018-05-02 11:39:02.793 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables-extensions.js  
+2018-05-02 11:39:02.795 +03:00 [INF] Request finished in 501.1802ms 200 application/javascript
+2018-05-02 11:39:02.817 +03:00 [INF] Request finished in 367.4539ms 200 application/javascript
+2018-05-02 11:39:02.821 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/sweetalert/abp-sweetalert.js  
+2018-05-02 11:39:02.824 +03:00 [INF] Request finished in 448.3276ms 200 application/javascript
+2018-05-02 11:39:02.941 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/toastr/abp-toastr.js  
+2018-05-02 11:39:03.034 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/sweetalert/abp-sweetalert.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/sweetalert/abp-sweetalert.js'
+2018-05-02 11:39:03.059 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/toastr/abp-toastr.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/toastr/abp-toastr.js'
+2018-05-02 11:39:03.083 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables-extensions.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/datatables/datatables-extensions.js'
+2018-05-02 11:39:03.153 +03:00 [INF] Request finished in 190.9471ms 200 application/javascript
+2018-05-02 11:39:03.176 +03:00 [INF] Request finished in 403.1939ms 200 application/javascript
+2018-05-02 11:39:03.244 +03:00 [INF] Request finished in 423.7481ms 200 application/javascript
+2018-05-02 11:39:03.267 +03:00 [INF] Request finished in 764.0704ms 200 application/javascript
+2018-05-02 11:39:04.525 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/bootstrap/css/bootstrap.css  
+2018-05-02 11:39:04.533 +03:00 [INF] Sending file. Request path: '/libs/bootstrap/css/bootstrap.css'. Physical path: 'D:\github\abp\test\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo\wwwroot\libs\bootstrap\css\bootstrap.css'
+2018-05-02 11:39:04.552 +03:00 [INF] Request finished in 25.6276ms 200 text/css
+2018-05-02 11:39:29.651 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/css/demo.min.css  
+2018-05-02 11:39:29.656 +03:00 [INF] Sending file. Request path: '/css/demo.min.css'. Physical path: 'D:\github\abp\test\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo\wwwroot\css\demo.min.css'
+2018-05-02 11:39:29.671 +03:00 [INF] Request finished in 20.0414ms 200 text/css
+2018-05-02 11:39:55.639 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/Components/DynamicForms  
+2018-05-02 11:39:55.853 +03:00 [INF] Executing handler method OnGet with arguments (null) - ModelState is "Valid"
+2018-05-02 11:39:58.041 +03:00 [INF] Executed action /Components/DynamicForms in 2187.8215ms
+2018-05-02 11:39:58.051 +03:00 [INF] Request finished in 2420.4797ms 200 text/html; charset=utf-8
+2018-05-02 11:39:58.151 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables.css  
+2018-05-02 11:39:58.177 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/bootstrap/css/bootstrap.css  
+2018-05-02 11:39:58.198 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/toastr/toastr.min.css  
+2018-05-02 11:39:58.292 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/font-awesome/css/font-awesome.css  
+2018-05-02 11:39:58.314 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables.css was not modified
+2018-05-02 11:39:58.318 +03:00 [INF] The file /libs/bootstrap/css/bootstrap.css was not modified
+2018-05-02 11:39:58.333 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/datatables.net-bs4/css/dataTables.bootstrap4.css  
+2018-05-02 11:39:58.337 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/css/demo.min.css  
+2018-05-02 11:39:58.463 +03:00 [INF] Request finished in 245.2494ms 304 text/css
+2018-05-02 11:39:58.469 +03:00 [INF] The file /libs/font-awesome/css/font-awesome.css was not modified
+2018-05-02 11:39:58.500 +03:00 [INF] Request finished in 256.6001ms 304 text/css
+2018-05-02 11:39:58.506 +03:00 [INF] The file /css/demo.min.css was not modified
+2018-05-02 11:39:58.512 +03:00 [INF] The file /libs/datatables.net-bs4/css/dataTables.bootstrap4.css was not modified
+2018-05-02 11:39:58.524 +03:00 [INF] Request finished in 407.7892ms 304 text/css
+2018-05-02 11:39:58.527 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/jquery/jquery.js  
+2018-05-02 11:39:58.532 +03:00 [INF] The file /libs/toastr/toastr.min.css was not modified
+2018-05-02 11:39:58.578 +03:00 [INF] Request finished in 403.3974ms 304 text/css
+2018-05-02 11:39:58.608 +03:00 [INF] Request finished in 409.3984ms 304 text/css
+2018-05-02 11:39:58.653 +03:00 [INF] Request finished in 466.1241ms 304 text/css
+2018-05-02 11:39:58.654 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/bootstrap/js/bootstrap.bundle.js  
+2018-05-02 11:39:58.701 +03:00 [INF] The file /libs/jquery/jquery.js was not modified
+2018-05-02 11:39:58.723 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/jquery-validation/jquery.validate.js  
+2018-05-02 11:39:58.835 +03:00 [INF] The file /libs/bootstrap/js/bootstrap.bundle.js was not modified
+2018-05-02 11:39:58.862 +03:00 [INF] The file /libs/jquery-validation/jquery.validate.js was not modified
+2018-05-02 11:39:58.920 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/datatables.net/js/jquery.dataTables.js  
+2018-05-02 11:39:58.947 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js  
+2018-05-02 11:39:58.974 +03:00 [INF] Request finished in 314.7207ms 304 application/javascript
+2018-05-02 11:39:58.996 +03:00 [INF] Request finished in 226.9462ms 304 application/javascript
+2018-05-02 11:39:59.041 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/jquery-form/jquery.form.min.js  
+2018-05-02 11:39:59.047 +03:00 [INF] Request finished in 293.7452ms 304 application/javascript
+2018-05-02 11:39:59.158 +03:00 [INF] The file /libs/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js was not modified
+2018-05-02 11:39:59.194 +03:00 [INF] The file /libs/jquery-form/jquery.form.min.js was not modified
+2018-05-02 11:39:59.215 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/sweetalert/sweetalert.min.js  
+2018-05-02 11:39:59.307 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/datatables.net-bs4/js/dataTables.bootstrap4.js  
+2018-05-02 11:39:59.330 +03:00 [INF] The file /libs/sweetalert/sweetalert.min.js was not modified
+2018-05-02 11:39:59.343 +03:00 [INF] Request finished in 452.6266ms 304 application/javascript
+2018-05-02 11:39:59.457 +03:00 [INF] The file /libs/datatables.net/js/jquery.dataTables.js was not modified
+2018-05-02 11:39:59.459 +03:00 [INF] Request finished in 312.8728ms 304 application/javascript
+2018-05-02 11:39:59.511 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/toastr/toastr.min.js  
+2018-05-02 11:39:59.534 +03:00 [INF] Request finished in 480.9412ms 304 application/javascript
+2018-05-02 11:39:59.665 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/jquery/abp.ajax.js  
+2018-05-02 11:39:59.738 +03:00 [INF] The file /libs/toastr/toastr.min.js was not modified
+2018-05-02 11:39:59.759 +03:00 [INF] The file /libs/datatables.net-bs4/js/dataTables.bootstrap4.js was not modified
+2018-05-02 11:39:59.796 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/core/abp.js  
+2018-05-02 11:39:59.824 +03:00 [INF] The file /libs/abp/jquery/abp.ajax.js was not modified
+2018-05-02 11:39:59.853 +03:00 [INF] Request finished in 555.8678ms 304 application/javascript
+2018-05-02 11:39:59.901 +03:00 [INF] Request finished in 780.9294ms 304 application/javascript
+2018-05-02 11:39:59.931 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/jquery/abp.dom.js  
+2018-05-02 11:40:00.001 +03:00 [INF] Request finished in 651.4799ms 304 application/javascript
+2018-05-02 11:40:00.006 +03:00 [INF] Request finished in 335.6555ms 304 application/javascript
+2018-05-02 11:40:00.027 +03:00 [INF] The file /libs/abp/core/abp.js was not modified
+2018-05-02 11:40:00.168 +03:00 [INF] The file /libs/abp/jquery/abp.dom.js was not modified
+2018-05-02 11:40:00.186 +03:00 [INF] Request finished in 613.0831ms 304 application/javascript
+2018-05-02 11:40:00.235 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/dom-event-handlers.js  
+2018-05-02 11:40:00.284 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery/jquery-extensions.js  
+2018-05-02 11:40:00.288 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/dom-event-handlers.js was not modified
+2018-05-02 11:40:00.356 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery-form/jquery-form-extensions.js  
+2018-05-02 11:40:00.359 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/jquery/abp.resource-loader.js  
+2018-05-02 11:40:00.406 +03:00 [INF] Request finished in 239.3433ms 304 application/javascript
+2018-05-02 11:40:00.495 +03:00 [INF] Request finished in 501.8123ms 304 application/javascript
+2018-05-02 11:40:00.588 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/sweetalert/abp-sweetalert.js  
+2018-05-02 11:40:00.592 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/jquery-form/jquery-form-extensions.js was not modified
+2018-05-02 11:40:00.594 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/jquery/jquery-extensions.js was not modified
+2018-05-02 11:40:00.613 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/modal-manager.js  
+2018-05-02 11:40:00.670 +03:00 [INF] The file /libs/abp/jquery/abp.resource-loader.js was not modified
+2018-05-02 11:40:00.671 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/sweetalert/abp-sweetalert.js was not modified
+2018-05-02 11:40:00.694 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/modal-manager.js was not modified
+2018-05-02 11:40:00.718 +03:00 [INF] Request finished in 615.4389ms 304 application/javascript
+2018-05-02 11:40:00.761 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables-extensions.js  
+2018-05-02 11:40:00.784 +03:00 [INF] Request finished in 221.6799ms 304 application/javascript
+2018-05-02 11:40:00.828 +03:00 [INF] Request finished in 445.8427ms 304 application/javascript
+2018-05-02 11:40:00.877 +03:00 [INF] Request finished in 546.3157ms 304 application/javascript
+2018-05-02 11:40:00.903 +03:00 [INF] Request finished in 384.5494ms 304 application/javascript
+2018-05-02 11:40:00.974 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables-extensions.js was not modified
+2018-05-02 11:40:01.022 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/toastr/abp-toastr.js  
+2018-05-02 11:40:01.091 +03:00 [INF] Request finished in 368.443ms 304 application/javascript
+2018-05-02 11:40:01.135 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/toastr/abp-toastr.js was not modified
+2018-05-02 11:40:01.143 +03:00 [INF] Request finished in 284.3197ms 304 application/javascript
+2018-05-02 11:40:05.342 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/bootstrap/css/bootstrap.css  
+2018-05-02 11:40:05.349 +03:00 [INF] Sending file. Request path: '/libs/bootstrap/css/bootstrap.css'. Physical path: 'D:\github\abp\test\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo\wwwroot\libs\bootstrap\css\bootstrap.css'
+2018-05-02 11:40:05.357 +03:00 [INF] Request finished in 15.7702ms 200 text/css
+2018-05-02 11:40:25.027 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/css/demo.min.css  
+2018-05-02 11:40:25.032 +03:00 [INF] Sending file. Request path: '/css/demo.min.css'. Physical path: 'D:\github\abp\test\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo\wwwroot\css\demo.min.css'
+2018-05-02 11:40:25.039 +03:00 [INF] Request finished in 11.8364ms 200 text/css
+2018-05-02 11:41:31.094 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/Components/DynamicForms  
+2018-05-02 11:41:31.100 +03:00 [INF] Executing handler method OnGet with arguments (null) - ModelState is "Valid"
+2018-05-02 11:43:18.721 +03:00 [INF] Loaded modules:
+2018-05-02 11:43:18.774 +03:00 [INF] - Volo.Abp.Threading.AbpThreadingModule
+2018-05-02 11:43:18.781 +03:00 [INF] - Volo.Abp.Security.AbpSecurityModule
+2018-05-02 11:43:18.787 +03:00 [INF] - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2018-05-02 11:43:18.793 +03:00 [INF] - Volo.Abp.AspNetCore.AbpAspNetCoreModule
+2018-05-02 11:43:18.798 +03:00 [INF] - Volo.Abp.Localization.AbpLocalizationModule
+2018-05-02 11:43:18.805 +03:00 [INF] - Volo.Abp.ApiVersioning.AbpApiVersioningAbstractionsModule
+2018-05-02 11:43:18.811 +03:00 [INF] - Volo.Abp.Http.AbpHttpAbstractionsModule
+2018-05-02 11:43:18.817 +03:00 [INF] - Volo.Abp.Timing.AbpTimingModule
+2018-05-02 11:43:18.822 +03:00 [INF] - Volo.Abp.Json.AbpJsonModule
+2018-05-02 11:43:18.829 +03:00 [INF] - Volo.Abp.Http.AbpHttpModule
+2018-05-02 11:43:18.834 +03:00 [INF] - Volo.Abp.Data.AbpDataModule
+2018-05-02 11:43:18.840 +03:00 [INF] - Volo.Abp.Settings.AbpSettingsModule
+2018-05-02 11:43:18.846 +03:00 [INF] - Volo.Abp.MultiTenancy.AbpMultiTenancyAbstractionsModule
+2018-05-02 11:43:18.850 +03:00 [INF] - Volo.Abp.Auditing.AbpAuditingModule
+2018-05-02 11:43:18.854 +03:00 [INF] - Volo.Abp.EventBus.AbpEventBusModule
+2018-05-02 11:43:18.857 +03:00 [INF] - Volo.Abp.Guids.AbpGuidsModule
+2018-05-02 11:43:18.863 +03:00 [INF] - Volo.Abp.Uow.AbpUnitOfWorkModule
+2018-05-02 11:43:18.875 +03:00 [INF] - Volo.Abp.Domain.AbpDddDomainModule
+2018-05-02 11:43:18.882 +03:00 [INF] - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2018-05-02 11:43:18.888 +03:00 [INF] - Volo.Abp.Validation.AbpValidationModule
+2018-05-02 11:43:18.896 +03:00 [INF] - Volo.Abp.Authorization.AbpAuthorizationModule
+2018-05-02 11:43:18.903 +03:00 [INF] - Volo.Abp.Application.AbpDddApplicationModule
+2018-05-02 11:43:18.908 +03:00 [INF] - Volo.Abp.UI.AbpUiModule
+2018-05-02 11:43:18.914 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcModule
+2018-05-02 11:43:18.919 +03:00 [INF] - Volo.Abp.UI.Navigation.AbpUiNavigationModule
+2018-05-02 11:43:18.925 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.AbpAspNetCoreMvcUiModule
+2018-05-02 11:43:18.930 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.AbpAspNetCoreMvcUiBootstrapModule
+2018-05-02 11:43:18.935 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.AbpAspNetCoreMvcUiThemeSharedModule
+2018-05-02 11:43:18.940 +03:00 [INF] - Volo.Abp.Castle.AbpCastleCoreModule
+2018-05-02 11:43:18.946 +03:00 [INF] - Volo.Abp.Autofac.AbpAutofacModule
+2018-05-02 11:43:18.951 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.AbpAspNetCoreMvcUiBootstrapDemoModule
+2018-05-02 11:43:19.176 +03:00 [INF] Initialized all modules.
+2018-05-02 11:43:19.639 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/  
+2018-05-02 11:43:22.908 +03:00 [INF] Executing handler method OnGet with arguments (null) - ModelState is "Valid"
+2018-05-02 11:43:24.015 +03:00 [INF] Executed action /Index in 1116.7479ms
+2018-05-02 11:43:24.026 +03:00 [INF] Request finished in 4420.1496ms 200 text/html; charset=utf-8
+2018-05-02 11:43:24.057 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables.css  
+2018-05-02 11:43:24.120 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/modal-manager.js  
+2018-05-02 11:43:24.149 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery/jquery-extensions.js  
+2018-05-02 11:43:24.153 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery-form/jquery-form-extensions.js  
+2018-05-02 11:43:24.178 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables-extensions.js  
+2018-05-02 11:43:24.181 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/dom-event-handlers.js  
+2018-05-02 11:43:24.260 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/modal-manager.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/bootstrap/modal-manager.js'
+2018-05-02 11:43:24.263 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables.css'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/datatables/datatables.css'
+2018-05-02 11:43:24.310 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/dom-event-handlers.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/bootstrap/dom-event-handlers.js'
+2018-05-02 11:43:24.318 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables-extensions.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/datatables/datatables-extensions.js'
+2018-05-02 11:43:24.327 +03:00 [INF] Request finished in 252.0838ms 200 text/css
+2018-05-02 11:43:24.347 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery/jquery-extensions.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/jquery/jquery-extensions.js'
+2018-05-02 11:43:24.354 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery-form/jquery-form-extensions.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/jquery_form/jquery-form-extensions.js'
+2018-05-02 11:43:24.400 +03:00 [INF] Request finished in 234.9318ms 200 application/javascript
+2018-05-02 11:43:24.402 +03:00 [INF] Request finished in 231.9709ms 200 application/javascript
+2018-05-02 11:43:24.403 +03:00 [INF] Request finished in 290.7381ms 200 application/javascript
+2018-05-02 11:43:24.430 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/toastr/abp-toastr.js  
+2018-05-02 11:43:24.440 +03:00 [INF] Request finished in 248.4417ms 200 application/javascript
+2018-05-02 11:43:24.442 +03:00 [INF] Request finished in 296.4722ms 200 application/javascript
+2018-05-02 11:43:24.472 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/toastr/abp-toastr.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/toastr/abp-toastr.js'
+2018-05-02 11:43:24.523 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/sweetalert/abp-sweetalert.js  
+2018-05-02 11:43:24.525 +03:00 [INF] Request finished in 114.2629ms 200 application/javascript
+2018-05-02 11:43:24.551 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/sweetalert/abp-sweetalert.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/sweetalert/abp-sweetalert.js'
+2018-05-02 11:43:24.562 +03:00 [INF] Request finished in 79.1247ms 200 application/javascript
+2018-05-02 11:43:26.146 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/Components/DynamicForms  
+2018-05-02 11:43:26.492 +03:00 [INF] Executing handler method OnGet with arguments (null) - ModelState is "Valid"
+2018-05-02 11:43:26.684 +03:00 [INF] Executed action /Components/DynamicForms in 221.1466ms
+2018-05-02 11:43:26.693 +03:00 [INF] Request finished in 543.9068ms 200 text/html; charset=utf-8
+2018-05-02 11:43:26.718 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables.css  
+2018-05-02 11:43:26.736 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables.css was not modified
+2018-05-02 11:43:26.810 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables-extensions.js  
+2018-05-02 11:43:26.815 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery/jquery-extensions.js  
+2018-05-02 11:43:26.866 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/modal-manager.js  
+2018-05-02 11:43:26.888 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables-extensions.js was not modified
+2018-05-02 11:43:26.968 +03:00 [INF] Request finished in 152.9125ms 304 application/javascript
+2018-05-02 11:43:26.969 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery-form/jquery-form-extensions.js  
+2018-05-02 11:43:26.995 +03:00 [INF] Request finished in 83.8778ms 304 text/css
+2018-05-02 11:43:27.018 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/modal-manager.js was not modified
+2018-05-02 11:43:27.019 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/dom-event-handlers.js  
+2018-05-02 11:43:27.051 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/jquery/jquery-extensions.js was not modified
+2018-05-02 11:43:27.074 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/toastr/abp-toastr.js  
+2018-05-02 11:43:27.256 +03:00 [INF] Request finished in 281.5833ms 304 application/javascript
+2018-05-02 11:43:27.257 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/dom-event-handlers.js was not modified
+2018-05-02 11:43:27.266 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/sweetalert/abp-sweetalert.js  
+2018-05-02 11:43:27.270 +03:00 [INF] Request finished in 321.5209ms 304 application/javascript
+2018-05-02 11:43:27.271 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/toastr/abp-toastr.js was not modified
+2018-05-02 11:43:27.277 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/jquery-form/jquery-form-extensions.js was not modified
+2018-05-02 11:43:27.395 +03:00 [INF] Request finished in 301.1193ms 304 application/javascript
+2018-05-02 11:43:27.441 +03:00 [INF] Request finished in 546.858ms 304 application/javascript
+2018-05-02 11:43:27.442 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/sweetalert/abp-sweetalert.js was not modified
+2018-05-02 11:43:27.465 +03:00 [INF] Request finished in 526.2772ms 304 application/javascript
+2018-05-02 11:43:27.476 +03:00 [INF] Request finished in 397.3682ms 304 application/javascript
+2018-05-02 11:43:31.701 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/bootstrap/css/bootstrap.css  
+2018-05-02 11:43:31.707 +03:00 [INF] Sending file. Request path: '/libs/bootstrap/css/bootstrap.css'. Physical path: 'D:\github\abp\test\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo\wwwroot\libs\bootstrap\css\bootstrap.css'
+2018-05-02 11:43:31.722 +03:00 [INF] Request finished in 22.3143ms 200 text/css
+2018-05-02 11:44:23.090 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/Components/DynamicForms  
+2018-05-02 11:44:23.299 +03:00 [INF] Executing handler method OnGet with arguments (null) - ModelState is "Valid"
+2018-05-02 11:44:23.328 +03:00 [INF] Executed action /Components/DynamicForms in 28.047600000000003ms
+2018-05-02 11:44:23.336 +03:00 [INF] Request finished in 243.8856ms 200 text/html; charset=utf-8
+2018-05-02 11:44:23.432 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/css/demo.min.css  
+2018-05-02 11:44:23.455 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/bootstrap/css/bootstrap.css  
+2018-05-02 11:44:23.567 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables.css  
+2018-05-02 11:44:23.590 +03:00 [INF] The file /libs/bootstrap/css/bootstrap.css was not modified
+2018-05-02 11:44:23.658 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/datatables.net-bs4/css/dataTables.bootstrap4.css  
+2018-05-02 11:44:23.682 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/font-awesome/css/font-awesome.css  
+2018-05-02 11:44:23.682 +03:00 [INF] Request finished in 245.4153ms 304 text/css
+2018-05-02 11:44:23.753 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/toastr/toastr.min.css  
+2018-05-02 11:44:23.758 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables.css was not modified
+2018-05-02 11:44:23.771 +03:00 [INF] The file /css/demo.min.css was not modified
+2018-05-02 11:44:23.827 +03:00 [INF] The file /libs/toastr/toastr.min.css was not modified
+2018-05-02 11:44:23.848 +03:00 [INF] The file /libs/font-awesome/css/font-awesome.css was not modified
+2018-05-02 11:44:23.966 +03:00 [INF] Request finished in 423.6215ms 304 text/css
+2018-05-02 11:44:23.970 +03:00 [INF] The file /libs/datatables.net-bs4/css/dataTables.bootstrap4.css was not modified
+2018-05-02 11:44:24.008 +03:00 [INF] Request finished in 376.9038ms 304 text/css
+2018-05-02 11:44:24.079 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/jquery/jquery.js  
+2018-05-02 11:44:24.080 +03:00 [INF] Request finished in 446.6428ms 304 text/css
+2018-05-02 11:44:24.128 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/jquery-validation/jquery.validate.js  
+2018-05-02 11:44:24.152 +03:00 [INF] Request finished in 588.1494ms 304 text/css
+2018-05-02 11:44:24.248 +03:00 [INF] Request finished in 500.9946ms 304 text/css
+2018-05-02 11:44:24.302 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/bootstrap/js/bootstrap.bundle.js  
+2018-05-02 11:44:24.326 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/datatables.net/js/jquery.dataTables.js  
+2018-05-02 11:44:24.353 +03:00 [INF] The file /libs/jquery/jquery.js was not modified
+2018-05-02 11:44:24.381 +03:00 [INF] The file /libs/jquery-validation/jquery.validate.js was not modified
+2018-05-02 11:44:24.393 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js  
+2018-05-02 11:44:24.425 +03:00 [INF] The file /libs/bootstrap/js/bootstrap.bundle.js was not modified
+2018-05-02 11:44:24.448 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/jquery-form/jquery.form.min.js  
+2018-05-02 11:44:24.456 +03:00 [INF] The file /libs/datatables.net/js/jquery.dataTables.js was not modified
+2018-05-02 11:44:24.472 +03:00 [INF] Request finished in 585.7303ms 304 application/javascript
+2018-05-02 11:44:24.522 +03:00 [INF] Request finished in 391.2163ms 304 application/javascript
+2018-05-02 11:44:24.546 +03:00 [INF] Request finished in 409.3283ms 304 application/javascript
+2018-05-02 11:44:24.596 +03:00 [INF] The file /libs/jquery-form/jquery.form.min.js was not modified
+2018-05-02 11:44:24.599 +03:00 [INF] Request finished in 259.0406ms 304 application/javascript
+2018-05-02 11:44:24.612 +03:00 [INF] The file /libs/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js was not modified
+2018-05-02 11:44:24.643 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/sweetalert/sweetalert.min.js  
+2018-05-02 11:44:24.697 +03:00 [INF] Request finished in 386.2788ms 304 application/javascript
+2018-05-02 11:44:24.724 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/toastr/toastr.min.js  
+2018-05-02 11:44:24.789 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/datatables.net-bs4/js/dataTables.bootstrap4.js  
+2018-05-02 11:44:24.818 +03:00 [INF] Request finished in 215.4604ms 304 application/javascript
+2018-05-02 11:44:24.821 +03:00 [INF] The file /libs/datatables.net-bs4/js/dataTables.bootstrap4.js was not modified
+2018-05-02 11:44:24.849 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/core/abp.js  
+2018-05-02 11:44:24.855 +03:00 [INF] The file /libs/sweetalert/sweetalert.min.js was not modified
+2018-05-02 11:44:24.958 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/jquery/abp.ajax.js  
+2018-05-02 11:44:24.963 +03:00 [INF] Request finished in 284.5143ms 304 application/javascript
+2018-05-02 11:44:25.008 +03:00 [INF] The file /libs/toastr/toastr.min.js was not modified
+2018-05-02 11:44:25.106 +03:00 [INF] Request finished in 326.0153ms 304 application/javascript
+2018-05-02 11:44:25.150 +03:00 [INF] The file /libs/abp/core/abp.js was not modified
+2018-05-02 11:44:25.151 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/jquery/abp.dom.js  
+2018-05-02 11:44:25.201 +03:00 [INF] The file /libs/abp/jquery/abp.ajax.js was not modified
+2018-05-02 11:44:25.236 +03:00 [INF] Request finished in 402.0786ms 304 application/javascript
+2018-05-02 11:44:25.282 +03:00 [INF] The file /libs/abp/jquery/abp.dom.js was not modified
+2018-05-02 11:44:25.285 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery/jquery-extensions.js  
+2018-05-02 11:44:25.314 +03:00 [INF] Request finished in 456.0319ms 304 application/javascript
+2018-05-02 11:44:25.363 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery-form/jquery-form-extensions.js  
+2018-05-02 11:44:25.413 +03:00 [INF] Request finished in 358.2106ms 304 application/javascript
+2018-05-02 11:44:25.437 +03:00 [INF] Request finished in 427.0225ms 304 application/javascript
+2018-05-02 11:44:25.440 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/dom-event-handlers.js  
+2018-05-02 11:44:25.441 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/jquery/abp.resource-loader.js  
+2018-05-02 11:44:25.530 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/jquery/jquery-extensions.js was not modified
+2018-05-02 11:44:25.600 +03:00 [INF] The file /libs/abp/jquery/abp.resource-loader.js was not modified
+2018-05-02 11:44:25.623 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/jquery-form/jquery-form-extensions.js was not modified
+2018-05-02 11:44:25.683 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/modal-manager.js  
+2018-05-02 11:44:25.795 +03:00 [INF] Request finished in 368.7625ms 304 application/javascript
+2018-05-02 11:44:25.818 +03:00 [INF] Request finished in 494.0558ms 304 application/javascript
+2018-05-02 11:44:25.840 +03:00 [INF] Request finished in 363.1057ms 304 application/javascript
+2018-05-02 11:44:25.909 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables-extensions.js  
+2018-05-02 11:44:25.932 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/dom-event-handlers.js was not modified
+2018-05-02 11:44:26.054 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/sweetalert/abp-sweetalert.js  
+2018-05-02 11:44:26.054 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables-extensions.js was not modified
+2018-05-02 11:44:26.079 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/toastr/abp-toastr.js  
+2018-05-02 11:44:26.101 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/modal-manager.js was not modified
+2018-05-02 11:44:26.268 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/sweetalert/abp-sweetalert.js was not modified
+2018-05-02 11:44:26.317 +03:00 [INF] Request finished in 591.5555ms 304 application/javascript
+2018-05-02 11:44:26.341 +03:00 [INF] Request finished in 521.2298ms 304 application/javascript
+2018-05-02 11:44:26.364 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/toastr/abp-toastr.js was not modified
+2018-05-02 11:44:26.387 +03:00 [INF] Request finished in 546.7395ms 304 application/javascript
+2018-05-02 11:44:26.436 +03:00 [INF] Request finished in 405.9641ms 304 application/javascript
+2018-05-02 11:44:26.461 +03:00 [INF] Request finished in 401.55ms 304 application/javascript
+2018-05-02 11:44:27.315 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/bootstrap/css/bootstrap.css  
+2018-05-02 11:44:27.322 +03:00 [INF] Sending file. Request path: '/libs/bootstrap/css/bootstrap.css'. Physical path: 'D:\github\abp\test\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo\wwwroot\libs\bootstrap\css\bootstrap.css'
+2018-05-02 11:44:27.330 +03:00 [INF] Request finished in 16.1119ms 200 text/css
+2018-05-02 11:44:49.263 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/css/demo.min.css  
+2018-05-02 11:44:49.268 +03:00 [INF] Sending file. Request path: '/css/demo.min.css'. Physical path: 'D:\github\abp\test\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo\wwwroot\css\demo.min.css'
+2018-05-02 11:44:49.277 +03:00 [INF] Request finished in 11.1569ms 200 text/css
+2018-05-02 11:45:26.724 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/Components/DynamicForms  
+2018-05-02 11:45:26.729 +03:00 [INF] Executing handler method OnGet with arguments (null) - ModelState is "Valid"
+2018-05-02 11:45:26.757 +03:00 [INF] Executed action /Components/DynamicForms in 27.062800000000003ms
+2018-05-02 11:45:26.764 +03:00 [INF] Request finished in 47.5178ms 200 text/html; charset=utf-8
+2018-05-02 11:45:26.873 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/font-awesome/css/font-awesome.css  
+2018-05-02 11:45:26.894 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/bootstrap/css/bootstrap.css  
+2018-05-02 11:45:27.004 +03:00 [INF] The file /libs/font-awesome/css/font-awesome.css was not modified
+2018-05-02 11:45:27.067 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/toastr/toastr.min.css  
+2018-05-02 11:45:27.071 +03:00 [INF] Request finished in 227.9443ms 304 text/css
+2018-05-02 11:45:27.093 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables.css  
+2018-05-02 11:45:27.164 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/css/demo.min.css  
+2018-05-02 11:45:27.165 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/datatables.net-bs4/css/dataTables.bootstrap4.css  
+2018-05-02 11:45:27.216 +03:00 [INF] The file /libs/bootstrap/css/bootstrap.css was not modified
+2018-05-02 11:45:27.268 +03:00 [INF] The file /libs/datatables.net-bs4/css/dataTables.bootstrap4.css was not modified
+2018-05-02 11:45:27.268 +03:00 [INF] The file /libs/toastr/toastr.min.css was not modified
+2018-05-02 11:45:27.277 +03:00 [INF] The file /css/demo.min.css was not modified
+2018-05-02 11:45:27.288 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/jquery/jquery.js  
+2018-05-02 11:45:27.376 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables.css was not modified
+2018-05-02 11:45:27.402 +03:00 [INF] Request finished in 437.695ms 304 text/css
+2018-05-02 11:45:27.408 +03:00 [INF] Request finished in 353.558ms 304 text/css
+2018-05-02 11:45:27.480 +03:00 [INF] Request finished in 396.7665ms 304 text/css
+2018-05-02 11:45:27.481 +03:00 [INF] The file /libs/jquery/jquery.js was not modified
+2018-05-02 11:45:27.489 +03:00 [INF] Request finished in 326.0175ms 304 text/css
+2018-05-02 11:45:27.585 +03:00 [INF] Request finished in 460.8479ms 304 text/css
+2018-05-02 11:45:27.660 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/bootstrap/js/bootstrap.bundle.js  
+2018-05-02 11:45:27.684 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js  
+2018-05-02 11:45:27.687 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/jquery-form/jquery.form.min.js  
+2018-05-02 11:45:27.732 +03:00 [INF] Request finished in 289.4748ms 304 application/javascript
+2018-05-02 11:45:27.887 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/datatables.net/js/jquery.dataTables.js  
+2018-05-02 11:45:27.908 +03:00 [INF] The file /libs/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js was not modified
+2018-05-02 11:45:27.980 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/datatables.net-bs4/js/dataTables.bootstrap4.js  
+2018-05-02 11:45:27.981 +03:00 [INF] The file /libs/bootstrap/js/bootstrap.bundle.js was not modified
+2018-05-02 11:45:28.000 +03:00 [INF] The file /libs/jquery-form/jquery.form.min.js was not modified
+2018-05-02 11:45:28.021 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/jquery-validation/jquery.validate.js  
+2018-05-02 11:45:28.046 +03:00 [INF] The file /libs/datatables.net/js/jquery.dataTables.js was not modified
+2018-05-02 11:45:28.075 +03:00 [INF] The file /libs/datatables.net-bs4/js/dataTables.bootstrap4.js was not modified
+2018-05-02 11:45:28.087 +03:00 [INF] Request finished in 488.5894ms 304 application/javascript
+2018-05-02 11:45:28.112 +03:00 [INF] Request finished in 460.7162ms 304 application/javascript
+2018-05-02 11:45:28.179 +03:00 [INF] The file /libs/jquery-validation/jquery.validate.js was not modified
+2018-05-02 11:45:28.180 +03:00 [INF] Request finished in 392.6745ms 304 application/javascript
+2018-05-02 11:45:28.192 +03:00 [INF] Request finished in 545.0533ms 304 application/javascript
+2018-05-02 11:45:28.303 +03:00 [INF] Request finished in 164.3974ms 304 application/javascript
+2018-05-02 11:45:28.372 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/sweetalert/sweetalert.min.js  
+2018-05-02 11:45:28.395 +03:00 [INF] Request finished in 382.7555ms 304 application/javascript
+2018-05-02 11:45:28.462 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/toastr/toastr.min.js  
+2018-05-02 11:45:28.535 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/jquery/abp.ajax.js  
+2018-05-02 11:45:28.537 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/jquery/abp.resource-loader.js  
+2018-05-02 11:45:28.558 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/core/abp.js  
+2018-05-02 11:45:28.604 +03:00 [INF] The file /libs/toastr/toastr.min.js was not modified
+2018-05-02 11:45:28.674 +03:00 [INF] The file /libs/sweetalert/sweetalert.min.js was not modified
+2018-05-02 11:45:28.678 +03:00 [INF] The file /libs/abp/jquery/abp.ajax.js was not modified
+2018-05-02 11:45:28.715 +03:00 [INF] Request finished in 410.7378ms 304 application/javascript
+2018-05-02 11:45:28.782 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/jquery/abp.dom.js  
+2018-05-02 11:45:28.804 +03:00 [INF] The file /libs/abp/core/abp.js was not modified
+2018-05-02 11:45:28.825 +03:00 [INF] The file /libs/abp/jquery/abp.resource-loader.js was not modified
+2018-05-02 11:45:28.841 +03:00 [INF] Request finished in 487.8492ms 304 application/javascript
+2018-05-02 11:45:28.868 +03:00 [INF] Request finished in 350.8228ms 304 application/javascript
+2018-05-02 11:45:29.047 +03:00 [INF] The file /libs/abp/jquery/abp.dom.js was not modified
+2018-05-02 11:45:29.069 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery/jquery-extensions.js  
+2018-05-02 11:45:29.117 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/dom-event-handlers.js  
+2018-05-02 11:45:29.122 +03:00 [INF] Request finished in 565.9912ms 304 application/javascript
+2018-05-02 11:45:29.144 +03:00 [INF] Request finished in 475.358ms 304 application/javascript
+2018-05-02 11:45:29.147 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery-form/jquery-form-extensions.js  
+2018-05-02 11:45:29.243 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/jquery-form/jquery-form-extensions.js was not modified
+2018-05-02 11:45:29.253 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/dom-event-handlers.js was not modified
+2018-05-02 11:45:29.319 +03:00 [INF] Request finished in 536.912ms 304 application/javascript
+2018-05-02 11:45:29.340 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/jquery/jquery-extensions.js was not modified
+2018-05-02 11:45:29.373 +03:00 [INF] Request finished in 341.541ms 304 application/javascript
+2018-05-02 11:45:29.401 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/modal-manager.js  
+2018-05-02 11:45:29.453 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/sweetalert/abp-sweetalert.js  
+2018-05-02 11:45:29.476 +03:00 [INF] Request finished in 309.3928ms 304 application/javascript
+2018-05-02 11:45:29.479 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables-extensions.js  
+2018-05-02 11:45:29.504 +03:00 [INF] Request finished in 504.8284ms 304 application/javascript
+2018-05-02 11:45:29.617 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/modal-manager.js was not modified
+2018-05-02 11:45:29.663 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/sweetalert/abp-sweetalert.js was not modified
+2018-05-02 11:45:29.752 +03:00 [INF] Request finished in 301.2485ms 304 application/javascript
+2018-05-02 11:45:29.773 +03:00 [INF] Request finished in 446.4768ms 304 application/javascript
+2018-05-02 11:45:29.799 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables-extensions.js was not modified
+2018-05-02 11:45:29.801 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/toastr/abp-toastr.js  
+2018-05-02 11:45:29.849 +03:00 [INF] Request finished in 556.0623ms 304 application/javascript
+2018-05-02 11:45:29.873 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/toastr/abp-toastr.js was not modified
+2018-05-02 11:45:29.881 +03:00 [INF] Request finished in 391.4031ms 304 application/javascript
+2018-05-02 11:45:36.674 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/Components/DynamicForms  
+2018-05-02 11:45:36.680 +03:00 [INF] Executing handler method OnGet with arguments (null) - ModelState is "Valid"
+2018-05-02 11:45:36.688 +03:00 [INF] Executed action /Components/DynamicForms in 7.9903ms
+2018-05-02 11:45:36.696 +03:00 [INF] Request finished in 18.9587ms 200 text/html; charset=utf-8
+2018-05-02 11:45:36.805 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/toastr/toastr.min.css  
+2018-05-02 11:45:36.873 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables.css  
+2018-05-02 11:45:36.896 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/font-awesome/css/font-awesome.css  
+2018-05-02 11:45:37.013 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/css/demo.min.css  
+2018-05-02 11:45:37.016 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/datatables.net-bs4/css/dataTables.bootstrap4.css  
+2018-05-02 11:45:37.040 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables.css was not modified
+2018-05-02 11:45:37.070 +03:00 [INF] The file /libs/font-awesome/css/font-awesome.css was not modified
+2018-05-02 11:45:37.085 +03:00 [INF] The file /css/demo.min.css was not modified
+2018-05-02 11:45:37.106 +03:00 [INF] The file /libs/toastr/toastr.min.css was not modified
+2018-05-02 11:45:37.115 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/bootstrap/css/bootstrap.css  
+2018-05-02 11:45:37.138 +03:00 [INF] Request finished in 328.3669ms 304 text/css
+2018-05-02 11:45:37.184 +03:00 [INF] Request finished in 395.2027ms 304 text/css
+2018-05-02 11:45:37.320 +03:00 [INF] Request finished in 368.6979ms 304 text/css
+2018-05-02 11:45:37.341 +03:00 [INF] Request finished in 364.245ms 304 text/css
+2018-05-02 11:45:37.367 +03:00 [INF] The file /libs/datatables.net-bs4/css/dataTables.bootstrap4.css was not modified
+2018-05-02 11:45:37.479 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/bootstrap/js/bootstrap.bundle.js  
+2018-05-02 11:45:37.590 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/jquery-validation/jquery.validate.js  
+2018-05-02 11:45:37.613 +03:00 [INF] The file /libs/bootstrap/css/bootstrap.css was not modified
+2018-05-02 11:45:37.625 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/jquery/jquery.js  
+2018-05-02 11:45:37.634 +03:00 [INF] The file /libs/jquery-validation/jquery.validate.js was not modified
+2018-05-02 11:45:37.649 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js  
+2018-05-02 11:45:37.675 +03:00 [INF] Request finished in 680.0035ms 304 text/css
+2018-05-02 11:45:37.701 +03:00 [INF] The file /libs/bootstrap/js/bootstrap.bundle.js was not modified
+2018-05-02 11:45:37.734 +03:00 [INF] The file /libs/jquery/jquery.js was not modified
+2018-05-02 11:45:37.774 +03:00 [INF] Request finished in 905.4667ms 304 text/css
+2018-05-02 11:45:37.797 +03:00 [INF] The file /libs/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js was not modified
+2018-05-02 11:45:37.818 +03:00 [INF] Request finished in 380.0024ms 304 application/javascript
+2018-05-02 11:45:37.827 +03:00 [INF] Request finished in 437.1557ms 304 application/javascript
+2018-05-02 11:45:37.906 +03:00 [INF] Request finished in 356.7049ms 304 application/javascript
+2018-05-02 11:45:37.953 +03:00 [INF] Request finished in 386.0701ms 304 application/javascript
+2018-05-02 11:45:38.060 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/jquery-form/jquery.form.min.js  
+2018-05-02 11:45:38.062 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/toastr/toastr.min.js  
+2018-05-02 11:45:38.088 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/sweetalert/sweetalert.min.js  
+2018-05-02 11:45:38.245 +03:00 [INF] The file /libs/sweetalert/sweetalert.min.js was not modified
+2018-05-02 11:45:38.312 +03:00 [INF] The file /libs/jquery-form/jquery.form.min.js was not modified
+2018-05-02 11:45:38.313 +03:00 [INF] The file /libs/toastr/toastr.min.js was not modified
+2018-05-02 11:45:38.366 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/datatables.net/js/jquery.dataTables.js  
+2018-05-02 11:45:38.367 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/datatables.net-bs4/js/dataTables.bootstrap4.js  
+2018-05-02 11:45:38.390 +03:00 [INF] Request finished in 481.7789ms 304 application/javascript
+2018-05-02 11:45:38.435 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/core/abp.js  
+2018-05-02 11:45:38.496 +03:00 [INF] Request finished in 270.8668ms 304 application/javascript
+2018-05-02 11:45:38.520 +03:00 [INF] The file /libs/datatables.net-bs4/js/dataTables.bootstrap4.js was not modified
+2018-05-02 11:45:38.608 +03:00 [INF] The file /libs/datatables.net/js/jquery.dataTables.js was not modified
+2018-05-02 11:45:38.613 +03:00 [INF] Request finished in 384.4378ms 304 application/javascript
+2018-05-02 11:45:38.646 +03:00 [INF] The file /libs/abp/core/abp.js was not modified
+2018-05-02 11:45:38.702 +03:00 [INF] Request finished in 535.9182ms 304 application/javascript
+2018-05-02 11:45:38.793 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/jquery/abp.dom.js  
+2018-05-02 11:45:38.815 +03:00 [INF] Request finished in 638.5889ms 304 application/javascript
+2018-05-02 11:45:38.859 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/jquery/abp.resource-loader.js  
+2018-05-02 11:45:38.929 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/jquery/abp.ajax.js  
+2018-05-02 11:45:38.951 +03:00 [INF] Request finished in 773.4548ms 304 application/javascript
+2018-05-02 11:45:38.954 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/dom-event-handlers.js  
+2018-05-02 11:45:39.069 +03:00 [INF] The file /libs/abp/jquery/abp.dom.js was not modified
+2018-05-02 11:45:39.095 +03:00 [INF] The file /libs/abp/jquery/abp.resource-loader.js was not modified
+2018-05-02 11:45:39.100 +03:00 [INF] The file /libs/abp/jquery/abp.ajax.js was not modified
+2018-05-02 11:45:39.110 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/dom-event-handlers.js was not modified
+2018-05-02 11:45:39.155 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery/jquery-extensions.js  
+2018-05-02 11:45:39.290 +03:00 [INF] Request finished in 504.9049ms 304 application/javascript
+2018-05-02 11:45:39.291 +03:00 [INF] Request finished in 338.7362ms 304 application/javascript
+2018-05-02 11:45:39.404 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery-form/jquery-form-extensions.js  
+2018-05-02 11:45:39.405 +03:00 [INF] Request finished in 607.3605ms 304 application/javascript
+2018-05-02 11:45:39.406 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/jquery/jquery-extensions.js was not modified
+2018-05-02 11:45:39.413 +03:00 [INF] Request finished in 479.0147ms 304 application/javascript
+2018-05-02 11:45:39.533 +03:00 [INF] Request finished in 546.4098ms 304 application/javascript
+2018-05-02 11:45:39.575 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/modal-manager.js  
+2018-05-02 11:45:39.583 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables-extensions.js  
+2018-05-02 11:45:39.584 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/toastr/abp-toastr.js  
+2018-05-02 11:45:39.606 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/jquery-form/jquery-form-extensions.js was not modified
+2018-05-02 11:45:39.633 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/toastr/abp-toastr.js was not modified
+2018-05-02 11:45:39.765 +03:00 [INF] Request finished in 297.8608ms 304 application/javascript
+2018-05-02 11:45:39.793 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/modal-manager.js was not modified
+2018-05-02 11:45:39.902 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/sweetalert/abp-sweetalert.js  
+2018-05-02 11:45:39.903 +03:00 [INF] Request finished in 480.0953ms 304 application/javascript
+2018-05-02 11:45:39.947 +03:00 [INF] Request finished in 629.9396ms 304 application/javascript
+2018-05-02 11:45:39.950 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/sweetalert/abp-sweetalert.js was not modified
+2018-05-02 11:45:39.973 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables-extensions.js was not modified
+2018-05-02 11:45:40.070 +03:00 [INF] Request finished in 560.9139ms 304 application/javascript
+2018-05-02 11:45:40.071 +03:00 [INF] Request finished in 395.7026ms 304 application/javascript
+2018-05-02 11:46:51.770 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/Components/DynamicForms  
+2018-05-02 11:46:51.775 +03:00 [INF] Executing handler method OnGet with arguments (null) - ModelState is "Valid"
+2018-05-02 11:47:41.983 +03:00 [INF] Executed action /Components/DynamicForms in 50206.758ms
+2018-05-02 11:47:41.991 +03:00 [INF] Request finished in 50227.119ms 200 text/html; charset=utf-8
+2018-05-02 11:47:42.029 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/font-awesome/css/font-awesome.css  
+2018-05-02 11:47:42.097 +03:00 [INF] The file /libs/font-awesome/css/font-awesome.css was not modified
+2018-05-02 11:47:42.185 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/toastr/toastr.min.css  
+2018-05-02 11:47:42.250 +03:00 [INF] Request finished in 97.137ms 304 text/css
+2018-05-02 11:47:42.316 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/datatables.net-bs4/css/dataTables.bootstrap4.css  
+2018-05-02 11:47:42.342 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/bootstrap/css/bootstrap.css  
+2018-05-02 11:47:42.343 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables.css  
+2018-05-02 11:47:42.365 +03:00 [INF] The file /libs/toastr/toastr.min.css was not modified
+2018-05-02 11:47:42.395 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/css/demo.min.css  
+2018-05-02 11:47:42.440 +03:00 [INF] Request finished in 298.725ms 304 text/css
+2018-05-02 11:47:42.443 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/jquery/jquery.js  
+2018-05-02 11:47:42.465 +03:00 [INF] The file /css/demo.min.css was not modified
+2018-05-02 11:47:42.511 +03:00 [INF] The file /libs/jquery/jquery.js was not modified
+2018-05-02 11:47:42.524 +03:00 [INF] The file /libs/datatables.net-bs4/css/dataTables.bootstrap4.css was not modified
+2018-05-02 11:47:42.599 +03:00 [INF] Request finished in 398.0263ms 304 text/css
+2018-05-02 11:47:42.664 +03:00 [INF] Request finished in 457.204ms 304 text/css
+2018-05-02 11:47:42.665 +03:00 [INF] Request finished in 237.7059ms 304 application/javascript
+2018-05-02 11:47:42.732 +03:00 [INF] The file /libs/bootstrap/css/bootstrap.css was not modified
+2018-05-02 11:47:42.760 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables.css was not modified
+2018-05-02 11:47:42.808 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/bootstrap/js/bootstrap.bundle.js  
+2018-05-02 11:47:42.926 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/jquery-form/jquery.form.min.js  
+2018-05-02 11:47:42.970 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js  
+2018-05-02 11:47:42.982 +03:00 [INF] The file /libs/bootstrap/js/bootstrap.bundle.js was not modified
+2018-05-02 11:47:42.993 +03:00 [INF] Request finished in 728.1419ms 304 text/css
+2018-05-02 11:47:42.997 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/jquery-validation/jquery.validate.js  
+2018-05-02 11:47:43.035 +03:00 [INF] The file /libs/jquery-form/jquery.form.min.js was not modified
+2018-05-02 11:47:43.063 +03:00 [INF] Request finished in 749.9696ms 304 text/css
+2018-05-02 11:47:43.077 +03:00 [INF] Request finished in 483.7764ms 304 application/javascript
+2018-05-02 11:47:43.079 +03:00 [INF] The file /libs/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js was not modified
+2018-05-02 11:47:43.114 +03:00 [INF] The file /libs/jquery-validation/jquery.validate.js was not modified
+2018-05-02 11:47:43.157 +03:00 [INF] Request finished in 342.7179ms 304 application/javascript
+2018-05-02 11:47:43.169 +03:00 [INF] Request finished in 348.4182ms 304 application/javascript
+2018-05-02 11:47:43.201 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/sweetalert/sweetalert.min.js  
+2018-05-02 11:47:43.201 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/datatables.net/js/jquery.dataTables.js  
+2018-05-02 11:47:43.273 +03:00 [INF] Request finished in 333.9702ms 304 application/javascript
+2018-05-02 11:47:43.295 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/core/abp.js  
+2018-05-02 11:47:43.317 +03:00 [INF] The file /libs/datatables.net/js/jquery.dataTables.js was not modified
+2018-05-02 11:47:43.333 +03:00 [INF] The file /libs/sweetalert/sweetalert.min.js was not modified
+2018-05-02 11:47:43.347 +03:00 [INF] The file /libs/abp/core/abp.js was not modified
+2018-05-02 11:47:43.351 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/datatables.net-bs4/js/dataTables.bootstrap4.js  
+2018-05-02 11:47:43.354 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/toastr/toastr.min.js  
+2018-05-02 11:47:43.478 +03:00 [INF] The file /libs/datatables.net-bs4/js/dataTables.bootstrap4.js was not modified
+2018-05-02 11:47:43.480 +03:00 [INF] Request finished in 156.4494ms 304 application/javascript
+2018-05-02 11:47:43.496 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/jquery/abp.dom.js  
+2018-05-02 11:47:43.592 +03:00 [INF] Request finished in 217.1444ms 304 application/javascript
+2018-05-02 11:47:43.662 +03:00 [INF] Request finished in 323.2147ms 304 application/javascript
+2018-05-02 11:47:43.684 +03:00 [INF] The file /libs/toastr/toastr.min.js was not modified
+2018-05-02 11:47:43.709 +03:00 [INF] Request finished in 155.2747ms 304 application/javascript
+2018-05-02 11:47:43.712 +03:00 [INF] The file /libs/abp/jquery/abp.dom.js was not modified
+2018-05-02 11:47:43.720 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery/jquery-extensions.js  
+2018-05-02 11:47:43.752 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/jquery/abp.resource-loader.js  
+2018-05-02 11:47:43.824 +03:00 [INF] Request finished in 371.8188ms 304 application/javascript
+2018-05-02 11:47:43.870 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/jquery/abp.ajax.js  
+2018-05-02 11:47:43.872 +03:00 [INF] The file /libs/abp/jquery/abp.resource-loader.js was not modified
+2018-05-02 11:47:43.956 +03:00 [INF] Request finished in 490.4791ms 304 application/javascript
+2018-05-02 11:47:44.009 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/jquery/jquery-extensions.js was not modified
+2018-05-02 11:47:44.030 +03:00 [INF] The file /libs/abp/jquery/abp.ajax.js was not modified
+2018-05-02 11:47:44.036 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/modal-manager.js  
+2018-05-02 11:47:44.045 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery-form/jquery-form-extensions.js  
+2018-05-02 11:47:44.048 +03:00 [INF] Request finished in 256.3961ms 304 application/javascript
+2018-05-02 11:47:44.156 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/modal-manager.js was not modified
+2018-05-02 11:47:44.205 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/dom-event-handlers.js  
+2018-05-02 11:47:44.229 +03:00 [INF] Request finished in 480.0376ms 304 application/javascript
+2018-05-02 11:47:44.332 +03:00 [INF] Request finished in 311.04ms 304 application/javascript
+2018-05-02 11:47:44.364 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/dom-event-handlers.js was not modified
+2018-05-02 11:47:44.429 +03:00 [INF] Request finished in 248.8894ms 304 application/javascript
+2018-05-02 11:47:44.450 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/jquery-form/jquery-form-extensions.js was not modified
+2018-05-02 11:47:44.451 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables-extensions.js  
+2018-05-02 11:47:44.467 +03:00 [INF] Request finished in 721.026ms 304 application/javascript
+2018-05-02 11:47:44.536 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/sweetalert/abp-sweetalert.js  
+2018-05-02 11:47:44.581 +03:00 [INF] Request finished in 383.4385ms 304 application/javascript
+2018-05-02 11:47:44.604 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables-extensions.js was not modified
+2018-05-02 11:47:44.651 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/sweetalert/abp-sweetalert.js was not modified
+2018-05-02 11:47:44.698 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/toastr/abp-toastr.js  
+2018-05-02 11:47:44.763 +03:00 [INF] Request finished in 309.2499ms 304 application/javascript
+2018-05-02 11:47:44.810 +03:00 [INF] Request finished in 467.3112ms 304 application/javascript
+2018-05-02 11:47:44.855 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/toastr/abp-toastr.js was not modified
+2018-05-02 11:47:44.864 +03:00 [INF] Request finished in 513.5059ms 304 application/javascript
+2018-05-02 11:47:54.892 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/bootstrap/css/bootstrap.css  
+2018-05-02 11:47:54.898 +03:00 [INF] Sending file. Request path: '/libs/bootstrap/css/bootstrap.css'. Physical path: 'D:\github\abp\test\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo\wwwroot\libs\bootstrap\css\bootstrap.css'
+2018-05-02 11:47:54.931 +03:00 [INF] Request finished in 39.734ms 200 text/css
+2018-05-02 11:48:02.982 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/css/demo.min.css  
+2018-05-02 11:48:02.986 +03:00 [INF] Sending file. Request path: '/css/demo.min.css'. Physical path: 'D:\github\abp\test\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo\wwwroot\css\demo.min.css'
+2018-05-02 11:48:02.993 +03:00 [INF] Request finished in 11.9549ms 200 text/css
+2018-05-02 11:49:00.030 +03:00 [INF] Request starting HTTP/1.1 POST http://127.0.0.1:11778/iisintegration  0
+2018-05-02 11:49:00.035 +03:00 [INF] Request finished in 6.0689ms 202 
+2018-05-02 11:49:27.590 +03:00 [INF] Loaded modules:
+2018-05-02 11:49:27.639 +03:00 [INF] - Volo.Abp.Threading.AbpThreadingModule
+2018-05-02 11:49:27.644 +03:00 [INF] - Volo.Abp.Security.AbpSecurityModule
+2018-05-02 11:49:27.651 +03:00 [INF] - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2018-05-02 11:49:27.656 +03:00 [INF] - Volo.Abp.AspNetCore.AbpAspNetCoreModule
+2018-05-02 11:49:27.661 +03:00 [INF] - Volo.Abp.Localization.AbpLocalizationModule
+2018-05-02 11:49:27.667 +03:00 [INF] - Volo.Abp.ApiVersioning.AbpApiVersioningAbstractionsModule
+2018-05-02 11:49:27.671 +03:00 [INF] - Volo.Abp.Http.AbpHttpAbstractionsModule
+2018-05-02 11:49:27.675 +03:00 [INF] - Volo.Abp.Timing.AbpTimingModule
+2018-05-02 11:49:27.680 +03:00 [INF] - Volo.Abp.Json.AbpJsonModule
+2018-05-02 11:49:27.684 +03:00 [INF] - Volo.Abp.Http.AbpHttpModule
+2018-05-02 11:49:27.689 +03:00 [INF] - Volo.Abp.Data.AbpDataModule
+2018-05-02 11:49:27.693 +03:00 [INF] - Volo.Abp.Settings.AbpSettingsModule
+2018-05-02 11:49:27.698 +03:00 [INF] - Volo.Abp.MultiTenancy.AbpMultiTenancyAbstractionsModule
+2018-05-02 11:49:27.701 +03:00 [INF] - Volo.Abp.Auditing.AbpAuditingModule
+2018-05-02 11:49:27.705 +03:00 [INF] - Volo.Abp.EventBus.AbpEventBusModule
+2018-05-02 11:49:27.709 +03:00 [INF] - Volo.Abp.Guids.AbpGuidsModule
+2018-05-02 11:49:27.716 +03:00 [INF] - Volo.Abp.Uow.AbpUnitOfWorkModule
+2018-05-02 11:49:27.721 +03:00 [INF] - Volo.Abp.Domain.AbpDddDomainModule
+2018-05-02 11:49:27.727 +03:00 [INF] - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2018-05-02 11:49:27.734 +03:00 [INF] - Volo.Abp.Validation.AbpValidationModule
+2018-05-02 11:49:27.740 +03:00 [INF] - Volo.Abp.Authorization.AbpAuthorizationModule
+2018-05-02 11:49:27.745 +03:00 [INF] - Volo.Abp.Application.AbpDddApplicationModule
+2018-05-02 11:49:27.750 +03:00 [INF] - Volo.Abp.UI.AbpUiModule
+2018-05-02 11:49:27.756 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcModule
+2018-05-02 11:49:27.764 +03:00 [INF] - Volo.Abp.UI.Navigation.AbpUiNavigationModule
+2018-05-02 11:49:27.770 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.AbpAspNetCoreMvcUiModule
+2018-05-02 11:49:27.776 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.AbpAspNetCoreMvcUiBootstrapModule
+2018-05-02 11:49:27.784 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.AbpAspNetCoreMvcUiThemeSharedModule
+2018-05-02 11:49:27.791 +03:00 [INF] - Volo.Abp.Castle.AbpCastleCoreModule
+2018-05-02 11:49:27.801 +03:00 [INF] - Volo.Abp.Autofac.AbpAutofacModule
+2018-05-02 11:49:27.806 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.AbpAspNetCoreMvcUiBootstrapDemoModule
+2018-05-02 11:49:28.100 +03:00 [INF] Initialized all modules.
+2018-05-02 11:49:28.589 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/  
+2018-05-02 11:49:32.318 +03:00 [INF] Executing handler method OnGet with arguments (null) - ModelState is "Valid"
+2018-05-02 11:49:33.241 +03:00 [INF] Executed action /Index in 934.61560000000009ms
+2018-05-02 11:49:33.255 +03:00 [INF] Request finished in 4735.454ms 200 text/html; charset=utf-8
+2018-05-02 11:49:33.324 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/modal-manager.js  
+2018-05-02 11:49:33.358 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery-form/jquery-form-extensions.js  
+2018-05-02 11:49:33.359 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery/jquery-extensions.js  
+2018-05-02 11:49:33.362 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/dom-event-handlers.js  
+2018-05-02 11:49:33.386 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables.css  
+2018-05-02 11:49:33.388 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables-extensions.js  
+2018-05-02 11:49:33.428 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery-form/jquery-form-extensions.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/jquery_form/jquery-form-extensions.js'
+2018-05-02 11:49:33.481 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables.css'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/datatables/datatables.css'
+2018-05-02 11:49:33.510 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery/jquery-extensions.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/jquery/jquery-extensions.js'
+2018-05-02 11:49:33.511 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/dom-event-handlers.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/bootstrap/dom-event-handlers.js'
+2018-05-02 11:49:33.513 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables-extensions.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/datatables/datatables-extensions.js'
+2018-05-02 11:49:33.515 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/modal-manager.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/bootstrap/modal-manager.js'
+2018-05-02 11:49:33.542 +03:00 [INF] Request finished in 225.1775ms 200 application/javascript
+2018-05-02 11:49:33.598 +03:00 [INF] Request finished in 200.264ms 200 application/javascript
+2018-05-02 11:49:33.624 +03:00 [INF] Request finished in 226.2932ms 200 application/javascript
+2018-05-02 11:49:33.679 +03:00 [INF] Request finished in 225.1775ms 200 application/javascript
+2018-05-02 11:49:33.702 +03:00 [INF] Request finished in 227.2656ms 200 application/javascript
+2018-05-02 11:49:33.773 +03:00 [INF] Request finished in 235.2094ms 200 text/css
+2018-05-02 11:49:33.776 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/toastr/abp-toastr.js  
+2018-05-02 11:49:33.820 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/sweetalert/abp-sweetalert.js  
+2018-05-02 11:49:33.846 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/toastr/abp-toastr.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/toastr/abp-toastr.js'
+2018-05-02 11:49:33.876 +03:00 [INF] Request finished in 189.5945ms 200 application/javascript
+2018-05-02 11:49:33.879 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/sweetalert/abp-sweetalert.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/sweetalert/abp-sweetalert.js'
+2018-05-02 11:49:33.890 +03:00 [INF] Request finished in 153.5663ms 200 application/javascript
+2018-05-02 11:49:50.766 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/Components/DynamicForms  
+2018-05-02 11:49:51.127 +03:00 [INF] Executing handler method OnGet with arguments (null) - ModelState is "Valid"
+2018-05-02 11:49:55.234 +03:00 [INF] Executed action /Components/DynamicForms in 4141.8842ms
+2018-05-02 11:49:55.242 +03:00 [INF] Request finished in 4474.0036ms 200 text/html; charset=utf-8
+2018-05-02 11:49:55.267 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables.css  
+2018-05-02 11:49:55.278 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables.css was not modified
+2018-05-02 11:49:55.316 +03:00 [INF] Request finished in 21.3598ms 304 text/css
+2018-05-02 11:49:55.317 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery/jquery-extensions.js  
+2018-05-02 11:49:55.369 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/dom-event-handlers.js  
+2018-05-02 11:49:55.398 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery-form/jquery-form-extensions.js  
+2018-05-02 11:49:55.401 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/dom-event-handlers.js was not modified
+2018-05-02 11:49:55.466 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables-extensions.js  
+2018-05-02 11:49:55.466 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/jquery/jquery-extensions.js was not modified
+2018-05-02 11:49:55.474 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/jquery-form/jquery-form-extensions.js was not modified
+2018-05-02 11:49:55.487 +03:00 [INF] Request finished in 110.7606ms 304 application/javascript
+2018-05-02 11:49:55.517 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/sweetalert/abp-sweetalert.js  
+2018-05-02 11:49:55.520 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/modal-manager.js  
+2018-05-02 11:49:55.525 +03:00 [INF] Request finished in 190.2005ms 304 application/javascript
+2018-05-02 11:49:55.531 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables-extensions.js was not modified
+2018-05-02 11:49:55.569 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/toastr/abp-toastr.js  
+2018-05-02 11:49:55.621 +03:00 [INF] Request finished in 240.994ms 304 application/javascript
+2018-05-02 11:49:55.622 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/modal-manager.js was not modified
+2018-05-02 11:49:55.649 +03:00 [INF] Request finished in 184.3855ms 304 application/javascript
+2018-05-02 11:49:55.650 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/sweetalert/abp-sweetalert.js was not modified
+2018-05-02 11:49:55.686 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/toastr/abp-toastr.js was not modified
+2018-05-02 11:49:55.708 +03:00 [INF] Request finished in 244.6485ms 304 application/javascript
+2018-05-02 11:49:55.735 +03:00 [INF] Request finished in 158.4003ms 304 application/javascript
+2018-05-02 11:49:55.736 +03:00 [INF] Request finished in 331.9731ms 304 application/javascript
+2018-05-02 11:49:58.519 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/bootstrap/css/bootstrap.css  
+2018-05-02 11:49:58.525 +03:00 [INF] Sending file. Request path: '/libs/bootstrap/css/bootstrap.css'. Physical path: 'D:\github\abp\test\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo\wwwroot\libs\bootstrap\css\bootstrap.css'
+2018-05-02 11:49:58.543 +03:00 [INF] Request finished in 25.711ms 200 text/css
+2018-05-02 11:52:10.458 +03:00 [INF] Request starting HTTP/1.1 POST http://127.0.0.1:2470/iisintegration  0
+2018-05-02 11:52:10.485 +03:00 [INF] Request finished in 5.8525ms 202 
+2018-05-02 11:52:33.933 +03:00 [INF] Loaded modules:
+2018-05-02 11:52:33.972 +03:00 [INF] - Volo.Abp.Threading.AbpThreadingModule
+2018-05-02 11:52:33.977 +03:00 [INF] - Volo.Abp.Security.AbpSecurityModule
+2018-05-02 11:52:33.983 +03:00 [INF] - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2018-05-02 11:52:33.988 +03:00 [INF] - Volo.Abp.AspNetCore.AbpAspNetCoreModule
+2018-05-02 11:52:33.994 +03:00 [INF] - Volo.Abp.Localization.AbpLocalizationModule
+2018-05-02 11:52:33.999 +03:00 [INF] - Volo.Abp.ApiVersioning.AbpApiVersioningAbstractionsModule
+2018-05-02 11:52:34.004 +03:00 [INF] - Volo.Abp.Http.AbpHttpAbstractionsModule
+2018-05-02 11:52:34.008 +03:00 [INF] - Volo.Abp.Timing.AbpTimingModule
+2018-05-02 11:52:34.014 +03:00 [INF] - Volo.Abp.Json.AbpJsonModule
+2018-05-02 11:52:34.021 +03:00 [INF] - Volo.Abp.Http.AbpHttpModule
+2018-05-02 11:52:34.027 +03:00 [INF] - Volo.Abp.Data.AbpDataModule
+2018-05-02 11:52:34.033 +03:00 [INF] - Volo.Abp.Settings.AbpSettingsModule
+2018-05-02 11:52:34.037 +03:00 [INF] - Volo.Abp.MultiTenancy.AbpMultiTenancyAbstractionsModule
+2018-05-02 11:52:34.042 +03:00 [INF] - Volo.Abp.Auditing.AbpAuditingModule
+2018-05-02 11:52:34.048 +03:00 [INF] - Volo.Abp.EventBus.AbpEventBusModule
+2018-05-02 11:52:34.053 +03:00 [INF] - Volo.Abp.Guids.AbpGuidsModule
+2018-05-02 11:52:34.058 +03:00 [INF] - Volo.Abp.Uow.AbpUnitOfWorkModule
+2018-05-02 11:52:34.064 +03:00 [INF] - Volo.Abp.Domain.AbpDddDomainModule
+2018-05-02 11:52:34.070 +03:00 [INF] - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2018-05-02 11:52:34.075 +03:00 [INF] - Volo.Abp.Validation.AbpValidationModule
+2018-05-02 11:52:34.081 +03:00 [INF] - Volo.Abp.Authorization.AbpAuthorizationModule
+2018-05-02 11:52:34.086 +03:00 [INF] - Volo.Abp.Application.AbpDddApplicationModule
+2018-05-02 11:52:34.092 +03:00 [INF] - Volo.Abp.UI.AbpUiModule
+2018-05-02 11:52:34.097 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcModule
+2018-05-02 11:52:34.102 +03:00 [INF] - Volo.Abp.UI.Navigation.AbpUiNavigationModule
+2018-05-02 11:52:34.108 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.AbpAspNetCoreMvcUiModule
+2018-05-02 11:52:34.113 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.AbpAspNetCoreMvcUiBootstrapModule
+2018-05-02 11:52:34.118 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.AbpAspNetCoreMvcUiThemeSharedModule
+2018-05-02 11:52:34.123 +03:00 [INF] - Volo.Abp.Castle.AbpCastleCoreModule
+2018-05-02 11:52:34.130 +03:00 [INF] - Volo.Abp.Autofac.AbpAutofacModule
+2018-05-02 11:52:34.134 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.AbpAspNetCoreMvcUiBootstrapDemoModule
+2018-05-02 11:52:34.369 +03:00 [INF] Initialized all modules.
+2018-05-02 11:52:34.838 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/  
+2018-05-02 11:52:38.402 +03:00 [INF] Executing handler method OnGet with arguments (null) - ModelState is "Valid"
+2018-05-02 11:52:39.441 +03:00 [INF] Executed action /Index in 1060.5846000000001ms
+2018-05-02 11:52:39.456 +03:00 [INF] Request finished in 4636.1266ms 200 text/html; charset=utf-8
+2018-05-02 11:52:39.506 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables.css  
+2018-05-02 11:52:39.528 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery/jquery-extensions.js  
+2018-05-02 11:52:39.564 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/modal-manager.js  
+2018-05-02 11:52:39.569 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery-form/jquery-form-extensions.js  
+2018-05-02 11:52:39.574 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/dom-event-handlers.js  
+2018-05-02 11:52:39.664 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables-extensions.js  
+2018-05-02 11:52:39.668 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables.css'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/datatables/datatables.css'
+2018-05-02 11:52:39.689 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery-form/jquery-form-extensions.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/jquery_form/jquery-form-extensions.js'
+2018-05-02 11:52:39.717 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/dom-event-handlers.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/bootstrap/dom-event-handlers.js'
+2018-05-02 11:52:39.718 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables-extensions.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/datatables/datatables-extensions.js'
+2018-05-02 11:52:39.743 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery/jquery-extensions.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/jquery/jquery-extensions.js'
+2018-05-02 11:52:39.744 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/modal-manager.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/bootstrap/modal-manager.js'
+2018-05-02 11:52:39.826 +03:00 [INF] Request finished in 241.7564ms 200 application/javascript
+2018-05-02 11:52:39.863 +03:00 [INF] Request finished in 241.7624ms 200 application/javascript
+2018-05-02 11:52:39.863 +03:00 [INF] Request finished in 260.6044ms 200 text/css
+2018-05-02 11:52:39.888 +03:00 [INF] Request finished in 217.5536ms 200 application/javascript
+2018-05-02 11:52:39.932 +03:00 [INF] Request finished in 217.5049ms 200 application/javascript
+2018-05-02 11:52:40.008 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/sweetalert/abp-sweetalert.js  
+2018-05-02 11:52:40.009 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/toastr/abp-toastr.js  
+2018-05-02 11:52:40.011 +03:00 [INF] Request finished in 240.3855ms 200 application/javascript
+2018-05-02 11:52:40.124 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/toastr/abp-toastr.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/toastr/abp-toastr.js'
+2018-05-02 11:52:40.125 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore.mvc.ui.theme.shared/sweetalert/abp-sweetalert.js'. Physical path: '/wwwroot/libs/abp/aspnetcore/mvc/ui/theme/shared/sweetalert/abp-sweetalert.js'
+2018-05-02 11:52:40.139 +03:00 [INF] Request finished in 192.6213ms 200 application/javascript
+2018-05-02 11:52:40.145 +03:00 [INF] Request finished in 215.6314ms 200 application/javascript
+2018-05-02 11:52:46.620 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/Components/DynamicForms  
+2018-05-02 11:52:46.955 +03:00 [INF] Executing handler method OnGet with arguments (null) - ModelState is "Valid"
+2018-05-02 11:52:50.341 +03:00 [INF] Executed action /Components/DynamicForms in 3413.4575ms
+2018-05-02 11:52:50.348 +03:00 [INF] Request finished in 3726.5263ms 200 text/html; charset=utf-8
+2018-05-02 11:52:50.374 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables.css  
+2018-05-02 11:52:50.401 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables.css was not modified
+2018-05-02 11:52:50.436 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery-form/jquery-form-extensions.js  
+2018-05-02 11:52:50.460 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery/jquery-extensions.js  
+2018-05-02 11:52:50.540 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/dom-event-handlers.js  
+2018-05-02 11:52:50.554 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/modal-manager.js  
+2018-05-02 11:52:50.569 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables-extensions.js  
+2018-05-02 11:52:50.573 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/jquery-form/jquery-form-extensions.js was not modified
+2018-05-02 11:52:50.578 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/jquery/jquery-extensions.js was not modified
+2018-05-02 11:52:50.625 +03:00 [INF] Request finished in 94.7247ms 304 text/css
+2018-05-02 11:52:50.656 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables-extensions.js was not modified
+2018-05-02 11:52:50.710 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/modal-manager.js was not modified
+2018-05-02 11:52:50.717 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/dom-event-handlers.js was not modified
+2018-05-02 11:52:50.755 +03:00 [INF] Request finished in 180.4731ms 304 application/javascript
+2018-05-02 11:52:50.756 +03:00 [INF] Request finished in 319.3139ms 304 application/javascript
+2018-05-02 11:52:50.767 +03:00 [INF] Request finished in 189.4055ms 304 application/javascript
+2018-05-02 11:52:50.773 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/sweetalert/abp-sweetalert.js  
+2018-05-02 11:52:50.777 +03:00 [INF] Request finished in 312.5906ms 304 application/javascript
+2018-05-02 11:52:50.797 +03:00 [INF] Request finished in 256.7844ms 304 application/javascript
+2018-05-02 11:52:50.888 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:49211/libs/abp/aspnetcore.mvc.ui.theme.shared/toastr/abp-toastr.js  
+2018-05-02 11:52:50.890 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/sweetalert/abp-sweetalert.js was not modified
+2018-05-02 11:52:50.979 +03:00 [INF] The file /libs/abp/aspnetcore.mvc.ui.theme.shared/toastr/abp-toastr.js was not modified
+2018-05-02 11:52:50.981 +03:00 [INF] Request finished in 174.1612ms 304 application/javascript
+2018-05-02 11:52:51.029 +03:00 [INF] Request finished in 223.1253ms 304 application/javascript
