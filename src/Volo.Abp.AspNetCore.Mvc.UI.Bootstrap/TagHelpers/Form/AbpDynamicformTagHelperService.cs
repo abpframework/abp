@@ -47,10 +47,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
             SetFormAttributes(output);
 
-            if (TagHelper.SubmitButton ?? false)
-            {
-                SetSubmitButton(context, output);
-            }
+            SetSubmitButton(context, output);
         }
 
         protected virtual async Task ConvertToMvcForm(TagHelperContext context, TagHelperOutput output)
@@ -103,6 +100,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         protected virtual void SetSubmitButton(TagHelperContext context, TagHelperOutput output)
         {
+            if (TagHelper.SubmitButton ?? false)
+            {
+                return;
+            }
+
             var buttonHtml = ProcessSubmitButtonAndGetContent(context, output);
 
             output.PostContent.SetHtmlContent(output.PostContent.GetContent() + buttonHtml);
