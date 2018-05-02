@@ -8,11 +8,35 @@
 
 <h2>Dynamic Forms</h2>
 
-<h4># Example</h4>
+<h4># Dynamic Form Example</h4>
 
 <div class="demo-with-code">
     <div class="demo-area">
-        @*<abp-dynamic-form abp-model="@Model.PersonInput" asp-antiforgery="true" asp-controller="Demo" asp-action="Register">
+        <abp-dynamic-form abp-model="@Model.PersonInput"/>
+        <hr />
+        <h5>Posted Values:</h5>
+        <div>
+            Name: @Model.PersonInput.Name <br />
+            City: @Model.PersonInput.City <br />
+            Phone.Name: @Model.PersonInput.Phone.Name <br />
+            Phone.Number: @Model.PersonInput.Phone.Number <br />
+            Day: @Model.PersonInput.Day.ToString("yyyy-MM-dd") <br />
+            Country: @Model.PersonInput.Country <br />
+            IsActive: @Model.PersonInput.IsActive <br />
+        </div>
+    </div>
+    <div class="code-area">
+        <pre>
+&lt;abp-dynamic-form abp-model=&quot;Model.PersonInput&quot; asp-antiforgery=&quot;true&quot;/&gt;
+</pre>
+    </div>
+</div>
+
+<h4># Override an input Example</h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+        <abp-dynamic-form abp-model="@Model.PersonInput">
             <abp-input asp-for="@Model.PersonInput.Phone.Number" label="Phone Number" />
         </abp-dynamic-form>
         <hr />
@@ -25,119 +49,67 @@
             Day: @Model.PersonInput.Day.ToString("yyyy-MM-dd") <br />
             Country: @Model.PersonInput.Country <br />
             IsActive: @Model.PersonInput.IsActive <br />
-        </div>*@
-
-
-        <form asp-antiforgery="true" asp-controller="Demo" asp-action="Register">
-            <abp-input asp-for="@Model.PersonInput.Phone.Number" label="Phone Number NO ABP-DYNAMİC-FORM" />
-            <abp-input asp-for="@Model.PersonInput.Name" label="Name NO ABP-DYNAMİC-FORM" />
-        </form>
+        </div>
     </div>
     <div class="code-area">
         <pre>
-&lt;abp-dynamic-form asp-model=&quot;Model.PersonInput&quot; &gt;
+&lt;abp-dynamic-form abp-model=&quot;Model.PersonInput&quot;&gt;
+    &lt;abp-input asp-for=&quot;Model.PersonInput.Phone.Number&quot; label=&quot;Phone Number&quot; /&gt;
 &lt;/abp-dynamic-form&gt;
 </pre>
     </div>
 </div>
 
+<h4># Form with Button Example</h4>
 
-@*<h4># Input Group Example</h4>
+<div class="demo-with-code">
+    <div class="demo-area">
+        <abp-dynamic-form abp-model="@Model.PersonInput" submit-button="true"/>
+        <hr />
+        <h5>Posted Values:</h5>
+        <div>
+            Name: @Model.PersonInput.Name <br />
+            City: @Model.PersonInput.City <br />
+            Phone.Name: @Model.PersonInput.Phone.Name <br />
+            Phone.Number: @Model.PersonInput.Phone.Number <br />
+            Day: @Model.PersonInput.Day.ToString("yyyy-MM-dd") <br />
+            Country: @Model.PersonInput.Country <br />
+            IsActive: @Model.PersonInput.IsActive <br />
+        </div>
+    </div>
+    <div class="code-area">
+        <pre>
+&lt;abp-dynamic-form abp-model=&quot;Model.PersonInput&quot; submit-button=&quot;true&quot;/&gt;
+</pre>
+    </div>
+</div>
 
-    <div class="demo-with-code">
-        <div class="demo-area">
-            <form method="post" action="#">
-                <abp-input asp-for="@Model.Name" />
-                <abp-input asp-for="@Model.Password" label="Password" />
-                <abp-input asp-for="@Model.IsActive" />
-                <abp-input asp-for="@Model.PhoneNumber" />
-                <abp-input asp-for="@Model.EmailAddress" />
-                <abp-input asp-for="@Model.Count" />
-                <abp-input asp-for="@Model.Day" />
-                <abp-select asp-for="@Model.Country" asp-items="@Model.Countries" label="Country"></abp-select>
-                <abp-select asp-for="@Model.City" asp-items="@Html.GetEnumSelectList(typeof(Cities))"></abp-select>
-            </form>
-        </div>
-        <div class="code-area">
-            <pre>
-            &lt;form method=&quot;post&quot; action=&quot;#&quot;&gt;
-                &lt;abp-input asp-for=&quot;Model.Name&quot;/&gt;
-                &lt;abp-input asp-for=&quot;Model.Password&quot; label=&quot;Password&quot;/&gt;
-                &lt;abp-input asp-for=&quot;Model.IsActive&quot; /&gt;
-                &lt;abp-input asp-for=&quot;Model.PhoneNumber&quot; /&gt;
-                &lt;abp-input asp-for=&quot;Model.EmailAddress&quot; /&gt;
-                &lt;abp-input asp-for=&quot;Model.Count&quot; /&gt;
-                &lt;abp-input asp-for=&quot;Model.Day&quot; /&gt;
-                &lt;abp-select asp-for=&quot;Model.Country&quot; asp-items=&quot;Model.Countries&quot; label=&quot;Country&quot;&gt;&lt;/abp-select&gt;
-                &lt;abp-select asp-for=&quot;Model.City&quot; asp-items=&quot;Html.GetEnumSelectList(typeof(Cities))&quot;&gt;&lt;/abp-select&gt;
-            &lt;/form&gt;
-            </pre>
-        </div>
-    </div>*@
+<h4># Non-dynamic Form </h4>
 
-@*<div class="demo-with-code">
-        <div class="demo-area">
-            <form method="post" action="#">
-                <abp-form-group>
-                    <abp-select asp-for="@Model.Country" asp-items="@Model.Countries"></abp-select>
-                </abp-form-group>
-                <abp-form-group>
-                    <abp-select asp-for="@Model.City" asp-items="@Html.GetEnumSelectList(typeof(Cities))"></abp-select>
-                </abp-form-group>
-                <abp-form-group>
-                    <abp-input asp-for="@Model.Name" />
-                </abp-form-group>
-                <abp-form-group>
-                    <abp-input asp-for="@Model.Password" />
-                </abp-form-group>
-                <abp-form-group>
-                    <abp-input asp-for="@Model.PhoneNumber" />
-                </abp-form-group>
-                <abp-form-group>
-                    <abp-input asp-for="@Model.EmailAddress" />
-                </abp-form-group>
-                <abp-form-group>
-                    <abp-input asp-for="@Model.Count" />
-                </abp-form-group>
-                <abp-form-group>
-                    <abp-input asp-for="@Model.Day" />
-                </abp-form-group>
-                <abp-form-group>
-                    <abp-input asp-for="@Model.IsActive" />
-                </abp-form-group>
-            </form>
+<div class="demo-with-code">
+    <div class="demo-area">
+        <form method="post">
+            <abp-input asp-for="@Model.PersonInput.Name"/>
+            <abp-select asp-for="@Model.PersonInput.Country" label="Where Do you live?"/>
+            <abp-input asp-for="@Model.PersonInput.Phone.Number"/>
+        </form>
+        <hr />
+        <h5>Posted Values:</h5>
+        <div>
+            Name: @Model.PersonInput.Name <br />
+            Country: @Model.PersonInput.Country <br />
+            Phone.Number: @Model.PersonInput.Phone.Number <br />
         </div>
-        <div class="code-area">
-            <pre>
-            &lt;form method=&quot;post&quot; action=&quot;#&quot;&gt;
-                &lt;abp-form-group&gt;
-                    &lt;abp-select asp-for=&quot;@Model.Country&quot; asp-items=&quot;@Model.Countries&quot;&gt;&lt;/abp-select&gt;
-                &lt;/abp-form-group&gt;
-                &lt;abp-form-group&gt;
-                    &lt;abp-select asp-for=&quot;@Model.City&quot; asp-items=&quot;@Html.GetEnumSelectList(typeof(Cities))&quot;&gt;&lt;/abp-select&gt;
-                &lt;/abp-form-group&gt;
-                &lt;abp-form-group&gt;
-                    &lt;abp-input asp-for=&quot;@Model.Name&quot; /&gt;
-                &lt;/abp-form-group&gt;
-                &lt;abp-form-group&gt;
-                    &lt;abp-input asp-for=&quot;@Model.Password&quot; /&gt;
-                &lt;/abp-form-group&gt;
-                &lt;abp-form-group&gt;
-                    &lt;abp-input asp-for=&quot;@Model.PhoneNumber&quot; /&gt;
-                &lt;/abp-form-group&gt;
-                &lt;abp-form-group&gt;
-                    &lt;abp-input asp-for=&quot;@Model.EmailAddress&quot; /&gt;
-                &lt;/abp-form-group&gt;
-                &lt;abp-form-group&gt;
-                    &lt;abp-input asp-for=&quot;@Model.Count&quot; /&gt;
-                &lt;/abp-form-group&gt;
-                &lt;abp-form-group&gt;
-                    &lt;abp-input asp-for=&quot;@Model.Day&quot; /&gt;
-                &lt;/abp-form-group&gt;
-                &lt;abp-form-group&gt;
-                    &lt;abp-input asp-for=&quot;@Model.IsActive&quot; /&gt;
-                &lt;/abp-form-group&gt;
-            &lt;/form&gt;
-            </pre>
-        </div>
-    </div>*@
+    </div>
+    <div class="code-area">
+        <pre>
+&lt;form method=&quot;post&quot;&gt;
+    &lt;abp-input asp-for=&quot;Model.PersonInput.Name&quot;/&gt;
+    &lt;abp-input asp-for=&quot;Model.PersonInput.Country&quot; label=&quot;Where Do you live?&quot;/&gt;
+    &lt;abp-input asp-for=&quot;Model.PersonInput.Phone.Number&quot;/&gt;
+&lt;/form&gt;
+</pre>
+    </div>
+</div>
+
+

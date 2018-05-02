@@ -59,7 +59,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 Area = TagHelper.Area,
                 Page = TagHelper.Page,
                 PageHandler = TagHelper.PageHandler,
-                Antiforgery = TagHelper.Antiforgery,
+                Antiforgery = true,
                 Fragment = TagHelper.Fragment,
                 Route = TagHelper.Route,
                 Method = TagHelper.Method,
@@ -100,7 +100,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         protected virtual void SetSubmitButton(TagHelperContext context, TagHelperOutput output)
         {
-            if (TagHelper.SubmitButton ?? false)
+            if (!TagHelper.SubmitButton ?? true)
             {
                 return;
             }
@@ -123,9 +123,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
             foreach (var model in models)
             {
-                if (IsSelectGroup(context, model, out var selectItems))
+                if (IsSelectGroup(context, model))
                 {
-                    ProcessSelectGroup(context, model, selectItems);
+                    ProcessSelectGroup(context, model);
                     continue;
                 }
 
@@ -133,11 +133,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             }
         }
 
-        protected virtual void ProcessSelectGroup(TagHelperContext context, ModelExpression model, IEnumerable<SelectListItem> selectItems)
+        protected virtual void ProcessSelectGroup(TagHelperContext context, ModelExpression model)
         {
             var abpSelectTagHelper = _serviceProvider.GetRequiredService<AbpSelectTagHelper>();
             abpSelectTagHelper.AspFor = model;
-            abpSelectTagHelper.AspItems = selectItems;
+            abpSelectTagHelper.AspItems = null;
             abpSelectTagHelper.Label = "";
             abpSelectTagHelper.ViewContext = TagHelper.ViewContext;
 
@@ -230,28 +230,19 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             return type == typeof(List<SelectListItem>) || type == typeof(IEnumerable<SelectListItem>);
         }
 
-        protected virtual bool IsSelectGroup(TagHelperContext context, ModelExpression model, out IEnumerable<SelectListItem> selectItems)
+        protected virtual bool IsSelectGroup(TagHelperContext context, ModelExpression model)
         {
-            return IsEnum(model.ModelExplorer, out selectItems) || AreSelectItemsProvided(model.ModelExplorer, out selectItems);
+            return IsEnum(model.ModelExplorer) || AreSelectItemsProvided(model.ModelExplorer);
         }
 
-        protected virtual bool IsEnum(ModelExplorer explorer, out IEnumerable<SelectListItem> selectItems)
+        protected virtual bool IsEnum(ModelExplorer explorer)
         {
-            selectItems = explorer.Metadata.IsEnum ? GetSelectItemsFromEnum(explorer.ModelType) : null;
             return explorer.Metadata.IsEnum;
         }
 
-        protected virtual IEnumerable<SelectListItem> GetSelectItemsFromEnum(Type enumType)
+        protected virtual bool AreSelectItemsProvided(ModelExplorer explorer)
         {
-            return enumType.GetTypeInfo().GetMembers(BindingFlags.Public | BindingFlags.Static)
-                .Select((t, i) => new SelectListItem { Value = i.ToString(), Text = t.Name }).ToList();
-        }
-
-        protected virtual bool AreSelectItemsProvided(ModelExplorer explorer, out IEnumerable<SelectListItem> selectItems)
-        {
-            selectItems = GetAttribute<SelectItems>(explorer)?.GetItems(explorer, explorer.Model.ToString());
-            
-            return selectItems != null;
+            return GetAttribute<SelectItems>(explorer) != null;
         }
     }
 }
