@@ -19,6 +19,10 @@
     <EmbeddedResource Include="Views\**\*.cshtml" />
     <EmbeddedResource Include="wwwroot\**\*.*" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Pages\Error\Index.cshtml" />
+  </ItemGroup>
   
   <ItemGroup>
     <None Remove="web.config" />

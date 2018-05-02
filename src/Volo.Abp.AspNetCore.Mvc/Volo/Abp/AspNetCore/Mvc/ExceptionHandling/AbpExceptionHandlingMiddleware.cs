@@ -44,7 +44,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
 
                 if (httpContext.Items["_AbpActionInfo"] is AbpActionInfoInHttpContext actionInfo)
                 {
-                    if (actionInfo.IsObjectResult)
+                    if (actionInfo.IsObjectResult) //TODO: Align with AbpExceptionFilter.ShouldHandleException!
                     {
                         await HandleAndWrapException(httpContext, ex);
                         return;
