@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -22,7 +21,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 #region MvcFormTagHelperAttiributes
 
         private const string ActionAttributeName = "asp-action";
-        private const string AntiforgeryAttributeName = "asp-antiforgery";
         private const string AreaAttributeName = "asp-area";
         private const string PageAttributeName = "asp-page";
         private const string PageHandlerAttributeName = "asp-page-handler";
@@ -46,9 +44,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         [HtmlAttributeName(PageHandlerAttributeName)]
         public string PageHandler { get; set; }
-
-        [HtmlAttributeName(AntiforgeryAttributeName)]
-        public bool? Antiforgery { get; set; }
 
         [HtmlAttributeName(FragmentAttributeName)]
         public string Fragment { get; set; }
