@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
+using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 {
@@ -45,6 +46,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             SetContent(output,list);
 
             SetFormAttributes(output);
+
+            SetSubmitButton(context, output);
         }
 
         protected virtual async Task ConvertToMvcForm(TagHelperContext context, TagHelperOutput output)
@@ -95,6 +98,18 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             output.PreContent.SetHtmlContent(preContentBuilder.ToString());
         }
 
+        protected virtual void SetSubmitButton(TagHelperContext context, TagHelperOutput output)
+        {
+            if (TagHelper.SubmitButton ?? false)
+            {
+                return;
+            }
+
+            var buttonHtml = ProcessSubmitButtonAndGetContent(context, output);
+
+            output.PostContent.SetHtmlContent(output.PostContent.GetContent() + buttonHtml);
+        }
+
         protected virtual List<FormGroupItem> InitilizeFormGroupContentsContext(TagHelperContext context)
         {
             var items = new List<FormGroupItem>();
@@ -127,6 +142,16 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             abpSelectTagHelper.ViewContext = TagHelper.ViewContext;
 
             RenderTagHelper(new TagHelperAttributeList(), context, abpSelectTagHelper, _htmlEncoder, "div", TagMode.StartTagAndEndTag);
+        }
+
+        protected virtual string ProcessSubmitButtonAndGetContent(TagHelperContext context, TagHelperOutput output)
+        {
+            var abpButtonTagHelper = _serviceProvider.GetRequiredService<AbpButtonTagHelper>();
+            var attributes = new TagHelperAttributeList { new TagHelperAttribute("type", "submit") };
+            abpButtonTagHelper.Text = "Submit";
+            abpButtonTagHelper.ButtonType = AbpButtonType.Primary;
+
+            return RenderTagHelper(attributes, context, abpButtonTagHelper, _htmlEncoder, "button", TagMode.StartTagAndEndTag);
         }
 
         protected virtual void ProcessInputGroup(TagHelperContext context, ModelExpression model)
@@ -224,7 +249,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         protected virtual bool AreSelectItemsProvided(ModelExplorer explorer, out IEnumerable<SelectListItem> selectItems)
         {
-            selectItems = GetAttribute<SelectItems>(explorer)?.GetItems(explorer);
+            selectItems = GetAttribute<SelectItems>(explorer)?.GetItems(explorer, explorer.Model.ToString());
             
             return selectItems != null;
         }

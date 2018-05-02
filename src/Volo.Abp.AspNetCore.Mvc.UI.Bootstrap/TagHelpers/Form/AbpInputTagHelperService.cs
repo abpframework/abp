@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Localization;
+using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 {
@@ -25,18 +26,28 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            var html = GetFormInputGroupAsHtml(context, output);
+            var innerHtml = GetFormInputGroupAsHtml(context, output, out var isCheckbox);
 
             var order = GetInputOrder(TagHelper.AspFor.ModelExplorer);
 
-            AddGroupToFormGroupContents(context, TagHelper.AspFor.Name, html, order);
+            AddGroupToFormGroupContents(context, TagHelper.AspFor.Name, SurroundInnerHtmlAndGet(innerHtml, isCheckbox), order, out var surpress);
 
-            output.SuppressOutput();
+            if (surpress)
+            {
+                output.SuppressOutput();
+            }
+            else
+            {
+                output.TagMode = TagMode.StartTagAndEndTag;
+                output.TagName = "div";
+                output.Attributes.AddClass(isCheckbox ? "form-check" : "form-group");
+                output.Content.SetHtmlContent(output.Content.GetContent() + innerHtml);
+            }
         }
 
-        protected virtual string GetFormInputGroupAsHtml(TagHelperContext context, TagHelperOutput output)
+        protected virtual string GetFormInputGroupAsHtml(TagHelperContext context, TagHelperOutput output, out bool isCheckbox)
         {
-            var inputTag = GetInputTag(context, out var isCheckbox);
+            var inputTag = GetInputTag(context, out isCheckbox);
             var inputHtml = RenderTagHelperOutput(inputTag, _encoder);
             var label = GetLabelAsHtml(inputTag, isCheckbox);
 
@@ -63,9 +74,14 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 inputHtml + Environment.NewLine + label :
                 label + Environment.NewLine + inputHtml;
 
+            return Environment.NewLine + innerContent + Environment.NewLine +
+                Environment.NewLine + validation + Environment.NewLine;
+        }
+
+        protected virtual string SurroundInnerHtmlAndGet(string innerHtml, bool isCheckbox)
+        {
             return "<div class=\"" + (isCheckbox ? "form-check" : "form-group") + "\">" +
-                   Environment.NewLine + innerContent + Environment.NewLine +
-                   Environment.NewLine + validation + Environment.NewLine +
+                   Environment.NewLine + innerHtml + Environment.NewLine +
                    "</div>";
         }
 

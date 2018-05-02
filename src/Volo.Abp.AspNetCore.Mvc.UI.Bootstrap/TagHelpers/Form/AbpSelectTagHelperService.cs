@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Localization;
+using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 {
@@ -25,13 +26,23 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            var html = GetFormInputGroupAsHtml(context, output);
-            
+            var innerHtml = GetFormInputGroupAsHtml(context, output);
+
             var order = GetInputOrder(TagHelper.AspFor.ModelExplorer);
 
-            AddGroupToFormGroupContents(context, TagHelper.AspFor.Name, html, order);
-
-            output.SuppressOutput();
+            AddGroupToFormGroupContents(context, TagHelper.AspFor.Name, SurroundInnerHtmlAndGet(innerHtml), order, out var surpress);
+            
+            if (surpress)
+            {
+                output.SuppressOutput();
+            }
+            else
+            {
+                output.TagName = "div";
+                output.Attributes.AddClass("form-group");
+                output.TagMode = TagMode.StartTagAndEndTag;
+                output.Content.SetHtmlContent(innerHtml);
+            }
         }
         
         protected virtual string GetFormInputGroupAsHtml(TagHelperContext context, TagHelperOutput output)
@@ -40,14 +51,12 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             var selectAsHtml = RenderTagHelperOutput(selectTag, _encoder);
             var label = GetLabelAsHtml(selectTag);
 
-            return GetContent(label, selectAsHtml);
+            return label + Environment.NewLine + selectAsHtml;
         }
 
-        protected virtual string GetContent(string label, string inputHtml)
+        protected virtual string SurroundInnerHtmlAndGet(string innerHtml)
         {
-            var innerContent = label + Environment.NewLine + inputHtml;
-
-            return "<div class=\"form-group\">" + Environment.NewLine + innerContent + Environment.NewLine + "</div>";
+            return "<div class=\"form-group\">" + Environment.NewLine + innerHtml + Environment.NewLine + "</div>";
         }
 
         protected virtual TagHelperOutput GetSelectTag(TagHelperContext context)

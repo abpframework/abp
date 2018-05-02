@@ -13,6 +13,13 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components
     {
         [BindProperty]
         public PersonModel PersonInput { get; set; }
+        
+        public List<SelectListItem> Countries { get; set; } = new List<SelectListItem>
+        {
+            new SelectListItem { Value = "MX", Text = "Mexico"},
+            new SelectListItem { Value = "CA", Text = "Canada"},
+            new SelectListItem { Value = "US", Text = "USA"  },
+        };
 
         public void OnGet()
         {
@@ -24,6 +31,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components
                     Age = 65,
                     Country = "CA",
                     Day = DateTime.Now,
+                    City = Cities.NewJersey,
                     Phone = new PhoneModel { Number = "326346231", Name = "MyPhone" }
                 };
             }
@@ -62,13 +70,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components
             [DisplayName("Country")]
             [SelectItems(ItemsListPropertyName = nameof(Countries))]
             public string Country { get; set; }
-
-            public List<SelectListItem> Countries { get; set; } = new List<SelectListItem>
-            {
-                new SelectListItem { Value = "MX", Text = "Mexico"},
-                new SelectListItem { Value = "CA", Text = "Canada" },
-                new SelectListItem { Value = "US", Text = "USA"  },
-            };
         }
 
         public class PhoneModel

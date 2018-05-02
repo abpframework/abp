@@ -16,6 +16,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
         [HtmlAttributeNotBound]
         [ViewContext]
         public ViewContext ViewContext { get; set; }
+        
+        public bool? SubmitButton { get; set; }
 
 #region MvcFormTagHelperAttiributes
 
