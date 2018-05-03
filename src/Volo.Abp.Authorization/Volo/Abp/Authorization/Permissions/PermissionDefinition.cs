@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
+using JetBrains.Annotations;
+using Volo.Abp.Localization;
 
 namespace Volo.Abp.Authorization.Permissions
 {
@@ -15,6 +17,8 @@ namespace Volo.Abp.Authorization.Permissions
         /// If set, this permission can be granted only if parent is granted.
         /// </summary>
         public PermissionDefinition Parent { get; private set; }
+
+        public ILocalizableString DisplayName { get; set; }
 
         public IReadOnlyList<PermissionDefinition> Children => _children.ToImmutableList();
         private readonly List<PermissionDefinition> _children;
@@ -35,17 +39,18 @@ namespace Volo.Abp.Authorization.Permissions
             set => Properties[name] = value;
         }
 
-        protected internal PermissionDefinition(string name)
+        protected internal PermissionDefinition([NotNull] string name, ILocalizableString displayName = null)
         {
-            Name = name;
+            Name = Check.NotNull(name, nameof(name));
+            DisplayName = displayName ?? new FixedLocalizableString(name);
 
             Properties = new Dictionary<string, object>();
             _children = new List<PermissionDefinition>();
         }
 
-        public virtual PermissionDefinition AddChild(string name)
+        public virtual PermissionDefinition AddChild([NotNull] string name, ILocalizableString displayName = null)
         {
-            var child = new PermissionDefinition(name)
+            var child = new PermissionDefinition(name, displayName)
             {
                 Parent = this
             };

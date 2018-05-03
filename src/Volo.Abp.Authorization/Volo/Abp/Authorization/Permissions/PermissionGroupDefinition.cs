@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
+using Volo.Abp.Localization;
 
 namespace Volo.Abp.Authorization.Permissions
 {
@@ -37,9 +38,9 @@ namespace Volo.Abp.Authorization.Permissions
             _permissions = new List<PermissionDefinition>();
         }
 
-        public virtual PermissionDefinition AddPermission(string name)
+        public virtual PermissionDefinition AddPermission(string name, ILocalizableString displayName = null)
         {
-            var permission = new PermissionDefinition(name);
+            var permission = new PermissionDefinition(name, displayName);
 
             _permissions.Add(permission);
 

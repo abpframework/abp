@@ -1,12 +1,16 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Authorization.Permissions;
+using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.Security;
 
 namespace Volo.Abp.Authorization
 {
-    [DependsOn(typeof(AbpSecurityModule))]
+    [DependsOn(
+        typeof(AbpSecurityModule),
+        typeof(AbpLocalizationModule)
+        )]
     public class AbpAuthorizationModule : AbpModule
     {
         public override void PreConfigureServices(IServiceCollection services)
