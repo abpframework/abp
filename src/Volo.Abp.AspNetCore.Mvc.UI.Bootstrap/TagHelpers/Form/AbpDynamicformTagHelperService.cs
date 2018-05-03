@@ -37,13 +37,13 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
             NormalizeTagMode(context, output);
 
-            await output.GetChildContentAsync();
+            var childContent = (await output.GetChildContentAsync()).GetContent();
 
             await ConvertToMvcForm(context, output);
 
             ProcessFields(context, output);
 
-            SetContent(output, list);
+            SetContent(output, list, childContent);
 
             SetFormAttributes(context, output);
 
@@ -86,16 +86,25 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             output.Attributes.AddIfNotContains("method", "post");
         }
 
-        protected virtual void SetContent(TagHelperOutput output, List<FormGroupItem> items)
+        protected virtual void SetContent(TagHelperOutput output, List<FormGroupItem> items, string childContent)
         {
-            var preContentBuilder = new StringBuilder(output.PreContent.GetContent());
+            var contentBuilder = new StringBuilder("");
 
             foreach (var item in items.OrderBy(o => o.Order))
             {
-                preContentBuilder.AppendLine(item.HtmlContent);
+                contentBuilder.AppendLine(item.HtmlContent);
             }
 
-            output.PreContent.SetHtmlContent(preContentBuilder.ToString());
+            if (childContent.Contains(AbpFormContentPlaceHolder))
+            {
+                childContent = childContent.Replace(AbpFormContentPlaceHolder, contentBuilder.ToString());
+            }
+            else
+            {
+                childContent = contentBuilder + childContent;
+            }
+
+            output.Content.SetHtmlContent(childContent);
         }
 
         protected virtual void SetSubmitButton(TagHelperContext context, TagHelperOutput output)

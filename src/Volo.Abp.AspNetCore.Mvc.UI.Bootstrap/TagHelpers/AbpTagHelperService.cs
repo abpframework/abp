@@ -16,6 +16,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
         where TTagHelper : TagHelper
     {
         protected const string FormGroupContents = "FormGroupContents";
+        protected const string AbpFormContentPlaceHolder = "{_AbpFormContentPlaceHolder_}";
 
         public TTagHelper TagHelper { get; internal set; }
 
