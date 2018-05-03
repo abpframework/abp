@@ -16,6 +16,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
         where TTagHelper : TagHelper
     {
         protected const string FormGroupContents = "FormGroupContents";
+        protected const string TabItems = "TabItems";
+        protected const string TabItemsDataTogglePlaceHolder = "{{data_toggle}}";
+        protected const string TabItemsVerticalPillPlaceHolder = "{{vertical_pill}}";
         protected const string AbpFormContentPlaceHolder = "{_AbpFormContentPlaceHolder_}";
 
         public TTagHelper TagHelper { get; internal set; }
@@ -82,14 +85,20 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
 
         protected virtual List<FormGroupItem> GetFormGroupContentsList(TagHelperContext context, out bool surpress)
         {
-            if (!context.Items.ContainsKey(FormGroupContents))
-            {
-                surpress = false;
-                return new List<FormGroupItem>();
-            }
+            var items = GetValueFromContext<List<FormGroupItem>>(context, FormGroupContents);
+            surpress = items != null;
 
-            surpress = true;
-            return context.Items[FormGroupContents] as List<FormGroupItem>;
+            return items ?? new List<FormGroupItem>();
+        }
+
+        protected virtual T GetValueFromContext<T>(TagHelperContext context, string key)
+        {
+            if (!context.Items.ContainsKey(key))
+            {
+                return default;
+            }
+            
+            return (T)context.Items[key];
         }
 
         protected virtual string GetIdAttributeAsString(TagHelperOutput inputTag)
