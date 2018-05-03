@@ -7,9 +7,17 @@
 @inject IHtmlLocalizer<AbpUiResource> L
 @if (CurrentUser.IsAuthenticated)
 {
-    <span style="color: #fff">@CurrentUser.UserName</span> <text>(<a href="/Account/Logout">@L["Logout"]</a>)</text>
+    <div class="dropdown d-inline">
+        <a class="btn btn-link dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            @CurrentUser.UserName
+        </a>
+
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+            <a class="dropdown-item" href="/Account/Logout">@L["Logout"]</a>
+        </div>
+    </div>
 }
 else
 {
-    <a href="/Account/Login">Login</a>
+    <a href="/Account/Login">@L["Login"]</a>
 }

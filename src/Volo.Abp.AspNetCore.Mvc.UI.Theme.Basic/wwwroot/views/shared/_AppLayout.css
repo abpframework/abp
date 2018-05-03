@@ -1,3 +1,8 @@
 ﻿body {
   padding-top: 5rem;
 }
+
+#main-navbar-tools a.dropdown-toggle {
+    text-decoration: none;
+    color: #fff;
+}

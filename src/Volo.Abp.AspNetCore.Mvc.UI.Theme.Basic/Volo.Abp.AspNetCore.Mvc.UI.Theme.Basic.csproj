@@ -19,6 +19,10 @@
     <EmbeddedResource Include="Views\**\*.cshtml" />
     <EmbeddedResource Include="wwwroot\**\*.*" />
   </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="Views\Shared\Components\Theme\MainNavbar\Toolbar\Items\UserMenu\Default.cshtml" />
+  </ItemGroup>
   
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.csproj" />

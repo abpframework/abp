@@ -1,0 +1,14 @@
+﻿@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Views.Shared.Components.Theme.MainNavbar.Toolbar.Items.LanguageSwitch
+@model LanguageSwitchViewComponentModel
+<div class="dropdown d-inline">
+    <a class="btn btn-link dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        @Model.CurrentLanguage.DisplayName
+    </a>
+
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+        @foreach (var language in Model.OtherLanguages)
+        {
+            <a class="dropdown-item" href="/Abp/Languages/Switch?culture=@(language.Name)&uiCulture=@(language.Name)">@language.DisplayName</a>
+        }
+    </div>
+</div>

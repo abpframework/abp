@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Views.Shared.Components.Theme.MainNavbar.Toolbar.Items.LanguageSwitch;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Views.Shared.Components.Theme.MainNavbar.Toolbar.Items.UserMenu;
 using Volo.Abp.DependencyInjection;
 
@@ -12,6 +13,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars
             {
                 Items =
                 {
+                    new ToolbarItem(typeof(LanguageSwitchViewComponent)),
                     new ToolbarItem(typeof(UserMenuViewComponent))
                 }
             };

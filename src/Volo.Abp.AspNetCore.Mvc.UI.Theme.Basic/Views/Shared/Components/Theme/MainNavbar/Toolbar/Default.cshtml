@@ -2,5 +2,5 @@
 @model Toolbar
 @foreach (var toolbarItem in Model.Items)
 {
-    <text>@(await Component.InvokeAsync(toolbarItem.ComponentType))</text>
+    <span>@(await Component.InvokeAsync(toolbarItem.ComponentType))</span>
 }
