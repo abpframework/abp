@@ -27,7 +27,7 @@
     </div>
     <div class="code-area">
         <pre>
-&lt;abp-dynamic-form abp-model=&quot;Model.PersonInput&quot; asp-antiforgery=&quot;true&quot;/&gt;
+&lt;abp-dynamic-form abp-model=&quot;Model.PersonInput&quot;/&gt;
 </pre>
     </div>
 </div>
@@ -38,6 +38,7 @@
     <div class="demo-area">
         <abp-dynamic-form abp-model="@Model.PersonInput">
             <abp-input asp-for="@Model.PersonInput.Phone.Number" label="Phone Number" />
+            <abp-button button-type="Primary" type="submit" text="submit" />
         </abp-dynamic-form>
         <hr />
         <h5>Posted Values:</h5>
@@ -129,4 +130,33 @@
     </div>
 </div>
 
+<h4># Form Content Placement </h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+        <abp-dynamic-form abp-model="@Model.PersonInput">
+            <abp-form-content />
+            <abp-button button-type="Primary" type="submit" text="submit" />
+        </abp-dynamic-form>
+        <hr />
+        <h5>Posted Values:</h5>
+        <div>
+            Name: @Model.PersonInput.Name <br />
+            City: @Model.PersonInput.City <br />
+            Phone.Name: @Model.PersonInput.Phone.Name <br />
+            Phone.Number: @Model.PersonInput.Phone.Number <br />
+            Day: @Model.PersonInput.Day.ToString("yyyy-MM-dd") <br />
+            Country: @Model.PersonInput.Country <br />
+            IsActive: @Model.PersonInput.IsActive <br />
+        </div>
+    </div>
+    <div class="code-area">
+        <pre>
+&lt;abp-dynamic-form abp-model=&quot;@Model.PersonInput&quot;&gt;
+     &lt;abp-form-content /&gt;
+     &lt;abp-button button-type=&quot;Primary&quot; type=&quot;submit&quot; text=&quot;submit&quot; /&gt;
+&lt;/abp-dynamic-form&gt;
+</pre>
+    </div>
+</div>
 
