@@ -43,7 +43,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
             ProcessFields(context, output);
 
-            SetContent(output, list, childContent);
+            SetContent(context, output, list, childContent);
 
             SetFormAttributes(context, output);
 
@@ -86,7 +86,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             output.Attributes.AddIfNotContains("method", "post");
         }
 
-        protected virtual void SetContent(TagHelperOutput output, List<FormGroupItem> items, string childContent)
+        protected virtual void SetContent(TagHelperContext context, TagHelperOutput output, List<FormGroupItem> items, string childContent)
         {
             var contentBuilder = new StringBuilder("");
 
@@ -230,24 +230,12 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
             return type.IsPrimitive ||
                    type.IsValueType ||
+                   type == typeof(string) ||
+                   type == typeof(Guid) ||
                    type == typeof(DateTime) ||
                    type == typeof(ValueType) ||
-                   type == typeof(String) ||
-                   type == typeof(Decimal) ||
-                   type == typeof(Double) ||
-                   type == typeof(Guid) ||
-                   type == typeof(Char) ||
-                   type == typeof(Byte) ||
-                   type == typeof(Boolean) ||
                    type == typeof(TimeSpan) ||
                    type == typeof(DateTimeOffset) ||
-                   type == typeof(Int16) ||
-                   type == typeof(Int32) ||
-                   type == typeof(Int64) ||
-                   type == typeof(ushort) ||
-                   type == typeof(uint) ||
-                   type == typeof(ulong) ||
-                   type == typeof(float) ||
                    type.IsEnum;
         }
 
