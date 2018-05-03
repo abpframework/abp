@@ -13,7 +13,7 @@
                 case AbpButtonSize.Default:
                     return "";
                 default:
-                    throw new AbpException("Unknown AbpButtonSize: " + size);
+                    throw new AbpException($"Unknown {nameof(AbpButtonSize)}: {size}");
             }
         }
     }

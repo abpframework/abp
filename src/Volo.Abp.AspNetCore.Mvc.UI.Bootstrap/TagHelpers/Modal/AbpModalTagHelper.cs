@@ -2,6 +2,8 @@
 {
     public class AbpModalTagHelper : AbpTagHelper<AbpModalTagHelper, AbpModalTagHelperService>
     {
+        public AbpModalSize Size { get; set; } = AbpModalSize.Default;
+
         public AbpModalTagHelper(AbpModalTagHelperService tagHelperService)
             : base(tagHelperService)
         {

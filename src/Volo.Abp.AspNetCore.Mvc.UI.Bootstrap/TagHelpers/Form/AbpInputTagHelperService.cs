@@ -25,7 +25,13 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
             var order = GetInputOrder(TagHelper.AspFor.ModelExplorer);
 
-            AddGroupToFormGroupContents(context, TagHelper.AspFor.Name, SurroundInnerHtmlAndGet(context, output, innerHtml, isCheckbox), order, out var surpress);
+            AddGroupToFormGroupContents(
+                context,
+                TagHelper.AspFor.Name,
+                SurroundInnerHtmlAndGet(context, output, innerHtml, isCheckbox),
+                order,
+                out var surpress
+            );
 
             if (surpress)
             {
@@ -89,9 +95,14 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             };
 
             var inputTagHelperOutput = GetInnerTagHelper(new TagHelperAttributeList(), context, inputTagHelper, "input");
-            isCheckbox = IsInputCheckbox(context, output,inputTagHelperOutput.Attributes);
 
-            inputTagHelperOutput.Attributes.Add("class", isCheckbox ? "form-check-input" : "form-control");
+            if (!inputTagHelperOutput.Attributes.ContainsName("disabled") && TagHelper.IsDisabled)
+            {
+                inputTagHelperOutput.Attributes.Add("disabled", "true");
+            }
+
+            isCheckbox = IsInputCheckbox(context, output, inputTagHelperOutput.Attributes);
+            inputTagHelperOutput.Attributes.AddClass(isCheckbox ? "form-check-input" : "form-control");
 
             return inputTagHelperOutput;
         }
@@ -111,7 +122,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             var checkboxClass = isCheckbox ? "class=\"form-check-label\" " : "";
 
             return "<label " + checkboxClass + GetIdAttributeAsString(inputTag) + ">"
-                   + GetLabelValue(context,output) +
+                   + GetLabelValue(context, output) +
                    "</label>";
         }
 
