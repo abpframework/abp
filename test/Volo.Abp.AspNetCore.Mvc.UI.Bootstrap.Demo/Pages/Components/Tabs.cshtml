@@ -8,61 +8,107 @@
 
 <p>Based on <a href="http://getbootstrap.com/docs/4.1/components/navs/#tabs" target="_blank"> Bootstrap tab</a>.</p>
 
-<h4># Example</h4>
+<h4># Tab Example</h4>
 
 <div class="demo-with-code">
     <div class="demo-area">
-        
-
-        <abp-tabs name="TabId" tab-style="PillVertical" vertical-header-size="_1">
+        <abp-tabs name="TabId">
 
             <abp-tab-item name="nav-home" active="true" title="Home">
-                ..asdasd.
+                Content_Home
             </abp-tab-item>   
             <abp-tab-item name="nav-profile" title="profile">
-                ..wqewda.
+                Content_Profile
             </abp-tab-item>
             <abp-tab-item name="nav-contact" title="Contact">
-                ..dsadwa.
+                Content_Contact
             </abp-tab-item>
 
         </abp-tabs>
-
-
     </div>
     <div class="code-area">
-        
         <pre>
-    
+&lt;abp-tabs name=&quot;TabId&quot;&gt;
+    &lt;abp-tab-item name=&quot;nav-home&quot; active=&quot;true&quot; title=&quot;Home&quot;&gt;
+        Content_Home
+    &lt;/abp-tab-item&gt;   
+    &lt;abp-tab-item name=&quot;nav-profile&quot; title=&quot;profile&quot;&gt;
+        Content_Profile
+    &lt;/abp-tab-item&gt;
+    &lt;abp-tab-item name=&quot;nav-contact&quot; title=&quot;Contact&quot;&gt;
+        Content_Contact
+    &lt;/abp-tab-item&gt;
+&lt;/abp-tabs&gt;
 </pre>
     </div>
 </div>
 
-
-@*<h4># Example</h4>
+<h4># Pill Example</h4>
 
 <div class="demo-with-code">
     <div class="demo-area">
-            <div>
-                <nav>
-                    <div class="nav nav-pills" id="nav-tab" role="tablist">
-                        <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Home</a>
-                        <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Profile</a>
-                        <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">Contact</a>
-                    </div>
-                </nav>
-            </div>
-            <div>
-                <div class="tab-content" id="nav-tabContent">
-                    <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">..asdasd.</div>
-                    <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">.wqewda..</div>
-                    <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">..dsadwa.</div>
-                </div>
-            </div>
-        </div>
+        <abp-tabs name="PillId" tab-style="Pill">
+
+            <abp-tab-item name="nav-home-pill" active="true" title="Home">
+                Content_Home
+            </abp-tab-item>   
+            <abp-tab-item name="nav-profile-pill" title="profile">
+                Content_Profile
+            </abp-tab-item>
+            <abp-tab-item name="nav-contact-pill" title="Contact">
+                Content_Contact
+            </abp-tab-item>
+
+        </abp-tabs>
+    </div>
     <div class="code-area">
         <pre>
-    
+&lt;abp-tabs name=&quot;TabId&quot;   tab-style=&quot;Pill&quot; &gt;
+    &lt;abp-tab-item name=&quot;nav-home&quot; active=&quot;true&quot; title=&quot;Home&quot;&gt;
+        Content_Home
+    &lt;/abp-tab-item&gt;   
+    &lt;abp-tab-item name=&quot;nav-profile&quot; title=&quot;profile&quot;&gt;
+        Content_Profile
+    &lt;/abp-tab-item&gt;
+    &lt;abp-tab-item name=&quot;nav-contact&quot; title=&quot;Contact&quot;&gt;
+        Content_Contact
+    &lt;/abp-tab-item&gt;
+&lt;/abp-tabs&gt;
 </pre>
     </div>
-</div>*@
+</div>
+
+<h4># Vertical Example</h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+        <abp-tabs name="PillVerticalId" tab-style="PillVertical" vertical-header-size="_2">
+
+            <abp-tab-item name="nav-home-pill-vertical" active="true" title="Home">
+                Content_Home
+            </abp-tab-item>   
+            <abp-tab-item name="nav-profile-pill-vertical" title="profile">
+                Content_Profile
+            </abp-tab-item>
+            <abp-tab-item name="nav-contact-pill-vertical" title="Contact">
+                Content_Contact
+            </abp-tab-item>
+
+        </abp-tabs>
+    </div>
+    <div class="code-area">
+        <pre>
+&lt;abp-tabs name=&quot;TabId&quot;  tab-style=&quot;Pill&quot; vertical-header-size=&quot;_2&quot; &gt;
+    &lt;abp-tab-item name=&quot;nav-home&quot; active=&quot;true&quot; title=&quot;Home&quot;&gt;
+        Content_Home
+    &lt;/abp-tab-item&gt;   
+    &lt;abp-tab-item name=&quot;nav-profile&quot; title=&quot;profile&quot;&gt;
+        Content_Profile
+    &lt;/abp-tab-item&gt;
+    &lt;abp-tab-item name=&quot;nav-contact&quot; title=&quot;Contact&quot;&gt;
+        Content_Contact
+    &lt;/abp-tab-item&gt;
+&lt;/abp-tabs&gt;
+</pre>
+    </div>
+</div>
