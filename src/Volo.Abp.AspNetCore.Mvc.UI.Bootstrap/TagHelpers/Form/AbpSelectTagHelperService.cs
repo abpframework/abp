@@ -51,7 +51,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
         {
             var selectTag = GetSelectTag(context, output);
             var selectAsHtml = RenderTagHelperOutput(selectTag, _encoder);
-            var label = GetLabelAsHtml(context, output, selectTag);
+            var label = GetLabelAsHtml(context, output);
 
             return label + Environment.NewLine + selectAsHtml;
         }
@@ -93,23 +93,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             SetSelectedValue(context, output, selectItems);
 
             return selectItems;
-        }
-
-        protected virtual string GetLabelAsHtml(TagHelperContext context, TagHelperOutput output, TagHelperOutput selectTag)
-        {
-            if (string.IsNullOrEmpty(TagHelper.Label) && string.IsNullOrEmpty(TagHelper.AspFor.Metadata.DisplayName))
-            {
-                return "";
-            }
-
-            return "<label " + GetIdAttributeAsString(selectTag) + ">" + _localizer[GetLabelText()] + "</label>";
-        }
-
-        protected virtual string GetLabelText()
-        {
-            return string.IsNullOrEmpty(TagHelper.Label) ?
-                TagHelper.AspFor.Metadata.DisplayName :
-                TagHelper.Label;
         }
 
         protected virtual bool GetSelectItemsIfProvidedByEnum(TagHelperContext context, TagHelperOutput output, ModelExplorer explorer, out List<SelectListItem> selectItems)
@@ -158,6 +141,19 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             }
 
             return TagHelper.AspFor.ModelExplorer.Model?.ToString();
+        }
+
+        protected virtual string GetLabelAsHtml(TagHelperContext context, TagHelperOutput output)
+        {
+            var labelTagHelper = new LabelTagHelper(_generator)
+            {
+                For = TagHelper.AspFor,
+                ViewContext = TagHelper.ViewContext
+            };
+
+            var attributeList = new TagHelperAttributeList();
+
+            return RenderTagHelper(attributeList, context, labelTagHelper, _encoder, "span", TagMode.StartTagAndEndTag, true);
         }
     }
 }

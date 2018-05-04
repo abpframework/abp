@@ -147,7 +147,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             var abpSelectTagHelper = _serviceProvider.GetRequiredService<AbpSelectTagHelper>();
             abpSelectTagHelper.AspFor = model;
             abpSelectTagHelper.AspItems = null;
-            abpSelectTagHelper.Label = "";
             abpSelectTagHelper.ViewContext = TagHelper.ViewContext;
 
             RenderTagHelper(new TagHelperAttributeList(), context, abpSelectTagHelper, _htmlEncoder, "div", TagMode.StartTagAndEndTag);
@@ -167,7 +166,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
         {
             var abpInputTagHelper = _serviceProvider.GetRequiredService<AbpInputTagHelper>();
             abpInputTagHelper.AspFor = model;
-            abpInputTagHelper.Label = "";
             abpInputTagHelper.ViewContext = TagHelper.ViewContext;
 
             RenderTagHelper(new TagHelperAttributeList(), context, abpInputTagHelper, _htmlEncoder, "div", TagMode.StartTagAndEndTag);

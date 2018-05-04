@@ -129,12 +129,5 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
             return RenderTagHelper(attributeList, context, labelTagHelper, _encoder, "span", TagMode.StartTagAndEndTag, true);
         }
-
-        protected virtual string GetLabelValue(TagHelperContext context, TagHelperOutput output)
-        {
-            return string.IsNullOrEmpty(TagHelper.Label) ?
-                TagHelper.AspFor.Metadata.DisplayName :
-                TagHelper.Label;
-        }
     }
 }

@@ -9,8 +9,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
     {
         public ModelExpression AspFor { get; set; }
 
-        public string Label { get; set; }
-
         public IEnumerable<SelectListItem> AspItems { get; set; }
 
         [HtmlAttributeNotBound]
