@@ -12,12 +12,14 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
     {
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
+            SetRandomNameIfNotProvided();
+
             var items = InitilizeFormGroupContentsContext(context, output);
 
             await output.GetChildContentAsync();
 
-            var headers = GetHeaders(context,output,items);
-            var contents = GetConents(context,output,items);
+            var headers = GetHeaders(context, output, items);
+            var contents = GetConents(context, output, items);
 
             var surroundedHeaders = SurroundHeaders(context, output, headers);
             var surroundedContents = SurroundContents(context, output, contents);
@@ -70,8 +72,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
             var verticalClass = GetVerticalPillClassIfVertical();
 
             var surroundedHeaders = "<nav>" + Environment.NewLine +
-                                   "   <div class=\"nav"+ verticalClass + navClass + "\" id=\""+ id + "\" role=\"tablist\">" + Environment.NewLine +
-                                   headers+
+                                   "   <div class=\"nav" + verticalClass + navClass + "\" id=\"" + id + "\" role=\"tablist\">" + Environment.NewLine +
+                                   headers +
                                    "   </div>" + Environment.NewLine +
                                    "</nav>";
 
@@ -82,18 +84,18 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
         {
             var id = TagHelper.Name + "Content";
 
-            var surroundedContents = "<div class=\"tab-content\" id=\""+ id + "\">" + Environment.NewLine +
-                                   contents+
-                                   "   </div>" ;
+            var surroundedContents = "<div class=\"tab-content\" id=\"" + id + "\">" + Environment.NewLine +
+                                   contents +
+                                   "   </div>";
 
             return surroundedContents;
         }
 
         protected virtual string PlaceInsideColunm(string contents, int columnSize)
         {
-            var surroundedContents = "<div class=\"col-"+ columnSize + "\">" + Environment.NewLine +
-                                   contents+
-                                   "   </div>" ;
+            var surroundedContents = "<div class=\"col-" + columnSize + "\">" + Environment.NewLine +
+                                   contents +
+                                   "   </div>";
 
             return surroundedContents;
         }
@@ -107,9 +109,13 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
         {
             var headersBuilder = new StringBuilder();
 
-            foreach (var tabItem in items)
+            for (var index = 0; index < items.Count; index++)
             {
-                headersBuilder.AppendLine(tabItem.Header);
+                var header = items[index].Header;
+
+                header = SetTabItemNameIfNotProvided(header, index);
+
+                headersBuilder.AppendLine(header);
             }
 
             var headers = SetDataToggle(headersBuilder.ToString());
@@ -121,9 +127,13 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
         {
             var contentsBuilder = new StringBuilder();
 
-            foreach (var tabItem in items)
+            for (var index = 0; index < items.Count; index++)
             {
-                contentsBuilder.AppendLine(tabItem.Content);
+                var content = items[index].Content;
+
+                content = SetTabItemNameIfNotProvided(content, index);
+
+                contentsBuilder.AppendLine(content);
             }
 
             return contentsBuilder.ToString();
@@ -158,6 +168,19 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
                 TagHelper.VerticalHeaderSize == ColumnSize.Auto || TagHelper.VerticalHeaderSize == ColumnSize._
                     ? (int)ColumnSize._3
                     : (int)TagHelper.VerticalHeaderSize;
+        }
+
+        protected virtual void SetRandomNameIfNotProvided()
+        {
+            if (string.IsNullOrWhiteSpace(TagHelper.Name))
+            {
+                TagHelper.Name = Guid.NewGuid().ToString("N");
+            }
+        }
+
+        protected virtual string SetTabItemNameIfNotProvided(string content, int index)
+        {
+            return content.Replace(TabItemNamePlaceHolder, TagHelper.Name + "_" + index);
         }
     }
 }

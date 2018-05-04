@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Razor.TagHelpers;
@@ -9,6 +10,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
     {
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
+            SetPlaceholderForNameIfNotProvided();
+
             var innerContent = await output.GetChildContentAsync();
             var tabHeader = GetTabHeaderItem();
             var tabContent = GetTabContentItem(innerContent.GetContent());
@@ -44,6 +47,14 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
             return "<div class=\"tab-pane fade"+ showActive + "\" id=\""+ id + "\" role=\"tabpanel\" aria-labelledby=\""+ headerId + "\">" +
                    content +
                    "</div>";
+        }
+
+        protected virtual void SetPlaceholderForNameIfNotProvided()
+        {
+            if (string.IsNullOrWhiteSpace(TagHelper.Name))
+            {
+                TagHelper.Name = TabItemNamePlaceHolder;
+            }
         }
     }
 }
