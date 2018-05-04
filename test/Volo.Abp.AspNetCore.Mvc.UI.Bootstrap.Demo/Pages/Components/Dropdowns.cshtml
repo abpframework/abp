@@ -1,0 +1,114 @@
+﻿@page
+@model Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components.DropdownsModel
+@{
+    ViewData["Title"] = "Dropdowns";
+}
+
+<h2>Dropdowns</h2>
+
+<p>Based on <a href="https://getbootstrap.com/docs/4.1/components/dropdowns/" target="_blank"> Bootstrap button</a>.</p>
+
+<h4># Dropdown Example</h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+
+        <abp-dropdown>
+            <abp-dropdown-button button-type="Primary" text="Dropdown"/>
+            <abp-dropdown-menu>
+                <abp-dropdown-header>Dropdown header</abp-dropdown-header>
+                <abp-dropdown-item href="#" active="true">Action</abp-dropdown-item>
+                <abp-dropdown-item href="#" disabled="true">Another disabled action</abp-dropdown-item>
+                <abp-dropdown-item href="#">Something else here</abp-dropdown-item>
+                <abp-dropdown-divider/>
+                <abp-dropdown-item href="#">Separated link</abp-dropdown-item>
+            </abp-dropdown-menu>
+        </abp-dropdown>
+
+    </div>
+    <div class="code-area">
+        <pre>
+&lt;abp-dropdown&gt;
+    &lt;abp-dropdown-button button-type=&quot;Primary&quot; text=&quot;Dropdown&quot;/&gt;
+       &lt;abp-dropdown-menu&gt;
+       &lt;abp-dropdown-header&gt;Dropdown header&lt;/abp-dropdown-header&gt;
+       &lt;abp-dropdown-item href=&quot;#&quot; active=&quot;true&quot;&gt;Action&lt;/abp-dropdown-item&gt;
+       &lt;abp-dropdown-item href=&quot;#&quot; disabled=&quot;true&quot;&gt;Another disabled action&lt;/abp-dropdown-item&gt;
+       &lt;abp-dropdown-item href=&quot;#&quot;&gt;Something else here&lt;/abp-dropdown-item&gt;
+       &lt;abp-dropdown-divider/&gt;
+       &lt;abp-dropdown-item href=&quot;#&quot;&gt;Separated link&lt;/abp-dropdown-item&gt;
+    &lt;/abp-dropdown-menu&gt;
+&lt;/abp-dropdown&gt;
+</pre>
+    </div>
+</div>
+
+<h4># Split Dropdown Example</h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+
+        <abp-dropdown direction="Right">
+            <abp-dropdown-button dropdown-style="Split" button-type="Danger" text="Dropdown"/>
+            <abp-dropdown-menu>
+                <abp-dropdown-header>Dropdown header</abp-dropdown-header>
+                <abp-dropdown-item href="#" active="true">Action</abp-dropdown-item>
+                <abp-dropdown-item href="#" disabled="true">Another disabled action</abp-dropdown-item>
+                <abp-dropdown-item href="#">Something else here</abp-dropdown-item>
+                <abp-dropdown-divider/>
+                <abp-dropdown-item href="#">Separated link</abp-dropdown-item>
+            </abp-dropdown-menu>
+        </abp-dropdown>
+
+    </div>
+    <div class="code-area">
+        <pre>
+&lt;abp-dropdown direction=&quot;Right&quot;&gt;
+    &lt;abp-dropdown-button dropdown-style=&quot;Split&quot; button-type=&quot;Danger&quot; text=&quot;Dropdown&quot;/&gt;
+       &lt;abp-dropdown-menu&gt;
+       &lt;abp-dropdown-header&gt;Dropdown header&lt;/abp-dropdown-header&gt;
+       &lt;abp-dropdown-item href=&quot;#&quot; active=&quot;true&quot;&gt;Action&lt;/abp-dropdown-item&gt;
+       &lt;abp-dropdown-item href=&quot;#&quot; disabled=&quot;true&quot;&gt;Another disabled action&lt;/abp-dropdown-item&gt;
+       &lt;abp-dropdown-item href=&quot;#&quot;&gt;Something else here&lt;/abp-dropdown-item&gt;
+       &lt;abp-dropdown-divider/&gt;
+       &lt;abp-dropdown-item href=&quot;#&quot;&gt;Separated link&lt;/abp-dropdown-item&gt;
+    &lt;/abp-dropdown-menu&gt;
+&lt;/abp-dropdown&gt;
+</pre>
+    </div>
+</div>
+
+<h4># Link Dropdown Example</h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+
+        <abp-dropdown direction="Up">
+            <abp-dropdown-button Link="true" button-type="Primary" text="Dropdown"/>
+            <abp-dropdown-menu align="Right">
+                <abp-dropdown-header>Dropdown header</abp-dropdown-header>
+                <abp-dropdown-item href="#" active="true">Action</abp-dropdown-item>
+                <abp-dropdown-item href="#" disabled="true">Another disabled action</abp-dropdown-item>
+                <abp-dropdown-item href="#">Something else here</abp-dropdown-item>
+                <abp-dropdown-divider/>
+                <abp-dropdown-item href="#">Separated link</abp-dropdown-item>
+            </abp-dropdown-menu>
+        </abp-dropdown>
+
+    </div>
+    <div class="code-area">
+        <pre>
+&lt;abp-dropdown direction=&quot;Up&quot;&gt;
+    &lt;abp-dropdown-button Link=&quot;true&quot; button-type=&quot;Primary&quot; text=&quot;Dropdown&quot;/&gt;
+       &lt;abp-dropdown-menu align=&quot;Right&quot;&gt;
+       &lt;abp-dropdown-header&gt;Dropdown header&lt;/abp-dropdown-header&gt;
+       &lt;abp-dropdown-item href=&quot;#&quot; active=&quot;true&quot;&gt;Action&lt;/abp-dropdown-item&gt;
+       &lt;abp-dropdown-item href=&quot;#&quot; disabled=&quot;true&quot;&gt;Another disabled action&lt;/abp-dropdown-item&gt;
+       &lt;abp-dropdown-item href=&quot;#&quot;&gt;Something else here&lt;/abp-dropdown-item&gt;
+       &lt;abp-dropdown-divider/&gt;
+       &lt;abp-dropdown-item href=&quot;#&quot;&gt;Separated link&lt;/abp-dropdown-item&gt;
+    &lt;/abp-dropdown-menu&gt;
+&lt;/abp-dropdown&gt;
+</pre>
+    </div>
+</div>

@@ -1,0 +1,87 @@
+﻿@page
+@model Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components.AlertsModel
+@{
+    ViewData["Title"] = "Alerts";
+}
+
+<h2>Alerts</h2>
+
+<p>Based on <a href="https://getbootstrap.com/docs/4.1/components/alerts/" target="_blank"> Bootstrap Alert</a>.</p>
+
+<h4># Alert Example</h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+
+        <abp-alert alert-type="Danger">
+            I'm an abp alert!
+        </abp-alert>
+
+    </div>
+    <div class="code-area">
+        <pre>
+&lt;abp-alert alert-type=&quot;Danger&quot;&gt;
+     I&#39;m an abp alert!
+&lt;/abp-alert&gt;
+</pre>
+    </div>
+</div>
+
+<h4># Dismissible Alert Example</h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+
+        <abp-alert alert-type="Warning" dismissible="true">
+            I'm a dismissible abp alert!
+        </abp-alert>
+
+    </div>
+    <div class="code-area">
+        <pre>
+&lt;abp-alert alert-type=&quot;Warning&quot; dismissible=&quot;true&quot;&gt;
+     I&#39;m a dismissible abp alert!
+&lt;/abp-alert&gt;
+</pre>
+    </div>
+</div>
+
+<h4># Alert With Link Example</h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+
+        <abp-alert alert-type="Secondary">
+            I'm an abp alert with <a abp-alert-link href="#">Link</a>!
+        </abp-alert>
+
+    </div>
+    <div class="code-area">
+        <pre>
+&lt;abp-alert alert-type=&quot;Info&quot;&gt;
+      I&#39;m an abp alert with &lt;a abp-alert-link href=&quot;#&quot;&gt;Link&lt;/a&gt;!
+&lt;/abp-alert&gt;
+</pre>
+    </div>
+</div>
+
+<h4># Alert With Header Example</h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+
+        <abp-alert alert-type="Primary">
+            <h4 abp-alert-header>Header</h4>
+            I'm an abp alert!
+        </abp-alert>
+
+    </div>
+    <div class="code-area">
+        <pre>
+&lt;abp-alert alert-type=&quot;Primary&quot;&gt;
+    &lt;h4 abp-alert-header&gt;Header&lt;/h4&gt;
+    I&#39;m an abp alert!
+&lt;/abp-alert&gt;
+</pre>
+    </div>
+</div>
