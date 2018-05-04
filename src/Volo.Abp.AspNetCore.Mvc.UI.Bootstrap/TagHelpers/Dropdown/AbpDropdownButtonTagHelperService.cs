@@ -29,7 +29,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Dropdown
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            var buttonsAsHtml = GetButtonsAsHtml(context,output);
+            var buttonsAsHtml = GetButtonsAsHtml(context, output);
 
             output.PreElement.SetHtmlContent(buttonsAsHtml);
 
@@ -65,35 +65,17 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Dropdown
             abpButtonTagHelper.IconType = TagHelper.IconType;
             abpButtonTagHelper.Size = TagHelper.Size;
             abpButtonTagHelper.ButtonType = TagHelper.ButtonType;
+            var attributes = GetAttributesForMainButton(context, output);
 
-            var attributes = new TagHelperAttributeList();
+            var buttonTag = GetInnerTagHelper(attributes, context, abpButtonTagHelper, "button", TagMode.StartTagAndEndTag);
 
-            if (TagHelper.DropdownStyle == DropdownStyle.Single)
+            if (TagHelper.Link ?? false)
             {
-                attributes.AddClass("dropdown-toggle");
-                attributes.Add("data-toggle", "dropdown");
-                attributes.Add("aria-haspopup", "true");
-                attributes.Add("aria-expanded", "false");
-            }
-
-            if (output.Attributes.Any(at => at.Name == "href"))
-            {
-                attributes.Add("href", output.Attributes["href"].Value);
-            }
-
-            var mainButtonAsHtml = "";
-            if (!TagHelper.Link??true)
-            {
-                mainButtonAsHtml = RenderTagHelper(attributes, context, abpButtonTagHelper, _htmlEncoder, "button", TagMode.StartTagAndEndTag);
-            }
-            else
-            {
-                var buttonTag = GetInnerTagHelper(attributes, context, abpButtonTagHelper, "button", TagMode.StartTagAndEndTag);
                 var linkTag = ConvertButtonToLink(buttonTag);
-                mainButtonAsHtml = RenderTagHelperOutput(linkTag, _htmlEncoder);
+                return RenderTagHelperOutput(linkTag, _htmlEncoder);
             }
 
-            return mainButtonAsHtml;
+            return RenderTagHelperOutput(buttonTag, _htmlEncoder);
         }
 
         protected virtual string GetSplitButton(TagHelperContext context, TagHelperOutput output)
@@ -102,18 +84,45 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Dropdown
 
             abpButtonTagHelper.Size = TagHelper.Size;
             abpButtonTagHelper.ButtonType = TagHelper.ButtonType;
-            
+            var attributes = GetAttributesForSplitButton(context, output);
+
+            return RenderTagHelper(attributes, context, abpButtonTagHelper, _htmlEncoder, "button", TagMode.StartTagAndEndTag);
+        }
+
+        protected virtual TagHelperAttributeList GetAttributesForMainButton(TagHelperContext context, TagHelperOutput output)
+        {
+
             var attributes = new TagHelperAttributeList();
+
+            foreach (var tagHelperAttribute in output.Attributes)
+            {
+                attributes.Add(tagHelperAttribute);
+            }
+
+            if (TagHelper.DropdownStyle != DropdownStyle.Split)
+            {
+                attributes.AddClass("dropdown-toggle");
+                attributes.Add("data-toggle", "dropdown");
+                attributes.Add("aria-haspopup", "true");
+                attributes.Add("aria-expanded", "false");
+            }
+
+            return attributes;
+        }
+
+        protected virtual TagHelperAttributeList GetAttributesForSplitButton(TagHelperContext context, TagHelperOutput output)
+        {
+            var attributes = new TagHelperAttributeList
+            {
+                {"data-toggle", "dropdown"},
+                {"aria-haspopup", "true"},
+                {"aria-expanded", "false"},
+            };
             
             attributes.AddClass("dropdown-toggle");
             attributes.AddClass("dropdown-toggle-split");
-            attributes.Add("data-toggle", "dropdown");
-            attributes.Add("aria-haspopup", "true");
-            attributes.Add("aria-expanded", "false");
 
-            var splitButtonAsHtml = RenderTagHelper(attributes, context, abpButtonTagHelper, _htmlEncoder, "button", TagMode.StartTagAndEndTag);
-
-            return splitButtonAsHtml;
+            return attributes;
         }
 
         protected virtual TagHelperOutput ConvertButtonToLink(TagHelperOutput buttonTag)

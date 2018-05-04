@@ -8,7 +8,7 @@
 
 <p>Based on <a href="https://getbootstrap.com/docs/4.1/components/dropdowns/" target="_blank"> Bootstrap button</a>.</p>
 
-<h4># Example</h4>
+<h4># Dropdown Example</h4>
 
 <div class="demo-with-code">
     <div class="demo-area">
@@ -29,46 +29,16 @@
     <div class="code-area">
         <pre>
 &lt;abp-dropdown direction=&quot;Right&quot;&gt;
-  &lt;abp-dropdown-button dropdown-style=&quot;Split&quot; button-type=&quot;Danger&quot; text=&quot;Dropdown&quot; size=&quot;Large&quot;/&gt;
-  &lt;abp-dropdown-menu&gt;
-    &lt;abp-dropdown-header&gt;Dropdown header&lt;/abp-dropdown-header&gt;
-    &lt;abp-dropdown-item href=&quot;#&quot; active=&quot;true&quot;&gt;Action&lt;/abp-dropdown-item&gt;
-    &lt;abp-dropdown-item href=&quot;#&quot; disabled=&quot;true&quot;&gt;Another disabled action&lt;/abp-dropdown-item&gt;
-    &lt;abp-dropdown-item href=&quot;#&quot;&gt;Something else here&lt;/abp-dropdown-item&gt;
-    &lt;abp-dropdown-divider/&gt;
-    &lt;abp-dropdown-item href=&quot;#&quot;&gt;Separated link&lt;/abp-dropdown-item&gt;
-  &lt;/abp-dropdown-menu&gt;
+    &lt;abp-dropdown-button dropdown-style=&quot;Split&quot; link=&quot;true&quot; href=&quot;#&quot; button-type=&quot;Primary&quot; text=&quot;Dropdown&quot;/&gt;
+       &lt;abp-dropdown-menu&gt;
+       &lt;abp-dropdown-header&gt;Dropdown header&lt;/abp-dropdown-header&gt;
+       &lt;abp-dropdown-item href=&quot;#&quot; active=&quot;true&quot;&gt;Action&lt;/abp-dropdown-item&gt;
+       &lt;abp-dropdown-item href=&quot;#&quot; disabled=&quot;true&quot;&gt;Another disabled action&lt;/abp-dropdown-item&gt;
+       &lt;abp-dropdown-item href=&quot;#&quot;&gt;Something else here&lt;/abp-dropdown-item&gt;
+       &lt;abp-dropdown-divider/&gt;
+       &lt;abp-dropdown-item href=&quot;#&quot;&gt;Separated link&lt;/abp-dropdown-item&gt;
+    &lt;/abp-dropdown-menu&gt;
 &lt;/abp-dropdown&gt;
 </pre>
     </div>
 </div>
-
-<h4># Example</h4>
-
-<div class="demo-with-code">
-    <div class="demo-area">
-        
-        <div class="btn-group">
-            <button type="button" class="btn btn-secondary btn-lg">
-                Split dropup
-            </button>
-            <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span class="sr-only">Toggle Dropdown</span>
-            </button>
-            <div class="dropdown-menu">
-                <abp-dropdown-header>Dropdown header</abp-dropdown-header>
-                <abp-dropdown-item href="#" active="true">Action</abp-dropdown-item>
-                <abp-dropdown-item href="#" disabled="true">Another disabled action</abp-dropdown-item>
-                <abp-dropdown-item href="#">Something else here</abp-dropdown-item>
-                <abp-dropdown-divider/>
-                <abp-dropdown-item href="#">Separated link</abp-dropdown-item>
-            </div>
-        </div>
-
-    </div>
-    <div class="code-area">
-        <pre>
-</pre>
-    </div>
-</div>
-
