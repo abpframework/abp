@@ -66,7 +66,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Dropdown
             abpButtonTagHelper.Size = TagHelper.Size;
             abpButtonTagHelper.ButtonType = TagHelper.ButtonType;
 
-
             var attributes = new TagHelperAttributeList();
 
             if (TagHelper.DropdownStyle == DropdownStyle.Single)
@@ -103,8 +102,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Dropdown
 
             abpButtonTagHelper.Size = TagHelper.Size;
             abpButtonTagHelper.ButtonType = TagHelper.ButtonType;
-
-
+            
             var attributes = new TagHelperAttributeList();
             
             attributes.AddClass("dropdown-toggle");
@@ -113,17 +111,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Dropdown
             attributes.Add("aria-haspopup", "true");
             attributes.Add("aria-expanded", "false");
 
-            var splitButtonAsHtml = "";
-            if (true)
-            {
-                splitButtonAsHtml = RenderTagHelper(attributes, context, abpButtonTagHelper, _htmlEncoder, "button", TagMode.StartTagAndEndTag);
-            }
-            else
-            {
-                var buttonTag = GetInnerTagHelper(attributes, context, abpButtonTagHelper, "button", TagMode.StartTagAndEndTag);
-                var linkTag = ConvertButtonToLink(buttonTag);
-                splitButtonAsHtml = RenderTagHelperOutput(linkTag, _htmlEncoder);
-            }
+            var splitButtonAsHtml = RenderTagHelper(attributes, context, abpButtonTagHelper, _htmlEncoder, "button", TagMode.StartTagAndEndTag);
 
             return splitButtonAsHtml;
         }
