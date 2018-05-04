@@ -7,9 +7,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Alert
     {
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            output.TagName = "a";
             output.Attributes.AddClass("alert-link");
-            output.TagMode = TagMode.StartTagAndEndTag;
+            output.Attributes.RemoveAll("abp-alert-link");
         }
         
     }
