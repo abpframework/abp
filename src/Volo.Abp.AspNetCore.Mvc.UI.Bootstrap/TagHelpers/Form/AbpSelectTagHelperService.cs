@@ -17,13 +17,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
     {
         private readonly IHtmlGenerator _generator;
         private readonly HtmlEncoder _encoder;
-        private readonly IStringLocalizer<AbpUiResource> _localizer;
 
-        public AbpSelectTagHelperService(IHtmlGenerator generator, HtmlEncoder encoder, IStringLocalizer<AbpUiResource> localizer)
+        public AbpSelectTagHelperService(IHtmlGenerator generator, HtmlEncoder encoder)
         {
             _generator = generator;
             _encoder = encoder;
-            _localizer = localizer;
         }
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
@@ -51,7 +49,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
         {
             var selectTag = GetSelectTag(context, output);
             var selectAsHtml = RenderTagHelperOutput(selectTag, _encoder);
-            var label = GetLabelAsHtml(context, output);
+            var label = GetLabelAsHtml(context, output, selectTag);
 
             return label + Environment.NewLine + selectAsHtml;
         }
@@ -93,6 +91,16 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             SetSelectedValue(context, output, selectItems);
 
             return selectItems;
+        }
+
+        protected virtual string GetLabelAsHtml(TagHelperContext context, TagHelperOutput output, TagHelperOutput selectTag)
+        {
+            if (string.IsNullOrEmpty(TagHelper.Label))
+            {
+                return GetLabelAsHtmlUsingTagHelper(context, output);
+            }
+
+            return "<label " + GetIdAttributeAsString(selectTag) + ">" + TagHelper.Label + "</label>";
         }
 
         protected virtual bool GetSelectItemsIfProvidedByEnum(TagHelperContext context, TagHelperOutput output, ModelExplorer explorer, out List<SelectListItem> selectItems)
@@ -143,17 +151,15 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             return TagHelper.AspFor.ModelExplorer.Model?.ToString();
         }
 
-        protected virtual string GetLabelAsHtml(TagHelperContext context, TagHelperOutput output)
+        protected virtual string GetLabelAsHtmlUsingTagHelper(TagHelperContext context, TagHelperOutput output)
         {
             var labelTagHelper = new LabelTagHelper(_generator)
             {
                 For = TagHelper.AspFor,
                 ViewContext = TagHelper.ViewContext
             };
-
-            var attributeList = new TagHelperAttributeList();
-
-            return RenderTagHelper(attributeList, context, labelTagHelper, _encoder, "span", TagMode.StartTagAndEndTag, true);
+            
+            return RenderTagHelper(new TagHelperAttributeList(), context, labelTagHelper, _encoder, "span", TagMode.StartTagAndEndTag, true);
         }
     }
 }
