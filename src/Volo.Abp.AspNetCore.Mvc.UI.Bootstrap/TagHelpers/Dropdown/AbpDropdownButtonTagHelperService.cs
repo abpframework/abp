@@ -14,16 +14,13 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Dropdown
     {
 
         private readonly HtmlEncoder _htmlEncoder;
-        private readonly IHtmlGenerator _htmlGenerator;
         private readonly IServiceProvider _serviceProvider;
 
         public AbpDropdownButtonTagHelperService(
             HtmlEncoder htmlEncoder,
-            IHtmlGenerator htmlGenerator,
             IServiceProvider serviceProvider)
         {
             _htmlEncoder = htmlEncoder;
-            _htmlGenerator = htmlGenerator;
             _serviceProvider = serviceProvider;
         }
 
