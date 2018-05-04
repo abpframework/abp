@@ -10,69 +10,76 @@ namespace Volo.Abp.Localization
         [NotNull]
         public Type ResourceType { get; }
 
+        [NotNull]
+        public string ResourceName => LocalizationResourceNameAttribute.GetName(ResourceType);
+
         [CanBeNull]
         public string DefaultCultureName { get; set; }
 
         [NotNull]
-        public ILocalizationDictionaryProvider DictionaryProvider { get; }
+        public IDictionary<string, ILocalizationDictionary> Dictionaries { get; }
 
         [NotNull]
-        public List<ILocalizationDictionaryProvider> Extensions { get; }
+        public List<ILocalizationResourceContributor> Contributors { get; }
 
         [NotNull]
         public List<Type> BaseResourceTypes { get; }
 
         public LocalizationResource(
             [NotNull] Type resourceType, 
-            [CanBeNull] string defaultCultureName, //TODO: defaultCultureName should be optional (and second argument) because it's not required for the LocalizationResource!
-            [NotNull] ILocalizationDictionaryProvider dictionaryProvider)
+            [CanBeNull] string defaultCultureName = null,
+            [CanBeNull] ILocalizationResourceContributor initialContributor = null)
         {
             ResourceType = Check.NotNull(resourceType, nameof(resourceType));
-            DictionaryProvider = Check.NotNull(dictionaryProvider, nameof(dictionaryProvider));
             DefaultCultureName = defaultCultureName;
 
+            Dictionaries = new Dictionary<string, ILocalizationDictionary>();
+
             BaseResourceTypes = new List<Type>();
-            Extensions = new List<ILocalizationDictionaryProvider>();
+            Contributors = new List<ILocalizationResourceContributor>();
+
+            if (initialContributor != null)
+            {
+                Contributors.Add(initialContributor);
+            }
 
             AddBaseResourceTypes();
         }
 
         public virtual void Initialize(IServiceProvider serviceProvider)
         {
-            //TODO: We should refactor here to create a better design!
+            var context = new LocalizationResourceInitializationContext(this, serviceProvider);
 
-            var context = new LocalizationResourceInitializationContext(serviceProvider);
+            Dictionaries.Clear();
+            InitializeContributors(context);
 
-            InitializeDictionaryProvider(context);
-            InitializeExtensions(context);
-
-            DictionaryProvider.Updated += (sender, args) =>
+            foreach (var contributor in Contributors)
             {
-                InitializeExtensions(context);
-            };
-
-            foreach (var extension in Extensions)
-            {
-                extension.Updated += (sender, args) =>
+                contributor.Updated += (sender, args) =>
                 {
-                    InitializeDictionaryProvider(context);
-                    InitializeExtensions(context);
+                    Dictionaries.Clear();
+                    InitializeContributors(context);
                 };
             }
         }
 
-        private void InitializeExtensions(LocalizationResourceInitializationContext context)
+        protected virtual void InitializeContributors(LocalizationResourceInitializationContext context)
         {
-            foreach (var extension in Extensions)
+            foreach (var contributor in Contributors)
             {
-                extension.Initialize(context);
-                DictionaryProvider.Extend(extension);
+                foreach (var dictionary in contributor.GetDictionaries(context))
+                {
+                    var existingDictionary = Dictionaries.GetOrDefault(dictionary.CultureName);
+                    if (existingDictionary == null)
+                    {
+                        Dictionaries[dictionary.CultureName] = dictionary;
+                    }
+                    else
+                    {
+                        existingDictionary.Extend(dictionary);
+                    }
+                }
             }
-        }
-
-        private void InitializeDictionaryProvider(LocalizationResourceInitializationContext context)
-        {
-            DictionaryProvider.Initialize(context);
         }
 
         protected virtual void AddBaseResourceTypes()

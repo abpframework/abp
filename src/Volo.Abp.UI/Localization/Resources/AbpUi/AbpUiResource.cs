@@ -2,7 +2,7 @@
 
 namespace Localization.Resources.AbpUi
 {
-    [ShortLocalizationResourceName("AbpUi")]
+    [LocalizationResourceName("AbpUi")]
     public class AbpUiResource
     {
     }

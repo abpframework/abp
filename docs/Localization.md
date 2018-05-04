@@ -53,10 +53,9 @@ public class MyModule : AbpModule
 
         services.Configure<AbpLocalizationOptions>(options =>
         {        
-            options.Resources.AddVirtualJson<TestResource>(
-                "en", 
-                "/Localization/Resources/Test"
-            );
+            options.Resources
+                .Add<TestResource>("en")
+                .AddVirtualJson("/Localization/Resources/Test");
         });
     }
 }
@@ -64,6 +63,7 @@ public class MyModule : AbpModule
 
 In this example;
 
+* Added a new localization resource with "en" (English) as the default culture.
 * Used JSON files to store the localization strings.
 * JSON files are embedded into the assembly using the [virtual file system](Virtual-File-System.md).
 
@@ -90,7 +90,7 @@ A JSON localization file content is shown below:
 Localization resources are also available in the client (JavaScript) side. So, setting a short name for the localization resource makes it easy to use localization texts. Example:
 
 ````C#
-[ShortLocalizationResourceName("Test")]
+[LocalizationResourceName("Test")]
 public class TestResource
 {
 }
@@ -114,10 +114,10 @@ Alternative inheritance by configuring the `AbpLocalizationOptions`:
 ````C#
 services.Configure<AbpLocalizationOptions>(options =>
 {
-    options.Resources.AddVirtualJson<TestResource>("en", "/Localization/Resources/Test");
-
-    //Inherit from an existing resource
-    options.Resources.AddBaseTypes<TestResource>(typeof(AbpValidationResource));
+    options.Resources
+        .Add<TestResource>("en") //Define the resource by "en" default culture
+        .AddVirtualJson("/Localization/Resources/Test") //Add strings from virtual json files
+        .AddBaseTypes(typeof(AbpValidationResource)); //Inherit from an existing resource
 });
 ````
 
@@ -131,13 +131,13 @@ Inheriting from a resource creates a new resource without modifying the existing
 ````C#
 services.Configure<AbpLocalizationOptions>(options =>
 {
-    options.Resources.ExtendWithVirtualJson<TestResource>(
-        "/Localization/Resources/Test/Extensions"
-    );
+    options.Resources
+        .Get<TestResource>()
+        .AddVirtualJson("/Localization/Resources/Test/Extensions");
 });
 ````
 
-If an extension file defines the same localized string, it overrides the string.
+* If an extension file defines the same localized string, it overrides the string.
 
 #### Getting Localized Texts
 

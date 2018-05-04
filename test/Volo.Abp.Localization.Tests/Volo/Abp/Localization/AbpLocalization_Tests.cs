@@ -117,10 +117,10 @@ namespace Volo.Abp.Localization
 
                 services.Configure<AbpLocalizationOptions>(options =>
                 {
-                    options.Resources.AddVirtualJson<LocalizationTestValidationResource>("en", "/Volo/Abp/Localization/TestResources/Base/Validation");
-                    options.Resources.AddVirtualJson<LocalizationTestCountryNamesResource>("en", "/Volo/Abp/Localization/TestResources/Base/CountryNames");
-                    options.Resources.AddVirtualJson<LocalizationTestResource>("en", "/Volo/Abp/Localization/TestResources/Source");
-                    options.Resources.ExtendWithVirtualJson<LocalizationTestResource>("/Volo/Abp/Localization/TestResources/SourceExt");
+                    options.Resources.Add<LocalizationTestValidationResource>("en").AddVirtualJson("/Volo/Abp/Localization/TestResources/Base/Validation");
+                    options.Resources.Add<LocalizationTestCountryNamesResource>("en").AddVirtualJson("/Volo/Abp/Localization/TestResources/Base/CountryNames");
+                    options.Resources.Add<LocalizationTestResource>("en").AddVirtualJson("/Volo/Abp/Localization/TestResources/Source");
+                    options.Resources.Get<LocalizationTestResource>().AddVirtualJson("/Volo/Abp/Localization/TestResources/SourceExt");
                 });
             }
         }

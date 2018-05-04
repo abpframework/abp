@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Primitives;
@@ -7,38 +9,37 @@ using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.Localization.VirtualFiles
 {
-    public abstract class VirtualFileLocalizationDictionaryProviderBase : LocalizationDictionaryProviderBase
+    public abstract class VirtualFileLocalizationResourceContributorBase : LocalizationResourceContributorBase
     {
         private readonly string _virtualPath;
 
         private bool _subscribedForChanges;
 
-        protected VirtualFileLocalizationDictionaryProviderBase(string virtualPath)
+        protected VirtualFileLocalizationResourceContributorBase(string virtualPath)
         {
             _virtualPath = virtualPath;
         }
 
-        public override void Initialize(LocalizationResourceInitializationContext context) //TODO: Extract initialization to a factory..?
+        public override List<ILocalizationDictionary> GetDictionaries(LocalizationResourceInitializationContext context)
         {
             var virtualFileProvider = context.ServiceProvider.GetRequiredService<IVirtualFileProvider>();
 
-            CreateDictionaries(virtualFileProvider);
-
             if (!_subscribedForChanges)
             {
-                ChangeToken.OnChange(() => virtualFileProvider.Watch(_virtualPath.EnsureEndsWith('/') + "**/*.*"), () =>
+                ChangeToken.OnChange(() => virtualFileProvider.Watch(_virtualPath.EnsureEndsWith('/') + "*.*"), () =>
                 {
-                    CreateDictionaries(virtualFileProvider);
                     OnUpdated();
                 });
 
                 _subscribedForChanges = true;
             }
+
+            return CreateDictionaries(virtualFileProvider);
         }
 
-        private void CreateDictionaries(IFileProvider fileProvider)
+        private List<ILocalizationDictionary> CreateDictionaries(IFileProvider fileProvider)
         {
-            Dictionaries.Clear();
+            var dictionaries = new Dictionary<string, ILocalizationDictionary>();
 
             foreach (var file in fileProvider.GetDirectoryContents(_virtualPath))
             {
@@ -48,13 +49,15 @@ namespace Volo.Abp.Localization.VirtualFiles
                 }
 
                 var dictionary = CreateDictionaryFromFile(file);
-                if (Dictionaries.ContainsKey(dictionary.CultureName))
+                if (dictionaries.ContainsKey(dictionary.CultureName))
                 {
                     throw new AbpException($"{file.PhysicalPath} dictionary has a culture name '{dictionary.CultureName}' which is already defined!");
                 }
                 
-                Dictionaries[dictionary.CultureName] = dictionary;
+                dictionaries[dictionary.CultureName] = dictionary;
             }
+
+            return dictionaries.Values.ToList();
         }
 
         protected abstract bool CanParseFile(IFileInfo file);

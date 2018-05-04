@@ -72,7 +72,7 @@ namespace Volo.Abp.Localization
 
         protected virtual LocalizedString GetLocalizedStringOrNull(string name, string cultureName, bool tryDefaults = true)
         {
-            var dictionaries = Resource.DictionaryProvider.Dictionaries;
+            var dictionaries = Resource.Dictionaries;
 
             //Try to get from original dictionary (with country code)
             if (dictionaries.TryGetValue(cultureName, out var originalDictionary))
@@ -124,7 +124,7 @@ namespace Volo.Abp.Localization
         {
             //TODO: Can be optimized (example: if it's already default dictionary, skip overriding)
 
-            var dictionaries = Resource.DictionaryProvider.Dictionaries;
+            var dictionaries = Resource.Dictionaries;
 
             var allStrings = new Dictionary<string, LocalizedString>();
 

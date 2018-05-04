@@ -4,9 +4,11 @@ using Volo.Abp.Localization.Json;
 
 namespace Volo.Abp.Localization.VirtualFiles.Json
 {
-    public class JsonEmbeddedFileLocalizationDictionaryProvider : VirtualFileLocalizationDictionaryProviderBase
+    //TODO: Use composition over inheritance..?
+
+    public class JsonVirtualFileLocalizationResourceContributor : VirtualFileLocalizationResourceContributorBase
     {
-        public JsonEmbeddedFileLocalizationDictionaryProvider(string virtualPath)
+        public JsonVirtualFileLocalizationResourceContributor(string virtualPath)
             : base(virtualPath)
         {
 
@@ -19,7 +21,7 @@ namespace Volo.Abp.Localization.VirtualFiles.Json
 
         protected override ILocalizationDictionary CreateDictionaryFromFileContent(string jsonString)
         {
-            return JsonLocalizationDictionaryBuilder.BuildFromJsonString(jsonString); //TODO: Use composition over inheritance!
+            return JsonLocalizationDictionaryBuilder.BuildFromJsonString(jsonString);
         }
     }
 }

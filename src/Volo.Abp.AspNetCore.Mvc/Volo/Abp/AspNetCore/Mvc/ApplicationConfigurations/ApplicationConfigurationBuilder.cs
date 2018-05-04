@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
@@ -74,12 +73,8 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
                     dictionary[localizedString.Name] = localizedString.Value;
                 }
 
-                var resourceShortName = resource.ResourceType
-                                            .GetCustomAttributes(true)
-                                            .OfType<ShortLocalizationResourceNameAttribute>()
-                                            .FirstOrDefault()?.Name ?? resource.ResourceType.FullName;
-
-                localizationConfig.Values[resourceShortName] = dictionary;
+                var resourceName = LocalizationResourceNameAttribute.GetName(resource.ResourceType);
+                localizationConfig.Values[resourceName] = dictionary;
             }
 
             return localizationConfig;

@@ -2,7 +2,7 @@
 {
     //TODO: Move to Volo.Abp.Validation!
 
-    [ShortLocalizationResourceName("AbpValidation")]
+    [LocalizationResourceName("AbpValidation")]
     public class AbpValidationResource
     {
         
