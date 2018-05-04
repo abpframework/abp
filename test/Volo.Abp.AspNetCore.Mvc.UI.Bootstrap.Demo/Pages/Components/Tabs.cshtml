@@ -8,12 +8,44 @@
 
 <p>Based on <a href="http://getbootstrap.com/docs/4.1/components/navs/#tabs" target="_blank"> Bootstrap tab</a>.</p>
 
-<h4># Tab Example</h4>
+<h4># Most Simple Tabs Example</h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+        <abp-tabs>
+            <abp-tab-item active="true" title="Home">
+                Content_Home
+            </abp-tab-item>   
+            <abp-tab-item title="profile">
+                Content_Profile
+            </abp-tab-item>
+            <abp-tab-item title="Contact">
+                Content_Contact
+            </abp-tab-item>
+        </abp-tabs>
+    </div>
+    <div class="code-area">
+        <pre>
+&lt;abp-tabs name=&quot;TabId&quot;&gt;
+    &lt;abp-tab-item name=&quot;nav-home&quot; active=&quot;true&quot; title=&quot;Home&quot;&gt;
+        Content_Home
+    &lt;/abp-tab-item&gt;   
+    &lt;abp-tab-item name=&quot;nav-profile&quot; title=&quot;profile&quot;&gt;
+        Content_Profile
+    &lt;/abp-tab-item&gt;
+    &lt;abp-tab-item name=&quot;nav-contact&quot; title=&quot;Contact&quot;&gt;
+        Content_Contact
+    &lt;/abp-tab-item&gt;
+&lt;/abp-tabs&gt;
+</pre>
+    </div>
+</div>
+
+<h4># Tabs With Name Attiribute Example</h4>
 
 <div class="demo-with-code">
     <div class="demo-area">
         <abp-tabs name="TabId">
-
             <abp-tab-item name="nav-home" active="true" title="Home">
                 Content_Home
             </abp-tab-item>   
@@ -23,7 +55,6 @@
             <abp-tab-item name="nav-contact" title="Contact">
                 Content_Contact
             </abp-tab-item>
-
         </abp-tabs>
     </div>
     <div class="code-area">
@@ -47,18 +78,16 @@
 
 <div class="demo-with-code">
     <div class="demo-area">
-        <abp-tabs name="PillId" tab-style="Pill">
-
-            <abp-tab-item name="nav-home-pill" active="true" title="Home">
+        <abp-tabs tab-style="Pill">
+            <abp-tab-item active="true" title="Home">
                 Content_Home
             </abp-tab-item>   
-            <abp-tab-item name="nav-profile-pill" title="profile">
+            <abp-tab-item title="profile">
                 Content_Profile
             </abp-tab-item>
-            <abp-tab-item name="nav-contact-pill" title="Contact">
+            <abp-tab-item title="Contact">
                 Content_Contact
             </abp-tab-item>
-
         </abp-tabs>
     </div>
     <div class="code-area">
@@ -82,18 +111,16 @@
 
 <div class="demo-with-code">
     <div class="demo-area">
-        <abp-tabs name="PillVerticalId" tab-style="PillVertical" vertical-header-size="_2">
-
-            <abp-tab-item name="nav-home-pill-vertical" active="true" title="Home">
+        <abp-tabs tab-style="PillVertical" vertical-header-size="_2">
+            <abp-tab-item active="true" title="Home">
                 Content_Home
             </abp-tab-item>   
-            <abp-tab-item name="nav-profile-pill-vertical" title="profile">
+            <abp-tab-item title="profile">
                 Content_Profile
             </abp-tab-item>
-            <abp-tab-item name="nav-contact-pill-vertical" title="Contact">
+            <abp-tab-item title="Contact">
                 Content_Contact
             </abp-tab-item>
-
         </abp-tabs>
     </div>
     <div class="code-area">
