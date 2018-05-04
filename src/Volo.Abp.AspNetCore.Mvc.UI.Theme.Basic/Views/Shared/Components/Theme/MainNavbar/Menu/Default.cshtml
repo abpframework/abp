@@ -1,11 +1,16 @@
-﻿@using Volo.Abp.UI.Navigation
+﻿@using System
+@using Volo.Abp.UI.Navigation
 @model ApplicationMenu
 @foreach (var menuItem in Model.Items)
 {
     if (menuItem.IsLeaf)
     {
+        if (menuItem.Url.IsNullOrEmpty())
+        {
+            continue;
+        }
+
         <li class="nav-item @(menuItem.IsDisabled ? "disabled" : "")">
-            <!-- active -->
             <a class="nav-link" href="@(menuItem.Url ?? "#")">@menuItem.DisplayName</a> @*<span class="sr-only">(current)</span>*@
         </li>
     }
