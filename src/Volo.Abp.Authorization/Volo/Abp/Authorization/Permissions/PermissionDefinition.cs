@@ -18,7 +18,12 @@ namespace Volo.Abp.Authorization.Permissions
         /// </summary>
         public PermissionDefinition Parent { get; private set; }
 
-        public ILocalizableString DisplayName { get; set; }
+        public ILocalizableString DisplayName
+        {
+            get => _displayName;
+            set => _displayName = Check.NotNull(value, nameof(value));
+        }
+        private ILocalizableString _displayName;
 
         public IReadOnlyList<PermissionDefinition> Children => _children.ToImmutableList();
         private readonly List<PermissionDefinition> _children;

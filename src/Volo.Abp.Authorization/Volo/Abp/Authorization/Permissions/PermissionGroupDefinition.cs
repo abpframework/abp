@@ -13,6 +13,13 @@ namespace Volo.Abp.Authorization.Permissions
 
         public Dictionary<string, object> Properties { get; }
 
+        public ILocalizableString DisplayName
+        {
+            get => _displayName;
+            set => _displayName = Check.NotNull(value, nameof(value));
+        }
+        private ILocalizableString _displayName;
+
         public IReadOnlyList<PermissionDefinition> Permissions => _permissions.ToImmutableList();
         private readonly List<PermissionDefinition> _permissions;
 
@@ -30,9 +37,10 @@ namespace Volo.Abp.Authorization.Permissions
             set => Properties[name] = value;
         }
 
-        protected internal PermissionGroupDefinition(string name)
+        protected internal PermissionGroupDefinition(string name, ILocalizableString displayName = null)
         {
             Name = name;
+            DisplayName = displayName ?? new FixedLocalizableString(Name);
 
             Properties = new Dictionary<string, object>();
             _permissions = new List<PermissionDefinition>();
