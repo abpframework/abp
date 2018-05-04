@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
 {
-    [HtmlTargetElement("abp-tab-item")]
-    public class AbpTabItemTagHelper : AbpTagHelper<AbpTabItemTagHelper, AbpTabItemTagHelperService>
+    [HtmlTargetElement("abp-tab")]
+    public class AbpTabTagHelper : AbpTagHelper<AbpTabTagHelper, AbpTabTagHelperService>
     {
         public string Name { get; set; }
 
@@ -12,7 +12,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
 
         public bool? Active { get; set; }
 
-        public AbpTabItemTagHelper(AbpTabItemTagHelperService tagHelperService)
+        public AbpTabTagHelper(AbpTabTagHelperService tagHelperService)
             : base(tagHelperService)
         {
 

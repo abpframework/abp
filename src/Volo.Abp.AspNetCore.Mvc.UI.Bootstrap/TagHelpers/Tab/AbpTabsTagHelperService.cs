@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Razor.TagHelpers;
@@ -34,9 +35,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
             }
 
         }
-
-
-
+        
         protected virtual string CombineHeadersAndContents(TagHelperContext context, TagHelperOutput output, string headers, string contents)
         {
             var combined = new StringBuilder();
@@ -54,15 +53,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
             combined.AppendLine(headers).AppendLine(contents);
 
             return combined.ToString();
-        }
-
-
-
-        protected virtual string MakeVerticalTab(TagHelperContext context, TagHelperOutput output, string headers, string contents)
-        {
-
-
-            return "";
         }
 
         protected virtual string SurroundHeaders(TagHelperContext context, TagHelperOutput output, string headers)
@@ -105,8 +95,33 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
             output.Attributes.AddClass("row");
         }
 
+        protected virtual void SetActiveTab(List<TabItem> items)
+        {
+            if (!items.Any(it => it.Active) && items.Count > 0)
+            {
+                items.FirstOrDefault().Active = true;
+            }
+
+            foreach (var tabItem in items)
+            {
+                if (tabItem.Active)
+                {
+                    tabItem.Content = tabItem.Content.Replace(AbpTabItemShowActivePlaceholder, " show active");
+                    tabItem.Header = tabItem.Header.Replace(AbpTabItemActivePlaceholder, " active").Replace(AbpTabItemSelectedPlaceholder, "true");
+                }
+                else
+                {
+                    tabItem.Content = tabItem.Content.Replace(AbpTabItemShowActivePlaceholder, "");
+                    tabItem.Header = tabItem.Header.Replace(AbpTabItemActivePlaceholder, "").Replace(AbpTabItemSelectedPlaceholder, "false");
+                }
+            }
+
+        }
+
         protected virtual string GetHeaders(TagHelperContext context, TagHelperOutput output, List<TabItem> items)
         {
+            SetActiveTab(items);
+
             var headersBuilder = new StringBuilder();
 
             for (var index = 0; index < items.Count; index++)

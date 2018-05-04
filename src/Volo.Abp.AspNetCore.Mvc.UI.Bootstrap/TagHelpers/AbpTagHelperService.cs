@@ -22,6 +22,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
         protected const string TabItemsVerticalPillPlaceHolder = "{{vertical_pill}}";
         protected const string TabItemNamePlaceHolder = "{{Tag_Name}}";
         protected const string AbpFormContentPlaceHolder = "{_AbpFormContentPlaceHolder_}";
+        protected const string AbpTabItemActivePlaceholder = "{_Tab_Active_Placeholder_}";
+        protected const string AbpTabItemShowActivePlaceholder = "{_Tab_Show_Active_Placeholder_}";
+        protected const string AbpTabItemSelectedPlaceholder = "{_Tab_Selected_Placeholder_}";
 
         public TTagHelper TagHelper { get; internal set; }
 
