@@ -24,9 +24,16 @@
                     e.preventDefault();
 
                     if (!$(this).closest('li').hasClass('disabled')) {
-                        fieldItem.action({
-                            record: record
-                        });
+                        if (fieldItem.confirmMessage) {
+                            abp.message.confirm(fieldItem.confirmMessage({ record: record }))
+                                .done(function(accepted) {
+                                    if (accepted) {
+                                        fieldItem.action({ record: record });
+                                    }
+                                });
+                        } else {
+                            fieldItem.action({ record: record });
+                        }
                     }
                 });
             }
