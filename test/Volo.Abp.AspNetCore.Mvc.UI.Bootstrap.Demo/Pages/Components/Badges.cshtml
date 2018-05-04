@@ -1,0 +1,33 @@
+﻿@page
+@model Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components.BadgesModel
+@{
+    ViewData["Title"] = "Badges";
+}
+
+<h2>Badges</h2>
+
+<p>Based on <a href="https://getbootstrap.com/docs/4.1/components/badges/" target="_blank"> Bootstrap Badge</a>.</p>
+
+<h4># Badges Examples</h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+
+        <span abp-badge="Primary" >I'm an abp badge!</span>
+        <span abp-badge-pill="Warning" >I'm an abp pill badge!</span>
+        <a abp-badge="Danger" href="#">I'm an abp badge link!</a>
+        <a abp-badge-pill="Success" href="#">I'm an abp pill badge link!</a>
+
+    </div>
+    <div class="code-area">
+        <pre>
+&lt;span abp-badge=&quot;Primary&quot; &gt;I&#39;m an abp badge!&lt;/span&gt;
+
+&lt;span abp-badge-pill=&quot;Warning&quot; &gt;I&#39;m an abp pill badge!&lt;/span&gt;
+
+&lt;a abp-badge=&quot;Danger&quot; href=&quot;#&quot; &gt;I&#39;m an abp badge link!&lt;/a&gt;
+
+&lt;a abp-badge-pill=&quot;Success&quot; href=&quot;#&quot; &gt;I&#39;m an abp pill badge link!&lt;/a&gt;
+</pre>
+    </div>
+</div>
