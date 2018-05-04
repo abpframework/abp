@@ -75,6 +75,8 @@ namespace Volo.Abp.Localization
             {
                 _localizer["USA"].Value.ShouldBe("United States of America"); //Inherited from CountryNames/en.json
                 _localizer["ThisFieldIsRequired"].Value.ShouldBe("This field is required"); //Inherited from Validation/en.json
+
+                _localizer.GetAllStrings().ShouldContain(ls => ls.Name == "USA");
             }
 
             using (AbpCultureHelper.Use("tr"))

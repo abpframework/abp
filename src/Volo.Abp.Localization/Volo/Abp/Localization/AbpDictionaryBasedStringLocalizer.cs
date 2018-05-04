@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Globalization;
+using System.Linq;
 using Microsoft.Extensions.Localization;
 
 namespace Volo.Abp.Localization
@@ -125,8 +126,15 @@ namespace Volo.Abp.Localization
 
             var dictionaries = Resource.DictionaryProvider.Dictionaries;
 
-            //Create a temp dictionary to build
             var allStrings = new Dictionary<string, LocalizedString>();
+
+            foreach (var baseLocalizer in BaseLocalizers.Select(l => l.WithCulture(CultureInfo.GetCultureInfo(cultureName))))
+            {
+                foreach (var localizedString in baseLocalizer.GetAllStrings(includeParentCultures))
+                {
+                    allStrings[localizedString.Name] = localizedString;
+                }
+            }
 
             if (includeParentCultures)
             {
