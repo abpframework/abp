@@ -1,11 +1,10 @@
-﻿@using System
-@using Volo.Abp.UI.Navigation
+﻿@using Volo.Abp.UI.Navigation
 @model ApplicationMenu
 @foreach (var menuItem in Model.Items)
 {
     if (menuItem.IsLeaf)
     {
-        if (menuItem.Url.IsNullOrEmpty())
+        if (menuItem.Url == null)
         {
             continue;
         }
