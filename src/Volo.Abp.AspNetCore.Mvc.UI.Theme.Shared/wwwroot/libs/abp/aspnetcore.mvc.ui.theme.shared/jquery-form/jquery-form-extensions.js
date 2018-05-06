@@ -5,7 +5,13 @@
 
     $.fn.abpAjaxForm = function (userOptions) {
         var $form = $(this);
-        userOptions = userOptions || {};
+        userOptions = $.extend({
+            formSubmitting: {
+                disableSubmitButtonBusy: false,
+                disableOtherButtonsBusy: false,
+                $excludedBusyButtons: {} /*Prevents busy or disabled effect on these buttons. Must be jQuery instances*/
+            }
+        }, userOptions || {});
 
         var options = $.extend({}, $.fn.abpAjaxForm.defaults, userOptions);
 
@@ -18,8 +24,19 @@
                 return false;
             }
 
-            $form.find("button[type='submit']").buttonBusy(true);
-            //TODO: Disable other buttons..?
+            if (!userOptions.formSubmitting.disableSubmitButtonBusy) {
+                var submitButtons = $form.find("button[type=submit]").not(userOptions.formSubmitting.$excludedBusyButtons);
+                if (submitButtons.length === 1) {
+                    submitButtons.buttonBusy(true);
+                } else if (submitButtons.length > 1) {
+                    $(document.activeElement).buttonBusy(true);
+                }
+            }
+
+            if (!userOptions.formSubmitting.disableOtherButtonsBusy) {
+                var otherButtons = $form.find("button[type!=submit]").not(userOptions.formSubmitting.$excludedBusyButtons);
+                otherButtons.prop('disabled', true);
+            }
 
             return true;
         };
