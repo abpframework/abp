@@ -26,6 +26,23 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tooltip
             output.Attributes.Add("title", GetTitle());
         }
 
+        protected virtual string GetTitle()
+        {
+            switch (GetDirectory())
+            {
+                case TooltipDirectory.Top:
+                    return TagHelper.AbpTooltipTop;
+                case TooltipDirectory.Right:
+                    return TagHelper.AbpTooltipRight;
+                case TooltipDirectory.Bottom:
+                    return TagHelper.AbpTooltipBottom;
+                case TooltipDirectory.Left:
+                    return TagHelper.AbpTooltipLeft;
+                default:
+                    return TagHelper.AbpTooltip;
+            }
+        }
+
         protected virtual TooltipDirectory GetDirectory()
         {
             if (!string.IsNullOrWhiteSpace(TagHelper.AbpTooltipTop))
@@ -46,28 +63,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tooltip
             }
 
             return TooltipDirectory.Bottom;
-        }
-
-        protected virtual string GetTitle()
-        {
-            if (!string.IsNullOrWhiteSpace(TagHelper.AbpTooltipTop))
-            {
-                return TagHelper.AbpTooltipTop;
-            }
-            if (!string.IsNullOrWhiteSpace(TagHelper.AbpTooltipRight))
-            {
-                return TagHelper.AbpTooltipRight;
-            }
-            if (!string.IsNullOrWhiteSpace(TagHelper.AbpTooltipBottom))
-            {
-                return TagHelper.AbpTooltipBottom;
-            }
-            if (!string.IsNullOrWhiteSpace(TagHelper.AbpTooltipLeft))
-            {
-                return TagHelper.AbpTooltipLeft;
-            }
-
-            return TagHelper.AbpTooltip;
         }
     }
 }
