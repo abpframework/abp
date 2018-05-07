@@ -1,0 +1,32 @@
+﻿@page
+@model Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components.BreadcrumbsModel
+@{
+    ViewData["Title"] = "Breadcrumbs";
+}
+
+<h2>Breadcrumbs</h2>
+
+<p>Based on <a href="https://getbootstrap.com/docs/4.1/components/breadcrumbs/" target="_blank"> Bootstrap Breadcrumb</a>.</p>
+
+<h4># Breadcrumb Examples</h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+
+        <abp-breadcrumb>
+            <abp-breadcrumb-item href="#" title="Home"/>
+            <abp-breadcrumb-item href="#" title="Library"/>
+            <abp-breadcrumb-item title="Page"/>
+        </abp-breadcrumb>
+
+    </div>
+    <div class="code-area">
+        <pre>
+&lt;abp-breadcrumb&gt;
+   &lt;abp-breadcrumb-item href=&quot;#&quot; title=&quot;Home&quot;/&gt;
+   &lt;abp-breadcrumb-item href=&quot;#&quot; title=&quot;Library&quot;/&gt;
+   &lt;abp-breadcrumb-item title=&quot;Page&quot;/&gt;
+&lt;/abp-breadcrumb&gt;
+</pre>
+    </div>
+</div>
