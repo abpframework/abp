@@ -19,16 +19,38 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
         {
             output.TagName = "div";
             output.Attributes.AddClass("modal-footer");
-            output.Content.SetHtmlContent(CreateContent());
+
+            if (TagHelper.Buttons != AbpModalButtons.None)
+            {
+                output.PostContent.SetHtmlContent(CreateContent());
+            }
         }
 
         protected virtual string CreateContent()
         {
             var sb = new StringBuilder();
 
-            sb.AppendLine("<button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">" + _localizer["Close"] + "</button>");
-            sb.AppendLine("<button type=\"submit\" class=\"btn btn-primary\" data-busy-text=\"" + _localizer["SavingWithThreeDot"] + "\"><i class=\"fa fa-check\"></i> <span>" + _localizer["Save"] + "</span></button>");
-
+            switch (TagHelper.Buttons)
+            {
+                case AbpModalButtons.Cancel:
+                    sb.AppendLine("<button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">" + _localizer["Cancel"] + "</button>");
+                    break;
+                case AbpModalButtons.Close:
+                    sb.AppendLine("<button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">" + _localizer["Close"] + "</button>");
+                    break;
+                case AbpModalButtons.Save:
+                    sb.AppendLine("<button type=\"submit\" class=\"btn btn-primary\" data-busy-text=\"" + _localizer["SavingWithThreeDot"] + "\"><i class=\"fa fa-check\"></i> <span>" + _localizer["Save"] + "</span></button>");
+                    break;
+                case AbpModalButtons.Save | AbpModalButtons.Cancel:
+                    sb.AppendLine("<button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">" + _localizer["Cancel"] + "</button>");
+                    sb.AppendLine("<button type=\"submit\" class=\"btn btn-primary\" data-busy-text=\"" + _localizer["SavingWithThreeDot"] + "\"><i class=\"fa fa-check\"></i> <span>" + _localizer["Save"] + "</span></button>");
+                    break;
+                case AbpModalButtons.Save | AbpModalButtons.Close:
+                    sb.AppendLine("<button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">" + _localizer["Close"] + "</button>");
+                    sb.AppendLine("<button type=\"submit\" class=\"btn btn-primary\" data-busy-text=\"" + _localizer["SavingWithThreeDot"] + "\"><i class=\"fa fa-check\"></i> <span>" + _localizer["Save"] + "</span></button>");
+                    break;
+            }
+            
             return sb.ToString();
         }
     }

@@ -1,0 +1,41 @@
+﻿@page
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@model Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components.ModalsModel
+@{
+    ViewData["Title"] = "Modals";
+}
+
+<h2>Modals</h2>
+
+<p>Based on <a href="https://getbootstrap.com/docs/4.1/components/modals/" target="_blank"> Bootstrap Alert</a>.</p>
+
+<h4># Modal Example</h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+
+        <abp-modal>
+            
+            <abp-modal-header title="Header"></abp-modal-header>
+            
+            <abp-modal-body>
+                Body
+            </abp-modal-body>
+
+            <abp-modal-footer buttons="@(AbpModalButtons.Save|AbpModalButtons.Close)"></abp-modal-footer>
+
+        </abp-modal>
+
+    </div>
+    <div class="code-area">
+        <pre>
+&lt;abp-modal&gt;
+   &lt;abp-modal-header title=&quot;Header&quot;&gt;&lt;/abp-modal-header&gt;
+   &lt;abp-modal-body&gt;
+       Body
+   &lt;/abp-modal-body&gt;
+   &lt;abp-modal-footer buttons=&quot;(AbpModalButtons.Save|AbpModalButtons.Close)&quot;&gt;&lt;/abp-modal-footer&gt;
+&lt;/abp-modal&gt;
+</pre>
+    </div>
+</div>

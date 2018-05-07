@@ -2,6 +2,8 @@
 {
     public class AbpModalFooterTagHelper : AbpTagHelper<AbpModalFooterTagHelper, AbpModalFooterTagHelperService>
     {
+        public AbpModalButtons Buttons { get; set; }
+
         public AbpModalFooterTagHelper(AbpModalFooterTagHelperService tagHelperService)
             : base(tagHelperService)
         {
