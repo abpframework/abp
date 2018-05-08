@@ -1,0 +1,73 @@
+﻿@page
+@model Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components.ProgressBarsModel
+@{
+    ViewData["Title"] = "Progress Bars";
+}
+
+<h2>Progress Bars</h2>
+
+<p>Based on <a href="https://getbootstrap.com/docs/4.1/components/progress/" target="_blank"> Bootstrap Progress Bars</a>.</p>
+
+<h4># Progress Bar Examples</h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+
+        <abp-progress>
+            <abp-progress-bar value="70"/>
+            
+        </abp-progress>
+        <br />
+        <abp-progress>
+            <abp-progress-bar type="Warning" value="25">
+                %25
+            </abp-progress-bar>
+        </abp-progress>
+        <br />
+        <abp-progress>
+            <abp-progress-bar type="Success" value="40" strip="true">
+            </abp-progress-bar>
+        </abp-progress>
+        <br />
+        <abp-progress>
+            <abp-progress-bar type="Dark" value="10" min-value="5" max-value="15"  strip="true">
+                %50
+            </abp-progress-bar>
+        </abp-progress>
+        <br />
+        <abp-progress>
+            <abp-progress-bar type="Success" value="25">
+            </abp-progress-bar>
+            <abp-progress-bar type="Danger" value="10" strip="true">
+                %10
+            </abp-progress-bar>
+            <abp-progress-bar type="Primary" value="50" animation="true" strip="true">
+            </abp-progress-bar>
+        </abp-progress>
+    </div>
+    <div class="code-area">
+        <pre>
+&lt;abp-progress&gt;
+  &lt;abp-progress-bar value=&quot;70&quot;/&gt;
+&lt;/abp-progress&gt;
+
+&lt;abp-progress&gt;
+  &lt;abp-progress-bar type=&quot;Warning&quot; value=&quot;25&quot;&gt;%25&lt;/abp-progress-bar&gt;
+&lt;/abp-progress&gt;
+
+&lt;abp-progress&gt;
+  &lt;abp-progress-bar type=&quot;Success&quot; value=&quot;40&quot; strip=&quot;true&quot;/&gt;
+&lt;/abp-progress&gt;
+
+&lt;abp-progress&gt;
+  &lt;abp-progress-bar type=&quot;Dark&quot; value=&quot;10&quot; min-value=&quot;5&quot; max-value=&quot;15&quot;  strip=&quot;true&quot;&gt;%50&lt;/abp-progress-bar&gt;
+&lt;/abp-progress&gt;
+
+&lt;abp-progress&gt;
+  &lt;abp-progress-bar type=&quot;Success&quot; value=&quot;25&quot;/&gt;
+  &lt;abp-progress-bar type=&quot;Danger&quot; value=&quot;10&quot; strip=&quot;true&quot;&gt;%10&lt;/abp-progress-bar&gt;
+  &lt;abp-progress-bar type=&quot;Primary&quot; value=&quot;50&quot; animation=&quot;true&quot; strip=&quot;true&quot;/&gt;
+&lt;/abp-progress&gt;
+</pre>
+    </div>
+</div>
