@@ -1,20 +1,30 @@
 ﻿@using Localization.Resources.AbpUi
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.Abp.MultiTenancy
+@using Volo.Abp.UI.Navigation
 @using Volo.Abp.Users
 @inject ICurrentUser CurrentUser
 @inject ICurrentTenant CurrentTenant
 @inject IHtmlLocalizer<AbpUiResource> L
+@model ApplicationMenu
 @if (CurrentUser.IsAuthenticated)
 {
     <div class="dropdown d-inline">
         <a class="btn btn-link dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             @CurrentUser.UserName
         </a>
+        
+        @if (Model.Items.Any())
+        {
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                @foreach (var menuItem in Model.Items)
+                {
+                    <a class="dropdown-item" href="@menuItem.Url">@menuItem.DisplayName</a>
+                }
 
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-            <a class="dropdown-item" href="/Account/Logout">@L["Logout"]</a>
-        </div>
+                @*<a class="dropdown-item" href="/Account/Logout">@L["Logout"]</a>*@
+            </div>
+        }
     </div>
 }
 else
