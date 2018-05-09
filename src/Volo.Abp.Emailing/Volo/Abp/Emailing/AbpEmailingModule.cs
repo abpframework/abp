@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Modularity;
+using Volo.Abp.Settings;
 
 namespace Volo.Abp.Emailing
 {
@@ -7,6 +8,11 @@ namespace Volo.Abp.Emailing
     {
         public override void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<SettingOptions>(options =>
+            {
+                options.DefinitionProviders.Add<EmailSettingProvider>();
+            });
+
             services.AddAssemblyOf<AbpEmailingModule>();
         }
     }
