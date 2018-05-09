@@ -1,0 +1,134 @@
+﻿@page
+@model Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components.ListGroupsModel
+@{
+    ViewData["Title"] = "List Groups";
+}
+
+<h2>List Groups</h2>
+
+<p>Based on <a href="https://getbootstrap.com/docs/4.1/components/list-group/" target="_blank"> Bootstrap List Group</a>.</p>
+
+<h4># List Group Example</h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+
+        <abp-list-group>
+            <abp-list-group-item>Cras justo odio</abp-list-group-item>
+            <abp-list-group-item>Dapibus ac facilisis in</abp-list-group-item>
+            <abp-list-group-item>Morbi leo risus</abp-list-group-item>
+            <abp-list-group-item>Vestibulum at eros</abp-list-group-item>
+        </abp-list-group>
+
+    </div>
+    <div class="code-area">
+        <pre>
+&lt;abp-list-group&gt;
+    &lt;abp-list-group-item active=&quot;true&quot;&gt;Cras justo odio&lt;/abp-list-group-item&gt;
+    &lt;abp-list-group-item&gt;Dapibus ac facilisis in&lt;/abp-list-group-item&gt;
+    &lt;abp-list-group-item&gt;Morbi leo risus&lt;/abp-list-group-item&gt;
+    &lt;abp-list-group-item disabled=&quot;true&quot;&gt;Vestibulum at eros&lt;/abp-list-group-item&gt;
+&lt;/abp-list-group&gt;
+</pre>
+    </div>
+</div>
+
+<h4># List Group Flush Example</h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+
+        <abp-list-group flush="true">
+            <abp-list-group-item>Cras justo odio</abp-list-group-item>
+            <abp-list-group-item>Dapibus ac facilisis in</abp-list-group-item>
+            <abp-list-group-item>Morbi leo risus</abp-list-group-item>
+            <abp-list-group-item>Vestibulum at eros</abp-list-group-item>
+        </abp-list-group>
+
+    </div>
+    <div class="code-area">
+        <pre>
+&lt;abp-list-group flush=&quot;true&quot;&gt;
+    &lt;abp-list-group-item&gt;Cras justo odio&lt;/abp-list-group-item&gt;
+    &lt;abp-list-group-item&gt;Dapibus ac facilisis in&lt;/abp-list-group-item&gt;
+    &lt;abp-list-group-item&gt;Morbi leo risus&lt;/abp-list-group-item&gt;
+    &lt;abp-list-group-item&gt;Vestibulum at eros&lt;/abp-list-group-item&gt;
+&lt;/abp-list-group&gt;
+</pre>
+    </div>
+</div>
+
+<h4># List Group Link Example</h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+
+        <abp-list-group>
+            <abp-list-group-item href="#">Cras justo odio</abp-list-group-item>
+            <abp-list-group-item href="#">Dapibus ac facilisis in</abp-list-group-item>
+            <abp-list-group-item href="#">Morbi leo risus</abp-list-group-item>
+            <abp-list-group-item href="#">Vestibulum at eros</abp-list-group-item>
+        </abp-list-group>
+
+    </div>
+    <div class="code-area">
+        <pre>
+&lt;abp-list-group&gt;
+    &lt;abp-list-group-item href=&quot;#&quot;&gt;Cras justo odio&lt;/abp-list-group-item&gt;
+    &lt;abp-list-group-item href=&quot;#&quot;&gt;Dapibus ac facilisis in&lt;/abp-list-group-item&gt;
+    &lt;abp-list-group-item href=&quot;#&quot;&gt;Morbi leo risus&lt;/abp-list-group-item&gt;
+    &lt;abp-list-group-item href=&quot;#&quot;&gt;Vestibulum at eros&lt;/abp-list-group-item&gt;
+&lt;/abp-list-group&gt;
+</pre>
+    </div>
+</div>
+
+<h4># List Group Button Example</h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+
+        <abp-list-group>
+            <abp-list-group-item tag-type="Button">Cras justo odio</abp-list-group-item>
+            <abp-list-group-item tag-type="Button">Dapibus ac facilisis in</abp-list-group-item>
+            <abp-list-group-item tag-type="Button">Morbi leo risus</abp-list-group-item>
+            <abp-list-group-item tag-type="Button">Vestibulum at eros</abp-list-group-item>
+        </abp-list-group>
+
+    </div>
+    <div class="code-area">
+        <pre>
+&lt;abp-list-group flush=&quot;true&quot;&gt;
+    &lt;abp-list-group-item tag-type=&quot;Button&quot;&gt;Cras justo odio&lt;/abp-list-group-item&gt;
+    &lt;abp-list-group-item tag-type=&quot;Button&quot;&gt;Dapibus ac facilisis in&lt;/abp-list-group-item&gt;
+    &lt;abp-list-group-item tag-type=&quot;Button&quot;&gt;Morbi leo risus&lt;/abp-list-group-item&gt;
+    &lt;abp-list-group-item tag-type=&quot;Button&quot;&gt;Vestibulum at eros&lt;/abp-list-group-item&gt;
+&lt;/abp-list-group&gt;
+</pre>
+    </div>
+</div>
+
+<h4># List Group style Contextual classes Example</h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+
+        <abp-list-group>
+            <abp-list-group-item type="Warning">Cras justo odio</abp-list-group-item>
+            <abp-list-group-item type="Danger">Dapibus ac facilisis in</abp-list-group-item>
+            <abp-list-group-item type="Success">Morbi leo risus <span abp-badge-pill="Success">42</span></abp-list-group-item>
+            <abp-list-group-item type="Secondary">Vestibulum at eros <span abp-badge-pill="Warning">5</span></abp-list-group-item>
+        </abp-list-group>
+
+    </div>
+    <div class="code-area">
+        <pre>
+&lt;abp-list-group flush=&quot;true&quot;&gt;
+    &lt;abp-list-group-item type=&quot;Warning&quot;&gt;Cras justo odio&lt;/abp-list-group-item&gt;
+    &lt;abp-list-group-item type=&quot;Danger&quot;&gt;Dapibus ac facilisis in&lt;/abp-list-group-item&gt;
+    &lt;abp-list-group-item type=&quot;Success&quot;&gt;Morbi leo risus &lt;span abp-badge-pill=&quot;Success&quot;&gt;42&lt;/span&gt;&lt;/abp-list-group-item&gt;
+    &lt;abp-list-group-item type=&quot;Secondary&quot;&gt;Vestibulum at eros &lt;span abp-badge-pill=&quot;Warning&quot;&gt;5&lt;/span&gt;&lt;/abp-list-group-item&gt;
+&lt;/abp-list-group&gt;
+</pre>
+    </div>
+</div>
