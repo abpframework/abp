@@ -4,7 +4,7 @@ namespace Volo.Abp.UI.Navigation
 {
     public class MenuConfigurationContext : IMenuConfigurationContext
     {
-        public ApplicationMenu Menu { get; set; }
+        public ApplicationMenu Menu { get; }
 
         public IServiceProvider ServiceProvider { get; }
 
