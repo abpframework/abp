@@ -20,6 +20,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
         protected const string TabItems = "TabItems";
         protected const string AccordionItems = "AccordionItems";
         protected const string BreadcrumbItemsContent = "BreadcrumbItemsContent";
+        protected const string CarouselItemsContent = "CarouselItemsContent";
         protected const string TabItemsDataTogglePlaceHolder = "{{data_toggle}}";
         protected const string TabItemsVerticalPillPlaceHolder = "{{vertical_pill}}";
         protected const string TabItemNamePlaceHolder = "{{Tag_Name}}";
@@ -27,6 +28,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
         protected const string AbpTabItemActivePlaceholder = "{_Tab_Active_Placeholder_}";
         protected const string AbpTabItemShowActivePlaceholder = "{_Tab_Show_Active_Placeholder_}";
         protected const string AbpBreadcrumbItemActivePlaceholder = "{_Breadcrumb_Active_Placeholder_}";
+        protected const string AbpCarouselItemActivePlaceholder = "{_CarouselItem_Active_Placeholder_}";
         protected const string AbpTabItemSelectedPlaceholder = "{_Tab_Selected_Placeholder_}";
         protected const string AbpAccordionParentIdPlaceholder = "{_{{Parent_Accordion_Id}}_}";
 
