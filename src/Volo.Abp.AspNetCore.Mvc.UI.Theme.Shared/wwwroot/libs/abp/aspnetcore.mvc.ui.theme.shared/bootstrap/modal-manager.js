@@ -9,18 +9,18 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
 (function ($) {
 
     abp.modals = abp.modals || {};
-    
+
     abp.ModalManager = (function () {
 
-        var CallbackList = function() { //TODO: To a seperated file
+        var CallbackList = function () { //TODO: To a seperated file
             var _callbacks = [];
 
             return {
-                add: function(callback) {
+                add: function (callback) {
                     _callbacks.push(callback);
                 },
 
-                triggerAll: function(thisObj, argumentList) {
+                triggerAll: function (thisObj, argumentList) {
                     for (var i = 0; i < _callbacks.length; i++) {
                         _callbacks[i].apply(thisObj, argumentList);
                     }
@@ -71,14 +71,14 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
                     }
 
                     _$form.on('abp-ajax-success',
-                        function() {
+                        function () {
                             _publicApi.setResult.apply(_publicApi, arguments);
                             _$modal.modal('hide');
                         });
                 } else {
                     _$form = null;
                 }
-                
+
                 _$modal.modal({
                     backdrop: 'static'
                 });
@@ -95,11 +95,10 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
                 var modalClass = abp.modals[options.modalClass];
                 if (modalClass) {
                     _modalObject = new modalClass();
-                    if (_modalObject.init) {
-                        _modalObject.init(_publicApi, _args);
-                    }
+                    _modalObject.init && _modalObject.init(_publicApi, _args); //TODO: Remove later
+                    _modalObject.initModal && _modalObject.initModal(_publicApi, _args);
                 }
-                
+
                 _$modal.modal('show');
             };
 
@@ -115,7 +114,7 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
                         };
 
                         if (options.scriptUrl) {
-                            abp.ResourceLoader.loadScript(options.scriptUrl, function() {
+                            abp.ResourceLoader.loadScript(options.scriptUrl, function () {
                                 _initAndShowModal();
                             });
                         } else {
@@ -124,7 +123,7 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
                     });
             };
 
-            var _close = function() {
+            var _close = function () {
                 if (!_$modal) {
                     return;
                 }
@@ -144,7 +143,7 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
 
                 open: _open,
 
-                reopen: function() {
+                reopen: function () {
                     _open(_args);
                 },
 
@@ -166,7 +165,7 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
                     return _args;
                 },
 
-                getOptions: function() {
+                getOptions: function () {
                     return _options;
                 },
 
