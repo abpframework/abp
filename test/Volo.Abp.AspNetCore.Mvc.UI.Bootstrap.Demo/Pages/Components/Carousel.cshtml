@@ -1,0 +1,51 @@
+﻿@page
+@model Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components.CarouselsModel
+@{
+    ViewData["Title"] = "Carousels";
+}
+
+<h2>Carousels</h2>
+
+<p>Based on <a href="https://getbootstrap.com/docs/4.1/content/images/" target="_blank"> Bootstrap Carousel</a>.</p>
+
+<h4># Carousel Examples</h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+        <abp-carousel>
+            <abp-carousel-item src="data:image/svg+xml;charset=UTF-8,%3Csvg width%3D&quot;800&quot; height%3D&quot;400&quot; xmlns%3D&quot;http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg&quot; viewBox%3D&quot;0 0 800 400&quot; preserveAspectRatio%3D&quot;none&quot;%3E%3Cdefs%3E%3Cstyle type%3D&quot;text%2Fcss&quot;%3E%23holder_16343cfb712 text %7B fill%3A%23444%3Bfont-weight%3Anormal%3Bfont-family%3AHelvetica%2C monospace%3Bfont-size%3A40pt %7D %3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg id%3D&quot;holder_16343cfb712&quot;%3E%3Crect width%3D&quot;800&quot; height%3D&quot;400&quot; fill%3D&quot;%23666&quot;%3E%3C%2Frect%3E%3Cg%3E%3Ctext x%3D&quot;247.2916717529297&quot; y%3D&quot;218.3&quot;%3EFirst slide%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E" alt="Carousel Item 1" caption="Caption" caption-title="title"></abp-carousel-item>
+            <abp-carousel-item src="data:image/svg+xml;charset=UTF-8,%3Csvg width%3D&quot;800&quot; height%3D&quot;400&quot; xmlns%3D&quot;http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg&quot; viewBox%3D&quot;0 0 800 400&quot; preserveAspectRatio%3D&quot;none&quot;%3E%3Cdefs%3E%3Cstyle type%3D&quot;text%2Fcss&quot;%3E%23holder_16343cfb712 text %7B fill%3A%23444%3Bfont-weight%3Anormal%3Bfont-family%3AHelvetica%2C monospace%3Bfont-size%3A40pt %7D %3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg id%3D&quot;holder_16343cfb712&quot;%3E%3Crect width%3D&quot;800&quot; height%3D&quot;400&quot; fill%3D&quot;%23666&quot;%3E%3C%2Frect%3E%3Cg%3E%3Ctext x%3D&quot;247.2916717529297&quot; y%3D&quot;218.3&quot;%3ESecond slide%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E" alt="Carousel Item 2" caption="Caption2" caption-title="title2"></abp-carousel-item>
+            <abp-carousel-item src="data:image/svg+xml;charset=UTF-8,%3Csvg width%3D&quot;800&quot; height%3D&quot;400&quot; xmlns%3D&quot;http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg&quot; viewBox%3D&quot;0 0 800 400&quot; preserveAspectRatio%3D&quot;none&quot;%3E%3Cdefs%3E%3Cstyle type%3D&quot;text%2Fcss&quot;%3E%23holder_16343cfb714 text %7B fill%3A%23333%3Bfont-weight%3Anormal%3Bfont-family%3AHelvetica%2C monospace%3Bfont-size%3A40pt %7D %3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg id%3D&quot;holder_16343cfb714&quot;%3E%3Crect width%3D&quot;800&quot; height%3D&quot;400&quot; fill%3D&quot;%23555&quot;%3E%3C%2Frect%3E%3Cg%3E%3Ctext x%3D&quot;276.9749984741211&quot; y%3D&quot;218.3&quot;%3EThird slide%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E" alt="Carousel Item 3" caption="Caption3" caption-title="title3"></abp-carousel-item>
+        </abp-carousel>
+    </div>
+    <div class="code-area">
+        <pre>
+&lt;abp-carousel&gt;
+   &lt;abp-carousel-item src=&quot;...&quot;  alt=&quot;Carousel Item 1&quot; caption=&quot;Caption&quot; caption-title=&quot;title&quot;&gt;&lt;/abp-carousel-item&gt;
+   &lt;abp-carousel-item src=&quot;...&quot; alt=&quot;Carousel Item 2&quot; caption=&quot;Caption2&quot; caption-title=&quot;title2&quot;&gt;&lt;/abp-carousel-item&gt;
+   &lt;abp-carousel-item src=&quot;...&quot; alt=&quot;Carousel Item 3&quot; caption=&quot;Caption3&quot; caption-title=&quot;title3&quot;&gt;&lt;/abp-carousel-item&gt;
+&lt;/abp-carousel&gt;
+</pre>
+    </div>
+</div>
+
+<h4># Carousel Examples</h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+        <abp-carousel controls="true" indicators="false" crossfade="true">
+            <abp-carousel-item src="data:image/svg+xml;charset=UTF-8,%3Csvg width%3D&quot;800&quot; height%3D&quot;400&quot; xmlns%3D&quot;http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg&quot; viewBox%3D&quot;0 0 800 400&quot; preserveAspectRatio%3D&quot;none&quot;%3E%3Cdefs%3E%3Cstyle type%3D&quot;text%2Fcss&quot;%3E%23holder_16343cfb712 text %7B fill%3A%23444%3Bfont-weight%3Anormal%3Bfont-family%3AHelvetica%2C monospace%3Bfont-size%3A40pt %7D %3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg id%3D&quot;holder_16343cfb712&quot;%3E%3Crect width%3D&quot;800&quot; height%3D&quot;400&quot; fill%3D&quot;%23666&quot;%3E%3C%2Frect%3E%3Cg%3E%3Ctext x%3D&quot;247.2916717529297&quot; y%3D&quot;218.3&quot;%3EFirst slide%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E" alt="Carousel Item 1"></abp-carousel-item>
+            <abp-carousel-item src="data:image/svg+xml;charset=UTF-8,%3Csvg width%3D&quot;800&quot; height%3D&quot;400&quot; xmlns%3D&quot;http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg&quot; viewBox%3D&quot;0 0 800 400&quot; preserveAspectRatio%3D&quot;none&quot;%3E%3Cdefs%3E%3Cstyle type%3D&quot;text%2Fcss&quot;%3E%23holder_16343cfb712 text %7B fill%3A%23444%3Bfont-weight%3Anormal%3Bfont-family%3AHelvetica%2C monospace%3Bfont-size%3A40pt %7D %3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg id%3D&quot;holder_16343cfb712&quot;%3E%3Crect width%3D&quot;800&quot; height%3D&quot;400&quot; fill%3D&quot;%23666&quot;%3E%3C%2Frect%3E%3Cg%3E%3Ctext x%3D&quot;247.2916717529297&quot; y%3D&quot;218.3&quot;%3ESecond slide%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E" alt="Carousel Item 2" caption="Caption2" caption-title="title2"></abp-carousel-item>
+            <abp-carousel-item src="data:image/svg+xml;charset=UTF-8,%3Csvg width%3D&quot;800&quot; height%3D&quot;400&quot; xmlns%3D&quot;http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg&quot; viewBox%3D&quot;0 0 800 400&quot; preserveAspectRatio%3D&quot;none&quot;%3E%3Cdefs%3E%3Cstyle type%3D&quot;text%2Fcss&quot;%3E%23holder_16343cfb714 text %7B fill%3A%23333%3Bfont-weight%3Anormal%3Bfont-family%3AHelvetica%2C monospace%3Bfont-size%3A40pt %7D %3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg id%3D&quot;holder_16343cfb714&quot;%3E%3Crect width%3D&quot;800&quot; height%3D&quot;400&quot; fill%3D&quot;%23555&quot;%3E%3C%2Frect%3E%3Cg%3E%3Ctext x%3D&quot;276.9749984741211&quot; y%3D&quot;218.3&quot;%3EThird slide%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E" alt="Carousel Item 3"></abp-carousel-item>
+        </abp-carousel>
+    </div>
+    <div class="code-area">
+        <pre>
+&lt;abp-carousel controls=&quot;true&quot; indicators=&quot;false&quot; crossfade=&quot;true&quot;&gt;
+   &lt;abp-carousel-item src=&quot;...&quot;  alt=&quot;Carousel Item 1&quot;&gt;&lt;/abp-carousel-item&gt;
+   &lt;abp-carousel-item src=&quot;...&quot; alt=&quot;Carousel Item 2&quot; caption=&quot;Caption2&quot; caption-title=&quot;title2&quot;&gt;&lt;/abp-carousel-item&gt;
+   &lt;abp-carousel-item src=&quot;...&quot; alt=&quot;Carousel Item 3&quot;&gt;&lt;/abp-carousel-item&gt;
+&lt;/abp-carousel&gt;
+</pre>
+    </div>
+</div>

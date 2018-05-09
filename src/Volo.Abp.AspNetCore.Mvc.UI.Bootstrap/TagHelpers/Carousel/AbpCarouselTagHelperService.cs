@@ -51,6 +51,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Carousel
 
         protected virtual void SetControls(TagHelperContext context, TagHelperOutput output, List<CarouselItem> itemList)
         {
+            if (!TagHelper.Controls ?? false)
+            {
+                return;
+            }
+
             var html = new StringBuilder("");
 
             html.AppendLine("<a class=\"carousel-control-prev\" href=\"#" + TagHelper.Id + "\" role=\"button\" data-slide=\"prev\">");
@@ -67,7 +72,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Carousel
 
         protected virtual void SetIndicators(TagHelperContext context, TagHelperOutput output, List<CarouselItem> itemList)
         {
-            if (TagHelper.Indicators??false)
+            if (!TagHelper.Indicators??false)
             {
                 return;
             }
