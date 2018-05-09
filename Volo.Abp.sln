@@ -184,6 +184,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AspNetCore.Mvc.UI.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Tests", "test\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Tests\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Tests.csproj", "{869F7453-7DDC-4915-B92C-7861466AB68B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Emailing", "src\Volo.Abp.Emailing\Volo.Abp.Emailing.csproj", "{8B1CB44B-BA40-4C78-9447-A7864126D7C3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -514,6 +516,10 @@ Global
 		{869F7453-7DDC-4915-B92C-7861466AB68B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{869F7453-7DDC-4915-B92C-7861466AB68B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{869F7453-7DDC-4915-B92C-7861466AB68B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B1CB44B-BA40-4C78-9447-A7864126D7C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B1CB44B-BA40-4C78-9447-A7864126D7C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B1CB44B-BA40-4C78-9447-A7864126D7C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B1CB44B-BA40-4C78-9447-A7864126D7C3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -602,6 +608,7 @@ Global
 		{7E0517E0-AE09-4E10-8469-308F065F2F43} = {447C8A77-E5F0-4538-8687-7383196D04EA}
 		{57E29185-6DAF-4A41-8CE0-3F07EE3E289A} = {447C8A77-E5F0-4538-8687-7383196D04EA}
 		{869F7453-7DDC-4915-B92C-7861466AB68B} = {447C8A77-E5F0-4538-8687-7383196D04EA}
+		{8B1CB44B-BA40-4C78-9447-A7864126D7C3} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB97ECF4-9A84-433F-A80B-2A3285BDD1D5}
