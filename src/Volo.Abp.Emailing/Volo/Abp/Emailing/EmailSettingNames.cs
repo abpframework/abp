@@ -8,12 +8,12 @@
         /// <summary>
         /// Abp.Net.Mail.DefaultFromAddress
         /// </summary>
-        public const string DefaultFromAddress = "Abp.Net.Mail.DefaultFromAddress";
+        public const string DefaultFromAddress = "Abp.Mailing.DefaultFromAddress";
 
         /// <summary>
         /// Abp.Net.Mail.DefaultFromDisplayName
         /// </summary>
-        public const string DefaultFromDisplayName = "Abp.Net.Mail.DefaultFromDisplayName";
+        public const string DefaultFromDisplayName = "Abp.Mailing.DefaultFromDisplayName";
 
         /// <summary>
         /// SMTP related email settings.
@@ -23,37 +23,37 @@
             /// <summary>
             /// Abp.Net.Mail.Smtp.Host
             /// </summary>
-            public const string Host = "Abp.Net.Mail.Smtp.Host";
+            public const string Host = "Abp.Mailing.Smtp.Host";
 
             /// <summary>
             /// Abp.Net.Mail.Smtp.Port
             /// </summary>
-            public const string Port = "Abp.Net.Mail.Smtp.Port";
+            public const string Port = "Abp.Mailing.Smtp.Port";
 
             /// <summary>
             /// Abp.Net.Mail.Smtp.UserName
             /// </summary>
-            public const string UserName = "Abp.Net.Mail.Smtp.UserName";
+            public const string UserName = "Abp.Mailing.Smtp.UserName";
 
             /// <summary>
             /// Abp.Net.Mail.Smtp.Password
             /// </summary>
-            public const string Password = "Abp.Net.Mail.Smtp.Password";
+            public const string Password = "Abp.Mailing.Smtp.Password";
 
             /// <summary>
             /// Abp.Net.Mail.Smtp.Domain
             /// </summary>
-            public const string Domain = "Abp.Net.Mail.Smtp.Domain";
+            public const string Domain = "Abp.Mailing.Smtp.Domain";
 
             /// <summary>
             /// Abp.Net.Mail.Smtp.EnableSsl
             /// </summary>
-            public const string EnableSsl = "Abp.Net.Mail.Smtp.EnableSsl";
+            public const string EnableSsl = "Abp.Mailing.Smtp.EnableSsl";
 
             /// <summary>
             /// Abp.Net.Mail.Smtp.UseDefaultCredentials
             /// </summary>
-            public const string UseDefaultCredentials = "Abp.Net.Mail.Smtp.UseDefaultCredentials";
+            public const string UseDefaultCredentials = "Abp.Mailing.Smtp.UseDefaultCredentials";
         }
     }
 }
