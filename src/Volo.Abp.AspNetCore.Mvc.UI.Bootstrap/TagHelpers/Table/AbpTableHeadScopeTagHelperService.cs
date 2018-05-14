@@ -11,7 +11,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Table
 
         protected virtual void SetScope(TagHelperContext context, TagHelperOutput output)
         {
-            switch (TagHelper.Scpoe)
+            switch (TagHelper.Scope)
             {
                 case AbpThScope.Default:
                     return;
