@@ -16,7 +16,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Table
             SetBorderStyle(context, output);
             SetSmall(context, output);
             SetStripedRows(context, output);
-
         }
 
         protected virtual void SetResponsiveness(TagHelperContext context, TagHelperOutput output)
