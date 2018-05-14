@@ -1,0 +1,82 @@
+﻿@page
+@model Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components.TablesModel
+@{
+    ViewData["Title"] = "Tables";
+}
+
+<h2>Tables</h2>
+
+<p>Based on <a href="https://getbootstrap.com/docs/4.1/content/Tables/" target="_blank"> Bootstrap Tables</a>.</p>
+
+<h4># Tables Examples</h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+
+        <abp-table striped-rows="true" hoverable-rows="true" responsive-sm="true">
+            <thead theme="Dark">
+            <tr>
+                <th scope="Column">#</th>
+                <th scope="Column">First</th>
+                <th scope="Column">Last</th>
+                <th scope="Column">Handle</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <th scope="Row">1</th>
+                <td>Mark</td>
+                <td>Otto</td>
+                <td  abp-table-style="Danger">mdo</td>
+            </tr>
+            <tr abp-table-style="Warning">
+                <th scope="Row">2</th>
+                <td>Jacob</td>
+                <td>Thornton</td>
+                <td>fat</td>
+            </tr>
+            <tr>
+                <th scope="Row">3</th>
+                <td abp-table-style="Success">Larry</td>
+                <td>the Bird</td>
+                <td>twitter</td>
+            </tr>
+            </tbody>
+        </abp-table>
+
+    </div>
+    <div class="code-area">
+        <pre>
+        &lt;abp-table striped-rows=&quot;true&quot; small=&quot;true&quot; hoverable-rows=&quot;true&quot; responsive-sm=&quot;true&quot;&gt;
+            &lt;thead theme=&quot;Dark&quot;&gt;
+            &lt;tr&gt;
+                &lt;th scope=&quot;Column&quot;&gt;#&lt;/th&gt;
+                &lt;th scope=&quot;Column&quot;&gt;First&lt;/th&gt;
+                &lt;th scope=&quot;Column&quot;&gt;Last&lt;/th&gt;
+                &lt;th scope=&quot;Column&quot;&gt;Handle&lt;/th&gt;
+            &lt;/tr&gt;
+            &lt;/thead&gt;
+            &lt;tbody&gt;
+            &lt;tr&gt;
+                &lt;th scope=&quot;Row&quot;&gt;1&lt;/th&gt;
+                &lt;td&gt;Mark&lt;/td&gt;
+                &lt;td&gt;Otto&lt;/td&gt;
+                &lt;td  abp-table-style=&quot;Danger&quot;&gt;mdo&lt;/td&gt;
+            &lt;/tr&gt;
+            &lt;tr abp-table-style=&quot;Warning&quot;&gt;
+                &lt;th scope=&quot;Row&quot;&gt;2&lt;/th&gt;
+                &lt;td&gt;Jacob&lt;/td&gt;
+                &lt;td&gt;Thornton&lt;/td&gt;
+                &lt;td&gt;fat&lt;/td&gt;
+            &lt;/tr&gt;
+            &lt;tr&gt;
+                &lt;th scope=&quot;Row&quot;&gt;3&lt;/th&gt;
+                &lt;td abp-table-style=&quot;Success&quot;&gt;Larry&lt;/td&gt;
+                &lt;td&gt;the Bird&lt;/td&gt;
+                &lt;td&gt;twitter&lt;/td&gt;
+            &lt;/tr&gt;
+            &lt;/tbody&gt;
+        &lt;/abp-table&gt;
+</pre>
+    </div>
+</div>
