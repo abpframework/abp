@@ -21,16 +21,16 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
         protected const string AccordionItems = "AccordionItems";
         protected const string BreadcrumbItemsContent = "BreadcrumbItemsContent";
         protected const string CarouselItemsContent = "CarouselItemsContent";
-        protected const string TabItemsDataTogglePlaceHolder = "{{data_toggle}}";
-        protected const string TabItemsVerticalPillPlaceHolder = "{{vertical_pill}}";
-        protected const string TabItemNamePlaceHolder = "{{Tag_Name}}";
+        protected const string TabItemsDataTogglePlaceHolder = "{_data_toggle_Placeholder_}";
+        protected const string TabItemsVerticalPillPlaceHolder = "{_vertical_pill_Placeholder_}";
+        protected const string TabItemNamePlaceHolder = "{_Tab_Tag_Name_Placeholder_}";
         protected const string AbpFormContentPlaceHolder = "{_AbpFormContentPlaceHolder_}";
         protected const string AbpTabItemActivePlaceholder = "{_Tab_Active_Placeholder_}";
         protected const string AbpTabItemShowActivePlaceholder = "{_Tab_Show_Active_Placeholder_}";
         protected const string AbpBreadcrumbItemActivePlaceholder = "{_Breadcrumb_Active_Placeholder_}";
         protected const string AbpCarouselItemActivePlaceholder = "{_CarouselItem_Active_Placeholder_}";
         protected const string AbpTabItemSelectedPlaceholder = "{_Tab_Selected_Placeholder_}";
-        protected const string AbpAccordionParentIdPlaceholder = "{_{{Parent_Accordion_Id}}_}";
+        protected const string AbpAccordionParentIdPlaceholder = "{_Parent_Accordion_Id_}";
 
         public TTagHelper TagHelper { get; internal set; }
 
@@ -106,7 +106,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
         {
             if (!context.Items.ContainsKey(key))
             {
-                return default;
+                return default(T);
             }
             
             return (T)context.Items[key];
