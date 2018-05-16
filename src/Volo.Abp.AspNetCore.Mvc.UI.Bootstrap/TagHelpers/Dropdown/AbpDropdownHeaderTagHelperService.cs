@@ -11,6 +11,5 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Dropdown
             output.Attributes.AddClass("dropdown-header");
             output.TagMode = TagMode.StartTagAndEndTag;
         }
-        
     }
 }

@@ -11,6 +11,5 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid
             output.Attributes.AddClass("w-100");
             output.TagMode = TagMode.StartTagAndEndTag;
         }
-
     }
 }

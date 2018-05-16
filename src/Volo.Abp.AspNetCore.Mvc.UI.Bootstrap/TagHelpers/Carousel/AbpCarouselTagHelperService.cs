@@ -72,7 +72,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Carousel
 
         protected virtual void SetIndicators(TagHelperContext context, TagHelperOutput output, List<CarouselItem> itemList)
         {
-            if (!TagHelper.Indicators??false)
+            if (!TagHelper.Indicators ?? false)
             {
                 return;
             }
@@ -83,9 +83,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Carousel
             {
                 html.AppendLine(
                     "<li " +
-                    "data-target=\"#"+TagHelper.Id+"\"" +
-                    " data-slide-to=\""+i+"\"" +
-                    (itemList[i].Active?" class=\"active\">":"") +
+                    "data-target=\"#" + TagHelper.Id + "\"" +
+                    " data-slide-to=\"" + i + "\"" +
+                    (itemList[i].Active ? " class=\"active\">" : "") +
                     "</li>");
             }
 
@@ -95,7 +95,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Carousel
 
         protected virtual void SetOneItemAsActive(TagHelperContext context, TagHelperOutput output, List<CarouselItem> itemList)
         {
-            if (!itemList.Any(it=> it.Active) && itemList.Count > 0)
+            if (!itemList.Any(it => it.Active) && itemList.Count > 0)
             {
                 itemList.FirstOrDefault().Active = true;
             }
@@ -117,7 +117,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Carousel
 
         protected virtual void SetFadeAnimation(TagHelperContext context, TagHelperOutput output)
         {
-            if (TagHelper.Crossfade??false)
+            if (TagHelper.Crossfade ?? false)
             {
                 output.Attributes.AddClass("carousel-fade");
             }

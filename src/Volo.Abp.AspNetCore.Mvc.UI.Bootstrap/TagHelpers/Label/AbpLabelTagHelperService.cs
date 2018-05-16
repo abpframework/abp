@@ -8,6 +8,5 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Label
         {
             //TODO: fill
         }
-        
     }
 }

@@ -5,7 +5,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Image
 {
     public class AbpImageTagHelperService : AbpTagHelperService<AbpImageTagHelper>
     {
-
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             output.TagName = "img";
@@ -65,6 +64,5 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Image
         {
             output.Attributes.Add("alt",TagHelper.Alt);
         }
-
     }
 }

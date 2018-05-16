@@ -11,6 +11,5 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Dropdown
             output.Attributes.AddClass("dropdown-divider");
             output.TagMode = TagMode.StartTagAndEndTag;
         }
-        
     }
 }

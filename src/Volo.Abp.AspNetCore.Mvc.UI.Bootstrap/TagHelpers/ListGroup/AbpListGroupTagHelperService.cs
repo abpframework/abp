@@ -15,6 +15,5 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.ListGroup
                 output.Attributes.AddClass("list-group-flush");
             }
         }
-
     }
 }
