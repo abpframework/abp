@@ -47,6 +47,5 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Alert
 
             output.PostContent.SetHtmlContent(buttonAsHtml);
         }
-
     }
 }

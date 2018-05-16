@@ -10,7 +10,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Alert
     [HtmlTargetElement("h6", ParentTag = "abp-alert", TagStructure = TagStructure.NormalOrSelfClosing)]
     public class AbpAlertHeaderTagHelper : AbpTagHelper<AbpAlertHeaderTagHelper, AbpAlertHeaderTagHelperService>
     {
-
         public AbpAlertHeaderTagHelper(AbpAlertHeaderTagHelperService tagHelperService)
             : base(tagHelperService)
         {

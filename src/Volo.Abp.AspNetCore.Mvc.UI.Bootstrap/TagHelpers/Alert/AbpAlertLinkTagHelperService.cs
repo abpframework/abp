@@ -9,6 +9,5 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Alert
         {
             output.Attributes.AddClass("alert-link");
         }
-        
     }
 }
