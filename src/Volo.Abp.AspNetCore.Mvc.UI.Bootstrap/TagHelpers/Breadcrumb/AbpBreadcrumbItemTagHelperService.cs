@@ -23,8 +23,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Breadcrumb
             var list = GetValueFromContext<List<BreadcrumbItem>>(context, BreadcrumbItemsContent);
 
             output.Content.SetHtmlContent(GetInnerHtml(context, output));
-
-
+            
             list.Add(new BreadcrumbItem
             {
                 Html = RenderTagHelperOutput(output, _encoder),

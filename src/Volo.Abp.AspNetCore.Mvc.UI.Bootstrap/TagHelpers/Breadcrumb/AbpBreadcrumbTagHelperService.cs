@@ -26,12 +26,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Breadcrumb
 
         protected virtual void SetInnerList(TagHelperContext context, TagHelperOutput output, List<BreadcrumbItem> list)
         {
-            var anyActiveItem = list.Any(bc => bc.Active);
-
-            if (!anyActiveItem && list.Count > 0)
-            {
-                list.Last().Active = true;
-            }
+            SetLastOneActiveIfThereIsNotAny(context, output, list);
 
             var html = new StringBuilder("");
 
@@ -50,6 +45,14 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Breadcrumb
             var items = new List<BreadcrumbItem>();
             context.Items[BreadcrumbItemsContent] = items;
             return items;
+        }
+
+        protected virtual void SetLastOneActiveIfThereIsNotAny(TagHelperContext context, TagHelperOutput output, List<BreadcrumbItem> list)
+        {
+            if (list.Count > 0 && list.Any(bc => bc.Active))
+            {
+                list.Last().Active = true;
+            }
         }
 
         protected virtual string SetActiveClassIfActiveAndGetHtml(BreadcrumbItem item)
