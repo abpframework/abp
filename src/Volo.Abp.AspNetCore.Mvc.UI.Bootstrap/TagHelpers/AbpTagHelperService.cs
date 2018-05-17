@@ -16,7 +16,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
         where TTagHelper : TagHelper
     {
         protected const string FormGroupContents = "FormGroupContents";
-        protected const string DropdownButtonsAsHtml = "DropdownButtonsAsHtmlContent";
         protected const string TabItems = "TabItems";
         protected const string AccordionItems = "AccordionItems";
         protected const string BreadcrumbItemsContent = "BreadcrumbItemsContent";
