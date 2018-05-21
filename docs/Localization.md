@@ -4,13 +4,13 @@ ABP's localization system is seamlessly integrated to the `Microsoft.Extensions.
 
 ### Volo.Abp.Localization Package
 
+> This package is already installed by default with the startup template. So, most of the time, you don't need to install it manually.
+
 Volo.Abp.Localization is the core package of the localization system. Install it to your project using the package manager console (PMC):
 
 ```
 Install-Package Volo.Abp.Localization
 ```
-
-> This package is already installed by default with the startup template. So, most of the time, you don't need to install it manually.
 
 Then you can add **AbpLocalizationModule** dependency to your module:
 
