@@ -14,5 +14,9 @@
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.AspNetCore.Mvc.UI\Volo.Abp.AspNetCore.Mvc.UI.csproj" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <Folder Include="TagHelpers\Navbar\" />
+  </ItemGroup>
 
 </Project>

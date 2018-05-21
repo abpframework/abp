@@ -4,8 +4,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
-using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Breadcrumb;
-using Volo.Abp.Threading;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Nav
 {
