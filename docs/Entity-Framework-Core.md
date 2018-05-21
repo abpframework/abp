@@ -1,10 +1,10 @@
 ## Entity Framework Core Integration
 
-This document explains how to integrate EF Core as ORM provider to ABP based applications and how to configure it in details.
+This document explains how to integrate EF Core as an ORM provider to ABP based applications and how to configure it.
 
 ### Installation
 
-`Volo.Abp.EntityFrameworkCore` is the main nuget package for EF Core integration. Install it to your project (for a layered application, to your data/infrastructure layer):
+`Volo.Abp.EntityFrameworkCore` is the main nuget package for the EF Core integration. Install it to your project (for a layered application, to your data/infrastructure layer):
 
 ````
 Install-Package Volo.Abp.EntityFrameworkCore
@@ -92,17 +92,11 @@ services.AddAbpDbContext<MyDbContext>(options =>
 });
 ````
 
-Then you can inject and use `IRepository<TEntity>` or `IQueryableRepository<TEntity>` in your services (see repository documentation - TODO).
-
-TODO: Example
+Then you can inject and use `IRepository<TEntity>` or `IQueryableRepository<TEntity>` in your services.
 
 #### Add Custom Repositories
 
 TODO...
-
-### Best Practices
-
-See [best practices](Best-Practices/) for EF Core integration.
 
 #### Set Base DbContext Class or Interface for Default Repositories
 
