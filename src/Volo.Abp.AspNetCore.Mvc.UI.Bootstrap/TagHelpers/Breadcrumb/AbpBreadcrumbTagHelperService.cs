@@ -49,7 +49,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Breadcrumb
 
         protected virtual void SetLastOneActiveIfThereIsNotAny(TagHelperContext context, TagHelperOutput output, List<BreadcrumbItem> list)
         {
-            if (list.Count > 0 && list.Any(bc => bc.Active))
+            if (list.Count > 0 && !list.Any(bc => bc.Active))
             {
                 list.Last().Active = true;
             }
