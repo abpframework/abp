@@ -10,6 +10,5 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Figure
             output.TagName = "figcaption";
             output.Attributes.AddClass("figure-caption");
         }
-        
     }
 }

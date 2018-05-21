@@ -10,6 +10,5 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Figure
             output.TagName = "figure";
             output.Attributes.AddClass("figure");
         }
-        
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Blockquote
 {
-    [HtmlTargetElement("p", ParentTag = "blockquote")]
+    [HtmlTargetElement("p", ParentTag = "abp-blockquote")]
     public class AbpBlockquoteParagraphTagHelper : AbpTagHelper<AbpBlockquoteParagraphTagHelper, AbpBlockquoteParagraphTagHelperService>
     {
         public AbpBlockquoteParagraphTagHelper(AbpBlockquoteParagraphTagHelperService tagHelperService)

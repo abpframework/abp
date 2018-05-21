@@ -6,14 +6,12 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Alert
 {
     public class AbpAlertTagHelperService : AbpTagHelperService<AbpAlertTagHelper>
     {
-
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             output.TagName = "div";
             output.TagMode = TagMode.StartTagAndEndTag;
 
             AddClasses(context, output);
-
             AddDismissButtonIfDismissible(context, output);
         }
 
@@ -45,10 +43,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Alert
             var buttonAsHtml =
                 "<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">" + Environment.NewLine +
                 "    <span aria-hidden=\"true\">&times;</span>" + Environment.NewLine +
-                "  </button>";
+                " </button>";
 
             output.PostContent.SetHtmlContent(buttonAsHtml);
         }
-
     }
 }

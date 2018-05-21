@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Microsoft.AspNetCore.Razor.TagHelpers;
+﻿using Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Badge
@@ -8,21 +7,33 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Badge
     {
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            var badgeType = TagHelper.BadgeType != AbpBadgeType._? TagHelper.BadgeType : TagHelper.BadgePillType;
+            SetBadgeClass(context, output);
+            SetBadgeStyle(context, output);
+        }
 
+        protected virtual void SetBadgeStyle(TagHelperContext context, TagHelperOutput output)
+        {
+            var badgeType = GetBadgeType(context, output);
+
+            if (badgeType != AbpBadgeType.Default && badgeType != AbpBadgeType._)
+            {
+                output.Attributes.AddClass("badge-" + badgeType.ToString().ToLowerInvariant());
+            }
+        }
+
+        protected virtual void SetBadgeClass(TagHelperContext context, TagHelperOutput output)
+        {
             output.Attributes.AddClass("badge");
 
             if (TagHelper.BadgePillType != AbpBadgeType._)
             {
                 output.Attributes.AddClass("badge-pill");
             }
-
-            if (badgeType != AbpBadgeType.Default && badgeType != AbpBadgeType._)
-            {
-                output.Attributes.AddClass("badge-" + badgeType.ToString().ToLowerInvariant());
-            }
-
         }
-        
+
+        protected virtual AbpBadgeType GetBadgeType(TagHelperContext context, TagHelperOutput output)
+        {
+            return TagHelper.BadgeType != AbpBadgeType._ ? TagHelper.BadgeType : TagHelper.BadgePillType;
+        }
     }
 }

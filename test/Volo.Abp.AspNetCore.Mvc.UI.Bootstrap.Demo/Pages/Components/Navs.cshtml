@@ -1,0 +1,34 @@
+﻿@page
+@model Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components.NavsModel
+@{
+    ViewData["Title"] = "Navs";
+}
+
+<h2>Navs</h2>
+
+<p>Based on <a href="https://getbootstrap.com/docs/4.1/components/navs/" target="_blank"> Bootstrap Navs</a>.</p>
+
+<h4># Navs Examples</h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+
+        <abp-nav  nav-style="Pill" responsive="true" align="Center">
+            <abp-nav-item href="#">Active</abp-nav-item>
+            <abp-nav-item href="#">Longer nav link</abp-nav-item>
+            <abp-nav-item href="#">Link</abp-nav-item>
+            <abp-nav-item href="#" disabled="true">Disabled</abp-nav-item>
+        </abp-nav>
+
+    </div>
+    <div class="code-area">
+        <pre>
+&lt;abp-nav  nav-style=&quot;Pill&quot; responsive=&quot;true&quot; align=&quot;Center&quot;&gt;
+     &lt;abp-nav-item href=&quot;#&quot;&gt;Active&lt;/abp-nav-item&gt;
+     &lt;abp-nav-item href=&quot;#&quot;&gt;Longer nav link&lt;/abp-nav-item&gt;
+     &lt;abp-nav-item href=&quot;#&quot;&gt;Link&lt;/abp-nav-item&gt;
+     &lt;abp-nav-item href=&quot;#&quot; disabled=&quot;true&quot;&gt;Disabled&lt;/abp-nav-item&gt;
+&lt;/abp-nav&gt;
+</pre>
+    </div>
+</div>

@@ -1,12 +1,10 @@
-﻿using System;
-using Microsoft.AspNetCore.Razor.TagHelpers;
+﻿using Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Image
 {
     public class AbpImageTagHelperService : AbpTagHelperService<AbpImageTagHelper>
     {
-
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             output.TagName = "img";
@@ -66,6 +64,5 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Image
         {
             output.Attributes.Add("alt",TagHelper.Alt);
         }
-
     }
 }

@@ -9,6 +9,5 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Figure
         {
             output.Attributes.AddClass("figure-img");
         }
-        
     }
 }

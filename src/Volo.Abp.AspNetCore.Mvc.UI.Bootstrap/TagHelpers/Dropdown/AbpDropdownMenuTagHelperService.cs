@@ -25,6 +25,5 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Dropdown
                     return;
             }
         }
-
     }
 }
