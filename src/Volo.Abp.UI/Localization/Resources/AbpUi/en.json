@@ -26,6 +26,7 @@
     "ProcessingWithThreeDot": "Processing...",
     "Login": "Login",
     "Register": "Register",
-    "Logout": "Log out"
+    "Logout": "Log out",
+    "Submit": "Submit"
   }
 }
