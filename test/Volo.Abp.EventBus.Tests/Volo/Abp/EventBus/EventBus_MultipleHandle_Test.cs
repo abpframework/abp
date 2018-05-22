@@ -16,18 +16,10 @@ namespace Volo.Abp.EventBus
             EventBus.Register<EntityChangedEventData<MyEntity>>(handler);
             EventBus.Register<EntityCreatedEventData<MyEntity>>(handler);
 
-            var asyncHandler = new MyAsyncEventHandler();
-
-            EventBus.Register<EntityChangedEventData<MyEntity>>(asyncHandler);
-            EventBus.Register<EntityCreatedEventData<MyEntity>>(asyncHandler);
-
             await EventBus.TriggerAsync(new EntityCreatedEventData<MyEntity>(new MyEntity()));
 
             handler.EntityCreatedEventCount.ShouldBe(1);
             handler.EntityChangedEventCount.ShouldBe(1);
-
-            asyncHandler.EntityCreatedEventCount.ShouldBe(1);
-            asyncHandler.EntityChangedEventCount.ShouldBe(1);
         }
 
         public class MyEntity : Entity
@@ -52,26 +44,6 @@ namespace Volo.Abp.EventBus
             {
                 EntityCreatedEventCount++;
                 return Task.CompletedTask;
-            }
-        }
-
-        public class MyAsyncEventHandler :
-            IAsyncEventHandler<EntityChangedEventData<MyEntity>>,
-            IAsyncEventHandler<EntityCreatedEventData<MyEntity>>
-        {
-            public int EntityChangedEventCount { get; set; }
-            public int EntityCreatedEventCount { get; set; }
-
-            public Task HandleEventAsync(EntityChangedEventData<MyEntity> eventData)
-            {
-                EntityChangedEventCount++;
-                return Task.FromResult(0);
-            }
-
-            public Task HandleEventAsync(EntityCreatedEventData<MyEntity> eventData)
-            {
-                EntityCreatedEventCount++;
-                return Task.FromResult(0);
             }
         }
     }

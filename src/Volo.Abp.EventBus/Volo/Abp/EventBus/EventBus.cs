@@ -66,7 +66,7 @@ namespace Volo.Abp.EventBus
         /// <inheritdoc/>
         public IDisposable Register<TEvent>(Func<TEvent, Task> action) where TEvent : class
         {
-            return Register(typeof(TEvent), new AsyncActionEventHandler<TEvent>(action));
+            return Register(typeof(TEvent), new ActionEventHandler<TEvent>(action));
         }
 
         /// <inheritdoc/>
@@ -121,7 +121,7 @@ namespace Volo.Abp.EventBus
                                 return false;
                             }
 
-                            var actionHandler = singleInstanceFactory.HandlerInstance as AsyncActionEventHandler<TEvent>;
+                            var actionHandler = singleInstanceFactory.HandlerInstance as ActionEventHandler<TEvent>;
                             if (actionHandler == null)
                             {
                                 return false;

@@ -15,7 +15,6 @@ namespace Volo.Abp.EventBus
             await EventBus.TriggerAsync(new MySimpleEventData(4));
 
             GetRequiredService<MySimpleEventDataHandler>().TotalData.ShouldBe(10);
-            GetRequiredService<MySimpleAsyncEventDataHandler>().TotalData.ShouldBe(10);
         }
     }
 }
