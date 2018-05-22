@@ -9,10 +9,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Nav
         {
             output.TagName = "nav";
             output.Attributes.AddClass("navbar");
-            output.Attributes.AddClass("bg-light");
-            output.Attributes.AddClass("navbar-light");
 
             SetSize(context,output);
+            SetStyle(context, output);
         }
 
         protected virtual void SetSize(TagHelperContext context, TagHelperOutput output)
@@ -20,6 +19,26 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Nav
             if (TagHelper.Size != AbpNavbarSize.Default)
             {
                 output.Attributes.AddClass("navbar-expand-" + TagHelper.Size.ToString().ToLowerInvariant());
+            }
+        }
+
+        protected virtual void SetStyle(TagHelperContext context, TagHelperOutput output)
+        {
+            if (TagHelper.NavbarStyle == AbpNavbarStyle.Default)
+            {
+                return;
+            }
+
+            var styleAsStringArray = TagHelper.NavbarStyle.ToString().ToLowerInvariant().Split('_');
+
+            if (styleAsStringArray.Length < 2)
+            {
+                output.Attributes.AddClass("navbar-" + styleAsStringArray[0]);
+            }
+            else
+            {
+                output.Attributes.AddClass("navbar-" + styleAsStringArray[0]);
+                output.Attributes.AddClass("bg-" + styleAsStringArray[1]);
             }
         }
     }
