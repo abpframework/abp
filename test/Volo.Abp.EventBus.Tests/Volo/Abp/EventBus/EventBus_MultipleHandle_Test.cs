@@ -9,7 +9,7 @@ namespace Volo.Abp.EventBus
     public class EventBus_EntityEvents_Test : EventBusTestBase
     {
         [Fact]
-        public void Should_Call_Created_And_Changed_Once()
+        public async Task Should_Call_Created_And_Changed_Once()
         {
             var handler = new MyEventHandler();
 
@@ -18,10 +18,10 @@ namespace Volo.Abp.EventBus
 
             var asyncHandler = new MyAsyncEventHandler();
 
-            EventBus.AsyncRegister<EntityChangedEventData<MyEntity>>(asyncHandler);
-            EventBus.AsyncRegister<EntityCreatedEventData<MyEntity>>(asyncHandler);
+            EventBus.Register<EntityChangedEventData<MyEntity>>(asyncHandler);
+            EventBus.Register<EntityCreatedEventData<MyEntity>>(asyncHandler);
 
-            EventBus.Trigger(new EntityCreatedEventData<MyEntity>(new MyEntity()));
+            await EventBus.TriggerAsync(new EntityCreatedEventData<MyEntity>(new MyEntity()));
 
             handler.EntityCreatedEventCount.ShouldBe(1);
             handler.EntityChangedEventCount.ShouldBe(1);
@@ -35,21 +35,23 @@ namespace Volo.Abp.EventBus
             
         }
 
-        public class MyEventHandler : 
-            IEventHandler<EntityChangedEventData<MyEntity>>,
-            IEventHandler<EntityCreatedEventData<MyEntity>>
+        public class MyEventHandler :
+            IAsyncEventHandler<EntityChangedEventData<MyEntity>>,
+            IAsyncEventHandler<EntityCreatedEventData<MyEntity>>
         {
             public int EntityChangedEventCount { get; set; }
             public int EntityCreatedEventCount { get; set; }
 
-            public void HandleEvent(EntityChangedEventData<MyEntity> eventData)
+            public Task HandleEventAsync(EntityChangedEventData<MyEntity> eventData)
             {
                 EntityChangedEventCount++;
+                return Task.CompletedTask;
             }
 
-            public void HandleEvent(EntityCreatedEventData<MyEntity> eventData)
+            public Task HandleEventAsync(EntityCreatedEventData<MyEntity> eventData)
             {
                 EntityCreatedEventCount++;
+                return Task.CompletedTask;
             }
         }
 

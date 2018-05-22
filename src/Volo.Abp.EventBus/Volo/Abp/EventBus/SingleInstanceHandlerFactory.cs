@@ -1,6 +1,3 @@
-using System;
-using Volo.Abp.DynamicProxy;
-
 namespace Volo.Abp.EventBus
 {
     /// <summary>
@@ -29,11 +26,6 @@ namespace Volo.Abp.EventBus
         public IEventHandlerDisposeWrapper GetHandler()
         {
             return new EventHandlerDisposeWrapper(HandlerInstance);
-        }
-
-        public Type GetHandlerType()
-        {
-            return ProxyHelper.UnProxy(HandlerInstance).GetType();
         }
     }
 }

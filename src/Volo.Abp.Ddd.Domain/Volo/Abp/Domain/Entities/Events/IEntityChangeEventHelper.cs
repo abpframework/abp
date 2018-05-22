@@ -7,26 +7,18 @@ namespace Volo.Abp.Domain.Entities.Events
     /// </summary>
     public interface IEntityChangeEventHelper
     {
-        void TriggerEvents(EntityChangeReport changeReport);
-
         Task TriggerEventsAsync(EntityChangeReport changeReport);
 
-        void TriggerEntityCreatingEvent(object entity);
+        Task TriggerEntityCreatingEventAsync(object entity);
+        Task TriggerEntityCreatedEventAsync(object entity);
+        Task TriggerEntityCreatedEventOnUowCompletedAsync(object entity);
 
-        void TriggerEntityCreatedEvent(object entity);
+        Task TriggerEntityUpdatingEventAsync(object entity);
+        Task TriggerEntityUpdatedEventAsync(object entity);
+        Task TriggerEntityUpdatedEventOnUowCompletedAsync(object entity);
 
-        void TriggerEntityCreatedEventOnUowCompleted(object entity);
-
-        void TriggerEntityUpdatingEvent(object entity);
-
-        void TriggerEntityUpdatedEvent(object entity);
-
-        void TriggerEntityUpdatedEventOnUowCompleted(object entity);
-
-        void TriggerEntityDeletingEvent(object entity);
-
-        void TriggerEntityDeletedEvent(object entity);
-        
-        void TriggerEntityDeletedEventOnUowCompleted(object entity);
+        Task TriggerEntityDeletingEventAsync(object entity);
+        Task TriggerEntityDeletedEventAsync(object entity);
+        Task TriggerEntityDeletedEventOnUowCompletedAsync(object entity);
     }
 }

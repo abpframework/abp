@@ -22,7 +22,7 @@ namespace Volo.Abp.Uow
 
             using (var uow = _unitOfWorkManager.Begin())
             {
-                uow.Completed += (sender, args) => completed = true;
+                uow.OnCompleted(async () => completed = true);
                 uow.Disposed += (sender, args) => disposed = true;
 
                 uow.Complete();
@@ -43,7 +43,7 @@ namespace Volo.Abp.Uow
             {
                 using (var childUow = _unitOfWorkManager.Begin())
                 {
-                    childUow.Completed += (sender, args) => completed = true;
+                    childUow.OnCompleted(async () => completed = true);
                     uow.Disposed += (sender, args) => disposed = true;
 
                     childUow.Complete();
@@ -73,7 +73,7 @@ namespace Volo.Abp.Uow
 
             using (var uow = _unitOfWorkManager.Begin())
             {
-                uow.Completed += (sender, args) => completed = true;
+                uow.OnCompleted(async () => completed = true);
                 uow.Failed += (sender, args) => failed = true;
                 uow.Disposed += (sender, args) => disposed = true;
             }
@@ -94,7 +94,7 @@ namespace Volo.Abp.Uow
             {
                 using (var uow = _unitOfWorkManager.Begin())
                 {
-                    uow.Completed += (sender, args) => completed = true;
+                    uow.OnCompleted(async () => completed = true);
                     uow.Failed += (sender, args) => failed = true;
                     uow.Disposed += (sender, args) => disposed = true;
 
@@ -118,7 +118,7 @@ namespace Volo.Abp.Uow
 
             using (var uow = _unitOfWorkManager.Begin())
             {
-                uow.Completed += (sender, args) => completed = true;
+                uow.OnCompleted(async () => completed = true);
                 uow.Failed += (sender, args) => { failed = true; args.IsRolledback.ShouldBeTrue(); };
                 uow.Disposed += (sender, args) => disposed = true;
 

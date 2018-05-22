@@ -1,5 +1,3 @@
-using System;
-
 namespace Volo.Abp.EventBus
 {
     /// <summary>
@@ -12,11 +10,5 @@ namespace Volo.Abp.EventBus
         /// </summary>
         /// <returns>The event handler</returns>
         IEventHandlerDisposeWrapper GetHandler();
-
-        /// <summary>
-        /// Gets type of the handler (without creating an instance).
-        /// </summary>
-        /// <returns></returns>
-        Type GetHandlerType();
     }
 }

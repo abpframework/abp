@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Shouldly;
 using Xunit;
 
@@ -7,21 +8,20 @@ namespace Volo.Abp.EventBus
     public class EventBus_Exception_Test : EventBusTestBase
     {
         [Fact]
-        public void Should_Throw_Single_Exception_If_Only_One_Of_Handlers_Fails()
+        public async Task Should_Throw_Single_Exception_If_Only_One_Of_Handlers_Fails()
         {
-            EventBus.Register<MySimpleEventData>(
-                eventData => throw new Exception("This exception is intentionally thrown!"));
+            EventBus.Register<MySimpleEventData>(eventData => throw new Exception("This exception is intentionally thrown!"));
 
-            var appException = Assert.Throws<Exception>(() =>
+            var appException = await Assert.ThrowsAsync<Exception>(async () =>
             {
-                EventBus.Trigger(new MySimpleEventData(1));
+                await EventBus.TriggerAsync(new MySimpleEventData(1));
             });
 
             appException.Message.ShouldBe("This exception is intentionally thrown!");
         }
 
         [Fact]
-        public void Should_Throw_Aggregate_Exception_If_More_Than_One_Of_Handlers_Fail()
+        public async Task Should_Throw_Aggregate_Exception_If_More_Than_One_Of_Handlers_Fail()
         {
             EventBus.Register<MySimpleEventData>(
                 eventData => throw new Exception("This exception is intentionally thrown #1!"));
@@ -29,9 +29,9 @@ namespace Volo.Abp.EventBus
             EventBus.Register<MySimpleEventData>(
                 eventData => throw new Exception("This exception is intentionally thrown #2!"));
 
-            var aggrException = Assert.Throws<AggregateException>(() =>
+            var aggrException = await Assert.ThrowsAsync<AggregateException>(async () =>
             {
-                EventBus.Trigger(new MySimpleEventData(1));
+                await EventBus.TriggerAsync(new MySimpleEventData(1));
             });
 
             aggrException.InnerExceptions.Count.ShouldBe(2);

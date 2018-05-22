@@ -17,54 +17,49 @@ namespace Volo.Abp.Domain.Entities.Events
 
         }
 
-        public void TriggerEntityCreatingEvent(object entity)
+        public Task TriggerEntityCreatingEventAsync(object entity)
         {
-            
+            return Task.CompletedTask;
         }
 
-        public void TriggerEntityCreatedEvent(object entity)
+        public Task TriggerEntityCreatedEventAsync(object entity)
         {
-            
+            return Task.CompletedTask;
         }
 
-        public void TriggerEntityCreatedEventOnUowCompleted(object entity)
+        public Task TriggerEntityCreatedEventOnUowCompletedAsync(object entity)
         {
-            
+            return Task.CompletedTask;
         }
 
-        public void TriggerEntityUpdatingEvent(object entity)
+        public Task TriggerEntityUpdatingEventAsync(object entity)
         {
-            
+            return Task.CompletedTask;
         }
 
-        public void TriggerEntityUpdatedEvent(object entity)
+        public Task TriggerEntityUpdatedEventAsync(object entity)
         {
-            
+            return Task.CompletedTask;
         }
 
-        public void TriggerEntityUpdatedEventOnUowCompleted(object entity)
+        public Task TriggerEntityUpdatedEventOnUowCompletedAsync(object entity)
         {
-            
+            return Task.CompletedTask;
         }
 
-        public void TriggerEntityDeletingEvent(object entity)
+        public Task TriggerEntityDeletingEventAsync(object entity)
         {
-            
+            return Task.CompletedTask;
         }
 
-        public void TriggerEntityDeletedEvent(object entity)
+        public Task TriggerEntityDeletedEventAsync(object entity)
         {
-            
+            return Task.CompletedTask;
         }
 
-        public void TriggerEntityDeletedEventOnUowCompleted(object entity)
+        public Task TriggerEntityDeletedEventOnUowCompletedAsync(object entity)
         {
-            
-        }
-
-        public void TriggerEvents(EntityChangeReport changeReport)
-        {
-            
+            return Task.CompletedTask;
         }
 
         public Task TriggerEventsAsync(EntityChangeReport changeReport)

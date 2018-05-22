@@ -1,14 +1,16 @@
-﻿using Volo.Abp.DependencyInjection;
+﻿using System.Threading.Tasks;
+using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.EventBus
 {
-    public class MySimpleEventDataHandler : IEventHandler<MySimpleEventData>, ISingletonDependency
+    public class MySimpleEventDataHandler : IAsyncEventHandler<MySimpleEventData>, ISingletonDependency
     {
         public int TotalData { get; private set; }
 
-        public void HandleEvent(MySimpleEventData eventData)
+        public Task HandleEventAsync(MySimpleEventData eventData)
         {
             TotalData += eventData.Value;
+            return Task.CompletedTask;
         }
     }
 }

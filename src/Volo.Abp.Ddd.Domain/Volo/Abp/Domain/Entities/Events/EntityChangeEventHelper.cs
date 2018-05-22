@@ -23,98 +23,86 @@ namespace Volo.Abp.Domain.Entities.Events
             EventBus = NullEventBus.Instance;
         }
 
-        public virtual void TriggerEvents(EntityChangeReport changeReport)
+        public async Task TriggerEventsAsync(EntityChangeReport changeReport)
         {
-            TriggerEventsInternal(changeReport);
+            await TriggerEventsInternalAsync(changeReport);
 
             if (changeReport.IsEmpty() || _unitOfWorkManager.Current == null)
             {
                 return;
             }
 
-            _unitOfWorkManager.Current.SaveChanges();
+            await _unitOfWorkManager.Current.SaveChangesAsync();
         }
 
-        public Task TriggerEventsAsync(EntityChangeReport changeReport) //TODO: Trigger events really async!
+        public virtual async Task TriggerEntityCreatingEventAsync(object entity)
         {
-            TriggerEventsInternal(changeReport);
-
-            if (changeReport.IsEmpty() || _unitOfWorkManager.Current == null)
-            {
-                return Task.FromResult(0);
-            }
-
-            return _unitOfWorkManager.Current.SaveChangesAsync();
+            await TriggerEventWithEntity(typeof(EntityCreatingEventData<>), entity, true);
         }
 
-        public virtual void TriggerEntityCreatingEvent(object entity)
+        public async Task TriggerEntityCreatedEventAsync(object entity)
         {
-            TriggerEventWithEntity(typeof(EntityCreatingEventData<>), entity, true);
+            await TriggerEventWithEntity(typeof(EntityCreatedEventData<>), entity, true);
         }
 
-        public void TriggerEntityCreatedEvent(object entity)
+        public virtual async Task TriggerEntityCreatedEventOnUowCompletedAsync(object entity)
         {
-            TriggerEventWithEntity(typeof(EntityCreatedEventData<>), entity, true);
+            await TriggerEventWithEntity(typeof(EntityCreatedEventData<>), entity, false);
         }
 
-        public virtual void TriggerEntityCreatedEventOnUowCompleted(object entity)
+        public virtual async Task TriggerEntityUpdatingEventAsync(object entity)
         {
-            TriggerEventWithEntity(typeof(EntityCreatedEventData<>), entity, false);
+            await TriggerEventWithEntity(typeof(EntityUpdatingEventData<>), entity, true);
         }
 
-        public virtual void TriggerEntityUpdatingEvent(object entity)
+        public async Task TriggerEntityUpdatedEventAsync(object entity)
         {
-            TriggerEventWithEntity(typeof(EntityUpdatingEventData<>), entity, true);
+            await TriggerEventWithEntity(typeof(EntityUpdatedEventData<>), entity, true);
         }
 
-        public void TriggerEntityUpdatedEvent(object entity)
+        public virtual async Task TriggerEntityUpdatedEventOnUowCompletedAsync(object entity)
         {
-            TriggerEventWithEntity(typeof(EntityUpdatedEventData<>), entity, true);
+            await TriggerEventWithEntity(typeof(EntityUpdatedEventData<>), entity, false);
         }
 
-        public virtual void TriggerEntityUpdatedEventOnUowCompleted(object entity)
+        public virtual async Task TriggerEntityDeletingEventAsync(object entity)
         {
-            TriggerEventWithEntity(typeof(EntityUpdatedEventData<>), entity, false);
+            await TriggerEventWithEntity(typeof(EntityDeletingEventData<>), entity, true);
         }
 
-        public virtual void TriggerEntityDeletingEvent(object entity)
+        public async Task TriggerEntityDeletedEventAsync(object entity)
         {
-            TriggerEventWithEntity(typeof(EntityDeletingEventData<>), entity, true);
+            await TriggerEventWithEntity(typeof(EntityDeletedEventData<>), entity, true);
         }
 
-        public void TriggerEntityDeletedEvent(object entity)
+        public virtual async Task TriggerEntityDeletedEventOnUowCompletedAsync(object entity)
         {
-            TriggerEventWithEntity(typeof(EntityDeletedEventData<>), entity, true);
+            await TriggerEventWithEntity(typeof(EntityDeletedEventData<>), entity, false);
         }
 
-        public virtual void TriggerEntityDeletedEventOnUowCompleted(object entity)
+        protected virtual async Task TriggerEventsInternalAsync(EntityChangeReport changeReport)
         {
-            TriggerEventWithEntity(typeof(EntityDeletedEventData<>), entity, false);
+            await TriggerEntityChangeEvents(changeReport.ChangedEntities);
+            await TriggerDomainEvents(changeReport.DomainEvents);
         }
 
-        public virtual void TriggerEventsInternal(EntityChangeReport changeReport)
-        {
-            TriggerEntityChangeEvents(changeReport.ChangedEntities);
-            TriggerDomainEvents(changeReport.DomainEvents);
-        }
-
-        protected virtual void TriggerEntityChangeEvents(List<EntityChangeEntry> changedEntities)
+        protected virtual async Task TriggerEntityChangeEvents(List<EntityChangeEntry> changedEntities)
         {
             foreach (var changedEntity in changedEntities)
             {
                 switch (changedEntity.ChangeType)
                 {
                     case EntityChangeType.Created:
-                        TriggerEntityCreatingEvent(changedEntity.Entity);
-                        TriggerEntityCreatedEventOnUowCompleted(changedEntity.Entity);
+                        await TriggerEntityCreatingEventAsync(changedEntity.Entity);
+                        await TriggerEntityCreatedEventOnUowCompletedAsync(changedEntity.Entity);
                         break;
                     case EntityChangeType.Updated:
-                        TriggerEntityUpdatingEvent(changedEntity.Entity);
-                        TriggerEntityUpdatedEventOnUowCompleted(changedEntity.Entity);
+                        await TriggerEntityUpdatingEventAsync(changedEntity.Entity);
+                        await TriggerEntityUpdatedEventOnUowCompletedAsync(changedEntity.Entity);
                         break;
                     case EntityChangeType.Deleted:
-                        TriggerEntityDeletingEvent(changedEntity.Entity);
-                        TriggerEntityDeletedEventOnUowCompleted(changedEntity.Entity);
+                        await TriggerEntityDeletingEventAsync(changedEntity.Entity);
+                        await TriggerEntityDeletedEventOnUowCompletedAsync(changedEntity.Entity);
                         break;
                     default:
                         throw new AbpException("Unknown EntityChangeType: " + changedEntity.ChangeType);
@@ -122,26 +110,26 @@ namespace Volo.Abp.Domain.Entities.Events
             }
         }
 
-        protected virtual void TriggerDomainEvents(List<DomainEventEntry> domainEvents)
+        protected virtual async Task TriggerDomainEvents(List<DomainEventEntry> domainEvents)
         {
             foreach (var domainEvent in domainEvents)
             {
-                EventBus.Trigger(domainEvent.EventData.GetType(), domainEvent.EventData);
+                await EventBus.TriggerAsync(domainEvent.EventData.GetType(), domainEvent.EventData);
             }
         }
 
-        protected virtual void TriggerEventWithEntity(Type genericEventType, object entity, bool triggerInCurrentUnitOfWork)
+        protected virtual async Task TriggerEventWithEntity(Type genericEventType, object entity, bool triggerInCurrentUnitOfWork)
         {
             var entityType = ProxyHelper.UnProxy(entity).GetType();
             var eventType = genericEventType.MakeGenericType(entityType);
 
             if (triggerInCurrentUnitOfWork || _unitOfWorkManager.Current == null)
             {
-                EventBus.Trigger(eventType, Activator.CreateInstance(eventType, entity));
+                await EventBus.TriggerAsync(eventType, Activator.CreateInstance(eventType, entity));
                 return;
             }
 
-            _unitOfWorkManager.Current.Completed += (sender, args) => EventBus.Trigger(eventType, Activator.CreateInstance(eventType, entity));
+            _unitOfWorkManager.Current.OnCompleted(() => EventBus.TriggerAsync(eventType, Activator.CreateInstance(eventType, entity)));
         }
     }
 }

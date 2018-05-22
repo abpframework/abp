@@ -29,11 +29,12 @@ namespace Volo.Abp.TestApp.Testing
 
             var isTriggered = false;
 
-            EventBus.Register<PersonNameChangedEvent>((data) =>
+            EventBus.Register<PersonNameChangedEvent>(data =>
             {
                 data.OldName.ShouldBe("Douglas");
                 data.Person.Name.ShouldBe("Douglas-Changed");
                 isTriggered = true;
+                return Task.CompletedTask;
             });
 
             //Act

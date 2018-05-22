@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.Domain.Entities.Events;
 using Volo.Abp.Domain.Repositories;
@@ -50,6 +51,7 @@ namespace Volo.Abp.TestApp.Testing
                     data.Entity.Age.ShouldBe(15);
                     data.Entity.Age = 18;
                     PersonRepository.Update(data.Entity);
+                    return Task.CompletedTask;
                 });
 
                 EventBus.Register<EntityCreatedEventData<Person>>(data =>
@@ -63,6 +65,8 @@ namespace Volo.Abp.TestApp.Testing
 
                     data.Entity.Age.ShouldBe(18);
                     data.Entity.Name.ShouldBe(personName);
+
+                    return Task.CompletedTask;
                 });
 
                 EventBus.Register<EntityUpdatingEventData<Person>>(data =>
@@ -76,6 +80,8 @@ namespace Volo.Abp.TestApp.Testing
 
                     data.Entity.Name.ShouldBe(personName);
                     data.Entity.Age.ShouldBe(18);
+
+                    return Task.CompletedTask;
                 });
 
                 EventBus.Register<EntityUpdatedEventData<Person>>(data =>
@@ -89,6 +95,8 @@ namespace Volo.Abp.TestApp.Testing
 
                     data.Entity.Name.ShouldBe(personName);
                     data.Entity.Age.ShouldBe(18);
+
+                    return Task.CompletedTask;
                 });
 
                 PersonRepository.Insert(new Person(Guid.NewGuid(), personName, 15));
