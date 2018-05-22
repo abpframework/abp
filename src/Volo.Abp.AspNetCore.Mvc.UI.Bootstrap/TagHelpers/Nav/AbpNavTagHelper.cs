@@ -6,8 +6,6 @@
 
         public NavStyle NavStyle { get; set; } = NavStyle.Default;
 
-        public bool? Responsive { get; set; }
-
         public AbpNavTagHelper(AbpNavTagHelperService tagHelperService)
             : base(tagHelperService)
         {
