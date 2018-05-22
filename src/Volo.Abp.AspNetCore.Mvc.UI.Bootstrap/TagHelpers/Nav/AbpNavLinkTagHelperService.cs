@@ -19,8 +19,12 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Nav
         {
             output.TagName = "a";
             output.TagMode = TagMode.StartTagAndEndTag;
-            output.Attributes.Add("href",TagHelper.Href??"");
             SetClasses(context, output);
+
+            if (!string.IsNullOrWhiteSpace(TagHelper.Href))
+            {
+                output.Attributes.Add("href", TagHelper.Href);
+            }
         }
 
         protected virtual void SetClasses(TagHelperContext context, TagHelperOutput output)

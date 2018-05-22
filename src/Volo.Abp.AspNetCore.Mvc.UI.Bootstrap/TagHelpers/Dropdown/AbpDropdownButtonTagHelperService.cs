@@ -64,7 +64,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Dropdown
 
             var buttonTag = GetInnerTagHelper(attributes, context, abpButtonTagHelper, "button", TagMode.StartTagAndEndTag);
 
-            if (TagHelper.Link ?? false)
+            if ((TagHelper.NavLink ?? false) || (TagHelper.Link ?? false))
             {
                 var linkTag = ConvertButtonToLink(buttonTag);
                 return RenderTagHelperOutput(linkTag, _htmlEncoder);
@@ -125,6 +125,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Dropdown
             buttonTag.TagName = "a";
             buttonTag.Attributes.RemoveAll("type");
             buttonTag.Attributes.Add("roles", "button");
+
+            if (TagHelper.NavLink??false)
+            {
+                buttonTag.Attributes.AddClass("nav-link");
+            }
             return buttonTag;
         }
     }

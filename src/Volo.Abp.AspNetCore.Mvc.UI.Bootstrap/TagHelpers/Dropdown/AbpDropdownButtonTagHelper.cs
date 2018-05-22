@@ -18,6 +18,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Dropdown
 
         public bool? Link { get; set; }
 
+        public bool? NavLink { get; set; }
+
         public AbpDropdownButtonTagHelper(AbpDropdownButtonTagHelperService tagHelperService)
             : base(tagHelperService)
         {
