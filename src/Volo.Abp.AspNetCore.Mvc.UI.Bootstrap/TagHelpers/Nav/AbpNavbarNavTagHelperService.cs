@@ -9,7 +9,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Nav
         {
             output.TagName = "ul";
             output.Attributes.AddClass("navbar-nav");
-            output.Attributes.AddClass("mr-auto");
         }
     }
 }

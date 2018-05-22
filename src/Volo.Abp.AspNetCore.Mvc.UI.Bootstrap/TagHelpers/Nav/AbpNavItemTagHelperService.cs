@@ -14,7 +14,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Nav
             SetActiveClass(context, output);
         }
 
-
         protected virtual void SetDropdownClass(TagHelperContext context, TagHelperOutput output)
         {
             if (TagHelper.Dropdown ?? false)
