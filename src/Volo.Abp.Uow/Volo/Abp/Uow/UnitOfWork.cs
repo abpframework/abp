@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.Uow
 {
@@ -19,7 +20,8 @@ namespace Volo.Abp.Uow
 
         public string ReservationName { get; set; }
 
-        public event EventHandler<UnitOfWorkEventArgs> Completed;
+        protected List<Func<Task>> CompletedHandlers { get; } = new List<Func<Task>>();
+
         public event EventHandler<UnitOfWorkFailedEventArgs> Failed;
         public event EventHandler<UnitOfWorkEventArgs> Disposed;
 
@@ -123,7 +125,7 @@ namespace Volo.Abp.Uow
             {
                 await SaveChangesAsync(cancellationToken);
                 await CommitTransactionsAsync();
-                OnCompleted();
+                await OnCompletedAsync();
             }
             catch (Exception ex)
             {
@@ -210,9 +212,30 @@ namespace Volo.Abp.Uow
             return _transactionApis.GetOrAdd(key, factory);
         }
 
+        public void OnCompleted(Func<Task> handler)
+        {
+            CompletedHandlers.Add(handler);
+        }
+
+        public void OnFailed(Func<Task> handler)
+        {
+            throw new NotImplementedException();
+        }
+
         protected virtual void OnCompleted()
         {
-            Completed.InvokeSafely(this, new UnitOfWorkEventArgs(this));
+            foreach (var handler in CompletedHandlers)
+            {
+                AsyncHelper.RunSync(handler);
+            }
+        }
+
+        protected virtual async Task OnCompletedAsync()
+        {
+            foreach (var handler in CompletedHandlers)
+            {
+                await handler.Invoke();
+            }
         }
 
         protected virtual void OnFailed()

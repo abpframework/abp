@@ -12,22 +12,12 @@ namespace Volo.Abp.EventBus
             
         }
 
-        public IDisposable Register<TEvent>(Action<TEvent> action) where TEvent : class
-        {
-            return NullDisposable.Instance;
-        }
-
-        public IDisposable AsyncRegister<TEvent>(Func<TEvent, Task> action) where TEvent : class
+        public IDisposable Register<TEvent>(Func<TEvent, Task> action) where TEvent : class
         {
             return NullDisposable.Instance;
         }
 
         public IDisposable Register<TEvent>(IEventHandler<TEvent> handler) where TEvent : class
-        {
-            return NullDisposable.Instance;
-        }
-
-        public IDisposable AsyncRegister<TEvent>(IAsyncEventHandler<TEvent> handler) where TEvent : class
         {
             return NullDisposable.Instance;
         }
@@ -52,22 +42,12 @@ namespace Volo.Abp.EventBus
             return NullDisposable.Instance;
         }
 
-        public void Unregister<TEvent>(Action<TEvent> action) where TEvent : class
-        {
-
-        }
-
         public void AsyncUnregister<TEvent>(Func<TEvent, Task> action) where TEvent : class
         {
             
         }
 
-        public void Unregister<TEvent>(IEventHandler<TEvent> handler) where TEvent : class
-        {
-            
-        }
-
-        public void AsyncUnregister<TEvent>(IAsyncEventHandler<TEvent> handler) where TEvent : class
+        public void AsyncUnregister<TEvent>(IEventHandler<TEvent> handler) where TEvent : class
         {
             
         }
@@ -93,16 +73,6 @@ namespace Volo.Abp.EventBus
         }
 
         public void UnregisterAll(Type eventType)
-        {
-            
-        }
-
-        public void Trigger<TEvent>(TEvent eventData) where TEvent : class
-        {
-            
-        }
-
-        public void Trigger(Type eventType, object eventData)
         {
             
         }

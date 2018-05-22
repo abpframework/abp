@@ -8,33 +8,13 @@ namespace Volo.Abp.EventBus
     /// </summary>
     public interface IEventBus
     {
-        #region Register
-
         /// <summary>
         /// Registers to an event.
         /// Given action is called for all event occurrences.
         /// </summary>
         /// <param name="action">Action to handle events</param>
         /// <typeparam name="TEvent">Event type</typeparam>
-        IDisposable Register<TEvent>(Action<TEvent> action) 
-            where TEvent : class;
-
-        /// <summary>
-        /// Registers to an event.
-        /// Given action is called for all event occurrences.
-        /// </summary>
-        /// <param name="action">Action to handle events</param>
-        /// <typeparam name="TEvent">Event type</typeparam>
-        IDisposable AsyncRegister<TEvent>(Func<TEvent, Task> action) 
-            where TEvent : class;
-
-        /// <summary>
-        /// Registers to an event. 
-        /// Same (given) instance of the handler is used for all event occurrences.
-        /// </summary>
-        /// <typeparam name="TEvent">Event type</typeparam>
-        /// <param name="handler">Object to handle the event</param>
-        IDisposable Register<TEvent>(IEventHandler<TEvent> handler) 
+        IDisposable Register<TEvent>(Func<TEvent, Task> action) 
             where TEvent : class;
 
         /// <summary>
@@ -43,7 +23,7 @@ namespace Volo.Abp.EventBus
         /// </summary>
         /// <typeparam name="TEvent">Event type</typeparam>
         /// <param name="handler">Object to handle the event</param>
-        IDisposable AsyncRegister<TEvent>(IAsyncEventHandler<TEvent> handler)
+        IDisposable Register<TEvent>(IEventHandler<TEvent> handler)
             where TEvent : class;
 
         /// <summary>
@@ -80,18 +60,6 @@ namespace Volo.Abp.EventBus
         /// <param name="factory">A factory to create/release handlers</param>
         IDisposable Register(Type eventType, IEventHandlerFactory factory);
 
-        #endregion
-
-        #region Unregister
-
-        /// <summary>
-        /// Unregisters from an event.
-        /// </summary>
-        /// <typeparam name="TEvent">Event type</typeparam>
-        /// <param name="action"></param>
-        void Unregister<TEvent>(Action<TEvent> action) 
-            where TEvent : class;
-
         /// <summary>
         /// Unregisters from an event.
         /// </summary>
@@ -105,15 +73,7 @@ namespace Volo.Abp.EventBus
         /// </summary>
         /// <typeparam name="TEvent">Event type</typeparam>
         /// <param name="handler">Handler object that is registered before</param>
-        void Unregister<TEvent>(IEventHandler<TEvent> handler)
-            where TEvent : class;
-
-        /// <summary>
-        /// Unregisters from an event.
-        /// </summary>
-        /// <typeparam name="TEvent">Event type</typeparam>
-        /// <param name="handler">Handler object that is registered before</param>
-        void AsyncUnregister<TEvent>(IAsyncEventHandler<TEvent> handler) 
+        void AsyncUnregister<TEvent>(IEventHandler<TEvent> handler) 
             where TEvent : class;
 
         /// <summary>
@@ -151,25 +111,6 @@ namespace Volo.Abp.EventBus
         /// <param name="eventType">Event type</param>
         void UnregisterAll(Type eventType);
 
-        #endregion
-
-        #region Trigger
-
-        /// <summary>
-        /// Triggers an event.
-        /// </summary>
-        /// <typeparam name="TEvent">Event type</typeparam>
-        /// <param name="eventData">Related data for the event</param>
-        void Trigger<TEvent>(TEvent eventData) 
-            where TEvent : class;
-
-        /// <summary>
-        /// Triggers an event.
-        /// </summary>
-        /// <param name="eventType">Event type</param>
-        /// <param name="eventData">Related data for the event</param>
-        void Trigger(Type eventType, object eventData);
-
         /// <summary>
         /// Triggers an event asynchronously.
         /// </summary>
@@ -186,7 +127,5 @@ namespace Volo.Abp.EventBus
         /// <param name="eventData">Related data for the event</param>
         /// <returns>The task to handle async operation</returns>
         Task TriggerAsync(Type eventType, object eventData);
-        
-        #endregion
     }
 }

@@ -64,26 +64,13 @@ namespace Volo.Abp.EventBus
         }
 
         /// <inheritdoc/>
-        public IDisposable Register<TEvent>(Action<TEvent> action)
-            where TEvent : class
+        public IDisposable Register<TEvent>(Func<TEvent, Task> action) where TEvent : class
         {
             return Register(typeof(TEvent), new ActionEventHandler<TEvent>(action));
         }
 
         /// <inheritdoc/>
-        public IDisposable AsyncRegister<TEvent>(Func<TEvent, Task> action) where TEvent : class
-        {
-            return Register(typeof(TEvent), new AsyncActionEventHandler<TEvent>(action));
-        }
-
-        /// <inheritdoc/>
         public IDisposable Register<TEvent>(IEventHandler<TEvent> handler) where TEvent : class
-        {
-            return Register(typeof(TEvent), handler);
-        }
-
-        /// <inheritdoc/>
-        public IDisposable AsyncRegister<TEvent>(IAsyncEventHandler<TEvent> handler) where TEvent : class
         {
             return Register(typeof(TEvent), handler);
         }
@@ -118,7 +105,7 @@ namespace Volo.Abp.EventBus
         }
 
         /// <inheritdoc/>
-        public void Unregister<TEvent>(Action<TEvent> action) where TEvent : class
+        public void AsyncUnregister<TEvent>(Func<TEvent, Task> action) where TEvent : class
         {
             Check.NotNull(action, nameof(action));
 
@@ -146,41 +133,7 @@ namespace Volo.Abp.EventBus
         }
 
         /// <inheritdoc/>
-        public void AsyncUnregister<TEvent>(Func<TEvent, Task> action) where TEvent : class
-        {
-            Check.NotNull(action, nameof(action));
-
-            GetOrCreateHandlerFactories(typeof(TEvent))
-                .Locking(factories =>
-                {
-                    factories.RemoveAll(
-                        factory =>
-                        {
-                            var singleInstanceFactory = factory as SingleInstanceHandlerFactory;
-                            if (singleInstanceFactory == null)
-                            {
-                                return false;
-                            }
-
-                            var actionHandler = singleInstanceFactory.HandlerInstance as AsyncActionEventHandler<TEvent>;
-                            if (actionHandler == null)
-                            {
-                                return false;
-                            }
-
-                            return actionHandler.Action == action;
-                        });
-                });
-        }
-
-        /// <inheritdoc/>
-        public void Unregister<TEvent>(IEventHandler<TEvent> handler) where TEvent : class
-        {
-            Unregister(typeof(TEvent), handler);
-        }
-
-        /// <inheritdoc/>
-        public void AsyncUnregister<TEvent>(IAsyncEventHandler<TEvent> handler) where TEvent : class
+        public void AsyncUnregister<TEvent>(IEventHandler<TEvent> handler) where TEvent : class
         {
             Unregister(typeof(TEvent), handler);
         }
@@ -224,66 +177,6 @@ namespace Volo.Abp.EventBus
         }
 
         /// <inheritdoc/>
-        public void Trigger<TEvent>(TEvent eventData) where TEvent : class
-        {
-            Trigger(typeof(TEvent), eventData);
-        }
-
-        /// <inheritdoc/>
-        public void Trigger(Type eventType, object eventData)
-        {
-            var exceptions = new List<Exception>();
-
-            foreach (var handlerFactories in GetHandlerFactories(eventType))
-            {
-                foreach (var handlerFactory in handlerFactories.EventHandlerFactories)
-                {
-                    var handlerType = handlerFactory.GetHandlerType();
-
-                    if (IsAsyncEventHandler(handlerType))
-                    {
-                        AsyncHelper.RunSync(() => TriggerAsyncHandlingException(handlerFactory, handlerFactories.EventType, eventData, exceptions));
-                    }
-                    else if (IsEventHandler(handlerType))
-                    {
-                        TriggerHandlingException(handlerFactory, handlerFactories.EventType, eventData, exceptions);
-                    }
-                    else
-                    {
-                        var message = $"Event handler to register for event type {eventType.Name} does not implement IEventHandler<{eventType.Name}> or IAsyncEventHandler<{eventType.Name}> interface!";
-                        exceptions.Add(new AbpException(message));
-                    }
-                }
-            }
-
-            //Implements generic argument inheritance. See classWithInheritableGenericArgument
-            if (eventType.GetTypeInfo().IsGenericType &&
-                eventType.GetGenericArguments().Length == 1 &&
-                typeof(IEventDataWithInheritableGenericArgument).IsAssignableFrom(eventType))
-            {
-                var genericArg = eventType.GetGenericArguments()[0];
-                var baseArg = genericArg.GetTypeInfo().BaseType;
-                if (baseArg != null)
-                {
-                    var baseEventType = eventType.GetGenericTypeDefinition().MakeGenericType(baseArg);
-                    var constructorArgs = ((IEventDataWithInheritableGenericArgument)eventData).GetConstructorArgs();
-                    var baseEventData = Activator.CreateInstance(baseEventType, constructorArgs);
-                    Trigger(baseEventType, baseEventData);
-                }
-            }
-
-            if (exceptions.Any())
-            {
-                if (exceptions.Count == 1)
-                {
-                    exceptions[0].ReThrow();
-                }
-
-                throw new AggregateException("More than one error has occurred while triggering the event: " + eventType, exceptions);
-            }
-        }
-
-        /// <inheritdoc/>
         public Task TriggerAsync<TEvent>(TEvent eventData) where TEvent : class
         {
             return TriggerAsync(typeof(TEvent), eventData);
@@ -300,21 +193,7 @@ namespace Volo.Abp.EventBus
             {
                 foreach (var handlerFactory in handlerFactories.EventHandlerFactories)
                 {
-                    var handlerType = handlerFactory.GetHandlerType();
-
-                    if (IsAsyncEventHandler(handlerType))
-                    {
-                        await TriggerAsyncHandlingException(handlerFactory, handlerFactories.EventType, eventData, exceptions);
-                    }
-                    else if (IsEventHandler(handlerType))
-                    {
-                        TriggerHandlingException(handlerFactory, handlerFactories.EventType, eventData, exceptions);
-                    }
-                    else
-                    {
-                        var message = $"Event handler to register for event type {eventType.Name} does not implement IEventHandler<{eventType.Name}> or IAsyncEventHandler<{eventType.Name}> interface!";
-                        exceptions.Add(new AbpException(message));
-                    }
+                    await TriggerAsyncHandlingException(handlerFactory, handlerFactories.EventType, eventData, exceptions);
                 }
             }
 
@@ -345,39 +224,13 @@ namespace Volo.Abp.EventBus
             }
         }
 
-        private void TriggerHandlingException(IEventHandlerFactory handlerFactory, Type eventType, object eventData, List<Exception> exceptions)
-        {
-            using (var eventHandlerWrapper = handlerFactory.GetHandler())
-            {
-                try
-                {
-                    var handlerType = typeof(IEventHandler<>).MakeGenericType(eventType);
-
-                    var method = handlerType.GetMethod(
-                        "HandleEvent",
-                        new[] { eventType }
-                    );
-
-                    method.Invoke(eventHandlerWrapper.EventHandler, new[] { eventData });
-                }
-                catch (TargetInvocationException ex)
-                {
-                    exceptions.Add(ex.InnerException);
-                }
-                catch (Exception ex)
-                {
-                    exceptions.Add(ex);
-                }
-            }
-        }
-
         private async Task TriggerAsyncHandlingException(IEventHandlerFactory asyncHandlerFactory, Type eventType, object eventData, List<Exception> exceptions)
         {
             using (var eventHandlerWrapper = asyncHandlerFactory.GetHandler())
             {
                 try
                 {
-                    var asyncHandlerType = typeof(IAsyncEventHandler<>).MakeGenericType(eventType);
+                    var asyncHandlerType = typeof(IEventHandler<>).MakeGenericType(eventType);
 
                     var method = asyncHandlerType.GetMethod(
                         "HandleEventAsync",
@@ -395,20 +248,6 @@ namespace Volo.Abp.EventBus
                     exceptions.Add(ex);
                 }
             }
-        }
-
-        private bool IsEventHandler(Type handlerType)
-        {
-            return handlerType.GetInterfaces()
-                .Where(i => i.IsGenericType)
-                .Any(i => i.GetGenericTypeDefinition() == typeof(IEventHandler<>));
-        }
-
-        private bool IsAsyncEventHandler(Type handlerType)
-        {
-            return handlerType.GetInterfaces()
-                .Where(i => i.IsGenericType)
-                .Any(i => i.GetGenericTypeDefinition() == typeof(IAsyncEventHandler<>));
         }
 
         private IEnumerable<EventTypeWithEventHandlerFactories> GetHandlerFactories(Type eventType)

@@ -17,6 +17,7 @@ using Volo.Abp.Domain.Entities.Events;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Reflection;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.EntityFrameworkCore
 {
@@ -76,7 +77,7 @@ namespace Volo.Abp.EntityFrameworkCore
                 ChangeTracker.AutoDetectChangesEnabled = false; //TODO: Why this is needed?
                 var changeReport = ApplyAbpConcepts();
                 var result = base.SaveChanges(acceptAllChangesOnSuccess);
-                EntityChangeEventHelper.TriggerEvents(changeReport);
+                AsyncHelper.RunSync(() => EntityChangeEventHelper.TriggerEventsAsync(changeReport));
                 return result;
             }
             catch (DbUpdateConcurrencyException ex)

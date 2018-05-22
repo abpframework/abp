@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 
 namespace Volo.Abp.EventBus
 {
@@ -8,9 +9,10 @@ namespace Volo.Abp.EventBus
 
         public static int DisposeCount { get; set; }
 
-        public void HandleEvent(MySimpleEventData eventData)
+        public Task HandleEventAsync(MySimpleEventData eventData)
         {
             ++HandleCount;
+            return Task.CompletedTask;
         }
 
         public void Dispose()

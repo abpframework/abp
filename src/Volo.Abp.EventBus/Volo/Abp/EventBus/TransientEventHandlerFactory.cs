@@ -24,10 +24,5 @@ namespace Volo.Abp.EventBus
                 () => (handler as IDisposable)?.Dispose()
             );
         }
-
-        public Type GetHandlerType()
-        {
-            return typeof(THandler);
-        }
     }
 }

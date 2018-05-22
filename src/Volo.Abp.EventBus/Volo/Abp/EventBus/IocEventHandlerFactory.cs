@@ -31,10 +31,5 @@ namespace Volo.Abp.EventBus
                 () => scope.Dispose()
             );
         }
-
-        public Type GetHandlerType()
-        {
-            return HandlerType;
-        }
     }
 }

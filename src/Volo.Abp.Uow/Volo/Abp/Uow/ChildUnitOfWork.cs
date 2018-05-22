@@ -17,7 +17,6 @@ namespace Volo.Abp.Uow
 
         public string ReservationName => _parent.ReservationName;
 
-        public event EventHandler<UnitOfWorkEventArgs> Completed;
         public event EventHandler<UnitOfWorkFailedEventArgs> Failed;
         public event EventHandler<UnitOfWorkEventArgs> Disposed;
 
@@ -31,7 +30,6 @@ namespace Volo.Abp.Uow
 
             _parent = parent;
 
-            _parent.Completed += (sender, args) => { Completed.InvokeSafely(sender, args); };
             _parent.Failed += (sender, args) => { Failed.InvokeSafely(sender, args); };
             _parent.Disposed += (sender, args) => { Disposed.InvokeSafely(sender, args); };
         }
@@ -79,6 +77,11 @@ namespace Volo.Abp.Uow
         public Task RollbackAsync(CancellationToken cancellationToken = default)
         {
             return _parent.RollbackAsync(cancellationToken);
+        }
+
+        public void OnCompleted(Func<Task> handler)
+        {
+            _parent.OnCompleted(handler);
         }
 
         public IDatabaseApi FindDatabaseApi(string key)

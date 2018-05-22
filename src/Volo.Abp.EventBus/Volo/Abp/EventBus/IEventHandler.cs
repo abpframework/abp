@@ -1,8 +1,10 @@
+using System.Threading.Tasks;
+
 namespace Volo.Abp.EventBus
 {
     /// <summary>
     /// Undirect base interface for all event handlers.
-    /// Implement <see cref="IEventHandler{TEventData}"/> instead of this one.
+    /// Implement <see cref="IEventHandler{TEvent}"/> instead of this one.
     /// </summary>
     public interface IEventHandler
     {
@@ -10,7 +12,7 @@ namespace Volo.Abp.EventBus
     }
 
     /// <summary>
-    /// Defines an interface of a class that handles events of type <see cref="IEventHandler{TEventData}"/>.
+    /// Defines an interface of a class that handles events asynchrounously of type <see cref="IEventHandler{TEvent}"/>.
     /// </summary>
     /// <typeparam name="TEvent">Event type to handle</typeparam>
     public interface IEventHandler<in TEvent> : IEventHandler
@@ -19,6 +21,6 @@ namespace Volo.Abp.EventBus
         /// Handler handles the event by implementing this method.
         /// </summary>
         /// <param name="eventData">Event data</param>
-        void HandleEvent(TEvent eventData);
+        Task HandleEventAsync(TEvent eventData);
     }
 }

@@ -1,10 +1,11 @@
 using System;
+using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.EventBus
 {
     /// <summary>
-    /// This event handler is an adapter to be able to use an action as <see cref="IEventHandler{TEventData}"/> implementation.
+    /// This event handler is an adapter to be able to use an action as <see cref="IEventHandler{TEvent}"/> implementation.
     /// </summary>
     /// <typeparam name="TEvent">Event type</typeparam>
     internal class ActionEventHandler<TEvent> :
@@ -12,15 +13,15 @@ namespace Volo.Abp.EventBus
         ITransientDependency
     {
         /// <summary>
-        /// Action to handle the event.
+        /// Function to handle the event.
         /// </summary>
-        public Action<TEvent> Action { get; private set; }
+        public Func<TEvent, Task> Action { get; }
 
         /// <summary>
-        /// Creates a new instance of <see cref="ActionEventHandler{TEventData}"/>.
+        /// Creates a new instance of <see cref="ActionEventHandler{TEvent}"/>.
         /// </summary>
         /// <param name="handler">Action to handle the event</param>
-        public ActionEventHandler(Action<TEvent> handler)
+        public ActionEventHandler(Func<TEvent, Task> handler)
         {
             Action = handler;
         }
@@ -29,9 +30,9 @@ namespace Volo.Abp.EventBus
         /// Handles the event.
         /// </summary>
         /// <param name="eventData"></param>
-        public void HandleEvent(TEvent eventData)
+        public async Task HandleEventAsync(TEvent eventData)
         {
-            Action(eventData);
+            await Action(eventData);
         }
     }
 }

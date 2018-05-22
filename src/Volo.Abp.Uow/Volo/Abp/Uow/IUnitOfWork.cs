@@ -9,8 +9,7 @@ namespace Volo.Abp.Uow
     {
         Guid Id { get; }
 
-        event EventHandler<UnitOfWorkEventArgs> Completed;
-
+        //TODO: Switch to OnFailed (sync) and OnDisposed (sync) methods to be compatible with OnCompleted
         event EventHandler<UnitOfWorkFailedEventArgs> Failed;
 
         event EventHandler<UnitOfWorkEventArgs> Disposed;
@@ -40,5 +39,7 @@ namespace Volo.Abp.Uow
         void Rollback();
 
         Task RollbackAsync(CancellationToken cancellationToken = default);
+
+        void OnCompleted(Func<Task> handler);
     }
 }
