@@ -56,6 +56,7 @@
 
         <abp-nav-bar size="Lg">
             <a abp-navbar-brand href="#">Navbar</a>
+            <abp-navbar-toggle>
                 <abp-navbar-nav>
                     <abp-nav-item active="true">
                         <a abp-nav-link href="#">Home <span class="sr-only">(current)</span></a>
@@ -65,13 +66,13 @@
                     </abp-nav-item>
                     <abp-nav-item dropdown="true">
                         <abp-dropdown>
-                            <abp-dropdown-button nav-link="true" text="Dropdown"/>
+                            <abp-dropdown-button nav-link="true" text="Dropdown" />
                             <abp-dropdown-menu>
                                 <abp-dropdown-header>Dropdown header</abp-dropdown-header>
                                 <abp-dropdown-item href="#" active="true">Action</abp-dropdown-item>
                                 <abp-dropdown-item href="#" disabled="true">Another disabled action</abp-dropdown-item>
                                 <abp-dropdown-item href="#">Something else here</abp-dropdown-item>
-                                <abp-dropdown-divider/>
+                                <abp-dropdown-divider />
                                 <abp-dropdown-item href="#">Separated link</abp-dropdown-item>
                             </abp-dropdown-menu>
                         </abp-dropdown>
@@ -80,6 +81,7 @@
                         <a abp-nav-link disabled="true" href="#">Disabled</a>
                     </abp-nav-item>
                 </abp-navbar-nav>
+            </abp-navbar-toggle>
         </abp-nav-bar>
 
     </div>
@@ -87,6 +89,7 @@
         <pre>
         &lt;abp-nav-bar size=&quot;Lg&quot;&gt;
             &lt;a abp-navbar-brand href=&quot;#&quot;&gt;Navbar&lt;/a&gt;
+            &lt;abp-navbar-toggle&gt;
                 &lt;abp-navbar-nav&gt;
                     &lt;abp-nav-item active=&quot;true&quot;&gt;
                         &lt;a abp-nav-link href=&quot;#&quot;&gt;Home &lt;span class=&quot;sr-only&quot;&gt;(current)&lt;/span&gt;&lt;/a&gt;
@@ -96,13 +99,13 @@
                     &lt;/abp-nav-item&gt;
                     &lt;abp-nav-item dropdown=&quot;true&quot;&gt;
                         &lt;abp-dropdown&gt;
-                            &lt;abp-dropdown-button nav-link=&quot;true&quot; text=&quot;Dropdown&quot;/&gt;
+                            &lt;abp-dropdown-button nav-link=&quot;true&quot; text=&quot;Dropdown&quot; /&gt;
                             &lt;abp-dropdown-menu&gt;
                                 &lt;abp-dropdown-header&gt;Dropdown header&lt;/abp-dropdown-header&gt;
                                 &lt;abp-dropdown-item href=&quot;#&quot; active=&quot;true&quot;&gt;Action&lt;/abp-dropdown-item&gt;
                                 &lt;abp-dropdown-item href=&quot;#&quot; disabled=&quot;true&quot;&gt;Another disabled action&lt;/abp-dropdown-item&gt;
                                 &lt;abp-dropdown-item href=&quot;#&quot;&gt;Something else here&lt;/abp-dropdown-item&gt;
-                                &lt;abp-dropdown-divider/&gt;
+                                &lt;abp-dropdown-divider /&gt;
                                 &lt;abp-dropdown-item href=&quot;#&quot;&gt;Separated link&lt;/abp-dropdown-item&gt;
                             &lt;/abp-dropdown-menu&gt;
                         &lt;/abp-dropdown&gt;
@@ -111,6 +114,7 @@
                         &lt;a abp-nav-link disabled=&quot;true&quot; href=&quot;#&quot;&gt;Disabled&lt;/a&gt;
                     &lt;/abp-nav-item&gt;
                 &lt;/abp-navbar-nav&gt;
+            &lt;/abp-navbar-toggle&gt;
         &lt;/abp-nav-bar&gt;
 </pre>
     </div>
