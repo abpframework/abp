@@ -8,14 +8,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Nav
 {
     public class AbpNavLinkTagHelperService : AbpTagHelperService<AbpNavLinkTagHelper>
     {
-        private readonly HtmlEncoder _encoder;
-
-        public AbpNavLinkTagHelperService(HtmlEncoder encoder)
-        {
-            _encoder = encoder;
-        }
-
-        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+        public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             output.TagName = "a";
             output.TagMode = TagMode.StartTagAndEndTag;
