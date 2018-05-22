@@ -28,8 +28,8 @@ namespace Volo.Abp.EventBus
         }
 
         public class MyEventHandler :
-            IAsyncEventHandler<EntityChangedEventData<MyEntity>>,
-            IAsyncEventHandler<EntityCreatedEventData<MyEntity>>
+            IEventHandler<EntityChangedEventData<MyEntity>>,
+            IEventHandler<EntityCreatedEventData<MyEntity>>
         {
             public int EntityChangedEventCount { get; set; }
             public int EntityCreatedEventCount { get; set; }

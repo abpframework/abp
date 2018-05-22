@@ -3,7 +3,7 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.EventBus
 {
-    public class MySimpleEventDataHandler : IAsyncEventHandler<MySimpleEventData>, ISingletonDependency
+    public class MySimpleEventDataHandler : IEventHandler<MySimpleEventData>, ISingletonDependency
     {
         public int TotalData { get; private set; }
 

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Volo.Abp.EventBus
 {
-    public class MySimpleTransientEventHandler : IAsyncEventHandler<MySimpleEventData>, IDisposable
+    public class MySimpleTransientEventHandler : IEventHandler<MySimpleEventData>, IDisposable
     {
         public static int HandleCount { get; set; }
 

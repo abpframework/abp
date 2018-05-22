@@ -23,7 +23,7 @@ namespace Volo.Abp.EventBus
         /// </summary>
         /// <typeparam name="TEvent">Event type</typeparam>
         /// <param name="handler">Object to handle the event</param>
-        IDisposable Register<TEvent>(IAsyncEventHandler<TEvent> handler)
+        IDisposable Register<TEvent>(IEventHandler<TEvent> handler)
             where TEvent : class;
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace Volo.Abp.EventBus
         /// </summary>
         /// <typeparam name="TEvent">Event type</typeparam>
         /// <param name="handler">Handler object that is registered before</param>
-        void AsyncUnregister<TEvent>(IAsyncEventHandler<TEvent> handler) 
+        void AsyncUnregister<TEvent>(IEventHandler<TEvent> handler) 
             where TEvent : class;
 
         /// <summary>

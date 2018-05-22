@@ -17,7 +17,7 @@ namespace Volo.Abp.EventBus
             return NullDisposable.Instance;
         }
 
-        public IDisposable Register<TEvent>(IAsyncEventHandler<TEvent> handler) where TEvent : class
+        public IDisposable Register<TEvent>(IEventHandler<TEvent> handler) where TEvent : class
         {
             return NullDisposable.Instance;
         }
@@ -47,7 +47,7 @@ namespace Volo.Abp.EventBus
             
         }
 
-        public void AsyncUnregister<TEvent>(IAsyncEventHandler<TEvent> handler) where TEvent : class
+        public void AsyncUnregister<TEvent>(IEventHandler<TEvent> handler) where TEvent : class
         {
             
         }

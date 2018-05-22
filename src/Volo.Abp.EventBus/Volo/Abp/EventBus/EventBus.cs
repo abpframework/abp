@@ -70,7 +70,7 @@ namespace Volo.Abp.EventBus
         }
 
         /// <inheritdoc/>
-        public IDisposable Register<TEvent>(IAsyncEventHandler<TEvent> handler) where TEvent : class
+        public IDisposable Register<TEvent>(IEventHandler<TEvent> handler) where TEvent : class
         {
             return Register(typeof(TEvent), handler);
         }
@@ -133,7 +133,7 @@ namespace Volo.Abp.EventBus
         }
 
         /// <inheritdoc/>
-        public void AsyncUnregister<TEvent>(IAsyncEventHandler<TEvent> handler) where TEvent : class
+        public void AsyncUnregister<TEvent>(IEventHandler<TEvent> handler) where TEvent : class
         {
             Unregister(typeof(TEvent), handler);
         }
@@ -230,7 +230,7 @@ namespace Volo.Abp.EventBus
             {
                 try
                 {
-                    var asyncHandlerType = typeof(IAsyncEventHandler<>).MakeGenericType(eventType);
+                    var asyncHandlerType = typeof(IEventHandler<>).MakeGenericType(eventType);
 
                     var method = asyncHandlerType.GetMethod(
                         "HandleEventAsync",
