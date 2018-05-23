@@ -150,23 +150,28 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         protected virtual AbpTagHelper GetSelectGroupTagHelper(TagHelperContext context, TagHelperOutput output, ModelExpression model)
         {
-            if (IsRadioGroup(model.ModelExplorer))
-            {
-                var abpRadioInputTagHelper = _serviceProvider.GetRequiredService<AbpRadioInputTagHelper>();
-                abpRadioInputTagHelper.AspFor = model;
-                abpRadioInputTagHelper.AspItems = null;
-                abpRadioInputTagHelper.Inline = GetAttribute<AbpRadioButton>(model.ModelExplorer).Inline;
-                abpRadioInputTagHelper.ViewContext = TagHelper.ViewContext;
-                return abpRadioInputTagHelper;
-            }
-            else
-            {
-                var abpSelectTagHelper = _serviceProvider.GetRequiredService<AbpSelectTagHelper>();
-                abpSelectTagHelper.AspFor = model;
-                abpSelectTagHelper.AspItems = null;
-                abpSelectTagHelper.ViewContext = TagHelper.ViewContext;
-                return abpSelectTagHelper;
-            }
+            return IsRadioGroup(model.ModelExplorer) ? 
+                GetAbpRadioInputTagHelper(model) :
+                GetSelectGroupTagHelper(model);
+        }
+
+        private AbpTagHelper GetSelectGroupTagHelper(ModelExpression model)
+        {
+            var abpSelectTagHelper = _serviceProvider.GetRequiredService<AbpSelectTagHelper>();
+            abpSelectTagHelper.AspFor = model;
+            abpSelectTagHelper.AspItems = null;
+            abpSelectTagHelper.ViewContext = TagHelper.ViewContext;
+            return abpSelectTagHelper;
+        }
+
+        private AbpTagHelper GetAbpRadioInputTagHelper(ModelExpression model)
+        {
+            var abpRadioInputTagHelper = _serviceProvider.GetRequiredService<AbpRadioInputTagHelper>();
+            abpRadioInputTagHelper.AspFor = model;
+            abpRadioInputTagHelper.AspItems = null;
+            abpRadioInputTagHelper.Inline = GetAttribute<AbpRadioButton>(model.ModelExplorer).Inline;
+            abpRadioInputTagHelper.ViewContext = TagHelper.ViewContext;
+            return abpRadioInputTagHelper;
         }
 
         protected virtual string ProcessSubmitButtonAndGetContent(TagHelperContext context, TagHelperOutput output)
