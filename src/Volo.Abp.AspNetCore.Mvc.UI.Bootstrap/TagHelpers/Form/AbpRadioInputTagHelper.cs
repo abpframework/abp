@@ -14,6 +14,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         public bool? Inline { get; set; }
 
+        public bool? Disabled { get; set; }
+
         public IEnumerable<SelectListItem> AspItems { get; set; }
 
         [HtmlAttributeNotBound]

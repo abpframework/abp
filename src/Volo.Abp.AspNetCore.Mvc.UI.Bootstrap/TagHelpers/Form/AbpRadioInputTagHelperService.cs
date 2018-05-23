@@ -33,7 +33,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 output.TagMode = TagMode.StartTagAndEndTag;
                 output.Content.SetHtmlContent(html);
             }
-
         }
 
         protected virtual string GetHtml(TagHelperContext context, TagHelperOutput output, List<SelectListItem> selectItems)
@@ -46,9 +45,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 var id = TagHelper.AspFor.Name + "Radio" + selectItem.Value;
                 var name = TagHelper.AspFor.Name;
                 var selected = selectItem.Selected ? " checked=\"checked\"" : "";
+                var disabled = (TagHelper.Disabled??false) ? " disabled" : "";
 
                 var htmlPart = "<div class=\"custom-control custom-radio" + inlineClass + "\">\r\n" +
-                               "  <input type=\"radio\" id=\"" + id + "\" name=\"" + name + "\" value=\"" + selectItem.Value + "\"" + selected + " class=\"custom-control-input\">\r\n" +
+                               "  <input type=\"radio\" id=\"" + id + "\" name=\"" + name + "\" value=\"" + selectItem.Value + "\"" + selected + " class=\"custom-control-input\""+ disabled + ">\r\n" +
                                "  <label class=\"custom-control-label\" for=\"" + id + "\">" + selectItem.Text + "</label>\r\n" +
                                "</div>";
 

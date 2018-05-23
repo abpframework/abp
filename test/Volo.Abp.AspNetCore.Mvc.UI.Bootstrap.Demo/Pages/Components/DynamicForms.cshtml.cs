@@ -69,7 +69,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components
             public bool IsActive { get; set; }
 
             [DisplayName("Country")]
-            [AbpRadioButton(Inline = false)]
+            [AbpRadioButton(Inline = true)]
             [SelectItems(ItemsListPropertyName = nameof(Countries))]
             public string Country { get; set; }
         }

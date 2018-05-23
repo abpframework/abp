@@ -166,10 +166,12 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         private AbpTagHelper GetAbpRadioInputTagHelper(ModelExpression model)
         {
+            var radioButtonAttribute = GetAttribute<AbpRadioButton>(model.ModelExplorer);
             var abpRadioInputTagHelper = _serviceProvider.GetRequiredService<AbpRadioInputTagHelper>();
             abpRadioInputTagHelper.AspFor = model;
             abpRadioInputTagHelper.AspItems = null;
-            abpRadioInputTagHelper.Inline = GetAttribute<AbpRadioButton>(model.ModelExplorer).Inline;
+            abpRadioInputTagHelper.Inline = radioButtonAttribute.Inline;
+            abpRadioInputTagHelper.Disabled = radioButtonAttribute.Disabled;
             abpRadioInputTagHelper.ViewContext = TagHelper.ViewContext;
             return abpRadioInputTagHelper;
         }
