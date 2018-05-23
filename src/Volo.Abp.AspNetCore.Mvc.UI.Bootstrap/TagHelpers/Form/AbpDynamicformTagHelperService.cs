@@ -143,12 +143,30 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         protected virtual void ProcessSelectGroup(TagHelperContext context, TagHelperOutput output, ModelExpression model)
         {
-            var abpSelectTagHelper = _serviceProvider.GetRequiredService<AbpSelectTagHelper>();
-            abpSelectTagHelper.AspFor = model;
-            abpSelectTagHelper.AspItems = null;
-            abpSelectTagHelper.ViewContext = TagHelper.ViewContext;
+            var abpSelectTagHelper = GetSelectGroupTagHelper(context, output, model);
 
             RenderTagHelper(new TagHelperAttributeList(), context, abpSelectTagHelper, _htmlEncoder, "div", TagMode.StartTagAndEndTag);
+        }
+
+        protected virtual AbpTagHelper GetSelectGroupTagHelper(TagHelperContext context, TagHelperOutput output, ModelExpression model)
+        {
+            if (IsRadioGroup(model.ModelExplorer))
+            {
+                var abpRadioInputTagHelper = _serviceProvider.GetRequiredService<AbpRadioInputTagHelper>();
+                abpRadioInputTagHelper.AspFor = model;
+                abpRadioInputTagHelper.AspItems = null;
+                abpRadioInputTagHelper.Inline = GetAttribute<AbpRadioButton>(model.ModelExplorer).Inline;
+                abpRadioInputTagHelper.ViewContext = TagHelper.ViewContext;
+                return abpRadioInputTagHelper;
+            }
+            else
+            {
+                var abpSelectTagHelper = _serviceProvider.GetRequiredService<AbpSelectTagHelper>();
+                abpSelectTagHelper.AspFor = model;
+                abpSelectTagHelper.AspItems = null;
+                abpSelectTagHelper.ViewContext = TagHelper.ViewContext;
+                return abpSelectTagHelper;
+            }
         }
 
         protected virtual string ProcessSubmitButtonAndGetContent(TagHelperContext context, TagHelperOutput output)
@@ -254,6 +272,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
         protected virtual bool AreSelectItemsProvided(ModelExplorer explorer)
         {
             return GetAttribute<SelectItems>(explorer) != null;
+        }
+
+        protected virtual bool IsRadioGroup(ModelExplorer explorer)
+        {
+            return GetAttribute<AbpRadioButton>(explorer) != null;
         }
     }
 }

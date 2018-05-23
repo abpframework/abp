@@ -11,8 +11,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
     {
         public string ItemsListPropertyName { get; set; }
 
-        public SelectType SelectType { get; set; } = SelectType.Dropdown;
-
         public IEnumerable<SelectListItem> GetItems(ModelExplorer explorer)
         {
             var properties = explorer.Container.Properties.Where(p => p.Metadata.PropertyName.Equals(ItemsListPropertyName)).ToList();
