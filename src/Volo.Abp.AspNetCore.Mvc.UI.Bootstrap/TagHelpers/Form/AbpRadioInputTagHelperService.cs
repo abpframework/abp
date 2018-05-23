@@ -42,7 +42,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
             foreach (var selectItem in selectItems)
             {
-                var inlineClass = (TagHelper.Inline ?? true) ? " custom-control-inline" : "";
+                var inlineClass = (TagHelper.Inline ?? false) ? " custom-control-inline" : "";
                 var id = TagHelper.AspFor.Name + "Radio" + selectItem.Value;
                 var name = TagHelper.AspFor.Name;
                 var selected = selectItem.Selected ? " checked=\"checked\"" : "";
