@@ -18,6 +18,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic
             services.Configure<ThemingOptions>(options =>
             {
                 options.Themes.Add<BasicTheme>();
+
+                if (options.DefaultThemeName == null)
+                {
+                    options.DefaultThemeName = BasicTheme.Name;
+                }
             });
 
             services.Configure<VirtualFileSystemOptions>(options =>
