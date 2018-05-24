@@ -1,52 +1,41 @@
 ﻿using System;
-using System.Linq;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Theming
 {
-    public class DefaultThemeManager : IThemeManager, ITransientDependency, IServiceProviderAccessor
+    public class DefaultThemeManager : IThemeManager, IScopedDependency, IServiceProviderAccessor
     {
-        public IServiceProvider ServiceProvider { get; }
+        private const string CurrentThemeHttpContextKey = "__AbpCurrentTheme";
 
+        public IServiceProvider ServiceProvider { get; }
         public ITheme CurrentTheme => GetCurrentTheme();
 
-        protected ThemingOptions Options { get; }
+        protected IThemeSelector ThemeSelector { get; }
+        protected IHttpContextAccessor HttpContextAccessor { get; }
 
         public DefaultThemeManager(
-            IOptions<ThemingOptions> options, 
-            IServiceProvider serviceProvider)
+            IServiceProvider serviceProvider,
+            IThemeSelector themeSelector,
+            IHttpContextAccessor httpContextAccessor)
         {
+            HttpContextAccessor = httpContextAccessor;
             ServiceProvider = serviceProvider;
-            Options = options.Value;
+            ThemeSelector = themeSelector;
         }
 
         protected virtual ITheme GetCurrentTheme()
         {
-            var themeInfo = GetCurrentThemeInfo();
-            return (ITheme) ServiceProvider.GetRequiredService(themeInfo.ThemeType);
-        }
+            var preSelectedTheme = HttpContextAccessor.HttpContext.Items[CurrentThemeHttpContextKey] as ITheme;
 
-        protected virtual ThemeInfo GetCurrentThemeInfo()
-        {
-            if (!Options.Themes.Any())
+            if (preSelectedTheme == null)
             {
-                throw new AbpException($"No theme registered! Use {nameof(ThemingOptions)} to register themes.");
+                preSelectedTheme = (ITheme)ServiceProvider.GetRequiredService(ThemeSelector.GetCurrentThemeInfo().ThemeType);
+                HttpContextAccessor.HttpContext.Items[CurrentThemeHttpContextKey] = preSelectedTheme;
             }
 
-            if (Options.DefaultThemeName == null)
-            {
-                return Options.Themes.Values.First();
-            }
-
-            var themeInfo = Options.Themes.Values.FirstOrDefault(t => t.Name == Options.DefaultThemeName);
-            if (themeInfo == null)
-            {
-                throw new AbpException("Default theme is configured but it's not found in the registered themes: " + Options.DefaultThemeName);
-            }
-
-            return themeInfo;
+            return preSelectedTheme;
         }
     }
 }
