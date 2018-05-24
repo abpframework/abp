@@ -93,12 +93,12 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         protected virtual string GetLabelAsHtml(TagHelperContext context, TagHelperOutput output, TagHelperOutput selectTag)
         {
-            if (string.IsNullOrEmpty(TagHelper.Label))
+            if (!string.IsNullOrEmpty(TagHelper.Label))
             {
-                return GetLabelAsHtmlUsingTagHelper(context, output);
+                return "<label " + GetIdAttributeAsString(selectTag) + ">" + TagHelper.Label + "</label>";
             }
 
-            return "<label " + GetIdAttributeAsString(selectTag) + ">" + TagHelper.Label + "</label>";
+            return GetLabelAsHtmlUsingTagHelper(context, output);
         }
 
         protected virtual bool GetSelectItemsIfProvidedByEnum(TagHelperContext context, TagHelperOutput output, ModelExplorer explorer, out List<SelectListItem> selectItems)
@@ -118,10 +118,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         protected virtual void SetSelectedValue(TagHelperContext context, TagHelperOutput output, List<SelectListItem> selectItems)
         {
-            var selectedValue = GetSelectedValue(context, output);
-
             if (!selectItems.Any(si => si.Selected))
             {
+                var selectedValue = GetSelectedValue(context, output);
+
                 var itemToBeSelected = selectItems.FirstOrDefault(si => si.Value.ToString() == selectedValue);
 
                 if (itemToBeSelected != null)
@@ -133,20 +133,21 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         protected virtual string GetSelectedValue(TagHelperContext context, TagHelperOutput output)
         {
-            if (TagHelper.AspFor.ModelExplorer.Metadata.IsEnum)
+            var modelExplorer = TagHelper.AspFor.ModelExplorer;
+
+            if (modelExplorer.Metadata.IsEnum)
             {
-                var baseType = TagHelper.AspFor.ModelExplorer.Model?.GetType().GetEnumUnderlyingType();
+                var baseType = modelExplorer.Model?.GetType().GetEnumUnderlyingType();
 
-                if (baseType == null)
-                {
-                    return null;
-                }
+                if (baseType == null) { return null; }
 
-                var valueAsString = Convert.ChangeType(TagHelper.AspFor.ModelExplorer.Model, baseType);
-                return valueAsString != null ? valueAsString.ToString() : "";
+                var value = Convert.ChangeType(modelExplorer.Model, baseType);
+                return value != null ? value.ToString() : "";
             }
-
-            return TagHelper.AspFor.ModelExplorer.Model?.ToString();
+            else
+            {
+                return modelExplorer.Model?.ToString();
+            }
         }
 
         protected virtual string GetLabelAsHtmlUsingTagHelper(TagHelperContext context, TagHelperOutput output)
@@ -156,7 +157,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 For = TagHelper.AspFor,
                 ViewContext = TagHelper.ViewContext
             };
-            
+
             return RenderTagHelper(new TagHelperAttributeList(), context, labelTagHelper, _encoder, "span", TagMode.StartTagAndEndTag, true);
         }
     }

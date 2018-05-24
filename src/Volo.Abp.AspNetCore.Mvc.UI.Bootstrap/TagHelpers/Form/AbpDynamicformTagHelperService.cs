@@ -152,10 +152,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
         {
             return IsRadioGroup(model.ModelExplorer) ? 
                 GetAbpRadioInputTagHelper(model) :
-                GetSelectGroupTagHelper(model);
+                GetSelectTagHelper(model);
         }
 
-        private AbpTagHelper GetSelectGroupTagHelper(ModelExpression model)
+        private AbpTagHelper GetSelectTagHelper(ModelExpression model)
         {
             var abpSelectTagHelper = _serviceProvider.GetRequiredService<AbpSelectTagHelper>();
             abpSelectTagHelper.AspFor = model;
