@@ -262,3 +262,4 @@ src/MicroserviceDemo/MicroserviceDemo.TenancyService/Logs/*.txt
 src/AbpDesk/Web_PlugIns/AbpDesk.MongoBlog.dll
 /test/Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo/Logs/logs.txt
 test/Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo/Logs/logs.txt
+test/Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo/Logs/logs.txt

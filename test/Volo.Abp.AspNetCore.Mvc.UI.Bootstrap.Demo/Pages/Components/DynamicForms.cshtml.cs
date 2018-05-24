@@ -13,11 +13,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components
     {
         [BindProperty]
         public PersonModel PersonInput { get; set; }
-        
+
         public List<SelectListItem> Countries { get; set; } = new List<SelectListItem>
         {
             new SelectListItem { Value = "CA", Text = "Canada"},
-            new SelectListItem { Value = "US", Text = "USA"  },
+            new SelectListItem { Value = "US", Text = "USA"},
             new SelectListItem { Value = "UK", Text = "United Kingdom"},
             new SelectListItem { Value = "RU", Text = "Russia"}
         };
@@ -40,7 +40,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components
 
         public void OnPost()
         {
-            
+
         }
 
         public class PersonModel
@@ -64,17 +64,14 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components
             [DisplayName("Day")]
             [DisplayOrder(10003)]
             public DateTime Day { get; set; }
-            
+
             [DisplayName("Is Active")]
             public bool IsActive { get; set; }
 
             [DisplayName("Country")]
+            [AbpRadioButton(Inline = true)]
             [SelectItems(ItemsListPropertyName = nameof(Countries))]
             public string Country { get; set; }
-
-            [DisplayName("Country")]
-            [SelectItems(ItemsListPropertyName = nameof(Countries))]
-            public IEnumerable<string> MultiCountry { get; set; }
         }
 
         public class PhoneModel
