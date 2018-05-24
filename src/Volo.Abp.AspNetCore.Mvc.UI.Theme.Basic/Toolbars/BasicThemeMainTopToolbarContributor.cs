@@ -14,6 +14,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Toolbars
                 return Task.CompletedTask;
             }
 
+            if (!(context.Theme is BasicTheme))
+            {
+                return Task.CompletedTask;
+            }
+
             context.Toolbar.Items.Add(new ToolbarItem(typeof(LanguageSwitchViewComponent)));
             context.Toolbar.Items.Add(new ToolbarItem(typeof(UserMenuViewComponent)));
 
