@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Views.Shared.Components.Theme.MainNavbar.Toolbar.Items.LanguageSwitch
+namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Themes.Basic.Components.Toolbar.LanguageSwitch
 {
     public class LanguageSwitchViewComponent : AbpViewComponent
     {
@@ -43,7 +43,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Views.Shared.Components.Theme.M
                 });
             }
 
-            return View("~/Views/Shared/Components/Theme/MainNavbar/Toolbar/Items/LanguageSwitch/Default.cshtml", model);
+            return View("~/Themes/Basic/Components/Toolbar/LanguageSwitch/Default.cshtml", model);
         }
     }
 }

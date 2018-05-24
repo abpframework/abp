@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Views.Shared.Components.Theme.MainNavbar.Toolbar
+namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Themes.Basic.Components.Toolbar
 {
     public class MainNavbarToolbarViewComponent : AbpViewComponent
     {
@@ -16,7 +16,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Views.Shared.Components.Theme.M
         public async Task<IViewComponentResult> InvokeAsync()
         {
             var toolbar = await _toolbarManager.GetAsync(StandardToolbars.Main);
-            return View("~/Views/Shared/Components/Theme/MainNavbar/Toolbar/Default.cshtml", toolbar);
+            return View("~/Themes/Basic/Components/Toolbar/Default.cshtml", toolbar);
         }
     }
 }

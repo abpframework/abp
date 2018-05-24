@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <Import Project="..\..\common.props" />
 
@@ -15,17 +15,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Themes\**\*.cshtml" />
     <EmbeddedResource Include="Pages\**\*.cshtml" />
     <EmbeddedResource Include="Views\**\*.cshtml" />
     <EmbeddedResource Include="wwwroot\**\*.*" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Remove="Views\Shared\Components\Theme\MainNavbar\Toolbar\Items\UserMenu\Default.cshtml" />
+    <EmbeddedResource Remove="Themes\Basic\_ViewImports.cshtml" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.csproj" />
   </ItemGroup>
-
+  
 </Project>

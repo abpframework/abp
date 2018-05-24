@@ -1,3 +1,6 @@
-﻿@{
-    Layout = "~/Views/Shared/_AppLayout.cshtml";
+﻿@using Volo.Abp.AspNetCore.Mvc.UI.Theming
+@inject IThemeManager ThemeManager
+@{
+    //TODO: Move this to a lower layer... to Shared?
+    Layout = ThemeManager.CurrentTheme.DefaultLayout;
 }

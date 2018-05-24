@@ -8,7 +8,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic
     {
         public const string Name = "Basic";
 
-        public string DefaultLayout => "~/Views/Shared/_AppLayout.cshtml";
+        public string DefaultLayout => "~/Themes/Basic/Layouts/App.cshtml";
 
         public string GetLayoutOrNull(string name)
         {
