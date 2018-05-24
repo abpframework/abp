@@ -7,6 +7,6 @@ namespace Volo.Abp.AspNetCore.Mvc.RazorPages
     public abstract class AbpPage : Page
     {
         [RazorInject]
-        protected ICurrentUser CurrentUser { get; set; }
+        public ICurrentUser CurrentUser { get; set; }
     }
 }
