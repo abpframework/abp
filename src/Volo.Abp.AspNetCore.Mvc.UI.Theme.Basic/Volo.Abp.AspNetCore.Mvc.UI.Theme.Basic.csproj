@@ -22,10 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Remove="Themes\Basic\_ViewImports.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.csproj" />
   </ItemGroup>
   

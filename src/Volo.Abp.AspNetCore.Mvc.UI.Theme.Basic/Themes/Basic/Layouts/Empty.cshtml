@@ -1,0 +1,38 @@
+﻿@using Volo.Abp.AspNetCore.Mvc.AntiForgery
+@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Themes.Basic.Components.MainNavbar
+@inject IAbpAntiForgeryManager AbpAntiForgeryManager
+@{
+    Layout = null;
+    AbpAntiForgeryManager.SetCookie();
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>ABP Web Application</title>
+
+    <vc:abp-style-bundle name="GlobalStyles"></vc:abp-style-bundle>
+
+    <link rel="stylesheet" type="text/css" href="~/views/shared/_AppLayout.css" />
+
+    @RenderSection("styles", false)
+</head>
+<body>
+
+    <div class="container-fluid">
+        @RenderBody()
+    </div>
+
+    <vc:abp-script-bundle name="GlobalScripts"></vc:abp-script-bundle>
+
+    <script type="text/javascript" src="~/Abp/ApplicationConfigurationScript"></script>
+    <script type="text/javascript" src="~/Abp/ServiceProxyScript"></script>
+
+    @RenderSection("scripts", false)
+
+</body>
+</html>

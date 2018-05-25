@@ -2,8 +2,6 @@
 {
     public interface ITheme
     {
-        string DefaultLayout { get; }
-
-        string GetLayoutOrNull(string name);
+        string GetLayout(string name, bool fallbackToDefault = true);
     }
 }

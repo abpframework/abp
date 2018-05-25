@@ -8,11 +8,19 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic
     {
         public const string Name = "Basic";
 
-        public string DefaultLayout => "~/Themes/Basic/Layouts/App.cshtml";
-
-        public string GetLayoutOrNull(string name)
+        public string GetLayout(string name, bool fallbackToDefault = true)
         {
-            return DefaultLayout;
+            switch (name)
+            {
+                case StandardLayouts.Application:
+                    return "~/Themes/Basic/Layouts/Application.cshtml";
+                case StandardLayouts.Account:
+                    return "~/Themes/Basic/Layouts/Application.cshtml";
+                case StandardLayouts.Empty:
+                    return "~/Themes/Basic/Layouts/Empty.cshtml";
+                default:
+                    return fallbackToDefault ? "~/Themes/Basic/Layouts/Application.cshtml" : null;
+            }
         }
     }
 }
