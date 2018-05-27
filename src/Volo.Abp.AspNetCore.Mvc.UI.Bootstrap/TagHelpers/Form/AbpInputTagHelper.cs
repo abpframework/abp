@@ -13,6 +13,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
         [HtmlAttributeName("disabled")]
         public bool IsDisabled { get; set; }
 
+        public bool AutoFocus { get; set; }
+
         [HtmlAttributeNotBound]
         [ViewContext]
         public ViewContext ViewContext { get; set; }

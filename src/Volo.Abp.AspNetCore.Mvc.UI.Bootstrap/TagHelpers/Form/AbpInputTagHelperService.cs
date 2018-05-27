@@ -96,9 +96,14 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
             var inputTagHelperOutput = GetInnerTagHelper(new TagHelperAttributeList(), context, inputTagHelper, "input");
 
-            if (!inputTagHelperOutput.Attributes.ContainsName("disabled") && TagHelper.IsDisabled)
+            if (TagHelper.IsDisabled && !inputTagHelperOutput.Attributes.ContainsName("disabled"))
             {
                 inputTagHelperOutput.Attributes.Add("disabled", "true");
+            }
+
+            if (TagHelper.AutoFocus && !inputTagHelperOutput.Attributes.ContainsName("data-auto-focus"))
+            {
+                inputTagHelperOutput.Attributes.Add("data-auto-focus", "true");
             }
 
             isCheckbox = IsInputCheckbox(context, output, inputTagHelperOutput.Attributes);
