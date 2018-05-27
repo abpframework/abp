@@ -1,6 +1,6 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Alert
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Alerts
 {
-    public enum AbpAlertType
+    public enum AlertType
     {
         Default,
         Primary,

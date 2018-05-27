@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Volo.Abp.AspNetCore.Mvc.UI.Alerts;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Alert
@@ -20,7 +21,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Alert
             output.Attributes.Add("role", "alert");
             output.Attributes.AddClass("alert");
 
-            if (TagHelper.AlertType != AbpAlertType.Default)
+            if (TagHelper.AlertType != AlertType.Default)
             {
                 output.Attributes.AddClass("alert-" + TagHelper.AlertType.ToString().ToLowerInvariant());
             }

@@ -1,5 +1,6 @@
 ﻿@using Volo.Abp.AspNetCore.Mvc.AntiForgery
 @using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Themes.Basic.Components.MainNavbar
+@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Themes.Basic.Components.PageAlerts
 @inject IAbpAntiForgeryManager AbpAntiForgeryManager
 @{
     Layout = null;
@@ -25,7 +26,9 @@
 
     @(await Component.InvokeAsync<MainNavbarViewComponent>())
 
-    <div class="container"> @* TODO: Create option to select 'container' or 'container-fluid' *@
+    <div class="container">
+        @* TODO: Create option to select 'container' or 'container-fluid' *@
+        @(await Component.InvokeAsync<PageAlertsViewComponent>())
         @RenderBody()
     </div>
 

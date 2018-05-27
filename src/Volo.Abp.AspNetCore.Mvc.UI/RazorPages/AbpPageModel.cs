@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Volo.Abp.AspNetCore.Mvc.UI.Alerts;
 using Volo.Abp.AspNetCore.Mvc.Validation;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
@@ -33,6 +34,10 @@ namespace Volo.Abp.AspNetCore.Mvc.RazorPages
         public IModelStateValidator ModelValidator { get; set; }
 
         public IAuthorizationService AuthorizationService { get; set; }
+
+        public IAlertManager AlertManager { get; set; }
+
+        public AlertList Alerts => AlertManager.Alerts;
 
         protected IUnitOfWork CurrentUnitOfWork => UnitOfWorkManager?.Current;
 
