@@ -72,6 +72,8 @@
     });
 
     $(function () {
+        enableFormFeatures($('form'));
+
         $('[data-toggle="tooltip"]').tooltip({
             container: 'body'
         });
@@ -80,7 +82,7 @@
             container: 'body'
         });
 
-        enableFormFeatures($('form'));
+        $('[data-auto-focus="true"]').first().findWithSelf('input').focus();
     });
 
 })(jQuery);
