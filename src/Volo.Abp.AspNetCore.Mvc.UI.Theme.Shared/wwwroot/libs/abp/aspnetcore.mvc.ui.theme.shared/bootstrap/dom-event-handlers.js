@@ -82,7 +82,7 @@
             container: 'body'
         });
 
-        $('[data-auto-focus="true"]').first().findWithSelf('input').focus();
+        $('[data-auto-focus="true"]').first().findWithSelf('input,select').focus();
     });
 
 })(jQuery);
