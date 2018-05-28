@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Localization;
+using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
 {
@@ -28,9 +29,12 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
                 output.SuppressOutput();
             }
 
-            output.TagName = "div";
-            output.TagMode = TagMode.StartTagAndEndTag;
+            ProcessMainTag(context, output);
+            SetContentAsHtml(context, output);
+        }
 
+        protected virtual void SetContentAsHtml(TagHelperContext context, TagHelperOutput output)
+        {
             var html = new StringBuilder("");
 
             html.AppendLine(GetOpeningTags(context, output));
@@ -40,6 +44,14 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
             html.AppendLine(GetClosingTags(context, output));
 
             output.Content.SetHtmlContent(html.ToString());
+        }
+
+        protected virtual void ProcessMainTag(TagHelperContext context, TagHelperOutput output)
+        {
+            output.TagName = "div";
+            output.TagMode = TagMode.StartTagAndEndTag;
+            output.Attributes.AddClass("row");
+            output.Attributes.AddClass("mt-3");
         }
 
         protected virtual string GetPages(TagHelperContext context, TagHelperOutput output)
@@ -64,19 +76,16 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
             {
                 pageHtml.AppendLine("<span class=\"page-link gap\">…</span>");
             }
+            else if(!page.IsGap && TagHelper.Model.CurrentPage == page.Index)
+            {
+                pageHtml.AppendLine("                                 <span class=\"page-link\">\r\n" +
+                                    "                                    " + page.Index + "\r\n" +
+                                    "                                    <span class=\"sr-only\">(current)</span>\r\n" +
+                                    "                                </span>");
+            }
             else
             {
-                if (TagHelper.Model.CurrentPage == page.Index)
-                {
-                    pageHtml.AppendLine("                                 <span class=\"page-link\">\r\n" +
-                                        "                                    " + page.Index + "\r\n" +
-                                        "                                    <span class=\"sr-only\">(current)</span>\r\n" +
-                                        "                                </span>");
-                }
-                else
-                {
-                    pageHtml.AppendLine(RenderAnchorTagHelperLinkHtml(context, output, page.Index.ToString(), page.Index.ToString()));
-                }
+                pageHtml.AppendLine(RenderAnchorTagHelperLinkHtml(context, output, page.Index.ToString(), page.Index.ToString()));
             }
 
             pageHtml.AppendLine("</li>");
@@ -84,31 +93,42 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
             return pageHtml.ToString();
         }
 
-
-
         protected virtual string GetPreviousButton(TagHelperContext context, TagHelperOutput output)
         {
-            var content = "PagerPrevious";
+            var localizationKey = "PagerPrevious";
             var currentPage = TagHelper.Model.CurrentPage == 1
                 ? TagHelper.Model.CurrentPage.ToString()
                 : (TagHelper.Model.CurrentPage - 1).ToString();
             return
                 "<li class=\"page-item " + (TagHelper.Model.CurrentPage == 1 ? "disabled" : "") + "\">\r\n" +
-                RenderAnchorTagHelperLinkHtml(context, output, currentPage, content) +
+                RenderAnchorTagHelperLinkHtml(context, output, currentPage, localizationKey) +
                 "                </li>";
         }
 
         protected virtual string GetNextButton(TagHelperContext context, TagHelperOutput output)
         {
-            var content = "PagerNext";
+            var localizationKey = "PagerNext";
             var currentPage = (TagHelper.Model.CurrentPage + 1).ToString();
             return
                 "<li class=\"page-item " + (TagHelper.Model.CurrentPage >= TagHelper.Model.TotalPageCount ? "disabled" : "") + "\">\r\n" +
-                RenderAnchorTagHelperLinkHtml(context, output, currentPage, content) +
+                RenderAnchorTagHelperLinkHtml(context, output, currentPage, localizationKey) +
                 "                </li>";
         }
 
-        protected virtual string RenderAnchorTagHelperLinkHtml(TagHelperContext context, TagHelperOutput output, string currentPage, string content)
+        protected virtual string RenderAnchorTagHelperLinkHtml(TagHelperContext context, TagHelperOutput output, string currentPage, string localizationKey)
+        {
+            var anchorTagHelper = GetAnchorTagHelper(currentPage, out var attributeList);
+
+            var tagHelperOutput = GetInnerTagHelper(attributeList, context, anchorTagHelper, "a", TagMode.StartTagAndEndTag);
+
+            tagHelperOutput.Content.SetHtmlContent(_localizer[localizationKey]);
+
+            var renderedHtml = RenderTagHelperOutput(tagHelperOutput, _encoder);
+
+            return renderedHtml;
+        }
+
+        private AnchorTagHelper GetAnchorTagHelper(string currentPage, out TagHelperAttributeList attributeList)
         {
             var anchorTagHelper = new AnchorTagHelper(_generator)
             {
@@ -119,19 +139,13 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
             anchorTagHelper.RouteValues.Add("currentPage", currentPage);
             anchorTagHelper.RouteValues.Add("sort", TagHelper.Model.Sort);
 
-            var attributeList = new TagHelperAttributeList
+            attributeList = new TagHelperAttributeList
             {
                 new TagHelperAttribute("tabindex", "-1"),
                 new TagHelperAttribute("class", "page-link")
             };
 
-            var tagHelperOutput = GetInnerTagHelper(attributeList, context, anchorTagHelper, "a", TagMode.StartTagAndEndTag);
-
-            tagHelperOutput.Content.SetHtmlContent(_localizer[content]);
-
-            var renderedHtml = RenderTagHelperOutput(tagHelperOutput, _encoder);
-
-            return renderedHtml;
+            return anchorTagHelper;
         }
 
         protected virtual string GetOpeningTags(TagHelperContext context, TagHelperOutput output)
@@ -141,11 +155,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
                 : "";
 
             return
-                "<div class=\"row mt-3\">\r\n" +
                 pagerInfo +
                 "    <div class=\"col-sm-12 col-md-7\">\r\n" +
                 "        <nav aria-label=\"Page navigation\">\r\n" +
-                "            <ul class=\"pagination justify-content-end\">";
+                "            <ul class=\"pagination justify-localizationKey-end\">";
         }
 
         protected virtual string GetClosingTags(TagHelperContext context, TagHelperOutput output)
@@ -153,8 +166,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
             return
                 "            </ul>\r\n" +
                 "         </ nav>\r\n" +
-                "    </div>\r\n" +
-                "</div>";
+                "    </div>\r\n";
         }
     }
 }

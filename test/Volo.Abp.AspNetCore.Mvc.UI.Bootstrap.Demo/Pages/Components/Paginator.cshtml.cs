@@ -14,13 +14,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components
 
         public void OnGet(int currentPage, string sort)
         {
-            PagerModel = new PagerModel(totalCount: 100,
-                shownItemsCount: 10,
-                currentPage: currentPage,
-                pageSize: 10,
-                pageUrl: "Paginator",
-                sort: sort
-            );
+            PagerModel = new PagerModel(100, 10, currentPage, 10, "Paginator", sort);
         }
     }
 }
