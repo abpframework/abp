@@ -9,6 +9,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
     {
         public PagerModel Model { get; set; }
 
+        public bool? ShowInfo { get; set; }
+
         [HtmlAttributeNotBound]
         [ViewContext]
         public ViewContext ViewContext { get; set; }

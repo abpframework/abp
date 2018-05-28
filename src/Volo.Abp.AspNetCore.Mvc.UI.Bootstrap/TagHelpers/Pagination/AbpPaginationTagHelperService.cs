@@ -1,8 +1,10 @@
 ﻿using System.Text;
 using System.Text.Encodings.Web;
+using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Microsoft.Extensions.Localization;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
 {
@@ -10,11 +12,13 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
     {
         private readonly IHtmlGenerator _generator;
         private readonly HtmlEncoder _encoder;
+        private readonly IStringLocalizer<AbpUiResource> _localizer;
 
-        public AbpPaginationTagHelperService(IHtmlGenerator generator, HtmlEncoder encoder)
+        public AbpPaginationTagHelperService(IHtmlGenerator generator, HtmlEncoder encoder, IStringLocalizer<AbpUiResource> localizer)
         {
             _generator = generator;
             _encoder = encoder;
+            _localizer = localizer;
         }
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
@@ -29,11 +33,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
 
             var html = new StringBuilder("");
 
-            html.AppendLine(GetOpeningTags(context,output));
-            html.AppendLine(GetPreviousButton(context,output));
-            html.AppendLine(GetPages(context,output));
-            html.AppendLine(GetNextButton(context,output));
-            html.AppendLine(GetClosingTags(context,output));
+            html.AppendLine(GetOpeningTags(context, output));
+            html.AppendLine(GetPreviousButton(context, output));
+            html.AppendLine(GetPages(context, output));
+            html.AppendLine(GetNextButton(context, output));
+            html.AppendLine(GetClosingTags(context, output));
 
             output.Content.SetHtmlContent(html.ToString());
         }
@@ -84,7 +88,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
 
         protected virtual string GetPreviousButton(TagHelperContext context, TagHelperOutput output)
         {
-            var content = "Previous Button";
+            var content = "PagerPrevious";
             var currentPage = TagHelper.Model.CurrentPage == 1
                 ? TagHelper.Model.CurrentPage.ToString()
                 : (TagHelper.Model.CurrentPage - 1).ToString();
@@ -96,7 +100,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
 
         protected virtual string GetNextButton(TagHelperContext context, TagHelperOutput output)
         {
-            var content = "Next Button";
+            var content = "PagerNext";
             var currentPage = (TagHelper.Model.CurrentPage + 1).ToString();
             return
                 "<li class=\"page-item " + (TagHelper.Model.CurrentPage >= TagHelper.Model.TotalPageCount ? "disabled" : "") + "\">\r\n" +
@@ -123,7 +127,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
 
             var tagHelperOutput = GetInnerTagHelper(attributeList, context, anchorTagHelper, "a", TagMode.StartTagAndEndTag);
 
-            tagHelperOutput.Content.SetHtmlContent(content);
+            tagHelperOutput.Content.SetHtmlContent(_localizer[content]);
 
             var renderedHtml = RenderTagHelperOutput(tagHelperOutput, _encoder);
 
@@ -132,10 +136,13 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
 
         protected virtual string GetOpeningTags(TagHelperContext context, TagHelperOutput output)
         {
+            var pagerInfo = (TagHelper.ShowInfo ?? false) ?
+                "    <div class=\"col-sm-12 col-md-5\"> " + _localizer["PagerInfo", TagHelper.Model.ShowingFrom, TagHelper.Model.ShowingTo, TagHelper.Model.TotalItemsCount] + "</div>\r\n"
+                : "";
+
             return
                 "<div class=\"row mt-3\">\r\n" +
-                // "    <div class=\"col-sm-12 col-md-5\">@L[\"PagerInfo\", Model.ShowingFrom, Model.ShowingTo, Model.TotalItemsCount]</div>\r\n" +  <<<<<<<<< No localization for now!
-                "    <div class=\"col-sm-12 col-md-5\"> " + TagHelper.Model.ShowingFrom + " " + TagHelper.Model.ShowingTo + " " + TagHelper.Model.TotalItemsCount + " @L[\"PagerInfo\", Model.ShowingFrom, Model.ShowingTo, Model.TotalItemsCount]</div>\r\n" +
+                pagerInfo +
                 "    <div class=\"col-sm-12 col-md-7\">\r\n" +
                 "        <nav aria-label=\"Page navigation\">\r\n" +
                 "            <ul class=\"pagination justify-content-end\">";
