@@ -2,14 +2,14 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Modularity;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo
 {
     [DependsOn(
-        typeof(AbpAspNetCoreMvcUiThemeSharedModule),
+        typeof(AbpAspNetCoreMvcUiBasicThemeModule),
         typeof(AbpAutofacModule)
         )]
     public class AbpAspNetCoreMvcUiBootstrapDemoModule : AbpModule
