@@ -2,7 +2,7 @@
 {
     public enum AbpBorderType
     {
-        _,
+        Default,
         _0,
         Primary,
         Secondary,
