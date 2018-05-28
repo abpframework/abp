@@ -17,5 +17,15 @@ namespace Volo.Abp.Settings
                 StringComparison.OrdinalIgnoreCase
             );
         }
+
+        public static async Task<T> GetAsync<T>([NotNull] this ISettingManager settingManager, [NotNull] string name, T defaultValue = default) 
+            where T : struct
+        {
+            Check.NotNull(settingManager, nameof(settingManager));
+            Check.NotNull(name, nameof(name));
+
+            var value = await settingManager.GetOrNullAsync(name);
+            return value?.To<T>() ?? defaultValue;
+        }
     }
 }
