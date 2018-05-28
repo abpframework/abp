@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Volo.Abp.AspNetCore.Mvc.ExceptionHandling;
 using Volo.Abp.Http;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Pages.Error
+namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Pages.Error
 {
     public class IndexModel : PageModel
     {

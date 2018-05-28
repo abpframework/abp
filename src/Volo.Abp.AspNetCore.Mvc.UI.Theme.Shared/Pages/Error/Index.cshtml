@@ -1,7 +1,9 @@
 ﻿@page
+@using System.Linq
+@using System.Collections.Generic
 @using Localization.Resources.AbpUi
 @using Microsoft.AspNetCore.Mvc.Localization
-@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Pages.Error
+@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Pages.Error
 @model IndexModel
 @inject IHtmlLocalizer<AbpUiResource> L
 @{
@@ -15,7 +17,7 @@
 }
 
 <h1>
-   [@Model.HttpStatusCode] @errorMessage
+    [@Model.HttpStatusCode] @errorMessage
 </h1>
 
 <div>
