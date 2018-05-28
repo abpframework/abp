@@ -11,6 +11,7 @@ using Volo.Abp.AspNetCore.Mvc.Validation;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectMapping;
+using Volo.Abp.Settings;
 using Volo.Abp.Timing;
 using Volo.Abp.Uow;
 using Volo.Abp.Users;
@@ -30,6 +31,8 @@ namespace Volo.Abp.AspNetCore.Mvc.RazorPages
         public ICurrentUser CurrentUser { get; set; }
 
         public ICurrentTenant CurrentTenant { get; set; }
+
+        public ISettingManager SettingManager { get; set; }
 
         public IModelStateValidator ModelValidator { get; set; }
 
