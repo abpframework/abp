@@ -30,7 +30,9 @@ namespace System
 
             "false".To<bool>().ShouldBeOfType<bool>().ShouldBe(false);
             "True".To<bool>().ShouldBeOfType<bool>().ShouldBe(true);
-            
+            "False".To<bool>().ShouldBeOfType<bool>().ShouldBe(false);
+            "TrUE".To<bool>().ShouldBeOfType<bool>().ShouldBe(true);
+
             Assert.Throws<FormatException>(() => "test".To<bool>());
             Assert.Throws<FormatException>(() => "test".To<int>());
         }
