@@ -23,7 +23,7 @@ namespace Volo.Abp.Settings
         public static T Get<T>([NotNull] this ISettingManager settingManager, [NotNull] string name, T defaultValue = default)
             where T : struct
         {
-            return AsyncHelper.RunSync(() => settingManager.GetAsync<T>(name, defaultValue));
+            return AsyncHelper.RunSync(() => settingManager.GetAsync(name, defaultValue));
         }
 
         public static bool IsTrue([NotNull] this ISettingManager settingManager, [NotNull] string name)

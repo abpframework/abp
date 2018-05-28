@@ -15,10 +15,12 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Pages.Error
         public int HttpStatusCode { get; set; }
 
         private readonly IExceptionToErrorInfoConverter _errorInfoConverter;
+        private readonly IHttpExceptionStatusCodeFinder _statusCodeFinder;
 
-        public IndexModel(IExceptionToErrorInfoConverter errorInfoConverter)
+        public IndexModel(IExceptionToErrorInfoConverter errorInfoConverter, IHttpExceptionStatusCodeFinder statusCodeFinder)
         {
             _errorInfoConverter = errorInfoConverter;
+            _statusCodeFinder = statusCodeFinder;
         }
 
         public void OnGet()
@@ -33,8 +35,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Pages.Error
 
             if (HttpStatusCode == 0)
             {
-                HttpStatusCode = HttpContext.Response.StatusCode;
+                HttpStatusCode = (int)_statusCodeFinder.GetStatusCode(HttpContext, exception);
             }
+
+            HttpContext.Response.StatusCode = HttpStatusCode;
         }
     }
 }
