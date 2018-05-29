@@ -1,7 +1,9 @@
 ﻿@using Volo.Abp.AspNetCore.Mvc.AntiForgery
 @using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Themes.Basic.Components.MainNavbar
 @using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Themes.Basic.Components.PageAlerts
+@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Components
 @inject IAbpAntiForgeryManager AbpAntiForgeryManager
+@inject IBrandingProvider BrandingProvider
 @{
     Layout = null;
     AbpAntiForgeryManager.SetCookie();
@@ -14,7 +16,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <title>@(ViewBag.Title == null ? "ABP Web Application" : ViewBag.Title)</title>
+    <title>@(ViewBag.Title == null ? BrandingProvider.AppName : ViewBag.Title)</title>
 
     <vc:abp-style-bundle name="GlobalStyles"></vc:abp-style-bundle>
 
