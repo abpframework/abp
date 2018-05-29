@@ -33,6 +33,5 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid
 
             output.Attributes.AddClass("justify-content-" + TagHelper.HAlign.ToString().ToLowerInvariant());
         }
-
     }
 }

@@ -141,8 +141,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
                 if (baseType == null) { return null; }
 
-                var value = Convert.ChangeType(modelExplorer.Model, baseType);
-                return value != null ? value.ToString() : "";
+                return Convert.ChangeType(modelExplorer.Model, baseType)?.ToString() ?? "";
             }
             else
             {
