@@ -1,1 +1,3 @@
-﻿<a class="navbar-brand" href="~/">ProjectName</a>
+﻿@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Components
+@inject IBrandingProvider BrandingProvider
+<a class="navbar-brand" href="~/">@BrandingProvider.AppName</a>
