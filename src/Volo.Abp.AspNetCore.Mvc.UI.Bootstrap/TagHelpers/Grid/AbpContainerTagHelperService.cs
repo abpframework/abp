@@ -10,6 +10,5 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid
             output.TagName = "div";
             output.Attributes.AddClass("container");
         }
-        
     }
 }
