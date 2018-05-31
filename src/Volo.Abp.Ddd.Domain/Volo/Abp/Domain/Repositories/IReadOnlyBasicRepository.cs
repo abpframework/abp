@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Volo.Abp.Domain.Entities;
@@ -28,6 +29,22 @@ namespace Volo.Abp.Domain.Repositories
         /// <returns>Entity</returns>
         [NotNull]
         Task<TEntity> GetAsync(TKey id, bool includeDetails = true, CancellationToken cancellationToken = default);
+
+        ///// <summary>
+        ///// Gets a list containing all the entities.
+        ///// </summary>
+        ///// <param name="includeDetails">Set true to include all children of this entity</param>
+        ///// <returns>Entity</returns>
+        //[NotNull]
+        //List<TEntity> GetList(bool includeDetails = true);
+
+        ///// <summary>
+        ///// Gets a list containing all the entities.
+        ///// </summary>
+        ///// <param name="includeDetails">Set true to include all children of this entity</param>
+        ///// <returns>Entity</returns>
+        //[NotNull]
+        //Task<List<TEntity>> GetListAsync(bool includeDetails = true);
 
         /// <summary>
         /// Gets an entity with given primary key or null if not found.

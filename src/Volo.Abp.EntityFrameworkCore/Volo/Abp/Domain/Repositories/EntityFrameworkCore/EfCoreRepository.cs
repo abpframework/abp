@@ -222,6 +222,16 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
             return entity;
         }
 
+        //public List<TEntity> GetList(bool includeDetails = true)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public Task<List<TEntity>> GetListAsync(bool includeDetails = true)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
         public virtual TEntity Find(TKey id, bool includeDetails = true)
         {
             return includeDetails
