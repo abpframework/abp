@@ -173,6 +173,16 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             }
         }
 
+        public override List<TEntity> GetList(bool includeDetails = false)
+        {
+            return GetMongoQueryable().ToList();
+        }
+
+        public override async Task<List<TEntity>> GetListAsync(bool includeDetails = false, CancellationToken cancellationToken = default)
+        {
+            return await GetMongoQueryable().ToListAsync(cancellationToken);
+        }
+
         public override void Delete(Expression<Func<TEntity, bool>> predicate, bool autoSave = false)
         {
             var entities = GetMongoQueryable()

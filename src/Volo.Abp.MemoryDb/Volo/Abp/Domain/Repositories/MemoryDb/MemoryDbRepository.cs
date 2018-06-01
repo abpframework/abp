@@ -41,6 +41,11 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
             Collection.Remove(entity);
         }
 
+        public override List<TEntity> GetList(bool includeDetails = false)
+        {
+            return Collection.ToList();
+        }
+        
         protected override IQueryable<TEntity> GetQueryable()
         {
             return ApplyDataFilters(Collection.AsQueryable());

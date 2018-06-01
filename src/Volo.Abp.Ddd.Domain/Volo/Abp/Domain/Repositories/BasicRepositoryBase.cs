@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
@@ -44,6 +45,13 @@ namespace Volo.Abp.Domain.Repositories
         protected virtual CancellationToken GetCancellationToken(CancellationToken prefferedValue = default)
         {
             return CancellationTokenProvider.FallbackToProvider(prefferedValue);
+        }
+
+        public abstract List<TEntity> GetList(bool includeDetails = false);
+
+        public virtual Task<List<TEntity>> GetListAsync(bool includeDetails = false, CancellationToken cancellationToken = default)
+        {
+            return Task.FromResult(GetList(includeDetails));
         }
     }
 

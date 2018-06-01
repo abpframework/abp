@@ -112,6 +112,20 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
             }
         }
 
+        public override List<TEntity> GetList(bool includeDetails = false)
+        {
+            return includeDetails
+                ? WithDetails().ToList()
+                : DbSet.ToList();
+        }
+
+        public override Task<List<TEntity>> GetListAsync(bool includeDetails = false, CancellationToken cancellationToken = default)
+        {
+            return includeDetails
+                ? WithDetails().ToListAsync(cancellationToken)
+                : DbSet.ToListAsync(cancellationToken);
+        }
+
         protected override IQueryable<TEntity> GetQueryable()
         {
             return DbSet.AsQueryable();
@@ -221,16 +235,6 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
 
             return entity;
         }
-
-        //public List<TEntity> GetList(bool includeDetails = true)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public Task<List<TEntity>> GetListAsync(bool includeDetails = true)
-        //{
-        //    throw new NotImplementedException();
-        //}
 
         public virtual TEntity Find(TKey id, bool includeDetails = true)
         {

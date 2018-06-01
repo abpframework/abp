@@ -5,7 +5,8 @@ using Volo.Abp.Domain.Entities;
 
 namespace Volo.Abp.Domain.Repositories
 {
-    public interface IReadOnlyRepository<TEntity> : IQueryable<TEntity>
+    public interface IReadOnlyRepository<TEntity> : IQueryable<TEntity>, IReadOnlyBasicRepository<TEntity>
+        where TEntity : class, IEntity
     {
         IQueryable<TEntity> WithDetails();
 

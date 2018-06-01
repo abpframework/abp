@@ -250,6 +250,11 @@ namespace Volo.Abp.Domain.Repositories
                 throw new NotImplementedException();
             }
 
+            public override List<TEntity> GetList(bool includeDetails = false)
+            {
+                throw new NotImplementedException();
+            }
+
             protected override IQueryable<TEntity> GetQueryable()
             {
                 throw new NotImplementedException();

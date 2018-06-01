@@ -6,7 +6,26 @@ using Volo.Abp.Domain.Entities;
 
 namespace Volo.Abp.Domain.Repositories
 {
-    public interface IReadOnlyBasicRepository<TEntity, TKey> : IRepository
+    public interface IReadOnlyBasicRepository<TEntity> : IRepository
+        where TEntity : class, IEntity
+    {
+        /// <summary>
+        /// Gets a list of all the entities.
+        /// </summary>
+        /// <param name="includeDetails">Set true to include all children of this entity</param>
+        /// <returns>Entity</returns>
+        List<TEntity> GetList(bool includeDetails = false);
+
+        /// <summary>
+        /// Gets a list of all the entities.
+        /// </summary>
+        /// <param name="includeDetails">Set true to include all children of this entity</param>
+        /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
+        /// <returns>Entity</returns>
+        Task<List<TEntity>> GetListAsync(bool includeDetails = false, CancellationToken cancellationToken = default);
+    }
+
+    public interface IReadOnlyBasicRepository<TEntity, TKey> : IReadOnlyBasicRepository<TEntity>
         where TEntity : class, IEntity<TKey>
     {
         /// <summary>
@@ -29,22 +48,6 @@ namespace Volo.Abp.Domain.Repositories
         /// <returns>Entity</returns>
         [NotNull]
         Task<TEntity> GetAsync(TKey id, bool includeDetails = true, CancellationToken cancellationToken = default);
-
-        ///// <summary>
-        ///// Gets a list containing all the entities.
-        ///// </summary>
-        ///// <param name="includeDetails">Set true to include all children of this entity</param>
-        ///// <returns>Entity</returns>
-        //[NotNull]
-        //List<TEntity> GetList(bool includeDetails = true);
-
-        ///// <summary>
-        ///// Gets a list containing all the entities.
-        ///// </summary>
-        ///// <param name="includeDetails">Set true to include all children of this entity</param>
-        ///// <returns>Entity</returns>
-        //[NotNull]
-        //Task<List<TEntity>> GetListAsync(bool includeDetails = true);
 
         /// <summary>
         /// Gets an entity with given primary key or null if not found.
