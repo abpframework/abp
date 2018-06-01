@@ -6,7 +6,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Components
 {
     public class Card_Tests : AbpAspNetCoreMvcUiBootstrapDemoTestBase
     {
-        [Fact]
+        [Fact(Skip = "This test project is not completed yet")]
         public async Task Index()
         {
             var result = await GetResponseAsStringAsync("/Components/Cards");
