@@ -7,6 +7,7 @@
 @{
     Layout = null;
     AbpAntiForgeryManager.SetCookie();
+    var containerClass = ViewBag.FluidLayout == true ? "container-fluid" : "container";
 }
 
 <!DOCTYPE html>
@@ -28,7 +29,7 @@
 
     @(await Component.InvokeAsync<MainNavbarViewComponent>())
 
-    <div class="container">
+    <div class="@containerClass">
         @* TODO: Create option to select 'container' or 'container-fluid' *@
         @(await Component.InvokeAsync<PageAlertsViewComponent>())
         @RenderBody()
