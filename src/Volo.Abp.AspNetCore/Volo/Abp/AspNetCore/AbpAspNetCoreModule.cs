@@ -24,7 +24,7 @@ namespace Volo.Abp.AspNetCore
 
         private static void AddAspNetServices(IServiceCollection services)
         {
-            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddHttpContextAccessor();
         }
     }
 }
