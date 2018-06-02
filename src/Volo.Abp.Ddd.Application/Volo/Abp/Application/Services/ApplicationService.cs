@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Aspects;
+using Volo.Abp.Authorization;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectMapping;
@@ -46,6 +49,36 @@ namespace Volo.Abp.Application.Services
         protected ApplicationService()
         {
             GuidGenerator = SimpleGuidGenerator.Instance;
+        }
+
+        /// <summary>
+        /// Checks for given <paramref name="policyName"/>.
+        /// Throws <see cref="AbpAuthorizationException"/> if given policy has not been granted.
+        /// </summary>
+        /// <param name="policyName">The policy name. This method does nothing if given <paramref name="policyName"/> is null or empty.</param>
+        protected virtual async Task CheckPolicyAsync([CanBeNull] string policyName)
+        {
+            if (string.IsNullOrEmpty(policyName))
+            {
+                return;
+            }
+
+            await AuthorizationService.CheckAsync(policyName);
+        }
+
+        /// <summary>
+        /// Checks for given <paramref name="policyName"/>.
+        /// Throws <see cref="AbpAuthorizationException"/> if given policy has not been granted.
+        /// </summary>
+        /// <param name="policyName">The policy name. This method does nothing if given <paramref name="policyName"/> is null or empty.</param>
+        protected virtual void CheckPolicy([CanBeNull] string policyName)
+        {
+            if (string.IsNullOrEmpty(policyName))
+            {
+                return;
+            }
+
+            AuthorizationService.Check(policyName);
         }
     }
 }

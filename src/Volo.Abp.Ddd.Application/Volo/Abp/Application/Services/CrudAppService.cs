@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
@@ -56,7 +57,7 @@ namespace Volo.Abp.Application.Services
 
         public virtual TEntityDto Get(TKey id)
         {
-            CheckGetPermission();
+            CheckGetPolicy();
 
             var entity = GetEntityById(id);
             return MapToEntityDto(entity);
@@ -64,7 +65,7 @@ namespace Volo.Abp.Application.Services
 
         public virtual PagedResultDto<TEntityDto> GetAll(TGetAllInput input)
         {
-            CheckGetAllPermission();
+            CheckGetAllPolicy();
 
             var query = CreateFilteredQuery(input);
 
@@ -83,7 +84,7 @@ namespace Volo.Abp.Application.Services
 
         public virtual TEntityDto Create(TCreateInput input)
         {
-            CheckCreatePermission();
+            CheckCreatePolicy();
 
             var entity = MapToEntity(input);
 
@@ -95,7 +96,7 @@ namespace Volo.Abp.Application.Services
 
         public virtual TEntityDto Update(TKey id, TUpdateInput input)
         {
-            CheckUpdatePermission();
+            CheckUpdatePolicy();
 
             var entity = GetEntityById(id);
 
@@ -107,7 +108,7 @@ namespace Volo.Abp.Application.Services
 
         public virtual void Delete(TKey id)
         {
-            CheckDeletePermission();
+            CheckDeletePolicy();
 
             Repository.Delete(id);
         }
@@ -115,6 +116,31 @@ namespace Volo.Abp.Application.Services
         protected virtual TEntity GetEntityById(TKey id)
         {
             return Repository.Get(id);
+        }
+
+        protected virtual void CheckGetPolicy()
+        {
+            CheckPolicy(GetPolicyName);
+        }
+
+        protected virtual void CheckGetAllPolicy()
+        {
+            CheckPolicy(GetAllPolicyName);
+        }
+
+        protected virtual void CheckCreatePolicy()
+        {
+            CheckPolicy(CreatePolicyName);
+        }
+
+        protected virtual void CheckUpdatePolicy()
+        {
+            CheckPolicy(UpdatePolicyName);
+        }
+
+        protected virtual void CheckDeletePolicy()
+        {
+            CheckPolicy(DeletePolicyName);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
@@ -61,7 +62,7 @@ namespace Volo.Abp.Application.Services
 
         public virtual async Task<TEntityDto> GetAsync(TKey id)
         {
-            CheckGetPermission();
+            await CheckGetPolicyAsync();
 
             var entity = await GetEntityByIdAsync(id);
             return MapToEntityDto(entity);
@@ -69,7 +70,7 @@ namespace Volo.Abp.Application.Services
 
         public virtual async Task<PagedResultDto<TEntityDto>> GetListAsync(TGetAllInput input)
         {
-            CheckGetAllPermission();
+            await CheckGetAllPolicyAsync();
 
             var query = CreateFilteredQuery(input);
 
@@ -88,7 +89,7 @@ namespace Volo.Abp.Application.Services
 
         public virtual async Task<TEntityDto> CreateAsync(TCreateInput input)
         {
-            CheckCreatePermission();
+            await CheckCreatePolicyAsync();
 
             var entity = MapToEntity(input);
 
@@ -100,7 +101,7 @@ namespace Volo.Abp.Application.Services
 
         public virtual async Task<TEntityDto> UpdateAsync(TKey id, TUpdateInput input)
         {
-            CheckUpdatePermission();
+            await CheckUpdatePolicyAsync();
 
             var entity = await GetEntityByIdAsync(id);
 
@@ -112,16 +113,41 @@ namespace Volo.Abp.Application.Services
             return MapToEntityDto(entity);
         }
 
-        public virtual Task DeleteAsync(TKey id)
+        public virtual async Task DeleteAsync(TKey id)
         {
-            CheckDeletePermission();
+            await CheckDeletePolicyAsync();
 
-            return Repository.DeleteAsync(id);
+            await Repository.DeleteAsync(id);
         }
 
         protected virtual Task<TEntity> GetEntityByIdAsync(TKey id)
         {
             return Repository.GetAsync(id);
+        }
+
+        protected virtual async Task CheckGetPolicyAsync()
+        {
+            await CheckPolicyAsync(GetPolicyName);
+        }
+
+        protected virtual async Task CheckGetAllPolicyAsync()
+        {
+            await CheckPolicyAsync(GetAllPolicyName);
+        }
+
+        protected virtual async Task CheckCreatePolicyAsync()
+        {
+            await CheckPolicyAsync(CreatePolicyName);
+        }
+
+        protected virtual async Task CheckUpdatePolicyAsync()
+        {
+            await CheckPolicyAsync(UpdatePolicyName);
+        }
+
+        protected virtual async Task CheckDeletePolicyAsync()
+        {
+            await CheckPolicyAsync(DeletePolicyName);
         }
     }
 }

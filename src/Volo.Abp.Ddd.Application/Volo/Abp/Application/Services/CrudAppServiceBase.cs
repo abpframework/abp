@@ -4,6 +4,7 @@ using System.Linq.Dynamic.Core;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.ObjectMapping;
 
 namespace Volo.Abp.Application.Services
 {
@@ -17,15 +18,15 @@ namespace Volo.Abp.Application.Services
     {
         protected IRepository<TEntity, TKey> Repository { get; }
         
-        protected virtual string GetPermissionName { get; set; }
+        protected virtual string GetPolicyName { get; set; }
 
-        protected virtual string GetAllPermissionName { get; set; }
+        protected virtual string GetAllPolicyName { get; set; }
 
-        protected virtual string CreatePermissionName { get; set; }
+        protected virtual string CreatePolicyName { get; set; }
 
-        protected virtual string UpdatePermissionName { get; set; }
+        protected virtual string UpdatePolicyName { get; set; }
 
-        protected virtual string DeletePermissionName { get; set; }
+        protected virtual string DeletePolicyName { get; set; }
 
         protected CrudAppServiceBase(IRepository<TEntity, TKey> repository)
         {
@@ -142,39 +143,6 @@ namespace Volo.Abp.Application.Services
         protected virtual void MapToEntity(TUpdateInput updateInput, TEntity entity)
         {
             ObjectMapper.Map(updateInput, entity);
-        }
-
-        protected virtual void CheckPermission(string permissionName)
-        {
-            if (!string.IsNullOrEmpty(permissionName))
-            {
-                //TODO: PermissionChecker.Authorize(permissionName); //Will be implemented when PermissionChecker is available
-            }
-        }
-
-        protected virtual void CheckGetPermission()
-        {
-            CheckPermission(GetPermissionName);
-        }
-
-        protected virtual void CheckGetAllPermission()
-        {
-            CheckPermission(GetAllPermissionName);
-        }
-
-        protected virtual void CheckCreatePermission()
-        {
-            CheckPermission(CreatePermissionName);
-        }
-
-        protected virtual void CheckUpdatePermission()
-        {
-            CheckPermission(UpdatePermissionName);
-        }
-
-        protected virtual void CheckDeletePermission()
-        {
-            CheckPermission(DeletePermissionName);
         }
     }
 }
