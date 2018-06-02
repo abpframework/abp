@@ -62,7 +62,7 @@ namespace Volo.Abp.Domain.Repositories
         /// Set true to automatically save changes to database.
         /// This is useful for ORMs / database APIs those only save changes with an explicit method call, but you need to immediately save changes to the database.
         /// </param>
-        void Delete([NotNull] TEntity entity, bool autoSave = false); //TODO: Return true if deleted
+        void Delete([NotNull] TEntity entity, bool autoSave = false);
 
         /// <summary>
         /// Deletes an entity.
@@ -73,7 +73,7 @@ namespace Volo.Abp.Domain.Repositories
         /// This is useful for ORMs / database APIs those only save changes with an explicit method call, but you need to immediately save changes to the database.
         /// </param>
         /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
-        Task DeleteAsync([NotNull] TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default); //TODO: Return true if deleted
+        Task DeleteAsync([NotNull] TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default);
     }
 
     public interface IBasicRepository<TEntity, TKey> : IBasicRepository<TEntity>, IReadOnlyBasicRepository<TEntity, TKey>
