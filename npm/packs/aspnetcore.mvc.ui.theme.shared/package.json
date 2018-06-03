@@ -7,7 +7,7 @@
   "dependencies": {
     "@abp/aspnetcore.mvc.ui": "^0.2.3",
     "@abp/jquery": "^0.2.3",
-    "bootstrap": "^4.1.0",
+    "@abp/bootstrap": "^0.2.3",
     "datatables.net-bs4": "^1.10.16",
     "font-awesome": "^4.7.0",
     "jquery-form": "^4.2.2",

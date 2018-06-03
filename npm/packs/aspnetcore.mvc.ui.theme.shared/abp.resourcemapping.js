@@ -3,10 +3,6 @@
         "../jquery/abp.resourcemapping.js"
     ],
     mappings: {
-        //Bootstrap
-        "@node_modules/bootstrap/dist/css/bootstrap.css": "@libs/bootstrap/css/",
-        "@node_modules/bootstrap/dist/js/bootstrap.bundle.js": "@libs/bootstrap/js/",
-
         //Font-Awesome
         "@node_modules/font-awesome/css/font-awesome.css": "@libs/font-awesome/css/",
         "@node_modules/font-awesome/fonts/*.*": "@libs/font-awesome/fonts/",
