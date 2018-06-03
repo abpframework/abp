@@ -1,0 +1,11 @@
+{
+  "version": "0.2.3",
+  "name": "@abp/toastr",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@abp/jquery": "^0.2.3",
+    "toastr": "^2.1.4"
+  }
+}
