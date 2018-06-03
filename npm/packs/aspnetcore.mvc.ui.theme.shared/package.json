@@ -10,7 +10,7 @@
     "@abp/bootstrap": "^0.2.3",
     "@abp/datatables.net-bs4": "^0.2.3",
     "@abp/font-awesome": "^0.2.3",
-    "jquery-form": "^4.2.2",
+    "@abp/jquery-form": "^0.2.3",
     "jquery-validation-unobtrusive": "^3.2.9",
     "sweetalert": "^2.1.0",
     "toastr": "^2.1.4"

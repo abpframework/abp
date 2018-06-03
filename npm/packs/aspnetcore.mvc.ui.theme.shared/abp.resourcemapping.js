@@ -3,12 +3,10 @@
         "../jquery/abp.resourcemapping.js",
         "../bootstrap/abp.resourcemapping.js",
         "../font-awesome/abp.resourcemapping.js",
+        "../jquery-form/abp.resourcemapping.js",
         "../datatables.net-bs4/abp.resourcemapping.js"
     ],
     mappings: {
-        //jQuery-Form
-        "@node_modules/jquery-form/dist/jquery.form.min.js": "@libs/jquery-form/",
-
         //jQuery-Validation
         "@node_modules/jquery-validation/dist/jquery.validate.js": "@libs/jquery-validation/",
         "@node_modules/jquery-validation/dist/localization/*.*": "@libs/jquery-validation/localization/",
