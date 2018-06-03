@@ -1,6 +1,8 @@
 ﻿module.exports = {
     imports: [
-        "../jquery/abp.resourcemapping.js"
+        "../jquery/abp.resourcemapping.js",
+        "../bootstrap/abp.resourcemapping.js",
+        "../datatables.net-bs4/abp.resourcemapping.js"
     ],
     mappings: {
         //Font-Awesome
@@ -16,11 +18,6 @@
 
         //jQuery-Validation-Unobtrusive
         "@node_modules/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js": "@libs/jquery-validation-unobtrusive/",
-
-        //Datatables
-        "@node_modules/datatables.net/js/jquery.dataTables.js": "@libs/datatables.net/js/",
-        "@node_modules/datatables.net-bs4/css/dataTables.bootstrap4.css": "@libs/datatables.net-bs4/css/",
-        "@node_modules/datatables.net-bs4/js/dataTables.bootstrap4.js": "@libs/datatables.net-bs4/js/",
         
         //Sweetalert
         "@node_modules/sweetalert/dist/*.*": "@libs/sweetalert/",

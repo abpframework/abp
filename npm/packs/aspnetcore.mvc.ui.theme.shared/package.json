@@ -8,7 +8,7 @@
     "@abp/aspnetcore.mvc.ui": "^0.2.3",
     "@abp/jquery": "^0.2.3",
     "@abp/bootstrap": "^0.2.3",
-    "datatables.net-bs4": "^1.10.16",
+    "@abp/datatables.net-bs4": "^0.2.3",
     "font-awesome": "^4.7.0",
     "jquery-form": "^4.2.2",
     "jquery-validation-unobtrusive": "^3.2.9",
