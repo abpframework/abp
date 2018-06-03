@@ -1,0 +1,11 @@
+{
+  "version": "0.2.3",
+  "name": "@abp/font-awesome",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@abp/core": "^0.2.3",
+    "font-awesome": "^4.7.0"
+  }
+}

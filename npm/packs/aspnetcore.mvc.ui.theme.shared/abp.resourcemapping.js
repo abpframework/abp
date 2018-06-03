@@ -2,13 +2,10 @@
     imports: [
         "../jquery/abp.resourcemapping.js",
         "../bootstrap/abp.resourcemapping.js",
+        "../font-awesome/abp.resourcemapping.js",
         "../datatables.net-bs4/abp.resourcemapping.js"
     ],
     mappings: {
-        //Font-Awesome
-        "@node_modules/font-awesome/css/font-awesome.css": "@libs/font-awesome/css/",
-        "@node_modules/font-awesome/fonts/*.*": "@libs/font-awesome/fonts/",
-
         //jQuery-Form
         "@node_modules/jquery-form/dist/jquery.form.min.js": "@libs/jquery-form/",
 
