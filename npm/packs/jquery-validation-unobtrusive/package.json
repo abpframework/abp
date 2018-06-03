@@ -5,7 +5,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@abp/jquery": "^0.2.3",
+    "@abp/jquery-validation": "^0.2.3",
     "jquery-validation-unobtrusive": "^3.2.9"
   }
 }
