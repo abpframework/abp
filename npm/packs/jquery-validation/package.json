@@ -1,11 +1,11 @@
 {
-  "version": "0.2.3",
+  "version": "0.3.0",
   "name": "@abp/jquery-validation",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/jquery": "^0.2.3",
+    "@abp/jquery": "^0.3.0",
     "jquery-validation": "^1.17.0"
   }
 }
