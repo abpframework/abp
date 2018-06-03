@@ -11,7 +11,7 @@
     "@abp/font-awesome": "^0.2.3",
     "@abp/jquery-form": "^0.2.3",
     "@abp/jquery-validation-unobtrusive": "^0.2.3",
-    "sweetalert": "^2.1.0",
+    "@abp/sweetalert": "^0.2.3",
     "toastr": "^2.1.4"
   }
 }
