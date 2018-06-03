@@ -6,12 +6,11 @@
   },
   "dependencies": {
     "@abp/aspnetcore.mvc.ui": "^0.2.3",
-    "@abp/jquery": "^0.2.3",
     "@abp/bootstrap": "^0.2.3",
     "@abp/datatables.net-bs4": "^0.2.3",
     "@abp/font-awesome": "^0.2.3",
     "@abp/jquery-form": "^0.2.3",
-    "jquery-validation-unobtrusive": "^3.2.9",
+    "@abp/jquery-validation-unobtrusive": "^0.2.3",
     "sweetalert": "^2.1.0",
     "toastr": "^2.1.4"
   }
