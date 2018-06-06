@@ -41,7 +41,6 @@
     * [Repositories](Repositories.md)
     * Domain Services
     * Specifications
-    * Domain Events
   * Application Layer
     * Application Services
     * Data Transfer Objects
