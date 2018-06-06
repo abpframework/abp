@@ -10,7 +10,7 @@ namespace System.Collections.Generic
         public void InsertAfter()
         {
             var list = Enumerable.Range(1, 3).ToList();
-            
+
             list.InsertAfter(i => i == 2, 42);
 
             list.Count.ShouldBe(4);
@@ -64,6 +64,38 @@ namespace System.Collections.Generic
             list[2].ShouldBe(42);
             list[3].ShouldBe(2);
             list[4].ShouldBe(3);
+        }
+
+        [Fact]
+        public void ReplaceWhile_WithValue()
+        {
+            var list = Enumerable.Range(1, 3).ToList();
+
+            list[0].ShouldBe(1);
+            list[1].ShouldBe(2);
+            list[2].ShouldBe(3);
+
+            list.ReplaceWhile(i => i >= 2, 42);
+
+            list[0].ShouldBe(1);
+            list[1].ShouldBe(42);
+            list[2].ShouldBe(42);
+        }
+
+        [Fact]
+        public void ReplaceWhile_WithFactory()
+        {
+            var list = Enumerable.Range(1, 3).ToList();
+
+            list[0].ShouldBe(1);
+            list[1].ShouldBe(2);
+            list[2].ShouldBe(3);
+
+            list.ReplaceWhile(i => i >= 2, i => i + 1);
+
+            list[0].ShouldBe(1);
+            list[1].ShouldBe(3);
+            list[2].ShouldBe(4);
         }
     }
 }
