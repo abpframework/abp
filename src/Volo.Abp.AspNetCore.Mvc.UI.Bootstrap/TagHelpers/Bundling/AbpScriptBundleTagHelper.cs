@@ -3,7 +3,7 @@
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Bundling
 {
     [HtmlTargetElement("abp-script-bundle", TagStructure = TagStructure.NormalOrSelfClosing)]
-    public class AbpScriptBundleTagHelper : AbpTagHelper<AbpScriptBundleTagHelper, AbpScriptBundleTagHelperService>
+    public class AbpScriptBundleTagHelper : AbpTagHelper<AbpScriptBundleTagHelper, AbpScriptBundleTagHelperService>, IBundleTagHelper
     {
         public string Name { get; set; }
 

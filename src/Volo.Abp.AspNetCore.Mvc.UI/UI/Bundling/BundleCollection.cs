@@ -1,18 +1,18 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 {
     public class BundleCollection
     {
-        private readonly Dictionary<string, BundleConfiguration> _bundleContributors;
+        private readonly ConcurrentDictionary<string, BundleConfiguration> _bundleContributors;
 
         public BundleCollection()
         {
-            _bundleContributors = new Dictionary<string, BundleConfiguration>();
+            _bundleContributors = new ConcurrentDictionary<string, BundleConfiguration>();
         }
 
-        //TODO: Seperate to Add and WithFiles/WithContributors methods instead of coupling
         public BundleConfiguration Add(string bundleName)
         {
             if (_bundleContributors.ContainsKey(bundleName))
@@ -20,49 +20,54 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
                 throw new AbpException($"There is already a bundle added with given {nameof(bundleName)}: {bundleName}");
             }
 
-            var bundleConfiguration = new BundleConfiguration(bundleName);
-            _bundleContributors.Add(bundleName, bundleConfiguration);
-            return bundleConfiguration;
+            return _bundleContributors.AddOrUpdate(bundleName, new BundleConfiguration(bundleName), (n, c) => c);
         }
 
         public BundleConfiguration Get(string bundleName)
         {
-            if (!_bundleContributors.ContainsKey(bundleName))
-            {
-                throw new AbpException($"There is no bundle added with given {nameof(bundleName)}: {bundleName}");
-            }
+            CheckBundle(bundleName);
 
             return _bundleContributors[bundleName];
         }
 
-        public BundleConfiguration GetOrAdd(string bundleName, Action<BundleConfiguration> configureAction = null)
+        public BundleConfiguration GetOrAdd(string bundleName)
+        {
+            return GetOrAdd(bundleName, c => { });
+        }
+
+        internal BundleConfiguration GetOrAdd(string bundleName, Action<BundleConfiguration> configureAction)
         {
             return _bundleContributors.GetOrAdd(
                 bundleName,
                 () =>
                 {
                     var configuration = new BundleConfiguration(bundleName);
-                    configureAction?.Invoke(configuration);
+                    configureAction.Invoke(configuration);
                     return configuration;
                 });
         }
 
         public List<string> GetFiles(string bundleName)
         {
-            var bundleConfiguration = _bundleContributors.GetOrDefault(bundleName);
-            if (bundleConfiguration == null)
-            {
-                throw new AbpException("Undefined bundle: " + bundleName);
-            }
+            CheckBundle(bundleName);
 
             var files = new List<string>();
 
+            var bundleConfiguration = _bundleContributors[bundleName];
             foreach (var contributor in bundleConfiguration.Contributors)
             {
                 contributor.Contribute(files);
             }
 
             return files;
+        }
+
+        private void CheckBundle(string bundleName)
+        {
+            if (!_bundleContributors.ContainsKey(bundleName))
+            {
+                throw new AbpException($"There is no bundle with given {nameof(bundleName)}: {bundleName}");
+            }
         }
     }
 }

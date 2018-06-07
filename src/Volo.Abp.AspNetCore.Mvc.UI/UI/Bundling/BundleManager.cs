@@ -34,31 +34,16 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 
         public List<string> GetScriptBundleFiles(string bundleName)
         {
-            //if (_hostingEnvironment.IsDevelopment())
-            {
-                return _options.ScriptBundles.GetFiles(bundleName);
-            }
-
-            return new List<string>
-            {
-                _cache.GetOrAdd(
-                    "SCRIPT:" + bundleName,
-                    () => _bundler.CreateBundle(
-                        _options.ScriptBundles.GetFiles(bundleName)
-                    )
-                )
-            };
+            return _options.ScriptBundles.GetFiles(bundleName);
         }
 
-        public void CreateDynamicStyleBundle(string bundleName, Action<BundleConfiguration> configureAction)
+        public void CreateStyleBundle(string bundleName, Action<BundleConfiguration> configureAction)
         {
-            //TODO: How to handle concurrency!
             _options.StyleBundles.GetOrAdd(bundleName, configureAction);
         }
 
-        public void CreateDynamicScriptBundle(string bundleName, Action<BundleConfiguration> configureAction)
+        public void CreateScriptBundle(string bundleName, Action<BundleConfiguration> configureAction)
         {
-            //TODO: How to handle concurrency!
             _options.ScriptBundles.GetOrAdd(bundleName, configureAction);
         }
     }
