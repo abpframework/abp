@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Hosting;
@@ -47,6 +48,18 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
                     )
                 )
             };
+        }
+
+        public void CreateDynamicStyleBundle(string bundleName, Action<BundleConfiguration> configureAction)
+        {
+            //TODO: How to handle concurrency!
+            _options.StyleBundles.GetOrAdd(bundleName, configureAction);
+        }
+
+        public void CreateDynamicScriptBundle(string bundleName, Action<BundleConfiguration> configureAction)
+        {
+            //TODO: How to handle concurrency!
+            _options.ScriptBundles.GetOrAdd(bundleName, configureAction);
         }
     }
 }

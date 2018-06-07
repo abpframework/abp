@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 {
@@ -34,9 +35,16 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
             return _bundleContributors[bundleName];
         }
 
-        public BundleConfiguration GetOrAdd(string bundleName)
+        public BundleConfiguration GetOrAdd(string bundleName, Action<BundleConfiguration> configureAction = null)
         {
-            return _bundleContributors.GetOrAdd(bundleName, () => new BundleConfiguration(bundleName));
+            return _bundleContributors.GetOrAdd(
+                bundleName,
+                () =>
+                {
+                    var configuration = new BundleConfiguration(bundleName);
+                    configureAction?.Invoke(configuration);
+                    return configuration;
+                });
         }
 
         public List<string> GetFiles(string bundleName)
