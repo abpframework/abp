@@ -8,7 +8,7 @@ namespace Microsoft.AspNetCore.Hosting
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
-                .AddJsonFile(fileName + ".json", optional: false, reloadOnChange: true)
+                .AddJsonFile(fileName + ".json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"{fileName}.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
 
             return builder.Build();

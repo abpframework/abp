@@ -14,5 +14,12 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             return services.GetHostingEnvironment().BuildConfiguration(fileName);
         }
+
+        public static IConfigurationRoot AddConfiguration(this IServiceCollection services, string fileName = "appsettings")
+        {
+            var configuration = services.BuildConfiguration(fileName);
+            services.AddConfiguration(configuration);
+            return configuration;
+        }
     }
 }

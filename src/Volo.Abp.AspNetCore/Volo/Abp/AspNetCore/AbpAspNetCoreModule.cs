@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Volo.Abp.Modularity;
 using Volo.Abp.Security;
 using Volo.Abp.Threading;
@@ -19,6 +17,9 @@ namespace Volo.Abp.AspNetCore
             AddAspNetServices(services);
 
             services.AddObjectAccessor<IApplicationBuilder>();
+
+            services.AddConfiguration();
+
             services.AddAssemblyOf<AbpAspNetCoreModule>();
         }
 
