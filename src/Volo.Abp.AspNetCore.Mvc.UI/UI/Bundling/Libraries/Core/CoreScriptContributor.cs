@@ -1,6 +1,6 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.Libraries.Abp.Core
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.Libraries.Core
 {
-    public class AbpCoreScriptContributor : BundleContributor
+    public class CoreScriptContributor : BundleContributor
     {
         public override void ConfigureBundle(BundleConfigurationContext context)
         {

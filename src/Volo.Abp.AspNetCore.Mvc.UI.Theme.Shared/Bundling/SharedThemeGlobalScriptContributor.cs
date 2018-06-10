@@ -1,12 +1,8 @@
 ﻿using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
-using Volo.Abp.AspNetCore.Mvc.UI.Bundling.Libraries.Abp.Core;
-using Volo.Abp.AspNetCore.Mvc.UI.Bundling.Libraries.Abp.JQuery;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling.Libraries.Bootstrap;
-using Volo.Abp.AspNetCore.Mvc.UI.Bundling.Libraries.DatatablesNet;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling.Libraries.DatatablesNetBs4;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling.Libraries.JQuery;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling.Libraries.JQueryForm;
-using Volo.Abp.AspNetCore.Mvc.UI.Bundling.Libraries.JQueryValidation;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling.Libraries.JQueryValidationUnobtrusive;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling.Libraries.SweetAlert;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling.Libraries.Toastr;
@@ -15,8 +11,7 @@ using Volo.Abp.Modularity;
 namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling
 {
     [DependsOn(
-        typeof(AbpCoreScriptContributor),
-        typeof(AbpJQueryScriptContributor),
+        typeof(JQueryScriptContributor),
         typeof(BootstrapScriptContributor),
         typeof(JQueryValidationUnobtrusiveScriptContributor),
         typeof(JQueryFormScriptContributor),
