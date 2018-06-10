@@ -17,6 +17,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling
     {
         public override void ConfigureBundle(BundleConfigurationContext context)
         {
+            //TODO: Should this go to Basic Theme???
             context.Files.Add("/libs/abp/aspnetcore.mvc.ui.theme.shared/datatables/datatables.css");
         }
     }

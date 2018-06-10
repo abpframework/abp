@@ -1,4 +1,6 @@
 ﻿using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
+using Volo.Abp.AspNetCore.Mvc.UI.Bundling.Libraries.Abp.Core;
+using Volo.Abp.AspNetCore.Mvc.UI.Bundling.Libraries.Abp.JQuery;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling.Libraries.Bootstrap;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling.Libraries.DatatablesNet;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling.Libraries.DatatablesNetBs4;
@@ -13,12 +15,11 @@ using Volo.Abp.Modularity;
 namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling
 {
     [DependsOn(
-        typeof(JQueryScriptContributor),
+        typeof(AbpCoreScriptContributor),
+        typeof(AbpJQueryScriptContributor),
         typeof(BootstrapScriptContributor),
-        typeof(JQueryValidationScriptContributor),
         typeof(JQueryValidationUnobtrusiveScriptContributor),
         typeof(JQueryFormScriptContributor),
-        typeof(DatatablesNetScriptContributor),
         typeof(DatatablesNetBs4ScriptContributor),
         typeof(SweetalertScriptContributor),
         typeof(ToastrScriptBundleContributor)
@@ -29,10 +30,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling
         {
             context.Files.AddRange(new[]
             {
-                //TODO: Move to their own contributors, but first consider to change abp.js a bit
-                "/libs/abp/core/abp.js",
-                "/libs/abp/jquery/abp.jquery.js",
-
                 "/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery/jquery-extensions.js",
                 "/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery-form/jquery-form-extensions.js",
                 "/libs/abp/aspnetcore.mvc.ui.theme.shared/bootstrap/dom-event-handlers.js",
