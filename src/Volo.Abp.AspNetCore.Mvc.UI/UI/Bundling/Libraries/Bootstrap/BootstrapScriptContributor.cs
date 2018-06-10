@@ -3,8 +3,8 @@ using Volo.Abp.Modularity;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.Libraries.Bootstrap
 {
-    [DependsOn(typeof(JQueryScriptBundleContributor))]
-    public class BootstrapScriptBundleContributor : BundleContributor
+    [DependsOn(typeof(JQueryScriptContributor))]
+    public class BootstrapScriptContributor : BundleContributor
     {
         public override void ConfigureBundle(BundleConfigurationContext context)
         {

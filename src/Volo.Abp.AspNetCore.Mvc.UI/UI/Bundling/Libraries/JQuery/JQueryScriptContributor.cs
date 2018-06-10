@@ -1,6 +1,6 @@
 ﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.Libraries.JQuery
 {
-    public class JQueryScriptBundleContributor : BundleContributor
+    public class JQueryScriptContributor : BundleContributor
     {
         public override void ConfigureBundle(BundleConfigurationContext context)
         {

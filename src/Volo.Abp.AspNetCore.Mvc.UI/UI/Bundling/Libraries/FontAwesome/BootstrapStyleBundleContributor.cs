@@ -1,6 +1,6 @@
 ﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.Libraries.FontAwesome
 {
-    public class FontAwesomeStyleBundleContributor : BundleContributor
+    public class FontAwesomeStyleContributor : BundleContributor
     {
         public override void ConfigureBundle(BundleConfigurationContext context)
         {

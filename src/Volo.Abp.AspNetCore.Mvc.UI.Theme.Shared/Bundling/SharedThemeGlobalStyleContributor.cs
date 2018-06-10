@@ -8,10 +8,10 @@ using Volo.Abp.Modularity;
 namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling
 {
     [DependsOn(
-        typeof(BootstrapStyleBundleContributor),
-        typeof(FontAwesomeStyleBundleContributor),
+        typeof(BootstrapStyleContributor),
+        typeof(FontAwesomeStyleContributor),
         typeof(ToastrStyleBundleContributor),
-        typeof(DatatablesNetBs4StyleBundleContributor)
+        typeof(DatatablesNetBs4StyleContributor)
     )]
     public class SharedThemeGlobalStyleContributor : BundleContributor
     {

@@ -62,7 +62,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 
             using (var scope = _serviceProvider.CreateScope())
             {
-
                 var context = new BundleConfigurationContext(
                     new List<string>(),
                     _themeManager.CurrentTheme,

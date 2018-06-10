@@ -3,8 +3,8 @@ using Volo.Abp.Modularity;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.Libraries.DatatablesNetBs4
 {
-    [DependsOn(typeof(BootstrapStyleBundleContributor))]
-    public class DatatablesNetBs4StyleBundleContributor : BundleContributor
+    [DependsOn(typeof(BootstrapStyleContributor))]
+    public class DatatablesNetBs4StyleContributor : BundleContributor
     {
         public override void ConfigureBundle(BundleConfigurationContext context)
         {

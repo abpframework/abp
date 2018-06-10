@@ -30,15 +30,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
         public void Add([NotNull] Type contributorType)
         {
             Check.NotNull(contributorType, nameof(contributorType));
-            if (!typeof(IBundleContributor).IsAssignableFrom(contributorType))
-            {
-                throw new AbpException($"Given {nameof(contributorType)} ({contributorType.AssemblyQualifiedName}) should implement the {typeof(IBundleContributor).AssemblyQualifiedName} interface!");
-            }
-
-            if (IsAlreadyAdded(contributorType))
-            {
-                throw new AbpException($"Given {nameof(contributorType)} ({contributorType.AssemblyQualifiedName}) is already added before! If you want to ensure that a contributor is added, create your own contributor and depend on the contributor you want to ensure that it's added.");
-            }
 
             AddWithDependencies(contributorType);
         }
@@ -55,6 +46,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 
         private void AddWithDependencies(Type contributorType)
         {
+            if (IsAlreadyAdded(contributorType))
+            {
+                return;
+            }
+
             var dependsOnAttributes = contributorType
                 .GetCustomAttributes(true)
                 .OfType<IDependedTypesProvider>()
@@ -65,11 +61,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
                 foreach (var dependedType in dependsOnAttribute.GetDependedTypes())
                 {
                     AddWithDependencies(dependedType); //Recursive call
-
-                    if (!IsAlreadyAdded(dependedType))
-                    {
-                        AddInstanceToContributors(dependedType);
-                    }
                 }
             }
 
@@ -78,6 +69,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 
         private void AddInstanceToContributors(Type contributorType)
         {
+            if (!typeof(IBundleContributor).IsAssignableFrom(contributorType))
+            {
+                throw new AbpException($"Given {nameof(contributorType)} ({contributorType.AssemblyQualifiedName}) should implement the {typeof(IBundleContributor).AssemblyQualifiedName} interface!");
+            }
+
             try
             {
                 _contributors.Add((IBundleContributor)Activator.CreateInstance(contributorType));
