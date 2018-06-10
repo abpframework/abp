@@ -1,11 +1,11 @@
 {
-  "version": "0.3.0",
+  "version": "0.3.1",
   "name": "@abp/sweetalert",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/core": "^0.3.0",
+    "@abp/core": "^0.3.1",
     "sweetalert": "^2.1.0"
   }
 }

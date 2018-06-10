@@ -1,11 +1,11 @@
 {
-  "version": "0.3.0",
+  "version": "0.3.1",
   "name": "@abp/jquery-form",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/jquery": "^0.3.0",
+    "@abp/jquery": "^0.3.1",
     "jquery-form": "^4.2.2"
   }
 }
