@@ -1,4 +1,5 @@
-﻿@{
+﻿@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling
+@{
     Layout = null;
     var title = "ABP Bootstrap Demo";
     if (ViewData["Title"] != null)
@@ -16,8 +17,8 @@
 
     <title>@title</title>
 
-    <vc:abp-style-bundle name="GlobalStyles"></vc:abp-style-bundle>
-    <link href="~/css/demo.min.css" rel="stylesheet" /> @* TODO: Add to the GlobalStyles bundle! *@
+    <abp-style-bundle name="@StandardBundles.Styles.Global" />
+    <link href="~/css/demo.min.css" rel="stylesheet" />
 
     @RenderSection("styles", false)
 </head>
@@ -27,7 +28,7 @@
         @RenderBody()
     </div>
 
-    <vc:abp-script-bundle name="GlobalScripts"></vc:abp-script-bundle>
+    <abp-script-bundle name="@StandardBundles.Scripts.Global" />
 
     @RenderSection("scripts", false)
 

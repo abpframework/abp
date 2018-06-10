@@ -22,11 +22,11 @@ namespace Volo.Abp.Modularity
 
             var dependencyDescriptors = moduleType
                 .GetCustomAttributes()
-                .OfType<IDependedModuleTypesProvider>();
+                .OfType<IDependedTypesProvider>();
 
             foreach (var descriptor in dependencyDescriptors)
             {
-                foreach (var dependedModuleType in descriptor.GetDependedModuleTypes())
+                foreach (var dependedModuleType in descriptor.GetDependedTypes())
                 {
                     dependencies.AddIfNotContains(dependedModuleType);
                 }

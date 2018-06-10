@@ -2,14 +2,14 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 {
     public class BundlingOptions
     {
-        public BundleCollection StyleBundles { get; set; }
+        public BundleConfigurationCollection StyleBundles { get; set; }
 
-        public BundleCollection ScriptBundles { get; set; }
+        public BundleConfigurationCollection ScriptBundles { get; set; }
 
         public BundlingOptions()
         {
-            StyleBundles = new BundleCollection();
-            ScriptBundles = new BundleCollection();
+            StyleBundles = new BundleConfigurationCollection();
+            ScriptBundles = new BundleConfigurationCollection();
         }
     }
 }

@@ -4,12 +4,12 @@
     {
         public string Name { get; }
 
-        public BundleContributorList Contributors { get; }
+        public BundleContributorCollection Contributors { get; }
 
         public BundleConfiguration(string name)
         {
             Name = name;
-            Contributors = new BundleContributorList();
+            Contributors = new BundleContributorCollection();
         }
     }
 }

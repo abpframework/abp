@@ -1,9 +1,7 @@
-﻿using System.Collections.Generic;
-
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 {
     public interface IBundleContributor
     {
-        void Contribute(List<string> files);
+        void ConfigureBundle(BundleConfigurationContext context);
     }
 }

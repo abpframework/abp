@@ -4,11 +4,11 @@ using System.Collections.Generic;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 {
-    public class BundleCollection
+    public class BundleConfigurationCollection
     {
         private readonly ConcurrentDictionary<string, BundleConfiguration> _bundleContributors;
 
-        public BundleCollection()
+        public BundleConfigurationCollection()
         {
             _bundleContributors = new ConcurrentDictionary<string, BundleConfiguration>();
         }
@@ -30,6 +30,12 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
             return _bundleContributors[bundleName];
         }
 
+        public BundleConfiguration GetOrNull(string bundleName)
+        {
+            _bundleContributors.TryGetValue(bundleName, out var bundleConfiguration);
+            return bundleConfiguration;
+        }
+
         public BundleConfiguration GetOrAdd(string bundleName)
         {
             return GetOrAdd(bundleName, c => { });
@@ -45,21 +51,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
                     configureAction.Invoke(configuration);
                     return configuration;
                 });
-        }
-
-        public List<string> GetFiles(string bundleName)
-        {
-            CheckBundle(bundleName);
-
-            var files = new List<string>();
-
-            var bundleConfiguration = _bundleContributors[bundleName];
-            foreach (var contributor in bundleConfiguration.Contributors)
-            {
-                contributor.Contribute(files);
-            }
-
-            return files;
         }
 
         private void CheckBundle(string bundleName)

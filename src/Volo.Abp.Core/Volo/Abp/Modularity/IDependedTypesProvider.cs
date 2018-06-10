@@ -3,9 +3,9 @@ using JetBrains.Annotations;
 
 namespace Volo.Abp.Modularity
 {
-    public interface IDependedModuleTypesProvider
+    public interface IDependedTypesProvider
     {
         [NotNull]
-        Type[] GetDependedModuleTypes();
+        Type[] GetDependedTypes();
     }
 }

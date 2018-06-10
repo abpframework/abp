@@ -4,30 +4,22 @@ using JetBrains.Annotations;
 namespace Volo.Abp.Modularity
 {
     /// <summary>
-    /// Used to define dependencies of an ABP module to other modules.
-    /// It should be used for a class implements <see cref="IAbpModule"/>.
+    /// Used to define dependencies of a type.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-    public class DependsOnAttribute : Attribute, IDependedModuleTypesProvider
+    public class DependsOnAttribute : Attribute, IDependedTypesProvider
     {
-        /// <summary>
-        /// Types of depended modules.
-        /// </summary>
         [NotNull]
-        public Type[] DependedModuleTypes { get; }
+        public Type[] DependedTypes { get; }
 
-        /// <summary>
-        /// Used to define dependencies of an ABP module to other modules.
-        /// </summary>
-        /// <param name="dependedModuleTypes">Types of depended modules</param>
-        public DependsOnAttribute(params Type[] dependedModuleTypes)
+        public DependsOnAttribute(params Type[] dependedTypes)
         {
-            DependedModuleTypes = dependedModuleTypes ?? new Type[0];
+            DependedTypes = dependedTypes ?? new Type[0];
         }
 
-        public virtual Type[] GetDependedModuleTypes()
+        public virtual Type[] GetDependedTypes()
         {
-            return DependedModuleTypes;
+            return DependedTypes;
         }
     }
 }

@@ -50,8 +50,7 @@ namespace System.Collections.Generic
         /// <returns>Value if found, default if can not found.</returns>
         public static TValue GetOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key)
         {
-            TValue obj;
-            return dictionary.TryGetValue(key, out obj) ? obj : default;
+            return dictionary.TryGetValue(key, out var obj) ? obj : default;
         }
 
         /// <summary>
@@ -64,8 +63,7 @@ namespace System.Collections.Generic
         /// <returns>Value if found, default if can not found.</returns>
         public static TValue GetOrDefault<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> dictionary, TKey key)
         {
-            TValue obj;
-            return dictionary.TryGetValue(key, out obj) ? obj : default;
+            return dictionary.TryGetValue(key, out var obj) ? obj : default;
         }
 
         /// <summary>
