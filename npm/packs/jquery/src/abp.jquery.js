@@ -1,13 +1,93 @@
 ﻿var abp = abp || {};
-(function ($) {
+(function($) {
 
     if (!$) {
-        return;
+        throw "abp/jquery library requires the jquery library included to the page!";
     }
 
-    /* JQUERY ENHANCEMENTS ***************************************************/
+    // ABP CORE OVERRIDES /////////////////////////////////////////////////////
 
-    // abp.ajax -> uses $.ajax ------------------------------------------------
+    abp.message._showMessage = function (message, title) {
+        alert((title || '') + ' ' + message);
+
+        return $.Deferred(function ($dfd) {
+            $dfd.resolve();
+        });
+    };
+
+    abp.message.confirm = function (message, titleOrCallback, callback) {
+        if (titleOrCallback && !(typeof titleOrCallback == 'string')) {
+            callback = titleOrCallback;
+        }
+
+        var result = confirm(message);
+        callback && callback(result);
+
+        return $.Deferred(function ($dfd) {
+            $dfd.resolve(result);
+        });
+    };
+
+    abp.utils.isFunction = function (obj) {
+        return $.isFunction(obj);
+    };
+
+    // JQUERY EXTENSIONS //////////////////////////////////////////////////////
+
+    $.fn.findWithSelf = function (selector) {
+        return this.filter(selector).add(this.find(selector));
+    };
+
+    // DOM ////////////////////////////////////////////////////////////////////
+
+    abp.dom = abp.dom || {};
+
+    abp.dom.onNodeAdded = function (callback) {
+        abp.event.on('abp.dom.nodeAdded', callback);
+    };
+
+    abp.dom.onNodeRemoved = function (callback) {
+        abp.event.on('abp.dom.nodeRemoved', callback);
+    };
+
+    var mutationObserverCallback = function (mutationsList) {
+        for (var i = 0; i < mutationsList.length; i++) {
+            var mutation = mutationsList[i];
+            if (mutation.type === 'childList') {
+                if (mutation.addedNodes && mutation.removedNodes.length) {
+                    for (var k = 0; k < mutation.removedNodes.length; k++) {
+                        abp.event.trigger(
+                            'abp.dom.nodeRemoved',
+                            {
+                                $el: $(mutation.removedNodes[k])
+                            }
+                        );
+                    }
+                }
+
+                if (mutation.addedNodes && mutation.addedNodes.length) {
+                    for (var j = 0; j < mutation.addedNodes.length; j++) {
+                        abp.event.trigger(
+                            'abp.dom.nodeAdded',
+                            {
+                                $el: $(mutation.addedNodes[j])
+                            }
+                        );
+                    }
+                }
+            }
+        }
+    };
+
+    new MutationObserver(mutationObserverCallback).observe(
+        $('body')[0],
+        {
+            subtree: true,
+            childList: true
+        }
+    );
+
+    // AJAX ///////////////////////////////////////////////////////////////////
 
     abp.ajax = function (userOptions) {
         userOptions = userOptions || {};
@@ -186,5 +266,124 @@
         abp.ajax.defaultError404.message = l('DefaultErrorMessage404');
         abp.ajax.defaultError404.details = l('DefaultErrorMessage404Detail');
     });
+
+    // RESOURCE LOADER ////////////////////////////////////////////////////////
+
+    /* UrlStates enum */
+    var UrlStates = {
+        LOADING: 'LOADING',
+        LOADED: 'LOADED',
+        FAILED: 'FAILED'
+    };
+
+    /* UrlInfo class */
+    function UrlInfo(url) {
+        this.url = url;
+        this.state = UrlStates.LOADING;
+        this.loadCallbacks = [];
+        this.failCallbacks = [];
+    }
+
+    UrlInfo.prototype.succeed = function () {
+        this.state = UrlStates.LOADED;
+        for (var i = 0; i < this.loadCallbacks.length; i++) {
+            this.loadCallbacks[i]();
+        }
+    };
+
+    UrlInfo.prototype.failed = function () {
+        this.state = UrlStates.FAILED;
+        for (var i = 0; i < this.failCallbacks.length; i++) {
+            this.failCallbacks[i]();
+        }
+    };
+
+    UrlInfo.prototype.handleCallbacks = function (loadCallback, failCallback) {
+        switch (this.state) {
+            case UrlStates.LOADED:
+                loadCallback && loadCallback();
+                break;
+            case UrlStates.FAILED:
+                failCallback && failCallback();
+                break;
+            case UrlStates.LOADING:
+                this.addCallbacks(loadCallback, failCallback);
+                break;
+        }
+    };
+
+    UrlInfo.prototype.addCallbacks = function (loadCallback, failCallback) {
+        loadCallback && this.loadCallbacks.push(loadCallback);
+        failCallback && this.failCallbacks.push(failCallback);
+    };
+
+    /* ResourceLoader API */
+
+    abp.ResourceLoader = (function () {
+
+        var _urlInfos = {};
+
+        function getCacheKey(url) {
+            return url;
+        }
+
+        function appendTimeToUrl(url) {
+
+            if (url.indexOf('?') < 0) {
+                url += '?';
+            } else {
+                url += '&';
+            }
+
+            url += '_=' + new Date().getTime();
+
+            return url;
+        }
+
+        var _loadFromUrl = function (url, loadCallback, failCallback, serverLoader) {
+
+            var cacheKey = getCacheKey(url);
+
+            var urlInfo = _urlInfos[cacheKey];
+
+            if (urlInfo) {
+                urlInfo.handleCallbacks(loadCallback, failCallback);
+                return;
+            }
+
+            _urlInfos[cacheKey] = urlInfo = new UrlInfo(url);
+            urlInfo.addCallbacks(loadCallback, failCallback);
+
+            serverLoader(urlInfo);
+        };
+
+        var _loadScript = function (url, loadCallback, failCallback) {
+            _loadFromUrl(url, loadCallback, failCallback, function (urlInfo) {
+                $.getScript(url)
+                    .done(function () {
+                        urlInfo.succeed();
+                    })
+                    .fail(function () {
+                        urlInfo.failed();
+                    });
+            });
+        };
+
+        var _loadStyle = function (url) {
+            _loadFromUrl(url, undefined, undefined, function (urlInfo) {
+
+                $('<link/>', {
+                    rel: 'stylesheet',
+                    type: 'text/css',
+                    href: appendTimeToUrl(url)
+                }).appendTo('head');
+            });
+        };
+
+        return {
+            loadScript: _loadScript,
+            loadStyle: _loadStyle
+        }
+    })();
 
 })(jQuery);

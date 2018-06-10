@@ -31,9 +31,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling
             {
                 //TODO: Move to their own contributors, but first consider to change abp.js a bit
                 "/libs/abp/core/abp.js",
-                "/libs/abp/jquery/abp.dom.js",
-                "/libs/abp/jquery/abp.ajax.js",
-                "/libs/abp/jquery/abp.resource-loader.js",
+                "/libs/abp/jquery/abp.jquery.js",
 
                 "/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery/jquery-extensions.js",
                 "/libs/abp/aspnetcore.mvc.ui.theme.shared/jquery-form/jquery-form-extensions.js",
