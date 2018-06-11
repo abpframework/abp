@@ -54,8 +54,10 @@ namespace Volo.Abp.VirtualFileSystem
             return fileProvider;
         }
 
-        protected class InternalVirtualFileProvider : IFileProvider
+        protected class InternalVirtualFileProvider : DictionaryBasedFileProvider
         {
+            protected override Dictionary<string, IFileInfo> Files => _files.Value;
+
             private readonly VirtualFileSystemOptions _options;
             private readonly Lazy<Dictionary<string, IFileInfo>> _files;
 
@@ -63,64 +65,12 @@ namespace Volo.Abp.VirtualFileSystem
             {
                 _options = options;
                 _files = new Lazy<Dictionary<string, IFileInfo>>(
-                    CreateResourcesDictionary,
+                    CreateFiles,
                     true
                 );
             }
-
-            public IFileInfo GetFileInfo(string subpath)
-            {
-                if (string.IsNullOrEmpty(subpath))
-                {
-                    return new NotFoundFileInfo(subpath);
-                }
-
-                var file = _files.Value.GetOrDefault(VirtualFilePathHelper.NormalizePath(subpath));
-
-                if (file == null)
-                {
-                    return new NotFoundFileInfo(subpath);
-                }
-
-                return file;
-            }
-
-            public IDirectoryContents GetDirectoryContents(string subpath)
-            {
-                var directory = GetFileInfo(subpath);
-                if (!directory.IsDirectory)
-                {
-                    return new NotFoundDirectoryContents();
-                }
-
-                var fileList = new List<IFileInfo>();
-
-                var directoryPath = subpath.EnsureEndsWith('/');
-                foreach (var fileInfo in _files.Value.Values)
-                {
-                    if (!fileInfo.PhysicalPath.StartsWith(directoryPath))
-                    {
-                        continue;
-                    }
-
-                    var relativePath = fileInfo.PhysicalPath.Substring(directoryPath.Length);
-                    if (relativePath.Contains("/"))
-                    {
-                        continue;
-                    }
-
-                    fileList.Add(fileInfo);
-                }
-
-                return new EnumerableDirectoryContents(fileList);
-            }
-
-            public IChangeToken Watch(string filter)
-            {
-                return NullChangeToken.Singleton;
-            }
-
-            private Dictionary<string, IFileInfo> CreateResourcesDictionary()
+            
+            private Dictionary<string, IFileInfo> CreateFiles()
             {
                 var files = new Dictionary<string, IFileInfo>(StringComparer.OrdinalIgnoreCase);
 
