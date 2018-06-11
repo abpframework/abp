@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 {
@@ -13,25 +12,32 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 
         public static BundleConfiguration AddContributors(this BundleConfiguration bundleConfiguration, params IBundleContributor[] contributors)
         {
-            if (!contributors.IsNullOrEmpty())
+            Check.NotNull(contributors, nameof(contributors));
+
+            foreach (var contributor in contributors)
             {
-                foreach (var contributor in contributors)
-                {
-                    bundleConfiguration.Contributors.Add(contributor);
-                }
+                bundleConfiguration.Contributors.Add(contributor);
             }
+
+            return bundleConfiguration;
+        }
+
+        public static BundleConfiguration AddBaseBundles(this BundleConfiguration bundleConfiguration, params string[] bundleNames)
+        {
+            Check.NotNull(bundleNames, nameof(bundleNames));
+
+            bundleConfiguration.BaseBundles.AddRange(bundleNames);
 
             return bundleConfiguration;
         }
 
         public static BundleConfiguration AddContributors(this BundleConfiguration bundleConfiguration, params Type[] contributorTypes)
         {
-            if (!contributorTypes.IsNullOrEmpty())
+            Check.NotNull(contributorTypes, nameof(contributorTypes));
+
+            foreach (var contributorType in contributorTypes)
             {
-                foreach (var contributorType in contributorTypes)
-                {
-                    bundleConfiguration.Contributors.Add(contributorType);
-                }
+                bundleConfiguration.Contributors.Add(contributorType);
             }
 
             return bundleConfiguration;

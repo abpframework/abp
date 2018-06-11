@@ -2,6 +2,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -46,27 +47,28 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 
         public List<string> GetStyleBundleFiles(string bundleName)
         {
-            return GetBundleFiles(_options.StyleBundles.Get(bundleName), _styleBundler);
+            return GetBundleFiles(_options.StyleBundles, bundleName, _styleBundler);
         }
 
         public List<string> GetScriptBundleFiles(string bundleName)
         {
-            return GetBundleFiles(_options.ScriptBundles.Get(bundleName), _scriptBundler);
+            return GetBundleFiles(_options.ScriptBundles, bundleName, _scriptBundler);
         }
 
-        protected virtual List<string> GetBundleFiles(BundleConfiguration bundleConfiguration, IBundler bundler)
+        protected virtual List<string> GetBundleFiles(BundleConfigurationCollection bundles, string bundleName, IBundler bundler)
         {
             //TODO: Caching
             //TODO: Concurrency
 
-            var files = CreateFileListFromConfiguration(bundleConfiguration);
+
+            var files = CreateFileList(bundles, bundleName);
 
             if (!IsBundlingEnabled())
             {
                 return files;
             }
 
-            var bundleRelativePath = _options.BundleFolderName.EnsureEndsWith('/') + bundleConfiguration.Name + "." + bundler.FileExtension;
+            var bundleRelativePath = _options.BundleFolderName.EnsureEndsWith('/') + bundleName + "." + bundler.FileExtension;
 
             var bundleResult = bundler.Bundle(new BundlerContext(bundleRelativePath, files));
 
@@ -101,22 +103,38 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
             //return !_hostingEnvironment.IsDevelopment();
         }
 
-        protected virtual List<string> CreateFileListFromConfiguration(BundleConfiguration bundleConfiguration)
+        protected virtual List<string> CreateFileList(BundleConfigurationCollection bundles, string bundleName)
         {
             using (var scope = _serviceProvider.CreateScope())
             {
-                var context = new BundleConfigurationContext(
-                    new List<string>(),
-                    _themeManager.CurrentTheme,
-                    scope.ServiceProvider
-                );
+                var contributors = new List<IBundleContributor>();
+                var context = new BundleConfigurationContext(scope.ServiceProvider);
 
-                foreach (var contributor in bundleConfiguration.Contributors.GetAll())
+                AddContributorsWithBaseBundles(contributors, bundles, context, bundleName);
+
+                foreach (var contributor in contributors)
                 {
                     contributor.ConfigureBundle(context);
                 }
 
                 return context.Files;
+            }
+        }
+
+        protected virtual void AddContributorsWithBaseBundles(List<IBundleContributor> contributors, BundleConfigurationCollection bundles, BundleConfigurationContext context, string bundleName)
+        {
+            var bundleConfiguration = bundles.Get(bundleName);
+
+            foreach (var baseBundleName in bundleConfiguration.BaseBundles)
+            {
+                AddContributorsWithBaseBundles(contributors, bundles, context, baseBundleName); //Recursive call
+            }
+
+            var selfContributors = bundleConfiguration.Contributors.GetAll();
+
+            if (selfContributors.Any())
+            {
+                contributors.AddRange(selfContributors);
             }
         }
     }
