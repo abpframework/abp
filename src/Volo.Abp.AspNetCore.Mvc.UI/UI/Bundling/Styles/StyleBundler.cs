@@ -1,4 +1,3 @@
-using System;
 using Volo.Abp.AspNetCore.Mvc.UI.Minification.Styles;
 using Volo.Abp.AspNetCore.VirtualFileSystem;
 
@@ -16,9 +15,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.Styles
 
         protected override string GetFileContent(IBundlerContext context, string file)
         {
-            var content = base.GetFileContent(context, file);
             return CssRelativePath.Adjust(
-                content,
+                base.GetFileContent(context, file),
                 WebRootFileProvider.GetAbsolutePath(file),
                 WebRootFileProvider.GetAbsolutePath(context.BundleRelativePath)
             );
