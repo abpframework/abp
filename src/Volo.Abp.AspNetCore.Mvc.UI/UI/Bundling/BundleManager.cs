@@ -12,6 +12,8 @@ using Volo.Abp.AspNetCore.Mvc.UI.Bundling.Styles;
 using Volo.Abp.AspNetCore.Mvc.UI.Theming;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.IO;
+using Volo.Abp.VirtualFileSystem;
+using Volo.Abp.VirtualFileSystem.Embedded;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 {
@@ -22,8 +24,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
         private readonly IHostingEnvironment _hostingEnvironment;
         private readonly IScriptBundler _scriptBundler;
         private readonly IStyleBundler _styleBundler;
-        private readonly IThemeManager _themeManager;
         private readonly IServiceProvider _serviceProvider;
+        private readonly IDynamicFileProvider _dynamicFileProvider;
 
         private readonly ConcurrentDictionary<string, string> _cache;
 
@@ -32,13 +34,12 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
             IScriptBundler scriptBundler,
             IStyleBundler styleBundler,
             IHostingEnvironment hostingEnvironment,
-            IThemeManager themeManager,
-            IServiceProvider serviceProvider)
+            IServiceProvider serviceProvider, IDynamicFileProvider dynamicFileProvider)
         {
             _hostingEnvironment = hostingEnvironment;
             _scriptBundler = scriptBundler;
-            _themeManager = themeManager;
             _serviceProvider = serviceProvider;
+            _dynamicFileProvider = dynamicFileProvider;
             _styleBundler = styleBundler;
             _options = options.Value;
 
@@ -82,9 +83,19 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 
         protected virtual void SaveBundleResult(string bundleRelativePath, BundleResult bundleResult)
         {
-            var bundleFilePath = Path.Combine(_hostingEnvironment.WebRootPath, bundleRelativePath);
-            DirectoryHelper.CreateIfNotExists(Path.GetDirectoryName(bundleFilePath));
-            File.WriteAllText(bundleFilePath, bundleResult.Content, Encoding.UTF8);
+            //TODO: Optimize?
+            var fileName = bundleRelativePath.Substring(bundleRelativePath.IndexOf('/') + 1);
+
+            _dynamicFileProvider.AddOrUpdate(
+                new InMemoryFileInfo(
+                    Encoding.UTF8.GetBytes(bundleResult.Content),
+                    "/wwwroot/" + bundleRelativePath, //TODO: get rid of wwwroot!
+                    fileName
+                    )
+                );
+            //var bundleFilePath = Path.Combine(_hostingEnvironment.WebRootPath, bundleRelativePath);
+            //DirectoryHelper.CreateIfNotExists(Path.GetDirectoryName(bundleFilePath));
+            //File.WriteAllText(bundleFilePath, bundleResult.Content, Encoding.UTF8);
         }
 
         public virtual void CreateStyleBundle(string bundleName, Action<BundleConfiguration> configureAction)

@@ -7,7 +7,7 @@ namespace Volo.Abp.VirtualFileSystem
 {
     public abstract class DictionaryBasedFileProvider : IFileProvider
     {
-        protected abstract Dictionary<string, IFileInfo> Files { get; }
+        protected abstract IDictionary<string, IFileInfo> Files { get; }
 
         public virtual IFileInfo GetFileInfo(string subpath)
         {
@@ -16,7 +16,7 @@ namespace Volo.Abp.VirtualFileSystem
                 return new NotFoundFileInfo(subpath);
             }
 
-            var file = Files.GetOrDefault(VirtualFilePathHelper.NormalizePath(subpath));
+            var file = Files.GetOrDefault(NormalizePath(subpath));
 
             if (file == null)
             {
@@ -59,6 +59,11 @@ namespace Volo.Abp.VirtualFileSystem
         public virtual IChangeToken Watch(string filter)
         {
             return NullChangeToken.Singleton;
+        }
+
+        protected virtual string NormalizePath(string subpath)
+        {
+            return subpath;
         }
     }
 }
