@@ -19,22 +19,22 @@ namespace Volo.Abp.VirtualFileSystem
             _fileProvider = CreateHybridProvider();
         }
 
-        public IFileInfo GetFileInfo(string subpath)
+        public virtual IFileInfo GetFileInfo(string subpath)
         {
             return _fileProvider.GetFileInfo(subpath);
         }
 
-        public IDirectoryContents GetDirectoryContents(string subpath)
+        public virtual IDirectoryContents GetDirectoryContents(string subpath)
         {
             return _fileProvider.GetDirectoryContents(subpath);
         }
 
-        public IChangeToken Watch(string filter)
+        public virtual IChangeToken Watch(string filter)
         {
             return _fileProvider.Watch(filter);
         }
 
-        private IFileProvider CreateHybridProvider()
+        protected virtual IFileProvider CreateHybridProvider()
         {
             IFileProvider fileProvider = new InternalVirtualFileProvider(_options);
 
@@ -54,7 +54,7 @@ namespace Volo.Abp.VirtualFileSystem
             return fileProvider;
         }
 
-        private class InternalVirtualFileProvider : IFileProvider
+        protected class InternalVirtualFileProvider : IFileProvider
         {
             private readonly VirtualFileSystemOptions _options;
             private readonly Lazy<Dictionary<string, IFileInfo>> _files;

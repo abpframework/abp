@@ -30,12 +30,13 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Bundling
             CreateBundle(bundleName, files);
 
             var bundleFiles = GetBundleFiles(bundleName);
-            await output.GetChildContentAsync(); //TODO: Suppress child execution!
+
             output.Content.Clear();
             AddHtmlTags(context, output, bundleFiles);
         }
 
         protected abstract void CreateBundle(string bundleName, List<string> files);
+
         protected abstract List<string> GetBundleFiles(string bundleName);
 
         protected abstract void AddHtmlTags(TagHelperContext context, TagHelperOutput output, List<string> files);
@@ -49,7 +50,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Bundling
         {
             var fileList = new List<string>();
             context.Items[AbpBundleFileTagHelperService.ContextFileListKey] = fileList;
-            await output.GetChildContentAsync();
+            await output.GetChildContentAsync(); //TODO: Suppress child execution!
             return fileList;
         }
     }

@@ -13,7 +13,7 @@ namespace Microsoft.AspNetCore.Builder
 
             IFileProvider fileProvider = new AspNetCoreVirtualFileProvider(
                 app.ApplicationServices,
-                "/wwwroot"
+                "/wwwroot"  //TODO: Hard-coded "/wwwroot" is not good!
             );
             
             app.UseStaticFiles(
