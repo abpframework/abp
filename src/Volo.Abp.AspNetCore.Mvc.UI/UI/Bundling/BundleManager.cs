@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
 using Microsoft.AspNetCore.Hosting;
@@ -9,16 +7,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling.Scripts;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling.Styles;
-using Volo.Abp.AspNetCore.Mvc.UI.Theming;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.IO;
 using Volo.Abp.VirtualFileSystem;
-using Volo.Abp.VirtualFileSystem.Embedded;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 {
-    //TODO: Do not make this singleton (since it's using scoped services), instead separate a singleton bundlecache!
-    public class BundleManager : IBundleManager, ISingletonDependency
+    public class BundleManager : IBundleManager, ITransientDependency
     {
         private readonly BundlingOptions _options;
         private readonly IHostingEnvironment _hostingEnvironment;
@@ -26,24 +20,24 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
         private readonly IStyleBundler _styleBundler;
         private readonly IServiceProvider _serviceProvider;
         private readonly IDynamicFileProvider _dynamicFileProvider;
-
-        private readonly ConcurrentDictionary<string, string> _cache;
+        private readonly IBundleCache _bundleCache;
 
         public BundleManager(
             IOptions<BundlingOptions> options,
             IScriptBundler scriptBundler,
             IStyleBundler styleBundler,
             IHostingEnvironment hostingEnvironment,
-            IServiceProvider serviceProvider, IDynamicFileProvider dynamicFileProvider)
+            IServiceProvider serviceProvider, 
+            IDynamicFileProvider dynamicFileProvider, 
+            IBundleCache bundleCache)
         {
             _hostingEnvironment = hostingEnvironment;
             _scriptBundler = scriptBundler;
             _serviceProvider = serviceProvider;
             _dynamicFileProvider = dynamicFileProvider;
+            _bundleCache = bundleCache;
             _styleBundler = styleBundler;
             _options = options.Value;
-
-            _cache = new ConcurrentDictionary<string, string>();
         }
 
         public List<string> GetStyleBundleFiles(string bundleName)
@@ -58,27 +52,26 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 
         protected virtual List<string> GetBundleFiles(BundleConfigurationCollection bundles, string bundleName, IBundler bundler)
         {
-            //TODO: Caching
-            //TODO: Concurrency
-
-
-            var files = CreateFileList(bundles, bundleName);
-
-            if (!IsBundlingEnabled())
-            {
-                return files;
-            }
-
             var bundleRelativePath = _options.BundleFolderName.EnsureEndsWith('/') + bundleName + "." + bundler.FileExtension;
 
-            var bundleResult = bundler.Bundle(new BundlerContext(bundleRelativePath, files));
-
-            SaveBundleResult(bundleRelativePath, bundleResult);
-
-            return new List<string>
+            return _bundleCache.GetFiles(bundleRelativePath, () =>
             {
-                "/" + bundleRelativePath
-            };
+                var files = CreateFileList(bundles, bundleName);
+
+                if (!IsBundlingEnabled())
+                {
+                    return files;
+                }
+
+                var bundleResult = bundler.Bundle(new BundlerContext(bundleRelativePath, files));
+
+                SaveBundleResult(bundleRelativePath, bundleResult);
+
+                return new List<string>
+                {
+                    "/" + bundleRelativePath
+                };
+            });
         }
 
         protected virtual void SaveBundleResult(string bundleRelativePath, BundleResult bundleResult)
