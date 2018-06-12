@@ -1,4 +1,5 @@
-﻿using Shouldly;
+﻿using System.Text;
+using Shouldly;
 using Volo.Abp.Localization;
 using Xunit;
 
@@ -191,6 +192,28 @@ namespace System
         {
             "MyValue1".ToEnum<MyEnum>().ShouldBe(MyEnum.MyValue1);
             "MyValue2".ToEnum<MyEnum>().ShouldBe(MyEnum.MyValue2);
+        }
+
+        [Theory]
+        [InlineData("")]
+        [InlineData("MyStringİ")]
+        public void GetBytes_Test(string str)
+        {
+            var bytes = str.GetBytes();
+            bytes.ShouldNotBeNull();
+            bytes.Length.ShouldBeGreaterThan(0);
+            Encoding.UTF8.GetString(bytes).ShouldBe(str);
+        }
+
+        [Theory]
+        [InlineData("")]
+        [InlineData("MyString")]
+        public void GetBytes_With_Encoding_Test(string str)
+        {
+            var bytes = str.GetBytes(Encoding.ASCII);
+            bytes.ShouldNotBeNull();
+            bytes.Length.ShouldBeGreaterThan(0);
+            Encoding.ASCII.GetString(bytes).ShouldBe(str);
         }
 
         private enum MyEnum

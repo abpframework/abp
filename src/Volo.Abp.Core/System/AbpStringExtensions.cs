@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using JetBrains.Annotations;
 using Volo.Abp;
 
 namespace System
@@ -403,6 +404,25 @@ namespace System
             }
 
             return str.Left(maxLength - postfix.Length) + postfix;
+        }
+
+        /// <summary>
+        /// Converts given string to a byte array using <see cref="Encoding.UTF8"/> encoding.
+        /// </summary>
+        public static byte[] GetBytes(this string str)
+        {
+            return str.GetBytes(Encoding.UTF8);
+        }
+
+        /// <summary>
+        /// Converts given string to a byte array using the given <paramref name="encoding"/>
+        /// </summary>
+        public static byte[] GetBytes([NotNull] this string str, [NotNull] Encoding encoding)
+        {
+            Check.NotNull(str, nameof(str));
+            Check.NotNull(encoding, nameof(encoding));
+
+            return encoding.GetBytes(str);
         }
     }
 }
