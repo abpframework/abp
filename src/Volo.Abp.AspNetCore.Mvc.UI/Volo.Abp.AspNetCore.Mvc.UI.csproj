@@ -7,7 +7,7 @@
     <AssemblyName>Volo.Abp.AspNetCore.Mvc.UI</AssemblyName>
     <PackageId>Volo.Abp.AspNetCore.Mvc.UI</PackageId>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
-    <RootNamespace>Volo.Abp.AspNetCore.Mvc</RootNamespace>
+    <RootNamespace />
   </PropertyGroup>
 
   <ItemGroup>

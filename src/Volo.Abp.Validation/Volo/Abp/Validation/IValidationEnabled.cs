@@ -1,4 +1,4 @@
-﻿namespace Volo.Abp.Application.Services
+﻿namespace Volo.Abp.Validation
 {
     public interface IValidationEnabled
     {

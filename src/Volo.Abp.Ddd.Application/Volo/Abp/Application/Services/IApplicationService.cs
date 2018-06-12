@@ -1,6 +1,7 @@
 ﻿using Volo.Abp.Authorization;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Uow;
+using Volo.Abp.Validation;
 
 namespace Volo.Abp.Application.Services
 {

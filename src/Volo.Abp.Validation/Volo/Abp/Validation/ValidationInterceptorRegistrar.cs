@@ -1,5 +1,4 @@
-﻿using Volo.Abp.Application.Services;
-using Volo.Abp.DependencyInjection;
+﻿using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Validation
 {

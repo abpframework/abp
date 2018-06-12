@@ -16,7 +16,7 @@ using Volo.Abp.Timing;
 using Volo.Abp.Uow;
 using Volo.Abp.Users;
 
-namespace Volo.Abp.AspNetCore.Mvc.RazorPages
+namespace Volo.Abp.AspNetCore.Mvc.UI.RazorPages
 {
     public abstract class AbpPageModel : PageModel
     {

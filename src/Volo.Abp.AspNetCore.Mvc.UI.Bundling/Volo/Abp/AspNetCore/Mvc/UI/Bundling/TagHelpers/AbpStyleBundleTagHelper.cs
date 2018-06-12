@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Razor.TagHelpers;
+using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Bundling
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
 {
     //TODO: Move to Volo.Abp.AspNetCore.Mvc.UI package.
 

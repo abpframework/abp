@@ -12,6 +12,7 @@ using Volo.Abp.Threading;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
 {
+    //TODO: Refactor this class, extract bootstrap functionality!
     public abstract class AbpTagHelperService<TTagHelper> : IAbpTagHelperService<TTagHelper>
         where TTagHelper : TagHelper
     {

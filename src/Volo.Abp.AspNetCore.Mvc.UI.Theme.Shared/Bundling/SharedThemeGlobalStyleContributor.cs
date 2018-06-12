@@ -1,8 +1,8 @@
 ﻿using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
-using Volo.Abp.AspNetCore.Mvc.UI.Bundling.Libraries.Bootstrap;
-using Volo.Abp.AspNetCore.Mvc.UI.Bundling.Libraries.DatatablesNetBs4;
-using Volo.Abp.AspNetCore.Mvc.UI.Bundling.Libraries.FontAwesome;
-using Volo.Abp.AspNetCore.Mvc.UI.Bundling.Libraries.Toastr;
+using Volo.Abp.AspNetCore.Mvc.UI.Packages.Bootstrap;
+using Volo.Abp.AspNetCore.Mvc.UI.Packages.DatatablesNetBs4;
+using Volo.Abp.AspNetCore.Mvc.UI.Packages.FontAwesome;
+using Volo.Abp.AspNetCore.Mvc.UI.Packages.Toastr;
 using Volo.Abp.Modularity;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling

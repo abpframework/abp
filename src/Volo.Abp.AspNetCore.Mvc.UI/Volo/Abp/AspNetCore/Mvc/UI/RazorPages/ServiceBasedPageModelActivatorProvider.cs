@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.AspNetCore.Mvc.RazorPages
+namespace Volo.Abp.AspNetCore.Mvc.UI.RazorPages
 {
     [Dependency(ReplaceServices = true)]
     public class ServiceBasedPageModelActivatorProvider : IPageModelActivatorProvider, ITransientDependency

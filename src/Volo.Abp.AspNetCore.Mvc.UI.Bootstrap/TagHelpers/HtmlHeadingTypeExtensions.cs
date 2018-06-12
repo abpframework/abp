@@ -1,4 +1,4 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Card
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
 {
     public static class HtmlHeadingTypeExtensions
     {

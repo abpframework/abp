@@ -1,11 +1,11 @@
 ﻿using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
-using Volo.Abp.AspNetCore.Mvc.UI.Bundling.Libraries.Bootstrap;
-using Volo.Abp.AspNetCore.Mvc.UI.Bundling.Libraries.DatatablesNetBs4;
-using Volo.Abp.AspNetCore.Mvc.UI.Bundling.Libraries.JQuery;
-using Volo.Abp.AspNetCore.Mvc.UI.Bundling.Libraries.JQueryForm;
-using Volo.Abp.AspNetCore.Mvc.UI.Bundling.Libraries.JQueryValidationUnobtrusive;
-using Volo.Abp.AspNetCore.Mvc.UI.Bundling.Libraries.SweetAlert;
-using Volo.Abp.AspNetCore.Mvc.UI.Bundling.Libraries.Toastr;
+using Volo.Abp.AspNetCore.Mvc.UI.Packages.Bootstrap;
+using Volo.Abp.AspNetCore.Mvc.UI.Packages.DatatablesNetBs4;
+using Volo.Abp.AspNetCore.Mvc.UI.Packages.JQuery;
+using Volo.Abp.AspNetCore.Mvc.UI.Packages.JQueryForm;
+using Volo.Abp.AspNetCore.Mvc.UI.Packages.JQueryValidationUnobtrusive;
+using Volo.Abp.AspNetCore.Mvc.UI.Packages.SweetAlert;
+using Volo.Abp.AspNetCore.Mvc.UI.Packages.Toastr;
 using Volo.Abp.Modularity;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling

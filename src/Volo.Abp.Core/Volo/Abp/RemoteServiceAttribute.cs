@@ -1,7 +1,7 @@
 using System;
 using System.Reflection;
 
-namespace Volo.Abp.Application.Services
+namespace Volo.Abp
 {
     [Serializable]
     [AttributeUsage(AttributeTargets.Interface | AttributeTargets.Class | AttributeTargets.Method)]
