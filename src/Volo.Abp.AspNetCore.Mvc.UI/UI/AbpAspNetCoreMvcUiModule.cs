@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation;
-using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI
 {
@@ -12,11 +11,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI
         public override void ConfigureServices(IServiceCollection services)
         {
             services.AddAssemblyOf<AbpAspNetCoreMvcUiModule>();
-
-            services.Configure<VirtualFileSystemOptions>(options =>
-            {
-                options.FileSets.AddEmbedded<AbpAspNetCoreMvcUiModule>("Volo.Abp.AspNetCore.Mvc");
-            });
         }
     }
 }

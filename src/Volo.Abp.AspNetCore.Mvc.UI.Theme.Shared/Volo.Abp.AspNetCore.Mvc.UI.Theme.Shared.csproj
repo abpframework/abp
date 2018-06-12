@@ -27,6 +27,7 @@
   
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.csproj" />
+    <ProjectReference Include="..\Volo.Abp.AspNetCore.Mvc.UI.Packages\Volo.Abp.AspNetCore.Mvc.UI.Packages.csproj" />
   </ItemGroup>
 
 </Project>

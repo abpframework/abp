@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
+using Volo.Abp.AspNetCore.Mvc.UI.Packages;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
@@ -8,7 +9,8 @@ using Volo.Abp.VirtualFileSystem;
 namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared
 {
     [DependsOn(
-        typeof(AbpAspNetCoreMvcUiBootstrapModule)
+        typeof(AbpAspNetCoreMvcUiBootstrapModule),
+        typeof(AbpAspNetCoreMvcUiPackagesModule)
         )]
     public class AbpAspNetCoreMvcUiThemeSharedModule : AbpModule
     {

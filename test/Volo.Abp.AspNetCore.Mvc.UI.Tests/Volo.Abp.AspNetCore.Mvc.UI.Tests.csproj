@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Volo.Abp.AspNetCore.Mvc.UI\Volo.Abp.AspNetCore.Mvc.UI.csproj" />
+    <ProjectReference Include="..\..\src\Volo.Abp.AspNetCore.Mvc.UI.Bundling\Volo.Abp.AspNetCore.Mvc.UI.Bundling.csproj" />
     <ProjectReference Include="..\..\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
     <ProjectReference Include="..\Volo.Abp.AspNetCore.Tests\Volo.Abp.AspNetCore.Tests.csproj" />
   </ItemGroup>
