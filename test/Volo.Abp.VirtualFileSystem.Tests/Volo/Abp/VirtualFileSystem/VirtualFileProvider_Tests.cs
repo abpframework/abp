@@ -3,7 +3,6 @@ using System.Text;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.Modularity;
-using Volo.Abp.VirtualFileSystem.Embedded;
 using Xunit;
 
 namespace Volo.Abp.VirtualFileSystem
