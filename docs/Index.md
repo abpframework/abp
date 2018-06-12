@@ -48,8 +48,10 @@
 * ASP.NET Core MVC
   * API Versioning
   * User Interface
-    * Themes
+    * [Client Side Package Management](AspNetCore/Client-Side-Package-Management.md)
+    * [Bundling & Minification](AspNetCore/Bundling-Minification.md)
     * Tag Helpers
+    * Themes
 * Data Access
   * [Entity Framework Core Integration](Entity-Framework-Core.md)
   * [MongoDB Integration](MongoDB.md)
