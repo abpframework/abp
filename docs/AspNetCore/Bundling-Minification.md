@@ -51,7 +51,7 @@ This bundle defines a style bundle with a **unique name** *MyGlobalBundle*. It's
 * ABP creates the bundle as **lazy** from the provided files when it's **first requested**. For the subsequent calls, it's returned from the **cache**. That means if you conditionally add files to the bundle, it's executed only once and any change of the condition will not effect the bundle for the next requests.
 * ABP adds bundle files **individually** to the page for the `development` environment. It automatically bundles & minifies for the other environments (`staging`, `production`...).
 * The bundle files may be **physical** files or [**virtual/embedded** files](../Virtual-File-System.md).
-* ABP automatically add **version query string** (like ?_v=67872834234) to the bundle file URL which prevents browser caching when a bundle changes.
+* ABP automatically add **version query string** (like ?_v=67872834243042 - generated from last change date of the related file) to the bundle file URL which prevents browser caching when a bundle changes. The versioning works even if the bundle files are individually added to the page (on the development environment).
 
 #### Importing The Bundling Tag Helpers
 
