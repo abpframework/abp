@@ -224,7 +224,7 @@ Using the built-in contributors for standard packages;
 Standard package contributors are defined in the `Volo.Abp.AspNetCore.Mvc.UI.Packages` nuget package. To install it into your project:
 
 ````
-install-package Volo.Abp.AspNetCore.Mvc.UI.Bundling
+install-package Volo.Abp.AspNetCore.Mvc.UI.Packages
 ````
 
 Then add the `AbpAspNetCoreMvcUiPackagesModule` module dependency to your own module
@@ -245,7 +245,7 @@ namespace MyCompany.MyProject
 
 ##### Themes
 
-Themes (TODO: link) uses the standard package contributors to add library resources to page layouts.
+Themes (TODO: link) also uses the standard package contributors to add library resources to page layouts.
 
 ### See Also
 
