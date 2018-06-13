@@ -71,10 +71,6 @@ namespace System.Collections.Generic
         {
             var list = Enumerable.Range(1, 3).ToList();
 
-            list[0].ShouldBe(1);
-            list[1].ShouldBe(2);
-            list[2].ShouldBe(3);
-
             list.ReplaceWhile(i => i >= 2, 42);
 
             list[0].ShouldBe(1);
@@ -87,15 +83,47 @@ namespace System.Collections.Generic
         {
             var list = Enumerable.Range(1, 3).ToList();
 
-            list[0].ShouldBe(1);
-            list[1].ShouldBe(2);
-            list[2].ShouldBe(3);
-
             list.ReplaceWhile(i => i >= 2, i => i + 1);
 
             list[0].ShouldBe(1);
             list[1].ShouldBe(3);
             list[2].ShouldBe(4);
+        }
+
+        [Fact]
+        public void ReplaceOne_WithValue()
+        {
+            var list = Enumerable.Range(1, 3).ToList();
+
+            list.ReplaceOne(i => i >= 2, 42);
+
+            list[0].ShouldBe(1);
+            list[1].ShouldBe(42);
+            list[2].ShouldBe(3);
+        }
+
+        [Fact]
+        public void ReplaceOne_WithFactory()
+        {
+            var list = Enumerable.Range(1, 3).ToList();
+
+            list.ReplaceOne(i => i >= 2, i => i + 1);
+
+            list[0].ShouldBe(1);
+            list[1].ShouldBe(3);
+            list[2].ShouldBe(3);
+        }
+
+        [Fact]
+        public void ReplaceOne_With_Item()
+        {
+            var list = Enumerable.Range(1, 3).ToList();
+
+            list.ReplaceOne(2, 42);
+
+            list[0].ShouldBe(1);
+            list[1].ShouldBe(42);
+            list[2].ShouldBe(3);
         }
     }
 }
