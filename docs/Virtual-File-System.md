@@ -1,6 +1,6 @@
 ## Virtual File System
 
-Virtual File System makes possible to manage files those are not physically exists in the file system (disk). It's mainly used to embed files into assemblies and use them like physical files on runtime.
+Virtual File System makes possible to manage files those are not physically exists in the file system (disk). It's mainly used to embed (js, css, image, cshtml...) files into assemblies and use them like physical files on runtime.
 
 ### Volo.Abp.VirtualFileSystem Package
 

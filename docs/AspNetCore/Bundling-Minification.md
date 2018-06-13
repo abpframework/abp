@@ -11,13 +11,13 @@ ABP offers a simpler, dynamic, powerful, modular and built-in way.
 
 > This package is already installed by default with the startup templates. So, most of the time, you don't need to install it manually.
 
-Install the Volo.Abp.AspNetCore.Mvc.UI.Bundling nuget package to your project:
+Install the `Volo.Abp.AspNetCore.Mvc.UI.Bundling` nuget package to your project:
 
 ````
 install-package Volo.Abp.AspNetCore.Mvc.UI.Bundling
 ````
 
-Then you can add **AbpLocalizationModule** dependency to your module:
+Then you can add the `AbpAspNetCoreMvcUiBundlingModule` dependency to your module:
 
 ````C#
 using Volo.Abp.Modularity;
@@ -193,6 +193,10 @@ When a bundle contributor is added, its dependencies are **automatically and rec
 
 Creating contributors and defining dependencies is a way of organizing bundle creation across different modules.
 
+##### Accessing to the IServiceProvider
+
+While it is rarely needed,`BundleConfigurationContext` has a `ServiceProvider` property that you can resolve service dependencies inside the `ConfigureBundle` method.
+
 #### Built-In Package Contributors
 
 Adding a NPM package resources (js, css files) into a bundle is pretty standard. For instance you always add the same `bootstrap.css` file for the bootstrap NPM package.
@@ -210,12 +214,38 @@ public class MyExtensionStyleBundleContributor : BundleContributor
 Using the built-in contributors for standard packages;
 
 * Prevents you **wrongly typing** the resource paths.
-* Prevents changes if the resource **path changes** (the depended contributor will handle it).
+* Prevents changing your contributor if the resource **path changes** (the depended contributor will handle it).
 * Prevents multiple modules add the same file **multiple times** to the same bundle.
 
-##### Service Dependencies
+##### Volo.Abp.AspNetCore.Mvc.UI.Packages Package
 
-TODO
+> This package is already installed by default with the startup templates. So, most of the time, you don't need to install it manually.
+
+Standard package contributors are defined in the `Volo.Abp.AspNetCore.Mvc.UI.Packages` nuget package. To install it into your project:
+
+````
+install-package Volo.Abp.AspNetCore.Mvc.UI.Bundling
+````
+
+Then add the `AbpAspNetCoreMvcUiPackagesModule` module dependency to your own module
+
+````C#
+using Volo.Abp.Modularity;
+using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
+
+namespace MyCompany.MyProject
+{
+    [DependsOn(typeof(AbpAspNetCoreMvcUiPackagesModule))]
+    public class MyWebModule : AbpModule
+    {
+        //...
+    }
+}
+````
+
+##### Themes
+
+Themes (TODO: link) uses the standard package contributors to add library resources to page layouts.
 
 ### See Also
 
