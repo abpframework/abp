@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling.Scripts;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling.Styles;
+using Volo.Abp.AspNetCore.VirtualFileSystem;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.VirtualFileSystem;
 
@@ -14,6 +15,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 {
     public class BundleManager : IBundleManager, ITransientDependency
     {
+        protected IHybridWebRootFileProvider WebRootFileProvider { get; }
+
+        //TODO: Make all protected readonly to allow easily extend the bundlemanager
         private readonly BundlingOptions _options;
         private readonly IHostingEnvironment _hostingEnvironment;
         private readonly IScriptBundler _scriptBundler;
@@ -27,25 +31,27 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
             IScriptBundler scriptBundler,
             IStyleBundler styleBundler,
             IHostingEnvironment hostingEnvironment,
-            IServiceProvider serviceProvider, 
-            IDynamicFileProvider dynamicFileProvider, 
-            IBundleCache bundleCache)
+            IServiceProvider serviceProvider,
+            IDynamicFileProvider dynamicFileProvider,
+            IBundleCache bundleCache,
+            IHybridWebRootFileProvider webRootFileProvider)
         {
             _hostingEnvironment = hostingEnvironment;
             _scriptBundler = scriptBundler;
             _serviceProvider = serviceProvider;
             _dynamicFileProvider = dynamicFileProvider;
             _bundleCache = bundleCache;
+            WebRootFileProvider = webRootFileProvider;
             _styleBundler = styleBundler;
             _options = options.Value;
         }
 
-        public List<string> GetStyleBundleFiles(string bundleName)
+        public virtual List<string> GetStyleBundleFiles(string bundleName)
         {
             return GetBundleFiles(_options.StyleBundles, bundleName, _styleBundler);
         }
 
-        public List<string> GetScriptBundleFiles(string bundleName)
+        public virtual List<string> GetScriptBundleFiles(string bundleName)
         {
             return GetBundleFiles(_options.ScriptBundles, bundleName, _scriptBundler);
         }
@@ -54,14 +60,23 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
         {
             var bundleRelativePath = _options.BundleFolderName.EnsureEndsWith('/') + bundleName + "." + bundler.FileExtension;
 
-            return _bundleCache.GetFiles(bundleRelativePath, () =>
+            var cacheItem = _bundleCache.GetOrAdd(bundleRelativePath, () =>
             {
                 var files = CreateFileList(bundles, bundleName);
 
                 if (!IsBundlingEnabled())
                 {
-                    return files;
+                    return new BundleCacheItem(files);
                 }
+
+                var cacheValue = new BundleCacheItem(
+                    new List<string>
+                    {
+                        "/" + bundleRelativePath
+                    }
+                );
+
+                WatchChanges(cacheValue, files, bundleRelativePath);
 
                 var bundleResult = bundler.Bundle(
                     new BundlerContext(
@@ -73,11 +88,33 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 
                 SaveBundleResult(bundleRelativePath, bundleResult);
 
-                return new List<string>
-                {
-                    "/" + bundleRelativePath
-                };
+                return cacheValue;
             });
+
+            return cacheItem.Files;
+        }
+
+        private void WatchChanges(BundleCacheItem cacheValue, List<string> files, string bundleRelativePath)
+        {
+            lock (cacheValue.WatchDisposeHandles)
+            {
+                foreach (var file in files)
+                {
+                    var watchDisposeHandle = WebRootFileProvider.Watch(file).RegisterChangeCallback(_ =>
+                    {
+                        lock (cacheValue.WatchDisposeHandles)
+                        {
+                            cacheValue.WatchDisposeHandles.ForEach(h => h.Dispose());
+                            cacheValue.WatchDisposeHandles.Clear();
+                        }
+
+                        _bundleCache.Remove(bundleRelativePath);
+                        _dynamicFileProvider.Delete("/wwwroot/" + bundleRelativePath); //TODO: get rid of wwwroot!
+                    }, null);
+
+                    cacheValue.WatchDisposeHandles.Add(watchDisposeHandle);
+                }
+            }
         }
 
         protected virtual void SaveBundleResult(string bundleRelativePath, BundleResult bundleResult)
