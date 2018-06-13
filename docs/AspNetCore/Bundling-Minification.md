@@ -50,6 +50,8 @@ This bundle defines a style bundle with a **unique name** *MyGlobalBundle*. It's
 
 * ABP creates the bundle as **lazy** from the provided files when it's **first requested**. For the subsequent calls, it's returned from the **cache**. That means if you conditionally add files to the bundle, it's executed only once and any change of the condition will not effect the bundle for the next requests.
 * ABP adds bundle files **individually** to the page for the `development` environment. It automatically bundles & minifies for the other environments (`staging`, `production`...).
+* The bundle files may be **physical** files or [**virtual/embedded** files](../Virtual-File-System.md).
+* ABP automatically add **version query string** (like ?_v=67872834234) to the bundle file URL which prevents browser caching when a bundle changes.
 
 #### Importing The Bundling Tag Helpers
 
@@ -83,7 +85,11 @@ This will potentially create two different bundles (one incudes the `my-global-s
 
 ### Using Bundling Options
 
-If you need to use same bundle in **multiple pages** or want to use some more **powerful features**, you can configure bundles **by code** in your [module](../Module-Development-Basics.md) class. Example usage:
+If you need to use same bundle in **multiple pages** or want to use some more **powerful features**, you can configure bundles **by code** in your [module](../Module-Development-Basics.md) class.
+
+#### Creating A New Bundle
+
+Example usage:
 
 ````C#
 [DependsOn(typeof(AbpAspNetCoreMvcUiBundlingModule))]
@@ -117,3 +123,100 @@ After defining such a bundle, it can be included into a page using the same tag 
 
 This time, no file defined in the tag helper definition because the bundle files are defined by the code.
 
+#### Getting & Modifying An Existing Bundle
+
+ABP provides [modularity](../Module-Development-Basics.md) for bundling too. A module can modify an existing bundle that is created by a depended module. Example:
+
+````C#
+[DependsOn(typeof(MyWebModule))]
+public class MyWebExtensionModule : AbpModule
+{
+    public override void ConfigureServices(IServiceCollection services)
+    {
+        services.Configure<BundlingOptions>(options =>
+        {
+            options
+                .ScriptBundles
+                .Get("MyGlobalBundle") //Getting the bundle defined by the MyWebModule
+                .AddFiles(
+                    "/scripts/my-extension-script.js"
+                );
+        });
+    }
+}
+````
+
+#### Bundle Contributors
+
+Adding files to an existing bundle seems useful. What if you need to **replace** a file in the bundle or you want to **conditionally** add files? Defining a bundle contributor provides extra power for such cases.
+
+An example bundle contributor that replaces bootstrap.css with a customized version:
+
+````C#
+public class MyExtensionGlobalStyleContributor : BundleContributor
+{
+    public override void ConfigureBundle(BundleConfigurationContext context)
+    {
+        context.Files.ReplaceOne(
+            "/libs/bootstrap/css/bootstrap.css",
+            "/styles/extensions/bootstrap-customized.css"
+        );
+    }
+}
+````
+
+Then you can use this contributor like that:
+
+````C#
+services.Configure<BundlingOptions>(options =>
+{
+    options
+        .ScriptBundles
+        .Get("MyGlobalBundle")
+        .AddContributors(typeof(MyExtensionStyleBundleContributor));
+});
+````
+
+##### Contributor Dependencies
+
+A bundle contributor can have one or more dependencies to other contributors. Example:
+
+````C#
+[DependsOn(typeof(MyDependedBundleContributor))] //Define the dependency
+public class MyExtensionStyleBundleContributor : BundleContributor
+{
+    //...
+}
+````
+
+When a bundle contributor is added, its dependencies are **automatically and recursively** added. Dependencies added by the **dependency order** by preventing **duplicates**.
+
+Creating contributors and defining dependencies is a way of organizing bundle creation across different modules.
+
+#### Built-In Package Contributors
+
+Adding a NPM package resources (js, css files) into a bundle is pretty standard. For instance you always add the same `bootstrap.css` file for the bootstrap NPM package.
+
+There are built-in contributors for all [standard NPM packages](Client-Side-Package-Management.md). For instance, if your contributor depends on the bootstrap, you can just declare it instead of adding the bootstrap.css yourself:
+
+````C#
+[DependsOn(typeof(BootstrapStyleContributor))] //Define the bootstrap style dependency
+public class MyExtensionStyleBundleContributor : BundleContributor
+{
+    //...
+}
+````
+
+Using the built-in contributors for standard packages;
+
+* Prevents you **wrongly typing** the resource paths.
+* Prevents changes if the resource **path changes** (the depended contributor will handle it).
+* Prevents multiple modules add the same file **multiple times** to the same bundle.
+
+##### Service Dependencies
+
+TODO
+
+### See Also
+
+* [Client Side Package Management](Client-Side-Package-Management.md)
