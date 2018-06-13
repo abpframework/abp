@@ -243,9 +243,20 @@ namespace MyCompany.MyProject
 }
 ````
 
-#### Themes
+### Themes
 
 Themes uses the standard package contributors to add library resources to page layouts. Themes may also define some standard/global bundles, so any module can contribute to those standard/global bundles. See the [theming documentation](Theming.md) for more.
+
+### Best Practices & Suggestions
+
+It's suggested to define multiple bundles for an application, each one is used for different purposes.
+
+* **Global bundle**: Global style/script bundles are included to every page in the application. Themes already defines global style & script bundles. Your module can contribute to them.
+* **Layout bundles**: This is a specific bundle to an individual layout. Only contains resources shared among all the pages use the layout.
+* **Module bundles**: For shared resources among an individual module pages.
+* **Page bundles**: Specific bundles created for each page. Use the bundling tag helpers to create the bundle.
+
+Establish a balance between performance, network bandwidth usage and managing too many bundles.
 
 ### See Also
 
