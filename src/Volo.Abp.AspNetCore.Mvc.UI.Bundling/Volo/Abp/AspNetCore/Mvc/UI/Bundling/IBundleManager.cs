@@ -7,9 +7,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 
     public interface IBundleManager
     {
-        List<string> GetStyleBundleFiles(string bundleName);
+        IReadOnlyList<string> GetStyleBundleFiles(string bundleName);
 
-        List<string> GetScriptBundleFiles(string bundleName);
+        IReadOnlyList<string> GetScriptBundleFiles(string bundleName);
 
         void CreateStyleBundle(string bundleName, Action<BundleConfiguration> configureAction);
 

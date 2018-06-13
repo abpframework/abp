@@ -32,14 +32,18 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
             var bundleFiles = GetBundleFiles(bundleName);
 
             output.Content.Clear();
-            AddHtmlTags(context, output, bundleFiles);
+
+            foreach (var bundleFile in bundleFiles)
+            {
+                AddHtmlTag(context, output, bundleFile + "_");
+            }
         }
 
         protected abstract void CreateBundle(string bundleName, List<string> files);
 
-        protected abstract List<string> GetBundleFiles(string bundleName);
+        protected abstract IReadOnlyList<string> GetBundleFiles(string bundleName);
 
-        protected abstract void AddHtmlTags(TagHelperContext context, TagHelperOutput output, List<string> files);
+        protected abstract void AddHtmlTag(TagHelperContext context, TagHelperOutput output, string file);
 
         protected virtual string GenerateBundleName(TagHelperContext context, TagHelperOutput output, List<string> fileList)
         {

@@ -20,18 +20,14 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
             );
         }
 
-        protected override List<string> GetBundleFiles(string bundleName)
+        protected override IReadOnlyList<string> GetBundleFiles(string bundleName)
         {
             return BundleManager.GetScriptBundleFiles(bundleName);
         }
 
-        protected override void AddHtmlTags(TagHelperContext context, TagHelperOutput output, List<string> files)
+        protected override void AddHtmlTag(TagHelperContext context, TagHelperOutput output, string file)
         {
-            foreach (var file in files)
-            {
-                output.Content.AppendHtml($"<script src=\"{file}\" type=\"text/javascript\"></script>{Environment.NewLine}");
-            }
+            output.Content.AppendHtml($"<script src=\"{file}\" type=\"text/javascript\"></script>{Environment.NewLine}");
         }
-
     }
 }

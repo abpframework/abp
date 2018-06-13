@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
 using Microsoft.AspNetCore.Hosting;
@@ -46,17 +47,17 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
             _options = options.Value;
         }
 
-        public virtual List<string> GetStyleBundleFiles(string bundleName)
+        public virtual IReadOnlyList<string> GetStyleBundleFiles(string bundleName)
         {
             return GetBundleFiles(_options.StyleBundles, bundleName, _styleBundler);
         }
 
-        public virtual List<string> GetScriptBundleFiles(string bundleName)
+        public virtual IReadOnlyList<string> GetScriptBundleFiles(string bundleName)
         {
             return GetBundleFiles(_options.ScriptBundles, bundleName, _scriptBundler);
         }
 
-        protected virtual List<string> GetBundleFiles(BundleConfigurationCollection bundles, string bundleName, IBundler bundler)
+        protected virtual IReadOnlyList<string> GetBundleFiles(BundleConfigurationCollection bundles, string bundleName, IBundler bundler)
         {
             var bundleRelativePath = _options.BundleFolderName.EnsureEndsWith('/') + bundleName + "." + bundler.FileExtension;
 
@@ -91,7 +92,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
                 return cacheValue;
             });
 
-            return cacheItem.Files;
+            return cacheItem.Files.ToImmutableList();
         }
 
         private void WatchChanges(BundleCacheItem cacheValue, List<string> files, string bundleRelativePath)
