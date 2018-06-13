@@ -1,13 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Volo.Abp.AspNetCore.VirtualFileSystem;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
 {
     public class AbpScriptBundleTagHelperService : AbpBundleTagHelperServiceBase<AbpScriptBundleTagHelper>
     {
-        public AbpScriptBundleTagHelperService(IBundleManager bundleManager)
-            : base(bundleManager)
+        public AbpScriptBundleTagHelperService(
+            IBundleManager bundleManager,
+            IHybridWebRootFileProvider webRootFileProvider)
+            : base(
+                bundleManager, 
+                webRootFileProvider)
         {
 
         }

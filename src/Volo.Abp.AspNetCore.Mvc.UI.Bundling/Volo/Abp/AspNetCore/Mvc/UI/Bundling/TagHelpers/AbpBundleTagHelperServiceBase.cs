@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers;
+using Volo.Abp.AspNetCore.VirtualFileSystem;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
 {
@@ -10,10 +11,12 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
         where TTagHelper : TagHelper, IBundleTagHelper
     {
         protected IBundleManager BundleManager { get; }
+        protected IHybridWebRootFileProvider WebRootFileProvider { get; }
 
-        protected AbpBundleTagHelperServiceBase(IBundleManager bundleManager)
+        protected AbpBundleTagHelperServiceBase(IBundleManager bundleManager, IHybridWebRootFileProvider webRootFileProvider)
         {
             BundleManager = bundleManager;
+            WebRootFileProvider = webRootFileProvider;
         }
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
@@ -35,7 +38,13 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
 
             foreach (var bundleFile in bundleFiles)
             {
-                AddHtmlTag(context, output, bundleFile + "_");
+                var file = WebRootFileProvider.GetFileInfo(bundleFile);
+                if (file == null)
+                {
+                    throw new AbpException($"Could not find the bundle file from {nameof(IHybridWebRootFileProvider)}");
+                }
+
+                AddHtmlTag(context, output, bundleFile + "?_v=" + file.LastModified.UtcTicks);
             }
         }
 
