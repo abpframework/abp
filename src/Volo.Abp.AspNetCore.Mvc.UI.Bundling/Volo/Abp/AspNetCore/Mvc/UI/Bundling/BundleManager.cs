@@ -120,7 +120,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 
         protected virtual void SaveBundleResult(string bundleRelativePath, BundleResult bundleResult)
         {
-            //TODO: Optimize?
             var fileName = bundleRelativePath.Substring(bundleRelativePath.IndexOf('/') + 1);
 
             _dynamicFileProvider.AddOrUpdate(
@@ -130,12 +129,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
                     fileName
                     )
                 );
-
-            //TODO: Saving to file option?
-
-            //var bundleFilePath = Path.Combine(_hostingEnvironment.WebRootPath, bundleRelativePath);
-            //DirectoryHelper.CreateIfNotExists(Path.GetDirectoryName(bundleFilePath));
-            //File.WriteAllText(bundleFilePath, bundleResult.Content, Encoding.UTF8);
         }
 
         public virtual void CreateStyleBundle(string bundleName, Action<BundleConfiguration> configureAction)

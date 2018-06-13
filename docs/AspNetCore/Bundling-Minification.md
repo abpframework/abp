@@ -243,10 +243,11 @@ namespace MyCompany.MyProject
 }
 ````
 
-##### Themes
+#### Themes
 
-Themes (TODO: link) also uses the standard package contributors to add library resources to page layouts.
+Themes uses the standard package contributors to add library resources to page layouts. Themes may also define some standard/global bundles, so any module can contribute to those standard/global bundles. See the [theming documentation](Theming.md) for more.
 
 ### See Also
 
 * [Client Side Package Management](Client-Side-Package-Management.md)
+* [Theming](Theming.md)

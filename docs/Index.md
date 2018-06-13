@@ -50,8 +50,8 @@
   * User Interface
     * [Client Side Package Management](AspNetCore/Client-Side-Package-Management.md)
     * [Bundling & Minification](AspNetCore/Bundling-Minification.md)
-    * Tag Helpers
-    * Themes
+    * [Tag Helpers](Tag-Helpers.md)
+    * [Theming](AspNetCore/Theming.md)
 * Data Access
   * [Entity Framework Core Integration](Entity-Framework-Core.md)
   * [MongoDB Integration](MongoDB.md)
