@@ -13,6 +13,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
         /// </summary>
         public string BundleFolderName { get; } = "__bundles";
 
+        /// <summary>
+        /// Default: auto.
+        /// </summary>
+        public BundlingMode Mode { get; set; } = BundlingMode.Auto;
+
         public BundlingOptions()
         {
             StyleBundles = new BundleConfigurationCollection();

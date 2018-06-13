@@ -63,7 +63,13 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
                     return files;
                 }
 
-                var bundleResult = bundler.Bundle(new BundlerContext(bundleRelativePath, files));
+                var bundleResult = bundler.Bundle(
+                    new BundlerContext(
+                        bundleRelativePath,
+                        files,
+                        IsMinficationEnabled()
+                    )
+                );
 
                 SaveBundleResult(bundleRelativePath, bundleResult);
 
@@ -86,6 +92,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
                     fileName
                     )
                 );
+
+            //TODO: Saving to file option?
+
             //var bundleFilePath = Path.Combine(_hostingEnvironment.WebRootPath, bundleRelativePath);
             //DirectoryHelper.CreateIfNotExists(Path.GetDirectoryName(bundleFilePath));
             //File.WriteAllText(bundleFilePath, bundleResult.Content, Encoding.UTF8);
@@ -103,8 +112,34 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 
         protected virtual bool IsBundlingEnabled()
         {
-            return true;
-            //return !_hostingEnvironment.IsDevelopment();
+            switch (_options.Mode)
+            {
+                case BundlingMode.None:
+                    return false;
+                case BundlingMode.Bundle:
+                case BundlingMode.BundleAndMinify:
+                    return true;
+                case BundlingMode.Auto:
+                    return !_hostingEnvironment.IsDevelopment();
+                default:
+                    throw new AbpException($"Unhandled {nameof(BundlingMode)}: {_options.Mode}");
+            }
+        }
+
+        protected virtual bool IsMinficationEnabled()
+        {
+            switch (_options.Mode)
+            {
+                case BundlingMode.None:
+                case BundlingMode.Bundle:
+                    return false;
+                case BundlingMode.BundleAndMinify:
+                    return true;
+                case BundlingMode.Auto:
+                    return !_hostingEnvironment.IsDevelopment();
+                default:
+                    throw new AbpException($"Unhandled {nameof(BundlingMode)}: {_options.Mode}");
+            }
         }
 
         protected virtual List<string> CreateFileList(BundleConfigurationCollection bundles, string bundleName)

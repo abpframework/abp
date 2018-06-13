@@ -7,5 +7,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
         string BundleRelativePath { get; }
 
         IReadOnlyList<string> ContentFiles { get; }
+
+        bool IsMinificationEnabled { get; }
     }
 }

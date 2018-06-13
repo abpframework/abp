@@ -201,7 +201,7 @@ namespace System
         {
             var bytes = str.GetBytes();
             bytes.ShouldNotBeNull();
-            bytes.Length.ShouldBeGreaterThan(0);
+            bytes.Length.ShouldBeGreaterThanOrEqualTo(str.Length);
             Encoding.UTF8.GetString(bytes).ShouldBe(str);
         }
 
@@ -212,7 +212,7 @@ namespace System
         {
             var bytes = str.GetBytes(Encoding.ASCII);
             bytes.ShouldNotBeNull();
-            bytes.Length.ShouldBeGreaterThan(0);
+            bytes.Length.ShouldBeGreaterThanOrEqualTo(str.Length);
             Encoding.ASCII.GetString(bytes).ShouldBe(str);
         }
 

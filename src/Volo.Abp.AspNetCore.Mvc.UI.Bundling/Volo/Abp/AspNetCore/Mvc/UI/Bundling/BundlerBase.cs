@@ -28,9 +28,14 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
                 sb.AppendLine(GetFileContent(context, file));
             }
 
-            return new BundleResult(
-                Minifier.Minify(sb.ToString(), context.BundleRelativePath)
-            );
+            var bundleContent = sb.ToString();
+
+            if (context.IsMinificationEnabled)
+            {
+                bundleContent = Minifier.Minify(bundleContent, context.BundleRelativePath);
+            }
+
+            return new BundleResult(bundleContent);
         }
 
         protected virtual string GetFileContent(IBundlerContext context, string file)
