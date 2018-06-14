@@ -12,6 +12,8 @@
     "@abp/jquery-form": "^0.3.1",
     "@abp/jquery-validation-unobtrusive": "^0.3.1",
     "@abp/sweetalert": "^0.3.1",
-    "@abp/toastr": "^0.3.1"
+    "@abp/toastr": "^0.3.1",
+    "@abp/lodash": "^0.3.1",
+    "@abp/timeago": "^0.3.1"
   }
 }
