@@ -1,11 +1,11 @@
 {
-  "version": "0.3.1",
+  "version": "0.3.2",
   "name": "@abp/highlight.js",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/core": "^0.3.1",
+    "@abp/core": "^0.3.2",
     "highlight.js": "^9.12.0"
   }
 }
