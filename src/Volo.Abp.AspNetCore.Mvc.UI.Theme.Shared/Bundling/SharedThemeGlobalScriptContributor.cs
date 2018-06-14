@@ -4,7 +4,10 @@ using Volo.Abp.AspNetCore.Mvc.UI.Packages.DatatablesNetBs4;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.JQuery;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.JQueryForm;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.JQueryValidationUnobtrusive;
+using Volo.Abp.AspNetCore.Mvc.UI.Packages.Lodash;
+using Volo.Abp.AspNetCore.Mvc.UI.Packages.Select2;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.SweetAlert;
+using Volo.Abp.AspNetCore.Mvc.UI.Packages.Timeago;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.Toastr;
 using Volo.Abp.Modularity;
 
@@ -13,11 +16,14 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling
     [DependsOn(
         typeof(JQueryScriptContributor),
         typeof(BootstrapScriptContributor),
+        typeof(LodashScriptContributor),
         typeof(JQueryValidationUnobtrusiveScriptContributor),
         typeof(JQueryFormScriptContributor),
         typeof(DatatablesNetBs4ScriptContributor),
         typeof(SweetalertScriptContributor),
-        typeof(ToastrScriptBundleContributor)
+        typeof(ToastrScriptBundleContributor),
+        typeof(TimeagoScriptContributor),
+        typeof(Select2ScriptContributor)
     )]
     public class SharedThemeGlobalScriptContributor : BundleContributor
     {
