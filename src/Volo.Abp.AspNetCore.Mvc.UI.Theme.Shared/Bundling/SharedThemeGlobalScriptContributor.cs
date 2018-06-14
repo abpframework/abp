@@ -19,11 +19,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling
         typeof(LodashScriptContributor),
         typeof(JQueryValidationUnobtrusiveScriptContributor),
         typeof(JQueryFormScriptContributor),
+        typeof(Select2ScriptContributor),
         typeof(DatatablesNetBs4ScriptContributor),
         typeof(SweetalertScriptContributor),
         typeof(ToastrScriptBundleContributor),
-        typeof(TimeagoScriptContributor),
-        typeof(Select2ScriptContributor))]
+        typeof(TimeagoScriptContributor))]
     public class SharedThemeGlobalScriptContributor : BundleContributor
     {
         public override void ConfigureBundle(BundleConfigurationContext context)
