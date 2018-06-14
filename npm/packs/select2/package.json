@@ -1,0 +1,11 @@
+{
+  "version": "0.3.1",
+  "name": "@abp/select2",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@abp/core": "^0.3.1",
+    "select2": "^4.0.5"
+  }
+}

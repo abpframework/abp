@@ -8,7 +8,8 @@
         "../toastr/abp.resourcemapping.js",
         "../datatables.net-bs4/abp.resourcemapping.js",
         "../lodash/abp.resourcemapping.js",
-        "../timeago/abp.resourcemapping.js"
+        "../timeago/abp.resourcemapping.js",
+        "../select2/abp.resourcemapping.js"
     ],
     mappings: {
         
