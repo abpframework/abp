@@ -254,12 +254,11 @@ paket-files/
 # ABP
 build/outputs
 src/AbpDesk/AbpDesk.Web.Mvc/Logs
-/src/Volo.Abp.Identity.HttpApi.Host/Logs
-src/MicroserviceDemo/MicroserviceDemo.Web/Logs/*.txt
-src/MicroserviceDemo/MicroserviceDemo.TenantService/Logs/*.txt
-src/MicroserviceDemo/MicroserviceDemo.AuthServer/Logs/*.txt
-src/MicroserviceDemo/MicroserviceDemo.TenancyService/Logs/*.txt
+/src/Volo.Abp.Identity.HttpApi.Host/Logs/*
+src/MicroserviceDemo/MicroserviceDemo.Web/Logs/*
+src/MicroserviceDemo/MicroserviceDemo.TenantService/Logs/*
+src/MicroserviceDemo/MicroserviceDemo.AuthServer/Logs/*
+src/MicroserviceDemo/MicroserviceDemo.TenancyService/Logs/*
 src/AbpDesk/Web_PlugIns/AbpDesk.MongoBlog.dll
-/test/Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo/Logs/logs.txt
-test/Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo/Logs/logs.txt
-test/Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo/Logs/logs.txt
+test/Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo/Logs/*
+!src/Volo.Abp.AspNetCore.Mvc.UI.Packages/Volo/Abp/AspNetCore/Mvc/UI/Packages/*

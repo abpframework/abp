@@ -1,0 +1,15 @@
+﻿using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
+using Volo.Abp.AspNetCore.Mvc.UI.Packages.JQuery;
+using Volo.Abp.Modularity;
+
+namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.Bootstrap
+{
+    [DependsOn(typeof(JQueryScriptContributor))]
+    public class BootstrapScriptContributor : BundleContributor
+    {
+        public override void ConfigureBundle(BundleConfigurationContext context)
+        {
+            context.Files.Add("/libs/bootstrap/js/bootstrap.bundle.js");
+        }
+    }
+}
