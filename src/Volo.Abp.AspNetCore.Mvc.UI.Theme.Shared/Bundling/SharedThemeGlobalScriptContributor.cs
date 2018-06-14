@@ -23,8 +23,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling
         typeof(SweetalertScriptContributor),
         typeof(ToastrScriptBundleContributor),
         typeof(TimeagoScriptContributor),
-        typeof(Select2ScriptContributor)
-    )]
+        typeof(Select2ScriptContributor))]
     public class SharedThemeGlobalScriptContributor : BundleContributor
     {
         public override void ConfigureBundle(BundleConfigurationContext context)

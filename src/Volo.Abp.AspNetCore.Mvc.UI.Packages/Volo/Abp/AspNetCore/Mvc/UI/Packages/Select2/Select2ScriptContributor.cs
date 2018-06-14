@@ -1,4 +1,5 @@
-﻿using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
+﻿using System.Collections.Generic;
+using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.Core;
 using Volo.Abp.Modularity;
 
@@ -10,7 +11,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.Select2
         public override void ConfigureBundle(BundleConfigurationContext context)
         {
             //TODO: Add select2.full.min.js or localize!
-            context.Files.Add("/libs/select2/js/select2.min.js");
+            context.Files.AddIfNotContains("/libs/select2/js/select2.min.js");
         }
     }
 }

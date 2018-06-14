@@ -1,4 +1,5 @@
-﻿using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
+﻿using System.Collections.Generic;
+using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.FontAwesome
 {
@@ -6,7 +7,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.FontAwesome
     {
         public override void ConfigureBundle(BundleConfigurationContext context)
         {
-            context.Files.Add("/libs/font-awesome/css/font-awesome.css");
+            context.Files.AddIfNotContains("/libs/font-awesome/css/font-awesome.css");
         }
     }
 }

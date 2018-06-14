@@ -1,4 +1,5 @@
-﻿using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
+﻿using System.Collections.Generic;
+using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.JQuery;
 using Volo.Abp.Modularity;
 
@@ -9,7 +10,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.Toastr
     {
         public override void ConfigureBundle(BundleConfigurationContext context)
         {
-            context.Files.Add("/libs/toastr/toastr.min.js");
+            context.Files.AddIfNotContains("/libs/toastr/toastr.min.js");
         }
     }
 }

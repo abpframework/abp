@@ -1,4 +1,5 @@
-﻿using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
+﻿using System.Collections.Generic;
+using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.JQueryValidation;
 using Volo.Abp.Modularity;
 
@@ -9,7 +10,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.JQueryValidationUnobtrusive
     {
         public override void ConfigureBundle(BundleConfigurationContext context)
         {
-            context.Files.Add("/libs/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js");
+            context.Files.AddIfNotContains("/libs/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js");
         }
     }
 }

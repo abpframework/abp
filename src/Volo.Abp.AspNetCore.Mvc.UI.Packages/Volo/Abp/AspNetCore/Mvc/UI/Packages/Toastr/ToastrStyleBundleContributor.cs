@@ -1,4 +1,5 @@
-﻿using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
+﻿using System.Collections.Generic;
+using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.Toastr
 {
@@ -6,7 +7,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.Toastr
     {
         public override void ConfigureBundle(BundleConfigurationContext context)
         {
-            context.Files.Add("/libs/toastr/toastr.min.css");
+            context.Files.AddIfNotContains("/libs/toastr/toastr.min.css");
         }
     }
 }

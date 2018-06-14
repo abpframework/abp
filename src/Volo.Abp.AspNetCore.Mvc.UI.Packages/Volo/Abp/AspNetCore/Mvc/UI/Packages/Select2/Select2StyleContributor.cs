@@ -1,4 +1,5 @@
-﻿using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
+﻿using System.Collections.Generic;
+using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.Select2
 {
@@ -6,7 +7,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.Select2
     {
         public override void ConfigureBundle(BundleConfigurationContext context)
         {
-            context.Files.Add("/libs/select2/css/select2.min.css");
+            context.Files.AddIfNotContains("/libs/select2/css/select2.min.css");
         }
     }
 }

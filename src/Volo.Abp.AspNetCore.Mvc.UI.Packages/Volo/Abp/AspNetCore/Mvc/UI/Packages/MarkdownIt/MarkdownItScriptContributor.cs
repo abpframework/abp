@@ -1,4 +1,5 @@
-﻿using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
+﻿using System.Collections.Generic;
+using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.Core;
 using Volo.Abp.Modularity;
 
@@ -9,7 +10,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.MarkdownIt
     {
         public override void ConfigureBundle(BundleConfigurationContext context)
         {
-            context.Files.Add("/libs/markdown-it/markdown-it.min.js");
+            context.Files.AddIfNotContains("/libs/markdown-it/markdown-it.min.js");
         }
     }
 }

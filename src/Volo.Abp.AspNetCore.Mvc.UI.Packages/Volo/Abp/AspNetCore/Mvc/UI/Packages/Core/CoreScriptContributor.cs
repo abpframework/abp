@@ -1,4 +1,5 @@
-﻿using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
+﻿using System.Collections.Generic;
+using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.Core
 {
@@ -6,7 +7,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.Core
     {
         public override void ConfigureBundle(BundleConfigurationContext context)
         {
-            context.Files.Add("/libs/abp/core/abp.js");
+            context.Files.AddIfNotContains("/libs/abp/core/abp.js");
         }
     }
 }
