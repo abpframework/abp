@@ -1,11 +1,11 @@
 {
-  "version": "0.3.2",
+  "version": "0.3.4",
   "name": "@abp/datatables.net-bs4",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/datatables.net": "^0.3.2",
+    "@abp/datatables.net": "^0.3.4",
     "datatables.net-bs4": "^1.10.16"
   }
 }

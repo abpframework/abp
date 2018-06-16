@@ -1,11 +1,11 @@
 {
-  "version": "0.3.2",
+  "version": "0.3.4",
   "name": "@abp/jquery",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/core": "^0.3.2",
+    "@abp/core": "^0.3.4",
     "jquery": "^3.3.1"
   }
 }
