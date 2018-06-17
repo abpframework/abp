@@ -23,8 +23,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
         {
             output.TagName = null;
 
-            var bundleName = TagHelper.Name;
             var files = await GetBundleItems(context, output);
+
+            var bundleName = TagHelper.GetNameOrNull();
             if (bundleName.IsNullOrEmpty())
             {
                 bundleName = GenerateBundleName(files);

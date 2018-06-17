@@ -12,5 +12,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
             : base(service)
         {
         }
+
+        public string GetNameOrNull()
+        {
+            return Name;
+        }
     }
 }

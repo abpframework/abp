@@ -2,6 +2,6 @@
 {
     public interface IBundleTagHelper
     {
-        string Name { get; }
+        string GetNameOrNull();
     }
 }
