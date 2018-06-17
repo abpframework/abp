@@ -83,6 +83,16 @@ This will potentially create two different bundles (one incudes the `my-global-s
 
 > It's always suggested to use a `name` for the bundle unless you need to the dynamic bundling feature. Providing a name is more performant since it does not need to get bundle files and calculate a dynamic name.
 
+#### Single File Bundle
+
+If you need to just add a single file to the page, you can use the `abp-script` or `abp-style` tag helper as a shortcut. Example:
+
+````xml
+<abp-script src="/scripts/my-script.js" />
+````
+
+All the benefits of bundling & minification are also valid here.
+
 ### Using Bundling Options
 
 If you need to use same bundle in **multiple pages** or want to use some more **powerful features**, you can configure bundles **by code** in your [module](../Module-Development-Basics.md) class.
