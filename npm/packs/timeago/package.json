@@ -1,11 +1,11 @@
 {
-  "version": "0.3.4",
+  "version": "0.3.5",
   "name": "@abp/timeago",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/jquery": "^0.3.4",
+    "@abp/jquery": "^0.3.5",
     "timeago": "^1.6.3"
   }
 }
