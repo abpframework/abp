@@ -24,10 +24,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
             output.TagName = null;
 
             var bundleName = TagHelper.Name;
-            var files = await GetFileList(context, output);
+            var files = await GetBundleItems(context, output);
             if (bundleName.IsNullOrEmpty())
             {
-                bundleName = GenerateBundleName(context, output, files);
+                bundleName = GenerateBundleName(files);
             }
 
             CreateBundle(bundleName, files);
@@ -48,21 +48,21 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
             }
         }
 
-        protected abstract void CreateBundle(string bundleName, List<string> files);
+        protected abstract void CreateBundle(string bundleName, List<BundleTagHelperItem> bundleItems);
 
         protected abstract IReadOnlyList<string> GetBundleFiles(string bundleName);
 
         protected abstract void AddHtmlTag(TagHelperContext context, TagHelperOutput output, string file);
 
-        protected virtual string GenerateBundleName(TagHelperContext context, TagHelperOutput output, List<string> fileList)
+        protected virtual string GenerateBundleName(List<BundleTagHelperItem> bundleItems)
         {
-            return fileList.JoinAsString("|").ToMd5();
+            return bundleItems.JoinAsString("|").ToMd5();
         }
 
-        protected virtual async Task<List<string>> GetFileList(TagHelperContext context, TagHelperOutput output)
+        protected virtual async Task<List<BundleTagHelperItem>> GetBundleItems(TagHelperContext context, TagHelperOutput output)
         {
-            var fileList = new List<string>();
-            context.Items[AbpBundleFileTagHelperService.ContextFileListKey] = fileList;
+            var fileList = new List<BundleTagHelperItem>();
+            context.Items[AbpTagHelperConsts.ContextBundleItemListKey] = fileList;
             await output.GetChildContentAsync(); //TODO: Suppress child execution!
             return fileList;
         }

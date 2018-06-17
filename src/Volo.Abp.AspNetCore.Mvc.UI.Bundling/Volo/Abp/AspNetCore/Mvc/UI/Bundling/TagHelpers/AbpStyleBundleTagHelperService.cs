@@ -17,11 +17,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
 
         }
 
-        protected override void CreateBundle(string bundleName, List<string> files)
+        protected override void CreateBundle(string bundleName, List<BundleTagHelperItem> bundleItems)
         {
             BundleManager.CreateStyleBundle(
                 bundleName,
-                configuration => configuration.AddFiles(files.ToArray())
+                configuration => bundleItems.ForEach(bi => bi.AddToConfiguration(configuration))
             );
         }
 

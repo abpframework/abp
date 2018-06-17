@@ -26,6 +26,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
         private readonly IServiceProvider _serviceProvider;
         private readonly IDynamicFileProvider _dynamicFileProvider;
         private readonly IBundleCache _bundleCache;
+        private readonly IWebRequestResources _requestResources;
 
         public BundleManager(
             IOptions<BundlingOptions> options,
@@ -35,7 +36,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
             IServiceProvider serviceProvider,
             IDynamicFileProvider dynamicFileProvider,
             IBundleCache bundleCache,
-            IHybridWebRootFileProvider webRootFileProvider)
+            IHybridWebRootFileProvider webRootFileProvider, 
+            IWebRequestResources requestResources)
         {
             _hostingEnvironment = hostingEnvironment;
             _scriptBundler = scriptBundler;
@@ -43,6 +45,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
             _dynamicFileProvider = dynamicFileProvider;
             _bundleCache = bundleCache;
             WebRootFileProvider = webRootFileProvider;
+            _requestResources = requestResources;
             _styleBundler = styleBundler;
             _options = options.Value;
         }
@@ -59,17 +62,19 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 
         protected virtual IReadOnlyList<string> GetBundleFiles(BundleConfigurationCollection bundles, string bundleName, IBundler bundler)
         {
-            var bundleRelativePath = _options.BundleFolderName.EnsureEndsWith('/') + bundleName + "." + bundler.FileExtension;
+            var files = _requestResources.TryAdd(CreateFileList(bundles, bundleName));
+
+            if (!IsBundlingEnabled())
+            {
+                return files;
+            }
+
+            var bundleRelativePath =
+                _options.BundleFolderName.EnsureEndsWith('/') +
+                bundleName + "." + files.JoinAsString("|").ToMd5() + "." + bundler.FileExtension;
 
             var cacheItem = _bundleCache.GetOrAdd(bundleRelativePath, () =>
             {
-                var files = CreateFileList(bundles, bundleName);
-
-                if (!IsBundlingEnabled())
-                {
-                    return new BundleCacheItem(files);
-                }
-
                 var cacheValue = new BundleCacheItem(
                     new List<string>
                     {
@@ -187,7 +192,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
                     contributor.ConfigureBundle(context);
                 }
 
-                return context.Files;
+                return context.Files; //TODO: Distinct?
             }
         }
 

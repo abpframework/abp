@@ -10,7 +10,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.Lodash
     {
         public override void ConfigureBundle(BundleConfigurationContext context)
         {
-            context.Files.AddIfNotContains("/libs/loadash/lodash.min.js");
+            context.Files.AddIfNotContains("/libs/lodash/lodash.min.js");
         }
     }
 }

@@ -4,14 +4,14 @@ using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
 {
-    public class AbpBundleFileTagHelperService : AbpTagHelperService<AbpBundleFileTagHelper>
+    public class AbpBundleContributorTagHelperService : AbpTagHelperService<AbpBundleContributorTagHelper>
     {
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             output.SuppressOutput();
 
             var files = (List<BundleTagHelperItem>)context.Items[AbpTagHelperConsts.ContextBundleItemListKey];
-            files.Add(new BundleTagHelperItem(TagHelper.Src));
+            files.Add(new BundleTagHelperItem(TagHelper.Type));
         }
     }
 }

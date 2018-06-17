@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 {
@@ -13,7 +14,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 
         public override void ConfigureBundle(BundleConfigurationContext context)
         {
-            context.Files.AddRange(Files);
+            foreach (var file in Files)
+            {
+                context.Files.AddIfNotContains(file);
+            }
         }
     }
 }
