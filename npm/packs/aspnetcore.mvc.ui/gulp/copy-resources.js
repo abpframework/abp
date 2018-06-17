@@ -10,8 +10,10 @@
         path = require("path"),
         extendObject = require('extend-object');
 
-    function init(rootMappingFilePath) {
-        var resourceMapping = buildResourceMapping(rootMappingFilePath);
+    function init(rootPath) {
+        var investigatedPackagePaths = {};
+
+        var resourceMapping = buildResourceMapping(rootPath);
 
         function replaceAliases(text) {
             if (!resourceMapping.aliases) {
@@ -33,6 +35,15 @@
             return text.replace(new RegExp(search, 'g'), replacement);
         }
 
+        function requireOptional(filePath) {
+            //TODO: Implement this using a library instead of try-catch!
+            try {
+                return require(filePath);
+            } catch (e) {
+                return undefined;
+            } 
+        }
+        
         function cleanFiles() {
             if (resourceMapping.clean) {
                 for (var i = 0; i < resourceMapping.clean.length; i++) {
@@ -41,20 +52,27 @@
             }
         }
 
-        function buildResourceMapping(mappingFilePath) {
-            var resourcemapping = require(mappingFilePath);
+        function buildResourceMapping(packagePath) {
+            if (investigatedPackagePaths[packagePath]) {
+                return {};
+            }
 
-            if (resourcemapping.imports && resourcemapping.imports.length) {
+            investigatedPackagePaths[packagePath] = 'OK';
 
+            var packageJson = requireOptional(path.join(packagePath, 'package.json'));
+            var resourcemapping = requireOptional(path.join(packagePath, 'abp.resourcemapping.js')) || { };
+
+            if (packageJson && packageJson.dependencies) {
                 var aliases = {};
                 var mappings = {};
 
-                for (var i = 0; i < resourcemapping.imports.length; i++) {
-
-                    var importedMappingFilePath = path.join(path.dirname(mappingFilePath), resourcemapping.imports[i]);
-                    var importedResourceMapping = buildResourceMapping(importedMappingFilePath);
-                    extendObject(aliases, importedResourceMapping.aliases);
-                    extendObject(mappings, importedResourceMapping.mappings);
+                for (var dependency in packageJson.dependencies) {
+                    if (packageJson.dependencies.hasOwnProperty(dependency)) {
+                        var dependedPackagePath = path.join(rootPath, 'node_modules', dependency);
+                        var importedResourceMapping = buildResourceMapping(dependedPackagePath);
+                        extendObject(aliases, importedResourceMapping.aliases);
+                        extendObject(mappings, importedResourceMapping.mappings);
+                    }
                 }
 
                 extendObject(aliases, resourcemapping.aliases);
@@ -73,13 +91,15 @@
 
                 var tasks = [];
 
-                for (var mapping in resourceMapping.mappings) {
-                    if (resourceMapping.mappings.hasOwnProperty(mapping)) {
-                        var source = replaceAliases(mapping);
-                        var destination = replaceAliases(resourceMapping.mappings[mapping]);
-                        tasks.push(
-                            gulp.src(source).pipe(gulp.dest(destination))
-                        );
+                if (resourceMapping.mappings) {
+                    for (var mapping in resourceMapping.mappings) {
+                        if (resourceMapping.mappings.hasOwnProperty(mapping)) {
+                            var source = replaceAliases(mapping);
+                            var destination = replaceAliases(resourceMapping.mappings[mapping]);
+                            tasks.push(
+                                gulp.src(source).pipe(gulp.dest(destination))
+                            );
+                        }
                     }
                 }
 
