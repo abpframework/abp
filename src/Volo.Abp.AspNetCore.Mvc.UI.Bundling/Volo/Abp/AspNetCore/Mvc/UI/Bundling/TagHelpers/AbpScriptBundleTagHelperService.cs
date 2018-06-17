@@ -1,38 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Razor.TagHelpers;
-using Volo.Abp.AspNetCore.VirtualFileSystem;
-
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
 {
     public class AbpScriptBundleTagHelperService : AbpBundleTagHelperServiceBase<AbpScriptBundleTagHelper>
     {
-        public AbpScriptBundleTagHelperService(
-            IBundleManager bundleManager,
-            IHybridWebRootFileProvider webRootFileProvider)
-            : base(
-                bundleManager, 
-                webRootFileProvider)
+        public AbpScriptBundleTagHelperService(AbpTagHelperScriptHelper resourceHelper) 
+            : base(resourceHelper)
         {
-
-        }
-
-        protected override void CreateBundle(string bundleName, List<BundleTagHelperItem> bundleItems)
-        {
-            BundleManager.CreateScriptBundle(
-                bundleName,
-                configuration => bundleItems.ForEach(bi => bi.AddToConfiguration(configuration))
-            );
-        }
-
-        protected override IReadOnlyList<string> GetBundleFiles(string bundleName)
-        {
-            return BundleManager.GetScriptBundleFiles(bundleName);
-        }
-
-        protected override void AddHtmlTag(TagHelperContext context, TagHelperOutput output, string file)
-        {
-            output.Content.AppendHtml($"<script src=\"{file}\" type=\"text/javascript\"></script>{Environment.NewLine}");
         }
     }
 }
