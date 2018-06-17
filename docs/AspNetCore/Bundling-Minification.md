@@ -39,10 +39,10 @@ The simplest way of creating a bundle is to use `abp-script-bundle` or `abp-styl
 
 ````html
 <abp-style-bundle name="MyGlobalBundle">
-    <abp-bundle-file src="/libs/bootstrap/css/bootstrap.css" />
-    <abp-bundle-file src="/libs/font-awesome/css/font-awesome.css" />
-    <abp-bundle-file src="/libs/toastr/toastr.css" />
-    <abp-bundle-file src="/styles/my-global-style.css" />
+    <abp-style src="/libs/bootstrap/css/bootstrap.css" />
+    <abp-style src="/libs/font-awesome/css/font-awesome.css" />
+    <abp-style src="/libs/toastr/toastr.css" />
+    <abp-style src="/styles/my-global-style.css" />
 </abp-style-bundle>
 ````
 
@@ -69,12 +69,12 @@ The `name` is **optional** for the razor bundle tag helpers. If you don't define
 
 ````html
 <abp-style-bundle>
-    <abp-bundle-file src="/libs/bootstrap/css/bootstrap.css" />
-    <abp-bundle-file src="/libs/font-awesome/css/font-awesome.css" />
-    <abp-bundle-file src="/libs/toastr/toastr.css" />
+    <abp-style src="/libs/bootstrap/css/bootstrap.css" />
+    <abp-style src="/libs/font-awesome/css/font-awesome.css" />
+    <abp-style src="/libs/toastr/toastr.css" />
     @if (ViewBag.IncludeCustomStyles != false)
     {
-        <abp-bundle-file src="/styles/my-global-style.css" />
+        <abp-style src="/styles/my-global-style.css" />
     }
 </abp-style-bundle>
 ````
@@ -83,15 +83,13 @@ This will potentially create two different bundles (one incudes the `my-global-s
 
 > It's always suggested to use a `name` for the bundle unless you need to the dynamic bundling feature. Providing a name is more performant since it does not need to get bundle files and calculate a dynamic name.
 
-#### Single File Bundle
+#### Single File
 
-If you need to just add a single file to the page, you can use the `abp-script` or `abp-style` tag helper as a shortcut. Example:
+If you need to just add a single file to the page, you can use the `abp-script` or `abp-style` tag without a surrounding `abp-script-bundle` or `abp-style-bundle` tag. Example:
 
 ````xml
 <abp-script src="/scripts/my-script.js" />
 ````
-
-All the benefits of bundling & minification are also valid here.
 
 ### Using Bundling Options
 
