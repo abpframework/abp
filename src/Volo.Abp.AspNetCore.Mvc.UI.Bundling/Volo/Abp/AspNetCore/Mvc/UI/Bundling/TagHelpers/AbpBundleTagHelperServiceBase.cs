@@ -8,29 +8,29 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
     public abstract class AbpBundleTagHelperServiceBase<TTagHelper> : AbpTagHelperService<TTagHelper>
         where TTagHelper : TagHelper, IBundleTagHelper
     {
-        protected AbpTagHelperResourceHelper ResourceHelper { get; }
+        protected AbpTagHelperResourceService ResourceService { get; }
 
-        protected AbpBundleTagHelperServiceBase(AbpTagHelperResourceHelper resourceHelper)
+        protected AbpBundleTagHelperServiceBase(AbpTagHelperResourceService resourceService)
         {
-            ResourceHelper = resourceHelper;
+            ResourceService = resourceService;
         }
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            await ResourceHelper.ProcessAsync(
+            await ResourceService.ProcessAsync(
                 context,
                 output,
-                TagHelper.GetNameOrNull(),
-                await GetBundleItems(context, output)
+                await GetBundleItems(context, output),
+                TagHelper.GetNameOrNull()
             );
         }
 
         protected virtual async Task<List<BundleTagHelperItem>> GetBundleItems(TagHelperContext context, TagHelperOutput output)
         {
-            var fileList = new List<BundleTagHelperItem>();
-            context.Items[AbpTagHelperConsts.ContextBundleItemListKey] = fileList;
-            await output.GetChildContentAsync(); //TODO: Suppress child execution!
-            return fileList;
+            var bundleItems = new List<BundleTagHelperItem>();
+            context.Items[AbpTagHelperConsts.ContextBundleItemListKey] = bundleItems;
+            await output.GetChildContentAsync(); //TODO: Is there a way of executing children without getting content?
+            return bundleItems;
         }
     }
 }

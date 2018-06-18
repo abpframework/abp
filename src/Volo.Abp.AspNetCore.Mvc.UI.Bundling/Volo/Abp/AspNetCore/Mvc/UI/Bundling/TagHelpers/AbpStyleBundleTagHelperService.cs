@@ -2,7 +2,7 @@
 {
     public class AbpStyleBundleTagHelperService : AbpBundleTagHelperServiceBase<AbpStyleBundleTagHelper>
     {
-        public AbpStyleBundleTagHelperService(AbpTagHelperStyleHelper resourceHelper) 
+        public AbpStyleBundleTagHelperService(AbpTagHelperStyleService resourceHelper) 
             : base(resourceHelper)
         {
         }

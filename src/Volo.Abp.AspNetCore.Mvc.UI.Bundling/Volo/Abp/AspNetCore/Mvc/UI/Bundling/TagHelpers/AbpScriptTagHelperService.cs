@@ -1,39 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Razor.TagHelpers;
-using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers;
+﻿using Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers.Internal;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
 {
-    public class AbpScriptTagHelperService : AbpTagHelperService<AbpScriptTagHelper>
+    public class AbpScriptTagHelperService : AbpTagHelperResourceItemService<AbpScriptTagHelper>
     {
-        protected AbpTagHelperScriptHelper ResourceHelper { get; }
-
-        public AbpScriptTagHelperService(AbpTagHelperScriptHelper resourceHelper)
+        public AbpScriptTagHelperService(AbpTagHelperScriptService resourceService)
+            : base(resourceService)
         {
-            ResourceHelper = resourceHelper;
-        }
-
-        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
-        {
-            var tagHelperItems = context.Items.GetOrDefault(AbpTagHelperConsts.ContextBundleItemListKey) as List<BundleTagHelperItem>;
-            if (tagHelperItems != null)
-            {
-                output.SuppressOutput();
-                tagHelperItems.Add(TagHelper.CreateBundleTagHelperItem());
-            }
-            else
-            {
-                await ResourceHelper.ProcessAsync(
-                    context,
-                    output,
-                    TagHelper.GetNameOrNull(),
-                    new List<BundleTagHelperItem>
-                    {
-                        TagHelper.CreateBundleTagHelperItem()
-                    }
-                );
-            }
         }
     }
 }
