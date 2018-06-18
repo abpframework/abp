@@ -4,7 +4,7 @@
     {
         public static void AddFiles(this BundleContributorCollection contributors, params string[] files)
         {
-            contributors.Add(new SimpleBundleContributor(files));
+            contributors.Add(new BundleFileContributor(files));
         }
     }
 }

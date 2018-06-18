@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 {
-    public class SimpleBundleContributor : BundleContributor
+    public class BundleFileContributor : BundleContributor
     {
         public string[] Files { get; }
 
-        public SimpleBundleContributor(params string[] files)
+        public BundleFileContributor(params string[] files)
         {
             Files = files ?? Array.Empty<string>();
         }
