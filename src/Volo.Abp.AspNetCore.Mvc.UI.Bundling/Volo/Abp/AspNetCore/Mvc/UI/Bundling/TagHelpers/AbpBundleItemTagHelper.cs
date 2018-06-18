@@ -33,7 +33,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
             {
                 return Src
                     .RemovePreFix("/")
-                    .RemovePostFix(StringComparison.OrdinalIgnoreCase, ".js")
+                    .RemovePostFix(StringComparison.OrdinalIgnoreCase, "." + GetFileExtension())
                     .Replace("/", ".");
             }
 
@@ -44,15 +44,17 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
         {
             if (Type != null)
             {
-                return new BundleTagHelperItem(Type);
+                return new BundleTagHelperContributorTypeItem(Type);
             }
 
             if (Src != null)
             {
-                return new BundleTagHelperItem(Src);
+                return new BundleTagHelperFileItem(Src);
             }
 
             throw new AbpException("abp-script tag helper requires to set either src or type!");
         }
+
+        protected abstract string GetFileExtension();
     }
 }

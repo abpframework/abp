@@ -10,5 +10,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
         {
 
         }
+
+        protected override string GetFileExtension()
+        {
+            return "js";
+        }
     }
 }
