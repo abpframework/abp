@@ -32,7 +32,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 
         public BundleConfiguration GetOrNull(string bundleName)
         {
-            _bundleContributors.TryGetValue(bundleName, out var bundleConfiguration);
+            if (!_bundleContributors.TryGetValue(bundleName, out var bundleConfiguration))
+            {
+                return null;
+            }
+
             return bundleConfiguration;
         }
 

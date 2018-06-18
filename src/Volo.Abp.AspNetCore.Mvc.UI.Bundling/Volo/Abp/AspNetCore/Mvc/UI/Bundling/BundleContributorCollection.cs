@@ -9,20 +9,20 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 {
     public class BundleContributorCollection
     {
-        private readonly List<IBundleContributor> _contributors;
+        private readonly List<BundleContributor> _contributors;
 
         public BundleContributorCollection()
         {
-            _contributors = new List<IBundleContributor>();
+            _contributors = new List<BundleContributor>();
         }
 
-        public void Add(IBundleContributor contributor)
+        public void Add(BundleContributor contributor)
         {
             _contributors.Add(contributor);
         }
 
         public void Add<TContributor>()
-            where TContributor : IBundleContributor, new()
+            where TContributor : BundleContributor, new()
         {
             Add(typeof(TContributor));
         }
@@ -34,7 +34,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
             AddWithDependencies(contributorType);
         }
 
-        public IReadOnlyList<IBundleContributor> GetAll()
+        public IReadOnlyList<BundleContributor> GetAll()
         {
             return _contributors.ToImmutableList();
         }
@@ -69,14 +69,14 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 
         private void AddInstanceToContributors(Type contributorType)
         {
-            if (!typeof(IBundleContributor).IsAssignableFrom(contributorType))
+            if (!typeof(BundleContributor).IsAssignableFrom(contributorType))
             {
-                throw new AbpException($"Given {nameof(contributorType)} ({contributorType.AssemblyQualifiedName}) should implement the {typeof(IBundleContributor).AssemblyQualifiedName} interface!");
+                throw new AbpException($"Given {nameof(contributorType)} ({contributorType.AssemblyQualifiedName}) should implement the {typeof(BundleContributor).AssemblyQualifiedName} interface!");
             }
 
             try
             {
-                _contributors.Add((IBundleContributor)Activator.CreateInstance(contributorType));
+                _contributors.Add((BundleContributor)Activator.CreateInstance(contributorType));
             }
             catch (Exception ex)
             {

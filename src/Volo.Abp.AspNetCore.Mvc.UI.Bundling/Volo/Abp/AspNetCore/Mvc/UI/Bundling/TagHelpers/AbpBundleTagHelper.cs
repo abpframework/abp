@@ -2,13 +2,13 @@
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
 {
-    public abstract class AbpBundleTagHelperBase<TTagHelper, TService> : AbpTagHelper<TTagHelper, TService>, IBundleTagHelper
+    public abstract class AbpBundleTagHelper<TTagHelper, TService> : AbpTagHelper<TTagHelper, TService>, IBundleTagHelper
         where TTagHelper : AbpTagHelper<TTagHelper, TService>
         where TService : class, IAbpTagHelperService<TTagHelper>
     {
         public string Name { get; set; }
 
-        protected AbpBundleTagHelperBase(TService service)
+        protected AbpBundleTagHelper(TService service)
             : base(service)
         {
 

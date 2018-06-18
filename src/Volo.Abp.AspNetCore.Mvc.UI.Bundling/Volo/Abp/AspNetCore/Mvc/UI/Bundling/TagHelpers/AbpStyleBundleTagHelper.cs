@@ -3,7 +3,7 @@
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
 {
     [HtmlTargetElement("abp-style-bundle", TagStructure = TagStructure.NormalOrSelfClosing)]
-    public class AbpStyleBundleTagHelper : AbpBundleTagHelperBase<AbpStyleBundleTagHelper, AbpStyleBundleTagHelperService>, IBundleTagHelper
+    public class AbpStyleBundleTagHelper : AbpBundleTagHelper<AbpStyleBundleTagHelper, AbpStyleBundleTagHelperService>, IBundleTagHelper
     {
         public AbpStyleBundleTagHelper(AbpStyleBundleTagHelperService service)
             : base(service)

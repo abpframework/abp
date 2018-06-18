@@ -5,7 +5,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
 {
     public abstract class AbpBundleItemTagHelper<TTagHelper, TTagHelperService> : AbpTagHelper<TTagHelper, TTagHelperService>, IBundleItemTagHelper 
         where TTagHelper : AbpTagHelper<TTagHelper, TTagHelperService>, IBundleItemTagHelper
-        where TTagHelperService: AbpTagHelperResourceItemService<TTagHelper>
+        where TTagHelperService: AbpBundleItemTagHelperService<TTagHelper>
     {
         /// <summary>
         /// A file path.

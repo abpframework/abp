@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling.Scripts;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling.Styles;
+using Volo.Abp.AspNetCore.Mvc.UI.Resources;
 using Volo.Abp.AspNetCore.VirtualFileSystem;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.VirtualFileSystem;
@@ -182,21 +183,20 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
         {
             using (var scope = _serviceProvider.CreateScope())
             {
-                var contributors = new List<IBundleContributor>();
+                var contributors = new List<BundleContributor>();
                 var context = new BundleConfigurationContext(scope.ServiceProvider);
 
                 AddContributorsWithBaseBundles(contributors, bundles, context, bundleName);
 
-                foreach (var contributor in contributors)
-                {
-                    contributor.ConfigureBundle(context);
-                }
+                contributors.ForEach(c => c.PreConfigureBundle(context));
+                contributors.ForEach(c => c.ConfigureBundle(context));
+                contributors.ForEach(c => c.PostConfigureBundle(context));
 
                 return context.Files; //TODO: Distinct?
             }
         }
 
-        protected virtual void AddContributorsWithBaseBundles(List<IBundleContributor> contributors, BundleConfigurationCollection bundles, BundleConfigurationContext context, string bundleName)
+        protected virtual void AddContributorsWithBaseBundles(List<BundleContributor> contributors, BundleConfigurationCollection bundles, BundleConfigurationContext context, string bundleName)
         {
             var bundleConfiguration = bundles.Get(bundleName);
 

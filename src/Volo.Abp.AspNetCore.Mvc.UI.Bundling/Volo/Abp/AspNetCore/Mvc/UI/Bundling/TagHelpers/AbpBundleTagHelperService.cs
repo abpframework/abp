@@ -5,12 +5,12 @@ using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
 {
-    public abstract class AbpBundleTagHelperServiceBase<TTagHelper> : AbpTagHelperService<TTagHelper>
+    public abstract class AbpBundleTagHelperService<TTagHelper> : AbpTagHelperService<TTagHelper>
         where TTagHelper : TagHelper, IBundleTagHelper
     {
         protected AbpTagHelperResourceService ResourceService { get; }
 
-        protected AbpBundleTagHelperServiceBase(AbpTagHelperResourceService resourceService)
+        protected AbpBundleTagHelperService(AbpTagHelperResourceService resourceService)
         {
             ResourceService = resourceService;
         }

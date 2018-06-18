@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.VirtualFileSystem;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers.Internal
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
 {
     public class AbpTagHelperScriptService : AbpTagHelperResourceService
     {
