@@ -1,6 +1,6 @@
 ## ASP.NET Core MVC Bundling & Minification
 
-There are many ways of bundling & minification for client side resources (JavaScript and CSS files). Most common ways are:
+There are many ways of bundling & minification of client side resources (JavaScript and CSS files). Most common ways are:
 
 * Using the [Bundler & Minifier](https://marketplace.visualstudio.com/items?itemName=MadsKristensen.BundlerMinifier) Visual Studio extension or the [nuget package](https://www.nuget.org/packages/BuildBundlerMinifier/).
 * Using [Gulp](https://gulpjs.com/)/[Grunt](https://gruntjs.com/) task managers and their plugins.
@@ -33,7 +33,7 @@ namespace MyCompany.MyProject
 }
 ````
 
-### Using The Razor Bundling Tag Helpers
+### Razor Bundling Tag Helpers
 
 The simplest way of creating a bundle is to use `abp-script-bundle` or `abp-style-bundle` tag helpers. Example:
 
@@ -46,12 +46,12 @@ The simplest way of creating a bundle is to use `abp-script-bundle` or `abp-styl
 </abp-style-bundle>
 ````
 
-This bundle defines a style bundle with a **unique name** *MyGlobalBundle*. It's very easy to *understand* how to use it. Let's see how it *works*:
+This bundle defines a style bundle with a **unique name**: *MyGlobalBundle*. It's very easy to *understand* how to use it. Let's see how it *works*:
 
 * ABP creates the bundle as **lazy** from the provided files when it's **first requested**. For the subsequent calls, it's returned from the **cache**. That means if you conditionally add files to the bundle, it's executed only once and any change of the condition will not effect the bundle for the next requests.
-* ABP adds bundle files **individually** to the page for the `development` environment. It automatically bundles & minifies for the other environments (`staging`, `production`...).
+* ABP adds bundle files **individually** to the page for the `development` environment. It automatically bundles & minifies for other environments (`staging`, `production`...).
 * The bundle files may be **physical** files or [**virtual/embedded** files](../Virtual-File-System.md).
-* ABP automatically add **version query string** (like ?_v=67872834243042 - generated from last change date of the related file) to the bundle file URL which prevents browser caching when a bundle changes. The versioning works even if the bundle files are individually added to the page (on the development environment).
+* ABP automatically adds **version query string** (like ?_v=67872834243042 - generated from last change date of the related files) to the bundle file URL which prevents browser caching when a bundle changes. The versioning works even if the bundle files are individually added to the page (on the development environment).
 
 #### Importing The Bundling Tag Helpers
 
@@ -63,9 +63,9 @@ In order to use bundle tag helpers, you need to add it into your `_ViewImports.c
 @addTagHelper *, Volo.Abp.AspNetCore.Mvc.UI.Bundling
 ````
 
-#### Unnamed & Dynamic Bundles
+#### Unnamed Bundles
 
-The `name` is **optional** for the razor bundle tag helpers. If you don't define a name, it's automatically **calculated** based on the used bundle files (they are **concatenated** and **hashed**). That means you may have **dynamic bundles** if you define bundle files inside @if statements. Example:
+The `name` is **optional** for the razor bundle tag helpers. If you don't define a name, it's automatically **calculated** based on the used bundle file names (they are **concatenated** and **hashed**). That means you can conditionally add items to the bundle. Example:
 
 ````html
 <abp-style-bundle>
@@ -81,7 +81,14 @@ The `name` is **optional** for the razor bundle tag helpers. If you don't define
 
 This will potentially create two different bundles (one incudes the `my-global-style.css` and other does not).
 
-> It's always suggested to use a `name` for the bundle unless you need to the dynamic bundling feature. Providing a name is more performant since it does not need to get bundle files and calculate a dynamic name.
+Advantages of **unnamed** bundles:
+
+* Can **conditionally** add items to the bundle. But this may lead to multiple variations of the bundle based on the conditions used.
+
+Advantages of **named** bundles:
+
+* **A little more performant** since it does not need to calculate a dynamic bundle name.
+* Other modules can **contribute** to the bundle by its name.
 
 #### Single File
 
@@ -91,7 +98,9 @@ If you need to just add a single file to the page, you can use the `abp-script` 
 <abp-script src="/scripts/my-script.js" />
 ````
 
-### Using Bundling Options
+The bundle name will be *scripts.my-scripts* for the example above (/ is replaced by .).
+
+### Bundling Options
 
 If you need to use same bundle in **multiple pages** or want to use some more **powerful features**, you can configure bundles **by code** in your [module](../Module-Development-Basics.md) class.
 
@@ -109,13 +118,14 @@ public class MyWebModule : AbpModule
         {
             options
                 .ScriptBundles
-                .Add("MyGlobalBundle")
-                .AddFiles(
-                    "/libs/jquery/jquery.js",
-                    "/libs/bootstrap/js/bootstrap.js",
-                    "/libs/toastr/toastr.min.js",
-                    "/scripts/my-global-scripts.css"
-                );
+                .Add("MyGlobalBundle", bundle => {
+                    bundle.AddFiles(
+                        "/libs/jquery/jquery.js",
+                        "/libs/bootstrap/js/bootstrap.js",
+                        "/libs/toastr/toastr.min.js",
+                        "/scripts/my-global-scripts.css"
+                    );
+                });                
         });
     }
 }
@@ -131,9 +141,9 @@ After defining such a bundle, it can be included into a page using the same tag 
 
 This time, no file defined in the tag helper definition because the bundle files are defined by the code.
 
-#### Getting & Modifying An Existing Bundle
+#### Configuring An Existing Bundle
 
-ABP provides [modularity](../Module-Development-Basics.md) for bundling too. A module can modify an existing bundle that is created by a depended module. Example:
+ABP supports [modularity](../Module-Development-Basics.md) for bundling too. A module can modify an existing bundle that is created by a depended module. Example:
 
 ````C#
 [DependsOn(typeof(MyWebModule))]
@@ -145,16 +155,17 @@ public class MyWebExtensionModule : AbpModule
         {
             options
                 .ScriptBundles
-                .Get("MyGlobalBundle") //Getting the bundle defined by the MyWebModule
-                .AddFiles(
-                    "/scripts/my-extension-script.js"
-                );
+                .Configure("MyGlobalBundle", bundle => {
+                    bundle.AddFiles(
+                        "/scripts/my-extension-script.js"
+                    );
+                });                
         });
     }
 }
 ````
 
-#### Bundle Contributors
+### Bundle Contributors
 
 Adding files to an existing bundle seems useful. What if you need to **replace** a file in the bundle or you want to **conditionally** add files? Defining a bundle contributor provides extra power for such cases.
 
@@ -185,7 +196,7 @@ services.Configure<BundlingOptions>(options =>
 });
 ````
 
-##### Contributor Dependencies
+#### Contributor Dependencies
 
 A bundle contributor can have one or more dependencies to other contributors. Example:
 
@@ -201,7 +212,7 @@ When a bundle contributor is added, its dependencies are **automatically and rec
 
 Creating contributors and defining dependencies is a way of organizing bundle creation across different modules.
 
-##### Accessing to the IServiceProvider
+#### Accessing to the IServiceProvider
 
 While it is rarely needed,`BundleConfigurationContext` has a `ServiceProvider` property that you can resolve service dependencies inside the `ConfigureBundle` method.
 
@@ -225,7 +236,7 @@ Using the built-in contributors for standard packages;
 * Prevents changing your contributor if the resource **path changes** (the depended contributor will handle it).
 * Prevents multiple modules add the same file **multiple times** to the same bundle.
 
-##### Volo.Abp.AspNetCore.Mvc.UI.Packages Package
+#### Volo.Abp.AspNetCore.Mvc.UI.Packages Package
 
 > This package is already installed by default with the startup templates. So, most of the time, you don't need to install it manually.
 
