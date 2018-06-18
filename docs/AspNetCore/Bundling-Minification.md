@@ -79,16 +79,15 @@ The `name` is **optional** for the razor bundle tag helpers. If you don't define
 </abp-style-bundle>
 ````
 
-This will potentially create two different bundles (one incudes the `my-global-style.css` and other does not).
+This will potentially create **two different bundles** (one incudes the `my-global-style.css` and other does not).
 
 Advantages of **unnamed** bundles:
 
-* Can **conditionally** add items to the bundle. But this may lead to multiple variations of the bundle based on the current conditions.
+* Can **conditionally add items** to the bundle. But this may lead to multiple variations of the bundle based on the conditions.
 
 Advantages of **named** bundles:
 
-* **A little more performant** since it does not need to calculate a dynamic bundle name.
-* Other modules can **contribute** to the bundle by its name (see the sections below).
+* Other **modules can contribute** to the bundle by its name (see the sections below).
 
 #### Single File
 
@@ -123,7 +122,7 @@ public class MyWebModule : AbpModule
                         "/libs/jquery/jquery.js",
                         "/libs/bootstrap/js/bootstrap.js",
                         "/libs/toastr/toastr.min.js",
-                        "/scripts/my-global-scripts.css"
+                        "/scripts/my-global-scripts.js"
                     );
                 });                
         });
@@ -229,9 +228,9 @@ Creating contributors and defining dependencies is a way of organizing bundle cr
 
 #### Accessing to the IServiceProvider
 
-While it is rarely needed,`BundleConfigurationContext` has a `ServiceProvider` property that you can resolve service dependencies inside the `ConfigureBundle` method.
+While it is rarely needed, `BundleConfigurationContext` has a `ServiceProvider` property that you can resolve service dependencies inside the `ConfigureBundle` method.
 
-#### Built-In Package Contributors
+#### Standard Package Contributors
 
 Adding a specific NPM package resources (js, css files) into a bundle is pretty standard for that package. For instance you always add the `bootstrap.css` file for the bootstrap NPM package.
 
@@ -252,7 +251,7 @@ Using the built-in contributors for standard packages;
 * Prevents multiple modules add the same file **multiple times**.
 * Manages **dependencies recursively** (adds dependencies of dependencies... if necessary).
 
-#### Volo.Abp.AspNetCore.Mvc.UI.Packages Package
+##### Volo.Abp.AspNetCore.Mvc.UI.Packages Package
 
 > This package is already installed by default with the startup templates. So, most of the time, you don't need to install it manually.
 
@@ -278,9 +277,28 @@ namespace MyCompany.MyProject
 }
 ````
 
+#### Bundle Inheritance
+
+In some specific cases, it may be needed to create a **new** bundle **inherited** from other bundle(s). Inheriting from a bundle (recursively) inherits all files/contributors of that bundle. Then the derived bundle can add or modify files/contributors **without modifying** the original bundle. Example:
+
+````c#
+services.Configure<BundlingOptions>(options =>
+{
+    options
+        .StyleBundles
+        .Add("MyTheme.MyGlobalBundle", bundle => {
+            bundle
+                .AddBaseBundles("MyGlobalBundle") //Can add multiple
+                .AddFiles(
+                    "/styles/mytheme-global-styles.css"
+                );
+        });                
+});
+````
+
 ### Themes
 
-Themes uses the standard package contributors to add library resources to page layouts. Themes may also define some standard/global bundles, so any module can contribute to those standard/global bundles. See the [theming documentation](Theming.md) for more.
+Themes uses the standard package contributors to add library resources to page layouts. Themes may also define some standard/global bundles, so any module can contribute to these standard/global bundles. See the [theming documentation](Theming.md) for more.
 
 ### Best Practices & Suggestions
 
