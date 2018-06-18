@@ -27,7 +27,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 
         public BundleResult Bundle(IBundlerContext context)
         {
-            Logger.LogInformation($"Bundling {context.BundleRelativePath} ({context.ContentFiles} files)");
+            Logger.LogInformation($"Bundling {context.BundleRelativePath} ({context.ContentFiles.Count} files)");
 
             var sb = new StringBuilder();
 
