@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling.Scripts;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling.Styles;
@@ -17,17 +19,17 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 {
     public class BundleManager : IBundleManager, ITransientDependency
     {
-        protected IHybridWebRootFileProvider WebRootFileProvider { get; }
+        public ILogger<BundleManager> Logger { get; set; }
 
-        //TODO: Make all protected readonly to allow easily extend the bundlemanager
-        private readonly BundlingOptions _options;
-        private readonly IHostingEnvironment _hostingEnvironment;
-        private readonly IScriptBundler _scriptBundler;
-        private readonly IStyleBundler _styleBundler;
-        private readonly IServiceProvider _serviceProvider;
-        private readonly IDynamicFileProvider _dynamicFileProvider;
-        private readonly IBundleCache _bundleCache;
-        private readonly IWebRequestResources _requestResources;
+        protected readonly BundlingOptions Options;
+        protected readonly IHybridWebRootFileProvider WebRootFileProvider;
+        protected readonly IHostingEnvironment HostingEnvironment;
+        protected readonly IScriptBundler ScriptBundler;
+        protected readonly IStyleBundler StyleBundler;
+        protected readonly IServiceProvider ServiceProvider;
+        protected readonly IDynamicFileProvider DynamicFileProvider;
+        protected readonly IBundleCache BundleCache;
+        protected readonly IWebRequestResources RequestResources;
 
         public BundleManager(
             IOptions<BundlingOptions> options,
@@ -40,30 +42,32 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
             IHybridWebRootFileProvider webRootFileProvider, 
             IWebRequestResources requestResources)
         {
-            _hostingEnvironment = hostingEnvironment;
-            _scriptBundler = scriptBundler;
-            _serviceProvider = serviceProvider;
-            _dynamicFileProvider = dynamicFileProvider;
-            _bundleCache = bundleCache;
+            HostingEnvironment = hostingEnvironment;
+            ScriptBundler = scriptBundler;
+            ServiceProvider = serviceProvider;
+            DynamicFileProvider = dynamicFileProvider;
+            BundleCache = bundleCache;
             WebRootFileProvider = webRootFileProvider;
-            _requestResources = requestResources;
-            _styleBundler = styleBundler;
-            _options = options.Value;
+            RequestResources = requestResources;
+            StyleBundler = styleBundler;
+            Options = options.Value;
+
+            Logger = NullLogger<BundleManager>.Instance;
         }
 
         public virtual IReadOnlyList<string> GetStyleBundleFiles(string bundleName)
         {
-            return GetBundleFiles(_options.StyleBundles, bundleName, _styleBundler);
+            return GetBundleFiles(Options.StyleBundles, bundleName, StyleBundler);
         }
 
         public virtual IReadOnlyList<string> GetScriptBundleFiles(string bundleName)
         {
-            return GetBundleFiles(_options.ScriptBundles, bundleName, _scriptBundler);
+            return GetBundleFiles(Options.ScriptBundles, bundleName, ScriptBundler);
         }
 
         protected virtual IReadOnlyList<string> GetBundleFiles(BundleConfigurationCollection bundles, string bundleName, IBundler bundler)
         {
-            var files = _requestResources.TryAdd(CreateFileList(bundles, bundleName));
+            var files = RequestResources.TryAdd(CreateFileList(bundles, bundleName));
 
             if (!IsBundlingEnabled())
             {
@@ -71,10 +75,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
             }
 
             var bundleRelativePath =
-                _options.BundleFolderName.EnsureEndsWith('/') +
+                Options.BundleFolderName.EnsureEndsWith('/') +
                 bundleName + "." + files.JoinAsString("|").ToMd5() + "." + bundler.FileExtension;
 
-            var cacheItem = _bundleCache.GetOrAdd(bundleRelativePath, () =>
+            var cacheItem = BundleCache.GetOrAdd(bundleRelativePath, () =>
             {
                 var cacheValue = new BundleCacheItem(
                     new List<string>
@@ -115,8 +119,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
                             cacheValue.WatchDisposeHandles.Clear();
                         }
 
-                        _bundleCache.Remove(bundleRelativePath);
-                        _dynamicFileProvider.Delete("/wwwroot/" + bundleRelativePath); //TODO: get rid of wwwroot!
+                        BundleCache.Remove(bundleRelativePath);
+                        DynamicFileProvider.Delete("/wwwroot/" + bundleRelativePath); //TODO: get rid of wwwroot!
                     }, null);
 
                     cacheValue.WatchDisposeHandles.Add(watchDisposeHandle);
@@ -128,7 +132,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
         {
             var fileName = bundleRelativePath.Substring(bundleRelativePath.IndexOf('/') + 1);
 
-            _dynamicFileProvider.AddOrUpdate(
+            DynamicFileProvider.AddOrUpdate(
                 new InMemoryFileInfo(
                     Encoding.UTF8.GetBytes(bundleResult.Content),
                     "/wwwroot/" + bundleRelativePath, //TODO: get rid of wwwroot!
@@ -139,17 +143,17 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 
         public virtual void CreateStyleBundle(string bundleName, Action<BundleConfiguration> configureAction)
         {
-            _options.StyleBundles.TryAdd(bundleName, configureAction);
+            Options.StyleBundles.TryAdd(bundleName, configureAction);
         }
 
         public virtual void CreateScriptBundle(string bundleName, Action<BundleConfiguration> configureAction)
         {
-            _options.ScriptBundles.TryAdd(bundleName, configureAction);
+            Options.ScriptBundles.TryAdd(bundleName, configureAction);
         }
 
         protected virtual bool IsBundlingEnabled()
         {
-            switch (_options.Mode)
+            switch (Options.Mode)
             {
                 case BundlingMode.None:
                     return false;
@@ -157,15 +161,15 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
                 case BundlingMode.BundleAndMinify:
                     return true;
                 case BundlingMode.Auto:
-                    return !_hostingEnvironment.IsDevelopment();
+                    return !HostingEnvironment.IsDevelopment();
                 default:
-                    throw new AbpException($"Unhandled {nameof(BundlingMode)}: {_options.Mode}");
+                    throw new AbpException($"Unhandled {nameof(BundlingMode)}: {Options.Mode}");
             }
         }
 
         protected virtual bool IsMinficationEnabled()
         {
-            switch (_options.Mode)
+            switch (Options.Mode)
             {
                 case BundlingMode.None:
                 case BundlingMode.Bundle:
@@ -173,15 +177,15 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
                 case BundlingMode.BundleAndMinify:
                     return true;
                 case BundlingMode.Auto:
-                    return !_hostingEnvironment.IsDevelopment();
+                    return !HostingEnvironment.IsDevelopment();
                 default:
-                    throw new AbpException($"Unhandled {nameof(BundlingMode)}: {_options.Mode}");
+                    throw new AbpException($"Unhandled {nameof(BundlingMode)}: {Options.Mode}");
             }
         }
 
         protected virtual List<string> CreateFileList(BundleConfigurationCollection bundles, string bundleName)
         {
-            using (var scope = _serviceProvider.CreateScope())
+            using (var scope = ServiceProvider.CreateScope())
             {
                 var contributors = new List<BundleContributor>();
                 var context = new BundleConfigurationContext(scope.ServiceProvider);
