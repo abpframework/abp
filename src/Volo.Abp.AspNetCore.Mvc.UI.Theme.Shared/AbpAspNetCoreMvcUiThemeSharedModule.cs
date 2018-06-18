@@ -25,13 +25,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared
             {
                 options
                     .StyleBundles
-                    .Add(StandardBundles.Styles.Global)
-                    .AddContributors(typeof(SharedThemeGlobalStyleContributor));
+                    .Add(StandardBundles.Styles.Global, bundle => { bundle.AddContributors(typeof(SharedThemeGlobalStyleContributor)); });
 
                 options
                     .ScriptBundles
-                    .Add(StandardBundles.Scripts.Global)
-                    .AddContributors(typeof(SharedThemeGlobalScriptContributor));
+                    .Add(StandardBundles.Scripts.Global, bundle => bundle.AddContributors(typeof(SharedThemeGlobalScriptContributor)));
             });
 
             services.AddAssemblyOf<AbpAspNetCoreMvcUiThemeSharedModule>();
