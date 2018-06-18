@@ -27,24 +27,27 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 
         public BundleResult Bundle(IBundlerContext context)
         {
-            Logger.LogDebug($"Bundling {context.BundleRelativePath}");
+            Logger.LogInformation($"Bundling {context.BundleRelativePath} ({context.ContentFiles} files)");
 
             var sb = new StringBuilder();
 
+            Logger.LogDebug("Bundle files:");
             foreach (var file in context.ContentFiles)
             {
-                sb.AppendLine(GetFileContent(context, file));
+                var fileContent = GetFileContent(context, file);
+                Logger.LogDebug($"- {file} ({fileContent.Length} bytes)");
+                sb.AppendLine(fileContent);
             }
 
             var bundleContent = sb.ToString();
 
             if (context.IsMinificationEnabled)
             {
-                Logger.LogDebug($"Minifying {context.BundleRelativePath}");
+                Logger.LogInformation($"Minifying {context.BundleRelativePath} ({bundleContent.Length} bytes)");
                 bundleContent = Minifier.Minify(bundleContent, context.BundleRelativePath);
             }
 
-            Logger.LogDebug($"Bundled {context.BundleRelativePath}");
+            Logger.LogInformation($"Bundled {context.BundleRelativePath} ({bundleContent.Length} bytes)");
 
             return new BundleResult(bundleContent);
         }
