@@ -65,7 +65,7 @@ In order to use bundle tag helpers, you need to add it into your `_ViewImports.c
 
 #### Unnamed Bundles
 
-The `name` is **optional** for the razor bundle tag helpers. If you don't define a name, it's automatically **calculated** based on the used bundle file names (they are **concatenated** and **hashed**). That means you can conditionally add items to the bundle. Example:
+The `name` is **optional** for the razor bundle tag helpers. If you don't define a name, it's automatically **calculated** based on the used bundle file names (they are **concatenated** and **hashed**). Example:
 
 ````html
 <abp-style-bundle>
@@ -83,12 +83,12 @@ This will potentially create two different bundles (one incudes the `my-global-s
 
 Advantages of **unnamed** bundles:
 
-* Can **conditionally** add items to the bundle. But this may lead to multiple variations of the bundle based on the conditions used.
+* Can **conditionally** add items to the bundle. But this may lead to multiple variations of the bundle based on the current conditions.
 
 Advantages of **named** bundles:
 
 * **A little more performant** since it does not need to calculate a dynamic bundle name.
-* Other modules can **contribute** to the bundle by its name.
+* Other modules can **contribute** to the bundle by its name (see the sections below).
 
 #### Single File
 
@@ -98,7 +98,7 @@ If you need to just add a single file to the page, you can use the `abp-script` 
 <abp-script src="/scripts/my-script.js" />
 ````
 
-The bundle name will be *scripts.my-scripts* for the example above (/ is replaced by .).
+The bundle name will be *scripts.my-scripts* for the example above ("/" is replaced by "."). All bundling features are work as expected for single file bundles too.
 
 ### Bundling Options
 
@@ -165,6 +165,8 @@ public class MyWebExtensionModule : AbpModule
 }
 ````
 
+> It's not possible to configure unnamed bundle tag helpers by code, because their name are not known on the development time. It's suggested to always use a name for a bundle tag helper.
+
 ### Bundle Contributors
 
 Adding files to an existing bundle seems useful. What if you need to **replace** a file in the bundle or you want to **conditionally** add files? Defining a bundle contributor provides extra power for such cases.
@@ -191,10 +193,23 @@ services.Configure<BundlingOptions>(options =>
 {
     options
         .ScriptBundles
-        .Get("MyGlobalBundle")
-        .AddContributors(typeof(MyExtensionStyleBundleContributor));
+        .Configure("MyGlobalBundle", bundle => {
+            bundle.AddContributors(typeof(MyExtensionStyleBundleContributor));
+        });        
 });
 ````
+
+Contributors can also be used in bundle tag helpers. Example:
+
+````xml
+<abp-style-bundle>
+    <abp-style type="@typeof(BootstrapStyleContributor)" />
+    <abp-style src="/libs/font-awesome/css/font-awesome.css" />
+    <abp-style src="/libs/toastr/toastr.css" />
+</abp-style-bundle>
+````
+
+`abp-style` and `abp-script` tags can get `type` attributes (instead of `src` attributes) as shown in this sample. When you add a bundle contributor, it's dependencies are also automatically added to the bundle.
 
 #### Contributor Dependencies
 
@@ -208,7 +223,7 @@ public class MyExtensionStyleBundleContributor : BundleContributor
 }
 ````
 
-When a bundle contributor is added, its dependencies are **automatically and recursively** added. Dependencies added by the **dependency order** by preventing **duplicates**.
+When a bundle contributor is added, its dependencies are **automatically and recursively** added. Dependencies added by the **dependency order** by preventing **duplicates**. Duplicates are prevented even if they are in separated bundles. ABP organizes all bundles in a page and eliminates duplications.
 
 Creating contributors and defining dependencies is a way of organizing bundle creation across different modules.
 
@@ -218,7 +233,7 @@ While it is rarely needed,`BundleConfigurationContext` has a `ServiceProvider` p
 
 #### Built-In Package Contributors
 
-Adding a NPM package resources (js, css files) into a bundle is pretty standard. For instance you always add the same `bootstrap.css` file for the bootstrap NPM package.
+Adding a specific NPM package resources (js, css files) into a bundle is pretty standard for that package. For instance you always add the `bootstrap.css` file for the bootstrap NPM package.
 
 There are built-in contributors for all [standard NPM packages](Client-Side-Package-Management.md). For instance, if your contributor depends on the bootstrap, you can just declare it instead of adding the bootstrap.css yourself:
 
@@ -234,7 +249,8 @@ Using the built-in contributors for standard packages;
 
 * Prevents you **wrongly typing** the resource paths.
 * Prevents changing your contributor if the resource **path changes** (the depended contributor will handle it).
-* Prevents multiple modules add the same file **multiple times** to the same bundle.
+* Prevents multiple modules add the same file **multiple times**.
+* Manages **dependencies recursively** (adds dependencies of dependencies... if necessary).
 
 #### Volo.Abp.AspNetCore.Mvc.UI.Packages Package
 
@@ -271,9 +287,9 @@ Themes uses the standard package contributors to add library resources to page l
 It's suggested to define multiple bundles for an application, each one is used for different purposes.
 
 * **Global bundle**: Global style/script bundles are included to every page in the application. Themes already defines global style & script bundles. Your module can contribute to them.
-* **Layout bundles**: This is a specific bundle to an individual layout. Only contains resources shared among all the pages use the layout.
-* **Module bundles**: For shared resources among an individual module pages.
-* **Page bundles**: Specific bundles created for each page. Use the bundling tag helpers to create the bundle.
+* **Layout bundles**: This is a specific bundle to an individual layout. Only contains resources shared among all the pages use the layout. Use the bundling tag helpers to create the bundle as a good practice.
+* **Module bundles**: For shared resources among the pages of an individual module.
+* **Page bundles**: Specific bundles created for each page. Use the bundling tag helpers to create the bundle as a best practice.
 
 Establish a balance between performance, network bandwidth usage and managing too many bundles.
 
