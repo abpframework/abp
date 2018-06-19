@@ -67,7 +67,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 
         protected virtual IReadOnlyList<string> GetBundleFiles(BundleConfigurationCollection bundles, string bundleName, IBundler bundler)
         {
-            var files = RequestResources.TryAdd(CreateFileList(bundles, bundleName));
+            var files = RequestResources.Filter(CreateFileList(bundles, bundleName));
 
             if (!IsBundlingEnabled())
             {

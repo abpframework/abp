@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Volo.Abp.AspNetCore.Mvc.UI.Resources;
 using Volo.Abp.AspNetCore.VirtualFileSystem;
 using Volo.Abp.DependencyInjection;
 
@@ -14,12 +15,16 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
 
         protected IHybridWebRootFileProvider WebRootFileProvider { get; }
 
+        protected IWebRequestResources WebRequestResources { get; }
+        
         protected AbpTagHelperResourceService(
             IBundleManager bundleManager, 
-            IHybridWebRootFileProvider webRootFileProvider)
+            IHybridWebRootFileProvider webRootFileProvider, 
+            IWebRequestResources webRequestResources)
         {
             BundleManager = bundleManager;
             WebRootFileProvider = webRootFileProvider;
+            WebRequestResources = webRequestResources;
         }
 
         public virtual Task ProcessAsync(
@@ -55,6 +60,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
 
                 AddHtmlTag(context, output, bundleFile + "?_v=" + file.LastModified.UtcTicks);
             }
+
+            WebRequestResources.Add(bundleFiles);
 
             return Task.CompletedTask;
         }
