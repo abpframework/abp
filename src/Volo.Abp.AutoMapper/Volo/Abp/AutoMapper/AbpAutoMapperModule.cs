@@ -104,12 +104,18 @@ namespace Volo.Abp.AutoMapper
                 }
             ).ToArray();
 
-            logger.LogDebug($"Found {types.Length} classes define auto mapping attributes:");
-
-            foreach (var type in types)
+            if (types.Length <= 0)
             {
-                logger.LogDebug(type.FullName);
-                context.MapperConfiguration.CreateAutoAttributeMaps(type);
+                logger.LogDebug($"No class found with auto mapping attributes.");
+            }
+            else
+            {
+                logger.LogDebug($"Found {types.Length} classes define auto mapping attributes.");
+                foreach (var type in types)
+                {
+                    logger.LogDebug(type.FullName);
+                    context.MapperConfiguration.CreateAutoAttributeMaps(type);
+                }
             }
         }
     }

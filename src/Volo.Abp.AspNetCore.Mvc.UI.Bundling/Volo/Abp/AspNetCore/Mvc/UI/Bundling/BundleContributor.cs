@@ -16,5 +16,11 @@
         {
 
         }
+
+        //TODO: Reconsider naming and usage!
+        public virtual void ConfigureDynamicResources(BundleConfigurationContext context)
+        {
+
+        }
     }
 }

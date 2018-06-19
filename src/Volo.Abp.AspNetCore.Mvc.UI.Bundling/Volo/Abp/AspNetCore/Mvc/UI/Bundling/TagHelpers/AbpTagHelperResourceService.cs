@@ -2,8 +2,10 @@
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
-using Volo.Abp.AspNetCore.Mvc.UI.Resources;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.AspNetCore.VirtualFileSystem;
 using Volo.Abp.DependencyInjection;
 
@@ -11,20 +13,20 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
 {
     public abstract class AbpTagHelperResourceService : ITransientDependency
     {
+        public ILogger<AbpTagHelperResourceService> Logger { get; set; }
+
         protected IBundleManager BundleManager { get; }
 
         protected IHybridWebRootFileProvider WebRootFileProvider { get; }
 
-        protected IWebRequestResources WebRequestResources { get; }
-        
         protected AbpTagHelperResourceService(
             IBundleManager bundleManager, 
-            IHybridWebRootFileProvider webRootFileProvider, 
-            IWebRequestResources webRequestResources)
+            IHybridWebRootFileProvider webRootFileProvider)
         {
             BundleManager = bundleManager;
             WebRootFileProvider = webRootFileProvider;
-            WebRequestResources = webRequestResources;
+
+            Logger = NullLogger<AbpTagHelperResourceService>.Instance;
         }
 
         public virtual Task ProcessAsync(
@@ -36,6 +38,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
             Check.NotNull(context, nameof(context));
             Check.NotNull(output, nameof(output));
             Check.NotNull(bundleItems, nameof(bundleItems));
+
+            var stopwatch = Stopwatch.StartNew();
 
             output.TagName = null;
 
@@ -61,7 +65,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
                 AddHtmlTag(context, output, bundleFile + "?_v=" + file.LastModified.UtcTicks);
             }
 
-            WebRequestResources.Add(bundleFiles);
+            stopwatch.Stop();
+            Logger.LogDebug($"Added bundle '{bundleName}' to the page in {stopwatch.Elapsed.TotalMilliseconds:0.00} ms.");
 
             return Task.CompletedTask;
         }

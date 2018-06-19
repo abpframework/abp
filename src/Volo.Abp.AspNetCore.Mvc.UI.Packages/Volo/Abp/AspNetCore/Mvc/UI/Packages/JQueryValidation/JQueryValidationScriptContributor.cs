@@ -16,31 +16,40 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.JQueryValidation
             context.Files.AddIfNotContains("/libs/jquery-validation/jquery.validate.js");
         }
 
-        public void ConfigureDynamic(BundleConfigurationContext context)
+        public override void ConfigureDynamicResources(BundleConfigurationContext context)
         {
-            //TODO: Can we optimize this? Also refactor a bit to reduce duplication
+            //TODO: Can we optimize these points:
+            // - Can we get rid of context.FileProvider.GetFileInfo call?
+            // - What if the same contributer is used twice for a page.
+            //   Duplication is prevented by the bundle manager, however the logic below will execute twice
 
-            var currentCultureName = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.Replace('-', '_');
-            var filePath = DefaultLocalizationFolder + "messages_" + currentCultureName + ".js";
+            var cultureName = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.Replace('-', '_');
+
+            if (TryAddCultureFile(context, cultureName))
+            {
+                return;
+            }
+
+            if (!cultureName.Contains("_"))
+            {
+                return;
+            }
+
+            TryAddCultureFile(context, cultureName.Substring(0, cultureName.IndexOf('_')));
+        }
+
+        protected virtual bool TryAddCultureFile(BundleConfigurationContext context, string cultureName)
+        {
+            var filePath = DefaultLocalizationFolder + "messages_" + cultureName + ".js";
             var fileInfo = context.FileProvider.GetFileInfo(filePath);
-            if (fileInfo != null)
+
+            if (!fileInfo.Exists)
             {
-                context.Files.AddIfNotContains(filePath);
-                return;
+                return false;
             }
 
-            if (!currentCultureName.Contains("_"))
-            {
-                return;
-            }
-
-            currentCultureName = currentCultureName.Substring(0, currentCultureName.IndexOf('_'));
-            filePath = DefaultLocalizationFolder + "messages_" + currentCultureName + ".js";
-            fileInfo = context.FileProvider.GetFileInfo(filePath);
-            if (fileInfo != null)
-            {
-                context.Files.AddIfNotContains(filePath);
-            }
+            context.Files.AddIfNotContains(filePath);
+            return true;
         }
     }
 }

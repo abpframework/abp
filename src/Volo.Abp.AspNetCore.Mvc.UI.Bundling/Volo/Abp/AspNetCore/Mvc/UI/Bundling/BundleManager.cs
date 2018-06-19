@@ -4,7 +4,6 @@ using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
@@ -68,16 +67,17 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
         protected virtual IReadOnlyList<string> GetBundleFiles(BundleConfigurationCollection bundles, string bundleName, IBundler bundler)
         {
             var contributors = GetContributors(bundles, bundleName);
-            var files = RequestResources.Filter(CreateFileList(contributors));
+            var bundleFiles = RequestResources.TryAdd(GetBundleFiles(contributors));
+            var dynamicResources = RequestResources.TryAdd(GetDynamicResources(contributors));
 
             if (!IsBundlingEnabled())
             {
-                return files;
+                return bundleFiles.Union(dynamicResources).ToImmutableList();
             }
 
             var bundleRelativePath =
                 Options.BundleFolderName.EnsureEndsWith('/') +
-                bundleName + "." + files.JoinAsString("|").ToMd5() + "." + bundler.FileExtension;
+                bundleName + "." + bundleFiles.JoinAsString("|").ToMd5() + "." + bundler.FileExtension;
 
             var cacheItem = BundleCache.GetOrAdd(bundleRelativePath, () =>
             {
@@ -88,12 +88,12 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
                     }
                 );
 
-                WatchChanges(cacheValue, files, bundleRelativePath);
+                WatchChanges(cacheValue, bundleFiles, bundleRelativePath);
 
                 var bundleResult = bundler.Bundle(
                     new BundlerContext(
                         bundleRelativePath,
-                        files,
+                        bundleFiles,
                         IsMinficationEnabled()
                     )
                 );
@@ -103,7 +103,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
                 return cacheValue;
             });
 
-            return cacheItem.Files.ToImmutableList();
+            return cacheItem.Files.Union(dynamicResources).ToImmutableList();
         }
 
         private void WatchChanges(BundleCacheItem cacheValue, List<string> files, string bundleRelativePath)
@@ -184,17 +184,29 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
             }
         }
 
-        protected virtual List<string> CreateFileList(List<BundleContributor> contributors)
+        protected virtual List<string> GetBundleFiles(List<BundleContributor> contributors)
         {
-            using (var scope = ServiceProvider.CreateScope())
-            {
-                var context = new BundleConfigurationContext(scope.ServiceProvider, scope.ServiceProvider.GetRequiredService<IVirtualFileProvider>());
-                contributors.ForEach(c => c.PreConfigureBundle(context));
-                contributors.ForEach(c => c.ConfigureBundle(context));
-                contributors.ForEach(c => c.PostConfigureBundle(context));
+            var context = CreateBundleConfigurationContext();
 
-                return context.Files;
-            }
+            contributors.ForEach(c => c.PreConfigureBundle(context));
+            contributors.ForEach(c => c.ConfigureBundle(context));
+            contributors.ForEach(c => c.PostConfigureBundle(context));
+
+            return context.Files;
+        }
+
+        protected virtual List<string> GetDynamicResources(List<BundleContributor> contributors)
+        {
+            var context = CreateBundleConfigurationContext();
+
+            contributors.ForEach(c => c.ConfigureDynamicResources(context));
+
+            return context.Files;
+        }
+
+        protected virtual BundleConfigurationContext CreateBundleConfigurationContext()
+        {
+            return new BundleConfigurationContext(ServiceProvider, WebRootFileProvider);
         }
 
         protected virtual List<BundleContributor> GetContributors(BundleConfigurationCollection bundles, string bundleName)
