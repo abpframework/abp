@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Microsoft.Extensions.FileProviders;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 {
@@ -9,10 +10,13 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 
         public IServiceProvider ServiceProvider { get; }
 
-        public BundleConfigurationContext(IServiceProvider serviceProvider)
+        public IFileProvider FileProvider { get; }
+
+        public BundleConfigurationContext(IServiceProvider serviceProvider, IFileProvider fileProvider)
         {
             Files = new List<string>();
             ServiceProvider = serviceProvider;
+            FileProvider = fileProvider;
         }
     }
 }

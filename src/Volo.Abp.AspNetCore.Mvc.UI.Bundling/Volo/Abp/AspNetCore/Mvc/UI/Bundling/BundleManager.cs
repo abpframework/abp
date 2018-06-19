@@ -39,7 +39,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
             IServiceProvider serviceProvider,
             IDynamicFileProvider dynamicFileProvider,
             IBundleCache bundleCache,
-            IHybridWebRootFileProvider webRootFileProvider, 
+            IHybridWebRootFileProvider webRootFileProvider,
             IWebRequestResources requestResources)
         {
             HostingEnvironment = hostingEnvironment;
@@ -67,7 +67,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 
         protected virtual IReadOnlyList<string> GetBundleFiles(BundleConfigurationCollection bundles, string bundleName, IBundler bundler)
         {
-            var files = RequestResources.Filter(CreateFileList(bundles, bundleName));
+            var contributors = GetContributors(bundles, bundleName);
+            var files = RequestResources.Filter(CreateFileList(contributors));
 
             if (!IsBundlingEnabled())
             {
@@ -183,30 +184,33 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
             }
         }
 
-        protected virtual List<string> CreateFileList(BundleConfigurationCollection bundles, string bundleName)
+        protected virtual List<string> CreateFileList(List<BundleContributor> contributors)
         {
             using (var scope = ServiceProvider.CreateScope())
             {
-                var contributors = new List<BundleContributor>();
-                var context = new BundleConfigurationContext(scope.ServiceProvider);
-
-                AddContributorsWithBaseBundles(contributors, bundles, context, bundleName);
-
+                var context = new BundleConfigurationContext(scope.ServiceProvider, scope.ServiceProvider.GetRequiredService<IVirtualFileProvider>());
                 contributors.ForEach(c => c.PreConfigureBundle(context));
                 contributors.ForEach(c => c.ConfigureBundle(context));
                 contributors.ForEach(c => c.PostConfigureBundle(context));
 
-                return context.Files; //TODO: Distinct?
+                return context.Files;
             }
         }
 
-        protected virtual void AddContributorsWithBaseBundles(List<BundleContributor> contributors, BundleConfigurationCollection bundles, BundleConfigurationContext context, string bundleName)
+        protected virtual List<BundleContributor> GetContributors(BundleConfigurationCollection bundles, string bundleName)
+        {
+            var contributors = new List<BundleContributor>();
+            AddContributorsWithBaseBundles(contributors, bundles, bundleName);
+            return contributors;
+        }
+
+        protected virtual void AddContributorsWithBaseBundles(List<BundleContributor> contributors, BundleConfigurationCollection bundles, string bundleName)
         {
             var bundleConfiguration = bundles.Get(bundleName);
 
             foreach (var baseBundleName in bundleConfiguration.BaseBundles)
             {
-                AddContributorsWithBaseBundles(contributors, bundles, context, baseBundleName); //Recursive call
+                AddContributorsWithBaseBundles(contributors, bundles, baseBundleName); //Recursive call
             }
 
             var selfContributors = bundleConfiguration.Contributors.GetAll();
