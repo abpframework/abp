@@ -1,0 +1,12 @@
+{
+  "culture": "en",
+  "texts": {
+    "Permission:IdentityManagement": "Idetity management",
+    "Permission:RoleManagement": "Role management",
+    "Permission:Create": "Create",
+    "Permission:Edit": "Edit",
+    "Permission:Delete": "Delete",
+    "Permission:ChangePermissions": "Change permissions",
+    "Permission:UserManagement": "User management"
+  }
+}

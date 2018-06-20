@@ -1,0 +1,19 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@using Volo.Abp.Identity.Localization
+@model Volo.Abp.Identity.Web.Pages.Identity.Roles.EditModalModel
+@inject IHtmlLocalizer<IdentityResource> L
+@{
+    Layout = null;
+}
+<form method="post" asp-page="/Identity/Roles/EditModal" autocomplete="off" data-ajaxForm="true">
+    <abp-modal>
+        <abp-modal-header title="@L["Edit"].Value"></abp-modal-header>
+        <abp-modal-body>
+            <input asp-for="Role.Id" />
+            <abp-input asp-for="Role.Name" label="@L["RoleName"].Value" />
+        </abp-modal-body>
+        <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)"></abp-modal-footer>
+    </abp-modal>
+</form>

@@ -1,0 +1,36 @@
+﻿@page
+@model Volo.Abp.Account.Web.Pages.Account.LoginModel
+@using Volo.Abp.Account.Web.Settings
+@inherits Volo.Abp.Account.Web.Pages.Account.AccountPage
+@inject Volo.Abp.Settings.ISettingManager SettingManager
+<h2>@L["Login"]</h2>
+<abp-row>
+    <abp-column size-md="_3">
+        <form method="post">
+            <abp-input asp-for="Input.UserNameOrEmailAddress" auto-focus="true" />
+            <abp-input asp-for="Input.Password" />
+            <abp-input asp-for="Input.RememberMe" class="mb-3" />
+            <abp-button button-type="Primary" type="submit">@L["Login"]</abp-button>
+            @if (string.Equals(await SettingManager.GetOrNullAsync(AccountSettingNames.IsSelfRegistrationEnabled), "true", StringComparison.OrdinalIgnoreCase))
+            {
+                <a abp-button="Secondary" href="@Url.Page("./Register", new {returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash})">@L["Register"]</a>
+            }
+        </form>
+    </abp-column>
+
+    @if (Model.ExternalLogins.Any())
+    {
+        <abp-column size-md="_3">
+            <h4>Use another service to log in.</h4>
+            <form asp-page="./Login" asp-page-handler="ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" asp-route-returnUrlHash="@Model.ReturnUrlHash" method="post">
+                <div>
+                    @foreach (var provider in Model.ExternalLogins)
+                    {
+                        <abp-button button-type="Primary" type="submit" name="provider" value="@provider.Name">@provider.DisplayName</abp-button>
+                    }
+                </div>
+            </form>
+        </abp-column>
+    }
+
+</abp-row>

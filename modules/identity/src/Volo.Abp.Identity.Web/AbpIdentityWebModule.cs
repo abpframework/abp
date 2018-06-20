@@ -1,0 +1,72 @@
+﻿using Localization.Resources.AbpUi;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.AspNetCore.Mvc.Localization;
+using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
+using Volo.Abp.AutoMapper;
+using Volo.Abp.Identity.Localization;
+using Volo.Abp.Identity.Web.Navigation;
+using Volo.Abp.Localization;
+using Volo.Abp.Localization.Resources.AbpValidation;
+using Volo.Abp.Modularity;
+using Volo.Abp.PermissionManagement.Web;
+using Volo.Abp.UI.Navigation;
+using Volo.Abp.VirtualFileSystem;
+
+namespace Volo.Abp.Identity.Web
+{
+    [DependsOn(typeof(AbpIdentityHttpApiModule))]
+    [DependsOn(typeof(AbpAspNetCoreMvcUiBootstrapModule))]
+    [DependsOn(typeof(AbpAutoMapperModule))]
+    [DependsOn(typeof(AbpPermissionManagementWebModule))]
+    public class AbpIdentityWebModule : AbpModule
+    {
+        public override void PreConfigureServices(IServiceCollection services)
+        {
+            services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
+            {
+                options.AddAssemblyResource(typeof(IdentityResource), typeof(AbpIdentityWebModule).Assembly);
+            });
+        }
+
+        public override void ConfigureServices(IServiceCollection services)
+        {
+            services.Configure<NavigationOptions>(options =>
+            {
+                options.MenuContributors.Add(new AbpIdentityWebMainMenuContributor());
+            });
+
+            services.Configure<VirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.AddEmbedded<AbpIdentityWebModule>("Volo.Abp.Identity.Web");
+            });
+
+            services.Configure<AbpLocalizationOptions>(options =>
+            {
+                options.Resources
+                    .Get<IdentityResource>()
+                    .AddBaseTypes(
+                        typeof(AbpValidationResource),
+                        typeof(AbpUiResource)
+                    ).AddVirtualJson("/Localization/Resources/AbpIdentity");
+            });
+
+            services.Configure<AbpAutoMapperOptions>(options =>
+            {
+                options.AddProfile<AbpIdentityWebAutoMapperProfile>(validate: true);
+            });
+
+            services.Configure<RazorPagesOptions>(options =>
+            {
+                options.Conventions.AuthorizePage("/Identity/Users/Index", IdentityPermissions.Users.Default);
+                options.Conventions.AuthorizePage("/Identity/Users/CreateModal", IdentityPermissions.Users.Create);
+                options.Conventions.AuthorizePage("/Identity/Users/EditModal", IdentityPermissions.Users.Update);
+                options.Conventions.AuthorizePage("/Identity/Roles/Index", IdentityPermissions.Roles.Default);
+                options.Conventions.AuthorizePage("/Identity/Roles/CreateModal", IdentityPermissions.Roles.Create);
+                options.Conventions.AuthorizePage("/Identity/Roles/EditModal", IdentityPermissions.Roles.Update);
+            });
+
+            services.AddAssemblyOf<AbpIdentityWebModule>();
+        }
+    }
+}
