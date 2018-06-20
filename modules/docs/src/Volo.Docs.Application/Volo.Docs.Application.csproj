@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Volo.Docs.Application.Contracts\Volo.Docs.Application.Contracts.csproj" />
+    <ProjectReference Include="..\Volo.Docs.Domain\Volo.Docs.Domain.csproj" />
+    <ProjectReference Include="..\..\..\abp\src\Volo.Abp.AutoMapper\Volo.Abp.AutoMapper.csproj" />
+    <ProjectReference Include="..\..\..\abp\src\Volo.Abp.Caching\Volo.Abp.Caching.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Octokit" Version="0.29.0" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,14 @@
+{
+  "name": "bootstrap-toc",
+  "homepage": "https://github.com/afeld/bootstrap-toc",
+  "version": "0.4.1",
+  "_release": "0.4.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.4.1",
+    "commit": "a46628385301df48d2a0d813b2a7f529a074662b"
+  },
+  "_source": "https://github.com/afeld/bootstrap-toc.git",
+  "_target": "0.4.1",
+  "_originalSource": "bootstrap-toc"
+}

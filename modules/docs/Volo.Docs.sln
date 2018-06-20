@@ -1,0 +1,95 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{42416152-5BAB-4706-93A6-57A19E71FE14}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Docs.Domain.Shared", "src\Volo.Docs.Domain.Shared\Volo.Docs.Domain.Shared.csproj", "{ECE3F02A-3189-4159-A29C-D7C3D146DE36}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Docs.Domain", "src\Volo.Docs.Domain\Volo.Docs.Domain.csproj", "{AC02A635-260F-4FE9-9173-A7F8D7777263}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Docs.Application.Contracts", "src\Volo.Docs.Application.Contracts\Volo.Docs.Application.Contracts.csproj", "{E70D5691-90FF-44BF-BF16-152B161163D0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Docs.Application", "src\Volo.Docs.Application\Volo.Docs.Application.csproj", "{B12622E8-20C7-44DB-8088-33844731469A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Docs.EntityFrameworkCore", "src\Volo.Docs.EntityFrameworkCore\Volo.Docs.EntityFrameworkCore.csproj", "{2D35B1A4-6D22-454D-8C20-46CA7A74535E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Docs.HttpApi", "src\Volo.Docs.HttpApi\Volo.Docs.HttpApi.csproj", "{30808C64-F590-47F7-AF8A-256F6B6E186B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Docs.HttpApi.Client", "src\Volo.Docs.HttpApi.Client\Volo.Docs.HttpApi.Client.csproj", "{BF3FDDFF-BED8-422C-82E9-07F181A2D47F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Docs.Web", "src\Volo.Docs.Web\Volo.Docs.Web.csproj", "{871FB966-C89F-4AF5-BB1D-172625AA571C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "app", "app", "{555508AD-F593-43E3-9354-9FA51512F181}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.DocsTestApp", "app\Volo.DocsTestApp\Volo.DocsTestApp.csproj", "{30BC20A3-85CE-4907-8FD0-54153C3F190C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.DocsTestApp.EntityFrameworkCore", "app\Volo.DocsTestApp.EntityFrameworkCore\Volo.DocsTestApp.EntityFrameworkCore.csproj", "{A5F88BCB-6B22-4E2D-AE89-AEF1E3DC727A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{ECE3F02A-3189-4159-A29C-D7C3D146DE36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECE3F02A-3189-4159-A29C-D7C3D146DE36}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECE3F02A-3189-4159-A29C-D7C3D146DE36}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECE3F02A-3189-4159-A29C-D7C3D146DE36}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC02A635-260F-4FE9-9173-A7F8D7777263}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC02A635-260F-4FE9-9173-A7F8D7777263}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC02A635-260F-4FE9-9173-A7F8D7777263}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC02A635-260F-4FE9-9173-A7F8D7777263}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E70D5691-90FF-44BF-BF16-152B161163D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E70D5691-90FF-44BF-BF16-152B161163D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E70D5691-90FF-44BF-BF16-152B161163D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E70D5691-90FF-44BF-BF16-152B161163D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B12622E8-20C7-44DB-8088-33844731469A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B12622E8-20C7-44DB-8088-33844731469A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B12622E8-20C7-44DB-8088-33844731469A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B12622E8-20C7-44DB-8088-33844731469A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D35B1A4-6D22-454D-8C20-46CA7A74535E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D35B1A4-6D22-454D-8C20-46CA7A74535E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D35B1A4-6D22-454D-8C20-46CA7A74535E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D35B1A4-6D22-454D-8C20-46CA7A74535E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30808C64-F590-47F7-AF8A-256F6B6E186B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30808C64-F590-47F7-AF8A-256F6B6E186B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30808C64-F590-47F7-AF8A-256F6B6E186B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30808C64-F590-47F7-AF8A-256F6B6E186B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF3FDDFF-BED8-422C-82E9-07F181A2D47F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF3FDDFF-BED8-422C-82E9-07F181A2D47F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF3FDDFF-BED8-422C-82E9-07F181A2D47F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF3FDDFF-BED8-422C-82E9-07F181A2D47F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{871FB966-C89F-4AF5-BB1D-172625AA571C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{871FB966-C89F-4AF5-BB1D-172625AA571C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{871FB966-C89F-4AF5-BB1D-172625AA571C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{871FB966-C89F-4AF5-BB1D-172625AA571C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30BC20A3-85CE-4907-8FD0-54153C3F190C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30BC20A3-85CE-4907-8FD0-54153C3F190C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30BC20A3-85CE-4907-8FD0-54153C3F190C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30BC20A3-85CE-4907-8FD0-54153C3F190C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5F88BCB-6B22-4E2D-AE89-AEF1E3DC727A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5F88BCB-6B22-4E2D-AE89-AEF1E3DC727A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5F88BCB-6B22-4E2D-AE89-AEF1E3DC727A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5F88BCB-6B22-4E2D-AE89-AEF1E3DC727A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{ECE3F02A-3189-4159-A29C-D7C3D146DE36} = {42416152-5BAB-4706-93A6-57A19E71FE14}
+		{AC02A635-260F-4FE9-9173-A7F8D7777263} = {42416152-5BAB-4706-93A6-57A19E71FE14}
+		{E70D5691-90FF-44BF-BF16-152B161163D0} = {42416152-5BAB-4706-93A6-57A19E71FE14}
+		{B12622E8-20C7-44DB-8088-33844731469A} = {42416152-5BAB-4706-93A6-57A19E71FE14}
+		{2D35B1A4-6D22-454D-8C20-46CA7A74535E} = {42416152-5BAB-4706-93A6-57A19E71FE14}
+		{30808C64-F590-47F7-AF8A-256F6B6E186B} = {42416152-5BAB-4706-93A6-57A19E71FE14}
+		{BF3FDDFF-BED8-422C-82E9-07F181A2D47F} = {42416152-5BAB-4706-93A6-57A19E71FE14}
+		{871FB966-C89F-4AF5-BB1D-172625AA571C} = {42416152-5BAB-4706-93A6-57A19E71FE14}
+		{30BC20A3-85CE-4907-8FD0-54153C3F190C} = {555508AD-F593-43E3-9354-9FA51512F181}
+		{A5F88BCB-6B22-4E2D-AE89-AEF1E3DC727A} = {555508AD-F593-43E3-9354-9FA51512F181}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {13691265-2547-4FFF-B757-E8FACB05679D}
+	EndGlobalSection
+EndGlobal

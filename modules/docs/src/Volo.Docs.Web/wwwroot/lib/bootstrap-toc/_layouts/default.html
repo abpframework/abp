@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Table of Contents plugin for Bootstrap</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-fork-ribbon-css/0.1.1/gh-fork-ribbon.min.css" />
+    <!--[if lt IE 9]>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-fork-ribbon-css/0.1.1/gh-fork-ribbon.ie.min.css" />
+    <![endif]-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ site.baseurl }}/bootstrap-toc.css" media="screen" charset="utf-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css">
+    <link rel="stylesheet" href="{{ site.baseurl }}/assets/screen.css" media="screen" charset="utf-8">
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
+    <script src="{{ site.baseurl }}/bootstrap-toc.js" charset="utf-8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/highlight.min.js"></script>
+    <script type="text/javascript">
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-19048260-11', 'auto');
+      ga('send', 'pageview');
+
+      hljs.initHighlightingOnLoad();
+
+      $(function() {
+        $('#toc').append('<div class="hint">(creates this)</div>');
+      });
+    </script>
+  </head>
+  <body data-spy="scroll" data-target="#toc">
+    <div class="github-fork-ribbon-wrapper right">
+      <div class="github-fork-ribbon">
+        <a href="https://github.com/afeld/bootstrap-toc">Fork me on GitHub</a>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-3">
+          <nav id="toc" data-spy="affix" data-toggle="toc"></nav>
+        </div>
+        <div class="col-sm-9">
+          {{ content }}
+          <footer>
+            <a href="https://twitter.com/aidanfeldman" class="twitter-follow-button" data-show-count="false" data-size="large">Follow @aidanfeldman</a>
+            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+          </footer>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

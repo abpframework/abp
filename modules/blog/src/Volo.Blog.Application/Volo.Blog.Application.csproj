@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Volo.Blog.Application.Contracts\Volo.Blog.Application.Contracts.csproj" />
+    <ProjectReference Include="..\Volo.Blog.Domain\Volo.Blog.Domain.csproj" />
+    <ProjectReference Include="..\..\..\abp\src\Volo.Abp.AutoMapper\Volo.Abp.AutoMapper.csproj" />
+    <ProjectReference Include="..\..\..\abp\src\Volo.Abp.Caching\Volo.Abp.Caching.csproj" />
+  </ItemGroup>
+
+</Project>

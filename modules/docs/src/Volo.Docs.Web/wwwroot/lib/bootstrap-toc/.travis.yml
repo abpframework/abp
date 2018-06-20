@@ -1,0 +1,10 @@
+sudo: false
+language: node_js
+node_js:
+  - "5.1"
+branches:
+  only:
+    - /.*/
+cache:
+  directories:
+    - node_modules
