@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
@@ -14,7 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Volo.Abp.Users.EntityFrameworkCore\Volo.Abp.Users.EntityFrameworkCore.csproj" />
-    <ProjectReference Include="..\..\src\Volo.Abp.Users.Tests.Shared\Volo.Abp.Users.Tests.Shared.csproj" />
+    <ProjectReference Include="..\..\test\Volo.Abp.Users.Tests.Shared\Volo.Abp.Users.Tests.Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>

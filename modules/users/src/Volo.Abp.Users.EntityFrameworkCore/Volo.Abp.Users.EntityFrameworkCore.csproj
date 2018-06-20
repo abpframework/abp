@@ -14,7 +14,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\abp\src\Volo.Abp.EntityFrameworkCore\Volo.Abp.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.EntityFrameworkCore\Volo.Abp.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\Volo.Abp.Users.Domain\Volo.Abp.Users.Domain.csproj" />
   </ItemGroup>
 

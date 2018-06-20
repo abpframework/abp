@@ -14,7 +14,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\abp\src\Volo.Abp.Core\Volo.Abp.Core.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Core\Volo.Abp.Core.csproj" />
   </ItemGroup>
 
 </Project>
