@@ -6,13 +6,13 @@
 @inject IHtmlLocalizer<IdentityResource> L
 @section styles {
     <abp-style-bundle name="@typeof(IndexModel).FullName">
-        <abp-bundle-file src="/pages/identity/roles/index.css" />
+        <abp-style src="/pages/identity/roles/index.css" />
     </abp-style-bundle>
 }
 @section scripts {
     <abp-script-bundle name="@typeof(IndexModel).FullName">
-        <abp-bundle-file src="/pages/abp-permission-management/permission-management-modal.js" />
-        <abp-bundle-file src="/pages/identity/roles/index.js" />
+        <abp-script src="/pages/abp-permission-management/permission-management-modal.js" />
+        <abp-script src="/pages/identity/roles/index.js" />
     </abp-script-bundle>
 }
 <abp-card id="IdentityRolesWrapper">
