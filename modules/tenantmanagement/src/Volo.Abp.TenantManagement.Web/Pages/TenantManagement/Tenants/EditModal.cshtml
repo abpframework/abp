@@ -1,0 +1,19 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.TenantManagement.Localization
+@using Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants
+@model EditModalModel
+@inject IHtmlLocalizer<AbpTenantManagementResource> L
+@{
+    Layout = null;
+}
+<form method="post" asp-page="/TenantManagement/Tenants/EditModal" autocomplete="off">
+    <abp-modal>
+        <abp-modal-header title="@L["Edit"].Value"></abp-modal-header>
+        <abp-modal-body>
+            <input asp-for="Tenant.Id" />
+            <abp-input asp-for="Tenant.Name" label="@L["TenantName"].Value" />
+        </abp-modal-body>
+        <abp-modal-footer></abp-modal-footer>
+    </abp-modal>
+</form>

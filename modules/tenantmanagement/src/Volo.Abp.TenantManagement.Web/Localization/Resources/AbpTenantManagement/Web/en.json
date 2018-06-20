@@ -1,0 +1,10 @@
+{
+  "culture": "en",
+  "texts": {
+    "Menu:TenantManagement": "Tenant management",
+    "Tenants": "Tenants",
+    "NewTenant": "New tenant",
+    "TenantName": "Tenant name",
+    "TenantDeletionConfirmationMessage": "Tenant '{0}' will be deleted. Do you confirm that?"
+  }
+}
