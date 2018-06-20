@@ -12,7 +12,7 @@
   
   <ItemGroup>
     <ProjectReference Include="..\..\src\Volo.Docs.EntityFrameworkCore\Volo.Docs.EntityFrameworkCore.csproj" />
-    <ProjectReference Include="..\..\..\abp\src\Volo.Abp.EntityFrameworkCore.SqlServer\Volo.Abp.EntityFrameworkCore.SqlServer.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.EntityFrameworkCore.SqlServer\Volo.Abp.EntityFrameworkCore.SqlServer.csproj" />
   </ItemGroup>
 
 </Project>
