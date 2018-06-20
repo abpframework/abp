@@ -16,7 +16,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.TenantManagement.Domain\Volo.Abp.TenantManagement.Domain.csproj" />
 
-    <ProjectReference Include="..\..\..\abp\src\Volo.Abp.MongoDB\Volo.Abp.MongoDB.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.MongoDB\Volo.Abp.MongoDB.csproj" />
   </ItemGroup>
   
 </Project>

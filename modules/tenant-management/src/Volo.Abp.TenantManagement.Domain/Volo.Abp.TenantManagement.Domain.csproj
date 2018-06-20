@@ -16,11 +16,11 @@
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.TenantManagement.Domain.Shared\Volo.Abp.TenantManagement.Domain.Shared.csproj" />
 
-    <ProjectReference Include="..\..\..\abp\src\Volo.Abp.AutoMapper\Volo.Abp.AutoMapper.csproj" />
-    <ProjectReference Include="..\..\..\abp\src\Volo.Abp.Data\Volo.Abp.Data.csproj" />
-    <ProjectReference Include="..\..\..\abp\src\Volo.Abp.Ddd.Domain\Volo.Abp.Ddd.Domain.csproj" />
-    <ProjectReference Include="..\..\..\abp\src\Volo.Abp.MultiTenancy.Abstractions\Volo.Abp.MultiTenancy.Abstractions.csproj" />
-    <ProjectReference Include="..\..\..\abp\src\Volo.Abp.UI\Volo.Abp.UI.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AutoMapper\Volo.Abp.AutoMapper.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Data\Volo.Abp.Data.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Ddd.Domain\Volo.Abp.Ddd.Domain.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.MultiTenancy.Abstractions\Volo.Abp.MultiTenancy.Abstractions.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.UI\Volo.Abp.UI.csproj" />
   </ItemGroup>
 
 </Project>
