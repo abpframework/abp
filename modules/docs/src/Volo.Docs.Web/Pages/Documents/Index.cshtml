@@ -1,0 +1,13 @@
+﻿@page
+@using Volo.Docs.Pages.Documents
+@model IndexModel
+@{
+}
+<h2>Projects</h2>
+
+<ul>
+    @foreach (var project in Model.Projects)
+    {
+        <li><a asp-page="./Project/Index" asp-route-projectName="@project.ShortName" asp-route-version="latest">@project.Name</a></li>   
+    }
+</ul>

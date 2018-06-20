@@ -1,0 +1,52 @@
+﻿@page
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.Identity
+@using Volo.Abp.Identity.Localization
+@using Volo.Abp.Identity.Web.Pages.Identity.Users
+@model IndexModel
+@inject IHtmlLocalizer<IdentityResource> L
+@inject IAuthorizationService Authorization
+@section styles {
+    <abp-style-bundle name="@typeof(IndexModel).FullName">
+        <abp-style src="/pages/identity/users/index.css" />
+    </abp-style-bundle>
+}
+
+@section scripts {
+    <abp-script-bundle name="@typeof(IndexModel).FullName">
+        <abp-script src="/pages/abp-permission-management/permission-management-modal.js" />
+        <abp-script src="/pages/identity/users/index.js" />
+    </abp-script-bundle>
+}
+
+<abp-card id="IdentityUsersWrapper">
+    <abp-card-header>
+        <div class="row">
+            <div class="col-md-6">
+                <h2>@L["Users"]</h2>
+            </div>
+            <div class="col-md-6 text-right">
+                @if (await Authorization.IsGrantedAsync(IdentityPermissions.Users.Create))
+                {
+                    <button type="button" name="CreateUser" class="btn btn-primary">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                        @L["NewUser"]
+                    </button>
+                }
+            </div>
+        </div>
+    </abp-card-header>
+    <abp-card-body>
+        <table class="table table-striped nowrap">
+            <thead>
+                <tr>
+                    <th>@L["Actions"]</th>
+                    <th>@L["UserName"]</th>
+                    <th>@L["EmailAddress"]</th>
+                    <th>@L["PhoneNumber"]</th>
+                </tr>
+            </thead>
+        </table>
+    </abp-card-body>
+</abp-card>

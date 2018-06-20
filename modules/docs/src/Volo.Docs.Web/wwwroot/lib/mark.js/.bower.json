@@ -1,0 +1,55 @@
+{
+  "name": "mark.js",
+  "version": "8.11.0",
+  "keywords": [
+    "mark.js",
+    "markjs",
+    "mark",
+    "jquery.mark",
+    "jmHighlight",
+    "highlight",
+    "search",
+    "jquery",
+    "javascript",
+    "text",
+    "keyword"
+  ],
+  "license": "MIT",
+  "homepage": "https://markjs.io/",
+  "authors": [
+    {
+      "name": "Julian Motz",
+      "homepage": "https://github.com/julmot"
+    }
+  ],
+  "description": "Highlight keywords using JavaScript. Intended for every use case. Can e.g. be used to mark text in search results.",
+  "main": "dist/mark.js",
+  "moduleType": [
+    "global",
+    "amd"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/julmot/mark.js.git"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "jquery": ">1.10"
+  },
+  "ignore": [
+    "*",
+    "!dist/*",
+    "!LICENSE",
+    "!README.md"
+  ],
+  "_release": "8.11.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "8.11.0",
+    "commit": "c62a4a3808e3462dab72b44fa989ea3fa10f3c5b"
+  },
+  "_source": "https://github.com/julmot/mark.js.git",
+  "_target": "^8.11.0",
+  "_originalSource": "mark.js",
+  "_direct": true
+}

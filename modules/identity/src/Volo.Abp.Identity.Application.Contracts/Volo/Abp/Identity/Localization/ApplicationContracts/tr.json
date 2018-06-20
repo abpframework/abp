@@ -1,0 +1,12 @@
+﻿{
+  "culture": "tr",
+  "texts": {
+    "Permission:IdentityManagement": "Kimlik yönetimi",
+    "Permission:RoleManagement": "Rol yönetimi",
+    "Permission:Create": "Oluşturma",
+    "Permission:Edit": "Düzenleme",
+    "Permission:Delete": "Silme",
+    "Permission:ChangePermissions": "İzinleri değiştirme",
+    "Permission:UserManagement": "Kullanıcı yönetimi"
+  }
+}

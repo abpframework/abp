@@ -1,0 +1,18 @@
+﻿@page
+@using Microsoft.Extensions.Localization
+@using Volo.Abp.TenantManagement.Localization
+@using Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants
+@model CreateModalModel
+@inject IStringLocalizer<AbpTenantManagementResource> L
+@{
+    Layout = null;
+}
+<form method="post" asp-page="/TenantManagement/Tenants/CreateModal">
+    <abp-modal>
+        <abp-modal-header title="@L["NewTenant"]"></abp-modal-header>
+        <abp-modal-body>
+            <abp-input asp-for="Tenant.Name" label="@L["TenantName"].Value"  />
+        </abp-modal-body>
+        <abp-modal-footer></abp-modal-footer>
+    </abp-modal>
+</form>

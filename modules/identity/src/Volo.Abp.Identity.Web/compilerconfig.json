@@ -1,0 +1,10 @@
+﻿[
+  {
+    "outputFile": "wwwroot/pages/identity/users/index.css",
+    "inputFile": "wwwroot/pages/identity/users/index.less"
+  },
+  {
+    "outputFile": "wwwroot/pages/identity/users/index.es5.js",
+    "inputFile": "wwwroot/pages/identity/users/index.js"
+  }
+]

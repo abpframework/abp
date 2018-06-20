@@ -1,0 +1,35 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@using Volo.Abp.Identity.Localization
+@model Volo.Abp.Identity.Web.Pages.Identity.Users.EditModalModel
+@inject IHtmlLocalizer<IdentityResource> L
+@{
+    Layout = null;
+}
+<form method="post" asp-page="/Identity/Users/EditModal">
+    <abp-modal>
+        <abp-modal-header title="@L["Edit"].Value"></abp-modal-header>
+        <abp-modal-body>
+            <abp-tabs name="create-user-modal-tabs">
+                <abp-tab title="@L["UserInformations"].Value">
+                    <input asp-for="UserInfo.Id" />
+                    <abp-input asp-for="UserInfo.UserName" />
+                    <abp-input asp-for="UserInfo.Email" />
+                    <abp-input asp-for="UserInfo.PhoneNumber" />
+                    <abp-input asp-for="UserInfo.LockoutEnabled" />
+                    <abp-input asp-for="UserInfo.TwoFactorEnabled" />
+                </abp-tab>
+                <abp-tab title="@L["Roles"].Value">
+                    @for (var i = 0; i < Model.Roles.Length; i++)
+                    {
+                        <abp-input asp-for="@Model.Roles[i].IsAssigned" label="@Model.Roles[i].Name" />
+                        <input asp-for="@Model.Roles[i].Name" />
+                    }
+                </abp-tab>
+            </abp-tabs>
+            <div asp-validation-summary="All"></div>
+        </abp-modal-body>
+        <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)"></abp-modal-footer>
+    </abp-modal>
+</form>

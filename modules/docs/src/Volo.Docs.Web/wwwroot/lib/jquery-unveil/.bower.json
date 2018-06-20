@@ -1,0 +1,18 @@
+{
+  "name": "jquery-unveil",
+  "version": "1.3.0",
+  "main": [
+    "jquery.unveil.js"
+  ],
+  "homepage": "https://github.com/luis-almeida/unveil",
+  "_release": "1.3.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "1.3.0",
+    "commit": "ebd5ed98086c963e2dae6f5bda6e9fbafb3614de"
+  },
+  "_source": "https://github.com/luis-almeida/unveil.git",
+  "_target": "^1.3.0",
+  "_originalSource": "unveil",
+  "_direct": true
+}

@@ -1,0 +1,10 @@
+﻿{
+  "culture": "tr",
+  "texts": {
+    "Menu:TenantManagement": "Müşteri yönetimi",
+    "Tenants": "Müşteriler",
+    "NewTenant": "Yeni müşteri",
+    "TenantName": "Müşteri adı",
+    "TenantDeletionConfirmationMessage": "'{0}' isimli müşteri silinecektir. Onaylıyor musunuz?"
+  }
+}

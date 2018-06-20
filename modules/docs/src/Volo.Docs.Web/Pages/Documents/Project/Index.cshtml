@@ -1,0 +1,106 @@
+﻿@page
+@model Volo.Docs.Pages.Documents.Project.IndexModel
+@{
+    ViewBag.FluidLayout = true;
+}
+@section styles {
+    <link href="~/lib/bootstrap-toc/dist/bootstrap-toc.css" rel="stylesheet" type="text/css" />
+    <link href="~/pages/documents/project/index.css" rel="stylesheet" type="text/css" />
+}
+@section scripts {
+    <script src="~/lib/mark.js/dist/jquery.mark.min.js" charset="UTF-8"></script>
+    <script src="~/lib/bootstrap-toc/dist/bootstrap-toc.js" charset="UTF-8"></script>
+    <script src="~/lib/anchor-js/anchor.min.js"></script>
+    <script src="~/lib/jquery-unveil/jquery.unveil.js" charset="UTF-8"></script>
+    <script src="~/lib/clipboard/dist/clipboard.min.js"></script>
+
+    <script src="~/pages/documents/project/index.js" charset="UTF-8"></script>
+}
+
+<abp-row>
+    <abp-column>
+        <script>
+            (function () {
+                var cx = "@Model.Document.Project.GoogleCustomSearchId";
+                var gcse = document.createElement('script');
+                gcse.type = 'text/javascript';
+                gcse.async = true;
+                gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+                var s = document.getElementsByTagName('script')[0];
+                s.parentNode.insertBefore(gcse, s);
+            })();
+        </script>
+        <gcse:search noResultsString='No documents found!'></gcse:search>
+    </abp-column>
+</abp-row>
+
+<div class="row flex-xl-nowrap" id="docsContainer">
+
+    <abp-column size="_12" size-md="_3" size-xl="_2" class="bd-sidebar">
+        <div class="bd-search align-items-center d-none d-md-block">
+            <input class="form-control ds-input flat"
+                   id="filterInput"
+                   placeholder="Filter..."
+                   autocomplete="off"
+                   spellcheck="false"
+                   dir="auto"
+                   type="search">
+        </div>
+
+        @if (Model.Versions.Any())
+        {
+            <div class="form-horizontal document-version">
+                <div class="form-group">
+                    <label class="col-md-3 col-sm-3 control-label d-none d-lg-block">Version</label>
+                    <div class="col-lg-9 col-md-12  d-flex ">
+                        @Html.DropDownList("DocumentVersion", Model.Versions.Select(v => new SelectListItem
+                        {
+                            Text = v.DisplayText,
+                            Value = "/documents/" + Model.ProjectName + "/" + v.Version + "/" + Model.DocumentName,
+                            Selected = (v.Version == Model.Version)
+                        }), new { @class = "form-control flat" })
+
+                        <button class="btn btn-link bd-search-docs-toggle d-md-none p-0 ml-3"
+                                type="button"
+                                data-toggle="collapse"
+                                data-target="#bd-docs-nav" aria-controls="bd-docs-nav"
+                                aria-expanded="false" aria-label="Toggle docs navigation">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 30 30" width="30" height="30" focusable="false">
+                                <title>Menu</title>
+                                <path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-miterlimit="10" d="M4 7h22M4 15h22M4 23h22" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <nav class="bd-links" id="bd-docs-nav">
+            @* TODO: removed collapse class, why it's needed? *@
+            @Html.Raw(Model.NavigationDocument.Content)
+        </nav>
+    </abp-column>
+
+    <main class="col-12 col-md-8 col-xl-8 py-md-3 pl-md-5 bd-content" role="main">
+        <div class="top-toc d-none d-md-block d-xl-none">
+            <p class="toc-ticle">In this document</p>
+            <nav class="toc-navigaton"></nav>
+        </div>
+
+        <h2 class="document-title">@Model.Document.Title</h2>
+        
+        <div class="document-toolbar">
+            @if (!string.IsNullOrEmpty(Model.Document.EditLink))
+            {
+                <a href="@Model.Document.EditLink" target="_blank"> <i class="fa fa-edit"></i> Edit @*TODO: localize*@</a>
+            }
+        </div>
+
+        @Html.Raw(Model.Document.Content)
+    </main>
+
+    <div class="d-none d-xl-block col-xl-2 bd-toc">
+        <nav id="toc" data-spy="affix" class="affix toc-navigaton sidebar-toc"></nav>
+    </div>
+
+</div>

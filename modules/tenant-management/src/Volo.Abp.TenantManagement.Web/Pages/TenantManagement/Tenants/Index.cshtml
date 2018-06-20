@@ -1,0 +1,34 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.TenantManagement.Localization
+@using Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants
+@model IndexModel
+@inject IHtmlLocalizer<AbpTenantManagementResource> L
+@section styles {
+    <link rel="stylesheet" type="text/css" href="~/modules/multi-tenancy/views/tenants/index.css" />
+}
+@section scripts {
+    <script type="text/javascript" src="~/modules/multi-tenancy/views/tenants/index.js"></script>
+}
+<abp-card id="TenantsWrapper">
+    <abp-card-header>
+        <abp-row>
+            <abp-column size-md="_6">
+                <h2>@L["Tenants"]</h2>
+            </abp-column>
+            <abp-column size-md="_6" class="text-right">
+                <abp-button button-type="Primary" name="CreateTenant" icon="plus" text="@L["NewTenant"].Value" />
+            </abp-column>
+        </abp-row>
+    </abp-card-header>
+    <abp-card-body>
+        <table class="table table-striped nowrap">
+            <thead>
+            <tr>
+                <th>@L["Actions"]</th>
+                <th>@L["TenantName"]</th>
+            </tr>
+            </thead>
+        </table>
+    </abp-card-body>
+</abp-card>
