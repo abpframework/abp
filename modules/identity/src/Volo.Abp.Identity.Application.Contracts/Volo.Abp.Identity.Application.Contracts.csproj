@@ -20,10 +20,10 @@
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.Identity.Domain.Shared\Volo.Abp.Identity.Domain.Shared.csproj" />
 
-    <ProjectReference Include="..\..\..\abp-permissionmanagement\src\Volo.Abp.PermissionManagement.Application.Contracts\Volo.Abp.PermissionManagement.Application.Contracts.csproj" />
+    <ProjectReference Include="..\..\..\permission-management\src\Volo.Abp.PermissionManagement.Application.Contracts\Volo.Abp.PermissionManagement.Application.Contracts.csproj" />
 
-    <ProjectReference Include="..\..\..\abp\src\Volo.Abp.Authorization\Volo.Abp.Authorization.csproj" />
-    <ProjectReference Include="..\..\..\abp\src\Volo.Abp.Ddd.Application\Volo.Abp.Ddd.Application.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Authorization\Volo.Abp.Authorization.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Ddd.Application\Volo.Abp.Ddd.Application.csproj" />
   </ItemGroup>
 
 </Project>

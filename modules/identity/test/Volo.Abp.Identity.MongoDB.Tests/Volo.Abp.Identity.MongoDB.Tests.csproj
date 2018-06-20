@@ -15,7 +15,7 @@
     <ProjectReference Include="..\..\src\Volo.Abp.Identity.MongoDB\Volo.Abp.Identity.MongoDB.csproj" />
     <ProjectReference Include="..\Volo.Abp.Identity.TestBase\Volo.Abp.Identity.TestBase.csproj" />
 
-    <ProjectReference Include="..\..\..\abp-permissionmanagement\src\Volo.Abp.PermissionManagement.MongoDB\Volo.Abp.PermissionManagement.MongoDB.csproj" />
+    <ProjectReference Include="..\..\..\permission-management\src\Volo.Abp.PermissionManagement.MongoDB\Volo.Abp.PermissionManagement.MongoDB.csproj" />
   </ItemGroup>
 
   <ItemGroup>

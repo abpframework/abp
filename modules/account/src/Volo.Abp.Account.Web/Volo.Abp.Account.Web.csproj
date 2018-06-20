@@ -21,9 +21,9 @@
   </ItemGroup>
   
   <ItemGroup>
-    <ProjectReference Include="..\..\..\abp-identity\src\Volo.Abp.Identity.Domain\Volo.Abp.Identity.Domain.csproj" />
+    <ProjectReference Include="..\..\..\identity\src\Volo.Abp.Identity.Domain\Volo.Abp.Identity.Domain.csproj" />
     
-    <ProjectReference Include="..\..\..\abp\src\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.csproj" />
   </ItemGroup>
 
 </Project>
