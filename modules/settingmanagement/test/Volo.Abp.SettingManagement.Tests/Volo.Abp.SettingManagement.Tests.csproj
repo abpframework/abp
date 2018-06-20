@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <AssemblyName>Volo.Abp.SettingManagement.Tests</AssemblyName>
+    <PackageId>Volo.Abp.SettingManagement.Tests</PackageId>
+    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <RootNamespace />
+  </PropertyGroup>
+
+  <ItemGroup>
+    
+    <ProjectReference Include="..\..\..\abp-users\src\Volo.Abp.Users.Abstractions\Volo.Abp.Users.Abstractions.csproj" />
+    
+    <ProjectReference Include="..\Volo.Abp.SettingManagement.EntityFrameworkCore.Tests\Volo.Abp.SettingManagement.EntityFrameworkCore.Tests.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.2" />
+  </ItemGroup>
+
+</Project>

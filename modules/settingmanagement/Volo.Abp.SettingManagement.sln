@@ -1,0 +1,81 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27428.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.SettingManagement.Domain.Shared", "src\Volo.Abp.SettingManagement.Domain.Shared\Volo.Abp.SettingManagement.Domain.Shared.csproj", "{3A607A96-8248-4027-9A96-44145A84B210}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{F1BE945B-F0CF-4712-BC2B-9AF8C02059EA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.SettingManagement.Domain", "src\Volo.Abp.SettingManagement.Domain\Volo.Abp.SettingManagement.Domain.csproj", "{5236093A-E52E-4D50-89B3-09591D35C2FA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.SettingManagement.EntityFrameworkCore", "src\Volo.Abp.SettingManagement.EntityFrameworkCore\Volo.Abp.SettingManagement.EntityFrameworkCore.csproj", "{10A31B5C-B772-4F78-94A9-FE49A15D068D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{7E8D2943-ADE7-4C89-8048-0780CE07E0E0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.SettingManagement.Tests", "test\Volo.Abp.SettingManagement.Tests\Volo.Abp.SettingManagement.Tests.csproj", "{E8335ADC-D09E-4B74-8190-45A9FAF962CA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.SettingManagement.MongoDB", "src\Volo.Abp.SettingManagement.MongoDB\Volo.Abp.SettingManagement.MongoDB.csproj", "{7615D255-FB8F-49F0-81C0-F2E69F7F0CB7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.SettingManagement.TestBase", "test\Volo.Abp.SettingManagement.TestBase\Volo.Abp.SettingManagement.TestBase.csproj", "{D4A2DCB2-FA6A-43DC-9469-B6CDAA7EB489}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.SettingManagement.EntityFrameworkCore.Tests", "test\Volo.Abp.SettingManagement.EntityFrameworkCore.Tests\Volo.Abp.SettingManagement.EntityFrameworkCore.Tests.csproj", "{AFF6A7B6-A80B-4569-9F6B-CD6C72EAB6D4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.SettingManagement.MongoDB.Tests", "test\Volo.Abp.SettingManagement.MongoDB.Tests\Volo.Abp.SettingManagement.MongoDB.Tests.csproj", "{DF76DE74-1029-4FEA-8ADF-3C5636944757}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3A607A96-8248-4027-9A96-44145A84B210}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A607A96-8248-4027-9A96-44145A84B210}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A607A96-8248-4027-9A96-44145A84B210}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A607A96-8248-4027-9A96-44145A84B210}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5236093A-E52E-4D50-89B3-09591D35C2FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5236093A-E52E-4D50-89B3-09591D35C2FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5236093A-E52E-4D50-89B3-09591D35C2FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5236093A-E52E-4D50-89B3-09591D35C2FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10A31B5C-B772-4F78-94A9-FE49A15D068D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10A31B5C-B772-4F78-94A9-FE49A15D068D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10A31B5C-B772-4F78-94A9-FE49A15D068D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10A31B5C-B772-4F78-94A9-FE49A15D068D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8335ADC-D09E-4B74-8190-45A9FAF962CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8335ADC-D09E-4B74-8190-45A9FAF962CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8335ADC-D09E-4B74-8190-45A9FAF962CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8335ADC-D09E-4B74-8190-45A9FAF962CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7615D255-FB8F-49F0-81C0-F2E69F7F0CB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7615D255-FB8F-49F0-81C0-F2E69F7F0CB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7615D255-FB8F-49F0-81C0-F2E69F7F0CB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7615D255-FB8F-49F0-81C0-F2E69F7F0CB7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4A2DCB2-FA6A-43DC-9469-B6CDAA7EB489}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4A2DCB2-FA6A-43DC-9469-B6CDAA7EB489}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4A2DCB2-FA6A-43DC-9469-B6CDAA7EB489}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4A2DCB2-FA6A-43DC-9469-B6CDAA7EB489}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFF6A7B6-A80B-4569-9F6B-CD6C72EAB6D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFF6A7B6-A80B-4569-9F6B-CD6C72EAB6D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFF6A7B6-A80B-4569-9F6B-CD6C72EAB6D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFF6A7B6-A80B-4569-9F6B-CD6C72EAB6D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF76DE74-1029-4FEA-8ADF-3C5636944757}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF76DE74-1029-4FEA-8ADF-3C5636944757}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF76DE74-1029-4FEA-8ADF-3C5636944757}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF76DE74-1029-4FEA-8ADF-3C5636944757}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3A607A96-8248-4027-9A96-44145A84B210} = {F1BE945B-F0CF-4712-BC2B-9AF8C02059EA}
+		{5236093A-E52E-4D50-89B3-09591D35C2FA} = {F1BE945B-F0CF-4712-BC2B-9AF8C02059EA}
+		{10A31B5C-B772-4F78-94A9-FE49A15D068D} = {F1BE945B-F0CF-4712-BC2B-9AF8C02059EA}
+		{E8335ADC-D09E-4B74-8190-45A9FAF962CA} = {7E8D2943-ADE7-4C89-8048-0780CE07E0E0}
+		{7615D255-FB8F-49F0-81C0-F2E69F7F0CB7} = {F1BE945B-F0CF-4712-BC2B-9AF8C02059EA}
+		{D4A2DCB2-FA6A-43DC-9469-B6CDAA7EB489} = {7E8D2943-ADE7-4C89-8048-0780CE07E0E0}
+		{AFF6A7B6-A80B-4569-9F6B-CD6C72EAB6D4} = {7E8D2943-ADE7-4C89-8048-0780CE07E0E0}
+		{DF76DE74-1029-4FEA-8ADF-3C5636944757} = {7E8D2943-ADE7-4C89-8048-0780CE07E0E0}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {24B3A486-E7CA-4AA5-B76F-27D351A97E59}
+	EndGlobalSection
+EndGlobal
