@@ -1,0 +1,14 @@
+﻿@page
+@using MyCompanyName.MyProjectName.Pages
+@inherits MyProjectNamePageBase
+@model IndexModel
+@section styles {
+    <link href="~/pages/index.css" rel="stylesheet" />
+}
+<abp-card>
+    <abp-card-header>@L["Welcome"]</abp-card-header>
+    <abp-card-body>
+        <p class="app-welcome-message">@L["LongWelcomeMessage"]</p>
+        <p><a href="https://abp.io?ref=tmpl" target="_blank">abp.io</a></p>
+    </abp-card-body>
+</abp-card>
