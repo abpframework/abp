@@ -10,7 +10,6 @@ namespace Volo.BlogTestApp
 {
     public class Startup
     {
-
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddApplication<BlogTestAppModule>(options =>
