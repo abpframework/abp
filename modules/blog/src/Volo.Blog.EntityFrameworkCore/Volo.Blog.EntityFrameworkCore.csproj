@@ -7,7 +7,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Volo.Blog.Domain\Volo.Blog.Domain.csproj" />
-    <ProjectReference Include="..\..\..\abp\src\Volo.Abp.EntityFrameworkCore\Volo.Abp.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.EntityFrameworkCore\Volo.Abp.EntityFrameworkCore.csproj" />
   </ItemGroup>
 
 </Project>

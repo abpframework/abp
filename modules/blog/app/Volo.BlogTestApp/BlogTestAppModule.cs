@@ -13,7 +13,6 @@ using Volo.Abp.AspNetCore.Modularity;
 using Volo.Abp.AspNetCore.Mvc.UI;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Mvc.UI.Theming;
 using Volo.Abp.Autofac;
@@ -32,8 +31,7 @@ namespace Volo.BlogTestApp
         typeof(BlogApplicationModule),
         typeof(BlogTestAppEntityFrameworkCoreModule),
         typeof(AbpAutofacModule),
-        typeof(AbpAspNetCoreMvcUiBasicThemeModule),
-        typeof(AbpAspNetCoreMvcUiLeptonThemeModule)
+        typeof(AbpAspNetCoreMvcUiBasicThemeModule)
     )]
     public class BlogTestAppModule : AbpModule
     {
@@ -57,12 +55,11 @@ namespace Volo.BlogTestApp
             {
                 services.Configure<VirtualFileSystemOptions>(options =>
                 {
-                    options.FileSets.ReplaceEmbeddedByPyhsical<AbpUiModule>(Path.Combine(hostingEnvironment.ContentRootPath, "..\\..\\..\\abp\\src\\Volo.Abp.UI"));
-                    options.FileSets.ReplaceEmbeddedByPyhsical<AbpAspNetCoreMvcUiModule>(Path.Combine(hostingEnvironment.ContentRootPath, "..\\..\\..\\abp\\src\\Volo.Abp.AspNetCore.Mvc.UI"));
-                    options.FileSets.ReplaceEmbeddedByPyhsical<AbpAspNetCoreMvcUiBootstrapModule>(Path.Combine(hostingEnvironment.ContentRootPath, "..\\..\\..\\abp\\src\\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap"));
-                    options.FileSets.ReplaceEmbeddedByPyhsical<AbpAspNetCoreMvcUiThemeSharedModule>(Path.Combine(hostingEnvironment.ContentRootPath, "..\\..\\..\\abp\\src\\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared"));
-                    options.FileSets.ReplaceEmbeddedByPyhsical<AbpAspNetCoreMvcUiBasicThemeModule>(Path.Combine(hostingEnvironment.ContentRootPath, "..\\..\\..\\abp\\src\\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic"));
-                    options.FileSets.ReplaceEmbeddedByPyhsical<AbpAspNetCoreMvcUiLeptonThemeModule>(Path.Combine(hostingEnvironment.ContentRootPath, "..\\..\\..\\abp-lepton-mvc\\src\\Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton"));
+                    options.FileSets.ReplaceEmbeddedByPyhsical<AbpUiModule>(Path.Combine(hostingEnvironment.ContentRootPath, "..\\..\\..\\..\\framework\\src\\Volo.Abp.UI"));
+                    options.FileSets.ReplaceEmbeddedByPyhsical<AbpAspNetCoreMvcUiModule>(Path.Combine(hostingEnvironment.ContentRootPath, "..\\..\\..\\..\\framework\\src\\Volo.Abp.AspNetCore.Mvc.UI"));
+                    options.FileSets.ReplaceEmbeddedByPyhsical<AbpAspNetCoreMvcUiBootstrapModule>(Path.Combine(hostingEnvironment.ContentRootPath, "..\\..\\..\\..\\framework\\src\\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap"));
+                    options.FileSets.ReplaceEmbeddedByPyhsical<AbpAspNetCoreMvcUiThemeSharedModule>(Path.Combine(hostingEnvironment.ContentRootPath, "..\\..\\..\\..\\framework\\src\\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared"));
+                    options.FileSets.ReplaceEmbeddedByPyhsical<AbpAspNetCoreMvcUiBasicThemeModule>(Path.Combine(hostingEnvironment.ContentRootPath, "..\\..\\..\\..\\framework\\src\\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic"));
                     options.FileSets.ReplaceEmbeddedByPyhsical<BlogDomainModule>(Path.Combine(hostingEnvironment.ContentRootPath, "..\\..\\src\\Volo.Blog.Domain"));
                     options.FileSets.ReplaceEmbeddedByPyhsical<BlogWebModule>(Path.Combine(hostingEnvironment.ContentRootPath, "..\\..\\src\\Volo.Blog.Web"));
                 });

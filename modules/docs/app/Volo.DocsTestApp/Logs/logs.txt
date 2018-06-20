@@ -12510,3 +12510,219 @@ System.Collections.Generic.KeyNotFoundException: The given key 'GithubAccessToke
 2018-06-07 12:59:13.003 +03:00 [INF] Executing ObjectResult, writing value of type 'System.String'.
 2018-06-07 12:59:13.004 +03:00 [INF] Executed action Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc) in 108.287ms
 2018-06-07 12:59:13.004 +03:00 [INF] Request finished in 117.3815ms 200 text/plain; charset=utf-8
+2018-06-20 10:04:30.081 +03:00 [INF] Loaded modules:
+2018-06-20 10:04:30.096 +03:00 [INF] - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2018-06-20 10:04:30.096 +03:00 [INF] - Volo.Abp.Localization.AbpLocalizationModule
+2018-06-20 10:04:30.096 +03:00 [INF] - Volo.Docs.DocsDomainSharedModule
+2018-06-20 10:04:30.096 +03:00 [INF] - Volo.Docs.DocsApplicationContractsModule
+2018-06-20 10:04:30.096 +03:00 [INF] - Volo.Docs.DocsHttpApiModule
+2018-06-20 10:04:30.096 +03:00 [INF] - Volo.Abp.Threading.AbpThreadingModule
+2018-06-20 10:04:30.096 +03:00 [INF] - Volo.Abp.Security.AbpSecurityModule
+2018-06-20 10:04:30.096 +03:00 [INF] - Volo.Abp.AspNetCore.AbpAspNetCoreModule
+2018-06-20 10:04:30.096 +03:00 [INF] - Volo.Abp.ApiVersioning.AbpApiVersioningAbstractionsModule
+2018-06-20 10:04:30.096 +03:00 [INF] - Volo.Abp.Http.AbpHttpAbstractionsModule
+2018-06-20 10:04:30.096 +03:00 [INF] - Volo.Abp.Timing.AbpTimingModule
+2018-06-20 10:04:30.096 +03:00 [INF] - Volo.Abp.Json.AbpJsonModule
+2018-06-20 10:04:30.096 +03:00 [INF] - Volo.Abp.Http.AbpHttpModule
+2018-06-20 10:04:30.096 +03:00 [INF] - Volo.Abp.Data.AbpDataModule
+2018-06-20 10:04:30.096 +03:00 [INF] - Volo.Abp.Settings.AbpSettingsModule
+2018-06-20 10:04:30.096 +03:00 [INF] - Volo.Abp.MultiTenancy.AbpMultiTenancyAbstractionsModule
+2018-06-20 10:04:30.096 +03:00 [INF] - Volo.Abp.Auditing.AbpAuditingModule
+2018-06-20 10:04:30.096 +03:00 [INF] - Volo.Abp.EventBus.AbpEventBusModule
+2018-06-20 10:04:30.096 +03:00 [INF] - Volo.Abp.Guids.AbpGuidsModule
+2018-06-20 10:04:30.096 +03:00 [INF] - Volo.Abp.Uow.AbpUnitOfWorkModule
+2018-06-20 10:04:30.096 +03:00 [INF] - Volo.Abp.Domain.AbpDddDomainModule
+2018-06-20 10:04:30.096 +03:00 [INF] - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2018-06-20 10:04:30.096 +03:00 [INF] - Volo.Abp.Validation.AbpValidationModule
+2018-06-20 10:04:30.096 +03:00 [INF] - Volo.Abp.Authorization.AbpAuthorizationModule
+2018-06-20 10:04:30.096 +03:00 [INF] - Volo.Abp.Application.AbpDddApplicationModule
+2018-06-20 10:04:30.096 +03:00 [INF] - Volo.Abp.UI.AbpUiModule
+2018-06-20 10:04:30.096 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcModule
+2018-06-20 10:04:30.096 +03:00 [INF] - Volo.Abp.UI.Navigation.AbpUiNavigationModule
+2018-06-20 10:04:30.096 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.AbpAspNetCoreMvcUiModule
+2018-06-20 10:04:30.096 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.AbpAspNetCoreMvcUiBootstrapModule
+2018-06-20 10:04:30.096 +03:00 [INF] - Volo.Docs.DocsWebModule
+2018-06-20 10:04:30.096 +03:00 [INF] - Volo.Docs.DocsDomainModule
+2018-06-20 10:04:30.096 +03:00 [INF] - Volo.Abp.Serialization.AbpSerializationModule
+2018-06-20 10:04:30.096 +03:00 [INF] - Volo.Abp.Caching.AbpCachingModule
+2018-06-20 10:04:30.096 +03:00 [INF] - Volo.Abp.AutoMapper.AbpAutoMapperModule
+2018-06-20 10:04:30.096 +03:00 [INF] - Volo.Docs.DocsApplicationModule
+2018-06-20 10:04:30.096 +03:00 [INF] - Volo.Abp.EntityFrameworkCore.AbpEntityFrameworkCoreModule
+2018-06-20 10:04:30.096 +03:00 [INF] - Volo.Docs.EntityFrameworkCore.DocsEntityFrameworkCoreModule
+2018-06-20 10:04:30.097 +03:00 [INF] - Volo.Abp.EntityFrameworkCore.SqlServer.AbpEntityFrameworkCoreSqlServerModule
+2018-06-20 10:04:30.097 +03:00 [INF] - Volo.DocsTestApp.EntityFrameworkCore.DocsTestAppEntityFrameworkCoreModule
+2018-06-20 10:04:30.097 +03:00 [INF] - Volo.Abp.Castle.AbpCastleCoreModule
+2018-06-20 10:04:30.097 +03:00 [INF] - Volo.Abp.Autofac.AbpAutofacModule
+2018-06-20 10:04:30.097 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Bundling.AbpAspNetCoreMvcUiBundlingModule
+2018-06-20 10:04:30.097 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Packages.AbpAspNetCoreMvcUiPackagesModule
+2018-06-20 10:04:30.097 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.AbpAspNetCoreMvcUiThemeSharedModule
+2018-06-20 10:04:30.097 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.AbpAspNetCoreMvcUiBasicThemeModule
+2018-06-20 10:04:30.097 +03:00 [INF] - Volo.DocsTestApp.DocsTestAppModule
+2018-06-20 10:04:30.616 +03:00 [INF] Initialized all modules.
+2018-06-20 10:04:30.924 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/  
+2018-06-20 10:04:31.174 +03:00 [INF] Route matched with {action = "Index", controller = "Home", area = "", page = ""}. Executing action Volo.DocsTestApp.Controllers.HomeController.Index (Volo.DocsTestApp)
+2018-06-20 10:04:31.204 +03:00 [INF] Executing action method Volo.DocsTestApp.Controllers.HomeController.Index (Volo.DocsTestApp) - Validation state: "Valid"
+2018-06-20 10:04:31.211 +03:00 [INF] Executed action method Volo.DocsTestApp.Controllers.HomeController.Index (Volo.DocsTestApp), returned result Microsoft.AspNetCore.Mvc.RedirectResult in 0.18000000000000002ms.
+2018-06-20 10:04:31.220 +03:00 [INF] Executing RedirectResult, redirecting to /Documents/.
+2018-06-20 10:04:31.224 +03:00 [INF] Executed action Volo.DocsTestApp.Controllers.HomeController.Index (Volo.DocsTestApp) in 46.8615ms
+2018-06-20 10:04:31.233 +03:00 [INF] Request finished in 312.3384ms 302 
+2018-06-20 10:04:31.247 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/Documents/  
+2018-06-20 10:04:33.103 +03:00 [INF] Route matched with {page = "/Documents/Index", action = "", controller = "", area = ""}. Executing action /Documents/Index
+2018-06-20 10:04:33.173 +03:00 [INF] Executing handler method OnGet with arguments (null) - ModelState is "Valid"
+2018-06-20 10:04:33.757 +03:00 [INF] Executing RedirectToPageResult, redirecting to ./Project/Index.
+2018-06-20 10:04:33.758 +03:00 [INF] Executed action /Documents/Index in 654.27960000000007ms
+2018-06-20 10:04:33.758 +03:00 [INF] Request finished in 2510.4578ms 302 
+2018-06-20 10:04:33.766 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/documents/abp/latest/Introduction  
+2018-06-20 10:04:34.110 +03:00 [INF] Route matched with {page = "/Documents/Project/Index", action = "", controller = "", area = ""}. Executing action /Documents/Project/Index
+2018-06-20 10:04:34.135 +03:00 [INF] Executing handler method OnGet with arguments (null) - ModelState is "Valid"
+2018-06-20 10:04:40.623 +03:00 [INF] Executed action /Documents/Project/Index in 6512.2591ms
+2018-06-20 10:04:40.627 +03:00 [INF] Request finished in 6860.4379ms 200 text/html; charset=utf-8
+2018-06-20 10:04:40.666 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/libs/bootstrap/css/bootstrap.css?_v=636648456477368077  
+2018-06-20 10:04:40.673 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/libs/font-awesome/css/font-awesome.css?_v=636648456477378084  
+2018-06-20 10:04:40.674 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/libs/select2/css/select2.min.css?_v=636648456477378084  
+2018-06-20 10:04:40.675 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/libs/datatables.net-bs4/css/dataTables.bootstrap4.css?_v=636648456477378084  
+2018-06-20 10:04:40.675 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/libs/abp/jquery/abp.jquery.js?_v=636648456477398072  
+2018-06-20 10:04:40.676 +03:00 [INF] The file /libs/font-awesome/css/font-awesome.css was not modified
+2018-06-20 10:04:40.676 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/libs/toastr/toastr.min.css?_v=636648456477568081  
+2018-06-20 10:04:40.676 +03:00 [INF] The file /libs/datatables.net-bs4/css/dataTables.bootstrap4.css was not modified
+2018-06-20 10:04:40.676 +03:00 [INF] The file /libs/select2/css/select2.min.css was not modified
+2018-06-20 10:04:40.676 +03:00 [INF] The file /libs/toastr/toastr.min.css was not modified
+2018-06-20 10:04:40.677 +03:00 [INF] Sending file. Request path: '/libs/abp/jquery/abp.jquery.js'. Physical path: 'D:\Github\abp\modules\docs\app\Volo.DocsTestApp\wwwroot\libs\abp\jquery\abp.jquery.js'
+2018-06-20 10:04:40.677 +03:00 [INF] Request finished in 1.6985ms 200 application/javascript
+2018-06-20 10:04:40.677 +03:00 [INF] Request finished in 2.4823ms 304 text/css
+2018-06-20 10:04:40.677 +03:00 [INF] Request finished in 3.612ms 304 text/css
+2018-06-20 10:04:40.677 +03:00 [INF] Request finished in 1.7819ms 304 text/css
+2018-06-20 10:04:40.677 +03:00 [INF] Request finished in 4.8589ms 304 text/css
+2018-06-20 10:04:40.694 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/libs/bootstrap/js/bootstrap.bundle.js?_v=636648456477398072  
+2018-06-20 10:04:40.695 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/pages/documents/project/index.css  
+2018-06-20 10:04:40.696 +03:00 [INF] The file /pages/documents/project/index.css was not modified
+2018-06-20 10:04:40.696 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/libs/lodash/lodash.min.js?_v=636648456477318093  
+2018-06-20 10:04:40.696 +03:00 [INF] Request finished in 0.6433ms 304 text/css
+2018-06-20 10:04:40.697 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/views/shared/_AppLayout.css  
+2018-06-20 10:04:40.698 +03:00 [INF] The file /views/shared/_AppLayout.css was not modified
+2018-06-20 10:04:40.698 +03:00 [INF] Request finished in 1.2533ms 304 text/css
+2018-06-20 10:04:40.704 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/lib/bootstrap-toc/dist/bootstrap-toc.css  
+2018-06-20 10:04:40.704 +03:00 [INF] The file /lib/bootstrap-toc/dist/bootstrap-toc.css was not modified
+2018-06-20 10:04:40.704 +03:00 [INF] Request finished in 0.7595ms 304 text/css
+2018-06-20 10:04:40.710 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/libs/jquery-validation/jquery.validate.js?_v=636648456477318093  
+2018-06-20 10:04:40.710 +03:00 [INF] Sending file. Request path: '/libs/lodash/lodash.min.js'. Physical path: 'D:\Github\abp\modules\docs\app\Volo.DocsTestApp\wwwroot\libs\lodash\lodash.min.js'
+2018-06-20 10:04:40.710 +03:00 [INF] Sending file. Request path: '/libs/bootstrap/css/bootstrap.css'. Physical path: 'D:\Github\abp\modules\docs\app\Volo.DocsTestApp\wwwroot\libs\bootstrap\css\bootstrap.css'
+2018-06-20 10:04:40.711 +03:00 [INF] Sending file. Request path: '/libs/jquery-validation/jquery.validate.js'. Physical path: 'D:\Github\abp\modules\docs\app\Volo.DocsTestApp\wwwroot\libs\jquery-validation\jquery.validate.js'
+2018-06-20 10:04:40.713 +03:00 [INF] Sending file. Request path: '/libs/bootstrap/js/bootstrap.bundle.js'. Physical path: 'D:\Github\abp\modules\docs\app\Volo.DocsTestApp\wwwroot\libs\bootstrap\js\bootstrap.bundle.js'
+2018-06-20 10:04:40.714 +03:00 [INF] Request finished in 18.1125ms 200 application/javascript
+2018-06-20 10:04:40.715 +03:00 [INF] Request finished in 48.4122ms 200 text/css
+2018-06-20 10:04:40.715 +03:00 [INF] Request finished in 5.4459ms 200 application/javascript
+2018-06-20 10:04:40.715 +03:00 [INF] Request finished in 20.3885ms 200 application/javascript
+2018-06-20 10:04:40.717 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/libs/jquery-form/jquery.form.min.js?_v=636648456477318093  
+2018-06-20 10:04:40.718 +03:00 [INF] Sending file. Request path: '/libs/jquery-form/jquery.form.min.js'. Physical path: 'D:\Github\abp\modules\docs\app\Volo.DocsTestApp\wwwroot\libs\jquery-form\jquery.form.min.js'
+2018-06-20 10:04:40.719 +03:00 [INF] Request finished in 1.681ms 200 application/javascript
+2018-06-20 10:04:40.728 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/libs/abp/core/abp.js?_v=636648456477368077  
+2018-06-20 10:04:40.728 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/libs/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js?_v=636648456477328106  
+2018-06-20 10:04:40.729 +03:00 [INF] The file /libs/abp/core/abp.js was not modified
+2018-06-20 10:04:40.729 +03:00 [INF] Request finished in 0.4024ms 304 application/javascript
+2018-06-20 10:04:40.729 +03:00 [INF] Sending file. Request path: '/libs/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js'. Physical path: 'D:\Github\abp\modules\docs\app\Volo.DocsTestApp\wwwroot\libs\jquery-validation-unobtrusive\jquery.validate.unobtrusive.js'
+2018-06-20 10:04:40.729 +03:00 [INF] Request finished in 0.8429ms 200 application/javascript
+2018-06-20 10:04:40.731 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/libs/jquery/jquery.js?_v=636648456477328106  
+2018-06-20 10:04:40.733 +03:00 [INF] The file /libs/jquery/jquery.js was not modified
+2018-06-20 10:04:40.733 +03:00 [INF] Request finished in 2.3551ms 304 application/javascript
+2018-06-20 10:04:40.740 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/libs/select2/js/select2.min.js?_v=636648456477428088  
+2018-06-20 10:04:40.742 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/libs/sweetalert/sweetalert.min.js?_v=636648456477348072  
+2018-06-20 10:04:40.744 +03:00 [INF] Sending file. Request path: '/libs/sweetalert/sweetalert.min.js'. Physical path: 'D:\Github\abp\modules\docs\app\Volo.DocsTestApp\wwwroot\libs\sweetalert\sweetalert.min.js'
+2018-06-20 10:04:40.744 +03:00 [INF] Sending file. Request path: '/libs/select2/js/select2.min.js'. Physical path: 'D:\Github\abp\modules\docs\app\Volo.DocsTestApp\wwwroot\libs\select2\js\select2.min.js'
+2018-06-20 10:04:40.744 +03:00 [INF] Request finished in 2.1535ms 200 application/javascript
+2018-06-20 10:04:40.744 +03:00 [INF] Request finished in 4.4402ms 200 application/javascript
+2018-06-20 10:04:40.747 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/libs/datatables.net-bs4/js/dataTables.bootstrap4.js?_v=636648456477358077  
+2018-06-20 10:04:40.748 +03:00 [INF] Sending file. Request path: '/libs/datatables.net-bs4/js/dataTables.bootstrap4.js'. Physical path: 'D:\Github\abp\modules\docs\app\Volo.DocsTestApp\wwwroot\libs\datatables.net-bs4\js\dataTables.bootstrap4.js'
+2018-06-20 10:04:40.748 +03:00 [INF] Request finished in 0.931ms 200 application/javascript
+2018-06-20 10:04:40.749 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/libs/timeago/jquery.timeago.js?_v=636648456477328106  
+2018-06-20 10:04:40.749 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/libs/toastr/toastr.min.js?_v=636648456477638085  
+2018-06-20 10:04:40.751 +03:00 [INF] Sending file. Request path: '/libs/toastr/toastr.min.js'. Physical path: 'D:\Github\abp\modules\docs\app\Volo.DocsTestApp\wwwroot\libs\toastr\toastr.min.js'
+2018-06-20 10:04:40.752 +03:00 [INF] Request finished in 2.2153ms 200 application/javascript
+2018-06-20 10:04:40.752 +03:00 [INF] Sending file. Request path: '/libs/timeago/jquery.timeago.js'. Physical path: 'D:\Github\abp\modules\docs\app\Volo.DocsTestApp\wwwroot\libs\timeago\jquery.timeago.js'
+2018-06-20 10:04:40.752 +03:00 [INF] Request finished in 2.8666ms 200 application/javascript
+2018-06-20 10:04:40.758 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/libs/datatables.net/js/jquery.dataTables.js?_v=636648456477368077  
+2018-06-20 10:04:40.759 +03:00 [INF] The file /libs/datatables.net/js/jquery.dataTables.js was not modified
+2018-06-20 10:04:40.760 +03:00 [INF] Request finished in 2.0244ms 304 application/javascript
+2018-06-20 10:04:40.760 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/libs/abp/aspnetcore-mvc-ui-theme-shared/bootstrap/dom-event-handlers.js?_v=636634793200502732  
+2018-06-20 10:04:40.761 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore-mvc-ui-theme-shared/bootstrap/dom-event-handlers.js'. Physical path: 'D:\Github\abp\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared\wwwroot\libs\abp\aspnetcore-mvc-ui-theme-shared\bootstrap\dom-event-handlers.js'
+2018-06-20 10:04:40.762 +03:00 [INF] Request finished in 1.4449ms 200 application/javascript
+2018-06-20 10:04:40.766 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/libs/abp/aspnetcore-mvc-ui-theme-shared/jquery/jquery-extensions.js?_v=636634793200502732  
+2018-06-20 10:04:40.767 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/libs/abp/aspnetcore-mvc-ui-theme-shared/jquery-form/jquery-form-extensions.js?_v=636634793200502732  
+2018-06-20 10:04:40.767 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/libs/abp/aspnetcore-mvc-ui-theme-shared/bootstrap/modal-manager.js?_v=636634793200502732  
+2018-06-20 10:04:40.767 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore-mvc-ui-theme-shared/jquery/jquery-extensions.js'. Physical path: 'D:\Github\abp\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared\wwwroot\libs\abp\aspnetcore-mvc-ui-theme-shared\jquery\jquery-extensions.js'
+2018-06-20 10:04:40.767 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore-mvc-ui-theme-shared/bootstrap/modal-manager.js'. Physical path: 'D:\Github\abp\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared\wwwroot\libs\abp\aspnetcore-mvc-ui-theme-shared\bootstrap\modal-manager.js'
+2018-06-20 10:04:40.767 +03:00 [INF] Request finished in 0.991ms 200 application/javascript
+2018-06-20 10:04:40.768 +03:00 [INF] Request finished in 0.8941ms 200 application/javascript
+2018-06-20 10:04:40.773 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/libs/abp/aspnetcore-mvc-ui-theme-shared/sweetalert/abp-sweetalert.js?_v=636634793200502732  
+2018-06-20 10:04:40.773 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/libs/jquery-validation/localization/messages_tr.js?_v=636648456479008087  
+2018-06-20 10:04:40.773 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore-mvc-ui-theme-shared/jquery-form/jquery-form-extensions.js'. Physical path: 'D:\Github\abp\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared\wwwroot\libs\abp\aspnetcore-mvc-ui-theme-shared\jquery-form\jquery-form-extensions.js'
+2018-06-20 10:04:40.773 +03:00 [INF] Request finished in 6.7384ms 200 application/javascript
+2018-06-20 10:04:40.773 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore-mvc-ui-theme-shared/sweetalert/abp-sweetalert.js'. Physical path: 'D:\Github\abp\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared\wwwroot\libs\abp\aspnetcore-mvc-ui-theme-shared\sweetalert\abp-sweetalert.js'
+2018-06-20 10:04:40.774 +03:00 [INF] Request finished in 0.9737ms 200 application/javascript
+2018-06-20 10:04:40.774 +03:00 [INF] Sending file. Request path: '/libs/jquery-validation/localization/messages_tr.js'. Physical path: 'D:\Github\abp\modules\docs\app\Volo.DocsTestApp\wwwroot\libs\jquery-validation\localization\messages_tr.js'
+2018-06-20 10:04:40.774 +03:00 [INF] Request finished in 0.8857ms 200 application/javascript
+2018-06-20 10:04:40.776 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/Abp/ApplicationConfigurationScript  
+2018-06-20 10:04:40.782 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/Abp/ServiceProxyScript  
+2018-06-20 10:04:40.791 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/libs/abp/aspnetcore-mvc-ui-theme-shared/toastr/abp-toastr.js?_v=636634793200502732  
+2018-06-20 10:04:40.792 +03:00 [INF] The file /libs/abp/aspnetcore-mvc-ui-theme-shared/toastr/abp-toastr.js was not modified
+2018-06-20 10:04:40.792 +03:00 [INF] Request finished in 1.1833ms 304 application/javascript
+2018-06-20 10:04:40.793 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/lib/mark.js/dist/jquery.mark.min.js  
+2018-06-20 10:04:40.793 +03:00 [INF] Route matched with {area = "Abp", action = "GetAll", controller = "AbpServiceProxyScript", page = ""}. Executing action Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc)
+2018-06-20 10:04:40.793 +03:00 [INF] The file /lib/mark.js/dist/jquery.mark.min.js was not modified
+2018-06-20 10:04:40.793 +03:00 [INF] Request finished in 0.6187ms 304 application/javascript
+2018-06-20 10:04:40.801 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/lib/bootstrap-toc/dist/bootstrap-toc.js  
+2018-06-20 10:04:40.801 +03:00 [INF] Route matched with {area = "Abp", action = "Get", controller = "AbpApplicationConfigurationScript", page = ""}. Executing action Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc)
+2018-06-20 10:04:40.802 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/libs/abp/aspnetcore-mvc-ui-theme-shared/datatables/datatables-extensions.js?_v=636634793200502732  
+2018-06-20 10:04:40.803 +03:00 [INF] The file /lib/bootstrap-toc/dist/bootstrap-toc.js was not modified
+2018-06-20 10:04:40.803 +03:00 [INF] Request finished in 1.8296ms 304 application/javascript
+2018-06-20 10:04:40.804 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore-mvc-ui-theme-shared/datatables/datatables-extensions.js'. Physical path: 'D:\Github\abp\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared\wwwroot\libs\abp\aspnetcore-mvc-ui-theme-shared\datatables\datatables-extensions.js'
+2018-06-20 10:04:40.805 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/lib/anchor-js/anchor.min.js  
+2018-06-20 10:04:40.805 +03:00 [INF] Request finished in 2.7581ms 200 application/javascript
+2018-06-20 10:04:40.805 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/lib/jquery-unveil/jquery.unveil.js  
+2018-06-20 10:04:40.805 +03:00 [INF] The file /lib/anchor-js/anchor.min.js was not modified
+2018-06-20 10:04:40.805 +03:00 [INF] Request finished in 0.6428ms 304 application/javascript
+2018-06-20 10:04:40.807 +03:00 [INF] The file /lib/jquery-unveil/jquery.unveil.js was not modified
+2018-06-20 10:04:40.811 +03:00 [INF] Request finished in 5.8522ms 304 application/javascript
+2018-06-20 10:04:40.814 +03:00 [INF] Executing action method Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc) - Validation state: "Valid"
+2018-06-20 10:04:40.824 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/pages/documents/project/index.js  
+2018-06-20 10:04:40.824 +03:00 [INF] The file /pages/documents/project/index.js was not modified
+2018-06-20 10:04:40.825 +03:00 [INF] Request finished in 0.5605ms 304 application/javascript
+2018-06-20 10:04:40.826 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/lib/clipboard/dist/clipboard.min.js  
+2018-06-20 10:04:40.826 +03:00 [INF] The file /lib/clipboard/dist/clipboard.min.js was not modified
+2018-06-20 10:04:40.827 +03:00 [INF] Request finished in 1.7409ms 304 application/javascript
+2018-06-20 10:04:40.832 +03:00 [INF] Executing action method Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc) with arguments (["Volo.Abp.AspNetCore.Mvc.ProxyScripting.ServiceProxyGenerationModel"]) - Validation state: "Valid"
+2018-06-20 10:04:40.862 +03:00 [INF] Executed action method Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc), returned result Microsoft.AspNetCore.Mvc.ObjectResult in 47.310900000000004ms.
+2018-06-20 10:04:40.870 +03:00 [INF] Executing ObjectResult, writing value of type 'System.String'.
+2018-06-20 10:04:40.871 +03:00 [INF] Executed action Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc) in 70.095300000000009ms
+2018-06-20 10:04:40.872 +03:00 [INF] Request finished in 96.5725ms 200 text/plain; charset=utf-8
+2018-06-20 10:04:40.911 +03:00 [INF] Executed action method Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc), returned result Microsoft.AspNetCore.Mvc.ObjectResult in 77.287100000000009ms.
+2018-06-20 10:04:40.911 +03:00 [INF] Executing ObjectResult, writing value of type 'System.String'.
+2018-06-20 10:04:40.911 +03:00 [INF] Executed action Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc) in 118.71180000000001ms
+2018-06-20 10:04:40.911 +03:00 [INF] Request finished in 129.296ms 200 text/plain; charset=utf-8
+2018-06-20 10:04:40.923 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/libs/font-awesome/fonts/fontawesome-webfont.woff2?v=4.7.0  
+2018-06-20 10:04:40.925 +03:00 [INF] Sending file. Request path: '/libs/font-awesome/fonts/fontawesome-webfont.woff2'. Physical path: 'D:\Github\abp\modules\docs\app\Volo.DocsTestApp\wwwroot\libs\font-awesome\fonts\fontawesome-webfont.woff2'
+2018-06-20 10:04:40.925 +03:00 [INF] Request finished in 1.4187ms 200 font/woff2
+2018-06-20 10:04:41.081 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/favicon.ico  
+2018-06-20 10:04:41.082 +03:00 [INF] Request finished in 1.2865ms 404 
+2018-06-20 10:04:52.971 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/documents/abp/v3.7.2/Dynamic-Web-API  
+2018-06-20 10:04:52.972 +03:00 [INF] Route matched with {page = "/Documents/Project/Index", action = "", controller = "", area = ""}. Executing action /Documents/Project/Index
+2018-06-20 10:04:52.973 +03:00 [INF] Executing handler method OnGet with arguments (null) - ModelState is "Valid"
+2018-06-20 10:04:54.877 +03:00 [INF] Executed action /Documents/Project/Index in 1904.3715000000002ms
+2018-06-20 10:04:54.877 +03:00 [INF] Request finished in 1905.3981ms 200 text/html; charset=utf-8
+2018-06-20 10:04:54.901 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/libs/bootstrap/css/bootstrap.css?_v=636648456477368077  
+2018-06-20 10:04:54.901 +03:00 [INF] The file /libs/bootstrap/css/bootstrap.css was not modified
+2018-06-20 10:04:54.902 +03:00 [INF] Request finished in 0.5325ms 304 text/css
+2018-06-20 10:04:54.947 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/Abp/ApplicationConfigurationScript  
+2018-06-20 10:04:54.948 +03:00 [INF] Route matched with {area = "Abp", action = "Get", controller = "AbpApplicationConfigurationScript", page = ""}. Executing action Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc)
+2018-06-20 10:04:54.949 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/Abp/ServiceProxyScript  
+2018-06-20 10:04:54.949 +03:00 [INF] Executing action method Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc) - Validation state: "Valid"
+2018-06-20 10:04:54.950 +03:00 [INF] Executed action method Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc), returned result Microsoft.AspNetCore.Mvc.ObjectResult in 0.86910000000000009ms.
+2018-06-20 10:04:54.950 +03:00 [INF] Route matched with {area = "Abp", action = "GetAll", controller = "AbpServiceProxyScript", page = ""}. Executing action Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc)
+2018-06-20 10:04:54.950 +03:00 [INF] Executing ObjectResult, writing value of type 'System.String'.
+2018-06-20 10:04:54.950 +03:00 [INF] Executed action Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc) in 2.3444000000000003ms
+2018-06-20 10:04:54.951 +03:00 [INF] Request finished in 3.5853ms 200 text/plain; charset=utf-8
+2018-06-20 10:04:54.953 +03:00 [INF] Executing action method Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc) with arguments (["Volo.Abp.AspNetCore.Mvc.ProxyScripting.ServiceProxyGenerationModel"]) - Validation state: "Valid"
+2018-06-20 10:04:54.954 +03:00 [INF] Executed action method Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc), returned result Microsoft.AspNetCore.Mvc.ObjectResult in 0.62240000000000006ms.
+2018-06-20 10:04:54.954 +03:00 [INF] Executing ObjectResult, writing value of type 'System.String'.
+2018-06-20 10:04:54.954 +03:00 [INF] Executed action Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc) in 4.1163ms
+2018-06-20 10:04:54.955 +03:00 [INF] Request finished in 5.9235ms 200 text/plain; charset=utf-8

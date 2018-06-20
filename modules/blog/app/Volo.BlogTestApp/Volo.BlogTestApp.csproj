@@ -20,9 +20,8 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Volo.Blog.Application\Volo.Blog.Application.csproj" />
     <ProjectReference Include="..\..\src\Volo.Blog.Web\Volo.Blog.Web.csproj" />
-    <ProjectReference Include="..\..\..\abp\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
-    <ProjectReference Include="..\..\..\abp\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.csproj" />
-    <ProjectReference Include="..\..\..\abp-lepton-mvc\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton\Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.csproj" />
     <ProjectReference Include="..\Volo.BlogTestApp.EntityFrameworkCore\Volo.BlogTestApp.EntityFrameworkCore.csproj" />
   </ItemGroup>
 

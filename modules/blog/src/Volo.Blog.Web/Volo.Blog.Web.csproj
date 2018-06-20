@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\abp\src\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.csproj" />
     <ProjectReference Include="..\Volo.Blog.HttpApi\Volo.Blog.HttpApi.csproj" />
     <PackageReference Include="CommonMark.NET" Version="0.15.1" />
   </ItemGroup>
@@ -17,10 +17,6 @@
   <ItemGroup>
     <EmbeddedResource Include="wwwroot\**\*.*" />
     <EmbeddedResource Include="Pages\**\*.cshtml" Exclude="*.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Remove="Pages\Blog\Index.cshtml" />
   </ItemGroup>
 
 </Project>
