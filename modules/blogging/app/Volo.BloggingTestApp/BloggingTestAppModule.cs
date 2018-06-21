@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
+using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Modularity;
 using Volo.Abp.AspNetCore.Mvc.UI;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
@@ -18,7 +19,10 @@ using Volo.Abp.AspNetCore.Mvc.UI.Theming;
 using Volo.Abp.Autofac;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.Identity;
+using Volo.Abp.Identity.Web;
 using Volo.Abp.Modularity;
+using Volo.Abp.Threading;
 using Volo.Abp.UI;
 using Volo.Abp.VirtualFileSystem;
 using Volo.Blogging;
@@ -30,6 +34,9 @@ namespace Volo.BloggingTestApp
         typeof(BloggingWebModule),
         typeof(BloggingApplicationModule),
         typeof(BloggingTestAppEntityFrameworkCoreModule),
+        typeof(AbpAccountWebModule),
+        typeof(AbpIdentityWebModule),
+        typeof(AbpIdentityApplicationModule),
         typeof(AbpAutofacModule),
         typeof(AbpAspNetCoreMvcUiBasicThemeModule)
     )]
@@ -72,7 +79,6 @@ namespace Volo.BloggingTestApp
                     options.DocInclusionPredicate((docName, description) => true);
                 });
 
-
             var cultures = new List<CultureInfo> { new CultureInfo("en"), new CultureInfo("tr") };
             services.Configure<RequestLocalizationOptions>(options =>
             {
@@ -93,7 +99,14 @@ namespace Volo.BloggingTestApp
         {
             var app = context.GetApplicationBuilder();
 
-            app.UseDeveloperExceptionPage();
+            if (context.GetEnvironment().IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseErrorPage();
+            }
 
             app.UseStaticFiles();
             app.UseVirtualFiles();
@@ -117,6 +130,16 @@ namespace Volo.BloggingTestApp
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
+            });
+
+            AsyncHelper.RunSync(async () =>
+            {
+                await context.ServiceProvider
+                    .GetRequiredService<IIdentityDataSeeder>()
+                    .SeedAsync(
+                        "1q2w3E*",
+                        IdentityPermissions.GetAll()//.Union(BlogPermissions.GetAll()) //TODO: Define blog permissions
+                    );
             });
         }
     }

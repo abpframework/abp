@@ -1,5 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.Identity.EntityFrameworkCore;
+using Volo.Abp.PermissionManagement.EntityFrameworkCore;
+using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Blogging.EntityFrameworkCore;
 
 namespace Volo.BloggingTestApp.EntityFrameworkCore
@@ -16,6 +19,9 @@ namespace Volo.BloggingTestApp.EntityFrameworkCore
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.ConfigurePermissionManagement();
+            modelBuilder.ConfigureSettingManagement();
+            modelBuilder.ConfigureIdentity();
             modelBuilder.ConfigureBlogging();
         }
     }
