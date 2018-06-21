@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.Modularity;
@@ -27,7 +28,14 @@ namespace Volo.Blogging
             {
                 options.FileSets.AddEmbedded<BloggingWebModule>("Volo.Blogging");
             });
-            
+
+
+            services.Configure<RazorPagesOptions>(options =>
+            {
+                //TODO: Make configurable!
+                options.Conventions.AddPageRoute("/Blog/Posts/Index", "blog/{blogShortName}");
+                options.Conventions.AddPageRoute("/Blog/Posts/Detail", "blog/{blogShortName}/{postTitle}");
+            });
 
             services.AddAssemblyOf<BloggingWebModule>();
         }

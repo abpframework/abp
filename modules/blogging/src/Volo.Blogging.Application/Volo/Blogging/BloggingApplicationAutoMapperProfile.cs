@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Volo.Blogging.Blogs;
+using Volo.Blogging.Posts;
 
 namespace Volo.Blogging
 {
@@ -8,6 +9,7 @@ namespace Volo.Blogging
         public BloggingApplicationAutoMapperProfile()
         {
             CreateMap<Blog, BlogDto>();
+            CreateMap<Post, PostDto>();
         }
     }
 }

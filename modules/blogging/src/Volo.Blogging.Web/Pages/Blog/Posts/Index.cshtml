@@ -1,4 +1,15 @@
 ﻿@page
 @model Volo.Blogging.Pages.Blog.Posts.IndexModel
 @{
+
 }
+<h2>
+    Posts
+</h2>
+
+<ul>
+    @foreach (var post in Model.Posts)
+    {
+            <li><a asp-page="./Detail" asp-route-postTitle="@post.Title" asp-route-blogShortName="@Model.BlogShortName">@post.Title</a></li>
+    }
+</ul>

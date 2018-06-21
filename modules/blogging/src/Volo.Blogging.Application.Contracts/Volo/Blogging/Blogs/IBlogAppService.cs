@@ -10,5 +10,7 @@ namespace Volo.Blogging.Blogs
     public interface IBlogAppService : IApplicationService
     {
         Task<ListResultDto<BlogDto>> GetListAsync();
+
+        Task<BlogDto> GetByShortNameAsync(string shortName);
     }
 }

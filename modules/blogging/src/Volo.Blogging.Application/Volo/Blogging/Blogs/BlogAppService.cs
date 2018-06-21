@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
+using Volo.Abp.UI;
 
 namespace Volo.Blogging.Blogs
 {
@@ -21,5 +22,18 @@ namespace Volo.Blogging.Blogs
                 ObjectMapper.Map<List<Blog>, List<BlogDto>>(blogs)
             );
         }
+
+        public async Task<BlogDto> GetByShortNameAsync(string shortName)
+        {
+            var blog = await _blogRepository.FindByShortNameAsync(shortName);
+
+            if (blog == null)
+            {
+                throw new UserFriendlyException("Blog Doesn't exist");
+            }
+
+            return ObjectMapper.Map<Blog, BlogDto>(blog);
+        }
+        
     }
 }
