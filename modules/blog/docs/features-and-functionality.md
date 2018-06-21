@@ -4,7 +4,10 @@ The blog module takes Medium as a reference for simplicity & features.
 
 ### Overall / Ideas
 
+* Blog (Full Audited)
+  * Name
 * Post (Full Audited)
+  * BlogId
   * Title
   * Content
   * Creator
