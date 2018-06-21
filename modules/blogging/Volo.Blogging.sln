@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Blogging.TestBase", "t
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Blogging.EntityFrameworkCore.Tests", "test\Volo.Blogging.EntityFrameworkCore.Tests\Volo.Blogging.EntityFrameworkCore.Tests.csproj", "{0B9AAD44-1FCF-4AF1-838F-A09446E98E37}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Blogging.Application.Tests", "test\Volo.Blogging.Application.Tests\Volo.Blogging.Application.Tests.csproj", "{C949B953-80B3-4B36-B535-1AD74A34FEAC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +89,10 @@ Global
 		{0B9AAD44-1FCF-4AF1-838F-A09446E98E37}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0B9AAD44-1FCF-4AF1-838F-A09446E98E37}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0B9AAD44-1FCF-4AF1-838F-A09446E98E37}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C949B953-80B3-4B36-B535-1AD74A34FEAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C949B953-80B3-4B36-B535-1AD74A34FEAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C949B953-80B3-4B36-B535-1AD74A34FEAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C949B953-80B3-4B36-B535-1AD74A34FEAC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -104,6 +110,7 @@ Global
 		{14409939-5A35-4145-A5C4-F3AED1617243} = {EB4FB44A-FE39-4245-9DAD-D6437BCE3870}
 		{BBE8D8BE-1B24-49FE-86EF-3848D4BB6829} = {25B3A516-5C0D-42E3-9294-E8A9346CEE4B}
 		{0B9AAD44-1FCF-4AF1-838F-A09446E98E37} = {25B3A516-5C0D-42E3-9294-E8A9346CEE4B}
+		{C949B953-80B3-4B36-B535-1AD74A34FEAC} = {25B3A516-5C0D-42E3-9294-E8A9346CEE4B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F2BAE819-78D4-407A-9201-22473B2850B0}

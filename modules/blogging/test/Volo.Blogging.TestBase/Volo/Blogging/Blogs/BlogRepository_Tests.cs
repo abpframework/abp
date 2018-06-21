@@ -16,10 +16,10 @@ namespace Volo.Blogging.Blogs
         }
 
         [Fact]
-        public async Task FindByShortNameAsync_Temp()
+        public async Task FindByShortNameAsync()
         {
-            var blog = await BlogRepository.FindByShortNameAsync("default");
-            blog.ShouldBeNull();
+            var blog = await BlogRepository.FindByShortNameAsync("blog-1");
+            blog.ShouldNotBeNull();
         }
     }
 }
