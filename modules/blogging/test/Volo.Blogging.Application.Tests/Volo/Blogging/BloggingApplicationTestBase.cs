@@ -3,7 +3,7 @@ using Volo.Blogging.EntityFrameworkCore;
 
 namespace Volo.Blogging
 {
-    public abstract class QaApplicationTestBase : BloggingTestBase<BloggingApplicationTestModule>
+    public abstract class BloggingApplicationTestBase : BloggingTestBase<BloggingApplicationTestModule>
     {
         protected virtual void UsingDbContext(Action<IBloggingDbContext> action)
         {
