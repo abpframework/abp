@@ -4,31 +4,32 @@ The blog module takes Medium as a reference for simplicity & features.
 
 ### Overall / Ideas
 
-* Blogging (Full Audited)
+* Blog (Full Audited)
   * Name
 * Post (Full Audited)
   * BloggingId
   * Title
   * Content
-  * Creator
-  * Tags
-  * View Count
-  * Comments (Full Audited)
-    * Text
+  * *Tags*
+  * *View Count*
+  * *Comments (Full Audited)*
+    * *Text*
 * Editor
   * Markdown & WYSIWYG editor
   * Supports images, videos and code sections
   * Supports preview
 * Users
-  * Supports gravatar for profile image
+  * *Supports gravatar for profile image*
 * Supports Multi-Tenancy
 * Theming
   * Nicely split views into partials, so we can create templates by overriding some parts.
 * ORM/DB
-  * Supports EF Core & MongoDB
+  * Supports EF Core & *MongoDB*
 
 ### Pages
 
+* Blog List
+  * Goes to the blog if there is only one
 * Post List
   * Shows a list of blog post summaries (title & some part from the beginning)
     * Supports Paging & Searching
