@@ -12,8 +12,8 @@ namespace Volo.Abp.Auditing
         protected IClock Clock { get; }
 
         public AuditPropertySetter(
-            ICurrentUser currentUser, 
-            ICurrentTenant currentTenant, 
+            ICurrentUser currentUser,
+            ICurrentTenant currentTenant,
             IClock clock)
         {
             CurrentUser = currentUser;
@@ -54,16 +54,6 @@ namespace Volo.Abp.Auditing
 
         private void SetCreatorId(object targetObject)
         {
-            if (!(targetObject is ICreationAudited creationAuditedObject))
-            {
-                return;
-            }
-
-            if (creationAuditedObject.CreatorId != null)
-            {
-                return;
-            }
-
             if (!CurrentUser.Id.HasValue)
             {
                 return;
@@ -78,16 +68,33 @@ namespace Volo.Abp.Auditing
             }
 
             /* TODO: The code below is from old ABP, not implemented yet
-            if (tenantId.HasValue && MultiTenancyHelper.IsHostEntity(entity))
-            {
-                //Tenant user created a host entity
-                return;
-            }
-             */
+                if (tenantId.HasValue && MultiTenancyHelper.IsHostEntity(entity))
+                {
+                    //Tenant user created a host entity
+                    return;
+                }
+                 */
 
-            creationAuditedObject.CreatorId = CurrentUser.Id;
+            if (targetObject is IMayHaveCreator mayHaveCreatorObject)
+            {
+                if (mayHaveCreatorObject.CreatorId.HasValue && mayHaveCreatorObject.CreatorId.Value != default)
+                {
+                    return;
+                }
+
+                mayHaveCreatorObject.CreatorId = CurrentUser.Id;
+            }
+            else if (targetObject is IMustHaveCreator mustHaveCreatorObject)
+            {
+                if (mustHaveCreatorObject.CreatorId != default)
+                {
+                    return;
+                }
+
+                mustHaveCreatorObject.CreatorId = CurrentUser.Id.Value;
+            }
         }
-        
+
         private void SetLastModificationTime(object targetObject)
         {
             if (targetObject is IHasModificationTime objectWithModificationTime)

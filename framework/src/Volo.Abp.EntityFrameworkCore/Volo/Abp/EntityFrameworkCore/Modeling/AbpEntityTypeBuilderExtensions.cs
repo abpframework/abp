@@ -33,6 +33,18 @@ namespace Volo.Abp.EntityFrameworkCore.Modeling
             b.Property(x => x.DeletionTime).IsRequired(false).HasColumnName(nameof(IHasDeletionTime.DeletionTime));
         }
 
+        public static void ConfigureMayHaveCreator<T>(this EntityTypeBuilder<T> b)
+            where T : class, IMayHaveCreator
+        {
+            b.Property(x => x.CreatorId).IsRequired(false).HasColumnName(nameof(IMayHaveCreator.CreatorId));
+        }
+
+        public static void ConfigureMustHaveCreator<T>(this EntityTypeBuilder<T> b)
+            where T : class, IMustHaveCreator
+        {
+            b.Property(x => x.CreatorId).IsRequired().HasColumnName(nameof(IMustHaveCreator.CreatorId));
+        }
+
         public static void ConfigureDeletionAudited<T>(this EntityTypeBuilder<T> b)
             where T : class, IDeletionAudited
         {
