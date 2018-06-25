@@ -22,6 +22,8 @@ namespace Volo.Blogging.Pages.Blog.Posts
 
         public PostDto Post { get; set; }
 
+        public BlogDto Blog { get; set; }
+
         public DetailModel(IPostAppService postAppService, IBlogAppService blogAppService)
         {
             _postAppService = postAppService;
@@ -32,7 +34,8 @@ namespace Volo.Blogging.Pages.Blog.Posts
         {
             var blog = await _blogAppService.GetByShortNameAsync(BlogShortName);
 
-            Post = await _postAppService.GetPost(new GetPostInput(){BlogId = blog.Id , Title = PostTitle});
+            Post = await _postAppService.GetPost(new GetPostInput {BlogId = blog.Id , Title = PostTitle});
+            Blog = blog;
         }
     }
 }
