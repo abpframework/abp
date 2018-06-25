@@ -22,6 +22,12 @@ namespace Volo.Blogging.Pages.Blog
         {
             var result = await _blogAppService.GetListAsync();
 
+            if (result.Items.Count == 1)
+            {
+                var blog = result.Items[0];
+                return RedirectToPage("./Posts/Index", new { blogShortName = blog.ShortName});
+            }
+
             Blogs = result.Items;
             return Page();
         }
