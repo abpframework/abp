@@ -4,10 +4,12 @@ using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Users;
 
 namespace Volo.Blogging.Posts
 {
+    [Authorize(BloggingPermissions.Posts.Default)]
     public class PostAppService : ApplicationService, IPostAppService
     {
         private readonly IPostRepository _postRepository;
@@ -39,6 +41,7 @@ namespace Volo.Blogging.Posts
             return ObjectMapper.Map<Post, PostWithDetailsDto>(post);
         }
 
+        [Authorize(BloggingPermissions.Posts.Update)]
         public async Task<PostWithDetailsDto> UpdateAsync(Guid id, UpdatePostDto input)
         {
             var post = await _postRepository.GetAsync(id);
@@ -51,10 +54,11 @@ namespace Volo.Blogging.Posts
             return ObjectMapper.Map<Post, PostWithDetailsDto>(post);
         }
 
+        [Authorize(BloggingPermissions.Posts.Create)]
         public async Task<PostWithDetailsDto> CreateAsync(CreatePostDto input)
         {
             var post = new Post(
-                GuidGenerator.Create(),
+                id: GuidGenerator.Create(),
                 blogId: input.BlogId,
                 creatorId: CurrentUser.GetId(),
                 title: input.Title

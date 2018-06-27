@@ -29,14 +29,13 @@ namespace Volo.Blogging
                 options.FileSets.AddEmbedded<BloggingWebModule>("Volo.Blogging");
             });
 
-
             services.Configure<RazorPagesOptions>(options =>
             {
                 //TODO: Make configurable!
                 options.Conventions.AddPageRoute("/Blog/Posts/Index", "blog/{blogShortName}");
                 options.Conventions.AddPageRoute("/Blog/Posts/Detail", "blog/{blogShortName}/{postTitle}");
-                options.Conventions.AddPageRoute("/Blog/Posts/Edit", "blog/{blogShortName}/manage/{postId}");
-                options.Conventions.AddPageRoute("/Blog/Posts/New", "blog/{blogShortName}/manage/new");
+                options.Conventions.AddPageRoute("/Blog/Posts/Edit", "blog/{blogShortName}/posts/edit/{postId}");
+                options.Conventions.AddPageRoute("/Blog/Posts/New", "blog/{blogShortName}/posts/new");
             });
 
             services.AddAssemblyOf<BloggingWebModule>();
