@@ -1,8 +1,6 @@
-using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Volo.Abp.Application.Dtos;
 using Volo.Blogging.Blogs;
 using Volo.Blogging.Posts;
 
@@ -16,7 +14,7 @@ namespace Volo.Blogging.Pages.Blog.Posts
         [BindProperty(SupportsGet = true)]
         public string BlogShortName { get; set; }
 
-        public PostWithDetailsDto Post { get; set; }
+        public CreatePostDto Post { get; set; }
 
         public BlogDto Blog { get; set; }
 
@@ -30,7 +28,7 @@ namespace Volo.Blogging.Pages.Blog.Posts
         {
             var blog = await _blogAppService.GetByShortNameAsync(BlogShortName);
 
-            Post = new PostWithDetailsDto()
+            Post = new CreatePostDto()
             {
                 BlogId = blog.Id
             };

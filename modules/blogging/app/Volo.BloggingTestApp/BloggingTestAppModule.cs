@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Localization;
@@ -138,7 +139,7 @@ namespace Volo.BloggingTestApp
                     .GetRequiredService<IIdentityDataSeeder>()
                     .SeedAsync(
                         "1q2w3E*",
-                        IdentityPermissions.GetAll()//.Union(BlogPermissions.GetAll()) //TODO: Define blog permissions
+                        IdentityPermissions.GetAll().Union(BloggingPermissions.GetAll())
                     );
             });
         }
