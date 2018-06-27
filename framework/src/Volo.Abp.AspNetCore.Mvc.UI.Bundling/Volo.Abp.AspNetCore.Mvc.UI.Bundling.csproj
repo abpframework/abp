@@ -1,7 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="..\..\..\common.props" />
+
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>Volo.Abp.AspNetCore.Mvc.UI.Bundling</AssemblyName>
+    <PackageId>Volo.Abp.AspNetCore.Mvc.UI.Bundling</PackageId>
     <RootNamespace />
   </PropertyGroup>
 
