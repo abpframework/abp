@@ -263,3 +263,4 @@ framework/src/AbpDesk/Web_PlugIns/AbpDesk.MongoBlog.dll
 framework/test/Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo/Logs/*
 !framework/src/Volo.Abp.AspNetCore.Mvc.UI.Packages/Volo/Abp/AspNetCore/Mvc/UI/Packages/*
 modules/blog/app/Volo.BlogTestApp/Logs/*
+nupkg/push.ps1
