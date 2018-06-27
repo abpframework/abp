@@ -113,6 +113,25 @@ $projects = (
     "modules/identity/src/Volo.Abp.Identity.Web",    
 
     # modules/account
-    "modules/account/src/Volo.Abp.Account.Web"
+    "modules/account/src/Volo.Abp.Account.Web",
     
+    # modules/docs
+    "modules/docs/src/Volo.Docs.Application",
+    "modules/docs/src/Volo.Docs.Application.Contracts",
+    "modules/docs/src/Volo.Docs.Domain",
+    "modules/docs/src/Volo.Docs.Domain.Shared",
+    "modules/docs/src/Volo.Docs.EntityFrameworkCore",
+    "modules/docs/src/Volo.Docs.HttpApi",
+    "modules/docs/src/Volo.Docs.HttpApi.Client",
+    "modules/docs/src/Volo.Docs.Web",    
+    
+    # modules/blogging
+    "modules/blogging/src/Volo.Blogging.Application",
+    "modules/blogging/src/Volo.Blogging.Application.Contracts",
+    "modules/blogging/src/Volo.Blogging.Domain",
+    "modules/blogging/src/Volo.Blogging.Domain.Shared",
+    "modules/blogging/src/Volo.Blogging.EntityFrameworkCore",
+    "modules/blogging/src/Volo.Blogging.HttpApi",
+    "modules/blogging/src/Volo.Blogging.HttpApi.Client",
+    "modules/blogging/src/Volo.Blogging.Web"    
 )
