@@ -77,7 +77,7 @@ namespace MyCompanyName.MyProjectName
                 {
                     options.FileSets.ReplaceEmbeddedByPyhsical<MyProjectNameDomainModule>(Path.Combine(hostingEnvironment.ContentRootPath, "..\\MyCompanyName.MyProjectName.Domain"));
 
-                    //TODO: These are temporary and will be removed before template release!
+                     //</TEMPLATE-REMOVE>
                     options.FileSets.ReplaceEmbeddedByPyhsical<AbpUiModule>(Path.Combine(hostingEnvironment.ContentRootPath, "..\\..\\..\\..\\framework\\src\\Volo.Abp.UI"));
                     options.FileSets.ReplaceEmbeddedByPyhsical<AbpAspNetCoreMvcUiModule>(Path.Combine(hostingEnvironment.ContentRootPath, "..\\..\\..\\..\\framework\\src\\Volo.Abp.AspNetCore.Mvc.UI"));
                     options.FileSets.ReplaceEmbeddedByPyhsical<AbpAspNetCoreMvcUiBootstrapModule>(Path.Combine(hostingEnvironment.ContentRootPath, "..\\..\\..\\..\\framework\\src\\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap"));
@@ -86,6 +86,7 @@ namespace MyCompanyName.MyProjectName
                     options.FileSets.ReplaceEmbeddedByPyhsical<AbpPermissionManagementWebModule>(Path.Combine(hostingEnvironment.ContentRootPath, "..\\..\\..\\..\\modules\\permission-management\\src\\Volo.Abp.PermissionManagement.Web"));
                     options.FileSets.ReplaceEmbeddedByPyhsical<AbpIdentityWebModule>(Path.Combine(hostingEnvironment.ContentRootPath, "..\\..\\..\\..\\modules\\identity\\src\\Volo.Abp.Identity.Web"));
                     options.FileSets.ReplaceEmbeddedByPyhsical<AbpAccountWebModule>(Path.Combine(hostingEnvironment.ContentRootPath, "..\\..\\..\\..\\modules\\account\\src\\Volo.Abp.Account.Web"));
+					 //</TEMPLATE-REMOVE>
                 });
             }
         }
