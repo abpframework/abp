@@ -11,7 +11,7 @@
         <p>@L["LongWelcomeMessage"]</p>
         @if (!CurrentUser.IsAuthenticated)
         {
-            <p><i class="fa fa-sign-in"></i> <a href="/Account/Login">@L["Login"]</a></p>
+            <p><a abp-button="Primary" href="/Account/Login"><i class="fa fa-sign-in"></i> @L["Login"]</a></p>
         }
         <hr/>
         <p class="text-right"><a href="http://abp.io?ref=tmpl" target="_blank">abp.io</a></p>
