@@ -8,7 +8,12 @@
 <abp-card>
     <abp-card-header>@L["Welcome"]</abp-card-header>
     <abp-card-body>
-        <p class="app-welcome-message">@L["LongWelcomeMessage"]</p>
-        <p><a href="https://abp.io?ref=tmpl" target="_blank">abp.io</a></p>
+        <p>@L["LongWelcomeMessage"]</p>
+        @if (!CurrentUser.IsAuthenticated)
+        {
+            <p><i class="fa fa-sign-in"></i> <a href="/Account/Login">@L["Login"]</a></p>
+        }
+        <hr/>
+        <p class="text-right"><a href="http://abp.io?ref=tmpl" target="_blank">abp.io</a></p>
     </abp-card-body>
 </abp-card>
