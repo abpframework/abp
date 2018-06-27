@@ -1,7 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="..\..\..\..\common.props" />
+
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>Volo.Docs.Application.Contracts</AssemblyName>
+    <PackageId>Volo.Docs.Application.Contracts</PackageId>
     <RootNamespace />
   </PropertyGroup>
 
