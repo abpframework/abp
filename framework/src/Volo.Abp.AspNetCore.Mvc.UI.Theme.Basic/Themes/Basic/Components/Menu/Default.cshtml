@@ -10,7 +10,16 @@
         }
 
         <li class="nav-item @(menuItem.IsDisabled ? "disabled" : "")">
-            <a class="nav-link" href="@(menuItem.Url ?? "#")">@menuItem.DisplayName</a> @*<span class="sr-only">(current)</span>*@
+            <a class="nav-link" href="@(menuItem.Url ?? "#")">
+                @if (menuItem.Icon != null)
+                {
+                    if (menuItem.Icon.StartsWith("fa"))
+                    {
+                        <i class="@menuItem.Icon"></i>
+                    }
+                }
+                @menuItem.DisplayName
+            </a> @*<span class="sr-only">(current)</span>*@
         </li>
     }
     else
