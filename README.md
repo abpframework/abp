@@ -1,5 +1,11 @@
 # ABP
 
+This project is the next generation of the [ASP.NET Boilerplate](https://aspnetboilerplate.com/) web application framework.
+
+### Status
+
+This project is in **very early preview** stage and it's not suggested to use it in a real project. 
+
 ### Documentation
 
 See the <a href="docs\Index.md" target="_blank">documentation</a>.
