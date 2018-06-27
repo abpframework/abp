@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Account.Web.Localization;
 using Volo.Abp.Account.Web.Settings;
 using Volo.Abp.AspNetCore.Mvc.Localization;
-using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.Identity;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.Resources.AbpValidation;
@@ -15,7 +15,7 @@ using Volo.Abp.VirtualFileSystem;
 namespace Volo.Abp.Account.Web
 {
     [DependsOn(typeof(AbpIdentityDomainModule))]
-    [DependsOn(typeof(AbpAspNetCoreMvcUiBootstrapModule))]
+    [DependsOn(typeof(AbpAspNetCoreMvcUiThemeSharedModule))]
     public class AbpAccountWebModule : AbpModule
     {
         public override void PreConfigureServices(IServiceCollection services)
