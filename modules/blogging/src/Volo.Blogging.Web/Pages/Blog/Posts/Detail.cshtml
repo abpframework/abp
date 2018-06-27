@@ -8,4 +8,8 @@
 
 <p>@Model.Post.Content</p>
 
-<i>Posted to @Model.Blog.Name On @Model.Post.CreationTime</i>
+<p>
+    <i>Posted to @Model.Blog.Name On @Model.Post.CreationTime</i>
+</p>
+
+<a asp-page="./Edit" asp-route-postId="@Model.Post.Id" asp-route-blogShortName="@Model.BlogShortName">edit</a>

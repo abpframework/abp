@@ -19,7 +19,7 @@ namespace Volo.Blogging.Pages.Blog.Posts
         [BindProperty(SupportsGet = true)]
         public string BlogShortName { get; set; }
 
-        public IReadOnlyList<PostDto> Posts { get; set; }
+        public IReadOnlyList<PostWithDetailsDto> Posts { get; set; }
 
         public IndexModel(IPostAppService postAppService, IBlogAppService blogAppService)
         {
@@ -31,7 +31,7 @@ namespace Volo.Blogging.Pages.Blog.Posts
         {
             var blog = await _blogAppService.GetByShortNameAsync(BlogShortName);
 
-            Posts = _postAppService.GetPostsByBlogId(blog.Id).Items;
+            Posts = _postAppService.GetListByBlogIdAsync(blog.Id).Items;
         }
     }
 }

@@ -24,4 +24,14 @@
     <Content Remove="Pages\Blog\Posts\Index.cshtml" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Remove="Pages\Blog\Posts\Edit.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Pages\Blog\Posts\Edit.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+  </ItemGroup>
+
 </Project>

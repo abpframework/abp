@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
@@ -34,6 +35,12 @@ namespace Volo.Blogging.Blogs
 
             return ObjectMapper.Map<Blog, BlogDto>(blog);
         }
-        
+
+        public async Task<BlogDto> GetAsync(Guid id)
+        {
+            var blog = await _blogRepository.GetAsync(id);
+
+            return ObjectMapper.Map<Blog, BlogDto>(blog);
+        }
     }
 }

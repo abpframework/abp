@@ -1,15 +1,14 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Volo.Abp.Application.Dtos;
 using Volo.Blogging.Blogs;
 using Volo.Blogging.Posts;
 
 namespace Volo.Blogging.Pages.Blog.Posts
 {
-    public class DetailModel : PageModel
+    public class NewModel : PageModel
     {
         private readonly IPostAppService _postAppService;
         private readonly IBlogAppService _blogAppService;
@@ -18,13 +17,13 @@ namespace Volo.Blogging.Pages.Blog.Posts
         public string BlogShortName { get; set; }
 
         [BindProperty(SupportsGet = true)]
-        public string PostTitle { get; set; }
+        public string PostId { get; set; }
 
         public PostWithDetailsDto Post { get; set; }
 
         public BlogDto Blog { get; set; }
 
-        public DetailModel(IPostAppService postAppService, IBlogAppService blogAppService)
+        public NewModel(IPostAppService postAppService, IBlogAppService blogAppService)
         {
             _postAppService = postAppService;
             _blogAppService = blogAppService;
@@ -34,8 +33,20 @@ namespace Volo.Blogging.Pages.Blog.Posts
         {
             var blog = await _blogAppService.GetByShortNameAsync(BlogShortName);
 
-            Post = await _postAppService.GetByTitleAsync(new GetPostInput {BlogId = blog.Id , Title = PostTitle});
+            Post = new PostWithDetailsDto()
+            {
+                BlogId = blog.Id
+            };
+
             Blog = blog;
+        }
+
+        public async Task<ActionResult> OnPost(CreatePostDto post)
+        {
+            var insertedPost = await _postAppService.CreateAsync(post);
+            var blog = await _blogAppService.GetAsync(insertedPost.BlogId);
+
+            return Redirect(Url.Content($"~/blog/{blog.ShortName}/{insertedPost.Title}"));
         }
     }
 }

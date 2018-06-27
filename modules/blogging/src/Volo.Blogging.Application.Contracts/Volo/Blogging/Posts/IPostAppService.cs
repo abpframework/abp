@@ -9,8 +9,14 @@ namespace Volo.Blogging.Posts
 {
     public interface IPostAppService : IApplicationService
     {
-        ListResultDto<PostDto> GetPostsByBlogId(Guid id);
+        ListResultDto<PostWithDetailsDto> GetListByBlogIdAsync(Guid id);
 
-        Task<PostDto> GetPost(GetPostInput input);
+        Task<PostWithDetailsDto> GetByTitleAsync(GetPostInput input);
+
+        Task<PostWithDetailsDto> GetAsync(Guid id);
+
+        Task<PostWithDetailsDto> CreateAsync(CreatePostDto input);
+
+        Task<PostWithDetailsDto> UpdateAsync(Guid id, UpdatePostDto input);
     }
 }

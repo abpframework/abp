@@ -14,6 +14,11 @@ namespace Volo.Blogging
     {
         public override void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<AbpAutoMapperOptions>(options =>
+            {
+                options.AddProfile<BloggingApplicationAutoMapperProfile>(validate: true);
+            });
+
             services.AddAssemblyOf<BloggingApplicationModule>();
         }
     }
