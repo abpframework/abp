@@ -16,9 +16,6 @@ namespace Volo.Blogging.Pages.Blog.Posts
         [BindProperty(SupportsGet = true)]
         public string BlogShortName { get; set; }
 
-        [BindProperty(SupportsGet = true)]
-        public string PostId { get; set; }
-
         public PostWithDetailsDto Post { get; set; }
 
         public BlogDto Blog { get; set; }
