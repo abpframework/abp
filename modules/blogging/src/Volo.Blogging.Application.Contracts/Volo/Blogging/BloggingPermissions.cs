@@ -36,7 +36,7 @@ namespace Volo.Blogging
                 Posts.Default,
                 Posts.Delete,
                 Posts.Update,
-                Posts.Create,
+                Posts.Create
             };
         }
     }
