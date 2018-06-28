@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <RootNamespace>Acme.BookStore</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Acme.BookStore.Domain\Acme.BookStore.Domain.csproj" />
+    <PackageReference Include="Volo.Abp.Identity.Application" Version="0.3.2" />
+  </ItemGroup>
+
+</Project>
