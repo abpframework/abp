@@ -2,7 +2,7 @@
 
 ### Creating a new project
 
-Go to the template creation page, enter a project name and create your project as shown below:
+Go to [the template creation page](https://abp.io/Templates), enter a project name and create your project as shown below:
 
 ![bookstore-create--template](images/bookstore-create-template.png)
 
@@ -43,7 +43,7 @@ Right click to the **.Web** project and select **Set as StartUp Project**:
 
 Open the **Package Manager Console**, select **.EntityFrameworkCore** project as the **Default Project** and run the `Update-Database` command:
 
-![pcm-update-database](D:\Github\abp\docs\images\pcm-update-database.png)
+![pcm-update-database](images/pcm-update-database.png)
 
 This will create a new database with the name configured.
 
@@ -57,8 +57,8 @@ Click to the **Login** button, enter `admin` as the username and `1q2w3E*` as th
 
 Startup template includes the **identity management** module. Once you login, the Identity management menu will be available where you can manage **roles**, **users** and their **permissions**.
 
-![bookstore-user-management](D:\Github\abp\docs\images\bookstore-user-management.png)
+![bookstore-user-management](images/bookstore-user-management.png)
 
 ### What's Next?
 
-* [Step by step application development tutorial for ASP.NET Core MVC](Tutorials/AspNetCore-Mvc/Part-I.md)
+* [Application development tutorial](Tutorials/AspNetCore-Mvc/Part-I.md)
