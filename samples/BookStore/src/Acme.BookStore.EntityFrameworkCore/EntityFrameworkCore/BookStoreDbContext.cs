@@ -8,6 +8,8 @@ namespace Acme.BookStore.EntityFrameworkCore
 {
     public class BookStoreDbContext : AbpDbContext<BookStoreDbContext>
     {
+        public DbSet<Book> Book { get; set; }
+
         public BookStoreDbContext(DbContextOptions<BookStoreDbContext> options)
             : base(options)
         {
@@ -21,13 +23,6 @@ namespace Acme.BookStore.EntityFrameworkCore
             modelBuilder.ConfigureIdentity();
             modelBuilder.ConfigurePermissionManagement();
             modelBuilder.ConfigureSettingManagement();
-
-            //builder.Entity<MyEntity>(b =>
-            //{
-            //    b.ToTable(BookStoreConsts.DbTablePrefix + "PermissionGrants", BookStoreConsts.DbSchema);
-
-            //    ...
-            //});
         }
     }
 }
