@@ -20,23 +20,8 @@
 
   <ItemGroup>
     <EmbeddedResource Include="wwwroot\**\*.*" />
+    <EmbeddedResource Include="Localization\Resources\Blogging\Web\*.json" />
     <EmbeddedResource Include="Pages\**\*.cshtml" Exclude="*.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Remove="Pages\Blog\Posts\Detail.cshtml" />
-    <Content Remove="Pages\Blog\Posts\Index.cshtml" />
-    <Content Remove="Pages\Blog\_ViewImports.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Remove="Pages\Blog\Posts\Edit.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Update="Pages\Blog\Posts\Edit.cshtml">
-      <Pack>$(IncludeRazorContentInPack)</Pack>
-    </Content>
   </ItemGroup>
 
 </Project>

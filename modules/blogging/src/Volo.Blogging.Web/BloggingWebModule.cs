@@ -1,8 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Localization;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
+using Volo.Abp.Localization;
+using Volo.Abp.Localization.Resources.AbpValidation;
 using Volo.Abp.Modularity;
+using Volo.Abp.UI;
 using Volo.Abp.VirtualFileSystem;
 using Volo.Blogging.Localization;
 
@@ -27,6 +31,15 @@ namespace Volo.Blogging
             services.Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<BloggingWebModule>("Volo.Blogging");
+            });
+
+            services.Configure<AbpLocalizationOptions>(options =>
+            {
+                options.Resources
+                    .Get<BloggingResource>()
+                    .AddBaseTypes(typeof(AbpValidationResource))
+                    .AddBaseTypes(typeof(AbpUiModule))
+                    .AddVirtualJson("/Localization/Resources/Blogging/Web");
             });
 
             services.Configure<RazorPagesOptions>(options =>

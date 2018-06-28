@@ -1,14 +1,15 @@
 ﻿@page
 @using Volo.Blogging.Pages.Blog.Posts
 @model NewModel
+@inherits Volo.Blogging.Pages.Blog.BloggingPage
 <form method="post">
     <abp-input asp-for="Post.Title" auto-focus="true" />
     
     <div class="form-group">
-        <label>Content</label>
+        <label>@L["Content"]</label>
         <textarea rows="4" class="form-control" name="Post.Content">@Model.Post.Content</textarea>
     </div>
 
     <abp-input asp-for="Post.BlogId" label=" " /> @* TODO: Remove label when the issue is fixed *@
-    <abp-button type="submit" text="Submit" />
+    <abp-button type="submit" text="@L["Submit"].Value" />
 </form>

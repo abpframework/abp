@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.UI;
 
 namespace Volo.Blogging.Blogs
@@ -30,7 +32,7 @@ namespace Volo.Blogging.Blogs
 
             if (blog == null)
             {
-                throw new UserFriendlyException("Blog Doesn't exist");
+                throw new EntityNotFoundException(typeof(Blog), shortName);
             }
 
             return ObjectMapper.Map<Blog, BlogDto>(blog);
