@@ -15,6 +15,7 @@ using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Modularity;
+using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
@@ -54,9 +55,18 @@ namespace Acme.BookStore
             ConfigureVirtualFileSystem(services, hostingEnvironment);
             ConfigureLocalizationServices(services);
             ConfigureNavigationServices(services);
+            ConfigureAutoApiControllers(services);
             ConfigureSwaggerServices(services);
 
             services.AddAssemblyOf<BookStoreWebModule>();
+        }
+
+        private static void ConfigureAutoApiControllers(IServiceCollection services)
+        {
+            services.Configure<AbpAspNetCoreMvcOptions>(options =>
+            {
+                options.ConventionalControllers.Create(typeof(BookStoreApplicationModule).Assembly);
+            });
         }
 
         private static void ConfigureDatabaseServices(IServiceCollection services, IConfigurationRoot configuration)

@@ -5,6 +5,7 @@
         Undefined,
         Advanture,
         Biography,
+        Dystopia,
         Fantastic,
         Horror,
         Science,
