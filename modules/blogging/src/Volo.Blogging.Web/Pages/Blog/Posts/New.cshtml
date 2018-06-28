@@ -1,23 +1,14 @@
 ﻿@page
 @using Volo.Blogging.Pages.Blog.Posts
 @model NewModel
-@{
-
-}
-
-<form method="post" id="new-post-form">
-
-    <abp-input asp-for="@Model.Post.Title" autofocus />
-
+<form method="post">
+    <abp-input asp-for="Post.Title" auto-focus="true" />
+    
     <div class="form-group">
         <label>Content</label>
         <textarea rows="4" class="form-control" name="Post.Content">@Model.Post.Content</textarea>
     </div>
 
-    <abp-input asp-for="@Model.Post.BlogId" hidden="" />
-
-    <abp-button type="submit" form="new-post-form">
-        <span>Submit</span>
-    </abp-button>
-
+    <abp-input asp-for="Post.BlogId" label=" " /> @* TODO: Remove label when the issue is fixed *@
+    <abp-button type="submit" text="Submit" />
 </form>

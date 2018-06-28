@@ -7,11 +7,11 @@
     Posts
 </h2>
 
+<a asp-page="./New" asp-route-blogShortName="@Model.BlogShortName">Create New Post</a>
+
 <ul>
     @foreach (var post in Model.Posts)
     {
         <li><a asp-page="./Detail" asp-route-postTitle="@post.Title" asp-route-blogShortName="@Model.BlogShortName">@post.Title</a></li>
     }
 </ul>
-
-<a asp-page="./New" asp-route-blogShortName="@Model.BlogShortName">Create New Post</a>

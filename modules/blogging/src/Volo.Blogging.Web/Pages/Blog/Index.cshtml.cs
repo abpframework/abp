@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +17,7 @@ namespace Volo.Blogging.Pages.Blog
             _blogAppService = blogAppService;
         }
 
-        public async Task<IActionResult> OnGet()
+        public async Task<IActionResult> OnGetAsync()
         {
             var result = await _blogAppService.GetListAsync();
 
@@ -29,6 +28,7 @@ namespace Volo.Blogging.Pages.Blog
             }
 
             Blogs = result.Items;
+
             return Page();
         }
     }

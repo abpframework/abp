@@ -26,6 +26,7 @@
   <ItemGroup>
     <Content Remove="Pages\Blog\Posts\Detail.cshtml" />
     <Content Remove="Pages\Blog\Posts\Index.cshtml" />
+    <Content Remove="Pages\Blog\_ViewImports.cshtml" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,3 +1,5 @@
+using System;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -14,7 +16,8 @@ namespace Volo.Blogging.Pages.Blog.Posts
         [BindProperty(SupportsGet = true)]
         public string BlogShortName { get; set; }
 
-        public CreatePostDto Post { get; set; }
+        [BindProperty]
+        public CreatePostViewModel Post { get; set; }
 
         public BlogDto Blog { get; set; }
 
@@ -24,24 +27,42 @@ namespace Volo.Blogging.Pages.Blog.Posts
             _blogAppService = blogAppService;
         }
 
-        public async void OnGet()
+        public async void OnGetAsync()
         {
-            var blog = await _blogAppService.GetByShortNameAsync(BlogShortName);
-
-            Post = new CreatePostDto()
+            Blog = await _blogAppService.GetByShortNameAsync(BlogShortName);
+            Post = new CreatePostViewModel
             {
-                BlogId = blog.Id
+                BlogId = Blog.Id
             };
-
-            Blog = blog;
         }
 
-        public async Task<ActionResult> OnPost(CreatePostDto post)
+        public async Task<ActionResult> OnPost()
         {
-            var insertedPost = await _postAppService.CreateAsync(post);
-            var blog = await _blogAppService.GetAsync(insertedPost.BlogId);
+            var blog = await _blogAppService.GetAsync(Post.BlogId);
+            var postWithDetailsDto = await _postAppService.CreateAsync(
+                new CreatePostDto //TODO: Use automapper
+                {
+                    BlogId = Post.BlogId,
+                    Title = Post.Title,
+                    Content = Post.Content
+                }
+            );
 
-            return Redirect(Url.Content($"~/blog/{blog.ShortName}/{insertedPost.Title}"));
+            //TODO: Try Url.Page(...)
+            return Redirect(Url.Content($"~/blog/{blog.ShortName}/{postWithDetailsDto.Title}"));
+        }
+
+        public class CreatePostViewModel
+        {
+            [HiddenInput]
+            public Guid BlogId { get; set; }
+
+            [Required]
+            [StringLength(PostConsts.MaxTitleLength)]
+            public string Title { get; set; }
+
+            [StringLength(PostConsts.MaxContentLength)]
+            public string Content { get; set; }
         }
     }
 }

@@ -1,10 +1,7 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Volo.Abp.Application.Dtos;
 using Volo.Blogging.Blogs;
 using Volo.Blogging.Posts;
 
@@ -27,10 +24,9 @@ namespace Volo.Blogging.Pages.Blog.Posts
             _blogAppService = blogAppService;
         }
 
-        public async Task OnGet()
+        public async Task OnGetAsync()
         {
             var blog = await _blogAppService.GetByShortNameAsync(BlogShortName);
-
             Posts = _postAppService.GetListByBlogIdAsync(blog.Id).Items;
         }
     }
