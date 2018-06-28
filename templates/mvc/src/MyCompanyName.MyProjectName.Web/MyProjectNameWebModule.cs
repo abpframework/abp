@@ -15,6 +15,7 @@ using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Modularity;
+using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
@@ -54,6 +55,7 @@ namespace MyCompanyName.MyProjectName
             ConfigureVirtualFileSystem(services, hostingEnvironment);
             ConfigureLocalizationServices(services);
             ConfigureNavigationServices(services);
+            ConfigureAutoApiControllers(services);
             ConfigureSwaggerServices(services);
 
             services.AddAssemblyOf<MyProjectNameWebModule>();
@@ -117,6 +119,14 @@ namespace MyCompanyName.MyProjectName
             services.Configure<NavigationOptions>(options =>
             {
                 options.MenuContributors.Add(new MyProjectNameMenuContributor());
+            });
+        }
+
+        private static void ConfigureAutoApiControllers(IServiceCollection services)
+        {
+            services.Configure<AbpAspNetCoreMvcOptions>(options =>
+            {
+                options.ConventionalControllers.Create(typeof(MyProjectNameApplicationModule).Assembly);
             });
         }
 
