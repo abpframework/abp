@@ -21,16 +21,16 @@
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.1.1" />
     <PackageReference Include="Serilog.AspNetCore" Version="2.1.1" />
     <PackageReference Include="Serilog.Sinks.File" Version="4.0.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="2.1.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="2.5.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Acme.BookStore.Application\Acme.BookStore.Application.csproj" />
     <ProjectReference Include="..\Acme.BookStore.EntityFrameworkCore\Acme.BookStore.EntityFrameworkCore.csproj" />
-    <PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic" Version="0.3.2" />
-    <PackageReference Include="Volo.Abp.Autofac" Version="0.3.2" />
-    <PackageReference Include="Volo.Abp.Identity.Web" Version="0.3.2" />
-    <PackageReference Include="Volo.Abp.Account.Web" Version="0.3.2" />
+    <PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic" Version="0.3.3" />
+    <PackageReference Include="Volo.Abp.Autofac" Version="0.3.3" />
+    <PackageReference Include="Volo.Abp.Identity.Web" Version="0.3.3" />
+    <PackageReference Include="Volo.Abp.Account.Web" Version="0.3.3" />
   </ItemGroup>
 
 </Project>
