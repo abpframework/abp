@@ -3,8 +3,14 @@
 ## Table of Contents
 
 * Getting Started
-  *  <a href="Getting-Started-Console-Application.md" target="_blank">With Console Application</a>
-  *  <a href="Getting-Started-AspNetCore-Application.md" target="_blank">With ASP.NET Core Web Application</a>
+  * From Startup Templates
+    * [ASP.NET Core MVC Template](Getting-Started-AspNetCore-MVC-Template.md)
+  * From Empty Projects
+    *  <a href="Getting-Started-Console-Application.md" target="_blank">With Console Application</a>
+    * <a href="Getting-Started-AspNetCore-Application.md" target="_blank">With ASP.NET Core Web Application</a>
+* Tutorials
+  * Application Development
+    * [With ASP.NET Core MVC](Tutorials/AspNetCore-Mvc/Part-I.md)
 * Fundamentals
   * <a href="Dependency-Injection.md" target="_blank">Dependency Injection</a>
     * AutoFac Integration
