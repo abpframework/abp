@@ -4,7 +4,6 @@ using System.Linq.Dynamic.Core;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
-using Volo.Abp.ObjectMapping;
 
 namespace Volo.Abp.Application.Services
 {
@@ -142,6 +141,11 @@ namespace Volo.Abp.Application.Services
         /// </summary>
         protected virtual void MapToEntity(TUpdateInput updateInput, TEntity entity)
         {
+            if (updateInput is IEntityDto<TKey> entityDto)
+            {
+                entityDto.Id = entity.Id;
+            }
+
             ObjectMapper.Map(updateInput, entity);
         }
     }
