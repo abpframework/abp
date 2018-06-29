@@ -87,7 +87,7 @@ public class BookStoreDbContext : AbpDbContext<BookStoreDbContext>
 
 Startup template uses [EF Core Code First Migrations](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/) to create and maintain the database schema. Open the **Package Manager Console (PMC)**, select the `Acme.BookStore.EntityFrameworkCore` as the **default project** and execute the following command:
 
-![bookstore-pmc-add-book-migration](../../images\bookstore-pmc-add-book-migration.png)
+![bookstore-pmc-add-book-migration](../../images/bookstore-pmc-add-book-migration.png)
 
 This will create a new migration class inside the `Migrations` folder. Then execute the `Update-Database` command to update the database schema:
 
@@ -99,7 +99,7 @@ PM> Update-Database
 
 `Update-Database` command created the `Books` table in the database. Enter a few sample rows, so you can show them on the page:
 
-![bookstore-books-table](../../images\bookstore-books-table.png)
+![bookstore-books-table](../../images/bookstore-books-table.png)
 
 ### Create the Application Service
 
@@ -215,7 +215,7 @@ acme.bookStore.book.getList({}).done(function (result) { console.log(result); })
 
 Running this code produces such an output:
 
-![bookstore-test-js-proxy-getlist](D:\Github\abp\docs\images\bookstore-test-js-proxy-getlist.png)
+![bookstore-test-js-proxy-getlist](../../images/bookstore-test-js-proxy-getlist.png)
 
 You can see the **book list** returned from the server.
 
@@ -240,15 +240,66 @@ successfully created the book with id: f3f03580-c1aa-d6a9-072d-39e75c69f5c7
 
 Check the `books` table in the database to see the new book row. You can also try `get`, `update` and `delete` functions.
 
-### Create the Book List Page
+### Create the Books Page
+
+It's time to create something visible! Instead of classic MVC, we will use the new [Razor Pages UI](https://docs.microsoft.com/en-us/aspnet/core/tutorials/razor-pages/razor-pages-start) approach which is recommended by Microsoft.
+
+Create a new `Books` folder under the `Pages` folder of the `Acme.BookStore.Web` project and add a new Razor Page named `Index.html`:
+
+![bookstore-add-index-page](../../images/bookstore-add-index-page.png)
+
+Open the `Index.cshtml` and change the content as shown below:
+
+````html
+@page
+@using Acme.BookStore.Pages.Books
+@inherits Acme.BookStore.Pages.BookStorePageBase
+@model IndexModel
+
+<h2>Books</h2>
+````
+
+* This page inherits from the `BookStorePageBase` class which comes with the startup template and provides some shared properties/methods used by all pages.
+
+#### Add Books Page to the Main Menu
+
+Open the `BookStoreMenuContributor` class in the `Menus` folder and add the following code to the end of the `ConfigureMainMenuAsync` method:
+
+````c#
+context.Menu.AddItem(
+    new ApplicationMenuItem("BooksStore", l["Menu:BookStore"])
+        .AddItem(new ApplicationMenuItem("BooksStore.Books", l["Menu:Books"], url: "/Books"))
+);
+````
+
+#### Localizing the Menu Items
+
+Localization texts are located under the `Localization/BookStore` folder of the `Acme.BookStore.Domain` project:
+
+![bookstore-localization-files](../../images/bookstore-localization-files.png)
+
+Open the `en.json` file and add localization texts for `Menu:BookStore` and `Menu:Books`  keys:
+
+````json
+{
+  "culture": "en",
+  "texts": {
+    //...
+    "Menu:BookStore": "Book Store",
+    "Menu:Books": "Books"
+  }
+}
+````
+
+* ABP's localization system is built on [ASP.NET Core's standard localization](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/localization) system and extends it in many ways. See the [localization document](../../Localization.md) for details.
+* Localization key names are arbitrary, you can set any name. We prefer to add `Menu` namespace for menu items to distinguish from other texts. If a text is not defined in the localization file, it **fallbacks** to the localization key (ASP.NET Core's standard behavior).
+
+Run the application and see the menu items are added to the top bar:
+
+![bookstore-menu-items](../../images/bookstore-menu-items.png)
+
+When you click to the Books menu item, you are redirected to the new Books page.
+
+#### Book List
 
 TODO...
-
-
-
-
-
-
-
-
-

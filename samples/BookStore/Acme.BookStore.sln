@@ -15,9 +15,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{CA9AC87F-097
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{04DBDB01-70F4-4E06-B468-8F87850B22BE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Acme.BookStore.Application.Tests", "test\Acme.BookStore.Application.Tests\Acme.BookStore.Application.Tests.csproj", "{50B2631D-129C-47B3-A587-029CCD6099BC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Acme.BookStore.Application.Tests", "test\Acme.BookStore.Application.Tests\Acme.BookStore.Application.Tests.csproj", "{50B2631D-129C-47B3-A587-029CCD6099BC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Acme.BookStore.Web.Tests", "test\Acme.BookStore.Web.Tests\Acme.BookStore.Web.Tests.csproj", "{5F1B28C6-8D0C-4155-92D0-252F7EA5F674}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Acme.BookStore.Web.Tests", "test\Acme.BookStore.Web.Tests\Acme.BookStore.Web.Tests.csproj", "{5F1B28C6-8D0C-4155-92D0-252F7EA5F674}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
