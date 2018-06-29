@@ -18,6 +18,6 @@
         <textarea rows="4" class="form-control" name="Post.Content">@Model.Post.Content</textarea>
     </div>
 
-    <abp-input asp-for="Post.BlogId" label=" " /> @* TODO: Remove label when the issue is fixed *@
+    <abp-input asp-for="Post.BlogId"/>
     <abp-button type="submit" text="@L["Submit"].Value" />
 </form>

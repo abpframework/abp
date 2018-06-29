@@ -27,6 +27,7 @@
 
   <ItemGroup>
     <Content Remove="wwwroot\pages\blog\posts\edit.js" />
+    <Content Remove="wwwroot\pages\blog\posts\new.js" />
   </ItemGroup>
 
 </Project>

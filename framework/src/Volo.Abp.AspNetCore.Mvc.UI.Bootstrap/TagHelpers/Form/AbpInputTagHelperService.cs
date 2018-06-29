@@ -52,12 +52,17 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             var inputHtml = RenderTagHelperOutput(inputTag, _encoder);
             var label = GetLabelAsHtml(context, output, inputTag, isCheckbox);
 
-            var validation = isCheckbox ? "" : GetValidationAsHtml(context, output);
+            var validation = isCheckbox ? "" : GetValidationAsHtml(context, output, inputTag);
 
             return GetContent(context, output, label, inputHtml, validation, isCheckbox);
         }
-        protected virtual string GetValidationAsHtml(TagHelperContext context, TagHelperOutput output)
+        protected virtual string GetValidationAsHtml(TagHelperContext context, TagHelperOutput output, TagHelperOutput inputTag)
         {
+            if (inputTag.Attributes.Any(a => a.Name.ToLowerInvariant() == "type" && a.Value.ToString().ToLowerInvariant() == "hidden"))
+            {
+                return "";
+            }
+
             var validationMessageTagHelper = new ValidationMessageTagHelper(_generator)
             {
                 For = TagHelper.AspFor,
@@ -119,6 +124,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         protected virtual string GetLabelAsHtml(TagHelperContext context, TagHelperOutput output, TagHelperOutput inputTag, bool isCheckbox)
         {
+            if (inputTag.Attributes.Any(a=>a.Name.ToLowerInvariant() == "type" && a.Value.ToString().ToLowerInvariant() == "hidden"))
+            {
+                return "";
+            }
+
             if (string.IsNullOrEmpty(TagHelper.Label))
             {
                 return GetLabelAsHtmlUsingTagHelper(context,output,isCheckbox);
