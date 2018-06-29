@@ -13,7 +13,7 @@ $solutionsPaths = (
     "modules/tenant-management",
     "modules/account",
     "modules/docs",
-    "modules/blog"
+    "modules/blogging"
 )
 
 # Build all solutions
