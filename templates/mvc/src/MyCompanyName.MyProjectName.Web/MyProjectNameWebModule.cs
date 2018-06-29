@@ -160,6 +160,12 @@ namespace MyCompanyName.MyProjectName
 
             app.UseRequestLocalization(app.ApplicationServices.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value);
 
+            app.UseSwagger();
+            app.UseSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "MyProjectName API");
+            });
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
