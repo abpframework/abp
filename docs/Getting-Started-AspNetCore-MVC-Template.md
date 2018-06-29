@@ -8,6 +8,13 @@ Go to [the template creation page](https://abp.io/Templates), enter a project na
 
 When you click to the *create* button, a new Visual Studio solution is created and downloaded with the name you have provided.
 
+#### Pre Requirements
+
+The downloaded project requires;
+
+* [Visual Studio 2017 (v15.7.0+)](https://visualstudio.microsoft.com/tr/downloads/)
+* [.NET Core 2.1.1+](https://www.microsoft.com/net/download/dotnet-core/)
+
 ### The Solution Structure
 
 Open the zip file downloaded and open in **Visual Studio 2017 (15.7.0+)**:
