@@ -97,7 +97,7 @@ namespace MyCompanyName.MyProjectName
                 services.Configure<VirtualFileSystemOptions>(options =>
                 {
                     options.FileSets.ReplaceEmbeddedByPyhsical<MyProjectNameDomainModule>(Path.Combine(hostingEnvironment.ContentRootPath, "..\\MyCompanyName.MyProjectName.Domain"));
-                    //</TEMPLATE-REMOVE>
+                    //<TEMPLATE-REMOVE>
                     options.FileSets.ReplaceEmbeddedByPyhsical<AbpUiModule>(Path.Combine(hostingEnvironment.ContentRootPath, "..\\..\\..\\..\\framework\\src\\Volo.Abp.UI"));
                     options.FileSets.ReplaceEmbeddedByPyhsical<AbpAspNetCoreMvcUiModule>(Path.Combine(hostingEnvironment.ContentRootPath, "..\\..\\..\\..\\framework\\src\\Volo.Abp.AspNetCore.Mvc.UI"));
                     options.FileSets.ReplaceEmbeddedByPyhsical<AbpAspNetCoreMvcUiBootstrapModule>(Path.Combine(hostingEnvironment.ContentRootPath, "..\\..\\..\\..\\framework\\src\\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap"));
