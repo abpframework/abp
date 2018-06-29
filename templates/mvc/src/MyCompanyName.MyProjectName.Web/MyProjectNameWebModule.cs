@@ -16,11 +16,13 @@ using Volo.Abp;
 using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Modularity;
 using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.Autofac;
+using Volo.Abp.AutoMapper;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Identity;
@@ -46,12 +48,21 @@ namespace MyCompanyName.MyProjectName
         )]
     public class MyProjectNameWebModule : AbpModule
     {
+        public override void PreConfigureServices(IServiceCollection services)
+        {
+            services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
+            {
+                options.AddAssemblyResource(typeof(MyProjectNameResource), typeof(MyProjectNameWebModule).Assembly);
+            });
+        }
+
         public override void ConfigureServices(IServiceCollection services)
         {
             var hostingEnvironment = services.GetHostingEnvironment();
             var configuration = services.BuildConfiguration();
 
             ConfigureDatabaseServices(services, configuration);
+            ConfigureAutoMapper(services);
             ConfigureVirtualFileSystem(services, hostingEnvironment);
             ConfigureLocalizationServices(services);
             ConfigureNavigationServices(services);
@@ -71,6 +82,14 @@ namespace MyCompanyName.MyProjectName
             services.Configure<AbpDbContextOptions>(options => { options.UseSqlServer(); });
         }
 
+        private static void ConfigureAutoMapper(IServiceCollection services)
+        {
+            services.Configure<AbpAutoMapperOptions>(options =>
+            {
+                options.AddProfile<MyProjectNameWebAutoMapperProfile>(); //Pass validate parameter as true to validate the configuration
+            });
+        }
+
         private static void ConfigureVirtualFileSystem(IServiceCollection services, IHostingEnvironment hostingEnvironment)
         {
             if (hostingEnvironment.IsDevelopment())
@@ -78,8 +97,7 @@ namespace MyCompanyName.MyProjectName
                 services.Configure<VirtualFileSystemOptions>(options =>
                 {
                     options.FileSets.ReplaceEmbeddedByPyhsical<MyProjectNameDomainModule>(Path.Combine(hostingEnvironment.ContentRootPath, "..\\MyCompanyName.MyProjectName.Domain"));
-
-                     //</TEMPLATE-REMOVE>
+                    //</TEMPLATE-REMOVE>
                     options.FileSets.ReplaceEmbeddedByPyhsical<AbpUiModule>(Path.Combine(hostingEnvironment.ContentRootPath, "..\\..\\..\\..\\framework\\src\\Volo.Abp.UI"));
                     options.FileSets.ReplaceEmbeddedByPyhsical<AbpAspNetCoreMvcUiModule>(Path.Combine(hostingEnvironment.ContentRootPath, "..\\..\\..\\..\\framework\\src\\Volo.Abp.AspNetCore.Mvc.UI"));
                     options.FileSets.ReplaceEmbeddedByPyhsical<AbpAspNetCoreMvcUiBootstrapModule>(Path.Combine(hostingEnvironment.ContentRootPath, "..\\..\\..\\..\\framework\\src\\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap"));
@@ -88,7 +106,7 @@ namespace MyCompanyName.MyProjectName
                     options.FileSets.ReplaceEmbeddedByPyhsical<AbpPermissionManagementWebModule>(Path.Combine(hostingEnvironment.ContentRootPath, "..\\..\\..\\..\\modules\\permission-management\\src\\Volo.Abp.PermissionManagement.Web"));
                     options.FileSets.ReplaceEmbeddedByPyhsical<AbpIdentityWebModule>(Path.Combine(hostingEnvironment.ContentRootPath, "..\\..\\..\\..\\modules\\identity\\src\\Volo.Abp.Identity.Web"));
                     options.FileSets.ReplaceEmbeddedByPyhsical<AbpAccountWebModule>(Path.Combine(hostingEnvironment.ContentRootPath, "..\\..\\..\\..\\modules\\account\\src\\Volo.Abp.Account.Web"));
-					 //</TEMPLATE-REMOVE>
+					//</TEMPLATE-REMOVE>
                 });
             }
         }

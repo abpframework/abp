@@ -9,6 +9,8 @@
     "Name": "Name",
     "Type": "Type",
     "PublishDate": "Publish Date",
-    "Price": "Price"
+    "Price": "Price",
+    "NewBook": "New book",
+    "Books": "Books"
   }
 }

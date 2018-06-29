@@ -4,10 +4,11 @@
 
 In this tutorial series, you will build an application that is used to manage a list of books & their authors. **Entity Framework Core** (EF Core) will be used as the ORM provider (as it comes pre-configured with the startup template).
 
-This is the second part of the tutorial series. See other parts:
+This is the second part of the tutorial series. See all parts:
 
-- Part I (this tutorial)
-- [Part II](Part-II.md)
+- **Part I: Create the project and a book list page (this tutorial)**
+- [Part II: Create, Update and Delete books](Part-II.md)
+- [Part III: Integration Tests](Part-III.md)
 
 You can download the **source code** of the application [from here](https://github.com/volosoft/abp/tree/master/samples/BookStore).
 
@@ -183,6 +184,7 @@ namespace Acme.BookStore
 
 * `BookAppService` is derived from `AsyncCrudAppService<Book, BookDto, Guid>` which implements all CRUD methods defined above.
 * `BookAppService` injects `IRepository<Book, Guid>` which is the default repository created for the `Book` entity. See the [repository document](../../Repositories.md).
+* `BookAppService` uses `IObjectMapper` to convert `Book` objects to `BookDto` objects and vice verse. Startup template uses the [AutoMapper](http://automapper.org/) library as the mapping provider. Since you haven't defined any mapping configuration, AutoMapper's [inline mapping](http://automapper.readthedocs.io/en/latest/Inline-Mapping.html) feature is used to automatically configure the mapping. This works fine if both classes have identical properties, but may cause to problems if they not. See the [AutoMapper integration document](../../AutoMapper-Integration.md) for details.
 
 ### Auto API Controllers
 
@@ -355,7 +357,7 @@ Create `index.js` JavaScript file under the `wwwroot/pages/books/` folder:
 
 ````js
 $(function() {
-    $('#BooksTable').DataTable({
+    var dataTable = $('#BooksTable').DataTable({
         ajax: abp.libs.datatables.createAjax(acme.bookStore.book.getList),
         columnDefs: [
             {

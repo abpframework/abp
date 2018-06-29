@@ -16,21 +16,20 @@ using Volo.Abp;
 using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Modularity;
 using Volo.Abp.AspNetCore.Mvc;
-using Volo.Abp.AspNetCore.Mvc.UI;
-using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
+using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.Autofac;
+using Volo.Abp.AutoMapper;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Identity;
+using Volo.Abp.Identity.Localization;
 using Volo.Abp.Identity.Web;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.Resources.AbpValidation;
 using Volo.Abp.Modularity;
-using Volo.Abp.PermissionManagement.Web;
 using Volo.Abp.Threading;
-using Volo.Abp.UI;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
 
@@ -46,19 +45,36 @@ namespace Acme.BookStore
         )]
     public class BookStoreWebModule : AbpModule
     {
+        public override void PreConfigureServices(IServiceCollection services)
+        {
+            services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
+            {
+                options.AddAssemblyResource(typeof(BookStoreResource), typeof(BookStoreWebModule).Assembly);
+            });
+        }
+
         public override void ConfigureServices(IServiceCollection services)
         {
             var hostingEnvironment = services.GetHostingEnvironment();
             var configuration = services.BuildConfiguration();
 
             ConfigureDatabaseServices(services, configuration);
+            ConfigureAutoMapper(services);
             ConfigureVirtualFileSystem(services, hostingEnvironment);
             ConfigureLocalizationServices(services);
             ConfigureNavigationServices(services);
             ConfigureAutoApiControllers(services);
             ConfigureSwaggerServices(services);
-
+            
             services.AddAssemblyOf<BookStoreWebModule>();
+        }
+
+        private static void ConfigureAutoMapper(IServiceCollection services)
+        {
+            services.Configure<AbpAutoMapperOptions>(options =>
+            {
+                options.AddProfile<BookStoreWebAutoMapperProfile>(validate: true);
+            });
         }
 
         private static void ConfigureAutoApiControllers(IServiceCollection services)

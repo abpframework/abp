@@ -8,7 +8,17 @@
 }
 <abp-card>
     <abp-card-header>
-        <h2>@L["Books"]</h2>
+        <abp-row>
+            <abp-column size-md="_6">
+                <h2>@L["Books"]</h2>
+            </abp-column>
+            <abp-column size-md="_6" class="text-right">
+                <abp-button id="NewBookButton"
+                            text="@L["NewBook"].Value"
+                            icon="plus"
+                            button-type="Primary" />
+            </abp-column>
+        </abp-row>
     </abp-card-header>
     <abp-card-body>
         <abp-table striped-rows="true" id="BooksTable">

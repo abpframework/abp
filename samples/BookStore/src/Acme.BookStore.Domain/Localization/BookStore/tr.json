@@ -9,6 +9,8 @@
     "Name": "İsim",
     "Type": "Tür",
     "PublishDate": "Yayınlanma Tarihi",
-    "Price": "Fiyat"
+    "Price": "Fiyat",
+    "NewBook": "Yeni kitap",
+    "Books": "Kitaplar"
   }
 }
