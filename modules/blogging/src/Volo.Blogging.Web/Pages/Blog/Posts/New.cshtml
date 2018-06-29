@@ -2,6 +2,12 @@
 @using Volo.Blogging.Pages.Blog.Posts
 @model NewModel
 @inherits Volo.Blogging.Pages.Blog.BloggingPage
+
+@section scripts {
+    <abp-script-bundle name="@typeof(NewModel).FullName">
+        <abp-script src="/pages/blog/posts/bew.js" />
+    </abp-script-bundle>
+}
 <form method="post">
     <abp-input asp-for="Post.Title" auto-focus="true" />
 

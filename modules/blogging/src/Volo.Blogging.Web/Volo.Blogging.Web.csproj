@@ -25,4 +25,8 @@
     <EmbeddedResource Include="Pages\**\*.cshtml" Exclude="*.cs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Remove="wwwroot\pages\blog\posts\edit.js" />
+  </ItemGroup>
+
 </Project>
