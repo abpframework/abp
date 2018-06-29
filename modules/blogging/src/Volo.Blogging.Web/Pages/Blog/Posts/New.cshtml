@@ -4,7 +4,9 @@
 @inherits Volo.Blogging.Pages.Blog.BloggingPage
 <form method="post">
     <abp-input asp-for="Post.Title" auto-focus="true" />
-    
+
+    <abp-input asp-for="Post.Url" />
+
     <div class="form-group">
         <label>@L["Content"]</label>
         <textarea rows="4" class="form-control" name="Post.Content">@Model.Post.Content</textarea>

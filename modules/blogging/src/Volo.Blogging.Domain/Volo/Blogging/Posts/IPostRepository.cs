@@ -9,6 +9,6 @@ namespace Volo.Blogging.Posts
     {
         List<Post> GetPostsByBlogId(Guid id);
 
-        Task<Post> GetPost(Guid blogId, string title);
+        Task<Post> GetPostByUrl(Guid blogId, string url);
     }
 }

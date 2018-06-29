@@ -27,9 +27,9 @@ namespace Volo.Blogging.Posts
                 ObjectMapper.Map<List<Post>, List<PostWithDetailsDto>>(posts));
         }
 
-        public async Task<PostWithDetailsDto> GetByTitleAsync(GetPostInput input)
+        public async Task<PostWithDetailsDto> GetByUrlAsync(GetPostInput input)
         {
-            var post = await _postRepository.GetPost(input.BlogId, input.Title);
+            var post = await _postRepository.GetPostByUrl(input.BlogId, input.Url);
 
             return ObjectMapper.Map<Post, PostWithDetailsDto>(post);
         }
@@ -50,7 +50,8 @@ namespace Volo.Blogging.Posts
                 Id = post.Id,
                 BlogId = post.BlogId,
                 Content = post.Content,
-                Title = post.Title
+                Title = post.Title,
+                Url = post.Url
             };
 
             return dto;
@@ -62,6 +63,7 @@ namespace Volo.Blogging.Posts
             var post = await _postRepository.GetAsync(id);
 
             post.SetTitle(input.Title);
+            post.SetUrl(input.Url);
             post.Content = input.Content;
 
             post = await _postRepository.UpdateAsync(post);
@@ -76,7 +78,8 @@ namespace Volo.Blogging.Posts
                 id: GuidGenerator.Create(),
                 blogId: input.BlogId,
                 creatorId: CurrentUser.GetId(),
-                title: input.Title
+                title: input.Title,
+                url: input.Url
             ) {Content = input.Content};
 
             await _postRepository.InsertAsync(post);

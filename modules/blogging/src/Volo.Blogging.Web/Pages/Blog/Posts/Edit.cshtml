@@ -1,15 +1,12 @@
 ﻿@page
 @using Volo.Blogging.Pages.Blog.Posts
 @model EditModel
-@{
-
-}
-
-
 
 <form method="post" id="edit-post-form">
 
-    <abp-input asp-for="@Model.Post.Title" autofocus />
+    <abp-input asp-for="@Model.Post.Title"  auto-focus="true" />
+
+    <abp-input asp-for="@Model.Post.Url" />
 
     <div class="form-group">
         <label>Content</label>
