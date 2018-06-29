@@ -37,13 +37,14 @@ namespace Volo.Blogging.Pages.Blog.Posts
             {
                 BlogId = Post.BlogId,
                 Title = Post.Title,
+                Url = Post.Url,
                 Content = Post.Content
             };
 
             var editedPost = await _postAppService.UpdateAsync(Post.Id, post);
             var blog = await _blogAppService.GetAsync(editedPost.BlogId);
 
-            return Redirect(Url.Content($"~/blog/{blog.ShortName}/{editedPost.Title}"));
+            return Redirect(Url.Content($"~/blog/{blog.ShortName}/{editedPost.Url}"));
         }
     }
 
@@ -59,6 +60,11 @@ namespace Volo.Blogging.Pages.Blog.Posts
         [StringLength(PostConsts.MaxTitleLength)]
         [Display(Name = "Title")]
         public string Title { get; set; }
+
+        [Required]
+        [StringLength(PostConsts.MaxUrlLength)]
+        [Display(Name = "Url")]
+        public string Url { get; set; }
 
         [StringLength(PostConsts.MaxContentLength)]
         [Display(Name = "Content")]

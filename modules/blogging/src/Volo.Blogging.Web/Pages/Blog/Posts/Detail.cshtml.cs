@@ -18,7 +18,7 @@ namespace Volo.Blogging.Pages.Blog.Posts
         public string BlogShortName { get; set; }
 
         [BindProperty(SupportsGet = true)]
-        public string PostTitle { get; set; }
+        public string PostUrl { get; set; }
 
         public PostWithDetailsDto Post { get; set; }
 
@@ -34,7 +34,7 @@ namespace Volo.Blogging.Pages.Blog.Posts
         {
             var blog = await _blogAppService.GetByShortNameAsync(BlogShortName);
 
-            Post = await _postAppService.GetByTitleAsync(new GetPostInput {BlogId = blog.Id , Title = PostTitle});
+            Post = await _postAppService.GetByUrlAsync(new GetPostInput {BlogId = blog.Id , Url = PostUrl});
             Blog = blog;
         }
     }

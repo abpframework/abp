@@ -11,6 +11,11 @@ namespace Volo.Blogging.Posts
         [StringLength(PostConsts.MaxTitleLength)]
         public string Title { get; set; }
 
+
+        [Required]
+        [StringLength(PostConsts.MaxUrlLength)]
+        public string Url { get; set; }
+
         [StringLength(PostConsts.MaxContentLength)]
         public string Content { get; set; }
     }

@@ -53,7 +53,7 @@ namespace Volo.Blogging
             {
                 //TODO: Make configurable!
                 options.Conventions.AddPageRoute("/Blog/Posts/Index", "blog/{blogShortName}");
-                options.Conventions.AddPageRoute("/Blog/Posts/Detail", "blog/{blogShortName}/{postTitle}");
+                options.Conventions.AddPageRoute("/Blog/Posts/Detail", "blog/{blogShortName}/{postUrl}");
                 options.Conventions.AddPageRoute("/Blog/Posts/Edit", "blog/{blogShortName}/posts/edit/{postId}");
                 options.Conventions.AddPageRoute("/Blog/Posts/New", "blog/{blogShortName}/posts/new");
             });

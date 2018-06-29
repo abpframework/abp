@@ -42,7 +42,7 @@ namespace Volo.Blogging.Pages.Blog.Posts
             var postWithDetailsDto = await _postAppService.CreateAsync(ObjectMapper.Map<CreatePostViewModel,CreatePostDto>(Post));
 
             //TODO: Try Url.Page(...)
-            return Redirect(Url.Content($"~/blog/{blog.ShortName}/{postWithDetailsDto.Title}"));
+            return Redirect(Url.Content($"~/blog/{blog.ShortName}/{postWithDetailsDto.Url}"));
         }
 
         public class CreatePostViewModel
@@ -54,6 +54,11 @@ namespace Volo.Blogging.Pages.Blog.Posts
             [StringLength(PostConsts.MaxTitleLength)]
             [Display(Name = "Title")]
             public string Title { get; set; }
+
+            [Required]
+            [StringLength(PostConsts.MaxUrlLength)]
+            [Display(Name = "Url")]
+            public string Url { get; set; }
 
             [StringLength(PostConsts.MaxContentLength)]
             [Display(Name = "Content")]

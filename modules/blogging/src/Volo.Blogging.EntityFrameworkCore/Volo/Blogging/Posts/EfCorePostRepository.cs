@@ -24,9 +24,9 @@ namespace Volo.Blogging.Posts
             return DbSet.Where(p => p.BlogId == id).ToList();
         }
 
-        public async Task<Post> GetPost(Guid blogId, string title)
+        public async Task<Post> GetPostByUrl(Guid blogId, string url)
         {
-            return await DbSet.FirstOrDefaultAsync(p => p.BlogId == blogId && p.Title == title);
+            return await DbSet.FirstOrDefaultAsync(p => p.BlogId == blogId && p.Url == url);
         }
     }
 }
