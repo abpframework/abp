@@ -1,13 +1,14 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Blogging.Blogs;
 using Volo.Blogging.Posts;
 
 namespace Volo.Blogging.Pages.Blog.Posts
 {
-    public class EditModel : PageModel
+    public class EditModel : AbpPageModel
     {
         private readonly IPostAppService _postAppService;
         private readonly IBlogAppService _blogAppService;
@@ -15,7 +16,8 @@ namespace Volo.Blogging.Pages.Blog.Posts
         [BindProperty(SupportsGet = true)]
         public string PostId { get; set; }
 
-        public PostWithDetailsDto Post { get; set; }
+        [BindProperty]
+        public EditPostViewModel Post { get; set; }
 
         public EditModel(IPostAppService postAppService, IBlogAppService blogAppService)
         {
@@ -25,15 +27,41 @@ namespace Volo.Blogging.Pages.Blog.Posts
 
         public async void OnGet()
         {
-            Post = await _postAppService.GetAsync(new Guid(PostId));
+            var postDto = await _postAppService.GetForEditAsync(new Guid(PostId));
+            Post = ObjectMapper.Map<GetPostForEditOutput, EditPostViewModel>(postDto);
         }
 
-        public async Task<ActionResult> OnPost(Guid id, UpdatePostDto post)
+        public async Task<ActionResult> OnPost()
         {
-            var editedPost = await _postAppService.UpdateAsync(id, post);
+            var post = new UpdatePostDto
+            {
+                BlogId = Post.BlogId,
+                Title = Post.Title,
+                Content = Post.Content
+            };
+
+            var editedPost = await _postAppService.UpdateAsync(Post.Id, post);
             var blog = await _blogAppService.GetAsync(editedPost.BlogId);
 
             return Redirect(Url.Content($"~/blog/{blog.ShortName}/{editedPost.Title}"));
         }
+    }
+
+    public class EditPostViewModel
+    {
+        [HiddenInput]
+        public Guid Id { get; set; }
+
+        [HiddenInput]
+        public Guid BlogId { get; set; }
+
+        [Required]
+        [StringLength(PostConsts.MaxTitleLength)]
+        [Display(Name = "Title")]
+        public string Title { get; set; }
+
+        [StringLength(PostConsts.MaxContentLength)]
+        [Display(Name = "Content")]
+        public string Content { get; set; }
     }
 }

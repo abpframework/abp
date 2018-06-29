@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
+using Volo.Abp.AutoMapper;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.Resources.AbpValidation;
 using Volo.Abp.Modularity;
@@ -14,6 +15,7 @@ namespace Volo.Blogging
 {
     [DependsOn(
         typeof(BloggingHttpApiModule),
+        typeof(AbpAutoMapperModule),
         typeof(AbpAspNetCoreMvcUiBootstrapModule)
     )]
     public class BloggingWebModule : AbpModule
@@ -40,6 +42,11 @@ namespace Volo.Blogging
                     .AddBaseTypes(typeof(AbpValidationResource))
                     .AddBaseTypes(typeof(AbpUiModule))
                     .AddVirtualJson("/Localization/Resources/Blogging/Web");
+            });
+
+            services.Configure<AbpAutoMapperOptions>(options =>
+            {
+                options.AddProfile<AbpBloggingWebAutoMapperProfile>(validate: true);
             });
 
             services.Configure<RazorPagesOptions>(options =>

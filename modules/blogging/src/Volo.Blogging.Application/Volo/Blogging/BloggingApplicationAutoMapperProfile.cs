@@ -12,6 +12,7 @@ namespace Volo.Blogging
             CreateMap<Blog, BlogDto>();
             CreateMap<Post, PostDto>();
             CreateMap<Post, PostWithDetailsDto>();
+            CreateMap<Post, GetPostForEditOutput>();
         }
     }
 }

@@ -41,6 +41,21 @@ namespace Volo.Blogging.Posts
             return ObjectMapper.Map<Post, PostWithDetailsDto>(post);
         }
 
+        public async Task<GetPostForEditOutput> GetForEditAsync(Guid id)
+        {
+            var post = await _postRepository.GetAsync(id);
+
+            var dto = new GetPostForEditOutput
+            {
+                Id = post.Id,
+                BlogId = post.BlogId,
+                Content = post.Content,
+                Title = post.Title
+            };
+
+            return dto;
+        }
+
         [Authorize(BloggingPermissions.Posts.Update)]
         public async Task<PostWithDetailsDto> UpdateAsync(Guid id, UpdatePostDto input)
         {

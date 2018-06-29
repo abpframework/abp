@@ -2,13 +2,13 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Blogging.Blogs;
 using Volo.Blogging.Posts;
 
 namespace Volo.Blogging.Pages.Blog.Posts
 {
-    public class NewModel : PageModel
+    public class NewModel : AbpPageModel
     {
         private readonly IPostAppService _postAppService;
         private readonly IBlogAppService _blogAppService;
@@ -39,14 +39,7 @@ namespace Volo.Blogging.Pages.Blog.Posts
         public async Task<ActionResult> OnPost()
         {
             var blog = await _blogAppService.GetAsync(Post.BlogId);
-            var postWithDetailsDto = await _postAppService.CreateAsync(
-                new CreatePostDto //TODO: Use automapper
-                {
-                    BlogId = Post.BlogId,
-                    Title = Post.Title,
-                    Content = Post.Content
-                }
-            );
+            var postWithDetailsDto = await _postAppService.CreateAsync(ObjectMapper.Map<CreatePostViewModel,CreatePostDto>(Post));
 
             //TODO: Try Url.Page(...)
             return Redirect(Url.Content($"~/blog/{blog.ShortName}/{postWithDetailsDto.Title}"));

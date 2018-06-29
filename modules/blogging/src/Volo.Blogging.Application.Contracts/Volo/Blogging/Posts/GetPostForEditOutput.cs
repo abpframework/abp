@@ -5,7 +5,7 @@ using Volo.Abp.Application.Dtos;
 
 namespace Volo.Blogging.Posts
 {
-    public class GetPostForEditOutput : FullAuditedEntityDto<Guid>
+    public class GetPostForEditOutput : EntityDto<Guid>
     {
         public Guid BlogId { get; set; }
 
