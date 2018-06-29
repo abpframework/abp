@@ -2,5 +2,24 @@
 @using Acme.BookStore.Pages.Books
 @inherits Acme.BookStore.Pages.BookStorePageBase
 @model IndexModel
-
-<h2>Books</h2>
+@section scripts
+{
+    <abp-script src="/pages/books/index.js" />
+}
+<abp-card>
+    <abp-card-header>
+        <h2>@L["Books"]</h2>
+    </abp-card-header>
+    <abp-card-body>
+        <abp-table striped-rows="true" id="BooksTable">
+            <thead>
+                <tr>
+                    <th>@L["Name"]</th>
+                    <th>@L["Type"]</th>
+                    <th>@L["PublishDate"]</th>
+                    <th>@L["Price"]</th>
+                </tr>
+            </thead>
+        </abp-table>
+    </abp-card-body>
+</abp-card>

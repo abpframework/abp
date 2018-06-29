@@ -4,6 +4,11 @@
 
 In this tutorial series, you will build an application that is used to manage a list of books & their authors. **Entity Framework Core** (EF Core) will be used as the ORM provider (as it comes pre-configured with the startup template).
 
+This is the second part of the tutorial series. See other parts:
+
+- Part I (this tutorial)
+- [Part II](Part-II.md)
+
 You can download the **source code** of the application [from here](https://github.com/volosoft/abp/tree/master/samples/BookStore).
 
 ### Creating the Project
@@ -302,4 +307,86 @@ When you click to the Books menu item, you are redirected to the new Books page.
 
 #### Book List
 
-TODO...
+We will use the [Datatables.net](https://datatables.net/) JQuery plugin to show list of tables on the page. Datatables completely works via AJAX, so it is fast and provides a good user experience. Datatables plugin is configured in the startup template, so you can directly use it.
+
+##### Index.cshtml Changes
+
+Change the `Pages/Books/Index.cshtml` as following:
+
+````html
+@page
+@using Acme.BookStore.Pages.Books
+@inherits Acme.BookStore.Pages.BookStorePageBase
+@model IndexModel
+@section scripts
+{
+    <abp-script src="/pages/books/index.js" />
+}
+<abp-card>
+    <abp-card-header>
+        <h2>@L["Books"]</h2>
+    </abp-card-header>
+    <abp-card-body>
+        <abp-table striped-rows="true" id="BooksTable">
+            <thead>
+                <tr>
+                    <th>@L["Name"]</th>
+                    <th>@L["Type"]</th>
+                    <th>@L["PublishDate"]</th>
+                    <th>@L["Price"]</th>
+                </tr>
+            </thead>
+        </abp-table>
+    </abp-card-body>
+</abp-card>
+````
+
+* `abp-script` [tag helper](https://docs.microsoft.com/en-us/aspnet/core/mvc/views/tag-helpers/intro) is used to add external **scripts** to the page. It has many additional features compared to standard `script` tag. It handles **minification** and **versioning** for example. See the [bundling & minification document](../../AspNetCore/Bundling-Minification.md) for details.
+* `abp-card` and `abp-table` are **tag helpers** for Twitter Bootstrap's [card component](http://getbootstrap.com/docs/4.1/components/card/). There are many tag helpers in ABP to easily use most of the [bootstrap](https://getbootstrap.com/) components. You can use regular HTML tags instead of these tag helpers, but using tag helpers reduces HTML code and prevents errors by the help of the intellisense. See the [tag helpers document](../../AspNetCore/Tag-Helpers.md).
+* You can **localize** the column names in the localization file as you did for the menu items above.
+
+##### Add a Script File
+
+Create `index.js` JavaScript file under the `wwwroot/pages/books/` folder:
+
+![bookstore-index-js-file](../../images/bookstore-index-js-file.png)
+
+`index.js` content is shown below:
+
+````js
+$(function() {
+    $('#BooksTable').DataTable({
+        ajax: abp.libs.datatables.createAjax(acme.bookStore.book.getList),
+        columnDefs: [
+            {
+                targets: 0,
+                data: "name"
+            },
+            {
+                targets: 1,
+                data: "type"
+            },
+            {
+                targets: 2,
+                data: "price"
+            },
+            {
+                targets: 3,
+                data: "publishDate"
+            }
+        ]
+    });
+});
+````
+
+* `abp.libs.datatables.createAjax` is a helper function to adapt ABP's dynamic JavaScript API proxies to Datatable's format.
+* `acme.bookStore.book.getList` is the function to get list of books (you have seen it before).
+* See [Datatable's documentation](https://datatables.net/manual/) for more configuration options.
+
+The final UI is shown below:
+
+![bookstore-book-list](../../images/bookstore-book-list.png)
+
+### Next Part
+
+See the [next part](Part-II.md) of this tutorial.
