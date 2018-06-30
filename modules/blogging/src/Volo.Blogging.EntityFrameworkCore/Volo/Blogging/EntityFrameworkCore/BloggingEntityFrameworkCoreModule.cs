@@ -2,7 +2,7 @@
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 
-namespace Volo.Blogging.EntityFrameworkCore.Volo.Blogging.EntityFrameworkCore
+namespace Volo.Blogging.EntityFrameworkCore
 {
     [DependsOn(
         typeof(BloggingDomainModule),
