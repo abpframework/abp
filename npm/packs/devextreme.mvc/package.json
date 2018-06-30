@@ -1,0 +1,14 @@
+{
+  "version": "0.3.5",
+  "name": "@abp/devextreme.mvc",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@abp/jquery": "^0.3.5",
+    "@abp/bootstrap": "^0.3.5",
+    "jzip": "^1.0.0",
+    "devextreme": "^18.1.4",
+    "devextreme-aspnet-data": "^1.4.7"
+  }
+}
