@@ -4,7 +4,7 @@ using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
-using Volo.Blogging.EntityFrameworkCore.Volo.Blogging.EntityFrameworkCore;
+using Volo.Blogging.EntityFrameworkCore;
 
 namespace Volo.BloggingTestApp.EntityFrameworkCore
 {
