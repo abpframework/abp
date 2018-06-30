@@ -1,4 +1,6 @@
-﻿using Volo.Abp.EntityFrameworkCore;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.Modularity;
 
 namespace Volo.Blogging.EntityFrameworkCore
 {
