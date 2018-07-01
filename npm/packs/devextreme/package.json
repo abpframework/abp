@@ -1,0 +1,12 @@
+{
+  "version": "0.3.5",
+  "name": "@abp/devextreme",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@abp/bootstrap": "^0.3.5",
+    "@abp/jszip": "^3.1.5",
+    "devextreme": "^18.1.4"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "version": "0.3.5",
+  "name": "@abp/devextreme-aspnet-data",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@abp/devextreme": "^18.1.4",
+    "devextreme-aspnet-data": "^1.4.7"
+  }
+}
