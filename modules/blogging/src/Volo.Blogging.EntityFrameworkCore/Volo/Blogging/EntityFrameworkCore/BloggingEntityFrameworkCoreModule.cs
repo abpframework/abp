@@ -1,8 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.EntityFrameworkCore;
-using Volo.Abp.Modularity;
+﻿using Volo.Abp.EntityFrameworkCore;
 
-namespace Volo.Blogging.EntityFrameworkCore.Volo.Blogging.EntityFrameworkCore
+namespace Volo.Blogging.EntityFrameworkCore
 {
     [DependsOn(
         typeof(BloggingDomainModule),
