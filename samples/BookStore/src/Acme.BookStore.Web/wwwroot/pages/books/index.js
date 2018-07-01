@@ -12,11 +12,15 @@
             },
             {
                 targets: 2,
-                data: "price"
+                data: "publishDate"
             },
             {
                 targets: 3,
-                data: "publishDate"
+                data: "price"
+            },
+            {
+                targets: 4,
+                data: "creationTime"
             }
         ]
     });
