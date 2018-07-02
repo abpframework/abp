@@ -2,9 +2,9 @@
 
 namespace MyCompanyName.MyProjectName
 {
-    public class MyProjectNameWebAutoMapperProfile : Profile
+    public class MyProjectNameApplicationAutoMapperProfile : Profile
     {
-        public MyProjectNameWebAutoMapperProfile()
+        public MyProjectNameApplicationAutoMapperProfile()
         {
             //Configure your AutoMapper mapping configuration here...
         }
