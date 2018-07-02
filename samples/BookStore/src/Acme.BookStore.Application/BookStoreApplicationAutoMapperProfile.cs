@@ -2,9 +2,9 @@
 
 namespace Acme.BookStore
 {
-    public class BookStoreWebAutoMapperProfile : Profile
+    public class BookStoreApplicationAutoMapperProfile : Profile
     {
-        public BookStoreWebAutoMapperProfile()
+        public BookStoreApplicationAutoMapperProfile()
         {
             //add your custom AutoMapper configuration
         }

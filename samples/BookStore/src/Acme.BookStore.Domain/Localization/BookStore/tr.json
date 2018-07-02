@@ -10,6 +10,7 @@
     "Type": "Tür",
     "PublishDate": "Yayınlanma Tarihi",
     "Price": "Fiyat",
+    "CreationTime": "Oluşturulma zamanı",
     "NewBook": "Yeni kitap",
     "Books": "Kitaplar"
   }

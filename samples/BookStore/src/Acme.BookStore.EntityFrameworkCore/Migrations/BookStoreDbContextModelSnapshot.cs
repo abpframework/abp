@@ -24,6 +24,14 @@ namespace Acme.BookStore.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<DateTime>("CreationTime");
+
+                    b.Property<Guid?>("CreatorId");
+
+                    b.Property<DateTime?>("LastModificationTime");
+
+                    b.Property<Guid?>("LastModifierId");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(128);

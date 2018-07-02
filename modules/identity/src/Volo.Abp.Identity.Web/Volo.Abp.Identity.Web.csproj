@@ -18,6 +18,16 @@
     <EmbeddedResource Include="wwwroot\**\*.*" />
     <EmbeddedResource Include="Pages\**\*.cshtml" Exclude="*.cs" />
     <EmbeddedResource Include="Localization\Resources\**\*.json" />
+
+    <Content Remove="wwwroot\**\*.*" />
+    <Content Remove="Pages\**\*.cshtml" />
+    <Content Remove="Localization\Resources\**\*.json" />
+    <Content Remove="compilerconfig.json" />
+    <Content Remove="compilerconfig.json.defaults" />
+    <Content Remove="Properties\launchSettings.json" />
+
+    <None Include="compilerconfig.json" />
+    <None Include="Properties\launchSettings.json" />
   </ItemGroup>
 
   <ItemGroup>

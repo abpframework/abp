@@ -12,6 +12,10 @@ namespace Acme.BookStore.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
+                    CreationTime = table.Column<DateTime>(nullable: false),
+                    CreatorId = table.Column<Guid>(nullable: true),
+                    LastModificationTime = table.Column<DateTime>(nullable: true),
+                    LastModifierId = table.Column<Guid>(nullable: true),
                     Name = table.Column<string>(maxLength: 128, nullable: false),
                     Type = table.Column<byte>(nullable: false),
                     PublishDate = table.Column<DateTime>(nullable: false),

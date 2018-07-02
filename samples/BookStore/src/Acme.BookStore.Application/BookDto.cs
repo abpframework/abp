@@ -1,13 +1,12 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.AutoMapper;
 
 namespace Acme.BookStore
 {
-    public class BookDto : EntityDto<Guid>
+    [AutoMapFrom(typeof(Book))]
+    public class BookDto : AuditedEntityDto<Guid>
     {
-        [Required]
-        [StringLength(128)]
         public string Name { get; set; }
 
         public BookType Type { get; set; }

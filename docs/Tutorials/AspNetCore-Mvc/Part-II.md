@@ -29,8 +29,6 @@ Create a new razor page, named `CreateModal.cshtml` under the `Pages/Books` fold
 Open the `CreateModal.cshtml.cs` file (`CreateModalModel` class) and replace with the following code:
 
 ````C#
-using System;
-using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
@@ -40,7 +38,7 @@ namespace Acme.BookStore.Pages.Books
     public class CreateModalModel : AbpPageModel
     {
         [BindProperty]
-        public CreateBookViewModel Book { get; set; }
+        public CreateUpdateBookDto Book { get; set; }
 
         private readonly IBookAppService _bookAppService;
 
@@ -51,75 +49,15 @@ namespace Acme.BookStore.Pages.Books
 
         public async Task<IActionResult> OnPostAsync()
         {
-            ValidateModel();
-
-            var bookDto = ObjectMapper.Map<CreateBookViewModel, BookDto>(Book);
-            await _bookAppService.CreateAsync(bookDto);
-
+            await _bookAppService.CreateAsync(Book);
             return NoContent();
         }
-
-        public class CreateBookViewModel
-        {
-            [Required]
-            [StringLength(128)]
-            [Display(Name = "Name")]
-            public string Name { get; set; }
-
-            [Display(Name = "Type")]
-            public BookType Type { get; set; } = BookType.Undefined;
-
-            [Display(Name = "PublishDate")]
-            public DateTime PublishDate { get; set; }
-
-            [Display(Name = "Price")]
-            public float Price { get; set; }
-        }
     }
 }
 ````
 
-* `CreateBookViewModel` is a nested class that will be used to create and post the form.
-  * Each property has a `[Display]` property which sets the label on the form for the related input. It's also integrated to the localization system.
-  * Each property has data annotations for validation which is used for validation in the client side and the server side and automatically localized.
 * `[BindProperty]` attribute on the `Book` property binds post request data to this property.
-
-##### AutoMapper Configuration
-
-`OnPostAsync` method maps `CreateBookViewModel` object to `BookDto` object (which is accepted by the `BookAppService.CreateAsync` method).
-
-Open the `BookStoreWebAutoMapperProfile` class and add the mapping:
-
-````C#
-using Acme.BookStore.Pages.Books;
-using AutoMapper;
-using Volo.Abp.AutoMapper;
-
-namespace Acme.BookStore
-{
-    public class BookStoreWebAutoMapperProfile : Profile
-    {
-        public BookStoreWebAutoMapperProfile()
-        {
-            CreateMap<CreateModalModel.CreateBookViewModel, BookDto>()
-                .Ignore(x => x.Id);
-        }
-    }
-}
-
-````
-
-Thus, AutoMapper will create the mapping configuration between classes and will ignore the `Id` property of the `BookDto` class (to satisfy the configuration validation - see below).
-
-##### AutoMapper Configuration Validation
-
-AutoMapper has a [configuration validation feature](http://automapper.readthedocs.io/en/latest/Configuration-validation.html) which is not enabled for the startup template by default. If you want to perform validation, go to the `BookStoreWebModule` class, find the `ConfigureAutoMapper` method and change the `AddProfile` line as shown below:
-
-````c#
-options.AddProfile<BookStoreWebAutoMapperProfile>(validate: true);
-````
-
-It's up to you to use validation or not. It can prevent mapping mistakes, but comes with a cost of configuration. See [AutoMapper's documentation](http://automapper.readthedocs.io/en/latest/Configuration-validation.html) to fully understand it.
+* This class simply injects the `IBookAppService` in its constructor and calls the `CreateAsync` method in the `OnPostAsync` handler.
 
 ##### CreateModal.cshtml
 
@@ -139,8 +77,7 @@ Open the `CreateModal.cshtml` file and paste the code below:
         <abp-modal-body>
             <abp-form-content />
         </abp-modal-body>
-        <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)">
-        </abp-modal-footer>
+        <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)"></abp-modal-footer>
     </abp-modal>
 </abp-dynamic-form>
 ````
