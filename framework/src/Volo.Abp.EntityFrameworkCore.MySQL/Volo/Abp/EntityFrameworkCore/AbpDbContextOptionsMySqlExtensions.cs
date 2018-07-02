@@ -6,9 +6,9 @@ using System.Text;
 
 namespace Volo.Abp.EntityFrameworkCore
 {
-    public static class AbpDbContextOptionsMySqlExtensions
+    public static class AbpDbContextOptionsMySQLExtensions
     {
-        public static void UseMySql(
+        public static void UseMySQL(
                 [NotNull] this AbpDbContextOptions options,
                 [CanBeNull] Action<MySQLDbContextOptionsBuilder> mySQLOptionsAction = null)
         {
