@@ -17,26 +17,23 @@
 }
 <abp-card id="IdentityRolesWrapper">
     <abp-card-header>
-        <div class="row">
-            <div class="col-md-6">
+        <abp-row>
+            <abp-column size-md="_6">
                 <h2>@L["Roles"]</h2>
-            </div>
-            <div class="col-md-6 text-right">
-                <button type="button" name="CreateRole" class="btn btn-primary">
-                    <i class="fa fa-plus" aria-hidden="true"></i>
-                    @L["NewRole"]
-                </button>
-            </div>
-        </div>
+            </abp-column>
+            <abp-column size-md="_6" class="text-right">
+                <abp-button button-type="Primary" name="CreateRole" text="@L["NewRole"].Value" icon="plus"/>
+            </abp-column>
+        </abp-row>
     </abp-card-header>
     <abp-card-body>
-        <table class="table table-striped nowrap">
-            <thead>
-                <tr>
-                    <th>@L["Actions"]</th>
-                    <th>@L["RoleName"]</th>
-                </tr>
-            </thead>
-        </table>
+        <abp-table striped-rows="true" class="nowrap">
+                <thead>
+                    <tr>
+                        <th>@L["Actions"]</th>
+                        <th>@L["RoleName"]</th>
+                    </tr>
+                </thead>
+        </abp-table>
     </abp-card-body>
 </abp-card>

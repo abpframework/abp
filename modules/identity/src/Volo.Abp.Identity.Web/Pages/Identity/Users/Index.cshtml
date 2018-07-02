@@ -22,31 +22,28 @@
 
 <abp-card id="IdentityUsersWrapper">
     <abp-card-header>
-        <div class="row">
-            <div class="col-md-6">
+        <abp-row>
+            <abp-column size-md="_6">
                 <h2>@L["Users"]</h2>
-            </div>
-            <div class="col-md-6 text-right">
+            </abp-column>
+            <abp-column  size-md="_6" class="text-right">
                 @if (await Authorization.IsGrantedAsync(IdentityPermissions.Users.Create))
                 {
-                    <button type="button" name="CreateUser" class="btn btn-primary">
-                        <i class="fa fa-plus" aria-hidden="true"></i>
-                        @L["NewUser"]
-                    </button>
+                    <abp-button button-type="Primary" name="CreateUser" text="@L["NewUser"].Value" icon="plus"/>
                 }
-            </div>
-        </div>
+            </abp-column>
+        </abp-row>
     </abp-card-header>
     <abp-card-body>
-        <table class="table table-striped nowrap">
-            <thead>
-                <tr>
-                    <th>@L["Actions"]</th>
-                    <th>@L["UserName"]</th>
-                    <th>@L["EmailAddress"]</th>
-                    <th>@L["PhoneNumber"]</th>
-                </tr>
-            </thead>
-        </table>
+        <abp-table striped-rows="true" class="nowrap">
+                <thead>
+                    <tr>
+                        <th>@L["Actions"]</th>
+                        <th>@L["UserName"]</th>
+                        <th>@L["EmailAddress"]</th>
+                        <th>@L["PhoneNumber"]</th>
+                    </tr>
+                </thead>
+        </abp-table>
     </abp-card-body>
 </abp-card>
