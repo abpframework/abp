@@ -4,19 +4,14 @@
     ViewData["Title"] = "Cards";
 }
 
+@section styles {
+    <abp-style-bundle>
+        <abp-style src="/css/demo.css" />
+    </abp-style-bundle>
+}
+
 <h2>Cards</h2>
 
-@*
-    <h4># Example</h4>
-
-    <div class="demo-with-code">
-        <div class="demo-area">
-        </div>
-        <div class="code-area">
-    <pre></pre>
-        </div>
-    </div>
-*@
 
 <p>Based on <a href="http://getbootstrap.com/docs/4.1/components/card/" target="_blank"> Bootstrap card</a>.</p>
 
@@ -100,10 +95,10 @@
                         <a class="nav-link active" href="#">Active</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Link</a>
+                        <a class="nav-link" href="#link">Link</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link disabled" href="#">Disabled</a>
+                        <a class="nav-link disabled" href="#disabledlink">Disabled</a>
                     </li>
                 </ul>
             </abp-card-header>
@@ -122,10 +117,10 @@
                 &lt;a class="nav-link active" href="#"&gt;Active&lt;/a&gt;
             &lt;/li&gt;
             &lt;li class="nav-item"&gt;
-                &lt;a class="nav-link" href="#"&gt;Link&lt;/a&gt;
+                &lt;a class="nav-link" href="#link"&gt;Link&lt;/a&gt;
             &lt;/li&gt;
             &lt;li class="nav-item"&gt;
-                &lt;a class="nav-link disabled" href="#"&gt;Disabled&lt;/a&gt;
+                &lt;a class="nav-link disabled" href="#disabledlink"&gt;Disabled&lt;/a&gt;
             &lt;/li&gt;
         &lt;/ul&gt;
     &lt;/abp-card-header&gt;

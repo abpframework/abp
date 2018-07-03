@@ -6,13 +6,19 @@
     ViewData["Title"] = "Forms";
 }
 
+@section styles {
+    <abp-style-bundle>
+        <abp-style src="/css/demo.css" />
+    </abp-style-bundle>
+}
+
 <h2>Dynamic Forms</h2>
 
 <h4># Dynamic Form Example</h4>
 
 <div class="demo-with-code">
     <div class="demo-area">
-        <abp-dynamic-form abp-model="@Model.PersonInput"/>
+        <abp-dynamic-form abp-model="@Model.PersonInput" />
         <hr />
         <h5>Posted Values:</h5>
         <div>

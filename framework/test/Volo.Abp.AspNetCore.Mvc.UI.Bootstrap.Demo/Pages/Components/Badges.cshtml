@@ -4,17 +4,23 @@
     ViewData["Title"] = "Badges";
 }
 
+@section styles {
+    <abp-style-bundle>
+        <abp-style src="/css/demo.css" />
+    </abp-style-bundle>
+}
+
 <h2>Badges</h2>
 
-<p>Based on <a href="https://getbootstrap.com/docs/4.1/components/badges/" target="_blank"> Bootstrap Badge</a>.</p>
+<p>Based on <a href="https://getbootstrap.com/docs/4.1/components/badge/" target="_blank"> Bootstrap Badge</a>.</p>
 
 <h4># Badges Examples</h4>
 
 <div class="demo-with-code">
     <div class="demo-area">
 
-        <span abp-badge="Primary" >I'm an abp badge!</span>
-        <span abp-badge-pill="Warning" >I'm an abp pill badge!</span>
+        <span abp-badge="Primary">I'm an abp badge!</span>
+        <span abp-badge-pill="Warning">I'm an abp pill badge!</span>
         <a abp-badge="Danger" href="#">I'm an abp badge link!</a>
         <a abp-badge-pill="Success" href="#">I'm an abp pill badge link!</a>
 

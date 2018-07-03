@@ -4,6 +4,12 @@
     ViewData["Title"] = "Tabs";
 }
 
+@section styles {
+    <abp-style-bundle>
+        <abp-style src="/css/demo.css" />
+    </abp-style-bundle>
+}
+
 <h2>Tabs</h2>
 
 <p>Based on <a href="http://getbootstrap.com/docs/4.1/components/navs/#tabs" target="_blank"> Bootstrap tab</a>.</p>
@@ -15,7 +21,7 @@
         <abp-tabs>
             <abp-tab title="Home">
                 Content_Home
-            </abp-tab>   
+            </abp-tab>
             <abp-tab title="profile">
                 Content_Profile
             </abp-tab>
@@ -48,7 +54,7 @@
         <abp-tabs name="TabId">
             <abp-tab name="nav-home" title="Home">
                 Content_Home
-            </abp-tab>   
+            </abp-tab>
             <abp-tab name="nav-profile" active="true" title="profile">
                 Content_Profile
             </abp-tab>
@@ -81,7 +87,7 @@
         <abp-tabs tab-style="Pill">
             <abp-tab active="true" title="Home">
                 Content_Home
-            </abp-tab>   
+            </abp-tab>
             <abp-tab title="profile">
                 Content_Profile
             </abp-tab>
@@ -114,7 +120,7 @@
         <abp-tabs tab-style="PillVertical" vertical-header-size="_2">
             <abp-tab active="true" title="Home">
                 Content_Home
-            </abp-tab>   
+            </abp-tab>
             <abp-tab title="profile">
                 Content_Profile
             </abp-tab>

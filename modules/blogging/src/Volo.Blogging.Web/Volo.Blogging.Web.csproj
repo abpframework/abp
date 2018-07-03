@@ -28,8 +28,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="wwwroot\pages\blog\posts\edit.js" />
-    <Content Remove="wwwroot\pages\blog\posts\new.js" />
+    <Content Remove="wwwroot\**\*.*" />
+    <Content Remove="Pages\**\*.cshtml" />
+    <Content Remove="Localization\Resources\**\*.json" />
+    <Content Remove="Properties\launchSettings.json" />
+    <None Include="Properties\launchSettings.json" />
   </ItemGroup>
 
 </Project>

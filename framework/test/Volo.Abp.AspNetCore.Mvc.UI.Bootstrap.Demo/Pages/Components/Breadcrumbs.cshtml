@@ -4,6 +4,12 @@
     ViewData["Title"] = "Breadcrumbs";
 }
 
+@section styles {
+    <abp-style-bundle>
+        <abp-style src="/css/demo.css" />
+    </abp-style-bundle>
+}
+
 <h2>Breadcrumbs</h2>
 
 <p>Based on <a href="https://getbootstrap.com/docs/4.1/components/breadcrumbs/" target="_blank"> Bootstrap Breadcrumb</a>.</p>
@@ -14,9 +20,9 @@
     <div class="demo-area">
 
         <abp-breadcrumb>
-            <abp-breadcrumb-item href="#" title="Home"/>
-            <abp-breadcrumb-item href="#" title="Library"/>
-            <abp-breadcrumb-item title="Page"/>
+            <abp-breadcrumb-item href="#" title="Home" />
+            <abp-breadcrumb-item href="#" title="Library" />
+            <abp-breadcrumb-item title="Page" />
         </abp-breadcrumb>
 
     </div>

@@ -5,19 +5,26 @@
     ViewData["Title"] = "Modals";
 }
 
+@section styles {
+    <abp-style-bundle>
+        <abp-style src="/css/demo.css" />
+    </abp-style-bundle>
+}
+
 <h2>Modals</h2>
 
-<p>Based on <a href="https://getbootstrap.com/docs/4.1/components/modals/" target="_blank"> Bootstrap Modal</a>.</p>
+<p>Based on <a href="https://getbootstrap.com/docs/4.1/components/modal/" target="_blank"> Bootstrap Modal</a>.</p>
 
 <h4># Modal Example</h4>
 
 <div class="demo-with-code">
     <div class="demo-area">
+        <abp-button button-type="Success" data-toggle="modal" data-target="#myModal">Launch modal</abp-button>
 
-        <abp-modal>
-            
+        <abp-modal id="myModal">
+
             <abp-modal-header title="Header"></abp-modal-header>
-            
+
             <abp-modal-body>
                 Body
             </abp-modal-body>
@@ -29,7 +36,7 @@
     </div>
     <div class="code-area">
         <pre>
-&lt;abp-modal&gt;
+&lt;abp-modal id=&quot;myModal&quot;&gt;
    &lt;abp-modal-header title=&quot;Header&quot;&gt;&lt;/abp-modal-header&gt;
    &lt;abp-modal-body&gt;
        Body
