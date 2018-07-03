@@ -4,6 +4,12 @@
     ViewData["Title"] = "Tables";
 }
 
+@section styles {
+    <abp-style-bundle>
+        <abp-style src="/css/demo.css" />
+    </abp-style-bundle>
+}
+
 <h2>Tables</h2>
 
 <p>Based on <a href="https://getbootstrap.com/docs/4.1/content/Tables/" target="_blank"> Bootstrap Tables</a>.</p>
@@ -15,32 +21,32 @@
 
         <abp-table striped-rows="true" hoverable-rows="true" responsive-sm="true">
             <thead theme="Dark">
-            <tr>
-                <th scope="Column">#</th>
-                <th scope="Column">First</th>
-                <th scope="Column">Last</th>
-                <th scope="Column">Handle</th>
-            </tr>
+                <tr>
+                    <th scope="Column">#</th>
+                    <th scope="Column">First</th>
+                    <th scope="Column">Last</th>
+                    <th scope="Column">Handle</th>
+                </tr>
             </thead>
             <tbody>
-            <tr>
-                <th scope="Row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td  abp-table-style="Danger">mdo</td>
-            </tr>
-            <tr abp-table-style="Warning">
-                <th scope="Row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>fat</td>
-            </tr>
-            <tr>
-                <th scope="Row">3</th>
-                <td abp-table-style="Success">Larry</td>
-                <td>the Bird</td>
-                <td>twitter</td>
-            </tr>
+                <tr>
+                    <th scope="Row">1</th>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td abp-table-style="Danger">mdo</td>
+                </tr>
+                <tr abp-table-style="Warning">
+                    <th scope="Row">2</th>
+                    <td>Jacob</td>
+                    <td>Thornton</td>
+                    <td>fat</td>
+                </tr>
+                <tr>
+                    <th scope="Row">3</th>
+                    <td abp-table-style="Success">Larry</td>
+                    <td>the Bird</td>
+                    <td>twitter</td>
+                </tr>
             </tbody>
         </abp-table>
 

@@ -4,6 +4,12 @@
     ViewData["Title"] = "Buttons";
 }
 
+@section styles {
+    <abp-style-bundle>
+        <abp-style src="/css/demo.css" />
+    </abp-style-bundle>
+}
+
 <h2>Buttons</h2>
 
 <p>Based on <a href="http://getbootstrap.com/docs/4.1/components/buttons/" target="_blank"> Bootstrap button</a>.</p>
@@ -12,7 +18,7 @@
 
 <div class="demo-with-code">
     <div class="demo-area">
-        <abp-button text="Default"/>
+        <abp-button text="Default" />
         <abp-button button-type="Primary">Primary</abp-button>
         <abp-button button-type="Secondary">Secondary</abp-button>
         <abp-button button-type="Success">Success</abp-button>
@@ -42,9 +48,9 @@
 <h4># Example</h4>
 
 <div class="demo-with-code">
-    <div class="demo-area">
+    <div class="demo-area" style="margin: 35px;">
         <a abp-button="Primary" href="#">Link</a>
-        <abp-button button-type="Primary" type="submit" text="Button"/>
+        <abp-button button-type="Primary" type="submit" text="Button" />
         <input abp-button="Primary" value="Input" />
         <input abp-button="Primary" type="submit" value="Submit" />
         <input abp-button="Primary" type="reset" value="Reset" />
@@ -64,8 +70,8 @@
 
 <div class="demo-with-code">
     <div class="demo-area">
-        <abp-button size="Large" text="Large"/>
-        <abp-button size="Small" text="Small"/>
+        <abp-button size="Large" text="Large" />
+        <abp-button size="Small" text="Small" />
     </div>
     <div class="code-area">
         <pre>
@@ -79,7 +85,7 @@
 
 <div class="demo-with-code">
     <div class="demo-area">
-        <abp-button icon-type="FontAwesome" icon="info" text="With Icon"/>
+        <abp-button icon-type="FontAwesome" icon="info" text="With Icon" />
     </div>
     <div class="code-area">
         <pre>
@@ -92,7 +98,7 @@
 
 <div class="demo-with-code">
     <div class="demo-area">
-        <abp-button text="Busy" busy-text="Saving..."/>
+        <abp-button text="Busy" busy-text="Saving..." />
     </div>
     <div class="code-area">
         <pre>

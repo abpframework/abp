@@ -4,6 +4,12 @@
     ViewData["Title"] = "Dropdowns";
 }
 
+@section styles {
+    <abp-style-bundle>
+        <abp-style src="/css/demo.css" />
+    </abp-style-bundle>
+}
+
 <h2>Dropdowns</h2>
 
 <p>Based on <a href="https://getbootstrap.com/docs/4.1/components/dropdowns/" target="_blank"> Bootstrap button</a>.</p>
@@ -14,13 +20,13 @@
     <div class="demo-area">
 
         <abp-dropdown>
-            <abp-dropdown-button button-type="Primary" text="Dropdown"/>
+            <abp-dropdown-button button-type="Primary" text="Dropdown" />
             <abp-dropdown-menu>
                 <abp-dropdown-header>Dropdown header</abp-dropdown-header>
                 <abp-dropdown-item href="#" active="true">Action</abp-dropdown-item>
                 <abp-dropdown-item href="#" disabled="true">Another disabled action</abp-dropdown-item>
                 <abp-dropdown-item href="#">Something else here</abp-dropdown-item>
-                <abp-dropdown-divider/>
+                <abp-dropdown-divider />
                 <abp-dropdown-item href="#">Separated link</abp-dropdown-item>
             </abp-dropdown-menu>
         </abp-dropdown>
@@ -49,13 +55,13 @@
     <div class="demo-area">
 
         <abp-dropdown direction="Right">
-            <abp-dropdown-button dropdown-style="Split" button-type="Danger" text="Dropdown"/>
+            <abp-dropdown-button dropdown-style="Split" button-type="Danger" text="Dropdown" />
             <abp-dropdown-menu>
                 <abp-dropdown-header>Dropdown header</abp-dropdown-header>
                 <abp-dropdown-item href="#" active="true">Action</abp-dropdown-item>
                 <abp-dropdown-item href="#" disabled="true">Another disabled action</abp-dropdown-item>
                 <abp-dropdown-item href="#">Something else here</abp-dropdown-item>
-                <abp-dropdown-divider/>
+                <abp-dropdown-divider />
                 <abp-dropdown-item href="#">Separated link</abp-dropdown-item>
             </abp-dropdown-menu>
         </abp-dropdown>
@@ -84,13 +90,13 @@
     <div class="demo-area">
 
         <abp-dropdown direction="Up">
-            <abp-dropdown-button Link="true" button-type="Primary" text="Dropdown"/>
+            <abp-dropdown-button Link="true" button-type="Primary" text="Dropdown" />
             <abp-dropdown-menu align="Right">
                 <abp-dropdown-header>Dropdown header</abp-dropdown-header>
                 <abp-dropdown-item href="#" active="true">Action</abp-dropdown-item>
                 <abp-dropdown-item href="#" disabled="true">Another disabled action</abp-dropdown-item>
                 <abp-dropdown-item href="#">Something else here</abp-dropdown-item>
-                <abp-dropdown-divider/>
+                <abp-dropdown-divider />
                 <abp-dropdown-item href="#">Separated link</abp-dropdown-item>
             </abp-dropdown-menu>
         </abp-dropdown>

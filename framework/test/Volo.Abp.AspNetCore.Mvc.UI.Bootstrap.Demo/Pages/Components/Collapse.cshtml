@@ -5,6 +5,12 @@
     ViewData["Title"] = "Collapse";
 }
 
+
+@section styles {
+    <abp-style-bundle>
+        <abp-style src="/css/demo.css" />
+    </abp-style-bundle>
+}
 <h2>Collapse</h2>
 
 <p>Based on <a href="https://getbootstrap.com/docs/4.1/components/collapse/" target="_blank"> Bootstrap Collapse</a>.</p>
@@ -48,13 +54,13 @@
 
 <div class="demo-with-code">
     <div class="demo-area">
-        
+
         <p>
             <abp-collapse-button buton-type="Success" body-id="collapseExample">
                 Toggle
             </abp-collapse-button>
         </p>
-        
+
         <abp-collapse-body id="collapseExample" show="true">
             3Anim pariatur  wolf moon tempor,,, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
         </abp-collapse-body>
