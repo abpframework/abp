@@ -2,10 +2,10 @@
   "culture": "en",
   "texts": {
     "Menu:Home": "Home",
-    "Menu:BookStore": "Book Store",
-    "Menu:Books": "Books",
     "Welcome": "Welcome",
     "LongWelcomeMessage": "Welcome to the application. This is a startup project based on the ABP framework. For more information, visit abp.io.",
+    "Menu:BookStore": "Book Store",
+    "Menu:Books": "Books",
     "Name": "Name",
     "Type": "Type",
     "PublishDate": "Publish Date",

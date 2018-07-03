@@ -12,7 +12,7 @@ namespace Acme.BookStore.Pages.Books
 
         [BindProperty]
         public CreateUpdateBookDto Book { get; set; }
-        
+
         private readonly IBookAppService _bookAppService;
 
         public EditModalModel(IBookAppService bookAppService)

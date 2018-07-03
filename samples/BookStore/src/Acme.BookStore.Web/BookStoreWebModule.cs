@@ -17,6 +17,8 @@ using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Modularity;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.Localization;
+using Volo.Abp.AspNetCore.Mvc.UI;
+using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.Autofac;
@@ -28,7 +30,9 @@ using Volo.Abp.Identity.Web;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.Resources.AbpValidation;
 using Volo.Abp.Modularity;
+using Volo.Abp.PermissionManagement.Web;
 using Volo.Abp.Threading;
+using Volo.Abp.UI;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
 
@@ -69,24 +73,8 @@ namespace Acme.BookStore
             ConfigureNavigationServices(services);
             ConfigureAutoApiControllers(services);
             ConfigureSwaggerServices(services);
-            
+
             services.AddAssemblyOf<BookStoreWebModule>();
-        }
-
-        private static void ConfigureAutoMapper(IServiceCollection services)
-        {
-            services.Configure<AbpAutoMapperOptions>(options =>
-            {
-                options.AddProfile<BookStoreWebAutoMapperProfile>(validate: true);
-            });
-        }
-
-        private static void ConfigureAutoApiControllers(IServiceCollection services)
-        {
-            services.Configure<AbpAspNetCoreMvcOptions>(options =>
-            {
-                options.ConventionalControllers.Create(typeof(BookStoreApplicationModule).Assembly);
-            });
         }
 
         private static void ConfigureDatabaseServices(IServiceCollection services, IConfigurationRoot configuration)
@@ -99,6 +87,14 @@ namespace Acme.BookStore
             services.Configure<AbpDbContextOptions>(options => { options.UseSqlServer(); });
         }
 
+        private static void ConfigureAutoMapper(IServiceCollection services)
+        {
+            services.Configure<AbpAutoMapperOptions>(options =>
+            {
+                options.AddProfile<BookStoreWebAutoMapperProfile>();
+            });
+        }
+
         private static void ConfigureVirtualFileSystem(IServiceCollection services, IHostingEnvironment hostingEnvironment)
         {
             if (hostingEnvironment.IsDevelopment())
@@ -106,6 +102,7 @@ namespace Acme.BookStore
                 services.Configure<VirtualFileSystemOptions>(options =>
                 {
                     options.FileSets.ReplaceEmbeddedByPyhsical<BookStoreDomainModule>(Path.Combine(hostingEnvironment.ContentRootPath, "..\\Acme.BookStore.Domain"));
+                    
                 });
             }
         }
@@ -136,6 +133,14 @@ namespace Acme.BookStore
             services.Configure<NavigationOptions>(options =>
             {
                 options.MenuContributors.Add(new BookStoreMenuContributor());
+            });
+        }
+
+        private static void ConfigureAutoApiControllers(IServiceCollection services)
+        {
+            services.Configure<AbpAspNetCoreMvcOptions>(options =>
+            {
+                options.ConventionalControllers.Create(typeof(BookStoreApplicationModule).Assembly);
             });
         }
 

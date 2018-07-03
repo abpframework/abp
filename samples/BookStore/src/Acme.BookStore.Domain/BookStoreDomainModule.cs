@@ -3,6 +3,7 @@ using Acme.BookStore.Localization.BookStore;
 using Acme.BookStore.Settings;
 using Volo.Abp.Identity;
 using Volo.Abp.Localization;
+using Volo.Abp.Localization.Resources.AbpValidation;
 using Volo.Abp.Modularity;
 using Volo.Abp.Settings;
 using Volo.Abp.VirtualFileSystem;
@@ -23,6 +24,7 @@ namespace Acme.BookStore
             {
                 options.Resources
                     .Add<BookStoreResource>("en")
+                    .AddBaseTypes(typeof(AbpValidationResource))
                     .AddVirtualJson("/Localization/BookStore");
             });
 

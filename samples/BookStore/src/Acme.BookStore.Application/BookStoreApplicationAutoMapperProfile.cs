@@ -6,7 +6,7 @@ namespace Acme.BookStore
     {
         public BookStoreApplicationAutoMapperProfile()
         {
-            //add your custom AutoMapper configuration
+            //Configure your AutoMapper mapping configuration here...
         }
     }
 }
