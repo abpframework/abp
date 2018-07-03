@@ -1,10 +1,9 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 
 namespace Acme.BookStore.Pages.Books
 {
-    public class CreateModalModel : AbpPageModel
+    public class CreateModalModel : BookStorePageModelBase
     {
         [BindProperty]
         public CreateUpdateBookDto Book { get; set; }

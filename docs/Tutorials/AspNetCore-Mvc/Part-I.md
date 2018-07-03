@@ -2,7 +2,7 @@
 
 ### About the Tutorial
 
-In this tutorial series, you will build an application that is used to manage a list of books & their authors. **Entity Framework Core** (EF Core) will be used as the ORM provider (as it comes pre-configured with the startup template).
+In this tutorial series, you will build an application that is used to manage a list of books & their authors. **Entity Framework Core** (EF Core) will be used as the ORM provider (as it comes pre-configured with the [startup template](https://abp.io/Templates)).
 
 This is the first part of the tutorial series. See all parts:
 
@@ -174,14 +174,13 @@ namespace Acme.BookStore
 }
 ````
 
-* This DTO class is used to get book information from the user interface.
-* Each property has a `[Display]` property which sets the label on the form for the related input. It's also integrated to the localization system.
+* This DTO class is used to get book information from the user interface to create or update a book.
 * It defines data annotation attributes (like `[Required]`) to define validations for the properties.
 * Each property has a `[Display]` property which sets the label on UI forms for the related inputs. It's also integrated to the localization system. The same DTO will be used as View Model. That's why it defines that attribute. You may find incorrect to use DTOs as View Models. You could use a separated view model class, but we thought it's practical and makes the sample project less complex.
 
 #### IBookAppService
 
-First, define an interface named `IBookAppService` for the book application service:
+Define an interface named `IBookAppService` for the book application service:
 
 ````C#
 using System;
@@ -205,7 +204,7 @@ namespace Acme.BookStore
 ````
 
 * Defining interfaces for application services is <u>not required</u> by the framework. However, it's suggested as a good practice.
-* `IAsyncCrudAppService` defines common CRUD methods: `GetAsync`, `GetListAsync`, `CreateAsync`, `UpdateAsync` and `DeleteAsync`. It's not required to extend it. Instead you could inherit from the empty `IApplicationService` interface and define your own methods.
+* `IAsyncCrudAppService` defines common **CRUD** methods: `GetAsync`, `GetListAsync`, `CreateAsync`, `UpdateAsync` and `DeleteAsync`. It's not required to extend it. Instead you could inherit from the empty `IApplicationService` interface and define your own methods.
 * There are some variations of the `IAsyncCrudAppService` where you can use a single DTO or separated DTOs for each method.
 
 #### BookAppService
@@ -250,7 +249,7 @@ The startup template is configured to run the [swagger UI](https://swagger.io/to
 
 ![bookstore-swagger](../../images/bookstore-swagger.png)
 
-You will see some built-in service endpoints as well as the `Book` service and its REST-style service endpoints.
+You will see some built-in service endpoints as well as the `Book` service and its REST-style endpoints.
 
 ### Dynamic JavaScript Proxies
 
@@ -290,7 +289,7 @@ You should see a message in the console something like that:
 successfully created the book with id: f3f03580-c1aa-d6a9-072d-39e75c69f5c7
 ````
 
-Check the `books` table in the database to see the new book row. You can also try `get`, `update` and `delete` functions.
+Check the `books` table in the database to see the new book row. You can try `get`, `update` and `delete` functions too.
 
 ### Create the Books Page
 
@@ -311,7 +310,7 @@ Open the `Index.cshtml` and change the content as shown below:
 <h2>Books</h2>
 ````
 
-* This page inherits from the `BookStorePageBase` class which comes with the startup template and provides some shared properties/methods used by all pages.
+* This page **inherits** from the `BookStorePageBase` class which comes with the startup template and provides some shared properties/methods used by all pages.
 
 #### Add Books Page to the Main Menu
 
