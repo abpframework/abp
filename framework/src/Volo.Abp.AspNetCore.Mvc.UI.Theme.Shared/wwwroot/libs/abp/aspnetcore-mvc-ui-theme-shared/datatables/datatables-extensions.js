@@ -78,10 +78,12 @@
             if (fieldItem.displayNameHtml) {
                 $a.html(fieldItem.text);
             } else {
-                if (fieldItem.icon) {
-                    var icon = fieldItem.iconClass ? fieldItem.iconClass : "fa fa-" + fieldItem.icon;
-                    $a.append($("<i>").addClass(icon + " mr-1"));
-                }
+
+                if (fieldItem.icon !== undefined && fieldItem.icon) {
+                    $a.append($("<i>").addClass("fa fa-" + fieldItem.icon + " mr-1"));
+                } else if (fieldItem.iconClass) {
+                    $a.append($("<i>").addClass(fieldItem.iconClass + " mr-1"));
+                } 
 
                 $a.append(fieldItem.text);
             }
@@ -115,14 +117,13 @@
                 .addClass('action-button');
 
             var $dropdownButton = $('<button/>');
-
+            
             if (field.icon !== undefined) {
-                //setting field.icon=null will show no icon.
                 if (field.icon) {
                     $dropdownButton.append($("<i>").addClass("fa fa-" + field.icon + " mr-1"));
                 }
             } else if (field.iconClass) {
-                $dropdownButton.append($("<i>").addClass(field.iconClass));
+                $dropdownButton.append($("<i>").addClass(field.iconClass + " mr-1"));
             } else {
                 $dropdownButton.append($("<i>").addClass("fa fa-cog mr-1"));
             }
