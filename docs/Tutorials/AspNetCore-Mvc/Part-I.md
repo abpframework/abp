@@ -2,9 +2,9 @@
 
 ### About the Tutorial
 
-In this tutorial series, you will build an application that is used to manage a list of books & their authors. **Entity Framework Core** (EF Core) will be used as the ORM provider (as it comes pre-configured with the startup template).
+In this tutorial series, you will build an application that is used to manage a list of books & their authors. **Entity Framework Core** (EF Core) will be used as the ORM provider (as it comes pre-configured with the [startup template](https://abp.io/Templates)).
 
-This is the second part of the tutorial series. See all parts:
+This is the first part of the tutorial series. See all parts:
 
 - **Part I: Create the project and a book list page (this tutorial)**
 - [Part II: Create, Update and Delete books](Part-II.md)
@@ -30,12 +30,12 @@ Define [entities](../../Entities.md) in the **domain layer** (`Acme.BookStore.Do
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Volo.Abp.Domain.Entities;
+using Volo.Abp.Domain.Entities.Auditing;
 
 namespace Acme.BookStore
 {
     [Table("Books")]
-    public class Book : AggregateRoot<Guid>
+    public class Book : AuditedAggregateRoot<Guid>
     {
         [Required]
         [StringLength(128)]
@@ -50,8 +50,10 @@ namespace Acme.BookStore
 }
 ````
 
-* ABP has two fundamental base classes for entities: `AggregateRoot` and `Entity`. **Aggregate Roots** are one of the concepts of the **Domain Driven Design (DDD)**. See [entity document](../../Entities.md) for details and best practices.
-* Used **data annotation attributes** in this code. You could use EF Core's [fluent mapping API](https://docs.microsoft.com/en-us/ef/core/modeling) instead.
+* ABP has two fundamental base classes for entities: `AggregateRoot` and `Entity`. **Aggregate Root** is one of the **Domain Driven Design (DDD)** concepts. See [entity document](../../Entities.md) for details and best practices.
+* `Book` entity inherits `AuditedAggregateRoot` which adds some auditing properties (`CreationTime`, `CreatorId`, `LastModificationTime`... etc.) on top of the `AggregateRoot` class.
+* `Guid` is the **primary key type** of the `Book` entity.
+* Used **data annotation attributes** in this code for EF Core mappings. You could use EF Core's [fluent mapping API](https://docs.microsoft.com/en-us/ef/core/modeling) instead.
 
 #### BookType Enum
 
@@ -117,15 +119,14 @@ Create a DTO class named `BookDto` into the `Acme.BookStore.Application` project
 
 ````C#
 using System;
-using System.ComponentModel.DataAnnotations;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.AutoMapper;
 
 namespace Acme.BookStore
 {
-    public class BookDto : EntityDto<Guid>
+    [AutoMapFrom(typeof(Book))]
+    public class BookDto : AuditedEntityDto<Guid>
     {
-        [Required]
-        [StringLength(128)]
         public string Name { get; set; }
 
         public BookType Type { get; set; }
@@ -138,27 +139,73 @@ namespace Acme.BookStore
 ````
 
 * **DTO** classes are used to transfer data between the presentation layer and the application layer. See the [Data Transfer Objects document](../../Data-Transfer-Objects.md) for details.
+* `BookDto` is used to transfer a book data to the presentation layer to show a book information on the UI.
+* `BookDto` is derived from the `AuditedEntityDto<Guid>` which has audit properties just like the `Book` defined above.
+* `[AutoMapFrom(typeof(Book))]` is used to create AutoMapper mapping from the `Book` class to the `BookDto` class. Thus, you can automatically convert `Book` objects to `BookDto` objects (instead of manually copy all properties).
 
-#### IBookAppService
+#### CreateUpdateDto
 
-First, define an interface named `IBookAppService` for the book application service:
+Create a DTO class named `CreateUpdateDto` into the `Acme.BookStore.Application` project:
 
-````C#
+````c#
 using System;
-using Volo.Abp.Application.Services;
+using System.ComponentModel.DataAnnotations;
+using Volo.Abp.AutoMapper;
 
 namespace Acme.BookStore
 {
-    public interface IBookAppService : IAsyncCrudAppService<BookDto, Guid>
+    [AutoMapTo(typeof(Book))]
+    public class CreateUpdateBookDto
     {
+        [Required]
+        [StringLength(128)]
+        [Display(Name = "Name")]
+        public string Name { get; set; }
 
+        [Display(Name = "Type")]
+        public BookType Type { get; set; } = BookType.Undefined;
+
+        [Display(Name = "PublishDate")]
+        public DateTime PublishDate { get; set; }
+
+        [Display(Name = "Price")]
+        public float Price { get; set; }
     }
 }
 ````
 
+* This DTO class is used to get book information from the user interface to create or update a book.
+* It defines data annotation attributes (like `[Required]`) to define validations for the properties.
+* Each property has a `[Display]` property which sets the label on UI forms for the related inputs. It's also integrated to the localization system. The same DTO will be used as View Model. That's why it defines that attribute. You may find incorrect to use DTOs as View Models. You could use a separated view model class, but we thought it's practical and makes the sample project less complex.
+
+#### IBookAppService
+
+Define an interface named `IBookAppService` for the book application service:
+
+````C#
+using System;
+using Volo.Abp.Application.Dtos;
+using Volo.Abp.Application.Services;
+
+namespace Acme.BookStore
+{
+    public interface IBookAppService : 
+        IAsyncCrudAppService< //Defines CRUD methods
+            BookDto, //Used to show books
+            Guid, //Primary key of the book entity
+            PagedAndSortedResultRequestDto, //Used for paging/sorting on getting a list of books
+            CreateUpdateBookDto, //Used to create a new book
+            CreateUpdateBookDto> //Used to update a book
+    {
+
+    }
+}
+
+````
+
 * Defining interfaces for application services is <u>not required</u> by the framework. However, it's suggested as a good practice.
-* `IAsyncCrudAppService` defines common CRUD methods: `GetAsync`, `GetListAsync`, `CreateAsync`, `UpdateAsync` and `DeleteAsync`. It's not required to extend it. Instead you could inherit from the empty `IApplicationService` interface and define your own methods.
-* There are some variations of the `IAsyncCrudAppService`. In this sample, the first generic parameter, `BookDto`, is the DTO used for service methods and the second parameter, `Guid`, is the type of the primary key of the entity.
+* `IAsyncCrudAppService` defines common **CRUD** methods: `GetAsync`, `GetListAsync`, `CreateAsync`, `UpdateAsync` and `DeleteAsync`. It's not required to extend it. Instead you could inherit from the empty `IApplicationService` interface and define your own methods.
+* There are some variations of the `IAsyncCrudAppService` where you can use a single DTO or separated DTOs for each method.
 
 #### BookAppService
 
@@ -166,12 +213,16 @@ Implement the `IBookAppService` as named `BookAppService`:
 
 ````C#
 using System;
+using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
 
 namespace Acme.BookStore
 {
-    public class BookAppService : AsyncCrudAppService<Book, BookDto, Guid>, IBookAppService
+    public class BookAppService : 
+        AsyncCrudAppService<Book, BookDto, Guid, PagedAndSortedResultRequestDto,
+                            CreateUpdateBookDto, CreateUpdateBookDto>,
+        IBookAppService
     {
         public BookAppService(IRepository<Book, Guid> repository) 
             : base(repository)
@@ -182,9 +233,9 @@ namespace Acme.BookStore
 }
 ````
 
-* `BookAppService` is derived from `AsyncCrudAppService<Book, BookDto, Guid>` which implements all CRUD methods defined above.
-* `BookAppService` injects `IRepository<Book, Guid>` which is the default repository created for the `Book` entity. See the [repository document](../../Repositories.md).
-* `BookAppService` uses `IObjectMapper` to convert `Book` objects to `BookDto` objects and vice verse. Startup template uses the [AutoMapper](http://automapper.org/) library as the mapping provider. Since you haven't defined any mapping configuration, AutoMapper's [inline mapping](http://automapper.readthedocs.io/en/latest/Inline-Mapping.html) feature is used to automatically configure the mapping. This works fine if both classes have identical properties, but may cause to problems if they not. See the [AutoMapper integration document](../../AutoMapper-Integration.md) for details.
+* `BookAppService` is derived from `AsyncCrudAppService<...>` which implements all CRUD methods defined above.
+* `BookAppService` injects `IRepository<Book, Guid>` which is the default repository created for the `Book` entity. ABP automatically creates repositories for each aggregate root (or entity). See the [repository document](../../Repositories.md).
+* `BookAppService` uses `IObjectMapper` to convert `Book` objects to `BookDto` objects and `CreateUpdateBookDto` objects to `Book` objects. Startup template uses the [AutoMapper](http://automapper.org/) library as the mapping provider. You defined mappings using the `AutoMapFrom` and `AutoMapTo` attributes above. See the [AutoMapper integration document](../../AutoMapper-Integration.md) for details.
 
 ### Auto API Controllers
 
@@ -198,7 +249,7 @@ The startup template is configured to run the [swagger UI](https://swagger.io/to
 
 ![bookstore-swagger](../../images/bookstore-swagger.png)
 
-You will see some built-in service endpoints as well as the `Book` service and its REST-style service endpoints.
+You will see some built-in service endpoints as well as the `Book` service and its REST-style endpoints.
 
 ### Dynamic JavaScript Proxies
 
@@ -229,14 +280,7 @@ You can see the **book list** returned from the server.
 Let's **create a new book** using the `create` function:
 
 ````js
-acme.bookStore.book.create({
-    name: 'Foundation',
-    type: 7,
-    publishDate: '1951-05-24',
-    price: 21.5
-}).done(function (result) { 
-    console.log('successfully created the book with id: ' + result.id); 
-});
+acme.bookStore.book.create({ name: 'Foundation', type: 7, publishDate: '1951-05-24', price: 21.5 }).done(function (result) { console.log('successfully created the book with id: ' + result.id); });
 ````
 
 You should see a message in the console something like that:
@@ -245,7 +289,7 @@ You should see a message in the console something like that:
 successfully created the book with id: f3f03580-c1aa-d6a9-072d-39e75c69f5c7
 ````
 
-Check the `books` table in the database to see the new book row. You can also try `get`, `update` and `delete` functions.
+Check the `books` table in the database to see the new book row. You can try `get`, `update` and `delete` functions too.
 
 ### Create the Books Page
 
@@ -266,7 +310,7 @@ Open the `Index.cshtml` and change the content as shown below:
 <h2>Books</h2>
 ````
 
-* This page inherits from the `BookStorePageBase` class which comes with the startup template and provides some shared properties/methods used by all pages.
+* This page **inherits** from the `BookStorePageBase` class which comes with the startup template and provides some shared properties/methods used by all pages.
 
 #### Add Books Page to the Main Menu
 
@@ -336,6 +380,7 @@ Change the `Pages/Books/Index.cshtml` as following:
                     <th>@L["Type"]</th>
                     <th>@L["PublishDate"]</th>
                     <th>@L["Price"]</th>
+                    <th>@L["CreationTime"]</th>
                 </tr>
             </thead>
         </abp-table>
@@ -370,11 +415,15 @@ $(function() {
             },
             {
                 targets: 2,
-                data: "price"
+                data: "publishDate"
             },
             {
                 targets: 3,
-                data: "publishDate"
+                data: "price"
+            },
+            {
+                targets: 4,
+                data: "creationTime"
             }
         ]
     });

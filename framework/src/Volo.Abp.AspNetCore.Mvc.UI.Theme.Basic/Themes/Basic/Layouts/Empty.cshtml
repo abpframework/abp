@@ -1,6 +1,6 @@
 ﻿@using Volo.Abp.AspNetCore.Mvc.AntiForgery
+@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling
 @using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Themes.Basic.Components.PageAlerts
-@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling
 @using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Components
 @inject IAbpAntiForgeryManager AbpAntiForgeryManager
 @inject IBrandingProvider BrandingProvider
@@ -18,9 +18,7 @@
 
     <title>@(ViewBag.Title == null ? BrandingProvider.AppName : ViewBag.Title)</title>
 
-    <abp-style-bundle name="@StandardBundles.Styles.Global" />
-
-    <link rel="stylesheet" type="text/css" href="~/views/shared/_AppLayout.css" />
+    <abp-style-bundle name="@BasicThemeBundles.Styles.Global" />
 
     @RenderSection("styles", false)
 </head>
@@ -31,7 +29,7 @@
         @RenderBody()
     </div>
 
-    <abp-script-bundle name="@StandardBundles.Scripts.Global" />
+    <abp-script-bundle name="@BasicThemeBundles.Scripts.Global" />
 
     <script type="text/javascript" src="~/Abp/ApplicationConfigurationScript"></script>
     <script type="text/javascript" src="~/Abp/ServiceProxyScript"></script>

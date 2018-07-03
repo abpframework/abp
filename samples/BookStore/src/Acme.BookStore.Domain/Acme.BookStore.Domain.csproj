@@ -6,7 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Volo.Abp.Identity.Domain" Version="0.3.3" />
+    <PackageReference Include="Volo.Abp.Identity.Domain" Version="0.3.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.DataAnnotations" Version="2.1.1" />
   </ItemGroup>
 
   <ItemGroup>

@@ -2,11 +2,47 @@
 
 (function ($) {
 
-
     /************************************************************************
-    * RECORD-ACTIONS extension for datatables                               *
+    * RECORD-ACTIONS extension for datatables                               
+     ---------------------------------------------------------------
+    * USAGE: element (creates the JQuery element and puts in the specified target)
+       {
+            targets: 0,
+            rowAction: 
+            {
+                element: $("<button/>")
+                    .addClass("btn btn-primary btn-sm m-btn--icon")
+                    .text("My button")
+                    .prepend($("<i/>").addClass("la la-sign-in"))
+                    .click(function () {
+                        console.log($(this).data());
+                    })
+            },
+        },
+
+     ---------------------------------------------------------------
+     * USAGE: items (create a list of items)
+       {
+           targets: 0,
+           rowAction: 
+           {
+                text: 'My actions',
+                items:
+                    [
+                        {
+                            text: "My first action",
+                            visible: function () {
+                                return true;
+                            },
+                            action: function (data) {
+                                console.log(data.record);
+                            }
+                        }
+                    ]
+           }
+        },
     *************************************************************************/
-    var recordActions = function() {
+    var recordActions = function () {
         if (!$.fn.dataTableExt) {
             return;
         }
@@ -26,7 +62,7 @@
                     if (!$(this).closest('li').hasClass('disabled')) {
                         if (fieldItem.confirmMessage) {
                             abp.message.confirm(fieldItem.confirmMessage({ record: record }))
-                                .done(function(accepted) {
+                                .done(function (accepted) {
                                     if (accepted) {
                                         fieldItem.action({ record: record });
                                     }
@@ -110,16 +146,18 @@
         };
 
         var _createRowAction = function (record, field, tableInstance) {
-            if (field.items && field.items.length > 1) {
+            if (field.items && field.items.length > 0) {
                 return _createButtonDropdown(record, field, tableInstance);
             } else if (field.element) {
                 var $singleActionButton = _createSingleButton(record, field);
-                if ($singleActionButton != "") {
-                    return $singleActionButton.clone(true);
+                if ($singleActionButton === "") {
+                    return "";
                 }
+
+                return $singleActionButton.clone(true);
             }
 
-            return "";
+            throw "Cannot create row action. Either set element or items fields!";
         }
 
         var hideColumnWithoutRedraw = function (tableInstance, colIndex) {
@@ -185,15 +223,15 @@
         });
 
     }();
-   
+
     /************************************************************************
     * AJAX extension for datatables                                         *
     *************************************************************************/
-    var ajaxActions = function() {
+    var ajaxActions = function () {
         var datatables = abp.utils.createNamespace(abp, 'libs.datatables');
 
-        datatables.createAjax = function(serverMethod, inputAction) {
-            return function(requestData, callback, settings) {
+        datatables.createAjax = function (serverMethod, inputAction) {
+            return function (requestData, callback, settings) {
                 var input = inputAction ? inputAction() : {};
 
                 //Paging
@@ -216,7 +254,7 @@
                 }
 
                 if (callback) {
-                    serverMethod(input).then(function(result) {
+                    serverMethod(input).then(function (result) {
                         callback({
                             recordsTotal: result.totalCount,
                             recordsFiltered: result.totalCount,

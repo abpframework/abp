@@ -22,6 +22,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\**\*.*" />
+    <Content Remove="Pages\**\*.cshtml" />
+    <Content Remove="Views\**\*.cshtml" />
+    <Content Remove="Areas\**\*.cshtml" />
+    <Content Remove="compilerconfig.json" />
+    <Content Remove="Properties\launchSettings.json" />
+    <None Include="compilerconfig.json" />
+    <None Include="Properties\launchSettings.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics" Version="2.1.0" />
   </ItemGroup>
   

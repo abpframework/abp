@@ -10,7 +10,11 @@
     "Type": "Type",
     "PublishDate": "Publish Date",
     "Price": "Price",
+    "CreationTime": "Creation Time",
     "NewBook": "New book",
-    "Books": "Books"
+    "Books": "Books",
+    "Update": "Update",
+    "BookDeletionConfirmationMessage": "Are you sure to delete this book: {0}",
+    "SuccessfullyDeleted": "Successfully deleted."
   }
 }

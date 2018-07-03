@@ -18,7 +18,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tooltip
 
         protected virtual void SetDataPlacement(TagHelperContext context, TagHelperOutput output)
         {
-            output.Attributes.Add("data-placement", GetDirectory().ToString().ToLowerInvariant());
+            var directory = GetDirectory() != TooltipDirectory.Default ? GetDirectory() : TooltipDirectory.Bottom;
+            output.Attributes.Add("data-placement", directory.ToString().ToLowerInvariant());
         }
 
         protected virtual void SetTooltipTitle(TagHelperContext context, TagHelperOutput output)
@@ -62,7 +63,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tooltip
                 return TooltipDirectory.Left;
             }
 
-            return TooltipDirectory.Bottom;
+            return TooltipDirectory.Default;
         }
     }
 }

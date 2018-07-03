@@ -1,6 +1,4 @@
-﻿using Acme.BookStore.Pages.Books;
-using AutoMapper;
-using Volo.Abp.AutoMapper;
+﻿using AutoMapper;
 
 namespace Acme.BookStore
 {
@@ -8,8 +6,7 @@ namespace Acme.BookStore
     {
         public BookStoreWebAutoMapperProfile()
         {
-            CreateMap<CreateModalModel.CreateBookViewModel, BookDto>()
-                .Ignore(x => x.Id);
+            //add your custom AutoMapper configuration
         }
     }
 }

@@ -14,14 +14,19 @@ namespace Volo.Abp.AspNetCore.Mvc.Localization
             AssemblyResources = new Dictionary<Assembly, Type>();
         }
 
-        public void AddAssemblyResource([NotNull] Type resourceType, [CanBeNull] Assembly assembly = null)
+        public void AddAssemblyResource(
+            [NotNull] Type resourceType, 
+            params Assembly[] assemblies)
         {
-            if (assembly == null)
+            if (assemblies.IsNullOrEmpty())
             {
-                assembly = resourceType.Assembly;
+                assemblies = new Assembly[] {resourceType.Assembly};
             }
 
-            AssemblyResources[assembly] = resourceType;
+            foreach (var assembly in assemblies)
+            {
+                AssemblyResources[assembly] = resourceType;
+            }
         }
     }
 }

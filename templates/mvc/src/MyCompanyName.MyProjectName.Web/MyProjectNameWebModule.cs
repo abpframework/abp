@@ -52,7 +52,12 @@ namespace MyCompanyName.MyProjectName
         {
             services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
             {
-                options.AddAssemblyResource(typeof(MyProjectNameResource), typeof(MyProjectNameWebModule).Assembly);
+                options.AddAssemblyResource(
+                    typeof(MyProjectNameResource),
+                    typeof(MyProjectNameDomainModule).Assembly,
+                    typeof(MyProjectNameApplicationModule).Assembly,
+                    typeof(MyProjectNameWebModule).Assembly
+                );
             });
         }
 
@@ -86,7 +91,7 @@ namespace MyCompanyName.MyProjectName
         {
             services.Configure<AbpAutoMapperOptions>(options =>
             {
-                options.AddProfile<MyProjectNameWebAutoMapperProfile>(); //Pass validate parameter as true to validate the configuration
+                options.AddProfile<MyProjectNameWebAutoMapperProfile>();
             });
         }
 

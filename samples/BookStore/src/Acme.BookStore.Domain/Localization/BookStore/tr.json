@@ -10,7 +10,11 @@
     "Type": "Tür",
     "PublishDate": "Yayınlanma Tarihi",
     "Price": "Fiyat",
+    "CreationTime": "Oluşturulma zamanı",
     "NewBook": "Yeni kitap",
-    "Books": "Kitaplar"
+    "Books": "Kitaplar",
+    "Update": "Güncelle",
+    "BookDeletionConfirmationMessage": "Bu kitabı silmek istediğinize emin misiniz: {0}",
+    "SuccessfullyDeleted": "Başarıyla silindi."
   }
 }

@@ -24,7 +24,6 @@ using Volo.Abp.AutoMapper;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Identity;
-using Volo.Abp.Identity.Localization;
 using Volo.Abp.Identity.Web;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.Resources.AbpValidation;
@@ -49,7 +48,12 @@ namespace Acme.BookStore
         {
             services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
             {
-                options.AddAssemblyResource(typeof(BookStoreResource), typeof(BookStoreWebModule).Assembly);
+                options.AddAssemblyResource(
+                    typeof(BookStoreResource),
+                    typeof(BookStoreDomainModule).Assembly,
+                    typeof(BookStoreApplicationModule).Assembly,
+                    typeof(BookStoreWebModule).Assembly
+                );
             });
         }
 

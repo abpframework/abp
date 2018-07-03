@@ -19,7 +19,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling
     {
         public override void ConfigureBundle(BundleConfigurationContext context)
         {
-
+            context.Files.AddRange(new[]
+            {
+                "/libs/abp/aspnetcore-mvc-ui-theme-shared/datatables/datatables-styles.css"
+            });
         }
     }
 }

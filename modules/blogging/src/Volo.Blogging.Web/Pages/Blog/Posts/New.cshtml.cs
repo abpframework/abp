@@ -60,6 +60,7 @@ namespace Volo.Blogging.Pages.Blog.Posts
             [Display(Name = "Url")]
             public string Url { get; set; }
 
+            [HiddenInput]
             [StringLength(PostConsts.MaxContentLength)]
             [Display(Name = "Content")]
             public string Content { get; set; }
