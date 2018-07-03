@@ -31,6 +31,7 @@
     "Submit": "Submit",
     "PagerNext": "Next",
     "PagerPrevious": "Previous",
-    "PagerInfo": "Showing {0} to {1} of {2} entries."
+    "PagerInfo": "Showing {0} to {1} of {2} entries.",
+    "DatatableActionDropdownDefaultText": "Actions"
   }
 }
