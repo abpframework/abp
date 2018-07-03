@@ -5,9 +5,9 @@
     /************************************************************************
     * RECORD-ACTIONS extension for datatables                               
      ---------------------------------------------------------------
-    * USAGE: element (creates the JQuery element)
+    * SINGLE BUTTON USAGE (creates the given JQuery element)
        {
-            targets: 0,
+            targets: 0,  //optional
             rowAction: 
             {
                 element: $("<button/>")
@@ -21,19 +21,19 @@
         },
 
      ---------------------------------------------------------------
-     * USAGE: items (create a list of items)
+     * LIST OF ITEMS USAGE
        {
-           targets: 0,
+           targets: 0, //optional
            rowAction: 
            {
-                text: 'My actions', 
-                icon: 'bolt' //see fa icon set https://fontawesome.com/v4.7.0/icons/
+                text: 'My actions', //optional. default value: Actions
+                icon: 'bolt' //optional. default value: cog. See fa icon set https://fontawesome.com/v4.7.0/icons/
                 items:
                     [
                         {
-                            text: "My first action",
-                            icon: "thumbs-o-down", 
-                            visible: true // or you can use functions eg: function(){ return true/false;} ,
+                            text: "My first action", //mandatory
+                            icon: "thumbs-o-down",  //optional.
+                            visible: true //optional. default value: true. Accepts boolean returning function too. Eg: function(){ return true/false;} ,
                             action: function (data) {
                                 console.log(data.record);
                             }
@@ -271,9 +271,9 @@
     /************************************************************************
     * AJAX extension for datatables                                         *
     *************************************************************************/
-    var ajaxActions = function () {
-        var datatables = abp.utils.createNamespace(abp, 'libs.datatables');
+    var datatables = abp.utils.createNamespace(abp, 'libs.datatables');
 
+    var ajaxActions = function () {
         datatables.createAjax = function (serverMethod, inputAction) {
             return function (requestData, callback, settings) {
                 var input = inputAction ? inputAction() : {};
@@ -308,6 +308,39 @@
                 }
             }
         }
+    }();
+
+    /************************************************************************
+    * Configuration/Options normalizer for datatables                       *
+    *************************************************************************/
+    var optionNormalizer = function () {
+
+        var customizeRowActionColumn = function(column) {
+            column.data = null;
+            column.orderable = false;
+            column.defaultContent = "";
+
+            if (column.autoWidth === undefined) {
+                column.autoWidth = false;
+            }
+        };
+
+        datatables.normalizeConfiguration = function (configuration) {
+            for (var i = 0; i < configuration.columnDefs.length; i++) {
+                var column = configuration.columnDefs[i];
+                if (!column.targets) {
+                    column.targets = i;
+                }
+
+                if (column.rowAction) {
+                    customizeRowActionColumn(column);
+                }
+            }
+
+
+            return configuration;
+        }
+
     }();
 
 })(jQuery);
