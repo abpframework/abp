@@ -20,7 +20,7 @@ This tutorial assumes that you have created a new project, named `Acme.BookStore
 
 This is the layered solution structure created from the startup template:
 
-![bookstore-visual-studio-solution](../../images/bookstore-visual-studio-solution.png)
+![bookstore-visual-studio-solution](images/bookstore-visual-studio-solution.png)
 
 ### Create the Book Entity
 
@@ -95,7 +95,7 @@ public class BookStoreDbContext : AbpDbContext<BookStoreDbContext>
 
 Startup template uses [EF Core Code First Migrations](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/) to create and maintain the database schema. Open the **Package Manager Console (PMC)**, select the `Acme.BookStore.EntityFrameworkCore` as the **default project** and execute the following command:
 
-![bookstore-pmc-add-book-migration](../../images/bookstore-pmc-add-book-migration.png)
+![bookstore-pmc-add-book-migration](images/bookstore-pmc-add-book-migration.png)
 
 This will create a new migration class inside the `Migrations` folder. Then execute the `Update-Database` command to update the database schema:
 
@@ -107,7 +107,7 @@ PM> Update-Database
 
 `Update-Database` command created the `Books` table in the database. Enter a few sample rows, so you can show them on the page:
 
-![bookstore-books-table](../../images/bookstore-books-table.png)
+![bookstore-books-table](images/bookstore-books-table.png)
 
 ### Create the Application Service
 
@@ -247,7 +247,7 @@ ABP can automatically configures your application services as MVC API Controller
 
 The startup template is configured to run the [swagger UI](https://swagger.io/tools/swagger-ui/) using the [Swashbuckle.AspNetCore](https://github.com/domaindrivendev/Swashbuckle.AspNetCore) library. Run the application and enter `http://localhost:53929/swagger/` as URL on your browser:
 
-![bookstore-swagger](../../images/bookstore-swagger.png)
+![bookstore-swagger](images/bookstore-swagger.png)
 
 You will see some built-in service endpoints as well as the `Book` service and its REST-style endpoints.
 
@@ -273,7 +273,7 @@ acme.bookStore.book.getList({}).done(function (result) { console.log(result); })
 
 Running this code produces such an output:
 
-![bookstore-test-js-proxy-getlist](../../images/bookstore-test-js-proxy-getlist.png)
+![bookstore-test-js-proxy-getlist](images/bookstore-test-js-proxy-getlist.png)
 
 You can see the **book list** returned from the server.
 
@@ -297,7 +297,7 @@ It's time to create something visible! Instead of classic MVC, we will use the n
 
 Create a new `Books` folder under the `Pages` folder of the `Acme.BookStore.Web` project and add a new Razor Page named `Index.html`:
 
-![bookstore-add-index-page](../../images/bookstore-add-index-page.png)
+![bookstore-add-index-page](images/bookstore-add-index-page.png)
 
 Open the `Index.cshtml` and change the content as shown below:
 
@@ -327,7 +327,7 @@ context.Menu.AddItem(
 
 Localization texts are located under the `Localization/BookStore` folder of the `Acme.BookStore.Domain` project:
 
-![bookstore-localization-files](../../images/bookstore-localization-files.png)
+![bookstore-localization-files](images/bookstore-localization-files.png)
 
 Open the `en.json` file and add localization texts for `Menu:BookStore` and `Menu:Books`  keys:
 
@@ -347,7 +347,7 @@ Open the `en.json` file and add localization texts for `Menu:BookStore` and `Men
 
 Run the application and see the menu items are added to the top bar:
 
-![bookstore-menu-items](../../images/bookstore-menu-items.png)
+![bookstore-menu-items](images/bookstore-menu-items.png)
 
 When you click to the Books menu item, you are redirected to the new Books page.
 
@@ -396,7 +396,7 @@ Change the `Pages/Books/Index.cshtml` as following:
 
 Create `index.js` JavaScript file under the `wwwroot/pages/books/` folder:
 
-![bookstore-index-js-file](../../images/bookstore-index-js-file.png)
+![bookstore-index-js-file](images/bookstore-index-js-file.png)
 
 `index.js` content is shown below:
 
@@ -436,7 +436,7 @@ $(function() {
 
 The final UI is shown below:
 
-![bookstore-book-list](../../images/bookstore-book-list.png)
+![bookstore-book-list](images/bookstore-book-list.png)
 
 ### Next Part
 
