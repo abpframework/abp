@@ -4,11 +4,6 @@
 @using Volo.Abp.Identity.Web.Pages.Identity.Roles
 @model IndexModel
 @inject IHtmlLocalizer<IdentityResource> L
-@section styles {
-    <abp-style-bundle name="@typeof(IndexModel).FullName">
-        <abp-style src="/pages/identity/roles/index.css" />
-    </abp-style-bundle>
-}
 @section scripts {
     <abp-script-bundle name="@typeof(IndexModel).FullName">
         <abp-script src="/pages/abp-permission-management/permission-management-modal.js" />
