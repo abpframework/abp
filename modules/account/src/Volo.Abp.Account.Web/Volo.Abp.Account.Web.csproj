@@ -19,6 +19,13 @@
     <EmbeddedResource Include="Pages\**\*.*" Exclude="*.cs" />
     <EmbeddedResource Include="Localization\Resources\*.json" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Pages\**\*.cshtml" />
+    <Content Remove="Localization\Resources\*.json" />
+    <Content Remove="Properties\launchSettings.json" />
+    <None Include="Properties\launchSettings.json" />
+  </ItemGroup>
   
   <ItemGroup>
     <ProjectReference Include="..\..\..\identity\src\Volo.Abp.Identity.Domain\Volo.Abp.Identity.Domain.csproj" />

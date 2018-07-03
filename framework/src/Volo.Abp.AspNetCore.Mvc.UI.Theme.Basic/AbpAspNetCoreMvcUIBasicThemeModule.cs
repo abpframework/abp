@@ -1,6 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Toolbars;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars;
 using Volo.Abp.AspNetCore.Mvc.UI.Theming;
 using Volo.Abp.Modularity;
@@ -34,7 +37,26 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic
             {
                 options.Contributors.Add(new BasicThemeMainTopToolbarContributor());
             });
-            
+
+            services.Configure<BundlingOptions>(options =>
+            {
+                options
+                    .StyleBundles
+                    .Add(BasicThemeBundles.Styles.Global, bundle =>
+                    {
+                        bundle
+                            .AddBaseBundles(StandardBundles.Styles.Global)
+                            .AddContributors(new BasicThemeGlobalStyleContributor());
+                    });
+
+                options
+                    .ScriptBundles
+                    .Add(BasicThemeBundles.Scripts.Global, bundle =>
+                    {
+                        bundle.AddBaseBundles(StandardBundles.Scripts.Global);
+                    });
+            });
+
             services.AddAssemblyOf<AbpAspNetCoreMvcUiBasicThemeModule>();
         }
     }
