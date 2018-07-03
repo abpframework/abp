@@ -5,7 +5,7 @@
     /************************************************************************
     * RECORD-ACTIONS extension for datatables                               
      ---------------------------------------------------------------
-    * USAGE: element (creates the JQuery element and puts in the specified target)
+    * USAGE: element (creates the JQuery element)
        {
             targets: 0,
             rowAction: 
@@ -78,6 +78,18 @@
             return $li;
         }
 
+        var getVisibilityValue = function(visibilityField, record) {
+            if (visibilityField === undefined) {
+                return true;
+            }
+
+            if (abp.utils.isFunction(visibilityField)) {
+                return visibilityField(record);
+            } else {
+                return visibilityField;
+            }
+        }
+
         var _createButtonDropdown = function (record, field) {
             var $container = $('<div/>')
                 .addClass('dropdown')
@@ -99,7 +111,8 @@
             for (var i = 0; i < field.items.length; i++) {
                 var fieldItem = field.items[i];
 
-                if (fieldItem.visible && !fieldItem.visible({ record: record })) {
+                var isVisible = getVisibilityValue(fieldItem.visible, record);
+                if (!isVisible) {
                     continue;
                 }
 
@@ -126,22 +139,12 @@
 
         var _createSingleButton = function (record, field) {
             $(field.element).data(record);
+            var isVisible = getVisibilityValue(field.visible, record);
 
-            if (field.visible === undefined) {
+            if (isVisible) {
                 return field.element;
             }
-
-            var isVisibilityFunction = typeof field.visible === "function";
-            if (isVisibilityFunction) {
-                if (field.visible()) {
-                    return field.element;
-                }
-            } else {
-                if (field.visible) {
-                    return field.element;
-                }
-            }
-
+          
             return "";
         };
 
@@ -157,7 +160,7 @@
                 return $singleActionButton.clone(true);
             }
 
-            throw "Cannot create row action. Either set element or items fields!";
+            throw "DTE#1: Cannot create row action. Either set element or items fields!";
         }
 
         var hideColumnWithoutRedraw = function (tableInstance, colIndex) {
