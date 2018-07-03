@@ -21,13 +21,6 @@ namespace MyCompanyName.MyProjectName.EntityFrameworkCore
             modelBuilder.ConfigureIdentity();
             modelBuilder.ConfigurePermissionManagement();
             modelBuilder.ConfigureSettingManagement();
-
-            //builder.Entity<MyEntity>(b =>
-            //{
-            //    b.ToTable(MyProjectNameConsts.DbTablePrefix + "PermissionGrants", MyProjectNameConsts.DbSchema);
-
-            //    ...
-            //});
         }
     }
 }
