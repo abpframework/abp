@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Text;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
@@ -19,7 +18,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
             var sb = new StringBuilder();
 
             var attritubutes = output.Attributes.Select(a => " " + a.Name + "=\"" + a.Value + "\" ").ToList();
-            var attritubutesAsJoin = String.Join(" ", attritubutes.ToArray()); 
+            var attritubutesAsJoin = string.Join(" ", attritubutes.ToArray()); 
 
             sb.AppendLine("<div class=\""+ GetModalClasses() + "\" tabindex=\"-1\" role=\"dialog\" aria-hidden=\"true\" "+ attritubutesAsJoin + ">");
             sb.AppendLine("    <div class=\"" + GetModalDialogClasses() + "\" role=\"document\">");
