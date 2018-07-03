@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using System;
+using System.Linq;
+using System.Text;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
@@ -8,15 +10,18 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             output.TagName = null;
-            output.PreContent.SetHtmlContent(CreatePreContent());
+            output.PreContent.SetHtmlContent(CreatePreContent(output));
             output.PostContent.SetHtmlContent(CreatePostContent());
         }
 
-        protected virtual string CreatePreContent()
+        protected virtual string CreatePreContent(TagHelperOutput output)
         {
             var sb = new StringBuilder();
 
-            sb.AppendLine("<div class=\""+ GetModalClasses() + "\" tabindex=\"-1\" role=\"dialog\" aria-hidden=\"true\">");
+            var attritubutes = output.Attributes.Select(a => " " + a.Name + "=\"" + a.Value + "\" ").ToList();
+            var attritubutesAsJoin = String.Join(" ", attritubutes.ToArray()); 
+
+            sb.AppendLine("<div class=\""+ GetModalClasses() + "\" tabindex=\"-1\" role=\"dialog\" aria-hidden=\"true\" "+ attritubutesAsJoin + ">");
             sb.AppendLine("    <div class=\"" + GetModalDialogClasses() + "\" role=\"document\">");
             sb.AppendLine("        <div class=\"" + GetModalContentClasses() + "\">");
 
