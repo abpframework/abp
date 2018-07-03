@@ -4,6 +4,12 @@
     ViewData["Title"] = "Progress Bars";
 }
 
+@section styles {
+    <abp-style-bundle>
+        <abp-style src="/css/demo.css" />
+    </abp-style-bundle>
+}
+
 <h2>Progress Bars</h2>
 
 <p>Based on <a href="https://getbootstrap.com/docs/4.1/components/progress/" target="_blank"> Bootstrap Progress Bars</a>.</p>
@@ -14,8 +20,8 @@
     <div class="demo-area">
 
         <abp-progress>
-            <abp-progress-bar value="70"/>
-            
+            <abp-progress-bar value="70" />
+
         </abp-progress>
         <br />
         <abp-progress>
@@ -30,7 +36,7 @@
         </abp-progress>
         <br />
         <abp-progress>
-            <abp-progress-bar type="Dark" value="10" min-value="5" max-value="15"  strip="true">
+            <abp-progress-bar type="Dark" value="10" min-value="5" max-value="15" strip="true">
                 %50
             </abp-progress-bar>
         </abp-progress>

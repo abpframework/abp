@@ -5,9 +5,9 @@
     /************************************************************************
     * RECORD-ACTIONS extension for datatables                               
      ---------------------------------------------------------------
-    * USAGE: element (creates the JQuery element)
+    * SINGLE BUTTON USAGE (creates the given JQuery element)
        {
-            targets: 0,
+            targets: 0,  //optional
             rowAction: 
             {
                 element: $("<button/>")
@@ -21,19 +21,27 @@
         },
 
      ---------------------------------------------------------------
-     * USAGE: items (create a list of items)
+     * LIST OF ITEMS USAGE
        {
-           targets: 0,
+           targets: 0, //optional
            rowAction: 
            {
-                text: 'My actions',
+                text: 'My actions', //optional. default value: Actions
+                icon: 'bolt' //optional. default value: cog. See fa icon set https://fontawesome.com/v4.7.0/icons/
                 items:
                     [
                         {
-                            text: "My first action",
-                            visible: function () {
-                                return true;
-                            },
+                            text: "My first action", //mandatory
+                            icon: "thumbs-o-down",  //optional.
+                            visible: true //optional. default value: true. Accepts boolean returning function too. Eg: function(){ return true/false;} ,
+                            action: function (data) {
+                                console.log(data.record);
+                            }
+                        },
+                         {
+                            text: "My second action",
+                            icon: "thumbs-o-up",
+                            visible: true, 
                             action: function (data) {
                                 console.log(data.record);
                             }
@@ -42,17 +50,40 @@
            }
         },
     *************************************************************************/
+    var localize = function (key) {
+        return abp.localization.getResource('AbpUi')(key);
+    }
+
     var recordActions = function () {
         if (!$.fn.dataTableExt) {
             return;
+        }
+
+        var getVisibilityValue = function (visibilityField, record) {
+            if (visibilityField === undefined) {
+                return true;
+            }
+
+            if (abp.utils.isFunction(visibilityField)) {
+                return visibilityField(record);
+            } else {
+                return visibilityField;
+            }
         }
 
         var _createDropdownItem = function (record, fieldItem) {
             var $li = $('<li/>');
             var $a = $('<a/>');
 
-            if (fieldItem.text) {
+            if (fieldItem.displayNameHtml) {
                 $a.html(fieldItem.text);
+            } else {
+                if (fieldItem.icon) {
+                    var icon = fieldItem.iconClass ? fieldItem.iconClass : "fa fa-" + fieldItem.icon;
+                    $a.append($("<i>").addClass(icon + " mr-1"));
+                }
+
+                $a.append(fieldItem.text);
             }
 
             if (fieldItem.action) {
@@ -78,25 +109,31 @@
             return $li;
         }
 
-        var getVisibilityValue = function(visibilityField, record) {
-            if (visibilityField === undefined) {
-                return true;
-            }
-
-            if (abp.utils.isFunction(visibilityField)) {
-                return visibilityField(record);
-            } else {
-                return visibilityField;
-            }
-        }
-
         var _createButtonDropdown = function (record, field) {
             var $container = $('<div/>')
                 .addClass('dropdown')
                 .addClass('action-button');
 
-            var $dropdownButton = $('<button/>')
-                .html(field.text)
+            var $dropdownButton = $('<button/>');
+
+            if (field.icon !== undefined) {
+                //setting field.icon=null will show no icon.
+                if (field.icon) {
+                    $dropdownButton.append($("<i>").addClass("fa fa-" + field.icon + " mr-1"));
+                }
+            } else if (field.iconClass) {
+                $dropdownButton.append($("<i>").addClass(field.iconClass));
+            } else {
+                $dropdownButton.append($("<i>").addClass("fa fa-cog mr-1"));
+            }
+
+            if (field.text) {
+                $dropdownButton.append(field.text);
+            } else {
+                $dropdownButton.append(localize("DatatableActionDropdownDefaultText"));
+            }
+
+            $dropdownButton
                 .addClass('btn btn-primary btn-sm dropdown-toggle')
                 .attr('data-toggle', 'dropdown')
                 .attr('aria-haspopup', 'true')
@@ -139,12 +176,13 @@
 
         var _createSingleButton = function (record, field) {
             $(field.element).data(record);
+
             var isVisible = getVisibilityValue(field.visible, record);
 
             if (isVisible) {
                 return field.element;
             }
-          
+
             return "";
         };
 
@@ -202,37 +240,40 @@
         };
 
         var _existingApiRenderRowActionsFunction = $.fn.dataTableExt.oApi.renderRowActions;
-        $.fn.dataTableExt.oApi.renderRowActions = function (tableInstance, nRow, aData, iDisplayIndex, iDisplayIndexFull) {
-            if (_existingApiRenderRowActionsFunction) {
-                _existingApiRenderRowActionsFunction(tableInstance, nRow, aData, iDisplayIndex, iDisplayIndexFull);
-            }
+        $.fn.dataTableExt.oApi.renderRowActions =
+            function (tableInstance, nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+                if (_existingApiRenderRowActionsFunction) {
+                    _existingApiRenderRowActionsFunction(tableInstance, nRow, aData, iDisplayIndex, iDisplayIndexFull);
+                }
 
-            renderRowActions(tableInstance, nRow, aData, iDisplayIndex, iDisplayIndexFull);
-        };
+                renderRowActions(tableInstance, nRow, aData, iDisplayIndex, iDisplayIndexFull);
+            };
 
         if (!$.fn.dataTable) {
             return;
         }
 
         var _existingDefaultFnRowCallback = $.fn.dataTable.defaults.fnRowCallback;
-        $.extend(true, $.fn.dataTable.defaults, {
-            fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
-                if (_existingDefaultFnRowCallback) {
-                    _existingDefaultFnRowCallback(this, nRow, aData, iDisplayIndex, iDisplayIndexFull);
-                }
+        $.extend(true,
+            $.fn.dataTable.defaults,
+            {
+                fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+                    if (_existingDefaultFnRowCallback) {
+                        _existingDefaultFnRowCallback(this, nRow, aData, iDisplayIndex, iDisplayIndexFull);
+                    }
 
-                renderRowActions(this, nRow, aData, iDisplayIndex, iDisplayIndexFull);
-            }
-        });
+                    renderRowActions(this, nRow, aData, iDisplayIndex, iDisplayIndexFull);
+                }
+            });
 
     }();
 
     /************************************************************************
     * AJAX extension for datatables                                         *
     *************************************************************************/
-    var ajaxActions = function () {
-        var datatables = abp.utils.createNamespace(abp, 'libs.datatables');
+    var datatables = abp.utils.createNamespace(abp, 'libs.datatables');
 
+    var ajaxActions = function () {
         datatables.createAjax = function (serverMethod, inputAction) {
             return function (requestData, callback, settings) {
                 var input = inputAction ? inputAction() : {};
@@ -267,6 +308,39 @@
                 }
             }
         }
+    }();
+
+    /************************************************************************
+    * Configuration/Options normalizer for datatables                       *
+    *************************************************************************/
+    var optionNormalizer = function () {
+
+        var customizeRowActionColumn = function(column) {
+            column.data = null;
+            column.orderable = false;
+            column.defaultContent = "";
+
+            if (column.autoWidth === undefined) {
+                column.autoWidth = false;
+            }
+        };
+
+        datatables.normalizeConfiguration = function (configuration) {
+            for (var i = 0; i < configuration.columnDefs.length; i++) {
+                var column = configuration.columnDefs[i];
+                if (!column.targets) {
+                    column.targets = i;
+                }
+
+                if (column.rowAction) {
+                    customizeRowActionColumn(column);
+                }
+            }
+
+
+            return configuration;
+        }
+
     }();
 
 })(jQuery);

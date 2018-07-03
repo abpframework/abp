@@ -28,6 +28,7 @@
     "Login": "Giriş",
     "Register": "Kaydol",
     "Logout": "Çıkış",
-    "Submit": "Gönder"
+    "Submit": "Gönder",
+    "DatatableActionDropdownDefaultText": "İşlemler"
   }
 }
