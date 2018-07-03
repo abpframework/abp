@@ -1,6 +1,6 @@
 ## ASP.NET Core MVC Tutorial - Part I
 
-### About the Tutorial
+### About this Tutorial
 
 In this tutorial series, you will build an application that is used to manage a list of books & their authors. **Entity Framework Core** (EF Core) will be used as the ORM provider (as it comes pre-configured with the [startup template](https://abp.io/Templates)).
 
@@ -400,36 +400,22 @@ Create `index.js` JavaScript file under the `wwwroot/pages/books/` folder:
 `index.js` content is shown below:
 
 ````js
-$(function() {
-    var dataTable = $('#BooksTable').DataTable({
+$(function () {
+    var dataTable = $('#BooksTable').DataTable(abp.libs.datatables.normalizeConfiguration({
         ajax: abp.libs.datatables.createAjax(acme.bookStore.book.getList),
         columnDefs: [
-            {
-                targets: 0,
-                data: "name"
-            },
-            {
-                targets: 1,
-                data: "type"
-            },
-            {
-                targets: 2,
-                data: "publishDate"
-            },
-            {
-                targets: 3,
-                data: "price"
-            },
-            {
-                targets: 4,
-                data: "creationTime"
-            }
+            { data: "name" },
+            { data: "type" },
+            { data: "publishDate" },
+            { data: "price" },
+            { data: "creationTime" }
         ]
-    });
+    }));
 });
 ````
 
 * `abp.libs.datatables.createAjax` is a helper function to adapt ABP's dynamic JavaScript API proxies to Datatable's format.
+* `abp.libs.datatables.normalizeConfiguration` is another helper function. It's not required to use it, but it simplifies the datatables configuration by providing conventional values for missing options.
 * `acme.bookStore.book.getList` is the function to get list of books (you have seen it before).
 * See [Datatable's documentation](https://datatables.net/manual/) for more configuration options.
 

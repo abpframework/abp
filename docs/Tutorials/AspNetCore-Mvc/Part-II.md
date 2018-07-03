@@ -1,8 +1,6 @@
 ## ASP.NET Core MVC Tutorial - Part II
 
-### About the Tutorial
-
-In this tutorial series, you will build an application that is used to manage a list of books & their authors. **Entity Framework Core** (EF Core) will be used as the ORM provider (as it comes pre-configured with the startup template).
+### About this Tutorial
 
 This is the second part of the tutorial series. See all parts:
 
@@ -31,7 +29,6 @@ Open the `CreateModal.cshtml.cs` file (`CreateModalModel` class) and replace wit
 ````C#
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 
 namespace Acme.BookStore.Pages.Books
 {
@@ -56,7 +53,7 @@ namespace Acme.BookStore.Pages.Books
 }
 ````
 
-* This class is derived from the `BookStorePageModelBase` instead of standard `PageModel`. `BookStorePageModelBase` inherits the `PageModel` and adds some common properties/methods those can be used in your page model classes.
+* This class is derived from the `BookStorePageModelBase` instead of standard `PageModel`. `BookStorePageModelBase` inherits the `PageModel` and adds some common properties/methods those can be used by your page model classes.
 * `[BindProperty]` attribute on the `Book` property binds post request data to this property.
 * This class simply injects the `IBookAppService` in its constructor and calls the `CreateAsync` method in the `OnPostAsync` handler.
 
@@ -84,9 +81,9 @@ Open the `CreateModal.cshtml` file and paste the code below:
 ````
 
 * This modal uses `abp-dynamic-form` tag helper to automatically create the form from the `CreateBookViewModel` class.
-  * `abp-model` attribute indicates the model object, the `Book` in this case.
-  * `data-ajaxForm` attribute makes the form to submit via AJAX, instead of classic page post.
-  * `abp-form-content` tag helper is a placeholder to render the form. This is optional and needed only if you added some other content in the `abp-dynamic-form` tag.
+  * `abp-model` attribute indicates the model object, the `Book` property in this case.
+  * `data-ajaxForm` attribute makes the form submitting via AJAX, instead of a classic page post.
+  * `abp-form-content` tag helper is a placeholder to render the form controls (this is optional and needed only if you added some other content in the `abp-dynamic-form` tag, just like in this view).
 
 #### Add the "New book" Button
 
@@ -179,7 +176,7 @@ namespace Acme.BookStore.Pages.Books
 }
 ````
 
-* `HiddenInput` and `BindProperty` are standard ASP.NET Core MVC attributes. Used `SupportsGet` to be able to get Id value from query string parameter of the request.
+* `[HiddenInput]` and `[BindProperty]` are standard ASP.NET Core MVC attributes. Used `SupportsGet` to be able to get Id value from query string parameter of the request.
 * Mapped `BookDto` (received from the `BookAppService.GetAsync`) to `CreateUpdateBookDto` in the `GetAsync` method.
 * The `OnPostAsync` simply uses `BookAppService.UpdateAsync` to update the entity.
 
@@ -270,7 +267,7 @@ Open the `Pages/Books/Index.cshtml` page and change the table section as shown b
 </abp-table>
 ````
 
-* Just added a new `th` tag for the "Actions" button.
+* Just added a new `th` tag for the "Actions".
 
 Open the `wwwroot/pages/books/index.js` and replace the content as below:
 
@@ -282,71 +279,30 @@ $(function () {
     var createModal = new abp.ModalManager(abp.appPath + 'Books/CreateModal');
     var editModal = new abp.ModalManager(abp.appPath + 'Books/EditModal');
 
-    var dataTable = $('#BooksTable').DataTable({
+    var dataTable = $('#BooksTable').DataTable(abp.libs.datatables.normalizeConfiguration({
         order: [[1, "asc"]],
         ajax: abp.libs.datatables.createAjax(acme.bookStore.book.getList),
         columnDefs: [
             {
-                targets: 0,
-                data: null,
-                orderable: false,
-                autoWidth: false,
-                defaultContent: '',
                 rowAction: {
-                    text: '<i class="fa fa-cog"></i> ' + l('Actions') + 
-                          ' <span class="caret"></span>',
                     items:
                         [
                             {
                                 text: l('Edit'),
-                                visible: function () { return true; },
                                 action: function (data) {
-                                    editModal.open({
-                                        id: data.record.id
-                                    });
-                                }
-                            },
-                            {
-                                text: l('Delete'),
-                                visible: function () { return true; },
-                                confirmMessage: function (data) {
-                                    return l('BookDeletionConfirmationMessage',
-                                             data.record.name);
-                                },
-                                action: function (data) {
-                                    acme.bookStore.book
-                                        .delete(data.record.id)
-                                        .then(function () {
-                                            abp.notify.info(l('SuccessfullyDeleted'));
-                                            dataTable.ajax.reload();
-                                        });
+                                    editModal.open({ id: data.record.id });
                                 }
                             }
                         ]
                 }
             },
-            {
-                targets: 1,
-                data: "name"
-            },
-            {
-                targets: 2,
-                data: "type"
-            },
-            {
-                targets: 3,
-                data: "publishDate"
-            },
-            {
-                targets: 4,
-                data: "price"
-            },
-            {
-                targets: 5,
-                data: "creationTime"
-            }
+            { data: "name" },
+            { data: "type" },
+            { data: "publishDate" },
+            { data: "price" },
+            { data: "creationTime" }
         ]
-    });
+    }));
 
     createModal.onResult(function () {
         dataTable.ajax.reload();
@@ -363,7 +319,104 @@ $(function () {
 });
 ````
 
+* Used `abp.localization.getResource('BookStore')` to be able to use the same localization texts defined on the server side.
 * Added a new `ModalManager` named `editModal` to open the edit modal dialog.
 * Added a new column at the beginning of the `columnDefs` section. This column is used for the "Actions" dropdown button.
 * "Edit" action simply calls `editModal.open` to open the edit dialog.
-* Also added a "Delete" button to delete the book.
+
+You can run the application and edit any book by selecting the edit action.
+
+### Deleting an Existing Book
+
+Open the `wwwroot/pages/books/index.js` and add a new item to the `rowAction` `items`:
+
+````js
+{
+    text: l('Delete'),
+    confirmMessage: function (data) {
+        return l('BookDeletionConfirmationMessage', data.record.name);
+    },
+    action: function (data) {
+        acme.bookStore.book
+            .delete(data.record.id)
+            .then(function() {
+                abp.notify.info(l('SuccessfullyDeleted'));
+                dataTable.ajax.reload();
+            });
+    }
+}
+````
+
+* `confirmMessage` option is used to ask a confirmation question before executing the `action`.
+* Used `acme.bookStore.book.delete` javascript proxy function to perform an AJAX request to delete a book.
+* `abp.notify.info` is used to show a toastr notification just after the deletion.
+
+The final `index.js` content is shown below:
+
+````js
+$(function () {
+
+    var l = abp.localization.getResource('BookStore');
+
+    var createModal = new abp.ModalManager(abp.appPath + 'Books/CreateModal');
+    var editModal = new abp.ModalManager(abp.appPath + 'Books/EditModal');
+
+    var dataTable = $('#BooksTable').DataTable(abp.libs.datatables.normalizeConfiguration({
+        order: [[1, "asc"]],
+        ajax: abp.libs.datatables.createAjax(acme.bookStore.book.getList),
+        columnDefs: [
+            {
+                rowAction: {
+                    items:
+                    [
+                        {
+                            text: l('Edit'),
+                            action: function (data) {
+                                editModal.open({ id: data.record.id });
+                            }
+                        },
+                        {
+                            text: l('Delete'),
+                            confirmMessage: function (data) {
+                                return l('BookDeletionConfirmationMessage', data.record.name);
+                            },
+                            action: function (data) {
+                                acme.bookStore.book
+                                    .delete(data.record.id)
+                                    .then(function() {
+                                        abp.notify.info(l('SuccessfullyDeleted'));
+                                        dataTable.ajax.reload();
+                                    });
+                            }
+                        }
+                    ]
+                }
+            },
+            { data: "name" },
+            { data: "type" },
+            { data: "publishDate" },
+            { data: "price" },
+            { data: "creationTime" }
+        ]
+    }));
+
+    createModal.onResult(function () {
+        dataTable.ajax.reload();
+    });
+
+    editModal.onResult(function () {
+        dataTable.ajax.reload();
+    });
+
+    $('#NewBookButton').click(function (e) {
+        e.preventDefault();
+        createModal.open();
+    });
+});
+````
+
+Run the application and try to delete a book.
+
+### Next Part
+
+See the [next part](Part-III.md) of this tutorial.

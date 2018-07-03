@@ -1,8 +1,6 @@
 ## ASP.NET Core MVC Tutorial - Part III
 
-### About the Tutorial
-
-In this tutorial series, you will build an application that is used to manage a list of books & their authors. **Entity Framework Core** (EF Core) will be used as the ORM provider (as it comes pre-configured with the startup template).
+### About this Tutorial
 
 This is the third part of the tutorial series. See all parts:
 
@@ -18,10 +16,10 @@ There are two test projects in the solution:
 
 ![bookstore-test-projects](images/bookstore-test-projects.png)
 
-* `Acme.BookStore.Application.Tests` is for unit & integration test projects. You can write tests for application services those are integrated to the framework. It uses **EF Core SQLite in-memory** database.
-* `Acme.BookStore.Web.Tests` is for full stack integration tests including the web layer. So, you can write tests for UI too.
+* `Acme.BookStore.Application.Tests` is for unit & integration tests. You can write tests for application service methods. It uses **EF Core SQLite in-memory** database.
+* `Acme.BookStore.Web.Tests` is for full stack integration tests including the web layer. So, you can write tests for UI pages too.
 
-Test projects uses the following libraries for testing:
+Test projects use the following libraries for testing:
 
 * [xunit](https://xunit.github.io/) as the main test framework.
 * [Shoudly](http://shouldly.readthedocs.io/en/latest/) as an assertion library.
@@ -61,7 +59,8 @@ namespace Acme.BookStore
 }
 ````
 
-* It simply uses `IIdentityDataSeeder` which is implemented by the identity module and creates an admin role and admin user. You can use them in the tests.
+* It simply uses `IIdentityDataSeeder` which is implemented by the identity module and creates an admin role and admin user. You can use them in your tests.
+* You can add new test data in the `BuildInternalAsync` method.
 
 Change the `BookStoreTestDataBuilder` class as show below:
 
@@ -123,7 +122,7 @@ namespace Acme.BookStore
 }
 ````
 
-* Injected `IRepository<Book, Guid>` and used it in the `BuildInternalAsync` to create 2 book entities.
+* Injected `IRepository<Book, Guid>` and used it in the `BuildInternalAsync` to create two book entities.
 
 ### Testing the BookAppService
 
@@ -211,7 +210,7 @@ public async Task Should_Not_Create_A_Book_Without_Name()
 }
 ````
 
-* Since the `Name` is set as empty, ABP throws an `AbpValidationException`.
+* Since the `Name` is empty, ABP throws an `AbpValidationException`.
 
 ### Testing Web Pages
 
