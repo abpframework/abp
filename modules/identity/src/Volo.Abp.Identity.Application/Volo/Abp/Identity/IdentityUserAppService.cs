@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.PermissionManagement;
@@ -56,7 +57,7 @@ namespace Volo.Abp.Identity
         {
             var user = new IdentityUser(GuidGenerator.Create(), input.UserName, input.Email, CurrentTenant.Id);
 
-            CheckIdentityErrors(await _userManager.CreateAsync(user, input.Password));
+            (await _userManager.CreateAsync(user, input.Password)).CheckErrors();
             await UpdateUserByInput(user, input);
 
             await CurrentUnitOfWork.SaveChangesAsync();
@@ -69,9 +70,9 @@ namespace Volo.Abp.Identity
         {
             var user = await _userManager.GetByIdAsync(id);
 
-            CheckIdentityErrors(await _userManager.SetUserNameAsync(user, input.UserName));
+            (await _userManager.SetUserNameAsync(user, input.UserName)).CheckErrors();
             await UpdateUserByInput(user, input);
-            CheckIdentityErrors(await _userManager.UpdateAsync(user));
+            (await _userManager.UpdateAsync(user)).CheckErrors();
             await CurrentUnitOfWork.SaveChangesAsync();
 
             return ObjectMapper.Map<IdentityUser, IdentityUserDto>(user);
@@ -86,14 +87,14 @@ namespace Volo.Abp.Identity
                 return;
             }
 
-            CheckIdentityErrors(await _userManager.DeleteAsync(user));
+            (await _userManager.DeleteAsync(user)).CheckErrors();
         }
 
         [Authorize(IdentityPermissions.Users.Update)]
         public async Task UpdateRolesAsync(Guid id, IdentityUserUpdateRolesDto input)
         {
             var user = await _userManager.GetByIdAsync(id);
-            CheckIdentityErrors(await _userManager.SetRolesAsync(user, input.RoleNames));
+            (await _userManager.SetRolesAsync(user, input.RoleNames)).CheckErrors();
             await _userRepository.UpdateAsync(user);
         }
 
@@ -114,14 +115,14 @@ namespace Volo.Abp.Identity
         
         private async Task UpdateUserByInput(IdentityUser user, IdentityUserCreateOrUpdateDtoBase input)
         {
-            CheckIdentityErrors(await _userManager.SetEmailAsync(user, input.Email));
-            CheckIdentityErrors(await _userManager.SetPhoneNumberAsync(user, input.PhoneNumber));
-            CheckIdentityErrors(await _userManager.SetTwoFactorEnabledAsync(user, input.TwoFactorEnabled));
-            CheckIdentityErrors(await _userManager.SetLockoutEnabledAsync(user, input.LockoutEnabled));
+            (await _userManager.SetEmailAsync(user, input.Email)).CheckErrors();
+            (await _userManager.SetPhoneNumberAsync(user, input.PhoneNumber)).CheckErrors();
+            (await _userManager.SetTwoFactorEnabledAsync(user, input.TwoFactorEnabled)).CheckErrors();
+            (await _userManager.SetLockoutEnabledAsync(user, input.LockoutEnabled)).CheckErrors();
 
             if (input.RoleNames != null)
             {
-                CheckIdentityErrors(await _userManager.SetRolesAsync(user, input.RoleNames));
+                (await _userManager.SetRolesAsync(user, input.RoleNames)).CheckErrors();
             }
         }
     }

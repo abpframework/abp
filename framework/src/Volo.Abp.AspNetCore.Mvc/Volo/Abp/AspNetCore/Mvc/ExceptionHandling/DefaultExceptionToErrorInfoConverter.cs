@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Localization.Resources.AbpUi;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Authorization;
@@ -10,6 +11,7 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.ExceptionHandling;
 using Volo.Abp.Http;
+using Volo.Abp.Localization;
 using Volo.Abp.Localization.ExceptionHandling;
 using Volo.Abp.UI;
 using Volo.Abp.Validation;
@@ -23,12 +25,15 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
         protected ExceptionLocalizationOptions LocalizationOptions { get; }
         protected IStringLocalizerFactory StringLocalizerFactory { get; }
         protected IStringLocalizer<AbpUiResource> L { get; }
+        protected IServiceProvider ServiceProvider { get; }
 
         public DefaultExceptionToErrorInfoConverter(
             IOptions<ExceptionLocalizationOptions> localizationOptions,
             IStringLocalizerFactory stringLocalizerFactory,
-            IStringLocalizer<AbpUiResource> abpUiStringLocalizer)
+            IStringLocalizer<AbpUiResource> abpUiStringLocalizer,
+            IServiceProvider serviceProvider)
         {
+            ServiceProvider = serviceProvider;
             StringLocalizerFactory = stringLocalizerFactory;
             L = abpUiStringLocalizer;
             LocalizationOptions = localizationOptions.Value;
@@ -101,6 +106,16 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
 
         protected virtual void TryToLocalizeExceptionMessage(Exception exception, RemoteServiceErrorInfo errorInfo)
         {
+            if (exception is ILocalizeErrorMessage localizeErrorMessageException)
+            {
+                using (var scope = ServiceProvider.CreateScope())
+                {
+                    errorInfo.Message = localizeErrorMessageException.LocalizeMessage(new LocalizationContext(scope.ServiceProvider));
+                }
+
+                return;
+            }
+
             if (!(exception is IHasErrorCode exceptionWithErrorCode))
             {
                 return;
@@ -166,7 +181,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
                     aggException.InnerException is AbpValidationException ||
                     aggException.InnerException is EntityNotFoundException ||
                     aggException.InnerException is AbpAuthorizationException ||
-                    aggException.InnerException is BusinessException)
+                    aggException.InnerException is IBusinessException)
                 {
                     return aggException.InnerException;
                 }

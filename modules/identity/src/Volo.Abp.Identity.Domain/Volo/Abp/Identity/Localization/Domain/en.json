@@ -1,0 +1,7 @@
+{
+  "culture": "en",
+  "texts": {
+    "Identity.PasswordTooShort": "Passwords must be at least {0} characters.",
+    "Identity.PasswordRequiresNonAlphanumeric": "Passwords must have at least one non alphanumeric character."
+  }
+}

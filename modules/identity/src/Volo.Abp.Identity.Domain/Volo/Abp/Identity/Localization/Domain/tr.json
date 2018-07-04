@@ -1,0 +1,7 @@
+﻿{
+  "culture": "tr",
+  "texts": {
+    "Identity.PasswordTooShort": "Şifre en az {0} karakter uzunluğunda olmalı.",
+    "Identity.PasswordRequiresNonAlphanumeric": "Şifre en az bir sayı ya da harf olmayan karakter içermeli."
+  }
+}

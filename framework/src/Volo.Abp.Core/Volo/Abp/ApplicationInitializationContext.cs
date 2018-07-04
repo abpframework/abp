@@ -1,9 +1,10 @@
 ﻿using System;
 using JetBrains.Annotations;
+using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp
 {
-    public class ApplicationInitializationContext
+    public class ApplicationInitializationContext : IServiceProviderAccessor
     {
         public IServiceProvider ServiceProvider { get; set; }
 

@@ -3,10 +3,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Domain;
+using Volo.Abp.Identity.Localization;
+using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.Settings;
 using Volo.Abp.Users;
+using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.Identity
 {
@@ -27,6 +30,18 @@ namespace Volo.Abp.Identity
             services.Configure<SettingOptions>(options =>
             {
                 options.DefinitionProviders.Add<AbpIdentitySettingDefinitionProvider>();
+            });
+
+            services.Configure<VirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.AddEmbedded<AbpIdentityDomainModule>();
+            });
+
+            services.Configure<AbpLocalizationOptions>(options =>
+            {
+                options.Resources
+                    .Get<IdentityResource>()
+                    .AddVirtualJson("/Volo/Abp/Identity/Localization/Domain");
             });
 
             var identityBuilder = services.AddAbpIdentity(options =>

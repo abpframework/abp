@@ -30,7 +30,9 @@ namespace Volo.Abp.Identity
 
             services.Configure<AbpLocalizationOptions>(options =>
             {
-                options.Resources.Get<IdentityResource>().AddVirtualJson("/Volo/Abp/Identity/Localization/ApplicationContracts");
+                options.Resources
+                    .Get<IdentityResource>()
+                    .AddVirtualJson("/Volo/Abp/Identity/Localization/ApplicationContracts");
             });
 
             services.AddAssemblyOf<AbpIdentityApplicationContractsModule>();

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Authorization.Permissions;
@@ -70,7 +71,7 @@ namespace Volo.Abp.Identity
         {
             var role = new IdentityRole(GuidGenerator.Create(), input.Name, CurrentTenant.Id);
 
-            await _roleManager.CreateAsync(role);
+            (await _roleManager.CreateAsync(role)).CheckErrors();
             await CurrentUnitOfWork.SaveChangesAsync();
 
             return ObjectMapper.Map<IdentityRole, IdentityRoleDto>(role);
@@ -81,9 +82,9 @@ namespace Volo.Abp.Identity
         {
             var role = await _roleManager.GetByIdAsync(id);
 
-            await _roleManager.SetRoleNameAsync(role, input.Name);
+            (await _roleManager.SetRoleNameAsync(role, input.Name)).CheckErrors();
 
-            await _roleManager.UpdateAsync(role);
+            (await _roleManager.UpdateAsync(role)).CheckErrors();
             await CurrentUnitOfWork.SaveChangesAsync();
 
             return ObjectMapper.Map<IdentityRole, IdentityRoleDto>(role);
@@ -98,7 +99,7 @@ namespace Volo.Abp.Identity
                 return;
             }
 
-            await _roleManager.DeleteAsync(role);
+            (await _roleManager.DeleteAsync(role)).CheckErrors();
         }
     }
 }
