@@ -12,24 +12,18 @@
         var _$wrapper = $('#IdentityRolesWrapper');
         var _$table = _$wrapper.find('table');
 
-        var _dataTable = _$table.DataTable({
+        var _dataTable = _$table.DataTable(abp.libs.datatables.normalizeConfiguration({
             order: [[1, "asc"]],
             ajax: abp.libs.datatables.createAjax(_identityRoleAppService.getList),
             columnDefs: [
                 {
-                    targets: 0,
-                    data: null,
-                    orderable: false,
-                    autoWidth: false,
-                    defaultContent: '',
                     rowAction: {
-                        text: '<i class="fa fa-cog"></i> ' + l('Actions') + ' <span class="caret"></span>',
                         items:
                             [
                                 {
                                     text: l('Edit'),
                                     visible: function () {
-                                        return true;
+                                        return true; //TODO: Check permission
                                     },
                                     action: function (data) {
                                         _editModal.open({
@@ -40,7 +34,7 @@
                                 {
                                     text: l('Permissions'),
                                     visible: function () {
-                                        return true;
+                                        return true; //TODO: Check permission
                                     },
                                     action: function (data) {
                                         _permissionsModal.open({
@@ -52,7 +46,7 @@
                                 {
                                     text: l('Delete'),
                                     visible: function () {
-                                        return true;
+                                        return true; //TODO: Check permission
                                     },
                                     confirmMessage: function (data) { return l('RoleDeletionConfirmationMessage', data.record.name)},
                                     action: function (data) {
@@ -67,11 +61,10 @@
                     }
                 },
                 {
-                    targets: 1,
                     data: "name"
                 }
             ]
-        });
+        }));
 
         _createModal.onResult(function () {
             _dataTable.ajax.reload();

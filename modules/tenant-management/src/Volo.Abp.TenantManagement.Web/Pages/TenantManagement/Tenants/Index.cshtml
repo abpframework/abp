@@ -4,9 +4,6 @@
 @using Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants
 @model IndexModel
 @inject IHtmlLocalizer<AbpTenantManagementResource> L
-@section styles {
-    <link rel="stylesheet" type="text/css" href="~/modules/multi-tenancy/views/tenants/index.css" />
-}
 @section scripts {
     <script type="text/javascript" src="~/modules/multi-tenancy/views/tenants/index.js"></script>
 }
@@ -22,13 +19,13 @@
         </abp-row>
     </abp-card-header>
     <abp-card-body>
-        <table class="table table-striped nowrap">
+        <abp-table striped-rows="true" class="nowrap">
             <thead>
-            <tr>
-                <th>@L["Actions"]</th>
-                <th>@L["TenantName"]</th>
-            </tr>
+                <tr>
+                    <th>@L["Actions"]</th>
+                    <th>@L["TenantName"]</th>
+                </tr>
             </thead>
-        </table>
+        </abp-table>
     </abp-card-body>
 </abp-card>

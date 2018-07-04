@@ -9,29 +9,18 @@
     $(function () {
 
         var _$wrapper = $('#TenantsWrapper');
-        var _$table = _$wrapper.find('table');
 
-        var _dataTable = _$table.DataTable({
+        var _dataTable = _$wrapper.find('table').DataTable(abp.libs.datatables.normalizeConfiguration({
             order: [[1, "asc"]],
             ajax: abp.libs.datatables.createAjax(_tenantAppService.getList),
             columnDefs: [
                 {
-                    //TODO: Can we eleminate targets, data, orderable, autoWidth, defaultContent fields or make these values default
-                    targets: 0,
-                    data: null,
-                    orderable: false,
-                    autoWidth: false,
-                    defaultContent: '',
                     rowAction: {
-                        text: '<i class="fa fa-cog"></i> ' + l('Actions') + ' <span class="caret"></span>', //TODO: Add icon option and set text as only l('Actions')
                         items:
                             [
                                 {
-                                    //TODO: Allow to add icon
                                     text: l('Edit'),
-                                    visible: function () { //TODO: Allow visible to be a boolean for simple cases
-                                        return true;
-                                    },
+                                    visible: function () { return true; }, //TODO: Check permission
                                     action: function (data) {
                                         _editModal.open({
                                             id: data.record.id
@@ -40,9 +29,7 @@
                                 },
                                 {
                                     text: l('Delete'),
-                                    visible: function () {
-                                        return true;
-                                    },
+                                    visible: function () { return true; }, //TODO: Check permission
                                     confirmMessage: function (data) { return l('TenantDeletionConfirmationMessage', data.record.name)},
                                     action: function (data) {
                                         _tenantAppService
@@ -56,11 +43,10 @@
                     }
                 },
                 {
-                    targets: 1,
                     data: "name"
                 }
             ]
-        });
+        }));
 
         _createModal.onResult(function () {
             _dataTable.ajax.reload();
