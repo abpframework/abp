@@ -1,5 +1,5 @@
 var abp = abp || {};
-(function ($) {
+(function () {
 
     /* Application paths *****************************************/
 
@@ -187,41 +187,32 @@ var abp = abp || {};
 
     abp.message = abp.message || {};
 
-    var showMessage = function (message, title) {
+    abp.message._showMessage = function (message, title) {
         alert((title || '') + ' ' + message);
-
-        if (!$) {
-            abp.log.warn('abp.message can not return promise since jQuery is not defined!');
-            return null;
-        }
-
-        return $.Deferred(function ($dfd) {
-            $dfd.resolve();
-        });
     };
 
     abp.message.info = function (message, title) {
         abp.log.warn('abp.message.info is not implemented!');
-        return showMessage(message, title);
+        return abp.message._showMessage(message, title);
     };
 
     abp.message.success = function (message, title) {
         abp.log.warn('abp.message.success is not implemented!');
-        return showMessage(message, title);
+        return abp.message._showMessage(message, title);
     };
 
     abp.message.warn = function (message, title) {
         abp.log.warn('abp.message.warn is not implemented!');
-        return showMessage(message, title);
+        return abp.message._showMessage(message, title);
     };
 
     abp.message.error = function (message, title) {
         abp.log.warn('abp.message.error is not implemented!');
-        return showMessage(message, title);
+        return abp.message._showMessage(message, title);
     };
 
     abp.message.confirm = function (message, titleOrCallback, callback) {
-        abp.log.warn('abp.message.confirm is not implemented!');
+        abp.log.warn('abp.message.confirm is not properly implemented!');
 
         if (titleOrCallback && !(typeof titleOrCallback == 'string')) {
             callback = titleOrCallback;
@@ -229,15 +220,6 @@ var abp = abp || {};
 
         var result = confirm(message);
         callback && callback(result);
-
-        if (!$) {
-            abp.log.warn('abp.message can not return promise since jQuery is not defined!');
-            return null;
-        }
-
-        return $.Deferred(function ($dfd) {
-            $dfd.resolve(result);
-        });
     };
 
     /* UI *******************************************************/
@@ -422,12 +404,6 @@ var abp = abp || {};
     };
 
     abp.utils.isFunction = function (obj) {
-        if ($) {
-            //Prefer to use jQuery if possible
-            return $.isFunction(obj);
-        }
-
-        //alternative for $.isFunction
         return !!(obj && obj.constructor && obj.call && obj.apply);
     };
 

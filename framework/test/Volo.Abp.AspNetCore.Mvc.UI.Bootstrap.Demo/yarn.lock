@@ -2,25 +2,25 @@
 # yarn lockfile v1
 
 
-"@abp/aspnetcore.mvc.ui.theme.shared@^0.2.3":
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/@abp/aspnetcore.mvc.ui.theme.shared/-/aspnetcore.mvc.ui.theme.shared-0.2.3.tgz#aaab6c13f38a07d5876ab0e9b40aa6409c0d21c1"
+"@abp/aspnetcore.mvc.ui.theme.shared@^0.3.5":
+  version "0.3.5"
+  resolved "https://registry.yarnpkg.com/@abp/aspnetcore.mvc.ui.theme.shared/-/aspnetcore.mvc.ui.theme.shared-0.3.5.tgz#5926165c1bfc7a5e01e3f0d3533f44d7faafd556"
   dependencies:
-    "@abp/aspnetcore.mvc.ui" "^0.2.3"
-    "@abp/jquery" "^0.2.3"
-    bootstrap "^4.1.0"
-    datatables.net "^1.10.16"
-    datatables.net-bs4 "^1.10.16"
-    font-awesome "^4.7.0"
-    jquery-form "^4.2.2"
-    jquery-validation "^1.17.0"
-    jquery-validation-unobtrusive "^3.2.9"
-    sweetalert "^2.1.0"
-    toastr "^2.1.4"
+    "@abp/aspnetcore.mvc.ui" "^0.3.5"
+    "@abp/bootstrap" "^0.3.5"
+    "@abp/datatables.net-bs4" "^0.3.5"
+    "@abp/font-awesome" "^0.3.5"
+    "@abp/jquery-form" "^0.3.5"
+    "@abp/jquery-validation-unobtrusive" "^0.3.5"
+    "@abp/lodash" "^0.3.5"
+    "@abp/select2" "^0.3.5"
+    "@abp/sweetalert" "^0.3.5"
+    "@abp/timeago" "^0.3.5"
+    "@abp/toastr" "^0.3.5"
 
-"@abp/aspnetcore.mvc.ui@^0.2.3":
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/@abp/aspnetcore.mvc.ui/-/aspnetcore.mvc.ui-0.2.3.tgz#3e16e6fced400b92632d07e99145f010d8f44534"
+"@abp/aspnetcore.mvc.ui@^0.3.5":
+  version "0.3.5"
+  resolved "https://registry.yarnpkg.com/@abp/aspnetcore.mvc.ui/-/aspnetcore.mvc.ui-0.3.5.tgz#f60217ec953d5b717a89191f4feba80c8ad545d8"
   dependencies:
     ansi-colors "^1.1.0"
     extend-object "^1.0.0"
@@ -29,16 +29,104 @@
     path "^0.12.7"
     rimraf "^2.6.2"
 
-"@abp/core@^0.2.3":
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/@abp/core/-/core-0.2.3.tgz#82988f31d2cdd88dbda7e969d495d46c2d4e3f40"
-
-"@abp/jquery@^0.2.3":
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/@abp/jquery/-/jquery-0.2.3.tgz#93d31db0cc781623f90300fd53c397e634d9c7da"
+"@abp/bootstrap@^0.3.5":
+  version "0.3.5"
+  resolved "https://registry.yarnpkg.com/@abp/bootstrap/-/bootstrap-0.3.5.tgz#7bf9f16b7d0657ddf38caa97cdb21eb26d758637"
   dependencies:
-    "@abp/core" "^0.2.3"
+    "@abp/core" "^0.3.5"
+    bootstrap "^4.1.1"
+
+"@abp/core@^0.3.5":
+  version "0.3.5"
+  resolved "https://registry.yarnpkg.com/@abp/core/-/core-0.3.5.tgz#0e26c03259c10b223465d9cf4f541113ce6a56ae"
+
+"@abp/datatables.net-bs4@^0.3.5":
+  version "0.3.5"
+  resolved "https://registry.yarnpkg.com/@abp/datatables.net-bs4/-/datatables.net-bs4-0.3.5.tgz#b0e40c8f2d40113bebaf62c5219c41a8c5e918cd"
+  dependencies:
+    "@abp/datatables.net" "^0.3.5"
+    datatables.net-bs4 "^1.10.16"
+
+"@abp/datatables.net@^0.3.5":
+  version "0.3.5"
+  resolved "https://registry.yarnpkg.com/@abp/datatables.net/-/datatables.net-0.3.5.tgz#784d14462a3e08e7cc921e8d9d0c7f384b8f6e6a"
+  dependencies:
+    "@abp/core" "^0.3.5"
+    datatables.net "^1.10.16"
+
+"@abp/font-awesome@^0.3.5":
+  version "0.3.5"
+  resolved "https://registry.yarnpkg.com/@abp/font-awesome/-/font-awesome-0.3.5.tgz#25385a24d8cbb9475b9d57a51c6402e48963da44"
+  dependencies:
+    "@abp/core" "^0.3.5"
+    font-awesome "^4.7.0"
+
+"@abp/jquery-form@^0.3.5":
+  version "0.3.5"
+  resolved "https://registry.yarnpkg.com/@abp/jquery-form/-/jquery-form-0.3.5.tgz#ec8315dbf87fa6be841448acd3fbccf51507f6da"
+  dependencies:
+    "@abp/jquery" "^0.3.5"
+    jquery-form "^4.2.2"
+
+"@abp/jquery-validation-unobtrusive@^0.3.5":
+  version "0.3.5"
+  resolved "https://registry.yarnpkg.com/@abp/jquery-validation-unobtrusive/-/jquery-validation-unobtrusive-0.3.5.tgz#6b8b5c821718266ae13e1a3f65da4862ed0a7e6d"
+  dependencies:
+    "@abp/jquery-validation" "^0.3.5"
+    jquery-validation-unobtrusive "^3.2.9"
+
+"@abp/jquery-validation@^0.3.5":
+  version "0.3.5"
+  resolved "https://registry.yarnpkg.com/@abp/jquery-validation/-/jquery-validation-0.3.5.tgz#c3f2e3d695f333261cdefadc35c962ebf6f016d3"
+  dependencies:
+    "@abp/jquery" "^0.3.5"
+    jquery-validation "^1.17.0"
+
+"@abp/jquery@^0.3.5":
+  version "0.3.5"
+  resolved "https://registry.yarnpkg.com/@abp/jquery/-/jquery-0.3.5.tgz#928252246400ed0c5519dcd3d5fca8be471ce11f"
+  dependencies:
+    "@abp/core" "^0.3.5"
     jquery "^3.3.1"
+
+"@abp/lodash@^0.3.5":
+  version "0.3.5"
+  resolved "https://registry.yarnpkg.com/@abp/lodash/-/lodash-0.3.5.tgz#5cc9397b23be9a3f99e2b20db5b3c1af8d01d06b"
+  dependencies:
+    "@abp/core" "^0.3.5"
+    lodash "^4.17.10"
+
+"@abp/select2@^0.3.5":
+  version "0.3.5"
+  resolved "https://registry.yarnpkg.com/@abp/select2/-/select2-0.3.5.tgz#065727e1948fff2d454ced9183ce03f0b01b377f"
+  dependencies:
+    "@abp/core" "^0.3.5"
+    select2 "^4.0.5"
+
+"@abp/sweetalert@^0.3.5":
+  version "0.3.5"
+  resolved "https://registry.yarnpkg.com/@abp/sweetalert/-/sweetalert-0.3.5.tgz#399f5daad720dd7187abaa191d58928555a26a8f"
+  dependencies:
+    "@abp/core" "^0.3.5"
+    sweetalert "^2.1.0"
+
+"@abp/timeago@^0.3.5":
+  version "0.3.5"
+  resolved "https://registry.yarnpkg.com/@abp/timeago/-/timeago-0.3.5.tgz#c54080833136da6055fac64d4fbab1da637cb821"
+  dependencies:
+    "@abp/jquery" "^0.3.5"
+    timeago "^1.6.3"
+
+"@abp/toastr@^0.3.5":
+  version "0.3.5"
+  resolved "https://registry.yarnpkg.com/@abp/toastr/-/toastr-0.3.5.tgz#3584a92dcac7e0694c45364ed604c11c8e6ef009"
+  dependencies:
+    "@abp/jquery" "^0.3.5"
+    toastr "^2.1.4"
+
+almond@~0.3.1:
+  version "0.3.3"
+  resolved "https://registry.yarnpkg.com/almond/-/almond-0.3.3.tgz#a0e7c95ac7624d6417b4494b1e68bff693168a20"
 
 ansi-colors@^1.1.0:
   version "1.1.0"
@@ -128,9 +216,9 @@ beeper@^1.0.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/beeper/-/beeper-1.1.1.tgz#e6d5ea8c5dad001304a70b22638447f69cb2f809"
 
-bootstrap@^4.1.0:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-4.1.0.tgz#110b05c31a236d56dbc9adcda6dd16f53738a28a"
+bootstrap@^4.1.1:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-4.1.1.tgz#3aec85000fa619085da8d2e4983dfd67cf2114cb"
 
 brace-expansion@^1.0.0, brace-expansion@^1.1.7:
   version "1.1.11"
@@ -793,6 +881,10 @@ jquery-form@^4.2.2:
   dependencies:
     jquery ">=1.7.2"
 
+jquery-mousewheel@~3.1.13:
+  version "3.1.13"
+  resolved "https://registry.yarnpkg.com/jquery-mousewheel/-/jquery-mousewheel-3.1.13.tgz#06f0335f16e353a695e7206bf50503cb523a6ee5"
+
 jquery-validation-unobtrusive@^3.2.9:
   version "3.2.9"
   resolved "https://registry.yarnpkg.com/jquery-validation-unobtrusive/-/jquery-validation-unobtrusive-3.2.9.tgz#674bec080408c54c12a22d4234ad3904f47fd5d5"
@@ -806,7 +898,7 @@ jquery-validation@>=1.16, jquery-validation@^1.17.0:
   dependencies:
     jquery "^1.7 || ^2.0 || ^3.1"
 
-jquery@>=1.12.0, jquery@>=1.7, jquery@>=1.7.2, jquery@>=1.8, "jquery@^1.7 || ^2.0 || ^3.1", jquery@^3.3.1:
+jquery@>=1.12.0, jquery@>=1.2.3, jquery@>=1.7, jquery@>=1.7.2, jquery@>=1.8, "jquery@^1.7 || ^2.0 || ^3.1", jquery@^3.3.1:
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.3.1.tgz#958ce29e81c9790f31be7792df5d4d95fc57fbca"
 
@@ -925,6 +1017,10 @@ lodash.templatesettings@^3.0.0:
   dependencies:
     lodash._reinterpolate "^3.0.0"
     lodash.escape "^3.0.0"
+
+lodash@^4.17.10:
+  version "4.17.10"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.10.tgz#1b7793cf7259ea38fb3661d4d38b3260af8ae4e7"
 
 lodash@~1.0.1:
   version "1.0.2"
@@ -1266,6 +1362,13 @@ safe-regex@^1.1.0:
   dependencies:
     ret "~0.1.10"
 
+select2@^4.0.5:
+  version "4.0.5"
+  resolved "https://registry.yarnpkg.com/select2/-/select2-4.0.5.tgz#7aac50692561985b34d3b82ec55e226f8960d40a"
+  dependencies:
+    almond "~0.3.1"
+    jquery-mousewheel "~3.1.13"
+
 semver@^4.1.0:
   version "4.3.6"
   resolved "https://registry.yarnpkg.com/semver/-/semver-4.3.6.tgz#300bc6e0e86374f7ba61068b5b1ecd57fc6532da"
@@ -1419,6 +1522,12 @@ tildify@^1.0.0:
 time-stamp@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/time-stamp/-/time-stamp-1.1.0.tgz#764a5a11af50561921b133f3b44e618687e0f5c3"
+
+timeago@^1.6.3:
+  version "1.6.3"
+  resolved "https://registry.yarnpkg.com/timeago/-/timeago-1.6.3.tgz#162a1adae99356297df59339837d09f1b0f36465"
+  dependencies:
+    jquery ">=1.2.3"
 
 to-object-path@^0.3.0:
   version "0.3.0"

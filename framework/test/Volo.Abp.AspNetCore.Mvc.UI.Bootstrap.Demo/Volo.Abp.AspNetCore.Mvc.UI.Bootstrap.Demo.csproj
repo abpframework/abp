@@ -12,6 +12,8 @@
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+    <MvcRazorExcludeRefAssembliesFromPublish>false</MvcRazorExcludeRefAssembliesFromPublish>
+    <MvcRazorCompileOnPublish>true</MvcRazorCompileOnPublish>
   </PropertyGroup>
 
   <ItemGroup>
