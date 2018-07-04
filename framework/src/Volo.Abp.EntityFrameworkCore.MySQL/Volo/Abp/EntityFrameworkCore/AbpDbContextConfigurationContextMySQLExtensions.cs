@@ -2,8 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using MySql.Data.EntityFrameworkCore.Infraestructure;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Volo.Abp.EntityFrameworkCore.DependencyInjection;
 
 namespace Volo.Abp.EntityFrameworkCore

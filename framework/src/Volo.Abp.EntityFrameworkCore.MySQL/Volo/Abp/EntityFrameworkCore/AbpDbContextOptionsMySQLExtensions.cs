@@ -1,8 +1,6 @@
 ﻿using JetBrains.Annotations;
 using MySql.Data.EntityFrameworkCore.Infraestructure;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Volo.Abp.EntityFrameworkCore
 {
