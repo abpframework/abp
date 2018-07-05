@@ -1,0 +1,48 @@
+﻿@using Volo.Abp.AspNetCore.Mvc.AntiForgery
+@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling
+@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Themes.Basic.Components.MainNavbar
+@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Themes.Basic.Components.PageAlerts
+@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Components
+@inject IAbpAntiForgeryManager AbpAntiForgeryManager
+@inject IBrandingProvider BrandingProvider
+@{
+    Layout = null;
+    AbpAntiForgeryManager.SetCookie();
+    var containerClass = ViewBag.FluidLayout == true ? "container-fluid" : "container"; //TODO: Better and type-safe options
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>@(ViewBag.Title == null ? BrandingProvider.AppName : ViewBag.Title)</title>
+
+    <abp-style-bundle name="@BasicThemeBundles.Styles.Global" />
+
+    @RenderSection("styles", false)
+</head>
+<body>
+
+    @(await Component.InvokeAsync<MainNavbarViewComponent>())
+
+    <div class="@containerClass">
+        <abp-row>
+            <abp-column size-md="_4" offset-md="_4">
+                @(await Component.InvokeAsync<PageAlertsViewComponent>())
+                @RenderBody()
+            </abp-column>
+        </abp-row>
+    </div>
+
+    <abp-script-bundle name="@BasicThemeBundles.Scripts.Global" />
+
+    <script type="text/javascript" src="~/Abp/ApplicationConfigurationScript"></script>
+    <script type="text/javascript" src="~/Abp/ServiceProxyScript"></script>
+
+    @RenderSection("scripts", false)
+
+</body>
+</html>

@@ -15,7 +15,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic
                 case StandardLayouts.Application:
                     return "~/Themes/Basic/Layouts/Application.cshtml";
                 case StandardLayouts.Account:
-                    return "~/Themes/Basic/Layouts/Application.cshtml";
+                    return "~/Themes/Basic/Layouts/Account.cshtml";
                 case StandardLayouts.Empty:
                     return "~/Themes/Basic/Layouts/Empty.cshtml";
                 default:

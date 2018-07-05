@@ -2,13 +2,9 @@
 @model Volo.Abp.Account.Web.Pages.Account.RegisterModel
 @inherits Volo.Abp.Account.Web.Pages.Account.AccountPage
 <h2>@L["Register"]</h2>
-<abp-row>
-    <abp-column size-md="_3">
-        <form method="post">
-            <abp-input asp-for="Input.UserName" auto-focus="true" />
-            <abp-input asp-for="Input.EmailAddress" />
-            <abp-input asp-for="Input.Password" />
-            <abp-button button-type="Primary" type="submit">@L["Register"]</abp-button>
-        </form>
-    </abp-column>
-</abp-row>
+<form method="post">
+    <abp-input asp-for="Input.UserName" auto-focus="true" />
+    <abp-input asp-for="Input.EmailAddress" />
+    <abp-input asp-for="Input.Password" />
+    <abp-button button-type="Primary" type="submit">@L["Register"]</abp-button>
+</form>
