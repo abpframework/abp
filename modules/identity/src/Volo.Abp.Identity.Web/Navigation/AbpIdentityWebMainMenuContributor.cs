@@ -19,7 +19,7 @@ namespace Volo.Abp.Identity.Web.Navigation
             var authorizationService = context.ServiceProvider.GetRequiredService<IAuthorizationService>();
             var l = context.ServiceProvider.GetRequiredService<IStringLocalizer<IdentityResource>>();
 
-            var identityMenuItem = new ApplicationMenuItem("Identity", l["Menu:IdentityManagement"]);
+            var identityMenuItem = new ApplicationMenuItem("Identity", l["Menu:IdentityManagement"], icon: "fa fa-id-card");
             context.Menu.AddItem(identityMenuItem);
 
             if (await authorizationService.IsGrantedAsync(IdentityPermissions.Roles.Default))
