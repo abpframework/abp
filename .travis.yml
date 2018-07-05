@@ -1,3 +1,2 @@
 language: csharp
-script:
-  - pwsh "build-all.ps1"
+solution: framework/Volo.Abp.sln
