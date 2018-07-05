@@ -22,6 +22,10 @@ foreach ($solutionsPath in $solutionsPaths) {
     $solutionAbsPath = (Join-Path $rootFolder $solutionsPath)
     Set-Location $solutionAbsPath
     dotnet build
+    if (-Not $?) {
+        Write-Host ("Build failed for the solution: " + $solutionsPath)
+        exit $LASTEXITCODE
+    }
 }
 
 Set-Location $rootFolder

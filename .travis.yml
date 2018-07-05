@@ -1,0 +1,3 @@
+language: csharp
+script:
+  - pwsh "build-all.ps1"
