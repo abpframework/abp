@@ -4,6 +4,7 @@ using Volo.Abp.Account.Web.Localization;
 using Volo.Abp.Account.Web.Settings;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars;
 using Volo.Abp.Identity;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.Resources.AbpValidation;
@@ -49,6 +50,11 @@ namespace Volo.Abp.Account.Web
                     .Add<AccountResource>("en")
                     .AddVirtualJson("/Localization/Resources/AbpAccount/Web")
                     .AddBaseTypes(typeof(AbpUiResource), typeof(AbpValidationResource));
+            });
+            
+            services.Configure<ToolbarOptions>(options =>
+            {
+                options.Contributors.Add(new AccountModuleToolbarContributor());
             });
 
             services.AddAssemblyOf<AbpAccountWebModule>();
