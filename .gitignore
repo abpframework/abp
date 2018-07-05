@@ -264,3 +264,4 @@ framework/test/Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo/Logs/*
 !framework/src/Volo.Abp.AspNetCore.Mvc.UI.Packages/Volo/Abp/AspNetCore/Mvc/UI/Packages/*
 modules/blog/app/Volo.BlogTestApp/Logs/*
 nupkg/push.ps1
+templates/mvc/src/MyCompanyName.MyProjectName.Web/Logs/logs.txt
