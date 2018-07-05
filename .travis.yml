@@ -1,2 +1,5 @@
 language: csharp
-solution: framework/Volo.Abp.sln
+mono: none
+dotnet: 2.1.300
+script:
+  - dotnet build framework/Volo.Abp.sln
