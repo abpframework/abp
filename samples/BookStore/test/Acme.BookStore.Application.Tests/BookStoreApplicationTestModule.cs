@@ -21,13 +21,13 @@ namespace Acme.BookStore
     {
         private SqliteConnection _sqliteConnection;
 
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAlwaysAllowAuthorization();
+            context.Services.AddAlwaysAllowAuthorization();
 
-            ConfigureInMemorySqlite(services);
+            ConfigureInMemorySqlite(context.Services);
 
-            services.AddAssemblyOf<BookStoreApplicationTestModule>();
+            context.Services.AddAssemblyOf<BookStoreApplicationTestModule>();
         }
 
         private void ConfigureInMemorySqlite(IServiceCollection services)

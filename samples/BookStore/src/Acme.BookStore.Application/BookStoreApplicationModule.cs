@@ -12,19 +12,19 @@ namespace Acme.BookStore
         typeof(AbpIdentityApplicationModule))]
     public class BookStoreApplicationModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.Configure<PermissionOptions>(options =>
+            context.Services.Configure<PermissionOptions>(options =>
             {
                 options.DefinitionProviders.Add<BookStorePermissionDefinitionProvider>();
             });
 
-            services.Configure<AbpAutoMapperOptions>(options =>
+            context.Services.Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<BookStoreApplicationAutoMapperProfile>();
             });
 
-            services.AddAssemblyOf<BookStoreApplicationModule>();
+            context.Services.AddAssemblyOf<BookStoreApplicationModule>();
         }
     }
 }

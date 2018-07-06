@@ -12,10 +12,10 @@
   
   <ItemGroup>
     <ProjectReference Include="..\Acme.BookStore.Domain\Acme.BookStore.Domain.csproj" />
-    <PackageReference Include="Volo.Abp.PermissionManagement.EntityFrameworkCore" Version="0.3.5" />
-    <PackageReference Include="Volo.Abp.SettingManagement.EntityFrameworkCore" Version="0.3.5" />
-    <PackageReference Include="Volo.Abp.Identity.EntityFrameworkCore" Version="0.3.5" />
-    <PackageReference Include="Volo.Abp.EntityFrameworkCore.SqlServer" Version="0.3.5" />
+    <PackageReference Include="Volo.Abp.PermissionManagement.EntityFrameworkCore" Version="0.3.7" />
+    <PackageReference Include="Volo.Abp.SettingManagement.EntityFrameworkCore" Version="0.3.7" />
+    <PackageReference Include="Volo.Abp.Identity.EntityFrameworkCore" Version="0.3.7" />
+    <PackageReference Include="Volo.Abp.EntityFrameworkCore.SqlServer" Version="0.3.7" />
   </ItemGroup>
 
 </Project>

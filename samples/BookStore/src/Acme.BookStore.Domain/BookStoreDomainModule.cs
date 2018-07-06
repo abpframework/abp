@@ -13,14 +13,14 @@ namespace Acme.BookStore
     [DependsOn(typeof(AbpIdentityDomainModule))]
     public class BookStoreDomainModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.Configure<VirtualFileSystemOptions>(options =>
+            context.Services.Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<BookStoreDomainModule>();
             });
 
-            services.Configure<AbpLocalizationOptions>(options =>
+            context.Services.Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources
                     .Add<BookStoreResource>("en")
@@ -28,12 +28,12 @@ namespace Acme.BookStore
                     .AddVirtualJson("/Localization/BookStore");
             });
 
-            services.Configure<SettingOptions>(options =>
+            context.Services.Configure<SettingOptions>(options =>
             {
                 options.DefinitionProviders.Add<BookStoreSettingDefinitionProvider>();
             });
 
-            services.AddAssemblyOf<BookStoreDomainModule>();
+            context.Services.AddAssemblyOf<BookStoreDomainModule>();
         }
     }
 }

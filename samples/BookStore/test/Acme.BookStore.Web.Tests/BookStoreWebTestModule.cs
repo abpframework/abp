@@ -32,20 +32,20 @@ namespace Acme.BookStore
     )]
     public class BookStoreWebTestModule : AbpModule
     {
-        public override void PreConfigureServices(IServiceCollection services)
+        public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            services.PreConfigure<IMvcBuilder>(builder =>
+            context.Services.PreConfigure<IMvcBuilder>(builder =>
             {
                 builder.PartManager.ApplicationParts.Add(new AssemblyPart(typeof(BookStoreWebModule).Assembly));
             });
         }
 
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            ConfigureLocalizationServices(services);
-            ConfigureNavigationServices(services);
+            ConfigureLocalizationServices(context.Services);
+            ConfigureNavigationServices(context.Services);
 
-            services.AddAssemblyOf<BookStoreWebTestModule>();
+            context.Services.AddAssemblyOf<BookStoreWebTestModule>();
         }
 
         private static void ConfigureLocalizationServices(IServiceCollection services)

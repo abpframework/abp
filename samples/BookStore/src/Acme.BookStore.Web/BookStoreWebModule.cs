@@ -48,9 +48,9 @@ namespace Acme.BookStore
         )]
     public class BookStoreWebModule : AbpModule
     {
-        public override void PreConfigureServices(IServiceCollection services)
+        public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
+            context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
             {
                 options.AddAssemblyResource(
                     typeof(BookStoreResource),
@@ -61,20 +61,20 @@ namespace Acme.BookStore
             });
         }
 
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            var hostingEnvironment = services.GetHostingEnvironment();
-            var configuration = services.BuildConfiguration();
+            var hostingEnvironment = context.Services.GetHostingEnvironment();
+            var configuration = context.Services.BuildConfiguration();
 
-            ConfigureDatabaseServices(services, configuration);
-            ConfigureAutoMapper(services);
-            ConfigureVirtualFileSystem(services, hostingEnvironment);
-            ConfigureLocalizationServices(services);
-            ConfigureNavigationServices(services);
-            ConfigureAutoApiControllers(services);
-            ConfigureSwaggerServices(services);
+            ConfigureDatabaseServices(context.Services, configuration);
+            ConfigureAutoMapper(context.Services);
+            ConfigureVirtualFileSystem(context.Services, hostingEnvironment);
+            ConfigureLocalizationServices(context.Services);
+            ConfigureNavigationServices(context.Services);
+            ConfigureAutoApiControllers(context.Services);
+            ConfigureSwaggerServices(context.Services);
 
-            services.AddAssemblyOf<BookStoreWebModule>();
+            context.Services.AddAssemblyOf<BookStoreWebModule>();
         }
 
         private static void ConfigureDatabaseServices(IServiceCollection services, IConfigurationRoot configuration)

@@ -15,14 +15,14 @@ namespace Acme.BookStore.EntityFrameworkCore
         typeof(AbpEntityFrameworkCoreSqlServerModule))]
     public class BookStoreEntityFrameworkCoreModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAbpDbContext<BookStoreDbContext>(options =>
+            context.Services.AddAbpDbContext<BookStoreDbContext>(options =>
             {
                 options.AddDefaultRepositories();
             });
 
-            services.AddAssemblyOf<BookStoreEntityFrameworkCoreModule>();
+            context.Services.AddAssemblyOf<BookStoreEntityFrameworkCoreModule>();
         }
     }
 }
