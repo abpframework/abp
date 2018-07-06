@@ -62,9 +62,7 @@ $testProjectPaths = (
     "modules/setting-management/test/Volo.Abp.SettingManagement.Tests",
     "modules/tenant-management/test/Volo.Abp.TenantManagement.EntityFrameworkCore.Tests",
     "modules/tenant-management/test/Volo.Abp.TenantManagement.MongoDB.Tests",
-    "modules/tenant-management/test/Volo.Abp.TenantManagement.Application.Tests",
-    "modules/users/test/Volo.Abp.Users.MongoDB.Tests",
-    "modules/users/test/Volo.Abp.Users.EntityFrameworkCore.Tests"
+    "modules/tenant-management/test/Volo.Abp.TenantManagement.Application.Tests"
 )
 
 # Build all solutions
