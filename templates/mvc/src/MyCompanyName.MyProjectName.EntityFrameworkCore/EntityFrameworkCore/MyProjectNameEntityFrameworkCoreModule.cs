@@ -19,7 +19,8 @@ namespace MyCompanyName.MyProjectName.EntityFrameworkCore
         {
             context.Services.AddAbpDbContext<MyProjectNameDbContext>(options =>
             {
-                options.AddDefaultRepositories();
+                //Remove "includeAllEntities: true" to create default repositories only for aggregate roots
+                options.AddDefaultRepositories(includeAllEntities: true);
             });
 
             context.Services.AddAssemblyOf<MyProjectNameEntityFrameworkCoreModule>();
