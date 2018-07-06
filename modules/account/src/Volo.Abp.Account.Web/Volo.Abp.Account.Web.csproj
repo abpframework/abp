@@ -17,12 +17,12 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Pages\**\*.*" Exclude="*.cs" />
-    <EmbeddedResource Include="Localization\Resources\*.json" />
+    <EmbeddedResource Include="Localization\**\*.json" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Remove="Pages\**\*.cshtml" />
-    <Content Remove="Localization\Resources\*.json" />
+    <Content Remove="Localization\**\*.json" />
     <Content Remove="Properties\launchSettings.json" />
     <None Include="Properties\launchSettings.json" />
   </ItemGroup>
