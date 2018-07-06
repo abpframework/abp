@@ -17,6 +17,11 @@ foreach($project in $projects) {
     Remove-Item -Recurse (Join-Path $projectFolder "bin/Release")
     & dotnet msbuild /t:pack /p:Configuration=Release /p:SourceLinkCreate=true
 
+    if (-Not $?) {
+        Write-Host ("Packaging failed for the project: " + $projectFolder)
+        exit $LASTEXITCODE
+    }
+    
     # Copy nuget package
     $projectName = $project.Substring($project.LastIndexOf("/") + 1)
     $projectPackPath = Join-Path $projectFolder ("/bin/Release/" + $projectName + ".*.nupkg")
