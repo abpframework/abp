@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Volo.Abp.UI;
 
 namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
 {

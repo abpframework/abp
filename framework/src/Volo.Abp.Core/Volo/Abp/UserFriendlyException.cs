@@ -2,10 +2,8 @@ using System;
 using System.Runtime.Serialization;
 using Microsoft.Extensions.Logging;
 
-namespace Volo.Abp.UI
+namespace Volo.Abp
 {
-    //TODO: Move to Volo.Abp namespace
-
     /// <summary>
     /// This exception type is directly shown to the user.
     /// </summary>
