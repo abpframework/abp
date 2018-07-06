@@ -196,15 +196,15 @@ protected override IQueryable<IdentityUser> IncludeDetails(IQueryable<IdentityUs
     )]
 public class AbpIdentityEntityFrameworkCoreModule : AbpModule
 {
-    public override void ConfigureServices(IServiceCollection services)
+    public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        services.AddAbpDbContext<IdentityDbContext>(options =>
+        context.Services.AddAbpDbContext<IdentityDbContext>(options =>
         {
             options.AddRepository<IdentityUser, EfCoreIdentityUserRepository>();
             options.AddRepository<IdentityRole, EfCoreIdentityRoleRepository>();
         });
 
-        services.AddAssemblyOf<AbpIdentityEntityFrameworkCoreModule>();
+        context.Services.AddAssemblyOf<AbpIdentityEntityFrameworkCoreModule>();
     }
 }
 ````

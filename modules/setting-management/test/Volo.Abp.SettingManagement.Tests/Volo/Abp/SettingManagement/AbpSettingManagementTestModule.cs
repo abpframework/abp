@@ -10,9 +10,9 @@ namespace Volo.Abp.SettingManagement
         typeof(AbpUsersAbstractionModule))]
     public class AbpSettingManagementTestModule : AbpModule //TODO: Rename to Volo.Abp.SettingManagement.Domain.Tests..?
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAssemblyOf<AbpSettingManagementTestModule>();
+            context.Services.AddAssemblyOf<AbpSettingManagementTestModule>();
         }
     }
 }

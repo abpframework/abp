@@ -14,19 +14,19 @@ namespace Volo.Abp.SettingManagement.EntityFrameworkCore
         )]
     public class AbpSettingManagementEntityFrameworkCoreTestModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var sqliteConnection = CreateDatabaseAndGetConnection();
 
-            services.Configure<AbpDbContextOptions>(options =>
+            context.Services.Configure<AbpDbContextOptions>(options =>
             {
-                options.Configure(context =>
+                options.Configure(abpDbContextConfigurationContext =>
                 {
-                    context.DbContextOptions.UseSqlite(sqliteConnection);
+                    abpDbContextConfigurationContext.DbContextOptions.UseSqlite(sqliteConnection);
                 });
             });
 
-            services.AddAssemblyOf<AbpSettingManagementEntityFrameworkCoreTestModule>();
+            context.Services.AddAssemblyOf<AbpSettingManagementEntityFrameworkCoreTestModule>();
         }
 
         private static SqliteConnection CreateDatabaseAndGetConnection()

@@ -21,13 +21,13 @@ namespace MyCompanyName.MyProjectName
     {
         private SqliteConnection _sqliteConnection;
 
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAlwaysAllowAuthorization();
+            context.Services.AddAlwaysAllowAuthorization();
 
-            ConfigureInMemorySqlite(services);
+            ConfigureInMemorySqlite(context.Services);
 
-            services.AddAssemblyOf<MyProjectNameApplicationTestModule>();
+            context.Services.AddAssemblyOf<MyProjectNameApplicationTestModule>();
         }
 
         private void ConfigureInMemorySqlite(IServiceCollection services)

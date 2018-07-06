@@ -19,11 +19,11 @@ namespace Volo.Abp.EntityFrameworkCore
     [DependsOn(typeof(AbpEfCoreTestSecondContextModule))]
     public class AbpEntityFrameworkCoreTestModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAssemblyOf<AbpEntityFrameworkCoreTestModule>();
+            context.Services.AddAssemblyOf<AbpEntityFrameworkCoreTestModule>();
 
-            services.AddAbpDbContext<TestAppDbContext>(options =>
+            context.Services.AddAbpDbContext<TestAppDbContext>(options =>
             {
                 options.AddDefaultRepositories(true);
                 options.ReplaceDbContext<IThirdDbContext>();
@@ -36,11 +36,11 @@ namespace Volo.Abp.EntityFrameworkCore
 
             var sqliteConnection = CreateDatabaseAndGetConnection();
 
-            services.Configure<AbpDbContextOptions>(options =>
+            context.Services.Configure<AbpDbContextOptions>(options =>
             {
-                options.Configure(context =>
+                options.Configure(abpDbContextConfigurationContext =>
                 {
-                    context.DbContextOptions.UseSqlite(sqliteConnection);
+                    abpDbContextConfigurationContext.DbContextOptions.UseSqlite(sqliteConnection);
                 });
             });
         }

@@ -9,14 +9,14 @@ namespace Volo.Abp.MultiTenancy
     [DependsOn(typeof(AbpSettingsModule))]
     public class AbpMultiTenancyAbstractionsModule : AbpModule //TODO: Rename to AbpMultiTenancyModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.Configure<SettingOptions>(options =>
+            context.Services.Configure<SettingOptions>(options =>
             {
                 options.ValueProviders.Add<TenantSettingValueProvider>();
             });
 
-            services.AddAssemblyOf<AbpMultiTenancyAbstractionsModule>();
+            context.Services.AddAssemblyOf<AbpMultiTenancyAbstractionsModule>();
         }
     }
 }

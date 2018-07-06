@@ -48,9 +48,9 @@ namespace MyCompanyName.MyProjectName
         )]
     public class MyProjectNameWebModule : AbpModule
     {
-        public override void PreConfigureServices(IServiceCollection services)
+        public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
+            context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
             {
                 options.AddAssemblyResource(
                     typeof(MyProjectNameResource),
@@ -61,20 +61,20 @@ namespace MyCompanyName.MyProjectName
             });
         }
 
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            var hostingEnvironment = services.GetHostingEnvironment();
-            var configuration = services.BuildConfiguration();
+            var hostingEnvironment = context.Services.GetHostingEnvironment();
+            var configuration = context.Services.BuildConfiguration();
 
-            ConfigureDatabaseServices(services, configuration);
-            ConfigureAutoMapper(services);
-            ConfigureVirtualFileSystem(services, hostingEnvironment);
-            ConfigureLocalizationServices(services);
-            ConfigureNavigationServices(services);
-            ConfigureAutoApiControllers(services);
-            ConfigureSwaggerServices(services);
+            ConfigureDatabaseServices(context.Services, configuration);
+            ConfigureAutoMapper(context.Services);
+            ConfigureVirtualFileSystem(context.Services, hostingEnvironment);
+            ConfigureLocalizationServices(context.Services);
+            ConfigureNavigationServices(context.Services);
+            ConfigureAutoApiControllers(context.Services);
+            ConfigureSwaggerServices(context.Services);
 
-            services.AddAssemblyOf<MyProjectNameWebModule>();
+            context.Services.AddAssemblyOf<MyProjectNameWebModule>();
         }
 
         private static void ConfigureDatabaseServices(IServiceCollection services, IConfigurationRoot configuration)

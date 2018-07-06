@@ -10,14 +10,14 @@ namespace Volo.Abp.Identity
     [DependsOn(typeof(AbpLocalizationModule))]
     public class AbpIdentityDomainSharedModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.Configure<AbpLocalizationOptions>(options =>
+            context.Services.Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources.Add<IdentityResource>("en");
             });
 
-            services.AddAssemblyOf<AbpIdentityDomainSharedModule>();
+            context.Services.AddAssemblyOf<AbpIdentityDomainSharedModule>();
         }
     }
 }

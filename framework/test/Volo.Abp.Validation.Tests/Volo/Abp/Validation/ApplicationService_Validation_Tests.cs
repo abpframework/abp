@@ -149,20 +149,20 @@ namespace Volo.Abp.Validation
         [DependsOn(typeof(AbpValidationModule))]
         public class TestModule : AbpModule
         {
-            public override void PreConfigureServices(IServiceCollection services)
+            public override void PreConfigureServices(ServiceConfigurationContext context)
             {
-                services.OnRegistred(context =>
+                context.Services.OnRegistred(onServiceRegistredContext =>
                 {
-                    if (typeof(IMyAppService).IsAssignableFrom(context.ImplementationType))
+                    if (typeof(IMyAppService).IsAssignableFrom(onServiceRegistredContext.ImplementationType))
                     {
-                        context.Interceptors.TryAdd<ValidationInterceptor>();
+                        onServiceRegistredContext.Interceptors.TryAdd<ValidationInterceptor>();
                     }
                 });
             }
 
-            public override void ConfigureServices(IServiceCollection services)
+            public override void ConfigureServices(ServiceConfigurationContext context)
             {
-                services.AddType<MyAppService>();
+                context.Services.AddType<MyAppService>();
             }
         }
 

@@ -4,6 +4,6 @@ namespace Volo.Abp.Modularity
 {
     public interface IPostConfigureServices
     {
-        void PostConfigureServices(IServiceCollection services);
+        void PostConfigureServices(ServiceConfigurationContext context);
     }
 }

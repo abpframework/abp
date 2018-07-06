@@ -12,9 +12,9 @@ namespace Volo.Blogging
         )]
     public class BloggingTestBaseModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAssemblyOf<BloggingTestBaseModule>();
+            context.Services.AddAssemblyOf<BloggingTestBaseModule>();
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)

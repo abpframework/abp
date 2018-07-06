@@ -40,9 +40,9 @@ namespace BasicAspNetCoreApplication
     [DependsOn(typeof(AbpAspNetCoreMvcModule))]
     public class AppModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAssemblyOf<AppModule>();
+            context.Services.AddAssemblyOf<AppModule>();
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
@@ -82,11 +82,11 @@ namespace BasicAspNetCoreApplication
 {
     public class Startup
     {
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddApplication<AppModule>();
+            context.Services.AddApplication<AppModule>();
 
-            return services.BuildServiceProviderFromFactory();
+            return context.Services.BuildServiceProviderFromFactory();
         }
 
         public void Configure(IApplicationBuilder app)

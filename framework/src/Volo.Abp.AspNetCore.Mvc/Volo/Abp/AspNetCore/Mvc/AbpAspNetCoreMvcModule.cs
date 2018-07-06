@@ -35,21 +35,21 @@ namespace Volo.Abp.AspNetCore.Mvc
     [DependsOn(typeof(AbpUiModule))]
     public class AbpAspNetCoreMvcModule : AbpModule
     {
-        public override void PreConfigureServices(IServiceCollection services)
+        public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddConventionalRegistrar(new AbpAspNetCoreMvcConventionalRegistrar());
+            context.Services.AddConventionalRegistrar(new AbpAspNetCoreMvcConventionalRegistrar());
         }
 
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
             //Configure Razor
-            services.Insert(0,
+            context.Services.Insert(0,
                 ServiceDescriptor.Singleton<IConfigureOptions<RazorViewEngineOptions>>(
                     new ConfigureOptions<RazorViewEngineOptions>(options =>
                         {
                             options.FileProviders.Add(
                                 new AspNetCoreVirtualFileProvider(
-                                    services.GetSingletonInstance<IObjectAccessor<IServiceProvider>>()
+                                    context.Services.GetSingletonInstance<IObjectAccessor<IServiceProvider>>()
                                 )
                             );
                         }
@@ -57,14 +57,14 @@ namespace Volo.Abp.AspNetCore.Mvc
                 )
             );
 
-            services.Configure<ApiDescriptionModelOptions>(options =>
+            context.Services.Configure<ApiDescriptionModelOptions>(options =>
             {
                 options.IgnoredInterfaces.AddIfNotContains(typeof(IAsyncActionFilter));
                 options.IgnoredInterfaces.AddIfNotContains(typeof(IFilterMetadata));
                 options.IgnoredInterfaces.AddIfNotContains(typeof(IActionFilter));
             });
 
-            services.Configure<AbpAspNetCoreMvcOptions>(options =>
+            context.Services.Configure<AbpAspNetCoreMvcOptions>(options =>
             {
                 options.ConventionalControllers.Create(typeof(AbpAspNetCoreMvcModule).Assembly, o =>
                 {
@@ -72,13 +72,13 @@ namespace Volo.Abp.AspNetCore.Mvc
                 });
             });
 
-            var mvcCoreBuilder = services.AddMvcCore();
-            services.ExecutePreConfiguredActions(mvcCoreBuilder);
+            var mvcCoreBuilder = context.Services.AddMvcCore();
+            context.Services.ExecutePreConfiguredActions(mvcCoreBuilder);
 
-            var mvcBuilder = services.AddMvc()
+            var mvcBuilder = context.Services.AddMvc()
                 .AddDataAnnotationsLocalization(options =>
                 {
-                    var assemblyResources = services.ExecutePreConfiguredActions(new AbpMvcDataAnnotationsLocalizationOptions()).AssemblyResources;
+                    var assemblyResources = context.Services.ExecutePreConfiguredActions(new AbpMvcDataAnnotationsLocalizationOptions()).AssemblyResources;
 
                     options.DataAnnotationLocalizerProvider = (type, factory) =>
                     {
@@ -88,30 +88,30 @@ namespace Volo.Abp.AspNetCore.Mvc
                 })
                 .AddViewLocalization(); //TODO: How to configure from the application? Also, consider to move to a UI module since APIs does not care about it.
 
-            services.ExecutePreConfiguredActions(mvcBuilder);
+            context.Services.ExecutePreConfiguredActions(mvcBuilder);
 
             //TODO: AddViewLocalization by default..?
 
-            services.TryAddSingleton<IActionContextAccessor, ActionContextAccessor>();
+            context.Services.TryAddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
             //Use DI to create controllers
-            services.Replace(ServiceDescriptor.Transient<IControllerActivator, ServiceBasedControllerActivator>());
+            context.Services.Replace(ServiceDescriptor.Transient<IControllerActivator, ServiceBasedControllerActivator>());
 
             //Use DI to create view components
-            services.Replace(ServiceDescriptor.Singleton<IViewComponentActivator, ServiceBasedViewComponentActivator>());
+            context.Services.Replace(ServiceDescriptor.Singleton<IViewComponentActivator, ServiceBasedViewComponentActivator>());
 
             //Add feature providers
-            var partManager = services.GetSingletonInstance<ApplicationPartManager>();
-            var application = services.GetSingletonInstance<IAbpApplication>();
+            var partManager = context.Services.GetSingletonInstance<ApplicationPartManager>();
+            var application = context.Services.GetSingletonInstance<IAbpApplication>();
 
             partManager.FeatureProviders.Add(new AbpConventionalControllerFeatureProvider(application));
 
-            services.Configure<MvcOptions>(mvcOptions =>
+            context.Services.Configure<MvcOptions>(mvcOptions =>
             {
-                mvcOptions.AddAbp(services);
+                mvcOptions.AddAbp(context.Services);
             });
 
-            services.AddAssemblyOf<AbpAspNetCoreMvcModule>();
+            context.Services.AddAssemblyOf<AbpAspNetCoreMvcModule>();
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)

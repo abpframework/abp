@@ -19,41 +19,41 @@ namespace Volo.Abp.Identity
     [DependsOn(typeof(AbpUsersDomainModule))]
     public class AbpIdentityDomainModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.Configure<PermissionManagementOptions>(options =>
+            context.Services.Configure<PermissionManagementOptions>(options =>
             {
                 options.ManagementProviders.Add<UserPermissionManagementProvider>();
                 options.ManagementProviders.Add<RolePermissionManagementProvider>();
             });
 
-            services.Configure<SettingOptions>(options =>
+            context.Services.Configure<SettingOptions>(options =>
             {
                 options.DefinitionProviders.Add<AbpIdentitySettingDefinitionProvider>();
             });
 
-            services.Configure<VirtualFileSystemOptions>(options =>
+            context.Services.Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpIdentityDomainModule>();
             });
 
-            services.Configure<AbpLocalizationOptions>(options =>
+            context.Services.Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources
                     .Get<IdentityResource>()
                     .AddVirtualJson("/Volo/Abp/Identity/Localization/Domain");
             });
 
-            var identityBuilder = services.AddAbpIdentity(options =>
+            var identityBuilder = context.Services.AddAbpIdentity(options =>
             {
                 options.User.RequireUniqueEmail = true;
             });
 
-            services.ExecutePreConfiguredActions(identityBuilder);
+            context.Services.ExecutePreConfiguredActions(identityBuilder);
 
-            AddAbpIdentityOptionsFactory(services);
+            AddAbpIdentityOptionsFactory(context.Services);
 
-            services.AddAssemblyOf<AbpIdentityDomainModule>();
+            context.Services.AddAssemblyOf<AbpIdentityDomainModule>();
         }
 
         private static void AddAbpIdentityOptionsFactory(IServiceCollection services)

@@ -12,14 +12,14 @@ namespace Volo.Docs
         typeof(AbpAutoMapperModule))]
     public class DocsApplicationModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.Configure<AbpAutoMapperOptions>(options =>
+            context.Services.Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<DocsApplicationAutoMapperProfile>(validate: true);
             });
 
-            services.AddAssemblyOf<DocsApplicationModule>();
+            context.Services.AddAssemblyOf<DocsApplicationModule>();
         }
     }
 }

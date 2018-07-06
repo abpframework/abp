@@ -8,9 +8,9 @@ namespace Volo.Abp.AspNetCore.TestBase
     [DependsOn(typeof(AbpAspNetCoreModule))]
     public class AbpAspNetCoreTestBaseModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAssemblyOf<AbpAspNetCoreTestBaseModule>();
+            context.Services.AddAssemblyOf<AbpAspNetCoreTestBaseModule>();
         }
     }
 }

@@ -5,9 +5,9 @@ namespace Volo.Abp.Sms
 {
     public class AbpSmsModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAssemblyOf<AbpSmsModule>();
+            context.Services.AddAssemblyOf<AbpSmsModule>();
         }
     }
 }

@@ -13,9 +13,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI
     )]
     public class AbpAspNetCoreMvcUiTestModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAssemblyOf<AbpAspNetCoreMvcUiTestModule>();
+            context.Services.AddAssemblyOf<AbpAspNetCoreMvcUiTestModule>();
         }
     }
 }

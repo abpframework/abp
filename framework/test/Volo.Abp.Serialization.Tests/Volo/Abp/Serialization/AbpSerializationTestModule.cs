@@ -6,9 +6,9 @@ namespace Volo.Abp.Serialization
     [DependsOn(typeof(AbpSerializationModule))]
     public class AbpSerializationTestModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAssemblyOf<AbpSerializationTestModule>();
+            context.Services.AddAssemblyOf<AbpSerializationTestModule>();
         }
     }
 }

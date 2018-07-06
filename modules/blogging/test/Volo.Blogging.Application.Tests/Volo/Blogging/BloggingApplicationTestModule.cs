@@ -10,11 +10,11 @@ namespace Volo.Blogging
         typeof(BloggingTestBaseModule))]
     public class BloggingApplicationTestModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAlwaysAllowAuthorization();
+            context.Services.AddAlwaysAllowAuthorization();
 
-            services.AddAssemblyOf<BloggingApplicationTestModule>();
+            context.Services.AddAssemblyOf<BloggingApplicationTestModule>();
         }
     }
 }

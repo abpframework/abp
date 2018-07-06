@@ -11,18 +11,18 @@ namespace Volo.Abp.PermissionManagement.MongoDB
         )]
     public class AbpPermissionManagementMongoDbModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
             AbpPermissionManagementBsonClassMap.Configure();
 
-            services.AddMongoDbContext<PermissionManagementMongoDbContext>(options =>
+            context.Services.AddMongoDbContext<PermissionManagementMongoDbContext>(options =>
             {
                 options.AddDefaultRepositories<IPermissionManagementMongoDbContext>();
 
                 options.AddRepository<PermissionGrant, MongoPermissionGrantRepository>();
             });
 
-            services.AddAssemblyOf<AbpPermissionManagementMongoDbModule>();
+            context.Services.AddAssemblyOf<AbpPermissionManagementMongoDbModule>();
         }
     }
 }

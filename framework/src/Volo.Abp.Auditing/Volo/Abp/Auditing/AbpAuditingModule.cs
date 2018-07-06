@@ -16,9 +16,9 @@ namespace Volo.Abp.Auditing
         )]
     public class AbpAuditingModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAssemblyOf<AbpAuditingModule>();
+            context.Services.AddAssemblyOf<AbpAuditingModule>();
         }
     }
 }

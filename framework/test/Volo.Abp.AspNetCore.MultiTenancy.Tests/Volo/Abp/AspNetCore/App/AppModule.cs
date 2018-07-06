@@ -17,9 +17,9 @@ namespace Volo.Abp.AspNetCore.App
         )]
     public class AppModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.Configure<TenantResolveOptions>(options =>
+            context.Services.Configure<TenantResolveOptions>(options =>
             {
                 options.AddDomainTenantResolver("{0}.abp.io");
             });

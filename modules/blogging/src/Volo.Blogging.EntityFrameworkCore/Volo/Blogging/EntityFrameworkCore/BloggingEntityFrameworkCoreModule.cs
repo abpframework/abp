@@ -9,11 +9,11 @@ namespace Volo.Blogging.EntityFrameworkCore
         typeof(AbpEntityFrameworkCoreModule))]
     public class BloggingEntityFrameworkCoreModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAbpDbContext<BloggingDbContext>();
+            context.Services.AddAbpDbContext<BloggingDbContext>();
 
-            services.AddAssemblyOf<BloggingEntityFrameworkCoreModule>();
+            context.Services.AddAssemblyOf<BloggingEntityFrameworkCoreModule>();
         }
     }
 }

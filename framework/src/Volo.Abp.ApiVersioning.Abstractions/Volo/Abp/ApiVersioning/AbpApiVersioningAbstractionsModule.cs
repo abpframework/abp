@@ -5,9 +5,9 @@ namespace Volo.Abp.ApiVersioning
 {
     public class AbpApiVersioningAbstractionsModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddSingleton<IRequestedApiVersion>(NullRequestedApiVersion.Instance);
+            context.Services.AddSingleton<IRequestedApiVersion>(NullRequestedApiVersion.Instance);
         }
     }
 }

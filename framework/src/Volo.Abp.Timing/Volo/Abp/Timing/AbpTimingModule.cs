@@ -5,9 +5,9 @@ namespace Volo.Abp.Timing
 {
     public class AbpTimingModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAssemblyOf<AbpTimingModule>();
+            context.Services.AddAssemblyOf<AbpTimingModule>();
         }
     }
 }

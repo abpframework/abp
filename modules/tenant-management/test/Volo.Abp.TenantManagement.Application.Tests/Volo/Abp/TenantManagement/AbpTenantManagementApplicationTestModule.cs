@@ -9,11 +9,11 @@ namespace Volo.Abp.TenantManagement
         typeof(AbpTenantManagementEntityFrameworkCoreTestModule))]
     public class AbpTenantManagementApplicationTestModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAlwaysAllowPermissionChecker();
+            context.Services.AddAlwaysAllowPermissionChecker();
 
-            services.AddAssemblyOf<AbpTenantManagementApplicationTestModule>();
+            context.Services.AddAssemblyOf<AbpTenantManagementApplicationTestModule>();
         }
     }
 }

@@ -12,26 +12,26 @@ namespace Volo.Abp.TenantManagement
     [DependsOn(typeof(AbpTenantManagementDomainSharedModule))]
     public class AbpTenantManagementApplicationContractsModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.Configure<PermissionOptions>(options =>
+            context.Services.Configure<PermissionOptions>(options =>
             {
                 options.DefinitionProviders.Add<AbpTenantManagementPermissionDefinitionProvider>();
             });
 
-            services.Configure<VirtualFileSystemOptions>(options =>
+            context.Services.Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpTenantManagementApplicationContractsModule>();
             });
 
-            services.Configure<AbpLocalizationOptions>(options =>
+            context.Services.Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources
                     .Get<AbpTenantManagementResource>()
                     .AddVirtualJson("/Volo/Abp/TenantManagement/Localization/ApplicationContracts");
             });
 
-            services.AddAssemblyOf<AbpTenantManagementApplicationContractsModule>();
+            context.Services.AddAssemblyOf<AbpTenantManagementApplicationContractsModule>();
         }
     }
 }

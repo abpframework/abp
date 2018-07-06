@@ -8,23 +8,23 @@ namespace Volo.Abp.Localization
     [DependsOn(typeof(AbpVirtualFileSystemModule))]
     public class AbpLocalizationModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            AbpStringLocalizerFactory.Replace(services);
+            AbpStringLocalizerFactory.Replace(context.Services);
 
-            services.Configure<VirtualFileSystemOptions>(options =>
+            context.Services.Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpLocalizationModule>("Volo.Abp", "Volo/Abp");
             });
 
-            services.Configure<AbpLocalizationOptions>(options =>
+            context.Services.Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources
                 .Add<AbpValidationResource>("en")
                 .AddVirtualJson("/Localization/Resources/AbpValidation");
             });
 
-            services.AddAssemblyOf<AbpLocalizationModule>();
+            context.Services.AddAssemblyOf<AbpLocalizationModule>();
         }
     }
 }

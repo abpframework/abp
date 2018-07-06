@@ -8,16 +8,16 @@ namespace Volo.Abp.PermissionManagement.EntityFrameworkCore
     [DependsOn(typeof(AbpEntityFrameworkCoreModule))]
     public class AbpPermissionManagementEntityFrameworkCoreModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAbpDbContext<PermissionManagementDbContext>(options =>
+            context.Services.AddAbpDbContext<PermissionManagementDbContext>(options =>
             {
                 options.AddDefaultRepositories<IPermissionManagementDbContext>();
 
                 options.AddRepository<PermissionGrant, EfCorePermissionGrantRepository>();
             });
 
-            services.AddAssemblyOf<AbpPermissionManagementEntityFrameworkCoreModule>();
+            context.Services.AddAssemblyOf<AbpPermissionManagementEntityFrameworkCoreModule>();
         }
     }
 }

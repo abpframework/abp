@@ -21,27 +21,27 @@ namespace Volo.Abp.Identity.Web
     [DependsOn(typeof(AbpPermissionManagementWebModule))]
     public class AbpIdentityWebModule : AbpModule
     {
-        public override void PreConfigureServices(IServiceCollection services)
+        public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
+            context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
             {
                 options.AddAssemblyResource(typeof(IdentityResource), typeof(AbpIdentityWebModule).Assembly);
             });
         }
 
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.Configure<NavigationOptions>(options =>
+            context.Services.Configure<NavigationOptions>(options =>
             {
                 options.MenuContributors.Add(new AbpIdentityWebMainMenuContributor());
             });
 
-            services.Configure<VirtualFileSystemOptions>(options =>
+            context.Services.Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpIdentityWebModule>("Volo.Abp.Identity.Web");
             });
 
-            services.Configure<AbpLocalizationOptions>(options =>
+            context.Services.Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources
                     .Get<IdentityResource>()
@@ -51,12 +51,12 @@ namespace Volo.Abp.Identity.Web
                     ).AddVirtualJson("/Localization/Resources/AbpIdentity");
             });
 
-            services.Configure<AbpAutoMapperOptions>(options =>
+            context.Services.Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<AbpIdentityWebAutoMapperProfile>(validate: true);
             });
 
-            services.Configure<RazorPagesOptions>(options =>
+            context.Services.Configure<RazorPagesOptions>(options =>
             {
                 options.Conventions.AuthorizePage("/Identity/Users/Index", IdentityPermissions.Users.Default);
                 options.Conventions.AuthorizePage("/Identity/Users/CreateModal", IdentityPermissions.Users.Create);
@@ -66,7 +66,7 @@ namespace Volo.Abp.Identity.Web
                 options.Conventions.AuthorizePage("/Identity/Roles/EditModal", IdentityPermissions.Roles.Update);
             });
 
-            services.AddAssemblyOf<AbpIdentityWebModule>();
+            context.Services.AddAssemblyOf<AbpIdentityWebModule>();
         }
     }
 }

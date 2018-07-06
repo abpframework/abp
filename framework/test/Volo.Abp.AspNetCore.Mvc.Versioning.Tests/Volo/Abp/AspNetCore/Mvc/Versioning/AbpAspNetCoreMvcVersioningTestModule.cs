@@ -17,9 +17,9 @@ namespace Volo.Abp.AspNetCore.Mvc.Versioning
         )]
     public class AbpAspNetCoreMvcVersioningTestModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.Configure<AbpAspNetCoreMvcOptions>(options =>
+            context.Services.Configure<AbpAspNetCoreMvcOptions>(options =>
             {
                 //2.0 Version
                 options.ConventionalControllers.Create(typeof(AbpAspNetCoreMvcVersioningTestModule).Assembly, opts =>
@@ -36,7 +36,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Versioning
                 });
             });
 
-            services.AddApiVersioning(options =>
+            context.Services.AddApiVersioning(options =>
             {
                 options.ReportApiVersions = true;
                 options.AssumeDefaultVersionWhenUnspecified = true;
@@ -44,14 +44,14 @@ namespace Volo.Abp.AspNetCore.Mvc.Versioning
                 //options.ApiVersionReader = new HeaderApiVersionReader("api-version"); //Supports header too
                 //options.ApiVersionReader = new MediaTypeApiVersionReader(); //Supports accept header too
 
-                options.ConfigureAbp(services);
+                options.ConfigureAbp(context.Services);
             });
 
-            services.AddAssemblyOf<AbpAspNetCoreMvcVersioningTestModule>();
+            context.Services.AddAssemblyOf<AbpAspNetCoreMvcVersioningTestModule>();
             
-            services.AddHttpClientProxies(typeof(AbpAspNetCoreMvcVersioningTestModule).Assembly);
+            context.Services.AddHttpClientProxies(typeof(AbpAspNetCoreMvcVersioningTestModule).Assembly);
 
-            services.Configure<RemoteServiceOptions>(options =>
+            context.Services.Configure<RemoteServiceOptions>(options =>
             {
                 options.RemoteServices.Default = new RemoteServiceConfiguration("/");
             });

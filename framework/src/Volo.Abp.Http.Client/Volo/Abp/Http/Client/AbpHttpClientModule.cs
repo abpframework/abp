@@ -8,9 +8,9 @@ namespace Volo.Abp.Http.Client
     [DependsOn(typeof(AbpCastleCoreModule))]
     public class AbpHttpClientModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAssemblyOf<AbpHttpClientModule>();
+            context.Services.AddAssemblyOf<AbpHttpClientModule>();
         }
     }
 }

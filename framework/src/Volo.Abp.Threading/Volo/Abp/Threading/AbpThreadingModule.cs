@@ -5,11 +5,11 @@ namespace Volo.Abp.Threading
 {
     public class AbpThreadingModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddSingleton<ICancellationTokenProvider>(NullCancellationTokenProvider.Instance);
+            context.Services.AddSingleton<ICancellationTokenProvider>(NullCancellationTokenProvider.Instance);
 
-            services.AddAssemblyOf<AbpThreadingModule>();
+            context.Services.AddAssemblyOf<AbpThreadingModule>();
         }
     }
 }

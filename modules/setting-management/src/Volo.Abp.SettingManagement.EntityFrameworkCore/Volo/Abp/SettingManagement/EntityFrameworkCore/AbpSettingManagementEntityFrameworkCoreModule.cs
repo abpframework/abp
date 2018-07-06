@@ -8,16 +8,16 @@ namespace Volo.Abp.SettingManagement.EntityFrameworkCore
     [DependsOn(typeof(AbpEntityFrameworkCoreModule))]
     public class AbpSettingManagementEntityFrameworkCoreModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAbpDbContext<AbpSettingManagementDbContext>(options =>
+            context.Services.AddAbpDbContext<AbpSettingManagementDbContext>(options =>
             {
                 options.AddDefaultRepositories<ISettingManagementDbContext>();
 
                 options.AddRepository<Setting, EfCoreSettingRepository>();
             });
 
-            services.AddAssemblyOf<AbpSettingManagementEntityFrameworkCoreModule>();
+            context.Services.AddAssemblyOf<AbpSettingManagementEntityFrameworkCoreModule>();
         }
     }
 }

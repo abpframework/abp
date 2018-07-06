@@ -10,17 +10,17 @@ namespace Volo.Abp.Identity.MongoDB
         )]
     public class AbpIdentityMongoDbModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
             AbpIdentityBsonClassMap.Configure();
 
-            services.AddMongoDbContext<AbpIdentityMongoDbContext>(options =>
+            context.Services.AddMongoDbContext<AbpIdentityMongoDbContext>(options =>
             {
                 options.AddRepository<IdentityUser, MongoIdentityUserRepository>();
                 options.AddRepository<IdentityRole, MongoIdentityRoleRepository>();
             });
 
-            services.AddAssemblyOf<AbpIdentityMongoDbModule>();
+            context.Services.AddAssemblyOf<AbpIdentityMongoDbModule>();
         }
     }
 }

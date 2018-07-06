@@ -13,14 +13,14 @@ namespace Volo.Abp.Identity
         )]
     public class AbpIdentityApplicationModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.Configure<AbpAutoMapperOptions>(options =>
+            context.Services.Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<AbpIdentityApplicationModuleAutoMapperProfile>();
             });
 
-            services.AddAssemblyOf<AbpIdentityApplicationModule>();
+            context.Services.AddAssemblyOf<AbpIdentityApplicationModule>();
         }
     }
 }

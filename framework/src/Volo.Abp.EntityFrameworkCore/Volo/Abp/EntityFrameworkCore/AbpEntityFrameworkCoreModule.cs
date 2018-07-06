@@ -10,13 +10,13 @@ namespace Volo.Abp.EntityFrameworkCore
     [DependsOn(typeof(AbpDddDomainModule))]
     public class AbpEntityFrameworkCoreModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.Configure<AbpDbContextOptions>(options =>
+            context.Services.Configure<AbpDbContextOptions>(options =>
             {
-                options.PreConfigure(context =>
+                options.PreConfigure(abpDbContextConfigurationContext =>
                 {
-                    context.DbContextOptions
+                    abpDbContextConfigurationContext.DbContextOptions
                         .ConfigureWarnings(warnings =>
                         {
                             warnings.Ignore(CoreEventId.LazyLoadOnDisposedContextWarning);
@@ -24,8 +24,8 @@ namespace Volo.Abp.EntityFrameworkCore
                 });
             });
 
-            services.TryAddTransient(typeof(IDbContextProvider<>), typeof(UnitOfWorkDbContextProvider<>));
-            services.AddAssemblyOf<AbpEntityFrameworkCoreModule>();
+            context.Services.TryAddTransient(typeof(IDbContextProvider<>), typeof(UnitOfWorkDbContextProvider<>));
+            context.Services.AddAssemblyOf<AbpEntityFrameworkCoreModule>();
         }
     }
 }

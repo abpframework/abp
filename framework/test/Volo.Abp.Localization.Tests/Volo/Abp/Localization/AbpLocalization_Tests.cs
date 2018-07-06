@@ -108,14 +108,14 @@ namespace Volo.Abp.Localization
         [DependsOn(typeof(AbpLocalizationModule))]
         public class TestModule : AbpModule
         {
-            public override void ConfigureServices(IServiceCollection services)
+            public override void ConfigureServices(ServiceConfigurationContext context)
             {
-                services.Configure<VirtualFileSystemOptions>(options =>
+                context.Services.Configure<VirtualFileSystemOptions>(options =>
                 {
                     options.FileSets.AddEmbedded<TestModule>();
                 });
 
-                services.Configure<AbpLocalizationOptions>(options =>
+                context.Services.Configure<AbpLocalizationOptions>(options =>
                 {
                     options.Resources.Add<LocalizationTestValidationResource>("en").AddVirtualJson("/Volo/Abp/Localization/TestResources/Base/Validation");
                     options.Resources.Add<LocalizationTestCountryNamesResource>("en").AddVirtualJson("/Volo/Abp/Localization/TestResources/Base/CountryNames");

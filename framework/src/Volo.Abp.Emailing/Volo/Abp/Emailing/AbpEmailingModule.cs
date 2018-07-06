@@ -6,14 +6,14 @@ namespace Volo.Abp.Emailing
 {
     public class AbpEmailingModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.Configure<SettingOptions>(options =>
+            context.Services.Configure<SettingOptions>(options =>
             {
                 options.DefinitionProviders.Add<EmailSettingProvider>();
             });
 
-            services.AddAssemblyOf<AbpEmailingModule>();
+            context.Services.AddAssemblyOf<AbpEmailingModule>();
         }
     }
 }

@@ -5,9 +5,9 @@ namespace Volo.Abp.Users
 {
     public class AbpUsersDomainSharedModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAssemblyOf<AbpUsersDomainSharedModule>();
+            context.Services.AddAssemblyOf<AbpUsersDomainSharedModule>();
         }
     }
 }

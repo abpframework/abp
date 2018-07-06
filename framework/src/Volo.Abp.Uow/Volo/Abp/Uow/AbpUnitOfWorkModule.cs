@@ -5,14 +5,14 @@ namespace Volo.Abp.Uow
 {
     public class AbpUnitOfWorkModule : AbpModule
     {
-        public override void PreConfigureServices(IServiceCollection services)
+        public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            services.OnRegistred(UnitOfWorkInterceptorRegistrar.RegisterIfNeeded);
+            context.Services.OnRegistred(UnitOfWorkInterceptorRegistrar.RegisterIfNeeded);
         }
 
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAssemblyOf<AbpUnitOfWorkModule>();
+            context.Services.AddAssemblyOf<AbpUnitOfWorkModule>();
         }
     }
 }

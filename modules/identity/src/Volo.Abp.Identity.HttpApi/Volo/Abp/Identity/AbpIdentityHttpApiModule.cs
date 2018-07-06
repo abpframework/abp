@@ -7,9 +7,9 @@ namespace Volo.Abp.Identity
     [DependsOn(typeof(AbpIdentityApplicationContractsModule), typeof(AbpAspNetCoreMvcModule))]
     public class AbpIdentityHttpApiModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAssemblyOf<AbpIdentityHttpApiModule>();
+            context.Services.AddAssemblyOf<AbpIdentityHttpApiModule>();
         }
     }
 }

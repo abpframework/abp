@@ -10,18 +10,18 @@ namespace Volo.Abp.SettingManagement.MongoDB
         )]
     public class AbpSettingManagementMongoDbModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
             AbpSettingManagementBsonClassMap.Configure();
 
-            services.AddMongoDbContext<SettingManagementMongoDbContext>(options =>
+            context.Services.AddMongoDbContext<SettingManagementMongoDbContext>(options =>
             {
                 options.AddDefaultRepositories<ISettingManagementMongoDbContext>();
 
                 options.AddRepository<Setting, MongoSettingRepository>();
             });
 
-            services.AddAssemblyOf<AbpSettingManagementMongoDbModule>();
+            context.Services.AddAssemblyOf<AbpSettingManagementMongoDbModule>();
         }
     }
 }

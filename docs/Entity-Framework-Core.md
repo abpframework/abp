@@ -62,9 +62,9 @@ namespace MyCompany.MyProject
     [DependsOn(typeof(AbpEntityFrameworkCoreModule))]
     public class MyModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAbpDbContext<MyDbContext>();
+            context.Services.AddAbpDbContext<MyDbContext>();
 
             //...
         }

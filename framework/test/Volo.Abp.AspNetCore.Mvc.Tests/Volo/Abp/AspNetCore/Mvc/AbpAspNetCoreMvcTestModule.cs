@@ -20,11 +20,11 @@ namespace Volo.Abp.AspNetCore.Mvc
         )]
     public class AbpAspNetCoreMvcTestModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddLocalization(); //TODO: Move to the framework..?
+            context.Services.AddLocalization(); //TODO: Move to the framework..?
 
-            services.AddAuthorization(options =>
+            context.Services.AddAuthorization(options =>
             {
                 options.AddPolicy("MyClaimTestPolicy", policy =>
                 {
@@ -32,23 +32,23 @@ namespace Volo.Abp.AspNetCore.Mvc
                 });
             });
 
-            services.Configure<AbpAspNetCoreMvcOptions>(options =>
+            context.Services.Configure<AbpAspNetCoreMvcOptions>(options =>
             {
                 options.ConventionalControllers.Create(typeof(TestAppModule).Assembly, opts =>
                 {
-                    opts.UrlActionNameNormalizer = context =>
-                        string.Equals(context.ActionNameInUrl, "phone", StringComparison.OrdinalIgnoreCase)
+                    opts.UrlActionNameNormalizer = urlActionNameNormalizerContext =>
+                        string.Equals(urlActionNameNormalizerContext.ActionNameInUrl, "phone", StringComparison.OrdinalIgnoreCase)
                             ? "phones"
-                            : context.ActionNameInUrl;
+                            : urlActionNameNormalizerContext.ActionNameInUrl;
                 });
             });
 
-            services.Configure<PermissionOptions>(options =>
+            context.Services.Configure<PermissionOptions>(options =>
             {
                 options.DefinitionProviders.Add<TestPermissionDefinitionProvider>();
             });
 
-            services.AddAssemblyOf<AbpAspNetCoreMvcTestModule>();
+            context.Services.AddAssemblyOf<AbpAspNetCoreMvcTestModule>();
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)

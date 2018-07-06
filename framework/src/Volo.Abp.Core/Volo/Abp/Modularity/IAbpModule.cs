@@ -6,6 +6,6 @@ namespace Volo.Abp.Modularity
 {
     public interface IAbpModule : ISingletonDependency
     {
-        void ConfigureServices([NotNull] IServiceCollection services);
+        void ConfigureServices(ServiceConfigurationContext context);
     }
 }

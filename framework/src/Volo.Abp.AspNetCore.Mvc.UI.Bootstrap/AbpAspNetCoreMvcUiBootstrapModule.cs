@@ -7,11 +7,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap
     [DependsOn(typeof(AbpAspNetCoreMvcUiModule))]
     public class AbpAspNetCoreMvcUiBootstrapModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAssemblyOf<AbpAspNetCoreMvcUiBootstrapModule>();
+            context.Services.AddAssemblyOf<AbpAspNetCoreMvcUiBootstrapModule>();
             
-            services.Configure<VirtualFileSystemOptions>(options =>
+            context.Services.Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpAspNetCoreMvcUiBootstrapModule>("Volo.Abp.AspNetCore.Mvc.UI.Bootstrap");
             });

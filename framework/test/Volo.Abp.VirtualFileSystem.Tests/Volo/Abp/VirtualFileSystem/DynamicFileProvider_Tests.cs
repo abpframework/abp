@@ -86,7 +86,7 @@ namespace Volo.Abp.VirtualFileSystem
         [DependsOn(typeof(AbpVirtualFileSystemModule))]
         public class TestModule : AbpModule
         {
-            public override void ConfigureServices(IServiceCollection services)
+            public override void ConfigureServices(ServiceConfigurationContext context)
             {
                 
             }

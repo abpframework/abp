@@ -6,23 +6,23 @@ namespace Volo.Abp.Serialization
 {
     public class AbpSerializationModule : AbpModule
     {
-        public override void PreConfigureServices(IServiceCollection services)
+        public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            services.OnExposing(context =>
+            context.Services.OnExposing(onServiceExposingContext =>
             {
                 //Register types for IObjectSerializer<T> if implements
-                context.ExposedTypes.AddRange(
+                onServiceExposingContext.ExposedTypes.AddRange(
                     ReflectionHelper.GetImplementedGenericTypes(
-                        context.ImplementationType,
+                        onServiceExposingContext.ImplementationType,
                         typeof(IObjectSerializer<>)
                     )
                 );
             });
         }
 
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAssemblyOf<AbpSerializationModule>();
+            context.Services.AddAssemblyOf<AbpSerializationModule>();
         }
     }
 }

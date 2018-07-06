@@ -9,9 +9,9 @@ namespace Volo.Abp.Identity
         )]
     public class AbpIdentityApplicationTestModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAssemblyOf<AbpIdentityApplicationTestModule>();
+            context.Services.AddAssemblyOf<AbpIdentityApplicationTestModule>();
         }
     }
 }

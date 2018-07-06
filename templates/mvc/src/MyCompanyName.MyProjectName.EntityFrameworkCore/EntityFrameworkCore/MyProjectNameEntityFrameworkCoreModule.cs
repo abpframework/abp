@@ -15,14 +15,14 @@ namespace MyCompanyName.MyProjectName.EntityFrameworkCore
         typeof(AbpEntityFrameworkCoreSqlServerModule))]
     public class MyProjectNameEntityFrameworkCoreModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAbpDbContext<MyProjectNameDbContext>(options =>
+            context.Services.AddAbpDbContext<MyProjectNameDbContext>(options =>
             {
                 options.AddDefaultRepositories();
             });
 
-            services.AddAssemblyOf<MyProjectNameEntityFrameworkCoreModule>();
+            context.Services.AddAssemblyOf<MyProjectNameEntityFrameworkCoreModule>();
         }
     }
 }

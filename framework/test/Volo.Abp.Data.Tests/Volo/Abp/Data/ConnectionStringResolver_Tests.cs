@@ -40,9 +40,9 @@ namespace Volo.Abp.Data
         [DependsOn(typeof(AbpDataModule))]
         public class TestModule : AbpModule
         {
-            public override void ConfigureServices(IServiceCollection services)
+            public override void ConfigureServices(ServiceConfigurationContext context)
             {
-                services.Configure<DbConnectionOptions>(options =>
+                context.Services.Configure<DbConnectionOptions>(options =>
                 {
                     options.ConnectionStrings.Default = DefaultConnString;
                     options.ConnectionStrings[Database1Name] = Database1ConnString;

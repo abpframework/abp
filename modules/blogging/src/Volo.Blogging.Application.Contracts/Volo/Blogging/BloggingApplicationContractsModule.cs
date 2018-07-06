@@ -7,14 +7,14 @@ namespace Volo.Blogging
     [DependsOn(typeof(BloggingDomainSharedModule))]
     public class BloggingApplicationContractsModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.Configure<PermissionOptions>(options =>
+            context.Services.Configure<PermissionOptions>(options =>
             {
                 options.DefinitionProviders.Add<BloggingPermissionDefinitionProvider>();
             });
 
-            services.AddAssemblyOf<BloggingApplicationContractsModule>();
+            context.Services.AddAssemblyOf<BloggingApplicationContractsModule>();
         }
     }
 }

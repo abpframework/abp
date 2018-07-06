@@ -12,14 +12,14 @@ namespace Volo.Blogging
         typeof(AbpAutoMapperModule))]
     public class BloggingApplicationModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.Configure<AbpAutoMapperOptions>(options =>
+            context.Services.Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<BloggingApplicationAutoMapperProfile>(validate: true);
             });
 
-            services.AddAssemblyOf<BloggingApplicationModule>();
+            context.Services.AddAssemblyOf<BloggingApplicationModule>();
         }
     }
 }

@@ -6,23 +6,23 @@ namespace Volo.Abp.ObjectMapping
 {
     public class AbpObjectMappingModule : AbpModule
     {
-        public override void PreConfigureServices(IServiceCollection services)
+        public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            services.OnExposing(context =>
+            context.Services.OnExposing(onServiceExposingContext =>
             {
                 //Register types for IObjectMapper<TSource, TDestination> if implements
-                context.ExposedTypes.AddRange(
+                onServiceExposingContext.ExposedTypes.AddRange(
                     ReflectionHelper.GetImplementedGenericTypes(
-                        context.ImplementationType,
+                        onServiceExposingContext.ImplementationType,
                         typeof(IObjectMapper<,>)
                     )
                 );
             });
         }
 
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAssemblyOf<AbpObjectMappingModule>();
+            context.Services.AddAssemblyOf<AbpObjectMappingModule>();
         }
     }
 }

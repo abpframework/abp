@@ -14,31 +14,31 @@ namespace Volo.Abp.PermissionManagement.Web
     [DependsOn(typeof(AbpAutoMapperModule))]
     public class AbpPermissionManagementWebModule : AbpModule
     {
-        public override void PreConfigureServices(IServiceCollection services)
+        public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
+            context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
             {
                 options.AddAssemblyResource(typeof(AbpPermissionManagementResource));
             });
         }
 
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAssemblyOf<AbpPermissionManagementWebModule>();
+            context.Services.AddAssemblyOf<AbpPermissionManagementWebModule>();
 
-            services.Configure<VirtualFileSystemOptions>(options =>
+            context.Services.Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpPermissionManagementWebModule>("Volo.Abp.PermissionManagement.Web");
             });
-            
-            services.Configure<AbpLocalizationOptions>(options =>
+
+            context.Services.Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources
                     .Add<AbpPermissionManagementResource>("en")
                     .AddVirtualJson("/Localization/Resources/AbpPermissionManagement");
             });
 
-            services.Configure<AbpAutoMapperOptions>(options =>
+            context.Services.Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<AbpPermissionManagementWebAutoMapperProfile>(validate: true);
             });

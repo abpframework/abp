@@ -14,9 +14,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo
         )]
     public class AbpAspNetCoreMvcUiBootstrapDemoModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAssemblyOf<AbpAspNetCoreMvcUiBootstrapDemoModule>();
+            context.Services.AddAssemblyOf<AbpAspNetCoreMvcUiBootstrapDemoModule>();
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)

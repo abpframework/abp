@@ -91,22 +91,23 @@ namespace Volo.Abp.Modularity
 
         protected virtual void ConfigureServices(List<IAbpModuleDescriptor> modules, IServiceCollection services)
         {
+            var context = new ServiceConfigurationContext(services);
             //PreConfigureServices
             foreach (var module in modules.Where(m => m.Instance is IPreConfigureServices))
             {
-                ((IPreConfigureServices)module.Instance).PreConfigureServices(services);
+                ((IPreConfigureServices)module.Instance).PreConfigureServices(context);
             }
 
             //ConfigureServices
             foreach (var module in modules)
             {
-                module.Instance.ConfigureServices(services);
+                module.Instance.ConfigureServices(context);
             }
 
             //IPostConfigureServices
             foreach (var module in modules.Where(m => m.Instance is IPostConfigureServices))
             {
-                ((IPostConfigureServices)module.Instance).PostConfigureServices(services);
+                ((IPostConfigureServices)module.Instance).PostConfigureServices(context);
             }
         }
 
