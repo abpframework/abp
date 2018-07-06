@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Shouldly;
 using Volo.Blogging.Blogs;
@@ -27,23 +24,28 @@ namespace Volo.Blogging
         public async Task Should_Create_A_Post()
         {
             var blogId = (await _blogRepository.GetListAsync()).First().Id;
-            var title = "title";
-            var content = "content";
+            var title = "test title";
+            var content = "test content";
 
-            var newPost = await _postAppService.CreateAsync(new CreatePostDto()
+            var newPostDto = await _postAppService.CreateAsync(new CreatePostDto()
             {
                 BlogId = blogId,
                 Title = title,
-                Content = content
+                Content = content,
+                Url = title.Replace(" ", "-")
             });
+
+            newPostDto.Id.ShouldNotBeNull();
 
             UsingDbContext(context =>
             {
                 var post = context.Posts.FirstOrDefault(q => q.Title == title);
                 post.ShouldNotBeNull();
-                post.Title.ShouldBe(title);
-                post.Content.ShouldBe(content);
+                post.Id.ShouldBe(newPostDto.Id);
+                post.Title.ShouldBe(newPostDto.Title);
+                post.Content.ShouldBe(newPostDto.Content);
                 post.BlogId.ShouldBe(blogId);
+                post.Url.ShouldBe(newPostDto.Url);
             });
         }
 
@@ -52,24 +54,25 @@ namespace Volo.Blogging
         {
             var blogId = (await _blogRepository.GetListAsync()).First().Id;
             var title = "title";
-            var newTitle = "newtitle";
+            var newTitle = "new title";
             var content = "content";
 
             var newPost = await _postAppService.CreateAsync(new CreatePostDto()
             {
                 BlogId = blogId,
                 Title = title,
-                Content = content
+                Content = content,
+                Url = title.Replace(" ", "-")
             });
 
             await _postAppService.UpdateAsync(newPost.Id, new UpdatePostDto()
             {
                 BlogId = blogId,
                 Title = newTitle,
-                Content = content
+                Content = content,
+                Url = newTitle.Replace(" ", "-")
             });
-
-
+            
             UsingDbContext(context =>
             {
                 var post = context.Posts.FirstOrDefault(q => q.Id == newPost.Id);
@@ -77,6 +80,7 @@ namespace Volo.Blogging
                 post.Title.ShouldBe(newTitle);
                 post.Content.ShouldBe(content);
                 post.BlogId.ShouldBe(blogId);
+                post.Url.ShouldBe(newTitle.Replace(" ", "-"));
             });
         }
     }

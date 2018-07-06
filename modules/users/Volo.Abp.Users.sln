@@ -11,8 +11,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Users.Domain.Share
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{6DE713B1-3AD7-4388-8B07-CCBE7158EC6E}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{61BBB58B-4B6E-417D-A768-87B2D00BC7C3}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Users.Abstractions", "src\Volo.Abp.Users.Abstractions\Volo.Abp.Users.Abstractions.csproj", "{3905D0E9-448D-43DE-8884-C60D0612AA04}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Users.MongoDB", "src\Volo.Abp.Users.MongoDB\Volo.Abp.Users.MongoDB.csproj", "{70E89492-7D4E-418A-835F-35E70282E808}"
