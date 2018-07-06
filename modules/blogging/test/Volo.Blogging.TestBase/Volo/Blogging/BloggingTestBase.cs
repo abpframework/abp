@@ -12,6 +12,11 @@ namespace Volo.Blogging
     {
         protected Guid? CurrentUserId { get; set; }
 
+        protected BloggingTestBase()
+        {
+            CurrentUserId = Guid.NewGuid();
+        }
+
         protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
         {
             options.UseAutofac();
