@@ -1,7 +1,5 @@
-namespace Volo.Abp.UI
+namespace Volo.Abp
 {
-    //TODO: Move to Volo.Abp namespace
-
     public interface IUserFriendlyException : IBusinessException
     {
 
