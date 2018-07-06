@@ -6,8 +6,8 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.1" />
-    <PackageReference Include="Volo.Abp.AspNetCore.Mvc" Version="0.3.6" />
-    <PackageReference Include="Volo.Abp.Autofac" Version="0.3.6" />
+    <PackageReference Include="Volo.Abp.AspNetCore.Mvc" Version="0.3.7" />
+    <PackageReference Include="Volo.Abp.Autofac" Version="0.3.7" />
   </ItemGroup>
 
 </Project>

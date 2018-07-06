@@ -13,11 +13,11 @@ namespace BasicAspNetCoreApplication
     [DependsOn(typeof(AbpAutofacModule))]
     public class AppModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddMvc();
+            context.Services.AddMvc();
 
-            services.AddAssemblyOf<AppModule>();
+            context.Services.AddAssemblyOf<AppModule>();
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)

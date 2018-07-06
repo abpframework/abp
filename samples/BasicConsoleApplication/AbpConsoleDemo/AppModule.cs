@@ -5,9 +5,9 @@ namespace AbpConsoleDemo
 {
     public class AppModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAssemblyOf<AppModule>();
+            context.Services.AddAssemblyOf<AppModule>();
         }
     }
 }
