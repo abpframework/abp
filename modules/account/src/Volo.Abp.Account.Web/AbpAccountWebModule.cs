@@ -19,32 +19,32 @@ namespace Volo.Abp.Account.Web
     [DependsOn(typeof(AbpAspNetCoreMvcUiThemeSharedModule))]
     public class AbpAccountWebModule : AbpModule
     {
-        public override void PreConfigureServices(IServiceCollection services)
+        public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
+            context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
             {
                 options.AddAssemblyResource(typeof(AccountResource), typeof(AbpAccountWebModule).Assembly);
             });
         }
 
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.Configure<SettingOptions>(options =>
+            context.Services.Configure<SettingOptions>(options =>
             {
                 options.DefinitionProviders.Add<AccountSettingDefinitionProvider>();
             });
 
-            services.Configure<VirtualFileSystemOptions>(options =>
+            context.Services.Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpAccountWebModule>("Volo.Abp.Account.Web");
             });
 
-            services.Configure<NavigationOptions>(options =>
+            context.Services.Configure<NavigationOptions>(options =>
             {
                 options.MenuContributors.Add(new AbpAccountUserMenuContributor());
             });
 
-            services.Configure<AbpLocalizationOptions>(options =>
+            context.Services.Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources
                     .Add<AccountResource>("en")
@@ -52,12 +52,12 @@ namespace Volo.Abp.Account.Web
                     .AddBaseTypes(typeof(AbpUiResource), typeof(AbpValidationResource));
             });
             
-            services.Configure<ToolbarOptions>(options =>
+            context.Services.Configure<ToolbarOptions>(options =>
             {
                 options.Contributors.Add(new AccountModuleToolbarContributor());
             });
 
-            services.AddAssemblyOf<AbpAccountWebModule>();
+            context.Services.AddAssemblyOf<AbpAccountWebModule>();
         }
     }
 }

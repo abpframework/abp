@@ -10,14 +10,14 @@ namespace Volo.Docs.EntityFrameworkCore
         typeof(AbpEntityFrameworkCoreModule))]
     public class DocsEntityFrameworkCoreModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAbpDbContext<DocsDbContext>(options =>
+            context.Services.AddAbpDbContext<DocsDbContext>(options =>
             {
                 options.AddRepository<Project, EfCoreProjectRepository>();
             });
 
-            services.AddAssemblyOf<DocsEntityFrameworkCoreModule>();
+            context.Services.AddAssemblyOf<DocsEntityFrameworkCoreModule>();
         }
     }
 }

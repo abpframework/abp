@@ -12,11 +12,11 @@ namespace Volo.Abp.Identity
         )]
     public class AbpIdentityTestBaseModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAlwaysAllowPermissionChecker();
-            
-            services.AddAssemblyOf<AbpIdentityTestBaseModule>();
+            context.Services.AddAlwaysAllowPermissionChecker();
+
+            context.Services.AddAssemblyOf<AbpIdentityTestBaseModule>();
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)

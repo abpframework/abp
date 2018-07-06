@@ -12,14 +12,14 @@ namespace Volo.Abp.PermissionManagement
         )]
     public class AbpPermissionManagementTestBaseModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.Configure<PermissionOptions>(options =>
+            context.Services.Configure<PermissionOptions>(options =>
             {
                 options.DefinitionProviders.Add<TestPermissionDefinitionProvider>();
             });
 
-            services.AddAssemblyOf<AbpPermissionManagementTestBaseModule>();
+            context.Services.AddAssemblyOf<AbpPermissionManagementTestBaseModule>();
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)

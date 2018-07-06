@@ -7,9 +7,9 @@ namespace Volo.Abp.AspNetCore.Authentication.OAuth
     [DependsOn(typeof(AbpSecurityModule))]
     public class AbpAspNetCoreAuthenticationOAuthModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAssemblyOf<AbpAspNetCoreAuthenticationOAuthModule>();
+            context.Services.AddAssemblyOf<AbpAspNetCoreAuthenticationOAuthModule>();
         }
     }
 }

@@ -6,9 +6,9 @@ namespace Volo.Abp.Castle
 {
     public class AbpCastleCoreModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddTransient(typeof(CastleAbpInterceptorAdapter<>));
+            context.Services.AddTransient(typeof(CastleAbpInterceptorAdapter<>));
         }
     }
 }

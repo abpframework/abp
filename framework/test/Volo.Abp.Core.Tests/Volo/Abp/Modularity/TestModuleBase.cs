@@ -14,17 +14,17 @@ namespace Volo.Abp.Modularity
 
         public bool OnApplicationShutdownIsCalled { get; set; }
 
-        public override void PreConfigureServices(IServiceCollection services)
+        public override void PreConfigureServices(ServiceConfigurationContext context)
         {
             PreConfigureServicesIsCalled = true;
         }
 
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
             ConfigureServicesIsCalled = true;
         }
 
-        public override void PostConfigureServices(IServiceCollection services)
+        public override void PostConfigureServices(ServiceConfigurationContext context)
         {
             PostConfigureServicesIsCalled = true;
         }

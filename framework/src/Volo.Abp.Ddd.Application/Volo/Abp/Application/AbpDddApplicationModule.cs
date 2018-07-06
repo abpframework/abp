@@ -21,9 +21,9 @@ namespace Volo.Abp.Application
     [DependsOn(typeof(AbpHttpAbstractionsModule))]
     public class AbpDddApplicationModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.Configure<ApiDescriptionModelOptions>(options =>
+            context.Services.Configure<ApiDescriptionModelOptions>(options =>
             {
                 options.IgnoredInterfaces.AddIfNotContains(typeof(IRemoteService));
                 options.IgnoredInterfaces.AddIfNotContains(typeof(IApplicationService));
@@ -31,7 +31,7 @@ namespace Volo.Abp.Application
                 options.IgnoredInterfaces.AddIfNotContains(typeof(IAuthorizationEnabled)); //TODO: Move to it's own module if possible?
             });
 
-            services.AddAssemblyOf<AbpDddApplicationModule>();
+            context.Services.AddAssemblyOf<AbpDddApplicationModule>();
         }
     }
 }

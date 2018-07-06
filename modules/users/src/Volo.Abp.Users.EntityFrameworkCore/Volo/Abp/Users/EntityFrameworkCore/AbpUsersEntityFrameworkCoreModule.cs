@@ -10,9 +10,9 @@ namespace Volo.Abp.Users.EntityFrameworkCore
         )]
     public class AbpUsersEntityFrameworkCoreModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAssemblyOf<AbpUsersEntityFrameworkCoreModule>();
+            context.Services.AddAssemblyOf<AbpUsersEntityFrameworkCoreModule>();
         }
     }
 }

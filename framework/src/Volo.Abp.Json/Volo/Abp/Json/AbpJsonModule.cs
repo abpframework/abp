@@ -7,9 +7,9 @@ namespace Volo.Abp.Json
     [DependsOn(typeof(AbpTimingModule))]
     public class AbpJsonModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAssemblyOf<AbpJsonModule>();
+            context.Services.AddAssemblyOf<AbpJsonModule>();
         }
     }
 }

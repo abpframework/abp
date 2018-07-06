@@ -5,9 +5,9 @@ namespace Volo.Abp.VirtualFileSystem
 {
     public class AbpVirtualFileSystemModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAssemblyOf<AbpVirtualFileSystemModule>();
+            context.Services.AddAssemblyOf<AbpVirtualFileSystemModule>();
         }
     }
 }

@@ -10,9 +10,9 @@ namespace Volo.DocsTestApp.EntityFrameworkCore
         typeof(AbpEntityFrameworkCoreSqlServerModule))]
     public class DocsTestAppEntityFrameworkCoreModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAssemblyOf<DocsTestAppEntityFrameworkCoreModule>();
+            context.Services.AddAssemblyOf<DocsTestAppEntityFrameworkCoreModule>();
         }
     }
 }

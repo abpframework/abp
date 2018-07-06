@@ -5,9 +5,9 @@ namespace Volo.Abp.Guids
 {
     public class AbpGuidsModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAssemblyOf<AbpGuidsModule>();
+            context.Services.AddAssemblyOf<AbpGuidsModule>();
         }
     }
 }

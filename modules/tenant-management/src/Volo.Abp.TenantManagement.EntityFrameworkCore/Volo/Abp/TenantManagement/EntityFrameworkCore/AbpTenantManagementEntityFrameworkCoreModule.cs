@@ -8,14 +8,14 @@ namespace Volo.Abp.TenantManagement.EntityFrameworkCore
     [DependsOn(typeof(AbpEntityFrameworkCoreModule))]
     public class AbpTenantManagementEntityFrameworkCoreModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAbpDbContext<TenantManagementDbContext>(options =>
+            context.Services.AddAbpDbContext<TenantManagementDbContext>(options =>
             {
                 options.AddDefaultRepositories<ITenantManagementDbContext>();
             });
 
-            services.AddAssemblyOf<AbpTenantManagementEntityFrameworkCoreModule>();
+            context.Services.AddAssemblyOf<AbpTenantManagementEntityFrameworkCoreModule>();
         }
     }
 }

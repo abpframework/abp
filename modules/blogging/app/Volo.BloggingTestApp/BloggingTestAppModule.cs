@@ -43,25 +43,25 @@ namespace Volo.BloggingTestApp
     )]
     public class BloggingTestAppModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            var hostingEnvironment = services.GetHostingEnvironment();
-            var configuration = services.BuildConfiguration();
+            var hostingEnvironment = context.Services.GetHostingEnvironment();
+            var configuration = context.Services.BuildConfiguration();
 
-            services.Configure<DbConnectionOptions>(options =>
+            context.Services.Configure<DbConnectionOptions>(options =>
             {
                 const string connStringName = "SqlServer";
                 options.ConnectionStrings.Default = configuration.GetConnectionString(connStringName);
             });
 
-            services.Configure<AbpDbContextOptions>(options =>
+            context.Services.Configure<AbpDbContextOptions>(options =>
             {
                 options.UseSqlServer();
             });
 
             if (hostingEnvironment.IsDevelopment())
             {
-                services.Configure<VirtualFileSystemOptions>(options =>
+                context.Services.Configure<VirtualFileSystemOptions>(options =>
                 {
                     options.FileSets.ReplaceEmbeddedByPyhsical<AbpUiModule>(Path.Combine(hostingEnvironment.ContentRootPath, "..\\..\\..\\..\\framework\\src\\Volo.Abp.UI"));
                     options.FileSets.ReplaceEmbeddedByPyhsical<AbpAspNetCoreMvcUiModule>(Path.Combine(hostingEnvironment.ContentRootPath, "..\\..\\..\\..\\framework\\src\\Volo.Abp.AspNetCore.Mvc.UI"));
@@ -73,7 +73,7 @@ namespace Volo.BloggingTestApp
                 });
             }
 
-            services.AddSwaggerGen(
+            context.Services.AddSwaggerGen(
                 options =>
                 {
                     options.SwaggerDoc("v1", new Info { Title = "Blogging API", Version = "v1" });
@@ -81,19 +81,19 @@ namespace Volo.BloggingTestApp
                 });
 
             var cultures = new List<CultureInfo> { new CultureInfo("en"), new CultureInfo("tr") };
-            services.Configure<RequestLocalizationOptions>(options =>
+            context.Services.Configure<RequestLocalizationOptions>(options =>
             {
                 options.DefaultRequestCulture = new RequestCulture("en");
                 options.SupportedCultures = cultures;
                 options.SupportedUICultures = cultures;
             });
 
-            services.Configure<ThemingOptions>(options =>
+            context.Services.Configure<ThemingOptions>(options =>
             {
                 options.DefaultThemeName = BasicTheme.Name;
             });
 
-            services.AddAssemblyOf<BloggingTestAppModule>();
+            context.Services.AddAssemblyOf<BloggingTestAppModule>();
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)

@@ -56,9 +56,9 @@ namespace MyCompany.MyProject
     [DependsOn(typeof(AbpVirtualFileSystemModule))]
     public class MyModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.Configure<VirtualFileSystemOptions>(options =>
+            context.Services.Configure<VirtualFileSystemOptions>(options =>
             {
                 //Register all embedded files of this assembly to the virtual file system
                 options.FileSets.AddEmbedded<MyModule>();
@@ -116,13 +116,13 @@ The example below shows an application depends on a module (`MyModule`) that con
 [DependsOn(typeof(MyModule))]
 public class MyWebAppModule : AbpModule
 {
-    public override void ConfigureServices(IServiceCollection services)
+    public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        var hostingEnvironment = services.GetHostingEnvironment();
+        var hostingEnvironment = context.Services.GetHostingEnvironment();
 
         if (hostingEnvironment.IsDevelopment()) //only for development time
         {
-            services.Configure<VirtualFileSystemOptions>(options =>
+            context.Services.Configure<VirtualFileSystemOptions>(options =>
             {
                 //ReplaceEmbeddedByPyhsical gets the root folder of the MyModule project
                 options.FileSets.ReplaceEmbeddedByPyhsical<MyModule>(

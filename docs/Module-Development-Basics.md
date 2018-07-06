@@ -25,7 +25,7 @@ public class BlogModule : AbpModule
 ````C#
 public class BlogModule : AbpModule
 {
-    public override void ConfigureServices(IServiceCollection services)
+    public override void ConfigureServices(ServiceConfigurationContext context)
     {
         //...
     }
@@ -37,9 +37,9 @@ You can register dependencies one by one as stated in Microsoft's <a href="https
 ````C#
 public class BlogModule : AbpModule
 {
-    public override void ConfigureServices(IServiceCollection services)
+    public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        services.AddAssemblyOf<BlogModule>();
+        context.Services.AddAssemblyOf<BlogModule>();
     }
 }
 ````
@@ -51,12 +51,12 @@ You can also configure other services and modules in this method. Example:
 ````C#
 public class BlogModule : AbpModule
 {
-    public override void ConfigureServices(IServiceCollection services)
+    public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        services.AddAssemblyOf<BlogModule>();
+        context.Services.AddAssemblyOf<BlogModule>();
 
         //Configure default connection string for the application
-        services.Configure<DbConnectionOptions>(options =>
+        context.Services.Configure<DbConnectionOptions>(options =>
         {
             options.ConnectionStrings.Default = "......";
         });

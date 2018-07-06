@@ -9,10 +9,10 @@ namespace Volo.Abp.MongoDB
     [DependsOn(typeof(AbpDddDomainModule))]
     public class AbpMongoDbModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.TryAddTransient(typeof(IMongoDbContextProvider<>), typeof(UnitOfWorkMongoDbContextProvider<>));
-            services.AddAssemblyOf<AbpMongoDbModule>();
+            context.Services.TryAddTransient(typeof(IMongoDbContextProvider<>), typeof(UnitOfWorkMongoDbContextProvider<>));
+            context.Services.AddAssemblyOf<AbpMongoDbModule>();
         }
     }
 }

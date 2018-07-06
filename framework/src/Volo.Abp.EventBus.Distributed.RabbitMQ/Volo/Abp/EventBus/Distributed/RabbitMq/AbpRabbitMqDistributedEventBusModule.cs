@@ -6,9 +6,9 @@ namespace Volo.Abp.EventBus.Distributed.RabbitMq
     [DependsOn(typeof(AbpDistributedEventBusModule))]
     public class AbpRabbitMqDistributedEventBusModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAssemblyOf<AbpRabbitMqDistributedEventBusModule>();
+            context.Services.AddAssemblyOf<AbpRabbitMqDistributedEventBusModule>();
         }
     }
 }

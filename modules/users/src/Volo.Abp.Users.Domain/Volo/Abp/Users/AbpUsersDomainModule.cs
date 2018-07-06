@@ -13,9 +13,9 @@ namespace Volo.Abp.Users
         )]
     public class AbpUsersDomainModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAssemblyOf<AbpUsersDomainModule>();
+            context.Services.AddAssemblyOf<AbpUsersDomainModule>();
         }
     }
 }

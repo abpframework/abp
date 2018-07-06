@@ -14,14 +14,14 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared
         )]
     public class AbpAspNetCoreMvcUiThemeSharedModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.Configure<VirtualFileSystemOptions>(options =>
+            context.Services.Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpAspNetCoreMvcUiThemeSharedModule>("Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared");
             });
 
-            services.Configure<BundlingOptions>(options =>
+            context.Services.Configure<BundlingOptions>(options =>
             {
                 options
                     .StyleBundles
@@ -32,7 +32,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared
                     .Add(StandardBundles.Scripts.Global, bundle => bundle.AddContributors(typeof(SharedThemeGlobalScriptContributor)));
             });
 
-            services.AddAssemblyOf<AbpAspNetCoreMvcUiThemeSharedModule>();
+            context.Services.AddAssemblyOf<AbpAspNetCoreMvcUiThemeSharedModule>();
         }
     }
 }

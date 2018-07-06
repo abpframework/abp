@@ -34,9 +34,9 @@ namespace Volo.Abp.UI.Navigation
         [DependsOn(typeof(AbpUiNavigationModule))]
         public class TestModule : AbpModule
         {
-            public override void ConfigureServices(IServiceCollection services)
+            public override void ConfigureServices(ServiceConfigurationContext context)
             {
-                services.Configure<NavigationOptions>(options =>
+                context.Services.Configure<NavigationOptions>(options =>
                 {
                     options.MenuContributors.Add(new TestMenuContributer1());
                     options.MenuContributors.Add(new TestMenuContributer2());

@@ -6,9 +6,9 @@ namespace Volo.Abp.UI.Navigation
     [DependsOn(typeof(AbpUiModule))]
     public class AbpUiNavigationModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAssemblyOf<AbpUiNavigationModule>();
+            context.Services.AddAssemblyOf<AbpUiNavigationModule>();
         }
     }
 }

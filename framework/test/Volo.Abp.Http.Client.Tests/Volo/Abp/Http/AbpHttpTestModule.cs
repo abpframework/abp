@@ -10,14 +10,14 @@ namespace Volo.Abp.Http
     [DependsOn(typeof(AbpAspNetCoreMvcTestModule), typeof(AbpHttpClientModule))]
     public class AbpHttpTestModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAssemblyOf<AbpHttpTestModule>();
+            context.Services.AddAssemblyOf<AbpHttpTestModule>();
 
-            services.AddHttpClientProxies(typeof(TestAppModule).Assembly);
-            services.AddHttpClientProxy<IRegularTestController>();
+            context.Services.AddHttpClientProxies(typeof(TestAppModule).Assembly);
+            context.Services.AddHttpClientProxy<IRegularTestController>();
 
-            services.Configure<RemoteServiceOptions>(options =>
+            context.Services.Configure<RemoteServiceOptions>(options =>
             {
                 options.RemoteServices.Default = new RemoteServiceConfiguration("/");
             });

@@ -10,11 +10,11 @@ namespace Volo.Abp.Http
     [DependsOn(typeof(AbpJsonModule))]
     public class AbpHttpModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAssemblyOf<AbpHttpModule>();
+            context.Services.AddAssemblyOf<AbpHttpModule>();
 
-            services.Configure<AbpApiProxyScriptingOptions>(options =>
+            context.Services.Configure<AbpApiProxyScriptingOptions>(options =>
             {
                 options.Generators[JQueryProxyScriptGenerator.Name] = typeof(JQueryProxyScriptGenerator);
             });

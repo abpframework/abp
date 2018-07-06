@@ -20,22 +20,22 @@ namespace Volo.Blogging
     )]
     public class BloggingWebModule : AbpModule
     {
-        public override void PreConfigureServices(IServiceCollection services)
+        public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
+            context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
             {
                 options.AddAssemblyResource(typeof(BloggingResource), typeof(BloggingWebModule).Assembly);
             });
         }
 
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.Configure<VirtualFileSystemOptions>(options =>
+            context.Services.Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<BloggingWebModule>("Volo.Blogging");
             });
 
-            services.Configure<AbpLocalizationOptions>(options =>
+            context.Services.Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources
                     .Get<BloggingResource>()
@@ -44,12 +44,12 @@ namespace Volo.Blogging
                     .AddVirtualJson("/Localization/Resources/Blogging/Web");
             });
 
-            services.Configure<AbpAutoMapperOptions>(options =>
+            context.Services.Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<AbpBloggingWebAutoMapperProfile>(validate: true);
             });
 
-            services.Configure<RazorPagesOptions>(options =>
+            context.Services.Configure<RazorPagesOptions>(options =>
             {
                 //TODO: Make configurable!
                 options.Conventions.AddPageRoute("/Blog/Posts/Index", "blog/{blogShortName}");
@@ -58,7 +58,7 @@ namespace Volo.Blogging
                 options.Conventions.AddPageRoute("/Blog/Posts/New", "blog/{blogShortName}/posts/new");
             });
 
-            services.AddAssemblyOf<BloggingWebModule>();
+            context.Services.AddAssemblyOf<BloggingWebModule>();
         }
     }
 }

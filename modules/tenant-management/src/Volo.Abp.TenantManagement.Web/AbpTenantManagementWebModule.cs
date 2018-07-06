@@ -19,27 +19,27 @@ namespace Volo.Abp.TenantManagement.Web
     [DependsOn(typeof(AbpAutoMapperModule))]
     public class AbpTenantManagementWebModule : AbpModule
     {
-        public override void PreConfigureServices(IServiceCollection services)
+        public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
+            context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
             {
                 options.AddAssemblyResource(typeof(AbpTenantManagementResource), typeof(AbpTenantManagementWebModule).Assembly);
             });
         }
 
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.Configure<NavigationOptions>(options =>
+            context.Services.Configure<NavigationOptions>(options =>
             {
                 options.MenuContributors.Add(new AbpTenantManagementWebMainMenuContributor());
             });
 
-            services.Configure<VirtualFileSystemOptions>(options =>
+            context.Services.Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpTenantManagementWebModule>("Volo.Abp.TenantManagement.Web");
             });
 
-            services.Configure<AbpLocalizationOptions>(options =>
+            context.Services.Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources
                     .Get<AbpTenantManagementResource>()
@@ -49,19 +49,19 @@ namespace Volo.Abp.TenantManagement.Web
                     ).AddVirtualJson("/Localization/Resources/AbpTenantManagement/Web");
             });
 
-            services.Configure<AbpAutoMapperOptions>(options =>
+            context.Services.Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<AbpTenantManagementWebAutoMapperProfile>(validate: true);
             });
 
-            services.Configure<RazorPagesOptions>(options =>
+            context.Services.Configure<RazorPagesOptions>(options =>
             {
                 options.Conventions.AuthorizePage("/TenantManagement/Tenants/Index", TenantManagementPermissions.Tenants.Default);
                 options.Conventions.AuthorizePage("/TenantManagement/Tenants/CreateModal", TenantManagementPermissions.Tenants.Create);
                 options.Conventions.AuthorizePage("/TenantManagement/Tenants/EditModal", TenantManagementPermissions.Tenants.Update);
             });
 
-            services.AddAssemblyOf<AbpTenantManagementWebModule>();
+            context.Services.AddAssemblyOf<AbpTenantManagementWebModule>();
         }
     }
 }

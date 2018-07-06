@@ -5,7 +5,7 @@ namespace Volo.Abp
 {
     public class AbpTestBaseModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
             
         }

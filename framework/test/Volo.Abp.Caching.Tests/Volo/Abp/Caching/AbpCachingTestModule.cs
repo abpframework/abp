@@ -6,9 +6,9 @@ namespace Volo.Abp.Caching
     [DependsOn(typeof(AbpCachingModule))]
     public class AbpCachingTestModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAssemblyOf<AbpCachingTestModule>();
+            context.Services.AddAssemblyOf<AbpCachingTestModule>();
         }
     }
 }

@@ -20,7 +20,7 @@ namespace Volo.Abp.Modularity
         [DependsOn(typeof(IndependentEmptyModule))]
         public class MyStartupModule : IAbpModule
         {
-            public void ConfigureServices(IServiceCollection services)
+            public void ConfigureServices(ServiceConfigurationContext context)
             {
                 
             }

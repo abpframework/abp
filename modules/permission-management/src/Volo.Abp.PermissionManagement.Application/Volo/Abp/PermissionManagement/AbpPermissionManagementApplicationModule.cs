@@ -7,9 +7,9 @@ namespace Volo.Abp.PermissionManagement
     [DependsOn(typeof(AbpPermissionManagementApplicationContractsModule))]
     public class AbpPermissionManagementApplicationModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAssemblyOf<AbpPermissionManagementApplicationModule>();
+            context.Services.AddAssemblyOf<AbpPermissionManagementApplicationModule>();
         }
     }
 }

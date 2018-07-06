@@ -8,14 +8,14 @@ namespace Volo.Abp.Identity
     [DependsOn(typeof(AbpIdentityEntityFrameworkCoreTestModule))]
     public class AbpIdentityDomainTestModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.Configure<PermissionOptions>(options =>
+            context.Services.Configure<PermissionOptions>(options =>
             {
                 options.DefinitionProviders.Add<IdentityTestPermissionDefinitionProvider>();
             });
 
-            services.AddAssemblyOf<AbpIdentityDomainTestModule>();
+            context.Services.AddAssemblyOf<AbpIdentityDomainTestModule>();
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)

@@ -5,14 +5,14 @@ namespace Volo.Abp.Validation
 {
     public class AbpValidationModule : AbpModule
     {
-        public override void PreConfigureServices(IServiceCollection services)
+        public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            services.OnRegistred(ValidationInterceptorRegistrar.RegisterIfNeeded);
+            context.Services.OnRegistred(ValidationInterceptorRegistrar.RegisterIfNeeded);
         }
 
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAssemblyOf<AbpValidationModule>();
+            context.Services.AddAssemblyOf<AbpValidationModule>();
         }
     }
 }

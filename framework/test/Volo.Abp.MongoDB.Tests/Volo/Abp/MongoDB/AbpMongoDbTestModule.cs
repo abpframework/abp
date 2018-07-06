@@ -16,22 +16,22 @@ namespace Volo.Abp.MongoDB
     {
         private MongoDbRunner _mongoDbRunner;
 
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
             _mongoDbRunner = MongoDbRunner.Start();
 
-            services.Configure<DbConnectionOptions>(options =>
+            context.Services.Configure<DbConnectionOptions>(options =>
             {
                 options.ConnectionStrings.Default = _mongoDbRunner.ConnectionString;
             });
 
-            services.AddMongoDbContext<TestAppMongoDbContext>(options =>
+            context.Services.AddMongoDbContext<TestAppMongoDbContext>(options =>
             {
                 options.AddDefaultRepositories<ITestAppMongoDbContext>();
                 options.AddRepository<City, CityRepository>();
             });
 
-            services.AddAssemblyOf<AbpMongoDbTestModule>();
+            context.Services.AddAssemblyOf<AbpMongoDbTestModule>();
         }
 
         public override void OnApplicationShutdown(ApplicationShutdownContext context)

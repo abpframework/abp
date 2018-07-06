@@ -4,6 +4,6 @@ namespace Volo.Abp.Modularity
 {
     public interface IPreConfigureServices
     {
-        void PreConfigureServices(IServiceCollection services);
+        void PreConfigureServices(ServiceConfigurationContext context);
     }
 }

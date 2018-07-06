@@ -8,14 +8,14 @@ namespace Volo.Docs
     [DependsOn(typeof(AbpLocalizationModule))]
     public class DocsDomainSharedModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.Configure<AbpLocalizationOptions>(options =>
+            context.Services.Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources.Add<DocsResource>("en");
             });
 
-            services.AddAssemblyOf<DocsDomainSharedModule>();
+            context.Services.AddAssemblyOf<DocsDomainSharedModule>();
         }
     }
 }

@@ -14,28 +14,28 @@ namespace Volo.Docs
         )]
     public class DocsWebModule : AbpModule
     {
-        public override void PreConfigureServices(IServiceCollection services)
+        public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
+            context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
             {
                 options.AddAssemblyResource(typeof(DocsResource), typeof(DocsWebModule).Assembly);
             });
         }
 
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.Configure<VirtualFileSystemOptions>(options =>
+            context.Services.Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<DocsWebModule>("Volo.Docs");
             });
 
-            services.Configure<RazorPagesOptions>(options =>
+            context.Services.Configure<RazorPagesOptions>(options =>
             {
                 //TODO: Make configurable!
                 options.Conventions.AddPageRoute("/Documents/Project/Index", "documents/{projectName}/{version}/{*documentName}");
             });
 
-            services.AddAssemblyOf<DocsWebModule>();
+            context.Services.AddAssemblyOf<DocsWebModule>();
         }
     }
 }

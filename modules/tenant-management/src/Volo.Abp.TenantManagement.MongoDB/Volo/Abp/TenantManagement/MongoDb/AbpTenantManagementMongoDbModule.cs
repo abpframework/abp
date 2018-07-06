@@ -10,18 +10,18 @@ namespace Volo.Abp.TenantManagement.MongoDb
         )]
     public class AbpTenantManagementMongoDbModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
             AbpTenantManagementBsonClassMap.Configure();
 
-            services.AddMongoDbContext<TenantManagementMongoDbContext>(options =>
+            context.Services.AddMongoDbContext<TenantManagementMongoDbContext>(options =>
             {
                 options.AddDefaultRepositories<ITenantManagementMongoDbContext>();
 
                 options.AddRepository<Tenant, MongoTenantRepository>();
             });
 
-            services.AddAssemblyOf<AbpTenantManagementMongoDbModule>();
+            context.Services.AddAssemblyOf<AbpTenantManagementMongoDbModule>();
         }
     }
 }

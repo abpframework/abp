@@ -8,14 +8,14 @@ namespace Volo.Blogging
     [DependsOn(typeof(AbpLocalizationModule))]
     public class BloggingDomainSharedModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.Configure<AbpLocalizationOptions>(options =>
+            context.Services.Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources.Add<BloggingResource>("en");
             });
 
-            services.AddAssemblyOf<BloggingDomainSharedModule>();
+            context.Services.AddAssemblyOf<BloggingDomainSharedModule>();
         }
     }
 }

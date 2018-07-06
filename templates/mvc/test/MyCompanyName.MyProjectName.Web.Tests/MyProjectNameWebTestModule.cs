@@ -32,20 +32,20 @@ namespace MyCompanyName.MyProjectName
     )]
     public class MyProjectNameWebTestModule : AbpModule
     {
-        public override void PreConfigureServices(IServiceCollection services)
+        public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            services.PreConfigure<IMvcBuilder>(builder =>
+            context.Services.PreConfigure<IMvcBuilder>(builder =>
             {
                 builder.PartManager.ApplicationParts.Add(new AssemblyPart(typeof(MyProjectNameWebModule).Assembly));
             });
         }
 
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            ConfigureLocalizationServices(services);
-            ConfigureNavigationServices(services);
+            ConfigureLocalizationServices(context.Services);
+            ConfigureNavigationServices(context.Services);
 
-            services.AddAssemblyOf<MyProjectNameWebTestModule>();
+            context.Services.AddAssemblyOf<MyProjectNameWebTestModule>();
         }
 
         private static void ConfigureLocalizationServices(IServiceCollection services)

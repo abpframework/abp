@@ -7,19 +7,19 @@ namespace Volo.Abp.EntityFrameworkCore.TestApp.SecondContext
     [DependsOn(typeof(AbpEntityFrameworkCoreModule))]
     public class AbpEfCoreTestSecondContextModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAbpDbContext<SecondDbContext>(options =>
+            context.Services.AddAbpDbContext<SecondDbContext>(options =>
             {
                 options.AddDefaultRepositories();
             });
 
-            services.AddAbpDbContext<ThirdDbContext.ThirdDbContext>(options =>
+            context.Services.AddAbpDbContext<ThirdDbContext.ThirdDbContext>(options =>
             {
                 options.AddDefaultRepositories<IThirdDbContext>();
             });
 
-            services.AddAssemblyOf<AbpEfCoreTestSecondContextModule>();
+            context.Services.AddAssemblyOf<AbpEfCoreTestSecondContextModule>();
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)

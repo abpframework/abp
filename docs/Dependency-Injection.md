@@ -9,7 +9,7 @@ Since ABP is a modular framework, every module defines it's services and registe
 ````C#
 public class BlogModule : AbpModule
 {
-    public override void ConfigureServices(IServiceCollection services)
+    public override void ConfigureServices(ServiceConfigurationContext context)
     {
         //register dependencies here
     }
@@ -23,9 +23,9 @@ ABP introduces conventional service registration. To register all services of a 
 ````C#
 public class BlogModule : AbpModule
 {
-    public override void ConfigureServices(IServiceCollection services)
+    public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        services.AddAssemblyOf<BlogModule>();
+        context.Services.AddAssemblyOf<BlogModule>();
     }
 }
 ````
@@ -134,16 +134,16 @@ In some cases, you may need to register a service to IServiceCollection manually
 ````C#
 public class BlogModule : AbpModule
 {
-    public override void ConfigureServices(IServiceCollection services)
+    public override void ConfigureServices(ServiceConfigurationContext context)
     {
         //Add services by convention
-        services.AddAssemblyOf<BlogModule>();
+        context.Services.AddAssemblyOf<BlogModule>();
 
         //Register an instance as singleton
-        services.AddSingleton<TaxCalculator>(new TaxCalculator(taxRatio: 0.18));
+        context.Services.AddSingleton<TaxCalculator>(new TaxCalculator(taxRatio: 0.18));
 
         //Register a factory method that resolves from IServiceProvider
-        services.AddScoped<ITaxCalculator>(sp => sp.GetRequiredService<TaxCalculator>());
+        context.Services.AddScoped<ITaxCalculator>(sp => sp.GetRequiredService<TaxCalculator>());
     }
 }
 ````
@@ -153,16 +153,16 @@ Finally, you may want to add a single class or a few classes by ABP's convention
 ````C#
 public class BlogModule : AbpModule
 {
-    public override void ConfigureServices(IServiceCollection services)
+    public override void ConfigureServices(ServiceConfigurationContext context)
     {
         //Add single type
-        services.AddType(typeof(TaxCalculator));
+        context.Services.AddType(typeof(TaxCalculator));
 
         //Add multiple types in once call
-        services.AddTypes(typeof(TaxCalculator), typeof(MyOtherService));
+        context.Services.AddTypes(typeof(TaxCalculator), typeof(MyOtherService));
 
         //Add single type using generic shortcut
-        services.AddType<TaxCalculator>();
+        context.Services.AddType<TaxCalculator>();
     }
 }
 ````

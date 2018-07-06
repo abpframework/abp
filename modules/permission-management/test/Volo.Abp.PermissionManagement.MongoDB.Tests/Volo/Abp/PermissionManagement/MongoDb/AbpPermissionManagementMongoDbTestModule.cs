@@ -13,16 +13,16 @@ namespace Volo.Abp.PermissionManagement.MongoDb
     {
         private MongoDbRunner _mongoDbRunner;
 
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
             _mongoDbRunner = MongoDbRunner.Start();
 
-            services.Configure<DbConnectionOptions>(options =>
+            context.Services.Configure<DbConnectionOptions>(options =>
             {
                 options.ConnectionStrings.Default = _mongoDbRunner.ConnectionString;
             });
 
-            services.AddAssemblyOf<AbpPermissionManagementMongoDbTestModule>();
+            context.Services.AddAssemblyOf<AbpPermissionManagementMongoDbTestModule>();
         }
 
         public override void OnApplicationShutdown(ApplicationShutdownContext context)

@@ -6,9 +6,9 @@ namespace Volo.Abp.Autofac
     [DependsOn(typeof(AbpAutofacModule))]
     public class AutofacTestModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAssemblyOf<AbpAutofacModule>();
+            context.Services.AddAssemblyOf<AbpAutofacModule>();
         }
     }
 }

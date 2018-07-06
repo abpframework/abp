@@ -111,9 +111,9 @@ Example usage:
 [DependsOn(typeof(AbpAspNetCoreMvcUiBundlingModule))]
 public class MyWebModule : AbpModule
 {
-    public override void ConfigureServices(IServiceCollection services)
+    public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        services.Configure<BundlingOptions>(options =>
+        context.Services.Configure<BundlingOptions>(options =>
         {
             options
                 .ScriptBundles
@@ -148,9 +148,9 @@ ABP supports [modularity](../Module-Development-Basics.md) for bundling too. A m
 [DependsOn(typeof(MyWebModule))]
 public class MyWebExtensionModule : AbpModule
 {
-    public override void ConfigureServices(IServiceCollection services)
+    public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        services.Configure<BundlingOptions>(options =>
+        context.Services.Configure<BundlingOptions>(options =>
         {
             options
                 .ScriptBundles

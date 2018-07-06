@@ -16,14 +16,14 @@ namespace Volo.Abp.TenantManagement
     [DependsOn(typeof(AbpUiModule))] //TODO: It's not good to depend on the UI module. However, UserFriendlyException is inside it!
     public class AbpTenantManagementDomainModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.Configure<AbpAutoMapperOptions>(options =>
+            context.Services.Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<AbpTenantManagementDomainMappingProfile>(validate: true);
             });
 
-            services.AddAssemblyOf<AbpTenantManagementDomainModule>();
+            context.Services.AddAssemblyOf<AbpTenantManagementDomainModule>();
         }
     }
 }

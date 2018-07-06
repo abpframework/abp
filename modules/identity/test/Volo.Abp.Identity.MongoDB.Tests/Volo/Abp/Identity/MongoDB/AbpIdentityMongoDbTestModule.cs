@@ -15,16 +15,16 @@ namespace Volo.Abp.Identity.MongoDB
     {
         private MongoDbRunner _mongoDbRunner;
 
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
             _mongoDbRunner = MongoDbRunner.Start();
 
-            services.Configure<DbConnectionOptions>(options =>
+            context.Services.Configure<DbConnectionOptions>(options =>
             {
                 options.ConnectionStrings.Default = _mongoDbRunner.ConnectionString;
             });
 
-            services.AddAssemblyOf<AbpIdentityMongoDbTestModule>();
+            context.Services.AddAssemblyOf<AbpIdentityMongoDbTestModule>();
         }
 
         public override void OnApplicationShutdown(ApplicationShutdownContext context)

@@ -7,9 +7,9 @@ namespace Volo.Docs
         typeof(DocsApplicationContractsModule))]
     public class DocsHttpApiClientModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAssemblyOf<DocsHttpApiClientModule>();
+            context.Services.AddAssemblyOf<DocsHttpApiClientModule>();
         }
     }
 }

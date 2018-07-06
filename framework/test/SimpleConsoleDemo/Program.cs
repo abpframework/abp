@@ -32,9 +32,9 @@ namespace SimpleConsoleDemo
 
     public class MyConsoleModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAssemblyOf<MyConsoleModule>();
+            context.Services.AddAssemblyOf<MyConsoleModule>();
         }
     }
 

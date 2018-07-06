@@ -136,9 +136,9 @@ namespace MyCompany.MyProject
     [DependsOn(typeof(AbpMultiTenancyModule))]
     public class MyModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.Configure<TenantResolveOptions>(options =>
+            context.Services.Configure<TenantResolveOptions>(options =>
             {
                 options.TenantResolvers.Add(new MyCustomTenantResolver());
             });
@@ -192,9 +192,9 @@ namespace MyCompany.MyProject
     [DependsOn(typeof(AbpMultiTenancyModule))]
     public class MyModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.Configure<ConfigurationTenantStoreOptions>(options =>
+            context.Services.Configure<ConfigurationTenantStoreOptions>(options =>
             {
                 options.Tenants = new[]
                 {
@@ -236,11 +236,11 @@ namespace MyCompany.MyProject
     [DependsOn(typeof(AbpMultiTenancyModule))]
     public class MyModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var configuration = BuildConfiguration();
 
-            services.Configure<ConfigurationTenantStoreOptions>(configuration);
+            context.Services.Configure<ConfigurationTenantStoreOptions>(configuration);
         }
 
         private static IConfigurationRoot BuildConfiguration()
@@ -359,9 +359,9 @@ namespace MyCompany.MyProject
     [DependsOn(typeof(AbpAspNetCoreMultiTenancyModule))]
     public class MyModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.Configure<TenantResolveOptions>(options =>
+            context.Services.Configure<TenantResolveOptions>(options =>
             {
                 //Subdomain format: {0}.mydomain.com (adding as the highest priority resolver)
                 options.TenantResolvers.Insert(0, new DomainTenantResolver("{0}.mydomain.com"));

@@ -6,9 +6,9 @@ namespace Volo.Docs
     [DependsOn(typeof(DocsDomainSharedModule))]
     public class DocsApplicationContractsModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAssemblyOf<DocsApplicationContractsModule>();
+            context.Services.AddAssemblyOf<DocsApplicationContractsModule>();
         }
     }
 }

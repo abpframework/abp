@@ -10,9 +10,9 @@ namespace Volo.Abp.SettingManagement
     [DependsOn(typeof(AbpSettingManagementDomainSharedModule))]
     public class AbpSettingManagementDomainModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAssemblyOf<AbpSettingManagementDomainModule>();
+            context.Services.AddAssemblyOf<AbpSettingManagementDomainModule>();
         }
     }
 }

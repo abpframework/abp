@@ -11,19 +11,19 @@ namespace Volo.Abp.UI
     )]
     public class AbpUiModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.Configure<VirtualFileSystemOptions>(options =>
+            context.Services.Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpUiModule>();
             });
 
-            services.Configure<AbpLocalizationOptions>(options =>
+            context.Services.Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources.Add<AbpUiResource>("en").AddVirtualJson("/Localization/Resources/AbpUi");
             });
             
-            services.AddAssemblyOf<AbpUiModule>();
+            context.Services.AddAssemblyOf<AbpUiModule>();
         }
     }
 }

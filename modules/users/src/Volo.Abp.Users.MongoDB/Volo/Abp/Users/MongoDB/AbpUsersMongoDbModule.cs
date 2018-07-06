@@ -10,9 +10,9 @@ namespace Volo.Abp.Users.MongoDB
         )]
     public class AbpUsersMongoDbModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAssemblyOf<AbpUsersMongoDbModule>();
+            context.Services.AddAssemblyOf<AbpUsersMongoDbModule>();
         }
     }
 }

@@ -17,13 +17,13 @@ namespace Volo.Abp.AutoMapper
         private static volatile bool _createdMappingsBefore;
         private static readonly object SyncObj = new object();
 
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAssemblyOf<AbpAutoMapperModule>();
+            context.Services.AddAssemblyOf<AbpAutoMapperModule>();
 
             var mapperAccessor = new MapperAccessor();
-            services.AddSingleton<IMapperAccessor>(_ => mapperAccessor);
-            services.AddSingleton<MapperAccessor>(_ => mapperAccessor);
+            context.Services.AddSingleton<IMapperAccessor>(_ => mapperAccessor);
+            context.Services.AddSingleton<MapperAccessor>(_ => mapperAccessor);
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)

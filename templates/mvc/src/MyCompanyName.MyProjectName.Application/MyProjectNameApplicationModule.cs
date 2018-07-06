@@ -12,19 +12,19 @@ namespace MyCompanyName.MyProjectName
         typeof(AbpIdentityApplicationModule))]
     public class MyProjectNameApplicationModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.Configure<PermissionOptions>(options =>
+            context.Services.Configure<PermissionOptions>(options =>
             {
                 options.DefinitionProviders.Add<MyProjectNamePermissionDefinitionProvider>();
             });
 
-            services.Configure<AbpAutoMapperOptions>(options =>
+            context.Services.Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<MyProjectNameApplicationAutoMapperProfile>();
             });
 
-            services.AddAssemblyOf<MyProjectNameApplicationModule>();
+            context.Services.AddAssemblyOf<MyProjectNameApplicationModule>();
         }
     }
 }

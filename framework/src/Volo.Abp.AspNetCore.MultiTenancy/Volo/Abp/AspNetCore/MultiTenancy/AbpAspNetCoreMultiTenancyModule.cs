@@ -10,9 +10,9 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
         )]
     public class AbpAspNetCoreMultiTenancyModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.Configure<TenantResolveOptions>(options =>
+            context.Services.Configure<TenantResolveOptions>(options =>
             {
                 options.TenantResolvers.Add(new QueryStringTenantResolveContributer());
                 options.TenantResolvers.Add(new RouteTenantResolveContributer());
@@ -20,7 +20,7 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
                 options.TenantResolvers.Add(new CookieTenantResolveContributer());
             });
 
-            services.AddAssemblyOf<AbpAspNetCoreMultiTenancyModule>();
+            context.Services.AddAssemblyOf<AbpAspNetCoreMultiTenancyModule>();
         }
     }
 }

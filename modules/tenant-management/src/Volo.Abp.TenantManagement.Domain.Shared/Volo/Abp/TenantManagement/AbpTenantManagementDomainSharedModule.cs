@@ -7,14 +7,14 @@ namespace Volo.Abp.TenantManagement
 {
     public class AbpTenantManagementDomainSharedModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.Configure<AbpLocalizationOptions>(options =>
+            context.Services.Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources.Add<AbpTenantManagementResource>("en");
             });
 
-            services.AddAssemblyOf<AbpTenantManagementDomainSharedModule>();
+            context.Services.AddAssemblyOf<AbpTenantManagementDomainSharedModule>();
         }
     }
 }

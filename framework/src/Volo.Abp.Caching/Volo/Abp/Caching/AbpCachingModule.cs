@@ -11,14 +11,14 @@ namespace Volo.Abp.Caching
     [DependsOn(typeof(AbpMultiTenancyAbstractionsModule))]
     public class AbpCachingModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddMemoryCache();
-            services.AddDistributedMemoryCache();
+            context.Services.AddMemoryCache();
+            context.Services.AddDistributedMemoryCache();
 
-            services.AddAssemblyOf<AbpCachingModule>();
+            context.Services.AddAssemblyOf<AbpCachingModule>();
 
-            services.AddSingleton(typeof(IDistributedCache<>), typeof(DistributedCache<>));
+            context.Services.AddSingleton(typeof(IDistributedCache<>), typeof(DistributedCache<>));
         }
     }
 }

@@ -17,19 +17,19 @@ namespace Volo.Blogging.EntityFrameworkCore
     {
         private SqliteConnection _sqliteConnection;
 
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
             _sqliteConnection = CreateDatabaseAndGetConnection();
 
-            services.Configure<AbpDbContextOptions>(options =>
+            context.Services.Configure<AbpDbContextOptions>(options =>
             {
-                options.Configure(context =>
+                options.Configure(abpDbContextConfigurationContext =>
                 {
-                    context.DbContextOptions.UseSqlite(_sqliteConnection);
+                    abpDbContextConfigurationContext.DbContextOptions.UseSqlite(_sqliteConnection);
                 });
             });
 
-            services.AddAssemblyOf<BloggingEntityFrameworkCoreTestModule>();
+            context.Services.AddAssemblyOf<BloggingEntityFrameworkCoreTestModule>();
         }
 
         private static SqliteConnection CreateDatabaseAndGetConnection()

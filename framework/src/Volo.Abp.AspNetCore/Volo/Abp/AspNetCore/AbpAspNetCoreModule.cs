@@ -12,15 +12,15 @@ namespace Volo.Abp.AspNetCore
     [DependsOn(typeof(AbpVirtualFileSystemModule))]
     public class AbpAspNetCoreModule : IAbpModule
     {
-        public void ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(ServiceConfigurationContext context)
         {
-            AddAspNetServices(services);
+            AddAspNetServices(context.Services);
 
-            services.AddObjectAccessor<IApplicationBuilder>();
+            context.Services.AddObjectAccessor<IApplicationBuilder>();
 
-            services.AddConfiguration();
+            context.Services.AddConfiguration();
 
-            services.AddAssemblyOf<AbpAspNetCoreModule>();
+            context.Services.AddAssemblyOf<AbpAspNetCoreModule>();
         }
 
         private static void AddAspNetServices(IServiceCollection services)

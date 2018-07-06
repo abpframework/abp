@@ -8,9 +8,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI
     [DependsOn(typeof(AbpUiNavigationModule))]
     public class AbpAspNetCoreMvcUiModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAssemblyOf<AbpAspNetCoreMvcUiModule>();
+            context.Services.AddAssemblyOf<AbpAspNetCoreMvcUiModule>();
         }
     }
 }

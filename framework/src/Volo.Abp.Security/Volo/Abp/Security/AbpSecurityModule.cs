@@ -5,9 +5,9 @@ namespace Volo.Abp.Security
 {
     public class AbpSecurityModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAssemblyOf<AbpSecurityModule>();
+            context.Services.AddAssemblyOf<AbpSecurityModule>();
         }
     }
 }

@@ -10,9 +10,9 @@ namespace Volo.Abp.TenantManagement
         )]
     public class AbpTenantManagementHttpApiModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAssemblyOf<AbpTenantManagementHttpApiModule>();
+            context.Services.AddAssemblyOf<AbpTenantManagementHttpApiModule>();
         }
     }
 }

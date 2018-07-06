@@ -8,9 +8,9 @@ namespace Volo.Abp.EntityFrameworkCore.MySQL
         )]
     public class AbpEntityFrameworkCoreMySQLModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAssemblyOf<AbpEntityFrameworkCoreMySQLModule>();
+            context.Services.AddAssemblyOf<AbpEntityFrameworkCoreMySQLModule>();
         }
     }
 }

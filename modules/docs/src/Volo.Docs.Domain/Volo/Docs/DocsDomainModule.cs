@@ -9,9 +9,9 @@ namespace Volo.Docs
         typeof(AbpDddDomainModule))]
     public class DocsDomainModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAssemblyOf<DocsDomainModule>();
+            context.Services.AddAssemblyOf<DocsDomainModule>();
         }
     }
 }

@@ -15,22 +15,22 @@ namespace Volo.Abp.MemoryDb
         typeof(AbpAutofacModule))]
     public class AbpMemoryDbTestModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var connStr = Guid.NewGuid().ToString();
 
-            services.Configure<DbConnectionOptions>(options =>
+            context.Services.Configure<DbConnectionOptions>(options =>
             {
                 options.ConnectionStrings.Default = connStr;
             });
 
-            services.AddMemoryDbContext<TestAppMemoryDbContext>(options =>
+            context.Services.AddMemoryDbContext<TestAppMemoryDbContext>(options =>
             {
                 options.AddDefaultRepositories();
                 options.AddRepository<City, CityRepository>();
             });
 
-            services.AddAssemblyOf<AbpMemoryDbTestModule>();
+            context.Services.AddAssemblyOf<AbpMemoryDbTestModule>();
         }
     }
 }

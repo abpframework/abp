@@ -6,9 +6,9 @@ namespace Volo.Abp.EventBus
     [DependsOn(typeof(AbpEventBusModule))]
     public class EventBusTestModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAssemblyOf<EventBusTestModule>();
+            context.Services.AddAssemblyOf<EventBusTestModule>();
         }
     }
 }

@@ -5,11 +5,11 @@ namespace Volo.Abp.Data
 {
     public class AbpDataModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddSingleton(typeof(IDataFilter<>), typeof(DataFilter<>));
+            context.Services.AddSingleton(typeof(IDataFilter<>), typeof(DataFilter<>));
 
-            services.AddAssemblyOf<AbpDataModule>();
+            context.Services.AddAssemblyOf<AbpDataModule>();
         }
     }
 }

@@ -8,14 +8,14 @@ namespace Volo.Abp.EventBus
 {
     public class AbpEventBusModule : AbpModule
     {
-        public override void PreConfigureServices(IServiceCollection services)
+        public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            AddEventHandlers(services);
+            AddEventHandlers(context.Services);
         }
 
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAssemblyOf<AbpEventBusModule>();
+            context.Services.AddAssemblyOf<AbpEventBusModule>();
         }
 
         private static void AddEventHandlers(IServiceCollection services)

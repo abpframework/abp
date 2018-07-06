@@ -44,14 +44,14 @@ Then it should be added using `AbpLocalizationOptions` as shown below:
 [DependsOn(typeof(AbpLocalizationModule))]
 public class MyModule : AbpModule
 {
-    public override void ConfigureServices(IServiceCollection services)
+    public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        services.Configure<VirtualFileSystemOptions>(options =>
+        context.Services.Configure<VirtualFileSystemOptions>(options =>
         {
             options.FileSets.AddEmbedded<MyModule>();
         });
 
-        services.Configure<AbpLocalizationOptions>(options =>
+        context.Services.Configure<AbpLocalizationOptions>(options =>
         {        
             options.Resources
                 .Add<TestResource>("en")

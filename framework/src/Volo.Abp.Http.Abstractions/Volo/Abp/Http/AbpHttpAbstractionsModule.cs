@@ -5,9 +5,9 @@ namespace Volo.Abp.Http
 {
     public class AbpHttpAbstractionsModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAssemblyOf<AbpHttpAbstractionsModule>();
+            context.Services.AddAssemblyOf<AbpHttpAbstractionsModule>();
         }
     }
 }

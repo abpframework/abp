@@ -13,26 +13,26 @@ namespace Volo.Abp.TenantManagement.EntityFrameworkCore
         )]
     public class AbpTenantManagementEntityFrameworkCoreTestModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddEntityFrameworkInMemoryDatabase();
+            context.Services.AddEntityFrameworkInMemoryDatabase();
 
             var databaseName = Guid.NewGuid().ToString();
 
-            services.Configure<AbpDbContextOptions>(options =>
+            context.Services.Configure<AbpDbContextOptions>(options =>
             {
-                options.Configure(context =>
+                options.Configure(abpDbContextConfigurationContext =>
                 {
-                    context.DbContextOptions.UseInMemoryDatabase(databaseName);
+                    abpDbContextConfigurationContext.DbContextOptions.UseInMemoryDatabase(databaseName);
                 });
             });
 
-            services.Configure<UnitOfWorkDefaultOptions>(options =>
+            context.Services.Configure<UnitOfWorkDefaultOptions>(options =>
             {
                 options.TransactionBehavior = UnitOfWorkTransactionBehavior.Disabled; //EF in-memory database does not support transactions
             });
 
-            services.AddAssemblyOf<AbpTenantManagementEntityFrameworkCoreTestModule>();
+            context.Services.AddAssemblyOf<AbpTenantManagementEntityFrameworkCoreTestModule>();
         }
     }
 }

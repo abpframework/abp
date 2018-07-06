@@ -13,14 +13,14 @@ namespace MyCompanyName.MyProjectName
     [DependsOn(typeof(AbpIdentityDomainModule))]
     public class MyProjectNameDomainModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.Configure<VirtualFileSystemOptions>(options =>
+            context.Services.Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<MyProjectNameDomainModule>();
             });
 
-            services.Configure<AbpLocalizationOptions>(options =>
+            context.Services.Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources
                     .Add<MyProjectNameResource>("en")
@@ -28,12 +28,12 @@ namespace MyCompanyName.MyProjectName
                     .AddVirtualJson("/Localization/MyProjectName");
             });
 
-            services.Configure<SettingOptions>(options =>
+            context.Services.Configure<SettingOptions>(options =>
             {
                 options.DefinitionProviders.Add<MyProjectNameSettingDefinitionProvider>();
             });
 
-            services.AddAssemblyOf<MyProjectNameDomainModule>();
+            context.Services.AddAssemblyOf<MyProjectNameDomainModule>();
         }
     }
 }

@@ -13,17 +13,17 @@ namespace Volo.Abp.Modularity
         IPreConfigureServices, 
         IPostConfigureServices
     {
-        public virtual void PreConfigureServices(IServiceCollection services)
+        public virtual void PreConfigureServices(ServiceConfigurationContext context)
         {
             
         }
 
-        public virtual void ConfigureServices(IServiceCollection services)
+        public virtual void ConfigureServices(ServiceConfigurationContext context)
         {
             
         }
 
-        public virtual void PostConfigureServices(IServiceCollection services)
+        public virtual void PostConfigureServices(ServiceConfigurationContext context)
         {
             
         }

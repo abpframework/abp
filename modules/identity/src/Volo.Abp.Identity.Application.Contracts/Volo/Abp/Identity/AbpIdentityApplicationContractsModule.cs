@@ -16,26 +16,26 @@ namespace Volo.Abp.Identity
     [DependsOn(typeof(AbpPermissionManagementApplicationContractsModule))]
     public class AbpIdentityApplicationContractsModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.Configure<PermissionOptions>(options =>
+            context.Services.Configure<PermissionOptions>(options =>
             {
                 options.DefinitionProviders.Add<IdentityPermissionDefinitionProvider>();
             });
 
-            services.Configure<VirtualFileSystemOptions>(options =>
+            context.Services.Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpIdentityApplicationContractsModule>();
             });
 
-            services.Configure<AbpLocalizationOptions>(options =>
+            context.Services.Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources
                     .Get<IdentityResource>()
                     .AddVirtualJson("/Volo/Abp/Identity/Localization/ApplicationContracts");
             });
 
-            services.AddAssemblyOf<AbpIdentityApplicationContractsModule>();
+            context.Services.AddAssemblyOf<AbpIdentityApplicationContractsModule>();
         }
     }
 }

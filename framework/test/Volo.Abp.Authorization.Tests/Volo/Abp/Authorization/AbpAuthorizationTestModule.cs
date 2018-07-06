@@ -10,25 +10,25 @@ namespace Volo.Abp.Authorization
     [DependsOn(typeof(AbpAuthorizationModule))]
     public class AbpAuthorizationTestModule : AbpModule
     {
-        public override void PreConfigureServices(IServiceCollection services)
+        public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            services.OnRegistred(context =>
+            context.Services.OnRegistred(onServiceRegistredContext =>
             {
-                if (typeof(IMyAuthorizedService1).IsAssignableFrom(context.ImplementationType))
+                if (typeof(IMyAuthorizedService1).IsAssignableFrom(onServiceRegistredContext.ImplementationType))
                 {
-                    context.Interceptors.TryAdd<AuthorizationInterceptor>();
+                    onServiceRegistredContext.Interceptors.TryAdd<AuthorizationInterceptor>();
                 }
             });
         }
 
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.Configure<PermissionOptions>(options =>
+            context.Services.Configure<PermissionOptions>(options =>
             {
                 options.DefinitionProviders.TryAdd<AuthorizationTestPermissionDefinitionProvider>();
             });
 
-            services.AddAssemblyOf<AbpAuthorizationTestModule>();
+            context.Services.AddAssemblyOf<AbpAuthorizationTestModule>();
         }
     }
 }

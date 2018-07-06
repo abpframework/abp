@@ -8,14 +8,14 @@ namespace Volo.Abp.Users
 
     public class AbpUsersAbstractionModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.Configure<SettingOptions>(options =>
+            context.Services.Configure<SettingOptions>(options =>
             {
                 options.ValueProviders.Add<UserSettingValueProvider>();
             });
 
-            services.AddAssemblyOf<AbpUsersAbstractionModule>();
+            context.Services.AddAssemblyOf<AbpUsersAbstractionModule>();
         }
     }
 }

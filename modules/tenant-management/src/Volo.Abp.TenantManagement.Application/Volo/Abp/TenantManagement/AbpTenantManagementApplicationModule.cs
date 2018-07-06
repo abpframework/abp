@@ -8,14 +8,14 @@ namespace Volo.Abp.TenantManagement
     [DependsOn(typeof(AbpTenantManagementApplicationContractsModule))]
     public class AbpTenantManagementApplicationModule : AbpModule
     {
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.Configure<AbpAutoMapperOptions>(options =>
+            context.Services.Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<AbpTenantManagementApplicationAutoMapperProfile>(validate: true);
             });
 
-            services.AddAssemblyOf<AbpTenantManagementApplicationModule>();
+            context.Services.AddAssemblyOf<AbpTenantManagementApplicationModule>();
         }
     }
 }

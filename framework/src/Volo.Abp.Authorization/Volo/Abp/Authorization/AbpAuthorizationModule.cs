@@ -13,24 +13,24 @@ namespace Volo.Abp.Authorization
         )]
     public class AbpAuthorizationModule : AbpModule
     {
-        public override void PreConfigureServices(IServiceCollection services)
+        public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            services.OnRegistred(AuthorizationInterceptorRegistrar.RegisterIfNeeded);
+            context.Services.OnRegistred(AuthorizationInterceptorRegistrar.RegisterIfNeeded);
         }
 
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            services.AddAuthorization();
+            context.Services.AddAuthorization();
 
-            services.AddSingleton<IAuthorizationHandler, PermissionRequirementHandler>();
+            context.Services.AddSingleton<IAuthorizationHandler, PermissionRequirementHandler>();
 
-            services.Configure<PermissionOptions>(options =>
+            context.Services.Configure<PermissionOptions>(options =>
             {
                 options.ValueProviders.Add<UserPermissionValueProvider>();
                 options.ValueProviders.Add<RolePermissionValueProvider>();
             });
 
-            services.AddAssemblyOf<AbpAuthorizationModule>();
+            context.Services.AddAssemblyOf<AbpAuthorizationModule>();
         }
     }
 }
