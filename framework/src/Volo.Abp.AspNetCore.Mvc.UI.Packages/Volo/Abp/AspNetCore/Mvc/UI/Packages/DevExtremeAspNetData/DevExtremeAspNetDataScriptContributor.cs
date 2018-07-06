@@ -10,8 +10,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.DevExtremeAspNetData
     {
         public override void ConfigureBundle(BundleConfigurationContext context)
         {
-            context.Files.AddIfNotContains("devextreme-aspnet-data/js/dx.aspnet.data.js");
-            context.Files.AddIfNotContains("devextreme/aspnet.js");
+            context.Files.AddIfNotContains("/libs/devextreme-aspnet-data/js/dx.aspnet.data.js");
+            context.Files.AddIfNotContains("/libs/devextreme/aspnet.js");
         }
     }
 }

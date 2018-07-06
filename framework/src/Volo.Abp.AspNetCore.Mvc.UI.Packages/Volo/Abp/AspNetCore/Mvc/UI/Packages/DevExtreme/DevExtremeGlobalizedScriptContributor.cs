@@ -12,7 +12,15 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.DevExtreme
     {
         public override void ConfigureBundle(BundleConfigurationContext context)
         {
-            context.Files.AddIfNotContains("/libs/devextreme/dist/js/dx.all.js");
+            context.Files.AddIfNotContains("/libs/cldr/cldr.js");
+            context.Files.AddIfNotContains("/libs/cldr/event.js");
+            context.Files.AddIfNotContains("/libs/cldr/supplemental.js");
+            context.Files.AddIfNotContains("/libs/cldr/unresolved.js");
+            context.Files.AddIfNotContains("/libs/globalize/globalize.js");
+            context.Files.AddIfNotContains("/libs/globalize/message.js");
+            context.Files.AddIfNotContains("/libs/globalize/number.js");
+            context.Files.AddIfNotContains("/libs/globalize/currency.js");
+            context.Files.AddIfNotContains("/libs/globalize/date.js");
         }
     }
 }

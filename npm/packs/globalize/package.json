@@ -1,6 +1,6 @@
 {
   "version": "0.3.5",
-  "name": "@abp/jszip",
+  "name": "@abp/globalize",
   "publishConfig": {
     "access": "public"
   },
