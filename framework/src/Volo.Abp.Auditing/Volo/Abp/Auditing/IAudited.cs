@@ -1,5 +1,7 @@
 namespace Volo.Abp.Auditing
 {
+    //TODO: Rename IAudited to IAuditedObject (also for ICreationAudited, IDeletionAudited... and so on)
+
     /// <summary>
     /// This interface can be implemented to add standard auditing properties to a class.
     /// </summary>
