@@ -58,8 +58,8 @@ public class BlogPostAppService : ApplicationService
 
 If you implement these interfaces, your class is registered to dependency injection automatically:
 
-* ``ITransient`` to register with transient lifetime.
-* ``ISingleton`` to register with singleton lifetime.
+* ``ITransientDependency`` to register with transient lifetime.
+* ``ISingletonDependency`` to register with singleton lifetime.
 * ``IScopedDependency`` to register with scoped lifetime.
 
 Example:
