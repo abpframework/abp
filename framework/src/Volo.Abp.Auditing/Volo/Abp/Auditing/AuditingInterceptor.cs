@@ -47,6 +47,7 @@ namespace Volo.Abp.Auditing
             {
                 stopwatch.Stop();
                 auditInfo.ExecutionDuration = Convert.ToInt32(stopwatch.Elapsed.TotalMilliseconds);
+                auditInfo.ServiceName = "AuditingInterceptor->" + auditInfo.ServiceName;
                 _auditingHelper.Save(auditInfo);
             }
         }
@@ -83,6 +84,7 @@ namespace Volo.Abp.Auditing
             {
                 stopwatch.Stop();
                 auditInfo.ExecutionDuration = Convert.ToInt32(stopwatch.Elapsed.TotalMilliseconds);
+                auditInfo.ServiceName = "AuditingInterceptor->" + auditInfo.ServiceName;
                 await _auditingHelper.SaveAsync(auditInfo);
             }
         }

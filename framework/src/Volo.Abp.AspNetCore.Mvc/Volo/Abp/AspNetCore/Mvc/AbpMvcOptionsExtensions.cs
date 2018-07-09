@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.AspNetCore.Mvc.Auditing;
 using Volo.Abp.AspNetCore.Mvc.Conventions;
 using Volo.Abp.AspNetCore.Mvc.ExceptionHandling;
 using Volo.Abp.AspNetCore.Mvc.Uow;
@@ -23,8 +24,7 @@ namespace Volo.Abp.AspNetCore.Mvc
 
         private static void AddFilters(MvcOptions options)
         {
-            //options.Filters.AddService(typeof(AbpAuthorizationFilter));
-            //options.Filters.AddService(typeof(AbpAuditActionFilter));
+            options.Filters.AddService(typeof(AbpAuditActionFilter));
             options.Filters.AddService(typeof(AbpValidationActionFilter));
             options.Filters.AddService(typeof(AbpUowActionFilter));
             options.Filters.AddService(typeof(AbpExceptionFilter));

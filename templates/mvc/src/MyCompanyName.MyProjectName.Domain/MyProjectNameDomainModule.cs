@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using MyCompanyName.MyProjectName.Localization.MyProjectName;
 using MyCompanyName.MyProjectName.Settings;
+using Volo.Abp.Auditing;
 using Volo.Abp.Identity;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.Resources.AbpValidation;
@@ -10,7 +11,9 @@ using Volo.Abp.VirtualFileSystem;
 
 namespace MyCompanyName.MyProjectName
 {
-    [DependsOn(typeof(AbpIdentityDomainModule))]
+    [DependsOn(
+        typeof(AbpIdentityDomainModule),
+        typeof(AbpAuditingModule))] //TODO: Replace with AbpAuditLoggingDomainModule when it's done.
     public class MyProjectNameDomainModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq.Expressions;
 
 namespace Volo.Abp.Auditing
 {
@@ -15,7 +17,12 @@ namespace Volo.Abp.Auditing
         {
             IsEnabled = true;
             IsEnabledForAnonymousUsers = true;
-            IgnoredTypes = new List<Type>();
+
+            IgnoredTypes = new List<Type>
+            {
+                typeof(Stream),
+                typeof(Expression)
+            };
         }
     }
 }

@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Aspects;
-using Volo.Abp.Authorization;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectMapping;
@@ -20,9 +19,6 @@ namespace Volo.Abp.Application.Services
     {
         public static string[] CommonPostfixes { get; set; } = { "AppService", "ApplicationService", "Service" };
 
-        /// <summary>
-        /// Gets the applied cross cutting concerns.
-        /// </summary>
         public List<string> AppliedCrossCuttingConcerns { get; } = new List<string>();
 
         public IUnitOfWorkManager UnitOfWorkManager { get; set; }
