@@ -12,10 +12,11 @@ namespace Volo.Abp.Auditing
     public class AuditingInterceptor_Tests : AbpIntegratedTest<AuditingInterceptor_Tests.TestModule>
     {
         private IAuditingStore _auditingStore;
+        private IAuditingManager _auditingManager;
 
         public AuditingInterceptor_Tests()
         {
-            
+            _auditingManager = GetRequiredService<IAuditingManager>();
         }
 
         protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
@@ -33,11 +34,15 @@ namespace Volo.Abp.Auditing
         public async Task Should_Write_AuditLog_For_Classes_That_Implement_IAuditingEnabled()
         {
             var myAuditedObject1 = GetRequiredService<MyAuditedObject1>();
-            await myAuditedObject1.DoItAsync(new InputObject {Value1 = "fourty-two", Value2 = 42});
 
-            #pragma warning disable 4014
-            _auditingStore.Received().SaveAsync(Arg.Any<AuditInfo>());
-            #pragma warning restore 4014
+            using (_auditingManager.BeginScope())
+            {
+                await myAuditedObject1.DoItAsync(new InputObject { Value1 = "fourty-two", Value2 = 42 });
+            }
+
+#pragma warning disable 4014
+            _auditingStore.Received().SaveAsync(Arg.Any<AuditLogInfo>());
+#pragma warning restore 4014
         }
 
         [DependsOn(

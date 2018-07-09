@@ -1,6 +1,6 @@
 ﻿namespace Volo.Abp.AspNetCore.Mvc
 {
-    public class AbpActionInfoInHttpContext
+    public class AbpActionInfoInHttpContext //Rename?
     {
         public bool IsObjectResult { get; set; }
     }

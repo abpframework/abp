@@ -7,11 +7,19 @@ namespace Volo.Abp.Auditing
 {
     public class AuditingOptions
     {
+        //TODO: Consider to add an option to disable auditing for application service methods?
+
+        /// <summary>
+        /// Default: true.
+        /// </summary>
         public bool IsEnabled { get; set; }
 
+        /// <summary>
+        /// Default: true.
+        /// </summary>
         public bool IsEnabledForAnonymousUsers { get; set; }
 
-        public List<IAuditInfoContributor> Contributors { get; }
+        public List<AuditLogContributor> Contributors { get; }
 
         public List<Type> IgnoredTypes { get; }
 
@@ -20,9 +28,9 @@ namespace Volo.Abp.Auditing
             IsEnabled = true;
             IsEnabledForAnonymousUsers = true;
 
-            Contributors = new List<IAuditInfoContributor>
+            Contributors = new List<AuditLogContributor>
             {
-                new ClientInfoAuditInfoContributor()
+                new ClientInfoAuditLogContributor()
             };
 
             IgnoredTypes = new List<Type>

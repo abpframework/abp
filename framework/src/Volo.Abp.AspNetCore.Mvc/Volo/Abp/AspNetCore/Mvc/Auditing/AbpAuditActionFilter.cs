@@ -14,16 +14,18 @@ namespace Volo.Abp.AspNetCore.Mvc.Auditing
     {
         protected AuditingOptions Options { get; }
         private readonly IAuditingHelper _auditingHelper;
+        private readonly IAuditingManager _auditingManager;
 
-        public AbpAuditActionFilter(IOptions<AuditingOptions> options, IAuditingHelper auditingHelper)
+        public AbpAuditActionFilter(IOptions<AuditingOptions> options, IAuditingHelper auditingHelper, IAuditingManager auditingManager)
         {
             Options = options.Value;
             _auditingHelper = auditingHelper;
+            _auditingManager = auditingManager;
         }
 
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            if (!ShouldSaveAudit(context))
+            if (!ShouldSaveAudit(context, out var auditLog, out var auditLogAction))
             {
                 await next();
                 return;
@@ -31,41 +33,65 @@ namespace Volo.Abp.AspNetCore.Mvc.Auditing
 
             using (AbpCrossCuttingConcerns.Applying(context.Controller, AbpCrossCuttingConcerns.Auditing))
             {
-                var auditInfo = _auditingHelper.CreateAuditInfo(
-                    context.ActionDescriptor.AsControllerActionDescriptor().ControllerTypeInfo.AsType(),
-                    context.ActionDescriptor.AsControllerActionDescriptor().MethodInfo,
-                    context.ActionArguments
-                );
-
                 var stopwatch = Stopwatch.StartNew();
 
                 try
                 {
                     var result = await next();
+
                     if (result.Exception != null && !result.ExceptionHandled)
                     {
-                        auditInfo.Exception = result.Exception;
+                        auditLog.Exceptions.Add(result.Exception);
                     }
                 }
                 catch (Exception ex)
                 {
-                    auditInfo.Exception = ex;
+                    auditLog.Exceptions.Add(ex);
                     throw;
                 }
                 finally
                 {
                     stopwatch.Stop();
-                    auditInfo.ExecutionDuration = Convert.ToInt32(stopwatch.Elapsed.TotalMilliseconds);
-                    await _auditingHelper.SaveAsync(auditInfo);
+                    auditLogAction.ExecutionDuration = Convert.ToInt32(stopwatch.Elapsed.TotalMilliseconds);
+                    auditLog.Actions.Add(auditLogAction);
                 }
             }
         }
 
-        private bool ShouldSaveAudit(ActionExecutingContext actionContext)
+        private bool ShouldSaveAudit(ActionExecutingContext context, out AuditLogInfo auditLog, out AuditLogActionInfo auditLogAction)
         {
-            return Options.IsEnabled &&
-                   actionContext.ActionDescriptor.IsControllerAction() &&
-                   _auditingHelper.ShouldSaveAudit(actionContext.ActionDescriptor.GetMethodInfo(), true);
+            auditLog = null;
+            auditLogAction = null;
+
+            if (!Options.IsEnabled)
+            {
+                return false;
+            }
+
+            if (!context.ActionDescriptor.IsControllerAction())
+            {
+                return false;
+            }
+
+            var auditLogScope = _auditingManager.Current;
+            if (auditLogScope == null)
+            {
+                return false;
+            }
+
+            if (!_auditingHelper.ShouldSaveAudit(context.ActionDescriptor.GetMethodInfo(), true))
+            {
+                return false;
+            }
+
+            auditLog = auditLogScope.Log;
+            auditLogAction = _auditingHelper.CreateAuditLogAction(
+                context.ActionDescriptor.AsControllerActionDescriptor().ControllerTypeInfo.AsType(),
+                context.ActionDescriptor.AsControllerActionDescriptor().MethodInfo,
+                context.ActionArguments
+            );
+
+            return true;
         }
     }
 }

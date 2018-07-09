@@ -4,9 +4,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Volo.Abp.Auditing
 {
-    public class ClientInfoAuditInfoContributor : IAuditInfoContributor
+    public class ClientInfoAuditLogContributor : AuditLogContributor
     {
-        public Task Contribute(IAuditInfoContributionContext context)
+        public override Task ContributeAsync(AuditLogContributionContext context)
         {
             var clientInfoProvider = context.ServiceProvider.GetRequiredService<IClientInfoProvider>();
 

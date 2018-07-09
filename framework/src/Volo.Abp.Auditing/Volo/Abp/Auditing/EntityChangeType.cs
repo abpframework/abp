@@ -1,4 +1,4 @@
-namespace Volo.Abp.Domain.Entities.Events
+namespace Volo.Abp.Auditing
 {
     public enum EntityChangeType : byte
     {

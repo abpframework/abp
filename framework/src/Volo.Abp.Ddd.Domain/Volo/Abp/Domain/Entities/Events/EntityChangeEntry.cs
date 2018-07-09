@@ -1,4 +1,5 @@
 using System;
+using Volo.Abp.Auditing;
 
 namespace Volo.Abp.Domain.Entities.Events
 {

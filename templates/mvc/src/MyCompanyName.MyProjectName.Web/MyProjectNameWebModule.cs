@@ -189,6 +189,8 @@ namespace MyCompanyName.MyProjectName
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "MyProjectName API");
             });
 
+            app.UseAuditing();
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

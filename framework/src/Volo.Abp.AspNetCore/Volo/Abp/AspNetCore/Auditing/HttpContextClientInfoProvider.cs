@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Auditing;
 
-namespace Microsoft.AspNetCore.Auditing
+namespace Volo.Abp.AspNetCore.Auditing
 {
     public class HttpContextClientInfoProvider : IClientInfoProvider
     {

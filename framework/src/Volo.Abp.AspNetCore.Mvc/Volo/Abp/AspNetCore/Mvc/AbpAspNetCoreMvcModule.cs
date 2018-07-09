@@ -30,7 +30,6 @@ namespace Volo.Abp.AspNetCore.Mvc
     [DependsOn(typeof(AbpAspNetCoreModule))]
     [DependsOn(typeof(AbpLocalizationModule))]
     [DependsOn(typeof(AbpApiVersioningAbstractionsModule))]
-    [DependsOn(typeof(AbpHttpModule))]
     [DependsOn(typeof(AbpDddApplicationModule))]
     [DependsOn(typeof(AbpUiModule))]
     public class AbpAspNetCoreMvcModule : AbpModule

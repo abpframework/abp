@@ -4,6 +4,6 @@ namespace Volo.Abp.Auditing
 {
     public interface IAuditingStore
     {
-        Task SaveAsync(AuditInfo auditInfo);
+        Task SaveAsync(AuditLogInfo auditInfo);
     }
 }

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -89,24 +88,14 @@ namespace Volo.Abp.Auditing
             return defaultValue;
         }
 
-        public virtual AuditInfo CreateAuditInfo(Type type, MethodInfo method, object[] arguments)
+        public virtual AuditLogInfo CreateAuditLogInfo()
         {
-            return CreateAuditInfo(type, method, CreateArgumentsDictionary(method, arguments));
-        }
-
-        public virtual AuditInfo CreateAuditInfo(Type type, MethodInfo method, IDictionary<string, object> arguments)
-        {
-            var auditInfo = new AuditInfo
+            var auditInfo = new AuditLogInfo
             {
                 TenantId = CurrentTenant.Id,
                 UserId = CurrentUser.Id,
                 //ImpersonatorUserId = AbpSession.ImpersonatorUserId, //TODO: Impersonation system is not available yet!
                 //ImpersonatorTenantId = AbpSession.ImpersonatorTenantId,
-                ServiceName = type != null
-                    ? type.FullName
-                    : "",
-                MethodName = method.Name,
-                Parameters = SerializeConvertArguments(arguments),
                 ExecutionTime = Clock.Now
             };
 
@@ -115,17 +104,39 @@ namespace Volo.Abp.Auditing
             return auditInfo;
         }
 
-        protected virtual void ExecuteContributors(AuditInfo auditInfo)
+        public virtual AuditLogActionInfo CreateAuditLogAction(Type type, MethodInfo method, object[] arguments)
+        {
+            return CreateAuditLogAction(type, method, CreateArgumentsDictionary(method, arguments));
+        }
+
+        public virtual AuditLogActionInfo CreateAuditLogAction(Type type, MethodInfo method, IDictionary<string, object> arguments)
+        {
+            var actionInfo = new AuditLogActionInfo
+            {
+                ServiceName = type != null
+                    ? type.FullName
+                    : "",
+                MethodName = method.Name,
+                Parameters = SerializeConvertArguments(arguments),
+                ExecutionTime = Clock.Now
+            };
+
+            //TODO Execute contributors
+
+            return actionInfo;
+        }
+
+        protected virtual void ExecuteContributors(AuditLogInfo auditLogInfo)
         {
             using (var scope = ServiceProvider.CreateScope())
             {
-                var context = new AuditInfoContributionContext(scope.ServiceProvider, auditInfo);
+                var context = new AuditLogContributionContext(scope.ServiceProvider, auditLogInfo);
 
                 foreach (var contributor in Options.Contributors)
                 {
                     try
                     {
-                        contributor.Contribute(context);
+                        contributor.ContributeAsync(context);
                     }
                     catch (Exception ex)
                     {
@@ -133,16 +144,6 @@ namespace Volo.Abp.Auditing
                     }
                 }
             }
-        }
-
-        public virtual void Save(AuditInfo auditInfo)
-        {
-            AuditingStore.Save(auditInfo);
-        }
-
-        public virtual async Task SaveAsync(AuditInfo auditInfo)
-        {
-            await AuditingStore.SaveAsync(auditInfo);
         }
 
         protected virtual string SerializeConvertArguments(IDictionary<string, object> arguments)

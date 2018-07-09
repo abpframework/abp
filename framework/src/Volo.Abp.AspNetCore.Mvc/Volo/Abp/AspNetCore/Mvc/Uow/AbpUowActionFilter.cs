@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Options;
+using Volo.Abp.AspNetCore.Uow;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Uow;
 
@@ -11,7 +12,6 @@ namespace Volo.Abp.AspNetCore.Mvc.Uow
 {
     public class AbpUowActionFilter : IAsyncActionFilter, ITransientDependency
     {
-        public const string UnitOfWorkReservationName = "_AbpActionUnitOfWork";
 
         private readonly IUnitOfWorkManager _unitOfWorkManager;
         private readonly UnitOfWorkDefaultOptions _defaultOptions;
@@ -47,7 +47,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Uow
             var options = CreateOptions(context, unitOfWorkAttr);
 
             //Trying to begin a reserved UOW by AbpUnitOfWorkMiddleware
-            if (_unitOfWorkManager.TryBeginReserved(UnitOfWorkReservationName, options))
+            if (_unitOfWorkManager.TryBeginReserved(AbpUnitOfWorkMiddleware.UnitOfWorkReservationName, options))
             {
                 var result = await next();
                 if (!Succeed(result))

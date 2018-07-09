@@ -10,27 +10,21 @@ namespace Volo.Abp.Auditing
     public class AuditingInterceptor : AbpInterceptor, ITransientDependency
     {
         private readonly IAuditingHelper _auditingHelper;
+        private readonly IAuditingManager _auditingManager;
 
-        public AuditingInterceptor(IAuditingHelper auditingHelper)
+        public AuditingInterceptor(IAuditingHelper auditingHelper, IAuditingManager auditingManager)
         {
             _auditingHelper = auditingHelper;
+            _auditingManager = auditingManager;
         }
 
         public override void Intercept(IAbpMethodInvocation invocation)
         {
-            if (AbpCrossCuttingConcerns.IsApplied(invocation.TargetObject, AbpCrossCuttingConcerns.Auditing))
+            if (!ShouldIntercept(invocation, out var auditLog, out var auditLogAction))
             {
                 invocation.Proceed();
                 return;
             }
-
-            if (!_auditingHelper.ShouldSaveAudit(invocation.Method))
-            {
-                invocation.Proceed();
-                return;
-            }
-
-            var auditInfo = _auditingHelper.CreateAuditInfo(invocation.TargetObject.GetType(), invocation.Method, invocation.Arguments);
 
             var stopwatch = Stopwatch.StartNew();
 
@@ -40,34 +34,24 @@ namespace Volo.Abp.Auditing
             }
             catch (Exception ex)
             {
-                auditInfo.Exception = ex;
+                auditLog.Exceptions.Add(ex);
                 throw;
             }
             finally
             {
                 stopwatch.Stop();
-                auditInfo.ExecutionDuration = Convert.ToInt32(stopwatch.Elapsed.TotalMilliseconds);
-                _auditingHelper.Save(auditInfo);
+                auditLogAction.ExecutionDuration = Convert.ToInt32(stopwatch.Elapsed.TotalMilliseconds);
+                auditLog.Actions.Add(auditLogAction);
             }
         }
 
         public override async Task InterceptAsync(IAbpMethodInvocation invocation)
         {
-            //Try to reduce duplication with Intercept
-
-            if (AbpCrossCuttingConcerns.IsApplied(invocation.TargetObject, AbpCrossCuttingConcerns.Auditing))
+            if (!ShouldIntercept(invocation, out var auditLog, out var auditLogAction))
             {
-                await invocation.ProceedAsync();
+                invocation.Proceed();
                 return;
             }
-
-            if (!_auditingHelper.ShouldSaveAudit(invocation.Method))
-            {
-                await invocation.ProceedAsync();
-                return;
-            }
-
-            var auditInfo = _auditingHelper.CreateAuditInfo(invocation.TargetObject.GetType(), invocation.Method, invocation.Arguments);
 
             var stopwatch = Stopwatch.StartNew();
 
@@ -77,14 +61,44 @@ namespace Volo.Abp.Auditing
             }
             catch (Exception ex)
             {
-                auditInfo.Exception = ex;
+                auditLog.Exceptions.Add(ex);
+                throw;
             }
             finally
             {
                 stopwatch.Stop();
-                auditInfo.ExecutionDuration = Convert.ToInt32(stopwatch.Elapsed.TotalMilliseconds);
-                await _auditingHelper.SaveAsync(auditInfo);
+                auditLogAction.ExecutionDuration = Convert.ToInt32(stopwatch.Elapsed.TotalMilliseconds);
+                auditLog.Actions.Add(auditLogAction);
             }
+        }
+
+        protected virtual bool ShouldIntercept(IAbpMethodInvocation invocation, out AuditLogInfo auditLog, out AuditLogActionInfo auditLogAction)
+        {
+            auditLog = null;
+            auditLogAction = null;
+
+            if (AbpCrossCuttingConcerns.IsApplied(invocation.TargetObject, AbpCrossCuttingConcerns.Auditing))
+            {
+                return false;
+            }
+
+            var auditLogScope = _auditingManager.Current;
+            if (auditLogScope == null)
+            {
+                return false;
+            }
+
+            if (!_auditingHelper.ShouldSaveAudit(invocation.Method))
+            {
+                return false;
+            }
+
+            auditLog = auditLogScope.Log;
+            auditLogAction = _auditingHelper.CreateAuditLogAction(
+                invocation.TargetObject.GetType(), invocation.Method, invocation.Arguments
+            );
+
+            return true;
         }
     }
 }

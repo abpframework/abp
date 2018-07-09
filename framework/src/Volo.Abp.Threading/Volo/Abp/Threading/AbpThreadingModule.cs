@@ -8,6 +8,7 @@ namespace Volo.Abp.Threading
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.AddSingleton<ICancellationTokenProvider>(NullCancellationTokenProvider.Instance);
+            context.Services.AddSingleton(typeof(IAmbientScopeProvider<>), typeof(AmbientDataContextAmbientScopeProvider<>));
 
             context.Services.AddAssemblyOf<AbpThreadingModule>();
         }

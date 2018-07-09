@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Primitives;
 using Microsoft.Net.Http.Headers;
-using Volo.Abp.AspNetCore.Mvc.Uow;
+using Volo.Abp.AspNetCore.Uow;
 using Volo.Abp.Http;
 using Volo.Abp.Json;
 
