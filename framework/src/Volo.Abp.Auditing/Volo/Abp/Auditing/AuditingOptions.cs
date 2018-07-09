@@ -11,12 +11,19 @@ namespace Volo.Abp.Auditing
 
         public bool IsEnabledForAnonymousUsers { get; set; }
 
+        public List<IAuditInfoContributor> Contributors { get; }
+
         public List<Type> IgnoredTypes { get; }
 
         public AuditingOptions()
         {
             IsEnabled = true;
             IsEnabledForAnonymousUsers = true;
+
+            Contributors = new List<IAuditInfoContributor>
+            {
+                new ClientInfoAuditInfoContributor()
+            };
 
             IgnoredTypes = new List<Type>
             {

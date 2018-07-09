@@ -1,9 +1,10 @@
 ﻿using System;
-using Castle.Core.Logging;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Auditing;
 
-namespace Volo.Abp.AspNetCore.Mvc.Auditing
+namespace Microsoft.AspNetCore.Auditing
 {
     public class HttpContextClientInfoProvider : IClientInfoProvider
     {
@@ -13,7 +14,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Auditing
 
         public string ComputerName => GetComputerName();
 
-        public ILogger Logger { get; set; }
+        public ILogger<HttpContextClientInfoProvider> Logger { get; set; }
 
         private readonly IHttpContextAccessor _httpContextAccessor;
 
@@ -27,7 +28,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Auditing
             _httpContextAccessor = httpContextAccessor;
             _httpContext = httpContextAccessor.HttpContext;
 
-            Logger = NullLogger.Instance;
+            Logger = NullLogger<HttpContextClientInfoProvider>.Instance;
         }
 
         protected virtual string GetBrowserInfo()
@@ -45,7 +46,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Auditing
             }
             catch (Exception ex)
             {
-                Logger.Warn(ex.ToString());
+                Logger.LogException(ex, LogLevel.Warning);
             }
 
             return null;

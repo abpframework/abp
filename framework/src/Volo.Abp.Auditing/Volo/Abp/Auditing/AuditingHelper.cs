@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
@@ -19,21 +20,20 @@ namespace Volo.Abp.Auditing
         protected ICurrentUser CurrentUser { get; }
         protected ICurrentTenant CurrentTenant { get; }
         protected IClock Clock { get; }
-        protected IAuditInfoProvider AuditInfoProvider;
         protected AuditingOptions Options;
         protected IAuditSerializer AuditSerializer;
+        protected IServiceProvider ServiceProvider;
 
         public AuditingHelper(
-            IAuditInfoProvider auditInfoProvider,
             IAuditSerializer auditSerializer,
             IOptions<AuditingOptions> options,
             ICurrentUser currentUser,
             ICurrentTenant currentTenant,
             IClock clock,
             IAuditingStore auditingStore,
-            ILogger<AuditingHelper> logger)
+            ILogger<AuditingHelper> logger,
+            IServiceProvider serviceProvider)
         {
-            AuditInfoProvider = auditInfoProvider;
             Options = options.Value;
             AuditSerializer = auditSerializer;
             CurrentUser = currentUser;
@@ -42,6 +42,7 @@ namespace Volo.Abp.Auditing
             AuditingStore = auditingStore;
 
             Logger = logger;
+            ServiceProvider = serviceProvider;
         }
 
         public virtual bool ShouldSaveAudit(MethodInfo methodInfo, bool defaultValue = false)
@@ -109,16 +110,29 @@ namespace Volo.Abp.Auditing
                 ExecutionTime = Clock.Now
             };
 
-            try
-            {
-                AuditInfoProvider.Fill(auditInfo);
-            }
-            catch (Exception ex)
-            {
-                Logger.LogException(ex, LogLevel.Warning);
-            }
+            ExecuteContributors(auditInfo);
 
             return auditInfo;
+        }
+
+        protected virtual void ExecuteContributors(AuditInfo auditInfo)
+        {
+            using (var scope = ServiceProvider.CreateScope())
+            {
+                var context = new AuditInfoContributionContext(scope.ServiceProvider, auditInfo);
+
+                foreach (var contributor in Options.Contributors)
+                {
+                    try
+                    {
+                        contributor.Contribute(context);
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.LogException(ex, LogLevel.Warning);
+                    }
+                }
+            }
         }
 
         public virtual void Save(AuditInfo auditInfo)
