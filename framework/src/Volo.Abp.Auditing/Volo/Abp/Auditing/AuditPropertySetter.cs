@@ -105,7 +105,7 @@ namespace Volo.Abp.Auditing
 
         private void SetLastModifierId(object targetObject)
         {
-            if (!(targetObject is IModificationAudited modificationAuditedObject))
+            if (!(targetObject is IModificationAuditedObject modificationAuditedObject))
             {
                 return;
             }
@@ -150,7 +150,7 @@ namespace Volo.Abp.Auditing
 
         private void SetDeleterId(object targetObject)
         {
-            if (!(targetObject is IDeletionAudited deletionAuditedObject))
+            if (!(targetObject is IDeletionAuditedObject deletionAuditedObject))
             {
                 return;
             }

@@ -56,7 +56,6 @@ namespace Volo.Abp.AspNetCore.Mvc.Auditing
                 {
                     stopwatch.Stop();
                     auditInfo.ExecutionDuration = Convert.ToInt32(stopwatch.Elapsed.TotalMilliseconds);
-                    auditInfo.ServiceName = "AbpAuditActionFilter->" + auditInfo.ServiceName;
                     await _auditingHelper.SaveAsync(auditInfo);
                 }
             }

@@ -5,7 +5,7 @@ namespace Volo.Abp.Auditing
     /// <summary>
     /// This interface can be implemented to store deletion information (who delete and when deleted).
     /// </summary>
-    public interface IDeletionAudited : IHasDeletionTime
+    public interface IDeletionAuditedObject : IHasDeletionTime
     {
         /// <summary>
         /// Id of the deleter user.
@@ -14,10 +14,10 @@ namespace Volo.Abp.Auditing
     }
 
     /// <summary>
-    /// Extends <see cref="IDeletionAudited"/> to add user navigation propery.
+    /// Extends <see cref="IDeletionAuditedObject"/> to add user navigation propery.
     /// </summary>
     /// <typeparam name="TUser">Type of the user</typeparam>
-    public interface IDeletionAudited<TUser> : IDeletionAudited
+    public interface IDeletionAuditedObject<TUser> : IDeletionAuditedObject
     {
         /// <summary>
         /// Reference to the deleter user.

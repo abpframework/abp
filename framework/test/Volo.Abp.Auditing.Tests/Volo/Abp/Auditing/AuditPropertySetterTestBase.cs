@@ -48,7 +48,7 @@ namespace Volo.Abp.Auditing
             
         }
 
-        public class MyAuditedObject : IMultiTenant, IFullAudited
+        public class MyAuditedObject : IMultiTenant, IFullAuditedObject
         {
             public Guid? TenantId { get; set; }
             public DateTime CreationTime { get; set; }

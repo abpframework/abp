@@ -16,6 +16,22 @@ namespace Volo.Abp.Auditing
 
         private static bool ShouldIntercept(Type type)
         {
+            if (ShouldAuditTypeByDefault(type))
+            {
+                return true;
+            }
+
+            if (type.GetMethods().Any(m => m.IsDefined(typeof(AuditedAttribute), true)))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        //TODO: Move to a better place
+        internal static bool ShouldAuditTypeByDefault(Type type)
+        {
             if (type.IsDefined(typeof(AuditedAttribute), true))
             {
                 return true;
@@ -27,11 +43,6 @@ namespace Volo.Abp.Auditing
             }
 
             if (typeof(IAuditingEnabled).IsAssignableFrom(type))
-            {
-                return true;
-            }
-
-            if (type.GetMethods().Any(m => m.IsDefined(typeof(AuditedAttribute), true)))
             {
                 return true;
             }

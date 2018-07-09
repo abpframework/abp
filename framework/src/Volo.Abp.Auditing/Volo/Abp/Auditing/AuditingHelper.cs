@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
@@ -15,9 +14,8 @@ namespace Volo.Abp.Auditing
 {
     public class AuditingHelper : IAuditingHelper, ITransientDependency
     {
-        public ILogger<AuditingHelper> Logger { get; set; }
-
-        public IAuditingStore AuditingStore { get; set; }
+        protected ILogger<AuditingHelper> Logger { get; }
+        protected IAuditingStore AuditingStore { get; }
         protected ICurrentUser CurrentUser { get; }
         protected ICurrentTenant CurrentTenant { get; }
         protected IClock Clock { get; }
@@ -31,7 +29,9 @@ namespace Volo.Abp.Auditing
             IOptions<AuditingOptions> options,
             ICurrentUser currentUser,
             ICurrentTenant currentTenant,
-            IClock clock)
+            IClock clock,
+            IAuditingStore auditingStore,
+            ILogger<AuditingHelper> logger)
         {
             AuditInfoProvider = auditInfoProvider;
             Options = options.Value;
@@ -39,11 +39,12 @@ namespace Volo.Abp.Auditing
             CurrentUser = currentUser;
             CurrentTenant = currentTenant;
             Clock = clock;
+            AuditingStore = auditingStore;
 
-            Logger = NullLogger<AuditingHelper>.Instance;
+            Logger = logger;
         }
 
-        public bool ShouldSaveAudit(MethodInfo methodInfo, bool defaultValue = false)
+        public virtual bool ShouldSaveAudit(MethodInfo methodInfo, bool defaultValue = false)
         {
             if (!Options.IsEnabled)
             {
@@ -78,17 +79,7 @@ namespace Volo.Abp.Auditing
             var classType = methodInfo.DeclaringType;
             if (classType != null)
             {
-                if (classType.IsDefined(typeof(AuditedAttribute), true))
-                {
-                    return true;
-                }
-
-                if (classType.IsDefined(typeof(DisableAuditingAttribute), true))
-                {
-                    return false;
-                }
-
-                if (typeof(IAuditingEnabled).IsAssignableFrom(classType))
+                if (AuditingInterceptorRegistrar.ShouldAuditTypeByDefault(classType))
                 {
                     return true;
                 }
@@ -97,12 +88,12 @@ namespace Volo.Abp.Auditing
             return defaultValue;
         }
 
-        public AuditInfo CreateAuditInfo(Type type, MethodInfo method, object[] arguments)
+        public virtual AuditInfo CreateAuditInfo(Type type, MethodInfo method, object[] arguments)
         {
             return CreateAuditInfo(type, method, CreateArgumentsDictionary(method, arguments));
         }
 
-        public AuditInfo CreateAuditInfo(Type type, MethodInfo method, IDictionary<string, object> arguments)
+        public virtual AuditInfo CreateAuditInfo(Type type, MethodInfo method, IDictionary<string, object> arguments)
         {
             var auditInfo = new AuditInfo
             {
@@ -130,17 +121,17 @@ namespace Volo.Abp.Auditing
             return auditInfo;
         }
 
-        public void Save(AuditInfo auditInfo)
+        public virtual void Save(AuditInfo auditInfo)
         {
             AuditingStore.Save(auditInfo);
         }
 
-        public async Task SaveAsync(AuditInfo auditInfo)
+        public virtual async Task SaveAsync(AuditInfo auditInfo)
         {
             await AuditingStore.SaveAsync(auditInfo);
         }
 
-        private string SerializeConvertArguments(IDictionary<string, object> arguments)
+        protected virtual string SerializeConvertArguments(IDictionary<string, object> arguments)
         {
             try
             {
@@ -172,7 +163,7 @@ namespace Volo.Abp.Auditing
             }
         }
 
-        private static Dictionary<string, object> CreateArgumentsDictionary(MethodInfo method, object[] arguments)
+        protected virtual Dictionary<string, object> CreateArgumentsDictionary(MethodInfo method, object[] arguments)
         {
             var parameters = method.GetParameters();
             var dictionary = new Dictionary<string, object>();

@@ -4,10 +4,10 @@ using Volo.Abp.Auditing;
 namespace Volo.Abp.Domain.Entities.Auditing
 {
     /// <summary>
-    /// This class can be used to simplify implementing <see cref="ICreationAudited"/> for aggregate roots.
+    /// This class can be used to simplify implementing <see cref="ICreationAuditedObject"/> for aggregate roots.
     /// </summary>
     [Serializable]
-    public abstract class CreationAuditedAggregateRoot : AggregateRoot, ICreationAudited
+    public abstract class CreationAuditedAggregateRoot : AggregateRoot, ICreationAuditedObject
     {
         /// <inheritdoc />
         public virtual DateTime CreationTime { get; set; }
@@ -17,11 +17,11 @@ namespace Volo.Abp.Domain.Entities.Auditing
     }
 
     /// <summary>
-    /// This class can be used to simplify implementing <see cref="ICreationAudited"/> for aggregate roots.
+    /// This class can be used to simplify implementing <see cref="ICreationAuditedObject"/> for aggregate roots.
     /// </summary>
     /// <typeparam name="TKey">Type of the primary key of the entity</typeparam>
     [Serializable]
-    public abstract class CreationAuditedAggregateRoot<TKey> : AggregateRoot<TKey>, ICreationAudited
+    public abstract class CreationAuditedAggregateRoot<TKey> : AggregateRoot<TKey>, ICreationAuditedObject
     {
         /// <inheritdoc />
         public virtual DateTime CreationTime { get; set; }

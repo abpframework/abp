@@ -46,10 +46,10 @@ namespace Volo.Abp.EntityFrameworkCore.Modeling
         }
 
         public static void ConfigureDeletionAudited<T>(this EntityTypeBuilder<T> b)
-            where T : class, IDeletionAudited
+            where T : class, IDeletionAuditedObject
         {
             b.ConfigureDeletionTime();
-            b.Property(x => x.DeleterId).IsRequired(false).HasColumnName(nameof(IDeletionAudited.DeleterId));
+            b.Property(x => x.DeleterId).IsRequired(false).HasColumnName(nameof(IDeletionAuditedObject.DeleterId));
         }
 
         public static void ConfigureCreationTime<T>(this EntityTypeBuilder<T> b)
@@ -59,10 +59,10 @@ namespace Volo.Abp.EntityFrameworkCore.Modeling
         }
 
         public static void ConfigureCreationAudited<T>(this EntityTypeBuilder<T> b)
-            where T : class, ICreationAudited
+            where T : class, ICreationAuditedObject
         {
             b.ConfigureCreationTime();
-            b.Property(x => x.CreatorId).IsRequired(false).HasColumnName(nameof(ICreationAudited.CreatorId));
+            b.Property(x => x.CreatorId).IsRequired(false).HasColumnName(nameof(ICreationAuditedObject.CreatorId));
         }
 
         public static void ConfigureLastModificationTime<T>(this EntityTypeBuilder<T> b)
@@ -72,26 +72,26 @@ namespace Volo.Abp.EntityFrameworkCore.Modeling
         }
 
         public static void ConfigureModificationAudited<T>(this EntityTypeBuilder<T> b)
-            where T : class, IModificationAudited
+            where T : class, IModificationAuditedObject
         {
             b.ConfigureLastModificationTime();
-            b.Property(x => x.LastModifierId).IsRequired(false).HasColumnName(nameof(IModificationAudited.LastModifierId));
+            b.Property(x => x.LastModifierId).IsRequired(false).HasColumnName(nameof(IModificationAuditedObject.LastModifierId));
         }
 
         public static void ConfigureAudited<T>(this EntityTypeBuilder<T> b)
-            where T : class, IAudited
+            where T : class, IAuditedObject
         {
             b.ConfigureCreationAudited();
             b.ConfigureModificationAudited();
         }
 
         public static void ConfigureFullAudited<T>(this EntityTypeBuilder<T> b)
-            where T : class, IFullAudited
+            where T : class, IFullAuditedObject
         {
             b.ConfigureAudited();
             b.ConfigureDeletionAudited();
         }
 
-        //TODO: Add other interfaces (IMultiTenant, IAudited<TUser>...)
+        //TODO: Add other interfaces (IMultiTenant, IAuditedObject<TUser>...)
     }
 }

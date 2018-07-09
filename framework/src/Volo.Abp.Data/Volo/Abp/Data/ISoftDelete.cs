@@ -1,4 +1,4 @@
-﻿namespace Volo.Abp
+﻿namespace Volo.Abp //TODO: Change namespace to Volo.Abp.Data
 {
     /// <summary>
     /// Used to standardize soft deleting entities.
@@ -6,7 +6,7 @@
     /// marked as IsDeleted = true in the database,
     /// but can not be retrieved to the application normally.
     /// </summary>
-    public interface ISoftDelete //TODO: Move to another assembly?
+    public interface ISoftDelete
     {
         /// <summary>
         /// Used to mark an Entity as 'Deleted'. 

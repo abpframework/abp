@@ -4,11 +4,11 @@ using Volo.Abp.Auditing;
 namespace Volo.Abp.Application.Dtos
 {
     /// <summary>
-    /// This class can be inherited by DTO classes to implement <see cref="IAudited"/> interface.
+    /// This class can be inherited by DTO classes to implement <see cref="IAuditedObject"/> interface.
     /// </summary>
     /// <typeparam name="TUserDto">Type of the User DTO</typeparam>
     [Serializable]
-    public abstract class AuditedEntityWithUserDto<TUserDto> : AuditedEntityDto, IAudited<TUserDto>
+    public abstract class AuditedEntityWithUserDto<TUserDto> : AuditedEntityDto, IAuditedObject<TUserDto>
     {
         /// <inheritdoc />
         public TUserDto Creator { get; set; }
@@ -18,12 +18,12 @@ namespace Volo.Abp.Application.Dtos
     }
 
     /// <summary>
-    /// This class can be inherited by DTO classes to implement <see cref="IAudited"/> interface.
+    /// This class can be inherited by DTO classes to implement <see cref="IAuditedObject"/> interface.
     /// </summary>
     /// <typeparam name="TPrimaryKey">Type of primary key</typeparam>
     /// <typeparam name="TUserDto">Type of the User DTO</typeparam>
     [Serializable]
-    public abstract class AuditedEntityWithUserDto<TPrimaryKey, TUserDto> : AuditedEntityDto<TPrimaryKey>, IAudited<TUserDto>
+    public abstract class AuditedEntityWithUserDto<TPrimaryKey, TUserDto> : AuditedEntityDto<TPrimaryKey>, IAuditedObject<TUserDto>
     {
         /// <inheritdoc />
         public TUserDto Creator { get; set; }

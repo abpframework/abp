@@ -4,10 +4,10 @@ using Volo.Abp.Auditing;
 namespace Volo.Abp.Domain.Entities.Auditing
 {
     /// <summary>
-    /// This class can be used to simplify implementing <see cref="IAudited"/>.
+    /// This class can be used to simplify implementing <see cref="IAuditedObject"/>.
     /// </summary>
     [Serializable]
-    public abstract class AuditedEntity : CreationAuditedEntity, IAudited
+    public abstract class AuditedEntity : CreationAuditedEntity, IAuditedObject
     {
         /// <inheritdoc />
         public virtual DateTime? LastModificationTime { get; set; }
@@ -17,11 +17,11 @@ namespace Volo.Abp.Domain.Entities.Auditing
     }
 
     /// <summary>
-    /// This class can be used to simplify implementing <see cref="IAudited"/>.
+    /// This class can be used to simplify implementing <see cref="IAuditedObject"/>.
     /// </summary>
     /// <typeparam name="TKey">Type of the primary key of the entity</typeparam>
     [Serializable]
-    public abstract class AuditedEntity<TKey> : CreationAuditedEntity<TKey>, IAudited
+    public abstract class AuditedEntity<TKey> : CreationAuditedEntity<TKey>, IAuditedObject
     {
         /// <inheritdoc />
         public virtual DateTime? LastModificationTime { get; set; }

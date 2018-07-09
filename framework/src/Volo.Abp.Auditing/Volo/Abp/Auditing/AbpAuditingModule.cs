@@ -7,7 +7,6 @@ using Volo.Abp.Timing;
 
 namespace Volo.Abp.Auditing
 {
-    //TODO: Can we remove AbpDataModule dependency since it only contains ISoftDelete related to auditing module!
     [DependsOn(
         typeof(AbpDataModule),
         typeof(AbpTimingModule),

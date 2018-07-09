@@ -4,10 +4,10 @@ using Volo.Abp.Auditing;
 namespace Volo.Abp.Domain.Entities.Auditing
 {
     /// <summary>
-    /// Implements <see cref="IFullAudited"/> to be a base class for full-audited aggregate roots.
+    /// Implements <see cref="IFullAuditedObject"/> to be a base class for full-audited aggregate roots.
     /// </summary>
     [Serializable]
-    public abstract class FullAuditedAggregateRoot : AuditedAggregateRoot, IFullAudited
+    public abstract class FullAuditedAggregateRoot : AuditedAggregateRoot, IFullAuditedObject
     {
         /// <inheritdoc />
         public virtual bool IsDeleted { get; set; }
@@ -20,11 +20,11 @@ namespace Volo.Abp.Domain.Entities.Auditing
     }
 
     /// <summary>
-    /// Implements <see cref="IFullAudited"/> to be a base class for full-audited aggregate roots.
+    /// Implements <see cref="IFullAuditedObject"/> to be a base class for full-audited aggregate roots.
     /// </summary>
     /// <typeparam name="TKey">Type of the primary key of the entity</typeparam>
     [Serializable]
-    public abstract class FullAuditedAggregateRoot<TKey> : AuditedAggregateRoot<TKey>, IFullAudited
+    public abstract class FullAuditedAggregateRoot<TKey> : AuditedAggregateRoot<TKey>, IFullAuditedObject
     {
         /// <inheritdoc />
         public virtual bool IsDeleted { get; set; }
