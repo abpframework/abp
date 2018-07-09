@@ -1,0 +1,24 @@
+﻿using MongoDB.Driver;
+using Volo.Abp.Data;
+using Volo.Abp.MongoDB;
+
+namespace Volo.Abp.AuditLogging.MongoDB
+{
+    [ConnectionStringName("AbpAuditLogging")]
+    public class AuditLoggingMongoDbContext : AbpMongoDbContext, IAuditLoggingMongoDbContext
+    {
+        public static string CollectionPrefix { get; set; } = AbpAuditLoggingConsts.DefaultDbTablePrefix;
+
+        public IMongoCollection<AuditLog> AuditLogs => Collection<AuditLog>();
+
+        protected override void CreateModel(IMongoModelBuilder modelBuilder)
+        {
+            base.CreateModel(modelBuilder);
+
+            modelBuilder.ConfigureSettingManagement(options =>
+            {
+                options.CollectionPrefix = CollectionPrefix;
+            });
+        }
+    }
+}
