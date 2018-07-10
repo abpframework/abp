@@ -30,10 +30,7 @@ namespace Volo.Abp.Auditing
             IsEnabled = true;
             IsEnabledForAnonymousUsers = true;
 
-            Contributors = new List<AuditLogContributor>
-            {
-                new ClientInfoAuditLogContributor()
-            };
+            Contributors = new List<AuditLogContributor>();
 
             IgnoredTypes = new List<Type>
             {

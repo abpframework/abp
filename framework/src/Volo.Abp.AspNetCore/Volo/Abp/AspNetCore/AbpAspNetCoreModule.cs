@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.AspNetCore.Auditing;
 using Volo.Abp.Auditing;
 using Volo.Abp.Authorization;
 using Volo.Abp.Domain;
@@ -30,12 +31,14 @@ namespace Volo.Abp.AspNetCore
     {
         public void ConfigureServices(ServiceConfigurationContext context)
         {
+            context.Services.Configure<AbpAuditingOptions>(options =>
+            {
+                options.Contributors.Add(new AspNetCoreAuditLogContributor());
+            });
+
             AddAspNetServices(context.Services);
-
             context.Services.AddObjectAccessor<IApplicationBuilder>();
-
             context.Services.AddConfiguration();
-
             context.Services.AddAssemblyOf<AbpAspNetCoreModule>();
         }
 
