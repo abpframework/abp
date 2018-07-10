@@ -34,9 +34,7 @@ namespace Volo.Abp.AuditLogging
                 //Exceptions = new Exceptions("something went wrong.")
             };
 
-            await Assert.ThrowsAsync<AbpException>(
-                async () => await _auditingStore.SaveAsync(auditLog)
-            );
+            await _auditingStore.SaveAsync(auditLog);
         }
     }
 }

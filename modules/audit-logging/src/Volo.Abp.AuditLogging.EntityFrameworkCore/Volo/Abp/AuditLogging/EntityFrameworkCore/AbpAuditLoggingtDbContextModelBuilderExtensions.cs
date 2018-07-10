@@ -1,7 +1,5 @@
 ﻿using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
-using Volo.Abp;
-using Volo.Abp.EntityFrameworkCore.Modeling;
 
 namespace Volo.Abp.AuditLogging.EntityFrameworkCore
 {
@@ -23,15 +21,15 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
             {
                 b.ToTable(tablePrefix + "AuditLogs", schema);
                 
-                b.Property(x => x.ClientIpAddress).HasMaxLength(AuditLogConsts.MaxClientIpAddressLength);
-                b.Property(x => x.ClientName).HasMaxLength(AuditLogConsts.MaxClientNameLength);
+                b.Property(x => x.ClientIpAddress).HasMaxLength(AuditLogConsts.MaxClientIpAddressLength).HasColumnName(nameof(AuditLog.ClientIpAddress));
+                b.Property(x => x.ClientName).HasMaxLength(AuditLogConsts.MaxClientNameLength); //TODO: Add HasColumnNames
                 b.Property(x => x.BrowserInfo).HasMaxLength(AuditLogConsts.MaxBrowserInfoLength);
                 b.Property(x => x.Exceptions).HasMaxLength(AuditLogConsts.MaxExceptionLength);
 
-                b.HasIndex(x => new { x.TenantId, x.UserId, x.ExecutionTime});
-
                 b.HasOne<EntityChange>().WithMany().HasForeignKey(x => x.EntityChanges);
-                b.HasOne<AuditLogAction>().WithMany().HasForeignKey(x => x.Actions);
+                b.HasMany<AuditLogAction>().WithOne().HasForeignKey(x => x.);
+
+                b.HasIndex(x => new { x.TenantId, x.UserId, x.ExecutionTime });
             });
 
             builder.Entity<EntityChange>(b =>

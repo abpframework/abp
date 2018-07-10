@@ -10,6 +10,5 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
             : base(dbContextProvider)
         {
         }
-
     }
 }

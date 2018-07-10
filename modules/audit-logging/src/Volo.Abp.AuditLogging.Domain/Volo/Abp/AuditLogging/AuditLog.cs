@@ -4,6 +4,7 @@ using System.Linq;
 using Volo.Abp.Auditing;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.AuditLogging
@@ -41,8 +42,9 @@ namespace Volo.Abp.AuditLogging
 
         }
 
-        public AuditLog(AuditLogInfo auditInfo)
+        public AuditLog(IGuidGenerator guidGenerator, AuditLogInfo auditInfo)
         {
+            Id = guidGenerator.Create();
             TenantId = auditInfo.TenantId;
             UserId = auditInfo.UserId;
             ExecutionTime = auditInfo.ExecutionTime;
@@ -53,8 +55,8 @@ namespace Volo.Abp.AuditLogging
             ImpersonatorUserId = auditInfo.ImpersonatorUserId;
             ImpersonatorTenantId = auditInfo.ImpersonatorTenantId;
             ExtraProperties = auditInfo.ExtraProperties;
-            EntityChanges = auditInfo.EntityChanges.Select(e=> new EntityChange(e)).ToList();
-            Actions = auditInfo.Actions.Select(e=> new AuditLogAction(e)).ToList();
+            EntityChanges = auditInfo.EntityChanges.Select(e => new EntityChange(e)).ToList();
+            Actions = auditInfo.Actions.Select(e => new AuditLogAction(guidGenerator.Create(), Id, e)).ToList();
             Exceptions = auditInfo.Exceptions.Select(e => e.ToString()).ToList();
         }
     }

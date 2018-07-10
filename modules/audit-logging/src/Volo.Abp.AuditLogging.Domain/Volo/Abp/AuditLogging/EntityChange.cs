@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using Volo.Abp.Auditing;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.MultiTenancy;
@@ -9,17 +8,19 @@ namespace Volo.Abp.AuditLogging
 {
     public class EntityChange : Entity<Guid>, IMultiTenant
     {
-        public virtual Guid? TenantId { get; set; }
+        public virtual Guid AuditLogId { get; protected set; }
 
-        public virtual DateTime ChangeTime { get; set; }
+        public virtual Guid? TenantId { get; protected set; }
 
-        public virtual EntityChangeType ChangeType { get; set; }
+        public virtual DateTime ChangeTime { get; protected set; }
 
-        public virtual string EntityId { get; set; }
+        public virtual EntityChangeType ChangeType { get; protected set; }
 
-        public virtual string EntityTypeFullName { get; set; }
+        public virtual string EntityId { get; protected set; }
 
-        public ICollection<EntityPropertyChangeInfo> PropertyChanges { get; set; }
+        public virtual string EntityTypeFullName { get; protected set; }
+
+        public ICollection<EntityPropertyChangeInfo> PropertyChanges { get; protected set; }
 
         protected EntityChange()
         {
@@ -33,7 +34,7 @@ namespace Volo.Abp.AuditLogging
             ChangeType = entityChangeInfo.ChangeType;
             EntityId = entityChangeInfo.EntityId;
             EntityTypeFullName = entityChangeInfo.EntityTypeFullName;
-            PropertyChanges = entityChangeInfo.PropertyChanges;
+            PropertyChanges = entityChangeInfo.PropertyChanges; //Copy instead of assiging
         }
     }
 }
