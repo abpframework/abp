@@ -9,5 +9,7 @@
         public const int MaxBrowserInfoLength = 512;
 
         public const int MaxExceptionsLength = 4000;
+
+        public const int MaxCommentsLength = 256;
     }
 }

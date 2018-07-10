@@ -31,6 +31,8 @@ namespace Volo.Abp.AuditLogging
 
         public virtual string Exceptions { get; protected set; }
 
+        public virtual string Comments { get; protected set; }
+
         public virtual Dictionary<string, object> ExtraProperties { get; protected set; }
 
         public virtual ICollection<EntityChange> EntityChanges { get; protected set; }
@@ -58,6 +60,7 @@ namespace Volo.Abp.AuditLogging
             EntityChanges = auditInfo.EntityChanges.Select(e => new EntityChange(guidGenerator, Id, e)).ToList();
             Actions = auditInfo.Actions.Select(e => new AuditLogAction(guidGenerator.Create(), Id, e)).ToList();
             Exceptions = auditInfo.Exceptions.JoinAsString(Environment.NewLine);
+            Comments = auditInfo.Comments.JoinAsString(Environment.NewLine);
         }
     }
 }
