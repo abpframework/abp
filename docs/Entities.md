@@ -45,10 +45,17 @@ public class UserRole : Entity
     {
             
     }
+    
+    public override object[] GetKeys()
+    {
+        return new object[] { UserId, RoleId };
+    }
 }
 ````
 
 For the example above, the composite key is composed of `UserId` and `RoleId`. For a relational database, it is the composite primary key of the related table.
+
+Entities with composite keys should implement the `GetKeys()` method as shown above.
 
 Notice that you also need to define keys of the entity in your **object-to-relational mapping** (ORM) configuration.
 
