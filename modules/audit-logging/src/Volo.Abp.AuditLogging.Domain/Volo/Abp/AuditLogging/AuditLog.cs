@@ -38,6 +38,8 @@ namespace Volo.Abp.AuditLogging
 
         public virtual string Comments { get; protected set; }
 
+        public int? HttpStatusCode { get; set; }
+
         public virtual Dictionary<string, object> ExtraProperties { get; protected set; }
 
         public virtual ICollection<EntityChange> EntityChanges { get; protected set; }
@@ -61,6 +63,7 @@ namespace Volo.Abp.AuditLogging
             BrowserInfo = auditInfo.BrowserInfo;
             HttpMethod = auditInfo.HttpMethod;
             Url = auditInfo.Url;
+            HttpStatusCode = auditInfo.HttpStatusCode;
             ImpersonatorUserId = auditInfo.ImpersonatorUserId;
             ImpersonatorTenantId = auditInfo.ImpersonatorTenantId;
             ExtraProperties = auditInfo.ExtraProperties.ToDictionary(pair => pair.Key, pair => pair.Value);
