@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Auditing;
@@ -29,7 +30,7 @@ namespace Volo.Abp.AspNetCore.Auditing
 
         public async Task Invoke(HttpContext httpContext)
         {
-            if (!ShouldWriteAuditLog())
+            if (!ShouldWriteAuditLog(httpContext))
             {
                 await _next(httpContext);
                 return;
@@ -48,7 +49,7 @@ namespace Volo.Abp.AspNetCore.Auditing
             }
         }
 
-        private bool ShouldWriteAuditLog()
+        private bool ShouldWriteAuditLog(HttpContext httpContext)
         {
             if (!Options.IsEnabled)
             {
@@ -56,6 +57,12 @@ namespace Volo.Abp.AspNetCore.Auditing
             }
 
             if (!Options.IsEnabledForAnonymousUsers && !CurrentUser.IsAuthenticated)
+            {
+                return false;
+            }
+
+            if (!Options.IsEnabledForGetRequests && 
+                string.Equals(httpContext.Request.Method, HttpMethods.Get, StringComparison.OrdinalIgnoreCase))
             {
                 return false;
             }

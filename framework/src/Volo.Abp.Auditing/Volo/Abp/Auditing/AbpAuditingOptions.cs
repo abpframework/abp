@@ -24,6 +24,12 @@ namespace Volo.Abp.Auditing
         public List<Type> IgnoredTypes { get; }
 
         public IEntityHistorySelectorList EntityHistorySelectors { get; }
+
+        //TODO: Move this to asp.net core layer or convert it to a more dynamic strategy?
+        /// <summary>
+        /// Default: false.
+        /// </summary>
+        public bool IsEnabledForGetRequests { get; set; }
         
         public AbpAuditingOptions()
         {
