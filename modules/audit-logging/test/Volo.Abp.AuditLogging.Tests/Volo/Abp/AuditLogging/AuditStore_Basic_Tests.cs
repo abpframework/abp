@@ -27,11 +27,7 @@ namespace Volo.Abp.AuditLogging
                 ExecutionDuration = 42,
                 ClientIpAddress = "153.1.7.61",
                 ClientName = "MyDesktop",
-                BrowserInfo = "Chrome",
-                //ServiceName = "SampleService2",
-                //MethodName = "SampleMethod2",
-                //Parameters = "SampleParameter",
-                //Exceptions = new Exceptions("something went wrong.")
+                BrowserInfo = "Chrome"
             };
 
             await _auditingStore.SaveAsync(auditLog);

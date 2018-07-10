@@ -8,6 +8,10 @@ using Volo.Abp.Modularity;
 
 namespace Volo.Abp.AuditLogging.EntityFrameworkCore
 {
+    [DependsOn(
+        typeof(AbpAuditLoggingTestBaseModule),
+        typeof(AbpAuditLoggingEntityFrameworkCoreModule)
+    )]
     public class AbpAuditLoggingEntityFrameworkCoreTestModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)

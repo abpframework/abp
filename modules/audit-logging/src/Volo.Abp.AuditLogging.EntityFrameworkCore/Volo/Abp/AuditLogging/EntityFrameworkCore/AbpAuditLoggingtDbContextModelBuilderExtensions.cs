@@ -1,5 +1,6 @@
 ﻿using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
+using Volo.Abp.EntityFrameworkCore.Modeling;
 
 namespace Volo.Abp.AuditLogging.EntityFrameworkCore
 {
@@ -22,12 +23,19 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
                 b.ToTable(tablePrefix + "AuditLogs", schema);
                 
                 b.Property(x => x.ClientIpAddress).HasMaxLength(AuditLogConsts.MaxClientIpAddressLength).HasColumnName(nameof(AuditLog.ClientIpAddress));
-                b.Property(x => x.ClientName).HasMaxLength(AuditLogConsts.MaxClientNameLength); //TODO: Add HasColumnNames
-                b.Property(x => x.BrowserInfo).HasMaxLength(AuditLogConsts.MaxBrowserInfoLength);
-                b.Property(x => x.Exceptions).HasMaxLength(AuditLogConsts.MaxExceptionLength);
+                b.Property(x => x.ClientName).HasMaxLength(AuditLogConsts.MaxClientNameLength).HasColumnName(nameof(AuditLog.ClientName)); 
+                b.Property(x => x.BrowserInfo).HasMaxLength(AuditLogConsts.MaxBrowserInfoLength).HasColumnName(nameof(AuditLog.BrowserInfo));
+                b.Property(x => x.Exceptions).HasMaxLength(AuditLogConsts.MaxExceptionsLength).HasColumnName(nameof(AuditLog.Exceptions));
+                b.Property(x => x.ExecutionDuration).HasColumnName(nameof(AuditLog.ExecutionDuration));
+                b.Property(x => x.ImpersonatorTenantId).HasColumnName(nameof(AuditLog.ImpersonatorTenantId));
+                b.Property(x => x.ImpersonatorUserId).HasColumnName(nameof(AuditLog.ImpersonatorUserId));
+                b.Property(x => x.UserId).HasColumnName(nameof(AuditLog.UserId));
+                b.Property(x => x.TenantId).HasColumnName(nameof(AuditLog.TenantId));
 
-                b.HasOne<EntityChange>().WithMany().HasForeignKey(x => x.EntityChanges);
-                b.HasMany<AuditLogAction>().WithOne().HasForeignKey(x => x.);
+                b.ConfigureExtraProperties();
+
+                b.HasMany<AuditLogAction>().WithOne().HasForeignKey(x => x.AuditLogId);
+                b.HasMany<EntityChange>().WithOne().HasForeignKey(x => x.AuditLogId);
 
                 b.HasIndex(x => new { x.TenantId, x.UserId, x.ExecutionTime });
             });
@@ -36,19 +44,42 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
             {
                 b.ToTable(tablePrefix + "EntityChanges", schema);
 
-                b.Property(x => x.EntityTypeFullName).IsRequired();
-                b.Property(x => x.EntityId).IsRequired();
+                b.Property(x => x.EntityTypeFullName).IsRequired().HasColumnName(nameof(EntityChange.EntityTypeFullName));
+                b.Property(x => x.EntityId).IsRequired().HasColumnName(nameof(EntityChange.EntityId));
+                b.Property(x => x.AuditLogId).IsRequired().HasColumnName(nameof(EntityChange.AuditLogId));
+                b.Property(x => x.ChangeTime).IsRequired().HasColumnName(nameof(EntityChange.ChangeTime));
+                b.Property(x => x.ChangeType).IsRequired().HasColumnName(nameof(EntityChange.ChangeType));
+                b.Property(x => x.TenantId).IsRequired().HasColumnName(nameof(EntityChange.TenantId));
+
+                b.HasMany<EntityPropertyChange>().WithOne().HasForeignKey(x => x.EntityChangeId);
 
                 b.HasIndex(x => new { x.TenantId, x.EntityTypeFullName});
+            });
+
+            builder.Entity<EntityPropertyChange>(b =>
+            {
+                b.ToTable(tablePrefix + "EntityPropertyChanges", schema);
+
+                b.Property(x => x.NewValue).IsRequired().HasColumnName(nameof(EntityPropertyChange.NewValue));
+                b.Property(x => x.PropertyName).IsRequired().HasColumnName(nameof(EntityPropertyChange.PropertyName));
+                b.Property(x => x.PropertyTypeFullName).IsRequired().HasColumnName(nameof(EntityPropertyChange.PropertyTypeFullName));
+                b.Property(x => x.OriginalValue).HasColumnName(nameof(EntityPropertyChange.OriginalValue));
+
+                b.HasIndex(x => new { x.PropertyName});
             });
 
             builder.Entity<AuditLogAction>(b =>
             {
                 b.ToTable(tablePrefix + "AuditLogActions", schema);
 
-                b.Property(x => x.ServiceName).HasMaxLength(AuditLogActionConsts.MaxServiceNameLength);
-                b.Property(x => x.MethodName).HasMaxLength(AuditLogActionConsts.MaxMethodNameLength);
-                b.Property(x => x.Parameters).HasMaxLength(AuditLogActionConsts.MaxParametersLength);
+                b.Property(x => x.ServiceName).HasMaxLength(AuditLogActionConsts.MaxServiceNameLength).HasColumnName(nameof(AuditLogAction.ServiceName));
+                b.Property(x => x.MethodName).HasMaxLength(AuditLogActionConsts.MaxMethodNameLength).HasColumnName(nameof(AuditLogAction.MethodName));
+                b.Property(x => x.Parameters).HasMaxLength(AuditLogActionConsts.MaxParametersLength).HasColumnName(nameof(AuditLogAction.Parameters));
+                b.Property(x => x.AuditLogId).HasColumnName(nameof(AuditLogAction.AuditLogId));
+                b.Property(x => x.ExecutionTime).HasColumnName(nameof(AuditLogAction.ExecutionTime));
+                b.Property(x => x.ExecutionDuration).HasColumnName(nameof(AuditLogAction.ExecutionDuration));
+
+                b.ConfigureExtraProperties();
 
                 b.HasIndex(x => new { x.ServiceName, x.ExecutionTime});
             });

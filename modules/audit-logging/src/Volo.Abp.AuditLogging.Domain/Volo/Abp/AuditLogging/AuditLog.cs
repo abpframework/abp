@@ -11,35 +11,35 @@ namespace Volo.Abp.AuditLogging
 {
     public class AuditLog : Entity<Guid>, IHasExtraProperties, IMultiTenant
     {
-        public virtual Guid? TenantId { get; set; }
+        public virtual Guid? TenantId { get; protected set; }
 
-        public virtual Guid? UserId { get; set; }
+        public virtual Guid? UserId { get; protected set; }
 
-        public virtual Guid? ImpersonatorUserId { get; set; }
+        public virtual Guid? ImpersonatorUserId { get; protected set; }
 
-        public virtual Guid? ImpersonatorTenantId { get; set; }
+        public virtual Guid? ImpersonatorTenantId { get; protected set; }
 
-        public virtual DateTime ExecutionTime { get; set; }
+        public virtual DateTime ExecutionTime { get; protected set; }
 
-        public virtual int ExecutionDuration { get; set; }
+        public virtual int ExecutionDuration { get; protected set; }
 
-        public virtual string ClientIpAddress { get; set; }
+        public virtual string ClientIpAddress { get; protected set; }
 
-        public virtual string ClientName { get; set; }
+        public virtual string ClientName { get; protected set; }
 
-        public virtual string BrowserInfo { get; set; }
+        public virtual string BrowserInfo { get; protected set; }
 
-        public virtual List<string> Exceptions { get; }
+        public virtual string Exceptions { get; set; }
 
-        public Dictionary<string, object> ExtraProperties { get; }
+        public Dictionary<string, object> ExtraProperties { get; set; }
 
         public ICollection<EntityChange> EntityChanges { get; }
 
-        public ICollection<AuditLogAction> Actions { get; set; }
+        public ICollection<AuditLogAction> Actions { get; protected set; }
 
         protected AuditLog()
         {
-
+            ExtraProperties = new Dictionary<string, object>();
         }
 
         public AuditLog(IGuidGenerator guidGenerator, AuditLogInfo auditInfo)
@@ -55,9 +55,9 @@ namespace Volo.Abp.AuditLogging
             ImpersonatorUserId = auditInfo.ImpersonatorUserId;
             ImpersonatorTenantId = auditInfo.ImpersonatorTenantId;
             ExtraProperties = auditInfo.ExtraProperties;
-            EntityChanges = auditInfo.EntityChanges.Select(e => new EntityChange(e)).ToList();
+            EntityChanges = auditInfo.EntityChanges.Select(e => new EntityChange(guidGenerator, Id, e)).ToList();
             Actions = auditInfo.Actions.Select(e => new AuditLogAction(guidGenerator.Create(), Id, e)).ToList();
-            Exceptions = auditInfo.Exceptions.Select(e => e.ToString()).ToList();
+            Exceptions = String.Join(Environment.NewLine, auditInfo.Exceptions.Select(e=>e.ToString()).ToArray());
         }
     }
 }
