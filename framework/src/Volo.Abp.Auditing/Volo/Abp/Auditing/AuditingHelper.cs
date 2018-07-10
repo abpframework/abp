@@ -46,16 +46,6 @@ namespace Volo.Abp.Auditing
 
         public virtual bool ShouldSaveAudit(MethodInfo methodInfo, bool defaultValue = false)
         {
-            if (!Options.IsEnabled)
-            {
-                return false;
-            }
-
-            if (!Options.IsEnabledForAnonymousUsers && !CurrentUser.IsAuthenticated)
-            {
-                return false;
-            }
-
             if (methodInfo == null)
             {
                 return false;
