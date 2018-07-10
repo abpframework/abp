@@ -9,11 +9,14 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Auditing;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Entities.Events;
+using Volo.Abp.EntityFrameworkCore.EntityHistory;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Reflection;
@@ -40,6 +43,12 @@ namespace Volo.Abp.EntityFrameworkCore
 
         public IAuditPropertySetter AuditPropertySetter { get; set; }
 
+        public IEntityHistoryHelper EntityHistoryHelper { get; set; }
+
+        public IAuditingManager AuditingManager { get; set; }
+
+        public ILogger<AbpDbContext<TDbContext>> Logger { get; set; }
+
         private static readonly MethodInfo ConfigureGlobalFiltersMethodInfo
             = typeof(AbpDbContext<TDbContext>)
                 .GetMethod(
@@ -52,6 +61,8 @@ namespace Volo.Abp.EntityFrameworkCore
         {
             GuidGenerator = SimpleGuidGenerator.Instance;
             EntityChangeEventHelper = NullEntityChangeEventHelper.Instance;
+            EntityHistoryHelper = NullEntityHistoryHelper.Instance;
+            Logger = NullLogger<AbpDbContext<TDbContext>>.Instance;
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -70,14 +81,35 @@ namespace Volo.Abp.EntityFrameworkCore
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
         {
-            ChangeTracker.DetectChanges();
+            //TODO: Reduce duplications with SaveChangesAsync
+            //TODO: Instead of adding entity changes to audit log, write them to uow and add to audit log only if uow succeed
 
+            ChangeTracker.DetectChanges();
+            
             try
             {
                 ChangeTracker.AutoDetectChangesEnabled = false; //TODO: Why this is needed?
+
+                var auditLog = AuditingManager?.Current?.Log;
+
+                List<EntityChangeInfo> entityChangeList = null;
+                if (auditLog != null)
+                {
+                    entityChangeList = EntityHistoryHelper.CreateChangeList(ChangeTracker.Entries().ToList());
+                }
+
                 var changeReport = ApplyAbpConcepts();
+
                 var result = base.SaveChanges(acceptAllChangesOnSuccess);
+
                 AsyncHelper.RunSync(() => EntityChangeEventHelper.TriggerEventsAsync(changeReport));
+
+                if (auditLog != null)
+                {
+                    EntityHistoryHelper.UpdateChangeList(entityChangeList);
+                    auditLog.EntityChanges.AddRange(entityChangeList);
+                }
+
                 return result;
             }
             catch (DbUpdateConcurrencyException ex)
@@ -97,9 +129,32 @@ namespace Volo.Abp.EntityFrameworkCore
             try
             {
                 ChangeTracker.AutoDetectChangesEnabled = false; //TODO: Why this is needed?
+
+                var auditLog = AuditingManager?.Current?.Log;
+
+                List<EntityChangeInfo> entityChangeList = null;
+                if (auditLog != null)
+                {
+                    entityChangeList = EntityHistoryHelper.CreateChangeList(ChangeTracker.Entries().ToList());
+                }
+                else
+                {
+                    Logger.LogWarning("AuditingManager?.Current is null!");
+                }
+
                 var changeReport = ApplyAbpConcepts();
+
                 var result = await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+
                 await EntityChangeEventHelper.TriggerEventsAsync(changeReport);
+
+                if (auditLog != null)
+                {
+                    EntityHistoryHelper.UpdateChangeList(entityChangeList);
+                    auditLog.EntityChanges.AddRange(entityChangeList);
+                    Logger.LogDebug($"Added {entityChangeList.Count} entity changes to the current audit log");
+                }
+
                 return result;
             }
             catch (DbUpdateConcurrencyException ex)

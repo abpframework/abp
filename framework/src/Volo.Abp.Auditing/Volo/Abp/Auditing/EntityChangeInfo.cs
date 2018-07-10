@@ -17,7 +17,7 @@ namespace Volo.Abp.Auditing
 
         public Guid? TenantId { get; set; }
 
-        public ICollection<EntityPropertyChangeInfo> PropertyChanges { get; set; }
+        public List<EntityPropertyChangeInfo> PropertyChanges { get; set; }
 
         #region Not mapped
 

@@ -32,14 +32,14 @@ namespace Volo.Abp.Auditing
 
         public Dictionary<string, object> ExtraProperties { get; }
 
-        public IList<EntityChangeInfo> EntityChanges { get; }
+        public List<EntityChangeInfo> EntityChanges { get; }
 
         public AuditLogInfo()
         {
             Actions = new List<AuditLogActionInfo>();
             Exceptions = new List<Exception>();
             ExtraProperties = new Dictionary<string, object>();
-            EntityChanges  = new List<EntityChangeInfo>();
+            EntityChanges = new List<EntityChangeInfo>();
         }
 
         public override string ToString()
@@ -57,7 +57,7 @@ namespace Volo.Abp.Auditing
                 foreach (var action in Actions)
                 {
                     sb.AppendLine($"  - {action.ServiceName}.{action.MethodName} ({action.ExecutionDuration} ms.)");
-                    sb.AppendLine($"  - {action.Parameters}");
+                    sb.AppendLine($"    {action.Parameters}");
                 }
             }
 
@@ -67,11 +67,22 @@ namespace Volo.Abp.Auditing
                 foreach (var exception in Exceptions)
                 {
                     sb.AppendLine($"  - {exception.Message}");
-                    sb.AppendLine($"  - {exception}");
+                    sb.AppendLine($"    {exception}");
                 }
             }
 
-            //TODO: EntityChanges
+            if (EntityChanges.Any())
+            {
+                sb.AppendLine("- Entity Changes:");
+                foreach (var entityChange in EntityChanges)
+                {
+                    sb.AppendLine($"  - [{entityChange.ChangeType}] {entityChange.EntityTypeFullName}, Id = {entityChange.EntityId}");
+                    foreach (var propertyChange in entityChange.PropertyChanges)
+                    {
+                        sb.AppendLine($"    {propertyChange.PropertyName}: {propertyChange.OriginalValue} -> {propertyChange.NewValue}");
+                    }
+                }
+            }
 
             return sb.ToString();
         }

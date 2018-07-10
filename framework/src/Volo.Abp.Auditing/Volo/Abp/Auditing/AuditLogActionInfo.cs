@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Auditing
 {
-    public class AuditLogActionInfo
+    public class AuditLogActionInfo : IMultiTenant
     {
+        public Guid? TenantId { get; set; }
+
         public string ServiceName { get; set; }
 
         public string MethodName { get; set; }
