@@ -72,5 +72,10 @@ namespace Volo.Abp.Identity
         {
             return new UserLoginInfo(LoginProvider, ProviderKey, ProviderDisplayName);
         }
+
+        public override object[] GetKeys()
+        {
+            return new object[] {UserId, LoginProvider};
+        }
     }
 }

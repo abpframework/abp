@@ -6,7 +6,7 @@
     /// </summary>
     public interface IEntity
     {
-
+        object[] GetKeys();
     }
 
     /// <summary>

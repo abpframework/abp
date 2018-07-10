@@ -53,5 +53,10 @@ namespace Volo.Abp.Identity
             Value = value;
             TenantId = tenantId;
         }
+
+        public override object[] GetKeys()
+        {
+            return new object[] { UserId, LoginProvider, Name };
+        }
     }
 }

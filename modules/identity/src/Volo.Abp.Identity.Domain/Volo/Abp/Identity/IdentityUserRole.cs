@@ -32,5 +32,10 @@ namespace Volo.Abp.Identity
             RoleId = roleId;
             TenantId = tenantId;
         }
+
+        public override object[] GetKeys()
+        {
+            return new object[] { UserId, RoleId };
+        }
     }
 }

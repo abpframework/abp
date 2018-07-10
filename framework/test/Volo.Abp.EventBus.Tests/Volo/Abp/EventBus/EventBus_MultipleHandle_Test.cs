@@ -24,7 +24,10 @@ namespace Volo.Abp.EventBus
 
         public class MyEntity : Entity
         {
-            
+            public override object[] GetKeys()
+            {
+                return new object[0];
+            }
         }
 
         public class MyEventHandler :

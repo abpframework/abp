@@ -230,6 +230,10 @@ namespace Volo.Abp.Domain.Repositories
         public class MyTestAggregateRootWithoutPk : AggregateRoot
         {
             public string MyId { get; set; }
+            public override object[] GetKeys()
+            {
+                return new object[] {MyId};
+            }
         }
 
         public class MyTestDefaultRepository<TEntity> : RepositoryBase<TEntity>

@@ -26,6 +26,11 @@ namespace Volo.Abp.TestApp.Domain
             Number = number;
             Type = type;
         }
+
+        public override object[] GetKeys()
+        {
+            return new object[] {PersonId, Number};
+        }
     }
 
     public class Order : AggregateRoot<Guid>
@@ -95,6 +100,11 @@ namespace Volo.Abp.TestApp.Domain
         internal void ChangeCount(int newCount)
         {
             Count = newCount;
+        }
+
+        public override object[] GetKeys()
+        {
+            return new object[] {OrderId, ProductId};
         }
     }
 }

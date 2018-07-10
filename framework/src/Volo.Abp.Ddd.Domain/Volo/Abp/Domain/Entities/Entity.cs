@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using Volo.Abp.MultiTenancy;
 
@@ -11,8 +12,10 @@ namespace Volo.Abp.Domain.Entities
         /// <inheritdoc/>
         public override string ToString()
         {
-            return $"[ENTITY: {GetType().Name}]";
+            return $"[ENTITY: {GetType().Name}] Keys = {GetKeys().JoinAsString(", ")}";
         }
+
+        public abstract object[] GetKeys();
     }
 
     /// <inheritdoc cref="IEntity{TKey}" />
@@ -95,6 +98,11 @@ namespace Volo.Abp.Domain.Entities
         public static bool operator !=(Entity<TKey> left, Entity<TKey> right)
         {
             return !(left == right);
+        }
+
+        public override object[] GetKeys()
+        {
+            return new object[] {Id};
         }
 
         /// <inheritdoc/>
