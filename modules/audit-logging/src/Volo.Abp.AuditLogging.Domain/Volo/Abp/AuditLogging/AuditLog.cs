@@ -9,6 +9,7 @@ using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.AuditLogging
 {
+    [DisableAuditing]
     public class AuditLog : AggregateRoot<Guid>, IHasExtraProperties, IMultiTenant
     {
         public virtual Guid? UserId { get; protected set; }
@@ -28,6 +29,10 @@ namespace Volo.Abp.AuditLogging
         public virtual string ClientName { get; protected set; }
 
         public virtual string BrowserInfo { get; protected set; }
+
+        public virtual string HttpMethod { get; protected set; }
+
+        public virtual string Url { get; protected set; }
 
         public virtual string Exceptions { get; protected set; }
 
@@ -54,6 +59,8 @@ namespace Volo.Abp.AuditLogging
             ClientIpAddress = auditInfo.ClientIpAddress;
             ClientName = auditInfo.ClientName;
             BrowserInfo = auditInfo.BrowserInfo;
+            HttpMethod = auditInfo.HttpMethod;
+            Url = auditInfo.Url;
             ImpersonatorUserId = auditInfo.ImpersonatorUserId;
             ImpersonatorTenantId = auditInfo.ImpersonatorTenantId;
             ExtraProperties = auditInfo.ExtraProperties.ToDictionary(pair => pair.Key, pair => pair.Value);
