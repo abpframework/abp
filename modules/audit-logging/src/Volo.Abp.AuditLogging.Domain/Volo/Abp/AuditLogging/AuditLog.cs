@@ -9,6 +9,7 @@ using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.AuditLogging
 {
+    [DisableAuditing]
     public class AuditLog : AggregateRoot<Guid>, IHasExtraProperties, IMultiTenant
     {
         public virtual Guid? UserId { get; protected set; }

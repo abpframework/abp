@@ -8,6 +8,7 @@ using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.AuditLogging
 {
+    [DisableAuditing]
     public class AuditLogAction : Entity<Guid>, IMultiTenant, IHasExtraProperties
     {
         public Guid? TenantId { get; protected set; }
