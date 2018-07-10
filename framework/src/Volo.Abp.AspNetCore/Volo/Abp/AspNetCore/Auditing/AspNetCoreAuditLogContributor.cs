@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -18,12 +17,12 @@ namespace Volo.Abp.AspNetCore.Auditing
             Logger = NullLogger<AspNetCoreAuditLogContributor>.Instance;
         }
 
-        public override Task ContributeAsync(AuditLogContributionContext context)
+        public override void PreContribute(AuditLogContributionContext context)
         {
             var httpContext = context.ServiceProvider.GetRequiredService<IHttpContextAccessor>().HttpContext;
             if (httpContext == null)
             {
-                return Task.CompletedTask;
+                return;
             }
 
             if (context.AuditInfo.HttpMethod == null)
@@ -47,8 +46,20 @@ namespace Volo.Abp.AspNetCore.Auditing
             }
 
             //TODO: context.AuditInfo.ClientName
+        }
 
-            return Task.CompletedTask;
+        public override void PostContribute(AuditLogContributionContext context)
+        {
+            var httpContext = context.ServiceProvider.GetRequiredService<IHttpContextAccessor>().HttpContext;
+            if (httpContext == null)
+            {
+                return;
+            }
+
+            if (context.AuditInfo.HttpStatusCode == null)
+            {
+                context.AuditInfo.HttpStatusCode = httpContext.Response.StatusCode;
+            }
         }
 
         protected virtual string GetBrowserInfo(HttpContext httpContext)

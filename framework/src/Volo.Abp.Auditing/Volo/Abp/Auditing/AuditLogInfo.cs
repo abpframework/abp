@@ -30,6 +30,8 @@ namespace Volo.Abp.Auditing
 
         public string HttpMethod { get; set; }
 
+        public int? HttpStatusCode { get; set; }
+
         public string Url { get; set; }
 
         public List<AuditLogActionInfo> Actions { get; set; }
@@ -55,7 +57,7 @@ namespace Volo.Abp.Auditing
         {
             var sb = new StringBuilder();
 
-            sb.AppendLine($"AUDIT LOG: [{HttpMethod ?? "?"}] {Url}");
+            sb.AppendLine($"AUDIT LOG: [{HttpStatusCode?.ToString() ?? "---"}: {(HttpMethod ?? "-------").PadRight(7)}] {Url}");
             sb.AppendLine($"- UserId                 : {UserId}");
             sb.AppendLine($"- ClientIpAddress        : {ClientIpAddress}");
             sb.AppendLine($"- ExecutionDuration      : {ExecutionDuration}");

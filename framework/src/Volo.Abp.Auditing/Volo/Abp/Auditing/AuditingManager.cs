@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Threading;
 
@@ -10,6 +14,9 @@ namespace Volo.Abp.Auditing
     {
         private const string AmbientContextKey = "Volo.Abp.Auditing.IAuditLogScope";
 
+        protected IServiceProvider ServiceProvider { get; }
+        protected AbpAuditingOptions Options { get; }
+        protected ILogger<AuditingManager> Logger { get; set; }
         private readonly IAmbientScopeProvider<IAuditLogScope> _ambientScopeProvider;
         private readonly IAuditingHelper _auditingHelper;
         private readonly IAuditingStore _auditingStore;
@@ -17,8 +24,14 @@ namespace Volo.Abp.Auditing
         public AuditingManager(
             IAmbientScopeProvider<IAuditLogScope> ambientScopeProvider, 
             IAuditingHelper auditingHelper, 
-            IAuditingStore auditingStore)
+            IAuditingStore auditingStore,
+            IServiceProvider serviceProvider,
+            IOptions<AbpAuditingOptions> options)
         {
+            ServiceProvider = serviceProvider;
+            Options = options.Value;
+            Logger = NullLogger<AuditingManager>.Instance;
+
             _ambientScopeProvider = ambientScopeProvider;
             _auditingHelper = auditingHelper;
             _auditingStore = auditingStore;
@@ -35,45 +48,79 @@ namespace Volo.Abp.Auditing
 
             Debug.Assert(Current != null, "Current != null");
 
-            var stopWatch = Stopwatch.StartNew();
-
-            return new DisposableSaveHandle(_auditingStore, ambientScope, Current.Log, stopWatch);
+            return new DisposableSaveHandle(this, ambientScope, Current.Log, Stopwatch.StartNew());
         }
 
-        private class DisposableSaveHandle : IAuditLogSaveHandle
+        protected virtual void ExecutePostContributors(AuditLogInfo auditLogInfo)
         {
-            private readonly IAuditingStore _auditingStore;
-            private readonly IDisposable _scope;
-            private readonly AuditLogInfo _auditLog;
-            private readonly Stopwatch _stopWatch;
+            using (var scope = ServiceProvider.CreateScope())
+            {
+                var context = new AuditLogContributionContext(scope.ServiceProvider, auditLogInfo);
 
+                foreach (var contributor in Options.Contributors)
+                {
+                    try
+                    {
+                        contributor.PostContribute(context);
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.LogException(ex, LogLevel.Warning);
+                    }
+                }
+            }
+        }
+
+        protected virtual void BeforeSave(DisposableSaveHandle saveHandle)
+        {
+            saveHandle.StopWatch.Stop();
+            saveHandle.AuditLog.ExecutionDuration = Convert.ToInt32(saveHandle.StopWatch.Elapsed.TotalMilliseconds);
+            ExecutePostContributors(saveHandle.AuditLog);
+        }
+
+        protected virtual async Task SaveAsync(DisposableSaveHandle saveHandle)
+        {
+            BeforeSave(saveHandle);
+            await _auditingStore.SaveAsync(saveHandle.AuditLog);
+        }
+
+        protected virtual void Save(DisposableSaveHandle saveHandle)
+        {
+            BeforeSave(saveHandle);
+            _auditingStore.Save(saveHandle.AuditLog);
+        }
+
+        protected class DisposableSaveHandle : IAuditLogSaveHandle
+        {
+            public AuditLogInfo AuditLog { get; }
+            public Stopwatch StopWatch { get; }
+
+            private readonly AuditingManager _auditingManager;
+            private readonly IDisposable _scope;
             private bool _saved;
 
-            public DisposableSaveHandle(IAuditingStore auditingStore, IDisposable scope, AuditLogInfo auditLog, Stopwatch stopWatch)
+            public DisposableSaveHandle(
+                AuditingManager auditingManager,
+                IDisposable scope,
+                AuditLogInfo auditLog, 
+                Stopwatch stopWatch)
             {
-                _auditingStore = auditingStore;
+                _auditingManager = auditingManager;
                 _scope = scope;
-                _auditLog = auditLog;
-                _stopWatch = stopWatch;
-            }
-
-            private void BeforeSave()
-            {
-                _stopWatch.Stop();
-                _saved = true;
-                _auditLog.ExecutionDuration = Convert.ToInt32(_stopWatch.Elapsed.TotalMilliseconds);
+                AuditLog = auditLog;
+                StopWatch = stopWatch;
             }
 
             public async Task SaveAsync()
             {
-                BeforeSave();
-                await _auditingStore.SaveAsync(_auditLog);
+                _saved = true;
+                await _auditingManager.SaveAsync(this);
             }
 
             public void Save()
             {
-                BeforeSave();
-                _auditingStore.Save(_auditLog);
+                _saved = true;
+                _auditingManager.Save(this);
             }
 
             public void Dispose()

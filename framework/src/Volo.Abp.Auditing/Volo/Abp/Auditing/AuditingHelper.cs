@@ -89,7 +89,7 @@ namespace Volo.Abp.Auditing
                 ExecutionTime = Clock.Now
             };
 
-            ExecuteContributors(auditInfo);
+            ExecutePreContributors(auditInfo);
 
             return auditInfo;
         }
@@ -116,7 +116,7 @@ namespace Volo.Abp.Auditing
             return actionInfo;
         }
 
-        protected virtual void ExecuteContributors(AuditLogInfo auditLogInfo)
+        protected virtual void ExecutePreContributors(AuditLogInfo auditLogInfo)
         {
             using (var scope = ServiceProvider.CreateScope())
             {
@@ -126,7 +126,7 @@ namespace Volo.Abp.Auditing
                 {
                     try
                     {
-                        contributor.ContributeAsync(context);
+                        contributor.PreContribute(context);
                     }
                     catch (Exception ex)
                     {
