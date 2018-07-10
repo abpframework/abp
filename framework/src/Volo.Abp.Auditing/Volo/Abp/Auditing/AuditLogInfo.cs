@@ -48,6 +48,7 @@ namespace Volo.Abp.Auditing
             Exceptions = new List<Exception>();
             ExtraProperties = new Dictionary<string, object>();
             EntityChanges = new List<EntityChangeInfo>();
+            Comments = new List<string>();
         }
 
         public override string ToString()
