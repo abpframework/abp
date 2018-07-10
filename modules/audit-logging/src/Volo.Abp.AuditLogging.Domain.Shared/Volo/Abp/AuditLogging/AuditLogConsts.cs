@@ -2,9 +2,12 @@
 {
     public static class AuditLogConsts
     {
-        public static int MaxClientIpAddressLength = 64;
-        public static int MaxClientNameLength = 128;
-        public static int MaxBrowserInfoLength = 512;
-        public static int MaxExceptionsLength = 8*1024;
+        public const int MaxClientIpAddressLength = 64;
+
+        public const int MaxClientNameLength = 128;
+
+        public const int MaxBrowserInfoLength = 512;
+
+        public const int MaxExceptionsLength = 4000;
     }
 }

@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using Volo.Abp.Auditing;
+using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.AuditLogging
 {
-    public class EntityChange : Entity<Guid>, IMultiTenant
+    public class EntityChange : Entity<Guid>, IMultiTenant, IHasExtraProperties
     {
         public virtual Guid AuditLogId { get; protected set; }
 
@@ -24,9 +25,11 @@ namespace Volo.Abp.AuditLogging
 
         public ICollection<EntityPropertyChange> PropertyChanges { get; protected set; }
 
+        public virtual Dictionary<string, object> ExtraProperties { get; protected set; }
+
         protected EntityChange()
         {
-
+            ExtraProperties = new Dictionary<string, object>();
         }
 
         public EntityChange(IGuidGenerator guidGenerator, Guid auditLogId, EntityChangeInfo entityChangeInfo)
@@ -38,7 +41,8 @@ namespace Volo.Abp.AuditLogging
             ChangeType = entityChangeInfo.ChangeType;
             EntityId = entityChangeInfo.EntityId;
             EntityTypeFullName = entityChangeInfo.EntityTypeFullName;
-            PropertyChanges = entityChangeInfo.PropertyChanges.Select( p=> new EntityPropertyChange(guidGenerator, Id, p)).ToList(); 
+            PropertyChanges = entityChangeInfo.PropertyChanges.Select(p => new EntityPropertyChange(guidGenerator, Id, p)).ToList();
+            ExtraProperties = entityChangeInfo.ExtraProperties.ToDictionary(pair => pair.Key, pair => pair.Value);
         }
     }
 }

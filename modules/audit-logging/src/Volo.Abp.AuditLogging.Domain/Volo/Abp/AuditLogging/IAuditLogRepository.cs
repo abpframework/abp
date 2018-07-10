@@ -5,5 +5,6 @@ namespace Volo.Abp.AuditLogging
 {
     public interface IAuditLogRepository : IBasicRepository<AuditLog, Guid>
     {
+
     }
 }

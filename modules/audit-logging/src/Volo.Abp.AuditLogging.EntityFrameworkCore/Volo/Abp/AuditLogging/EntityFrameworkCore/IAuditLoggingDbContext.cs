@@ -8,9 +8,5 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
     public interface IAuditLoggingDbContext : IEfCoreDbContext
     {
         DbSet<AuditLog> AuditLogs { get; set; }
-
-        DbSet<AuditLogAction> AuditLogAction { get; set; }
-
-        DbSet<EntityChange> EntityChange { get; set; }
     }
 }

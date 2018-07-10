@@ -13,10 +13,6 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
 
         public DbSet<AuditLog> AuditLogs { get; set; }
 
-        public DbSet<AuditLogAction> AuditLogAction { get; set; }
-
-        public DbSet<EntityChange> EntityChange { get; set; }
-
         public AbpAuditLoggingDbContext(DbContextOptions<AbpAuditLoggingDbContext> options)
             : base(options)
         {

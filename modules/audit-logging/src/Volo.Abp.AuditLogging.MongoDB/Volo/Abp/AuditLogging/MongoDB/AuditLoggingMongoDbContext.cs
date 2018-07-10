@@ -15,7 +15,7 @@ namespace Volo.Abp.AuditLogging.MongoDB
         {
             base.CreateModel(modelBuilder);
 
-            modelBuilder.ConfigureSettingManagement(options =>
+            modelBuilder.ConfigureAuditLogging(options =>
             {
                 options.CollectionPrefix = CollectionPrefix;
             });

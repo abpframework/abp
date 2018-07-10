@@ -14,8 +14,6 @@ namespace Volo.Abp.AuditLogging.MongoDB
 
             context.Services.AddMongoDbContext<AuditLoggingMongoDbContext>(options =>
             {
-                options.AddDefaultRepositories<IAuditLoggingMongoDbContext>();
-
                 options.AddRepository<AuditLog, MongoAuditLogRepository>();
             });
 

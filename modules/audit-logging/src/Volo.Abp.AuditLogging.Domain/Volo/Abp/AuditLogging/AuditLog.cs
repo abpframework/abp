@@ -9,11 +9,11 @@ using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.AuditLogging
 {
-    public class AuditLog : Entity<Guid>, IHasExtraProperties, IMultiTenant
+    public class AuditLog : AggregateRoot<Guid>, IHasExtraProperties, IMultiTenant
     {
-        public virtual Guid? TenantId { get; protected set; }
-
         public virtual Guid? UserId { get; protected set; }
+
+        public virtual Guid? TenantId { get; protected set; }
 
         public virtual Guid? ImpersonatorUserId { get; protected set; }
 
@@ -29,13 +29,13 @@ namespace Volo.Abp.AuditLogging
 
         public virtual string BrowserInfo { get; protected set; }
 
-        public virtual string Exceptions { get; set; }
+        public virtual string Exceptions { get; protected set; }
 
-        public Dictionary<string, object> ExtraProperties { get; set; }
+        public virtual Dictionary<string, object> ExtraProperties { get; protected set; }
 
-        public ICollection<EntityChange> EntityChanges { get; }
+        public virtual ICollection<EntityChange> EntityChanges { get; protected set; }
 
-        public ICollection<AuditLogAction> Actions { get; protected set; }
+        public virtual ICollection<AuditLogAction> Actions { get; protected set; }
 
         protected AuditLog()
         {
@@ -54,10 +54,10 @@ namespace Volo.Abp.AuditLogging
             BrowserInfo = auditInfo.BrowserInfo;
             ImpersonatorUserId = auditInfo.ImpersonatorUserId;
             ImpersonatorTenantId = auditInfo.ImpersonatorTenantId;
-            ExtraProperties = auditInfo.ExtraProperties;
+            ExtraProperties = auditInfo.ExtraProperties.ToDictionary(pair => pair.Key, pair => pair.Value);
             EntityChanges = auditInfo.EntityChanges.Select(e => new EntityChange(guidGenerator, Id, e)).ToList();
             Actions = auditInfo.Actions.Select(e => new AuditLogAction(guidGenerator.Create(), Id, e)).ToList();
-            Exceptions = String.Join(Environment.NewLine, auditInfo.Exceptions.Select(e=>e.ToString()).ToArray());
+            Exceptions = auditInfo.Exceptions.JoinAsString(Environment.NewLine);
         }
     }
 }

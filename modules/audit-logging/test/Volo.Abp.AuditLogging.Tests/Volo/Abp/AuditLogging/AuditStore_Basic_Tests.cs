@@ -17,6 +17,7 @@ namespace Volo.Abp.AuditLogging
         [Fact]
         public async Task Should_Save_A_Audit_Log()
         {
+            //Arrange
             var auditLog = new AuditLogInfo()
             {
                 TenantId = Guid.NewGuid(),
@@ -30,7 +31,11 @@ namespace Volo.Abp.AuditLogging
                 BrowserInfo = "Chrome"
             };
 
+            //Act
             await _auditingStore.SaveAsync(auditLog);
+
+            //Assert
+            //TODO:...
         }
     }
 }

@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using Volo.Abp.Data;
 using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Auditing
 {
-    public class AuditLogActionInfo : IMultiTenant
+    public class AuditLogActionInfo : IMultiTenant, IHasExtraProperties
     {
         public Guid? TenantId { get; set; }
 

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
+using Volo.Abp.Data;
 using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Auditing
 {
-    public class EntityChangeInfo : IMultiTenant
+    public class EntityChangeInfo : IMultiTenant, IHasExtraProperties
     {
         public DateTime ChangeTime { get; set; }
 
@@ -19,11 +19,13 @@ namespace Volo.Abp.Auditing
 
         public List<EntityPropertyChangeInfo> PropertyChanges { get; set; }
 
-        #region Not mapped
+        public Dictionary<string, object> ExtraProperties { get; }
 
-        [NotMapped]
-        public virtual object EntityEntry { get; set; } //TODO: ???
+        public virtual object EntityEntry { get; set; } //TODO: Try to remove since it breaks serializability
 
-        #endregion
+        public EntityChangeInfo()
+        {
+            ExtraProperties = new Dictionary<string, object>();
+        }
     }
 }

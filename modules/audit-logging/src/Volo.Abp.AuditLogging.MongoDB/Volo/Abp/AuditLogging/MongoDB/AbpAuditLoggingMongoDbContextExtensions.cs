@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Volo.Abp.MongoDB;
 
 namespace Volo.Abp.AuditLogging.MongoDB
 {
-    public static class AbpSettingManagementMongoDbContextExtensions
+    public static class AbpAuditLoggingMongoDbContextExtensions
     {
-        public static void ConfigureSettingManagement(
+        public static void ConfigureAuditLogging(
             this IMongoModelBuilder builder,
             Action<MongoModelBuilderConfigurationOptions> optionsAction = null)
         {
@@ -19,7 +17,7 @@ namespace Volo.Abp.AuditLogging.MongoDB
 
             builder.Entity<AuditLog>(b =>
             {
-                b.CollectionName = options.CollectionPrefix + "Settings";
+                b.CollectionName = options.CollectionPrefix + "AuditLogging";
             });
         }
     }

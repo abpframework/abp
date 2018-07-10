@@ -12,8 +12,6 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
         {
             context.Services.AddAbpDbContext<AbpAuditLoggingDbContext>(options =>
             {
-                options.AddDefaultRepositories<IAuditLoggingDbContext>();
-
                 options.AddRepository<AuditLog, EfCoreAuditLogRepository>();
             });
 

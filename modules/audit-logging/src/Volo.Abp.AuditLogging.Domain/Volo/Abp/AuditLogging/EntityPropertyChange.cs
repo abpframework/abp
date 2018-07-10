@@ -2,11 +2,14 @@
 using Volo.Abp.Auditing;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Guids;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.AuditLogging
 {
-    public class EntityPropertyChange : Entity<Guid>
+    public class EntityPropertyChange : Entity<Guid>, IMultiTenant
     {
+        public Guid? TenantId { get; protected set; }
+
         public virtual Guid EntityChangeId { get; protected set; }
 
         public virtual string NewValue { get; protected set; }
@@ -24,8 +27,9 @@ namespace Volo.Abp.AuditLogging
 
         public EntityPropertyChange(IGuidGenerator guidGenerator, Guid entityChangeId, EntityPropertyChangeInfo entityChangeInfo)
         {
-            EntityChangeId = entityChangeId;
             Id = guidGenerator.Create();
+            TenantId = entityChangeInfo.TenantId;
+            EntityChangeId = entityChangeId;
             NewValue = entityChangeInfo.NewValue;
             OriginalValue = entityChangeInfo.OriginalValue;
             PropertyName = entityChangeInfo.PropertyName;

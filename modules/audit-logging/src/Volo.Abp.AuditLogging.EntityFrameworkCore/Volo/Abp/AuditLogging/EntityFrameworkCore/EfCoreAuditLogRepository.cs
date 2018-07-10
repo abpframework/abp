@@ -9,6 +9,7 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
         public EfCoreAuditLogRepository(IDbContextProvider<IAuditLoggingDbContext> dbContextProvider)
             : base(dbContextProvider)
         {
+
         }
     }
 }
