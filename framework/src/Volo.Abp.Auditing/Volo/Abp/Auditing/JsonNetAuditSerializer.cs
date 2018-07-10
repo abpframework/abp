@@ -6,9 +6,9 @@ namespace Volo.Abp.Auditing
 {
     public class JsonNetAuditSerializer : IAuditSerializer, ITransientDependency
     {
-        protected AuditingOptions Options;
+        protected AbpAuditingOptions Options;
 
-        public JsonNetAuditSerializer(IOptions<AuditingOptions> options)
+        public JsonNetAuditSerializer(IOptions<AbpAuditingOptions> options)
         {
             Options = options.Value;
         }

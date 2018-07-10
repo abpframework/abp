@@ -24,19 +24,16 @@ namespace Volo.Abp.EntityFrameworkCore.EntityHistory
 
         protected IAuditingStore AuditingStore { get; }
         protected IJsonSerializer JsonSerializer { get; }
-        protected AuditingOptions Options { get; }
+        protected AbpAuditingOptions Options { get; }
 
-        private readonly IUnitOfWorkManager _unitOfWorkManager;
         private readonly IClock _clock;
 
         public EntityHistoryHelper(
-            IUnitOfWorkManager unitOfWorkManager,
             IAuditingStore auditingStore,
-            IOptions<AuditingOptions> options,
+            IOptions<AbpAuditingOptions> options,
             IClock clock,
             IJsonSerializer jsonSerializer)
         {
-            _unitOfWorkManager = unitOfWorkManager;
             _clock = clock;
             AuditingStore = auditingStore;
             JsonSerializer = jsonSerializer;
@@ -47,8 +44,6 @@ namespace Volo.Abp.EntityFrameworkCore.EntityHistory
 
         public virtual List<EntityChangeInfo> CreateChangeList(ICollection<EntityEntry> entityEntries)
         {
-            //TODO: Check if auditing disabled (on at somewhere else)?
-
             var list = new List<EntityChangeInfo>();
 
             foreach (var entry in entityEntries)
@@ -232,6 +227,11 @@ namespace Volo.Abp.EntityFrameworkCore.EntityHistory
             if (entityType.GetTypeInfo().IsDefined(typeof(DisableAuditingAttribute), true))
             {
                 return false;
+            }
+
+            if (Options.EntityHistorySelectors.Any(selector => selector.Predicate(entityType)))
+            {
+                return true;
             }
 
             var properties = entityEntry.Metadata.GetProperties();

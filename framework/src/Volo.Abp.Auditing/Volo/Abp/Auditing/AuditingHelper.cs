@@ -19,13 +19,13 @@ namespace Volo.Abp.Auditing
         protected ICurrentUser CurrentUser { get; }
         protected ICurrentTenant CurrentTenant { get; }
         protected IClock Clock { get; }
-        protected AuditingOptions Options;
+        protected AbpAuditingOptions Options;
         protected IAuditSerializer AuditSerializer;
         protected IServiceProvider ServiceProvider;
 
         public AuditingHelper(
             IAuditSerializer auditSerializer,
-            IOptions<AuditingOptions> options,
+            IOptions<AbpAuditingOptions> options,
             ICurrentUser currentUser,
             ICurrentTenant currentTenant,
             IClock clock,

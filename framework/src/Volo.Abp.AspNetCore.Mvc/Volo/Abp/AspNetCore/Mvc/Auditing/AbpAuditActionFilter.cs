@@ -12,11 +12,11 @@ namespace Volo.Abp.AspNetCore.Mvc.Auditing
 {
     public class AbpAuditActionFilter : IAsyncActionFilter, ITransientDependency
     {
-        protected AuditingOptions Options { get; }
+        protected AbpAuditingOptions Options { get; }
         private readonly IAuditingHelper _auditingHelper;
         private readonly IAuditingManager _auditingManager;
 
-        public AbpAuditActionFilter(IOptions<AuditingOptions> options, IAuditingHelper auditingHelper, IAuditingManager auditingManager)
+        public AbpAuditActionFilter(IOptions<AbpAuditingOptions> options, IAuditingHelper auditingHelper, IAuditingManager auditingManager)
         {
             Options = options.Value;
             _auditingHelper = auditingHelper;

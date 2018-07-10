@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 
 namespace Volo.Abp.Auditing
 {
-    public class AuditingOptions
+    public class AbpAuditingOptions
     {
         //TODO: Consider to add an option to disable auditing for application service methods?
 
@@ -23,7 +23,9 @@ namespace Volo.Abp.Auditing
 
         public List<Type> IgnoredTypes { get; }
 
-        public AuditingOptions()
+        public IEntityHistorySelectorList EntityHistorySelectors { get; }
+        
+        public AbpAuditingOptions()
         {
             IsEnabled = true;
             IsEnabledForAnonymousUsers = true;
@@ -38,6 +40,8 @@ namespace Volo.Abp.Auditing
                 typeof(Stream),
                 typeof(Expression)
             };
+
+            EntityHistorySelectors = new EntityHistorySelectorList();
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Security.Claims;
 using JetBrains.Annotations;
+using Volo.Abp.Auditing;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
@@ -24,6 +25,7 @@ namespace Volo.Abp.Identity
         /// <summary>
         /// Gets or sets the normalized name for this role.
         /// </summary>
+        [DisableAuditing]
         public virtual string NormalizedName { get; protected internal set; }
 
         /// <summary>
@@ -34,6 +36,7 @@ namespace Volo.Abp.Identity
         /// <summary>
         /// A random value that should change whenever a role is persisted to the store
         /// </summary>
+        [DisableAuditing]
         public virtual string ConcurrencyStamp { get; set; }
 
         /// <summary>

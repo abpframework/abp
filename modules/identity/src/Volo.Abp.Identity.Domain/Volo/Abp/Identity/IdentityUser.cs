@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Identity;
+using Volo.Abp.Auditing;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Guids;
@@ -24,6 +25,7 @@ namespace Volo.Abp.Identity
         /// <summary>
         /// Gets or sets the normalized user name for this user.
         /// </summary>
+        [DisableAuditing]
         public virtual string NormalizedUserName { get; protected internal set; }
 
         /// <summary>
@@ -34,6 +36,7 @@ namespace Volo.Abp.Identity
         /// <summary>
         /// Gets or sets the normalized email address for this user.
         /// </summary>
+        [DisableAuditing]
         public virtual string NormalizedEmail { get; protected internal set; }
 
         /// <summary>
@@ -45,16 +48,19 @@ namespace Volo.Abp.Identity
         /// <summary>
         /// Gets or sets a salted and hashed representation of the password for this user.
         /// </summary>
+        [DisableAuditing]
         public virtual string PasswordHash { get; protected internal set; }
 
         /// <summary>
         /// A random value that must change whenever a users credentials change (password changed, login removed)
         /// </summary>
+        [DisableAuditing]
         public virtual string SecurityStamp { get; protected internal set; }
 
         /// <summary>
         /// A random value that must change whenever a user is persisted to the store
         /// </summary>
+        [DisableAuditing]
         public virtual string ConcurrencyStamp { get; set; }
 
         /// <summary>

@@ -11,14 +11,14 @@ namespace Volo.Abp.AspNetCore.Auditing
         private readonly RequestDelegate _next;
         private readonly IAuditingManager _auditingManager;
 
-        protected AuditingOptions Options { get; }
+        protected AbpAuditingOptions Options { get; }
         protected ICurrentUser CurrentUser { get; }
 
         public AbpAuditingMiddleware(
             RequestDelegate next, 
             IAuditingManager auditingManager,
             ICurrentUser currentUser,
-            IOptions<AuditingOptions> options)
+            IOptions<AbpAuditingOptions> options)
         {
             _next = next;
             _auditingManager = auditingManager;
