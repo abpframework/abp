@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AutoMapper\Volo.Abp.AutoMapper.csproj" />
+    <ProjectReference Include="..\MyCompanyName.MyModuleName.Application.Contracts\MyCompanyName.MyModuleName.Application.Contracts.csproj" />
+    <ProjectReference Include="..\MyCompanyName.MyModuleName.Domain\MyCompanyName.MyModuleName.Domain.csproj" />
+  </ItemGroup>
+
+</Project>
