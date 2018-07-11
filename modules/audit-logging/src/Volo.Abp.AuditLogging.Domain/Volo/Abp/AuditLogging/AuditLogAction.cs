@@ -11,7 +11,7 @@ namespace Volo.Abp.AuditLogging
     [DisableAuditing]
     public class AuditLogAction : Entity<Guid>, IMultiTenant, IHasExtraProperties
     {
-        public Guid? TenantId { get; protected set; }
+        public virtual Guid? TenantId { get; protected set; }
 
         public virtual Guid AuditLogId { get; protected set; }
 
