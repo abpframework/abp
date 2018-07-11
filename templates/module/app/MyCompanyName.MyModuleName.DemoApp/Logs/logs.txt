@@ -1,0 +1,212 @@
+2018-07-11 18:37:07.746 +03:00 [INF] Starting web host.
+2018-07-11 18:37:09.703 +03:00 [INF] User profile is available. Using 'C:\Users\halil\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2018-07-11 18:37:09.782 +03:00 [INF] Loaded modules:
+2018-07-11 18:37:09.783 +03:00 [INF] - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2018-07-11 18:37:09.783 +03:00 [INF] - Volo.Abp.Localization.AbpLocalizationModule
+2018-07-11 18:37:09.783 +03:00 [INF] - MyCompanyName.MyModuleName.MyModuleNameDomainSharedModule
+2018-07-11 18:37:09.783 +03:00 [INF] - Volo.Abp.Data.AbpDataModule
+2018-07-11 18:37:09.783 +03:00 [INF] - Volo.Abp.Timing.AbpTimingModule
+2018-07-11 18:37:09.783 +03:00 [INF] - Volo.Abp.Json.AbpJsonModule
+2018-07-11 18:37:09.783 +03:00 [INF] - Volo.Abp.Security.AbpSecurityModule
+2018-07-11 18:37:09.783 +03:00 [INF] - Volo.Abp.Threading.AbpThreadingModule
+2018-07-11 18:37:09.783 +03:00 [INF] - Volo.Abp.Settings.AbpSettingsModule
+2018-07-11 18:37:09.783 +03:00 [INF] - Volo.Abp.MultiTenancy.AbpMultiTenancyAbstractionsModule
+2018-07-11 18:37:09.783 +03:00 [INF] - Volo.Abp.Auditing.AbpAuditingModule
+2018-07-11 18:37:09.783 +03:00 [INF] - Volo.Abp.EventBus.AbpEventBusModule
+2018-07-11 18:37:09.783 +03:00 [INF] - Volo.Abp.Guids.AbpGuidsModule
+2018-07-11 18:37:09.783 +03:00 [INF] - Volo.Abp.Uow.AbpUnitOfWorkModule
+2018-07-11 18:37:09.783 +03:00 [INF] - Volo.Abp.Domain.AbpDddDomainModule
+2018-07-11 18:37:09.783 +03:00 [INF] - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2018-07-11 18:37:09.783 +03:00 [INF] - Volo.Abp.Validation.AbpValidationModule
+2018-07-11 18:37:09.783 +03:00 [INF] - Volo.Abp.Authorization.AbpAuthorizationModule
+2018-07-11 18:37:09.783 +03:00 [INF] - Volo.Abp.Http.AbpHttpAbstractionsModule
+2018-07-11 18:37:09.783 +03:00 [INF] - Volo.Abp.Application.AbpDddApplicationModule
+2018-07-11 18:37:09.783 +03:00 [INF] - MyCompanyName.MyModuleName.MyModuleNameApplicationContractsModule
+2018-07-11 18:37:09.783 +03:00 [INF] - Volo.Abp.Http.AbpHttpModule
+2018-07-11 18:37:09.783 +03:00 [INF] - Volo.Abp.UI.AbpUiModule
+2018-07-11 18:37:09.783 +03:00 [INF] - Volo.Abp.AspNetCore.AbpAspNetCoreModule
+2018-07-11 18:37:09.783 +03:00 [INF] - Volo.Abp.ApiVersioning.AbpApiVersioningAbstractionsModule
+2018-07-11 18:37:09.783 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcModule
+2018-07-11 18:37:09.783 +03:00 [INF] - MyCompanyName.MyModuleName.MyModuleNameHttpApiModule
+2018-07-11 18:37:09.783 +03:00 [INF] - Volo.Abp.UI.Navigation.AbpUiNavigationModule
+2018-07-11 18:37:09.783 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.AbpAspNetCoreMvcUiModule
+2018-07-11 18:37:09.783 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.AbpAspNetCoreMvcUiBootstrapModule
+2018-07-11 18:37:09.783 +03:00 [INF] - Volo.Abp.AutoMapper.AbpAutoMapperModule
+2018-07-11 18:37:09.783 +03:00 [INF] - MyCompanyName.MyModuleName.MyModuleNameWebModule
+2018-07-11 18:37:09.783 +03:00 [INF] - MyCompanyName.MyModuleName.MyModuleNameDomainModule
+2018-07-11 18:37:09.783 +03:00 [INF] - MyCompanyName.MyModuleName.MyModuleNameApplicationModule
+2018-07-11 18:37:09.783 +03:00 [INF] - Volo.Abp.EntityFrameworkCore.AbpEntityFrameworkCoreModule
+2018-07-11 18:37:09.783 +03:00 [INF] - MyCompanyName.MyModuleName.EntityFrameworkCore.MyModuleNameEntityFrameworkCoreModule
+2018-07-11 18:37:09.783 +03:00 [INF] - Volo.Abp.PermissionManagement.AbpPermissionManagementDomainSharedModule
+2018-07-11 18:37:09.783 +03:00 [INF] - Volo.Abp.Serialization.AbpSerializationModule
+2018-07-11 18:37:09.783 +03:00 [INF] - Volo.Abp.Caching.AbpCachingModule
+2018-07-11 18:37:09.783 +03:00 [INF] - Volo.Abp.PermissionManagement.AbpPermissionManagementDomainModule
+2018-07-11 18:37:09.783 +03:00 [INF] - Volo.Abp.PermissionManagement.EntityFrameworkCore.AbpPermissionManagementEntityFrameworkCoreModule
+2018-07-11 18:37:09.783 +03:00 [INF] - Volo.Abp.SettingManagement.AbpSettingManagementDomainSharedModule
+2018-07-11 18:37:09.783 +03:00 [INF] - Volo.Abp.SettingManagement.AbpSettingManagementDomainModule
+2018-07-11 18:37:09.783 +03:00 [INF] - Volo.Abp.SettingManagement.EntityFrameworkCore.AbpSettingManagementEntityFrameworkCoreModule
+2018-07-11 18:37:09.783 +03:00 [INF] - Volo.Abp.Users.AbpUsersDomainSharedModule
+2018-07-11 18:37:09.783 +03:00 [INF] - Volo.Abp.Identity.AbpIdentityDomainSharedModule
+2018-07-11 18:37:09.783 +03:00 [INF] - Volo.Abp.Users.AbpUsersAbstractionModule
+2018-07-11 18:37:09.783 +03:00 [INF] - Volo.Abp.Users.AbpUsersDomainModule
+2018-07-11 18:37:09.783 +03:00 [INF] - Volo.Abp.Identity.AbpIdentityDomainModule
+2018-07-11 18:37:09.783 +03:00 [INF] - Volo.Abp.Users.EntityFrameworkCore.AbpUsersEntityFrameworkCoreModule
+2018-07-11 18:37:09.783 +03:00 [INF] - Volo.Abp.Identity.EntityFrameworkCore.AbpIdentityEntityFrameworkCoreModule
+2018-07-11 18:37:09.783 +03:00 [INF] - Volo.Abp.EntityFrameworkCore.SqlServer.AbpEntityFrameworkCoreSqlServerModule
+2018-07-11 18:37:09.783 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Bundling.AbpAspNetCoreMvcUiBundlingModule
+2018-07-11 18:37:09.783 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Packages.AbpAspNetCoreMvcUiPackagesModule
+2018-07-11 18:37:09.783 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.AbpAspNetCoreMvcUiThemeSharedModule
+2018-07-11 18:37:09.783 +03:00 [INF] - Volo.Abp.Account.Web.AbpAccountWebModule
+2018-07-11 18:37:09.783 +03:00 [INF] - Volo.Abp.PermissionManagement.AbpPermissionManagementApplicationContractsModule
+2018-07-11 18:37:09.783 +03:00 [INF] - Volo.Abp.Identity.AbpIdentityApplicationContractsModule
+2018-07-11 18:37:09.783 +03:00 [INF] - Volo.Abp.Identity.AbpIdentityHttpApiModule
+2018-07-11 18:37:09.783 +03:00 [INF] - Volo.Abp.PermissionManagement.Web.AbpPermissionManagementWebModule
+2018-07-11 18:37:09.783 +03:00 [INF] - Volo.Abp.Identity.Web.AbpIdentityWebModule
+2018-07-11 18:37:09.783 +03:00 [INF] - Volo.Abp.PermissionManagement.AbpPermissionManagementApplicationModule
+2018-07-11 18:37:09.783 +03:00 [INF] - Volo.Abp.Identity.AbpIdentityApplicationModule
+2018-07-11 18:37:09.783 +03:00 [INF] - Volo.Abp.Castle.AbpCastleCoreModule
+2018-07-11 18:37:09.783 +03:00 [INF] - Volo.Abp.Autofac.AbpAutofacModule
+2018-07-11 18:37:09.783 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.AbpAspNetCoreMvcUiBasicThemeModule
+2018-07-11 18:37:09.783 +03:00 [INF] - MyCompanyName.MyModuleName.DemoApp.DemoAppModule
+2018-07-11 18:37:09.843 +03:00 [DBG] No class found with auto mapping attributes.
+2018-07-11 18:37:11.469 +03:00 [WRN] AuditingManager?.Current is null!
+2018-07-11 18:37:11.498 +03:00 [WRN] AuditingManager?.Current is null!
+2018-07-11 18:37:11.513 +03:00 [WRN] AuditingManager?.Current is null!
+2018-07-11 18:37:11.518 +03:00 [WRN] AuditingManager?.Current is null!
+2018-07-11 18:37:11.521 +03:00 [WRN] AuditingManager?.Current is null!
+2018-07-11 18:37:11.523 +03:00 [WRN] AuditingManager?.Current is null!
+2018-07-11 18:37:11.527 +03:00 [WRN] AuditingManager?.Current is null!
+2018-07-11 18:37:11.530 +03:00 [WRN] AuditingManager?.Current is null!
+2018-07-11 18:37:11.532 +03:00 [WRN] AuditingManager?.Current is null!
+2018-07-11 18:37:11.535 +03:00 [WRN] AuditingManager?.Current is null!
+2018-07-11 18:37:11.538 +03:00 [WRN] AuditingManager?.Current is null!
+2018-07-11 18:37:12.018 +03:00 [WRN] AuditingManager?.Current is null!
+2018-07-11 18:37:12.092 +03:00 [WRN] AuditingManager?.Current is null!
+2018-07-11 18:37:12.191 +03:00 [WRN] AuditingManager?.Current is null!
+2018-07-11 18:37:12.195 +03:00 [WRN] AuditingManager?.Current is null!
+2018-07-11 18:37:12.335 +03:00 [WRN] AuditingManager?.Current is null!
+2018-07-11 18:37:12.355 +03:00 [WRN] AuditingManager?.Current is null!
+2018-07-11 18:37:12.359 +03:00 [WRN] AuditingManager?.Current is null!
+2018-07-11 18:37:12.367 +03:00 [WRN] AuditingManager?.Current is null!
+2018-07-11 18:37:12.367 +03:00 [WRN] AuditingManager?.Current is null!
+2018-07-11 18:37:12.368 +03:00 [WRN] AuditingManager?.Current is null!
+2018-07-11 18:37:12.368 +03:00 [WRN] AuditingManager?.Current is null!
+2018-07-11 18:37:12.391 +03:00 [INF] Initialized all modules.
+2018-07-11 18:37:12.719 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:57891/  
+2018-07-11 18:37:12.774 +03:00 [INF] Identity.Application was not authenticated. Failure message: Unprotect ticket failed
+2018-07-11 18:37:12.988 +03:00 [INF] Request finished in 270.7021ms 404 
+2018-07-11 18:37:13.043 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:57891/favicon.ico  
+2018-07-11 18:37:13.046 +03:00 [INF] Identity.Application was not authenticated. Failure message: Unprotect ticket failed
+2018-07-11 18:37:13.048 +03:00 [INF] Request finished in 4.7501ms 404 
+2018-07-11 18:38:51.281 +03:00 [INF] Starting web host.
+2018-07-11 18:38:52.538 +03:00 [INF] User profile is available. Using 'C:\Users\halil\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2018-07-11 18:38:52.626 +03:00 [INF] Loaded modules:
+2018-07-11 18:38:52.627 +03:00 [INF] - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2018-07-11 18:38:52.627 +03:00 [INF] - Volo.Abp.Localization.AbpLocalizationModule
+2018-07-11 18:38:52.627 +03:00 [INF] - MyCompanyName.MyModuleName.MyModuleNameDomainSharedModule
+2018-07-11 18:38:52.627 +03:00 [INF] - Volo.Abp.Data.AbpDataModule
+2018-07-11 18:38:52.627 +03:00 [INF] - Volo.Abp.Timing.AbpTimingModule
+2018-07-11 18:38:52.627 +03:00 [INF] - Volo.Abp.Json.AbpJsonModule
+2018-07-11 18:38:52.627 +03:00 [INF] - Volo.Abp.Security.AbpSecurityModule
+2018-07-11 18:38:52.627 +03:00 [INF] - Volo.Abp.Threading.AbpThreadingModule
+2018-07-11 18:38:52.627 +03:00 [INF] - Volo.Abp.Settings.AbpSettingsModule
+2018-07-11 18:38:52.627 +03:00 [INF] - Volo.Abp.MultiTenancy.AbpMultiTenancyAbstractionsModule
+2018-07-11 18:38:52.627 +03:00 [INF] - Volo.Abp.Auditing.AbpAuditingModule
+2018-07-11 18:38:52.627 +03:00 [INF] - Volo.Abp.EventBus.AbpEventBusModule
+2018-07-11 18:38:52.627 +03:00 [INF] - Volo.Abp.Guids.AbpGuidsModule
+2018-07-11 18:38:52.627 +03:00 [INF] - Volo.Abp.Uow.AbpUnitOfWorkModule
+2018-07-11 18:38:52.627 +03:00 [INF] - Volo.Abp.Domain.AbpDddDomainModule
+2018-07-11 18:38:52.627 +03:00 [INF] - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2018-07-11 18:38:52.627 +03:00 [INF] - Volo.Abp.Validation.AbpValidationModule
+2018-07-11 18:38:52.627 +03:00 [INF] - Volo.Abp.Authorization.AbpAuthorizationModule
+2018-07-11 18:38:52.627 +03:00 [INF] - Volo.Abp.Http.AbpHttpAbstractionsModule
+2018-07-11 18:38:52.627 +03:00 [INF] - Volo.Abp.Application.AbpDddApplicationModule
+2018-07-11 18:38:52.627 +03:00 [INF] - MyCompanyName.MyModuleName.MyModuleNameApplicationContractsModule
+2018-07-11 18:38:52.627 +03:00 [INF] - Volo.Abp.Http.AbpHttpModule
+2018-07-11 18:38:52.627 +03:00 [INF] - Volo.Abp.UI.AbpUiModule
+2018-07-11 18:38:52.627 +03:00 [INF] - Volo.Abp.AspNetCore.AbpAspNetCoreModule
+2018-07-11 18:38:52.627 +03:00 [INF] - Volo.Abp.ApiVersioning.AbpApiVersioningAbstractionsModule
+2018-07-11 18:38:52.627 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcModule
+2018-07-11 18:38:52.627 +03:00 [INF] - MyCompanyName.MyModuleName.MyModuleNameHttpApiModule
+2018-07-11 18:38:52.627 +03:00 [INF] - Volo.Abp.UI.Navigation.AbpUiNavigationModule
+2018-07-11 18:38:52.627 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.AbpAspNetCoreMvcUiModule
+2018-07-11 18:38:52.627 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.AbpAspNetCoreMvcUiBootstrapModule
+2018-07-11 18:38:52.628 +03:00 [INF] - Volo.Abp.AutoMapper.AbpAutoMapperModule
+2018-07-11 18:38:52.628 +03:00 [INF] - MyCompanyName.MyModuleName.MyModuleNameWebModule
+2018-07-11 18:38:52.628 +03:00 [INF] - MyCompanyName.MyModuleName.MyModuleNameDomainModule
+2018-07-11 18:38:52.628 +03:00 [INF] - MyCompanyName.MyModuleName.MyModuleNameApplicationModule
+2018-07-11 18:38:52.628 +03:00 [INF] - Volo.Abp.EntityFrameworkCore.AbpEntityFrameworkCoreModule
+2018-07-11 18:38:52.628 +03:00 [INF] - MyCompanyName.MyModuleName.EntityFrameworkCore.MyModuleNameEntityFrameworkCoreModule
+2018-07-11 18:38:52.628 +03:00 [INF] - Volo.Abp.PermissionManagement.AbpPermissionManagementDomainSharedModule
+2018-07-11 18:38:52.628 +03:00 [INF] - Volo.Abp.Serialization.AbpSerializationModule
+2018-07-11 18:38:52.628 +03:00 [INF] - Volo.Abp.Caching.AbpCachingModule
+2018-07-11 18:38:52.628 +03:00 [INF] - Volo.Abp.PermissionManagement.AbpPermissionManagementDomainModule
+2018-07-11 18:38:52.628 +03:00 [INF] - Volo.Abp.PermissionManagement.EntityFrameworkCore.AbpPermissionManagementEntityFrameworkCoreModule
+2018-07-11 18:38:52.628 +03:00 [INF] - Volo.Abp.SettingManagement.AbpSettingManagementDomainSharedModule
+2018-07-11 18:38:52.628 +03:00 [INF] - Volo.Abp.SettingManagement.AbpSettingManagementDomainModule
+2018-07-11 18:38:52.628 +03:00 [INF] - Volo.Abp.SettingManagement.EntityFrameworkCore.AbpSettingManagementEntityFrameworkCoreModule
+2018-07-11 18:38:52.628 +03:00 [INF] - Volo.Abp.Users.AbpUsersDomainSharedModule
+2018-07-11 18:38:52.628 +03:00 [INF] - Volo.Abp.Identity.AbpIdentityDomainSharedModule
+2018-07-11 18:38:52.628 +03:00 [INF] - Volo.Abp.Users.AbpUsersAbstractionModule
+2018-07-11 18:38:52.628 +03:00 [INF] - Volo.Abp.Users.AbpUsersDomainModule
+2018-07-11 18:38:52.628 +03:00 [INF] - Volo.Abp.Identity.AbpIdentityDomainModule
+2018-07-11 18:38:52.628 +03:00 [INF] - Volo.Abp.Users.EntityFrameworkCore.AbpUsersEntityFrameworkCoreModule
+2018-07-11 18:38:52.628 +03:00 [INF] - Volo.Abp.Identity.EntityFrameworkCore.AbpIdentityEntityFrameworkCoreModule
+2018-07-11 18:38:52.628 +03:00 [INF] - Volo.Abp.EntityFrameworkCore.SqlServer.AbpEntityFrameworkCoreSqlServerModule
+2018-07-11 18:38:52.628 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Bundling.AbpAspNetCoreMvcUiBundlingModule
+2018-07-11 18:38:52.628 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Packages.AbpAspNetCoreMvcUiPackagesModule
+2018-07-11 18:38:52.628 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.AbpAspNetCoreMvcUiThemeSharedModule
+2018-07-11 18:38:52.628 +03:00 [INF] - Volo.Abp.Account.Web.AbpAccountWebModule
+2018-07-11 18:38:52.628 +03:00 [INF] - Volo.Abp.PermissionManagement.AbpPermissionManagementApplicationContractsModule
+2018-07-11 18:38:52.628 +03:00 [INF] - Volo.Abp.Identity.AbpIdentityApplicationContractsModule
+2018-07-11 18:38:52.628 +03:00 [INF] - Volo.Abp.Identity.AbpIdentityHttpApiModule
+2018-07-11 18:38:52.628 +03:00 [INF] - Volo.Abp.PermissionManagement.Web.AbpPermissionManagementWebModule
+2018-07-11 18:38:52.628 +03:00 [INF] - Volo.Abp.Identity.Web.AbpIdentityWebModule
+2018-07-11 18:38:52.628 +03:00 [INF] - Volo.Abp.PermissionManagement.AbpPermissionManagementApplicationModule
+2018-07-11 18:38:52.628 +03:00 [INF] - Volo.Abp.Identity.AbpIdentityApplicationModule
+2018-07-11 18:38:52.628 +03:00 [INF] - Volo.Abp.Castle.AbpCastleCoreModule
+2018-07-11 18:38:52.628 +03:00 [INF] - Volo.Abp.Autofac.AbpAutofacModule
+2018-07-11 18:38:52.628 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.AbpAspNetCoreMvcUiBasicThemeModule
+2018-07-11 18:38:52.628 +03:00 [INF] - MyCompanyName.MyModuleName.DemoApp.DemoAppModule
+2018-07-11 18:38:52.764 +03:00 [DBG] No class found with auto mapping attributes.
+2018-07-11 18:38:54.405 +03:00 [WRN] AuditingManager?.Current is null!
+2018-07-11 18:38:54.452 +03:00 [WRN] AuditingManager?.Current is null!
+2018-07-11 18:38:54.473 +03:00 [WRN] AuditingManager?.Current is null!
+2018-07-11 18:38:54.483 +03:00 [WRN] AuditingManager?.Current is null!
+2018-07-11 18:38:54.489 +03:00 [WRN] AuditingManager?.Current is null!
+2018-07-11 18:38:54.501 +03:00 [WRN] AuditingManager?.Current is null!
+2018-07-11 18:38:54.511 +03:00 [WRN] AuditingManager?.Current is null!
+2018-07-11 18:38:54.518 +03:00 [WRN] AuditingManager?.Current is null!
+2018-07-11 18:38:54.522 +03:00 [WRN] AuditingManager?.Current is null!
+2018-07-11 18:38:54.533 +03:00 [WRN] AuditingManager?.Current is null!
+2018-07-11 18:38:54.536 +03:00 [WRN] AuditingManager?.Current is null!
+2018-07-11 18:38:55.701 +03:00 [WRN] AuditingManager?.Current is null!
+2018-07-11 18:38:55.704 +03:00 [INF] Initialized all modules.
+2018-07-11 18:38:56.018 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:57891/  
+2018-07-11 18:38:56.076 +03:00 [INF] Identity.Application was not authenticated. Failure message: Unprotect ticket failed
+2018-07-11 18:38:57.846 +03:00 [ERR] An unhandled exception has occurred while executing the request.
+Microsoft.AspNetCore.Mvc.Razor.Compilation.CompilationFailedException: One or more compilation failures occurred:
+injz0khu.5zv(28,58): error CS0433: The type 'RazorInjectAttribute' exists in both 'Microsoft.AspNetCore.Mvc.Razor, Version=2.1.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60' and 'Microsoft.AspNetCore.Mvc.Razor, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60'
+injz0khu.5zv(30,58): error CS0433: The type 'RazorInjectAttribute' exists in both 'Microsoft.AspNetCore.Mvc.Razor, Version=2.1.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60' and 'Microsoft.AspNetCore.Mvc.Razor, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60'
+injz0khu.5zv(32,58): error CS0433: The type 'RazorInjectAttribute' exists in both 'Microsoft.AspNetCore.Mvc.Razor, Version=2.1.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60' and 'Microsoft.AspNetCore.Mvc.Razor, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60'
+injz0khu.5zv(34,58): error CS0433: The type 'RazorInjectAttribute' exists in both 'Microsoft.AspNetCore.Mvc.Razor, Version=2.1.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60' and 'Microsoft.AspNetCore.Mvc.Razor, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60'
+injz0khu.5zv(36,58): error CS0433: The type 'RazorInjectAttribute' exists in both 'Microsoft.AspNetCore.Mvc.Razor, Version=2.1.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60' and 'Microsoft.AspNetCore.Mvc.Razor, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60'
+   at Microsoft.AspNetCore.Mvc.Razor.Internal.RazorViewCompiler.CompileAndEmit(RazorCodeDocument codeDocument, String generatedCode)
+   at Microsoft.AspNetCore.Mvc.Razor.Internal.RazorViewCompiler.CompileAndEmit(String relativePath)
+   at Microsoft.AspNetCore.Mvc.Razor.Internal.RazorViewCompiler.OnCacheMiss(String normalizedPath)
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.RazorPages.Internal.DefaultPageLoader.Load(PageActionDescriptor actionDescriptor)
+   at Microsoft.AspNetCore.Mvc.RazorPages.Internal.PageActionInvokerProvider.OnProvidersExecuting(ActionInvokerProviderContext context)
+   at Microsoft.AspNetCore.Mvc.Internal.ActionInvokerFactory.CreateInvoker(ActionContext actionContext)
+   at Microsoft.AspNetCore.Mvc.Internal.MvcAttributeRouteHandler.<>c__DisplayClass12_0.<RouteAsync>b__0(HttpContext c)
+   at Microsoft.AspNetCore.Builder.RouterMiddleware.Invoke(HttpContext httpContext)
+   at Volo.Abp.AspNetCore.Auditing.AbpAuditingMiddleware.Invoke(HttpContext httpContext) in D:\Github\abp\framework\src\Volo.Abp.AspNetCore\Volo\Abp\AspNetCore\Auditing\AbpAuditingMiddleware.cs:line 35
+   at Microsoft.AspNetCore.Localization.RequestLocalizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIIndexMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+2018-07-11 18:38:57.906 +03:00 [INF] Request finished in 1890.8359ms 500 text/html; charset=utf-8

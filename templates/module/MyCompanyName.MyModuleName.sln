@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2026
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCompanyName.MyModuleName.Domain.Shared", "src\MyCompanyName.MyModuleName.Domain.Shared\MyCompanyName.MyModuleName.Domain.Shared.csproj", "{D64C1577-4929-4B60-939E-96DE1534891A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyCompanyName.MyModuleName.Domain.Shared", "src\MyCompanyName.MyModuleName.Domain.Shared\MyCompanyName.MyModuleName.Domain.Shared.csproj", "{D64C1577-4929-4B60-939E-96DE1534891A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCompanyName.MyModuleName.Domain", "src\MyCompanyName.MyModuleName.Domain\MyCompanyName.MyModuleName.Domain.csproj", "{F2840BC7-0188-4606-9126-DADD0F5ABF7A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyCompanyName.MyModuleName.Domain", "src\MyCompanyName.MyModuleName.Domain\MyCompanyName.MyModuleName.Domain.csproj", "{F2840BC7-0188-4606-9126-DADD0F5ABF7A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCompanyName.MyModuleName.Application.Contracts", "src\MyCompanyName.MyModuleName.Application.Contracts\MyCompanyName.MyModuleName.Application.Contracts.csproj", "{BD65D04F-08D5-40C1-8C24-77CA0BACB877}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyCompanyName.MyModuleName.Application.Contracts", "src\MyCompanyName.MyModuleName.Application.Contracts\MyCompanyName.MyModuleName.Application.Contracts.csproj", "{BD65D04F-08D5-40C1-8C24-77CA0BACB877}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCompanyName.MyModuleName.Application", "src\MyCompanyName.MyModuleName.Application\MyCompanyName.MyModuleName.Application.csproj", "{78040F9E-3501-4A40-82DF-00A597710F35}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyCompanyName.MyModuleName.Application", "src\MyCompanyName.MyModuleName.Application\MyCompanyName.MyModuleName.Application.csproj", "{78040F9E-3501-4A40-82DF-00A597710F35}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{649A3FFA-182F-4E56-9717-E6A9A2BEC545}"
 EndProject
@@ -17,25 +17,27 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{CCD2960C
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "app", "app", "{E400416D-2895-4512-9D17-90681EEC7E0A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCompanyName.MyModuleName.EntityFrameworkCore", "src\MyCompanyName.MyModuleName.EntityFrameworkCore\MyCompanyName.MyModuleName.EntityFrameworkCore.csproj", "{0CE86223-D31D-4315-A1F5-87BA3EE1B844}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyCompanyName.MyModuleName.EntityFrameworkCore", "src\MyCompanyName.MyModuleName.EntityFrameworkCore\MyCompanyName.MyModuleName.EntityFrameworkCore.csproj", "{0CE86223-D31D-4315-A1F5-87BA3EE1B844}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCompanyName.MyModuleName.MongoDB", "src\MyCompanyName.MyModuleName.MongoDB\MyCompanyName.MyModuleName.MongoDB.csproj", "{F1C58097-4C08-4D88-8976-6B3389391481}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyCompanyName.MyModuleName.MongoDB", "src\MyCompanyName.MyModuleName.MongoDB\MyCompanyName.MyModuleName.MongoDB.csproj", "{F1C58097-4C08-4D88-8976-6B3389391481}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCompanyName.MyModuleName.HttpApi", "src\MyCompanyName.MyModuleName.HttpApi\MyCompanyName.MyModuleName.HttpApi.csproj", "{077AA5F8-8B61-420C-A6B5-0150A66FDB34}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyCompanyName.MyModuleName.HttpApi", "src\MyCompanyName.MyModuleName.HttpApi\MyCompanyName.MyModuleName.HttpApi.csproj", "{077AA5F8-8B61-420C-A6B5-0150A66FDB34}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCompanyName.MyModuleName.HttpApi.Client", "src\MyCompanyName.MyModuleName.HttpApi.Client\MyCompanyName.MyModuleName.HttpApi.Client.csproj", "{36E2735F-CEAB-44C8-A6D1-2CDAFF399751}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyCompanyName.MyModuleName.HttpApi.Client", "src\MyCompanyName.MyModuleName.HttpApi.Client\MyCompanyName.MyModuleName.HttpApi.Client.csproj", "{36E2735F-CEAB-44C8-A6D1-2CDAFF399751}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCompanyName.MyModuleName.Web", "src\MyCompanyName.MyModuleName.Web\MyCompanyName.MyModuleName.Web.csproj", "{8C5B0D35-9734-4439-977C-2F1AC9E1D69E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyCompanyName.MyModuleName.Web", "src\MyCompanyName.MyModuleName.Web\MyCompanyName.MyModuleName.Web.csproj", "{8C5B0D35-9734-4439-977C-2F1AC9E1D69E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCompanyName.MyModuleName.TestBase", "test\MyCompanyName.MyModuleName.TestBase\MyCompanyName.MyModuleName.TestBase.csproj", "{6E5B22E7-E2DB-45D4-B828-8019D8FD51E8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyCompanyName.MyModuleName.TestBase", "test\MyCompanyName.MyModuleName.TestBase\MyCompanyName.MyModuleName.TestBase.csproj", "{6E5B22E7-E2DB-45D4-B828-8019D8FD51E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCompanyName.MyModuleName.Domain.Tests", "test\MyCompanyName.MyModuleName.Domain.Tests\MyCompanyName.MyModuleName.Domain.Tests.csproj", "{44FB6636-5427-415D-8883-CB7E42D548F2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyCompanyName.MyModuleName.Domain.Tests", "test\MyCompanyName.MyModuleName.Domain.Tests\MyCompanyName.MyModuleName.Domain.Tests.csproj", "{44FB6636-5427-415D-8883-CB7E42D548F2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCompanyName.MyModuleName.EntityFrameworkCore.Tests", "test\MyCompanyName.MyModuleName.EntityFrameworkCore.Tests\MyCompanyName.MyModuleName.EntityFrameworkCore.Tests.csproj", "{E5906DE1-B2F5-472E-BE1B-1D96A68B834D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyCompanyName.MyModuleName.EntityFrameworkCore.Tests", "test\MyCompanyName.MyModuleName.EntityFrameworkCore.Tests\MyCompanyName.MyModuleName.EntityFrameworkCore.Tests.csproj", "{E5906DE1-B2F5-472E-BE1B-1D96A68B834D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCompanyName.MyModuleName.MongoDB.Tests", "test\MyCompanyName.MyModuleName.MongoDB.Tests\MyCompanyName.MyModuleName.MongoDB.Tests.csproj", "{AA783A34-86E4-41A5-AE21-5D9FBD98D858}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyCompanyName.MyModuleName.MongoDB.Tests", "test\MyCompanyName.MyModuleName.MongoDB.Tests\MyCompanyName.MyModuleName.MongoDB.Tests.csproj", "{AA783A34-86E4-41A5-AE21-5D9FBD98D858}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCompanyName.MyModuleName.Application.Tests", "test\MyCompanyName.MyModuleName.Application.Tests\MyCompanyName.MyModuleName.Application.Tests.csproj", "{13A9EAD6-F3A4-4357-BA4A-A7E8FEB4A264}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyCompanyName.MyModuleName.Application.Tests", "test\MyCompanyName.MyModuleName.Application.Tests\MyCompanyName.MyModuleName.Application.Tests.csproj", "{13A9EAD6-F3A4-4357-BA4A-A7E8FEB4A264}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCompanyName.MyModuleName.DemoApp", "app\MyCompanyName.MyModuleName.DemoApp\MyCompanyName.MyModuleName.DemoApp.csproj", "{E7353C9A-4357-4A40-A39A-52B73F5A0CA1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -99,6 +101,10 @@ Global
 		{13A9EAD6-F3A4-4357-BA4A-A7E8FEB4A264}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{13A9EAD6-F3A4-4357-BA4A-A7E8FEB4A264}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{13A9EAD6-F3A4-4357-BA4A-A7E8FEB4A264}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E7353C9A-4357-4A40-A39A-52B73F5A0CA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7353C9A-4357-4A40-A39A-52B73F5A0CA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E7353C9A-4357-4A40-A39A-52B73F5A0CA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E7353C9A-4357-4A40-A39A-52B73F5A0CA1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -118,6 +124,7 @@ Global
 		{E5906DE1-B2F5-472E-BE1B-1D96A68B834D} = {CCD2960C-23CC-4AB4-B84D-60C7AAA52F4D}
 		{AA783A34-86E4-41A5-AE21-5D9FBD98D858} = {CCD2960C-23CC-4AB4-B84D-60C7AAA52F4D}
 		{13A9EAD6-F3A4-4357-BA4A-A7E8FEB4A264} = {CCD2960C-23CC-4AB4-B84D-60C7AAA52F4D}
+		{E7353C9A-4357-4A40-A39A-52B73F5A0CA1} = {E400416D-2895-4512-9D17-90681EEC7E0A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4324B3B4-B60B-4E3C-91D8-59576B4E26DD}
