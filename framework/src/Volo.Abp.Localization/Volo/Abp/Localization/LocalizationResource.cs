@@ -25,6 +25,10 @@ namespace Volo.Abp.Localization
         [NotNull]
         public List<Type> BaseResourceTypes { get; }
 
+        public EventHandler Updated;
+
+        internal bool RegisteredToUpdate { get; set; }
+
         public LocalizationResource(
             [NotNull] Type resourceType, 
             [CanBeNull] string defaultCultureName = null,
@@ -46,25 +50,12 @@ namespace Volo.Abp.Localization
             AddBaseResourceTypes();
         }
 
-        public virtual void Initialize(IServiceProvider serviceProvider)
+        public virtual void FillDictionaries(IServiceProvider serviceProvider)
         {
+            Dictionaries.Clear();
+
             var context = new LocalizationResourceInitializationContext(this, serviceProvider);
 
-            Dictionaries.Clear();
-            InitializeContributors(context);
-
-            foreach (var contributor in Contributors)
-            {
-                contributor.Updated += (sender, args) =>
-                {
-                    Dictionaries.Clear();
-                    InitializeContributors(context);
-                };
-            }
-        }
-
-        protected virtual void InitializeContributors(LocalizationResourceInitializationContext context)
-        {
             foreach (var contributor in Contributors)
             {
                 foreach (var dictionary in contributor.GetDictionaries(context))

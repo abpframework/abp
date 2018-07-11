@@ -15,10 +15,11 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             MySingletonService singletonService;
             MyEmptyTransientService emptyTransientService;
+            MyTransientService1 transientService1;
 
             using (var scope = ServiceProvider.CreateScope())
             {
-                var transientService1 = scope.ServiceProvider.GetRequiredService<MyTransientService1>();
+                transientService1 = scope.ServiceProvider.GetRequiredService<MyTransientService1>();
                 emptyTransientService = scope.ServiceProvider.GetRequiredService<MyEmptyTransientService>();
 
                 transientService1.DoIt();
@@ -26,12 +27,19 @@ namespace Microsoft.Extensions.DependencyInjection
 
                 singletonService = transientService1.SingletonService;
                 singletonService.TransientInstances.Count.ShouldBe(2);
+
+                transientService1.TransientInstances.Count.ShouldBe(2);
+                transientService1.TransientInstances.ForEach(ts => ts.IsDisposed.ShouldBeFalse());
             }
 
             Assert.Equal(singletonService, GetRequiredService<MySingletonService>());
 
-            singletonService.TransientInstances.Count.ShouldBe(2);
+            singletonService.ResolveTransient();
+
+            singletonService.TransientInstances.Count.ShouldBe(3);
             singletonService.TransientInstances.ForEach(ts => ts.IsDisposed.ShouldBeFalse());
+
+            transientService1.TransientInstances.ForEach(ts => ts.IsDisposed.ShouldBeTrue());
 
             emptyTransientService.IsDisposed.ShouldBeTrue();
         }
@@ -77,15 +85,23 @@ namespace Microsoft.Extensions.DependencyInjection
         public class MyTransientService1 : ITransientDependency
         {
             public MySingletonService SingletonService { get; }
+            public IServiceProvider ServiceProvider { get; }
+            public List<MyEmptyTransientService> TransientInstances { get; }
 
-            public MyTransientService1(MySingletonService singletonService)
+            public MyTransientService1(MySingletonService singletonService, IServiceProvider serviceProvider)
             {
                 SingletonService = singletonService;
+                ServiceProvider = serviceProvider;
+                TransientInstances = new List<MyEmptyTransientService>();
             }
 
             public void DoIt()
             {
                 SingletonService.ResolveTransient();
+
+                TransientInstances.Add(
+                    ServiceProvider.GetRequiredService<MyEmptyTransientService>()
+                );
             }
         }
 

@@ -15,7 +15,7 @@ namespace Volo.Abp.Localization
         private readonly AbpLocalizationOptions _abpLocalizationOptions;
         private readonly IServiceProvider _serviceProvider;
 
-        private readonly ConcurrentDictionary<Type, AbpDictionaryBasedStringLocalizer> _localizerCache;
+        private readonly ConcurrentDictionary<Type, StringLocalizerCacheItem> _localizerCache;
 
         //TODO: It's better to use decorator pattern for IStringLocalizerFactory instead of getting ResourceManagerStringLocalizerFactory as a dependency.
         public AbpStringLocalizerFactory(
@@ -27,27 +27,48 @@ namespace Volo.Abp.Localization
             _serviceProvider = serviceProvider;
             _abpLocalizationOptions = abpLocalizationOptions.Value;
 
-            _localizerCache = new ConcurrentDictionary<Type, AbpDictionaryBasedStringLocalizer>();
+            _localizerCache = new ConcurrentDictionary<Type, StringLocalizerCacheItem>();
         }
 
         public virtual IStringLocalizer Create(Type resourceType)
         {
-            var localizationResource = _abpLocalizationOptions.Resources.GetOrDefault(resourceType);
-            if (localizationResource == null)
+            var resource = _abpLocalizationOptions.Resources.GetOrDefault(resourceType);
+            if (resource == null)
             {
                 return _innerFactory.Create(resourceType);
             }
 
-            return _localizerCache.GetOrAdd(resourceType, _ => CreateAbpStringLocalizer(localizationResource));
+            return _localizerCache.GetOrAdd(
+                resourceType,
+                _ => CreateStringLocalizerCacheItem(resource)
+            ).Localizer;
         }
 
-        private AbpDictionaryBasedStringLocalizer CreateAbpStringLocalizer(LocalizationResource resource)
+        private StringLocalizerCacheItem CreateStringLocalizerCacheItem(LocalizationResource resource)
         {
-            resource.Initialize(_serviceProvider); //TODO: Use CreateScope?
+            using (var scope = _serviceProvider.CreateScope())
+            {
+                resource.FillDictionaries(scope.ServiceProvider);
+            }
 
-            return new AbpDictionaryBasedStringLocalizer(
-                resource,
-                resource.BaseResourceTypes.Select(Create).ToList()
+            if (!resource.RegisteredToUpdate)
+            {
+                resource.RegisteredToUpdate = true;
+
+                foreach (var contributor in resource.Contributors)
+                {
+                    contributor.Updated += (sender, args) =>
+                    {
+                        _localizerCache.TryRemove(resource.ResourceType, out _);
+                    };
+                }
+            }
+
+            return new StringLocalizerCacheItem(
+                new AbpDictionaryBasedStringLocalizer(
+                    resource,
+                    resource.BaseResourceTypes.Select(Create).ToList()
+                )
             );
         }
 
@@ -62,6 +83,16 @@ namespace Volo.Abp.Localization
         {
             services.Replace(ServiceDescriptor.Singleton<IStringLocalizerFactory, AbpStringLocalizerFactory>());
             services.AddSingleton<ResourceManagerStringLocalizerFactory>();
+        }
+
+        private class StringLocalizerCacheItem
+        {
+            public AbpDictionaryBasedStringLocalizer Localizer { get; }
+
+            public StringLocalizerCacheItem(AbpDictionaryBasedStringLocalizer localizer)
+            {
+                Localizer = localizer;
+            }
         }
     }
 }
