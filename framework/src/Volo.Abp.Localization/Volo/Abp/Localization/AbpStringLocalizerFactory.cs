@@ -46,11 +46,6 @@ namespace Volo.Abp.Localization
 
         private StringLocalizerCacheItem CreateStringLocalizerCacheItem(LocalizationResource resource)
         {
-            using (var scope = _serviceProvider.CreateScope())
-            {
-                resource.FillDictionaries(scope.ServiceProvider);
-            }
-
             if (!resource.RegisteredToUpdate)
             {
                 resource.RegisteredToUpdate = true;
@@ -62,6 +57,11 @@ namespace Volo.Abp.Localization
                         _localizerCache.TryRemove(resource.ResourceType, out _);
                     };
                 }
+            }
+
+            using (var scope = _serviceProvider.CreateScope())
+            {
+                resource.FillDictionaries(scope.ServiceProvider);
             }
 
             return new StringLocalizerCacheItem(
