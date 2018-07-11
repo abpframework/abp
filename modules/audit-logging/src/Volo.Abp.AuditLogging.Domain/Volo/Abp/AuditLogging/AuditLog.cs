@@ -38,7 +38,7 @@ namespace Volo.Abp.AuditLogging
 
         public virtual string Comments { get; protected set; }
 
-        public int? HttpStatusCode { get; set; }
+        public virtual int? HttpStatusCode { get; set; }
 
         public virtual Dictionary<string, object> ExtraProperties { get; protected set; }
 
