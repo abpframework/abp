@@ -11,6 +11,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCompanyName.MyModuleName.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCompanyName.MyModuleName.Application", "src\MyCompanyName.MyModuleName.Application\MyCompanyName.MyModuleName.Application.csproj", "{78040F9E-3501-4A40-82DF-00A597710F35}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{649A3FFA-182F-4E56-9717-E6A9A2BEC545}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{CCD2960C-23CC-4AB4-B84D-60C7AAA52F4D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "app", "app", "{E400416D-2895-4512-9D17-90681EEC7E0A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCompanyName.MyModuleName.EntityFrameworkCore", "src\MyCompanyName.MyModuleName.EntityFrameworkCore\MyCompanyName.MyModuleName.EntityFrameworkCore.csproj", "{0CE86223-D31D-4315-A1F5-87BA3EE1B844}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCompanyName.MyModuleName.MongoDB", "src\MyCompanyName.MyModuleName.MongoDB\MyCompanyName.MyModuleName.MongoDB.csproj", "{F1C58097-4C08-4D88-8976-6B3389391481}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,9 +43,25 @@ Global
 		{78040F9E-3501-4A40-82DF-00A597710F35}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{78040F9E-3501-4A40-82DF-00A597710F35}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{78040F9E-3501-4A40-82DF-00A597710F35}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0CE86223-D31D-4315-A1F5-87BA3EE1B844}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CE86223-D31D-4315-A1F5-87BA3EE1B844}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CE86223-D31D-4315-A1F5-87BA3EE1B844}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CE86223-D31D-4315-A1F5-87BA3EE1B844}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1C58097-4C08-4D88-8976-6B3389391481}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1C58097-4C08-4D88-8976-6B3389391481}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1C58097-4C08-4D88-8976-6B3389391481}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1C58097-4C08-4D88-8976-6B3389391481}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D64C1577-4929-4B60-939E-96DE1534891A} = {649A3FFA-182F-4E56-9717-E6A9A2BEC545}
+		{F2840BC7-0188-4606-9126-DADD0F5ABF7A} = {649A3FFA-182F-4E56-9717-E6A9A2BEC545}
+		{BD65D04F-08D5-40C1-8C24-77CA0BACB877} = {649A3FFA-182F-4E56-9717-E6A9A2BEC545}
+		{78040F9E-3501-4A40-82DF-00A597710F35} = {649A3FFA-182F-4E56-9717-E6A9A2BEC545}
+		{0CE86223-D31D-4315-A1F5-87BA3EE1B844} = {649A3FFA-182F-4E56-9717-E6A9A2BEC545}
+		{F1C58097-4C08-4D88-8976-6B3389391481} = {649A3FFA-182F-4E56-9717-E6A9A2BEC545}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4324B3B4-B60B-4E3C-91D8-59576B4E26DD}
