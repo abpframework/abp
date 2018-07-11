@@ -73,7 +73,7 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
                 b.Property(x => x.AuditLogId).IsRequired().HasColumnName(nameof(EntityChange.AuditLogId));
                 b.Property(x => x.ChangeTime).IsRequired().HasColumnName(nameof(EntityChange.ChangeTime));
                 b.Property(x => x.ChangeType).IsRequired().HasColumnName(nameof(EntityChange.ChangeType));
-                b.Property(x => x.TenantId).IsRequired().HasColumnName(nameof(EntityChange.TenantId));
+                b.Property(x => x.TenantId).HasColumnName(nameof(EntityChange.TenantId));
 
                 b.HasMany<EntityPropertyChange>().WithOne().HasForeignKey(x => x.EntityChangeId);
 

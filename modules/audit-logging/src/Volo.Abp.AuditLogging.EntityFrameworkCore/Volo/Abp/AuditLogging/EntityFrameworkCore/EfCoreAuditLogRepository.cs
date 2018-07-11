@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 
@@ -10,6 +11,11 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
             : base(dbContextProvider)
         {
 
+        }
+
+        public override IQueryable<AuditLog> WithDetails()
+        {
+            return GetQueryable().IncludeDetails();
         }
     }
 }

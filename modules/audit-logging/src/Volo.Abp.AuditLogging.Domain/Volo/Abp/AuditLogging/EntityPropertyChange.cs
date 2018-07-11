@@ -9,7 +9,7 @@ namespace Volo.Abp.AuditLogging
     [DisableAuditing]
     public class EntityPropertyChange : Entity<Guid>, IMultiTenant
     {
-        public Guid? TenantId { get; protected set; }
+        public virtual Guid? TenantId { get; protected set; }
 
         public virtual Guid EntityChangeId { get; protected set; }
 
