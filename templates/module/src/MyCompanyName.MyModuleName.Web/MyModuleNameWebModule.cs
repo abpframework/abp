@@ -45,7 +45,7 @@ namespace MyCompanyName.MyModuleName
                     .AddBaseTypes(
                         typeof(AbpValidationResource),
                         typeof(AbpUiResource)
-                    ).AddVirtualJson("/Localization/Resources/AbpIdentity");
+                    ).AddVirtualJson("/Localization/Resources/MyModuleName");
             });
 
             context.Services.Configure<AbpAutoMapperOptions>(options =>
