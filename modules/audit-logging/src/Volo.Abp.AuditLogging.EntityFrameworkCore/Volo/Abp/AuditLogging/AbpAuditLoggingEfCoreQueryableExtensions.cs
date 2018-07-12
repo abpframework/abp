@@ -19,7 +19,7 @@ namespace Volo.Abp.AuditLogging
 
             return queryable
                 .Include(x => x.Actions)
-                .Include(x => x.EntityChanges);
+                .Include(x => x.EntityChanges).ThenInclude(ec=>ec.PropertyChanges);
         }
 
     }
