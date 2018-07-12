@@ -26,5 +26,10 @@ namespace Volo.Abp.TenantManagement
             Name = name;
             Value = value;
         }
+
+        public override object[] GetKeys()
+        {
+            return new object[] { TenantId, Name, Value };
+        }
     }
 }
