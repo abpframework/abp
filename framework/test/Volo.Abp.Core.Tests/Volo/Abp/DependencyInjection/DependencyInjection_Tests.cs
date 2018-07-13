@@ -16,11 +16,11 @@ namespace Volo.Abp.DependencyInjection
             var services = new ServiceCollection();
 
             services
-                .AddSingleton<MySingletonService>()
+                .AddSingleton<MySingletonServiceUsesTransients>()
                 .AddTransient<MyTransientServiceUsesSingleton>()
                 .AddTransient<MyTransientService>();
 
-            MySingletonService singletonService;
+            MySingletonServiceUsesTransients singletonService;
 
             using (var serviceProvider = services.BuildServiceProvider())
             {
@@ -36,21 +36,77 @@ namespace Volo.Abp.DependencyInjection
                 {
                     scope.ServiceProvider.GetRequiredService<MyTransientServiceUsesSingleton>().DoIt();
                     scope.ServiceProvider.GetRequiredService<MyTransientServiceUsesSingleton>().DoIt();
-                    scope.ServiceProvider.GetRequiredService<MySingletonService>().ShouldNotBeDisposed();
+                    scope.ServiceProvider.GetRequiredService<MySingletonServiceUsesTransients>().ShouldNotBeDisposed();
                 }
 
-                singletonService = serviceProvider.GetRequiredService<MySingletonService>();
+                singletonService = serviceProvider.GetRequiredService<MySingletonServiceUsesTransients>();
                 singletonService.ShouldNotBeDisposed();
             }
 
             singletonService.ShouldBeDisposed();
         }
 
+        [Fact]
+        public void Should_Release_Resolved_Services_When_Main_Service_Is_Disposed()
+        {
+            var services = new ServiceCollection();
+
+            services
+                .AddTransient<MyTransientServiceUsesTransients>()
+                .AddTransient<MyTransientService>();
+
+            using (var serviceProvider = services.BuildServiceProvider())
+            {
+                MyTransientServiceUsesTransients myTransientServiceUsesTransients;
+
+                using (var scope = serviceProvider.CreateScope())
+                {
+                    myTransientServiceUsesTransients = scope.ServiceProvider.GetRequiredService<MyTransientServiceUsesTransients>();
+
+                    myTransientServiceUsesTransients.DoIt();
+                    myTransientServiceUsesTransients.DoIt();
+
+                    myTransientServiceUsesTransients.ShouldNotBeDisposed();
+                }
+
+                myTransientServiceUsesTransients.ShouldBeDisposed();
+            }
+        }
+
+        [Fact]
+        public void Inner_Scope_Should_Resolve_New_Scoped_Service()
+        {
+            var services = new ServiceCollection();
+
+            services
+                .AddScoped<ScopedServiceWithState>();
+
+            using (var serviceProvider = services.BuildServiceProvider())
+            {
+                using (var scope = serviceProvider.CreateScope())
+                {
+                    var service1 = scope.ServiceProvider.GetRequiredService<ScopedServiceWithState>();
+                    var service2 = scope.ServiceProvider.GetRequiredService<ScopedServiceWithState>();
+
+                    service1.ShouldBe(service2);
+
+                    using (var innerScope = scope.ServiceProvider.CreateScope())
+                    {
+                        var innserService1 = innerScope.ServiceProvider.GetRequiredService<ScopedServiceWithState>();
+                        var innserService2 = innerScope.ServiceProvider.GetRequiredService<ScopedServiceWithState>();
+
+                        innserService1.ShouldBe(innserService2);
+                        innserService1.ShouldNotBe(service1);
+                    }
+                }
+            }
+        }
+
         private class MyTransientServiceUsesSingleton
         {
-            private readonly MySingletonService _singletonService;
+            private readonly MySingletonServiceUsesTransients _singletonService;
 
-            public MyTransientServiceUsesSingleton(MySingletonService singletonService)
+            public MyTransientServiceUsesSingleton(MySingletonServiceUsesTransients singletonService)
             {
                 _singletonService = singletonService;
             }
@@ -61,13 +117,13 @@ namespace Volo.Abp.DependencyInjection
             }
         }
 
-        private class MySingletonService
+        private class MySingletonServiceUsesTransients
         {
             private readonly IServiceProvider _serviceProvider;
 
             private readonly List<MyTransientService> _instances;
 
-            public MySingletonService(IServiceProvider serviceProvider)
+            public MySingletonServiceUsesTransients(IServiceProvider serviceProvider)
             {
                 _serviceProvider = serviceProvider;
                 _instances = new List<MyTransientService>();
@@ -102,6 +158,60 @@ namespace Volo.Abp.DependencyInjection
             public void Dispose()
             {
                 IsDisposed = true;
+            }
+        }
+
+        private class MyTransientServiceUsesTransients
+        {
+            private readonly IServiceProvider _serviceProvider;
+
+            private readonly List<MyTransientService> _instances;
+
+            public MyTransientServiceUsesTransients(IServiceProvider serviceProvider)
+            {
+                _serviceProvider = serviceProvider;
+                _instances = new List<MyTransientService>();
+            }
+
+            public void DoIt()
+            {
+                _instances.Add(_serviceProvider.GetRequiredService<MyTransientService>());
+            }
+
+            public void ShouldNotBeDisposed()
+            {
+                foreach (var instance in _instances)
+                {
+                    instance.IsDisposed.ShouldBeFalse();
+                }
+            }
+
+            public void ShouldBeDisposed()
+            {
+                foreach (var instance in _instances)
+                {
+                    instance.IsDisposed.ShouldBeTrue();
+                }
+            }
+        }
+
+        private class ScopedServiceWithState
+        {
+            private readonly Dictionary<string, object> _items;
+
+            public ScopedServiceWithState()
+            {
+                _items = new Dictionary<string, object>();
+            }
+
+            public void Set(string name, object value)
+            {
+                _items[name] = value;
+            }
+
+            public object Get(string name)
+            {
+                return _items[name];
             }
         }
     }
