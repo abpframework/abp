@@ -24,7 +24,6 @@ using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Data;
-using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.Web;
 using Volo.Abp.Localization;
@@ -35,6 +34,9 @@ using Volo.Abp.Threading;
 using Volo.Abp.UI;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
+//<TEMPLATE-REMOVE IF-NOT='EntityFrameworkCore'>
+using Volo.Abp.EntityFrameworkCore;
+//</TEMPLATE-REMOVE>
 
 namespace MyCompanyName.MyProjectName
 {
@@ -83,8 +85,10 @@ namespace MyCompanyName.MyProjectName
             {
                 options.ConnectionStrings.Default = configuration.GetConnectionString("Default");
             });
+            //<TEMPLATE-REMOVE IF-NOT='EntityFrameworkCore'>
 
             services.Configure<AbpDbContextOptions>(options => { options.UseSqlServer(); });
+            //</TEMPLATE-REMOVE>
         }
 
         private static void ConfigureAutoMapper(IServiceCollection services)
