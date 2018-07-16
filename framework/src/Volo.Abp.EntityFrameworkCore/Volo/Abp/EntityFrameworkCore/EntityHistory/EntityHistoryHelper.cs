@@ -13,6 +13,7 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Json;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Reflection;
 using Volo.Abp.Timing;
 using Volo.Abp.Uow;
 
@@ -170,7 +171,7 @@ namespace Volo.Abp.EntityFrameworkCore.EntityHistory
                         NewValue = isDeleted ? null : JsonSerializer.Serialize(propertyEntry.CurrentValue).TruncateWithPostfix(EntityPropertyChangeInfo.MaxValueLength),
                         OriginalValue = isCreated ? null : JsonSerializer.Serialize(propertyEntry.OriginalValue).TruncateWithPostfix(EntityPropertyChangeInfo.MaxValueLength),
                         PropertyName = property.Name,
-                        PropertyTypeFullName = property.ClrType.FullName,
+                        PropertyTypeFullName = property.ClrType.GetFirstGenericArgumentIfNullable().FullName,
                         TenantId = GetTenantId(entityEntry.Entity)
                     });
                 }
@@ -311,7 +312,7 @@ namespace Volo.Abp.EntityFrameworkCore.EntityHistory
                                     NewValue = JsonSerializer.Serialize(propertyEntry.CurrentValue),
                                     OriginalValue = JsonSerializer.Serialize(propertyEntry.OriginalValue),
                                     PropertyName = property.Name,
-                                    PropertyTypeFullName = property.ClrType.FullName
+                                    PropertyTypeFullName = property.ClrType.GetFirstGenericArgumentIfNullable().FullName
                                 });
                             }
 

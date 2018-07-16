@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 
 namespace Volo.Abp.Reflection
@@ -33,14 +34,24 @@ namespace Volo.Abp.Reflection
                 return true;
             }
 
-            if (includeNullables && 
-                type.IsGenericType && 
+            if (includeNullables &&
+                type.IsGenericType &&
                 type.GetGenericTypeDefinition() == typeof(Nullable<>))
             {
                 return IsPrimitiveExtendedInternal(type.GenericTypeArguments[0], includeEnums);
             }
 
             return false;
+        }
+
+        public static Type GetFirstGenericArgumentIfNullable(this Type t)
+        {
+            if (t.GetGenericArguments().Length > 0 && t.GetGenericTypeDefinition() == typeof(Nullable<>))
+            {
+                return t.GetGenericArguments().FirstOrDefault();
+            }
+
+            return t;
         }
 
         private static bool IsPrimitiveExtendedInternal(Type type, bool includeEnums)
