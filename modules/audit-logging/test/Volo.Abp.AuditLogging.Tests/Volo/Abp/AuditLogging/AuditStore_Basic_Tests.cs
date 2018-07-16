@@ -27,7 +27,6 @@ namespace Volo.Abp.AuditLogging
 
             var auditLog = new AuditLogInfo
             {
-                TenantId = Guid.NewGuid(),
                 UserId = userId,
                 ImpersonatorUserId = Guid.NewGuid(),
                 ImpersonatorTenantId = Guid.NewGuid(),
@@ -36,7 +35,27 @@ namespace Volo.Abp.AuditLogging
                 ClientIpAddress = ipAddress,
                 ClientName = "MyDesktop",
                 BrowserInfo = "Chrome",
-                Comments = new List<string> { firstComment, "Second Comment"}
+                Comments = new List<string> { firstComment, "Second Comment"},
+                EntityChanges =
+                {
+                    new EntityChangeInfo
+                    {
+                        EntityId = Guid.NewGuid().ToString(),
+                        EntityTypeFullName = typeof(AuditStore_Basic_Tests).FullName,
+                        ChangeType = EntityChangeType.Created,
+                        ChangeTime = DateTime.Now,
+                        PropertyChanges = new List<EntityPropertyChangeInfo>
+                        {
+                            new EntityPropertyChangeInfo
+                            {
+                                PropertyTypeFullName = typeof(string).FullName,
+                                PropertyName = "Name",
+                                NewValue = "New value",
+                                OriginalValue = null
+                            }
+                        }
+                    }
+                }
             };
 
             //Act
@@ -44,11 +63,14 @@ namespace Volo.Abp.AuditLogging
 
             //Assert
 
-            var insertedLog = GetAuditLogsFromDbContext().FirstOrDefault(al => al.UserId == userId);
+            var insertedLog = GetAuditLogsFromDbContext()
+                .FirstOrDefault(al => al.UserId == userId);
 
             insertedLog.ShouldNotBeNull();
             insertedLog.ClientIpAddress.ShouldBe(ipAddress);
             insertedLog.Comments.ShouldStartWith(firstComment);
+            insertedLog.EntityChanges.Count.ShouldBeGreaterThan(0);
+            insertedLog.EntityChanges.First().PropertyChanges.Count.ShouldBeGreaterThan(0);
         }
     }
 }

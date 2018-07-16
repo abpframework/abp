@@ -26,7 +26,7 @@ namespace Volo.Abp.AuditLogging
         protected List<AuditLog> GetAuditLogsFromDbContext()
         {
             return UsingDbContext(context =>
-                context.AuditLogs.ToList()
+                context.AuditLogs.IncludeDetails().ToList()
             );
         }
     }

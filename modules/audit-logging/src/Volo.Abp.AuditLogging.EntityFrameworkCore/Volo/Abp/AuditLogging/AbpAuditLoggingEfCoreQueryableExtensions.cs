@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using Microsoft.EntityFrameworkCore;
 
 namespace Volo.Abp.AuditLogging
@@ -21,6 +18,5 @@ namespace Volo.Abp.AuditLogging
                 .Include(x => x.Actions)
                 .Include(x => x.EntityChanges).ThenInclude(ec=>ec.PropertyChanges);
         }
-
     }
 }
