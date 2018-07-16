@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Volo.Abp.Data;
 using Volo.Abp.MultiTenancy;
 
@@ -30,10 +31,28 @@ namespace Volo.Abp.Auditing
 
         public virtual void Merge(EntityChangeInfo changeInfo)
         {
-            //TODO: Gracefully merge (add/update) and also for ExtraProperties
             foreach (var propertyChange in changeInfo.PropertyChanges)
             {
-                PropertyChanges.Add(propertyChange);
+                var existingChange = PropertyChanges.FirstOrDefault(p => p.PropertyName == propertyChange.PropertyName);
+                if (existingChange == null)
+                {
+                    PropertyChanges.Add(propertyChange);
+                }
+                else
+                {
+                    existingChange.NewValue = propertyChange.NewValue;
+                }
+            }
+
+            foreach (var extraProperty in changeInfo.ExtraProperties)
+            {
+                var key = extraProperty.Key;
+                if (ExtraProperties.ContainsKey(key))
+                {
+                    key = InternalUtils.AddCounter(key);
+                }
+
+                ExtraProperties[key] = extraProperty.Value;
             }
         }
     }
