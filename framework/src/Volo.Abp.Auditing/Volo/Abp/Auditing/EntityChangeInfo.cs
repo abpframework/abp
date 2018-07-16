@@ -27,5 +27,14 @@ namespace Volo.Abp.Auditing
         {
             ExtraProperties = new Dictionary<string, object>();
         }
+
+        public virtual void Merge(EntityChangeInfo changeInfo)
+        {
+            //TODO: Gracefully merge (add/update) and also for ExtraProperties
+            foreach (var propertyChange in changeInfo.PropertyChanges)
+            {
+                PropertyChanges.Add(propertyChange);
+            }
+        }
     }
 }

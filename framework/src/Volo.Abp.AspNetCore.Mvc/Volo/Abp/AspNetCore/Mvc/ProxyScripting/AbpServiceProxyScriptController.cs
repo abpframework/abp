@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Volo.Abp.Auditing;
 using Volo.Abp.Http.ProxyScripting;
 
 namespace Volo.Abp.AspNetCore.Mvc.ProxyScripting
 {
-    //TODO: abp area?
-    //TODO: [DisableAuditing]
     [Area("Abp")]
     [Route("Abp/ServiceProxyScript")]
+    [DisableAuditing]
     public class AbpServiceProxyScriptController : AbpController
     {
         private readonly IProxyScriptManager _proxyScriptManager;

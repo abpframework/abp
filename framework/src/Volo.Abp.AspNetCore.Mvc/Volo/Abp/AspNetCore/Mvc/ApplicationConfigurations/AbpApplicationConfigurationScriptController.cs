@@ -2,12 +2,14 @@
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Volo.Abp.Auditing;
 using Volo.Abp.Json;
 
 namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
 {
     [Area("Abp")]
     [Route("Abp/ApplicationConfigurationScript")]
+    [DisableAuditing]
     public class AbpApplicationConfigurationScriptController : AbpController
     {
         private readonly IApplicationConfigurationBuilder _configurationBuilder;

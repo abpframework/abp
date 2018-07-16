@@ -85,7 +85,7 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
             {
                 b.ToTable(tablePrefix + "EntityPropertyChanges", schema);
 
-                b.Property(x => x.NewValue).HasMaxLength(EntityPropertyChangeConsts.MaxNewValueLength).IsRequired().HasColumnName(nameof(EntityPropertyChange.NewValue));
+                b.Property(x => x.NewValue).HasMaxLength(EntityPropertyChangeConsts.MaxNewValueLength).HasColumnName(nameof(EntityPropertyChange.NewValue));
                 b.Property(x => x.PropertyName).HasMaxLength(EntityPropertyChangeConsts.MaxPropertyNameLength).IsRequired().HasColumnName(nameof(EntityPropertyChange.PropertyName));
                 b.Property(x => x.PropertyTypeFullName).HasMaxLength(EntityPropertyChangeConsts.MaxPropertyTypeFullNameLength).IsRequired().HasColumnName(nameof(EntityPropertyChange.PropertyTypeFullName));
                 b.Property(x => x.OriginalValue).HasMaxLength(EntityPropertyChangeConsts.MaxOriginalValueLength).HasColumnName(nameof(EntityPropertyChange.OriginalValue));

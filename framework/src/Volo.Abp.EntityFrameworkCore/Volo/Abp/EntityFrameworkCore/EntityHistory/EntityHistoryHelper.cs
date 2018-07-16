@@ -219,12 +219,12 @@ namespace Volo.Abp.EntityFrameworkCore.EntityHistory
                 return false;
             }
 
-            if (entityType.GetTypeInfo().IsDefined(typeof(AuditedAttribute), true))
+            if (entityType.IsDefined(typeof(AuditedAttribute), true))
             {
                 return true;
             }
 
-            if (entityType.GetTypeInfo().IsDefined(typeof(DisableAuditingAttribute), true))
+            if (entityType.IsDefined(typeof(DisableAuditingAttribute), true))
             {
                 return false;
             }
@@ -257,7 +257,7 @@ namespace Volo.Abp.EntityFrameworkCore.EntityHistory
             }
 
             var entityType = propertyEntry.EntityEntry.Entity.GetType();
-            if (entityType.GetTypeInfo().IsDefined(typeof(DisableAuditingAttribute), true))
+            if (entityType.IsDefined(typeof(DisableAuditingAttribute), true))
             {
                 if (propertyInfo == null || !propertyInfo.IsDefined(typeof(AuditedAttribute), true))
                 {

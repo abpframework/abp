@@ -30,7 +30,7 @@ namespace Volo.Abp.Auditing
         }
 
         //TODO: Move to a better place
-        internal static bool ShouldAuditTypeByDefault(Type type)
+        public static bool ShouldAuditTypeByDefault(Type type)
         {
             if (type.IsDefined(typeof(AuditedAttribute), true))
             {
