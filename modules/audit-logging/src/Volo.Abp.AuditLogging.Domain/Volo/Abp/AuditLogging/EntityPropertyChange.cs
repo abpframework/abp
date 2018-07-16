@@ -31,10 +31,10 @@ namespace Volo.Abp.AuditLogging
             Id = guidGenerator.Create();
             TenantId = entityChangeInfo.TenantId;
             EntityChangeId = entityChangeId;
-            NewValue = entityChangeInfo.NewValue;
-            OriginalValue = entityChangeInfo.OriginalValue;
-            PropertyName = entityChangeInfo.PropertyName;
-            PropertyTypeFullName = entityChangeInfo.PropertyTypeFullName;
+            NewValue = entityChangeInfo.NewValue.Truncate(EntityPropertyChangeConsts.MaxNewValueLength);
+            OriginalValue = entityChangeInfo.OriginalValue.Truncate(EntityPropertyChangeConsts.MaxOriginalValueLength);
+            PropertyName = entityChangeInfo.PropertyName.TruncateFromBeginning(EntityPropertyChangeConsts.MaxPropertyNameLength);
+            PropertyTypeFullName = entityChangeInfo.PropertyTypeFullName.TruncateFromBeginning(EntityPropertyChangeConsts.MaxPropertyTypeFullNameLength);
         }
     }
 }

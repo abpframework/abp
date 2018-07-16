@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Volo.Abp.AuditLogging
+﻿namespace Volo.Abp.AuditLogging
 {
     public class EntityPropertyChangeConsts
     {

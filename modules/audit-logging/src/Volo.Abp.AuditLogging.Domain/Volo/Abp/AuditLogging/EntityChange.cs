@@ -40,8 +40,8 @@ namespace Volo.Abp.AuditLogging
             TenantId = entityChangeInfo.TenantId;
             ChangeTime = entityChangeInfo.ChangeTime;
             ChangeType = entityChangeInfo.ChangeType;
-            EntityId = entityChangeInfo.EntityId;
-            EntityTypeFullName = entityChangeInfo.EntityTypeFullName;
+            EntityId = entityChangeInfo.EntityId.Truncate(EntityChangeConsts.MaxEntityTypeFullNameLength);
+            EntityTypeFullName = entityChangeInfo.EntityTypeFullName.TruncateFromBeginning(EntityChangeConsts.MaxEntityTypeFullNameLength);
             PropertyChanges = entityChangeInfo.PropertyChanges.Select(p => new EntityPropertyChange(guidGenerator, Id, p)).ToList();
             ExtraProperties = entityChangeInfo.ExtraProperties.ToDictionary(pair => pair.Key, pair => pair.Value);
         }

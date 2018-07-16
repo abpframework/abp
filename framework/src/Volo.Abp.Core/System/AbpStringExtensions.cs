@@ -365,6 +365,25 @@ namespace System
         }
 
         /// <summary>
+        /// Gets a substring of a string from Ending of the string if it exceeds maximum length.
+        /// </summary>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="str"/> is null</exception>
+        public static string TruncateFromBeginning(this string str, int maxLength)
+        {
+            if (str == null)
+            {
+                return null;
+            }
+
+            if (str.Length <= maxLength)
+            {
+                return str;
+            }
+
+            return str.Right(maxLength);
+        }
+
+        /// <summary>
         /// Gets a substring of a string from beginning of the string if it exceeds maximum length.
         /// It adds a "..." postfix to end of the string if it's truncated.
         /// Returning string can not be longer than maxLength.

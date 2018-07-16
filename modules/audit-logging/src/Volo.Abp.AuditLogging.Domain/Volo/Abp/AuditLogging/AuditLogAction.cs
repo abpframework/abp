@@ -34,15 +34,16 @@ namespace Volo.Abp.AuditLogging
 
         public AuditLogAction(Guid id, Guid auditLogId, AuditLogActionInfo actionInfo)
         {
+
             Id = id;
             TenantId = actionInfo.TenantId;
             AuditLogId = auditLogId;
-            ServiceName = actionInfo.ServiceName;
-            MethodName = actionInfo.MethodName;
-            Parameters = actionInfo.Parameters;
             ExecutionTime = actionInfo.ExecutionTime;
             ExecutionDuration = actionInfo.ExecutionDuration;
             ExtraProperties = actionInfo.ExtraProperties.ToDictionary(pair => pair.Key, pair => pair.Value);
+            ServiceName = actionInfo.ServiceName.TruncateFromBeginning(AuditLogActionConsts.MaxServiceNameLength);
+            MethodName = actionInfo.MethodName.TruncateFromBeginning(AuditLogActionConsts.MaxMethodNameLength);
+            Parameters = actionInfo.Parameters.Length > AuditLogActionConsts.MaxParametersLength ? "" : actionInfo.Parameters;
         }
     }
 }
