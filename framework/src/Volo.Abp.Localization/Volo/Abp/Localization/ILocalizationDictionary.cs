@@ -21,7 +21,5 @@ namespace Volo.Abp.Localization
         /// </summary>
         /// <returns>List of all <see cref="LocalString"/> object</returns>
         IReadOnlyList<LocalString> GetAllStrings();
-
-        void Extend(ILocalizationDictionary dictionary);
     }
 }

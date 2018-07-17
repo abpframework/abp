@@ -75,7 +75,7 @@ namespace Volo.Abp.Localization.Json
                     dublicateNames.JoinAsString(", "));
             }
 
-            return new LocalizationDictionary(cultureCode, dictionary);
+            return new StaticLocalizationDictionary(cultureCode, dictionary);
         }
     }
 }
