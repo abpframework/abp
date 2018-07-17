@@ -22,8 +22,8 @@ namespace Volo.Abp.AuditLogging.MongoDB
             string httpMethod = null, string url = null, HttpStatusCode? httpStatusCode = null, bool includeDetails = false)
         {
             var query = GetMongoQueryable()
-                .WhereIf(httpMethod != null, q => q.HttpMethod == httpMethod)
-                .WhereIf(url != null, q => q.Url == url)
+                .WhereIf(httpMethod != null, q => q.HttpMethod.ToLowerInvariant() == httpMethod.ToLowerInvariant())
+                .WhereIf(url != null, q => q.Url.ToLowerInvariant().Contains(url.ToLowerInvariant()))
                 .WhereIf(httpStatusCode != null && httpStatusCode > 0, q => q.HttpStatusCode == (int?)httpStatusCode);
 
             var totalCount = await query.As<IMongoQueryable<AuditLog>>().LongCountAsync();
