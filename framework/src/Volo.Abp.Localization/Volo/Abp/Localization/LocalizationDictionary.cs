@@ -45,11 +45,6 @@ namespace Volo.Abp.Localization
             }
         }
 
-        public void Clear()
-        {
-            _dictionary.Clear();
-        }
-
         /// <inheritdoc/>
         public virtual IEnumerator<LocalString> GetEnumerator()
         {
