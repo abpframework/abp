@@ -51,7 +51,7 @@ namespace Volo.Abp.Localization.Json
                 throw new AbpException("Culture is empty in language json file.");
             }
 
-            var dictionary = new LocalizationDictionary(cultureCode);
+            var dictionary = new Dictionary<string, LocalString>();
             var dublicateNames = new List<string>();
             foreach (var item in jsonFile.Texts)
             {
@@ -60,7 +60,7 @@ namespace Volo.Abp.Localization.Json
                     throw new AbpException("The key is empty in given json string.");
                 }
 
-                if (dictionary.GetOrNull(item.Key) != null)
+                if (dictionary.GetOrDefault(item.Key) != null)
                 {
                     dublicateNames.Add(item.Key);
                 }
@@ -75,7 +75,7 @@ namespace Volo.Abp.Localization.Json
                     dublicateNames.JoinAsString(", "));
             }
 
-            return dictionary;
+            return new LocalizationDictionary(cultureCode, dictionary);
         }
     }
 }

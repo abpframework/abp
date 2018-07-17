@@ -11,13 +11,6 @@ namespace Volo.Abp.Localization
     {
         /// <inheritdoc/>
         public string CultureName { get; }
-        
-        /// <inheritdoc/>
-        public virtual LocalString this[string name]
-        {
-            get => GetOrNull(name);
-            set => _dictionary[name] = value;
-        }
 
         private readonly Dictionary<string, LocalString> _dictionary;
 
@@ -25,10 +18,11 @@ namespace Volo.Abp.Localization
         /// Creates a new <see cref="LocalizationDictionary"/> object.
         /// </summary>
         /// <param name="cultureName">Culture of the dictionary</param>
-        public LocalizationDictionary(string cultureName)
+        /// <param name="dictionary">The dictionary</param>
+        public LocalizationDictionary(string cultureName, Dictionary<string, LocalString> dictionary)
         {
             CultureName = cultureName;
-            _dictionary = new Dictionary<string, LocalString>();
+            _dictionary = dictionary;
         }
 
         /// <inheritdoc/>
@@ -47,7 +41,7 @@ namespace Volo.Abp.Localization
         {
             foreach (var localizedString in dictionary.GetAllStrings())
             {
-                this[localizedString.Name] = localizedString;
+                _dictionary[localizedString.Name] = localizedString;
             }
         }
 

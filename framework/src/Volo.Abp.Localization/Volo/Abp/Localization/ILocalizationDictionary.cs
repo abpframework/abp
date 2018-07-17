@@ -10,12 +10,6 @@ namespace Volo.Abp.Localization
         string CultureName { get; }
 
         /// <summary>
-        /// Gets/sets a string for this dictionary with given name (key).
-        /// </summary>
-        /// <param name="name">Name to get/set</param>
-        LocalString this[string name] { get; set; }
-
-        /// <summary>
         /// Gets a <see cref="LocalString"/> for given <paramref name="name"/>.
         /// </summary>
         /// <param name="name">Name (key) to get localized string</param>
