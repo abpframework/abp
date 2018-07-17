@@ -59,8 +59,8 @@ namespace Volo.Abp.AuditLogging
             ExecutionTime = auditInfo.ExecutionTime;
             ExecutionDuration = auditInfo.ExecutionDuration;
             ClientIpAddress = auditInfo.ClientIpAddress;
-            ClientName = auditInfo.ClientName;
-            BrowserInfo = auditInfo.BrowserInfo;
+            ClientName = auditInfo.ClientName.Truncate(AuditLogConsts.MaxClientNameLength);
+            BrowserInfo = auditInfo.BrowserInfo.Truncate(AuditLogConsts.MaxBrowserInfoLength);
             HttpMethod = auditInfo.HttpMethod;
             Url = auditInfo.Url;
             HttpStatusCode = auditInfo.HttpStatusCode;
