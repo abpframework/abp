@@ -15,5 +15,7 @@
         public const int MaxUrlLength = 256;
 
         public const int MaxHttpMethodLength = 16;
+
+        public const int MaxUserNameLength = 256;
     }
 }

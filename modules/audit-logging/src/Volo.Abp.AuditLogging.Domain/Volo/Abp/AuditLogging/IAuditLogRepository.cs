@@ -14,6 +14,7 @@ namespace Volo.Abp.AuditLogging
             string filter = null,
             string httpMethod = null,
             string url = null,
+            string userName = null,
             HttpStatusCode? httpStatusCode = null,
             bool includeDetails = false);
     }

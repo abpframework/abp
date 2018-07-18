@@ -12,6 +12,8 @@ namespace Volo.Abp.Auditing
     {
         public Guid? UserId { get; set; }
 
+        public string UserName { get; set; }
+
         public Guid? TenantId { get; set; }
 
         public Guid? ImpersonatorUserId { get; set; }
@@ -58,7 +60,7 @@ namespace Volo.Abp.Auditing
             var sb = new StringBuilder();
 
             sb.AppendLine($"AUDIT LOG: [{HttpStatusCode?.ToString() ?? "---"}: {(HttpMethod ?? "-------").PadRight(7)}] {Url}");
-            sb.AppendLine($"- UserId                 : {UserId}");
+            sb.AppendLine($"- UserName - UserId                 : {UserName} - {UserId}");
             sb.AppendLine($"- ClientIpAddress        : {ClientIpAddress}");
             sb.AppendLine($"- ExecutionDuration      : {ExecutionDuration}");
 
