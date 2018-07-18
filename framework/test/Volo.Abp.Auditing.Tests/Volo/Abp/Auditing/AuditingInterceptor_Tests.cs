@@ -35,9 +35,10 @@ namespace Volo.Abp.Auditing
         {
             var myAuditedObject1 = GetRequiredService<MyAuditedObject1>();
 
-            using (_auditingManager.BeginScope())
+            using (var scope = _auditingManager.BeginScope())
             {
                 await myAuditedObject1.DoItAsync(new InputObject { Value1 = "fourty-two", Value2 = 42 });
+                await scope.SaveAsync();
             }
 
 #pragma warning disable 4014

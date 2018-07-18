@@ -137,12 +137,6 @@ namespace Volo.Abp.Auditing
                 return false;
             }
 
-            if (!Options.IsEnabledForGetRequests && !auditLog.EntityChanges.Any())
-            {
-                //TODO: We can create another option for that: IsEnabledIfNoChangesDone?
-                return false;
-            }
-
             return true;
         }
 
