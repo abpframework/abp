@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <AssemblyName>Volo.Abp.AuditLogging.MongoDB.Tests</AssemblyName>
+    <PackageId>Volo.Abp.AuditLogging.MongoDB.Tests</PackageId>
+    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <RootNamespace />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Volo.Abp.AuditLogging.MongoDB\Volo.Abp.AuditLogging.MongoDB.csproj" />
+    <ProjectReference Include="..\Volo.Abp.AuditLogging.TestBase\Volo.Abp.AuditLogging.TestBase.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.2" />
+    <PackageReference Include="Mongo2Go" Version="2.2.1" />
+  </ItemGroup>
+
+</Project>

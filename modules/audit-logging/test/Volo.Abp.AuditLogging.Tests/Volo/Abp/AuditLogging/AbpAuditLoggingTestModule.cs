@@ -4,7 +4,9 @@ using Volo.Abp.Modularity;
 
 namespace Volo.Abp.AuditLogging
 {
-    [DependsOn(typeof(AbpAuditLoggingEntityFrameworkCoreTestModule))]
+    [DependsOn(
+        typeof(AbpAuditLoggingEntityFrameworkCoreTestModule)
+        )]
     public class AbpAuditLoggingTestModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
