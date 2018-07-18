@@ -7,19 +7,12 @@ using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.AspNetCore.VirtualFileSystem
 {
-    public class AspNetCoreVirtualFileProvider : IFileProvider
+    public class RazorViewEngineVirtualFileProvider : IFileProvider
     {
         private readonly Lazy<IFileProvider> _fileProvider;
         private readonly IObjectAccessor<IServiceProvider> _serviceProviderAccessor;
-        private readonly string _contentPath;
 
-        public AspNetCoreVirtualFileProvider(IServiceProvider serviceProvider, string contentPath = null)
-            : this(new ObjectAccessor<IServiceProvider>(serviceProvider))
-        {
-            _contentPath = contentPath;
-        }
-
-        public AspNetCoreVirtualFileProvider(IObjectAccessor<IServiceProvider> serviceProviderAccessor)
+        public RazorViewEngineVirtualFileProvider(IObjectAccessor<IServiceProvider> serviceProviderAccessor)
         {
             _serviceProviderAccessor = serviceProviderAccessor;
             _fileProvider = new Lazy<IFileProvider>(
@@ -30,11 +23,6 @@ namespace Volo.Abp.AspNetCore.VirtualFileSystem
 
         public IFileInfo GetFileInfo(string subpath)
         {
-            if (_contentPath != null)
-            {
-                subpath = _contentPath + subpath;
-            }
-
             if (!IsInitialized())
             {
                 return new NotFoundFileInfo(subpath);
@@ -45,11 +33,6 @@ namespace Volo.Abp.AspNetCore.VirtualFileSystem
 
         public IDirectoryContents GetDirectoryContents(string subpath)
         {
-            if (_contentPath != null)
-            {
-                subpath = _contentPath + subpath;
-            }
-
             if (!IsInitialized())
             {
                 return new NotFoundDirectoryContents();

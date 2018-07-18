@@ -47,7 +47,7 @@ namespace Volo.Abp.AspNetCore.Mvc
                     new ConfigureOptions<RazorViewEngineOptions>(options =>
                         {
                             options.FileProviders.Add(
-                                new AspNetCoreVirtualFileProvider(
+                                new RazorViewEngineVirtualFileProvider(
                                     context.Services.GetSingletonInstance<IObjectAccessor<IServiceProvider>>()
                                 )
                             );

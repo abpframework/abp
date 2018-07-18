@@ -1,19 +1,16 @@
-﻿using Microsoft.Extensions.FileProviders;
-using Volo.Abp.AspNetCore.VirtualFileSystem;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
+using Volo.Abp.VirtualFileSystem;
 
 namespace Microsoft.AspNetCore.Builder
 {
-    //TODO: Volo.Abp.AspNetCore.EmbeddedFiles package should be referenced by the projects using embedded resources..?
-
     public static class VirtualFileSystemApplicationBuilderExtensions
     {
         public static void UseVirtualFiles(this IApplicationBuilder app)
         {
-            //var options = app.ApplicationServices.GetRequiredService<IOptions<VirtualFileSystemOptions>>().Value;
-
-            IFileProvider fileProvider = new AspNetCoreVirtualFileProvider(
-                app.ApplicationServices,
-                "/wwwroot"  //TODO: Hard-coded "/wwwroot" is not good!
+            IFileProvider fileProvider = new FileProviderSubFolderWrapper(
+                app.ApplicationServices.GetRequiredService<IVirtualFileProvider>(),
+                "/wwwroot"
             );
             
             app.UseStaticFiles(
