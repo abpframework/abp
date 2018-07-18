@@ -36,6 +36,7 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
                 b.Property(x => x.ImpersonatorTenantId).HasColumnName(nameof(AuditLog.ImpersonatorTenantId));
                 b.Property(x => x.ImpersonatorUserId).HasColumnName(nameof(AuditLog.ImpersonatorUserId));
                 b.Property(x => x.UserId).HasColumnName(nameof(AuditLog.UserId));
+                b.Property(x => x.UserName).HasMaxLength(AuditLogConsts.MaxUserNameLength).HasColumnName(nameof(AuditLog.UserName));
                 b.Property(x => x.TenantId).HasColumnName(nameof(AuditLog.TenantId));
 
                 b.HasMany<AuditLogAction>().WithOne().HasForeignKey(x => x.AuditLogId);

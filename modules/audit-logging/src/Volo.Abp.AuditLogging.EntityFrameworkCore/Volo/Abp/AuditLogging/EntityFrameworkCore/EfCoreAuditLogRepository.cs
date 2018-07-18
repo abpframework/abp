@@ -24,14 +24,16 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
             string filter = null,
             string httpMethod = null,
             string url = null,
+            string userName = null,
             HttpStatusCode? httpStatusCode = null,
             bool includeDetails = false)
         {
             var query = DbSet.AsNoTracking()
                 .IncludeDetails(includeDetails)
-                .WhereIf(httpMethod != null, q => q.HttpMethod != null && q.HttpMethod.ToLowerInvariant() == httpMethod.ToLowerInvariant())
-                .WhereIf(url != null, q => q.Url != null && q.Url.ToLowerInvariant().Contains(url.ToLowerInvariant()))
-                .WhereIf(httpStatusCode != null && httpStatusCode > 0, q => q.HttpStatusCode == (int?)httpStatusCode);
+                .WhereIf(httpMethod != null, auditLog => auditLog.HttpMethod != null && auditLog.HttpMethod.ToLowerInvariant() == httpMethod.ToLowerInvariant())
+                .WhereIf(url != null, auditLog => auditLog.Url != null && auditLog.Url.ToLowerInvariant().Contains(url.ToLowerInvariant()))
+                .WhereIf(userName != null, auditLog => auditLog.UserName != null && auditLog.UserName == userName)
+                .WhereIf(httpStatusCode != null && httpStatusCode > 0, auditLog => auditLog.HttpStatusCode == (int?)httpStatusCode);
 
             var totalCount = await query.LongCountAsync();
 

@@ -84,6 +84,7 @@ namespace Volo.Abp.Auditing
             {
                 TenantId = CurrentTenant.Id,
                 UserId = CurrentUser.Id,
+                UserName = CurrentUser.UserName,
                 //ImpersonatorUserId = AbpSession.ImpersonatorUserId, //TODO: Impersonation system is not available yet!
                 //ImpersonatorTenantId = AbpSession.ImpersonatorTenantId,
                 ExecutionTime = Clock.Now
