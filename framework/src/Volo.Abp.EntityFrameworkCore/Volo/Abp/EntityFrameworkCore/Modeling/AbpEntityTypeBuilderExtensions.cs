@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Newtonsoft.Json;
 using Volo.Abp.Auditing;
 using Volo.Abp.Data;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.EntityFrameworkCore.Modeling
 {
@@ -90,6 +91,12 @@ namespace Volo.Abp.EntityFrameworkCore.Modeling
         {
             b.ConfigureAudited();
             b.ConfigureDeletionAudited();
+        }
+
+        public static void ConfigureMultiTenant<T>(this EntityTypeBuilder<T> b)
+            where T : class, IMultiTenant
+        {
+            b.Property(x => x.TenantId).IsRequired(false).HasColumnName(nameof(IMultiTenant.TenantId));
         }
 
         //TODO: Add other interfaces (IMultiTenant, IAuditedObject<TUser>...)

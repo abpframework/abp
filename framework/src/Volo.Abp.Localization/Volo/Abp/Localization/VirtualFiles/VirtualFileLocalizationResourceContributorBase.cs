@@ -1,47 +1,80 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Primitives;
 using Volo.Abp.Internal;
 using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.Localization.VirtualFiles
 {
-    public abstract class VirtualFileLocalizationResourceContributorBase : LocalizationResourceContributorBase
+    public abstract class VirtualFileLocalizationResourceContributorBase : ILocalizationResourceContributor
     {
         private readonly string _virtualPath;
-
+        private IVirtualFileProvider _virtualFileProvider;
+        private Dictionary<string, ILocalizationDictionary> _dictionaries;
         private bool _subscribedForChanges;
+        private readonly object _syncObj = new object();
 
         protected VirtualFileLocalizationResourceContributorBase(string virtualPath)
         {
             _virtualPath = virtualPath;
         }
 
-        public override List<ILocalizationDictionary> GetDictionaries(LocalizationResourceInitializationContext context)
+        public void Initialize(LocalizationResourceInitializationContext context)
         {
-            var virtualFileProvider = context.ServiceProvider.GetRequiredService<IVirtualFileProvider>();
-
-            if (!_subscribedForChanges)
-            {
-                ChangeToken.OnChange(() => virtualFileProvider.Watch(_virtualPath.EnsureEndsWith('/') + "*.*"), () =>
-                {
-                    OnUpdated();
-                });
-
-                _subscribedForChanges = true;
-            }
-
-            return CreateDictionaries(virtualFileProvider);
+            _virtualFileProvider = context.ServiceProvider.GetRequiredService<IVirtualFileProvider>();
         }
 
-        private List<ILocalizationDictionary> CreateDictionaries(IFileProvider fileProvider)
+        public LocalizedString GetOrNull(string cultureName, string name)
+        {
+            return GetDictionaries().GetOrDefault(cultureName)?.GetOrNull(name);
+        }
+
+        public void Fill(string cultureName, Dictionary<string, LocalizedString> dictionary)
+        {
+            GetDictionaries().GetOrDefault(cultureName)?.Fill(dictionary);
+        }
+
+        private Dictionary<string, ILocalizationDictionary> GetDictionaries()
+        {
+            var dictionaries = _dictionaries;
+            if (dictionaries != null)
+            {
+                return dictionaries;
+            }
+
+            lock (_syncObj)
+            {
+                dictionaries = _dictionaries;
+                if (dictionaries != null)
+                {
+                    return dictionaries;
+                }
+
+                if (!_subscribedForChanges)
+                {
+                    ChangeToken.OnChange(() => _virtualFileProvider.Watch(_virtualPath.EnsureEndsWith('/') + "*.*"),
+                        () =>
+                        {
+                            _dictionaries = null;
+                        });
+
+                    _subscribedForChanges = true;
+                }
+
+                dictionaries = _dictionaries = CreateDictionaries();
+            }
+            
+            return dictionaries;
+        }
+
+        private Dictionary<string, ILocalizationDictionary> CreateDictionaries()
         {
             var dictionaries = new Dictionary<string, ILocalizationDictionary>();
 
-            foreach (var file in fileProvider.GetDirectoryContents(_virtualPath))
+            foreach (var file in _virtualFileProvider.GetDirectoryContents(_virtualPath))
             {
                 if (file.IsDirectory || !CanParseFile(file))
                 {
@@ -53,11 +86,11 @@ namespace Volo.Abp.Localization.VirtualFiles
                 {
                     throw new AbpException($"{file.PhysicalPath} dictionary has a culture name '{dictionary.CultureName}' which is already defined!");
                 }
-                
+
                 dictionaries[dictionary.CultureName] = dictionary;
             }
 
-            return dictionaries.Values.ToList();
+            return dictionaries;
         }
 
         protected abstract bool CanParseFile(IFileInfo file);

@@ -20,7 +20,7 @@ namespace Volo.Abp.Caching
         void Set(
             string key,
             TCacheItem value,
-            DistributedCacheEntryOptions options
+            DistributedCacheEntryOptions options = null
         );
 
         Task SetAsync(

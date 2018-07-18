@@ -1,6 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.Immutable;
+using Microsoft.Extensions.Localization;
 
 namespace Volo.Abp.Localization
 {
@@ -12,29 +11,31 @@ namespace Volo.Abp.Localization
         /// <inheritdoc/>
         public string CultureName { get; }
 
-        protected Dictionary<string, LocalString> Dictionary { get; }
+        protected Dictionary<string, LocalizedString> Dictionary { get; }
 
         /// <summary>
         /// Creates a new <see cref="StaticLocalizationDictionary"/> object.
         /// </summary>
         /// <param name="cultureName">Culture of the dictionary</param>
         /// <param name="dictionary">The dictionary</param>
-        public StaticLocalizationDictionary(string cultureName, Dictionary<string, LocalString> dictionary)
+        public StaticLocalizationDictionary(string cultureName, Dictionary<string, LocalizedString> dictionary)
         {
             CultureName = cultureName;
             Dictionary = dictionary;
         }
 
         /// <inheritdoc/>
-        public virtual LocalString GetOrNull(string name)
+        public virtual LocalizedString GetOrNull(string name)
         {
             return Dictionary.GetOrDefault(name);
         }
 
-        /// <inheritdoc/>
-        public virtual IReadOnlyList<LocalString> GetAllStrings()
+        public void Fill(Dictionary<string, LocalizedString> dictionary)
         {
-            return Dictionary.Values.ToImmutableList();
+            foreach (var item in Dictionary)
+            {
+                dictionary[item.Key] = item.Value;
+            }
         }
     }
 }

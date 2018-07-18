@@ -1,9 +1,11 @@
+using System;
+
 namespace Volo.Abp
 {
     /// <summary>
     /// Can be used to store Name/Value (or Key/Value) pairs.
     /// </summary>
-    //[Serializable]
+    [Serializable]
     public class NameValue : NameValue<string>
     {
         /// <summary>
@@ -27,7 +29,7 @@ namespace Volo.Abp
     /// <summary>
     /// Can be used to store Name/Value (or Key/Value) pairs.
     /// </summary>
-    //[Serializable]
+    [Serializable]
     public class NameValue<T>
     {
         /// <summary>

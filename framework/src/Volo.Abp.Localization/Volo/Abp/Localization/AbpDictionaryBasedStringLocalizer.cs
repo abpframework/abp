@@ -72,16 +72,11 @@ namespace Volo.Abp.Localization
 
         protected virtual LocalizedString GetLocalizedStringOrNull(string name, string cultureName, bool tryDefaults = true)
         {
-            var dictionaries = Resource.Dictionaries;
-
             //Try to get from original dictionary (with country code)
-            if (dictionaries.TryGetValue(cultureName, out var originalDictionary))
+            var strOriginal = Resource.Contributors.GetOrNull(cultureName, name);
+            if (strOriginal != null)
             {
-                var strOriginal = originalDictionary.GetOrNull(name);
-                if (strOriginal != null)
-                {
-                    return new LocalizedString(name, strOriginal.Value);
-                }
+                return strOriginal;
             }
 
             if (!tryDefaults)
@@ -92,27 +87,20 @@ namespace Volo.Abp.Localization
             //Try to get from same language dictionary (without country code)
             if (cultureName.Contains("-")) //Example: "tr-TR" (length=5)
             {
-                if (dictionaries.TryGetValue(GetBaseCultureName(cultureName), out var langDictionary))
+                var strLang = Resource.Contributors.GetOrNull(GetBaseCultureName(cultureName), name);
+                if (strLang != null)
                 {
-                    var strLang = langDictionary.GetOrNull(name);
-                    if (strLang != null)
-                    {
-                        return new LocalizedString(name, strLang.Value);
-                    }
+                    return strLang;
                 }
             }
 
             //Try to get from default language
             if (!Resource.DefaultCultureName.IsNullOrEmpty())
             {
-                var defaultDictionary = dictionaries.GetOrDefault(Resource.DefaultCultureName);
-                if (defaultDictionary != null)
+                var strDefault = Resource.Contributors.GetOrNull(Resource.DefaultCultureName, name);
+                if (strDefault != null)
                 {
-                    var strDefault = defaultDictionary.GetOrNull(name);
-                    if (strDefault != null)
-                    {
-                        return new LocalizedString(name, strDefault.Value);
-                    }
+                    return strDefault;
                 }
             }
 
@@ -123,8 +111,6 @@ namespace Volo.Abp.Localization
         protected virtual IReadOnlyList<LocalizedString> GetAllStrings(string cultureName, bool includeParentCultures = true)
         {
             //TODO: Can be optimized (example: if it's already default dictionary, skip overriding)
-
-            var dictionaries = Resource.Dictionaries;
 
             var allStrings = new Dictionary<string, LocalizedString>();
 
@@ -138,40 +124,21 @@ namespace Volo.Abp.Localization
 
             if (includeParentCultures)
             {
-                //Fill all strings from default dictionary
+                //Fill all strings from default culture
                 if (!Resource.DefaultCultureName.IsNullOrEmpty())
                 {
-                    var defaultDictionary = dictionaries.GetOrDefault(Resource.DefaultCultureName);
-                    if (defaultDictionary != null)
-                    {
-                        foreach (var defaultDictString in defaultDictionary.GetAllStrings())
-                        {
-                            allStrings[defaultDictString.Name] = new LocalizedString(defaultDictString.Name, defaultDictString.Value);
-                        }
-                    }
+                    Resource.Contributors.Fill(Resource.DefaultCultureName, allStrings);
                 }
 
                 //Overwrite all strings from the language based on country culture
                 if (cultureName.Contains("-"))
                 {
-                    if (dictionaries.TryGetValue(GetBaseCultureName(cultureName), out var langDictionary))
-                    {
-                        foreach (var langString in langDictionary.GetAllStrings())
-                        {
-                            allStrings[langString.Name] = new LocalizedString(langString.Name, langString.Value);
-                        }
-                    }
+                    Resource.Contributors.Fill(GetBaseCultureName(cultureName), allStrings);
                 }
             }
 
-            //Overwrite all strings from the original dictionary
-            if (dictionaries.TryGetValue(cultureName, out var originalDictionary))
-            {
-                foreach (var originalLangString in originalDictionary.GetAllStrings())
-                {
-                    allStrings[originalLangString.Name] = new LocalizedString(originalLangString.Name, originalLangString.Value);
-                }
-            }
+            //Overwrite all strings from the original culture
+            Resource.Contributors.Fill(cultureName, allStrings);
 
             return allStrings.Values.ToImmutableList();
         }

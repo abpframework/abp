@@ -17,18 +17,10 @@ namespace Volo.Abp.Localization
         public string DefaultCultureName { get; set; }
 
         [NotNull]
-        public IReadOnlyDictionary<string, ILocalizationDictionary> Dictionaries => _dictionaries;
-        private readonly Dictionary<string, ILocalizationDictionary> _dictionaries;
-
-        [NotNull]
-        public List<ILocalizationResourceContributor> Contributors { get; }
+        public LocalizationResourceContributorList Contributors { get; }
 
         [NotNull]
         public List<Type> BaseResourceTypes { get; }
-
-        public EventHandler Updated;
-
-        internal bool RegisteredToUpdate { get; set; }
 
         public LocalizationResource(
             [NotNull] Type resourceType, 
@@ -38,10 +30,8 @@ namespace Volo.Abp.Localization
             ResourceType = Check.NotNull(resourceType, nameof(resourceType));
             DefaultCultureName = defaultCultureName;
 
-            _dictionaries = new Dictionary<string, ILocalizationDictionary>();
-
             BaseResourceTypes = new List<Type>();
-            Contributors = new List<ILocalizationResourceContributor>();
+            Contributors = new LocalizationResourceContributorList();
 
             if (initialContributor != null)
             {
@@ -49,29 +39,6 @@ namespace Volo.Abp.Localization
             }
 
             AddBaseResourceTypes();
-        }
-
-        public virtual void FillDictionaries(IServiceProvider serviceProvider)
-        {
-            _dictionaries.Clear();
-
-            var context = new LocalizationResourceInitializationContext(this, serviceProvider);
-
-            foreach (var contributor in Contributors)
-            {
-                foreach (var dictionary in contributor.GetDictionaries(context))
-                {
-                    var existingDictionary = _dictionaries.GetOrDefault(dictionary.CultureName);
-                    if (existingDictionary == null)
-                    {
-                        _dictionaries[dictionary.CultureName] = new CombinedLocalizationDictionary(dictionary);
-                    }
-                    else
-                    {
-                        _dictionaries[dictionary.CultureName].As<CombinedLocalizationDictionary>().AddFirst(dictionary);
-                    }
-                }
-            }
         }
 
         protected virtual void AddBaseResourceTypes()

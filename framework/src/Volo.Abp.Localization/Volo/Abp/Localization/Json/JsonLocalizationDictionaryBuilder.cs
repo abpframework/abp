@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Microsoft.Extensions.Localization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
@@ -51,7 +52,7 @@ namespace Volo.Abp.Localization.Json
                 throw new AbpException("Culture is empty in language json file.");
             }
 
-            var dictionary = new Dictionary<string, LocalString>();
+            var dictionary = new Dictionary<string, LocalizedString>();
             var dublicateNames = new List<string>();
             foreach (var item in jsonFile.Texts)
             {
@@ -65,7 +66,7 @@ namespace Volo.Abp.Localization.Json
                     dublicateNames.Add(item.Key);
                 }
 
-                dictionary[item.Key] = new LocalString(item.Key, item.Value.NormalizeLineEndings());
+                dictionary[item.Key] = new LocalizedString(item.Key, item.Value.NormalizeLineEndings());
             }
 
             if (dublicateNames.Count > 0)

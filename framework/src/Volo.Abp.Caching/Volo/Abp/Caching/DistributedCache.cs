@@ -60,7 +60,7 @@ namespace Volo.Abp.Caching
             return ObjectSerializer.Deserialize<TCacheItem>(cachedBytes);
         }
 
-        public virtual void Set(string key, TCacheItem value, DistributedCacheEntryOptions options)
+        public virtual void Set(string key, TCacheItem value, DistributedCacheEntryOptions options = null)
         {
             Cache.Set(
                 NormalizeKey(key),

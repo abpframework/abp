@@ -1,8 +1,10 @@
-﻿using JetBrains.Annotations;
+﻿using System;
+using JetBrains.Annotations;
 
 namespace Volo.Abp.Caching
 {
-    public class CacheNameAttribute
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface | AttributeTargets.Struct)]
+    public class CacheNameAttribute : Attribute
     {
         public string Name { get; }
 

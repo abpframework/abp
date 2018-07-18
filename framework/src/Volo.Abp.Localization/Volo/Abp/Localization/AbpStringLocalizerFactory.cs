@@ -46,22 +46,19 @@ namespace Volo.Abp.Localization
 
         private StringLocalizerCacheItem CreateStringLocalizerCacheItem(LocalizationResource resource)
         {
-            if (!resource.RegisteredToUpdate)
+            foreach (var globalContributor in _abpLocalizationOptions.GlobalContributors)
             {
-                resource.RegisteredToUpdate = true;
-
-                foreach (var contributor in resource.Contributors)
-                {
-                    contributor.Updated += (sender, args) =>
-                    {
-                        _localizerCache.TryRemove(resource.ResourceType, out _);
-                    };
-                }
+                resource.Contributors.Add((ILocalizationResourceContributor) Activator.CreateInstance(globalContributor));
             }
 
             using (var scope = _serviceProvider.CreateScope())
             {
-                resource.FillDictionaries(scope.ServiceProvider);
+                var context = new LocalizationResourceInitializationContext(resource, scope.ServiceProvider);
+
+                foreach (var contributor in resource.Contributors)
+                {
+                    contributor.Initialize(context);
+                }
             }
 
             return new StringLocalizerCacheItem(
