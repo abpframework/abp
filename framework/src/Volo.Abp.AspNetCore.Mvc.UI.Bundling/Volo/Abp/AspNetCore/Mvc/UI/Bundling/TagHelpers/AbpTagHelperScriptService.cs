@@ -12,12 +12,12 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
     {
         public AbpTagHelperScriptService(
             IBundleManager bundleManager,
-            IHybridWebRootFileProvider webRootFileProvider,
+            IWebContentFileProvider webContentFileProvider,
             IOptions<BundlingOptions> options,
             IHostingEnvironment hostingEnvironment
             ) : base(
                 bundleManager,
-                webRootFileProvider,
+                webContentFileProvider,
                 options,
                 hostingEnvironment)
         {

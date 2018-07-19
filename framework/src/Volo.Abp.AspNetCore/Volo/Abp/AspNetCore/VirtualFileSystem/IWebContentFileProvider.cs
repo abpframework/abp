@@ -2,7 +2,7 @@
 
 namespace Volo.Abp.AspNetCore.VirtualFileSystem
 {
-    public interface IHybridWebRootFileProvider : IFileProvider
+    public interface IWebContentFileProvider : IFileProvider
     {
 
     }

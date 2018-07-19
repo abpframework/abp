@@ -7,8 +7,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.Scripts
     {
         public override string FileExtension => "js";
 
-        public ScriptBundler(IHybridWebRootFileProvider webRootFileProvider, IJavascriptMinifier minifier)
-            : base(webRootFileProvider, minifier)
+        public ScriptBundler(IWebContentFileProvider webContentFileProvider, IJavascriptMinifier minifier)
+            : base(webContentFileProvider, minifier)
         {
         }
     }

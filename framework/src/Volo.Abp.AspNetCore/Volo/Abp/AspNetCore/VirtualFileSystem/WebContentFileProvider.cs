@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Hosting;
@@ -12,7 +11,7 @@ using Volo.Abp.VirtualFileSystem;
 namespace Volo.Abp.AspNetCore.VirtualFileSystem
 {
     //TODO: How to handle wwwroot naming?
-    public class HybridWebRootFileProvider : IHybridWebRootFileProvider, ISingletonDependency
+    public class WebContentFileProvider : IWebContentFileProvider, ISingletonDependency
     {
         private readonly IVirtualFileProvider _virtualFileProvider;
         private readonly IFileProvider _fileProvider;
@@ -21,7 +20,7 @@ namespace Volo.Abp.AspNetCore.VirtualFileSystem
 
         protected AspNetCoreContentOptions Options { get; }
 
-        public HybridWebRootFileProvider(
+        public WebContentFileProvider(
             IVirtualFileProvider virtualFileProvider, 
             IHostingEnvironment hostingEnvironment,
             IOptions<AspNetCoreContentOptions> options)
@@ -69,13 +68,13 @@ namespace Volo.Abp.AspNetCore.VirtualFileSystem
         {
             if (!ExtraAllowedFolder(filter))
             {
-                return _fileProvider.Watch("/wwwroot" + filter);
+                return _fileProvider.Watch(_rootPath + filter);
             }
 
             return new CompositeChangeToken(
                 new[]
                 {
-                    _fileProvider.Watch("/wwwroot" + filter),
+                    _fileProvider.Watch(_rootPath + filter),
                     _fileProvider.Watch(filter)
                 }
             );

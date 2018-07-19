@@ -11,8 +11,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.Styles
         private readonly IHostingEnvironment _hostingEnvironment;
         public override string FileExtension => "css";
 
-        public StyleBundler(IHybridWebRootFileProvider webRootFileProvider, ICssMinifier minifier, IHostingEnvironment hostingEnvironment) 
-            : base(webRootFileProvider, minifier)
+        public StyleBundler(IWebContentFileProvider webContentFileProvider, ICssMinifier minifier, IHostingEnvironment hostingEnvironment) 
+            : base(webContentFileProvider, minifier)
         {
             _hostingEnvironment = hostingEnvironment;
         }

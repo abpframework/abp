@@ -21,7 +21,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
         public ILogger<BundleManager> Logger { get; set; }
 
         protected readonly BundlingOptions Options;
-        protected readonly IHybridWebRootFileProvider WebRootFileProvider;
+        protected readonly IWebContentFileProvider WebContentFileProvider;
         protected readonly IHostingEnvironment HostingEnvironment;
         protected readonly IScriptBundler ScriptBundler;
         protected readonly IStyleBundler StyleBundler;
@@ -38,7 +38,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
             IServiceProvider serviceProvider,
             IDynamicFileProvider dynamicFileProvider,
             IBundleCache bundleCache,
-            IHybridWebRootFileProvider webRootFileProvider,
+            IWebContentFileProvider webContentFileProvider,
             IWebRequestResources requestResources)
         {
             HostingEnvironment = hostingEnvironment;
@@ -46,7 +46,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
             ServiceProvider = serviceProvider;
             DynamicFileProvider = dynamicFileProvider;
             BundleCache = bundleCache;
-            WebRootFileProvider = webRootFileProvider;
+            WebContentFileProvider = webContentFileProvider;
             RequestResources = requestResources;
             StyleBundler = styleBundler;
             Options = options.Value;
@@ -112,7 +112,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
             {
                 foreach (var file in files)
                 {
-                    var watchDisposeHandle = WebRootFileProvider.Watch(file).RegisterChangeCallback(_ =>
+                    var watchDisposeHandle = WebContentFileProvider.Watch(file).RegisterChangeCallback(_ =>
                     {
                         lock (cacheValue.WatchDisposeHandles)
                         {
@@ -196,7 +196,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 
         protected virtual BundleConfigurationContext CreateBundleConfigurationContext()
         {
-            return new BundleConfigurationContext(ServiceProvider, WebRootFileProvider);
+            return new BundleConfigurationContext(ServiceProvider, WebContentFileProvider);
         }
 
         protected virtual List<BundleContributor> GetContributors(BundleConfigurationCollection bundles, string bundleName)

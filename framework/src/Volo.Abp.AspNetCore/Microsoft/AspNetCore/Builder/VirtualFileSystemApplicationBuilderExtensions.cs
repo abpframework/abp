@@ -27,7 +27,7 @@ namespace Microsoft.AspNetCore.Builder
             app.UseStaticFiles(
                 new StaticFileOptions
                 {
-                    FileProvider = app.ApplicationServices.GetRequiredService<IHybridWebRootFileProvider>()
+                    FileProvider = app.ApplicationServices.GetRequiredService<IWebContentFileProvider>()
                 }
             );
         }

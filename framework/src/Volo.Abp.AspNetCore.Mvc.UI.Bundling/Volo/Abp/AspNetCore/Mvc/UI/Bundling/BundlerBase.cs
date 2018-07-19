@@ -12,12 +12,12 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
     {
         public ILogger<BundlerBase> Logger { get; set; }
 
-        protected IHybridWebRootFileProvider WebRootFileProvider { get; }
+        protected IWebContentFileProvider WebContentFileProvider { get; }
         protected IMinifier Minifier { get; }
 
-        protected BundlerBase(IHybridWebRootFileProvider webRootFileProvider, IMinifier minifier)
+        protected BundlerBase(IWebContentFileProvider webContentFileProvider, IMinifier minifier)
         {
-            WebRootFileProvider = webRootFileProvider;
+            WebContentFileProvider = webContentFileProvider;
             Minifier = minifier;
 
             Logger = NullLogger<BundlerBase>.Instance;
@@ -59,11 +59,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 
         protected virtual IFileInfo GetFileInfo(IBundlerContext context, string file)
         {
-            var fileInfo = WebRootFileProvider.GetFileInfo(file);
+            var fileInfo = WebContentFileProvider.GetFileInfo(file);
 
             if (!fileInfo.Exists)
             {
-                throw new AbpException($"Could not find file '{file}' using {nameof(IHybridWebRootFileProvider)}");
+                throw new AbpException($"Could not find file '{file}' using {nameof(IWebContentFileProvider)}");
             }
 
             return fileInfo;

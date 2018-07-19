@@ -18,18 +18,18 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
         public ILogger<AbpTagHelperResourceService> Logger { get; set; }
 
         protected IBundleManager BundleManager { get; }
-        protected IHybridWebRootFileProvider WebRootFileProvider { get; }
+        protected IWebContentFileProvider WebContentFileProvider { get; }
         protected IHostingEnvironment HostingEnvironment { get; }
         protected readonly BundlingOptions Options;
         
         protected AbpTagHelperResourceService(
             IBundleManager bundleManager,
-            IHybridWebRootFileProvider webRootFileProvider,
+            IWebContentFileProvider webContentFileProvider,
             IOptions<BundlingOptions> options, 
             IHostingEnvironment hostingEnvironment)
         {
             BundleManager = bundleManager;
-            WebRootFileProvider = webRootFileProvider;
+            WebContentFileProvider = webContentFileProvider;
             HostingEnvironment = hostingEnvironment;
             Options = options.Value;
 
@@ -63,10 +63,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
 
             foreach (var bundleFile in bundleFiles)
             {
-                var file = WebRootFileProvider.GetFileInfo(bundleFile);
+                var file = WebContentFileProvider.GetFileInfo(bundleFile);
                 if (file == null)
                 {
-                    throw new AbpException($"Could not find the bundle file from {nameof(IHybridWebRootFileProvider)}");
+                    throw new AbpException($"Could not find the bundle file from {nameof(IWebContentFileProvider)}");
                 }
 
                 AddHtmlTag(context, output, bundleFile + "?_v=" + file.LastModified.UtcTicks);
