@@ -11,19 +11,6 @@ namespace Microsoft.AspNetCore.Builder
     {
         public static void UseVirtualFiles(this IApplicationBuilder app)
         {
-            //var options = app.ApplicationServices.GetRequiredService<IOptions<AspNetCoreContentOptions>>().Value;
-            //var hostingEnvironment = app.ApplicationServices.GetRequiredService<IHostingEnvironment>();
-
-            //var fileProvider = new FileProviderSubFolderWrapper(
-            //    new CompositeFileProvider(
-            //        new PhysicalFileProvider(hostingEnvironment.ContentRootPath),
-            //        app.ApplicationServices.GetRequiredService<IVirtualFileProvider>()
-            //    ),
-            //    "/wwwroot",
-            //    options.AllowedExtraWebContentFolders.ToArray(),
-            //    options.AllowedExtraWebContentFileExtensions.ToArray()
-            //);
-
             app.UseStaticFiles(
                 new StaticFileOptions
                 {
