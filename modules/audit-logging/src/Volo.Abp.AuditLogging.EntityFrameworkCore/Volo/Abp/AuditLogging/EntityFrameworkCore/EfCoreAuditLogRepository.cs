@@ -30,7 +30,7 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
         {
             var query = GetListQuery(httpMethod, url, userName, httpStatusCode, includeDetails);
 
-            var auditLogs = await query.OrderBy(sorting)
+            var auditLogs = await query.OrderBy(sorting ?? "executionTime desc")
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync();
 

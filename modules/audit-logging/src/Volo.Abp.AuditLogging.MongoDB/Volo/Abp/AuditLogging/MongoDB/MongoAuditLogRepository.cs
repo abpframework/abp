@@ -20,20 +20,22 @@ namespace Volo.Abp.AuditLogging.MongoDB
         }
 
         public async Task<List<AuditLog>> GetListAsync(string sorting = null, int maxResultCount = 50, int skipCount = 0,
-            string httpMethod = null, string url = null, string userName = null, HttpStatusCode? httpStatusCode = null, bool includeDetails = false)
+            string httpMethod = null, string url = null, string userName = null, HttpStatusCode? httpStatusCode = null, bool includeDetails = true)
         {
             var query = GetListQuery(httpMethod, url, userName, httpStatusCode, includeDetails);
 
-            return await query.OrderBy(sorting).As<IMongoQueryable<AuditLog>>()
+            return await query.OrderBy(sorting ?? "executionTime desc").As<IMongoQueryable<AuditLog>>()
                 .PageBy<AuditLog, IMongoQueryable<AuditLog>>(skipCount, maxResultCount)
                 .ToListAsync();
         }
 
-        public async Task<long> GetCountAsync(string httpMethod = null, string url = null, string userName = null, HttpStatusCode? httpStatusCode = null, bool includeDetails = false)
+        public async Task<long> GetCountAsync(string httpMethod = null, string url = null, string userName = null, HttpStatusCode? httpStatusCode = null, bool includeDetails = true)
         {
             var query = GetListQuery(httpMethod, url, userName, httpStatusCode, includeDetails);
 
-            return await query.As<IMongoQueryable<AuditLog>>().LongCountAsync();
+            var count = await query.As<IMongoQueryable<AuditLog>>().LongCountAsync();
+
+            return count;
         }
 
         private IQueryable<AuditLog> GetListQuery(

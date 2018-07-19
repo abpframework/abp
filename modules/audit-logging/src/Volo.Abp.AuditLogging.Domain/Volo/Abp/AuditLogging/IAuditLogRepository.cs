@@ -16,7 +16,7 @@ namespace Volo.Abp.AuditLogging
             string url = null,
             string userName = null,
             HttpStatusCode? httpStatusCode = null,
-            bool includeDetails = false);
+            bool includeDetails = true);
 
         Task<long> GetCountAsync(
             string httpMethod = null,
