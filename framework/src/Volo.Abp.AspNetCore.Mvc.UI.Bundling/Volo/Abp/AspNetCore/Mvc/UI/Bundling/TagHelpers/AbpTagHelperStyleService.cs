@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.VirtualFileSystem;
@@ -11,11 +13,13 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
         public AbpTagHelperStyleService(
             IBundleManager bundleManager, 
             IHybridWebRootFileProvider webRootFileProvider,
-            IOptions<BundlingOptions> options
+            IOptions<BundlingOptions> options,
+            IHostingEnvironment hostingEnvironment
             ) : base(
                 bundleManager, 
                 webRootFileProvider,
-                options)
+                options,
+                hostingEnvironment)
         {
         }
 
@@ -23,7 +27,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
         {
             Options.StyleBundles.TryAdd(
                 bundleName,
-                configuration => bundleItems.ForEach(bi => bi.AddToConfiguration(configuration))
+                configuration => bundleItems.ForEach(bi => bi.AddToConfiguration(configuration)),
+                HostingEnvironment.IsDevelopment() && bundleItems.Any()
             );
         }
 

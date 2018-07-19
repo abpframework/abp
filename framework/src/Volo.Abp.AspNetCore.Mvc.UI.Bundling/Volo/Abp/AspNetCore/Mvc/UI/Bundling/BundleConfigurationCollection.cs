@@ -24,7 +24,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
         /// <param name="configureAction">Initial configuration action.</param>
         /// <returns>Returns this object for chained calls.</returns>
         public BundleConfigurationCollection Add(
-            [NotNull] string bundleName, 
+            [NotNull] string bundleName,
             [CanBeNull] Action<BundleConfiguration> configureAction = null)
         {
             if (!TryAdd(bundleName, configureAction))
@@ -42,19 +42,44 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
         /// </summary>
         /// <param name="bundleName">Bundle name.</param>
         /// <param name="configureAction">Initial configuration action.</param>
+        /// <param name="overrideIfExists">
+        /// Overrides the bundle even if it does exists.
+        /// This option is designed to be used only for development time
+        /// where bundle configuration action may change.
+        /// </param>
         /// <returns>Returns true if added. Returns false if it's already added before.</returns>
         public bool TryAdd(
-            [NotNull] string bundleName, 
-            [CanBeNull] Action<BundleConfiguration> configureAction = null)
+            [NotNull] string bundleName,
+            [CanBeNull] Action<BundleConfiguration> configureAction = null,
+            bool overrideIfExists = false)
         {
             Check.NotNull(bundleName, nameof(bundleName));
+
+            if (overrideIfExists)
+            {
+                _bundles[bundleName] = CreateBundle(bundleName, configureAction);
+                return true;
+            }
 
             if (_bundles.ContainsKey(bundleName))
             {
                 return false;
             }
 
+            var bundle = CreateBundle(bundleName, configureAction);
+
+            if (!_bundles.TryAdd(bundleName, bundle))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private BundleConfiguration CreateBundle(string bundleName, Action<BundleConfiguration> configureAction)
+        {
             var bundle = new BundleConfiguration(bundleName);
+
             configureAction?.Invoke(bundle);
 
             if (_lazyBundleConfigurationActions.TryGetValue(bundleName, out var configurationActions))
@@ -65,20 +90,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
                 }
             }
 
-            if (!_bundles.TryAdd(bundleName, bundle))
-            {
-                return false;
-            }
-
-            if (configurationActions != null)
-            {
-                lock (configurationActions)
-                {
-                    configurationActions.Clear();
-                }
-            }
-
-            return true;
+            return bundle;
         }
 
         /// <summary>

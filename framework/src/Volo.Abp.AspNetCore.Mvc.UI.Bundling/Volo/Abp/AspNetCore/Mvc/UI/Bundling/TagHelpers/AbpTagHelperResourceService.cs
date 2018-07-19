@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
@@ -18,15 +19,18 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
 
         protected IBundleManager BundleManager { get; }
         protected IHybridWebRootFileProvider WebRootFileProvider { get; }
+        protected IHostingEnvironment HostingEnvironment { get; }
         protected readonly BundlingOptions Options;
         
         protected AbpTagHelperResourceService(
-            IBundleManager bundleManager, 
+            IBundleManager bundleManager,
             IHybridWebRootFileProvider webRootFileProvider,
-            IOptions<BundlingOptions> options)
+            IOptions<BundlingOptions> options, 
+            IHostingEnvironment hostingEnvironment)
         {
             BundleManager = bundleManager;
             WebRootFileProvider = webRootFileProvider;
+            HostingEnvironment = hostingEnvironment;
             Options = options.Value;
 
             Logger = NullLogger<AbpTagHelperResourceService>.Instance;
