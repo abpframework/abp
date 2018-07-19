@@ -17,7 +17,7 @@ namespace Volo.Abp.AuditLogging.MongoDB
 
             builder.Entity<AuditLog>(b =>
             {
-                b.CollectionName = options.CollectionPrefix + "AuditLogging";
+                b.CollectionName = options.CollectionPrefix + "AuditLogs";
             });
         }
     }
