@@ -151,7 +151,6 @@ Virtual File System is well integrated to ASP.NET Core:
 Virtual Files Middleware is used to serve embedded (js, css, image...) files to clients/browsers just like physical files in the **wwwroot** folder. Add it just after the static file middleware as shown below:
 
 ````C#
-app.UseStaticFiles();
 app.UseVirtualFiles();
 ````
 

@@ -168,7 +168,6 @@ namespace Acme.BookStore
                 app.UseErrorPage();
             }
 
-            app.UseStaticFiles();
             app.UseVirtualFiles();
             app.UseAuthentication();
 

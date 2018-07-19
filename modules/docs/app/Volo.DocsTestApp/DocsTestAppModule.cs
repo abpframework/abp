@@ -95,7 +95,6 @@ namespace Volo.DocsTestApp
 
             app.UseDeveloperExceptionPage();
 
-            app.UseStaticFiles();
             app.UseVirtualFiles();
 
             app.UseSwagger();

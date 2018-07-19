@@ -29,7 +29,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseStaticFiles();
             app.UseVirtualFiles();
 
             app.UseMvcWithDefaultRoute();

@@ -109,7 +109,6 @@ namespace Volo.BloggingTestApp
                 app.UseErrorPage();
             }
 
-            app.UseStaticFiles();
             app.UseVirtualFiles();
 
             app.UseSwagger();

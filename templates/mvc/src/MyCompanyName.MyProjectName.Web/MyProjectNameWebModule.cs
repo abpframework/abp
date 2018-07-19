@@ -181,7 +181,6 @@ namespace MyCompanyName.MyProjectName
                 app.UseErrorPage();
             }
 
-            app.UseStaticFiles();
             app.UseVirtualFiles();
             app.UseAuthentication();
 
