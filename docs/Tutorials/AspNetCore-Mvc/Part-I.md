@@ -365,7 +365,7 @@ Change the `Pages/Books/Index.cshtml` as following:
 @model IndexModel
 @section scripts
 {
-    <abp-script src="/pages/books/index.js" />
+    <abp-script src="/Pages/Books/index.js" />
 }
 <abp-card>
     <abp-card-header>
@@ -393,7 +393,7 @@ Change the `Pages/Books/Index.cshtml` as following:
 
 ##### Add a Script File
 
-Create `index.js` JavaScript file under the `wwwroot/pages/books/` folder:
+Create `index.js` JavaScript file under the `Pages/Books/` folder:
 
 ![bookstore-index-js-file](images/bookstore-index-js-file.png)
 

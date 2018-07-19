@@ -32,7 +32,15 @@
     <Content Remove="Pages\**\*.cshtml" />
     <Content Remove="Localization\Resources\**\*.json" />
     <Content Remove="Properties\launchSettings.json" />
+    <EmbeddedResource Include="Pages\Blog\Posts\edit.js" />
+    <EmbeddedResource Include="Pages\Blog\Posts\new.css" />
+    <EmbeddedResource Include="Pages\Blog\Posts\new.js" />
+    <EmbeddedResource Include="Pages\Blog\Posts\new.scss" />
     <None Include="Properties\launchSettings.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\pages\blog\posts\" />
   </ItemGroup>
 
 </Project>
