@@ -4,17 +4,21 @@ using System.Linq;
 using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.Auditing;
+using Volo.Abp.Modularity;
 using Xunit;
 
 namespace Volo.Abp.AuditLogging
 {
-    public class AuditStore_Basic_Tests : AuditLogsTestBase
+    public abstract class AuditStore_Basic_Tests<TStartupModule> : AuditLoggingTestBase<TStartupModule> 
+        where TStartupModule : IAbpModule
     {
         private readonly IAuditingStore _auditingStore;
+        private readonly IAuditLogRepository _auditLogRepository;
 
-        public AuditStore_Basic_Tests()
+        protected AuditStore_Basic_Tests()
         {
             _auditingStore = GetRequiredService<IAuditingStore>();
+            _auditLogRepository = GetRequiredService<IAuditLogRepository>();
         }
 
         [Fact]
@@ -41,7 +45,7 @@ namespace Volo.Abp.AuditLogging
                     new EntityChangeInfo
                     {
                         EntityId = Guid.NewGuid().ToString(),
-                        EntityTypeFullName = typeof(AuditStore_Basic_Tests).FullName,
+                        EntityTypeFullName = "Volo.Abp.AuditLogging.TestEntity",
                         ChangeType = EntityChangeType.Created,
                         ChangeTime = DateTime.Now,
                         PropertyChanges = new List<EntityPropertyChangeInfo>
@@ -63,7 +67,7 @@ namespace Volo.Abp.AuditLogging
 
             //Assert
 
-            var insertedLog = GetAuditLogsFromDbContext()
+            var insertedLog = _auditLogRepository.GetList(true)
                 .FirstOrDefault(al => al.UserId == userId);
 
             insertedLog.ShouldNotBeNull();
