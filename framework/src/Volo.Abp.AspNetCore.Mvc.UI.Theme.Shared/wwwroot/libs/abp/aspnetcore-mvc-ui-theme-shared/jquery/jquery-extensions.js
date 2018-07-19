@@ -60,7 +60,10 @@
     };
 
     var toCamelCase = function(str) {
-        var regexs = [/(^[A-Z])/, /((\.)[A-Z])/];
+        var regexs = [
+            /(^[A-Z])/, // first char of string
+            /((\.)[A-Z])/ // first char after a dot (.)
+        ];
 
         regexs.forEach(
             function(regex) {
