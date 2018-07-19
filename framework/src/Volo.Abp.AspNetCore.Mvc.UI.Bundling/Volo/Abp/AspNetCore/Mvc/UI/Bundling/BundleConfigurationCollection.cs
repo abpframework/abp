@@ -23,7 +23,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
         /// <param name="bundleName">Bundle name.</param>
         /// <param name="configureAction">Initial configuration action.</param>
         /// <returns>Returns this object for chained calls.</returns>
-        public BundleConfigurationCollection Add([NotNull] string bundleName, [CanBeNull] Action<BundleConfiguration> configureAction = null)
+        public BundleConfigurationCollection Add(
+            [NotNull] string bundleName, 
+            [CanBeNull] Action<BundleConfiguration> configureAction = null)
         {
             if (!TryAdd(bundleName, configureAction))
             {
@@ -41,7 +43,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
         /// <param name="bundleName">Bundle name.</param>
         /// <param name="configureAction">Initial configuration action.</param>
         /// <returns>Returns true if added. Returns false if it's already added before.</returns>
-        public bool TryAdd([NotNull] string bundleName, [CanBeNull] Action<BundleConfiguration> configureAction = null)
+        public bool TryAdd(
+            [NotNull] string bundleName, 
+            [CanBeNull] Action<BundleConfiguration> configureAction = null)
         {
             Check.NotNull(bundleName, nameof(bundleName));
 

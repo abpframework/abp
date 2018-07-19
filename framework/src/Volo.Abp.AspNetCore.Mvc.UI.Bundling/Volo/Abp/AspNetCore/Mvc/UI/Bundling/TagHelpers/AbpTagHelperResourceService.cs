@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.VirtualFileSystem;
 using Volo.Abp.DependencyInjection;
 
@@ -16,15 +17,17 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
         public ILogger<AbpTagHelperResourceService> Logger { get; set; }
 
         protected IBundleManager BundleManager { get; }
-
         protected IHybridWebRootFileProvider WebRootFileProvider { get; }
-
+        protected readonly BundlingOptions Options;
+        
         protected AbpTagHelperResourceService(
             IBundleManager bundleManager, 
-            IHybridWebRootFileProvider webRootFileProvider)
+            IHybridWebRootFileProvider webRootFileProvider,
+            IOptions<BundlingOptions> options)
         {
             BundleManager = bundleManager;
             WebRootFileProvider = webRootFileProvider;
+            Options = options.Value;
 
             Logger = NullLogger<AbpTagHelperResourceService>.Instance;
         }

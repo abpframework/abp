@@ -142,16 +142,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
                 );
         }
 
-        public virtual void CreateStyleBundle(string bundleName, Action<BundleConfiguration> configureAction)
-        {
-            Options.StyleBundles.TryAdd(bundleName, configureAction);
-        }
-
-        public virtual void CreateScriptBundle(string bundleName, Action<BundleConfiguration> configureAction)
-        {
-            Options.ScriptBundles.TryAdd(bundleName, configureAction);
-        }
-
         protected virtual bool IsBundlingEnabled()
         {
             switch (Options.Mode)
