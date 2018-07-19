@@ -59,23 +59,57 @@
         });
     };
 
-    $.fn.serializeFormToObject = function () {
+    var toCamelCase = function(str) {
+        var regexs = [/(^[A-Z])/, /((\.)[A-Z])/];
+
+        regexs.forEach(
+            function(regex) {
+                var infLoopAvoider = 0;
+
+                while (regex.test(str)) {
+                    str = str
+                        .replace(regex, function ($1) { return $1.toLowerCase(); });
+
+                    if (infLoopAvoider++ > 1000) {
+                        break;
+                    }
+                }
+            }
+        );
+
+        return str;
+    };
+
+    $.fn.serializeFormToObject = function (camelCase = true) {
         //serialize to array
         var data = $(this).serializeArray();
 
         //add also disabled items
         $(':disabled[name]', this)
             .each(function (item) {
+                var value = '';
+
                 if ($(this).is(":checkbox")) {
-                    data.push({ name: this.name, value: $(this).is(':checked') });
+                    value = $(this).is(':checked');
                 } else {
-                    data.push({ name: this.name, value: $(this).val() });
+                    value = $(this).val();
                 }
+
+                data.push({ name: this.name, value: value });
             });
 
         //map to object
         var obj = {};
-        data.map(function (x) { obj[x.name] = x.value; });
+
+        if (camelCase) {
+            data.forEach(function (d) {
+                d.name = toCamelCase(d.name);
+            });
+        }
+
+        data.map(function (x) {
+                obj[x.name] = x.value;
+        });
 
         return obj;
     };
