@@ -10,13 +10,12 @@ using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.AspNetCore.VirtualFileSystem
 {
-    //TODO: How to handle wwwroot naming?
     public class WebContentFileProvider : IWebContentFileProvider, ISingletonDependency
     {
         private readonly IVirtualFileProvider _virtualFileProvider;
         private readonly IFileProvider _fileProvider;
         private readonly IHostingEnvironment _hostingEnvironment;
-        private string _rootPath = "/wwwroot";
+        private string _rootPath = "/wwwroot"; //TODO: How to handle wwwroot naming?
 
         protected AspNetCoreContentOptions Options { get; }
 
@@ -29,12 +28,17 @@ namespace Volo.Abp.AspNetCore.VirtualFileSystem
             _hostingEnvironment = hostingEnvironment;
             Options = options.Value;
 
-            _fileProvider = CreateHybridProvider();
+            _fileProvider = CreateFileProvider();
         }
 
-        public IFileInfo GetFileInfo(string subpath)
+        public virtual IFileInfo GetFileInfo(string subpath)
         {
             Check.NotNullOrEmpty(subpath, nameof(subpath));
+
+            if (PathUtils.PathNavigatesAboveRoot(subpath))
+            {
+                return new NotFoundFileInfo(subpath);
+            }
 
             if (ExtraAllowedFolder(subpath) && ExtraAllowedExtension(subpath))
             {
@@ -48,9 +52,14 @@ namespace Volo.Abp.AspNetCore.VirtualFileSystem
             return _fileProvider.GetFileInfo(_rootPath + subpath);
         }
 
-        public IDirectoryContents GetDirectoryContents([NotNull] string subpath)
+        public virtual IDirectoryContents GetDirectoryContents([NotNull] string subpath)
         {
             Check.NotNullOrEmpty(subpath, nameof(subpath));
+
+            if (PathUtils.PathNavigatesAboveRoot(subpath))
+            {
+                return NotFoundDirectoryContents.Singleton;
+            }
 
             if (ExtraAllowedFolder(subpath))
             {
@@ -80,7 +89,7 @@ namespace Volo.Abp.AspNetCore.VirtualFileSystem
             );
         }
 
-        protected virtual IFileProvider CreateHybridProvider()
+        protected virtual IFileProvider CreateFileProvider()
         {
             return new CompositeFileProvider(
                 new PhysicalFileProvider(_hostingEnvironment.ContentRootPath),
