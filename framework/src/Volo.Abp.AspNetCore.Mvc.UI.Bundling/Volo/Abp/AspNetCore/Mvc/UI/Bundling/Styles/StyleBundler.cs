@@ -1,3 +1,6 @@
+using System;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
 using Volo.Abp.AspNetCore.Mvc.UI.Minification.Styles;
 using Volo.Abp.AspNetCore.VirtualFileSystem;
 
@@ -5,21 +8,27 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.Styles
 {
     public class StyleBundler : BundlerBase, IStyleBundler
     {
+        private readonly IHostingEnvironment _hostingEnvironment;
         public override string FileExtension => "css";
 
-        public StyleBundler(IHybridWebRootFileProvider webRootFileProvider, ICssMinifier minifier) 
+        public StyleBundler(IHybridWebRootFileProvider webRootFileProvider, ICssMinifier minifier, IHostingEnvironment hostingEnvironment) 
             : base(webRootFileProvider, minifier)
         {
-
+            _hostingEnvironment = hostingEnvironment;
         }
 
         protected override string GetFileContent(IBundlerContext context, string file)
         {
             return CssRelativePath.Adjust(
                 base.GetFileContent(context, file),
-                WebRootFileProvider.GetAbsolutePath(file),
-                WebRootFileProvider.GetAbsolutePath(context.BundleRelativePath)
+                GetAbsolutePath(file),
+                GetAbsolutePath(context.BundleRelativePath)
             );
+        }
+
+        public string GetAbsolutePath(string relativePath)
+        {
+            return Path.Combine(_hostingEnvironment.ContentRootPath, "wwwroot", relativePath.RemovePreFix("/"));
         }
     }
 }

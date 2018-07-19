@@ -8,7 +8,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.Styles
     {
         private static readonly Regex _rxUrl = new Regex(@"url\s*\(\s*([""']?)([^:)]+)\1\s*\)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-        public static string Adjust(string cssFileContents, string absoluteInputFilePath, string absoluteOutputPath)
+        public static string Adjust(
+            string cssFileContents, 
+            string absoluteInputFilePath, 
+            string absoluteOutputPath)
         {
             var matches = _rxUrl.Matches(cssFileContents);
 

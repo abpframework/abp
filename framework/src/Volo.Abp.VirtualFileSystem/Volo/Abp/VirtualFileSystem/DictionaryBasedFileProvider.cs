@@ -31,7 +31,7 @@ namespace Volo.Abp.VirtualFileSystem
             var directory = GetFileInfo(subpath);
             if (!directory.IsDirectory)
             {
-                return new NotFoundDirectoryContents();
+                return NotFoundDirectoryContents.Singleton;
             }
 
             var fileList = new List<IFileInfo>();

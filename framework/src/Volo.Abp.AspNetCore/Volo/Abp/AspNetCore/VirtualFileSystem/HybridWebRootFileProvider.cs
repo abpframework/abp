@@ -1,53 +1,102 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.AspNetCore.VirtualFileSystem
 {
+    //TODO: How to handle wwwroot naming?
     public class HybridWebRootFileProvider : IHybridWebRootFileProvider, ISingletonDependency
     {
         private readonly IVirtualFileProvider _virtualFileProvider;
         private readonly IFileProvider _fileProvider;
         private readonly IHostingEnvironment _hostingEnvironment;
+        private string _rootPath = "/wwwroot";
 
-        public HybridWebRootFileProvider(IVirtualFileProvider virtualFileProvider, IHostingEnvironment hostingEnvironment)
+        protected AspNetCoreContentOptions Options { get; }
+
+        public HybridWebRootFileProvider(
+            IVirtualFileProvider virtualFileProvider, 
+            IHostingEnvironment hostingEnvironment,
+            IOptions<AspNetCoreContentOptions> options)
         {
             _virtualFileProvider = virtualFileProvider;
             _hostingEnvironment = hostingEnvironment;
+            Options = options.Value;
 
             _fileProvider = CreateHybridProvider();
         }
 
-        public virtual IFileInfo GetFileInfo(string subpath)
+        public IFileInfo GetFileInfo(string subpath)
         {
-            return _fileProvider.GetFileInfo("/wwwroot" + subpath); //TODO: Hard-coded "/wwwroot" is not good!
+            Check.NotNullOrEmpty(subpath, nameof(subpath));
+
+            if (ExtraAllowedFolder(subpath) && ExtraAllowedExtension(subpath))
+            {
+                var fileInfo = _fileProvider.GetFileInfo(subpath);
+                if (fileInfo.Exists)
+                {
+                    return fileInfo;
+                }
+            }
+
+            return _fileProvider.GetFileInfo(_rootPath + subpath);
         }
 
-        public virtual IDirectoryContents GetDirectoryContents(string subpath)
+        public IDirectoryContents GetDirectoryContents([NotNull] string subpath)
         {
-            return _fileProvider.GetDirectoryContents("/wwwroot" + subpath);
+            Check.NotNullOrEmpty(subpath, nameof(subpath));
+
+            if (ExtraAllowedFolder(subpath))
+            {
+                var directory = _fileProvider.GetDirectoryContents(subpath);
+                if (directory.Exists)
+                {
+                    return directory;
+                }
+            }
+
+            return _fileProvider.GetDirectoryContents(_rootPath + subpath);
         }
 
         public virtual IChangeToken Watch(string filter)
         {
-            return _fileProvider.Watch("/wwwroot" + filter);
-        }
+            if (!ExtraAllowedFolder(filter))
+            {
+                return _fileProvider.Watch("/wwwroot" + filter);
+            }
 
-        public string GetAbsolutePath(string relativePath)
-        {
-            return Path.Combine(_hostingEnvironment.ContentRootPath, "wwwroot", relativePath.RemovePreFix("/"));
+            return new CompositeChangeToken(
+                new[]
+                {
+                    _fileProvider.Watch("/wwwroot" + filter),
+                    _fileProvider.Watch(filter)
+                }
+            );
         }
 
         protected virtual IFileProvider CreateHybridProvider()
         {
             return new CompositeFileProvider(
-                _hostingEnvironment.ContentRootFileProvider,
+                new PhysicalFileProvider(_hostingEnvironment.ContentRootPath),
                 _virtualFileProvider
             );
+        }
+
+        protected virtual bool ExtraAllowedFolder(string path)
+        {
+            return Options.AllowedExtraWebContentFolders.Any(s => path.StartsWith(s, StringComparison.OrdinalIgnoreCase));
+        }
+
+        protected virtual bool ExtraAllowedExtension(string path)
+        {
+            return Options.AllowedExtraWebContentFileExtensions.Any(e => path.EndsWith(e, StringComparison.OrdinalIgnoreCase));
         }
     }
 }
