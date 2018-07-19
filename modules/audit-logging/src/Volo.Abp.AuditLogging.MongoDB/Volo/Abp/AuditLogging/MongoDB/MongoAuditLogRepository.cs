@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Net;
@@ -18,22 +19,35 @@ namespace Volo.Abp.AuditLogging.MongoDB
 
         }
 
-        public async Task<Paging.PagedResult<AuditLog>> GetListAsync(string sorting = null, int maxResultCount = 50, int skipCount = 0, string filter = null,
+        public async Task<List<AuditLog>> GetListAsync(string sorting = null, int maxResultCount = 50, int skipCount = 0,
             string httpMethod = null, string url = null, string userName = null, HttpStatusCode? httpStatusCode = null, bool includeDetails = false)
         {
-            var query = GetMongoQueryable()
+            var query = GetListQuery(httpMethod, url, userName, httpStatusCode, includeDetails);
+
+            return await query.OrderBy(sorting).As<IMongoQueryable<AuditLog>>()
+                .PageBy<AuditLog, IMongoQueryable<AuditLog>>(skipCount, maxResultCount)
+                .ToListAsync();
+        }
+
+        public async Task<long> GetCountAsync(string httpMethod = null, string url = null, string userName = null, HttpStatusCode? httpStatusCode = null, bool includeDetails = false)
+        {
+            var query = GetListQuery(httpMethod, url, userName, httpStatusCode, includeDetails);
+
+            return await query.As<IMongoQueryable<AuditLog>>().LongCountAsync();
+        }
+
+        private IQueryable<AuditLog> GetListQuery(
+            string httpMethod = null,
+            string url = null,
+            string userName = null,
+            HttpStatusCode? httpStatusCode = null,
+            bool includeDetails = true)
+        {
+            return GetMongoQueryable()
                 .WhereIf(httpMethod != null, auditLog => auditLog.HttpMethod != null && auditLog.HttpMethod.ToLowerInvariant() == httpMethod.ToLowerInvariant())
                 .WhereIf(url != null, auditLog => auditLog.Url != null && auditLog.Url.ToLowerInvariant().Contains(url.ToLowerInvariant()))
                 .WhereIf(userName != null, auditLog => auditLog.UserName != null && auditLog.UserName == userName)
                 .WhereIf(httpStatusCode != null && httpStatusCode > 0, auditLog => auditLog.HttpStatusCode == (int?)httpStatusCode);
-
-            var totalCount = await query.As<IMongoQueryable<AuditLog>>().LongCountAsync();
-
-            var questions = await query.OrderBy(sorting).As<IMongoQueryable<AuditLog>>()
-                .PageBy<AuditLog, IMongoQueryable<AuditLog>>(skipCount, maxResultCount)
-                .ToListAsync();
-
-            return new Paging.PagedResult<AuditLog>(totalCount, questions);
         }
     }
 }

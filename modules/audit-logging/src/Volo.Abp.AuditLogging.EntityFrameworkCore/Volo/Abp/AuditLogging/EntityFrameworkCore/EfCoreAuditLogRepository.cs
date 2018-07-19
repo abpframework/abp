@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Net;
@@ -17,31 +18,52 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
 
         }
 
-        public async Task<Paging.PagedResult<AuditLog>> GetListAsync(
+        public async Task<List<AuditLog>> GetListAsync(
             string sorting = null,
             int maxResultCount = 50,
             int skipCount = 0,
-            string filter = null,
             string httpMethod = null,
             string url = null,
             string userName = null,
             HttpStatusCode? httpStatusCode = null,
-            bool includeDetails = false)
+            bool includeDetails = true)
         {
-            var query = DbSet.AsNoTracking()
-                .IncludeDetails(includeDetails)
-                .WhereIf(httpMethod != null, auditLog => auditLog.HttpMethod != null && auditLog.HttpMethod.ToLowerInvariant() == httpMethod.ToLowerInvariant())
-                .WhereIf(url != null, auditLog => auditLog.Url != null && auditLog.Url.ToLowerInvariant().Contains(url.ToLowerInvariant()))
-                .WhereIf(userName != null, auditLog => auditLog.UserName != null && auditLog.UserName == userName)
-                .WhereIf(httpStatusCode != null && httpStatusCode > 0, auditLog => auditLog.HttpStatusCode == (int?)httpStatusCode);
-
-            var totalCount = await query.LongCountAsync();
+            var query = GetListQuery(httpMethod, url, userName, httpStatusCode, includeDetails);
 
             var auditLogs = await query.OrderBy(sorting)
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync();
 
-            return new Paging.PagedResult<AuditLog>(totalCount, auditLogs);
+            return auditLogs;
+        }
+
+        public async Task<long> GetCountAsync(
+            string httpMethod = null,
+            string url = null,
+            string userName = null,
+            HttpStatusCode? httpStatusCode = null,
+            bool includeDetails = true)
+        {
+            var query = GetListQuery(httpMethod, url, userName, httpStatusCode, includeDetails);
+
+            var totalCount = await query.LongCountAsync();
+
+            return totalCount;
+        }
+
+        private IQueryable<AuditLog> GetListQuery(
+            string httpMethod = null,
+            string url = null,
+            string userName = null,
+            HttpStatusCode? httpStatusCode = null,
+            bool includeDetails = true)
+        {
+            return DbSet.AsNoTracking()
+                .IncludeDetails(includeDetails)
+                .WhereIf(httpMethod != null, auditLog => auditLog.HttpMethod != null && auditLog.HttpMethod.ToLowerInvariant() == httpMethod.ToLowerInvariant())
+                .WhereIf(url != null, auditLog => auditLog.Url != null && auditLog.Url.ToLowerInvariant().Contains(url.ToLowerInvariant()))
+                .WhereIf(userName != null, auditLog => auditLog.UserName != null && auditLog.UserName == userName)
+                .WhereIf(httpStatusCode != null && httpStatusCode > 0, auditLog => auditLog.HttpStatusCode == (int?)httpStatusCode);
         }
 
         public override IQueryable<AuditLog> WithDetails()
