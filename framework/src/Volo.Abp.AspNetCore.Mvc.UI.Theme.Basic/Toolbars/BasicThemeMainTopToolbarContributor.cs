@@ -1,11 +1,9 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Themes.Basic.Components.Toolbar.LanguageSwitch;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Themes.Basic.Components.Toolbar.UserMenu;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars;
+using Volo.Abp.Localization;
 using Volo.Abp.Users;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Toolbars
@@ -24,9 +22,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Toolbars
                 return Task.CompletedTask;
             }
 
-            var requestLocalizationOptions = context.ServiceProvider.GetService<IOptions<RequestLocalizationOptions>>();
+            var languageProvider = context.ServiceProvider.GetService<ILanguageProvider>();
 
-            if (requestLocalizationOptions.Value.SupportedCultures.Count > 1)
+            //TODO: This duplicates GetLanguages() usage. Can we eleminate this?
+            if (languageProvider.GetLanguages().Count > 1)
             {
                 context.Toolbar.Items.Add(new ToolbarItem(typeof(LanguageSwitchViewComponent)));
             }

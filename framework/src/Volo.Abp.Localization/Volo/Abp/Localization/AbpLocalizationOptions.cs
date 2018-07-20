@@ -1,4 +1,5 @@
-﻿using Volo.Abp.Collections;
+﻿using System.Collections.Generic;
+using Volo.Abp.Collections;
 
 namespace Volo.Abp.Localization
 {
@@ -8,10 +9,13 @@ namespace Volo.Abp.Localization
 
         public ITypeList<ILocalizationResourceContributor> GlobalContributors { get; }
 
+        public List<LanguageInfo> Languages { get; }
+
         public AbpLocalizationOptions()
         {
             Resources = new LocalizationResourceDictionary();
             GlobalContributors = new TypeList<ILocalizationResourceContributor>();
+            Languages = new List<LanguageInfo>();
         }
     }
 }

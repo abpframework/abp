@@ -8,7 +8,7 @@
     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
         @foreach (var language in Model.OtherLanguages)
         {
-            <a class="dropdown-item" href="/Abp/Languages/Switch?culture=@(language.Name)&uiCulture=@(language.Name)">@language.DisplayName</a>
+            <a class="dropdown-item" href="/Abp/Languages/Switch?culture=@(language.CultureName)&uiCulture=@(language.UiCultureName)">@language.DisplayName</a>
         }
     </div>
 </div>

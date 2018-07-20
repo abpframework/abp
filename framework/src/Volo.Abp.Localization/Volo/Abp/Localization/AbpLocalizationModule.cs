@@ -1,11 +1,15 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Localization.Resources.AbpValidation;
 using Volo.Abp.Modularity;
+using Volo.Abp.Settings;
 using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.Localization
 {
-    [DependsOn(typeof(AbpVirtualFileSystemModule))]
+    [DependsOn(
+        typeof(AbpVirtualFileSystemModule),
+        typeof(AbpSettingsModule)
+        )]
     public class AbpLocalizationModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
@@ -22,6 +26,11 @@ namespace Volo.Abp.Localization
                 options.Resources
                 .Add<AbpValidationResource>("en")
                 .AddVirtualJson("/Localization/Resources/AbpValidation");
+            });
+
+            context.Services.Configure<SettingOptions>(options =>
+            {
+                options.DefinitionProviders.Add<LocalizationSettingProvider>();
             });
 
             context.Services.AddAssemblyOf<AbpLocalizationModule>();

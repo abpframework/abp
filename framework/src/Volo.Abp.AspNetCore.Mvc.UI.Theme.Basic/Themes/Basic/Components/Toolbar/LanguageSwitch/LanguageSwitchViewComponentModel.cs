@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Volo.Abp.Localization;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Themes.Basic.Components.Toolbar.LanguageSwitch
 {
@@ -6,11 +7,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Themes.Basic.Components.Toolbar
     {
         public LanguageInfo CurrentLanguage { get; set; }
 
-        public List<LanguageInfo> OtherLanguages { get; }
-
-        public LanguageSwitchViewComponentModel()
-        {
-            OtherLanguages = new List<LanguageInfo>();
-        }
+        public List<LanguageInfo> OtherLanguages { get; set; }
     }
 }

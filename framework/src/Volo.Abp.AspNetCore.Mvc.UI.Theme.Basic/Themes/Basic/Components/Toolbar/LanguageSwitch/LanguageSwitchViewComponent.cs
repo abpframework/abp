@@ -1,49 +1,44 @@
-﻿using System.Globalization;
+﻿using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Volo.Abp.Localization;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Themes.Basic.Components.Toolbar.LanguageSwitch
 {
     public class LanguageSwitchViewComponent : AbpViewComponent
     {
-        private readonly RequestLocalizationOptions _options;
+        private readonly ILanguageProvider _languageProvider;
 
-        public LanguageSwitchViewComponent(IOptions<RequestLocalizationOptions> options)
+        public LanguageSwitchViewComponent(ILanguageProvider languageProvider)
         {
-            _options = options.Value;
+            _languageProvider = languageProvider;
         }
 
-        public IViewComponentResult Invoke()
+        public async Task<IViewComponentResult> InvokeAsync()
         {
-            //TODO: Better handle culture & uiculture separation!
+            var languages = await _languageProvider.GetLanguagesAsync();
+            var currentLanguage = FindCurrentLanguage(languages);
 
             var model = new LanguageSwitchViewComponentModel
             {
-                CurrentLanguage = new LanguageInfo
-                {
-                    Name = CultureInfo.CurrentUICulture.Name,
-                    DisplayName = CultureInfo.CurrentUICulture.DisplayName,
-                    Icon = null //TODO!
-                }
+                CurrentLanguage = currentLanguage,
+                OtherLanguages = languages.Where(l => l != currentLanguage).ToList()
             };
-
-            foreach (var supportedUiCulture in _options.SupportedUICultures)
-            {
-                if (model.CurrentLanguage.Name == supportedUiCulture.Name)
-                {
-                    continue;
-                }
-
-                model.OtherLanguages.Add(new LanguageInfo
-                {
-                    Name = supportedUiCulture.Name,
-                    DisplayName = supportedUiCulture.DisplayName,
-                    Icon = null //TODO!
-                });
-            }
-
+            
             return View("~/Themes/Basic/Components/Toolbar/LanguageSwitch/Default.cshtml", model);
+        }
+
+        private LanguageInfo FindCurrentLanguage(IReadOnlyList<LanguageInfo> languages)
+        {
+            return languages.FirstOrDefault(l =>
+                       l.CultureName == CultureInfo.CurrentCulture.Name &&
+                       l.UiCultureName == CultureInfo.CurrentUICulture.Name)
+                   ?? languages.FirstOrDefault(l => l.CultureName == CultureInfo.CurrentCulture.Name)
+                   ?? languages.FirstOrDefault(l => l.UiCultureName == CultureInfo.CurrentUICulture.Name);
         }
     }
 }
