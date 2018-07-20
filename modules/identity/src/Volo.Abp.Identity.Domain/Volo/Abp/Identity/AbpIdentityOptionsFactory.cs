@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
-using Volo.Abp.Json;
 using Volo.Abp.Options;
 using Volo.Abp.Settings;
 
@@ -11,29 +10,26 @@ namespace Volo.Abp.Identity
     public class AbpIdentityOptionsFactory : AbpOptionsFactory<IdentityOptions>
     {
         private readonly ISettingManager _settingManager;
-        private readonly IJsonSerializer _jsonSerializer;
 
         public AbpIdentityOptionsFactory(
             IEnumerable<IConfigureOptions<IdentityOptions>> setups,
             IEnumerable<IPostConfigureOptions<IdentityOptions>> postConfigures,
-            ISettingManager settingManager,
-            IJsonSerializer jsonSerializer)
+            ISettingManager settingManager)
             : base(setups, postConfigures)
         {
             _settingManager = settingManager;
-            _jsonSerializer = jsonSerializer;
         }
 
         public override IdentityOptions Create(string name)
         {
             var options = base.Create(name);
 
-            SetPasswordOptions(options);
+            OverrideOptions(options);
 
             return options;
         }
 
-        protected virtual void SetPasswordOptions(IdentityOptions options)
+        protected virtual void OverrideOptions(IdentityOptions options)
         {
             options.Password.RequiredLength = _settingManager.Get(IdentitySettingNames.Password.RequiredLength, options.Password.RequiredLength);
             options.Password.RequiredUniqueChars = _settingManager.Get(IdentitySettingNames.Password.RequiredUniqueChars, options.Password.RequiredUniqueChars);
