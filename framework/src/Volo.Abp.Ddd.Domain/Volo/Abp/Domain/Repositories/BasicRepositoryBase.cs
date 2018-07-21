@@ -53,6 +53,13 @@ namespace Volo.Abp.Domain.Repositories
         {
             return Task.FromResult(GetList(includeDetails));
         }
+
+        public abstract long GetCount();
+
+        public virtual Task<long> GetCountAsync(CancellationToken cancellationToken = default)
+        {
+            return Task.FromResult(GetCount());
+        }
     }
 
     public abstract class BasicRepositoryBase<TEntity, TKey> : BasicRepositoryBase<TEntity>, IBasicRepository<TEntity, TKey>

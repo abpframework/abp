@@ -183,6 +183,16 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             return await GetMongoQueryable().ToListAsync(cancellationToken);
         }
 
+        public override long GetCount()
+        {
+            return GetMongoQueryable().LongCount();
+        }
+
+        public override async Task<long> GetCountAsync(CancellationToken cancellationToken = default)
+        {
+            return await GetMongoQueryable().LongCountAsync(cancellationToken);
+        }
+
         public override void Delete(Expression<Func<TEntity, bool>> predicate, bool autoSave = false)
         {
             var entities = GetMongoQueryable()

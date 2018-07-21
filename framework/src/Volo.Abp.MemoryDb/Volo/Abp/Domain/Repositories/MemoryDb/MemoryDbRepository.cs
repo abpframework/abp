@@ -45,7 +45,12 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
         {
             return Collection.ToList();
         }
-        
+
+        public override long GetCount()
+        {
+            return Collection.Count;
+        }
+
         protected override IQueryable<TEntity> GetQueryable()
         {
             return ApplyDataFilters(Collection.AsQueryable());

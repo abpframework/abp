@@ -119,11 +119,21 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
                 : DbSet.ToList();
         }
 
-        public override Task<List<TEntity>> GetListAsync(bool includeDetails = false, CancellationToken cancellationToken = default)
+        public override async Task<List<TEntity>> GetListAsync(bool includeDetails = false, CancellationToken cancellationToken = default)
         {
             return includeDetails
-                ? WithDetails().ToListAsync(cancellationToken)
-                : DbSet.ToListAsync(cancellationToken);
+                ? await WithDetails().ToListAsync(cancellationToken)
+                : await DbSet.ToListAsync(cancellationToken);
+        }
+
+        public override long GetCount()
+        {
+            return DbSet.LongCount();
+        }
+
+        public override async Task<long> GetCountAsync(CancellationToken cancellationToken = default)
+        {
+            return await DbSet.LongCountAsync(cancellationToken);
         }
 
         protected override IQueryable<TEntity> GetQueryable()
