@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
+using Nito.AsyncEx;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Serialization;
 using Volo.Abp.Threading;
@@ -24,10 +25,12 @@ namespace Volo.Abp.Caching
 
         protected ICurrentTenant CurrentTenant { get; }
 
+        protected AsyncLock AsyncLock { get; } = new AsyncLock();
+
         public DistributedCache(
             IDistributedCache cache,
             ICancellationTokenProvider cancellationTokenProvider,
-            IObjectSerializer objectSerializer, 
+            IObjectSerializer objectSerializer,
             ICurrentTenant currentTenant)
         {
             Cache = cache;
@@ -58,6 +61,53 @@ namespace Volo.Abp.Caching
             }
 
             return ObjectSerializer.Deserialize<TCacheItem>(cachedBytes);
+        }
+
+        public TCacheItem GetOrAdd(string key, Func<TCacheItem> factory)
+        {
+            var value = Get(key);
+            if (value != null)
+            {
+                return value;
+            }
+
+            using (AsyncLock.Lock())
+            {
+                value = Get(key);
+                if (value != null)
+                {
+                    return value;
+                }
+
+                value = factory();
+                Set(key, value);
+
+            }
+
+            return value;
+        }
+
+        public async Task<TCacheItem> GetOrAddAsync(string key, Func<Task<TCacheItem>> factory, CancellationToken token = default)
+        {
+            var value = await GetAsync(key, token);
+            if (value != null)
+            {
+                return value;
+            }
+
+            using (await AsyncLock.LockAsync(token))
+            {
+                value = await GetAsync(key, token);
+                if (value != null)
+                {
+                    return value;
+                }
+
+                value = await factory();
+                await SetAsync(key, value, token: token);
+            }
+
+            return value;
         }
 
         public virtual void Set(string key, TCacheItem value, DistributedCacheEntryOptions options = null)

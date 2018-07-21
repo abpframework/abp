@@ -35,5 +35,42 @@ namespace Volo.Abp.Caching
             cacheItem = await personCache.GetAsync(cacheKey);
             cacheItem.ShouldBeNull();
         }
+
+        [Fact]
+        public async Task GetOrAddAsync()
+        {
+            var personCache = GetRequiredService<IDistributedCache<PersonCacheItem>>();
+
+            var cacheKey = Guid.NewGuid().ToString();
+            const string personName = "john nash";
+
+            //Will execute the factory method to create the cache item
+
+            bool factoryExecuted = false;
+
+            var cacheItem = await personCache.GetOrAddAsync(cacheKey,
+                async () =>
+                {
+                    factoryExecuted = true;
+                    return new PersonCacheItem(personName);
+                });
+
+            factoryExecuted.ShouldBeTrue();
+            cacheItem.Name.ShouldBe(personName);
+
+            //This time, it will not execute the factory
+
+            factoryExecuted = false;
+
+            cacheItem = await personCache.GetOrAddAsync(cacheKey,
+                async () =>
+                {
+                    factoryExecuted = true;
+                    return new PersonCacheItem(personName);
+                });
+
+            factoryExecuted.ShouldBeFalse();
+            cacheItem.Name.ShouldBe(personName);
+        }
     }
 }

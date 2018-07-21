@@ -3,6 +3,7 @@ using JetBrains.Annotations;
 
 namespace Volo.Abp.Localization
 {
+    [Serializable]
     public class LanguageInfo
     {
         [NotNull]
@@ -16,6 +17,11 @@ namespace Volo.Abp.Localization
 
         [CanBeNull]
         public virtual string FlagIcon { get; set; }
+
+        protected LanguageInfo()
+        {
+            
+        }
 
         public LanguageInfo(
             string cultureName,

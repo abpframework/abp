@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Caching.Distributed;
@@ -14,6 +15,17 @@ namespace Volo.Abp.Caching
 
         Task<TCacheItem> GetAsync(
             [NotNull] string key,
+            CancellationToken token = default
+        );
+
+        TCacheItem GetOrAdd(
+            string key,
+            Func<TCacheItem> factory
+        );
+
+        Task<TCacheItem> GetOrAddAsync(
+            [NotNull] string key,
+            Func<Task<TCacheItem>> factory,
             CancellationToken token = default
         );
 
