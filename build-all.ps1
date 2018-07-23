@@ -4,7 +4,7 @@ $rootFolder = (Get-Item -Path "./" -Verbose).FullName
 
 # List of solutions
 
-$solutionsPaths = (
+$solutionPaths = (
     "framework",
     "modules/users",
     "modules/permission-management",
@@ -13,17 +13,18 @@ $solutionsPaths = (
     "modules/tenant-management",
     "modules/account",
     "modules/docs",
-    "modules/blogging"
+    "modules/blogging",
+    "modules/audit-logging"
 )
 
 # Build all solutions
 
-foreach ($solutionsPath in $solutionsPaths) {    
-    $solutionAbsPath = (Join-Path $rootFolder $solutionsPath)
+foreach ($solutionPath in $solutionPaths) {    
+    $solutionAbsPath = (Join-Path $rootFolder $solutionPath)
     Set-Location $solutionAbsPath
     dotnet build
     if (-Not $?) {
-        Write-Host ("Build failed for the solution: " + $solutionsPath)
+        Write-Host ("Build failed for the solution: " + $solutionPath)
         exit $LASTEXITCODE
     }
 }
