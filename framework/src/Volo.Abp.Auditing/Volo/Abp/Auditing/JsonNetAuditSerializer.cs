@@ -4,6 +4,7 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Auditing
 {
+    //TODO: Rename to JsonAuditSerializer
     public class JsonNetAuditSerializer : IAuditSerializer, ITransientDependency
     {
         protected AbpAuditingOptions Options;
