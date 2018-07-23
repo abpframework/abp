@@ -194,9 +194,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AspNetCore.Mvc.UI.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.EntityFrameworkCore.MySQL", "src\Volo.Abp.EntityFrameworkCore.MySQL\Volo.Abp.EntityFrameworkCore.MySQL.csproj", "{27C120C9-F618-4C1D-B959-8D0B048D0835}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.BackgroundJobs", "src\Volo.Abp.BackgroundJobs\Volo.Abp.BackgroundJobs.csproj", "{E6E0BBB5-48A7-4FDA-8A47-8B308BCD36AD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.BackgroundJobs", "src\Volo.Abp.BackgroundJobs\Volo.Abp.BackgroundJobs.csproj", "{E6E0BBB5-48A7-4FDA-8A47-8B308BCD36AD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.BackgroundWorkers", "src\Volo.Abp.BackgroundWorkers\Volo.Abp.BackgroundWorkers.csproj", "{6C3E76B8-C4DA-4E74-9F8B-A8BC4C831722}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.BackgroundWorkers", "src\Volo.Abp.BackgroundWorkers\Volo.Abp.BackgroundWorkers.csproj", "{6C3E76B8-C4DA-4E74-9F8B-A8BC4C831722}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.BackgroundJobs.Tests", "test\Volo.Abp.BackgroundJobs.Tests\Volo.Abp.BackgroundJobs.Tests.csproj", "{D86548EA-7047-4623-8824-F6285CD254AA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -556,6 +558,10 @@ Global
 		{6C3E76B8-C4DA-4E74-9F8B-A8BC4C831722}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6C3E76B8-C4DA-4E74-9F8B-A8BC4C831722}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6C3E76B8-C4DA-4E74-9F8B-A8BC4C831722}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D86548EA-7047-4623-8824-F6285CD254AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D86548EA-7047-4623-8824-F6285CD254AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D86548EA-7047-4623-8824-F6285CD254AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D86548EA-7047-4623-8824-F6285CD254AA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -651,6 +657,7 @@ Global
 		{27C120C9-F618-4C1D-B959-8D0B048D0835} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{E6E0BBB5-48A7-4FDA-8A47-8B308BCD36AD} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{6C3E76B8-C4DA-4E74-9F8B-A8BC4C831722} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
+		{D86548EA-7047-4623-8824-F6285CD254AA} = {447C8A77-E5F0-4538-8687-7383196D04EA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB97ECF4-9A84-433F-A80B-2A3285BDD1D5}

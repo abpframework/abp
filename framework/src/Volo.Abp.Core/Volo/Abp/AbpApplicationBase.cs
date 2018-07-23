@@ -46,9 +46,12 @@ namespace Volo.Abp
 
         public virtual void Shutdown()
         {
-            ServiceProvider
-                .GetRequiredService<IModuleManager>()
-                .ShutdownModules(new ApplicationShutdownContext());
+            using (var scope = ServiceProvider.CreateScope())
+            {
+                scope.ServiceProvider
+                    .GetRequiredService<IModuleManager>()
+                    .ShutdownModules(new ApplicationShutdownContext(scope.ServiceProvider));
+            }
         }
 
         public virtual void Dispose()
@@ -66,7 +69,7 @@ namespace Volo.Abp
         {
             using (var scope = ServiceProvider.CreateScope())
             {
-                ServiceProvider
+                scope.ServiceProvider
                     .GetRequiredService<IModuleManager>()
                     .InitializeModules(new ApplicationInitializationContext(scope.ServiceProvider));
             }
