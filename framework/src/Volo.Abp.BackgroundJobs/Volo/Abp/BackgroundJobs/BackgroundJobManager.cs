@@ -79,7 +79,7 @@ namespace Volo.Abp.BackgroundJobs
 
         public async Task<bool> DeleteAsync(Guid jobId)
         {
-            var jobInfo = await Store.GetAsync(jobId);
+            var jobInfo = await Store.FindAsync(jobId);
             if (jobInfo == null)
             {
                 return false;

@@ -14,7 +14,7 @@ namespace Volo.Abp.BackgroundJobs
         /// </summary>
         /// <param name="jobId">The Job Unique Identifier.</param>
         /// <returns>The BackgroundJobInfo object.</returns>
-        Task<BackgroundJobInfo> GetAsync(Guid jobId);
+        Task<BackgroundJobInfo> FindAsync(Guid jobId);
 
         /// <summary>
         /// Inserts a background job.
