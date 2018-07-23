@@ -50,7 +50,7 @@ namespace Volo.Abp.BackgroundJobs
                     var job = scope.ServiceProvider.GetService(jobType);
                     if (job == null)
                     {
-                        throw new AbpException("JobName is not registered: " + jobType);
+                        throw new AbpException("The job type is not registered to DI: " + jobType);
                     }
 
                     //TODO: Type check for the job object

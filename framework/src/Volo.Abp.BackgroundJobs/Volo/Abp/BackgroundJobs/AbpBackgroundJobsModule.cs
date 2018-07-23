@@ -30,7 +30,7 @@ namespace Volo.Abp.BackgroundJobs
                     .GetRequiredService<IBackgroundWorkerManager>()
                     .Add(
                         context.ServiceProvider
-                            .GetRequiredService<IBackgroundJobManager>()
+                            .GetRequiredService<IBackgroundJobWorker>()
                     );
             }
         }

@@ -1,14 +1,12 @@
 using System;
 using System.Threading.Tasks;
-using Volo.Abp.BackgroundWorkers;
 
 namespace Volo.Abp.BackgroundJobs
 {
-    //TODO: Create a non-generic EnqueueAsync extension method to IBackgroundJobManager which takes types as input parameters rather than generic parameters.
     /// <summary>
     /// Defines interface of a job manager.
     /// </summary>
-    public interface IBackgroundJobManager : IBackgroundWorker
+    public interface IBackgroundJobManager
     {
         /// <summary>
         /// Enqueues a job to be executed.

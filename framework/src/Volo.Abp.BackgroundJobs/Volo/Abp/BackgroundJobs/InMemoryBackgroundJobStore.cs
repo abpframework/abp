@@ -25,7 +25,7 @@ namespace Volo.Abp.BackgroundJobs
 
         public Task<BackgroundJobInfo> FindAsync(Guid jobId)
         {
-            return Task.FromResult(_jobs[jobId]);
+            return Task.FromResult(_jobs.GetOrDefault(jobId));
         }
         
         public Task InsertAsync(BackgroundJobInfo jobInfo)

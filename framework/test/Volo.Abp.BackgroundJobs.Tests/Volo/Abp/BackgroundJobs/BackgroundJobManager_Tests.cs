@@ -22,21 +22,5 @@ namespace Volo.Abp.BackgroundJobs
             jobId.ShouldNotBe(default);
             (await _backgroundJobStore.FindAsync(jobId)).ShouldNotBeNull();
         }
-
-        [BackgroundJobName("TestJobs.MyJob")]
-        private class MyJobArgs
-        {
-            public string Value { get; set; }
-
-            public MyJobArgs()
-            {
-                
-            }
-
-            public MyJobArgs(string value)
-            {
-                Value = value;
-            }
-        }
     }
 }
