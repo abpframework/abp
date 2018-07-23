@@ -31,13 +31,13 @@ namespace Volo.Abp.BackgroundJobs
             Store = store;
         }
 
-        public Task<Guid> EnqueueAsync<TArgs>(TArgs args, BackgroundJobPriority priority = BackgroundJobPriority.Normal, TimeSpan? delay = null)
+        public virtual Task<Guid> EnqueueAsync<TArgs>(TArgs args, BackgroundJobPriority priority = BackgroundJobPriority.Normal, TimeSpan? delay = null)
         {
-            var jobName = BackgroundJobNameAttribute.GetNameOrNull<TArgs>();
+            var jobName = BackgroundJobNameAttribute.GetName<TArgs>();
             return EnqueueAsync(jobName, args, priority, delay);
         }
 
-        public async Task<Guid> EnqueueAsync(string jobName, object args, BackgroundJobPriority priority = BackgroundJobPriority.Normal, TimeSpan? delay = null)
+        protected virtual async Task<Guid> EnqueueAsync(string jobName, object args, BackgroundJobPriority priority = BackgroundJobPriority.Normal, TimeSpan? delay = null)
         {
             var jobInfo = new BackgroundJobInfo
             {

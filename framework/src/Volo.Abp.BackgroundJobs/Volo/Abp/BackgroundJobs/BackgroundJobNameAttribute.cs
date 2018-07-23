@@ -13,18 +13,21 @@ namespace Volo.Abp.BackgroundJobs
             Name = Check.NotNullOrWhiteSpace(name, nameof(name));
         }
 
-        public static string GetNameOrNull<TJobArgs>()
+        public static string GetName<TJobArgs>()
         {
-            return GetNameOrNull(typeof(TJobArgs));
+            return GetName(typeof(TJobArgs));
         }
 
-        public static string GetNameOrNull(Type jobArgsType)
+        public static string GetName([NotNull] Type jobArgsType)
         {
+            Check.NotNull(jobArgsType, nameof(jobArgsType));
+
             return jobArgsType
-                .GetCustomAttributes(true)
-                .OfType<IBackgroundJobNameProvider>()
-                .FirstOrDefault()
-                ?.Name;
+                       .GetCustomAttributes(true)
+                       .OfType<IBackgroundJobNameProvider>()
+                       .FirstOrDefault()
+                       ?.Name
+                   ?? jobArgsType.FullName;
         }
     }
 }

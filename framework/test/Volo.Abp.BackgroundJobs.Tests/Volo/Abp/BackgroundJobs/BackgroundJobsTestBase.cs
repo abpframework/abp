@@ -2,6 +2,9 @@
 {
     public abstract class BackgroundJobsTestBase : AbpIntegratedTest<AbpBackgroundJobsTestModule>
     {
-
+        protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
+        {
+            options.UseAutofac();
+        }
     }
 }
