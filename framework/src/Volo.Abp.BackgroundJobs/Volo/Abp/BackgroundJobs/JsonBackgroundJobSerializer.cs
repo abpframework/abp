@@ -1,9 +1,10 @@
 ﻿using System;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Json;
 
 namespace Volo.Abp.BackgroundJobs
 {
-    public class JsonBackgroundJobSerializer : IBackgroundJobSerializer
+    public class JsonBackgroundJobSerializer : IBackgroundJobSerializer, ITransientDependency
     {
         private readonly IJsonSerializer _jsonSerializer;
 

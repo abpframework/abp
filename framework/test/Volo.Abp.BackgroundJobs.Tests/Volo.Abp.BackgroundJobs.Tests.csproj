@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
+    <LangVersion>latest</LangVersion>
     <AssemblyName>Volo.Abp.BackgroundJobs.Tests</AssemblyName>
     <PackageId>Volo.Abp.BackgroundJobs.Tests</PackageId>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>

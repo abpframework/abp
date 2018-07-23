@@ -13,20 +13,25 @@ namespace Volo.Abp.BackgroundJobs
         /// <summary>
         /// Enqueues a job to be executed.
         /// </summary>
-        /// <typeparam name="TJob">Type of the job.</typeparam>
         /// <typeparam name="TArgs">Type of the arguments of job.</typeparam>
         /// <param name="args">Job arguments.</param>
         /// <param name="priority">Job priority.</param>
         /// <param name="delay">Job delay (wait duration before first try).</param>
         /// <returns>Unique identifier of a background job.</returns>
-        Task<Guid> EnqueueAsync<TJob, TArgs>(TArgs args, BackgroundJobPriority priority = BackgroundJobPriority.Normal, TimeSpan? delay = null)
-            where TJob : IBackgroundJob<TArgs>;
+        Task<Guid> EnqueueAsync<TArgs>(
+            TArgs args,
+            BackgroundJobPriority priority = BackgroundJobPriority.Normal,
+            TimeSpan? delay = null
+        );
 
         /// <summary>
-        /// Deletes a job with the specified jobId.
+        /// Enqueues a job to be executed.
         /// </summary>
-        /// <param name="jobId">The Job Unique Identifier.</param>
-        /// <returns><c>True</c> on a successfull state transition, <c>false</c> otherwise.</returns>
-        Task<bool> DeleteAsync(Guid jobId);
+        /// <param name="jobName">Job name.</param>
+        /// <param name="args">Job arguments.</param>
+        /// <param name="priority">Job priority.</param>
+        /// <param name="delay">Job delay (wait duration before first try).</param>
+        /// <returns>Unique identifier of a background job.</returns>
+        Task<Guid> EnqueueAsync(string jobName, object args, BackgroundJobPriority priority = BackgroundJobPriority.Normal, TimeSpan? delay = null);
     }
 }

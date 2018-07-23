@@ -10,7 +10,7 @@ namespace Volo.Abp.BackgroundJobs
     public class BackgroundJobInfo
     {
         /// <summary>
-        /// Maximum length of <see cref="JobType"/>.
+        /// Maximum length of <see cref="JobName"/>.
         /// Value: 512.
         /// </summary>
         public const int MaxJobTypeLength = 512;
@@ -48,7 +48,7 @@ namespace Volo.Abp.BackgroundJobs
         /// </summary>
         [Required]
         [StringLength(MaxJobTypeLength)]
-        public virtual string JobType { get; set; }
+        public virtual string JobName { get; set; }
 
         /// <summary>
         /// Job arguments as JSON string.
