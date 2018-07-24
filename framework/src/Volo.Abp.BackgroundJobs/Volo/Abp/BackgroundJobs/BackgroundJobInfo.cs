@@ -9,25 +9,6 @@ namespace Volo.Abp.BackgroundJobs
     /// </summary>
     public class BackgroundJobInfo
     {
-        /// <summary>
-        /// Default duration (as seconds) for the first wait on a failure.
-        /// Default value: 60 (1 minutes).
-        /// </summary>
-        public static int DefaultFirstWaitDuration { get; set; } //TODO: Move to configuration
-
-        /// <summary>
-        /// Default timeout value (as seconds) for a job before it's abandoned (<see cref="IsAbandoned"/>).
-        /// Default value: 172,800 (2 days).
-        /// </summary>
-        public static int DefaultTimeout { get; set; } //TODO: Move to configuration
-
-        /// <summary>
-        /// Default wait factor for execution failures.
-        /// This amount is multiplated by last wait time to calculate next wait time.
-        /// Default value: 2.0.
-        /// </summary>
-        public static double DefaultWaitFactor { get; set; } //TODO: Move to configuration
-
         public Guid Id { get; set; }
 
         /// <summary>
@@ -72,39 +53,12 @@ namespace Volo.Abp.BackgroundJobs
         /// </summary>
         public virtual BackgroundJobPriority Priority { get; set; }
 
-        static BackgroundJobInfo()
-        {
-            DefaultFirstWaitDuration = 60;
-            DefaultTimeout = 172800;
-            DefaultWaitFactor = 2.0;
-        }
-
         /// <summary>
         /// Initializes a new instance of the <see cref="BackgroundJobInfo"/> class.
         /// </summary>
         public BackgroundJobInfo()
         {
             Priority = BackgroundJobPriority.Normal;
-        }
-
-        /// <summary>
-        /// Calculates next try time if a job fails.
-        /// Returns null if it will not wait anymore and job should be abandoned.
-        /// </summary>
-        /// <returns></returns>
-        public virtual DateTime? CalculateNextTryTime(IClock clock) //TODO: Move to another place to override easier
-        {
-            var nextWaitDuration = DefaultFirstWaitDuration * (Math.Pow(DefaultWaitFactor, TryCount - 1));
-            var nextTryDate = LastTryTime.HasValue
-                ? LastTryTime.Value.AddSeconds(nextWaitDuration)
-                : clock.Now.AddSeconds(nextWaitDuration);
-
-            if (nextTryDate.Subtract(CreationTime).TotalSeconds > DefaultTimeout)
-            {
-                return null;
-            }
-
-            return nextTryDate;
         }
     }
 }

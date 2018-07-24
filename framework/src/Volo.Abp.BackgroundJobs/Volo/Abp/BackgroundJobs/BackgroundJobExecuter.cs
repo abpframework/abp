@@ -36,8 +36,10 @@ namespace Volo.Abp.BackgroundJobs
             Logger = NullLogger<BackgroundJobExecuter>.Instance;
         }
 
-        public void Execute(BackgroundJobInfo jobInfo)
+        public virtual void Execute(BackgroundJobInfo jobInfo)
         {
+            //TODO: Refactor (split to multiple methods).
+
             try
             {
                 jobInfo.TryCount++;
@@ -53,8 +55,6 @@ namespace Volo.Abp.BackgroundJobs
                         throw new AbpException("The job type is not registered to DI: " + jobType);
                     }
 
-                    //TODO: Type check for the job object
-
                     var jobExecuteMethod = job.GetType().GetMethod("Execute");
                     Debug.Assert(jobExecuteMethod != null, nameof(jobExecuteMethod) + " != null");
                     var argsType = jobExecuteMethod.GetParameters()[0].ParameterType;
@@ -69,7 +69,7 @@ namespace Volo.Abp.BackgroundJobs
                     {
                         Logger.LogException(ex);
 
-                        var nextTryTime = jobInfo.CalculateNextTryTime(Clock);
+                        var nextTryTime = CalculateNextTryTime(jobInfo);
                         if (nextTryTime.HasValue)
                         {
                             jobInfo.NextTryTime = nextTryTime.Value;
@@ -104,7 +104,7 @@ namespace Volo.Abp.BackgroundJobs
             }
         }
 
-        private void TryUpdate(BackgroundJobInfo jobInfo)
+        protected virtual void TryUpdate(BackgroundJobInfo jobInfo)
         {
             try
             {
@@ -114,6 +114,21 @@ namespace Volo.Abp.BackgroundJobs
             {
                 Logger.LogException(updateEx);
             }
+        }
+
+        protected virtual DateTime? CalculateNextTryTime(BackgroundJobInfo jobInfo) //TODO: Move to another place to override easier
+        {
+            var nextWaitDuration = Options.DefaultFirstWaitDuration * (Math.Pow(Options.DefaultWaitFactor, jobInfo.TryCount - 1));
+            var nextTryDate = jobInfo.LastTryTime.HasValue
+                ? jobInfo.LastTryTime.Value.AddSeconds(nextWaitDuration)
+                : Clock.Now.AddSeconds(nextWaitDuration);
+
+            if (nextTryDate.Subtract(jobInfo.CreationTime).TotalSeconds > Options.DefaultTimeout)
+            {
+                return null;
+            }
+
+            return nextTryDate;
         }
     }
 }

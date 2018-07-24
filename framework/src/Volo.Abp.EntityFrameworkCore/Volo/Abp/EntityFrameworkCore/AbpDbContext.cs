@@ -137,10 +137,6 @@ namespace Volo.Abp.EntityFrameworkCore
                 {
                     entityChangeList = EntityHistoryHelper.CreateChangeList(ChangeTracker.Entries().ToList());
                 }
-                else
-                {
-                    Logger.LogWarning("AuditingManager?.Current is null!");
-                }
 
                 var changeReport = ApplyAbpConcepts();
 

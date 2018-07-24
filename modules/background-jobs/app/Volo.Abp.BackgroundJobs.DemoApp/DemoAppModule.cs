@@ -38,7 +38,10 @@ namespace Volo.Abp.BackgroundJobs.DemoApp
 
             context.Services.Configure<BackgroundJobOptions>(options =>
             {
+                //Configure for fast running
                 options.JobPollPeriod = 1000;
+                options.DefaultFirstWaitDuration = 1;
+                options.DefaultWaitFactor = 1;
             });
 
             context.Services.AddAssemblyOf<DemoAppModule>();
