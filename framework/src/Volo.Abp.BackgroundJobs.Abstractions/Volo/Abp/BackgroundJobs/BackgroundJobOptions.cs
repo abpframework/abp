@@ -3,13 +3,12 @@ using System.Collections.Generic;
 
 namespace Volo.Abp.BackgroundJobs
 {
-    //TODO: Move options related to default backgroundjob manager to another class
-    //TODO: Create Volo.Abp.BackgroundJobs.Abstractions package and move abstractions there!
-
     public class BackgroundJobOptions
     {
         public Dictionary<string, Type> JobTypes { get; }
-        
+
+        //TODO: Move options related to default backgroundjob manager to another class
+
         /// <summary>
         /// Default: true.
         /// </summary>
