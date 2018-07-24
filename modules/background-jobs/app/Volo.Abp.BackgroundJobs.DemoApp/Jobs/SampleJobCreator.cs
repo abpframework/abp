@@ -13,8 +13,10 @@ namespace Volo.Abp.BackgroundJobs.DemoApp.Jobs
 
         public void CreateJobs()
         {
-            _backgroundJobManager.Enqueue(new WriteToConsoleJobArgs { Value = "42" });
-            _backgroundJobManager.Enqueue(new WriteToConsoleJobArgs { Value = "43" });
+            _backgroundJobManager.Enqueue(new WriteToConsoleGreenJobArgs { Value = "test 1 (green)" });
+            _backgroundJobManager.Enqueue(new WriteToConsoleGreenJobArgs { Value = "test 2 (green)" });
+            _backgroundJobManager.Enqueue(new WriteToConsoleYellowJobArgs { Value = "test 1 (yellow)" });
+            _backgroundJobManager.Enqueue(new WriteToConsoleYellowJobArgs { Value = "test 2 (yellow)" });
         }
     }
 }

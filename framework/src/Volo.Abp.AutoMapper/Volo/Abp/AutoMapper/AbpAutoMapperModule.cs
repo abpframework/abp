@@ -26,7 +26,7 @@ namespace Volo.Abp.AutoMapper
             context.Services.AddSingleton<MapperAccessor>(_ => mapperAccessor);
         }
 
-        public override void OnApplicationInitialization(ApplicationInitializationContext context)
+        public override void OnPreApplicationInitialization(ApplicationInitializationContext context)
         {
             CreateMappings(context.ServiceProvider);
         }

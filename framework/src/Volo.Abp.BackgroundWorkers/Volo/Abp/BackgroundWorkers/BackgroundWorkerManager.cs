@@ -10,40 +10,40 @@ namespace Volo.Abp.BackgroundWorkers
     /// </summary>
     public class BackgroundWorkerManager : RunnableBase, IBackgroundWorkerManager, ISingletonDependency, IDisposable
     {
-        private readonly List<IBackgroundWorker> _backgroundJobs;
+        private readonly List<IBackgroundWorker> _backgroundWorkers;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BackgroundWorkerManager"/> class.
         /// </summary>
         public BackgroundWorkerManager()
         {
-            _backgroundJobs = new List<IBackgroundWorker>();
+            _backgroundWorkers = new List<IBackgroundWorker>();
         }
 
         public override void Start()
         {
             base.Start();
 
-            _backgroundJobs.ForEach(job => job.Start());
+            _backgroundWorkers.ForEach(worker => worker.Start());
         }
 
         public override void Stop()
         {
-            _backgroundJobs.ForEach(job => job.Stop());
+            _backgroundWorkers.ForEach(worker => worker.Stop());
 
             base.Stop();
         }
 
         public override void WaitToStop()
         {
-            _backgroundJobs.ForEach(job => job.WaitToStop());
+            _backgroundWorkers.ForEach(worker => worker.WaitToStop());
 
             base.WaitToStop();
         }
 
         public void Add(IBackgroundWorker worker)
         {
-            _backgroundJobs.Add(worker);
+            _backgroundWorkers.Add(worker);
 
             if (IsRunning)
             {

@@ -13,9 +13,9 @@ namespace Volo.Abp.BackgroundJobs
         public virtual string JobName { get; set; }
 
         /// <summary>
-        /// Job arguments as JSON string.
+        /// Job arguments as serialized string.
         /// </summary>
-        public virtual string JobArgs { get; set; } //TODO: Consider to conver to byte[]
+        public virtual string JobArgs { get; set; }
 
         /// <summary>
         /// Try count of this job.

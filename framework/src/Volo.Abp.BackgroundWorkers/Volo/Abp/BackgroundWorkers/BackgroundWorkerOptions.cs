@@ -2,6 +2,9 @@
 {
     public class BackgroundWorkerOptions
     {
-        public bool IsEnabled { get; set; }
+        /// <summary>
+        /// Default: true.
+        /// </summary>
+        public bool IsEnabled { get; set; } = true;
     }
 }

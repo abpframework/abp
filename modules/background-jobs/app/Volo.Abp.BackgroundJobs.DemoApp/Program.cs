@@ -22,6 +22,8 @@ namespace Volo.Abp.BackgroundJobs.DemoApp
 
                 Console.WriteLine("Press ENTER to stop the application..!");
                 Console.ReadLine();
+
+                application.Shutdown();
             }
         }
     }
