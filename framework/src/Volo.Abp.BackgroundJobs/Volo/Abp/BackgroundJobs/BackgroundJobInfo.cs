@@ -1,6 +1,4 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
-using Volo.Abp.Timing;
 
 namespace Volo.Abp.BackgroundJobs
 {

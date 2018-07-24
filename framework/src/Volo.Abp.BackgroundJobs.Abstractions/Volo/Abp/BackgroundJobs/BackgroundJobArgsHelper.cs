@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 
 namespace Volo.Abp.BackgroundJobs
 {
-    internal static class BackgroundJobHelper
+    public static class BackgroundJobArgsHelper
     {
         public static Type GetJobArgsType(Type jobType)
         {

@@ -200,6 +200,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.BackgroundWorkers"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.BackgroundJobs.Tests", "test\Volo.Abp.BackgroundJobs.Tests\Volo.Abp.BackgroundJobs.Tests.csproj", "{D86548EA-7047-4623-8824-F6285CD254AA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.BackgroundJobs.Abstractions", "src\Volo.Abp.BackgroundJobs.Abstractions\Volo.Abp.BackgroundJobs.Abstractions.csproj", "{EB9C3B4D-FEBD-4691-8F34-AAC2C13F6F2F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -562,6 +564,10 @@ Global
 		{D86548EA-7047-4623-8824-F6285CD254AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D86548EA-7047-4623-8824-F6285CD254AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D86548EA-7047-4623-8824-F6285CD254AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB9C3B4D-FEBD-4691-8F34-AAC2C13F6F2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB9C3B4D-FEBD-4691-8F34-AAC2C13F6F2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB9C3B4D-FEBD-4691-8F34-AAC2C13F6F2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB9C3B4D-FEBD-4691-8F34-AAC2C13F6F2F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -658,6 +664,7 @@ Global
 		{E6E0BBB5-48A7-4FDA-8A47-8B308BCD36AD} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{6C3E76B8-C4DA-4E74-9F8B-A8BC4C831722} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{D86548EA-7047-4623-8824-F6285CD254AA} = {447C8A77-E5F0-4538-8687-7383196D04EA}
+		{EB9C3B4D-FEBD-4691-8F34-AAC2C13F6F2F} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB97ECF4-9A84-433F-A80B-2A3285BDD1D5}
