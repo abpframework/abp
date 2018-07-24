@@ -63,7 +63,7 @@ namespace Volo.Abp.BackgroundJobs
                     try
                     {
                         jobExecuteMethod.Invoke(job, new[] { argsObj });
-                        AsyncHelper.RunSync(() => Store.DeleteAsync(jobInfo));
+                        AsyncHelper.RunSync(() => Store.DeleteAsync(jobInfo.Id));
                     }
                     catch (Exception ex)
                     {

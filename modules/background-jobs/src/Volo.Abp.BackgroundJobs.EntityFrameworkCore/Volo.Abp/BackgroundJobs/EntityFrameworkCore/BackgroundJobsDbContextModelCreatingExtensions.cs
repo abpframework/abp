@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
-using Volo.Abp;
+using Volo.Abp.EntityFrameworkCore.Modeling;
 
 namespace Volo.Abp.BackgroundJobs.EntityFrameworkCore
 {
@@ -15,24 +15,23 @@ namespace Volo.Abp.BackgroundJobs.EntityFrameworkCore
             var options = new BackgroundJobsModelBuilderConfigurationOptions();
 
             optionsAction?.Invoke(options);
-
-            /* Configure all entities here. Example:
-
-            builder.Entity<Question>(b =>
+            
+            builder.Entity<BackgroundJobRecord>(b =>
             {
-                //Configure table & schema name
-                //b.ToTable(options.TablePrefix + "Questions", options.Schema);
-                
-                //Properties
-                //b.Property(q => q.Title).IsRequired().HasMaxLength(QuestionConsts.MaxTitleLength);
-                
-                //Configure relations
-                //b.HasMany(question => question.Tags).WithOne().HasForeignKey(qt => qt.QuestionId);
+                b.ToTable(options.TablePrefix + "BackgroundJobs", options.Schema);
 
-                //Configure indexes
-                //b.HasIndex(q => q.CreationTime);
+                b.ConfigureCreationTime();
+
+                b.Property(x => x.JobName).IsRequired().HasMaxLength(BackgroundJobRecordConsts.MaxJobNameLength);
+                b.Property(x => x.JobArgs).IsRequired().HasMaxLength(BackgroundJobRecordConsts.MaxJobArgsLength);
+                b.Property(x => x.TryCount).HasDefaultValue(0);
+                b.Property(x => x.NextTryTime);
+                b.Property(x => x.LastTryTime);
+                b.Property(x => x.IsAbandoned).HasDefaultValue(false);
+                b.Property(x => x.Priority).HasDefaultValue(BackgroundJobPriority.Normal);
+                
+                b.HasIndex(x => new { x.IsAbandoned, x.NextTryTime });
             });
-            */
         }
     }
 }

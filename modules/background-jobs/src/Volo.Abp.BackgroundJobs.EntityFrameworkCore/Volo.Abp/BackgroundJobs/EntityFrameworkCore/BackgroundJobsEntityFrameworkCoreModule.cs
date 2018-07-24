@@ -14,9 +14,7 @@ namespace Volo.Abp.BackgroundJobs.EntityFrameworkCore
         {
             context.Services.AddAbpDbContext<BackgroundJobsDbContext>(options =>
             {
-                /* Add custom repositories here. Example:
-                 * options.AddRepository<Question, EfCoreQuestionRepository>();
-                 */
+                 options.AddRepository<BackgroundJobRecord, EfCoreBackgroundJobRepository>();
             });
 
             context.Services.AddAssemblyOf<BackgroundJobsEntityFrameworkCoreModule>();

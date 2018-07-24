@@ -10,18 +10,6 @@ namespace Volo.Abp.BackgroundJobs
     public class BackgroundJobInfo
     {
         /// <summary>
-        /// Maximum length of <see cref="JobName"/>.
-        /// Value: 512.
-        /// </summary>
-        public const int MaxJobTypeLength = 512;
-
-        /// <summary>
-        /// Maximum length of <see cref="JobArgs"/>.
-        /// Value: 1 MB (1,048,576 bytes).
-        /// </summary>
-        public const int MaxJobArgsLength = 1024 * 1024;
-
-        /// <summary>
         /// Default duration (as seconds) for the first wait on a failure.
         /// Default value: 60 (1 minutes).
         /// </summary>
@@ -46,15 +34,11 @@ namespace Volo.Abp.BackgroundJobs
         /// Type of the job.
         /// It's AssemblyQualifiedName of job type.
         /// </summary>
-        [Required]
-        [StringLength(MaxJobTypeLength)]
         public virtual string JobName { get; set; }
 
         /// <summary>
         /// Job arguments as JSON string.
         /// </summary>
-        [Required]
-        [MaxLength(MaxJobArgsLength)]
         public virtual string JobArgs { get; set; } //TODO: Consider to conver to byte[]
 
         /// <summary>

@@ -6,7 +6,16 @@ namespace Volo.Abp.BackgroundJobs.DemoApp
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            using (var application = AbpApplicationFactory.Create<DemoAppModule>(options =>
+            {
+                options.UseAutofac();
+            }))
+            {
+                application.Initialize();
+
+                Console.WriteLine("Press ENTER to stop the application..!");
+                Console.ReadLine();
+            }
         }
     }
 }

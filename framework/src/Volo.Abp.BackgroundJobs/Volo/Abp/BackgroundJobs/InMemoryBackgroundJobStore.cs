@@ -48,9 +48,9 @@ namespace Volo.Abp.BackgroundJobs
             return Task.FromResult(waitingJobs);
         }
 
-        public Task DeleteAsync(BackgroundJobInfo jobInfo)
+        public Task DeleteAsync(Guid jobId)
         {
-            _jobs.TryRemove(jobInfo.Id, out _);
+            _jobs.TryRemove(jobId, out _);
 
             return Task.FromResult(0);
         }
@@ -59,7 +59,7 @@ namespace Volo.Abp.BackgroundJobs
         {
             if (jobInfo.IsAbandoned)
             {
-                return DeleteAsync(jobInfo);
+                return DeleteAsync(jobInfo.Id);
             }
 
             return Task.FromResult(0);

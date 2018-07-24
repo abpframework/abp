@@ -34,8 +34,8 @@ namespace Volo.Abp.BackgroundJobs
         /// <summary>
         /// Deletes a job.
         /// </summary>
-        /// <param name="jobInfo">Job information.</param>
-        Task DeleteAsync(BackgroundJobInfo jobInfo);
+        /// <param name="jobId">The Job Unique Identifier.</param>
+        Task DeleteAsync(Guid jobId);
 
         /// <summary>
         /// Updates a job.

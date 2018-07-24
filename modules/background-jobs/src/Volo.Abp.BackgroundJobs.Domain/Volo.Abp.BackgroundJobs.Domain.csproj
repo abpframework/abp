@@ -9,7 +9,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.BackgroundJobs.Domain.Shared\Volo.Abp.BackgroundJobs.Domain.Shared.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AutoMapper\Volo.Abp.AutoMapper.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Ddd.Domain\Volo.Abp.Ddd.Domain.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.BackgroundJobs\Volo.Abp.BackgroundJobs.csproj" />
   </ItemGroup>
 
 </Project>

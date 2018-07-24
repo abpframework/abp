@@ -2,7 +2,7 @@
 {
     public static class BackgroundJobsConsts
     {
-        public const string DefaultDbTablePrefix = "BackgroundJobs";
+        public const string DefaultDbTablePrefix = "Abp";
 
         public const string DefaultDbSchema = null;
     }
