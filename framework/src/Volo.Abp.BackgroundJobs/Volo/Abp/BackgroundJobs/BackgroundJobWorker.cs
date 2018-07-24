@@ -12,7 +12,7 @@ namespace Volo.Abp.BackgroundJobs
     {
         protected IBackgroundJobExecuter JobExecuter { get; }
         protected IBackgroundJobStore Store { get; }
-        protected BackgroundJobOptions Options { get; }
+        protected BackgroundJobWorkerOptions Options { get; }
         protected IClock Clock { get; }
 
         /// <summary>
@@ -22,7 +22,7 @@ namespace Volo.Abp.BackgroundJobs
             IBackgroundJobStore store,
             AbpTimer timer,
             IBackgroundJobExecuter jobExecuter,
-            IOptions<BackgroundJobOptions> options,
+            IOptions<BackgroundJobWorkerOptions> options,
             IClock clock)
             : base(timer)
         {

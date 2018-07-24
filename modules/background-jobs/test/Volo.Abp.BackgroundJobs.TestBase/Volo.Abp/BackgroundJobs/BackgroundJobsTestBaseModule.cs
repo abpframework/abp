@@ -15,7 +15,7 @@ namespace Volo.Abp.BackgroundJobs
         {
             context.Services.Configure<BackgroundJobOptions>(options =>
             {
-                options.IsJobExecutionEnabled = false;
+                options.IsEnabled = false;
             });
 
             context.Services.AddAssemblyOf<BackgroundJobsTestBaseModule>();
