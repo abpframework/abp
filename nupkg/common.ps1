@@ -134,5 +134,17 @@ $projects = (
     "modules/blogging/src/Volo.Blogging.EntityFrameworkCore",
     "modules/blogging/src/Volo.Blogging.HttpApi",
     "modules/blogging/src/Volo.Blogging.HttpApi.Client",
-    "modules/blogging/src/Volo.Blogging.Web"    
+    "modules/blogging/src/Volo.Blogging.Web",
+    
+    # modules/audit-logging
+    "modules/audit-logging/src/Volo.Abp.AuditLogging.Domain.Shared",
+    "modules/audit-logging/src/Volo.Abp.AuditLogging.Domain",
+    "modules/audit-logging/src/Volo.Abp.AuditLogging.EntityFrameworkCore",
+    "modules/audit-logging/src/Volo.Abp.AuditLogging.MongoDB",
+    
+    # modules/background-jobs
+    "modules/background-jobs/src/Volo.Abp.BackgroundJobs.Domain.Shared",
+    "modules/background-jobs/src/Volo.Abp.BackgroundJobs.Domain",
+    "modules/background-jobs/src/Volo.Abp.BackgroundJobs.EntityFrameworkCore",
+    "modules/background-jobs/src/Volo.Abp.BackgroundJobs.MongoDB"
 )

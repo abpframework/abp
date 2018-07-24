@@ -14,7 +14,8 @@ $solutionPaths = (
     "modules/account",
     "modules/docs",
     "modules/blogging",
-    "modules/audit-logging"
+    "modules/audit-logging",
+    "modules/background-jobs"
 )
 
 # Build all solutions

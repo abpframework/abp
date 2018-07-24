@@ -13,7 +13,9 @@ $solutionsPaths = (
     "modules/tenant-management",
     "modules/account",
     "modules/docs",
-    "modules/blogging"
+    "modules/blogging",
+    "modules/audit-logging",
+    "modules/background-jobs"
 )
 
 # List of test projects
@@ -62,7 +64,13 @@ $testProjectPaths = (
     "modules/setting-management/test/Volo.Abp.SettingManagement.Tests",
     "modules/tenant-management/test/Volo.Abp.TenantManagement.EntityFrameworkCore.Tests",
     "modules/tenant-management/test/Volo.Abp.TenantManagement.MongoDB.Tests",
-    "modules/tenant-management/test/Volo.Abp.TenantManagement.Application.Tests"
+    "modules/tenant-management/test/Volo.Abp.TenantManagement.Application.Tests",
+    "modules/audit-logging/test/Volo.Abp.AuditLogging.EntityFrameworkCore.Tests",
+    "modules/audit-logging/test/Volo.Abp.AuditLogging.MongoDB.Tests",
+    "modules/audit-logging/test/Volo.Abp.AuditLogging.Tests",
+    "modules/background-jobs/test/Volo.Abp.BackgroundJobs.EntityFrameworkCore.Tests",
+    "modules/background-jobs/test/Volo.Abp.BackgroundJobs.MongoDB.Tests",
+    "modules/background-jobs/test/Volo.Abp.BackgroundJobs.Domain.Tests"
 )
 
 # Build all solutions
