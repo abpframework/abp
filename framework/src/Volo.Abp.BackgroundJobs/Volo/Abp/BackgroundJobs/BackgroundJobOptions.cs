@@ -49,6 +49,7 @@ namespace Volo.Abp.BackgroundJobs
         {
             JobTypes = new Dictionary<string, Type>();
 
+            JobPollPeriod = 5000;
             DefaultFirstWaitDuration = 60;
             DefaultTimeout = 172800;
             DefaultWaitFactor = 2.0;

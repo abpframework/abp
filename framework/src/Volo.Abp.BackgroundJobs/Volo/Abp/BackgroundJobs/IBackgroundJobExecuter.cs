@@ -2,6 +2,6 @@
 {
     public interface IBackgroundJobExecuter
     {
-        void Execute(BackgroundJobInfo jobInfo);
+        void Execute(JobExecutionContext context);
     }
 }

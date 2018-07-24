@@ -198,7 +198,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.BackgroundJobs", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.BackgroundWorkers", "src\Volo.Abp.BackgroundWorkers\Volo.Abp.BackgroundWorkers.csproj", "{6C3E76B8-C4DA-4E74-9F8B-A8BC4C831722}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.BackgroundJobs.Tests", "test\Volo.Abp.BackgroundJobs.Tests\Volo.Abp.BackgroundJobs.Tests.csproj", "{D86548EA-7047-4623-8824-F6285CD254AA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.BackgroundJobs.Tests", "test\Volo.Abp.BackgroundJobs.Tests\Volo.Abp.BackgroundJobs.Tests.csproj", "{D86548EA-7047-4623-8824-F6285CD254AA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

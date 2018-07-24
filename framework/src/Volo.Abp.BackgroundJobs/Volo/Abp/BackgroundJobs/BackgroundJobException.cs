@@ -1,21 +1,15 @@
 ﻿using System;
 using System.Runtime.Serialization;
-using JetBrains.Annotations;
 
 namespace Volo.Abp.BackgroundJobs
 {
     [Serializable]
     public class BackgroundJobException : AbpException
     {
-        [CanBeNull]
-        public BackgroundJobInfo BackgroundJob { get; set; }
+        public string JobName { get; set; }
 
-        [CanBeNull]
-        public object JobObject { get; set; }
+        public string JobArgs { get; set; }
 
-        /// <summary>
-        /// Creates a new <see cref="BackgroundJobException"/> object.
-        /// </summary>
         public BackgroundJobException()
         {
 
