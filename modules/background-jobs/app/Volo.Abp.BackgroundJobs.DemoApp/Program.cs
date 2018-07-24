@@ -1,4 +1,6 @@
 ﻿using System;
+using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.BackgroundJobs.DemoApp.Jobs;
 
 namespace Volo.Abp.BackgroundJobs.DemoApp
 {
@@ -12,6 +14,11 @@ namespace Volo.Abp.BackgroundJobs.DemoApp
             }))
             {
                 application.Initialize();
+
+                application
+                    .ServiceProvider
+                    .GetRequiredService<SampleJobCreator>()
+                    .CreateJobs();
 
                 Console.WriteLine("Press ENTER to stop the application..!");
                 Console.ReadLine();
