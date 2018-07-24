@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
-using Volo.Abp.EntityFrameworkCore;
+using MongoDB.Driver;
+using MongoDB.Driver.Linq;
+using Volo.Abp.Domain.Repositories.MongoDB;
+using Volo.Abp.MongoDB;
 using Volo.Abp.Timing;
 
-namespace Volo.Abp.BackgroundJobs.EntityFrameworkCore
+namespace Volo.Abp.BackgroundJobs.MongoDB
 {
-    public class EfCoreBackgroundJobRepository : EfCoreRepository<IBackgroundJobsDbContext, BackgroundJobRecord, Guid>, IBackgroundJobRepository
+    public class MongoBackgroundJobRepository : MongoDbRepository<IBackgroundJobsMongoDbContext, BackgroundJobRecord, Guid>, IBackgroundJobRepository
     {
         protected IClock Clock { get; }
 
-        public EfCoreBackgroundJobRepository(
-            IDbContextProvider<IBackgroundJobsDbContext> dbContextProvider,
+        public MongoBackgroundJobRepository(
+            IMongoDbContextProvider<IBackgroundJobsMongoDbContext> dbContextProvider, 
             IClock clock) 
             : base(dbContextProvider)
         {
@@ -24,7 +24,7 @@ namespace Volo.Abp.BackgroundJobs.EntityFrameworkCore
         public async Task<List<BackgroundJobRecord>> GetWaitingListAsync(int maxResultCount)
         {
             var now = Clock.Now;
-            return await DbSet
+            return await GetMongoQueryable()
                 .Where(t => !t.IsAbandoned && t.NextTryTime <= now)
                 .OrderByDescending(t => t.Priority)
                 .ThenBy(t => t.TryCount)

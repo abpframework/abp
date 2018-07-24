@@ -1,16 +1,15 @@
-﻿using Volo.Abp.Data;
+﻿using MongoDB.Driver;
+using Volo.Abp.Data;
 using Volo.Abp.MongoDB;
 
 namespace Volo.Abp.BackgroundJobs.MongoDB
 {
-    [ConnectionStringName("BackgroundJobs")]
+    [ConnectionStringName("AbpBackgroundJobs")]
     public class BackgroundJobsMongoDbContext : AbpMongoDbContext, IBackgroundJobsMongoDbContext
     {
         public static string CollectionPrefix { get; set; } = BackgroundJobsConsts.DefaultDbTablePrefix;
 
-        /* Add mongo collections here. Example:
-         * public IMongoCollection<Question> Questions => Collection<Question>();
-         */
+        public IMongoCollection<BackgroundJobRecord> BackgroundJobs { get; set; }
 
         protected override void CreateModel(IMongoModelBuilder modelBuilder)
         {

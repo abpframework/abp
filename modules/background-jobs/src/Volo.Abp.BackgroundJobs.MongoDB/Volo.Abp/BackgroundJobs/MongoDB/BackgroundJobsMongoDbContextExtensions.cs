@@ -1,10 +1,9 @@
 ﻿using System;
-using Volo.Abp;
 using Volo.Abp.MongoDB;
 
 namespace Volo.Abp.BackgroundJobs.MongoDB
 {
-    public static class AbpUsersMongoDbContextExtensions
+    public static class BackgroundJobsMongoDbContextExtensions
     {
         public static void ConfigureBackgroundJobs(
             this IMongoModelBuilder builder,
@@ -15,6 +14,11 @@ namespace Volo.Abp.BackgroundJobs.MongoDB
             var options = new BackgroundJobsMongoModelBuilderConfigurationOptions();
 
             optionsAction?.Invoke(options);
+
+            builder.Entity<BackgroundJobRecord>(b =>
+            {
+                b.CollectionName = options.CollectionPrefix + "BackgroundJobs";
+            });
         }
     }
 }

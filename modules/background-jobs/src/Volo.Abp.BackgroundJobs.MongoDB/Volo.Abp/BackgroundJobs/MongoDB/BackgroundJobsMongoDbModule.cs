@@ -16,9 +16,7 @@ namespace Volo.Abp.BackgroundJobs.MongoDB
 
             context.Services.AddMongoDbContext<BackgroundJobsMongoDbContext>(options =>
             {
-                /* Add custom repositories here. Example:
-                 * options.AddRepository<Question, MongoQuestionRepository>();
-                 */
+                 options.AddRepository<BackgroundJobRecord, MongoBackgroundJobRepository>();
             });
 
             context.Services.AddAssemblyOf<BackgroundJobsMongoDbModule>();
