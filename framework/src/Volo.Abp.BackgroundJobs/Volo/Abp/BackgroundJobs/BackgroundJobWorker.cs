@@ -12,8 +12,10 @@ namespace Volo.Abp.BackgroundJobs
     {
         protected IBackgroundJobExecuter JobExecuter { get; }
         protected IBackgroundJobStore Store { get; }
-        protected BackgroundJobWorkerOptions Options { get; }
+        protected BackgroundJobOptions JobOptions { get; }
+        protected BackgroundJobWorkerOptions WorkerOptions { get; }
         protected IClock Clock { get; }
+        protected IBackgroundJobSerializer Serializer { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BackgroundJobManager"/> class.
@@ -22,39 +24,45 @@ namespace Volo.Abp.BackgroundJobs
             IBackgroundJobStore store,
             AbpTimer timer,
             IBackgroundJobExecuter jobExecuter,
-            IOptions<BackgroundJobWorkerOptions> options,
+            IBackgroundJobSerializer serializer,
+            IOptions<BackgroundJobOptions> jobOptions,
+            IOptions<BackgroundJobWorkerOptions> workerOptions,
             IClock clock)
             : base(timer)
         {
             JobExecuter = jobExecuter;
+            Serializer = serializer;
             Clock = clock;
             Store = store;
-            Options = options.Value;
-            Timer.Period = Options.JobPollPeriod;
+            WorkerOptions = workerOptions.Value;
+            JobOptions = jobOptions.Value;
+            Timer.Period = WorkerOptions.JobPollPeriod;
         }
 
         protected override void DoWork()
         {
-            var waitingJobs = AsyncHelper.RunSync(() => Store.GetWaitingJobsAsync(Options.MaxJobFetchCount));
+            var waitingJobs = AsyncHelper.RunSync(() => Store.GetWaitingJobsAsync(WorkerOptions.MaxJobFetchCount));
 
             foreach (var jobInfo in waitingJobs)
             {
                 jobInfo.TryCount++;
                 jobInfo.LastTryTime = Clock.Now;
 
-                var context = new JobExecutionContext(jobInfo.JobName, jobInfo.JobArgs);
-
                 try
                 {
-                    JobExecuter.Execute(context);
+                    var jobType = JobOptions.GetJobType(jobInfo.JobName);
+                    var jobArgsType = BackgroundJobArgsHelper.GetJobArgsType(jobType);
+                    var jobArgs = Serializer.Deserialize(jobInfo.JobArgs, jobArgsType);
 
-                    if (context.Result == JobExecutionResult.Success)
+                    var context = new JobExecutionContext(jobType, jobArgs);
+
+                    try
                     {
+                        JobExecuter.Execute(context);
                         AsyncHelper.RunSync(() => Store.DeleteAsync(jobInfo.Id));
                     }
-                    else if (context.Result == JobExecutionResult.Failed)
+                    catch (BackgroundJobExecutionException)
                     {
-
                         var nextTryTime = CalculateNextTryTime(jobInfo);
                         if (nextTryTime.HasValue)
                         {
@@ -91,12 +99,12 @@ namespace Volo.Abp.BackgroundJobs
 
         protected virtual DateTime? CalculateNextTryTime(BackgroundJobInfo jobInfo) //TODO: Move to another place to override easier
         {
-            var nextWaitDuration = Options.DefaultFirstWaitDuration * (Math.Pow(Options.DefaultWaitFactor, jobInfo.TryCount - 1));
+            var nextWaitDuration = WorkerOptions.DefaultFirstWaitDuration * (Math.Pow(WorkerOptions.DefaultWaitFactor, jobInfo.TryCount - 1));
             var nextTryDate = jobInfo.LastTryTime.HasValue
                 ? jobInfo.LastTryTime.Value.AddSeconds(nextWaitDuration)
                 : Clock.Now.AddSeconds(nextWaitDuration);
 
-            if (nextTryDate.Subtract(jobInfo.CreationTime).TotalSeconds > Options.DefaultTimeout)
+            if (nextTryDate.Subtract(jobInfo.CreationTime).TotalSeconds > WorkerOptions.DefaultTimeout)
             {
                 return null;
             }

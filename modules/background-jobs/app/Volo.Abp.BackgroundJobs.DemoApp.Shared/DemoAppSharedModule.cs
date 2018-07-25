@@ -14,7 +14,7 @@ namespace Volo.Abp.BackgroundJobs.DemoApp.Shared
             context.Services.AddAssemblyOf<DemoAppSharedModule>();
         }
 
-        public override void OnApplicationInitialization(ApplicationInitializationContext context)
+        public override void OnPostApplicationInitialization(ApplicationInitializationContext context)
         {
             context.ServiceProvider
                 .GetRequiredService<SampleJobCreator>()

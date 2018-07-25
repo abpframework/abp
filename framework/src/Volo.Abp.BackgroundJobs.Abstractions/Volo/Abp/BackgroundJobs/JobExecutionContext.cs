@@ -1,16 +1,18 @@
-﻿namespace Volo.Abp.BackgroundJobs
+﻿using System;
+
+namespace Volo.Abp.BackgroundJobs
 {
     public class JobExecutionContext
     {
-        public string JobName { get; }
+        public Type JobType { get; }
 
-        public string JobArgs { get; }
+        public object JobArgs { get; }
 
         public JobExecutionResult Result { get; set; }
 
-        public JobExecutionContext(string jobName, string jobArgs)
+        public JobExecutionContext(Type jobType, object jobArgs)
         {
-            JobName = jobName;
+            JobType = jobType;
             JobArgs = jobArgs;
             Result = JobExecutionResult.Success;
         }

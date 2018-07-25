@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -13,16 +12,13 @@ namespace Volo.Abp.BackgroundJobs
         public ILogger<BackgroundJobExecuter> Logger { protected get; set; }
 
         protected IServiceProvider ServiceProvider { get; }
-        protected IBackgroundJobSerializer Serializer { get; }
         protected BackgroundJobOptions Options { get; }
 
         public BackgroundJobExecuter(
             IServiceProvider serviceProvider,
-            IBackgroundJobSerializer serializer,
             IOptions<BackgroundJobOptions> options)
         {
             ServiceProvider = serviceProvider;
-            Serializer = serializer;
             Options = options.Value;
 
             Logger = NullLogger<BackgroundJobExecuter>.Instance;
@@ -30,26 +26,23 @@ namespace Volo.Abp.BackgroundJobs
 
         public virtual void Execute(JobExecutionContext context)
         {
-            //TODO: Refactor (split to multiple methods).
-
-            var jobType = Options.GetJobType(context.JobName);
-
             using (var scope = ServiceProvider.CreateScope())
             {
-                var job = scope.ServiceProvider.GetService(jobType);
+                var job = scope.ServiceProvider.GetService(context.JobType);
                 if (job == null)
                 {
-                    throw new AbpException("The job type is not registered to DI: " + jobType);
+                    throw new AbpException("The job type is not registered to DI: " + context.JobType);
                 }
 
-                var jobExecuteMethod = job.GetType().GetMethod("Execute");
-                Debug.Assert(jobExecuteMethod != null, nameof(jobExecuteMethod) + " != null");
-                var argsType = jobExecuteMethod.GetParameters()[0].ParameterType;
-                var argsObj = Serializer.Deserialize(context.JobArgs, argsType);
-
+                var jobExecuteMethod = context.JobType.GetMethod(nameof(IBackgroundJob<object>.Execute));
+                if (jobExecuteMethod == null)
+                {
+                    throw new AbpException($"Given job type does not implement {typeof(IBackgroundJob<>).Name}. The job type was: " + context.JobType);
+                }
+                
                 try
                 {
-                    jobExecuteMethod.Invoke(job, new[] { argsObj });
+                    jobExecuteMethod.Invoke(job, new[] { context.JobArgs });
                 }
                 catch (Exception ex)
                 {
@@ -58,9 +51,9 @@ namespace Volo.Abp.BackgroundJobs
                     Logger.LogException(ex);
 
                     //TODO: Somehow trigger an event for the exception (may create an Volo.Abp.ExceptionHandling package)!
-                    var backgroundJobException = new BackgroundJobException("A background job execution is failed. See inner exception for details.", ex)
+                    throw new BackgroundJobExecutionException("A background job execution is failed. See inner exception for details.", ex)
                     {
-                        JobName = context.JobName,
+                        JobType = context.JobType.AssemblyQualifiedName,
                         JobArgs = context.JobArgs
                     };
                 }

@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using Shouldly;
-using Volo.Abp.Json;
 using Xunit;
 
 namespace Volo.Abp.BackgroundJobs
@@ -8,12 +7,10 @@ namespace Volo.Abp.BackgroundJobs
     public class BackgroundJobExecuter_Tests : BackgroundJobsTestBase
     {
         private readonly IBackgroundJobExecuter _backgroundJobExecuter;
-        private readonly IJsonSerializer _jsonSerializer;
 
         public BackgroundJobExecuter_Tests()
         {
             _backgroundJobExecuter = GetRequiredService<IBackgroundJobExecuter>();
-            _jsonSerializer = GetRequiredService<IJsonSerializer>();
         }
 
         [Fact]
@@ -28,8 +25,8 @@ namespace Volo.Abp.BackgroundJobs
 
             _backgroundJobExecuter.Execute(
                 new JobExecutionContext(
-                    BackgroundJobNameAttribute.GetName<MyJobArgs>(),
-                    _jsonSerializer.Serialize(new MyJobArgs("42"))
+                    typeof(MyJob),
+                    new MyJobArgs("42")
                 )
             );
 

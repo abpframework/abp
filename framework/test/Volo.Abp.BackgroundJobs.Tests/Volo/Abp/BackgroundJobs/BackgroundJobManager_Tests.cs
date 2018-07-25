@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Shouldly;
 using Xunit;
 
@@ -18,9 +19,9 @@ namespace Volo.Abp.BackgroundJobs
         [Fact]
         public async Task Should_Store_Jobs()
         {
-            var jobId = await _backgroundJobManager.EnqueueAsync(new MyJobArgs("42"));
-            jobId.ShouldNotBe(default);
-            (await _backgroundJobStore.FindAsync(jobId)).ShouldNotBeNull();
+            var jobIdAsString = await _backgroundJobManager.EnqueueAsync(new MyJobArgs("42"));
+            jobIdAsString.ShouldNotBe(default);
+            (await _backgroundJobStore.FindAsync(Guid.Parse(jobIdAsString))).ShouldNotBeNull();
         }
     }
 }

@@ -17,7 +17,7 @@ namespace Volo.Abp.BackgroundJobs
             JobTypes = new Dictionary<string, Type>();
         }
 
-        internal Type GetJobType(string jobName)
+        public Type GetJobType(string jobName)
         {
             var jobType = JobTypes.GetOrDefault(jobName);
 

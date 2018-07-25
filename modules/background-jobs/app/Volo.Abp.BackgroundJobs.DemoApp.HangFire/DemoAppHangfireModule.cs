@@ -2,17 +2,17 @@
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Autofac;
 using Volo.Abp.BackgroundJobs.DemoApp.Shared;
-using Volo.Abp.Hangfire;
 using Volo.Abp.Modularity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Volo.Abp.BackgroundJobs.Hangfire;
 
 namespace Volo.Abp.BackgroundJobs.DemoApp.HangFire
 {
     [DependsOn(
         typeof(DemoAppSharedModule),
         typeof(AbpAutofacModule),
-        typeof(AbpHangfireModule)
+        typeof(AbpBackgroundJobsHangfireModule)
     )]
     public class DemoAppHangfireModule : AbpModule
     {
