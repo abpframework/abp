@@ -13,5 +13,11 @@ namespace Volo.Abp.RabbitMQ
         {
             context.Services.AddAssemblyOf<AbpRabbitMqModule>();
         }
+
+        public override void OnApplicationShutdown(ApplicationShutdownContext context)
+        {
+            context.ServiceProvider.GetRequiredService<IConnectionPool>().Dispose();
+            //TODO: Dispose channel pool when it's implemented! 
+        }
     }
 }

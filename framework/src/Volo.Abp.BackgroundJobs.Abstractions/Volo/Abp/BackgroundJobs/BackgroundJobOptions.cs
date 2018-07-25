@@ -7,10 +7,11 @@ namespace Volo.Abp.BackgroundJobs
     {
         public Dictionary<string, Type> JobTypes { get; }
 
+        //TODO: Implement for all providers! (Hangfire does not implement yet)
         /// <summary>
         /// Default: true.
         /// </summary>
-        public bool IsEnabled { get; set; } = true;
+        public bool IsJobExecutionEnabled { get; set; } = true;
 
         public BackgroundJobOptions()
         {

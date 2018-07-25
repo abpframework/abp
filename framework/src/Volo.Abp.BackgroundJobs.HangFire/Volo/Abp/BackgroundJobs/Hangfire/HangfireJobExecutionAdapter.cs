@@ -20,10 +20,6 @@ namespace Volo.Abp.BackgroundJobs.Hangfire
 
             var context = new JobExecutionContext(jobType, args);
             JobExecuter.Execute(context);
-            if (context.Result == JobExecutionResult.Failed)
-            {
-                throw new AbpException("Job failed");
-            }
         }
     }
 }

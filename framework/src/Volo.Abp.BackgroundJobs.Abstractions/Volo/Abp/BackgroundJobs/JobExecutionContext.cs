@@ -8,13 +8,10 @@ namespace Volo.Abp.BackgroundJobs
 
         public object JobArgs { get; }
 
-        public JobExecutionResult Result { get; set; }
-
         public JobExecutionContext(Type jobType, object jobArgs)
         {
             JobType = jobType;
             JobArgs = jobArgs;
-            Result = JobExecutionResult.Success;
         }
     }
 }

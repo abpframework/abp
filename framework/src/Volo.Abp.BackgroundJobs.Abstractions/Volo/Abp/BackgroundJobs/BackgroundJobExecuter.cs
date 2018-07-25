@@ -46,8 +46,6 @@ namespace Volo.Abp.BackgroundJobs
                 }
                 catch (Exception ex)
                 {
-                    context.Result = JobExecutionResult.Failed;
-
                     Logger.LogException(ex);
 
                     throw new BackgroundJobExecutionException("A background job execution is failed. See inner exception for details.", ex)
