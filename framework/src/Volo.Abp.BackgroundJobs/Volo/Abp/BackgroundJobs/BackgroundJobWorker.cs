@@ -18,7 +18,7 @@ namespace Volo.Abp.BackgroundJobs
         protected IBackgroundJobSerializer Serializer { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BackgroundJobManager"/> class.
+        /// Initializes a new instance of the <see cref="DefaultBackgroundJobManager"/> class.
         /// </summary>
         public BackgroundJobWorker(
             IBackgroundJobStore store,

@@ -9,7 +9,8 @@ namespace Volo.Abp.BackgroundJobs
     /// <summary>
     /// Default implementation of <see cref="IBackgroundJobManager"/>.
     /// </summary>
-    public class BackgroundJobManager : IBackgroundJobManager, ISingletonDependency
+    [Dependency(TryRegister = true)]
+    public class DefaultBackgroundJobManager : IBackgroundJobManager, ISingletonDependency
     {
         protected IClock Clock { get; }
         protected IBackgroundJobSerializer Serializer { get; }
@@ -17,9 +18,9 @@ namespace Volo.Abp.BackgroundJobs
         protected IBackgroundJobStore Store { get; }
         
         /// <summary>
-        /// Initializes a new instance of the <see cref="BackgroundJobManager"/> class.
+        /// Initializes a new instance of the <see cref="DefaultBackgroundJobManager"/> class.
         /// </summary>
-        public BackgroundJobManager(
+        public DefaultBackgroundJobManager(
             IClock clock,
             IBackgroundJobSerializer serializer,
             IBackgroundJobStore store,

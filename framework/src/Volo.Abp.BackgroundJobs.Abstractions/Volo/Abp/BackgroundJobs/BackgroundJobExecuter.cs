@@ -50,7 +50,6 @@ namespace Volo.Abp.BackgroundJobs
 
                     Logger.LogException(ex);
 
-                    //TODO: Somehow trigger an event for the exception (may create an Volo.Abp.ExceptionHandling package)!
                     throw new BackgroundJobExecutionException("A background job execution is failed. See inner exception for details.", ex)
                     {
                         JobType = context.JobType.AssemblyQualifiedName,

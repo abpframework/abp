@@ -5,6 +5,7 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.BackgroundJobs.Hangfire
 {
+    [Dependency(ReplaceServices = true)]
     public class HangfireBackgroundJobManager : IBackgroundJobManager, ITransientDependency
     {
         public Task<string> EnqueueAsync<TArgs>(TArgs args, BackgroundJobPriority priority = BackgroundJobPriority.Normal,
