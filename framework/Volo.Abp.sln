@@ -204,6 +204,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.BackgroundJobs.Abs
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.BackgroundJobs.HangFire", "src\Volo.Abp.BackgroundJobs.HangFire\Volo.Abp.BackgroundJobs.HangFire.csproj", "{35AC93EF-E383-4F4E-839D-6EE1C62681F1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.HangFire", "src\Volo.Abp.HangFire\Volo.Abp.HangFire.csproj", "{EE01E964-E60E-4C3C-BCF0-AF1A0C0A3DC9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -574,6 +576,10 @@ Global
 		{35AC93EF-E383-4F4E-839D-6EE1C62681F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{35AC93EF-E383-4F4E-839D-6EE1C62681F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{35AC93EF-E383-4F4E-839D-6EE1C62681F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE01E964-E60E-4C3C-BCF0-AF1A0C0A3DC9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE01E964-E60E-4C3C-BCF0-AF1A0C0A3DC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE01E964-E60E-4C3C-BCF0-AF1A0C0A3DC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE01E964-E60E-4C3C-BCF0-AF1A0C0A3DC9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -672,6 +678,7 @@ Global
 		{D86548EA-7047-4623-8824-F6285CD254AA} = {447C8A77-E5F0-4538-8687-7383196D04EA}
 		{EB9C3B4D-FEBD-4691-8F34-AAC2C13F6F2F} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{35AC93EF-E383-4F4E-839D-6EE1C62681F1} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
+		{EE01E964-E60E-4C3C-BCF0-AF1A0C0A3DC9} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB97ECF4-9A84-433F-A80B-2A3285BDD1D5}

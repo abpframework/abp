@@ -1,12 +1,12 @@
 ﻿using System;
 
-namespace Volo.Abp.BackgroundJobs.DemoApp
+namespace Volo.Abp.BackgroundJobs.DemoApp.HangFire
 {
     class Program
     {
         static void Main(string[] args)
         {
-            using (var application = AbpApplicationFactory.Create<DemoAppModule>(options =>
+            using (var application = AbpApplicationFactory.Create<DemoAppHangfireModule>(options =>
             {
                 options.UseAutofac();
             }))

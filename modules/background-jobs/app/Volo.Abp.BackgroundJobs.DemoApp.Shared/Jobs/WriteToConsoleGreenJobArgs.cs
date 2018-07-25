@@ -1,4 +1,4 @@
-﻿namespace Volo.Abp.BackgroundJobs.DemoApp.Jobs
+﻿namespace Volo.Abp.BackgroundJobs.DemoApp.Shared.Jobs
 {
     [BackgroundJobName("GreenJob")]
     public class WriteToConsoleGreenJobArgs

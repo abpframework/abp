@@ -6,14 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="2.1.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.1.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="2.1.0" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
     <ProjectReference Include="..\..\src\Volo.Abp.BackgroundJobs.EntityFrameworkCore\Volo.Abp.BackgroundJobs.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.EntityFrameworkCore.SqlServer\Volo.Abp.EntityFrameworkCore.SqlServer.csproj" />
+    <ProjectReference Include="..\Volo.Abp.BackgroundJobs.DemoApp.Shared\Volo.Abp.BackgroundJobs.DemoApp.Shared.csproj" />
   </ItemGroup>
 
 </Project>

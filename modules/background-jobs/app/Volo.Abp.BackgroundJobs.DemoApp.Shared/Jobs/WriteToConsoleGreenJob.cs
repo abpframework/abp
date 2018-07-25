@@ -1,13 +1,13 @@
 ﻿using System;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.BackgroundJobs.DemoApp.Jobs
+namespace Volo.Abp.BackgroundJobs.DemoApp.Shared.Jobs
 {
     public class WriteToConsoleGreenJob : BackgroundJob<WriteToConsoleGreenJobArgs>, ITransientDependency
     {
         public override void Execute(WriteToConsoleGreenJobArgs args)
         {
-            if (RandomHelper.GetRandom(0,100) < 70)
+            if (RandomHelper.GetRandom(0, 100) < 70)
             {
                 throw new ApplicationException("A sample exception from the WriteToConsoleGreenJob!");
             }

@@ -1,7 +1,7 @@
 ﻿using System;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.BackgroundJobs.DemoApp.Jobs
+namespace Volo.Abp.BackgroundJobs.DemoApp.Shared.Jobs
 {
     public class WriteToConsoleYellowJob : BackgroundJob<WriteToConsoleYellowJobArgs>, ITransientDependency
     {

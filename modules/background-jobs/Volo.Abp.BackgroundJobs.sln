@@ -25,7 +25,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.BackgroundJobs.Ent
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.BackgroundJobs.MongoDB.Tests", "test\Volo.Abp.BackgroundJobs.MongoDB.Tests\Volo.Abp.BackgroundJobs.MongoDB.Tests.csproj", "{AA783A34-86E4-41A5-AE21-5D9FBD98D858}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.BackgroundJobs.DemoApp", "app\Volo.Abp.BackgroundJobs.DemoApp\Volo.Abp.BackgroundJobs.DemoApp.csproj", "{9A871D66-BE8D-440C-BF79-F778F8A50BF3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.BackgroundJobs.DemoApp", "app\Volo.Abp.BackgroundJobs.DemoApp\Volo.Abp.BackgroundJobs.DemoApp.csproj", "{9A871D66-BE8D-440C-BF79-F778F8A50BF3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.BackgroundJobs.DemoApp.Shared", "app\Volo.Abp.BackgroundJobs.DemoApp.Shared\Volo.Abp.BackgroundJobs.DemoApp.Shared.csproj", "{DE6914FF-F60A-461A-8498-461198E917BE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.BackgroundJobs.DemoApp.HangFire", "app\Volo.Abp.BackgroundJobs.DemoApp.HangFire\Volo.Abp.BackgroundJobs.DemoApp.HangFire.csproj", "{2060AC85-2598-4342-A87C-A684A2C71A37}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,6 +73,14 @@ Global
 		{9A871D66-BE8D-440C-BF79-F778F8A50BF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9A871D66-BE8D-440C-BF79-F778F8A50BF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9A871D66-BE8D-440C-BF79-F778F8A50BF3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE6914FF-F60A-461A-8498-461198E917BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE6914FF-F60A-461A-8498-461198E917BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE6914FF-F60A-461A-8498-461198E917BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE6914FF-F60A-461A-8498-461198E917BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2060AC85-2598-4342-A87C-A684A2C71A37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2060AC85-2598-4342-A87C-A684A2C71A37}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2060AC85-2598-4342-A87C-A684A2C71A37}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2060AC85-2598-4342-A87C-A684A2C71A37}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -83,6 +95,8 @@ Global
 		{E5906DE1-B2F5-472E-BE1B-1D96A68B834D} = {CCD2960C-23CC-4AB4-B84D-60C7AAA52F4D}
 		{AA783A34-86E4-41A5-AE21-5D9FBD98D858} = {CCD2960C-23CC-4AB4-B84D-60C7AAA52F4D}
 		{9A871D66-BE8D-440C-BF79-F778F8A50BF3} = {E400416D-2895-4512-9D17-90681EEC7E0A}
+		{DE6914FF-F60A-461A-8498-461198E917BE} = {E400416D-2895-4512-9D17-90681EEC7E0A}
+		{2060AC85-2598-4342-A87C-A684A2C71A37} = {E400416D-2895-4512-9D17-90681EEC7E0A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4324B3B4-B60B-4E3C-91D8-59576B4E26DD}
