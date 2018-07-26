@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Diagnostics;
+using System.Linq;
 using System.Threading;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using RabbitMQ.Client;
 using Volo.Abp.DependencyInjection;
 
@@ -13,13 +17,16 @@ namespace Volo.Abp.RabbitMQ
         protected ConcurrentDictionary<string, ChannelPoolItem> Channels { get; }
 
         protected bool IsDisposed { get; private set; }
-        
-        protected TimeSpan ChannelDisposeWaitDuration { get; set; } = TimeSpan.FromSeconds(15);
+
+        protected TimeSpan TotalDisposeWaitDuration { get; set; } = TimeSpan.FromSeconds(10);
+
+        public ILogger<ChannelPool> Logger { get; set; }
 
         public ChannelPool(IConnectionPool connectionPool)
         {
             ConnectionPool = connectionPool;
             Channels = new ConcurrentDictionary<string, ChannelPoolItem>();
+            Logger = NullLogger<ChannelPool>.Instance;
         }
 
         public virtual IChannelAccessor Acquire(string channelName = null)
@@ -64,15 +71,44 @@ namespace Volo.Abp.RabbitMQ
 
             IsDisposed = true;
 
+            if (!Channels.Any())
+            {
+                Logger.LogDebug($"Disposed channel pool with no channels in the pool.");
+                return;
+            }
+
+            var poolDisposeStopwatch = Stopwatch.StartNew();
+
+            Logger.LogInformation($"Disposing channel pool ({Channels.Count} channels).");
+
+            var remainingWaitDuration = TotalDisposeWaitDuration;
+
             foreach (var poolItem in Channels.Values)
             {
+                var poolItemDisposeStopwatch = Stopwatch.StartNew();
+
                 try
                 {
-                    poolItem.WaitIfInUse(ChannelDisposeWaitDuration);
+                    poolItem.WaitIfInUse(remainingWaitDuration);
                     poolItem.Channel.Dispose();
                 }
                 catch
                 { }
+
+                poolItemDisposeStopwatch.Stop();
+
+                remainingWaitDuration = remainingWaitDuration > poolItemDisposeStopwatch.Elapsed
+                    ? remainingWaitDuration.Subtract(poolItemDisposeStopwatch.Elapsed)
+                    : TimeSpan.Zero;
+            }
+
+            poolDisposeStopwatch.Stop();
+
+            Logger.LogInformation($"Disposed RabbitMQ Channel Pool ({Channels.Count} channels in {poolDisposeStopwatch.Elapsed.TotalMilliseconds:0.00} ms).");
+
+            if(poolDisposeStopwatch.Elapsed.TotalSeconds > 5.0)
+            {
+                Logger.LogWarning($"Disposing RabbitMQ Channel Pool got time greather than expected: {poolDisposeStopwatch.Elapsed.TotalMilliseconds:0.00} ms.");
             }
 
             Channels.Clear();
