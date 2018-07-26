@@ -6,7 +6,7 @@ namespace Volo.Abp.BackgroundJobs.DemoApp.RabbitMq
     {
         static void Main(string[] args)
         {
-            using (var application = AbpApplicationFactory.Create<DemoAppHangfireModule>(options =>
+            using (var application = AbpApplicationFactory.Create<DemoAppRabbitMqModule>(options =>
             {
                 options.UseAutofac();
             }))
