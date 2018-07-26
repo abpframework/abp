@@ -13,7 +13,7 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.AddSingleton(typeof(JobListener<>)); //TODO: Introduce and use interface!
+            context.Services.AddSingleton(typeof(IJobQueue<>), typeof(JobQueue<>));
 
             context.Services.AddAssemblyOf<AbpBackgroundJobsRabbitMqModule>();
         }

@@ -2,7 +2,7 @@
 
 namespace Volo.Abp.RabbitMQ
 {
-    public class QueueDictionary : Dictionary<string, QueueOptions>
+    public class QueueOptionsDictionary : Dictionary<string, QueueOptions>
     {
 
     }

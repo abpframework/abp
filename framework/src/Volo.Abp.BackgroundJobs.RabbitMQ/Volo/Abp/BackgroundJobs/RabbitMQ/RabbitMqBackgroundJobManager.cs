@@ -17,35 +17,12 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
             ChannelPool = channelPool;
         }
 
-        public Task<string> EnqueueAsync<TArgs>(TArgs args, BackgroundJobPriority priority = BackgroundJobPriority.Normal,
+        public Task<string> EnqueueAsync<TArgs>(
+            TArgs args, 
+            BackgroundJobPriority priority = BackgroundJobPriority.Normal,
             TimeSpan? delay = null)
         {
-            var jobName = BackgroundJobNameAttribute.GetName<TArgs>();
-            var queueName = "BackgroundJobs." + jobName; //TODO: Make prefix optional
-
-            using (var channelAccessor = ChannelPool.Acquire(queueName))
-            {
-                var properties = channelAccessor.Channel.CreateBasicProperties();
-                properties.Persistent = true;
-
-                Publish(channelAccessor.Channel, queueName, args, properties);
-            }
-
-            return null; //TODO: Can RabbitMQ return a message identifier?
-        }
-
-        private void Publish<TArgs>(
-            IModel channel, 
-            string queueName, 
-            TArgs args, 
-            IBasicProperties properties)
-        {
-            channel.BasicPublish(
-                exchange: "",
-                routingKey: queueName,
-                basicProperties: properties,
-                body: Serializer.Serialize(args)
-            );
+            
         }
     }
 }
