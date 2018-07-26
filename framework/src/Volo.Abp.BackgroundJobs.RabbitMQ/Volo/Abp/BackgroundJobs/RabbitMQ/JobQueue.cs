@@ -111,7 +111,7 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
                 return Task.CompletedTask;
             }
 
-            ChannelAccessor = ChannelPool.Acquire(QueueName);
+            ChannelAccessor = ChannelPool.Acquire(QueueName + ".JobQueue");
 
             var queueOptions = RabbitMqOptions.Queues.GetOrDefault(QueueName)
                                ?? new QueueOptions(QueueName);

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
@@ -7,7 +6,7 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.RabbitMQ
 {
-    public class ConnectionPool : IConnectionPool, IDisposable, ISingletonDependency
+    public class ConnectionPool : IConnectionPool, ISingletonDependency
     {
         protected AbpRabbitMqOptions Options { get; }
 

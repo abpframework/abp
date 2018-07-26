@@ -9,7 +9,7 @@ namespace Volo.Abp.BackgroundJobs.DemoApp.Shared.Jobs
         {
             if (RandomHelper.GetRandom(0, 100) < 70)
             {
-                throw new ApplicationException("A sample exception from the WriteToConsoleGreenJob!");
+                //throw new ApplicationException("A sample exception from the WriteToConsoleGreenJob!");
             }
 
             var oldColor = Console.ForegroundColor;
