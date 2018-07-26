@@ -53,6 +53,8 @@ namespace Volo.Abp.RabbitMQ
 
                 }
             }
+
+            Connections.Clear();
         }
     }
 }

@@ -57,9 +57,11 @@ namespace Volo.Abp.Modularity
 
         public void ShutdownModules(ApplicationShutdownContext context)
         {
+            var modules = _moduleContainer.Modules.Reverse().ToList();
+
             foreach (var contributer in _lifecycleContributers)
             {
-                foreach (var module in _moduleContainer.Modules)
+                foreach (var module in modules)
                 {
                     contributer.Shutdown(context, module.Instance);
                 }

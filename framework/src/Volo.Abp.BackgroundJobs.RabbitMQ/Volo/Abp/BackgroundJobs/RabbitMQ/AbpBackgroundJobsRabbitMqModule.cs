@@ -25,5 +25,12 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
                 .GetRequiredService<IJobQueueManager>()
                 .Start();
         }
+
+        public override void OnApplicationShutdown(ApplicationShutdownContext context)
+        {
+            context.ServiceProvider
+                .GetRequiredService<IJobQueueManager>()
+                .Stop();
+        }
     }
 }

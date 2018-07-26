@@ -1,6 +1,8 @@
-﻿namespace Volo.Abp.RabbitMQ
+﻿using System;
+
+namespace Volo.Abp.RabbitMQ
 {
-    public interface IChannelPool
+    public interface IChannelPool : IDisposable
     {
         IChannelAccessor Acquire(string channelName = null);
     }

@@ -17,10 +17,12 @@ namespace Volo.Abp.RabbitMQ
         public override void OnApplicationShutdown(ApplicationShutdownContext context)
         {
             context.ServiceProvider
-                .GetRequiredService<IConnectionPool>()
+                .GetRequiredService<IChannelPool>()
                 .Dispose();
 
-            //TODO: Dispose channel pool when it's implemented! 
+            context.ServiceProvider
+                .GetRequiredService<IConnectionPool>()
+                .Dispose();
         }
     }
 }

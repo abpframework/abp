@@ -11,7 +11,11 @@ namespace Volo.Abp.RabbitMQ
         protected IConnectionPool ConnectionPool { get; }
 
         protected ConcurrentDictionary<string, ChannelPoolItem> Channels { get; }
+
+        protected bool IsDisposed { get; private set; }
         
+        protected TimeSpan ChannelDisposeWaitDuration { get; set; } = TimeSpan.FromSeconds(15);
+
         public ChannelPool(IConnectionPool connectionPool)
         {
             ConnectionPool = connectionPool;
@@ -20,33 +24,20 @@ namespace Volo.Abp.RabbitMQ
 
         public virtual IChannelAccessor Acquire(string channelName = null)
         {
+            CheckDisposed();
+
             channelName = channelName ?? "";
 
-            var poolItem = Channels.GetOrAdd(channelName, _ => new ChannelPoolItem
-            {
-                Channel = CreateChannel(channelName)
-            });
+            var poolItem = Channels.GetOrAdd(
+                channelName,
+                _ => new ChannelPoolItem(CreateChannel(channelName))
+            );
 
-            lock (poolItem)
-            {
-                while (poolItem.IsInUse)
-                {
-                    Monitor.Wait(poolItem);
-                }
-                
-                poolItem.IsInUse = true;
-            }
+            poolItem.Acquire();
 
             return new ChannelAccessor(
                 poolItem.Channel,
-                () =>
-                {
-                    lock (poolItem)
-                    {
-                        poolItem.IsInUse = false;
-                        Monitor.PulseAll(poolItem);
-                    }
-                }
+                () => poolItem.Release()
             );
         }
 
@@ -54,6 +45,94 @@ namespace Volo.Abp.RabbitMQ
         {
             //TODO: How to determine the right connection name?
             return ConnectionPool.Get().CreateModel();
+        }
+
+        protected void CheckDisposed()
+        {
+            if (IsDisposed)
+            {
+                throw new ObjectDisposedException(nameof(ChannelPool));
+            }
+        }
+
+        public void Dispose()
+        {
+            if (IsDisposed)
+            {
+                return;
+            }
+
+            IsDisposed = true;
+
+            foreach (var poolItem in Channels.Values)
+            {
+                try
+                {
+                    poolItem.WaitIfInUse(ChannelDisposeWaitDuration);
+                    poolItem.Channel.Dispose();
+                }
+                catch
+                { }
+            }
+
+            Channels.Clear();
+        }
+
+        protected class ChannelPoolItem : IDisposable
+        {
+            public IModel Channel { get; }
+
+            public bool IsInUse
+            {
+                get => _isInUse;
+                private set => _isInUse = value;
+            }
+            private volatile bool _isInUse;
+
+            public ChannelPoolItem(IModel channel)
+            {
+                Channel = channel;
+            }
+
+            public void Acquire()
+            {
+                lock (this)
+                {
+                    while (IsInUse)
+                    {
+                        Monitor.Wait(this);
+                    }
+
+                    IsInUse = true;
+                }
+            }
+
+            public void WaitIfInUse(TimeSpan timeout)
+            {
+                lock (this)
+                {
+                    if (!IsInUse)
+                    {
+                        return;
+                    }
+
+                    Monitor.Wait(this, timeout);
+                }
+            }
+
+            public void Release()
+            {
+                lock (this)
+                {
+                    IsInUse = false;
+                    Monitor.PulseAll(this);
+                }
+            }
+
+            public void Dispose()
+            {
+                Channel.Dispose();
+            }
         }
 
         protected class ChannelAccessor : IChannelAccessor
