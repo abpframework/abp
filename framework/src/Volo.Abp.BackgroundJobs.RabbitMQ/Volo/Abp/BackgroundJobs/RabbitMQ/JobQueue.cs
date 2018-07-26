@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Nito.AsyncEx;
 using RabbitMQ.Client;
@@ -9,6 +12,8 @@ using Volo.Abp.RabbitMQ;
 
 namespace Volo.Abp.BackgroundJobs.RabbitMQ
 {
+    //TODO: Needs refactoring
+
     public class JobQueue<TArgs> : IJobQueue<TArgs>
     {
         protected Type JobType { get; }
@@ -17,6 +22,8 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
 
         protected IChannelAccessor ChannelAccessor { get; private set; }
         protected EventingBasicConsumer Consumer { get; private set; }
+        
+        public ILogger<JobQueue<TArgs>> Logger { get; set; }
 
         protected IChannelPool ChannelPool { get; }
         protected AbpRabbitMqOptions RabbitMqOptions { get; }
@@ -43,9 +50,14 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
             JobName = BackgroundJobNameAttribute.GetName<TArgs>();
             JobType = BackgroundJobOptions.GetJobType(JobName);
             QueueName = "BackgroundJobs." + JobName; //TODO: Make prefix optional
+
+            Logger = NullLogger<JobQueue<TArgs>>.Instance;
         }
 
-        public virtual async Task<string> Enqueue(TArgs args)
+        public virtual async Task<string> EnqueueAsync(
+            TArgs args,
+            BackgroundJobPriority priority = BackgroundJobPriority.Normal,
+            TimeSpan? delay = null)
         {
             CheckDisposed();
 
@@ -53,20 +65,31 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
             {
                 await EnsureInitializedAsync();
 
-                await PublishAsync(args);
+                await PublishAsync(args, priority, delay);
 
                 return null;
             }
         }
 
-        public Task StartAsync()
+        public async Task StartAsync(CancellationToken cancellationToken = default)
         {
+            CheckDisposed();
+
             if (!BackgroundJobOptions.IsJobExecutionEnabled)
             {
-                return Task.CompletedTask;
+                return;
             }
 
-            return EnsureInitializedAsync();
+            using (await SyncObj.LockAsync())
+            {
+                await EnsureInitializedAsync();
+            }
+        }
+
+        public Task StopAsync(CancellationToken cancellationToken = default)
+        {
+            Dispose();
+            return Task.CompletedTask;
         }
 
         public virtual void Dispose()
@@ -81,7 +104,7 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
             ChannelAccessor?.Dispose();
         }
 
-        public virtual Task EnsureInitializedAsync()
+        protected virtual Task EnsureInitializedAsync()
         {
             if (ChannelAccessor != null)
             {
@@ -93,7 +116,8 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
             var queueOptions = RabbitMqOptions.Queues.GetOrDefault(QueueName)
                                ?? new QueueOptions(QueueName);
 
-            queueOptions.Declare(ChannelAccessor.Channel);
+            var result = queueOptions.Declare(ChannelAccessor.Channel);
+            Logger.LogDebug($"RabbitMQ Queue '{QueueName}' has {result.MessageCount} messages and {result.ConsumerCount} consumers.");
 
             if (BackgroundJobOptions.IsJobExecutionEnabled)
             {
@@ -111,8 +135,13 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
             return Task.CompletedTask;
         }
 
-        protected virtual Task PublishAsync(TArgs args)
+        protected virtual Task PublishAsync(
+            TArgs args, 
+            BackgroundJobPriority priority = BackgroundJobPriority.Normal,
+            TimeSpan? delay = null)
         {
+            //TODO: How to handle priority & delay?
+
             ChannelAccessor.Channel.BasicPublish(
                 exchange: "",
                 routingKey: QueueName,
@@ -137,9 +166,21 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
                 Serializer.Deserialize(ea.Body, typeof(TArgs))
             );
 
-            JobExecuter.Execute(context);
-
-            //TODO: How to ACK on success or Reject on failure?
+            try
+            {
+                JobExecuter.Execute(context);
+                ChannelAccessor.Channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
+            }
+            catch (BackgroundJobExecutionException)
+            {
+                //TODO: Reject like that?
+                ChannelAccessor.Channel.BasicReject(deliveryTag: ea.DeliveryTag, requeue: true);
+            }
+            catch (Exception)
+            {
+                //TODO: Reject like that?
+                ChannelAccessor.Channel.BasicReject(deliveryTag: ea.DeliveryTag, requeue: false);
+            }
         }
 
         private void CheckDisposed()

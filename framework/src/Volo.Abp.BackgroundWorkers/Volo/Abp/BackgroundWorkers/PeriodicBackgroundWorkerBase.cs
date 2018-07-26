@@ -1,4 +1,6 @@
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.Threading;
 
@@ -21,27 +23,18 @@ namespace Volo.Abp.BackgroundWorkers
             Timer.Elapsed += Timer_Elapsed;
         }
 
-        public override void Start()
+        public override async Task StartAsync(CancellationToken cancellationToken = default)
         {
-            base.Start();
-            Timer.Start();
+            await base.StartAsync(cancellationToken);
+            await Timer.StartAsync(cancellationToken);
         }
 
-        public override void Stop()
+        public override async Task StopAsync(CancellationToken cancellationToken = default)
         {
-            Timer.Stop();
-            base.Stop();
+            await Timer.StopAsync(cancellationToken);
+            await base.StopAsync(cancellationToken);
         }
-
-        public override void WaitToStop()
-        {
-            Timer.WaitToStop();
-            base.WaitToStop();
-        }
-
-        /// <summary>
-        /// Handles the Elapsed event of the Timer.
-        /// </summary>
+        
         private void Timer_Elapsed(object sender, System.EventArgs e)
         {
             try

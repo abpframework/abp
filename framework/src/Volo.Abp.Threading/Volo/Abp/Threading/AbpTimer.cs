@@ -1,5 +1,8 @@
 using System;
 using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Threading
@@ -7,7 +10,7 @@ namespace Volo.Abp.Threading
     /// <summary>
     /// A roboust timer implementation that ensures no overlapping occurs. It waits exactly specified <see cref="Period"/> between ticks.
     /// </summary>
-    public class AbpTimer : RunnableBase, ITransientDependency
+    public class AbpTimer : IRunnable, ITransientDependency
     {
         /// <summary>
         /// This event is raised periodically according to Period of Timer.
@@ -25,74 +28,49 @@ namespace Volo.Abp.Threading
         /// </summary>
         public bool RunOnStart { get; set; }
 
-        /// <summary>
-        /// This timer is used to perfom the task at spesified intervals.
-        /// </summary>
+        public ILogger<AbpTimer> Logger { get; set; }
+
         private readonly Timer _taskTimer;
-
-        /// <summary>
-        /// Indicates that whether timer is running or stopped.
-        /// </summary>
-        private volatile bool _running;
-
-        /// <summary>
-        /// Indicates that whether performing the task or _taskTimer is in sleep mode.
-        /// This field is used to wait executing tasks when stopping Timer.
-        /// </summary>
         private volatile bool _performingTasks;
+        private volatile bool _isRunning;
 
-        /// <summary>
-        /// Creates a new Timer.
-        /// </summary>
         public AbpTimer()
         {
+            Logger = NullLogger<AbpTimer>.Instance;
+
             _taskTimer = new Timer(TimerCallBack, null, Timeout.Infinite, Timeout.Infinite);
         }
 
-        /// <summary>
-        /// Starts the timer.
-        /// </summary>
-        public override void Start()
+        public Task StartAsync(CancellationToken cancellationToken = default)
         {
             if (Period <= 0)
             {
                 throw new AbpException("Period should be set before starting the timer!");
             }
 
-            base.Start();
-
-            _running = true;
-            _taskTimer.Change(RunOnStart ? 0 : Period, Timeout.Infinite);
-        }
-
-        /// <summary>
-        /// Stops the timer.
-        /// </summary>
-        public override void Stop()
-        {
             lock (_taskTimer)
             {
-                _running = false;
-                _taskTimer.Change(Timeout.Infinite, Timeout.Infinite);
+                _taskTimer.Change(RunOnStart ? 0 : Period, Timeout.Infinite);
+                _isRunning = true;
             }
 
-            base.Stop();
+            return Task.CompletedTask;
         }
 
-        /// <summary>
-        /// Waits the service to stop.
-        /// </summary>
-        public override void WaitToStop()
+        public Task StopAsync(CancellationToken cancellationToken = default)
         {
             lock (_taskTimer)
             {
+                _taskTimer.Change(Timeout.Infinite, Timeout.Infinite);
                 while (_performingTasks)
                 {
                     Monitor.Wait(_taskTimer);
                 }
+
+                _isRunning = false;
             }
 
-            base.WaitToStop();
+            return Task.CompletedTask;
         }
 
         /// <summary>
@@ -103,7 +81,7 @@ namespace Volo.Abp.Threading
         {
             lock (_taskTimer)
             {
-                if (!_running || _performingTasks)
+                if (!_isRunning || _performingTasks)
                 {
                     return;
                 }
@@ -114,10 +92,7 @@ namespace Volo.Abp.Threading
 
             try
             {
-                if (Elapsed != null)
-                {
-                    Elapsed(this, new EventArgs());
-                }
+                Elapsed.InvokeSafely(this, new EventArgs());
             }
             catch
             {
@@ -128,7 +103,7 @@ namespace Volo.Abp.Threading
                 lock (_taskTimer)
                 {
                     _performingTasks = false;
-                    if (_running)
+                    if (_isRunning)
                     {
                         _taskTimer.Change(Period, Timeout.Infinite);
                     }

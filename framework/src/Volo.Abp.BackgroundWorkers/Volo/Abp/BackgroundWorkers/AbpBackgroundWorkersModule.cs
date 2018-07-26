@@ -33,7 +33,7 @@ namespace Volo.Abp.BackgroundWorkers
             {
                 context.ServiceProvider
                     .GetRequiredService<IBackgroundWorkerManager>()
-                    .StopAndWaitToStop();
+                    .Stop();
             }
         }
     }

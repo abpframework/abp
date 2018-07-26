@@ -1,17 +1,21 @@
+﻿using JetBrains.Annotations;
+
 namespace Volo.Abp.Threading
 {
-    /// <summary>
-    /// Some extension methods for <see cref="IRunnable"/>.
-    /// </summary>
     public static class RunnableExtensions
     {
-        /// <summary>
-        /// Calls <see cref="IRunnable.Stop"/> and then <see cref="IRunnable.WaitToStop"/>.
-        /// </summary>
-        public static void StopAndWaitToStop(this IRunnable runnable)
+        public static void Start([NotNull] this IRunnable runnable)
         {
-            runnable.Stop();
-            runnable.WaitToStop();
+            Check.NotNull(runnable, nameof(runnable));
+
+            AsyncHelper.RunSync(() => runnable.StartAsync());
+        }
+
+        public static void Stop([NotNull] this IRunnable runnable)
+        {
+            Check.NotNull(runnable, nameof(runnable));
+
+            AsyncHelper.RunSync(() => runnable.StopAsync());
         }
     }
 }
