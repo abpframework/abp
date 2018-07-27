@@ -29,7 +29,7 @@ namespace Volo.Abp.RabbitMQ
             Logger = NullLogger<ChannelPool>.Instance;
         }
 
-        public virtual IChannelAccessor Acquire(string channelName = null)
+        public virtual IChannelAccessor Acquire(string channelName = null, string connectionName = null)
         {
             CheckDisposed();
 
@@ -37,21 +37,23 @@ namespace Volo.Abp.RabbitMQ
 
             var poolItem = Channels.GetOrAdd(
                 channelName,
-                _ => new ChannelPoolItem(CreateChannel(channelName))
+                _ => new ChannelPoolItem(CreateChannel(channelName, connectionName))
             );
 
             poolItem.Acquire();
 
             return new ChannelAccessor(
                 poolItem.Channel,
+                channelName,
                 () => poolItem.Release()
             );
         }
 
-        protected virtual IModel CreateChannel(string channelName)
+        protected virtual IModel CreateChannel(string channelName, string connectionName)
         {
-            //TODO: How to determine the right connection name?
-            return ConnectionPool.Get().CreateModel();
+            return ConnectionPool
+                .Get(connectionName)
+                .CreateModel();
         }
 
         protected void CheckDisposed()
@@ -174,11 +176,15 @@ namespace Volo.Abp.RabbitMQ
         protected class ChannelAccessor : IChannelAccessor
         {
             public IModel Channel { get; }
+
+            public string Name { get; }
+
             private readonly Action _disposeAction;
 
-            public ChannelAccessor(IModel channel, Action disposeAction)
+            public ChannelAccessor(IModel channel, string name, Action disposeAction)
             {
                 _disposeAction = disposeAction;
+                Name = name;
                 Channel = channel;
             }
 

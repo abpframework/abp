@@ -12,14 +12,17 @@ namespace Volo.Abp.BackgroundJobs.DemoApp.Shared.Jobs
                 //throw new ApplicationException("A sample exception from the WriteToConsoleYellowJob!");
             }
 
-            var oldColor = Console.ForegroundColor;
-            Console.ForegroundColor = ConsoleColor.Yellow;
+            lock (Console.Out)
+            {
+                var oldColor = Console.ForegroundColor;
+                Console.ForegroundColor = ConsoleColor.Yellow;
 
-            Console.WriteLine();
-            Console.WriteLine($"############### WriteToConsoleYellowJob: {args.Value} - {args.Time:HH:mm:ss}  ###############");
-            Console.WriteLine();
+                Console.WriteLine();
+                Console.WriteLine($"############### WriteToConsoleYellowJob: {args.Value} - {args.Time:HH:mm:ss}  ###############");
+                Console.WriteLine();
 
-            Console.ForegroundColor = oldColor;
+                Console.ForegroundColor = oldColor;
+            }
         }
     }
 }

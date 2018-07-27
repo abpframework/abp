@@ -16,9 +16,10 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
 
     public class JobQueue<TArgs> : IJobQueue<TArgs>
     {
-        protected Type JobType { get; }
-        protected string JobName { get; }
-        protected string QueueName { get; }
+        private const string ChannelPrefix = "JobQueue.";
+
+        protected BackgroundJobConfiguration JobConfiguration { get; }
+        protected JobQueueConfiguration QueueConfiguration { get; }
 
         protected IChannelAccessor ChannelAccessor { get; private set; }
         protected EventingBasicConsumer Consumer { get; private set; }
@@ -30,6 +31,7 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
         protected BackgroundJobOptions BackgroundJobOptions { get; }
         protected IRabbitMqSerializer Serializer { get; }
         protected IBackgroundJobExecuter JobExecuter { get; }
+        protected RabbitMqBackgroundJobOptions RabbitMqBackgroundJobOptions { get; }
 
         protected AsyncLock SyncObj = new AsyncLock();
         protected bool IsDiposed { get; private set; }
@@ -37,19 +39,25 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
         public JobQueue(
             IChannelPool channelPool,
             IRabbitMqSerializer serializer,
-            IOptions<AbpRabbitMqOptions> options,
+            IOptions<AbpRabbitMqOptions> rabbitMqOptions,
             IBackgroundJobExecuter jobExecuter,
-            IOptions<BackgroundJobOptions> backgroundJobOptions)
+            IOptions<BackgroundJobOptions> backgroundJobOptions,
+            IOptions<RabbitMqBackgroundJobOptions> rabbitMqBackgroundJobOptions)
         {
             Serializer = serializer;
             JobExecuter = jobExecuter;
             BackgroundJobOptions = backgroundJobOptions.Value;
             ChannelPool = channelPool;
-            RabbitMqOptions = options.Value;
+            RabbitMqOptions = rabbitMqOptions.Value;
+            RabbitMqBackgroundJobOptions = rabbitMqBackgroundJobOptions.Value;
 
-            JobName = BackgroundJobNameAttribute.GetName<TArgs>();
-            JobType = BackgroundJobOptions.GetJob(typeof(TArgs)).JobType;
-            QueueName = "BackgroundJobs." + JobName; //TODO: Make prefix optional
+            JobConfiguration = BackgroundJobOptions.GetJob(typeof(TArgs));
+
+            QueueConfiguration = RabbitMqBackgroundJobOptions.JobQueues.GetOrDefault(typeof(TArgs)) ??
+                            new JobQueueConfiguration(
+                                typeof(TArgs),
+                                RabbitMqBackgroundJobOptions.DefaultQueueNamePrefix + JobConfiguration.JobName
+                            );
 
             Logger = NullLogger<JobQueue<TArgs>>.Instance;
         }
@@ -111,13 +119,13 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
                 return Task.CompletedTask;
             }
 
-            ChannelAccessor = ChannelPool.Acquire(QueueName + ".JobQueue");
+            ChannelAccessor = ChannelPool.Acquire(
+                ChannelPrefix + QueueConfiguration.QueueName,
+                QueueConfiguration.ConnectionName
+            );
 
-            var queueOptions = RabbitMqOptions.Queues.GetOrDefault(QueueName)
-                               ?? new QueueOptions(QueueName);
-
-            var result = queueOptions.Declare(ChannelAccessor.Channel);
-            Logger.LogDebug($"RabbitMQ Queue '{QueueName}' has {result.MessageCount} messages and {result.ConsumerCount} consumers.");
+            var result = QueueConfiguration.Declare(ChannelAccessor.Channel);
+            Logger.LogDebug($"RabbitMQ Queue '{QueueConfiguration.QueueName}' has {result.MessageCount} messages and {result.ConsumerCount} consumers.");
 
             if (BackgroundJobOptions.IsJobExecutionEnabled)
             {
@@ -126,7 +134,7 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
 
                 //TODO: What BasicConsume returns?
                 ChannelAccessor.Channel.BasicConsume(
-                    queue: QueueName,
+                    queue: QueueConfiguration.QueueName,
                     autoAck: false,
                     consumer: Consumer
                 );
@@ -144,7 +152,7 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
 
             ChannelAccessor.Channel.BasicPublish(
                 exchange: "",
-                routingKey: QueueName,
+                routingKey: QueueConfiguration.QueueName,
                 basicProperties: CreateBasicPropertiesToPublish(),
                 body: Serializer.Serialize(args)
             );
@@ -162,7 +170,7 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
         protected virtual void MessageReceived(object sender, BasicDeliverEventArgs ea)
         {
             var context = new JobExecutionContext(
-                JobType,
+                JobConfiguration.JobType,
                 Serializer.Deserialize(ea.Body, typeof(TArgs))
             );
 

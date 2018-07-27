@@ -21,13 +21,18 @@ namespace Volo.Abp.BackgroundJobs
             _jobConfigurationsByName = new Dictionary<string, BackgroundJobConfiguration>();
         }
 
+        public BackgroundJobConfiguration GetJob<TArgs>()
+        {
+            return GetJob(typeof(TArgs));
+        }
+
         public BackgroundJobConfiguration GetJob(Type argsType)
         {
             var jobConfiguration = _jobConfigurationsByArgsType.GetOrDefault(argsType);
 
             if (jobConfiguration == null)
             {
-                throw new AbpException("Undefined background job type for the job args type: " + argsType.AssemblyQualifiedName);
+                throw new AbpException("Undefined background job for the job args type: " + argsType.AssemblyQualifiedName);
             }
 
             return jobConfiguration;
@@ -39,7 +44,7 @@ namespace Volo.Abp.BackgroundJobs
 
             if (jobConfiguration == null)
             {
-                throw new AbpException("Undefined background job type for the job name: " + name);
+                throw new AbpException("Undefined background job for the job name: " + name);
             }
 
             return jobConfiguration;

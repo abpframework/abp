@@ -4,10 +4,10 @@ using RabbitMQ.Client;
 
 namespace Volo.Abp.RabbitMQ
 {
-    public class QueueOptions
+    public class QueueConfiguration
     {
         [NotNull]
-        public string Name { get; }
+        public string QueueName { get; }
 
         public bool Durable { get; set; }
 
@@ -17,23 +17,23 @@ namespace Volo.Abp.RabbitMQ
 
         public IDictionary<string, object> Arguments { get; }
 
-        public QueueOptions(
-            [NotNull] string name, 
+        public QueueConfiguration(
+            [NotNull] string queueName, 
             bool durable = true, 
             bool exclusive = false, 
             bool autoDelete = false)
         {
-            Name = name;
+            QueueName = queueName;
             Durable = durable;
             Exclusive = exclusive;
             AutoDelete = autoDelete;
             Arguments = new Dictionary<string, object>();
         }
 
-        public QueueDeclareOk Declare(IModel channel)
+        public virtual QueueDeclareOk Declare(IModel channel)
         {
             return channel.QueueDeclare(
-                queue: Name,
+                queue: QueueName,
                 durable: Durable,
                 exclusive: Exclusive,
                 autoDelete: AutoDelete,

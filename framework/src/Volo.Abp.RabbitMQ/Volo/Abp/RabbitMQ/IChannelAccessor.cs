@@ -11,5 +11,10 @@ namespace Volo.Abp.RabbitMQ
         /// Instead, dispose the <see cref="IChannelAccessor"/> after usage.
         /// </summary>
         IModel Channel { get; }
+
+        /// <summary>
+        /// Name of the channel.
+        /// </summary>
+        string Name { get; }
     }
 }
