@@ -12,54 +12,52 @@ using Volo.Abp.RabbitMQ;
 
 namespace Volo.Abp.BackgroundJobs.RabbitMQ
 {
-    //TODO: Needs refactoring
-
     public class JobQueue<TArgs> : IJobQueue<TArgs>
     {
         private const string ChannelPrefix = "JobQueue.";
 
         protected BackgroundJobConfiguration JobConfiguration { get; }
         protected JobQueueConfiguration QueueConfiguration { get; }
-
         protected IChannelAccessor ChannelAccessor { get; private set; }
         protected EventingBasicConsumer Consumer { get; private set; }
         
         public ILogger<JobQueue<TArgs>> Logger { get; set; }
 
-        protected IChannelPool ChannelPool { get; }
-        protected AbpRabbitMqOptions RabbitMqOptions { get; }
         protected BackgroundJobOptions BackgroundJobOptions { get; }
+        protected RabbitMqBackgroundJobOptions RabbitMqBackgroundJobOptions { get; }
+        protected IChannelPool ChannelPool { get; }
         protected IRabbitMqSerializer Serializer { get; }
         protected IBackgroundJobExecuter JobExecuter { get; }
-        protected RabbitMqBackgroundJobOptions RabbitMqBackgroundJobOptions { get; }
 
         protected AsyncLock SyncObj = new AsyncLock();
         protected bool IsDiposed { get; private set; }
 
         public JobQueue(
+            IOptions<BackgroundJobOptions> backgroundJobOptions,
+            IOptions<RabbitMqBackgroundJobOptions> rabbitMqBackgroundJobOptions,
             IChannelPool channelPool,
             IRabbitMqSerializer serializer,
-            IOptions<AbpRabbitMqOptions> rabbitMqOptions,
-            IBackgroundJobExecuter jobExecuter,
-            IOptions<BackgroundJobOptions> backgroundJobOptions,
-            IOptions<RabbitMqBackgroundJobOptions> rabbitMqBackgroundJobOptions)
+            IBackgroundJobExecuter jobExecuter)
         {
+            BackgroundJobOptions = backgroundJobOptions.Value;
+            RabbitMqBackgroundJobOptions = rabbitMqBackgroundJobOptions.Value;
             Serializer = serializer;
             JobExecuter = jobExecuter;
-            BackgroundJobOptions = backgroundJobOptions.Value;
             ChannelPool = channelPool;
-            RabbitMqOptions = rabbitMqOptions.Value;
-            RabbitMqBackgroundJobOptions = rabbitMqBackgroundJobOptions.Value;
 
             JobConfiguration = BackgroundJobOptions.GetJob(typeof(TArgs));
-
-            QueueConfiguration = RabbitMqBackgroundJobOptions.JobQueues.GetOrDefault(typeof(TArgs)) ??
-                            new JobQueueConfiguration(
-                                typeof(TArgs),
-                                RabbitMqBackgroundJobOptions.DefaultQueueNamePrefix + JobConfiguration.JobName
-                            );
+            QueueConfiguration = GetOrCreateJobQueueConfiguration();
 
             Logger = NullLogger<JobQueue<TArgs>>.Instance;
+        }
+
+        protected virtual JobQueueConfiguration GetOrCreateJobQueueConfiguration()
+        {
+            return RabbitMqBackgroundJobOptions.JobQueues.GetOrDefault(typeof(TArgs)) ??
+                   new JobQueueConfiguration(
+                       typeof(TArgs),
+                       RabbitMqBackgroundJobOptions.DefaultQueueNamePrefix + JobConfiguration.JobName
+                   );
         }
 
         public virtual async Task<string> EnqueueAsync(
@@ -79,7 +77,7 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
             }
         }
 
-        public async Task StartAsync(CancellationToken cancellationToken = default)
+        public virtual async Task StartAsync(CancellationToken cancellationToken = default)
         {
             CheckDisposed();
 
@@ -94,7 +92,7 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
             }
         }
 
-        public Task StopAsync(CancellationToken cancellationToken = default)
+        public virtual Task StopAsync(CancellationToken cancellationToken = default)
         {
             Dispose();
             return Task.CompletedTask;
@@ -191,7 +189,7 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
             }
         }
 
-        private void CheckDisposed()
+        protected void CheckDisposed()
         {
             if (IsDiposed)
             {

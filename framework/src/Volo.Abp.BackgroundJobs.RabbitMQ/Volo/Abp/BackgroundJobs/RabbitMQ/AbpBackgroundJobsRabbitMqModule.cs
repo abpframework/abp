@@ -21,12 +21,22 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
+            StartJobQueueManager(context);
+        }
+
+        public override void OnApplicationShutdown(ApplicationShutdownContext context)
+        {
+            StopJobQueueManager(context);
+        }
+
+        private static void StartJobQueueManager(ApplicationInitializationContext context)
+        {
             context.ServiceProvider
                 .GetRequiredService<IJobQueueManager>()
                 .Start();
         }
 
-        public override void OnApplicationShutdown(ApplicationShutdownContext context)
+        private static void StopJobQueueManager(ApplicationShutdownContext context)
         {
             context.ServiceProvider
                 .GetRequiredService<IJobQueueManager>()
