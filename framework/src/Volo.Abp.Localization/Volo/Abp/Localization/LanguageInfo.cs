@@ -4,7 +4,7 @@ using JetBrains.Annotations;
 namespace Volo.Abp.Localization
 {
     [Serializable]
-    public class LanguageInfo
+    public class LanguageInfo : ILanguageInfo
     {
         [NotNull]
         public virtual string CultureName { get; protected set; }

@@ -98,14 +98,8 @@ namespace Microsoft.AspNetCore.Builder
                 return new RequestCulture(firstLanguage.CultureName, firstLanguage.UiCultureName);
             }
 
-            if (!defaultLanguage.Contains(";"))
-            {
-                return new RequestCulture(defaultLanguage, defaultLanguage);
-            }
-
-            var splitted = defaultLanguage.Split(';');
-            return new RequestCulture(splitted[0], splitted[1]);
-
+            var (cultureName, uiCultureName) = LocalizationSettingHelper.ParseLanguageSetting(defaultLanguage);
+            return new RequestCulture(cultureName, uiCultureName);
         }
     }
 }

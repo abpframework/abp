@@ -1,10 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using Volo.Abp.Localization;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Themes.Basic.Components.Toolbar.LanguageSwitch
@@ -21,7 +18,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Themes.Basic.Components.Toolbar
         public async Task<IViewComponentResult> InvokeAsync()
         {
             var languages = await _languageProvider.GetLanguagesAsync();
-            var currentLanguage = FindCurrentLanguage(languages);
+            var currentLanguage = languages.FindByCulture(
+                CultureInfo.CurrentCulture.Name,
+                CultureInfo.CurrentUICulture.Name
+            );
 
             var model = new LanguageSwitchViewComponentModel
             {
@@ -30,15 +30,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Themes.Basic.Components.Toolbar
             };
             
             return View("~/Themes/Basic/Components/Toolbar/LanguageSwitch/Default.cshtml", model);
-        }
-
-        private LanguageInfo FindCurrentLanguage(IReadOnlyList<LanguageInfo> languages)
-        {
-            return languages.FirstOrDefault(l =>
-                       l.CultureName == CultureInfo.CurrentCulture.Name &&
-                       l.UiCultureName == CultureInfo.CurrentUICulture.Name)
-                   ?? languages.FirstOrDefault(l => l.CultureName == CultureInfo.CurrentCulture.Name)
-                   ?? languages.FirstOrDefault(l => l.UiCultureName == CultureInfo.CurrentUICulture.Name);
         }
     }
 }
