@@ -13,13 +13,23 @@ namespace Volo.Abp.RabbitMQ
         [NotNull]
         public ConnectionFactory Default
         {
-            get => this.GetOrDefault(DefaultConnectionName);
+            get => this[DefaultConnectionName];
             set => this[DefaultConnectionName] = Check.NotNull(value, nameof(value));
         }
 
         public RabbitMqConnections()
         {
             Default = new ConnectionFactory();
+        }
+
+        public ConnectionFactory GetOrDefault(string connectionName)
+        {
+            if (TryGetValue(connectionName, out var connectionFactory))
+            {
+                return connectionFactory;
+            }
+
+            return Default;
         }
     }
 }

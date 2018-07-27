@@ -90,7 +90,7 @@ namespace Volo.Abp.RabbitMQ
                 try
                 {
                     poolItem.WaitIfInUse(remainingWaitDuration);
-                    poolItem.Channel.Dispose();
+                    poolItem.Dispose();
                 }
                 catch
                 { }

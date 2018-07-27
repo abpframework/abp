@@ -2,13 +2,13 @@
 {
     public class AbpRabbitMqOptions
     {
-        public RabbitMqConnections Connections { get; }
+        public RabbitMqConnections ConnectionFactories { get; }
 
         public QueueOptionsDictionary Queues { get; }
 
         public AbpRabbitMqOptions()
         {
-            Connections = new RabbitMqConnections();
+            ConnectionFactories = new RabbitMqConnections();
             Queues = new QueueOptionsDictionary();
         }
     }
