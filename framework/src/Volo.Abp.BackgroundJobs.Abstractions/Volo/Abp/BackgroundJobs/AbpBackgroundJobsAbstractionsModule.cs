@@ -38,9 +38,7 @@ namespace Volo.Abp.BackgroundJobs
             {
                 foreach (var jobType in jobTypes)
                 {
-                    var jobArgsType = BackgroundJobArgsHelper.GetJobArgsType(jobType);
-                    var jobName = BackgroundJobNameAttribute.GetName(jobArgsType);
-                    options.JobTypes[jobName] = jobType;
+                    options.AddJob(jobType);
                 }
             });
         }

@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 
 namespace Volo.Abp.BackgroundJobs
 {
     public class BackgroundJobOptions
     {
-        public Dictionary<string, Type> JobTypes { get; }
+        private readonly Dictionary<Type, BackgroundJobConfiguration> _jobConfigurationsByArgsType;
+        private readonly Dictionary<string, BackgroundJobConfiguration> _jobConfigurationsByName;
 
         //TODO: Implement for all providers! (Hangfire does not implement yet)
         /// <summary>
@@ -15,19 +17,48 @@ namespace Volo.Abp.BackgroundJobs
 
         public BackgroundJobOptions()
         {
-            JobTypes = new Dictionary<string, Type>();
+            _jobConfigurationsByArgsType = new Dictionary<Type, BackgroundJobConfiguration>();
+            _jobConfigurationsByName = new Dictionary<string, BackgroundJobConfiguration>();
         }
 
-        public Type GetJobType(string jobName)
+        public BackgroundJobConfiguration GetJob(Type argsType)
         {
-            var jobType = JobTypes.GetOrDefault(jobName);
+            var jobConfiguration = _jobConfigurationsByArgsType.GetOrDefault(argsType);
 
-            if (jobType == null)
+            if (jobConfiguration == null)
             {
-                throw new AbpException("Undefined background job type for the job name: " + jobName);
+                throw new AbpException("Undefined background job type for the job args type: " + argsType.AssemblyQualifiedName);
             }
 
-            return jobType;
+            return jobConfiguration;
+        }
+
+        public BackgroundJobConfiguration GetJob(string name)
+        {
+            var jobConfiguration = _jobConfigurationsByName.GetOrDefault(name);
+
+            if (jobConfiguration == null)
+            {
+                throw new AbpException("Undefined background job type for the job name: " + name);
+            }
+
+            return jobConfiguration;
+        }
+
+        public IReadOnlyList<BackgroundJobConfiguration> GetJobs()
+        {
+            return _jobConfigurationsByArgsType.Values.ToImmutableList();
+        }
+
+        public void AddJob(Type jobType)
+        {
+            AddJob(new BackgroundJobConfiguration(jobType));
+        }
+
+        public void AddJob(BackgroundJobConfiguration jobConfiguration)
+        {
+            _jobConfigurationsByArgsType[jobConfiguration.ArgsType] = jobConfiguration;
+            _jobConfigurationsByName[jobConfiguration.JobName] = jobConfiguration;
         }
     }
 }

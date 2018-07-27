@@ -15,9 +15,7 @@ namespace Volo.Abp.BackgroundJobs.Hangfire
 
         public void Execute(TArgs args)
         {
-            var jobName = BackgroundJobNameAttribute.GetName<TArgs>();
-            var jobType = Options.GetJobType(jobName);
-
+            var jobType = Options.GetJob(typeof(TArgs)).JobType;
             var context = new JobExecutionContext(jobType, args);
             JobExecuter.Execute(context);
         }

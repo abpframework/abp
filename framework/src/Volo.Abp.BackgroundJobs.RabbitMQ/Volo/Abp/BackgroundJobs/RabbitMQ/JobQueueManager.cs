@@ -32,15 +32,11 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
                 return;
             }
 
-            foreach (var item in Options.JobTypes)
+            foreach (var jobConfiguration in Options.GetJobs())
             {
-                var jobName = item.Key;
-                var jobType = item.Value;
-                var argsType = BackgroundJobArgsHelper.GetJobArgsType(jobType);
-
-                var jobQueue = (IRunnable)ServiceProvider.GetRequiredService(typeof(IJobQueue<>).MakeGenericType(argsType));
+                var jobQueue = (IRunnable)ServiceProvider.GetRequiredService(typeof(IJobQueue<>).MakeGenericType(jobConfiguration.ArgsType));
                 await jobQueue.StartAsync(cancellationToken);
-                JobQueues[jobName] = jobQueue;
+                JobQueues[jobConfiguration.JobName] = jobQueue;
             }
         }
 
@@ -56,17 +52,16 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
 
         public IJobQueue<TArgs> Get<TArgs>()
         {
-            var jobName = BackgroundJobNameAttribute.GetName(typeof(TArgs));
+            var jobConfiguration = Options.GetJob(typeof(TArgs));
 
-            if (!Options.JobTypes.ContainsKey(jobName))
+            return (IJobQueue<TArgs>)JobQueues.GetOrAdd(jobConfiguration.JobName, _ =>
             {
-                throw new AbpException("No job registered");
-            }
+                var jobQueue = (IRunnable) ServiceProvider
+                    .GetRequiredService(typeof(IJobQueue<>)
+                        .MakeGenericType(typeof(TArgs)));
 
-            return (IJobQueue<TArgs>)JobQueues.GetOrAdd(jobName, _ =>
-            {
-                var jobQueue = (IRunnable)ServiceProvider.GetRequiredService(typeof(IJobQueue<>).MakeGenericType(typeof(TArgs)));
                 jobQueue.Start();
+
                 return jobQueue;
             });
         }

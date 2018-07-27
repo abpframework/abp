@@ -48,7 +48,7 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
             RabbitMqOptions = options.Value;
 
             JobName = BackgroundJobNameAttribute.GetName<TArgs>();
-            JobType = BackgroundJobOptions.GetJobType(JobName);
+            JobType = BackgroundJobOptions.GetJob(typeof(TArgs)).JobType;
             QueueName = "BackgroundJobs." + JobName; //TODO: Make prefix optional
 
             Logger = NullLogger<JobQueue<TArgs>>.Instance;

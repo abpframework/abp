@@ -50,11 +50,9 @@ namespace Volo.Abp.BackgroundJobs
 
                 try
                 {
-                    var jobType = JobOptions.GetJobType(jobInfo.JobName);
-                    var jobArgsType = BackgroundJobArgsHelper.GetJobArgsType(jobType);
-                    var jobArgs = Serializer.Deserialize(jobInfo.JobArgs, jobArgsType);
-
-                    var context = new JobExecutionContext(jobType, jobArgs);
+                    var jobConfiguration = JobOptions.GetJob(jobInfo.JobName);
+                    var jobArgs = Serializer.Deserialize(jobInfo.JobArgs, jobConfiguration.ArgsType);
+                    var context = new JobExecutionContext(jobConfiguration.JobType, jobArgs);
 
                     try
                     {
