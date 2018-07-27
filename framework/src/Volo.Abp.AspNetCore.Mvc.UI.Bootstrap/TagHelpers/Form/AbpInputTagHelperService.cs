@@ -157,7 +157,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 attributeList.AddClass("form-check-label");
             }
 
-            return RenderTagHelper(attributeList, context, labelTagHelper, _encoder, "span", TagMode.StartTagAndEndTag, true);
+            return RenderTagHelper(attributeList, context, labelTagHelper, _encoder, "label", TagMode.StartTagAndEndTag, true);
         }
     }
 }
