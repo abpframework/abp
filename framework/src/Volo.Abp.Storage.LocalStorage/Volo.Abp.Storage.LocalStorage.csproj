@@ -2,8 +2,8 @@
   <Import Project="..\..\..\common.props" />
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>Volo.Abp.Storage.Azure</AssemblyName>
-    <PackageId>Volo.Abp.Storage.Azure</PackageId>
+    <AssemblyName>Volo.Abp.Storage.Amazon</AssemblyName>
+    <PackageId>Volo.Abp.Storage.Amazon</PackageId>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
@@ -11,9 +11,11 @@
     <RootNamespace />
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="WindowsAzure.Storage" version="9.3.0" />
+    <ProjectReference Include="..\Volo.Abp.Storage\Volo.Abp.Storage.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Volo.Abp.Storage\Volo.Abp.Storage.csproj" />
+    <Reference Include="Microsoft.AspNetCore.Hosting.Abstractions">
+      <HintPath>C:\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.aspnetcore.hosting.abstractions\2.1.0\lib\netstandard2.0\Microsoft.AspNetCore.Hosting.Abstractions.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>
