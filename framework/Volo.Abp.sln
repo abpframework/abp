@@ -210,6 +210,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.BackgroundJobs.Rab
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.RabbitMQ", "src\Volo.Abp.RabbitMQ\Volo.Abp.RabbitMQ.csproj", "{D91DE561-F403-416F-BD0B-DBF0BA1C4447}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Storage", "src\Volo.Abp.Storage\Volo.Abp.Storage.csproj", "{FA81071B-98D5-47B2-993E-54DDEF1AB819}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Storage.Amazon", "src\Volo.Abp.Storage.Amazon\Volo.Abp.Storage.Amazon.csproj", "{2695F842-659A-4805-B787-225E185D5B1C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -592,6 +596,14 @@ Global
 		{D91DE561-F403-416F-BD0B-DBF0BA1C4447}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D91DE561-F403-416F-BD0B-DBF0BA1C4447}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D91DE561-F403-416F-BD0B-DBF0BA1C4447}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA81071B-98D5-47B2-993E-54DDEF1AB819}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA81071B-98D5-47B2-993E-54DDEF1AB819}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA81071B-98D5-47B2-993E-54DDEF1AB819}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA81071B-98D5-47B2-993E-54DDEF1AB819}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2695F842-659A-4805-B787-225E185D5B1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2695F842-659A-4805-B787-225E185D5B1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2695F842-659A-4805-B787-225E185D5B1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2695F842-659A-4805-B787-225E185D5B1C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -693,6 +705,8 @@ Global
 		{EE01E964-E60E-4C3C-BCF0-AF1A0C0A3DC9} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{DA7A2C04-E8C4-48AA-A37E-27C25BCE280A} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{D91DE561-F403-416F-BD0B-DBF0BA1C4447} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
+		{FA81071B-98D5-47B2-993E-54DDEF1AB819} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
+		{2695F842-659A-4805-B787-225E185D5B1C} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB97ECF4-9A84-433F-A80B-2A3285BDD1D5}
