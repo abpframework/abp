@@ -189,7 +189,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
             tagHelperOutput.TagName = "textarea";
             tagHelperOutput.TagMode = TagMode.StartTagAndEndTag;
-            tagHelperOutput.Content.SetContent(TagHelper.AspFor.ModelExplorer.Model.ToString());
+            tagHelperOutput.Content.SetContent(TagHelper.AspFor.ModelExplorer.Model?.ToString());
             if (textAreaAttribute.Rows>0)
             {
                 tagHelperOutput.Attributes.Add("rows", textAreaAttribute.Rows);

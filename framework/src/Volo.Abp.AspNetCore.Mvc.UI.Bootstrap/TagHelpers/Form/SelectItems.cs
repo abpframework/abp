@@ -31,6 +31,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 }
             }
 
+            // ReSharper disable once AssignNullToNotNullAttribute
             var selectItems = (properties.First().Model as IEnumerable<SelectListItem>).ToList();
             
             return selectItems;
