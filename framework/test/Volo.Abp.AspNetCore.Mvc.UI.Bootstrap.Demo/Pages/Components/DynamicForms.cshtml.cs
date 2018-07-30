@@ -47,6 +47,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components
         {
             [Required]
             [DisplayName("Name")]
+            [TextArea]
             public string Name { get; set; }
 
             [Required]

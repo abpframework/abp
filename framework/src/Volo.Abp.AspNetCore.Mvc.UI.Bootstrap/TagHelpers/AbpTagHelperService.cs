@@ -95,7 +95,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
 
         protected virtual T GetAttribute<T>(ModelExplorer property) where T : Attribute
         {
-            return property?.Metadata?.ContainerType?.GetTypeInfo()?.GetProperty(property.Metadata.PropertyName)?.GetCustomAttribute<T>();
+            var x = property?.Metadata?.ContainerType?.GetTypeInfo();
+            var y = x.GetProperty(property.Metadata.PropertyName);
+            var z = y.GetCustomAttribute<T>();
+            return z;
         }
 
         protected virtual List<FormGroupItem> GetFormGroupContentsList(TagHelperContext context, out bool surpress)
