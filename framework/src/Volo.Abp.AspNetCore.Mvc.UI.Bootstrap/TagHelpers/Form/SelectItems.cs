@@ -11,6 +11,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
     {
         public string ItemsListPropertyName { get; set; }
 
+        public SelectItems(string itemsListPropertyName)
+        {
+            ItemsListPropertyName = itemsListPropertyName;
+        }
+
         public IEnumerable<SelectListItem> GetItems(ModelExplorer explorer)
         {
             var properties = explorer.Container.Properties.Where(p => p.Metadata.PropertyName.Equals(ItemsListPropertyName)).ToList();
@@ -26,6 +31,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 }
             }
 
+            // ReSharper disable once AssignNullToNotNullAttribute
             var selectItems = (properties.First().Model as IEnumerable<SelectListItem>).ToList();
             
             return selectItems;

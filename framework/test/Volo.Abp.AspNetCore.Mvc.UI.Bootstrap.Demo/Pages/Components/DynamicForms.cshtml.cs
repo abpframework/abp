@@ -49,6 +49,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components
             [DisplayName("Name")]
             public string Name { get; set; }
 
+            [DisplayName("Surname")]
+            [TextArea(Rows = 4)]
+            public string Surname { get; set; }
+
             [Required]
             [DisplayName("Age")]
             [Range(1, 100)]
@@ -70,7 +74,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components
 
             [DisplayName("Country")]
             [AbpRadioButton(Inline = true)]
-            [SelectItems(ItemsListPropertyName = nameof(Countries))]
+            [SelectItems(nameof(Countries))]
             public string Country { get; set; }
         }
 

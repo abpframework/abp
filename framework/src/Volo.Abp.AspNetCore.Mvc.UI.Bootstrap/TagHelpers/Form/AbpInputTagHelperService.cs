@@ -48,7 +48,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         protected virtual string GetFormInputGroupAsHtml(TagHelperContext context, TagHelperOutput output, out bool isCheckbox)
         {
-            var inputTag = GetInputTag(context, output, out isCheckbox);
+            var inputTag = GetInputTagHelperOutput(context, output, out isCheckbox);
             var inputHtml = RenderTagHelperOutput(inputTag, _encoder);
             var label = GetLabelAsHtml(context, output, inputTag, isCheckbox);
 
@@ -92,15 +92,33 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                    "</div>";
         }
 
-        protected virtual TagHelperOutput GetInputTag(TagHelperContext context, TagHelperOutput output, out bool isCheckbox)
+        protected virtual TagHelper GetInputTagHelper(TagHelperContext context, TagHelperOutput output)
         {
-            var inputTagHelper = new InputTagHelper(_generator)
+            var textAreaAttribute = GetAttribute<TextArea>(TagHelper.AspFor.ModelExplorer);
+
+            if (textAreaAttribute != null)
+            {
+                return new TextAreaTagHelper(_generator)
+                {
+                    For = TagHelper.AspFor,
+                    ViewContext = TagHelper.ViewContext
+                };
+            }
+
+            return new InputTagHelper(_generator)
             {
                 For = TagHelper.AspFor,
                 ViewContext = TagHelper.ViewContext
             };
+        }
 
-            var inputTagHelperOutput = GetInnerTagHelper(new TagHelperAttributeList(), context, inputTagHelper, "input");
+        protected virtual TagHelperOutput GetInputTagHelperOutput(TagHelperContext context, TagHelperOutput output, out bool isCheckbox)
+        {
+            var tagHelper = GetInputTagHelper(context, output);
+
+            var inputTagHelperOutput = GetInnerTagHelper(new TagHelperAttributeList(), context, tagHelper, "input");
+
+            ConvertToTextAreaIfTextArea(inputTagHelperOutput);
 
             if (TagHelper.IsDisabled && !inputTagHelperOutput.Attributes.ContainsName("disabled"))
             {
@@ -125,16 +143,16 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         protected virtual string GetLabelAsHtml(TagHelperContext context, TagHelperOutput output, TagHelperOutput inputTag, bool isCheckbox)
         {
-            if (inputTag.Attributes.Any(a=>a.Name.ToLowerInvariant() == "type" && a.Value.ToString().ToLowerInvariant() == "hidden"))
+            if (inputTag.Attributes.Any(a => a.Name.ToLowerInvariant() == "type" && a.Value.ToString().ToLowerInvariant() == "hidden"))
             {
                 return "";
             }
 
             if (string.IsNullOrEmpty(TagHelper.Label))
             {
-                return GetLabelAsHtmlUsingTagHelper(context,output,isCheckbox);
+                return GetLabelAsHtmlUsingTagHelper(context, output, isCheckbox);
             }
-            
+
             var checkboxClass = isCheckbox ? "class=\"form-check-label\" " : "";
 
             return "<label " + checkboxClass + GetIdAttributeAsString(inputTag) + ">"
@@ -158,6 +176,28 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             }
 
             return RenderTagHelper(attributeList, context, labelTagHelper, _encoder, "label", TagMode.StartTagAndEndTag, true);
+        }
+
+        protected virtual void ConvertToTextAreaIfTextArea(TagHelperOutput tagHelperOutput)
+        {
+            var textAreaAttribute = GetAttribute<TextArea>(TagHelper.AspFor.ModelExplorer);
+
+            if (textAreaAttribute == null)
+            {
+                return;
+            }
+
+            tagHelperOutput.TagName = "textarea";
+            tagHelperOutput.TagMode = TagMode.StartTagAndEndTag;
+            tagHelperOutput.Content.SetContent(TagHelper.AspFor.ModelExplorer.Model?.ToString());
+            if (textAreaAttribute.Rows>0)
+            {
+                tagHelperOutput.Attributes.Add("rows", textAreaAttribute.Rows);
+            }
+            if (textAreaAttribute.Cols > 0)
+            {
+                tagHelperOutput.Attributes.Add("cols", textAreaAttribute.Cols);
+            }
         }
     }
 }
