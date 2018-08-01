@@ -2,17 +2,15 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.Application.Dtos;
-using Volo.Abp.Application.Services;
-using Volo.Abp.DependencyInjection;
+using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.PermissionManagement;
 
 namespace Volo.Abp.Identity
 {
     [RemoteService]
     [Area("identity")]
-    [Controller]
     [ControllerName("User")]
-    public class IdentityUserController : IIdentityUserAppService, ITransientDependency //TODO: Try to implement these type wrapper controllers automatically!
+    public class IdentityUserController : AbpController, IIdentityUserAppService
     {
         private readonly IIdentityUserAppService _userAppService;
 

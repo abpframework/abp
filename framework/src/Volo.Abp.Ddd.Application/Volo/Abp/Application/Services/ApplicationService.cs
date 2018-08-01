@@ -6,16 +6,27 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Aspects;
+using Volo.Abp.Auditing;
+using Volo.Abp.Authorization;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Timing;
 using Volo.Abp.Uow;
 using Volo.Abp.Users;
+using Volo.Abp.Validation;
 
 namespace Volo.Abp.Application.Services
 {
-    public abstract class ApplicationService : IApplicationService, IAvoidDuplicateCrossCuttingConcerns
+    public abstract class ApplicationService : 
+        IApplicationService, 
+        IAvoidDuplicateCrossCuttingConcerns,
+        IValidationEnabled,
+        IUnitOfWorkEnabled,
+        IAuthorizationEnabled,
+        IAuditingEnabled,
+        ITransientDependency
     {
         public static string[] CommonPostfixes { get; set; } = { "AppService", "ApplicationService", "Service" };
 
