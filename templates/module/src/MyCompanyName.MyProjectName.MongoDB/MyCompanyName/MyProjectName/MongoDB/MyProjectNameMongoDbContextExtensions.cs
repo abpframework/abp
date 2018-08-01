@@ -4,7 +4,7 @@ using Volo.Abp.MongoDB;
 
 namespace MyCompanyName.MyProjectName.MongoDB
 {
-    public static class AbpUsersMongoDbContextExtensions
+    public static class MyProjectNameMongoDbContextExtensions
     {
         public static void ConfigureMyProjectName(
             this IMongoModelBuilder builder,
