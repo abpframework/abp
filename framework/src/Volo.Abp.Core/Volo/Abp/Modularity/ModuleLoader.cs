@@ -92,6 +92,8 @@ namespace Volo.Abp.Modularity
         protected virtual void ConfigureServices(List<IAbpModuleDescriptor> modules, IServiceCollection services)
         {
             var context = new ServiceConfigurationContext(services);
+            services.AddSingleton(context);
+
             //PreConfigureServices
             foreach (var module in modules.Where(m => m.Instance is IPreConfigureServices))
             {
@@ -104,7 +106,7 @@ namespace Volo.Abp.Modularity
                 module.Instance.ConfigureServices(context);
             }
 
-            //IPostConfigureServices
+            //PostConfigureServices
             foreach (var module in modules.Where(m => m.Instance is IPostConfigureServices))
             {
                 ((IPostConfigureServices)module.Instance).PostConfigureServices(context);
