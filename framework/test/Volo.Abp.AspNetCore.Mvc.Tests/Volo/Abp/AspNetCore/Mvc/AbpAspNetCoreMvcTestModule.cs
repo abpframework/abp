@@ -3,12 +3,16 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Modularity;
 using Volo.Abp.AspNetCore.Mvc.Authorization;
+using Volo.Abp.AspNetCore.Mvc.Localization;
+using Volo.Abp.AspNetCore.Mvc.Localization.Resource;
 using Volo.Abp.AspNetCore.TestBase;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Autofac;
+using Volo.Abp.Localization;
 using Volo.Abp.MemoryDb;
 using Volo.Abp.Modularity;
 using Volo.Abp.TestApp;
+using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.AspNetCore.Mvc
 {
@@ -20,10 +24,19 @@ namespace Volo.Abp.AspNetCore.Mvc
         )]
     public class AbpAspNetCoreMvcTestModule : AbpModule
     {
+        public override void PreConfigureServices(ServiceConfigurationContext context)
+        {
+            context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
+            {
+                options.AddAssemblyResource(
+                    typeof(MvcTestResource),
+                    typeof(AbpAspNetCoreMvcTestModule).Assembly
+                );
+            });
+        }
+
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.AddLocalization(); //TODO: Move to the framework..?
-
             context.Services.AddAuthorization(options =>
             {
                 options.AddPolicy("MyClaimTestPolicy", policy =>
@@ -46,6 +59,18 @@ namespace Volo.Abp.AspNetCore.Mvc
             context.Services.Configure<PermissionOptions>(options =>
             {
                 options.DefinitionProviders.Add<TestPermissionDefinitionProvider>();
+            });
+
+            context.Services.Configure<VirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.AddEmbedded<AbpAspNetCoreMvcTestModule>();
+            });
+
+            context.Services.Configure<AbpLocalizationOptions>(options =>
+            {
+                options.Resources
+                    .Add<MvcTestResource>("en")
+                    .AddVirtualJson("/Volo/Abp/AspNetCore/Mvc/Localization/Resource");
             });
 
             context.Services.AddAssemblyOf<AbpAspNetCoreMvcTestModule>();
