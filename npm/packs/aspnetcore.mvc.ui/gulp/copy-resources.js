@@ -13,7 +13,7 @@
     function init(rootPath) {
         var investigatedPackagePaths = {};
 
-        var resourceMapping = buildResourceMapping(rootPath);
+        var resourceMapping = normalizeResourceMapping(buildResourceMapping(rootPath));
 
         function replaceAliases(text) {
             if (!resourceMapping.aliases) {
@@ -50,6 +50,31 @@
                     rimraf.sync(replaceAliases(resourceMapping.clean[i]) + '/**/*', { force: true });
                 }
             }
+        }
+        
+        function normalizeResourceMapping(resourcemapping) {
+            var defaultSettings = {
+                aliases: {
+                    "@node_modules": "./node_modules",
+                    "@libs": "./wwwroot/libs"
+                },
+                clean: [
+                    "@libs"
+                ]
+            };
+            
+            extendObject(defaultSettings.aliases, resourcemapping.aliases);
+            resourcemapping.aliases = defaultSettings.aliases;
+            
+            if (!resourcemapping.clean) {
+                resourcemapping.clean = [];
+            }
+            
+            for (var i = 0; i < defaultSettings.clean.length; ++i) {
+                resourcemapping.clean.push(defaultSettings.clean[i]);
+            }
+            
+            return resourcemapping;
         }
 
         function buildResourceMapping(packagePath) {

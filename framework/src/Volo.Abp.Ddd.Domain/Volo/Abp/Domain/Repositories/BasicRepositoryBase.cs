@@ -5,10 +5,15 @@ using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Threading;
+using Volo.Abp.Uow;
 
 namespace Volo.Abp.Domain.Repositories
 {
-    public abstract class BasicRepositoryBase<TEntity> : IBasicRepository<TEntity>, IServiceProviderAccessor
+    public abstract class BasicRepositoryBase<TEntity> : 
+        IBasicRepository<TEntity>, 
+        IServiceProviderAccessor,
+        IUnitOfWorkEnabled,
+        ITransientDependency
         where TEntity : class, IEntity
     {
         public IServiceProvider ServiceProvider { get; set; }

@@ -1,0 +1,8 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.App
+@inject IViewLocalizer Localizer
+@model Volo.Abp.AspNetCore.App.LocalizationTestController.PersonModel
+<form>
+    <label asp-for="BirthDate"></label>
+    <input asp-for="BirthDate" />
+</form>

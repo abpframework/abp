@@ -26,7 +26,7 @@ namespace MyCompanyName.MyProjectName
 
             context.Services.Configure<ExceptionLocalizationOptions>(options =>
             {
-                options.MapCodeNamespace("Volo.Qa", typeof(MyProjectNameResource));
+                options.MapCodeNamespace("MyProjectName", typeof(MyProjectNameResource));
             });
 
             context.Services.AddAssemblyOf<MyProjectNameDomainModule>();

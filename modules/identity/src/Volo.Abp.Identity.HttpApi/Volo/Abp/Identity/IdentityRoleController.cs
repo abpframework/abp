@@ -3,17 +3,15 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.Application.Dtos;
-using Volo.Abp.Application.Services;
-using Volo.Abp.DependencyInjection;
+using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.PermissionManagement;
 
 namespace Volo.Abp.Identity
 {
     [RemoteService]
     [Area("identity")]
-    [Controller]
     [ControllerName("Role")]
-    public class IdentityRoleController : IIdentityRoleAppService, ITransientDependency
+    public class IdentityRoleController : AbpController, IIdentityRoleAppService
     {
         private readonly IIdentityRoleAppService _roleAppService;
 
