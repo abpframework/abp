@@ -147,16 +147,13 @@ namespace Volo.Abp.Account.Web.Pages.Account
         {
             [Required]
             [StringLength(255)]
-            [DisplayName(nameof(UserNameOrEmailAddress))]
             public string UserNameOrEmailAddress { get; set; }
 
             [Required]
             [StringLength(32)]
             [DataType(DataType.Password)]
-            [DisplayName(nameof(Password))]
             public string Password { get; set; }
-
-            [DisplayName(nameof(RememberMe))]
+            
             public bool RememberMe { get; set; }
         }
     }

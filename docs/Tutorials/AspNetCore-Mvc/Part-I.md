@@ -157,16 +157,12 @@ namespace Acme.BookStore
     {
         [Required]
         [StringLength(128)]
-        [Display(Name = "Name")]
         public string Name { get; set; }
 
-        [Display(Name = "Type")]
         public BookType Type { get; set; } = BookType.Undefined;
 
-        [Display(Name = "PublishDate")]
         public DateTime PublishDate { get; set; }
 
-        [Display(Name = "Price")]
         public float Price { get; set; }
     }
 }
