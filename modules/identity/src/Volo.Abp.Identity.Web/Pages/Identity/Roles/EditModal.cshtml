@@ -7,13 +7,12 @@
 @{
     Layout = null;
 }
-<form method="post" asp-page="/Identity/Roles/EditModal" autocomplete="off" data-ajaxForm="true">
+<abp-dynamic-form abp-model="@Model.Role" asp-page="/Identity/Roles/EditModal">
     <abp-modal>
         <abp-modal-header title="@L["Edit"].Value"></abp-modal-header>
         <abp-modal-body>
-            <input asp-for="Role.Id" />
-            <abp-input asp-for="Role.Name" />
+            <abp-form-content/>
         </abp-modal-body>
         <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)"></abp-modal-footer>
     </abp-modal>
-</form>
+</abp-dynamic-form>
