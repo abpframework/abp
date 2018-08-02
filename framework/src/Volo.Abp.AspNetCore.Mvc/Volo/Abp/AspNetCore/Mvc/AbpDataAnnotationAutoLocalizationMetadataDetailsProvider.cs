@@ -12,6 +12,8 @@ namespace Volo.Abp.AspNetCore.Mvc
 {
     public class AbpDataAnnotationAutoLocalizationMetadataDetailsProvider : IDisplayMetadataProvider
     {
+        private const string PropertyLocalizationKeyPrefix = "Property:";
+
         private readonly Lazy<IStringLocalizerFactory> _stringLocalizerFactory;
         private readonly Lazy<IOptions<MvcDataAnnotationsLocalizationOptions>> _localizationOptions;
 
@@ -24,27 +26,38 @@ namespace Volo.Abp.AspNetCore.Mvc
         public void CreateDisplayMetadata(DisplayMetadataProviderContext context)
         {
             var displayMetadata = context.DisplayMetadata;
-
             if (displayMetadata.DisplayName != null)
             {
                 return;
             }
 
             var attributes = context.Attributes;
-            var displayAttribute = attributes.OfType<DisplayAttribute>().FirstOrDefault();
-            var displayNameAttribute = attributes.OfType<DisplayNameAttribute>().FirstOrDefault();
 
-            if (displayAttribute != null || displayNameAttribute != null)
+            if (attributes.OfType<DisplayAttribute>().Any() ||
+                attributes.OfType<DisplayNameAttribute>().Any())
+            {
+                return;
+            }
+
+            if (_localizationOptions.Value.Value.DataAnnotationLocalizerProvider == null)
             {
                 return;
             }
 
             var containerType = context.Key.ContainerType ?? context.Key.ModelType;
             var localizer = _localizationOptions.Value.Value.DataAnnotationLocalizerProvider(containerType, _stringLocalizerFactory.Value);
-            if (context.Key.Name == "BirthDate")
+
+            displayMetadata.DisplayName = () =>
             {
-                displayMetadata.DisplayName = () => localizer[context.Key.Name];
-            }
+                var localizedString = localizer[PropertyLocalizationKeyPrefix + context.Key.Name];
+
+                if (localizedString.ResourceNotFound)
+                {
+                    localizedString = localizer[context.Key.Name];
+                }
+
+                return localizedString;
+            };
         }
     }
 }
