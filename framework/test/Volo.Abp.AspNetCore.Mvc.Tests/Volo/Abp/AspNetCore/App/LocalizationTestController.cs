@@ -19,7 +19,7 @@ namespace Volo.Abp.AspNetCore.App
 
         public class PersonModel
         {
-            [Display(Name = nameof(BirthDate))]
+            //[Display(Name = nameof(BirthDate))]
             public string BirthDate { get; set; }
 
             public PersonModel()

@@ -15,6 +15,7 @@ namespace Volo.Abp.AspNetCore.Mvc
             AddConventions(options, services);
             AddFilters(options);
             AddModelBinders(options);
+            AddMetadataProviders(options, services);
         }
 
         private static void AddConventions(MvcOptions options, IServiceCollection services)
@@ -33,6 +34,13 @@ namespace Volo.Abp.AspNetCore.Mvc
         private static void AddModelBinders(MvcOptions options)
         {
             //options.ModelBinderProviders.Add(new AbpDateTimeModelBinderProvider());
+        }
+
+        private static void AddMetadataProviders(MvcOptions options, IServiceCollection services)
+        {
+            options.ModelMetadataDetailsProviders.Add(
+                new AbpDataAnnotationAutoLocalizationMetadataDetailsProvider(services)
+            );
         }
     }
 }

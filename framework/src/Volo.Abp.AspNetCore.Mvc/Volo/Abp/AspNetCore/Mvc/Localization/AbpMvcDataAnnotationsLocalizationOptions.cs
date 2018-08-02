@@ -15,12 +15,12 @@ namespace Volo.Abp.AspNetCore.Mvc.Localization
         }
 
         public void AddAssemblyResource(
-            [NotNull] Type resourceType, 
+            [NotNull] Type resourceType,
             params Assembly[] assemblies)
         {
             if (assemblies.IsNullOrEmpty())
             {
-                assemblies = new Assembly[] {resourceType.Assembly};
+                assemblies = new[] { resourceType.Assembly };
             }
 
             foreach (var assembly in assemblies)
