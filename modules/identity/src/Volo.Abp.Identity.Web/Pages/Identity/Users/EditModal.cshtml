@@ -13,12 +13,12 @@
         <abp-modal-body>
             <abp-tabs name="create-user-modal-tabs">
                 <abp-tab title="@L["UserInformations"].Value">
-                    <input asp-for="UserInfo.Id" />
-                    <abp-input asp-for="UserInfo.UserName" />
-                    <abp-input asp-for="UserInfo.Email" />
-                    <abp-input asp-for="UserInfo.PhoneNumber" />
-                    <abp-input asp-for="UserInfo.LockoutEnabled" />
-                    <abp-input asp-for="UserInfo.TwoFactorEnabled" />
+                    <input asp-for="UserInfo.Id"/>
+                    <abp-input asp-for="UserInfo.UserName"/>
+                    <abp-input asp-for="UserInfo.Email"/>
+                    <abp-input asp-for="UserInfo.PhoneNumber"/>
+                    <abp-input asp-for="UserInfo.LockoutEnabled"/>
+                    <abp-input asp-for="UserInfo.TwoFactorEnabled"/>
                 </abp-tab>
                 <abp-tab title="@L["Roles"].Value">
                     @for (var i = 0; i < Model.Roles.Length; i++)

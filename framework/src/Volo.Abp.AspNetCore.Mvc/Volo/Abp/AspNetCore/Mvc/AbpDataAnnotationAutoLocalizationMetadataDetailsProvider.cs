@@ -12,7 +12,7 @@ namespace Volo.Abp.AspNetCore.Mvc
 {
     public class AbpDataAnnotationAutoLocalizationMetadataDetailsProvider : IDisplayMetadataProvider
     {
-        private const string PropertyLocalizationKeyPrefix = "Property:";
+        private const string PropertyLocalizationKeyPrefix = "DisplayName:";
 
         private readonly Lazy<IStringLocalizerFactory> _stringLocalizerFactory;
         private readonly Lazy<IOptions<MvcDataAnnotationsLocalizationOptions>> _localizationOptions;

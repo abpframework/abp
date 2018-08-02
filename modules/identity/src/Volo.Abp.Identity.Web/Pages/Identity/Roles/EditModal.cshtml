@@ -12,7 +12,7 @@
         <abp-modal-header title="@L["Edit"].Value"></abp-modal-header>
         <abp-modal-body>
             <input asp-for="Role.Id" />
-            <abp-input asp-for="Role.Name" label="@L["RoleName"].Value" />
+            <abp-input asp-for="Role.Name" />
         </abp-modal-body>
         <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)"></abp-modal-footer>
     </abp-modal>
