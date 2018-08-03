@@ -46,33 +46,26 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components
         public class PersonModel
         {
             [Required]
-            [DisplayName("Name")]
             public string Name { get; set; }
-
-            [DisplayName("Surname")]
+            
             [TextArea(Rows = 4)]
             public string Surname { get; set; }
 
             [Required]
-            [DisplayName("Age")]
             [Range(1, 100)]
             public int Age { get; set; }
 
             [Required]
-            [DisplayName("City")]
             public Cities City { get; set; }
 
             public PhoneModel Phone { get; set; }
 
             [DataType(DataType.Date)]
-            [DisplayName("Day")]
             [DisplayOrder(10003)]
             public DateTime Day { get; set; }
-
-            [DisplayName("Is Active")]
+            
             public bool IsActive { get; set; }
-
-            [DisplayName("Country")]
+            
             [AbpRadioButton(Inline = true)]
             [SelectItems(nameof(Countries))]
             public string Country { get; set; }
@@ -82,7 +75,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components
         {
             [Required]
             [DisplayOrder(10002)]
-            [DisplayName("Number")]
             public string Number { get; set; }
 
             [Required]

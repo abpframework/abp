@@ -62,19 +62,16 @@ namespace Volo.Abp.Account.Web.Pages.Account
         {
             [Required]
             [StringLength(32)]
-            [DisplayName(nameof(UserName))]
             public string UserName { get; set; }
 
             [Required]
             [EmailAddress]
             [StringLength(255)]
-            [DisplayName(nameof(EmailAddress))]
             public string EmailAddress { get; set; }
 
             [Required]
             [StringLength(32)]
             [DataType(DataType.Password)]
-            [DisplayName(nameof(Password))]
             public string Password { get; set; }
         }
     }

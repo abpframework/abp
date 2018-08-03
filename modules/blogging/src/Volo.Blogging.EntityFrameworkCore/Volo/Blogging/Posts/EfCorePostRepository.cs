@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Blogging.Blogs;
@@ -26,7 +27,14 @@ namespace Volo.Blogging.Posts
 
         public async Task<Post> GetPostByUrl(Guid blogId, string url)
         {
-            return await DbSet.FirstOrDefaultAsync(p => p.BlogId == blogId && p.Url == url);
+            var post = await DbSet.FirstOrDefaultAsync(p => p.BlogId == blogId && p.Url == url);
+
+            if (post == null)
+            {
+                throw new EntityNotFoundException(typeof(Post), nameof(post));
+            }
+
+            return post;
         }
     }
 }

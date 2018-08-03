@@ -52,17 +52,14 @@ namespace Volo.Blogging.Pages.Blog.Posts
 
             [Required]
             [StringLength(PostConsts.MaxTitleLength)]
-            [Display(Name = "Title")]
             public string Title { get; set; }
 
             [Required]
             [StringLength(PostConsts.MaxUrlLength)]
-            [Display(Name = "Url")]
             public string Url { get; set; }
 
             [HiddenInput]
             [StringLength(PostConsts.MaxContentLength)]
-            [Display(Name = "Content")]
             public string Content { get; set; }
         }
     }

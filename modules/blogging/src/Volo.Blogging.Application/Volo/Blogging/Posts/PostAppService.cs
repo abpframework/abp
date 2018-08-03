@@ -5,7 +5,9 @@ using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Users;
+using Volo.Blogging.Blogs;
 
 namespace Volo.Blogging.Posts
 {
