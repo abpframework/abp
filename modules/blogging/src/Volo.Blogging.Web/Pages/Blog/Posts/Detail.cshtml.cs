@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Volo.Abp.Domain.Entities;
 using Volo.Blogging.Blogs;
 using Volo.Blogging.Posts;
 
@@ -32,10 +33,8 @@ namespace Volo.Blogging.Pages.Blog.Posts
 
         public async void OnGet()
         {
-            var blog = await _blogAppService.GetByShortNameAsync(BlogShortName);
-
-            Post = await _postAppService.GetByUrlAsync(new GetPostInput {BlogId = blog.Id , Url = PostUrl});
-            Blog = blog;
+            Blog = await _blogAppService.GetByShortNameAsync(BlogShortName);
+            Post = await _postAppService.GetByUrlAsync(new GetPostInput {BlogId = Blog.Id , Url = PostUrl});
         }
     }
 }
