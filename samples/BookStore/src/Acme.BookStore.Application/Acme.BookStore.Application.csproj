@@ -7,7 +7,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Acme.BookStore.Domain\Acme.BookStore.Domain.csproj" />
-    <PackageReference Include="Volo.Abp.Identity.Application" Version="0.3.7" />
+    <PackageReference Include="Volo.Abp.Identity.Application" Version="0.4.1" />
   </ItemGroup>
 
 </Project>
