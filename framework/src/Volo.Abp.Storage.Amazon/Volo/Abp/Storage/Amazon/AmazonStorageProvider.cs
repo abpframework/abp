@@ -13,7 +13,7 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Storage.Amazon
 {
-    public class AmazonStorageProvider : IStorageProvider, ISingletonDependency
+    public class AmazonStorageProvider : IStorageProvider, ITransientDependency
     {
         private const string DefaultServiceUrl = "https://s3.amazonaws.com";
         private readonly IAmazonS3 _s3Client;

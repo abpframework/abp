@@ -12,8 +12,6 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="WindowsAzure.Storage" version="9.3.0" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.Storage\Volo.Abp.Storage.csproj" />
   </ItemGroup>
 </Project>
