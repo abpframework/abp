@@ -1,10 +1,10 @@
 {
-  "version": "0.3.5",
+  "version": "0.4.1",
   "name": "@abp/aspnetcore.mvc.ui.theme.basic",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/aspnetcore.mvc.ui.theme.shared": "^0.3.5"
+    "@abp/aspnetcore.mvc.ui.theme.shared": "^0.4.1"
   }
 }

@@ -42,7 +42,7 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Roles
 
             [Required]
             [StringLength(IdentityRoleConsts.MaxNameLength)]
-            [Display(Name = "RoleName")]
+            [Display(Name = "DisplayName:RoleName")]
             public string Name { get; set; }
         }
     }

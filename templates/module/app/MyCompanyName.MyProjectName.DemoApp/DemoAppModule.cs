@@ -1,13 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using MyCompanyName.MyProjectName.EntityFrameworkCore;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
@@ -22,6 +18,7 @@ using Volo.Abp.EntityFrameworkCore.SqlServer;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.Identity.Web;
+using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
@@ -81,17 +78,10 @@ namespace MyCompanyName.MyProjectName.DemoApp
                     options.DocInclusionPredicate((docName, description) => true);
                 });
 
-            var cultures = new List<CultureInfo>
+            context.Services.Configure<AbpLocalizationOptions>(options =>
             {
-                new CultureInfo("en")
-                //Add other languages...
-            };
-
-            context.Services.Configure<RequestLocalizationOptions>(options =>
-            {
-                options.DefaultRequestCulture = new RequestCulture("en");
-                options.SupportedCultures = cultures;
-                options.SupportedUICultures = cultures;
+                options.Languages.Add(new LanguageInfo("en", "en", "English"));
+                //...add other languages
             });
 
             context.Services.AddAssemblyOf<DemoAppModule>();
@@ -110,7 +100,6 @@ namespace MyCompanyName.MyProjectName.DemoApp
                 app.UseErrorPage();
             }
 
-            app.UseStaticFiles();
             app.UseVirtualFiles();
 
             app.UseSwagger();
@@ -120,9 +109,7 @@ namespace MyCompanyName.MyProjectName.DemoApp
             });
 
             app.UseAuthentication();
-
-            app.UseRequestLocalization(app.ApplicationServices.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value);
-
+            app.UseAbpRequestLocalization();
             app.UseAuditing();
 
             app.UseMvc(routes =>

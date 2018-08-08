@@ -1,13 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
+﻿using System.IO;
 using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Acme.BookStore.EntityFrameworkCore;
 using Acme.BookStore.Localization.BookStore;
 using Acme.BookStore.Menus;
@@ -17,8 +13,6 @@ using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Modularity;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.Localization;
-using Volo.Abp.AspNetCore.Mvc.UI;
-using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.Autofac;
@@ -30,9 +24,7 @@ using Volo.Abp.Identity.Web;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.Resources.AbpValidation;
 using Volo.Abp.Modularity;
-using Volo.Abp.PermissionManagement.Web;
 using Volo.Abp.Threading;
-using Volo.Abp.UI;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
 
@@ -109,14 +101,6 @@ namespace Acme.BookStore
 
         private static void ConfigureLocalizationServices(IServiceCollection services)
         {
-            var cultures = new List<CultureInfo> {new CultureInfo("en"), new CultureInfo("tr")};
-            services.Configure<RequestLocalizationOptions>(options =>
-            {
-                options.DefaultRequestCulture = new RequestCulture("en");
-                options.SupportedCultures = cultures;
-                options.SupportedUICultures = cultures;
-            });
-
             services.Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources
@@ -125,6 +109,9 @@ namespace Acme.BookStore
                         typeof(AbpValidationResource),
                         typeof(AbpUiResource)
                     );
+
+                options.Languages.Add(new LanguageInfo("en", "en", "English"));
+                options.Languages.Add(new LanguageInfo("tr", "tr", "Türkçe"));
             });
         }
 
@@ -171,7 +158,7 @@ namespace Acme.BookStore
             app.UseVirtualFiles();
             app.UseAuthentication();
 
-            app.UseRequestLocalization(app.ApplicationServices.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value);
+            app.UseAbpRequestLocalization();
 
             app.UseSwagger();
             app.UseSwaggerUI(options =>

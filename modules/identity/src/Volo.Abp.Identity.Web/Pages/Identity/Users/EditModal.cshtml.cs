@@ -61,23 +61,18 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Users
 
             [Required]
             [StringLength(IdentityUserConsts.MaxUserNameLength)]
-            [Display(Name = "UserName")]
             public string UserName { get; set; }
 
             [Required]
             [EmailAddress]
             [StringLength(IdentityUserConsts.MaxEmailLength)]
-            [Display(Name = "EmailAddress")]
             public string Email { get; set; }
 
             [StringLength(IdentityUserConsts.MaxPhoneNumberLength)]
-            [Display(Name = "PhoneNumber")]
             public string PhoneNumber { get; set; }
 
-            [Display(Name = "TwoFactorVerification")]
             public bool TwoFactorEnabled { get; set; }
 
-            [Display(Name = "AccountLockoutOnFailedLoginAttempts")]
             public bool LockoutEnabled { get; set; }
         }
 

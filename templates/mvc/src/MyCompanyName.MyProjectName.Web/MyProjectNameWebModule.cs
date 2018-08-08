@@ -1,13 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
+﻿using System.IO;
 using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using MyCompanyName.MyProjectName.EntityFrameworkCore;
 using MyCompanyName.MyProjectName.Localization.MyProjectName;
 using MyCompanyName.MyProjectName.Menus;
@@ -122,14 +118,6 @@ namespace MyCompanyName.MyProjectName
 
         private static void ConfigureLocalizationServices(IServiceCollection services)
         {
-            var cultures = new List<CultureInfo> {new CultureInfo("en"), new CultureInfo("tr")};
-            services.Configure<RequestLocalizationOptions>(options =>
-            {
-                options.DefaultRequestCulture = new RequestCulture("en");
-                options.SupportedCultures = cultures;
-                options.SupportedUICultures = cultures;
-            });
-
             services.Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources
@@ -138,6 +126,9 @@ namespace MyCompanyName.MyProjectName
                         typeof(AbpValidationResource),
                         typeof(AbpUiResource)
                     );
+
+                options.Languages.Add(new LanguageInfo("en", "en", "English"));
+                options.Languages.Add(new LanguageInfo("tr", "tr", "Türkçe"));
             });
         }
 
@@ -183,8 +174,7 @@ namespace MyCompanyName.MyProjectName
 
             app.UseVirtualFiles();
             app.UseAuthentication();
-
-            app.UseRequestLocalization(app.ApplicationServices.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value);
+            app.UseAbpRequestLocalization();
 
             app.UseSwagger();
             app.UseSwaggerUI(options =>

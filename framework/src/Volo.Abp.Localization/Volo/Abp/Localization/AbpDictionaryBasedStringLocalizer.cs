@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Globalization;
 using System.Linq;
+using System.Resources;
 using Microsoft.Extensions.Localization;
 
 namespace Volo.Abp.Localization
@@ -116,9 +117,18 @@ namespace Volo.Abp.Localization
 
             foreach (var baseLocalizer in BaseLocalizers.Select(l => l.WithCulture(CultureInfo.GetCultureInfo(cultureName))))
             {
-                foreach (var localizedString in baseLocalizer.GetAllStrings(includeParentCultures))
+                //TODO: Try/catch is a workaround here!
+                try
                 {
-                    allStrings[localizedString.Name] = localizedString;
+                    var baseLocalizedString = baseLocalizer.GetAllStrings(includeParentCultures);
+                    foreach (var localizedString in baseLocalizedString)
+                    {
+                        allStrings[localizedString.Name] = localizedString;
+                    }
+                }
+                catch (MissingManifestResourceException)
+                {
+
                 }
             }
 

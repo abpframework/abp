@@ -2,17 +2,17 @@
 # yarn lockfile v1
 
 
-"@abp/aspnetcore.mvc.ui.theme.basic@^0.3.5":
-  version "0.3.5"
-  resolved "https://registry.yarnpkg.com/@abp/aspnetcore.mvc.ui.theme.basic/-/aspnetcore.mvc.ui.theme.basic-0.3.5.tgz#4f6fa79c1d55175a0d7d2a4670a7e5ae896b6402"
+"@abp/aspnetcore.mvc.ui.theme.basic@^0.4.1":
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/@abp/aspnetcore.mvc.ui.theme.basic/-/aspnetcore.mvc.ui.theme.basic-0.4.1.tgz#be341dc021031584bb77a2e13113cfc60656f6b6"
   dependencies:
-    "@abp/aspnetcore.mvc.ui.theme.shared" "^0.3.5"
+    "@abp/aspnetcore.mvc.ui.theme.shared" "^0.4.1"
 
-"@abp/aspnetcore.mvc.ui.theme.shared@^0.3.5":
-  version "0.3.5"
-  resolved "https://registry.yarnpkg.com/@abp/aspnetcore.mvc.ui.theme.shared/-/aspnetcore.mvc.ui.theme.shared-0.3.5.tgz#5926165c1bfc7a5e01e3f0d3533f44d7faafd556"
+"@abp/aspnetcore.mvc.ui.theme.shared@^0.4.1":
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/@abp/aspnetcore.mvc.ui.theme.shared/-/aspnetcore.mvc.ui.theme.shared-0.4.1.tgz#d62619679f531fa285058a67ff1477e5ffe5d696"
   dependencies:
-    "@abp/aspnetcore.mvc.ui" "^0.3.5"
+    "@abp/aspnetcore.mvc.ui" "^0.4.1"
     "@abp/bootstrap" "^0.3.5"
     "@abp/datatables.net-bs4" "^0.3.5"
     "@abp/font-awesome" "^0.3.5"
@@ -24,9 +24,9 @@
     "@abp/timeago" "^0.3.5"
     "@abp/toastr" "^0.3.5"
 
-"@abp/aspnetcore.mvc.ui@^0.3.5":
-  version "0.3.5"
-  resolved "https://registry.yarnpkg.com/@abp/aspnetcore.mvc.ui/-/aspnetcore.mvc.ui-0.3.5.tgz#f60217ec953d5b717a89191f4feba80c8ad545d8"
+"@abp/aspnetcore.mvc.ui@^0.4.1":
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/@abp/aspnetcore.mvc.ui/-/aspnetcore.mvc.ui-0.4.1.tgz#0b0dd5c918a7327efa94fb1f4aff7356568d37b1"
   dependencies:
     ansi-colors "^1.1.0"
     extend-object "^1.0.0"
