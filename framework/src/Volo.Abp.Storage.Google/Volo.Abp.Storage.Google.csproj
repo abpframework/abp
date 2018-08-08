@@ -16,7 +16,4 @@
   <ItemGroup>
     <PackageReference Include="Google.Cloud.Storage.V1" Version="2.1.0" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Volo\Abp\Storage\Google" />
-  </ItemGroup>
 </Project>
