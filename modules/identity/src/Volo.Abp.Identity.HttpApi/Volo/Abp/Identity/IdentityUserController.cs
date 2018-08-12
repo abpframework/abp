@@ -64,16 +64,11 @@ namespace Volo.Abp.Identity
             return _userAppService.UpdatePermissionsAsync(id, input);
         }
 
+        //todo: add authorize attrbutes on the corresponding methods.
         [HttpGet]
         public virtual Task<IdentityUserDto> FindByUsernameAsync(string username)
         {
-            if (CurrentUser.Id.HasValue)
-            {
-                return _userAppService.FindByUsernameAsync(username);
-            }
-
-            Console.WriteLine("Not logged in!");
-            throw new UnauthorizedAccessException();
+            return _userAppService.FindByUsernameAsync(username);
         }
 
         [HttpGet]
