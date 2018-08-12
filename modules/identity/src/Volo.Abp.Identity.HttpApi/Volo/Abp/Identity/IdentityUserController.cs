@@ -63,5 +63,23 @@ namespace Volo.Abp.Identity
         {
             return _userAppService.UpdatePermissionsAsync(id, input);
         }
+
+        [HttpGet]
+        public virtual Task<IdentityUserDto> FindByUsernameAsync(string username)
+        {
+            if (CurrentUser.Id.HasValue)
+            {
+                return _userAppService.FindByUsernameAsync(username);
+            }
+
+            Console.WriteLine("Not logged in!");
+            throw new UnauthorizedAccessException();
+        }
+
+        [HttpGet]
+        public virtual Task<IdentityUserDto> FindByEmailAsync(string email)
+        {
+            return _userAppService.FindByEmailAsync(email);
+        }
     }
 }

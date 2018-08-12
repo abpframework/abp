@@ -112,7 +112,21 @@ namespace Volo.Abp.Identity
         {
             await _permissionAppServiceHelper.UpdateAsync(UserPermissionValueProvider.ProviderName, id.ToString(), input);
         }
-        
+
+        public async Task<IdentityUserDto> FindByUsernameAsync(string username)
+        {
+            return ObjectMapper.Map<IdentityUser, IdentityUserDto>(
+                await _userManager.FindByNameAsync(username)
+            );
+        }
+
+        public async Task<IdentityUserDto> FindByEmailAsync(string email)
+        {
+            return ObjectMapper.Map<IdentityUser, IdentityUserDto>(
+                await _userManager.FindByEmailAsync(email)
+            );
+        }
+
         private async Task UpdateUserByInput(IdentityUser user, IdentityUserCreateOrUpdateDtoBase input)
         {
             (await _userManager.SetEmailAsync(user, input.Email)).CheckErrors();

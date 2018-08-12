@@ -15,5 +15,9 @@ namespace Volo.Abp.Identity
         Task<GetPermissionListResultDto> GetPermissionsAsync(Guid id);
 
         Task UpdatePermissionsAsync(Guid id, UpdatePermissionsDto input);
+
+        Task<IdentityUserDto> FindByUsernameAsync(string username);
+
+        Task<IdentityUserDto> FindByEmailAsync(string email);
     }
 }

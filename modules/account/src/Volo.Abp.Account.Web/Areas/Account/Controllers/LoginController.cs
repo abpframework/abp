@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -29,7 +30,7 @@ namespace Volo.Abp.Account.Web.Areas.Account.Controllers
 
         [HttpPost]
         [Route("")]
-        public virtual async Task<IActionResult> Login(UserLoginInfo login)
+        public virtual async Task<AbpLoginResult> Login(UserLoginInfo login)
         {
             if (login == null)
             {
@@ -55,28 +56,28 @@ namespace Volo.Abp.Account.Web.Areas.Account.Controllers
 
             if (result.IsLockedOut)
             {
-                return Json(new AbpLoginResult(LoginResultType.LockedOut));
+                return new AbpLoginResult(LoginResultType.LockedOut);
             }
 
             if (result.RequiresTwoFactor)
             {
-                return Json(new AbpLoginResult(LoginResultType.RequiresTwoFactor));
+                return new AbpLoginResult(LoginResultType.RequiresTwoFactor);
             }
 
             if (result.IsNotAllowed)
             {
-                return Json(new AbpLoginResult(LoginResultType.NotAllowed));
+                return new AbpLoginResult(LoginResultType.NotAllowed);
             }
 
             if (!result.Succeeded)
             {
-                return Json(new AbpLoginResult(LoginResultType.InvalidUserNameOrPassword));
+                return new AbpLoginResult(LoginResultType.InvalidUserNameOrPassword);
             }
 
-            return Json(new AbpLoginResult(LoginResultType.Success)
+            return new AbpLoginResult(LoginResultType.Success)
             {
-                IdentityCookieToken = GetCookieValueFromResponse(AspNetCoreIdentityCookieName) //todo: cookie name can be retrieved from UseAuthentication options
-            });
+                IdentityCookieToken = GetCookieValueFromResponse(AspNetCoreIdentityCookieName)
+            };
         }
 
         private string GetCookieValueFromResponse(string cookieName)

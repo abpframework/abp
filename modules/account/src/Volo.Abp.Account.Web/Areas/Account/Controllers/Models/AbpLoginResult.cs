@@ -1,4 +1,6 @@
-﻿using Volo.Abp.Account.Web.Areas.Account.Controllers.Models;
+﻿using System;
+using Volo.Abp.Account.Web.Areas.Account.Controllers.Models;
+using Volo.Abp.Identity;
 
 namespace Volo.Abp.Account.Web.Areas.Account.Controllers
 {
