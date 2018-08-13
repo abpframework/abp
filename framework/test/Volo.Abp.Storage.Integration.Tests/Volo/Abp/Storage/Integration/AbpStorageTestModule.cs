@@ -17,7 +17,7 @@ namespace Volo.Abp.Storage.Integration
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var basePath = PlatformServices.Default.Application.ApplicationBasePath;
-                
+
             context.Services.AddAbpStorage(context.Services.GetConfiguration())
                 .AddAzureStorage()
                 .AddFileSystemStorage(Path.Combine(basePath, "FileVault"))

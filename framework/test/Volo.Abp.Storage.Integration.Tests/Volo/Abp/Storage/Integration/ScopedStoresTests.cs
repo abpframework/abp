@@ -7,7 +7,7 @@ namespace Volo.Abp.Storage.Integration
 {
     [Collection(nameof(IntegrationCollection))]
     [Trait("Operation", "ScopedStores"), Trait("Kind", "Integration")]
-    public class ScopedStoresTests : AbpIntegratedTest<AbpStorageTestModule>
+    public class ScopedStoresTests : AbpStoresTestBase
     {
         [Theory(DisplayName = nameof(ScopedStoreUpdate)), InlineData("ScopedStore1"), InlineData("ScopedStore2")]
         public async Task ScopedStoreUpdate(string storeName)

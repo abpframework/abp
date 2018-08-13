@@ -8,7 +8,7 @@ namespace Volo.Abp.Storage.Integration
 {
     [Collection(nameof(IntegrationCollection))]
     [Trait("Operation", "Update"), Trait("Kind", "Integration")]
-    public class UpdateTests : AbpIntegratedTest<AbpStorageTestModule>
+    public class UpdateTests : AbpStoresTestBase
     {
         [Theory(DisplayName = nameof(WriteAllText)), InlineData("Store1"), InlineData("Store2"), InlineData("Store3"), InlineData("Store4"), InlineData("Store5"), InlineData("Store6")]
         public async Task WriteAllText(string storeName)

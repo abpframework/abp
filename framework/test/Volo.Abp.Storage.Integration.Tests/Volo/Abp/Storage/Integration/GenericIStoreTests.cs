@@ -6,7 +6,7 @@ namespace Volo.Abp.Storage.Integration
 {
     [Collection(nameof(IntegrationCollection))]
     [Trait("Operation", "GenericIStore"), Trait("Kind", "Integration")]
-    public class GenericIStoreTests : AbpIntegratedTest<AbpStorageTestModule>
+    public class GenericIStoreTests : AbpStoresTestBase
     {
         [Fact]
         public async Task GenericListRootFiles()

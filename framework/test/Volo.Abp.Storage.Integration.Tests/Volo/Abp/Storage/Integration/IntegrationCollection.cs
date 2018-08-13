@@ -3,7 +3,7 @@
 namespace Volo.Abp.Storage.Integration
 {
     [CollectionDefinition(nameof(IntegrationCollection))]
-    public class IntegrationCollection: ICollectionFixture<StoresFixture_Test>
+    public class IntegrationCollection: ICollectionFixture<AbpStoresTestBase>
     {
     }
 }

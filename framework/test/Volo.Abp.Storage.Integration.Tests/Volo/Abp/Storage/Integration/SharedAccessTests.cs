@@ -13,7 +13,7 @@ namespace Volo.Abp.Storage.Integration
 {
     [Collection(nameof(IntegrationCollection))]
     [Trait("Operation", "SharedAccess"), Trait("Kind", "Integration")]
-    public class SharedAccessTests : AbpIntegratedTest<AbpStorageTestModule>
+    public class SharedAccessTests : AbpStoresTestBase
     {
         [Theory(DisplayName = nameof(StoreSharedAccess)), InlineData("Store3"), InlineData("Store4"), InlineData("Store5"), InlineData("Store6")]
         public async Task StoreSharedAccess(string storeName)

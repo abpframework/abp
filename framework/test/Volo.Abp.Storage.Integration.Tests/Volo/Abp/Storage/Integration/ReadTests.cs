@@ -6,7 +6,7 @@ namespace Volo.Abp.Storage.Integration
 {
     [Collection(nameof(IntegrationCollection))]
     [Trait("Operation", "Read"), Trait("Kind", "Integration")]
-    public class ReadTests : AbpIntegratedTest<AbpStorageTestModule>
+    public class ReadTests : AbpStoresTestBase
     {
         [Theory(DisplayName = nameof(ReadAllTextFromRootFile)), InlineData("Store1"), InlineData("Store2"), InlineData("Store3"), InlineData("Store4"), InlineData("Store5"), InlineData("Store6")]
         public async Task ReadAllTextFromRootFile(string storeName)

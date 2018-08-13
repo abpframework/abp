@@ -1,19 +1,18 @@
-﻿﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.PlatformAbstractions;
- using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
- using Volo.Abp.Storage.Azure.Configuration;
+using Volo.Abp.Storage.Azure.Configuration;
 using Volo.Abp.Storage.Configuration;
 using Volo.Abp.Storage.FileSystem.Configuration;
 
 namespace Volo.Abp.Storage.Integration
 {
-    public class StoresFixture_Test : AbpIntegratedTest<AbpStorageTestModule>, IDisposable
+    public abstract class AbpStoresTestBase : AbpIntegratedTest<AbpStorageTestModule>
     {
         public IConfigurationRoot Configuration { get; }
         public string BasePath { get; }
@@ -24,7 +23,7 @@ namespace Volo.Abp.Storage.Integration
         public AbpFileSystemParsedOptions FileSystemParsedOptions { get; }
         public AbpFileSystemStoreOptions TestStoreOptions { get; }
 
-        public StoresFixture_Test()
+        public AbpStoresTestBase()
         {
             BasePath = PlatformServices.Default.Application.ApplicationBasePath;
 
@@ -43,17 +42,17 @@ namespace Volo.Abp.Storage.Integration
                 });
 
             Configuration = builder.Build();
-            
-            StorageOptions = ServiceProvider.GetService<IOptions<AbpStorageOptions>>().Value;
-            AzureParsedOptions = ServiceProvider.GetService<IOptions<AbpAzureParsedOptions>>().Value;
-            FileSystemParsedOptions = ServiceProvider.GetService<IOptions<AbpFileSystemParsedOptions>>().Value;
-            TestStoreOptions = ServiceProvider.GetService<IOptions<TestStore>>().Value
+
+            StorageOptions = GetService<IOptions<AbpStorageOptions>>().Value;
+            AzureParsedOptions = GetService<IOptions<AbpAzureParsedOptions>>().Value;
+            FileSystemParsedOptions = GetService<IOptions<AbpFileSystemParsedOptions>>().Value;
+            TestStoreOptions = GetService<IOptions<TestStore>>().Value
                 .ParseStoreOptions<AbpFileSystemParsedOptions, AbpFileSystemProviderInstanceOptions,
                     AbpFileSystemStoreOptions, AbpFileSystemScopedStoreOptions>(FileSystemParsedOptions);
             ResetStores();
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
             DeleteRootResources();
         }
@@ -117,7 +116,7 @@ namespace Volo.Abp.Storage.Integration
         private void ResetAzureStores()
         {
             var azCopy = Path.Combine(
-                Environment.ExpandEnvironmentVariables(Configuration["AzCopyPath"]),
+                Environment.ExpandEnvironmentVariables("%ProgramFiles(x86)%\\Microsoft SDKs\\Azure\\AzCopy"),
                 "AzCopy.exe");
 
             foreach (var parsedStoreKvp in AzureParsedOptions.ParsedStores)
