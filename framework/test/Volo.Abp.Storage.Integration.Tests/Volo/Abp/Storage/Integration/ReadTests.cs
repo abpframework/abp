@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System.IO;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -6,12 +7,19 @@ namespace Volo.Abp.Storage.Integration
 {
     [Collection(nameof(IntegrationCollection))]
     [Trait("Operation", "Read"), Trait("Kind", "Integration")]
-    public class ReadTests : AbpStoresTestBase
+    public class ReadTests
     {
+        private AbpStoresTestFixture _storeFixture;
+
+        public ReadTests(AbpStoresTestFixture storeFixture)
+        {
+            _storeFixture = storeFixture;
+        }
+
         [Theory(DisplayName = nameof(ReadAllTextFromRootFile)), InlineData("Store1"), InlineData("Store2"), InlineData("Store3"), InlineData("Store4"), InlineData("Store5"), InlineData("Store6")]
         public async Task ReadAllTextFromRootFile(string storeName)
         {
-            var storageFactory = GetRequiredService<IAbpStorageFactory>();
+            var storageFactory = _storeFixture.Services.GetRequiredService<IAbpStorageFactory>();
 
             var store = storageFactory.GetStore(storeName);
 
@@ -25,7 +33,7 @@ namespace Volo.Abp.Storage.Integration
         [Theory(DisplayName = nameof(ReadAllTextFromRootFile)), InlineData("Store1"), InlineData("Store2"), InlineData("Store3"), InlineData("Store4"), InlineData("Store5"), InlineData("Store6")]
         public async Task ReadAllTextFromSubdirectoryFile(string storeName)
         {
-            var storageFactory = GetRequiredService<IAbpStorageFactory>();
+            var storageFactory = _storeFixture.Services.GetRequiredService<IAbpStorageFactory>();
 
             var store = storageFactory.GetStore(storeName);
 
@@ -39,7 +47,7 @@ namespace Volo.Abp.Storage.Integration
         [Theory(DisplayName = nameof(ReadAllBytesFromSubdirectoryFile)), InlineData("Store1"), InlineData("Store2"), InlineData("Store3"), InlineData("Store4"), InlineData("Store5"), InlineData("Store6")]
         public async Task ReadAllBytesFromSubdirectoryFile(string storeName)
         {
-            var storageFactory = GetRequiredService<IAbpStorageFactory>();
+            var storageFactory = _storeFixture.Services.GetRequiredService<IAbpStorageFactory>();
 
             var store = storageFactory.GetStore(storeName);
 
@@ -55,7 +63,7 @@ namespace Volo.Abp.Storage.Integration
         [Theory(DisplayName = nameof(ReadAllBytesFromSubdirectoryFileUsingFileReference)), InlineData("Store1"), InlineData("Store2"), InlineData("Store3"), InlineData("Store4"), InlineData("Store5"), InlineData("Store6")]
         public async Task ReadAllBytesFromSubdirectoryFileUsingFileReference(string storeName)
         {
-            var storageFactory = GetRequiredService<IAbpStorageFactory>();
+            var storageFactory = _storeFixture.Services.GetRequiredService<IAbpStorageFactory>();
 
             var store = storageFactory.GetStore(storeName);
 
@@ -74,7 +82,7 @@ namespace Volo.Abp.Storage.Integration
         [Theory(DisplayName = nameof(ReadFileFromSubdirectoryFile)), InlineData("Store1"), InlineData("Store2"), InlineData("Store3"), InlineData("Store4"), InlineData("Store5"), InlineData("Store6")]
         public async Task ReadFileFromSubdirectoryFile(string storeName)
         {
-            var storageFactory = GetRequiredService<IAbpStorageFactory>();
+            var storageFactory = _storeFixture.Services.GetRequiredService<IAbpStorageFactory>();
 
             var store = storageFactory.GetStore(storeName);
 
@@ -95,7 +103,7 @@ namespace Volo.Abp.Storage.Integration
         [Theory(DisplayName = nameof(ReadAllTextFromSubdirectoryFileUsingFileReference)), InlineData("Store1"), InlineData("Store2"), InlineData("Store3"), InlineData("Store4"), InlineData("Store5"), InlineData("Store6")]
         public async Task ReadAllTextFromSubdirectoryFileUsingFileReference(string storeName)
         {
-            var storageFactory = GetRequiredService<IAbpStorageFactory>();
+            var storageFactory = _storeFixture.Services.GetRequiredService<IAbpStorageFactory>();
 
             var store = storageFactory.GetStore(storeName);
 
@@ -112,7 +120,7 @@ namespace Volo.Abp.Storage.Integration
         [Theory(DisplayName = nameof(ListThenReadAllTextFromSubdirectoryFile)), InlineData("Store1"), InlineData("Store2"), InlineData("Store3"), InlineData("Store4"), InlineData("Store5"), InlineData("Store6")]
         public async Task ListThenReadAllTextFromSubdirectoryFile(string storeName)
         {
-            var storageFactory = GetRequiredService<IAbpStorageFactory>();
+            var storageFactory = _storeFixture.Services.GetRequiredService<IAbpStorageFactory>();
 
             var store = storageFactory.GetStore(storeName);
 

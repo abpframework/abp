@@ -1,16 +1,24 @@
-﻿using System.Threading.Tasks;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Volo.Abp.Storage.Integration
 {
     [Collection(nameof(IntegrationCollection))]
     [Trait("Operation", "Delete"), Trait("Kind", "Integration")]
-    public class DeleteTests : AbpStoresTestBase
+    public class DeleteTests
     {
+        private AbpStoresTestFixture _storeFixture;
+
+        public DeleteTests(AbpStoresTestFixture storeFixture)
+        {
+            _storeFixture = storeFixture;
+        }
+
         [Theory(DisplayName = nameof(Delete)), InlineData("Store1"), InlineData("Store2"), InlineData("Store3"), InlineData("Store4"), InlineData("Store5"), InlineData("Store6")]
         public async Task Delete(string storeName)
         {
-            var storageFactory = GetRequiredService<IAbpStorageFactory>();
+            var storageFactory = _storeFixture.Services.GetRequiredService<IAbpStorageFactory>();
 
             var store = storageFactory.GetStore(storeName);
 

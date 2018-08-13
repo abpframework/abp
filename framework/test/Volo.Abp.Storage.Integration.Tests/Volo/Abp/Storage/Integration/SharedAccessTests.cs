@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Auth;
@@ -13,13 +14,20 @@ namespace Volo.Abp.Storage.Integration
 {
     [Collection(nameof(IntegrationCollection))]
     [Trait("Operation", "SharedAccess"), Trait("Kind", "Integration")]
-    public class SharedAccessTests : AbpStoresTestBase
+    public class SharedAccessTests
     {
+        private AbpStoresTestFixture _storeFixture;
+
+        public SharedAccessTests(AbpStoresTestFixture storeFixture)
+        {
+            _storeFixture = storeFixture;
+        }
+
         [Theory(DisplayName = nameof(StoreSharedAccess)), InlineData("Store3"), InlineData("Store4"), InlineData("Store5"), InlineData("Store6")]
         public async Task StoreSharedAccess(string storeName)
         {
-            var storageFactory = GetRequiredService<IAbpStorageFactory>();
-            var options = GetRequiredService<IOptions<AbpAzureParsedOptions>>();
+            var storageFactory = _storeFixture.Services.GetRequiredService<IAbpStorageFactory>();
+            var options = _storeFixture.Services.GetRequiredService<IOptions<AbpAzureParsedOptions>>();
 
             var store = storageFactory.GetStore(storeName);
 

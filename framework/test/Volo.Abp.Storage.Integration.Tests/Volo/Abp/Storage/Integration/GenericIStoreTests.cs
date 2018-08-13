@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -6,12 +7,19 @@ namespace Volo.Abp.Storage.Integration
 {
     [Collection(nameof(IntegrationCollection))]
     [Trait("Operation", "GenericIStore"), Trait("Kind", "Integration")]
-    public class GenericIStoreTests : AbpStoresTestBase
+    public class GenericIStoreTests
     {
+        private AbpStoresTestFixture _storeFixture;
+
+        public GenericIStoreTests(AbpStoresTestFixture storeFixture)
+        {
+            _storeFixture = storeFixture;
+        }
+
         [Fact]
         public async Task GenericListRootFiles()
         {
-            var store = GetRequiredService<IAbpStore<TestStore>>();
+            var store = _storeFixture.Services.GetRequiredService<IAbpStore<TestStore>>();
 
             var expected = new[] { "TextFile.txt", "template.hbs" };
 

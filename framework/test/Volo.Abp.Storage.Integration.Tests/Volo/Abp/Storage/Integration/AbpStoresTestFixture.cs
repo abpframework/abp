@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.PlatformAbstractions;
 using Microsoft.WindowsAzure.Storage;
@@ -9,12 +10,14 @@ using System.IO;
 using Volo.Abp.Storage.Azure.Configuration;
 using Volo.Abp.Storage.Configuration;
 using Volo.Abp.Storage.FileSystem.Configuration;
+using Volo.Abp.Storage.FileSystem.ExtendedProperties;
 
 namespace Volo.Abp.Storage.Integration
 {
-    public abstract class AbpStoresTestBase : AbpIntegratedTest<AbpStorageTestModule>
+    public class AbpStoresTestFixture : IDisposable
     {
         public IConfigurationRoot Configuration { get; }
+        public IServiceProvider Services { get; }
         public string BasePath { get; }
         public string FileSystemRootPath => Path.Combine(BasePath, "FileVault");
         public string FileSystemSecondaryRootPath => Path.Combine(BasePath, "FileVault2");
@@ -23,7 +26,7 @@ namespace Volo.Abp.Storage.Integration
         public AbpFileSystemParsedOptions FileSystemParsedOptions { get; }
         public AbpFileSystemStoreOptions TestStoreOptions { get; }
 
-        public AbpStoresTestBase()
+        public AbpStoresTestFixture()
         {
             BasePath = PlatformServices.Default.Application.ApplicationBasePath;
 
@@ -43,16 +46,31 @@ namespace Volo.Abp.Storage.Integration
 
             Configuration = builder.Build();
 
-            StorageOptions = GetService<IOptions<AbpStorageOptions>>().Value;
-            AzureParsedOptions = GetService<IOptions<AbpAzureParsedOptions>>().Value;
-            FileSystemParsedOptions = GetService<IOptions<AbpFileSystemParsedOptions>>().Value;
-            TestStoreOptions = GetService<IOptions<TestStore>>().Value
+            var services = new ServiceCollection();
+
+            services.AddOptions();
+
+            services.AddAbpStorage(Configuration)
+                .AddAzureStorage()
+                .AddFileSystemStorage(FileSystemRootPath)
+                .AddFileSystemExtendedProperties();
+
+            Services = services.BuildServiceProvider();
+
+            StorageOptions = Services.GetService<IOptions<AbpStorageOptions>>().Value;
+
+            AzureParsedOptions = Services.GetService<IOptions<AbpAzureParsedOptions>>().Value;
+
+            FileSystemParsedOptions = Services.GetService<IOptions<AbpFileSystemParsedOptions>>().Value;
+
+            TestStoreOptions = Services.GetService<IOptions<TestStore>>().Value
                 .ParseStoreOptions<AbpFileSystemParsedOptions, AbpFileSystemProviderInstanceOptions,
                     AbpFileSystemStoreOptions, AbpFileSystemScopedStoreOptions>(FileSystemParsedOptions);
+
             ResetStores();
         }
 
-        public override void Dispose()
+        public void Dispose()
         {
             DeleteRootResources();
         }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,12 +9,19 @@ namespace Volo.Abp.Storage.Integration
 {
     [Collection(nameof(IntegrationCollection))]
     [Trait("Operation", "Update"), Trait("Kind", "Integration")]
-    public class UpdateTests : AbpStoresTestBase
+    public class UpdateTests
     {
+        private AbpStoresTestFixture _storeFixture;
+
+        public UpdateTests(AbpStoresTestFixture storeFixture)
+        {
+            _storeFixture = storeFixture;
+        }
+
         [Theory(DisplayName = nameof(WriteAllText)), InlineData("Store1"), InlineData("Store2"), InlineData("Store3"), InlineData("Store4"), InlineData("Store5"), InlineData("Store6")]
         public async Task WriteAllText(string storeName)
         {
-            var storageFactory = GetRequiredService<IAbpStorageFactory>();
+            var storageFactory = _storeFixture.Services.GetRequiredService<IAbpStorageFactory>();
 
             var store = storageFactory.GetStore(storeName);
             var textToWrite = "The answer is 42";
@@ -29,7 +37,7 @@ namespace Volo.Abp.Storage.Integration
         [Theory(DisplayName = nameof(ETagShouldBeTheSameWithSameContent)), InlineData("Store1"), InlineData("Store2"), InlineData("Store3"), InlineData("Store4"), InlineData("Store5"), InlineData("Store6")]
         public async Task ETagShouldBeTheSameWithSameContent(string storeName)
         {
-            var storageFactory = GetRequiredService<IAbpStorageFactory>();
+            var storageFactory = _storeFixture.Services.GetRequiredService<IAbpStorageFactory>();
 
             var store = storageFactory.GetStore(storeName);
             var textToWrite = "ETag Test Compute";
@@ -44,7 +52,7 @@ namespace Volo.Abp.Storage.Integration
         [Theory(DisplayName = nameof(ETagShouldBeDifferentWithDifferentContent)), InlineData("Store1"), InlineData("Store2"), InlineData("Store3"), InlineData("Store4"), InlineData("Store5"), InlineData("Store6")]
         public async Task ETagShouldBeDifferentWithDifferentContent(string storeName)
         {
-            var storageFactory = GetRequiredService<IAbpStorageFactory>();
+            var storageFactory = _storeFixture.Services.GetRequiredService<IAbpStorageFactory>();
 
             var store = storageFactory.GetStore(storeName);
             var textToWrite = "ETag Test Compute";
@@ -60,7 +68,7 @@ namespace Volo.Abp.Storage.Integration
         [Theory(DisplayName = nameof(SaveStream)), InlineData("Store1"), InlineData("Store2"), InlineData("Store3"), InlineData("Store4"), InlineData("Store5"), InlineData("Store6")]
         public async Task SaveStream(string storeName)
         {
-            var storageFactory = GetRequiredService<IAbpStorageFactory>();
+            var storageFactory = _storeFixture.Services.GetRequiredService<IAbpStorageFactory>();
 
             var store = storageFactory.GetStore(storeName);
             var textToWrite = "The answer is 42";
@@ -76,7 +84,7 @@ namespace Volo.Abp.Storage.Integration
         [Theory(DisplayName = nameof(AddMetatadaRoundtrip)), InlineData("Store1"), InlineData("Store2"), InlineData("Store3"), InlineData("Store4"), InlineData("Store5"), InlineData("Store6")]
         public async Task AddMetatadaRoundtrip(string storeName)
         {
-            var storageFactory = GetRequiredService<IAbpStorageFactory>();
+            var storageFactory = _storeFixture.Services.GetRequiredService<IAbpStorageFactory>();
 
             var store = storageFactory.GetStore(storeName);
 
@@ -100,7 +108,7 @@ namespace Volo.Abp.Storage.Integration
         [Theory(DisplayName = nameof(SaveMetatadaRoundtrip)), InlineData("Store1"), InlineData("Store2"), InlineData("Store3"), InlineData("Store4"), InlineData("Store5"), InlineData("Store6")]
         public async Task SaveMetatadaRoundtrip(string storeName)
         {
-            var storageFactory = GetRequiredService<IAbpStorageFactory>();
+            var storageFactory = _storeFixture.Services.GetRequiredService<IAbpStorageFactory>();
 
             var store = storageFactory.GetStore(storeName);
 
@@ -124,7 +132,7 @@ namespace Volo.Abp.Storage.Integration
         [Theory(DisplayName = nameof(SaveEncodedMetatadaRoundtrip)), InlineData("Store1"), InlineData("Store2"), InlineData("Store3"), InlineData("Store4"), InlineData("Store5"), InlineData("Store6")]
         public async Task SaveEncodedMetatadaRoundtrip(string storeName)
         {
-            var storageFactory = GetRequiredService<IAbpStorageFactory>();
+            var storageFactory = _storeFixture.Services.GetRequiredService<IAbpStorageFactory>();
 
             var store = storageFactory.GetStore(storeName);
 
@@ -148,7 +156,7 @@ namespace Volo.Abp.Storage.Integration
         [Theory(DisplayName = nameof(ListMetatadaRoundtrip)), InlineData("Store1"), InlineData("Store2"), InlineData("Store3"), InlineData("Store4"), InlineData("Store5"), InlineData("Store6")]
         public async Task ListMetatadaRoundtrip(string storeName)
         {
-            var storageFactory = GetRequiredService<IAbpStorageFactory>();
+            var storageFactory = _storeFixture.Services.GetRequiredService<IAbpStorageFactory>();
 
             var store = storageFactory.GetStore(storeName);
 
