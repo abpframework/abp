@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Auth;
@@ -14,20 +13,13 @@ namespace Volo.Abp.Storage.Integration
 {
     [Collection(nameof(IntegrationCollection))]
     [Trait("Operation", "SharedAccess"), Trait("Kind", "Integration")]
-    public class SharedAccessTests
+    public class SharedAccessTests : AbpIntegratedTest<AbpStorageTestModule>
     {
-        private readonly StoresFixture _storeFixture;
-
-        public SharedAccessTests(StoresFixture fixture)
-        {
-            _storeFixture = fixture;
-        }
-
         [Theory(DisplayName = nameof(StoreSharedAccess)), InlineData("Store3"), InlineData("Store4"), InlineData("Store5"), InlineData("Store6")]
         public async Task StoreSharedAccess(string storeName)
         {
-            var storageFactory = _storeFixture.Services.GetRequiredService<IAbpStorageFactory>();
-            var options = _storeFixture.Services.GetRequiredService<IOptions<AbpAzureParsedOptions>>();
+            var storageFactory = GetRequiredService<IAbpStorageFactory>();
+            var options = GetRequiredService<IOptions<AbpAzureParsedOptions>>();
 
             var store = storageFactory.GetStore(storeName);
 
@@ -41,17 +33,17 @@ namespace Volo.Abp.Storage.Integration
 
             var account = CloudStorageAccount.Parse(storeOptions.ConnectionString);            
 
-            var accountSAS = new StorageCredentials(sharedAccessSignature);
-            var accountWithSAS = new CloudStorageAccount(accountSAS, account.Credentials.AccountName, endpointSuffix: null, useHttps: true);
-            var blobClientWithSAS = accountWithSAS.CreateCloudBlobClient();
-            var containerWithSAS = blobClientWithSAS.GetContainerReference(storeOptions.ContainerName);
+            var accountSas = new StorageCredentials(sharedAccessSignature);
+            var accountWithSas = new CloudStorageAccount(accountSas, account.Credentials.AccountName, endpointSuffix: null, useHttps: true);
+            var blobClientWithSas = accountWithSas.CreateCloudBlobClient();
+            var containerWithSas = blobClientWithSas.GetContainerReference(storeOptions.ContainerName);
 
             BlobContinuationToken continuationToken = null;
             var results = new List<IListBlobItem>();
 
             do
             {
-                var response = await containerWithSAS.ListBlobsSegmentedAsync(continuationToken);
+                var response = await containerWithSas.ListBlobsSegmentedAsync(continuationToken);
                 continuationToken = response.ContinuationToken;
                 results.AddRange(response.Results);
             }

@@ -1,26 +1,18 @@
 ﻿using System;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
 namespace Volo.Abp.Storage.Integration
 {
     [Collection(nameof(IntegrationCollection))]
     [Trait("Operation", "ScopedStores"), Trait("Kind", "Integration")]
-    public class ScopedStoresTests
+    public class ScopedStoresTests : AbpIntegratedTest<AbpStorageTestModule>
     {
-        private StoresFixture _storeFixture;
-
-        public ScopedStoresTests(StoresFixture fixture)
-        {
-            _storeFixture = fixture;
-        }
-
         [Theory(DisplayName = nameof(ScopedStoreUpdate)), InlineData("ScopedStore1"), InlineData("ScopedStore2")]
         public async Task ScopedStoreUpdate(string storeName)
         {
-            var storageFactory = _storeFixture.Services.GetRequiredService<IAbpStorageFactory>();
+            var storageFactory = GetRequiredService<IAbpStorageFactory>();
 
             var formatArg = Guid.NewGuid();
             var store = storageFactory.GetScopedStore(storeName, formatArg);

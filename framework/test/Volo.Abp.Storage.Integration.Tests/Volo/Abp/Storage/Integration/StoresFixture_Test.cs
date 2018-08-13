@@ -1,24 +1,30 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.PlatformAbstractions;
-using Microsoft.Extensions.Configuration.FileExtensions;
-using Microsoft.WindowsAzure.Storage;
+ using Microsoft.WindowsAzure.Storage;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Volo.Abp.Storage.Azure.Configuration;
+ using Volo.Abp.Storage.Azure.Configuration;
 using Volo.Abp.Storage.Configuration;
 using Volo.Abp.Storage.FileSystem.Configuration;
-using Volo.Abp.Storage.FileSystem.ExtendedProperties;
 
 namespace Volo.Abp.Storage.Integration
 {
-    public class StoresFixture : IDisposable
+    public class StoresFixture_Test : AbpIntegratedTest<AbpStorageTestModule>, IDisposable
     {
-        public StoresFixture()
+        public IConfigurationRoot Configuration { get; }
+        public string BasePath { get; }
+        public string FileSystemRootPath => Path.Combine(BasePath, "FileVault");
+        public string FileSystemSecondaryRootPath => Path.Combine(BasePath, "FileVault2");
+        public AbpStorageOptions StorageOptions { get; }
+        public AbpAzureParsedOptions AzureParsedOptions { get; }
+        public AbpFileSystemParsedOptions FileSystemParsedOptions { get; }
+        public AbpFileSystemStoreOptions TestStoreOptions { get; }
+
+        public StoresFixture_Test()
         {
             BasePath = PlatformServices.Default.Application.ApplicationBasePath;
 
@@ -37,46 +43,15 @@ namespace Volo.Abp.Storage.Integration
                 });
 
             Configuration = builder.Build();
-
-            var services = new ServiceCollection();
-
-            services.AddOptions();
-
-            services.AddAbpStorage(Configuration)
-                .AddAzureStorage()
-                .AddFileSystemStorage(FileSystemRootPath)
-                .AddFileSystemExtendedProperties();
-
-            services.Configure<AbpStorageOptions>(Configuration.GetSection("Storage"));
-            services.Configure<TestStore>(Configuration.GetSection("TestStore"));
-
-            Services = services.BuildServiceProvider();
-            StorageOptions = Services.GetService<IOptions<AbpStorageOptions>>().Value;
-            AzureParsedOptions = Services.GetService<IOptions<AbpAzureParsedOptions>>().Value;
-            FileSystemParsedOptions = Services.GetService<IOptions<AbpFileSystemParsedOptions>>().Value;
-            TestStoreOptions = Services.GetService<IOptions<TestStore>>().Value
+            
+            StorageOptions = ServiceProvider.GetService<IOptions<AbpStorageOptions>>().Value;
+            AzureParsedOptions = ServiceProvider.GetService<IOptions<AbpAzureParsedOptions>>().Value;
+            FileSystemParsedOptions = ServiceProvider.GetService<IOptions<AbpFileSystemParsedOptions>>().Value;
+            TestStoreOptions = ServiceProvider.GetService<IOptions<TestStore>>().Value
                 .ParseStoreOptions<AbpFileSystemParsedOptions, AbpFileSystemProviderInstanceOptions,
                     AbpFileSystemStoreOptions, AbpFileSystemScopedStoreOptions>(FileSystemParsedOptions);
             ResetStores();
         }
-
-        public IConfigurationRoot Configuration { get; }
-
-        public IServiceProvider Services { get; }
-
-        public string BasePath { get; }
-
-        public string FileSystemRootPath => Path.Combine(BasePath, "FileVault");
-
-        public string FileSystemSecondaryRootPath => Path.Combine(BasePath, "FileVault2");
-
-        public AbpStorageOptions StorageOptions { get; }
-
-        public AbpAzureParsedOptions AzureParsedOptions { get; }
-
-        public AbpFileSystemParsedOptions FileSystemParsedOptions { get; }
-
-        public AbpFileSystemStoreOptions TestStoreOptions { get; }
 
         public void Dispose()
         {

@@ -11,6 +11,7 @@
     <RootNamespace />
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.1.1" />
     <PackageReference Include="Microsoft.Extensions.FileSystemGlobbing" Version="2.1.1" />
     <ProjectReference Include="..\Volo.Abp.Storage\Volo.Abp.Storage.csproj" />
   </ItemGroup>

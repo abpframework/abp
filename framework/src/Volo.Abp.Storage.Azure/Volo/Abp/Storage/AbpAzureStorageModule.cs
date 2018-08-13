@@ -8,6 +8,9 @@ namespace Volo.Abp.Storage
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
+            context.Services.AddAbpStorage(context.Services.GetConfiguration().GetSection("Storage"))
+                .AddAzureStorage();
+            
             context.Services.AddAssemblyOf<AbpAzureStorageModule>();
         }
     }

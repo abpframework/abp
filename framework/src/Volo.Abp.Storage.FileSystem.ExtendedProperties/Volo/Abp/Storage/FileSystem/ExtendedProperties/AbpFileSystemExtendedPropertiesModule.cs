@@ -8,6 +8,8 @@ namespace Volo.Abp.Storage.FileSystem.ExtendedProperties
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
+            context.Services.AddFileSystemExtendedProperties();
+            
             context.Services.AddAssemblyOf<AbpFileSystemExtendedPropertiesModule>();
         }
     }
