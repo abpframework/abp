@@ -42,7 +42,7 @@ namespace Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants
 
             [Required]
             [StringLength(TenantConsts.MaxNameLength)]
-            [Display(Name = "TenantName")]
+            [Display(Name = "DisplayName:TenantName")]
             public string Name { get; set; }
         }
     }
