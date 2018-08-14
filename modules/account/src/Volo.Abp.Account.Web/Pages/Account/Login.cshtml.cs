@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Claims;
@@ -11,7 +10,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.Identity;
 using Volo.Abp.Security.Claims;
-using Volo.Abp.UI;
 using Volo.Abp.Uow;
 
 namespace Volo.Abp.Account.Web.Pages.Account
