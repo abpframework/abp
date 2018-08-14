@@ -7,8 +7,6 @@
             Result = result;
         }
 
-        public string IdentityCookieToken { get; set; }
-
         public LoginResultType Result { get; }
 
         public string Description => Result.ToString();

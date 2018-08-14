@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Volo.Abp.Account.Web.Areas.Account.Controllers.Models
 {
@@ -14,5 +15,7 @@ namespace Volo.Abp.Account.Web.Areas.Account.Controllers.Models
         public string Password { get; set; }
 
         public bool RememberMe { get; set; }
+
+        public Guid? TenanId { get; set; }
     }
 }
