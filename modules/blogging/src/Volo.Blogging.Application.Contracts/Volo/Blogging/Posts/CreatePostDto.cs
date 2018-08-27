@@ -18,5 +18,7 @@ namespace Volo.Blogging.Posts
 
         [StringLength(PostConsts.MaxContentLength)]
         public string Content { get; set; }
+
+        public string Tags { get; set; }
     }
 }

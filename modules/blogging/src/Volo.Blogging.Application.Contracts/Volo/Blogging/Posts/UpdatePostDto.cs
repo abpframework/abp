@@ -14,5 +14,7 @@ namespace Volo.Blogging.Posts
         public string Url { get; set; }
 
         public string Content { get; set; }
+
+        public string Tags { get; set; }
     }
 }

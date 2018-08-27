@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
@@ -27,8 +28,9 @@ namespace Volo.Blogging.Pages.Blog.Posts
 
         public async void OnGet()
         {
-            var postDto = await _postAppService.GetForEditAsync(new Guid(PostId));
-            Post = ObjectMapper.Map<GetPostForEditOutput, EditPostViewModel>(postDto);
+            var postDto = await _postAppService.GetAsync(new Guid(PostId));
+            Post = ObjectMapper.Map<PostWithDetailsDto, EditPostViewModel>(postDto);
+            Post.Tags = String.Join(", ", postDto.Tags.Select(p=>p.Name).ToArray());
         }
 
         public async Task<ActionResult> OnPost()
@@ -38,7 +40,8 @@ namespace Volo.Blogging.Pages.Blog.Posts
                 BlogId = Post.BlogId,
                 Title = Post.Title,
                 Url = Post.Url,
-                Content = Post.Content
+                Content = Post.Content,
+                Tags = Post.Tags
             };
 
             var editedPost = await _postAppService.UpdateAsync(Post.Id, post);
@@ -66,5 +69,7 @@ namespace Volo.Blogging.Pages.Blog.Posts
 
         [StringLength(PostConsts.MaxContentLength)]
         public string Content { get; set; }
+
+        public string Tags { get; set; }
     }
 }

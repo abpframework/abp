@@ -4,7 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using Volo.Abp;
 using Volo.Abp.EntityFrameworkCore.Modeling;
 using Volo.Blogging.Blogs;
+using Volo.Blogging.Comments;
 using Volo.Blogging.Posts;
+using Volo.Blogging.Tagging;
 
 namespace Volo.Blogging.EntityFrameworkCore
 {
@@ -41,7 +43,46 @@ namespace Volo.Blogging.EntityFrameworkCore
                 b.Property(x => x.Url).IsRequired().HasMaxLength(PostConsts.MaxUrlLength).HasColumnName(nameof(Post.Url));
                 b.Property(x => x.Content).IsRequired(false).HasMaxLength(PostConsts.MaxContentLength).HasColumnName(nameof(Post.Content));
 
+                b.HasMany(question => question.Tags).WithOne().HasForeignKey(qt => qt.PostId);
+
                 b.HasOne<Blog>().WithMany().IsRequired().HasForeignKey(p => p.BlogId);
+            });
+
+            builder.Entity<Comment>(b =>
+            {
+                b.ToTable(options.TablePrefix + "Comments", options.Schema);
+
+                b.ConfigureFullAudited();
+                
+                b.Property(x => x.Text).IsRequired().HasMaxLength(CommentConsts.MaxTextLength).HasColumnName(nameof(Comment.Text));
+                b.Property(x => x.RepliedCommentId).HasColumnName(nameof(Comment.RepliedCommentId));
+                b.Property(x => x.PostId).IsRequired().HasColumnName(nameof(Comment.PostId));
+
+                b.HasOne<Comment>().WithMany().HasForeignKey(p => p.RepliedCommentId);
+                b.HasOne<Post>().WithMany().IsRequired().HasForeignKey(p => p.PostId);
+            });
+
+            builder.Entity<Tag>(b =>
+            {
+                b.ToTable(options.TablePrefix + "Tags", options.Schema);
+
+                b.ConfigureFullAudited();
+                
+                b.Property(x => x.Name).IsRequired().HasMaxLength(TagConsts.MaxNameLength).HasColumnName(nameof(Tag.Name));
+                b.Property(x => x.Description).HasMaxLength(TagConsts.MaxDescriptionLength).HasColumnName(nameof(Tag.Description));
+                b.Property(x => x.UsageCount).HasColumnName(nameof(Tag.UsageCount));
+
+                b.HasMany<PostTag>().WithOne().HasForeignKey(qt => qt.TagId);
+            });
+
+            builder.Entity<PostTag>(b =>
+            {
+                b.ToTable(options.TablePrefix + "PostTags", options.Schema);
+
+                b.Property(x => x.PostId).HasColumnName(nameof(PostTag.PostId));
+                b.Property(x => x.TagId).HasColumnName(nameof(PostTag.TagId));
+
+                b.HasKey(x => new { x.PostId, x.TagId });
             });
         }
     }

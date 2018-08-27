@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using JetBrains.Annotations;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities.Auditing;
@@ -18,6 +19,8 @@ namespace Volo.Blogging.Posts
         [CanBeNull]
         public virtual string Content { get; set; }
 
+        public virtual Collection<PostTag> Tags { get; protected set; }
+
         protected Post()
         {
             
@@ -30,6 +33,8 @@ namespace Volo.Blogging.Posts
             BlogId = blogId;
             Title = Check.NotNullOrWhiteSpace(title, nameof(title));
             Url = Check.NotNullOrWhiteSpace(url, nameof(url));
+
+            Tags = new Collection<PostTag>();
         }
 
         public virtual Post SetTitle([NotNull] string title)

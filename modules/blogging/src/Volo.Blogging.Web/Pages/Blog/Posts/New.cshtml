@@ -1,8 +1,7 @@
 ﻿@page
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.Lodash
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.TuiEditor
-@using Volo.Blogging.Pages.Blog.Posts
-@model NewModel
+@model Volo.Blogging.Pages.Blog.Posts.NewModel
 @inherits Volo.Blogging.Pages.Blog.BloggingPage
 @section styles {
 <abp-style-bundle @*name="@typeof(NewModel).FullName"*@>
@@ -25,6 +24,7 @@
         <abp-input asp-for="Post.Url" />
 
         <abp-input asp-for="Post.Content" />
+        <abp-input asp-for="Post.Tags" />
 
 
         <div class="form-group">

@@ -32,6 +32,8 @@
     <Content Remove="Pages\**\*.cshtml" />
     <Content Remove="Localization\Resources\**\*.json" />
     <Content Remove="Properties\launchSettings.json" />
+    <None Remove="Pages\Blog\Posts\detail.js" />
+    <EmbeddedResource Include="Pages\Blog\Posts\detail.js" />
     <EmbeddedResource Include="Pages\Blog\Posts\edit.js" />
     <EmbeddedResource Include="Pages\Blog\Posts\new.css" />
     <EmbeddedResource Include="Pages\Blog\Posts\new.js" />

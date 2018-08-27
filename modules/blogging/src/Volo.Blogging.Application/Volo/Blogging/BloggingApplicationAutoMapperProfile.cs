@@ -1,7 +1,11 @@
 ﻿using AutoMapper;
 using Volo.Abp.AutoMapper;
 using Volo.Blogging.Blogs;
+using Volo.Blogging.Comments;
+using Volo.Blogging.Comments.Dtos;
 using Volo.Blogging.Posts;
+using Volo.Blogging.Tagging;
+using Volo.Blogging.Tagging.Dtos;
 
 namespace Volo.Blogging
 {
@@ -12,7 +16,8 @@ namespace Volo.Blogging
             CreateMap<Blog, BlogDto>();
             CreateMap<Post, PostDto>();
             CreateMap<Post, PostWithDetailsDto>();
-            CreateMap<Post, GetPostForEditOutput>();
+            CreateMap<Comment, CommentDto>();
+            CreateMap<Tag, TagDto>();
         }
     }
 }

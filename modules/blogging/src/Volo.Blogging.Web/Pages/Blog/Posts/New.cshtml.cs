@@ -61,6 +61,8 @@ namespace Volo.Blogging.Pages.Blog.Posts
             [HiddenInput]
             [StringLength(PostConsts.MaxContentLength)]
             public string Content { get; set; }
+
+            public string Tags { get; set; }
         }
     }
 }

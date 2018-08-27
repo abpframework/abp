@@ -4,6 +4,12 @@
 @{
 }
 
+@section scripts {
+    <abp-script-bundle name="@typeof(DetailModel).FullName">
+        <abp-script src="/Pages/Blog/Posts/detail.js" />
+    </abp-script-bundle>
+}
+
 <h2>@Model.Post.Title</h2>
 
 <p>@Model.Post.Content</p>
@@ -12,4 +18,49 @@
     <i>Posted to @Model.Blog.Name On @Model.Post.CreationTime</i>
 </p>
 
+<abp-row>
+    @foreach (var tag in Model.Post.Tags)
+    {
+    <span abp-badge-pill="Warning">@tag.Name</span>
+    }
+</abp-row>
+
+<a>comment </a>
 <a asp-page="./Edit" asp-route-postId="@Model.Post.Id" asp-route-blogShortName="@Model.BlogShortName">edit</a>
+
+@foreach (var commentWithRepliesDto in Model.CommentsWithReplies)
+{
+    <abp-row>
+        
+        <abp-column offset-sm="_3" size-sm="_7" v-align="Start">
+            @commentWithRepliesDto.Comment.Text
+            <br />
+            @commentWithRepliesDto.Comment.CreationTime
+        </abp-column>
+        <abp-column size-sm="_2" v-align="End">
+        <button type="button" data-button="@commentWithRepliesDto.Comment.Id">
+            Reply
+        </button>
+        </abp-column>
+    </abp-row>
+    <br />
+    foreach (var reply in commentWithRepliesDto.Replies)
+    {
+        <abp-row>
+            <abp-column offset-sm="_6" size-sm="_2">
+
+                @reply.Text
+                <br />
+                @reply.CreationTime
+            </abp-column>
+        </abp-row>
+    }
+        <div class="m-separator m-separator--dashed"></div>
+}
+
+<form method="post">
+    <input name="postId" value="@Model.Post.Id" hidden/>
+    <input name="repliedCommentId" id="repliedCommentId" hidden/>
+    <textarea type="text" name="text" id="textBoxId"></textarea>
+    <abp-button button-type="Primary" type="submit" text="submit" />
+</form>

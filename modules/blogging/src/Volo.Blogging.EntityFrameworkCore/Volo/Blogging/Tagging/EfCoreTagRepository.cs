@@ -1,0 +1,30 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
+using Volo.Abp.EntityFrameworkCore;
+using Volo.Blogging.EntityFrameworkCore;
+
+namespace Volo.Blogging.Tagging
+{
+    public class EfCoreTagRepository : EfCoreRepository<IBloggingDbContext, Tag, Guid>, ITagRepository
+    {
+        public EfCoreTagRepository(IDbContextProvider<IBloggingDbContext> dbContextProvider)
+            : base(dbContextProvider)
+        {
+        }
+
+        public async Task<List<Tag>> GetListAsync()
+        {
+            return await DbSet.ToListAsync();
+        }
+
+        public async Task<List<Tag>> GetListAsync(IEnumerable<Guid> ids)
+        {
+            return await DbSet.Where(c => ids.Contains(c.Id)).ToListAsync();
+        }
+    }
+}

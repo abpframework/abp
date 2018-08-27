@@ -2,7 +2,9 @@
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Blogging.Blogs;
+using Volo.Blogging.Comments;
 using Volo.Blogging.Posts;
+using Volo.Blogging.Tagging;
 
 namespace Volo.Blogging.EntityFrameworkCore
 {
@@ -12,5 +14,11 @@ namespace Volo.Blogging.EntityFrameworkCore
         DbSet<Blog> Blogs { get; set; }
 
         DbSet<Post> Posts { get; set; }
+
+        DbSet<Comment> Comments { get; set; }
+
+        DbSet<PostTag> PostTags { get; set; }
+
+        DbSet<Tag> Tags { get; set; }
     }
 }

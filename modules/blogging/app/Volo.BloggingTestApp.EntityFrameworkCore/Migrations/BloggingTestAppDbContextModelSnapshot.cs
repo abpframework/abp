@@ -331,6 +331,54 @@ namespace Volo.BloggingTestApp.EntityFrameworkCore.Migrations
                     b.ToTable("BlgBlogs");
                 });
 
+            modelBuilder.Entity("Volo.Blogging.Comments.Comment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnName("CreationTime");
+
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnName("CreatorId");
+
+                    b.Property<Guid?>("DeleterId")
+                        .HasColumnName("DeleterId");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnName("DeletionTime");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("IsDeleted")
+                        .HasDefaultValue(false);
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnName("LastModificationTime");
+
+                    b.Property<Guid?>("LastModifierId")
+                        .HasColumnName("LastModifierId");
+
+                    b.Property<Guid>("PostId")
+                        .HasColumnName("PostId");
+
+                    b.Property<Guid?>("RepliedCommentId")
+                        .HasColumnName("RepliedCommentId");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnName("Text")
+                        .HasMaxLength(1024);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PostId");
+
+                    b.HasIndex("RepliedCommentId");
+
+                    b.ToTable("BlgComments");
+                });
+
             modelBuilder.Entity("Volo.Blogging.Posts.Post", b =>
                 {
                     b.Property<Guid>("Id")
@@ -383,6 +431,70 @@ namespace Volo.BloggingTestApp.EntityFrameworkCore.Migrations
                     b.ToTable("BlgPosts");
                 });
 
+            modelBuilder.Entity("Volo.Blogging.Posts.PostTag", b =>
+                {
+                    b.Property<Guid>("PostId")
+                        .HasColumnName("PostId");
+
+                    b.Property<Guid>("TagId")
+                        .HasColumnName("TagId");
+
+                    b.Property<DateTime>("CreationTime");
+
+                    b.Property<Guid?>("CreatorId");
+
+                    b.HasKey("PostId", "TagId");
+
+                    b.HasIndex("TagId");
+
+                    b.ToTable("BlgPostTags");
+                });
+
+            modelBuilder.Entity("Volo.Blogging.Tagging.Tag", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnName("CreationTime");
+
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnName("CreatorId");
+
+                    b.Property<Guid?>("DeleterId")
+                        .HasColumnName("DeleterId");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnName("DeletionTime");
+
+                    b.Property<string>("Description")
+                        .HasColumnName("Description")
+                        .HasMaxLength(512);
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("IsDeleted")
+                        .HasDefaultValue(false);
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnName("LastModificationTime");
+
+                    b.Property<Guid?>("LastModifierId")
+                        .HasColumnName("LastModifierId");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnName("Name")
+                        .HasMaxLength(64);
+
+                    b.Property<int>("UsageCount")
+                        .HasColumnName("UsageCount");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BlgTags");
+                });
+
             modelBuilder.Entity("Volo.Abp.Identity.IdentityRoleClaim", b =>
                 {
                     b.HasOne("Volo.Abp.Identity.IdentityRole")
@@ -428,11 +540,36 @@ namespace Volo.BloggingTestApp.EntityFrameworkCore.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("Volo.Blogging.Comments.Comment", b =>
+                {
+                    b.HasOne("Volo.Blogging.Posts.Post")
+                        .WithMany()
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Volo.Blogging.Comments.Comment")
+                        .WithMany()
+                        .HasForeignKey("RepliedCommentId");
+                });
+
             modelBuilder.Entity("Volo.Blogging.Posts.Post", b =>
                 {
                     b.HasOne("Volo.Blogging.Blogs.Blog")
                         .WithMany()
                         .HasForeignKey("BlogId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Volo.Blogging.Posts.PostTag", b =>
+                {
+                    b.HasOne("Volo.Blogging.Posts.Post")
+                        .WithMany("Tags")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Volo.Blogging.Tagging.Tag")
+                        .WithMany()
+                        .HasForeignKey("TagId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
