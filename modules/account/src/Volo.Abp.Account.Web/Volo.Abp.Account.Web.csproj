@@ -31,7 +31,6 @@
   
   <ItemGroup>
     <ProjectReference Include="..\..\..\identity\src\Volo.Abp.Identity.Domain\Volo.Abp.Identity.Domain.csproj" />
-
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.csproj" />
   </ItemGroup>
 
