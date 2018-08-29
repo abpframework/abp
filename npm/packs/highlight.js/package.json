@@ -1,11 +1,11 @@
 {
-  "version": "0.3.5",
+  "version": "0.4.6",
   "name": "@abp/highlight.js",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/core": "^0.3.5",
-    "highlight.js": "^9.12.0"
-  }
+    "@abp/core": "^0.4.3"
+  },
+  "gitHead": "2e846ad3e5a8cbe04100484865335fbcd845a342"
 }
