@@ -14,10 +14,12 @@ namespace Volo.Abp.Sms
             Logger = NullLogger<NullSmsSender>.Instance;
         }
 
-        public Task SendAsync(string text)
+        public Task SendAsync(string phoneNumber, string text)
         {
             Logger.LogWarning($"SMS Sending was not implemented! Using {nameof(NullSmsSender)}:");
-            Logger.LogWarning("SMS Text: " + text);
+            Logger.LogWarning("Phone Number : " + phoneNumber);
+            Logger.LogWarning("SMS Text     : " + text);
+
             return Task.CompletedTask;
         }
     }
