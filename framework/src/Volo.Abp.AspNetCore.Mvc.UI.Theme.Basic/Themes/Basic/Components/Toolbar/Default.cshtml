@@ -1,6 +1,6 @@
 ﻿@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars
 @model Toolbar
-@foreach (var toolbarItem in Model.Items)
+@foreach (var toolbarItem in Model.Items.OrderBy(i => i.Order))
 {
     <span>@(await Component.InvokeAsync(toolbarItem.ComponentType))</span>
 }

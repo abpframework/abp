@@ -25,11 +25,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars
 
         public async Task<Toolbar> GetAsync(string name)
         {
-            var menu = new Toolbar(name);
+            var toolbar = new Toolbar(name);
 
             using (var scope = ServiceProvider.CreateScope())
             {
-                var context = new ToolbarConfigurationContext(ThemeManager.CurrentTheme, menu, scope.ServiceProvider);
+                var context = new ToolbarConfigurationContext(ThemeManager.CurrentTheme, toolbar, scope.ServiceProvider);
 
                 foreach (var contributor in Options.Contributors)
                 {
@@ -37,7 +37,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars
                 }
             }
 
-            return menu;
+            return toolbar;
         }
     }
 }

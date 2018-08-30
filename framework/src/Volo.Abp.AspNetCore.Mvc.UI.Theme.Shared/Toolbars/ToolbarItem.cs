@@ -12,8 +12,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars
         }
         private Type _componentType;
 
-        public ToolbarItem([NotNull] Type componentType)
+        public int Order { get; set; }
+
+        public ToolbarItem([NotNull] Type componentType, int order = 0)
         {
+            Order = order;
             ComponentType = Check.NotNull(componentType, nameof(componentType));
         }
     }
