@@ -60,5 +60,30 @@ namespace Microsoft.AspNetCore.Identity
 
             return localizer["Identity.Default"];
         }
+
+        public static string GetResultAsString(this SignInResult signInResult)
+        {
+            if (signInResult.Succeeded)
+            {
+                return "Succeeded";
+            }
+
+            if (signInResult.IsLockedOut)
+            {
+                return "IsLockedOut";
+            }
+
+            if (signInResult.IsNotAllowed)
+            {
+                return "IsNotAllowed";
+            }
+
+            if (signInResult.RequiresTwoFactor)
+            {
+                return "RequiresTwoFactor";
+            }
+
+            return "Unknown";
+        }
     }
 }
