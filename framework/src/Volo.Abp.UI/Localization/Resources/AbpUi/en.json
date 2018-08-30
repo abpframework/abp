@@ -29,6 +29,7 @@
     "Register": "Register",
     "Logout": "Log out",
     "Submit": "Submit",
+    "Back": "Back",
     "PagerNext": "Next",
     "PagerPrevious": "Previous",
     "PagerInfo": "Showing {0} to {1} of {2} entries.",
