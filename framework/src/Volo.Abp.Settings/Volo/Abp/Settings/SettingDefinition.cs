@@ -28,7 +28,7 @@
         /// <summary>
         /// Can be used to store a custom object related to this setting.
         /// </summary>
-        public object CustomData { get; set; }
+        public object CustomData { get; set; } //TODO: Convert to dictionary!
 
         //TODO: Add Properties dictionary for custom stuff (and remove CustomData)
 
