@@ -9,6 +9,7 @@ using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Users;
 using Volo.Blogging.Blogs;
+using Volo.Blogging.Comments;
 using Volo.Blogging.Tagging;
 using Volo.Blogging.Tagging.Dtos;
 
@@ -20,20 +21,35 @@ namespace Volo.Blogging.Posts
         private readonly IPostRepository _postRepository;
         private readonly ITagRepository _tagRepository;
         private readonly IPostTagRepository _postTagRepository;
+        private readonly ICommentRepository _commentRepository;
 
-        public PostAppService(IPostRepository postRepository, ITagRepository tagRepository, IPostTagRepository postTagRepository)
+        public PostAppService(IPostRepository postRepository, ITagRepository tagRepository, IPostTagRepository postTagRepository, ICommentRepository commentRepository)
         {
             _postRepository = postRepository;
             _tagRepository = tagRepository;
             _postTagRepository = postTagRepository;
+            _commentRepository = commentRepository;
         }
 
-        public ListResultDto<PostWithDetailsDto> GetListByBlogIdAsync(Guid id)
+        public async Task<ListResultDto<PostWithDetailsDto>> GetListByBlogId(Guid id)
         {
             var posts = _postRepository.GetPostsByBlogId(id);
 
-            return new ListResultDto<PostWithDetailsDto>(
+            var postDtos = new List<PostWithDetailsDto>(
                 ObjectMapper.Map<List<Post>, List<PostWithDetailsDto>>(posts));
+
+            foreach (var postDto in postDtos)
+            {
+                var tagIds = (await _postTagRepository.GetListAsync()).Where(pt => pt.PostId == postDto.Id);
+
+                var tags = await _tagRepository.GetListAsync(tagIds.Select(t => t.TagId));
+
+                postDto.Tags = ObjectMapper.Map<List<Tag>, List<TagDto>>(tags);
+
+                postDto.CommentCount = (await _commentRepository.GetListAsync()).Count(p => p.PostId == postDto.Id);
+            }
+
+            return new ListResultDto<PostWithDetailsDto>(postDtos);
         }
 
         public async Task<PostWithDetailsDto> GetByUrlAsync(GetPostInput input)

@@ -2,6 +2,14 @@
   "culture": "en",
   "texts": {
     "Title": "Title",
-    "Content": "Content"
+    "ContinueReading": "Continue Reading",
+    "DaysAgo": "days ago",
+    "Content": "Content",
+    "SeeAll": "See All",
+    "PopularTags": "Popular Tags",
+    "Read": "Read",
+    "LastPosts": "Last Posts",
+    "Posts": "Posts",
+    "Comment": "Comment"
   }
 }

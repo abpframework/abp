@@ -1,0 +1,19 @@
+ header { 
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 100; 
+    background:#f8f9fa;   
+    .navbar-blog { 
+            padding: 20px 0;  
+    
+        ul {
+            li {
+                a {
+                    color: black;
+                }
+            }
+        }
+    } 
+ }
