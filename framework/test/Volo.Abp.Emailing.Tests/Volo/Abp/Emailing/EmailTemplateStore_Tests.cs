@@ -7,17 +7,17 @@ namespace Volo.Abp.Emailing
 {
     public class EmailTemplateStore_Tests : AbpIntegratedTest<AbpEmailingTestModule>
     {
-        private readonly IEmailTemplateStore _emailTemplateStore;
+        private readonly IEmailTemplateProvider _emailTemplateProvider;
 
         public EmailTemplateStore_Tests()
         {
-            _emailTemplateStore = GetRequiredService<IEmailTemplateStore>();
+            _emailTemplateProvider = GetRequiredService<IEmailTemplateProvider>();
         }
 
         [Fact]
         public async Task Should_Get_Registered_Template()
         {
-            var template = await _emailTemplateStore.GetAsync("template1");
+            var template = await _emailTemplateProvider.GetAsync("template1");
             template.Content.ShouldContain("This is a test template!");
         }
     }

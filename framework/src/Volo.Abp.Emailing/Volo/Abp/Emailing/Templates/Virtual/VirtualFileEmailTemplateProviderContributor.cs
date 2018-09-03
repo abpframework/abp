@@ -7,39 +7,39 @@ using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.Emailing.Templates.Virtual
 {
-    public class VirtualFileEmailTemplateProvider : IEmailTemplateProvider
+    public class VirtualFileEmailTemplateProviderContributor : IEmailTemplateProviderContributor
     {
         public const string VirtualFilePathKey = "VirtualFilePath";
 
-        public Task ProvideAsync(EmailTemplateProviderContext context)
+        public Task ProvideAsync(EmailTemplateProviderContributorContext contributorContext)
         {
-            var templateDefinition = FindTemplateDefinition(context);
+            var templateDefinition = FindTemplateDefinition(contributorContext);
             if (templateDefinition == null)
             {
                 return Task.CompletedTask;
             }
 
-            var fileInfo = FindVirtualFileInfo(context, templateDefinition);
+            var fileInfo = FindVirtualFileInfo(contributorContext, templateDefinition);
             if (fileInfo == null)
             {
                 return Task.CompletedTask;
             }
 
-            context.Template = new EmailTemplate(fileInfo.ReadAsString());
+            contributorContext.Template = new EmailTemplate(fileInfo.ReadAsString(), templateDefinition);
             return Task.CompletedTask;
         }
 
-        protected virtual EmailTemplateDefinition FindTemplateDefinition(EmailTemplateProviderContext context)
+        protected virtual EmailTemplateDefinition FindTemplateDefinition(EmailTemplateProviderContributorContext contributorContext)
         {
-            return context
+            return contributorContext
                 .ServiceProvider
                 .GetRequiredService<IOptions<EmailTemplateOptions>>()
                 .Value
                 .Templates
-                .GetOrDefault(context.Name);
+                .GetOrDefault(contributorContext.Name);
         }
 
-        protected virtual IFileInfo FindVirtualFileInfo(EmailTemplateProviderContext context, EmailTemplateDefinition templateDefinition)
+        protected virtual IFileInfo FindVirtualFileInfo(EmailTemplateProviderContributorContext contributorContext, EmailTemplateDefinition templateDefinition)
         {
             var virtualFilePath = templateDefinition?.GetVirtualFilePathOrNull();
             if (virtualFilePath == null)
@@ -47,7 +47,7 @@ namespace Volo.Abp.Emailing.Templates.Virtual
                 return null;
             }
 
-            var virtualFileProvider = context.ServiceProvider.GetRequiredService<IVirtualFileProvider>();
+            var virtualFileProvider = contributorContext.ServiceProvider.GetRequiredService<IVirtualFileProvider>();
 
             var fileInfo = virtualFileProvider.GetFileInfo(virtualFilePath);
             if (fileInfo?.Exists != true)

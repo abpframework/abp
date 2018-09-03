@@ -4,13 +4,13 @@
     {
         public static EmailTemplateDefinition SetVirtualFilePath(this EmailTemplateDefinition emailTemplateDefinition, string path)
         {
-            emailTemplateDefinition[VirtualFileEmailTemplateProvider.VirtualFilePathKey] = path;
+            emailTemplateDefinition[VirtualFileEmailTemplateProviderContributor.VirtualFilePathKey] = path;
             return emailTemplateDefinition;
         }
 
         public static string GetVirtualFilePathOrNull(this EmailTemplateDefinition emailTemplateDefinition)
         {
-            return emailTemplateDefinition[VirtualFileEmailTemplateProvider.VirtualFilePathKey] as string;
+            return emailTemplateDefinition[VirtualFileEmailTemplateProviderContributor.VirtualFilePathKey] as string;
         }
     }
 }

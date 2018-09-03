@@ -3,7 +3,7 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Emailing.Templates
 {
-    public class EmailTemplateProviderContext : IServiceProviderAccessor
+    public class EmailTemplateProviderContributorContext : IServiceProviderAccessor
     {
         public string Name { get; }
 
@@ -11,7 +11,7 @@ namespace Volo.Abp.Emailing.Templates
 
         public EmailTemplate Template { get; set; }
 
-        public EmailTemplateProviderContext(string name, IServiceProvider serviceProvider)
+        public EmailTemplateProviderContributorContext(string name, IServiceProvider serviceProvider)
         {
             Name = name;
             ServiceProvider = serviceProvider;

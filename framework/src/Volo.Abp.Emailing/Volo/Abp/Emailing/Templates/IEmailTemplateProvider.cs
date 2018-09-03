@@ -4,6 +4,6 @@ namespace Volo.Abp.Emailing.Templates
 {
     public interface IEmailTemplateProvider
     {
-        Task ProvideAsync(EmailTemplateProviderContext context);
+        Task<EmailTemplate> GetAsync(string name);
     }
 }

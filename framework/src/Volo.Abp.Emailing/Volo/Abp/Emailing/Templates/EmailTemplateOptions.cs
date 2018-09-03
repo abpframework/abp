@@ -5,18 +5,22 @@ namespace Volo.Abp.Emailing.Templates
 {
     public class EmailTemplateOptions
     {
-        public List<IEmailTemplateProvider> Providers { get; }
+        public List<IEmailTemplateProviderContributor> Providers { get; }
 
         public EmailTemplateDefinitionDictionary Templates { get; }
 
+        public string DefaultLayout { get; set; }
+
         public EmailTemplateOptions()
         {
-            Providers = new List<IEmailTemplateProvider>
+            Providers = new List<IEmailTemplateProviderContributor>
             {
-                new VirtualFileEmailTemplateProvider()
+                new VirtualFileEmailTemplateProviderContributor()
             };
 
             Templates = new EmailTemplateDefinitionDictionary();
+
+            DefaultLayout = StandardEmailTemplates.DefaultLayout;
         }
     }
 }

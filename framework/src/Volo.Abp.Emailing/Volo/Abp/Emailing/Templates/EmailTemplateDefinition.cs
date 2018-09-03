@@ -1,11 +1,20 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using JetBrains.Annotations;
 
 namespace Volo.Abp.Emailing.Templates
 {
     public class EmailTemplateDefinition
     {
+        public const string DefaultLayoutPlaceHolder = "_";
+
         public string Name { get; }
+
+        public bool IsLayout { get; }
+
+        public string Layout { get; set; }
+
+        public Type LocalizationResource { get; set; }
 
         public Dictionary<string, object> Properties { get; }
 
@@ -23,10 +32,13 @@ namespace Volo.Abp.Emailing.Templates
             set => Properties[name] = value;
         }
 
-        public EmailTemplateDefinition([NotNull]string name)
+        public EmailTemplateDefinition([NotNull]string name, Type localizationResource = null, bool isLayout = false, string layout = DefaultLayoutPlaceHolder)
         {
             Name = Check.NotNullOrWhiteSpace(name, nameof(name));
             Properties = new Dictionary<string, object>();
+            LocalizationResource = localizationResource;
+            IsLayout = isLayout;
+            Layout = layout;
         }
     }
 }

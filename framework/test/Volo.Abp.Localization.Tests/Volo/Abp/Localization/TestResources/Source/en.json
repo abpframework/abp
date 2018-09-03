@@ -4,6 +4,7 @@
     "Hello <b>{0}</b>.": "Hello <b>{0}</b>.",
     "Car": "Car",
     "CarPlural": "Cars",
-    "MaxLenghtErrorMessage": "This field's length can be maximum of '{0}' chars"
+    "MaxLenghtErrorMessage": "This field's length can be maximum of '{0}' chars",
+    "Universe": "Universe"
   }
 }
