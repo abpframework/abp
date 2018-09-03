@@ -7,7 +7,7 @@
         }
 
         title = title.replace(' ','-');
-
+        title = title.replace(new RegExp(' ', 'g'), '-');
         $('#Post_Url').val(title);
     });
 

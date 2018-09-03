@@ -18,5 +18,8 @@ namespace Volo.Blogging.Tagging
         Task<TagDto> UpdateAsync(Guid id, UpdateTagDto input);
 
         Task DeleteAsync(Guid id);
+
+        Task<List<PopularTagDto>> GetPopularTags(GetPopularTagsInput input);
+
     }
 }

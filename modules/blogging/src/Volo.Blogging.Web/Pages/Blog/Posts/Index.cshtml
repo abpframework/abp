@@ -1,17 +1,254 @@
 ﻿@page
+@inherits Volo.Blogging.Pages.Blog.BloggingPage
+@using Volo.Blogging.Pages.Blog.Posts
+@using Volo.Blogging.Posts
 @model Volo.Blogging.Pages.Blog.Posts.IndexModel
 @{
 
 }
-<h2>
-    Posts
-</h2>
 
-<a asp-page="./New" asp-route-blogShortName="@Model.BlogShortName">Create New Post</a>
+@section scripts {
+    <abp-script-bundle name="@typeof(IndexModel).FullName">
+        <abp-script src="/Pages/Blog/Posts/detail.js" />
+        <abp-script src="/Pages/Blog/Posts/blogcss/blog.js" />
+        <abp-script src="/Pages/Blog/Posts/blogcss/owlcarousel/dist/owl.carousel.min.js" />
+    </abp-script-bundle>
+}
+@section styles {
+    <abp-style-bundle @*name="@typeof(IndexModel).FullName" *@>
+        <abp-style src="/Pages/Blog/Posts/blogcss/blog.css" />
+        <abp-style src="/Pages/Blog/Posts/blogcss/owlcarousel/dist/assets/owl.carousel.min.css" />
+        <abp-style src="/Pages/Blog/Posts/blogcss/owlcarousel/dist/assets/owl.theme.default.min.css" />
+        <abp-style src="/Pages/Blog/Posts/blogcss/owlcarousel/dist/assets/owl.theme.green.min.css" />
+    </abp-style-bundle>
+}
 
-<ul>
-    @foreach (var post in Model.Posts)
-    {
-        <li><a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">@post.Title</a></li>
-    }
-</ul>
+<div class="container hero-container pb-5 bg-white">
+
+    <div class="row">
+        <div class="col-md-8">
+            <section class="hero-section">
+                <div class="owl-carousel owl-theme">
+
+                    @for (var index = 0; index < Model.Posts.Count && index < 3; index++)
+                    {
+                        var post = Model.Posts[index];
+                        <div class="item">
+                            <div class="hero-articles">
+                                <div class="img-container">
+                                    <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">
+                                        <img src="https://placeimg.com/680/680/tech" class="hero-article-img">
+                                    </a>
+                                </div>
+                                <div class="hero-content">
+                                    <p class="tags">
+                                        @foreach (var tag in post.Tags)
+                                        {
+                                            <a href="#" class="tag">@tag.Name</a>
+                                        }
+                                    </p>
+                                    <h2>
+                                        <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">@post.Title</a>
+                                    </h2>
+                                    <p class="article-sum">
+                                        @(post.Content == null ? "" : (post.Content.Length > 150 ? post.Content.Substring(150) : post.Content))
+                                    </p>
+                                    <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName" class="btn btn-primary btn-rounded">@L["ContinueReading"]</a>
+
+                                </div>
+                                <div class="article-owner">
+                                    <div class="article-infos">
+                                        <div class="user-card">
+                                            <a href="#">
+                                                <img src="https://placeimg.com/120/120/people" class="article-avatar">
+                                            </a>
+                                            <a href="#">
+                                                <strong>Armağan Ünlü</strong>, @((DateTime.Today - post.CreationTime).Days) @L["DaysAgo"]
+                                            </a>
+                                            <span class="seperator">|</span>
+                                            <a href="#">
+                                                <i class="fa fa-eye"></i> 156K @L["Read"]
+                                            </a>
+                                            <span class="seperator">|</span>
+                                            <a href="#">
+                                                <i class="fa fa-comment"></i> @post.CommentCount @L["Comment"]
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="user-link-icons">
+                                    <a class="add-bookmark" href="#">
+                                        <i class="fa fa-bookmark"></i>
+                                    </a>
+                                    <a class="share-article" href="#">
+                                        <i class="fa fa-share-alt"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </section>
+        </div>
+
+        <div class="col-md-4">
+            <h2>What is new?</h2>
+            <div class="list-group">
+
+                @for (var index = 0; index < Model.Posts.Count && index < 3; index++)
+                {
+                    var post = Model.Posts[index];
+                    <div class="list-group-item list-group-item-action flex-column align-items-start">
+                        <section class="box-articles p-0">
+                            <div class="row  align-middle">
+                                <div class="col-4">
+                                    <div class="img-container" style="height: 80px;">
+                                        <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">
+                                            <img src="https://placeimg.com/480/270/tech" class="box-article-img">
+                                        </a>
+                                        <div class="user-link-icons">
+                                            <a class="add-bookmark" href="#">
+                                                <i class="fa fa-bookmark"></i>
+                                            </a>
+                                            <a class="share-article" href="#">
+                                                <i class="fa fa-share-alt"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-8 pl-0">
+                                    <h3>
+                                        <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">@post.Title</a>
+                                    </h3>
+                                    <div class="article-owner">
+                                        <div class="article-infos">
+                                            <div class="user-card">
+                                                <a href="#">
+                                                    <strong>Armağan Ünlü</strong>, @((DateTime.Today - post.CreationTime).Days) @L["DaysAgo"]
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                }
+            </div>
+            <div class="mt-3">
+                <a href="#" class="btn-link f-85">@L["SeeAll"]<i class="fa fa-long-arrow-right"></i></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container last-post-section pb-5">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="row">
+                <div class="col">
+                    <div class="titline">
+                        <h2>@L["LastPosts"]</h2>
+                    </div>
+                </div>
+            </div>
+
+            @for (var index = 3; index < Model.Posts.Count; index++)
+            {
+                var post = Model.Posts[index];
+                var oddPost = index % 2 == 1;
+
+                <section class="box-articles">
+                    <div class="row @(oddPost?"align-middle":"")">
+                        <div class="col-md-4 order-md-@(oddPost?"last":"first")">
+                            <div class="img-container">
+                                <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">
+                                    <img src="https://placeimg.com/480/270/tech" class="box-article-img">
+                                </a>
+                                <div class="user-link-icons">
+                                    <a class="add-bookmark" href="#">
+                                        <i class="fa fa-bookmark"></i>
+                                    </a>
+                                    <a class="share-article" href="#">
+                                        <i class="fa fa-share-alt"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-8 order-md-@(oddPost?"first":"last")">
+                            <p class="tags">
+                                @foreach (var tag in post.Tags)
+                                {
+                                    <a href="#" class="tag">@tag.Name</a>
+                                }
+                            </p>
+                            <h3>
+                                <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">@post.Title</a>
+                            </h3>
+                            <p>
+                                @(post.Content == null ? "" : (post.Content.Length > 250 ? post.Content.Substring(150) : post.Content))...
+                            </p>
+                            <div class="article-owner">
+                                <div class="article-infos">
+                                    <div class="user-card">
+                                        <a href="#">
+                                            <img src="https://placeimg.com/120/120/pople" class="article-avatar">
+                                        </a>
+                                        <a href="#">
+                                            <strong>Armağan Ünlü</strong>, @((DateTime.Today - post.CreationTime).Days) @L["DaysAgo"]
+                                        </a>
+                                        <span class="seperator">|</span>
+                                        <a href="#">
+                                            <i class="fa fa-eye"></i> 156K
+                                        </a>
+                                        <span class="seperator">|</span>
+                                        <a href="#">
+                                            <i class="fa fa-comment"></i>  @post.CommentCount
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            }
+
+        </div>
+
+        <div class="col-md-4">
+            <div class="pb-5 sidebox" id="sidebar">
+
+                <div class="titline">
+                    <h2>@L["PopularTags"]</h2>
+                </div>
+                <div class="sideboxes">
+                    <div class="popular-tags">
+                        @foreach (var popularTag in Model.PopularTags)
+                        {
+                            <a href="#">@popularTag.Tag.Name <span>(@popularTag.Count @L["Posts"])</span></a>
+                        }
+                    </div>
+
+                </div>
+
+                <hr>
+                <footer>
+                    <a href="#">About</a>
+                    <span class="seperator">|</span>
+                    <a href="#">Privacy Policy</a>
+                    <span class="seperator">|</span>
+                    <a href="#">Terms</a>
+
+                    <p>
+                        Copyright Volosoft - Blog
+                    </p>
+                </footer>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+

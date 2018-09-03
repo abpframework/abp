@@ -2,6 +2,14 @@
   "culture": "tr",
   "texts": {
     "Title": "Başlık",
-    "Content": "İçerik"
+    "ContinueReading": "Okumaya Devam",
+    "DaysAgo": "Gün Önce",
+    "Content": "İçerik",
+    "SeeAll": "Hepsini Gör",
+    "PopularTags": "Popüler Etiketler",
+    "Read": "Okunma",
+    "LastPosts": "Son Yazılar",
+    "Posts": "Yazılar",
+    "Comment": "Yorum"
   }
 }

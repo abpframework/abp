@@ -1,0 +1,102 @@
+.post-detail { 
+    h1 { 
+        padding: 0px 0;
+        line-height: 1.25em;
+        font-size: 3.5em;
+    }
+    .article-owner {      
+        text-align: center; 
+        position: relative;
+        z-index: 12;
+        .article-infos {
+            color: #000;
+            a {
+                color: black;
+                color: rgba(0, 0, 0, 0.8);
+            }
+            .seperator {
+                margin: 0 4px;
+                color: rgba(0, 0, 0, 0.2);
+            }
+            img.article-avatar { 
+                width: 64px;
+                margin: -20px 10px 0px 0;
+                display: inline-block;
+                border-radius: 50%;
+                border: 3px solid #fff;
+            }
+        }
+    }   
+    .post-content {
+        font-size: 1.125em;
+        .post-img-container {
+            margin: 50px -80px  20px; 
+            overflow: hidden;
+            border-radius: 4px;
+        }
+        .lead {
+            font-size: 1.125em;
+            color: #111;
+        }
+    }
+}
+
+.comment-avatar {
+    max-width: 64px;
+}
+.answer-avatar {
+    max-width: 48px;
+}
+.media {
+    font-size: .95em;
+    .media {
+        font-size: .95em;
+    }
+} 
+
+.comment-area {
+    .comment-owner {
+        span {
+            font-weight: 300;
+            color: #999;
+            font-size: .8em;
+        }
+    }
+    >.media {
+        padding: 30px 0; 
+        border-bottom: 1px solid #f1f1f1;
+        .media {
+            padding: 20px 0;  
+        }
+    }
+    .comment-buttons { 
+        background: #f8f9fa ;
+        border-bottom: 1px solid #f1f1f1;
+        padding: 6px 10px;
+        font-size: .85em;
+        .seperator {
+            color: #ddd;
+            margin: 0 8px;
+        }
+        .count {
+            color: #fff;
+            background: #ddd;
+            margin-left: 5px;
+            padding: 1px 3px;
+            font-size: 10px;
+            border-radius: 3px;
+            &.count-up {
+                background: #999;
+            }
+        }
+    }
+    p {
+        margin-bottom: 6px;
+    }
+    .comment-avatar {
+        width: 64px;
+    }
+    .answer-avatar {
+        width: 48px;
+    }
+}
