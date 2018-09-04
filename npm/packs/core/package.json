@@ -1,7 +1,8 @@
 {
-  "version": "0.3.5",
+  "version": "0.4.3",
   "name": "@abp/core",
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "gitHead": "2e846ad3e5a8cbe04100484865335fbcd845a342"
 }

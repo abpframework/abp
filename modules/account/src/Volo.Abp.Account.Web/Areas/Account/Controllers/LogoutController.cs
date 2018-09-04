@@ -16,6 +16,7 @@ namespace Volo.Abp.Account.Web.Areas.Account.Controllers
             _signInManager = signInManager;
         }
 
+        //todo@alper: this method can be moved to AccountController like "account/logout"
         public async Task<IActionResult> Index()
         {
             await _signInManager.SignOutAsync();

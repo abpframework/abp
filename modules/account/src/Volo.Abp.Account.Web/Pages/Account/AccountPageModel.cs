@@ -7,7 +7,6 @@ using Microsoft.Extensions.Localization;
 using Volo.Abp.Account.Web.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Abp.Identity;
-using Volo.Abp.UI;
 
 namespace Volo.Abp.Account.Web.Pages.Account
 {
