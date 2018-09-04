@@ -4,6 +4,7 @@
     var $container = $("#qa-new-post-container");
     var $editorContainer = $container.find(".new-post-editor");
     var $submitButton = $container.find("button[type=submit]");
+    var $form = $container.find("form#new-post-form");
     var editorDataKey = "tuiEditor";
 
     var uploadImage = function (file, callbackFn) {
@@ -48,12 +49,10 @@
 
 
     $container.find("form#new-post-form").submit(function (e) {
-        var $form = $container.find("form#new-post-form");
         var $postTextInput = $form.find("input[name='Post.Content']");
 
         var postText = newPostEditor.getMarkdown();
         $postTextInput.val(postText);
-        console.log(postText);
 
         $submitButton.buttonBusy();
         $(this).off('submit').submit();
