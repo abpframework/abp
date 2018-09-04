@@ -25,12 +25,13 @@
                 </div>
                 <div class="hero-content">
                     <p class="tags">
-                        <abp-row>
+                            <p class="tags">
+
                             @foreach (var tag in Model.Post.Tags)
                             {
                                 <a href="#" class="tag">@tag.Name</a>
                             }
-                        </abp-row>
+                            </p>
                     </p>
                     <h1>
                         <a href="#">@Model.Post.Title</a>
@@ -52,7 +53,7 @@
                             </a>
                             <span class="seperator">|</span>
                             <a href="#">
-                                <i class="fa fa-comment"></i> 60 @L["Comment"]
+                                <i class="fa fa-comment"></i> @Model.CommentCount @L["Comment"]
                             </a>
                         </div>
                     </div>
@@ -73,7 +74,7 @@
 <div class="row">
     <div class="col-md-8 mx-auto">
         <section class="post-content">
-            <p>@Model.Post.Content</p>
+            <p>@Model.FormattedContent</p>
 
         </section>
     </div>
