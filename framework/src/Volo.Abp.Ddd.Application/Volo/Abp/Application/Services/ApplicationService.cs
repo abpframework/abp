@@ -12,6 +12,7 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectMapping;
+using Volo.Abp.Settings;
 using Volo.Abp.Timing;
 using Volo.Abp.Uow;
 using Volo.Abp.Users;
@@ -43,6 +44,8 @@ namespace Volo.Abp.Application.Services
         public ICurrentTenant CurrentTenant { get; set; }
 
         public ICurrentUser CurrentUser { get; set; }
+
+        public ISettingManager SettingManager { get; set; }
 
         public IClock Clock { get; set; }
 
