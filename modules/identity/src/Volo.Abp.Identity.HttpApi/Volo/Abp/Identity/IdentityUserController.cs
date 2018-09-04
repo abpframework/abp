@@ -63,5 +63,18 @@ namespace Volo.Abp.Identity
         {
             return _userAppService.UpdatePermissionsAsync(id, input);
         }
+
+        //todo: add authorize attrbutes on the corresponding methods.
+        [HttpGet]
+        public virtual Task<IdentityUserDto> FindByUsernameAsync(string username)
+        {
+            return _userAppService.FindByUsernameAsync(username);
+        }
+
+        [HttpGet]
+        public virtual Task<IdentityUserDto> FindByEmailAsync(string email)
+        {
+            return _userAppService.FindByEmailAsync(email);
+        }
     }
 }

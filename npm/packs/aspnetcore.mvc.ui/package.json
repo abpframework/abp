@@ -1,5 +1,5 @@
 {
-  "version": "0.4.1",
+  "version": "0.4.3",
   "name": "@abp/aspnetcore.mvc.ui",
   "publishConfig": {
     "access": "public"
@@ -11,5 +11,6 @@
     "merge-stream": "^1.0.1",
     "path": "^0.12.7",
     "rimraf": "^2.6.2"
-  }
+  },
+  "gitHead": "2e846ad3e5a8cbe04100484865335fbcd845a342"
 }
