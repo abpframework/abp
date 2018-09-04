@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
+using CommonMark;
+using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Volo.Blogging.Blogs;
@@ -24,8 +27,12 @@ namespace Volo.Blogging.Pages.Blog.Posts
 
         [BindProperty]
         public PostDetailsViewModel NewComment { get; set; }
+        
+        public int CommentCount { get; set; }
 
         public PostWithDetailsDto Post { get; set; }
+
+        public IHtmlContent FormattedContent { get; set; }
 
         public IReadOnlyList<CommentWithRepliesDto> CommentsWithReplies { get; set; }
 
@@ -59,9 +66,29 @@ namespace Volo.Blogging.Pages.Blog.Posts
         {
             Blog = await _blogAppService.GetByShortNameAsync(BlogShortName);
             Post = await _postAppService.GetByUrlAsync(new GetPostInput { BlogId = Blog.Id, Url = PostUrl });
+            FormattedContent = RenderMarkdown(Post.Content);
             CommentsWithReplies = await _commentAppService.GetHierarchicalListOfPostAsync(new GetCommentListOfPostAsync() { PostId = Post.Id });
+            CountComments();
         }
 
+        public void CountComments()
+        {
+            CommentCount = CommentsWithReplies.Count;
+            foreach (var commentWithReply in CommentsWithReplies)
+            {
+                CommentCount += commentWithReply.Replies.Count;
+            }
+        }
+
+        public IHtmlContent RenderMarkdown(string content)
+        {
+            byte[] bytes = Encoding.Default.GetBytes(content);
+            var utf8Content = Encoding.UTF8.GetString(bytes);
+
+            var html = CommonMarkConverter.Convert(utf8Content);
+            
+            return new HtmlString(html);
+        }
 
         public class PostDetailsViewModel
         {
