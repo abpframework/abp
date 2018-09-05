@@ -96,7 +96,7 @@
 <div class="row">
     <div class="col-md-8 mx-auto">
         <div class="tags">
-            <h5>Tags in this article</h5>
+            <h5>@L["TagsInThisArticle"]</h5>
             @foreach (var tag in Model.Post.Tags)
             {
                 <a asp-page="/Blog/Tags/Posts" asp-route-blogShortName="@Model.BlogShortName" asp-route-tagName="@tag.Name" class="tag">@tag.Name</a>

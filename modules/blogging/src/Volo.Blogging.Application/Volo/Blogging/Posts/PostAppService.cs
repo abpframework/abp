@@ -161,6 +161,10 @@ namespace Volo.Blogging.Posts
 
         private List<string> SplitTags(string tags)
         {
+            if (tags.IsNullOrWhiteSpace())
+            {
+                return new List<string>();
+            }
             return new List<string>(tags.Split(",").Select(t=>t.Trim()));
         }
     }
