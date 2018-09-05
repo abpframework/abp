@@ -1,6 +1,9 @@
 ﻿@page
 @inherits Volo.Blogging.Pages.Blog.BloggingPage
+@using Microsoft.AspNetCore.Authorization
+@using Volo.Blogging
 @using Volo.Blogging.Pages.Blog.Posts
+@inject IAuthorizationService Authorization
 @model DetailModel
 @{
 }
@@ -21,17 +24,17 @@
     <div class="col-md-12 mx-auto">
         <section class="hero-section">
             <div class="hero-articles">
-                <div class="img-container" style="min-height: 480px; background: url(https://cdn-images-1.medium.com/max/800/1*yFcPtGZXbm10e6v9WIXVOQ.png) center center no-repeat; background-size: cover; ">
+                <div class="img-container" style="min-height: 480px; background: url(https://placeimg.com/800/435/tech) center center no-repeat; background-size: cover; ">
                 </div>
                 <div class="hero-content">
                     <p class="tags">
-                            <p class="tags">
+                    <p class="tags">
 
-                            @foreach (var tag in Model.Post.Tags)
-                            {
-                                <a href="#" class="tag">@tag.Name</a>
-                            }
-                            </p>
+                        @foreach (var tag in Model.Post.Tags)
+                        {
+                            <a asp-page="/Blog/Tags/Posts" asp-route-blogShortName="@Model.BlogShortName" asp-route-tagName="@tag.Name" class="tag">@tag.Name</a>
+                        }
+                    </p>
                     </p>
                     <h1>
                         <a href="#">@Model.Post.Title</a>
@@ -42,10 +45,10 @@
                     <div class="article-infos">
                         <div class="user-card">
                             <a href="#">
-                                <img src="https://cdn-images-1.medium.com/fit/c/60/60/0*uarpjksge8Mloaa6.jpeg" class="article-avatar">
+                                <img src="https://placeimg.com/60/60/people" class="article-avatar">
                             </a>
                             <a href="#">
-                                <strong> @Model.Blog.Name</strong>, @Model.Post.CreationTime
+                                <strong> Halil İbrahim Kalkan</strong>, @Model.Post.CreationTime.ToString("dd/MM/yyyy hh/mm")
                             </a>
                             <span class="seperator">|</span>
                             <a href="#">
@@ -55,6 +58,15 @@
                             <a href="#">
                                 <i class="fa fa-comment"></i> @Model.CommentCount @L["Comment"]
                             </a>
+
+
+                            @if (await Authorization.IsGrantedAsync(BloggingPermissions.Posts.Update))
+                            {
+                                <span class="seperator">|</span>
+                                <a asp-page="./Edit" asp-route-postId="@Model.Post.Id" asp-route-blogShortName="@Model.BlogShortName">
+                                    <i class="fa fa-pencil"></i>  @L["Edit"]
+                                </a>
+                            }
                         </div>
                     </div>
                 </div>
@@ -74,7 +86,7 @@
 <div class="row">
     <div class="col-md-8 mx-auto">
         <section class="post-content">
-            <p>@Model.FormattedContent</p>
+            <p>@Html.Raw(Model.FormattedContent)</p>
 
         </section>
     </div>
@@ -87,10 +99,9 @@
             <h5>Tags in this article</h5>
             @foreach (var tag in Model.Post.Tags)
             {
-                <a href="#" class="tag">@tag.Name</a>
+                <a asp-page="/Blog/Tags/Posts" asp-route-blogShortName="@Model.BlogShortName" asp-route-tagName="@tag.Name" class="tag">@tag.Name</a>
             }
         </div>
-        <a asp-page="./Edit" asp-route-postId="@Model.Post.Id" asp-route-blogShortName="@Model.BlogShortName">@L["Edit"]</a>
         <div class="comment-form mt-4">
             <div class="clearfix bg-light p-4">
                 <h3 class="mt-0">@L["LeaveComment"]</h3>
@@ -116,7 +127,7 @@
                     <div class="media-body">
                         <h5 class="comment-owner">
                             Armağan Ünlü
-                            <span class="float-right">@commentWithRepliesDto.Comment.CreationTime</span>
+                            <span class="float-right">@commentWithRepliesDto.Comment.CreationTime.ToString("dd/MM/yyyy hh/mm")</span>
                         </h5>
                         <p>
                             @commentWithRepliesDto.Comment.Text
@@ -161,7 +172,7 @@
                                 <div class="media-body">
                                     <h5 class="comment-owner">
                                         Zlatan Ibrahimovic
-                                        <span class="float-right">@reply.CreationTime</span>
+                                        <span class="float-right">@reply.CreationTime.ToString("dd/MM/yyyy hh/mm")</span>
                                     </h5>
                                     <p>
                                         @reply.Text

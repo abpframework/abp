@@ -9,6 +9,8 @@ namespace Volo.Blogging.Tagging
     {
         Task<List<Tag>> GetListAsync();
 
+        Task<Tag> GetByNameAsync(string name);
+
         Task<List<Tag>> GetListAsync(IEnumerable<Guid> ids);
     }
 }

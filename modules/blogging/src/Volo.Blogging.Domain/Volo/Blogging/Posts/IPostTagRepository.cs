@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Volo.Abp.Domain.Repositories;
-using Volo.Blogging.Tagging;
+﻿using Volo.Abp.Domain.Repositories;
 
 namespace Volo.Blogging.Posts
 {

@@ -5,10 +5,7 @@ using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
-using Volo.Abp.Domain.Entities;
-using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Users;
-using Volo.Blogging.Blogs;
 using Volo.Blogging.Comments;
 using Volo.Blogging.Tagging;
 using Volo.Blogging.Tagging.Dtos;
@@ -50,6 +47,15 @@ namespace Volo.Blogging.Posts
             }
 
             return new ListResultDto<PostWithDetailsDto>(postDtos);
+        }
+
+        public async Task<ListResultDto<PostWithDetailsDto>> GetListByBlogIdAndTagName(Guid blogId, string tagName)
+        {
+            var all = (await GetListByBlogId(blogId)).Items;
+
+            var tag = await _tagRepository.GetByNameAsync(tagName);
+
+            return new ListResultDto<PostWithDetailsDto>(all.Where(p=>p.Tags.Any(t=>t.Id == tag.Id)).ToList());
         }
 
         public async Task<PostWithDetailsDto> GetByUrlAsync(GetPostInput input)
@@ -125,6 +131,11 @@ namespace Volo.Blogging.Posts
             foreach (var oldTag in oldTags)
             {
                 await _postTagRepository.DeleteAsync(oldTag);
+
+                var tag = await _tagRepository.GetAsync(oldTag.TagId);
+
+                tag.DecreaseUsageCount();
+                await _tagRepository.UpdateAsync(tag);
             }
 
             var tags = await _tagRepository.GetListAsync();
@@ -135,7 +146,12 @@ namespace Volo.Blogging.Posts
 
                 if (tag == null)
                 {
-                    tag = await _tagRepository.InsertAsync(new Tag(newTag));
+                    tag = await _tagRepository.InsertAsync(new Tag(newTag, 1));
+                }
+                else
+                {
+                    tag.IncreaseUsageCount();
+                    tag = await _tagRepository.UpdateAsync(tag);
                 }
 
                 await _postTagRepository.InsertAsync(new PostTag(post.Id, tag.Id));

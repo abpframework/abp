@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Services;
 using Volo.Blogging.Tagging.Dtos;
@@ -19,7 +18,7 @@ namespace Volo.Blogging.Tagging
 
         Task DeleteAsync(Guid id);
 
-        Task<List<PopularTagDto>> GetPopularTags(GetPopularTagsInput input);
+        Task<List<TagDto>> GetPopularTags(GetPopularTagsInput input);
 
     }
 }

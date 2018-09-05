@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Volo.Abp.Application.Dtos;
-using Volo.Abp.Domain.Entities.Auditing;
 
 namespace Volo.Blogging.Comments.Dtos
 {

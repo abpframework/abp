@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Guids;
 using Volo.Blogging.Comments.Dtos;
 
 namespace Volo.Blogging.Comments
 {
+    [Authorize(BloggingPermissions.Comments.Default)]
     public class CommentAppService : ApplicationService, ICommentAppService
     {
         private readonly ICommentRepository _commentRepository;
@@ -48,6 +50,7 @@ namespace Volo.Blogging.Comments
                 ObjectMapper.Map<List<Comment>, List<CommentDto>>(comments));
         }
 
+        [Authorize(BloggingPermissions.Comments.Create)]
         public async Task<CommentDto> CreateAsync(CreateCommentDto input)
         {
             var comment = new Comment(_guidGenerator.Create(), input.PostId, input.RepliedCommentId,input.Text);
@@ -57,6 +60,7 @@ namespace Volo.Blogging.Comments
             return ObjectMapper.Map<Comment, CommentDto>(comment);
         }
 
+        [Authorize(BloggingPermissions.Comments.Update)]
         public async Task<CommentDto> UpdateAsync(Guid id, UpdateCommentDto input)
         {
             var comment = await _commentRepository.GetAsync(id);
@@ -68,6 +72,7 @@ namespace Volo.Blogging.Comments
             return ObjectMapper.Map<Comment, CommentDto>(comment);
         }
 
+        [Authorize(BloggingPermissions.Comments.Delete)]
         public async Task DeleteAsync(Guid id)
         {
             await _commentRepository.DeleteAsync(id);

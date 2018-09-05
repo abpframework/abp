@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Localization;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AutoMapper;
@@ -56,6 +55,7 @@ namespace Volo.Blogging
                 options.Conventions.AddPageRoute("/Blog/Posts/Detail", "blog/{blogShortName}/{postUrl}");
                 options.Conventions.AddPageRoute("/Blog/Posts/Edit", "blog/{blogShortName}/posts/edit/{postId}");
                 options.Conventions.AddPageRoute("/Blog/Posts/New", "blog/{blogShortName}/posts/new");
+                options.Conventions.AddPageRoute("/Blog/Tags/Posts", "blog/{blogShortName}/{tagName}/posts");
             });
 
             context.Services.AddAssemblyOf<BloggingWebModule>();

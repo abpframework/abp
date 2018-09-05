@@ -3,8 +3,6 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Volo.BloggingTestApp.EntityFrameworkCore;
 
 namespace Volo.BloggingTestApp.EntityFrameworkCore.Migrations
 {
