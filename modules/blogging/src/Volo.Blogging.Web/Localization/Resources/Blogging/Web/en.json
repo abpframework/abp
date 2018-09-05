@@ -1,6 +1,7 @@
 {
   "culture": "en",
   "texts": {
+    "Menu:Blogs": "Blog",
     "Title": "Title",
     "ContinueReading": "Continue Reading",
     "DaysAgo": "days ago",

@@ -1,6 +1,7 @@
 ﻿{
   "culture": "tr",
   "texts": {
+    "Menu:Blogs": "Blog",
     "Title": "Başlık",
     "ContinueReading": "Okumaya Devam",
     "DaysAgo": "Gün Önce",

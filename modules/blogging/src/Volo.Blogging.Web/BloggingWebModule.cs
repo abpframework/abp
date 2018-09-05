@@ -7,6 +7,7 @@ using Volo.Abp.Localization;
 using Volo.Abp.Localization.Resources.AbpValidation;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI;
+using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
 using Volo.Blogging.Localization;
 
@@ -29,6 +30,12 @@ namespace Volo.Blogging
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
+
+            context.Services.Configure<NavigationOptions>(options =>
+            {
+                options.MenuContributors.Add(new BloggingMenuContributor());
+            });
+
             context.Services.Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<BloggingWebModule>("Volo.Blogging");

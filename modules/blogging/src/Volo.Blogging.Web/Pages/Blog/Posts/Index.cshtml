@@ -54,7 +54,7 @@
                                         <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">@post.Title</a>
                                     </h2>
                                     <p class="article-sum">
-                                        @(post.Content == null ? "" : (post.Content.Length > 150 ? post.Content.Substring(0, 150) : post.Content))
+                                        @(post.Content == null ? "" : (post.Content.Length > 150 ? post.Content.Substring(0, 150) + "..." : post.Content))
                                     </p>
                                     <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName" class="btn btn-primary btn-rounded">@L["ContinueReading"]</a>
 
