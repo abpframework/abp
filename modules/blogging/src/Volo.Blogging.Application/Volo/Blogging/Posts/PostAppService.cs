@@ -12,7 +12,11 @@ using Volo.Blogging.Tagging.Dtos;
 
 namespace Volo.Blogging.Posts
 {
-    [Authorize(BloggingPermissions.Posts.Default)]
+    /* TODO: Custom policy with configuration.
+     * We should create a custom policy to see the blog as read only if the blog is
+     * configured as 'public' or the current user has the related permission.
+     */
+    //[Authorize(BloggingPermissions.Posts.Default)]
     public class PostAppService : ApplicationService, IPostAppService
     {
         private readonly IPostRepository _postRepository;

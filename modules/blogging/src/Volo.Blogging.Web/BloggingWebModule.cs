@@ -30,18 +30,17 @@ namespace Volo.Blogging
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-
-            context.Services.Configure<NavigationOptions>(options =>
+            Configure<NavigationOptions>(options =>
             {
                 options.MenuContributors.Add(new BloggingMenuContributor());
             });
 
-            context.Services.Configure<VirtualFileSystemOptions>(options =>
+            Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<BloggingWebModule>("Volo.Blogging");
             });
 
-            context.Services.Configure<AbpLocalizationOptions>(options =>
+            Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources
                     .Get<BloggingResource>()
@@ -50,12 +49,12 @@ namespace Volo.Blogging
                     .AddVirtualJson("/Localization/Resources/Blogging/Web");
             });
 
-            context.Services.Configure<AbpAutoMapperOptions>(options =>
+            Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<AbpBloggingWebAutoMapperProfile>(validate: true);
             });
 
-            context.Services.Configure<RazorPagesOptions>(options =>
+            Configure<RazorPagesOptions>(options =>
             {
                 //TODO: Make configurable!
                 options.Conventions.AddPageRoute("/Blog/Posts/Index", "blog/{blogShortName}");
