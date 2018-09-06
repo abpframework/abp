@@ -15,6 +15,8 @@ namespace Volo.Blogging.Posts
 
         public string Content { get; set; }
 
+        public int ReadCount { get; set; }
+
         public int CommentCount { get; set; }
 
         public List<TagDto> Tags { get; set; }

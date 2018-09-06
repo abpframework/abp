@@ -65,7 +65,7 @@ namespace Volo.Blogging.Pages.Blog.Posts
         private async Task GetData()
         {
             Blog = await _blogAppService.GetByShortNameAsync(BlogShortName);
-            Post = await _postAppService.GetByUrlAsync(new GetPostInput { BlogId = Blog.Id, Url = PostUrl });
+            Post = await _postAppService.GetForReadingAsync(new GetPostInput { BlogId = Blog.Id, Url = PostUrl });
             FormattedContent = RenderMarkdown(Post.Content);
             CommentsWithReplies = await _commentAppService.GetHierarchicalListOfPostAsync(new GetCommentListOfPostAsync() { PostId = Post.Id });
             CountComments();

@@ -11,7 +11,7 @@ namespace Volo.Blogging.Posts
 
         Task<ListResultDto<PostWithDetailsDto>> GetListByBlogIdAndTagName(Guid blogId, string tagName);
 
-        Task<PostWithDetailsDto> GetByUrlAsync(GetPostInput input);
+        Task<PostWithDetailsDto> GetForReadingAsync(GetPostInput input);
 
         Task<PostWithDetailsDto> GetAsync(Guid id);
 

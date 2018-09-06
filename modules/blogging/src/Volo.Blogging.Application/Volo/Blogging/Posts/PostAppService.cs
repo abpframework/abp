@@ -58,9 +58,11 @@ namespace Volo.Blogging.Posts
             return new ListResultDto<PostWithDetailsDto>(all.Where(p=>p.Tags.Any(t=>t.Id == tag.Id)).ToList());
         }
 
-        public async Task<PostWithDetailsDto> GetByUrlAsync(GetPostInput input)
+        public async Task<PostWithDetailsDto> GetForReadingAsync(GetPostInput input)
         {
             var post = await _postRepository.GetPostByUrl(input.BlogId, input.Url);
+
+            post.IncreaseReadCount();
 
             var postDto = ObjectMapper.Map<Post, PostWithDetailsDto>(post);
 

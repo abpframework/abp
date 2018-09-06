@@ -28,18 +28,14 @@
                 </div>
                 <div class="hero-content">
                     <p class="tags">
-                    <p class="tags">
-
                         @foreach (var tag in Model.Post.Tags)
                         {
                             <a asp-page="/Blog/Tags/Posts" asp-route-blogShortName="@Model.BlogShortName" asp-route-tagName="@tag.Name" class="tag">@tag.Name</a>
                         }
                     </p>
-                    </p>
                     <h1>
                         <a href="#">@Model.Post.Title</a>
                     </h1>
-
                 </div>
                 <div class="article-owner">
                     <div class="article-infos">
@@ -52,7 +48,7 @@
                             </a>
                             <span class="seperator">|</span>
                             <a href="#">
-                                <i class="fa fa-eye"></i> 156K @L["Read"]
+                                <i class="fa fa-eye"></i> @Model.Post.ReadCount @L["Read"]
                             </a>
                             <span class="seperator">|</span>
                             <a href="#">
