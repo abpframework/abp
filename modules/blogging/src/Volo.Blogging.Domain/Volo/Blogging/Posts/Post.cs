@@ -19,6 +19,9 @@ namespace Volo.Blogging.Posts
         [CanBeNull]
         public virtual string Content { get; set; }
 
+        [CanBeNull]
+        public virtual int ReadCount { get; protected set; }
+
         public virtual Collection<PostTag> Tags { get; protected set; }
 
         protected Post()
@@ -35,6 +38,12 @@ namespace Volo.Blogging.Posts
             Url = Check.NotNullOrWhiteSpace(url, nameof(url));
 
             Tags = new Collection<PostTag>();
+        }
+
+        public virtual Post IncreaseReadCount()
+        {
+            ReadCount++;
+            return this;
         }
 
         public virtual Post SetTitle([NotNull] string title)

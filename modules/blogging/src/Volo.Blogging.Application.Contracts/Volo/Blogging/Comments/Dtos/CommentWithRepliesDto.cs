@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Volo.Abp.Application.Dtos;
+﻿using System.Collections.Generic;
 
 namespace Volo.Blogging.Comments.Dtos
 {

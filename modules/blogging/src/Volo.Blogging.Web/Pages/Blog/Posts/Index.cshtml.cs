@@ -20,7 +20,7 @@ namespace Volo.Blogging.Pages.Blog.Posts
 
         public IReadOnlyList<PostWithDetailsDto> Posts { get; set; }
 
-        public IReadOnlyList<PopularTagDto> PopularTags { get; set; }
+        public IReadOnlyList<TagDto> PopularTags { get; set; }
 
         public IndexModel(IPostAppService postAppService, IBlogAppService blogAppService, ITagAppService tagAppService)
         {

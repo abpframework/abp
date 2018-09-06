@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Services;
 using Volo.Blogging.Posts;
 using Volo.Blogging.Tagging.Dtos;
 
 namespace Volo.Blogging.Tagging
 {
+    [Authorize(BloggingPermissions.Tags.Default)]
     public class TagAppService : ApplicationService, ITagAppService
     {
         private readonly ITagRepository _tagRepository;
@@ -35,11 +37,13 @@ namespace Volo.Blogging.Tagging
                 ObjectMapper.Map<List<Tag>, List<TagDto>>(tags));
         }
 
+        [Authorize(BloggingPermissions.Tags.Create)]
         public async Task<TagDto> CreateAsync(CreateTagDto input)
         {
             var newTag = await _tagRepository.InsertAsync(
                 new Tag(
-                    input.Name,
+                    input.Name, 
+                    0,
                     input.Description
                     )
                 );
@@ -47,6 +51,7 @@ namespace Volo.Blogging.Tagging
             return ObjectMapper.Map<Tag, TagDto>(newTag);
         }
 
+        [Authorize(BloggingPermissions.Tags.Update)]
         public async Task<TagDto> UpdateAsync(Guid id, UpdateTagDto input)
         {
             var tag = await _tagRepository.GetAsync(id);
@@ -59,39 +64,21 @@ namespace Volo.Blogging.Tagging
             return ObjectMapper.Map<Tag, TagDto>(tag);
         }
 
+        [Authorize(BloggingPermissions.Tags.Delete)]
         public async Task DeleteAsync(Guid id)
         {
             await _tagRepository.DeleteAsync(id);
         }
 
-        public async Task<List<PopularTagDto>> GetPopularTags(GetPopularTagsInput input)
+        public async Task<List<TagDto>> GetPopularTags(GetPopularTagsInput input)
         {
-            var postTags = await _postTagRepository.GetListAsync();
+            var postTags = (await _tagRepository.GetListAsync()).OrderByDescending(t=>t.UsageCount)
+                .WhereIf(input.MinimumPostCount != null, t=>t.UsageCount >= input.MinimumPostCount)
+                .Take(input.ResultCount).ToList();
 
-            var postTagsGrouped = postTags.GroupBy(x => x.PostId)
-                .OrderByDescending(g => g.Count())
-                .SelectMany(g => g).Select(t=>t.TagId).Distinct().ToList();
 
-            var popularTagDtos = new List<PopularTagDto>();
-
-            for (var i = 0; i < input.ResultCount && i < postTagsGrouped.Count; i++)
-            {
-                var tagId = postTagsGrouped[i];
-                var count = postTags.Count(t => t.TagId == tagId);
-                if (count < input.MinimumPostCount)
-                {
-                    break;
-                }
-                var tag = await _tagRepository.GetAsync(tagId);
-
-                popularTagDtos.Add(new PopularTagDto
-                {
-                    Tag = ObjectMapper.Map<Tag, TagDto>(tag),
-                    Count = count
-                });
-            }
-
-            return popularTagDtos;
+            return new List<TagDto>(
+                ObjectMapper.Map<List<Tag>, List<TagDto>>(postTags));
         }
     }
 }

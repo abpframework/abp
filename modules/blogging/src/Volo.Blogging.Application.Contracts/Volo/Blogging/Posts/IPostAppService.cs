@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
@@ -11,7 +9,9 @@ namespace Volo.Blogging.Posts
     {
         Task<ListResultDto<PostWithDetailsDto>> GetListByBlogId(Guid id);
 
-        Task<PostWithDetailsDto> GetByUrlAsync(GetPostInput input);
+        Task<ListResultDto<PostWithDetailsDto>> GetListByBlogIdAndTagName(Guid blogId, string tagName);
+
+        Task<PostWithDetailsDto> GetForReadingAsync(GetPostInput input);
 
         Task<PostWithDetailsDto> GetAsync(Guid id);
 

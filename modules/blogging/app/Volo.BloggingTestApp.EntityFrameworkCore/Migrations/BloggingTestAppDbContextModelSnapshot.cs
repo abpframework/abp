@@ -414,6 +414,8 @@ namespace Volo.BloggingTestApp.EntityFrameworkCore.Migrations
                     b.Property<Guid?>("LastModifierId")
                         .HasColumnName("LastModifierId");
 
+                    b.Property<int>("ReadCount");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnName("Title")

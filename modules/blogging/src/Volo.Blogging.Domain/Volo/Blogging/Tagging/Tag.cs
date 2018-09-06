@@ -1,9 +1,7 @@
 ﻿using System;
 using JetBrains.Annotations;
 using Volo.Abp;
-using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Entities.Auditing;
-using Volo.Abp.MultiTenancy;
 
 namespace Volo.Blogging.Tagging
 {
@@ -20,15 +18,30 @@ namespace Volo.Blogging.Tagging
 
         }
 
-        public Tag([NotNull] string name, string description = null)
+        public Tag([NotNull] string name, int usageCount = 0, string description = null)
         {
             Name = Check.NotNullOrWhiteSpace(name, nameof(name));
             Description = description;
+            UsageCount = usageCount;
         }
 
         public virtual void SetName(string name)
         {
             Name = Check.NotNullOrWhiteSpace(name, nameof(name));
+        }
+
+        public virtual void IncreaseUsageCount(int number = 1)
+        {
+            UsageCount += number;
+        }
+
+        public virtual void DecreaseUsageCount(int number = 1)
+        {
+            if (UsageCount <= 0)
+            {
+                return;
+            }
+            UsageCount -= number;
         }
 
         public virtual void SetDescription(string description)

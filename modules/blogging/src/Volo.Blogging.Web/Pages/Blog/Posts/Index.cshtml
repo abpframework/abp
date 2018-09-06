@@ -1,7 +1,9 @@
 ﻿@page
 @inherits Volo.Blogging.Pages.Blog.BloggingPage
+@using Microsoft.AspNetCore.Authorization
+@using Volo.Blogging
 @using Volo.Blogging.Pages.Blog.Posts
-@using Volo.Blogging.Posts
+@inject IAuthorizationService Authorization
 @model Volo.Blogging.Pages.Blog.Posts.IndexModel
 @{
 
@@ -22,7 +24,7 @@
         <abp-style src="/Pages/Blog/Posts/blogcss/owlcarousel/dist/assets/owl.theme.green.min.css" />
     </abp-style-bundle>
 }
-    <a asp-page="./New" asp-route-blogShortName="@Model.BlogShortName">Create New Post</a>
+
 <div class="container hero-container pb-5 bg-white">
 
     <div class="row">
@@ -44,14 +46,14 @@
                                     <p class="tags">
                                         @foreach (var tag in post.Tags)
                                         {
-                                            <a href="#" class="tag">@tag.Name</a>
+                                            <a asp-page="/Blog/Tags/Posts" asp-route-blogShortName="@Model.BlogShortName" asp-route-tagName="@tag.Name" class="tag">@tag.Name</a>
                                         }
                                     </p>
                                     <h2>
                                         <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">@post.Title</a>
                                     </h2>
                                     <p class="article-sum">
-                                        @(post.Content == null ? "" : (post.Content.Length > 150 ? post.Content.Substring(0,150) : post.Content))
+                                        @(post.Content == null ? "" : (post.Content.Length > 150 ? post.Content.Substring(0, 150) + "..." : post.Content))
                                     </p>
                                     <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName" class="btn btn-primary btn-rounded">@L["ContinueReading"]</a>
 
@@ -67,7 +69,7 @@
                                             </a>
                                             <span class="seperator">|</span>
                                             <a href="#">
-                                                <i class="fa fa-eye"></i> 156K @L["Read"]
+                                                <i class="fa fa-eye"></i> @post.ReadCount @L["Read"]
                                             </a>
                                             <span class="seperator">|</span>
                                             <a href="#">
@@ -92,7 +94,13 @@
         </div>
 
         <div class="col-md-4">
-            <h2>What is new?</h2>
+
+            @if (await Authorization.IsGrantedAsync(BloggingPermissions.Posts.Create))
+            {
+                <a asp-page="./New" asp-route-blogShortName="@Model.BlogShortName">Create New Post</a>
+            }
+
+            <h2>@L["WhatIsNew"]</h2>
             <div class="list-group">
 
                 @for (var index = 0; index < Model.Posts.Count && index < 3; index++)
@@ -180,7 +188,7 @@
                             <p class="tags">
                                 @foreach (var tag in post.Tags)
                                 {
-                                    <a href="#" class="tag">@tag.Name</a>
+                                    <a asp-page="/Blog/Tags/Posts" asp-route-blogShortName="@Model.BlogShortName" asp-route-tagName="@tag.Name" class="tag">@tag.Name</a>
                                 }
                             </p>
                             <h3>
@@ -200,7 +208,7 @@
                                         </a>
                                         <span class="seperator">|</span>
                                         <a href="#">
-                                            <i class="fa fa-eye"></i> 156K
+                                            <i class="fa fa-eye"></i> @post.ReadCount
                                         </a>
                                         <span class="seperator">|</span>
                                         <a href="#">
@@ -226,7 +234,7 @@
                     <div class="popular-tags">
                         @foreach (var popularTag in Model.PopularTags)
                         {
-                            <a href="#">@popularTag.Tag.Name <span>(@popularTag.Count @L["Posts"])</span></a>
+                            <a asp-page="/Blog/Tags/Posts" asp-route-blogShortName="@Model.BlogShortName" asp-route-tagName="@popularTag.Name">@popularTag.Name <span>(@popularTag.UsageCount @L["Posts"])</span></a>
                         }
                     </div>
 

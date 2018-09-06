@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
@@ -20,6 +19,11 @@ namespace Volo.Blogging.Tagging
         public async Task<List<Tag>> GetListAsync()
         {
             return await DbSet.ToListAsync();
+        }
+
+        public async Task<Tag> GetByNameAsync(string name)
+        {
+            return await DbSet.FirstOrDefaultAsync(t=>t.Name == name);
         }
 
         public async Task<List<Tag>> GetListAsync(IEnumerable<Guid> ids)

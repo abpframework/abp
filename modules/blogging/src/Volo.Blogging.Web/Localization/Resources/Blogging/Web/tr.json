@@ -1,15 +1,20 @@
 ﻿{
   "culture": "tr",
   "texts": {
+    "Menu:Blogs": "Blog",
     "Title": "Başlık",
-    "ContinueReading": "Okumaya Devam",
+    "ContinueReading": "Devamı...",
     "DaysAgo": "Gün Önce",
     "Content": "İçerik",
     "SeeAll": "Hepsini Gör",
     "PopularTags": "Popüler Etiketler",
     "Read": "Okunma",
     "LastPosts": "Son Yazılar",
+    "LeaveComment": "Yorum Bırak",
+    "TagsInThisArticle": "Makalenin Etiketleri",
     "Posts": "Yazılar",
-    "Comment": "Yorum"
+    "Edit": "Düzelt",
+    "Comment": "Yorum",
+    "WhatIsNew": "Yeniler"
   }
 }

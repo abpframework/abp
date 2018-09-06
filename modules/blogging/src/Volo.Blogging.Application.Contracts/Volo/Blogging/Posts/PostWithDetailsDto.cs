@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using Volo.Abp.Application.Dtos;
 using Volo.Blogging.Tagging.Dtos;
 
@@ -15,6 +14,8 @@ namespace Volo.Blogging.Posts
         public string Url { get; set; }
 
         public string Content { get; set; }
+
+        public int ReadCount { get; set; }
 
         public int CommentCount { get; set; }
 
