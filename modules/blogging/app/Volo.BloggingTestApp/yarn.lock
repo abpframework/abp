@@ -2,31 +2,31 @@
 # yarn lockfile v1
 
 
-"@abp/aspnetcore.mvc.ui.theme.basic@^0.3.5":
-  version "0.3.5"
-  resolved "https://registry.yarnpkg.com/@abp/aspnetcore.mvc.ui.theme.basic/-/aspnetcore.mvc.ui.theme.basic-0.3.5.tgz#4f6fa79c1d55175a0d7d2a4670a7e5ae896b6402"
+"@abp/aspnetcore.mvc.ui.theme.basic@^0.4.8":
+  version "0.4.8"
+  resolved "https://registry.yarnpkg.com/@abp/aspnetcore.mvc.ui.theme.basic/-/aspnetcore.mvc.ui.theme.basic-0.4.8.tgz#9d7e3fde04a415f628f5d936b45223d6e3fb6a36"
   dependencies:
-    "@abp/aspnetcore.mvc.ui.theme.shared" "^0.3.5"
+    "@abp/aspnetcore.mvc.ui.theme.shared" "^0.4.8"
 
-"@abp/aspnetcore.mvc.ui.theme.shared@^0.3.5":
-  version "0.3.5"
-  resolved "https://registry.yarnpkg.com/@abp/aspnetcore.mvc.ui.theme.shared/-/aspnetcore.mvc.ui.theme.shared-0.3.5.tgz#5926165c1bfc7a5e01e3f0d3533f44d7faafd556"
+"@abp/aspnetcore.mvc.ui.theme.shared@^0.4.8":
+  version "0.4.8"
+  resolved "https://registry.yarnpkg.com/@abp/aspnetcore.mvc.ui.theme.shared/-/aspnetcore.mvc.ui.theme.shared-0.4.8.tgz#c575110beb627d2febed6b8d9f9015759ba2561d"
   dependencies:
-    "@abp/aspnetcore.mvc.ui" "^0.3.5"
-    "@abp/bootstrap" "^0.3.5"
-    "@abp/datatables.net-bs4" "^0.3.5"
-    "@abp/font-awesome" "^0.3.5"
-    "@abp/jquery-form" "^0.3.5"
-    "@abp/jquery-validation-unobtrusive" "^0.3.5"
-    "@abp/lodash" "^0.3.5"
-    "@abp/select2" "^0.3.5"
-    "@abp/sweetalert" "^0.3.5"
-    "@abp/timeago" "^0.3.5"
-    "@abp/toastr" "^0.3.5"
+    "@abp/aspnetcore.mvc.ui" "^0.4.8"
+    "@abp/bootstrap" "^0.4.8"
+    "@abp/datatables.net-bs4" "^0.4.8"
+    "@abp/font-awesome" "^0.4.8"
+    "@abp/jquery-form" "^0.4.8"
+    "@abp/jquery-validation-unobtrusive" "^0.4.8"
+    "@abp/lodash" "^0.4.8"
+    "@abp/select2" "^0.4.8"
+    "@abp/sweetalert" "^0.4.8"
+    "@abp/timeago" "^0.4.8"
+    "@abp/toastr" "^0.4.8"
 
-"@abp/aspnetcore.mvc.ui@^0.3.5":
-  version "0.3.5"
-  resolved "https://registry.yarnpkg.com/@abp/aspnetcore.mvc.ui/-/aspnetcore.mvc.ui-0.3.5.tgz#f60217ec953d5b717a89191f4feba80c8ad545d8"
+"@abp/aspnetcore.mvc.ui@^0.4.8":
+  version "0.4.8"
+  resolved "https://registry.yarnpkg.com/@abp/aspnetcore.mvc.ui/-/aspnetcore.mvc.ui-0.4.8.tgz#92e29f14ff459f44d9fdd50b46521fbae2f7478c"
   dependencies:
     ansi-colors "^1.1.0"
     extend-object "^1.0.0"
@@ -35,100 +35,145 @@
     path "^0.12.7"
     rimraf "^2.6.2"
 
-"@abp/bootstrap@^0.3.5":
-  version "0.3.5"
-  resolved "https://registry.yarnpkg.com/@abp/bootstrap/-/bootstrap-0.3.5.tgz#7bf9f16b7d0657ddf38caa97cdb21eb26d758637"
+"@abp/blogging@^0.4.8":
+  version "0.4.8"
+  resolved "https://registry.yarnpkg.com/@abp/blogging/-/blogging-0.4.8.tgz#0799205ef3d9d95f282496acfdffc2b4c471ac85"
   dependencies:
-    "@abp/core" "^0.3.5"
+    "@abp/aspnetcore.mvc.ui.theme.shared" "^0.4.8"
+    "@abp/owl.carousel" "^0.4.8"
+    "@abp/tui-editor" "^0.4.8"
+
+"@abp/bootstrap@^0.4.8":
+  version "0.4.8"
+  resolved "https://registry.yarnpkg.com/@abp/bootstrap/-/bootstrap-0.4.8.tgz#34efb0cf52e4706d42ffcd5191594c7066ec8771"
+  dependencies:
+    "@abp/core" "^0.4.8"
     bootstrap "^4.1.1"
 
-"@abp/core@^0.3.5":
-  version "0.3.5"
-  resolved "https://registry.yarnpkg.com/@abp/core/-/core-0.3.5.tgz#0e26c03259c10b223465d9cf4f541113ce6a56ae"
-
-"@abp/datatables.net-bs4@^0.3.5":
-  version "0.3.5"
-  resolved "https://registry.yarnpkg.com/@abp/datatables.net-bs4/-/datatables.net-bs4-0.3.5.tgz#b0e40c8f2d40113bebaf62c5219c41a8c5e918cd"
+"@abp/codemirror@^0.4.8":
+  version "0.4.8"
+  resolved "https://registry.yarnpkg.com/@abp/codemirror/-/codemirror-0.4.8.tgz#146ba707d967164c71dd387a8e28d72ac5e70ce8"
   dependencies:
-    "@abp/datatables.net" "^0.3.5"
+    "@abp/core" "^0.4.8"
+    codemirror "^5.38.0"
+
+"@abp/core@^0.4.8":
+  version "0.4.8"
+  resolved "https://registry.yarnpkg.com/@abp/core/-/core-0.4.8.tgz#c8a6c23c1ab51e41f790584c4ba12dddfd5d66ad"
+
+"@abp/datatables.net-bs4@^0.4.8":
+  version "0.4.8"
+  resolved "https://registry.yarnpkg.com/@abp/datatables.net-bs4/-/datatables.net-bs4-0.4.8.tgz#b867c451dffcc3ca87509fc5bdf8be0d1f6074c6"
+  dependencies:
+    "@abp/datatables.net" "^0.4.8"
     datatables.net-bs4 "^1.10.16"
 
-"@abp/datatables.net@^0.3.5":
-  version "0.3.5"
-  resolved "https://registry.yarnpkg.com/@abp/datatables.net/-/datatables.net-0.3.5.tgz#784d14462a3e08e7cc921e8d9d0c7f384b8f6e6a"
+"@abp/datatables.net@^0.4.8":
+  version "0.4.8"
+  resolved "https://registry.yarnpkg.com/@abp/datatables.net/-/datatables.net-0.4.8.tgz#f13bec346c01822dccf3b7fc1e7cf60bab00b680"
   dependencies:
-    "@abp/core" "^0.3.5"
+    "@abp/core" "^0.4.8"
     datatables.net "^1.10.16"
 
-"@abp/font-awesome@^0.3.5":
-  version "0.3.5"
-  resolved "https://registry.yarnpkg.com/@abp/font-awesome/-/font-awesome-0.3.5.tgz#25385a24d8cbb9475b9d57a51c6402e48963da44"
+"@abp/font-awesome@^0.4.8":
+  version "0.4.8"
+  resolved "https://registry.yarnpkg.com/@abp/font-awesome/-/font-awesome-0.4.8.tgz#a18c503b697af98faeaad092d8f1cb2df464a59d"
   dependencies:
-    "@abp/core" "^0.3.5"
+    "@abp/core" "^0.4.8"
     font-awesome "^4.7.0"
 
-"@abp/jquery-form@^0.3.5":
-  version "0.3.5"
-  resolved "https://registry.yarnpkg.com/@abp/jquery-form/-/jquery-form-0.3.5.tgz#ec8315dbf87fa6be841448acd3fbccf51507f6da"
+"@abp/highlight.js@^0.4.8":
+  version "0.4.8"
+  resolved "https://registry.yarnpkg.com/@abp/highlight.js/-/highlight.js-0.4.8.tgz#93c69ea8a5781d16abd2a957cf46b2db49064878"
   dependencies:
-    "@abp/jquery" "^0.3.5"
+    "@abp/core" "^0.4.8"
+
+"@abp/jquery-form@^0.4.8":
+  version "0.4.8"
+  resolved "https://registry.yarnpkg.com/@abp/jquery-form/-/jquery-form-0.4.8.tgz#2f37b43076f618b0ac9532852a863584035f8c2e"
+  dependencies:
+    "@abp/jquery" "^0.4.8"
     jquery-form "^4.2.2"
 
-"@abp/jquery-validation-unobtrusive@^0.3.5":
-  version "0.3.5"
-  resolved "https://registry.yarnpkg.com/@abp/jquery-validation-unobtrusive/-/jquery-validation-unobtrusive-0.3.5.tgz#6b8b5c821718266ae13e1a3f65da4862ed0a7e6d"
+"@abp/jquery-validation-unobtrusive@^0.4.8":
+  version "0.4.8"
+  resolved "https://registry.yarnpkg.com/@abp/jquery-validation-unobtrusive/-/jquery-validation-unobtrusive-0.4.8.tgz#056dfb28edf22652596f71758e7c5caad2fc4ca1"
   dependencies:
-    "@abp/jquery-validation" "^0.3.5"
+    "@abp/jquery-validation" "^0.4.8"
     jquery-validation-unobtrusive "^3.2.9"
 
-"@abp/jquery-validation@^0.3.5":
-  version "0.3.5"
-  resolved "https://registry.yarnpkg.com/@abp/jquery-validation/-/jquery-validation-0.3.5.tgz#c3f2e3d695f333261cdefadc35c962ebf6f016d3"
+"@abp/jquery-validation@^0.4.8":
+  version "0.4.8"
+  resolved "https://registry.yarnpkg.com/@abp/jquery-validation/-/jquery-validation-0.4.8.tgz#a31fd6c1353c8db3aab53d06d5e4e84e7208c89b"
   dependencies:
-    "@abp/jquery" "^0.3.5"
+    "@abp/jquery" "^0.4.8"
     jquery-validation "^1.17.0"
 
-"@abp/jquery@^0.3.5":
-  version "0.3.5"
-  resolved "https://registry.yarnpkg.com/@abp/jquery/-/jquery-0.3.5.tgz#928252246400ed0c5519dcd3d5fca8be471ce11f"
+"@abp/jquery@^0.4.8":
+  version "0.4.8"
+  resolved "https://registry.yarnpkg.com/@abp/jquery/-/jquery-0.4.8.tgz#7d1280a8dedf8a1144317afd89973370743806fd"
   dependencies:
-    "@abp/core" "^0.3.5"
+    "@abp/core" "^0.4.8"
     jquery "^3.3.1"
 
-"@abp/lodash@^0.3.5":
-  version "0.3.5"
-  resolved "https://registry.yarnpkg.com/@abp/lodash/-/lodash-0.3.5.tgz#5cc9397b23be9a3f99e2b20db5b3c1af8d01d06b"
+"@abp/lodash@^0.4.8":
+  version "0.4.8"
+  resolved "https://registry.yarnpkg.com/@abp/lodash/-/lodash-0.4.8.tgz#61bcbadf2991645cdb8fb86400398fe0ff0733a1"
   dependencies:
-    "@abp/core" "^0.3.5"
+    "@abp/core" "^0.4.8"
     lodash "^4.17.10"
 
-"@abp/select2@^0.3.5":
-  version "0.3.5"
-  resolved "https://registry.yarnpkg.com/@abp/select2/-/select2-0.3.5.tgz#065727e1948fff2d454ced9183ce03f0b01b377f"
+"@abp/markdown-it@^0.4.8":
+  version "0.4.8"
+  resolved "https://registry.yarnpkg.com/@abp/markdown-it/-/markdown-it-0.4.8.tgz#7d3a676b2ef878828aa73a8ee8250f84d607b5ca"
   dependencies:
-    "@abp/core" "^0.3.5"
+    "@abp/core" "^0.4.8"
+    markdown-it "^8.4.1"
+
+"@abp/owl.carousel@^0.4.8":
+  version "0.4.8"
+  resolved "https://registry.yarnpkg.com/@abp/owl.carousel/-/owl.carousel-0.4.8.tgz#02efba237afd3dbd6d9b6c9397596e617a338e49"
+  dependencies:
+    "@abp/core" "^0.4.8"
+    owl.carousel "^2.3.4"
+
+"@abp/select2@^0.4.8":
+  version "0.4.8"
+  resolved "https://registry.yarnpkg.com/@abp/select2/-/select2-0.4.8.tgz#0e4fc4fe2166c144d2d30bf64ac071bde960998d"
+  dependencies:
+    "@abp/core" "^0.4.8"
     select2 "^4.0.5"
 
-"@abp/sweetalert@^0.3.5":
-  version "0.3.5"
-  resolved "https://registry.yarnpkg.com/@abp/sweetalert/-/sweetalert-0.3.5.tgz#399f5daad720dd7187abaa191d58928555a26a8f"
+"@abp/sweetalert@^0.4.8":
+  version "0.4.8"
+  resolved "https://registry.yarnpkg.com/@abp/sweetalert/-/sweetalert-0.4.8.tgz#0a4146d315f7fd88a1a6c91f2d4a8566839ada68"
   dependencies:
-    "@abp/core" "^0.3.5"
+    "@abp/core" "^0.4.8"
     sweetalert "^2.1.0"
 
-"@abp/timeago@^0.3.5":
-  version "0.3.5"
-  resolved "https://registry.yarnpkg.com/@abp/timeago/-/timeago-0.3.5.tgz#c54080833136da6055fac64d4fbab1da637cb821"
+"@abp/timeago@^0.4.8":
+  version "0.4.8"
+  resolved "https://registry.yarnpkg.com/@abp/timeago/-/timeago-0.4.8.tgz#b5418ba16b46ac41fc8487d67a3f798782d29ebf"
   dependencies:
-    "@abp/jquery" "^0.3.5"
+    "@abp/jquery" "^0.4.8"
     timeago "^1.6.3"
 
-"@abp/toastr@^0.3.5":
-  version "0.3.5"
-  resolved "https://registry.yarnpkg.com/@abp/toastr/-/toastr-0.3.5.tgz#3584a92dcac7e0694c45364ed604c11c8e6ef009"
+"@abp/toastr@^0.4.8":
+  version "0.4.8"
+  resolved "https://registry.yarnpkg.com/@abp/toastr/-/toastr-0.4.8.tgz#a68c26a77b7f8b63f51ea1850f911df5210b93b7"
   dependencies:
-    "@abp/jquery" "^0.3.5"
+    "@abp/jquery" "^0.4.8"
     toastr "^2.1.4"
+
+"@abp/tui-editor@^0.4.8":
+  version "0.4.8"
+  resolved "https://registry.yarnpkg.com/@abp/tui-editor/-/tui-editor-0.4.8.tgz#608190d74985637d9fa82d8a46ab297aa32cbf20"
+  dependencies:
+    "@abp/codemirror" "^0.4.8"
+    "@abp/highlight.js" "^0.4.8"
+    "@abp/jquery" "^0.4.8"
+    "@abp/markdown-it" "^0.4.8"
+    tui-editor "^1.2.6"
 
 almond@~0.3.1:
   version "0.3.3"
@@ -161,6 +206,12 @@ ansi-wrap@0.1.0, ansi-wrap@^0.1.0:
 archy@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/archy/-/archy-1.0.0.tgz#f9c8c13757cc1dd7bc379ac77b2c62a5c2868c40"
+
+argparse@^1.0.7:
+  version "1.0.10"
+  resolved "https://registry.yarnpkg.com/argparse/-/argparse-1.0.10.tgz#bcd6791ea5ae09725e17e5ad988134cd40b3d911"
+  dependencies:
+    sprintf-js "~1.0.2"
 
 arr-diff@^4.0.0:
   version "4.0.0"
@@ -201,6 +252,21 @@ assign-symbols@^1.0.0:
 atob@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/atob/-/atob-2.1.1.tgz#ae2d5a729477f289d60dd7f96a6314a22dd6c22a"
+
+babel-polyfill@^6.26.0:
+  version "6.26.0"
+  resolved "https://registry.yarnpkg.com/babel-polyfill/-/babel-polyfill-6.26.0.tgz#379937abc67d7895970adc621f284cd966cf2153"
+  dependencies:
+    babel-runtime "^6.26.0"
+    core-js "^2.5.0"
+    regenerator-runtime "^0.10.5"
+
+babel-runtime@^6.26.0:
+  version "6.26.0"
+  resolved "https://registry.yarnpkg.com/babel-runtime/-/babel-runtime-6.26.0.tgz#965c7058668e82b55d7bfe04ff2337bc8b5647fe"
+  dependencies:
+    core-js "^2.4.0"
+    regenerator-runtime "^0.11.0"
 
 balanced-match@^1.0.0:
   version "1.0.0"
@@ -293,6 +359,10 @@ clone@^1.0.0, clone@^1.0.2:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/clone/-/clone-1.0.4.tgz#da309cc263df15994c688ca902179ca3c7cd7c7e"
 
+codemirror@^5.33.0, codemirror@^5.38.0:
+  version "5.40.0"
+  resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.40.0.tgz#2f5ed47366e514f41349ba0fe34daaa39be4e257"
+
 collection-visit@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/collection-visit/-/collection-visit-1.0.0.tgz#4bc0373c164bc3291b4d368c829cf1a80a59dca0"
@@ -315,6 +385,10 @@ concat-map@0.0.1:
 copy-descriptor@^0.1.0:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/copy-descriptor/-/copy-descriptor-0.1.1.tgz#676f6eb3c39997c2ee1ac3a924fd6124748f578d"
+
+core-js@^2.4.0, core-js@^2.5.0:
+  version "2.5.7"
+  resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.5.7.tgz#f972608ff0cead68b841a16a932d0b183791814e"
 
 core-util-is@~1.0.0:
   version "1.0.2"
@@ -392,6 +466,10 @@ end-of-stream@~0.1.5:
   dependencies:
     once "~1.3.0"
 
+entities@~1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/entities/-/entities-1.1.1.tgz#6e5c2d0a5621b5dadaecef80b90edfb5cd7772f0"
+
 es6-object-assign@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/es6-object-assign/-/es6-object-assign-1.1.0.tgz#c2c3582656247c39ea107cb1e6652b6f9f24523c"
@@ -399,6 +477,10 @@ es6-object-assign@^1.1.0:
 escape-string-regexp@^1.0.2:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/escape-string-regexp/-/escape-string-regexp-1.0.5.tgz#1b61c0562190a8dff6ae3bb2cf0200ca130b86d4"
+
+"eve@git://github.com/adobe-webplatform/eve.git#eef80ed":
+  version "0.4.1"
+  resolved "git://github.com/adobe-webplatform/eve.git#eef80ed8d188423c2272746fb8ae5cc8dad84cb1"
 
 expand-brackets@^2.1.4:
   version "2.1.4"
@@ -713,6 +795,10 @@ has-values@^1.0.0:
     is-number "^3.0.0"
     kind-of "^4.0.0"
 
+highlight.js@^9.12.0:
+  version "9.12.0"
+  resolved "https://registry.yarnpkg.com/highlight.js/-/highlight.js-9.12.0.tgz#e6d9dbe57cbefe60751f02af336195870c90c01e"
+
 homedir-polyfill@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/homedir-polyfill/-/homedir-polyfill-1.0.1.tgz#4c2bbc8a758998feebf5ed68580f76d46768b4bc"
@@ -900,7 +986,7 @@ jquery-validation@>=1.16, jquery-validation@^1.17.0:
   dependencies:
     jquery "^1.7 || ^2.0 || ^3.1"
 
-jquery@>=1.12.0, jquery@>=1.2.3, jquery@>=1.7, jquery@>=1.7.2, jquery@>=1.8, "jquery@^1.7 || ^2.0 || ^3.1", jquery@^3.3.1:
+jquery@>=1.12.0, jquery@>=1.2.3, jquery@>=1.7, jquery@>=1.7.2, jquery@>=1.8, jquery@>=1.8.3, "jquery@^1.7 || ^2.0 || ^3.1", jquery@^3.3.1:
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.3.1.tgz#958ce29e81c9790f31be7792df5d4d95fc57fbca"
 
@@ -936,6 +1022,12 @@ liftoff@^2.1.0:
     object.map "^1.0.0"
     rechoir "^0.6.2"
     resolve "^1.1.7"
+
+linkify-it@^2.0.0:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/linkify-it/-/linkify-it-2.0.3.tgz#d94a4648f9b1c179d64fa97291268bdb6ce9434f"
+  dependencies:
+    uc.micro "^1.0.1"
 
 lodash._basecopy@^3.0.0:
   version "3.0.1"
@@ -1047,6 +1139,20 @@ map-visit@^1.0.0:
   resolved "https://registry.yarnpkg.com/map-visit/-/map-visit-1.0.0.tgz#ecdca8f13144e660f1b5bd41f12f3479d98dfb8f"
   dependencies:
     object-visit "^1.0.0"
+
+markdown-it@^8.4.0, markdown-it@^8.4.1:
+  version "8.4.2"
+  resolved "https://registry.yarnpkg.com/markdown-it/-/markdown-it-8.4.2.tgz#386f98998dc15a37722aa7722084f4020bdd9b54"
+  dependencies:
+    argparse "^1.0.7"
+    entities "~1.1.1"
+    linkify-it "^2.0.0"
+    mdurl "^1.0.1"
+    uc.micro "^1.0.5"
+
+mdurl@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/mdurl/-/mdurl-1.0.1.tgz#fe85b2ec75a59037f2adfec100fd6c601761152e"
 
 merge-stream@^1.0.1:
   version "1.0.1"
@@ -1211,6 +1317,16 @@ os-homedir@^1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/os-homedir/-/os-homedir-1.0.2.tgz#ffbc4988336e0e833de0c168c7ef152121aa7fb3"
 
+owl.carousel@^2.3.4:
+  version "2.3.4"
+  resolved "https://registry.yarnpkg.com/owl.carousel/-/owl.carousel-2.3.4.tgz#6c53dc8d24304b790e4f27a1dc4a655e973ccdc9"
+  dependencies:
+    jquery ">=1.8.3"
+
+pako@1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/pako/-/pako-1.0.3.tgz#5f515b0c6722e1982920ae8005eacb0b7ca73ccf"
+
 parse-filepath@^1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/parse-filepath/-/parse-filepath-1.0.2.tgz#a632127f53aaf3d15876f5872f3ffac763d6c891"
@@ -1252,6 +1368,13 @@ path@^0.12.7:
     process "^0.11.1"
     util "^0.10.3"
 
+plantuml-encoder@^1.2.5:
+  version "1.2.5"
+  resolved "https://registry.yarnpkg.com/plantuml-encoder/-/plantuml-encoder-1.2.5.tgz#6b8e5b9e1a1dbd88b3fd9fb46f734eec7d44b548"
+  dependencies:
+    pako "1.0.3"
+    utf8-bytes "0.0.1"
+
 posix-character-classes@^0.1.0:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/posix-character-classes/-/posix-character-classes-0.1.1.tgz#01eac0fe3b5af71a2a6c02feabb8c1fef7e00eab"
@@ -1271,6 +1394,12 @@ process@^0.11.1:
 promise-polyfill@^6.0.2:
   version "6.1.0"
   resolved "https://registry.yarnpkg.com/promise-polyfill/-/promise-polyfill-6.1.0.tgz#dfa96943ea9c121fca4de9b5868cb39d3472e057"
+
+"raphael@git+https://github.com/nhnent/raphael.git#2.2.0-c":
+  version "2.2.0-c"
+  resolved "git+https://github.com/nhnent/raphael.git#78a6ed3ec269f33b6457b0ec66f8c3d1f2ed70e0"
+  dependencies:
+    eve "git://github.com/adobe-webplatform/eve.git#eef80ed"
 
 "readable-stream@>=1.0.33-1 <1.1.0-0":
   version "1.0.34"
@@ -1308,6 +1437,14 @@ rechoir@^0.6.2:
   dependencies:
     resolve "^1.1.6"
 
+regenerator-runtime@^0.10.5:
+  version "0.10.5"
+  resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.10.5.tgz#336c3efc1220adcedda2c9fab67b5a7955a33658"
+
+regenerator-runtime@^0.11.0:
+  version "0.11.1"
+  resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.11.1.tgz#be05ad7f9bf7d22e056f9726cee5017fbf19e2e9"
+
 regex-not@^1.0.0, regex-not@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/regex-not/-/regex-not-1.0.2.tgz#1f4ece27e00b0b65e0247a6810e6a85d83a5752c"
@@ -1326,6 +1463,10 @@ repeat-string@^1.6.1:
 replace-ext@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/replace-ext/-/replace-ext-0.0.1.tgz#29bbd92078a739f0bcce2b4ee41e837953522924"
+
+resize-observer-polyfill@^1.5.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/resize-observer-polyfill/-/resize-observer-polyfill-1.5.0.tgz#660ff1d9712a2382baa2cad450a4716209f9ca69"
 
 resolve-dir@^1.0.0, resolve-dir@^1.0.1:
   version "1.0.1"
@@ -1456,6 +1597,14 @@ split-string@^3.0.1, split-string@^3.0.2:
   dependencies:
     extend-shallow "^3.0.0"
 
+sprintf-js@~1.0.2:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/sprintf-js/-/sprintf-js-1.0.3.tgz#04e6926f662895354f3dd015203633b857297e2c"
+
+"squire-rte@github:neilj/Squire#306230d0df9b38047cd06204476ddc0582569cfd":
+  version "1.8.10"
+  resolved "https://codeload.github.com/neilj/Squire/tar.gz/306230d0df9b38047cd06204476ddc0582569cfd"
+
 static-extend@^0.1.1:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/static-extend/-/static-extend-0.1.2.tgz#60809c39cbff55337226fd5e0b520f341f1fb5c6"
@@ -1531,6 +1680,10 @@ timeago@^1.6.3:
   dependencies:
     jquery ">=1.2.3"
 
+to-mark@^1.1.2:
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/to-mark/-/to-mark-1.1.3.tgz#d421a170a2dd582025e5090256c7821c6703f346"
+
 to-object-path@^0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/to-object-path/-/to-object-path-0.3.0.tgz#297588b7b0e7e0ac08e04e672f85c1f4999e17af"
@@ -1558,6 +1711,44 @@ toastr@^2.1.4:
   resolved "https://registry.yarnpkg.com/toastr/-/toastr-2.1.4.tgz#8b43be64fb9d0c414871446f2db8e8ca4e95f181"
   dependencies:
     jquery ">=1.12.0"
+
+tui-chart@^3.0.1:
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/tui-chart/-/tui-chart-3.3.1.tgz#34f11787d6c1b2a61b98febf9804c5d1fc3cc432"
+  dependencies:
+    babel-polyfill "^6.26.0"
+    raphael "https://github.com/nhnent/raphael.git#2.2.0-c"
+    tui-code-snippet "^1.3.0"
+
+tui-code-snippet@^1.3.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/tui-code-snippet/-/tui-code-snippet-1.4.0.tgz#b09bb8e621e382af23024363d5763f9be44412b4"
+
+tui-color-picker@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/tui-color-picker/-/tui-color-picker-2.2.0.tgz#452b89a25f3f3d9f47dae73c166435dd3539bc4f"
+  dependencies:
+    tui-code-snippet "^1.3.0"
+
+tui-editor@^1.2.6:
+  version "1.2.6"
+  resolved "https://registry.yarnpkg.com/tui-editor/-/tui-editor-1.2.6.tgz#3a7fb374b5e7907ed6d0a1eddd43e5da197c4576"
+  dependencies:
+    codemirror "^5.33.0"
+    highlight.js "^9.12.0"
+    jquery "^3.3.1"
+    markdown-it "^8.4.0"
+    plantuml-encoder "^1.2.5"
+    resize-observer-polyfill "^1.5.0"
+    squire-rte "github:neilj/Squire#306230d0df9b38047cd06204476ddc0582569cfd"
+    to-mark "^1.1.2"
+    tui-chart "^3.0.1"
+    tui-code-snippet "^1.3.0"
+    tui-color-picker "^2.2.0"
+
+uc.micro@^1.0.1, uc.micro@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/uc.micro/-/uc.micro-1.0.5.tgz#0c65f15f815aa08b560a61ce8b4db7ffc3f45376"
 
 unc-path-regex@^0.1.2:
   version "0.1.2"
@@ -1596,6 +1787,10 @@ use@^3.1.0:
 user-home@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/user-home/-/user-home-1.1.1.tgz#2b5be23a32b63a7c9deb8d0f28d485724a3df190"
+
+utf8-bytes@0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/utf8-bytes/-/utf8-bytes-0.0.1.tgz#116b025448c9b500081cdfbf1f4d6c6c37d8837d"
 
 util-deprecate@~1.0.1:
   version "1.0.2"

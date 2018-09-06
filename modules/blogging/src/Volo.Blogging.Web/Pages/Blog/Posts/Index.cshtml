@@ -1,27 +1,22 @@
 ﻿@page
 @inherits Volo.Blogging.Pages.Blog.BloggingPage
 @using Microsoft.AspNetCore.Authorization
+@using Volo.Abp.AspNetCore.Mvc.UI.Packages.OwlCarousel
 @using Volo.Blogging
 @using Volo.Blogging.Pages.Blog.Posts
 @inject IAuthorizationService Authorization
 @model Volo.Blogging.Pages.Blog.Posts.IndexModel
-@{
-
-}
-
 @section scripts {
     <abp-script-bundle name="@typeof(IndexModel).FullName">
+        <abp-script type="@typeof(OwlCarouselScriptContributor)" />
         <abp-script src="/Pages/Blog/Posts/detail.js" />
         <abp-script src="/Pages/Blog/Shared/Scripts/blog.js" />
-        <abp-script src="/Pages/Blog/Posts/blogcss/owlcarousel/dist/owl.carousel.min.js" />
     </abp-script-bundle>
 }
 @section styles {
     <abp-style-bundle name="@typeof(IndexModel).FullName">
+        <abp-script type="@typeof(OwlCarouselStyleContributor)" />
         <abp-style src="/Pages/Blog/Shared/Styles/blog.css" />
-        <abp-style src="/Pages/Blog/Shared/owlcarousel/dist/assets/owl.carousel.min.css" />
-        <abp-style src="/Pages/Blog/Shared/owlcarousel/dist/assets/owl.theme.default.min.css" />
-        <abp-style src="/Pages/Blog/Shared/owlcarousel/dist/assets/owl.theme.green.min.css" />
     </abp-style-bundle>
 }
 

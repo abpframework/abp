@@ -1,5 +1,4 @@
 ﻿@page
-@using Volo.Abp.AspNetCore.Mvc.UI.Packages.Lodash
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.TuiEditor
 @using Volo.Blogging.Pages.Blog.Posts
 @model EditModel
@@ -13,7 +12,6 @@
 }
 @section scripts {
     <abp-script-bundle name="@typeof(EditModel).FullName">
-        <abp-script type="@typeof(LodashScriptContributor)" />
         <abp-script type="@typeof(TuiEditorScriptContributor)" />
         <abp-script src="/Pages/Blog/Posts/edit.js" />
     </abp-script-bundle>

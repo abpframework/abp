@@ -1,5 +1,4 @@
 ﻿@page
-@using Volo.Abp.AspNetCore.Mvc.UI.Packages.Lodash
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.TuiEditor
 @model Volo.Blogging.Pages.Blog.Posts.NewModel
 @inherits Volo.Blogging.Pages.Blog.BloggingPage
@@ -11,7 +10,6 @@
 }
 @section scripts {
     <abp-script-bundle @*name="@typeof(NewModel).FullName"*@>
-        <abp-script type="@typeof(LodashScriptContributor)" />
         <abp-script type="@typeof(TuiEditorScriptContributor)" />
         <abp-script src="/Pages/Blog/Posts/new.js" />
     </abp-script-bundle>

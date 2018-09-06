@@ -1,6 +1,6 @@
 /*!
  * tui-editor
- * @version 1.2.2
+ * @version 1.2.6
  * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com> (https://nhnent.github.io/tui.editor/)
  * @license MIT
  */
@@ -174,7 +174,7 @@ function scrollSyncExtension(editor) {
   var i18n = editor.i18n;
   var TOOL_TIP = {
     active: i18n.get('Auto scroll enabled'),
-    inActive: i18n.get('Auto scroll disabled')
+    inactive: i18n.get('Auto scroll disabled')
   };
 
   if (editor.isViewer()) {
@@ -221,10 +221,10 @@ function scrollSyncExtension(editor) {
         button._onOut();
         if (isActive) {
           button.$el.addClass('active');
-          button.tooltip = TOOL_TIP.active;
+          button.setTooltip(TOOL_TIP.active);
         } else {
           button.$el.removeClass('active');
-          button.tooltip = TOOL_TIP.inActive;
+          button.setTooltip(TOOL_TIP.inactive);
         }
         button._onOver();
       }
@@ -252,7 +252,9 @@ function scrollSyncExtension(editor) {
 
   editor.on('previewRenderAfter', function () {
     sectionManager.sectionMatch();
-    scrollManager.syncPreviewScrollTopToMarkdown();
+    if (isActive) {
+      scrollManager.syncPreviewScrollTopToMarkdown();
+    }
     isScrollable = true;
   });
 
@@ -1074,7 +1076,7 @@ var SectionManager = function () {
   }, {
     key: '_isSeTextHeader',
     value: function _isSeTextHeader(lineString, nextLineString) {
-      return lineString.replace(FIND_SPACE, '') !== '' && nextLineString && FIND_SETEXT_HEADER_RX.test(nextLineString);
+      return lineString.replace(FIND_SPACE, '') !== '' && !this._isQuote(lineString) && nextLineString && FIND_SETEXT_HEADER_RX.test(nextLineString);
     }
   }, {
     key: '_isImage',

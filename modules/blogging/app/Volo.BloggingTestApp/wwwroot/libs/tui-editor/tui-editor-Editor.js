@@ -1,6 +1,6 @@
 /*!
  * tui-editor
- * @version 1.2.2
+ * @version 1.2.6
  * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com> (https://nhnent.github.io/tui.editor/)
  * @license MIT
  */
@@ -13,7 +13,7 @@
 		exports["Editor"] = factory(require("jquery"), require("tui-code-snippet"), require("codemirror"), require("markdown-it"), require("to-mark"), require("highlight.js"), require("squire-rte"));
 	else
 		root["tui"] = root["tui"] || {}, root["tui"]["Editor"] = factory(root["$"], (root["tui"] && root["tui"]["util"]), root["CodeMirror"], root["markdownit"], root["toMark"], root["hljs"], root["Squire"]);
-})(typeof self !== 'undefined' ? self : this, function(__WEBPACK_EXTERNAL_MODULE_0__, __WEBPACK_EXTERNAL_MODULE_1__, __WEBPACK_EXTERNAL_MODULE_6__, __WEBPACK_EXTERNAL_MODULE_21__, __WEBPACK_EXTERNAL_MODULE_22__, __WEBPACK_EXTERNAL_MODULE_30__, __WEBPACK_EXTERNAL_MODULE_62__) {
+})(typeof self !== 'undefined' ? self : this, function(__WEBPACK_EXTERNAL_MODULE_0__, __WEBPACK_EXTERNAL_MODULE_1__, __WEBPACK_EXTERNAL_MODULE_6__, __WEBPACK_EXTERNAL_MODULE_22__, __WEBPACK_EXTERNAL_MODULE_23__, __WEBPACK_EXTERNAL_MODULE_31__, __WEBPACK_EXTERNAL_MODULE_64__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -76,7 +76,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "dist/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 42);
+/******/ 	return __webpack_require__(__webpack_require__.s = 44);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -116,16 +116,17 @@ var _tuiCodeSnippet = __webpack_require__(1);
 
 var _tuiCodeSnippet2 = _interopRequireDefault(_tuiCodeSnippet);
 
-var _command = __webpack_require__(19);
+var _command = __webpack_require__(21);
 
 var _command2 = _interopRequireDefault(_command);
+
+var _util = __webpack_require__(9);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var isMac = /Mac/.test(navigator.platform);
-var KEYMAP_OS_INDEX = isMac ? 1 : 0;
+var KEYMAP_OS_INDEX = _util.isMac ? 1 : 0;
 
 /**
  * Class CommandManager
@@ -504,14 +505,18 @@ var getPrevOffsetNodeUntil = function getPrevOffsetNodeUntil(node, index, untilN
   return prevNode;
 };
 
-var getParentUntilBy = function getParentUntilBy(node, condition) {
+var getParentUntilBy = function getParentUntilBy(node, matchCondition, stopCondition) {
   var foundedNode = void 0;
 
-  while (node.parentNode && !condition(node.parentNode)) {
+  while (node.parentNode && !matchCondition(node.parentNode)) {
     node = node.parentNode;
+
+    if (stopCondition && stopCondition(node.parentNode)) {
+      break;
+    }
   }
 
-  if (condition(node.parentNode)) {
+  if (matchCondition(node.parentNode)) {
     foundedNode = node;
   }
 
@@ -624,6 +629,23 @@ var getPrevTextNode = function getPrevTextNode(node) {
   }
 
   return node;
+};
+
+/**
+ * test whether root contains the given node
+ * @param {HTMLNode} root - root node
+ * @param {HTMLNode} node - node to test
+ * @returns {Boolean} true if root contains node
+ */
+var containsNode = function containsNode(root, node) {
+  var walker = document.createTreeWalker(root, 4, null, false);
+  var found = root === node;
+
+  while (!found && walker.nextNode()) {
+    found = walker.currentNode === node;
+  }
+
+  return found;
 };
 
 /**
@@ -810,8 +832,10 @@ exports.default = {
   getPrevOffsetNodeUntil: getPrevOffsetNodeUntil,
   getNodeOffsetOfParent: getNodeOffsetOfParent,
   getChildNodeByOffset: getChildNodeByOffset,
+  containsNode: containsNode,
   getTopPrevNodeUnder: getTopPrevNodeUnder,
   getTopNextNodeUnder: getTopNextNodeUnder,
+  getParentUntilBy: getParentUntilBy,
   getParentUntil: getParentUntil,
   getTopBlockNode: getTopBlockNode,
   getPrevTextNode: getPrevTextNode,
@@ -1342,7 +1366,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 
-var _highlight = __webpack_require__(30);
+var _highlight = __webpack_require__(31);
 
 var _highlight2 = _interopRequireDefault(_highlight);
 
@@ -1720,6 +1744,368 @@ exports.default = UIController;
 "use strict";
 
 
+var _tuiCodeSnippet = __webpack_require__(1);
+
+var _tuiCodeSnippet2 = _interopRequireDefault(_tuiCodeSnippet);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var hostnameSent = false;
+
+/**
+ * send host name
+ * @ignore
+ */
+function sendHostName() {
+  if (hostnameSent) {
+    return;
+  }
+  hostnameSent = true;
+
+  var trackingID = 'UA-115377265-9';
+  var applicationID = 'editor';
+  var hitType = 'event';
+  var _location = location,
+      hostname = _location.hostname;
+
+
+  _tuiCodeSnippet2.default.imagePing('https://www.google-analytics.com/collect', {
+    v: 1,
+    t: hitType,
+    tid: trackingID,
+    cid: hostname,
+    dp: hostname,
+    dh: applicationID
+  });
+}
+
+var isMac = /Mac/.test(navigator.platform);
+
+module.exports = {
+  sendHostName: sendHostName,
+  isMac: isMac
+};
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @fileoverview Implement Module for managing import external data such as image
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
+
+
+var _tuiCodeSnippet = __webpack_require__(1);
+
+var _tuiCodeSnippet2 = _interopRequireDefault(_tuiCodeSnippet);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var URLRegex = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})(\/([^\s]*))?$/g;
+
+/**
+ * Class ImportManager
+ */
+
+var ImportManager = function () {
+  /**
+   * Creates an instance of ImportManager.
+   * @param {EventManager} eventManager - eventManager
+   * @memberof ImportManager
+   */
+  function ImportManager(eventManager) {
+    _classCallCheck(this, ImportManager);
+
+    this.eventManager = eventManager;
+    this._lastState = null;
+
+    this._initEvent();
+    this._initDefaultImageImporter();
+  }
+
+  /**
+   * graceful decode uri component
+   * @param {string} originalURI - string to be decoded
+   * @returns {string} decoded string
+   * @memberof ImportManager
+   * @static
+   */
+
+
+  _createClass(ImportManager, [{
+    key: '_initEvent',
+
+
+    /**
+     * Initialize event handler
+     * @memberof ImportManager
+     * @private
+     */
+    value: function _initEvent() {
+      var _this = this;
+
+      this.eventManager.listen('stateChange', function (ev) {
+        _this._lastState = ev;
+      });
+
+      this.eventManager.listen('drop', function (ev) {
+        var items = ev.data.dataTransfer && ev.data.dataTransfer.files;
+        _this._processBlobItems(items, ev.data);
+      });
+
+      this.eventManager.listen('willPaste', function (ev) {
+        // IE has no interface to handle clipboard image. #976
+        var fragment = ev.data.fragment;
+        var descendant = fragment.querySelectorAll('*');
+        // only if paste event data has one img element and the element has base64 encoded image
+        if (descendant.length !== 1 || descendant[0].tagName !== 'IMG' || !/^data:image/.test(descendant[0].src)) {
+          return;
+        }
+        ev.data.preventDefault();
+
+        var blob = dataURItoBlob(descendant[0].src);
+        _this._emitAddImageBlobHook(blob, 'paste');
+      });
+
+      this.eventManager.listen('paste', function (ev) {
+        _this._processClipboard(ev.data);
+      });
+
+      this.eventManager.listen('pasteBefore', function (ev) {
+        _this._decodeURL(ev);
+      });
+    }
+
+    /**
+     * Initialize default image importer
+     * @memberof ImportManager
+     * @private
+     */
+
+  }, {
+    key: '_initDefaultImageImporter',
+    value: function _initDefaultImageImporter() {
+      this.eventManager.listen('addImageBlobHook', function (blob, callback) {
+        var reader = new FileReader();
+
+        reader.onload = function (event) {
+          callback(event.target.result);
+        };
+
+        reader.readAsDataURL(blob);
+      });
+    }
+
+    /**
+     * Emit add image blob hook
+     * @memberof ImportManager
+     * @param {object} blob - blob or file
+     * @param {string} type - type of an event the item belongs to. paste or drop
+     * @private
+     */
+
+  }, {
+    key: '_emitAddImageBlobHook',
+    value: function _emitAddImageBlobHook(blob, type) {
+      var _this2 = this;
+
+      this.eventManager.emit('addImageBlobHook', blob, function (imageUrl, altText) {
+        _this2.eventManager.emit('command', 'AddImage', {
+          imageUrl: imageUrl,
+          altText: altText || blob.name || 'image'
+        });
+      }, type);
+    }
+
+    /**
+     * Decode url when paste link
+     * @param {object} ev - event object
+     * @private
+     */
+
+  }, {
+    key: '_decodeURL',
+    value: function _decodeURL(ev) {
+      var decodeURIGraceful = ImportManager.decodeURIGraceful,
+          encodeMarkdownCharacters = ImportManager.encodeMarkdownCharacters;
+
+
+      if (ev.source === 'markdown' && ev.data.text) {
+        var texts = ev.data.text;
+        var text = texts[0];
+        if (texts.length === 1 && text.match(URLRegex)) {
+          text = decodeURIGraceful(text);
+          text = encodeMarkdownCharacters(text);
+          ev.data.update(null, null, [text]);
+        }
+      } else if (ev.source === 'wysiwyg') {
+        var container = ev.$clipboardContainer.get(0);
+        var firstChild = container.childNodes[0];
+        var _text = firstChild.innerText;
+        if (container.childNodes.length === 1 && firstChild.tagName === 'A' && _text.match(URLRegex)) {
+          firstChild.innerText = decodeURIGraceful(_text);
+          firstChild.href = encodeMarkdownCharacters(firstChild.href);
+        }
+      }
+    }
+
+    /**
+     * Get blob or excel data from clipboard
+     * @memberof ImportManager
+     * @param {object} evData Clipboard data
+     * @private
+     */
+
+  }, {
+    key: '_processClipboard',
+    value: function _processClipboard(evData) {
+      var cbData = evData.clipboardData || window.clipboardData;
+      var blobItems = cbData && cbData.items;
+      var types = cbData.types;
+
+
+      if (blobItems && types && types.length === 1 && _tuiCodeSnippet2.default.inArray('Files', [].slice.call(types)) !== -1) {
+        this._processBlobItems(blobItems, evData);
+      }
+    }
+
+    /**
+     * Process for blob item
+     * @memberof ImportManager
+     * @param {Array.<string>} items Item array
+     * @param {object} evData Event data
+     * @private
+     */
+
+  }, {
+    key: '_processBlobItems',
+    value: function _processBlobItems(items, evData) {
+      var _this3 = this;
+
+      if (items) {
+        _tuiCodeSnippet2.default.forEachArray(items, function (item) {
+          if (item.type.indexOf('image') !== -1) {
+            evData.preventDefault();
+            evData.stopPropagation();
+            evData.codemirrorIgnore = true;
+
+            var blob = item.name ? item : item.getAsFile(); // Blob or File
+            _this3._emitAddImageBlobHook(blob, evData.type);
+
+            return false;
+          }
+
+          return true;
+        });
+      }
+    }
+
+    /**
+     * Returns if current cursor state is in block format ex) blockquote, list, task, codeblock
+     * @returns {boolean}
+     * @private
+     */
+
+  }, {
+    key: '_isInBlockFormat',
+    value: function _isInBlockFormat() {
+      var state = this._lastState;
+
+      return state && (state.codeBlock || state.list || state.task || state.code);
+    }
+  }], [{
+    key: 'decodeURIGraceful',
+    value: function decodeURIGraceful(originalURI) {
+      var uris = originalURI.split(' ');
+      var decodedURIs = [];
+      var decodedURI = void 0;
+
+      _tuiCodeSnippet2.default.forEachArray(uris, function (uri) {
+        try {
+          decodedURI = decodeURIComponent(uri);
+          decodedURI = decodedURI.replace(/ /g, '%20');
+        } catch (e) {
+          decodedURI = uri;
+        }
+
+        return decodedURIs.push(decodedURI);
+      });
+
+      return decodedURIs.join(' ');
+    }
+
+    /**
+     * encode markdown critical characters
+     * @static
+     * @param {string} text - string to encode
+     * @returns {string} - markdown character encoded string
+     * @memberof ImportManager
+     */
+
+  }, {
+    key: 'encodeMarkdownCharacters',
+    value: function encodeMarkdownCharacters(text) {
+      return text.replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/\[/g, '%5B').replace(/\]/g, '%5D').replace(/</g, '%3C').replace(/>/g, '%3E');
+    }
+
+    /**
+     * escape markdown critical characters
+     * @static
+     * @param {string} text - string to escape
+     * @returns {string} - markdown character escaped string
+     * @memberof ImportManager
+     */
+
+  }, {
+    key: 'escapeMarkdownCharacters',
+    value: function escapeMarkdownCharacters(text) {
+      return text.replace(/\(/g, '\\(').replace(/\)/g, '\\)').replace(/\[/g, '\\[').replace(/\]/g, '\\]').replace(/</g, '\\<').replace(/>/g, '\\>');
+    }
+  }]);
+
+  return ImportManager;
+}();
+
+/**
+ * data URI to Blob
+ * @param {string} dataURI - data URI string
+ * @returns {Blob} - blob data
+ * @ignore
+ */
+
+
+function dataURItoBlob(dataURI) {
+  var byteString = atob(dataURI.split(',')[1]);
+  var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+  var ab = new ArrayBuffer(byteString.length);
+  var ia = new Uint8Array(ab);
+  for (var i = 0; i < byteString.length; i += 1) {
+    ia[i] = byteString.charCodeAt(i);
+  }
+  var blob = new Blob([ab], { type: mimeString });
+
+  return blob;
+}
+
+exports.default = ImportManager;
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -1817,7 +2203,7 @@ Object.defineProperty(ToolbarItem, 'className', {
 exports.default = ToolbarItem;
 
 /***/ }),
-/* 10 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1831,7 +2217,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-var _preview = __webpack_require__(11);
+var _preview = __webpack_require__(13);
 
 var _preview2 = _interopRequireDefault(_preview);
 
@@ -1926,7 +2312,7 @@ var MarkdownPreview = function (_Preview) {
 exports.default = MarkdownPreview;
 
 /***/ }),
-/* 11 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1946,7 +2332,7 @@ var _jquery = __webpack_require__(0);
 
 var _jquery2 = _interopRequireDefault(_jquery);
 
-var _lazyRunner = __webpack_require__(18);
+var _lazyRunner = __webpack_require__(20);
 
 var _lazyRunner2 = _interopRequireDefault(_lazyRunner);
 
@@ -2090,7 +2476,7 @@ var Preview = function () {
 exports.default = Preview;
 
 /***/ }),
-/* 12 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2202,7 +2588,7 @@ function finalizeHtml($html, needHtmlText) {
 exports.default = htmlSanitizer;
 
 /***/ }),
-/* 13 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2226,7 +2612,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var eventList = ['previewBeforeHook', 'previewRenderAfter', 'previewNeedsRefresh', 'addImageBlobHook', 'setMarkdownAfter', 'contentChangedFromWysiwyg', 'changeFromWysiwyg', 'contentChangedFromMarkdown', 'changeFromMarkdown', 'change', 'changeModeToWysiwyg', 'changeModeToMarkdown', 'changeModeBefore', 'changeMode', 'changePreviewStyle', 'openPopupAddLink', 'openPopupAddImage', 'openPopupAddTable', 'openPopupTableUtils', 'openHeadingSelect', 'openPopupCodeBlockLanguages', 'openPopupCodeBlockEditor', 'openDropdownToolbar', 'closePopupCodeBlockLanguages', 'closePopupCodeBlockEditor', 'closeAllPopup', 'command', 'addCommandBefore', 'htmlUpdate', 'markdownUpdate', 'renderedHtmlUpdated', 'removeEditor', 'convertorAfterMarkdownToHtmlConverted', 'convertorBeforeHtmlToMarkdownConverted', 'convertorAfterHtmlToMarkdownConverted', 'stateChange', 'wysiwygSetValueAfter', 'wysiwygSetValueBefore', 'wysiwygGetValueBefore', 'wysiwygProcessHTMLText', 'wysiwygRangeChangeAfter', 'wysiwygKeyEvent', 'scroll', 'click', 'mousedown', 'mouseover', 'mouseout', 'mouseup', 'contextmenu', 'keydown', 'keyup', 'keyMap', 'load', 'focus', 'blur', 'paste', 'pasteBefore', 'willPaste', 'copy', 'copyBefore', 'copyAfter', 'cut', 'cutAfter', 'drop', 'show', 'hide'];
+var eventList = ['previewBeforeHook', 'previewRenderAfter', 'previewNeedsRefresh', 'addImageBlobHook', 'setMarkdownAfter', 'contentChangedFromWysiwyg', 'changeFromWysiwyg', 'contentChangedFromMarkdown', 'changeFromMarkdown', 'change', 'changeModeToWysiwyg', 'changeModeToMarkdown', 'changeModeBefore', 'changeMode', 'changePreviewStyle', 'changePreviewTabPreview', 'changePreviewTabWrite', 'openPopupAddLink', 'openPopupAddImage', 'openPopupAddTable', 'openPopupTableUtils', 'openHeadingSelect', 'openPopupCodeBlockLanguages', 'openPopupCodeBlockEditor', 'openDropdownToolbar', 'closePopupCodeBlockLanguages', 'closePopupCodeBlockEditor', 'closeAllPopup', 'command', 'addCommandBefore', 'htmlUpdate', 'markdownUpdate', 'renderedHtmlUpdated', 'removeEditor', 'convertorAfterMarkdownToHtmlConverted', 'convertorBeforeHtmlToMarkdownConverted', 'convertorAfterHtmlToMarkdownConverted', 'stateChange', 'wysiwygSetValueAfter', 'wysiwygSetValueBefore', 'wysiwygGetValueBefore', 'wysiwygProcessHTMLText', 'wysiwygRangeChangeAfter', 'wysiwygKeyEvent', 'scroll', 'click', 'mousedown', 'mouseover', 'mouseout', 'mouseup', 'contextmenu', 'keydown', 'keyup', 'keyMap', 'load', 'focus', 'blur', 'paste', 'pasteBefore', 'willPaste', 'copy', 'copyBefore', 'copyAfter', 'cut', 'cutAfter', 'drop', 'show', 'hide'];
 
 /**
  * Class EventManager
@@ -2453,6 +2839,8 @@ var EventManager = function () {
         if (handler.namespace !== namespace) {
           handlersToSurvive.push(handler);
         }
+
+        return null;
       });
 
       this.events.set(type, handlersToSurvive);
@@ -2465,7 +2853,7 @@ var EventManager = function () {
 exports.default = EventManager;
 
 /***/ }),
-/* 14 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2554,7 +2942,7 @@ var ExtManager = function () {
 exports.default = new ExtManager();
 
 /***/ }),
-/* 15 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2578,43 +2966,43 @@ var _tuiCodeSnippet = __webpack_require__(1);
 
 var _tuiCodeSnippet2 = _interopRequireDefault(_tuiCodeSnippet);
 
-var _markdownIt = __webpack_require__(21);
+var _markdownIt = __webpack_require__(22);
 
 var _markdownIt2 = _interopRequireDefault(_markdownIt);
 
-var _toMark = __webpack_require__(22);
+var _toMark = __webpack_require__(23);
 
 var _toMark2 = _interopRequireDefault(_toMark);
 
-var _htmlSanitizer = __webpack_require__(12);
+var _htmlSanitizer = __webpack_require__(14);
 
 var _htmlSanitizer2 = _interopRequireDefault(_htmlSanitizer);
 
-var _markdownitTaskPlugin = __webpack_require__(23);
+var _markdownitTaskPlugin = __webpack_require__(24);
 
 var _markdownitTaskPlugin2 = _interopRequireDefault(_markdownitTaskPlugin);
 
-var _markdownitCodeBlockPlugin = __webpack_require__(24);
+var _markdownitCodeBlockPlugin = __webpack_require__(25);
 
 var _markdownitCodeBlockPlugin2 = _interopRequireDefault(_markdownitCodeBlockPlugin);
 
-var _markdownitCodeRenderer = __webpack_require__(25);
+var _markdownitCodeRenderer = __webpack_require__(26);
 
 var _markdownitCodeRenderer2 = _interopRequireDefault(_markdownitCodeRenderer);
 
-var _markdownitBlockQuoteRenderer = __webpack_require__(26);
+var _markdownitBlockQuoteRenderer = __webpack_require__(27);
 
 var _markdownitBlockQuoteRenderer2 = _interopRequireDefault(_markdownitBlockQuoteRenderer);
 
-var _markdownitTableRenderer = __webpack_require__(27);
+var _markdownitTableRenderer = __webpack_require__(28);
 
 var _markdownitTableRenderer2 = _interopRequireDefault(_markdownitTableRenderer);
 
-var _markdownitHtmlBlockRenderer = __webpack_require__(28);
+var _markdownitHtmlBlockRenderer = __webpack_require__(29);
 
 var _markdownitHtmlBlockRenderer2 = _interopRequireDefault(_markdownitHtmlBlockRenderer);
 
-var _markdownitBackticksRenderer = __webpack_require__(29);
+var _markdownitBackticksRenderer = __webpack_require__(30);
 
 var _markdownitBackticksRenderer2 = _interopRequireDefault(_markdownitBackticksRenderer);
 
@@ -2845,7 +3233,7 @@ var Convertor = function () {
       var FIND_BR_RX = /<br>/ig;
       var FIND_DOUBLE_BR_RX = /<br \/><br \/>/ig;
       var FIND_PASSING_AND_NORMAL_BR_RX = /<br data-tomark-pass \/><br \/>(.)/ig;
-      var FIRST_TWO_BRS_BEFORE_RX = /([^>]|<\/b>|<\/i>|<\/s>|<img [^>]*>)/;
+      var FIRST_TWO_BRS_BEFORE_RX = /([^>]|<\/a>|<\/code>|<\/span>|<\/b>|<\/i>|<\/s>|<img [^>]*>)/;
       var TWO_BRS_RX = /<br data-tomark-pass \/><br data-tomark-pass \/>/;
       var FIND_FIRST_TWO_BRS_RX = new RegExp(FIRST_TWO_BRS_BEFORE_RX.source + TWO_BRS_RX.source, 'g');
 
@@ -2891,7 +3279,7 @@ var Convertor = function () {
 exports.default = Convertor;
 
 /***/ }),
-/* 16 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2903,11 +3291,11 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _toolbarItem = __webpack_require__(9);
+var _toolbarItem = __webpack_require__(11);
 
 var _toolbarItem2 = _interopRequireDefault(_toolbarItem);
 
-var _tooltip = __webpack_require__(32);
+var _tooltip = __webpack_require__(34);
 
 var _tooltip2 = _interopRequireDefault(_tooltip);
 
@@ -2977,6 +3365,13 @@ var Button = function (_ToolbarItem) {
   }
 
   /**
+   * set tooltip text
+   * @param {string} text - tooltip text to show
+   * @memberof button
+   */
+
+
+  /**
    * ToolbarItem className
    * @type {String}
    * @memberof Button
@@ -2985,6 +3380,11 @@ var Button = function (_ToolbarItem) {
 
 
   _createClass(Button, [{
+    key: 'setTooltip',
+    value: function setTooltip(text) {
+      this._tooltip = text;
+    }
+  }, {
     key: '_setOptions',
     value: function _setOptions(options) {
       this._command = options.command;
@@ -3007,6 +3407,10 @@ var Button = function (_ToolbarItem) {
   }, {
     key: '_onClick',
     value: function _onClick() {
+      if (!this.isEnabled()) {
+        return;
+      }
+
       if (this._command) {
         this.trigger('command', this._command);
       } else if (this._event) {
@@ -3018,12 +3422,50 @@ var Button = function (_ToolbarItem) {
   }, {
     key: '_onOver',
     value: function _onOver() {
+      if (!this.isEnabled()) {
+        return;
+      }
+
       _tooltip2.default.show(this.$el, this._tooltip);
     }
   }, {
     key: '_onOut',
     value: function _onOut() {
       _tooltip2.default.hide();
+    }
+
+    /**
+     * enable button
+     * @memberof Button
+     */
+
+  }, {
+    key: 'enable',
+    value: function enable() {
+      this.$el.attr('disabled', false);
+    }
+
+    /**
+     * disable button
+     * @memberof Button
+     */
+
+  }, {
+    key: 'disable',
+    value: function disable() {
+      this.$el.attr('disabled', true);
+    }
+
+    /**
+     * check whether this button is enabled
+     * @returns {Boolean} - true for enabled
+     * @memberof Button
+     */
+
+  }, {
+    key: 'isEnabled',
+    value: function isEnabled() {
+      return !this.$el.attr('disabled');
     }
   }]);
 
@@ -3043,7 +3485,7 @@ Object.defineProperty(Button, 'className', {
 exports.default = Button;
 
 /***/ }),
-/* 17 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3449,7 +3891,7 @@ var KeyMapper = function () {
 exports.default = KeyMapper;
 
 /***/ }),
-/* 18 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3556,7 +3998,7 @@ var LazyRunner = function () {
 exports.default = LazyRunner;
 
 /***/ }),
-/* 19 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3729,325 +4171,6 @@ Command.TYPE = {
 exports.default = Command;
 
 /***/ }),
-/* 20 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @fileoverview Implement Module for managing import external data such as image
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
-
-
-var _tuiCodeSnippet = __webpack_require__(1);
-
-var _tuiCodeSnippet2 = _interopRequireDefault(_tuiCodeSnippet);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var URLRegex = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})(\/([^\s]*))?$/g;
-
-/**
- * Class ImportManager
- */
-
-var ImportManager = function () {
-  /**
-   * Creates an instance of ImportManager.
-   * @param {EventManager} eventManager - eventManager
-   * @memberof ImportManager
-   */
-  function ImportManager(eventManager) {
-    _classCallCheck(this, ImportManager);
-
-    this.eventManager = eventManager;
-    this._lastState = null;
-
-    this._initEvent();
-    this._initDefaultImageImporter();
-  }
-
-  /**
-   * graceful decode uri component
-   * @param {string} originalURI - string to be decoded
-   * @returns {string} decoded string
-   * @memberof ImportManager
-   * @static
-   */
-
-
-  _createClass(ImportManager, [{
-    key: '_initEvent',
-
-
-    /**
-     * Initialize event handler
-     * @memberof ImportManager
-     * @private
-     */
-    value: function _initEvent() {
-      var _this = this;
-
-      this.eventManager.listen('stateChange', function (ev) {
-        _this._lastState = ev;
-      });
-
-      this.eventManager.listen('drop', function (ev) {
-        var items = ev.data.dataTransfer && ev.data.dataTransfer.files;
-        _this._processBlobItems(items, ev.data);
-      });
-
-      this.eventManager.listen('willPaste', function (ev) {
-        // IE has no interface to handle clipboard image. #976
-        var fragment = ev.data.fragment;
-        var descendant = fragment.querySelectorAll('*');
-        // only if paste event data has one img element and the element has base64 encoded image
-        if (descendant.length !== 1 || descendant[0].tagName !== 'IMG' || !/^data:image/.test(descendant[0].src)) {
-          return;
-        }
-        ev.data.preventDefault();
-
-        var blob = dataURItoBlob(descendant[0].src);
-        _this._emitAddImageBlobHook(blob, 'paste');
-      });
-
-      this.eventManager.listen('paste', function (ev) {
-        _this._processClipboard(ev.data);
-      });
-
-      this.eventManager.listen('pasteBefore', function (ev) {
-        _this._decodeURL(ev);
-      });
-    }
-
-    /**
-     * Initialize default image importer
-     * @memberof ImportManager
-     * @private
-     */
-
-  }, {
-    key: '_initDefaultImageImporter',
-    value: function _initDefaultImageImporter() {
-      this.eventManager.listen('addImageBlobHook', function (blob, callback) {
-        var reader = new FileReader();
-
-        reader.onload = function (event) {
-          callback(event.target.result);
-        };
-
-        reader.readAsDataURL(blob);
-      });
-    }
-
-    /**
-     * Emit add image blob hook
-     * @memberof ImportManager
-     * @param {object} blob - blob or file
-     * @param {string} type - type of an event the item belongs to. paste or drop
-     * @private
-     */
-
-  }, {
-    key: '_emitAddImageBlobHook',
-    value: function _emitAddImageBlobHook(blob, type) {
-      var _this2 = this;
-
-      this.eventManager.emit('addImageBlobHook', blob, function (imageUrl, altText) {
-        _this2.eventManager.emit('command', 'AddImage', {
-          imageUrl: imageUrl,
-          altText: altText || blob.name || 'image'
-        });
-      }, type);
-    }
-
-    /**
-     * Decode url when paste link
-     * @param {object} ev - event object
-     * @private
-     */
-
-  }, {
-    key: '_decodeURL',
-    value: function _decodeURL(ev) {
-      var decodeURIGraceful = ImportManager.decodeURIGraceful,
-          encodeMarkdownCharacters = ImportManager.encodeMarkdownCharacters;
-
-
-      if (ev.source === 'markdown' && ev.data.text) {
-        var texts = ev.data.text;
-        var text = texts[0];
-        if (texts.length === 1 && text.match(URLRegex)) {
-          text = decodeURIGraceful(text);
-          text = encodeMarkdownCharacters(text);
-          ev.data.update(null, null, [text]);
-        }
-      } else if (ev.source === 'wysiwyg') {
-        var container = ev.$clipboardContainer.get(0);
-        var firstChild = container.childNodes[0];
-        var _text = firstChild.innerText;
-        if (container.childNodes.length === 1 && firstChild.tagName === 'A' && _text.match(URLRegex)) {
-          firstChild.innerText = decodeURIGraceful(_text);
-          firstChild.href = encodeMarkdownCharacters(firstChild.href);
-        }
-      }
-    }
-
-    /**
-     * Get blob or excel data from clipboard
-     * @memberof ImportManager
-     * @param {object} evData Clipboard data
-     * @private
-     */
-
-  }, {
-    key: '_processClipboard',
-    value: function _processClipboard(evData) {
-      var cbData = evData.clipboardData || window.clipboardData;
-      var blobItems = cbData && cbData.items;
-      var types = cbData.types;
-
-
-      if (blobItems && types && types.length === 1 && _tuiCodeSnippet2.default.inArray('Files', [].slice.call(types)) !== -1) {
-        this._processBlobItems(blobItems, evData);
-      }
-    }
-
-    /**
-     * Process for blob item
-     * @memberof ImportManager
-     * @param {Array.<string>} items Item array
-     * @param {object} evData Event data
-     * @private
-     */
-
-  }, {
-    key: '_processBlobItems',
-    value: function _processBlobItems(items, evData) {
-      var _this3 = this;
-
-      if (items) {
-        _tuiCodeSnippet2.default.forEachArray(items, function (item) {
-          if (item.type.indexOf('image') !== -1) {
-            evData.preventDefault();
-            evData.stopPropagation();
-            evData.codemirrorIgnore = true;
-
-            var blob = item.name ? item : item.getAsFile(); // Blob or File
-            _this3._emitAddImageBlobHook(blob, evData.type);
-
-            return false;
-          }
-
-          return true;
-        });
-      }
-    }
-
-    /**
-     * Returns if current cursor state is in block format ex) blockquote, list, task, codeblock
-     * @returns {boolean}
-     * @private
-     */
-
-  }, {
-    key: '_isInBlockFormat',
-    value: function _isInBlockFormat() {
-      var state = this._lastState;
-
-      return state && (state.codeBlock || state.list || state.task || state.code);
-    }
-  }], [{
-    key: 'decodeURIGraceful',
-    value: function decodeURIGraceful(originalURI) {
-      var uris = originalURI.split(' ');
-      var decodedURIs = [];
-      var decodedURI = void 0;
-
-      _tuiCodeSnippet2.default.forEachArray(uris, function (uri) {
-        try {
-          decodedURI = decodeURIComponent(uri);
-          decodedURI = decodedURI.replace(/ /g, '%20');
-        } catch (e) {
-          decodedURI = uri;
-        }
-
-        return decodedURIs.push(decodedURI);
-      });
-
-      return decodedURIs.join(' ');
-    }
-
-    /**
-     * encode markdown critical characters
-     * @static
-     * @param {string} text - string to encode
-     * @returns {string} - markdown character encoded string
-     * @memberof ImportManager
-     */
-
-  }, {
-    key: 'encodeMarkdownCharacters',
-    value: function encodeMarkdownCharacters(text) {
-      return text.replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/\[/g, '%5B').replace(/\]/g, '%5D').replace(/</g, '%3C').replace(/>/g, '%3E');
-    }
-
-    /**
-     * escape markdown critical characters
-     * @static
-     * @param {string} text - string to escape
-     * @returns {string} - markdown character escaped string
-     * @memberof ImportManager
-     */
-
-  }, {
-    key: 'escapeMarkdownCharacters',
-    value: function escapeMarkdownCharacters(text) {
-      return text.replace(/\(/g, '\\(').replace(/\)/g, '\\)').replace(/\[/g, '\\[').replace(/\]/g, '\\]').replace(/</g, '\\<').replace(/>/g, '\\>');
-    }
-  }]);
-
-  return ImportManager;
-}();
-
-/**
- * data URI to Blob
- * @param {string} dataURI - data URI string
- * @returns {Blob} - blob data
- * @ignore
- */
-
-
-function dataURItoBlob(dataURI) {
-  var byteString = atob(dataURI.split(',')[1]);
-  var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
-  var ab = new ArrayBuffer(byteString.length);
-  var ia = new Uint8Array(ab);
-  for (var i = 0; i < byteString.length; i += 1) {
-    ia[i] = byteString.charCodeAt(i);
-  }
-  var blob = new Blob([ab], { type: mimeString });
-
-  return blob;
-}
-
-exports.default = ImportManager;
-
-/***/ }),
-/* 21 */
-/***/ (function(module, exports) {
-
-module.exports = __WEBPACK_EXTERNAL_MODULE_21__;
-
-/***/ }),
 /* 22 */
 /***/ (function(module, exports) {
 
@@ -4055,6 +4178,12 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_22__;
 
 /***/ }),
 /* 23 */
+/***/ (function(module, exports) {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE_23__;
+
+/***/ }),
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4162,7 +4291,7 @@ function isTaskListItemToken(tokens, index) {
 module.exports = MarkdownitTaskRenderer;
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4245,7 +4374,7 @@ function escape(html, encode) {
 module.exports = MarkdownitCodeBlockRenderer;
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4314,7 +4443,7 @@ module.exports = function code(state, startLine, endLine /*, silent*/) {
 /* eslint-enable */
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4646,7 +4775,7 @@ module.exports = function blockquote(state, startLine, endLine, silent) {
 };
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4860,7 +4989,7 @@ module.exports = function table(state, startLine, endLine, silent) {
 };
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4957,7 +5086,7 @@ module.exports = function html_block(state, startLine, endLine, silent) {
 /* eslint-enable */
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5029,13 +5158,13 @@ module.exports = function backtick(state, silent) {
 };
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports) {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE_30__;
+module.exports = __WEBPACK_EXTERNAL_MODULE_31__;
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5055,11 +5184,11 @@ var _tuiCodeSnippet = __webpack_require__(1);
 
 var _tuiCodeSnippet2 = _interopRequireDefault(_tuiCodeSnippet);
 
-var _mdPreview = __webpack_require__(10);
+var _mdPreview = __webpack_require__(12);
 
 var _mdPreview2 = _interopRequireDefault(_mdPreview);
 
-var _eventManager = __webpack_require__(13);
+var _eventManager = __webpack_require__(15);
 
 var _eventManager2 = _interopRequireDefault(_eventManager);
 
@@ -5067,11 +5196,11 @@ var _commandManager = __webpack_require__(2);
 
 var _commandManager2 = _interopRequireDefault(_commandManager);
 
-var _extManager = __webpack_require__(14);
+var _extManager = __webpack_require__(16);
 
 var _extManager2 = _interopRequireDefault(_extManager);
 
-var _convertor = __webpack_require__(15);
+var _convertor = __webpack_require__(17);
 
 var _convertor2 = _interopRequireDefault(_convertor);
 
@@ -5114,7 +5243,8 @@ var ToastUIEditorViewer = function () {
     _classCallCheck(this, ToastUIEditorViewer);
 
     this.options = _jquery2.default.extend({
-      useDefaultHTMLSanitizer: true
+      useDefaultHTMLSanitizer: true,
+      codeBlockLanguages: _codeBlockManager.CodeBlockManager.getHighlightJSLanguages()
     }, options);
 
     this.eventManager = new _eventManager2.default();
@@ -5361,7 +5491,22 @@ ToastUIEditorViewer.WwTableSelectionManager = null;
 module.exports = ToastUIEditorViewer;
 
 /***/ }),
-/* 32 */
+/* 33 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var FIND_MD_OL_RX = exports.FIND_MD_OL_RX = /^[ \t]*[\d]+\. .*/;
+var FIND_MD_UL_RX = exports.FIND_MD_UL_RX = /^[ \t]*[-*] .*/;
+var FIND_MD_TASK_RX = exports.FIND_MD_TASK_RX = /^[ \t]*([*-] |[\d]+\. )(\[[ xX]] ).*/;
+var FIND_MD_UL_TASK_RX = exports.FIND_MD_UL_TASK_RX = /^[ \t]*[*-] (\[[ xX]] ).*/;
+
+/***/ }),
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5437,7 +5582,7 @@ var Tooltip = function () {
 exports.default = new Tooltip();
 
 /***/ }),
-/* 33 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5461,10 +5606,6 @@ var _codemirror = __webpack_require__(6);
 
 var _codemirror2 = _interopRequireDefault(_codemirror);
 
-__webpack_require__(45);
-
-__webpack_require__(46);
-
 __webpack_require__(47);
 
 __webpack_require__(48);
@@ -5472,6 +5613,10 @@ __webpack_require__(48);
 __webpack_require__(49);
 
 __webpack_require__(50);
+
+__webpack_require__(51);
+
+__webpack_require__(52);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -5526,7 +5671,8 @@ var CodeMirrorExt = function () {
           'Alt-Up': 'replaceLineTextToUpper',
           'Alt-Down': 'replaceLineTextToLower'
         },
-        indentUnit: 4
+        indentUnit: 4,
+        cursorScrollMargin: 12
       }, options);
 
       this.cm = _codemirror2.default.fromTextArea(cmTextarea, options);
@@ -5868,7 +6014,7 @@ var CodeMirrorExt = function () {
 exports.default = CodeMirrorExt;
 
 /***/ }),
-/* 34 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5971,7 +6117,7 @@ var ComponentManager = function () {
 exports.default = ComponentManager;
 
 /***/ }),
-/* 35 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6562,28 +6708,28 @@ var WwTableManager = function () {
       var _wwe$getEditor$getSel = this.wwe.getEditor().getSelection(),
           startContainer = _wwe$getEditor$getSel.startContainer;
 
-      var parentNode = startContainer.parentNode;
-
       var tableData = this._getTableDataFromTable(fragment);
-      var isTextInTableCell = parentNode.tagName === 'TD' || parentNode.tagName === 'TH';
       var isTableCell = startContainer.tagName === 'TD' || startContainer.tagName === 'TH';
-      var isTextNode = startContainer.nodeType === 3;
       var brString = isIE10 ? '' : '<br />';
       var anchorElement = void 0,
           td = void 0,
           tr = void 0,
           tdContent = void 0;
 
-      if (isTextNode && isTextInTableCell) {
-        anchorElement = parentNode;
-      } else if (isTableCell) {
+      if (isTableCell) {
         anchorElement = startContainer;
       } else {
-        anchorElement = (0, _jquery2.default)(startContainer).find('th,td').get(0);
+        anchorElement = _domUtils2.default.getParentUntilBy(startContainer, function (node) {
+          return node.tagName === 'TD' || node.tagName === 'TH';
+        }, function (node) {
+          return (0, _jquery2.default)(node).closest('table').length === 0;
+        });
+        anchorElement = anchorElement ? anchorElement.parentNode : null;
       }
 
-      td = anchorElement;
+      anchorElement = anchorElement ? anchorElement : (0, _jquery2.default)(startContainer).find('th,td').get(0);
 
+      td = anchorElement;
       while (tableData.length) {
         tr = tableData.shift();
 
@@ -7384,7 +7530,7 @@ function tableCellGenerator(amount, tagName) {
 exports.default = WwTableManager;
 
 /***/ }),
-/* 36 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7844,13 +7990,14 @@ var WwTableSelectionManager = function () {
     /**
        * Style to selected cells.
        * @param {function} onStyle - function for styling
+       * @param {Object} [options] - options to be passed into onStyle
        */
 
   }, {
     key: 'styleToSelectedCells',
-    value: function styleToSelectedCells(onStyle) {
+    value: function styleToSelectedCells(onStyle, options) {
       this.createRangeBySelectedCells();
-      onStyle(this.wwe.getEditor());
+      onStyle(this.wwe.getEditor(), options);
     }
 
     /**
@@ -7874,7 +8021,7 @@ var WwTableSelectionManager = function () {
 exports.default = WwTableSelectionManager;
 
 /***/ }),
-/* 37 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7940,6 +8087,7 @@ var WwCodeBlockManager = function () {
 
     this._init();
   }
+
   /**
    * _init
    * Initialize
@@ -8073,7 +8221,7 @@ var WwCodeBlockManager = function () {
     key: '_mergeCodeblockEachlinesFromHTMLText',
     value: function _mergeCodeblockEachlinesFromHTMLText(html) {
       html = html.replace(/<pre( .*?)?>(.*?)<\/pre>/g, function (match, codeAttr, code) {
-        code = code.replace(/<br \/>/g, '\n');
+        code = code.replace(/<br\s*\/?>/g, '\n');
         code = code.replace(/<div ?(.*?)>/g, '');
         code = code.replace(/\n$/, '');
 
@@ -8270,7 +8418,7 @@ function sanitizeHtmlCode(code) {
 exports.default = WwCodeBlockManager;
 
 /***/ }),
-/* 38 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8296,19 +8444,19 @@ var _uicontroller = __webpack_require__(8);
 
 var _uicontroller2 = _interopRequireDefault(_uicontroller);
 
-var _button = __webpack_require__(16);
+var _button = __webpack_require__(18);
 
 var _button2 = _interopRequireDefault(_button);
 
-var _toolbarItem = __webpack_require__(9);
+var _toolbarItem = __webpack_require__(11);
 
 var _toolbarItem2 = _interopRequireDefault(_toolbarItem);
 
-var _toolbarDivider = __webpack_require__(39);
+var _toolbarDivider = __webpack_require__(41);
 
 var _toolbarDivider2 = _interopRequireDefault(_toolbarDivider);
 
-var _toolbarItemFactory = __webpack_require__(40);
+var _toolbarItemFactory = __webpack_require__(42);
 
 var _toolbarItemFactory2 = _interopRequireDefault(_toolbarItemFactory);
 
@@ -8397,6 +8545,45 @@ var Toolbar = function (_UIController) {
             }
           }
         });
+      });
+      eventManager.listen('changePreviewTabPreview', function () {
+        return _this2.disableAllButton();
+      });
+      eventManager.listen('changePreviewTabWrite', function () {
+        return _this2.enableAllButton();
+      });
+      eventManager.listen('changeMode', function () {
+        return _this2.enableAllButton();
+      });
+    }
+
+    /**
+     * disable all toolbar button
+     * @memberof Toolbar
+     */
+
+  }, {
+    key: 'disableAllButton',
+    value: function disableAllButton() {
+      this._items.forEach(function (item) {
+        if (item instanceof _button2.default) {
+          item.disable();
+        }
+      });
+    }
+
+    /**
+     * enable all toolbar button
+     * @memberof Toolbar
+     */
+
+  }, {
+    key: 'enableAllButton',
+    value: function enableAllButton() {
+      this._items.forEach(function (item) {
+        if (item instanceof _button2.default) {
+          item.enable();
+        }
       });
     }
 
@@ -8673,7 +8860,7 @@ var Toolbar = function (_UIController) {
 exports.default = Toolbar;
 
 /***/ }),
-/* 39 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8683,7 +8870,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _toolbarItem = __webpack_require__(9);
+var _toolbarItem = __webpack_require__(11);
 
 var _toolbarItem2 = _interopRequireDefault(_toolbarItem);
 
@@ -8747,7 +8934,7 @@ Object.defineProperty(ToolbarDivider, 'className', {
 exports.default = ToolbarDivider;
 
 /***/ }),
-/* 40 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8762,15 +8949,15 @@ var _createClass = function () { function defineProperties(target, props) { for 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
-var _toolbarItem = __webpack_require__(9);
+var _toolbarItem = __webpack_require__(11);
 
 var _toolbarItem2 = _interopRequireDefault(_toolbarItem);
 
-var _toolbarButton = __webpack_require__(71);
+var _toolbarButton = __webpack_require__(73);
 
 var _toolbarButton2 = _interopRequireDefault(_toolbarButton);
 
-var _toolbarDivider = __webpack_require__(39);
+var _toolbarDivider = __webpack_require__(41);
 
 var _toolbarDivider2 = _interopRequireDefault(_toolbarDivider);
 
@@ -8964,7 +9151,7 @@ var ToolbarItemFactory = function () {
 exports.default = ToolbarItemFactory;
 
 /***/ }),
-/* 41 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9120,7 +9307,7 @@ var Tab = function (_UIController) {
 exports.default = Tab;
 
 /***/ }),
-/* 42 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9132,7 +9319,7 @@ var _jquery2 = _interopRequireDefault(_jquery);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var Editor = __webpack_require__(43);
+var Editor = __webpack_require__(45);
 
 // for jquery
 /**
@@ -9173,7 +9360,7 @@ _jquery2.default.fn.tuiEditor = function () {
 module.exports = Editor;
 
 /***/ }),
-/* 43 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9202,27 +9389,27 @@ var _tuiCodeSnippet = __webpack_require__(1);
 
 var _tuiCodeSnippet2 = _interopRequireDefault(_tuiCodeSnippet);
 
-var _button = __webpack_require__(16);
+var _button = __webpack_require__(18);
 
 var _button2 = _interopRequireDefault(_button);
 
-var _markdownEditor = __webpack_require__(44);
+var _markdownEditor = __webpack_require__(46);
 
 var _markdownEditor2 = _interopRequireDefault(_markdownEditor);
 
-var _mdPreview = __webpack_require__(10);
+var _mdPreview = __webpack_require__(12);
 
 var _mdPreview2 = _interopRequireDefault(_mdPreview);
 
-var _wysiwygEditor = __webpack_require__(53);
+var _wysiwygEditor = __webpack_require__(55);
 
 var _wysiwygEditor2 = _interopRequireDefault(_wysiwygEditor);
 
-var _layout = __webpack_require__(66);
+var _layout = __webpack_require__(68);
 
 var _layout2 = _interopRequireDefault(_layout);
 
-var _eventManager = __webpack_require__(13);
+var _eventManager = __webpack_require__(15);
 
 var _eventManager2 = _interopRequireDefault(_eventManager);
 
@@ -9230,23 +9417,23 @@ var _commandManager2 = __webpack_require__(2);
 
 var _commandManager3 = _interopRequireDefault(_commandManager2);
 
-var _extManager = __webpack_require__(14);
+var _extManager = __webpack_require__(16);
 
 var _extManager2 = _interopRequireDefault(_extManager);
 
-var _importManager = __webpack_require__(20);
+var _importManager = __webpack_require__(10);
 
 var _importManager2 = _interopRequireDefault(_importManager);
 
-var _wwCodeBlockManager = __webpack_require__(37);
+var _wwCodeBlockManager = __webpack_require__(39);
 
 var _wwCodeBlockManager2 = _interopRequireDefault(_wwCodeBlockManager);
 
-var _convertor = __webpack_require__(15);
+var _convertor = __webpack_require__(17);
 
 var _convertor2 = _interopRequireDefault(_convertor);
 
-var _viewer = __webpack_require__(31);
+var _viewer = __webpack_require__(32);
 
 var _viewer2 = _interopRequireDefault(_viewer);
 
@@ -9254,7 +9441,7 @@ var _i18n = __webpack_require__(4);
 
 var _i18n2 = _interopRequireDefault(_i18n);
 
-var _defaultUI = __webpack_require__(67);
+var _defaultUI = __webpack_require__(69);
 
 var _defaultUI2 = _interopRequireDefault(_defaultUI);
 
@@ -9262,11 +9449,11 @@ var _domUtils = __webpack_require__(3);
 
 var _domUtils2 = _interopRequireDefault(_domUtils);
 
-var _wwTableManager = __webpack_require__(35);
+var _wwTableManager = __webpack_require__(37);
 
 var _wwTableManager2 = _interopRequireDefault(_wwTableManager);
 
-var _wwTableSelectionManager = __webpack_require__(36);
+var _wwTableSelectionManager = __webpack_require__(38);
 
 var _wwTableSelectionManager2 = _interopRequireDefault(_wwTableSelectionManager);
 
@@ -9274,169 +9461,167 @@ var _codeBlockManager = __webpack_require__(7);
 
 var _codeBlockManager2 = _interopRequireDefault(_codeBlockManager);
 
-var _bold = __webpack_require__(85);
+var _bold = __webpack_require__(87);
 
 var _bold2 = _interopRequireDefault(_bold);
 
-var _italic = __webpack_require__(86);
+var _italic = __webpack_require__(88);
 
 var _italic2 = _interopRequireDefault(_italic);
 
-var _strike = __webpack_require__(87);
+var _strike = __webpack_require__(89);
 
 var _strike2 = _interopRequireDefault(_strike);
 
-var _blockquote = __webpack_require__(88);
+var _blockquote = __webpack_require__(90);
 
 var _blockquote2 = _interopRequireDefault(_blockquote);
 
-var _heading = __webpack_require__(89);
+var _heading = __webpack_require__(91);
 
 var _heading2 = _interopRequireDefault(_heading);
 
-var _paragraph = __webpack_require__(90);
+var _paragraph = __webpack_require__(92);
 
 var _paragraph2 = _interopRequireDefault(_paragraph);
 
-var _hr = __webpack_require__(91);
+var _hr = __webpack_require__(93);
 
 var _hr2 = _interopRequireDefault(_hr);
 
-var _addLink = __webpack_require__(92);
+var _addLink = __webpack_require__(94);
 
 var _addLink2 = _interopRequireDefault(_addLink);
 
-var _addImage = __webpack_require__(93);
+var _addImage = __webpack_require__(95);
 
 var _addImage2 = _interopRequireDefault(_addImage);
 
-var _ul = __webpack_require__(94);
+var _ul = __webpack_require__(96);
 
 var _ul2 = _interopRequireDefault(_ul);
 
-var _ol = __webpack_require__(95);
+var _ol = __webpack_require__(97);
 
 var _ol2 = _interopRequireDefault(_ol);
 
-var _indent = __webpack_require__(96);
+var _indent = __webpack_require__(98);
 
 var _indent2 = _interopRequireDefault(_indent);
 
-var _outdent = __webpack_require__(97);
+var _outdent = __webpack_require__(99);
 
 var _outdent2 = _interopRequireDefault(_outdent);
 
-var _table = __webpack_require__(98);
+var _table = __webpack_require__(100);
 
 var _table2 = _interopRequireDefault(_table);
 
-var _task = __webpack_require__(99);
+var _task = __webpack_require__(101);
 
 var _task2 = _interopRequireDefault(_task);
 
-var _code = __webpack_require__(100);
+var _code = __webpack_require__(102);
 
 var _code2 = _interopRequireDefault(_code);
 
-var _codeBlock = __webpack_require__(101);
+var _codeBlock = __webpack_require__(103);
 
 var _codeBlock2 = _interopRequireDefault(_codeBlock);
 
-var _bold3 = __webpack_require__(102);
+var _bold3 = __webpack_require__(104);
 
 var _bold4 = _interopRequireDefault(_bold3);
 
-var _italic3 = __webpack_require__(103);
+var _italic3 = __webpack_require__(105);
 
 var _italic4 = _interopRequireDefault(_italic3);
 
-var _strike3 = __webpack_require__(104);
+var _strike3 = __webpack_require__(106);
 
 var _strike4 = _interopRequireDefault(_strike3);
 
-var _blockquote3 = __webpack_require__(105);
+var _blockquote3 = __webpack_require__(107);
 
 var _blockquote4 = _interopRequireDefault(_blockquote3);
 
-var _addImage3 = __webpack_require__(106);
+var _addImage3 = __webpack_require__(108);
 
 var _addImage4 = _interopRequireDefault(_addImage3);
 
-var _addLink3 = __webpack_require__(107);
+var _addLink3 = __webpack_require__(109);
 
 var _addLink4 = _interopRequireDefault(_addLink3);
 
-var _hr3 = __webpack_require__(108);
+var _hr3 = __webpack_require__(110);
 
 var _hr4 = _interopRequireDefault(_hr3);
 
-var _heading3 = __webpack_require__(109);
+var _heading3 = __webpack_require__(111);
 
 var _heading4 = _interopRequireDefault(_heading3);
 
-var _paragraph3 = __webpack_require__(110);
+var _paragraph3 = __webpack_require__(112);
 
 var _paragraph4 = _interopRequireDefault(_paragraph3);
 
-var _ul3 = __webpack_require__(111);
+var _ul3 = __webpack_require__(113);
 
 var _ul4 = _interopRequireDefault(_ul3);
 
-var _ol3 = __webpack_require__(112);
+var _ol3 = __webpack_require__(114);
 
 var _ol4 = _interopRequireDefault(_ol3);
 
-var _table3 = __webpack_require__(113);
+var _table3 = __webpack_require__(115);
 
 var _table4 = _interopRequireDefault(_table3);
 
-var _tableAddRow = __webpack_require__(114);
+var _tableAddRow = __webpack_require__(116);
 
 var _tableAddRow2 = _interopRequireDefault(_tableAddRow);
 
-var _tableAddCol = __webpack_require__(115);
+var _tableAddCol = __webpack_require__(117);
 
 var _tableAddCol2 = _interopRequireDefault(_tableAddCol);
 
-var _tableRemoveRow = __webpack_require__(116);
+var _tableRemoveRow = __webpack_require__(118);
 
 var _tableRemoveRow2 = _interopRequireDefault(_tableRemoveRow);
 
-var _tableRemoveCol = __webpack_require__(117);
+var _tableRemoveCol = __webpack_require__(119);
 
 var _tableRemoveCol2 = _interopRequireDefault(_tableRemoveCol);
 
-var _tableAlignCol = __webpack_require__(118);
+var _tableAlignCol = __webpack_require__(120);
 
 var _tableAlignCol2 = _interopRequireDefault(_tableAlignCol);
 
-var _tableRemove = __webpack_require__(119);
+var _tableRemove = __webpack_require__(121);
 
 var _tableRemove2 = _interopRequireDefault(_tableRemove);
 
-var _indent3 = __webpack_require__(120);
+var _indent3 = __webpack_require__(122);
 
 var _indent4 = _interopRequireDefault(_indent3);
 
-var _outdent3 = __webpack_require__(121);
+var _outdent3 = __webpack_require__(123);
 
 var _outdent4 = _interopRequireDefault(_outdent3);
 
-var _task3 = __webpack_require__(122);
+var _task3 = __webpack_require__(124);
 
 var _task4 = _interopRequireDefault(_task3);
 
-var _code3 = __webpack_require__(123);
+var _code3 = __webpack_require__(125);
 
 var _code4 = _interopRequireDefault(_code3);
 
-var _codeBlock3 = __webpack_require__(124);
+var _codeBlock3 = __webpack_require__(126);
 
 var _codeBlock4 = _interopRequireDefault(_codeBlock3);
 
-var _util = __webpack_require__(125);
-
-__webpack_require__(126);
+var _util = __webpack_require__(9);
 
 __webpack_require__(127);
 
@@ -9455,6 +9640,10 @@ __webpack_require__(133);
 __webpack_require__(134);
 
 __webpack_require__(135);
+
+__webpack_require__(136);
+
+__webpack_require__(137);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -9553,9 +9742,7 @@ var ToastUIEditor = function () {
 
     this.mdEditor = _markdownEditor2.default.factory(this.layout.getMdEditorContainerEl(), this.eventManager);
     this.preview = new _mdPreview2.default(this.layout.getPreviewEl(), this.eventManager, this.convertor);
-    this.wwEditor = _wysiwygEditor2.default.factory(this.layout.getWwEditorContainerEl(), this.eventManager, {
-      useCommandShortcut: this.options.useCommandShortcut
-    });
+    this.wwEditor = _wysiwygEditor2.default.factory(this.layout.getWwEditorContainerEl(), this.eventManager);
     this.toMarkOptions = null;
 
     this.changePreviewStyle(this.options.previewStyle);
@@ -10360,7 +10547,7 @@ ToastUIEditor.markdownitHighlight = _convertor2.default.getMarkdownitHighlightRe
 module.exports = ToastUIEditor;
 
 /***/ }),
-/* 44 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10378,23 +10565,23 @@ var _tuiCodeSnippet = __webpack_require__(1);
 
 var _tuiCodeSnippet2 = _interopRequireDefault(_tuiCodeSnippet);
 
-var _codeMirrorExt = __webpack_require__(33);
+var _codeMirrorExt = __webpack_require__(35);
 
 var _codeMirrorExt2 = _interopRequireDefault(_codeMirrorExt);
 
-var _keyMapper = __webpack_require__(17);
+var _keyMapper = __webpack_require__(19);
 
 var _keyMapper2 = _interopRequireDefault(_keyMapper);
 
-var _mdListManager = __webpack_require__(51);
+var _mdListManager = __webpack_require__(53);
 
 var _mdListManager2 = _interopRequireDefault(_mdListManager);
 
-var _componentManager = __webpack_require__(34);
+var _componentManager = __webpack_require__(36);
 
 var _componentManager2 = _interopRequireDefault(_componentManager);
 
-var _mdTextObject = __webpack_require__(52);
+var _mdTextObject = __webpack_require__(54);
 
 var _mdTextObject2 = _interopRequireDefault(_mdTextObject);
 
@@ -10433,8 +10620,8 @@ var MarkdownEditor = function (_CodeMirrorExt) {
       dragDrop: true,
       allowDropFileTypes: ['image'],
       extraKeys: {
-        'Enter': 'newlineAndIndentContinue',
-        'Tab': 'subListIndentTab',
+        'Enter': 'newlineAndIndentContinueMarkdownList',
+        'Tab': 'indentOrderedList',
         'Shift-Tab': 'indentLessOrderedList'
       }
     }));
@@ -10573,7 +10760,7 @@ var MarkdownEditor = function (_CodeMirrorExt) {
           codeBlock: !!overlay.codeBlock,
           quote: !!base.quote,
           list: !!base.list,
-          task: !!base.task,
+          task: !!base.taskList,
           source: 'markdown'
         };
 
@@ -10690,7 +10877,7 @@ var MarkdownEditor = function (_CodeMirrorExt) {
 exports.default = MarkdownEditor;
 
 /***/ }),
-/* 45 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10833,7 +11020,7 @@ function findFirstListItem(lineNumber, cm) {
 }
 
 /***/ }),
-/* 46 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10918,7 +11105,7 @@ _codemirror2.default.overlayMode = function (base, overlay, combine) {
  */
 
 /***/ }),
-/* 47 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10931,18 +11118,10 @@ var _codemirror2 = _interopRequireDefault(_codemirror);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /*eslint-disable */
-"use strict"; // CodeMirror, copyright (c) by Marijn Haverbeke and others
-// Distributed under an MIT license: http://codemirror.net/LICENSE
-/**
- * @modifier NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
- */
-// based on https://github.com/codemirror/CodeMirror/blob/ff04f127ba8a736b97d06c505fb85d976e3f2980/mode/markdown/markdown.js
-
-
 _codemirror2.default.defineMode("markdown", function (cmCfg, modeCfg) {
 
-  var htmlFound = _codemirror2.default.modes.hasOwnProperty("xml");
-  var htmlMode = _codemirror2.default.getMode(cmCfg, htmlFound ? { name: "xml", htmlMode: true } : "text/plain");
+  var htmlMode = _codemirror2.default.getMode(cmCfg, "text/html");
+  var htmlModeMissing = htmlMode.name == "null";
 
   function getMode(name) {
     if (_codemirror2.default.findModeByName) {
@@ -10961,61 +11140,61 @@ _codemirror2.default.defineMode("markdown", function (cmCfg, modeCfg) {
   // Excess `>` will emit `error` token.
   if (modeCfg.maxBlockquoteDepth === undefined) modeCfg.maxBlockquoteDepth = 0;
 
-  // Should underscores in words open/close em/strong?
-  if (modeCfg.underscoresBreakWords === undefined) modeCfg.underscoresBreakWords = true;
-
-  // TUI.EDITOR MODIFICATION START
-  // scrollSync prototype
-  // https://github.nhnent.com/fe/tui.editor/commit/f63d6ae79078923d369e6c170d07485f05c42fd7
-  // Use `fencedCodeBlocks` to configure fenced code blocks. false to
-  // disable, string to specify a precise regexp that the fence should
-  // match, and true to allow three or more backticks or tildes (as
-  // per CommonMark).
-  // Turn on fenced code blocks? ("```" to start/end)
-  // if (modeCfg.fencedCodeBlocks === undefined) modeCfg.fencedCodeBlocks = false;
-  // TUI.EDITOR MODIFICATION END
-
   // Turn on task lists? ("- [ ] " and "- [x] ")
   if (modeCfg.taskLists === undefined) modeCfg.taskLists = false;
 
   // Turn on strikethrough syntax
   if (modeCfg.strikethrough === undefined) modeCfg.strikethrough = false;
 
-  var codeDepth = 0;
+  if (modeCfg.emoji === undefined) modeCfg.emoji = false;
 
-  var header = 'header',
-      code = 'comment',
-      quote = 'quote',
-      list1 = 'variable-2',
-      list2 = 'variable-3',
-      list3 = 'keyword',
-      hr = 'hr',
-      image = 'tag',
-      formatting = 'formatting',
-      linkinline = 'link',
-      linkemail = 'link',
-      linktext = 'link',
-      linkhref = 'string',
-      em = 'em',
-      strong = 'strong',
-      strikethrough = 'strikethrough';
+  if (modeCfg.fencedCodeBlockHighlighting === undefined) modeCfg.fencedCodeBlockHighlighting = true;
+
+  if (modeCfg.xml === undefined) modeCfg.xml = true;
+
+  // Allow token types to be overridden by user-provided token types.
+  if (modeCfg.tokenTypeOverrides === undefined) modeCfg.tokenTypeOverrides = {};
+
+  var tokenTypes = {
+    header: "header",
+    code: "comment",
+    quote: "quote",
+    list1: "variable-2",
+    list2: "variable-3",
+    list3: "keyword",
+    hr: "hr",
+    image: "image",
+    imageAltText: "image-alt-text",
+    imageMarker: "image-marker",
+    formatting: "formatting",
+    linkInline: "link",
+    linkEmail: "link",
+    linkText: "link",
+    linkHref: "string",
+    em: "em",
+    strong: "strong",
+    strikethrough: "strikethrough",
+    emoji: "builtin"
+  };
+
+  for (var tokenType in tokenTypes) {
+    if (tokenTypes.hasOwnProperty(tokenType) && modeCfg.tokenTypeOverrides[tokenType]) {
+      tokenTypes[tokenType] = modeCfg.tokenTypeOverrides[tokenType];
+    }
+  }
 
   var hrRE = /^([*\-_])(?:\s*\1){2,}\s*$/,
-      ulRE = /^[*\-+]\s+/,
-      olRE = /^[0-9]+([.)])\s+/,
-      taskListRE = /^\[(x| )\](?=\s)/ // Must follow ulRE or olRE
-  // TUI.EDITOR MODIFICATION START
-  // scrollSync prototype
-  // https://github.nhnent.com/fe/tui.editor/commit/f63d6ae79078923d369e6c170d07485f05c42fd7
+      listRE = /^(?:[*\-+]|^[0-9]+([.)]))\s+/,
+      taskListRE = /^\[(x| )\](?=\s)/i // Must follow listRE
   ,
       atxHeaderRE = modeCfg.allowAtxHeaderWithoutSpace ? /^(#+)/ : /^(#+)(?: |$)/,
       setextHeaderRE = /^ *(?:\={1,}|-{1,})\s*$/,
-      textRE = /^[^#!\[\]*_\\<>` "'(~]+/,
-      fencedCodeRE = new RegExp("^(" + (modeCfg.fencedCodeBlocks === true ? "~~~+|```+" : modeCfg.fencedCodeBlocks) + ")[ \\t]*([\\w+#]*)");
-  // ,   atxHeaderRE = /^(#+)(?: |$)/
-  // ,   setextHeaderRE = /^ *(?:\={1,}|-{1,})\s*$/
-  // ,   textRE = /^[^#!\[\]*_\\<>` "'(~]+/;
-  // TUI.EDITOR MODIFICATION END
+      textRE = /^[^#!\[\]*_\\<>` "'(~:]+/,
+      fencedCodeRE = /^(~~~+|```+)[ \t]*([\w+#-]*)[^\n`]*$/,
+      linkDefRE = /^\s*\[[^\]]+?\]:.*$/ // naive link-definition
+  ,
+      punctuation = /[!\"#$%&\'()*+,\-\.\/:;<=>?@\[\\\]^_`{|}~]/,
+      expandedTab = "    "; // CommonMark specifies tab as 4 spaces
 
   function switchInline(stream, state, f) {
     state.f = state.inline = f;
@@ -11027,19 +11206,17 @@ _codemirror2.default.defineMode("markdown", function (cmCfg, modeCfg) {
     return f(stream, state);
   }
 
-  // TUI.EDITOR MODIFICATION START
-  // scrollSync prototype
-  // https://github.nhnent.com/fe/tui.editor/commit/f63d6ae79078923d369e6c170d07485f05c42fd7
   function lineIsEmpty(line) {
     return !line || !/\S/.test(line.string);
   }
-  // TUI.EDITOR MODIFICATION END
 
   // Blocks
 
   function blankLine(state) {
     // Reset linkTitle state
     state.linkTitle = false;
+    state.linkHref = false;
+    state.linkText = false;
     // Reset EM state
     state.em = false;
     // Reset STRONG state
@@ -11050,152 +11227,144 @@ _codemirror2.default.defineMode("markdown", function (cmCfg, modeCfg) {
     state.quote = 0;
     // Reset state.indentedCode
     state.indentedCode = false;
-    if (!htmlFound && state.f == htmlBlock) {
-      state.f = inlineNormal;
-      state.block = blockNormal;
+    if (state.f == htmlBlock) {
+      var exit = htmlModeMissing;
+      if (!exit) {
+        var inner = _codemirror2.default.innerMode(htmlMode, state.htmlState);
+        exit = inner.mode.name == "xml" && inner.state.tagStart === null && !inner.state.context && inner.state.tokenize.isInText;
+      }
+      if (exit) {
+        state.f = inlineNormal;
+        state.block = blockNormal;
+        state.htmlState = null;
+      }
     }
     // Reset state.trailingSpace
     state.trailingSpace = 0;
     state.trailingSpaceNewLine = false;
-    // TUI.EDITOR MODIFICATION START
-    // scrollSync prototype
-    // https://github.nhnent.com/fe/tui.editor/commit/f63d6ae79078923d369e6c170d07485f05c42fd7
     // Mark this line as blank
     state.prevLine = state.thisLine;
-    state.thisLine = null;
-    // state.thisLineHasContent = false;
-    // TUI.EDITOR MODIFICATION END
+    state.thisLine = { stream: null };
     return null;
   }
 
   function blockNormal(stream, state) {
-
-    var sol = stream.sol();
-
-    var prevLineIsList = state.list !== false,
-        prevLineIsIndentedCode = state.indentedCode;
+    var firstTokenOnLine = stream.column() === state.indentation;
+    var prevLineLineIsEmpty = lineIsEmpty(state.prevLine.stream);
+    var prevLineIsIndentedCode = state.indentedCode;
+    var prevLineIsHr = state.prevLine.hr;
+    var prevLineIsList = state.list !== false;
+    var maxNonCodeIndentation = (state.listStack[state.listStack.length - 1] || 0) + 3;
 
     state.indentedCode = false;
 
-    if (prevLineIsList) {
-      if (state.indentationDiff >= 0) {
-        // Continued list
-        if (state.indentationDiff < 4) {
-          // Only adjust indentation if *not* a code block
-          state.indentation -= state.indentationDiff;
+    var lineIndentation = state.indentation;
+    // compute once per line (on first token)
+    if (state.indentationDiff === null) {
+      state.indentationDiff = state.indentation;
+      if (prevLineIsList) {
+        // Reset inline styles which shouldn't propagate aross list items
+        state.em = false;
+        state.strong = false;
+        state.code = false;
+        state.strikethrough = false;
+
+        state.list = null;
+        // While this list item's marker's indentation is less than the deepest
+        //  list item's content's indentation,pop the deepest list item
+        //  indentation off the stack, and update block indentation state
+        while (lineIndentation < state.listStack[state.listStack.length - 1]) {
+          state.listStack.pop();
+          if (state.listStack.length) {
+            state.indentation = state.listStack[state.listStack.length - 1];
+            // less than the first list's indent -> the line is no longer a list
+          } else {
+            state.list = false;
+          }
         }
-        state.list = null;
-        // TUI.EDITOR MODIFICATION START
-        // bug: no highlight in list
-        // https://github.nhnent.com/fe/tui.editor/commit/d42c37639942633ccaf755c0c0d20f460c0b2441
-        // https://github.nhnent.com/fe/tui.editor/issues/1002
-      }
-      if (state.indentation > 0) {
-        state.list = null;
-        // state.listDepth = Math.floor(state.indentation / 4) + 1;
-        // } else if (state.indentation > 0) {
-        //   state.list = null;
-        state.listDepth = Math.floor(state.indentation / 4);
-        // TUI.EDITOR MODIFICATION END
-      } else {
-        // No longer a list
-        state.list = false;
-        state.listDepth = 0;
+        if (state.list !== false) {
+          state.indentationDiff = lineIndentation - state.listStack[state.listStack.length - 1];
+        }
       }
     }
 
+    // not comprehensive (currently only for setext detection purposes)
+    var allowsInlineContinuation = !prevLineLineIsEmpty && !prevLineIsHr && !state.prevLine.header && (!prevLineIsList || !prevLineIsIndentedCode) && !state.prevLine.fencedCodeEnd;
+
+    var isHr = (state.list === false || prevLineIsHr || prevLineLineIsEmpty) && state.indentation <= maxNonCodeIndentation && stream.match(hrRE);
+
     var match = null;
-    if (state.indentationDiff >= 4) {
+    if (state.indentationDiff >= 4 && (prevLineIsIndentedCode || state.prevLine.fencedCodeEnd || state.prevLine.header || prevLineLineIsEmpty)) {
       stream.skipToEnd();
-      // TUI.EDITOR MODIFICATION START
-      // scrollSync prototype
-      // https://github.nhnent.com/fe/tui.editor/commit/f63d6ae79078923d369e6c170d07485f05c42fd7
-      if (prevLineIsIndentedCode || lineIsEmpty(state.prevLine)) {
-        // if (prevLineIsIndentedCode || !state.prevLineHasContent) {
-        // TUI.EDITOR MODIFICATION END
-        state.indentation -= 4;
-        state.indentedCode = true;
-        return code;
-      } else {
-        return null;
-      }
+      state.indentedCode = true;
+      return tokenTypes.code;
     } else if (stream.eatSpace()) {
       return null;
-    } else if ((match = stream.match(atxHeaderRE)) && match[1].length <= 6) {
+    } else if (firstTokenOnLine && state.indentation <= maxNonCodeIndentation && (match = stream.match(atxHeaderRE)) && match[1].length <= 6) {
+      state.quote = 0;
       state.header = match[1].length;
+      state.thisLine.header = true;
       if (modeCfg.highlightFormatting) state.formatting = "header";
       state.f = state.inline;
       return getType(state);
-      // TUI.EDITOR MODIFICATION START
-      // scrollSync prototype
-      // https://github.nhnent.com/fe/tui.editor/commit/f63d6ae79078923d369e6c170d07485f05c42fd7
-    } else if (!lineIsEmpty(state.prevLine) && !state.quote && !prevLineIsList && !prevLineIsIndentedCode && (match = stream.match(setextHeaderRE))) {
-      // } else if (state.prevLineHasContent && !state.quote && !prevLineIsList && !prevLineIsIndentedCode && (match = stream.match(setextHeaderRE))) {
-      // TUI.EDITOR MODIFICATION END
-      state.header = match[0].charAt(0) == '=' ? 1 : 2;
-      if (modeCfg.highlightFormatting) state.formatting = "header";
-      state.f = state.inline;
-      return getType(state);
-    } else if (stream.eat('>')) {
-      state.quote = sol ? 1 : state.quote + 1;
+    } else if (state.indentation <= maxNonCodeIndentation && stream.eat('>')) {
+      state.quote = firstTokenOnLine ? 1 : state.quote + 1;
       if (modeCfg.highlightFormatting) state.formatting = "quote";
       stream.eatSpace();
       return getType(state);
-    } else if (stream.peek() === '[') {
-      return switchInline(stream, state, footnoteLink);
-    } else if (stream.match(hrRE, true)) {
-      state.hr = true;
-      return hr;
-      // TUI.EDITOR MODIFICATION START
-      // scrollSync prototype
-      // https://github.nhnent.com/fe/tui.editor/commit/f63d6ae79078923d369e6c170d07485f05c42fd7
-    } else if ((lineIsEmpty(state.prevLine) || prevLineIsList) && (stream.match(ulRE, false) || stream.match(olRE, false))) {
-      // } else if ((!state.prevLineHasContent || prevLineIsList) && (stream.match(ulRE, false) || stream.match(olRE, false))) {
-      // TUI.EDITOR MODIFICATION END
-      var listType = null;
-      if (stream.match(ulRE, true)) {
-        listType = 'ul';
-      } else {
-        stream.match(olRE, true);
-        listType = 'ol';
-      }
-      // TUI.EDITOR MODIFICATION START
-      // scrollSync prototype
-      // https://github.nhnent.com/fe/tui.editor/commit/f63d6ae79078923d369e6c170d07485f05c42fd7
-      // Roll back to original #1002
-      // https://github.nhnent.com/fe/tui.editor/issues/1002
-      // state.indentation = stream.column() + stream.current().length;
-      state.indentation += 4;
-      // TUI.EDITOR MODIFICATION END
+    } else if (!isHr && !state.setext && firstTokenOnLine && state.indentation <= maxNonCodeIndentation && (match = stream.match(listRE))) {
+      var listType = match[1] ? "ol" : "ul";
+
+      state.indentation = lineIndentation + stream.current().length;
       state.list = true;
-      state.listDepth++;
+      state.quote = 0;
+
+      // Add this list item's content's indentation to the stack
+      state.listStack.push(state.indentation);
+
       if (modeCfg.taskLists && stream.match(taskListRE, false)) {
         state.taskList = true;
-        // TUI.EDITOR MODIFICATION START
-        // Do not show table format pasting confirm on paste event where in Bloc... (#720)
-        // https://github.nhnent.com/fe/tui.editor/commit/ed0b8b6c0cd5928a962e533f797e5bafcbfd6b33
-        state.task = true; // to manage task state
-        // TUI.EDITOR MODIFICATION END
       }
       state.f = state.inline;
       if (modeCfg.highlightFormatting) state.formatting = ["list", "list-" + listType];
       return getType(state);
-      // TUI.EDITOR MODIFICATION START
-      // scrollSync prototype
-      // https://github.nhnent.com/fe/tui.editor/commit/f63d6ae79078923d369e6c170d07485f05c42fd7
-    } else if (modeCfg.fencedCodeBlocks && (match = stream.match(fencedCodeRE, true))) {
-      state.fencedChars = match[1];
+    } else if (firstTokenOnLine && state.indentation <= maxNonCodeIndentation && (match = stream.match(fencedCodeRE, true))) {
+      state.quote = 0;
+      state.fencedEndRE = new RegExp(match[1] + "+ *$");
       // try switching mode
-      state.localMode = getMode(match[2]);
-      // } else if (modeCfg.fencedCodeBlocks && stream.match(/^```[ \t]*([\w+#]*)/, true)) {
-      //   // try switching mode
-      //   state.localMode = getMode(RegExp.$1);
-      // TUI.EDITOR MODIFICATION END
-      if (state.localMode) state.localState = state.localMode.startState();
+      state.localMode = modeCfg.fencedCodeBlockHighlighting && getMode(match[2]);
+      if (state.localMode) state.localState = _codemirror2.default.startState(state.localMode);
       state.f = state.block = local;
       if (modeCfg.highlightFormatting) state.formatting = "code-block";
-      state.code = true;
+      state.code = -1;
       return getType(state);
+      // SETEXT has lowest block-scope precedence after HR, so check it after
+      //  the others (code, blockquote, list...)
+    } else if (
+    // if setext set, indicates line after ---/===
+    state.setext ||
+    // line before ---/===
+    (!allowsInlineContinuation || !prevLineIsList) && !state.quote && state.list === false && !state.code && !isHr && !linkDefRE.test(stream.string) && (match = stream.lookAhead(1)) && (match = match.match(setextHeaderRE))) {
+      if (!state.setext) {
+        state.header = match[0].charAt(0) == '=' ? 1 : 2;
+        state.setext = state.header;
+      } else {
+        state.header = state.setext;
+        // has no effect on type so we can reset it now
+        state.setext = 0;
+        stream.skipToEnd();
+        if (modeCfg.highlightFormatting) state.formatting = "header";
+      }
+      state.thisLine.header = true;
+      state.f = state.inline;
+      return getType(state);
+    } else if (isHr) {
+      stream.skipToEnd();
+      state.hr = true;
+      state.thisLine.hr = true;
+      return tokenTypes.hr;
+    } else if (stream.peek() === '[') {
+      return switchInline(stream, state, footnoteLink);
     }
 
     return switchInline(stream, state, state.inline);
@@ -11203,49 +11372,39 @@ _codemirror2.default.defineMode("markdown", function (cmCfg, modeCfg) {
 
   function htmlBlock(stream, state) {
     var style = htmlMode.token(stream, state.htmlState);
-    if (htmlFound && state.htmlState.tagStart === null && !state.htmlState.context && state.htmlState.tokenize.isInText || state.md_inside && stream.current().indexOf(">") > -1) {
-      state.f = inlineNormal;
-      state.block = blockNormal;
-      state.htmlState = null;
+    if (!htmlModeMissing) {
+      var inner = _codemirror2.default.innerMode(htmlMode, state.htmlState);
+      if (inner.mode.name == "xml" && inner.state.tagStart === null && !inner.state.context && inner.state.tokenize.isInText || state.md_inside && stream.current().indexOf(">") > -1) {
+        state.f = inlineNormal;
+        state.block = blockNormal;
+        state.htmlState = null;
+      }
     }
     return style;
   }
 
   function local(stream, state) {
-    // TUI.EDITOR MODIFICATION START
-    // scrollSync prototype
-    // https://github.nhnent.com/fe/tui.editor/commit/f63d6ae79078923d369e6c170d07485f05c42fd7
-    if (stream.sol() && state.fencedChars && stream.match(state.fencedChars, false)) {
-      // if (stream.sol() && stream.match("```", false)) {
-      // TUI.EDITOR MODIFICATION END
+    var currListInd = state.listStack[state.listStack.length - 1] || 0;
+    var hasExitedList = state.indentation < currListInd;
+    var maxFencedEndInd = currListInd + 3;
+    if (state.fencedEndRE && state.indentation <= maxFencedEndInd && (hasExitedList || stream.match(state.fencedEndRE))) {
+      if (modeCfg.highlightFormatting) state.formatting = "code-block";
+      var returnType;
+      if (!hasExitedList) returnType = getType(state);
       state.localMode = state.localState = null;
-      state.f = state.block = leavingLocal;
-      return null;
+      state.block = blockNormal;
+      state.f = inlineNormal;
+      state.fencedEndRE = null;
+      state.code = 0;
+      state.thisLine.fencedCodeEnd = true;
+      if (hasExitedList) return switchBlock(stream, state, state.block);
+      return returnType;
     } else if (state.localMode) {
       return state.localMode.token(stream, state.localState);
     } else {
       stream.skipToEnd();
-      return code;
+      return tokenTypes.code;
     }
-  }
-
-  function leavingLocal(stream, state) {
-    // TUI.EDITOR MODIFICATION START
-    // scrollSync prototype
-    // https://github.nhnent.com/fe/tui.editor/commit/f63d6ae79078923d369e6c170d07485f05c42fd7
-    stream.match(state.fencedChars);
-    state.block = blockNormal;
-    state.f = inlineNormal;
-    state.fencedChars = null;
-    // stream.match("```");
-    // state.block = blockNormal;
-    // state.f = inlineNormal;
-    // TUI.EDITOR MODIFICATION END
-    if (modeCfg.highlightFormatting) state.formatting = "code-block";
-    state.code = true;
-    var returnType = getType(state);
-    state.code = false;
-    return returnType;
   }
 
   // Inline
@@ -11253,22 +11412,22 @@ _codemirror2.default.defineMode("markdown", function (cmCfg, modeCfg) {
     var styles = [];
 
     if (state.formatting) {
-      styles.push(formatting);
+      styles.push(tokenTypes.formatting);
 
       if (typeof state.formatting === "string") state.formatting = [state.formatting];
 
       for (var i = 0; i < state.formatting.length; i++) {
-        styles.push(formatting + "-" + state.formatting[i]);
+        styles.push(tokenTypes.formatting + "-" + state.formatting[i]);
 
         if (state.formatting[i] === "header") {
-          styles.push(formatting + "-" + state.formatting[i] + "-" + state.header);
+          styles.push(tokenTypes.formatting + "-" + state.formatting[i] + "-" + state.header);
         }
 
         // Add `formatting-quote` and `formatting-quote-#` for blockquotes
         // Add `error` instead if the maximum blockquote nesting depth is passed
         if (state.formatting[i] === "quote") {
           if (!modeCfg.maxBlockquoteDepth || modeCfg.maxBlockquoteDepth >= state.quote) {
-            styles.push(formatting + "-" + state.formatting[i] + "-" + state.quote);
+            styles.push(tokenTypes.formatting + "-" + state.formatting[i] + "-" + state.quote);
           } else {
             styles.push("error");
           }
@@ -11286,51 +11445,61 @@ _codemirror2.default.defineMode("markdown", function (cmCfg, modeCfg) {
     }
 
     if (state.linkHref) {
-      styles.push(linkhref, "url");
+      styles.push(tokenTypes.linkHref, "url");
     } else {
       // Only apply inline styles to non-url text
       if (state.strong) {
-        styles.push(strong);
+        styles.push(tokenTypes.strong);
       }
       if (state.em) {
-        styles.push(em);
+        styles.push(tokenTypes.em);
       }
       if (state.strikethrough) {
-        styles.push(strikethrough);
+        styles.push(tokenTypes.strikethrough);
       }
-
+      if (state.emoji) {
+        styles.push(tokenTypes.emoji);
+      }
       if (state.linkText) {
-        styles.push(linktext);
+        styles.push(tokenTypes.linkText);
       }
-
       if (state.code) {
-        styles.push(code);
+        styles.push(tokenTypes.code);
+      }
+      if (state.image) {
+        styles.push(tokenTypes.image);
+      }
+      if (state.imageAltText) {
+        styles.push(tokenTypes.imageAltText, "link");
+      }
+      if (state.imageMarker) {
+        styles.push(tokenTypes.imageMarker);
       }
     }
 
     if (state.header) {
-      styles.push(header);styles.push(header + "-" + state.header);
+      styles.push(tokenTypes.header, tokenTypes.header + "-" + state.header);
     }
 
     if (state.quote) {
-      styles.push(quote);
+      styles.push(tokenTypes.quote);
 
       // Add `quote-#` where the maximum for `#` is modeCfg.maxBlockquoteDepth
       if (!modeCfg.maxBlockquoteDepth || modeCfg.maxBlockquoteDepth >= state.quote) {
-        styles.push(quote + "-" + state.quote);
+        styles.push(tokenTypes.quote + "-" + state.quote);
       } else {
-        styles.push(quote + "-" + modeCfg.maxBlockquoteDepth);
+        styles.push(tokenTypes.quote + "-" + modeCfg.maxBlockquoteDepth);
       }
     }
 
     if (state.list !== false) {
-      var listMod = (state.listDepth - 1) % 3;
+      var listMod = (state.listStack.length - 1) % 3;
       if (!listMod) {
-        styles.push(list1);
+        styles.push(tokenTypes.list1);
       } else if (listMod === 1) {
-        styles.push(list2);
+        styles.push(tokenTypes.list2);
       } else {
-        styles.push(list3);
+        styles.push(tokenTypes.list3);
       }
     }
 
@@ -11361,7 +11530,7 @@ _codemirror2.default.defineMode("markdown", function (cmCfg, modeCfg) {
     }
 
     if (state.taskList) {
-      var taskOpen = stream.match(taskListRE, true)[1] !== "x";
+      var taskOpen = stream.match(taskListRE, true)[1] === " ";
       if (taskOpen) state.taskOpen = true;else state.taskClosed = true;
       if (modeCfg.highlightFormatting) state.formatting = "task";
       state.taskList = false;
@@ -11376,18 +11545,7 @@ _codemirror2.default.defineMode("markdown", function (cmCfg, modeCfg) {
       return getType(state);
     }
 
-    // Get sol() value now, before character is consumed
-    var sol = stream.sol();
-
     var ch = stream.next();
-
-    if (ch === '\\') {
-      stream.next();
-      if (modeCfg.highlightFormatting) {
-        var type = getType(state);
-        return type ? type + " formatting-escape" : "formatting-escape";
-      }
-    }
 
     // Matches link titles present on next line
     if (state.linkTitle) {
@@ -11396,10 +11554,10 @@ _codemirror2.default.defineMode("markdown", function (cmCfg, modeCfg) {
       if (ch === '(') {
         matchCh = ')';
       }
-      matchCh = (matchCh + '').replace(/([.?*+^$[\]\\(){}|-])/g, "\\$1");
+      matchCh = (matchCh + '').replace(/([.?*+^\[\]\\(){}|-])/g, "\\$1");
       var regex = '^\\s*(?:[^' + matchCh + '\\\\]+|\\\\\\\\|\\\\.)' + matchCh;
       if (stream.match(new RegExp(regex), true)) {
-        return linkhref;
+        return tokenTypes.linkHref;
       }
     }
 
@@ -11407,20 +11565,17 @@ _codemirror2.default.defineMode("markdown", function (cmCfg, modeCfg) {
     if (ch === '`') {
       var previousFormatting = state.formatting;
       if (modeCfg.highlightFormatting) state.formatting = "code";
-      var t = getType(state);
-      var before = stream.pos;
       stream.eatWhile('`');
-      var difference = 1 + stream.pos - before;
-      if (!state.code) {
-        codeDepth = difference;
-        state.code = true;
+      var count = stream.current().length;
+      if (state.code == 0 && (!state.quote || count == 1)) {
+        state.code = count;
         return getType(state);
+      } else if (count == state.code) {
+        // Must be exact
+        var t = getType(state);
+        state.code = 0;
+        return t;
       } else {
-        if (difference === codeDepth) {
-          // Must be exact
-          state.code = false;
-          return t;
-        }
         state.formatting = previousFormatting;
         return getType(state);
       }
@@ -11428,28 +11583,50 @@ _codemirror2.default.defineMode("markdown", function (cmCfg, modeCfg) {
       return getType(state);
     }
 
-    if (ch === '!' && stream.match(/\[[^\]]*\] ?(?:\(|\[)/, false)) {
-      stream.match(/\[[^\]]*\]/);
-      // TUI.EDITOR MODIFICATION START
-      // remove image syntax from highlight
-      // https://github.nhnent.com/fe/tui.editor/commit/d2160b8c16f392372569dc2a22f12957afd7d9f2
-      // hash string in image link is too long to highligh. exclude image from highlight
-      // state.inline = state.f = linkHref;
-      // TUI.EDITOR MODIFICATION END
-      return image;
+    if (ch === '\\') {
+      stream.next();
+      if (modeCfg.highlightFormatting) {
+        var type = getType(state);
+        var formattingEscape = tokenTypes.formatting + "-escape";
+        return type ? type + " " + formattingEscape : formattingEscape;
+      }
     }
 
-    if (ch === '[' && stream.match(/.*\](\(.*\)| ?\[.*\])/, false)) {
+    if (ch === '!' && stream.match(/\[[^\]]*\] ?(?:\(|\[)/, false)) {
+      state.imageMarker = true;
+      state.image = true;
+      if (modeCfg.highlightFormatting) state.formatting = "image";
+      return getType(state);
+    }
+
+    if (ch === '[' && state.imageMarker && stream.match(/[^\]]*\](\(.*?\)| ?\[.*?\])/, false)) {
+      state.imageMarker = false;
+      state.imageAltText = true;
+      if (modeCfg.highlightFormatting) state.formatting = "image";
+      return getType(state);
+    }
+
+    if (ch === ']' && state.imageAltText) {
+      if (modeCfg.highlightFormatting) state.formatting = "image";
+      var type = getType(state);
+      state.imageAltText = false;
+      state.image = false;
+      state.inline = state.f = linkHref;
+      return type;
+    }
+
+    if (ch === '[' && !state.image) {
+      if (state.linkText && stream.match(/^.*?\]/)) return getType(state);
       state.linkText = true;
       if (modeCfg.highlightFormatting) state.formatting = "link";
       return getType(state);
     }
 
-    if (ch === ']' && state.linkText && stream.match(/\(.*\)| ?\[.*\]/, false)) {
+    if (ch === ']' && state.linkText) {
       if (modeCfg.highlightFormatting) state.formatting = "link";
       var type = getType(state);
       state.linkText = false;
-      state.inline = state.f = linkHref;
+      state.inline = state.f = stream.match(/\(.*?\)| ?\[.*?\]/, false) ? linkHref : inlineNormal;
       return type;
     }
 
@@ -11462,7 +11639,7 @@ _codemirror2.default.defineMode("markdown", function (cmCfg, modeCfg) {
       } else {
         type = "";
       }
-      return type + linkinline;
+      return type + tokenTypes.linkInline;
     }
 
     if (ch === '<' && stream.match(/^[^> \\]+@(?:[^\\>]|\\.)+>/, false)) {
@@ -11474,68 +11651,50 @@ _codemirror2.default.defineMode("markdown", function (cmCfg, modeCfg) {
       } else {
         type = "";
       }
-      return type + linkemail;
+      return type + tokenTypes.linkEmail;
     }
-    // TUI.EDITOR MODIFICATION START
-    // codemirror markdown mode fix to prevent htmlBlock
-    // https://github.nhnent.com/fe/tui.editor/commit/35910adb507646b6129fd4d349c65bbe28832211
-    // we dont need html Block it ruin markdown blocks
-    /*
-        if (ch === '<' && stream.match(/^(!--|\w)/, false)) {
-          var end = stream.string.indexOf(">", stream.pos);
-          if (end != -1) {
-            var atts = stream.string.substring(stream.start, end);
-            if (/markdown\s*=\s*('|"){0,1}1('|"){0,1}/.test(atts)) state.md_inside = true;
-          }
-          stream.backUp(1);
-          state.htmlState = CodeMirror.startState(htmlMode);
-          return switchBlock(stream, state, htmlBlock);
-        }
-    
-        if (ch === '<' && stream.match(/^\/\w*?>/)) {
-          state.md_inside = false;
-          return "tag";
-        }
-    */
-    // TUI.EDITOR MODIFICATION END
 
-    var ignoreUnderscore = false;
-    if (!modeCfg.underscoresBreakWords) {
-      if (ch === '_' && stream.peek() !== '_' && stream.match(/(\w)/, false)) {
-        var prevPos = stream.pos - 2;
-        if (prevPos >= 0) {
-          var prevCh = stream.string.charAt(prevPos);
-          if (prevCh !== '_' && prevCh.match(/(\w)/, false)) {
-            ignoreUnderscore = true;
-          }
-        }
+    if (modeCfg.xml && ch === '<' && stream.match(/^(!--|\?|!\[CDATA\[|[a-z][a-z0-9-]*(?:\s+[a-z_:.\-]+(?:\s*=\s*[^>]+)?)*\s*(?:>|$))/i, false)) {
+      var end = stream.string.indexOf(">", stream.pos);
+      if (end != -1) {
+        var atts = stream.string.substring(stream.start, end);
+        if (/markdown\s*=\s*('|"){0,1}1('|"){0,1}/.test(atts)) state.md_inside = true;
       }
+      stream.backUp(1);
+      state.htmlState = _codemirror2.default.startState(htmlMode);
+      return switchBlock(stream, state, htmlBlock);
     }
-    if (ch === '*' || ch === '_' && !ignoreUnderscore) {
-      if (sol && stream.peek() === ' ') {
-        // Do nothing, surrounded by newline and space
-      } else if (state.strong === ch && stream.eat(ch)) {
-        // Remove STRONG
-        if (modeCfg.highlightFormatting) state.formatting = "strong";
+
+    if (modeCfg.xml && ch === '<' && stream.match(/^\/\w*?>/)) {
+      state.md_inside = false;
+      return "tag";
+    } else if (ch === "*" || ch === "_") {
+      var len = 1,
+          before = stream.pos == 1 ? " " : stream.string.charAt(stream.pos - 2);
+      while (len < 3 && stream.eat(ch)) {
+        len++;
+      }var after = stream.peek() || " ";
+      // See http://spec.commonmark.org/0.27/#emphasis-and-strong-emphasis
+      var leftFlanking = !/\s/.test(after) && (!punctuation.test(after) || /\s/.test(before) || punctuation.test(before));
+      var rightFlanking = !/\s/.test(before) && (!punctuation.test(before) || /\s/.test(after) || punctuation.test(after));
+      var setEm = null,
+          setStrong = null;
+      if (len % 2) {
+        // Em
+        if (!state.em && leftFlanking && (ch === "*" || !rightFlanking || punctuation.test(before))) setEm = true;else if (state.em == ch && rightFlanking && (ch === "*" || !leftFlanking || punctuation.test(after))) setEm = false;
+      }
+      if (len > 1) {
+        // Strong
+        if (!state.strong && leftFlanking && (ch === "*" || !rightFlanking || punctuation.test(before))) setStrong = true;else if (state.strong == ch && rightFlanking && (ch === "*" || !leftFlanking || punctuation.test(after))) setStrong = false;
+      }
+      if (setStrong != null || setEm != null) {
+        if (modeCfg.highlightFormatting) state.formatting = setEm == null ? "strong" : setStrong == null ? "em" : "strong em";
+        if (setEm === true) state.em = ch;
+        if (setStrong === true) state.strong = ch;
         var t = getType(state);
-        state.strong = false;
+        if (setEm === false) state.em = false;
+        if (setStrong === false) state.strong = false;
         return t;
-      } else if (!state.strong && stream.eat(ch)) {
-        // Add STRONG
-        state.strong = ch;
-        if (modeCfg.highlightFormatting) state.formatting = "strong";
-        return getType(state);
-      } else if (state.em === ch) {
-        // Remove EM
-        if (modeCfg.highlightFormatting) state.formatting = "em";
-        var t = getType(state);
-        state.em = false;
-        return t;
-      } else if (!state.em) {
-        // Add EM
-        state.em = ch;
-        if (modeCfg.highlightFormatting) state.formatting = "em";
-        return getType(state);
       }
     } else if (ch === ' ') {
       if (stream.eat('*') || stream.eat('_')) {
@@ -11578,8 +11737,16 @@ _codemirror2.default.defineMode("markdown", function (cmCfg, modeCfg) {
       }
     }
 
+    if (modeCfg.emoji && ch === ":" && stream.match(/^[a-z_\d+-]+:/)) {
+      state.emoji = true;
+      if (modeCfg.highlightFormatting) state.formatting = "emoji";
+      var retType = getType(state);
+      state.emoji = false;
+      return retType;
+    }
+
     if (ch === ' ') {
-      if (stream.match(/ +$/, false)) {
+      if (stream.match(/^ +$/, false)) {
         state.trailingSpace++;
       } else if (state.trailingSpace) {
         state.trailingSpaceNewLine = true;
@@ -11601,12 +11768,12 @@ _codemirror2.default.defineMode("markdown", function (cmCfg, modeCfg) {
       } else {
         type = "";
       }
-      return type + linkinline;
+      return type + tokenTypes.linkInline;
     }
 
     stream.match(/^[^>]+/, true);
 
-    return linkinline;
+    return tokenTypes.linkInline;
   }
 
   function linkHref(stream, state) {
@@ -11624,6 +11791,11 @@ _codemirror2.default.defineMode("markdown", function (cmCfg, modeCfg) {
     return 'error';
   }
 
+  var linkRE = {
+    ")": /^(?:[^\\\(\)]|\\.|\((?:[^\\\(\)]|\\.)*\))*?(?=\))/,
+    "]": /^(?:[^\\\[\]]|\\.|\[(?:[^\\\[\]]|\\.)*\])*?(?=\])/
+  };
+
   function getLinkHrefInside(endChar) {
     return function (stream, state) {
       var ch = stream.next();
@@ -11636,17 +11808,14 @@ _codemirror2.default.defineMode("markdown", function (cmCfg, modeCfg) {
         return returnState;
       }
 
-      if (stream.match(inlineRE(endChar), true)) {
-        stream.backUp(1);
-      }
-
+      stream.match(linkRE[endChar]);
       state.linkHref = true;
       return getType(state);
     };
   }
 
   function footnoteLink(stream, state) {
-    if (stream.match(/^[^\]]*\]:/, false)) {
+    if (stream.match(/^([^\]\\]|\\.)*\]:/, false)) {
       state.f = footnoteLinkInside;
       stream.next(); // Consume [
       if (modeCfg.highlightFormatting) state.formatting = "link";
@@ -11665,9 +11834,9 @@ _codemirror2.default.defineMode("markdown", function (cmCfg, modeCfg) {
       return returnType;
     }
 
-    stream.match(/^[^\]]+/, true);
+    stream.match(/^([^\]\\]|\\.)+/, true);
 
-    return linktext;
+    return tokenTypes.linkText;
   }
 
   function footnoteUrl(stream, state) {
@@ -11686,33 +11855,16 @@ _codemirror2.default.defineMode("markdown", function (cmCfg, modeCfg) {
       stream.match(/^(?:\s+(?:"(?:[^"\\]|\\\\|\\.)+"|'(?:[^'\\]|\\\\|\\.)+'|\((?:[^)\\]|\\\\|\\.)+\)))?/, true);
     }
     state.f = state.inline = inlineNormal;
-    return linkhref + " url";
-  }
-
-  var savedInlineRE = [];
-  function inlineRE(endChar) {
-    if (!savedInlineRE[endChar]) {
-      // Escape endChar for RegExp (taken from http://stackoverflow.com/a/494122/526741)
-      endChar = (endChar + '').replace(/([.?*+^$[\]\\(){}|-])/g, "\\$1");
-      // Match any non-endChar, escaped character, as well as the closing
-      // endChar.
-      savedInlineRE[endChar] = new RegExp('^(?:[^\\\\]|\\\\.)*?(' + endChar + ')');
-    }
-    return savedInlineRE[endChar];
+    return tokenTypes.linkHref + " url";
   }
 
   var mode = {
     startState: function startState() {
       return {
         f: blockNormal,
-        // TUI.EDITOR MODIFICATION START
-        // scrollSync prototype
-        // https://github.nhnent.com/fe/tui.editor/commit/f63d6ae79078923d369e6c170d07485f05c42fd7
-        prevLine: null,
-        thisLine: null,
-        // prevLineHasContent: false,
-        // thisLineHasContent: false,
-        // TUI.EDITOR MODIFICATION END
+
+        prevLine: { stream: null },
+        thisLine: { stream: null },
 
         block: blockNormal,
         htmlState: null,
@@ -11725,27 +11877,21 @@ _codemirror2.default.defineMode("markdown", function (cmCfg, modeCfg) {
         linkText: false,
         linkHref: false,
         linkTitle: false,
+        code: 0,
         em: false,
         strong: false,
         header: 0,
+        setext: 0,
         hr: false,
-        // TUI.EDITOR MODIFICATION START
-        // Do not show table format pasting confirm on paste event where in Bloc... (#720)
-        // https://github.nhnent.com/fe/tui.editor/commit/ed0b8b6c0cd5928a962e533f797e5bafcbfd6b33
-        task: false,
-        // TUI.EDITOR MODIFICATION END
         taskList: false,
         list: false,
-        listDepth: 0,
+        listStack: [],
         quote: 0,
         trailingSpace: 0,
         trailingSpaceNewLine: false,
         strikethrough: false,
-        // TUI.EDITOR MODIFICATION START
-        // scrollSync prototype
-        // https://github.nhnent.com/fe/tui.editor/commit/f63d6ae79078923d369e6c170d07485f05c42fd7
-        fencedChars: null
-        // TUI.EDITOR MODIFICATION END
+        emoji: false,
+        fencedEndRE: null
       };
     },
 
@@ -11753,14 +11899,8 @@ _codemirror2.default.defineMode("markdown", function (cmCfg, modeCfg) {
       return {
         f: s.f,
 
-        // TUI.EDITOR MODIFICATION START
-        // scrollSync prototype
-        // https://github.nhnent.com/fe/tui.editor/commit/f63d6ae79078923d369e6c170d07485f05c42fd7
         prevLine: s.prevLine,
-        thisLine: s.this,
-        // prevLineHasContent: s.prevLineHasContent,
-        // thisLineHasContent: s.thisLineHasContent,
-        // TUI.EDITOR MODIFICATION END
+        thisLine: s.thisLine,
 
         block: s.block,
         htmlState: s.htmlState && _codemirror2.default.copyState(htmlMode, s.htmlState),
@@ -11772,35 +11912,26 @@ _codemirror2.default.defineMode("markdown", function (cmCfg, modeCfg) {
         inline: s.inline,
         text: s.text,
         formatting: false,
+        linkText: s.linkText,
         linkTitle: s.linkTitle,
-        // TUI.EDITOR MODIFICATION START
-        // scrollSync prototype
-        // https://github.nhnent.com/fe/tui.editor/commit/f63d6ae79078923d369e6c170d07485f05c42fd7
+        linkHref: s.linkHref,
         code: s.code,
-        // TUI.EDITOR MODIFICATION END
         em: s.em,
         strong: s.strong,
         strikethrough: s.strikethrough,
+        emoji: s.emoji,
         header: s.header,
+        setext: s.setext,
         hr: s.hr,
         taskList: s.taskList,
-        // TUI.EDITOR MODIFICATION START
-        // Do not show table format pasting confirm on paste event where in Bloc... (#720)
-        // https://github.nhnent.com/fe/tui.editor/commit/ed0b8b6c0cd5928a962e533f797e5bafcbfd6b33
-        task: s.task, // to manage task state
-        // TUI.EDITOR MODIFICATION END
         list: s.list,
-        listDepth: s.listDepth,
+        listStack: s.listStack.slice(0),
         quote: s.quote,
         indentedCode: s.indentedCode,
         trailingSpace: s.trailingSpace,
         trailingSpaceNewLine: s.trailingSpaceNewLine,
         md_inside: s.md_inside,
-        // TUI.EDITOR MODIFICATION START
-        // scrollSync prototype
-        // https://github.nhnent.com/fe/tui.editor/commit/f63d6ae79078923d369e6c170d07485f05c42fd7
-        fencedChars: s.fencedChars
-        // TUI.EDITOR MODIFICATION END
+        fencedEndRE: s.fencedEndRE
       };
     },
 
@@ -11809,61 +11940,34 @@ _codemirror2.default.defineMode("markdown", function (cmCfg, modeCfg) {
       // Reset state.formatting
       state.formatting = false;
 
-      // TUI.EDITOR MODIFICATION START
-      // scrollSync prototype
-      // https://github.nhnent.com/fe/tui.editor/commit/f63d6ae79078923d369e6c170d07485f05c42fd7
-      if (stream != state.thisLine) {
-        var forceBlankLine = state.header || state.hr;
-        // if (stream.sol()) {
-        //   var forceBlankLine = !!state.header || state.hr;
-        // TUI.EDITOR MODIFICATION END
-
-        // Reset state.header and state.hr
+      if (stream != state.thisLine.stream) {
         state.header = 0;
         state.hr = false;
 
-        if (stream.match(/^\s*$/, true) || forceBlankLine) {
-          // TUI.EDITOR MODIFICATION START
-          // scrollSync prototype
-          // https://github.nhnent.com/fe/tui.editor/commit/f63d6ae79078923d369e6c170d07485f05c42fd7
+        if (stream.match(/^\s*$/, true)) {
           blankLine(state);
-          if (!forceBlankLine) return null;
-          state.prevLine = null;
+          return null;
         }
 
         state.prevLine = state.thisLine;
-        state.thisLine = stream;
-        //   state.prevLineHasContent = false;
-        //   blankLine(state);
-        //   return forceBlankLine ? this.token(stream, state) : null;
-        // } else {
-        //   state.prevLineHasContent = state.thisLineHasContent;
-        //   state.thisLineHasContent = true;
-        // }
-        // TUI.EDITOR MODIFICATION END
+        state.thisLine = { stream: stream
 
-        // Reset state.taskList
-        state.taskList = false;
-        // TUI.EDITOR MODIFICATION START
-        // Do not show table format pasting confirm on paste event where in Bloc... (#720)
-        // https://github.nhnent.com/fe/tui.editor/commit/ed0b8b6c0cd5928a962e533f797e5bafcbfd6b33
-        state.task = false; // to manage task status
-        // Reset state.code
-        // state.code = false;
-        // TUI.EDITOR MODIFICATION END
+          // Reset state.taskList
+        };state.taskList = false;
 
         // Reset state.trailingSpace
         state.trailingSpace = 0;
         state.trailingSpaceNewLine = false;
 
-        state.f = state.block;
-        var indentation = stream.match(/^\s*/, true)[0].replace(/\t/g, '    ').length;
-        var difference = Math.floor((indentation - state.indentation) / 4) * 4;
-        if (difference > 4) difference = 4;
-        var adjustedIndentation = state.indentation + difference;
-        state.indentationDiff = adjustedIndentation - state.indentation;
-        state.indentation = adjustedIndentation;
-        if (indentation > 0) return null;
+        if (!state.localState) {
+          state.f = state.block;
+          if (state.f != htmlBlock) {
+            var indentation = stream.match(/^\s*/, true)[0].replace(/\t/g, expandedTab).length;
+            state.indentation = indentation;
+            state.indentationDiff = null;
+            if (indentation > 0) return null;
+          }
+        }
       }
       return state.f(stream, state);
     },
@@ -11874,23 +11978,34 @@ _codemirror2.default.defineMode("markdown", function (cmCfg, modeCfg) {
       return { state: state, mode: mode };
     },
 
+    indent: function indent(state, textAfter, line) {
+      if (state.block == htmlBlock && htmlMode.indent) return htmlMode.indent(state.htmlState, textAfter, line);
+      if (state.localState && state.localMode.indent) return state.localMode.indent(state.localState, textAfter, line);
+      return _codemirror2.default.Pass;
+    },
+
     blankLine: blankLine,
 
     getType: getType,
-    // TUI.EDITOR MODIFICATION START
-    // Exclude closing tags highlighting fixes #789 (#801)
-    // https://github.nhnent.com/fe/tui.editor/commit/815b271cd426c6939413136a0532846a58cd36ab
+
     closeBrackets: "()[]{}''\"\"``",
-    // TUI.EDITOR MODIFICATION END
     fold: "markdown"
   };
   return mode;
-}, "xml");
+}, "xml"); // CodeMirror, copyright (c) by Marijn Haverbeke and others
+// Distributed under an MIT license: http://codemirror.net/LICENSE
+/**
+ * @modifier NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+ */
+// based on https://github.com/codemirror/CodeMirror/blob/ff04f127ba8a736b97d06c505fb85d976e3f2980/mode/markdown/markdown.js
+
+
+_codemirror2.default.defineMIME("text/markdown", "markdown");
 
 _codemirror2.default.defineMIME("text/x-markdown", "markdown");
 
 /***/ }),
-/* 48 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11976,12 +12091,12 @@ _codemirror2.default.defineMode("gfm", function (config, modeConfig) {
         state.ateSpace = true;
         return null;
       }
+      // Disable GitHub specifics. SHA, Num, Combine links
+      /*
       if (stream.sol() || state.ateSpace) {
         state.ateSpace = false;
-        /*
-        //we dont need this
         if (modeConfig.gitHubSpice !== false) {
-          if(stream.match(/^(?:[a-zA-Z0-9\-_]+\/)?(?:[a-zA-Z0-9\-_]+@)?(?:[a-f0-9]{7,40}\b)/)) {
+          if(stream.match(/^(?:[a-zA-Z0-9\-_]+\/)?(?:[a-zA-Z0-9\-_]+@)?(?=.{0,6}\d)(?:[a-f0-9]{7,40}\b)/)) {
             // User/Project@SHA
             // User@SHA
             // SHA
@@ -11995,8 +12110,8 @@ _codemirror2.default.defineMode("gfm", function (config, modeConfig) {
             return "link";
           }
         }
-        }
-        if (stream.match(urlRE) &&
+      }
+      if (stream.match(urlRE) &&
           stream.string.slice(stream.start - 2, stream.start) != "](" &&
           (stream.start == 0 || /\W/.test(stream.string.charAt(stream.start - 1)))) {
         // URLs
@@ -12005,8 +12120,8 @@ _codemirror2.default.defineMode("gfm", function (config, modeConfig) {
         // And then limited url schemes to the CommonMark list, so foo:bar isn't matched as a URL
         state.combineTokens = true;
         return "link";
-        */
       }
+      */
       stream.next();
       return null;
     },
@@ -12014,10 +12129,9 @@ _codemirror2.default.defineMode("gfm", function (config, modeConfig) {
   };
 
   var markdownConfig = {
-    underscoresBreakWords: false,
     taskLists: true,
-    fencedCodeBlocks: '```',
-    strikethrough: true
+    strikethrough: true,
+    emoji: true
   };
   for (var attr in modeConfig) {
     markdownConfig[attr] = modeConfig[attr];
@@ -12029,7 +12143,7 @@ _codemirror2.default.defineMode("gfm", function (config, modeConfig) {
 _codemirror2.default.defineMIME("text/x-gfm", "gfm");
 
 /***/ }),
-/* 49 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12042,9 +12156,8 @@ var _codemirror2 = _interopRequireDefault(_codemirror);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /*eslint-disable */
-var listRE = /^(\s*)(>[> ]*|[*+-]\s(?:\[(?:x|\s)\]\s)?|(\d+)([.)]\s(?:\[(?:x|\s)\]\s)?))(\s*)/,
-    emptyListRE = /^(\s*)(>[> ]*|[*+-]\s(?:\[(?:x|\s)\]\s)?|(\d+)([.)]\s(?:\[(?:x|\s)\]\s)?))(\s*)$/,
-    FIND_CODEBLOCK_START_RX = /^ *(`{3,}|~{3,})[ \.]*\S+ */,
+var listRE = /^(\s*)(>[> ]*|[*+-] \[[x ]\]\s|[*+-]\s|(\d+)([.)]))(\s*)/,
+    emptyListRE = /^(\s*)(>[> ]*|[*+-] \[[x ]\]|[*+-]|(\d+)[.)])(\s*)$/,
     unorderedListRE = /[*+-]\s/; // CodeMirror, copyright (c) by Marijn Haverbeke and others
 // Distributed under an MIT license: http://codemirror.net/LICENSE
 /**
@@ -12052,95 +12165,103 @@ var listRE = /^(\s*)(>[> ]*|[*+-]\s(?:\[(?:x|\s)\]\s)?|(\d+)([.)]\s(?:\[(?:x|\s)
  */
 
 
-_codemirror2.default.commands.subListIndentTab = function (cm) {
-    if (cm.getOption("disableInput")) return _codemirror2.default.Pass;
-    var ranges = cm.listSelections();
-    for (var i = 0; i < ranges.length; i++) {
-        var pos = ranges[i].head;
-        var line = cm.getLine(pos.line);
-        var cursorBeforeTextInline = line.substr(0, pos.ch);
+_codemirror2.default.commands.indentOrderedList = function (cm) {
+  if (cm.getOption("disableInput")) return _codemirror2.default.Pass;
+  var ranges = cm.listSelections();
+  for (var i = 0; i < ranges.length; i++) {
+    var pos = ranges[i].head;
+    var line = cm.getLine(pos.line);
+    var cursorBeforeTextInline = line.substr(0, pos.ch);
 
-        if (listRE.test(cursorBeforeTextInline)) {
-            cm.replaceRange(Array(cm.getOption("indentUnit") + 1).join(" ") + line, {
-                line: pos.line, ch: 0
-            }, {
-                line: pos.line, ch: line.length
-            }, '+input');
-            cm.setCursor(pos.line, pos.ch + 4);
-        } else {
-            if (cm.somethingSelected()) cm.indentSelection("add");else cm.execCommand("insertSoftTab");
-        }
+    if (listRE.test(cursorBeforeTextInline) || cm.somethingSelected()) {
+      cm.indentSelection("add");
+    } else {
+      cm.execCommand("insertSoftTab");
     }
-    // TUI.EDITOR MODIFICATION START
-    // 
-    // https://github.nhnent.com/fe/tui.editor/commit/f63d6ae79078923d369e6c170d07485f05c42fd7
-    cm.execCommand('fixOrderedListNumber');
-    /// TUI.EDITOR MODIFICATION END
+  }
+  cm.execCommand('fixOrderedListNumber');
 };
 
-_codemirror2.default.commands.newlineAndIndentContinue = function (cm) {
-    if (cm.getOption("disableInput")) return _codemirror2.default.Pass;
-    var ranges = cm.listSelections(),
-        replacements = [];
+_codemirror2.default.commands.newlineAndIndentContinueMarkdownList = function (cm) {
+  if (cm.getOption("disableInput")) return _codemirror2.default.Pass;
+  var ranges = cm.listSelections(),
+      replacements = [];
+  for (var i = 0; i < ranges.length; i++) {
+    var pos = ranges[i].head;
+    var eolState = cm.getStateAfter(pos.line);
+    var inList = eolState.list !== false;
+    var inQuote = eolState.quote !== 0;
 
-    for (var i = 0; i < ranges.length; i++) {
-        var pos = ranges[i].head;
-        var eolState = cm.getStateAfter(pos.line);
-        var inList = eolState.base.list !== false;
-        var inQuote = eolState.base.quote !== 0;
-
-        var line = cm.getLine(pos.line);
-        var isCodeBlockStart = FIND_CODEBLOCK_START_RX.test(line);
-        var match = listRE.exec(line);
-        var cursor = cm.getCursor();
-
-        if (!ranges[i].empty() || !inList && !inQuote && !isCodeBlockStart || !match && !isCodeBlockStart) {
-            cm.execCommand("newlineAndIndent");
-            return;
-        }
-
-        if (isCodeBlockStart) {
-            cursor = cm.getCursor();
-
-            if (cursor.line !== pos.line || cursor.ch !== line.length) {
-                cm.execCommand("newlineAndIndent");
-                return;
-            }
-        }
-
-        if (emptyListRE.test(line) && cursor.ch > 0) {
-            cm.replaceRange("", {
-                line: pos.line, ch: 0
-            }, {
-                line: pos.line, ch: line.length
-            });
-            replacements[i] = "\n";
-        } else if (isCodeBlockStart) {
-            replacements[i] = '\n\n```';
-        } else {
-            var indent = match[1],
-                after = match[5],
-                bullet;
-            if (indent.length === pos.ch) {
-                bullet = "";
-            } else if (unorderedListRE.test(match[2]) || match[2].indexOf(">") >= 0) {
-                bullet = match[2];
-            } else {
-                bullet = parseInt(match[3], 10) + 1 + match[4];
-            }
-            replacements[i] = "\n" + indent + bullet + after;
-        }
+    var line = cm.getLine(pos.line),
+        match = listRE.exec(line);
+    var cursorBeforeBullet = /^\s*$/.test(line.slice(0, pos.ch));
+    if (!ranges[i].empty() || !inList && !inQuote || !match || cursorBeforeBullet) {
+      cm.execCommand("newlineAndIndent");
+      return;
     }
+    if (emptyListRE.test(line)) {
+      if (!/>\s*$/.test(line)) cm.replaceRange("", {
+        line: pos.line, ch: 0
+      }, {
+        line: pos.line, ch: pos.ch + 1
+      });
+      replacements[i] = "\n";
+    } else {
+      var indent = match[1],
+          after = match[5];
+      var numbered = !(unorderedListRE.test(match[2]) || match[2].indexOf(">") >= 0);
+      var bullet = numbered ? parseInt(match[3], 10) + 1 + match[4] : match[2].replace("x", " ");
+      replacements[i] = "\n" + indent + bullet + after;
 
-    cm.replaceSelections(replacements);
-
-    if (isCodeBlockStart) {
-        cm.setCursor(pos.line + 1, 0);
+      if (numbered) incrementRemainingMarkdownListNumbers(cm, pos);
     }
+  }
+
+  cm.replaceSelections(replacements);
 };
+
+// Auto-updating Markdown list numbers when a new item is added to the
+// middle of a list
+function incrementRemainingMarkdownListNumbers(cm, pos) {
+  var startLine = pos.line,
+      lookAhead = 0,
+      skipCount = 0;
+  var startItem = listRE.exec(cm.getLine(startLine)),
+      startIndent = startItem[1];
+
+  do {
+    lookAhead += 1;
+    var nextLineNumber = startLine + lookAhead;
+    var nextLine = cm.getLine(nextLineNumber),
+        nextItem = listRE.exec(nextLine);
+
+    if (nextItem) {
+      var nextIndent = nextItem[1];
+      var newNumber = parseInt(startItem[3], 10) + lookAhead - skipCount;
+      var nextNumber = parseInt(nextItem[3], 10),
+          itemNumber = nextNumber;
+
+      if (startIndent === nextIndent && !isNaN(nextNumber)) {
+        if (newNumber === nextNumber) itemNumber = nextNumber + 1;
+        if (newNumber > nextNumber) itemNumber = newNumber + 1;
+        cm.replaceRange(nextLine.replace(listRE, nextIndent + itemNumber + nextItem[4] + nextItem[5]), {
+          line: nextLineNumber, ch: 0
+        }, {
+          line: nextLineNumber, ch: nextLine.length
+        });
+      } else {
+        if (startIndent.length > nextIndent.length) return;
+        // This doesn't run if the next line immediatley indents, as it is
+        // not clear of the users intention (new indented item or same level)
+        if (startIndent.length < nextIndent.length && lookAhead === 1) return;
+        skipCount += 1;
+      }
+    }
+  } while (nextItem);
+}
 
 /***/ }),
-/* 50 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12293,7 +12414,7 @@ function replaceMultiLine(cm, upper, bottom, lineAdjustment) {
 }
 
 /***/ }),
-/* 51 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12585,7 +12706,7 @@ var MdListManager = function () {
 exports.default = MdListManager;
 
 /***/ }),
-/* 52 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12773,7 +12894,7 @@ var mdTextObject = function () {
 exports.default = mdTextObject;
 
 /***/ }),
-/* 53 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12801,59 +12922,59 @@ var _domUtils = __webpack_require__(3);
 
 var _domUtils2 = _interopRequireDefault(_domUtils);
 
-var _wwClipboardManager = __webpack_require__(54);
+var _wwClipboardManager = __webpack_require__(56);
 
 var _wwClipboardManager2 = _interopRequireDefault(_wwClipboardManager);
 
-var _wwListManager = __webpack_require__(56);
+var _wwListManager = __webpack_require__(58);
 
 var _wwListManager2 = _interopRequireDefault(_wwListManager);
 
-var _wwTaskManager = __webpack_require__(57);
+var _wwTaskManager = __webpack_require__(59);
 
 var _wwTaskManager2 = _interopRequireDefault(_wwTaskManager);
 
-var _wwTableManager = __webpack_require__(35);
+var _wwTableManager = __webpack_require__(37);
 
 var _wwTableManager2 = _interopRequireDefault(_wwTableManager);
 
-var _wwTableSelectionManager = __webpack_require__(36);
+var _wwTableSelectionManager = __webpack_require__(38);
 
 var _wwTableSelectionManager2 = _interopRequireDefault(_wwTableSelectionManager);
 
-var _wwHrManager = __webpack_require__(58);
+var _wwHrManager = __webpack_require__(60);
 
 var _wwHrManager2 = _interopRequireDefault(_wwHrManager);
 
-var _wwPManager = __webpack_require__(59);
+var _wwPManager = __webpack_require__(61);
 
 var _wwPManager2 = _interopRequireDefault(_wwPManager);
 
-var _wwHeadingManager = __webpack_require__(60);
+var _wwHeadingManager = __webpack_require__(62);
 
 var _wwHeadingManager2 = _interopRequireDefault(_wwHeadingManager);
 
-var _wwCodeBlockManager = __webpack_require__(37);
+var _wwCodeBlockManager = __webpack_require__(39);
 
 var _wwCodeBlockManager2 = _interopRequireDefault(_wwCodeBlockManager);
 
-var _squireExt = __webpack_require__(61);
+var _squireExt = __webpack_require__(63);
 
 var _squireExt2 = _interopRequireDefault(_squireExt);
 
-var _keyMapper = __webpack_require__(17);
+var _keyMapper = __webpack_require__(19);
 
 var _keyMapper2 = _interopRequireDefault(_keyMapper);
 
-var _wwTextObject = __webpack_require__(63);
+var _wwTextObject = __webpack_require__(65);
 
 var _wwTextObject2 = _interopRequireDefault(_wwTextObject);
 
-var _componentManager = __webpack_require__(34);
+var _componentManager = __webpack_require__(36);
 
 var _componentManager2 = _interopRequireDefault(_componentManager);
 
-var _codeBlockGadget = __webpack_require__(64);
+var _codeBlockGadget = __webpack_require__(66);
 
 var _codeBlockGadget2 = _interopRequireDefault(_codeBlockGadget);
 
@@ -12880,14 +13001,10 @@ var WysiwygEditor = function () {
    * Creates an instance of WysiwygEditor.
    * @param {jQuery} $el element to insert editor
    * @param {EventManager} eventManager EventManager instance
-   * @param {object} [options={}] - option object
-   *  @param {boolean} [options.useCommandShortcut=true] - whether to use squire command shortcuts
    * @memberof WysiwygEditor
    */
   function WysiwygEditor($el, eventManager) {
     var _this = this;
-
-    var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
     _classCallCheck(this, WysiwygEditor);
 
@@ -12901,10 +13018,6 @@ var WysiwygEditor = function () {
 
     this._keyEventHandlers = {};
     this._managers = {};
-
-    this._options = _jquery2.default.extend({
-      'useCommandShortcut': true
-    }, options);
 
     this._initEvent();
     this._initDefaultKeyEventHandler();
@@ -12933,9 +13046,7 @@ var WysiwygEditor = function () {
           'HR': false
         }
       });
-      if (!this._options.useCommandShortcut) {
-        this.editor.blockCommandShortcuts();
-      }
+      this.editor.blockCommandShortcuts();
 
       this._clipboardManager = new _wwClipboardManager2.default(this);
       this._initSquireEvent();
@@ -12965,6 +13076,7 @@ var WysiwygEditor = function () {
     value: function _preprocessForInlineElement(html) {
       return html.replace(/<br>( *)<img/g, '<br><br>$1<img');
     }
+
     /**
      * _initEvent
      * Initialize EventManager event handler
@@ -12984,7 +13096,7 @@ var WysiwygEditor = function () {
         return _this2._runKeyEventHandlers(ev.data, ev.keyMap);
       });
       this.eventManager.listen('wysiwygRangeChangeAfter', function () {
-        return _this2._scrollToRangeIfNeed();
+        return _this2.scrollIntoCursor();
       });
     }
 
@@ -12992,23 +13104,30 @@ var WysiwygEditor = function () {
      * addKeyEventHandler
      * Add key event handler
      * @memberof WysiwygEditor
-     * @param {string} keyMap keyMap string
+     * @param {string|Array.<string>} keyMap - keyMap string or array of string
      * @param {function} handler handler
      */
 
   }, {
     key: 'addKeyEventHandler',
     value: function addKeyEventHandler(keyMap, handler) {
+      var _this3 = this;
+
       if (!handler) {
         handler = keyMap;
         keyMap = 'DEFAULT';
       }
 
-      if (!this._keyEventHandlers[keyMap]) {
-        this._keyEventHandlers[keyMap] = [];
+      if (!_tuiCodeSnippet2.default.isArray(keyMap)) {
+        keyMap = [keyMap];
       }
 
-      this._keyEventHandlers[keyMap].push(handler);
+      keyMap.forEach(function (key) {
+        if (!_this3._keyEventHandlers[key]) {
+          _this3._keyEventHandlers[key] = [];
+        }
+        _this3._keyEventHandlers[key].push(handler);
+      });
     }
 
     /**
@@ -13077,22 +13196,22 @@ var WysiwygEditor = function () {
   }, {
     key: '_initSquireEvent',
     value: function _initSquireEvent() {
-      var _this3 = this;
+      var _this4 = this;
 
       var squire = this.getEditor();
       var isNeedFirePostProcessForRangeChange = false;
 
       squire.addEventListener('copy', function (clipboardEvent) {
-        _this3.eventManager.emit('copy', {
+        _this4.eventManager.emit('copy', {
           source: 'wysiwyg',
           data: clipboardEvent
         });
         _tuiCodeSnippet2.default.debounce(function () {
-          if (!_this3.isEditorValid()) {
+          if (!_this4.isEditorValid()) {
             return;
           }
 
-          _this3.eventManager.emit('copyAfter', {
+          _this4.eventManager.emit('copyAfter', {
             source: 'wysiwyg',
             data: clipboardEvent
           });
@@ -13100,16 +13219,16 @@ var WysiwygEditor = function () {
       });
 
       squire.addEventListener(_tuiCodeSnippet2.default.browser.msie ? 'beforecut' : 'cut', function (clipboardEvent) {
-        _this3.eventManager.emit('cut', {
+        _this4.eventManager.emit('cut', {
           source: 'wysiwyg',
           data: clipboardEvent
         });
         _tuiCodeSnippet2.default.debounce(function () {
-          if (!_this3.isEditorValid()) {
+          if (!_this4.isEditorValid()) {
             return;
           }
 
-          _this3.eventManager.emit('cutAfter', {
+          _this4.eventManager.emit('cutAfter', {
             source: 'wysiwyg',
             data: clipboardEvent
           });
@@ -13117,7 +13236,7 @@ var WysiwygEditor = function () {
       });
 
       squire.addEventListener(_tuiCodeSnippet2.default.browser.msie ? 'beforepaste' : 'paste', function (clipboardEvent) {
-        _this3.eventManager.emit('paste', {
+        _this4.eventManager.emit('paste', {
           source: 'wysiwyg',
           data: clipboardEvent
         });
@@ -13132,7 +13251,7 @@ var WysiwygEditor = function () {
       squire.addEventListener('drop', function (ev) {
         ev.preventDefault();
 
-        _this3.eventManager.emit('drop', {
+        _this4.eventManager.emit('drop', {
           source: 'wysiwyg',
           data: ev
         });
@@ -13142,38 +13261,38 @@ var WysiwygEditor = function () {
 
       // change event will fired after range has been updated
       squire.addEventListener('input', _tuiCodeSnippet2.default.debounce(function () {
-        if (!_this3.isEditorValid()) {
+        if (!_this4.isEditorValid()) {
           return;
         }
 
-        if (!_this3._silentChange) {
+        if (!_this4._silentChange) {
           var eventObj = {
             source: 'wysiwyg'
           };
 
-          _this3.eventManager.emit('changeFromWysiwyg', eventObj);
-          _this3.eventManager.emit('change', eventObj);
-          _this3.eventManager.emit('contentChangedFromWysiwyg', _this3);
+          _this4.eventManager.emit('changeFromWysiwyg', eventObj);
+          _this4.eventManager.emit('change', eventObj);
+          _this4.eventManager.emit('contentChangedFromWysiwyg', _this4);
         } else {
-          _this3._silentChange = false;
+          _this4._silentChange = false;
         }
 
-        _this3.getEditor().preserveLastLine();
+        _this4.getEditor().preserveLastLine();
       }, 0));
 
       squire.addEventListener('keydown', function (keyboardEvent) {
-        var range = _this3.getEditor().getSelection();
+        var range = _this4.getEditor().getSelection();
 
         if (!range.collapsed) {
           isNeedFirePostProcessForRangeChange = true;
         }
 
-        _this3.eventManager.emit('keydown', {
+        _this4.eventManager.emit('keydown', {
           source: 'wysiwyg',
           data: keyboardEvent
         });
 
-        _this3._onKeyDown(keyboardEvent);
+        _this4._onKeyDown(keyboardEvent);
       });
 
       if (_tuiCodeSnippet2.default.browser.firefox) {
@@ -13182,24 +13301,24 @@ var WysiwygEditor = function () {
 
 
           if (keyCode === 13 || keyCode === 9) {
-            var range = _this3.getEditor().getSelection();
+            var range = _this4.getEditor().getSelection();
 
             if (!range.collapsed) {
               isNeedFirePostProcessForRangeChange = true;
             }
 
-            _this3.eventManager.emit('keydown', {
+            _this4.eventManager.emit('keydown', {
               source: 'wysiwyg',
               data: keyboardEvent
             });
 
-            _this3._onKeyDown(keyboardEvent);
+            _this4._onKeyDown(keyboardEvent);
           }
         });
 
         // firefox produces shattered text nodes
         squire.addEventListener('keyup', function () {
-          var range = _this3.getRange();
+          var range = _this4.getRange();
 
           if (_domUtils2.default.isTextNode(range.commonAncestorContainer) && _domUtils2.default.isTextNode(range.commonAncestorContainer.previousSibling)) {
             var prevLen = range.commonAncestorContainer.previousSibling.length;
@@ -13212,7 +13331,7 @@ var WysiwygEditor = function () {
 
             curEl.parentNode.removeChild(curEl);
 
-            _this3.setRange(range);
+            _this4.setRange(range);
             range.detach();
           }
         });
@@ -13220,73 +13339,74 @@ var WysiwygEditor = function () {
 
       squire.addEventListener('keyup', function (keyboardEvent) {
         if (isNeedFirePostProcessForRangeChange) {
-          _this3.debouncedPostProcessForChange();
+          _this4.debouncedPostProcessForChange();
           isNeedFirePostProcessForRangeChange = false;
         }
 
-        _this3.eventManager.emit('keyup', {
+        _this4.eventManager.emit('keyup', {
           source: 'wysiwyg',
           data: keyboardEvent
         });
       });
 
       this.$editorContainerEl.on('scroll', function (ev) {
-        _this3.eventManager.emit('scroll', {
+        _this4.eventManager.emit('scroll', {
           source: 'wysiwyg',
           data: ev
         });
       });
 
       squire.addEventListener('click', function (ev) {
-        _this3.eventManager.emit('click', {
+        _this4.eventManager.emit('click', {
           source: 'wysiwyg',
           data: ev
         });
       });
 
       squire.addEventListener('mousedown', function (ev) {
-        _this3.eventManager.emit('mousedown', {
+        _this4.eventManager.emit('mousedown', {
           source: 'wysiwyg',
           data: ev
         });
       });
 
       squire.addEventListener('mouseover', function (ev) {
-        _this3.eventManager.emit('mouseover', {
+        _this4.eventManager.emit('mouseover', {
           source: 'wysiwyg',
           data: ev
         });
       });
 
       squire.addEventListener('mouseout', function (ev) {
-        _this3.eventManager.emit('mouseout', {
+        _this4.eventManager.emit('mouseout', {
           source: 'wysiwyg',
           data: ev
         });
       });
 
       squire.addEventListener('mouseup', function (ev) {
-        _this3.eventManager.emit('mouseup', {
+        _this4.eventManager.emit('mouseup', {
           source: 'wysiwyg',
           data: ev
         });
       });
 
       squire.addEventListener('contextmenu', function (ev) {
-        _this3.eventManager.emit('contextmenu', {
+        _this4.eventManager.emit('contextmenu', {
           source: 'wysiwyg',
           data: ev
         });
       });
 
       squire.addEventListener('focus', function () {
-        _this3.eventManager.emit('focus', {
+        _this4.eventManager.emit('focus', {
           source: 'wysiwyg'
         });
       });
 
       squire.addEventListener('blur', function () {
-        _this3.eventManager.emit('blur', {
+        _this4.fixIMERange();
+        _this4.eventManager.emit('blur', {
           source: 'wysiwyg'
         });
       });
@@ -13300,16 +13420,16 @@ var WysiwygEditor = function () {
           code: /CODE/.test(data.path),
           codeBlock: /PRE/.test(data.path),
           quote: /BLOCKQUOTE/.test(data.path),
-          list: /LI(?!.task-list-item)/.test(_this3._getLastLiString(data.path)),
-          task: /LI.task-list-item/.test(_this3._getLastLiString(data.path)),
+          list: /LI(?!.task-list-item)/.test(_this4._getLastLiString(data.path)),
+          task: /LI.task-list-item/.test(_this4._getLastLiString(data.path)),
           source: 'wysiwyg'
         };
 
-        _this3.eventManager.emit('stateChange', state);
+        _this4.eventManager.emit('stateChange', state);
       });
 
       squire.addEventListener('willPaste', function (ev) {
-        _this3.eventManager.emit('willPaste', {
+        _this4.eventManager.emit('willPaste', {
           source: 'wysiwyg',
           data: ev
         });
@@ -13375,26 +13495,26 @@ var WysiwygEditor = function () {
   }, {
     key: '_initDefaultKeyEventHandler',
     value: function _initDefaultKeyEventHandler() {
-      var _this4 = this;
+      var _this5 = this;
 
       this.addKeyEventHandler('ENTER', function (ev, range) {
-        if (_this4._isInOrphanText(range)) {
+        if (_this5._isInOrphanText(range)) {
           // We need this cuz input text right after table make orphan text in webkit
-          _this4.defer(function () {
-            _this4._wrapDefaultBlockToOrphanTexts();
-            _this4.breakToNewDefaultBlock(range, 'before');
+          _this5.defer(function () {
+            _this5._wrapDefaultBlockToOrphanTexts();
+            _this5.breakToNewDefaultBlock(range, 'before');
           });
         }
 
-        _this4.defer(function () {
-          _this4._scrollToRangeIfNeed();
+        _this5.defer(function () {
+          return _this5.scrollIntoCursor();
         });
       });
 
       this.addKeyEventHandler('TAB', function (ev) {
-        var sq = _this4.getEditor();
+        var sq = _this5.getEditor();
         var range = sq.getSelection();
-        var isAbleToInput4Spaces = range.collapsed && _this4._isCursorNotInRestrictedAreaOfTabAction(sq);
+        var isAbleToInput4Spaces = range.collapsed && _this5._isCursorNotInRestrictedAreaOfTabAction(sq);
         var isTextSelection = !range.collapsed && _domUtils2.default.isTextNode(range.commonAncestorContainer);
 
         ev.preventDefault();
@@ -13419,27 +13539,6 @@ var WysiwygEditor = function () {
 
         (0, _jquery2.default)(node).wrap('<div />');
       });
-    }
-
-    /**
-     * Scroll editor area to current cursor position if need
-     * @private
-     */
-
-  }, {
-    key: '_scrollToRangeIfNeed',
-    value: function _scrollToRangeIfNeed() {
-      var $editorContainerEl = this.$editorContainerEl;
-      var range = this.getRange();
-      var cursorTop = this.getEditor().getCursorPosition(range).top - $editorContainerEl.offset().top;
-
-      if (cursorTop >= $editorContainerEl.height()) {
-        var target = range.endContainer;
-        if (!(target instanceof Element)) {
-          target = target.parentNode;
-        }
-        target.scrollIntoView(false);
-      }
     }
 
     /**
@@ -13556,6 +13655,28 @@ var WysiwygEditor = function () {
     }
 
     /**
+     * set selection by start/end container/offset
+     * @param {HTMLNode} startContainer - start container
+     * @param {Number} startOffset - start offset
+     * @param {HTMLNode} endContainer - end container
+     * @param {Number} endOffset - end offset
+     * @returns {Range} - range instance
+     * @memberof WysiwygEditor
+     */
+
+  }, {
+    key: 'setSelectionByContainerAndOffset',
+    value: function setSelectionByContainerAndOffset(startContainer, startOffset, endContainer, endOffset) {
+      var sq = this.getEditor();
+      var range = sq.getSelection();
+      range.setStart(startContainer, startOffset);
+      range.setEnd(endContainer, endOffset);
+      sq.setSelection(range);
+
+      return range;
+    }
+
+    /**
      * restoreSavedSelection
      * Restore saved selection
      * @memberof WysiwygEditor
@@ -13602,11 +13723,11 @@ var WysiwygEditor = function () {
   }, {
     key: 'makeEmptyBlockCurrentSelection',
     value: function makeEmptyBlockCurrentSelection() {
-      var _this5 = this;
+      var _this6 = this;
 
       this.getEditor().modifyBlocks(function (frag) {
         if (!frag.textContent) {
-          frag = _this5.getEditor().createDefaultBlock();
+          frag = _this6.getEditor().createDefaultBlock();
         }
 
         return frag;
@@ -13790,11 +13911,11 @@ var WysiwygEditor = function () {
   }, {
     key: '_prepareGetHTML',
     value: function _prepareGetHTML() {
-      var _this6 = this;
+      var _this7 = this;
 
       this.getEditor().modifyDocument(function () {
-        _this6._joinSplitedTextNodes();
-        _this6.eventManager.emit('wysiwygGetValueBefore', _this6);
+        _this7._joinSplitedTextNodes();
+        _this7.eventManager.emit('wysiwygGetValueBefore', _this7);
       });
     }
 
@@ -13806,14 +13927,14 @@ var WysiwygEditor = function () {
   }, {
     key: 'postProcessForChange',
     value: function postProcessForChange() {
-      var _this7 = this;
+      var _this8 = this;
 
       if (!this.isEditorValid()) {
         return;
       }
 
       this.getEditor().modifyDocument(function () {
-        _this7.eventManager.emit('wysiwygRangeChangeAfter', _this7);
+        _this8.eventManager.emit('wysiwygRangeChangeAfter', _this8);
       });
     }
 
@@ -13988,6 +14109,37 @@ var WysiwygEditor = function () {
     }
 
     /**
+     * move scroll to cursor
+     * scrollIntoView browser function may cause scrolling on document.
+     * this function aims to replace scrollIntoView function to prevent that.
+     * it will move the scroll of squire only.
+     * @memberof SquireExt
+     */
+
+  }, {
+    key: 'scrollIntoCursor',
+    value: function scrollIntoCursor() {
+      var scrollTop = this.scrollTop();
+
+      var _getEditor$getCursorP = this.getEditor().getCursorPosition(),
+          cursorTop = _getEditor$getCursorP.top,
+          cursorHeight = _getEditor$getCursorP.height;
+
+      var _$editorContainerEl$g = this.$editorContainerEl.get(0).getBoundingClientRect(),
+          editorTop = _$editorContainerEl$g.top,
+          editorHeight = _$editorContainerEl$g.height;
+
+      var cursorAboveEditor = cursorTop - editorTop;
+      var cursorBelowEditor = cursorTop + cursorHeight - (editorTop + editorHeight);
+
+      if (cursorAboveEditor < 0) {
+        this.scrollTop(scrollTop + cursorAboveEditor);
+      } else if (cursorBelowEditor > 0) {
+        this.scrollTop(scrollTop + cursorBelowEditor);
+      }
+    }
+
+    /**
      * Set cursor position to end
      * @memberof WysiwygEditor
      */
@@ -13996,10 +14148,7 @@ var WysiwygEditor = function () {
     key: 'moveCursorToEnd',
     value: function moveCursorToEnd() {
       this.getEditor().moveCursorToEnd();
-      var contentNodes = this.get$Body().get(0).childNodes;
-      if (contentNodes.length > 0) {
-        contentNodes[contentNodes.length - 1].scrollIntoView(false);
-      }
+      this.scrollIntoCursor();
       this._correctRangeAfterMoveCursor('end');
     }
 
@@ -14081,6 +14230,45 @@ var WysiwygEditor = function () {
     }
 
     /**
+     * get IME range
+     * cjk composition causes wrong caret position.
+     * it returns fixed IME composition range
+     * @memberof WysiwygEditor
+     * @returns {Range}
+     */
+
+  }, {
+    key: 'getIMERange',
+    value: function getIMERange() {
+      var range = void 0;
+      var selection = getSelection();
+
+      if (selection && selection.rangeCount) {
+        range = selection.getRangeAt(0).cloneRange();
+      }
+
+      return range;
+    }
+
+    /**
+     * get IME range
+     * cjk composition causes wrong caret position.
+     * it sets fixed IME composition range
+     * @memberof WysiwygEditor
+     */
+
+  }, {
+    key: 'fixIMERange',
+    value: function fixIMERange() {
+      var range = this.getIMERange();
+
+      // range exists and it's an WYSIWYG editor content
+      if (range && (0, _jquery2.default)(range.commonAncestorContainer).closest(this.$editorContainerEl).length) {
+        this.setRange(range);
+      }
+    }
+
+    /**
      * set range
      * @param {Range} range - range to set
      * @memberof WysiwygEditor
@@ -14107,13 +14295,13 @@ var WysiwygEditor = function () {
   }, {
     key: 'defer',
     value: function defer(callback, delayOffset) {
-      var _this8 = this;
+      var _this9 = this;
 
       var delay = delayOffset ? delayOffset : 0;
 
       setTimeout(function () {
-        if (_this8.isEditorValid()) {
-          callback(_this8);
+        if (_this9.isEditorValid()) {
+          callback(_this9);
         }
       }, delay);
     }
@@ -14164,7 +14352,7 @@ var WysiwygEditor = function () {
 exports.default = WysiwygEditor;
 
 /***/ }),
-/* 54 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14192,7 +14380,7 @@ var _domUtils = __webpack_require__(3);
 
 var _domUtils2 = _interopRequireDefault(_domUtils);
 
-var _wwPasteContentHelper = __webpack_require__(55);
+var _wwPasteContentHelper = __webpack_require__(57);
 
 var _wwPasteContentHelper2 = _interopRequireDefault(_wwPasteContentHelper);
 
@@ -14597,7 +14785,7 @@ var WwClipboardManager = function () {
 exports.default = WwClipboardManager;
 
 /***/ }),
-/* 55 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14625,7 +14813,7 @@ var _domUtils = __webpack_require__(3);
 
 var _domUtils2 = _interopRequireDefault(_domUtils);
 
-var _htmlSanitizer = __webpack_require__(12);
+var _htmlSanitizer = __webpack_require__(14);
 
 var _htmlSanitizer2 = _interopRequireDefault(_htmlSanitizer);
 
@@ -15126,7 +15314,7 @@ var WwPasteContentHelper = function () {
 exports.default = WwPasteContentHelper;
 
 /***/ }),
-/* 56 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15240,7 +15428,7 @@ var WwListManager = function () {
     value: function _initKeyHandler() {
       var _this2 = this;
 
-      this.wwe.addKeyEventHandler('TAB', function (ev, range) {
+      this.wwe.addKeyEventHandler(['TAB', 'CTRL+]', 'META+]'], function (ev, range) {
         var isNeedNext = void 0;
 
         if (range.collapsed) {
@@ -15255,7 +15443,7 @@ var WwListManager = function () {
         return isNeedNext;
       });
 
-      this.wwe.addKeyEventHandler('SHIFT+TAB', function (ev, range) {
+      this.wwe.addKeyEventHandler(['SHIFT+TAB', 'CTRL+[', 'META+['], function (ev, range) {
         var isNeedNext = void 0;
 
         if (range.collapsed) {
@@ -15414,16 +15602,36 @@ var WwListManager = function () {
       var nestedList = wrapperDiv.querySelector(NESTED_LIST_QUERY);
       while (nestedList !== null) {
         var prevLI = nestedList.previousElementSibling;
-        while (prevLI.tagName !== 'LI') {
+        while (prevLI && prevLI.tagName !== 'LI') {
           prevLI = prevLI.previousElementSibling;
         }
 
-        prevLI.appendChild(nestedList);
+        if (prevLI) {
+          prevLI.appendChild(nestedList);
+        } else {
+          this._unwrap(nestedList);
+        }
 
         nestedList = wrapperDiv.querySelector(NESTED_LIST_QUERY);
       }
 
       return wrapperDiv.innerHTML;
+    }
+
+    /**
+     * unwrap nesting list
+     * @param {Node} nestedList - nested list to unwrap
+     * @private
+     */
+
+  }, {
+    key: '_unwrap',
+    value: function _unwrap(nestedList) {
+      var fragment = document.createDocumentFragment();
+      while (nestedList.firstChild) {
+        fragment.appendChild(nestedList.firstChild);
+      }
+      nestedList.parentNode.replaceChild(fragment, nestedList);
     }
 
     /**
@@ -15556,7 +15764,7 @@ var WwListManager = function () {
 exports.default = WwListManager;
 
 /***/ }),
-/* 57 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15778,7 +15986,7 @@ var WwTaskManager = function () {
 exports.default = WwTaskManager;
 
 /***/ }),
-/* 58 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16097,7 +16305,7 @@ function findTextNodeFilter() {
 exports.default = WwHrManager;
 
 /***/ }),
-/* 59 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16263,7 +16471,7 @@ var WwPManager = function () {
 exports.default = WwPManager;
 
 /***/ }),
-/* 60 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16531,7 +16739,7 @@ var WwHeadingManager = function () {
 exports.default = WwHeadingManager;
 
 /***/ }),
-/* 61 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16551,13 +16759,15 @@ var _tuiCodeSnippet = __webpack_require__(1);
 
 var _tuiCodeSnippet2 = _interopRequireDefault(_tuiCodeSnippet);
 
-var _squireRte = __webpack_require__(62);
+var _squireRte = __webpack_require__(64);
 
 var _squireRte2 = _interopRequireDefault(_squireRte);
 
 var _domUtils = __webpack_require__(3);
 
 var _domUtils2 = _interopRequireDefault(_domUtils);
+
+var _util = __webpack_require__(9);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -16934,8 +17144,7 @@ var SquireExt = function (_Squire) {
     value: function blockCommandShortcuts() {
       var _this3 = this;
 
-      var isMac = /Mac/.test(navigator.platform);
-      var meta = isMac ? 'meta' : 'ctrl';
+      var meta = _util.isMac ? 'meta' : 'ctrl';
       var keys = ['b', 'i', 'u', 'shift-7', 'shift-5', 'shift-6', 'shift-8', 'shift-9', '[', ']'];
 
       keys.forEach(function (key) {
@@ -16952,13 +17161,13 @@ var SquireExt = function (_Squire) {
 exports.default = SquireExt;
 
 /***/ }),
-/* 62 */
+/* 64 */
 /***/ (function(module, exports) {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE_62__;
+module.exports = __WEBPACK_EXTERNAL_MODULE_64__;
 
 /***/ }),
-/* 63 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17165,7 +17374,7 @@ var WwTextObject = function () {
 exports.default = WwTextObject;
 
 /***/ }),
-/* 64 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17183,7 +17392,7 @@ var _jquery = __webpack_require__(0);
 
 var _jquery2 = _interopRequireDefault(_jquery);
 
-var _blockOverlay = __webpack_require__(65);
+var _blockOverlay = __webpack_require__(67);
 
 var _blockOverlay2 = _interopRequireDefault(_blockOverlay);
 
@@ -17336,7 +17545,7 @@ var CodeBlockGadget = function (_BlockOverlay) {
 exports.default = CodeBlockGadget;
 
 /***/ }),
-/* 65 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17542,7 +17751,7 @@ var BlockOverlay = function () {
 exports.default = BlockOverlay;
 
 /***/ }),
-/* 66 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17816,7 +18025,7 @@ var Layout = function () {
 exports.default = Layout;
 
 /***/ }),
-/* 67 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17836,11 +18045,11 @@ var _jquery = __webpack_require__(0);
 
 var _jquery2 = _interopRequireDefault(_jquery);
 
-var _defaultToolbar = __webpack_require__(68);
+var _defaultToolbar = __webpack_require__(70);
 
 var _defaultToolbar2 = _interopRequireDefault(_defaultToolbar);
 
-var _tab = __webpack_require__(41);
+var _tab = __webpack_require__(43);
 
 var _tab2 = _interopRequireDefault(_tab);
 
@@ -17848,35 +18057,35 @@ var _layerpopup = __webpack_require__(5);
 
 var _layerpopup2 = _interopRequireDefault(_layerpopup);
 
-var _modeSwitch = __webpack_require__(73);
+var _modeSwitch = __webpack_require__(75);
 
 var _modeSwitch2 = _interopRequireDefault(_modeSwitch);
 
-var _popupAddLink = __webpack_require__(74);
+var _popupAddLink = __webpack_require__(76);
 
 var _popupAddLink2 = _interopRequireDefault(_popupAddLink);
 
-var _popupAddImage = __webpack_require__(75);
+var _popupAddImage = __webpack_require__(77);
 
 var _popupAddImage2 = _interopRequireDefault(_popupAddImage);
 
-var _popupTableUtils = __webpack_require__(76);
+var _popupTableUtils = __webpack_require__(78);
 
 var _popupTableUtils2 = _interopRequireDefault(_popupTableUtils);
 
-var _popupAddTable = __webpack_require__(77);
+var _popupAddTable = __webpack_require__(79);
 
 var _popupAddTable2 = _interopRequireDefault(_popupAddTable);
 
-var _popupAddHeading = __webpack_require__(78);
+var _popupAddHeading = __webpack_require__(80);
 
 var _popupAddHeading2 = _interopRequireDefault(_popupAddHeading);
 
-var _popupCodeBlockLanguages = __webpack_require__(79);
+var _popupCodeBlockLanguages = __webpack_require__(81);
 
 var _popupCodeBlockLanguages2 = _interopRequireDefault(_popupCodeBlockLanguages);
 
-var _popupCodeBlockEditor = __webpack_require__(80);
+var _popupCodeBlockEditor = __webpack_require__(82);
 
 var _popupCodeBlockEditor2 = _interopRequireDefault(_popupCodeBlockEditor);
 
@@ -17884,7 +18093,7 @@ var _i18n = __webpack_require__(4);
 
 var _i18n2 = _interopRequireDefault(_i18n);
 
-var _tooltip = __webpack_require__(32);
+var _tooltip = __webpack_require__(34);
 
 var _tooltip2 = _interopRequireDefault(_tooltip);
 
@@ -18089,8 +18298,11 @@ var DefaultUI = function () {
       this._markdownTab.on('itemClick', function (ev, itemText) {
         if (itemText === _i18n2.default.get('Preview')) {
           editor.eventManager.emit('previewNeedsRefresh');
+          editor.eventManager.emit('changePreviewTabPreview');
+          editor.eventManager.emit('closeAllPopup');
         } else {
           editor.getCodeMirror().focus();
+          editor.eventManager.emit('changePreviewTabWrite');
         }
       });
     }
@@ -18124,11 +18336,11 @@ var DefaultUI = function () {
     key: '_initPopupAddTable',
     value: function _initPopupAddTable() {
       this._popups.push(new _popupAddTable2.default({
-        $target: this.$el,
+        $target: this._toolbar.$el,
         eventManager: this._editor.eventManager,
         $button: this.$el.find('button.tui-table'),
         css: {
-          'position': 'fixed'
+          'position': 'absolute'
         }
       }));
     }
@@ -18136,11 +18348,11 @@ var DefaultUI = function () {
     key: '_initPopupAddHeading',
     value: function _initPopupAddHeading() {
       this._popups.push(new _popupAddHeading2.default({
-        $target: this.$el,
+        $target: this._toolbar.$el,
         eventManager: this._editor.eventManager,
         $button: this.$el.find('button.tui-heading'),
         css: {
-          'position': 'fixed'
+          'position': 'absolute'
         }
       }));
     }
@@ -18300,7 +18512,7 @@ var DefaultUI = function () {
 exports.default = DefaultUI;
 
 /***/ }),
-/* 68 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18314,7 +18526,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-var _resizeObserverPolyfill = __webpack_require__(69);
+var _resizeObserverPolyfill = __webpack_require__(71);
 
 var _resizeObserverPolyfill2 = _interopRequireDefault(_resizeObserverPolyfill);
 
@@ -18322,15 +18534,15 @@ var _i18n = __webpack_require__(4);
 
 var _i18n2 = _interopRequireDefault(_i18n);
 
-var _toolbar = __webpack_require__(38);
+var _toolbar = __webpack_require__(40);
 
 var _toolbar2 = _interopRequireDefault(_toolbar);
 
-var _popupDropdownToolbar = __webpack_require__(72);
+var _popupDropdownToolbar = __webpack_require__(74);
 
 var _popupDropdownToolbar2 = _interopRequireDefault(_popupDropdownToolbar);
 
-var _toolbarItemFactory = __webpack_require__(40);
+var _toolbarItemFactory = __webpack_require__(42);
 
 var _toolbarItemFactory2 = _interopRequireDefault(_toolbarItemFactory);
 
@@ -18496,7 +18708,7 @@ var DefaultToolbar = function (_Toolbar) {
 exports.default = DefaultToolbar;
 
 /***/ }),
-/* 69 */
+/* 71 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -19526,10 +19738,10 @@ var index = (function () {
 
 /* harmony default export */ __webpack_exports__["default"] = (index);
 
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(70)))
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(72)))
 
 /***/ }),
-/* 70 */
+/* 72 */
 /***/ (function(module, exports) {
 
 var g;
@@ -19556,7 +19768,7 @@ module.exports = g;
 
 
 /***/ }),
-/* 71 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19566,7 +19778,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _button = __webpack_require__(16);
+var _button = __webpack_require__(18);
 
 var _button2 = _interopRequireDefault(_button);
 
@@ -19601,7 +19813,7 @@ var ToolbarButton = function (_Button) {
 exports.default = ToolbarButton;
 
 /***/ }),
-/* 72 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19623,7 +19835,7 @@ var _layerpopup = __webpack_require__(5);
 
 var _layerpopup2 = _interopRequireDefault(_layerpopup);
 
-var _toolbar = __webpack_require__(38);
+var _toolbar = __webpack_require__(40);
 
 var _toolbar2 = _interopRequireDefault(_toolbar);
 
@@ -19868,7 +20080,7 @@ Object.defineProperty(PopupDropdownToolbar, 'OPEN_EVENT', {
 exports.default = PopupDropdownToolbar;
 
 /***/ }),
-/* 73 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -20071,7 +20283,7 @@ Object.defineProperty(ModeSwitch, 'TYPE', {
 exports.default = ModeSwitch;
 
 /***/ }),
-/* 74 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -20303,7 +20515,7 @@ var PopupAddLink = function (_LayerPopup) {
 exports.default = PopupAddLink;
 
 /***/ }),
-/* 75 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -20325,7 +20537,7 @@ var _layerpopup = __webpack_require__(5);
 
 var _layerpopup2 = _interopRequireDefault(_layerpopup);
 
-var _tab = __webpack_require__(41);
+var _tab = __webpack_require__(43);
 
 var _tab2 = _interopRequireDefault(_tab);
 
@@ -20529,7 +20741,7 @@ var PopupAddImage = function (_LayerPopup) {
 exports.default = PopupAddImage;
 
 /***/ }),
-/* 76 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -20700,7 +20912,7 @@ var PopupTableUtils = function (_LayerPopup) {
 exports.default = PopupTableUtils;
 
 /***/ }),
-/* 77 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -20887,10 +21099,14 @@ var PopupAddTable = function (_LayerPopup) {
 
       this._eventManager.listen('openPopupAddTable', function () {
         var $button = _this3._$button;
-        var offset = $button.offset();
+
+        var _$button$get = $button.get(0),
+            offsetTop = _$button$get.offsetTop,
+            offsetLeft = _$button$get.offsetLeft;
+
         _this3.$el.css({
-          top: offset.top + $button.outerHeight(),
-          left: offset.left
+          top: offsetTop + $button.outerHeight(),
+          left: offsetLeft
         });
         _this3._eventManager.emit('closeAllPopup');
         _this3.show();
@@ -21193,7 +21409,7 @@ PopupAddTable.MIN_COL_SELECTION_INDEX = MIN_COL_SELECTION_INDEX;
 exports.default = PopupAddTable;
 
 /***/ }),
-/* 78 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -21317,11 +21533,14 @@ var PopupAddHeading = function (_LayerPopup) {
       this._eventManager.listen('closeAllPopup', this.hide.bind(this));
       this._eventManager.listen('openHeadingSelect', function () {
         var $button = _this3._$button;
-        var offset = $button.offset();
+
+        var _$button$get = $button.get(0),
+            offsetTop = _$button$get.offsetTop,
+            offsetLeft = _$button$get.offsetLeft;
 
         _this3.$el.css({
-          top: offset.top + $button.outerHeight(),
-          left: offset.left
+          top: offsetTop + $button.outerHeight(),
+          left: offsetLeft
         });
 
         _this3._eventManager.emit('closeAllPopup');
@@ -21336,7 +21555,7 @@ var PopupAddHeading = function (_LayerPopup) {
 exports.default = PopupAddHeading;
 
 /***/ }),
-/* 79 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -21634,7 +21853,7 @@ var PopupCodeBlockLanguages = function (_LayerPopup) {
 exports.default = PopupCodeBlockLanguages;
 
 /***/ }),
-/* 80 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -21660,19 +21879,19 @@ var _layerpopup = __webpack_require__(5);
 
 var _layerpopup2 = _interopRequireDefault(_layerpopup);
 
-var _scrollSyncSplit = __webpack_require__(81);
+var _scrollSyncSplit = __webpack_require__(83);
 
 var _scrollSyncSplit2 = _interopRequireDefault(_scrollSyncSplit);
 
-var _codeBlockEditor = __webpack_require__(82);
+var _codeBlockEditor = __webpack_require__(84);
 
 var _codeBlockEditor2 = _interopRequireDefault(_codeBlockEditor);
 
-var _codeBlockPreview = __webpack_require__(83);
+var _codeBlockPreview = __webpack_require__(85);
 
 var _codeBlockPreview2 = _interopRequireDefault(_codeBlockPreview);
 
-var _codeBlockLanguagesCombo = __webpack_require__(84);
+var _codeBlockLanguagesCombo = __webpack_require__(86);
 
 var _codeBlockLanguagesCombo2 = _interopRequireDefault(_codeBlockLanguagesCombo);
 
@@ -22007,7 +22226,7 @@ var PopupCodeBlockEditor = function (_LayerPopup) {
 exports.default = PopupCodeBlockEditor;
 
 /***/ }),
-/* 81 */
+/* 83 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -22321,7 +22540,7 @@ var ScrollSyncSplit = function () {
 exports.default = ScrollSyncSplit;
 
 /***/ }),
-/* 82 */
+/* 84 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -22337,7 +22556,7 @@ var _jquery = __webpack_require__(0);
 
 var _jquery2 = _interopRequireDefault(_jquery);
 
-var _codeMirrorExt = __webpack_require__(33);
+var _codeMirrorExt = __webpack_require__(35);
 
 var _codeMirrorExt2 = _interopRequireDefault(_codeMirrorExt);
 
@@ -22545,7 +22764,7 @@ var CodeBlockEditor = function (_CodeMirrorExt) {
 exports.default = CodeBlockEditor;
 
 /***/ }),
-/* 83 */
+/* 85 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -22559,7 +22778,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-var _preview = __webpack_require__(11);
+var _preview = __webpack_require__(13);
 
 var _preview2 = _interopRequireDefault(_preview);
 
@@ -22648,7 +22867,7 @@ var CodeBlockPreview = function (_Preview) {
 exports.default = CodeBlockPreview;
 
 /***/ }),
-/* 84 */
+/* 86 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -22672,7 +22891,7 @@ var _i18n = __webpack_require__(4);
 
 var _i18n2 = _interopRequireDefault(_i18n);
 
-var _keyMapper = __webpack_require__(17);
+var _keyMapper = __webpack_require__(19);
 
 var _keyMapper2 = _interopRequireDefault(_keyMapper);
 
@@ -22888,7 +23107,7 @@ var CodeBlockLanguagesCombo = function () {
 exports.default = CodeBlockLanguagesCombo;
 
 /***/ }),
-/* 85 */
+/* 87 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -22904,7 +23123,12 @@ var _commandManager2 = _interopRequireDefault(_commandManager);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var boldRegex = /^[*_]{2,}[^*_]*[*_]{2,}$/;
+var boldRangeRegex = /^[*_]{2,}[^*_]+[*_]{2,}$/; /**
+                                                 * @fileoverview Implements Bold markdown command
+                                                 * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+                                                 */
+
+var boldContentRegex = /[*_]{2,}([^*_]+)[*_]{2,}/g;
 
 /**
  * Bold
@@ -22913,10 +23137,6 @@ var boldRegex = /^[*_]{2,}[^*_]*[*_]{2,}$/;
  * @module markdownCommands/Bold
  * @ignore
  */
-/**
-* @fileoverview Implements Bold markdown command
-* @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
-*/
 var Bold = _commandManager2.default.command('markdown', /** @lends Bold */{
   name: 'Bold',
   keyMap: ['CTRL+B', 'META+B'],
@@ -22939,7 +23159,14 @@ var Bold = _commandManager2.default.command('markdown', /** @lends Bold */{
     }
 
     var isRemoved = this.isNeedRemove(selection);
-    var result = isRemoved ? this.remove(selection) : this.append(selection);
+    var result = void 0;
+    if (isRemoved) {
+      result = this.remove(selection);
+      result = this._removeBoldSyntax(result);
+    } else {
+      result = this._removeBoldSyntax(selection);
+      result = this.append(result);
+    }
 
     doc.replaceSelection(result, 'around');
 
@@ -22957,7 +23184,7 @@ var Bold = _commandManager2.default.command('markdown', /** @lends Bold */{
    * @returns {boolean} - true if it has bold
    */
   isNeedRemove: function isNeedRemove(text) {
-    return boldRegex.test(text);
+    return boldRangeRegex.test(text);
   },
 
 
@@ -23018,13 +23245,24 @@ var Bold = _commandManager2.default.command('markdown', /** @lends Bold */{
    */
   setCursorToCenter: function setCursorToCenter(doc, cursor) {
     doc.setCursor(cursor.line, cursor.ch + 2);
+  },
+
+
+  /**
+   * remove bold syntax in the middle of given text
+   * @param {string} text - text selected
+   * @returns {string} - text eliminated all bold in the middle of it's content
+   * @private
+   */
+  _removeBoldSyntax: function _removeBoldSyntax(text) {
+    return text ? text.replace(boldContentRegex, '$1') : '';
   }
 });
 
 exports.default = Bold;
 
 /***/ }),
-/* 86 */
+/* 88 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -23040,12 +23278,13 @@ var _commandManager2 = _interopRequireDefault(_commandManager);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var boldItalicRegex = /^[*_]{3,}[^*_]*[*_]{3,}$/; /**
-                                                   * @fileoverview Implements Italic markdown command
-                                                   * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
-                                                   */
+var boldItalicRangeRegex = /^[*_]{3,}[^*_]+[*_]{3,}$/; /**
+                                                        * @fileoverview Implements Italic markdown command
+                                                        * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+                                                        */
 
-var italicRegex = /^[*_][^*_]*[*_]$/;
+var italicRangeRegex = /^[*_][^*_]+[*_]$/;
+var italicContentRegex = /[*_]([^*_]+)[*_]/g;
 
 /**
  * Italic
@@ -23092,7 +23331,14 @@ var Italic = _commandManager2.default.command('markdown', /** @lends Italic */{
     }
 
     var isRemoved = this.isNeedRemove(selection);
-    var result = isRemoved ? this.remove(selection) : this.append(selection);
+    var result = void 0;
+    if (isRemoved) {
+      result = this.remove(selection);
+      result = this._removeItalicSyntax(result);
+    } else {
+      result = this._removeItalicSyntax(selection);
+      result = this.append(result);
+    }
 
     doc.replaceSelection(result, 'around');
 
@@ -23111,7 +23357,7 @@ var Italic = _commandManager2.default.command('markdown', /** @lends Italic */{
    * @returns {boolean} - true if it has italic or bold
    */
   isNeedRemove: function isNeedRemove(text) {
-    return italicRegex.test(text) || boldItalicRegex.test(text);
+    return italicRangeRegex.test(text) || boldItalicRangeRegex.test(text);
   },
 
 
@@ -23232,13 +23478,24 @@ var Italic = _commandManager2.default.command('markdown', /** @lends Italic */{
   setCursorToCenter: function setCursorToCenter(doc, cursor, isRemoved) {
     var pos = isRemoved ? -1 : 1;
     doc.setCursor(cursor.line, cursor.ch + pos);
+  },
+
+
+  /**
+   * remove italic syntax in the middle of given text
+   * @param {string} text - text selected
+   * @returns {string} - text eliminated all italic in the middle of it's content
+   * @private
+   */
+  _removeItalicSyntax: function _removeItalicSyntax(text) {
+    return text ? text.replace(italicContentRegex, '$1') : '';
   }
 });
 
 exports.default = Italic;
 
 /***/ }),
-/* 87 */
+/* 89 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -23254,7 +23511,12 @@ var _commandManager2 = _interopRequireDefault(_commandManager);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var strikeRegex = /^[~~](.*[\s\n]*.*)*[~~]$/;
+var strikeRangeRegex = /^~~[^~]+~~$/; /**
+                                       * @fileoverview Implements StrikeThrough markdown command
+                                       * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+                                       */
+
+var strikeContentRegex = /~~([^~]+)~~/g;
 
 /**
  * Strike
@@ -23262,10 +23524,6 @@ var strikeRegex = /^[~~](.*[\s\n]*.*)*[~~]$/;
  * @extends Command
  * @module markdownCommands/Strike
  * @ignore
- */
-/**
- * @fileoverview Implements StrikeThrough markdown command
- * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
  */
 var Strike = _commandManager2.default.command('markdown', /** @lends Strike */{
   name: 'Strike',
@@ -23285,15 +23543,15 @@ var Strike = _commandManager2.default.command('markdown', /** @lends Strike */{
 
     if (isNeedToRemove) {
       result = this.remove(selection);
+      result = this._removeStrikeSyntax(result);
     } else {
-      result = this.append(selection);
+      result = this._removeStrikeSyntax(selection);
+      result = this.append(result);
     }
 
     doc.replaceSelection(result, 'around');
 
-    var isEmptySelection = !selection;
-
-    if (isEmptySelection && !isNeedToRemove) {
+    if (!selection && !isNeedToRemove) {
       this.setCursorToCenter(doc, cursor, isNeedToRemove);
     }
 
@@ -23307,7 +23565,7 @@ var Strike = _commandManager2.default.command('markdown', /** @lends Strike */{
    * @returns {boolean} Boolean value of strike syntax removal
    */
   hasStrikeSyntax: function hasStrikeSyntax(text) {
-    return strikeRegex.test(text);
+    return strikeRangeRegex.test(text);
   },
 
 
@@ -23340,13 +23598,24 @@ var Strike = _commandManager2.default.command('markdown', /** @lends Strike */{
   setCursorToCenter: function setCursorToCenter(doc, cursor, isRemoved) {
     var pos = isRemoved ? -2 : 2;
     doc.setCursor(cursor.line, cursor.ch + pos);
+  },
+
+
+  /**
+   * remove strike syntax in the middle of given text
+   * @param {string} text - text selected
+   * @returns {string} - text eliminated all strike in the middle of it's content
+   * @private
+   */
+  _removeStrikeSyntax: function _removeStrikeSyntax(text) {
+    return text ? text.replace(strikeContentRegex, '$1') : '';
   }
 });
 
 exports.default = Strike;
 
 /***/ }),
-/* 88 */
+/* 90 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -23415,7 +23684,7 @@ var Blockquote = _commandManager2.default.command('markdown', /** @lends Blockqu
 exports.default = Blockquote;
 
 /***/ }),
-/* 89 */
+/* 91 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -23516,7 +23785,7 @@ function getHeadingMarkdown(text, size) {
 exports.default = Heading;
 
 /***/ }),
-/* 90 */
+/* 92 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -23597,7 +23866,7 @@ function getParagraphMarkdown(lineText) {
 exports.default = Paragraph;
 
 /***/ }),
-/* 91 */
+/* 93 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -23668,7 +23937,7 @@ var HR = _commandManager2.default.command('markdown', /** @lends HR */{
 exports.default = HR;
 
 /***/ }),
-/* 92 */
+/* 94 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -23682,7 +23951,7 @@ var _commandManager = __webpack_require__(2);
 
 var _commandManager2 = _interopRequireDefault(_commandManager);
 
-var _importManager = __webpack_require__(20);
+var _importManager = __webpack_require__(10);
 
 var _importManager2 = _interopRequireDefault(_importManager);
 
@@ -23745,7 +24014,7 @@ var AddLink = _commandManager2.default.command('markdown', /** @lends AddLink */
 exports.default = AddLink;
 
 /***/ }),
-/* 93 */
+/* 95 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -23759,7 +24028,19 @@ var _commandManager = __webpack_require__(2);
 
 var _commandManager2 = _interopRequireDefault(_commandManager);
 
+var _importManager = __webpack_require__(10);
+
+var _importManager2 = _interopRequireDefault(_importManager);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+* @fileoverview Implments AddImage markdown command
+* @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+*/
+var decodeURIGraceful = _importManager2.default.decodeURIGraceful,
+    encodeMarkdownCharacters = _importManager2.default.encodeMarkdownCharacters,
+    escapeMarkdownCharacters = _importManager2.default.escapeMarkdownCharacters;
 
 /**
  * AddImage
@@ -23768,6 +24049,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @module markdownCommands/AddImage
  * @ignore
  */
+
 var AddImage = _commandManager2.default.command('markdown', /** @lends AddImage */{
   name: 'AddImage',
   /**
@@ -23791,20 +24073,24 @@ var AddImage = _commandManager2.default.command('markdown', /** @lends AddImage 
       ch: range.to.ch
     };
 
-    var replaceText = '![' + data.altText + '](' + data.imageUrl + ')';
+    var altText = data.altText,
+        imageUrl = data.imageUrl;
+
+    altText = decodeURIGraceful(altText);
+    altText = escapeMarkdownCharacters(altText);
+    imageUrl = encodeMarkdownCharacters(imageUrl);
+    var replaceText = '![' + altText + '](' + imageUrl + ')';
 
     doc.replaceRange(replaceText, from, to, '+addImage');
 
     cm.focus();
   }
-}); /**
-    * @fileoverview Implments AddImage markdown command
-    * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
-    */
+});
+
 exports.default = AddImage;
 
 /***/ }),
-/* 94 */
+/* 96 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -23818,15 +24104,16 @@ var _commandManager = __webpack_require__(2);
 
 var _commandManager2 = _interopRequireDefault(_commandManager);
 
+var _listRegex = __webpack_require__(33);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var FIND_MD_OL_RX = /^[ \t]*[\d]+\. .*/; /**
-                                          * @fileoverview Implements UL markdown command
-                                          * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
-                                          */
-
-var FIND_MD_UL_RX = /^[ \t]*[-*] .*/;
-var FIND_MD_TASK_RX = /^[ \t]*[-*]( \[[ xX]])? .*/;
+/**
+ * @fileoverview Implements UL markdown command
+ * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+ */
+var MD_UL_TASK_SYNTAX_RX = /([-*])( \[[ xX]]) /;
+var MD_UL_OR_UL_TASK_SYNTAX_RX = /[\d]+\.( \[[ xX]])? /;
 
 /**
  * UL
@@ -23862,9 +24149,11 @@ var UL = _commandManager2.default.command('markdown', /** @lends UL */{
       line = doc.getLine(i);
 
       if (listManager.isListOrParagraph(line)) {
-        if (isOlOrTask(line)) {
-          listManager.replaceLineText(doc, i, /[\d]+\. /, '* ');
-        } else if (!line.match(FIND_MD_UL_RX)) {
+        if (isUlTask(line)) {
+          listManager.replaceLineText(doc, i, MD_UL_TASK_SYNTAX_RX, '$1 ');
+        } else if (isOlOrTask(line)) {
+          listManager.replaceLineText(doc, i, MD_UL_OR_UL_TASK_SYNTAX_RX, '* ');
+        } else if (!line.match(_listRegex.FIND_MD_UL_RX)) {
           doc.replaceRange('* ', currentLineStart);
         }
 
@@ -23880,18 +24169,27 @@ var UL = _commandManager2.default.command('markdown', /** @lends UL */{
 });
 
 /**
+ * Return whether the given line is UL TASK
+ * @param {string} line Line text
+ * @returns {boolean}
+ */
+function isUlTask(line) {
+  return !!(line && line.match(_listRegex.FIND_MD_UL_TASK_RX));
+}
+
+/**
  * Return whether passed line is OL or TASK or neither
  * @param {string} line Line text
  * @returns {boolean}
  */
 function isOlOrTask(line) {
-  return !!(line && (line.match(FIND_MD_TASK_RX) || line.match(FIND_MD_OL_RX)));
+  return !!(line && (line.match(_listRegex.FIND_MD_TASK_RX) || line.match(_listRegex.FIND_MD_OL_RX)));
 }
 
 exports.default = UL;
 
 /***/ }),
-/* 95 */
+/* 97 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -23905,15 +24203,16 @@ var _commandManager = __webpack_require__(2);
 
 var _commandManager2 = _interopRequireDefault(_commandManager);
 
+var _listRegex = __webpack_require__(33);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var FIND_MD_OL_RX = /^[ \t]*[\d]+\. .*/; /**
-                                          * @fileoverview Implements OL markdown command
-                                          * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
-                                          */
+/**
+ * @fileoverview Implements OL markdown command
+ * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+ */
 
-var FIND_MD_UL_RX = /^[ \t]*[-*] .*/;
-var FIND_MD_TASK_RX = /^[ \t]*[-*]( \[[ xX]])? .*/;
+var MD_LIST_OR_TASK_SYNTAX_RX = /([-*]|[\d]+\.)( \[[ xX]])? /;
 
 /**
  * OL
@@ -23951,8 +24250,8 @@ var OL = _commandManager2.default.command('markdown', /** @lends OL */{
 
       if (listManager.isListOrParagraph(line)) {
         if (isUlOrTask(line)) {
-          listManager.replaceLineText(doc, i, /[*-] /, ordinalNumber + '. ');
-        } else if (!line.match(FIND_MD_OL_RX)) {
+          listManager.replaceLineText(doc, i, MD_LIST_OR_TASK_SYNTAX_RX, ordinalNumber + '. ');
+        } else if (!line.match(_listRegex.FIND_MD_OL_RX)) {
           doc.replaceRange(ordinalNumber + '. ', currentLineStart);
         }
 
@@ -23975,13 +24274,13 @@ var OL = _commandManager2.default.command('markdown', /** @lends OL */{
  * @returns {boolean}
  */
 function isUlOrTask(line) {
-  return !!(line && (line.match(FIND_MD_TASK_RX) || line.match(FIND_MD_UL_RX)));
+  return !!(line && (line.match(_listRegex.FIND_MD_TASK_RX) || line.match(_listRegex.FIND_MD_UL_RX)));
 }
 
 exports.default = OL;
 
 /***/ }),
-/* 96 */
+/* 98 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -24012,7 +24311,7 @@ var Indent = _commandManager2.default.command('markdown', /** @lends Indent */{
    */
   exec: function exec(mde) {
     var cm = mde.getEditor();
-    cm.execCommand('subListIndentTab');
+    cm.execCommand('indentOrderedList');
   }
 }); /**
      * @fileoverview Implements Indent markdown command
@@ -24022,7 +24321,7 @@ var Indent = _commandManager2.default.command('markdown', /** @lends Indent */{
 exports.default = Indent;
 
 /***/ }),
-/* 97 */
+/* 99 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -24063,7 +24362,7 @@ var Outdent = _commandManager2.default.command('markdown', /** @lends Outdent */
 exports.default = Outdent;
 
 /***/ }),
-/* 98 */
+/* 100 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -24184,7 +24483,7 @@ function makeBody(col, row, data) {
 exports.default = Table;
 
 /***/ }),
-/* 99 */
+/* 101 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -24198,16 +24497,16 @@ var _commandManager = __webpack_require__(2);
 
 var _commandManager2 = _interopRequireDefault(_commandManager);
 
+var _listRegex = __webpack_require__(33);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var FIND_MD_OL_RX = /^[ \t]*[\d]+\. .*/; /**
-                                          * @fileoverview Implements Task markdown command
-                                          * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
-                                          */
-
-var FIND_MD_UL_RX = /^[ \t]*[-*] .*/;
-var FIND_MD_TASK_RX = /^[ \t]*[-*]( \[[ xX]])? .*/;
-var FIND_TASK_SYNTAX_RX = /([*-] |[\d]+\. )(\[[ xX]] )/;
+/**
+ * @fileoverview Implements Task markdown command
+ * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+ */
+var MD_UL_OR_OL_SYNTAX_RX = /([*-] |[\d]+\. )/;
+var MD_TASK_SYNTAX_RX = /([*-] |[\d]+\. )(\[[ xX]] )/;
 
 /**
  * Task
@@ -24241,14 +24540,14 @@ var Task = _commandManager2.default.command('markdown', /** @lends Task */{
 
       line = doc.getLine(i);
 
-      var hasTaskSyntax = !!line.match(FIND_TASK_SYNTAX_RX);
+      var hasTaskSyntax = !!line.match(MD_TASK_SYNTAX_RX);
 
       if (listManager.isListOrParagraph(line)) {
         if (isOlOrUl(line) && hasTaskSyntax) {
-          listManager.replaceLineText(doc, i, FIND_TASK_SYNTAX_RX, '$1');
+          listManager.replaceLineText(doc, i, MD_TASK_SYNTAX_RX, '$1');
         } else if (isOlOrUl(line) && !hasTaskSyntax) {
-          listManager.replaceLineText(doc, i, /([*-] |[\d]+\. )/, '$1[ ] ');
-        } else if (!line.match(FIND_MD_TASK_RX)) {
+          listManager.replaceLineText(doc, i, MD_UL_OR_OL_SYNTAX_RX, '$1[ ] ');
+        } else if (!line.match(_listRegex.FIND_MD_TASK_RX)) {
           doc.replaceRange('* [ ] ', currentLineStart);
         }
 
@@ -24269,13 +24568,13 @@ var Task = _commandManager2.default.command('markdown', /** @lends Task */{
  * @returns {boolean}
  */
 function isOlOrUl(line) {
-  return !!(line && (line.match(FIND_MD_UL_RX) || line.match(FIND_MD_OL_RX)));
+  return !!(line && (line.match(_listRegex.FIND_MD_UL_RX) || line.match(_listRegex.FIND_MD_OL_RX)));
 }
 
 exports.default = Task;
 
 /***/ }),
-/* 100 */
+/* 102 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -24290,6 +24589,13 @@ var _commandManager = __webpack_require__(2);
 var _commandManager2 = _interopRequireDefault(_commandManager);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var codeRangeRegex = /^`([^`]+)`$/; /**
+                                    * @fileoverview Implements Code markdown command
+                                    * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+                                    */
+
+var codeContentRegex = /`([^`]+)`/g;
 
 /**
  * Code
@@ -24308,18 +24614,50 @@ var Code = _commandManager2.default.command('markdown', /** @lends Code */{
   exec: function exec(mde) {
     var cm = mde.getEditor();
     var doc = cm.getDoc();
-
     var selection = doc.getSelection();
-    var range = cm.getCursor();
+    var cursor = cm.getCursor();
+    var hasSyntax = this.hasStrikeSyntax(selection);
 
-    doc.replaceSelection(this.append(selection), 'around');
+    var result = void 0;
+    if (hasSyntax) {
+      result = this.remove(selection);
+      result = this._removeCodeSyntax(result);
+    } else {
+      result = this._removeCodeSyntax(selection);
+      result = this.append(result);
+    }
 
-    if (!selection) {
-      doc.setCursor(range.line, range.ch + 1);
+    doc.replaceSelection(result, 'around');
+
+    if (!selection && !hasSyntax) {
+      this.setCursorToCenter(doc, cursor, hasSyntax);
     }
 
     cm.focus();
   },
+
+
+  /**
+   * set cursor to center
+   * @param {CodeMirror.doc} doc - codemirror document
+   * @param {object} cursor - codemirror cursor
+   * @param {boolean} isRemoved - whether it involes deletion
+   */
+  setCursorToCenter: function setCursorToCenter(doc, cursor, isRemoved) {
+    var pos = isRemoved ? -1 : 1;
+    doc.setCursor(cursor.line, cursor.ch + pos);
+  },
+
+
+  /**
+   * has code syntax
+   * @param {string} text Source text
+   * @returns {boolean} true if the given text has a code syntax
+   */
+  hasStrikeSyntax: function hasStrikeSyntax(text) {
+    return codeRangeRegex.test(text);
+  },
+
 
   /**
    * apply Code
@@ -24328,15 +24666,34 @@ var Code = _commandManager2.default.command('markdown', /** @lends Code */{
    */
   append: function append(text) {
     return '`' + text + '`';
+  },
+
+
+  /**
+   * remove Code
+   * @param {string} text - selected text
+   * @returns {string} - text after code syntax removed
+   */
+  remove: function remove(text) {
+    return text.substr(1, text.length - 2);
+  },
+
+
+  /**
+   * remove bold syntax in the middle of given text
+   * @param {string} text - text selected
+   * @returns {string} - text eliminated all code in the middle of it's content
+   * @private
+   */
+  _removeCodeSyntax: function _removeCodeSyntax(text) {
+    return text ? text.replace(codeContentRegex, '$1') : '';
   }
-}); /**
-    * @fileoverview Implements Code markdown command
-    * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
-    */
+});
+
 exports.default = Code;
 
 /***/ }),
-/* 101 */
+/* 103 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -24394,7 +24751,7 @@ var CodeBlock = _commandManager2.default.command('markdown', /** @lends CodeBloc
 exports.default = CodeBlock;
 
 /***/ }),
-/* 102 */
+/* 104 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -24408,10 +24765,6 @@ var _commandManager = __webpack_require__(2);
 
 var _commandManager2 = _interopRequireDefault(_commandManager);
 
-var _domUtils = __webpack_require__(3);
-
-var _domUtils2 = _interopRequireDefault(_domUtils);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
@@ -24420,10 +24773,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @extends Command
  * @module wysiwygCommands/Bold
  * @ignore
- */
-/**
- * @fileoverview Implements bold WysiwygCommand
- * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
  */
 var Bold = _commandManager2.default.command('wysiwyg', /** @lends Bold */{
   name: 'Bold',
@@ -24440,14 +24789,12 @@ var Bold = _commandManager2.default.command('wysiwyg', /** @lends Bold */{
 
     if (sq.hasFormat('table') && tableSelectionManager.getSelectedCells().length) {
       tableSelectionManager.styleToSelectedCells(styleBold);
-    } else {
-      styleBold(sq);
-    }
 
-    var range = sq.getSelection();
-    if (sq.hasFormat('table') && !_domUtils2.default.isTextNode(range.commonAncestorContainer)) {
+      var range = sq.getSelection();
       range.collapse(true);
       sq.setSelection(range);
+    } else {
+      styleBold(sq);
     }
   }
 });
@@ -24455,6 +24802,10 @@ var Bold = _commandManager2.default.command('wysiwyg', /** @lends Bold */{
 /**
  * Style bold.
  * @param {object} sq - squire editor instance
+ */
+/**
+ * @fileoverview Implements bold WysiwygCommand
+ * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
  */
 function styleBold(sq) {
   if (sq.hasFormat('b') || sq.hasFormat('strong')) {
@@ -24470,7 +24821,7 @@ function styleBold(sq) {
 exports.default = Bold;
 
 /***/ }),
-/* 103 */
+/* 105 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -24484,10 +24835,6 @@ var _commandManager = __webpack_require__(2);
 
 var _commandManager2 = _interopRequireDefault(_commandManager);
 
-var _domUtils = __webpack_require__(3);
-
-var _domUtils2 = _interopRequireDefault(_domUtils);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
@@ -24497,11 +24844,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @module wysiwygCommands/Italic
  * @ignore
  */
-/**
- * @fileoverview Implements italic WysiwygCommand
- * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
- */
-
 var Italic = _commandManager2.default.command('wysiwyg', /** @lends Italic */{
   name: 'Italic',
   keyMap: ['CTRL+I', 'META+I'],
@@ -24511,20 +24853,18 @@ var Italic = _commandManager2.default.command('wysiwyg', /** @lends Italic */{
    */
   exec: function exec(wwe) {
     var sq = wwe.getEditor();
-    var range = sq.getSelection();
     var tableSelectionManager = wwe.componentManager.getManager('tableSelection');
 
     wwe.focus();
 
     if (sq.hasFormat('table') && tableSelectionManager.getSelectedCells().length) {
       tableSelectionManager.styleToSelectedCells(styleItalic);
-    } else {
-      styleItalic(sq);
-    }
 
-    if (sq.hasFormat('table') && !_domUtils2.default.isTextNode(range.commonAncestorContainer)) {
+      var range = sq.getSelection();
       range.collapse(true);
       sq.setSelection(range);
+    } else {
+      styleItalic(sq);
     }
   }
 });
@@ -24533,6 +24873,11 @@ var Italic = _commandManager2.default.command('wysiwyg', /** @lends Italic */{
  * Style italic.
  * @param {object} sq - squire editor instance
  */
+/**
+ * @fileoverview Implements italic WysiwygCommand
+ * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+ */
+
 function styleItalic(sq) {
   if (sq.hasFormat('i') || sq.hasFormat('em')) {
     sq.changeFormat(null, { tag: 'i' });
@@ -24547,7 +24892,7 @@ function styleItalic(sq) {
 exports.default = Italic;
 
 /***/ }),
-/* 104 */
+/* 106 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -24561,10 +24906,6 @@ var _commandManager = __webpack_require__(2);
 
 var _commandManager2 = _interopRequireDefault(_commandManager);
 
-var _domUtils = __webpack_require__(3);
-
-var _domUtils2 = _interopRequireDefault(_domUtils);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
@@ -24574,11 +24915,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @module wysiwygCommands/Strike
  * @ignore
  */
-/**
- * @fileoverview Implements strike WysiwygCommand
- * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
- */
-
 var Strike = _commandManager2.default.command('wysiwyg', /** @lends Strike */{
   name: 'Strike',
   keyMap: ['CTRL+S', 'META+S'],
@@ -24588,20 +24924,18 @@ var Strike = _commandManager2.default.command('wysiwyg', /** @lends Strike */{
    */
   exec: function exec(wwe) {
     var sq = wwe.getEditor();
-    var range = sq.getSelection();
     var tableSelectionManager = wwe.componentManager.getManager('tableSelection');
 
     wwe.focus();
 
     if (sq.hasFormat('table') && tableSelectionManager.getSelectedCells().length) {
       tableSelectionManager.styleToSelectedCells(styleStrike);
-    } else {
-      styleStrike(sq);
-    }
 
-    if (sq.hasFormat('table') && !_domUtils2.default.isTextNode(range.commonAncestorContainer)) {
+      var range = sq.getSelection();
       range.collapse(true);
       sq.setSelection(range);
+    } else {
+      styleStrike(sq);
     }
   }
 });
@@ -24610,6 +24944,11 @@ var Strike = _commandManager2.default.command('wysiwyg', /** @lends Strike */{
  * Style strike.
  * @param {object} sq - squire editor instance
  */
+/**
+ * @fileoverview Implements strike WysiwygCommand
+ * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+ */
+
 function styleStrike(sq) {
   if (sq.hasFormat('S')) {
     sq.changeFormat(null, { tag: 'S' });
@@ -24624,7 +24963,7 @@ function styleStrike(sq) {
 exports.default = Strike;
 
 /***/ }),
-/* 105 */
+/* 107 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -24672,7 +25011,7 @@ var Blockquote = _commandManager2.default.command('wysiwyg', /** @lends Blockquo
 exports.default = Blockquote;
 
 /***/ }),
-/* 106 */
+/* 108 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -24686,7 +25025,18 @@ var _commandManager = __webpack_require__(2);
 
 var _commandManager2 = _interopRequireDefault(_commandManager);
 
+var _importManager = __webpack_require__(10);
+
+var _importManager2 = _interopRequireDefault(_importManager);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * @fileoverview Implements AddImage wysiwyg command
+ * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+ */
+var decodeURIGraceful = _importManager2.default.decodeURIGraceful,
+    encodeMarkdownCharacters = _importManager2.default.encodeMarkdownCharacters;
 
 /**
  * AddImage
@@ -24695,6 +25045,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @module wysiwygCommands/AddImage
  * @ignore
  */
+
 var AddImage = _commandManager2.default.command('wysiwyg', /** @lends AddImage */{
   name: 'AddImage',
   /**
@@ -24704,21 +25055,24 @@ var AddImage = _commandManager2.default.command('wysiwyg', /** @lends AddImage *
    */
   exec: function exec(wwe, data) {
     var sq = wwe.getEditor();
+    var altText = data.altText,
+        imageUrl = data.imageUrl;
+
+    altText = decodeURIGraceful(altText);
+    imageUrl = encodeMarkdownCharacters(imageUrl);
 
     wwe.focus();
 
     if (!sq.hasFormat('PRE')) {
-      sq.insertImage(data.imageUrl, { 'alt': data.altText });
+      sq.insertImage(imageUrl, { 'alt': altText });
     }
   }
-}); /**
-     * @fileoverview Implements AddImage wysiwyg command
-     * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
-     */
+});
+
 exports.default = AddImage;
 
 /***/ }),
-/* 107 */
+/* 109 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -24736,7 +25090,7 @@ var _commandManager = __webpack_require__(2);
 
 var _commandManager2 = _interopRequireDefault(_commandManager);
 
-var _importManager = __webpack_require__(20);
+var _importManager = __webpack_require__(10);
 
 var _importManager2 = _interopRequireDefault(_importManager);
 
@@ -24791,7 +25145,7 @@ var AddLink = _commandManager2.default.command('wysiwyg', /** @lends AddLink */{
 exports.default = AddLink;
 
 /***/ }),
-/* 108 */
+/* 110 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -24872,7 +25226,7 @@ var HR = _commandManager2.default.command('wysiwyg', /** @lends HR */{
 exports.default = HR;
 
 /***/ }),
-/* 109 */
+/* 111 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -24942,7 +25296,7 @@ var Heading = _commandManager2.default.command('wysiwyg', /** @lends Heading */{
 exports.default = Heading;
 
 /***/ }),
-/* 110 */
+/* 112 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -25009,7 +25363,7 @@ var Paragraph = _commandManager2.default.command('wysiwyg', /** @lends Paragraph
 exports.default = Paragraph;
 
 /***/ }),
-/* 111 */
+/* 113 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -25023,6 +25377,10 @@ var _commandManager = __webpack_require__(2);
 
 var _commandManager2 = _interopRequireDefault(_commandManager);
 
+var _domUtils = __webpack_require__(3);
+
+var _domUtils2 = _interopRequireDefault(_domUtils);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
@@ -25031,6 +25389,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @extends Command
  * @module wysiwygCommands/UL
  * @ignore
+ */
+/**
+ * @fileoverview Implements ul WysiwygCommand
+ * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
  */
 var UL = _commandManager2.default.command('wysiwyg', /** @lends UL */{
   name: 'UL',
@@ -25043,11 +25405,10 @@ var UL = _commandManager2.default.command('wysiwyg', /** @lends UL */{
     var sq = wwe.getEditor();
     var range = sq.getSelection();
     var listManager = wwe.componentManager.getManager('list');
-    var _range = range,
-        startContainer = _range.startContainer,
-        endContainer = _range.endContainer,
-        startOffset = _range.startOffset,
-        endOffset = _range.endOffset;
+    var startContainer = range.startContainer,
+        endContainer = range.endContainer,
+        startOffset = range.startOffset,
+        endOffset = range.endOffset;
 
 
     wwe.focus();
@@ -25058,14 +25419,17 @@ var UL = _commandManager2.default.command('wysiwyg', /** @lends UL */{
     var newLIs = [];
     for (var i = 0; i < lines.length; i += 1) {
       var newLI = this._changeFormatToUnorderedListIfNeed(wwe, lines[i]);
-      newLIs.push(newLI);
+      if (newLI) {
+        newLIs.push(newLI);
+      }
     }
 
-    range = sq.getSelection();
-    range.setStart(newLIs[0].firstChild, startOffset);
-    range.setEnd(newLIs[newLIs.length - 1].firstChild, endOffset);
-    sq.setSelection(range);
-    sq.saveUndoState(range);
+    if (newLIs.length) {
+      var newStartContainer = _domUtils2.default.containsNode(newLIs[0], startContainer) ? startContainer : newLIs[0];
+      var newEndContainer = _domUtils2.default.containsNode(newLIs[newLIs.length - 1], endContainer) ? endContainer : newLIs[newLIs.length - 1];
+
+      wwe.setSelectionByContainerAndOffset(newStartContainer, startOffset, newEndContainer, endOffset);
+    }
   },
 
 
@@ -25079,7 +25443,8 @@ var UL = _commandManager2.default.command('wysiwyg', /** @lends UL */{
   _changeFormatToUnorderedListIfNeed: function _changeFormatToUnorderedListIfNeed(wwe, target) {
     var sq = wwe.getEditor();
     var range = sq.getSelection();
-    var newLI = range.startContainer;
+    var taskManager = wwe.componentManager.getManager('task');
+    var newLI = void 0;
 
     if (!sq.hasFormat('TABLE') && !sq.hasFormat('PRE')) {
       range.setStart(target, 0);
@@ -25088,6 +25453,7 @@ var UL = _commandManager2.default.command('wysiwyg', /** @lends UL */{
 
       if (sq.hasFormat('LI')) {
         wwe.saveSelection(range);
+        taskManager.unformatTask(range.startContainer);
         sq.replaceParent(range.startContainer, 'ol', 'ul');
         wwe.restoreSavedSelection();
       } else {
@@ -25100,14 +25466,12 @@ var UL = _commandManager2.default.command('wysiwyg', /** @lends UL */{
 
     return newLI;
   }
-}); /**
-     * @fileoverview Implements ul WysiwygCommand
-     * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
-     */
+});
+
 exports.default = UL;
 
 /***/ }),
-/* 112 */
+/* 114 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -25121,6 +25485,10 @@ var _commandManager = __webpack_require__(2);
 
 var _commandManager2 = _interopRequireDefault(_commandManager);
 
+var _domUtils = __webpack_require__(3);
+
+var _domUtils2 = _interopRequireDefault(_domUtils);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
@@ -25130,6 +25498,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @module wysiwygCommands/OL
  * @ignore
  */
+/**
+ * @fileoverview Implements ol WysiwygCommand
+ * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+ */
+
 var OL = _commandManager2.default.command('wysiwyg', /** @lends OL */{
   name: 'OL',
   keyMap: ['CTRL+O', 'META+O'],
@@ -25141,11 +25514,10 @@ var OL = _commandManager2.default.command('wysiwyg', /** @lends OL */{
     var sq = wwe.getEditor();
     var range = sq.getSelection();
     var listManager = wwe.componentManager.getManager('list');
-    var _range = range,
-        startContainer = _range.startContainer,
-        startOffset = _range.startOffset,
-        endContainer = _range.endContainer,
-        endOffset = _range.endOffset;
+    var startContainer = range.startContainer,
+        startOffset = range.startOffset,
+        endContainer = range.endContainer,
+        endOffset = range.endOffset;
 
 
     wwe.focus();
@@ -25156,14 +25528,17 @@ var OL = _commandManager2.default.command('wysiwyg', /** @lends OL */{
     var newLIs = [];
     for (var i = 0; i < lines.length; i += 1) {
       var newLI = this._changeFormatToOrderedListIfNeed(wwe, lines[i]);
-      newLIs.push(newLI);
+      if (newLI) {
+        newLIs.push(newLI);
+      }
     }
 
-    range = sq.getSelection();
-    range.setStart(newLIs[0].firstChild, startOffset);
-    range.setEnd(newLIs[newLIs.length - 1].firstChild, endOffset);
-    sq.setSelection(range);
-    sq.saveUndoState(range);
+    if (newLIs.length) {
+      var newStartContainer = _domUtils2.default.containsNode(newLIs[0], startContainer) ? startContainer : newLIs[0];
+      var newEndContainer = _domUtils2.default.containsNode(newLIs[newLIs.length - 1], endContainer) ? endContainer : newLIs[newLIs.length - 1];
+
+      wwe.setSelectionByContainerAndOffset(newStartContainer, startOffset, newEndContainer, endOffset);
+    }
   },
 
 
@@ -25177,7 +25552,8 @@ var OL = _commandManager2.default.command('wysiwyg', /** @lends OL */{
   _changeFormatToOrderedListIfNeed: function _changeFormatToOrderedListIfNeed(wwe, target) {
     var sq = wwe.getEditor();
     var range = sq.getSelection();
-    var newLI = range.startContainer;
+    var taskManager = wwe.componentManager.getManager('task');
+    var newLI = void 0;
 
     if (!sq.hasFormat('TABLE') && !sq.hasFormat('PRE')) {
       range.setStart(target, 0);
@@ -25186,6 +25562,7 @@ var OL = _commandManager2.default.command('wysiwyg', /** @lends OL */{
 
       if (sq.hasFormat('LI')) {
         wwe.saveSelection(range);
+        taskManager.unformatTask(range.startContainer);
         sq.replaceParent(range.startContainer, 'ul', 'ol');
         wwe.restoreSavedSelection();
       } else {
@@ -25198,15 +25575,12 @@ var OL = _commandManager2.default.command('wysiwyg', /** @lends OL */{
 
     return newLI;
   }
-}); /**
-     * @fileoverview Implements ol WysiwygCommand
-     * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
-     */
+});
 
 exports.default = OL;
 
 /***/ }),
-/* 113 */
+/* 115 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -25346,7 +25720,7 @@ function makeBody(col, row, data) {
 exports.default = Table;
 
 /***/ }),
-/* 114 */
+/* 116 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -25471,7 +25845,7 @@ function focusToFirstTd(sq, $tr) {
 exports.default = TableAddRow;
 
 /***/ }),
-/* 115 */
+/* 117 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -25620,7 +25994,7 @@ function focusToNextCell(sq, $cell) {
 exports.default = TableAddCol;
 
 /***/ }),
-/* 116 */
+/* 118 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -25749,7 +26123,7 @@ function getTrs(range, selectionMgr, $table) {
 exports.default = TableRemoveRow;
 
 /***/ }),
-/* 117 */
+/* 119 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -25789,35 +26163,39 @@ var TableRemoveCol = _commandManager2.default.command('wysiwyg', /** @lends Remo
   exec: function exec(wwe) {
     var sq = wwe.getEditor();
     var range = sq.getSelection().cloneRange();
+    var $table = (0, _jquery2.default)(range.startContainer).parents('table');
     var tableMgr = wwe.componentManager.getManager('table');
     var selectionMgr = wwe.componentManager.getManager('tableSelection');
-    var isAbleToRemoveColumn = (0, _jquery2.default)(range.startContainer).closest('table').find('thead tr th').length > 1;
+    var hasMultipleCols = (0, _jquery2.default)(range.startContainer).closest('table').find('thead tr th').length > 1;
 
     wwe.focus();
-    // IE 800a025e error on removing part of selection range. collpase
+    // IE 800a025e error on removing part of selection range. collapse
     range.collapse(true);
     sq.setSelection(range);
 
-    if (sq.hasFormat('TR', null, range) && isAbleToRemoveColumn) {
-      sq.saveUndoState(range);
-      var $nextFocus = void 0,
-          $cell = void 0;
-
+    if (sq.hasFormat('TR', null, range) && hasMultipleCols) {
+      var tbodyColLength = $table.find('tbody tr:first td').length;
       var $selectedCellsByManager = selectionMgr.getSelectedCells();
-      if ($selectedCellsByManager.length > 1) {
-        var $tailCell = $selectedCellsByManager.last();
-        var $headCell = $selectedCellsByManager.first();
-        $nextFocus = $tailCell.next().length > 0 ? $tailCell.next() : $headCell.prev();
 
-        removeMultipleColsByCells($selectedCellsByManager);
-      } else {
-        $cell = getCellByRange(range);
-        $nextFocus = $cell.next().length ? $cell.next() : $cell.prev();
+      if ($selectedCellsByManager.length < tbodyColLength) {
+        sq.saveUndoState(range);
+        var $nextFocus = void 0;
 
-        removeColByCell($cell);
+        if ($selectedCellsByManager.length > 1) {
+          var $tailCell = $selectedCellsByManager.last();
+          var $headCell = $selectedCellsByManager.first();
+          $nextFocus = $tailCell.next().length ? $tailCell.next() : $headCell.prev();
+
+          removeMultipleColsByCells($selectedCellsByManager);
+        } else {
+          var $cell = getCellByRange(range);
+          $nextFocus = $cell.next().length ? $cell.next() : $cell.prev();
+
+          removeColByCell($cell);
+        }
+
+        focusToCell(sq, $nextFocus, tableMgr);
       }
-
-      focusToCell(sq, $nextFocus, tableMgr);
     }
   }
 });
@@ -25891,7 +26269,7 @@ function focusToCell(sq, $cell, tableMgr) {
 exports.default = TableRemoveCol;
 
 /***/ }),
-/* 118 */
+/* 120 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26043,7 +26421,7 @@ function getRangeInformation(range, selectionMgr) {
 exports.default = TableAlignCol;
 
 /***/ }),
-/* 119 */
+/* 121 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26098,7 +26476,7 @@ var TableRemove = _commandManager2.default.command('wysiwyg', /** @lends RemoveT
 exports.default = TableRemove;
 
 /***/ }),
-/* 120 */
+/* 122 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26174,7 +26552,7 @@ var Indent = _commandManager2.default.command('wysiwyg', /** @lends Indent */{
 exports.default = Indent;
 
 /***/ }),
-/* 121 */
+/* 123 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26254,7 +26632,7 @@ function getCurrent$Li(wwe) {
 exports.default = Outdent;
 
 /***/ }),
-/* 122 */
+/* 124 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26272,6 +26650,10 @@ var _commandManager = __webpack_require__(2);
 
 var _commandManager2 = _interopRequireDefault(_commandManager);
 
+var _domUtils = __webpack_require__(3);
+
+var _domUtils2 = _interopRequireDefault(_domUtils);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
@@ -26280,10 +26662,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @extends Command
  * @module wysiwygCommands/Task
  * @ignore
- */
-/**
- * @fileoverview Implements Task WysiwygCommand
- * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
  */
 var Task = _commandManager2.default.command('wysiwyg', /** @lends Task */{
   name: 'Task',
@@ -26296,11 +26674,10 @@ var Task = _commandManager2.default.command('wysiwyg', /** @lends Task */{
     var sq = wwe.getEditor();
     var range = sq.getSelection();
     var listManager = wwe.componentManager.getManager('list');
-    var _range = range,
-        startContainer = _range.startContainer,
-        endContainer = _range.endContainer,
-        startOffset = _range.startOffset,
-        endOffset = _range.endOffset;
+    var startContainer = range.startContainer,
+        endContainer = range.endContainer,
+        startOffset = range.startOffset,
+        endOffset = range.endOffset;
 
 
     wwe.focus();
@@ -26312,14 +26689,17 @@ var Task = _commandManager2.default.command('wysiwyg', /** @lends Task */{
     var newLIs = [];
     for (var i = 0; i < lines.length; i += 1) {
       var newLI = this._changeFormatToTaskIfNeed(wwe, lines[i]);
-      newLIs.push(newLI);
+      if (newLI) {
+        newLIs.push(newLI);
+      }
     }
 
-    range = sq.getSelection();
-    range.setStart(newLIs[0].firstChild, startOffset);
-    range.setEnd(newLIs[newLIs.length - 1].firstChild, endOffset);
-    sq.setSelection(range);
-    sq.saveUndoState(range);
+    if (newLIs.length) {
+      var newStartContainer = _domUtils2.default.containsNode(newLIs[0], startContainer) ? startContainer : newLIs[0];
+      var newEndContainer = _domUtils2.default.containsNode(newLIs[newLIs.length - 1], endContainer) ? endContainer : newLIs[newLIs.length - 1];
+
+      wwe.setSelectionByContainerAndOffset(newStartContainer, startOffset, newEndContainer, endOffset);
+    }
   },
 
 
@@ -26334,7 +26714,7 @@ var Task = _commandManager2.default.command('wysiwyg', /** @lends Task */{
     var sq = wwe.getEditor();
     var range = sq.getSelection();
     var taskManager = wwe.componentManager.getManager('task');
-    var newLI = range.startContainer;
+    var newLI = void 0;
 
     if (!sq.hasFormat('TABLE') && !sq.hasFormat('PRE')) {
       range.setStart(target, 0);
@@ -26357,12 +26737,14 @@ var Task = _commandManager2.default.command('wysiwyg', /** @lends Task */{
 
     return newLI;
   }
-});
-
+}); /**
+     * @fileoverview Implements Task WysiwygCommand
+     * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+     */
 exports.default = Task;
 
 /***/ }),
-/* 123 */
+/* 125 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26410,7 +26792,6 @@ var Code = _commandManager2.default.command('wysiwyg', /** @lends Code */{
    */
   exec: function exec(wwe) {
     var sq = wwe.getEditor();
-    var range = sq.getSelection();
     var tableSelectionManager = wwe.componentManager.getManager('tableSelection');
     var _styleCode = _tuiCodeSnippet2.default.bind(styleCode, null, wwe.getEditor());
 
@@ -26418,13 +26799,12 @@ var Code = _commandManager2.default.command('wysiwyg', /** @lends Code */{
 
     if (sq.hasFormat('table') && tableSelectionManager.getSelectedCells().length) {
       tableSelectionManager.styleToSelectedCells(_styleCode);
-    } else {
-      _styleCode(sq);
-    }
 
-    if (sq.hasFormat('table') && !_domUtils2.default.isTextNode(range.commonAncestorContainer)) {
+      var range = sq.getSelection();
       range.collapse(true);
       sq.setSelection(range);
+    } else {
+      _styleCode(sq);
     }
   }
 });
@@ -26469,7 +26849,7 @@ function styleCode(editor, sq) {
 exports.default = Code;
 
 /***/ }),
-/* 124 */
+/* 126 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26579,53 +26959,7 @@ function getCodeBlockBody(range, wwe) {
 exports.default = CodeBlock;
 
 /***/ }),
-/* 125 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _tuiCodeSnippet = __webpack_require__(1);
-
-var _tuiCodeSnippet2 = _interopRequireDefault(_tuiCodeSnippet);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var hostnameSent = false;
-
-/**
- * send host name
- * @ignore
- */
-function sendHostName() {
-  if (hostnameSent) {
-    return;
-  }
-  hostnameSent = true;
-
-  var trackingID = 'UA-115377265-9';
-  var applicationID = 'editor';
-  var hitType = 'event';
-  var _location = location,
-      hostname = _location.hostname;
-
-
-  _tuiCodeSnippet2.default.imagePing('https://www.google-analytics.com/collect', {
-    v: 1,
-    t: hitType,
-    tid: trackingID,
-    cid: hostname,
-    dp: hostname,
-    dh: applicationID
-  });
-}
-
-module.exports = {
-  sendHostName: sendHostName
-};
-
-/***/ }),
-/* 126 */
+/* 127 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26689,7 +27023,7 @@ _i18n2.default.setLanguage(['en', 'en_US'], {
     */
 
 /***/ }),
-/* 127 */
+/* 128 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26753,7 +27087,7 @@ _i18n2.default.setLanguage(['ko', 'ko_KR'], {
     */
 
 /***/ }),
-/* 128 */
+/* 129 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26817,7 +27151,7 @@ _i18n2.default.setLanguage(['zh', 'zh_CN'], {
     */
 
 /***/ }),
-/* 129 */
+/* 130 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26881,7 +27215,7 @@ _i18n2.default.setLanguage(['ja', 'ja_JP'], {
     */
 
 /***/ }),
-/* 130 */
+/* 131 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26945,7 +27279,7 @@ _i18n2.default.setLanguage(['nl', 'nl_NL'], {
     */
 
 /***/ }),
-/* 131 */
+/* 132 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27009,7 +27343,7 @@ _i18n2.default.setLanguage(['es', 'es_ES'], {
     */
 
 /***/ }),
-/* 132 */
+/* 133 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27073,7 +27407,7 @@ _i18n2.default.setLanguage(['de', 'de_DE'], {
     */
 
 /***/ }),
-/* 133 */
+/* 134 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27137,7 +27471,7 @@ _i18n2.default.setLanguage(['ru', 'ru_RU'], {
     */
 
 /***/ }),
-/* 134 */
+/* 135 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27201,7 +27535,7 @@ _i18n2.default.setLanguage(['fr', 'fr_FR'], {
     */
 
 /***/ }),
-/* 135 */
+/* 136 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27262,6 +27596,70 @@ _i18n2.default.setLanguage(['uk', 'uk_UA'], {
 }); /**
     * @fileoverview I18N for Ukrainian
     * @author Nikolya <k_m_i@i.ua>
+    */
+
+/***/ }),
+/* 137 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _i18n = __webpack_require__(4);
+
+var _i18n2 = _interopRequireDefault(_i18n);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+_i18n2.default.setLanguage(['tr', 'tr_TR'], {
+  'Markdown': 'Markdown',
+  'WYSIWYG': 'WYSIWYG',
+  'Write': 'Düzenle',
+  'Preview': 'Ön izleme',
+  'Headings': 'Başlıklar',
+  'Paragraph': 'Paragraf',
+  'Bold': 'Kalın',
+  'Italic': 'İtalik',
+  'Strike': 'Altı çizgili',
+  'Code': 'Satır içi kod',
+  'Line': 'Çizgi',
+  'Blockquote': 'Alıntı',
+  'Unordered list': 'Sıralanmamış liste',
+  'Ordered list': 'Sıralı liste',
+  'Task': 'Görev kutusu',
+  'Indent': 'Girintiyi arttır',
+  'Outdent': 'Girintiyi azalt',
+  'Insert link': 'Bağlantı ekle',
+  'Insert CodeBlock': 'Kod bloku ekle',
+  'Insert table': 'Tablo ekle',
+  'Insert image': 'İmaj ekle',
+  'Heading': 'Başlık',
+  'Image URL': 'İmaj URL',
+  'Select image file': 'İmaj dosyası seç',
+  'Description': 'Açıklama',
+  'OK': 'Onay',
+  'More': 'Daha Fazla',
+  'Cancel': 'İptal',
+  'File': 'Dosya',
+  'URL': 'URL',
+  'Link text': 'Bağlantı yazısı',
+  'Add row': 'Satır ekle',
+  'Add col': 'Sütun ekle',
+  'Remove row': 'Satır sil',
+  'Remove col': 'Sütun sil',
+  'Align left': 'Sola hizala',
+  'Align center': 'Merkeze hizala',
+  'Align right': 'Sağa hizala',
+  'Remove table': 'Tabloyu kaldır',
+  'Would you like to paste as table?': 'Tablo olarak yapıştırmak ister misiniz?',
+  'Text color': 'Metin rengi',
+  'Auto scroll enabled': 'Otomatik kaydırma açık',
+  'Auto scroll disabled': 'Otomatik kaydırma kapalı',
+  'Cannot paste values ​​other than a table in the cell selection state': 'Hücre seçimi sırasında tablo dışında veriler yapıştırılamaz.',
+  'Choose language': 'Dil seçiniz'
+}); /**
+    * @fileoverview I18N for Turkish
+    * @author Mesut Gölcük <mesutgolcuk@gmail.com>
     */
 
 /***/ })
