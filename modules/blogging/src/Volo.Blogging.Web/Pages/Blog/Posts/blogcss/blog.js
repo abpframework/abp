@@ -1,5 +1,3 @@
-$('body').addClass("vs-blog");
-
 function handleArrows() {
     var herosWidth = $(".hero-articles").width();
     var arrowsPosition = (herosWidth / 2 - 90);
@@ -17,10 +15,6 @@ function handleImages() {
         $(".box-articles .img-container").css("height", "auto");
     }
 }
-function handleBodyPadding() { 
-    var headerHeight = $("header").height();
-    $("body").css("padding-top", headerHeight);
-} 
 function handleOwlCarousel() { 
     $('.hero-section .owl-carousel').owlCarousel({
         loop:true,
@@ -53,7 +47,6 @@ $(document).ready(function(){
         handleArrows();  
     }, 500);  
     handleImages(); 
-    handleBodyPadding(); 
     handleOwlCarousel(); 
     var stickySidebar = new StickySidebar('#sidebar', {
         topSpacing: 80,
@@ -70,7 +63,6 @@ $(window).resize(function(){
     setTimeout(function(){ 
         handleArrows(); 
         handleImages(); 
-        handleBodyPadding(); 
     }, 500); 
 });
 

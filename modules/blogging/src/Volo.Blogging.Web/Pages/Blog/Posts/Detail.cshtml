@@ -20,195 +20,198 @@
     </abp-style-bundle>
 }
 
-<div class="row mb-5">
-    <div class="col-md-12 mx-auto">
-        <section class="hero-section">
-            <div class="hero-articles">
-                <div class="img-container" style="min-height: 480px; background: url(https://placeimg.com/800/435/tech) center center no-repeat; background-size: cover; ">
-                </div>
-                <div class="hero-content">
-                    <p class="tags">
-                        @foreach (var tag in Model.Post.Tags)
-                        {
-                            <a asp-page="/Blog/Tags/Posts" asp-route-blogShortName="@Model.BlogShortName" asp-route-tagName="@tag.Name" class="tag">@tag.Name</a>
-                        }
-                    </p>
-                    <h1>
-                        <a href="#">@Model.Post.Title</a>
-                    </h1>
-                </div>
-                <div class="article-owner">
-                    <div class="article-infos">
-                        <div class="user-card">
-                            <a href="#">
-                                <img src="https://placeimg.com/60/60/people" class="article-avatar">
-                            </a>
-                            <a href="#">
-                                <strong> Halil İbrahim Kalkan</strong>, @Model.Post.CreationTime.ToString("dd/MM/yyyy hh/mm")
-                            </a>
-                            <span class="seperator">|</span>
-                            <a href="#">
-                                <i class="fa fa-eye"></i> @Model.Post.ReadCount @L["Read"]
-                            </a>
-                            <span class="seperator">|</span>
-                            <a href="#">
-                                <i class="fa fa-comment"></i> @Model.CommentCount @L["Comment"]
-                            </a>
+<div class="vs-blog">
 
-
-                            @if (await Authorization.IsGrantedAsync(BloggingPermissions.Posts.Update))
-                            {
-                                <span class="seperator">|</span>
-                                <a asp-page="./Edit" asp-route-postId="@Model.Post.Id" asp-route-blogShortName="@Model.BlogShortName">
-                                    <i class="fa fa-pencil"></i>  @L["Edit"]
-                                </a>
-                            }
-                        </div>
+    <div class="row mb-5">
+        <div class="col-md-12 mx-auto">
+            <section class="hero-section">
+                <div class="hero-articles">
+                    <div class="img-container" style="min-height: 480px; background: url(https://placeimg.com/800/435/tech) center center no-repeat; background-size: cover; ">
                     </div>
-                </div>
-                <div class="user-link-icons">
-                    <a class="add-bookmark" href="#">
-                        <i class="fa fa-bookmark"></i>
-                    </a>
-                    <a class="share-article" href="#">
-                        <i class="fa fa-share-alt"></i>
-                    </a>
-                </div>
-            </div>
-        </section>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-md-8 mx-auto">
-        <section class="post-content">
-            <p>@Html.Raw(Model.FormattedContent)</p>
-
-        </section>
-    </div>
-</div>
-
-
-<div class="row">
-    <div class="col-md-8 mx-auto">
-        <div class="tags">
-            <h5>@L["TagsInThisArticle"]</h5>
-            @foreach (var tag in Model.Post.Tags)
-            {
-                <a asp-page="/Blog/Tags/Posts" asp-route-blogShortName="@Model.BlogShortName" asp-route-tagName="@tag.Name" class="tag">@tag.Name</a>
-            }
-        </div>
-        <div class="comment-form mt-4">
-            <div class="clearfix bg-light p-4">
-                <h3 class="mt-0">@L["LeaveComment"]</h3>
-                <div>
-                    <form method="post">
-                        <input name="postId" value="@Model.Post.Id" hidden />
-                        <input name="repliedCommentId" id="repliedCommentId" hidden />
-                        <div class="form-group">
-                            <textarea class="form-control no-border" name="text" id="textBoxId" rows="4"></textarea>
-                        </div>
-                        <abp-button button-type="Primary" class="btn-rounded float-right" type="submit" text="@L["Submit"].Value" />
-                    </form>
-                </div>
-            </div>
-        </div>
-        <div class="comment-area">
-
-
-            @foreach (var commentWithRepliesDto in Model.CommentsWithReplies)
-            {
-                <div class="media">
-                    <img class="d-flex mr-3 rounded-circle comment-avatar" src="https://placeimg.com/120/120/people" alt="">
-                    <div class="media-body">
-                        <h5 class="comment-owner">
-                            Armağan Ünlü
-                            <span class="float-right">@commentWithRepliesDto.Comment.CreationTime.ToString("dd/MM/yyyy hh/mm")</span>
-                        </h5>
-                        <p>
-                            @commentWithRepliesDto.Comment.Text
+                    <div class="hero-content">
+                        <p class="tags">
+                            @foreach (var tag in Model.Post.Tags)
+                            {
+                                <a asp-page="/Blog/Tags/Posts" asp-route-blogShortName="@Model.BlogShortName" asp-route-tagName="@tag.Name" class="tag">@tag.Name</a>
+                            }
                         </p>
-                        <div class="comment-buttons">
+                        <h1>
+                            <a href="#">@Model.Post.Title</a>
+                        </h1>
+                    </div>
+                    <div class="article-owner">
+                        <div class="article-infos">
+                            <div class="user-card">
+                                <a href="#">
+                                    <img src="https://placeimg.com/60/60/people" class="article-avatar">
+                                </a>
+                                <a href="#">
+                                    <strong> Halil İbrahim Kalkan</strong>, @Model.Post.CreationTime.ToString("dd/MM/yyyy hh/mm")
+                                </a>
+                                <span class="seperator">|</span>
+                                <a href="#">
+                                    <i class="fa fa-eye"></i> @Model.Post.ReadCount @L["Read"]
+                                </a>
+                                <span class="seperator">|</span>
+                                <a href="#">
+                                    <i class="fa fa-comment"></i> @Model.CommentCount @L["Comment"]
+                                </a>
 
-                            <a href="#" class="tag" data-relpyid="@commentWithRepliesDto.Comment.Id">
-                                <i class="fa fa-reply" aria-hidden="true"></i> @L["Reply"]
-                            </a>
 
-                            <span class="seperator">|</span>
-                            <a href="tag.html" class="tag">
-                                <i class="fa fa-chevron-up" aria-hidden="true"></i><span class="count count-up">44</span>
-                            </a>
-                            <span class="seperator">|</span>
-                            <a href="tag.html" class="tag">
-                                <i class="fa fa-chevron-down" aria-hidden="true"></i><span class="count count-down">8</span>
-                            </a>
-                        </div>
-
-                        <div class="comment-form mt-4 replyForm">
-                            <div class="clearfix bg-light p-4">
-                                <h3 class="mt-0">@L["ReplyTo"] Armağan Ünlü</h3>
-                                <div>
-                                    <form method="post">
-                                        <input name="postId" value="@Model.Post.Id" hidden />
-                                        <input name="repliedCommentId" value="@commentWithRepliesDto.Comment.Id" hidden />
-
-                                        <div class="form-group">
-                                            <textarea class="form-control no-border" name="text" id="textBoxId" rows="4"></textarea>
-                                        </div>
-                                        <abp-button button-type="Primary" class="btn-rounded float-right" type="submit" text="@L["Comment"].Value" />
-                                    </form>
-                                </div>
+                                @if (await Authorization.IsGrantedAsync(BloggingPermissions.Posts.Update))
+                                {
+                                    <span class="seperator">|</span>
+                                    <a asp-page="./Edit" asp-route-postId="@Model.Post.Id" asp-route-blogShortName="@Model.BlogShortName">
+                                        <i class="fa fa-pencil"></i>  @L["Edit"]
+                                    </a>
+                                }
                             </div>
                         </div>
+                    </div>
+                    <div class="user-link-icons">
+                        <a class="add-bookmark" href="#">
+                            <i class="fa fa-bookmark"></i>
+                        </a>
+                        <a class="share-article" href="#">
+                            <i class="fa fa-share-alt"></i>
+                        </a>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
 
-                        @foreach (var reply in commentWithRepliesDto.Replies)
-                        {
-                            <div class="media">
-                                <img class="d-flex mr-3 rounded-circle answer-avatar" src="https://placeimg.com/120/120/people?t=1535457179534" alt="">
-                                <div class="media-body">
-                                    <h5 class="comment-owner">
-                                        Zlatan Ibrahimovic
-                                        <span class="float-right">@reply.CreationTime.ToString("dd/MM/yyyy hh/mm")</span>
-                                    </h5>
-                                    <p>
-                                        @reply.Text
-                                    </p>
-                                    <div class="comment-buttons">
-                                        <a href="#" class="tag" data-relpyid="@commentWithRepliesDto.Comment.Id">
-                                            <i class="fa fa-reply" aria-hidden="true"></i> @L["Reply"]
-                                        </a>
-                                        <span class="seperator">|</span>
-                                        <a href="tag.html" class="tag">
-                                            <i class="fa fa-chevron-up" aria-hidden="true"></i><span class="count count-up">44</span>
-                                        </a>
-                                        <span class="seperator">|</span>
-                                        <a href="tag.html" class="tag">
-                                            <i class="fa fa-chevron-down" aria-hidden="true"></i><span class="count count-down">8</span>
-                                        </a>
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <section class="post-content">
+                <p>@Html.Raw(Model.FormattedContent)</p>
+
+            </section>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="tags">
+                <h5>@L["TagsInThisArticle"]</h5>
+                @foreach (var tag in Model.Post.Tags)
+                {
+                    <a asp-page="/Blog/Tags/Posts" asp-route-blogShortName="@Model.BlogShortName" asp-route-tagName="@tag.Name" class="tag">@tag.Name</a>
+                }
+            </div>
+            <div class="comment-form mt-4">
+                <div class="clearfix bg-light p-4">
+                    <h3 class="mt-0">@L["LeaveComment"]</h3>
+                    <div>
+                        <form method="post">
+                            <input name="postId" value="@Model.Post.Id" hidden />
+                            <input name="repliedCommentId" id="repliedCommentId" hidden />
+                            <div class="form-group">
+                                <textarea class="form-control no-border" name="text" id="textBoxId" rows="4"></textarea>
+                            </div>
+                            <abp-button button-type="Primary" class="btn-rounded float-right" type="submit" text="@L["Submit"].Value" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="comment-area">
+
+
+                @foreach (var commentWithRepliesDto in Model.CommentsWithReplies)
+                {
+                    <div class="media">
+                        <img class="d-flex mr-3 rounded-circle comment-avatar" src="https://placeimg.com/120/120/people" alt="">
+                        <div class="media-body">
+                            <h5 class="comment-owner">
+                                Armağan Ünlü
+                                <span class="float-right">@commentWithRepliesDto.Comment.CreationTime.ToString("dd/MM/yyyy hh/mm")</span>
+                            </h5>
+                            <p>
+                                @commentWithRepliesDto.Comment.Text
+                            </p>
+                            <div class="comment-buttons">
+
+                                <a href="#" class="tag" data-relpyid="@commentWithRepliesDto.Comment.Id">
+                                    <i class="fa fa-reply" aria-hidden="true"></i> @L["Reply"]
+                                </a>
+
+                                <span class="seperator">|</span>
+                                <a href="tag.html" class="tag">
+                                    <i class="fa fa-chevron-up" aria-hidden="true"></i><span class="count count-up">44</span>
+                                </a>
+                                <span class="seperator">|</span>
+                                <a href="tag.html" class="tag">
+                                    <i class="fa fa-chevron-down" aria-hidden="true"></i><span class="count count-down">8</span>
+                                </a>
+                            </div>
+
+                            <div class="comment-form mt-4 replyForm">
+                                <div class="clearfix bg-light p-4">
+                                    <h3 class="mt-0">@L["ReplyTo"] Armağan Ünlü</h3>
+                                    <div>
+                                        <form method="post">
+                                            <input name="postId" value="@Model.Post.Id" hidden />
+                                            <input name="repliedCommentId" value="@commentWithRepliesDto.Comment.Id" hidden />
+
+                                            <div class="form-group">
+                                                <textarea class="form-control no-border" name="text" id="textBoxId" rows="4"></textarea>
+                                            </div>
+                                            <abp-button button-type="Primary" class="btn-rounded float-right" type="submit" text="@L["Comment"].Value" />
+                                        </form>
                                     </div>
+                                </div>
+                            </div>
 
-                                    <div class="comment-form mt-4 replyForm">
-                                        <div class="clearfix bg-light p-4">
-                                            <h3 class="mt-0">@L["ReplyTo"] Armağan Ünlü</h3>
-                                            <div>
-                                                <form method="post">
-                                                    <input name="postId" value="@Model.Post.Id" hidden />
-                                                    <input name="repliedCommentId" value="@commentWithRepliesDto.Comment.Id" hidden />
-                                                    <div class="form-group">
-                                                        <textarea class="form-control no-border" name="text" id="textBoxId" rows="4"></textarea>
-                                                    </div>
-                                                    <abp-button button-type="Primary" class="btn-rounded float-right" type="submit" text="@L["Submit"].Value" />
-                                                </form>
+                            @foreach (var reply in commentWithRepliesDto.Replies)
+                            {
+                                <div class="media">
+                                    <img class="d-flex mr-3 rounded-circle answer-avatar" src="https://placeimg.com/120/120/people?t=1535457179534" alt="">
+                                    <div class="media-body">
+                                        <h5 class="comment-owner">
+                                            Zlatan Ibrahimovic
+                                            <span class="float-right">@reply.CreationTime.ToString("dd/MM/yyyy hh/mm")</span>
+                                        </h5>
+                                        <p>
+                                            @reply.Text
+                                        </p>
+                                        <div class="comment-buttons">
+                                            <a href="#" class="tag" data-relpyid="@commentWithRepliesDto.Comment.Id">
+                                                <i class="fa fa-reply" aria-hidden="true"></i> @L["Reply"]
+                                            </a>
+                                            <span class="seperator">|</span>
+                                            <a href="tag.html" class="tag">
+                                                <i class="fa fa-chevron-up" aria-hidden="true"></i><span class="count count-up">44</span>
+                                            </a>
+                                            <span class="seperator">|</span>
+                                            <a href="tag.html" class="tag">
+                                                <i class="fa fa-chevron-down" aria-hidden="true"></i><span class="count count-down">8</span>
+                                            </a>
+                                        </div>
+
+                                        <div class="comment-form mt-4 replyForm">
+                                            <div class="clearfix bg-light p-4">
+                                                <h3 class="mt-0">@L["ReplyTo"] Armağan Ünlü</h3>
+                                                <div>
+                                                    <form method="post">
+                                                        <input name="postId" value="@Model.Post.Id" hidden />
+                                                        <input name="repliedCommentId" value="@commentWithRepliesDto.Comment.Id" hidden />
+                                                        <div class="form-group">
+                                                            <textarea class="form-control no-border" name="text" id="textBoxId" rows="4"></textarea>
+                                                        </div>
+                                                        <abp-button button-type="Primary" class="btn-rounded float-right" type="submit" text="@L["Submit"].Value" />
+                                                    </form>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        }
+                            }
+                        </div>
                     </div>
-                </div>
-            }
+                }
 
+            </div>
         </div>
     </div>
 </div>
