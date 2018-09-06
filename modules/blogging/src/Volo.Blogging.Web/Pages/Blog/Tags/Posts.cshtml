@@ -7,12 +7,12 @@
 
 @section scripts {
     <abp-script-bundle name="@typeof(PostsModel).FullName">
-        <abp-script src="/Pages/Blog/Posts/blogcss/blog.js" />
+        <abp-script src="/Pages/Blog/Shared/Scripts/blog.js" />
     </abp-script-bundle>
 }
 @section styles {
-    <abp-style-bundle @*name="@typeof(DetailModel).FullName" *@>
-        <abp-style src="/Pages/Blog/Posts/blogcss/blog.css" />
+    <abp-style-bundle name="@typeof(PostsModel).FullName">
+        <abp-style src="/Pages/Blog/Shared/Styles/blog.css" />
     </abp-style-bundle>
 }
 

@@ -5,23 +5,18 @@
 @using Volo.Blogging.Pages.Blog.Posts
 @inject IAuthorizationService Authorization
 @model DetailModel
-@{
-}
-
 @section scripts {
     <abp-script-bundle name="@typeof(DetailModel).FullName">
         <abp-script src="/Pages/Blog/Posts/detail.js" />
-        <abp-script src="/Pages/Blog/Posts/blogcss/blog.js" />
+        <abp-script src="/Pages/Blog/Shared/Scripts/blog.js" />
     </abp-script-bundle>
 }
 @section styles {
-    <abp-style-bundle @*name="@typeof(DetailModel).FullName" *@>
-        <abp-style src="/Pages/Blog/Posts/blogcss/blog.css" />
+    <abp-style-bundle name="@typeof(DetailModel).FullName">
+        <abp-style src="/Pages/Blog/Shared/Styles/blog.css" />
     </abp-style-bundle>
 }
-
 <div class="vs-blog">
-
     <div class="row mb-5">
         <div class="col-md-12 mx-auto">
             <section class="hero-section">
@@ -89,7 +84,6 @@
             </section>
         </div>
     </div>
-
 
     <div class="row">
         <div class="col-md-8 mx-auto">
@@ -210,7 +204,6 @@
                         </div>
                     </div>
                 }
-
             </div>
         </div>
     </div>
