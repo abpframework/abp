@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -33,7 +34,14 @@ namespace Volo.Abp.UI.Navigation
                 }
             }
 
+            NormalizeMenu(menu);
+
             return menu;
+        }
+
+        protected virtual void NormalizeMenu(ApplicationMenu menu)
+        {
+            menu.Items.RemoveAll(item => item.IsLeaf && item.Url.IsNullOrEmpty());
         }
     }
 }

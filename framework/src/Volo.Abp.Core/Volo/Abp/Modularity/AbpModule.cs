@@ -13,6 +13,22 @@ namespace Volo.Abp.Modularity
         IPreConfigureServices, 
         IPostConfigureServices
     {
+        protected internal ServiceConfigurationContext ServiceConfigurationContext
+        {
+            get
+            {
+                if (_serviceConfigurationContext == null)
+                {
+                    throw new AbpException($"{nameof(ServiceConfigurationContext)} is only available in the {nameof(PreConfigureServices)}, {nameof(PreConfigureServices)} and {nameof(PreConfigureServices)} methods.");
+                }
+
+                return _serviceConfigurationContext;
+            }
+            internal set => _serviceConfigurationContext = value;
+        }
+
+        private ServiceConfigurationContext _serviceConfigurationContext;
+
         public virtual void PreConfigureServices(ServiceConfigurationContext context)
         {
             
@@ -65,6 +81,12 @@ namespace Volo.Abp.Modularity
             {
                 throw new ArgumentException("Given type is not an ABP module: " + moduleType.AssemblyQualifiedName);
             }
+        }
+
+        protected void Configure<TOptions>(Action<TOptions> configureOptions) 
+            where TOptions : class
+        {
+            ServiceConfigurationContext.Services.Configure(configureOptions);
         }
     }
 }

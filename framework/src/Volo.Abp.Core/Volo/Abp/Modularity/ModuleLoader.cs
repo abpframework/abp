@@ -94,6 +94,14 @@ namespace Volo.Abp.Modularity
             var context = new ServiceConfigurationContext(services);
             services.AddSingleton(context);
 
+            foreach (var module in modules)
+            {
+                if (module.Instance is AbpModule abpModule)
+                {
+                    abpModule.ServiceConfigurationContext = context;
+                }
+            }
+
             //PreConfigureServices
             foreach (var module in modules.Where(m => m.Instance is IPreConfigureServices))
             {
@@ -110,6 +118,14 @@ namespace Volo.Abp.Modularity
             foreach (var module in modules.Where(m => m.Instance is IPostConfigureServices))
             {
                 ((IPostConfigureServices)module.Instance).PostConfigureServices(context);
+            }
+
+            foreach (var module in modules)
+            {
+                if (module.Instance is AbpModule abpModule)
+                {
+                    abpModule.ServiceConfigurationContext = null;
+                }
             }
         }
 
