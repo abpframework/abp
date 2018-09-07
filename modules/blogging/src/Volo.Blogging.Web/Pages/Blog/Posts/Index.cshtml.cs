@@ -18,6 +18,9 @@ namespace Volo.Blogging.Pages.Blog.Posts
         [BindProperty(SupportsGet = true)]
         public string BlogShortName { get; set; }
 
+        [BindProperty(SupportsGet = true)]
+        public string TagName { get; set; }
+
         public IReadOnlyList<PostWithDetailsDto> Posts { get; set; }
 
         public IReadOnlyList<TagDto> PopularTags { get; set; }
@@ -32,7 +35,7 @@ namespace Volo.Blogging.Pages.Blog.Posts
         public async Task OnGetAsync()
         {
             var blog = await _blogAppService.GetByShortNameAsync(BlogShortName);
-            Posts = (await _postAppService.GetListByBlogId(blog.Id)).Items;
+            Posts = (await _postAppService.GetListByBlogIdAndTagName(blog.Id, TagName)).Items;
             PopularTags = (await _tagAppService.GetPopularTags(new GetPopularTagsInput {ResultCount = 10}));
         }
     }

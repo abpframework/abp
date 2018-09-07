@@ -7,8 +7,6 @@ namespace Volo.Blogging.Posts
 {
     public interface IPostAppService : IApplicationService
     {
-        Task<ListResultDto<PostWithDetailsDto>> GetListByBlogId(Guid id);
-
         Task<ListResultDto<PostWithDetailsDto>> GetListByBlogIdAndTagName(Guid blogId, string tagName);
 
         Task<PostWithDetailsDto> GetForReadingAsync(GetPostInput input);

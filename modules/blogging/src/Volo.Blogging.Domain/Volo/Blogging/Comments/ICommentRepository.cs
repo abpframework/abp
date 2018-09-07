@@ -10,5 +10,7 @@ namespace Volo.Blogging.Comments
         Task<List<Comment>> GetListOfPostAsync(
             Guid postId
         );
+
+        Task<List<Comment>> GetRepliesOfComment(Guid id);
     }
 }

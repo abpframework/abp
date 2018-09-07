@@ -61,7 +61,6 @@ namespace Volo.Blogging
                 options.Conventions.AddPageRoute("/Blog/Posts/Detail", "blog/{blogShortName}/{postUrl}");
                 options.Conventions.AddPageRoute("/Blog/Posts/Edit", "blog/{blogShortName}/posts/edit/{postId}");
                 options.Conventions.AddPageRoute("/Blog/Posts/New", "blog/{blogShortName}/posts/new");
-                options.Conventions.AddPageRoute("/Blog/Tags/Posts", "blog/{blogShortName}/{tagName}/posts");
             });
 
             context.Services.AddAssemblyOf<BloggingWebModule>();

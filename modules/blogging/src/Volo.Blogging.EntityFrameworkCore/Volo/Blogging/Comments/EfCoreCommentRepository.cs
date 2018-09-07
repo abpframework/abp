@@ -23,5 +23,11 @@ namespace Volo.Blogging.Comments
                 .OrderBy(a => a.CreationTime)
                 .ToListAsync();
         }
+
+        public async Task<List<Comment>> GetRepliesOfComment(Guid id)
+        {
+            return await DbSet
+                .Where(a => a.RepliedCommentId == id).ToListAsync();
+        }
     }
 }

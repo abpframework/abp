@@ -46,7 +46,7 @@
                                         <p class="tags">
                                             @foreach (var tag in post.Tags)
                                             {
-                                                <a asp-page="/Blog/Tags/Posts" asp-route-blogShortName="@Model.BlogShortName" asp-route-tagName="@tag.Name" class="tag">@tag.Name</a>
+                                                <a asp-page="/Blog/Posts/Index" asp-route-blogShortName="@Model.BlogShortName" asp-route-tagName="@tag.Name" class="tag">@tag.Name</a>
                                             }
                                         </p>
                                         <h2>
@@ -65,7 +65,7 @@
                                                     <img src="https://placeimg.com/120/120/people" class="article-avatar">
                                                 </a>
                                                 <a href="#">
-                                                    <strong>Armağan Ünlü</strong>, @((DateTime.Today - post.CreationTime).Days) @L["DaysAgo"]
+                                                    <strong>Armağan Ünlü</strong>, @ConvertDatetimeToTimeAgo(post.CreationTime)
                                                 </a>
                                                 <span class="seperator">|</span>
                                                 <a href="#">
@@ -132,7 +132,7 @@
                                             <div class="article-infos">
                                                 <div class="user-card">
                                                     <a href="#">
-                                                        <strong>Armağan Ünlü</strong>, @((DateTime.Today - post.CreationTime).Days) @L["DaysAgo"]
+                                                        <strong>Armağan Ünlü</strong>, @ConvertDatetimeToTimeAgo(post.CreationTime)
                                                     </a>
                                                 </div>
                                             </div>
@@ -188,7 +188,7 @@
                                 <p class="tags">
                                     @foreach (var tag in post.Tags)
                                     {
-                                        <a asp-page="/Blog/Tags/Posts" asp-route-blogShortName="@Model.BlogShortName" asp-route-tagName="@tag.Name" class="tag">@tag.Name</a>
+                                        <a asp-page="/Blog/Posts/Index" asp-route-blogShortName="@Model.BlogShortName" asp-route-tagName="@tag.Name" class="tag">@tag.Name</a>
                                     }
                                 </p>
                                 <h3>
@@ -204,7 +204,7 @@
                                                 <img src="https://placeimg.com/120/120/pople" class="article-avatar">
                                             </a>
                                             <a href="#">
-                                                <strong>Armağan Ünlü</strong>, @((DateTime.Today - post.CreationTime).Days) @L["DaysAgo"]
+                                                <strong>Armağan Ünlü</strong>, @ConvertDatetimeToTimeAgo(post.CreationTime)
                                             </a>
                                             <span class="seperator">|</span>
                                             <a href="#">
@@ -234,7 +234,7 @@
                         <div class="popular-tags">
                             @foreach (var popularTag in Model.PopularTags)
                             {
-                                <a asp-page="/Blog/Tags/Posts" asp-route-blogShortName="@Model.BlogShortName" asp-route-tagName="@popularTag.Name">@popularTag.Name <span>(@popularTag.UsageCount @L["Posts"])</span></a>
+                                <a asp-page="/Blog/Posts/Index" asp-route-blogShortName="@Model.BlogShortName" asp-route-tagName="@popularTag.Name">@popularTag.Name <span>(@popularTag.UsageCount @L["Posts"])</span></a>
                             }
                         </div>
 
