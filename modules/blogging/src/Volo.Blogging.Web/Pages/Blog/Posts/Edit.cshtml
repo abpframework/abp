@@ -47,7 +47,7 @@
 
             </div>
             <div class="mt-3 d-flex flex-row-reverse">
-                <abp-button type="submit" form="edit-post-form" text="@L["Submit"].Value" icon="check" />
+                <abp-button button-type="Primary" type="submit" form="edit-post-form" text="@L["Submit"].Value" icon="check" />
 
                 <a asp-page="/Blog/Posts/Detail" asp-route-postUrl="@Model.Post.Url" asp-route-blogShortName="@Model.BlogShortName" class="btn btn-default mr-2"><span>@L["Cancel"]</span></a>
             </div>
