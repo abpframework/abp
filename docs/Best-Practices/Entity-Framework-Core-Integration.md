@@ -203,8 +203,6 @@ public class AbpIdentityEntityFrameworkCoreModule : AbpModule
             options.AddRepository<IdentityUser, EfCoreIdentityUserRepository>();
             options.AddRepository<IdentityRole, EfCoreIdentityRoleRepository>();
         });
-
-        context.Services.AddAssemblyOf<AbpIdentityEntityFrameworkCoreModule>();
     }
 }
 ````
