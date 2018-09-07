@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Services;
@@ -37,6 +38,13 @@ namespace Volo.Blogging.Comments
                 {
                     hierarchicalComments.Add(new CommentWithRepliesDto() { Comment = commentDto });
                 }
+            }
+
+            hierarchicalComments = hierarchicalComments.OrderByDescending(c => c.Comment.CreationTime).ToList();
+
+            foreach (var hierarchicalComment in hierarchicalComments)
+            {
+                hierarchicalComment.Replies = hierarchicalComment.Replies.OrderBy(c => c.CreationTime).ToList();
             }
 
             return hierarchicalComments;
