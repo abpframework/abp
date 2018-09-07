@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Blogging.Comments;
+using Volo.Blogging.Comments.Dtos;
 
 namespace Volo.Blogging.Areas.Blog.Controllers
 {
@@ -23,6 +24,12 @@ namespace Volo.Blogging.Areas.Blog.Controllers
         public async Task Delete(Guid id)
         {
             await _commentAppService.DeleteAsync(id);
+        }
+
+        [HttpPost]
+        public async Task Update(Guid id, UpdateCommentDto commentDto)
+        {
+            await _commentAppService.UpdateAsync(id, commentDto);
         }
     }
 }

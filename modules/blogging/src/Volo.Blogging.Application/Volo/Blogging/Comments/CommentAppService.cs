@@ -9,7 +9,7 @@ using Volo.Blogging.Comments.Dtos;
 
 namespace Volo.Blogging.Comments
 {
-    [Authorize(BloggingPermissions.Comments.Default)]
+  //  [Authorize(BloggingPermissions.Comments.Default)]
     public class CommentAppService : ApplicationService, ICommentAppService
     {
         private readonly ICommentRepository _commentRepository;
@@ -68,11 +68,26 @@ namespace Volo.Blogging.Comments
             return ObjectMapper.Map<Comment, CommentDto>(comment);
         }
 
-        [Authorize(BloggingPermissions.Comments.Update)]
         public async Task<CommentDto> UpdateAsync(Guid id, UpdateCommentDto input)
         {
             var comment = await _commentRepository.GetAsync(id);
 
+            if (CurrentUser.Id != comment.CreatorId)
+            {
+                return await UpdateAsAdminAsync(id, comment, input);
+            }
+
+            return await UpdateCommentAsync(id, comment, input);
+        }
+
+        [Authorize(BloggingPermissions.Comments.Update)]
+        private async Task<CommentDto> UpdateAsAdminAsync(Guid id, Comment comment, UpdateCommentDto input)
+        {
+            return await UpdateCommentAsync(id, comment, input);
+        }
+
+        private async Task<CommentDto> UpdateCommentAsync(Guid id, Comment comment, UpdateCommentDto input)
+        {
             comment.SetText(input.Text);
 
             comment = await _commentRepository.UpdateAsync(comment);

@@ -47,8 +47,6 @@
         }
     }).data(editorDataKey);
 
-
-
     $container.find("form#edit-post-form").submit(function (e) {
         var $postTextInput = $form.find("input[name='Post.Content']");
 

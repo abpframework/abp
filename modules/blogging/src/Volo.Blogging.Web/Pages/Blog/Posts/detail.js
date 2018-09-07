@@ -1,6 +1,27 @@
 ﻿(function ($) {
 
     $('div .replyForm').hide();
+    $('div .editForm').hide();
+
+    $('form[class="editFormClass"]').submit(function (event) {
+        event.preventDefault();
+        var form = $(this).serializeFormToObject();
+        
+        $.ajax({
+            type: "POST",
+            url: "/Blog/Comments/Update",
+            data: {
+                id: form.commentId,
+                commentDto: {
+                    text: form.text
+                }
+            },
+            success: function (response) {
+                $('div .editForm').hide();
+                $('#' + form.commentId).text(form.text);
+            }
+        });
+    });
 
     $('a').click(function (event) {
         var linkElement = $(this);
@@ -21,22 +42,39 @@
             return;
         }
 
-        var id = $(this).attr('data-deleteid');
+        data = $(this).attr('data-deleteid');
 
-        if (id != '' && id !== undefined) {
+        if (data != '' && data !== undefined) {
 
             event.preventDefault();
-            console.log(id);
+
             $.ajax({
                 type: "POST",
                 url: "/Blog/Comments/Delete",
-                data: { id: id },
+                data: { id: data },
                 success: function (response) {
-                    console.log(linkElement);
                     linkElement.parent().parent().parent().remove();
                 }
             });
         }
+
+        data = $(this).attr('data-updateid');
+
+        if (data != '' && data !== undefined) {
+
+            event.preventDefault();
+
+            var div = $(this).parent().next().next();
+
+            if (div.is(":hidden")) {
+                $('div .editForm').hide();
+                div.show();
+            } else {
+                div.hide();
+            }
+            return;
+        }
+
 
     });
 

@@ -124,7 +124,7 @@
                                 Armağan Ünlü
                                 <span class="float-right">@ConvertDatetimeToTimeAgo(commentWithRepliesDto.Comment.CreationTime)</span>
                             </h5>
-                            <p>
+                            <p id="@commentWithRepliesDto.Comment.Id">
                                 @commentWithRepliesDto.Comment.Text
                             </p>
                             <div class="comment-buttons">
@@ -139,14 +139,14 @@
                                         <i class="fa fa-trash" aria-hidden="true"></i> @L["Delete"]
                                     </a>
                                 }
-                                <span class="seperator">|</span>
-                                <a href="tag.html" class="tag">
-                                    <i class="fa fa-chevron-up" aria-hidden="true"></i><span class="count count-up">44</span>
-                                </a>
-                                <span class="seperator">|</span>
-                                <a href="tag.html" class="tag">
-                                    <i class="fa fa-chevron-down" aria-hidden="true"></i><span class="count count-down">8</span>
-                                </a>
+
+                                @if (await Authorization.IsGrantedAsync(BloggingPermissions.Comments.Update) || (CurrentUser.Id == commentWithRepliesDto.Comment.CreatorId))
+                                {
+                                    <span class="seperator">|</span>
+                                    <a href="#" class="tag" data-updateid="@commentWithRepliesDto.Comment.Id">
+                                        <i class="fa fa-pencil" aria-hidden="true"></i> @L["Edit"]
+                                    </a>
+                                }
                             </div>
 
                             <div class="comment-form mt-4 replyForm">
@@ -165,6 +165,23 @@
                                     </div>
                                 </div>
                             </div>
+                                        
+                            @if (await Authorization.IsGrantedAsync(BloggingPermissions.Comments.Update) || (CurrentUser.Id == commentWithRepliesDto.Comment.CreatorId))
+                            {
+                                <div class="comment-form mt-4 editForm">
+                                    <div class="clearfix bg-light p-4">
+                                        <div>
+                                            <form class="editFormClass">
+                                                <input name="commentId" value="@commentWithRepliesDto.Comment.Id" hidden/>
+                                                <div class="form-group">
+                                                    <textarea class="form-control no-border" name="text" id="textBoxId" rows="4">@commentWithRepliesDto.Comment.Text</textarea>
+                                                </div>
+                                                <abp-button button-type="Primary" class="btn-rounded float-right" type="submit" text="@L["Submit"].Value"/>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
 
                             @foreach (var reply in commentWithRepliesDto.Replies)
                             {
@@ -175,14 +192,14 @@
                                             Zlatan Ibrahimovic
                                             <span class="float-right">@ConvertDatetimeToTimeAgo(reply.CreationTime)</span>
                                         </h5>
-                                        <p>
+                                        <p id="@reply.Id">
                                             @reply.Text
                                         </p>
                                         <div class="comment-buttons">
                                             <a href="#" class="tag" data-relpyid="@commentWithRepliesDto.Comment.Id">
                                                 <i class="fa fa-reply" aria-hidden="true"></i> @L["Reply"]
                                             </a>
-                                            
+
                                             @if (await Authorization.IsGrantedAsync(BloggingPermissions.Comments.Delete) || (CurrentUser.Id == commentWithRepliesDto.Comment.CreatorId))
                                             {
                                                 <span class="seperator">|</span>
@@ -190,14 +207,14 @@
                                                     <i class="fa fa-trash" aria-hidden="true"></i> @L["Delete"]
                                                 </a>
                                             }
-                                            <span class="seperator">|</span>
-                                            <a href="tag.html" class="tag">
-                                                <i class="fa fa-chevron-up" aria-hidden="true"></i><span class="count count-up">44</span>
-                                            </a>
-                                            <span class="seperator">|</span>
-                                            <a href="tag.html" class="tag">
-                                                <i class="fa fa-chevron-down" aria-hidden="true"></i><span class="count count-down">8</span>
-                                            </a>
+
+                                            @if (await Authorization.IsGrantedAsync(BloggingPermissions.Comments.Update) || (CurrentUser.Id == commentWithRepliesDto.Comment.CreatorId))
+                                            {
+                                                <span class="seperator">|</span>
+                                                <a href="#" class="tag" data-updateid="@reply.Id">
+                                                    <i class="fa fa-pencil" aria-hidden="true"></i> @L["Edit"]
+                                                </a>
+                                            }
                                         </div>
 
                                         <div class="comment-form mt-4 replyForm">
@@ -215,6 +232,23 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        
+                                        @if (await Authorization.IsGrantedAsync(BloggingPermissions.Comments.Update) || (CurrentUser.Id == commentWithRepliesDto.Comment.CreatorId))
+                                        {
+                                            <div class="comment-form mt-4 editForm">
+                                                <div class="clearfix bg-light p-4">
+                                                    <div>
+                                                        <form class="editFormClass">
+                                                            <input name="commentId" value="@reply.Id" hidden/>
+                                                            <div class="form-group">
+                                                                <textarea class="form-control no-border" name="text" id="textBoxId" rows="4">@reply.Text</textarea>
+                                                            </div>
+                                                            <abp-button button-type="Primary" class="btn-rounded float-right" type="submit" text="@L["Submit"].Value"/>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
                                     </div>
                                 </div>
                             }
