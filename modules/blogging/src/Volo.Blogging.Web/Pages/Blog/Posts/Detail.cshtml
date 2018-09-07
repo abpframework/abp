@@ -44,7 +44,7 @@
                                     <img src="https://placeimg.com/60/60/people" class="article-avatar">
                                 </a>
                                 <a href="#">
-                                    <strong> Halil İbrahim Kalkan</strong>, @Model.Post.CreationTime.ToString("dd/MM/yyyy hh/mm")
+                                    <strong> Halil İbrahim Kalkan</strong>, @ConvertDatetimeToTimeAgo(Model.Post.CreationTime)
                                 </a>
                                 <span class="seperator">|</span>
                                 <a href="#">
@@ -122,7 +122,7 @@
                         <div class="media-body">
                             <h5 class="comment-owner">
                                 Armağan Ünlü
-                                <span class="float-right">@commentWithRepliesDto.Comment.CreationTime.ToString("dd/MM/yyyy hh/mm")</span>
+                                <span class="float-right">@ConvertDatetimeToTimeAgo(commentWithRepliesDto.Comment.CreationTime)</span>
                             </h5>
                             <p>
                                 @commentWithRepliesDto.Comment.Text
@@ -167,7 +167,7 @@
                                     <div class="media-body">
                                         <h5 class="comment-owner">
                                             Zlatan Ibrahimovic
-                                            <span class="float-right">@reply.CreationTime.ToString("dd/MM/yyyy hh/mm")</span>
+                                            <span class="float-right">@ConvertDatetimeToTimeAgo(reply.CreationTime)</span>
                                         </h5>
                                         <p>
                                             @reply.Text

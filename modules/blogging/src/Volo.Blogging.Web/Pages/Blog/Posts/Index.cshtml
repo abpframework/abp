@@ -65,7 +65,7 @@
                                                     <img src="https://placeimg.com/120/120/people" class="article-avatar">
                                                 </a>
                                                 <a href="#">
-                                                    <strong>Armağan Ünlü</strong>, @((DateTime.Today - post.CreationTime).Days) @L["DaysAgo"]
+                                                    <strong>Armağan Ünlü</strong>, @ConvertDatetimeToTimeAgo(post.CreationTime)
                                                 </a>
                                                 <span class="seperator">|</span>
                                                 <a href="#">
@@ -132,7 +132,7 @@
                                             <div class="article-infos">
                                                 <div class="user-card">
                                                     <a href="#">
-                                                        <strong>Armağan Ünlü</strong>, @((DateTime.Today - post.CreationTime).Days) @L["DaysAgo"]
+                                                        <strong>Armağan Ünlü</strong>, @ConvertDatetimeToTimeAgo(post.CreationTime)
                                                     </a>
                                                 </div>
                                             </div>
@@ -204,7 +204,7 @@
                                                 <img src="https://placeimg.com/120/120/pople" class="article-avatar">
                                             </a>
                                             <a href="#">
-                                                <strong>Armağan Ünlü</strong>, @((DateTime.Today - post.CreationTime).Days) @L["DaysAgo"]
+                                                <strong>Armağan Ünlü</strong>, @ConvertDatetimeToTimeAgo(post.CreationTime)
                                             </a>
                                             <span class="seperator">|</span>
                                             <a href="#">
