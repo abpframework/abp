@@ -27,9 +27,9 @@ namespace Volo.Abp.AspNetCore
         typeof(AbpUiModule), //TODO: Can we remove this?
         typeof(AbpValidationModule)
         )]
-    public class AbpAspNetCoreModule : IAbpModule
+    public class AbpAspNetCoreModule : AbpModule
     {
-        public void ConfigureServices(ServiceConfigurationContext context)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.Configure<AbpAuditingOptions>(options =>
             {
