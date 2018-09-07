@@ -10,7 +10,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.OwlCarousel
             //TODO: Theming!
             context.Files.AddIfNotContains("/libs/owl.carousel/assets/owl.carousel.min.css");
             context.Files.AddIfNotContains("/libs/owl.carousel/assets/owl.theme.default.min.css");
-            context.Files.AddIfNotContains("/libs/owl.carousel/assets/owl.owl.theme.green.min.css");
+            context.Files.AddIfNotContains("/libs/owl.carousel/assets/owl.theme.green.min.css");
         }
     }
 }
