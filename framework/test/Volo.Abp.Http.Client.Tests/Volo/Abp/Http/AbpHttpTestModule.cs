@@ -12,8 +12,6 @@ namespace Volo.Abp.Http
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.AddAssemblyOf<AbpHttpTestModule>();
-
             context.Services.AddHttpClientProxies(typeof(TestAppModule).Assembly);
             context.Services.AddHttpClientProxy<IRegularTestController>();
 

@@ -19,8 +19,6 @@ namespace Volo.Abp.TestApp
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             ConfigureAutoMapper(context.Services);
-
-            context.Services.AddAssemblyOf<TestAppModule>();
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)

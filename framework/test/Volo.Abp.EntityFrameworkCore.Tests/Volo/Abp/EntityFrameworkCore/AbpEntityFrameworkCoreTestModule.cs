@@ -21,8 +21,6 @@ namespace Volo.Abp.EntityFrameworkCore
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.AddAssemblyOf<AbpEntityFrameworkCoreTestModule>();
-
             context.Services.AddAbpDbContext<TestAppDbContext>(options =>
             {
                 options.AddDefaultRepositories(true);

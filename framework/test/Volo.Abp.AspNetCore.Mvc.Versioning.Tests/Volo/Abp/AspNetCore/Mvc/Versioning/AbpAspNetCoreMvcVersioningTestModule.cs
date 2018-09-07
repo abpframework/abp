@@ -47,8 +47,6 @@ namespace Volo.Abp.AspNetCore.Mvc.Versioning
                 options.ConfigureAbp(context.Services);
             });
 
-            context.Services.AddAssemblyOf<AbpAspNetCoreMvcVersioningTestModule>();
-            
             context.Services.AddHttpClientProxies(typeof(AbpAspNetCoreMvcVersioningTestModule).Assembly);
 
             context.Services.Configure<RemoteServiceOptions>(options =>

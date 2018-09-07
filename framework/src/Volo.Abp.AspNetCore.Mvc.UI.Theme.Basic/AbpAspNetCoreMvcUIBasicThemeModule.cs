@@ -56,8 +56,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic
                         bundle.AddBaseBundles(StandardBundles.Scripts.Global);
                     });
             });
-
-            context.Services.AddAssemblyOf<AbpAspNetCoreMvcUiBasicThemeModule>();
         }
     }
 }

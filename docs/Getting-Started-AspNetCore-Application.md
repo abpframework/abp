@@ -1,6 +1,6 @@
 ﻿## Getting Started ABP With AspNet Core MVC Web Application
 
-This tutorial explains how to start ABP from scratch with minimal dependencies. You generally want to start with a ***startup template*** (TODO: link).
+This tutorial explains how to start ABP from scratch with minimal dependencies. You generally want to start with a ***[startup template](https://abp.io/Templates)***.
 
 ### Create A New Project
 
@@ -40,11 +40,6 @@ namespace BasicAspNetCoreApplication
     [DependsOn(typeof(AbpAspNetCoreMvcModule))]
     public class AppModule : AbpModule
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            context.Services.AddAssemblyOf<AppModule>();
-        }
-
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             var app = context.GetApplicationBuilder();
@@ -63,11 +58,9 @@ namespace BasicAspNetCoreApplication
 
 ``AppModule`` is a good name for the startup module for an application.
 
-A module class can register services to Dependency Injection by overriding ``ConfigureServices`` method as shown here. ``AddAssemblyOf<...>`` is a special extension method of ABP that registers all services in an assembly by convention (see [dependency injection document](Dependency-Injection.md)). While this is optional, a module generally registers some services.
-
 ABP packages define module classes and a module can depend on another module. In the code above, our ``AppModule`` depends on ``AbpAspNetCoreMvcModule`` (defined by Volo.Abp.AspNetCore.Mvc package). It's common to add a ``DependsOn`` attribute after installing a new ABP nuget package.
 
-Instead of Startup class, we are registering dependencies and configuring AspNet Core pipeline in this module class.
+Instead of Startup class, we are configuring ASP.NET Core pipeline in this module class.
 
 ### The Startup Class
 
@@ -127,7 +120,7 @@ If you run the application, you will see a "Hello World!" message on the page.
 
 Derived ``HomeController`` from ``AbpController`` instead of standard ``Controller`` class. This is not required, but ``AbpController`` class has useful base properties and methods to make your development easier.
 
-### Using Autofac as Dependency Injection Framework
+### Using Autofac as the Dependency Injection Framework
 
 While AspNet Core's Dependency Injection (DI) system is fine for basic requirements, Autofac provides advanced features like Property Injection and Method Interception which are required by ABP to perform advanced application framework features.
 

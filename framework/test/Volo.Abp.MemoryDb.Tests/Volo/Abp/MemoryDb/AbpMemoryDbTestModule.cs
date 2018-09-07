@@ -29,8 +29,6 @@ namespace Volo.Abp.MemoryDb
                 options.AddDefaultRepositories();
                 options.AddRepository<City, CityRepository>();
             });
-
-            context.Services.AddAssemblyOf<AbpMemoryDbTestModule>();
         }
     }
 }

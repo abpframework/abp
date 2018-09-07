@@ -39,7 +39,6 @@ namespace Volo.Abp.AspNetCore
             AddAspNetServices(context.Services);
             context.Services.AddObjectAccessor<IApplicationBuilder>();
             context.Services.AddConfiguration();
-            context.Services.AddAssemblyOf<AbpAspNetCoreModule>();
         }
 
         private static void AddAspNetServices(IServiceCollection services)

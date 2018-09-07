@@ -16,8 +16,6 @@ namespace Volo.Abp.Caching
             context.Services.AddMemoryCache();
             context.Services.AddDistributedMemoryCache();
 
-            context.Services.AddAssemblyOf<AbpCachingModule>();
-
             context.Services.AddSingleton(typeof(IDistributedCache<>), typeof(DistributedCache<>));
         }
     }

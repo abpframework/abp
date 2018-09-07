@@ -32,19 +32,7 @@ public class BlogModule : AbpModule
 }
 ````
 
-You can register dependencies one by one as stated in Microsoft's <a href="https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection" target="_blank">documentation</a>. ABP has also a **conventional dependency registration system** which allows you to register all services in your assembly automatically. ``ConfigureServices`` methods of most modules contain such an expression to register all services in given module:
-
-````C#
-public class BlogModule : AbpModule
-{
-    public override void ConfigureServices(ServiceConfigurationContext context)
-    {
-        context.Services.AddAssemblyOf<BlogModule>();
-    }
-}
-````
-
-See [Dependency Injection](Dependency-Injection.md) documentation for more about the dependency injection system.
+You can register dependencies one by one as stated in Microsoft's <a href="https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection" target="_blank">documentation</a>. Bu ABP has a **conventional dependency registration system** which automatically register all services in your assembly. See the [dependency Injection](Dependency-Injection.md) documentation for more about the dependency injection system.
 
 You can also configure other services and modules in this method. Example:
 
@@ -53,8 +41,6 @@ public class BlogModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.AddAssemblyOf<BlogModule>();
-
         //Configure default connection string for the application
         context.Services.Configure<DbConnectionOptions>(options =>
         {
@@ -123,19 +109,6 @@ You can also perform startup logic if your module requires
 #### Application Shutdown
 
 Lastly, you can override ``OnApplicationShutdown`` method if you want to execute a code while application is beign shutdown.
-
-#### Alternative to Deriving from AbpModule Class
-
-If you want to not derive your modules from ``AbpModule`` class for some reason, you can create a class and implement ``IAbpModule`` interface. This is the minimal interface required by ABP. If you want to handle other life cycle events as described above, you can implement additional interfaces:
-
-* ``IPreConfigureServices``
-* ``IPostConfigureServices``
-* ``IOnPreApplicationInitialization``
-* ``IOnApplicationInitialization``
-* ``IOnPostApplicationInitialization``
-* ``IOnApplicationShutdown``
-
-However, deriving from ``AbpModule`` class is simpler since it implements all of these interfaces as virtual empty methods, so you can simple override which you need.
 
 ### Module Dependencies
 

@@ -12,8 +12,6 @@ namespace Volo.Abp.AutoMapper
             {
                 options.UseStaticMapper = false;
             });
-
-            context.Services.AddAssemblyOf<AutoMapperTestModule>();
         }
     }
 }

@@ -19,8 +19,6 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
                 options.TenantResolvers.Add(new HeaderTenantResolveContributer());
                 options.TenantResolvers.Add(new CookieTenantResolveContributer());
             });
-
-            context.Services.AddAssemblyOf<AbpAspNetCoreMultiTenancyModule>();
         }
     }
 }

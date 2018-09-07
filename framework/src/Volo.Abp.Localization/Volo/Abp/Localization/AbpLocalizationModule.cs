@@ -32,8 +32,6 @@ namespace Volo.Abp.Localization
             {
                 options.DefinitionProviders.Add<LocalizationSettingProvider>();
             });
-
-            context.Services.AddAssemblyOf<AbpLocalizationModule>();
         }
     }
 }

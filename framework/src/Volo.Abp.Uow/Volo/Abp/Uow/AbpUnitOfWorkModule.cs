@@ -9,10 +9,5 @@ namespace Volo.Abp.Uow
         {
             context.Services.OnRegistred(UnitOfWorkInterceptorRegistrar.RegisterIfNeeded);
         }
-
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            context.Services.AddAssemblyOf<AbpUnitOfWorkModule>();
-        }
     }
 }

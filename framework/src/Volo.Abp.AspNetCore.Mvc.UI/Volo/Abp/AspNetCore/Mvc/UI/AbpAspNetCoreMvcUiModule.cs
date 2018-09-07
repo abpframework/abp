@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.Modularity;
+﻿using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI
@@ -8,9 +7,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI
     [DependsOn(typeof(AbpUiNavigationModule))]
     public class AbpAspNetCoreMvcUiModule : AbpModule
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            context.Services.AddAssemblyOf<AbpAspNetCoreMvcUiModule>();
-        }
+
     }
 }

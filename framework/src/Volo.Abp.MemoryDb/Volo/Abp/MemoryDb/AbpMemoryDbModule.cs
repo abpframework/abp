@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
+﻿using Microsoft.Extensions.DependencyInjection.Extensions;
 using Volo.Abp.Domain;
 using Volo.Abp.Modularity;
 using Volo.Abp.Uow.MemoryDb;
@@ -15,7 +14,6 @@ namespace Volo.Abp.MemoryDb
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.TryAddTransient(typeof(IMemoryDatabaseProvider<>), typeof(UnitOfWorkMemoryDatabaseProvider<>));
-            context.Services.AddAssemblyOf<AbpMemoryDbModule>();
         }
     }
 }

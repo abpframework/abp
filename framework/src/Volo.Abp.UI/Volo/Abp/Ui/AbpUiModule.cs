@@ -22,8 +22,6 @@ namespace Volo.Abp.UI
             {
                 options.Resources.Add<AbpUiResource>("en").AddVirtualJson("/Localization/Resources/AbpUi");
             });
-            
-            context.Services.AddAssemblyOf<AbpUiModule>();
         }
     }
 }

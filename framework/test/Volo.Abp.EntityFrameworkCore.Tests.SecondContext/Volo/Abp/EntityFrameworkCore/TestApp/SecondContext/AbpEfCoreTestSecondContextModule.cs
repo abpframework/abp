@@ -18,8 +18,6 @@ namespace Volo.Abp.EntityFrameworkCore.TestApp.SecondContext
             {
                 options.AddDefaultRepositories<IThirdDbContext>();
             });
-
-            context.Services.AddAssemblyOf<AbpEfCoreTestSecondContextModule>();
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)

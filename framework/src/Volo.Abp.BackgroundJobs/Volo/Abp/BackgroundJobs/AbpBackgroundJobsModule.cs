@@ -15,11 +15,6 @@ namespace Volo.Abp.BackgroundJobs
         )]
     public class AbpBackgroundJobsModule : AbpModule
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            context.Services.AddAssemblyOf<AbpBackgroundJobsModule>();
-        }
-
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             var options = context.ServiceProvider.GetRequiredService<IOptions<BackgroundJobOptions>>().Value;

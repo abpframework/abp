@@ -18,11 +18,28 @@ public class BlogModule : AbpModule
 
 ### Conventional Registration
 
-ABP introduces conventional service registration. To register all services of a module, you can simple call ``AddAssemblyOf`` extension method as shown below:
+ABP introduces conventional service registration. You should do nothing to register services by convention. It's automatically done. If you want to disable it, you can set `SkipAutoServiceRegistration` to `true` by overriding the `PreConfigureServices` method.
 
 ````C#
 public class BlogModule : AbpModule
 {
+    public override void PreConfigureServices(ServiceConfigurationContext context)
+    {
+        SkipAutoServiceRegistration = true;
+    }
+}
+````
+
+Once you skip auto registration, you should manually register your services. In that case, ``AddAssemblyOf`` extension method can help you to register all your services by convention. Example:
+
+````c#
+public class BlogModule : AbpModule
+{
+    public override void PreConfigureServices(ServiceConfigurationContext context)
+    {
+        SkipAutoServiceRegistration = true;
+    }
+
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         context.Services.AddAssemblyOf<BlogModule>();
@@ -30,19 +47,19 @@ public class BlogModule : AbpModule
 }
 ````
 
-``AddAssemblyOf`` extension method takes a type (generally the type of the module class) and registers all services in the same assembly with given type by convention. The section below explains conventions and configurations.
+The section below explains the conventions and configurations.
 
-#### Inheritly Registered Types
+#### Inherently Registered Types
 
 Some specific types are registered to dependency injection by default. Examples:
 
-* Module classes implement ``IAbpModule`` interface are registered as singleton.
-* MVC controllers inherit ``Controller`` (or ``AbpController``) class are registered as transient.
-* MVC page models inherit ``PageModel`` (or ``AbpPageModel``) class are registered as transient.
-* MVC view components inherit ``ViewComponent`` (or ``AbpViewComponent``) class are registered as transient.
-* Application services implement ``IApplicationService`` interface (or inherit ``ApplicationService`` class) are registered as transient.
-* Repositories implement ``IRepository`` interface are registered as transient.
-* Domain services implement ``IDomainService`` interface are registered as transient.
+* Module classes are registered as singleton.
+* MVC controllers (inherit ``Controller`` or ``AbpController``) are registered as transient.
+* MVC page models (inherit ``PageModel`` or ``AbpPageModel``) are registered as transient.
+* MVC view components (inherit ``ViewComponent`` or ``AbpViewComponent``) are registered as transient.
+* Application services (implement ``IApplicationService`` interface or inherit ``ApplicationService`` class) are registered as transient.
+* Repositories (implement ``IRepository`` interface) are registered as transient.
+* Domain services (implement ``IDomainService`` interface) are registered as transient.
 
 Example:
 
@@ -129,40 +146,18 @@ public class TaxCalculator : ITaxCalculator, ITransientDependency
 
 #### Manually Registering
 
-In some cases, you may need to register a service to IServiceCollection manually, especially if you need to use custom factory methods or singleton instances. In that case, you can directly add services just as <a href="https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection" target="_blank">Microsoft documentation</a> describes. Example:
+In some cases, you may need to register a service to the `IServiceCollection` manually, especially if you need to use custom factory methods or singleton instances. In that case, you can directly add services just as <a href="https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection" target="_blank">Microsoft documentation</a> describes. Example:
 
 ````C#
 public class BlogModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        //Add services by convention
-        context.Services.AddAssemblyOf<BlogModule>();
-
         //Register an instance as singleton
         context.Services.AddSingleton<TaxCalculator>(new TaxCalculator(taxRatio: 0.18));
 
         //Register a factory method that resolves from IServiceProvider
         context.Services.AddScoped<ITaxCalculator>(sp => sp.GetRequiredService<TaxCalculator>());
-    }
-}
-````
-
-Finally, you may want to add a single class or a few classes by ABP's conventions, but don't want to use ``AddAssemblyOf``. In that case, you can use ``AddType`` and ``AddTypes`` extension method which implements ABP's conventions for given type(s). Example:
-
-````C#
-public class BlogModule : AbpModule
-{
-    public override void ConfigureServices(ServiceConfigurationContext context)
-    {
-        //Add single type
-        context.Services.AddType(typeof(TaxCalculator));
-
-        //Add multiple types in once call
-        context.Services.AddTypes(typeof(TaxCalculator), typeof(MyOtherService));
-
-        //Add single type using generic shortcut
-        context.Services.AddType<TaxCalculator>();
     }
 }
 ````
@@ -270,3 +265,7 @@ using (var scope = _serviceProvider.CreateScope())
 ````
 
 Both services are released when the created scope is disposed (at the end of the using block).
+
+### See Also
+
+* [ASP.NET Core Dependency Injection Best Practices, Tips & Tricks](https://medium.com/volosoft/asp-net-core-dependency-injection-best-practices-tips-tricks-c6e9c67f9d96)

@@ -111,6 +111,14 @@ namespace Volo.Abp.Modularity
             //ConfigureServices
             foreach (var module in modules)
             {
+                if (module.Instance is AbpModule abpModule)
+                {
+                    if (!abpModule.SkipAutoServiceRegistration)
+                    {
+                        services.AddAssembly(module.Type.Assembly);
+                    }
+                }
+
                 module.Instance.ConfigureServices(context);
             }
 

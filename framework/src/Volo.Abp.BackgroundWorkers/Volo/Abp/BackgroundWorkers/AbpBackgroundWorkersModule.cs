@@ -10,10 +10,6 @@ namespace Volo.Abp.BackgroundWorkers
         )]
     public class AbpBackgroundWorkersModule : AbpModule
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            context.Services.AddAssemblyOf<AbpBackgroundWorkersModule>();
-        }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
