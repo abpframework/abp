@@ -5,6 +5,9 @@
 @using Volo.Blogging.Pages.Blog.Posts
 @inject IAuthorizationService Authorization
 @model DetailModel
+@{
+    ViewBag.PageTitle = "Blog";
+}
 @section scripts {
     <abp-script-bundle name="@typeof(DetailModel).FullName">
         <abp-script src="/Pages/Blog/Posts/detail.js" />

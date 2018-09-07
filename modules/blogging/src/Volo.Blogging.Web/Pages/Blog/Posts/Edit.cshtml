@@ -3,7 +3,9 @@
 @using Volo.Blogging.Pages.Blog.Posts
 @model EditModel
 @inherits Volo.Blogging.Pages.Blog.BloggingPage
-
+@{
+    ViewBag.PageTitle = "Blog";
+}
 @section styles {
     <abp-style-bundle @*name="@typeof(EditModel).FullName" *@>
         <abp-style type="@typeof(TuiEditorStyleContributor)" />
@@ -18,7 +20,7 @@
 }
 
 <div id="edit-post-container">
-    <form method="post"  id="edit-post-form">
+    <form method="post" id="edit-post-form">
         <abp-input asp-for="Post.Title" auto-focus="true" />
         <abp-input asp-for="Post.Url" />
         <abp-input asp-for="Post.Tags" />

@@ -6,6 +6,9 @@
 @using Volo.Blogging.Pages.Blog.Posts
 @inject IAuthorizationService Authorization
 @model Volo.Blogging.Pages.Blog.Posts.IndexModel
+@{
+    ViewBag.PageTitle = "Blog";
+}
 @section scripts {
     <abp-script-bundle name="@typeof(IndexModel).FullName">
         <abp-script type="@typeof(OwlCarouselScriptContributor)" />
