@@ -183,7 +183,7 @@
                                                 <i class="fa fa-reply" aria-hidden="true"></i> @L["Reply"]
                                             </a>
                                             
-                                            @if (await Authorization.IsGrantedAsync(BloggingPermissions.Comments.Delete))
+                                            @if (await Authorization.IsGrantedAsync(BloggingPermissions.Comments.Delete) || (CurrentUser.Id == commentWithRepliesDto.Comment.CreatorId))
                                             {
                                                 <span class="seperator">|</span>
                                                 <a href="#" class="tag" data-deleteid="@reply.Id">

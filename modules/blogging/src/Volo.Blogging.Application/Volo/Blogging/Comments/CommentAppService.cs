@@ -80,8 +80,26 @@ namespace Volo.Blogging.Comments
             return ObjectMapper.Map<Comment, CommentDto>(comment);
         }
 
-        [Authorize(BloggingPermissions.Comments.Delete)]
         public async Task DeleteAsync(Guid id)
+        {
+            var comment = await _commentRepository.GetAsync(id);
+
+            if (CurrentUser.Id != comment.CreatorId)
+            {
+                await DeleteAsAdminAsync(id);
+                return;
+            }
+
+            await DeleteCommentAsync(id);
+        }
+
+        [Authorize(BloggingPermissions.Comments.Delete)]
+        private async Task DeleteAsAdminAsync(Guid id)
+        {
+            await DeleteCommentAsync(id);
+        }
+
+        private async Task DeleteCommentAsync(Guid id)
         {
             await _commentRepository.DeleteAsync(id);
 
