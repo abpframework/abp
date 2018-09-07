@@ -25,8 +25,6 @@ namespace Volo.Abp.BackgroundJobs.EntityFrameworkCore
                     abpDbContextConfigurationContext.DbContextOptions.UseSqlite(sqliteConnection);
                 });
             });
-
-            context.Services.AddAssemblyOf<BackgroundJobsEntityFrameworkCoreTestModule>();
         }
         
         private static SqliteConnection CreateDatabaseAndGetConnection()

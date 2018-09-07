@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.Domain;
+﻿using Volo.Abp.Domain;
 using Volo.Abp.Modularity;
 using Volo.Abp.Settings;
 
@@ -10,9 +9,6 @@ namespace Volo.Abp.SettingManagement
     [DependsOn(typeof(AbpSettingManagementDomainSharedModule))]
     public class AbpSettingManagementDomainModule : AbpModule
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            context.Services.AddAssemblyOf<AbpSettingManagementDomainModule>();
-        }
+        
     }
 }

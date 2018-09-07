@@ -32,8 +32,6 @@ namespace MyCompanyName.MyProjectName
                     .Get<MyProjectNameResource>()
                     .AddVirtualJson("/MyCompanyName/MyProjectName/Localization/ApplicationContracts");
             });
-
-            context.Services.AddAssemblyOf<MyProjectNameApplicationContractsModule>();
         }
     }
 }

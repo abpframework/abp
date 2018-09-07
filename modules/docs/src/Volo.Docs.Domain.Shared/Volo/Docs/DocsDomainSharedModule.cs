@@ -14,8 +14,6 @@ namespace Volo.Docs
             {
                 options.Resources.Add<DocsResource>("en");
             });
-
-            context.Services.AddAssemblyOf<DocsDomainSharedModule>();
         }
     }
 }

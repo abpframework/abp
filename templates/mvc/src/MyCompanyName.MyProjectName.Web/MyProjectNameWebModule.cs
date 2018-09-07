@@ -71,8 +71,6 @@ namespace MyCompanyName.MyProjectName
             ConfigureNavigationServices(context.Services);
             ConfigureAutoApiControllers(context.Services);
             ConfigureSwaggerServices(context.Services);
-
-            context.Services.AddAssemblyOf<MyProjectNameWebModule>();
         }
 
         private static void ConfigureDatabaseServices(IServiceCollection services, IConfigurationRoot configuration)

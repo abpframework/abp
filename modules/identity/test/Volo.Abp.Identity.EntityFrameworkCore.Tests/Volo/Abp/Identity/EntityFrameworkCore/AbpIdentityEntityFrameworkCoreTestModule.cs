@@ -27,8 +27,6 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                     abpDbContextConfigurationContext.DbContextOptions.UseSqlite(sqliteConnection);
                 });
             });
-
-            context.Services.AddAssemblyOf<AbpIdentityEntityFrameworkCoreTestModule>();
         }
         
         private static SqliteConnection CreateDatabaseAndGetConnection()

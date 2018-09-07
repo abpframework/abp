@@ -19,8 +19,6 @@ namespace Volo.Abp.Identity
             {
                 options.AddProfile<AbpIdentityApplicationModuleAutoMapperProfile>();
             });
-
-            context.Services.AddAssemblyOf<AbpIdentityApplicationModule>();
         }
     }
 }

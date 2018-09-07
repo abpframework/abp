@@ -18,8 +18,6 @@ namespace Volo.Abp.PermissionManagement
             {
                 options.DefinitionProviders.Add<TestPermissionDefinitionProvider>();
             });
-
-            context.Services.AddAssemblyOf<AbpPermissionManagementTestBaseModule>();
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)

@@ -17,8 +17,6 @@ namespace Volo.Abp.BackgroundJobs
             {
                 options.AddProfile<BackgroundJobsDomainAutoMapperProfile>(validate: true);
             });
-
-            context.Services.AddAssemblyOf<BackgroundJobsDomainModule>();
         }
     }
 }

@@ -16,8 +16,6 @@ namespace Volo.Abp.SettingManagement.EntityFrameworkCore
 
                 options.AddRepository<Setting, EfCoreSettingRepository>();
             });
-
-            context.Services.AddAssemblyOf<AbpSettingManagementEntityFrameworkCoreModule>();
         }
     }
 }

@@ -85,8 +85,6 @@ namespace Volo.DocsTestApp
             {
                 options.DefaultThemeName = BasicTheme.Name;
             });
-
-            context.Services.AddAssemblyOf<DocsTestAppModule>();
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)

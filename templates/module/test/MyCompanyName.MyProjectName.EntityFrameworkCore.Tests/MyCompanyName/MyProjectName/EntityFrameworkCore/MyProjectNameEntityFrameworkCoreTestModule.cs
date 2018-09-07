@@ -25,8 +25,6 @@ namespace MyCompanyName.MyProjectName.EntityFrameworkCore
                     abpDbContextConfigurationContext.DbContextOptions.UseSqlite(sqliteConnection);
                 });
             });
-
-            context.Services.AddAssemblyOf<MyProjectNameEntityFrameworkCoreTestModule>();
         }
         
         private static SqliteConnection CreateDatabaseAndGetConnection()

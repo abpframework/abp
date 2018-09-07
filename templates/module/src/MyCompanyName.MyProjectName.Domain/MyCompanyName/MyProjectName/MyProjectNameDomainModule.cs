@@ -28,8 +28,6 @@ namespace MyCompanyName.MyProjectName
             {
                 options.MapCodeNamespace("MyProjectName", typeof(MyProjectNameResource));
             });
-
-            context.Services.AddAssemblyOf<MyProjectNameDomainModule>();
         }
     }
 }

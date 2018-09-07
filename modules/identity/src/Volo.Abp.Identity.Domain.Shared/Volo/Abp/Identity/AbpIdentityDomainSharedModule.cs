@@ -16,8 +16,6 @@ namespace Volo.Abp.Identity
             {
                 options.Resources.Add<IdentityResource>("en");
             });
-
-            context.Services.AddAssemblyOf<AbpIdentityDomainSharedModule>();
         }
     }
 }

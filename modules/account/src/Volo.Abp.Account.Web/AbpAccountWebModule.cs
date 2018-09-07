@@ -56,8 +56,6 @@ namespace Volo.Abp.Account.Web
             {
                 options.Contributors.Add(new AccountModuleToolbarContributor());
             });
-
-            context.Services.AddAssemblyOf<AbpAccountWebModule>();
         }
     }
 }

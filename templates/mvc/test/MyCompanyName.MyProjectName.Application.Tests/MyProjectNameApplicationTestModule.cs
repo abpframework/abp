@@ -26,8 +26,6 @@ namespace MyCompanyName.MyProjectName
             context.Services.AddAlwaysAllowAuthorization();
 
             ConfigureInMemorySqlite(context.Services);
-
-            context.Services.AddAssemblyOf<MyProjectNameApplicationTestModule>();
         }
 
         private void ConfigureInMemorySqlite(IServiceCollection services)

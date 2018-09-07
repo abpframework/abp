@@ -21,14 +21,11 @@ namespace Volo.Abp.AuditLogging.MongoDB
             {
                 options.ConnectionStrings.Default = _mongoDbRunner.ConnectionString;
             });
-
-            context.Services.AddAssemblyOf<AbpAuditLoggingMongoDbTestModule>();
         }
 
         public override void OnApplicationShutdown(ApplicationShutdownContext context)
         {
             _mongoDbRunner.Dispose();
         }
-
     }
 }

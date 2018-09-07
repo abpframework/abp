@@ -83,8 +83,6 @@ namespace MyCompanyName.MyProjectName.DemoApp
                 options.Languages.Add(new LanguageInfo("en", "en", "English"));
                 //...add other languages
             });
-
-            context.Services.AddAssemblyOf<DemoAppModule>();
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)

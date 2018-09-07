@@ -18,8 +18,6 @@ namespace Volo.Abp.BackgroundJobs.MongoDB
             {
                  options.AddRepository<BackgroundJobRecord, MongoBackgroundJobRepository>();
             });
-
-            context.Services.AddAssemblyOf<BackgroundJobsMongoDbModule>();
         }
     }
 }

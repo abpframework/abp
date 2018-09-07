@@ -16,8 +16,6 @@ namespace Volo.Abp.BackgroundJobs.EntityFrameworkCore
             {
                  options.AddRepository<BackgroundJobRecord, EfCoreBackgroundJobRepository>();
             });
-
-            context.Services.AddAssemblyOf<BackgroundJobsEntityFrameworkCoreModule>();
         }
     }
 }

@@ -45,8 +45,6 @@ namespace Volo.Abp.BackgroundJobs.DemoApp
                 options.DefaultFirstWaitDuration = 1;
                 options.DefaultWaitFactor = 1;
             });
-
-            context.Services.AddAssemblyOf<DemoAppModule>();
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)

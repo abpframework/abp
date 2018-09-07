@@ -30,8 +30,6 @@ namespace Volo.Abp.PermissionManagement.EntityFrameworkCore
             {
                 options.TransactionBehavior = UnitOfWorkTransactionBehavior.Disabled; //EF in-memory database does not support transactions
             });
-
-            context.Services.AddAssemblyOf<AbpPermissionManagementEntityFrameworkCoreTestModule>();
         }
     }
 }

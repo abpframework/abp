@@ -21,8 +21,6 @@ namespace Volo.Abp.PermissionManagement.MongoDB
 
                 options.AddRepository<PermissionGrant, MongoPermissionGrantRepository>();
             });
-
-            context.Services.AddAssemblyOf<AbpPermissionManagementMongoDbModule>();
         }
     }
 }

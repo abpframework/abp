@@ -27,11 +27,6 @@ namespace Volo.Abp.BackgroundJobs.DemoApp.HangFire
             });
         }
 
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            context.Services.AddAssemblyOf<DemoAppHangfireModule>();
-        }
-
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             context

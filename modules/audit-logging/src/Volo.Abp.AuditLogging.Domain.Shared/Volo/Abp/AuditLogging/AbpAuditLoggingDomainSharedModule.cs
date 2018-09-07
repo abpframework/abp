@@ -13,8 +13,6 @@ namespace Volo.Abp.AuditLogging
             {
                 options.Resources.Add<AuditLoggingResource>("en");
             });
-
-            context.Services.AddAssemblyOf<AbpAuditLoggingDomainSharedModule>();
         }
     }
 }

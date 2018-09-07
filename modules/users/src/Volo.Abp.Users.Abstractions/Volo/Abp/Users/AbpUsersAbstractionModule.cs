@@ -14,8 +14,6 @@ namespace Volo.Abp.Users
             {
                 options.ValueProviders.Add<UserSettingValueProvider>();
             });
-
-            context.Services.AddAssemblyOf<AbpUsersAbstractionModule>();
         }
     }
 }

@@ -57,8 +57,6 @@ namespace MyCompanyName.MyProjectName
             {
                 //Configure authorization.
             });
-
-            context.Services.AddAssemblyOf<MyProjectNameWebModule>();
         }
     }
 }

@@ -20,8 +20,6 @@ namespace MyCompanyName.MyProjectName.MongoDB
                  * options.AddRepository<Question, MongoQuestionRepository>();
                  */
             });
-
-            context.Services.AddAssemblyOf<MyProjectNameMongoDbModule>();
         }
     }
 }

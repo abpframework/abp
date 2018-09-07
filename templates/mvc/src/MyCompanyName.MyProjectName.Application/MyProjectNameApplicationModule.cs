@@ -23,8 +23,6 @@ namespace MyCompanyName.MyProjectName
             {
                 options.AddProfile<MyProjectNameApplicationAutoMapperProfile>();
             });
-
-            context.Services.AddAssemblyOf<MyProjectNameApplicationModule>();
         }
     }
 }
