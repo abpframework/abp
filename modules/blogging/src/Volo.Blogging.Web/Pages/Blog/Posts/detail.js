@@ -3,21 +3,39 @@
     $('div .replyForm').hide();
 
     $('a').click(function (event) {
-        var data = $(this).attr('data-relpyid');
+        var linkElement = $(this);
+        var data = linkElement.attr('data-relpyid');
 
-        if (data == '' || data === undefined) {
+        if (data != '' && data !== undefined) {
+
+            event.preventDefault();
+
+            var div = $(this).parent().next();
+
+            if (div.is(":hidden")) {
+                $('div .replyForm').hide();
+                div.show();
+            } else {
+                div.hide();
+            }
             return;
         }
 
-        event.preventDefault();
+        var id = $(this).attr('data-deleteid');
 
-        var div = $(this).parent().next();
+        if (id != '' && id !== undefined) {
 
-        if (div.is(":hidden")) {
-            $('div .replyForm').hide();
-            div.show();
-        } else {
-            div.hide();
+            event.preventDefault();
+            console.log(id);
+            $.ajax({
+                type: "POST",
+                url: "/Blog/Comments/Delete",
+                data: { id: id },
+                success: function (response) {
+                    console.log(linkElement);
+                    linkElement.parent().parent().parent().remove();
+                }
+            });
         }
 
     });

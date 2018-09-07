@@ -61,7 +61,7 @@ namespace Volo.Blogging.Comments
         [Authorize(BloggingPermissions.Comments.Create)]
         public async Task<CommentDto> CreateAsync(CreateCommentDto input)
         {
-            var comment = new Comment(_guidGenerator.Create(), input.PostId, input.RepliedCommentId,input.Text);
+            var comment = new Comment(_guidGenerator.Create(), input.PostId, input.RepliedCommentId, input.Text);
 
             comment = await _commentRepository.InsertAsync(comment);
 
@@ -84,6 +84,13 @@ namespace Volo.Blogging.Comments
         public async Task DeleteAsync(Guid id)
         {
             await _commentRepository.DeleteAsync(id);
+
+            var replies = await _commentRepository.GetRepliesOfComment(id);
+
+            foreach (var reply in replies)
+            {
+                await _commentRepository.DeleteAsync(reply.Id);
+            }
         }
     }
 }

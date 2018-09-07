@@ -132,7 +132,13 @@
                                 <a href="#" class="tag" data-relpyid="@commentWithRepliesDto.Comment.Id">
                                     <i class="fa fa-reply" aria-hidden="true"></i> @L["Reply"]
                                 </a>
-
+                                @if (await Authorization.IsGrantedAsync(BloggingPermissions.Comments.Delete))
+                                {
+                                    <span class="seperator">|</span>
+                                    <a href="#" class="tag" data-deleteid="@commentWithRepliesDto.Comment.Id">
+                                        <i class="fa fa-trash" aria-hidden="true"></i> @L["Delete"]
+                                    </a>
+                                }
                                 <span class="seperator">|</span>
                                 <a href="tag.html" class="tag">
                                     <i class="fa fa-chevron-up" aria-hidden="true"></i><span class="count count-up">44</span>
@@ -176,6 +182,14 @@
                                             <a href="#" class="tag" data-relpyid="@commentWithRepliesDto.Comment.Id">
                                                 <i class="fa fa-reply" aria-hidden="true"></i> @L["Reply"]
                                             </a>
+                                            
+                                            @if (await Authorization.IsGrantedAsync(BloggingPermissions.Comments.Delete))
+                                            {
+                                                <span class="seperator">|</span>
+                                                <a href="#" class="tag" data-deleteid="@reply.Id">
+                                                    <i class="fa fa-trash" aria-hidden="true"></i> @L["Delete"]
+                                                </a>
+                                            }
                                             <span class="seperator">|</span>
                                             <a href="tag.html" class="tag">
                                                 <i class="fa fa-chevron-up" aria-hidden="true"></i><span class="count count-up">44</span>
