@@ -20,8 +20,6 @@ namespace Volo.Abp.TenantManagement.MongoDb
 
                 options.AddRepository<Tenant, MongoTenantRepository>();
             });
-
-            context.Services.AddAssemblyOf<AbpTenantManagementMongoDbModule>();
         }
     }
 }

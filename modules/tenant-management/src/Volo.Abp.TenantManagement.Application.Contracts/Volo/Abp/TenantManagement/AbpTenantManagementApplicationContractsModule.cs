@@ -30,8 +30,6 @@ namespace Volo.Abp.TenantManagement
                     .Get<AbpTenantManagementResource>()
                     .AddVirtualJson("/Volo/Abp/TenantManagement/Localization/ApplicationContracts");
             });
-
-            context.Services.AddAssemblyOf<AbpTenantManagementApplicationContractsModule>();
         }
     }
 }
