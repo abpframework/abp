@@ -46,7 +46,7 @@
                                         <p class="tags">
                                             @foreach (var tag in post.Tags)
                                             {
-                                                <a asp-page="/Blog/Tags/Posts" asp-route-blogShortName="@Model.BlogShortName" asp-route-tagName="@tag.Name" class="tag">@tag.Name</a>
+                                                <a asp-page="/Blog/Posts/Index" asp-route-blogShortName="@Model.BlogShortName" asp-route-tagName="@tag.Name" class="tag">@tag.Name</a>
                                             }
                                         </p>
                                         <h2>
@@ -188,7 +188,7 @@
                                 <p class="tags">
                                     @foreach (var tag in post.Tags)
                                     {
-                                        <a asp-page="/Blog/Tags/Posts" asp-route-blogShortName="@Model.BlogShortName" asp-route-tagName="@tag.Name" class="tag">@tag.Name</a>
+                                        <a asp-page="/Blog/Posts/Index" asp-route-blogShortName="@Model.BlogShortName" asp-route-tagName="@tag.Name" class="tag">@tag.Name</a>
                                     }
                                 </p>
                                 <h3>
@@ -234,7 +234,7 @@
                         <div class="popular-tags">
                             @foreach (var popularTag in Model.PopularTags)
                             {
-                                <a asp-page="/Blog/Tags/Posts" asp-route-blogShortName="@Model.BlogShortName" asp-route-tagName="@popularTag.Name">@popularTag.Name <span>(@popularTag.UsageCount @L["Posts"])</span></a>
+                                <a asp-page="/Blog/Posts/Index" asp-route-blogShortName="@Model.BlogShortName" asp-route-tagName="@popularTag.Name">@popularTag.Name <span>(@popularTag.UsageCount @L["Posts"])</span></a>
                             }
                         </div>
 

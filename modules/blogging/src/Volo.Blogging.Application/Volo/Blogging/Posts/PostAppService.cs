@@ -32,7 +32,7 @@ namespace Volo.Blogging.Posts
             _commentRepository = commentRepository;
         }
 
-        public async Task<ListResultDto<PostWithDetailsDto>> GetListByBlogId(Guid id)
+        public async Task<ListResultDto<PostWithDetailsDto>> GetListByBlogIdAndTagName(Guid id, string tagName)
         {
             var posts = _postRepository.GetPostsByBlogId(id);
 
@@ -50,16 +50,13 @@ namespace Volo.Blogging.Posts
                 postDto.CommentCount = (await _commentRepository.GetListAsync()).Count(p => p.PostId == postDto.Id);
             }
 
+            if (!tagName.IsNullOrWhiteSpace())
+            {
+                var tag = await _tagRepository.GetByNameAsync(tagName);
+                postDtos = postDtos.Where(p => p.Tags.Any(t => t.Id == tag.Id)).ToList();
+            }
+
             return new ListResultDto<PostWithDetailsDto>(postDtos);
-        }
-
-        public async Task<ListResultDto<PostWithDetailsDto>> GetListByBlogIdAndTagName(Guid blogId, string tagName)
-        {
-            var all = (await GetListByBlogId(blogId)).Items;
-
-            var tag = await _tagRepository.GetByNameAsync(tagName);
-
-            return new ListResultDto<PostWithDetailsDto>(all.Where(p=>p.Tags.Any(t=>t.Id == tag.Id)).ToList());
         }
 
         public async Task<PostWithDetailsDto> GetForReadingAsync(GetPostInput input)

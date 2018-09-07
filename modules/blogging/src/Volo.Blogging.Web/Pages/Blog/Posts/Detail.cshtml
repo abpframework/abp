@@ -30,7 +30,7 @@
                         <p class="tags">
                             @foreach (var tag in Model.Post.Tags)
                             {
-                                <a asp-page="/Blog/Tags/Posts" asp-route-blogShortName="@Model.BlogShortName" asp-route-tagName="@tag.Name" class="tag">@tag.Name</a>
+                                <a asp-page="/Blog/Posts/Index" asp-route-blogShortName="@Model.BlogShortName" asp-route-tagName="@tag.Name" class="tag">@tag.Name</a>
                             }
                         </p>
                         <h1>
@@ -94,7 +94,7 @@
                 <h5>@L["TagsInThisArticle"]</h5>
                 @foreach (var tag in Model.Post.Tags)
                 {
-                    <a asp-page="/Blog/Tags/Posts" asp-route-blogShortName="@Model.BlogShortName" asp-route-tagName="@tag.Name" class="tag">@tag.Name</a>
+                    <a asp-page="/Blog/Posts/Index" asp-route-blogShortName="@Model.BlogShortName" asp-route-tagName="@tag.Name" class="tag">@tag.Name</a>
                 }
             </div>
             <div class="comment-form mt-4">
