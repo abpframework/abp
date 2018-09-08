@@ -21,8 +21,6 @@ namespace Volo.Abp.PermissionManagement.MongoDb
             {
                 options.ConnectionStrings.Default = _mongoDbRunner.ConnectionString;
             });
-
-            context.Services.AddAssemblyOf<AbpPermissionManagementMongoDbTestModule>();
         }
 
         public override void OnApplicationShutdown(ApplicationShutdownContext context)

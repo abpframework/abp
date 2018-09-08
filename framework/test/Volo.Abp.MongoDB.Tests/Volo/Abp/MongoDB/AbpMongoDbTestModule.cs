@@ -30,8 +30,6 @@ namespace Volo.Abp.MongoDB
                 options.AddDefaultRepositories<ITestAppMongoDbContext>();
                 options.AddRepository<City, CityRepository>();
             });
-
-            context.Services.AddAssemblyOf<AbpMongoDbTestModule>();
         }
 
         public override void OnApplicationShutdown(ApplicationShutdownContext context)

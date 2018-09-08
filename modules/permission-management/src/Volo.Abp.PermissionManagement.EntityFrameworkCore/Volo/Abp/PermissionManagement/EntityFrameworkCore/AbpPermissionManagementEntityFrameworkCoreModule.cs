@@ -16,8 +16,6 @@ namespace Volo.Abp.PermissionManagement.EntityFrameworkCore
 
                 options.AddRepository<PermissionGrant, EfCorePermissionGrantRepository>();
             });
-
-            context.Services.AddAssemblyOf<AbpPermissionManagementEntityFrameworkCoreModule>();
         }
     }
 }

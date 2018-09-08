@@ -25,8 +25,6 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
                     abpDbContextConfigurationContext.DbContextOptions.UseSqlite(sqliteConnection);
                 });
             });
-
-            context.Services.AddAssemblyOf<AbpAuditLoggingEntityFrameworkCoreTestModule>();
         }
 
         private static SqliteConnection CreateDatabaseAndGetConnection()

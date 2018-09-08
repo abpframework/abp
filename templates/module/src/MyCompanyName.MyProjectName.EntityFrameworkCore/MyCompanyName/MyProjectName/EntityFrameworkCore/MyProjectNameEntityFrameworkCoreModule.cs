@@ -18,8 +18,6 @@ namespace MyCompanyName.MyProjectName.EntityFrameworkCore
                  * options.AddRepository<Question, EfCoreQuestionRepository>();
                  */
             });
-
-            context.Services.AddAssemblyOf<MyProjectNameEntityFrameworkCoreModule>();
         }
     }
 }

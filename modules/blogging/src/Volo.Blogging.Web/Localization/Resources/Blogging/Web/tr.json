@@ -5,6 +5,13 @@
     "Title": "Başlık",
     "ContinueReading": "Devamı...",
     "DaysAgo": "Gün Önce",
+    "YearsAgo": "yıl önce",
+    "MonthsAgo": "ay önce",
+    "WeeksAgo": "hafta önce",
+    "MinutesAgo": "dakika önce",
+    "SecondsAgo": "saniye önce",
+    "HoursAgo": "saat önce",
+    "Now": "şimdi",
     "Content": "İçerik",
     "SeeAll": "Hepsini Gör",
     "PopularTags": "Popüler Etiketler",
@@ -13,7 +20,7 @@
     "LeaveComment": "Yorum Bırak",
     "TagsInThisArticle": "Makalenin Etiketleri",
     "Posts": "Yazılar",
-    "Edit": "Düzelt",
+    "Edit": "Düzenle",
     "Comment": "Yorum",
     "WhatIsNew": "Yeniler"
   }

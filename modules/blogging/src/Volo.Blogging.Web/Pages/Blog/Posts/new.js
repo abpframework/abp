@@ -46,8 +46,6 @@
         }
     }).data(editorDataKey);
 
-
-
     $container.find("form#new-post-form").submit(function (e) {
         var $postTextInput = $form.find("input[name='Post.Content']");
 
@@ -65,8 +63,8 @@
             title = title.substring(0, 64);
         }
 
-        title = title.replace(' ','-');
-
+        title = title.replace(' ', '-');
+        title = title.replace(new RegExp(' ', 'g'), '-');
         $('#Post_Url').val(title);
     });
 

@@ -15,6 +15,9 @@ namespace Volo.Blogging.Pages.Blog.Posts
         private readonly IBlogAppService _blogAppService;
 
         [BindProperty(SupportsGet = true)]
+        public string BlogShortName { get; set; }
+
+        [BindProperty(SupportsGet = true)]
         public string PostId { get; set; }
 
         [BindProperty]

@@ -14,8 +14,6 @@ namespace Volo.Abp.TenantManagement
             {
                 options.AddProfile<AbpTenantManagementApplicationAutoMapperProfile>(validate: true);
             });
-
-            context.Services.AddAssemblyOf<AbpTenantManagementApplicationModule>();
         }
     }
 }

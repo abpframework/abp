@@ -13,11 +13,6 @@ namespace Volo.Abp.EventBus
             AddEventHandlers(context.Services);
         }
 
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            context.Services.AddAssemblyOf<AbpEventBusModule>();
-        }
-
         private static void AddEventHandlers(IServiceCollection services)
         {
             var handlers = new List<Type>();

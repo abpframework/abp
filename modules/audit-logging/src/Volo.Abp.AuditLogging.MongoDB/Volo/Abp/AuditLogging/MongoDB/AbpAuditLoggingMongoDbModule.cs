@@ -16,8 +16,6 @@ namespace Volo.Abp.AuditLogging.MongoDB
             {
                 options.AddRepository<AuditLog, MongoAuditLogRepository>();
             });
-
-            context.Services.AddAssemblyOf<AbpAuditLoggingMongoDbModule>();
         }
     }
 }

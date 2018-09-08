@@ -8,8 +8,6 @@ namespace Volo.Abp.Data
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.AddSingleton(typeof(IDataFilter<>), typeof(DataFilter<>));
-
-            context.Services.AddAssemblyOf<AbpDataModule>();
         }
     }
 }

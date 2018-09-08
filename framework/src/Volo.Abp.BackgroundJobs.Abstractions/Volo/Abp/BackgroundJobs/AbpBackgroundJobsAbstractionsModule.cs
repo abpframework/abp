@@ -17,11 +17,6 @@ namespace Volo.Abp.BackgroundJobs
             RegisterJobs(context.Services);
         }
 
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            context.Services.AddAssemblyOf<AbpBackgroundJobsAbstractionsModule>();
-        }
-
         private static void RegisterJobs(IServiceCollection services)
         {
             var jobTypes = new List<Type>();

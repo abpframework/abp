@@ -18,8 +18,6 @@ namespace Volo.Docs
             {
                 options.AddProfile<DocsApplicationAutoMapperProfile>(validate: true);
             });
-
-            context.Services.AddAssemblyOf<DocsApplicationModule>();
         }
     }
 }

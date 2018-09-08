@@ -20,8 +20,6 @@ namespace Volo.Abp.SettingManagement.MongoDB
 
                 options.AddRepository<Setting, MongoSettingRepository>();
             });
-
-            context.Services.AddAssemblyOf<AbpSettingManagementMongoDbModule>();
         }
     }
 }

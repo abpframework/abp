@@ -65,8 +65,8 @@ namespace Volo.Abp.UI.Navigation
                     () => new ApplicationMenuItem("Administration", "Administration")
                 );
 
-                administration.AddItem(new ApplicationMenuItem("Administration.UserManagement", "User Management"));
-                administration.AddItem(new ApplicationMenuItem("Administration.RoleManagement", "Role Management"));
+                administration.AddItem(new ApplicationMenuItem("Administration.UserManagement", "User Management", url: "/admin/users"));
+                administration.AddItem(new ApplicationMenuItem("Administration.RoleManagement", "Role Management", url: "/admin/roles"));
 
                 return Task.CompletedTask;
             }
@@ -86,14 +86,14 @@ namespace Volo.Abp.UI.Navigation
                     return Task.CompletedTask;
                 }
 
-                context.Menu.Items.Insert(0, new ApplicationMenuItem("Dashboard", "Dashboard"));
+                context.Menu.Items.Insert(0, new ApplicationMenuItem("Dashboard", "Dashboard", url: "/dashboard"));
 
                 var administration = context.Menu.Items.GetOrAdd(
                     m => m.Name == "Administration",
                     () => new ApplicationMenuItem("Administration", "Administration")
                 );
 
-                administration.AddItem(new ApplicationMenuItem("Administration.DashboardSettings", "Dashboard Settings"));
+                administration.AddItem(new ApplicationMenuItem("Administration.DashboardSettings", "Dashboard Settings", url: "/admin/settings/dashboard"));
 
                 return Task.CompletedTask;
             }

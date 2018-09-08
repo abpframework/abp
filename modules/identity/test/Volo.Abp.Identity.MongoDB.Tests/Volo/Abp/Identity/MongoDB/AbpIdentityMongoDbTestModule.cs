@@ -23,8 +23,6 @@ namespace Volo.Abp.Identity.MongoDB
             {
                 options.ConnectionStrings.Default = _mongoDbRunner.ConnectionString;
             });
-
-            context.Services.AddAssemblyOf<AbpIdentityMongoDbTestModule>();
         }
 
         public override void OnApplicationShutdown(ApplicationShutdownContext context)

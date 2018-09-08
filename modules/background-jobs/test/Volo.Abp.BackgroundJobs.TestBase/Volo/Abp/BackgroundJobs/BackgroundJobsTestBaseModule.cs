@@ -17,8 +17,6 @@ namespace Volo.Abp.BackgroundJobs
             {
                 options.IsJobExecutionEnabled = false;
             });
-
-            context.Services.AddAssemblyOf<BackgroundJobsTestBaseModule>();
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)

@@ -15,8 +15,6 @@ namespace Volo.Abp.MultiTenancy
             {
                 options.ValueProviders.Add<TenantSettingValueProvider>();
             });
-
-            context.Services.AddAssemblyOf<AbpMultiTenancyAbstractionsModule>();
         }
     }
 }

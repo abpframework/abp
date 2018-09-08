@@ -15,8 +15,6 @@ namespace Volo.Abp.Hangfire
             {
                 context.Services.ExecutePreConfiguredActions(configuration);
             });
-
-            context.Services.AddAssemblyOf<AbpHangfireModule>();
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)

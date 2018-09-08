@@ -44,8 +44,6 @@ namespace MyCompanyName.MyProjectName
         {
             ConfigureLocalizationServices(context.Services);
             ConfigureNavigationServices(context.Services);
-
-            context.Services.AddAssemblyOf<MyProjectNameWebTestModule>();
         }
 
         private static void ConfigureLocalizationServices(IServiceCollection services)

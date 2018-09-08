@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Mongo2Go;
-using Volo.Abp;
 using Volo.Abp.Data;
 using Volo.Abp.Modularity;
 
@@ -22,8 +21,6 @@ namespace Volo.Abp.BackgroundJobs.MongoDB
             {
                 options.ConnectionStrings.Default = _mongoDbRunner.ConnectionString;
             });
-
-            context.Services.AddAssemblyOf<BackgroundJobsMongoDbTestModule>();
         }
 
         public override void OnApplicationShutdown(ApplicationShutdownContext context)

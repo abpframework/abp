@@ -194,8 +194,6 @@ public class AbpIdentityMongoDbModule : AbpModule
             options.AddRepository<IdentityUser, MongoIdentityUserRepository>();
             options.AddRepository<IdentityRole, MongoIdentityRoleRepository>();
         });
-
-        context.Services.AddAssemblyOf<AbpIdentityMongoDbModule>();
     }
 }
 ```

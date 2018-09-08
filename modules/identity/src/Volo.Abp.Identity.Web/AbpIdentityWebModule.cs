@@ -65,8 +65,6 @@ namespace Volo.Abp.Identity.Web
                 options.Conventions.AuthorizePage("/Identity/Roles/CreateModal", IdentityPermissions.Roles.Create);
                 options.Conventions.AuthorizePage("/Identity/Roles/EditModal", IdentityPermissions.Roles.Update);
             });
-
-            context.Services.AddAssemblyOf<AbpIdentityWebModule>();
         }
     }
 }

@@ -38,8 +38,6 @@ namespace Volo.Abp.Emailing
                             .SetVirtualFilePath("/Volo/Abp/Emailing/Templates/SimpleMessageTemplate.html")
                     );
             });
-
-            context.Services.AddAssemblyOf<AbpEmailingModule>();
         }
     }
 }

@@ -15,8 +15,6 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.AddSingleton(typeof(IJobQueue<>), typeof(JobQueue<>));
-
-            context.Services.AddAssemblyOf<AbpBackgroundJobsRabbitMqModule>();
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)

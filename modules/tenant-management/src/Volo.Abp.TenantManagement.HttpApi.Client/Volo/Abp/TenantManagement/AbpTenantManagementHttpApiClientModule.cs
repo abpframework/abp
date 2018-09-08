@@ -17,8 +17,6 @@ namespace Volo.Abp.TenantManagement
                 typeof(AbpTenantManagementApplicationContractsModule).Assembly,
                 RemoteServiceName
             );
-
-            context.Services.AddAssemblyOf<AbpTenantManagementHttpApiClientModule>();
         }
     }
 }

@@ -23,10 +23,5 @@ namespace Volo.Abp.Auditing
         {
             context.Services.OnRegistred(AuditingInterceptorRegistrar.RegisterIfNeeded);
         }
-
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            context.Services.AddAssemblyOf<AbpAuditingModule>();
-        }
     }
 }

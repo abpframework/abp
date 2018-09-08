@@ -23,8 +23,6 @@ namespace MyCompanyName.MyProjectName
             {
                 options.DefinitionProviders.Add<MyProjectNameSettingDefinitionProvider>();
             });
-
-            context.Services.AddAssemblyOf<MyProjectNameApplicationModule>();
         }
     }
 }

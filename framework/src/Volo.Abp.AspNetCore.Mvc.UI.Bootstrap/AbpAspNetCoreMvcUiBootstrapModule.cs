@@ -9,8 +9,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.AddAssemblyOf<AbpAspNetCoreMvcUiBootstrapModule>();
-            
             context.Services.Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpAspNetCoreMvcUiBootstrapModule>("Volo.Abp.AspNetCore.Mvc.UI.Bootstrap");

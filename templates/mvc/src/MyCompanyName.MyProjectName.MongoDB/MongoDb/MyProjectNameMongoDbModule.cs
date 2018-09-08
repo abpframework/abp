@@ -19,8 +19,6 @@ namespace MyCompanyName.MyProjectName.MongoDb
             {
                 options.AddDefaultRepositories();
             });
-
-            context.Services.AddAssemblyOf<MyProjectNameMongoDbModule>();
         }
     }
 }

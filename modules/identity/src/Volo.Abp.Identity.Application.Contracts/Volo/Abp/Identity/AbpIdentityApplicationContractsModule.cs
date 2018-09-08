@@ -34,8 +34,6 @@ namespace Volo.Abp.Identity
                     .Get<IdentityResource>()
                     .AddVirtualJson("/Volo/Abp/Identity/Localization/ApplicationContracts");
             });
-
-            context.Services.AddAssemblyOf<AbpIdentityApplicationContractsModule>();
         }
     }
 }

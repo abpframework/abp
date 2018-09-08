@@ -22,8 +22,6 @@ namespace Volo.Abp.TenantManagement
             {
                 options.AddProfile<AbpTenantManagementDomainMappingProfile>(validate: true);
             });
-
-            context.Services.AddAssemblyOf<AbpTenantManagementDomainModule>();
         }
     }
 }

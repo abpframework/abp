@@ -31,8 +31,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared
                     .ScriptBundles
                     .Add(StandardBundles.Scripts.Global, bundle => bundle.AddContributors(typeof(SharedThemeGlobalScriptContributor)));
             });
-
-            context.Services.AddAssemblyOf<AbpAspNetCoreMvcUiThemeSharedModule>();
         }
     }
 }

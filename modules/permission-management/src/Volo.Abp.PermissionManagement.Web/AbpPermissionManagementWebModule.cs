@@ -24,8 +24,6 @@ namespace Volo.Abp.PermissionManagement.Web
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.AddAssemblyOf<AbpPermissionManagementWebModule>();
-
             context.Services.Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpPermissionManagementWebModule>("Volo.Abp.PermissionManagement.Web");

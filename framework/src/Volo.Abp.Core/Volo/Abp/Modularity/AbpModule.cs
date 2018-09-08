@@ -13,6 +13,8 @@ namespace Volo.Abp.Modularity
         IPreConfigureServices, 
         IPostConfigureServices
     {
+        protected internal bool SkipAutoServiceRegistration { get; protected set; }
+
         protected internal ServiceConfigurationContext ServiceConfigurationContext
         {
             get

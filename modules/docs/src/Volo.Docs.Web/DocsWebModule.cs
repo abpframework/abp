@@ -34,8 +34,6 @@ namespace Volo.Docs
                 //TODO: Make configurable!
                 options.Conventions.AddPageRoute("/Documents/Project/Index", "documents/{projectName}/{version}/{*documentName}");
             });
-
-            context.Services.AddAssemblyOf<DocsWebModule>();
         }
     }
 }

@@ -72,8 +72,6 @@ namespace Volo.Abp.AspNetCore.Mvc
                     .Add<MvcTestResource>("en")
                     .AddVirtualJson("/Volo/Abp/AspNetCore/Mvc/Localization/Resource");
             });
-
-            context.Services.AddAssemblyOf<AbpAspNetCoreMvcTestModule>();
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)

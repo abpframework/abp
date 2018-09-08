@@ -16,8 +16,6 @@ namespace MyCompanyName.MyProjectName
             {
                 options.Resources.Add<MyProjectNameResource>("en");
             });
-
-            context.Services.AddAssemblyOf<MyProjectNameDomainSharedModule>();
         }
     }
 }

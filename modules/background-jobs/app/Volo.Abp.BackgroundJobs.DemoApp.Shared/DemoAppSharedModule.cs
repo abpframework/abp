@@ -9,11 +9,6 @@ namespace Volo.Abp.BackgroundJobs.DemoApp.Shared
         )]
     public class DemoAppSharedModule : AbpModule
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            context.Services.AddAssemblyOf<DemoAppSharedModule>();
-        }
-
         public override void OnPostApplicationInitialization(ApplicationInitializationContext context)
         {
             context.ServiceProvider

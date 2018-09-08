@@ -19,8 +19,6 @@ namespace Volo.Abp.Identity.MongoDB
                 options.AddRepository<IdentityUser, MongoIdentityUserRepository>();
                 options.AddRepository<IdentityRole, MongoIdentityRoleRepository>();
             });
-
-            context.Services.AddAssemblyOf<AbpIdentityMongoDbModule>();
         }
     }
 }

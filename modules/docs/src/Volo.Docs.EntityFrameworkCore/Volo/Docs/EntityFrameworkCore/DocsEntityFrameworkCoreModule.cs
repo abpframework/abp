@@ -16,8 +16,6 @@ namespace Volo.Docs.EntityFrameworkCore
             {
                 options.AddRepository<Project, EfCoreProjectRepository>();
             });
-
-            context.Services.AddAssemblyOf<DocsEntityFrameworkCoreModule>();
         }
     }
 }

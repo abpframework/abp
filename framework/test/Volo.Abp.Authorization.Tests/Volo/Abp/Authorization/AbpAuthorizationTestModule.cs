@@ -27,8 +27,6 @@ namespace Volo.Abp.Authorization
             {
                 options.DefinitionProviders.TryAdd<AuthorizationTestPermissionDefinitionProvider>();
             });
-
-            context.Services.AddAssemblyOf<AbpAuthorizationTestModule>();
         }
     }
 }

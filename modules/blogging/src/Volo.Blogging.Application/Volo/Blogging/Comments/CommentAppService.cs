@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Services;
@@ -8,7 +9,7 @@ using Volo.Blogging.Comments.Dtos;
 
 namespace Volo.Blogging.Comments
 {
-    [Authorize(BloggingPermissions.Comments.Default)]
+  //  [Authorize(BloggingPermissions.Comments.Default)]
     public class CommentAppService : ApplicationService, ICommentAppService
     {
         private readonly ICommentRepository _commentRepository;
@@ -39,6 +40,13 @@ namespace Volo.Blogging.Comments
                 }
             }
 
+            hierarchicalComments = hierarchicalComments.OrderByDescending(c => c.Comment.CreationTime).ToList();
+
+            foreach (var hierarchicalComment in hierarchicalComments)
+            {
+                hierarchicalComment.Replies = hierarchicalComment.Replies.OrderBy(c => c.CreationTime).ToList();
+            }
+
             return hierarchicalComments;
         }
 
@@ -53,18 +61,33 @@ namespace Volo.Blogging.Comments
         [Authorize(BloggingPermissions.Comments.Create)]
         public async Task<CommentDto> CreateAsync(CreateCommentDto input)
         {
-            var comment = new Comment(_guidGenerator.Create(), input.PostId, input.RepliedCommentId,input.Text);
+            var comment = new Comment(_guidGenerator.Create(), input.PostId, input.RepliedCommentId, input.Text);
 
             comment = await _commentRepository.InsertAsync(comment);
 
             return ObjectMapper.Map<Comment, CommentDto>(comment);
         }
 
-        [Authorize(BloggingPermissions.Comments.Update)]
         public async Task<CommentDto> UpdateAsync(Guid id, UpdateCommentDto input)
         {
             var comment = await _commentRepository.GetAsync(id);
 
+            if (CurrentUser.Id != comment.CreatorId)
+            {
+                return await UpdateAsAdminAsync(id, comment, input);
+            }
+
+            return await UpdateCommentAsync(id, comment, input);
+        }
+
+        [Authorize(BloggingPermissions.Comments.Update)]
+        private async Task<CommentDto> UpdateAsAdminAsync(Guid id, Comment comment, UpdateCommentDto input)
+        {
+            return await UpdateCommentAsync(id, comment, input);
+        }
+
+        private async Task<CommentDto> UpdateCommentAsync(Guid id, Comment comment, UpdateCommentDto input)
+        {
             comment.SetText(input.Text);
 
             comment = await _commentRepository.UpdateAsync(comment);
@@ -72,10 +95,35 @@ namespace Volo.Blogging.Comments
             return ObjectMapper.Map<Comment, CommentDto>(comment);
         }
 
-        [Authorize(BloggingPermissions.Comments.Delete)]
         public async Task DeleteAsync(Guid id)
         {
+            var comment = await _commentRepository.GetAsync(id);
+
+            if (CurrentUser.Id != comment.CreatorId)
+            {
+                await DeleteAsAdminAsync(id);
+                return;
+            }
+
+            await DeleteCommentAsync(id);
+        }
+
+        [Authorize(BloggingPermissions.Comments.Delete)]
+        private async Task DeleteAsAdminAsync(Guid id)
+        {
+            await DeleteCommentAsync(id);
+        }
+
+        private async Task DeleteCommentAsync(Guid id)
+        {
             await _commentRepository.DeleteAsync(id);
+
+            var replies = await _commentRepository.GetRepliesOfComment(id);
+
+            foreach (var reply in replies)
+            {
+                await _commentRepository.DeleteAsync(reply.Id);
+            }
         }
     }
 }

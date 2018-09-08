@@ -52,8 +52,6 @@ namespace Volo.Abp.Identity
             context.Services.ExecutePreConfiguredActions(identityBuilder);
 
             AddAbpIdentityOptionsFactory(context.Services);
-
-            context.Services.AddAssemblyOf<AbpIdentityDomainModule>();
         }
 
         private static void AddAbpIdentityOptionsFactory(IServiceCollection services)

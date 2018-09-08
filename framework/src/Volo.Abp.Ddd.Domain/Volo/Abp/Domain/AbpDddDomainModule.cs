@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.Auditing;
+﻿using Volo.Abp.Auditing;
 using Volo.Abp.Data;
 using Volo.Abp.EventBus;
 using Volo.Abp.Guids;
@@ -22,9 +21,6 @@ namespace Volo.Abp.Domain
         typeof(AbpUnitOfWorkModule))]
     public class AbpDddDomainModule : AbpModule
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            context.Services.AddAssemblyOf<AbpDddDomainModule>();
-        }
+
     }
 }

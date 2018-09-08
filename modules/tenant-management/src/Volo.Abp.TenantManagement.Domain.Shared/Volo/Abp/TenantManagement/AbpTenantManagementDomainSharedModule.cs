@@ -13,8 +13,6 @@ namespace Volo.Abp.TenantManagement
             {
                 options.Resources.Add<AbpTenantManagementResource>("en");
             });
-
-            context.Services.AddAssemblyOf<AbpTenantManagementDomainSharedModule>();
         }
     }
 }

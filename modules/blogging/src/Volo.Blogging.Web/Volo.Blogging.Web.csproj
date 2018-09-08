@@ -33,7 +33,9 @@
     <Content Remove="Pages\**\*.cshtml" />
     <Content Remove="Pages\**\*.js" />
     <Content Remove="Pages\**\*.css" />
+    <Content Remove="compilerconfig.json" />
     <Content Remove="Properties\launchSettings.json" />
+    <None Include="compilerconfig.json" />
     <None Include="Properties\launchSettings.json" />
   </ItemGroup>
 

@@ -17,8 +17,6 @@ namespace Volo.Abp.SettingManagement
             {
                 options.DefinitionProviders.Add<TestSettingDefinitionProvider>();
             });
-
-            context.Services.AddAssemblyOf<AbpSettingManagementTestBaseModule>();
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)

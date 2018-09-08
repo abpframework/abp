@@ -22,8 +22,6 @@ namespace MyCompanyName.MyProjectName.EntityFrameworkCore
                 //Remove "includeAllEntities: true" to create default repositories only for aggregate roots
                 options.AddDefaultRepositories(includeAllEntities: true);
             });
-
-            context.Services.AddAssemblyOf<MyProjectNameEntityFrameworkCoreModule>();
         }
     }
 }

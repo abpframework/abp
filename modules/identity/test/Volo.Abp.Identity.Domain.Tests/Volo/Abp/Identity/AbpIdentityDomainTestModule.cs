@@ -14,8 +14,6 @@ namespace Volo.Abp.Identity
             {
                 options.DefinitionProviders.Add<IdentityTestPermissionDefinitionProvider>();
             });
-
-            context.Services.AddAssemblyOf<AbpIdentityDomainTestModule>();
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)

@@ -30,8 +30,6 @@ namespace Volo.Abp.Application
                 options.IgnoredInterfaces.AddIfNotContains(typeof(IUnitOfWorkEnabled)); //TODO: Move to it's own module if possible?
                 options.IgnoredInterfaces.AddIfNotContains(typeof(IAuthorizationEnabled)); //TODO: Move to it's own module if possible?
             });
-
-            context.Services.AddAssemblyOf<AbpDddApplicationModule>();
         }
     }
 }

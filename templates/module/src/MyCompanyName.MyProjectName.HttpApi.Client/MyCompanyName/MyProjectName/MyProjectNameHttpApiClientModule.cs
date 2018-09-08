@@ -17,8 +17,6 @@ namespace MyCompanyName.MyProjectName
                 typeof(MyProjectNameApplicationContractsModule).Assembly,
                 RemoteServiceName
             );
-
-            context.Services.AddAssemblyOf<MyProjectNameHttpApiClientModule>();
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿## Getting Started ABP With Console Application
 
-This tutorial explains how to start ABP from scratch with minimal dependencies. You generally want to start with a ***startup template*** (TODO: link).
+This tutorial explains how to start ABP from scratch with minimal dependencies. You generally want to start with a ***[startup template](https://abp.io/Templates)***.
 
 ### Create A New Project
 
@@ -28,17 +28,12 @@ namespace AbpConsoleDemo
 {
     public class AppModule : AbpModule
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            context.Services.AddAssemblyOf<AppModule>();
-        }
+        
     }
 }
 ````
 
 ``AppModule`` is a good name for the startup module for an application.
-
-A module class can register services to Dependency Injection by overriding ``ConfigureServices`` method as shown here. ``AddAssemblyOf<...>`` is a special extension method of ABP that registers all services in an assembly by convention (TODO: link to DI document). While this is optional, a module generally registers some services.
 
 ### Initialize The Application
 
@@ -110,7 +105,8 @@ namespace AbpConsoleDemo
                 application.Initialize();
 
                 //Resolve a service and use it
-                var helloWorldService = application.ServiceProvider.GetService<HelloWorldService>();
+                var helloWorldService = 
+                    application.ServiceProvider.GetService<HelloWorldService>();
                 helloWorldService.SayHello();
 
                 Console.WriteLine("Press ENTER to stop application...");

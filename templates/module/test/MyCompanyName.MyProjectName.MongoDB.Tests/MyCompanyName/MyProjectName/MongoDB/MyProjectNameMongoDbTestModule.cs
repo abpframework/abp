@@ -22,8 +22,6 @@ namespace MyCompanyName.MyProjectName.MongoDB
             {
                 options.ConnectionStrings.Default = _mongoDbRunner.ConnectionString;
             });
-
-            context.Services.AddAssemblyOf<MyProjectNameMongoDbTestModule>();
         }
 
         public override void OnApplicationShutdown(ApplicationShutdownContext context)

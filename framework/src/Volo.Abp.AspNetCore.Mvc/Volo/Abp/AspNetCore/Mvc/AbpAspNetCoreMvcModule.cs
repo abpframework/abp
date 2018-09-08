@@ -109,8 +109,6 @@ namespace Volo.Abp.AspNetCore.Mvc
             {
                 mvcOptions.AddAbp(context.Services);
             });
-
-            context.Services.AddAssemblyOf<AbpAspNetCoreMvcModule>();
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
