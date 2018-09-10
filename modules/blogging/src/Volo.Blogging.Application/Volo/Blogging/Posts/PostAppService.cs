@@ -41,11 +41,7 @@ namespace Volo.Blogging.Posts
 
             foreach (var postDto in postDtos)
             {
-                var tagIds = (await _postTagRepository.GetListAsync()).Where(pt => pt.PostId == postDto.Id);
-
-                var tags = await _tagRepository.GetListAsync(tagIds.Select(t => t.TagId));
-
-                postDto.Tags = ObjectMapper.Map<List<Tag>, List<TagDto>>(tags);
+                postDto.Tags = await GetTagsOfPost(postDto);
 
                 postDto.CommentCount = (await _commentRepository.GetListAsync()).Count(p => p.PostId == postDto.Id);
             }
@@ -67,11 +63,7 @@ namespace Volo.Blogging.Posts
 
             var postDto = ObjectMapper.Map<Post, PostWithDetailsDto>(post);
 
-            var tagIds = (await _postTagRepository.GetListAsync()).Where(pt => pt.PostId == postDto.Id);
-
-            var tags = await _tagRepository.GetListAsync(tagIds.Select(t => t.TagId));
-
-            postDto.Tags = ObjectMapper.Map<List<Tag>, List<TagDto>>(tags);
+            postDto.Tags = await GetTagsOfPost(postDto);
 
             return postDto;
         }
@@ -82,11 +74,7 @@ namespace Volo.Blogging.Posts
 
             var postDto = ObjectMapper.Map<Post, PostWithDetailsDto>(post);
 
-            var tagIds = (await _postTagRepository.GetListAsync()).Where(pt => pt.PostId == postDto.Id);
-
-            var tags = await _tagRepository.GetListAsync(tagIds.Select(t => t.TagId));
-
-            postDto.Tags = ObjectMapper.Map<List<Tag>, List<TagDto>>(tags);
+            postDto.Tags = await GetTagsOfPost(postDto);
 
             return postDto;
         }
@@ -160,6 +148,15 @@ namespace Volo.Blogging.Posts
                 await _postTagRepository.InsertAsync(new PostTag(post.Id, tag.Id));
             }
 
+        }
+
+        private async Task<List<TagDto>> GetTagsOfPost(PostWithDetailsDto postDto)
+        {
+            var tagIds = (await _postTagRepository.GetListAsync()).Where(pt => pt.PostId == postDto.Id);
+
+            var tags = await _tagRepository.GetListAsync(tagIds.Select(t => t.TagId));
+
+            return ObjectMapper.Map<List<Tag>, List<TagDto>>(tags);
         }
 
         private List<string> SplitTags(string tags)

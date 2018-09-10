@@ -9,7 +9,7 @@ using Volo.Blogging.Comments.Dtos;
 
 namespace Volo.Blogging.Comments
 {
-  //  [Authorize(BloggingPermissions.Comments.Default)]
+    //  [Authorize(BloggingPermissions.Comments.Default)]
     public class CommentAppService : ApplicationService, ICommentAppService
     {
         private readonly ICommentRepository _commentRepository;
@@ -42,15 +42,10 @@ namespace Volo.Blogging.Comments
 
             hierarchicalComments = hierarchicalComments.OrderByDescending(c => c.Comment.CreationTime).ToList();
 
-            foreach (var hierarchicalComment in hierarchicalComments)
-            {
-                hierarchicalComment.Replies = hierarchicalComment.Replies.OrderBy(c => c.CreationTime).ToList();
-            }
-
             return hierarchicalComments;
         }
 
-        public async Task<List<CommentDto>> GetListOfPostAsync(GetCommentListOfPostAsync input)
+        private async Task<List<CommentDto>> GetListOfPostAsync(GetCommentListOfPostAsync input)
         {
             var comments = await _commentRepository.GetListOfPostAsync(input.PostId);
 

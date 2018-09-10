@@ -8,8 +8,6 @@ namespace Volo.Blogging.Comments
 {
     public interface ICommentAppService : IApplicationService
     {
-        Task<List<CommentDto>> GetListOfPostAsync(GetCommentListOfPostAsync input);
-
         Task<List<CommentWithRepliesDto>> GetHierarchicalListOfPostAsync(GetCommentListOfPostAsync input);
 
         Task<CommentDto> CreateAsync(CreateCommentDto input);
