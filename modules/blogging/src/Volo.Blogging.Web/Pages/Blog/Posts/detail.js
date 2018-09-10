@@ -6,7 +6,7 @@
     $('form[class="editFormClass"]').submit(function (event) {
         event.preventDefault();
         var form = $(this).serializeFormToObject();
-        
+
         $.ajax({
             type: "POST",
             url: "/Blog/Comments/Update",
@@ -23,15 +23,13 @@
         });
     });
 
-    $('a').click(function (event) {
+    $('.replyLink').click(function (event) {
+        event.preventDefault();
         var linkElement = $(this);
         var replyCommentId = linkElement.attr('data-relpyid');
 
         if (replyCommentId != '' && replyCommentId !== undefined) {
-
-            event.preventDefault();
-
-            var div = $(this).parent().next();
+            var div = linkElement.parent().next();
 
             if (div.is(":hidden")) {
                 $('div .replyForm').hide();
@@ -41,18 +39,18 @@
             }
             return;
         }
+    });
 
-        var deleteCommentId = $(this).attr('data-deleteid');
+    $('.deleteLink').click(function(event) {
+        event.preventDefault();
+        var linkElement = $(this);
+        var deleteCommentId = linkElement.attr('data-deleteid');
 
         if (deleteCommentId != '' && deleteCommentId !== undefined) {
-
-            console.log(deleteCommentId);
-            event.preventDefault();
             abp.message.confirm(
-                'User admin will be deleted.',
+                'Comment will be deleted.', // TODO: localize
                 'Are you sure?',
-                function (isConfirmed) {
-                    console.log(deleteCommentId);
+                function(isConfirmed) {
                     if (isConfirmed) {
                         $.ajax({
                             type: "POST",
@@ -65,16 +63,17 @@
                     }
                 }
             );
-            
         }
+    });
 
+    $('.updateLink').click(function (event) {
+        event.preventDefault();
+        var linkElement = $(this);
         var updateCommentId = $(this).attr('data-updateid');
 
         if (updateCommentId != '' && updateCommentId !== undefined) {
 
-            event.preventDefault();
-
-            var div = $(this).parent().next().next();
+            var div = linkElement.parent().next().next();
 
             if (div.is(":hidden")) {
                 $('div .editForm').hide();
@@ -84,8 +83,6 @@
             }
             return;
         }
-
-
     });
 
 })(jQuery);

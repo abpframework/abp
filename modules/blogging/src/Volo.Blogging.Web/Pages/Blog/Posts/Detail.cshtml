@@ -129,13 +129,13 @@
                             </p>
                             <div class="comment-buttons">
 
-                                <a href="#" class="tag" data-relpyid="@commentWithRepliesDto.Comment.Id">
+                                <a href="#" class="tag replyLink" data-relpyid="@commentWithRepliesDto.Comment.Id">
                                     <i class="fa fa-reply" aria-hidden="true"></i> @L["Reply"]
                                 </a>
                                 @if (await Authorization.IsGrantedAsync(BloggingPermissions.Comments.Delete))
                                 {
                                     <span class="seperator">|</span>
-                                    <a href="#" class="tag" data-deleteid="@commentWithRepliesDto.Comment.Id">
+                                    <a href="#" class="tag deleteLink" data-deleteid="@commentWithRepliesDto.Comment.Id">
                                         <i class="fa fa-trash" aria-hidden="true"></i> @L["Delete"]
                                     </a>
                                 }
@@ -143,7 +143,7 @@
                                 @if (await Authorization.IsGrantedAsync(BloggingPermissions.Comments.Update) || (CurrentUser.Id == commentWithRepliesDto.Comment.CreatorId))
                                 {
                                     <span class="seperator">|</span>
-                                    <a href="#" class="tag" data-updateid="@commentWithRepliesDto.Comment.Id">
+                                    <a href="#" class="tag updateLink" data-updateid="@commentWithRepliesDto.Comment.Id">
                                         <i class="fa fa-pencil" aria-hidden="true"></i> @L["Edit"]
                                     </a>
                                 }
