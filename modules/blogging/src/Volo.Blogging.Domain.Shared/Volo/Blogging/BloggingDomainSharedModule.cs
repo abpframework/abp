@@ -14,8 +14,6 @@ namespace Volo.Blogging
             {
                 options.Resources.Add<BloggingResource>("en");
             });
-
-            context.Services.AddAssemblyOf<BloggingDomainSharedModule>();
         }
     }
 }

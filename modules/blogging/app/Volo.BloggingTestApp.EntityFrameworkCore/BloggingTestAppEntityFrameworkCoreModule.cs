@@ -16,9 +16,6 @@ namespace Volo.BloggingTestApp.EntityFrameworkCore
         typeof(AbpEntityFrameworkCoreSqlServerModule))]
     public class BloggingTestAppEntityFrameworkCoreModule : AbpModule
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            context.Services.AddAssemblyOf<BloggingTestAppEntityFrameworkCoreModule>();
-        }
+
     }
 }

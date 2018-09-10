@@ -18,8 +18,6 @@ namespace Volo.Blogging
             {
                 options.AddProfile<BloggingApplicationAutoMapperProfile>(validate: true);
             });
-
-            context.Services.AddAssemblyOf<BloggingApplicationModule>();
         }
     }
 }

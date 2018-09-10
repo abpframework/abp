@@ -28,8 +28,6 @@ namespace Volo.Blogging.EntityFrameworkCore
                     abpDbContextConfigurationContext.DbContextOptions.UseSqlite(_sqliteConnection);
                 });
             });
-
-            context.Services.AddAssemblyOf<BloggingEntityFrameworkCoreTestModule>();
         }
 
         private static SqliteConnection CreateDatabaseAndGetConnection()
