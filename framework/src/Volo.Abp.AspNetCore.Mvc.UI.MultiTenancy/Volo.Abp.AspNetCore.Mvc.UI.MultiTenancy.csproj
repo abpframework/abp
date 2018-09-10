@@ -4,15 +4,27 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>Volo.Abp.AspNetCore.Mvc.UI.TenantSwitch</AssemblyName>
-    <PackageId>Volo.Abp.AspNetCore.Mvc.UI.TenantSwitch</PackageId>
+    <AssemblyName>Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy</AssemblyName>
+    <PackageId>Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy</PackageId>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <IsPackable>true</IsPackable>
     <OutputType>Library</OutputType>
+    <RootNamespace />
   </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Pages\**\*.cshtml" />
+    <EmbeddedResource Include="Pages\**\*.js" />
+    <EmbeddedResource Include="Volo\Abp\AspNetCore\Mvc\UI\MultiTenancy\Components\**\*.cshtml" />
+    <EmbeddedResource Include="Volo\Abp\AspNetCore\Mvc\UI\MultiTenancy\Localization\*.json" />
+    <Content Remove="Pages\**\*.cshtml" />
+    <Content Remove="Pages\**\*.js" />
+    <Content Remove="Volo\Abp\AspNetCore\Mvc\UI\MultiTenancy\Components\**\*.cshtml" />
+    <Content Remove="Volo\Abp\AspNetCore\Mvc\UI\MultiTenancy\Localization\*.json" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.AspNetCore.MultiTenancy\Volo.Abp.AspNetCore.MultiTenancy.csproj" />

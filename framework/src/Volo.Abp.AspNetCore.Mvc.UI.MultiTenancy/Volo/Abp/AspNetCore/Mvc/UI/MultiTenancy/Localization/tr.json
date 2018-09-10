@@ -1,0 +1,9 @@
+﻿{
+  "culture": "tr",
+  "texts": {
+    "GivenTenantIsNotAvailable": "İstenilen müşteri bulunamadı: {0}",
+    "SwitchTenant": "Müşteri değiştir",
+    "Name": "İsim",
+    "SwitchTenantHint": "Host tarafına geçmek için isim alanını boş bırakın."
+  }
+}

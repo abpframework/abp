@@ -16,17 +16,17 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
             var _callbacks = [];
 
             return {
-                add: function (callback) {
+                add: function(callback) {
                     _callbacks.push(callback);
                 },
 
-                triggerAll: function (thisObj, argumentList) {
+                triggerAll: function(thisObj, argumentList) {
                     for (var i = 0; i < _callbacks.length; i++) {
                         _callbacks[i].apply(thisObj, argumentList);
                     }
                 }
 
-            }
+            };
         };
 
         return function (options) {
@@ -54,7 +54,7 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
 
             function _removeContainer() {
                 _$modalContainer && _$modalContainer.remove();
-            };
+            }
 
             function _createContainer() {
                 _removeContainer();
@@ -66,6 +66,7 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
                 _$modal = _$modalContainer.find('.modal');
                 _$form = _$modalContainer.find('form');
                 if (_$form.length) {
+                    //TODO: data-ajaxForm comparison seems wrong!
                     if (_$form.attr('data-ajaxForm') === undefined || _$form.attr('data-ajaxForm') === false) {
                         _$form.abpAjaxForm();
                     }
@@ -131,52 +132,51 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
                 _$modal.modal('hide');
             };
 
-            var _onClose = function (onCloseCallback) {
+            var _onClose = function(onCloseCallback) {
                 _onCloseCallbacks.add(onCloseCallback);
-            }
+            };
 
-            var _onResult = function (callback) {
+            var _onResult = function(callback) {
                 _onResultCallbacks.add(callback);
-            }
+            };
 
             _publicApi = {
-
                 open: _open,
 
-                reopen: function () {
+                reopen: function() {
                     _open(_args);
                 },
 
                 close: _close,
 
-                getModalId: function () {
+                getModalId: function() {
                     return _modalId;
                 },
 
-                getModal: function () {
+                getModal: function() {
                     return _$modal;
                 },
 
-                getForm: function () {
+                getForm: function() {
                     return _$form;
                 },
 
-                getArgs: function () {
+                getArgs: function() {
                     return _args;
                 },
 
-                getOptions: function () {
+                getOptions: function() {
                     return _options;
                 },
 
-                setResult: function () {
+                setResult: function() {
                     _onResultCallbacks.triggerAll(_publicApi, arguments);
                 },
 
                 onClose: _onClose,
 
                 onResult: _onResult
-            }
+            };
 
             return _publicApi;
 

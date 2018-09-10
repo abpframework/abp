@@ -90,5 +90,11 @@ namespace Volo.Abp.Modularity
         {
             ServiceConfigurationContext.Services.Configure(configureOptions);
         }
+
+        protected void PreConfigure<TOptions>(Action<TOptions> configureOptions)
+            where TOptions : class
+        {
+            ServiceConfigurationContext.Services.PreConfigure(configureOptions);
+        }
     }
 }
