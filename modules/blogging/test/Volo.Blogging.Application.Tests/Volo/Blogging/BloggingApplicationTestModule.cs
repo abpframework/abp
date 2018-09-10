@@ -13,8 +13,6 @@ namespace Volo.Blogging
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.AddAlwaysAllowAuthorization();
-
-            context.Services.AddAssemblyOf<BloggingApplicationTestModule>();
         }
     }
 }

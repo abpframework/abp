@@ -6,7 +6,7 @@
     $('form[class="editFormClass"]').submit(function (event) {
         event.preventDefault();
         var form = $(this).serializeFormToObject();
-        
+
         $.ajax({
             type: "POST",
             url: "/Blog/Comments/Update",
@@ -23,15 +23,13 @@
         });
     });
 
-    $('a').click(function (event) {
+    $('.replyLink').click(function (event) {
+        event.preventDefault();
         var linkElement = $(this);
-        var data = linkElement.attr('data-relpyid');
+        var replyCommentId = linkElement.attr('data-relpyid');
 
-        if (data != '' && data !== undefined) {
-
-            event.preventDefault();
-
-            var div = $(this).parent().next();
+        if (replyCommentId != '' && replyCommentId !== undefined) {
+            var div = linkElement.parent().next();
 
             if (div.is(":hidden")) {
                 $('div .replyForm').hide();
@@ -41,30 +39,41 @@
             }
             return;
         }
+    });
 
-        data = $(this).attr('data-deleteid');
+    $('.deleteLink').click(function(event) {
+        event.preventDefault();
+        var linkElement = $(this);
+        var deleteCommentId = linkElement.attr('data-deleteid');
 
-        if (data != '' && data !== undefined) {
-
-            event.preventDefault();
-
-            $.ajax({
-                type: "POST",
-                url: "/Blog/Comments/Delete",
-                data: { id: data },
-                success: function (response) {
-                    linkElement.parent().parent().parent().remove();
+        if (deleteCommentId != '' && deleteCommentId !== undefined) {
+            abp.message.confirm(
+                'Comment will be deleted.', // TODO: localize
+                'Are you sure?',
+                function(isConfirmed) {
+                    if (isConfirmed) {
+                        $.ajax({
+                            type: "POST",
+                            url: "/Blog/Comments/Delete",
+                            data: { id: deleteCommentId },
+                            success: function (response) {
+                                linkElement.parent().parent().parent().remove();
+                            }
+                        });
+                    }
                 }
-            });
+            );
         }
+    });
 
-        data = $(this).attr('data-updateid');
+    $('.updateLink').click(function (event) {
+        event.preventDefault();
+        var linkElement = $(this);
+        var updateCommentId = $(this).attr('data-updateid');
 
-        if (data != '' && data !== undefined) {
+        if (updateCommentId != '' && updateCommentId !== undefined) {
 
-            event.preventDefault();
-
-            var div = $(this).parent().next().next();
+            var div = linkElement.parent().next().next();
 
             if (div.is(":hidden")) {
                 $('div .editForm').hide();
@@ -74,8 +83,6 @@
             }
             return;
         }
-
-
     });
 
 })(jQuery);

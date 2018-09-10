@@ -7,9 +7,6 @@ namespace Volo.Blogging
         typeof(BloggingApplicationContractsModule))]
     public class BloggingHttpApiClientModule : AbpModule
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            context.Services.AddAssemblyOf<BloggingHttpApiClientModule>();
-        }
+
     }
 }

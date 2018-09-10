@@ -92,8 +92,6 @@ namespace Volo.BloggingTestApp
             {
                 options.DefaultThemeName = BasicTheme.Name;
             });
-
-            context.Services.AddAssemblyOf<BloggingTestAppModule>();
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)

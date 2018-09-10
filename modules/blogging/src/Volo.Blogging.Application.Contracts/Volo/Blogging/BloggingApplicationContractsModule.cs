@@ -13,8 +13,6 @@ namespace Volo.Blogging
             {
                 options.DefinitionProviders.Add<BloggingPermissionDefinitionProvider>();
             });
-
-            context.Services.AddAssemblyOf<BloggingApplicationContractsModule>();
         }
     }
 }

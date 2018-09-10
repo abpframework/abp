@@ -9,9 +9,6 @@ namespace Volo.Blogging
         typeof(AbpDddDomainModule))]
     public class BloggingDomainModule : AbpModule
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            context.Services.AddAssemblyOf<BloggingDomainModule>();
-        }
+
     }
 }
