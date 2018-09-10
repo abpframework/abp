@@ -43,7 +43,7 @@ namespace Volo.Blogging.Posts
             {
                 postDto.Tags = await GetTagsOfPost(postDto);
 
-                postDto.CommentCount = (await _commentRepository.GetListAsync()).Count(p => p.PostId == postDto.Id);
+                postDto.CommentCount = await _commentRepository.GetCommentCountOfPostAsync(postDto.Id);
             }
 
             if (!tagName.IsNullOrWhiteSpace())
@@ -117,18 +117,38 @@ namespace Volo.Blogging.Posts
 
         private async Task SaveTags(List<String> newTags, Post post)
         {
+
+            await RemoveOldTags(newTags, post);
+
+            await AddNewTags(newTags, post);
+        }
+
+        private async Task RemoveOldTags(List<string> newTags, Post post)
+        {
             var oldTags = (await _postTagRepository.GetListAsync()).Where(pt => pt.PostId == post.Id).ToList();
 
             foreach (var oldTag in oldTags)
             {
-                await _postTagRepository.DeleteAsync(oldTag);
-
                 var tag = await _tagRepository.GetAsync(oldTag.TagId);
 
-                tag.DecreaseUsageCount();
-                await _tagRepository.UpdateAsync(tag);
-            }
+                var oldTagNameInNewTags = newTags.FirstOrDefault(t => t == tag.Name);
 
+                if (oldTagNameInNewTags == null)
+                {
+                    await _postTagRepository.DeleteAsync(oldTag);
+
+                    tag.DecreaseUsageCount();
+                    await _tagRepository.UpdateAsync(tag);
+                }
+                else
+                {
+                    newTags.Remove(oldTagNameInNewTags);
+                }
+            }
+        }
+
+        private async Task AddNewTags(List<string> newTags, Post post)
+        {
             var tags = await _tagRepository.GetListAsync();
 
             foreach (var newTag in newTags)
@@ -147,7 +167,6 @@ namespace Volo.Blogging.Posts
 
                 await _postTagRepository.InsertAsync(new PostTag(post.Id, tag.Id));
             }
-
         }
 
         private async Task<List<TagDto>> GetTagsOfPost(PostWithDetailsDto postDto)

@@ -11,6 +11,8 @@ namespace Volo.Blogging.Comments
             Guid postId
         );
 
+        Task<int> GetCommentCountOfPostAsync(Guid postId);
+
         Task<List<Comment>> GetRepliesOfComment(Guid id);
     }
 }

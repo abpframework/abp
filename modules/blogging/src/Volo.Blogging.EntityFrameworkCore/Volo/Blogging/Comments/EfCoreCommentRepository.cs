@@ -24,6 +24,12 @@ namespace Volo.Blogging.Comments
                 .ToListAsync();
         }
 
+        public async Task<int> GetCommentCountOfPostAsync(Guid postId)
+        {
+            return await DbSet
+                .CountAsync(a => a.PostId == postId);
+        }
+
         public async Task<List<Comment>> GetRepliesOfComment(Guid id)
         {
             return await DbSet
