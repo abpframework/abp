@@ -25,9 +25,9 @@
 
     $('a').click(function (event) {
         var linkElement = $(this);
-        var data = linkElement.attr('data-relpyid');
+        var replyCommentId = linkElement.attr('data-relpyid');
 
-        if (data != '' && data !== undefined) {
+        if (replyCommentId != '' && replyCommentId !== undefined) {
 
             event.preventDefault();
 
@@ -42,25 +42,35 @@
             return;
         }
 
-        data = $(this).attr('data-deleteid');
+        var deleteCommentId = $(this).attr('data-deleteid');
 
-        if (data != '' && data !== undefined) {
+        if (deleteCommentId != '' && deleteCommentId !== undefined) {
 
+            console.log(deleteCommentId);
             event.preventDefault();
-
-            $.ajax({
-                type: "POST",
-                url: "/Blog/Comments/Delete",
-                data: { id: data },
-                success: function (response) {
-                    linkElement.parent().parent().parent().remove();
+            abp.message.confirm(
+                'User admin will be deleted.',
+                'Are you sure?',
+                function (isConfirmed) {
+                    console.log(deleteCommentId);
+                    if (isConfirmed) {
+                        $.ajax({
+                            type: "POST",
+                            url: "/Blog/Comments/Delete",
+                            data: { id: deleteCommentId },
+                            success: function (response) {
+                                linkElement.parent().parent().parent().remove();
+                            }
+                        });
+                    }
                 }
-            });
+            );
+            
         }
 
-        data = $(this).attr('data-updateid');
+        var updateCommentId = $(this).attr('data-updateid');
 
-        if (data != '' && data !== undefined) {
+        if (updateCommentId != '' && updateCommentId !== undefined) {
 
             event.preventDefault();
 
