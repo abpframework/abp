@@ -7,7 +7,6 @@
     var editorDataKey = "tuiEditor";
 
     var setCoverImage = function (file) {
-        console.log(file.fileUrl);
         $('#Post_CoverImage').val(file.fileUrl);
         $("#CoverImage").attr("src", file.fileUrl);
     };

@@ -87,11 +87,6 @@
 
             <div class="col-md-4">
 
-                @if (await Authorization.IsGrantedAsync(BloggingPermissions.Posts.Create))
-                {
-                    <a asp-page="./New" asp-route-blogShortName="@Model.BlogShortName">Create New Post</a>
-                }
-
                 <h2>@L["WhatIsNew"]</h2>
                 <div class="list-group">
 
@@ -127,9 +122,12 @@
                         </div>
                     }
                 </div>
-                <div class="mt-3">
-                    <a href="#" class="btn-link f-85">@L["SeeAll"]<i class="fa fa-long-arrow-right"></i></a>
-                </div>
+
+
+                @if (await Authorization.IsGrantedAsync(BloggingPermissions.Posts.Create))
+                {
+                    <a asp-page="./New" asp-route-blogShortName="@Model.BlogShortName">@L["CreateANewPost"]</a>
+                }
             </div>
         </div>
     </div>
