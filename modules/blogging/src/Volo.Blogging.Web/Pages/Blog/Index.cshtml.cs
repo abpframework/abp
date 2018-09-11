@@ -12,6 +12,9 @@ namespace Volo.Blogging.Pages.Blog
 
         public IReadOnlyList<BlogDto> Blogs { get; private set; }
 
+        [BindProperty]
+        public BlogDto Blog { get; set; }
+
         public IndexModel(IBlogAppService blogAppService)
         {
             _blogAppService = blogAppService;
@@ -19,6 +22,24 @@ namespace Volo.Blogging.Pages.Blog
 
         public async Task<IActionResult> OnGetAsync()
         {
+            var result = await _blogAppService.GetListAsync();
+
+            if (result.Items.Count == 1)
+            {
+                var blog = result.Items[0];
+                return RedirectToPage("./Posts/Index", new { blogShortName = blog.ShortName });
+            }
+
+            Blogs = result.Items;
+
+            return Page();
+        }
+
+        public async Task<IActionResult> OnPostAsync()
+        {
+            await _blogAppService.Create(Blog);
+
+
             var result = await _blogAppService.GetListAsync();
 
             if (result.Items.Count == 1)

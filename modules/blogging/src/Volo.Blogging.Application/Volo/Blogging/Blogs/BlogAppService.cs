@@ -42,5 +42,10 @@ namespace Volo.Blogging.Blogs
 
             return ObjectMapper.Map<Blog, BlogDto>(blog);
         }
+
+        public async Task Create(BlogDto blog)
+        {
+            await _blogRepository.InsertAsync(new Blog(GuidGenerator.Create(), blog.Name, blog.ShortName));
+        }
     }
 }

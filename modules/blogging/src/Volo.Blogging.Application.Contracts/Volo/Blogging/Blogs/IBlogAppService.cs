@@ -12,5 +12,7 @@ namespace Volo.Blogging.Blogs
         Task<BlogDto> GetByShortNameAsync(string shortName);
 
         Task<BlogDto> GetAsync(Guid id);
+
+        Task Create(BlogDto blog);
     }
 }

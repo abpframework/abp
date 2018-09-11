@@ -10,6 +10,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Volo\Blogging\Localization\ApplicationContracts\en.json" />
+    <None Remove="Volo\Blogging\Localization\ApplicationContracts\tr.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Volo\Blogging\Localization\ApplicationContracts\en.json" />
+    <EmbeddedResource Include="Volo\Blogging\Localization\ApplicationContracts\tr.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Volo.Blogging.Domain.Shared\Volo.Blogging.Domain.Shared.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Ddd.Application\Volo.Abp.Ddd.Application.csproj" />
   </ItemGroup>
