@@ -1,0 +1,13 @@
+﻿{
+  "culture": "tr",
+  "texts": {
+    "Permission:Blogging": "Blog",
+    "Permission:Blogs": "Bloglar",
+    "Permission:Posts": "Yazılar",
+    "Permission:Tags": "Etiketler",
+    "Permission:Comments": "Yorumlar",
+    "Permission:Edit": "Düzenke",
+    "Permission:Create": "Ekle",
+    "Permission:Delete": "Sil"
+  }
+}
