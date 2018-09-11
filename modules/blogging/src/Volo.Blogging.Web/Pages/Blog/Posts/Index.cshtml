@@ -39,7 +39,7 @@
                                 <div class="hero-articles">
                                     <div class="img-container">
                                         <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">
-                                            <img src="https://placeimg.com/680/680/tech" class="hero-article-img">
+                                            <img src="@post.CoverImage" class="hero-article-img">
                                         </a>
                                     </div>
                                     <div class="hero-content">
@@ -61,30 +61,22 @@
                                     <div class="article-owner">
                                         <div class="article-infos">
                                             <div class="user-card">
-                                                <a href="#">
+                                                <a>
                                                     <img src="https://placeimg.com/120/120/people" class="article-avatar">
                                                 </a>
-                                                <a href="#">
+                                                <a>
                                                     <strong>Armağan Ünlü</strong>, @ConvertDatetimeToTimeAgo(post.CreationTime)
                                                 </a>
                                                 <span class="seperator">|</span>
-                                                <a href="#">
+                                                <a>
                                                     <i class="fa fa-eye"></i> @post.ReadCount @L["Read"]
                                                 </a>
                                                 <span class="seperator">|</span>
-                                                <a href="#">
+                                                <a>
                                                     <i class="fa fa-comment"></i> @post.CommentCount @L["Comment"]
                                                 </a>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="user-link-icons">
-                                        <a class="add-bookmark" href="#">
-                                            <i class="fa fa-bookmark"></i>
-                                        </a>
-                                        <a class="share-article" href="#">
-                                            <i class="fa fa-share-alt"></i>
-                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -112,16 +104,8 @@
                                     <div class="col-4">
                                         <div class="img-container" style="height: 80px;">
                                             <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">
-                                                <img src="https://placeimg.com/480/270/tech" class="box-article-img">
+                                                <img src="@post.CoverImage" class="box-article-img">
                                             </a>
-                                            <div class="user-link-icons">
-                                                <a class="add-bookmark" href="#">
-                                                    <i class="fa fa-bookmark"></i>
-                                                </a>
-                                                <a class="share-article" href="#">
-                                                    <i class="fa fa-share-alt"></i>
-                                                </a>
-                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-8 pl-0">
@@ -131,7 +115,7 @@
                                         <div class="article-owner">
                                             <div class="article-infos">
                                                 <div class="user-card">
-                                                    <a href="#">
+                                                    <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">
                                                         <strong>Armağan Ünlü</strong>, @ConvertDatetimeToTimeAgo(post.CreationTime)
                                                     </a>
                                                 </div>
@@ -172,16 +156,8 @@
                             <div class="col-md-4 order-md-@(oddPost?"last":"first")">
                                 <div class="img-container">
                                     <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">
-                                        <img src="https://placeimg.com/480/270/tech" class="box-article-img">
+                                        <img src="@post.CoverImage" class="box-article-img">
                                     </a>
-                                    <div class="user-link-icons">
-                                        <a class="add-bookmark" href="#">
-                                            <i class="fa fa-bookmark"></i>
-                                        </a>
-                                        <a class="share-article" href="#">
-                                            <i class="fa fa-share-alt"></i>
-                                        </a>
-                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-8 order-md-@(oddPost?"first":"last")">
@@ -203,15 +179,15 @@
                                             <a href="#">
                                                 <img src="https://placeimg.com/120/120/pople" class="article-avatar">
                                             </a>
-                                            <a href="#">
+                                            <a>
                                                 <strong>Armağan Ünlü</strong>, @ConvertDatetimeToTimeAgo(post.CreationTime)
                                             </a>
                                             <span class="seperator">|</span>
-                                            <a href="#">
+                                            <a>
                                                 <i class="fa fa-eye"></i> @post.ReadCount
                                             </a>
                                             <span class="seperator">|</span>
-                                            <a href="#">
+                                            <a>
                                                 <i class="fa fa-comment"></i>  @post.CommentCount
                                             </a>
                                         </div>

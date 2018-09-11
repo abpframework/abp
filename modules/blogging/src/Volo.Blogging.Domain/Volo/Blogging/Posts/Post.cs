@@ -14,6 +14,9 @@ namespace Volo.Blogging.Posts
         public virtual string Url { get; protected set; }
 
         [NotNull]
+        public virtual string CoverImage { get; set; }
+
+        [NotNull]
         public virtual string Title { get; protected set; }
 
         [CanBeNull]
@@ -29,13 +32,14 @@ namespace Volo.Blogging.Posts
             
         }
 
-        public Post(Guid id, Guid blogId, Guid creatorId, [NotNull] string title, [NotNull] string url)
+        public Post(Guid id, Guid blogId, Guid creatorId, [NotNull] string title, [NotNull] string coverImage, [NotNull] string url)
         {
             Id = id;
             CreatorId = creatorId;
             BlogId = blogId;
             Title = Check.NotNullOrWhiteSpace(title, nameof(title));
             Url = Check.NotNullOrWhiteSpace(url, nameof(url));
+            CoverImage = Check.NotNullOrWhiteSpace(coverImage, nameof(coverImage));
 
             Tags = new Collection<PostTag>();
         }

@@ -47,12 +47,17 @@ namespace Volo.Blogging.Pages.Blog.Posts
 
         public class CreatePostViewModel
         {
+            [Required]
             [HiddenInput]
             public Guid BlogId { get; set; }
 
             [Required]
             [StringLength(PostConsts.MaxTitleLength)]
             public string Title { get; set; }
+
+            [Required]
+            [HiddenInput]
+            public string CoverImage { get; set; }
 
             [Required]
             [StringLength(PostConsts.MaxUrlLength)]

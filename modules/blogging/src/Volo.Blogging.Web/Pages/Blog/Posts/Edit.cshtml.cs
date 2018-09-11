@@ -43,6 +43,7 @@ namespace Volo.Blogging.Pages.Blog.Posts
                 BlogId = Post.BlogId,
                 Title = Post.Title,
                 Url = Post.Url,
+                CoverImage = Post.CoverImage,
                 Content = Post.Content,
                 Tags = Post.Tags
             };
@@ -56,15 +57,21 @@ namespace Volo.Blogging.Pages.Blog.Posts
 
     public class EditPostViewModel
     {
+        [Required]
         [HiddenInput]
         public Guid Id { get; set; }
 
+        [Required]
         [HiddenInput]
         public Guid BlogId { get; set; }
 
         [Required]
         [StringLength(PostConsts.MaxTitleLength)]
         public string Title { get; set; }
+
+        [Required]
+        [HiddenInput]
+        public string CoverImage { get; set; }
 
         [Required]
         [StringLength(PostConsts.MaxUrlLength)]

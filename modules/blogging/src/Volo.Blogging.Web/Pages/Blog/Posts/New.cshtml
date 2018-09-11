@@ -21,8 +21,20 @@
     <form method="post" id="new-post-form">
         <abp-input asp-for="Post.BlogId" />
         <abp-input asp-for="Post.Title" auto-focus="true" />
-
         <abp-input asp-for="Post.Url" />
+        <abp-input asp-for="Post.CoverImage" />
+
+        <abp-row>
+            <abp-column size-sm="_9">
+                <div class="form-group">
+                    <label for="CoverImageFile">@L["CoverImage"]</label>
+                    <input class="form-control" type="file" id="CoverImageFile" />
+                </div>
+            </abp-column>
+            <abp-column size-sm="_3">
+                <img id="CoverImage" src="@Model.Post.CoverImage" height="80" width="160" style="display:none" />
+            </abp-column>
+        </abp-row>
 
         <abp-input asp-for="Post.Content" />
         <abp-input asp-for="Post.Tags" />

@@ -87,6 +87,7 @@ namespace Volo.Blogging.Posts
             post.SetTitle(input.Title);
             post.SetUrl(input.Url);
             post.Content = input.Content;
+            post.CoverImage = input.CoverImage;
 
             post = await _postRepository.UpdateAsync(post);
 
@@ -104,6 +105,7 @@ namespace Volo.Blogging.Posts
                 blogId: input.BlogId,
                 creatorId: CurrentUser.GetId(),
                 title: input.Title,
+                coverImage: input.CoverImage,
                 url: input.Url
             ) {Content = input.Content};
 

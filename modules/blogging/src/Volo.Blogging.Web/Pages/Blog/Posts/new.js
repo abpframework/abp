@@ -7,13 +7,44 @@
     var $form = $container.find("form#new-post-form");
     var editorDataKey = "tuiEditor";
 
+    var setCoverImage = function (file) {
+        console.log(file.fileUrl);
+        $('#Post_CoverImage').val(file.fileUrl);
+        $("#CoverImage").attr("src", file.fileUrl);
+        $("#CoverImage").show();
+    };
+
+    var uploadCoverImage = function (file) {
+        var formData = new FormData();
+        formData.append('file', file);
+
+        $.ajax({
+            type: "POST",
+            url: "/Blog/Files/UploadImage",
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                setCoverImage(response);
+            }
+        });
+    };
+
+    $('#CoverImageFile').change(function () {
+        if (!$('#CoverImageFile').prop('files').length) {
+            return;
+        }
+        var file = $('#CoverImageFile').prop('files')[0];
+        uploadCoverImage(file);
+    });
+
     var uploadImage = function (file, callbackFn) {
         var formData = new FormData();
         formData.append('file', file);
 
         $.ajax({ 
             type: "POST",
-            url: "",
+            url: "/Blog/Files/UploadImage",
             data: formData,
             contentType: false,
             processData: false,

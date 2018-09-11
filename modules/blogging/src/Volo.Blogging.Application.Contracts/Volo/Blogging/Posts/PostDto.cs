@@ -9,6 +9,8 @@ namespace Volo.Blogging.Posts
 
         public string Title { get; protected set; }
 
+        public string CoverImage { get; protected set; }
+
         public string Url { get; set; }
 
         public int ReadCount { get; set; }

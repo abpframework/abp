@@ -23,7 +23,7 @@ namespace Volo.Blogging
         [Fact]
         public async Task Should_Get_List_Of_Comments()
         {
-           var post = await _postRepository.InsertAsync(new Post(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), "asd", "asd"));
+           var post = await _postRepository.InsertAsync(new Post(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), "asd", "asd", "asd"));
             var comment1 = await _commentRepository.InsertAsync(new Comment(Guid.NewGuid(), post.Id, Guid.Empty, "qweasd"));
             var comment2 = await _commentRepository.InsertAsync(new Comment(Guid.NewGuid(), post.Id, comment1.Id, "qweasd"));
 
