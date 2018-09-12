@@ -41,7 +41,7 @@ namespace Volo.Blogging.Posts
 
             foreach (var postDto in postDtos)
             {
-                postDto.Tags = await GetTagsOfPost(postDto);
+                postDto.Tags = await GetTagsOfPost(postDto.Id);
 
                 postDto.CommentCount = await _commentRepository.GetCommentCountOfPostAsync(postDto.Id);
             }
@@ -63,7 +63,7 @@ namespace Volo.Blogging.Posts
 
             var postDto = ObjectMapper.Map<Post, PostWithDetailsDto>(post);
 
-            postDto.Tags = await GetTagsOfPost(postDto);
+            postDto.Tags = await GetTagsOfPost(postDto.Id);
 
             return postDto;
         }
@@ -74,9 +74,19 @@ namespace Volo.Blogging.Posts
 
             var postDto = ObjectMapper.Map<Post, PostWithDetailsDto>(post);
 
-            postDto.Tags = await GetTagsOfPost(postDto);
+            postDto.Tags = await GetTagsOfPost(postDto.Id);
 
             return postDto;
+        }
+
+        public async Task DeleteAsync(Guid id)
+        {
+            var tags = await GetTagsOfPost(id);
+            _tagRepository.DecreaseUsageCountOfTags(tags.Select(t=>t.Id).ToList());
+            _postTagRepository.DeleteOfPost(id);
+            _commentRepository.DeleteOfPost(id);
+
+            await _postRepository.DeleteAsync(id);
         }
 
         [Authorize(BloggingPermissions.Posts.Update)]
@@ -171,9 +181,9 @@ namespace Volo.Blogging.Posts
             }
         }
 
-        private async Task<List<TagDto>> GetTagsOfPost(PostWithDetailsDto postDto)
+        private async Task<List<TagDto>> GetTagsOfPost(Guid id)
         {
-            var tagIds = (await _postTagRepository.GetListAsync()).Where(pt => pt.PostId == postDto.Id);
+            var tagIds = (await _postTagRepository.GetListAsync()).Where(pt => pt.PostId == id);
 
             var tags = await _tagRepository.GetListAsync(tagIds.Select(t => t.TagId));
 

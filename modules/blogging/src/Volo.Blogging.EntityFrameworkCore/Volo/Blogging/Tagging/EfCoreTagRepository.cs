@@ -30,5 +30,15 @@ namespace Volo.Blogging.Tagging
         {
             return await DbSet.Where(c => ids.Contains(c.Id)).ToListAsync();
         }
+
+        public void DecreaseUsageCountOfTags(List<Guid> ids)
+        {
+            var tags = DbSet.Where(t => ids.Any(id => id == t.Id));
+
+            foreach (var tag in tags)
+            {
+                tag.DecreaseUsageCount();
+            }
+        }
     }
 }
