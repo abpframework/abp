@@ -1,19 +1,21 @@
- header { 
-    position: fixed;
-    width: 100%;
-    top: 0;
-    left: 0;
-    z-index: 100; 
-    background:#f8f9fa;   
-    .navbar-blog { 
-            padding: 20px 0;  
-    
-        ul {
-            li {
-                a {
-                    color: black;
-                }
-            }
-        }
-    } 
- }
+.vs-blog-title {
+    padding-bottom: 15px;
+    margin-bottom: 25px;
+    border-bottom: 1px solid #ddd;
+    h1,h2,h3,h4,h5, h6 {
+        margin: 0;
+        padding: 0;
+    }
+}
+
+ 
+.vs-footer { 
+    padding-top: 15px;
+    margin-top: 25px;
+    border-top: 1px solid #ddd; 
+}
+
+.vs-seperator {
+    padding: 0 4px;
+    opacity: .3;
+}

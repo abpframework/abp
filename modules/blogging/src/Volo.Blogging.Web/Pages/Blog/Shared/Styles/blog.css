@@ -1,15 +1,9 @@
 ﻿div.vs-blog {
   position: relative;
-  background: #fff;
-  font-family: Helvetica, sans-serif;
-  font-size: 15px;
-  /* Owl overwrite */
-  /*
-.hero-container {
-    width: 96%;
-    max-width: 1440px;
-}   
-*/ }
+  background: white;
+  padding: 0 30px;
+  font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+  font-size: 14px; }
   div.vs-blog a, div.vs-blog a:hover {
     text-decoration: none;
     color: #000000; }
@@ -20,13 +14,13 @@
     font-family: Helvetica, Roboto, sans-serif;
     font-weight: 700; }
   div.vs-blog h1 {
-    font-size: 2.0em;
+    font-size: 2.25em;
     margin: 1.5rem 0 .75rem; }
   div.vs-blog h2, div.vs-blog .tab-title {
-    font-size: 1.5em;
+    font-size: 1.75em;
     margin: 1.5rem 0 .75rem; }
   div.vs-blog h3 {
-    font-size: 1.25em;
+    font-size: 1.5em;
     margin: 1.5rem 0 .75rem; }
   div.vs-blog h4 {
     font-size: 1.25em;
@@ -46,172 +40,99 @@
     background: aqua; }
   div.vs-blog .no-border {
     border: 0; }
-  div.vs-blog .owl-theme .owl-nav {
-    margin-top: 0 !important;
-    text-align: center;
-    -webkit-tap-highlight-color: transparent;
-    position: absolute;
-    bottom: 120px;
-    left: 0;
-    right: 0;
-    font-size: 3em;
-    color: white; }
-    div.vs-blog .owl-theme .owl-nav > button {
-      width: 40px;
-      height: 40px;
-      padding: 0 !important;
-      display: inline-block !important;
-      line-height: 27px !important;
-      text-align: center;
-      background: none !important;
-      transition: .3s; }
-      div.vs-blog .owl-theme .owl-nav > button.owl-next {
-        position: absolute;
-        right: 10%; }
-      div.vs-blog .owl-theme .owl-nav > button.owl-prev {
-        position: absolute;
-        left: 10%; }
-      div.vs-blog .owl-theme .owl-nav > button > span {
-        width: 40px;
-        height: 40px;
-        padding: 0;
-        border: 2px solid white;
-        border-radius: 40px;
-        display: inline-block;
-        line-height: 29px;
-        text-align: center; }
   div.vs-blog .btn-rounded {
     border-radius: 30px; }
   div.vs-blog .list-group .list-group-item {
     position: relative;
     display: block;
-    padding: 21px 0 21px 0;
-    margin-bottom: -1px;
-    background-color: #fff;
-    font-size: .8em;
-    border: 0;
-    border: 1px solid #f5f5f5;
-    border-width: 1px 0; }
+    padding: 0 0 20px 0;
+    background: none;
+    border-radius: 0;
+    border: 0; }
     div.vs-blog .list-group .list-group-item:hover {
       background: none; }
     div.vs-blog .list-group .list-group-item + .list-group-item {
-      margin-top: -1px; }
+      border-top: 1px solid #f5f5f5;
+      padding: 20px 0; }
     div.vs-blog .list-group .list-group-item h3 {
       margin-top: 0; }
-  div.vs-blog .tab-content {
-    padding: 30px 0px 0; }
-  div.vs-blog .container {
-    padding-right: 20px;
-    padding-left: 20px; }
-  div.vs-blog .row {
-    margin-right: -20px;
-    margin-left: -20px; }
-  div.vs-blog .col, div.vs-blog .col-1, div.vs-blog .col-10, div.vs-blog .col-11, div.vs-blog .col-12, div.vs-blog .col-2, div.vs-blog .col-3, div.vs-blog .col-4, div.vs-blog .col-5, div.vs-blog .col-6, div.vs-blog .col-7, div.vs-blog .col-8, div.vs-blog .col-9, div.vs-blog .col-auto, div.vs-blog .col-lg, div.vs-blog .col-lg-1, div.vs-blog .col-lg-10, div.vs-blog .col-lg-11, div.vs-blog .col-lg-12, div.vs-blog .col-lg-2, div.vs-blog .col-lg-3, div.vs-blog .col-lg-4, div.vs-blog .col-lg-5, div.vs-blog .col-lg-6, div.vs-blog .col-lg-7, div.vs-blog .col-lg-8, div.vs-blog .col-lg-9, div.vs-blog .col-lg-auto, div.vs-blog .col-md, div.vs-blog .col-md-1, div.vs-blog .col-md-10, div.vs-blog .col-md-11, div.vs-blog .col-md-12, div.vs-blog .col-md-2, div.vs-blog .col-md-3, div.vs-blog .col-md-4, div.vs-blog .col-md-5, div.vs-blog .col-md-6, div.vs-blog .col-md-7, div.vs-blog .col-md-8, div.vs-blog .col-md-9, div.vs-blog .col-md-auto, div.vs-blog .col-sm, div.vs-blog .col-sm-1, div.vs-blog .col-sm-10, div.vs-blog .col-sm-11, div.vs-blog .col-sm-12, div.vs-blog .col-sm-2, div.vs-blog .col-sm-3, div.vs-blog .col-sm-4, div.vs-blog .col-sm-5, div.vs-blog .col-sm-6, div.vs-blog .col-sm-7, div.vs-blog .col-sm-8, div.vs-blog .col-sm-9, div.vs-blog .col-sm-auto, div.vs-blog .col-xl, div.vs-blog .col-xl-1, div.vs-blog .col-xl-10, div.vs-blog .col-xl-11, div.vs-blog .col-xl-12, div.vs-blog .col-xl-2, div.vs-blog .col-xl-3, div.vs-blog .col-xl-4, div.vs-blog .col-xl-5, div.vs-blog .col-xl-6, div.vs-blog .col-xl-7, div.vs-blog .col-xl-8, div.vs-blog .col-xl-9, div.vs-blog .col-xl-auto {
-    padding-right: 20px;
-    padding-left: 20px; }
-  @media (min-width: 1200px) {
-    div.vs-blog .container {
-      max-width: 1080px; } }
-  div.vs-blog .f-85 {
+  div.vs-blog .list-group.small-list .list-group-item {
+    padding: 10px 0; }
+    div.vs-blog .list-group.small-list .list-group-item + .list-group-item {
+      padding: 10px 0; }
+  div.vs-blog .font-75 {
+    font-size: .75em; }
+  div.vs-blog .font-85 {
     font-size: .85em; }
-  div.vs-blog .nav-tabs {
-    margin-bottom: 20px;
-    border-bottom: 3px solid #000; }
-    div.vs-blog .nav-tabs .nav-item {
-      margin-bottom: -16px;
-      background: white;
-      border-left: 5px solid #fff; }
-      div.vs-blog .nav-tabs .nav-item .tab-title {
-        font-weight: 700;
-        line-height: 1.1;
-        padding: 7px;
-        margin-left: -14px; }
-    div.vs-blog .nav-tabs .nav-link {
-      font-size: .8em;
-      border-radius: 50px;
-      padding: .25rem .5rem;
-      font-weight: 700;
-      color: grey; }
-      div.vs-blog .nav-tabs .nav-link:hover, div.vs-blog .nav-tabs .nav-link:focus {
-        background: #eee; }
-    div.vs-blog .nav-tabs .nav-link.active,
-    div.vs-blog .nav-tabs .nav-item.show .nav-link {
-      background: black;
-      border-color: white;
-      color: white;
-      border-radius: 50px; }
-  div.vs-blog .pb-5, div.vs-blog .py-5 {
-    padding-bottom: 4rem !important; }
-  div.vs-blog .pt-5, div.vs-blog .py-5 {
-    padding-top: 4rem !important; }
-  div.vs-blog footer {
-    font-size: .8em;
-    line-height: 2; }
-    div.vs-blog footer .seperator {
-      padding: 0 5px;
-      opacity: .5; }
-  div.vs-blog header {
-    position: fixed;
-    width: 100%;
-    top: 0;
-    left: 0;
-    z-index: 100;
-    background: #f8f9fa; }
-    div.vs-blog header .navbar-blog {
-      padding: 20px 0; }
-      div.vs-blog header .navbar-blog ul li a {
-        color: black; }
-  div.vs-blog section.hero-section {
+  div.vs-blog .font-92 {
+    font-size: .92em; }
+  div.vs-blog .font-100 {
+    font-size: 1em; }
+  div.vs-blog .font-125 {
+    font-size: 1.25em; }
+  div.vs-blog .vs-blog-title {
+    padding-bottom: 15px;
+    margin-bottom: 25px;
+    border-bottom: 1px solid #ddd; }
+    div.vs-blog .vs-blog-title h1, div.vs-blog .vs-blog-title h2, div.vs-blog .vs-blog-title h3, div.vs-blog .vs-blog-title h4, div.vs-blog .vs-blog-title h5, div.vs-blog .vs-blog-title h6 {
+      margin: 0;
+      padding: 0; }
+  div.vs-blog .vs-footer {
+    padding-top: 15px;
+    margin-top: 25px;
+    border-top: 1px solid #ddd; }
+  div.vs-blog .vs-seperator {
+    padding: 0 4px;
+    opacity: .3; }
+  div.vs-blog .hero-section {
     padding: 0; }
-    div.vs-blog section.hero-section .hero-articles {
+    div.vs-blog .hero-section .hero-articles {
       position: relative;
       overflow: hidden; }
-      div.vs-blog section.hero-section .hero-articles .hero-content {
+      div.vs-blog .hero-section .hero-articles .hero-content {
         position: absolute;
         left: 12%;
         right: 12%;
         bottom: 80px;
         z-index: 4;
         text-align: center; }
-        div.vs-blog section.hero-section .hero-articles .hero-content h2 {
+        div.vs-blog .hero-section .hero-articles .hero-content h2 {
           margin-top: 0;
           font-size: 2.5em;
           font-weight: bold; }
-        div.vs-blog section.hero-section .hero-articles .hero-content a {
+        div.vs-blog .hero-section .hero-articles .hero-content a {
           color: white;
           text-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5); }
-        div.vs-blog section.hero-section .hero-articles .hero-content p {
+        div.vs-blog .hero-section .hero-articles .hero-content p {
           color: white; }
-      div.vs-blog section.hero-section .hero-articles .tags .tag {
+      div.vs-blog .hero-section .hero-articles .tags .tag {
         background: rgba(208, 208, 208, 0.3);
         color: #fff !important; }
-        div.vs-blog section.hero-section .hero-articles .tags .tag:hover {
+        div.vs-blog .hero-section .hero-articles .tags .tag:hover {
           background: white;
           color: black !important; }
-      div.vs-blog section.hero-section .hero-articles .article-owner {
+      div.vs-blog .hero-section .hero-articles .article-owner {
         text-align: center;
         position: relative;
         z-index: 12; }
-        div.vs-blog section.hero-section .hero-articles .article-owner .article-infos {
+        div.vs-blog .hero-section .hero-articles .article-owner .article-infos {
           color: black; }
-          div.vs-blog section.hero-section .hero-articles .article-owner .article-infos a {
+          div.vs-blog .hero-section .hero-articles .article-owner .article-infos a {
             color: black; }
-          div.vs-blog section.hero-section .hero-articles .article-owner .article-infos .seperator {
+          div.vs-blog .hero-section .hero-articles .article-owner .article-infos .seperator {
             margin: 0 4px;
             color: rgba(255, 255, 255, 0.2); }
-          div.vs-blog section.hero-section .hero-articles .article-owner .article-infos img.article-avatar {
+          div.vs-blog .hero-section .hero-articles .article-owner .article-infos img.article-avatar {
             width: 64px;
             margin: -25px 10px 0px 0;
             border: 3px solid #fff;
             display: inline-block;
             border-radius: 50%; }
-      div.vs-blog section.hero-section .hero-articles .img-container {
-        background: black;
-        border-top-left-radius: 0;
-        border-top-right-radius: 0; }
-        div.vs-blog section.hero-section .hero-articles .img-container img {
+      div.vs-blog .hero-section .hero-articles .img-container {
+        background: black; }
+        div.vs-blog .hero-section .hero-articles .img-container img {
           filter: grayscale(10%); }
-        div.vs-blog section.hero-section .hero-articles .img-container::after {
+        div.vs-blog .hero-section .hero-articles .img-container::after {
           content: "";
           display: block;
           position: absolute;
@@ -222,31 +143,20 @@
           background: linear-gradient(to bottom, transparent 0, rgba(0, 0, 0, 0.91) 89%, rgba(0, 0, 0, 0.93) 93%) !important;
           transition: .2s all ease-in-out;
           opacity: .9; }
-      div.vs-blog section.hero-section .hero-articles:hover .img-container::after {
+      div.vs-blog .hero-section .hero-articles:hover .img-container::after {
         opacity: 1; }
-  div.vs-blog .box-articles {
-    padding: 0 0 40px 0; }
-    div.vs-blog .box-articles + .box-articles {
-      padding: 40px 0;
-      border-top: 1px solid #f5f5f5;
-      border-bottom: 1px solid  #f5f5f5;
-      margin-top: -1px; }
-    div.vs-blog .box-articles h3 {
-      margin: 10px 0; }
-      div.vs-blog .box-articles h3 a {
-        font-weight: 700; }
-    div.vs-blog .box-articles .article-owner .article-infos {
-      color: #000; }
-      div.vs-blog .box-articles .article-owner .article-infos a {
-        color: rgba(0, 0, 0, 0.6); }
-      div.vs-blog .box-articles .article-owner .article-infos .seperator {
-        margin: 0 4px;
-        color: rgba(0, 0, 0, 0.2); }
-      div.vs-blog .box-articles .article-owner .article-infos img.article-avatar {
-        width: 30px;
-        margin: -1px 4px 0 0;
-        display: inline-block;
-        border-radius: 50%; }
+  div.vs-blog .article-owner .article-infos {
+    color: #000; }
+    div.vs-blog .article-owner .article-infos a {
+      color: rgba(0, 0, 0, 0.6); }
+    div.vs-blog .article-owner .article-infos .seperator {
+      margin: 0 4px;
+      color: rgba(0, 0, 0, 0.2); }
+    div.vs-blog .article-owner .article-infos img.article-avatar {
+      width: 30px;
+      margin: -1px 4px 0 0;
+      display: inline-block;
+      border-radius: 50%; }
   div.vs-blog .card-articles .card-content {
     padding: 10px 0px 10px; }
     div.vs-blog .card-articles .card-content h3 {
@@ -281,40 +191,30 @@
       font-size: 1.25em; }
       div.vs-blog .user-link-icons a:hover {
         color: #fff; }
-  div.vs-blog .tags {
-    margin: 5px 0; }
-    div.vs-blog .tags .tag {
-      display: inline-block;
-      padding: 0px 6px;
-      background: rgba(208, 208, 208, 0.3);
-      border-radius: 30px;
-      margin: 4px 1px;
-      color: #b1b1b1 !important;
-      font-size: .64em;
-      line-height: 1.6em;
-      text-transform: uppercase; }
-      div.vs-blog .tags .tag:hover {
-        background: black;
-        color: white !important; }
+  div.vs-blog .tags .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    background: rgba(208, 208, 208, 0.3);
+    border-radius: 30px;
+    margin: 0 1px 3px 0;
+    color: #b1b1b1 !important;
+    font-size: .7em;
+    line-height: 1.6em;
+    text-transform: uppercase; }
+    div.vs-blog .tags .tag:hover {
+      background: black;
+      color: white !important; }
   div.vs-blog .popular-tags a {
     display: block;
-    padding: 10px 15px;
-    background: white;
-    margin-bottom: 2px;
-    font-size: .85em; }
-    div.vs-blog .popular-tags a:hover {
-      background: #f5f5f5; }
+    font-size: .9em; }
     div.vs-blog .popular-tags a span {
       float: right;
       opacity: .3;
-      font-size: .85em; }
+      font-size: .9em; }
   div.vs-blog .img-container {
     position: relative;
     overflow: hidden;
     border-radius: 4px; }
-  div.vs-blog .sidebox .sideboxes {
-    padding: 30px;
-    background: #fafafa; }
   div.vs-blog .post-detail h1 {
     padding: 0px 0;
     line-height: 1.25em;
@@ -354,20 +254,19 @@
     font-size: .95em; }
     div.vs-blog .media .media {
       font-size: .95em; }
-  div.vs-blog .comment-area .comment-owner span {
-    font-weight: 300;
-    color: #999;
-    font-size: .8em; }
+  div.vs-blog .comment-area .comment-owner {
+    margin-bottom: 2px; }
+    div.vs-blog .comment-area .comment-owner span {
+      font-weight: 300;
+      color: #999;
+      font-size: .8em; }
   div.vs-blog .comment-area > .media {
     padding: 30px 0;
     border-bottom: 1px solid #f1f1f1; }
     div.vs-blog .comment-area > .media .media {
       padding: 20px 0; }
   div.vs-blog .comment-area .comment-buttons {
-    background: #f8f9fa;
-    border-bottom: 1px solid #f1f1f1;
-    padding: 6px 10px;
-    font-size: .85em; }
+    padding: 4px 8px; }
     div.vs-blog .comment-area .comment-buttons .seperator {
       color: #ddd;
       margin: 0 8px; }
@@ -380,6 +279,10 @@
       border-radius: 3px; }
       div.vs-blog .comment-area .comment-buttons .count.count-up {
         background: #999; }
+    div.vs-blog .comment-area .comment-buttons a {
+      opacity: .5; }
+      div.vs-blog .comment-area .comment-buttons a:hover {
+        opacity: .75; }
   div.vs-blog .comment-area p {
     margin-bottom: 6px; }
   div.vs-blog .comment-area .comment-avatar {

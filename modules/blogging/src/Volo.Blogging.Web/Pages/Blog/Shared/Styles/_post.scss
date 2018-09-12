@@ -52,32 +52,36 @@
     .media {
         font-size: .95em;
     }
-} 
+}
 
 .comment-area {
     .comment-owner {
+        margin-bottom: 2px;
+
         span {
             font-weight: 300;
             color: #999;
             font-size: .8em;
         }
     }
-    >.media {
-        padding: 30px 0; 
+
+    > .media {
+        padding: 30px 0;
         border-bottom: 1px solid #f1f1f1;
+
         .media {
-            padding: 20px 0;  
+            padding: 20px 0;
         }
     }
+
     .comment-buttons { 
-        background: #f8f9fa ;
-        border-bottom: 1px solid #f1f1f1;
-        padding: 6px 10px;
-        font-size: .85em;
+        padding: 4px 8px;
+
         .seperator {
             color: #ddd;
             margin: 0 8px;
         }
+
         .count {
             color: #fff;
             background: #ddd;
@@ -85,17 +89,27 @@
             padding: 1px 3px;
             font-size: 10px;
             border-radius: 3px;
+
             &.count-up {
                 background: #999;
             }
         }
+        a {
+            opacity: .5;
+            &:hover {
+                opacity: .75;
+            }
+        }
     }
+
     p {
         margin-bottom: 6px;
     }
+
     .comment-avatar {
         width: 64px;
     }
+
     .answer-avatar {
         width: 48px;
     }
