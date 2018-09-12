@@ -66,6 +66,10 @@ namespace Volo.Abp.Users
             {
                 await WithNewUowAsync(() => _userRepository.UpdateAsync(localUser, cancellationToken: cancellationToken));
             }
+            else
+            {
+                return localUser;
+            }
 
             return await _userRepository.FindAsync(id, cancellationToken: cancellationToken);
         }
@@ -110,6 +114,10 @@ namespace Volo.Abp.Users
             if (localUser is IUpdateUserData && ((IUpdateUserData)localUser).Update(externalUser))
             {
                 await WithNewUowAsync(() => _userRepository.UpdateAsync(localUser, cancellationToken: cancellationToken));
+            }
+            else
+            {
+                return localUser;
             }
 
             return await _userRepository.FindAsync(externalUser.Id, cancellationToken: cancellationToken);
