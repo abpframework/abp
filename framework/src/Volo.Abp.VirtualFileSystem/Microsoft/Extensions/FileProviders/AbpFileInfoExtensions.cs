@@ -1,6 +1,6 @@
-﻿using System.IO;
+﻿using JetBrains.Annotations;
+using System.IO;
 using System.Text;
-using JetBrains.Annotations;
 using Volo.Abp;
 
 namespace Microsoft.Extensions.FileProviders
@@ -24,7 +24,10 @@ namespace Microsoft.Extensions.FileProviders
 
             using (var stream = fileInfo.CreateReadStream())
             {
-                return encoding.GetString(stream.GetAllBytes());
+                using (var streamReader = new StreamReader(stream, encoding, true))
+                {
+                    return streamReader.ReadToEnd();
+                }
             }
         }
     }
