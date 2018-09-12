@@ -13,6 +13,6 @@ namespace Volo.Blogging.Blogs
 
         Task<BlogDto> GetAsync(Guid id);
 
-        Task Create(BlogDto blog);
+        Task<BlogDto> Create(CreateBlogDto blog);
     }
 }

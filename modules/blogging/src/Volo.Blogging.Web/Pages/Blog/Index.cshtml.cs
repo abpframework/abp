@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
@@ -13,7 +14,7 @@ namespace Volo.Blogging.Pages.Blog
         public IReadOnlyList<BlogDto> Blogs { get; private set; }
 
         [BindProperty]
-        public BlogDto Blog { get; set; }
+        public BlogIndexViewModel Blog { get; set; }
 
         public IndexModel(IBlogAppService blogAppService)
         {
@@ -37,8 +38,7 @@ namespace Volo.Blogging.Pages.Blog
 
         public async Task<IActionResult> OnPostAsync()
         {
-            await _blogAppService.Create(Blog);
-
+            await _blogAppService.Create(ObjectMapper.Map<BlogIndexViewModel, CreateBlogDto>(Blog));
 
             var result = await _blogAppService.GetListAsync();
 
@@ -51,6 +51,17 @@ namespace Volo.Blogging.Pages.Blog
             Blogs = result.Items;
 
             return Page();
+        }
+
+        public class BlogIndexViewModel
+        {
+            [Required]
+            public string Name { get; set; }
+
+            [Required]
+            public string ShortName { get; set; }
+
+            public string Description { get; set; }
         }
     }
 }

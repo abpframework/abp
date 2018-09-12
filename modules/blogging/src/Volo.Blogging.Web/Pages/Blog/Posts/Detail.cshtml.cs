@@ -45,12 +45,12 @@ namespace Volo.Blogging.Pages.Blog.Posts
             _commentAppService = commentAppService;
         }
 
-        public async void OnGetAsync()
+        public async Task OnGetAsync()
         {
             await GetData();
         }
 
-        public async void OnPostAsync()
+        public async Task OnPostAsync()
         {
             await _commentAppService.CreateAsync(new CreateCommentDto()
             {
@@ -62,7 +62,7 @@ namespace Volo.Blogging.Pages.Blog.Posts
             await GetData();
         }
 
-        public async void OnDeleteAsync(Guid commentId)
+        public async Task OnDeleteAsync(Guid commentId)
         {
             await _commentAppService.DeleteAsync(commentId);
 

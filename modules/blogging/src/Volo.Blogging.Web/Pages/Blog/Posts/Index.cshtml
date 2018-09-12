@@ -222,8 +222,12 @@
                         <div class="list-group-item">
                             <a asp-page="/Blog/Posts/Index" asp-route-blogShortName="@Model.BlogShortName" asp-route-tagName="@popularTag.Name">@popularTag.Name <span>(@popularTag.UsageCount @L["Posts"])</span></a>
                         </div>
+
                     }
+
+
                 </div>
+
                 <div class="vs-footer">
                     <a href="#">About</a>
                     <span class="vs-seperator">|</span>
@@ -233,8 +237,8 @@
                     <p>
                         &copy; Copyright Volosoft 2018 - Blog
                     </p>
-                </div> 
+                </div>
             </div>
-        </div> 
+        </div>
     </div>
 </div>

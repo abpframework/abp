@@ -29,7 +29,7 @@ namespace Volo.Blogging.Pages.Blog.Posts
             _blogAppService = blogAppService;
         }
 
-        public async void OnGet()
+        public async Task OnGet()
         {
             var postDto = await _postAppService.GetAsync(new Guid(PostId));
             Post = ObjectMapper.Map<PostWithDetailsDto, EditPostViewModel>(postDto);

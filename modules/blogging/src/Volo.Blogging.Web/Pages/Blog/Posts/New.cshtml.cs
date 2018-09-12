@@ -27,7 +27,7 @@ namespace Volo.Blogging.Pages.Blog.Posts
             _blogAppService = blogAppService;
         }
 
-        public async void OnGetAsync()
+        public async Task OnGetAsync()
         {
             Blog = await _blogAppService.GetByShortNameAsync(BlogShortName);
             Post = new CreatePostViewModel

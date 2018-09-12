@@ -5,10 +5,12 @@ using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Logging;
 using Volo.Abp.Users;
 using Volo.Blogging.Comments;
 using Volo.Blogging.Tagging;
 using Volo.Blogging.Tagging.Dtos;
+using Volo.Blogging.Users;
 
 namespace Volo.Blogging.Posts
 {
@@ -19,13 +21,16 @@ namespace Volo.Blogging.Posts
     //[Authorize(BloggingPermissions.Posts.Default)]
     public class PostAppService : ApplicationService, IPostAppService
     {
+        protected IBlogUserLookupService UserLookupService { get; }
+
         private readonly IPostRepository _postRepository;
         private readonly ITagRepository _tagRepository;
         private readonly IPostTagRepository _postTagRepository;
         private readonly ICommentRepository _commentRepository;
 
-        public PostAppService(IPostRepository postRepository, ITagRepository tagRepository, IPostTagRepository postTagRepository, ICommentRepository commentRepository)
+        public PostAppService(IPostRepository postRepository, ITagRepository tagRepository, IPostTagRepository postTagRepository, ICommentRepository commentRepository, IBlogUserLookupService userLookupService)
         {
+            UserLookupService = userLookupService;
             _postRepository = postRepository;
             _tagRepository = tagRepository;
             _postTagRepository = postTagRepository;
@@ -41,9 +46,16 @@ namespace Volo.Blogging.Posts
 
             foreach (var postDto in postDtos)
             {
-                postDto.Tags = await GetTagsOfPost(postDto);
+                postDto.Tags = await GetTagsOfPost(postDto.Id);
 
                 postDto.CommentCount = await _commentRepository.GetCommentCountOfPostAsync(postDto.Id);
+
+                if (postDto.CreatorId.HasValue)
+                {
+                    var creatorUser = await UserLookupService.FindByIdAsync(postDto.CreatorId.Value);
+                    //TODO: Check if creatorUser is null!
+                    Logger.LogWarning($"Creator of post {postDto.Id} is {creatorUser.UserName}");
+                }
             }
 
             if (!tagName.IsNullOrWhiteSpace())
@@ -63,7 +75,7 @@ namespace Volo.Blogging.Posts
 
             var postDto = ObjectMapper.Map<Post, PostWithDetailsDto>(post);
 
-            postDto.Tags = await GetTagsOfPost(postDto);
+            postDto.Tags = await GetTagsOfPost(postDto.Id);
 
             return postDto;
         }
@@ -74,9 +86,19 @@ namespace Volo.Blogging.Posts
 
             var postDto = ObjectMapper.Map<Post, PostWithDetailsDto>(post);
 
-            postDto.Tags = await GetTagsOfPost(postDto);
+            postDto.Tags = await GetTagsOfPost(postDto.Id);
 
             return postDto;
+        }
+
+        public async Task DeleteAsync(Guid id)
+        {
+            var tags = await GetTagsOfPost(id);
+            _tagRepository.DecreaseUsageCountOfTags(tags.Select(t=>t.Id).ToList());
+            _postTagRepository.DeleteOfPost(id);
+            _commentRepository.DeleteOfPost(id);
+
+            await _postRepository.DeleteAsync(id);
         }
 
         [Authorize(BloggingPermissions.Posts.Update)]
@@ -171,9 +193,9 @@ namespace Volo.Blogging.Posts
             }
         }
 
-        private async Task<List<TagDto>> GetTagsOfPost(PostWithDetailsDto postDto)
+        private async Task<List<TagDto>> GetTagsOfPost(Guid id)
         {
-            var tagIds = (await _postTagRepository.GetListAsync()).Where(pt => pt.PostId == postDto.Id);
+            var tagIds = (await _postTagRepository.GetListAsync()).Where(pt => pt.PostId == id);
 
             var tags = await _tagRepository.GetListAsync(tagIds.Select(t => t.TagId));
 

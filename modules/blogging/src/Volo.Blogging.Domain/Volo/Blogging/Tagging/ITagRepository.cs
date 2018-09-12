@@ -12,5 +12,7 @@ namespace Volo.Blogging.Tagging
         Task<Tag> GetByNameAsync(string name);
 
         Task<List<Tag>> GetListAsync(IEnumerable<Guid> ids);
+
+        void DecreaseUsageCountOfTags(List<Guid> id);
     }
 }
