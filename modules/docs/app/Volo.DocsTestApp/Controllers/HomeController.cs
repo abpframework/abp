@@ -7,7 +7,7 @@ namespace Volo.DocsTestApp.Controllers
     {
         public ActionResult Index()
         {
-            return Redire2ct("/Documents/");
+            return Redirect("/Documents/");
         }
     }
 }
