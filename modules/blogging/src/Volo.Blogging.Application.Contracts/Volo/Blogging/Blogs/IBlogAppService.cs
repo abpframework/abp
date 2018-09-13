@@ -15,15 +15,11 @@ namespace Volo.Blogging.Blogs
         Task<BlogDto> GetByShortNameAsync(string shortName);
 
         Task<BlogDto> GetAsync(Guid id);
-
-<<<<<<< HEAD
+        
         Task<BlogDto> Create(CreateBlogDto input);
 
         Task<BlogDto> Update(Guid id, UpdateBlogDto input);
 
         Task Delete(Guid id);
-=======
-        Task<BlogDto> Create(CreateBlogDto blog);
->>>>>>> 5023d9202b64c4367e1234ad5e5f7acb76c592e3
     }
 }
