@@ -1,6 +1,6 @@
 # ABP
 
-[![Build Status](https://travis-ci.org/volosoft/abp.svg?branch=master)](https://travis-ci.org/volosoft/abp)
+[![Build Status](http://vjenkins.dynu.net:5480/job/abp/badge/icon)](http://vjenkins.dynu.net:5480/job/abp)
 
 This project is the next generation of the [ASP.NET Boilerplate](https://aspnetboilerplate.com/) web application framework.
 
