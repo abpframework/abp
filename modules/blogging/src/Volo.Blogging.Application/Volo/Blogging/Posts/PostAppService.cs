@@ -40,32 +40,22 @@ namespace Volo.Blogging.Posts
         public async Task<ListResultDto<PostWithDetailsDto>> GetListByBlogIdAndTagName(Guid id, string tagName)
         {
             var posts = _postRepository.GetPostsByBlogId(id);
-
             var tag = tagName.IsNullOrWhiteSpace()? null: await _tagRepository.GetByNameAsync(tagName);
-
-            var allPostDtos = new List<PostWithDetailsDto>(
-                ObjectMapper.Map<List<Post>, List<PostWithDetailsDto>>(posts));
-
-            var filteredPostDtos = new List<PostWithDetailsDto>();
-
             var userDictionary = new Dictionary<Guid, BlogUserDto>();
+            var postDtos = new List<PostWithDetailsDto>(ObjectMapper.Map<List<Post>, List<PostWithDetailsDto>>(posts));
 
-            foreach (var postDto in allPostDtos)
+            if (tag != null)
             {
-                postDto.Tags = await GetTagsOfPost(postDto.Id);
-
-                if (tag != null && postDto.Tags.All(t => t.Id != tag.Id))
-                {
-                    continue;
-                }
-
-                filteredPostDtos.Add(postDto);
+                postDtos = await FilterPostsByTag(postDtos, tag);
             }
 
-            foreach (var postDto in filteredPostDtos)
+            foreach (var postDto in postDtos)
             {
                 postDto.CommentCount = await _commentRepository.GetCommentCountOfPostAsync(postDto.Id);
+            }
 
+            foreach (var postDto in postDtos)
+            {
                 if (postDto.CreatorId.HasValue)
                 {
                     var creatorUser = await UserLookupService.FindByIdAsync(postDto.CreatorId.Value);
@@ -77,7 +67,7 @@ namespace Volo.Blogging.Posts
                 }
             }
 
-            foreach (var postDto in filteredPostDtos)
+            foreach (var postDto in postDtos)
             {
                 if (postDto.CreatorId.HasValue && userDictionary.ContainsKey((Guid) postDto.CreatorId))
                 {
@@ -85,7 +75,24 @@ namespace Volo.Blogging.Posts
                 }
             }
 
-            return new ListResultDto<PostWithDetailsDto>(allPostDtos);
+            return new ListResultDto<PostWithDetailsDto>(postDtos);
+        }
+
+        private async Task<List<PostWithDetailsDto>> FilterPostsByTag(List<PostWithDetailsDto> allPostDtos, Tag tag)
+        {
+            var filteredPostDtos = new List<PostWithDetailsDto>();
+
+            foreach (var postDto in allPostDtos)
+            {
+                if (await _postTagRepository.FindByTagIdAndPostIdAsync(postDto.Id, tag.Id) == null)
+                {
+                    continue;
+                }
+
+                filteredPostDtos.Add(postDto);
+            }
+
+            return filteredPostDtos;
         }
 
         public async Task<PostWithDetailsDto> GetForReadingAsync(GetPostInput input)
@@ -98,6 +105,13 @@ namespace Volo.Blogging.Posts
 
             postDto.Tags = await GetTagsOfPost(postDto.Id);
 
+            if (postDto.CreatorId.HasValue)
+            {
+                var creatorUser = await UserLookupService.FindByIdAsync(postDto.CreatorId.Value);
+
+                postDto.Writer = ObjectMapper.Map<BlogUser, BlogUserDto>(creatorUser);
+            }
+
             return postDto;
         }
 
@@ -108,6 +122,13 @@ namespace Volo.Blogging.Posts
             var postDto = ObjectMapper.Map<Post, PostWithDetailsDto>(post);
 
             postDto.Tags = await GetTagsOfPost(postDto.Id);
+
+            if (postDto.CreatorId.HasValue)
+            {
+                var creatorUser = await UserLookupService.FindByIdAsync(postDto.CreatorId.Value);
+
+                postDto.Writer = ObjectMapper.Map<BlogUser, BlogUserDto>(creatorUser);
+            }
 
             return postDto;
         }

@@ -7,5 +7,7 @@ namespace Volo.Blogging.Posts
     public interface IPostTagRepository : IBasicRepository<PostTag>
     {
         void DeleteOfPost(Guid id);
+
+        Task<PostTag> FindByTagIdAndPostIdAsync(Guid postId, Guid tagId);
     }
 }

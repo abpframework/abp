@@ -16,8 +16,8 @@ namespace Volo.Blogging
         {
             CreateMap<Blog, BlogDto>();
             CreateMap<Post, PostDto>();
-            CreateMap<Post, PostWithDetailsDto>().Ignore(x=>x.CommentCount);
-            CreateMap<Comment, CommentDto>();
+            CreateMap<Post, PostWithDetailsDto>().ForMember(x => x.Writer, opt => opt.Ignore()).Ignore(x=>x.CommentCount);
+            CreateMap<Comment, CommentWithDetailsDto>().ForMember(x => x.Writer, opt => opt.Ignore());
             CreateMap<Tag, TagDto>();
         }
     }
