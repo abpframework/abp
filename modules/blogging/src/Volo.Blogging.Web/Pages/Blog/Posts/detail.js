@@ -25,6 +25,7 @@
 
     $('.replyLink').click(function (event) {
         event.preventDefault();
+        $('div .editForm').hide();
         var linkElement = $(this);
         var replyCommentId = linkElement.attr('data-relpyid');
 
@@ -68,6 +69,8 @@
 
     $('.updateLink').click(function (event) {
         event.preventDefault();
+        $('div .replyForm').hide();
+
         var linkElement = $(this);
         var updateCommentId = $(this).attr('data-updateid');
 
