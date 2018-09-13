@@ -93,7 +93,7 @@
                                             <img src="https://placeimg.com/120/120/people" class="article-avatar">
                                         </a>
                                         <a>
-                                            <strong>Armağan Ünlü</strong>, @ConvertDatetimeToTimeAgo(post.CreationTime)
+                                            <strong>@post.Writer.UserName</strong>, @ConvertDatetimeToTimeAgo(post.CreationTime)
                                         </a>
                                         <span class="vs-seperator">|</span>
                                         <a>
@@ -135,7 +135,7 @@
                                             <div class="article-infos">
                                                 <div class="user-card">
                                                     <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">
-                                                        <strong>Armağan Ünlü</strong>, @ConvertDatetimeToTimeAgo(post.CreationTime)
+                                                        <strong>@post.Writer.UserName</strong>, @ConvertDatetimeToTimeAgo(post.CreationTime)
                                                     </a>
                                                 </div>
                                             </div>
@@ -192,7 +192,7 @@
                                                     <img src="https://placeimg.com/120/120/pople" class="article-avatar">
                                                 </a>
                                                 <a>
-                                                    <strong>Armağan Ünlü</strong>, @ConvertDatetimeToTimeAgo(post.CreationTime)
+                                                    <strong>@post.Writer.UserName</strong>, @ConvertDatetimeToTimeAgo(post.CreationTime)
                                                 </a>
                                                 <span class="vs-seperator">|</span>
                                                 <a>

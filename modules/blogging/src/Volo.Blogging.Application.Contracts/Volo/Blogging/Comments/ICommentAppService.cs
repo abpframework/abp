@@ -10,9 +10,9 @@ namespace Volo.Blogging.Comments
     {
         Task<List<CommentWithRepliesDto>> GetHierarchicalListOfPostAsync(GetCommentListOfPostAsync input);
 
-        Task<CommentDto> CreateAsync(CreateCommentDto input);
+        Task<CommentWithDetailsDto> CreateAsync(CreateCommentDto input);
 
-        Task<CommentDto> UpdateAsync(Guid id, UpdateCommentDto input);
+        Task<CommentWithDetailsDto> UpdateAsync(Guid id, UpdateCommentDto input);
 
         Task DeleteAsync(Guid id);
     }
