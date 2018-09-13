@@ -16,7 +16,6 @@ namespace Volo.Blogging
         {
             CreateMap<PostWithDetailsDto, EditPostViewModel>().Ignore(x=>x.Tags);
             CreateMap<NewModel.CreatePostViewModel, CreatePostDto>();
-            CreateMap<IndexModel.BlogIndexViewModel, CreateBlogDto>();
             CreateMap<CreateModel.BlogCreateModalView, CreateBlogDto>();
             CreateMap<BlogDto, EditModel.BlogEditViewModel>();
         }

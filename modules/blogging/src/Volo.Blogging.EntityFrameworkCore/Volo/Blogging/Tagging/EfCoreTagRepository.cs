@@ -23,6 +23,11 @@ namespace Volo.Blogging.Tagging
 
         public async Task<Tag> GetByNameAsync(string name)
         {
+            return await DbSet.FirstAsync(t=>t.Name == name);
+        }
+
+        public async Task<Tag> FindByNameAsync(string name)
+        {
             return await DbSet.FirstOrDefaultAsync(t=>t.Name == name);
         }
 

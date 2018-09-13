@@ -41,30 +41,51 @@ namespace Volo.Blogging.Posts
         {
             var posts = _postRepository.GetPostsByBlogId(id);
 
-            var postDtos = new List<PostWithDetailsDto>(
+            var tag = tagName.IsNullOrWhiteSpace()? null: await _tagRepository.GetByNameAsync(tagName);
+
+            var allPostDtos = new List<PostWithDetailsDto>(
                 ObjectMapper.Map<List<Post>, List<PostWithDetailsDto>>(posts));
 
-            foreach (var postDto in postDtos)
+            var filteredPostDtos = new List<PostWithDetailsDto>();
+
+            var userDictionary = new Dictionary<Guid, BlogUserDto>();
+
+            foreach (var postDto in allPostDtos)
             {
                 postDto.Tags = await GetTagsOfPost(postDto.Id);
 
+                if (tag != null && postDto.Tags.All(t => t.Id != tag.Id))
+                {
+                    continue;
+                }
+
+                filteredPostDtos.Add(postDto);
+            }
+
+            foreach (var postDto in filteredPostDtos)
+            {
                 postDto.CommentCount = await _commentRepository.GetCommentCountOfPostAsync(postDto.Id);
 
                 if (postDto.CreatorId.HasValue)
                 {
                     var creatorUser = await UserLookupService.FindByIdAsync(postDto.CreatorId.Value);
-                    //TODO: Check if creatorUser is null!
-                    Logger.LogWarning($"Creator of post {postDto.Id} is {creatorUser.UserName}");
+
+                    if (creatorUser != null && !userDictionary.ContainsKey(creatorUser.Id))
+                    {
+                        userDictionary.Add(creatorUser.Id, ObjectMapper.Map<BlogUser, BlogUserDto>(creatorUser));
+                    }
                 }
             }
 
-            if (!tagName.IsNullOrWhiteSpace())
+            foreach (var postDto in filteredPostDtos)
             {
-                var tag = await _tagRepository.GetByNameAsync(tagName);
-                postDtos = postDtos.Where(p => p.Tags.Any(t => t.Id == tag.Id)).ToList();
+                if (postDto.CreatorId.HasValue && userDictionary.ContainsKey((Guid) postDto.CreatorId))
+                {
+                    postDto.Writer = userDictionary[(Guid)postDto.CreatorId];
+                }
             }
 
-            return new ListResultDto<PostWithDetailsDto>(postDtos);
+            return new ListResultDto<PostWithDetailsDto>(allPostDtos);
         }
 
         public async Task<PostWithDetailsDto> GetForReadingAsync(GetPostInput input)
