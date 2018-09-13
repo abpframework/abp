@@ -22,9 +22,13 @@
     "TagsInThisArticle": "Tags in this article",
     "Posts": "Posts",
     "Edit": "Edit",
+    "CommentDeletionWarningMessage": "Comment will be deleted.",
+    "BlogDeletionWarningMessage": "Blog will be deleted.",
+    "AreYouSure": "Are you sure?",
     "Comment": "Comment",
     "CoverImage": "Cover Image",
     "CreateANewPost": "Create A New Post",
+    "CreateANewBlog": "Create A New Blog",
     "WhatIsNew": "What is new?"
   }
 }

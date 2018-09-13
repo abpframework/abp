@@ -1,5 +1,6 @@
 ﻿$(function () {
 
+    var l = abp.localization.getResource('Blogging');
     var _createModal = new abp.ModalManager(abp.appPath + 'Admin/Blogs/Create');
     var _editModal = new abp.ModalManager(abp.appPath + 'Admin/Blogs/Edit');
 
@@ -20,7 +21,7 @@
                     items:
                         [
                             {
-                                text: 'Edit',
+                                text: l('Edit'),
                                 visible: function () {
                                     return true; //TODO: Check permission
                                 },
@@ -31,11 +32,11 @@
                                 }
                             },
                             {
-                                text: 'Delete',
+                                text: l('Delete'),
                                 visible: function () {
                                     return true; //TODO: Check permission
                                 },
-                                confirmMessage: function (data) { return 'Todo: fill this message' },
+                                confirmMessage: function (data) { return l('BlogDeletionWarningMessage') },
                                 action: function (data) {
                                     volo.blogging.blogs
                                         .delete(data.record.id)

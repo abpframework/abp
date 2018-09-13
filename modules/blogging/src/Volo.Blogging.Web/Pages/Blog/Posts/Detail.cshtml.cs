@@ -33,8 +33,6 @@ namespace Volo.Blogging.Pages.Blog.Posts
 
         public PostWithDetailsDto Post { get; set; }
 
-        public IHtmlContent FormattedContent { get; set; }
-
         public IReadOnlyList<CommentWithRepliesDto> CommentsWithReplies { get; set; }
 
         public BlogDto Blog { get; set; }
@@ -74,7 +72,6 @@ namespace Volo.Blogging.Pages.Blog.Posts
         {
             Blog = await _blogAppService.GetByShortNameAsync(BlogShortName);
             Post = await _postAppService.GetForReadingAsync(new GetPostInput { BlogId = Blog.Id, Url = PostUrl });
-            FormattedContent = RenderMarkdown(Post.Content);
             CommentsWithReplies = await _commentAppService.GetHierarchicalListOfPostAsync(new GetCommentListOfPostAsync() { PostId = Post.Id });
             CountComments();
         }
@@ -86,16 +83,6 @@ namespace Volo.Blogging.Pages.Blog.Posts
             {
                 CommentCount += commentWithReply.Replies.Count;
             }
-        }
-
-        public IHtmlContent RenderMarkdown(string content)
-        {
-            byte[] bytes = Encoding.Default.GetBytes(content);
-            var utf8Content = Encoding.UTF8.GetString(bytes);
-
-            var html = CommonMarkConverter.Convert(utf8Content);
-            
-            return new HtmlString(html);
         }
 
         public class PostDetailsViewModel

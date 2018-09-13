@@ -22,9 +22,13 @@
     "TagsInThisArticle": "Makalenin Etiketleri",
     "Posts": "Yazılar",
     "Edit": "Düzenle",
+    "CommentDeletionWarningMessage": "Yorum silinecek.",
+    "BlogDeletionWarningMessage": "Blog silinecek.",
+    "AreYouSure": "Emin misiniz?",
     "Comment": "Yorum",
     "CoverImage": "Kapak resmi",
     "CreateANewPost": "Yeni Yazı oluştur",
+    "CreateANewBlog": "Yeni Blog Ekle",
     "WhatIsNew": "Yeniler"
   }
 }

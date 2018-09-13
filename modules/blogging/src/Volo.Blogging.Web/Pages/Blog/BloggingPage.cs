@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Text;
+using CommonMark;
+using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Localization;
 using Microsoft.AspNetCore.Mvc.Razor.Internal;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
@@ -13,6 +16,8 @@ namespace Volo.Blogging.Pages.Blog
 
         public const string DefaultTitle = "Blog";
 
+        public const int MaxShortContentLength = 128;
+
         public string GetTitle(string title = null)
         {
             if (string.IsNullOrWhiteSpace(title))
@@ -21,6 +26,49 @@ namespace Volo.Blogging.Pages.Blog
             }
 
             return title;
+        }
+
+        public string GetShortContent(string content)
+        {
+            var openingTag = "<p>";
+            var closingTag = "</p>";
+
+            var html = RenderMarkdownToString(content);
+
+            var splittedHtml = html.Split(closingTag);
+
+            if (splittedHtml.Length < 1)
+            {
+                return "";
+            }
+
+            var firstHtmlPart = splittedHtml[0];
+            var paragraphStartIndex = firstHtmlPart.IndexOf(openingTag, StringComparison.Ordinal) + openingTag.Length;
+
+            if (firstHtmlPart.Length - paragraphStartIndex <= MaxShortContentLength)
+            {
+                return firstHtmlPart.Substring(paragraphStartIndex);
+            }
+
+            return firstHtmlPart.Substring(paragraphStartIndex, MaxShortContentLength) + "...";
+        }
+
+        public IHtmlContent RenderMarkdownToHtml(string content)
+        {
+            byte[] bytes = Encoding.Default.GetBytes(content);
+            var utf8Content = Encoding.UTF8.GetString(bytes);
+
+            var html = CommonMarkConverter.Convert(utf8Content);
+
+            return new HtmlString(html);
+        }
+
+        public string RenderMarkdownToString(string content)
+        {
+            byte[] bytes = Encoding.Default.GetBytes(content);
+            var utf8Content = Encoding.UTF8.GetString(bytes);
+
+            return CommonMarkConverter.Convert(utf8Content);
         }
 
         public string ConvertDatetimeToTimeAgo(DateTime dt)

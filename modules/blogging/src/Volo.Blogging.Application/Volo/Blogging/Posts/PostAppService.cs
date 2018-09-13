@@ -5,7 +5,6 @@ using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Logging;
 using Volo.Abp.Users;
 using Volo.Blogging.Comments;
 using Volo.Blogging.Tagging;

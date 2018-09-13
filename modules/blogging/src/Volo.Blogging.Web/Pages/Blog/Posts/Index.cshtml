@@ -81,7 +81,7 @@
                                     <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">@post.Title</a>
                                 </h2>
                                 <p class="article-sum">
-                                    @(post.Content == null ? "" : (post.Content.Length > 150 ? post.Content.Substring(0, 150) + "..." : post.Content))
+                                    @(GetShortContent(post.Content))
                                 </p>
                                 <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName" class="btn btn-primary btn-rounded">@L["ContinueReading"]</a>
 
@@ -183,7 +183,7 @@
                                         <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">@post.Title</a>
                                     </h3>
                                     <p>
-                                        @(post.Content == null ? "" : (post.Content.Length > 250 ? post.Content.Substring(0, 150) : post.Content))...
+                                        @(GetShortContent(post.Content))
                                     </p>
                                     <div class="article-owner">
                                         <div class="article-infos">

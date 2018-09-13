@@ -1,5 +1,7 @@
 ﻿(function ($) {
 
+    var l = abp.localization.getResource('Blogging');
+
     $('div .replyForm').hide();
     $('div .editForm').hide();
 
@@ -49,8 +51,8 @@
 
         if (deleteCommentId != '' && deleteCommentId !== undefined) {
             abp.message.confirm(
-                'Comment will be deleted.', // TODO: localize
-                'Are you sure?',
+                l('CommentDeletionWarningMessage'), // TODO: localize
+                l('Are you sure?)',
                 function(isConfirmed) {
                     if (isConfirmed) {
                         $.ajax({
