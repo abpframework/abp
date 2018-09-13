@@ -33,5 +33,11 @@ namespace Volo.Blogging.Blogs
             Name = Check.NotNullOrWhiteSpace(name, nameof(name));
             return this;
         }
+
+        public virtual Blog SetShortName(string shortName)
+        {
+            ShortName = Check.NotNullOrWhiteSpace(shortName, nameof(shortName));
+            return this;
+        }
     }
 }

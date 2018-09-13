@@ -2,6 +2,7 @@
   "culture": "en",
   "texts": {
     "Menu:Blogs": "Blog",
+    "Menu:BlogManagement": "Blog Management",
     "Title": "Title",
     "ContinueReading": "Continue Reading",
     "DaysAgo": "days ago",

@@ -3,10 +3,12 @@ using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp;
 using Volo.Abp.EntityFrameworkCore.Modeling;
+using Volo.Abp.Users.EntityFrameworkCore;
 using Volo.Blogging.Blogs;
 using Volo.Blogging.Comments;
 using Volo.Blogging.Posts;
 using Volo.Blogging.Tagging;
+using Volo.Blogging.Users;
 
 namespace Volo.Blogging.EntityFrameworkCore
 {
@@ -20,6 +22,14 @@ namespace Volo.Blogging.EntityFrameworkCore
 
             var options = new BloggingModelBuilderConfigurationOptions();
             optionsAction?.Invoke(options);
+
+            builder.Entity<BlogUser>(b =>
+            {
+                b.ToTable(options.TablePrefix + "Users", options.Schema);
+
+                b.ConfigureAbpUser(options);
+                b.ConfigureExtraProperties();
+            });
 
             builder.Entity<Blog>(b =>
             {

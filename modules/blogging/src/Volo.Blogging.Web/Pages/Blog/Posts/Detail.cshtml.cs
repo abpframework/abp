@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Volo.Blogging.Blogs;
+using Volo.Blogging.Blogs.Dtos;
 using Volo.Blogging.Comments;
 using Volo.Blogging.Comments.Dtos;
 using Volo.Blogging.Posts;

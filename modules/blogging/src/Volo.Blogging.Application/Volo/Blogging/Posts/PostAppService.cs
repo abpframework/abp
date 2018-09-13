@@ -5,10 +5,12 @@ using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Logging;
 using Volo.Abp.Users;
 using Volo.Blogging.Comments;
 using Volo.Blogging.Tagging;
 using Volo.Blogging.Tagging.Dtos;
+using Volo.Blogging.Users;
 
 namespace Volo.Blogging.Posts
 {
@@ -19,13 +21,16 @@ namespace Volo.Blogging.Posts
     //[Authorize(BloggingPermissions.Posts.Default)]
     public class PostAppService : ApplicationService, IPostAppService
     {
+        protected IBlogUserLookupService UserLookupService { get; }
+
         private readonly IPostRepository _postRepository;
         private readonly ITagRepository _tagRepository;
         private readonly IPostTagRepository _postTagRepository;
         private readonly ICommentRepository _commentRepository;
 
-        public PostAppService(IPostRepository postRepository, ITagRepository tagRepository, IPostTagRepository postTagRepository, ICommentRepository commentRepository)
+        public PostAppService(IPostRepository postRepository, ITagRepository tagRepository, IPostTagRepository postTagRepository, ICommentRepository commentRepository, IBlogUserLookupService userLookupService)
         {
+            UserLookupService = userLookupService;
             _postRepository = postRepository;
             _tagRepository = tagRepository;
             _postTagRepository = postTagRepository;
@@ -44,6 +49,13 @@ namespace Volo.Blogging.Posts
                 postDto.Tags = await GetTagsOfPost(postDto.Id);
 
                 postDto.CommentCount = await _commentRepository.GetCommentCountOfPostAsync(postDto.Id);
+
+                if (postDto.CreatorId.HasValue)
+                {
+                    var creatorUser = await UserLookupService.FindByIdAsync(postDto.CreatorId.Value);
+                    //TODO: Check if creatorUser is null!
+                    Logger.LogWarning($"Creator of post {postDto.Id} is {creatorUser.UserName}");
+                }
             }
 
             if (!tagName.IsNullOrWhiteSpace())

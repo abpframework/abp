@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
+using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.Resources.AbpValidation;
@@ -15,8 +16,9 @@ namespace Volo.Blogging
 {
     [DependsOn(
         typeof(BloggingHttpApiModule),
-        typeof(AbpAutoMapperModule),
-        typeof(AbpAspNetCoreMvcUiBootstrapModule)
+        typeof(AbpAspNetCoreMvcUiBootstrapModule),
+        typeof(AbpAspNetCoreMvcUiBundlingModule),
+        typeof(AbpAutoMapperModule)
     )]
     public class BloggingWebModule : AbpModule
     {
@@ -37,7 +39,7 @@ namespace Volo.Blogging
 
             Configure<VirtualFileSystemOptions>(options =>
             {
-                options.FileSets.AddEmbedded<BloggingWebModule>("Volo.Blogging");
+                options.FileSets.AddEmbedded<BloggingWebModule>("Volo.Blogging.Web");
             });
 
             Configure<AbpLocalizationOptions>(options =>
