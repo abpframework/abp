@@ -33,6 +33,7 @@
     "PagerNext": "Next",
     "PagerPrevious": "Previous",
     "PagerInfo": "Showing {0} to {1} of {2} entries.",
-    "DatatableActionDropdownDefaultText": "Actions"
+    "DatatableActionDropdownDefaultText": "Actions",
+    "ChangePassword": "Change password"
   }
 }

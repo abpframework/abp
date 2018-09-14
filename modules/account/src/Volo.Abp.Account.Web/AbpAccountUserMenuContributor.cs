@@ -10,7 +10,7 @@ namespace Volo.Abp.Account.Web
     {
         public AbpAccountUserMenuContributor()
         {
-            
+
         }
 
         public Task ConfigureMenuAsync(MenuConfigurationContext context)
@@ -21,6 +21,8 @@ namespace Volo.Abp.Account.Web
             }
 
             var l = context.ServiceProvider.GetRequiredService<IStringLocalizer<AbpUiResource>>();
+
+            context.Menu.AddItem(new ApplicationMenuItem("Account.ChangePassword", l["ChangePassword"], icon: "fa fa-key", url: "#", elementId: "abp-account-change-password"));
 
             context.Menu.AddItem(new ApplicationMenuItem("Account.Logout", l["Logout"], url: "/Account/Logout", icon: "fa fa-power-off", order: int.MaxValue - 1000));
 
