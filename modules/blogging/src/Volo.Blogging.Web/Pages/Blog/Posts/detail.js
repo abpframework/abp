@@ -52,7 +52,7 @@
         if (deleteCommentId != '' && deleteCommentId !== undefined) {
             abp.message.confirm(
                 l('CommentDeletionWarningMessage'), // TODO: localize
-                l('Are you sure?)',
+                l('Are you sure?'),
                 function(isConfirmed) {
                     if (isConfirmed) {
                         $.ajax({

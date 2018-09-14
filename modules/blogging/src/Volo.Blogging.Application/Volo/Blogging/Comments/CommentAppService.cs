@@ -12,7 +12,6 @@ using Volo.Blogging.Users;
 
 namespace Volo.Blogging.Comments
 {
-    //  [Authorize(BloggingPermissions.Comments.Default)]
     public class CommentAppService : ApplicationService, ICommentAppService
     {
         protected IBlogUserLookupService UserLookupService;
@@ -96,22 +95,8 @@ namespace Volo.Blogging.Comments
         {
             var comment = await _commentRepository.GetAsync(id);
 
-            if (CurrentUser.Id != comment.CreatorId)
-            {
-                return await UpdateAsAdminAsync(id, comment, input);
-            }
+            await AuthorizationService.CheckAsync(comment, CommonOperations.Update);
 
-            return await UpdateCommentAsync(id, comment, input);
-        }
-
-        [Authorize(BloggingPermissions.Comments.Update)]
-        private async Task<CommentWithDetailsDto> UpdateAsAdminAsync(Guid id, Comment comment, UpdateCommentDto input)
-        {
-            return await UpdateCommentAsync(id, comment, input);
-        }
-
-        private async Task<CommentWithDetailsDto> UpdateCommentAsync(Guid id, Comment comment, UpdateCommentDto input)
-        {
             comment.SetText(input.Text);
 
             comment = await _commentRepository.UpdateAsync(comment);
@@ -123,23 +108,8 @@ namespace Volo.Blogging.Comments
         {
             var comment = await _commentRepository.GetAsync(id);
 
-            if (CurrentUser.Id != comment.CreatorId)
-            {
-                await DeleteAsAdminAsync(id);
-                return;
-            }
+            await AuthorizationService.CheckAsync(comment, CommonOperations.Delete);
 
-            await DeleteCommentAsync(id);
-        }
-
-        [Authorize(BloggingPermissions.Comments.Delete)]
-        private async Task DeleteAsAdminAsync(Guid id)
-        {
-            await DeleteCommentAsync(id);
-        }
-
-        private async Task DeleteCommentAsync(Guid id)
-        {
             await _commentRepository.DeleteAsync(id);
 
             var replies = await _commentRepository.GetRepliesOfComment(id);

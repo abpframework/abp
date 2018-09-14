@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Entities;
@@ -56,6 +57,7 @@ namespace Volo.Blogging.Blogs
             return ObjectMapper.Map<Blog, BlogDto>(blog);
         }
 
+        [Authorize(BloggingPermissions.Blogs.Create)]
         public async Task<BlogDto> Create(CreateBlogDto input)
         {
             var newBlog = await _blogRepository.InsertAsync(new Blog(GuidGenerator.Create(), input.Name, input.ShortName){Description = input.Description});
@@ -63,6 +65,7 @@ namespace Volo.Blogging.Blogs
             return ObjectMapper.Map<Blog, BlogDto>(newBlog);
         }
 
+        [Authorize(BloggingPermissions.Blogs.Update)]
         public async Task<BlogDto> Update(Guid id, UpdateBlogDto input)
         {
             var blog = await _blogRepository.GetAsync(id);
@@ -74,6 +77,7 @@ namespace Volo.Blogging.Blogs
             return ObjectMapper.Map<Blog, BlogDto>(blog);
         }
 
+        [Authorize(BloggingPermissions.Blogs.Delete)]
         public async Task Delete(Guid id)
         {
             await _blogRepository.DeleteAsync(id);

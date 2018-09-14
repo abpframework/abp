@@ -134,6 +134,10 @@ namespace Volo.Blogging.Posts
 
         public async Task DeleteAsync(Guid id)
         {
+            var post = await _postRepository.GetAsync(id);
+
+            await AuthorizationService.CheckAsync(post, CommonOperations.Delete);
+
             var tags = await GetTagsOfPost(id);
             _tagRepository.DecreaseUsageCountOfTags(tags.Select(t=>t.Id).ToList());
             _postTagRepository.DeleteOfPost(id);
@@ -146,6 +150,8 @@ namespace Volo.Blogging.Posts
         public async Task<PostWithDetailsDto> UpdateAsync(Guid id, UpdatePostDto input)
         {
             var post = await _postRepository.GetAsync(id);
+
+            await AuthorizationService.CheckAsync(post, CommonOperations.Update);
 
             post.SetTitle(input.Title);
             post.SetUrl(input.Url);
