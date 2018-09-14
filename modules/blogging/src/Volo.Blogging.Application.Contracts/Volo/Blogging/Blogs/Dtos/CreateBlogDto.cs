@@ -1,9 +1,6 @@
-using System;
-using Volo.Abp.Application.Dtos;
-
-namespace Volo.Blogging.Blogs
+namespace Volo.Blogging.Blogs.Dtos
 {
-    public class BlogDto : EntityDto<Guid>
+    public class CreateBlogDto
     {
         public string Name { get; set; }
 

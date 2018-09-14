@@ -1,0 +1,30 @@
+{
+    "items": [{
+        "text": "Getting Started",     
+        "items": [{
+            "text": "From Startup Templates",
+            "items": [{
+                "text": "ASP.NET Core MVC",
+                "path": "Getting-Started-AspNetCore-MVC-Template.md"
+            }]
+        },{
+            "text": "From Empty Projects",
+            "items": [{
+                "text": "With ASP.NET Core Web Application",
+                "path": "Getting-Started-AspNetCore-Application.md"
+            },{
+                "text": "With Console Application",
+                "path": "Getting-Started-Console-Application.md"
+            }]
+        }]
+    },{
+        "text": "Tutorials",
+        "items": [{
+            "text": "Application Development",
+            "items": [{
+                "text": "With ASP.NET Core MVC",
+                "path": "Tutorials/AspNetCore-Mvc/Part-I.md"
+            }]
+        }]
+    }]
+}

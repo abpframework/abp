@@ -23,12 +23,27 @@ namespace Volo.Blogging.Tagging
 
         public async Task<Tag> GetByNameAsync(string name)
         {
+            return await DbSet.FirstAsync(t=>t.Name == name);
+        }
+
+        public async Task<Tag> FindByNameAsync(string name)
+        {
             return await DbSet.FirstOrDefaultAsync(t=>t.Name == name);
         }
 
         public async Task<List<Tag>> GetListAsync(IEnumerable<Guid> ids)
         {
             return await DbSet.Where(c => ids.Contains(c.Id)).ToListAsync();
+        }
+
+        public void DecreaseUsageCountOfTags(List<Guid> ids)
+        {
+            var tags = DbSet.Where(t => ids.Any(id => id == t.Id));
+
+            foreach (var tag in tags)
+            {
+                tag.DecreaseUsageCount();
+            }
         }
     }
 }

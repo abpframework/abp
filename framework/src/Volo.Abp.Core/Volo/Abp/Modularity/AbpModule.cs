@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Volo.Abp.Modularity
@@ -89,6 +90,30 @@ namespace Volo.Abp.Modularity
             where TOptions : class
         {
             ServiceConfigurationContext.Services.Configure(configureOptions);
+        }
+
+        protected void Configure<TOptions>(string name, Action<TOptions> configureOptions)
+            where TOptions : class
+        {
+            ServiceConfigurationContext.Services.Configure(name, configureOptions);
+        }
+
+        protected void Configure<TOptions>(IConfiguration configuration)
+            where TOptions : class
+        {
+            ServiceConfigurationContext.Services.Configure<TOptions>(configuration);
+        }
+
+        protected void Configure<TOptions>(IConfiguration configuration, Action<BinderOptions> configureBinder)
+            where TOptions : class
+        {
+            ServiceConfigurationContext.Services.Configure<TOptions>(configuration, configureBinder);
+        }
+
+        protected void Configure<TOptions>(string name, IConfiguration configuration)
+            where TOptions : class
+        {
+            ServiceConfigurationContext.Services.Configure<TOptions>(name, configuration);
         }
 
         protected void PreConfigure<TOptions>(Action<TOptions> configureOptions)

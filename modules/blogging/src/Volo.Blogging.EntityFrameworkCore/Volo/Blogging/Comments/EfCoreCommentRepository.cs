@@ -35,5 +35,11 @@ namespace Volo.Blogging.Comments
             return await DbSet
                 .Where(a => a.RepliedCommentId == id).ToListAsync();
         }
+
+        public void DeleteOfPost(Guid id)
+        {
+            var recordsToDelete = DbSet.Where(pt => pt.PostId == id);
+            DbSet.RemoveRange(recordsToDelete);
+        }
     }
 }

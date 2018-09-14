@@ -1,9 +1,9 @@
 using System;
 using Volo.Abp.Application.Dtos;
 
-namespace Volo.Blogging.Blogs
+namespace Volo.Blogging.Blogs.Dtos
 {
-    public class CreateBlogDto
+    public class BlogDto : FullAuditedEntityDto<Guid>
     {
         public string Name { get; set; }
 

@@ -13,6 +13,8 @@ namespace Volo.Blogging.Posts
 
         Task<PostWithDetailsDto> GetAsync(Guid id);
 
+        Task DeleteAsync(Guid id);
+
         Task<PostWithDetailsDto> CreateAsync(CreatePostDto input);
 
         Task<PostWithDetailsDto> UpdateAsync(Guid id, UpdatePostDto input);

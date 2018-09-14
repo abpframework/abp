@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Entities;
+using Volo.Blogging.Blogs.Dtos;
 
 namespace Volo.Blogging.Blogs
 {
@@ -15,6 +17,18 @@ namespace Volo.Blogging.Blogs
         {
             _blogRepository = blogRepository;
         }
+
+        public async Task<PagedResultDto<BlogDto>> GetListPagedAsync(PagedAndSortedResultRequestDto input)
+        {
+            var blogs = await _blogRepository.GetListAsync(input.Sorting, input.MaxResultCount, input.SkipCount );
+
+            var totalCount = await _blogRepository.GetTotalBlogCount();
+
+            var dtos = ObjectMapper.Map<List<Blog>, List<BlogDto>>(blogs);
+
+            return new PagedResultDto<BlogDto>(totalCount, dtos);
+        }
+
         public async Task<ListResultDto<BlogDto>> GetListAsync()
         {
             var blogs = await _blogRepository.GetListAsync();
@@ -43,11 +57,30 @@ namespace Volo.Blogging.Blogs
             return ObjectMapper.Map<Blog, BlogDto>(blog);
         }
 
+        [Authorize(BloggingPermissions.Blogs.Create)]
         public async Task<BlogDto> Create(CreateBlogDto input)
         {
             var newBlog = await _blogRepository.InsertAsync(new Blog(GuidGenerator.Create(), input.Name, input.ShortName){Description = input.Description});
 
             return ObjectMapper.Map<Blog, BlogDto>(newBlog);
+        }
+
+        [Authorize(BloggingPermissions.Blogs.Update)]
+        public async Task<BlogDto> Update(Guid id, UpdateBlogDto input)
+        {
+            var blog = await _blogRepository.GetAsync(id);
+
+            blog.SetName(input.Name);
+            blog.SetShortName(input.ShortName);
+            blog.Description = input.Description;
+
+            return ObjectMapper.Map<Blog, BlogDto>(blog);
+        }
+
+        [Authorize(BloggingPermissions.Blogs.Delete)]
+        public async Task Delete(Guid id)
+        {
+            await _blogRepository.DeleteAsync(id);
         }
     }
 }

@@ -36,6 +36,8 @@
     <Content Remove="Pages\**\*.css" />
     <Content Remove="compilerconfig.json" />
     <Content Remove="Properties\launchSettings.json" />
+    <None Remove="Pages\Admin\Blogs\create.js" />
+    <None Remove="Pages\Admin\Blogs\edit.js" />
     <None Include="compilerconfig.json" />
     <None Include="Properties\launchSettings.json" />
   </ItemGroup>

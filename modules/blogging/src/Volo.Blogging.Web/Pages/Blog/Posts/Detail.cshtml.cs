@@ -1,12 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
-using CommonMark;
-using Microsoft.AspNetCore.Html;
+using System.Web;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Volo.Blogging.Blogs;
+using Volo.Blogging.Blogs.Dtos;
 using Volo.Blogging.Comments;
 using Volo.Blogging.Comments.Dtos;
 using Volo.Blogging.Posts;
@@ -15,6 +14,7 @@ namespace Volo.Blogging.Pages.Blog.Posts
 {
     public class DetailModel : PageModel
     {
+        private const int TwitterLinkLength = 23;
         private readonly IPostAppService _postAppService;
         private readonly IBlogAppService _blogAppService;
         private readonly ICommentAppService _commentAppService;
@@ -27,12 +27,10 @@ namespace Volo.Blogging.Pages.Blog.Posts
 
         [BindProperty]
         public PostDetailsViewModel NewComment { get; set; }
-        
+
         public int CommentCount { get; set; }
 
         public PostWithDetailsDto Post { get; set; }
-
-        public IHtmlContent FormattedContent { get; set; }
 
         public IReadOnlyList<CommentWithRepliesDto> CommentsWithReplies { get; set; }
 
@@ -73,7 +71,6 @@ namespace Volo.Blogging.Pages.Blog.Posts
         {
             Blog = await _blogAppService.GetByShortNameAsync(BlogShortName);
             Post = await _postAppService.GetForReadingAsync(new GetPostInput { BlogId = Blog.Id, Url = PostUrl });
-            FormattedContent = RenderMarkdown(Post.Content);
             CommentsWithReplies = await _commentAppService.GetHierarchicalListOfPostAsync(new GetCommentListOfPostAsync() { PostId = Post.Id });
             CountComments();
         }
@@ -87,14 +84,20 @@ namespace Volo.Blogging.Pages.Blog.Posts
             }
         }
 
-        public IHtmlContent RenderMarkdown(string content)
+        public string GetTwitterShareUrl(string title, string url)
         {
-            byte[] bytes = Encoding.Default.GetBytes(content);
-            var utf8Content = Encoding.UTF8.GetString(bytes);
+            var readAtString = " | Read More At";
+            var linkedAccounts = "" ;
 
-            var html = CommonMarkConverter.Convert(utf8Content);
-            
-            return new HtmlString(html);
+            var otherCharsLength = (readAtString + linkedAccounts).Length;
+            var maxTitleLength = 280 - TwitterLinkLength - otherCharsLength;
+
+            title = title.Length < maxTitleLength ? title : title.Substring(0, maxTitleLength -3) + "...";
+
+            var text = title + readAtString + url + linkedAccounts;
+
+            var builder = new UriBuilder("https://twitter.com/intent/tweet") { Query = "text=" + HttpUtility.UrlEncode(text) };
+            return builder.ToString();
         }
 
         public class PostDetailsViewModel

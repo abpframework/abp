@@ -28,7 +28,7 @@
             autoplay: true,
             autoHeight: true,
             autoplaySpeed: 1000,
-            items: 1
+            items: 1,
         });
         $('.card-article-container .owl-carousel').owlCarousel({
             loop: true,

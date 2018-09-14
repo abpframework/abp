@@ -21,6 +21,8 @@ namespace Volo.Blogging.Posts
 
         public int CommentCount { get; set; }
 
+        public BlogUserDto Writer { get; set; }
+
         public List<TagDto> Tags { get; set; }
     }
 }

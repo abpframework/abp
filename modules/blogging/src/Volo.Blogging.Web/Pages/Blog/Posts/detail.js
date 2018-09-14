@@ -1,5 +1,7 @@
 ﻿(function ($) {
 
+    var l = abp.localization.getResource('Blogging');
+
     $('div .replyForm').hide();
     $('div .editForm').hide();
 
@@ -25,6 +27,7 @@
 
     $('.replyLink').click(function (event) {
         event.preventDefault();
+        $('div .editForm').hide();
         var linkElement = $(this);
         var replyCommentId = linkElement.attr('data-relpyid');
 
@@ -48,8 +51,8 @@
 
         if (deleteCommentId != '' && deleteCommentId !== undefined) {
             abp.message.confirm(
-                'Comment will be deleted.', // TODO: localize
-                'Are you sure?',
+                l('CommentDeletionWarningMessage'), // TODO: localize
+                l('Are you sure?'),
                 function(isConfirmed) {
                     if (isConfirmed) {
                         $.ajax({
@@ -68,6 +71,8 @@
 
     $('.updateLink').click(function (event) {
         event.preventDefault();
+        $('div .replyForm').hide();
+
         var linkElement = $(this);
         var updateCommentId = $(this).attr('data-updateid');
 
