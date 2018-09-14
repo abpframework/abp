@@ -71,7 +71,7 @@ namespace Volo.Blogging.Pages.Blog
             return CommonMarkConverter.Convert(utf8Content);
         }
 
-        public string ConvertDatetimeToTimeAgo(DateTime dt)
+        public LocalizedHtmlString ConvertDatetimeToTimeAgo(DateTime dt)
         {
             var timeDiff = DateTime.Now - dt;
 
@@ -79,37 +79,37 @@ namespace Volo.Blogging.Pages.Blog
 
             if (diffInDays >= 365)
             {
-                return diffInDays / 365 + L["YearsAgo"].Value;
+                return  L["YearsAgo", diffInDays / 365];
             }
             if (diffInDays >= 30)
             {
-                return diffInDays / 30 + L["MonthsAgo"].Value;
+                return L["MonthsAgo", diffInDays / 30];
             }
             if (diffInDays >= 7)
             {
-                return diffInDays / 7 + L["WeeksAgo"].Value;
+                return L["WeeksAgo", diffInDays / 7];
             }
             if (diffInDays >= 1)
             {
-                return diffInDays + L["DaysAgo"].Value;
+                return L["DaysAgo", diffInDays];
             }
 
             var diffInSeconds = (int) timeDiff.TotalSeconds;
 
             if (diffInSeconds >= 3600)
             {
-                return diffInSeconds / 3600 + L["HoursAgo"].Value;
+                return L["HoursAgo", diffInSeconds / 3600];
             }
             if (diffInSeconds >= 60)
             {
-                return diffInSeconds / 60 + L["MinutesAgo"].Value;
+                return L["MinutesAgo", diffInSeconds];
             }
             if (diffInSeconds >= 1)
             {
-                return diffInSeconds + L["SecondsAgo"].Value;
+                return  L["SecondsAgo", diffInSeconds];
             }
 
-            return L["Now"].Value;
+            return L["Now"];
         }
     }
 }
