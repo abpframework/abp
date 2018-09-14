@@ -12,7 +12,7 @@ namespace Volo.Docs.Documents
 {
     public class GithubDocumentStore : IDocumentStore, ITransientDependency
     {
-        public const string Type = "Github";
+        public const string Type = "Github"; //TODO: Conver to "github"
 
         public async Task<Document> FindDocumentByNameAsync(Project project, string documentName, string version)
         {

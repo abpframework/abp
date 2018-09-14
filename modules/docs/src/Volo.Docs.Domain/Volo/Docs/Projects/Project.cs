@@ -9,25 +9,43 @@ namespace Volo.Docs.Projects
 {
     public class Project : AggregateRoot<Guid>, IHasExtraProperties
     {
+        /// <summary>
+        /// Name of the project for display purposes.
+        /// </summary>
         public virtual string Name { get; protected set; }
 
+        /// <summary>
+        /// A short name of the project to be seen in URLs.
+        /// </summary>
         public virtual string ShortName { get; protected set; }
 
+        /// <summary>
+        /// The format of the document (e.g. "md" for Markdown, "html" for HTML).
+        /// </summary>
         public virtual string Format { get; protected set; }
 
+        /// <summary>
+        /// The document for the initial page.
+        /// </summary>
         public virtual string DefaultDocumentName { get; protected set; }
 
+        /// <summary>
+        /// The document to be used for the navigation menu (index).
+        /// </summary>
         public virtual string NavigationDocumentName { get; protected set; }
 
+        /// <summary>
+        /// The source of the documents (e.g. Github).
+        /// </summary>
         public virtual string DocumentStoreType { get; protected set; }
 
         public virtual string GoogleCustomSearchId { get; set; }
 
-        public Dictionary<string, object> ExtraProperties { get; protected set; }
+        public virtual Dictionary<string, object> ExtraProperties { get; protected set; }
 
         protected Project()
         {
-            ExtraProperties = new Dictionary<string, object>(); //TODO: Needed (by mongodb)..?
+            ExtraProperties = new Dictionary<string, object>();
         }
 
         public Project(Guid id, [NotNull] string name, [NotNull] string shortName, [NotNull] string defaultDocumentName, [NotNull] string navigationDocumentName, string googleCustomSearchId)
