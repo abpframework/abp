@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
-using CommonMark;
-using Microsoft.AspNetCore.Html;
+using System.Web;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Volo.Blogging.Blogs;
@@ -16,6 +14,7 @@ namespace Volo.Blogging.Pages.Blog.Posts
 {
     public class DetailModel : PageModel
     {
+        private const int TwitterLinkLength = 23;
         private readonly IPostAppService _postAppService;
         private readonly IBlogAppService _blogAppService;
         private readonly ICommentAppService _commentAppService;
@@ -28,7 +27,7 @@ namespace Volo.Blogging.Pages.Blog.Posts
 
         [BindProperty]
         public PostDetailsViewModel NewComment { get; set; }
-        
+
         public int CommentCount { get; set; }
 
         public PostWithDetailsDto Post { get; set; }
@@ -83,6 +82,22 @@ namespace Volo.Blogging.Pages.Blog.Posts
             {
                 CommentCount += commentWithReply.Replies.Count;
             }
+        }
+
+        public string GetTwitterShareUrl(string title, string url)
+        {
+            var readAtString = " | Read More At";
+            var linkedAccounts = "" ;
+
+            var otherCharsLength = (readAtString + linkedAccounts).Length;
+            var maxTitleLength = 280 - TwitterLinkLength - otherCharsLength;
+
+            title = title.Length < maxTitleLength ? title : title.Substring(0, maxTitleLength -3) + "...";
+
+            var text = title + readAtString + url + linkedAccounts;
+
+            var builder = new UriBuilder("https://twitter.com/intent/tweet") { Query = "text=" + HttpUtility.UrlEncode(text) };
+            return builder.ToString();
         }
 
         public class PostDetailsViewModel
