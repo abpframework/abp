@@ -155,31 +155,34 @@
                 }
             </div>
 
-            <a class="twitter-share-button"
-               href="@Model.GetTwitterShareUrl(Model.Post.Title,  HttpContext.Request.GetEncodedUrl())" target="_blank">
-                Tweet
+            <a class="btn-rounded float-right btn btn-primary"
+               href="@Model.GetTwitterShareUrl(Model.Post.Title, HttpContext.Request.GetEncodedUrl())" target="_blank">
+                <i class="fa fa-twitter"></i>
+                @L["ShareOnTwitter"]
             </a>
 
-            <div class="comment-form mt-4">
-                <div class="vs-blog-title mb-0">
-                    <h3>@L["LeaveComment"]</h3>
-                </div>
-                <div class="clearfix bg-light p-4">
-                    <div>
-                        <form method="post">
-                            <input name="postId" value="@Model.Post.Id" hidden />
-                            <input name="repliedCommentId" id="repliedCommentId" hidden />
-                            <div class="form-group">
-                                <textarea class="form-control no-border" name="text" id="textBoxId" rows="4"></textarea>
-                            </div>
-                            <abp-button button-type="Primary" class="btn-rounded float-right" type="submit" text="@L["Submit"].Value" />
-                        </form>
+            @if (await Authorization.IsGrantedAsync(BloggingPermissions.Comments.Create))
+            {
+                <div class="comment-form mt-4">
+                    <div class="vs-blog-title mb-0">
+                        <h3>@L["LeaveComment"]</h3>
+                    </div>
+                    <div class="clearfix bg-light p-4">
+                        <div>
+                            <form method="post">
+                                <input name="postId" value="@Model.Post.Id" hidden />
+                                <input name="repliedCommentId" id="repliedCommentId" hidden />
+                                <div class="form-group">
+                                    <textarea class="form-control no-border" name="text" id="textBoxId" rows="4"></textarea>
+                                </div>
+                                <abp-button button-type="Primary" class="btn-rounded float-right" type="submit" text="@L["Submit"].Value" />
+                            </form>
+                        </div>
                     </div>
                 </div>
-            </div>
+            }
+
             <div class="comment-area">
-
-
                 @foreach (var commentWithRepliesDto in Model.CommentsWithReplies)
                 {
                     <div class="media">
