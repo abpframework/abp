@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.AuditLogging.EntityFrameworkCore;
+using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.SqlServer;
 using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.Modularity;
@@ -12,7 +14,10 @@ namespace MyCompanyName.MyProjectName.EntityFrameworkCore
         typeof(AbpIdentityEntityFrameworkCoreModule),
         typeof(AbpPermissionManagementEntityFrameworkCoreModule),
         typeof(AbpSettingManagementEntityFrameworkCoreModule),
-        typeof(AbpEntityFrameworkCoreSqlServerModule))]
+        typeof(AbpEntityFrameworkCoreSqlServerModule),
+        typeof(BackgroundJobsEntityFrameworkCoreModule),
+        typeof(AbpAuditLoggingEntityFrameworkCoreModule)
+        )]
     public class MyProjectNameEntityFrameworkCoreModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)

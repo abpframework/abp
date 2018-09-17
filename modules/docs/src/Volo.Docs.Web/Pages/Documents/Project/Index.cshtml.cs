@@ -48,7 +48,7 @@ namespace Volo.Docs.Pages.Documents.Project
                 Version = latestVersion.Version;
             }
 
-            latestVersion.DisplayText = $"latest {latestVersion.Version}";
+            latestVersion.DisplayText = $"{latestVersion.Version} (latest)";
             latestVersion.Version = "latest";
 
             Document = await _documentAppService.GetByNameAsync(ProjectName, DocumentName, Version);

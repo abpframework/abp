@@ -2,6 +2,8 @@
 using MyCompanyName.MyProjectName.Localization.MyProjectName;
 using MyCompanyName.MyProjectName.Settings;
 using Volo.Abp.Auditing;
+using Volo.Abp.AuditLogging;
+using Volo.Abp.BackgroundJobs;
 using Volo.Abp.Identity;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.Resources.AbpValidation;
@@ -13,7 +15,10 @@ namespace MyCompanyName.MyProjectName
 {
     [DependsOn(
         typeof(AbpIdentityDomainModule),
-        typeof(AbpAuditingModule))] //TODO: Replace with AbpAuditLoggingDomainModule when it's done.
+        typeof(AbpAuditingModule),
+        typeof(BackgroundJobsDomainModule),
+        typeof(AbpAuditLoggingDomainModule)
+        )]
     public class MyProjectNameDomainModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)

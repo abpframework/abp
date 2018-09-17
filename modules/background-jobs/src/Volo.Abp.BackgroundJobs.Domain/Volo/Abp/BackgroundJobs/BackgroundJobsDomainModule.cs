@@ -9,7 +9,7 @@ namespace Volo.Abp.BackgroundJobs
         typeof(AbpBackgroundJobsModule),
         typeof(AbpAutoMapperModule)
         )]
-    public class BackgroundJobsDomainModule : AbpModule
+    public class BackgroundJobsDomainModule : AbpModule //TODO: Rename to AbpBackgroundJobsDomainModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
