@@ -4,6 +4,7 @@
 @using Microsoft.AspNetCore.Http.Extensions
 @using Volo.Blogging
 @using Volo.Blogging.Pages.Blog.Posts
+@using Volo.Blogging.Areas.Blog.Helpers.TagHelpers
 @inject IAuthorizationService Authorization
 @model DetailModel
 @{
@@ -36,9 +37,6 @@
                     <div class="article-infos">
                         <div class="user-card">
                             <a>
-                                <img src="https://placeimg.com/60/60/people" class="article-avatar">
-                            </a>
-                            <a >
                                 <strong> @(Model.Post.Writer == null ? "" : Model.Post.Writer.UserName)</strong>, @ConvertDatetimeToTimeAgo(Model.Post.CreationTime)
                             </a>
                             <span class="seperator">|</span>
@@ -46,7 +44,7 @@
                                 <i class="fa fa-eye"></i>  @L["ReadWithCount", @Model.Post.ReadCount]
                             </a>
                             <span class="seperator">|</span>
-                            <a >
+                            <a>
                                 <i class="fa fa-comment"></i> @L["CommentWithCount", @Model.CommentCount]
                             </a>
 
@@ -96,14 +94,14 @@
                             }
                         </p>
                         <h1>
-                            <a  asp-page="./Detail" asp-route-postUrl="@Model.Post.Url" asp-route-blogShortName="@Model.BlogShortName">@Model.Post.Title</a>
+                            <a asp-page="./Detail" asp-route-postUrl="@Model.Post.Url" asp-route-blogShortName="@Model.BlogShortName">@Model.Post.Title</a>
                         </h1>
                     </div>
                     <div class="article-owner">
                         <div class="article-infos">
                             <div class="user-card">
                                 <a>
-                                    <img src="https://placeimg.com/60/60/people" class="article-avatar">
+                                    <img gravatar-email="@Model.Post.Writer.Email" default-image="Identicon" class="article-avatar" />
                                 </a>
                                 <a>
                                     <strong> @(Model.Post.Writer == null ? "" : Model.Post.Writer.UserName)</strong>, @ConvertDatetimeToTimeAgo(Model.Post.CreationTime)
@@ -186,7 +184,7 @@
                 @foreach (var commentWithRepliesDto in Model.CommentsWithReplies)
                 {
                     <div class="media">
-                        <img class="d-flex mr-3 rounded-circle comment-avatar" src="https://placeimg.com/120/120/people" alt="">
+                        <img gravatar-email="@commentWithRepliesDto.Comment.Writer.Email" default-image="Identicon" class="d-flex mr-3 rounded-circle comment-avatar"  />
                         <div class="media-body">
                             <h5 class="comment-owner">
                                 @(commentWithRepliesDto.Comment.Writer == null ? "" : commentWithRepliesDto.Comment.Writer.UserName)
@@ -263,7 +261,7 @@
                             @foreach (var reply in commentWithRepliesDto.Replies)
                             {
                                 <div class="media">
-                                    <img class="d-flex mr-3 rounded-circle answer-avatar" src="https://placeimg.com/120/120/people?t=1535457179534" alt="">
+                                    <img gravatar-email="@reply.Writer.Email" default-image="Identicon" class="d-flex mr-3 rounded-circle comment-avatar"  />
                                     <div class="media-body">
                                         <h5 class="comment-owner">
                                             @(reply.Writer == null ? "" : reply.Writer.UserName)

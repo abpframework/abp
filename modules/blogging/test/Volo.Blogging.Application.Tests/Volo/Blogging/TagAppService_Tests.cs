@@ -1,12 +1,6 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Shouldly;
-using Volo.Blogging.Blogs;
-using Volo.Blogging.Blogs.Dtos;
-using Volo.Blogging.Comments;
-using Volo.Blogging.Comments.Dtos;
-using Volo.Blogging.Posts;
 using Volo.Blogging.Tagging;
 using Volo.Blogging.Tagging.Dtos;
 using Xunit;

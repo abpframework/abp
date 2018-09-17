@@ -86,7 +86,7 @@ namespace Volo.Blogging.Pages.Blog.Posts
 
         public string GetTwitterShareUrl(string title, string url)
         {
-            var readAtString = " | Read More At";
+            var readAtString = " | Read More At ";
             var linkedAccounts = "" ;
 
             var otherCharsLength = (readAtString + linkedAccounts).Length;
