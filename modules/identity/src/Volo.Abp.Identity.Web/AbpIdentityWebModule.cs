@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Identity.Localization;
@@ -21,6 +22,7 @@ namespace Volo.Abp.Identity.Web
     [DependsOn(typeof(AbpAspNetCoreMvcUiBootstrapModule))]
     [DependsOn(typeof(AbpAutoMapperModule))]
     [DependsOn(typeof(AbpPermissionManagementWebModule))]
+    [DependsOn(typeof(AbpAspNetCoreMvcUiThemeSharedModule))]
     public class AbpIdentityWebModule : AbpModule
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
