@@ -2,6 +2,10 @@
 @model ApplicationMenu
 @foreach (var menuItem in Model.Items)
 {
+    var elementId = string.IsNullOrEmpty(menuItem.ElementId) ? string.Empty : $"id=\"{menuItem.ElementId}\"";
+    var cssClass = string.IsNullOrEmpty(menuItem.CssClass) ? string.Empty : menuItem.CssClass;
+    var disabled = menuItem.IsDisabled ? "disabled" : string.Empty;
+
     if (menuItem.IsLeaf)
     {
         if (menuItem.Url == null)
@@ -9,7 +13,7 @@
             continue;
         }
 
-        <li class="nav-item @(menuItem.IsDisabled ? "disabled" : "")">
+        <li class="nav-item @cssClass @disabled" @elementId>
             <a class="nav-link" href="@(menuItem.Url ?? "#")">
                 @if (menuItem.Icon != null)
                 {
@@ -29,7 +33,9 @@
             <div class="dropdown-menu" aria-labelledby="Menu_@(menuItem.Name)">
                 @foreach (var childMenuItem in menuItem.Items)
                 {
-                    <a class="dropdown-item" href="@(childMenuItem.Url ?? "#")">@childMenuItem.DisplayName</a>
+                    <a class="dropdown-item @cssClass @disabled" href="@(childMenuItem.Url ?? "#")" @Html.Raw(elementId)>
+                        @childMenuItem.DisplayName
+                    </a>
                 }
             </div>
         </li>

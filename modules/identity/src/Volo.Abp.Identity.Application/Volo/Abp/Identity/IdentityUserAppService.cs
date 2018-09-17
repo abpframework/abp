@@ -113,7 +113,6 @@ namespace Volo.Abp.Identity
             await _permissionAppServiceHelper.UpdateAsync(UserPermissionValueProvider.ProviderName, id.ToString(), input);
         }
 
-        [Authorize(IdentityPermissions.Users.Default)]
         public async Task<IdentityUserDto> FindByUsernameAsync(string username)
         {
             return ObjectMapper.Map<IdentityUser, IdentityUserDto>(
@@ -121,12 +120,22 @@ namespace Volo.Abp.Identity
             );
         }
 
-        [Authorize(IdentityPermissions.Users.Default)]
         public async Task<IdentityUserDto> FindByEmailAsync(string email)
         {
             return ObjectMapper.Map<IdentityUser, IdentityUserDto>(
                 await _userManager.FindByEmailAsync(email)
             );
+        }
+
+        public async Task ChangePasswordAsync(string currentPassword, string newPassword)
+        {
+            if (!CurrentUser.Id.HasValue)
+            {
+                throw new AbpException("Current user Id is null!");
+            }
+
+            var currentUser = await _userManager.GetByIdAsync(CurrentUser.Id.Value);
+            (await _userManager.ChangePasswordAsync(currentUser, currentPassword, newPassword)).CheckErrors();
         }
 
         private async Task UpdateUserByInput(IdentityUser user, IdentityUserCreateOrUpdateDtoBase input)
