@@ -24,6 +24,7 @@
     "Posts": "Yazılar",
     "Edit": "Düzenle",
     "CommentDeletionWarningMessage": "Yorum silinecek.",
+    "PostDeletionWarningMessage": "Yazı silinecek.",
     "BlogDeletionWarningMessage": "Blog silinecek.",
     "AreYouSure": "Emin misiniz?",
     "CommentWithCount": "{0} Yorum",

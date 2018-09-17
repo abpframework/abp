@@ -69,6 +69,35 @@
         }
     });
 
+    $('#DeletePostLink').click(function (event) {
+        event.preventDefault();
+        var linkElement = $(this);
+        var deleteCommentId = linkElement.attr('data-postid');
+        var blogShortName = linkElement.attr('data-blogShortName');
+
+        if (deleteCommentId != '' && deleteCommentId !== undefined) {
+            abp.message.confirm(
+                l('PostDeletionWarningMessage'), // TODO: localize
+                l('AreYouSure'),
+                function(isConfirmed) {
+                    if (isConfirmed) {
+                        $.ajax({
+                            type: "POST",
+                            url: "/Blog/Posts/Delete",
+                            data: { id: deleteCommentId },
+                            success: function (response) {
+                                window.location.replace('/Blog/' + blogShortName);
+                            }
+                        });
+                    }
+                }
+            );
+        }
+    });
+    $('#DeletePostRouteLink').click(function (event) {
+        console.log("goooo");
+    });
+
     $('.updateLink').click(function (event) {
         event.preventDefault();
         $('div .replyForm').hide();

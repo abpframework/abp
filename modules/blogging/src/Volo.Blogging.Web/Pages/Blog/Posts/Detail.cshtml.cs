@@ -60,14 +60,7 @@ namespace Volo.Blogging.Pages.Blog.Posts
 
             await GetData();
         }
-
-        public async Task OnDeleteAsync(Guid commentId)
-        {
-            await _commentAppService.DeleteAsync(commentId);
-
-            await GetData();
-        }
-
+        
         private async Task GetData()
         {
             Blog = await _blogAppService.GetByShortNameAsync(BlogShortName);

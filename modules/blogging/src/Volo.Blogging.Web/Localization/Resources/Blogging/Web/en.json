@@ -23,6 +23,7 @@
     "Posts": "Posts",
     "Edit": "Edit",
     "CommentDeletionWarningMessage": "Comment will be deleted.",
+    "PostDeletionWarningMessage": "Post will be deleted.",
     "BlogDeletionWarningMessage": "Blog will be deleted.",
     "AreYouSure": "Are you sure?",
     "Comment": "{0} Comment",

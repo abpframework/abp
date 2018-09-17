@@ -47,15 +47,6 @@
                             <a>
                                 <i class="fa fa-comment"></i> @L["CommentWithCount", @Model.CommentCount]
                             </a>
-
-
-                            @if (await Authorization.IsGrantedAsync(BloggingPermissions.Posts.Update) || (CurrentUser.Id == Model.Post.CreatorId))
-                            {
-                                <span class="seperator">|</span>
-                                <a asp-page="./Edit" asp-route-postId="@Model.Post.Id" asp-route-blogShortName="@Model.BlogShortName">
-                                    <i class="fa fa-pencil"></i>  @L["Edit"]
-                                </a>
-                            }
                         </div>
                     </div>
                 </div>
@@ -114,13 +105,18 @@
                                 <a>
                                     <i class="fa fa-comment"></i> @L["CommentWithCount", @Model.CommentCount]
                                 </a>
-
-
                                 @if (await Authorization.IsGrantedAsync(BloggingPermissions.Posts.Update))
                                 {
                                     <span class="seperator">|</span>
                                     <a asp-page="./Edit" asp-route-postId="@Model.Post.Id" asp-route-blogShortName="@Model.BlogShortName">
                                         <i class="fa fa-pencil"></i>  @L["Edit"]
+                                    </a>
+                                }
+                                @if (await Authorization.IsGrantedAsync(BloggingPermissions.Posts.Delete) || (CurrentUser.Id == Model.Post.CreatorId))
+                                {
+                                    <span class="seperator">|</span>
+                                    <a href="#" id="DeletePostLink" data-postid="@Model.Post.Id" data-blogShortName="@Model.BlogShortName">
+                                        <i class="fa fa-trash"></i>  @L["Delete"]
                                     </a>
                                 }
                             </div>
