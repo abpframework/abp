@@ -39,7 +39,7 @@ namespace Volo.Blogging.Posts
         public async Task<ListResultDto<PostWithDetailsDto>> GetListByBlogIdAndTagName(Guid id, string tagName)
         {
             var posts = _postRepository.GetPostsByBlogId(id);
-            var tag = tagName.IsNullOrWhiteSpace()? null: await _tagRepository.GetByNameAsync(tagName);
+            var tag = tagName.IsNullOrWhiteSpace() ? null : await _tagRepository.GetByNameAsync(tagName);
             var userDictionary = new Dictionary<Guid, BlogUserDto>();
             var postDtos = new List<PostWithDetailsDto>(ObjectMapper.Map<List<Post>, List<PostWithDetailsDto>>(posts));
 
@@ -68,7 +68,7 @@ namespace Volo.Blogging.Posts
 
             foreach (var postDto in postDtos)
             {
-                if (postDto.CreatorId.HasValue && userDictionary.ContainsKey((Guid) postDto.CreatorId))
+                if (postDto.CreatorId.HasValue && userDictionary.ContainsKey((Guid)postDto.CreatorId))
                 {
                     postDto.Writer = userDictionary[(Guid)postDto.CreatorId];
                 }
@@ -139,7 +139,7 @@ namespace Volo.Blogging.Posts
             await AuthorizationService.CheckAsync(post, CommonOperations.Delete);
 
             var tags = await GetTagsOfPost(id);
-            _tagRepository.DecreaseUsageCountOfTags(tags.Select(t=>t.Id).ToList());
+            _tagRepository.DecreaseUsageCountOfTags(tags.Select(t => t.Id).ToList());
             _postTagRepository.DeleteOfPost(id);
             _commentRepository.DeleteOfPost(id);
 
@@ -150,6 +150,8 @@ namespace Volo.Blogging.Posts
         public async Task<PostWithDetailsDto> UpdateAsync(Guid id, UpdatePostDto input)
         {
             var post = await _postRepository.GetAsync(id);
+
+            input.Url = await RenameUrlIfItAlreadyExistAsync(input.BlogId, input.Url, post);
 
             await AuthorizationService.CheckAsync(post, CommonOperations.Update);
 
@@ -169,6 +171,8 @@ namespace Volo.Blogging.Posts
         [Authorize(BloggingPermissions.Posts.Create)]
         public async Task<PostWithDetailsDto> CreateAsync(CreatePostDto input)
         {
+            input.Url = await RenameUrlIfItAlreadyExistAsync(input.BlogId, input.Url);
+
             var post = new Post(
                 id: GuidGenerator.Create(),
                 blogId: input.BlogId,
@@ -176,7 +180,8 @@ namespace Volo.Blogging.Posts
                 title: input.Title,
                 coverImage: input.CoverImage,
                 url: input.Url
-            ) {Content = input.Content};
+            )
+            { Content = input.Content };
 
             await _postRepository.InsertAsync(post);
 
@@ -184,6 +189,18 @@ namespace Volo.Blogging.Posts
             await SaveTags(tagList, post);
 
             return ObjectMapper.Map<Post, PostWithDetailsDto>(post);
+        }
+
+        private async Task<string> RenameUrlIfItAlreadyExistAsync(Guid blogId, string url, Post existingPost = null)
+        {
+            var postList = await _postRepository.GetListAsync();
+
+            if (postList.Where(p => p.Url == url).WhereIf(existingPost != null, p =>  existingPost.Id != p.Id).Any())
+            {
+                return url + "-" + Guid.NewGuid().ToString().Substring(0, 5);
+            }
+
+            return url;
         }
 
         private async Task SaveTags(List<String> newTags, Post post)
@@ -255,7 +272,7 @@ namespace Volo.Blogging.Posts
             {
                 return new List<string>();
             }
-            return new List<string>(tags.Split(",").Select(t=>t.Trim()));
+            return new List<string>(tags.Split(",").Select(t => t.Trim()));
         }
     }
 }
