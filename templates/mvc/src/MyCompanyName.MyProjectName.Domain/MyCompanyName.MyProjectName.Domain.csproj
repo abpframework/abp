@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="\Localization\MyProjectName\*.json" />
+    <EmbeddedResource Include="Localization\MyProjectName\*.json" />
   </ItemGroup>
 
 </Project>
