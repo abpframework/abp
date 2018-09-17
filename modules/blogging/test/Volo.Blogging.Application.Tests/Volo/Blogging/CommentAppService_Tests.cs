@@ -28,16 +28,57 @@ namespace Volo.Blogging
         [Fact]
         public async Task Should_Get_List_Of_Comments()
         {
-            var blog = (await _blogRepository.GetListAsync()).FirstOrDefault();
             var post = (await _postRepository.GetListAsync()).FirstOrDefault();
-            var comment1 = await _commentRepository.InsertAsync(new Comment(Guid.NewGuid(), post.Id, null, "qweasd"));
-            var comment2 = await _commentRepository.InsertAsync(new Comment(Guid.NewGuid(), post.Id, null, "qweasd"));
+            await _commentRepository.InsertAsync(new Comment(Guid.NewGuid(), post.Id, null, "qweasd"));
+            await _commentRepository.InsertAsync(new Comment(Guid.NewGuid(), post.Id, null, "qweasd"));
 
             var comments =
                 await _commentAppService.GetHierarchicalListOfPostAsync(
                     new GetCommentListOfPostAsync() { PostId = post.Id });
 
-            comments.Count.ShouldBe(2);
+            comments.Count.ShouldBeGreaterThan(2);
+        }
+
+        [Fact]
+        public async Task Should_Create_A_Comment()
+        {
+            var postId = (await _postRepository.GetListAsync()).First().Id;
+            var content = "test content";
+
+            var commentWithDetailsDto = await _commentAppService.CreateAsync(new CreateCommentDto()
+                {PostId = postId,Text = content});
+
+            UsingDbContext(context =>
+            {
+                var comment = context.Comments.FirstOrDefault(q => q.Id == commentWithDetailsDto.Id);
+                comment.ShouldNotBeNull();
+                comment.Text.ShouldBe(commentWithDetailsDto.Text);
+            });
+        }
+
+        [Fact]
+        public async Task Should_Update_A_Comment()
+        {
+            var newContent = "new content";
+
+            var oldComment = (await _commentRepository.GetListAsync()).FirstOrDefault(); ;
+
+            await _commentAppService.UpdateAsync(oldComment.Id, new UpdateCommentDto()
+                {Text = newContent});
+
+            UsingDbContext(context =>
+            {
+                var comment = context.Comments.FirstOrDefault(q => q.Id == oldComment.Id);
+                comment.Text.ShouldBe(newContent);
+            });
+        }
+
+        [Fact]
+        public async Task Should_Delete_A_Comment()
+        {
+            var comment = (await _commentRepository.GetListAsync()).First();
+
+            await _commentAppService.DeleteAsync(comment.Id);
         }
     }
 }

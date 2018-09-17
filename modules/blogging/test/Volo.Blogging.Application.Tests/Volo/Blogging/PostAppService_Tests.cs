@@ -12,14 +12,30 @@ namespace Volo.Blogging
         private readonly IPostAppService _postAppService;
         private readonly IBlogRepository _blogRepository;
         private readonly IPostRepository _postRepository;
-        private readonly BloggingTestData _testData;
 
         public PostAppService_Tests()
         {
-            _testData = GetRequiredService<BloggingTestData>();
             _postAppService = GetRequiredService<IPostAppService>();
             _blogRepository = GetRequiredService<IBlogRepository>();
             _postRepository = GetRequiredService<IPostRepository>();
+        }
+
+        [Fact]
+        public async Task Should_Get_List_Of_Posts()
+        {
+            var blogId = (await _blogRepository.GetListAsync()).First().Id;
+            var posts = await _postAppService.GetListByBlogIdAndTagName(blogId, null);
+            posts.Items.Count.ShouldBeGreaterThan(0);
+        }
+
+        [Fact]
+        public async Task Should_Get_Fore_Reading()
+        {
+            var blogId = (await _blogRepository.GetListAsync()).First().Id;
+            var post = (await _postRepository.GetListAsync()).First(p=>p.BlogId == blogId);
+            var postToRead = await _postAppService.GetForReadingAsync(new GetPostInput() {BlogId = blogId, Url = post.Url});
+
+            postToRead.ShouldNotBeNull();
         }
 
         [Fact]
@@ -78,6 +94,14 @@ namespace Volo.Blogging
                 post.Title.ShouldBe(newTitle);
                 post.Content.ShouldBe(newContent);
             });
+        }
+
+        [Fact]
+        public async Task Should_Delete_A_Post()
+        {
+            var post = (await _postRepository.GetListAsync()).First();
+
+            await _postAppService.DeleteAsync(post.Id);
         }
     }
 }
