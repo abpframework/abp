@@ -6,7 +6,8 @@
     "Permission:Posts": "Yazılar",
     "Permission:Tags": "Etiketler",
     "Permission:Comments": "Yorumlar",
-    "Permission:Edit": "Düzenke",
+    "Permission:Management": "Yönetme",
+    "Permission:Edit": "Düzenle",
     "Permission:Create": "Ekle",
     "Permission:Delete": "Sil"
   }

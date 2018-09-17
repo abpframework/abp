@@ -11,6 +11,7 @@ namespace Volo.Blogging
             var bloggingGroup = context.AddGroup(BloggingPermissions.GroupName, L("Permission:Blogging"));
 
             var blogs = bloggingGroup.AddPermission(BloggingPermissions.Blogs.Default, L("Permission:Blogs"));
+            blogs.AddChild(BloggingPermissions.Blogs.Management, L("Permission:Management"));
             blogs.AddChild(BloggingPermissions.Blogs.Update, L("Permission:Edit"));
             blogs.AddChild(BloggingPermissions.Blogs.Delete, L("Permission:Delete"));
             blogs.AddChild(BloggingPermissions.Blogs.Create, L("Permission:Create"));

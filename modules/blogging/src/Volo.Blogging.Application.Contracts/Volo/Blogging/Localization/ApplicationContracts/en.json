@@ -6,6 +6,7 @@
     "Permission:Posts": "Posts",
     "Permission:Tags": "Tags",
     "Permission:Comments": "Comments",
+    "Permission:Management": "Management",
     "Permission:Edit": "Edit",
     "Permission:Create": "Create",
     "Permission:Delete": "Delete"

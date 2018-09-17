@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Blogging.Blogs;
 using Volo.Blogging.Blogs.Dtos;
 using Volo.Blogging.Posts;
@@ -10,7 +11,7 @@ using Volo.Blogging.Tagging.Dtos;
 
 namespace Volo.Blogging.Pages.Blog.Posts
 {
-    public class IndexModel : PageModel
+    public class IndexModel : AbpPageModel
     {
         private readonly IPostAppService _postAppService;
         private readonly IBlogAppService _blogAppService;

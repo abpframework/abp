@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Web;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Blogging.Blogs;
 using Volo.Blogging.Blogs.Dtos;
 using Volo.Blogging.Comments;
@@ -12,7 +13,7 @@ using Volo.Blogging.Posts;
 
 namespace Volo.Blogging.Pages.Blog.Posts
 {
-    public class DetailModel : PageModel
+    public class DetailModel : AbpPageModel
     {
         private const int TwitterLinkLength = 23;
         private readonly IPostAppService _postAppService;

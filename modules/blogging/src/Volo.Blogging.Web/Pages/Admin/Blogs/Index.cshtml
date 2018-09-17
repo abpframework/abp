@@ -3,7 +3,7 @@
 @using Volo.Blogging
 @using Volo.Blogging.Pages.Blog
 @inherits BloggingPage
-@model IndexModel
+@model Volo.Blogging.Pages.Admin.Blogs.IndexModel
 @inject IAuthorizationService Authorization
 @{
     ViewBag.PageTitle = "Blogs";
@@ -12,6 +12,7 @@
 @section scripts {
     <abp-script src="/Pages/Admin/Blogs/index.js" />
     <abp-script src="/Pages/Admin/Blogs/create.js" />
+    <abp-script src="/Pages/Admin/Blogs/edit.js" />
 }
 
 <abp-card>
