@@ -26,7 +26,7 @@
             <div class="row">
                 <div class="col">
                     <h1 class="my-0 display-inline-block">
-                        @L["Volosoft"]
+                        @Model.Blog.ShortName
                         <small class="text-muted">
                             @L["Blog"]
                         </small>
@@ -35,18 +35,18 @@
                 <div class="article-owner">
                     <div class="article-infos">
                         <div class="user-card">
-                            <a href="#">
+                            <a>
                                 <img src="https://placeimg.com/60/60/people" class="article-avatar">
                             </a>
-                            <a href="#">
+                            <a >
                                 <strong> @(Model.Post.Writer == null ? "" : Model.Post.Writer.UserName)</strong>, @ConvertDatetimeToTimeAgo(Model.Post.CreationTime)
                             </a>
                             <span class="seperator">|</span>
-                            <a href="#">
+                            <a>
                                 <i class="fa fa-eye"></i>  @L["ReadWithCount", @Model.Post.ReadCount]
                             </a>
                             <span class="seperator">|</span>
-                            <a href="#">
+                            <a >
                                 <i class="fa fa-comment"></i> @L["CommentWithCount", @Model.CommentCount]
                             </a>
 
@@ -96,24 +96,24 @@
                             }
                         </p>
                         <h1>
-                            <a href="#">@Model.Post.Title</a>
+                            <a  asp-page="./Detail" asp-route-postUrl="@Model.Post.Url" asp-route-blogShortName="@Model.BlogShortName">@Model.Post.Title</a>
                         </h1>
                     </div>
                     <div class="article-owner">
                         <div class="article-infos">
                             <div class="user-card">
-                                <a href="#">
+                                <a>
                                     <img src="https://placeimg.com/60/60/people" class="article-avatar">
                                 </a>
-                                <a href="#">
+                                <a>
                                     <strong> @(Model.Post.Writer == null ? "" : Model.Post.Writer.UserName)</strong>, @ConvertDatetimeToTimeAgo(Model.Post.CreationTime)
                                 </a>
                                 <span class="vs-seperator">|</span>
-                                <a href="#">
+                                <a>
                                     <i class="fa fa-eye"></i> @L["ReadWithCount", @Model.Post.ReadCount]
                                 </a>
                                 <span class="vs-seperator">|</span>
-                                <a href="#">
+                                <a>
                                     <i class="fa fa-comment"></i> @L["CommentWithCount", @Model.CommentCount]
                                 </a>
 
