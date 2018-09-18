@@ -85,7 +85,7 @@
                             type: "POST",
                             url: "/Blog/Posts/Delete",
                             data: { id: deleteCommentId },
-                            success: function (response) {
+                            success: function () {
                                 window.location.replace('/Blog/' + blogShortName);
                             }
                         });

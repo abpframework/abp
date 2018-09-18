@@ -8,13 +8,26 @@
 }
 
 
-<abp-dynamic-form submit-button="false" abp-model="Blog" asp-page="/Admin/Blogs/Create">
+<form asp-page="/Admin/Blogs/Create">
     <abp-modal size="@(AbpModalSize.Large)">
         <abp-modal-header title="@L["Create"].Value"></abp-modal-header>
         <abp-modal-body>
-            <abp-form-content/>
+            <abp-tabs>
+                <abp-tab title="@L["Info"].Value">
+                    <abp-input asp-for="Blog.Name"/>
+                    <abp-input asp-for="Blog.ShortName"/>
+                    <abp-input asp-for="Blog.Description"/>
+                </abp-tab>
+                <abp-tab title="@L["Social"].Value">
+                    <abp-input asp-for="Blog.Facebook" />
+                    <abp-input asp-for="Blog.Twitter" />
+                    <abp-input asp-for="Blog.Instagram" />
+                    <abp-input asp-for="Blog.Github" />
+                    <abp-input asp-for="Blog.StackOverflow" />
+                </abp-tab>
+            </abp-tabs>
         </abp-modal-body>
         <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)">
         </abp-modal-footer>
     </abp-modal>
-</abp-dynamic-form>
+</form>

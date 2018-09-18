@@ -16,6 +16,21 @@ namespace Volo.Blogging.Blogs
         [CanBeNull]
         public virtual string Description { get; set; }
 
+        [CanBeNull]
+        public virtual string Facebook { get; set; }
+
+        [CanBeNull]
+        public virtual string Twitter { get; set; }
+
+        [CanBeNull]
+        public virtual string Instagram { get; set; }
+
+        [CanBeNull]
+        public virtual string Github { get; set; }
+
+        [CanBeNull]
+        public virtual string StackOverflow { get; set; }
+
         protected Blog()
         {
             

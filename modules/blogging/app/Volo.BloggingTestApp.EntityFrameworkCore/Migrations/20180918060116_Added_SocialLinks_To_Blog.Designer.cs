@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Volo.BloggingTestApp.EntityFrameworkCore;
 
 namespace Volo.BloggingTestApp.EntityFrameworkCore.Migrations
 {
     [DbContext(typeof(BloggingTestAppDbContext))]
-    partial class BloggingTestAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180918060116_Added_SocialLinks_To_Blog")]
+    partial class Added_SocialLinks_To_Blog
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -306,14 +308,17 @@ namespace Volo.BloggingTestApp.EntityFrameworkCore.Migrations
                         .HasMaxLength(1024);
 
                     b.Property<string>("Facebook")
+                        .IsRequired()
                         .HasColumnName("Facebook")
                         .HasMaxLength(128);
 
                     b.Property<string>("Github")
+                        .IsRequired()
                         .HasColumnName("Github")
                         .HasMaxLength(128);
 
                     b.Property<string>("Instagram")
+                        .IsRequired()
                         .HasColumnName("Instagram")
                         .HasMaxLength(128);
 
@@ -339,10 +344,12 @@ namespace Volo.BloggingTestApp.EntityFrameworkCore.Migrations
                         .HasMaxLength(32);
 
                     b.Property<string>("StackOverflow")
+                        .IsRequired()
                         .HasColumnName("StackOverflow")
                         .HasMaxLength(128);
 
                     b.Property<string>("Twitter")
+                        .IsRequired()
                         .HasColumnName("Twitter")
                         .HasMaxLength(128);
 
