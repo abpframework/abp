@@ -10,13 +10,11 @@
         paging: true,
         searching: false,
         autoWidth: false,
-        scrollX: true,
         scrollCollapse: true,
         order: [[3, "desc"]],
         ajax: abp.libs.datatables.createAjax(volo.blogging.blogs.getListPaged),
         columnDefs: [
             {
-                targets: 0,  //optional
                 rowAction: {
                     items:
                         [

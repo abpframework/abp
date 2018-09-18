@@ -3,6 +3,8 @@
   "texts": {
     "Menu:Blogs": "Blog",
     "Title": "Başlık",
+    "Delete": "Sil",
+    "Reply": "Yanıtla",
     "Menu:BlogManagement": "Blog Yönetimi",
     "ContinueReading": "Devamı...",
     "DaysAgo": "{0} Gün Önce",

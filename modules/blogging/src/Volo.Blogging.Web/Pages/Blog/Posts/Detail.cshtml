@@ -55,18 +55,41 @@
                     <a asp-page="/Blog/Posts/Index" asp-route-blogShortName="@Model.BlogShortName">
                         <i class="fa fa fa-angle-left"></i> @L["Blog"]
                     </a>
-                    <span class="vs-seperator">|</span>
-                    <a href="#">
-                        <i class="fa fa-twitter"></i>
-                    </a>
-                    <span class="vs-seperator">|</span>
-                    <a href="#">
-                        <i class="fa fa-github"></i>
-                    </a>
-                    <span class="vs-seperator">|</span>
-                    <a href="#">
-                        <i class="fa fa-stack-overflow"></i>
-                    </a>
+                    @if (!string.IsNullOrWhiteSpace(Model.Blog.Facebook))
+                    {
+                        <span class="vs-seperator">|</span>
+                        <a href="https://Facebook.com/@Model.Blog.Facebook">
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Blog.Twitter))
+                    {
+                        <span class="vs-seperator">|</span>
+                        <a href="https://twitter.com/@Model.Blog.Twitter">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Blog.Instagram))
+                    {
+                        <span class="vs-seperator">|</span>
+                        <a href="https://Instagram.com/@Model.Blog.Instagram">
+                            <i class="fa fa-instagram"></i>
+                        </a>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Blog.Github))
+                    {
+                        <span class="vs-seperator">|</span>
+                        <a href="https://Github.com/@Model.Blog.Github">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Blog.StackOverflow))
+                    {
+                        <span class="vs-seperator">|</span>
+                        <a href="https://StackOverflow.com/@Model.Blog.StackOverflow">
+                            <i class="fa fa-stack-overflow"></i>
+                        </a>
+                    }
                 </div>
             </div>
         </div>
@@ -150,7 +173,7 @@
             </div>
 
             <a class="btn-rounded float-right btn btn-primary"
-               href="@Model.GetTwitterShareUrl(Model.Post.Title, HttpContext.Request.GetEncodedUrl())" target="_blank">
+               href="@Model.GetTwitterShareUrl(Model.Post.Title, HttpContext.Request.GetEncodedUrl(), "@" + (Model.Blog.Twitter??""))" target="_blank">
                 <i class="fa fa-twitter"></i>
                 @L["ShareOnTwitter"]
             </a>

@@ -60,7 +60,7 @@ namespace Volo.Blogging.Pages.Blog.Posts
 
             await GetData();
         }
-        
+
         private async Task GetData()
         {
             Blog = await _blogAppService.GetByShortNameAsync(BlogShortName);
@@ -78,20 +78,19 @@ namespace Volo.Blogging.Pages.Blog.Posts
             }
         }
 
-        public string GetTwitterShareUrl(string title, string url)
+        public string GetTwitterShareUrl(string title, string url, string linkedAccounts)
         {
             var readAtString = " | Read More At ";
-            var linkedAccounts = "" ;
-
-            var otherCharsLength = (readAtString + linkedAccounts).Length;
+            var otherCharsLength = (readAtString + linkedAccounts).Length + 1;
             var maxTitleLength = 280 - TwitterLinkLength - otherCharsLength;
+            title = title.Length < maxTitleLength ? title : title.Substring(0, maxTitleLength - 3) + "...";
 
-            title = title.Length < maxTitleLength ? title : title.Substring(0, maxTitleLength -3) + "...";
+            var text = title +
+                       readAtString +
+                       url +
+                       " " + linkedAccounts;
 
-            var text = title + readAtString + url + linkedAccounts;
-
-            var builder = new UriBuilder("https://twitter.com/intent/tweet") { Query = "text=" + HttpUtility.UrlEncode(text) };
-            return builder.ToString();
+            return (new UriBuilder("https://twitter.com/intent/tweet") { Query = "text=" + HttpUtility.UrlEncode(text) }).ToString();
         }
 
         public class PostDetailsViewModel

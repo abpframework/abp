@@ -4,6 +4,8 @@
     "Menu:Blogs": "Blog",
     "Menu:BlogManagement": "Blog Management",
     "Title": "Title",
+    "Delete": "Delete",
+    "Reply": "Reply",
     "ContinueReading": "Continue Reading",
     "DaysAgo": "{0} days ago",
     "YearsAgo": "{0} years ago",
