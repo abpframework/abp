@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Text;
+using CommonMark;
+using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Localization;
 using Microsoft.AspNetCore.Mvc.Razor.Internal;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
@@ -13,6 +16,8 @@ namespace Volo.Blogging.Pages.Blog
 
         public const string DefaultTitle = "Blog";
 
+        public const int MaxShortContentLength = 128;
+
         public string GetTitle(string title = null)
         {
             if (string.IsNullOrWhiteSpace(title))
@@ -23,7 +28,50 @@ namespace Volo.Blogging.Pages.Blog
             return title;
         }
 
-        public string ConvertDatetimeToTimeAgo(DateTime dt)
+        public string GetShortContent(string content)
+        {
+            var openingTag = "<p>";
+            var closingTag = "</p>";
+
+            var html = RenderMarkdownToString(content);
+
+            var splittedHtml = html.Split(closingTag);
+
+            if (splittedHtml.Length < 1)
+            {
+                return "";
+            }
+
+            var firstHtmlPart = splittedHtml[0];
+            var paragraphStartIndex = firstHtmlPart.IndexOf(openingTag, StringComparison.Ordinal) + openingTag.Length;
+
+            if (firstHtmlPart.Length - paragraphStartIndex <= MaxShortContentLength)
+            {
+                return firstHtmlPart.Substring(paragraphStartIndex);
+            }
+
+            return firstHtmlPart.Substring(paragraphStartIndex, MaxShortContentLength) + "...";
+        }
+
+        public IHtmlContent RenderMarkdownToHtml(string content)
+        {
+            byte[] bytes = Encoding.Default.GetBytes(content);
+            var utf8Content = Encoding.UTF8.GetString(bytes);
+
+            var html = CommonMarkConverter.Convert(utf8Content);
+
+            return new HtmlString(html);
+        }
+
+        public string RenderMarkdownToString(string content)
+        {
+            byte[] bytes = Encoding.Default.GetBytes(content);
+            var utf8Content = Encoding.UTF8.GetString(bytes);
+
+            return CommonMarkConverter.Convert(utf8Content);
+        }
+
+        public LocalizedHtmlString ConvertDatetimeToTimeAgo(DateTime dt)
         {
             var timeDiff = DateTime.Now - dt;
 
@@ -31,37 +79,37 @@ namespace Volo.Blogging.Pages.Blog
 
             if (diffInDays >= 365)
             {
-                return diffInDays / 365 + L["YearsAgo"].Value;
+                return  L["YearsAgo", diffInDays / 365];
             }
             if (diffInDays >= 30)
             {
-                return diffInDays / 30 + L["MonthsAgo"].Value;
+                return L["MonthsAgo", diffInDays / 30];
             }
             if (diffInDays >= 7)
             {
-                return diffInDays / 7 + L["WeeksAgo"].Value;
+                return L["WeeksAgo", diffInDays / 7];
             }
             if (diffInDays >= 1)
             {
-                return diffInDays + L["DaysAgo"].Value;
+                return L["DaysAgo", diffInDays];
             }
 
             var diffInSeconds = (int) timeDiff.TotalSeconds;
 
             if (diffInSeconds >= 3600)
             {
-                return diffInSeconds / 3600 + L["HoursAgo"].Value;
+                return L["HoursAgo", diffInSeconds / 3600];
             }
             if (diffInSeconds >= 60)
             {
-                return diffInSeconds / 60 + L["MinutesAgo"].Value;
+                return L["MinutesAgo", diffInSeconds];
             }
             if (diffInSeconds >= 1)
             {
-                return diffInSeconds + L["SecondsAgo"].Value;
+                return  L["SecondsAgo", diffInSeconds];
             }
 
-            return L["Now"].Value;
+            return L["Now"];
         }
     }
 }

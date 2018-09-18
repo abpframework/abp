@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Linq;
 using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -7,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using MyCompanyName.MyProjectName.EntityFrameworkCore;
 using MyCompanyName.MyProjectName.Localization.MyProjectName;
 using MyCompanyName.MyProjectName.Menus;
+using MyCompanyName.MyProjectName.Permissions;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
@@ -62,7 +64,7 @@ namespace MyCompanyName.MyProjectName
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var hostingEnvironment = context.Services.GetHostingEnvironment();
-            var configuration = context.Services.BuildConfiguration();
+            var configuration = context.Services.GetConfiguration();
 
             ConfigureDatabaseServices(context.Services, configuration);
             ConfigureAutoMapper(context.Services);
@@ -204,7 +206,8 @@ namespace MyCompanyName.MyProjectName
                     .GetRequiredService<IIdentityDataSeeder>()
                     .SeedAsync(
                         "1q2w3E*",
-                        IdentityPermissions.GetAll() //.Union(MyProjectNamePermissions.GetAll())
+                        IdentityPermissions.GetAll()
+                            .Union(MyProjectNamePermissions.GetAll())
                     );
             });
         }

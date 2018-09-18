@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Blogging.Blogs;
+using Volo.Blogging.Blogs.Dtos;
 using Volo.Blogging.Posts;
 
 namespace Volo.Blogging.Pages.Blog.Posts
@@ -27,7 +28,7 @@ namespace Volo.Blogging.Pages.Blog.Posts
             _blogAppService = blogAppService;
         }
 
-        public async void OnGetAsync()
+        public async Task OnGetAsync()
         {
             Blog = await _blogAppService.GetByShortNameAsync(BlogShortName);
             Post = new CreatePostViewModel

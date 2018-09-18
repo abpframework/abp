@@ -22,6 +22,10 @@
     "NewRole": "New role",
     "RoleName": "Role name",
     "CreationTime": "Creation time",
-    "Permissions": "Permissions"
+    "Permissions": "Permissions",
+    "DisplayName:CurrentPassword": "Current password",
+    "DisplayName:NewPassword": "New password",
+    "DisplayName:NewPasswordConfirm": "Confirm new password",
+    "PasswordChangedMessage": "Your password has been changed successfully."
   }
 }

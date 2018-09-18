@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Volo.Abp.AuditLogging.EntityFrameworkCore;
+using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
@@ -21,6 +23,8 @@ namespace MyCompanyName.MyProjectName.EntityFrameworkCore
             modelBuilder.ConfigureIdentity();
             modelBuilder.ConfigurePermissionManagement();
             modelBuilder.ConfigureSettingManagement();
+            modelBuilder.ConfigureBackgroundJobs();
+            modelBuilder.ConfigureAuditLogging();
         }
     }
 }

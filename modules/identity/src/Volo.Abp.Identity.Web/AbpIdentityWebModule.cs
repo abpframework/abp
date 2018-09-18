@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
+using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Identity.Localization;
 using Volo.Abp.Identity.Web.Navigation;
@@ -19,6 +22,7 @@ namespace Volo.Abp.Identity.Web
     [DependsOn(typeof(AbpAspNetCoreMvcUiBootstrapModule))]
     [DependsOn(typeof(AbpAutoMapperModule))]
     [DependsOn(typeof(AbpPermissionManagementWebModule))]
+    [DependsOn(typeof(AbpAspNetCoreMvcUiThemeSharedModule))]
     public class AbpIdentityWebModule : AbpModule
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
@@ -64,6 +68,14 @@ namespace Volo.Abp.Identity.Web
                 options.Conventions.AuthorizePage("/Identity/Roles/Index", IdentityPermissions.Roles.Default);
                 options.Conventions.AuthorizePage("/Identity/Roles/CreateModal", IdentityPermissions.Roles.Create);
                 options.Conventions.AuthorizePage("/Identity/Roles/EditModal", IdentityPermissions.Roles.Update);
+            });
+
+            Configure<BundlingOptions>(options =>
+            {
+                options
+                    .ScriptBundles
+                    .Get(StandardBundles.Scripts.Global)
+                    .AddFiles("/Pages/Identity/Shared/change-password-modal.js");
             });
         }
     }

@@ -25,6 +25,7 @@
     "Identity.UserLockedOut": "Kullanıcı hesabı kilitlenmiş.",
     "Identity.UserLockoutNotEnabled": "Bu kullanıcı için hesap kilitleme etkin değil.",
     "Identity.UserNameNotFound": "{0} kullanıcısı bulunamadı.",
-    "Identity.UserNotInRole": "Kullanıcı '{0}' rolünde değil."
+    "Identity.UserNotInRole": "Kullanıcı '{0}' rolünde değil.",
+    "Identity.PasswordConfirmationFailed": "Yeni şifre ile onay şifresi uyuşmuyor."
   }
 }

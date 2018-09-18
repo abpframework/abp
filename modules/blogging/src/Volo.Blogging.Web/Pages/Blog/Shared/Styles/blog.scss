@@ -1,11 +1,13 @@
 div.vs-blog {
     position: relative;
-    background: #fff;
-    font-family: Helvetica, sans-serif;
-    font-size: 15px;  
+    background: white;
+    padding: 0 30px;
+    font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+    font-size: 14px;  
     @import "bootstrap-overwrite.scss"; 
-    @import "header.scss"; 
-    @import "home.scss"; 
-    @import "post.scss"; 
-    @import "custom.scss";  
-}
+    @import "header.scss";  
+    @import "home.scss";        
+    @import "post.scss";  
+    @import "custom.scss";             
+}  
+                        

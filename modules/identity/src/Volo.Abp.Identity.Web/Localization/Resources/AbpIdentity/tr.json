@@ -22,6 +22,10 @@
     "NewRole": "Yeni rol",
     "RoleName": "Rol adı",
     "CreationTime": "Oluşturma zamanı",
-    "Permissions": "İzinler"
+    "Permissions": "İzinler",
+    "DisplayName:CurrentPassword": "Mevcut şifre",
+    "DisplayName:NewPassword": "Yeni şifre",
+    "DisplayName:NewPasswordConfirm": "Yeni şifre (tekrar)",
+    "PasswordChangedMessage": "Şifreniz başarıyla değiştirildi."
   }
 }

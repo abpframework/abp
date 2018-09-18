@@ -305,6 +305,18 @@ namespace Volo.BloggingTestApp.EntityFrameworkCore.Migrations
                         .HasColumnName("Description")
                         .HasMaxLength(1024);
 
+                    b.Property<string>("Facebook")
+                        .HasColumnName("Facebook")
+                        .HasMaxLength(128);
+
+                    b.Property<string>("Github")
+                        .HasColumnName("Github")
+                        .HasMaxLength(128);
+
+                    b.Property<string>("Instagram")
+                        .HasColumnName("Instagram")
+                        .HasMaxLength(128);
+
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
                         .HasColumnName("IsDeleted")
@@ -325,6 +337,14 @@ namespace Volo.BloggingTestApp.EntityFrameworkCore.Migrations
                         .IsRequired()
                         .HasColumnName("ShortName")
                         .HasMaxLength(32);
+
+                    b.Property<string>("StackOverflow")
+                        .HasColumnName("StackOverflow")
+                        .HasMaxLength(128);
+
+                    b.Property<string>("Twitter")
+                        .HasColumnName("Twitter")
+                        .HasMaxLength(128);
 
                     b.HasKey("Id");
 
@@ -499,6 +519,45 @@ namespace Volo.BloggingTestApp.EntityFrameworkCore.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("BlgTags");
+                });
+
+            modelBuilder.Entity("Volo.Blogging.Users.BlogUser", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Email")
+                        .HasColumnName("Email")
+                        .HasMaxLength(256);
+
+                    b.Property<bool>("EmailConfirmed")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("EmailConfirmed")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnName("PhoneNumber")
+                        .HasMaxLength(16);
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("PhoneNumberConfirmed")
+                        .HasDefaultValue(false);
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnName("TenantId");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnName("UserName")
+                        .HasMaxLength(256);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BlgUsers");
                 });
 
             modelBuilder.Entity("Volo.Abp.Identity.IdentityRoleClaim", b =>

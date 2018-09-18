@@ -12,6 +12,6 @@
 <ul>
     @foreach (var blog in Model.Blogs)
     {
-       <li><a asp-page="./Posts/Index" asp-route-blogShortName="@blog.ShortName">@blog.Name</a></li>
+        <li><a asp-page="./Posts/Index" asp-route-blogShortName="@blog.ShortName">@blog.Name</a></li>
     }
 </ul>

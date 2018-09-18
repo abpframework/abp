@@ -27,7 +27,21 @@ namespace Volo.Blogging
                 var rootMenuItem = new ApplicationMenuItem("Blogs", l["Menu:Blogs"], "/Blog");
 
                 context.Menu.AddItem(rootMenuItem);
+
+                if (await authorizationService.IsGrantedAsync(BloggingPermissions.Blogs.Management))
+                {
+                    var managementRootMenuItem = new ApplicationMenuItem("BlogManagement", l["Menu:BlogManagement"]);
+
+                    if (await authorizationService.IsGrantedAsync(BloggingPermissions.Blogs.Management))
+                    {
+                        managementRootMenuItem.AddItem(new ApplicationMenuItem("BlogsAdmin", l["Menu:Blogs"], "/Admin/Blogs"));
+                    }
+
+                    context.Menu.AddItem(managementRootMenuItem);
+                }
             }
+
+
         }
     }
 }

@@ -3,10 +3,12 @@ using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp;
 using Volo.Abp.EntityFrameworkCore.Modeling;
+using Volo.Abp.Users.EntityFrameworkCore;
 using Volo.Blogging.Blogs;
 using Volo.Blogging.Comments;
 using Volo.Blogging.Posts;
 using Volo.Blogging.Tagging;
+using Volo.Blogging.Users;
 
 namespace Volo.Blogging.EntityFrameworkCore
 {
@@ -21,6 +23,14 @@ namespace Volo.Blogging.EntityFrameworkCore
             var options = new BloggingModelBuilderConfigurationOptions();
             optionsAction?.Invoke(options);
 
+            builder.Entity<BlogUser>(b =>
+            {
+                b.ToTable(options.TablePrefix + "Users", options.Schema);
+
+                b.ConfigureAbpUser(options);
+                b.ConfigureExtraProperties();
+            });
+
             builder.Entity<Blog>(b =>
             {
                 b.ToTable(options.TablePrefix + "Blogs", options.Schema);
@@ -28,6 +38,11 @@ namespace Volo.Blogging.EntityFrameworkCore
                 b.ConfigureFullAudited();
 
                 b.Property(x => x.Name).IsRequired().HasMaxLength(BlogConsts.MaxNameLength).HasColumnName(nameof(Blog.Name));
+                b.Property(x => x.Facebook).HasMaxLength(BlogConsts.MaxSocialLinkLength).HasColumnName(nameof(Blog.Facebook));
+                b.Property(x => x.Twitter).HasMaxLength(BlogConsts.MaxSocialLinkLength).HasColumnName(nameof(Blog.Twitter));
+                b.Property(x => x.Instagram).HasMaxLength(BlogConsts.MaxSocialLinkLength).HasColumnName(nameof(Blog.Instagram));
+                b.Property(x => x.Github).HasMaxLength(BlogConsts.MaxSocialLinkLength).HasColumnName(nameof(Blog.Github));
+                b.Property(x => x.StackOverflow).HasMaxLength(BlogConsts.MaxSocialLinkLength).HasColumnName(nameof(Blog.StackOverflow));
                 b.Property(x => x.ShortName).IsRequired().HasMaxLength(BlogConsts.MaxShortNameLength).HasColumnName(nameof(Blog.ShortName));
                 b.Property(x => x.Description).IsRequired(false).HasMaxLength(BlogConsts.MaxDescriptionLength).HasColumnName(nameof(Blog.Description));
             });

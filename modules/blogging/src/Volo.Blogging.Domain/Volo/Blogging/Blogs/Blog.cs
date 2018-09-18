@@ -16,6 +16,21 @@ namespace Volo.Blogging.Blogs
         [CanBeNull]
         public virtual string Description { get; set; }
 
+        [CanBeNull]
+        public virtual string Facebook { get; set; }
+
+        [CanBeNull]
+        public virtual string Twitter { get; set; }
+
+        [CanBeNull]
+        public virtual string Instagram { get; set; }
+
+        [CanBeNull]
+        public virtual string Github { get; set; }
+
+        [CanBeNull]
+        public virtual string StackOverflow { get; set; }
+
         protected Blog()
         {
             
@@ -31,6 +46,12 @@ namespace Volo.Blogging.Blogs
         public virtual Blog SetName([NotNull] string name)
         {
             Name = Check.NotNullOrWhiteSpace(name, nameof(name));
+            return this;
+        }
+
+        public virtual Blog SetShortName(string shortName)
+        {
+            ShortName = Check.NotNullOrWhiteSpace(shortName, nameof(shortName));
             return this;
         }
     }

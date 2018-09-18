@@ -11,13 +11,31 @@ namespace Volo.Blogging
     {
         private readonly IPostAppService _postAppService;
         private readonly IBlogRepository _blogRepository;
-        private readonly BloggingTestData _testData;
+        private readonly IPostRepository _postRepository;
 
         public PostAppService_Tests()
         {
-            _testData = GetRequiredService<BloggingTestData>();
             _postAppService = GetRequiredService<IPostAppService>();
             _blogRepository = GetRequiredService<IBlogRepository>();
+            _postRepository = GetRequiredService<IPostRepository>();
+        }
+
+        [Fact]
+        public async Task Should_Get_List_Of_Posts()
+        {
+            var blogId = (await _blogRepository.GetListAsync()).First().Id;
+            var posts = await _postAppService.GetListByBlogIdAndTagName(blogId, null);
+            posts.Items.Count.ShouldBeGreaterThan(0);
+        }
+
+        [Fact]
+        public async Task Should_Get_Fore_Reading()
+        {
+            var blogId = (await _blogRepository.GetListAsync()).First().Id;
+            var post = (await _postRepository.GetListAsync()).First(p=>p.BlogId == blogId);
+            var postToRead = await _postAppService.GetForReadingAsync(new GetPostInput() {BlogId = blogId, Url = post.Url});
+
+            postToRead.ShouldNotBeNull();
         }
 
         [Fact]
@@ -26,12 +44,14 @@ namespace Volo.Blogging
             var blogId = (await _blogRepository.GetListAsync()).First().Id;
             var title = "test title";
             var content = "test content";
+            var coverImage = "new.jpg";
 
             var newPostDto = await _postAppService.CreateAsync(new CreatePostDto()
             {
                 BlogId = blogId,
                 Title = title,
                 Content = content,
+                CoverImage = coverImage,
                 Url = title.Replace(" ", "-")
             });
 
@@ -44,44 +64,44 @@ namespace Volo.Blogging
                 post.Id.ShouldBe(newPostDto.Id);
                 post.Title.ShouldBe(newPostDto.Title);
                 post.Content.ShouldBe(newPostDto.Content);
+                post.CoverImage.ShouldBe(newPostDto.CoverImage);
                 post.BlogId.ShouldBe(blogId);
                 post.Url.ShouldBe(newPostDto.Url);
             });
         }
 
         [Fact]
-        public async Task Should_Create_And_Update_A_Post()
+        public async Task Should_Update_A_Post()
         {
             var blogId = (await _blogRepository.GetListAsync()).First().Id;
-            var title = "title";
             var newTitle = "new title";
-            var content = "content";
+            var newContent = "content";
 
-            var newPost = await _postAppService.CreateAsync(new CreatePostDto()
-            {
-                BlogId = blogId,
-                Title = title,
-                Content = content,
-                Url = title.Replace(" ", "-")
-            });
+            var oldPost = (await _postRepository.GetListAsync()).FirstOrDefault(); ;
 
-            await _postAppService.UpdateAsync(newPost.Id, new UpdatePostDto()
+            await _postAppService.UpdateAsync(oldPost.Id, new UpdatePostDto()
             {
                 BlogId = blogId,
                 Title = newTitle,
-                Content = content,
+                CoverImage = oldPost.CoverImage,
+                Content = newContent,
                 Url = newTitle.Replace(" ", "-")
             });
             
             UsingDbContext(context =>
             {
-                var post = context.Posts.FirstOrDefault(q => q.Id == newPost.Id);
-                post.ShouldNotBeNull();
+                var post = context.Posts.FirstOrDefault(q => q.Id == oldPost.Id);
                 post.Title.ShouldBe(newTitle);
-                post.Content.ShouldBe(content);
-                post.BlogId.ShouldBe(blogId);
-                post.Url.ShouldBe(newTitle.Replace(" ", "-"));
+                post.Content.ShouldBe(newContent);
             });
+        }
+
+        [Fact]
+        public async Task Should_Delete_A_Post()
+        {
+            var post = (await _postRepository.GetListAsync()).First();
+
+            await _postAppService.DeleteAsync(post.Id);
         }
     }
 }

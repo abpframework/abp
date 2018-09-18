@@ -1,20 +1,21 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
-using CommonMark;
-using Microsoft.AspNetCore.Html;
+using System.Web;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Blogging.Blogs;
+using Volo.Blogging.Blogs.Dtos;
 using Volo.Blogging.Comments;
 using Volo.Blogging.Comments.Dtos;
 using Volo.Blogging.Posts;
 
 namespace Volo.Blogging.Pages.Blog.Posts
 {
-    public class DetailModel : PageModel
+    public class DetailModel : AbpPageModel
     {
+        private const int TwitterLinkLength = 23;
         private readonly IPostAppService _postAppService;
         private readonly IBlogAppService _blogAppService;
         private readonly ICommentAppService _commentAppService;
@@ -27,12 +28,10 @@ namespace Volo.Blogging.Pages.Blog.Posts
 
         [BindProperty]
         public PostDetailsViewModel NewComment { get; set; }
-        
+
         public int CommentCount { get; set; }
 
         public PostWithDetailsDto Post { get; set; }
-
-        public IHtmlContent FormattedContent { get; set; }
 
         public IReadOnlyList<CommentWithRepliesDto> CommentsWithReplies { get; set; }
 
@@ -45,12 +44,12 @@ namespace Volo.Blogging.Pages.Blog.Posts
             _commentAppService = commentAppService;
         }
 
-        public async void OnGetAsync()
+        public async Task OnGetAsync()
         {
             await GetData();
         }
 
-        public async void OnPostAsync()
+        public async Task OnPostAsync()
         {
             await _commentAppService.CreateAsync(new CreateCommentDto()
             {
@@ -62,18 +61,10 @@ namespace Volo.Blogging.Pages.Blog.Posts
             await GetData();
         }
 
-        public async void OnDeleteAsync(Guid commentId)
-        {
-            await _commentAppService.DeleteAsync(commentId);
-
-            await GetData();
-        }
-
         private async Task GetData()
         {
             Blog = await _blogAppService.GetByShortNameAsync(BlogShortName);
             Post = await _postAppService.GetForReadingAsync(new GetPostInput { BlogId = Blog.Id, Url = PostUrl });
-            FormattedContent = RenderMarkdown(Post.Content);
             CommentsWithReplies = await _commentAppService.GetHierarchicalListOfPostAsync(new GetCommentListOfPostAsync() { PostId = Post.Id });
             CountComments();
         }
@@ -87,14 +78,19 @@ namespace Volo.Blogging.Pages.Blog.Posts
             }
         }
 
-        public IHtmlContent RenderMarkdown(string content)
+        public string GetTwitterShareUrl(string title, string url, string linkedAccounts)
         {
-            byte[] bytes = Encoding.Default.GetBytes(content);
-            var utf8Content = Encoding.UTF8.GetString(bytes);
+            var readAtString = " | Read More At ";
+            var otherCharsLength = (readAtString + linkedAccounts).Length + 1;
+            var maxTitleLength = 280 - TwitterLinkLength - otherCharsLength;
+            title = title.Length < maxTitleLength ? title : title.Substring(0, maxTitleLength - 3) + "...";
 
-            var html = CommonMarkConverter.Convert(utf8Content);
-            
-            return new HtmlString(html);
+            var text = title +
+                       readAtString +
+                       url +
+                       " " + linkedAccounts;
+
+            return (new UriBuilder("https://twitter.com/intent/tweet") { Query = "text=" + HttpUtility.UrlEncode(text) }).ToString();
         }
 
         public class PostDetailsViewModel

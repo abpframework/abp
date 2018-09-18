@@ -1,8 +1,10 @@
 ﻿@page
 @inherits Volo.Blogging.Pages.Blog.BloggingPage
 @using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Http.Extensions
 @using Volo.Blogging
 @using Volo.Blogging.Pages.Blog.Posts
+@using Volo.Blogging.Areas.Blog.Helpers.TagHelpers
 @inject IAuthorizationService Authorization
 @model DetailModel
 @{
@@ -20,7 +22,79 @@
     </abp-style-bundle>
 }
 <div class="vs-blog">
-    <div class="row mb-5">
+    <div class="vs-blog-header">
+        <div class="vs-blog-title">
+            <div class="row">
+                <div class="col">
+                    <h1 class="my-0 display-inline-block">
+                        @Model.Blog.ShortName
+                        <small class="text-muted">
+                            @L["Blog"]
+                        </small>
+                    </h1>
+                </div>
+                <div class="article-owner">
+                    <div class="article-infos">
+                        <div class="user-card">
+                            <a>
+                                <strong> @(Model.Post.Writer == null ? "" : Model.Post.Writer.UserName)</strong>, @ConvertDatetimeToTimeAgo(Model.Post.CreationTime)
+                            </a>
+                            <span class="seperator">|</span>
+                            <a>
+                                <i class="fa fa-eye"></i>  @L["ReadWithCount", @Model.Post.ReadCount]
+                            </a>
+                            <span class="seperator">|</span>
+                            <a>
+                                <i class="fa fa-comment"></i> @L["CommentWithCount", @Model.CommentCount]
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4 text-right">
+                    <br />
+                    <a asp-page="/Blog/Posts/Index" asp-route-blogShortName="@Model.BlogShortName">
+                        <i class="fa fa fa-angle-left"></i> @L["Blog"]
+                    </a>
+                    @if (!string.IsNullOrWhiteSpace(Model.Blog.Facebook))
+                    {
+                        <span class="vs-seperator">|</span>
+                        <a href="https://Facebook.com/@Model.Blog.Facebook">
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Blog.Twitter))
+                    {
+                        <span class="vs-seperator">|</span>
+                        <a href="https://twitter.com/@Model.Blog.Twitter">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Blog.Instagram))
+                    {
+                        <span class="vs-seperator">|</span>
+                        <a href="https://Instagram.com/@Model.Blog.Instagram">
+                            <i class="fa fa-instagram"></i>
+                        </a>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Blog.Github))
+                    {
+                        <span class="vs-seperator">|</span>
+                        <a href="https://Github.com/@Model.Blog.Github">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Blog.StackOverflow))
+                    {
+                        <span class="vs-seperator">|</span>
+                        <a href="https://StackOverflow.com/@Model.Blog.StackOverflow">
+                            <i class="fa fa-stack-overflow"></i>
+                        </a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-md-12 mx-auto">
             <section class="hero-section">
                 <div class="hero-articles">
@@ -34,28 +108,26 @@
                             }
                         </p>
                         <h1>
-                            <a href="#">@Model.Post.Title</a>
+                            <a asp-page="./Detail" asp-route-postUrl="@Model.Post.Url" asp-route-blogShortName="@Model.BlogShortName">@Model.Post.Title</a>
                         </h1>
                     </div>
                     <div class="article-owner">
                         <div class="article-infos">
                             <div class="user-card">
-                                <a href="#">
-                                    <img src="https://placeimg.com/60/60/people" class="article-avatar">
+                                <a>
+                                    <img gravatar-email="@Model.Post.Writer.Email" default-image="Identicon" class="article-avatar" />
                                 </a>
-                                <a href="#">
-                                    <strong> Halil İbrahim Kalkan</strong>, @ConvertDatetimeToTimeAgo(Model.Post.CreationTime)
+                                <a>
+                                    <strong> @(Model.Post.Writer == null ? "" : Model.Post.Writer.UserName)</strong>, @ConvertDatetimeToTimeAgo(Model.Post.CreationTime)
                                 </a>
-                                <span class="seperator">|</span>
-                                <a href="#">
-                                    <i class="fa fa-eye"></i> @Model.Post.ReadCount @L["Read"]
+                                <span class="vs-seperator">|</span>
+                                <a>
+                                    <i class="fa fa-eye"></i> @L["ReadWithCount", @Model.Post.ReadCount]
                                 </a>
-                                <span class="seperator">|</span>
-                                <a href="#">
-                                    <i class="fa fa-comment"></i> @Model.CommentCount @L["Comment"]
+                                <span class="vs-seperator">|</span>
+                                <a>
+                                    <i class="fa fa-comment"></i> @L["CommentWithCount", @Model.CommentCount]
                                 </a>
-
-
                                 @if (await Authorization.IsGrantedAsync(BloggingPermissions.Posts.Update))
                                 {
                                     <span class="seperator">|</span>
@@ -63,16 +135,15 @@
                                         <i class="fa fa-pencil"></i>  @L["Edit"]
                                     </a>
                                 }
+                                @if (await Authorization.IsGrantedAsync(BloggingPermissions.Posts.Delete) || (CurrentUser.Id == Model.Post.CreatorId))
+                                {
+                                    <span class="seperator">|</span>
+                                    <a href="#" id="DeletePostLink" data-postid="@Model.Post.Id" data-blogShortName="@Model.BlogShortName">
+                                        <i class="fa fa-trash"></i>  @L["Delete"]
+                                    </a>
+                                }
                             </div>
                         </div>
-                    </div>
-                    <div class="user-link-icons">
-                        <a class="add-bookmark" href="#">
-                            <i class="fa fa-bookmark"></i>
-                        </a>
-                        <a class="share-article" href="#">
-                            <i class="fa fa-share-alt"></i>
-                        </a>
                     </div>
                 </div>
             </section>
@@ -82,7 +153,10 @@
     <div class="row">
         <div class="col-md-8 mx-auto">
             <section class="post-content">
-                <p>@Html.Raw(Model.FormattedContent)</p>
+                <p>
+                    @Html.Raw(RenderMarkdownToHtml(Model.Post.Content))
+
+                </p>
 
             </section>
         </div>
@@ -97,41 +171,56 @@
                     <a asp-page="/Blog/Posts/Index" asp-route-blogShortName="@Model.BlogShortName" asp-route-tagName="@tag.Name" class="tag">@tag.Name</a>
                 }
             </div>
-            <div class="comment-form mt-4">
-                <div class="clearfix bg-light p-4">
-                    <h3 class="mt-0">@L["LeaveComment"]</h3>
-                    <div>
-                        <form method="post">
-                            <input name="postId" value="@Model.Post.Id" hidden />
-                            <input name="repliedCommentId" id="repliedCommentId" hidden />
-                            <div class="form-group">
-                                <textarea class="form-control no-border" name="text" id="textBoxId" rows="4"></textarea>
-                            </div>
-                            <abp-button button-type="Primary" class="btn-rounded float-right" type="submit" text="@L["Submit"].Value" />
-                        </form>
+
+            <a class="btn-rounded float-right btn btn-primary"
+               href="@Model.GetTwitterShareUrl(Model.Post.Title, HttpContext.Request.GetEncodedUrl(), "@" + (Model.Blog.Twitter??""))" target="_blank">
+                <i class="fa fa-twitter"></i>
+                @L["ShareOnTwitter"]
+            </a>
+
+            @if (await Authorization.IsGrantedAsync(BloggingPermissions.Comments.Create))
+            {
+                <div class="comment-form mt-4">
+                    <div class="vs-blog-title mb-0">
+                        <h3>@L["LeaveComment"]</h3>
+                    </div>
+                    <div class="clearfix bg-light p-4">
+                        <div>
+                            <form method="post">
+                                <input name="postId" value="@Model.Post.Id" hidden />
+                                <input name="repliedCommentId" id="repliedCommentId" hidden />
+                                <div class="form-group">
+                                    <textarea class="form-control no-border" name="text" id="textBoxId" rows="4"></textarea>
+                                </div>
+                                <abp-button button-type="Primary" class="btn-rounded float-right" type="submit" text="@L["Submit"].Value" />
+                            </form>
+                        </div>
                     </div>
                 </div>
-            </div>
+            }
+
             <div class="comment-area">
-
-
                 @foreach (var commentWithRepliesDto in Model.CommentsWithReplies)
                 {
                     <div class="media">
-                        <img class="d-flex mr-3 rounded-circle comment-avatar" src="https://placeimg.com/120/120/people" alt="">
+                        <img gravatar-email="@commentWithRepliesDto.Comment.Writer.Email" default-image="Identicon" class="d-flex mr-3 rounded-circle comment-avatar"  />
                         <div class="media-body">
                             <h5 class="comment-owner">
-                                Armağan Ünlü
+                                @(commentWithRepliesDto.Comment.Writer == null ? "" : commentWithRepliesDto.Comment.Writer.UserName)
                                 <span class="float-right">@ConvertDatetimeToTimeAgo(commentWithRepliesDto.Comment.CreationTime)</span>
                             </h5>
                             <p id="@commentWithRepliesDto.Comment.Id">
                                 @commentWithRepliesDto.Comment.Text
                             </p>
-                            <div class="comment-buttons">
+                            <div class="comment-buttons font-75 bg-light">
 
-                                <a href="#" class="tag replyLink" data-relpyid="@commentWithRepliesDto.Comment.Id">
-                                    <i class="fa fa-reply" aria-hidden="true"></i> @L["Reply"]
-                                </a>
+                                @if (await Authorization.IsGrantedAsync(BloggingPermissions.Comments.Create))
+                                {
+                                    <a href="#" class="tag replyLink" data-relpyid="@commentWithRepliesDto.Comment.Id">
+                                        <i class="fa fa-reply" aria-hidden="true"></i> @L["Reply"]
+                                    </a>
+                                }
+
                                 @if (await Authorization.IsGrantedAsync(BloggingPermissions.Comments.Delete))
                                 {
                                     <span class="seperator">|</span>
@@ -149,34 +238,39 @@
                                 }
                             </div>
 
-                            <div class="comment-form mt-4 replyForm">
-                                <div class="clearfix bg-light p-4">
-                                    <h3 class="mt-0">@L["ReplyTo"] Armağan Ünlü</h3>
-                                    <div>
-                                        <form method="post">
-                                            <input name="postId" value="@Model.Post.Id" hidden />
-                                            <input name="repliedCommentId" value="@commentWithRepliesDto.Comment.Id" hidden />
+                            @if (await Authorization.IsGrantedAsync(BloggingPermissions.Comments.Create))
+                            {
+                                <div class="comment-form mt-4 replyForm">
+                                    <div class="clearfix bg-light p-4">
+                                        <h3 class="mt-0">
+                                            @L["ReplyTo"]
+                                            @(commentWithRepliesDto.Comment.Writer == null ? "" : commentWithRepliesDto.Comment.Writer.UserName)
+                                        </h3>
+                                        <div>
+                                            <form method="post">
+                                                <input name="postId" value="@Model.Post.Id" hidden />
+                                                <input name="repliedCommentId" value="@commentWithRepliesDto.Comment.Id" hidden />
 
-                                            <div class="form-group">
-                                                <textarea class="form-control no-border" name="text" id="textBoxId" rows="4"></textarea>
-                                            </div>
-                                            <abp-button button-type="Primary" class="btn-rounded float-right" type="submit" text="@L["Comment"].Value" />
-                                        </form>
+                                                <div class="form-group">
+                                                    <textarea class="form-control no-border" name="text" id="textBoxId" rows="4"></textarea>
+                                                </div>
+                                                <abp-button button-type="Primary" class="btn-rounded float-right" type="submit" text="@L["Comment"].Value" />
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                                        
+                            }
                             @if (await Authorization.IsGrantedAsync(BloggingPermissions.Comments.Update) || (CurrentUser.Id == commentWithRepliesDto.Comment.CreatorId))
                             {
                                 <div class="comment-form mt-4 editForm">
                                     <div class="clearfix bg-light p-4">
                                         <div>
                                             <form class="editFormClass">
-                                                <input name="commentId" value="@commentWithRepliesDto.Comment.Id" hidden/>
+                                                <input name="commentId" value="@commentWithRepliesDto.Comment.Id" hidden />
                                                 <div class="form-group">
                                                     <textarea class="form-control no-border" name="text" id="textBoxId" rows="4">@commentWithRepliesDto.Comment.Text</textarea>
                                                 </div>
-                                                <abp-button button-type="Primary" class="btn-rounded float-right" type="submit" text="@L["Submit"].Value"/>
+                                                <abp-button button-type="Primary" class="btn-rounded float-right" type="submit" text="@L["Submit"].Value" />
                                             </form>
                                         </div>
                                     </div>
@@ -186,24 +280,27 @@
                             @foreach (var reply in commentWithRepliesDto.Replies)
                             {
                                 <div class="media">
-                                    <img class="d-flex mr-3 rounded-circle answer-avatar" src="https://placeimg.com/120/120/people?t=1535457179534" alt="">
+                                    <img gravatar-email="@reply.Writer.Email" default-image="Identicon" class="d-flex mr-3 rounded-circle comment-avatar"  />
                                     <div class="media-body">
                                         <h5 class="comment-owner">
-                                            Zlatan Ibrahimovic
+                                            @(reply.Writer == null ? "" : reply.Writer.UserName)
                                             <span class="float-right">@ConvertDatetimeToTimeAgo(reply.CreationTime)</span>
                                         </h5>
                                         <p id="@reply.Id">
                                             @reply.Text
                                         </p>
-                                        <div class="comment-buttons">
-                                            <a href="#" class="tag" data-relpyid="@commentWithRepliesDto.Comment.Id">
-                                                <i class="fa fa-reply" aria-hidden="true"></i> @L["Reply"]
-                                            </a>
+                                        <div class="comment-buttons font-75 bg-light">
 
+                                            @if (await Authorization.IsGrantedAsync(BloggingPermissions.Comments.Create))
+                                            {
+                                                <a href="#" class="tag replyLink" data-relpyid="@commentWithRepliesDto.Comment.Id">
+                                                    <i class="fa fa-reply" aria-hidden="true"></i> @L["Reply"]
+                                                </a>
+                                            }
                                             @if (await Authorization.IsGrantedAsync(BloggingPermissions.Comments.Delete) || (CurrentUser.Id == commentWithRepliesDto.Comment.CreatorId))
                                             {
                                                 <span class="seperator">|</span>
-                                                <a href="#" class="tag" data-deleteid="@reply.Id">
+                                                <a href="#" class="tag deleteLink" data-deleteid="@reply.Id">
                                                     <i class="fa fa-trash" aria-hidden="true"></i> @L["Delete"]
                                                 </a>
                                             }
@@ -211,39 +308,44 @@
                                             @if (await Authorization.IsGrantedAsync(BloggingPermissions.Comments.Update) || (CurrentUser.Id == commentWithRepliesDto.Comment.CreatorId))
                                             {
                                                 <span class="seperator">|</span>
-                                                <a href="#" class="tag" data-updateid="@reply.Id">
+                                                <a href="#" class="tag updateLink" data-updateid="@reply.Id">
                                                     <i class="fa fa-pencil" aria-hidden="true"></i> @L["Edit"]
                                                 </a>
                                             }
                                         </div>
 
-                                        <div class="comment-form mt-4 replyForm">
-                                            <div class="clearfix bg-light p-4">
-                                                <h3 class="mt-0">@L["ReplyTo"] Armağan Ünlü</h3>
-                                                <div>
-                                                    <form method="post">
-                                                        <input name="postId" value="@Model.Post.Id" hidden />
-                                                        <input name="repliedCommentId" value="@commentWithRepliesDto.Comment.Id" hidden />
-                                                        <div class="form-group">
-                                                            <textarea class="form-control no-border" name="text" id="textBoxId" rows="4"></textarea>
-                                                        </div>
-                                                        <abp-button button-type="Primary" class="btn-rounded float-right" type="submit" text="@L["Submit"].Value" />
-                                                    </form>
+                                        @if (await Authorization.IsGrantedAsync(BloggingPermissions.Comments.Create))
+                                        {
+                                            <div class="comment-form mt-4 replyForm">
+                                                <div class="clearfix bg-light p-4">
+                                                    <h3 class="mt-0">
+                                                        @L["ReplyTo"]
+                                                        @(commentWithRepliesDto.Comment.Writer == null ? "" : commentWithRepliesDto.Comment.Writer.UserName)
+                                                    </h3>
+                                                    <div>
+                                                        <form method="post">
+                                                            <input name="postId" value="@Model.Post.Id" hidden />
+                                                            <input name="repliedCommentId" value="@commentWithRepliesDto.Comment.Id" hidden />
+                                                            <div class="form-group">
+                                                                <textarea class="form-control no-border" name="text" id="textBoxId" rows="4"></textarea>
+                                                            </div>
+                                                            <abp-button button-type="Primary" class="btn-rounded float-right" type="submit" text="@L["Submit"].Value" />
+                                                        </form>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        
+                                        }
                                         @if (await Authorization.IsGrantedAsync(BloggingPermissions.Comments.Update) || (CurrentUser.Id == commentWithRepliesDto.Comment.CreatorId))
                                         {
                                             <div class="comment-form mt-4 editForm">
                                                 <div class="clearfix bg-light p-4">
                                                     <div>
                                                         <form class="editFormClass">
-                                                            <input name="commentId" value="@reply.Id" hidden/>
+                                                            <input name="commentId" value="@reply.Id" hidden />
                                                             <div class="form-group">
                                                                 <textarea class="form-control no-border" name="text" id="textBoxId" rows="4">@reply.Text</textarea>
                                                             </div>
-                                                            <abp-button button-type="Primary" class="btn-rounded float-right" type="submit" text="@L["Submit"].Value"/>
+                                                            <abp-button button-type="Primary" class="btn-rounded float-right" type="submit" text="@L["Submit"].Value" />
                                                         </form>
                                                     </div>
                                                 </div>

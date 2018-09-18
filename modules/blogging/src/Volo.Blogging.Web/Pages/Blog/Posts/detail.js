@@ -1,5 +1,7 @@
 ﻿(function ($) {
 
+    var l = abp.localization.getResource('Blogging');
+
     $('div .replyForm').hide();
     $('div .editForm').hide();
 
@@ -25,6 +27,7 @@
 
     $('.replyLink').click(function (event) {
         event.preventDefault();
+        $('div .editForm').hide();
         var linkElement = $(this);
         var replyCommentId = linkElement.attr('data-relpyid');
 
@@ -48,8 +51,8 @@
 
         if (deleteCommentId != '' && deleteCommentId !== undefined) {
             abp.message.confirm(
-                'Comment will be deleted.', // TODO: localize
-                'Are you sure?',
+                l('CommentDeletionWarningMessage'), // TODO: localize
+                l('Are you sure?'),
                 function(isConfirmed) {
                     if (isConfirmed) {
                         $.ajax({
@@ -66,8 +69,39 @@
         }
     });
 
+    $('#DeletePostLink').click(function (event) {
+        event.preventDefault();
+        var linkElement = $(this);
+        var deleteCommentId = linkElement.attr('data-postid');
+        var blogShortName = linkElement.attr('data-blogShortName');
+
+        if (deleteCommentId != '' && deleteCommentId !== undefined) {
+            abp.message.confirm(
+                l('PostDeletionWarningMessage'), // TODO: localize
+                l('AreYouSure'),
+                function(isConfirmed) {
+                    if (isConfirmed) {
+                        $.ajax({
+                            type: "POST",
+                            url: "/Blog/Posts/Delete",
+                            data: { id: deleteCommentId },
+                            success: function () {
+                                window.location.replace('/Blog/' + blogShortName);
+                            }
+                        });
+                    }
+                }
+            );
+        }
+    });
+    $('#DeletePostRouteLink').click(function (event) {
+        console.log("goooo");
+    });
+
     $('.updateLink').click(function (event) {
         event.preventDefault();
+        $('div .replyForm').hide();
+
         var linkElement = $(this);
         var updateCommentId = $(this).attr('data-updateid');
 

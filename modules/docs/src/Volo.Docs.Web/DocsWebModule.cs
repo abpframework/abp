@@ -16,7 +16,7 @@ namespace Volo.Docs
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
+            PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
             {
                 options.AddAssemblyResource(typeof(DocsResource), typeof(DocsWebModule).Assembly);
             });
@@ -24,12 +24,12 @@ namespace Volo.Docs
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.Configure<VirtualFileSystemOptions>(options =>
+            Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<DocsWebModule>("Volo.Docs");
             });
 
-            context.Services.Configure<RazorPagesOptions>(options =>
+            Configure<RazorPagesOptions>(options =>
             {
                 //TODO: Make configurable!
                 options.Conventions.AddPageRoute("/Documents/Project/Index", "documents/{projectName}/{version}/{*documentName}");
