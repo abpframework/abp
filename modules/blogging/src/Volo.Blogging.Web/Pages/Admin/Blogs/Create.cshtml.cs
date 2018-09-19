@@ -1,4 +1,6 @@
 using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
@@ -10,18 +12,25 @@ namespace Volo.Blogging.Pages.Admin.Blogs
     public class CreateModel : AbpPageModel
     {
         private readonly IBlogAppService _blogAppService;
+        private readonly IAuthorizationService _authorization;
 
         [BindProperty]
         public BlogCreateModalView Blog { get; set; } = new BlogCreateModalView();
 
-        public CreateModel(IBlogAppService blogAppService)
+        public CreateModel(IBlogAppService blogAppService, IAuthorizationService authorization)
         {
             _blogAppService = blogAppService;
+            _authorization = authorization;
         }
 
-        public void OnGet()
+        public async Task<ActionResult> OnGetAsync()
         {
+            if (!await _authorization.IsGrantedAsync(BloggingPermissions.Blogs.Create))
+            {
+                return Redirect("/");
+            }
 
+            return Page();
         }
 
         public async void OnPostAsync()

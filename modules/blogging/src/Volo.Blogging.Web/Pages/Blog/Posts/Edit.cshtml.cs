@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Blogging.Blogs;
@@ -13,6 +14,7 @@ namespace Volo.Blogging.Pages.Blog.Posts
     {
         private readonly IPostAppService _postAppService;
         private readonly IBlogAppService _blogAppService;
+        private readonly IAuthorizationService _authorization;
 
         [BindProperty(SupportsGet = true)]
         public string BlogShortName { get; set; }
@@ -23,20 +25,28 @@ namespace Volo.Blogging.Pages.Blog.Posts
         [BindProperty]
         public EditPostViewModel Post { get; set; }
 
-        public EditModel(IPostAppService postAppService, IBlogAppService blogAppService)
+        public EditModel(IPostAppService postAppService, IBlogAppService blogAppService, IAuthorizationService authorization)
         {
             _postAppService = postAppService;
             _blogAppService = blogAppService;
+            _authorization = authorization;
         }
 
-        public async Task OnGet()
+        public async Task<ActionResult> OnGetAsync()
         {
+            if (!await _authorization.IsGrantedAsync(BloggingPermissions.Posts.Update))
+            {
+                return Redirect("/");
+            }
+
             var postDto = await _postAppService.GetAsync(new Guid(PostId));
             Post = ObjectMapper.Map<PostWithDetailsDto, EditPostViewModel>(postDto);
             Post.Tags = String.Join(", ", postDto.Tags.Select(p=>p.Name).ToArray());
+
+            return Page();
         }
 
-        public async Task<ActionResult> OnPost()
+        public async Task<ActionResult> OnPostAsync()
         {
             var post = new UpdatePostDto
             {

@@ -1,6 +1,8 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Net;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Blogging.Blogs;
@@ -13,6 +15,7 @@ namespace Volo.Blogging.Pages.Blog.Posts
     {
         private readonly IPostAppService _postAppService;
         private readonly IBlogAppService _blogAppService;
+        private readonly IAuthorizationService _authorization;
 
         [BindProperty(SupportsGet = true)]
         public string BlogShortName { get; set; }
@@ -22,19 +25,27 @@ namespace Volo.Blogging.Pages.Blog.Posts
 
         public BlogDto Blog { get; set; }
 
-        public NewModel(IPostAppService postAppService, IBlogAppService blogAppService)
+        public NewModel(IPostAppService postAppService, IBlogAppService blogAppService, IAuthorizationService authorization)
         {
             _postAppService = postAppService;
             _blogAppService = blogAppService;
+            _authorization = authorization;
         }
 
-        public async Task OnGetAsync()
+        public async Task<ActionResult> OnGetAsync()
         {
+            if (!await _authorization.IsGrantedAsync(BloggingPermissions.Posts.Create))
+            {
+                return Redirect("/");
+            }
+
             Blog = await _blogAppService.GetByShortNameAsync(BlogShortName);
             Post = new CreatePostViewModel
             {
                 BlogId = Blog.Id
             };
+
+            return Page();
         }
 
         public async Task<ActionResult> OnPost()

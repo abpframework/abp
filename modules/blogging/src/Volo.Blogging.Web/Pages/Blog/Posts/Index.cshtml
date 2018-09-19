@@ -47,38 +47,38 @@
                     @if (await Authorization.IsGrantedAsync(BloggingPermissions.Posts.Create))
                     {
                         <a asp-page="./New" asp-route-blogShortName="@Model.BlogShortName">@L["CreateANewPost"]</a>
+                        <span class="vs-seperator">|</span>
                     }
                     @if (!string.IsNullOrWhiteSpace(Model.Blog.Facebook))
                     {
-                        <span class="vs-seperator">|</span>
                         <a href="https://Facebook.com/@Model.Blog.Facebook" target="_blank">
                             <i class="fa fa-facebook"></i>
                         </a>
+                        <span class="vs-seperator">|</span>
                     }
                     @if (!string.IsNullOrWhiteSpace(Model.Blog.Twitter))
                     {
-                        <span class="vs-seperator">|</span>
                         <a href="https://twitter.com/@Model.Blog.Twitter" target="_blank">
                             <i class="fa fa-twitter"></i>
                         </a>
+                        <span class="vs-seperator">|</span>
                     }
                     @if (!string.IsNullOrWhiteSpace(Model.Blog.Instagram))
                     {
-                        <span class="vs-seperator">|</span>
                         <a href="https://Instagram.com/@Model.Blog.Instagram" target="_blank">
                             <i class="fa fa-instagram"></i>
                         </a>
+                        <span class="vs-seperator">|</span>
                     }
                     @if (!string.IsNullOrWhiteSpace(Model.Blog.Github))
                     {
-                        <span class="vs-seperator">|</span>
                         <a href="https://Github.com/@Model.Blog.Github" target="_blank">
                             <i class="fa fa-github"></i>
                         </a>
+                        <span class="vs-seperator">|</span>
                     }
                     @if (!string.IsNullOrWhiteSpace(Model.Blog.StackOverflow))
                     {
-                        <span class="vs-seperator">|</span>
                         <a href="https://StackOverflow.com/@Model.Blog.StackOverflow" target="_blank">
                             <i class="fa fa-stack-overflow"></i>
                         </a>

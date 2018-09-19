@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Blogging.Blogs;
@@ -13,6 +14,7 @@ namespace Volo.Blogging.Pages.Admin.Blogs
     public class EditModel : AbpPageModel
     {
         private readonly IBlogAppService _blogAppService;
+        private readonly IAuthorizationService _authorization;
 
         [BindProperty(SupportsGet = true)]
         public Guid BlogId { get; set; }
@@ -20,19 +22,27 @@ namespace Volo.Blogging.Pages.Admin.Blogs
         [BindProperty]
         public BlogEditViewModel Blog { get; set; } = new BlogEditViewModel();
 
-        public EditModel(IBlogAppService blogAppService)
+        public EditModel(IBlogAppService blogAppService, IAuthorizationService authorization)
         {
             _blogAppService = blogAppService;
+            _authorization = authorization;
         }
 
-        public async Task OnGet()
+        public async Task<ActionResult> OnGetAsync()
         {
+            if (!await _authorization.IsGrantedAsync(BloggingPermissions.Blogs.Update))
+            {
+                return Redirect("/");
+            }
+
             var blog = await _blogAppService.GetAsync(BlogId);
 
             Blog = ObjectMapper.Map<BlogDto, BlogEditViewModel>(blog);
+
+            return Page();
         }
 
-        public async Task OnPost()
+        public async Task OnPostAsync()
         {
             await _blogAppService.Update(Blog.Id, new UpdateBlogDto()
             {
