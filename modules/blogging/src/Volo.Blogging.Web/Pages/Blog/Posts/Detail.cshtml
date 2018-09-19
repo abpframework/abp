@@ -27,28 +27,11 @@
             <div class="row">
                 <div class="col">
                     <h1 class="my-0 display-inline-block">
-                        @Model.Blog.ShortName
+                        @Model.Blog.Name
                         <small class="text-muted">
-                            @L["Blog"]
+                            @L["BLOG"]
                         </small>
                     </h1>
-                </div>
-                <div class="article-owner">
-                    <div class="article-infos">
-                        <div class="user-card">
-                            <a>
-                                <strong> @(Model.Post.Writer == null ? "" : Model.Post.Writer.UserName)</strong>, @ConvertDatetimeToTimeAgo(Model.Post.CreationTime)
-                            </a>
-                            <span class="seperator">|</span>
-                            <a>
-                                <i class="fa fa-eye"></i>  @L["ReadWithCount", @Model.Post.ReadCount]
-                            </a>
-                            <span class="seperator">|</span>
-                            <a>
-                                <i class="fa fa-comment"></i> @L["CommentWithCount", @Model.CommentCount]
-                            </a>
-                        </div>
-                    </div>
                 </div>
                 <div class="col-sm-4 text-right">
                     <br />
@@ -172,7 +155,7 @@
                 }
             </div>
 
-            <a class="btn-rounded float-right btn btn-primary"
+            <a class="btn btn-blue float-right"
                href="@Model.GetTwitterShareUrl(Model.Post.Title, HttpContext.Request.GetEncodedUrl(), "@" + (Model.Blog.Twitter??""))" target="_blank">
                 <i class="fa fa-twitter"></i>
                 @L["ShareOnTwitter"]
