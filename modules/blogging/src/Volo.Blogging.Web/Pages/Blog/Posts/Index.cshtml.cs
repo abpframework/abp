@@ -40,7 +40,7 @@ namespace Volo.Blogging.Pages.Blog.Posts
         {
             Blog = await _blogAppService.GetByShortNameAsync(BlogShortName);
             Posts = (await _postAppService.GetListByBlogIdAndTagName(Blog.Id, TagName)).Items;
-            PopularTags = (await _tagAppService.GetPopularTags(new GetPopularTagsInput {ResultCount = 10}));
+            PopularTags = (await _tagAppService.GetPopularTags(new GetPopularTagsInput {ResultCount = 10, MinimumPostCount = 2}));
         }
     }
 }

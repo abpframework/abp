@@ -55,6 +55,11 @@ namespace Volo.Blogging.Posts
 
             foreach (var postDto in postDtos)
             {
+                postDto.Tags = await GetTagsOfPost(postDto.Id);
+            }
+
+            foreach (var postDto in postDtos)
+            {
                 if (postDto.CreatorId.HasValue)
                 {
                     var creatorUser = await UserLookupService.FindByIdAsync(postDto.CreatorId.Value);

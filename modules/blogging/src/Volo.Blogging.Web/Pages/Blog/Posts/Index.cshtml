@@ -31,7 +31,14 @@
                     <h1 class="my-0 display-inline-block">
                         @Model.Blog.Name
                         <small class="text-muted">
-                            @L["BLOG"]
+                            @if (string.IsNullOrWhiteSpace(Model.TagName))
+                            {
+                                @L["BLOG"]
+                            }
+                            else
+                            {
+                                @Html.Raw("#")@Model.TagName
+                            }
                         </small>
                     </h1>
                 </div>
@@ -44,35 +51,35 @@
                     @if (!string.IsNullOrWhiteSpace(Model.Blog.Facebook))
                     {
                         <span class="vs-seperator">|</span>
-                        <a href="https://Facebook.com/@Model.Blog.Facebook">
+                        <a href="https://Facebook.com/@Model.Blog.Facebook" target="_blank">
                             <i class="fa fa-facebook"></i>
                         </a>
                     }
                     @if (!string.IsNullOrWhiteSpace(Model.Blog.Twitter))
                     {
                         <span class="vs-seperator">|</span>
-                        <a href="https://twitter.com/@Model.Blog.Twitter">
+                        <a href="https://twitter.com/@Model.Blog.Twitter" target="_blank">
                             <i class="fa fa-twitter"></i>
                         </a>
                     }
                     @if (!string.IsNullOrWhiteSpace(Model.Blog.Instagram))
                     {
                         <span class="vs-seperator">|</span>
-                        <a href="https://Instagram.com/@Model.Blog.Instagram">
+                        <a href="https://Instagram.com/@Model.Blog.Instagram" target="_blank">
                             <i class="fa fa-instagram"></i>
                         </a>
                     }
                     @if (!string.IsNullOrWhiteSpace(Model.Blog.Github))
                     {
                         <span class="vs-seperator">|</span>
-                        <a href="https://Github.com/@Model.Blog.Github">
+                        <a href="https://Github.com/@Model.Blog.Github" target="_blank">
                             <i class="fa fa-github"></i>
                         </a>
                     }
                     @if (!string.IsNullOrWhiteSpace(Model.Blog.StackOverflow))
                     {
                         <span class="vs-seperator">|</span>
-                        <a href="https://StackOverflow.com/@Model.Blog.StackOverflow">
+                        <a href="https://StackOverflow.com/@Model.Blog.StackOverflow" target="_blank">
                             <i class="fa fa-stack-overflow"></i>
                         </a>
                     }
