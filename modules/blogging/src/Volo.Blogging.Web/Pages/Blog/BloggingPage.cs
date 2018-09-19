@@ -102,7 +102,7 @@ namespace Volo.Blogging.Pages.Blog
             }
             if (diffInSeconds >= 60)
             {
-                return L["MinutesAgo", diffInSeconds];
+                return L["MinutesAgo", diffInSeconds / 60];
             }
             if (diffInSeconds >= 1)
             {

@@ -124,7 +124,7 @@
                                         </a>
                                         <span class="vs-seperator">|</span>
                                         <a>
-                                            <i class="fa fa-comment"></i>  @L["CommentWithCount", @post.CommentCount]
+                                            <i class="fa fa-comment"></i>  @L["CommentWithCount", post.CommentCount]
                                         </a>
                                     </div>
                                 </div>
@@ -176,81 +176,86 @@
 
     <div class="pb-5">
         <div class="row">
-            <div class="col-md-8 box-articles">
-                <div class="vs-blog-title">
-                    <h2>@L["LastPosts"]</h2>
-                </div>
-                <div class="list-group">
-                    @for (var index = 3; index < Model.Posts.Count; index++)
-                    {
-                        var post = Model.Posts[index];
-                        var oddPost = index % 2 == 1;
+            @if (Model.Posts.Count > 3)
+            {
+                <div class="col-md-8 box-articles">
+                    <div class="vs-blog-title">
+                        <h2>@L["LastPosts"]</h2>
+                    </div>
+                    <div class="list-group">
+                        @for (var index = 3; index < Model.Posts.Count; index++)
+                        {
+                            var post = Model.Posts[index];
+                            var oddPost = index % 2 == 1;
 
-                        <div class="list-group-item">
-                            <div class="row @(oddPost?"align-middle":"")">
-                                <div class="col-md-4 order-md-@(oddPost?"last":"first")">
-                                    <div class="img-container">
-                                        <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">
-                                            <img src="@post.CoverImage" class="box-article-img">
-                                        </a>
+                            <div class="list-group-item">
+                                <div class="row @(oddPost ? "align-middle" : "")">
+                                    <div class="col-md-4 order-md-@(oddPost ? "last" : "first")">
+                                        <div class="img-container">
+                                            <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">
+                                                <img src="@post.CoverImage" class="box-article-img">
+                                            </a>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col order-md-@(oddPost?"first":"last")">
-                                    <p class="tags">
-                                        @foreach (var tag in post.Tags)
-                                        {
-                                            <a asp-page="/Blog/Posts/Index" asp-route-blogShortName="@Model.BlogShortName" asp-route-tagName="@tag.Name" class="tag">@tag.Name</a>
-                                        }
-                                    </p>
-                                    <h3>
-                                        <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">@post.Title</a>
-                                    </h3>
-                                    <p>
-                                        @(GetShortContent(post.Content))
-                                    </p>
-                                    <div class="article-owner">
-                                        <div class="article-infos">
-                                            <div class="user-card">
-                                                <a>
-                                                    <img gravatar-email="@post.Writer.Email" default-image="Identicon" class="article-avatar" />
-                                                </a>
-                                                <a>
-                                                    <strong>@post.Writer.UserName</strong>, @ConvertDatetimeToTimeAgo(post.CreationTime)
-                                                </a>
-                                                <span class="vs-seperator">|</span>
-                                                <a>
-                                                    <i class="fa fa-eye"></i> @post.ReadCount
-                                                </a>
-                                                <span class="vs-seperator">|</span>
-                                                <a>
-                                                    <i class="fa fa-comment"></i>  @post.CommentCount
-                                                </a>
+                                    <div class="col order-md-@(oddPost ? "first" : "last")">
+                                        <p class="tags">
+                                            @foreach (var tag in post.Tags)
+                                            {
+                                                <a asp-page="/Blog/Posts/Index" asp-route-blogShortName="@Model.BlogShortName" asp-route-tagName="@tag.Name" class="tag">@tag.Name</a>
+                                            }
+                                        </p>
+                                        <h3>
+                                            <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">@post.Title</a>
+                                        </h3>
+                                        <p>
+                                            @(GetShortContent(post.Content))
+                                        </p>
+                                        <div class="article-owner">
+                                            <div class="article-infos">
+                                                <div class="user-card">
+                                                    <a>
+                                                        <img gravatar-email="@post.Writer.Email" default-image="Identicon" class="article-avatar" />
+                                                    </a>
+                                                    <a>
+                                                        <strong>@post.Writer.UserName</strong>, @ConvertDatetimeToTimeAgo(post.CreationTime)
+                                                    </a>
+                                                    <span class="vs-seperator">|</span>
+                                                    <a>
+                                                        <i class="fa fa-eye"></i> @post.ReadCount
+                                                    </a>
+                                                    <span class="vs-seperator">|</span>
+                                                    <a>
+                                                        <i class="fa fa-comment"></i> @post.CommentCount
+                                                    </a>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    }
+                        }
+                    </div>
                 </div>
-            </div>
+            }
 
-            <div class="col-md-4">
-                <div class="vs-blog-title">
-                    <h2>@L["PopularTags"]</h2>
+
+            @if (Model.PopularTags.Count > 0)
+            {
+                <div class="col-md-4">
+                    <div class="vs-blog-title">
+                        <h2>@L["PopularTags"]</h2>
+                    </div>
+                    <div class="list-group small-list popular-tags">
+                        @foreach (var popularTag in Model.PopularTags)
+                        {
+                            <div class="list-group-item">
+                                <a asp-page="/Blog/Posts/Index" asp-route-blogShortName="@Model.BlogShortName" asp-route-tagName="@popularTag.Name">@popularTag.Name <span>(@popularTag.UsageCount @L["Posts"])</span></a>
+                            </div>
+
+                        }
+                    </div>
                 </div>
-                <div class="list-group small-list popular-tags">
-                    @foreach (var popularTag in Model.PopularTags)
-                    {
-                        <div class="list-group-item">
-                            <a asp-page="/Blog/Posts/Index" asp-route-blogShortName="@Model.BlogShortName" asp-route-tagName="@popularTag.Name">@popularTag.Name <span>(@popularTag.UsageCount @L["Posts"])</span></a>
-                        </div>
-
-                    }
-
-
-                </div>
-            </div>
+            }
         </div>
     </div>
 </div>

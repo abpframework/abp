@@ -20,7 +20,7 @@ namespace Volo.Blogging.Posts
 
         public List<Post> GetPostsByBlogId(Guid id)
         {
-            return DbSet.Where(p => p.BlogId == id).ToList();
+            return DbSet.Where(p => p.BlogId == id).OrderByDescending(p=>p.CreationTime).ToList();
         }
 
         public async Task<Post> GetPostByUrl(Guid blogId, string url)
