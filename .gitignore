@@ -262,8 +262,9 @@ framework/src/MicroserviceDemo/MicroserviceDemo.TenancyService/Logs/*
 framework/src/AbpDesk/Web_PlugIns/AbpDesk.MongoBlog.dll
 framework/test/Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo/Logs/*
 !framework/src/Volo.Abp.AspNetCore.Mvc.UI.Packages/Volo/Abp/AspNetCore/Mvc/UI/Packages/*
-modules/blog/app/Volo.BlogTestApp/Logs/*
 nupkg/push.ps1
 templates/mvc/src/MyCompanyName.MyProjectName.Web/Logs/logs.txt
 modules/blogging/app/Volo.BloggingTestApp/wwwroot/files/*
-modules/blogging/app/Volo.BloggingTestApp/Logs/logs.txt
+modules/blogging/app/Volo.BloggingTestApp/Logs/*
+modules/blog/app/Volo.BlogTestApp/Logs/*
+modules/docs/app/Volo.DocsTestApp/Logs/*
