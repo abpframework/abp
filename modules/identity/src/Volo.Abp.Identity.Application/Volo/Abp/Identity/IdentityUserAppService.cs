@@ -9,7 +9,6 @@ using Volo.Abp.PermissionManagement;
 
 namespace Volo.Abp.Identity
 {
-    [Authorize(IdentityPermissions.Users.Default)]
     public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppService
     {
         private readonly IdentityUserManager _userManager;
@@ -26,6 +25,7 @@ namespace Volo.Abp.Identity
             _permissionAppServiceHelper = permissionAppServiceHelper;
         }
 
+        [Authorize(IdentityPermissions.Users.Default)]
         public async Task<IdentityUserDto> GetAsync(Guid id)
         {
             return ObjectMapper.Map<IdentityUser, IdentityUserDto>(
@@ -33,6 +33,7 @@ namespace Volo.Abp.Identity
             );
         }
 
+        [Authorize(IdentityPermissions.Users.Default)]
         public async Task<PagedResultDto<IdentityUserDto>> GetListAsync(GetIdentityUsersInput input)
         {
             var count = await _userRepository.GetCountAsync(); //TODO: 
@@ -44,6 +45,7 @@ namespace Volo.Abp.Identity
             );
         }
 
+        [Authorize(IdentityPermissions.Users.Default)]
         public async Task<ListResultDto<IdentityRoleDto>> GetRolesAsync(Guid id)
         {
             var roles = await _userRepository.GetRolesAsync(id);
@@ -113,6 +115,7 @@ namespace Volo.Abp.Identity
             await _permissionAppServiceHelper.UpdateAsync(UserPermissionValueProvider.ProviderName, id.ToString(), input);
         }
 
+        [Authorize(IdentityPermissions.Users.Default)]
         public async Task<IdentityUserDto> FindByUsernameAsync(string username)
         {
             return ObjectMapper.Map<IdentityUser, IdentityUserDto>(
@@ -120,6 +123,7 @@ namespace Volo.Abp.Identity
             );
         }
 
+        [Authorize(IdentityPermissions.Users.Default)]
         public async Task<IdentityUserDto> FindByEmailAsync(string email)
         {
             return ObjectMapper.Map<IdentityUser, IdentityUserDto>(
