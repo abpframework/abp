@@ -1,4 +1,5 @@
 ﻿@page
+@using Volo.Docs.Helpers.TagHelpers;
 @model Volo.Docs.Pages.Documents.Project.IndexModel
 @{
     ViewBag.FluidLayout = true;
@@ -13,7 +14,6 @@
     <script src="~/lib/anchor-js/anchor.min.js"></script>
     <script src="~/lib/jquery-unveil/jquery.unveil.js" charset="UTF-8"></script>
     <script src="~/lib/clipboard/dist/clipboard.min.js"></script>
-
     <script src="~/pages/documents/project/index.js" charset="UTF-8"></script>
 }
 
@@ -57,7 +57,7 @@
                         {
                             Text = v.DisplayText,
                             Value = "/documents/" + Model.ProjectName + "/" + v.Version + "/" + Model.DocumentName,
-                            Selected = (v.Version == Model.Version)
+                            Selected = v.IsSelected
                         }), new { @class = "form-control flat" })
 
                         <button class="btn btn-link bd-search-docs-toggle d-md-none p-0 ml-3"
@@ -76,8 +76,34 @@
         }
 
         <nav class="bd-links" id="bd-docs-nav">
-            @* TODO: removed collapse class, why it's needed? *@
-            @Html.Raw(Model.NavigationDocument.Content)
+
+            <ul navigation-items="@Model.Navigation.RootItem"></ul>
+
+
+            @*@if (Model.Navigation.RootItem != null)
+            {
+                <ul class="nav nav-list" id="sidebar-scroll">
+                    @if (Model.Navigation.RootItem.Items.Any())
+                    {
+                        for (var i = 0; i < Model.Navigation.RootItem.Items.Count; i++)
+                        {
+                            var item = Model.Navigation.RootItem.Items[i];
+
+                            <li>
+                                <label class="tree-toggle nav-header">
+                                    <span class="plus-icon">
+                                        <i class="fa fa-chevron-down"></i>
+                                    </span>
+                                </label>
+
+                                <a href="@item.Path">@item.Text</a>
+                            </li>
+                        }
+                    }
+                </ul>
+            }*@
+
+
         </nav>
     </abp-column>
 
@@ -88,7 +114,7 @@
         </div>
 
         <h2 class="document-title">@Model.Document.Title</h2>
-        
+
         <div class="document-toolbar">
             @if (!string.IsNullOrEmpty(Model.Document.EditLink))
             {

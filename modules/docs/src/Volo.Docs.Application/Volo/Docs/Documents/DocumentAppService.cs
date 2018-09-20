@@ -26,25 +26,26 @@ namespace Volo.Docs.Documents
             _documentStoreFactory = documentStoreFactory;
         }
 
-        public async Task<DocumentWithDetailsDto> GetByNameAsync(string projectShortName, string documentName, string version)
+        public async Task<DocumentWithDetailsDto> GetByNameAsync(string projectShortName, string documentName, string version, bool normalize)
         {
             var project = await _projectRepository.FindByShortNameAsync(projectShortName);
 
-            return await GetDocument(project, documentName, version);
+            return await GetDocument(project, documentName, version, normalize);
         }
 
-        public async Task<DocumentWithDetailsDto> GetNavigationDocumentAsync(string projectShortName, string version)
+        public async Task<NavigationWithDetailsDto> GetNavigationDocumentAsync(string projectShortName, string version, bool normalize)
         {
             var project = await _projectRepository.FindByShortNameAsync(projectShortName);
 
-            return await GetDocument(project, project.NavigationDocumentName, version);
+            return ObjectMapper.Map<DocumentWithDetailsDto, NavigationWithDetailsDto>(
+                await GetDocument(project, project.NavigationDocumentName, version, normalize));
         }
 
-        private async Task<DocumentWithDetailsDto> GetDocument(Project project, string documentName, string version)
+        private async Task<DocumentWithDetailsDto> GetDocument(Project project, string documentName, string version, bool normalize)
         {
             if (project == null)
             {
-                throw new EntityNotFoundException($"Project Not Found!");
+                throw new EntityNotFoundException("Project Not Found!");
             }
 
             if (string.IsNullOrWhiteSpace(documentName))
@@ -52,16 +53,19 @@ namespace Volo.Docs.Documents
                 documentName = project.DefaultDocumentName;
             }
 
-            var documentStore = _documentStoreFactory.Create(project);
+            IDocumentStore documentStore = _documentStoreFactory.Create(project);
             var document = await documentStore.FindDocumentByNameAsync(project, documentName, version);
 
             var dto = ObjectMapper.Map<Document, DocumentWithDetailsDto>(document);
 
             dto.Project = ObjectMapper.Map<Project, ProjectDto>(project);
 
-            dto.Content = NormalizeLinks(dto.Content, project.ShortName, version);
-            dto.Content = NormalizeImages(dto.Content, dto.RawRootUrl);
-
+            if (normalize)
+            {
+                dto.Content = NormalizeLinks(dto.Content, project.ShortName, version);
+                dto.Content = NormalizeImages(dto.Content, dto.RawRootUrl);
+            }
+            
             return dto;
         }
 
@@ -99,7 +103,7 @@ namespace Volo.Docs.Documents
 
         private async Task SetVersionsToCache(string projectShortName, List<string> versions)
         {
-            var options = new DistributedCacheEntryOptions(){SlidingExpiration = TimeSpan.FromDays(1)};
+            var options = new DistributedCacheEntryOptions() { SlidingExpiration = TimeSpan.FromDays(1) };
             await _distributedCache.SetAsync(projectShortName, versions, options);
         }
 

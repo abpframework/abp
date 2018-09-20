@@ -24,7 +24,12 @@ namespace Volo.Docs.Pages.Documents
             if (result.Items.Count == 1)
             {
                 var project = result.Items[0];
-                return RedirectToPage("./Project/Index", new { projectName = project.ShortName, version = "latest", documentName = project.DefaultDocumentName });
+                return RedirectToPage("./Project/Index", new
+                {
+                    projectName = project.ShortName,
+                    version = DocsWebConsts.DefaultVersion.Version,
+                    documentName = project.DefaultDocumentName
+                });
             }
 
             Projects = result.Items;

@@ -11,7 +11,10 @@ namespace Volo.Docs
         {
             CreateMap<Project, ProjectDto>();
             CreateMap<Document, DocumentWithDetailsDto>()
-                .Ignore(x => x.Project); 
+                .Ignore(x => x.Project);
+
+            CreateMap<DocumentWithDetailsDto, NavigationWithDetailsDto>()
+                .Ignore(x => x.RootItem);
         }
     }
 }

@@ -6,9 +6,11 @@ namespace Volo.Docs.Documents
 {
     public interface IDocumentAppService : IApplicationService
     {
-        Task<DocumentWithDetailsDto> GetByNameAsync(string projectShortName, string documentName, string version);
+        Task<DocumentWithDetailsDto> GetByNameAsync(string projectShortName, string documentName, string version,
+            bool normalize);
 
-        Task<DocumentWithDetailsDto> GetNavigationDocumentAsync(string projectShortName, string version);
+        Task<NavigationWithDetailsDto> GetNavigationDocumentAsync(string projectShortName, string version,
+            bool normalize);
 
         Task<List<string>> GetVersions(string projectShortName, string documentName);
     }

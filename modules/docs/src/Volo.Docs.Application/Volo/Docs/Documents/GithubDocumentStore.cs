@@ -3,48 +3,70 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Octokit;
-using Volo.Abp.DependencyInjection;
+using Volo.Abp.Domain.Services;
 using ProductHeaderValue = Octokit.ProductHeaderValue;
 using Project = Volo.Docs.Projects.Project;
 
 namespace Volo.Docs.Documents
 {
-    public class GithubDocumentStore : IDocumentStore, ITransientDependency
+    public class GithubDocumentStore : DomainService, IDocumentStore
     {
-        public const string Type = "Github"; //TODO: Conver to "github"
+        public const string Type = "Github"; //TODO: Convert to "github"
 
         public async Task<Document> FindDocumentByNameAsync(Project project, string documentName, string version)
         {
-            var rootUrl = project.ExtraProperties["GithubRootUrl"].ToString().Replace("_version_/", version + "/").Replace("www.","");
+            var rootUrl = project.ExtraProperties["GithubRootUrl"].ToString().Replace("_version_/", version + "/").Replace("www.", "");
             var token = project.ExtraProperties["GithubAccessToken"]?.ToString();
 
             var rawRootUrl = rootUrl.Replace("github.com", token + "raw.githubusercontent.com").Replace("/tree/", "/");
-            var rawUrl = rawRootUrl + $"{documentName}.md";
-            var editLink = rootUrl.Replace("/tree/", "/blob/") + $"{documentName}.md";
+            var rawUrl = rawRootUrl + documentName;
+            var editLink = rootUrl.Replace("/tree/", "/blob/") + documentName;
 
+            var content = DownloadWebContent(documentName, rawUrl);
+
+            return await Task.FromResult(new Document
+            {
+                Title = documentName,
+                Content = content,
+                EditLink = editLink,
+                RootUrl = rootUrl,
+                RawRootUrl = rawRootUrl,
+                Format = project.Format
+            });
+        }
+
+        private string DownloadWebContent(string documentName, string rawUrl)
+        {
             using (var webClient = new WebClient())
             {
-                string content;
-
                 try
                 {
-                    content = webClient.DownloadString(rawUrl);
+                    return webClient.DownloadString(rawUrl);
                 }
-                catch (Exception)
+                catch (WebException ex)
                 {
-                    content = "The Document doesn't exist.";
-                }
+                    Logger.LogError(ex, ex.Message);
 
-                return new Document
+                    if (ex.Status == WebExceptionStatus.ProtocolError)
+                    {
+                        if (ex.Response != null && ex.Response is HttpWebResponse response)
+                        {
+                            if (response.StatusCode == HttpStatusCode.NotFound)
+                            {
+                                return $"The document {documentName} not found in this version!";
+                            }
+                        }
+                    }
+
+                    return "An error occured while getting the document " + documentName;
+                }
+                catch (Exception ex)
                 {
-                    Title = documentName,
-                    Content = content,
-                    EditLink = editLink,
-                    RootUrl = rootUrl,
-                    RawRootUrl = rawRootUrl,
-                    Format = project.Format
-                };
+                    Logger.LogError(ex, ex.Message);
+                    return "An error occured while getting the document " + documentName;
+                }
             }
         }
 
@@ -53,7 +75,7 @@ namespace Volo.Docs.Documents
             var gitHubClient = new GitHubClient(new ProductHeaderValue("AbpWebSite"));
             var url = project.ExtraProperties["GithubRootUrl"].ToString();
             var releases = await gitHubClient.Repository.Release.GetAll(GetGithubOrganizationNameFromUrl(url), GetGithubRepositoryNameFromUrl(url));
-            
+
             return releases.OrderByDescending(r => r.PublishedAt).Select(r => r.TagName).ToList();
         }
 

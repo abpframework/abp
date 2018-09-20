@@ -24,7 +24,7 @@ namespace Volo.Docs.Pages.Documents.Project
 
         public List<VersionInfo> Versions { get; private set; }
 
-        public DocumentWithDetailsDto NavigationDocument { get; private set; }
+        public NavigationWithDetailsDto Navigation { get; private set; }
 
         private readonly IDocumentAppService _documentAppService;
         private readonly IDocumentFormattingFactory _documentFormattingFactory;
@@ -41,36 +41,66 @@ namespace Volo.Docs.Pages.Documents.Project
                 .Select(v => new VersionInfo(v, v))
                 .ToList();
 
-            var latestVersion = Versions.First();
 
-            if (string.Equals(Version, "latest", StringComparison.OrdinalIgnoreCase) || !Versions.Exists(v => v.Version == Version))
+            var latestVersion = Versions.First();
+            latestVersion.DisplayText = $"{latestVersion.Version} - latest";
+            latestVersion.Version = latestVersion.Version;
+
+            AddDefaultVersionIfNotContains();
+
+            var versionFromUrl = Versions.FirstOrDefault(v => v.Version == Version);
+            if (versionFromUrl != null)
             {
-                Version = latestVersion.Version;
+                versionFromUrl.IsSelected = true;
+            }
+            else if (string.Equals(Version, "latest", StringComparison.InvariantCultureIgnoreCase))
+            {
+                latestVersion.IsSelected = true;
+            }
+            else
+            {
+                Versions.First().IsSelected = true;
             }
 
-            latestVersion.DisplayText = $"{latestVersion.Version} (latest)";
-            latestVersion.Version = "latest";
+            //if (string.Equals(Version, "latest", StringComparison.OrdinalIgnoreCase) || !Versions.Exists(v => v.Version == Version))
+            //{
+            //    Version = latestVersion.Version;
+            //    latestVersion.IsSelected = true;
+            //}
 
-            Document = await _documentAppService.GetByNameAsync(ProjectName, DocumentName, Version);
+            if (Version == null)
+            {
+                Version = Versions.Single(x => x.IsSelected).Version;
+            }
+
+            Document = await _documentAppService.GetByNameAsync(ProjectName, DocumentName, Version, true);
             var documentFormatting = _documentFormattingFactory.Create(Document.Format ?? "md");
             Document.Content = documentFormatting.Format(Document.Content);
 
-            NavigationDocument = await _documentAppService.GetNavigationDocumentAsync(ProjectName, Version);
-            var navigationDocumentFormatting = _documentFormattingFactory.Create(NavigationDocument.Format);
-            NavigationDocument.Content = navigationDocumentFormatting.Format(NavigationDocument.Content);
+            Navigation = await _documentAppService.GetNavigationDocumentAsync(ProjectName, Version, false);
+            Navigation.ConvertItems();
         }
 
-        public class VersionInfo
+        private void AddDefaultVersionIfNotContains()
         {
-            public string DisplayText { get; set; }
-
-            public string Version { get; set; }
-
-            public VersionInfo(string displayText, string version)
+            if (DocsWebConsts.DefaultVersion == null)
             {
-                DisplayText = displayText;
-                Version = version;
+                return;
             }
+
+            if (Versions.Contains(DocsWebConsts.DefaultVersion))
+            {
+                return;
+            }
+
+            Versions.Insert(0, DocsWebConsts.DefaultVersion);
         }
+
+        public void RenderTree()
+        {
+
+        }
+
+
     }
 }
