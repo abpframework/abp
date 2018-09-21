@@ -81,7 +81,7 @@ namespace Volo.Blogging.Comments
                 ObjectMapper.Map<List<Comment>, List<CommentWithDetailsDto>>(comments));
         }
 
-        [Authorize(BloggingPermissions.Comments.Create)]
+        //[Authorize(BloggingPermissions.Comments.Create)] TODO: Temporary removed
         public async Task<CommentWithDetailsDto> CreateAsync(CreateCommentDto input)
         {
             var comment = new Comment(_guidGenerator.Create(), input.PostId, input.RepliedCommentId, input.Text);

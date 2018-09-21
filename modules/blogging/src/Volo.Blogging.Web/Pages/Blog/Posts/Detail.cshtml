@@ -2,6 +2,7 @@
 @inherits Volo.Blogging.Pages.Blog.BloggingPage
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Http.Extensions
+@using Volo.Abp.Users
 @using Volo.Blogging
 @using Volo.Blogging.Pages.Blog.Posts
 @using Volo.Blogging.Areas.Blog.Helpers.TagHelpers
@@ -9,6 +10,7 @@
 @model DetailModel
 @{
     ViewBag.PageTitle = "Blog";
+    var hasCommentingPermission = CurrentUser.IsAuthenticated; //TODO: Apply real policy!
 }
 @section scripts {
     <abp-script-bundle name="@typeof(DetailModel).FullName">
@@ -100,13 +102,13 @@
                 }
             </div>
 
-            <a class="btn btn-blue float-right"
+            @*<a class="btn btn-blue float-right" TODO: Disabled temporary
                href="@Model.GetTwitterShareUrl(Model.Post.Title, HttpContext.Request.GetEncodedUrl(), "@" + (Model.Blog.Twitter??""))" target="_blank">
                 <i class="fa fa-twitter"></i>
                 @L["ShareOnTwitter"]
-            </a>
+            </a>*@
 
-            @if (await Authorization.IsGrantedAsync(BloggingPermissions.Comments.Create))
+            @if (hasCommentingPermission)
             {
                 <div class="comment-form mt-4">
                     <div class="vs-blog-title mb-0">
@@ -131,7 +133,7 @@
                 @foreach (var commentWithRepliesDto in Model.CommentsWithReplies)
                 {
                     <div class="media">
-                        <img gravatar-email="@commentWithRepliesDto.Comment.Writer.Email" default-image="Identicon" class="d-flex mr-3 rounded-circle comment-avatar"  />
+                        <img gravatar-email="@commentWithRepliesDto.Comment.Writer.Email" default-image="Identicon" class="d-flex mr-3 rounded-circle comment-avatar" />
                         <div class="media-body">
                             <h5 class="comment-owner">
                                 @(commentWithRepliesDto.Comment.Writer == null ? "" : commentWithRepliesDto.Comment.Writer.UserName)
@@ -142,7 +144,7 @@
                             </p>
                             <div class="comment-buttons font-75 bg-light">
 
-                                @if (await Authorization.IsGrantedAsync(BloggingPermissions.Comments.Create))
+                                @if (hasCommentingPermission)
                                 {
                                     <a href="#" class="tag replyLink" data-relpyid="@commentWithRepliesDto.Comment.Id">
                                         <i class="fa fa-reply" aria-hidden="true"></i> @L["Reply"]
@@ -166,7 +168,7 @@
                                 }
                             </div>
 
-                            @if (await Authorization.IsGrantedAsync(BloggingPermissions.Comments.Create))
+                            @if (hasCommentingPermission)
                             {
                                 <div class="comment-form mt-4 replyForm">
                                     <div class="clearfix bg-light p-4">
@@ -208,7 +210,7 @@
                             @foreach (var reply in commentWithRepliesDto.Replies)
                             {
                                 <div class="media">
-                                    <img gravatar-email="@reply.Writer.Email" default-image="Identicon" class="d-flex mr-3 rounded-circle comment-avatar"  />
+                                    <img gravatar-email="@reply.Writer.Email" default-image="Identicon" class="d-flex mr-3 rounded-circle comment-avatar" />
                                     <div class="media-body">
                                         <h5 class="comment-owner">
                                             @(reply.Writer == null ? "" : reply.Writer.UserName)
@@ -219,7 +221,7 @@
                                         </p>
                                         <div class="comment-buttons font-75 bg-light">
 
-                                            @if (await Authorization.IsGrantedAsync(BloggingPermissions.Comments.Create))
+                                            @if (hasCommentingPermission)
                                             {
                                                 <a href="#" class="tag replyLink" data-relpyid="@commentWithRepliesDto.Comment.Id">
                                                     <i class="fa fa-reply" aria-hidden="true"></i> @L["Reply"]
@@ -242,7 +244,7 @@
                                             }
                                         </div>
 
-                                        @if (await Authorization.IsGrantedAsync(BloggingPermissions.Comments.Create))
+                                        @if (hasCommentingPermission)
                                         {
                                             <div class="comment-form mt-4 replyForm">
                                                 <div class="clearfix bg-light p-4">

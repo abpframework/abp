@@ -10,10 +10,9 @@
     text-decoration: none;
     color: #000000; }
   div.vs-blog p {
-    color: #444;
-    font-family: 'PT Sans', 'Times New Roman', Times, serif; }
+    color: #444; }
   div.vs-blog h1, div.vs-blog h2, div.vs-blog h3, div.vs-blog h4, div.vs-blog h5, div.vs-blog h6, div.vs-blog .tab-title {
-    font-family: Helvetica, Roboto, sans-serif;
+    font-family: Helvetica, Arial, sans-serif;
     font-weight: 700; }
   div.vs-blog h1 {
     font-size: 2.25em;
