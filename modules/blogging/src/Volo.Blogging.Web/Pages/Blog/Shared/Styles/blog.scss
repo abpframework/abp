@@ -4,6 +4,8 @@ div.vs-blog {
     padding: 0 30px;
     font-family: 'Open Sans', Helvetica, Arial, sans-serif;
     font-size: 14px;  
+    margin: 0 auto;
+    max-width: 1080px;
     @import "bootstrap-overwrite.scss"; 
     @import "header.scss";  
     @import "home.scss";        

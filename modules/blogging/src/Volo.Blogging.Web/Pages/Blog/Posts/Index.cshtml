@@ -24,69 +24,69 @@
 }
 
 <div class="vs-blog">
-    <div class="vs-blog-header">
-        <div class="vs-blog-title">
-            <div class="row">
-                <div class="col">
-                    <h1 class="my-0 display-inline-block">
-                        @Model.Blog.Name
-                        <small class="text-muted">
-                            @if (string.IsNullOrWhiteSpace(Model.TagName))
-                            {
-                                @L["BLOG"]
-                            }
-                            else
-                            {
-                                @Html.Raw("#")@Model.TagName
-                            }
-                        </small>
-                    </h1>
-                </div>
-                <div class="col-sm-4 text-right">
-                    <br />
-                    @if (await Authorization.IsGrantedAsync(BloggingPermissions.Posts.Create))
-                    {
-                        <a asp-page="./New" asp-route-blogShortName="@Model.BlogShortName">@L["CreateANewPost"]</a>
-                        <span class="vs-seperator">|</span>
-                    }
-                    @if (!string.IsNullOrWhiteSpace(Model.Blog.Facebook))
-                    {
-                        <a href="https://Facebook.com/@Model.Blog.Facebook" target="_blank">
-                            <i class="fa fa-facebook"></i>
-                        </a>
-                        <span class="vs-seperator">|</span>
-                    }
-                    @if (!string.IsNullOrWhiteSpace(Model.Blog.Twitter))
-                    {
-                        <a href="https://twitter.com/@Model.Blog.Twitter" target="_blank">
-                            <i class="fa fa-twitter"></i>
-                        </a>
-                        <span class="vs-seperator">|</span>
-                    }
-                    @if (!string.IsNullOrWhiteSpace(Model.Blog.Instagram))
-                    {
-                        <a href="https://Instagram.com/@Model.Blog.Instagram" target="_blank">
-                            <i class="fa fa-instagram"></i>
-                        </a>
-                        <span class="vs-seperator">|</span>
-                    }
-                    @if (!string.IsNullOrWhiteSpace(Model.Blog.Github))
-                    {
-                        <a href="https://Github.com/@Model.Blog.Github" target="_blank">
-                            <i class="fa fa-github"></i>
-                        </a>
-                        <span class="vs-seperator">|</span>
-                    }
-                    @if (!string.IsNullOrWhiteSpace(Model.Blog.StackOverflow))
-                    {
-                        <a href="https://StackOverflow.com/@Model.Blog.StackOverflow" target="_blank">
-                            <i class="fa fa-stack-overflow"></i>
-                        </a>
-                    }
+    @*<div class="vs-blog-header">
+            <div class="vs-blog-title">
+                <div class="row">
+                    <div class="col">
+                        <h1 class="my-0 display-inline-block">
+                            @Model.Blog.Name
+                            <small class="text-muted">
+                                @if (string.IsNullOrWhiteSpace(Model.TagName))
+                                {
+                                    @L["BLOG"]
+                                }
+                                else
+                                {
+                                    @Html.Raw("#")@Model.TagName
+                                }
+                            </small>
+                        </h1>
+                    </div>
+                    <div class="col-sm-4 text-right">
+                        <br />
+                        @if (await Authorization.IsGrantedAsync(BloggingPermissions.Posts.Create))
+                        {
+                            <a asp-page="./New" asp-route-blogShortName="@Model.BlogShortName">@L["CreateANewPost"]</a>
+                            <span class="vs-seperator">|</span>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Blog.Facebook))
+                        {
+                            <a href="https://Facebook.com/@Model.Blog.Facebook" target="_blank">
+                                <i class="fa fa-facebook"></i>
+                            </a>
+                            <span class="vs-seperator">|</span>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Blog.Twitter))
+                        {
+                            <a href="https://twitter.com/@Model.Blog.Twitter" target="_blank">
+                                <i class="fa fa-twitter"></i>
+                            </a>
+                            <span class="vs-seperator">|</span>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Blog.Instagram))
+                        {
+                            <a href="https://Instagram.com/@Model.Blog.Instagram" target="_blank">
+                                <i class="fa fa-instagram"></i>
+                            </a>
+                            <span class="vs-seperator">|</span>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Blog.Github))
+                        {
+                            <a href="https://Github.com/@Model.Blog.Github" target="_blank">
+                                <i class="fa fa-github"></i>
+                            </a>
+                            <span class="vs-seperator">|</span>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Blog.StackOverflow))
+                        {
+                            <a href="https://StackOverflow.com/@Model.Blog.StackOverflow" target="_blank">
+                                <i class="fa fa-stack-overflow"></i>
+                            </a>
+                        }
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
+        </div>*@
     <div class="pb-3">
         <div class="row">
             <div class="col-md-8">
@@ -183,9 +183,9 @@
 
     <div class="pb-5">
         <div class="row">
-            @if (Model.Posts.Count > 3)
-            {
-                <div class="col-md-8 box-articles">
+            <div class="col-md-8 box-articles">
+                @if (Model.Posts.Count > 3)
+                {
                     <div class="vs-blog-title">
                         <h2>@L["LastPosts"]</h2>
                     </div>
@@ -242,8 +242,8 @@
                             </div>
                         }
                     </div>
-                </div>
-            }
+                }
+            </div>
 
 
             @if (Model.PopularTags.Count > 0)

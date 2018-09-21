@@ -22,61 +22,6 @@
     </abp-style-bundle>
 }
 <div class="vs-blog">
-    <div class="vs-blog-header">
-        <div class="vs-blog-title">
-            <div class="row">
-                <div class="col">
-                    <h1 class="my-0 display-inline-block">
-                        @Model.Blog.Name
-                        <small class="text-muted">
-                            @L["BLOG"]
-                        </small>
-                    </h1>
-                </div>
-                <div class="col-sm-4 text-right">
-                    <br />
-                    <a asp-page="/Blog/Posts/Index" asp-route-blogShortName="@Model.BlogShortName">
-                        <i class="fa fa fa-angle-left"></i> @L["Blog"]
-                    </a>
-                    <span class="vs-seperator">|</span>
-                    @if (!string.IsNullOrWhiteSpace(Model.Blog.Facebook))
-                    {
-                        <a href="https://Facebook.com/@Model.Blog.Facebook" target="_blank">
-                            <i class="fa fa-facebook"></i>
-                        </a>
-                        <span class="vs-seperator">|</span>
-                    }
-                    @if (!string.IsNullOrWhiteSpace(Model.Blog.Twitter))
-                    {
-                        <a href="https://twitter.com/@Model.Blog.Twitter" target="_blank">
-                            <i class="fa fa-twitter"></i>
-                        </a>
-                        <span class="vs-seperator">|</span>
-                    }
-                    @if (!string.IsNullOrWhiteSpace(Model.Blog.Instagram))
-                    {
-                        <a href="https://Instagram.com/@Model.Blog.Instagram" target="_blank">
-                            <i class="fa fa-instagram"></i>
-                        </a>
-                        <span class="vs-seperator">|</span>
-                    }
-                    @if (!string.IsNullOrWhiteSpace(Model.Blog.Github))
-                    {
-                        <a href="https://Github.com/@Model.Blog.Github" target="_blank">
-                            <i class="fa fa-github"></i>
-                        </a>
-                        <span class="vs-seperator">|</span>
-                    }
-                    @if (!string.IsNullOrWhiteSpace(Model.Blog.StackOverflow))
-                    {
-                        <a href="https://StackOverflow.com/@Model.Blog.StackOverflow" target="_blank">
-                            <i class="fa fa-stack-overflow"></i>
-                        </a>
-                    }
-                </div>
-            </div>
-        </div>
-    </div>
     <div class="row">
         <div class="col-md-12 mx-auto">
             <section class="hero-section">
