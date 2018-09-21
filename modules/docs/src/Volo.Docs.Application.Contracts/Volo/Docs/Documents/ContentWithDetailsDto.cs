@@ -21,6 +21,10 @@ namespace Volo.Docs.Documents
 
         public string Version { get; set; }
 
+        public string LocalDirectory { get; set; }
+
+        public string FileName { get; set; }
+
         public ProjectDto Project { get; set; }
     }
 

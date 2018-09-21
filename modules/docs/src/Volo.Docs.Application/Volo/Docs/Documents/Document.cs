@@ -15,5 +15,9 @@ namespace Volo.Docs.Documents
         public string RawRootUrl { get; set; }
 
         public string Version { get; set; }
+
+        public string LocalDirectory { get; set; }
+
+        public string FileName { get; set; }
     }
 }

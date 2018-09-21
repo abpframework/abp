@@ -8,10 +8,6 @@
     "inputFile": "Pages/Documents/_docs.scss"
   },
   {
-    "outputFile": "Pages/Documents/Project/vs.css",
-    "inputFile": "Pages/Documents/Project/vs.scss"
-  },
-  {
     "outputFile": "Pages/Documents/_responsive.css",
     "inputFile": "Pages/Documents/_responsive.scss"
   },

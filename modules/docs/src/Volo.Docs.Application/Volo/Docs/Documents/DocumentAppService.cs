@@ -54,17 +54,17 @@ namespace Volo.Docs.Documents
             }
 
             IDocumentStore documentStore = _documentStoreFactory.Create(project);
-            var document = await documentStore.FindDocumentByNameAsync(project, documentName, version);
+            Document document = await documentStore.FindDocumentByNameAsync(project, documentName, version);
 
             var dto = ObjectMapper.Map<Document, DocumentWithDetailsDto>(document);
 
             dto.Project = ObjectMapper.Map<Project, ProjectDto>(project);
 
-            if (normalize)
-            {
-                dto.Content = NormalizeLinks(dto.Content, project.ShortName, version);
-                dto.Content = NormalizeImages(dto.Content, dto.RawRootUrl);
-            }
+            //if (normalize)
+            //{
+            //    dto.Content = NormalizeLinks(dto.Content, project.ShortName, version);
+            //    dto.Content = NormalizeImages(dto.Content, dto.RawRootUrl);
+            //}
 
             return dto;
         }
@@ -107,40 +107,6 @@ namespace Volo.Docs.Documents
             await _distributedCache.SetAsync(projectShortName, versions, options);
         }
 
-        private static string NormalizeLinks(string content, string projectShortName, string version)
-        {
-            var linkRegex = new Regex(@"\(([^)]+.md)\)", RegexOptions.Multiline);
-            var matches = linkRegex.Matches(content);
-            foreach (Match match in matches)
-            {
-                var mdFile = match.Value;
-                content = content.Replace(mdFile, "(/documents/" + projectShortName + "/" + version + "/" + mdFile.Replace("(", "").Replace(")", "").Replace(".md", "") + ")");
-            }
-
-            return content;
-        }
-
-        private static string NormalizeImages(string content, string documentRootAddress)
-        {
-            content = Regex.Replace(content, @"(<img\s+[^>]*)src=""([^""]*)""([^>]*>)", delegate (Match match)
-            {
-                var newImageSource = documentRootAddress.EnsureEndsWith('/') + match.Groups[1].Value.TrimStart('/');
-                return match.Groups[1] + "src=\"" + newImageSource + "\"" + match.Groups[3];
-
-            }, RegexOptions.IgnoreCase | RegexOptions.Singleline | RegexOptions.Multiline);
-
-            //var baseImageUrl = documentRootAddress;
-
-            //if (content.Contains("images/"))
-            //{
-            //    Console.Write("");
-            //}
-
-            //var newSrcAttribute = "src=\"" + baseImageUrl + "images/\" data-src=\"" + baseImageUrl + "images/";
-
-            //return content.Replace("src=\"images/", newSrcAttribute)
-            //    .Replace("src=\"../images/", newSrcAttribute);
-            return content;
-        }
+     
     }
 }

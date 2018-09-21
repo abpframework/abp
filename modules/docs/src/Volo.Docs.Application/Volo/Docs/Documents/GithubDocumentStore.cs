@@ -23,6 +23,14 @@ namespace Volo.Docs.Documents
             var rawRootUrl = rootUrl.Replace("github.com", token + "raw.githubusercontent.com").Replace("/tree/", "/");
             var rawUrl = rawRootUrl + documentName;
             var editLink = rootUrl.Replace("/tree/", "/blob/") + documentName;
+            string localDirectory = "";
+            string fileName = documentName;
+
+            if (documentName.Contains("/"))
+            {
+                localDirectory = documentName.Substring(0, documentName.LastIndexOf('/'));
+                fileName = documentName.Substring(documentName.LastIndexOf('/') + 1, documentName.Length - documentName.LastIndexOf('/') - 1);
+            }
 
             var content = DownloadWebContent(documentName, rawUrl);
 
@@ -33,7 +41,9 @@ namespace Volo.Docs.Documents
                 EditLink = editLink,
                 RootUrl = rootUrl,
                 RawRootUrl = rawRootUrl,
-                Format = project.Format
+                Format = project.Format,
+                LocalDirectory = localDirectory,
+                FileName = fileName
             });
         }
 
