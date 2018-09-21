@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.Account.Web.Settings;
 using Volo.Abp.Identity;
@@ -36,13 +37,8 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
             var user = new IdentityUser(GuidGenerator.Create(), Input.UserName, Input.EmailAddress, CurrentTenant.Id);
 
-            var result = await UserManager.CreateAsync(user, Input.Password);
-
-            if (!result.Succeeded)
-            {
-                throw new NotImplementedException();
-            }
-
+            (await UserManager.CreateAsync(user, Input.Password)).CheckErrors();
+            
             await UserManager.SetEmailAsync(user, Input.EmailAddress);
 
             await SignInManager.SignInAsync(user, isPersistent: false);
