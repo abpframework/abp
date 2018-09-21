@@ -1,132 +1,314 @@
 ﻿@page
-@using Volo.Docs.Helpers.TagHelpers;
-@model Volo.Docs.Pages.Documents.Project.IndexModel
+@using System.Globalization
+@using System.Net
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Http.Extensions
+@using Microsoft.AspNetCore.Mvc.Rendering
+@using Microsoft.Extensions.Options
+@using Volo.Abp.AspNetCore.Mvc.UI.Theming
+@using Volo.Docs.Areas.Documents.Helpers
+@using Volo.Docs
+@using Volo.Docs.Pages.Documents.Project
+@inject IThemeManager ThemeManager
+@model IndexModel
 @{
     ViewBag.FluidLayout = true;
+    Layout = ThemeManager.CurrentTheme.GetEmptyLayout();
 }
 @section styles {
-    <link href="~/lib/bootstrap-toc/dist/bootstrap-toc.css" rel="stylesheet" type="text/css" />
-    <link href="~/pages/documents/project/index.css" rel="stylesheet" type="text/css" />
+    <abp-style-bundle name="@typeof(IndexModel).FullName">
+        <abp-style src="/Pages/Documents/Project/vs.css" />
+        <abp-style src="/lib/prism/prism.css" />
+        <abp-style src="/lib/mCustomScrollbar/jquery.mCustomScrollbar.min.css" />
+    </abp-style-bundle>
 }
+
 @section scripts {
-    <script src="~/lib/mark.js/dist/jquery.mark.min.js" charset="UTF-8"></script>
-    <script src="~/lib/bootstrap-toc/dist/bootstrap-toc.js" charset="UTF-8"></script>
-    <script src="~/lib/anchor-js/anchor.min.js"></script>
-    <script src="~/lib/jquery-unveil/jquery.unveil.js" charset="UTF-8"></script>
-    <script src="~/lib/clipboard/dist/clipboard.min.js"></script>
-    <script src="~/pages/documents/project/index.js" charset="UTF-8"></script>
+    <abp-script-bundle name="@typeof(IndexModel).FullName">
+        <abp-script src="/Pages/Documents/Project/index.js" />
+        <abp-script src="/lib/mCustomScrollbar/jquery.mCustomScrollbar.concat.min.js" />
+        <abp-script src="/lib/prism/prism.js" />
+        <abp-script src="/lib/popper.js/dist/umd/popper.min.js" />
+        <abp-script src="/Pages/Documents/Project/vs.js" />
+    </abp-script-bundle>
 }
 
-<abp-row>
-    <abp-column>
-        <script>
-            (function () {
-                var cx = "@Model.Document.Project.GoogleCustomSearchId";
-                var gcse = document.createElement('script');
-                gcse.type = 'text/javascript';
-                gcse.async = true;
-                gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
-                var s = document.getElementsByTagName('script')[0];
-                s.parentNode.insertBefore(gcse, s);
-            })();
-        </script>
-        <gcse:search noResultsString='No documents found!'></gcse:search>
-    </abp-column>
-</abp-row>
+<div class="docs-page" data-spy="scroll" data-target="#docs-sticky-index">
+    <div class="row">
+        <div class="col-md-3 docs-sidebar dark-sidebar">
+            <div class="docs-sidebar-wrapper">
+                <div class="docs-top">
+                    <nav class="navbar navbar-logo">
+                        <a class="navbar-brand" href="index.html">
+                            ASP.NET ZERO
+                            <br><strong class="display-block">Documentation</strong>
+                        </a>
+                        <a href="#" class="go-back-site"><i class="fa fa-chevron-left"></i> Back to Website</a>
+                        <div class="for-mobile">
+                            <div class="navbar-light">
+                                <button type="button" class="open-dmenu navbar-toggler" aria-label="Close">
+                                    <span class="navbar-toggler-icon"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </nav>
 
-<div class="row flex-xl-nowrap" id="docsContainer">
+                </div>
+                <div class="docs-tree-list">
+                    <div class="docs-search">
+                        <form class="form-inline">
+                            <input class="form-control" type="search" placeholder="Filter Topics" aria-label="Search">
+                            <button class="my-2 btn btn-search my-sm-0" type="submit">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </form>
+                    </div>
 
-    <abp-column size="_12" size-md="_3" size-xl="_2" class="bd-sidebar">
-        <div class="bd-search align-items-center d-none d-md-block">
-            <input class="form-control ds-input flat"
-                   id="filterInput"
-                   placeholder="Filter..."
-                   autocomplete="off"
-                   spellcheck="false"
-                   dir="auto"
-                   type="search">
+                    @if (Model.Versions.Any())
+                    {
+                        <div class="form-horizontal document-version">
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    @Html.DropDownList("DocumentVersion", Model.Versions.Select(v => new SelectListItem
+                                    {
+                                        Text = v.DisplayText,
+                                        Value = "/documents/" + Model.ProjectName + "/" + v.Version + "/" + Model.DocumentName,
+                                        Selected = v.IsSelected
+                                    }), new {@class = "form-control flat"})
+
+                                    <button class="btn btn-link bd-search-docs-toggle d-md-none p-0 ml-3"
+                                            type="button"
+                                            data-toggle="collapse"
+                                            data-target="#bd-docs-nav" aria-controls="bd-docs-nav"
+                                            aria-expanded="false" aria-label="Toggle docs navigation">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 30 30" width="30" height="30" focusable="false">
+                                            <title>Menu</title>
+                                            <path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-miterlimit="10" d="M4 7h22M4 15h22M4 23h22" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    <ul root-item="@Model.Navigation.RootItem" id="sidebar-scroll" class="nav nav-list"></ul>
+
+                </div>
+            </div>
         </div>
+        <div class="col-md-7 docs-content bg-white">
+            <div class="docs-content-field">
+                <div class="docs-text-field">
+                    <div data-spy="scroll" data-target="#docs-sticky-index" data-offset="0">
+                        <article class="docs-body">
 
-        @if (Model.Versions.Any())
-        {
-            <div class="form-horizontal document-version">
-                <div class="form-group">
-                    <label class="col-md-3 col-sm-3 control-label d-none d-lg-block">Version</label>
-                    <div class="col-lg-9 col-md-12  d-flex ">
-                        @Html.DropDownList("DocumentVersion", Model.Versions.Select(v => new SelectListItem
-                        {
-                            Text = v.DisplayText,
-                            Value = "/documents/" + Model.ProjectName + "/" + v.Version + "/" + Model.DocumentName,
-                            Selected = v.IsSelected
-                        }), new { @class = "form-control flat" })
 
-                        <button class="btn btn-link bd-search-docs-toggle d-md-none p-0 ml-3"
-                                type="button"
-                                data-toggle="collapse"
-                                data-target="#bd-docs-nav" aria-controls="bd-docs-nav"
-                                aria-expanded="false" aria-label="Toggle docs navigation">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 30 30" width="30" height="30" focusable="false">
-                                <title>Menu</title>
-                                <path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-miterlimit="10" d="M4 7h22M4 15h22M4 23h22" />
-                            </svg>
-                        </button>
+
+
+                            <h1 id="dependency-injection">
+                                <a id="user-content-dependency-injection" class="anchor" href="#dependency-injection">
+                                    <i class="fa fa-link"></i>
+                                </a>Dependency Injection
+                            </h1>
+                            <p>ABP's Dependency Injection system is developed based on Microsoft's <a href="https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection" rel="nofollow">dependency injection extension</a> library (Microsoft.Extensions.DependencyInjection nuget package). So, it's documentation is valid in ABP too.</p>
+
+
+
+
+                            <h2 id="modularity">
+                                <a id="user-content-modularity" class="anchor" href="#modularity">
+                                    <i class="fa fa-link"></i>
+                                </a>Modularity
+                            </h2>
+                            <p>Since ABP is a modular framework, every module defines it's services and registers to dependency injection in a seperated place, in it's own <a href="/abpframework/abp/blob/master/docs/Module-Development-Basics.md">module class</a>. Example:</p>
+                            <div class="code-block">
+                                <pre class="line-numbers" data-line=""> 
+                                <code class="language-csharp">
+                                                public class BlogModule : AbpModule
+                                                {
+                                                    public override void ConfigureServices(ServiceConfigurationContext context)
+                                                    {
+                                                        //register dependencies here
+                                                    }
+                                                }
+                                            </code>
+                                        </pre>
+                            </div>
+
+
+
+
+                            <h2 id="conventional-registration">
+                                <a id="user-content-conventional-registration" class="anchor" href="#conventional-registration">
+                                    <i class="fa fa-link"></i>
+                                </a>Conventional Registration
+                            </h2>
+                            <p>ABP introduces conventional service registration. You should do nothing to register services by convention. It's automatically done. If you want to disable it, you can set <code>SkipAutoServiceRegistration</code> to <code>true</code> by overriding the <code>PreConfigureServices</code> method.</p>
+                            <div class="code-block">
+                                <pre class="line-numbers" data-line=""> 
+                                <code class="language-csharp">
+                                                {
+                                                    public override void PreConfigureServices(ServiceConfigurationContext context)
+                                                    {
+                                                        SkipAutoServiceRegistration = true;
+                                                    }
+                                                }
+                                            </code>
+                                        </pre>
+                            </div>
+                            <p>Once you skip auto registration, you should manually register your services. In that case, <code>AddAssemblyOf</code> extension method can help you to register all your services by convention. Example:</p>
+                            <div class="code-block">
+                                <pre class="line-numbers" data-line=""> 
+                                <code class="language-csharp">
+                                                {
+                                                    public override void PreConfigureServices(ServiceConfigurationContext context)
+                                                    {
+                                                        SkipAutoServiceRegistration = true;
+                                                    }
+                                                
+                                                    public override void ConfigureServices(ServiceConfigurationContext context)
+                                                    {
+                                                        context.Services.AddAssemblyOf< BlogModule >();
+                                                    }
+                                                }
+                                            </code>
+                                        </pre>
+                            </div>
+                            <p>The section below explains the conventions and configurations.</p>
+
+
+
+
+
+                            <h2 id="inherently-registered-types">
+                                <a id="user-content-inherently-registered-types" class="anchor" href="#inherently-registered-types">
+                                    <i class="fa fa-link"></i>
+                                </a>Inherently Registered Types
+                            </h2>
+                            <p>Some specific types are registered to dependency injection by default. Examples:</p>
+                            <ul>
+                                <li>Module classes are registered as singleton.</li>
+                                <li>MVC controllers (inherit <code>Controller</code> or <code>AbpController</code>) are registered as transient.</li>
+                                <li>MVC page models (inherit <code>PageModel</code> or <code>AbpPageModel</code>) are registered as transient.</li>
+                                <li>MVC view components (inherit <code>ViewComponent</code> or <code>AbpViewComponent</code>) are registered as transient.</li>
+                                <li>Application services (implement <code>IApplicationService</code> interface or inherit <code>ApplicationService</code> class) are registered as transient.</li>
+                                <li>Repositories (implement <code>IRepository</code> interface) are registered as transient.</li>
+                                <li>Domain services (implement <code>IDomainService</code> interface) are registered as transient.</li>
+                            </ul>
+                            <p>Example:</p>
+                            <div class="code-block">
+                                <pre class="line-numbers" data-line=""> 
+                                <code class="language-csharp">
+                                                public class BlogPostAppService : ApplicationService
+                                                {
+                                                }
+                                            </code>
+                                        </pre>
+                            </div>
+                            <p><code>BlogPostAppService</code> is automatically registered with transient lifetime since it's derived from a known base class.</p>
+
+
+
+
+                            <h2 id="dependency-interfaces">
+                                <a id="user-content-dependency-interfaces" class="anchor" href="#dependency-interfaces">
+                                    <i class="fa fa-link"></i>
+                                </a>Dependency Interfaces
+                            </h2>
+                            <p>If you implement these interfaces, your class is registered to dependency injection automatically:</p>
+                            <ul>
+                                <li><code>ITransientDependency</code> to register with transient lifetime.</li>
+                                <li><code>ISingletonDependency</code> to register with singleton lifetime.</li>
+                                <li><code>IScopedDependency</code> to register with scoped lifetime.</li>
+                            </ul>
+                            <p>Example:</p>
+                            <div class="code-block">
+                                <pre class="line-numbers" data-line=""> 
+                                <code class="language-csharp">
+                                                public class TaxCalculator : ITransientDependency
+                                                {
+                                                }
+                                            </code>
+                                        </pre>
+                            </div>
+                            <p><code>TaxCalculator</code> is automatically registered with transient lifetime since it implements <code>ITransientDependency</code>.</p>
+
+
+
+
+                            <h2 id="dependency-attribute">
+                                <a id="user-content-dependency-attribute" class="anchor" href="#dependency-attribute">
+                                    <i class="fa fa-link"></i>
+                                </a>Dependency Attribute
+                            </h2>
+                            <p>Another way of configuring a service for dependency injection is to use <code>DependencyAttribute</code>. It has given properties:</p>
+                            <ul>
+                                <li><code>Lifetime</code>: Lifetime of the registration: <code>Singleton</code>, <code>Transient</code> or <code>Scoped</code>.</li>
+                                <li><code>TryRegister</code>: Set <code>true</code> to register the service only it's not registered before. Uses TryAdd... extension methods of IServiceCollection.</li>
+                                <li><code>ReplaceServices</code>: Set <code>true</code> to replace services if they are already registered before. Uses Replace extension method of IServiceCollection.</li>
+                            </ul>
+                            <p>Example:</p>
+                            <div class="code-block">
+                                <pre class="line-numbers" data-line=""> 
+                                <code class="language-csharp">
+                                                public class TaxCalculator : ITransientDependency
+                                                {
+                                                }
+                                            </code>
+                                        </pre>
+                            </div>
+                            <p><code>Dependency</code> attribute has higher priority then dependency interfaces if it defines the <code>Lifetime</code> property.</p>
+
+
+
+
+
+                            <h2 id="exposeservices-attribute">
+                                <a id="user-content-exposeservices-attribute" class="anchor" href="#exposeservices-attribute">
+                                    <i class="fa fa-link"></i>
+                                </a>ExposeServices Attribute
+                            </h2>
+                            <p><code>ExposeServicesAttribute</code> is used to control which services are provided by the related class. Example:</p>
+                            <div class="code-block">
+                                <pre class="line-numbers" data-line=""> 
+                                <code class="language-csharp">
+                                                [ExposeServices(typeof(ITaxCalculator))]
+                                                public class TaxCalculator: ICalculator, ITaxCalculator, ICanCalculate, ITransientDependency
+                                                { 
+                                                } 
+                                            </code>
+                                        </pre>
+                            </div>
+
+
+
+                        </article>
                     </div>
                 </div>
             </div>
-        }
-
-        <nav class="bd-links" id="bd-docs-nav">
-
-            <ul navigation-items="@Model.Navigation.RootItem"></ul>
-
-
-            @*@if (Model.Navigation.RootItem != null)
-            {
-                <ul class="nav nav-list" id="sidebar-scroll">
-                    @if (Model.Navigation.RootItem.Items.Any())
-                    {
-                        for (var i = 0; i < Model.Navigation.RootItem.Items.Count; i++)
-                        {
-                            var item = Model.Navigation.RootItem.Items[i];
-
-                            <li>
-                                <label class="tree-toggle nav-header">
-                                    <span class="plus-icon">
-                                        <i class="fa fa-chevron-down"></i>
-                                    </span>
-                                </label>
-
-                                <a href="@item.Path">@item.Text</a>
-                            </li>
-                        }
-                    }
-                </ul>
-            }*@
-
-
-        </nav>
-    </abp-column>
-
-    <main class="col-12 col-md-8 col-xl-8 py-md-3 pl-md-5 bd-content" role="main">
-        <div class="top-toc d-none d-md-block d-xl-none">
-            <p class="toc-ticle">In this document</p>
-            <nav class="toc-navigaton"></nav>
         </div>
-
-        <h2 class="document-title">@Model.Document.Title</h2>
-
-        <div class="document-toolbar">
-            @if (!string.IsNullOrEmpty(Model.Document.EditLink))
-            {
-                <a href="@Model.Document.EditLink" target="_blank"> <i class="fa fa-edit"></i> Edit @*TODO: localize*@</a>
-            }
+        <div class="col-md-2 docs-page-index position-relative bg-light">
+            <div class="docs-inner-anchors mt-2">
+                <nav id="docs-sticky-index" class="navbar p-0 pt-2">
+                    <h5 class="inner-title">In this article</h5>
+                    <nav class="nav nav-pills flex-column">
+                        <a class="nav-link" href="#dependency-injection">Dependency Injection</a>
+                        <nav class="nav nav-pills flex-column">
+                            <a class="nav-link" href="#modularity">Modularity</a>
+                            <a class="nav-link" href="#conventional-registration">Conventional Registration</a>
+                            <a class="nav-link" href="#inherently-registered-types">Inherently Registered Types</a>
+                            <a class="nav-link" href="#dependency-interfaces">Dependency Interfaces</a>
+                            <a class="nav-link" href="#dependency-attribute">Dependency Attribute</a>
+                            <a class="nav-link" href="#exposeservices-attribute">ExposeServices Attribute</a>
+                        </nav>
+                    </nav>
+                </nav>
+                <div class="row">
+                    <div class="col mt-4 p-0">
+                        <a href="javascript:;" class="scroll-top-btn"><i class="fa fa-chevron-up"></i> Go to Top</a>
+                    </div>
+                </div>
+            </div>
         </div>
-
-        @Html.Raw(Model.Document.Content)
-    </main>
-
-    <div class="d-none d-xl-block col-xl-2 bd-toc">
-        <nav id="toc" data-spy="affix" class="affix toc-navigaton sidebar-toc"></nav>
     </div>
-
 </div>

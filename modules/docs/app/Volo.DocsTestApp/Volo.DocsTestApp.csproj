@@ -27,5 +27,5 @@
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.csproj" />
     <ProjectReference Include="..\Volo.DocsTestApp.EntityFrameworkCore\Volo.DocsTestApp.EntityFrameworkCore.csproj" />
   </ItemGroup>
-
+  
 </Project>

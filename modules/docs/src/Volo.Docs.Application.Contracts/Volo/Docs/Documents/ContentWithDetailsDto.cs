@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 using Volo.Docs.Projects;
 
@@ -33,6 +34,10 @@ namespace Volo.Docs.Documents
 
         [JsonProperty("items")]
         public List<NavigationNode> Items { get; set; }
+
+        public bool HasChildItems => Items != null && Items.Any();
+
+        public bool IsEmpty => Text == null && Path == null;
     }
 
     public class NavigationWithDetailsDto : DocumentWithDetailsDto

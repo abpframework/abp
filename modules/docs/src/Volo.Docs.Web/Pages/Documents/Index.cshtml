@@ -1,27 +1,35 @@
 ﻿@page
 @using Volo.Docs
 @using Volo.Docs.Pages.Documents
-@model IndexModel
+@model Volo.Docs.Pages.Documents.IndexModel
 @{
 }
-<h2>Projects</h2>
+@section styles {
+    <abp-style-bundle name="@typeof(IndexModel).FullName">
+        <abp-style src="/Pages/Documents/Project/vs.css" />
+        <abp-style src="/assets/fa/css/font-awesome.min.css" />
+    </abp-style-bundle>
+}
 
-@if (Model.Projects.Count > 0)
-{
-    <ul>
-        @foreach (var project in Model.Projects)
+<div class="p-5 text-center">
+
+    @if (Model.Projects.Count > 0)
+    {
+        <h2>Project(s)</h2>
+
+        foreach (var project in Model.Projects)
         {
-            <li>
+            <div>
                 <a asp-page="./Project/Index"
                    asp-route-projectName="@project.ShortName"
                    asp-route-version="@DocsWebConsts.DefaultVersion.Version">
                     @project.Name
                 </a>
-            </li>
+            </div>
         }
-    </ul>
-}
-else
-{
-    <p>There is no project defined yet!</p>
-}
+    }
+    else
+    {
+        <p>There is no project defined yet!</p>
+    }
+</div>

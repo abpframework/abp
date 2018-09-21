@@ -2,5 +2,9 @@
   {
     "outputFile": "wwwroot/pages/documents/project/index.css",
     "inputFile": "wwwroot/pages/documents/project/index.less"
+  },
+  {
+    "outputFile": "Pages/Documents/_docs.css",
+    "inputFile": "Pages/Documents/_docs.scss"
   }
 ]
