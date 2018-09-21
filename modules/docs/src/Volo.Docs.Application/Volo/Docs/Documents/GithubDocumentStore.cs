@@ -79,7 +79,7 @@ namespace Volo.Docs.Documents
             return releases.OrderByDescending(r => r.PublishedAt).Select(r => r.TagName).ToList();
         }
 
-        private string GetGithubOrganizationNameFromUrl(string url)
+        private static string GetGithubOrganizationNameFromUrl(string url)
         {
             try
             {

@@ -62,12 +62,6 @@ namespace Volo.Docs.Pages.Documents.Project
                 Versions.First().IsSelected = true;
             }
 
-            //if (string.Equals(Version, "latest", StringComparison.OrdinalIgnoreCase) || !Versions.Exists(v => v.Version == Version))
-            //{
-            //    Version = latestVersion.Version;
-            //    latestVersion.IsSelected = true;
-            //}
-
             if (Version == null)
             {
                 Version = Versions.Single(x => x.IsSelected).Version;
@@ -95,12 +89,5 @@ namespace Volo.Docs.Pages.Documents.Project
 
             Versions.Insert(0, DocsWebConsts.DefaultVersion);
         }
-
-        public void RenderTree()
-        {
-
-        }
-
-
     }
 }

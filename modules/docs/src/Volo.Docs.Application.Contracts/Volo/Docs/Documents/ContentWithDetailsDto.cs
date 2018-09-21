@@ -43,11 +43,11 @@ namespace Volo.Docs.Documents
     public class NavigationWithDetailsDto : DocumentWithDetailsDto
     {
         [JsonProperty("items")]
-        public NavigationNode RootItem { get; set; }
+        public NavigationNode RootNode { get; set; }
 
         public void ConvertItems()
         {
-            RootItem = string.IsNullOrWhiteSpace(Content) ?
+            RootNode = string.IsNullOrWhiteSpace(Content) ?
                 new NavigationNode() :
                 JsonConvert.DeserializeObject<NavigationNode>(Content);
         }

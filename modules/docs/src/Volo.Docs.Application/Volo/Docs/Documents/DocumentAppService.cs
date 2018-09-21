@@ -65,7 +65,7 @@ namespace Volo.Docs.Documents
                 dto.Content = NormalizeLinks(dto.Content, project.ShortName, version);
                 dto.Content = NormalizeImages(dto.Content, dto.RawRootUrl);
             }
-            
+
             return dto;
         }
 
@@ -122,17 +122,25 @@ namespace Volo.Docs.Documents
 
         private static string NormalizeImages(string content, string documentRootAddress)
         {
-            var baseImageUrl = documentRootAddress;
-
-            if (content.Contains("images/"))
+            content = Regex.Replace(content, @"(<img\s+[^>]*)src=""([^""]*)""([^>]*>)", delegate (Match match)
             {
-                Console.Write("");
-            }
+                var newImageSource = documentRootAddress.EnsureEndsWith('/') + match.Groups[1].Value.TrimStart('/');
+                return match.Groups[1] + "src=\"" + newImageSource + "\"" + match.Groups[3];
 
-            var newSrcAttribute = "src=\"" + baseImageUrl + "images/\" data-src=\"" + baseImageUrl + "images/";
+            }, RegexOptions.IgnoreCase | RegexOptions.Singleline | RegexOptions.Multiline);
 
-            return content.Replace("src=\"images/", newSrcAttribute)
-                .Replace("src=\"../images/", newSrcAttribute);
+            //var baseImageUrl = documentRootAddress;
+
+            //if (content.Contains("images/"))
+            //{
+            //    Console.Write("");
+            //}
+
+            //var newSrcAttribute = "src=\"" + baseImageUrl + "images/\" data-src=\"" + baseImageUrl + "images/";
+
+            //return content.Replace("src=\"images/", newSrcAttribute)
+            //    .Replace("src=\"../images/", newSrcAttribute);
+            return content;
         }
     }
 }
