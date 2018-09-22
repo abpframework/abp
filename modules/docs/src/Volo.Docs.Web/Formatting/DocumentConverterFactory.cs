@@ -4,21 +4,21 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Docs.Formatting
 {
-    public class DocumentFormattingFactory : IDocumentFormattingFactory, ITransientDependency
+    public class DocumentConverterFactory : IDocumentConverterFactory, ITransientDependency
     {
         private readonly IServiceProvider _serviceProvider;
 
-        public DocumentFormattingFactory(IServiceProvider serviceProvider)
+        public DocumentConverterFactory(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
         }
 
-        public IDocumentFormatting Create(string format)
+        public IDocumentConverter Create(string format)
         {
             switch (format.ToLowerInvariant())
             {
-                case MarkdownDocumentFormatting.Type:
-                    return _serviceProvider.GetRequiredService<MarkdownDocumentFormatting>();
+                case MarkdownDocumentConverter.Type:
+                    return _serviceProvider.GetRequiredService<MarkdownDocumentConverter>();
                 default:
                     throw new ApplicationException($"Undefined document formatting: {format}");
             }

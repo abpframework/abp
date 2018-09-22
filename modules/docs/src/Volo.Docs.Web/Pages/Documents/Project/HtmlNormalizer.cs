@@ -5,23 +5,7 @@ namespace Volo.Docs.Pages.Documents.Project
 {
     public static class HtmlNormalizer
     {
-        //todo: fix this for html content.
-        public static string NormalizeLinks(string content, string projectShortName, string version)
-        {
-            //var linkRegex = new Regex(@"\(([^)]+.md)\)", RegexOptions.Multiline);
-            //var matches = linkRegex.Matches(content);
-            //foreach (Match match in matches)
-            //{
-            //    var mdFile = match.Value;
-            //    content = content.Replace(mdFile, "(/documents/" + projectShortName + "/" + version + "/" + mdFile.Replace("(", "").Replace(")", "").Replace(".md", "") + ")");
-            //}
-
-            //return content;
-
-            return content;
-        }
-
-        public static string NormalizeImages(string content, string documentRawRootUrl, string localDirectory)
+        public static string ReplaceImageSources(string content, string documentRawRootUrl, string localDirectory)
         {
             content = Regex.Replace(content, @"(<img\s+[^>]*)src=""([^""]*)""([^>]*>)", delegate (Match match)
                 {

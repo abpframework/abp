@@ -50,7 +50,8 @@ namespace Volo.Docs.Documents
                 RawRootUrl = rawRootUrl,
                 Format = project.Format,
                 LocalDirectory = localDirectory,
-                FileName = fileName
+                FileName = fileName,
+                Version = version
             });
         }
 

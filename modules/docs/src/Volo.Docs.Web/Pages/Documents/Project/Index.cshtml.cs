@@ -27,12 +27,12 @@ namespace Volo.Docs.Pages.Documents.Project
         public NavigationWithDetailsDto Navigation { get; private set; }
 
         private readonly IDocumentAppService _documentAppService;
-        private readonly IDocumentFormattingFactory _documentFormattingFactory;
+        private readonly IDocumentConverterFactory _documentConverterFactory;
 
-        public IndexModel(IDocumentAppService documentAppService, IDocumentFormattingFactory documentFormattingFactory)
+        public IndexModel(IDocumentAppService documentAppService, IDocumentConverterFactory documentConverterFactory)
         {
             _documentAppService = documentAppService;
-            _documentFormattingFactory = documentFormattingFactory;
+            _documentConverterFactory = documentConverterFactory;
         }
 
         public async Task OnGet()
@@ -41,12 +41,14 @@ namespace Volo.Docs.Pages.Documents.Project
                 .Select(v => new VersionInfo(v, v))
                 .ToList();
 
+            var hasAnyVersion = Versions.Any();
 
-            var latestVersion = Versions.First();
+            AddDefaultVersionIfNotContains();
+
+            var latestVersion = hasAnyVersion ? Versions[1] : Versions[0];
             latestVersion.DisplayText = $"{latestVersion.Version} - latest";
             latestVersion.Version = latestVersion.Version;
 
-            AddDefaultVersionIfNotContains();
 
             var versionFromUrl = Versions.FirstOrDefault(v => v.Version == Version);
             if (versionFromUrl != null)
@@ -68,11 +70,11 @@ namespace Volo.Docs.Pages.Documents.Project
             }
 
             Document = await _documentAppService.GetByNameAsync(ProjectName, DocumentName, Version, true);
-            var documentFormatting = _documentFormattingFactory.Create(Document.Format ?? "md");
-            var content = documentFormatting.Format(Document.Content);
-            
-            content = HtmlNormalizer.NormalizeImages(content, Document.RawRootUrl, Document.LocalDirectory);
-            content = HtmlNormalizer.NormalizeLinks(content, Document.Project.ShortName, Document.Version);
+            var converter = _documentConverterFactory.Create(Document.Format ?? "md");
+            var content = converter.NormalizeLinks(Document.Content, Document.Project.ShortName, Document.Version, Document.LocalDirectory);
+            content = converter.Convert(content);
+
+            content = HtmlNormalizer.ReplaceImageSources(content, Document.RawRootUrl, Document.LocalDirectory);
             Document.Content = content;
 
             Navigation = await _documentAppService.GetNavigationDocumentAsync(ProjectName, Version, false);
