@@ -70,6 +70,7 @@ namespace Volo.Docs.Pages.Documents.Project
             Document = await _documentAppService.GetByNameAsync(ProjectName, DocumentName, Version, true);
             var documentFormatting = _documentFormattingFactory.Create(Document.Format ?? "md");
             var content = documentFormatting.Format(Document.Content);
+            
             content = HtmlNormalizer.NormalizeImages(content, Document.RawRootUrl, Document.LocalDirectory);
             content = HtmlNormalizer.NormalizeLinks(content, Document.Project.ShortName, Document.Version);
             Document.Content = content;

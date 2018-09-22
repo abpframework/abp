@@ -13,23 +13,26 @@
             top: 0px;
             position: fixed;
 
+            .form-control {
+                background: none;
+                border-radius: 6px;
+                padding-left: 36px;
+                width: 100%;
+                background: #eeeff2;
+                border: 0;
+
+                &:focus, &:active, &:hover, &:visited {
+                    box-shadow: none;
+                }
+            }
+
+
             .docs-search {
                 position: relative;
                 padding: 0 1rem;
                 margin: 1rem 0;
 
-                input.form-control {
-                    background: none;
-                    border-radius: 6px;
-                    padding-left: 36px;
-                    width: 100%;
-                    background: #eeeff2;
-                    border: 0;
 
-                    &:focus, &:active, &:hover, &:visited {
-                        box-shadow: none;
-                    }
-                }
 
                 .btn-search {
                     position: absolute;

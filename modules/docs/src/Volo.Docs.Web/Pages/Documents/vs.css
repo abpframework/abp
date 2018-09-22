@@ -9,19 +9,19 @@
       width: 270px;
       top: 0px;
       position: fixed; }
+      .docs-page .docs-sidebar .docs-sidebar-wrapper .form-control {
+        background: none;
+        border-radius: 6px;
+        padding-left: 36px;
+        width: 100%;
+        background: #eeeff2;
+        border: 0; }
+        .docs-page .docs-sidebar .docs-sidebar-wrapper .form-control:focus, .docs-page .docs-sidebar .docs-sidebar-wrapper .form-control:active, .docs-page .docs-sidebar .docs-sidebar-wrapper .form-control:hover, .docs-page .docs-sidebar .docs-sidebar-wrapper .form-control:visited {
+          box-shadow: none; }
       .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-search {
         position: relative;
         padding: 0 1rem;
         margin: 1rem 0; }
-        .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-search input.form-control {
-          background: none;
-          border-radius: 6px;
-          padding-left: 36px;
-          width: 100%;
-          background: #eeeff2;
-          border: 0; }
-          .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-search input.form-control:focus, .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-search input.form-control:active, .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-search input.form-control:hover, .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-search input.form-control:visited {
-            box-shadow: none; }
         .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-search .btn-search {
           position: absolute;
           top: 0px;

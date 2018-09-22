@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Net.Sockets;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Octokit;
@@ -15,9 +18,12 @@ namespace Volo.Docs.Documents
     {
         public const string Type = "Github"; //TODO: Convert to "github"
 
+        private const bool IsOffline = true; //use it when you don't want to get from GitHub (eg: I have no internet)
+
         public async Task<Document> FindDocumentByNameAsync(Project project, string documentName, string version)
         {
-            var rootUrl = project.ExtraProperties["GithubRootUrl"].ToString().Replace("_version_/", version + "/").Replace("www.", "");
+            var rootUrl = project.ExtraProperties["GithubRootUrl"].ToString().Replace("_version_/", version + "/")
+                .Replace("www.", "");
             var token = project.ExtraProperties["GithubAccessToken"]?.ToString();
 
             var rawRootUrl = rootUrl.Replace("github.com", token + "raw.githubusercontent.com").Replace("/tree/", "/");
@@ -29,7 +35,8 @@ namespace Volo.Docs.Documents
             if (documentName.Contains("/"))
             {
                 localDirectory = documentName.Substring(0, documentName.LastIndexOf('/'));
-                fileName = documentName.Substring(documentName.LastIndexOf('/') + 1, documentName.Length - documentName.LastIndexOf('/') - 1);
+                fileName = documentName.Substring(documentName.LastIndexOf('/') + 1,
+                    documentName.Length - documentName.LastIndexOf('/') - 1);
             }
 
             var content = DownloadWebContent(documentName, rawUrl);
@@ -69,6 +76,17 @@ namespace Volo.Docs.Documents
                             }
                         }
                     }
+                    //todo: remove it when filedocumentstore is implemented
+                    else if (ex.InnerException is HttpRequestException &&
+                             ex.InnerException.InnerException != null &&
+                             ex.InnerException.InnerException is SocketException exception &&
+                             exception.SocketErrorCode == SocketError.HostNotFound)
+                    {
+                        if (IsOffline)
+                        {
+                            return File.ReadAllText(Path.Combine(@"D:\Github\abp\docs\", documentName));
+                        }
+                    }
 
                     return "An error occured while getting the document " + documentName;
                 }
@@ -82,18 +100,28 @@ namespace Volo.Docs.Documents
 
         public async Task<List<string>> GetVersions(Project project, string documentName)
         {
-            var gitHubClient = new GitHubClient(new ProductHeaderValue("AbpWebSite"));
-            var url = project.ExtraProperties["GithubRootUrl"].ToString();
-            var releases = await gitHubClient.Repository.Release.GetAll(GetGithubOrganizationNameFromUrl(url), GetGithubRepositoryNameFromUrl(url));
+            try
+            {
+                var gitHubClient = new GitHubClient(new ProductHeaderValue("AbpWebSite"));
+                var url = project.ExtraProperties["GithubRootUrl"].ToString();
+                var releases = await gitHubClient.Repository.Release.GetAll(GetGithubOrganizationNameFromUrl(url),
+                    GetGithubRepositoryNameFromUrl(url));
 
-            return releases.OrderByDescending(r => r.PublishedAt).Select(r => r.TagName).ToList();
+                return releases.OrderByDescending(r => r.PublishedAt).Select(r => r.TagName).ToList();
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex.Message, ex);
+                return new List<string>();
+            }
         }
 
         private static string GetGithubOrganizationNameFromUrl(string url)
         {
             try
             {
-                var urlStartingAfterFirstSlash = url.Substring(url.IndexOf("github.com/", StringComparison.Ordinal) + "github.com/".Length);
+                var urlStartingAfterFirstSlash =
+                    url.Substring(url.IndexOf("github.com/", StringComparison.Ordinal) + "github.com/".Length);
                 return urlStartingAfterFirstSlash.Substring(0, urlStartingAfterFirstSlash.IndexOf('/'));
             }
             catch (Exception)
@@ -106,8 +134,10 @@ namespace Volo.Docs.Documents
         {
             try
             {
-                var urlStartingAfterFirstSlash = url.Substring(url.IndexOf("github.com/", StringComparison.Ordinal) + "github.com/".Length);
-                var urlStartingAfterSecondSlash = urlStartingAfterFirstSlash.Substring(urlStartingAfterFirstSlash.IndexOf('/') + 1);
+                var urlStartingAfterFirstSlash =
+                    url.Substring(url.IndexOf("github.com/", StringComparison.Ordinal) + "github.com/".Length);
+                var urlStartingAfterSecondSlash =
+                    urlStartingAfterFirstSlash.Substring(urlStartingAfterFirstSlash.IndexOf('/') + 1);
                 return urlStartingAfterSecondSlash.Substring(0, urlStartingAfterSecondSlash.IndexOf('/'));
             }
             catch (Exception)
@@ -115,6 +145,5 @@ namespace Volo.Docs.Documents
                 throw new Exception($"Github url is not valid: {url}");
             }
         }
-
     }
 }
