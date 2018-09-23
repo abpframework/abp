@@ -2,10 +2,6 @@ $('.tree-toggle').click(function () {
     $(this).parent().children('ul.tree').toggle(100);
     $(this).toggleClass("opened");
 });
-$(function () {
-    $('.tree-toggle').parent().children('ul.tree').toggle(100);
-})
-
 
 $(document).ready(function () {
     var scrollTopBtn = $(".scroll-top-btn");
@@ -35,6 +31,7 @@ function handleSidebar() {
     var sideBar = $(".docs-sidebar-wrapper");
     sideBar.css("margin-left", sideBarPosition);
 }
+
 $(window).resize(function () {
     handleSidebar();
 });
@@ -75,15 +72,18 @@ $('.open-dmenu').on("click", function () {
 
 
 (function ($) {
+
     $(window).on("load", function () {
         $("#sidebar-scroll").mCustomScrollbar({
             theme: "minimal"
         });
     });
+
     $(window).on("load", function () {
         $("#index-scroll").mCustomScrollbar({
             theme: "minimal-dark"
         });
     });
+
 })(jQuery);
 

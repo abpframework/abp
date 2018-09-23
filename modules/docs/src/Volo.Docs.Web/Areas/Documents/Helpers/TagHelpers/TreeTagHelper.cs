@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Text;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Docs.Documents;
@@ -15,9 +16,10 @@ namespace Volo.Docs.Areas.Documents.Helpers.TagHelpers
                                                       </span>
                                                   </label>
                                                   <a href='{0}' class='{5}'>{1}</a>
-                                                {2}</li>";
+                                                  {2}
+                                              </li>";
 
-        private const string UlItemTemplate = @"<ul class='nav nav-list tree'>
+        private const string UlItemTemplate = @"<ul class='nav nav-list tree' style='{1}'>
                                                     {0}
                                                 </ul>";
 
@@ -30,45 +32,60 @@ namespace Volo.Docs.Areas.Documents.Helpers.TagHelpers
         [HtmlAttributeName("project-name")]
         public string ProjectName { get; set; }
 
+        [HtmlAttributeName("selected-document-name")]
+        public string SelectedDocumentName { get; set; }
+
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             var content = new StringBuilder();
+
             RootNode.Items?.ForEach(childNode =>
-                {
-                    content.Append(RenderTreeNodeAsHtml(childNode));
-                });
+            {
+                content.Append(RenderNodeAsHtml(childNode));
+            });
 
             output.Content.AppendHtml(content.ToString());
         }
 
-        private string RenderTreeNodeAsHtml(NavigationNode node)
+        private string RenderNodeAsHtml(NavigationNode node)
         {
             var content = "";
 
+            var isAnyNodeOpenedInThisLevel = node.Items?.Any(n => n.IsOpened(SelectedDocumentName)) ?? false;
+
             node.Items?.ForEach(innerNode =>
             {
-                content += GetParentNode(innerNode);
+                content += GetParentNode(innerNode, isAnyNodeOpenedInThisLevel);
             });
 
-            return node.IsEmpty ?
-                content :
-                GetLeafNode(node, content);
+            var result = node.IsEmpty ? content : GetLeafNode(node, content);
+
+            return result;
         }
 
-        private string GetParentNode(NavigationNode node)
+        private string GetParentNode(NavigationNode node, bool isOpened)
         {
-            return string.Format(UlItemTemplate, RenderTreeNodeAsHtml(node));
+            var output = RenderNodeAsHtml(node);
+
+            return string.Format(UlItemTemplate, output, isOpened ? "" : "display: none;");
         }
 
         private string GetLeafNode(NavigationNode node, string content)
         {
+            var cssClass = node.Path.IsNullOrEmpty() ? "tree-toggle" : "";
+
+            if (node.IsOpened(SelectedDocumentName))
+            {
+                cssClass += " opened";
+            }
+
             return string.Format(LiItemTemplate,
                 node.Path.IsNullOrEmpty() ? "#" : "/documents/" + ProjectName + "/" + Version + "/" + node.Path,
                 node.Text.IsNullOrEmpty() ? "?" : node.Text,
                 content,
                 node.HasChildItems ? "nav-header" : "last-link",
                 node.HasChildItems ? "chevron-down" : "long-arrow-right",
-                node.Path.IsNullOrEmpty() ? "tree-toggle" : "");
+                cssClass);
         }
 
     }

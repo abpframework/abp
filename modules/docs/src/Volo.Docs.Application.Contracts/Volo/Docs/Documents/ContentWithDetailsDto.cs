@@ -42,6 +42,31 @@ namespace Volo.Docs.Documents
         public bool HasChildItems => Items != null && Items.Any();
 
         public bool IsEmpty => Text == null && Path == null;
+
+        public bool IsOpened(string documentName)
+        {
+            if (documentName == null)
+            {
+                return false;
+            }
+
+            if (!HasChildItems)
+            {
+                return documentName == Path;
+            }
+
+            var isOpened = false;
+            foreach (var n in Items)
+            {
+                if (n.IsOpened(documentName))
+                {
+                    isOpened = true;
+                    break;
+                }
+            }
+
+            return isOpened;
+        }
     }
 
     public class NavigationWithDetailsDto : DocumentWithDetailsDto
