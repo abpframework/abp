@@ -10,13 +10,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Volo\Blogging\Localization\ApplicationContracts\en.json" />
-    <None Remove="Volo\Blogging\Localization\ApplicationContracts\tr.json" />
+    <None Remove="Volo\Blogging\Localization\Resources\Blogging\ApplicationContracts\en.json" />
+    <None Remove="Volo\Blogging\Localization\Resources\Blogging\ApplicationContracts\tr.json" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Volo\Blogging\Localization\ApplicationContracts\en.json" />
-    <EmbeddedResource Include="Volo\Blogging\Localization\ApplicationContracts\tr.json" />
+    <EmbeddedResource Include="Volo\Blogging\Localization\Resources\Blogging\ApplicationContracts\en.json" />
+    <EmbeddedResource Include="Volo\Blogging\Localization\Resources\Blogging\ApplicationContracts\tr.json" />
   </ItemGroup>
 
   <ItemGroup>

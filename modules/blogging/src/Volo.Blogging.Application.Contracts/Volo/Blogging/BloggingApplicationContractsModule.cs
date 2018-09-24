@@ -25,7 +25,7 @@ namespace Volo.Blogging
             {
                 options.Resources
                     .Get<BloggingResource>()
-                    .AddVirtualJson("/Localization/Resources/Blogging/ApplicationContracts");
+                    .AddVirtualJson("Volo/Blogging/Localization/Resources/Blogging/ApplicationContracts");
             });
         }
     }
