@@ -1,30 +1,232 @@
 {
-    "items": [{
-        "text": "Getting Started",     
-        "items": [{
-            "text": "From Startup Templates",
-            "items": [{
-                "text": "ASP.NET Core MVC",
-                "path": "Getting-Started-AspNetCore-MVC-Template.md"
-            }]
-        },{
-            "text": "From Empty Projects",
-            "items": [{
-                "text": "With ASP.NET Core Web Application",
-                "path": "Getting-Started-AspNetCore-Application.md"
-            },{
-                "text": "With Console Application",
-                "path": "Getting-Started-Console-Application.md"
-            }]
-        }]
-    },{
-        "text": "Tutorials",
-        "items": [{
-            "text": "Application Development",
-            "items": [{
-                "text": "With ASP.NET Core MVC",
-                "path": "Tutorials/AspNetCore-Mvc/Part-I.md"
-            }]
-        }]
-    }]
+  "items": [
+    {
+      "text": "Getting Started",
+      "items": [
+        {
+          "text": "From Startup Templates",
+          "items": [
+            {
+              "text": "ASP.NET Core MVC",
+              "path": "Getting-Started-AspNetCore-MVC-Template.md"
+            }
+          ]
+        },
+        {
+          "text": "From Empty Projects",
+          "items": [
+            {
+              "text": "With ASP.NET Core Web Application",
+              "path": "Getting-Started-AspNetCore-Application.md"
+            },
+            {
+              "text": "With Console Application",
+              "path": "Getting-Started-Console-Application.md"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "Tutorials",
+      "items": [
+        {
+          "text": "Application Development",
+          "items": [
+            {
+              "text": "With ASP.NET Core MVC",
+              "path": "Tutorials/AspNetCore-Mvc/Part-I.md"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "Fundamentals",
+      "items": [
+        {
+          "text": "Dependency Injection",
+          "path": "Dependency-Injection.md",
+          "items": [
+            {
+              "text": "AutoFac Integration"
+            }
+          ]
+        },
+        {
+          "text": "Virtual File System",
+          "path": "Virtual-File-System.md"
+        },
+        {
+          "text": "Localization",
+          "path": "Localization.md"
+        },
+        {
+          "text": "Exception Handling",
+          "path": "Exception-Handling.md"
+        },
+        {
+          "text": "Validation"
+        },
+        {
+          "text": "Authorization"
+        },
+        {
+          "text": "Caching"
+        },
+        {
+          "text": "Auditing"
+        },
+        {
+          "text": "Setting Management"
+        }
+      ]
+    },
+    {
+      "text": "Events",
+      "items": [
+        {
+          "text": "Event Bus"
+        },
+        {
+          "text": "Distributed Event Bus",
+          "path": "Dependency-Injection.md",
+          "items": [
+            {
+              "text": "RabbitMQ Integration"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "Services",
+      "items": [
+        {
+          "text": "Object Serialization"
+        },
+        {
+          "text": "JSON Serialization"
+        },
+        {
+          "text": "Emailing"
+        },
+        {
+          "text": "GUIDs"
+        },
+        {
+          "text": "Threading"
+        },
+        {
+          "text": "Timing"
+        }
+      ]
+    },
+    {
+      "text": "Multi Tenancy",
+      "path": "Multi-Tenancy.md"
+    },
+    {
+      "text": "Module Development",
+      "items": [
+        {
+          "text": "Basics",
+          "path": "Module-Development-Basics.md"
+        },
+        {
+          "text": "Plug-In Modules"
+        },
+        {
+          "text": "Best Practices",
+          "path": "Best-Practices/Index.md"
+        }
+      ]
+    },
+    {
+      "text": "Domain Driven Design",
+      "items": [
+        {
+          "text": "Domain Layer",
+          "items": [
+            {
+              "text": "Entities & Aggregate Roots",
+              "path": "Entities.md"
+            },
+            {
+              "text": "Value Objects"
+            },
+            {
+              "text": "Repositories",
+              "path": "Repositories.md"
+            },
+            {
+              "text": "Domain Services"
+            },
+            {
+              "text": "Specifications"
+            }
+          ]
+        },
+        {
+          "text": "Application Layer",
+          "items": [
+            {
+              "text": "Application Services"
+            },
+            {
+              "text": "Data Transfer Objects"
+            },
+            {
+              "text": "Unit Of Work"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "ASP.NET Core MVC",
+      "items": [
+        {
+          "text": "API Versioning"
+        },
+        {
+          "text": "User Interface",
+          "items": [
+            {
+              "text": "Client Side Package Management",
+              "path": "AspNetCore/Client-Side-Package-Management.md"
+            },
+            {
+              "text": "Bundling & Minification",
+              "path": "AspNetCore/Bundling-Minification.md"
+            },
+            {
+              "text": "Tag Helpers",
+              "path": "Tag-Helpers.md"
+            },
+            {
+              "text": "Theming",
+              "path": "AspNetCore/Theming.md"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "Data Access",
+      "items": [
+        {
+          "text": "Entity Framework Core Integration",
+          "path": "Entity-Framework-Core.md"
+        },
+        {
+          "text": "MongoDB Integration",
+          "path": "MongoDB.md"
+        }
+      ]
+    },
+    {
+      "text": "Testing"
+    }
+  ]
 }
