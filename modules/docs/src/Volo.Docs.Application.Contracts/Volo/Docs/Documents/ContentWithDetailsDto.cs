@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
@@ -77,9 +78,15 @@ namespace Volo.Docs.Documents
 
         public void ConvertItems()
         {
-            RootNode = string.IsNullOrWhiteSpace(Content) ?
-                new NavigationNode() :
-                JsonConvert.DeserializeObject<NavigationNode>(Content);
+            try
+            {
+                RootNode = JsonConvert.DeserializeObject<NavigationNode>(Content);
+            }
+            catch (JsonException)
+            {
+                //todo: should log the exception?
+                RootNode = new NavigationNode();
+            }
         }
     }
 }
