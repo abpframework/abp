@@ -7,7 +7,5 @@
         public const int MaxShortNameLength = 32;
 
         public const int MaxDescriptionLength = 1024;
-
-        public const int MaxSocialLinkLength = 128;
     }
 }

@@ -54,21 +54,6 @@ namespace Volo.Blogging.Pages.Admin.Blogs
             [StringLength(BlogConsts.MaxDescriptionLength)]
             public string Description { get; set; }
 
-            [StringLength(BlogConsts.MaxSocialLinkLength)]
-            public string Facebook { get; set; }
-
-            [StringLength(BlogConsts.MaxSocialLinkLength)]
-            public string Twitter { get; set; }
-
-            [StringLength(BlogConsts.MaxSocialLinkLength)]
-            public string Instagram { get; set; }
-
-            [StringLength(BlogConsts.MaxSocialLinkLength)]
-            public string Github { get; set; }
-
-            [StringLength(BlogConsts.MaxSocialLinkLength)]
-            public string StackOverflow { get; set; }
-
         }
     }
 }

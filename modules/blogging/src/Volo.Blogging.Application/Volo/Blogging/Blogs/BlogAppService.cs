@@ -62,12 +62,7 @@ namespace Volo.Blogging.Blogs
         {
             var newBlog = await _blogRepository.InsertAsync(new Blog(GuidGenerator.Create(), input.Name, input.ShortName)
             {
-                Description = input.Description,
-                Facebook = input.Facebook,
-                Twitter = input.Twitter,
-                Instagram = input.Instagram,
-                Github = input.Github,
-                StackOverflow = input.StackOverflow
+                Description = input.Description
             });
 
             return ObjectMapper.Map<Blog, BlogDto>(newBlog);
@@ -81,11 +76,6 @@ namespace Volo.Blogging.Blogs
             blog.SetName(input.Name);
             blog.SetShortName(input.ShortName);
             blog.Description = input.Description;
-            blog.Facebook = input.Facebook;
-            blog.Twitter = input.Twitter;
-            blog.Instagram = input.Instagram;
-            blog.Github = input.Github;
-            blog.StackOverflow = input.StackOverflow;
 
             return ObjectMapper.Map<Blog, BlogDto>(blog);
         }
