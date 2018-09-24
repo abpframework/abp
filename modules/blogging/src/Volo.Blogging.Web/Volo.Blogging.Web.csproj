@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Localization\Resources\Blogging\Web\*.json" />
+    <EmbeddedResource Include="Localization\Resources\**\*.json" />
     <EmbeddedResource Include="Pages\**\*.cshtml" />
     <EmbeddedResource Include="Pages\**\*.js" />
     <EmbeddedResource Include="Pages\**\*.css" />
@@ -36,8 +36,6 @@
     <Content Remove="Pages\**\*.css" />
     <Content Remove="compilerconfig.json" />
     <Content Remove="Properties\launchSettings.json" />
-    <None Remove="Pages\Admin\Blogs\create.js" />
-    <None Remove="Pages\Admin\Blogs\edit.js" />
     <None Include="compilerconfig.json" />
     <None Include="Properties\launchSettings.json" />
   </ItemGroup>

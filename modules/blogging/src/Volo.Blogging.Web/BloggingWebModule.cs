@@ -39,7 +39,7 @@ namespace Volo.Blogging
 
             Configure<VirtualFileSystemOptions>(options =>
             {
-                options.FileSets.AddEmbedded<BloggingWebModule>("Volo.Blogging.Web");
+                options.FileSets.AddEmbedded<BloggingWebModule>("Volo.Blogging");
             });
 
             Configure<AbpLocalizationOptions>(options =>
