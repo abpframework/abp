@@ -86,7 +86,14 @@
         $(this).off('submit').submit();
     });
 
-    $('#Post_Title').on("change paste keyup", function() {
+    var urlEdited = false;
+    var reflectedChange = false;
+
+    $('#Post_Title').on("change paste keyup", function () {
+        if (urlEdited) {
+            return;
+        }
+
         var title = $('#Post_Title').val();
 
         if (title.length > 64) {
@@ -95,7 +102,15 @@
 
         title = title.replace(' ', '-');
         title = title.replace(new RegExp(' ', 'g'), '-');
+        reflectedChange = true;
         $('#Post_Url').val(title);
+        reflectedChange = false;
+    });
+
+    $('#Post_Url').change(function () {
+        if (!reflectedChange) {
+            urlEdited = true;
+        }
     });
 
 })(jQuery);
