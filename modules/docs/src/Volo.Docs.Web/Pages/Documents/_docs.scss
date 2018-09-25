@@ -6,16 +6,16 @@
         background: #f5f7f9;
         padding-right: 1rem;
         position: relative;
-        width: 270px;
+        top: 0px;
+        left: 0;
+        position: fixed;
 
         .docs-sidebar-wrapper {
             width: 270px;
-            top: 0px;
-            position: fixed;
+            float: right;
 
-            .form-control {
+            input.form-control {
                 background: none;
-                border-radius: 6px;
                 padding-left: 36px;
                 width: 100%;
                 background: #eeeff2;
@@ -26,13 +26,36 @@
                 }
             }
 
+            .docs-version {
+                position: relative;
+                padding: 0 1rem;
+                margin: .5rem 0 1rem;
+
+                .version-select {
+                    padding: 1px;
+                    border-radius: 8px;
+
+                    select.form-control {
+                        line-height: 1;
+                        border-top-left-radius: 0;
+                        border-bottom-left-radius: 0;
+                        padding: .3em .5em .5em;
+
+                        &:focus, &:active, &:hover, &:visited {
+                            box-shadow: none;
+                        }
+                    }
+
+                    label {
+                    }
+                }
+            }
 
             .docs-search {
                 position: relative;
                 padding: 0 1rem;
-                margin: 1rem 0;
-
-
+                margin: .5rem 0;
+                font-size: .9em;
 
                 .btn-search {
                     position: absolute;
@@ -43,7 +66,7 @@
                     background: none;
 
                     i.fa {
-                        color: #aaa;
+                        color: #ddd;
                     }
                 }
             }
@@ -100,7 +123,7 @@
                                 }
 
                                 &.last-link {
-                                    top: 11px;
+                                    top: 9px;
                                     color: #aaa;
                                 }
                             }
@@ -197,31 +220,49 @@
     }
 
     .docs-content {
+        .docs-link-btns {
+            border-bottom: 1px solid #f4f5f7;
+            background: #fdfdfd;
+            padding: 10px 20px;
+            margin: 0 -15px;
+            text-align: right;
+            font-size: .8em;
+
+            a {
+                color: #999;
+
+                &:hover {
+                    color: #444;
+                    text-decoration: none;
+                }
+            }
+        }
+
         .docs-text-field {
-            padding: 0 3rem 3rem;
+            padding: 0 2rem 2rem;
         }
 
         article.docs-body {
             h1 {
-                padding-top: 3rem;
+                padding-top: 2rem;
                 font-size: 2.25rem;
                 padding-bottom: 10px;
             }
 
             h2 {
-                padding-top: 40px;
-                padding-bottom: 5px;
-                font-size: 1.75rem;
+                padding-top: 2rem;
+                padding-bottom: 10px;
+                font-size: 2rem;
             }
 
             h3, h4, h5, h6 {
-                padding-top: 30px;
+                padding-top: 20px;
                 padding-bottom: 5px;
+                font-size: 1.5rem;
             }
 
             h1, h2, h3, h4, h5, h6 {
                 position: relative;
-                display: inline-block;
 
                 .anchor {
                     position: absolute;
@@ -238,6 +279,14 @@
                         opacity: 1;
                     }
                 }
+            }
+
+            img {
+                max-width: 100%;
+                border: 1px solid #f4f5f7;
+                margin: 15px 0 25px;
+                box-shadow: 0 0 45px #f8f9fa;
+                border-radius: 6px;
             }
         }
     }
@@ -297,7 +346,6 @@
             }
 
             > .navbar {
-                margin-left: -18px;
             }
 
             .docs-anchors-wrapper {
@@ -306,7 +354,6 @@
             }
 
             .inner-title {
-                padding-left: 18px;
             }
         }
 
@@ -325,9 +372,9 @@
 }
 
 
-@media (min-width: 1200px) {
+@media (min-width: 1100px) {
     .container {
-        max-width: 1180px;
+        max-width: 1080px;
     }
 
     .docs-page {
@@ -337,7 +384,23 @@
 
                 .docs-sidebar-wrapper {
 
-                    .docs-search, .docs-version {
+                    .docs-version {
+                        .version-select {
+                            select.form-control {
+                                background: #333;
+                                border-color: #333;
+                                color: #999;
+                            }
+
+                            label {
+                                background: #444;
+                                border-color: #444;
+                                color: #ddd;
+                            }
+                        }
+                    }
+
+                    .docs-search {
                         .form-control {
                             background: #333;
                             color: #999;
@@ -350,13 +413,12 @@
 
                         .btn-search {
                             i.fa {
-                                color: #eee;
+                                color: #aaa;
                             }
                         }
                     }
 
-                    .docs-tree-list {
-
+                    .docs-tree-list { 
                         ul {
                             li {
                                 label {
@@ -553,3 +615,21 @@
 .for-desktop {
     display: inline-block;
 }
+
+
+
+
+pre[class*="language-"] {
+    padding: 1.4em 2em !important;
+    margin: 15px 0 25px !important;
+    border-radius: 6px;
+}
+code {
+    padding: 0.2em 0.4em;
+    margin: 0;
+    font-size: 82%;
+    background-color: #f0f1f3;
+    border-radius: 3px;
+    color: #28a745;
+}
+ 

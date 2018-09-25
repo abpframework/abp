@@ -352,25 +352,4 @@ div.code-toolbar>.toolbar span:focus {
 .command-line-prompt>span[data-prompt]:before {
     content: attr(data-prompt);
 }
-
-
-
-.code-block {    
-    padding: 0px 10px;
-    max-width: 960px;
-    background: #222;
-    border-radius: 6px;
-    overflow: hidden;
-    margin: 1rem 0 1rem;
-}
-
-
-
-code {
-    padding: 0.2em 0.4em;
-    margin: 0;
-    font-size: 82%;
-    background-color: rgb(231, 255, 236);
-    border-radius: 3px;
-    color: #28a745;
-}
+ 

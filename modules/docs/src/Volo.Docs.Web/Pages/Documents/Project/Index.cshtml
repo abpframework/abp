@@ -20,6 +20,7 @@
         <abp-style src="/Pages/Documents/vs.css" />
         <abp-style src="/lib/prism/prism.css" />
         <abp-style src="/lib/mCustomScrollbar/jquery.mCustomScrollbar.min.css" />
+        <abp-style src="/lib/bootstrap-toc/bootstrap-toc.css" />
     </abp-style-bundle>
 }
 
@@ -29,12 +30,12 @@
         <abp-script src="/lib/mCustomScrollbar/jquery.mCustomScrollbar.concat.min.js" />
         <abp-script src="/lib/prism/prism.js" />
         <abp-script src="/lib/popper.js/dist/umd/popper.min.js" />
+        <abp-script src="/lib/bootstrap-toc/bootstrap-toc.js" />
         <abp-script src="/Pages/Documents/vs.js" />
     </abp-script-bundle>
-}
-
+} 
 <div class="docs-page" data-spy="scroll" data-target="#docs-sticky-index">
-    <div class="row">
+    <div class="row justify-content-end">
         <div class="col-md-3 docs-sidebar dark-sidebar">
             <div class="docs-sidebar-wrapper">
                 <div class="docs-top">
@@ -59,22 +60,30 @@
                         <form class="form-inline">
                             <input class="form-control" type="search" placeholder="Filter Topics" aria-label="Search">
                             <button class="my-2 btn btn-search my-sm-0" type="submit">
-                                <i class="fa fa-search"></i>
+                                <i class="fa fa-filter"></i>
                             </button>
                         </form>
-                    </div>
 
-                    @if (Model.Versions.Any())
-                    {
-                        <div class="col-md-12 docs-version">
-                            @Html.DropDownList("Version", Model.Versions.Select(v => new SelectListItem
-                            {
-                                Text = v.DisplayText,
-                                Value = "/documents/" + Model.ProjectName + "/" + v.Version + "/" + Model.DocumentName,
-                                Selected = v.IsSelected
-                            }), new {@class = "form-control"})
-                        </div>
-                    }
+                    </div>
+                        @if (Model.Versions.Any())
+                        {
+                            <div class="docs-version">
+                                <div class="version-select">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <label class="input-group-text" >Version</label>
+
+                                        </div> 
+                                            @Html.DropDownList("Version", Model.Versions.Select(v => new SelectListItem
+                                            {
+                                                Text = v.DisplayText,
+                                                Value = "/documents/" + Model.ProjectName + "/" + v.Version + "/" + Model.DocumentName,
+                                                Selected = v.IsSelected
+                                            }), new {@class = "form-control"}) 
+                                    </div>
+                                </div>
+                            </div>
+                        }
 
                     <ul root-node="@Model.Navigation.RootNode"
                         version="@(Model.Version.IsNullOrEmpty() ? "latest" : Model.Version)"
@@ -86,19 +95,19 @@
             </div>
         </div>
         <div class="col-md-7 docs-content bg-white">
+
+            <div class="docs-link-btns">
+
+                @if (!string.IsNullOrEmpty(Model.Document.EditLink))
+                {
+                    <a href="@Model.Document.EditLink" target="_blank"> <i class="fa fa-edit"></i> Edit @*TODO: localize*@</a>
+                }
+            </div>
+
             <div class="docs-content-field">
                 <div class="docs-text-field">
                     <div data-spy="scroll" data-target="#docs-sticky-index" data-offset="0">
                         <article class="docs-body">
-
-                            <div style="float: right; top: 1em; position: relative;">
-
-                                @if (!string.IsNullOrEmpty(Model.Document.EditLink))
-                                {
-                                    <a href="@Model.Document.EditLink" target="_blank"> <i class="fa fa-edit"></i> Edit @*TODO: localize*@</a>
-                                }
-                            </div>
-
                             @Html.Raw(Model.Document.Content)
 
                         </article>
@@ -108,19 +117,8 @@
         </div>
         <div class="col-md-2 docs-page-index position-relative bg-light">
             <div class="docs-inner-anchors mt-2">
-                <nav id="docs-sticky-index" class="navbar p-0 pt-2">
+                <nav  class="navbar p-0 pt-2" data-toggle="toc">
                     <h5 class="inner-title">In this article</h5>
-                    <nav class="nav nav-pills flex-column">
-                        <a class="nav-link" href="#dependency-injection">Dependency Injection</a>
-                        <nav class="nav nav-pills flex-column">
-                            <a class="nav-link" href="#modularity">Modularity</a>
-                            <a class="nav-link" href="#conventional-registration">Conventional Registration</a>
-                            <a class="nav-link" href="#inherently-registered-types">Inherently Registered Types</a>
-                            <a class="nav-link" href="#dependency-interfaces">Dependency Interfaces</a>
-                            <a class="nav-link" href="#dependency-attribute">Dependency Attribute</a>
-                            <a class="nav-link" href="#exposeservices-attribute">ExposeServices Attribute</a>
-                        </nav>
-                    </nav>
                 </nav>
                 <div class="row">
                     <div class="col mt-4 p-0">
