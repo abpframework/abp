@@ -11,6 +11,8 @@
     color: #000000; }
   div.vs-blog p {
     color: #444; }
+    div.vs-blog p a {
+      text-decoration: underline; }
   div.vs-blog h1, div.vs-blog h2, div.vs-blog h3, div.vs-blog h4, div.vs-blog h5, div.vs-blog h6, div.vs-blog .tab-title {
     font-family: Helvetica, Arial, sans-serif;
     font-weight: 700; }
