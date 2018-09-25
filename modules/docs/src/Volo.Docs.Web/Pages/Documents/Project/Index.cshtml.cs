@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Volo.Docs.Documents;
 using Volo.Docs.Formatting;
 
@@ -23,6 +24,13 @@ namespace Volo.Docs.Pages.Documents.Project
         public DocumentWithDetailsDto Document { get; private set; }
 
         public List<VersionInfo> Versions { get; private set; }
+
+        public List<SelectListItem> VersionSelectItems => Versions.Select(v => new SelectListItem
+        {
+            Text = v.DisplayText,
+            Value = "/documents/" + ProjectName + "/" + v.Version + "/" + DocumentName,
+            Selected = v.IsSelected
+        }).ToList();
 
         public NavigationWithDetailsDto Navigation { get; private set; }
 
@@ -95,7 +103,5 @@ namespace Volo.Docs.Pages.Documents.Project
 
             Versions.Insert(0, DocsWebConsts.DefaultVersion);
         }
-
-
     }
 }

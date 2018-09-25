@@ -38,11 +38,6 @@ namespace Volo.Blogging.EntityFrameworkCore
                 b.ConfigureFullAudited();
 
                 b.Property(x => x.Name).IsRequired().HasMaxLength(BlogConsts.MaxNameLength).HasColumnName(nameof(Blog.Name));
-                b.Property(x => x.Facebook).HasMaxLength(BlogConsts.MaxSocialLinkLength).HasColumnName(nameof(Blog.Facebook));
-                b.Property(x => x.Twitter).HasMaxLength(BlogConsts.MaxSocialLinkLength).HasColumnName(nameof(Blog.Twitter));
-                b.Property(x => x.Instagram).HasMaxLength(BlogConsts.MaxSocialLinkLength).HasColumnName(nameof(Blog.Instagram));
-                b.Property(x => x.Github).HasMaxLength(BlogConsts.MaxSocialLinkLength).HasColumnName(nameof(Blog.Github));
-                b.Property(x => x.StackOverflow).HasMaxLength(BlogConsts.MaxSocialLinkLength).HasColumnName(nameof(Blog.StackOverflow));
                 b.Property(x => x.ShortName).IsRequired().HasMaxLength(BlogConsts.MaxShortNameLength).HasColumnName(nameof(Blog.ShortName));
                 b.Property(x => x.Description).IsRequired(false).HasMaxLength(BlogConsts.MaxDescriptionLength).HasColumnName(nameof(Blog.Description));
             });

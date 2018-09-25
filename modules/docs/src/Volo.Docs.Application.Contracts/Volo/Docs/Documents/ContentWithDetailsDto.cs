@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
@@ -43,7 +44,7 @@ namespace Volo.Docs.Documents
 
         public bool IsEmpty => Text == null && Path == null;
 
-        public bool IsOpened(string documentName)
+        public bool IsSelected(string documentName)
         {
             if (documentName == null)
             {
@@ -55,18 +56,19 @@ namespace Volo.Docs.Documents
                 return documentName == Path;
             }
 
-            var isOpened = false;
+            var isSelected = false;
             foreach (var n in Items)
             {
-                if (n.IsOpened(documentName))
+                if (n.IsSelected(documentName))
                 {
-                    isOpened = true;
+                    isSelected = true;
                     break;
                 }
             }
 
-            return isOpened;
+            return isSelected;
         }
+
     }
 
     public class NavigationWithDetailsDto : DocumentWithDetailsDto
@@ -76,9 +78,15 @@ namespace Volo.Docs.Documents
 
         public void ConvertItems()
         {
-            RootNode = string.IsNullOrWhiteSpace(Content) ?
-                new NavigationNode() :
-                JsonConvert.DeserializeObject<NavigationNode>(Content);
+            try
+            {
+                RootNode = JsonConvert.DeserializeObject<NavigationNode>(Content);
+            }
+            catch (JsonException)
+            {
+                //todo: should log the exception?
+                RootNode = new NavigationNode();
+            }
         }
     }
 }

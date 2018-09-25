@@ -9,7 +9,7 @@ namespace Volo.Docs.Areas.Documents.Helpers.TagHelpers
     [HtmlTargetElement("ul", Attributes = "root-node")]
     public class TreeTagHelper : TagHelper
     {
-        private const string LiItemTemplate = @"<li>
+        private const string LiItemTemplate = @"<li class='{6}'>
                                                   <label class='tree-toggle {3}'>
                                                       <span class='plus-icon'>
                                                             <i class='fa fa-{4}'></i>
@@ -51,7 +51,7 @@ namespace Volo.Docs.Areas.Documents.Helpers.TagHelpers
         {
             var content = "";
 
-            var isAnyNodeOpenedInThisLevel = node.Items?.Any(n => n.IsOpened(SelectedDocumentName)) ?? false;
+            var isAnyNodeOpenedInThisLevel = node.Items?.Any(n => n.IsSelected(SelectedDocumentName)) ?? false;
 
             node.Items?.ForEach(innerNode =>
             {
@@ -72,11 +72,12 @@ namespace Volo.Docs.Areas.Documents.Helpers.TagHelpers
 
         private string GetLeafNode(NavigationNode node, string content)
         {
-            var cssClass = node.Path.IsNullOrEmpty() ? "tree-toggle" : "";
+            var anchorCss = node.Path.IsNullOrEmpty() ? "tree-toggle" : "";
+            var isNodeSelected = node.IsSelected(SelectedDocumentName);
 
-            if (node.IsOpened(SelectedDocumentName))
+            if (isNodeSelected)
             {
-                cssClass += " opened";
+                anchorCss += " opened";
             }
 
             return string.Format(LiItemTemplate,
@@ -85,7 +86,8 @@ namespace Volo.Docs.Areas.Documents.Helpers.TagHelpers
                 content,
                 node.HasChildItems ? "nav-header" : "last-link",
                 node.HasChildItems ? "chevron-down" : "long-arrow-right",
-                cssClass);
+                anchorCss ,
+                isNodeSelected? "selected-tree" : "");
         }
 
     }

@@ -60,12 +60,6 @@ namespace Volo.Docs.Documents
 
             dto.Project = ObjectMapper.Map<Project, ProjectDto>(project);
 
-            //if (normalize)
-            //{
-            //    dto.Content = NormalizeLinks(dto.Content, project.ShortName, version);
-            //    dto.Content = NormalizeImages(dto.Content, dto.RawRootUrl);
-            //}
-
             return dto;
         }
 

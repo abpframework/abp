@@ -72,7 +72,6 @@
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <label class="input-group-text" >Version</label>
-
                                         </div> 
                                             @Html.DropDownList("Version", Model.Versions.Select(v => new SelectListItem
                                             {
@@ -84,6 +83,12 @@
                                 </div>
                             </div>
                         }
+                  @*  @if (Model.Versions.Any())
+                    {
+                        <div class="col-md-12 docs-version">
+                            <select asp-items="Model.VersionSelectItems" class="form-control" onchange="window.location.replace(this.value)"></select>
+                        </div>
+                    } *@
 
                     <ul root-node="@Model.Navigation.RootNode"
                         version="@(Model.Version.IsNullOrEmpty() ? "latest" : Model.Version)"
