@@ -75,6 +75,7 @@
                         </form>
 
                     </div>
+
                     @if (Model.Versions.Any())
                     {
                         <div class="docs-version">
@@ -83,22 +84,13 @@
                                     <div class="input-group-prepend">
                                         <label class="input-group-text">Version</label>
                                     </div>
-                                    @Html.DropDownList("Version", Model.Versions.Select(v => new SelectListItem
-                                    {
-                                        Text = v.DisplayText,
-                                        Value = "/documents/" + Model.ProjectName + "/" + v.Version + "/" + Model.DocumentName,
-                                        Selected = v.IsSelected
-                                    }), new {@class = "form-control"})
+                                    
+                                        <select asp-items="Model.VersionSelectItems" class="form-control" onchange="window.location.replace(this.value)"></select>
+                                    
                                 </div>
                             </div>
                         </div>
                     }
-                    @*  @if (Model.Versions.Any())
-                        {
-                            <div class="col-md-12 docs-version">
-                                <select asp-items="Model.VersionSelectItems" class="form-control" onchange="window.location.replace(this.value)"></select>
-                            </div>
-                        } *@
 
                     <ul root-node="@Model.Navigation.RootNode"
                         version="@(Model.Version.IsNullOrEmpty() ? "latest" : Model.Version)"
