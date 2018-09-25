@@ -2,7 +2,7 @@
 
 [![Build Status](http://vjenkins.dynu.net:5480/job/abp/badge/icon)](http://vjenkins.dynu.net:5480/blue/organizations/jenkins/abp/activity)
 
-This project is the next generation of the [ASP.NET Boilerplate](https://aspnetboilerplate.com/) web application framework.
+This project is the next generation of the [ASP.NET Boilerplate](https://aspnetboilerplate.com/) web application framework. See [the announcement](https://abp.io/blog/abp/Abp-vNext-Announcement).
 
 ### Status
 
