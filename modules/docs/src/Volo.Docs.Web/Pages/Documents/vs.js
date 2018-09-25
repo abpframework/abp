@@ -25,27 +25,28 @@ $(document).ready(function () {
         return false;
     });
 });
- 
- 
-    $(function () {
-        var navSelector = '#docs-sticky-index';
-        var $myNav = $(navSelector);
-        Toc.init($myNav);
-        $('body').scrollspy({
-            target: navSelector
+
+
+$(function () {
+    var navSelector = '#docs-sticky-index';
+    var $myNav = $(navSelector);
+    Toc.init($myNav);
+    $('body').scrollspy({
+        target: navSelector
+    });
+});
+
+$("#docs-sticky-index a").on('click', function (event) {
+    if (this.hash !== "") {
+        event.preventDefault();
+        var hash = this.hash;
+        $('html, body').animate({
+            scrollTop: $(hash).offset().top
+        }, 800, function () {
+            window.location.hash = hash;
         });
-    });
-    $("#docs-sticky-index a").on('click', function (event) {
-        if (this.hash !== "") {
-            event.preventDefault();
-            var hash = this.hash;
-            $('html, body').animate({
-                scrollTop: $(hash).offset().top
-            }, 800, function () {
-                window.location.hash = hash;
-            });
-        }
-    });
+    }
+});
 
 $('.btn-toggle').on("click", function () {
     $(".toggle-row").slideToggle(400);

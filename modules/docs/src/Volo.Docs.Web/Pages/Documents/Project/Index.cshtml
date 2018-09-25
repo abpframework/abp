@@ -1,13 +1,5 @@
 ﻿@page
-@using System.Globalization
-@using System.Net
-@using Microsoft.AspNetCore.Authorization
-@using Microsoft.AspNetCore.Http.Extensions
-@using Microsoft.AspNetCore.Mvc.Rendering
-@using Microsoft.Extensions.Options
 @using Volo.Abp.AspNetCore.Mvc.UI.Theming
-@using Volo.Docs.Areas.Documents.Helpers
-@using Volo.Docs
 @using Volo.Docs.Pages.Documents.Project
 @inject IThemeManager ThemeManager
 @model IndexModel
@@ -38,6 +30,7 @@
     <div class="row justify-content-end">
         <div class="col-md-3 docs-sidebar dark-sidebar">
             <div class="docs-sidebar-wrapper">
+
                 <div class="docs-top">
                     <nav class="navbar navbar-logo">
 
@@ -48,12 +41,10 @@
                             </strong>
                         </a>
 
-
                         <a href="@Model.Document.Project.MainWebsiteUrl" class="go-back-site">
                             <i class="fa fa-chevron-left"></i>
                             Back to Website
                         </a>
-
 
                         <div class="for-mobile">
                             <div class="navbar-light">
@@ -63,17 +54,15 @@
                             </div>
                         </div>
                     </nav>
-
                 </div>
-                <div class="docs-tree-list">
-                    <div class="docs-search">
-                        <form class="form-inline">
-                            <input class="form-control" type="search" placeholder="Filter Topics" aria-label="Search">
-                            <button class="my-2 btn btn-search my-sm-0" type="submit">
-                                <i class="fa fa-filter"></i>
-                            </button>
-                        </form>
 
+                <div class="docs-tree-list">
+                    <div class="docs-filter">
+                        <input class="form-control" type="search" placeholder="Filter topics" aria-label="Filter">
+
+                        <span class="my-2 filter-icon my-sm-0">
+                            <i class="fa fa-filter"></i>
+                        </span>
                     </div>
 
                     @if (Model.Versions.Any())
@@ -84,9 +73,8 @@
                                     <div class="input-group-prepend">
                                         <label class="input-group-text">Version</label>
                                     </div>
-                                    
-                                        <select asp-items="Model.VersionSelectItems" class="form-control" onchange="window.location.replace(this.value)"></select>
-                                    
+
+                                    <select asp-items="Model.VersionSelectItems" class="form-control" onchange="window.location.replace(this.value)"></select>
                                 </div>
                             </div>
                         </div>
@@ -99,12 +87,13 @@
                         id="sidebar-scroll"
                         class="nav nav-list"></ul>
                 </div>
+
             </div>
         </div>
+
         <div class="col-md-7 docs-content bg-white">
 
             <div class="docs-link-btns">
-
                 @if (!string.IsNullOrEmpty(Model.Document.EditLink))
                 {
                     <a href="@Model.Document.EditLink" target="_blank"> <i class="fa fa-edit"></i> Edit @*TODO: localize*@</a>
@@ -121,18 +110,23 @@
                     </div>
                 </div>
             </div>
+
         </div>
+
         <div class="col-md-2 docs-page-index position-relative bg-light">
+
             <div class="docs-inner-anchors mt-2">
                 <nav class="navbar p-0 pt-2" data-toggle="toc">
                     <h5 class="inner-title">In this article</h5>
                 </nav>
+
                 <div class="row">
                     <div class="col mt-4 p-0">
                         <a href="javascript:;" class="scroll-top-btn"><i class="fa fa-chevron-up"></i> Go to Top</a>
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 </div>
