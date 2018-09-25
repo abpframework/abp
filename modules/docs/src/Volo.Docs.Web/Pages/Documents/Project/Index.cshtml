@@ -10,7 +10,9 @@
 @section styles {
     <abp-style-bundle name="@typeof(IndexModel).FullName">
         <abp-style src="/Pages/Documents/vs.css" />
-        <abp-style src="/lib/prism/prism.css" />
+        <abp-style src="/lib/prismjs/themes/prism-twilight.css" />
+        <abp-style src="/lib/prismjs/plugins/line-highlight/prism-line-highlight.css" />
+        <abp-style src="/lib/prismjs/plugins/toolbar/prism-toolbar.css" />
         <abp-style src="/lib/mCustomScrollbar/jquery.mCustomScrollbar.min.css" />
         <abp-style src="/lib/bootstrap-toc/bootstrap-toc.css" />
     </abp-style-bundle>
@@ -20,7 +22,13 @@
     <abp-script-bundle name="@typeof(IndexModel).FullName">
         <abp-script src="/Pages/Documents/Project/index.js" />
         <abp-script src="/lib/mCustomScrollbar/jquery.mCustomScrollbar.concat.min.js" />
-        <abp-script src="/lib/prism/prism.js" />
+        <abp-script src="/lib/clipboard/dist/clipboard.js" />
+        <abp-script src="/lib/prismjs/prism.js" />
+        <abp-script src="/lib/prismjs/plugins/toolbar/prism-toolbar.js" />
+        <abp-script src="/lib/prismjs/plugins/show-language/prism-show-language.js" />
+        <abp-script src="/lib/prismjs/plugins/copy-to-clipboard/prism-copy-to-clipboard.js" />
+        <abp-script src="/lib/prismjs/plugins/line-highlight/prism-line-highlight.js" />
+        <abp-script src="/lib/prismjs/components/prism-csharp.js" />
         <abp-script src="/lib/popper.js/dist/umd/popper.min.js" />
         <abp-script src="/lib/bootstrap-toc/bootstrap-toc.js" />
         <abp-script src="/Pages/Documents/vs.js" />
@@ -105,7 +113,6 @@
                     <div data-spy="scroll" data-target="#docs-sticky-index" data-offset="0">
                         <article class="docs-body">
                             @Html.Raw(Model.Document.Content)
-
                         </article>
                     </div>
                 </div>

@@ -83,6 +83,7 @@ namespace Volo.Docs.Pages.Documents.Project
             content = converter.Convert(content);
 
             content = HtmlNormalizer.ReplaceImageSources(content, Document.RawRootUrl, Document.LocalDirectory);
+            content = HtmlNormalizer.ReplaceCodeBlocksLanguage(content, "language-C#", "language-csharp");
             Document.Content = content;
 
             Navigation = await _documentAppService.GetNavigationDocumentAsync(ProjectName, Version, false);

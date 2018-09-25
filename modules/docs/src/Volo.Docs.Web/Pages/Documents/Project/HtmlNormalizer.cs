@@ -19,5 +19,11 @@ namespace Volo.Docs.Pages.Documents.Project
 
             return content;
         }
+
+        public static string ReplaceCodeBlocksLanguage(string content, string currentLanguage, string newLanguage)
+        {
+            return content.Replace("<code class=\"" + currentLanguage + "\">", "<code class=\"" + newLanguage + "\">");
+        }
+
     }
 }
