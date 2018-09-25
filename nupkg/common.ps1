@@ -10,7 +10,11 @@ $solutions = (
     "modules/permission-management",
     "modules/tenant-management",
     "modules/identity",
-    "modules/account"
+    "modules/account",
+    "modules/audit-logging",
+    "modules/background-jobs",
+    "modules/blogging",
+    "modules/docs"
 )
 
 # List of projects
@@ -25,6 +29,7 @@ $projects = (
     "framework/src/Volo.Abp.AspNetCore.Mvc.UI",
     "framework/src/Volo.Abp.AspNetCore.Mvc.UI.Bootstrap",
     "framework/src/Volo.Abp.AspNetCore.Mvc.UI.Bundling",
+    "framework/src/Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy",
     "framework/src/Volo.Abp.AspNetCore.Mvc.UI.Packages",
     "framework/src/Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic",
     "framework/src/Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared",
