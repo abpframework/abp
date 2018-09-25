@@ -257,7 +257,8 @@
     .docs-page .docs-sidebar.dark-sidebar .docs-sidebar-wrapper .docs-tree-list ul li.selected-tree > a {
       color: #fff; }
     .docs-page .docs-sidebar.dark-sidebar .docs-top .navbar-logo .navbar-brand {
-      color: #fff; }
+      color: #fff;
+      text-transform: uppercase; }
     .docs-page .docs-sidebar.dark-sidebar .docs-top .navbar-logo .go-back-site {
       color: #fff; }
     .docs-page .docs-sidebar.dark-sidebar .docs-top .navbar-logo .navbar-logo-desc {
@@ -322,7 +323,8 @@
           font-weight: 700;
           display: block;
           margin-right: 0em;
-          padding: 7px 0 10px; }
+          padding: 7px 0 10px;
+          text-transform: uppercase; }
           .docs-page .docs-sidebar .docs-top .navbar-logo .navbar-brand .docs-logo {
             width: 110px; }
         .docs-page .docs-sidebar .docs-top .navbar-logo .go-back-site {

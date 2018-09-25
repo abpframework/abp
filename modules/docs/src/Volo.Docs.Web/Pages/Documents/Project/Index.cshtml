@@ -33,18 +33,28 @@
         <abp-script src="/lib/bootstrap-toc/bootstrap-toc.js" />
         <abp-script src="/Pages/Documents/vs.js" />
     </abp-script-bundle>
-} 
+}
 <div class="docs-page" data-spy="scroll" data-target="#docs-sticky-index">
     <div class="row justify-content-end">
         <div class="col-md-3 docs-sidebar dark-sidebar">
             <div class="docs-sidebar-wrapper">
                 <div class="docs-top">
                     <nav class="navbar navbar-logo">
-                        <a class="navbar-brand" href="index.html">
-                            ASP.NET ZERO
-                            <br><strong class="display-block">Documentation</strong>
+
+                        <a class="navbar-brand w-100" href="/">
+                            @Model.ProjectName<br>
+                            <strong class="display-block">
+                                Documentation
+                            </strong>
                         </a>
-                        <a href="#" class="go-back-site"><i class="fa fa-chevron-left"></i> Back to Website</a>
+
+
+                        <a href="@Model.Document.Project.MainWebsiteUrl" class="go-back-site">
+                            <i class="fa fa-chevron-left"></i>
+                            Back to Website
+                        </a>
+
+
                         <div class="for-mobile">
                             <div class="navbar-light">
                                 <button type="button" class="open-dmenu navbar-toggler" aria-label="Close">
@@ -65,30 +75,30 @@
                         </form>
 
                     </div>
-                        @if (Model.Versions.Any())
-                        {
-                            <div class="docs-version">
-                                <div class="version-select">
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <label class="input-group-text" >Version</label>
-                                        </div> 
-                                            @Html.DropDownList("Version", Model.Versions.Select(v => new SelectListItem
-                                            {
-                                                Text = v.DisplayText,
-                                                Value = "/documents/" + Model.ProjectName + "/" + v.Version + "/" + Model.DocumentName,
-                                                Selected = v.IsSelected
-                                            }), new {@class = "form-control"}) 
+                    @if (Model.Versions.Any())
+                    {
+                        <div class="docs-version">
+                            <div class="version-select">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <label class="input-group-text">Version</label>
                                     </div>
+                                    @Html.DropDownList("Version", Model.Versions.Select(v => new SelectListItem
+                                    {
+                                        Text = v.DisplayText,
+                                        Value = "/documents/" + Model.ProjectName + "/" + v.Version + "/" + Model.DocumentName,
+                                        Selected = v.IsSelected
+                                    }), new {@class = "form-control"})
                                 </div>
                             </div>
-                        }
-                  @*  @if (Model.Versions.Any())
-                    {
-                        <div class="col-md-12 docs-version">
-                            <select asp-items="Model.VersionSelectItems" class="form-control" onchange="window.location.replace(this.value)"></select>
                         </div>
-                    } *@
+                    }
+                    @*  @if (Model.Versions.Any())
+                        {
+                            <div class="col-md-12 docs-version">
+                                <select asp-items="Model.VersionSelectItems" class="form-control" onchange="window.location.replace(this.value)"></select>
+                            </div>
+                        } *@
 
                     <ul root-node="@Model.Navigation.RootNode"
                         version="@(Model.Version.IsNullOrEmpty() ? "latest" : Model.Version)"
@@ -122,7 +132,7 @@
         </div>
         <div class="col-md-2 docs-page-index position-relative bg-light">
             <div class="docs-inner-anchors mt-2">
-                <nav  class="navbar p-0 pt-2" data-toggle="toc">
+                <nav class="navbar p-0 pt-2" data-toggle="toc">
                     <h5 class="inner-title">In this article</h5>
                 </nav>
                 <div class="row">

@@ -418,7 +418,7 @@
                         }
                     }
 
-                    .docs-tree-list { 
+                    .docs-tree-list {
                         ul {
                             li {
                                 label {
@@ -465,6 +465,7 @@
                     .navbar-logo {
                         .navbar-brand {
                             color: #fff;
+                            text-transform: uppercase;
                         }
 
                         .go-back-site {
@@ -563,6 +564,7 @@
                         display: block;
                         margin-right: 0em;
                         padding: 7px 0 10px;
+                        text-transform: uppercase;
 
                         .docs-logo {
                             width: 110px;

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Volo.DocsTestApp.EntityFrameworkCore;
 
 namespace Volo.DocsTestApp.EntityFrameworkCore.Migrations
 {
     [DbContext(typeof(DocsTestAppDbContext))]
-    partial class DocsTestAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180925162715_Added_MainWebsiteUrl")]
+    partial class Added_MainWebsiteUrl
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
