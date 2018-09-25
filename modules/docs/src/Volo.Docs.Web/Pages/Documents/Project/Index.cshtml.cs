@@ -83,7 +83,7 @@ namespace Volo.Docs.Pages.Documents.Project
             content = converter.Convert(content);
 
             content = HtmlNormalizer.ReplaceImageSources(content, Document.RawRootUrl, Document.LocalDirectory);
-            content = HtmlNormalizer.ReplaceCodeBlocksLanguage(content, "language-C#", "language-csharp");
+            content = HtmlNormalizer.ReplaceCodeBlocksLanguage(content, "language-C#", "language-csharp"); //todo find a way to make it on client in prismJS configuration (eg: map C# => csharp)
             Document.Content = content;
 
             Navigation = await _documentAppService.GetNavigationDocumentAsync(ProjectName, Version, false);

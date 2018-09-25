@@ -1,4 +1,11 @@
-﻿#docsContainer .document-title {
+﻿body {
+  padding-top: unset;
+}
+#main-navbar-tools a.dropdown-toggle {
+  text-decoration: unset;
+  color: unset;
+}
+#docsContainer .document-title {
   font-size: 2.5em;
 }
 #docsContainer .document-toolbar {

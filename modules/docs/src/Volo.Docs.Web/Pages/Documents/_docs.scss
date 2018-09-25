@@ -2,6 +2,20 @@
 .docs-page {
     background: rgb(245, 247, 249);
 
+    .anchorjs-link {
+        transition: all .25s linear;
+    }
+
+    *:hover > .anchorjs-link {
+        margin-left: -1.125em !important;
+        transition: color .25s linear;
+    }
+
+    .anchorjs-link:hover {
+        color: #2500AD;
+        text-decoration: none;
+    }
+
     .docs-sidebar {
         background: #f5f7f9;
         padding-right: 1rem;

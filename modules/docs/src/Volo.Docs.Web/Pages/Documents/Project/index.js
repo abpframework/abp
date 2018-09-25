@@ -62,7 +62,20 @@
 
         /*</FILTERING DOCUMENT ITEMS (LEFT-SIDEBAR)>*/
 
+     
+        var addAncharTags = function () {
+            anchors.options = {
+                placement: 'left'
+            };
 
+            var anchorTags = ["h1", "h2", "h3", "h4", "h5", "h6"];
+            var container = ".docs-page .docs-body";
+            anchorTags.forEach(function (tag) {
+                anchors.add(container + " " + tag);
+            });
+        };
+
+        addAncharTags();
     });
 
 })(jQuery);

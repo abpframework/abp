@@ -14,5 +14,9 @@
   {
     "outputFile": "Pages/Documents/vs.css",
     "inputFile": "Pages/Documents/vs.scss"
+  },
+  {
+    "outputFile": "Pages/Documents/Project/index.css",
+    "inputFile": "Pages/Documents/Project/index.less"
   }
 ]
