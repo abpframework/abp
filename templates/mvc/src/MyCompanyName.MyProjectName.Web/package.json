@@ -3,6 +3,6 @@
   "name": "volo.supportapp",
   "private": true,
   "dependencies": {
-    "@abp/aspnetcore.mvc.ui.theme.basic": "^0.4.1"
+    "@abp/aspnetcore.mvc.ui.theme.basic": "^0.4.9"
   }
 }
