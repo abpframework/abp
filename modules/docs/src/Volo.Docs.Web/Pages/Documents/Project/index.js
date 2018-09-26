@@ -2,80 +2,79 @@
 
     $(function () {
 
-        /*<FILTERING DOCUMENT ITEMS (LEFT-SIDEBAR)>*/
-        var navigationElementId = "sidebar-scroll";
-        var $navigation = $("#" + navigationElementId);
+        var initNavigationFilter = function (navigationContainerId) {
 
-        var getShownDocumentLinks = function () {
-            return $navigation.find(".mCSB_container > li a:visible").not(".tree-toggle");
-        };
+            var $navigation = $("#" + navigationContainerId);
 
-        var gotoFilteredDocumentIfThereIsOnlyOne = function () {
-            var $links = getShownDocumentLinks();
-            if ($links.length === 1) {
-                window.location = $links.first().attr("href");
-            }
-        };
+            var getShownDocumentLinks = function () {
+                return $navigation.find(".mCSB_container > li a:visible").not(".tree-toggle");
+            };
 
-        var filterDocumentItems = function (filterText) {
+            var gotoFilteredDocumentIfThereIsOnlyOne = function () {
+                var $links = getShownDocumentLinks();
+                if ($links.length === 1) {
+                    window.location = $links.first().attr("href");
+                }
+            };
 
-            $navigation.find(".mCSB_container .opened").removeClass("opened");
-            $navigation.find(".mCSB_container > li, .mCSB_container > li ul").hide();
+            var filterDocumentItems = function (filterText) {
 
-            if (!filterText) {
-                $navigation.find(".mCSB_container > li").show();
-                return;
-            }
+                $navigation.find(".mCSB_container .opened").removeClass("opened");
+                $navigation.find(".mCSB_container > li, .mCSB_container > li ul").hide();
 
-            var filteredItems = $navigation.find("li > a").filter(function () {
-                return $(this).text().toUpperCase().indexOf(filterText.toUpperCase()) > -1;
-            });
+                if (!filterText) {
+                    $navigation.find(".mCSB_container > li").show();
+                    return;
+                }
 
-            filteredItems.each(function () {
+                var filteredItems = $navigation.find("li > a").filter(function () {
+                    return $(this).text().toUpperCase().indexOf(filterText.toUpperCase()) > -1;
+                });
 
-                var $el = $(this);
-                $el.show();
-                var $parent = $el.parent();
+                filteredItems.each(function () {
 
-                var hasParent = true;
-                while (hasParent) {
-                    if ($parent.attr("id") === navigationElementId) {
-                        break;
+                    var $el = $(this);
+                    $el.show();
+                    var $parent = $el.parent();
+
+                    var hasParent = true;
+                    while (hasParent) {
+                        if ($parent.attr("id") === navigationContainerId) {
+                            break;
+                        }
+
+                        $parent.show();
+                        $parent.find("> li > label").not(".last-link").addClass("opened");
+
+                        $parent = $parent.parent();
+                        hasParent = $parent.length > 0;
                     }
+                });
+            };
 
-                    $parent.show();
-                    $parent.find("> li > label").not(".last-link").addClass("opened");
+            $(".docs-page .docs-filter input[type='search']").keyup(function (e) {
+                filterDocumentItems(e.target.value);
 
-                    $parent = $parent.parent();
-                    hasParent = $parent.length > 0;
+                if (e.key === "Enter") {
+                    gotoFilteredDocumentIfThereIsOnlyOne();
                 }
             });
-        };
+        }
 
-        $(".docs-page .docs-filter input[type='search']").keyup(function (e) {
-            filterDocumentItems(e.target.value);
-
-            if (e.key === "Enter") {
-                gotoFilteredDocumentIfThereIsOnlyOne();
-            }
-        });
-
-        /*</FILTERING DOCUMENT ITEMS (LEFT-SIDEBAR)>*/
-
-     
-        var addAncharTags = function () {
+        var addAncharTags = function (container) {
             anchors.options = {
                 placement: 'left'
             };
 
             var anchorTags = ["h1", "h2", "h3", "h4", "h5", "h6"];
-            var container = ".docs-page .docs-body";
             anchorTags.forEach(function (tag) {
                 anchors.add(container + " " + tag);
             });
         };
 
-        addAncharTags();
+        initNavigationFilter("sidebar-scroll");
+
+        addAncharTags(".docs-page .docs-body");
     });
 
 })(jQuery);
