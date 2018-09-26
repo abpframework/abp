@@ -24,6 +24,11 @@ namespace Volo.Abp.Identity.MongoDB
             {
                 b.CollectionName = options.CollectionPrefix + "Roles";
             });
+
+            builder.Entity<IdentityClaimType>(b =>
+            {
+                b.CollectionName = options.CollectionPrefix + "ClaimTypes";
+            });
         }
     }
 }

@@ -10,5 +10,7 @@ namespace Volo.Abp.Identity.MongoDB
         IMongoCollection<IdentityUser> Users { get; }
 
         IMongoCollection<IdentityRole> Roles { get; }
+
+        IMongoCollection<IdentityClaimType> ClaimTypes { get; }
     }
 }

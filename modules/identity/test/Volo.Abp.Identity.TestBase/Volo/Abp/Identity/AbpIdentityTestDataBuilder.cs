@@ -9,6 +9,7 @@ namespace Volo.Abp.Identity
     {
         private readonly IGuidGenerator _guidGenerator;
         private readonly IIdentityUserRepository _userRepository;
+        private readonly IIdentityClaimTypeRepository _identityClaimTypeRepository;
         private readonly IIdentityRoleRepository _roleRepository;
         private readonly ILookupNormalizer _lookupNormalizer;
         private readonly IdentityTestData _testData;
@@ -20,12 +21,14 @@ namespace Volo.Abp.Identity
         public AbpIdentityTestDataBuilder(
             IGuidGenerator guidGenerator,
             IIdentityUserRepository userRepository,
+            IIdentityClaimTypeRepository identityClaimTypeRepository,
             IIdentityRoleRepository roleRepository,
             ILookupNormalizer lookupNormalizer,
             IdentityTestData testData)
         {
             _guidGenerator = guidGenerator;
             _userRepository = userRepository;
+            _identityClaimTypeRepository = identityClaimTypeRepository;
             _roleRepository = roleRepository;
             _lookupNormalizer = lookupNormalizer;
             _testData = testData;
@@ -35,6 +38,7 @@ namespace Volo.Abp.Identity
         {
             AddRoles();
             AddUsers();
+            AddClaimTypes();
         }
 
         private void AddRoles()
@@ -72,6 +76,14 @@ namespace Volo.Abp.Identity
             neo.AddRole(_supporterRole.Id);
             neo.AddClaim(_guidGenerator, new Claim("TestClaimType", "43"));
             _userRepository.Insert(neo);
+        }
+
+        private void AddClaimTypes()
+        {
+            var ageClaim = new IdentityClaimType(_testData.AgeClaimId, "Age", false, false, null, null, null,IdentityClaimValueType.Int);
+            _identityClaimTypeRepository.Insert(ageClaim);
+            var educationClaim = new IdentityClaimType(_testData.EducationClaimId, "Education", true, false, null, null, null);
+            _identityClaimTypeRepository.Insert(educationClaim);
         }
     }
 }
