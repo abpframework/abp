@@ -69,7 +69,7 @@ Notice that you also need to define keys of the entity in your **object-to-relat
 
 > Notice that ABP creates default repositories only for aggregate roots by default. However, it's possible to include all entities. See repository documentation (TODO: link) for more. 
 
-ABP does not force you to use aggregate roots, you can only use the `Entity` class as defined before. However, if you want to implement DDD and want to create aggregate root classes, there are some best practices you may want to consider:
+ABP does not force you to use aggregate roots, you can in fact use the `Entity` class as defined before. However, if you want to implement DDD and want to create aggregate root classes, there are some best practices you may want to consider:
 
 * An aggregate root is responsible to preserve it's own integrity. This is also true for all entities, but aggregate root has responsibility for it's sub entities too. So, the aggregate root always be in a valid state.
 * An aggregate root can be referenced by it's Id. Do not reference it by navigation property.
