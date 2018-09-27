@@ -4,7 +4,7 @@ ABP's Dependency Injection system is developed based on Microsoft's <a href="htt
 
 ### Modularity
 
-Since ABP is a modular framework, every module defines it's services and registers to dependency injection in a seperated place, in it's own <a href="Module-Development-Basics.md" target="_blank">module class</a>. Example:
+Since ABP is a modular framework, every module defines it's own services and registers via dependency injection in it's own seperate <a href="Module-Development-Basics.md" target="_blank">module class</a>. Example:
 
 ````C#
 public class BlogModule : AbpModule
@@ -18,7 +18,7 @@ public class BlogModule : AbpModule
 
 ### Conventional Registration
 
-ABP introduces conventional service registration. You should do nothing to register services by convention. It's automatically done. If you want to disable it, you can set `SkipAutoServiceRegistration` to `true` by overriding the `PreConfigureServices` method.
+ABP introduces conventional service registration. You need not do anything to register a service by convention. It's automatically done. If you want to disable it, you can set `SkipAutoServiceRegistration` to `true` by overriding the `PreConfigureServices` method.
 
 ````C#
 public class BlogModule : AbpModule
@@ -87,11 +87,11 @@ public class TaxCalculator : ITransientDependency
 }
 ````
 
-``TaxCalculator`` is automatically registered with transient lifetime since it implements ``ITransientDependency``.
+``TaxCalculator`` is automatically registered with a transient lifetime since it implements ``ITransientDependency``.
 
 #### Dependency Attribute
 
-Another way of configuring a service for dependency injection is to use ``DependencyAttribute``. It has given properties:
+Another way of configuring a service for dependency injection is to use ``DependencyAttribute``. It has the following properties:
 
 * ``Lifetime``: Lifetime of the registration: ``Singleton``, ``Transient`` or ``Scoped``.
 * ``TryRegister``: Set ``true`` to register the service only it's not registered before. Uses TryAdd... extension methods of IServiceCollection.
@@ -108,7 +108,7 @@ public class TaxCalculator
 
 ````
 
-``Dependency`` attribute has higher priority then dependency interfaces if it defines the ``Lifetime`` property.
+``Dependency`` attribute has a higher priority than other dependency interfaces if it defines the ``Lifetime`` property.
 
 #### ExposeServices Attribute 
 
@@ -126,7 +126,7 @@ public class TaxCalculator: ICalculator, ITaxCalculator, ICanCalculate, ITransie
 
 #### Exposed Services by Convention
 
-If you do not specify which services to expose, ABP expose services by convention. If you think the ``TaxCalculator`` defined above:
+If you do not specify which services to expose, ABP expose services by convention. So taking the ``TaxCalculator`` defined above:
 
 * The class itself is exposed by default. That means you can inject it by ``TaxCalculator`` class.
 * Default interfaces are exposed by default. Default interfaces are determined by naming convention. In this example, ``ICalculator`` and ``ITaxCalculator`` are default interfaces of ``TaxCalculator``, but ``ICanCalculate`` is not.
@@ -164,11 +164,11 @@ public class BlogModule : AbpModule
 
 ### Injecting Dependencies
 
-There are three common ways of using a service that is registered before.
+There are three common ways of using a service that has already been registered.
 
 #### Contructor Injection
 
-This is the most common way of injecting a service into a class. Example:
+This is the most common way of injecting a service into a class. For example:
 
 ````C#
 public class TaxAppService : ApplicationService
@@ -187,13 +187,13 @@ public class TaxAppService : ApplicationService
 }
 ````
 
-``TaxAppService`` gets ``ITaxCalculator`` in it's constructor. Dependency injection system automatically provides the requested service on the runtime.
+``TaxAppService`` gets ``ITaxCalculator`` in it's constructor. The dependency injection system automatically provides the requested service at runtime.
 
 Constructor injection is preffered way of injecting dependencies to a class. In that way, the class can not be constructed unless all constructor-injected dependencies are provided. Thus, the class explicitly declares it's required services.
 
 #### Property Injection
 
-Property injection is not supported by Microsoft Dependency Injection library. However, ABP integates to 3rd-party DI providers (<a href="https://autofac.org/" target="_blank">Autofac</a>, for example) to make property injection possible. Example:
+Property injection is not supported by Microsoft Dependency Injection library. However, ABP can integrate with 3rd-party DI providers (<a href="https://autofac.org/" target="_blank">Autofac</a>, for example) to make property injection possible. Example:
 
 ````C#
 public class MyService : ITransientDependency
@@ -212,15 +212,15 @@ public class MyService : ITransientDependency
 }
 ````
 
-For a property-injection dependency, you declare a public property with public setter. Thus, DI framework can set it after creating your class.
+For a property-injection dependency, you declare a public property with public setter. This allows the DI framework to set it after creating your class.
 
 Property injected dependencies are generally considered as **optional** dependencies. That means the service can properly work without them. ``Logger`` is such a dependency, ``MyService`` can continue to work without logging.
 
 To make the dependency properly optional, we generally set a default/fallback value to the dependency. In this sample, NullLogger is used as fallback. Thus, ``MyService`` can work but does not write logs if DI framework or you don't set Logger property after creating ``MyService``.
 
-One restriction of property injection is that you can not use the dependency in your constructor, since it's set after the object consturction.
+One restriction of property injection is that you cannot use the dependency in your constructor, since it's set after the object construction.
 
-Property injection is also useful when you want to design a base class that has some common services injected by default. If you would use constructor injection, all derived classes should also inject depended services into their constructors which makes development harder. However, be carefully using property injection for non-optional services since it makes hard to see requirements of a class.
+Property injection is also useful when you want to design a base class that has some common services injected by default. If you're going to use constructor injection, all derived classes should also inject depended services into their own constructors which makes development harder. However, be very careful using property injection for non-optional services as it makes it harder to clearly see the requirements of a class.
 
 #### Resolve Service from IServiceProvider
 
@@ -246,7 +246,7 @@ public class MyService : ITransientDependency
 
 #### Releasing/Disposing Services
 
-If you used constructor or property injection, you never need to release services. However, if you resolved service from ``IServiceProvider``, you may need to care about releasing services in some cases.
+If you used constructor or property injection, you don't need to be concerned about releasing a service's resources. However, if you have resolved a service from ``IServiceProvider``, you might, in some cases, need to take care about releasing the services.
 
 ASP.NET Core releases all services in the end of current HTTP request, even if you directly resolved from ``IServiceProvider`` (assuming you injected IServiceProvider). But, there are several cases where you may want to release/dispose manually resolved services:
 
@@ -254,7 +254,7 @@ ASP.NET Core releases all services in the end of current HTTP request, even if y
 * You only have a reference to the root service provider.
 * You may want to immediately release & dispose services (for example, you may creating too many services with big memory usage and don't want to overuse memory).
 
-In any way, you can use such a code block to safely and immediately release services:
+In any case, you can use such a 'using' code block to safely and immediately release services:
 
 ````C#
 using (var scope = _serviceProvider.CreateScope())

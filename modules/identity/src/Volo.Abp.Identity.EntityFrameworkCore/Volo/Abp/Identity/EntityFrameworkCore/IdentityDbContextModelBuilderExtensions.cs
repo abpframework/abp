@@ -112,6 +112,17 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
 
                 b.HasIndex(uc => uc.RoleId);
             });
+
+            builder.Entity<IdentityClaimType>(b =>
+            {
+                b.ToTable(options.TablePrefix + "ClaimTypes", options.Schema);
+
+                b.Property(uc => uc.Name).HasMaxLength(IdentityClaimTypeConsts.MaxNameLength).IsRequired(); // make unique
+                b.Property(uc => uc.Regex).HasMaxLength(IdentityClaimTypeConsts.MaxRegexLength);
+                b.Property(uc => uc.RegexDescription).HasMaxLength(IdentityClaimTypeConsts.MaxRegexDescriptionLength);
+                b.Property(uc => uc.Description).HasMaxLength(IdentityClaimTypeConsts.MaxDescriptionLength);
+
+            });
         }
     }
 }

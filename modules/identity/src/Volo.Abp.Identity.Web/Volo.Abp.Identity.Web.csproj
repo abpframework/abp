@@ -20,8 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="Pages\**\*.*" />
-    <Content Include="Pages\**\*.cs" />
+    <Content Remove="Pages\**\*.cshtml" />
     <Content Remove="Localization\Resources\**\*.json" />
     <Content Remove="compilerconfig.json" />
     <Content Remove="compilerconfig.json.defaults" />

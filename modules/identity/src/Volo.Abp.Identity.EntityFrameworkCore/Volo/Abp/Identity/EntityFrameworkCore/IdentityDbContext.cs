@@ -18,6 +18,8 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
 
         public DbSet<IdentityRole> Roles { get; set; }
 
+        public DbSet<IdentityClaimType> ClaimTypes { get; set; }
+
         public IdentityDbContext(DbContextOptions<IdentityDbContext> options)
             : base(options)
         {

@@ -10,5 +10,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         DbSet<IdentityUser> Users { get; set; }
 
         DbSet<IdentityRole> Roles { get; set; }
+
+        DbSet<IdentityClaimType> ClaimTypes { get; set; }
     }
 }
