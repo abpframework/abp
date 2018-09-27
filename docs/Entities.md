@@ -71,10 +71,10 @@ Notice that you also need to define keys of the entity in your **object-to-relat
 
 ABP does not force you to use aggregate roots, you can in fact use the `Entity` class as defined before. However, if you want to implement DDD and want to create aggregate root classes, there are some best practices you may want to consider:
 
-* An aggregate root is responsible to preserve it's own integrity. This is also true for all entities, but aggregate root has responsibility for it's sub entities too. So, the aggregate root always be in a valid state.
-* An aggregate root can be referenced by it's Id. Do not reference it by navigation property.
+* An aggregate root is responsible to preserve it's own integrity. This is also true for all entities, but aggregate root has responsibility for it's sub entities too. So, the aggregate root must always be in a valid state.
+* An aggregate root can be referenced by it's Id. Do not reference it by it's navigation property.
 * An aggregate root is treated as a single unit. It's retrieved and updated as a single unit. It's generally considered as a transaction boundary.
-* Work with sub-entities over the aggregate root, do not modify them independently.
+* Work with sub-entities over the aggregate root- do not modify them independently.
 
 #### Aggregate Example
 
@@ -158,19 +158,19 @@ public class OrderLine : Entity
 }
 ````
 
-> If you do not want derive your aggregate root from the base `AggregateRoot<TKey>` class, you can directly implement `IAggregateRoot<TKey>` interface.
+> If you do not want to derive your aggregate root from the base `AggregateRoot<TKey>` class, you can directly implement the `IAggregateRoot<TKey>` interface.
 
 `Order` is an **aggregate root** with `Guid` type `Id` property. It has a collection of `OrderLine` entities. `OrderLine` is another entity with a composite primary key (`OrderLine`  and ` ProductId`).
 
-While this example may not implement all best practices of an aggregate root, it follows some good practices:
+While this example may not implement all the best practices of an aggregate root, it still follows good practices:
 
-* `Order` has a public constructor that takes **minimal requirements** to construct an `Order` instance. So, it's not possible to create an order without an id and reference number. The **protected/private** constructor is only necessary to **deserialize** object while reading from a data source.
-* `OrderLine` constructor is internal, so it only allows to be created by the domain layer. It's used inside of `Order.AddProduct` method.
+* `Order` has a public constructor that takes **minimal requirements** to construct an `Order` instance. So, it's not possible to create an order without an id and reference number. The **protected/private** constructor is only necessary to **deserialize** the object while reading from a data source.
+* `OrderLine` constructor is internal, so it is only allowed to be created by the domain layer. It's used inside of the `Order.AddProduct` method.
 * `Order.AddProduct` implements the business rule to add a product to an order.
-* All properties have `protected` setters. This is to prevent entity from arbitrary changes from outside of the entity. For instance, it would be dangerous to set `TotalItemCount` without adding a new product to the order. It's value is maintained by the `AddProduct` method.
+* All properties have `protected` setters. This is to prevent the entity from arbitrary changes from outside of the entity. For exmple, it would be dangerous to set `TotalItemCount` without adding a new product to the order. It's value is maintained by the `AddProduct` method.
 
-ABP does not force you to apply any DDD rule or pattern. However, it tries to make it possible and easier when you want to apply. The documentation also follows this principle.
+ABP does not force you to apply any DDD rule or patterns. However, it tries to make it possible and easier when you do want to apply them. The documentation also follows the same principle.
 
 #### Aggregate Roots with Composite Keys
 
-While it's not common (and not suggested) for aggregate roots, it's possible to define composite keys just as defined for entities above. Use non-generic `AggregateRoot` base class in that case.
+While it's not common (and not suggested) for aggregate roots, it isin fact possible to define composite keys in the same way as defined for the mentioned entities above. Use non-generic `AggregateRoot` base class in that case.
