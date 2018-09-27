@@ -50,6 +50,19 @@ namespace Volo.Docs.Pages.Documents.Project
             _projectAppService = projectAppService;
         }
 
+        public VersionInfo LatestVersionInfo
+        {
+            get
+            {
+                var latestVersion = Versions.First();
+
+                latestVersion.DisplayText = $"{latestVersion.Version} - " + DocsAppConsts.LatestVersion;
+                latestVersion.Version = latestVersion.Version;
+
+                return latestVersion;
+            }
+        }
+
         public async Task OnGet()
         {
             var projectDto = await _projectAppService.FindByShortNameAsync(ProjectName);
@@ -63,30 +76,29 @@ namespace Volo.Docs.Pages.Documents.Project
 
             Versions = versions.Select(v => new VersionInfo(v, v)).ToList();
 
-            AddDefaultVersionIfNotContains();
+            //VersionInfo latestVersion = Versions.First();
+            //latestVersion.DisplayText = $"{latestVersion.Version} - " + DocsAppConsts.LatestVersion;
+            //latestVersion.Version = latestVersion.Version;
 
-            var latestVersion = Versions.Count == 1 ? Versions[0] : Versions[1];
-            latestVersion.DisplayText = $"{latestVersion.Version} - latest";
-            latestVersion.Version = latestVersion.Version;
-
-
-            var versionFromUrl = Versions.FirstOrDefault(v => v.Version == Version);
-            if (versionFromUrl != null)
+           
+            if (string.Equals(Version, DocsAppConsts.LatestVersion, StringComparison.InvariantCultureIgnoreCase))
             {
-                versionFromUrl.IsSelected = true;
-            }
-            else if (string.Equals(Version, "latest", StringComparison.InvariantCultureIgnoreCase))
-            {
-                latestVersion.IsSelected = true;
+                LatestVersionInfo.IsSelected = true;
+                Version = LatestVersionInfo.Version;
             }
             else
             {
-                Versions.First().IsSelected = true;
-            }
-
-            if (Version == null)
-            {
-                Version = Versions.Single(x => x.IsSelected).Version;
+                var versionFromUrl = Versions.FirstOrDefault(v => v.Version == Version);
+                if (versionFromUrl != null)
+                {
+                    versionFromUrl.IsSelected = true;
+                    Version = versionFromUrl.Version;
+                }
+                else
+                {
+                    Versions.First().IsSelected = true;
+                    Version = Versions.First().Version;
+                }
             }
 
             Document = await _documentAppService.GetByNameAsync(ProjectName, DocumentNameWithExtension, Version, true);
@@ -101,20 +113,6 @@ namespace Volo.Docs.Pages.Documents.Project
             Navigation = await _documentAppService.GetNavigationDocumentAsync(ProjectName, Version, false);
             Navigation.ConvertItems();
         }
-
-        private void AddDefaultVersionIfNotContains()
-        {
-            if (DocsWebConsts.DefaultVersion == null)
-            {
-                return;
-            }
-
-            if (Versions.Contains(DocsWebConsts.DefaultVersion))
-            {
-                return;
-            }
-
-            Versions.Insert(0, DocsWebConsts.DefaultVersion);
-        }
+         
     }
 }

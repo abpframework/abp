@@ -1,5 +1,6 @@
 ﻿@page
 @using Volo.Abp.AspNetCore.Mvc.UI.Theming
+@using Volo.Docs
 @using Volo.Docs.Pages.Documents.Project
 @inject IThemeManager ThemeManager
 @model IndexModel
@@ -90,7 +91,7 @@
                     }
 
                     <ul root-node="@Model.Navigation.RootNode"
-                        version="@(Model.Version.IsNullOrEmpty() ? "latest" : Model.Version)"
+                        version="@(Model.LatestVersionInfo.IsSelected ? DocsAppConsts.LatestVersion : Model.Version)"
                         project-name="@Model.ProjectName"
                         project-format="@Model.ProjectFormat"
                         selected-document-name="@Model.DocumentNameWithExtension"
