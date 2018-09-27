@@ -308,7 +308,7 @@ Open the `Index.cshtml` and change the content as shown below:
 <h2>Books</h2>
 ````
 
-* This page **inherits** from the `BookStorePageBase` class which comes with the startup template and provides some shared properties/methods used by all pages.
+* Change the default inhertitance of the Razor View Page Model so it **inherits** from the `BookStorePageBase` class (instead of `PageModel`).  The `BookStorePageBase` class which comes with the startup template and provides some shared properties/methods used by all pages.
 
 #### Add Books Page to the Main Menu
 
