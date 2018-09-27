@@ -54,7 +54,7 @@ namespace Volo.Docs.Areas.Documents.Helpers.TagHelpers
         {
             var content = "";
 
-            var isAnyNodeOpenedInThisLevel = node.Items?.Any(n => n.IsSelected(SelectedDocumentName)) ?? false;
+            var isAnyNodeOpenedInThisLevel = IsAnyNodeOpenedInThisLevel(node);
 
             node.Items?.ForEach(innerNode =>
             {
@@ -64,6 +64,26 @@ namespace Volo.Docs.Areas.Documents.Helpers.TagHelpers
             var result = node.IsEmpty ? content : GetLeafNode(node, content);
 
             return result;
+        }
+
+        private bool IsAnyNodeOpenedInThisLevel(NavigationNode node)
+        {
+            if (node.Items == null)
+            {
+                return false;
+            }
+
+            if (node.IsSelected(SelectedDocumentName))
+            {
+                return true;
+            }
+
+            if (node.Items.Any(n => n.IsSelected(SelectedDocumentName)))
+            {
+                return true;
+            }
+
+            return false;
         }
 
         private string GetParentNode(NavigationNode node, bool isOpened)
