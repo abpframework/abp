@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Caching;
-using Volo.Abp.Domain.Entities;
 using Volo.Docs.Projects;
 
 namespace Volo.Docs.Documents
@@ -30,7 +28,7 @@ namespace Volo.Docs.Documents
         {
             var project = await _projectRepository.FindByShortNameAsync(projectShortName);
 
-            return await GetDocument(project, documentName, version, normalize);
+            return await GetDocument(ObjectMapper.Map<Project, ProjectDto>(project), documentName, version, normalize);
         }
 
         public async Task<NavigationWithDetailsDto> GetNavigationDocumentAsync(string projectShortName, string version, bool normalize)
@@ -38,14 +36,15 @@ namespace Volo.Docs.Documents
             var project = await _projectRepository.FindByShortNameAsync(projectShortName);
 
             return ObjectMapper.Map<DocumentWithDetailsDto, NavigationWithDetailsDto>(
-                await GetDocument(project, project.NavigationDocumentName, version, normalize));
+                await GetDocument(ObjectMapper.Map<Project, ProjectDto>(project), project.NavigationDocumentName,
+                    version, normalize));
         }
 
-        private async Task<DocumentWithDetailsDto> GetDocument(Project project, string documentName, string version, bool normalize)
+        public async Task<DocumentWithDetailsDto> GetDocument(ProjectDto project, string documentName, string version, bool normalize)
         {
             if (project == null)
             {
-                throw new EntityNotFoundException("Project Not Found!");
+                throw new ArgumentNullException(nameof(project));
             }
 
             if (string.IsNullOrWhiteSpace(documentName))
@@ -53,37 +52,32 @@ namespace Volo.Docs.Documents
                 documentName = project.DefaultDocumentName;
             }
 
-            IDocumentStore documentStore = _documentStoreFactory.Create(project);
-            Document document = await documentStore.FindDocumentByNameAsync(project, documentName, version);
+            IDocumentStore documentStore = _documentStoreFactory.Create(project.DocumentStoreType);
+
+            Document document = await documentStore.FindDocumentByNameAsync(project.ExtraProperties, project.Format, documentName, version);
 
             var dto = ObjectMapper.Map<Document, DocumentWithDetailsDto>(document);
 
-            dto.Project = ObjectMapper.Map<Project, ProjectDto>(project);
+            dto.Project = project;
 
             return dto;
         }
 
-        public async Task<List<string>> GetVersions(string projectShortName, string documentName)
+        public async Task<List<string>> GetVersions(string projectShortName, string defaultDocumentName, Dictionary<string, object> projectExtraProperties,
+            string documentStoreType, string documentName)
         {
-            var project = await _projectRepository.FindByShortNameAsync(projectShortName);
-
-            if (project == null)
-            {
-                throw new EntityNotFoundException($"Project Not Found!");
-            }
-
             if (string.IsNullOrWhiteSpace(documentName))
             {
-                documentName = project.DefaultDocumentName;
+                documentName = defaultDocumentName;
             }
 
-            var documentStore = _documentStoreFactory.Create(project);
+            var documentStore = _documentStoreFactory.Create(documentStoreType);
 
             var versions = await GetVersionsFromCache(projectShortName);
 
             if (versions == null)
             {
-                versions = await documentStore.GetVersions(project, documentName);
+                versions = await documentStore.GetVersions(projectExtraProperties, documentName);
                 await SetVersionsToCache(projectShortName, versions);
             }
 
@@ -100,7 +94,5 @@ namespace Volo.Docs.Documents
             var options = new DistributedCacheEntryOptions() { SlidingExpiration = TimeSpan.FromDays(1) };
             await _distributedCache.SetAsync(projectShortName, versions, options);
         }
-
-     
     }
 }

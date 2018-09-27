@@ -35,6 +35,9 @@ namespace Volo.Docs.Areas.Documents.Helpers.TagHelpers
         [HtmlAttributeName("selected-document-name")]
         public string SelectedDocumentName { get; set; }
 
+        [HtmlAttributeName("project-format")]
+        public string ProjectFormat { get; set; }
+
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             var content = new StringBuilder();
@@ -80,14 +83,18 @@ namespace Volo.Docs.Areas.Documents.Helpers.TagHelpers
                 anchorCss += " opened";
             }
 
+            var normalizedPath = node.Path != null && node.Path.EndsWith("." + ProjectFormat)
+                ? node.Path.Left(node.Path.Length - ProjectFormat.Length - 1)
+                : node.Path;
+
             return string.Format(LiItemTemplate,
-                node.Path.IsNullOrEmpty() ? "#" : "/documents/" + ProjectName + "/" + Version + "/" + node.Path,
+                node.Path.IsNullOrEmpty() ? "#" : "/documents/" + ProjectName + "/" + Version + "/" + normalizedPath,
                 node.Text.IsNullOrEmpty() ? "?" : node.Text,
                 content,
                 node.HasChildItems ? "nav-header" : "last-link",
                 node.HasChildItems ? "chevron-down" : "long-arrow-right",
-                anchorCss ,
-                isNodeSelected? "selected-tree" : "");
+                anchorCss,
+                isNodeSelected ? "selected-tree" : "");
         }
 
     }

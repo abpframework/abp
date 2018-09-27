@@ -92,7 +92,8 @@
                     <ul root-node="@Model.Navigation.RootNode"
                         version="@(Model.Version.IsNullOrEmpty() ? "latest" : Model.Version)"
                         project-name="@Model.ProjectName"
-                        selected-document-name="@Model.DocumentName"
+                        project-format="@Model.ProjectFormat"
+                        selected-document-name="@Model.DocumentNameWithExtension"
                         id="sidebar-scroll"
                         class="nav nav-list"></ul>
                 </div>

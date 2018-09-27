@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Volo.Docs.Documents;
 using Volo.Docs.Formatting;
+using Volo.Docs.Projects;
 
 namespace Volo.Docs.Pages.Documents.Project
 {
@@ -20,6 +21,10 @@ namespace Volo.Docs.Pages.Documents.Project
 
         [BindProperty(SupportsGet = true)]
         public string DocumentName { get; set; }
+
+        public string ProjectFormat { get; set; }
+
+        public string DocumentNameWithExtension { get; private set; }
 
         public DocumentWithDetailsDto Document { get; private set; }
 
@@ -36,24 +41,31 @@ namespace Volo.Docs.Pages.Documents.Project
 
         private readonly IDocumentAppService _documentAppService;
         private readonly IDocumentConverterFactory _documentConverterFactory;
+        private readonly IProjectAppService _projectAppService;
 
-        public IndexModel(IDocumentAppService documentAppService, IDocumentConverterFactory documentConverterFactory)
+        public IndexModel(IDocumentAppService documentAppService, IDocumentConverterFactory documentConverterFactory, IProjectAppService projectAppService)
         {
             _documentAppService = documentAppService;
             _documentConverterFactory = documentConverterFactory;
+            _projectAppService = projectAppService;
         }
 
         public async Task OnGet()
         {
-            Versions = (await _documentAppService.GetVersions(ProjectName, DocumentName))
-                .Select(v => new VersionInfo(v, v))
-                .ToList();
+            var projectDto = await _projectAppService.FindByShortNameAsync(ProjectName);
 
-            var hasAnyVersion = Versions.Any();
+            ProjectFormat = projectDto.Format;
+
+            DocumentNameWithExtension = DocumentName + "." + projectDto.Format;
+
+            var versions = await _documentAppService.GetVersions(projectDto.ShortName, projectDto.DefaultDocumentName,
+                projectDto.ExtraProperties, projectDto.DocumentStoreType, DocumentNameWithExtension);
+
+            Versions = versions.Select(v => new VersionInfo(v, v)).ToList();
 
             AddDefaultVersionIfNotContains();
 
-            var latestVersion = hasAnyVersion ? Versions[1] : Versions[0];
+            var latestVersion = Versions.Count == 1 ? Versions[0] : Versions[1];
             latestVersion.DisplayText = $"{latestVersion.Version} - latest";
             latestVersion.Version = latestVersion.Version;
 
@@ -77,8 +89,8 @@ namespace Volo.Docs.Pages.Documents.Project
                 Version = Versions.Single(x => x.IsSelected).Version;
             }
 
-            Document = await _documentAppService.GetByNameAsync(ProjectName, DocumentName, Version, true);
-            var converter = _documentConverterFactory.Create(Document.Format ?? "md");
+            Document = await _documentAppService.GetByNameAsync(ProjectName, DocumentNameWithExtension, Version, true);
+            var converter = _documentConverterFactory.Create(Document.Format ?? projectDto.Format);
             var content = converter.NormalizeLinks(Document.Content, Document.Project.ShortName, Document.Version, Document.LocalDirectory);
             content = converter.Convert(content);
 

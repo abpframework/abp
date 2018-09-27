@@ -1,4 +1,5 @@
 ﻿@page
+@using Castle.Core.Internal
 @using Volo.Docs
 @using Volo.Docs.Pages.Documents
 @model IndexModel
@@ -10,9 +11,14 @@
         <abp-style src="/assets/fa/css/font-awesome.min.css" />
     </abp-style-bundle>
 }
-
 <div class="p-5">
 
+    @if (Model.Projects.IsNullOrEmpty())
+    {
+        <div class="alert alert-secondary text-center" role="alert">
+            There are no projects yet!
+        </div>
+    }
     @if (Model.Projects.Count > 0)
     {
         <h1>Project(s)</h1>
@@ -33,8 +39,5 @@
             </ul>
         </p>
     }
-    else
-    {
-        <p>There is no project defined yet!</p>
-    }
+
 </div>

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
+using Volo.Abp.Domain.Entities;
 
 namespace Volo.Docs.Projects
 {
@@ -21,6 +22,17 @@ namespace Volo.Docs.Projects
             return new ListResultDto<ProjectDto>(
                 ObjectMapper.Map<List<Project>, List<ProjectDto>>(projects)
             );
+        }
+
+        public async Task<ProjectDto> FindByShortNameAsync(string shortName)
+        {
+            var project = await _projectRepository.FindByShortNameAsync(shortName);
+            if (project == null)
+            {
+                throw new EntityNotFoundException($"Project with the name {shortName} not found!");
+            }
+
+            return ObjectMapper.Map<Project, ProjectDto>(project);
         }
     }
 }

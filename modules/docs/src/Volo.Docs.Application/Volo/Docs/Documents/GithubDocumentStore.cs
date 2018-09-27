@@ -10,7 +10,6 @@ using Microsoft.Extensions.Logging;
 using Octokit;
 using Volo.Abp.Domain.Services;
 using ProductHeaderValue = Octokit.ProductHeaderValue;
-using Project = Volo.Docs.Projects.Project;
 
 namespace Volo.Docs.Documents
 {
@@ -20,11 +19,11 @@ namespace Volo.Docs.Documents
 
         private const bool IsOffline = true; //use it when you don't want to get from GitHub (eg: I have no internet)
 
-        public async Task<Document> FindDocumentByNameAsync(Project project, string documentName, string version)
+        public async Task<Document> FindDocumentByNameAsync(Dictionary<string, object> projectExtraProperties, string projectFormat, string documentName, string version)
         {
-            var rootUrl = project.ExtraProperties["GithubRootUrl"].ToString().Replace("_version_/", version + "/")
-                .Replace("www.", "");
-            var token = project.ExtraProperties["GithubAccessToken"]?.ToString();
+            var rootUrl = projectExtraProperties["GithubRootUrl"].ToString().Replace("_version_/", version + "/").Replace("www.", "");
+
+            var token = projectExtraProperties["GithubAccessToken"]?.ToString();
 
             var rawRootUrl = rootUrl.Replace("github.com", token + "raw.githubusercontent.com").Replace("/tree/", "/");
             var rawUrl = rawRootUrl + documentName;
@@ -48,7 +47,7 @@ namespace Volo.Docs.Documents
                 EditLink = editLink,
                 RootUrl = rootUrl,
                 RawRootUrl = rawRootUrl,
-                Format = project.Format,
+                Format = projectFormat,
                 LocalDirectory = localDirectory,
                 FileName = fileName,
                 Version = version
@@ -99,12 +98,12 @@ namespace Volo.Docs.Documents
             }
         }
 
-        public async Task<List<string>> GetVersions(Project project, string documentName)
+        public async Task<List<string>> GetVersions(Dictionary<string, object> projectExtraProperties, string documentName)
         {
             try
             {
                 var gitHubClient = new GitHubClient(new ProductHeaderValue("AbpWebSite"));
-                var url = project.ExtraProperties["GithubRootUrl"].ToString();
+                var url = projectExtraProperties["GithubRootUrl"].ToString();
                 var releases = await gitHubClient.Repository.Release.GetAll(GetGithubOrganizationNameFromUrl(url),
                     GetGithubRepositoryNameFromUrl(url));
 

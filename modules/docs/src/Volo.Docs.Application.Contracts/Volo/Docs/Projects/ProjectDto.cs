@@ -19,5 +19,9 @@ namespace Volo.Docs.Projects
         public Dictionary<string, object> ExtraProperties { get; protected set; }
 
         public string MainWebsiteUrl { get; set; }
+
+        public virtual string DocumentStoreType { get; protected set; }
+
+        public virtual string Format { get; protected set; }
     }
 }

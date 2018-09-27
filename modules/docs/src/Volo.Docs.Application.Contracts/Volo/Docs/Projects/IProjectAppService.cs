@@ -7,5 +7,7 @@ namespace Volo.Docs.Projects
     public interface IProjectAppService : IApplicationService
     {
         Task<ListResultDto<ProjectDto>> GetListAsync();
+     
+        Task<ProjectDto> FindByShortNameAsync(string shortName);
     }
 }

@@ -1,7 +1,6 @@
 using System;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
-using Volo.Docs.Projects;
 
 namespace Volo.Docs.Documents
 {
@@ -14,14 +13,14 @@ namespace Volo.Docs.Documents
             _serviceProvider = serviceProvider;
         }
 
-        public IDocumentStore Create(Project project)
+        public IDocumentStore Create(string documentStoreType)
         {
-            switch (project.DocumentStoreType)
+            switch (documentStoreType)
             {
                 case GithubDocumentStore.Type:
                     return _serviceProvider.GetRequiredService<GithubDocumentStore>();
                 default:
-                    throw new ApplicationException($"Undefined document store: {project.DocumentStoreType}");
+                    throw new ApplicationException($"Undefined document store: {documentStoreType}");
             }
         }
     }
