@@ -43,7 +43,7 @@ namespace Volo.Docs.Documents
         public bool HasChildItems => Items != null && Items.Any();
 
         public bool IsEmpty => Text == null && Path == null;
-         
+
         public bool IsSelected(string documentName)
         {
             if (documentName == null)
@@ -51,7 +51,7 @@ namespace Volo.Docs.Documents
                 return false;
             }
 
-            if (string.Equals(documentName, Path, StringComparison.InvariantCultureIgnoreCase))
+            if (string.Equals(documentName, Path, StringComparison.OrdinalIgnoreCase))
             {
                 return true;
             }
@@ -71,7 +71,6 @@ namespace Volo.Docs.Documents
 
             return false;
         }
-
     }
 
     public class NavigationWithDetailsDto : DocumentWithDetailsDto

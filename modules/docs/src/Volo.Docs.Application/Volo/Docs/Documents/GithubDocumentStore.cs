@@ -121,7 +121,7 @@ namespace Volo.Docs.Documents
             try
             {
                 var urlStartingAfterFirstSlash =
-                    url.Substring(url.IndexOf("github.com/", StringComparison.Ordinal) + "github.com/".Length);
+                    url.Substring(url.IndexOf("github.com/", StringComparison.OrdinalIgnoreCase) + "github.com/".Length);
                 return urlStartingAfterFirstSlash.Substring(0, urlStartingAfterFirstSlash.IndexOf('/'));
             }
             catch (Exception)
@@ -135,7 +135,7 @@ namespace Volo.Docs.Documents
             try
             {
                 var urlStartingAfterFirstSlash =
-                    url.Substring(url.IndexOf("github.com/", StringComparison.Ordinal) + "github.com/".Length);
+                    url.Substring(url.IndexOf("github.com/", StringComparison.OrdinalIgnoreCase) + "github.com/".Length);
                 var urlStartingAfterSecondSlash =
                     urlStartingAfterFirstSlash.Substring(urlStartingAfterFirstSlash.IndexOf('/') + 1);
                 return urlStartingAfterSecondSlash.Substring(0, urlStartingAfterSecondSlash.IndexOf('/'));
