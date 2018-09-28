@@ -1,15 +1,15 @@
 ## Exception Handling
 
-ABP provides a built-in infrastructure and offers a standard model to exception handling for a web application.
+ABP provides a built-in infrastructure and offers a standard model for handling exceptions in a web application.
 
 * Automatically **handles all exceptions** and sends a standard **formatted error message** to the client for an API/AJAX request.
 * Automatically hides **internal infrastructure errors** and returns a standard error message.
-* Provides configuration option to **localize** exception messages.
-* Automatically maps standard exceptions to **HTTP status codes** and provides configuration option to map custom exceptions.
+* Provides a configurable way to **localize** exception messages.
+* Automatically maps standard exceptions to **HTTP status codes** and provides a configurable option to map these to custom exceptions.
 
 ### Automatic Exception Handling
 
-`AbpExceptionFilter` handles an exception if **any of the following conditions** meets;
+`AbpExceptionFilter` handles an exception if **any of the following conditions** are meet:
 
 * Exception is thrown by a **controller action** which returns an **object result** (not a view result).
 * The request is an AJAX request (`X-Requested-With` HTTP header value is `XMLHttpRequest`).
@@ -29,7 +29,7 @@ Error Message is an instance of the `RemoteServiceErrorResponse` class. The simp
 }
 ````
 
-There are **optional fields** those can be filled based on the occurred exception.
+There are **optional fields** those can be filled based upon the exception that has occured.
 
 ##### Error Code
 
@@ -81,7 +81,7 @@ Error **details** in an optional field of the JSON error message. Thrown `Except
 }
 ````
 
-`AbpValidationException` implements the `IHasValidationErrors` interface and it is automatically thrown by the framework when a request input is not valid. So, usually you don't deal with validation errors except you have a very custom validation logic.
+`AbpValidationException` implements the `IHasValidationErrors` interface and it is automatically thrown by the framework when a request input is not valid. So, usually you don't need to deal with validation errors unless you have higly customised validation logic.
 
 #### Logging
 
@@ -89,7 +89,7 @@ Caught exceptions are automatically logged.
 
 ##### Log Level
 
-Exceptions are logged with the `Error` level by default. Log level can be determined by the exception if it implements the `IHasLogLevel` interface. Example:
+Exceptions are logged with the `Error` level by default. The Log level can be determined by the exception if it implements the `IHasLogLevel` interface. Example:
 
 ````C#
 public class MyException : Exception, IHasLogLevel
@@ -120,15 +120,15 @@ public class MyException : Exception, IExceptionWithSelfLogging
 
 Most of your own exceptions will be business exceptions. The `IBusinessException` interface is used to mark an exception as a business exception.
 
-`BusinessException` implements the `IBusinessException` interface in addition to the `IHasErrorCode`, `IHasErrorDetails` and `IHasLogLevel` interfaces. Default log level is `Warning`.
+`BusinessException` implements the `IBusinessException` interface in addition to the `IHasErrorCode`, `IHasErrorDetails` and `IHasLogLevel` interfaces. The default log level is `Warning`.
 
-Usually you have an error code related to a particular business exception. Example:
+Usually you have an error code related to a particular business exception. For example:
 
 ````C#
 throw new BusinessException(QaErrorCodes.CanNotVoteYourOwnAnswer);
 ````
 
-`QaErrorCodes.CanNotVoteYourOwnAnswer` is just a `const string`. Such an error code format is suggested:
+`QaErrorCodes.CanNotVoteYourOwnAnswer` is just a `const string`. The following error code format is recommended:
 
 ````
 <code-namespace>:<error-code>
@@ -147,11 +147,11 @@ Volo.Qa:010002
 
 ### Exception Localization
 
-One problem with throwing exception is how to localize error messages while sending to clients. ABP offers two models and their variants.
+One problem with throwing exceptions is how to localize error messages while sending it to the client. ABP offers two models and their variants.
 
 #### User Friendly Exception
 
-If an exception implements the `IUserFriendlyException` interface, then ABP does not change it's `Message` and `Details` properties and directly send to the client.
+If an exception implements the `IUserFriendlyException` interface, then ABP does not change it's `Message` and `Details` properties and directly send it to the client.
 
 `UserFriendlyException` class is the built-in implementation of the `IUserFriendlyException` interface. Example usage:
 
@@ -161,7 +161,7 @@ throw new UserFriendlyException(
 );
 ````
 
-In this way, **no need to localization** at all. If you want to localize the message, you can inject and use the standard **string localizer** (see the [localization document](Localization.md)). Example:
+In this way, there is **no need for localization** at all. If you want to localize the message, you can inject and use the standard **string localizer** (see the [localization document](Localization.md)). Example:
 
 ````C#
 throw new UserFriendlyException(_stringLocalizer["UserNameShouldBeUniqueMessage"]);
@@ -178,7 +178,7 @@ Then define it in the **localization resource** for each language. Example:
 }
 ````
 
-String localizer already supports **parameterized messages**. Example:
+String localizer already supports **parameterized messages**. For example:
 
 ````C#
 throw new UserFriendlyException(_stringLocalizer["UserNameShouldBeUniqueMessage", "john"]);
@@ -194,10 +194,10 @@ Then the localization text can be:
 
 #### Using Error Codes
 
-`UserFriendlyException` is fine, but has a few problems in advanced usages:
+`UserFriendlyException` is fine, but it has a few problems in advanced usages:
 
-* It requires to **inject string localizer** everywhere and always use it while throwing exceptions.
-* Some of the cases, it may **not possible** to inject the string localizer (in a static context or in an entity method).
+* It requires you to **inject the string localizer** everywhere and always use it while throwing exceptions.
+* However, in some of the cases, it may **not be possible** to inject the string localizer (in a static context or in an entity method).
 
 Instead of localizing the message while throwing the exception, you can separate the process using **error codes**.
 
@@ -210,7 +210,7 @@ services.Configure<ExceptionLocalizationOptions>(options =>
 });
 ````
 
-Then any of the exceptions with `Volo.Qa` namespace will be localized using the given localization resource. The localization resource should have an entry with the error code key. Example:
+Then any of the exceptions with `Volo.Qa` namespace will be localized using their given localization resource. The localization resource should always have an entry with the error code key. Example:
 
 ````json
 {
@@ -228,11 +228,11 @@ throw new BusinessException(QaDomainErrorCodes.CanNotVoteYourOwnAnswer);
 ````
 
 * Throwing any exception implementing the `IHasErrorCode` interface behaves the same. So, the error code localization approach is not unique to the `BusinessException` class.
-* Defining localized string is not required for an error message. If not defined, ABP sends the default error message to the client. It does not use the `Message` property of the exception! if you want that, use the `UserFriendlyException` (or use an exception type that implements the `IUserFriendlyException` interface).
+* Defining localized string is not required for an error message. If it's not defined, ABP sends the default error message to the client. It does not use the `Message` property of the exception! if you want that, use the `UserFriendlyException` (or use an exception type that implements the `IUserFriendlyException` interface).
 
 ##### Using Message Parameters
 
-If you have a parameterized error message, then you can set it with the exception's `Data` property. Example:
+If you have a parameterized error message, then you can set it with the exception's `Data` property. For example:
 
 ````C#
 throw new BusinessException("App:010046")
@@ -245,14 +245,14 @@ throw new BusinessException("App:010046")
 
 ````
 
-Fortunately there is a shortcut for it:
+Fortunately there is a shortcut way to code this:
 
 ````C#
 throw new BusinessException("App:010046")
     .WithData("UserName", "john");
 ````
 
-Then the localized text can contain the`UserName` parameter:
+Then the localized text can contain the `UserName` parameter:
 
 ````json
 {
@@ -263,7 +263,7 @@ Then the localized text can contain the`UserName` parameter:
 }
 ````
 
-* `WithData` can be chained for more than one parameter (like `.WithData(...).WithData(...)`).
+* `WithData` can be chained with more than one parameter (like `.WithData(...).WithData(...)`).
 
 ### HTTP Status Code Mapping
 
@@ -278,11 +278,11 @@ ABP tries to automatically determine the most suitable HTTP status code for comm
 * Returns `501` (not implemented) for the `NotImplementedException`.
 * Returns `500` (internal server error) for other exceptions (those are assumed as infrastructure exceptions).
 
-The `IHttpExceptionStatusCodeFinder` is used to automatically determine the HTTP status code. Default implementation is the `DefaultHttpExceptionStatusCodeFinder` class. It can be replaced or extended if needed.
+The `IHttpExceptionStatusCodeFinder` is used to automatically determine the HTTP status code. The default implementation is the `DefaultHttpExceptionStatusCodeFinder` class. It can be replaced or extended as needed.
 
 #### Custom Mappings
 
-Automatic HTTP status code determination can be overrided by custom mappings. Example:
+Automatic HTTP status code determination can be overrided by custom mappings. For example:
 
 ````C#
 services.Configure<ExceptionHttpStatusCodeOptions>(options =>
@@ -293,10 +293,10 @@ services.Configure<ExceptionHttpStatusCodeOptions>(options =>
 
 ### Built-In Exceptions
 
-Some exception types are automatically thrown by the framework.
+Some exception types are automatically thrown by the framework:
 
 - `AbpAuthorizationException` is thrown if the current user has no permission to perform the requested operation. See authorization document (TODO: link) for more.
 - `AbpValidationException` is thrown if the input of the current request is not valid. See validation document (TODO: link) for more.
 - `EntityNotFoundException` is thrown if the requested entity is not available. This is mostly thrown by [repositories](Repositories.md).
 
-You can also throw these type of exceptions in your code (while it's rarely needed).
+You can also throw these type of exceptions in your code (although it's rarely needed).
