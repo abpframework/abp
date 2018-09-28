@@ -43,18 +43,23 @@
 
                 <div class="docs-top">
                     <nav class="navbar navbar-logo">
+                        @if (!Model.ProjectName.IsNullOrWhiteSpace())
+                        {
+                            <a class="navbar-brand w-100" href="/">
+                                @Model.ProjectName<br>
+                                <strong class="display-block">
+                                    Documents
+                                </strong>
+                            </a>
+                        }
 
-                        <a class="navbar-brand w-100" href="/">
-                            @Model.ProjectName<br>
-                            <strong class="display-block">
-                                Documents
-                            </strong>
-                        </a>
-
-                        <a href="@Model.Document.Project.MainWebsiteUrl" class="go-back-site">
-                            <i class="fa fa-chevron-left"></i>
-                            Back to Website
-                        </a>
+                        @if (!Model.Document.Project.MainWebsiteUrl.IsNullOrWhiteSpace())
+                        {
+                            <a href="@Model.Document.Project.MainWebsiteUrl" class="go-back-site">
+                                <i class="fa fa-chevron-left"></i>
+                                Back to Website
+                            </a>
+                        }
 
                         <div class="for-mobile">
                             <div class="navbar-light">
@@ -127,7 +132,7 @@
 
             <div class="docs-inner-anchors mt-2">
                 <nav class="navbar p-0 pt-2" data-toggle="toc">
-                    <h5 class="inner-title">In this article</h5>
+                    <h5>In this article</h5>
                 </nav>
 
                 <div class="row">
