@@ -22,7 +22,7 @@ namespace Volo.Docs.Pages.Documents.Project
         [BindProperty(SupportsGet = true)]
         public string DocumentName { get; set; }
 
-        public string ProjectFormat { get; set; }
+        public string ProjectFormat { get; private set; }
 
         public string DocumentNameWithExtension { get; private set; }
 
@@ -30,14 +30,11 @@ namespace Volo.Docs.Pages.Documents.Project
 
         public List<VersionInfo> Versions { get; private set; }
 
-        public List<SelectListItem> VersionSelectItems => Versions.Select(v => new SelectListItem
-        {
-            Text = v.DisplayText,
-            Value = "/documents/" + ProjectName + "/" + v.Version + "/" + DocumentName,
-            Selected = v.IsSelected
-        }).ToList();
+        public List<SelectListItem> VersionSelectItems { get; private set; }
 
         public NavigationWithDetailsDto Navigation { get; private set; }
+
+        public VersionInfo LatestVersionInfo { get; private set; }
 
         private readonly IDocumentAppService _documentAppService;
         private readonly IDocumentConverterFactory _documentConverterFactory;
@@ -50,36 +47,52 @@ namespace Volo.Docs.Pages.Documents.Project
             _projectAppService = projectAppService;
         }
 
-        public VersionInfo LatestVersionInfo
-        {
-            get
-            {
-                var latestVersion = Versions.First();
-
-                latestVersion.DisplayText = $"{latestVersion.Version} - " + DocsAppConsts.LatestVersion;
-                latestVersion.Version = latestVersion.Version;
-
-                return latestVersion;
-            }
-        }
-
         public async Task OnGet()
         {
-            var projectDto = await _projectAppService.FindByShortNameAsync(ProjectName);
+            var project = await _projectAppService.FindByShortNameAsync(ProjectName);
 
-            ProjectFormat = projectDto.Format;
+            SetPageParams(project);
+
+            await SetVersionAsync(project);
+
+            await SetDocumentAsync();
+
+            await SetNavigationAsync();
+        }
+
+        private async Task SetNavigationAsync()
+        {
+            Navigation = await _documentAppService.GetNavigationDocumentAsync(ProjectName, Version, false);
+            Navigation.ConvertItems();
+        }
+
+        private void SetPageParams(ProjectDto project)
+        {
+            ProjectFormat = project.Format;
 
             if (DocumentName.IsNullOrWhiteSpace())
             {
-                DocumentName = projectDto.DefaultDocumentName;
+                DocumentName = project.DefaultDocumentName;
             }
 
-            DocumentNameWithExtension = DocumentName + "." + projectDto.Format;
+            DocumentNameWithExtension = DocumentName + "." + project.Format;
+        }
 
-            var versions = await _documentAppService.GetVersions(projectDto.ShortName, projectDto.DefaultDocumentName,
-                projectDto.ExtraProperties, projectDto.DocumentStoreType, DocumentNameWithExtension);
+        private async Task SetVersionAsync(ProjectDto project)
+        {
+            var versions = await _documentAppService.GetVersions(project.ShortName, project.DefaultDocumentName,
+                project.ExtraProperties, project.DocumentStoreType, DocumentNameWithExtension);
+
+            VersionSelectItems = Versions.Select(v => new SelectListItem
+            {
+                Text = v.DisplayText,
+                Value = "/documents/" + ProjectName + "/" + v.Version + "/" + DocumentName,
+                Selected = v.IsSelected
+            }).ToList();
 
             Versions = versions.Select(v => new VersionInfo(v, v)).ToList();
+
+            LatestVersionInfo = GetLatestVersion();
 
             if (string.Equals(Version, DocsAppConsts.LatestVersion, StringComparison.OrdinalIgnoreCase))
             {
@@ -100,20 +113,28 @@ namespace Volo.Docs.Pages.Documents.Project
                     Version = Versions.First().Version;
                 }
             }
+        }
 
+        private VersionInfo GetLatestVersion()
+        {
+            var latestVersion = Versions.First();
+
+            latestVersion.DisplayText = $"{latestVersion.Version} - " + DocsAppConsts.LatestVersion;
+            latestVersion.Version = latestVersion.Version;
+
+            return latestVersion;
+        }
+
+        private async Task SetDocumentAsync()
+        {
             Document = await _documentAppService.GetByNameAsync(ProjectName, DocumentNameWithExtension, Version, true);
-            var converter = _documentConverterFactory.Create(Document.Format ?? projectDto.Format);
+            var converter = _documentConverterFactory.Create(Document.Format ?? ProjectFormat);
             var content = converter.NormalizeLinks(Document.Content, Document.Project.ShortName, Document.Version, Document.LocalDirectory);
             content = converter.Convert(content);
 
             content = HtmlNormalizer.ReplaceImageSources(content, Document.RawRootUrl, Document.LocalDirectory);
             content = HtmlNormalizer.ReplaceCodeBlocksLanguage(content, "language-C#", "language-csharp"); //todo find a way to make it on client in prismJS configuration (eg: map C# => csharp)
             Document.Content = content;
-
-            Navigation = await _documentAppService.GetNavigationDocumentAsync(ProjectName, Version, false);
-            Navigation.ConvertItems();
-
         }
-
     }
 }
