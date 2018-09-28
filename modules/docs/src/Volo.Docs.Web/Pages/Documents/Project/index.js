@@ -61,7 +61,7 @@
             });
         }
 
-        var addAncharTags = function (container) {
+        var initAnchorTags = function (container) {
             anchors.options = {
                 placement: 'left'
             };
@@ -74,7 +74,7 @@
 
         initNavigationFilter("sidebar-scroll");
 
-        addAncharTags(".docs-page .docs-body");
+        initAnchorTags(".docs-page .docs-body");
     });
 
 })(jQuery);
