@@ -1,6 +1,6 @@
 ## Virtual File System
 
-Virtual File System makes possible to manage files those are not physically exists in the file system (disk). It's mainly used to embed (js, css, image, cshtml...) files into assemblies and use them like physical files on runtime.
+The Virtual File System makes it possible to manage files that do not physically exists on the file system (disk). It's mainly used to embed (js, css, image, cshtml...) files into assemblies and use them like physical files on runtime.
 
 ### Volo.Abp.VirtualFileSystem Package
 
@@ -44,7 +44,7 @@ If you want to add multiple files, this can be tedious. Alternatively, you can d
 
 This configuration recursively adds all files under the **MyResources** folder of the project (including the files you will add in the future).
 
-Then the module should configure `VirtualFileSystemOptions` to register embedded files to the virtual file system. Example:
+Then the module should be configured using `VirtualFileSystemOptions` to register the embedded files to the virtual file system. Example:
 
 ````C#
 using Microsoft.Extensions.DependencyInjection;
@@ -70,7 +70,7 @@ namespace MyCompany.MyProject
 }
 ````
 
-`AddEmbedded` extension method takes a class, finds all embedded files from the assembly of the given class and register to the virtual file system. It's a shortcut and could be written as shown below:
+The `AddEmbedded` extension method takes a class, finds all embedded files from the assembly of the given class and registers them to the virtual file system. More concisely it could be written as shown below:
 
 ````C#
 options.FileSets.Add(new EmbeddedFileSet(typeof(MyModule).Assembly));
@@ -102,13 +102,13 @@ public class MyService
 }
 ````
 
-#### Dealing Embedded Files On The Development
+#### Dealing With Embedded Files During Development
 
-Embedding a file into a module assembly and using it from another project by just referencing the assembly (or adding a nuget package) is very valuable for creating a re-usable module. However, it makes a bit hard to develop the module itself.
+Embedding a file into a module assembly and using it from another project by just referencing the assembly (or adding a nuget package) is very valuable for creating a re-usable module. However, it makes it a bit hard to develop the module itself.
 
 Assume that you are developing a module that contains an embedded JavaScript file. Whenever you change the file you must re-compile the project, re-start the application and refresh the browser page to take the change. Obviously, it is very time consuming and tedious.
 
-What if the application could directly use the physical file in the development time? Thus, you could just refresh the browser page to see any change in the JavaScript file. `ReplaceEmbeddedByPyhsical` method makes that possible. 
+What is needed is the ability for the application to directly use the physical file at development time and a browser refresh shows any change in the JavaScript file. `ReplaceEmbeddedByPyhsical` method makes that possible. 
 
 The example below shows an application depends on a module (`MyModule`) that contains embedded files and the application can reach the source code of the module on the development time. 
 
@@ -162,4 +162,4 @@ Adding virtual files middleware after the static files middleware makes it possi
 
 Embedded razor views/pages are available in the application without any configuration. Just place them into standard Views/Pages virtual folders in the module development.
 
-An embedded view/page can be overrided if a module/application locate a new file into the same location.
+An embedded view/page can be overrided if a module/application locates a new file into the same location.
