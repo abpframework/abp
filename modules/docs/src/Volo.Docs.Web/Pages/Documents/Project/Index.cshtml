@@ -1,8 +1,11 @@
 ﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.Abp.AspNetCore.Mvc.UI.Theming
 @using Volo.Docs
+@using Volo.Docs.Localization
 @using Volo.Docs.Pages.Documents.Project
 @inject IThemeManager ThemeManager
+@inject IHtmlLocalizer<DocsResource> L
 @model IndexModel
 @{
     ViewBag.FluidLayout = true;
@@ -48,7 +51,7 @@
                             <a class="navbar-brand w-100" href="/">
                                 @Model.ProjectName<br>
                                 <strong class="display-block">
-                                    Documents
+                                    @L["Documents"]
                                 </strong>
                             </a>
                         }
@@ -57,7 +60,7 @@
                         {
                             <a href="@Model.Document.Project.MainWebsiteUrl" class="go-back-site">
                                 <i class="fa fa-chevron-left"></i>
-                                Back to Website
+                                @L["BackToWebsite"]
                             </a>
                         }
 
@@ -74,7 +77,6 @@
                 <div class="docs-tree-list">
                     <div class="docs-filter">
                         <input class="form-control" type="search" placeholder="Filter topics" aria-label="Filter">
-
                         <span class="my-2 filter-icon my-sm-0">
                             <i class="fa fa-filter"></i>
                         </span>
@@ -86,7 +88,7 @@
                             <div class="version-select">
                                 <div class="input-group">
                                     <div class="input-group-prepend">
-                                        <label class="input-group-text">Version</label>
+                                        <label class="input-group-text">@L["Version"]</label>
                                     </div>
 
                                     <select asp-items="Model.VersionSelectItems" class="form-control" onchange="window.location.replace(this.value)"></select>
