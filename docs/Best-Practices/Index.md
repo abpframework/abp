@@ -2,13 +2,13 @@
 
 ### Introduction
 
-This document describes the **best practices** and **conventions** for who want to develop **modules** that satisfies the following specifications:
+This document describes the **best practices** and **conventions** for those who want to develop **modules** that satisfy the following specifications:
 
-* Develop the module that applies the **Domain Driven Design** patterns & best practices.
-* Develop the module as **DBMS and ORM independent**.
-* Develop the module that can be used as a **remote service / microservice** as well as can be integrated to a **monolithic** application.
+* Develop modules that conform to the **Domain Driven Design** patterns & best practices.
+* Develop modules with **DBMS and ORM independence**.
+* Develop modules that can be used as a **remote service / microservice** as well as being compatible with a **monolithic** application.
 
-Also, this guide is mostly usable for the **application development**.
+Also, this guide is mostly usable for general **application development**.
 
 ### Guides
 
