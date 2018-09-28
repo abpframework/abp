@@ -108,7 +108,7 @@ namespace Volo.Docs.Areas.Documents.Helpers.TagHelpers
                 : node.Path;
 
             return string.Format(LiItemTemplate,
-                node.Path.IsNullOrEmpty() ? "#" : "/documents/" + ProjectName + "/" + Version + "/" + normalizedPath,
+                node.Path.IsNullOrEmpty() ? "javascript:;" : "/documents/" + ProjectName + "/" + Version + "/" + normalizedPath,
                 node.Text.IsNullOrEmpty() ? "?" : node.Text,
                 content,
                 node.HasChildItems ? "nav-header" : "last-link",
