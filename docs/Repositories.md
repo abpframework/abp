@@ -56,7 +56,7 @@ Generic Repositories provides some standard CRUD features out of the box:
 
 #### Generic Repository without a Primary Key
 
-If your entity does not has an Id primary key (it may have a composite primary key for instance) then you can not use the `IRepository<TEntity, TKey>` defined above. In that case, you can inject and use `IRepository<TEntity>` for your entity.
+If your entity does not have an Id primary key (it may have a composite primary key for instance) then you cannot use the `IRepository<TEntity, TKey>` defined above. In that case, you can inject and use `IRepository<TEntity>` for your entity.
 
 > `IRepository<TEntity>` has a few missing methods those normally works with the `Id` property of an entity. Because of the entity has no `Id` property in that case, these methods are not available. One example is the `Get` method that gets an id and returns the entity with given id. However, you can still use `IQueryable<TEntity>` features to query entities by standard LINQ methods.
 
@@ -66,9 +66,9 @@ Standard `IRepository<TEntity, TKey>` interface extends standard `IQueryable<TEn
 
 ABP provides `IBasicRepository<TEntity, TPrimaryKey>` and `IBasicRepository<TEntity>` interfaces to support such scenarios. You can extend these interfaces (and optionally derive from `BasicRepositoryBase`) to create custom repositories for your entities.
 
-Depending to `IBasicRepository` but not depending to `IRepository` has an advantage to make possible to work with all data sources even if they don't support `IQueryable`. But major vendors, like Entity Framework, NHibernate or MongoDb already support `IQueryable`.
+Depending on `IBasicRepository` but not depending on `IRepository` has an advantage to make possible to work with all data sources even if they don't support `IQueryable`. But major vendors, like Entity Framework, NHibernate or MongoDb already support `IQueryable`.
 
-So, working with `IRepository` is the **suggested** way for typical applications. But reusable module developers may consider `IBasicRepository` to support wide range of data sources.
+So, working with `IRepository` is the **suggested** way for typical applications. But reusable module developers may consider `IBasicRepository` to support a wider range of data sources.
 
 ### Custom Repositories
 
@@ -93,7 +93,7 @@ This interface extends `IRepository<Person, Guid>` to take advantage of pre-buil
 
 ##### Custom Repository Implementation
 
-A custom repository tightly depends on the data access tool you are using. In this example, we will use Entity Framework Core:
+A custom repository is tightly coupled to the data access tool type you are using. In this example, we will use Entity Framework Core:
 
 ````C#
 public class PersonRepository : EfCoreRepository<MyDbContext, Person, Guid>, IPersonRepository
@@ -113,5 +113,5 @@ public class PersonRepository : EfCoreRepository<MyDbContext, Person, Guid>, IPe
 }
 ````
 
-You can directly access to the data access provider (`DbContext` in this case) to perform operations. See [entity framework integration document](Entity-Framework-Core.md) for more about custom repositories based on EF Core.
+You can directly access the data access provider (`DbContext` in this case) to perform operations. See [entity framework integration document](Entity-Framework-Core.md) for more about custom repositories based on EF Core.
 
