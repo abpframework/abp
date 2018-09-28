@@ -7,7 +7,7 @@ using Volo.Abp.Guids;
 
 namespace Volo.Abp.Identity
 {
-    public class IdenityClaimTypeManager : IDomainService
+    public class IdenityClaimTypeManager : DomainService
     {
         private readonly IIdentityClaimTypeRepository _identityClaimTypeRepository;
         private readonly IGuidGenerator _guidGenerator;
@@ -18,12 +18,7 @@ namespace Volo.Abp.Identity
             _guidGenerator = guidGenerator;
         }
 
-        public async Task<IdentityClaimType> GetAsync(Guid id)
-        {
-            return await _identityClaimTypeRepository.GetAsync(id);
-        }
-
-        public async Task<IdentityClaimType> CreateAsync(IdentityClaimType claimType)
+        public virtual async Task<IdentityClaimType> CreateAsync(IdentityClaimType claimType)
         {
             if (await _identityClaimTypeRepository.DoesNameExist(claimType.Name))
             {
@@ -33,19 +28,20 @@ namespace Volo.Abp.Identity
             return await _identityClaimTypeRepository.InsertAsync(claimType);
         }
 
-        public async Task<IdentityClaimType> UpdateAsync(IdentityClaimType claimType)
+        public virtual async Task<IdentityClaimType> UpdateAsync(IdentityClaimType claimType)
         {
             if (await _identityClaimTypeRepository.DoesNameExist(claimType.Name, claimType.Id))
             {
                 throw new AbpException($"Name Exist: {claimType.Name}");
             }
 
-            return await _identityClaimTypeRepository.UpdateAsync(claimType);
-        }
+            if (claimType.IsStatic)
+            {
+                throw new AbpException($"Can not update a static ClaimType.");
+            }
+            
 
-        public async Task DeleteAsync(Guid id)
-        {
-            await _identityClaimTypeRepository.DeleteAsync(id);
+            return await _identityClaimTypeRepository.UpdateAsync(claimType);
         }
     }
 }

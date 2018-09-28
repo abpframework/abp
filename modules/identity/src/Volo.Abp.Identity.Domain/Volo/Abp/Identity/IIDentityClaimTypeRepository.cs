@@ -9,5 +9,9 @@ namespace Volo.Abp.Identity
     public interface IIdentityClaimTypeRepository : IBasicRepository<IdentityClaimType, Guid>
     {
         Task<bool> DoesNameExist(string name, Guid? claimTypeId = null);
+
+        Task<List<IdentityClaimType>> GetListAsync(string sorting, int maxResultCount, int skipCount);
+
+        Task<int> GetTotalCount();
     }
 }
