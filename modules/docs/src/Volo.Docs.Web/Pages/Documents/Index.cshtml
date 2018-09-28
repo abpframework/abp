@@ -1,7 +1,10 @@
 ﻿@page
 @using Castle.Core.Internal
+@using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.Docs
+@using Volo.Docs.Localization
 @using Volo.Docs.Pages.Documents
+@inject IHtmlLocalizer<DocsResource> L
 @model IndexModel
 @{
 }
@@ -16,12 +19,12 @@
     @if (Model.Projects.IsNullOrEmpty())
     {
         <div class="alert alert-secondary text-center" role="alert">
-            There are no projects yet!
+            @L["NoProjectWarning"]
         </div>
     }
     @if (Model.Projects.Count > 0)
     {
-        <h1>Project(s)</h1>
+        <h1>@L["Projects"]</h1>
         <p>
             <ul style="list-style-type: upper-roman;">
                 @foreach (var project in Model.Projects)

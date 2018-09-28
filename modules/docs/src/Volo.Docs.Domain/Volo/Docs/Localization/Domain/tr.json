@@ -3,7 +3,11 @@
   "texts": {
     "Documents": "Dökümanlar",
     "BackToWebsite": "Ana sayafaya dön",
-    "Version": "Versiyon"
-
+    "Version": "Versiyon",
+    "Edit": "Düzenle",
+    "InThisDocument": "Bu dökümanda",
+    "GoToTop": "En üste çık",
+    "Projects": "Proje(ler)",
+    "NoProjectWarning": "Hiç proje yok!"
   }
 }

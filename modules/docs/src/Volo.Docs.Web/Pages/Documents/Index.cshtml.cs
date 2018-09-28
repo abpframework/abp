@@ -19,20 +19,19 @@ namespace Volo.Docs.Pages.Documents
 
         public async Task<IActionResult> OnGet()
         {
-            var result = await _projectAppService.GetListAsync();
+            var listResult = await _projectAppService.GetListAsync();
 
-            if (result.Items.Count == 1)
+            if (listResult.Items.Count == 1)
             {
-                var project = result.Items[0];
                 return RedirectToPage("./Project/Index", new
                 {
-                    projectName = project.ShortName,
+                    projectName = listResult.Items[0].ShortName,
                     version = DocsAppConsts.DefaultVersion.Version,
-                    documentName = project.DefaultDocumentName
+                    documentName = listResult.Items[0].DefaultDocumentName
                 });
             }
 
-            Projects = result.Items;
+            Projects = listResult.Items;
             return Page();
         }
     }

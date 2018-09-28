@@ -114,7 +114,7 @@
             <div class="docs-link-btns">
                 @if (!string.IsNullOrEmpty(Model.Document.EditLink))
                 {
-                    <a href="@Model.Document.EditLink" target="_blank"> <i class="fa fa-edit"></i> Edit @*TODO: localize*@</a>
+                    <a href="@Model.Document.EditLink" target="_blank"> <i class="fa fa-edit"></i> @L["Edit"]</a>
                 }
             </div>
 
@@ -134,12 +134,12 @@
 
             <div class="docs-inner-anchors mt-2">
                 <nav class="navbar p-0 pt-2" data-toggle="toc">
-                    <h5>In this article</h5>
+                    <h5>@L["InThisDocument"]</h5>
                 </nav>
 
                 <div class="row">
                     <div class="col mt-4 p-0">
-                        <a href="javascript:;" class="scroll-top-btn"><i class="fa fa-chevron-up"></i> Go to Top</a>
+                        <a href="javascript:;" class="scroll-top-btn"><i class="fa fa-chevron-up"></i> @L["GoToTop"]</a>
                     </div>
                 </div>
             </div>

@@ -3,7 +3,11 @@
   "texts": {
     "Documents": "Documents",
     "BackToWebsite": "Back to website",
-    "Version": "Version"
-
+    "Version": "Version",
+    "Edit": "Edit",
+    "InThisDocument": "In this document",
+    "GoToTop": "Go to top",
+    "Projects": "Project(s)",
+    "NoProjectWarning": "There are no projects yet!"
   }
 }

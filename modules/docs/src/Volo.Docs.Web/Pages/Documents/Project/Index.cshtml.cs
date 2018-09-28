@@ -69,13 +69,14 @@ namespace Volo.Docs.Pages.Documents.Project
 
             ProjectFormat = projectDto.Format;
 
+        
             DocumentNameWithExtension = DocumentName + "." + projectDto.Format;
 
             var versions = await _documentAppService.GetVersions(projectDto.ShortName, projectDto.DefaultDocumentName,
                 projectDto.ExtraProperties, projectDto.DocumentStoreType, DocumentNameWithExtension);
 
             Versions = versions.Select(v => new VersionInfo(v, v)).ToList();
-           
+
             if (string.Equals(Version, DocsAppConsts.LatestVersion, StringComparison.OrdinalIgnoreCase))
             {
                 LatestVersionInfo.IsSelected = true;
@@ -107,8 +108,8 @@ namespace Volo.Docs.Pages.Documents.Project
 
             Navigation = await _documentAppService.GetNavigationDocumentAsync(ProjectName, Version, false);
             Navigation.ConvertItems();
- 
+
         }
-         
+
     }
 }
