@@ -69,7 +69,11 @@ namespace Volo.Docs.Pages.Documents.Project
 
             ProjectFormat = projectDto.Format;
 
-        
+            if (DocumentName.IsNullOrWhiteSpace())
+            {
+                DocumentName = projectDto.DefaultDocumentName;
+            }
+
             DocumentNameWithExtension = DocumentName + "." + projectDto.Format;
 
             var versions = await _documentAppService.GetVersions(projectDto.ShortName, projectDto.DefaultDocumentName,
