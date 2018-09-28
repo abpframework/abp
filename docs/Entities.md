@@ -173,4 +173,4 @@ ABP does not force you to apply any DDD rule or patterns. However, it tries to m
 
 #### Aggregate Roots with Composite Keys
 
-While it's not common (and not suggested) for aggregate roots, it isin fact possible to define composite keys in the same way as defined for the mentioned entities above. Use non-generic `AggregateRoot` base class in that case.
+While it's not common (and not suggested) for aggregate roots, it is in fact possible to define composite keys in the same way as defined for the mentioned entities above. Use non-generic `AggregateRoot` base class in that case.

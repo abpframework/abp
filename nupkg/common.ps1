@@ -10,6 +10,7 @@ $solutions = (
     "modules/permission-management",
     "modules/tenant-management",
     "modules/identity",
+    "modules/identityserver",
     "modules/account",
     "modules/audit-logging",
     "modules/background-jobs",
@@ -123,7 +124,12 @@ $projects = (
     "modules/identity/src/Volo.Abp.Identity.MongoDB",
     "modules/identity/src/Volo.Abp.Identity.HttpApi",
     "modules/identity/src/Volo.Abp.Identity.HttpApi.Client",
-    "modules/identity/src/Volo.Abp.Identity.Web",    
+    "modules/identity/src/Volo.Abp.Identity.Web", 
+    
+    # modules/identityserver
+    "modules/identityserver/src/Volo.Abp.IdentityServer.Domain",
+    "modules/identityserver/src/Volo.Abp.IdentityServer.Domain.Shared",
+    "modules/identityserver/src/Volo.Abp.IdentityServer.EntityFrameworkCore", 
 
     # modules/account
     "modules/account/src/Volo.Abp.Account.Web",
