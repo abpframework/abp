@@ -83,13 +83,6 @@ namespace Volo.Docs.Pages.Documents.Project
             var versions = await _documentAppService.GetVersions(project.ShortName, project.DefaultDocumentName,
                 project.ExtraProperties, project.DocumentStoreType, DocumentNameWithExtension);
 
-            VersionSelectItems = Versions.Select(v => new SelectListItem
-            {
-                Text = v.DisplayText,
-                Value = "/documents/" + ProjectName + "/" + v.Version + "/" + DocumentName,
-                Selected = v.IsSelected
-            }).ToList();
-
             Versions = versions.Select(v => new VersionInfo(v, v)).ToList();
 
             LatestVersionInfo = GetLatestVersion();
@@ -113,6 +106,14 @@ namespace Volo.Docs.Pages.Documents.Project
                     Version = Versions.First().Version;
                 }
             }
+
+            VersionSelectItems = Versions.Select(v => new SelectListItem
+            {
+                Text = v.DisplayText,
+                Value = "/documents/" + ProjectName + "/" + v.Version + "/" + DocumentName,
+                Selected = v.IsSelected
+            }).ToList();
+
         }
 
         private VersionInfo GetLatestVersion()
