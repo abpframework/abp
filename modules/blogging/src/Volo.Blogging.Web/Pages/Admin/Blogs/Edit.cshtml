@@ -8,7 +8,7 @@
 }
 
 
-<abp-dynamic-form  asp-page="/Admin/Blogs/Edit">
+<abp-dynamic-form abp-model="Blog" asp-page="/Admin/Blogs/Edit">
     <abp-modal size="@(AbpModalSize.Large)">
         <abp-modal-header title="@L["Edit"].Value"></abp-modal-header>
         <abp-modal-body>
