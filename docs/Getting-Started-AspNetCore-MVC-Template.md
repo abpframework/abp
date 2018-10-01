@@ -6,7 +6,7 @@ Go to [the template creation page](https://abp.io/Templates), enter a project na
 
 ![bookstore-create--template](images/bookstore-create-template.png)
 
-When you click to the *create* button, a new Visual Studio solution is created and downloaded with the name you have provided.
+When you click the *create* button, a new Visual Studio solution is created and downloaded with the name you have provided.
 
 #### Pre Requirements
 
@@ -60,9 +60,9 @@ You can now run the application which will open the **home** page:
 
 ![bookstore-homepage](images/bookstore-homepage.png)
 
-Click to the **Login** button, enter `admin` as the username and `1q2w3E*` as the password to login to the application.
+Click the **Login** button, enter `admin` as the username and `1q2w3E*` as the password to login to the application.
 
-Startup template includes the **identity management** module. Once you login, the Identity management menu will be available where you can manage **roles**, **users** and their **permissions**.
+The startup template includes the **identity management** module. Once you login, the Identity management menu will be available where you can manage **roles**, **users** and their **permissions**.
 
 ![bookstore-user-management](images/bookstore-user-management.png)
 
