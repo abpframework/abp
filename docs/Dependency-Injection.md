@@ -246,9 +246,9 @@ public class MyService : ITransientDependency
 
 #### Releasing/Disposing Services
 
-If you used constructor or property injection, you don't need to be concerned about releasing a service's resources. However, if you have resolved a service from ``IServiceProvider``, you might, in some cases, need to take care about releasing the services.
+If you used a constructor or property injection, you don't need to be concerned about releasing the service's resources. However, if you have resolved a service from ``IServiceProvider``, you might, in some cases, need to take care about releasing the service resources.
 
-ASP.NET Core releases all services in the end of current HTTP request, even if you directly resolved from ``IServiceProvider`` (assuming you injected IServiceProvider). But, there are several cases where you may want to release/dispose manually resolved services:
+ASP.NET Core releases all services at the end of a current HTTP request, even if you directly resolved from ``IServiceProvider`` (assuming you injected IServiceProvider). But, there are several cases where you may want to release/dispose manually resolved services:
 
 * Your code is executed outside of AspNet Core request and the executer hasn't handled the service scope.
 * You only have a reference to the root service provider.
