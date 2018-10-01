@@ -126,7 +126,7 @@ public class MyWebAppModule : AbpModule
             {
                 //ReplaceEmbeddedByPyhsical gets the root folder of the MyModule project
                 options.FileSets.ReplaceEmbeddedByPyhsical<MyModule>(
-                    Path.Combine(hostingEnvironment.ContentRootPath, "..\\MyModuleProject")
+                    Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}MyModuleProject", Path.DirectorySeparatorChar))
                 );
             });
         }
