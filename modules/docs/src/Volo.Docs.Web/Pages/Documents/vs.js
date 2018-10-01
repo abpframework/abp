@@ -1,6 +1,6 @@
 $('.tree-toggle').click(function () {
     $(this).parent().children('ul.tree').toggle(100);
-    $(this).toggleClass("opened");
+    $(this).closest("li").toggleClass("selected-tree");
 });
 
 $(document).ready(function () {
@@ -23,30 +23,31 @@ $(document).ready(function () {
             scrollTop: 0
         }, 500);
         return false;
-    });
+    }); 
+     
 });
 
-
-$(function () {
+$(document).ready(function () {
     var navSelector = '#docs-sticky-index';
     var $myNav = $(navSelector);
-    Toc.init($myNav);
+    Toc.init($myNav); 
     $('body').scrollspy({
-        target: navSelector
+        target: $myNav
+    });
+    $("#docs-sticky-index a").on('click', function (event) {
+        if (this.hash !== "") {
+            event.preventDefault();
+            var hash = this.hash;
+            $('html, body').animate({
+                scrollTop: $(hash).offset().top
+            }, 500, function () {
+                window.location.hash = hash;
+            });
+        }
     });
 });
 
-$("#docs-sticky-index a").on('click', function (event) {
-    if (this.hash !== "") {
-        event.preventDefault();
-        var hash = this.hash;
-        $('html, body').animate({
-            scrollTop: $(hash).offset().top
-        }, 800, function () {
-            window.location.hash = hash;
-        });
-    }
-});
+
 
 $('.btn-toggle').on("click", function () {
     $(".toggle-row").slideToggle(400);
@@ -76,5 +77,30 @@ $('.open-dmenu').on("click", function () {
         });
     });
 
+
+
+    window.Toc.helpers.createNavList = function() {
+        return $('<ul class="nav nav-pills flex-column"></ul>');
+    };
+
+    window.Toc.helpers.createChildNavList = function($parent) {
+        var $childList = this.createNavList();
+        $parent.append($childList);
+        return $childList;
+    };
+
+    window.Toc.helpers.generateNavEl = function(anchor, text) {
+        var $a = $('<a class="nav-link"></a>');
+        $a.attr('href', '#' + anchor);
+        $a.text(text);
+        var $li = $('<li class="nav-item"></li>');
+        $li.append($a);
+        return $li;
+    };
+
+
 })(jQuery);
+
+
+
 

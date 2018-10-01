@@ -1,4 +1,7 @@
-﻿.docs-page {
+﻿body {
+  position: relative; }
+
+.docs-page {
   background: #f5f7f9; }
   .docs-page .anchorjs-link {
     transition: all .25s linear; }
@@ -57,68 +60,64 @@
           line-height: 1.5; }
           .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-filter .filter-icon i.fa {
             color: #ddd; }
-      .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-tree-list > ul {
-        display: block;
-        height: calc(100vh - 190px); }
-      .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-tree-list ul {
-        font-size: .913em;
-        list-style: none;
-        padding: 0 1rem;
-        margin: 0; }
-        .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-tree-list ul li {
-          margin-left: 0px;
-          padding-left: 24px;
+      .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-tree-list {
+        height: 100vh; }
+        .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-tree-list > ul {
           display: block;
-          width: 100%;
-          position: relative; }
-          .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-tree-list ul li label {
-            margin: 0; }
-            .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-tree-list ul li label.tree-toggle {
-              transition: .3s;
-              display: inline-block;
-              width: 18px;
-              height: 18px;
-              text-align: center;
-              padding: 0;
-              line-height: 1;
-              border-radius: 50%;
-              margin-right: 4px;
-              position: absolute;
-              left: 2px;
-              top: 8px;
-              color: #aaa;
-              cursor: pointer; }
-              .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-tree-list ul li label.tree-toggle:hover {
-                color: #000; }
-              .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-tree-list ul li label.tree-toggle .plus-icon {
-                font-size: .85em; }
-              .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-tree-list ul li label.tree-toggle:not(.last-link).opened {
-                transform: rotate(-90deg);
-                color: #000; }
-              .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-tree-list ul li label.tree-toggle.last-link {
-                top: 9px;
-                color: #aaa; }
-          .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-tree-list ul li a {
-            color: #222;
-            font-weight: 700;
-            padding: 7px 0;
+          height: calc(100vh - 210px); }
+        .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-tree-list ul {
+          font-size: .935em;
+          list-style: none;
+          padding: 0 1rem;
+          margin: 0; }
+          .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-tree-list ul li {
+            margin-left: 0px;
+            padding-left: 24px;
             display: block;
-            border-bottom: 1px solid #eeeff3; }
-            .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-tree-list ul li a:hover {
-              color: #000; }
-          .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-tree-list ul li ul {
-            padding: 0; }
-            .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-tree-list ul li ul li label.tree-toggle {
-              top: 7px; }
-            .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-tree-list ul li ul li a {
-              font-weight: 400; }
-            .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-tree-list ul li ul li ul {
+            width: 100%;
+            position: relative; }
+            .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-tree-list ul li a {
+              color: #999;
+              font-weight: 700;
+              padding: 7px 0;
+              display: block;
+              border-bottom: 1px solid #eeeff3; }
+              .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-tree-list ul li a:hover {
+                color: #000; }
+              .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-tree-list ul li a .plus-icon {
+                font-size: .85em;
+                transition: .3s;
+                width: 18px;
+                height: 18px;
+                text-align: center;
+                padding: 0;
+                line-height: 1;
+                border-radius: 50%;
+                margin-right: 4px;
+                position: absolute;
+                left: 2px;
+                top: 11px;
+                color: #aaa;
+                cursor: pointer; }
+                .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-tree-list ul li a .plus-icon.last-link {
+                  top: 11px;
+                  color: #aaa; }
+            .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-tree-list ul li ul {
               padding: 0; }
-              .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-tree-list ul li ul li ul li a {
-                font-weight: 300; }
-          .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-tree-list ul li.selected-tree > a {
-            color: #38003c;
-            font-weight: bold; }
+              .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-tree-list ul li ul li a {
+                font-weight: 400; }
+              .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-tree-list ul li ul li ul {
+                padding: 0; }
+                .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-tree-list ul li ul li ul li a {
+                  font-weight: 300; }
+            .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-tree-list ul li.selected-tree > a {
+              color: #000;
+              transition: .4s; }
+              .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-tree-list ul li.selected-tree > a span .fa {
+                color: #000; }
+              .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-tree-list ul li.selected-tree > a span:not(.last-link) .fa {
+                transform: rotate(90deg);
+                color: #000; }
     .docs-page .docs-sidebar .docs-top .navbar-logo .navbar-brand {
       font-size: 1.5rem;
       color: #000;
@@ -156,7 +155,7 @@
         color: #444;
         text-decoration: none; }
   .docs-page .docs-content .docs-text-field {
-    padding: 0 2rem 2rem; }
+    padding: 2rem; }
   .docs-page .docs-content article.docs-body h1 {
     padding-top: 2rem;
     font-size: 2.25rem;
@@ -197,28 +196,30 @@
       font-size: .90em;
       height: 100vh; }
       .docs-page .docs-page-index .docs-inner-anchors .navbar .nav-pills {
-        font-size: .95em;
-        margin-left: 18px;
-        border-left: 1px solid #e5e5e5; }
+        font-size: .96em;
+        margin-left: 15px;
+        border-left: 1px solid #eee; }
         .docs-page .docs-page-index .docs-inner-anchors .navbar .nav-pills .nav-link {
-          padding: .2rem 0rem .2rem 1rem;
+          padding: 5px 14px 6px;
           color: #aaa;
-          line-height: 1.1;
+          line-height: 1.2;
           position: relative;
-          border-left: 3px solid transparent;
+          border-left: 1px solid #eee;
           border-radius: 0;
-          margin-left: -2px;
-          margin-top: 2px;
-          margin-bottom: 2px;
+          margin-left: -1px;
+          margin-top: 1px;
+          margin-bottom: 1px;
           transition: .2s; }
           .docs-page .docs-page-index .docs-inner-anchors .navbar .nav-pills .nav-link.active {
+            border-left: 2px solid #007bff;
             background: none;
-            color: #000;
-            border-color: #000; }
+            color: #007bff; }
         .docs-page .docs-page-index .docs-inner-anchors .navbar .nav-pills .nav-pills .nav-link.active {
-          color: #000; }
+          color: #007bff; }
         .docs-page .docs-page-index .docs-inner-anchors .navbar .nav-pills .nav-pills .nav-pills .nav-link.active {
-          color: #000; }
+          color: #007bff; }
+      .docs-page .docs-page-index .docs-inner-anchors > .navbar {
+        margin-left: -30px; }
       .docs-page .docs-page-index .docs-inner-anchors .docs-anchors-wrapper {
         max-width: 300px;
         float: left; }
@@ -252,21 +253,36 @@
       border-radius: 6px; }
     .docs-page .docs-sidebar.dark-sidebar .docs-sidebar-wrapper .docs-filter .filter-icon i.fa {
       color: #aaa; }
-    .docs-page .docs-sidebar.dark-sidebar .docs-sidebar-wrapper .docs-tree-list ul li label.tree-toggle {
-      color: #666; }
-      .docs-page .docs-sidebar.dark-sidebar .docs-sidebar-wrapper .docs-tree-list ul li label.tree-toggle:hover {
-        color: #fff; }
-      .docs-page .docs-sidebar.dark-sidebar .docs-sidebar-wrapper .docs-tree-list ul li label.tree-toggle:not(.last-link).opened {
-        color: #fff; }
-      .docs-page .docs-sidebar.dark-sidebar .docs-sidebar-wrapper .docs-tree-list ul li label.tree-toggle.last-link {
-        color: #666; }
     .docs-page .docs-sidebar.dark-sidebar .docs-sidebar-wrapper .docs-tree-list ul li a {
-      color: #ddd;
+      color: #aaa;
       border-bottom: 1px solid #333; }
       .docs-page .docs-sidebar.dark-sidebar .docs-sidebar-wrapper .docs-tree-list ul li a:hover {
         color: #fff; }
+      .docs-page .docs-sidebar.dark-sidebar .docs-sidebar-wrapper .docs-tree-list ul li a .plus-icon {
+        font-size: .85em;
+        transition: .3s;
+        width: 18px;
+        height: 18px;
+        text-align: center;
+        padding: 0;
+        line-height: 1;
+        border-radius: 50%;
+        margin-right: 4px;
+        position: absolute;
+        left: 2px;
+        top: 11px;
+        color: #aaa;
+        cursor: pointer; }
+        .docs-page .docs-sidebar.dark-sidebar .docs-sidebar-wrapper .docs-tree-list ul li a .plus-icon.last-link {
+          top: 11px; }
     .docs-page .docs-sidebar.dark-sidebar .docs-sidebar-wrapper .docs-tree-list ul li.selected-tree > a {
-      color: #fff; }
+      color: #fff;
+      transition: .4s; }
+      .docs-page .docs-sidebar.dark-sidebar .docs-sidebar-wrapper .docs-tree-list ul li.selected-tree > a span .fa {
+        color: #fff; }
+      .docs-page .docs-sidebar.dark-sidebar .docs-sidebar-wrapper .docs-tree-list ul li.selected-tree > a span:not(.last-link) .fa {
+        transform: rotate(90deg);
+        color: #fff; }
     .docs-page .docs-sidebar.dark-sidebar .docs-top .navbar-logo .navbar-brand {
       color: #fff;
       text-transform: uppercase; }

@@ -9,15 +9,12 @@ namespace Volo.Docs.Areas.Documents.Helpers.TagHelpers
     [HtmlTargetElement("ul", Attributes = "root-node")]
     public class TreeTagHelper : TagHelper
     {
-        private const string LiItemTemplate = @"<li class='{6}'>
-                                                  <label class='tree-toggle {3}'>
-                                                      <span class='plus-icon'>
-                                                            <i class='fa fa-{4}'></i>
-                                                      </span>
-                                                  </label>
-                                                  <a href='{0}' class='{5}'>{1}</a>
+        private const string LiItemTemplate = @"<li class='{6}'> 
+                                                  <a href='{0}' class='{5}'> 
+                                                      <span class='plus-icon {3}'><i class='fa fa-{4}'></i></span>{1}
+                                                  </a>
                                                   {2}
-                                              </li>";
+                                                </li>";
 
         private const string UlItemTemplate = @"<ul class='nav nav-list tree' style='{1}'>
                                                     {0}
@@ -112,7 +109,7 @@ namespace Volo.Docs.Areas.Documents.Helpers.TagHelpers
                 node.Text.IsNullOrEmpty() ? "?" : node.Text,
                 content,
                 node.HasChildItems ? "nav-header" : "last-link",
-                node.HasChildItems ? "chevron-down" : "long-arrow-right",
+                node.HasChildItems ? "chevron-right" : "long-arrow-right",
                 anchorCss,
                 isNodeSelected ? "selected-tree" : "");
         }

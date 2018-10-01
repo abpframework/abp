@@ -21,9 +21,8 @@
         <abp-style src="/lib/bootstrap-toc/bootstrap-toc.css" />
     </abp-style-bundle>
 }
-
 @section scripts {
-    <abp-script-bundle name="@typeof(IndexModel).FullName">
+    <abp-script-bundle name="@typeof(IndexModel).FullName"> 
         <abp-script src="/lib/anchor-js/anchor.js" />
         <abp-script src="/Pages/Documents/Project/index.js" />
         <abp-script src="/lib/mCustomScrollbar/jquery.mCustomScrollbar.concat.min.js" />
@@ -133,8 +132,8 @@
         <div class="col-md-2 docs-page-index position-relative bg-light">
 
             <div class="docs-inner-anchors mt-2">
-                <nav class="navbar p-0 pt-2" data-toggle="toc">
-                    <h5>@L["InThisDocument"]</h5>
+                <h5>@L["InThisDocument"]</h5>
+                <nav id="docs-sticky-index" class="navbar">
                 </nav>
 
                 <div class="row">
