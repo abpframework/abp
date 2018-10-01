@@ -98,10 +98,10 @@ namespace Volo.Docs.Areas.Documents.Helpers.TagHelpers
             var anchorCss = node.Path.IsNullOrEmpty() ? "tree-toggle" : "";
             var isNodeSelected = node.IsSelected(SelectedDocumentName);
 
-            if (isNodeSelected)
-            {
-                anchorCss += " opened";
-            }
+            //if (isNodeSelected)
+            //{
+            //    anchorCss += " opened";
+            //}
 
             var normalizedPath = node.Path != null && node.Path.EndsWith("." + ProjectFormat)
                 ? node.Path.Left(node.Path.Length - ProjectFormat.Length - 1)
