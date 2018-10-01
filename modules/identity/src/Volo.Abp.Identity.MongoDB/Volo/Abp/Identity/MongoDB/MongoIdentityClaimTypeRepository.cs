@@ -17,7 +17,7 @@ namespace Volo.Abp.Identity.MongoDB
 
         public async Task<bool> DoesNameExist(string name, Guid? claimTypeId = null)
         {
-            return GetMongoQueryable().WhereIf(claimTypeId != null, ct => ct.Id == claimTypeId).Count(ct => ct.Name == name) > 0;
+            return GetMongoQueryable().WhereIf(claimTypeId != null, ct => ct.Id != claimTypeId).Count(ct => ct.Name == name) > 0;
         }
 
         public async Task<List<IdentityClaimType>> GetListAsync(string sorting, int maxResultCount, int skipCount)
