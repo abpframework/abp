@@ -86,11 +86,10 @@
       "text": "Events",
       "items": [
         {
-          "text": "Event Bus"
+          "text": "Event Bus (local)"
         },
         {
           "text": "Distributed Event Bus",
-          "path": "Dependency-Injection.md",
           "items": [
             {
               "text": "RabbitMQ Integration"
