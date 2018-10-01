@@ -1,4 +1,4 @@
-### Contribution
+## Contribution
 
 ABP is an open source platform.
 
