@@ -17,7 +17,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
 
         public async Task<bool> DoesNameExist(string name, Guid? claimTypeId = null)
         {
-            return await DbSet.WhereIf(claimTypeId != null, ct => ct.Id == claimTypeId).CountAsync(ct => ct.Name == name) > 0;
+            return await DbSet.WhereIf(claimTypeId != null, ct => ct.Id != claimTypeId).CountAsync(ct => ct.Name == name) > 0;
         }
 
         public async Task<List<IdentityClaimType>> GetListAsync(string sorting, int maxResultCount, int skipCount)
