@@ -34,7 +34,6 @@
         padding: 0 1rem;
         margin: .5rem 0 1rem; }
         .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select {
-          padding: 1px;
           border-radius: 8px; }
           .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select .input-group-text {
             border: 0; }
@@ -87,24 +86,29 @@
               border-bottom: 1px solid #eeeff3; }
               .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-tree-list ul li a:hover {
                 color: #000; }
-              .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-tree-list ul li a .plus-icon {
-                font-size: .85em;
-                transition: .3s;
-                width: 18px;
-                height: 18px;
-                text-align: center;
-                padding: 0;
-                line-height: 1;
-                border-radius: 50%;
-                margin-right: 4px;
-                position: absolute;
-                left: 2px;
+              .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-tree-list ul li a.last-link {
                 top: 11px;
-                color: #aaa;
-                cursor: pointer; }
-                .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-tree-list ul li a .plus-icon.last-link {
-                  top: 11px;
-                  color: #aaa; }
+                color: #aaa; }
+            .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-tree-list ul li span.tree-toggle {
+              color: #999;
+              padding: 7px 0;
+              display: block;
+              border-bottom: 1px solid #eeeff3; }
+            .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-tree-list ul li .plus-icon {
+              font-size: .85em;
+              transition: .3s;
+              width: 18px;
+              height: 18px;
+              text-align: center;
+              padding: 0;
+              line-height: 1;
+              border-radius: 50%;
+              margin-right: 4px;
+              position: absolute;
+              left: 2px;
+              top: 11px;
+              color: #aaa;
+              cursor: pointer; }
             .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-tree-list ul li ul {
               padding: 0; }
               .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-tree-list ul li ul li a {
@@ -116,11 +120,11 @@
             .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-tree-list ul li.selected-tree > a {
               color: #000;
               transition: .4s; }
-              .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-tree-list ul li.selected-tree > a span .fa {
-                color: #000; }
-              .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-tree-list ul li.selected-tree > a span:not(.last-link) .fa {
-                transform: rotate(90deg);
-                color: #000; }
+            .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-tree-list ul li.selected-tree > span .fa {
+              transform: rotate(90deg);
+              color: #007bff; }
+            .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-tree-list ul li.selected-tree.last-link > span .fa {
+              transform: rotate(0deg); }
     .docs-page .docs-sidebar .docs-top .navbar-logo .navbar-brand {
       font-size: 1.5rem;
       color: #000;
@@ -280,6 +284,11 @@
         cursor: pointer; }
         .docs-page .docs-sidebar.dark-sidebar .docs-sidebar-wrapper .docs-tree-list ul li a .plus-icon.last-link {
           top: 11px; }
+    .docs-page .docs-sidebar.dark-sidebar .docs-sidebar-wrapper .docs-tree-list ul li span.tree-toggle {
+      color: #555;
+      padding: 7px 0;
+      display: block;
+      border-bottom: 1px solid #333; }
     .docs-page .docs-sidebar.dark-sidebar .docs-sidebar-wrapper .docs-tree-list ul li.selected-tree > a {
       color: #fff;
       transition: .4s; }

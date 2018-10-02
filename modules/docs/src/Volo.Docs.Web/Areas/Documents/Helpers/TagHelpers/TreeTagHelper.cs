@@ -9,12 +9,15 @@ namespace Volo.Docs.Areas.Documents.Helpers.TagHelpers
     [HtmlTargetElement("ul", Attributes = "root-node")]
     public class TreeTagHelper : TagHelper
     {
-        private const string LiItemTemplate = @"<li class='{6}'> 
-                                                  <a href='{0}' class='{5} {3}'> 
-                                                      <span class='plus-icon'><i class='fa fa-{4}'></i></span>{1}
-                                                  </a>
-                                                  {2}
+        private const string LiItemTemplateWithLink = @"<li class='{0}'> 
+                                                    <span class='plus-icon'><i class='fa fa-{1}'></i></span>
+                                                      {2}
+                                                    {3}
                                                 </li>";
+        private const string ListItemAnchor = @"<a href='{0}' class='{1}'>{2}</a>";
+
+        private const string ListItemSpan = @"<span class='{0}'>{1}</span>";
+
 
         private const string UlItemTemplate = @"<ul class='nav nav-list tree' style='{1}'>
                                                     {0}
@@ -95,23 +98,60 @@ namespace Volo.Docs.Areas.Documents.Helpers.TagHelpers
             var anchorCss = node.Path.IsNullOrEmpty() ? "tree-toggle" : "";
             var isNodeSelected = node.IsSelected(SelectedDocumentName);
 
-            //if (isNodeSelected)
-            //{
-            //    anchorCss += " opened";
-            //}
-
             var normalizedPath = node.Path != null && node.Path.EndsWith("." + ProjectFormat)
                 ? node.Path.Left(node.Path.Length - ProjectFormat.Length - 1)
                 : node.Path;
 
-            return string.Format(LiItemTemplate,
-                node.Path.IsNullOrEmpty() ? "javascript:;" : "/documents/" + ProjectName + "/" + Version + "/" + normalizedPath,
-                node.Text.IsNullOrEmpty() ? "?" : node.Text,
-                content,
-                node.HasChildItems ? "nav-header" : "last-link",
-                node.HasChildItems ? "chevron-right" : "long-arrow-right",
-                anchorCss,
-                isNodeSelected ? "selected-tree" : "");
+            if (node.Path.IsNullOrEmpty() && !node.HasChildItems)
+            {
+                //span 
+                var span = string.Format(ListItemSpan, anchorCss, node.Text.IsNullOrEmpty() ? "?" : node.Text);
+                var listItemCss = node.HasChildItems ? "nav-header" : "last-link";
+                if (isNodeSelected)
+                {
+                    listItemCss += " selected-tree";
+                }
+
+                return string.Format(LiItemTemplateWithLink,
+                    listItemCss,
+                    node.HasChildItems ? "chevron-right" : "long-arrow-right",
+                    span,
+                    content);
+            }
+            else if (node.Path.IsNullOrEmpty() && node.HasChildItems)
+            {
+                //anchor
+                var path = "javascript:;";
+                var anchor = string.Format(ListItemAnchor, path, anchorCss, node.Text.IsNullOrEmpty() ? "?" : node.Text);
+                var listItemCss = node.HasChildItems ? "nav-header" : "last-link";
+                if (isNodeSelected)
+                {
+                    listItemCss += " selected-tree";
+                }
+
+                return string.Format(LiItemTemplateWithLink,
+                    listItemCss,
+                    node.HasChildItems ? "chevron-right" : "long-arrow-right",
+                    anchor,
+                    content);
+            }
+            else
+            {
+                //anchor
+                var path = "/documents/" + ProjectName + "/" + Version + "/" + normalizedPath;
+                var anchor = string.Format(ListItemAnchor, path, anchorCss, node.Text.IsNullOrEmpty() ? "?" : node.Text);
+                var listItemCss = node.HasChildItems ? "nav-header" : "last-link";
+                if (isNodeSelected)
+                {
+                    listItemCss += " selected-tree";
+                }
+
+                return string.Format(LiItemTemplateWithLink,
+                    listItemCss,
+                    node.HasChildItems ? "chevron-right" : "long-arrow-right",
+                    anchor,
+                    content);
+            }
         }
 
     }

@@ -48,7 +48,6 @@ body {
                 margin: .5rem 0 1rem;
 
                 .version-select {
-                    padding: 1px;
                     border-radius: 8px;
 
                     .input-group-text {
@@ -129,29 +128,35 @@ body {
                                 color: #000;
                             }
 
-                            .plus-icon {
-                                font-size: .85em;
-                                transition: .3s;
-                                width: 18px;
-                                height: 18px;
-                                text-align: center;
-                                padding: 0;
-                                line-height: 1;
-                                border-radius: 50%;
-                                margin-right: 4px;
-                                position: absolute;
-                                left: 2px;
+                            &.last-link {
                                 top: 11px;
                                 color: #aaa;
-                                cursor: pointer;
-
-                                &.last-link {
-                                    top: 11px;
-                                    color: #aaa;
-                                }
                             }
                         }
 
+                        span.tree-toggle {
+                            color: #999; 
+                            padding: 7px 0;
+                            display: block;
+                            border-bottom: 1px solid #eeeff3;
+                        }
+
+                        .plus-icon {
+                            font-size: .85em;
+                            transition: .3s;
+                            width: 18px;
+                            height: 18px;
+                            text-align: center;
+                            padding: 0;
+                            line-height: 1;
+                            border-radius: 50%;
+                            margin-right: 4px;
+                            position: absolute;
+                            left: 2px;
+                            top: 11px;
+                            color: #aaa;
+                            cursor: pointer;
+                        }
 
                         ul {
                             padding: 0;
@@ -178,15 +183,19 @@ body {
                             > a {
                                 color: #000;
                                 transition: .4s;
+                            }
 
-                                span {
+                            > span {
+                                .fa {
+                                    transform: rotate(90deg);
+                                    color: #007bff;
+                                }
+                            }
+
+                            &.last-link {
+                                > span {
                                     .fa {
-                                        color: #000;
-                                    }
-
-                                    &:not(.last-link) .fa {
-                                        transform: rotate(90deg);
-                                        color: #000;
+                                        transform: rotate(0deg);
                                     }
                                 }
                             }
@@ -443,7 +452,7 @@ body {
 
 
                                 a {
-                                    color: #aaa; 
+                                    color: #aaa;
                                     border-bottom: 1px solid #333;
 
                                     &:hover {
@@ -467,12 +476,19 @@ body {
                                         cursor: pointer;
 
                                         &.last-link {
-                                            top: 11px; 
+                                            top: 11px;
                                         }
                                     }
                                 }
 
-                                 
+
+                                span.tree-toggle {
+                                    color: #555;
+                                    padding: 7px 0;
+                                    display: block;
+                                    border-bottom: 1px solid #333;
+                                }
+
 
                                 &.selected-tree {
                                     > a {
@@ -642,8 +658,7 @@ body {
         }
     }
 }
-
-
+ 
 
 .for-mobile {
     display: none;
@@ -652,10 +667,7 @@ body {
 .for-desktop {
     display: inline-block;
 }
-
-
-
-
+ 
 pre[class*="language-"] {
     padding: 1.4em 2em !important;
     margin: 15px 0 25px !important;
