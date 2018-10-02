@@ -25,7 +25,7 @@
         background: none;
         padding-left: 36px;
         width: 100%;
-        background: #eeeff2;
+        background: #e9ecef;
         border: 0; }
         .docs-page .docs-sidebar .docs-sidebar-wrapper input.form-control:focus, .docs-page .docs-sidebar .docs-sidebar-wrapper input.form-control:active, .docs-page .docs-sidebar .docs-sidebar-wrapper input.form-control:hover, .docs-page .docs-sidebar .docs-sidebar-wrapper input.form-control:visited {
           box-shadow: none; }
@@ -36,11 +36,14 @@
         .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select {
           padding: 1px;
           border-radius: 8px; }
+          .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select .input-group-text {
+            border: 0; }
           .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select select.form-control {
             line-height: 1;
             border-top-left-radius: 0;
             border-bottom-left-radius: 0;
-            padding: .3em .5em .5em; }
+            padding: .3em .5em .5em;
+            border: 0; }
             .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select select.form-control:focus, .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select select.form-control:active, .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select select.form-control:hover, .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select select.form-control:visited {
               box-shadow: none; }
       .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-filter {
@@ -187,20 +190,22 @@
     box-shadow: 0 0 45px #f8f9fa;
     border-radius: 6px; }
   .docs-page .docs-page-index {
-    position: relative; }
+    height: 100vh; }
+    .docs-page .docs-page-index #scroll-index {
+      max-height: 100vh; }
     .docs-page .docs-page-index .docs-inner-anchors {
       position: fixed;
       top: 0px;
-      max-width: 270px;
+      /* max-width: 270px; */
       padding: 10px;
       font-size: .90em;
-      height: 100vh; }
+      /* height: 100vh; */ }
       .docs-page .docs-page-index .docs-inner-anchors .navbar .nav-pills {
-        font-size: .96em;
+        font-size: .92em;
         margin-left: 15px;
         border-left: 1px solid #eee; }
         .docs-page .docs-page-index .docs-inner-anchors .navbar .nav-pills .nav-link {
-          padding: 5px 14px 6px;
+          padding: 3px 14px 4px;
           color: #aaa;
           line-height: 1.2;
           position: relative;
@@ -218,7 +223,7 @@
           color: #007bff; }
         .docs-page .docs-page-index .docs-inner-anchors .navbar .nav-pills .nav-pills .nav-pills .nav-link.active {
           color: #007bff; }
-      .docs-page .docs-page-index .docs-inner-anchors > .navbar {
+      .docs-page .docs-page-index .docs-inner-anchors .index-scroll {
         margin-left: -30px; }
       .docs-page .docs-page-index .docs-inner-anchors .docs-anchors-wrapper {
         max-width: 300px;

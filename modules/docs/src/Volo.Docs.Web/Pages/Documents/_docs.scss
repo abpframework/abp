@@ -34,7 +34,7 @@ body {
                 background: none;
                 padding-left: 36px;
                 width: 100%;
-                background: #eeeff2;
+                background: #e9ecef;
                 border: 0;
 
                 &:focus, &:active, &:hover, &:visited {
@@ -51,11 +51,17 @@ body {
                     padding: 1px;
                     border-radius: 8px;
 
+                    .input-group-text {
+                        border: 0;
+                    }
+
                     select.form-control {
                         line-height: 1;
                         border-top-left-radius: 0;
                         border-bottom-left-radius: 0;
                         padding: .3em .5em .5em;
+                        border: 0;
+
 
                         &:focus, &:active, &:hover, &:visited {
                             box-shadow: none;
@@ -304,24 +310,27 @@ body {
     }
 
     .docs-page-index {
-        position: relative;
+         height: 100vh;
+
+        #scroll-index {
+            max-height: 100vh;
+        }
 
         .docs-inner-anchors {
             position: fixed;
             top: 0px;
-            max-width: 270px;
+            /* max-width: 270px; */
             padding: 10px;
             font-size: .90em;
-            height: 100vh;
-
+            /* height: 100vh; */
             .navbar {
                 .nav-pills {
-                    font-size: .96em;
+                    font-size: .92em;
                     margin-left: 15px;
                     border-left: 1px solid #eee;
 
                     .nav-link {
-                        padding: 5px 14px 6px;
+                        padding: 3px 14px 4px;
                         color: #aaa;
                         line-height: 1.2;
                         position: relative;
@@ -357,7 +366,7 @@ body {
                 }
             }
 
-            > .navbar {
+            .index-scroll {
                 margin-left: -30px;
             }
 

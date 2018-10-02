@@ -72,7 +72,7 @@ $('.open-dmenu').on("click", function () {
     });
 
     $(window).on("load", function () {
-        $("#index-scroll").mCustomScrollbar({
+        $("#scroll-index").mCustomScrollbar({
             theme: "minimal-dark"
         });
     });
