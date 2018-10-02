@@ -16,12 +16,17 @@ namespace Volo.Docs.Formatting
 
         public string Convert(string content)
         {
-            return CommonMarkConverter.Convert(Encoding.UTF8.GetString(Encoding.Default.GetBytes(content)));
+            return content == null ? null : CommonMarkConverter.Convert(Encoding.UTF8.GetString(Encoding.Default.GetBytes(content)));
         }
 
         public string NormalizeLinks(string content, string projectShortName, string version,
             string documentLocalDirectory)
         {
+            if (content == null)
+            {
+                return null;
+            }
+
             return Regex.Replace(content, MarkdownLinkRegExp, delegate (Match match)
                 {
                     var displayText = match.Groups[1].Value;
@@ -33,6 +38,11 @@ namespace Volo.Docs.Formatting
 
         private static string RemoveFileExtensionIfLocalUrl(string documentName)
         {
+            if (documentName == null)
+            {
+                return null;
+            }
+
             if (string.IsNullOrWhiteSpace(documentName))
             {
                 return documentName;
@@ -53,6 +63,11 @@ namespace Volo.Docs.Formatting
 
         private static bool IsRemoteUrl(string url)
         {
+            if (url == null)
+            {
+                return true;
+            }
+
             try
             {
                 return Regex.IsMatch(url, @"\A(https?|ftp)://(-\.)?([^\s/?\.#-]+\.?)+(/[^\s]*)?\z");
