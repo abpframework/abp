@@ -309,7 +309,8 @@ body {
         }
     }
 
-    .docs-page-index { 
+    .docs-page-index {
+        min-height: 100vh;
 
         #scroll-index {
             max-height: 100vh;
