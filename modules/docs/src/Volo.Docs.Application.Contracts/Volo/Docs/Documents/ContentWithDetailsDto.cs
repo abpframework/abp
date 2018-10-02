@@ -42,6 +42,8 @@ namespace Volo.Docs.Documents
         [JsonProperty("items")]
         public List<NavigationNode> Items { get; set; }
 
+        public bool IsLeaf => !HasChildItems;
+
         public bool HasChildItems => Items != null && Items.Any();
 
         public bool IsEmpty => Text == null && Path == null;
