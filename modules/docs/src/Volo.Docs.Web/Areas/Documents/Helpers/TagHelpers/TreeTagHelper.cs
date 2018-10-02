@@ -93,6 +93,7 @@ namespace Volo.Docs.Areas.Documents.Helpers.TagHelpers
             return string.Format(UlItemTemplate, output, isOpened ? "" : "display: none;");
         }
 
+        //TODO:Refactor
         private string GetLeafNode(NavigationNode node, string content)
         {
             var anchorCss = node.Path.IsNullOrEmpty() ? "tree-toggle" : "";
