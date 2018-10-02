@@ -22,7 +22,7 @@
     </abp-style-bundle>
 }
 @section scripts {
-    <abp-script-bundle name="@typeof(IndexModel).FullName"> 
+    <abp-script-bundle name="@typeof(IndexModel).FullName">
         <abp-script src="/lib/anchor-js/anchor.js" />
         <abp-script src="/Pages/Documents/Project/index.js" />
         <abp-script src="/lib/mCustomScrollbar/jquery.mCustomScrollbar.concat.min.js" />
@@ -108,41 +108,54 @@
             </div>
         </div>
 
-        <div class="col-md-7 docs-content bg-white">
+        @if (Model.Document.SuccessfullyRetrieved)
+        {
 
-            <div class="docs-link-btns">
-                @if (!string.IsNullOrEmpty(Model.Document.EditLink))
-                {
-                    <a href="@Model.Document.EditLink" target="_blank"> <i class="fa fa-edit"></i> @L["Edit"]</a>
-                }
+            <div class="col-md-7 docs-content bg-white">
+
+                <div class="docs-link-btns">
+                    @if (!string.IsNullOrEmpty(Model.Document.EditLink))
+                    {
+                        <a href="@Model.Document.EditLink" target="_blank"> <i class="fa fa-edit"></i> @L["Edit"]</a>
+                    }
+                </div>
+
+                <div class="docs-content-field">
+                    <div class="docs-text-field">
+                        <div data-spy="scroll" data-target="#docs-sticky-index" data-offset="0">
+                            <article class="docs-body">
+                                @Html.Raw(Model.Document.Content)
+                            </article>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
-            <div class="docs-content-field">
-                <div class="docs-text-field">
-                    <div data-spy="scroll" data-target="#docs-sticky-index" data-offset="0">
-                        <article class="docs-body">
-                            @Html.Raw(Model.Document.Content)
-                        </article>
+            <div class="col-md-2 docs-page-index position-relative bg-light">
+
+                <div id="scroll-index" class="docs-inner-anchors mt-2">
+                    <h5>@L["InThisDocument"]</h5>
+                    <nav id="docs-sticky-index" class="navbar index-scroll">
+                    </nav>
+
+                    <div class="row">
+                        <div class="col p-0 py-3">
+                            <a href="javascript:;" class="scroll-top-btn"><i class="fa fa-chevron-up"></i> @L["GoToTop"]</a>
+                        </div>
                     </div>
+
                 </div>
             </div>
 
-        </div>
-
-        <div class="col-md-2 docs-page-index position-relative bg-light">
-
-            <div id="scroll-index" class="docs-inner-anchors mt-2">
-                <h5>@L["InThisDocument"]</h5>
-                <nav id="docs-sticky-index" class="navbar index-scroll">
-                </nav>
-
-                <div class="row">
-                    <div class="col p-0 py-3">
-                        <a href="javascript:;" class="scroll-top-btn"><i class="fa fa-chevron-up"></i> @L["GoToTop"]</a>
-                    </div>
-                </div>
+        }
+        else
+        {
+            <div class="col-md-9 p-5 bg-white">
+                <p>@L["DocumentNotFound"]</p>
+                <a href="#">Go to home</a> /*Localize*/
             </div>
+        }
 
-        </div>
     </div>
 </div>

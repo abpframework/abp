@@ -8,6 +8,7 @@ using System.Net.Sockets;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Octokit;
+using Volo.Abp;
 using Volo.Abp.Domain.Services;
 using ProductHeaderValue = Octokit.ProductHeaderValue;
 
@@ -17,7 +18,7 @@ namespace Volo.Docs.Documents
     {
         public const string Type = "Github"; //TODO: Convert to "github"
 
-        private const bool IsOffline = true; //use it when you don't want to get from GitHub (eg: I have no internet)
+        public const int DocumentNotFoundExceptionCode = 20181001;
 
         public async Task<Document> FindDocumentByNameAsync(Dictionary<string, object> projectExtraProperties, string projectFormat, string documentName, string version)
         {
@@ -38,62 +39,37 @@ namespace Volo.Docs.Documents
                     documentName.Length - documentName.LastIndexOf('/') - 1);
             }
 
-            var content = DownloadWebContent(documentName, rawUrl);
-
-            return await Task.FromResult(new Document
+            var document = new Document
             {
                 Title = documentName,
-                Content = content,
                 EditLink = editLink,
                 RootUrl = rootUrl,
                 RawRootUrl = rawRootUrl,
                 Format = projectFormat,
                 LocalDirectory = localDirectory,
                 FileName = fileName,
-                Version = version
-            });
+                Version = version,
+                SuccessfullyRetrieved = TryDownloadWebContent(rawUrl, out var content),
+                Content = content
+            };
+
+            return await Task.FromResult(document);
         }
 
-        private string DownloadWebContent(string documentName, string rawUrl)
+        private bool TryDownloadWebContent(string rawUrl, out string content)
         {
             using (var webClient = new WebClient())
             {
                 try
                 {
-                    return webClient.DownloadString(rawUrl);
-                }
-                catch (WebException ex)
-                {
-                    Logger.LogError(ex, ex.Message);
-
-                    if (ex.Status == WebExceptionStatus.ProtocolError)
-                    {
-                        if (ex.Response != null && ex.Response is HttpWebResponse response)
-                        {
-                            if (response.StatusCode == HttpStatusCode.NotFound)
-                            {
-                                return $"The document {documentName} not found in this version!";
-                            }
-                        }
-                    }
-                    //todo: remove it when filedocumentstore is implemented
-                    else if (ex.InnerException is HttpRequestException &&
-                             ex.InnerException.InnerException != null &&
-                             ex.InnerException.InnerException is SocketException exception &&
-                             exception.SocketErrorCode == SocketError.HostNotFound)
-                    {
-                        if (IsOffline)
-                        {
-                            return File.ReadAllText(Path.Combine(@"D:\Github\abp\docs\", documentName));
-                        }
-                    }
-
-                    return "An error occured while getting the document " + documentName;
+                    content = webClient.DownloadString(rawUrl);
+                    return true;
                 }
                 catch (Exception ex)
                 {
+                    content = null;
                     Logger.LogError(ex, ex.Message);
-                    return "An error occured while getting the document " + documentName;
+                    return false;
                 }
             }
         }

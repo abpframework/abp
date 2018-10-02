@@ -10,8 +10,8 @@ namespace Volo.Docs.Areas.Documents.Helpers.TagHelpers
     public class TreeTagHelper : TagHelper
     {
         private const string LiItemTemplate = @"<li class='{6}'> 
-                                                  <a href='{0}' class='{5}'> 
-                                                      <span class='plus-icon {3}'><i class='fa fa-{4}'></i></span>{1}
+                                                  <a href='{0}' class='{5} {3}'> 
+                                                      <span class='plus-icon'><i class='fa fa-{4}'></i></span>{1}
                                                   </a>
                                                   {2}
                                                 </li>";

@@ -8,6 +8,7 @@
     "InThisDocument": "Bu dökümanda",
     "GoToTop": "En üste çık",
     "Projects": "Proje(ler)",
-    "NoProjectWarning": "Hiç proje yok!"
+    "NoProjectWarning": "Hiç proje yok!",
+    "DocumentNotFound": "Aradığınız döküman bulunamadı!"
   }
 }

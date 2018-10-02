@@ -19,5 +19,7 @@ namespace Volo.Docs.Documents
         public string LocalDirectory { get; set; }
 
         public string FileName { get; set; }
+
+        public bool SuccessfullyRetrieved { get; set; }
     }
 }

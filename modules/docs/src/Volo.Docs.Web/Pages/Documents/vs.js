@@ -1,4 +1,4 @@
-$('.tree-toggle').click(function () {
+$('.tree-toggle:not(.last-link)').click(function () {
     $(this).parent().children('ul.tree').toggle(100);
     $(this).closest("li").toggleClass("selected-tree");
 });

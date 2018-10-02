@@ -7,6 +7,11 @@ namespace Volo.Docs.Pages.Documents.Project
     {
         public static string ReplaceImageSources(string content, string documentRawRootUrl, string localDirectory)
         {
+            if (content == null)
+            {
+                return null;
+            }
+
             content = Regex.Replace(content, @"(<img\s+[^>]*)src=""([^""]*)""([^>]*>)", delegate (Match match)
                 {
                     var newImageSource = documentRawRootUrl.EnsureEndsWith('/') +
@@ -22,7 +27,7 @@ namespace Volo.Docs.Pages.Documents.Project
 
         public static string ReplaceCodeBlocksLanguage(string content, string currentLanguage, string newLanguage)
         {
-            return content.Replace("<code class=\"" + currentLanguage + "\">", "<code class=\"" + newLanguage + "\">");
+            return content?.Replace("<code class=\"" + currentLanguage + "\">", "<code class=\"" + newLanguage + "\">");
         }
 
     }
