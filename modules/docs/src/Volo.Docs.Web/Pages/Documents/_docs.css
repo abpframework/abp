@@ -245,7 +245,7 @@
   .container {
     max-width: 1080px; }
   .docs-page .docs-sidebar.dark-sidebar {
-    background: #222; }
+    background: #191919; }
     .docs-page .docs-sidebar.dark-sidebar .docs-sidebar-wrapper .docs-version .version-select select.form-control {
       background: #333;
       border-color: #333;
@@ -404,3 +404,15 @@ code {
   background-color: #f0f1f3;
   border-radius: 3px;
   color: #28a745; }
+
+pre code {
+  padding: 0; }
+
+pre .token.keyword {
+  color: #569cd6; }
+
+pre .token.atrule, pre .token.attr-value, pre .token.function, pre .token.class-name {
+  color: #d69d85; }
+
+:not(pre) > code[class*="language-"], pre[class*="language-"] {
+  background: #191919 !important; }

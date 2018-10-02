@@ -408,7 +408,7 @@ body {
     .docs-page {
         .docs-sidebar {
             &.dark-sidebar {
-                background: #222;
+                background: #191919;
 
                 .docs-sidebar-wrapper {
 
@@ -681,4 +681,20 @@ code {
     background-color: #f0f1f3;
     border-radius: 3px;
     color: #28a745;
+}
+pre {
+    code {
+        padding: 0;
+    }
+
+    .token.keyword {
+        color: #569cd6;
+    }
+
+    .token.atrule, .token.attr-value, .token.function, .token.class-name {
+        color: #d69d85;
+    }
+}
+:not(pre) > code[class*="language-"], pre[class*="language-"] {
+    background: #191919 !important;
 }
