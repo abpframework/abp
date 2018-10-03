@@ -84,6 +84,12 @@ namespace Volo.Docs.Documents
 
         public void ConvertItems()
         {
+            if (Content.IsNullOrEmpty())
+            {
+                RootNode = new NavigationNode();
+                return;
+            }
+
             try
             {
                 RootNode = JsonConvert.DeserializeObject<NavigationNode>(Content);
