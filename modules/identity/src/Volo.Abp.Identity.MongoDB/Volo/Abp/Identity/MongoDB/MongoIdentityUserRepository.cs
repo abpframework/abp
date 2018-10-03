@@ -8,16 +8,19 @@ using System.Threading.Tasks;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using Volo.Abp.Domain.Repositories.MongoDB;
+using Volo.Abp.Guids;
 using Volo.Abp.MongoDB;
 
 namespace Volo.Abp.Identity.MongoDB
 {
     public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDbContext, IdentityUser, Guid>, IIdentityUserRepository
     {
-        public MongoIdentityUserRepository(IMongoDbContextProvider<IAbpIdentityMongoDbContext> dbContextProvider) 
+        private readonly IGuidGenerator _guidGenerator;
+
+        public MongoIdentityUserRepository(IMongoDbContextProvider<IAbpIdentityMongoDbContext> dbContextProvider, IGuidGenerator guidGenerator) 
             : base(dbContextProvider)
         {
-
+            _guidGenerator = guidGenerator;
         }
 
         public async Task<IdentityUser> FindByNormalizedUserNameAsync(
@@ -116,6 +119,24 @@ namespace Volo.Abp.Identity.MongoDB
             var user = await GetAsync(id, cancellationToken: GetCancellationToken(cancellationToken));
             var roleIds = user.Roles.Select(r => r.RoleId).ToArray();
             return await DbContext.Roles.AsQueryable().Where(r => roleIds.Contains(r.Id)).ToListAsync(GetCancellationToken(cancellationToken));
+        }
+
+        public async Task<List<IdentityUserClaim>> GetClaimsAsync(Guid id, CancellationToken cancellationToken = default)
+        {
+            var user = await GetAsync(id, cancellationToken: GetCancellationToken(cancellationToken));
+            return user.Claims.ToList();
+        }
+
+        public async Task UpdateClaimsAsync(Guid id, List<IdentityUserClaim> claims)
+        {
+            var user = await GetAsync(id);
+
+            user.Claims.Clear();
+
+            foreach (var claim in claims)
+            {
+                user.Claims.Add(new IdentityUserClaim(_guidGenerator.Create(), id, claim.ClaimType, claim.ClaimValue, CurrentTenant.Id));
+            }
         }
 
         public async Task<long> GetCountAsync(

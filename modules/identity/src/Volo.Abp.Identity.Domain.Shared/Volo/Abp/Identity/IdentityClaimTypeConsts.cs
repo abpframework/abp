@@ -6,7 +6,7 @@ namespace Volo.Abp.Identity
 {
     public class IdentityClaimTypeConsts
     {
-        public const int MaxNameLength = 128;
+        public const int MaxNameLength = 256;
 
         public const int MaxRegexLength = 512;
 

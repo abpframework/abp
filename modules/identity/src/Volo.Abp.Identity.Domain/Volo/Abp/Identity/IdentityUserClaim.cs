@@ -25,7 +25,7 @@ namespace Volo.Abp.Identity
             UserId = userId;
         }
 
-        protected internal IdentityUserClaim(Guid id, Guid userId, [NotNull] string claimType, string claimValue, Guid? tenantId)
+        public IdentityUserClaim(Guid id, Guid userId, [NotNull] string claimType, string claimValue, Guid? tenantId)
             : base(id, claimType, claimValue, tenantId)
         {
             UserId = userId;

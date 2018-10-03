@@ -8,15 +8,18 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.Guids;
 
 namespace Volo.Abp.Identity.EntityFrameworkCore
 {
     public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext, IdentityUser, Guid>, IIdentityUserRepository
     {
-        public EfCoreIdentityUserRepository(IDbContextProvider<IIdentityDbContext> dbContextProvider)
+        private readonly IGuidGenerator _guidGenerator;
+
+        public EfCoreIdentityUserRepository(IDbContextProvider<IIdentityDbContext> dbContextProvider, IGuidGenerator guidGenerator)
             : base(dbContextProvider)
         {
-
+            _guidGenerator = guidGenerator;
         }
 
         public virtual async Task<IdentityUser> FindByNormalizedUserNameAsync(
@@ -129,6 +132,34 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                         select role;
 
             return await query.ToListAsync(GetCancellationToken(cancellationToken));
+        }
+
+        public virtual async Task<List<IdentityUserClaim>> GetClaimsAsync(
+            Guid id,
+            CancellationToken cancellationToken = default)
+        {
+            var query = from userClaim in DbContext.Set<IdentityUserClaim>()
+                        where userClaim.UserId == id
+                        select userClaim;
+
+            return await query.ToListAsync(GetCancellationToken(cancellationToken));
+        }
+
+        public async Task UpdateClaimsAsync(Guid id, List<IdentityUserClaim> claims)
+        {
+            var dbSet = DbContext.Set<IdentityUserClaim>();
+
+            var oldClaims = dbSet.Where(c => c.UserId == id).ToList();
+
+            foreach (var oldClaim in oldClaims)
+            {
+                dbSet.Remove(oldClaim);
+            }
+
+            foreach (var claim in claims)
+            {
+                dbSet.Add(new IdentityUserClaim(_guidGenerator.Create(), id, claim.ClaimType, claim.ClaimValue, CurrentTenant.Id));
+            }
         }
 
         public virtual async Task<long> GetCountAsync(
