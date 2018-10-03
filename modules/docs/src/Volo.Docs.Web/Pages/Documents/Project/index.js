@@ -13,7 +13,12 @@
             var gotoFilteredDocumentIfThereIsOnlyOne = function () {
                 var $links = getShownDocumentLinks();
                 if ($links.length === 1) {
-                    window.location = $links.first().attr("href");
+                    var url = $links.first().attr("href");
+                    if (url === "javascript:;") {
+                        return;
+                    }
+
+                    window.location = url;
                 }
             };
 
@@ -59,7 +64,7 @@
                     gotoFilteredDocumentIfThereIsOnlyOne();
                 }
             });
-        }
+        };
 
         var initAnchorTags = function (container) {
             anchors.options = {
