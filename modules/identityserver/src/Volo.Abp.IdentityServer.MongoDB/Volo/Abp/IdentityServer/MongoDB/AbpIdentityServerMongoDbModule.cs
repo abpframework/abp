@@ -1,5 +1,5 @@
-﻿using IdentityServer4.Models;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.IdentityServer.Grants;
 using Volo.Abp.Modularity;
 using Volo.Abp.MongoDB;
 using ApiResource = Volo.Abp.IdentityServer.ApiResources.ApiResource;

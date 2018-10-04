@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using MongoDB.Driver;
@@ -22,7 +21,7 @@ namespace Volo.Abp.IdentityServer.MongoDB
             CancellationToken cancellationToken = default)
         {
             return await GetMongoQueryable()
-                .Where(ar => scopeNames.Any(s=>s == ar.Name))
+                .Where(ar => scopeNames.Contains(ar.Name))
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
     }

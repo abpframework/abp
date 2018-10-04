@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using IdentityServer4.Models;
-using MongoDB.Bson.Serialization;
+﻿using MongoDB.Bson.Serialization;
+using Volo.Abp.IdentityServer.ApiResources;
+using Volo.Abp.IdentityServer.Clients;
+using Volo.Abp.IdentityServer.Grants;
+using Volo.Abp.IdentityServer.IdentityResources;
 using Volo.Abp.Threading;
 
 namespace Volo.Abp.IdentityServer.MongoDB
