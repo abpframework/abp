@@ -31,6 +31,9 @@ namespace Volo.Blogging.Pages.Blog.Posts
 
         public int CommentCount { get; set; }
 
+        [HiddenInput]
+        public Guid FocusCommentId { get; set; }
+
         public PostWithDetailsDto Post { get; set; }
 
         public IReadOnlyList<CommentWithRepliesDto> CommentsWithReplies { get; set; }
@@ -51,12 +54,14 @@ namespace Volo.Blogging.Pages.Blog.Posts
 
         public async Task OnPostAsync()
         {
-            await _commentAppService.CreateAsync(new CreateCommentDto()
+            var comment = await _commentAppService.CreateAsync(new CreateCommentDto()
             {
                 RepliedCommentId = NewComment.RepliedCommentId,
                 PostId = NewComment.PostId,
                 Text = NewComment.Text
             });
+
+            FocusCommentId = comment.Id;
 
             await GetData();
         }
