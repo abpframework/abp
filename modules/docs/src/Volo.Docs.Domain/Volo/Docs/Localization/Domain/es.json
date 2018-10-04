@@ -1,0 +1,14 @@
+{
+  "culture": "es",
+  "texts": {
+    "Documents": "Documentos",
+    "BackToWebsite": "Regresar al sitio",
+    "Version": "Versión",
+    "Edit": "Editar",
+    "InThisDocument": "En este documento",
+    "GoToTop": "Subir",
+    "Projects": "Proyecto(s)",
+    "NoProjectWarning": "¡Aun no hay proyectos!",
+    "DocumentNotFound": "¡Oops, no se encontró el documento solicitado!"
+  }
+}
