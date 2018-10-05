@@ -74,7 +74,7 @@ namespace MyCompanyName.MyProjectName.DemoApp
             context.Services.AddSwaggerGen(
                 options =>
                 {
-                    options.SwaggerDoc("v1", new Info { Title = "Blogging API", Version = "v1" });
+                    options.SwaggerDoc("v1", new Info { Title = "MyProjectName API", Version = "v1" });
                     options.DocInclusionPredicate((docName, description) => true);
                 });
 
