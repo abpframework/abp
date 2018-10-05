@@ -118,7 +118,12 @@ namespace Volo.Docs.Areas.Documents.Helpers.TagHelpers
         {
             var pathWithoutFileExtension = RemoveFileExtensionFromPath(path);
 
-            return hasChildItems ? "javascript:;" : "/documents/" + ProjectName + "/" + Version + "/" + pathWithoutFileExtension;
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                return "javascript:;";
+            }
+
+            return  "/documents/" + ProjectName + "/" + Version + "/" + pathWithoutFileExtension;
         }
 
         private string RemoveFileExtensionFromPath(string path)
