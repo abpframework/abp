@@ -13,7 +13,8 @@ namespace Volo.Abp.IdentityServer
     public class IdentityResourceRepository_Tests<TStartupModule> : AbpIdentityServerTestBase<TStartupModule>
         where TStartupModule : IAbpModule
     {
-        private IIdentityResourceRepository identityResourceRepository;
+        private readonly IIdentityResourceRepository identityResourceRepository;
+
         public IdentityResourceRepository_Tests()
         {
             identityResourceRepository = ServiceProvider.GetRequiredService<IIdentityResourceRepository>();
