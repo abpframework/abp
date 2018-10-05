@@ -10,9 +10,11 @@ namespace Volo.Docs.Formatting
     {
         public const string Type = "md";
 
-        private const string NewLinkFormat = "[{0}](/documents/{1}/{2}/{3}/{4})";
+        private const string NewLinkFormat = "[{0}](/documents/{1}/{2}{3}/{4})";
 
         private const string MarkdownLinkRegExp = @"\[([^)]+)\]\(([^)]+." + Type + @")\)";
+
+        private const string AnchorLinkRegExp = @"<a[^>]+href=\""(.*?)\""[^>]*>(.*)?</a>";
 
         public string Convert(string content)
         {
@@ -27,13 +29,33 @@ namespace Volo.Docs.Formatting
                 return null;
             }
 
-            return Regex.Replace(content, MarkdownLinkRegExp, delegate (Match match)
-                {
-                    var displayText = match.Groups[1].Value;
-                    var documentName = RemoveFileExtensionIfLocalUrl(match.Groups[2].Value);
-                    return string.Format(NewLinkFormat, displayText, projectShortName, version,
-                        documentLocalDirectory.TrimStart('/').TrimEnd('/'), documentName);
-                });
+            var normalized = Regex.Replace(content, MarkdownLinkRegExp, delegate (Match match)
+               {
+                   var displayText = match.Groups[1].Value;
+                   var documentName = RemoveFileExtensionIfLocalUrl(match.Groups[2].Value);
+                   var documentLocalDirectoryNormalized = documentLocalDirectory.TrimStart('/').TrimEnd('/');
+                   if (!string.IsNullOrWhiteSpace(documentLocalDirectoryNormalized))
+                   {
+                       documentLocalDirectoryNormalized = "/" + documentLocalDirectoryNormalized;
+                   }
+
+                   return string.Format(NewLinkFormat, displayText, projectShortName, version, documentLocalDirectoryNormalized, documentName);
+               });
+
+            normalized = Regex.Replace(normalized, AnchorLinkRegExp, delegate (Match match)
+           {
+               var displayText = match.Groups[2].Value;
+               var documentName = RemoveFileExtensionIfLocalUrl(match.Groups[1].Value);
+               var documentLocalDirectoryNormalized = documentLocalDirectory.TrimStart('/').TrimEnd('/');
+               if (!string.IsNullOrWhiteSpace(documentLocalDirectoryNormalized))
+               {
+                   documentLocalDirectoryNormalized = "/" + documentLocalDirectoryNormalized;
+               }
+
+               return string.Format(NewLinkFormat, displayText, projectShortName, version, documentLocalDirectoryNormalized, documentName);
+           });
+
+            return normalized;
         }
 
         private static string RemoveFileExtensionIfLocalUrl(string documentName)
