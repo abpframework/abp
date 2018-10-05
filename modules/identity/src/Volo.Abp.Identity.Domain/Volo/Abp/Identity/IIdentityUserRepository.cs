@@ -40,6 +40,8 @@ namespace Volo.Abp.Identity
             CancellationToken cancellationToken = default
         );
 
+        Task UpdateClaimsAsync(Guid id, List<IdentityUserClaim> claims);
+
         Task<List<IdentityUser>> GetListByNormalizedRoleNameAsync(
             string normalizedRoleName, 
             bool includeDetails = false,
@@ -60,6 +62,10 @@ namespace Volo.Abp.Identity
             bool includeDetails = false,
             CancellationToken cancellationToken = default
         );
+
+        Task<List<IdentityUserClaim>> GetClaimsAsync(
+            Guid id,
+            CancellationToken cancellationToken = default);
 
         Task<long> GetCountAsync(
             string filter = null,

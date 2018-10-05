@@ -3,6 +3,7 @@
     var l = abp.localization.getResource('Blogging');
 
     $('div .replyForm').hide();
+
     $('div .editForm').hide();
 
     $('form[class="editFormClass"]').submit(function (event) {
@@ -25,6 +26,16 @@
         });
     });
 
+    $('.editCancelButton').click(function (event) {
+        event.preventDefault();
+        $('div .editForm').hide();
+    });
+
+    $('.replyCancelButton').click(function (event) {
+        event.preventDefault();
+        $('div .replyForm').hide();
+    });
+
     $('.replyLink').click(function (event) {
         event.preventDefault();
         $('div .editForm').hide();
@@ -44,7 +55,7 @@
         }
     });
 
-    $('.deleteLink').click(function(event) {
+    $('.deleteLink').click(function (event) {
         event.preventDefault();
         var linkElement = $(this);
         var deleteCommentId = linkElement.attr('data-deleteid');
@@ -53,7 +64,7 @@
             abp.message.confirm(
                 l('CommentDeletionWarningMessage'), // TODO: localize
                 l('Are you sure?'),
-                function(isConfirmed) {
+                function (isConfirmed) {
                     if (isConfirmed) {
                         $.ajax({
                             type: "POST",
@@ -79,7 +90,7 @@
             abp.message.confirm(
                 l('PostDeletionWarningMessage'), // TODO: localize
                 l('AreYouSure'),
-                function(isConfirmed) {
+                function (isConfirmed) {
                     if (isConfirmed) {
                         $.ajax({
                             type: "POST",
@@ -118,5 +129,11 @@
             return;
         }
     });
+
+    if ($('#FocusCommentId').val() != '00000000-0000-0000-0000-000000000000') {
+        $('html, body').animate({
+            scrollTop: ($('#' + $('#FocusCommentId').val()).offset().top - 150)
+        }, 500);
+    }
 
 })(jQuery);

@@ -173,7 +173,6 @@ namespace Acme.BookStore
 
 * This DTO class is used to get book information from the user interface while creating or updating a book.
 * It defines data annotation attributes (like `[Required]`) to define validations for the properties. DTOs are automatically validated by ABP.
-* Each property has a `[Display]` property which set the label text on UI forms for the related input (it's also integrated to the localization system). The same DTO will be used as a View Model. That's why it defines that attribute. You may be inclined to think it's incorrect to use DTOs as View Models. There is nothing stopping you from using a separated view model class, but we thought it's practical and makes the sample project less complex.
 
 #### IBookAppService
 

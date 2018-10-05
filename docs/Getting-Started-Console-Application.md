@@ -1,6 +1,6 @@
 ﻿## Getting Started ABP With Console Application
 
-This tutorial explains how to start ABP from scratch with minimal dependencies. You generally want to start with a ***[startup template](https://abp.io/Templates)***.
+This tutorial explains how to start ABP from scratch with minimal dependencies. You generally want to start with a **[startup template](https://abp.io/Templates)**.
 
 ### Create A New Project
 

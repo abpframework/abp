@@ -5,6 +5,7 @@
     "Title": "Başlık",
     "Delete": "Sil",
     "Reply": "Yanıtla",
+    "ReplyTo": "{0}'a cevap ver",
     "Menu:BlogManagement": "Blog Yönetimi",
     "ContinueReading": "Devamı...",
     "DaysAgo": "{0} Gün Önce",

@@ -6,6 +6,7 @@
     "Title": "Title",
     "Delete": "Delete",
     "Reply": "Reply",
+    "ReplyTo": "Reply To {0}",
     "ContinueReading": "Continue Reading",
     "DaysAgo": "{0} days ago",
     "YearsAgo": "{0} years ago",
