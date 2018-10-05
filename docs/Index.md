@@ -6,13 +6,13 @@
   * From Startup Templates
     * [ASP.NET Core MVC Template](Getting-Started-AspNetCore-MVC-Template.md)
   * From Empty Projects
-    *  <a href="Getting-Started-Console-Application.md" target="_blank">With Console Application</a>
-    * <a href="Getting-Started-AspNetCore-Application.md" target="_blank">With ASP.NET Core Web Application</a>
+    * [With Console Application][Getting-Started-Console-Application.md]
+    * [With ASP.NET Core Web Application][Getting-Started-AspNetCore-Application.md]
 * Tutorials
   * Application Development
     * [With ASP.NET Core MVC](Tutorials/AspNetCore-Mvc/Part-I.md)
 * Fundamentals
-  * <a href="Dependency-Injection.md" target="_blank">Dependency Injection</a>
+  * [Dependency Injection](Dependency-Injection.md)
     * AutoFac Integration
   * [Virtual File System](Virtual-File-System.md)
   * [Localization](Localization.md)
@@ -37,7 +37,7 @@
   * Timing
 * [Multi Tenancy](Multi-Tenancy.md)
 * Module Development
-  * <a href="Module-Development-Basics.md" target="_blank">Basics</a>
+  * [Basics](Module-Development-Basics.md)
   * Plug-In Modules
   * [Best Practices](Best-Practices/Index.md)
 * Domain Driven Design

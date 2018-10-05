@@ -1,10 +1,10 @@
 ﻿## Dependency Injection
 
-ABP's Dependency Injection system is developed based on Microsoft's <a href="https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection" target="_blank">dependency injection extension</a> library (Microsoft.Extensions.DependencyInjection nuget package). So, it's documentation is valid in ABP too.
+ABP's Dependency Injection system is developed based on Microsoft's [dependency injection extension](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection) library (Microsoft.Extensions.DependencyInjection nuget package). So, it's documentation is valid in ABP too.
 
 ### Modularity
 
-Since ABP is a modular framework, every module defines it's own services and registers via dependency injection in it's own seperate <a href="Module-Development-Basics.md" target="_blank">module class</a>. Example:
+Since ABP is a modular framework, every module defines it's own services and registers via dependency injection in it's own seperate [module class](Module-Development-Basics.md). Example:
 
 ````C#
 public class BlogModule : AbpModule
@@ -146,7 +146,7 @@ public class TaxCalculator : ITaxCalculator, ITransientDependency
 
 #### Manually Registering
 
-In some cases, you may need to register a service to the `IServiceCollection` manually, especially if you need to use custom factory methods or singleton instances. In that case, you can directly add services just as <a href="https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection" target="_blank">Microsoft documentation</a> describes. Example:
+In some cases, you may need to register a service to the `IServiceCollection` manually, especially if you need to use custom factory methods or singleton instances. In that case, you can directly add services just as [Microsoft documentation](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection) describes. Example:
 
 ````C#
 public class BlogModule : AbpModule
@@ -193,7 +193,7 @@ Constructor injection is preffered way of injecting dependencies to a class. In 
 
 #### Property Injection
 
-Property injection is not supported by Microsoft Dependency Injection library. However, ABP can integrate with 3rd-party DI providers (<a href="https://autofac.org/" target="_blank">Autofac</a>, for example) to make property injection possible. Example:
+Property injection is not supported by Microsoft Dependency Injection library. However, ABP can integrate with 3rd-party DI providers ([Autofac](https://autofac.org/), for example) to make property injection possible. Example:
 
 ````C#
 public class MyService : ITransientDependency
