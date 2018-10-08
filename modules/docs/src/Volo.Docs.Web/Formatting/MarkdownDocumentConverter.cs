@@ -32,7 +32,7 @@ namespace Volo.Docs.Formatting
             var normalized = Regex.Replace(content, MarkdownLinkRegExp, delegate (Match match)
                {
                    var displayText = match.Groups[1].Value;
-                   var documentName = RemoveFileExtensionIfLocalUrl(match.Groups[2].Value);
+                   var documentName = RemoveFileExtension(match.Groups[2].Value);
                    var documentLocalDirectoryNormalized = documentLocalDirectory.TrimStart('/').TrimEnd('/');
                    if (!string.IsNullOrWhiteSpace(documentLocalDirectoryNormalized))
                    {
@@ -43,22 +43,28 @@ namespace Volo.Docs.Formatting
                });
 
             normalized = Regex.Replace(normalized, AnchorLinkRegExp, delegate (Match match)
-           {
-               var displayText = match.Groups[2].Value;
-               var documentName = RemoveFileExtensionIfLocalUrl(match.Groups[1].Value);
-               var documentLocalDirectoryNormalized = documentLocalDirectory.TrimStart('/').TrimEnd('/');
-               if (!string.IsNullOrWhiteSpace(documentLocalDirectoryNormalized))
-               {
-                   documentLocalDirectoryNormalized = "/" + documentLocalDirectoryNormalized;
-               }
+            {
+                var link = match.Groups[1].Value;
+                if (IsRemoteUrl(link))
+                {
+                    return match.Value;
+                }
 
-               return string.Format(NewLinkFormat, displayText, projectShortName, version, documentLocalDirectoryNormalized, documentName);
-           });
+                var displayText = match.Groups[2].Value;
+                var documentName = RemoveFileExtension(link);
+                var documentLocalDirectoryNormalized = documentLocalDirectory.TrimStart('/').TrimEnd('/');
+                if (!string.IsNullOrWhiteSpace(documentLocalDirectoryNormalized))
+                {
+                    documentLocalDirectoryNormalized = "/" + documentLocalDirectoryNormalized;
+                }
+
+                return string.Format(NewLinkFormat, displayText, projectShortName, version, documentLocalDirectoryNormalized, documentName);
+            });
 
             return normalized;
         }
 
-        private static string RemoveFileExtensionIfLocalUrl(string documentName)
+        private static string RemoveFileExtension(string documentName)
         {
             if (documentName == null)
             {
@@ -71,11 +77,6 @@ namespace Volo.Docs.Formatting
             }
 
             if (!documentName.EndsWith(Type, StringComparison.OrdinalIgnoreCase))
-            {
-                return documentName;
-            }
-
-            if (IsRemoteUrl(documentName))
             {
                 return documentName;
             }
