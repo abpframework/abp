@@ -11,10 +11,11 @@ body {
     *:hover > .anchorjs-link {
         margin-left: -1.125em !important;
         transition: color .25s linear;
+        color: gray;
     }
 
     .anchorjs-link:hover {
-        color: #2500AD;
+        color: #007bff;
         text-decoration: none;
     }
 
@@ -135,7 +136,7 @@ body {
                         }
 
                         span.tree-toggle {
-                            color: #999; 
+                            color: #999;
                             padding: 7px 0;
                             display: block;
                             border-bottom: 1px solid #eeeff3;
@@ -697,4 +698,13 @@ pre {
 }
 :not(pre) > code[class*="language-"], pre[class*="language-"] {
     background: #191919 !important;
+}
+
+
+div.code-toolbar > .toolbar span {
+    cursor: default;
+}
+
+div.code-toolbar > .toolbar a {
+    cursor: copy;
 }
