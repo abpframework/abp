@@ -77,6 +77,17 @@ namespace Volo.Docs.Pages.Documents.Project
 
             DocumentNameWithExtension = DocumentName + "." + project.Format;
         }
+        private static void SetLastVersionAsLatest(IReadOnlyList<VersionInfo> versions)
+        {
+            if (!versions.Any())
+            {
+                return;
+            }
+
+            versions[0].DisplayText = versions[0].Version + " - latest";
+            versions[0].Version = "latest";
+        }
+
 
         private async Task SetVersionAsync(ProjectDto project)
         {
@@ -84,6 +95,8 @@ namespace Volo.Docs.Pages.Documents.Project
                 project.ExtraProperties, project.DocumentStoreType, DocumentNameWithExtension);
 
             Versions = versions.Select(v => new VersionInfo(v, v)).ToList();
+
+          //  SetLastVersionAsLatest(Versions);
 
             LatestVersionInfo = GetLatestVersion();
 
