@@ -84,7 +84,7 @@ namespace Volo.Docs.Documents
 
         public void ConvertItems()
         {
-            if (Content.IsNullOrEmpty())
+            if (!SuccessfullyRetrieved || Content.IsNullOrEmpty())
             {
                 RootNode = new NavigationNode();
                 return;

@@ -96,13 +96,22 @@
                         </div>
                     }
 
-                    <ul root-node="@Model.Navigation.RootNode"
-                        version="@(Model.LatestVersionInfo.IsSelected ? DocsAppConsts.LatestVersion : Model.Version)"
-                        project-name="@Model.ProjectName"
-                        project-format="@Model.ProjectFormat"
-                        selected-document-name="@Model.DocumentNameWithExtension"
-                        id="sidebar-scroll"
-                        class="nav nav-list"></ul>
+                    @if (!Model.Navigation.SuccessfullyRetrieved || Model.Navigation.Content.IsNullOrEmpty())
+                    {
+                        <div class="text-muted p-3">
+                            <i class="fa fa-warning"></i> @L["NavigationDocumentNotFound"]
+                        </div>
+                    }
+                    else
+                    {
+                        <ul root-node="@Model.Navigation.RootNode"
+                            version="@(Model.LatestVersionInfo.IsSelected ? DocsAppConsts.LatestVersion : Model.Version)"
+                            project-name="@Model.ProjectName"
+                            project-format="@Model.ProjectFormat"
+                            selected-document-name="@Model.DocumentNameWithExtension"
+                            id="sidebar-scroll"
+                            class="nav nav-list"></ul>
+                    }
                 </div>
 
             </div>

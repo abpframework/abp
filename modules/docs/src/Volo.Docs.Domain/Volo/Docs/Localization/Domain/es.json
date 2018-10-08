@@ -9,6 +9,7 @@
     "GoToTop": "Subir",
     "Projects": "Proyecto(s)",
     "NoProjectWarning": "¡Aun no hay proyectos!",
-    "DocumentNotFound": "¡Oops, no se encontró el documento solicitado!"
+    "DocumentNotFound": "¡Oops, no se encontró el documento solicitado!",
+    "NavigationDocumentNotFound": "Esta versión no tiene un documento de navegación!"
   }
 }
