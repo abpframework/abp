@@ -77,7 +77,7 @@ namespace Volo.Docs.Pages.Documents.Project
 
             DocumentNameWithExtension = DocumentName + "." + project.Format;
         }
-       
+
         private async Task SetVersionAsync(ProjectDto project)
         {
             Versions = (await _documentAppService
@@ -110,10 +110,21 @@ namespace Volo.Docs.Pages.Documents.Project
             VersionSelectItems = Versions.Select(v => new SelectListItem
             {
                 Text = v.DisplayText,
-                Value = "/documents/" + ProjectName + "/" + v.Version + "/" + DocumentName,
+                Value = CreateLink(v.Version, DocumentName),
                 Selected = v.IsSelected
             }).ToList();
+        }
 
+        public string CreateLink(string version, string documentName = null)
+        {
+            var link = "/" + DocsAppConsts.WebsiteLinkFirstSegment + "/" + ProjectName + "/" + version;
+
+            if (documentName != null)
+            {
+                link += "/" + DocumentName;
+            }
+
+            return link;
         }
 
         private VersionInfo GetLatestVersion()
@@ -126,10 +137,10 @@ namespace Volo.Docs.Pages.Documents.Project
             return latestVersion;
         }
 
-        private string GetSpecificVersionOrLatest()
+        public string GetSpecificVersionOrLatest()
         {
-            return Document.Version == LatestVersionInfo.Version ? 
-                DocsAppConsts.LatestVersion : 
+            return Document.Version == LatestVersionInfo.Version ?
+                DocsAppConsts.LatestVersion :
                 Document.Version;
         }
 
@@ -137,13 +148,13 @@ namespace Volo.Docs.Pages.Documents.Project
         {
             Document = await _documentAppService.GetByNameAsync(ProjectName, DocumentNameWithExtension, Version, true);
             var converter = _documentConverterFactory.Create(Document.Format ?? ProjectFormat);
-            
+
             var content = converter.NormalizeLinks(Document.Content, Document.Project.ShortName, GetSpecificVersionOrLatest(), Document.LocalDirectory);
             content = converter.Convert(content);
 
             content = HtmlNormalizer.ReplaceImageSources(content, Document.RawRootUrl, Document.LocalDirectory);
             content = HtmlNormalizer.ReplaceCodeBlocksLanguage(content, "language-C#", "language-csharp"); //todo find a way to make it on client in prismJS configuration (eg: map C# => csharp)
-            
+
             Document.Content = content;
         }
     }

@@ -6,6 +6,8 @@ namespace Volo.Docs
     {
         public static string LatestVersion = "latest";
 
+        public static string WebsiteLinkFirstSegment = "documents";
+
         public static VersionInfo DefaultVersion = new VersionInfo(LatestVersion, LatestVersion);
     }
 }
