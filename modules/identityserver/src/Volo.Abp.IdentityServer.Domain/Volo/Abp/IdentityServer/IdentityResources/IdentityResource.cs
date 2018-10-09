@@ -56,5 +56,10 @@ namespace Volo.Abp.IdentityServer.IdentityResources
         {
             UserClaims.Add(new IdentityClaim(Id, type));
         }
+
+        public virtual void RemoveAllUserClaims()
+        {
+            UserClaims.Clear();
+        }
     }
 }
