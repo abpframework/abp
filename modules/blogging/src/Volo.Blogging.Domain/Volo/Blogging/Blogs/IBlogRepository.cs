@@ -11,6 +11,6 @@ namespace Volo.Blogging.Blogs
 
         Task<List<Blog>> GetListAsync(string sorting, int maxResultCount, int skipCount);
 
-        Task<int> GetTotalBlogCount();
+        Task<int> GetTotalCount();
     }
 }
