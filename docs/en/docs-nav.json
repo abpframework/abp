@@ -226,6 +226,10 @@
     },
     {
       "text": "Testing"
+    },
+    {
+      "text": "Contribution Guide",
+      "path": "Contribution/Index.md"
     }
   ]
 }
