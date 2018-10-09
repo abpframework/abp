@@ -21,7 +21,7 @@
 
 - Include all the **primitive properties** directly on the entity.
   - Exception: Can **exclude** properties for **security** reasons (like User.Password).
-- Include all the **sub collections** of the entity where every item in the collection is the **basic DTO** of the related entity.
+- Include all the **sub collections** of the entity where every item in the collection is a simple **relation DTO**.
 
 Example:
 
