@@ -1,23 +1,23 @@
-## Background Jobs
+## 后台作业
 
-### Introduction
+### 介绍
 
-Background jobs are used to queue some tasks to be executed in the background. You may need background jobs for several reasons. Here are some examples:
+后台作业用来在后台排队执行一些任务，出于几个原因，您可能需要后台工作，以下是一些例子：
 
-- To perform **long-running tasks** without having the users wait. For example, a user presses a 'report' button to start a long-running reporting job. You add this job to the **queue** and send the report's result to your user via email when it's completed.
-- To create **re-trying** and **persistent tasks** to **guarantee** that a code will be **successfully executed**. For example, you can send emails in a background job to overcome **temporary failures** and **guarantee** that it eventually will be sent. That way users do not wait while sending emails.
+- 执行无需用户等待的**长时间运行的任务**。 例如, 用户按下“报表”按钮来启动长时间运行的报表作业。 你将此作业添加到**队列**中并在它完成后通过邮件发送报表结果给你的用户。
+- 创建**重新尝试**和**持久的任务**以**确保**代码将**成功执行**。 例如， 您可以在后台工作中发送电子邮件，以克服**暂时故障**并最终**确保**它最终将被发送。这样用户在发送邮件时就不会等待了。
 
-Background jobs are **persistent** that means they will be **re-tried** and **executed** later even if your application crashes.
+后台作业是**持久性的**这意味着即时你的应用程序崩溃了，它们也会在稍后**重新尝试**并**执行** 。
 
-ABP provides an **abstraction** module and **several implementations** for background jobs. It has a built-in/default implementation as well as Hangfire and RabbitMQ integrations.
+ABP为后台作业提供了一个**抽象**模块和**几个实现**。它有一个内置/默认的实现以及与Hangfire和RabbitMQ的集成。
 
-### Abstraction Module
+### 抽象模块
 
-TODO
+待添加
 
-### Creating a Background Job
+### 创建一个后台作业
 
-A background job is a class that implements the `IBackgroundJob<TArgs>` interface or derives from the `BackgroundJob<TArgs>` class. `TArgs` is a simple plain C# class to store the job data.
+后台作业是一个实现`IBackgroundJob<TArgs>`接口或继承自`BackgroundJob<TArgs>`类的类。`TArgs`是一个简单的C#类，用于存储作业数据。
 
-An example background job to send emails in background:
+一个在后台发送邮件的后台作业例子：
 
