@@ -268,3 +268,6 @@ modules/blogging/app/Volo.BloggingTestApp/wwwroot/files/*
 modules/blogging/app/Volo.BloggingTestApp/Logs/*
 modules/blog/app/Volo.BlogTestApp/Logs/*
 modules/docs/app/Volo.DocsTestApp/Logs/*
+
+# macOS
+.DS_Store
