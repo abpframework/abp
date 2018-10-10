@@ -1,38 +1,40 @@
-## ASP.NET Core MVC Template
+## ASP.NET Core MVC 模板
 
-### Creating a new project
+### 创建新项目
 
-Go to [the template creation page](https://abp.io/Templates), enter a project name and create your project as shown below:
+访问[模板创建页面](https://abp.io/Templates), 输入项目名称并创建项目, 如下所示:
 
 ![bookstore-create--template](images/bookstore-create-template.png)
 
-When you click the *create* button, a new Visual Studio solution is created and downloaded with the name you have provided.
+单击 *create* 按钮时,将使用你提供的名称创建一个新的Visual Studio解决方案并开始下载.
 
-#### Pre Requirements
+#### 预先要求
 
-The downloaded project requires;
+下载的项目需要:
 
 * [Visual Studio 2017 (v15.7.0+)](https://visualstudio.microsoft.com/tr/downloads/)
 * [.NET Core 2.1.1+](https://www.microsoft.com/net/download/dotnet-core/)
 
-### The Solution Structure
+### 解决方案结构
 
-Extract the zip file downloaded and open in **Visual Studio 2017 (15.7.0+)**:
+下载后解压文件并在 **Visual Studio 2017(15.7.0 +)** 中打开:
 
 ![bookstore-visual-studio-solution](images/bookstore-visual-studio-solution.png)
 
-The solution has a layered structure (based on Domain Driven Design) where;
+该解决方案具有分层结构(基于域驱动设计), 其中:
 
-* ``.Domain`` is the domain layer.
-* ``.Application`` is the application layer.
-* ``.Web`` is the presentation layer.
-* ``.EntityFrameworkCore`` is the EF Core integration package.
+* ``.Domain`` 为领域层.
+* ``.Application`` 为应用层.
+* ``.Web`` 为是表示层.
+* ``.EntityFrameworkCore`` 是EF Core集成.
 
 The solution also contains unit & integration test projects properly configured to work with **EF Core** & **SQLite in-memory** database.
 
-### Creating the Database
+解决方案还包含配置好的的单元&集成测试项目, 以便与 **EF Core** 和 **SQLite内存中** 数据库配合使用.
 
-Check the **connection string** in the `appsettings.json` file under the `.Web` project:
+### 创建数据库
+
+查看`.Web`项目下`appsettings.json`文件中的 **连接字符串**：
 
 ````json
 {
@@ -44,28 +46,30 @@ Check the **connection string** in the `appsettings.json` file under the `.Web` 
 
 The solution is configured to use **Entity Framework Core** with **MS SQL Server**. EF Core supports [various](https://docs.microsoft.com/en-us/ef/core/providers/) database providers, so you can use another DBMS if you want.
 
-Right click to the `.Web` project and select **Set as StartUp Project**:
+解决方案使用 **Entity Framework Core** 和 **MS SQL Server**. EF Core支持[各种](https://docs.microsoft.com/en-us/ef/core/providers/)数据库提供程序,因此你可以根据实际需要使用其他DBMS.
+
+右键单击`.Web`项目并**设置启动项目**
 
 ![set-as-startup-project](images/set-as-startup-project.png)
 
-Open the **Package Manager Console**, select `.EntityFrameworkCore` project as the **Default Project** and run the `Update-Database` command:
+打开**包管理器控制台(Package Manager Console)**, 选择`.EntityFrameworkCore`项目作为**默认项目**并运行`Update-Database`命令:
 
 ![pcm-update-database](images/pcm-update-database.png)
 
-This will create a new database based on the configured connection string.
+这将基于配置的连接字符串创建新数据库.
 
-### Running the Application
+### 运行应用程序
 
-You can now run the application which will open the **home** page:
+您现在可以运行应用程序,它将会打开**home**页面：
 
 ![bookstore-homepage](images/bookstore-homepage.png)
 
-Click the **Login** button, enter `admin` as the username and `1q2w3E*` as the password to login to the application.
+单击 **登录** 按钮, 输入用户名`admin`, 密码`1q2w3E*`, 登录应用程序.
 
-The startup template includes the **identity management** module. Once you login, the Identity management menu will be available where you can manage **roles**, **users** and their **permissions**.
+启动模板包括 **身份管理(identity management)** 模块. 登录后将提供身份管理菜单,你可以在其中管理**角色**,**用户**及其**权限**.
 
 ![bookstore-user-management](images/bookstore-user-management.png)
 
-### What's Next?
+### 下一步是什么?
 
-* [Application development tutorial](Tutorials/AspNetCore-Mvc/Part-I.md)
+* [应用程序开发教程](Tutorials/AspNetCore-Mvc/Part-I.md)
