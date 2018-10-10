@@ -6,8 +6,8 @@
   * 从启动模板开始
     * [ASP.NET Core MVC 模板](Getting-Started-AspNetCore-MVC-Template.md)
   * 从空项目开始
-    * [使用Console Application][Getting-Started-Console-Application.md]
-    * [使用 ASP.NET Core Web Application][Getting-Started-AspNetCore-Application.md]
+    * [使用Console Application](Getting-Started-Console-Application.md)
+    * [使用 ASP.NET Core Web Application](Getting-Started-AspNetCore-Application.md)
 * 教程
   * 应用开发
     * [使用 ASP.NET Core MVC](Tutorials/AspNetCore-Mvc/Part-I.md)
