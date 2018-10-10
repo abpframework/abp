@@ -1,0 +1,235 @@
+{
+  "items": [
+    {
+      "text": "入门",
+      "items": [
+        {
+          "text": "从启动模板开始",
+          "items": [
+            {
+              "text": "ASP.NET Core MVC 模板",
+              "path": "Getting-Started-AspNetCore-MVC-Template.md"
+            }
+          ]
+        },
+        {
+          "text": "从空项目开始",
+          "items": [
+            {
+              "text": "使用Console Application",
+              "path": "Getting-Started-AspNetCore-Application.md"
+            },
+            {
+              "text": "使用 ASP.NET Core Web Application",
+              "path": "Getting-Started-Console-Application.md"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "教程",
+      "items": [
+        {
+          "text": "应用开发",
+          "items": [
+            {
+              "text": "使用 ASP.NET Core MVC",
+              "path": "Tutorials/AspNetCore-Mvc/Part-I.md"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "基础知识",
+      "items": [
+        {
+          "text": "依赖注入",
+          "path": "Dependency-Injection.md",
+          "items": [
+            {
+              "text": "AutoFac 集成"
+            }
+          ]
+        },
+        {
+          "text": "虚拟文件系统",
+          "path": "Virtual-File-System.md"
+        },
+        {
+          "text": "本地化",
+          "path": "Localization.md"
+        },
+        {
+          "text": "异常处理",
+          "path": "Exception-Handling.md"
+        },
+        {
+          "text": "验证"
+        },
+        {
+          "text": "授权"
+        },
+        {
+          "text": "缓存"
+        },
+        {
+          "text": "审计"
+        },
+        {
+          "text": "设置管理"
+        }
+      ]
+    },
+    {
+      "text": "事件",
+      "items": [
+        {
+          "text": "本地 Event Bus"
+        },
+        {
+          "text": "分布式 Event Bus",
+          "items": [
+            {
+              "text": "RabbitMQ 集成"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "服务",
+      "items": [
+        {
+          "text": "对象序列化"
+        },
+        {
+          "text": "JSON序列化"
+        },
+        {
+          "text": "邮件"
+        },
+        {
+          "text": "GUIDs"
+        },
+        {
+          "text": "线程"
+        },
+        {
+          "text": "定时"
+        }
+      ]
+    },
+    {
+      "text": "多租户",
+      "path": "Multi-Tenancy.md"
+    },
+    {
+      "text": "模块开发",
+      "items": [
+        {
+          "text": "基础",
+          "path": "Module-Development-Basics.md"
+        },
+        {
+          "text": "模块插件"
+        },
+        {
+          "text": "最佳实践",
+          "path": "Best-Practices/Index.md"
+        }
+      ]
+    },
+    {
+      "text": "领域驱动设计",
+      "items": [
+        {
+          "text": "领域层",
+          "items": [
+            {
+              "text": "实体&聚合根",
+              "path": "Entities.md"
+            },
+            {
+              "text": "值对象"
+            },
+            {
+              "text": "仓储",
+              "path": "Repositories.md"
+            },
+            {
+              "text": "领域服务"
+            },
+            {
+              "text": "规约"
+            }
+          ]
+        },
+        {
+          "text": "应用服务层",
+          "items": [
+            {
+              "text": "应用服务"
+            },
+            {
+              "text": "数据传输对象(DTO)"
+            },
+            {
+              "text": "工作单元"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "ASP.NET Core MVC",
+      "items": [
+        {
+          "text": "API 版本控制"
+        },
+        {
+          "text": "用户界面",
+          "items": [
+            {
+              "text": "客户端包管理",
+              "path": "AspNetCore/Client-Side-Package-Management.md"
+            },
+            {
+              "text": "捆绑&压缩",
+              "path": "AspNetCore/Bundling-Minification.md"
+            },
+            {
+              "text": "Tag Helpers",
+              "path": "Tag-Helpers.md"
+            },
+            {
+              "text": "主题化",
+              "path": "AspNetCore/Theming.md"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "数据访问",
+      "items": [
+        {
+          "text": "Entity Framework Core 集成",
+          "path": "Entity-Framework-Core.md"
+        },
+        {
+          "text": "MongoDB 集成",
+          "path": "MongoDB.md"
+        }
+      ]
+    },
+    {
+      "text": "测试"
+    },
+    {
+      "text": "贡献指南",
+      "path": "Contribution/Index.md"
+    }
+  ]
+}
