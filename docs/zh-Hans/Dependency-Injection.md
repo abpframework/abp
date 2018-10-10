@@ -1,24 +1,24 @@
-﻿## Dependency Injection
+## 依赖注入
 
-ABP's Dependency Injection system is developed based on Microsoft's [dependency injection extension](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection) library (Microsoft.Extensions.DependencyInjection nuget package). So, it's documentation is valid in ABP too.
+ABP的依赖注入系统是基于Microsoft的[依赖注入扩展](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection)库（Microsoft.Extensions.DependencyInjection nuget包）开发的.因此,它的文档在ABP中也是有效的.
 
-### Modularity
+### 模块化
 
-Since ABP is a modular framework, every module defines it's own services and registers via dependency injection in it's own seperate [module class](Module-Development-Basics.md). Example:
+由于ABP是一个模块化框架,因此每个模块都通过依赖注入定义它自己的服务并通过它自己的单独[模块类](Module-Development-Basics.md)进行注册.例：
 
 ````C#
 public class BlogModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        //register dependencies here
+        //在此处注入依赖项
     }
 }
 ````
 
-### Conventional Registration
+### 依照约定的注册
 
-ABP introduces conventional service registration. You need not do anything to register a service by convention. It's automatically done. If you want to disable it, you can set `SkipAutoServiceRegistration` to `true` by overriding the `PreConfigureServices` method.
+ABP引入了依照约定的服务注册.依照约定你无需做任何事,它会自动完成.如果要禁用它,你可以通过重写`PreConfigureServices`方法,设置`SkipAutoServiceRegistration`为`true`.
 
 ````C#
 public class BlogModule : AbpModule
@@ -30,7 +30,7 @@ public class BlogModule : AbpModule
 }
 ````
 
-Once you skip auto registration, you should manually register your services. In that case, ``AddAssemblyOf`` extension method can help you to register all your services by convention. Example:
+一旦跳过自动注册,你应该手动注册你的服务.在这种情况下,`AddAssemblyOf`扩展方法可以帮助你依照约定注册所有服务.例：
 
 ````c#
 public class BlogModule : AbpModule
@@ -47,19 +47,19 @@ public class BlogModule : AbpModule
 }
 ````
 
-The section below explains the conventions and configurations.
+以下部分解释了约定和配置.
 
-#### Inherently Registered Types
+#### 固有的注册类型
 
-Some specific types are registered to dependency injection by default. Examples:
+一些特定类型会默认注册到依赖注入.例子：
 
-* Module classes are registered as singleton.
-* MVC controllers (inherit ``Controller`` or ``AbpController``) are registered as transient.
-* MVC page models (inherit ``PageModel`` or ``AbpPageModel``) are registered as transient.
-* MVC view components (inherit ``ViewComponent`` or ``AbpViewComponent``) are registered as transient.
-* Application services (implement ``IApplicationService`` interface or inherit ``ApplicationService`` class) are registered as transient.
-* Repositories (implement ``IRepository`` interface) are registered as transient.
-* Domain services (implement ``IDomainService`` interface) are registered as transient.
+* 模块类注册为singleton.
+* MVC控制器（继承``Controller``或``AbpController``）被注册为transient.
+* MVC页面模型（继承``PageModel``或``AbpPageModel``）被注册为transient.
+* MVC视图组件（继承``ViewComponent``或``AbpViewComponent``）被注册为transient.
+* 应用程序服务（实现``IApplicationService``接口或继承``ApplicationService``类）注册为transient.
+* 存储库（实现``IRepository``接口）注册为transient.
+* 域服务（实现``IDomainService``接口）注册为transient.
 
 Example:
 
@@ -69,15 +69,15 @@ public class BlogPostAppService : ApplicationService
 }
 ````
 
-``BlogPostAppService`` is automatically registered with transient lifetime since it's derived from a known base class.
+``BlogPostAppService`` 由于它是从已知的基类派生的,因此会自动注册transient.
 
-#### Dependency Interfaces
+#### 依赖接口
 
-If you implement these interfaces, your class is registered to dependency injection automatically:
+如果实现这些接口,则会自动将类注册到依赖注入：
 
-* ``ITransientDependency`` to register with transient lifetime.
-* ``ISingletonDependency`` to register with singleton lifetime.
-* ``IScopedDependency`` to register with scoped lifetime.
+* ``ITransientDependency`` 注册为transient.
+* ``ISingletonDependency`` 注册为singleton.
+* ``IScopedDependency`` 注册为scoped.
 
 Example:
 
@@ -87,17 +87,17 @@ public class TaxCalculator : ITransientDependency
 }
 ````
 
-``TaxCalculator`` is automatically registered with a transient lifetime since it implements ``ITransientDependency``.
+``TaxCalculator``因为实现了``ITransientDependency``,所以它会自动注册为transient.
 
-#### Dependency Attribute
+#### Dependency 属性
 
-Another way of configuring a service for dependency injection is to use ``DependencyAttribute``. It has the following properties:
+配置依赖注入服务的另一种方法是使用``DependencyAttribute``.它具有以下属性：
 
-* ``Lifetime``: Lifetime of the registration: ``Singleton``, ``Transient`` or ``Scoped``.
-* ``TryRegister``: Set ``true`` to register the service only it's not registered before. Uses TryAdd... extension methods of IServiceCollection.
-* ``ReplaceServices``: Set ``true`` to replace services if they are already registered before. Uses Replace extension method of IServiceCollection.
+* ``Lifetime``: 注册的生命周期：Singleton,Transient或Scoped.
+* ``TryRegister``: 设置``true``则只注册以前未注册的服务.使用IServiceCollection的TryAdd ... 扩展方法.
+* ``ReplaceServices``: 设置``true``则替换之前已经注册过的服务.使用IServiceCollection的Replace扩展方法.
 
-Example:
+示例:
 
 ````C#
 [Dependency(ServiceLifetime.Transient, ReplaceServices = true)]
@@ -108,11 +108,11 @@ public class TaxCalculator
 
 ````
 
-``Dependency`` attribute has a higher priority than other dependency interfaces if it defines the ``Lifetime`` property.
+``Dependency``如果定义``Lifetime``属性,则具有比其他依赖接口更高的优先级. 
 
-#### ExposeServices Attribute 
+#### ExposeServices 属性 
 
-``ExposeServicesAttribute`` is used to control which services are provided by the related class. Example:
+``ExposeServicesAttribute``用于控制相关类提供了什么服务.例： 
 
 ````C#
 [ExposeServices(typeof(ITaxCalculator))]
@@ -122,18 +122,18 @@ public class TaxCalculator: ICalculator, ITaxCalculator, ICanCalculate, ITransie
 }
 ````
 
-``TaxCalculator`` class only exposes ``ITaxCalculator`` interface. That means you can only inject ``ITaxCalculator``, but can not inject ``TaxCalculator`` or ``ICalculator`` in your application.
+``TaxCalculator``类只公开``ITaxCalculator``接口.这意味着你只能注入``ITaxCalculator``,但不能注入``TaxCalculator``或``ICalculator``到你的应用程序中.
 
-#### Exposed Services by Convention
+#### 依照约定公开的服务
 
-If you do not specify which services to expose, ABP expose services by convention. So taking the ``TaxCalculator`` defined above:
+如果你未指定要公开的服务,则ABP依照约定公开服务.以上面定义的``TaxCalculator``为例：
 
-* The class itself is exposed by default. That means you can inject it by ``TaxCalculator`` class.
-* Default interfaces are exposed by default. Default interfaces are determined by naming convention. In this example, ``ICalculator`` and ``ITaxCalculator`` are default interfaces of ``TaxCalculator``, but ``ICanCalculate`` is not.
+* 默认情况下,类本身是公开的.这意味着你可以按``TaxCalculator``类注入它.
+* 默认情况下,默认接口是公开的.默认接口是由命名约定确定.在这个例子中,``ICalculator``和``ITaxCalculator``是``TaxCalculator``的默认接口,但``ICanCalculate``不是.
 
-#### Combining All Together
+#### 组合到一起
 
-Combining attributes and interfaces is possible as long as it's meaningful.
+只要有意义,就可以组合属性和接口.
 
 ````C#
 [Dependency(ReplaceServices = true)]
@@ -144,31 +144,31 @@ public class TaxCalculator : ITaxCalculator, ITransientDependency
 }
 ````
 
-#### Manually Registering
+#### 手动注册
 
-In some cases, you may need to register a service to the `IServiceCollection` manually, especially if you need to use custom factory methods or singleton instances. In that case, you can directly add services just as [Microsoft documentation](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection) describes. Example:
+在某些情况下,你可能需要向``IServiceCollection``手动注册服务,尤其是在需要使用自定义工厂方法或singleton实例时.在这种情况下,你可以像[Microsoft文档](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection)描述的那样直接添加服务.例：
 
 ````C#
 public class BlogModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        //Register an instance as singleton
+        //注册一个singleton实例
         context.Services.AddSingleton<TaxCalculator>(new TaxCalculator(taxRatio: 0.18));
 
-        //Register a factory method that resolves from IServiceProvider
+        //注册一个从IServiceProvider解析得来的工厂方法
         context.Services.AddScoped<ITaxCalculator>(sp => sp.GetRequiredService<TaxCalculator>());
     }
 }
 ````
 
-### Injecting Dependencies
+### 注入依赖关系
 
-There are three common ways of using a service that has already been registered.
+使用已注册的服务有三种常用方法.
 
-#### Contructor Injection
+#### 构造方法注入
 
-This is the most common way of injecting a service into a class. For example:
+这是将服务注入类的最常用方法.例如：
 
 ````C#
 public class TaxAppService : ApplicationService
@@ -182,18 +182,18 @@ public class TaxAppService : ApplicationService
 
     public void DoSomething()
     {
-        //...use _taxCalculator...
+        //...使用 _taxCalculator...
     }
 }
 ````
 
-``TaxAppService`` gets ``ITaxCalculator`` in it's constructor. The dependency injection system automatically provides the requested service at runtime.
+``TaxAppService``在构造方法中得到``ITaxCalculator``.依赖注入系统在运行时自动提供所请求的服务.
 
-Constructor injection is preffered way of injecting dependencies to a class. In that way, the class can not be constructed unless all constructor-injected dependencies are provided. Thus, the class explicitly declares it's required services.
+构造方法注入是将依赖项注入类的优先方式.这样,除非提供了所有构造方法注入的依赖项,否则无法构造类.因此,该类明确的声明了它必需的服务.
 
-#### Property Injection
+#### 属性注入
 
-Property injection is not supported by Microsoft Dependency Injection library. However, ABP can integrate with 3rd-party DI providers ([Autofac](https://autofac.org/), for example) to make property injection possible. Example:
+Microsoft依赖注入库不支持属性注入.但是,ABP可以与第三方DI提供商（例如[Autofac](https://autofac.org/)）集成,以实现属性注入.例：
 
 ````C#
 public class MyService : ITransientDependency
@@ -207,24 +207,24 @@ public class MyService : ITransientDependency
 
     public void DoSomething()
     {
-        //...use Logger to write logs...
+        //...使用 Logger 写日志...
     }
 }
 ````
 
-For a property-injection dependency, you declare a public property with public setter. This allows the DI framework to set it after creating your class.
+对于属性注入依赖项,使用公开的setter声明公共属性.这允许DI框架在创建类之后设置它.
 
-Property injected dependencies are generally considered as **optional** dependencies. That means the service can properly work without them. ``Logger`` is such a dependency, ``MyService`` can continue to work without logging.
+属性注入依赖项通常被视为可选依赖项.这意味着没有它们,服务也可以正常工作.``Logger``就是这样的依赖项,``MyService``可以继续工作而无需日志记录.
 
-To make the dependency properly optional, we generally set a default/fallback value to the dependency. In this sample, NullLogger is used as fallback. Thus, ``MyService`` can work but does not write logs if DI framework or you don't set Logger property after creating ``MyService``.
+为了使依赖项成为可选的,我们通常会为依赖项设置默认/后备(fallback)值.在此示例中,NullLogger用作后备.因此,如果DI框架或你在创建``MyService``后未设置Logger属性,则``MyService``依然可以工作但不写日志.
 
-One restriction of property injection is that you cannot use the dependency in your constructor, since it's set after the object construction.
+属性注入的一个限制是你不能在构造函数中使用依赖项,因为它是在对象构造之后设置的.
 
-Property injection is also useful when you want to design a base class that has some common services injected by default. If you're going to use constructor injection, all derived classes should also inject depended services into their own constructors which makes development harder. However, be very careful using property injection for non-optional services as it makes it harder to clearly see the requirements of a class.
+当你想要设计一个默认注入了一些公共服务的基类时,属性注入也很有用.如果你打算使用构造方法注入,那么所有派生类也应该将依赖的服务注入到它们自己的构造方法中,这使得开发更加困难.但是,对于非可选服务使用属性注入要非常小心,因为它使得类的要求难以清楚地看到.
 
-#### Resolve Service from IServiceProvider
+#### 从IServiceProvider解析服务
 
-You may want to resolve a service directly from ``IServiceProvider``. In that case, you can inject IServiceProvider into your class and use ``GetService`` method as shown below:
+你可能希望直接从``IServiceProvider``解析服务.在这种情况下,你可以将``IServiceProvider``注入到你的类并使用``GetService``方法,如下所示：
 
 ````C#
 public class MyService : ITransientDependency
@@ -244,17 +244,17 @@ public class MyService : ITransientDependency
 }
 ````
 
-#### Releasing/Disposing Services
+#### 释放/处理（Releasing/Disposing）服务
 
-If you used a constructor or property injection, you don't need to be concerned about releasing the service's resources. However, if you have resolved a service from ``IServiceProvider``, you might, in some cases, need to take care about releasing the service resources.
+如果你使用了构造函数或属性注入,则无需担心释放服务的资源.但是,如果你从``IServiceProvider``解析了服务,在某些情况下,你可能需要注意释放服务.
 
-ASP.NET Core releases all services at the end of a current HTTP request, even if you directly resolved from ``IServiceProvider`` (assuming you injected IServiceProvider). But, there are several cases where you may want to release/dispose manually resolved services:
+ASP.NET Core会在当前HTTP请求结束时释放所有服务,即使你直接从``IServiceProvider``解析了服务（假设你注入了IServiceProvider）.但是,在某些情况下,你可能希望释放/处理手动解析的服务：
 
-* Your code is executed outside of AspNet Core request and the executer hasn't handled the service scope.
-* You only have a reference to the root service provider.
-* You may want to immediately release & dispose services (for example, you may creating too many services with big memory usage and don't want to overuse memory).
+* 你的代码在AspNet Core请求之外执行,执行者没有处理服务范围.
+* 你只有对根服务提供者的引用.
+* 你可能希望立即释放和处理服务（例如,你可能会创建太多具有大量内存占用且不想过度使用内存的服务）.
 
-In any case, you can use such a 'using' code block to safely and immediately release services:
+在任何情况下,你都可以使用这样的`using`代码块来安全地立即释放服务：
 
 ````C#
 using (var scope = _serviceProvider.CreateScope())
@@ -264,8 +264,8 @@ using (var scope = _serviceProvider.CreateScope())
 }
 ````
 
-Both services are released when the created scope is disposed (at the end of the using block).
+两个服务在创建的scope被处理时（在using块的末尾）释放.
 
-### See Also
+### 请参阅
 
-* [ASP.NET Core Dependency Injection Best Practices, Tips & Tricks](https://medium.com/volosoft/asp-net-core-dependency-injection-best-practices-tips-tricks-c6e9c67f9d96)
+* [ASP.NET Core依赖注入最佳实践,提示和技巧](https://medium.com/volosoft/asp-net-core-dependency-injection-best-practices-tips-tricks-c6e9c67f9d96)
