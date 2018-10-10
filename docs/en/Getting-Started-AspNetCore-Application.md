@@ -1,6 +1,6 @@
 ﻿## Getting Started ABP With AspNet Core MVC Web Application
 
-This tutorial explains how to start ABP from scratch with minimal dependencies. You generally want to start with a ***[startup template](https://abp.io/Templates)***.
+This tutorial explains how to start ABP from scratch with minimal dependencies. You generally want to start with a **[startup template](https://abp.io/Templates)**.
 
 ### Create A New Project
 
@@ -154,4 +154,4 @@ services.AddApplication<AppModule>(options =>
 
 ### Source Code
 
-Get source code of the sample project created in this tutorial from [here](../samples/BasicAspNetCoreApplication).
+Get source code of the sample project created in this tutorial from [here](https://github.com/abpframework/abp/tree/master/samples/BasicAspNetCoreApplication).
