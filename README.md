@@ -10,7 +10,7 @@ This project is in **very early preview** stage and it's not suggested to use it
 
 ### Documentation
 
-See the <a href="docs\Index.md" target="_blank">documentation</a>.
+See the <a href="docs\en\Index.md" target="_blank">documentation</a>.
 
 ### How to Build
 
@@ -43,4 +43,4 @@ ABP is an open source platform.
 
 * Open a [new issue](https://github.com/volosoft/volo/issues/new) if you found a bug or if you have a new feature/enhancement idea.
 * Open a pull request if you want to make a development. Please create an issue before a development, so we can discuss it.
-* Contribute to the [documentation](docs/Index.md).
+* Contribute to the [documentation](docs/en/Index.md).
