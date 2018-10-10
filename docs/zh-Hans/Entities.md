@@ -1,12 +1,12 @@
-## Entities
+## 实体
 
-Entities are one of the core concepts of DDD (Domain Driven Design). Eric Evans describe it as "*An object that is not fundamentally defined by its attributes, but rather by a thread of continuity and identity*".
+实体是DDD(Domain Driven Design)中核心概念。Eric Evans是这样描述实体的 “一个没有从其属性，而是通过连续性和身份的线索来定义的对象”
 
-An entity is generally mapped to a table in a relational database.
+实体通常映射到关系数据库中的表中。
 
-### Entity Class
+### 实体类
 
-Entities are derived from `Entity<TKey>` class as shown below:
+实体都继承自`Entity<TKey>`类，如下所示：
 
 ```C#
 public class Person : Entity<int>
@@ -22,15 +22,15 @@ public class Person : Entity<int>
 }
 ```
 
-> If you do not want derive your entity from the base `Entity<TKey>` class, you can directly implement `IEntity<TKey>` interface.
+> 如果你不想继承基类`Entity<TKey>`，也可以直接实现`IEntity<TKey>`接口
 
-`Entity<TKey>` class just defines an `Id` property with the given primary **key type**, which is `int` in the sample above. It can be other types like `string`, `Guid`, `long` or whatever you need.
+`Entity<TKey>`类只是用给定的主 **键类型** 定义了一个`Id`属性，在上面的示例中是`int`类型。可以是其他类型如`string`, `Guid`, `long`或其他你需要的类型。
 
-Entity class also overrides the **equality** operator (==) to easily check if two entities are equal (they are equals if they are same entity type and their Ids are equals).
+实体类还重写了 **equality** 运算符（==），以方便地检查两个实体是否相等（如果它们是相同的类型并且它们的Id相等，则它们是相等的）。
 
-#### Entities with Composite Keys
+#### 具有复合键的实体
 
-Some entities may need to have **composite keys**. In that case, you can derive your entity from the non-generic `Entity` class. Example:
+有些实体可能需要 **复合键** 。在这种情况下，可以从非泛型`Entity`类派生实体。如：
 
 ````C#
 public class UserRole : Entity
@@ -53,32 +53,32 @@ public class UserRole : Entity
 }
 ````
 
-For the example above, the composite key is composed of `UserId` and `RoleId`. For a relational database, it is the composite primary key of the related table.
+上面的例子中，复合键由`UserId`和`RoleId`组成。在关系数据库中，它是相关表的复合主键。
 
-Entities with composite keys should implement the `GetKeys()` method as shown above.
+具有复合键的实体应当实现上面代码中所示的`GetKeys()`方法。
 
-Notice that you also need to define keys of the entity in your **object-to-relational mapping** (ORM) configuration.
+你还需要在 **object-to-relational mapping**（ORM）中配置实体的键。
 
-> Composite primary keys has a restriction with repositories. Since it has not known Id property, you can not use `IRepository<TEntity, TKey>` for these entities. However, you can always use `IRepository<TEntity>`. See repository documentation (TODO: link) for more.
+> 复合主键在仓储中有限制。由于不知道Id属性，所以对于这些实体，不能使用`IRepository<TEntity, TKey>`。但是，可以使用`IRepository<TEntity>`。更多信息请参见[仓储](Repositories.md)的文档。
 
-### AggregateRoot Class
+### 聚合根
 
-"*Aggregate is a pattern in Domain-Driven Design. A DDD aggregate is a cluster of domain objects that can be treated as a single unit. An example may be an order and its line-items, these will be separate objects, but it's useful to treat the order (together with its line items) as a single aggregate.*" (see the [full description](http://martinfowler.com/bliki/DDD_Aggregate.html))
+"*聚合是域驱动设计中的一种模式。DDD的聚合是一组可以作为一个单元处理的域对象。例如，订单及订单系列的商品，这些是独立的对象，但将订单（连同订单系列的商品）视为一个聚合通常是很有用的*"( [查看详细介绍](http://martinfowler.com/bliki/DDD_Aggregate.html))
 
-`AggregateRoot` class extends the `Entity` class. So, it also has an `Id` property by default.
+`AggregateRoot`类继承自`Entity`类，所以默认有`Id`这个属性
 
-> Notice that ABP creates default repositories only for aggregate roots by default. However, it's possible to include all entities. See repository documentation (TODO: link) for more. 
+> 值得注意的是 ABP 会默认为聚合根创建仓储，当然，ABP也可以为所有的实体创建仓储，详情参见[仓储](Repositories.md)。
 
-ABP does not force you to use aggregate roots, you can in fact use the `Entity` class as defined before. However, if you want to implement DDD and want to create aggregate root classes, there are some best practices you may want to consider:
+ABP不强制你使用聚合根，实际上你可以使用上面定义的`Entity`类，当然，如果你想实现DDD并且创建聚合根，这里有一些最佳实践仅供参考：
 
-* An aggregate root is responsible to preserve it's own integrity. This is also true for all entities, but aggregate root has responsibility for it's sub entities too. So, the aggregate root must always be in a valid state.
-* An aggregate root can be referenced by it's Id. Do not reference it by it's navigation property.
-* An aggregate root is treated as a single unit. It's retrieved and updated as a single unit. It's generally considered as a transaction boundary.
-* Work with sub-entities over the aggregate root- do not modify them independently.
+* 聚合根需要维护自身的完整性，所有的实体也是这样。但是聚合根也要维护子实体的完整性。所以，聚合根必须一直有效。
+* 使用Id引用聚合根，而不使用导航属性
+* 聚合根被视为一个单元。它是作为一个单元检索和更新的。它通常被认为是一个交易边界。
+* 不单独修改聚合根中的子实体
 
-#### Aggregate Example
+#### 聚合根例子
 
-This is a full sample of an aggregate root with a related sub-entity collection:
+这是一个具有子实体集合的聚合根例子：
 
 ````C#
 public class Order : AggregateRoot<Guid>
@@ -158,19 +158,19 @@ public class OrderLine : Entity
 }
 ````
 
-> If you do not want to derive your aggregate root from the base `AggregateRoot<TKey>` class, you can directly implement the `IAggregateRoot<TKey>` interface.
+> 如果你不想你的聚合根继承`AggregateRoot<TKey>`类，你可以直接实现`IAggregateRoot<TKey>`接口
 
-`Order` is an **aggregate root** with `Guid` type `Id` property. It has a collection of `OrderLine` entities. `OrderLine` is another entity with a composite primary key (`OrderLine`  and ` ProductId`).
+`Order`是一个具有`Guid`类型`Id`属性的 **聚合根**。它有一个`OrderLine`实体集合。`OrderLine`是一个具有组合键（`OrderLine`和 ` ProductId`）的实体。
 
-While this example may not implement all the best practices of an aggregate root, it still follows good practices:
+虽然这个示例可能无法实现聚合根的所有最佳实践，但它仍然遵循良好的实践：
 
-* `Order` has a public constructor that takes **minimal requirements** to construct an `Order` instance. So, it's not possible to create an order without an id and reference number. The **protected/private** constructor is only necessary to **deserialize** the object while reading from a data source.
-* `OrderLine` constructor is internal, so it is only allowed to be created by the domain layer. It's used inside of the `Order.AddProduct` method.
-* `Order.AddProduct` implements the business rule to add a product to an order.
-* All properties have `protected` setters. This is to prevent the entity from arbitrary changes from outside of the entity. For exmple, it would be dangerous to set `TotalItemCount` without adding a new product to the order. It's value is maintained by the `AddProduct` method.
+* `Order`有一个公共的构造函数，它需要 **minimal requirements** 来构造一个“订单”实例。因此，在没有`Id`和`referenceNo`的时候是无法创建订单的。**protected/private**的构造函数只有从数据库读取对象时 **反序列化** 才需要。
+* `OrderLine`的构造函数是internal的，所以它只能由领域层来创建。在`Order.AddProduct`这个方法的内部被使用。
+* `Order.AddProduct`实现了业务规则将商品添加到订单中
+* 所有属性都有`protected`的set。这是为了防止实体在实体外部任意改变。因此，在没有向订单中添加新产品的情况下设置 `TotalItemCount`将是危险的。它的值由`AddProduct`方法维护。
 
-ABP does not force you to apply any DDD rule or patterns. However, it tries to make it possible and easier when you do want to apply them. The documentation also follows the same principle.
+ABP不强制你应用任何DDD规则或模式。但是，当你准备应用的DDD规则或模式时候,ABP会让这变的可能而且更简单。文档同样遵循这个原则。
 
-#### Aggregate Roots with Composite Keys
+#### 带有组合键的聚合根
 
-While it's not common (and not suggested) for aggregate roots, it is in fact possible to define composite keys in the same way as defined for the mentioned entities above. Use non-generic `AggregateRoot` base class in that case.
+虽然这种聚合根并不常见（也不建议使用），但实际上可以按照与上面提到的跟实体相同的方式定义复合键。在这种情况下，要使用非泛型的`AggregateRoot`基类。
