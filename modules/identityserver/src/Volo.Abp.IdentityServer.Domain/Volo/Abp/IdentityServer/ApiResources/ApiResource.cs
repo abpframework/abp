@@ -72,5 +72,10 @@ namespace Volo.Abp.IdentityServer.ApiResources
         {
             UserClaims.Add(new ApiResourceClaim(Id, type));
         }
+
+        public virtual void RemoveAllUserClaims()
+        {
+            UserClaims.Clear();
+        }
     }
 }

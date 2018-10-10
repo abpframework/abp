@@ -54,7 +54,7 @@ namespace Volo.Abp.IdentityServer.IdentityResources
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<long> GetTotalBlogCount()
+        public virtual async Task<long> GetTotalCount()
         {
             return await DbSet.CountAsync();
         }

@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.IdentityServer.EntityFrameworkCore;
+using System.Linq.Dynamic.Core;
 
 namespace Volo.Abp.IdentityServer.ApiResources
 {
@@ -41,7 +42,16 @@ namespace Volo.Abp.IdentityServer.ApiResources
 
             return await query.ToListAsync(GetCancellationToken(cancellationToken));
         }
-        
+
+        public virtual async Task<List<ApiResource>> GetListAsync(string sorting, int skipCount, int maxResultCount, bool includeDetails = false,
+            CancellationToken cancellationToken = default)
+        {
+            return await DbSet
+                .IncludeDetails(includeDetails).OrderBy(sorting ?? "name desc")
+                .PageBy(skipCount, maxResultCount)
+                .ToListAsync(GetCancellationToken(cancellationToken));
+        }
+
         public virtual async Task<List<ApiResource>> GetListAsync(
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
@@ -49,6 +59,11 @@ namespace Volo.Abp.IdentityServer.ApiResources
             return await DbSet
                 .IncludeDetails(includeDetails)
                 .ToListAsync(GetCancellationToken(cancellationToken));
+        }
+
+        public virtual async Task<long> GetTotalCount()
+        {
+            return await DbSet.CountAsync();
         }
 
         public override IQueryable<ApiResource> WithDetails()

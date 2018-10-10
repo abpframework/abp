@@ -27,6 +27,6 @@ namespace Volo.Abp.IdentityServer.IdentityResources
             CancellationToken cancellationToken = default
         );
 
-        Task<long> GetTotalBlogCount();
+        Task<long> GetTotalCount();
     }
 }

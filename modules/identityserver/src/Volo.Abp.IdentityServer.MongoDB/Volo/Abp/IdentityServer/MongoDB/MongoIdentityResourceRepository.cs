@@ -36,7 +36,7 @@ namespace Volo.Abp.IdentityServer.MongoDB
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<long> GetTotalBlogCount()
+        public virtual async Task<long> GetTotalCount()
         {
             return await GetCountAsync();
         }
