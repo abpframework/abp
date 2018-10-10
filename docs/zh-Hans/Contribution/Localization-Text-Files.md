@@ -1,6 +1,6 @@
-## Localization Text Files
+## 本地化文本文件
 
-Here, a list of localization text files for anyone wants to contribute to localization of the texts coming from the framework. We will keep this list up to date:
+这是一个来自框架的本地化文本文件列表, 任何人都可以做出贡献. 我们会将此列表保持最新:
 
 * https://github.com/abpframework/abp/tree/master/framework/src/Volo.Abp.UI/Localization/Resources/AbpUi/en.json
 * https://github.com/abpframework/abp/tree/master/framework/src/Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy/Volo/Abp/AspNetCore/Mvc/UI/MultiTenancy/Localization/en.json
