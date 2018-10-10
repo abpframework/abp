@@ -61,7 +61,7 @@ public class BlogModule : AbpModule
 * 存储库（实现``IRepository``接口）注册为transient.
 * 域服务（实现``IDomainService``接口）注册为transient.
 
-Example:
+示例:
 
 ````C#
 public class BlogPostAppService : ApplicationService
@@ -79,7 +79,7 @@ public class BlogPostAppService : ApplicationService
 * ``ISingletonDependency`` 注册为singleton.
 * ``IScopedDependency`` 注册为scoped.
 
-Example:
+示例:
 
 ````C#
 public class TaxCalculator : ITransientDependency
