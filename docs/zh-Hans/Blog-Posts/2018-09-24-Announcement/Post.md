@@ -1,76 +1,97 @@
-### Introduction
-For a while, we were working to design a new major version of the ASP.NET Boilerplate framework. Now, it’s time to share it with the community. We are too excited and we believe that you are too.
+# ABP vNext介绍
 
-#### Naming
-The name of the framework remains same, except we will call it only as “ABP” instead of “ASP.NET Boilerplate”. Because, the “boilerplate” word leads to misunderstandings and does not reflect that it is a framework (instead of some boilerplate code). We continue to use the “ABP” name since it’s the successor of the current ASP.NET Boilerplate framework, except it’s a rewrite.
+## 介绍
 
-### How To Start
+过去的一段时间,我们正在设计一个新的主要版本的ASP.NET Boilerplate框架.现在,是时候与社区分享了.我们非常兴奋,相信你也是.
 
-We have created a startup template. You can just create a new project from https://abp.io/Templates and start your development. For more information, visit [abp.io](https://abp.io).
 
-### Why A Complete Rewrite?
-Why we spent our valuable time to rewrite it from scratch instead of incremental changes and improvements. Why?
+## 命名
 
-#### ASP.NET Core
-When we first introduced the ABP framework, it was 2013 (5 years ago)! There was no .Net Core & ASP.NET Core and there was no Angular2+. They were all developed from scratch after ABP’s release.
+框架的名称保持不变,除了我们将其仅称为“ABP”而不是“ASP.NET Boilerplate”.因为,“Boilerplate(样板)”会导致误解,并没反映出它是一个框架（而不是样板代码）.我们继续使用“ABP”名称,因为它是当前ASP.NET Boilerplate框架的继承者,除了它是完全重写的.
 
-ASP.NET Core introduced many built-in solutions (extension libraries) for dependency injection, logging, caching, localization, configuration and so on. These are actually independent from the ASP.NET Core and usable for any type of application.
 
-We were using 3rd-party libraries and our own solutions for these requirements. We immediately integrated to ASP.NET Core features once they were released. But that was an integration, instead of building the ABP framework on top of these extension libraries. For instance, current ASP.NET Boilerplate still depends on Castle Windsor for dependency injection even it’s integrated to ASP.NET Core’s DI system.
+## 如何开始
 
-We wanted to depend on these new extension libraries instead of 3rd-party and custom solutions and this changes fundamental structures of the framework.
+我们已经创建了一个启动模板.你可以从[abp.io/Templates](https://abp.io/Templates)创建一个新项目并开始开发.欲了解更多信息,请访问[abp.io](https://abp.io/).
 
-#### Self Modularization
-While current ABP is already modular itself and consists of dozens of packages, we still wanted to split the functionalities to more fine grained nuget packages.
 
-For example, the core Abp package contains many features like DDD classes, auditing, authorization, background jobs, event bus, json serialization, localization, multi-tenancy, threading, timing and so on… We wanted to split all these functionality into their own packages and make them optional.
+## 为什么要完全重写？
 
-#### Dropping Support for Legacy Technologies
-Yes, the new ABP framework will not support ASP.NET MVC 5.x, Entity Framework 6.x and other legacy technologies.
+为什么我们花了宝贵的时间从头开始重写它而不是增量更改和改进.为什么？
 
-These legacy technologies are maintained by Microsoft but no new feature is being added. So, if you are still using these technologies, you can continue with the current ASP.NET Boilerplate framework. We will continue to maintain it, fix bugs and will add new features.
+### ASP.NET Core
 
-Dropping support for these legacy libraries will improve our development speed (since we currently duplicate our work for some features) and concentrate on the .Net Core & ASP.NET Core.
+当我们第一次介绍ABP框架时,那是2013年（5年前）！那时候没有.Net Core和ASP.NET Core,也没有Angular2 +.ABP发布后,它们都是从头开发的.
 
-The new ABP framework will be based on .net standard. So, it’s still possible to use full .net framework or .net core with the new ABP framework.
+ASP.NET Core引入了许多内置解决方案（扩展库）,用于依赖注入,日志记录,缓存,本地化,配置等.它们实际上独立于ASP.NET Core,可用于任何类型的应用程序.
 
-### Goals
-We have learnt much from the community and had experience of developing the current ASP.NET Boilerplate framework. New ABP framework has significant and exciting goals.
+我们之前使用第三方库和我们自己的解决方案来满足这些要求.在它们发布后我们立即集成到ASP.NET Core功能中.但这是集成,而不是在这些扩展库之上构建ABP框架.例如,当前的ASP.NET Boilerplate依赖于Castle Windsor进行依赖注入,即使它已集成到ASP.NET Core的DI系统中.
 
-#### Application Modularity
-The first goal is to provide a good infrastructure to develop application modules. We think a module as a set of application features with its own database, its own entities, services, APIs, UI pages, components and so on.
+我们希望依赖这些新的扩展库而不是第三方和自定义解决方案,这会改变框架的基本结构.
 
-We will create a module market which will contain free & paid application modules. You will also be able to publish your own modules on the market. More information will be coming soon.
+### 自身模块化
 
-#### Microservices
-We are designing the new ABP framework to be ready to develop microservices and communicate them to each other.
+虽然目前的ABP本身已经是模块化的,并且包含许多包,但我们仍然希望将功能分解为更细粒度的nuget包.
 
-We are designing application modules so that they can be separately deployable as microservices or they can be embedded into a monolithic application.
+例如,核心Abp包包含许多功能,如DDD类,审计,授权,后台作业,事件总线,json序列化,本地化,多租户,线程,时间等......我们希望将所有这些功能拆分到各自的包中并使它们可选.
 
-We are creating a [specification / best practice documentation](https://github.com/abpframework/abp/blob/master/docs/Best-Practices/Index.md) for that.
+### 放弃对传统技术的支持
 
-#### Theming and UI Composition
-The new ABP framework will provide a theming infrastructure based on the latest Twitter Bootstrap 4.x. We developed a basic theme that only uses the plain Bootstrap 4.x styling. It’s free and open source. We are also developing premium & paid themes.
+是的,新的ABP框架将不支持ASP.NET MVC 5.x,Entity Framework 6.x和其他传统技术.
 
-UI Composition is one of the main goals. For this purpose, theme system will provide menus, toolbars and other extensible areas to allow other modules to contribute.
+这些传统技术会由Microsoft维护,但不会再添加任何新功能.因此,如果你仍在使用这些技术,则可以继续使用当前的ASP.NET Boilerplate框架.我们将继续维护它,修复错误并添加新功能.
 
-#### ORM/Database Independence & MongoDB Integration
-While current ASP.NET Boilerplate framework has implemented the repository pattern for ORM/Database independence, identity integration module (Abp.Zero* packages) has never worked well with ORMs other than EF.
+删除对这些传统库的支持将提高我们的开发速度（因为我们目前正在复制我们的某些功能的工作）并专注于.Net Core和ASP.NET Core.
 
-With the new ABP framework, the ultimate goal is completely abstract underlying data store system and develop modules EF Core independent.
+新的ABP框架将基于.net standard.因此,仍然可以在新的ABP框架中使用完整的.net framework或.net core.
 
-We embrace the MongoDB as a first-class citizen database and designing entities and repositories without any relational database or ORM assumption.
 
-#### More Extensibility
-New ABP framework provides more extensibility points and overriding capabilities for built-in services.
+## 目标
 
-### Some Features
-In this section, I will introduce some exciting new features of the new ABP framework.
+我们从社区学到了很多东西,并且有开发当前ASP.NET Boilerplate框架的经验.新的ABP框架有着重要而令人兴奋的目标.
 
-#### Bootstrap Tag Helpers
-We are creating a library to wrap twitter bootstrap 4.x elements/components into tag helpers. Example:
+### 应用程序模块化
 
-````C#
+第一个目标是提供良好的基础设施来开发应用程序模块.我们将模块视为一组应用程序功能,具有自己的数据库,自己的实体,服务,API,UI页面,组件等.
+
+我们将创建一个包含免费和付费应用程序模块的模块市场.你还可以在市场上发布自己的模块.更多信息即将推出.
+
+### 微服务
+
+我们正在设计新的ABP框架可方便的开发微服务并使它们相互通信.
+
+我们正在设计应用程序模块,以便它们可以作为微服务单独部署,或者可以嵌入到单个应用程序中.
+
+我们正在为此创建[规范/最佳实践文档](https://github.com/abpframework/abp/blob/master/docs/Best-Practices/Index.md)
+
+### 主题和UI组合
+
+新的ABP框架将基于最新的Twitter Bootstrap 4.x提供主题基础设施.我们开发了一个仅使用普通Bootstrap 4.x样式的基本主题.它是免费和开源的.我们还在开发高级和付费主题.
+
+UI组合是主要目标之一.为此,主题系统将提供菜单,工具栏和其他可扩展区域,以允许其他模块交互(contribute).
+
+### ORM / 数据库无关性和MongoDB集成
+
+虽然当前的ASP.NET Boilerplate框架已经实现了ORM /数据库无关的存储库(Repository)模式,但身份集成模块（以Abp.Zero*命名的包）与EF以外的ORM一直运行的不太好.
+
+使用新的ABP框架,最终目标是完全抽象的底层数据存储系统和开发与EF Core无关的模块.
+
+我们将MongoDB作为第一级别的数据库,并在没有任何关系数据库或ORM假设的情况下设计实体和存储库.
+
+### 更多可扩展性
+
+新的ABP框架为内置服务提供了更多的扩展点和覆盖的能力.
+
+
+## 一些功能
+
+在本节中,我将介绍新ABP框架的一些令人兴奋的新功能.
+
+### Bootstrap Tag Helpers
+
+我们正在创建一个库将twitter bootstrap 4.x元素/组件包装到tag helper中.例:
+
+~~~ html
 <abp-card>
     <img abp-card-image="Top" src="~/images/my-dog.png" />
     <abp-card-body>
@@ -85,90 +106,104 @@ We are creating a library to wrap twitter bootstrap 4.x elements/components into
         <a abp-button="Primary" href="#">Go somewhere &rarr;</a>
     </abp-card-body>
 </abp-card>
-````
+~~~
 
-"abp-*" tags are ABP tag helpers to simplify writing HTML for Bootstrap 4.x.
+“abp-*”标签是ABP tag helper,用于简化为Bootstrap 4.x编写HTML.
 
-#### Dynamic Forms
-Dynamic forms tag helper allows you to dynamically create forms for given model classes. Example:
+### 动态表单
 
-````C#
+动态表单tag helper允许你为给定的模型类动态地创建表单.例：
+
+~~~ html
 <abp-dynamic-form abp-model="@Model.PersonInput" submit-button="true" />
-````
+~~~
 
-Output:
+输出:
 
 ![dynamic-forms](dynamic-forms.png)
 
-It currently supports most used input types and more in the development.
+目前支持最常用的输入类型. 更多类型正在开发中.
 
-#### Virtual File System
-Virtual File System allows you to embed views, pages, components, javascript, css, json and other type of files into your module assembly/package (dll) and use your assembly in any application. Your virtual files behave just like physical files in the containing application with complete ASP.NET Core Integration.
+### 虚拟文件系统
 
-Read more [about the Virtual File System](https://medium.com/volosoft/designing-modularity-on-asp-net-core-virtual-file-system-2dd2cc2078bd) and see [its documentation](https://github.com/abpframework/abp/blob/master/docs/Virtual-File-System.md).
+虚拟文件系统允许你将视图,页面,组件,javascript,css,json和其他类型的文件嵌入到模块程序集/包（dll）中,并在任何应用程序中使用.在应用程序中你的虚拟文件就像物理文件一样, 完全的集成在ASP.NET Core中.
 
-#### Dynamic Bundling & Minification System
-Dynamic bundling & minification system works on the virtual file system and allows modules to create, modify and contribute to bundles in a modular, dynamic and powerful way. An example:
+更多信息请参阅[关于虚拟文件系统](https://medium.com/volosoft/designing-modularity-on-asp-net-core-virtual-file-system-2dd2cc2078bd)和[相关文档](https://github.com/abpframework/abp/blob/master/docs/Virtual-File-System.md).
 
-````C#
+### 动态捆绑和压缩系统
+
+动态捆绑和压缩系统运行在虚拟文件系统上,并且允许模块以模块化,动态和强大的方式创建,修改和交互捆绑包.一个例子：
+
+~~~ html
 <abp-style-bundle>
     <abp-style type="@typeof(BootstrapStyleContributor)" />
     <abp-style src="/libs/font-awesome/css/font-awesome.css" />
     <abp-style src="/libs/toastr/toastr.css" />
 </abp-style-bundle>
-````
+~~~
 
-This code creates a new style bundle on the fly by including bootstrap (and its dependencies if there are) and two more css files. These files are bundled & minified on production environment, but will be added individually on the development environment.
+这段代码通过包含bootstrap（及其依赖项,如果有）和另外两个css文件来动态创建一个新的样式包.这些文件在生产环境中捆绑和压缩,但将在开发环境中单独添加.
 
-See [the documentation](https://github.com/abpframework/abp/blob/master/docs/AspNetCore/Bundling-Minification.md) for more.
+有关更多信息,请参阅[文档](https://github.com/abpframework/abp/blob/master/docs/AspNetCore/Bundling-Minification.md)
 
-#### Distributed Event Bus
-In current ABP, there is an IEventBus service to trigger and handle events inside the application. In addition to this local event bus, we are creating a distributed event bus abstraction (and RabbitMQ integration) to implement distributed messaging patterns.
+### 分布式事件总线(Distributed Event Bus)
 
-#### Dynamic C# HTTP Client Proxies
-ABP was already creating dynamic javascript proxies for all HTTP APIs. This feature does also exists in the new ABP framework. In addition, it now can create dynamic C# proxies for all HTTP APIs.
+在当前的ABP中,有一个IEventBus服务来触发和处理应用程序内的事件.除了这个本地事件总线,我们还创建了一个分布式事件总线抽象（和RabbitMQ集成）来实现分布式消息传递模式.
 
-### Future Works
-All the stuffs mentioned above are already in development. However, we haven’t started some concepts yet.
+### 动态C# HTTP客户端代理
 
-#### Single Page Applications
-We designed the new framework SPAs in mind. However, we haven’t tried it with any SPA framework and we haven’t prepared a startup template for it yet.
+ABP已经为所有HTTP API创建动态JavaScript代理.该功能也存在于新的ABP框架中.此外,它现在可以为所有HTTP API创建动态C＃代理.
 
-### What About ASP.NET Boilerplate (Current Version) and ASP.NET Zero?
 
-We have dedicated development & support teams actively working on the [ASP.NET Boilerplate](https://aspnetboilerplate.com/) and [ASP.NET Zero](https://aspnetzero.com/) projects. These projects have a big community and we are also getting contributions from the community.
 
-We will continue to make enhancements, add new features and fix bugs for these projects for a long time. So, you can safely continue to use them.
+## 未来的工作
 
-### Is New ABP Production Ready?
-No, not yet. Our first goal is to make fundamental features stable then incrementally complete other features.
+上面提到的所有东西都已经开发出来了.但是,我们还有一些想法尚未着手.
 
-We will frequently release new versions and every new version will probably have breaking changes. We will write breaking changes on the release notes.
+### 单页应用程序（Single Page Applications）
 
-We currently define it experimental. But we hope that this will not continue for a long time. We can not declare a date yet, follow our releases.
+我们在设计新框架时考虑到了SPA这一点.但是,我们还没有尝试过任何SPA框架,我们还没有为它准备一个启动模板.
 
-### Packages & Versioning
-New ABP framework will start with v1.0 instead of following current ASP.NET Boilerplate's version to reflect the fact that it’s a rewrite.
+## ASP.NET Boilerplate（当前版本）和ASP.NET Zero会如何？
 
-We will frequently [release](https://github.com/abpframework/abp/releases) it. You can expect many breaking changes until v1.0. Starting with the v1.0, we will pay attention to not introduce breaking changes in 1.x releases.
+我们有专门的开发和支持团队积极致力于ASP.NET Boilerplate和ASP.NET Zero项目.这些项目有一个很大的社区,我们也从社区中获得了贡献.
 
-Current ABP’s package names start with [Abp](https://www.nuget.org/packages/Abp) prefix (like Abp.EntityFrameworkCore). New package names start with [Volo.Abp](https://www.nuget.org/packages/Volo.Abp.Core) prefix (like Volo.Abp.EntityFrameworkCore).
+我们将在很长一段时间内继续为这些项目进行改进,添加新功能和修复错误.因此,你可以安全地继续使用它们.
 
-### Which One Should I Start With?
-If you are creating a new project, we suggest to continue with the current ASP.NET Boilerplate framework since it’s very mature, feature rich and production ready.
+## 新的ABP可用在生产环境吗？
 
-If you are open to breaking changes and want to have experience on the new framework, you can start with the new ABP. We don’t suggest it yet for projects with close deadlines and go to the production in a short term.
+还没有.我们的第一个目标是使基本功能稳定,然后逐步完成其他功能.
 
-### Contribution
-Just like the current ABP framework, the new framework is available for your contribution.
+我们会经常发布新版本,每个新版本都可能会有重大变化.我们将在发行说明中写下重大更改.
 
-* You can send pull requests for code or documentation.
-* You can write blog posts or tutorials about it.
-* You can try it and share your experiences.
-* You can create enhancement and feature requests.
-* You can report bugs and other issues.
+我们目前将其定义为实验性质.但我们希望这不会持续很长时间.我们无法确定一个准确的日期,请关注我们的发布.
 
-### Communication / Links
-* **Official web site**: [abp.io](https://abp.io)
-* **Github**: [github.com/abpframework](https://github.com/abpframework)
-* **Twitter**: [@abpframework](https://twitter.com/abpframework)
+## 包和版本控制
+
+新的ABP框架将从v1.0开始,而不是遵循当前的ASP.NET Boilerplate版本, 以反映它是一个重写的事实.
+
+我们会经常发布它.你可以期待许多重大变化,直到v1.0.从v1.0开始,我们将注意不要在1.x版本中引入重大更改.
+
+当前ABP的包名称以Abp前缀开头（如Abp.EntityFrameworkCore）.新的包名称以Volo.Abp前缀开头（如Volo.Abp.EntityFrameworkCore）.
+
+## 我应该用哪一个？
+
+如果你正在创建一个新项目,我们建议你继续使用当前的ASP.NET Boilerplate框架,因为它非常成熟,功能丰富且可用于生产环境.
+
+如果你愿意接受重大变化并希望体验新框架,那么你可以从新的ABP开始.我们不建议在临近截止日期和在短期内上线的项目上使用它.
+
+## 贡献
+
+就像当前的ABP框架一样,你可为新框架做出贡献.
+
+* 你可以发送代码或文档的拉取请求.
+* 你可以撰写关于它的博客文章或教程.
+* 你可以尝试并分享你的经验.
+* 你可以提出改进和功能请求.
+* 你可以报告错误和其他问题.
+
+## 联系/链接
+
+* 官方网站：[abp.io](https://abp.io/)
+* Github：[github.com/abpframework](https://github.com/abpframework)
+* Twitter：[@abpframework](https://twitter.com/abpframework)
