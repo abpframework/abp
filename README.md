@@ -4,13 +4,15 @@
 
 This project is the next generation of the [ASP.NET Boilerplate](https://aspnetboilerplate.com/) web application framework. See [the announcement](https://abp.io/blog/abp/Abp-vNext-Announcement).
 
+See the official [web site (abp.io)](https://abp.io/) for more information.
+
 ### Status
 
 This project is in **very early preview** stage and it's not suggested to use it in a real project. 
 
 ### Documentation
 
-See the <a href="docs\en\Index.md" target="_blank">documentation</a>.
+See the <a href="https://abp.io/documents/" target="_blank">documentation</a>.
 
 ### How to Build
 
@@ -39,8 +41,4 @@ Framework solution is located under the `framework` folder. It has no external d
 
 ### Contribution
 
-ABP is an open source platform.
-
-* Open a [new issue](https://github.com/volosoft/volo/issues/new) if you found a bug or if you have a new feature/enhancement idea.
-* Open a pull request if you want to make a development. Please create an issue before a development, so we can discuss it.
-* Contribute to the [documentation](docs/en/Index.md).
+ABP is an open source platform. Check [the contribution guide](docs/en/Contribution/Index.md) if you want to contribute to the project.
