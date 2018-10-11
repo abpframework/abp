@@ -82,6 +82,13 @@ namespace Volo.Abp.IdentityServer.ApiResources
                 DbContext.Set<ApiScope>().Remove(scope);
             }
 
+            var secrets = DbContext.Set<ApiSecret>().Where(s => s.ApiResourceId == entity.Id);
+
+            foreach (var secret in secrets)
+            {
+                DbContext.Set<ApiSecret>().Remove(secret);
+            }
+
             return await base.UpdateAsync(entity, autoSave, cancellationToken);
         }
 

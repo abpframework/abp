@@ -79,6 +79,11 @@ namespace Volo.Abp.IdentityServer.ApiResources
             UserClaims.Clear();
         }
 
+        public virtual void RemoveAllSecrets()
+        {
+            Secrets.Clear();
+        }
+
         public virtual void RemoveAllScopes()
         {
             foreach (var scope in Scopes)
