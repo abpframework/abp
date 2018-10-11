@@ -121,4 +121,4 @@ While it's enough for this simple code example, it's always suggested to create 
 
 ### Source Code
 
-Get source code of the sample project created in this tutorial from [here](../samples/BasicConsoleApplication).
+Get source code of the sample project created in this tutorial from [here](https://github.com/abpframework/abp/tree/master/samples/BasicConsoleApplication.
