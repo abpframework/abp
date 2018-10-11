@@ -6,7 +6,7 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceCollectionConfigurationExtensions
     {
-        public static IServiceCollection AddConfiguration(this IServiceCollection services, IConfigurationRoot configurationRoot)
+        public static IServiceCollection SetConfiguration(this IServiceCollection services, IConfigurationRoot configurationRoot)
         {
             return services.Replace(ServiceDescriptor.Singleton<IConfigurationAccessor>(new DefaultConfigurationAccessor(configurationRoot)));
         }
