@@ -50,7 +50,7 @@ namespace MyCompany.MyProject
 
 ### 将DbContext注册到依赖注入
 
-在module中的ConfigureServices方法使用 `AddAbpDbContext` 在[依赖注入](Dependency-Injection.cn.md)系统注册DbContext类.
+在module中的ConfigureServices方法使用 `AddAbpDbContext` 在[依赖注入](Dependency-Injection.md)系统注册DbContext类.
 
 ````C#
 using Microsoft.Extensions.DependencyInjection;

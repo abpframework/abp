@@ -1,6 +1,6 @@
 ## 本地化
 
-ABP的本地化系统与`Microsoft.Extensions.Localization`无缝集成,并与[AspnetCore的本地化文档](https://docs.microsoft.com/zh-cn/aspnet/core/fundamentals/localization?view=aspnetcore-2.1)兼容. 它添加了一些实用功能和增强功能，使其更易于在实际开发中应用.
+ABP的本地化系统与`Microsoft.Extensions.Localization`无缝集成,并与[AspnetCore的本地化文档](https://docs.microsoft.com/zh-cn/aspnet/core/fundamentals/localization?view=aspnetcore-2.1)兼容. 它添加了一些实用功能和增强功能, 使其更易于在实际开发中应用.
 
 ### Volo.Abp.Localization Package
 
@@ -65,7 +65,7 @@ public class MyModule : AbpModule
 
 * 添加了一个新的本地化资源, 使用"en"（英语）作为默认的本地化.
 * 用JSON文件存储本地化字符串.
-* 使用[虚拟文件系统](Virtual-File-System.cn.md) 将JSON文件嵌入到程序集中.
+* 使用[虚拟文件系统](Virtual-File-System.md) 将JSON文件嵌入到程序集中.
 
 JSON文件位于 "/Localization/Resources/Test" 项目文件夹下, 如下图所示:
 
@@ -172,7 +172,7 @@ public class MyService
 <h1>@Localizer["HelloWorld"]</h1>
 ````
 
-有关在服务器端使用本地化的详细使用方法，请参阅[AspNetCore的本地化文档](https://docs.microsoft.com/zh-cn/aspnet/core/fundamentals/localization)
+有关在服务器端使用本地化的详细使用方法, 请参阅[AspNetCore的本地化文档](https://docs.microsoft.com/zh-cn/aspnet/core/fundamentals/localization)
 
 ##### 客户端
 
