@@ -56,6 +56,11 @@ namespace Volo.Abp.IdentityServer.ApiResources
             UserClaims.Add(new ApiScopeClaim(ApiResourceId, Name, type));
         }
 
+        public virtual void RemoveAllUserClaims()
+        {
+            UserClaims.Clear();
+        }
+
         public override object[] GetKeys()
         {
             return new object[] { ApiResourceId, Name };

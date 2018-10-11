@@ -63,7 +63,8 @@ namespace Volo.Abp.IdentityServer.ApiResources
             string description = null,
             bool required = false,
             bool emphasize = false,
-            bool showInDiscoveryDocument = true)
+            bool showInDiscoveryDocument = true,
+            ApiScopeClaim[] userClaims = null)
         {
             Scopes.Add(new ApiScope(Id, name, displayName, description, required, emphasize, showInDiscoveryDocument));
         }
@@ -76,6 +77,15 @@ namespace Volo.Abp.IdentityServer.ApiResources
         public virtual void RemoveAllUserClaims()
         {
             UserClaims.Clear();
+        }
+
+        public virtual void RemoveAllScopes()
+        {
+            foreach (var scope in Scopes)
+            {
+                scope.RemoveAllUserClaims();
+            }
+            Scopes.Clear();
         }
     }
 }
