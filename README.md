@@ -34,7 +34,7 @@ Framework solution is located under the `framework` folder. It has no external d
 
 - Disable "*Automatically check for missing packages during build in Visual Studio*" in the Visual Studio options.
 
-![disable-package-restore-visual-studio](docs/images/disable-package-restore-visual-studio.png)
+![disable-package-restore-visual-studio](docs/en/images/disable-package-restore-visual-studio.png)
 
 - When you open a solution, first run `dotnet restore` in the root folder of the solution.
 - When you change a dependency of a project (or any of the dependencies of your projects change their dependencies), run `dotnet restore` again.
