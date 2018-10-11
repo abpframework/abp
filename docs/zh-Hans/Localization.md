@@ -1,18 +1,18 @@
-## Localization
+## 本地化
 
-ABP's localization system is seamlessly integrated to the `Microsoft.Extensions.Localization` package and compatible with the [Microsoft's localization documentation](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/localization). It adds some useful features and enhancements to make it easier to use in real life application scenarios.
+ABP的本地化系统与`Microsoft.Extensions.Localization`无缝集成,并与[AspnetCore的本地化文档](https://docs.microsoft.com/zh-cn/aspnet/core/fundamentals/localization?view=aspnetcore-2.1)兼容. 它添加了一些实用功能和增强功能, 使其更易于在实际开发中应用.
 
 ### Volo.Abp.Localization Package
 
-> This package is already installed by default with the startup template. So, most of the time, you don't need to install it manually.
+> 启动模板默认已经安装了此nuget包, 所以在大多数情况下, 你不需要手动安装它.
 
-Volo.Abp.Localization is the core package of the localization system. Install it to your project using the package manager console (PMC):
+Volo.Abp.Localization是本地化系统的核心包. 使用程序包管理器控制台 (PMC) 将其安装到项目中:
 
 ```
 Install-Package Volo.Abp.Localization
 ```
 
-Then you can add **AbpLocalizationModule** dependency to your module:
+然后,您可以将 **AbpLocalizationModule** 依赖项添加到您的模块:
 
 ```c#
 using Volo.Abp.Modularity;
@@ -28,9 +28,9 @@ namespace MyCompany.MyProject
 }
 ```
 
-#### Creating A Localization Resource
+#### 创建本地化资源
 
-A localization resource is used to group related localization strings together and separate them from other localization strings of the application. A module generally defines its own localization resource. Localization resource is just a plain class. Example:
+本地化资源用于将相关的本地化字符串组合在一起,并将它们与应用程序的其他本地化字符串分开.通常一个模块会定义自己的本地化资源. 本地化资源就是一个普通的类. 例如:
 
 ````C#
 public class TestResource
@@ -38,7 +38,7 @@ public class TestResource
 }
 ````
 
-Then it should be added using `AbpLocalizationOptions` as shown below:
+然后应该使用 `AbpLocalizationOptions` 添加如下所示:
 
 ````C#
 [DependsOn(typeof(AbpLocalizationModule))]
@@ -52,7 +52,7 @@ public class MyModule : AbpModule
         });
 
         context.Services.Configure<AbpLocalizationOptions>(options =>
-        {        
+        {
             options.Resources
                 .Add<TestResource>("en")
                 .AddVirtualJson("/Localization/Resources/Test");
@@ -61,17 +61,17 @@ public class MyModule : AbpModule
 }
 ````
 
-In this example;
+在这个例子中;
 
-* Added a new localization resource with "en" (English) as the default culture.
-* Used JSON files to store the localization strings.
-* JSON files are embedded into the assembly using the [virtual file system](Virtual-File-System.md).
+* 添加了一个新的本地化资源, 使用"en"（英语）作为默认的本地化.
+* 用JSON文件存储本地化字符串.
+* 使用[虚拟文件系统](Virtual-File-System.md) 将JSON文件嵌入到程序集中.
 
-JSON files are located under "/Localization/Resources/Test" project folder as shown below:
+JSON文件位于 "/Localization/Resources/Test" 项目文件夹下, 如下图所示:
 
 ![localization-resource-json-files](images/localization-resource-json-files.png)
 
-A JSON localization file content is shown below:
+本地化文件内容如下所示:
 
 ````json
 {
@@ -82,12 +82,12 @@ A JSON localization file content is shown below:
 }
 ````
 
-* Every localization file should define the `culture` code for the file (like "en" or "en-US").
-* `texts` section just contains key-value collection of the localization strings (keys may have spaces too).
+* 每个本地化文件都需要定义 `culture` (文化) 代码  (例如 "en" 或 "en-US").
+* `texts` 部分只包含本地化字符串的键值集合 (键也可能有空格).
 
-##### Short Localization Resource Name
+##### 简短的本地化资源名称
 
-Localization resources are also available in the client (JavaScript) side. So, setting a short name for the localization resource makes it easy to use localization texts. Example:
+本地化资源也可以在客户端(JavaScript)使用. 因此, 为本地化资源设置一个简短的名称可以更方便的本地化文本. 例如:
 
 ````C#
 [LocalizationResourceName("Test")]
@@ -96,11 +96,11 @@ public class TestResource
 }
 ````
 
-See the Getting Localized Test / Client Side section below.
+请参阅下面的获取本地化资源Test中客户端部分.
 
-##### Inherit From Other Resources
+##### 继承其他资源
 
-A resource can inherit from other resources which makes possible to re-use existing localization strings without referring the existing resource. Example:
+资源可以从其他资源继承,这使得可以在不引用现有资源的情况下重用现有的本地化字符串. 例如:
 
 ````C#
 [InheritResource(typeof(AbpValidationResource))]
@@ -109,7 +109,7 @@ public class TestResource
 }
 ````
 
-Alternative inheritance by configuring the `AbpLocalizationOptions`:
+也可以通过 `AbpLocalizationOptions` 配置:
 
 ````C#
 services.Configure<AbpLocalizationOptions>(options =>
@@ -121,12 +121,12 @@ services.Configure<AbpLocalizationOptions>(options =>
 });
 ````
 
-* A resource may inherit from multiple resources.
-* If the new resource defines the same localized string, it overrides the string.
+* 资源可以从多个资源继承.
+* 如果新的本地化资源定义了相同的本地化字符串, 那么它会覆盖该字符串
 
-##### Extending Existing Resource
+##### 扩展现有资源
 
-Inheriting from a resource creates a new resource without modifying the existing one. In some cases, you may want to not create a new resource but directly extend an existing resource. Example:
+继承资源可以创建新的资源, 无需修改现有的资源. 但是在某些情况下,  您可能不想创建新资源,而是直接扩展现有资源. 例如:
 
 ````C#
 services.Configure<AbpLocalizationOptions>(options =>
@@ -137,15 +137,15 @@ services.Configure<AbpLocalizationOptions>(options =>
 });
 ````
 
-* If an extension file defines the same localized string, it overrides the string.
+* 如果扩展文件定义了相同的本地化字符串, 那么它会覆盖该字符串.
 
-#### Getting Localized Texts
+#### 获取本地化文本
 
-##### Server Side
+##### 服务器端
 
-Getting the localized text on the server side is pretty standard.
+在服务端获取本地化文本的用法是非常标准的(它与AspNetCore提供的获取本地化资源方式无缝集成).
 
-###### Simplest Usage In A Class
+###### 在类中简单的用法
 
 ````C#
 public class MyService
@@ -164,7 +164,7 @@ public class MyService
 }
 ````
 
-###### Simplest Usage In A Razor View/Page
+###### 在Razor视图/Page中简单的用法
 
 ````c#
 @inject IHtmlLocalizer<TestResource> Localizer
@@ -172,19 +172,19 @@ public class MyService
 <h1>@Localizer["HelloWorld"]</h1>
 ````
 
-Refer to the [Microsoft's localization documentation](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/localization) for details about using localization on the server side.
+有关在服务器端使用本地化的详细使用方法, 请参阅[AspNetCore的本地化文档](https://docs.microsoft.com/zh-cn/aspnet/core/fundamentals/localization)
 
-##### Client Side
+##### 客户端
 
-ABP provides JavaScript services to use the same localized texts in the client side.
+ABP提供了JavaScript服务, 可以在客户端使用相同的本地化文本.
 
-Get a localization resource:
+获取本地化资源:
 
 ````js
 var testResource = abp.localization.getResource('Test');
 ````
 
-Localize a string:
+本地化字符串:
 
 ````js
 var str = testResource('HelloWorld');

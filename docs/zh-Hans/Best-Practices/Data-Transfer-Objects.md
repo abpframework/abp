@@ -1,7 +1,7 @@
-﻿## Data Transfer Objects Best Practices & Conventions
+﻿## 数据传输对象最佳实践&约定
 
-* **Do** define DTOs in the **application contracts** package.
-* **Do** inherit from the pre-built **base DTO classes** where possible and necessary (like `EntityDto<TKey>`, `CreationAuditedEntityDto<TKey>`, `AuditedEntityDto<TKey>`, `FullAuditedEntityDto<TKey>` and so on).
-* **Do** define DTO members with **public getter and setter**.
-* **Do** use **data annotations** for **validation** on the properties of DTOs those are inputs of the service.
-* **Do** not add any **logic** into DTOs except implementing `IValidatableObject` when necessary.
+* **推荐** 在 **application.contracts** 层中定义DTO.
+* **推荐** 在可能和必要的情况下从预构建的 **基础DTO类** 继承 (如 `EntityDto<TKey>`, `CreationAuditedEntityDto<TKey>`, `AuditedEntityDto<TKey>`, `FullAuditedEntityDto<TKey>` 等).
+* **推荐** 定义 **public getter 和 setter** 的DTO成员 .
+* **推荐** 使用 **data annotations** **验证** service输入DTO的属性.
+* **不推荐** 在DTO中添加任何 **逻辑**, 在必要的时候可以实现  `IValidatableObject` 接口.

@@ -1,12 +1,12 @@
-﻿## Module Development
+﻿## 模块开发
 
-### Introduction
+### 介绍
 
-ABP is itself a modular framework. It also provides an infrastructure and architectural model to develop your own modules.
+ABP本身是一个模块化框架.它还提供了一个基础架构和架构模型来开发你自己的模块.
 
-### Module Class
+### 模块类
 
-Every module should define a module class. The simplest way of defining a module class is to create a class derived from ``AbpModule`` as shown below:
+每个模块都应该定义一个模块类.定义模块类的最简单方法是创建一个派生自``AbpModule``的类,如下所示：
 
 ````C#
 public class BlogModule : AbpModule
@@ -16,11 +16,11 @@ public class BlogModule : AbpModule
 
 ````
 
-#### Configuring Dependency Injection & Other Modules
+#### 配置依赖注入和其他模块
 
-##### ConfigureServices Method
+##### ConfigureServices方法
 
-``ConfigureServices`` is the main method to add your services to the dependency injection system and configure other modules. Example:
+``ConfigureServices``是将你的服务添加到依赖注入系统并配置其他模块的主要方法.例：
 
 ````C#
 public class BlogModule : AbpModule
@@ -32,16 +32,16 @@ public class BlogModule : AbpModule
 }
 ````
 
-You can register dependencies one by one as stated in Microsoft's [documentation](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection). But ABP has a **conventional dependency registration system** which automatically register all services in your assembly. See the [dependency Injection](Dependency-Injection.md) documentation for more about the dependency injection system.
+你可以按照Microsoft的[文档](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection)中的说明逐个注册依赖项.但ABP有一个**依照约定的依赖注册系统**,可以自动注册程序集中的所有服务.有关依赖项注入系统的更多信息,请参阅[依赖项注入](Dependency-Injection.md)文档.
 
-You can also configure other services and modules in this way. Example:
+你也可以通过这种方式配置其他服务和模块.例：
 
 ````C#
 public class BlogModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        //Configure default connection string for the application
+        //为应用程序配置默认的连接字符串
         context.Services.Configure<DbConnectionOptions>(options =>
         {
             options.ConnectionStrings.Default = "......";
@@ -49,20 +49,19 @@ public class BlogModule : AbpModule
     }
 }
 ````
+有关配置系统的更多信息,请参阅配置（TODO：link）文档.
 
-See Configuration (TODO: link) document for more about the configuration system.
+##### 配置服务前和后
 
-##### Pre & Post Configure Services
+``AbpModule``类还定义了``PreConfigureServices``和``PostConfigureServices``方法用来在``ConfigureServices``之前或之后覆盖和编写你的代码.请注意,在这些方法中编写的代码将在所有其他模块的``ConfigureServices``方法之前/之后执行.
 
-``AbpModule`` class also defines ``PreConfigureServices`` and ``PostConfigureServices`` methods to override and write your code just before and just after ``ConfigureServices``. Notice that the code you have written into these methods will be executed before/after the ``ConfigureServices`` methods of all other modules.
+#### 应用程序初始化
 
-#### Application Initialization
+一旦配置了所有模块的所有服务,应用程序就会通过初始化所有模块来启动.在此阶段,你可以从``IServiceProvider``中获取服务,因为这时它已准备就绪且可用.
 
-Once all the services of all modules are configured, the application starts by initializing all modules. In this phase, you can resolve services from ``IServiceProvider`` since it's ready and available.
+##### OnApplicationInitialization方法
 
-##### OnApplicationInitialization Method
-
-You can override ``OnApplicationInitialization`` method to execute code while application is being started. Example:
+你可以在启动应用程序时覆盖``OnApplicationInitialization``方法来执行代码.例：
 
 ````C#
 public class BlogModule : AbpModule
@@ -77,7 +76,7 @@ public class BlogModule : AbpModule
 }
 ````
 
-``OnApplicationInitialization`` is generally used by the startup module to construct the middleware pipeline for ASP.NET Core applications. Example:
+``OnApplicationInitialization``通常由启动模块用于构建ASP.NET Core应用程序的中间件管道.例：
 
 ````C#
 [DependsOn(typeof(AbpAspNetCoreMvcModule))]
@@ -100,19 +99,19 @@ public class AppModule : AbpModule
 }
 ````
 
-You can also perform startup logic if your module requires it
+如果模块需要,你还可以执行启动逻辑
 
-##### Pre & Post Application Initialization
+##### 应用程序初始化前和后
 
-``AbpModule`` class also defines ``OnPreApplicationInitialization`` and ``OnPostApplicationInitialization`` methods to override and write your code just before and just after ``OnApplicationInitialization``. Notice that the code you have written into these methods will be executed before/after the ``OnApplicationInitialization`` methods of all other modules.
+``AbpModule``类还定义了``OnPreApplicationInitialization``和``OnPostApplicationInitialization``方法用来在``OnApplicationInitialization``之前或之后覆盖和编写你的代码.请注意,在这些方法中编写的代码将在所有其他模块的``OnApplicationInitialization``方法之前/之后执行.
 
-#### Application Shutdown
+#### 应用程序关闭
 
-Lastly, you can override ``OnApplicationShutdown`` method if you want to execute some code while application is beign shutdown.
+最后,如果要在应用程序关闭时执行某些代码,你可以覆盖``OnApplicationShutdown``方法.
 
-### Module Dependencies
+### 模块依赖
 
-In a modular application, it's not unusual for one module to depend upon another module(s). An Abp module must declare ``[DependsOn]`` attribute if it does have a dependcy upon another module, as shown below:
+在模块化应用程序中,一个模块依赖于另一个模块并不罕见.如果一个Abp模块依赖于另一个模块,它必须声明``[DependsOn]``属性,如下所示：
 
 ````C#
 [DependsOn(typeof(AbpAspNetCoreMvcModule))]
@@ -123,6 +122,6 @@ public class BlogModule
 }
 ````
 
-You can use multiple ``DependsOn`` attribute or pass multiple module types to a single ``DependsOn`` attribute depending on your preference.
+你可以根据需要使用多个``DependsOn``属性或将多个模块类型传递给单个``DependsOn``属性.
 
-A depended module may depend on another module, but you only need to define your direct dependencies. ABP investigates the dependency graph for the application at startup and initializes/shutdowns modules in the correct order.
+依赖模块可能依赖于另一个模块,但你只需要定义直接依赖项.ABP在启动时会调查应用程序的依赖关系,并以正确的顺序初始化/关闭模块.
