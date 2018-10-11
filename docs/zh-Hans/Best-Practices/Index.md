@@ -1,27 +1,26 @@
-﻿## Module Development Best Practices & Conventions
+﻿## 模块开发最佳实践 & 约定
 
-### Introduction
+### 介绍
 
-This document describes the **best practices** and **conventions** for those who want to develop **modules** that satisfy the following specifications:
+这篇文档描述了想要满足以下规范的**模块**的**最佳实践**与**约定**:
 
-* Develop modules that conform to the **Domain Driven Design** patterns & best practices.
-* Develop modules with **DBMS and ORM independence**.
-* Develop modules that can be used as a **remote service / microservice** as well as being compatible with a **monolithic** application.
+* 开发应用**领域驱动设计**模式的最佳实践的模块.
+* 开发 **DBMS 与 ORM 独立** 的模块.
+* 开发可用作 **远程服务 / 微服务** 的模块, 并可以集成到 **单体** 应用程序中.
 
-Also, this guide is mostly usable for general **application development**.
+本指南主要用于 **应用程序** 开发.
 
-### Guides
+### 指南
 
-* Overall
-  * [Module Architecture](Module-Architecture.md)
-* Domain Layer
-  * [Entities](Entities.md)
-  * [Repositories](Repositories.md)
-  * [Domain Services](Domain-Services.md)
-* Application Layer
-  * [Application Services](Application-Services.md)
-  * [Data Transfer Objects](Data-Transfer-Objects.md)
-* Data Access
-  * [Entity Framework Core Integration](Entity-Framework-Core-Integration.md)
-  * [MongoDB Integration](MongoDB-Integration.md)
-
+* 总体
+  * [模块架构](Module-Architecture.md)
+* 领域层
+  * [实体](Entities.md)
+  * [仓储](Repositories.md)
+  * [领域服务](Domain-Services.md)
+* 应用程序层
+  * [应用程序服务](Application-Services.md)
+  * [数据传输对象](Data-Transfer-Objects.md)
+* 数据访问
+  * [Entity Framework Core 集成](Entity-Framework-Core-Integration.md)
+  * [MongoDB 集成](MongoDB-Integration.md)
