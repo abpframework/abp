@@ -88,7 +88,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 b.HasKey(l => new { l.UserId, l.LoginProvider, l.Name });
 
                 b.Property(ul => ul.LoginProvider).HasMaxLength(IdentityUserTokenConsts.MaxLoginProviderLength).IsRequired();
-                b.Property(ul => ul.LoginProvider).HasMaxLength(IdentityUserTokenConsts.MaxNameLength).IsRequired();
+                b.Property(ul => ul.Name).HasMaxLength(IdentityUserTokenConsts.MaxNameLength).IsRequired();
             });
 
             builder.Entity<IdentityRole>(b =>
