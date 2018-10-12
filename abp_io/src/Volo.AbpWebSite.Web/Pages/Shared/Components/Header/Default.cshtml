@@ -1,0 +1,53 @@
+﻿@using Volo.Abp.Users
+@inject ICurrentUser CurrentUser
+<header class="product-header">
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#product-nav" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand" href="/"><img src="/assets/abp-logo-light.svg" class="home-logo"></a>
+
+            <div class="collapse navbar-collapse" id="product-nav">
+                <ul class="navbar-nav mr-auto ml-auto mt-2 mt-lg-0">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Templates">Download</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/documents">Documents</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/blog/abp/">Blog</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://github.com/abpframework/abp/" target="_blank">Github</a>
+                    </li>
+                    <li class="for-mobile">
+                        <button type="button" class="close close-mmenu" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="form-inline my-2 my-lg-0">
+                @if (CurrentUser.IsAuthenticated)
+                {
+                    <a class="btn btn-logout" href="/Account/Logout">Logout (@CurrentUser.UserName)</a>
+                }
+                else
+                {
+                    <a class="btn btn-login" href="/Account/Logout">Login</a>
+                }
+                <a class="btn my-2 my-sm-0 text-success" href="/Templates">
+                    <span class="for-desktop">Getting Started</span>
+                    <span class="for-mobile">Go</span>
+                    <i class="fa fa-long-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </nav>
+</header>

@@ -1,0 +1,209 @@
+body {
+    position: relative;
+    font-family: 'PT Sans', sans-serif; 
+    background: url(../assets/tools/bg.jpg) center center no-repeat;
+    background-attachment: fixed;
+}
+
+h1,h2,h3,h4,h5,h6 { 
+    font-family: 'PT Sans Caption',  sans-serif; 
+}
+h1 {
+    font-size: 2.25em;
+    margin: 1.5rem 0 .75rem;
+}
+h2 {
+    font-size: 1.75em;
+    margin: 1.5rem 0 .75rem;
+}
+h3 {
+    font-size: 1.5em;
+    margin: 1.5rem 0 .75rem;
+}
+h4 {
+    font-size: 1.25em;
+    margin: 1.5rem 0 .75rem;
+}
+h5 {
+    font-size: 1em;    
+    margin: 1.5rem 0 .75rem;
+}
+h6 {
+    font-size: 1em;
+    margin: 1.5rem 0 .75rem;
+}
+
+img {
+    max-width: 100%;
+}
+.navbar {
+    padding: 1.75rem 2rem;
+}
+
+.nav-link { 
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+}
+.navbar-dark .navbar-nav .nav-link {
+    color: rgba(255, 255, 255, 1);
+}
+
+.text-success {
+    color: #e90052!important;
+}
+a.text-success:hover, a.text-success:focus {
+    color: #e90052 !important; 
+}
+.bg-success,
+.btn-success,
+.badge-success {
+    background-color: #e90052!important;
+    border-color: #e90052!important;
+}
+.bg-success {
+    background-color: rgba(233, 0, 82, 0.8) !important; 
+}
+.bg-blue,
+.btn-blue,
+.badge-blue {
+    background-color: #03abed!important;
+    border-color: #03abed!important;
+    color: #fff;
+    &:hover {  
+        background-color: #0095d0 !important;
+        border-color: #0095d0!important;
+        color: #fff!important;
+    }
+}
+.btn:focus,.btn:active,.btn:visited, a:focus, a:active, a:visited {
+    outline: none !important;
+    box-shadow: none;
+ }
+.text-primary {
+    color: #38003c!important;
+}
+.bg-primary,
+.btn-primary,
+.badge-primary {
+    background-color: #38003c!important;
+    border-color: #38003c!important;
+}
+.bg-primary  {
+    background-color: rgba(56, 0, 60, 0.9) !important; 
+}
+.btn-outline-primary { 
+    color: #38003c!important;
+    border-color: #38003c!important;
+    &:hover { 
+        background-color: #38003c!important;
+        color: #fff!important;
+    }
+}
+.dropdown-menu {
+    padding: 1rem 0;
+    border-radius: .15rem;
+    border: none;
+    box-shadow: 5px 5px 40px rgba(0, 0, 0, 0.3);
+    .dropdown-item {
+        padding: .75rem 1.5rem;
+    }
+}
+
+#index-video {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    min-width: 100%;
+    min-height: 100%;
+    z-index: -1;
+}
+ 
+
+.bg-gradient-horizontal { 
+    background: #ffffff; /* Old browsers */ 
+}
+ @media (min-width: 480px) {
+    .bg-gradient-horizontal { 
+        background: #ffffff; /* Old browsers */
+        background: -moz-linear-gradient(left, #ffffff 50%, #f2f2f2 50%); /* FF3.6-15 */
+        background: -webkit-linear-gradient(left, #ffffff 50%,#f2f2f2 50%); /* Chrome10-25,Safari5.1-6 */
+        background: linear-gradient(to right, #ffffff 50%,#f2f2f2 50%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f2f2f2',GradientType=1 ); /* IE6-9 */
+    }
+}
+
+.bg-transparency {
+    background: rgba(255, 255, 255, 0.9); 
+}
+.bg-light {
+    background: #eee;
+}
+
+ 
+.for-mobile {
+    display: none;
+}
+.for-desktop {
+    display: inline-block;
+}
+.breadcrumb {
+    background: none;
+    font-size: .85em;
+    border-radius: 0;
+    border-bottom: 1px solid #f5f5f5;
+    margin: 0 -15px;
+    padding: .5rem 0;
+    text-align: center;
+    display: block;
+    .breadcrumb-item+.breadcrumb-item { 
+        padding-left: 0.2rem;
+        &::before {
+            display: inline-block;
+            padding-right: 0.4rem;
+            color: #eee;
+            content: "|";
+        }
+    } 
+    .breadcrumb-item {
+        color: #eee;
+        display: inline-block;
+        a {
+            color: #aaa;
+        }
+    }
+}
+
+.close { 
+    font-weight: 300; 
+}
+
+hr {
+    margin-top: 2rem;
+    margin-bottom: 2.5rem; 
+    border-top: 1px solid rgba(0,0,0,.05);
+}
+
+span.with-br-name {
+    font-size: .75em;
+}
+span.br-name {
+    display: block;
+    font-size: 1.25em;
+}
+span.br-name-1 {
+    display: block;
+    font-size: 1em;
+}
+.btn-fifty {
+    display: flex;
+    .btn { 
+        -ms-flex: 0 0 50%;
+        flex: 0 0 50%;
+        max-width: 50%;        
+    }
+}
+
+
+.p-responsive {
+    padding: 120px 0;
+}

@@ -1,0 +1,79 @@
+﻿@page
+@using Volo.AbpWebSite
+@model Volo.AbpWebSite.Pages.TemplatesModel
+@{
+    ViewBag.PageTitle = "Get Started";
+}
+@section scripts {
+    <abp-script src="/Pages/templates.js" />
+}
+<div class="row">
+    <div class="col-md-8 mx-auto">
+
+        @using (Html.BeginForm(FormMethod.Post))
+        {
+            <div class="row border">
+                <div class="col p-5 ">
+                    <h2>
+                        <span class="text-primary">Create</span>
+                        <span class="text-success">New Project</span>
+
+                    </h2>
+
+                    <p>This wizard creates a new project from the startup template which is properly configured to jump start to your project.</p>
+
+                    <div class="form-group">
+                        <label for="CompanyAndProjectName">Project Name (as <i>YourProjectName</i> or <i>YourCompanyName.YourProjectName</i>):</label>
+                        <input class="form-control" name="CompanyAndProjectName" value="@Model.CompanyAndProjectName">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ProjectType">Project Type:</label>
+                        <select class="form-control" id="ProjectType" name="ProjectType">
+                            <option value="MvcApp">ASP.NET Core Mvc Application</option>
+                            <option value="MvcModule">ASP.NET Core Mvc Module</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="DatabaseProviderFormGroup">
+                        <label for="DatabaseProvider">Database Provider:</label>
+                        <select class="form-control" id="DatabaseProvider" name="DatabaseProvider">
+                            <option value="EntityFrameworkCore">Entity Framework Core</option>
+                            <option value="MongoDb">MongoDB</option>
+                        </select>
+                    </div>
+
+                    @if (DebugHelper.IsDebug)
+                    {
+                        <div class="form-group">
+                            <label for="DatabaseProvider">Version:</label>
+                            <select class="form-control" id="Version" name="Version">
+                                <option value="LatestStable">Latest stable</option>
+                                <option value="LatestUnstable">Latest (including previews)</option>
+                                <option value="Branch:master">Latest (master branch)</option>
+                            </select>
+                        </div>
+
+                        <abp-input asp-for="ReplaceLocalReferencesToNuget" />
+                    }
+
+                    <div class="form-group mt-4">
+                        <abp-button button-type="Success" size="Large" type="submit">Create Now <i class="fa fa-long-arrow-right"></i> </abp-button>
+                    </div>
+
+                </div>
+                <div class="col-md-5 bg-light p-5">
+                    <h4>The Startup Project</h4>
+                    <p>See <a href="/documents/abp/latest/Getting-Started-AspNetCore-MVC-Template" target="_blank">the documentation</a> to understand how to run the downloaded project.</p>
+
+                    <h4>Tutorial</h4>
+
+                    <p>See <a href="/documents/abp/latest/Tutorials/AspNetCore-Mvc/Part-I" target="_blank">the tutorial</a> to learn how to develop applications based on the ABP framework.</p>
+
+                </div>
+            </div>
+
+        }
+
+    </div>
+</div>

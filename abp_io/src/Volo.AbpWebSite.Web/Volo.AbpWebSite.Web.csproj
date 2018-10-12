@@ -1,0 +1,51 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <RootNamespace>Volo.AbpWebSite</RootNamespace>
+    <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+    <PreserveCompilationContext>true</PreserveCompilationContext>
+    <MvcRazorExcludeRefAssembliesFromPublish>false</MvcRazorExcludeRefAssembliesFromPublish>
+    <MvcRazorCompileOnPublish>true</MvcRazorCompileOnPublish>
+    <UserSecretsId>c140514f-e488-4c99-8b9a-fabee0f53ce0</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.1.1" />
+    <PackageReference Include="Serilog.Extensions.Logging" Version="2.0.2" />
+    <PackageReference Include="Serilog.Sinks.File" Version="4.0.0" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="4.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Volo.AbpWebSite.Application\Volo.AbpWebSite.Application.csproj" />
+    <ProjectReference Include="..\Volo.AbpWebSite.EntityFrameworkCore\Volo.AbpWebSite.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\..\..\..\..\abp\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.csproj" />
+    <ProjectReference Include="..\..\..\..\..\abp\framework\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
+    <ProjectReference Include="..\..\..\..\..\abp\modules\docs\src\Volo.Docs.Application\Volo.Docs.Application.csproj" />
+    <ProjectReference Include="..\..\..\..\..\abp\modules\docs\src\Volo.Docs.Web\Volo.Docs.Web.csproj" />
+    <ProjectReference Include="..\..\..\..\..\abp\modules\blogging\src\Volo.Blogging.Web\Volo.Blogging.Web.csproj" />
+    <ProjectReference Include="..\..\..\..\..\abp\modules\blogging\src\Volo.Blogging.Application\Volo.Blogging.Application.csproj" />
+    <ProjectReference Include="..\..\..\..\..\abp\modules\identity\src\Volo.Abp.Identity.Application\Volo.Abp.Identity.Application.csproj" />
+    <ProjectReference Include="..\..\..\..\..\abp\modules\identity\src\Volo.Abp.Identity.Web\Volo.Abp.Identity.Web.csproj" />
+    <ProjectReference Include="..\..\..\..\..\abp\modules\account\src\Volo.Abp.Account.Web\Volo.Abp.Account.Web.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Pages\*.js" />
+    <Content Include="Pages\*.css" />
+    <None Remove="TemplateFiles\*.zip" />
+    <Compile Remove="Logs\**" />
+    <Content Remove="Logs\**" />
+    <EmbeddedResource Remove="Logs\**" />
+    <None Remove="Logs\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Downloads\" />
+  </ItemGroup>
+
+</Project>
