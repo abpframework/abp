@@ -61,11 +61,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
             var navClass = TagHelper.TabStyle == TabStyle.Tab ? " nav-tabs" : " nav-pills";
             var verticalClass = GetVerticalPillClassIfVertical();
 
-            var surroundedHeaders = "<nav>" + Environment.NewLine +
-                                   "   <div class=\"nav" + verticalClass + navClass + "\" id=\"" + id + "\" role=\"tablist\">" + Environment.NewLine +
+            var surroundedHeaders = "<ul class=\"nav" + verticalClass + navClass + "\" id=\"" + id + "\" role=\"tablist\">" + Environment.NewLine +
                                    headers +
-                                   "   </div>" + Environment.NewLine +
-                                   "</nav>";
+                                   "</ul>";
 
             return surroundedHeaders;
         }
@@ -99,7 +97,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
         {
             if (!items.Any(it => it.Active) && items.Count > 0)
             {
-                items.FirstOrDefault().Active = true;
+                var firstItem = items.FirstOrDefault(i => !i.IsDropdown);
+                if (firstItem != null)
+                {
+                    firstItem.Active = true;
+                }
             }
 
             foreach (var tabItem in items)
@@ -126,9 +128,20 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
 
             for (var index = 0; index < items.Count; index++)
             {
-                var header = items[index].Header;
+                var item = items[index];
+                var header = "";
+                if (item.IsDropdown)
+                {
+                    var childHeaders = items.Where(i => i.ParentId == item.Id).Select(c => SetTabItemNameIfNotProvided(c.Header, items.IndexOf(c)));
+                    var childHeadersAsString = string.Join(Environment.NewLine, childHeaders.ToArray());
+                    header = item.Header.Replace(AbpTabDropdownItemsActivePlaceholder, childHeadersAsString);
+                }
+                else if (string.IsNullOrWhiteSpace(item.ParentId))
+                {
+                    header = item.Header;
 
-                header = SetTabItemNameIfNotProvided(header, index);
+                    header = SetTabItemNameIfNotProvided(header, index);
+                }
 
                 headersBuilder.AppendLine(header);
             }
@@ -144,6 +157,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
 
             for (var index = 0; index < items.Count; index++)
             {
+                if (items[index].IsDropdown)
+                {
+                    continue;
+                }
+
                 var content = items[index].Content;
 
                 content = SetTabItemNameIfNotProvided(content, index);

@@ -27,6 +27,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
         protected const string TabItemNamePlaceHolder = "{_Tab_Tag_Name_Placeholder_}";
         protected const string AbpFormContentPlaceHolder = "{_AbpFormContentPlaceHolder_}";
         protected const string AbpTabItemActivePlaceholder = "{_Tab_Active_Placeholder_}";
+        protected const string AbpTabDropdownItemsActivePlaceholder = "{_Tab_DropDown_Items_Placeholder_}";
         protected const string AbpTabItemShowActivePlaceholder = "{_Tab_Show_Active_Placeholder_}";
         protected const string AbpBreadcrumbItemActivePlaceholder = "{_Breadcrumb_Active_Placeholder_}";
         protected const string AbpCarouselItemActivePlaceholder = "{_CarouselItem_Active_Placeholder_}";

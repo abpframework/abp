@@ -25,9 +25,14 @@
             <abp-tab title="profile">
                 Content_Profile
             </abp-tab>
-            <abp-tab title="Contact">
-                Content_Contact
-            </abp-tab>
+            <abp-tab-dropdown title="Contact" name="ContactDropdown">
+                <abp-tab title="Contact 1" parent-dropdown-name="ContactDropdown">
+                    Content_1_Content
+                </abp-tab>
+                <abp-tab title="Contact 2" parent-dropdown-name="ContactDropdown">
+                    Content_2_Content
+                </abp-tab>
+            </abp-tab-dropdown>
         </abp-tabs>
     </div>
     <div class="code-area">
@@ -39,9 +44,14 @@
     &lt;abp-tab name=&quot;nav-profile&quot; title=&quot;profile&quot;&gt;
         Content_Profile
     &lt;/abp-tab&gt;
-    &lt;abp-tab name=&quot;nav-contact&quot; title=&quot;Contact&quot;&gt;
-        Content_Contact
-    &lt;/abp-tab&gt;
+    &lt;abp-tab-dropdown title=&quot;Contact&quot; name=&quot;ContactDropdown&quot;&gt;
+        &lt;abp-tab title=&quot;Contact 1&quot; parent-dropdown-name=&quot;ContactDropdown&quot;&gt;
+            Content_1_Content
+        &lt;/abp-tab&gt;
+        &lt;abp-tab title=&quot;Contact 2&quot; parent-dropdown-name=&quot;ContactDropdown&quot;&gt;
+            Content_2_Content
+        &lt;/abp-tab&gt;
+    &lt;/abp-tab-dropdown&gt;
 &lt;/abp-tabs&gt;
 </pre>
     </div>
