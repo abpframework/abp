@@ -35,8 +35,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Pages\*.js" />
     <Content Include="Pages\*.css" />
+
     <None Remove="TemplateFiles\*.zip" />
     <Compile Remove="Logs\**" />
     <Content Remove="Logs\**" />
