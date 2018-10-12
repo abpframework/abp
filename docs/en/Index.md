@@ -6,8 +6,8 @@
   * From Startup Templates
     * [ASP.NET Core MVC Template](Getting-Started-AspNetCore-MVC-Template.md)
   * From Empty Projects
-    * [With Console Application][Getting-Started-Console-Application.md]
-    * [With ASP.NET Core Web Application][Getting-Started-AspNetCore-Application.md]
+    * [With Console Application](Getting-Started-Console-Application.md)
+    * [With ASP.NET Core Web Application](Getting-Started-AspNetCore-Application.md)
 * Tutorials
   * Application Development
     * [With ASP.NET Core MVC](Tutorials/AspNetCore-Mvc/Part-I.md)
