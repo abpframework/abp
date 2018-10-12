@@ -47,5 +47,12 @@ namespace Volo.Abp.Emailing
         /// If true, it sets sender address/name if it's not set before and makes mail encoding UTF-8. 
         /// </param>
         Task SendAsync(MailMessage mail, bool normalize = true);
+
+        /// <summary>
+        /// Adds an email to queue to send via background jobs.
+        /// </summary>
+        Task QueueAsync(string to, string subject, string body, bool isBodyHtml = true);
+
+        //TODO: Add other Queue methods too. Problem: MailMessage is not serializable so can not be used in background jobs.
     }
 }

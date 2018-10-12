@@ -55,6 +55,11 @@ namespace Volo.Abp.BackgroundJobs
             return _jobConfigurationsByArgsType.Values.ToImmutableList();
         }
 
+        public void AddJob<TJob>()
+        {
+            AddJob(typeof(TJob));
+        }
+
         public void AddJob(Type jobType)
         {
             AddJob(new BackgroundJobConfiguration(jobType));
