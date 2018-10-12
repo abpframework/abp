@@ -56,7 +56,7 @@ namespace MyCompany.MyProject
 }
 ````
 
-实现IMultiTenant接口,需要在实体中定义一个 **TenantId** 的属性(查看更多有关[实体](Entitie.md)的文档)
+实现IMultiTenant接口,需要在实体中定义一个 **TenantId** 的属性(查看更多有关[实体](Entities.md)的文档)
 
 #### 获取当前租户的Id
 
