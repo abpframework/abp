@@ -19,7 +19,7 @@ namespace Volo.Abp.BackgroundJobs.DemoApp.HangFire
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
             var configuration = ConfigurationHelper.BuildConfiguration();
-            context.Services.AddConfiguration(configuration);
+            context.Services.SetConfiguration(configuration);
 
             context.Services.PreConfigure<IGlobalConfiguration>(hangfireConfiguration =>
             {

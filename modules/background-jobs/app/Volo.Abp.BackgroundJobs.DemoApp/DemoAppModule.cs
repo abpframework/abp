@@ -23,7 +23,7 @@ namespace Volo.Abp.BackgroundJobs.DemoApp
         {
             var configuration = ConfigurationHelper.BuildConfiguration();
 
-            context.Services.AddConfiguration(configuration);
+            context.Services.SetConfiguration(configuration);
 
             context.Services.Configure<DbConnectionOptions>(options =>
             {
