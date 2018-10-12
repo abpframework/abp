@@ -1,16 +1,16 @@
-﻿## Entity Framework Core Integration Best Practices
+﻿## Entity Framework Core 集成最佳实践
 
-> See [Entity Framework Core Integration document](../Entity-Framework-Core.md) for the basics of the EF Core integration.
+> 有关EF Core 集成的基础知识,请参阅[Entity Framework Core 集成文档](../Entity-Framework-Core.md).
 
-- **Do** define a separated `DbContext` interface and class for each module.
-- **Do not** rely on lazy loading on the application development.
-- **Do not** enable lazy loading for the `DbContext`.
+- **推荐** 为每个模块定义单独的 `DbContext` 接口和类.
+- **不推荐** 在应用程序开发中使用延迟加载.
+- **不推荐** 为 `DbContext` 启用延迟加载.
 
 ### DbContext Interface
 
-- **Do** define an **interface** for the `DbContext` that inherits from `IEfCoreDbContext`.
-- **Do** add a `ConnectionStringName` **attribute** to the `DbContext` interface.
-- **Do** add `DbSet<TEntity>` **properties** to the `DbContext` interface for only aggregate roots. Example:
+- **推荐** 继承自`IEfCoreDbContext` 的 `DbContext` 定义一个相应的 **interface**.
+- **推荐** 添加 `ConnectionStringName` **attribute** 到 `DbContext` 接口.
+- **推荐** 将 `DbSet<TEntity>`  **properties** 添加到 `DbContext` 接口中,注意: 仅适用于聚合根. 例如:
 
 ````C#
 [ConnectionStringName("AbpIdentity")]
@@ -23,9 +23,9 @@ public interface IIdentityDbContext : IEfCoreDbContext
 
 ### DbContext class
 
-* **Do** inherit the `DbContext` from the `AbpDbContext<TDbContext>` class.
-* **Do** add a `ConnectionStringName` attribute to the `DbContext` class.
-* **Do** implement the corresponding `interface` for the `DbContext` class. Example:
+* **推荐** `DbContext` 继承自 `AbpDbContext<TDbContext>` 类.
+* **推荐** 添加 `ConnectionStringName` **attribute** 到 `DbContext` 类.
+* **推荐** 实现 `DbContext` 类实现其相应的接口. 例如:
 
 ````C#
 [ConnectionStringName("AbpIdentity")]
@@ -44,21 +44,21 @@ public class IdentityDbContext : AbpDbContext<IdentityDbContext>, IIdentityDbCon
 }
 ````
 
-### Table Prefix and Schema
+### 表前缀与架构
 
-- **Do** add static `TablePrefix` and `Schema` **properties** to the `DbContext` class. Set default value from a constant. Example:
+- **推荐** 添加静态 **properties** `TablePrefix` 与  `Schema` 到 `DbContext` 类. 使用常量为其设置一个默认值. 例如:
 
 ````C#
 public static string TablePrefix { get; set; } = AbpIdentityConsts.DefaultDbTablePrefix;
 public static string Schema { get; set; } = AbpIdentityConsts.DefaultDbSchema;
 ````
 
-  - **Do** always use a short `TablePrefix` value for a module to create **unique table names** in a shared database. `Abp` table prefix is reserved for ABP core modules.
-  - **Do** set `Schema` to `null` as default.
+  - **推荐** 总是使用简短的 `TablePrefix` 值为模块在共享数据库中创建  **unique table names**. `Abp` 前缀是为ABP Core模块保留的.
+  - **推荐** `Schema` 默认赋值为 `null`.
 
 ### Model Mapping
 
-- **Do** explicitly **configure all entities** by overriding the `OnModelCreating` method of the `DbContext`. Example:
+- **Do** 重写 `DbContext` 的 `OnModelCreating` 方法显式 **配置所有实体**. 例如:
 
 ````C#
 protected override void OnModelCreating(ModelBuilder builder)
@@ -73,7 +73,7 @@ protected override void OnModelCreating(ModelBuilder builder)
 }
 ````
 
-- **Do not** configure model directly in the  `OnModelCreating` method. Instead, create an **extension method** for `ModelBuilder`. Use Configure*ModuleName* as the method name. Example:
+- **不推荐** 直接在 `OnModelCreating` 方法中配置model,而是为 `ModelBuilder` 定义一个 **扩展方法**. 使用Configure*ModuleName*作为方法名称. 例如:
 
 ````C#
 public static class IdentityDbContextModelBuilderExtensions
@@ -89,7 +89,7 @@ public static class IdentityDbContextModelBuilderExtensions
 
         builder.Entity<IdentityUser>(b =>
         {
-            b.ToTable(options.TablePrefix + "Users", options.Schema);            
+            b.ToTable(options.TablePrefix + "Users", options.Schema); 
             //code omitted for brevity
         });
 
@@ -97,14 +97,13 @@ public static class IdentityDbContextModelBuilderExtensions
         {
             b.ToTable(options.TablePrefix + "UserClaims", options.Schema);
             //code omitted for brevity
-        });
-        
+        }); 
         //code omitted for brevity
     }
 }
 ````
 
-* **Do** create a **configuration options** class by inheriting from the `ModelBuilderConfigurationOptions`. Example:
+* **推荐** 通过继承 `ModelBuilderConfigurationOptions` 来创建 **configuration Options** 类. 例如:
 
 ````C#
 public class IdentityModelBuilderConfigurationOptions : ModelBuilderConfigurationOptions
@@ -116,9 +115,9 @@ public class IdentityModelBuilderConfigurationOptions : ModelBuilderConfiguratio
 }
 ````
 
-### Repository Implementation
+### 仓储实现
 
-- **Do** **inherit** the repository from the `EfCoreRepository<TDbContext, TEntity, TKey>` class and implement the corresponding repository interface. Example:
+- **推荐** 从 `EfCoreRepository<TDbContext,TEntity,TKey>` 类 **继承** 仓储并实现相应的仓储接口. 例如:
 
 ````C#
 public class EfCoreIdentityUserRepository
@@ -132,12 +131,12 @@ public class EfCoreIdentityUserRepository
 }
 ````
 
-* **Do** use the `DbContext` interface as the generic parameter, not the class.
-* **Do** pass the `cancellationToken` to EF Core using the `GetCancellationToken` helper method. Example:
+* **推荐** 使用 `DbContext` 接口而不是类来作为泛型参数.
+* **推荐** 使用 `GetCancellationToken` 帮助方法将 `cancellationToken` 传递给EF Core. 例如:
 
 ````C#
 public virtual async Task<IdentityUser> FindByNormalizedUserNameAsync(
-    string normalizedUserName, 
+    string normalizedUserName,
     bool includeDetails = true,
     CancellationToken cancellationToken = default)
 {
@@ -150,9 +149,9 @@ public virtual async Task<IdentityUser> FindByNormalizedUserNameAsync(
 }
 ````
 
-`GetCancellationToken` fallbacks to the `ICancellationTokenProvider.Token` to obtain the cancellation token if it is not provided by the caller code.
+如果调用者代码中未提供取消令牌,则 `GetCancellationToken` 会从`ICancellationTokenProvider.Token` 获取取消令牌.
 
-- **Do** create a `IncludeDetails` **extension method** for the `IQueryable<TEntity>` for each aggregate root which has **sub collections**. Example:
+- **推荐** 为具有 **子集合** 的聚合根创建 `IQueryable<TEntity>` 返回类型的 `IncludeDetails` **扩展方法**. 例如:
 
 ````C#
 public static IQueryable<IdentityUser> IncludeDetails(
@@ -172,9 +171,9 @@ public static IQueryable<IdentityUser> IncludeDetails(
 }
 ````
 
-* **Do** use the `IncludeDetails` extension method in the repository methods just like used in the example code above (see FindByNormalizedUserNameAsync).
+* **推荐** 推荐在仓储其他方法中使用 `IncludeDetails` 扩展方法, 就像上面的示例代码一样(参阅 FindByNormalizedUserNameAsync).
 
-- **Do** override `IncludeDetails` method of the repository for aggregates root which have **sub collections**. Example:
+- **推荐** 覆盖具有 **子集合** 的聚合根仓储中的`IncludeDetails` 方法. 例如:
 
 ````C#
 protected override IQueryable<IdentityUser> IncludeDetails(IQueryable<IdentityUser> queryable)
@@ -185,9 +184,9 @@ protected override IQueryable<IdentityUser> IncludeDetails(IQueryable<IdentityUs
 
 ### Module Class
 
-- **Do** define a module class for the Entity Framework Core integration package.
-- **Do** add `DbContext` to the `IServiceCollection` using the `AddAbpDbContext<TDbContext>` method.
-- **Do** add implemented repositories to the options for the `AddAbpDbContext<TDbContext>` method. Example:
+- **推荐** 为Entity Framework Core集成包定义一个Module类.
+- **推荐** 使用 `AddAbpDbContext<TDbContext>` 方法将 `DbContext` 添加到 `IServiceCollection`.
+- **推荐** 将已实现的仓储添加到 `AddAbpDbContext<TDbContext>` 方法的options中. 例如:
 
 ````C#
 [DependsOn(
