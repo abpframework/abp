@@ -271,3 +271,4 @@ modules/docs/app/Volo.DocsTestApp/Logs/*
 
 # macOS
 .DS_Store
+abp_io/src/Volo.AbpWebSite.Web/Logs/logs.txt
