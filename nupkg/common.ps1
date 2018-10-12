@@ -131,7 +131,7 @@ $projects = (
     "modules/identityserver/src/Volo.Abp.IdentityServer.Domain.Shared",
     "modules/identityserver/src/Volo.Abp.IdentityServer.Domain",
     "modules/identityserver/src/Volo.Abp.IdentityServer.EntityFrameworkCore", 
-    "modules/identityserver/src/Volo.Abp.IdentityServer.MongoDB"
+    "modules/identityserver/src/Volo.Abp.IdentityServer.MongoDB",
 
     # modules/account
     "modules/account/src/Volo.Abp.Account.Web",
