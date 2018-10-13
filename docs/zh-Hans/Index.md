@@ -57,7 +57,7 @@
     * [客户端包管理](AspNetCore/Client-Side-Package-Management.md)
     * [捆绑&压缩](AspNetCore/Bundling-Minification.md)
     * [Tag Helpers](Tag-Helpers.md)
-    * [主题化](AspNetCore/Theming.md)
+    * [主题](AspNetCore/Theming.md)
 * 数据访问
   * [Entity Framework Core 集成](Entity-Framework-Core.md)
   * [MongoDB 集成](MongoDB.md)
