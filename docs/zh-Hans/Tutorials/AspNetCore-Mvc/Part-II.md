@@ -1,30 +1,30 @@
-## ASP.NET Core MVC Tutorial - Part II
+## ASP.NET Core MVC 教程 - 第二章
 
-### About this Tutorial
+### 关于本教程
 
-This is the second part of the tutorial series. See all parts:
+这是本教程所有章节中的第二章。下面是所有的章节:
 
-* [Part I: Create the project and a book list page](Part-I.md)
-* **Part II: Create, Update and Delete books (this tutorial)**
-* [Part III: Integration Tests](Part-III.md)
+* [Part I: 创建项目和书籍列表页面](Part-I.md)
+* **Part II: 创建,编辑,删除书籍(本章)**
+* [Part III: 集成测试](Part-III.md)
 
-You can download the **source code** of the application [from here](https://github.com/volosoft/abp/tree/master/samples/BookStore).
+你可以从 [这里](https://github.com/volosoft/abp/tree/master/samples/BookStore) 下载本程序的**源码**。
 
-### Creating a New Book
+### 新增 Book 实体
 
-In this section, you will learn how to create a new modal dialog form to create a new book. The result dialog will be like that:
+通过本节, 你将会了解如何创建一个 modal form 来实现新增书籍的功能。 最终成果如下图所示:
 
 ![bookstore-create-dialog](images/bookstore-create-dialog.png)
 
-#### Create the Modal Form
+#### 新建 modal form
 
-Create a new razor page, named `CreateModal.cshtml` under the `Pages/Books` folder of the `Acme.BookStore.Web` project:
+在 `Acme.BookStore.Web` 项目的 `Pages/Books` 目录下新建一个 `CreateModal.cshtml` Razor页面:
 
 ![bookstore-add-create-dialog](images/bookstore-add-create-dialog.png)
 
 ##### CreateModal.cshtml.cs
 
-Open the `CreateModal.cshtml.cs` file (`CreateModalModel` class) and replace with the following code:
+展开 `CreateModal.cshtml`，打开 `CreateModal.cshtml.cs` 代码文件，用如下代码替换 `CreateModalModel` 类的实现:
 
 ````C#
 using System.Threading.Tasks;
@@ -53,13 +53,13 @@ namespace Acme.BookStore.Pages.Books
 }
 ````
 
-* This class is derived from the `BookStorePageModelBase` instead of standard `PageModel`. `BookStorePageModelBase` inherits the `PageModel` and adds some common properties/methods those can be used by your page model classes.
-* `[BindProperty]` attribute on the `Book` property binds post request data to this property.
-* This class simply injects the `IBookAppService` in its constructor and calls the `CreateAsync` method in the `OnPostAsync` handler.
+* 这个类继承了 `BookStorePageModelBase` 而非默认的 `PageModel`。 `BookStorePageModelBase` 继承了 `PageModel` 并且添加了一些Razor页面模型通用的属性和方法。
+* 该类在 `Book` 属性上标记的 `[BindProperty]` 特性绑定了post请求提交上来的数据。
+* 该类通过构造函数注入了 `IBookAppService` 应用服务，并且在 `OnPostAsync` 方法中调用了服务的 `CreateAsync` 方法。
 
 ##### CreateModal.cshtml
 
-Open the `CreateModal.cshtml` file and paste the code below:
+打开 `CreateModal.cshtml` 文件并粘贴如下代码:
 
 ````html
 @page
@@ -80,14 +80,14 @@ Open the `CreateModal.cshtml` file and paste the code below:
 </abp-dynamic-form>
 ````
 
-* This modal uses `abp-dynamic-form` tag helper to automatically create the form from the `CreateBookViewModel` class.
-  * `abp-model` attribute indicates the model object, the `Book` property in this case.
-  * `data-ajaxForm` attribute makes the form submitting via AJAX, instead of a classic page post.
-  * `abp-form-content` tag helper is a placeholder to render the form controls (this is optional and needed only if you added some other content in the `abp-dynamic-form` tag, just like in this view).
+* 这个 modal 使用 `abp-dynamic-form` Tag Helper 根据 `CreateBookViewModel` 类自动构建了表单。
+  * `abp-model` 指定了 `Book` 属性为模型对象。
+  * `data-ajaxForm` 设置了表单通过AJAX提交。
+  * `abp-form-content` tag helper 作为表单控件渲染位置的占位符 (这是可选的，只有你在 `abp-dynamic-form` 中像本示例这样添加了其他内容才需要).
 
-#### Add the "New book" Button
+#### 添加 "New book" 按钮
 
-Open the `Pages/Books/Index.cshtml` and change the `abp-card-header` tag as shown below:
+打开 `Pages/Books/Index.cshtml` 并按如下代码修改 `abp-card-header` :
 
 ````html
 <abp-card-header>
@@ -105,11 +105,11 @@ Open the `Pages/Books/Index.cshtml` and change the `abp-card-header` tag as show
 </abp-card-header>
 ````
 
-Just added a **New book** button to the **top right** of the table:
+如下图所示，只是在表格 **右上方** 添加了 **New book** 按钮:
 
 ![bookstore-new-book-button](images/bookstore-new-book-button.png)
 
-Open the `wwwroot/pages/books/index.js` and add the following code just after the datatable configuration:
+打开 `wwwroot/pages/books/index.js` 在datatable配置代码后面添加如下代码:
 
 ````js
 var createModal = new abp.ModalManager(abp.appPath + 'Books/CreateModal');
@@ -124,19 +124,19 @@ $('#NewBookButton').click(function (e) {
 });
 ````
 
-* `abp.ModalManager` is a helper class to open and manage modals in the client side. It internally uses Twitter Bootstrap's standard modal, but abstracts many details by providing a simple API.
+* `abp.ModalManager` 是一个在客户端打开和管理modal的辅助类。它基于Twitter Bootstrap的标准modal组件通过简化的API抽象隐藏了许多细节.
 
-Now, you can **run the application** and add new books using the new modal form.
+现在，你可以 **运行程序** 通过新的 modal form 来创建书籍了。
 
-### Updating An Existing Book
+### 编辑更新已存在的 Book 实体
 
-Create a new razor page, named `EditModal.cshtml` under the `Pages/Books` folder of the `Acme.BookStore.Web` project:
+在 `Acme.BookStore.Web` 项目的 `Pages/Books` 目录下新建一个名叫 `EditModal.cshtml` 的Razor页面:
 
 ![bookstore-add-edit-dialog](images/bookstore-add-edit-dialog.png)
 
 #### EditModal.cshtml.cs
 
-Open the `EditModal.cshtml.cs` file (`EditModalModel` class) and replace with the following code:
+展开 `EditModal.cshtml`，打开 `EditModal.cshtml.cs` 文件（ `EditModalModel` 类） 并替换成以下代码:
 
 ````C#
 using System;
@@ -176,13 +176,13 @@ namespace Acme.BookStore.Pages.Books
 }
 ````
 
-* `[HiddenInput]` and `[BindProperty]` are standard ASP.NET Core MVC attributes. Used `SupportsGet` to be able to get Id value from query string parameter of the request.
-* Mapped `BookDto` (received from the `BookAppService.GetAsync`) to `CreateUpdateBookDto` in the `GetAsync` method.
-* The `OnPostAsync` simply uses `BookAppService.UpdateAsync` to update the entity.
+* `[HiddenInput]` 和 `[BindProperty]` 是标准的 ASP.NET Core MVC 特性。这里启用 `SupportsGet` 从Http请求的查询字符串中获取Id的值。
+* 在 `OnGetAsync` 方法中，将 `BookAppService.GetAsync` 方法返回的 `BookDto` 映射成 `CreateUpdateBookDto` 并赋值给Book属性。
+* `OnPostAsync` 方法直接使用 `BookAppService.UpdateAsync` 来更新实体。
 
 #### CreateUpdateBookDto
 
-In order to perform `BookDto` to `CreateUpdateBookDto` object mapping, change the `CreateUpdateBookDto` class as shown below:
+为了执行从 `BookDto` 到 `CreateUpdateBookDto` 的对象映射, 按如下所示修改 `CreateUpdateBookDto`类:
 
 ````C#
 using System;
@@ -211,11 +211,11 @@ namespace Acme.BookStore
 }
 ````
 
-* Just added the `[AutoMapFrom(typeof(BookDto))]` attribute to create the mapping.
+* 仅仅是添加 `[AutoMapFrom(typeof(BookDto))]` 特性就可以创建上述映射关系。
 
 #### EditModal.cshtml
 
-Replace `EditModal.cshtml` content with the following content:
+将 `EditModal.cshtml` 页面内容替换成如下代码:
 
 ````html
 @page
@@ -238,18 +238,18 @@ Replace `EditModal.cshtml` content with the following content:
 </abp-dynamic-form>
 ````
 
-This page is very similar to the `CreateModal.cshtml` except;
+除了以下几点，这个页面内容和 `CreateModal.cshtml` 非常相似:
 
-* It includes an `abp-input` for the `Id` property to store id of the editing book.
-* It uses `Books/EditModal` as the post URL and *Update* text as the modal header.
+* 此页面包含了一个 `abp-input` 以保存所编辑book实体的 `Id` 属性。
+* 此页面指定的post地址是 `Books/EditModal` ，并用文本 *Update* 作为 modal 标题。
 
-#### Add "Actions" Dropdown to the Table
+#### 为表格添加 "操作（Actions）" 下拉菜单
 
-We will add a dropdown button ("Actions") for each row of the table. The final UI looks like this:
+我们将为表格每行添加下拉按钮 ("Actions") 。 最终效果如下:
 
 ![bookstore-books-table-actions](images/bookstore-books-table-actions.png)
 
-Open the `Pages/Books/Index.cshtml` page and change the table section as shown below:
+打开 `Pages/Books/Index.cshtml` 页面，并按下方所示修改表格部分的代码:
 
 ````html
 <abp-table striped-rows="true" id="BooksTable">
@@ -266,9 +266,9 @@ Open the `Pages/Books/Index.cshtml` page and change the table section as shown b
 </abp-table>
 ````
 
-* Just added a new `th` tag for the "Actions".
+* 只是为"Actions"增加了一个 `th` 标签.
 
-Open the `wwwroot/pages/books/index.js` and replace the content as below:
+打开 `wwwroot/pages/books/index.js` 并用以下内容进行替换:
 
 ````js
 $(function () {
@@ -318,16 +318,16 @@ $(function () {
 });
 ````
 
-* Used `abp.localization.getResource('BookStore')` to be able to use the same localization texts defined on the server side.
-* Added a new `ModalManager` named `editModal` to open the edit modal dialog.
-* Added a new column at the beginning of the `columnDefs` section. This column is used for the "Actions" dropdown button.
-* "Edit" action simply calls `editModal.open` to open the edit dialog.
+* 通过 `abp.localization.getResource('BookStore')` 可以在客户端使用服务器端定义的相同的本地化语言文本。
+* 定义 `editModal` 为 `ModalManager` 来打开编辑用的 modal 对话框。
+* 在 `columnDefs` 起始处新增一列作为 "Actions" 下拉按钮。
+* "Edit" 操作只是简单调用 `editModal.open` 来打开编辑对话框。
 
-You can run the application and edit any book by selecting the edit action.
+现在，你可以运行程序，通过编辑操作来更新任一个book实体。
 
-### Deleting an Existing Book
+### 删除一个已有的Book实体
 
-Open the `wwwroot/pages/books/index.js` and add a new item to the `rowAction` `items`:
+打开 `wwwroot/pages/books/index.js` 文件，在 `rowAction` `items` 下新增一项:
 
 ````js
 {
@@ -346,11 +346,11 @@ Open the `wwwroot/pages/books/index.js` and add a new item to the `rowAction` `i
 }
 ````
 
-* `confirmMessage` option is used to ask a confirmation question before executing the `action`.
-* Used `acme.bookStore.book.delete` javascript proxy function to perform an AJAX request to delete a book.
-* `abp.notify.info` is used to show a toastr notification just after the deletion.
+* `confirmMessage` 用来在实际执行 `action` 之前向用户进行确认。
+* 通过javascript代理方法 `acme.bookStore.book.delete` 执行一个AJAX请求来删除一个book实体。
+* `abp.notify.info` 用来提示用户操作成功。
 
-The final `index.js` content is shown below:
+最终的 `index.js` 文件内容如下所示:
 
 ````js
 $(function () {
@@ -414,8 +414,8 @@ $(function () {
 });
 ````
 
-Run the application and try to delete a book.
+运行程序并尝试删除一个book实体。
 
-### Next Part
+### 下一章
 
-See the [next part](Part-III.md) of this tutorial.
+查看本教程的 [下一章](Part-III.md) 。

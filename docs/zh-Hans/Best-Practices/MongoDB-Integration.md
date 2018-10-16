@@ -1,12 +1,12 @@
-﻿## MongoDB Integration
+﻿## MongoDB 集成
 
-* Do define a separated `MongoDbContext` interface and class for each module.
+* **推荐** 为每个模块定义一个独立的 `MongoDbContext` 接口与实现类.
 
-### MongoDbContext Interface
+### MongoDbContext 接口
 
-- **Do** define an **interface** for the `MongoDbContext` that inherits from `IAbpMongoDbContext`.
-- **Do** add a `ConnectionStringName` **attribute** to the `MongoDbContext` interface.
-- **Do** add `IMongoCollection<TEntity>` **properties** to the `MongoDbContext` interface only for the aggregate roots. Example:
+- **推荐** 定义 `MongoDbContext` **接口** 时继承自 `IAbpMongoDbContext`.
+- **推荐** 添加 `ConnectionStringName` **attribute** 到 `MongoDbContext` 接口.
+- **推荐** 只把聚合根做为 `IMongoCollection<TEntity>` **properties** 添加到 `MongoDbContext` 接口. 示例:
 
 ````C#
 [ConnectionStringName("AbpIdentity")]
@@ -17,11 +17,11 @@ public interface IAbpIdentityMongoDbContext : IAbpMongoDbContext
 }
 ````
 
-### MongoDbContext class
+### MongoDbContext 类
 
-- **Do** inherit the `MongoDbContext` from the `AbpMongoDbContext` class.
-- **Do** add a `ConnectionStringName` attribute to the `MongoDbContext` class.
-- **Do** implement the corresponding `interface` for the `MongoDbContext` class. Example:
+- **推荐**  `MongoDbContext` 继承自 `AbpMongoDbContext` 类.
+- **推荐** 添加 `ConnectionStringName` **attribute** 到 `MongoDbContext` 类.
+- **推荐** `MongoDbContext` 类实现相对应的**接口**.  示例:
 
 ```c#
 [ConnectionStringName("AbpIdentity")]
@@ -34,21 +34,21 @@ public class AbpIdentityMongoDbContext : AbpMongoDbContext, IAbpIdentityMongoDbC
 }
 ```
 
-### Collection Prefix
+### Collection 前缀
 
-- **Do** add static `CollectionPrefix` **property** to the `DbContext` class. Set default value from a constant. Example:
+- **推荐** 添加静态 `CollectionPrefix` **property** 到 `DbContext` 类中并使用常量为其设置默认值. 示例:
 
 ```c#
 public static string CollectionPrefix { get; set; } = AbpIdentityConsts.DefaultDbTablePrefix;
 ```
 
-Used the same constant defined for the EF Core integration table prefix in this example.
+在此示例中使用与EF Core集成表前缀相同的常量.
 
-- **Do** always use a short `CollectionPrefix` value for a module to create **unique collection names** in a shared database. `Abp` collection prefix is reserved for ABP core modules.
+- **推荐** 总是使用简短的 `CollectionPrefix` 值为模块在共享数据库中创建  **unique collection names**. `Abp` collection前缀是为ABP Core模块保留的.
 
-### Collection Mapping
+### Collection 映射
 
-- **Do** explicitly **configure all aggregate roots** by overriding the `CreateModel` method of the `MongoDbContext`. Example:
+- **推荐** 通过重写 `MongoDbContext` 的 `CreateModel` 方法  **配置所有的聚合根** . 示例:
 
 ```c#
 protected override void CreateModel(IMongoModelBuilder modelBuilder)
@@ -62,7 +62,7 @@ protected override void CreateModel(IMongoModelBuilder modelBuilder)
 }
 ```
 
-- **Do not** configure model directly in the  `CreateModel` method. Instead, create an **extension method** for the `IMongoModelBuilder`. Use Configure*ModuleName* as the method name. Example:
+- **不推荐** 直接在 `CreateModel` 方法中配置model,而是为 `IMongoModelBuilder` 定义一个 **扩展方法**. 使用Configure*ModuleName*作为方法名称. 示例:
 
 ```c#
 public static class AbpIdentityMongoDbContextExtensions
@@ -90,7 +90,7 @@ public static class AbpIdentityMongoDbContextExtensions
 }
 ```
 
-- **Do** create a **configuration options** class by inheriting from the `MongoModelBuilderConfigurationOptions`. Example:
+- **推荐** 通过继承 `MongoModelBuilderConfigurationOptions` 来创建 **configuration Options** 类. 示例:
 
 ```c#
 public class IdentityMongoModelBuilderConfigurationOptions
@@ -103,7 +103,7 @@ public class IdentityMongoModelBuilderConfigurationOptions
 }
 ```
 
-* **Do** explicitly configure `BsonClassMap` for all entities. Create a static method for this purpose. Example:
+* **推荐** 创建一个静态方法, 显示地为所有的实体配置 `BsonClassMap`. 示例:
 
 ````C#
 public static class AbpIdentityBsonClassMap
@@ -129,11 +129,11 @@ public static class AbpIdentityBsonClassMap
 }
 ````
 
-`BsonClassMap` works with static methods. So, it is only needed to configure entities once in an application. `OneTimeRunner` guarantees that it runs in a thread safe manner and only once in the application life. Such a mapping above ensures that unit test properly run. This code will be called by the **module class** below.
+`BsonClassMap` 适用于静态方法. 所以只需要在应用程序配置一次实体. `OneTimeRunner` 以线程安全的方式运行, 并且在应用程序生命周期中只运行一次. 上面代码中的映射确保单元测试可以正确运行. 此代码将由下面的**模块类**调用.
 
-### Repository Implementation
+### 仓储实现
 
-- **Do** **inherit** the repository from the `MongoDbRepository<TMongoDbContext, TEntity, TKey>` class and implement the corresponding repository interface. Example:
+- **推荐** 仓储 **继承自** `MongoDbRepository<TMongoDbContext, TEntity, TKey>` 类并且实现其相应的接口. 示例:
 
 ```c#
 public class MongoIdentityUserRepository
@@ -148,7 +148,7 @@ public class MongoIdentityUserRepository
 }
 ```
 
-- **Do** pass the `cancellationToken` to the MongoDB Driver using the `GetCancellationToken` helper method. Example:
+- **推荐** 使用 `GetCancellationToken` 帮助方法将 `cancellationToken` 传递给MongoDB驱动程序. 示例:
 
 ```c#
 public async Task<IdentityUser> FindByNormalizedUserNameAsync(
@@ -164,19 +164,20 @@ public async Task<IdentityUser> FindByNormalizedUserNameAsync(
 }
 ```
 
-`GetCancellationToken` fallbacks to the `ICancellationTokenProvider.Token` to obtain the cancellation token if it is not provided by the caller code.
+如果调用者代码中未提供取消令牌, 则 `GetCancellationToken` 会从`ICancellationTokenProvider.Token` 获取取消令牌
+`GetCancellationToken`.
 
-* **Do** ignore the `includeDetails` parameters for the repository implementation since MongoDB loads the aggregate root as a whole (including sub collections) by default.
-* **Do** use the `GetMongoQueryable()` method to obtain an `IQueryable<TEntity>` to perform queries  wherever possible. Because;
-  *  `GetMongoQueryable()` method automatically uses the `ApplyDataFilters` method to filter the data based on the current data filters (like soft delete and multi-tenancy).
-  * Using `IQueryable<TEntity>` makes the code as much as similar to the EF Core repository implementation and easy to write and read.
-* **Do** implement data filtering if it is not possible to use the `GetMongoQueryable()` method.
+* **推荐** 忽略仓储实现中的 `includeDetails` 参数, 因为MongoDB在默认情况下将聚合根作为一个整体(包括子集合)加载.
+* **推荐** 使用 `GetMongoQueryable()` 方法获取 `IQueryable<TEntity>` 以尽可能执行查询use the `GetMongoQueryable()` method to obtain an `IQueryable<TEntity>` to perform queries  wherever possible. 因为;
+  *  `GetMongoQueryable()` 方法在内部使用 `ApplyDataFilters` 方法根据当前的过滤器 (如 软删除与多租户)过滤数据.
+  * 使用`IQueryable<TEntity>`让代码与EF Core仓储实现类似, 易于使用.
+* **推荐** 如果无法使用 `GetMongoQueryable()` 方法, 则应自行实现数据过滤.
 
-### Module Class
+### 模块类
 
-- **Do** define a module class for the MongoDB integration package.
-- **Do** add `MongoDbContext` to the `IServiceCollection` using the `AddMongoDbContext<TMongoDbContext>` method.
-- **Do** add implemented repositories to the options for the `AddMongoDbContext<TMongoDbContext>` method. Example:
+- **推荐** 为MongoDB集成包定义一个模块类.
+- **推荐** 使用 `AddMongoDbContext<TMongoDbContext>` 方法将 `MongoDbContext` 添加到 `IServiceCollection`.
+- **推荐** 将已实现的仓储添加到 `AddMongoDbContext<TMongoDbContext>` 方法options中. 示例:
 
 ```c#
 [DependsOn(
@@ -198,4 +199,4 @@ public class AbpIdentityMongoDbModule : AbpModule
 }
 ```
 
-Notice that this module class also calls the static `BsonClassMap` configuration method defined above.
+需要注意的是, 模块类还调用上面定义的静态 `BsonClassMap` 配置方法.
