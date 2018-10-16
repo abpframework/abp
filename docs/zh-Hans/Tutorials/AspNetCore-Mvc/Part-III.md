@@ -2,32 +2,32 @@
 
 ### About this Tutorial
 
-This is the third part of the tutorial series. See all parts:
+这是本教程所有章节中的第三章。下面是所有的章节:
 
-- [Part I: Create the project and a book list page](Part-I.md)
-- [Part II: Create, Update and Delete books](Part-II.md)
-- **Part III: Integration Tests (this tutorial)**
+- [Part I: 创建项目和书籍列表页面](Part-I.md)
+- [Part II: 创建,编辑,删除书籍](Part-II.md)
+- **Part III: 集成测试(本章)**
 
-You can download the **source code** of the application [from here](https://github.com/volosoft/abp/tree/master/samples/BookStore).
+你可以从 [这里](https://github.com/volosoft/abp/tree/master/samples/BookStore) 下载本程序的**源码**。
 
-### Test Projects in the Solution
+### 解决方案中的测试项目
 
-There are two test projects in the solution:
+本解决方案中有两个测试项目:
 
 ![bookstore-test-projects](images/bookstore-test-projects.png)
 
-* `Acme.BookStore.Application.Tests` is for unit & integration tests. You can write tests for application service methods. It uses **EF Core SQLite in-memory** database.
-* `Acme.BookStore.Web.Tests` is for full stack integration tests including the web layer. So, you can write tests for UI pages too.
+* `Acme.BookStore.Application.Tests` 项目用于单元测试和集成测试。你可以在这个项目中为Application Service方法写测试代码。这个项目使用了 **EF Core SQLite in-memory** 数据库。
+* `Acme.BookStore.Web.Tests` 项目用于包含Web层的完整集成测试。所以，你也可以在这里写关于UI页面的测试。
 
-Test projects use the following libraries for testing:
+测试项目使用了以下库:
 
-* [xunit](https://xunit.github.io/) as the main test framework.
-* [Shoudly](http://shouldly.readthedocs.io/en/latest/) as an assertion library.
-* [NSubstitute](http://nsubstitute.github.io/) as a mocking library.
+* [xunit](https://xunit.github.io/) 作为主测试框架。
+* [Shoudly](http://shouldly.readthedocs.io/en/latest/) 作为断言库。
+* [NSubstitute](http://nsubstitute.github.io/) 作为模拟库。
 
-### Adding Test Data
+### 添加测试用数据
 
-Startup template contains the `BookStoreTestDataBuilder` class in the `Acme.BookStore.Application.Tests` project that creates some data to run tests on. It's shown below:
+起始模板在 `Acme.BookStore.Application.Tests` 项目中包含了 `BookStoreTestDataBuilder` 类，用于创建一些测试用数据。 相关代码如下所示:
 
 ````C#
 using System.Threading.Tasks;
@@ -59,10 +59,10 @@ namespace Acme.BookStore
 }
 ````
 
-* It simply uses `IIdentityDataSeeder` which is implemented by the identity module and creates an admin role and admin user. You can use them in your tests.
-* You can add new test data in the `BuildInternalAsync` method.
+* 这里直接使用了identity模块实现的 `IIdentityDataSeeder` 接口，创建了一个admin角色和admin用户。你同样可以在你的测试代码中直接使用这些代码。
+* 你可以在 `BuildInternalAsync` 方法中添加你自己的测试数据。
 
-Change the `BookStoreTestDataBuilder` class as show below:
+按下方所示修改 `BookStoreTestDataBuilder` 类:
 
 ````C#
 using System;
@@ -122,11 +122,11 @@ namespace Acme.BookStore
 }
 ````
 
-* Injected `IRepository<Book, Guid>` and used it in the `BuildInternalAsync` to create two book entities.
+* 通过构造函数注入 `IRepository<Book, Guid>`，在 `BuildInternalAsync` 方法中用它创建两个book实体。
 
-### Testing the BookAppService
+### 测试 BookAppService
 
-Create a test class named `BookAppService_Tests` in the `Acme.BookStore.Application.Tests` project:
+在 `Acme.BookStore.Application.Tests` 项目中创建一个名叫 `BookAppService_Tests` 的测试类:
 
 ````C#
 using System.Threading.Tasks;
@@ -161,9 +161,9 @@ namespace Acme.BookStore
 }
 ````
 
-* `Should_Get_List_Of_Books` test simply uses `BookAppService.GetListAsync` method to get and check the list of users.
+* 测试方法 `Should_Get_List_Of_Books` 直接使用 `BookAppService.GetListAsync` 方法来获取用户列表，并执行检查。
 
-Add a new test that creates a valid new book:
+新增测试方法，用以测试创建一个合法book实体的场景:
 
 ````C#
 [Fact]
@@ -186,7 +186,7 @@ public async Task Should_Create_A_Valid_Book()
 }
 ````
 
-Add a new test that tries to create an invalid book and fails:
+新增测试方法，用以测试创建一个非法book实体失败的场景:
 
 ````C#
 [Fact]
@@ -210,8 +210,8 @@ public async Task Should_Not_Create_A_Book_Without_Name()
 }
 ````
 
-* Since the `Name` is empty, ABP throws an `AbpValidationException`.
+* 由于 `Name` 是空值, ABP 抛出一个 `AbpValidationException` 异常。
 
-### Testing Web Pages
+### 测试 Web 页面
 
 TODO
