@@ -73,7 +73,7 @@ protected override void OnModelCreating(ModelBuilder builder)
 }
 ````
 
-- **不推荐** 直接在 `OnModelCreating` 方法中配置model,而是为 `ModelBuilder` 定义一个 **扩展方法**. 使用Configure*ModuleName*作为方法名称. 例如:
+- **不推荐** 直接在 `OnModelCreating` 方法中配置model, 而是为 `ModelBuilder` 定义一个 **扩展方法**. 使用Configure*ModuleName*作为方法名称. 例如:
 
 ````C#
 public static class IdentityDbContextModelBuilderExtensions
