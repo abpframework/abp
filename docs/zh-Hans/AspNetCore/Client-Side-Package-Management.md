@@ -17,7 +17,7 @@ ABP是一个模块化平台. 每个开发人员都可以创建模块, 模块应�
 
 **标准包**的好处是:
 
-* 它取决于包装的**标准版本**。 取决于此包是**安全**，因为所有模块都依赖于相同的版本。
+* 它取决于包装的**标准版本**. 取决于此包是**安全**,因为所有模块都依赖于相同的版本.
 * 它包含将库资源(js,css,img...文件)从**node_modules**文件夹复制到**wwwroot/libs**文件夹的gulp任务. 有关更多信息, 请参阅 *映射库资源* 部分.
 
 依赖标准包装很容易. 只需像往常一样将它添加到**package.json**文件中. 例如:
@@ -47,10 +47,10 @@ yarn
 
 如果你需要不在标准软件包中的第三方NPM软件包,您可以在Github[repository](https://github.com/volosoft/abp)上创建Pull请求. 接受遵循这些规则的拉取请求:
 
-* 对于NPM上的`package-name`, 包名称应该命名为`@abp/package-name`(例如：`bootstrap`包的`@abp/bootstrap`).
+* 对于NPM上的`package-name`, 包名称应该命名为`@abp/package-name`(例如:`bootstrap`包的`@abp/bootstrap`).
 * 它应该是**最新的稳定**版本的包.
 * 它应该只依赖于**单个**第三方包. 它可以依赖于多个`@abp/*`包.
-* 包应包含一个`abp.resourcemapping.js`文件格式，如*映射库资源*部分中所定义. 此文件应仅映射所依赖包的资源.
+* 包应包含一个`abp.resourcemapping.js`文件格式,如*映射库资源*部分中所定义. 此文件应仅映射所依赖包的资源.
 * 你还需要为你创建的包创建[bundle贡献者](Bundling-Minification.md).
 
 有关示例, 请参阅当前标准包.
@@ -59,15 +59,15 @@ yarn
 
 使用NPM包和NPM/Yarn工具是客户端库的事实标准.  NPM/Yarn工具在Web项目的根文件夹中创建一个**node_modules**文件夹.
 
-下一个挑战是将所需的资源(js，css，img ...文件)从`node_modules`复制到**wwwroot**文件夹内的文件夹中,以使其可供客户端/浏览器访问.
+下一个挑战是将所需的资源(js,css,img ...文件)从`node_modules`复制到**wwwroot**文件夹内的文件夹中,以使其可供客户端/浏览器访问.
 
 ABP将基于[Gulp](https://gulpjs.com/)的任务定义为**将资源**从**node_modules**复制到**wwwroot/libs**文件夹. 每个**标准包**(参见*@ABP NPM Packages*部分)定义了自己文件的映射. 因此, 大多数情况你只配置依赖项.
 
-**启动模板**已经配置为开箱即用的所有这些。 本节将介绍配置选项。
+**启动模板**已经配置为开箱即用的所有这些. 本节将介绍配置选项.
 
 #### 资源映射定义文件
 
-模块应该定义一个名为`abp.resourcemapping.js`的JavaScript文件，其格式如下例所示:
+模块应该定义一个名为`abp.resourcemapping.js`的JavaScript文件,其格式如下例所示:
 
 ````js
 module.exports = {

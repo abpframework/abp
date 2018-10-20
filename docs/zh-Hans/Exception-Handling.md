@@ -19,7 +19,7 @@ ABP提供了用于处理Web应用程序异常的标准模型.
 
 #### 异常消息格式
 
-每个异常消息都是`RemoteServiceErrorResponse` 类的实例.下面是一个只有 **Message** 属性的错误JSON：
+每个异常消息都是`RemoteServiceErrorResponse` 类的实例.下面是一个只有 **Message** 属性的错误JSON:
 
 ````json
 {
@@ -161,7 +161,7 @@ throw new UserFriendlyException(
 );
 ````
 
-采用这种方式是不需要本地化的.如果需要本地化消息,则可以注入**string localizer**( 请参阅[本地化文档](Localization.md) )来实现. 例：
+采用这种方式是不需要本地化的.如果需要本地化消息,则可以注入**string localizer**( 请参阅[本地化文档](Localization.md) )来实现. 例:
 
 ````C#
 throw new UserFriendlyException(_stringLocalizer["UserNameShouldBeUniqueMessage"]);
@@ -267,7 +267,7 @@ throw new BusinessException("App:010046")
 
 ### HTTP状态代码 映射
 
-ABP尝试按照以下规则,自动映射常见的异常类型的HTTP状态代码：
+ABP尝试按照以下规则,自动映射常见的异常类型的HTTP状态代码:
 
 * 对于 `AbpAuthorizationException`:
   * 用户没有登录,返回 `401` (未认证).

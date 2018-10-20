@@ -112,7 +112,7 @@ UI组合是主要目标之一.为此,主题系统将提供菜单,工具栏和其
 
 ### 动态表单
 
-动态表单tag helper允许你为给定的模型类动态地创建表单.例：
+动态表单tag helper允许你为给定的模型类动态地创建表单.例:
 
 ~~~ html
 <abp-dynamic-form abp-model="@Model.PersonInput" submit-button="true" />
@@ -132,7 +132,7 @@ UI组合是主要目标之一.为此,主题系统将提供菜单,工具栏和其
 
 ### 动态捆绑和压缩系统
 
-动态捆绑和压缩系统运行在虚拟文件系统上,并且允许模块以模块化,动态和强大的方式创建,修改和交互捆绑包.一个例子：
+动态捆绑和压缩系统运行在虚拟文件系统上,并且允许模块以模块化,动态和强大的方式创建,修改和交互捆绑包.一个例子:
 
 ~~~ html
 <abp-style-bundle>
@@ -204,6 +204,6 @@ ABP已经为所有HTTP API创建动态JavaScript代理.该功能也存在于新�
 
 ## 联系/链接
 
-* 官方网站：[abp.io](https://abp.io/)
-* Github：[github.com/abpframework](https://github.com/abpframework)
-* Twitter：[@abpframework](https://twitter.com/abpframework)
+* 官方网站:[abp.io](https://abp.io/)
+* Github:[github.com/abpframework](https://github.com/abpframework)
+* Twitter:[@abpframework](https://twitter.com/abpframework)

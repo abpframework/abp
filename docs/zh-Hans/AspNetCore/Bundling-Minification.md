@@ -51,7 +51,7 @@ namespace MyCompany.MyProject
 `abp-script-bundle`定义了一个带有**唯一名称**的样式包:`MyGlobalBundle`. 使用方法很容易理解. 让我们看看它是如何*工作的*:
 
 * 当首次请求时,ABP从提供的文件中 **(延迟)lazy** 创建. 后续将从 **缓存** 中返回内容. 这意味着如果你有条件地将文件添加到包中,它只执行一次, 并且条件的任何更改都不会影响下一个请求的包.
-* 在`development`环境中ABP会将包文件**单独**添加到页面中, 其他环境(`staging`，`production`...)会自动捆绑和压缩.
+* 在`development`环境中ABP会将包文件**单独**添加到页面中, 其他环境(`staging`,`production`...)会自动捆绑和压缩.
 * 捆绑文件可以是**物理**文件或[**虚拟/嵌入**](../Virtual-File-System.md)的文件.
 * ABP自动将 **版本查询字符串(version query string)** 添加到捆绑文件的URL中,以防止浏览器缓存. 如:?_v=67872834243042(从文件的上次更改日期生成). 即使捆绑文件单独添加到页面(在`development`环境中), 版本控制仍然有效.
 
@@ -89,7 +89,6 @@ namespace MyCompany.MyProject
 
 **命名** bundles优点:
 
-* Other **modules can contribute** to the bundle by its name (see the sections below).
 * 其他模块可以通过其名称为捆绑包做出贡献(参见下面的部分).
 
 #### 单个文件
@@ -100,11 +99,9 @@ namespace MyCompany.MyProject
 <abp-script src="/scripts/my-script.js" />
 ````
 
-对于上面的示例，包名称将是 *scripts.my-scripts*("/"替换为"."). 所有捆绑功能也可以按预期应用于单个文件.
+对于上面的示例,包名称将是 *scripts.my-scripts*("/"替换为"."). 所有捆绑功能也可以按预期应用于单个文件.
 
 ### Bundling 选项
-
-If you need to use same bundle in **multiple pages** or want to use some more **powerful features**, you can configure bundles **by code** in your [module](../Module-Development-Basics.md) class.
 
 如果你需要在 **多个页面中使用相同的包** 或想要使用更多 **强大功能**, 你可以在[模块](../Module-Development-Basics.md)类中进行**配置**.
 
@@ -176,7 +173,7 @@ public class MyWebExtensionModule : AbpModule
 
 将文件添加到现有bundle似乎很有用. 如果你需要**替换**bundle中的文件或者你想**有条件地**添加文件怎么办?  定义bundle贡献者可为此类情况提供额外的功能.
 
-一个bundle的贡献者使用自定义版本bootstrap.css替换示例：
+一个bundle的贡献者使用自定义版本bootstrap.css替换示例:
 
 ````C#
 public class MyExtensionGlobalStyleContributor : BundleContributor
@@ -240,7 +237,7 @@ public class MyExtensionStyleBundleContributor : BundleContributor
 
 #### 标准包装贡献者
 
-将特定的NPM包资源(js，css文件)添加到包中对于该包非常简单. 例如, 你总是为bootstrap NPM包添加`bootstrap.css`文件.
+将特定的NPM包资源(js,css文件)添加到包中对于该包非常简单. 例如, 你总是为bootstrap NPM包添加`bootstrap.css`文件.
 
 所有[标准NPM包](Client-Side-Package-Management.md)都有内置的贡献者. 例如,如果你的贡献者依赖于引导程序,你可以声明它,而不是自己添加bootstrap.css.
 
@@ -257,7 +254,7 @@ public class MyExtensionStyleBundleContributor : BundleContributor
 * 防止你输入**无效的资源路径**.
 * 如果资源 **路径发生变化** (依赖贡献者将处理它),则防止更改你的贡献者.
 * 防止多个模块添加**重复文件**.
-* 以递归方式管理依赖项(如果需要，添加依赖项的依赖项).
+* 以递归方式管理依赖项(如果需要,添加依赖项的依赖项).
 
 ##### Volo.Abp.AspNetCore.Mvc.UI.Packages 包
 

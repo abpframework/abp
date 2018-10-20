@@ -4,7 +4,7 @@ ABP的依赖注入系统是基于Microsoft的[依赖注入扩展](https://docs.m
 
 ### 模块化
 
-由于ABP是一个模块化框架,因此每个模块都通过依赖注入定义它自己的服务并通过它自己的单独[模块类](Module-Development-Basics.md)进行注册.例：
+由于ABP是一个模块化框架,因此每个模块都通过依赖注入定义它自己的服务并通过它自己的单独[模块类](Module-Development-Basics.md)进行注册.例:
 
 ````C#
 public class BlogModule : AbpModule
@@ -30,7 +30,7 @@ public class BlogModule : AbpModule
 }
 ````
 
-一旦跳过自动注册,你应该手动注册你的服务.在这种情况下,`AddAssemblyOf`扩展方法可以帮助你依照约定注册所有服务.例：
+一旦跳过自动注册,你应该手动注册你的服务.在这种情况下,`AddAssemblyOf`扩展方法可以帮助你依照约定注册所有服务.例:
 
 ````c#
 public class BlogModule : AbpModule
@@ -51,7 +51,7 @@ public class BlogModule : AbpModule
 
 #### 固有的注册类型
 
-一些特定类型会默认注册到依赖注入.例子：
+一些特定类型会默认注册到依赖注入.例子:
 
 * 模块类注册为singleton.
 * MVC控制器（继承``Controller``或``AbpController``）被注册为transient.
@@ -73,7 +73,7 @@ public class BlogPostAppService : ApplicationService
 
 #### 依赖接口
 
-如果实现这些接口,则会自动将类注册到依赖注入：
+如果实现这些接口,则会自动将类注册到依赖注入:
 
 * ``ITransientDependency`` 注册为transient.
 * ``ISingletonDependency`` 注册为singleton.
@@ -91,9 +91,9 @@ public class TaxCalculator : ITransientDependency
 
 #### Dependency 属性
 
-配置依赖注入服务的另一种方法是使用``DependencyAttribute``.它具有以下属性：
+配置依赖注入服务的另一种方法是使用``DependencyAttribute``.它具有以下属性:
 
-* ``Lifetime``: 注册的生命周期：Singleton,Transient或Scoped.
+* ``Lifetime``: 注册的生命周期:Singleton,Transient或Scoped.
 * ``TryRegister``: 设置``true``则只注册以前未注册的服务.使用IServiceCollection的TryAdd ... 扩展方法.
 * ``ReplaceServices``: 设置``true``则替换之前已经注册过的服务.使用IServiceCollection的Replace扩展方法.
 
@@ -112,7 +112,7 @@ public class TaxCalculator
 
 #### ExposeServices 属性 
 
-``ExposeServicesAttribute``用于控制相关类提供了什么服务.例： 
+``ExposeServicesAttribute``用于控制相关类提供了什么服务.例: 
 
 ````C#
 [ExposeServices(typeof(ITaxCalculator))]
@@ -126,7 +126,7 @@ public class TaxCalculator: ICalculator, ITaxCalculator, ICanCalculate, ITransie
 
 #### 依照约定公开的服务
 
-如果你未指定要公开的服务,则ABP依照约定公开服务.以上面定义的``TaxCalculator``为例：
+如果你未指定要公开的服务,则ABP依照约定公开服务.以上面定义的``TaxCalculator``为例:
 
 * 默认情况下,类本身是公开的.这意味着你可以按``TaxCalculator``类注入它.
 * 默认情况下,默认接口是公开的.默认接口是由命名约定确定.在这个例子中,``ICalculator``和``ITaxCalculator``是``TaxCalculator``的默认接口,但``ICanCalculate``不是.
@@ -146,7 +146,7 @@ public class TaxCalculator : ITaxCalculator, ITransientDependency
 
 #### 手动注册
 
-在某些情况下,你可能需要向``IServiceCollection``手动注册服务,尤其是在需要使用自定义工厂方法或singleton实例时.在这种情况下,你可以像[Microsoft文档](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection)描述的那样直接添加服务.例：
+在某些情况下,你可能需要向``IServiceCollection``手动注册服务,尤其是在需要使用自定义工厂方法或singleton实例时.在这种情况下,你可以像[Microsoft文档](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection)描述的那样直接添加服务.例:
 
 ````C#
 public class BlogModule : AbpModule
@@ -168,7 +168,7 @@ public class BlogModule : AbpModule
 
 #### 构造方法注入
 
-这是将服务注入类的最常用方法.例如：
+这是将服务注入类的最常用方法.例如:
 
 ````C#
 public class TaxAppService : ApplicationService
@@ -193,7 +193,7 @@ public class TaxAppService : ApplicationService
 
 #### 属性注入
 
-Microsoft依赖注入库不支持属性注入.但是,ABP可以与第三方DI提供商（例如[Autofac](https://autofac.org/)）集成,以实现属性注入.例：
+Microsoft依赖注入库不支持属性注入.但是,ABP可以与第三方DI提供商（例如[Autofac](https://autofac.org/)）集成,以实现属性注入.例:
 
 ````C#
 public class MyService : ITransientDependency
@@ -224,7 +224,7 @@ public class MyService : ITransientDependency
 
 #### 从IServiceProvider解析服务
 
-你可能希望直接从``IServiceProvider``解析服务.在这种情况下,你可以将``IServiceProvider``注入到你的类并使用``GetService``方法,如下所示：
+你可能希望直接从``IServiceProvider``解析服务.在这种情况下,你可以将``IServiceProvider``注入到你的类并使用``GetService``方法,如下所示:
 
 ````C#
 public class MyService : ITransientDependency
@@ -248,13 +248,13 @@ public class MyService : ITransientDependency
 
 如果你使用了构造函数或属性注入,则无需担心释放服务的资源.但是,如果你从``IServiceProvider``解析了服务,在某些情况下,你可能需要注意释放服务.
 
-ASP.NET Core会在当前HTTP请求结束时释放所有服务,即使你直接从``IServiceProvider``解析了服务（假设你注入了IServiceProvider）.但是,在某些情况下,你可能希望释放/处理手动解析的服务：
+ASP.NET Core会在当前HTTP请求结束时释放所有服务,即使你直接从``IServiceProvider``解析了服务（假设你注入了IServiceProvider）.但是,在某些情况下,你可能希望释放/处理手动解析的服务:
 
 * 你的代码在AspNet Core请求之外执行,执行者没有处理服务范围.
 * 你只有对根服务提供者的引用.
 * 你可能希望立即释放和处理服务（例如,你可能会创建太多具有大量内存占用且不想过度使用内存的服务）.
 
-在任何情况下,你都可以使用这样的`using`代码块来安全地立即释放服务：
+在任何情况下,你都可以使用这样的`using`代码块来安全地立即释放服务:
 
 ````C#
 using (var scope = _serviceProvider.CreateScope())
