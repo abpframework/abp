@@ -2,17 +2,17 @@
 
 ### 关于本教程
 
-这是本教程所有章节中的第二章。下面是所有的章节:
+这是本教程所有章节中的第二章.下面是所有的章节:
 
 * [Part I: 创建项目和书籍列表页面](Part-I.md)
 * **Part II: 创建,编辑,删除书籍(本章)**
 * [Part III: 集成测试](Part-III.md)
 
-你可以从 [这里](https://github.com/volosoft/abp/tree/master/samples/BookStore) 下载本程序的**源码**。
+你可以从 [这里](https://github.com/volosoft/abp/tree/master/samples/BookStore) 下载本程序的**源码**.
 
 ### 新增 Book 实体
 
-通过本节, 你将会了解如何创建一个 modal form 来实现新增书籍的功能。 最终成果如下图所示:
+通过本节, 你将会了解如何创建一个 modal form 来实现新增书籍的功能. 最终成果如下图所示:
 
 ![bookstore-create-dialog](images/bookstore-create-dialog.png)
 
@@ -24,7 +24,7 @@
 
 ##### CreateModal.cshtml.cs
 
-展开 `CreateModal.cshtml`，打开 `CreateModal.cshtml.cs` 代码文件，用如下代码替换 `CreateModalModel` 类的实现:
+展开 `CreateModal.cshtml`,打开 `CreateModal.cshtml.cs` 代码文件,用如下代码替换 `CreateModalModel` 类的实现:
 
 ````C#
 using System.Threading.Tasks;
@@ -53,9 +53,9 @@ namespace Acme.BookStore.Pages.Books
 }
 ````
 
-* 这个类继承了 `BookStorePageModelBase` 而非默认的 `PageModel`。 `BookStorePageModelBase` 继承了 `PageModel` 并且添加了一些Razor页面模型通用的属性和方法。
-* 该类在 `Book` 属性上标记的 `[BindProperty]` 特性绑定了post请求提交上来的数据。
-* 该类通过构造函数注入了 `IBookAppService` 应用服务，并且在 `OnPostAsync` 方法中调用了服务的 `CreateAsync` 方法。
+* 这个类继承了 `BookStorePageModelBase` 而非默认的 `PageModel`. `BookStorePageModelBase` 继承了 `PageModel` 并且添加了一些Razor页面模型通用的属性和方法.
+* 该类在 `Book` 属性上标记的 `[BindProperty]` 特性绑定了post请求提交上来的数据.
+* 该类通过构造函数注入了 `IBookAppService` 应用服务,并且在 `OnPostAsync` 方法中调用了服务的 `CreateAsync` 方法.
 
 ##### CreateModal.cshtml
 
@@ -80,10 +80,10 @@ namespace Acme.BookStore.Pages.Books
 </abp-dynamic-form>
 ````
 
-* 这个 modal 使用 `abp-dynamic-form` Tag Helper 根据 `CreateBookViewModel` 类自动构建了表单。
-  * `abp-model` 指定了 `Book` 属性为模型对象。
-  * `data-ajaxForm` 设置了表单通过AJAX提交。
-  * `abp-form-content` tag helper 作为表单控件渲染位置的占位符 (这是可选的，只有你在 `abp-dynamic-form` 中像本示例这样添加了其他内容才需要).
+* 这个 modal 使用 `abp-dynamic-form` Tag Helper 根据 `CreateBookViewModel` 类自动构建了表单.
+  * `abp-model` 指定了 `Book` 属性为模型对象.
+  * `data-ajaxForm` 设置了表单通过AJAX提交.
+  * `abp-form-content` tag helper 作为表单控件渲染位置的占位符 (这是可选的,只有你在 `abp-dynamic-form` 中像本示例这样添加了其他内容才需要).
 
 #### 添加 "New book" 按钮
 
@@ -105,7 +105,7 @@ namespace Acme.BookStore.Pages.Books
 </abp-card-header>
 ````
 
-如下图所示，只是在表格 **右上方** 添加了 **New book** 按钮:
+如下图所示,只是在表格 **右上方** 添加了 **New book** 按钮:
 
 ![bookstore-new-book-button](images/bookstore-new-book-button.png)
 
@@ -124,9 +124,9 @@ $('#NewBookButton').click(function (e) {
 });
 ````
 
-* `abp.ModalManager` 是一个在客户端打开和管理modal的辅助类。它基于Twitter Bootstrap的标准modal组件通过简化的API抽象隐藏了许多细节.
+* `abp.ModalManager` 是一个在客户端打开和管理modal的辅助类.它基于Twitter Bootstrap的标准modal组件通过简化的API抽象隐藏了许多细节.
 
-现在，你可以 **运行程序** 通过新的 modal form 来创建书籍了。
+现在,你可以 **运行程序** 通过新的 modal form 来创建书籍了.
 
 ### 编辑更新已存在的 Book 实体
 
@@ -136,7 +136,7 @@ $('#NewBookButton').click(function (e) {
 
 #### EditModal.cshtml.cs
 
-展开 `EditModal.cshtml`，打开 `EditModal.cshtml.cs` 文件（ `EditModalModel` 类） 并替换成以下代码:
+展开 `EditModal.cshtml`,打开 `EditModal.cshtml.cs` 文件（ `EditModalModel` 类） 并替换成以下代码:
 
 ````C#
 using System;
@@ -176,9 +176,9 @@ namespace Acme.BookStore.Pages.Books
 }
 ````
 
-* `[HiddenInput]` 和 `[BindProperty]` 是标准的 ASP.NET Core MVC 特性。这里启用 `SupportsGet` 从Http请求的查询字符串中获取Id的值。
-* 在 `OnGetAsync` 方法中，将 `BookAppService.GetAsync` 方法返回的 `BookDto` 映射成 `CreateUpdateBookDto` 并赋值给Book属性。
-* `OnPostAsync` 方法直接使用 `BookAppService.UpdateAsync` 来更新实体。
+* `[HiddenInput]` 和 `[BindProperty]` 是标准的 ASP.NET Core MVC 特性.这里启用 `SupportsGet` 从Http请求的查询字符串中获取Id的值.
+* 在 `OnGetAsync` 方法中,将 `BookAppService.GetAsync` 方法返回的 `BookDto` 映射成 `CreateUpdateBookDto` 并赋值给Book属性.
+* `OnPostAsync` 方法直接使用 `BookAppService.UpdateAsync` 来更新实体.
 
 #### CreateUpdateBookDto
 
@@ -211,7 +211,7 @@ namespace Acme.BookStore
 }
 ````
 
-* 仅仅是添加 `[AutoMapFrom(typeof(BookDto))]` 特性就可以创建上述映射关系。
+* 仅仅是添加 `[AutoMapFrom(typeof(BookDto))]` 特性就可以创建上述映射关系.
 
 #### EditModal.cshtml
 
@@ -238,18 +238,18 @@ namespace Acme.BookStore
 </abp-dynamic-form>
 ````
 
-除了以下几点，这个页面内容和 `CreateModal.cshtml` 非常相似:
+除了以下几点,这个页面内容和 `CreateModal.cshtml` 非常相似:
 
-* 此页面包含了一个 `abp-input` 以保存所编辑book实体的 `Id` 属性。
-* 此页面指定的post地址是 `Books/EditModal` ，并用文本 *Update* 作为 modal 标题。
+* 此页面包含了一个 `abp-input` 以保存所编辑book实体的 `Id` 属性.
+* 此页面指定的post地址是 `Books/EditModal` ,并用文本 *Update* 作为 modal 标题.
 
 #### 为表格添加 "操作（Actions）" 下拉菜单
 
-我们将为表格每行添加下拉按钮 ("Actions") 。 最终效果如下:
+我们将为表格每行添加下拉按钮 ("Actions") . 最终效果如下:
 
 ![bookstore-books-table-actions](images/bookstore-books-table-actions.png)
 
-打开 `Pages/Books/Index.cshtml` 页面，并按下方所示修改表格部分的代码:
+打开 `Pages/Books/Index.cshtml` 页面,并按下方所示修改表格部分的代码:
 
 ````html
 <abp-table striped-rows="true" id="BooksTable">
@@ -318,16 +318,16 @@ $(function () {
 });
 ````
 
-* 通过 `abp.localization.getResource('BookStore')` 可以在客户端使用服务器端定义的相同的本地化语言文本。
-* 定义 `editModal` 为 `ModalManager` 来打开编辑用的 modal 对话框。
-* 在 `columnDefs` 起始处新增一列作为 "Actions" 下拉按钮。
-* "Edit" 操作只是简单调用 `editModal.open` 来打开编辑对话框。
+* 通过 `abp.localization.getResource('BookStore')` 可以在客户端使用服务器端定义的相同的本地化语言文本.
+* 定义 `editModal` 为 `ModalManager` 来打开编辑用的 modal 对话框.
+* 在 `columnDefs` 起始处新增一列作为 "Actions" 下拉按钮.
+* "Edit" 操作只是简单调用 `editModal.open` 来打开编辑对话框.
 
-现在，你可以运行程序，通过编辑操作来更新任一个book实体。
+现在,你可以运行程序,通过编辑操作来更新任一个book实体.
 
 ### 删除一个已有的Book实体
 
-打开 `wwwroot/pages/books/index.js` 文件，在 `rowAction` `items` 下新增一项:
+打开 `wwwroot/pages/books/index.js` 文件,在 `rowAction` `items` 下新增一项:
 
 ````js
 {
@@ -346,9 +346,9 @@ $(function () {
 }
 ````
 
-* `confirmMessage` 用来在实际执行 `action` 之前向用户进行确认。
-* 通过javascript代理方法 `acme.bookStore.book.delete` 执行一个AJAX请求来删除一个book实体。
-* `abp.notify.info` 用来提示用户操作成功。
+* `confirmMessage` 用来在实际执行 `action` 之前向用户进行确认.
+* 通过javascript代理方法 `acme.bookStore.book.delete` 执行一个AJAX请求来删除一个book实体.
+* `abp.notify.info` 用来提示用户操作成功.
 
 最终的 `index.js` 文件内容如下所示:
 
@@ -414,8 +414,8 @@ $(function () {
 });
 ````
 
-运行程序并尝试删除一个book实体。
+运行程序并尝试删除一个book实体.
 
 ### 下一章
 
-查看本教程的 [下一章](Part-III.md) 。
+查看本教程的 [下一章](Part-III.md) .

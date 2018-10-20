@@ -34,7 +34,7 @@ The solution also contains unit & integration test projects properly configured 
 
 ### 创建数据库
 
-查看`.Web`项目下`appsettings.json`文件中的 **连接字符串**：
+查看`.Web`项目下`appsettings.json`文件中的 **连接字符串**:
 
 ````json
 {
@@ -60,7 +60,7 @@ The solution is configured to use **Entity Framework Core** with **MS SQL Server
 
 ### 运行应用程序
 
-您现在可以运行应用程序,它将会打开**home**页面：
+您现在可以运行应用程序,它将会打开**home**页面:
 
 ![bookstore-homepage](images/bookstore-homepage.png)
 
