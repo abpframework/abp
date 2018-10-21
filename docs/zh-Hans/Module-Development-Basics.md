@@ -6,7 +6,7 @@ ABP本身是一个模块化框架.它还提供了一个基础架构和架构模�
 
 ### 模块类
 
-每个模块都应该定义一个模块类.定义模块类的最简单方法是创建一个派生自``AbpModule``的类,如下所示：
+每个模块都应该定义一个模块类.定义模块类的最简单方法是创建一个派生自``AbpModule``的类,如下所示:
 
 ````C#
 public class BlogModule : AbpModule
@@ -20,7 +20,7 @@ public class BlogModule : AbpModule
 
 ##### ConfigureServices方法
 
-``ConfigureServices``是将你的服务添加到依赖注入系统并配置其他模块的主要方法.例：
+``ConfigureServices``是将你的服务添加到依赖注入系统并配置其他模块的主要方法.例:
 
 ````C#
 public class BlogModule : AbpModule
@@ -34,7 +34,7 @@ public class BlogModule : AbpModule
 
 你可以按照Microsoft的[文档](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection)中的说明逐个注册依赖项.但ABP有一个**依照约定的依赖注册系统**,可以自动注册程序集中的所有服务.有关依赖项注入系统的更多信息,请参阅[依赖项注入](Dependency-Injection.md)文档.
 
-你也可以通过这种方式配置其他服务和模块.例：
+你也可以通过这种方式配置其他服务和模块.例:
 
 ````C#
 public class BlogModule : AbpModule
@@ -49,7 +49,7 @@ public class BlogModule : AbpModule
     }
 }
 ````
-有关配置系统的更多信息,请参阅配置（TODO：link）文档.
+有关配置系统的更多信息,请参阅配置（TODO:link）文档.
 
 ##### 配置服务前和后
 
@@ -61,7 +61,7 @@ public class BlogModule : AbpModule
 
 ##### OnApplicationInitialization方法
 
-你可以在启动应用程序时覆盖``OnApplicationInitialization``方法来执行代码.例：
+你可以在启动应用程序时覆盖``OnApplicationInitialization``方法来执行代码.例:
 
 ````C#
 public class BlogModule : AbpModule
@@ -76,7 +76,7 @@ public class BlogModule : AbpModule
 }
 ````
 
-``OnApplicationInitialization``通常由启动模块用于构建ASP.NET Core应用程序的中间件管道.例：
+``OnApplicationInitialization``通常由启动模块用于构建ASP.NET Core应用程序的中间件管道.例:
 
 ````C#
 [DependsOn(typeof(AbpAspNetCoreMvcModule))]
@@ -111,7 +111,7 @@ public class AppModule : AbpModule
 
 ### 模块依赖
 
-在模块化应用程序中,一个模块依赖于另一个模块并不罕见.如果一个Abp模块依赖于另一个模块,它必须声明``[DependsOn]``属性,如下所示：
+在模块化应用程序中,一个模块依赖于另一个模块并不罕见.如果一个Abp模块依赖于另一个模块,它必须声明``[DependsOn]``属性,如下所示:
 
 ````C#
 [DependsOn(typeof(AbpAspNetCoreMvcModule))]

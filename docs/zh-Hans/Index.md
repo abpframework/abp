@@ -1,5 +1,7 @@
 ﻿# ABP 文档
 
+> 翻译来自[cnAbp](https://github.com/cnabp)组织,中文网会持续跟进翻译,目前Abp vNext的英文文档还未完成,大家对整体框架没有深入的理解,翻译难免存在一些问题.敬请见谅.😀
+
 ## 目录
 
 * 入门
@@ -57,7 +59,7 @@
     * [客户端包管理](AspNetCore/Client-Side-Package-Management.md)
     * [捆绑&压缩](AspNetCore/Bundling-Minification.md)
     * [Tag Helpers](Tag-Helpers.md)
-    * [主题化](AspNetCore/Theming.md)
+    * [主题](AspNetCore/Theming.md)
 * 数据访问
   * [Entity Framework Core 集成](Entity-Framework-Core.md)
   * [MongoDB 集成](MongoDB.md)

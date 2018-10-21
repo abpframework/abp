@@ -1,6 +1,6 @@
 ﻿## 使用Console Application
 
-本教程将介绍如何从头开始以最小的依赖关系启动ABP. 您通常希望以 **[启动模板](https://abp.io/Templates)** 开头。
+本教程将介绍如何从头开始以最小的依赖关系启动ABP. 您通常希望以 **[启动模板](https://abp.io/Templates)** 开头.
 
 ### 创建一个新项目
 

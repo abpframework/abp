@@ -1,6 +1,6 @@
 ## Entity Framework Core 集成
 
-本文档介绍了如何将EF Core作为ORM提供程序集成到基于ABP的应用程序以及如何对其进行配置.
+本文介绍了如何将EF Core作为ORM提供程序集成到基于ABP的应用程序以及如何对其进行配置.
 
 ### 安装
 
