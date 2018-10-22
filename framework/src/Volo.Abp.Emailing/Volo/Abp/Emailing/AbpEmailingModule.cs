@@ -12,6 +12,7 @@ namespace Volo.Abp.Emailing
     [DependsOn(
         typeof(AbpSettingsModule),
         typeof(AbpVirtualFileSystemModule),
+        typeof(AbpBackgroundJobsAbstractionsModule),
         typeof(AbpLocalizationModule)
         )]
     public class AbpEmailingModule : AbpModule
