@@ -1,8 +1,9 @@
 using Volo.Abp.BackgroundJobs;
+using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Emailing
 {
-    public class BackgroundEmailSendingJob : BackgroundJob<BackgroundEmailSendingJobArgs>
+    public class BackgroundEmailSendingJob : BackgroundJob<BackgroundEmailSendingJobArgs>, ITransientDependency
     {
         protected IEmailSender EmailSender { get; }
 
