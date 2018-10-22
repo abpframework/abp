@@ -158,6 +158,11 @@ namespace Volo.Abp.IdentityServer.Clients
             ClientSecrets.Add(new ClientSecret(Id, value, expiration, type, description));
         }
 
+        public virtual void RemoveAllSecrets()
+        {
+            ClientSecrets.Clear();
+        }
+
         public virtual void AddScope([NotNull] string scope)
         {
             AllowedScopes.Add(new ClientScope(Id, scope));
@@ -191,6 +196,11 @@ namespace Volo.Abp.IdentityServer.Clients
         public virtual void AddClaim(IGuidGenerator guidGenerator, [NotNull] string type, string value)
         {
             Claims.Add(new ClientClaim(guidGenerator.Create(), Id, type, value));
+        }
+
+        public virtual void RemoveAllClaims()
+        {
+            Claims.Clear();
         }
     }
 }
