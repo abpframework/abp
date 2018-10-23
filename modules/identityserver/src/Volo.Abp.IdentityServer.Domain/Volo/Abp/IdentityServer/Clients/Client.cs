@@ -173,6 +173,11 @@ namespace Volo.Abp.IdentityServer.Clients
             AllowedScopes.Add(new ClientScope(Id, scope));
         }
 
+        public virtual void RemoveAllScopes()
+        {
+            AllowedScopes.Clear();
+        }
+
         public virtual void AddCorsOrigin([NotNull] string origin)
         {
             AllowedCorsOrigins.Add(new ClientCorsOrigin(Id, origin));

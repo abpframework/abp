@@ -80,6 +80,13 @@ namespace Volo.Abp.IdentityServer.Clients
                 DbContext.Set<ClientProperty>().Remove(clientProperty);
             }
 
+            var scopes = DbContext.Set<ClientScope>().Where(s => s.ClientId == entity.Id);
+
+            foreach (var scope in scopes)
+            {
+                DbContext.Set<ClientScope>().Remove(scope);
+            }
+
             return await base.UpdateAsync(entity, autoSave, cancellationToken);
         }
 
