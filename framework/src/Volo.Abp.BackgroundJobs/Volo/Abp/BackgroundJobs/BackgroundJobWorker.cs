@@ -17,9 +17,6 @@ namespace Volo.Abp.BackgroundJobs
         protected IClock Clock { get; }
         protected IBackgroundJobSerializer Serializer { get; }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DefaultBackgroundJobManager"/> class.
-        /// </summary>
         public BackgroundJobWorker(
             IBackgroundJobStore store,
             AbpTimer timer,
