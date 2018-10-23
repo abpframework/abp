@@ -153,6 +153,11 @@ namespace Volo.Abp.IdentityServer.Clients
             );
         }
 
+        public virtual void RemoveAllAllowedGrantTypes()
+        {
+            AllowedGrantTypes.Clear();
+        }
+
         public virtual void AddSecret([NotNull] string value, DateTime? expiration = null, string type = IdentityServerConstants.SecretTypes.SharedSecret, string description = null)
         {
             ClientSecrets.Add(new ClientSecret(Id, value, expiration, type, description));

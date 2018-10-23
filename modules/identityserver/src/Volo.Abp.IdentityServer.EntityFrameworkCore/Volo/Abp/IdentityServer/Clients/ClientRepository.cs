@@ -59,6 +59,13 @@ namespace Volo.Abp.IdentityServer.Clients
                 DbContext.Set<ClientClaim>().Remove(claim);
             }
 
+            var grantTypes = DbContext.Set<ClientGrantType>().Where(s => s.ClientId == entity.Id);
+
+            foreach (var grantType in grantTypes)
+            {
+                DbContext.Set<ClientGrantType>().Remove(grantType);
+            }
+
             return await base.UpdateAsync(entity, autoSave, cancellationToken);
         }
 
