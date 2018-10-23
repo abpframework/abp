@@ -193,9 +193,19 @@ namespace Volo.Abp.IdentityServer.Clients
             IdentityProviderRestrictions.Add(new ClientIdPRestriction(Id, provider));
         }
 
-        public virtual void AddProperty([NotNull] string key)
+        public virtual void RemoveAllIdentityProviderRestriction()
         {
-            Properties.Add(new ClientProperty(Id, key));
+            IdentityProviderRestrictions.Clear();
+        }
+
+        public virtual void AddProperty([NotNull] string key, [NotNull] string value)
+        {
+            Properties.Add(new ClientProperty(Id, key,value));
+        }
+
+        public virtual void RemoveAllProperties()
+        {
+            Properties.Clear();
         }
 
         public virtual void AddClaim(IGuidGenerator guidGenerator, [NotNull] string type, string value)

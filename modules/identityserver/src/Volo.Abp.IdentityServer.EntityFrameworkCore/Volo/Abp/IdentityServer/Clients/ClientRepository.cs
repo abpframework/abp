@@ -66,6 +66,20 @@ namespace Volo.Abp.IdentityServer.Clients
                 DbContext.Set<ClientGrantType>().Remove(grantType);
             }
 
+            var restrictions = DbContext.Set<ClientIdPRestriction>().Where(s => s.ClientId == entity.Id);
+
+            foreach (var restriction in restrictions)
+            {
+                DbContext.Set<ClientIdPRestriction>().Remove(restriction);
+            }
+
+            var properties = DbContext.Set<ClientProperty>().Where(s => s.ClientId == entity.Id);
+
+            foreach (var clientProperty in properties)
+            {
+                DbContext.Set<ClientProperty>().Remove(clientProperty);
+            }
+
             return await base.UpdateAsync(entity, autoSave, cancellationToken);
         }
 
