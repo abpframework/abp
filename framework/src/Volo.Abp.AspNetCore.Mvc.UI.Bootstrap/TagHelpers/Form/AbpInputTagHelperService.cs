@@ -41,6 +41,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             {
                 output.TagMode = TagMode.StartTagAndEndTag;
                 output.TagName = "div";
+                LeaveOnlyGroupAttributes(context, output);
                 output.Attributes.AddClass(isCheckbox ? "form-check" : "form-group");
                 output.Content.SetHtmlContent(output.Content.GetContent() + innerHtml);
             }
@@ -116,7 +117,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
         {
             var tagHelper = GetInputTagHelper(context, output);
 
-            var inputTagHelperOutput = GetInnerTagHelper(output.Attributes, context, tagHelper, "input");
+            var inputTagHelperOutput = GetInnerTagHelper(GetInputAttributes(context, output), context, tagHelper, "input");
 
             ConvertToTextAreaIfTextArea(inputTagHelperOutput);
 
@@ -190,13 +191,43 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             tagHelperOutput.TagName = "textarea";
             tagHelperOutput.TagMode = TagMode.StartTagAndEndTag;
             tagHelperOutput.Content.SetContent(TagHelper.AspFor.ModelExplorer.Model?.ToString());
-            if (textAreaAttribute.Rows>0)
+            if (textAreaAttribute.Rows > 0)
             {
                 tagHelperOutput.Attributes.Add("rows", textAreaAttribute.Rows);
             }
             if (textAreaAttribute.Cols > 0)
             {
                 tagHelperOutput.Attributes.Add("cols", textAreaAttribute.Cols);
+            }
+        }
+
+        protected virtual TagHelperAttributeList GetInputAttributes(TagHelperContext context, TagHelperOutput output)
+        {
+            var groupPrefix = "group-";
+
+            var tagHelperAttributes = output.Attributes.Where(a => !a.Name.StartsWith(groupPrefix)).ToList();
+            var attrList = new TagHelperAttributeList();
+
+            foreach (var tagHelperAttribute in tagHelperAttributes)
+            {
+                attrList.Add(tagHelperAttribute);
+            }
+
+            return attrList;
+        }
+
+        protected virtual void LeaveOnlyGroupAttributes(TagHelperContext context, TagHelperOutput output)
+        {
+            var groupPrefix = "group-";
+            var tagHelperAttributes = output.Attributes.Where(a => a.Name.StartsWith(groupPrefix)).ToList();
+
+            output.Attributes.Clear();
+
+            foreach (var tagHelperAttribute in tagHelperAttributes)
+            {
+                var nameWithoutPrefix = tagHelperAttribute.Name.Substring(groupPrefix.Length);
+                var newAttritube = new TagHelperAttribute(nameWithoutPrefix,tagHelperAttribute.Value);
+                output.Attributes.Add(newAttritube);
             }
         }
     }
