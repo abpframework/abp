@@ -193,17 +193,17 @@ namespace Volo.Abp.IdentityServer.Clients
             PostLogoutRedirectUris.Add(new ClientPostLogoutRedirectUri(Id, postLogoutRedirectUri));
         }
 
-        public virtual void RemoveAllCorsOrigin([NotNull] string origin)
+        public virtual void RemoveAllCorsOrigin()
         {
             AllowedCorsOrigins.Clear();
         }
 
-        public virtual void RemoveAllRedirectUri([NotNull] string redirectUri)
+        public virtual void RemoveAllRedirectUri()
         {
             RedirectUris.Clear();
         }
 
-        public virtual void RemoveAllPostLogoutRedirectUri([NotNull] string postLogoutRedirectUri)
+        public virtual void RemoveAllPostLogoutRedirectUri()
         {
             PostLogoutRedirectUris.Clear();
         }
