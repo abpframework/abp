@@ -22,6 +22,8 @@ namespace Volo.Docs.Pages.Documents.Project
         [BindProperty(SupportsGet = true)]
         public string DocumentName { get; set; }
 
+        public string ProjectDisplayName { get; set; }
+
         public string ProjectFormat { get; private set; }
 
         public string DocumentNameWithExtension { get; private set; }
@@ -69,6 +71,7 @@ namespace Volo.Docs.Pages.Documents.Project
         private void SetPageParams(ProjectDto project)
         {
             ProjectFormat = project.Format;
+            ProjectDisplayName = project.Name;
 
             if (DocumentName.IsNullOrWhiteSpace())
             {

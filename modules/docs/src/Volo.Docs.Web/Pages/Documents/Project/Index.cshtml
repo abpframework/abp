@@ -10,6 +10,7 @@
 @{
     ViewBag.FluidLayout = true;
     Layout = ThemeManager.CurrentTheme.GetEmptyLayout();
+    var projectDisplayName = Model.ProjectDisplayName ?? Model.ProjectName;
 }
 @section styles {
     <abp-style-bundle name="@typeof(IndexModel).FullName">
@@ -45,10 +46,10 @@
 
                 <div class="docs-top">
                     <nav class="navbar navbar-logo">
-                        @if (!Model.ProjectName.IsNullOrWhiteSpace())
+                        @if (!projectDisplayName.IsNullOrWhiteSpace())
                         {
                             <a class="navbar-brand w-100" href="@Model.CreateLink(Model.GetSpecificVersionOrLatest())">
-                                @Model.ProjectName<br>
+                                @projectDisplayName<br>
                                 <strong class="display-block">
                                     @L["Documents"]
                                 </strong>
