@@ -157,7 +157,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 ViewContext = TagHelper.ViewContext
             };
 
-            return RenderTagHelper(new TagHelperAttributeList(), context, labelTagHelper, _encoder, "span", TagMode.StartTagAndEndTag, true);
+            return RenderTagHelper(new TagHelperAttributeList(), context, labelTagHelper, _encoder, "label", TagMode.StartTagAndEndTag, true);
         }
     }
 }
