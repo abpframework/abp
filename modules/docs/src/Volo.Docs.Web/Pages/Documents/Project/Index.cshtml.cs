@@ -42,7 +42,10 @@ namespace Volo.Docs.Pages.Documents.Project
         private readonly IDocumentConverterFactory _documentConverterFactory;
         private readonly IProjectAppService _projectAppService;
 
-        public IndexModel(IDocumentAppService documentAppService, IDocumentConverterFactory documentConverterFactory, IProjectAppService projectAppService)
+        public IndexModel(
+            IDocumentAppService documentAppService, 
+            IDocumentConverterFactory documentConverterFactory, 
+            IProjectAppService projectAppService)
         {
             _documentAppService = documentAppService;
             _documentConverterFactory = documentConverterFactory;
@@ -87,6 +90,8 @@ namespace Volo.Docs.Pages.Documents.Project
                 .GetVersions(project.ShortName, project.DefaultDocumentName, project.ExtraProperties,
                     project.DocumentStoreType, DocumentNameWithExtension))
                     .Select(v => new VersionInfo(v, v)).ToList();
+
+            Versions.Insert(0, new VersionInfo("master","master"));
 
             LatestVersionInfo = GetLatestVersion();
 
