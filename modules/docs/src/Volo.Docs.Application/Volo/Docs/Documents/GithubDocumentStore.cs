@@ -8,6 +8,7 @@ using System.Net.Sockets;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Octokit;
+using Octokit.Internal;
 using Volo.Abp;
 using Volo.Abp.Domain.Services;
 using ProductHeaderValue = Octokit.ProductHeaderValue;
@@ -26,7 +27,7 @@ namespace Volo.Docs.Documents
 
             var token = projectExtraProperties["GithubAccessToken"]?.ToString();
 
-            var rawRootUrl = rootUrl.Replace("github.com", token + "raw.githubusercontent.com").Replace("/tree/", "/");
+            var rawRootUrl = rootUrl.Replace("github.com", "raw.githubusercontent.com").Replace("/tree/", "/");
             var rawUrl = rawRootUrl + documentName;
             var editLink = rootUrl.Replace("/tree/", "/blob/") + documentName;
             string localDirectory = "";
@@ -49,19 +50,24 @@ namespace Volo.Docs.Documents
                 LocalDirectory = localDirectory,
                 FileName = fileName,
                 Version = version,
-                SuccessfullyRetrieved = TryDownloadWebContent(rawUrl, out var content),
+                SuccessfullyRetrieved = TryDownloadWebContent(rawUrl, token, out var content),
                 Content = content
             };
 
             return await Task.FromResult(document);
         }
 
-        private bool TryDownloadWebContent(string rawUrl, out string content)
+        private bool TryDownloadWebContent(string rawUrl, string token, out string content)
         {
             using (var webClient = new WebClient())
             {
                 try
                 {
+                    if (!token.IsNullOrWhiteSpace())
+                    {
+                        webClient.Headers.Add("Authorization", "token " + token);
+                    }
+
                     content = webClient.DownloadString(rawUrl);
                     return true;
                 }
@@ -78,10 +84,22 @@ namespace Volo.Docs.Documents
         {
             try
             {
-                var gitHubClient = new GitHubClient(new ProductHeaderValue("AbpWebSite"));
+                var token = projectExtraProperties["GithubAccessToken"]?.ToString();
+
+                ICredentialStore credentialStore = token.IsNullOrWhiteSpace()
+                    ? null
+                    : new InMemoryCredentialStore(new Credentials(token));
+
+                var gitHubClient = new GitHubClient(
+                    new ProductHeaderValue("AbpWebSite"),
+                    credentialStore
+                );
+                
                 var url = projectExtraProperties["GithubRootUrl"].ToString();
-                var releases = await gitHubClient.Repository.Release.GetAll(GetGithubOrganizationNameFromUrl(url),
-                    GetGithubRepositoryNameFromUrl(url));
+                var releases = await gitHubClient.Repository.Release.GetAll(
+                    GetGithubOrganizationNameFromUrl(url),
+                    GetGithubRepositoryNameFromUrl(url)
+                );
 
                 return releases.OrderByDescending(r => r.PublishedAt).Select(r => r.TagName).ToList();
             }

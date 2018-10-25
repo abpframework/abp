@@ -94,7 +94,7 @@ namespace Volo.Docs.Documents
             {
                 RootNode = JsonConvert.DeserializeObject<NavigationNode>(Content);
             }
-            catch (JsonException)
+            catch (JsonException ex)
             {
                 //todo: should log the exception?
                 RootNode = new NavigationNode();
