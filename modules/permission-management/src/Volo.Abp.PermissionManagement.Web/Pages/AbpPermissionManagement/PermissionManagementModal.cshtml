@@ -38,9 +38,9 @@
                                     <abp-input asp-for="@Model.Groups[i].Permissions[j].IsGranted" 
                                                label="@Model.Groups[i].Permissions[j].GetShownName(Model.ProviderName)"
                                                disabled="@Model.Groups[i].Permissions[j].IsDisabled(Model.ProviderName)"
-                                               data-permission-name="@Model.Groups[i].Permissions[j].Name"
-                                               data-parent-name="@(Model.Groups[i].Permissions[j].ParentName ?? "")"
-                                               style="margin-left: @(Model.Groups[i].Permissions[j].Depth * 20)px" />
+                                               group-data-permission-name="@Model.Groups[i].Permissions[j].Name"
+                                               group-data-parent-name="@(Model.Groups[i].Permissions[j].ParentName ?? "")"
+                                               group-style="margin-left: @(Model.Groups[i].Permissions[j].Depth * 20)px" />
                                     <input asp-for="@Model.Groups[i].Permissions[j].Name" />
                                 }
                             </div>
