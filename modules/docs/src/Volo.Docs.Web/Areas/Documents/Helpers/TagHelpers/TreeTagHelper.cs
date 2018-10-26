@@ -116,6 +116,11 @@ namespace Volo.Docs.Areas.Documents.Helpers.TagHelpers
 
         private string NormalizePath(string path, bool hasChildItems)
         {
+            if (IsExternalLink(path))
+            {
+                return path;
+            }
+
             var pathWithoutFileExtension = RemoveFileExtensionFromPath(path);
 
             if (string.IsNullOrWhiteSpace(path))
@@ -124,6 +129,16 @@ namespace Volo.Docs.Areas.Documents.Helpers.TagHelpers
             }
 
             return  "/documents/" + ProjectName + "/" + Version + "/" + pathWithoutFileExtension;
+        }
+
+        protected virtual bool IsExternalLink(string path)
+        {
+            if (path.IsNullOrEmpty())
+            {
+                return false;
+            }
+
+            return path.StartsWith("http") || path.StartsWith("https");
         }
 
         private string RemoveFileExtensionFromPath(string path)
@@ -137,6 +152,5 @@ namespace Volo.Docs.Areas.Documents.Helpers.TagHelpers
                  ? path.Left(path.Length - ProjectFormat.Length - 1)
                  : path;
         }
-
     }
 }
