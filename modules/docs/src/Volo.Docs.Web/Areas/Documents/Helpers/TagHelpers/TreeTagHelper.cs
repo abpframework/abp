@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Docs.Documents;
+using Volo.Docs.Utils;
 
 namespace Volo.Docs.Areas.Documents.Helpers.TagHelpers
 {
@@ -116,7 +117,7 @@ namespace Volo.Docs.Areas.Documents.Helpers.TagHelpers
 
         private string NormalizePath(string path, bool hasChildItems)
         {
-            if (IsExternalLink(path))
+            if (UrlHelper.IsExternalLink(path))
             {
                 return path;
             }
@@ -129,16 +130,6 @@ namespace Volo.Docs.Areas.Documents.Helpers.TagHelpers
             }
 
             return  "/documents/" + ProjectName + "/" + Version + "/" + pathWithoutFileExtension;
-        }
-
-        protected virtual bool IsExternalLink(string path)
-        {
-            if (path.IsNullOrEmpty())
-            {
-                return false;
-            }
-
-            return path.StartsWith("http") || path.StartsWith("https");
         }
 
         private string RemoveFileExtensionFromPath(string path)

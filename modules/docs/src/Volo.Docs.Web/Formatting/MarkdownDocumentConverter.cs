@@ -1,8 +1,9 @@
-﻿using System;
+﻿using CommonMark;
+using System;
 using System.Text;
 using System.Text.RegularExpressions;
-using CommonMark;
 using Volo.Abp.DependencyInjection;
+using Volo.Docs.Utils;
 
 namespace Volo.Docs.Formatting
 {
@@ -31,8 +32,15 @@ namespace Volo.Docs.Formatting
 
             var normalized = Regex.Replace(content, MarkdownLinkRegExp, delegate (Match match)
                {
+                   var link = match.Groups[2].Value;
+                   if (UrlHelper.IsExternalLink(link))
+                   {
+                       return match.Value;
+                   }
+
                    var displayText = match.Groups[1].Value;
-                   var documentName = RemoveFileExtension(match.Groups[2].Value);
+
+                   var documentName = RemoveFileExtension(link);
                    var documentLocalDirectoryNormalized = documentLocalDirectory.TrimStart('/').TrimEnd('/');
                    if (!string.IsNullOrWhiteSpace(documentLocalDirectoryNormalized))
                    {
@@ -84,6 +92,7 @@ namespace Volo.Docs.Formatting
             return documentName.Left(documentName.Length - Type.Length - 1);
         }
 
+        //TODO: Merge with UrlHelper.IsExternalLink
         private static bool IsRemoteUrl(string url)
         {
             if (url == null)
