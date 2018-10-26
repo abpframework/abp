@@ -91,8 +91,6 @@ namespace Volo.Docs.Pages.Documents.Project
                     project.DocumentStoreType, DocumentNameWithExtension))
                     .Select(v => new VersionInfo(v, v)).ToList();
 
-            Versions.Insert(0, new VersionInfo("master","master"));
-
             LatestVersionInfo = GetLatestVersion();
 
             if (string.Equals(Version, DocsAppConsts.LatestVersion, StringComparison.OrdinalIgnoreCase))

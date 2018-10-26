@@ -63,9 +63,12 @@ namespace Volo.Docs.Documents
             return dto;
         }
 
+        //TODO: Application service never gets such a parameter: Dictionary<string, object> projectExtraProperties !!!
         public async Task<List<string>> GetVersions(string projectShortName, string defaultDocumentName, Dictionary<string, object> projectExtraProperties,
             string documentStoreType, string documentName)
         {
+            var project = await _projectRepository.FindByShortNameAsync(projectShortName);
+
             if (string.IsNullOrWhiteSpace(documentName))
             {
                 documentName = defaultDocumentName;
@@ -79,6 +82,15 @@ namespace Volo.Docs.Documents
             {
                 versions = await documentStore.GetVersions(projectExtraProperties, documentName);
                 await SetVersionsToCache(projectShortName, versions);
+            }
+
+            if (!project.MinimumVersion.IsNullOrEmpty())
+            {
+                var minVersionIndex = versions.IndexOf(project.MinimumVersion);
+                if (minVersionIndex > -1)
+                {
+                    versions = versions.GetRange(0, minVersionIndex + 1);
+                }
             }
 
             return versions;
