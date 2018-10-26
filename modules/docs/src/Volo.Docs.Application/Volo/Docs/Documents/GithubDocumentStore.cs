@@ -86,15 +86,10 @@ namespace Volo.Docs.Documents
             {
                 var token = projectExtraProperties["GithubAccessToken"]?.ToString();
 
-                ICredentialStore credentialStore = token.IsNullOrWhiteSpace()
-                    ? null
-                    : new InMemoryCredentialStore(new Credentials(token));
+                var gitHubClient = token.IsNullOrWhiteSpace()
+                    ? new GitHubClient(new ProductHeaderValue("AbpWebSite"))
+                    : new GitHubClient(new ProductHeaderValue("AbpWebSite"), new InMemoryCredentialStore(new Credentials(token)));
 
-                var gitHubClient = new GitHubClient(
-                    new ProductHeaderValue("AbpWebSite"),
-                    credentialStore
-                );
-                
                 var url = projectExtraProperties["GithubRootUrl"].ToString();
                 var releases = await gitHubClient.Repository.Release.GetAll(
                     GetGithubOrganizationNameFromUrl(url),
