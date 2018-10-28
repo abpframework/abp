@@ -12,7 +12,7 @@ Volo.Abp.Localization是本地化系统的核心包. 使用程序包管理器控
 Install-Package Volo.Abp.Localization
 ```
 
-然后,您可以将 **AbpLocalizationModule** 依赖项添加到您的模块:
+然后, 你可以将 **AbpLocalizationModule** 依赖项添加到模块:
 
 ```c#
 using Volo.Abp.Modularity;
@@ -126,7 +126,7 @@ services.Configure<AbpLocalizationOptions>(options =>
 
 ##### 扩展现有资源
 
-继承资源可以创建新的资源, 无需修改现有的资源. 但是在某些情况下,  您可能不想创建新资源,而是直接扩展现有资源. 例如:
+继承资源可以创建新的资源, 无需修改现有的资源. 但是在某些情况下,  你可能不想创建新资源,而是直接扩展现有资源. 例如:
 
 ````C#
 services.Configure<AbpLocalizationOptions>(options =>

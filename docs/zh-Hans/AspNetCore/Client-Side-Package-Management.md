@@ -45,7 +45,7 @@ yarn
 
 #### 贡献包
 
-如果你需要不在标准软件包中的第三方NPM软件包,您可以在Github[repository](https://github.com/volosoft/abp)上创建Pull请求. 接受遵循这些规则的拉取请求:
+如果你需要不在标准软件包中的第三方NPM软件包,你可以在Github[repository](https://github.com/volosoft/abp)上创建Pull请求. 接受遵循这些规则的拉取请求:
 
 * 对于NPM上的`package-name`, 包名称应该命名为`@abp/package-name`(例如:`bootstrap`包的`@abp/bootstrap`).
 * 它应该是**最新的稳定**版本的包.
