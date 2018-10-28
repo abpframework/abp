@@ -13,7 +13,7 @@ ABP内置了简单,动态,强大,模块化的方式.
 
 > 默认情况下已在启动模板安装此软件包. 大多数情况下,你不需要手动安装它.
 
-将`Volo.Abp.AspNetCore.Mvc.UI.Bundling` nuget包安装到您的项目中:
+将`Volo.Abp.AspNetCore.Mvc.UI.Bundling` nuget包安装到你的项目中:
 
 ````
 install-package Volo.Abp.AspNetCore.Mvc.UI.Bundling
@@ -132,7 +132,7 @@ public class MyWebModule : AbpModule
 }
 ````
 
-> 您可以在脚本和样式包中使用相同的名称(*MyGlobalBundle*), 因为它们被添加到不同的集合(`ScriptBundles`和`StyleBundles`).
+> 你可以在脚本和样式包中使用相同的名称(*MyGlobalBundle*), 因为它们被添加到不同的集合(`ScriptBundles`和`StyleBundles`).
 
 在定义bundle之后, 可以使用上面定义的相同tag helpers将其包括在页面中. 例如:
 
@@ -311,7 +311,7 @@ services.Configure<BundlingOptions>(options =>
 
 建议为应用程序定义多个包, 每个包用于不同的目的.
 
-* **全局包**: 应用程序中的每个页面都包含全局样式/脚本包. 主题已经定义了全局样式和脚本包. 您的模块可以为他们做出贡献.
+* **全局包**: 应用程序中的每个页面都包含全局样式/脚本包. 主题已经定义了全局样式和脚本包. 你的模块可以为他们做出贡献.
 * **布局包**: 这是针对单个布局的特定包. 仅包含在所有页面之间共享的资源使用布局. 使用bundling tag helpers创建捆绑包是一种很好的做法.
 * **模块包**: 用于单个模块页面之间的共享资源.
 * **页面包**: 为每个页面创建的特定包. 使用bundling tag helpers创建捆绑包作为最佳实践.

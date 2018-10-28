@@ -81,7 +81,7 @@ ABP提供了用于处理Web应用程序异常的标准模型.
 }
 ````
 
-`AbpValidationException`已经实现了`IHasValidationErrors`接口,当请求输入无效时,框架会自动抛出此错误. 因此,除非您有自定义的验证逻辑,否则不需要处理验证错误.
+`AbpValidationException`已经实现了`IHasValidationErrors`接口,当请求输入无效时,框架会自动抛出此错误. 因此,除非你有自定义的验证逻辑,否则不需要处理验证错误.
 
 #### 日志
 

@@ -60,7 +60,7 @@ The solution is configured to use **Entity Framework Core** with **MS SQL Server
 
 ### 运行应用程序
 
-您现在可以运行应用程序,它将会打开**home**页面:
+你现在可以运行应用程序,它将会打开**home**页面:
 
 ![bookstore-homepage](images/bookstore-homepage.png)
 
