@@ -86,7 +86,7 @@ public class LabelDto : EntityDto<Guid>
 
 * **推荐** 为异步方法使用 **Async** 后缀.
 * **不推荐** 在方法名中重复实体的名称.
-  * 例如: 在 `IProductAppService` 中定义`GetProductAsync(...)` 而不是 `GetAsync(...)` .
+  * 例如: 在 `IProductAppService` 中定义`GetAsync(...)` 而不是 `GetProductAsync(...)` .
 
 ##### 获取单一实体
 
@@ -104,7 +104,7 @@ Task<QuestionWithDetailsDto> GetAsync(Guid id);
 * **推荐** 如果需要获取单个DTO可以使用参数进行 **过滤**, **排序** 和 **分页**.
   * **推荐** 尽可能让过滤参数可选.
   * **推荐** 将排序与分页属性设置为可选, 并且提供默认值.
-  * **推荐** 限制最大页数大小 (基本性能考虑).
+  * **推荐** 限制最大页数大小 (基于性能考虑).
 * **推荐** 返回 **详细DTO**集合. 示例:
 
 ````C#
@@ -116,7 +116,7 @@ Task<List<QuestionWithDetailsDto>> GetListAsync(QuestionListQueryDto queryDto);
 * **推荐** 使用 `CreateAsync` 做为**方法名**.
 * **推荐** 使用**专门的输入DTO**来创建实体.
 * **推荐** 使用 **data annotations** 进行输入验证.
-  * 尽可能在**领域**之间共享常量(通过域**domain shared** package定义的常量).
+  * 尽可能在**领域**之间共享常量(通过**domain shared** package定义的常量).
 * **推荐** 只需要创建实体的**最少**信息, 但是提供了其他可选属性.
 
 示例**方法**:
@@ -147,7 +147,7 @@ public class CreateQuestionDto
 - **推荐** 使用**专门的输入DTO**来更新实体.
 - **推荐** 获取实体的id做为分离的原始参数. 不要包含更新DTO.
 - **推荐** 使用 **data annotations** 进行输入验证.
-  - 尽可能在**领域**之间共享常量(通过域**domain shared** package定义的常量).
+  - 尽可能在**领域**之间共享常量(通过**domain shared** package定义的常量).
 - **推荐** 返回更新实体的**详细**DTO.
 
 示例:
