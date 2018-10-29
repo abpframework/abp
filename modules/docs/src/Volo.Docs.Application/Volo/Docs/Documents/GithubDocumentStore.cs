@@ -1,3 +1,6 @@
+using Microsoft.Extensions.Logging;
+using Octokit;
+using Octokit.Internal;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -6,9 +9,6 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Sockets;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using Octokit;
-using Octokit.Internal;
 using Volo.Abp;
 using Volo.Abp.Domain.Services;
 using ProductHeaderValue = Octokit.ProductHeaderValue;
@@ -80,7 +80,7 @@ namespace Volo.Docs.Documents
             }
         }
 
-        public async Task<List<string>> GetVersions(Dictionary<string, object> projectExtraProperties, string documentName)
+        public async Task<List<VersionInfoDto>> GetVersions(Dictionary<string, object> projectExtraProperties, string documentName)
         {
             try
             {
@@ -96,12 +96,12 @@ namespace Volo.Docs.Documents
                     GetGithubRepositoryNameFromUrl(url)
                 );
 
-                return releases.OrderByDescending(r => r.PublishedAt).Select(r => r.TagName).ToList();
+                return releases.OrderByDescending(r => r.PublishedAt).Select(r => new VersionInfoDto { Name = r.TagName, DisplayName = r.TagName }).ToList();
             }
             catch (Exception ex)
             {
                 Logger.LogError(ex.Message, ex);
-                return new List<string>();
+                return new List<VersionInfoDto>();
             }
         }
 

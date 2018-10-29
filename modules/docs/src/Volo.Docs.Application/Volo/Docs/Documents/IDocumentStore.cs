@@ -9,6 +9,6 @@ namespace Volo.Docs.Documents
         Task<Document> FindDocumentByNameAsync(Dictionary<string, object> projectExtraProperties, string projectFormat,
             string documentName, string version);
 
-        Task<List<string>> GetVersions(Dictionary<string, object> projectExtraProperties, string documentName);
+        Task<List<VersionInfoDto>> GetVersions(Dictionary<string, object> projectExtraProperties, string documentName);
     }
 }

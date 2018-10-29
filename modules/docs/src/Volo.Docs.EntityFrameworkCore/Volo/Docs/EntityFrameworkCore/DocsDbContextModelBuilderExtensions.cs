@@ -26,6 +26,7 @@ namespace Volo.Docs.EntityFrameworkCore
                 b.Property(x => x.ShortName).IsRequired().HasMaxLength(ProjectConsts.MaxShortNameLength);
                 b.Property(x => x.DefaultDocumentName).IsRequired().HasMaxLength(ProjectConsts.MaxDefaultDocumentNameLength);
                 b.Property(x => x.NavigationDocumentName).IsRequired().HasMaxLength(ProjectConsts.MaxNavigationDocumentNameLength);
+                b.Property(x => x.LatestVersionBranchName).HasMaxLength(ProjectConsts.MaxLatestVersionBranchNameLength);
 
                 b.ConfigureExtraProperties();
             });

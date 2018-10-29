@@ -47,6 +47,8 @@ namespace Volo.Docs.Projects
 
         public virtual string MainWebsiteUrl { get; protected set; }
 
+        public virtual string LatestVersionBranchName { get; set; }
+
         protected Project()
         {
             ExtraProperties = new Dictionary<string, object>();

@@ -89,7 +89,7 @@ namespace Volo.Docs.Pages.Documents.Project
             Versions = (await _documentAppService
                 .GetVersions(project.ShortName, project.DefaultDocumentName, project.ExtraProperties,
                     project.DocumentStoreType, DocumentNameWithExtension))
-                    .Select(v => new VersionInfo(v, v)).ToList();
+                    .Select(v => new VersionInfo(v.DisplayName, v.Name)).ToList();
 
             LatestVersionInfo = GetLatestVersion();
 

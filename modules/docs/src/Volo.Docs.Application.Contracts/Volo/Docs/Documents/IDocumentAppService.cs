@@ -13,7 +13,7 @@ namespace Volo.Docs.Documents
         Task<NavigationWithDetailsDto> GetNavigationDocumentAsync(string projectShortName, string version,
             bool normalize);
 
-        Task<List<string>> GetVersions(string projectShortName, string defaultDocumentName,
+        Task<List<VersionInfoDto>> GetVersions(string projectShortName, string defaultDocumentName,
             Dictionary<string, object> projectExtraProperties,
             string documentStoreType, string documentName);
 
