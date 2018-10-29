@@ -22,6 +22,7 @@
             <abp-tab title="Home">
                 Content_Home
             </abp-tab>
+            <abp-tab-link title="Link" name="LinkId" href="#"/>
             <abp-tab title="profile">
                 Content_Profile
             </abp-tab>
@@ -38,10 +39,11 @@
     <div class="code-area">
         <pre>
 &lt;abp-tabs name=&quot;TabId&quot;&gt;
-    &lt;abp-tab name=&quot;nav-home&quot; title=&quot;Home&quot;&gt;
+    &lt;abp-tab title=&quot;Home&quot;&gt;
         Content_Home
     &lt;/abp-tab&gt;   
-    &lt;abp-tab name=&quot;nav-profile&quot; title=&quot;profile&quot;&gt;
+    &lt;abp-tab-link title=&quot;Link&quot; name=&quot;LinkId&quot; href=&quot;#&quot;/&gt;
+    &lt;abp-tab title=&quot;profile&quot;&gt;
         Content_Profile
     &lt;/abp-tab&gt;
     &lt;abp-tab-dropdown title=&quot;Contact&quot; name=&quot;ContactDropdown&quot;&gt;
@@ -108,14 +110,14 @@
     </div>
     <div class="code-area">
         <pre>
-&lt;abp-tabs name=&quot;TabId&quot;   tab-style=&quot;Pill&quot; &gt;
-    &lt;abp-tab name=&quot;nav-home&quot; active=&quot;true&quot; title=&quot;Home&quot;&gt;
+&lt;abp-tabs tab-style=&quot;Pill&quot; &gt;
+    &lt;abp-tab active=&quot;true&quot; title=&quot;Home&quot;&gt;
         Content_Home
     &lt;/abp-tab&gt;   
-    &lt;abp-tab name=&quot;nav-profile&quot; title=&quot;profile&quot;&gt;
+    &lt;abp-tab title=&quot;profile&quot;&gt;
         Content_Profile
     &lt;/abp-tab&gt;
-    &lt;abp-tab name=&quot;nav-contact&quot; title=&quot;Contact&quot;&gt;
+    &lt;abp-tab title=&quot;Contact&quot;&gt;
         Content_Contact
     &lt;/abp-tab&gt;
 &lt;/abp-tabs&gt;
@@ -142,13 +144,13 @@
     <div class="code-area">
         <pre>
 &lt;abp-tabs name=&quot;TabId&quot;  tab-style=&quot;Pill&quot; vertical-header-size=&quot;_2&quot; &gt;
-    &lt;abp-tab name=&quot;nav-home&quot; active=&quot;true&quot; title=&quot;Home&quot;&gt;
+    &lt;abp-tab active=&quot;true&quot; title=&quot;Home&quot;&gt;
         Content_Home
     &lt;/abp-tab&gt;   
-    &lt;abp-tab name=&quot;nav-profile&quot; title=&quot;profile&quot;&gt;
+    &lt;abp-tab title=&quot;profile&quot;&gt;
         Content_Profile
     &lt;/abp-tab&gt;
-    &lt;abp-tab name=&quot;nav-contact&quot; title=&quot;Contact&quot;&gt;
+    &lt;abp-tab title=&quot;Contact&quot;&gt;
         Content_Contact
     &lt;/abp-tab&gt;
 &lt;/abp-tabs&gt;
