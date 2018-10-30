@@ -5,13 +5,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Volo.Abp;
 
-namespace MyCompanyName.MyProjectName.Host
+namespace IdentityServerHost
 {
     public class Startup
     {
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.AddApplication<DemoAppModule>(options =>
+            services.AddApplication<IdentityServerHostModule>(options =>
             {
                 options.UseAutofac();
             });

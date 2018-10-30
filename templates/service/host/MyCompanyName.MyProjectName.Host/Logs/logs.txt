@@ -1,74 +1,56 @@
-2018-10-30 17:27:47.969 +03:00 [INF] Starting web host.
-2018-10-30 17:27:49.368 +03:00 [FTL] Application startup exception
-Autofac.Core.Registration.ComponentNotRegisteredException: The requested service 'Volo.Abp.DependencyInjection.ObjectAccessor`1[[Microsoft.AspNetCore.Builder.IApplicationBuilder, Microsoft.AspNetCore.Http.Abstractions, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60]]' has not been registered. To avoid this exception, either register a component to provide the service, check for service registration using IsRegistered(), or use the ResolveOptional() method to resolve an optional dependency.
-   at Autofac.ResolutionExtensions.ResolveService(IComponentContext context, Service service, IEnumerable`1 parameters)
-   at Autofac.Extensions.DependencyInjection.AutofacServiceProvider.GetRequiredService(Type serviceType) in D:\Github\abp\framework\src\Volo.Abp.Autofac\Autofac\Extensions\DependencyInjection\AutofacServiceProvider.cs:line 69
-   at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService(IServiceProvider provider, Type serviceType)
-   at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService[T](IServiceProvider provider)
-   at Microsoft.AspNetCore.Builder.AbpApplicationBuilderExtensions.InitializeApplication(IApplicationBuilder app) in D:\Github\abp\framework\src\Volo.Abp.AspNetCore\Microsoft\AspNetCore\Builder\AbpApplicationBuilderExtensions.cs:line 26
-   at MyCompanyName.MyProjectName.Host.Startup.Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory) in D:\Github\abp\templates\service\host\MyCompanyName.MyProjectName.Host\Startup.cs:line 34
---- End of stack trace from previous location where exception was thrown ---
-   at Microsoft.AspNetCore.Hosting.ConventionBasedStartup.Configure(IApplicationBuilder app)
-   at Microsoft.AspNetCore.Server.IISIntegration.IISSetupFilter.<>c__DisplayClass4_0.<Configure>b__0(IApplicationBuilder app)
-   at Microsoft.AspNetCore.Hosting.Internal.AutoRequestServicesStartupFilter.<>c__DisplayClass0_0.<Configure>b__0(IApplicationBuilder builder)
-   at Microsoft.AspNetCore.Hosting.Internal.WebHost.BuildApplication()
-2018-10-30 17:27:49.521 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:57992/  
-2018-10-30 17:27:49.546 +03:00 [INF] Request finished in 25.8936ms 500 text/html; charset=utf-8
-2018-10-30 17:27:49.591 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:57992/favicon.ico  
-2018-10-30 17:27:49.596 +03:00 [INF] Request finished in 4.5983ms 500 text/html; charset=utf-8
-2018-10-30 17:28:57.525 +03:00 [INF] Starting web host.
-2018-10-30 17:28:58.326 +03:00 [INF] User profile is available. Using 'C:\Users\halil\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
-2018-10-30 17:28:58.411 +03:00 [INF] Loaded modules:
-2018-10-30 17:28:58.412 +03:00 [INF] - Volo.Abp.Castle.AbpCastleCoreModule
-2018-10-30 17:28:58.412 +03:00 [INF] - Volo.Abp.Autofac.AbpAutofacModule
-2018-10-30 17:28:58.412 +03:00 [INF] - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
-2018-10-30 17:28:58.412 +03:00 [INF] - Volo.Abp.Settings.AbpSettingsModule
-2018-10-30 17:28:58.412 +03:00 [INF] - Volo.Abp.Localization.AbpLocalizationModule
-2018-10-30 17:28:58.412 +03:00 [INF] - MyCompanyName.MyProjectName.MyProjectNameDomainSharedModule
-2018-10-30 17:28:58.412 +03:00 [INF] - MyCompanyName.MyProjectName.MyProjectNameDomainModule
-2018-10-30 17:28:58.412 +03:00 [INF] - Volo.Abp.Data.AbpDataModule
-2018-10-30 17:28:58.412 +03:00 [INF] - Volo.Abp.Timing.AbpTimingModule
-2018-10-30 17:28:58.412 +03:00 [INF] - Volo.Abp.Json.AbpJsonModule
-2018-10-30 17:28:58.412 +03:00 [INF] - Volo.Abp.Security.AbpSecurityModule
-2018-10-30 17:28:58.412 +03:00 [INF] - Volo.Abp.Threading.AbpThreadingModule
-2018-10-30 17:28:58.412 +03:00 [INF] - Volo.Abp.MultiTenancy.AbpMultiTenancyAbstractionsModule
-2018-10-30 17:28:58.412 +03:00 [INF] - Volo.Abp.Auditing.AbpAuditingModule
-2018-10-30 17:28:58.412 +03:00 [INF] - Volo.Abp.EventBus.AbpEventBusModule
-2018-10-30 17:28:58.412 +03:00 [INF] - Volo.Abp.Guids.AbpGuidsModule
-2018-10-30 17:28:58.412 +03:00 [INF] - Volo.Abp.Uow.AbpUnitOfWorkModule
-2018-10-30 17:28:58.412 +03:00 [INF] - Volo.Abp.Domain.AbpDddDomainModule
-2018-10-30 17:28:58.412 +03:00 [INF] - Volo.Abp.ObjectMapping.AbpObjectMappingModule
-2018-10-30 17:28:58.412 +03:00 [INF] - Volo.Abp.Validation.AbpValidationModule
-2018-10-30 17:28:58.412 +03:00 [INF] - Volo.Abp.Authorization.AbpAuthorizationModule
-2018-10-30 17:28:58.412 +03:00 [INF] - Volo.Abp.Http.AbpHttpAbstractionsModule
-2018-10-30 17:28:58.412 +03:00 [INF] - Volo.Abp.Application.AbpDddApplicationModule
-2018-10-30 17:28:58.412 +03:00 [INF] - MyCompanyName.MyProjectName.MyProjectNameApplicationContractsModule
-2018-10-30 17:28:58.412 +03:00 [INF] - Volo.Abp.AutoMapper.AbpAutoMapperModule
-2018-10-30 17:28:58.412 +03:00 [INF] - MyCompanyName.MyProjectName.MyProjectNameApplicationModule
-2018-10-30 17:28:58.412 +03:00 [INF] - Volo.Abp.EntityFrameworkCore.AbpEntityFrameworkCoreModule
-2018-10-30 17:28:58.412 +03:00 [INF] - MyCompanyName.MyProjectName.EntityFrameworkCore.MyProjectNameEntityFrameworkCoreModule
-2018-10-30 17:28:58.412 +03:00 [INF] - Volo.Abp.Http.AbpHttpModule
-2018-10-30 17:28:58.412 +03:00 [INF] - Volo.Abp.UI.AbpUiModule
-2018-10-30 17:28:58.412 +03:00 [INF] - Volo.Abp.AspNetCore.AbpAspNetCoreModule
-2018-10-30 17:28:58.412 +03:00 [INF] - Volo.Abp.ApiVersioning.AbpApiVersioningAbstractionsModule
-2018-10-30 17:28:58.412 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcModule
-2018-10-30 17:28:58.412 +03:00 [INF] - MyCompanyName.MyProjectName.MyProjectNameHttpApiModule
-2018-10-30 17:28:58.412 +03:00 [INF] - Volo.Abp.PermissionManagement.AbpPermissionManagementDomainSharedModule
-2018-10-30 17:28:58.412 +03:00 [INF] - Volo.Abp.Serialization.AbpSerializationModule
-2018-10-30 17:28:58.412 +03:00 [INF] - Volo.Abp.Caching.AbpCachingModule
-2018-10-30 17:28:58.412 +03:00 [INF] - Volo.Abp.PermissionManagement.AbpPermissionManagementDomainModule
-2018-10-30 17:28:58.412 +03:00 [INF] - Volo.Abp.PermissionManagement.EntityFrameworkCore.AbpPermissionManagementEntityFrameworkCoreModule
-2018-10-30 17:28:58.412 +03:00 [INF] - Volo.Abp.SettingManagement.AbpSettingManagementDomainSharedModule
-2018-10-30 17:28:58.412 +03:00 [INF] - Volo.Abp.SettingManagement.AbpSettingManagementDomainModule
-2018-10-30 17:28:58.412 +03:00 [INF] - Volo.Abp.SettingManagement.EntityFrameworkCore.AbpSettingManagementEntityFrameworkCoreModule
-2018-10-30 17:28:58.412 +03:00 [INF] - Volo.Abp.AuditLogging.AbpAuditLoggingDomainSharedModule
-2018-10-30 17:28:58.412 +03:00 [INF] - Volo.Abp.AuditLogging.AbpAuditLoggingDomainModule
-2018-10-30 17:28:58.412 +03:00 [INF] - Volo.Abp.AuditLogging.EntityFrameworkCore.AbpAuditLoggingEntityFrameworkCoreModule
-2018-10-30 17:28:58.412 +03:00 [INF] - Volo.Abp.EntityFrameworkCore.SqlServer.AbpEntityFrameworkCoreSqlServerModule
-2018-10-30 17:28:58.412 +03:00 [INF] - MyCompanyName.MyProjectName.Host.DemoAppModule
-2018-10-30 17:28:58.481 +03:00 [DBG] No class found with auto mapping attributes.
-2018-10-30 17:28:59.430 +03:00 [DBG] BEGIN SaveChangesAsync:True
-2018-10-30 17:28:59.470 +03:00 [DBG]    at System.Environment.get_StackTrace()
+2018-10-30 18:17:33.924 +03:00 [INF] Starting web host.
+2018-10-30 18:17:36.652 +03:00 [INF] User profile is available. Using 'C:\Users\halil\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2018-10-30 18:17:36.720 +03:00 [INF] Loaded modules:
+2018-10-30 18:17:36.720 +03:00 [INF] - Volo.Abp.Castle.AbpCastleCoreModule
+2018-10-30 18:17:36.720 +03:00 [INF] - Volo.Abp.Autofac.AbpAutofacModule
+2018-10-30 18:17:36.720 +03:00 [INF] - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2018-10-30 18:17:36.720 +03:00 [INF] - Volo.Abp.Settings.AbpSettingsModule
+2018-10-30 18:17:36.720 +03:00 [INF] - Volo.Abp.Localization.AbpLocalizationModule
+2018-10-30 18:17:36.720 +03:00 [INF] - MyCompanyName.MyProjectName.MyProjectNameDomainSharedModule
+2018-10-30 18:17:36.721 +03:00 [INF] - MyCompanyName.MyProjectName.MyProjectNameDomainModule
+2018-10-30 18:17:36.721 +03:00 [INF] - Volo.Abp.Data.AbpDataModule
+2018-10-30 18:17:36.721 +03:00 [INF] - Volo.Abp.Timing.AbpTimingModule
+2018-10-30 18:17:36.721 +03:00 [INF] - Volo.Abp.Json.AbpJsonModule
+2018-10-30 18:17:36.721 +03:00 [INF] - Volo.Abp.Security.AbpSecurityModule
+2018-10-30 18:17:36.721 +03:00 [INF] - Volo.Abp.Threading.AbpThreadingModule
+2018-10-30 18:17:36.721 +03:00 [INF] - Volo.Abp.MultiTenancy.AbpMultiTenancyAbstractionsModule
+2018-10-30 18:17:36.721 +03:00 [INF] - Volo.Abp.Auditing.AbpAuditingModule
+2018-10-30 18:17:36.721 +03:00 [INF] - Volo.Abp.EventBus.AbpEventBusModule
+2018-10-30 18:17:36.721 +03:00 [INF] - Volo.Abp.Guids.AbpGuidsModule
+2018-10-30 18:17:36.721 +03:00 [INF] - Volo.Abp.Uow.AbpUnitOfWorkModule
+2018-10-30 18:17:36.721 +03:00 [INF] - Volo.Abp.Domain.AbpDddDomainModule
+2018-10-30 18:17:36.721 +03:00 [INF] - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2018-10-30 18:17:36.721 +03:00 [INF] - Volo.Abp.Validation.AbpValidationModule
+2018-10-30 18:17:36.721 +03:00 [INF] - Volo.Abp.Authorization.AbpAuthorizationModule
+2018-10-30 18:17:36.721 +03:00 [INF] - Volo.Abp.Http.AbpHttpAbstractionsModule
+2018-10-30 18:17:36.721 +03:00 [INF] - Volo.Abp.Application.AbpDddApplicationModule
+2018-10-30 18:17:36.721 +03:00 [INF] - MyCompanyName.MyProjectName.MyProjectNameApplicationContractsModule
+2018-10-30 18:17:36.721 +03:00 [INF] - Volo.Abp.AutoMapper.AbpAutoMapperModule
+2018-10-30 18:17:36.721 +03:00 [INF] - MyCompanyName.MyProjectName.MyProjectNameApplicationModule
+2018-10-30 18:17:36.721 +03:00 [INF] - Volo.Abp.EntityFrameworkCore.AbpEntityFrameworkCoreModule
+2018-10-30 18:17:36.721 +03:00 [INF] - MyCompanyName.MyProjectName.EntityFrameworkCore.MyProjectNameEntityFrameworkCoreModule
+2018-10-30 18:17:36.721 +03:00 [INF] - Volo.Abp.Http.AbpHttpModule
+2018-10-30 18:17:36.721 +03:00 [INF] - Volo.Abp.UI.AbpUiModule
+2018-10-30 18:17:36.721 +03:00 [INF] - Volo.Abp.AspNetCore.AbpAspNetCoreModule
+2018-10-30 18:17:36.721 +03:00 [INF] - Volo.Abp.ApiVersioning.AbpApiVersioningAbstractionsModule
+2018-10-30 18:17:36.721 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcModule
+2018-10-30 18:17:36.721 +03:00 [INF] - MyCompanyName.MyProjectName.MyProjectNameHttpApiModule
+2018-10-30 18:17:36.721 +03:00 [INF] - Volo.Abp.PermissionManagement.AbpPermissionManagementDomainSharedModule
+2018-10-30 18:17:36.721 +03:00 [INF] - Volo.Abp.Serialization.AbpSerializationModule
+2018-10-30 18:17:36.721 +03:00 [INF] - Volo.Abp.Caching.AbpCachingModule
+2018-10-30 18:17:36.721 +03:00 [INF] - Volo.Abp.PermissionManagement.AbpPermissionManagementDomainModule
+2018-10-30 18:17:36.721 +03:00 [INF] - Volo.Abp.PermissionManagement.EntityFrameworkCore.AbpPermissionManagementEntityFrameworkCoreModule
+2018-10-30 18:17:36.721 +03:00 [INF] - Volo.Abp.SettingManagement.AbpSettingManagementDomainSharedModule
+2018-10-30 18:17:36.721 +03:00 [INF] - Volo.Abp.SettingManagement.AbpSettingManagementDomainModule
+2018-10-30 18:17:36.721 +03:00 [INF] - Volo.Abp.SettingManagement.EntityFrameworkCore.AbpSettingManagementEntityFrameworkCoreModule
+2018-10-30 18:17:36.721 +03:00 [INF] - Volo.Abp.AuditLogging.AbpAuditLoggingDomainSharedModule
+2018-10-30 18:17:36.721 +03:00 [INF] - Volo.Abp.AuditLogging.AbpAuditLoggingDomainModule
+2018-10-30 18:17:36.721 +03:00 [INF] - Volo.Abp.AuditLogging.EntityFrameworkCore.AbpAuditLoggingEntityFrameworkCoreModule
+2018-10-30 18:17:36.721 +03:00 [INF] - Volo.Abp.EntityFrameworkCore.SqlServer.AbpEntityFrameworkCoreSqlServerModule
+2018-10-30 18:17:36.721 +03:00 [INF] - MyCompanyName.MyProjectName.Host.DemoAppModule
+2018-10-30 18:17:36.774 +03:00 [DBG] No class found with auto mapping attributes.
+2018-10-30 18:17:37.557 +03:00 [DBG] BEGIN SaveChangesAsync:True
+2018-10-30 18:17:37.592 +03:00 [DBG]    at System.Environment.get_StackTrace()
    at Volo.Abp.EntityFrameworkCore.AbpDbContext`1.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken) in D:\Github\abp\framework\src\Volo.Abp.EntityFrameworkCore\Volo\Abp\EntityFrameworkCore\AbpDbContext.cs:line 132
    at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
    at Volo.Abp.EntityFrameworkCore.AbpDbContext`1.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
@@ -119,7 +101,7 @@ Autofac.Core.Registration.ComponentNotRegisteredException: The requested service
    at Volo.Abp.AbpApplicationBase.InitializeModules() in D:\Github\abp\framework\src\Volo.Abp.Core\Volo\Abp\AbpApplicationBase.cs:line 72
    at Volo.Abp.AbpApplicationWithExternalServiceProvider.Initialize(IServiceProvider serviceProvider) in D:\Github\abp\framework\src\Volo.Abp.Core\Volo\Abp\AbpApplicationWithExternalServiceProvider.cs:line 27
    at Microsoft.AspNetCore.Builder.AbpApplicationBuilderExtensions.InitializeApplication(IApplicationBuilder app) in D:\Github\abp\framework\src\Volo.Abp.AspNetCore\Microsoft\AspNetCore\Builder\AbpApplicationBuilderExtensions.cs:line 27
-   at MyCompanyName.MyProjectName.Host.Startup.Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory) in D:\Github\abp\templates\service\host\MyCompanyName.MyProjectName.Host\Startup.cs:line 34
+   at MyCompanyName.MyProjectName.Host.Startup.Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory) in D:\Github\abp\templates\service\host\MyCompanyName.MyProjectName.Host\Startup.cs:line 24
    at System.RuntimeMethodHandle.InvokeMethod(Object target, Object[] arguments, Signature sig, Boolean constructor, Boolean wrapExceptions)
    at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
    at System.Reflection.MethodBase.Invoke(Object obj, Object[] parameters)
@@ -140,46 +122,16 @@ Autofac.Core.Registration.ComponentNotRegisteredException: The requested service
    at Microsoft.AspNetCore.Hosting.WebHostExtensions.RunAsync(IWebHost host, CancellationToken token)
    at Microsoft.AspNetCore.Hosting.WebHostExtensions.Run(IWebHost host)
    at MyCompanyName.MyProjectName.Host.Program.Main(String[] args) in D:\Github\abp\templates\service\host\MyCompanyName.MyProjectName.Host\Program.cs:line 23
-2018-10-30 17:28:59.481 +03:00 [DBG] END SaveChangesAsync:True
-2018-10-30 17:28:59.610 +03:00 [INF] Initialized all modules.
-2018-10-30 17:28:59.831 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:57992/  
-2018-10-30 17:29:00.000 +03:00 [INF] Route matched with {action = "Index", controller = "Home", area = ""}. Executing action MyCompanyName.MyProjectName.Host.Controllers.HomeController.Index (MyCompanyName.MyProjectName.Host)
-2018-10-30 17:29:00.030 +03:00 [INF] Executing action method MyCompanyName.MyProjectName.Host.Controllers.HomeController.Index (MyCompanyName.MyProjectName.Host) - Validation state: "Valid"
-2018-10-30 17:29:00.038 +03:00 [INF] Executed action method MyCompanyName.MyProjectName.Host.Controllers.HomeController.Index (MyCompanyName.MyProjectName.Host), returned result Microsoft.AspNetCore.Mvc.RedirectResult in 0.14300000000000002ms.
-2018-10-30 17:29:00.043 +03:00 [INF] Executing RedirectResult, redirecting to /swagger.
-2018-10-30 17:29:00.046 +03:00 [INF] Executed action MyCompanyName.MyProjectName.Host.Controllers.HomeController.Index (MyCompanyName.MyProjectName.Host) in 44.0428ms
-2018-10-30 17:29:00.051 +03:00 [INF] Request finished in 221.3547ms 302 
-2018-10-30 17:29:00.063 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:57992/swagger  
-2018-10-30 17:29:00.065 +03:00 [INF] Request finished in 1.4366ms 301 
-2018-10-30 17:29:00.073 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:57992/swagger/  
-2018-10-30 17:29:00.081 +03:00 [INF] Request finished in 7.8512ms 200 text/html
-2018-10-30 17:29:00.105 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:57992/swagger/swagger-ui.css  
-2018-10-30 17:29:00.111 +03:00 [INF] Sending file. Request path: '/swagger-ui.css'. Physical path: 'N/A'
-2018-10-30 17:29:00.111 +03:00 [INF] Request finished in 6.0399ms 200 text/css
-2018-10-30 17:29:00.114 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:57992/swagger/swagger-ui-bundle.js  
-2018-10-30 17:29:00.115 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:57992/swagger/swagger-ui-standalone-preset.js  
-2018-10-30 17:29:00.142 +03:00 [INF] Sending file. Request path: '/swagger-ui-standalone-preset.js'. Physical path: 'N/A'
-2018-10-30 17:29:00.147 +03:00 [INF] Request finished in 32.2909ms 200 application/javascript
-2018-10-30 17:29:00.173 +03:00 [INF] Sending file. Request path: '/swagger-ui-bundle.js'. Physical path: 'N/A'
-2018-10-30 17:29:00.173 +03:00 [INF] Request finished in 58.418ms 200 application/javascript
-2018-10-30 17:29:00.618 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:57992/swagger/favicon-16x16.png  
-2018-10-30 17:29:00.618 +03:00 [INF] Sending file. Request path: '/favicon-16x16.png'. Physical path: 'N/A'
-2018-10-30 17:29:00.618 +03:00 [INF] Request finished in 0.4589ms 200 image/png
-2018-10-30 17:29:00.662 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:57992/swagger/v1/swagger.json  
-2018-10-30 17:29:00.830 +03:00 [INF] Request finished in 167.9136ms 200 application/json
-2018-10-30 17:30:43.408 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:57992/swagger/  
-2018-10-30 17:30:43.408 +03:00 [INF] Request finished in 0.6016ms 200 text/html
-2018-10-30 17:30:43.441 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:57992/swagger/swagger-ui.css  
-2018-10-30 17:30:43.442 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:57992/swagger/swagger-ui-bundle.js  
-2018-10-30 17:30:43.443 +03:00 [INF] The file /swagger-ui.css was not modified
-2018-10-30 17:30:43.443 +03:00 [INF] The file /swagger-ui-bundle.js was not modified
-2018-10-30 17:30:43.444 +03:00 [INF] Request finished in 2.2869ms 304 application/javascript
-2018-10-30 17:30:43.444 +03:00 [INF] Request finished in 2.9373ms 304 text/css
-2018-10-30 17:30:43.445 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:57992/swagger/swagger-ui-standalone-preset.js  
-2018-10-30 17:30:43.445 +03:00 [INF] The file /swagger-ui-standalone-preset.js was not modified
-2018-10-30 17:30:43.445 +03:00 [INF] Request finished in 0.588ms 304 application/javascript
-2018-10-30 17:30:43.699 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:57992/swagger/favicon-16x16.png  
-2018-10-30 17:30:43.700 +03:00 [INF] The file /favicon-16x16.png was not modified
-2018-10-30 17:30:43.700 +03:00 [INF] Request finished in 0.4594ms 304 image/png
-2018-10-30 17:30:43.737 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:57992/swagger/v1/swagger.json  
-2018-10-30 17:30:43.739 +03:00 [INF] Request finished in 2.3626ms 200 application/json
+2018-10-30 18:17:37.600 +03:00 [DBG] END SaveChangesAsync:True
+2018-10-30 18:17:37.737 +03:00 [INF] Initialized all modules.
+2018-10-30 18:17:37.941 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:57992/  
+2018-10-30 18:17:38.105 +03:00 [INF] Route matched with {action = "Index", controller = "Home", area = ""}. Executing action MyCompanyName.MyProjectName.Host.Controllers.HomeController.Index (MyCompanyName.MyProjectName.Host)
+2018-10-30 18:17:38.126 +03:00 [INF] Executing action method MyCompanyName.MyProjectName.Host.Controllers.HomeController.Index (MyCompanyName.MyProjectName.Host) - Validation state: "Valid"
+2018-10-30 18:17:38.131 +03:00 [INF] Executed action method MyCompanyName.MyProjectName.Host.Controllers.HomeController.Index (MyCompanyName.MyProjectName.Host), returned result Microsoft.AspNetCore.Mvc.RedirectResult in 0.1369ms.
+2018-10-30 18:17:38.137 +03:00 [INF] Executing RedirectResult, redirecting to /swagger.
+2018-10-30 18:17:38.140 +03:00 [INF] Executed action MyCompanyName.MyProjectName.Host.Controllers.HomeController.Index (MyCompanyName.MyProjectName.Host) in 31.4434ms
+2018-10-30 18:17:38.145 +03:00 [INF] Request finished in 205.9632ms 302 
+2018-10-30 18:17:38.163 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:57992/swagger/  
+2018-10-30 18:17:38.171 +03:00 [INF] Request finished in 8.1569ms 200 text/html
+2018-10-30 18:17:38.401 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:57992/swagger/v1/swagger.json  
+2018-10-30 18:17:38.581 +03:00 [INF] Request finished in 179.8033ms 200 application/json
