@@ -39,6 +39,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyCompanyName.MyProjectName
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityServerHost", "host\IdentityServerHost\IdentityServerHost.csproj", "{3F3E0DCA-DA28-42FA-ABC8-F49E5A920D68}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleClient", "host\ConsoleClient\ConsoleClient.csproj", "{2A9E859C-BB5A-4A10-BB33-97ECBF10A8C8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -105,6 +107,10 @@ Global
 		{3F3E0DCA-DA28-42FA-ABC8-F49E5A920D68}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3F3E0DCA-DA28-42FA-ABC8-F49E5A920D68}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3F3E0DCA-DA28-42FA-ABC8-F49E5A920D68}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A9E859C-BB5A-4A10-BB33-97ECBF10A8C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A9E859C-BB5A-4A10-BB33-97ECBF10A8C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A9E859C-BB5A-4A10-BB33-97ECBF10A8C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A9E859C-BB5A-4A10-BB33-97ECBF10A8C8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -125,6 +131,7 @@ Global
 		{13A9EAD6-F3A4-4357-BA4A-A7E8FEB4A264} = {CCD2960C-23CC-4AB4-B84D-60C7AAA52F4D}
 		{E7353C9A-4357-4A40-A39A-52B73F5A0CA1} = {E400416D-2895-4512-9D17-90681EEC7E0A}
 		{3F3E0DCA-DA28-42FA-ABC8-F49E5A920D68} = {E400416D-2895-4512-9D17-90681EEC7E0A}
+		{2A9E859C-BB5A-4A10-BB33-97ECBF10A8C8} = {E400416D-2895-4512-9D17-90681EEC7E0A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4324B3B4-B60B-4E3C-91D8-59576B4E26DD}
