@@ -277,3 +277,4 @@ templates/mvc/src/MyCompanyName.MyProjectName.Web/Logs/*.*
 .DS_Store
 abp_io/src/Volo.AbpWebSite.Web/Logs/*
 abp_io/src/Volo.AbpWebSite.Web/wwwroot/files/*
+templates/service/host/MyCompanyName.MyProjectName.Host/Logs/logs.txt
