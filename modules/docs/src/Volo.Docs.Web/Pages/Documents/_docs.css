@@ -109,7 +109,11 @@
               left: 2px;
               top: 11px;
               color: #aaa;
-              cursor: pointer; }
+              cursor: default; }
+              .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-tree-list ul li .plus-icon .fa-long-arrow-right.no-link {
+                color: #555; }
+              .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-tree-list ul li .plus-icon .fa-chevron-right {
+                cursor: pointer; }
             .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-tree-list ul li ul {
               padding: 0; }
               .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-tree-list ul li ul li a {
@@ -282,7 +286,11 @@
         left: 2px;
         top: 11px;
         color: #aaa;
-        cursor: pointer; }
+        cursor: default; }
+        .docs-page .docs-sidebar.dark-sidebar .docs-sidebar-wrapper .docs-tree-list ul li a .plus-icon .fa-long-arrow-right.no-link {
+          color: #555; }
+        .docs-page .docs-sidebar.dark-sidebar .docs-sidebar-wrapper .docs-tree-list ul li a .plus-icon .fa-chevron-right {
+          cursor: pointer; }
         .docs-page .docs-sidebar.dark-sidebar .docs-sidebar-wrapper .docs-tree-list ul li a .plus-icon.last-link {
           top: 11px; }
     .docs-page .docs-sidebar.dark-sidebar .docs-sidebar-wrapper .docs-tree-list ul li span.tree-toggle {

@@ -41,7 +41,6 @@
     <Content Remove="compilerconfig.json" />
     <Content Remove="compilerconfig.json.defaults" />
     <None Remove="Pages\Documents\Project\vs.js" />
-    <None Remove="Pages\Documents\vs.min.css" />
     <None Include="compilerconfig.json" />
     <None Include="Properties\launchSettings.json" />
   </ItemGroup>

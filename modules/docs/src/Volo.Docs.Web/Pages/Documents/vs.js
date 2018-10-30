@@ -2,9 +2,21 @@ $('li:not(.last-link) a.tree-toggle').click(function () {
     $(this).parent().children('ul.tree').toggle(100);
     $(this).closest("li").toggleClass("selected-tree");
 });
-$('li:not(.last-link) span.plus-icon').click(function () {
-    $(this).parent().children('ul.tree').toggle(100);
-    $(this).closest("li").toggleClass("selected-tree");
+$('li:not(.last-link) span.plus-icon i.fa-chevron-right').click(function () {
+
+    //var hasLink = $(this).parent().find("a").length > 0;
+    //if (!hasLink) {
+    //    return;
+    //}
+
+    ////if ($(this).find("i.fa-long-arrow-right").length > 0) {
+    ////    return;
+    ////}
+
+    var $element = $(this).parent();
+
+    $element.parent().children('ul.tree').toggle(100);
+    $element.closest("li").toggleClass("selected-tree");
 });
 
 $(document).ready(function () {
@@ -27,14 +39,14 @@ $(document).ready(function () {
             scrollTop: 0
         }, 500);
         return false;
-    }); 
-     
+    });
+
 });
 
 $(document).ready(function () {
     var navSelector = '#docs-sticky-index';
     var $myNav = $(navSelector);
-    Toc.init($myNav); 
+    Toc.init($myNav);
     $('body').scrollspy({
         target: $myNav
     });
@@ -83,17 +95,17 @@ $('.open-dmenu').on("click", function () {
 
 
 
-    window.Toc.helpers.createNavList = function() {
+    window.Toc.helpers.createNavList = function () {
         return $('<ul class="nav nav-pills flex-column"></ul>');
     };
 
-    window.Toc.helpers.createChildNavList = function($parent) {
+    window.Toc.helpers.createChildNavList = function ($parent) {
         var $childList = this.createNavList();
         $parent.append($childList);
         return $childList;
     };
 
-    window.Toc.helpers.generateNavEl = function(anchor, text) {
+    window.Toc.helpers.generateNavEl = function (anchor, text) {
         var $a = $('<a class="nav-link"></a>');
         $a.attr('href', '#' + anchor);
         $a.text(text);

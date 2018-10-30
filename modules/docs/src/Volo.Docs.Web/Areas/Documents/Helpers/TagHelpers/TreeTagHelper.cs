@@ -90,7 +90,7 @@ namespace Volo.Docs.Areas.Documents.Helpers.TagHelpers
 
         private string GetLeafNode(NavigationNode node, string content)
         {
-            var anchorCss = node.Path.IsNullOrEmpty() ? "tree-toggle" : "";
+            var textCss = node.Path.IsNullOrEmpty() ? "tree-toggle" : "";
             var isNodeSelected = node.IsSelected(SelectedDocumentName);
             var listItemCss = node.HasChildItems ? "nav-header" : "last-link";
             if (isNodeSelected)
@@ -101,16 +101,16 @@ namespace Volo.Docs.Areas.Documents.Helpers.TagHelpers
             string listInnerItem;
             if (node.Path.IsNullOrEmpty() && node.IsLeaf)
             {
-                listInnerItem = string.Format(ListItemSpan, anchorCss, node.Text.IsNullOrEmpty() ? "?" : node.Text);
+                listInnerItem = string.Format(ListItemSpan, textCss, node.Text.IsNullOrEmpty() ? "?" : node.Text);
             }
             else
             {
-                listInnerItem = string.Format(ListItemAnchor, NormalizePath(node.Path, node.HasChildItems), anchorCss, node.Text.IsNullOrEmpty() ? "?" : node.Text);
+                listInnerItem = string.Format(ListItemAnchor, NormalizePath(node.Path, node.HasChildItems), textCss, node.Text.IsNullOrEmpty() ? "?" : node.Text);
             }
 
             return string.Format(LiItemTemplateWithLink,
                 listItemCss,
-                node.HasChildItems ? "chevron-right" : "long-arrow-right",
+                node.HasChildItems ? "chevron-right" : "long-arrow-right " + (node.Path.IsNullOrEmpty() ?  "no-link" : "has-link"),
                 listInnerItem,
                 content);
         }

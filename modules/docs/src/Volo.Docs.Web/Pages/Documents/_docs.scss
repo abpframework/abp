@@ -156,7 +156,17 @@ body {
                             left: 2px;
                             top: 11px;
                             color: #aaa;
-                            cursor: pointer;
+                            cursor: default;
+
+                            .fa-long-arrow-right {
+                                &.no-link {
+                                    color: #555;
+                                }
+                            }
+
+                            .fa-chevron-right {
+                                cursor: pointer;
+                            }
                         }
 
                         ul {
@@ -474,7 +484,17 @@ body {
                                         left: 2px;
                                         top: 11px;
                                         color: #aaa;
-                                        cursor: pointer;
+                                        cursor: default;
+
+                                        .fa-long-arrow-right {
+                                            &.no-link {
+                                                color: #555;
+                                            }
+                                        }
+
+                                        .fa-chevron-right {
+                                            cursor: pointer;
+                                        }
 
                                         &.last-link {
                                             top: 11px;
