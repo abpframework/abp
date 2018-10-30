@@ -25,8 +25,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyCompanyName.MyProjectName
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyCompanyName.MyProjectName.HttpApi.Client", "src\MyCompanyName.MyProjectName.HttpApi.Client\MyCompanyName.MyProjectName.HttpApi.Client.csproj", "{36E2735F-CEAB-44C8-A6D1-2CDAFF399751}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyCompanyName.MyProjectName.Web", "src\MyCompanyName.MyProjectName.Web\MyCompanyName.MyProjectName.Web.csproj", "{8C5B0D35-9734-4439-977C-2F1AC9E1D69E}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyCompanyName.MyProjectName.TestBase", "test\MyCompanyName.MyProjectName.TestBase\MyCompanyName.MyProjectName.TestBase.csproj", "{6E5B22E7-E2DB-45D4-B828-8019D8FD51E8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyCompanyName.MyProjectName.Domain.Tests", "test\MyCompanyName.MyProjectName.Domain.Tests\MyCompanyName.MyProjectName.Domain.Tests.csproj", "{44FB6636-5427-415D-8883-CB7E42D548F2}"
@@ -37,7 +35,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyCompanyName.MyProjectName
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyCompanyName.MyProjectName.Application.Tests", "test\MyCompanyName.MyProjectName.Application.Tests\MyCompanyName.MyProjectName.Application.Tests.csproj", "{13A9EAD6-F3A4-4357-BA4A-A7E8FEB4A264}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCompanyName.MyProjectName.DemoApp", "app\MyCompanyName.MyProjectName.DemoApp\MyCompanyName.MyProjectName.DemoApp.csproj", "{E7353C9A-4357-4A40-A39A-52B73F5A0CA1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyCompanyName.MyProjectName.Host", "host\MyCompanyName.MyProjectName.Host\MyCompanyName.MyProjectName.Host.csproj", "{E7353C9A-4357-4A40-A39A-52B73F5A0CA1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -77,10 +75,6 @@ Global
 		{36E2735F-CEAB-44C8-A6D1-2CDAFF399751}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{36E2735F-CEAB-44C8-A6D1-2CDAFF399751}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{36E2735F-CEAB-44C8-A6D1-2CDAFF399751}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8C5B0D35-9734-4439-977C-2F1AC9E1D69E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8C5B0D35-9734-4439-977C-2F1AC9E1D69E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8C5B0D35-9734-4439-977C-2F1AC9E1D69E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8C5B0D35-9734-4439-977C-2F1AC9E1D69E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6E5B22E7-E2DB-45D4-B828-8019D8FD51E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6E5B22E7-E2DB-45D4-B828-8019D8FD51E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6E5B22E7-E2DB-45D4-B828-8019D8FD51E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -118,7 +112,6 @@ Global
 		{F1C58097-4C08-4D88-8976-6B3389391481} = {649A3FFA-182F-4E56-9717-E6A9A2BEC545}
 		{077AA5F8-8B61-420C-A6B5-0150A66FDB34} = {649A3FFA-182F-4E56-9717-E6A9A2BEC545}
 		{36E2735F-CEAB-44C8-A6D1-2CDAFF399751} = {649A3FFA-182F-4E56-9717-E6A9A2BEC545}
-		{8C5B0D35-9734-4439-977C-2F1AC9E1D69E} = {649A3FFA-182F-4E56-9717-E6A9A2BEC545}
 		{6E5B22E7-E2DB-45D4-B828-8019D8FD51E8} = {CCD2960C-23CC-4AB4-B84D-60C7AAA52F4D}
 		{44FB6636-5427-415D-8883-CB7E42D548F2} = {CCD2960C-23CC-4AB4-B84D-60C7AAA52F4D}
 		{E5906DE1-B2F5-472E-BE1B-1D96A68B834D} = {CCD2960C-23CC-4AB4-B84D-60C7AAA52F4D}
