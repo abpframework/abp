@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.IdentityServer.EntityFrameworkCore;
 
 namespace IdentityServerHost
@@ -16,6 +17,7 @@ namespace IdentityServerHost
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.ConfigureIdentity();
             modelBuilder.ConfigureIdentityServer();
         }
     }

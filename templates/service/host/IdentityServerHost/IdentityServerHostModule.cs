@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp;
@@ -8,10 +6,9 @@ using Volo.Abp.AspNetCore.Modularity;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Autofac;
 using Volo.Abp.Data;
-using Volo.Abp.Domain.Repositories;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.SqlServer;
-using Volo.Abp.IdentityServer.Clients;
+using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.IdentityServer.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 
@@ -21,6 +18,7 @@ namespace IdentityServerHost
         typeof(AbpAutofacModule),
         typeof(AbpAspNetCoreMvcModule),
         typeof(AbpIdentityServerEntityFrameworkCoreModule),
+        typeof(AbpIdentityEntityFrameworkCoreModule),
         typeof(AbpEntityFrameworkCoreSqlServerModule)
         )]
     public class IdentityServerHostModule : AbpModule

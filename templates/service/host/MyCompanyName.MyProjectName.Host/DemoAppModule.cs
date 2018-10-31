@@ -15,6 +15,7 @@ using Volo.Abp.EntityFrameworkCore.SqlServer;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
+using Volo.Abp.Security.Claims;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.VirtualFileSystem;
 
@@ -69,6 +70,27 @@ namespace MyCompanyName.MyProjectName.Host
                 options.Languages.Add(new LanguageInfo("en", "en", "English"));
                 //...add other languages
             });
+
+            context.Services.AddDistributedSqlServerCache(options =>
+            {
+                options.ConnectionString = configuration.GetConnectionString("SqlServerCache");
+                options.SchemaName = "dbo";
+                options.TableName = "TestCache";
+            });
+
+            context.Services.AddAuthentication("Bearer")
+                .AddIdentityServerAuthentication(options =>
+                {
+                    options.Authority = "http://localhost:61517";
+                    options.RequireHttpsMetadata = false;
+
+                    options.ApiName = "api1";
+
+                    //TODO: Can we make this by default?
+                    options.InboundJwtClaimTypeMap["sub"] = AbpClaimTypes.UserId;
+                    options.InboundJwtClaimTypeMap["role"] = AbpClaimTypes.Role;
+                    options.InboundJwtClaimTypeMap["email"] = AbpClaimTypes.Email;
+                });
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)

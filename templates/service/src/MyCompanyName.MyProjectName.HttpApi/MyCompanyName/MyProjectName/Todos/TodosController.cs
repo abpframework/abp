@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
@@ -9,6 +10,7 @@ namespace MyCompanyName.MyProjectName.Todos
     [RemoteService]
     [Area("MyProjectName")]
     [Route("api/MyProjectName/todos")]
+    [Authorize]
     public class TodosController : AbpController
     {
         private readonly ITodoAppService _todoAppService;
