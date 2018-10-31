@@ -63,6 +63,9 @@ namespace Volo.AbpWebSite.Pages
                 case "MvcModule":
                     DatabaseProvider = DatabaseProvider.Irrelevant;
                     return new MvcModuleTemplate(_configurationAccessor.Configuration);
+                case "Service":
+                    DatabaseProvider = DatabaseProvider.Irrelevant;
+                    return new ServiceTemplate(_configurationAccessor.Configuration);
                 case "MvcApp":
                 default:
                     return new MvcApplicationTemplate(_configurationAccessor.Configuration);

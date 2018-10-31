@@ -3,13 +3,13 @@ using Volo.Utils.SolutionTemplating.Building;
 
 namespace Volo.AbpWebSite.Templates
 {
-    public class MvcModuleTemplate : TemplateInfo
+    public class ServiceTemplate : TemplateInfo
     {
-        public MvcModuleTemplate(IConfigurationRoot configuration) 
+        public ServiceTemplate(IConfigurationRoot configuration)
             : base(
-                "abp-mvc-module",
+                "abp-service",
                 new GithubRepositoryInfo("abpframework/abp", configuration["GithubAccessToken"]),
-                "/templates/module")
+                "/templates/service")
         {
 
         }
