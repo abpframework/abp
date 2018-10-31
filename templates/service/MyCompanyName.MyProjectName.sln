@@ -37,9 +37,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyCompanyName.MyProjectName
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyCompanyName.MyProjectName.Host", "host\MyCompanyName.MyProjectName.Host\MyCompanyName.MyProjectName.Host.csproj", "{E7353C9A-4357-4A40-A39A-52B73F5A0CA1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityServerHost", "host\IdentityServerHost\IdentityServerHost.csproj", "{3F3E0DCA-DA28-42FA-ABC8-F49E5A920D68}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServerHost", "host\IdentityServerHost\IdentityServerHost.csproj", "{3F3E0DCA-DA28-42FA-ABC8-F49E5A920D68}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleClient", "host\ConsoleClient\ConsoleClient.csproj", "{2A9E859C-BB5A-4A10-BB33-97ECBF10A8C8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleClient", "host\ConsoleClient\ConsoleClient.csproj", "{2A9E859C-BB5A-4A10-BB33-97ECBF10A8C8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

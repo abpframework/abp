@@ -46,13 +46,12 @@ namespace IdentityServerHost
                 iis.AutomaticAuthentication = false;
             });
 
-            //TODO: Configure distributed cache?
-            //context.Services.AddDistributedSqlServerCache(options =>
-            //{
-            //    options.ConnectionString = configuration.GetConnectionString("Default");
-            //    options.SchemaName = "dbo";
-            //    options.TableName = "TestCache";
-            //});
+            context.Services.AddDistributedSqlServerCache(options =>
+            {
+                options.ConnectionString = configuration.GetConnectionString("SqlServerCache");
+                options.SchemaName = "dbo";
+                options.TableName = "TestCache";
+            });
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
@@ -74,14 +73,9 @@ namespace IdentityServerHost
         {
             using (var scope = context.ServiceProvider.CreateScope())
             {
-                var clientRepository = scope.ServiceProvider.GetRequiredService<IRepository<Client, Guid>>();
-                if (clientRepository.Any())
-                {
-                    return;
-                }
-
-                var client = new Client(Guid.NewGuid(), "test-client");
-                clientRepository.Insert(client);
+                scope.ServiceProvider
+                    .GetRequiredService<IdentityServerDataSeeder>()
+                    .Seed();
             }
         }
     }
