@@ -45,7 +45,7 @@ namespace Volo.Docs.Projects
 
         public virtual Dictionary<string, object> ExtraProperties { get; protected set; }
 
-        public virtual string MainWebsiteUrl { get; protected set; }
+        public virtual string MainWebsiteUrl { get; set; }
 
         public virtual string LatestVersionBranchName { get; set; }
 
@@ -54,16 +54,21 @@ namespace Volo.Docs.Projects
             ExtraProperties = new Dictionary<string, object>();
         }
 
-        public Project(Guid id, [NotNull] string name, [NotNull] string shortName, [NotNull] string defaultDocumentName, [NotNull] string navigationDocumentName, string googleCustomSearchId, string mainWebsiteUrl)
+        public Project(
+            Guid id, 
+            [NotNull] string name, 
+            [NotNull] string shortName, 
+            [NotNull] string defaultDocumentName, 
+            [NotNull] string navigationDocumentName)
         {
             Id = id;
+
             Name = Check.NotNullOrWhiteSpace(name, nameof(name));
             ShortName = Check.NotNullOrWhiteSpace(shortName, nameof(shortName));
             DefaultDocumentName = Check.NotNullOrWhiteSpace(defaultDocumentName, nameof(defaultDocumentName));
             NavigationDocumentName = Check.NotNullOrWhiteSpace(navigationDocumentName, nameof(navigationDocumentName));
-            GoogleCustomSearchId = Check.NotNullOrWhiteSpace(googleCustomSearchId, nameof(googleCustomSearchId));
+
             ExtraProperties = new Dictionary<string, object>();
-            MainWebsiteUrl = mainWebsiteUrl;
         }
     }
 }

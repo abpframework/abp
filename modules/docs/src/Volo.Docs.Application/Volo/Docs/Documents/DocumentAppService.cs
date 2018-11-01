@@ -41,31 +41,32 @@ namespace Volo.Docs.Documents
                     version, normalize));
         }
 
-        public async Task<DocumentWithDetailsDto> GetDocument(ProjectDto project, string documentName, string version, bool normalize)
+        public async Task<DocumentWithDetailsDto> GetDocument(ProjectDto projectDto, string documentName, string version, bool normalize)
         {
-            if (project == null)
+            if (projectDto == null)
             {
-                throw new ArgumentNullException(nameof(project));
+                throw new ArgumentNullException(nameof(projectDto));
             }
+
+            var project = await _projectRepository.GetAsync(projectDto.Id);
 
             if (string.IsNullOrWhiteSpace(documentName))
             {
-                documentName = project.DefaultDocumentName;
+                documentName = projectDto.DefaultDocumentName;
             }
 
-            IDocumentStore documentStore = _documentStoreFactory.Create(project.DocumentStoreType);
+            IDocumentStore documentStore = _documentStoreFactory.Create(projectDto.DocumentStoreType);
 
-            Document document = await documentStore.FindDocumentByNameAsync(project.ExtraProperties, project.Format, documentName, version);
+            Document document = await documentStore.FindDocumentByNameAsync(project.ExtraProperties, projectDto.Format, documentName, version);
 
             var dto = ObjectMapper.Map<Document, DocumentWithDetailsDto>(document);
 
-            dto.Project = project;
+            dto.Project = projectDto;
 
             return dto;
         }
 
-        //TODO: Application service never gets such a parameter: Dictionary<string, object> projectExtraProperties !!!
-        public async Task<List<VersionInfoDto>> GetVersions(string projectShortName, string defaultDocumentName, Dictionary<string, object> projectExtraProperties,
+        public async Task<List<VersionInfoDto>> GetVersions(string projectShortName, string defaultDocumentName, 
             string documentStoreType, string documentName)
         {
             var project = await _projectRepository.FindByShortNameAsync(projectShortName);
@@ -81,7 +82,7 @@ namespace Volo.Docs.Documents
 
             if (versions == null)
             {
-                versions = await documentStore.GetVersions(projectExtraProperties, documentName);
+                versions = await documentStore.GetVersions(project.ExtraProperties, documentName);
                 await SetVersionsToCache(projectShortName, versions);
             }
 

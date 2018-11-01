@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Volo.Docs.Documents;
 using Volo.Docs.Formatting;
+using Volo.Docs.Models;
 using Volo.Docs.Projects;
 
 namespace Volo.Docs.Pages.Documents.Project
@@ -87,7 +88,7 @@ namespace Volo.Docs.Pages.Documents.Project
         private async Task SetVersionAsync(ProjectDto project)
         {
             Versions = (await _documentAppService
-                .GetVersions(project.ShortName, project.DefaultDocumentName, project.ExtraProperties,
+                .GetVersions(project.ShortName, project.DefaultDocumentName,
                     project.DocumentStoreType, DocumentNameWithExtension))
                     .Select(v => new VersionInfo(v.DisplayName, v.Name)).ToList();
 
@@ -123,7 +124,7 @@ namespace Volo.Docs.Pages.Documents.Project
 
         public string CreateLink(string version, string documentName = null)
         {
-            var link = "/" + DocsAppConsts.WebsiteLinkFirstSegment + "/" + ProjectName + "/" + version;
+            var link = "/documents/" + ProjectName + "/" + version;
 
             if (documentName != null)
             {

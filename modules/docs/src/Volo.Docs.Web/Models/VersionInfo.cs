@@ -1,4 +1,4 @@
-namespace Volo.Docs.Projects
+namespace Volo.Docs.Models
 {
     public class VersionInfo
     {
