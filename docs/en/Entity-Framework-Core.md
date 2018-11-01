@@ -201,6 +201,32 @@ public override async Task DeleteAsync(
 }
 ````
 
+#### Access to the EF Core API
+
+In most cases, you want to hide EF Core APIs behind a repository (this is the main purpose of the repository). However, if you want to access the DbContext instance over the repository, you can use `GetDbContext()` or `GetDbSet()` extension methods. Example:
+
+````csharp
+public class BookService
+{
+    private readonly IRepository<Book, Guid> _bookRepository;
+
+    public BookService(IRepository<Book, Guid> bookRepository)
+    {
+        _bookRepository = bookRepository;
+    }
+
+    public void Foo()
+    {
+        DbContext dbContext = _bookRepository.GetDbContext();
+        DbSet<Book> books = _bookRepository.GetDbSet();
+    }
+}
+````
+
+* `GetDbContext` returns a `DbContext` reference instead of `BookStoreDbContext`. You can cast it, however in most cases you don't need it.
+
+> Important: You must reference to the `Volo.Abp.EntityFrameworkCore` package from the project you want to access to the DbContext. This breaks encapsulation, but this is what you want in that case.
+
 #### Advanced Topics
 
 ##### Set Default Repository Classes
@@ -293,4 +319,3 @@ context.Services.AddAbpDbContext<OtherDbContext>(options =>
 ````
 
 In this example, `OtherDbContext` implements `IBookStoreDbContext`. This feature allows you to have multiple DbContext (one per module) on development, but single DbContext (implements all interfaces of all DbContexts) on runtime.
-
