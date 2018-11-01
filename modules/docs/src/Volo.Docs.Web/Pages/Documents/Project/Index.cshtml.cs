@@ -87,10 +87,9 @@ namespace Volo.Docs.Pages.Documents.Project
 
         private async Task SetVersionAsync(ProjectDto project)
         {
-            Versions = (await _documentAppService
-                .GetVersions(project.ShortName, project.DefaultDocumentName,
-                    project.DocumentStoreType, DocumentNameWithExtension))
-                    .Select(v => new VersionInfo(v.DisplayName, v.Name)).ToList();
+            var versionInfoDtos = await _documentAppService.GetVersions(project.ShortName);
+
+            Versions = versionInfoDtos.Select(v => new VersionInfo(v.DisplayName, v.Name)).ToList();
 
             LatestVersionInfo = GetLatestVersion();
 
@@ -153,7 +152,15 @@ namespace Volo.Docs.Pages.Documents.Project
 
         private async Task SetDocumentAsync()
         {
-            Document = await _documentAppService.GetByNameAsync(ProjectName, DocumentNameWithExtension, Version, true);
+            if (DocumentNameWithExtension.IsNullOrWhiteSpace())
+            {
+                Document = await _documentAppService.GetDefaultAsync(ProjectName, Version, true);
+            }
+            else
+            {
+                Document = await _documentAppService.GetByNameAsync(ProjectName, DocumentNameWithExtension, Version, true);
+            }
+
             var converter = _documentConverterFactory.Create(Document.Format ?? ProjectFormat);
 
             var content = converter.NormalizeLinks(Document.Content, Document.Project.ShortName, GetSpecificVersionOrLatest(), Document.LocalDirectory);

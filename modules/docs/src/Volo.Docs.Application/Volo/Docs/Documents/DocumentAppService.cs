@@ -25,64 +25,79 @@ namespace Volo.Docs.Documents
             _documentStoreFactory = documentStoreFactory;
         }
 
-        public async Task<DocumentWithDetailsDto> GetByNameAsync(string projectShortName, string documentName, string version, bool normalize)
+        public async Task<DocumentWithDetailsDto> GetByNameAsync(
+            string projectShortName, 
+            string documentName, 
+            string version, 
+            bool normalize)
         {
             var project = await _projectRepository.GetByShortNameAsync(projectShortName);
-
-            return await GetDocument(ObjectMapper.Map<Project, ProjectDto>(project), documentName, version, normalize);
+            return await GetDocumentWithDetailsDto(
+                project,
+                documentName,
+                version,
+                normalize
+            );
         }
 
-        public async Task<NavigationWithDetailsDto> GetNavigationDocumentAsync(string projectShortName, string version, bool normalize)
+        public async Task<DocumentWithDetailsDto> GetDefaultAsync(
+            string projectShortName, 
+            string version, 
+            bool normalize)
         {
             var project = await _projectRepository.GetByShortNameAsync(projectShortName);
-
-            return ObjectMapper.Map<DocumentWithDetailsDto, NavigationWithDetailsDto>(
-                await GetDocument(ObjectMapper.Map<Project, ProjectDto>(project), project.NavigationDocumentName,
-                    version, normalize));
+            return await GetDocumentWithDetailsDto(
+                project,
+                project.DefaultDocumentName,
+                version,
+                normalize
+            );
         }
 
-        public async Task<DocumentWithDetailsDto> GetDocument(ProjectDto projectDto, string documentName, string version, bool normalize)
+        public virtual async Task<NavigationWithDetailsDto> GetNavigationDocumentAsync(
+            string projectShortName, 
+            string version, 
+            bool normalize)
         {
-            if (projectDto == null)
-            {
-                throw new ArgumentNullException(nameof(projectDto));
-            }
+            var project = await _projectRepository.GetByShortNameAsync(projectShortName);
+            var documentDto = await GetDocumentWithDetailsDto(
+                project,
+                project.NavigationDocumentName,
+                version,
+                normalize
+            );
 
-            var project = await _projectRepository.GetAsync(projectDto.Id);
+            return ObjectMapper.Map<DocumentWithDetailsDto, NavigationWithDetailsDto>(documentDto);
+        }
 
-            if (string.IsNullOrWhiteSpace(documentName))
-            {
-                documentName = projectDto.DefaultDocumentName;
-            }
-
-            IDocumentStore documentStore = _documentStoreFactory.Create(projectDto.DocumentStoreType);
-
-            Document document = await documentStore.FindDocumentByNameAsync(project.ExtraProperties, projectDto.Format, documentName, version);
+        protected virtual async Task<DocumentWithDetailsDto> GetDocumentWithDetailsDto(
+            Project project, 
+            string documentName, 
+            string version, 
+            bool normalize)
+        {
+            var documentStore = _documentStoreFactory.Create(project.DocumentStoreType);
+            var document = await documentStore.Find(project, documentName, version);
 
             var dto = ObjectMapper.Map<Document, DocumentWithDetailsDto>(document);
-
-            dto.Project = projectDto;
+            dto.Project = ObjectMapper.Map<Project, ProjectDto>(project);
 
             return dto;
         }
 
-        public async Task<List<VersionInfoDto>> GetVersions(string projectShortName, string defaultDocumentName, 
-            string documentStoreType, string documentName)
+        public async Task<List<VersionInfoDto>> GetVersions(
+            string projectShortName
+            )
         {
             var project = await _projectRepository.GetByShortNameAsync(projectShortName);
 
-            if (string.IsNullOrWhiteSpace(documentName))
-            {
-                documentName = defaultDocumentName;
-            }
-
-            var documentStore = _documentStoreFactory.Create(documentStoreType);
+            var documentStore = _documentStoreFactory.Create(project.DocumentStoreType);
 
             var versions = await GetVersionsFromCache(projectShortName);
 
             if (versions == null)
             {
-                versions = await documentStore.GetVersions(project.ExtraProperties, documentName);
+                versions = await documentStore.GetVersions(project);
                 await SetVersionsToCache(projectShortName, versions);
             }
 
