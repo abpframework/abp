@@ -27,14 +27,14 @@ namespace Volo.Docs.Documents
 
         public async Task<DocumentWithDetailsDto> GetByNameAsync(string projectShortName, string documentName, string version, bool normalize)
         {
-            var project = await _projectRepository.FindByShortNameAsync(projectShortName);
+            var project = await _projectRepository.GetByShortNameAsync(projectShortName);
 
             return await GetDocument(ObjectMapper.Map<Project, ProjectDto>(project), documentName, version, normalize);
         }
 
         public async Task<NavigationWithDetailsDto> GetNavigationDocumentAsync(string projectShortName, string version, bool normalize)
         {
-            var project = await _projectRepository.FindByShortNameAsync(projectShortName);
+            var project = await _projectRepository.GetByShortNameAsync(projectShortName);
 
             return ObjectMapper.Map<DocumentWithDetailsDto, NavigationWithDetailsDto>(
                 await GetDocument(ObjectMapper.Map<Project, ProjectDto>(project), project.NavigationDocumentName,
@@ -69,7 +69,7 @@ namespace Volo.Docs.Documents
         public async Task<List<VersionInfoDto>> GetVersions(string projectShortName, string defaultDocumentName, 
             string documentStoreType, string documentName)
         {
-            var project = await _projectRepository.FindByShortNameAsync(projectShortName);
+            var project = await _projectRepository.GetByShortNameAsync(projectShortName);
 
             if (string.IsNullOrWhiteSpace(documentName))
             {

@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Volo.Abp.Application.Dtos;
 
 namespace Volo.Docs.Projects
@@ -11,10 +10,6 @@ namespace Volo.Docs.Projects
         public string ShortName { get; set; }
 
         public string DefaultDocumentName { get; set; }
-
-        public string NavigationDocumentName { get; set; }
-
-        public string GoogleCustomSearchId { get; set; }
 
         public string MainWebsiteUrl { get; set; }
 

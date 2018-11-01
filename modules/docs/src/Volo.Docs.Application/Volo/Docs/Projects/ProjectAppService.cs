@@ -24,13 +24,9 @@ namespace Volo.Docs.Projects
             );
         }
 
-        public async Task<ProjectDto> FindByShortNameAsync(string shortName)
+        public async Task<ProjectDto> GetByShortNameAsync(string shortName)
         {
-            var project = await _projectRepository.FindByShortNameAsync(shortName);
-            if (project == null)
-            {
-                throw new EntityNotFoundException($"Project with the name {shortName} not found!");
-            }
+            var project = await _projectRepository.GetByShortNameAsync(shortName);
 
             return ObjectMapper.Map<Project, ProjectDto>(project);
         }

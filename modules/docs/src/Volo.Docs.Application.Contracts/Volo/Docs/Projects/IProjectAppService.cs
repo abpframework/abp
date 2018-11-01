@@ -8,6 +8,6 @@ namespace Volo.Docs.Projects
     {
         Task<ListResultDto<ProjectDto>> GetListAsync();
      
-        Task<ProjectDto> FindByShortNameAsync(string shortName);
+        Task<ProjectDto> GetByShortNameAsync(string shortName);
     }
 }

@@ -55,7 +55,7 @@ namespace Volo.Docs.Pages.Documents.Project
 
         public async Task OnGet()
         {
-            var project = await _projectAppService.FindByShortNameAsync(ProjectName);
+            var project = await _projectAppService.GetByShortNameAsync(ProjectName);
 
             SetPageParams(project);
 

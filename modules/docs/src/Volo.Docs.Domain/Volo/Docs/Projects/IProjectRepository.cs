@@ -6,6 +6,6 @@ namespace Volo.Docs.Projects
 {
     public interface IProjectRepository : IBasicRepository<Project, Guid>
     {
-        Task<Project> FindByShortNameAsync(string shortName);
+        Task<Project> GetByShortNameAsync(string shortName);
     }
 }

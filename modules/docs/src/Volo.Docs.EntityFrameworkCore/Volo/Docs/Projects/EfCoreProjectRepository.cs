@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Docs.EntityFrameworkCore;
@@ -15,9 +16,16 @@ namespace Volo.Docs.Projects
 
         }
 
-        public async Task<Project> FindByShortNameAsync(string shortName)
+        public async Task<Project> GetByShortNameAsync(string shortName)
         {
-            return await DbSet.FirstOrDefaultAsync(p => p.ShortName == shortName);
+            var project = await DbSet.FirstOrDefaultAsync(p => p.ShortName == shortName);
+
+            if (project == null)
+            {
+                throw new EntityNotFoundException($"Project with the name {shortName} not found!");
+            }
+
+            return project;
         }
     }
 }
