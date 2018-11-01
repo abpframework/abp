@@ -6,6 +6,8 @@ namespace Volo.Docs.Documents
 {
     public interface IDocumentAppService : IApplicationService
     {
+        //TODO: Create input DTOs for methods and add validation annotations.
+
         Task<DocumentWithDetailsDto> GetByNameAsync(
             string projectShortName, 
             string documentName, 

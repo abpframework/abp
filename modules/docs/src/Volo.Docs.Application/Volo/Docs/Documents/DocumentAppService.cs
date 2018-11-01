@@ -85,16 +85,15 @@ namespace Volo.Docs.Documents
             return dto;
         }
 
-        public async Task<List<VersionInfoDto>> GetVersions(
-            string projectShortName
-            )
+        public async Task<List<VersionInfoDto>> GetVersions(string projectShortName)
         {
-            var project = await _projectRepository.GetByShortNameAsync(projectShortName);
+            //TODO: What if there is no version?
 
+            var project = await _projectRepository.GetByShortNameAsync(projectShortName);
             var documentStore = _documentStoreFactory.Create(project.DocumentStoreType);
 
+            //TODO: Why not use GetOrAddAsync
             var versions = await GetVersionsFromCache(projectShortName);
-
             if (versions == null)
             {
                 versions = await documentStore.GetVersions(project);
@@ -125,8 +124,14 @@ namespace Volo.Docs.Documents
 
         private async Task SetVersionsToCache(string projectShortName, List<VersionInfoDto> versions)
         {
-            var options = new DistributedCacheEntryOptions() { SlidingExpiration = TimeSpan.FromDays(1) };
-            await _distributedCache.SetAsync(projectShortName, versions, options);
+            await _distributedCache.SetAsync(
+                projectShortName,
+                versions,
+                new DistributedCacheEntryOptions
+                {
+                    SlidingExpiration = TimeSpan.FromDays(1)
+                }
+            );
         }
     }
 }

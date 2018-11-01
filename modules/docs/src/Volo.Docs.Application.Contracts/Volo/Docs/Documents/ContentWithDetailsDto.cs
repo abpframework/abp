@@ -23,7 +23,5 @@ namespace Volo.Docs.Documents
         public string FileName { get; set; }
 
         public ProjectDto Project { get; set; }
-
-        public bool SuccessfullyRetrieved { get; set; }
     }
 }

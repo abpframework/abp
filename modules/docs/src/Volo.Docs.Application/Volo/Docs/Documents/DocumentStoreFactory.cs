@@ -13,8 +13,10 @@ namespace Volo.Docs.Documents
             _serviceProvider = serviceProvider;
         }
 
-        public IDocumentStore Create(string documentStoreType)
+        public virtual IDocumentStore Create(string documentStoreType)
         {
+            //TODO: Should be extensible
+
             switch (documentStoreType)
             {
                 case GithubDocumentStore.Type:

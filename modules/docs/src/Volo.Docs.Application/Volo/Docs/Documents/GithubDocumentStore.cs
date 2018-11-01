@@ -3,13 +3,9 @@ using Octokit;
 using Octokit.Internal;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
-using System.Net.Sockets;
 using System.Threading.Tasks;
-using Volo.Abp;
 using Volo.Abp.Domain.Services;
 using ProductHeaderValue = Octokit.ProductHeaderValue;
 
@@ -19,26 +15,34 @@ namespace Volo.Docs.Documents
     {
         public const string Type = "Github"; //TODO: Convert to "github"
 
-        public const int DocumentNotFoundExceptionCode = 20181001;
-
-        public async Task<Document> Find(Volo.Docs.Projects.Project project, string documentName, string version)
+        public Task<Document> Find(
+            Projects.Project project, 
+            string documentName, 
+            string version)
         {
-            var rootUrl = project.ExtraProperties["GithubRootUrl"].ToString().Replace("_version_/", version + "/").Replace("www.", "");
+            var rootUrl = project.GetGithubUrl()
+                .Replace("_version_/", version + "/")
+                .Replace("www.", ""); //TODO: Can be a problem?
 
-            var token = project.ExtraProperties["GithubAccessToken"]?.ToString();
+            var rawRootUrl = rootUrl
+                .Replace("github.com", "raw.githubusercontent.com")
+                .Replace("/tree/", "/"); //TODO: Replacing this can be a problem if I have a tree folder inside the repository
 
-            var rawRootUrl = rootUrl.Replace("github.com", "raw.githubusercontent.com").Replace("/tree/", "/");
             var rawUrl = rawRootUrl + documentName;
             var editLink = rootUrl.Replace("/tree/", "/blob/") + documentName;
-            string localDirectory = "";
-            string fileName = documentName;
+            var localDirectory = "";
+            var fileName = documentName;
 
             if (documentName.Contains("/"))
             {
                 localDirectory = documentName.Substring(0, documentName.LastIndexOf('/'));
-                fileName = documentName.Substring(documentName.LastIndexOf('/') + 1,
-                    documentName.Length - documentName.LastIndexOf('/') - 1);
+                fileName = documentName.Substring(
+                    documentName.LastIndexOf('/') + 1,
+                    documentName.Length - documentName.LastIndexOf('/') - 1
+                );
             }
+
+            var token = project.ExtraProperties["GithubAccessToken"]?.ToString(); //TODO: Define GetGithubAccessToken extension method
 
             var document = new Document
             {
@@ -50,33 +54,30 @@ namespace Volo.Docs.Documents
                 LocalDirectory = localDirectory,
                 FileName = fileName,
                 Version = version,
-                SuccessfullyRetrieved = TryDownloadWebContent(rawUrl, token, out var content),
-                Content = content
+                Content = DownloadWebContent(rawUrl, token)
             };
 
-            return await Task.FromResult(document);
+            return Task.FromResult(document);
         }
 
-        private bool TryDownloadWebContent(string rawUrl, string token, out string content)
+        private string DownloadWebContent(string rawUrl, string token)
         {
-            using (var webClient = new WebClient())
+            try
             {
-                try
+                using (var webClient = new WebClient())
                 {
                     if (!token.IsNullOrWhiteSpace())
                     {
                         webClient.Headers.Add("Authorization", "token " + token);
                     }
 
-                    content = webClient.DownloadString(rawUrl);
-                    return true;
+                    return webClient.DownloadString(rawUrl);
                 }
-                catch (Exception ex)
-                {
-                    content = null;
-                    Logger.LogError(ex, ex.Message);
-                    return false;
-                }
+            }
+            catch (Exception ex) //TODO: Only handle when document is really not available
+            {
+                Logger.LogWarning(ex.Message, ex);
+                throw new DocumentNotFoundException(rawUrl);
             }
         }
 

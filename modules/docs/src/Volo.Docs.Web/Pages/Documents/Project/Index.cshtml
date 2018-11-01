@@ -97,7 +97,7 @@
                         </div>
                     }
 
-                    @if (!Model.Navigation.SuccessfullyRetrieved || Model.Navigation.Content.IsNullOrEmpty())
+                    @if (Model.Navigation == null || Model.Navigation.Content.IsNullOrEmpty())
                     {
                         <div class="text-muted p-3">
                             <i class="fa fa-warning"></i> @L["NavigationDocumentNotFound"]
@@ -118,9 +118,8 @@
             </div>
         </div>
 
-        @if (Model.Document.SuccessfullyRetrieved)
+        @if (Model.Document != null)
         {
-
             <div class="col-md-7 docs-content bg-white">
 
                 <div class="docs-link-btns">

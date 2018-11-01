@@ -68,7 +68,15 @@ namespace Volo.Docs.Pages.Documents.Project
 
         private async Task SetNavigationAsync()
         {
-            Navigation = await _documentAppService.GetNavigationDocumentAsync(ProjectName, Version, false);
+            try
+            {
+                Navigation = await _documentAppService.GetNavigationDocumentAsync(ProjectName, Version, false);
+            }
+            catch (DocumentNotFoundException) //TODO: What if called on a remote service which may return 404
+            {
+                return;
+            }
+
             Navigation.ConvertItems();
         }
 
@@ -145,6 +153,11 @@ namespace Volo.Docs.Pages.Documents.Project
 
         public string GetSpecificVersionOrLatest()
         {
+            if (Document?.Version == null)
+            {
+                return DocsAppConsts.LatestVersion;
+            }
+
             return Document.Version == LatestVersionInfo.Version ?
                 DocsAppConsts.LatestVersion :
                 Document.Version;
@@ -152,15 +165,22 @@ namespace Volo.Docs.Pages.Documents.Project
 
         private async Task SetDocumentAsync()
         {
-            if (DocumentNameWithExtension.IsNullOrWhiteSpace())
+            try
             {
-                Document = await _documentAppService.GetDefaultAsync(ProjectName, Version, true);
+                if (DocumentNameWithExtension.IsNullOrWhiteSpace())
+                {
+                    Document = await _documentAppService.GetDefaultAsync(ProjectName, Version, true);
+                }
+                else
+                {
+                    Document = await _documentAppService.GetByNameAsync(ProjectName, DocumentNameWithExtension, Version, true);
+                }
             }
-            else
+            catch (DocumentNotFoundException)
             {
-                Document = await _documentAppService.GetByNameAsync(ProjectName, DocumentNameWithExtension, Version, true);
+                return;
             }
-
+           
             var converter = _documentConverterFactory.Create(Document.Format ?? ProjectFormat);
 
             var content = converter.NormalizeLinks(Document.Content, Document.Project.ShortName, GetSpecificVersionOrLatest(), Document.LocalDirectory);
@@ -171,5 +191,6 @@ namespace Volo.Docs.Pages.Documents.Project
 
             Document.Content = content;
         }
+
     }
 }
