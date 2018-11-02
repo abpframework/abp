@@ -101,7 +101,7 @@ namespace Volo.Docs.Pages.Documents.Project
 
             LatestVersionInfo = GetLatestVersion();
 
-            if (string.Equals(Version, DocsAppConsts.LatestVersion, StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(Version, DocsAppConsts.Latest, StringComparison.OrdinalIgnoreCase))
             {
                 LatestVersionInfo.IsSelected = true;
                 Version = LatestVersionInfo.Version;
@@ -124,13 +124,18 @@ namespace Volo.Docs.Pages.Documents.Project
             VersionSelectItems = Versions.Select(v => new SelectListItem
             {
                 Text = v.DisplayText,
-                Value = CreateLink(v.Version, DocumentName),
+                Value = CreateLink(LatestVersionInfo, v.Version, DocumentName),
                 Selected = v.IsSelected
             }).ToList();
         }
 
-        public string CreateLink(string version, string documentName = null)
+        public string CreateLink(VersionInfo latestVersion, string version, string documentName = null)
         {
+            if (latestVersion.Version == version)
+            {
+                version = DocsAppConsts.Latest;
+            }
+
             var link = "/documents/" + ProjectName + "/" + version;
 
             if (documentName != null)
@@ -145,7 +150,7 @@ namespace Volo.Docs.Pages.Documents.Project
         {
             var latestVersion = Versions.First();
 
-            latestVersion.DisplayText = $"{latestVersion.Version} - " + DocsAppConsts.LatestVersion;
+            latestVersion.DisplayText = $"{latestVersion.DisplayText} ({DocsAppConsts.Latest})";
             latestVersion.Version = latestVersion.Version;
 
             return latestVersion;
@@ -155,11 +160,11 @@ namespace Volo.Docs.Pages.Documents.Project
         {
             if (Document?.Version == null)
             {
-                return DocsAppConsts.LatestVersion;
+                return DocsAppConsts.Latest;
             }
 
             return Document.Version == LatestVersionInfo.Version ?
-                DocsAppConsts.LatestVersion :
+                DocsAppConsts.Latest :
                 Document.Version;
         }
 

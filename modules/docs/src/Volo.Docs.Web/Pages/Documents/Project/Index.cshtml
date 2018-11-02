@@ -48,7 +48,7 @@
                     <nav class="navbar navbar-logo">
                         @if (!projectDisplayName.IsNullOrWhiteSpace())
                         {
-                            <a class="navbar-brand w-100" href="@Model.CreateLink(Model.GetSpecificVersionOrLatest())">
+                            <a class="navbar-brand w-100" href="@Model.CreateLink(Model.LatestVersionInfo, Model.GetSpecificVersionOrLatest())">
                                 @projectDisplayName<br>
                                 <strong class="display-block">
                                     @L["Documents"]
@@ -106,7 +106,7 @@
                     else
                     {
                         <ul root-node="@Model.Navigation.RootNode"
-                            version="@(Model.LatestVersionInfo.IsSelected ? DocsAppConsts.LatestVersion : Model.Version)"
+                            version="@(Model.LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Model.Version)"
                             project-name="@Model.ProjectName"
                             project-format="@Model.ProjectFormat"
                             selected-document-name="@Model.DocumentNameWithExtension"

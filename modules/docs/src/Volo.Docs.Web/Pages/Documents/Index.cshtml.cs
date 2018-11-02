@@ -26,7 +26,7 @@ namespace Volo.Docs.Pages.Documents
                 return RedirectToPage("./Project/Index", new
                 {
                     projectName = listResult.Items[0].ShortName,
-                    version = DocsAppConsts.LatestVersion,
+                    version = DocsAppConsts.Latest,
                     documentName = listResult.Items[0].DefaultDocumentName
                 });
             }

@@ -2,6 +2,6 @@
 {
     public class DocsAppConsts
     {
-        public static string LatestVersion = "latest";
+        public static string Latest = "latest";
     }
 }
