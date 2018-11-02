@@ -6,7 +6,7 @@ This document explains how to integrate EF Core as an ORM provider to ABP based 
 
 `Volo.Abp.EntityFrameworkCore` is the main nuget package for the EF Core integration. Install it to your project (for a layered application, to your data/infrastructure layer):
 
-````
+```` shell
 Install-Package Volo.Abp.EntityFrameworkCore
 ````
 
@@ -166,7 +166,7 @@ public class BookRepository : EfCoreRepository<BookStoreDbContext, Book, Guid>, 
 
     public async Task DeleteBooksByType(BookType type)
     {
-        await DbContext.Database.ExecuteSqlCommandAsync(        
+        await DbContext.Database.ExecuteSqlCommandAsync(
             $"DELETE FROM Books WHERE Type = {(int)type}"
         );
     }
@@ -193,8 +193,8 @@ This is especially important when you want to **override a base repository metho
 
 ````csharp
 public override async Task DeleteAsync(
-    Guid id, 
-    bool autoSave = false, 
+    Guid id,
+    bool autoSave = false,
     CancellationToken cancellationToken = default)
 {
     //TODO: Custom implementation of the delete method
@@ -237,7 +237,7 @@ First, define your repository classes like that:
 
 ```csharp
 public class MyRepositoryBase<TEntity>
-    : EfCoreRepository<BookStoreDbContext, TEntity> 
+    : EfCoreRepository<BookStoreDbContext, TEntity>
       where TEntity : class, IEntity
 {
     public MyRepositoryBase(IDbContextProvider<BookStoreDbContext> dbContextProvider) 
