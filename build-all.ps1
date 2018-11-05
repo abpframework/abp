@@ -19,6 +19,7 @@ $solutionPaths = (
     "modules/background-jobs",
     "abp_io",
     "templates/module",
+    "templates/service",
     "templates/mvc"
 )
 
