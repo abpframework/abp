@@ -75,5 +75,15 @@ namespace Volo.Abp.Identity
 
             return IdentityResult.Success;
         }
+
+        public async Task UnlockAsync(Guid id)
+        {
+            var user = await Store.FindByIdAsync(id.ToString(), CancellationToken);
+
+            if (user.LockoutEnd != null && user.LockoutEnd > DateTimeOffset.Now)
+            {
+                user.LockoutEnd = null;
+            }
+        }
     }
 }
