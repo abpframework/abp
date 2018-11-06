@@ -7,5 +7,9 @@ namespace Volo.Abp.Identity
         [Required]
         [StringLength(IdentityRoleConsts.MaxNameLength)]
         public string Name { get; set; }
+
+        public bool IsDefault { get; set; }
+
+        public bool IsPublic { get; set; }
     }
 }

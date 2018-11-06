@@ -7,12 +7,15 @@
 @{
     Layout = null;
 }
-<abp-dynamic-form abp-model="@Model.Role" asp-page="/Identity/Roles/EditModal">
+<form asp-page="/Identity/Roles/EditModal">
     <abp-modal>
         <abp-modal-header title="@L["Edit"].Value"></abp-modal-header>
         <abp-modal-body>
-            <abp-form-content/>
+            <abp-input asp-for="Role.Id" />
+            <abp-input asp-for="Role.Name" readonly="@(Model.Role.IsStatic?" readonly":"")" />
+            <abp-input asp-for="Role.IsDefault" />
+            <abp-input asp-for="Role.IsPublic" />
         </abp-modal-body>
         <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)"></abp-modal-footer>
     </abp-modal>
-</abp-dynamic-form>
+</form>

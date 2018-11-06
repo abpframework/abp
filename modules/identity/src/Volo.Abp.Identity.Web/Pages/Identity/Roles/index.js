@@ -45,8 +45,8 @@
                                 },
                                 {
                                     text: l('Delete'),
-                                    visible: function () {
-                                        return true; //TODO: Check permission
+                                    visible: function (data) {
+                                        return !data.isStatic; //TODO: Check permission
                                     },
                                     confirmMessage: function (data) { return l('RoleDeletionConfirmationMessage', data.record.name)},
                                     action: function (data) {

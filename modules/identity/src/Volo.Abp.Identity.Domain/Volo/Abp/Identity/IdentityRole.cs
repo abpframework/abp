@@ -40,11 +40,26 @@ namespace Volo.Abp.Identity
         public virtual string ConcurrencyStamp { get; set; }
 
         /// <summary>
+        /// A default role is automatically assigned to a new user
+        /// </summary>
+        public virtual bool IsDefault { get; set; }
+
+        /// <summary>
+        /// A static role can not be deleted/renamed
+        /// </summary>
+        public virtual bool IsStatic { get; protected set; }
+
+        /// <summary>
+        /// A user can see other user's public roles
+        /// </summary>
+        public virtual bool IsPublic { get; set; }
+        
+        /// <summary>
         /// Initializes a new instance of <see cref="IdentityRole"/>.
         /// </summary>
         protected IdentityRole() { }
 
-        public IdentityRole(Guid id, [NotNull] string name, Guid? tenantId = null)
+        public IdentityRole(Guid id, [NotNull] string name, bool isDefault = false, bool isStatic = false, bool isPublic = false, Guid? tenantId = null)
         {
             Check.NotNull(name, nameof(name));
 
@@ -53,6 +68,9 @@ namespace Volo.Abp.Identity
             TenantId = tenantId;
             NormalizedName = name.ToUpperInvariant();
             ConcurrencyStamp = Guid.NewGuid().ToString();
+            IsDefault = isDefault;
+            IsStatic = isStatic;
+            IsPublic = isPublic;
 
             Claims = new Collection<IdentityRoleClaim>();
         }

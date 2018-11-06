@@ -28,9 +28,20 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Users
         {
             UserInfo = new UserInfoViewModel();
 
+            var roleDtoList = await _identityRoleAppService.GetAllListAsync();
+
             Roles = ObjectMapper.Map<List<IdentityRoleDto>, AssignedRoleViewModel[]>(
                 await _identityRoleAppService.GetAllListAsync()
             );
+
+            var defaultRoles = roleDtoList.Where(r => r.IsDefault).ToList();
+            foreach (var role in Roles)
+            {
+                if (defaultRoles.Any(r => r.Name == role.Name))
+                {
+                    role.IsAssigned = true;
+                }
+            }
         }
 
         public async Task<NoContentResult> OnPostAsync()
