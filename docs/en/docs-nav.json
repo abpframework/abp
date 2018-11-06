@@ -143,6 +143,7 @@
     },
     {
       "text": "Domain Driven Design",
+      "path": "Domain-Driven-Design.md",
       "items": [
         {
           "text": "Domain Layer",
@@ -170,7 +171,8 @@
           "text": "Application Layer",
           "items": [
             {
-              "text": "Application Services"
+              "text": "Application Services",
+              "path": "Application-Services.md"
             },
             {
               "text": "Data Transfer Objects"
