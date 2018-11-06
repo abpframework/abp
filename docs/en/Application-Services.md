@@ -1,6 +1,8 @@
 # Application Services
 
-Application services are used to implement the **use cases** of an application. They are used to **expose domain logic to the presentation layer**. An Application Service is called from the presentation layer (optionally) with a **DTO (Data Transfer Object)** as the parameter. It uses domain objects to **perform some specific business logic** and (optionally) returns a DTO back to the presentation layer. Thus, the presentation layer is completely **isolated** from Domain layer.
+Application services are used to implement the **use cases** of an application. They are used to **expose domain logic to the presentation layer**.
+
+An Application Service is called from the presentation layer (optionally) with a **DTO (Data Transfer Object)** as the parameter. It uses domain objects to **perform some specific business logic** and (optionally) returns a DTO back to the presentation layer. Thus, the presentation layer is completely **isolated** from domain layer.
 
 ## Example
 
@@ -118,9 +120,15 @@ public class BookAppService : ApplicationService, IBookAppService
 * `BookAppService` [injects](Dependency-Injection.md) `IRepository<Book, Guid>` (see [repositories](Repositories.md)) and uses it inside the `CreateAsync` method to insert a new entity to the database.
 * `CreateAsync` uses the constructor of the `Book` entity to create a new book from the properties of given `input`.
 
+## Data Transfer Objects
+
+Application services gets and returns DTOs instead of entities. ABP does not force this rule. However, exposing entities to presentation layer (or to remote clients) have significant problems and not suggested. 
+
+See the [DTO documentation](Data-Transfer-Objects.md) for more.
+
 ## Object to Object Mapping
 
-The example `CreateAsync` method above manually creates a `Book` entity from given `CreateBookDto` object. This is because the `Book` entity enforces it (we designed it like that).
+The `CreateAsync` method above manually creates a `Book` entity from given `CreateBookDto` object. Because the `Book` entity enforces it (we designed it like that).
 
 However, in many cases, it's very practical to use **auto object mapping** to set properties of an object from a similar object. ABP provides an [object to object mapping](Object-To-Object-Mapping.md) infrastructure to make this even easier.
 
@@ -131,11 +139,11 @@ public interface IBookAppService : IApplicationService
 {
     Task CreateAsync(CreateBookDto input);
 
-    Task<BookDto> GetAsync(Guid id); //NEW METHOD
+    Task<BookDto> GetAsync(Guid id); //New method
 }
 ````
 
-`BookDto` is a simple [DTO](Data-Transfer-Objects.md) class defined as shown:
+`BookDto` is a simple [DTO](Data-Transfer-Objects.md) class defined as below:
 
 ````csharp
 [AutoMapFrom(typeof(Book))] //Defines the mapping
@@ -193,7 +201,96 @@ See the [authorization document](Authorization.md) for more.
 
 ## CRUD Application Services
 
-TODO!
+If you need to create a simple **CRUD application service** which has Create, Update, Delete and Get methods, you can use ABP's **base classes** to easily build your services. You can either inherit from `CrudAppService` or `AsyncCrudAppService`.
+
+### Example
+
+Create an `IBookAppService` interface inheriting from the `IAsyncCrudAppService` interface.
+
+````csharp
+public interface IBookAppService : 
+    IAsyncCrudAppService< //Defines CRUD methods
+        BookDto, //Used to show books
+        Guid, //Primary key of the book entity
+        PagedAndSortedResultRequestDto, //Used for paging/sorting on getting a list of books
+        CreateUpdateBookDto, //Used to create a new book
+        CreateUpdateBookDto> //Used to update a book
+{
+}
+````
+
+* `IAsyncCrudAppService` has generic arguments to get the primary key type of the entity and the DTO types for the CRUD operations (it does not get the entity type since the entity type is not exposed to the clients use this interface).
+
+`IAsyncCrudAppService` declares the following methods:
+
+````csharp
+public interface IAsyncCrudAppService<
+    TEntityDto,
+    in TKey,
+    in TGetListInput,
+    in TCreateInput,
+    in TUpdateInput>
+    : IApplicationService
+    where TEntityDto : IEntityDto<TKey>
+{
+    Task<TEntityDto> GetAsync(TKey id);
+
+    Task<PagedResultDto<TEntityDto>> GetListAsync(TGetListInput input);
+
+    Task<TEntityDto> CreateAsync(TCreateInput input);
+
+    Task<TEntityDto> UpdateAsync(TKey id, TUpdateInput input);
+
+    Task DeleteAsync(TKey id);
+}
+````
+
+DTO classes used in this example are `BookDto` and `CreateUpdateBookDto`:
+
+````csharp
+[AutoMapFrom(typeof(Book))]
+public class BookDto : AuditedEntityDto<Guid>
+{
+    public string Name { get; set; }
+
+    public BookType Type { get; set; }
+
+    public float Price { get; set; }
+}
+
+[AutoMapTo(typeof(Book))]
+public class CreateUpdateBookDto
+{
+    [Required]
+    [StringLength(128)]
+    public string Name { get; set; }
+
+    [Required]
+    public BookType Type { get; set; } = BookType.Undefined;
+
+    [Required]
+    public float Price { get; set; }
+}
+````
+
+* `CreateUpdateBookDto` is shared by create and update operations, but you could use separated DTO classes as well.
+
+And finally, the `BookAppService` implementation is very simple:
+
+````csharp
+public class BookAppService : 
+    AsyncCrudAppService<Book, BookDto, Guid, PagedAndSortedResultRequestDto,
+                        CreateUpdateBookDto, CreateUpdateBookDto>,
+    IBookAppService
+{
+    public BookAppService(IRepository<Book, Guid> repository) 
+        : base(repository)
+    {
+    }
+}
+````
+
+`AsyncCrudAppService` implements all methods declared in the `IAsyncCrudAppService` interface. You can then add your own custom methods or override and customize base methods.
 
 ## Lifetime
 
