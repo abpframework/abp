@@ -94,9 +94,7 @@ services.AddAbpDbContext<MyDbContext>(options =>
 });
 ````
 
-Then you can inject and use `IRepository<TEntity, TPrimaryKey>` or `IQueryableRepository<TEntity, TPrimaryKey>` in your services.
-
-Assume that you have a `Book` entity with `Guid` primary key:
+Then you can inject and use `IRepository<TEntity, TPrimaryKey>` in your services. Assume that you have a `Book` entity with `Guid` primary key:
 
 ```csharp
 public class Book : AggregateRoot<Guid>
@@ -107,7 +105,7 @@ public class Book : AggregateRoot<Guid>
 }
 ```
 
-And you want to create a new `Book` entity in a [domain service](Domain-Services.md):
+(`BookType` is a simple enum here) And you want to create a new `Book` entity in a [domain service](Domain-Services.md):
 
 ````csharp
 public class BookManager : DomainService
@@ -185,7 +183,7 @@ If you want to replace default repository implementation with your custom reposi
 context.Services.AddAbpDbContext<BookStoreDbContext>(options =>
 {
     options.AddDefaultRepositories();
-    options.AddRepository<Book, BookRepository>();
+    options.AddRepository<Book, BookRepository>(); //Replaces IRepository<Book, Guid>
 });
 ````
 
@@ -238,7 +236,7 @@ First, define your repository classes like that:
 ```csharp
 public class MyRepositoryBase<TEntity>
     : EfCoreRepository<BookStoreDbContext, TEntity> 
-      where TEntity : class, IEntity
+    where TEntity : class, IEntity
 {
     public MyRepositoryBase(IDbContextProvider<BookStoreDbContext> dbContextProvider) 
         : base(dbContextProvider)
@@ -248,7 +246,7 @@ public class MyRepositoryBase<TEntity>
 
 public class MyRepositoryBase<TEntity, TKey>
     : EfCoreRepository<BookStoreDbContext, TEntity, TKey>
-      where TEntity : class, IEntity<TKey>
+    where TEntity : class, IEntity<TKey>
 {
     public MyRepositoryBase(IDbContextProvider<BookStoreDbContext> dbContextProvider)
         : base(dbContextProvider)
