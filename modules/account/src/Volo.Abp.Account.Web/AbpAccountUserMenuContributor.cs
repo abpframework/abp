@@ -24,6 +24,8 @@ namespace Volo.Abp.Account.Web
 
             context.Menu.AddItem(new ApplicationMenuItem("Account.ChangePassword", l["ChangePassword"], icon: "fa fa-key", url: "#", elementId: "abp-account-change-password"));
 
+            context.Menu.AddItem(new ApplicationMenuItem("Account.PersonalSettings", l["PersonalInfo"], icon: "fa fa-info", url: "#", elementId: "abp-account-personal-settings"));
+
             context.Menu.AddItem(new ApplicationMenuItem("Account.Logout", l["Logout"], url: "/Account/Logout", icon: "fa fa-power-off", order: int.MaxValue - 1000));
 
             return Task.CompletedTask;

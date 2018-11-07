@@ -64,6 +64,11 @@ namespace Volo.Abp.Identity
             return _userAppService.UpdatePermissionsAsync(id, input);
         }
 
+        public virtual Task<IdentityUserDto> UpdatePersonalSettingsAsync(UpdatePersonalSettingsDto input)
+        {
+            return _userAppService.UpdatePersonalSettingsAsync(input);
+        }
+
         [HttpGet]
         public virtual Task<IdentityUserDto> FindByUsernameAsync(string username)
         {

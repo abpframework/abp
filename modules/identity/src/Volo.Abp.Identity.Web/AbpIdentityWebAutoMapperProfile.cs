@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Volo.Abp.Identity.Web.Pages.Identity.Roles;
+using Volo.Abp.Identity.Web.Pages.Identity.Shared;
 using CreateUserModalModel = Volo.Abp.Identity.Web.Pages.Identity.Users.CreateModalModel;
 using EditUserModalModel = Volo.Abp.Identity.Web.Pages.Identity.Users.EditModalModel;
 
@@ -31,6 +32,10 @@ namespace Volo.Abp.Identity.Web
 
             CreateMap<IdentityRoleDto, EditUserModalModel.AssignedRoleViewModel>()
                 .ForMember(dest => dest.IsAssigned, opt => opt.Ignore());
+
+            CreateMap<IdentityUserDto, PersonalSettingsInfoModel>();
+
+            CreateMap<PersonalSettingsInfoModel, UpdatePersonalSettingsDto>();
         }
 
         private void CreateRoleMappings()

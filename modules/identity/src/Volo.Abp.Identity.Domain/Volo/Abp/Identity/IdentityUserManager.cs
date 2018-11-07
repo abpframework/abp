@@ -75,5 +75,17 @@ namespace Volo.Abp.Identity
 
             return IdentityResult.Success;
         }
+
+        public async Task<IdentityResult> SetPersonalSettingsAsync([NotNull] IdentityUser user, [CanBeNull]  string name, [CanBeNull] string surname, [CanBeNull] string phoneNumber)
+        {
+            Check.NotNull(user, nameof(user));
+
+            user.Name = name;
+            user.Surname = surname;
+
+            (await SetPhoneNumberAsync(user, phoneNumber)).CheckErrors();
+
+            return IdentityResult.Success;
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Authentication;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -115,6 +116,23 @@ namespace Volo.Abp.Identity
             await _permissionAppServiceHelper.UpdateAsync(UserPermissionValueProvider.ProviderName, id.ToString(), input);
         }
 
+        public async Task<IdentityUserDto> UpdatePersonalSettingsAsync(UpdatePersonalSettingsDto input)
+        {
+            if (!CurrentUser.Id.HasValue)
+            {
+                throw new AuthenticationException();
+            }
+
+            var user = await _userManager.GetByIdAsync(CurrentUser.Id.Value);
+
+            await _userManager.SetPersonalSettingsAsync(user, input.Name, input.Surname, input.PhoneNumber);
+
+            (await _userManager.UpdateAsync(user)).CheckErrors();
+            await CurrentUnitOfWork.SaveChangesAsync();
+
+            return ObjectMapper.Map<IdentityUser, IdentityUserDto>(user);
+        }
+
         [Authorize(IdentityPermissions.Users.Default)]
         public async Task<IdentityUserDto> FindByUsernameAsync(string username)
         {
@@ -145,7 +163,7 @@ namespace Volo.Abp.Identity
         private async Task UpdateUserByInput(IdentityUser user, IdentityUserCreateOrUpdateDtoBase input)
         {
             (await _userManager.SetEmailAsync(user, input.Email)).CheckErrors();
-            (await _userManager.SetPhoneNumberAsync(user, input.PhoneNumber)).CheckErrors();
+            (await _userManager.SetPersonalSettingsAsync(user,input.Name,input.Surname, input.PhoneNumber)).CheckErrors();
             (await _userManager.SetTwoFactorEnabledAsync(user, input.TwoFactorEnabled)).CheckErrors();
             (await _userManager.SetLockoutEnabledAsync(user, input.LockoutEnabled)).CheckErrors();
 

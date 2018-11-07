@@ -7,6 +7,8 @@ namespace Volo.Abp.Users
             return new UserData(
                 user.Id,
                 user.UserName,
+                user.Name,
+                user.Surname,
                 user.Email,
                 user.EmailConfirmed,
                 user.PhoneNumber,
