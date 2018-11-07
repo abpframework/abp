@@ -6,6 +6,9 @@
     "NewUser": "Yeni kullanıcı",
     "UserName": "Kullanıcı adı",
     "EmailAddress": "E-posta adresi",
+    "DisplayName:IsDefault": "Varsayılan",
+    "DisplayName:IsStatic": "Sabit",
+    "DisplayName:IsPublic": "Herkese Açık",
     "PhoneNumber": "Telefon numarası",
     "UserInformations": "Kullanıcı bilgileri",
     "Roles": "Roller",
@@ -26,6 +29,8 @@
     "DisplayName:CurrentPassword": "Mevcut şifre",
     "DisplayName:NewPassword": "Yeni şifre",
     "DisplayName:NewPasswordConfirm": "Yeni şifre (tekrar)",
-    "PasswordChangedMessage": "Şifreniz başarıyla değiştirildi."
+    "PasswordChangedMessage": "Şifreniz başarıyla değiştirildi.",
+    "Identity.StaticRoleRenamingErrorMessage": "Bir Sabit rolün ismi değiştirilemez.",
+    "Identity.StaticRoleDeletionErrorMessage": "Bir Sabit rol silinemez."
   }
 }
