@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Volo.AbpWebSite.EntityFrameworkCore;
 
 namespace Volo.AbpWebSite.EntityFrameworkCore.Migrations
 {
     [DbContext(typeof(AbpWebSiteDbContext))]
-    partial class AbpWebSiteDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181107141542_Updated_Identity_20181107")]
+    partial class Updated_Identity_20181107
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
