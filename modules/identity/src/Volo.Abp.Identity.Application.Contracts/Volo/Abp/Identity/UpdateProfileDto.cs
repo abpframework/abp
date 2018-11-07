@@ -2,8 +2,14 @@
 
 namespace Volo.Abp.Identity
 {
-    public class UpdatePersonalSettingsDto
+    public class UpdateProfileDto
     {
+        [StringLength(IdentityUserConsts.MaxUserNameLength)]
+        public string UserName { get; set; }
+
+        [StringLength(IdentityUserConsts.MaxEmailLength)]
+        public string Email { get; set; }
+
         [StringLength(IdentityUserConsts.MaxNameLength)]
         public string Name { get; set; }
 

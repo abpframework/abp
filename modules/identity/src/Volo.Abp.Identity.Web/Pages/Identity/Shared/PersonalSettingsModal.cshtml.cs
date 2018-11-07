@@ -13,32 +13,27 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Shared
         [BindProperty]
         public PersonalSettingsInfoModel PersonalSettingsInfoModel { get; set; }
 
-        private readonly IIdentityUserAppService _userAppService;
+        private readonly IProfileAppService _profileAppService;
 
-        public PersonalSettingsModal(IIdentityUserAppService userAppService)
+        public PersonalSettingsModal(IProfileAppService profileAppService)
         {
-            _userAppService = userAppService;
+            _profileAppService = profileAppService;
         }
 
         public async Task OnGetAsync()
         {
-            if (!CurrentUser.Id.HasValue)
-            {
-                throw new AuthenticationException();
-            }
+            var user = await _profileAppService.GetAsync();
 
-            var user = await _userAppService.GetAsync(CurrentUser.Id.Value);
-
-            PersonalSettingsInfoModel = ObjectMapper.Map<IdentityUserDto, PersonalSettingsInfoModel>(user);
+            PersonalSettingsInfoModel = ObjectMapper.Map<ProfileDto, PersonalSettingsInfoModel>(user);
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
             ValidateModel();
 
-            var updateDto = ObjectMapper.Map<PersonalSettingsInfoModel, UpdatePersonalSettingsDto>(PersonalSettingsInfoModel);
+            var updateDto = ObjectMapper.Map<PersonalSettingsInfoModel, UpdateProfileDto>(PersonalSettingsInfoModel);
 
-            await _userAppService.UpdatePersonalSettingsAsync(updateDto);
+            await _profileAppService.UpdateAsync(updateDto);
 
             return NoContent();
         }
@@ -47,16 +42,23 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Shared
     public class PersonalSettingsInfoModel
     {
         [Required]
+        [StringLength(IdentityUserConsts.MaxUserNameLength)]
+        [Display(Name = "DisplayName:UserName")]
+        public string UserName { get; set; }
+
+        [Required]
+        [StringLength(IdentityUserConsts.MaxEmailLength)]
+        [Display(Name = "DisplayName:Email")]
+        public string Email { get; set; }
+
         [StringLength(IdentityUserConsts.MaxNameLength)]
         [Display(Name = "DisplayName:Name")]
         public string Name { get; set; }
 
-        [Required]
         [StringLength(IdentityUserConsts.MaxSurnameLength)]
         [Display(Name = "DisplayName:Surname")]
         public string Surname { get; set; }
 
-        [Required]
         [StringLength(IdentityUserConsts.MaxPhoneNumberLength)]
         [Display(Name = "DisplayName:PhoneNumber")]
         public string PhoneNumber { get; set; }

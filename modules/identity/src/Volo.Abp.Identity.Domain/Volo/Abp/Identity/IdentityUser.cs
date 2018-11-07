@@ -32,12 +32,12 @@ namespace Volo.Abp.Identity
         /// <summary>
         /// Gets or sets the Name for the user.
         /// </summary>
-        public virtual string Name { get; protected internal set; }
+        public virtual string Name { get; set; }
 
         /// <summary>
         /// Gets or sets the Surame for the user.
         /// </summary>
-        public virtual string Surname { get; protected internal set; }
+        public virtual string Surname { get; set; }
 
         /// <summary>
         /// Gets or sets the email address for this user.
