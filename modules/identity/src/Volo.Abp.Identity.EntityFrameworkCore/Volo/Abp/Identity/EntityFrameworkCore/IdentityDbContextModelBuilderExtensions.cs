@@ -97,6 +97,9 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
 
                 b.Property(r => r.Name).IsRequired().HasMaxLength(IdentityRoleConsts.MaxNameLength);
                 b.Property(r => r.NormalizedName).IsRequired().HasMaxLength(IdentityRoleConsts.MaxNormalizedNameLength);
+                b.Property(r => r.IsDefault).HasColumnName(nameof(IdentityRole.IsDefault));
+                b.Property(r => r.IsStatic).HasColumnName(nameof(IdentityRole.IsStatic));
+                b.Property(r => r.IsPublic).HasColumnName(nameof(IdentityRole.IsPublic));
 
                 b.HasMany(r => r.Claims).WithOne().HasForeignKey(rc => rc.RoleId).IsRequired();
 

@@ -40,6 +40,21 @@ namespace Volo.Abp.Identity
         public virtual string ConcurrencyStamp { get; set; }
 
         /// <summary>
+        /// A default role is automatically assigned to a new user
+        /// </summary>
+        public virtual bool IsDefault { get; set; }
+
+        /// <summary>
+        /// A static role can not be deleted/renamed
+        /// </summary>
+        public virtual bool IsStatic { get; set; }
+
+        /// <summary>
+        /// A user can see other user's public roles
+        /// </summary>
+        public virtual bool IsPublic { get; set; }
+        
+        /// <summary>
         /// Initializes a new instance of <see cref="IdentityRole"/>.
         /// </summary>
         protected IdentityRole() { }

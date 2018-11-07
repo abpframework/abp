@@ -63,6 +63,10 @@ namespace Volo.Abp.Identity
             if (adminRole == null)
             {
                 adminRole = new IdentityRole(_guidGenerator.Create(), adminRoleName, tenantId);
+
+                adminRole.IsStatic = true;
+                adminRole.IsPublic = true;
+
                 CheckIdentityErrors(await _roleManager.CreateAsync(adminRole));
 
                 if (adminRolePermissions != null)

@@ -71,6 +71,9 @@ namespace Volo.Abp.Identity
         {
             var role = new IdentityRole(GuidGenerator.Create(), input.Name, CurrentTenant.Id);
 
+            role.IsDefault = input.IsDefault;
+            role.IsPublic = input.IsPublic;
+
             (await _roleManager.CreateAsync(role)).CheckErrors();
             await CurrentUnitOfWork.SaveChangesAsync();
 
@@ -83,6 +86,9 @@ namespace Volo.Abp.Identity
             var role = await _roleManager.GetByIdAsync(id);
 
             (await _roleManager.SetRoleNameAsync(role, input.Name)).CheckErrors();
+
+            role.IsDefault = input.IsDefault;
+            role.IsPublic = input.IsPublic;
 
             (await _roleManager.UpdateAsync(role)).CheckErrors();
             await CurrentUnitOfWork.SaveChangesAsync();
