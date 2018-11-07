@@ -9,7 +9,7 @@ using Xunit;
 
 namespace Volo.Abp.Identity
 {
-    public class PrifleAppService_Tests : AbpIdentityApplicationTestBase
+    public class ProfileAppService_Tests : AbpIdentityApplicationTestBase
     {
         private readonly IProfileAppService _profileAppService;
         private readonly IIdentityUserRepository _userRepository;
@@ -17,7 +17,7 @@ namespace Volo.Abp.Identity
         private readonly IdentityTestData _testData;
         private ICurrentUser _currentUser;
 
-        public PrifleAppService_Tests()
+        public ProfileAppService_Tests()
         {
             _profileAppService = GetRequiredService<IProfileAppService>();
             _userRepository = GetRequiredService<IIdentityUserRepository>();
