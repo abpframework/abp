@@ -29,6 +29,8 @@
     "DisplayName:CurrentPassword": "Mevcut şifre",
     "DisplayName:NewPassword": "Yeni şifre",
     "DisplayName:NewPasswordConfirm": "Yeni şifre (tekrar)",
-    "PasswordChangedMessage": "Şifreniz başarıyla değiştirildi."
+    "PasswordChangedMessage": "Şifreniz başarıyla değiştirildi.",
+    "Identity.StaticRoleRenamingErrorMessage": "Bir Sabit rolün ismi değiştirilemez.",
+    "Identity.StaticRoleDeletionErrorMessage": "Bir Sabit rol silinemez."
   }
 }

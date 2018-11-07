@@ -12,7 +12,14 @@
         <abp-modal-header title="@L["Edit"].Value"></abp-modal-header>
         <abp-modal-body>
             <abp-input asp-for="Role.Id" />
-            <abp-input asp-for="Role.Name" readonly="@(Model.Role.IsStatic?" readonly":"")" />
+            @if (Model.Role.IsStatic)
+            {
+                <abp-input asp-for="Role.Name" readonly="readonly" />
+            }
+            else
+            {
+                <abp-input asp-for="Role.Name" />
+            }
             <abp-input asp-for="Role.IsDefault" />
             <abp-input asp-for="Role.IsPublic" />
         </abp-modal-body>

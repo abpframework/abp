@@ -62,7 +62,11 @@ namespace Volo.Abp.Identity
             var adminRole = await _roleRepository.FindByNormalizedNameAsync(_lookupNormalizer.Normalize(adminRoleName));
             if (adminRole == null)
             {
-                adminRole = new IdentityRole(_guidGenerator.Create(), adminRoleName, false, true, true, tenantId);
+                adminRole = new IdentityRole(_guidGenerator.Create(), adminRoleName, tenantId);
+
+                adminRole.IsStatic = true;
+                adminRole.IsPublic = true;
+
                 CheckIdentityErrors(await _roleManager.CreateAsync(adminRole));
 
                 if (adminRolePermissions != null)

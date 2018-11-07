@@ -30,17 +30,11 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Users
 
             var roleDtoList = await _identityRoleAppService.GetAllListAsync();
 
-            Roles = ObjectMapper.Map<List<IdentityRoleDto>, AssignedRoleViewModel[]>(
-                await _identityRoleAppService.GetAllListAsync()
-            );
+            Roles = ObjectMapper.Map<List<IdentityRoleDto>, AssignedRoleViewModel[]>(roleDtoList);
 
-            var defaultRoles = roleDtoList.Where(r => r.IsDefault).ToList();
             foreach (var role in Roles)
             {
-                if (defaultRoles.Any(r => r.Name == role.Name))
-                {
-                    role.IsAssigned = true;
-                }
+                role.IsAssigned = role.IsDefault;
             }
         }
 
@@ -87,6 +81,8 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Users
             public string Name { get; set; }
 
             public bool IsAssigned { get; set; }
+
+            public bool IsDefault { get; set; }
         }
     }
 }

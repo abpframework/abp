@@ -69,7 +69,10 @@ namespace Volo.Abp.Identity
         [Authorize(IdentityPermissions.Roles.Create)]
         public async Task<IdentityRoleDto> CreateAsync(IdentityRoleCreateDto input)
         {
-            var role = new IdentityRole(GuidGenerator.Create(), input.Name, input.IsDefault, false, input.IsPublic, CurrentTenant.Id);
+            var role = new IdentityRole(GuidGenerator.Create(), input.Name, CurrentTenant.Id);
+
+            role.IsDefault = input.IsDefault;
+            role.IsPublic = input.IsPublic;
 
             (await _roleManager.CreateAsync(role)).CheckErrors();
             await CurrentUnitOfWork.SaveChangesAsync();

@@ -26,6 +26,8 @@
     "Identity.UserLockoutNotEnabled": "Lockout is not enabled for this user.",
     "Identity.UserNameNotFound": "User {0} does not exist.",
     "Identity.UserNotInRole": "User is not in role '{0}'.",
-    "Identity.PasswordConfirmationFailed": "Password does not match the confirm password."
+    "Identity.PasswordConfirmationFailed": "Password does not match the confirm password.",
+    "Identity.StaticRoleRenamingErrorMessage": "Static roles can not be renamed.",
+    "Identity.StaticRoleDeletionErrorMessage": "Static roles can not be deleted."
   }
 }

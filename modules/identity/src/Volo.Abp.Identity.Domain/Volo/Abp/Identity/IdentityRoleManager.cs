@@ -4,9 +4,11 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Services;
+using Volo.Abp.Identity.Localization;
 using Volo.Abp.Threading;
 
 namespace Volo.Abp.Identity
@@ -15,6 +17,7 @@ namespace Volo.Abp.Identity
     {
         protected override CancellationToken CancellationToken => _cancellationTokenProvider.Token;
 
+        private readonly IStringLocalizer<IdentityResource> _localizer;
         private readonly ICancellationTokenProvider _cancellationTokenProvider;
 
         public IdentityRoleManager(
@@ -22,7 +25,8 @@ namespace Volo.Abp.Identity
             IEnumerable<IRoleValidator<IdentityRole>> roleValidators,
             ILookupNormalizer keyNormalizer,
             IdentityErrorDescriber errors,
-            ILogger<IdentityRoleManager> logger, 
+            ILogger<IdentityRoleManager> logger,
+            IStringLocalizer<IdentityResource> localizer,
             ICancellationTokenProvider cancellationTokenProvider)
             : base(
                   store, 
@@ -31,6 +35,7 @@ namespace Volo.Abp.Identity
                   errors, 
                   logger)
         {
+            _localizer = localizer;
             _cancellationTokenProvider = cancellationTokenProvider;
         }
 
@@ -45,21 +50,11 @@ namespace Volo.Abp.Identity
             return role;
         }
 
-        public List<IdentityRole> GetDefaultRoles()
-        {
-            if (Roles == null)
-            {
-                return new List<IdentityRole>();
-            }
-
-            return Roles.Where(r => r.IsDefault).ToList();
-        }
-
         public override async Task<IdentityResult> SetRoleNameAsync(IdentityRole role, string name)
         {
             if (role.IsStatic && role.Name != name)
             {
-                throw new AbpException("Static roles can not be renamed."); // TODO: localize & change exception type
+                throw new BusinessException(_localizer["Identity.StaticRoleRenamingErrorMessage"]); // TODO: localize & change exception type
             }
 
             return await base.SetRoleNameAsync(role,name);
@@ -69,7 +64,7 @@ namespace Volo.Abp.Identity
         {
             if (role.IsStatic)
             {
-                throw new AbpException("Static roles can not be deleted."); // TODO: localize & change exception type
+                throw new BusinessException(_localizer["Identity.StaticRoleDeletionErrorMessage"]); // TODO: localize & change exception type
             }
 
             return await base.DeleteAsync(role);

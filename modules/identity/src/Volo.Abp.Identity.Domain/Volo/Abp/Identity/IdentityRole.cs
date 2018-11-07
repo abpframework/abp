@@ -47,7 +47,7 @@ namespace Volo.Abp.Identity
         /// <summary>
         /// A static role can not be deleted/renamed
         /// </summary>
-        public virtual bool IsStatic { get; protected set; }
+        public virtual bool IsStatic { get; set; }
 
         /// <summary>
         /// A user can see other user's public roles
@@ -59,7 +59,7 @@ namespace Volo.Abp.Identity
         /// </summary>
         protected IdentityRole() { }
 
-        public IdentityRole(Guid id, [NotNull] string name, bool isDefault = false, bool isStatic = false, bool isPublic = false, Guid? tenantId = null)
+        public IdentityRole(Guid id, [NotNull] string name, Guid? tenantId = null)
         {
             Check.NotNull(name, nameof(name));
 
@@ -68,9 +68,6 @@ namespace Volo.Abp.Identity
             TenantId = tenantId;
             NormalizedName = name.ToUpperInvariant();
             ConcurrencyStamp = Guid.NewGuid().ToString();
-            IsDefault = isDefault;
-            IsStatic = isStatic;
-            IsPublic = isPublic;
 
             Claims = new Collection<IdentityRoleClaim>();
         }
