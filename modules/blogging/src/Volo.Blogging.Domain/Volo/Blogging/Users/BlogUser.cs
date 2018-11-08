@@ -14,6 +14,10 @@ namespace Volo.Blogging.Users
 
         public virtual string Email { get; protected set; }
 
+        public virtual string Name { get; set; }
+
+        public virtual string Surname { get; set; }
+
         public virtual bool EmailConfirmed { get; protected set; }
 
         public virtual string PhoneNumber { get; protected set; }
@@ -31,6 +35,8 @@ namespace Volo.Blogging.Users
         {
             Id = user.Id;
             Email = user.Email;
+            Name = user.Name;
+            Surname = user.Surname;
             EmailConfirmed = user.EmailConfirmed;
             PhoneNumber = user.PhoneNumber;
             PhoneNumberConfirmed = user.PhoneNumberConfirmed;
