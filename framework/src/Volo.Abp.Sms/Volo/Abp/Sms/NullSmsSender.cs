@@ -1,6 +1,7 @@
-﻿using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Sms
@@ -14,11 +15,11 @@ namespace Volo.Abp.Sms
             Logger = NullLogger<NullSmsSender>.Instance;
         }
 
-        public Task SendAsync(string phoneNumber, string text)
+        public Task SendAsync(SmsMessage smsMessage)
         {
             Logger.LogWarning($"SMS Sending was not implemented! Using {nameof(NullSmsSender)}:");
-            Logger.LogWarning("Phone Number : " + phoneNumber);
-            Logger.LogWarning("SMS Text     : " + text);
+            Logger.LogWarning("Phone Number : " + smsMessage.PhoneNumber);
+            Logger.LogWarning("SMS Text     : " + smsMessage.Text);
 
             return Task.CompletedTask;
         }
