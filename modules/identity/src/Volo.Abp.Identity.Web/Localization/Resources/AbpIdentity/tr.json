@@ -13,10 +13,14 @@
     "UserInformations": "Kullanıcı bilgileri",
     "Roles": "Roller",
     "Password": "Şifre",
+    "PersonalInfo": "Kişisel bilgi",
+    "PersonalSettings": "Kişisel Ayarlar",
     "UserDeletionConfirmationMessage": "{0} kullanıcısı silinecektir. Onaylıyor musunuz?",
     "RoleDeletionConfirmationMessage": "'{0}' rolü silinecektir. Onaylıyor musunuz?",
     "DisplayName:RoleName": "Rol adı",
     "DisplayName:UserName": "Kullanıcı adı",
+    "DisplayName:Name": "Adı",
+    "DisplayName:Surname": "Soyadı",
     "DisplayName:Password": "Şifre",
     "DisplayName:EmailAddress": "E-posta adresi",
     "DisplayName:PhoneNumber": "Telefon numarası",
@@ -30,6 +34,7 @@
     "DisplayName:NewPassword": "Yeni şifre",
     "DisplayName:NewPasswordConfirm": "Yeni şifre (tekrar)",
     "PasswordChangedMessage": "Şifreniz başarıyla değiştirildi.",
+    "PersonalSettingsSavedMessage": "Kişisel bilgileriniz başarıyla kaydedildi.",
     "Identity.StaticRoleRenamingErrorMessage": "Bir Sabit rolün ismi değiştirilemez.",
     "Identity.StaticRoleDeletionErrorMessage": "Bir Sabit rol silinemez."
   }

@@ -34,6 +34,7 @@
     "PagerPrevious": "Önceki",
     "PagerInfo": "{2} kayıttan {0} ile {1} arası gösteriliyor.",
     "DatatableActionDropdownDefaultText": "İşlemler",
-    "ChangePassword": "Şifre değiştir"
+    "ChangePassword": "Şifre değiştir",
+    "PersonalInfo": "Kişisel Bilgiler"
   }
 }

@@ -75,7 +75,8 @@ namespace Volo.Abp.Identity.Web
                 options
                     .ScriptBundles
                     .Get(StandardBundles.Scripts.Global)
-                    .AddFiles("/Pages/Identity/Shared/change-password-modal.js");
+                    .AddFiles("/Pages/Identity/Shared/change-password-modal.js")
+                    .AddFiles("/Pages/Identity/Shared/personal-settings-modal.js");
             });
         }
     }

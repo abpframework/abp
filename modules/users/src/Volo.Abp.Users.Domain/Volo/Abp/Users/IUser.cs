@@ -12,6 +12,12 @@ namespace Volo.Abp.Users
         [CanBeNull]
         string Email { get; }
 
+        [CanBeNull]
+        string Name  { get; }
+
+        [CanBeNull]
+        string Surname { get; }
+
         bool EmailConfirmed { get; }
 
         [CanBeNull]
