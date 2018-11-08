@@ -69,6 +69,7 @@ namespace Volo.Abp.TestApp.Testing
             }
 
             var douglas = await PersonRepository.GetAsync(TestDataBuilder.UserDouglasId);
+            douglas.LastModificationTime.ShouldBeNull();
 
             douglas.Age++;
 
