@@ -13,10 +13,14 @@
     "DisplayName:IsPublic": "Public",
     "Roles": "Roles",
     "Password": "Password",
+    "PersonalInfo": "Personal Info",
+    "PersonalSettings": "Personal settings",
     "UserDeletionConfirmationMessage": "User '{0}' will be deleted. Do you confirm that?",
     "RoleDeletionConfirmationMessage": "Role '{0}' will be deleted. Do you confirm that?",
     "DisplayName:RoleName": "Role name",
     "DisplayName:UserName": "User name",
+    "DisplayName:Name": "Name",
+    "DisplayName:Surname": "Surname",
     "DisplayName:Password": "Password",
     "DisplayName:EmailAddress": "Email address",
     "DisplayName:PhoneNumber": "Phone number",
@@ -29,6 +33,7 @@
     "DisplayName:CurrentPassword": "Current password",
     "DisplayName:NewPassword": "New password",
     "DisplayName:NewPasswordConfirm": "Confirm new password",
-    "PasswordChangedMessage": "Your password has been changed successfully."
+    "PasswordChangedMessage": "Your password has been changed successfully.",
+    "PersonalSettingsSavedMessage": "Your personal settings has been saved successfully."
   }
 }

@@ -8,12 +8,13 @@ using Microsoft.AspNetCore.Identity;
 using Volo.Abp.Auditing;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.Guids;
 using Volo.Abp.Users;
 
 namespace Volo.Abp.Identity
 {
-    public class IdentityUser : AggregateRoot<Guid>, IHasConcurrencyStamp, IUser, IHasExtraProperties
+    public class IdentityUser : FullAuditedAggregateRoot<Guid>, IHasConcurrencyStamp, IUser, IHasExtraProperties
     {
         public virtual Guid? TenantId { get; protected set; }
 
@@ -27,6 +28,16 @@ namespace Volo.Abp.Identity
         /// </summary>
         [DisableAuditing]
         public virtual string NormalizedUserName { get; protected internal set; }
+
+        /// <summary>
+        /// Gets or sets the Name for the user.
+        /// </summary>
+        public virtual string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Surame for the user.
+        /// </summary>
+        public virtual string Surname { get; set; }
 
         /// <summary>
         /// Gets or sets the email address for this user.

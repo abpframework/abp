@@ -4,11 +4,15 @@ using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Identity
 {
-    public class IdentityUserDto : EntityDto<Guid>, IMultiTenant
+    public class IdentityUserDto : FullAuditedEntityDto<Guid>, IMultiTenant
     {
         public Guid? TenantId { get; set; }
 
         public string UserName { get; set; }
+
+        public string Name { get; set; }
+
+        public string Surname { get; set; }
 
         public string Email { get; set; }
 
