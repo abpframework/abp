@@ -33,7 +33,9 @@ namespace Volo.Abp.EventBus
 
         protected EventBusOptions Options { get; }
 
-        public EventBus(IOptions<EventBusOptions> options, IServiceProvider serviceProvider)
+        public EventBus(
+            IOptions<EventBusOptions> options, 
+            IServiceProvider serviceProvider)
         {
             Options = options.Value;
             Logger = NullLogger<EventBus>.Instance;
@@ -105,7 +107,7 @@ namespace Volo.Abp.EventBus
         }
 
         /// <inheritdoc/>
-        public void AsyncUnregister<TEvent>(Func<TEvent, Task> action) where TEvent : class
+        public void Unregister<TEvent>(Func<TEvent, Task> action) where TEvent : class
         {
             Check.NotNull(action, nameof(action));
 
@@ -133,7 +135,7 @@ namespace Volo.Abp.EventBus
         }
 
         /// <inheritdoc/>
-        public void AsyncUnregister<TEvent>(IEventHandler<TEvent> handler) where TEvent : class
+        public void Unregister<TEvent>(IEventHandler<TEvent> handler) where TEvent : class
         {
             Unregister(typeof(TEvent), handler);
         }

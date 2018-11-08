@@ -42,12 +42,12 @@ namespace Volo.Abp.EventBus
             return NullDisposable.Instance;
         }
 
-        public void AsyncUnregister<TEvent>(Func<TEvent, Task> action) where TEvent : class
+        public void Unregister<TEvent>(Func<TEvent, Task> action) where TEvent : class
         {
             
         }
 
-        public void AsyncUnregister<TEvent>(IEventHandler<TEvent> handler) where TEvent : class
+        public void Unregister<TEvent>(IEventHandler<TEvent> handler) where TEvent : class
         {
             
         }

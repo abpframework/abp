@@ -19,7 +19,7 @@ namespace Volo.Abp.EventBus
 
         /// <summary>
         /// Registers to an event. 
-        /// Same (given) instance of the async handler is used for all event occurrences.
+        /// Same (given) instance of the handler is used for all event occurrences.
         /// </summary>
         /// <typeparam name="TEvent">Event type</typeparam>
         /// <param name="handler">Object to handle the event</param>
@@ -65,7 +65,7 @@ namespace Volo.Abp.EventBus
         /// </summary>
         /// <typeparam name="TEvent">Event type</typeparam>
         /// <param name="action"></param>
-        void AsyncUnregister<TEvent>(Func<TEvent, Task> action)
+        void Unregister<TEvent>(Func<TEvent, Task> action)
             where TEvent : class;
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace Volo.Abp.EventBus
         /// </summary>
         /// <typeparam name="TEvent">Event type</typeparam>
         /// <param name="handler">Handler object that is registered before</param>
-        void AsyncUnregister<TEvent>(IEventHandler<TEvent> handler) 
+        void Unregister<TEvent>(IEventHandler<TEvent> handler) 
             where TEvent : class;
 
         /// <summary>

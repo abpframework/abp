@@ -88,7 +88,7 @@ namespace Volo.Abp.EventBus
             await EventBus.TriggerAsync(new MySimpleEventData(2));
             await EventBus.TriggerAsync(new MySimpleEventData(3));
 
-            EventBus.AsyncUnregister(action);
+            EventBus.Unregister(action);
 
             await EventBus.TriggerAsync(new MySimpleEventData(4));
 
