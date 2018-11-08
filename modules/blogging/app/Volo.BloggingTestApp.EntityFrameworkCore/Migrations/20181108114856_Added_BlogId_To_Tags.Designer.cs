@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Volo.AbpWebSite.EntityFrameworkCore;
+using Volo.BloggingTestApp.EntityFrameworkCore;
 
-namespace Volo.AbpWebSite.EntityFrameworkCore.Migrations
+namespace Volo.BloggingTestApp.EntityFrameworkCore.Migrations
 {
-    [DbContext(typeof(AbpWebSiteDbContext))]
-    partial class AbpWebSiteDbContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(BloggingTestAppDbContext))]
+    [Migration("20181108114856_Added_BlogId_To_Tags")]
+    partial class Added_BlogId_To_Tags
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -609,79 +611,6 @@ namespace Volo.AbpWebSite.EntityFrameworkCore.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("BlgUsers");
-                });
-
-            modelBuilder.Entity("Volo.Docs.Projects.Project", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("DefaultDocumentName")
-                        .IsRequired()
-                        .HasMaxLength(128);
-
-                    b.Property<string>("DocumentStoreType");
-
-                    b.Property<string>("ExtraProperties")
-                        .HasColumnName("ExtraProperties");
-
-                    b.Property<string>("Format");
-
-                    b.Property<string>("GoogleCustomSearchId");
-
-                    b.Property<string>("LatestVersionBranchName")
-                        .HasMaxLength(128);
-
-                    b.Property<string>("MainWebsiteUrl");
-
-                    b.Property<string>("MinimumVersion");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(128);
-
-                    b.Property<string>("NavigationDocumentName")
-                        .IsRequired()
-                        .HasMaxLength(128);
-
-                    b.Property<string>("ShortName")
-                        .IsRequired()
-                        .HasMaxLength(32);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("DocsProjects");
-                });
-
-            modelBuilder.Entity("Volo.Utils.SolutionTemplating.DownloadInfo", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("CreationDuration");
-
-                    b.Property<DateTime>("CreationTime");
-
-                    b.Property<Guid?>("CreatorId");
-
-                    b.Property<byte>("DatabaseProvider");
-
-                    b.Property<string>("ProjectName")
-                        .IsRequired()
-                        .HasMaxLength(128);
-
-                    b.Property<string>("TemplateName")
-                        .IsRequired()
-                        .HasMaxLength(42);
-
-                    b.Property<string>("Version")
-                        .IsRequired()
-                        .HasMaxLength(20);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Downloads");
                 });
 
             modelBuilder.Entity("Volo.Abp.Identity.IdentityRoleClaim", b =>

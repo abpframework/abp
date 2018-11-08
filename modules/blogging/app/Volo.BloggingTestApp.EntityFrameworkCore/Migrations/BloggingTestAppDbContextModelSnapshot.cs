@@ -522,6 +522,8 @@ namespace Volo.BloggingTestApp.EntityFrameworkCore.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<Guid>("BlogId");
+
                     b.Property<DateTime>("CreationTime")
                         .HasColumnName("CreationTime");
 

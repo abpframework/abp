@@ -39,7 +39,7 @@ namespace Volo.Blogging.Posts
         public async Task<ListResultDto<PostWithDetailsDto>> GetListByBlogIdAndTagName(Guid id, string tagName)
         {
             var posts = _postRepository.GetPostsByBlogId(id);
-            var tag = tagName.IsNullOrWhiteSpace() ? null : await _tagRepository.FindByNameAsync(tagName);
+            var tag = tagName.IsNullOrWhiteSpace() ? null : await _tagRepository.FindByNameAsync(id, tagName);
             var userDictionary = new Dictionary<Guid, BlogUserDto>();
             var postDtos = new List<PostWithDetailsDto>(ObjectMapper.Map<List<Post>, List<PostWithDetailsDto>>(posts));
 
@@ -242,7 +242,7 @@ namespace Volo.Blogging.Posts
 
         private async Task AddNewTags(List<string> newTags, Post post)
         {
-            var tags = await _tagRepository.GetListAsync();
+            var tags = await _tagRepository.GetListAsync(post.BlogId);
 
             foreach (var newTag in newTags)
             {
@@ -250,7 +250,7 @@ namespace Volo.Blogging.Posts
 
                 if (tag == null)
                 {
-                    tag = await _tagRepository.InsertAsync(new Tag(newTag, 1));
+                    tag = await _tagRepository.InsertAsync(new Tag(post.BlogId, newTag, 1));
                 }
                 else
                 {

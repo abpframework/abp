@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <Compile Remove="Migrations\20181107140744_Updated_Identity_20181107.cs" />
+    <Compile Remove="Migrations\20181108115619_Blogging_Changes.cs" />
   </ItemGroup>
 
   <ItemGroup>
