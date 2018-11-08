@@ -66,7 +66,7 @@ namespace AbpConsoleDemo
 
 ### Hello World!
 
-The application above does nothing. Let's create a service does something:
+The application above does nothing. Let's create a service that does something:
 
 ````C#
 using System;
