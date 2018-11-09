@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="..\..\..\common.props" />
 
@@ -14,11 +14,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="RabbitMQ.Client" Version="5.0.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Volo.Abp.EventBus.Distributed\Volo.Abp.EventBus.Distributed.csproj" />
+    <ProjectReference Include="..\Volo.Abp.EventBus\Volo.Abp.EventBus.csproj" />
+    <ProjectReference Include="..\Volo.Abp.RabbitMQ\Volo.Abp.RabbitMQ.csproj" />
   </ItemGroup>
 
 </Project>

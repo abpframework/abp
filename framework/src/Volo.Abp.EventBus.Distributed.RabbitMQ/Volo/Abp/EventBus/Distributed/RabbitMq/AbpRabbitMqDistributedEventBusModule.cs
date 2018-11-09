@@ -2,7 +2,7 @@
 
 namespace Volo.Abp.EventBus.Distributed.RabbitMq
 {
-    [DependsOn(typeof(AbpDistributedEventBusModule))]
+    [DependsOn(typeof(AbpEventBusModule))]
     public class AbpRabbitMqDistributedEventBusModule : AbpModule
     {
 
