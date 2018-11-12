@@ -4,6 +4,7 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.EventBus.Distributed
 {
+    [Dependency(TryRegister = true)]
     public class LocalDistributedEventBus : IDistributedEventBus, ITransientDependency
     {
         private readonly IEventBus _eventBus;
