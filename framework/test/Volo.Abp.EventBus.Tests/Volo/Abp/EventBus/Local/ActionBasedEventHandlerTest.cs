@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Volo.Abp.EventBus
+namespace Volo.Abp.EventBus.Local
 {
     public class ActionBasedEventHandlerTest : EventBusTestBase
     {
@@ -12,17 +12,17 @@ namespace Volo.Abp.EventBus
         {
             var totalData = 0;
 
-            EventBus.Register<MySimpleEventData>(
+            LocalEventBus.Subscribe<MySimpleEventData>(
                 eventData =>
                 {
                     totalData += eventData.Value;
                     return Task.CompletedTask;
                 });
 
-            await EventBus.TriggerAsync(new MySimpleEventData(1));
-            await EventBus.TriggerAsync(new MySimpleEventData(2));
-            await EventBus.TriggerAsync(new MySimpleEventData(3));
-            await EventBus.TriggerAsync(new MySimpleEventData(4));
+            await LocalEventBus.PublishAsync(new MySimpleEventData(1));
+            await LocalEventBus.PublishAsync(new MySimpleEventData(2));
+            await LocalEventBus.PublishAsync(new MySimpleEventData(3));
+            await LocalEventBus.PublishAsync(new MySimpleEventData(4));
 
             Assert.Equal(10, totalData);
         }
@@ -32,17 +32,17 @@ namespace Volo.Abp.EventBus
         {
             var totalData = 0;
 
-            EventBus.Register<MySimpleEventData>(
+            LocalEventBus.Subscribe<MySimpleEventData>(
                 eventData =>
                 {
                     totalData += eventData.Value;
                     return Task.CompletedTask;
                 });
 
-            await EventBus.TriggerAsync(typeof(MySimpleEventData), new MySimpleEventData(1));
-            await EventBus.TriggerAsync(typeof(MySimpleEventData), new MySimpleEventData(2));
-            await EventBus.TriggerAsync(typeof(MySimpleEventData), new MySimpleEventData(3));
-            await EventBus.TriggerAsync(typeof(MySimpleEventData), new MySimpleEventData(4));
+            await LocalEventBus.PublishAsync(typeof(MySimpleEventData), new MySimpleEventData(1));
+            await LocalEventBus.PublishAsync(typeof(MySimpleEventData), new MySimpleEventData(2));
+            await LocalEventBus.PublishAsync(typeof(MySimpleEventData), new MySimpleEventData(3));
+            await LocalEventBus.PublishAsync(typeof(MySimpleEventData), new MySimpleEventData(4));
 
             Assert.Equal(10, totalData);
         }
@@ -52,20 +52,20 @@ namespace Volo.Abp.EventBus
         {
             var totalData = 0;
 
-            var registerDisposer = EventBus.Register<MySimpleEventData>(
+            var registerDisposer = LocalEventBus.Subscribe<MySimpleEventData>(
                 eventData =>
                 {
                     totalData += eventData.Value;
                     return Task.CompletedTask;
                 });
 
-            await EventBus.TriggerAsync(new MySimpleEventData(1));
-            await EventBus.TriggerAsync(new MySimpleEventData(2));
-            await EventBus.TriggerAsync(new MySimpleEventData(3));
+            await LocalEventBus.PublishAsync(new MySimpleEventData(1));
+            await LocalEventBus.PublishAsync(new MySimpleEventData(2));
+            await LocalEventBus.PublishAsync(new MySimpleEventData(3));
 
             registerDisposer.Dispose();
 
-            await EventBus.TriggerAsync(new MySimpleEventData(4));
+            await LocalEventBus.PublishAsync(new MySimpleEventData(4));
 
             Assert.Equal(6, totalData);
         }
@@ -82,15 +82,15 @@ namespace Volo.Abp.EventBus
                     return Task.CompletedTask;
                 });
 
-            EventBus.Register(action);
+            LocalEventBus.Subscribe(action);
 
-            await EventBus.TriggerAsync(new MySimpleEventData(1));
-            await EventBus.TriggerAsync(new MySimpleEventData(2));
-            await EventBus.TriggerAsync(new MySimpleEventData(3));
+            await LocalEventBus.PublishAsync(new MySimpleEventData(1));
+            await LocalEventBus.PublishAsync(new MySimpleEventData(2));
+            await LocalEventBus.PublishAsync(new MySimpleEventData(3));
 
-            EventBus.Unregister(action);
+            LocalEventBus.Unsubscribe(action);
 
-            await EventBus.TriggerAsync(new MySimpleEventData(4));
+            await LocalEventBus.PublishAsync(new MySimpleEventData(4));
 
             Assert.Equal(6, totalData);
         }
@@ -100,7 +100,7 @@ namespace Volo.Abp.EventBus
         {
             int totalData = 0;
 
-            EventBus.Register<MySimpleEventData>(
+            LocalEventBus.Subscribe<MySimpleEventData>(
                 async eventData =>
                 {
                     await Task.Delay(20);
@@ -108,10 +108,10 @@ namespace Volo.Abp.EventBus
                     await Task.Delay(20);
                 });
 
-            await EventBus.TriggerAsync(new MySimpleEventData(1));
-            await EventBus.TriggerAsync(new MySimpleEventData(2));
-            await EventBus.TriggerAsync(new MySimpleEventData(3));
-            await EventBus.TriggerAsync(new MySimpleEventData(4));
+            await LocalEventBus.PublishAsync(new MySimpleEventData(1));
+            await LocalEventBus.PublishAsync(new MySimpleEventData(2));
+            await LocalEventBus.PublishAsync(new MySimpleEventData(3));
+            await LocalEventBus.PublishAsync(new MySimpleEventData(4));
 
             Assert.Equal(10, totalData);
         }

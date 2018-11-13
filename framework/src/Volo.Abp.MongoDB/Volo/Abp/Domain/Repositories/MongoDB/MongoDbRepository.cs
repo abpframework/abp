@@ -10,6 +10,7 @@ using Volo.Abp.Auditing;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Entities.Events;
 using Volo.Abp.EventBus;
+using Volo.Abp.EventBus.Local;
 using Volo.Abp.Guids;
 using Volo.Abp.MongoDB;
 using Volo.Abp.MultiTenancy;
@@ -31,7 +32,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
 
         protected IMongoDbContextProvider<TMongoDbContext> DbContextProvider { get; }
 
-        public IEventBus EventBus { get; set; }
+        public ILocalEventBus LocalEventBus { get; set; }
 
         public IEntityChangeEventHelper EntityChangeEventHelper { get; set; }
 
@@ -43,7 +44,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
         {
             DbContextProvider = dbContextProvider;
 
-            EventBus = NullEventBus.Instance;
+            LocalEventBus = NullLocalEventBus.Instance;
             EntityChangeEventHelper = NullEntityChangeEventHelper.Instance;
         }
 
@@ -313,7 +314,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
 
             foreach (var entityEvent in entityEvents)
             {
-                await EventBus.TriggerAsync(entityEvent.GetType(), entityEvent);
+                await LocalEventBus.PublishAsync(entityEvent.GetType(), entityEvent);
             }
 
             generatesDomainEventsEntity.ClearDomainEvents();

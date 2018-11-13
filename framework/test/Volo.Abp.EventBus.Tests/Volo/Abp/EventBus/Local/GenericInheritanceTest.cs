@@ -4,7 +4,7 @@ using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Entities.Events;
 using Xunit;
 
-namespace Volo.Abp.EventBus
+namespace Volo.Abp.EventBus.Local
 {
     public class GenericInheritanceTest : EventBusTestBase
     {
@@ -13,7 +13,7 @@ namespace Volo.Abp.EventBus
         {
             var triggeredEvent = false;
 
-            EventBus.Register<EntityChangedEventData<Person>>(
+            LocalEventBus.Subscribe<EntityChangedEventData<Person>>(
                 eventData =>
                 {
                     eventData.Entity.Id.ShouldBe(42);
@@ -21,7 +21,7 @@ namespace Volo.Abp.EventBus
                     return Task.CompletedTask;
                 });
 
-            await EventBus.TriggerAsync(new EntityUpdatedEventData<Person>(new Person { Id = 42 }));
+            await LocalEventBus.PublishAsync(new EntityUpdatedEventData<Person>(new Person { Id = 42 }));
 
             triggeredEvent.ShouldBe(true);
         }
@@ -31,7 +31,7 @@ namespace Volo.Abp.EventBus
         {
             var triggeredEvent = false;
 
-            EventBus.Register<EntityChangedEventData<Person>>(
+            LocalEventBus.Subscribe<EntityChangedEventData<Person>>(
                 eventData =>
                 {
                     eventData.Entity.Id.ShouldBe(42);
@@ -39,7 +39,7 @@ namespace Volo.Abp.EventBus
                     return Task.CompletedTask;
                 });
 
-            await EventBus.TriggerAsync(new EntityChangedEventData<Student>(new Student { Id = 42 }));
+            await LocalEventBus.PublishAsync(new EntityChangedEventData<Student>(new Student { Id = 42 }));
 
             triggeredEvent.ShouldBe(true);
         }

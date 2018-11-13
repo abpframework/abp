@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.EventBus
+namespace Volo.Abp.EventBus.Local
 {
     public class MySimpleEventDataHandler : IEventHandler<MySimpleEventData>, ISingletonDependency
     {

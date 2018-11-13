@@ -1,9 +1,9 @@
 using System;
 using System.Threading.Tasks;
 
-namespace Volo.Abp.EventBus
+namespace Volo.Abp.EventBus.Distributed
 {
-    public class MySimpleTransientEventHandler : IEventHandler<MySimpleEventData>, IDisposable
+    public class MySimpleDistributedTransientEventHandler : IDistributedEventHandler<MySimpleEventData>, IDisposable
     {
         public static int HandleCount { get; set; }
 

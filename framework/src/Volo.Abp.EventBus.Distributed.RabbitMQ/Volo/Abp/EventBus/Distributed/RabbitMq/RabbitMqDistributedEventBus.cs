@@ -57,6 +57,41 @@ namespace Volo.Abp.EventBus.Distributed.RabbitMq
             throw new NotImplementedException();
         }
 
+        public void Unsubscribe<TEvent>(Func<TEvent, Task> action) where TEvent : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Unsubscribe<TEvent>(IEventHandler<TEvent> handler) where TEvent : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Unsubscribe(Type eventType, IEventHandler handler)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Unsubscribe<TEvent>(IEventHandlerFactory factory) where TEvent : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Unsubscribe(Type eventType, IEventHandlerFactory factory)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UnsubscribeAll<TEvent>() where TEvent : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UnsubscribeAll(Type eventType)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task PublishAsync<TEvent>(TEvent eventData)
             where TEvent : class
         {

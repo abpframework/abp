@@ -20,7 +20,7 @@ namespace Volo.Abp.EventBus
 
         public void Dispose()
         {
-            _eventBus.Unregister(_eventType, _factory);
+            _eventBus.Unsubscribe(_eventType, _factory);
         }
     }
 }

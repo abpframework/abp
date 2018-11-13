@@ -1,3 +1,6 @@
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -6,47 +9,46 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
-using Microsoft.Extensions.Options;
+using Volo.Abp.Collections;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.EventBus.Distributed;
+using Volo.Abp.Reflection;
 using Volo.Abp.Threading;
 
-namespace Volo.Abp.EventBus
+namespace Volo.Abp.EventBus.Local
 {
     /// <summary>
     /// Implements EventBus as Singleton pattern.
     /// </summary>
-    public class EventBus : IEventBus, ISingletonDependency
+    [ExposeServices(typeof(ILocalEventBus), typeof(LocalEventBus))]
+    public class LocalEventBus : ILocalEventBus, ISingletonDependency
     {
         /// <summary>
         /// Reference to the Logger.
         /// </summary>
-        public ILogger<EventBus> Logger { get; set; }
-
-        /// <summary>
-        /// All registered handler factories.
-        /// Key: Type of the event
-        /// Value: List of handler factories
-        /// </summary>
-        protected ConcurrentDictionary<Type, List<IEventHandlerFactory>> HandlerFactories { get; }
+        public ILogger<LocalEventBus> Logger { get; set; }
 
         protected EventBusOptions Options { get; }
 
-        public EventBus(
-            IOptions<EventBusOptions> options, 
+        protected ConcurrentDictionary<Type, List<IEventHandlerFactory>> HandlerFactories { get; }
+
+        protected IServiceProvider ServiceProvider { get; }
+
+        public LocalEventBus(
+            IOptions<EventBusOptions> options,
             IServiceProvider serviceProvider)
         {
+            ServiceProvider = serviceProvider;
             Options = options.Value;
-            Logger = NullLogger<EventBus>.Instance;
-            HandlerFactories = new ConcurrentDictionary<Type, List<IEventHandlerFactory>>();
+            Logger = NullLogger<LocalEventBus>.Instance;
 
-            RegisterHandlersInOptions(serviceProvider);
+            HandlerFactories = new ConcurrentDictionary<Type, List<IEventHandlerFactory>>();
+            Subscribe(Options.Handlers);
         }
 
-        protected virtual void RegisterHandlersInOptions(IServiceProvider serviceProvider)
+        public virtual void Subscribe(ITypeList<IEventHandler> handlers)
         {
-            foreach (var handler in Options.Handlers)
+            foreach (var handler in handlers)
             {
                 var interfaces = handler.GetInterfaces();
                 foreach (var @interface in interfaces)
@@ -59,46 +61,46 @@ namespace Volo.Abp.EventBus
                     var genericArgs = @interface.GetGenericArguments();
                     if (genericArgs.Length == 1)
                     {
-                        Register(genericArgs[0], new IocEventHandlerFactory(serviceProvider, handler));
+                        Subscribe(genericArgs[0], new IocEventHandlerFactory(ServiceProvider, handler));
                     }
                 }
             }
         }
 
         /// <inheritdoc/>
-        public IDisposable Register<TEvent>(Func<TEvent, Task> action) where TEvent : class
+        public IDisposable Subscribe<TEvent>(Func<TEvent, Task> action) where TEvent : class
         {
-            return Register(typeof(TEvent), new ActionEventHandler<TEvent>(action));
+            return Subscribe(typeof(TEvent), new ActionEventHandler<TEvent>(action));
         }
 
         /// <inheritdoc/>
-        public IDisposable Register<TEvent>(IEventHandler<TEvent> handler) where TEvent : class
+        public IDisposable Subscribe<TEvent>(IEventHandler<TEvent> handler) where TEvent : class
         {
-            return Register(typeof(TEvent), handler);
+            return Subscribe(typeof(TEvent), handler);
         }
 
         /// <inheritdoc/>
-        public IDisposable Register<TEvent, THandler>()
+        public IDisposable Subscribe<TEvent, THandler>()
             where TEvent : class
             where THandler : IEventHandler, new()
         {
-            return Register(typeof(TEvent), new TransientEventHandlerFactory<THandler>());
+            return Subscribe(typeof(TEvent), new TransientEventHandlerFactory<THandler>());
         }
 
         /// <inheritdoc/>
-        public IDisposable Register(Type eventType, IEventHandler handler)
+        public IDisposable Subscribe(Type eventType, IEventHandler handler)
         {
-            return Register(eventType, new SingleInstanceHandlerFactory(handler));
+            return Subscribe(eventType, new SingleInstanceHandlerFactory(handler));
         }
 
         /// <inheritdoc/>
-        public IDisposable Register<TEvent>(IEventHandlerFactory factory) where TEvent : class
+        public IDisposable Subscribe<TEvent>(IEventHandlerFactory factory) where TEvent : class
         {
-            return Register(typeof(TEvent), factory);
+            return Subscribe(typeof(TEvent), factory);
         }
 
         /// <inheritdoc/>
-        public IDisposable Register(Type eventType, IEventHandlerFactory factory)
+        public IDisposable Subscribe(Type eventType, IEventHandlerFactory factory)
         {
             GetOrCreateHandlerFactories(eventType)
                 .Locking(factories => factories.Add(factory));
@@ -107,7 +109,7 @@ namespace Volo.Abp.EventBus
         }
 
         /// <inheritdoc/>
-        public void Unregister<TEvent>(Func<TEvent, Task> action) where TEvent : class
+        public void Unsubscribe<TEvent>(Func<TEvent, Task> action) where TEvent : class
         {
             Check.NotNull(action, nameof(action));
 
@@ -135,13 +137,13 @@ namespace Volo.Abp.EventBus
         }
 
         /// <inheritdoc/>
-        public void Unregister<TEvent>(IEventHandler<TEvent> handler) where TEvent : class
+        public void Unsubscribe<TEvent>(IEventHandler<TEvent> handler) where TEvent : class
         {
-            Unregister(typeof(TEvent), handler);
+            Unsubscribe(typeof(TEvent), handler);
         }
 
         /// <inheritdoc/>
-        public void Unregister(Type eventType, IEventHandler handler)
+        public void Unsubscribe(Type eventType, IEventHandler handler)
         {
             GetOrCreateHandlerFactories(eventType)
                 .Locking(factories =>
@@ -150,43 +152,45 @@ namespace Volo.Abp.EventBus
                         factory =>
                             factory is SingleInstanceHandlerFactory &&
                             (factory as SingleInstanceHandlerFactory).HandlerInstance == handler
-                        );
+                    );
                 });
         }
 
         /// <inheritdoc/>
-        public void Unregister<TEvent>(IEventHandlerFactory factory) where TEvent : class
+        public void Unsubscribe<TEvent>(IEventHandlerFactory factory) where TEvent : class
         {
-            Unregister(typeof(TEvent), factory);
+            Unsubscribe(typeof(TEvent), factory);
         }
 
         /// <inheritdoc/>
-        public void Unregister(Type eventType, IEventHandlerFactory factory)
+        public void Unsubscribe(Type eventType, IEventHandlerFactory factory)
         {
             GetOrCreateHandlerFactories(eventType).Locking(factories => factories.Remove(factory));
         }
 
         /// <inheritdoc/>
-        public void UnregisterAll<TEvent>() where TEvent : class
+        public void UnsubscribeAll<TEvent>() where TEvent : class
         {
-            UnregisterAll(typeof(TEvent));
+            UnsubscribeAll(typeof(TEvent));
         }
 
         /// <inheritdoc/>
-        public void UnregisterAll(Type eventType)
+        public void UnsubscribeAll(Type eventType)
         {
             GetOrCreateHandlerFactories(eventType).Locking(factories => factories.Clear());
         }
 
         /// <inheritdoc/>
-        public Task TriggerAsync<TEvent>(TEvent eventData) where TEvent : class
+        public Task PublishAsync<TEvent>(TEvent eventData) where TEvent : class
         {
-            return TriggerAsync(typeof(TEvent), eventData);
+            return PublishAsync(typeof(TEvent), eventData);
         }
 
         /// <inheritdoc/>
-        public async Task TriggerAsync(Type eventType, object eventData)
+        public async Task PublishAsync(Type eventType, object eventData)
         {
+            //TODO: Aggregate all exceptions (including the recursive call)!
+
             var exceptions = new List<Exception>();
 
             await new SynchronizationContextRemover();
@@ -199,7 +203,7 @@ namespace Volo.Abp.EventBus
                 }
             }
 
-            //Implements generic argument inheritance. See classWithInheritableGenericArgument
+            //Implements generic argument inheritance. See IEventDataWithInheritableGenericArgument
             if (eventType.GetTypeInfo().IsGenericType &&
                 eventType.GetGenericArguments().Length == 1 &&
                 typeof(IEventDataWithInheritableGenericArgument).IsAssignableFrom(eventType))
@@ -211,7 +215,7 @@ namespace Volo.Abp.EventBus
                     var baseEventType = eventType.GetGenericTypeDefinition().MakeGenericType(baseArg);
                     var constructorArgs = ((IEventDataWithInheritableGenericArgument)eventData).GetConstructorArgs();
                     var baseEventData = Activator.CreateInstance(baseEventType, constructorArgs);
-                    await TriggerAsync(baseEventType, baseEventData);
+                    await PublishAsync(baseEventType, baseEventData);
                 }
             }
 
@@ -232,14 +236,38 @@ namespace Volo.Abp.EventBus
             {
                 try
                 {
-                    var asyncHandlerType = typeof(IEventHandler<>).MakeGenericType(eventType);
+                    var handlerType = eventHandlerWrapper.EventHandler.GetType();
 
-                    var method = asyncHandlerType.GetMethod(
-                        "HandleEventAsync",
-                        new[] { eventType }
-                    );
+                    if (ReflectionHelper.IsAssignableToGenericType(
+                        handlerType,
+                        typeof(IEventHandler<>)))
+                    {
+                        var method = typeof(IEventHandler<>) //TODO: to a static field
+                            .MakeGenericType(eventType)
+                            .GetMethod(
+                                nameof(IEventHandler<object>.HandleEventAsync),
+                                new[] {eventType}
+                            );
 
-                    await (Task)method.Invoke(eventHandlerWrapper.EventHandler, new[] { eventData });
+                        await (Task)method.Invoke(eventHandlerWrapper.EventHandler, new[] { eventData });
+                    }
+                    else if (ReflectionHelper.IsAssignableToGenericType(
+                        handlerType,
+                        typeof(IDistributedEventHandler<>)))
+                    {
+                        var method = typeof(IDistributedEventHandler<>) //TODO: to a static field
+                            .MakeGenericType(eventType)
+                            .GetMethod(
+                                nameof(IDistributedEventHandler<object>.HandleEventAsync),
+                                new[] {eventType}
+                            );
+
+                        await (Task)method.Invoke(eventHandlerWrapper.EventHandler, new[] { eventData });
+                    }
+                    else
+                    {
+                        throw new AbpException("The object instance is not an event handler. Object type: " + handlerType.AssemblyQualifiedName);
+                    }
                 }
                 catch (TargetInvocationException ex)
                 {
@@ -252,7 +280,7 @@ namespace Volo.Abp.EventBus
             }
         }
 
-        private IEnumerable<EventTypeWithEventHandlerFactories> GetHandlerFactories(Type eventType)
+        public virtual IEnumerable<EventTypeWithEventHandlerFactories> GetHandlerFactories(Type eventType)
         {
             var handlerFactoryList = new List<EventTypeWithEventHandlerFactories>();
 
@@ -264,16 +292,21 @@ namespace Volo.Abp.EventBus
             return handlerFactoryList.ToArray();
         }
 
-        private static bool ShouldTriggerEventForHandler(Type eventType, Type handlerType)
+        private List<IEventHandlerFactory> GetOrCreateHandlerFactories(Type eventType)
+        {
+            return HandlerFactories.GetOrAdd(eventType, (type) => new List<IEventHandlerFactory>());
+        }
+
+        private static bool ShouldTriggerEventForHandler(Type targetEventType, Type handlerEventType)
         {
             //Should trigger same type
-            if (handlerType == eventType)
+            if (handlerEventType == targetEventType)
             {
                 return true;
             }
 
             //Should trigger for inherited types
-            if (handlerType.IsAssignableFrom(eventType))
+            if (handlerEventType.IsAssignableFrom(targetEventType))
             {
                 return true;
             }
@@ -281,12 +314,7 @@ namespace Volo.Abp.EventBus
             return false;
         }
 
-        private List<IEventHandlerFactory> GetOrCreateHandlerFactories(Type eventType)
-        {
-            return HandlerFactories.GetOrAdd(eventType, (type) => new List<IEventHandlerFactory>());
-        }
-
-        private class EventTypeWithEventHandlerFactories
+        public class EventTypeWithEventHandlerFactories
         {
             public Type EventType { get; }
 
