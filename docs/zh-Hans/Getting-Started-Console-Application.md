@@ -1,6 +1,6 @@
 ﻿## 使用Console Application
 
-本教程将介绍如何从头开始以最小的依赖关系启动ABP. 您通常希望以 **[启动模板](https://abp.io/Templates)** 开头.
+本教程将介绍如何从头开始以最小的依赖关系启动ABP. 你通常希望以 **[启动模板](https://abp.io/Templates)** 开头.
 
 ### 创建一个新项目
 
@@ -10,7 +10,7 @@
 
 ### 安装 Volo.Abp 包
 
-Volo.Abp.Core是创建基于ABP的应用程序的核心nuget包. 所以,将它安装到您的项目中:
+Volo.Abp.Core是创建基于ABP的应用程序的核心nuget包. 所以,将它安装到你的项目中:
 
 ````
 Install-Package Volo.Abp.Core
