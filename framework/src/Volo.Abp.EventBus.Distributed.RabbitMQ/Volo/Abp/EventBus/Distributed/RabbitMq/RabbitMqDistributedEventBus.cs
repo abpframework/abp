@@ -1,17 +1,20 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.RabbitMQ;
 using RabbitMQ.Client;
+using Volo.Abp.EventBus.Local;
 
 namespace Volo.Abp.EventBus.Distributed.RabbitMq
 {
-    /* Inspired from the implementation of "eShopOnContainers"
-     * TODO: Implement Retry system
+    /* TODO: Implement Retry system
      * TODO: Should be improved
      */
-    public class RabbitMqDistributedEventBus : IDistributedEventBus, ITransientDependency
+    [Dependency(ReplaceServices = true)]
+    [ExposeServices(typeof(IDistributedEventBus), typeof(RabbitMqDistributedEventBus))]
+    public class RabbitMqDistributedEventBus : EventBusBase, IDistributedEventBus, ITransientDependency
     {
         protected RabbitMqDistributedEventBusOptions Options { get; }
         protected IChannelPool ChannelPool { get; }
@@ -26,79 +29,33 @@ namespace Volo.Abp.EventBus.Distributed.RabbitMq
             Serializer = serializer;
             Options = options.Value;
         }
-
-        public IDisposable Subscribe<TEvent>(Func<TEvent, Task> action) where TEvent : class
+        
+        public override IDisposable Subscribe(Type eventType, IEventHandlerFactory factory)
         {
             throw new NotImplementedException();
         }
 
-        public IDisposable Subscribe<TEvent>(IEventHandler<TEvent> handler) where TEvent : class
+        public override void Unsubscribe<TEvent>(Func<TEvent, Task> action)
         {
             throw new NotImplementedException();
         }
 
-        public IDisposable Subscribe<TEvent, THandler>() where TEvent : class where THandler : IEventHandler, new()
+        public override void Unsubscribe(Type eventType, IEventHandler handler)
         {
             throw new NotImplementedException();
         }
 
-        public IDisposable Subscribe(Type eventType, IEventHandler handler)
+        public override void Unsubscribe(Type eventType, IEventHandlerFactory factory)
         {
             throw new NotImplementedException();
         }
 
-        public IDisposable Subscribe<TEvent>(IEventHandlerFactory factory) where TEvent : class
+        public override void UnsubscribeAll(Type eventType)
         {
             throw new NotImplementedException();
         }
 
-        public IDisposable Subscribe(Type eventType, IEventHandlerFactory factory)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Unsubscribe<TEvent>(Func<TEvent, Task> action) where TEvent : class
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Unsubscribe<TEvent>(IEventHandler<TEvent> handler) where TEvent : class
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Unsubscribe(Type eventType, IEventHandler handler)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Unsubscribe<TEvent>(IEventHandlerFactory factory) where TEvent : class
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Unsubscribe(Type eventType, IEventHandlerFactory factory)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void UnsubscribeAll<TEvent>() where TEvent : class
-        {
-            throw new NotImplementedException();
-        }
-
-        public void UnsubscribeAll(Type eventType)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task PublishAsync<TEvent>(TEvent eventData)
-            where TEvent : class
-        {
-            return PublishAsync(typeof(TEvent), eventData);
-        }
-
-        public Task PublishAsync(Type eventType, object eventData)
+        public override Task PublishAsync(Type eventType, object eventData)
         {
             var eventName = eventType.FullName; //TODO: Get eventname from an attribute if available
             var body = Serializer.Serialize(eventData);
@@ -112,7 +69,7 @@ namespace Volo.Abp.EventBus.Distributed.RabbitMq
                 properties.DeliveryMode = 2; //persistent
 
                 channelAccessor.Channel.BasicPublish(
-                    exchange: Options.ExchangeName,
+                   exchange: Options.ExchangeName,
                     routingKey: eventName,
                     mandatory: true,
                     basicProperties: properties,
@@ -121,6 +78,11 @@ namespace Volo.Abp.EventBus.Distributed.RabbitMq
             }
 
             return Task.CompletedTask;
+        }
+
+        protected override IEnumerable<EventTypeWithEventHandlerFactories> GetHandlerFactories(Type eventType)
+        {
+            throw new NotImplementedException();
         }
     }
 }
