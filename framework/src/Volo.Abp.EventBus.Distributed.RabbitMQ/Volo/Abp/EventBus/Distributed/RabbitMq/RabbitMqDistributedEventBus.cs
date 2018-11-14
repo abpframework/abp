@@ -1,83 +1,221 @@
 ﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.RabbitMQ;
 using RabbitMQ.Client;
+using RabbitMQ.Client.Events;
+using Volo.Abp.Collections;
+using Volo.Abp.EventBus.Local;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.EventBus.Distributed.RabbitMq
 {
-    /* Inspired from the implementation of "eShopOnContainers"
+    /* TODO: How to handle unsubscribe to unbind on RabbitMq (may not be possible for)
      * TODO: Implement Retry system
      * TODO: Should be improved
      */
-    public class RabbitMqDistributedEventBus : IDistributedEventBus, ITransientDependency
+    [Dependency(ReplaceServices = true)]
+    [ExposeServices(typeof(IDistributedEventBus), typeof(RabbitMqDistributedEventBus))]
+    public class RabbitMqDistributedEventBus : EventBusBase, IDistributedEventBus, ISingletonDependency
     {
-        protected RabbitMqDistributedEventBusOptions Options { get; }
-        protected IChannelPool ChannelPool { get; }
+        protected RabbitMqDistributedEventBusOptions RabbitMqDistributedEventBusOptions { get; }
+        protected DistributedEventBusOptions DistributedEventBusOptions { get; }
+        protected IConnectionPool ConnectionPool { get; }
         protected IRabbitMqSerializer Serializer { get; }
+        protected ConcurrentDictionary<Type, List<IEventHandlerFactory>> HandlerFactories { get; } //TODO: Accessing to the List<IEventHandlerFactory> may not be thread-safe!
+        protected ConcurrentDictionary<string, Type> EventTypes { get; }
+        protected IModel ConsumerChannel;
+        protected IServiceProvider ServiceProvider { get; }
 
         public RabbitMqDistributedEventBus(
             IOptions<RabbitMqDistributedEventBusOptions> options,
-            IChannelPool channelPool,
-            IRabbitMqSerializer serializer)
+            IConnectionPool connectionPool,
+            IRabbitMqSerializer serializer,
+            IServiceProvider serviceProvider, 
+            DistributedEventBusOptions distributedEventBusOptions)
         {
-            ChannelPool = channelPool;
+            ConnectionPool = connectionPool;
             Serializer = serializer;
-            Options = options.Value;
+            ServiceProvider = serviceProvider;
+            DistributedEventBusOptions = distributedEventBusOptions;
+            RabbitMqDistributedEventBusOptions = options.Value;
+            
+            HandlerFactories = new ConcurrentDictionary<Type, List<IEventHandlerFactory>>();
+            EventTypes = new ConcurrentDictionary<string, Type>();
+
+            ConsumerChannel = CreateConsumerChannel();
+            Subscribe(DistributedEventBusOptions.Handlers);
         }
 
-        public IDisposable Subscribe<TEvent>(Func<TEvent, Task> action) where TEvent : class
+        public virtual void Subscribe(ITypeList<IEventHandler> handlers)
         {
-            throw new NotImplementedException();
+            foreach (var handler in handlers)
+            {
+                var interfaces = handler.GetInterfaces();
+                foreach (var @interface in interfaces)
+                {
+                    if (!typeof(IEventHandler).GetTypeInfo().IsAssignableFrom(@interface))
+                    {
+                        continue;
+                    }
+
+                    var genericArgs = @interface.GetGenericArguments();
+                    if (genericArgs.Length == 1)
+                    {
+                        Subscribe(genericArgs[0], new IocEventHandlerFactory(ServiceProvider, handler));
+                    }
+                }
+            }
         }
 
-        public IDisposable Subscribe<TEvent>(IEventHandler<TEvent> handler) where TEvent : class
+        private IModel CreateConsumerChannel()
         {
-            throw new NotImplementedException();
+            //TODO: Support multiple connection (and consumer)?
+            var channel = ConnectionPool.Get().CreateModel();
+            channel.ExchangeDeclare(
+                exchange: RabbitMqDistributedEventBusOptions.ExchangeName,
+                type: "direct"
+            );
+
+            channel.QueueDeclare(
+                queue: RabbitMqDistributedEventBusOptions.ClientName,
+                durable: true,
+                exclusive: false,
+                autoDelete: false,
+                arguments: null
+            );
+
+            var consumer = new EventingBasicConsumer(channel);
+            consumer.Received += async (model, ea) => { await ProcessEventAsync(channel, ea); };
+
+            channel.BasicConsume(
+                queue: RabbitMqDistributedEventBusOptions.ClientName,
+                autoAck: false,
+                consumer: consumer
+            );
+
+            channel.CallbackException += (sender, ea) =>
+            {
+                ConsumerChannel.Dispose();
+                ConsumerChannel = CreateConsumerChannel();
+            };
+
+            return channel;
         }
 
-        public IDisposable Subscribe<TEvent, THandler>() where TEvent : class where THandler : IEventHandler, new()
+        private async Task ProcessEventAsync(IModel channel, BasicDeliverEventArgs ea)
         {
-            throw new NotImplementedException();
+            var eventName = ea.RoutingKey;
+            var eventType = EventTypes.GetOrDefault(eventName);
+            if (eventType == null)
+            {
+                return;
+            }
+
+            var eventData = Serializer.Deserialize(ea.Body, eventType);
+
+            await TriggerHandlersAsync(eventType, eventData);
+
+            channel.BasicAck(ea.DeliveryTag, multiple: false);
         }
 
-        public IDisposable Subscribe(Type eventType, IEventHandler handler)
+        public override IDisposable Subscribe(Type eventType, IEventHandlerFactory factory)
         {
-            throw new NotImplementedException();
+            var handlerFactories = GetOrCreateHandlerFactories(eventType);
+            
+            handlerFactories.Add(factory);
+
+            if (handlerFactories.Count == 1) //TODO: Multi-threading!
+            {
+                var eventName = EventNameAttribute.GetName(eventType);
+
+                using (var channel = ConnectionPool.Get().CreateModel()) //TODO: Connection name per event!
+                {
+                    channel.QueueBind(
+                        queue: RabbitMqDistributedEventBusOptions.ClientName,
+                        exchange: RabbitMqDistributedEventBusOptions.ExchangeName,
+                        routingKey: eventName
+                    );
+                }
+            }
+
+            return new EventHandlerFactoryUnregistrar(this, eventType, factory);
         }
 
-        public IDisposable Subscribe<TEvent>(IEventHandlerFactory factory) where TEvent : class
+        /// <inheritdoc/>
+        public override void Unsubscribe<TEvent>(Func<TEvent, Task> action)
         {
-            throw new NotImplementedException();
+            Check.NotNull(action, nameof(action));
+
+            GetOrCreateHandlerFactories(typeof(TEvent))
+                .Locking(factories =>
+                {
+                    factories.RemoveAll(
+                        factory =>
+                        {
+                            var singleInstanceFactory = factory as SingleInstanceHandlerFactory;
+                            if (singleInstanceFactory == null)
+                            {
+                                return false;
+                            }
+
+                            var actionHandler = singleInstanceFactory.HandlerInstance as ActionEventHandler<TEvent>;
+                            if (actionHandler == null)
+                            {
+                                return false;
+                            }
+
+                            return actionHandler.Action == action;
+                        });
+                });
         }
 
-        public IDisposable Subscribe(Type eventType, IEventHandlerFactory factory)
+        /// <inheritdoc/>
+        public override void Unsubscribe(Type eventType, IEventHandler handler)
         {
-            throw new NotImplementedException();
+            GetOrCreateHandlerFactories(eventType)
+                .Locking(factories =>
+                {
+                    factories.RemoveAll(
+                        factory =>
+                            factory is SingleInstanceHandlerFactory &&
+                            (factory as SingleInstanceHandlerFactory).HandlerInstance == handler
+                    );
+                });
         }
 
-        public Task PublishAsync<TEvent>(TEvent eventData)
-            where TEvent : class
+        /// <inheritdoc/>
+        public override void Unsubscribe(Type eventType, IEventHandlerFactory factory)
         {
-            return PublishAsync(typeof(TEvent), eventData);
+            GetOrCreateHandlerFactories(eventType).Locking(factories => factories.Remove(factory));
         }
 
-        public Task PublishAsync(Type eventType, object eventData)
+        /// <inheritdoc/>
+        public override void UnsubscribeAll(Type eventType)
         {
-            var eventName = eventType.FullName; //TODO: Get eventname from an attribute if available
+            GetOrCreateHandlerFactories(eventType).Locking(factories => factories.Clear());
+        }
+
+        public override Task PublishAsync(Type eventType, object eventData)
+        {
+            var eventName = EventNameAttribute.GetName(eventType);
             var body = Serializer.Serialize(eventData);
 
-            using (var channelAccessor = ChannelPool.Acquire(Guid.NewGuid().ToString()))
+            using (var channel = ConnectionPool.Get().CreateModel()) //TODO: Connection name per event!
             {
                 //TODO: Other properties like durable?
-                channelAccessor.Channel.ExchangeDeclare(Options.ExchangeName, "");
+                channel.ExchangeDeclare(RabbitMqDistributedEventBusOptions.ExchangeName, "");
                 
-                var properties = channelAccessor.Channel.CreateBasicProperties();
+                var properties = channel.CreateBasicProperties();
                 properties.DeliveryMode = 2; //persistent
 
-                channelAccessor.Channel.BasicPublish(
-                    exchange: Options.ExchangeName,
+                channel.BasicPublish(
+                   exchange: RabbitMqDistributedEventBusOptions.ExchangeName,
                     routingKey: eventName,
                     mandatory: true,
                     basicProperties: properties,
@@ -86,6 +224,49 @@ namespace Volo.Abp.EventBus.Distributed.RabbitMq
             }
 
             return Task.CompletedTask;
+        }
+
+        private List<IEventHandlerFactory> GetOrCreateHandlerFactories(Type eventType)
+        {
+            return HandlerFactories.GetOrAdd(
+                eventType,
+                type =>
+                {
+                    var eventName = EventNameAttribute.GetName(type);
+                    EventTypes[eventName] = type;
+                    return new List<IEventHandlerFactory>();
+                }
+            );
+        }
+
+        protected override IEnumerable<EventTypeWithEventHandlerFactories> GetHandlerFactories(Type eventType)
+        {
+            var handlerFactoryList = new List<EventTypeWithEventHandlerFactories>();
+
+            foreach (var handlerFactory in HandlerFactories.Where(hf => ShouldTriggerEventForHandler(eventType, hf.Key)))
+            {
+                handlerFactoryList.Add(new EventTypeWithEventHandlerFactories(handlerFactory.Key, handlerFactory.Value));
+            }
+
+            return handlerFactoryList.ToArray();
+        }
+
+        private static bool ShouldTriggerEventForHandler(Type targetEventType, Type handlerEventType)
+        {
+            //Should trigger same type
+            if (handlerEventType == targetEventType)
+            {
+                return true;
+            }
+
+            //TODO: Support inheritance? But it does not support on subscription to RabbitMq!
+            //Should trigger for inherited types
+            if (handlerEventType.IsAssignableFrom(targetEventType))
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

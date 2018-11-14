@@ -8,7 +8,7 @@ namespace Volo.Abp.EventBus
     /// This event handler is an adapter to be able to use an action as <see cref="IEventHandler{TEvent}"/> implementation.
     /// </summary>
     /// <typeparam name="TEvent">Event type</typeparam>
-    internal class ActionEventHandler<TEvent> :
+    public class ActionEventHandler<TEvent> :
         IEventHandler<TEvent>,
         ITransientDependency
     {

@@ -5,6 +5,7 @@ using Volo.Abp.Auditing;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DynamicProxy;
 using Volo.Abp.EventBus;
+using Volo.Abp.EventBus.Local;
 using Volo.Abp.Uow;
 
 namespace Volo.Abp.Domain.Entities.Events
@@ -14,14 +15,14 @@ namespace Volo.Abp.Domain.Entities.Events
     /// </summary>
     public class EntityChangeEventHelper : IEntityChangeEventHelper, ITransientDependency
     {
-        public IEventBus EventBus { get; set; }
+        public ILocalEventBus LocalEventBus { get; set; }
 
         private readonly IUnitOfWorkManager _unitOfWorkManager;
 
         public EntityChangeEventHelper(IUnitOfWorkManager unitOfWorkManager)
         {
             _unitOfWorkManager = unitOfWorkManager;
-            EventBus = NullEventBus.Instance;
+            LocalEventBus = NullLocalEventBus.Instance;
         }
 
         public async Task TriggerEventsAsync(EntityChangeReport changeReport)
@@ -115,7 +116,7 @@ namespace Volo.Abp.Domain.Entities.Events
         {
             foreach (var domainEvent in domainEvents)
             {
-                await EventBus.TriggerAsync(domainEvent.EventData.GetType(), domainEvent.EventData);
+                await LocalEventBus.PublishAsync(domainEvent.EventData.GetType(), domainEvent.EventData);
             }
         }
 
@@ -126,11 +127,11 @@ namespace Volo.Abp.Domain.Entities.Events
 
             if (triggerInCurrentUnitOfWork || _unitOfWorkManager.Current == null)
             {
-                await EventBus.TriggerAsync(eventType, Activator.CreateInstance(eventType, entity));
+                await LocalEventBus.PublishAsync(eventType, Activator.CreateInstance(eventType, entity));
                 return;
             }
 
-            _unitOfWorkManager.Current.OnCompleted(() => EventBus.TriggerAsync(eventType, Activator.CreateInstance(eventType, entity)));
+            _unitOfWorkManager.Current.OnCompleted(() => LocalEventBus.PublishAsync(eventType, Activator.CreateInstance(eventType, entity)));
         }
     }
 }

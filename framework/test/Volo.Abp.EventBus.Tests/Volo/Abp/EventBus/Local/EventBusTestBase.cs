@@ -1,12 +1,12 @@
-namespace Volo.Abp.EventBus
+namespace Volo.Abp.EventBus.Local
 {
     public abstract class EventBusTestBase : AbpIntegratedTest<EventBusTestModule>
     {
-        protected IEventBus EventBus;
+        protected ILocalEventBus LocalEventBus;
 
         protected EventBusTestBase()
         {
-            EventBus = GetRequiredService<IEventBus>();
+            LocalEventBus = GetRequiredService<ILocalEventBus>();
         }
 
         protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)

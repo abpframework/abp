@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.EventBus;
+using Volo.Abp.EventBus.Local;
 using Volo.Abp.Modularity;
 using Volo.Abp.TestApp.Domain;
 using Xunit;
@@ -14,12 +15,12 @@ namespace Volo.Abp.TestApp.Testing
         where TStartupModule : IAbpModule
     {
         protected readonly IRepository<Person, Guid> PersonRepository;
-        protected readonly IEventBus EventBus;
+        protected readonly ILocalEventBus LocalEventBus;
 
         protected DomainEvents_Tests()
         {
             PersonRepository = GetRequiredService<IRepository<Person, Guid>>();
-            EventBus = GetRequiredService<IEventBus>();
+            LocalEventBus = GetRequiredService<ILocalEventBus>();
         }
 
         [Fact]
@@ -29,7 +30,7 @@ namespace Volo.Abp.TestApp.Testing
 
             var isTriggered = false;
 
-            EventBus.Register<PersonNameChangedEvent>(data =>
+            LocalEventBus.Subscribe<PersonNameChangedEvent>(data =>
             {
                 data.OldName.ShouldBe("Douglas");
                 data.Person.Name.ShouldBe("Douglas-Changed");

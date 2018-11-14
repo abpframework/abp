@@ -4,7 +4,7 @@ using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Entities.Events;
 using Xunit;
 
-namespace Volo.Abp.EventBus
+namespace Volo.Abp.EventBus.Local
 {
     public class EventBus_EntityEvents_Test : EventBusTestBase
     {
@@ -13,10 +13,10 @@ namespace Volo.Abp.EventBus
         {
             var handler = new MyEventHandler();
 
-            EventBus.Register<EntityChangedEventData<MyEntity>>(handler);
-            EventBus.Register<EntityCreatedEventData<MyEntity>>(handler);
+            LocalEventBus.Subscribe<EntityChangedEventData<MyEntity>>(handler);
+            LocalEventBus.Subscribe<EntityCreatedEventData<MyEntity>>(handler);
 
-            await EventBus.TriggerAsync(new EntityCreatedEventData<MyEntity>(new MyEntity()));
+            await LocalEventBus.PublishAsync(new EntityCreatedEventData<MyEntity>(new MyEntity()));
 
             handler.EntityCreatedEventCount.ShouldBe(1);
             handler.EntityChangedEventCount.ShouldBe(1);

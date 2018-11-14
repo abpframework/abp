@@ -4,6 +4,7 @@ using Shouldly;
 using Volo.Abp.Domain.Entities.Events;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.EventBus;
+using Volo.Abp.EventBus.Local;
 using Volo.Abp.Modularity;
 using Volo.Abp.TestApp.Domain;
 using Volo.Abp.Uow;
@@ -15,12 +16,12 @@ namespace Volo.Abp.TestApp.Testing
         where TStartupModule : IAbpModule
     {
         protected IRepository<Person, Guid> PersonRepository { get; }
-        protected IEventBus EventBus { get; }
+        protected ILocalEventBus LocalEventBus { get; }
 
         protected EntityChangeEvents_Tests()
         {
             PersonRepository = GetRequiredService<IRepository<Person, Guid>>();
-            EventBus = GetRequiredService<IEventBus>();
+            LocalEventBus = GetRequiredService<ILocalEventBus>();
         }
 
         [Fact]
@@ -35,7 +36,7 @@ namespace Volo.Abp.TestApp.Testing
 
             using (var uow = GetRequiredService<IUnitOfWorkManager>().Begin())
             {
-                EventBus.Register<EntityCreatingEventData<Person>>(data =>
+                LocalEventBus.Subscribe<EntityCreatingEventData<Person>>(data =>
                 {
                     creatingEventTriggered.ShouldBeFalse();
                     createdEventTriggered.ShouldBeFalse();
@@ -54,7 +55,7 @@ namespace Volo.Abp.TestApp.Testing
                     return Task.CompletedTask;
                 });
 
-                EventBus.Register<EntityCreatedEventData<Person>>(data =>
+                LocalEventBus.Subscribe<EntityCreatedEventData<Person>>(data =>
                 {
                     creatingEventTriggered.ShouldBeTrue();
                     createdEventTriggered.ShouldBeFalse();
@@ -69,7 +70,7 @@ namespace Volo.Abp.TestApp.Testing
                     return Task.CompletedTask;
                 });
 
-                EventBus.Register<EntityUpdatingEventData<Person>>(data =>
+                LocalEventBus.Subscribe<EntityUpdatingEventData<Person>>(data =>
                 {
                     creatingEventTriggered.ShouldBeTrue();
                     createdEventTriggered.ShouldBeFalse();
@@ -84,7 +85,7 @@ namespace Volo.Abp.TestApp.Testing
                     return Task.CompletedTask;
                 });
 
-                EventBus.Register<EntityUpdatedEventData<Person>>(data =>
+                LocalEventBus.Subscribe<EntityUpdatedEventData<Person>>(data =>
                 {
                     creatingEventTriggered.ShouldBeTrue();
                     createdEventTriggered.ShouldBeTrue();
