@@ -7,7 +7,7 @@ namespace Volo.Abp.EventBus
     /// <remarks>
     /// This class always gets the same single instance of handler.
     /// </remarks>
-    internal class SingleInstanceHandlerFactory : IEventHandlerFactory
+    public class SingleInstanceHandlerFactory : IEventHandlerFactory
     {
         /// <summary>
         /// The event handler instance.

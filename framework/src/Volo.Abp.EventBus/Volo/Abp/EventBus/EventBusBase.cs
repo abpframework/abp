@@ -82,6 +82,23 @@ namespace Volo.Abp.EventBus.Local
         /// <inheritdoc/>
         public abstract Task PublishAsync(Type eventType, object eventData);
 
+        public virtual async Task TriggerHandlersAsync(Type eventType, object eventData)
+        {
+            var exceptions = new List<Exception>();
+
+            await TriggerHandlersAsync(eventType, eventData, exceptions);
+
+            if (exceptions.Any())
+            {
+                if (exceptions.Count == 1)
+                {
+                    exceptions[0].ReThrow();
+                }
+
+                throw new AggregateException("More than one error has occurred while triggering the event: " + eventType, exceptions);
+            }
+        }
+
         protected virtual async Task TriggerHandlersAsync(Type eventType, object eventData, List<Exception> exceptions)
         {
             await new SynchronizationContextRemover();
