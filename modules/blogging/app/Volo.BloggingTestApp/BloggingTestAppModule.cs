@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿//#define MONGODB
+
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -28,13 +30,18 @@ using Volo.Abp.UI;
 using Volo.Abp.VirtualFileSystem;
 using Volo.Blogging;
 using Volo.BloggingTestApp.EntityFrameworkCore;
+using Volo.BloggingTestApp.MongoDb;
 
 namespace Volo.BloggingTestApp
 {
     [DependsOn(
         typeof(BloggingWebModule),
         typeof(BloggingApplicationModule),
+#if MONGODB
+               typeof(BloggingTestAppMongoDbModule),
+#else
         typeof(BloggingTestAppEntityFrameworkCoreModule),
+#endif
         typeof(AbpAccountWebModule),
         typeof(AbpIdentityWebModule),
         typeof(AbpIdentityApplicationModule),
@@ -50,15 +57,20 @@ namespace Volo.BloggingTestApp
 
             context.Services.Configure<DbConnectionOptions>(options =>
             {
+#if MONGODB
+                const string connStringName = "MongoDb";
+#else
                 const string connStringName = "SqlServer";
+#endif
                 options.ConnectionStrings.Default = configuration.GetConnectionString(connStringName);
             });
 
+#if !MONGODB
             context.Services.Configure<AbpDbContextOptions>(options =>
             {
                 options.UseSqlServer();
             });
-
+#endif
             if (hostingEnvironment.IsDevelopment())
             {
                 context.Services.Configure<VirtualFileSystemOptions>(options =>

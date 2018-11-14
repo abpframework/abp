@@ -38,7 +38,7 @@ namespace Volo.Blogging.Posts
 
         public async Task<ListResultDto<PostWithDetailsDto>> GetListByBlogIdAndTagName(Guid id, string tagName)
         {
-            var posts = _postRepository.GetPostsByBlogId(id);
+            var posts = await _postRepository.GetPostsByBlogId(id);
             var tag = tagName.IsNullOrWhiteSpace() ? null : await _tagRepository.FindByNameAsync(id, tagName);
             var userDictionary = new Dictionary<Guid, BlogUserDto>();
             var postDtos = new List<PostWithDetailsDto>(ObjectMapper.Map<List<Post>, List<PostWithDetailsDto>>(posts));
