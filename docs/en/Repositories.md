@@ -1,10 +1,10 @@
-## Repositories
+# Repositories
 
 "*Mediates between the domain and data mapping layers using a collection-like interface for accessing domain objects*" (Martin Fowler).
 
 Repositories, in practice, are used to perform database operations for domain objects (see [Entities](Entities.md)). Generally, a separated repository is used for each **aggregate root** or entity.
 
-### Generic Repositories
+## Generic Repositories
 
 ABP can provide a **default generic repository** for each aggregate root or entity. You can [inject](Dependency-Injection.md) `IRepository<TEntity, TKey>` into your service and perform standard **CRUD** operations. Example usage:
 
@@ -54,12 +54,6 @@ Generic Repositories provides some standard CRUD features out of the box:
 * Implements `IQueryable<TEntity>`, so you can use LINQ and extension methods like `FirstOrDefault`, `Where`, `OrderBy`, `ToList` and so on...
 * Have **sync** and **async** versions for all methods. 
 
-#### Generic Repository without a Primary Key
-
-If your entity does not have an Id primary key (it may have a composite primary key for instance) then you cannot use the `IRepository<TEntity, TKey>` defined above. In that case, you can inject and use `IRepository<TEntity>` for your entity.
-
-> `IRepository<TEntity>` has a few missing methods those normally works with the `Id` property of an entity. Because of the entity has no `Id` property in that case, these methods are not available. One example is the `Get` method that gets an id and returns the entity with given id. However, you can still use `IQueryable<TEntity>` features to query entities by standard LINQ methods.
-
 ### Basic Repositories
 
 Standard `IRepository<TEntity, TKey>` interface extends standard `IQueryable<TEntity>` and you can freely query using standard LINQ methods. However, some ORM providers or database systems may not support standard `IQueryable` interface.
@@ -70,15 +64,25 @@ Depending on `IBasicRepository` but not depending on `IRepository` has an advant
 
 So, working with `IRepository` is the **suggested** way for typical applications. But reusable module developers may consider `IBasicRepository` to support a wider range of data sources.
 
-### Custom Repositories
+### Read Only Repositories
+
+There are also `IReadOnlyRepository<TEntity, TKey>` and `IReadOnlyBasicRepository<Tentity, TKey>` interfaces for who only want to depend on querying capabilities of the repositories.
+
+### Generic Repository without a Primary Key
+
+If your entity does not have an Id primary key (it may have a composite primary key for instance) then you cannot use the `IRepository<TEntity, TKey>` (or basic/readonly versions) defined above. In that case, you can inject and use `IRepository<TEntity>` for your entity.
+
+> `IRepository<TEntity>` has a few missing methods those normally works with the `Id` property of an entity. Because of the entity has no `Id` property in that case, these methods are not available. One example is the `Get` method that gets an id and returns the entity with given id. However, you can still use `IQueryable<TEntity>` features to query entities by standard LINQ methods.
+
+## Custom Repositories
 
 Default generic repositories will be sufficient for most cases. However, you may need to create a custom repository class for your entity.
 
-#### Custom Repository Example
+### Custom Repository Example
 
 ABP does not force you to implement any interface or inherit from any base class for a repository. It can be just a simple POCO class. However, it's suggested to inherit existing repository interface and classes to make your work easier and get the standard methods out of the box.
 
-##### Custom Repository Interface
+#### Custom Repository Interface
 
 First, define an interface in your domain layer:
 
@@ -91,7 +95,7 @@ public interface IPersonRepository : IRepository<Person, Guid>
 
 This interface extends `IRepository<Person, Guid>` to take advantage of pre-built repository functionality.
 
-##### Custom Repository Implementation
+#### Custom Repository Implementation
 
 A custom repository is tightly coupled to the data access tool type you are using. In this example, we will use Entity Framework Core:
 
