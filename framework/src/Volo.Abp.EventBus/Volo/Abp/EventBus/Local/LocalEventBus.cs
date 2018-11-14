@@ -6,8 +6,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Collections;
 using Volo.Abp.DependencyInjection;
@@ -26,14 +24,14 @@ namespace Volo.Abp.EventBus.Local
         /// </summary>
         public ILogger<LocalEventBus> Logger { get; set; }
 
-        protected EventBusOptions Options { get; }
+        protected LocalEventBusOptions Options { get; }
 
         protected ConcurrentDictionary<Type, List<IEventHandlerFactory>> HandlerFactories { get; }
 
         protected IServiceProvider ServiceProvider { get; }
 
         public LocalEventBus(
-            IOptions<EventBusOptions> options,
+            IOptions<LocalEventBusOptions> options,
             IServiceProvider serviceProvider)
         {
             ServiceProvider = serviceProvider;

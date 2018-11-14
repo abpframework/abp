@@ -121,9 +121,7 @@ namespace Volo.Abp.EventBus.Local
                 {
                     var handlerType = eventHandlerWrapper.EventHandler.GetType();
 
-                    if (ReflectionHelper.IsAssignableToGenericType(
-                        handlerType,
-                        typeof(IEventHandler<>)))
+                    if (ReflectionHelper.IsAssignableToGenericType(handlerType, typeof(IEventHandler<>)))
                     {
                         var method = typeof(IEventHandler<>) //TODO: to a static field
                             .MakeGenericType(eventType)
@@ -134,9 +132,7 @@ namespace Volo.Abp.EventBus.Local
 
                         await (Task)method.Invoke(eventHandlerWrapper.EventHandler, new[] { eventData });
                     }
-                    else if (ReflectionHelper.IsAssignableToGenericType(
-                        handlerType,
-                        typeof(IDistributedEventHandler<>)))
+                    else if (ReflectionHelper.IsAssignableToGenericType(handlerType, typeof(IDistributedEventHandler<>)))
                     {
                         var method = typeof(IDistributedEventHandler<>) //TODO: to a static field
                             .MakeGenericType(eventType)

@@ -17,15 +17,15 @@ namespace Volo.Abp.EventBus.Distributed.RabbitMq
     public class RabbitMqDistributedEventBus : EventBusBase, IDistributedEventBus, ITransientDependency
     {
         protected RabbitMqDistributedEventBusOptions Options { get; }
-        protected IChannelPool ChannelPool { get; }
+        protected IConnectionPool ConnectionPool { get; }
         protected IRabbitMqSerializer Serializer { get; }
 
         public RabbitMqDistributedEventBus(
             IOptions<RabbitMqDistributedEventBusOptions> options,
-            IChannelPool channelPool,
+            IConnectionPool connectionPool,
             IRabbitMqSerializer serializer)
         {
-            ChannelPool = channelPool;
+            ConnectionPool = connectionPool;
             Serializer = serializer;
             Options = options.Value;
         }
@@ -57,18 +57,18 @@ namespace Volo.Abp.EventBus.Distributed.RabbitMq
 
         public override Task PublishAsync(Type eventType, object eventData)
         {
-            var eventName = eventType.FullName; //TODO: Get eventname from an attribute if available
+            var eventName = EventNameAttribute.GetName(eventType);
             var body = Serializer.Serialize(eventData);
 
-            using (var channelAccessor = ChannelPool.Acquire(Guid.NewGuid().ToString()))
+            using (var channel = ConnectionPool.Get().CreateModel())
             {
                 //TODO: Other properties like durable?
-                channelAccessor.Channel.ExchangeDeclare(Options.ExchangeName, "");
+                channel.ExchangeDeclare(Options.ExchangeName, "");
                 
-                var properties = channelAccessor.Channel.CreateBasicProperties();
+                var properties = channel.CreateBasicProperties();
                 properties.DeliveryMode = 2; //persistent
 
-                channelAccessor.Channel.BasicPublish(
+                channel.BasicPublish(
                    exchange: Options.ExchangeName,
                     routingKey: eventName,
                     mandatory: true,
