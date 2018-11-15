@@ -139,9 +139,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         protected virtual void AddDisabledAttribute(TagHelperOutput inputTagHelperOutput)
         {
-            var disabledAttribute = GetAttribute<DisabledInput>(TagHelper.AspFor.ModelExplorer);
-
-            if (disabledAttribute != null && !inputTagHelperOutput.Attributes.ContainsName("disabled"))
+            if (inputTagHelperOutput.Attributes.ContainsName("disabled"))
+            {
+                return;
+            }
+            else if (TagHelper.IsReadonly || GetAttribute<DisabledInput>(TagHelper.AspFor.ModelExplorer) != null)
             {
                 inputTagHelperOutput.Attributes.Add("disabled", "");
             }
@@ -149,9 +151,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         protected virtual void AddReadOnlyAttribute(TagHelperOutput inputTagHelperOutput)
         {
-            var readOnlyAttribute = GetAttribute<ReadOnlyInput>(TagHelper.AspFor.ModelExplorer);
-
-            if (readOnlyAttribute != null && !inputTagHelperOutput.Attributes.ContainsName("readonly"))
+            if (inputTagHelperOutput.Attributes.ContainsName("readonly"))
+            {
+                return;
+            }
+            else if (TagHelper.IsReadonly || GetAttribute<ReadOnlyInput>(TagHelper.AspFor.ModelExplorer) != null)
             {
                 inputTagHelperOutput.Attributes.Add("readonly", "");
             }
@@ -246,7 +250,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             foreach (var tagHelperAttribute in tagHelperAttributes)
             {
                 var nameWithoutPrefix = tagHelperAttribute.Name.Substring(groupPrefix.Length);
-                var newAttritube = new TagHelperAttribute(nameWithoutPrefix,tagHelperAttribute.Value);
+                var newAttritube = new TagHelperAttribute(nameWithoutPrefix, tagHelperAttribute.Value);
                 output.Attributes.Add(newAttritube);
             }
         }
