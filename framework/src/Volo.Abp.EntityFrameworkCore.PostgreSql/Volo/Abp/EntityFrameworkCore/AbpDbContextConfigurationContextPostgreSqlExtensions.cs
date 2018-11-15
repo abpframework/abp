@@ -10,15 +10,15 @@ namespace Volo.Abp.EntityFrameworkCore
     {
         public static DbContextOptionsBuilder UsePostgreSql(
             [NotNull] this AbpDbContextConfigurationContext context,
-            [CanBeNull] Action<NpgsqlDbContextOptionsBuilder> sqlServerOptionsAction = null)
+            [CanBeNull] Action<NpgsqlDbContextOptionsBuilder> postgreSqlOptionsAction = null)
         {
             if (context.ExistingConnection != null)
             {
-                return context.DbContextOptions.UseNpgsql(context.ExistingConnection, sqlServerOptionsAction);
+                return context.DbContextOptions.UseNpgsql(context.ExistingConnection, postgreSqlOptionsAction);
             }
             else
             {
-                return context.DbContextOptions.UseNpgsql(context.ConnectionString, sqlServerOptionsAction);
+                return context.DbContextOptions.UseNpgsql(context.ConnectionString, postgreSqlOptionsAction);
             }
         }
     }
