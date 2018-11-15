@@ -109,7 +109,7 @@ namespace Acme.BookStore.Pages.Books
 
 ![bookstore-new-book-button](images/bookstore-new-book-button.png)
 
-打开 `wwwroot/pages/books/index.js` 在datatable配置代码后面添加如下代码:
+打开 `Pages/books/index.js` 在datatable配置代码后面添加如下代码:
 
 ````js
 var createModal = new abp.ModalManager(abp.appPath + 'Books/CreateModal');
@@ -268,7 +268,7 @@ namespace Acme.BookStore
 
 * 只是为"Actions"增加了一个 `th` 标签.
 
-打开 `wwwroot/pages/books/index.js` 并用以下内容进行替换:
+打开 `Pages/books/index.js` 并用以下内容进行替换:
 
 ````js
 $(function () {
@@ -327,7 +327,7 @@ $(function () {
 
 ### 删除一个已有的Book实体
 
-打开 `wwwroot/pages/books/index.js` 文件,在 `rowAction` `items` 下新增一项:
+打开 `Pages/books/index.js` 文件,在 `rowAction` `items` 下新增一项:
 
 ````js
 {
