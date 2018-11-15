@@ -13,7 +13,7 @@
     "DisplayName:IsPublic": "Public",
     "Roles": "Roles",
     "Password": "Password",
-    "PersonalInfo": "Personal Info",
+    "PersonalInfo": "My profile",
     "PersonalSettings": "Personal settings",
     "UserDeletionConfirmationMessage": "User '{0}' will be deleted. Do you confirm that?",
     "RoleDeletionConfirmationMessage": "Role '{0}' will be deleted. Do you confirm that?",
