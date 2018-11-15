@@ -132,7 +132,7 @@ namespace Volo.Abp.EventBus.Distributed.RabbitMq
 
             if (handlerFactories.Count == 1) //TODO: Multi-threading!
             {
-                var eventName = EventNameAttribute.GetName(eventType);
+                var eventName = EventNameAttribute.GetNameOrDefault(eventType);
 
                 using (var channel = ConnectionPool.Get().CreateModel()) //TODO: Connection name per event!
                 {
@@ -203,7 +203,7 @@ namespace Volo.Abp.EventBus.Distributed.RabbitMq
 
         public override Task PublishAsync(Type eventType, object eventData)
         {
-            var eventName = EventNameAttribute.GetName(eventType);
+            var eventName = EventNameAttribute.GetNameOrDefault(eventType);
             var body = Serializer.Serialize(eventData);
 
             using (var channel = ConnectionPool.Get().CreateModel()) //TODO: Connection name per event!
@@ -232,7 +232,7 @@ namespace Volo.Abp.EventBus.Distributed.RabbitMq
                 eventType,
                 type =>
                 {
-                    var eventName = EventNameAttribute.GetName(type);
+                    var eventName = EventNameAttribute.GetNameOrDefault(type);
                     EventTypes[eventName] = type;
                     return new List<IEventHandlerFactory>();
                 }

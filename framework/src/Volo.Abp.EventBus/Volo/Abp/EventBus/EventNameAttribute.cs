@@ -7,19 +7,19 @@ namespace Volo.Abp.EventBus
     [AttributeUsage(AttributeTargets.Class)]
     public class EventNameAttribute : Attribute, IEventNameProvider
     {
-        public string Name { get; }
+        public virtual string Name { get; }
 
         public EventNameAttribute([NotNull] string name)
         {
             Name = Check.NotNullOrWhiteSpace(name, nameof(name));
         }
 
-        public static string GetName<TEvent>()
+        public static string GetNameOrDefault<TEvent>()
         {
-            return GetName(typeof(TEvent));
+            return GetNameOrDefault(typeof(TEvent));
         }
 
-        public static string GetName([NotNull] Type eventType)
+        public static string GetNameOrDefault([NotNull] Type eventType)
         {
             Check.NotNull(eventType, nameof(eventType));
 
@@ -27,13 +27,13 @@ namespace Volo.Abp.EventBus
                        .GetCustomAttributes(true)
                        .OfType<IEventNameProvider>()
                        .FirstOrDefault()
-                       ?.Name
+                       ?.GetName(eventType)
                    ?? eventType.FullName;
         }
-    }
 
-    public interface IEventNameProvider
-    {
-        string Name { get; }
+        public string GetName(Type eventType)
+        {
+            return Name;
+        }
     }
 }
