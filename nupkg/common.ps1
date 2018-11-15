@@ -55,6 +55,7 @@ $projects = (
     "framework/src/Volo.Abp.EntityFrameworkCore",
     "framework/src/Volo.Abp.EntityFrameworkCore.SqlServer",
     "framework/src/Volo.Abp.EntityFrameworkCore.MySQL",
+    "framework/src/Volo.Abp.EntityFrameworkCore.PostgreSql",
     "framework/src/Volo.Abp.EventBus",
     "framework/src/Volo.Abp.EventBus.Distributed",
     "framework/src/Volo.Abp.EventBus.Distributed.RabbitMQ",
