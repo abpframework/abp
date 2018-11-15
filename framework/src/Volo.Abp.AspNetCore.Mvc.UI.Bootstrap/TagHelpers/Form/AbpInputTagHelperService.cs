@@ -143,7 +143,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             {
                 return;
             }
-            else if (TagHelper.IsReadonly || GetAttribute<DisabledInput>(TagHelper.AspFor.ModelExplorer) != null)
+            else if (TagHelper.IsDisabled || GetAttribute<DisabledInput>(TagHelper.AspFor.ModelExplorer) != null)
             {
                 inputTagHelperOutput.Attributes.Add("disabled", "");
             }
