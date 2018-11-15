@@ -1,4 +1,5 @@
-﻿using Volo.Abp.Settings;
+﻿using Volo.Abp.Identity.Settings;
+using Volo.Abp.Settings;
 
 namespace Volo.Abp.Identity
 {
@@ -20,7 +21,10 @@ namespace Volo.Abp.Identity
                 new SettingDefinition(IdentitySettingNames.Lockout.MaxFailedAccessAttempts),
 
                 new SettingDefinition(IdentitySettingNames.SignIn.RequireConfirmedEmail),
-                new SettingDefinition(IdentitySettingNames.SignIn.RequireConfirmedPhoneNumber)
+                new SettingDefinition(IdentitySettingNames.SignIn.RequireConfirmedPhoneNumber),
+
+                new SettingDefinition(IdentitySettingNames.User.IsUserNameUpdateEnabled),
+                new SettingDefinition(IdentitySettingNames.User.IsEmailUpdateEnabled)
 
             );
         }

@@ -9,12 +9,27 @@
     Layout = null;
 }
 
-<abp-dynamic-form abp-model="@Model.PersonalSettingsInfoModel" asp-page="/Identity/Shared/PersonalSettingsModal">
+<form asp-page="/Identity/Shared/PersonalSettingsModal">
     <abp-modal>
         <abp-modal-header title="@L["PersonalInfo"].Value"></abp-modal-header>
         <abp-modal-body>
-            <abp-form-content />
+
+            <abp-input asp-for="PersonalSettingsInfoModel.UserName" readonly="Model.IsUsernameUpdateDisabled" />
+
+            <abp-row>
+                <abp-column size-md="_6">
+                    <abp-input asp-for="PersonalSettingsInfoModel.Name" />
+                </abp-column>
+                <abp-column size-md="_6">
+                    <abp-input asp-for="PersonalSettingsInfoModel.Surname" />
+                </abp-column>
+            </abp-row>
+
+            <abp-input asp-for="PersonalSettingsInfoModel.Email" readonly="Model.IsEmailUpdateDisabled" />
+
+            <abp-input asp-for="PersonalSettingsInfoModel.PhoneNumber" />
+
         </abp-modal-body>
         <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)"></abp-modal-footer>
     </abp-modal>
-</abp-dynamic-form>
+</form>

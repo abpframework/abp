@@ -1,4 +1,4 @@
-﻿namespace Volo.Abp.Identity
+﻿namespace Volo.Abp.Identity.Settings
 {
     public static class IdentitySettingNames
     {
@@ -31,6 +31,14 @@
 
             public const string RequireConfirmedEmail = SignInPrefix + ".RequireConfirmedEmail";
             public const string RequireConfirmedPhoneNumber = SignInPrefix + ".RequireConfirmedPhoneNumber";
+        }
+
+        public static class User
+        {
+            private const string UserPrefix = Prefix + ".User";
+
+            public const string IsUserNameUpdateEnabled = UserPrefix + ".IsUserNameUpdateEnabled";
+            public const string IsEmailUpdateEnabled = UserPrefix + ".IsEmailUpdateEnabled";
         }
     }
 }
