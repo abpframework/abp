@@ -71,8 +71,19 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             var inputTagHelperOutput = GetInnerTagHelper(new TagHelperAttributeList(), context, selectTagHelper, "select", TagMode.StartTagAndEndTag);
 
             inputTagHelperOutput.Attributes.Add("class", "form-control");
+            AddDisabledAttribute(inputTagHelperOutput);
 
             return inputTagHelperOutput;
+        }
+
+        protected virtual void AddDisabledAttribute(TagHelperOutput inputTagHelperOutput)
+        {
+            var disabledAttribute = GetAttribute<DisabledInput>(TagHelper.AspFor.ModelExplorer);
+
+            if (disabledAttribute != null && !inputTagHelperOutput.Attributes.ContainsName("disabled"))
+            {
+                inputTagHelperOutput.Attributes.Add("disabled", "");
+            }
         }
 
         protected virtual List<SelectListItem> GetSelectItems(TagHelperContext context, TagHelperOutput output)
