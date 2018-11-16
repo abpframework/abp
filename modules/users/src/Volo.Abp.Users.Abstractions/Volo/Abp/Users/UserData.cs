@@ -7,6 +7,8 @@ namespace Volo.Abp.Users
     {
         public Guid Id { get; set; }
 
+        public Guid? TenantId { get; set; }
+
         public string UserName { get; set; }
 
         public string Name { get; set; }
@@ -20,8 +22,6 @@ namespace Volo.Abp.Users
         public string PhoneNumber { get; set; }
 
         public bool PhoneNumberConfirmed { get; set; }
-
-        public Guid? TenantId { get; set; }
 
         public UserData()
         {
