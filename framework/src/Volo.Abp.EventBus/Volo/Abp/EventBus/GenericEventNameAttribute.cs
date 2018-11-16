@@ -5,7 +5,11 @@ namespace Volo.Abp.EventBus
     [AttributeUsage(AttributeTargets.Class)]
     public class GenericEventNameAttribute : Attribute, IEventNameProvider
     {
-        public string GetName(Type eventType)
+        public string Prefix { get; set; }
+
+        public string Postfix { get; set; }
+
+        public virtual string GetName(Type eventType)
         {
             if (!eventType.IsGenericType)
             {
@@ -18,7 +22,19 @@ namespace Volo.Abp.EventBus
                 throw new AbpException($"Given type has more than one generic argument: {eventType.AssemblyQualifiedName}");
             }
 
-            return EventNameAttribute.GetNameOrDefault(genericArguments[0]);
+            var eventName = EventNameAttribute.GetNameOrDefault(genericArguments[0]);
+
+            if (!Prefix.IsNullOrEmpty())
+            {
+                eventName = Prefix + eventName;
+            }
+
+            if (!Postfix.IsNullOrEmpty())
+            {
+                eventName = eventName + Postfix;
+            }
+
+            return eventName;
         }
     }
 }

@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Volo.Abp.EventBus.Local;
 
-namespace Volo.Abp.EventBus
+namespace Volo.Abp.EventBus.Local
 {
     public sealed class NullLocalEventBus : ILocalEventBus
     {

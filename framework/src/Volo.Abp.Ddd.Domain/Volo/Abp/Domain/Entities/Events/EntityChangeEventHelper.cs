@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Auditing;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.DynamicProxy;
 using Volo.Abp.EventBus;
+using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.EventBus.Local;
 using Volo.Abp.Uow;
 
@@ -16,70 +18,65 @@ namespace Volo.Abp.Domain.Entities.Events
     public class EntityChangeEventHelper : IEntityChangeEventHelper, ITransientDependency
     {
         public ILocalEventBus LocalEventBus { get; set; }
+        public IDistributedEventBus DistributedEventBus { get; set; }
 
-        private readonly IUnitOfWorkManager _unitOfWorkManager;
+        protected IUnitOfWorkManager UnitOfWorkManager { get; }
+        protected IEntityToEtoMapper EntityToEtoMapper { get; }
 
-        public EntityChangeEventHelper(IUnitOfWorkManager unitOfWorkManager)
+        public EntityChangeEventHelper(
+            IUnitOfWorkManager unitOfWorkManager,
+            IEntityToEtoMapper entityToEtoMapper)
         {
-            _unitOfWorkManager = unitOfWorkManager;
+            UnitOfWorkManager = unitOfWorkManager;
+            EntityToEtoMapper = entityToEtoMapper;
+
             LocalEventBus = NullLocalEventBus.Instance;
+            DistributedEventBus = NullDistributedEventBus.Instance;
         }
 
         public async Task TriggerEventsAsync(EntityChangeReport changeReport)
         {
             await TriggerEventsInternalAsync(changeReport);
 
-            if (changeReport.IsEmpty() || _unitOfWorkManager.Current == null)
+            if (changeReport.IsEmpty() || UnitOfWorkManager.Current == null)
             {
                 return;
             }
 
-            await _unitOfWorkManager.Current.SaveChangesAsync();
+            await UnitOfWorkManager.Current.SaveChangesAsync();
         }
 
         public virtual async Task TriggerEntityCreatingEventAsync(object entity)
         {
-            await TriggerEventWithEntity(typeof(EntityCreatingEventData<>), entity, true);
-        }
-
-        public async Task TriggerEntityCreatedEventAsync(object entity)
-        {
-            await TriggerEventWithEntity(typeof(EntityCreatedEventData<>), entity, true);
+            await TriggerEventWithEntity(LocalEventBus, typeof(EntityCreatingEventData<>), entity, true);
         }
 
         public virtual async Task TriggerEntityCreatedEventOnUowCompletedAsync(object entity)
         {
-            await TriggerEventWithEntity(typeof(EntityCreatedEventData<>), entity, false);
+            await TriggerEventWithEntity(LocalEventBus, typeof(EntityCreatedEventData<>), entity, false);
+            await TriggerEventWithEntity(DistributedEventBus, typeof(EntityCreatedEto<>), EntityToEtoMapper.Map(entity), false);
         }
 
         public virtual async Task TriggerEntityUpdatingEventAsync(object entity)
         {
-            await TriggerEventWithEntity(typeof(EntityUpdatingEventData<>), entity, true);
-        }
-
-        public async Task TriggerEntityUpdatedEventAsync(object entity)
-        {
-            await TriggerEventWithEntity(typeof(EntityUpdatedEventData<>), entity, true);
+            await TriggerEventWithEntity(LocalEventBus, typeof(EntityUpdatingEventData<>), entity, true);
         }
 
         public virtual async Task TriggerEntityUpdatedEventOnUowCompletedAsync(object entity)
         {
-            await TriggerEventWithEntity(typeof(EntityUpdatedEventData<>), entity, false);
+            await TriggerEventWithEntity(LocalEventBus, typeof(EntityUpdatedEventData<>), entity, false);
+            await TriggerEventWithEntity(DistributedEventBus, typeof(EntityUpdatedEto<>), EntityToEtoMapper.Map(entity), false);
         }
 
         public virtual async Task TriggerEntityDeletingEventAsync(object entity)
         {
-            await TriggerEventWithEntity(typeof(EntityDeletingEventData<>), entity, true);
-        }
-
-        public async Task TriggerEntityDeletedEventAsync(object entity)
-        {
-            await TriggerEventWithEntity(typeof(EntityDeletedEventData<>), entity, true);
+            await TriggerEventWithEntity(LocalEventBus, typeof(EntityDeletingEventData<>), entity, true);
         }
 
         public virtual async Task TriggerEntityDeletedEventOnUowCompletedAsync(object entity)
         {
-            await TriggerEventWithEntity(typeof(EntityDeletedEventData<>), entity, false);
+            await TriggerEventWithEntity(LocalEventBus, typeof(EntityDeletedEventData<>), entity, false);
+            await TriggerEventWithEntity(DistributedEventBus, typeof(EntityDeletedEto<>), EntityToEtoMapper.Map(entity), false);
         }
 
         protected virtual async Task TriggerEventsInternalAsync(EntityChangeReport changeReport)
@@ -120,18 +117,18 @@ namespace Volo.Abp.Domain.Entities.Events
             }
         }
 
-        protected virtual async Task TriggerEventWithEntity(Type genericEventType, object entity, bool triggerInCurrentUnitOfWork)
+        protected virtual async Task TriggerEventWithEntity(IEventPublisher eventPublisher, Type genericEventType, object entity, bool triggerInCurrentUnitOfWork)
         {
             var entityType = ProxyHelper.UnProxy(entity).GetType();
             var eventType = genericEventType.MakeGenericType(entityType);
 
-            if (triggerInCurrentUnitOfWork || _unitOfWorkManager.Current == null)
+            if (triggerInCurrentUnitOfWork || UnitOfWorkManager.Current == null)
             {
-                await LocalEventBus.PublishAsync(eventType, Activator.CreateInstance(eventType, entity));
+                await eventPublisher.PublishAsync(eventType, Activator.CreateInstance(eventType, entity));
                 return;
             }
 
-            _unitOfWorkManager.Current.OnCompleted(() => LocalEventBus.PublishAsync(eventType, Activator.CreateInstance(eventType, entity)));
+            UnitOfWorkManager.Current.OnCompleted(() => eventPublisher.PublishAsync(eventType, Activator.CreateInstance(eventType, entity)));
         }
     }
 }

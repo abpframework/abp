@@ -2,8 +2,9 @@ using System;
 using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.Domain.Entities.Events;
+using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.Domain.Repositories;
-using Volo.Abp.EventBus;
+using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.EventBus.Local;
 using Volo.Abp.Modularity;
 using Volo.Abp.TestApp.Domain;
@@ -17,11 +18,13 @@ namespace Volo.Abp.TestApp.Testing
     {
         protected IRepository<Person, Guid> PersonRepository { get; }
         protected ILocalEventBus LocalEventBus { get; }
+        protected IDistributedEventBus DistributedEventBus { get; }
 
         protected EntityChangeEvents_Tests()
         {
             PersonRepository = GetRequiredService<IRepository<Person, Guid>>();
             LocalEventBus = GetRequiredService<ILocalEventBus>();
+            DistributedEventBus = GetRequiredService<IDistributedEventBus>();
         }
 
         [Fact]
@@ -31,6 +34,8 @@ namespace Volo.Abp.TestApp.Testing
 
             var creatingEventTriggered = false;
             var createdEventTriggered = false;
+            var createdEtoTriggered = false;
+            var updatedEtoTriggered = false;
             var updatingEventTriggered = false;
             var updatedEventTriggered = false;
 
@@ -70,6 +75,15 @@ namespace Volo.Abp.TestApp.Testing
                     return Task.CompletedTask;
                 });
 
+                DistributedEventBus.Subscribe<EntityCreatedEto<PersonEto>>(eto =>
+                {
+                    eto.Entity.Name.ShouldBe(personName);
+
+                    createdEtoTriggered = true;
+
+                    return Task.CompletedTask;
+                });
+
                 LocalEventBus.Subscribe<EntityUpdatingEventData<Person>>(data =>
                 {
                     creatingEventTriggered.ShouldBeTrue();
@@ -100,6 +114,16 @@ namespace Volo.Abp.TestApp.Testing
                     return Task.CompletedTask;
                 });
 
+                DistributedEventBus.Subscribe<EntityUpdatedEto<PersonEto>>(eto =>
+                {
+                    eto.Entity.Name.ShouldBe(personName);
+                    eto.Entity.Age.ShouldBe(18);
+
+                    updatedEtoTriggered = true;
+
+                    return Task.CompletedTask;
+                });
+
                 PersonRepository.Insert(new Person(Guid.NewGuid(), personName, 15));
 
                 uow.Complete();
@@ -107,8 +131,10 @@ namespace Volo.Abp.TestApp.Testing
            
             creatingEventTriggered.ShouldBeTrue();
             createdEventTriggered.ShouldBeTrue();
+            createdEtoTriggered.ShouldBeTrue();
             updatingEventTriggered.ShouldBeTrue();
             updatedEventTriggered.ShouldBeTrue();
+            updatedEtoTriggered.ShouldBeTrue();
         }
     }
 }
