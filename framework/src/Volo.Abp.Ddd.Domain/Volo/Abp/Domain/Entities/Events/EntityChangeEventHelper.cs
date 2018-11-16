@@ -82,7 +82,8 @@ namespace Volo.Abp.Domain.Entities.Events
         protected virtual async Task TriggerEventsInternalAsync(EntityChangeReport changeReport)
         {
             await TriggerEntityChangeEvents(changeReport.ChangedEntities);
-            await TriggerDomainEvents(changeReport.DomainEvents);
+            await TriggerLocalEvents(changeReport.DomainEvents);
+            await TriggerDistributedEvents(changeReport.DistributedEvents);
         }
 
         protected virtual async Task TriggerEntityChangeEvents(List<EntityChangeEntry> changedEntities)
@@ -109,11 +110,19 @@ namespace Volo.Abp.Domain.Entities.Events
             }
         }
 
-        protected virtual async Task TriggerDomainEvents(List<DomainEventEntry> domainEvents)
+        protected virtual async Task TriggerLocalEvents(List<DomainEventEntry> localEvents)
         {
-            foreach (var domainEvent in domainEvents)
+            foreach (var localEvent in localEvents)
             {
-                await LocalEventBus.PublishAsync(domainEvent.EventData.GetType(), domainEvent.EventData);
+                await LocalEventBus.PublishAsync(localEvent.EventData.GetType(), localEvent.EventData);
+            }
+        }
+
+        protected virtual async Task TriggerDistributedEvents(List<DomainEventEntry> distributedEvents)
+        {
+            foreach (var distributedEvent in distributedEvents)
+            {
+                await DistributedEventBus.PublishAsync(distributedEvent.EventData.GetType(), distributedEvent.EventData);
             }
         }
 

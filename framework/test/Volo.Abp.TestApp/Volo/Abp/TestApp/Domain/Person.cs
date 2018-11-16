@@ -41,7 +41,24 @@ namespace Volo.Abp.TestApp.Domain
 
             var oldName = Name;
             Name = name;
-            AddDomainEvent(new PersonNameChangedEvent{Person = this, OldName =  oldName});
+
+            AddLocalEvent(
+                new PersonNameChangedEvent
+                {
+                    Person = this,
+                    OldName = oldName
+                }
+            );
+
+            AddDistributedEvent(
+                new PersonNameChangedEto
+                {
+                    Id = Id,
+                    OldName = oldName,
+                    NewName = Name,
+                    TenantId = TenantId
+                }
+            );
         }
     }
 }

@@ -203,7 +203,7 @@ namespace Volo.Abp.EntityFrameworkCore
                     break;
             }
 
-            AddDomainEvents(changeReport.DomainEvents, entry.Entity);
+            AddDomainEvents(changeReport, entry.Entity);
         }
 
         protected virtual void ApplyAbpConceptsForAddedEntity(EntityEntry entry, EntityChangeReport changeReport)
@@ -237,7 +237,7 @@ namespace Volo.Abp.EntityFrameworkCore
             changeReport.ChangedEntities.Add(new EntityChangeEntry(entry.Entity, EntityChangeType.Deleted));
         }
 
-        protected virtual void AddDomainEvents(List<DomainEventEntry> domainEvents, object entityAsObj)
+        protected virtual void AddDomainEvents(EntityChangeReport changeReport, object entityAsObj)
         {
             var generatesDomainEventsEntity = entityAsObj as IGeneratesDomainEvents;
             if (generatesDomainEventsEntity == null)
@@ -245,14 +245,19 @@ namespace Volo.Abp.EntityFrameworkCore
                 return;
             }
 
-            var entityEvents = generatesDomainEventsEntity.GetDomainEvents().ToArray();
-            if (entityEvents.IsNullOrEmpty())
+            var localEvents = generatesDomainEventsEntity.GetLocalEvents().ToArray();
+            if (localEvents.Any())
             {
-                return;
+                changeReport.DomainEvents.AddRange(localEvents.Select(eventData => new DomainEventEntry(entityAsObj, eventData)));
+                generatesDomainEventsEntity.ClearLocalEvents();
             }
 
-            domainEvents.AddRange(entityEvents.Select(eventData => new DomainEventEntry(entityAsObj, eventData)));
-            generatesDomainEventsEntity.ClearDomainEvents();
+            var distributedEvents = generatesDomainEventsEntity.GetDistributedEvents().ToArray();
+            if (distributedEvents.Any())
+            {
+                changeReport.DistributedEvents.AddRange(distributedEvents.Select(eventData => new DomainEventEntry(entityAsObj, eventData)));
+                generatesDomainEventsEntity.ClearDistributedEvents();
+            }
         }
 
         protected virtual void HandleConcurrencyStamp(EntityEntry entry)

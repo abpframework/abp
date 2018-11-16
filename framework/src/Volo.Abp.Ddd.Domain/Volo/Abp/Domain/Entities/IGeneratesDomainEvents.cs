@@ -6,8 +6,12 @@ namespace Volo.Abp.Domain.Entities
 
     public interface IGeneratesDomainEvents
     {
-        IEnumerable<object> GetDomainEvents();
+        IEnumerable<object> GetLocalEvents();
 
-        void ClearDomainEvents();
+        IEnumerable<object> GetDistributedEvents();
+
+        void ClearLocalEvents();
+
+        void ClearDistributedEvents();
     }
 }

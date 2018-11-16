@@ -10,6 +10,7 @@ using Volo.Abp.Auditing;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Entities.Events;
 using Volo.Abp.EventBus;
+using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.EventBus.Local;
 using Volo.Abp.Guids;
 using Volo.Abp.MongoDB;
@@ -34,6 +35,8 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
 
         public ILocalEventBus LocalEventBus { get; set; }
 
+        public IDistributedEventBus DistributedEventBus { get; set; }
+
         public IEntityChangeEventHelper EntityChangeEventHelper { get; set; }
 
         public IGuidGenerator GuidGenerator { get; set; }
@@ -45,6 +48,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             DbContextProvider = dbContextProvider;
 
             LocalEventBus = NullLocalEventBus.Instance;
+            DistributedEventBus = NullDistributedEventBus.Instance;
             EntityChangeEventHelper = NullEntityChangeEventHelper.Instance;
         }
 
@@ -306,18 +310,27 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
                 return;
             }
 
-            var entityEvents = generatesDomainEventsEntity.GetDomainEvents().ToArray();
-            if (entityEvents.IsNullOrEmpty())
+            var localEvents = generatesDomainEventsEntity.GetLocalEvents().ToArray();
+            if (localEvents.Any())
             {
-                return;
+                foreach (var localEvent in localEvents)
+                {
+                    await LocalEventBus.PublishAsync(localEvent.GetType(), localEvent);
+                }
+
+                generatesDomainEventsEntity.ClearLocalEvents();
             }
 
-            foreach (var entityEvent in entityEvents)
+            var distributedEvents = generatesDomainEventsEntity.GetDistributedEvents().ToArray();
+            if (distributedEvents.Any())
             {
-                await LocalEventBus.PublishAsync(entityEvent.GetType(), entityEvent);
-            }
+                foreach (var distributedEvent in distributedEvents)
+                {
+                    await DistributedEventBus.PublishAsync(distributedEvent.GetType(), distributedEvent);
+                }
 
-            generatesDomainEventsEntity.ClearDomainEvents();
+                generatesDomainEventsEntity.ClearDistributedEvents();
+            }
         }
     }
 
