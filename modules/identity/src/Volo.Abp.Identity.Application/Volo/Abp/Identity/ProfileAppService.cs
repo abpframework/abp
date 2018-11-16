@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Volo.Abp.Identity.Settings;
 using Volo.Abp.Users;
 
 namespace Volo.Abp.Identity
@@ -29,13 +28,30 @@ namespace Volo.Abp.Identity
         {
             var user = await _userManager.GetByIdAsync(CurrentUser.GetId());
 
-            (await _userManager.SetUserNameAsync(user, input.UserName)).CheckErrors();
-            (await _userManager.SetEmailAsync(user, input.Email)).CheckErrors();
+
+            var isUsernameUpdateEnabled = string.Equals(await (SettingManager.GetOrNullAsync(IdentitySettingNames.User.IsUserNameUpdateEnabled)),
+                "true", StringComparison.OrdinalIgnoreCase);
+
+            if (isUsernameUpdateEnabled)
+            {
+                (await _userManager.SetUserNameAsync(user, input.UserName)).CheckErrors();
+            }
+
+            var isEmailUpdateEnabled = !string.Equals(await (SettingManager.GetOrNullAsync(IdentitySettingNames.User.IsEmailUpdateEnabled)),
+                "true", StringComparison.OrdinalIgnoreCase);
+
+            if (isEmailUpdateEnabled)
+            {
+                (await _userManager.SetEmailAsync(user, input.Email)).CheckErrors();
+            }
+
             (await _userManager.SetPhoneNumberAsync(user, input.PhoneNumber)).CheckErrors();
+
             user.Name = input.Name;
             user.Surname = input.Surname;
 
             (await _userManager.UpdateAsync(user)).CheckErrors();
+
             await CurrentUnitOfWork.SaveChangesAsync();
 
             return ObjectMapper.Map<IdentityUser, ProfileDto>(user);
