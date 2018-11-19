@@ -37,12 +37,12 @@ namespace Volo.Abp.EventBus.Distributed.RabbitMq
             IConnectionPool connectionPool,
             IRabbitMqSerializer serializer,
             IServiceProvider serviceProvider, 
-            DistributedEventBusOptions distributedEventBusOptions)
+            IOptions<DistributedEventBusOptions> distributedEventBusOptions)
         {
             ConnectionPool = connectionPool;
             Serializer = serializer;
             ServiceProvider = serviceProvider;
-            DistributedEventBusOptions = distributedEventBusOptions;
+            DistributedEventBusOptions = distributedEventBusOptions.Value;
             RabbitMqDistributedEventBusOptions = options.Value;
             
             HandlerFactories = new ConcurrentDictionary<Type, List<IEventHandlerFactory>>();
@@ -52,7 +52,7 @@ namespace Volo.Abp.EventBus.Distributed.RabbitMq
             Subscribe(DistributedEventBusOptions.Handlers);
         }
 
-        public virtual void Subscribe(ITypeList<IEventHandler> handlers)
+        protected virtual void Subscribe(ITypeList<IEventHandler> handlers)
         {
             foreach (var handler in handlers)
             {

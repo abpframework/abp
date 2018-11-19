@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Reflection;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
+using Volo.Abp.Collections;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus.Local;
 
@@ -10,10 +13,39 @@ namespace Volo.Abp.EventBus.Distributed
     public class LocalDistributedEventBus : IDistributedEventBus, ITransientDependency
     {
         private readonly ILocalEventBus _localEventBus;
+        protected IServiceProvider ServiceProvider { get; }
+        protected DistributedEventBusOptions DistributedEventBusOptions { get; }
 
-        public LocalDistributedEventBus(ILocalEventBus localEventBus)
+        public LocalDistributedEventBus(
+            ILocalEventBus localEventBus, 
+            IServiceProvider serviceProvider,
+            IOptions<DistributedEventBusOptions> distributedEventBusOptions)
         {
             _localEventBus = localEventBus;
+            ServiceProvider = serviceProvider;
+            DistributedEventBusOptions = distributedEventBusOptions.Value;
+            Subscribe(distributedEventBusOptions.Value.Handlers);
+        }
+
+        public virtual void Subscribe(ITypeList<IEventHandler> handlers)
+        {
+            foreach (var handler in handlers)
+            {
+                var interfaces = handler.GetInterfaces();
+                foreach (var @interface in interfaces)
+                {
+                    if (!typeof(IEventHandler).GetTypeInfo().IsAssignableFrom(@interface))
+                    {
+                        continue;
+                    }
+
+                    var genericArgs = @interface.GetGenericArguments();
+                    if (genericArgs.Length == 1)
+                    {
+                        Subscribe(genericArgs[0], new IocEventHandlerFactory(ServiceProvider, handler));
+                    }
+                }
+            }
         }
 
         public IDisposable Subscribe<TEvent>(Func<TEvent, Task> action) where TEvent : class

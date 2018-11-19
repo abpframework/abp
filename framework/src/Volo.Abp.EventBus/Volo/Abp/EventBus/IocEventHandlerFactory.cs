@@ -7,16 +7,19 @@ namespace Volo.Abp.EventBus
     /// This <see cref="IEventHandlerFactory"/> implementation is used to get/release
     /// handlers using Ioc.
     /// </summary>
-    public class IocEventHandlerFactory : IEventHandlerFactory
+    public class IocEventHandlerFactory : IEventHandlerFactory, IDisposable
     {
         public Type HandlerType { get; }
 
-        private readonly IServiceProvider _serviceProvider;
+        protected IServiceScope ServiceScope { get; }
 
+        //TODO: Consider to inject IServiceScopeFactory instead
         public IocEventHandlerFactory(IServiceProvider serviceProvider, Type handlerType)
         {
-            _serviceProvider = serviceProvider;
             HandlerType = handlerType;
+            ServiceScope = serviceProvider
+                .GetRequiredService<IServiceScopeFactory>()
+                .CreateScope();
         }
 
         /// <summary>
@@ -25,11 +28,16 @@ namespace Volo.Abp.EventBus
         /// <returns>Resolved handler object</returns>
         public IEventHandlerDisposeWrapper GetHandler()
         {
-            var scope = _serviceProvider.CreateScope();
+            var scope = ServiceScope.ServiceProvider.CreateScope();
             return new EventHandlerDisposeWrapper(
                 (IEventHandler) scope.ServiceProvider.GetRequiredService(HandlerType),
                 () => scope.Dispose()
             );
+        }
+
+        public void Dispose()
+        {
+            ServiceScope.Dispose();
         }
     }
 }

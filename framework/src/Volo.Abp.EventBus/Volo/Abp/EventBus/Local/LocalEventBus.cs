@@ -67,7 +67,9 @@ namespace Volo.Abp.EventBus.Local
         public override IDisposable Subscribe(Type eventType, IEventHandlerFactory factory)
         {
             GetOrCreateHandlerFactories(eventType)
-                .Locking(factories => factories.Add(factory));
+                .Locking(factories =>
+                    factories.Add(factory)
+                );
 
             return new EventHandlerFactoryUnregistrar(this, eventType, factory);
         }

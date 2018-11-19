@@ -27,10 +27,11 @@ namespace Volo.Abp.EventBus
                 {
                     localHandlers.Add(context.ImplementationType);
                 }
-                else if (ReflectionHelper.IsAssignableToGenericType(context.ImplementationType, typeof(IDistributedEventHandler<>)))
-                {
-                    distributedHandlers.Add(context.ImplementationType);
-                }
+                //TODO: Distrbiuted event bus is disabled since it's not properly working yet for v0.8 release
+                //else if (ReflectionHelper.IsAssignableToGenericType(context.ImplementationType, typeof(IDistributedEventHandler<>)))
+                //{
+                //    distributedHandlers.Add(context.ImplementationType);
+                //}
             });
 
             services.Configure<LocalEventBusOptions>(options =>
