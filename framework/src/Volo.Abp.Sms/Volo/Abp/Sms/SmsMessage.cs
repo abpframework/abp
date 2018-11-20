@@ -11,12 +11,12 @@ namespace Volo.Abp.Sms
 
         public IDictionary<string, object> Properties { get; }
 
-        public SmsMessage([NotNull] string phoneNumber, [NotNull] string text)
+        public SmsMessage([NotNull] string phoneNumber, [NotNull] string text,IDictionary<string, object> properties = null)
         {
             PhoneNumber = Check.NotNullOrWhiteSpace(phoneNumber, nameof(phoneNumber));
             Text = Check.NotNullOrWhiteSpace(text, nameof(text));
 
-            Properties = new Dictionary<string, object>();
+            Properties = properties;
         }
     }
 }
