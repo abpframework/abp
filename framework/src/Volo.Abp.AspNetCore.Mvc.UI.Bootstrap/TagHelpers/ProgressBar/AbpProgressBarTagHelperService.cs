@@ -14,6 +14,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.ProgressBar
             SetStripClass(context,output);
             SetTypeClass(context,output);
             SetValues(context, output);
+
+            output.TagName = "div";
+            output.TagMode = TagMode.StartTagAndEndTag;
         }
 
         protected virtual void SetValues(TagHelperContext context, TagHelperOutput output)

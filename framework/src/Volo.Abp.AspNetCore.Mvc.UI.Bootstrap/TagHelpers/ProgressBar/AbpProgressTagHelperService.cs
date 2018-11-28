@@ -8,6 +8,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.ProgressBar
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             output.Attributes.AddClass("progress");
+            output.TagName = "div";
         }
         
     }
