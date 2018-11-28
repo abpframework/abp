@@ -1,6 +1,6 @@
 ﻿## 在AspNet Core MVC Web Application中使用ABP 
 
-本教程将介绍如何开始以最少的依赖关系开始使用ABP开发. You generally want to start with a ***[startup template](https://abp.io/Templates)***
+本教程将介绍如何开始以最少的依赖关系开始使用ABP开发. 
 
 通常情况下你需要下载一个 ***[启动模板](https://abp.io/Templates)***
 
