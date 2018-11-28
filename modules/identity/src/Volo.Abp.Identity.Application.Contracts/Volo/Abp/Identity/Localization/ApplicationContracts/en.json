@@ -1,7 +1,7 @@
 {
   "culture": "en",
   "texts": {
-    "Permission:IdentityManagement": "Idetity management",
+    "Permission:IdentityManagement": "Identity management",
     "Permission:RoleManagement": "Role management",
     "Permission:Create": "Create",
     "Permission:Edit": "Edit",

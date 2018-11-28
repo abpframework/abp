@@ -1,0 +1,12 @@
+{
+    "culture": "zh-Hans",
+    "texts": {
+      "Permission:IdentityManagement": "身份认证管理",
+      "Permission:RoleManagement": "角色管理",
+      "Permission:Create": "创建",
+      "Permission:Edit": "编辑",
+      "Permission:Delete": "删除",
+      "Permission:ChangePermissions": "更改权限",
+      "Permission:UserManagement": "用户管理"
+    }
+  }
