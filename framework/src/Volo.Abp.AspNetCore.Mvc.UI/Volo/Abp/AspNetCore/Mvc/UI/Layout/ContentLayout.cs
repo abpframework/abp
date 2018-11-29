@@ -7,7 +7,7 @@
         public BreadCrumb BreadCrumb { get; }
 
         public string MenuItemName { get; set; }
-        
+
         public ContentLayout()
         {
             BreadCrumb = new BreadCrumb();
