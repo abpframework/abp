@@ -5,7 +5,7 @@
         public string Title { get; set; }
 
         public BreadCrumb BreadCrumb { get; }
-
+        
         public ContentLayout()
         {
             BreadCrumb = new BreadCrumb();
