@@ -128,6 +128,7 @@ namespace MyCompanyName.MyProjectName
                     );
 
                 options.Languages.Add(new LanguageInfo("en", "en", "English"));
+                options.Languages.Add(new LanguageInfo("pt-BR", "pt-BR", "Português"));
                 options.Languages.Add(new LanguageInfo("tr", "tr", "Türkçe"));
             });
         }
