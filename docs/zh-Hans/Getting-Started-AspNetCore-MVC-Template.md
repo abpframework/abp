@@ -28,8 +28,6 @@
 * ``.Web`` 为是表示层.
 * ``.EntityFrameworkCore`` 是EF Core集成.
 
-The solution also contains unit & integration test projects properly configured to work with **EF Core** & **SQLite in-memory** database.
-
 解决方案还包含配置好的的单元&集成测试项目, 以便与 **EF Core** 和 **SQLite内存中** 数据库配合使用.
 
 ### 创建数据库
@@ -43,8 +41,6 @@ The solution also contains unit & integration test projects properly configured 
   }
 }
 ````
-
-The solution is configured to use **Entity Framework Core** with **MS SQL Server**. EF Core supports [various](https://docs.microsoft.com/en-us/ef/core/providers/) database providers, so you can use another DBMS if you want.
 
 解决方案使用 **Entity Framework Core** 和 **MS SQL Server**. EF Core支持[各种](https://docs.microsoft.com/en-us/ef/core/providers/)数据库提供程序,因此你可以根据实际需要使用其他DBMS.
 
