@@ -15,12 +15,12 @@ namespace Volo.Docs
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.Configure<VirtualFileSystemOptions>(options =>
+            Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<DocsDomainModule>();
             });
 
-            context.Services.Configure<AbpLocalizationOptions>(options =>
+            Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources.Get<DocsResource>().AddVirtualJson("/Volo/Docs/Localization/Domain");
             });

@@ -10,7 +10,7 @@ namespace Volo.Abp.TenantManagement
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.Configure<AbpAutoMapperOptions>(options =>
+            Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<AbpTenantManagementApplicationAutoMapperProfile>(validate: true);
             });

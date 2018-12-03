@@ -46,12 +46,12 @@ public class MyModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.Configure<VirtualFileSystemOptions>(options =>
+        Configure<VirtualFileSystemOptions>(options =>
         {
             options.FileSets.AddEmbedded<MyModule>();
         });
 
-        context.Services.Configure<AbpLocalizationOptions>(options =>
+        Configure<AbpLocalizationOptions>(options =>
         {        
             options.Resources
                 .Add<TestResource>("en")

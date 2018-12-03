@@ -139,7 +139,7 @@ namespace MyCompany.MyProject
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.Configure<TenantResolveOptions>(options =>
+            Configure<TenantResolveOptions>(options =>
             {
                 options.TenantResolvers.Add(new MyCustomTenantResolver());
             });
@@ -194,7 +194,7 @@ namespace MyCompany.MyProject
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.Configure<ConfigurationTenantStoreOptions>(options =>
+            Configure<ConfigurationTenantStoreOptions>(options =>
             {
                 options.Tenants = new[]
                 {
@@ -240,7 +240,7 @@ namespace MyCompany.MyProject
         {
             var configuration = BuildConfiguration();
 
-            context.Services.Configure<ConfigurationTenantStoreOptions>(configuration);
+            Configure<ConfigurationTenantStoreOptions>(configuration);
         }
 
         private static IConfigurationRoot BuildConfiguration()
@@ -362,7 +362,7 @@ namespace MyCompany.MyProject
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.Configure<TenantResolveOptions>(options =>
+            Configure<TenantResolveOptions>(options =>
             {
                 //子域名格式: {0}.mydomain.com (作为最高优先级解析器添加)
                 options.TenantResolvers.Insert(0, new DomainTenantResolver("{0}.mydomain.com"));

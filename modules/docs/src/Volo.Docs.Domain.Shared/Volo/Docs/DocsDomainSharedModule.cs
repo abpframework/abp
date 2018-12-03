@@ -10,7 +10,7 @@ namespace Volo.Docs
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.Configure<AbpLocalizationOptions>(options =>
+            Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources.Add<DocsResource>("en");
             });

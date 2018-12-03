@@ -58,7 +58,7 @@ namespace MyCompany.MyProject
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.Configure<VirtualFileSystemOptions>(options =>
+            Configure<VirtualFileSystemOptions>(options =>
             {
                 //Register all embedded files of this assembly to the virtual file system
                 options.FileSets.AddEmbedded<MyModule>();
@@ -122,7 +122,7 @@ public class MyWebAppModule : AbpModule
 
         if (hostingEnvironment.IsDevelopment()) //only for development time
         {
-            context.Services.Configure<VirtualFileSystemOptions>(options =>
+            Configure<VirtualFileSystemOptions>(options =>
             {
                 //ReplaceEmbeddedByPyhsical gets the root folder of the MyModule project
                 options.FileSets.ReplaceEmbeddedByPyhsical<MyModule>(

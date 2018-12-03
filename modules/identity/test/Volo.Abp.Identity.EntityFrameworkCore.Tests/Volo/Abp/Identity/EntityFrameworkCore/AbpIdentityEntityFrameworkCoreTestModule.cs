@@ -20,7 +20,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         {
             var sqliteConnection = CreateDatabaseAndGetConnection();
 
-            context.Services.Configure<AbpDbContextOptions>(options =>
+            Configure<AbpDbContextOptions>(options =>
             {
                 options.Configure(abpDbContextConfigurationContext =>
                 {

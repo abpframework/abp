@@ -29,22 +29,22 @@ namespace Volo.Abp.Account.Web
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.Configure<SettingOptions>(options =>
+            Configure<SettingOptions>(options =>
             {
                 options.DefinitionProviders.Add<AccountSettingDefinitionProvider>();
             });
 
-            context.Services.Configure<VirtualFileSystemOptions>(options =>
+            Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpAccountWebModule>("Volo.Abp.Account.Web");
             });
 
-            context.Services.Configure<NavigationOptions>(options =>
+            Configure<NavigationOptions>(options =>
             {
                 options.MenuContributors.Add(new AbpAccountUserMenuContributor());
             });
 
-            context.Services.Configure<AbpLocalizationOptions>(options =>
+            Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources
                     .Add<AccountResource>("en")
@@ -52,7 +52,7 @@ namespace Volo.Abp.Account.Web
                     .AddBaseTypes(typeof(AbpUiResource), typeof(AbpValidationResource));
             });
             
-            context.Services.Configure<ToolbarOptions>(options =>
+            Configure<ToolbarOptions>(options =>
             {
                 options.Contributors.Add(new AccountModuleToolbarContributor());
             });

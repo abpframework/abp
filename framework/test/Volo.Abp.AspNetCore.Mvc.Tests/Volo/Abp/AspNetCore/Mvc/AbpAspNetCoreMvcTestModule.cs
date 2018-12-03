@@ -45,7 +45,7 @@ namespace Volo.Abp.AspNetCore.Mvc
                 });
             });
 
-            context.Services.Configure<AbpAspNetCoreMvcOptions>(options =>
+            Configure<AbpAspNetCoreMvcOptions>(options =>
             {
                 options.ConventionalControllers.Create(typeof(TestAppModule).Assembly, opts =>
                 {
@@ -56,17 +56,17 @@ namespace Volo.Abp.AspNetCore.Mvc
                 });
             });
 
-            context.Services.Configure<PermissionOptions>(options =>
+            Configure<PermissionOptions>(options =>
             {
                 options.DefinitionProviders.Add<TestPermissionDefinitionProvider>();
             });
 
-            context.Services.Configure<VirtualFileSystemOptions>(options =>
+            Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpAspNetCoreMvcTestModule>();
             });
 
-            context.Services.Configure<AbpLocalizationOptions>(options =>
+            Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources
                     .Add<MvcTestResource>("en")

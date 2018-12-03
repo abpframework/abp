@@ -17,14 +17,14 @@ namespace Volo.Blogging
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.Configure<AbpAutoMapperOptions>(options =>
+            Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<BloggingApplicationAutoMapperProfile>(validate: true);
             });
 
 
 
-            context.Services.Configure<AuthorizationOptions>(options =>
+            Configure<AuthorizationOptions>(options =>
             {
                 //TODO: Rename UpdatePolicy/DeletePolicy since it's candidate to conflicts with other modules!
                 options.AddPolicy("BloggingUpdatePolicy", policy => policy.Requirements.Add(CommonOperations.Update));

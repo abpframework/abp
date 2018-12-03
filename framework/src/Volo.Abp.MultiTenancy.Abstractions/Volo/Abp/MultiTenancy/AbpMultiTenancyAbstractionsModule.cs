@@ -11,7 +11,7 @@ namespace Volo.Abp.MultiTenancy
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.Configure<SettingOptions>(options =>
+            Configure<SettingOptions>(options =>
             {
                 options.ValueProviders.Add<TenantSettingValueProvider>();
             });

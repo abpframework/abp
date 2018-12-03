@@ -25,12 +25,12 @@ namespace Volo.Abp.BackgroundJobs.DemoApp
 
             context.Services.SetConfiguration(configuration);
 
-            context.Services.Configure<DbConnectionOptions>(options =>
+            Configure<DbConnectionOptions>(options =>
             {
                 options.ConnectionStrings.Default = configuration.GetConnectionString("Default");
             });
 
-            context.Services.Configure<AbpDbContextOptions>(options =>
+            Configure<AbpDbContextOptions>(options =>
             {
                 options.Configure(opts =>
                 {
@@ -38,7 +38,7 @@ namespace Volo.Abp.BackgroundJobs.DemoApp
                 });
             });
 
-            context.Services.Configure<BackgroundJobWorkerOptions>(options =>
+            Configure<BackgroundJobWorkerOptions>(options =>
             {
                 //Configure for fast running
                 options.JobPollPeriod = 1000;

@@ -35,17 +35,17 @@ namespace Volo.Abp.Identity.Web
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.Configure<NavigationOptions>(options =>
+            Configure<NavigationOptions>(options =>
             {
                 options.MenuContributors.Add(new AbpIdentityWebMainMenuContributor());
             });
 
-            context.Services.Configure<VirtualFileSystemOptions>(options =>
+            Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpIdentityWebModule>("Volo.Abp.Identity.Web");
             });
 
-            context.Services.Configure<AbpLocalizationOptions>(options =>
+            Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources
                     .Get<IdentityResource>()
@@ -55,12 +55,12 @@ namespace Volo.Abp.Identity.Web
                     ).AddVirtualJson("/Localization/Resources/AbpIdentity");
             });
 
-            context.Services.Configure<AbpAutoMapperOptions>(options =>
+            Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<AbpIdentityWebAutoMapperProfile>(validate: true);
             });
 
-            context.Services.Configure<RazorPagesOptions>(options =>
+            Configure<RazorPagesOptions>(options =>
             {
                 options.Conventions.AuthorizePage("/Identity/Users/Index", IdentityPermissions.Users.Default);
                 options.Conventions.AuthorizePage("/Identity/Users/CreateModal", IdentityPermissions.Users.Create);

@@ -16,19 +16,19 @@ namespace Volo.Abp.Localization
         {
             AbpStringLocalizerFactory.Replace(context.Services);
 
-            context.Services.Configure<VirtualFileSystemOptions>(options =>
+            Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpLocalizationModule>("Volo.Abp", "Volo/Abp");
             });
 
-            context.Services.Configure<AbpLocalizationOptions>(options =>
+            Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources
                 .Add<AbpValidationResource>("en")
                 .AddVirtualJson("/Localization/Resources/AbpValidation");
             });
 
-            context.Services.Configure<SettingOptions>(options =>
+            Configure<SettingOptions>(options =>
             {
                 options.DefinitionProviders.Add<LocalizationSettingProvider>();
             });

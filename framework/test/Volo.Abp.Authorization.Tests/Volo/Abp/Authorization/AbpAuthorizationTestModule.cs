@@ -23,7 +23,7 @@ namespace Volo.Abp.Authorization
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.Configure<PermissionOptions>(options =>
+            Configure<PermissionOptions>(options =>
             {
                 options.DefinitionProviders.TryAdd<AuthorizationTestPermissionDefinitionProvider>();
             });
