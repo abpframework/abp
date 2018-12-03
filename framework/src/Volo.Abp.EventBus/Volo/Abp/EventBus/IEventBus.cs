@@ -32,15 +32,6 @@ namespace Volo.Abp.EventBus
             where TEvent : class;
 
         /// <summary>
-        /// Registers to an event. 
-        /// Same (given) instance of the handler is used for all event occurrences.
-        /// </summary>
-        /// <typeparam name="TEvent">Event type</typeparam>
-        /// <param name="handler">Object to handle the event</param>
-        IDisposable Subscribe<TEvent>(ILocalEventHandler<TEvent> handler)
-            where TEvent : class;
-
-        /// <summary>
         /// Registers to an event.
         /// A new instance of <see cref="THandler"/> object is created for every event occurrence.
         /// </summary>

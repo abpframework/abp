@@ -64,6 +64,12 @@ namespace Volo.Abp.EventBus.Local
         }
 
         /// <inheritdoc/>
+        public virtual IDisposable Subscribe<TEvent>(ILocalEventHandler<TEvent> handler) where TEvent : class
+        {
+            return Subscribe(typeof(TEvent), handler);
+        }
+
+        /// <inheritdoc/>
         public override IDisposable Subscribe(Type eventType, IEventHandlerFactory factory)
         {
             GetOrCreateHandlerFactories(eventType)

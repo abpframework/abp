@@ -48,6 +48,12 @@ namespace Volo.Abp.EventBus.Distributed
             }
         }
 
+        /// <inheritdoc/>
+        public virtual IDisposable Subscribe<TEvent>(IDistributedEventHandler<TEvent> handler) where TEvent : class
+        {
+            return Subscribe(typeof(TEvent), handler);
+        }
+
         public IDisposable Subscribe<TEvent>(Func<TEvent, Task> action) where TEvent : class
         {
             return _localEventBus.Subscribe(action);

@@ -19,12 +19,6 @@ namespace Volo.Abp.EventBus
         }
 
         /// <inheritdoc/>
-        public virtual IDisposable Subscribe<TEvent>(ILocalEventHandler<TEvent> handler) where TEvent : class
-        {
-            return Subscribe(typeof(TEvent), handler);
-        }
-
-        /// <inheritdoc/>
         public virtual IDisposable Subscribe<TEvent, THandler>()
             where TEvent : class
             where THandler : IEventHandler, new()

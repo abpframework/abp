@@ -124,6 +124,11 @@ namespace Volo.Abp.EventBus.Distributed.RabbitMq
             channel.BasicAck(ea.DeliveryTag, multiple: false);
         }
 
+        public IDisposable Subscribe<TEvent>(IDistributedEventHandler<TEvent> handler) where TEvent : class
+        {
+            return Subscribe(typeof(TEvent), handler);
+        }
+
         public override IDisposable Subscribe(Type eventType, IEventHandlerFactory factory)
         {
             var handlerFactories = GetOrCreateHandlerFactories(eventType);

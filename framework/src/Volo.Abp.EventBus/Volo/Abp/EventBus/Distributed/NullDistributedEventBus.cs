@@ -17,7 +17,7 @@ namespace Volo.Abp.EventBus.Distributed
             return NullDisposable.Instance;
         }
 
-        public IDisposable Subscribe<TEvent>(ILocalEventHandler<TEvent> handler) where TEvent : class
+        public IDisposable Subscribe<TEvent>(IDistributedEventHandler<TEvent> handler) where TEvent : class
         {
             return NullDisposable.Instance;
         }
