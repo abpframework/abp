@@ -13,16 +13,16 @@ namespace Volo.Abp.EventBus.Distributed
     public class LocalDistributedEventBus : IDistributedEventBus, ITransientDependency
     {
         private readonly ILocalEventBus _localEventBus;
-        protected IServiceProvider ServiceProvider { get; }
+        protected IHybridServiceScopeFactory ServiceScopeFactory { get; }
         protected DistributedEventBusOptions DistributedEventBusOptions { get; }
 
         public LocalDistributedEventBus(
-            ILocalEventBus localEventBus, 
-            IServiceProvider serviceProvider,
+            ILocalEventBus localEventBus,
+            IHybridServiceScopeFactory serviceScopeFactory,
             IOptions<DistributedEventBusOptions> distributedEventBusOptions)
         {
             _localEventBus = localEventBus;
-            ServiceProvider = serviceProvider;
+            ServiceScopeFactory = serviceScopeFactory;
             DistributedEventBusOptions = distributedEventBusOptions.Value;
             Subscribe(distributedEventBusOptions.Value.Handlers);
         }
@@ -42,7 +42,7 @@ namespace Volo.Abp.EventBus.Distributed
                     var genericArgs = @interface.GetGenericArguments();
                     if (genericArgs.Length == 1)
                     {
-                        Subscribe(genericArgs[0], new IocEventHandlerFactory(ServiceProvider, handler));
+                        Subscribe(genericArgs[0], new IocEventHandlerFactory(ServiceScopeFactory, handler));
                     }
                 }
             }

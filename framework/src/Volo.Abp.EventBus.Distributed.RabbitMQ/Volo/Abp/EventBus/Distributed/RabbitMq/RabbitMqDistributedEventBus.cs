@@ -30,18 +30,18 @@ namespace Volo.Abp.EventBus.Distributed.RabbitMq
         protected ConcurrentDictionary<Type, List<IEventHandlerFactory>> HandlerFactories { get; } //TODO: Accessing to the List<IEventHandlerFactory> may not be thread-safe!
         protected ConcurrentDictionary<string, Type> EventTypes { get; }
         protected IModel ConsumerChannel;
-        protected IServiceProvider ServiceProvider { get; }
+        protected IHybridServiceScopeFactory ServiceScopeFactory { get; }
 
         public RabbitMqDistributedEventBus(
             IOptions<RabbitMqDistributedEventBusOptions> options,
             IConnectionPool connectionPool,
             IRabbitMqSerializer serializer,
-            IServiceProvider serviceProvider, 
+            IHybridServiceScopeFactory serviceScopeFactory, 
             IOptions<DistributedEventBusOptions> distributedEventBusOptions)
         {
             ConnectionPool = connectionPool;
             Serializer = serializer;
-            ServiceProvider = serviceProvider;
+            ServiceScopeFactory = serviceScopeFactory;
             DistributedEventBusOptions = distributedEventBusOptions.Value;
             RabbitMqDistributedEventBusOptions = options.Value;
             
@@ -67,7 +67,7 @@ namespace Volo.Abp.EventBus.Distributed.RabbitMq
                     var genericArgs = @interface.GetGenericArguments();
                     if (genericArgs.Length == 1)
                     {
-                        Subscribe(genericArgs[0], new IocEventHandlerFactory(ServiceProvider, handler));
+                        Subscribe(genericArgs[0], new IocEventHandlerFactory(ServiceScopeFactory, handler));
                     }
                 }
             }
