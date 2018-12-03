@@ -31,8 +31,8 @@ namespace Volo.Abp.EventBus.Local
         }
 
         public class MyEventHandler :
-            IEventHandler<EntityChangedEventData<MyEntity>>,
-            IEventHandler<EntityCreatedEventData<MyEntity>>
+            ILocalEventHandler<EntityChangedEventData<MyEntity>>,
+            ILocalEventHandler<EntityCreatedEventData<MyEntity>>
         {
             public int EntityChangedEventCount { get; set; }
             public int EntityCreatedEventCount { get; set; }

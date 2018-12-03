@@ -126,7 +126,7 @@ namespace Volo.Abp.Domain.Entities.Events
             }
         }
 
-        protected virtual async Task TriggerEventWithEntity(IEventPublisher eventPublisher, Type genericEventType, object entity, bool triggerInCurrentUnitOfWork)
+        protected virtual async Task TriggerEventWithEntity(IEventBus eventPublisher, Type genericEventType, object entity, bool triggerInCurrentUnitOfWork)
         {
             var entityType = ProxyHelper.UnProxy(entity).GetType();
             var eventType = genericEventType.MakeGenericType(entityType);

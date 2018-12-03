@@ -53,7 +53,7 @@ namespace Volo.Abp.EventBus.Distributed
             return _localEventBus.Subscribe(action);
         }
 
-        public IDisposable Subscribe<TEvent>(IEventHandler<TEvent> handler) where TEvent : class
+        public IDisposable Subscribe<TEvent>(ILocalEventHandler<TEvent> handler) where TEvent : class
         {
             return _localEventBus.Subscribe(handler);
         }
@@ -83,7 +83,7 @@ namespace Volo.Abp.EventBus.Distributed
             _localEventBus.Unsubscribe(action);
         }
 
-        public void Unsubscribe<TEvent>(IEventHandler<TEvent> handler) where TEvent : class
+        public void Unsubscribe<TEvent>(ILocalEventHandler<TEvent> handler) where TEvent : class
         {
             _localEventBus.Unsubscribe(handler);
         }
