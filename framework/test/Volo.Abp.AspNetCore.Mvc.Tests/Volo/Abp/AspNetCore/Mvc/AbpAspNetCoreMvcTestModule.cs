@@ -1,4 +1,5 @@
 ﻿using System;
+using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Modularity;
@@ -9,9 +10,11 @@ using Volo.Abp.AspNetCore.TestBase;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Autofac;
 using Volo.Abp.Localization;
+using Volo.Abp.Localization.Resources.AbpValidation;
 using Volo.Abp.MemoryDb;
 using Volo.Abp.Modularity;
 using Volo.Abp.TestApp;
+using Volo.Abp.UI;
 using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.AspNetCore.Mvc
@@ -70,7 +73,10 @@ namespace Volo.Abp.AspNetCore.Mvc
             {
                 options.Resources
                     .Add<MvcTestResource>("en")
-                    .AddVirtualJson("/Volo/Abp/AspNetCore/Mvc/Localization/Resource");
+                    .AddBaseTypes(
+                        typeof(AbpUiResource),
+                        typeof(AbpValidationResource)
+                    ).AddVirtualJson("/Volo/Abp/AspNetCore/Mvc/Localization/Resource");
             });
         }
 
