@@ -1,0 +1,9 @@
+﻿@page
+@model Volo.Abp.SettingManagement.Web.Pages.SettingManagement.IndexModel
+@foreach (var group in Model.SettingPageCreationContext.Groups)
+{
+    <h2 id="@group.Id">@group.DisplayName</h2>
+    <div>
+        @await Component.InvokeAsync(group.ComponentType)
+    </div>
+}
