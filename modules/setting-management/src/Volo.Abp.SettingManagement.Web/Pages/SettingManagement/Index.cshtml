@@ -1,5 +1,11 @@
 ﻿@page
-@model Volo.Abp.SettingManagement.Web.Pages.SettingManagement.IndexModel
+@using Volo.Abp.SettingManagement.Web.Pages.SettingManagement
+@model IndexModel
+@section scripts {
+    <abp-script-bundle name="@typeof(IndexModel).FullName">
+        <abp-script src="/Pages/SettingManagement/Index.js" />
+    </abp-script-bundle>
+}
 @foreach (var group in Model.SettingPageCreationContext.Groups)
 {
     <h2 id="@group.Id">@group.DisplayName</h2>
