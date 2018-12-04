@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Acme.BookStore.Migrations
@@ -8,6 +7,24 @@ namespace Acme.BookStore.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "AbpClaimTypes",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(maxLength: 256, nullable: false),
+                    Required = table.Column<bool>(nullable: false),
+                    IsStatic = table.Column<bool>(nullable: false),
+                    Regex = table.Column<string>(maxLength: 512, nullable: true),
+                    RegexDescription = table.Column<string>(maxLength: 128, nullable: true),
+                    Description = table.Column<string>(maxLength: 256, nullable: true),
+                    ValueType = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AbpClaimTypes", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "AbpPermissionGrants",
                 columns: table => new
@@ -31,7 +48,10 @@ namespace Acme.BookStore.Migrations
                     TenantId = table.Column<Guid>(nullable: true),
                     Name = table.Column<string>(maxLength: 256, nullable: false),
                     NormalizedName = table.Column<string>(maxLength: 256, nullable: false),
-                    ConcurrencyStamp = table.Column<string>(nullable: true)
+                    ConcurrencyStamp = table.Column<string>(nullable: true),
+                    IsDefault = table.Column<bool>(nullable: false),
+                    IsStatic = table.Column<bool>(nullable: false),
+                    IsPublic = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -58,9 +78,18 @@ namespace Acme.BookStore.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
+                    CreationTime = table.Column<DateTime>(nullable: false),
+                    CreatorId = table.Column<Guid>(nullable: true),
+                    LastModificationTime = table.Column<DateTime>(nullable: true),
+                    LastModifierId = table.Column<Guid>(nullable: true),
+                    IsDeleted = table.Column<bool>(nullable: false),
+                    DeleterId = table.Column<Guid>(nullable: true),
+                    DeletionTime = table.Column<DateTime>(nullable: true),
                     TenantId = table.Column<Guid>(nullable: true),
                     UserName = table.Column<string>(maxLength: 256, nullable: false),
                     NormalizedUserName = table.Column<string>(maxLength: 256, nullable: false),
+                    Name = table.Column<string>(maxLength: 64, nullable: true),
+                    Surname = table.Column<string>(maxLength: 64, nullable: true),
                     Email = table.Column<string>(maxLength: 256, nullable: true),
                     NormalizedEmail = table.Column<string>(maxLength: 256, nullable: true),
                     EmailConfirmed = table.Column<bool>(nullable: false, defaultValue: false),
@@ -174,8 +203,8 @@ namespace Acme.BookStore.Migrations
                 {
                     TenantId = table.Column<Guid>(nullable: true),
                     UserId = table.Column<Guid>(nullable: false),
-                    LoginProvider = table.Column<string>(maxLength: 128, nullable: false),
-                    Name = table.Column<string>(nullable: false),
+                    LoginProvider = table.Column<string>(maxLength: 64, nullable: false),
+                    Name = table.Column<string>(maxLength: 128, nullable: false),
                     Value = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -247,6 +276,9 @@ namespace Acme.BookStore.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "AbpClaimTypes");
+
             migrationBuilder.DropTable(
                 name: "AbpPermissionGrants");
 
