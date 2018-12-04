@@ -10,4 +10,19 @@
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Include="Pages\**\*.*" Exclude="*.cs" />
+    <EmbeddedResource Include="Localization\Resources\**\*.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Pages\**\*.cshtml" />
+    <Content Remove="Pages\**\*.js" />
+    <Content Remove="Pages\**\*.css" />
+    <Content Remove="Localization\Resources\**\*.json" />
+    <Content Remove="Properties\launchSettings.json" />
+    <None Remove="Pages\Identity\Shared\personal-settings-modal.js" />
+    <None Include="Properties\launchSettings.json" />
+  </ItemGroup>
+
 </Project>
