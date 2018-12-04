@@ -84,12 +84,8 @@ namespace Volo.Abp.EntityFrameworkCore
             //TODO: Reduce duplications with SaveChangesAsync
             //TODO: Instead of adding entity changes to audit log, write them to uow and add to audit log only if uow succeed
 
-            ChangeTracker.DetectChanges();
-            
             try
             {
-                ChangeTracker.AutoDetectChangesEnabled = false; //TODO: Why this is needed?
-
                 var auditLog = AuditingManager?.Current?.Log;
 
                 List<EntityChangeInfo> entityChangeList = null;
@@ -124,12 +120,8 @@ namespace Volo.Abp.EntityFrameworkCore
 
         public override async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
         {
-            ChangeTracker.DetectChanges();
-
             try
             {
-                ChangeTracker.AutoDetectChangesEnabled = false; //TODO: Why this is needed?
-
                 var auditLog = AuditingManager?.Current?.Log;
 
                 List<EntityChangeInfo> entityChangeList = null;
