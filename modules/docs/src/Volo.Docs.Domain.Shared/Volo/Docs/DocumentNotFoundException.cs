@@ -2,7 +2,7 @@
 using System.Runtime.Serialization;
 using Volo.Abp;
 
-namespace Volo.Docs.Documents
+namespace Volo.Docs
 {
     [Serializable]
     public class DocumentNotFoundException : BusinessException

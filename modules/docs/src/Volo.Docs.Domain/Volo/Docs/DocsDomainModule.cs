@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.Domain;
+﻿using Volo.Abp.Domain;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
@@ -17,12 +16,15 @@ namespace Volo.Docs
         {
             Configure<VirtualFileSystemOptions>(options =>
             {
-                options.FileSets.AddEmbedded<DocsDomainModule>();
+                options.FileSets
+                    .AddEmbedded<DocsDomainModule>();
             });
 
             Configure<AbpLocalizationOptions>(options =>
             {
-                options.Resources.Get<DocsResource>().AddVirtualJson("/Volo/Docs/Localization/Domain");
+                options.Resources
+                    .Get<DocsResource>()
+                    .AddVirtualJson("/Volo/Docs/Localization/Domain");
             });
         }
     }

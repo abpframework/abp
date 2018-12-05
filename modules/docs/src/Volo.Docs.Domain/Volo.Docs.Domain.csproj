@@ -10,13 +10,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Volo\Docs\Localization\Domain\en.json" />
-    <None Remove="Volo\Docs\Localization\Domain\tr.json" />
+    <EmbeddedResource Include="Volo\Docs\Localization\Domain\*.json" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Volo\Docs\Localization\Domain\en.json" />
-    <EmbeddedResource Include="Volo\Docs\Localization\Domain\tr.json" />
+    <Content Remove="Volo\Docs\Localization\Domain\*.json" />
   </ItemGroup>
 
   <ItemGroup>
