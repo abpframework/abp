@@ -2,6 +2,8 @@
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
+using Volo.Docs.Documents;
+using Volo.Docs.GitHub.Documents;
 using Volo.Docs.Localization;
 
 namespace Volo.Docs
@@ -25,6 +27,11 @@ namespace Volo.Docs
                 options.Resources
                     .Get<DocsResource>()
                     .AddVirtualJson("/Volo/Docs/Localization/Domain");
+            });
+
+            Configure<DocumentStoreOptions>(options =>
+            {
+                options.Stores[GithubDocumentStore.Type] = typeof(GithubDocumentStore);
             });
         }
     }

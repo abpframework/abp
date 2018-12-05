@@ -1,29 +1,33 @@
 using System;
+using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Docs.Documents
 {
     public class DocumentStoreFactory : IDocumentStoreFactory, ITransientDependency
     {
-        private readonly IServiceProvider _serviceProvider;
+        protected DocumentStoreOptions Options { get; }
+        protected IServiceProvider ServiceProvider { get; }
 
-        public DocumentStoreFactory(IServiceProvider serviceProvider)
+        public DocumentStoreFactory(
+            IServiceProvider serviceProvider,
+            IOptions<DocumentStoreOptions> options)
         {
-            _serviceProvider = serviceProvider;
+            Options = options.Value;
+            ServiceProvider = serviceProvider;
         }
 
-        public virtual IDocumentStore Create(string documentStoreType)
+        public virtual IDocumentStore Create(string storeType)
         {
-            //TODO: Should be extensible
-
-            switch (documentStoreType)
+            var serviceType = Options.Stores.GetOrDefault(storeType);
+            if (serviceType == null)
             {
-                case GithubDocumentStore.Type:
-                    return _serviceProvider.GetRequiredService<GithubDocumentStore>();
-                default:
-                    throw new ApplicationException($"Undefined document store: {documentStoreType}");
+                throw new ApplicationException($"Undefined document store: {storeType}");
             }
+
+            return (IDocumentStore) ServiceProvider.GetRequiredService(serviceType);
         }
     }
 }

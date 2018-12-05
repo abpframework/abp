@@ -1,27 +1,26 @@
-using Microsoft.Extensions.Logging;
-using Octokit;
-using Octokit.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Octokit;
+using Octokit.Internal;
 using Volo.Abp.Domain.Services;
+using Volo.Docs.Documents;
+using Volo.Docs.GitHub.Projects;
 using Volo.Docs.Projects;
 using ProductHeaderValue = Octokit.ProductHeaderValue;
 
-namespace Volo.Docs.Documents
+namespace Volo.Docs.GitHub.Documents
 {
     public class GithubDocumentStore : DomainService, IDocumentStore
     {
-        public const string Type = "Github"; //TODO: Convert to "github"
+        public const string Type = "GitHub";
 
-        public Task<Document> FindDocument(
-            Projects.Project project, 
-            string documentName, 
-            string version)
+        public Task<Document> FindDocument(Docs.Projects.Project project, string documentName, string version)
         {
-            var rootUrl = project.GetGithubUrl()
+            var rootUrl = project.GetGitHubUrl()
                 .Replace("_version_/", version + "/")
                 .Replace("www.", ""); //TODO: Can be a problem?
 
@@ -43,7 +42,7 @@ namespace Volo.Docs.Documents
                 );
             }
 
-            var token = project.ExtraProperties["GithubAccessToken"]?.ToString(); //TODO: Define GetGithubAccessToken extension method
+            var token = project.GetGitHubAccessTokenOrNull();
 
             var document = new Document
             {
@@ -86,13 +85,13 @@ namespace Volo.Docs.Documents
         {
             try
             {
-                var token = project.ExtraProperties["GithubAccessToken"]?.ToString();
+                var token = project.GetGitHubAccessTokenOrNull();
 
                 var gitHubClient = token.IsNullOrWhiteSpace()
                     ? new GitHubClient(new ProductHeaderValue("AbpWebSite"))
                     : new GitHubClient(new ProductHeaderValue("AbpWebSite"), new InMemoryCredentialStore(new Credentials(token)));
 
-                var url = project.ExtraProperties["GithubRootUrl"].ToString();
+                var url = project.GetGitHubUrl();
                 var releases = await gitHubClient.Repository.Release.GetAll(
                     GetGithubOrganizationNameFromUrl(url),
                     GetGithubRepositoryNameFromUrl(url)

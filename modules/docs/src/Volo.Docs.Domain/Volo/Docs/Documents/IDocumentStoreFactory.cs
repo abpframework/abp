@@ -2,6 +2,6 @@ namespace Volo.Docs.Documents
 {
     public interface IDocumentStoreFactory
     {
-        IDocumentStore Create(string documentStoreType);
+        IDocumentStore Create(string storeType);
     }
 }
