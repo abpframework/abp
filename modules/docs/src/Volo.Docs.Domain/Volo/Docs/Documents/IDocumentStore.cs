@@ -7,14 +7,8 @@ namespace Volo.Docs.Documents
 {
     public interface IDocumentStore : IDomainService
     {
-        Task<Document> Find(
-            Project project,
-            string documentName,
-            string version
-        );
+        Task<Document> FindDocument(Project project, string documentName, string version);
 
-        Task<List<VersionInfoDto>> GetVersions(
-            Project project
-        );
+        Task<List<VersionInfo>> GetVersions(Project project);
     }
 }

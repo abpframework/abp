@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Services;
+using Volo.Docs.Projects;
 using ProductHeaderValue = Octokit.ProductHeaderValue;
 
 namespace Volo.Docs.Documents
@@ -15,7 +16,7 @@ namespace Volo.Docs.Documents
     {
         public const string Type = "Github"; //TODO: Convert to "github"
 
-        public Task<Document> Find(
+        public Task<Document> FindDocument(
             Projects.Project project, 
             string documentName, 
             string version)
@@ -81,7 +82,7 @@ namespace Volo.Docs.Documents
             }
         }
 
-        public async Task<List<VersionInfoDto>> GetVersions(Volo.Docs.Projects.Project project)
+        public async Task<List<VersionInfo>> GetVersions(Volo.Docs.Projects.Project project)
         {
             try
             {
@@ -97,12 +98,12 @@ namespace Volo.Docs.Documents
                     GetGithubRepositoryNameFromUrl(url)
                 );
 
-                return releases.OrderByDescending(r => r.PublishedAt).Select(r => new VersionInfoDto { Name = r.TagName, DisplayName = r.TagName }).ToList();
+                return releases.OrderByDescending(r => r.PublishedAt).Select(r => new VersionInfo { Name = r.TagName, DisplayName = r.TagName }).ToList();
             }
             catch (Exception ex)
             {
                 Logger.LogError(ex.Message, ex);
-                return new List<VersionInfoDto>();
+                return new List<VersionInfo>();
             }
         }
 

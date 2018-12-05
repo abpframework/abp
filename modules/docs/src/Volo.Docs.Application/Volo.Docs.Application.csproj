@@ -16,8 +16,4 @@
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Caching\Volo.Abp.Caching.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Octokit" Version="0.29.0" />
-  </ItemGroup>
-
 </Project>

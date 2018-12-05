@@ -18,6 +18,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Octokit" Version="0.29.0" />
+  </ItemGroup>
+  
+  <ItemGroup>
     <ProjectReference Include="..\Volo.Docs.Domain.Shared\Volo.Docs.Domain.Shared.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Ddd.Domain\Volo.Abp.Ddd.Domain.csproj" />
   </ItemGroup>

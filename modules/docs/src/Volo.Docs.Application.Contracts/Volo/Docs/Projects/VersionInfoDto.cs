@@ -1,8 +1,5 @@
-using System;
-
-namespace Volo.Docs.Documents
+﻿namespace Volo.Docs.Projects
 {
-    [Serializable]
     public class VersionInfoDto
     {
         public string DisplayName { get; set; }

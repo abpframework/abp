@@ -13,12 +13,12 @@ namespace Volo.Docs.Projects
     public class ProjectAppService : ApplicationService, IProjectAppService
     {
         private readonly IProjectRepository _projectRepository;
-        private readonly IDistributedCache<List<VersionInfoDto>> _distributedCache;
+        private readonly IDistributedCache<List<VersionInfo>> _distributedCache;
         private readonly IDocumentStoreFactory _documentStoreFactory;
 
         public ProjectAppService(
             IProjectRepository projectRepository,
-            IDistributedCache<List<VersionInfoDto>> distributedCache,
+            IDistributedCache<List<VersionInfo>> distributedCache,
             IDocumentStoreFactory documentStoreFactory)
         {
             _projectRepository = projectRepository;
@@ -71,15 +71,15 @@ namespace Volo.Docs.Projects
                 versions.First().Name = project.LatestVersionBranchName;
             }
 
-            return versions;
+            return ObjectMapper.Map<List<VersionInfo>, List<VersionInfoDto>>(versions);
         }
 
-        private async Task<List<VersionInfoDto>> GetVersionsFromCache(string projectShortName)
+        private async Task<List<VersionInfo>> GetVersionsFromCache(string projectShortName)
         {
             return await _distributedCache.GetAsync(projectShortName);
         }
 
-        private async Task SetVersionsToCache(string projectShortName, List<VersionInfoDto> versions)
+        private async Task SetVersionsToCache(string projectShortName, List<VersionInfo> versions)
         {
             await _distributedCache.SetAsync(
                 projectShortName,

@@ -53,7 +53,7 @@ namespace Volo.Docs.Documents
             string version)
         {
             var documentStore = _documentStoreFactory.Create(project.DocumentStoreType);
-            var document = await documentStore.Find(project, documentName, version);
+            var document = await documentStore.FindDocument(project, documentName, version);
 
             var dto = ObjectMapper.Map<Document, DocumentWithDetailsDto>(document);
             dto.Project = ObjectMapper.Map<Project, ProjectDto>(project);
