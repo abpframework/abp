@@ -6,10 +6,14 @@
         <abp-script src="/Pages/SettingManagement/Index.js" />
     </abp-script-bundle>
 }
+<abp-tabs tab-style="PillVertical"  vertical-header-size="_2">
+
 @foreach (var group in Model.SettingPageCreationContext.Groups)
 {
-    <h2 id="@group.Id">@group.DisplayName</h2>
-    <div>
+    <abp-tab title="@group.DisplayName">
+        
+        <h2>@group.DisplayName</h2>
         @await Component.InvokeAsync(group.ComponentType)
-    </div>
+    </abp-tab>
 }
+</abp-tabs>
