@@ -11,6 +11,7 @@ using Volo.Docs.Documents;
 using Volo.Docs.GitHub.Projects;
 using Volo.Docs.Projects;
 using ProductHeaderValue = Octokit.ProductHeaderValue;
+using Project = Volo.Docs.Projects.Project;
 
 namespace Volo.Docs.GitHub.Documents
 {
@@ -18,33 +19,22 @@ namespace Volo.Docs.GitHub.Documents
     {
         public const string Type = "GitHub";
 
-        public Task<Document> FindDocument(Docs.Projects.Project project, string documentName, string version)
+        public virtual async Task<Document> FindDocument(Project project, string documentName, string version)
         {
-            var rootUrl = project.GetGitHubUrl()
-                .Replace("_version_/", version + "/")
-                .Replace("www.", ""); //TODO: Can be a problem?
-
-            var rawRootUrl = rootUrl
-                .Replace("github.com", "raw.githubusercontent.com")
-                .Replace("/tree/", "/"); //TODO: Replacing this can be a problem if I have a tree folder inside the repository
-
-            var rawUrl = rawRootUrl + documentName;
-            var editLink = rootUrl.Replace("/tree/", "/blob/") + documentName;
+            var rootUrl = project.GetGitHubUrl(version);
+            var rawRootUrl = CalculateRawRootUrl(rootUrl);
+            var rawDocumentUrl = rawRootUrl + documentName;
+            var editLink = rootUrl.ReplaceFirst("/tree/", "/blob/") + documentName;
             var localDirectory = "";
             var fileName = documentName;
 
             if (documentName.Contains("/"))
             {
                 localDirectory = documentName.Substring(0, documentName.LastIndexOf('/'));
-                fileName = documentName.Substring(
-                    documentName.LastIndexOf('/') + 1,
-                    documentName.Length - documentName.LastIndexOf('/') - 1
-                );
+                fileName = documentName.Substring(documentName.LastIndexOf('/') + 1);
             }
 
-            var token = project.GetGitHubAccessTokenOrNull();
-
-            var document = new Document
+            return new Document
             {
                 Title = documentName,
                 EditLink = editLink,
@@ -54,13 +44,18 @@ namespace Volo.Docs.GitHub.Documents
                 LocalDirectory = localDirectory,
                 FileName = fileName,
                 Version = version,
-                Content = DownloadWebContent(rawUrl, token)
+                Content = await DownloadWebContentAsync(rawDocumentUrl, project.GetGitHubAccessTokenOrNull())
             };
-
-            return Task.FromResult(document);
         }
 
-        private string DownloadWebContent(string rawUrl, string token)
+        private static string CalculateRawRootUrl(string rootUrl)
+        {
+            return rootUrl
+                .Replace("github.com", "raw.githubusercontent.com")
+                .ReplaceFirst("/tree/", "/");
+        }
+
+        private async Task<string> DownloadWebContentAsync(string rawUrl, string token)
         {
             try
             {
@@ -71,33 +66,28 @@ namespace Volo.Docs.GitHub.Documents
                         webClient.Headers.Add("Authorization", "token " + token);
                     }
 
-                    return webClient.DownloadString(rawUrl);
+                    return await webClient.DownloadStringTaskAsync(new Uri(rawUrl));
                 }
             }
-            catch (Exception ex) //TODO: Only handle when document is really not available
+            catch (Exception ex)
             {
+                //TODO: Only handle when document is really not available
                 Logger.LogWarning(ex.Message, ex);
                 throw new DocumentNotFoundException(rawUrl);
             }
         }
 
-        public async Task<List<VersionInfo>> GetVersions(Volo.Docs.Projects.Project project)
+        public async Task<List<VersionInfo>> GetVersions(Project project)
         {
             try
             {
-                var token = project.GetGitHubAccessTokenOrNull();
-
-                var gitHubClient = token.IsNullOrWhiteSpace()
-                    ? new GitHubClient(new ProductHeaderValue("AbpWebSite"))
-                    : new GitHubClient(new ProductHeaderValue("AbpWebSite"), new InMemoryCredentialStore(new Credentials(token)));
-
-                var url = project.GetGitHubUrl();
-                var releases = await gitHubClient.Repository.Release.GetAll(
-                    GetGithubOrganizationNameFromUrl(url),
-                    GetGithubRepositoryNameFromUrl(url)
-                );
-
-                return releases.OrderByDescending(r => r.PublishedAt).Select(r => new VersionInfo { Name = r.TagName, DisplayName = r.TagName }).ToList();
+                return (await GetReleasesAsync(project))
+                    .OrderByDescending(r => r.PublishedAt)
+                    .Select(r => new VersionInfo
+                    {
+                        Name = r.TagName,
+                        DisplayName = r.TagName
+                    }).ToList();
             }
             catch (Exception ex)
             {
@@ -106,12 +96,32 @@ namespace Volo.Docs.GitHub.Documents
             }
         }
 
-        private static string GetGithubOrganizationNameFromUrl(string url)
+        private async Task<IReadOnlyList<Release>> GetReleasesAsync(Project project)
+        {
+            var url = project.GetGitHubUrl();
+            var ownerName = GetOwnerNameFromUrl(url);
+            var repositoryName = GetRepositoryNameFromUrl(url);
+            var gitHubClient = CreateGitHubClient(project.GetGitHubAccessTokenOrNull());
+
+            return await gitHubClient
+                .Repository
+                .Release
+                .GetAll(ownerName, repositoryName);
+        }
+
+        private static GitHubClient CreateGitHubClient(string token = null)
+        {
+            //TODO: Why hard-coded "abpframework"? Should be configurable?
+            return token.IsNullOrWhiteSpace()
+                ? new GitHubClient(new ProductHeaderValue("abpframework"))
+                : new GitHubClient(new ProductHeaderValue("abpframework"), new InMemoryCredentialStore(new Credentials(token)));
+        }
+
+        protected virtual string GetOwnerNameFromUrl(string url)
         {
             try
             {
-                var urlStartingAfterFirstSlash =
-                    url.Substring(url.IndexOf("github.com/", StringComparison.OrdinalIgnoreCase) + "github.com/".Length);
+                var urlStartingAfterFirstSlash = url.Substring(url.IndexOf("github.com/",StringComparison.OrdinalIgnoreCase) + "github.com/".Length);
                 return urlStartingAfterFirstSlash.Substring(0, urlStartingAfterFirstSlash.IndexOf('/'));
             }
             catch (Exception)
@@ -120,14 +130,12 @@ namespace Volo.Docs.GitHub.Documents
             }
         }
 
-        private string GetGithubRepositoryNameFromUrl(string url)
+        protected virtual string GetRepositoryNameFromUrl(string url)
         {
             try
             {
-                var urlStartingAfterFirstSlash =
-                    url.Substring(url.IndexOf("github.com/", StringComparison.OrdinalIgnoreCase) + "github.com/".Length);
-                var urlStartingAfterSecondSlash =
-                    urlStartingAfterFirstSlash.Substring(urlStartingAfterFirstSlash.IndexOf('/') + 1);
+                var urlStartingAfterFirstSlash = url.Substring(url.IndexOf("github.com/", StringComparison.OrdinalIgnoreCase) + "github.com/".Length);
+                var urlStartingAfterSecondSlash = urlStartingAfterFirstSlash.Substring(urlStartingAfterFirstSlash.IndexOf('/') + 1);
                 return urlStartingAfterSecondSlash.Substring(0, urlStartingAfterSecondSlash.IndexOf('/'));
             }
             catch (Exception)
