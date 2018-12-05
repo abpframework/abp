@@ -60,17 +60,21 @@ namespace Volo.Docs.Pages.Documents.Project
             SetPageParams(project);
 
             await SetVersionAsync(project);
-
-            await SetDocumentAsync();
-
-            await SetNavigationAsync();
+            await SetDocumentAsync(project);
+            await SetNavigationAsync(project);
         }
 
-        private async Task SetNavigationAsync()
+        private async Task SetNavigationAsync(ProjectDto project)
         {
             try
             {
-                Navigation = await _documentAppService.GetNavigationDocumentAsync(ProjectName, Version, false);
+                Navigation = await _documentAppService.GetNavigationDocumentAsync(
+                    new GetNavigationDocumentInput
+                    {
+                        ProjectId = project.Id,
+                        Version = Version
+                    }
+                );
             }
             catch (DocumentNotFoundException) //TODO: What if called on a remote service which may return 404
             {
@@ -95,7 +99,7 @@ namespace Volo.Docs.Pages.Documents.Project
 
         private async Task SetVersionAsync(ProjectDto project)
         {
-            var versionInfoDtos = await _documentAppService.GetVersions(project.ShortName);
+            var versionInfoDtos = await _projectAppService.GetVersionsAsync(project.Id);
 
             Versions = versionInfoDtos.Select(v => new VersionInfo(v.DisplayName, v.Name)).ToList();
 
@@ -168,17 +172,30 @@ namespace Volo.Docs.Pages.Documents.Project
                 Document.Version;
         }
 
-        private async Task SetDocumentAsync()
+        private async Task SetDocumentAsync(ProjectDto project)
         {
             try
             {
                 if (DocumentNameWithExtension.IsNullOrWhiteSpace())
                 {
-                    Document = await _documentAppService.GetDefaultAsync(ProjectName, Version, true);
+                    Document = await _documentAppService.GetDefaultAsync(
+                        new GetDefaultDocumentInput
+                        {
+                            ProjectId = project.Id,
+                            Version = Version
+                        }
+                    );
                 }
                 else
                 {
-                    Document = await _documentAppService.GetByNameAsync(ProjectName, DocumentNameWithExtension, Version, true);
+                    Document = await _documentAppService.GetAsync(
+                        new GetDocumentInput
+                        {
+                            ProjectId = project.Id,
+                            Name = DocumentNameWithExtension,
+                            Version = Version
+                        }
+                    );
                 }
             }
             catch (DocumentNotFoundException)

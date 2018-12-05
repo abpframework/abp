@@ -1,18 +1,29 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Distributed;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
-using Volo.Abp.Domain.Entities;
+using Volo.Abp.Caching;
+using Volo.Docs.Documents;
 
 namespace Volo.Docs.Projects
 {
     public class ProjectAppService : ApplicationService, IProjectAppService
     {
         private readonly IProjectRepository _projectRepository;
+        private readonly IDistributedCache<List<VersionInfoDto>> _distributedCache;
+        private readonly IDocumentStoreFactory _documentStoreFactory;
 
-        public ProjectAppService(IProjectRepository projectRepository)
+        public ProjectAppService(
+            IProjectRepository projectRepository,
+            IDistributedCache<List<VersionInfoDto>> distributedCache,
+            IDocumentStoreFactory documentStoreFactory)
         {
             _projectRepository = projectRepository;
+            _distributedCache = distributedCache;
+            _documentStoreFactory = documentStoreFactory;
         }
 
         public async Task<ListResultDto<ProjectDto>> GetListAsync()
@@ -29,6 +40,55 @@ namespace Volo.Docs.Projects
             var project = await _projectRepository.GetByShortNameAsync(shortName);
 
             return ObjectMapper.Map<Project, ProjectDto>(project);
+        }
+
+        public async Task<List<VersionInfoDto>> GetVersionsAsync(Guid id)
+        {
+            //TODO: What if there is no version?
+
+            var project = await _projectRepository.GetAsync(id);
+            var documentStore = _documentStoreFactory.Create(project.DocumentStoreType);
+
+            //TODO: Why not use GetOrAddAsync
+            var versions = await GetVersionsFromCache(project.ShortName);
+            if (versions == null)
+            {
+                versions = await documentStore.GetVersions(project);
+                await SetVersionsToCache(project.ShortName, versions);
+            }
+
+            if (!project.MinimumVersion.IsNullOrEmpty())
+            {
+                var minVersionIndex = versions.FindIndex(v => v.Name == project.MinimumVersion);
+                if (minVersionIndex > -1)
+                {
+                    versions = versions.GetRange(0, minVersionIndex + 1);
+                }
+            }
+
+            if (!string.IsNullOrEmpty(project.LatestVersionBranchName))
+            {
+                versions.First().Name = project.LatestVersionBranchName;
+            }
+
+            return versions;
+        }
+
+        private async Task<List<VersionInfoDto>> GetVersionsFromCache(string projectShortName)
+        {
+            return await _distributedCache.GetAsync(projectShortName);
+        }
+
+        private async Task SetVersionsToCache(string projectShortName, List<VersionInfoDto> versions)
+        {
+            await _distributedCache.SetAsync(
+                projectShortName,
+                versions,
+                new DistributedCacheEntryOptions
+                {
+                    SlidingExpiration = TimeSpan.FromDays(1)
+                }
+            );
         }
     }
 }
