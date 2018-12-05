@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Docs.Documents;
 using Volo.Docs.Formatting;
 using Volo.Docs.Models;
@@ -12,7 +13,7 @@ using Volo.Docs.Projects;
 
 namespace Volo.Docs.Pages.Documents.Project
 {
-    public class IndexModel : PageModel
+    public class IndexModel : AbpPageModel
     {
         [BindProperty(SupportsGet = true)]
         public string ProjectName { get; set; }
@@ -68,13 +69,15 @@ namespace Volo.Docs.Pages.Documents.Project
         {
             try
             {
-                Navigation = await _documentAppService.GetNavigationDocumentAsync(
+                var document = await _documentAppService.GetNavigationDocumentAsync(
                     new GetNavigationDocumentInput
                     {
                         ProjectId = project.Id,
                         Version = Version
                     }
                 );
+
+                Navigation = ObjectMapper.Map<DocumentWithDetailsDto, NavigationWithDetailsDto>(document);
             }
             catch (DocumentNotFoundException) //TODO: What if called on a remote service which may return 404
             {

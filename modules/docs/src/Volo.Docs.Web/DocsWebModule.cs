@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
+using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 using Volo.Docs.Localization;
@@ -33,6 +34,11 @@ namespace Volo.Docs
             {
                 //TODO: Make configurable!
                 options.Conventions.AddPageRoute("/Documents/Project/Index", "documents/{projectName}/{version}/{*documentName}");
+            });
+
+            Configure<AbpAutoMapperOptions>(options =>
+            {
+                options.AddProfile<DocsWebAutoMapperProfile>(validate: true);
             });
         }
     }

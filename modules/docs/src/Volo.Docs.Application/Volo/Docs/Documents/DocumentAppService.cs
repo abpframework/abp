@@ -37,16 +37,14 @@ namespace Volo.Docs.Documents
             );
         }
 
-        public virtual async Task<NavigationWithDetailsDto> GetNavigationDocumentAsync(GetNavigationDocumentInput input)
+        public virtual async Task<DocumentWithDetailsDto> GetNavigationDocumentAsync(GetNavigationDocumentInput input)
         {
             var project = await _projectRepository.GetAsync(input.ProjectId);
-            var documentDto = await GetDocumentWithDetailsDto(
+            return await GetDocumentWithDetailsDto(
                 project,
                 project.NavigationDocumentName,
                 input.Version
             );
-
-            return ObjectMapper.Map<DocumentWithDetailsDto, NavigationWithDetailsDto>(documentDto);
         }
 
         protected virtual async Task<DocumentWithDetailsDto> GetDocumentWithDetailsDto(
