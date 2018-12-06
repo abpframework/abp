@@ -1,14 +1,10 @@
+using Volo.Docs.Documents;
+using Volo.Docs.Projects;
+
 namespace Volo.Docs.HtmlConverting
 {
     public interface IDocumentToHtmlConverter
     {
-        string Convert(string content);
-
-        string NormalizeLinks(
-            string content,
-            string projectShortName,
-            string version,
-            string documentLocalDirectory
-        );
+        string Convert(ProjectDto project, DocumentWithDetailsDto document,string version);
     }
 }

@@ -29,8 +29,6 @@ namespace Volo.Docs.Pages.Documents.Project
 
         public DocumentWithDetailsDto Document { get; private set; }
 
-        public List<VersionInfoViewModel> Versions { get; private set; }
-
         public List<SelectListItem> VersionSelectItems { get; private set; }
 
         public NavigationWithDetailsDto Navigation { get; private set; }
@@ -58,6 +56,7 @@ namespace Volo.Docs.Pages.Documents.Project
             SetDocumentNames();
             await SetVersionAsync();
             await SetDocumentAsync();
+            ConvertDocumentContentToHtml();
             await SetNavigationAsync();
         }
 
@@ -73,13 +72,14 @@ namespace Volo.Docs.Pages.Documents.Project
 
         private async Task SetVersionAsync()
         {
-            var output = await _projectAppService.GetVersionsAsync(Project.Id);
+            //TODO: Needs refactoring
 
-            Versions = output.Items
+            var output = await _projectAppService.GetVersionsAsync(Project.Id);
+            var versions = output.Items
                 .Select(v => new VersionInfoViewModel(v.DisplayName, v.Name))
                 .ToList();
 
-            LatestVersionInfo = Versions.First();
+            LatestVersionInfo = versions.First();
             LatestVersionInfo.DisplayText = $"{LatestVersionInfo.DisplayText} ({DocsAppConsts.Latest})";
             LatestVersionInfo.Version = LatestVersionInfo.Version;
 
@@ -90,7 +90,7 @@ namespace Volo.Docs.Pages.Documents.Project
             }
             else
             {
-                var versionFromUrl = Versions.FirstOrDefault(v => v.Version == Version);
+                var versionFromUrl = versions.FirstOrDefault(v => v.Version == Version);
                 if (versionFromUrl != null)
                 {
                     versionFromUrl.IsSelected = true;
@@ -98,12 +98,12 @@ namespace Volo.Docs.Pages.Documents.Project
                 }
                 else
                 {
-                    Versions.First().IsSelected = true;
-                    Version = Versions.First().Version;
+                    versions.First().IsSelected = true;
+                    Version = versions.First().Version;
                 }
             }
 
-            VersionSelectItems = Versions.Select(v => new SelectListItem
+            VersionSelectItems = versions.Select(v => new SelectListItem
             {
                 Text = v.DisplayText,
                 Value = CreateLink(LatestVersionInfo, v.Version, DocumentName),
@@ -191,16 +191,27 @@ namespace Volo.Docs.Pages.Documents.Project
             catch (DocumentNotFoundException)
             {
                 //TODO: Handle it!
-                return;
+                throw;
             }
-           
+        }
+
+        private void ConvertDocumentContentToHtml()
+        {
             var converter = _documentToHtmlConverterFactory.Create(Document.Format ?? Project.Format);
+            var content = converter.Convert(Project, Document, GetSpecificVersionOrLatest());
 
-            var content = converter.NormalizeLinks(Document.Content, Document.Project.ShortName, GetSpecificVersionOrLatest(), Document.LocalDirectory);
-            content = converter.Convert(content);
+            content = HtmlNormalizer.ReplaceImageSources(
+                content,
+                Document.RawRootUrl,
+                Document.LocalDirectory
+            );
 
-            content = HtmlNormalizer.ReplaceImageSources(content, Document.RawRootUrl, Document.LocalDirectory);
-            content = HtmlNormalizer.ReplaceCodeBlocksLanguage(content, "language-C#", "language-csharp"); //todo find a way to make it on client in prismJS configuration (eg: map C# => csharp)
+            //todo find a way to make it on client in prismJS configuration (eg: map C# => csharp)
+            content = HtmlNormalizer.ReplaceCodeBlocksLanguage(
+                content,
+                "language-C#",
+                "language-csharp"
+            );
 
             Document.Content = content;
         }
