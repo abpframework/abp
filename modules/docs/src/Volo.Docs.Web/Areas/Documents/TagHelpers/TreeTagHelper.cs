@@ -5,8 +5,10 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Docs.Documents;
 using Volo.Docs.Utils;
 
-namespace Volo.Docs.Areas.Documents.Helpers.TagHelpers
+namespace Volo.Docs.Areas.Documents.TagHelpers
 {
+    //TODO: Better to convert element "document-nav-tree"
+    //TODO: Or better to convert to a partial view or to a view component instead of a tag helper!
     [HtmlTargetElement("ul", Attributes = "root-node")]
     public class TreeTagHelper : TagHelper
     {

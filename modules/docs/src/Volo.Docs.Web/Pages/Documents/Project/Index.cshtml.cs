@@ -51,23 +51,15 @@ namespace Volo.Docs.Pages.Documents.Project
 
         public async Task OnGetAsync()
         {
-            Project = await _projectAppService.GetByShortNameAsync(ProjectName);
-
-            SetDocumentNames();
+            await SetProjectAsync();
             await SetVersionAsync();
             await SetDocumentAsync();
-            ConvertDocumentContentToHtml();
             await SetNavigationAsync();
         }
 
-        private void SetDocumentNames()
+        private async Task SetProjectAsync()
         {
-            if (DocumentName.IsNullOrWhiteSpace())
-            {
-                DocumentName = Project.DefaultDocumentName;
-            }
-
-            DocumentNameWithExtension = DocumentName + "." + Project.Format;
+            Project = await _projectAppService.GetByShortNameAsync(ProjectName);
         }
 
         private async Task SetVersionAsync()
@@ -164,6 +156,13 @@ namespace Volo.Docs.Pages.Documents.Project
 
         private async Task SetDocumentAsync()
         {
+            if (DocumentName.IsNullOrWhiteSpace())
+            {
+                DocumentName = Project.DefaultDocumentName;
+            }
+
+            DocumentNameWithExtension = DocumentName + "." + Project.Format;
+
             try
             {
                 if (DocumentNameWithExtension.IsNullOrWhiteSpace())
@@ -193,6 +192,8 @@ namespace Volo.Docs.Pages.Documents.Project
                 //TODO: Handle it!
                 throw;
             }
+
+            ConvertDocumentContentToHtml();
         }
 
         private void ConvertDocumentContentToHtml()
