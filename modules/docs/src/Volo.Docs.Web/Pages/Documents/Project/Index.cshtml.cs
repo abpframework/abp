@@ -23,9 +23,7 @@ namespace Volo.Docs.Pages.Documents.Project
         [BindProperty(SupportsGet = true)]
         public string DocumentName { get; set; }
 
-        public string ProjectDisplayName { get; set; }
-
-        public string ProjectFormat { get; private set; }
+        public ProjectDto Project { get; set; }
 
         public string DocumentNameWithExtension { get; private set; }
 
@@ -53,55 +51,29 @@ namespace Volo.Docs.Pages.Documents.Project
             _projectAppService = projectAppService;
         }
 
-        public async Task OnGet()
+        public async Task OnGetAsync()
         {
-            var project = await _projectAppService.GetByShortNameAsync(ProjectName);
+            Project = await _projectAppService.GetByShortNameAsync(ProjectName);
 
-            SetPageParams(project);
-
-            await SetVersionAsync(project);
-            await SetDocumentAsync(project);
-            await SetNavigationAsync(project);
+            SetDocumentNames();
+            await SetVersionAsync();
+            await SetDocumentAsync();
+            await SetNavigationAsync();
         }
 
-        private async Task SetNavigationAsync(ProjectDto project)
+        private void SetDocumentNames()
         {
-            try
-            {
-                var document = await _documentAppService.GetNavigationDocumentAsync(
-                    new GetNavigationDocumentInput
-                    {
-                        ProjectId = project.Id,
-                        Version = Version
-                    }
-                );
-
-                Navigation = ObjectMapper.Map<DocumentWithDetailsDto, NavigationWithDetailsDto>(document);
-            }
-            catch (DocumentNotFoundException) //TODO: What if called on a remote service which may return 404
-            {
-                return;
-            }
-
-            Navigation.ConvertItems();
-        }
-
-        private void SetPageParams(ProjectDto project)
-        {
-            ProjectFormat = project.Format;
-            ProjectDisplayName = project.Name;
-
             if (DocumentName.IsNullOrWhiteSpace())
             {
-                DocumentName = project.DefaultDocumentName;
+                DocumentName = Project.DefaultDocumentName;
             }
 
-            DocumentNameWithExtension = DocumentName + "." + project.Format;
+            DocumentNameWithExtension = DocumentName + "." + Project.Format;
         }
 
-        private async Task SetVersionAsync(ProjectDto project)
+        private async Task SetVersionAsync()
         {
-            var versionInfoDtos = await _projectAppService.GetVersionsAsync(project.Id);
+            var versionInfoDtos = await _projectAppService.GetVersionsAsync(Project.Id);
 
             Versions = versionInfoDtos.Select(v => new VersionInfo(v.DisplayName, v.Name)).ToList();
 
@@ -134,6 +106,30 @@ namespace Volo.Docs.Pages.Documents.Project
                 Selected = v.IsSelected
             }).ToList();
         }
+
+        private async Task SetNavigationAsync()
+        {
+            try
+            {
+                var document = await _documentAppService.GetNavigationDocumentAsync(
+                    new GetNavigationDocumentInput
+                    {
+                        ProjectId = Project.Id,
+                        Version = Version
+                    }
+                );
+
+                Navigation = ObjectMapper.Map<DocumentWithDetailsDto, NavigationWithDetailsDto>(document);
+            }
+            catch (DocumentNotFoundException) //TODO: What if called on a remote service which may return 404
+            {
+                return;
+            }
+
+            Navigation.ConvertItems();
+        }
+
+
 
         public string CreateLink(VersionInfo latestVersion, string version, string documentName = null)
         {
@@ -174,7 +170,7 @@ namespace Volo.Docs.Pages.Documents.Project
                 Document.Version;
         }
 
-        private async Task SetDocumentAsync(ProjectDto project)
+        private async Task SetDocumentAsync()
         {
             try
             {
@@ -183,7 +179,7 @@ namespace Volo.Docs.Pages.Documents.Project
                     Document = await _documentAppService.GetDefaultAsync(
                         new GetDefaultDocumentInput
                         {
-                            ProjectId = project.Id,
+                            ProjectId = Project.Id,
                             Version = Version
                         }
                     );
@@ -193,7 +189,7 @@ namespace Volo.Docs.Pages.Documents.Project
                     Document = await _documentAppService.GetAsync(
                         new GetDocumentInput
                         {
-                            ProjectId = project.Id,
+                            ProjectId = Project.Id,
                             Name = DocumentNameWithExtension,
                             Version = Version
                         }
@@ -205,7 +201,7 @@ namespace Volo.Docs.Pages.Documents.Project
                 return;
             }
            
-            var converter = _documentToHtmlConverterFactory.Create(Document.Format ?? ProjectFormat);
+            var converter = _documentToHtmlConverterFactory.Create(Document.Format ?? Project.Format);
 
             var content = converter.NormalizeLinks(Document.Content, Document.Project.ShortName, GetSpecificVersionOrLatest(), Document.LocalDirectory);
             content = converter.Convert(content);

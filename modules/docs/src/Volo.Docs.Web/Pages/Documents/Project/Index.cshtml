@@ -10,7 +10,6 @@
 @{
     ViewBag.FluidLayout = true;
     Layout = ThemeManager.CurrentTheme.GetEmptyLayout();
-    var projectDisplayName = Model.ProjectDisplayName ?? Model.ProjectName;
 }
 @section styles {
     <abp-style-bundle name="@typeof(IndexModel).FullName">
@@ -46,10 +45,10 @@
 
                 <div class="docs-top">
                     <nav class="navbar navbar-logo">
-                        @if (!projectDisplayName.IsNullOrWhiteSpace())
+                        @if (!Model.Project.Name.IsNullOrWhiteSpace())
                         {
                             <a class="navbar-brand w-100" href="@Model.CreateLink(Model.LatestVersionInfo, Model.GetSpecificVersionOrLatest())">
-                                @projectDisplayName<br>
+                                @Model.Project.Name<br>
                                 <strong class="display-block">
                                     @L["Documents"]
                                 </strong>
@@ -108,7 +107,7 @@
                         <ul root-node="@Model.Navigation.RootNode"
                             version="@(Model.LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Model.Version)"
                             project-name="@Model.ProjectName"
-                            project-format="@Model.ProjectFormat"
+                            project-format="@Model.Project.Format"
                             selected-document-name="@Model.DocumentNameWithExtension"
                             id="sidebar-scroll"
                             class="nav nav-list"></ul>
