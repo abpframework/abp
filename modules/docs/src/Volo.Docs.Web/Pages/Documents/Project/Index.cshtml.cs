@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Docs.Documents;
-using Volo.Docs.Formatting;
+using Volo.Docs.HtmlConverting;
 using Volo.Docs.Models;
 using Volo.Docs.Projects;
 
@@ -41,16 +41,16 @@ namespace Volo.Docs.Pages.Documents.Project
         public VersionInfo LatestVersionInfo { get; private set; }
 
         private readonly IDocumentAppService _documentAppService;
-        private readonly IDocumentConverterFactory _documentConverterFactory;
+        private readonly IDocumentToHtmlConverterFactory _documentToHtmlConverterFactory;
         private readonly IProjectAppService _projectAppService;
 
         public IndexModel(
             IDocumentAppService documentAppService, 
-            IDocumentConverterFactory documentConverterFactory, 
+            IDocumentToHtmlConverterFactory documentToHtmlConverterFactory, 
             IProjectAppService projectAppService)
         {
             _documentAppService = documentAppService;
-            _documentConverterFactory = documentConverterFactory;
+            _documentToHtmlConverterFactory = documentToHtmlConverterFactory;
             _projectAppService = projectAppService;
         }
 
@@ -206,7 +206,7 @@ namespace Volo.Docs.Pages.Documents.Project
                 return;
             }
            
-            var converter = _documentConverterFactory.Create(Document.Format ?? ProjectFormat);
+            var converter = _documentToHtmlConverterFactory.Create(Document.Format ?? ProjectFormat);
 
             var content = converter.NormalizeLinks(Document.Content, Document.Project.ShortName, GetSpecificVersionOrLatest(), Document.LocalDirectory);
             content = converter.Convert(content);

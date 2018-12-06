@@ -24,7 +24,7 @@ namespace Volo.Docs.Documents
             var serviceType = Options.Stores.GetOrDefault(storeType);
             if (serviceType == null)
             {
-                throw new ApplicationException($"Undefined document store: {storeType}");
+                throw new ApplicationException($"Unknown document store: {storeType}");
             }
 
             return (IDocumentStore) ServiceProvider.GetRequiredService(serviceType);

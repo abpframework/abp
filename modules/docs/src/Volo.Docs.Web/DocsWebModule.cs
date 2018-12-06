@@ -5,7 +5,9 @@ using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
+using Volo.Docs.HtmlConverting;
 using Volo.Docs.Localization;
+using Volo.Docs.Markdown;
 
 namespace Volo.Docs
 {
@@ -39,6 +41,11 @@ namespace Volo.Docs
             Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<DocsWebAutoMapperProfile>(validate: true);
+            });
+
+            Configure<DocumentToHtmlConverterOptions>(options =>
+            {
+                options.Converters[MarkdownDocumentToHtmlConverter.Type] = typeof(MarkdownDocumentToHtmlConverter);
             });
         }
     }

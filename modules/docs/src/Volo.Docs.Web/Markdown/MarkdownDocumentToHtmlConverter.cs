@@ -1,13 +1,14 @@
-﻿using CommonMark;
-using System;
+﻿using System;
 using System.Text;
 using System.Text.RegularExpressions;
+using CommonMark;
 using Volo.Abp.DependencyInjection;
+using Volo.Docs.HtmlConverting;
 using Volo.Docs.Utils;
 
-namespace Volo.Docs.Formatting
+namespace Volo.Docs.Markdown
 {
-    public class MarkdownDocumentConverter : IDocumentConverter, ITransientDependency
+    public class MarkdownDocumentToHtmlConverter : IDocumentToHtmlConverter, ITransientDependency
     {
         public const string Type = "md";
 
