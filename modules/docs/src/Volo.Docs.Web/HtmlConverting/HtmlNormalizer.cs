@@ -2,7 +2,7 @@
 using System.Text.RegularExpressions;
 using Volo.Docs.Utils;
 
-namespace Volo.Docs.Pages.Documents.Project
+namespace Volo.Docs.HtmlConverting
 {
     public static class HtmlNormalizer
     {
