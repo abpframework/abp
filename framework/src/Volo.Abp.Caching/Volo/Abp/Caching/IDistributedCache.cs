@@ -20,12 +20,14 @@ namespace Volo.Abp.Caching
 
         TCacheItem GetOrAdd(
             string key,
-            Func<TCacheItem> factory
+            Func<TCacheItem> factory,
+            Func<DistributedCacheEntryOptions> optionsFactory = null
         );
 
         Task<TCacheItem> GetOrAddAsync(
             [NotNull] string key,
             Func<Task<TCacheItem>> factory,
+            Func<DistributedCacheEntryOptions> optionsFactory = null,
             CancellationToken token = default
         );
 
