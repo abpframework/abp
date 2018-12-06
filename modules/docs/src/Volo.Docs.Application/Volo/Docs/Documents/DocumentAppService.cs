@@ -17,9 +17,10 @@ namespace Volo.Docs.Documents
             _documentStoreFactory = documentStoreFactory;
         }
 
-        public async Task<DocumentWithDetailsDto> GetAsync(GetDocumentInput input)
+        public virtual async Task<DocumentWithDetailsDto> GetAsync(GetDocumentInput input)
         {
             var project = await _projectRepository.GetAsync(input.ProjectId);
+
             return await GetDocumentWithDetailsDto(
                 project,
                 input.Name,
@@ -27,9 +28,10 @@ namespace Volo.Docs.Documents
             );
         }
 
-        public async Task<DocumentWithDetailsDto> GetDefaultAsync(GetDefaultDocumentInput input)
+        public virtual async Task<DocumentWithDetailsDto> GetDefaultAsync(GetDefaultDocumentInput input)
         {
             var project = await _projectRepository.GetAsync(input.ProjectId);
+
             return await GetDocumentWithDetailsDto(
                 project,
                 project.DefaultDocumentName,
@@ -40,6 +42,7 @@ namespace Volo.Docs.Documents
         public virtual async Task<DocumentWithDetailsDto> GetNavigationDocumentAsync(GetNavigationDocumentInput input)
         {
             var project = await _projectRepository.GetAsync(input.ProjectId);
+
             return await GetDocumentWithDetailsDto(
                 project,
                 project.NavigationDocumentName,
@@ -52,13 +55,17 @@ namespace Volo.Docs.Documents
             string documentName, 
             string version)
         {
-            var documentStore = _documentStoreFactory.Create(project.DocumentStoreType);
-            var document = await documentStore.FindDocument(project, documentName, version);
+            var store = _documentStoreFactory.Create(project.DocumentStoreType);
+            var document = await store.FindDocument(project, documentName, version);
 
-            var dto = ObjectMapper.Map<Document, DocumentWithDetailsDto>(document);
-            dto.Project = ObjectMapper.Map<Project, ProjectDto>(project);
+            return CreateDocumentWithDetailsDto(project, document);
+        }
 
-            return dto;
+        protected virtual DocumentWithDetailsDto CreateDocumentWithDetailsDto(Project project, Document document)
+        {
+            var documentDto = ObjectMapper.Map<Document, DocumentWithDetailsDto>(document);
+            documentDto.Project = ObjectMapper.Map<Project, ProjectDto>(project);
+            return documentDto;
         }
     }
 }

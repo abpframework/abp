@@ -91,6 +91,7 @@ namespace Volo.Docs.GitHub.Documents
             }
             catch (Exception ex)
             {
+                //TODO: It may not be a good idea to hide the error!
                 Logger.LogError(ex.Message, ex);
                 return new List<VersionInfo>();
             }

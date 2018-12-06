@@ -13,16 +13,16 @@ namespace Volo.Docs.Projects
     public class ProjectAppService : ApplicationService, IProjectAppService
     {
         private readonly IProjectRepository _projectRepository;
-        private readonly IDistributedCache<List<VersionInfo>> _distributedCache;
+        private readonly IDistributedCache<List<VersionInfo>> _versionCache;
         private readonly IDocumentStoreFactory _documentStoreFactory;
 
         public ProjectAppService(
             IProjectRepository projectRepository,
-            IDistributedCache<List<VersionInfo>> distributedCache,
+            IDistributedCache<List<VersionInfo>> versionCache,
             IDocumentStoreFactory documentStoreFactory)
         {
             _projectRepository = projectRepository;
-            _distributedCache = distributedCache;
+            _versionCache = versionCache;
             _documentStoreFactory = documentStoreFactory;
         }
 
@@ -44,17 +44,28 @@ namespace Volo.Docs.Projects
 
         public async Task<List<VersionInfoDto>> GetVersionsAsync(Guid id)
         {
-            //TODO: What if there is no version?
-
             var project = await _projectRepository.GetAsync(id);
-            var documentStore = _documentStoreFactory.Create(project.DocumentStoreType);
 
-            //TODO: Why not use GetOrAddAsync
-            var versions = await GetVersionsFromCache(project.ShortName);
-            if (versions == null)
+            var versions = await _versionCache.GetOrAddAsync(
+                project.ShortName,
+                () => GetVersionsAsync(project),
+                () => new DistributedCacheEntryOptions
+                {
+                    SlidingExpiration = TimeSpan.FromDays(2)
+                }
+            );
+            
+            return ObjectMapper.Map<List<VersionInfo>, List<VersionInfoDto>>(versions);
+        }
+
+        protected virtual async Task<List<VersionInfo>> GetVersionsAsync(Project project)
+        {
+            var store = _documentStoreFactory.Create(project.DocumentStoreType);
+            var versions = await store.GetVersions(project);
+
+            if (!versions.Any())
             {
-                versions = await documentStore.GetVersions(project);
-                await SetVersionsToCache(project.ShortName, versions);
+                return versions;
             }
 
             if (!project.MinimumVersion.IsNullOrEmpty())
@@ -66,29 +77,12 @@ namespace Volo.Docs.Projects
                 }
             }
 
-            if (!string.IsNullOrEmpty(project.LatestVersionBranchName))
+            if (versions.Any() && !string.IsNullOrEmpty(project.LatestVersionBranchName))
             {
                 versions.First().Name = project.LatestVersionBranchName;
             }
 
-            return ObjectMapper.Map<List<VersionInfo>, List<VersionInfoDto>>(versions);
-        }
-
-        private async Task<List<VersionInfo>> GetVersionsFromCache(string projectShortName)
-        {
-            return await _distributedCache.GetAsync(projectShortName);
-        }
-
-        private async Task SetVersionsToCache(string projectShortName, List<VersionInfo> versions)
-        {
-            await _distributedCache.SetAsync(
-                projectShortName,
-                versions,
-                new DistributedCacheEntryOptions
-                {
-                    SlidingExpiration = TimeSpan.FromDays(1)
-                }
-            );
+            return versions;
         }
     }
 }
