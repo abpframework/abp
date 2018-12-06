@@ -29,13 +29,13 @@ namespace Volo.Docs.Pages.Documents.Project
 
         public DocumentWithDetailsDto Document { get; private set; }
 
-        public List<VersionInfo> Versions { get; private set; }
+        public List<VersionInfoViewModel> Versions { get; private set; }
 
         public List<SelectListItem> VersionSelectItems { get; private set; }
 
         public NavigationWithDetailsDto Navigation { get; private set; }
 
-        public VersionInfo LatestVersionInfo { get; private set; }
+        public VersionInfoViewModel LatestVersionInfo { get; private set; }
 
         private readonly IDocumentAppService _documentAppService;
         private readonly IDocumentToHtmlConverterFactory _documentToHtmlConverterFactory;
@@ -73,11 +73,15 @@ namespace Volo.Docs.Pages.Documents.Project
 
         private async Task SetVersionAsync()
         {
-            var versionInfoDtos = await _projectAppService.GetVersionsAsync(Project.Id);
+            var output = await _projectAppService.GetVersionsAsync(Project.Id);
 
-            Versions = versionInfoDtos.Select(v => new VersionInfo(v.DisplayName, v.Name)).ToList();
+            Versions = output.Items
+                .Select(v => new VersionInfoViewModel(v.DisplayName, v.Name))
+                .ToList();
 
-            LatestVersionInfo = GetLatestVersion();
+            LatestVersionInfo = Versions.First();
+            LatestVersionInfo.DisplayText = $"{LatestVersionInfo.DisplayText} ({DocsAppConsts.Latest})";
+            LatestVersionInfo.Version = LatestVersionInfo.Version;
 
             if (string.Equals(Version, DocsAppConsts.Latest, StringComparison.OrdinalIgnoreCase))
             {
@@ -128,10 +132,8 @@ namespace Volo.Docs.Pages.Documents.Project
 
             Navigation.ConvertItems();
         }
-
-
-
-        public string CreateLink(VersionInfo latestVersion, string version, string documentName = null)
+        
+        public string CreateLink(VersionInfoViewModel latestVersion, string version, string documentName = null)
         {
             if (latestVersion.Version == version)
             {
@@ -146,16 +148,6 @@ namespace Volo.Docs.Pages.Documents.Project
             }
 
             return link;
-        }
-
-        private VersionInfo GetLatestVersion()
-        {
-            var latestVersion = Versions.First();
-
-            latestVersion.DisplayText = $"{latestVersion.DisplayText} ({DocsAppConsts.Latest})";
-            latestVersion.Version = latestVersion.Version;
-
-            return latestVersion;
         }
 
         public string GetSpecificVersionOrLatest()
@@ -198,6 +190,7 @@ namespace Volo.Docs.Pages.Documents.Project
             }
             catch (DocumentNotFoundException)
             {
+                //TODO: Handle it!
                 return;
             }
            
@@ -211,6 +204,5 @@ namespace Volo.Docs.Pages.Documents.Project
 
             Document.Content = content;
         }
-
     }
 }

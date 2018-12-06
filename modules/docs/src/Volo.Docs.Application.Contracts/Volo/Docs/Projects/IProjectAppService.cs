@@ -12,6 +12,6 @@ namespace Volo.Docs.Projects
      
         Task<ProjectDto> GetByShortNameAsync(string shortName);
         
-        Task<List<VersionInfoDto>> GetVersionsAsync(Guid id);
+        Task<ListResultDto<VersionInfoDto>> GetVersionsAsync(Guid id);
     }
 }

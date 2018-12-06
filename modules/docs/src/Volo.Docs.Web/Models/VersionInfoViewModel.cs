@@ -1,6 +1,6 @@
 namespace Volo.Docs.Models
 {
-    public class VersionInfo
+    public class VersionInfoViewModel
     {
         public string DisplayText { get; set; }
 
@@ -8,7 +8,7 @@ namespace Volo.Docs.Models
 
         public bool IsSelected { get; set; }
 
-        public VersionInfo(string displayText, string version, bool isSelected = false)
+        public VersionInfoViewModel(string displayText, string version, bool isSelected = false)
         {
             DisplayText = displayText;
             Version = version;

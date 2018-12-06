@@ -42,7 +42,7 @@ namespace Volo.Docs.Projects
             return ObjectMapper.Map<Project, ProjectDto>(project);
         }
 
-        public async Task<List<VersionInfoDto>> GetVersionsAsync(Guid id)
+        public async Task<ListResultDto<VersionInfoDto>> GetVersionsAsync(Guid id)
         {
             var project = await _projectRepository.GetAsync(id);
 
@@ -54,8 +54,10 @@ namespace Volo.Docs.Projects
                     SlidingExpiration = TimeSpan.FromDays(2)
                 }
             );
-            
-            return ObjectMapper.Map<List<VersionInfo>, List<VersionInfoDto>>(versions);
+
+            return new ListResultDto<VersionInfoDto>(
+                ObjectMapper.Map<List<VersionInfo>, List<VersionInfoDto>>(versions)
+            );
         }
 
         protected virtual async Task<List<VersionInfo>> GetVersionsAsync(Project project)
