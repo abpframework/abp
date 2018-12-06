@@ -14,11 +14,11 @@ namespace Volo.Docs.Markdown
     {
         public const string Type = "md";
 
-        private const string NewLinkFormat = "[{0}](/documents/{1}/{2}{3}/{4})";
+        private const string MdLinkFormat = "[{0}](/documents/{1}/{2}{3}/{4})";
         private const string MarkdownLinkRegExp = @"\[([^)]+)\]\(([^)]+." + Type + @")\)";
         private const string AnchorLinkRegExp = @"<a[^>]+href=\""(.*?)\""[^>]*>(.*)?</a>";
 
-        public string Convert(ProjectDto project, DocumentWithDetailsDto document, string version)
+        public virtual string Convert(ProjectDto project, DocumentWithDetailsDto document, string version)
         {
             if (document.Content.IsNullOrEmpty())
             {
@@ -35,41 +35,43 @@ namespace Volo.Docs.Markdown
             return CommonMarkConverter.Convert(Encoding.UTF8.GetString(Encoding.Default.GetBytes(content)));
         }
 
-        private string NormalizeLinks(
+        protected virtual string NormalizeLinks(
             string content, 
             string projectShortName, 
             string version,
             string documentLocalDirectory)
         {
-            if (content == null)
+            var normalized = Regex.Replace(content, MarkdownLinkRegExp, delegate(Match match)
             {
-                return null;
-            }
+                var link = match.Groups[2].Value;
+                if (UrlHelper.IsExternalLink(link))
+                {
+                    return match.Value;
+                }
 
-            var normalized = Regex.Replace(content, MarkdownLinkRegExp, delegate (Match match)
-               {
-                   var link = match.Groups[2].Value;
-                   if (UrlHelper.IsExternalLink(link))
-                   {
-                       return match.Value;
-                   }
+                var displayText = match.Groups[1].Value;
 
-                   var displayText = match.Groups[1].Value;
+                var documentName = RemoveFileExtension(link);
+                var documentLocalDirectoryNormalized = documentLocalDirectory.TrimStart('/').TrimEnd('/');
+                if (!string.IsNullOrWhiteSpace(documentLocalDirectoryNormalized))
+                {
+                    documentLocalDirectoryNormalized = "/" + documentLocalDirectoryNormalized;
+                }
 
-                   var documentName = RemoveFileExtension(link);
-                   var documentLocalDirectoryNormalized = documentLocalDirectory.TrimStart('/').TrimEnd('/');
-                   if (!string.IsNullOrWhiteSpace(documentLocalDirectoryNormalized))
-                   {
-                       documentLocalDirectoryNormalized = "/" + documentLocalDirectoryNormalized;
-                   }
-
-                   return string.Format(NewLinkFormat, displayText, projectShortName, version, documentLocalDirectoryNormalized, documentName);
-               });
+                return string.Format(
+                    MdLinkFormat,
+                    displayText,
+                    projectShortName,
+                    version,
+                    documentLocalDirectoryNormalized,
+                    documentName
+                );
+            });
 
             normalized = Regex.Replace(normalized, AnchorLinkRegExp, delegate (Match match)
             {
                 var link = match.Groups[1].Value;
-                if (IsRemoteUrl(link))
+                if (UrlHelper.IsExternalLink(link))
                 {
                     return match.Value;
                 }
@@ -82,7 +84,14 @@ namespace Volo.Docs.Markdown
                     documentLocalDirectoryNormalized = "/" + documentLocalDirectoryNormalized;
                 }
 
-                return string.Format(NewLinkFormat, displayText, projectShortName, version, documentLocalDirectoryNormalized, documentName);
+                return string.Format(
+                    MdLinkFormat,
+                    displayText,
+                    projectShortName,
+                    version,
+                    documentLocalDirectoryNormalized,
+                    documentName
+                );
             });
 
             return normalized;
@@ -106,24 +115,6 @@ namespace Volo.Docs.Markdown
             }
 
             return documentName.Left(documentName.Length - Type.Length - 1);
-        }
-
-        //TODO: Merge with UrlHelper.IsExternalLink
-        private static bool IsRemoteUrl(string url)
-        {
-            if (url == null)
-            {
-                return true;
-            }
-
-            try
-            {
-                return Regex.IsMatch(url, @"\A(https?|ftp)://(-\.)?([^\s/?\.#-]+\.?)+(/[^\s]*)?\z");
-            }
-            catch (Exception)
-            {
-                return true;
-            }
         }
     }
 }
