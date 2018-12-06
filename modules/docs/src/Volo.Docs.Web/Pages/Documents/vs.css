@@ -473,27 +473,11 @@ div.code-toolbar > .toolbar a {
       border-radius: .25rem;
       color: #fff !important;
       margin-left: -1rem; }
-  .jumbotron .btn, footer .btn {
-    display: block;
-    margin-bottom: 10px; }
-  .multi-tenancy {
-    text-align: center !important; }
   .section-with-logos img {
     margin: 15px;
     opacity: 1;
     -webkit-filter: grayscale(0%);
     filter: grayscale(0%); }
-  .jumbotron {
-    padding-top: 160px;
-    margin-top: -160px;
-    border-radius: 0;
-    padding-bottom: 40px;
-    margin-bottom: 0;
-    font-size: .85em;
-    padding-left: 45px;
-    padding-right: 45px; }
-    .jumbotron .jumbotron-logo {
-      display: none; }
   span.code-arrow {
     padding: 0px 0 0px;
     display: block;

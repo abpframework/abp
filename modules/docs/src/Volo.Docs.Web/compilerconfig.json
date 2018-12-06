@@ -4,14 +4,6 @@
     "inputFile": "wwwroot/pages/documents/project/index.less"
   },
   {
-    "outputFile": "Pages/Documents/_docs.css",
-    "inputFile": "Pages/Documents/_docs.scss"
-  },
-  {
-    "outputFile": "Pages/Documents/_responsive.css",
-    "inputFile": "Pages/Documents/_responsive.scss"
-  },
-  {
     "outputFile": "Pages/Documents/vs.css",
     "inputFile": "Pages/Documents/vs.scss"
   },

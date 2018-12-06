@@ -4,15 +4,6 @@ $('li:not(.last-link) a.tree-toggle').click(function () {
 });
 $('li:not(.last-link) span.plus-icon i.fa-chevron-right').click(function () {
 
-    //var hasLink = $(this).parent().find("a").length > 0;
-    //if (!hasLink) {
-    //    return;
-    //}
-
-    ////if ($(this).find("i.fa-long-arrow-right").length > 0) {
-    ////    return;
-    ////}
-
     var $element = $(this).parent();
 
     $element.parent().children('ul.tree').toggle(100);
