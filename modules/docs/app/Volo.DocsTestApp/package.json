@@ -4,7 +4,6 @@
   "private": true,
   "dependencies": {
     "@abp/aspnetcore.mvc.ui.theme.basic": "^0.4.3",
-    "@abp/aspnetcore.mvc.ui": "^0.4.3",
     "prismjs": "^1.15.0",
     "malihu-custom-scrollbar-plugin": "^3.1.5",
     "anchor-js": "^4.1.1",

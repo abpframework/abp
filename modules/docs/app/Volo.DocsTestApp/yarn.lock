@@ -24,7 +24,7 @@
     "@abp/timeago" "^0.4.9"
     "@abp/toastr" "^0.4.9"
 
-"@abp/aspnetcore.mvc.ui@^0.4.3", "@abp/aspnetcore.mvc.ui@^0.4.9":
+"@abp/aspnetcore.mvc.ui@^0.4.9":
   version "0.4.9"
   resolved "https://registry.yarnpkg.com/@abp/aspnetcore.mvc.ui/-/aspnetcore.mvc.ui-0.4.9.tgz#cb7a1905ec003fd459e13e577ef7b3d2ada55f5f"
   dependencies:
