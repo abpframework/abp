@@ -4,6 +4,6 @@
   "private": true,
   "dependencies": {
     "@abp/aspnetcore.mvc.ui.theme.basic": "^0.4.9",
-    "@abp/docs": "^0.5.0"
+    "@abp/docs": "^0.5.1"
   }
 }
