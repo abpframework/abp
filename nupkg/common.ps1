@@ -95,6 +95,7 @@ $projects = (
     "modules/setting-management/src/Volo.Abp.SettingManagement.Domain",
     "modules/setting-management/src/Volo.Abp.SettingManagement.EntityFrameworkCore",
     "modules/setting-management/src/Volo.Abp.SettingManagement.MongoDB",
+    "modules/setting-management/src/Volo.Abp.SettingManagement.Web",
 
     # modules/permission-management
     "modules/permission-management/src/Volo.Abp.PermissionManagement.Domain.Shared",
