@@ -1,0 +1,9 @@
+{
+  "culture": "pt-BR",
+  "texts": {
+    "GivenTenantIsNotAvailable": "Tenant não está disponível: {0}",
+    "SwitchTenant": "Trocar tenant",
+    "Name": "Nome",
+    "SwitchTenantHint": "Deixe o campo de nome em branco para alternar para o lado do host."
+  }
+}
