@@ -5,7 +5,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.MalihuCustomScrollbar
 {
-    public class MalihuCustomScrollbarStyleBundleContributor : BundleContributor
+    public class MalihuCustomScrollbarPluginStyleBundleContributor : BundleContributor
     {
         public override void ConfigureBundle(BundleConfigurationContext context)
         {

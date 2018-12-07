@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Text;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.Anchor
+namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.Popper
 {
-    public class AnchorScriptBundleContributor : BundleContributor
+    public class PopperJsScriptBundleContributor : BundleContributor
     {
         public override void ConfigureBundle(BundleConfigurationContext context)
         {
-            context.Files.AddIfNotContains("/libs/anchor-js/anchor.js");
+            context.Files.AddIfNotContains("/libs/popper.js/popper.min.js");
         }
     }
 }
