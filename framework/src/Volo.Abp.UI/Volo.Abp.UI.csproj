@@ -16,10 +16,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Localization\**\*.json" />
   </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="Localization\Resources\AbpUi\pt-BR.json" />
-  </ItemGroup>
   
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.Localization\Volo.Abp.Localization.csproj" />
