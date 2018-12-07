@@ -1,5 +1,5 @@
 ﻿module.exports = {
     mappings: {
-        "@node_modules/prismjs/": "@libs/prismjs/"
+        "@node_modules/prismjs/**/*.*": "@libs/prismjs/"
     }
 }

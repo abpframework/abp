@@ -2,7 +2,14 @@
 # yarn lockfile v1
 
 
-"@abp/aspnetcore.mvc.ui.theme.basic@^0.4.3":
+"@abp/anchor-js@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@abp/anchor-js/-/anchor-js-0.5.0.tgz#6284b2b44fc4c7b5266fae609629ba2b55200d75"
+  dependencies:
+    "@abp/core" "^0.4.9"
+    anchor-js "^4.1.1"
+
+"@abp/aspnetcore.mvc.ui.theme.basic@^0.4.9":
   version "0.4.9"
   resolved "https://registry.yarnpkg.com/@abp/aspnetcore.mvc.ui.theme.basic/-/aspnetcore.mvc.ui.theme.basic-0.4.9.tgz#926a25c641225598c8666b658c1df3fa7fbed7cf"
   dependencies:
@@ -42,6 +49,13 @@
     "@abp/core" "^0.4.9"
     bootstrap "^4.1.1"
 
+"@abp/clipboard@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@abp/clipboard/-/clipboard-0.5.0.tgz#a90e47b22743bae9d7b921e86f496662198a71ef"
+  dependencies:
+    "@abp/core" "^0.4.9"
+    clipboard "^2.0.4"
+
 "@abp/core@^0.4.9":
   version "0.4.9"
   resolved "https://registry.yarnpkg.com/@abp/core/-/core-0.4.9.tgz#d644dde25fb9749e4d179bd72729afeae3b6e230"
@@ -59,6 +73,16 @@
   dependencies:
     "@abp/core" "^0.4.9"
     datatables.net "^1.10.16"
+
+"@abp/docs@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@abp/docs/-/docs-0.5.0.tgz#74df66150658b16b50d4fa756f0744f8c3171083"
+  dependencies:
+    "@abp/anchor-js" "^0.5.0"
+    "@abp/clipboard" "^0.5.0"
+    "@abp/malihu-custom-scrollbar-plugin" "^0.5.0"
+    "@abp/popper.js" "^0.5.0"
+    "@abp/prismjs" "^0.5.0"
 
 "@abp/font-awesome@^0.4.9":
   version "0.4.9"
@@ -101,6 +125,27 @@
   dependencies:
     "@abp/core" "^0.4.9"
     lodash "^4.17.10"
+
+"@abp/malihu-custom-scrollbar-plugin@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@abp/malihu-custom-scrollbar-plugin/-/malihu-custom-scrollbar-plugin-0.5.0.tgz#987d2fe165ff1ae6f700ffe9bd551a5f8a4abe46"
+  dependencies:
+    "@abp/core" "^0.4.9"
+    malihu-custom-scrollbar-plugin "^3.1.5"
+
+"@abp/popper.js@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@abp/popper.js/-/popper.js-0.5.0.tgz#ff89d181799f20f8faac58285a8863fe493108d7"
+  dependencies:
+    "@abp/core" "^0.4.9"
+    popper.js "^1.14.6"
+
+"@abp/prismjs@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@abp/prismjs/-/prismjs-0.5.0.tgz#883c300e7065cffe6e2cc215287ca17ddfd34789"
+  dependencies:
+    "@abp/core" "^0.4.9"
+    prismjs "^1.15.0"
 
 "@abp/select2@^0.4.9":
   version "0.4.9"
