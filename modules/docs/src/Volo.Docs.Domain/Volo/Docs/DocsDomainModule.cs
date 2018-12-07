@@ -3,6 +3,7 @@ using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 using Volo.Docs.Documents;
+using Volo.Docs.FileSystem.Documents;
 using Volo.Docs.GitHub.Documents;
 using Volo.Docs.Localization;
 
@@ -32,6 +33,7 @@ namespace Volo.Docs
             Configure<DocumentStoreOptions>(options =>
             {
                 options.Stores[GithubDocumentStore.Type] = typeof(GithubDocumentStore);
+                options.Stores[FileSystemDocumentStore.Type] = typeof(FileSystemDocumentStore);
             });
         }
     }

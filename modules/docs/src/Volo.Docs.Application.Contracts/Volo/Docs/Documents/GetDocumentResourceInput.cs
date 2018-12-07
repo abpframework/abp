@@ -4,7 +4,7 @@ using Volo.Docs.Projects;
 
 namespace Volo.Docs.Documents
 {
-    public class GetDocumentInput
+    public class GetDocumentResourceInput
     {
         public Guid ProjectId { get; set; }
 

@@ -8,7 +8,6 @@ namespace Volo.Docs.Documents
     {
         public Guid ProjectId { get; set; }
 
-        [Required]
         [StringLength(ProjectConsts.MaxVersionNameLength)]
         public string Version { get; set; }
     }

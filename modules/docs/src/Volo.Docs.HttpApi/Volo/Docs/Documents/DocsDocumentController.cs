@@ -34,9 +34,16 @@ namespace Volo.Docs.Documents
 
         [HttpGet]
         [Route("navigation")]
-        public virtual Task<DocumentWithDetailsDto> GetNavigationDocumentAsync(GetNavigationDocumentInput input)
+        public virtual Task<DocumentWithDetailsDto> GetNavigationAsync(GetNavigationDocumentInput input)
         {
-            return DocumentAppService.GetNavigationDocumentAsync(input);
+            return DocumentAppService.GetNavigationAsync(input);
+        }
+
+        [HttpGet]
+        [Route("resource")]
+        public Task<DocumentResourceDto> GetResourceAsync(GetDocumentResourceInput input)
+        {
+            return DocumentAppService.GetResourceAsync(input);
         }
     }
 }

@@ -9,6 +9,8 @@ namespace Volo.Docs.Documents
 
         Task<DocumentWithDetailsDto> GetDefaultAsync(GetDefaultDocumentInput input);
 
-        Task<DocumentWithDetailsDto> GetNavigationDocumentAsync(GetNavigationDocumentInput input);
+        Task<DocumentWithDetailsDto> GetNavigationAsync(GetNavigationDocumentInput input);
+
+        Task<DocumentResourceDto> GetResourceAsync(GetDocumentResourceInput input);
     }
 }

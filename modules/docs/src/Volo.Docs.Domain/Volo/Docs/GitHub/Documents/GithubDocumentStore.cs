@@ -15,11 +15,13 @@ using Project = Volo.Docs.Projects.Project;
 
 namespace Volo.Docs.GitHub.Documents
 {
+    //TODO: Needs refactoring
+
     public class GithubDocumentStore : DomainService, IDocumentStore
     {
         public const string Type = "GitHub";
 
-        public virtual async Task<Document> FindDocument(Project project, string documentName, string version)
+        public virtual async Task<Document> GetDocument(Project project, string documentName, string version)
         {
             var rootUrl = project.GetGitHubUrl(version);
             var rawRootUrl = CalculateRawRootUrl(rootUrl);
@@ -55,28 +57,6 @@ namespace Volo.Docs.GitHub.Documents
                 .ReplaceFirst("/tree/", "/");
         }
 
-        private async Task<string> DownloadWebContentAsync(string rawUrl, string token)
-        {
-            try
-            {
-                using (var webClient = new WebClient())
-                {
-                    if (!token.IsNullOrWhiteSpace())
-                    {
-                        webClient.Headers.Add("Authorization", "token " + token);
-                    }
-
-                    return await webClient.DownloadStringTaskAsync(new Uri(rawUrl));
-                }
-            }
-            catch (Exception ex)
-            {
-                //TODO: Only handle when document is really not available
-                Logger.LogWarning(ex.Message, ex);
-                throw new DocumentNotFoundException(rawUrl);
-            }
-        }
-
         public async Task<List<VersionInfo>> GetVersions(Project project)
         {
             try
@@ -95,6 +75,17 @@ namespace Volo.Docs.GitHub.Documents
                 Logger.LogError(ex.Message, ex);
                 return new List<VersionInfo>();
             }
+        }
+
+        public async Task<DocumentResource> GetResource(Project project, string resourceName, string version)
+        {
+            var rawRootUrl = CalculateRawRootUrl(project.GetGitHubUrl(version));
+            var content = await DownloadWebContentAsByteArrayAsync(
+                rawRootUrl + resourceName,
+                project.GetGitHubAccessTokenOrNull()
+            );
+
+            return new DocumentResource(content);
         }
 
         private async Task<IReadOnlyList<Release>> GetReleasesAsync(Project project)
@@ -142,6 +133,50 @@ namespace Volo.Docs.GitHub.Documents
             catch (Exception)
             {
                 throw new Exception($"Github url is not valid: {url}");
+            }
+        }
+
+        private async Task<string> DownloadWebContentAsync(string rawUrl, string token)
+        {
+            try
+            {
+                using (var webClient = new WebClient())
+                {
+                    if (!token.IsNullOrWhiteSpace())
+                    {
+                        webClient.Headers.Add("Authorization", "token " + token);
+                    }
+
+                    return await webClient.DownloadStringTaskAsync(new Uri(rawUrl));
+                }
+            }
+            catch (Exception ex)
+            {
+                //TODO: Only handle when document is really not available
+                Logger.LogWarning(ex.Message, ex);
+                throw new DocumentNotFoundException(rawUrl);
+            }
+        }
+
+        private async Task<byte[]> DownloadWebContentAsByteArrayAsync(string rawUrl, string token)
+        {
+            try
+            {
+                using (var webClient = new WebClient())
+                {
+                    if (!token.IsNullOrWhiteSpace())
+                    {
+                        webClient.Headers.Add("Authorization", "token " + token);
+                    }
+
+                    return await webClient.DownloadDataTaskAsync(new Uri(rawUrl));
+                }
+            }
+            catch (Exception ex)
+            {
+                //TODO: Only handle when resource is really not available
+                Logger.LogWarning(ex.Message, ex);
+                throw new ResourceNotFoundException(rawUrl);
             }
         }
     }

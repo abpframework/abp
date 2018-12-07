@@ -105,7 +105,7 @@
                     else
                     {
                         <ul root-node="@Model.Navigation.RootNode"
-                            version="@(Model.LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Model.Version)"
+                            version="@(Model.LatestVersionInfo == null || Model.LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Model.Version)"
                             project-name="@Model.ProjectName"
                             project-format="@Model.Project.Format"
                             selected-document-name="@Model.DocumentNameWithExtension"

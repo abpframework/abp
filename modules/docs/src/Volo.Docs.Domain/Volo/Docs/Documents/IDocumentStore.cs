@@ -7,8 +7,10 @@ namespace Volo.Docs.Documents
 {
     public interface IDocumentStore : IDomainService
     {
-        Task<Document> FindDocument(Project project, string documentName, string version);
+        Task<Document> GetDocument(Project project, string documentName, string version);
 
         Task<List<VersionInfo>> GetVersions(Project project);
+
+        Task<DocumentResource> GetResource(Project project, string resourceName, string version);
     }
 }

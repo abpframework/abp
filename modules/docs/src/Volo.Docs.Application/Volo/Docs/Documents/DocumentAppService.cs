@@ -39,7 +39,7 @@ namespace Volo.Docs.Documents
             );
         }
 
-        public virtual async Task<DocumentWithDetailsDto> GetNavigationDocumentAsync(GetNavigationDocumentInput input)
+        public virtual async Task<DocumentWithDetailsDto> GetNavigationAsync(GetNavigationDocumentInput input)
         {
             var project = await _projectRepository.GetAsync(input.ProjectId);
 
@@ -50,13 +50,23 @@ namespace Volo.Docs.Documents
             );
         }
 
+        public async Task<DocumentResourceDto> GetResourceAsync(GetDocumentResourceInput input)
+        {
+            var project = await _projectRepository.GetAsync(input.ProjectId);
+            var store = _documentStoreFactory.Create(project.DocumentStoreType);
+
+            var documentResource = await store.GetResource(project, input.Name, input.Version);
+
+            return ObjectMapper.Map<DocumentResource, DocumentResourceDto>(documentResource);
+        }
+
         protected virtual async Task<DocumentWithDetailsDto> GetDocumentWithDetailsDto(
             Project project, 
             string documentName, 
             string version)
         {
             var store = _documentStoreFactory.Create(project.DocumentStoreType);
-            var document = await store.FindDocument(project, documentName, version);
+            var document = await store.GetDocument(project, documentName, version);
 
             return CreateDocumentWithDetailsDto(project, document);
         }
