@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
@@ -10,8 +8,8 @@ namespace Volo.Docs.Projects
     {
         Task<ListResultDto<ProjectDto>> GetListAsync();
      
-        Task<ProjectDto> GetByShortNameAsync(string shortName);
+        Task<ProjectDto> GetAsync(string shortName);
         
-        Task<ListResultDto<VersionInfoDto>> GetVersionsAsync(Guid id);
+        Task<ListResultDto<VersionInfoDto>> GetVersionsAsync(string shortName);
     }
 }

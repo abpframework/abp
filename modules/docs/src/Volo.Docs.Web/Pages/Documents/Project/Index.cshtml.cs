@@ -59,14 +59,14 @@ namespace Volo.Docs.Pages.Documents.Project
 
         private async Task SetProjectAsync()
         {
-            Project = await _projectAppService.GetByShortNameAsync(ProjectName);
+            Project = await _projectAppService.GetAsync(ProjectName);
         }
 
         private async Task SetVersionAsync()
         {
             //TODO: Needs refactoring
 
-            var output = await _projectAppService.GetVersionsAsync(Project.Id);
+            var output = await _projectAppService.GetVersionsAsync(Project.ShortName);
             var versions = output.Items
                 .Select(v => new VersionInfoViewModel(v.DisplayName, v.Name))
                 .ToList();

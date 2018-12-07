@@ -35,16 +35,16 @@ namespace Volo.Docs.Projects
             );
         }
 
-        public async Task<ProjectDto> GetByShortNameAsync(string shortName)
+        public async Task<ProjectDto> GetAsync(string shortName)
         {
             var project = await _projectRepository.GetByShortNameAsync(shortName);
 
             return ObjectMapper.Map<Project, ProjectDto>(project);
         }
 
-        public async Task<ListResultDto<VersionInfoDto>> GetVersionsAsync(Guid id)
+        public async Task<ListResultDto<VersionInfoDto>> GetVersionsAsync(string shortName)
         {
-            var project = await _projectRepository.GetAsync(id);
+            var project = await _projectRepository.GetByShortNameAsync(shortName);
 
             var versions = await _versionCache.GetOrAddAsync(
                 project.ShortName,
