@@ -51,7 +51,7 @@ namespace Volo.Docs.Projects
                 () => GetVersionsAsync(project),
                 () => new DistributedCacheEntryOptions
                 {
-                    SlidingExpiration = TimeSpan.FromDays(2)
+                    SlidingExpiration = TimeSpan.FromSeconds(2)
                 }
             );
 
