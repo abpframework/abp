@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
@@ -28,6 +29,7 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
         protected IChannelPool ChannelPool { get; }
         protected IRabbitMqSerializer Serializer { get; }
         protected IBackgroundJobExecuter JobExecuter { get; }
+        protected IServiceScopeFactory ServiceScopeFactory { get; }
 
         protected AsyncLock SyncObj = new AsyncLock();
         protected bool IsDiposed { get; private set; }
@@ -37,12 +39,14 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
             IOptions<RabbitMqBackgroundJobOptions> rabbitMqBackgroundJobOptions,
             IChannelPool channelPool,
             IRabbitMqSerializer serializer,
-            IBackgroundJobExecuter jobExecuter)
+            IBackgroundJobExecuter jobExecuter,
+            IServiceScopeFactory serviceScopeFactory)
         {
             BackgroundJobOptions = backgroundJobOptions.Value;
             RabbitMqBackgroundJobOptions = rabbitMqBackgroundJobOptions.Value;
             Serializer = serializer;
             JobExecuter = jobExecuter;
+            ServiceScopeFactory = serviceScopeFactory;
             ChannelPool = channelPool;
 
             JobConfiguration = BackgroundJobOptions.GetJob(typeof(TArgs));
@@ -167,25 +171,29 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
 
         protected virtual void MessageReceived(object sender, BasicDeliverEventArgs ea)
         {
-            var context = new JobExecutionContext(
-                JobConfiguration.JobType,
-                Serializer.Deserialize(ea.Body, typeof(TArgs))
-            );
+            using (var scope = ServiceScopeFactory.CreateScope())
+            {
+                var context = new JobExecutionContext(
+                    scope.ServiceProvider,
+                    JobConfiguration.JobType,
+                    Serializer.Deserialize(ea.Body, typeof(TArgs))
+                );
 
-            try
-            {
-                JobExecuter.Execute(context);
-                ChannelAccessor.Channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
-            }
-            catch (BackgroundJobExecutionException)
-            {
-                //TODO: Reject like that?
-                ChannelAccessor.Channel.BasicReject(deliveryTag: ea.DeliveryTag, requeue: true);
-            }
-            catch (Exception)
-            {
-                //TODO: Reject like that?
-                ChannelAccessor.Channel.BasicReject(deliveryTag: ea.DeliveryTag, requeue: false);
+                try
+                {
+                    JobExecuter.Execute(context);
+                    ChannelAccessor.Channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
+                }
+                catch (BackgroundJobExecutionException)
+                {
+                    //TODO: Reject like that?
+                    ChannelAccessor.Channel.BasicReject(deliveryTag: ea.DeliveryTag, requeue: true);
+                }
+                catch (Exception)
+                {
+                    //TODO: Reject like that?
+                    ChannelAccessor.Channel.BasicReject(deliveryTag: ea.DeliveryTag, requeue: false);
+                }
             }
         }
 

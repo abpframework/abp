@@ -192,6 +192,19 @@ namespace System
             return str;
         }
 
+        public static string ReplaceFirst(this string str, string search, string replace, StringComparison comparisonType = StringComparison.Ordinal)
+        {
+            Check.NotNull(str, nameof(str));
+
+            var pos = str.IndexOf(search, comparisonType);
+            if (pos < 0)
+            {
+                return str;
+            }
+
+            return str.Substring(0, pos) + replace + str.Substring(pos + search.Length);
+        }
+
         /// <summary>
         /// Gets a substring of a string from end of the string.
         /// </summary>

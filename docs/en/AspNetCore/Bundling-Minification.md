@@ -114,7 +114,7 @@ public class MyWebModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.Configure<BundlingOptions>(options =>
+        Configure<BundlingOptions>(options =>
         {
             options
                 .ScriptBundles
@@ -152,7 +152,7 @@ public class MyWebExtensionModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.Configure<BundlingOptions>(options =>
+        Configure<BundlingOptions>(options =>
         {
             options
                 .ScriptBundles

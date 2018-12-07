@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Reflection;
 
-namespace Volo.Abp.EventBus.Local
+namespace Volo.Abp.EventBus
 {
     public abstract class EventBusBase : IEventBus
     {
@@ -16,12 +16,6 @@ namespace Volo.Abp.EventBus.Local
         public virtual IDisposable Subscribe<TEvent>(Func<TEvent, Task> action) where TEvent : class
         {
             return Subscribe(typeof(TEvent), new ActionEventHandler<TEvent>(action));
-        }
-
-        /// <inheritdoc/>
-        public virtual IDisposable Subscribe<TEvent>(IEventHandler<TEvent> handler) where TEvent : class
-        {
-            return Subscribe(typeof(TEvent), handler);
         }
 
         /// <inheritdoc/>
@@ -49,7 +43,7 @@ namespace Volo.Abp.EventBus.Local
         public abstract void Unsubscribe<TEvent>(Func<TEvent, Task> action) where TEvent : class;
 
         /// <inheritdoc/>
-        public virtual void Unsubscribe<TEvent>(IEventHandler<TEvent> handler) where TEvent : class
+        public virtual void Unsubscribe<TEvent>(ILocalEventHandler<TEvent> handler) where TEvent : class
         {
             Unsubscribe(typeof(TEvent), handler);
         }
@@ -138,12 +132,12 @@ namespace Volo.Abp.EventBus.Local
                 {
                     var handlerType = eventHandlerWrapper.EventHandler.GetType();
 
-                    if (ReflectionHelper.IsAssignableToGenericType(handlerType, typeof(IEventHandler<>)))
+                    if (ReflectionHelper.IsAssignableToGenericType(handlerType, typeof(ILocalEventHandler<>)))
                     {
-                        var method = typeof(IEventHandler<>) //TODO: to a static field
+                        var method = typeof(ILocalEventHandler<>)
                             .MakeGenericType(eventType)
                             .GetMethod(
-                                nameof(IEventHandler<object>.HandleEventAsync),
+                                nameof(ILocalEventHandler<object>.HandleEventAsync),
                                 new[] { eventType }
                             );
 
@@ -151,7 +145,7 @@ namespace Volo.Abp.EventBus.Local
                     }
                     else if (ReflectionHelper.IsAssignableToGenericType(handlerType, typeof(IDistributedEventHandler<>)))
                     {
-                        var method = typeof(IDistributedEventHandler<>) //TODO: to a static field
+                        var method = typeof(IDistributedEventHandler<>)
                             .MakeGenericType(eventType)
                             .GetMethod(
                                 nameof(IDistributedEventHandler<object>.HandleEventAsync),

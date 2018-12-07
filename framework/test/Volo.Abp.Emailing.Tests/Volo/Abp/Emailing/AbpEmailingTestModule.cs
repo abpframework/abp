@@ -13,12 +13,12 @@ namespace Volo.Abp.Emailing
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.Configure<VirtualFileSystemOptions>(options =>
+            Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpEmailingTestModule>();
             });
 
-            context.Services.Configure<EmailTemplateOptions>(options =>
+            Configure<EmailTemplateOptions>(options =>
             {
                 options.Templates["template1"] =
                     new EmailTemplateDefinition("template1")

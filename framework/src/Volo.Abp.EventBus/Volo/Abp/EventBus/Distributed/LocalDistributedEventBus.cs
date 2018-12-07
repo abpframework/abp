@@ -10,19 +10,19 @@ namespace Volo.Abp.EventBus.Distributed
 {
     [Dependency(TryRegister = true)]
     [ExposeServices(typeof(IDistributedEventBus), typeof(LocalDistributedEventBus))]
-    public class LocalDistributedEventBus : IDistributedEventBus, ITransientDependency
+    public class LocalDistributedEventBus : IDistributedEventBus, ISingletonDependency
     {
         private readonly ILocalEventBus _localEventBus;
-        protected IServiceProvider ServiceProvider { get; }
+        protected IHybridServiceScopeFactory ServiceScopeFactory { get; }
         protected DistributedEventBusOptions DistributedEventBusOptions { get; }
 
         public LocalDistributedEventBus(
-            ILocalEventBus localEventBus, 
-            IServiceProvider serviceProvider,
+            ILocalEventBus localEventBus,
+            IHybridServiceScopeFactory serviceScopeFactory,
             IOptions<DistributedEventBusOptions> distributedEventBusOptions)
         {
             _localEventBus = localEventBus;
-            ServiceProvider = serviceProvider;
+            ServiceScopeFactory = serviceScopeFactory;
             DistributedEventBusOptions = distributedEventBusOptions.Value;
             Subscribe(distributedEventBusOptions.Value.Handlers);
         }
@@ -42,10 +42,16 @@ namespace Volo.Abp.EventBus.Distributed
                     var genericArgs = @interface.GetGenericArguments();
                     if (genericArgs.Length == 1)
                     {
-                        Subscribe(genericArgs[0], new IocEventHandlerFactory(ServiceProvider, handler));
+                        Subscribe(genericArgs[0], new IocEventHandlerFactory(ServiceScopeFactory, handler));
                     }
                 }
             }
+        }
+
+        /// <inheritdoc/>
+        public virtual IDisposable Subscribe<TEvent>(IDistributedEventHandler<TEvent> handler) where TEvent : class
+        {
+            return Subscribe(typeof(TEvent), handler);
         }
 
         public IDisposable Subscribe<TEvent>(Func<TEvent, Task> action) where TEvent : class
@@ -53,7 +59,7 @@ namespace Volo.Abp.EventBus.Distributed
             return _localEventBus.Subscribe(action);
         }
 
-        public IDisposable Subscribe<TEvent>(IEventHandler<TEvent> handler) where TEvent : class
+        public IDisposable Subscribe<TEvent>(ILocalEventHandler<TEvent> handler) where TEvent : class
         {
             return _localEventBus.Subscribe(handler);
         }
@@ -83,7 +89,7 @@ namespace Volo.Abp.EventBus.Distributed
             _localEventBus.Unsubscribe(action);
         }
 
-        public void Unsubscribe<TEvent>(IEventHandler<TEvent> handler) where TEvent : class
+        public void Unsubscribe<TEvent>(ILocalEventHandler<TEvent> handler) where TEvent : class
         {
             _localEventBus.Unsubscribe(handler);
         }

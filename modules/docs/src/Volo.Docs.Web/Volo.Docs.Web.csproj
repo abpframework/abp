@@ -40,6 +40,9 @@
     <Content Remove="Properties\launchSettings.json" />
     <Content Remove="compilerconfig.json" />
     <Content Remove="compilerconfig.json.defaults" />
+    <None Remove="Pages\Documents\Project\bootstrap-toc.js" />
+    <None Remove="Pages\Documents\Project\index - Copy.css" />
+    <None Remove="Pages\Documents\Project\index - Copy.min.css" />
     <None Remove="Pages\Documents\Project\vs.js" />
     <None Include="compilerconfig.json" />
     <None Include="Properties\launchSettings.json" />

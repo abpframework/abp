@@ -25,6 +25,7 @@ namespace Volo.Abp.BackgroundJobs
 
             _backgroundJobExecuter.Execute(
                 new JobExecutionContext(
+                    ServiceProvider,
                     typeof(MyJob),
                     new MyJobArgs("42")
                 )

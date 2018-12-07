@@ -16,7 +16,7 @@ namespace Volo.Abp.Users
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.Configure<SettingOptions>(options =>
+            Configure<SettingOptions>(options =>
             {
                 options.ValueProviders.Add<UserSettingValueProvider>();
             });

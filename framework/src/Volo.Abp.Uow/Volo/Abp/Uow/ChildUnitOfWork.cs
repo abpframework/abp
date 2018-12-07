@@ -15,6 +15,10 @@ namespace Volo.Abp.Uow
 
         public bool IsReserved => _parent.IsReserved;
 
+        public bool IsDisposed => _parent.IsDisposed;
+
+        public bool IsCompleted => _parent.IsCompleted;
+
         public string ReservationName => _parent.ReservationName;
 
         public event EventHandler<UnitOfWorkFailedEventArgs> Failed;

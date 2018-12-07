@@ -63,7 +63,10 @@ namespace Volo.Abp.Caching
             return ObjectSerializer.Deserialize<TCacheItem>(cachedBytes);
         }
 
-        public TCacheItem GetOrAdd(string key, Func<TCacheItem> factory)
+        public TCacheItem GetOrAdd(
+            string key, 
+            Func<TCacheItem> factory,
+            Func<DistributedCacheEntryOptions> optionsFactory = null)
         {
             var value = Get(key);
             if (value != null)
@@ -80,14 +83,17 @@ namespace Volo.Abp.Caching
                 }
 
                 value = factory();
-                Set(key, value);
-
+                Set(key, value, optionsFactory?.Invoke());
             }
 
             return value;
         }
 
-        public async Task<TCacheItem> GetOrAddAsync(string key, Func<Task<TCacheItem>> factory, CancellationToken token = default)
+        public async Task<TCacheItem> GetOrAddAsync(
+            string key, 
+            Func<Task<TCacheItem>> factory,
+            Func<DistributedCacheEntryOptions> optionsFactory = null, 
+            CancellationToken token = default)
         {
             var value = await GetAsync(key, token);
             if (value != null)
@@ -104,7 +110,7 @@ namespace Volo.Abp.Caching
                 }
 
                 value = await factory();
-                await SetAsync(key, value, token: token);
+                await SetAsync(key, value, optionsFactory?.Invoke(), token);
             }
 
             return value;

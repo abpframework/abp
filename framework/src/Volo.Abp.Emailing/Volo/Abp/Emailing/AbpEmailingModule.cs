@@ -19,12 +19,12 @@ namespace Volo.Abp.Emailing
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.Configure<SettingOptions>(options =>
+            Configure<SettingOptions>(options =>
             {
                 options.DefinitionProviders.Add<EmailSettingProvider>();
             });
 
-            context.Services.Configure<VirtualFileSystemOptions>(options =>
+            Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpEmailingModule>();
             });
@@ -34,7 +34,7 @@ namespace Volo.Abp.Emailing
                 options.AddJob<BackgroundEmailSendingJob>();
             });
 
-            context.Services.Configure<EmailTemplateOptions>(options =>
+            Configure<EmailTemplateOptions>(options =>
             {
                 options.Templates
                     .Add(

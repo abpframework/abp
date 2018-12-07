@@ -14,17 +14,17 @@ namespace MyCompanyName.MyProjectName
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.Configure<VirtualFileSystemOptions>(options =>
+            Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<MyProjectNameDomainModule>();
             });
 
-            context.Services.Configure<AbpLocalizationOptions>(options =>
+            Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources.Get<MyProjectNameResource>().AddVirtualJson("/MyCompanyName/MyProjectName/Localization/Domain");
             });
 
-            context.Services.Configure<ExceptionLocalizationOptions>(options =>
+            Configure<ExceptionLocalizationOptions>(options =>
             {
                 options.MapCodeNamespace("MyProjectName", typeof(MyProjectNameResource));
             });

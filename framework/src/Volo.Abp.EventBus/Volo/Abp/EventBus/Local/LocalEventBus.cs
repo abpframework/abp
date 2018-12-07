@@ -28,13 +28,13 @@ namespace Volo.Abp.EventBus.Local
 
         protected ConcurrentDictionary<Type, List<IEventHandlerFactory>> HandlerFactories { get; }
 
-        protected IServiceProvider ServiceProvider { get; }
+        protected IHybridServiceScopeFactory ServiceScopeFactory { get; }
 
         public LocalEventBus(
             IOptions<LocalEventBusOptions> options,
-            IServiceProvider serviceProvider)
+            IHybridServiceScopeFactory serviceScopeFactory)
         {
-            ServiceProvider = serviceProvider;
+            ServiceScopeFactory = serviceScopeFactory;
             Options = options.Value;
             Logger = NullLogger<LocalEventBus>.Instance;
 
@@ -57,10 +57,16 @@ namespace Volo.Abp.EventBus.Local
                     var genericArgs = @interface.GetGenericArguments();
                     if (genericArgs.Length == 1)
                     {
-                        Subscribe(genericArgs[0], new IocEventHandlerFactory(ServiceProvider, handler));
+                        Subscribe(genericArgs[0], new IocEventHandlerFactory(ServiceScopeFactory, handler));
                     }
                 }
             }
+        }
+
+        /// <inheritdoc/>
+        public virtual IDisposable Subscribe<TEvent>(ILocalEventHandler<TEvent> handler) where TEvent : class
+        {
+            return Subscribe(typeof(TEvent), handler);
         }
 
         /// <inheritdoc/>

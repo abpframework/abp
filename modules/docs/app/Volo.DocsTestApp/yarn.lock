@@ -2,31 +2,38 @@
 # yarn lockfile v1
 
 
-"@abp/aspnetcore.mvc.ui.theme.basic@^0.3.5":
-  version "0.3.5"
-  resolved "https://registry.yarnpkg.com/@abp/aspnetcore.mvc.ui.theme.basic/-/aspnetcore.mvc.ui.theme.basic-0.3.5.tgz#4f6fa79c1d55175a0d7d2a4670a7e5ae896b6402"
+"@abp/anchor-js@^0.5.1":
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/@abp/anchor-js/-/anchor-js-0.5.1.tgz#5693bb317f08f9a05bb579f63d6ee011033d3632"
   dependencies:
-    "@abp/aspnetcore.mvc.ui.theme.shared" "^0.3.5"
+    "@abp/core" "^0.4.9"
+    anchor-js "^4.1.1"
 
-"@abp/aspnetcore.mvc.ui.theme.shared@^0.3.5":
-  version "0.3.5"
-  resolved "https://registry.yarnpkg.com/@abp/aspnetcore.mvc.ui.theme.shared/-/aspnetcore.mvc.ui.theme.shared-0.3.5.tgz#5926165c1bfc7a5e01e3f0d3533f44d7faafd556"
+"@abp/aspnetcore.mvc.ui.theme.basic@^0.4.9":
+  version "0.4.9"
+  resolved "https://registry.yarnpkg.com/@abp/aspnetcore.mvc.ui.theme.basic/-/aspnetcore.mvc.ui.theme.basic-0.4.9.tgz#926a25c641225598c8666b658c1df3fa7fbed7cf"
   dependencies:
-    "@abp/aspnetcore.mvc.ui" "^0.3.5"
-    "@abp/bootstrap" "^0.3.5"
-    "@abp/datatables.net-bs4" "^0.3.5"
-    "@abp/font-awesome" "^0.3.5"
-    "@abp/jquery-form" "^0.3.5"
-    "@abp/jquery-validation-unobtrusive" "^0.3.5"
-    "@abp/lodash" "^0.3.5"
-    "@abp/select2" "^0.3.5"
-    "@abp/sweetalert" "^0.3.5"
-    "@abp/timeago" "^0.3.5"
-    "@abp/toastr" "^0.3.5"
+    "@abp/aspnetcore.mvc.ui.theme.shared" "^0.4.9"
 
-"@abp/aspnetcore.mvc.ui@^0.3.5":
-  version "0.3.5"
-  resolved "https://registry.yarnpkg.com/@abp/aspnetcore.mvc.ui/-/aspnetcore.mvc.ui-0.3.5.tgz#f60217ec953d5b717a89191f4feba80c8ad545d8"
+"@abp/aspnetcore.mvc.ui.theme.shared@^0.4.9":
+  version "0.4.9"
+  resolved "https://registry.yarnpkg.com/@abp/aspnetcore.mvc.ui.theme.shared/-/aspnetcore.mvc.ui.theme.shared-0.4.9.tgz#cc8d83162329e3044e12a358c3f3ce6fb3e75f1b"
+  dependencies:
+    "@abp/aspnetcore.mvc.ui" "^0.4.9"
+    "@abp/bootstrap" "^0.4.9"
+    "@abp/datatables.net-bs4" "^0.4.9"
+    "@abp/font-awesome" "^0.4.9"
+    "@abp/jquery-form" "^0.4.9"
+    "@abp/jquery-validation-unobtrusive" "^0.4.9"
+    "@abp/lodash" "^0.4.9"
+    "@abp/select2" "^0.4.9"
+    "@abp/sweetalert" "^0.4.9"
+    "@abp/timeago" "^0.4.9"
+    "@abp/toastr" "^0.4.9"
+
+"@abp/aspnetcore.mvc.ui@^0.4.9":
+  version "0.4.9"
+  resolved "https://registry.yarnpkg.com/@abp/aspnetcore.mvc.ui/-/aspnetcore.mvc.ui-0.4.9.tgz#cb7a1905ec003fd459e13e577ef7b3d2ada55f5f"
   dependencies:
     ansi-colors "^1.1.0"
     extend-object "^1.0.0"
@@ -35,104 +42,146 @@
     path "^0.12.7"
     rimraf "^2.6.2"
 
-"@abp/bootstrap@^0.3.5":
-  version "0.3.5"
-  resolved "https://registry.yarnpkg.com/@abp/bootstrap/-/bootstrap-0.3.5.tgz#7bf9f16b7d0657ddf38caa97cdb21eb26d758637"
+"@abp/bootstrap@^0.4.9":
+  version "0.4.9"
+  resolved "https://registry.yarnpkg.com/@abp/bootstrap/-/bootstrap-0.4.9.tgz#2092858956c9b770509619ffa70d46b382531ce1"
   dependencies:
-    "@abp/core" "^0.3.5"
+    "@abp/core" "^0.4.9"
     bootstrap "^4.1.1"
 
-"@abp/core@^0.3.5":
-  version "0.3.5"
-  resolved "https://registry.yarnpkg.com/@abp/core/-/core-0.3.5.tgz#0e26c03259c10b223465d9cf4f541113ce6a56ae"
-
-"@abp/datatables.net-bs4@^0.3.5":
-  version "0.3.5"
-  resolved "https://registry.yarnpkg.com/@abp/datatables.net-bs4/-/datatables.net-bs4-0.3.5.tgz#b0e40c8f2d40113bebaf62c5219c41a8c5e918cd"
+"@abp/clipboard@^0.5.1":
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/@abp/clipboard/-/clipboard-0.5.1.tgz#bd799e3ed5eb316b718125fbd1010967cf0b5ec5"
   dependencies:
-    "@abp/datatables.net" "^0.3.5"
+    "@abp/core" "^0.4.9"
+    clipboard "^2.0.4"
+
+"@abp/core@^0.4.9":
+  version "0.4.9"
+  resolved "https://registry.yarnpkg.com/@abp/core/-/core-0.4.9.tgz#d644dde25fb9749e4d179bd72729afeae3b6e230"
+
+"@abp/datatables.net-bs4@^0.4.9":
+  version "0.4.9"
+  resolved "https://registry.yarnpkg.com/@abp/datatables.net-bs4/-/datatables.net-bs4-0.4.9.tgz#a51dcc6c166af8a3126f121cf410a170027e6d11"
+  dependencies:
+    "@abp/datatables.net" "^0.4.9"
     datatables.net-bs4 "^1.10.16"
 
-"@abp/datatables.net@^0.3.5":
-  version "0.3.5"
-  resolved "https://registry.yarnpkg.com/@abp/datatables.net/-/datatables.net-0.3.5.tgz#784d14462a3e08e7cc921e8d9d0c7f384b8f6e6a"
+"@abp/datatables.net@^0.4.9":
+  version "0.4.9"
+  resolved "https://registry.yarnpkg.com/@abp/datatables.net/-/datatables.net-0.4.9.tgz#1c96f4c800b9b05fc0dcec29dac471e1e5c5624a"
   dependencies:
-    "@abp/core" "^0.3.5"
+    "@abp/core" "^0.4.9"
     datatables.net "^1.10.16"
 
-"@abp/font-awesome@^0.3.5":
-  version "0.3.5"
-  resolved "https://registry.yarnpkg.com/@abp/font-awesome/-/font-awesome-0.3.5.tgz#25385a24d8cbb9475b9d57a51c6402e48963da44"
+"@abp/docs@^0.5.1":
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/@abp/docs/-/docs-0.5.1.tgz#401a34eb13ad9b773a3d70319c50bb40f6f39c25"
   dependencies:
-    "@abp/core" "^0.3.5"
+    "@abp/anchor-js" "^0.5.1"
+    "@abp/clipboard" "^0.5.1"
+    "@abp/malihu-custom-scrollbar-plugin" "^0.5.1"
+    "@abp/popper.js" "^0.5.1"
+    "@abp/prismjs" "^0.5.1"
+
+"@abp/font-awesome@^0.4.9":
+  version "0.4.9"
+  resolved "https://registry.yarnpkg.com/@abp/font-awesome/-/font-awesome-0.4.9.tgz#eb1691ff33be53832b5063aa2a382dc7d65a3f43"
+  dependencies:
+    "@abp/core" "^0.4.9"
     font-awesome "^4.7.0"
 
-"@abp/jquery-form@^0.3.5":
-  version "0.3.5"
-  resolved "https://registry.yarnpkg.com/@abp/jquery-form/-/jquery-form-0.3.5.tgz#ec8315dbf87fa6be841448acd3fbccf51507f6da"
+"@abp/jquery-form@^0.4.9":
+  version "0.4.9"
+  resolved "https://registry.yarnpkg.com/@abp/jquery-form/-/jquery-form-0.4.9.tgz#70af1af668f6a55dbadb455f64b6d1cbdc63caf8"
   dependencies:
-    "@abp/jquery" "^0.3.5"
+    "@abp/jquery" "^0.4.9"
     jquery-form "^4.2.2"
 
-"@abp/jquery-validation-unobtrusive@^0.3.5":
-  version "0.3.5"
-  resolved "https://registry.yarnpkg.com/@abp/jquery-validation-unobtrusive/-/jquery-validation-unobtrusive-0.3.5.tgz#6b8b5c821718266ae13e1a3f65da4862ed0a7e6d"
+"@abp/jquery-validation-unobtrusive@^0.4.9":
+  version "0.4.9"
+  resolved "https://registry.yarnpkg.com/@abp/jquery-validation-unobtrusive/-/jquery-validation-unobtrusive-0.4.9.tgz#3512f1f7fbf9f982b084b8f9cb68f91553dfbcef"
   dependencies:
-    "@abp/jquery-validation" "^0.3.5"
+    "@abp/jquery-validation" "^0.4.9"
     jquery-validation-unobtrusive "^3.2.9"
 
-"@abp/jquery-validation@^0.3.5":
-  version "0.3.5"
-  resolved "https://registry.yarnpkg.com/@abp/jquery-validation/-/jquery-validation-0.3.5.tgz#c3f2e3d695f333261cdefadc35c962ebf6f016d3"
+"@abp/jquery-validation@^0.4.9":
+  version "0.4.9"
+  resolved "https://registry.yarnpkg.com/@abp/jquery-validation/-/jquery-validation-0.4.9.tgz#5751da6dac87a6783dd4d1165240b3c29eed3ac3"
   dependencies:
-    "@abp/jquery" "^0.3.5"
+    "@abp/jquery" "^0.4.9"
     jquery-validation "^1.17.0"
 
-"@abp/jquery@^0.3.5":
-  version "0.3.5"
-  resolved "https://registry.yarnpkg.com/@abp/jquery/-/jquery-0.3.5.tgz#928252246400ed0c5519dcd3d5fca8be471ce11f"
+"@abp/jquery@^0.4.9":
+  version "0.4.9"
+  resolved "https://registry.yarnpkg.com/@abp/jquery/-/jquery-0.4.9.tgz#4033a4e3d6df643babc6baf29cd47ba5519338f0"
   dependencies:
-    "@abp/core" "^0.3.5"
+    "@abp/core" "^0.4.9"
     jquery "^3.3.1"
 
-"@abp/lodash@^0.3.5":
-  version "0.3.5"
-  resolved "https://registry.yarnpkg.com/@abp/lodash/-/lodash-0.3.5.tgz#5cc9397b23be9a3f99e2b20db5b3c1af8d01d06b"
+"@abp/lodash@^0.4.9":
+  version "0.4.9"
+  resolved "https://registry.yarnpkg.com/@abp/lodash/-/lodash-0.4.9.tgz#5d30d2d1f6245bf519160d5ba3ce5f4d08e9b48b"
   dependencies:
-    "@abp/core" "^0.3.5"
+    "@abp/core" "^0.4.9"
     lodash "^4.17.10"
 
-"@abp/select2@^0.3.5":
-  version "0.3.5"
-  resolved "https://registry.yarnpkg.com/@abp/select2/-/select2-0.3.5.tgz#065727e1948fff2d454ced9183ce03f0b01b377f"
+"@abp/malihu-custom-scrollbar-plugin@^0.5.1":
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/@abp/malihu-custom-scrollbar-plugin/-/malihu-custom-scrollbar-plugin-0.5.1.tgz#0b293c6164292aa9cb016b042735d2640ccc63fe"
   dependencies:
-    "@abp/core" "^0.3.5"
+    "@abp/core" "^0.4.9"
+    malihu-custom-scrollbar-plugin "^3.1.5"
+
+"@abp/popper.js@^0.5.1":
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/@abp/popper.js/-/popper.js-0.5.1.tgz#9bb1d1c88d467963b5acbdcfe01b7e2dbe773b0f"
+  dependencies:
+    "@abp/core" "^0.4.9"
+    popper.js "^1.14.6"
+
+"@abp/prismjs@^0.5.1":
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/@abp/prismjs/-/prismjs-0.5.1.tgz#0df2d40fe0c2a0992df03d6f8fc14682873b7f44"
+  dependencies:
+    "@abp/core" "^0.4.9"
+    prismjs "^1.15.0"
+
+"@abp/select2@^0.4.9":
+  version "0.4.9"
+  resolved "https://registry.yarnpkg.com/@abp/select2/-/select2-0.4.9.tgz#6bbb4d8ffd67876787a400647659f5bb7a1d642d"
+  dependencies:
+    "@abp/core" "^0.4.9"
     select2 "^4.0.5"
 
-"@abp/sweetalert@^0.3.5":
-  version "0.3.5"
-  resolved "https://registry.yarnpkg.com/@abp/sweetalert/-/sweetalert-0.3.5.tgz#399f5daad720dd7187abaa191d58928555a26a8f"
+"@abp/sweetalert@^0.4.9":
+  version "0.4.9"
+  resolved "https://registry.yarnpkg.com/@abp/sweetalert/-/sweetalert-0.4.9.tgz#34cd4f36004229621c454c3d80cc0d2d8d57d42e"
   dependencies:
-    "@abp/core" "^0.3.5"
+    "@abp/core" "^0.4.9"
     sweetalert "^2.1.0"
 
-"@abp/timeago@^0.3.5":
-  version "0.3.5"
-  resolved "https://registry.yarnpkg.com/@abp/timeago/-/timeago-0.3.5.tgz#c54080833136da6055fac64d4fbab1da637cb821"
+"@abp/timeago@^0.4.9":
+  version "0.4.9"
+  resolved "https://registry.yarnpkg.com/@abp/timeago/-/timeago-0.4.9.tgz#9314bb2c7194636d2dc294ab0b8a07522e26e905"
   dependencies:
-    "@abp/jquery" "^0.3.5"
+    "@abp/jquery" "^0.4.9"
     timeago "^1.6.3"
 
-"@abp/toastr@^0.3.5":
-  version "0.3.5"
-  resolved "https://registry.yarnpkg.com/@abp/toastr/-/toastr-0.3.5.tgz#3584a92dcac7e0694c45364ed604c11c8e6ef009"
+"@abp/toastr@^0.4.9":
+  version "0.4.9"
+  resolved "https://registry.yarnpkg.com/@abp/toastr/-/toastr-0.4.9.tgz#c95703330fefb4e9204292970d17d9facebdffb5"
   dependencies:
-    "@abp/jquery" "^0.3.5"
+    "@abp/jquery" "^0.4.9"
     toastr "^2.1.4"
 
 almond@~0.3.1:
   version "0.3.3"
   resolved "https://registry.yarnpkg.com/almond/-/almond-0.3.3.tgz#a0e7c95ac7624d6417b4494b1e68bff693168a20"
+
+anchor-js@^4.1.1:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/anchor-js/-/anchor-js-4.1.1.tgz#943b7605e47b3c663e91e82879b682f2e186a5b1"
 
 ansi-colors@^1.1.0:
   version "1.1.0"
@@ -281,6 +330,14 @@ class-utils@^0.3.5:
     isobject "^3.0.0"
     static-extend "^0.1.1"
 
+clipboard@^2.0.0, clipboard@^2.0.4:
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/clipboard/-/clipboard-2.0.4.tgz#836dafd66cf0fea5d71ce5d5b0bf6e958009112d"
+  dependencies:
+    good-listener "^1.2.2"
+    select "^1.1.2"
+    tiny-emitter "^2.0.0"
+
 clone-stats@^0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/clone-stats/-/clone-stats-0.0.1.tgz#b88f94a82cf38b8791d58046ea4029ad88ca99d1"
@@ -371,6 +428,10 @@ define-property@^2.0.2:
   dependencies:
     is-descriptor "^1.0.2"
     isobject "^3.0.1"
+
+delegate@^3.1.2:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/delegate/-/delegate-3.2.0.tgz#b66b71c3158522e8ab5744f720d8ca0c2af59166"
 
 deprecated@^0.0.1:
   version "0.0.1"
@@ -616,6 +677,12 @@ glogg@^1.0.0:
   resolved "https://registry.yarnpkg.com/glogg/-/glogg-1.0.1.tgz#dcf758e44789cc3f3d32c1f3562a3676e6a34810"
   dependencies:
     sparkles "^1.0.0"
+
+good-listener@^1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/good-listener/-/good-listener-1.2.2.tgz#d53b30cdf9313dffb7dc9a0d477096aa6d145c50"
+  dependencies:
+    delegate "^3.1.2"
 
 graceful-fs@^3.0.0:
   version "3.0.11"
@@ -887,7 +954,7 @@ jquery-form@^4.2.2:
   dependencies:
     jquery ">=1.7.2"
 
-jquery-mousewheel@~3.1.13:
+jquery-mousewheel@>=3.0.6, jquery-mousewheel@~3.1.13:
   version "3.1.13"
   resolved "https://registry.yarnpkg.com/jquery-mousewheel/-/jquery-mousewheel-3.1.13.tgz#06f0335f16e353a695e7206bf50503cb523a6ee5"
 
@@ -1041,6 +1108,12 @@ make-iterator@^1.0.0:
   resolved "https://registry.yarnpkg.com/make-iterator/-/make-iterator-1.0.1.tgz#29b33f312aa8f547c4a5e490f56afcec99133ad6"
   dependencies:
     kind-of "^6.0.2"
+
+malihu-custom-scrollbar-plugin@^3.1.5:
+  version "3.1.5"
+  resolved "https://registry.yarnpkg.com/malihu-custom-scrollbar-plugin/-/malihu-custom-scrollbar-plugin-3.1.5.tgz#310cecc5e59415a1c29e9dfb5d2b6e01d66a29ef"
+  dependencies:
+    jquery-mousewheel ">=3.0.6"
 
 map-cache@^0.2.0, map-cache@^0.2.2:
   version "0.2.2"
@@ -1256,6 +1329,10 @@ path@^0.12.7:
     process "^0.11.1"
     util "^0.10.3"
 
+popper.js@^1.14.6:
+  version "1.14.6"
+  resolved "https://registry.yarnpkg.com/popper.js/-/popper.js-1.14.6.tgz#ab20dd4edf9288b8b3b6531c47c361107b60b4b0"
+
 posix-character-classes@^0.1.0:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/posix-character-classes/-/posix-character-classes-0.1.1.tgz#01eac0fe3b5af71a2a6c02feabb8c1fef7e00eab"
@@ -1263,6 +1340,12 @@ posix-character-classes@^0.1.0:
 pretty-hrtime@^1.0.0:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/pretty-hrtime/-/pretty-hrtime-1.0.3.tgz#b7e3ea42435a4c9b2759d99e0f201eb195802ee1"
+
+prismjs@^1.15.0:
+  version "1.15.0"
+  resolved "https://registry.yarnpkg.com/prismjs/-/prismjs-1.15.0.tgz#8801d332e472091ba8def94976c8877ad60398d9"
+  optionalDependencies:
+    clipboard "^2.0.0"
 
 process-nextick-args@~2.0.0:
   version "2.0.0"
@@ -1374,6 +1457,10 @@ select2@^4.0.5:
   dependencies:
     almond "~0.3.1"
     jquery-mousewheel "~3.1.13"
+
+select@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/select/-/select-1.1.2.tgz#0e7350acdec80b1108528786ec1d4418d11b396d"
 
 semver@^4.1.0:
   version "4.3.6"
@@ -1534,6 +1621,10 @@ timeago@^1.6.3:
   resolved "https://registry.yarnpkg.com/timeago/-/timeago-1.6.3.tgz#162a1adae99356297df59339837d09f1b0f36465"
   dependencies:
     jquery ">=1.2.3"
+
+tiny-emitter@^2.0.0:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/tiny-emitter/-/tiny-emitter-2.0.2.tgz#82d27468aca5ade8e5fd1e6d22b57dd43ebdfb7c"
 
 to-object-path@^0.3.0:
   version "0.3.0"

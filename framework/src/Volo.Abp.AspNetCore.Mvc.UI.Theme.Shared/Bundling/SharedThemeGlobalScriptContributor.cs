@@ -1,10 +1,14 @@
 ﻿using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
+using Volo.Abp.AspNetCore.Mvc.UI.Packages.Anchor;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.Bootstrap;
+using Volo.Abp.AspNetCore.Mvc.UI.Packages.Clipboard;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.DatatablesNetBs4;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.JQuery;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.JQueryForm;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.JQueryValidationUnobtrusive;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.Lodash;
+using Volo.Abp.AspNetCore.Mvc.UI.Packages.MalihuCustomScrollbar;
+using Volo.Abp.AspNetCore.Mvc.UI.Packages.Popper;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.Select2;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.SweetAlert;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.Timeago;

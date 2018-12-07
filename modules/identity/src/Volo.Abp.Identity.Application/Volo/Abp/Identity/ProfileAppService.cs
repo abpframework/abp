@@ -1,8 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Volo.Abp.Identity.Settings;
+using Volo.Abp.Settings;
 using Volo.Abp.Users;
 
 namespace Volo.Abp.Identity
@@ -28,19 +28,12 @@ namespace Volo.Abp.Identity
         {
             var user = await _userManager.GetByIdAsync(CurrentUser.GetId());
 
-
-            var isUsernameUpdateEnabled = string.Equals(await (SettingManager.GetOrNullAsync(IdentitySettingNames.User.IsUserNameUpdateEnabled)),
-                "true", StringComparison.OrdinalIgnoreCase);
-
-            if (isUsernameUpdateEnabled)
+            if (await SettingManager.IsTrueAsync(IdentitySettingNames.User.IsUserNameUpdateEnabled))
             {
                 (await _userManager.SetUserNameAsync(user, input.UserName)).CheckErrors();
             }
 
-            var isEmailUpdateEnabled = !string.Equals(await (SettingManager.GetOrNullAsync(IdentitySettingNames.User.IsEmailUpdateEnabled)),
-                "true", StringComparison.OrdinalIgnoreCase);
-
-            if (isEmailUpdateEnabled)
+            if (await SettingManager.IsTrueAsync(IdentitySettingNames.User.IsEmailUpdateEnabled))
             {
                 (await _userManager.SetEmailAsync(user, input.Email)).CheckErrors();
             }

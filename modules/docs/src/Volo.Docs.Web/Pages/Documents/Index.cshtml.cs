@@ -32,6 +32,7 @@ namespace Volo.Docs.Pages.Documents
             }
 
             Projects = listResult.Items;
+
             return Page();
         }
     }
