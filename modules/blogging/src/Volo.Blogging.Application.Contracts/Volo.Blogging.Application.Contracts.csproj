@@ -11,10 +11,12 @@
 
   <ItemGroup>
     <None Remove="Volo\Blogging\Localization\Resources\Blogging\ApplicationContracts\en.json" />
+    <None Remove="Volo\Blogging\Localization\Resources\Blogging\ApplicationContracts\pt-BR.json" />
     <None Remove="Volo\Blogging\Localization\Resources\Blogging\ApplicationContracts\tr.json" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Volo\Blogging\Localization\Resources\Blogging\ApplicationContracts\pt-BR.json" />
     <EmbeddedResource Include="Volo\Blogging\Localization\Resources\Blogging\ApplicationContracts\en.json" />
     <EmbeddedResource Include="Volo\Blogging\Localization\Resources\Blogging\ApplicationContracts\tr.json" />
   </ItemGroup>
