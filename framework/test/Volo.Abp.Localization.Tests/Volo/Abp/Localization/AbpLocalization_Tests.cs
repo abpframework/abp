@@ -110,12 +110,12 @@ namespace Volo.Abp.Localization
         {
             public override void ConfigureServices(ServiceConfigurationContext context)
             {
-                context.Services.Configure<VirtualFileSystemOptions>(options =>
+                Configure<VirtualFileSystemOptions>(options =>
                 {
                     options.FileSets.AddEmbedded<TestModule>();
                 });
 
-                context.Services.Configure<AbpLocalizationOptions>(options =>
+                Configure<AbpLocalizationOptions>(options =>
                 {
                     options.Resources.Add<LocalizationTestValidationResource>("en").AddVirtualJson("/Volo/Abp/Localization/TestResources/Base/Validation");
                     options.Resources.Add<LocalizationTestCountryNamesResource>("en").AddVirtualJson("/Volo/Abp/Localization/TestResources/Base/CountryNames");

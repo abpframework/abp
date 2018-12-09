@@ -1,5 +1,5 @@
 {
-  "culture": "pt",
+  "culture": "pt-BR",
   "texts": {
     "Hello <b>{0}</b>.": "Olá <b>{0}</b>.",
     "Car": "Carro",

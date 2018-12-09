@@ -17,7 +17,7 @@ namespace Volo.Abp.EventBus.Local
             return NullDisposable.Instance;
         }
 
-        public IDisposable Subscribe<TEvent>(IEventHandler<TEvent> handler) where TEvent : class
+        public IDisposable Subscribe<TEvent>(ILocalEventHandler<TEvent> handler) where TEvent : class
         {
             return NullDisposable.Instance;
         }
@@ -47,7 +47,7 @@ namespace Volo.Abp.EventBus.Local
             
         }
 
-        public void Unsubscribe<TEvent>(IEventHandler<TEvent> handler) where TEvent : class
+        public void Unsubscribe<TEvent>(ILocalEventHandler<TEvent> handler) where TEvent : class
         {
             
         }

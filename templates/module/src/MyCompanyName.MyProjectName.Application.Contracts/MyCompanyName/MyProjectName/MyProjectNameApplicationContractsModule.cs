@@ -16,17 +16,17 @@ namespace MyCompanyName.MyProjectName
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.Configure<PermissionOptions>(options =>
+            Configure<PermissionOptions>(options =>
             {
                 options.DefinitionProviders.Add<MyProjectNamePermissionDefinitionProvider>();
             });
 
-            context.Services.Configure<VirtualFileSystemOptions>(options =>
+            Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<MyProjectNameApplicationContractsModule>();
             });
 
-            context.Services.Configure<AbpLocalizationOptions>(options =>
+            Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources
                     .Get<MyProjectNameResource>()

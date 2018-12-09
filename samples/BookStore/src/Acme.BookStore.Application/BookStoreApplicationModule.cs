@@ -14,12 +14,12 @@ namespace Acme.BookStore
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.Configure<PermissionOptions>(options =>
+            Configure<PermissionOptions>(options =>
             {
                 options.DefinitionProviders.Add<BookStorePermissionDefinitionProvider>();
             });
 
-            context.Services.Configure<AbpAutoMapperOptions>(options =>
+            Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<BookStoreApplicationAutoMapperProfile>();
             });

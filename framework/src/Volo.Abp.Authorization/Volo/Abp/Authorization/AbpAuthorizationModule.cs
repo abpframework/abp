@@ -24,7 +24,7 @@ namespace Volo.Abp.Authorization
 
             context.Services.AddSingleton<IAuthorizationHandler, PermissionRequirementHandler>();
 
-            context.Services.Configure<PermissionOptions>(options =>
+            Configure<PermissionOptions>(options =>
             {
                 options.ValueProviders.Add<UserPermissionValueProvider>();
                 options.ValueProviders.Add<RolePermissionValueProvider>();

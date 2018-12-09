@@ -10,11 +10,8 @@
 @inject ISettingManager SettingManager
 @{
     Layout = null;
-    var isUserNameUpdateEnabled = string.Equals(await SettingManager.GetOrNullAsync(IdentitySettingNames.User.IsUserNameUpdateEnabled), "true",
-        StringComparison.OrdinalIgnoreCase);
-
-    var isEmailUpdateEnabled = string.Equals(await SettingManager.GetOrNullAsync(IdentitySettingNames.User.IsEmailUpdateEnabled), "true",
-        StringComparison.OrdinalIgnoreCase);
+    var isUserNameUpdateEnabled = await SettingManager.IsTrueAsync(IdentitySettingNames.User.IsUserNameUpdateEnabled);
+    var isEmailUpdateEnabled = await SettingManager.IsTrueAsync(IdentitySettingNames.User.IsEmailUpdateEnabled);
 }
 
 <form asp-page="/Identity/Shared/PersonalSettingsModal">

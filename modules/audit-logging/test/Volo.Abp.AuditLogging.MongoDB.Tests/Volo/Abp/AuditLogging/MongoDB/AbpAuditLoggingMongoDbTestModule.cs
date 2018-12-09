@@ -17,7 +17,7 @@ namespace Volo.Abp.AuditLogging.MongoDB
         {
             _mongoDbRunner = MongoDbRunner.Start();
 
-            context.Services.Configure<DbConnectionOptions>(options =>
+            Configure<DbConnectionOptions>(options =>
             {
                 options.ConnectionStrings.Default = _mongoDbRunner.ConnectionString;
             });

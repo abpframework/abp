@@ -54,8 +54,6 @@ namespace Volo.Abp.Identity
         public async Task UpdateAsync()
         {
             //Arrange
-
-            //Arrange
             _currentUser.Id.Returns(_testData.UserJohnId);
             _currentUser.IsAuthenticated.Returns(true);
             

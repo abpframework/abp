@@ -14,12 +14,12 @@ namespace MyCompanyName.MyProjectName
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.Configure<PermissionOptions>(options =>
+            Configure<PermissionOptions>(options =>
             {
                 options.DefinitionProviders.Add<MyProjectNamePermissionDefinitionProvider>();
             });
 
-            context.Services.Configure<AbpAutoMapperOptions>(options =>
+            Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<MyProjectNameApplicationAutoMapperProfile>();
             });

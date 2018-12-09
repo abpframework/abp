@@ -17,7 +17,7 @@ namespace Volo.Abp.IdentityServer
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.Configure<AbpAutoMapperOptions>(options =>
+            Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<ClientAutoMapperProfile>(validate: true);
             });

@@ -4,6 +4,8 @@ using Volo.Abp.Modularity;
 
 namespace Volo.Abp
 {
+    //TODO: Move to "Testing" namespace
+
     public abstract class AbpIntegratedTest<TStartupModule> : AbpTestBaseWithServiceProvider, IDisposable
         where TStartupModule : IAbpModule
     {

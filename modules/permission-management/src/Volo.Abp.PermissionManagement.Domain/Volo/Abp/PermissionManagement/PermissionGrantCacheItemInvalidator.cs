@@ -7,7 +7,7 @@ using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.PermissionManagement
 {
-    public class PermissionGrantCacheItemInvalidator : IEventHandler<EntityChangedEventData<PermissionGrant>>, ITransientDependency
+    public class PermissionGrantCacheItemInvalidator : ILocalEventHandler<EntityChangedEventData<PermissionGrant>>, ITransientDependency
     {
         protected ICurrentTenant CurrentTenant { get; }
 

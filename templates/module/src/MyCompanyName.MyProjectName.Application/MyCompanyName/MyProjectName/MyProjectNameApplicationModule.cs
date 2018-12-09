@@ -14,12 +14,12 @@ namespace MyCompanyName.MyProjectName
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.Configure<AbpAutoMapperOptions>(options =>
+            Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<MyProjectNameApplicationAutoMapperProfile>(validate: true);
             });
 
-            context.Services.Configure<SettingOptions>(options =>
+            Configure<SettingOptions>(options =>
             {
                 options.DefinitionProviders.Add<MyProjectNameSettingDefinitionProvider>();
             });

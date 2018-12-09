@@ -18,17 +18,17 @@ namespace Volo.Abp.Identity
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.Configure<PermissionOptions>(options =>
+            Configure<PermissionOptions>(options =>
             {
                 options.DefinitionProviders.Add<IdentityPermissionDefinitionProvider>();
             });
 
-            context.Services.Configure<VirtualFileSystemOptions>(options =>
+            Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpIdentityApplicationContractsModule>();
             });
 
-            context.Services.Configure<AbpLocalizationOptions>(options =>
+            Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources
                     .Get<IdentityResource>()

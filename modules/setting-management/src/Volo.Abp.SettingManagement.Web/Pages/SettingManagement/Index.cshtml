@@ -1,0 +1,19 @@
+﻿@page
+@using Volo.Abp.SettingManagement.Web.Pages.SettingManagement
+@model IndexModel
+@section scripts {
+    <abp-script-bundle name="@typeof(IndexModel).FullName">
+        <abp-script src="/Pages/SettingManagement/Index.js" />
+    </abp-script-bundle>
+}
+<abp-tabs tab-style="PillVertical"  vertical-header-size="_2">
+
+@foreach (var group in Model.SettingPageCreationContext.Groups)
+{
+    <abp-tab title="@group.DisplayName">
+        
+        <h2>@group.DisplayName</h2>
+        @await Component.InvokeAsync(group.ComponentType)
+    </abp-tab>
+}
+</abp-tabs>

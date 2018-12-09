@@ -41,8 +41,6 @@ namespace Volo.Docs.Projects
         /// </summary>
         public virtual string DocumentStoreType { get; protected set; }
 
-        public virtual string GoogleCustomSearchId { get; set; }
-
         public virtual Dictionary<string, object> ExtraProperties { get; protected set; }
 
         public virtual string MainWebsiteUrl { get; set; }

@@ -1,13 +1,13 @@
 <Project>
   <PropertyGroup>
     <LangVersion>latest</LangVersion>
-    <Version>0.8.0</Version>
+    <Version>0.9.0</Version>
     <NoWarn>$(NoWarn);CS1591</NoWarn>
-    <PackageIconUrl>http://www.aspnetboilerplate.com/images/abp_nupkg.png</PackageIconUrl>
-    <PackageProjectUrl>http://abp.io</PackageProjectUrl>
-    <PackageLicenseUrl>https://github.com/volosoft/abp/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageIconUrl>https://abp.io/assets/abp_nupkg.png</PackageIconUrl>
+    <PackageProjectUrl>https://abp.io</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/abpframework/abp/blob/master/LICENSE</PackageLicenseUrl>
     <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/volosoft/abp/</RepositoryUrl>
+    <RepositoryUrl>https://github.com/abpframework/abp/</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>

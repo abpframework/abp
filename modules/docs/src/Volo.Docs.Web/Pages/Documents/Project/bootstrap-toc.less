@@ -1,0 +1,110 @@
+﻿@color_1: #767676;
+@color_2: #563d7c;
+@background_color_1: transparent;
+
+/*!
+ * Bootstrap Table of Contents v<%= version %> (http://afeld.github.io/bootstrap-toc/)
+ * Copyright 2015 Aidan Feldman
+ * Licensed under MIT (https://github.com/afeld/bootstrap-toc/blob/gh-pages/LICENSE.md) */
+/* modified from https://github.com/twbs/bootstrap/blob/94b4076dd2efba9af71f0b18d4ee4b163aa9e0dd/docs/assets/css/src/docs.css#L548-L601 */
+/* All levels of nav */
+/* Nav: second level (shown on .active) */
+nav[data-toggle='toc'] {
+    .nav {
+        > li {
+            > a {
+                display: block;
+                padding: 4px 20px;
+                font-size: 13px;
+                font-weight: 500;
+                color: @color_1;
+
+                &:hover {
+                    padding-left: 19px;
+                    color: @color_2;
+                    text-decoration: none;
+                    background-color: @background_color_1;
+                    border-left: 1px solid #563d7c;
+                }
+
+                &:focus {
+                    padding-left: 19px;
+                    color: @color_2;
+                    text-decoration: none;
+                    background-color: @background_color_1;
+                    border-left: 1px solid #563d7c;
+                }
+            }
+        }
+
+        .nav {
+            > li {
+                > a {
+                    padding-top: 1px;
+                    padding-bottom: 1px;
+                    padding-left: 30px;
+                    font-size: 12px;
+                    font-weight: normal;
+
+                    &:hover {
+                        padding-left: 29px;
+                    }
+
+                    &:focus {
+                        padding-left: 29px;
+                    }
+                }
+
+                > .active {
+                    padding-left: 28px;
+                    font-weight: 500;
+
+                    &:hover {
+                        padding-left: 28px;
+                        font-weight: 500;
+                    }
+
+                    &:focus {
+                        padding-left: 28px;
+                        font-weight: 500;
+                    }
+                }
+            }
+        }
+    }
+
+    .nav-link.active {
+        padding-left: 18px;
+        font-weight: bold;
+        color: @color_2;
+        background-color: @background_color_1;
+        border-left: 2px solid #563d7c;
+
+        &:hover {
+            padding-left: 18px;
+            font-weight: bold;
+            color: @color_2;
+            background-color: @background_color_1;
+            border-left: 2px solid #563d7c;
+        }
+
+        &:focus {
+            padding-left: 18px;
+            font-weight: bold;
+            color: @color_2;
+            background-color: @background_color_1;
+            border-left: 2px solid #563d7c;
+        }
+
+        & + ul {
+            display: block;
+        }
+    }
+
+    .nav-link {
+        & + ul {
+            display: none;
+            padding-bottom: 10px;
+        }
+    }
+}

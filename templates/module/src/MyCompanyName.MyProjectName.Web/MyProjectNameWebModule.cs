@@ -28,17 +28,17 @@ namespace MyCompanyName.MyProjectName
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.Configure<NavigationOptions>(options =>
+            Configure<NavigationOptions>(options =>
             {
                 options.MenuContributors.Add(new MyProjectNameMenuContributor());
             });
 
-            context.Services.Configure<VirtualFileSystemOptions>(options =>
+            Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<MyProjectNameWebModule>("MyCompanyName.MyProjectName");
             });
 
-            context.Services.Configure<AbpLocalizationOptions>(options =>
+            Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources
                     .Get<MyProjectNameResource>()
@@ -48,12 +48,12 @@ namespace MyCompanyName.MyProjectName
                     ).AddVirtualJson("/Localization/Resources/MyProjectName");
             });
 
-            context.Services.Configure<AbpAutoMapperOptions>(options =>
+            Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<MyProjectNameWebAutoMapperProfile>(validate: true);
             });
 
-            context.Services.Configure<RazorPagesOptions>(options =>
+            Configure<RazorPagesOptions>(options =>
             {
                 //Configure authorization.
             });

@@ -32,7 +32,7 @@ namespace Volo.Abp.AspNetCore
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.Configure<AbpAuditingOptions>(options =>
+            Configure<AbpAuditingOptions>(options =>
             {
                 options.Contributors.Add(new AspNetCoreAuditLogContributor());
             });

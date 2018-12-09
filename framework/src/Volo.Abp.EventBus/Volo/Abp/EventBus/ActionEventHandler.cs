@@ -5,11 +5,11 @@ using Volo.Abp.DependencyInjection;
 namespace Volo.Abp.EventBus
 {
     /// <summary>
-    /// This event handler is an adapter to be able to use an action as <see cref="IEventHandler{TEvent}"/> implementation.
+    /// This event handler is an adapter to be able to use an action as <see cref="ILocalEventHandler{TEvent}"/> implementation.
     /// </summary>
     /// <typeparam name="TEvent">Event type</typeparam>
     public class ActionEventHandler<TEvent> :
-        IEventHandler<TEvent>,
+        ILocalEventHandler<TEvent>,
         ITransientDependency
     {
         /// <summary>

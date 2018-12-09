@@ -55,7 +55,7 @@ namespace Volo.BloggingTestApp
             var hostingEnvironment = context.Services.GetHostingEnvironment();
             var configuration = context.Services.BuildConfiguration();
 
-            context.Services.Configure<DbConnectionOptions>(options =>
+            Configure<DbConnectionOptions>(options =>
             {
 #if MONGODB
                 const string connStringName = "MongoDb";
@@ -66,14 +66,14 @@ namespace Volo.BloggingTestApp
             });
 
 #if !MONGODB
-            context.Services.Configure<AbpDbContextOptions>(options =>
+            Configure<AbpDbContextOptions>(options =>
             {
                 options.UseSqlServer();
             });
 #endif
             if (hostingEnvironment.IsDevelopment())
             {
-                context.Services.Configure<VirtualFileSystemOptions>(options =>
+                Configure<VirtualFileSystemOptions>(options =>
                 {
                     options.FileSets.ReplaceEmbeddedByPyhsical<AbpUiModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.UI", Path.DirectorySeparatorChar)));
                     options.FileSets.ReplaceEmbeddedByPyhsical<AbpAspNetCoreMvcUiModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI", Path.DirectorySeparatorChar)));
@@ -93,14 +93,14 @@ namespace Volo.BloggingTestApp
                 });
 
             var cultures = new List<CultureInfo> { new CultureInfo("en"), new CultureInfo("tr") };
-            context.Services.Configure<RequestLocalizationOptions>(options =>
+            Configure<RequestLocalizationOptions>(options =>
             {
                 options.DefaultRequestCulture = new RequestCulture("en");
                 options.SupportedCultures = cultures;
                 options.SupportedUICultures = cultures;
             });
 
-            context.Services.Configure<ThemingOptions>(options =>
+            Configure<ThemingOptions>(options =>
             {
                 options.DefaultThemeName = BasicTheme.Name;
             });

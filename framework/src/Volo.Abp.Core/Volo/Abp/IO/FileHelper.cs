@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using JetBrains.Annotations;
 
 namespace Volo.Abp.IO
 {
@@ -17,6 +18,28 @@ namespace Volo.Abp.IO
             {
                 File.Delete(filePath);
             }
+        }
+
+        /// <summary>
+        /// Gets extension of a file.
+        /// </summary>
+        /// <param name="fileNameWithExtension"></param>
+        /// <returns>
+        /// Returns extension without dot.
+        /// Returns null if given <paramref name="fileNameWithExtension"></paramref> does not include dot.
+        /// </returns>
+        [CanBeNull]
+        public static string GetExtension([NotNull] string fileNameWithExtension)
+        {
+            Check.NotNull(fileNameWithExtension, nameof(fileNameWithExtension));
+
+            var lastDotIndex = fileNameWithExtension.LastIndexOf('.');
+            if (lastDotIndex < 0)
+            {
+                return null;
+            }
+
+            return fileNameWithExtension.Substring(lastDotIndex + 1);
         }
     }
 }

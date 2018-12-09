@@ -1,5 +1,6 @@
 using System;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.EventBus
 {
@@ -13,13 +14,10 @@ namespace Volo.Abp.EventBus
 
         protected IServiceScope ServiceScope { get; }
 
-        //TODO: Consider to inject IServiceScopeFactory instead
-        public IocEventHandlerFactory(IServiceProvider serviceProvider, Type handlerType)
+        public IocEventHandlerFactory(IHybridServiceScopeFactory scopeFactory, Type handlerType)
         {
             HandlerType = handlerType;
-            ServiceScope = serviceProvider
-                .GetRequiredService<IServiceScopeFactory>()
-                .CreateScope();
+            ServiceScope = scopeFactory.CreateScope();
         }
 
         /// <summary>

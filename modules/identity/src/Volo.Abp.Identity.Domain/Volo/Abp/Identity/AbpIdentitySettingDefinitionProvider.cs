@@ -23,8 +23,8 @@ namespace Volo.Abp.Identity
                 new SettingDefinition(IdentitySettingNames.SignIn.RequireConfirmedEmail),
                 new SettingDefinition(IdentitySettingNames.SignIn.RequireConfirmedPhoneNumber),
 
-                new SettingDefinition(IdentitySettingNames.User.IsUserNameUpdateEnabled),
-                new SettingDefinition(IdentitySettingNames.User.IsEmailUpdateEnabled)
+                new SettingDefinition(IdentitySettingNames.User.IsUserNameUpdateEnabled, "true"),
+                new SettingDefinition(IdentitySettingNames.User.IsEmailUpdateEnabled, "true")
 
             );
         }

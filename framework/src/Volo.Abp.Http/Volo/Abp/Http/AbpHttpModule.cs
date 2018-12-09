@@ -12,7 +12,7 @@ namespace Volo.Abp.Http
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.Configure<AbpApiProxyScriptingOptions>(options =>
+            Configure<AbpApiProxyScriptingOptions>(options =>
             {
                 options.Generators[JQueryProxyScriptGenerator.Name] = typeof(JQueryProxyScriptGenerator);
             });

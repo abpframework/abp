@@ -45,12 +45,12 @@ namespace Volo.Abp.Localization
         {
             public override void ConfigureServices(ServiceConfigurationContext context)
             {
-                context.Services.Configure<VirtualFileSystemOptions>(options =>
+                Configure<VirtualFileSystemOptions>(options =>
                 {
                     options.FileSets.AddEmbedded<AbpLocalization_Tests.TestModule>();
                 });
 
-                context.Services.Configure<AbpLocalizationOptions>(options =>
+                Configure<AbpLocalizationOptions>(options =>
                 {
                     options.Resources
                         .Add<LocalizationTestResource>("en")
