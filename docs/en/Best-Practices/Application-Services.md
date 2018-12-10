@@ -26,6 +26,7 @@
 Example:
 
 ```c#
+[Serializable]
 public class IssueDto : FullAuditedEntityDto<Guid>
 {
     public string Title { get; set; }
@@ -34,6 +35,7 @@ public class IssueDto : FullAuditedEntityDto<Guid>
     public Collection<IssueLabelDto> Labels { get; set; }
 }
 
+[Serializable]
 public class IssueLabelDto
 {
     public Guid IssueId { get; set; }
@@ -54,6 +56,7 @@ public class IssueLabelDto
 Example:
 
 ````C#
+[Serializable]
 public class IssueWithDetailsDto : FullAuditedEntityDto<Guid>
 {
     public string Title { get; set; }
@@ -62,12 +65,14 @@ public class IssueWithDetailsDto : FullAuditedEntityDto<Guid>
     public Collection<LabelDto> Labels { get; set; }
 }
 
+[Serializable]
 public class MilestoneDto : EntityDto<Guid>
 {
     public string Name { get; set; }
     public bool IsClosed { get; set; }
 }
 
+[Serializable]
 public class LabelDto : EntityDto<Guid>
 {
     public string Name { get; set; }
@@ -129,6 +134,7 @@ Task<QuestionWithDetailsDto> CreateAsync(CreateQuestionDto questionDto);
 The related **DTO**:
 
 ````C#
+[Serializable]
 public class CreateQuestionDto
 {
     [Required]
