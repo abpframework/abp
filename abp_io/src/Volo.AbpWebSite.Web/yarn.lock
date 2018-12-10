@@ -2,6 +2,13 @@
 # yarn lockfile v1
 
 
+"@abp/anchor-js@^0.5.1":
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/@abp/anchor-js/-/anchor-js-0.5.1.tgz#5693bb317f08f9a05bb579f63d6ee011033d3632"
+  dependencies:
+    "@abp/core" "^0.4.9"
+    anchor-js "^4.1.1"
+
 "@abp/aspnetcore.mvc.ui.theme.basic@^0.4.9":
   version "0.4.9"
   resolved "https://registry.yarnpkg.com/@abp/aspnetcore.mvc.ui.theme.basic/-/aspnetcore.mvc.ui.theme.basic-0.4.9.tgz#926a25c641225598c8666b658c1df3fa7fbed7cf"
@@ -50,6 +57,13 @@
     "@abp/core" "^0.4.9"
     bootstrap "^4.1.1"
 
+"@abp/clipboard@^0.5.1":
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/@abp/clipboard/-/clipboard-0.5.1.tgz#bd799e3ed5eb316b718125fbd1010967cf0b5ec5"
+  dependencies:
+    "@abp/core" "^0.4.9"
+    clipboard "^2.0.4"
+
 "@abp/codemirror@^0.4.9":
   version "0.4.9"
   resolved "https://registry.yarnpkg.com/@abp/codemirror/-/codemirror-0.4.9.tgz#59b6ece19efa9c10cf8c8a1164d0939515e13c9b"
@@ -74,6 +88,16 @@
   dependencies:
     "@abp/core" "^0.4.9"
     datatables.net "^1.10.16"
+
+"@abp/docs@^0.5.1":
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/@abp/docs/-/docs-0.5.1.tgz#401a34eb13ad9b773a3d70319c50bb40f6f39c25"
+  dependencies:
+    "@abp/anchor-js" "^0.5.1"
+    "@abp/clipboard" "^0.5.1"
+    "@abp/malihu-custom-scrollbar-plugin" "^0.5.1"
+    "@abp/popper.js" "^0.5.1"
+    "@abp/prismjs" "^0.5.1"
 
 "@abp/font-awesome@^0.4.9":
   version "0.4.9"
@@ -123,6 +147,13 @@
     "@abp/core" "^0.4.9"
     lodash "^4.17.10"
 
+"@abp/malihu-custom-scrollbar-plugin@^0.5.1":
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/@abp/malihu-custom-scrollbar-plugin/-/malihu-custom-scrollbar-plugin-0.5.1.tgz#0b293c6164292aa9cb016b042735d2640ccc63fe"
+  dependencies:
+    "@abp/core" "^0.4.9"
+    malihu-custom-scrollbar-plugin "^3.1.5"
+
 "@abp/markdown-it@^0.4.9":
   version "0.4.9"
   resolved "https://registry.yarnpkg.com/@abp/markdown-it/-/markdown-it-0.4.9.tgz#9b3ee9bffe0416d4ee9c5ea983de04a350f2b938"
@@ -136,6 +167,20 @@
   dependencies:
     "@abp/core" "^0.4.9"
     owl.carousel "^2.3.4"
+
+"@abp/popper.js@^0.5.1":
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/@abp/popper.js/-/popper.js-0.5.1.tgz#9bb1d1c88d467963b5acbdcfe01b7e2dbe773b0f"
+  dependencies:
+    "@abp/core" "^0.4.9"
+    popper.js "^1.14.6"
+
+"@abp/prismjs@^0.5.1":
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/@abp/prismjs/-/prismjs-0.5.1.tgz#0df2d40fe0c2a0992df03d6f8fc14682873b7f44"
+  dependencies:
+    "@abp/core" "^0.4.9"
+    prismjs "^1.15.0"
 
 "@abp/select2@^0.4.9":
   version "0.4.9"
@@ -178,6 +223,10 @@
 almond@~0.3.1:
   version "0.3.3"
   resolved "https://registry.yarnpkg.com/almond/-/almond-0.3.3.tgz#a0e7c95ac7624d6417b4494b1e68bff693168a20"
+
+anchor-js@^4.1.1:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/anchor-js/-/anchor-js-4.1.1.tgz#943b7605e47b3c663e91e82879b682f2e186a5b1"
 
 ansi-colors@^1.1.0:
   version "1.1.0"
@@ -332,6 +381,14 @@ class-utils@^0.3.5:
     isobject "^3.0.0"
     static-extend "^0.1.1"
 
+clipboard@^2.0.0, clipboard@^2.0.4:
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/clipboard/-/clipboard-2.0.4.tgz#836dafd66cf0fea5d71ce5d5b0bf6e958009112d"
+  dependencies:
+    good-listener "^1.2.2"
+    select "^1.1.2"
+    tiny-emitter "^2.0.0"
+
 clone-stats@^0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/clone-stats/-/clone-stats-0.0.1.tgz#b88f94a82cf38b8791d58046ea4029ad88ca99d1"
@@ -426,6 +483,10 @@ define-property@^2.0.2:
   dependencies:
     is-descriptor "^1.0.2"
     isobject "^3.0.1"
+
+delegate@^3.1.2:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/delegate/-/delegate-3.2.0.tgz#b66b71c3158522e8ab5744f720d8ca0c2af59166"
 
 deprecated@^0.0.1:
   version "0.0.1"
@@ -679,6 +740,12 @@ glogg@^1.0.0:
   resolved "https://registry.yarnpkg.com/glogg/-/glogg-1.0.1.tgz#dcf758e44789cc3f3d32c1f3562a3676e6a34810"
   dependencies:
     sparkles "^1.0.0"
+
+good-listener@^1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/good-listener/-/good-listener-1.2.2.tgz#d53b30cdf9313dffb7dc9a0d477096aa6d145c50"
+  dependencies:
+    delegate "^3.1.2"
 
 graceful-fs@^3.0.0:
   version "3.0.11"
@@ -954,7 +1021,7 @@ jquery-form@^4.2.2:
   dependencies:
     jquery ">=1.7.2"
 
-jquery-mousewheel@~3.1.13:
+jquery-mousewheel@>=3.0.6, jquery-mousewheel@~3.1.13:
   version "3.1.13"
   resolved "https://registry.yarnpkg.com/jquery-mousewheel/-/jquery-mousewheel-3.1.13.tgz#06f0335f16e353a695e7206bf50503cb523a6ee5"
 
@@ -1114,6 +1181,12 @@ make-iterator@^1.0.0:
   resolved "https://registry.yarnpkg.com/make-iterator/-/make-iterator-1.0.1.tgz#29b33f312aa8f547c4a5e490f56afcec99133ad6"
   dependencies:
     kind-of "^6.0.2"
+
+malihu-custom-scrollbar-plugin@^3.1.5:
+  version "3.1.5"
+  resolved "https://registry.yarnpkg.com/malihu-custom-scrollbar-plugin/-/malihu-custom-scrollbar-plugin-3.1.5.tgz#310cecc5e59415a1c29e9dfb5d2b6e01d66a29ef"
+  dependencies:
+    jquery-mousewheel ">=3.0.6"
 
 map-cache@^0.2.0, map-cache@^0.2.2:
   version "0.2.2"
@@ -1360,6 +1433,10 @@ plantuml-encoder@^1.2.5:
     pako "1.0.3"
     utf8-bytes "0.0.1"
 
+popper.js@^1.14.6:
+  version "1.14.6"
+  resolved "https://registry.yarnpkg.com/popper.js/-/popper.js-1.14.6.tgz#ab20dd4edf9288b8b3b6531c47c361107b60b4b0"
+
 posix-character-classes@^0.1.0:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/posix-character-classes/-/posix-character-classes-0.1.1.tgz#01eac0fe3b5af71a2a6c02feabb8c1fef7e00eab"
@@ -1367,6 +1444,12 @@ posix-character-classes@^0.1.0:
 pretty-hrtime@^1.0.0:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/pretty-hrtime/-/pretty-hrtime-1.0.3.tgz#b7e3ea42435a4c9b2759d99e0f201eb195802ee1"
+
+prismjs@^1.15.0:
+  version "1.15.0"
+  resolved "https://registry.yarnpkg.com/prismjs/-/prismjs-1.15.0.tgz#8801d332e472091ba8def94976c8877ad60398d9"
+  optionalDependencies:
+    clipboard "^2.0.0"
 
 process-nextick-args@~2.0.0:
   version "2.0.0"
@@ -1488,6 +1571,10 @@ select2@^4.0.5:
   dependencies:
     almond "~0.3.1"
     jquery-mousewheel "~3.1.13"
+
+select@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/select/-/select-1.1.2.tgz#0e7350acdec80b1108528786ec1d4418d11b396d"
 
 semver@^4.1.0:
   version "4.3.6"
@@ -1656,6 +1743,10 @@ timeago@^1.6.3:
   resolved "https://registry.yarnpkg.com/timeago/-/timeago-1.6.3.tgz#162a1adae99356297df59339837d09f1b0f36465"
   dependencies:
     jquery ">=1.2.3"
+
+tiny-emitter@^2.0.0:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/tiny-emitter/-/tiny-emitter-2.0.2.tgz#82d27468aca5ade8e5fd1e6d22b57dd43ebdfb7c"
 
 to-mark@^1.1.2:
   version "1.1.3"
