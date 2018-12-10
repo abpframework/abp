@@ -188,6 +188,8 @@ This method votes a question and returns the current score of the question.
 * **Do** implement application service interfaces in the **application layer**.
   * **Do** use the naming convention. Ex: Create `ProductAppService` class for the `IProductAppService` interface.
   * **Do** inherit from the `ApplicationService` base class.
+* **Do** make all public methods **virtual**, so developers may inherit and override them.
+* **Do not** make **private** methods. Instead make them **protected virtual**, so developers may inherit and override them.
 
 #### Using Repositories
 
