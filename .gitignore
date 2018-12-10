@@ -280,3 +280,8 @@ abp_io/src/Volo.AbpWebSite.Web/wwwroot/files/*
 templates/service/host/MyCompanyName.MyProjectName.Host/Logs/logs.txt
 templates/service/host/IdentityServerHost/Logs/logs.txt
 abp_io/src/Volo.AbpWebSite.Web/TemplateFiles/*.zip
+framework/test/Volo\.Abp\.AspNetCore\.Mvc\.UI\.Bootstrap\.Demo/package-lock\.json
+
+modules/blogging/app/Volo\.BloggingTestApp/package-lock\.json
+
+templates/mvc/src/MyCompanyName\.MyProjectName\.Web/package-lock\.json
