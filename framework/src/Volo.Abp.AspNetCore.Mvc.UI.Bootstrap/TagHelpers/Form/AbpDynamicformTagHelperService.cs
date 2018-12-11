@@ -134,10 +134,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 if (IsSelectGroup(context, model))
                 {
                     ProcessSelectGroup(context, output, model);
-                    continue;
                 }
-
-                ProcessInputGroup(context, output, model);
+                else
+                {
+                    ProcessInputGroup(context, output, model);
+                }
             }
         }
 
