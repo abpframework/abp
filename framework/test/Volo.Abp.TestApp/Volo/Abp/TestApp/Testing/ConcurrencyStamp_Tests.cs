@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Volo.Abp.Data;
 using Volo.Abp.Modularity;
 using Volo.Abp.TestApp.Domain;
 using Xunit;
@@ -18,9 +19,17 @@ namespace Volo.Abp.TestApp.Testing
         [Fact]
         public async Task Should_Not_Allow_To_Update_If_The_Entity_Has_Changed()
         {
-            var london = await CityRepository.FindByNameAsync("London");
-            london.Name = "London-1";
-            await CityRepository.UpdateAsync(london);
+            var london1 = await CityRepository.FindByNameAsync("London");
+            london1.Name = "London-1";
+
+            var london2 = await CityRepository.FindByNameAsync("London");
+            london2.Name = "London-2";
+            await CityRepository.UpdateAsync(london2);
+
+            await Assert.ThrowsAsync<AbpDbConcurrencyException>(async () =>
+            {
+                await CityRepository.UpdateAsync(london1);
+            });
         }
     }
 }
