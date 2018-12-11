@@ -95,6 +95,8 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             {
                 b.ToTable(options.TablePrefix + "Roles", options.Schema);
 
+                b.ConfigureExtraProperties();
+
                 b.Property(r => r.Name).IsRequired().HasMaxLength(IdentityRoleConsts.MaxNameLength);
                 b.Property(r => r.NormalizedName).IsRequired().HasMaxLength(IdentityRoleConsts.MaxNormalizedNameLength);
                 b.Property(r => r.IsDefault).HasColumnName(nameof(IdentityRole.IsDefault));

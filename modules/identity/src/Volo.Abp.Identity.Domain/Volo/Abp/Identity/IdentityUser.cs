@@ -6,8 +6,6 @@ using System.Security.Claims;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Identity;
 using Volo.Abp.Auditing;
-using Volo.Abp.Data;
-using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.Guids;
 using Volo.Abp.ObjectMapping;
@@ -15,7 +13,7 @@ using Volo.Abp.Users;
 
 namespace Volo.Abp.Identity
 {
-    public class IdentityUser : FullAuditedAggregateRoot<Guid>, IHasConcurrencyStamp, IUser, IHasExtraProperties, IMapTo<UserEto>
+    public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser, IMapTo<UserEto>
     {
         public virtual Guid? TenantId { get; protected set; }
 
@@ -68,12 +66,6 @@ namespace Volo.Abp.Identity
         /// </summary>
         [DisableAuditing]
         public virtual string SecurityStamp { get; protected internal set; }
-
-        /// <summary>
-        /// A random value that must change whenever a user is persisted to the store
-        /// </summary>
-        [DisableAuditing]
-        public virtual string ConcurrencyStamp { get; set; }
 
         /// <summary>
         /// Gets or sets a telephone number for the user.
@@ -132,8 +124,6 @@ namespace Volo.Abp.Identity
         /// Navigation property for this users tokens.
         /// </summary>
         public virtual ICollection<IdentityUserToken> Tokens { get; protected set; }
-
-        public Dictionary<string, object> ExtraProperties { get; protected set; }
 
         protected IdentityUser()
         {

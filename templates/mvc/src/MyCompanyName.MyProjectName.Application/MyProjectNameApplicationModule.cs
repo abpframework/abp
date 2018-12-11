@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using MyCompanyName.MyProjectName.Permissions;
+﻿using MyCompanyName.MyProjectName.Permissions;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Identity;
