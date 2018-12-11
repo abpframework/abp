@@ -227,6 +227,24 @@
       ]
     },
     {
+      "text": "Background",
+      "items": [
+        {
+          "text": "Background Jobs",
+          "path": "Background-Jobs.md",
+          "items": [
+            {
+              "text": "Hangfire Integration",
+              "path": "Background-Jobs-Hangfire.md"
+            },
+            {
+              "text": "RabbitMQ Integration",
+              "path": "Background-Jobs-RabbitMq.md"
+            }
+        }
+      ]
+    },
+    {
       "text": "Testing"
     },
     {
