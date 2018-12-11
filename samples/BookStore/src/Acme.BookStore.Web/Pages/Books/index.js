@@ -6,6 +6,12 @@
     var editModal = new abp.ModalManager(abp.appPath + 'Books/EditModal');
 
     var dataTable = $('#BooksTable').DataTable(abp.libs.datatables.normalizeConfiguration({
+        processing: true,
+        serverSide: true,
+        paging: true,
+        searching: false,
+        autoWidth: false,
+        scrollCollapse: true,
         order: [[1, "asc"]],
         ajax: abp.libs.datatables.createAjax(acme.bookStore.book.getList),
         columnDefs: [
