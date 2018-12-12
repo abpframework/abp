@@ -26,6 +26,7 @@
 示例:
 
 ```c#
+[Serializable]
 public class IssueDto : FullAuditedEntityDto<Guid>
 {
     public string Title { get; set; }
@@ -34,6 +35,7 @@ public class IssueDto : FullAuditedEntityDto<Guid>
     public Collection<IssueLabelDto> Labels { get; set; }
 }
 
+[Serializable]
 public class IssueLabelDto
 {
     public Guid IssueId { get; set; }
@@ -54,6 +56,7 @@ public class IssueLabelDto
 示例:
 
 ````C#
+[Serializable]
 public class IssueWithDetailsDto : FullAuditedEntityDto<Guid>
 {
     public string Title { get; set; }
@@ -62,12 +65,14 @@ public class IssueWithDetailsDto : FullAuditedEntityDto<Guid>
     public Collection<LabelDto> Labels { get; set; }
 }
 
+[Serializable]
 public class MilestoneDto : EntityDto<Guid>
 {
     public string Name { get; set; }
     public bool IsClosed { get; set; }
 }
 
+[Serializable]
 public class LabelDto : EntityDto<Guid>
 {
     public string Name { get; set; }
@@ -128,6 +133,7 @@ Task<QuestionWithDetailsDto> CreateAsync(CreateQuestionDto questionDto);
 输入**DTO**:
 
 ````C#
+[Serializable]
 public class CreateQuestionDto
 {
     [Required]
@@ -181,11 +187,13 @@ Task<int> VoteAsync(Guid id, VoteType type);
 * **推荐** 在**应用层**实现应用服务接口.
   * **推荐** 使用命名约定. 如: 为 `IProductAppService` 接口创建 `ProductAppService` 类.
   * **推荐** 继承自 `ApplicationService` 基类.
+* **推荐** 将所有的公开方法定义为 **virtual**, 以便开发人员继承和覆盖它们.
+* **不推荐** 定义 **private** 方法. 应该定义为 **protected virtual**, 这样开发人员可以继承和覆盖它们.
 
 #### 使用仓储
 
 * **推荐** 使用专门设计的仓储 (如 `IProductRepository`).
-* **不推荐** 使用泛型仓储 (如 `IRepository<Product>`).
+* **不推荐** 使用泛型仓储 (如 `IRepository<Product>`).z`
 
 #### 查询数据
 

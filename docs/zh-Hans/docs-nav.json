@@ -225,6 +225,25 @@
       ]
     },
     {
+      "text": "后台服务",
+      "items": [
+        {
+          "text": "后台作业",
+          "path": "Background-Jobs.md",
+          "items": [
+            {
+              "text": "Hangfire 集成",
+              "path": "Background-Jobs-Hangfire.md"
+            },
+            {
+              "text": "RabbitMQ 集成",
+              "path": "Background-Jobs-RabbitMq.md"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "text": "测试"
     },
     {
