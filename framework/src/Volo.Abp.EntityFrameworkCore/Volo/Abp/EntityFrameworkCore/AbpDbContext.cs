@@ -261,6 +261,7 @@ namespace Volo.Abp.EntityFrameworkCore
                 return;
             }
 
+            Entry(entity).Property(x => x.ConcurrencyStamp).OriginalValue = entity.ConcurrencyStamp;
             entity.ConcurrencyStamp = Guid.NewGuid().ToString("N");
         }
 
