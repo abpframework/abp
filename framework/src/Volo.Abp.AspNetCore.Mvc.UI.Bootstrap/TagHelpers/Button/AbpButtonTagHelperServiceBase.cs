@@ -33,6 +33,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button
             {
                 output.Attributes.AddClass(TagHelper.Size.ToClassName());
             }
+
+            if (TagHelper.Block ?? false)
+            {
+                output.Attributes.AddClass("btn-block");
+            }
         }
 
         protected virtual void AddIcon(TagHelperContext context, TagHelperOutput output)
