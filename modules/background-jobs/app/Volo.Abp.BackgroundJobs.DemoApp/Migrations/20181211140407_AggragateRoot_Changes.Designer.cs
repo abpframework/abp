@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.BackgroundJobs.DemoApp.Db;
@@ -10,9 +11,10 @@ using Volo.Abp.BackgroundJobs.DemoApp.Db;
 namespace Volo.Abp.BackgroundJobs.DemoApp.Migrations
 {
     [DbContext(typeof(DemoAppDbContext))]
-    partial class DemoAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181211140407_AggragateRoot_Changes")]
+    partial class AggragateRoot_Changes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

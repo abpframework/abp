@@ -1,4 +1,5 @@
 ﻿using MongoDB.Bson.Serialization;
+using Volo.Abp.MongoDB;
 using Volo.Abp.Threading;
 
 namespace Volo.Abp.BackgroundJobs.MongoDB
@@ -14,6 +15,7 @@ namespace Volo.Abp.BackgroundJobs.MongoDB
                 BsonClassMap.RegisterClassMap<BackgroundJobRecord>(map =>
                 {
                     map.AutoMap();
+                    map.ConfigureExtraProperties();
                 });
             });
         }
