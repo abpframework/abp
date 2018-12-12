@@ -10,7 +10,7 @@ using MyCompanyName.MyProjectName.Host;
 namespace MyCompanyName.MyProjectName.Host.Migrations
 {
     [DbContext(typeof(DemoAppDbContext))]
-    [Migration("20181030142530_Initial")]
+    [Migration("20181212121232_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -41,6 +41,8 @@ namespace MyCompanyName.MyProjectName.Host.Migrations
                     b.Property<string>("Comments")
                         .HasColumnName("Comments")
                         .HasMaxLength(256);
+
+                    b.Property<string>("ConcurrencyStamp");
 
                     b.Property<string>("Exceptions")
                         .HasColumnName("Exceptions")

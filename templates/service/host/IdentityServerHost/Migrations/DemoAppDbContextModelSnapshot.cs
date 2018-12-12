@@ -24,8 +24,17 @@ namespace IdentityServerHost.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .HasColumnName("ConcurrencyStamp")
+                        .HasMaxLength(256);
+
                     b.Property<string>("Description")
                         .HasMaxLength(256);
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnName("ExtraProperties");
 
                     b.Property<bool>("IsStatic");
 
@@ -53,7 +62,23 @@ namespace IdentityServerHost.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("ConcurrencyStamp");
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .HasColumnName("ConcurrencyStamp")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<bool>("IsDefault")
+                        .HasColumnName("IsDefault");
+
+                    b.Property<bool>("IsPublic")
+                        .HasColumnName("IsPublic");
+
+                    b.Property<bool>("IsStatic")
+                        .HasColumnName("IsStatic");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -106,9 +131,18 @@ namespace IdentityServerHost.Migrations
                         .HasDefaultValue(0);
 
                     b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
                         .IsRequired()
                         .HasColumnName("ConcurrencyStamp")
                         .HasMaxLength(256);
+
+                    b.Property<DateTime>("CreationTime");
+
+                    b.Property<Guid?>("CreatorId");
+
+                    b.Property<Guid?>("DeleterId");
+
+                    b.Property<DateTime?>("DeletionTime");
 
                     b.Property<string>("Email")
                         .HasColumnName("Email")
@@ -122,12 +156,22 @@ namespace IdentityServerHost.Migrations
                     b.Property<string>("ExtraProperties")
                         .HasColumnName("ExtraProperties");
 
+                    b.Property<bool>("IsDeleted");
+
+                    b.Property<DateTime?>("LastModificationTime");
+
+                    b.Property<Guid?>("LastModifierId");
+
                     b.Property<bool>("LockoutEnabled")
                         .ValueGeneratedOnAdd()
                         .HasColumnName("LockoutEnabled")
                         .HasDefaultValue(false);
 
                     b.Property<DateTimeOffset?>("LockoutEnd");
+
+                    b.Property<string>("Name")
+                        .HasColumnName("Name")
+                        .HasMaxLength(64);
 
                     b.Property<string>("NormalizedEmail")
                         .HasColumnName("NormalizedEmail")
@@ -155,6 +199,10 @@ namespace IdentityServerHost.Migrations
                         .IsRequired()
                         .HasColumnName("SecurityStamp")
                         .HasMaxLength(256);
+
+                    b.Property<string>("Surname")
+                        .HasColumnName("Surname")
+                        .HasMaxLength(64);
 
                     b.Property<Guid?>("TenantId")
                         .HasColumnName("TenantId");
@@ -267,6 +315,8 @@ namespace IdentityServerHost.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("ConcurrencyStamp");
+
                     b.Property<string>("Description")
                         .HasMaxLength(1000);
 
@@ -274,6 +324,9 @@ namespace IdentityServerHost.Migrations
                         .HasMaxLength(200);
 
                     b.Property<bool>("Enabled");
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnName("ExtraProperties");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -398,6 +451,8 @@ namespace IdentityServerHost.Migrations
                     b.Property<string>("ClientUri")
                         .HasMaxLength(2000);
 
+                    b.Property<string>("ConcurrencyStamp");
+
                     b.Property<int?>("ConsentLifetime");
 
                     b.Property<string>("Description")
@@ -406,6 +461,9 @@ namespace IdentityServerHost.Migrations
                     b.Property<bool>("EnableLocalLogin");
 
                     b.Property<bool>("Enabled");
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnName("ExtraProperties");
 
                     b.Property<bool>("FrontChannelLogoutSessionRequired");
 
@@ -587,12 +645,17 @@ namespace IdentityServerHost.Migrations
                         .IsRequired()
                         .HasMaxLength(200);
 
+                    b.Property<string>("ConcurrencyStamp");
+
                     b.Property<DateTime>("CreationTime");
 
                     b.Property<string>("Data")
                         .IsRequired();
 
                     b.Property<DateTime?>("Expiration");
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnName("ExtraProperties");
 
                     b.Property<Guid>("Id");
 
@@ -627,6 +690,8 @@ namespace IdentityServerHost.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("ConcurrencyStamp");
+
                     b.Property<string>("Description")
                         .HasMaxLength(1000);
 
@@ -636,6 +701,9 @@ namespace IdentityServerHost.Migrations
                     b.Property<bool>("Emphasize");
 
                     b.Property<bool>("Enabled");
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnName("ExtraProperties");
 
                     b.Property<string>("Name")
                         .IsRequired()
