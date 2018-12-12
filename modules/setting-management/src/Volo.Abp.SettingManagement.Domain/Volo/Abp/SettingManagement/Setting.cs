@@ -4,6 +4,7 @@ using Volo.Abp.Domain.Entities;
 
 namespace Volo.Abp.SettingManagement
 {
+    //TODO: Convert to AggregateRoot
     public class Setting : Entity<Guid>
     {
         [NotNull]

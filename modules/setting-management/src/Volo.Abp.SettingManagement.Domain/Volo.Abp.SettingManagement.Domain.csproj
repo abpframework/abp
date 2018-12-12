@@ -18,6 +18,7 @@
 
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Ddd.Domain\Volo.Abp.Ddd.Domain.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Settings\Volo.Abp.Settings.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Caching\Volo.Abp.Caching.csproj" />
   </ItemGroup>
 
 </Project>
