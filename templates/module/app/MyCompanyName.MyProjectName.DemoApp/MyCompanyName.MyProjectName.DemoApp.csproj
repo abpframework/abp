@@ -33,12 +33,4 @@
     <None Remove="Logs\**" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Content Remove="Pages\_ViewImports.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Pages\_ViewImports.cshtml" />
-  </ItemGroup>
-
 </Project>
