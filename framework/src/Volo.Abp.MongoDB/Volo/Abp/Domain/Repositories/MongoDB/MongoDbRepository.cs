@@ -10,7 +10,6 @@ using Volo.Abp.Auditing;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Entities.Events;
-using Volo.Abp.EventBus;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.EventBus.Local;
 using Volo.Abp.Guids;
@@ -449,7 +448,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
 
         public virtual void Delete(TKey id, bool autoSave = false)
         {
-            Collection.DeleteOne(CreateEntityFilter(id)); //TODO: How to handle concurrency stamp!
+            Collection.DeleteOne(CreateEntityFilter(id));
         }
 
         public virtual Task DeleteAsync(
