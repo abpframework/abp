@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Shouldly;
+using Volo.Abp.Data;
 using Xunit;
 
 namespace Volo.Abp.Identity
@@ -9,11 +10,13 @@ namespace Volo.Abp.Identity
     {
         private readonly IIdentityUserAppService _userAppService;
         private readonly IIdentityUserRepository _userRepository;
+        private readonly IdentityTestData _testData;
 
         public IdentityUserAppService_Tests()
         {
             _userAppService = GetRequiredService<IIdentityUserAppService>();
             _userRepository = GetRequiredService<IIdentityUserRepository>();
+            _testData = GetRequiredService<IdentityTestData>();
         }
 
         [Fact]
@@ -98,7 +101,10 @@ namespace Volo.Abp.Identity
                 TwoFactorEnabled = true,
                 PhoneNumber = CreateRandomPhoneNumber(),
                 Email = CreateRandomEmail(),
-                RoleNames = new[] { "admin", "moderator" }
+                RoleNames = new[] { "admin", "moderator" },
+                ConcurrencyStamp = johnNash.ConcurrencyStamp,
+                Surname = johnNash.Surname,
+                Name = johnNash.Name
             };
 
             //Act
@@ -120,6 +126,37 @@ namespace Volo.Abp.Identity
             user.LockoutEnabled.ShouldBe(input.LockoutEnabled);
             user.PhoneNumber.ShouldBe(input.PhoneNumber);
             user.Roles.Count.ShouldBe(2);
+        }
+
+
+        [Fact]
+        public async Task UpdateAsync_Concurrency_Exception()
+        {
+            //Get user
+            var johnNash = await _userAppService.GetAsync(_testData.UserJohnId);
+            
+            //Act
+
+            var input = new IdentityUserUpdateDto
+            {
+                Name = "John-updated",
+                Surname = "Nash-updated",
+                UserName = johnNash.UserName,
+                LockoutEnabled = true,
+                TwoFactorEnabled = true,
+                PhoneNumber = CreateRandomPhoneNumber(),
+                Email = CreateRandomEmail(),
+                RoleNames = new[] { "admin", "moderator" },
+                ConcurrencyStamp = johnNash.ConcurrencyStamp
+            };
+
+            await _userAppService.UpdateAsync(johnNash.Id, input);
+
+            //Second update with same input will throw exception because the entity has been modified
+            (await Assert.ThrowsAsync<AbpIdentityResultException>(async () =>
+            {
+                await _userAppService.UpdateAsync(johnNash.Id, input);
+            })).Message.ShouldContain("Optimistic concurrency failure");
         }
 
         [Fact]

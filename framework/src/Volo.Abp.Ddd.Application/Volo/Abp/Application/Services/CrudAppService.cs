@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
@@ -99,7 +98,7 @@ namespace Volo.Abp.Application.Services
             CheckUpdatePolicy();
 
             var entity = GetEntityById(id);
-
+            
             MapToEntity(input, entity);
             CurrentUnitOfWork.SaveChanges();
 

@@ -84,6 +84,7 @@ namespace Volo.Abp.Identity
         public async Task<IdentityRoleDto> UpdateAsync(Guid id, IdentityRoleUpdateDto input)
         {
             var role = await _roleManager.GetByIdAsync(id);
+            role.ConcurrencyStamp = input.ConcurrencyStamp;
 
             (await _roleManager.SetRoleNameAsync(role, input.Name)).CheckErrors();
 

@@ -201,13 +201,14 @@ namespace Volo.Abp.EntityFrameworkCore
         protected virtual void ApplyAbpConceptsForAddedEntity(EntityEntry entry, EntityChangeReport changeReport)
         {
             CheckAndSetId(entry);
+            SetConcurrencyStampIfNull(entry);
             SetCreationAuditProperties(entry);
             changeReport.ChangedEntities.Add(new EntityChangeEntry(entry.Entity, EntityChangeType.Created));
         }
 
         protected virtual void ApplyAbpConceptsForModifiedEntity(EntityEntry entry, EntityChangeReport changeReport)
         {
-            HandleConcurrencyStamp(entry);
+            UpdateConcurrencyStamp(entry);
             SetModificationAuditProperties(entry);
 
             if (entry.Entity is ISoftDelete && entry.Entity.As<ISoftDelete>().IsDeleted)
@@ -224,7 +225,7 @@ namespace Volo.Abp.EntityFrameworkCore
         protected virtual void ApplyAbpConceptsForDeletedEntity(EntityEntry entry, EntityChangeReport changeReport)
         {
             CancelDeletionForSoftDelete(entry);
-            HandleConcurrencyStamp(entry);
+            UpdateConcurrencyStamp(entry);
             SetDeletionAuditProperties(entry);
             changeReport.ChangedEntities.Add(new EntityChangeEntry(entry.Entity, EntityChangeType.Deleted));
         }
@@ -252,7 +253,7 @@ namespace Volo.Abp.EntityFrameworkCore
             }
         }
 
-        protected virtual void HandleConcurrencyStamp(EntityEntry entry)
+        protected virtual void UpdateConcurrencyStamp(EntityEntry entry)
         {
             var entity = entry.Entity as IHasConcurrencyStamp;
             if (entity == null)
@@ -260,7 +261,24 @@ namespace Volo.Abp.EntityFrameworkCore
                 return;
             }
 
-            entity.ConcurrencyStamp = Guid.NewGuid().ToString();
+            Entry(entity).Property(x => x.ConcurrencyStamp).OriginalValue = entity.ConcurrencyStamp;
+            entity.ConcurrencyStamp = Guid.NewGuid().ToString("N");
+        }
+
+        protected virtual void SetConcurrencyStampIfNull(EntityEntry entry)
+        {
+            var entity = entry.Entity as IHasConcurrencyStamp;
+            if (entity == null)
+            {
+                return;
+            }
+
+            if (entity.ConcurrencyStamp != null)
+            {
+                return;
+            }
+
+            entity.ConcurrencyStamp = Guid.NewGuid().ToString("N");
         }
 
         protected virtual void CancelDeletionForSoftDelete(EntityEntry entry)

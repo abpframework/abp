@@ -15,6 +15,7 @@
                 <abp-tab title="@L["UserInformations"].Value">
                     @* TODO: Can we use dynamic form? *@
                     <input asp-for="UserInfo.Id" />
+                    <input asp-for="UserInfo.ConcurrencyStamp" />
                     <abp-input asp-for="UserInfo.UserName" />
                     <abp-input asp-for="UserInfo.Name" />
                     <abp-input asp-for="UserInfo.Surname" />

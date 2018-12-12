@@ -11,7 +11,7 @@ using Volo.Abp.BackgroundJobs;
 namespace MyCompanyName.MyProjectName.Migrations
 {
     [DbContext(typeof(MyProjectNameDbContext))]
-    [Migration("20181114070127_Initial")]
+    [Migration("20181212113826_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -42,6 +42,8 @@ namespace MyCompanyName.MyProjectName.Migrations
                     b.Property<string>("Comments")
                         .HasColumnName("Comments")
                         .HasMaxLength(256);
+
+                    b.Property<string>("ConcurrencyStamp");
 
                     b.Property<string>("Exceptions")
                         .HasColumnName("Exceptions")
@@ -221,8 +223,13 @@ namespace MyCompanyName.MyProjectName.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("ConcurrencyStamp");
+
                     b.Property<DateTime>("CreationTime")
                         .HasColumnName("CreationTime");
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnName("ExtraProperties");
 
                     b.Property<bool>("IsAbandoned")
                         .ValueGeneratedOnAdd()
@@ -260,8 +267,17 @@ namespace MyCompanyName.MyProjectName.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .HasColumnName("ConcurrencyStamp")
+                        .HasMaxLength(256);
+
                     b.Property<string>("Description")
                         .HasMaxLength(256);
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnName("ExtraProperties");
 
                     b.Property<bool>("IsStatic");
 
@@ -289,7 +305,14 @@ namespace MyCompanyName.MyProjectName.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("ConcurrencyStamp");
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .HasColumnName("ConcurrencyStamp")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnName("ExtraProperties");
 
                     b.Property<bool>("IsDefault")
                         .HasColumnName("IsDefault");
@@ -351,6 +374,7 @@ namespace MyCompanyName.MyProjectName.Migrations
                         .HasDefaultValue(0);
 
                     b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
                         .IsRequired()
                         .HasColumnName("ConcurrencyStamp")
                         .HasMaxLength(256);

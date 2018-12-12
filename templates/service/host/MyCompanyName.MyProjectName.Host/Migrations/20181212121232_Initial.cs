@@ -12,6 +12,8 @@ namespace MyCompanyName.MyProjectName.Host.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
+                    ExtraProperties = table.Column<string>(nullable: true),
+                    ConcurrencyStamp = table.Column<string>(nullable: true),
                     UserId = table.Column<Guid>(nullable: true),
                     UserName = table.Column<string>(maxLength: 256, nullable: true),
                     TenantId = table.Column<Guid>(nullable: true),
@@ -26,8 +28,7 @@ namespace MyCompanyName.MyProjectName.Host.Migrations
                     Url = table.Column<string>(maxLength: 256, nullable: true),
                     Exceptions = table.Column<string>(maxLength: 4000, nullable: true),
                     Comments = table.Column<string>(maxLength: 256, nullable: true),
-                    HttpStatusCode = table.Column<int>(nullable: true),
-                    ExtraProperties = table.Column<string>(nullable: true)
+                    HttpStatusCode = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {

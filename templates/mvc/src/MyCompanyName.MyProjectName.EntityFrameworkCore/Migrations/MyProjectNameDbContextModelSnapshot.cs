@@ -41,6 +41,8 @@ namespace MyCompanyName.MyProjectName.Migrations
                         .HasColumnName("Comments")
                         .HasMaxLength(256);
 
+                    b.Property<string>("ConcurrencyStamp");
+
                     b.Property<string>("Exceptions")
                         .HasColumnName("Exceptions")
                         .HasMaxLength(4000);
@@ -219,8 +221,13 @@ namespace MyCompanyName.MyProjectName.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("ConcurrencyStamp");
+
                     b.Property<DateTime>("CreationTime")
                         .HasColumnName("CreationTime");
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnName("ExtraProperties");
 
                     b.Property<bool>("IsAbandoned")
                         .ValueGeneratedOnAdd()
@@ -258,8 +265,17 @@ namespace MyCompanyName.MyProjectName.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .HasColumnName("ConcurrencyStamp")
+                        .HasMaxLength(256);
+
                     b.Property<string>("Description")
                         .HasMaxLength(256);
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnName("ExtraProperties");
 
                     b.Property<bool>("IsStatic");
 
@@ -287,7 +303,14 @@ namespace MyCompanyName.MyProjectName.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("ConcurrencyStamp");
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .HasColumnName("ConcurrencyStamp")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnName("ExtraProperties");
 
                     b.Property<bool>("IsDefault")
                         .HasColumnName("IsDefault");
@@ -349,6 +372,7 @@ namespace MyCompanyName.MyProjectName.Migrations
                         .HasDefaultValue(0);
 
                     b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
                         .IsRequired()
                         .HasColumnName("ConcurrencyStamp")
                         .HasMaxLength(256);
