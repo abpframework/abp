@@ -12,9 +12,10 @@
         <abp-modal-header title="@L["Edit"].Value"></abp-modal-header>
         <abp-modal-body>
             <abp-input asp-for="Role.Id" />
+            <abp-input asp-for="Role.ConcurrencyStamp" />
             @if (Model.Role.IsStatic)
             {
-                <abp-input asp-for="Role.Name" readonly="readonly" />
+                <abp-input asp-for="Role.Name" readonly="true" />
             }
             else
             {

@@ -72,6 +72,7 @@ namespace Volo.Abp.Identity
         public async Task<IdentityUserDto> UpdateAsync(Guid id, IdentityUserUpdateDto input)
         {
             var user = await _userManager.GetByIdAsync(id);
+            user.ConcurrencyStamp = input.ConcurrencyStamp;
 
             (await _userManager.SetUserNameAsync(user, input.UserName)).CheckErrors();
             await UpdateUserByInput(user, input);
