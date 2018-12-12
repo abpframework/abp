@@ -4,6 +4,7 @@
             $(this).parent().children('ul.tree').toggle(100);
             $(this).closest("li").toggleClass("selected-tree");
         });
+
         $('li:not(.last-link) span.plus-icon i.fa-chevron-right').click(function () {
 
             var $element = $(this).parent();
@@ -33,44 +34,42 @@
             return false;
         });
 
-        var navSelector = '#docs-sticky-index';
-        var $myNav = $(navSelector);
-        Toc.init($myNav);
-        $('body').scrollspy({
-            target: $myNav
-        });
-        $("#docs-sticky-index a").on('click', function (event) {
-            if (this.hash !== "") {
-                event.preventDefault();
-                var hash = this.hash;
-                $('html, body').animate({
-                    scrollTop: $(hash).offset().top
-                }, 500, function () {
-                    window.location.hash = hash;
-                });
-            }
-        });
+        $(document).ready(function () {
+            var $myNav = $("#docs-sticky-index");
+            Toc.init($myNav);
+            $("body").scrollspy({
+                target: $myNav
+            });
 
-        $('.btn-toggle').on("click", function () {
-            $(".toggle-row").slideToggle(400);
-            $(this).toggleClass("less");
-        });
+            $("#docs-sticky-index a").on('click', function (event) {
+                if (this.hash !== "") {
+                    event.preventDefault();
+                    var hash = this.hash;
+                    $('html, body').animate({
+                        scrollTop: $(hash).offset().top
+                    }, 500, function () {
+                        window.location.hash = hash;
+                    });
+                }
+            });
 
-        $('.close-mmenu').on("click", function () {
-            $(".navbar-collapse").removeClass("show");
-        });
+            $(".btn-toggle").on("click", function () {
+                $(".toggle-row").slideToggle(400);
+                $(this).toggleClass("less");
+            });
 
-        $('.open-dmenu').on("click", function () {
-            $(".docs-tree-list").slideToggle();
-        });
+            $(".close-mmenu").on("click", function () {
+                $(".navbar-collapse").removeClass("show");
+            });
 
-        $(window).on("load", function () {
+            $(".open-dmenu").on("click", function () {
+                $(".docs-tree-list").slideToggle();
+            });
+
             $("#sidebar-scroll").mCustomScrollbar({
                 theme: "minimal"
             });
-        });
 
-        $(window).on("load", function () {
             $("#scroll-index").mCustomScrollbar({
                 theme: "minimal-dark"
             });
