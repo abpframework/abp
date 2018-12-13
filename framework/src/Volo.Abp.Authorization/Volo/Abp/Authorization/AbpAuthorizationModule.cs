@@ -9,7 +9,7 @@ namespace Volo.Abp.Authorization
 {
     [DependsOn(
         typeof(AbpSecurityModule),
-        typeof(AbpLocalizationModule)
+        typeof(AbpLocalizationAbstractionsModule)
         )]
     public class AbpAuthorizationModule : AbpModule
     {
