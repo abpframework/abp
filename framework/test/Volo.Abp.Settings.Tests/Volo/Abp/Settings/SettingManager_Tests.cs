@@ -27,21 +27,25 @@ namespace Volo.Abp.Settings
                 .ShouldBe("default-value");
         }
 
-        [Fact]
-        public async Task Should_Set_And_Get_Encrypted_Values()
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData("abc")]
+        [InlineData("This is a relatively long text... This is a relatively long text... This is a relatively long text... ")]
+        public async Task Should_Set_And_Get_Encrypted_Values(string plainValue)
         {
             (await _settingManager.GetOrNullAsync(TestSettingNames.TestSettingEncrypted))
                 .ShouldBeNull();
 
             await _settingManager.SetAsync(
                 TestSettingNames.TestSettingEncrypted,
-                "abc",
+                plainValue,
                 TestSettingValueProvider.ProviderName,
                 null
             );
 
             (await _settingManager.GetOrNullAsync(TestSettingNames.TestSettingEncrypted))
-                .ShouldBe("abc");
+                .ShouldBe(plainValue);
         }
 
         //TODO: Needs more tests with more advanced scenarios.
