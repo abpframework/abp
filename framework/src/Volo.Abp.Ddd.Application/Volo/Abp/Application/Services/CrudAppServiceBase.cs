@@ -4,6 +4,7 @@ using System.Linq.Dynamic.Core;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.ObjectMapping;
 
 namespace Volo.Abp.Application.Services
 {
@@ -11,7 +12,8 @@ namespace Volo.Abp.Application.Services
     /// This is a common base class for CrudAppService and AsyncCrudAppService classes.
     /// Inherit either from CrudAppService or AsyncCrudAppService, not from this class.
     /// </summary>
-    public abstract class CrudAppServiceBase<TEntity, TEntityDto, TKey, TGetAllInput, TCreateInput, TUpdateInput> : ApplicationService
+    public abstract class CrudAppServiceBase<TEntity, TEntityDto, TKey, TGetAllInput, TCreateInput, TUpdateInput> :
+        ApplicationService
         where TEntity : class, IEntity<TKey>
         where TEntityDto : IEntityDto<TKey>
     {

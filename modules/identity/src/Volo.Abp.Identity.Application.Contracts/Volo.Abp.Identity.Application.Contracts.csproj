@@ -18,10 +18,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Volo\Abp\Identity\Localization\ApplicationContracts\pt-BR.json" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.Identity.Domain.Shared\Volo.Abp.Identity.Domain.Shared.csproj" />
 
     <ProjectReference Include="..\..\..\permission-management\src\Volo.Abp.PermissionManagement.Application.Contracts\Volo.Abp.PermissionManagement.Application.Contracts.csproj" />

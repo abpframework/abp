@@ -212,6 +212,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AspNetCore.Mvc.UI.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.EntityFrameworkCore.PostgreSql", "src\Volo.Abp.EntityFrameworkCore.PostgreSql\Volo.Abp.EntityFrameworkCore.PostgreSql.csproj", "{882E82F1-1A57-4BB9-B126-4CBF700C8F0C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Localization.Abstractions", "src\Volo.Abp.Localization.Abstractions\Volo.Abp.Localization.Abstractions.csproj", "{20513A4E-FAC7-4106-8976-5D79A3BDFED1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -598,6 +600,10 @@ Global
 		{882E82F1-1A57-4BB9-B126-4CBF700C8F0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{882E82F1-1A57-4BB9-B126-4CBF700C8F0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{882E82F1-1A57-4BB9-B126-4CBF700C8F0C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20513A4E-FAC7-4106-8976-5D79A3BDFED1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20513A4E-FAC7-4106-8976-5D79A3BDFED1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20513A4E-FAC7-4106-8976-5D79A3BDFED1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20513A4E-FAC7-4106-8976-5D79A3BDFED1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -700,6 +706,7 @@ Global
 		{D3E07597-BB3D-4249-B873-607E2C128C0E} = {447C8A77-E5F0-4538-8687-7383196D04EA}
 		{77A621CF-9562-411B-A707-C7C02CC3B8FA} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{882E82F1-1A57-4BB9-B126-4CBF700C8F0C} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
+		{20513A4E-FAC7-4106-8976-5D79A3BDFED1} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB97ECF4-9A84-433F-A80B-2A3285BDD1D5}

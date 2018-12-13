@@ -7,7 +7,7 @@ using Volo.Abp.Domain.Entities;
 
 namespace Volo.Docs.Projects
 {
-    public class Project : AggregateRoot<Guid>, IHasExtraProperties
+    public class Project : AggregateRoot<Guid>
     {
         /// <summary>
         /// Name of the project for display purposes.
@@ -40,8 +40,6 @@ namespace Volo.Docs.Projects
         /// The source of the documents (e.g. Github).
         /// </summary>
         public virtual string DocumentStoreType { get; protected set; }
-
-        public virtual Dictionary<string, object> ExtraProperties { get; protected set; }
 
         public virtual string MainWebsiteUrl { get; set; }
 

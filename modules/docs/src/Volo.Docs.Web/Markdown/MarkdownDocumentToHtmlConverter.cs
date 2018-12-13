@@ -15,7 +15,7 @@ namespace Volo.Docs.Markdown
         public const string Type = "md";
 
         private const string MdLinkFormat = "[{0}](/documents/{1}/{2}{3}/{4})";
-        private const string MarkdownLinkRegExp = @"\[([^)]+)\]\(([^)]+." + Type + @")\)";
+        private const string MarkdownLinkRegExp = @"\[(.*)\]\((.*\.md)\)";
         private const string AnchorLinkRegExp = @"<a[^>]+href=\""(.*?)\""[^>]*>(.*)?</a>";
 
         public virtual string Convert(ProjectDto project, DocumentWithDetailsDto document, string version)
@@ -36,12 +36,12 @@ namespace Volo.Docs.Markdown
         }
 
         protected virtual string NormalizeLinks(
-            string content, 
-            string projectShortName, 
+            string content,
+            string projectShortName,
             string version,
             string documentLocalDirectory)
         {
-            var normalized = Regex.Replace(content, MarkdownLinkRegExp, delegate(Match match)
+            var normalized = Regex.Replace(content, MarkdownLinkRegExp, delegate (Match match)
             {
                 var link = match.Groups[2].Value;
                 if (UrlHelper.IsExternalLink(link))

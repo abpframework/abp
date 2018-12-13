@@ -4,6 +4,7 @@
     {
         Default,
         Small,
+        Medium,
         Large
     }
 }

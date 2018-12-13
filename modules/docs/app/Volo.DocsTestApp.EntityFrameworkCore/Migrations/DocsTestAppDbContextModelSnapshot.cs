@@ -24,6 +24,8 @@ namespace Volo.DocsTestApp.EntityFrameworkCore.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("ConcurrencyStamp");
+
                     b.Property<string>("DefaultDocumentName")
                         .IsRequired()
                         .HasMaxLength(128);

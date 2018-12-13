@@ -40,6 +40,8 @@ namespace MyCompanyName.MyProjectName.Host.Migrations
                         .HasColumnName("Comments")
                         .HasMaxLength(256);
 
+                    b.Property<string>("ConcurrencyStamp");
+
                     b.Property<string>("Exceptions")
                         .HasColumnName("Exceptions")
                         .HasMaxLength(4000);

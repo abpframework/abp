@@ -60,6 +60,8 @@
     * [捆绑&压缩](AspNetCore/Bundling-Minification.md)
     * [Tag Helpers](Tag-Helpers.md)
     * [主题](AspNetCore/Theming.md)
+* 后台服务
+  * [后台作业](Background-Jobs.md)
 * 数据访问
   * [Entity Framework Core 集成](Entity-Framework-Core.md)
   * [MongoDB 集成](MongoDB.md)

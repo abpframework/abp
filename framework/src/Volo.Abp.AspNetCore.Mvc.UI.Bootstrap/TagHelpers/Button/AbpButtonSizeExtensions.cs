@@ -8,6 +8,8 @@
             {
                 case AbpButtonSize.Small:
                     return "btn-sm";
+                case AbpButtonSize.Medium:
+                    return "btn-md";
                 case AbpButtonSize.Large:
                     return "btn-lg";
                 case AbpButtonSize.Default:

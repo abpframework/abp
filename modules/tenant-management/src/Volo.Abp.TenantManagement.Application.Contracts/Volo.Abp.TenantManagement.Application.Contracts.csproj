@@ -23,8 +23,4 @@
     <EmbeddedResource Include="Volo\Abp\TenantManagement\Localization\ApplicationContracts\*.json" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Remove="Volo\Abp\TenantManagement\Localization\ApplicationContracts\pt-BR.json" />
-  </ItemGroup>
-
 </Project>

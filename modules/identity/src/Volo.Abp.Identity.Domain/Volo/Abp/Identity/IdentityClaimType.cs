@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using JetBrains.Annotations;
 using Volo.Abp.Domain.Entities;
 
 namespace Volo.Abp.Identity
 {
-    public class IdentityClaimType : Entity<Guid>
+    public class IdentityClaimType : AggregateRoot<Guid>
     {
         public virtual string Name { get; protected set; }
 
@@ -24,12 +22,14 @@ namespace Volo.Abp.Identity
 
         protected IdentityClaimType()
         {
+
         }
 
         public IdentityClaimType(Guid id, [NotNull] string name, bool required, bool isStatic, [CanBeNull]string regex, [CanBeNull]string regexDescription, [CanBeNull] string description, IdentityClaimValueType valueType  = IdentityClaimValueType.String)
         {
             Check.NotNull(name, nameof(name));
 
+            Id = id;
             Name = name;
             Required = required;
             IsStatic = isStatic;
@@ -38,7 +38,5 @@ namespace Volo.Abp.Identity
             Description = description;
             ValueType = valueType;
         }
-
-
     }
 }

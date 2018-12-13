@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.Localization.Resources.AbpValidation;
+﻿using Volo.Abp.Localization.Resources.AbpValidation;
 using Volo.Abp.Modularity;
 using Volo.Abp.Settings;
 using Volo.Abp.VirtualFileSystem;
@@ -8,7 +7,8 @@ namespace Volo.Abp.Localization
 {
     [DependsOn(
         typeof(AbpVirtualFileSystemModule),
-        typeof(AbpSettingsModule)
+        typeof(AbpSettingsModule),
+        typeof(AbpLocalizationAbstractionsModule)
         )]
     public class AbpLocalizationModule : AbpModule
     {

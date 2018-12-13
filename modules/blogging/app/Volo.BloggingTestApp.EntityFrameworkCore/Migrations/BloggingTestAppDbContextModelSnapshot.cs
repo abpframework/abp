@@ -55,6 +55,9 @@ namespace Volo.BloggingTestApp.EntityFrameworkCore.Migrations
 
                     b.Property<string>("ConcurrencyStamp");
 
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnName("ExtraProperties");
+
                     b.Property<bool>("IsDefault")
                         .HasColumnName("IsDefault");
 
@@ -350,6 +353,8 @@ namespace Volo.BloggingTestApp.EntityFrameworkCore.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("ConcurrencyStamp");
+
                     b.Property<DateTime>("CreationTime")
                         .HasColumnName("CreationTime");
 
@@ -365,6 +370,9 @@ namespace Volo.BloggingTestApp.EntityFrameworkCore.Migrations
                     b.Property<string>("Description")
                         .HasColumnName("Description")
                         .HasMaxLength(1024);
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnName("ExtraProperties");
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
@@ -397,6 +405,8 @@ namespace Volo.BloggingTestApp.EntityFrameworkCore.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("ConcurrencyStamp");
+
                     b.Property<DateTime>("CreationTime")
                         .HasColumnName("CreationTime");
 
@@ -408,6 +418,9 @@ namespace Volo.BloggingTestApp.EntityFrameworkCore.Migrations
 
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnName("DeletionTime");
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnName("ExtraProperties");
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
@@ -448,6 +461,8 @@ namespace Volo.BloggingTestApp.EntityFrameworkCore.Migrations
                     b.Property<Guid>("BlogId")
                         .HasColumnName("BlogId");
 
+                    b.Property<string>("ConcurrencyStamp");
+
                     b.Property<string>("Content")
                         .HasColumnName("Content")
                         .HasMaxLength(1048576);
@@ -467,6 +482,9 @@ namespace Volo.BloggingTestApp.EntityFrameworkCore.Migrations
 
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnName("DeletionTime");
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnName("ExtraProperties");
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
@@ -524,6 +542,8 @@ namespace Volo.BloggingTestApp.EntityFrameworkCore.Migrations
 
                     b.Property<Guid>("BlogId");
 
+                    b.Property<string>("ConcurrencyStamp");
+
                     b.Property<DateTime>("CreationTime")
                         .HasColumnName("CreationTime");
 
@@ -539,6 +559,9 @@ namespace Volo.BloggingTestApp.EntityFrameworkCore.Migrations
                     b.Property<string>("Description")
                         .HasColumnName("Description")
                         .HasMaxLength(512);
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnName("ExtraProperties");
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
@@ -568,6 +591,8 @@ namespace Volo.BloggingTestApp.EntityFrameworkCore.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ConcurrencyStamp");
 
                     b.Property<string>("Email")
                         .HasColumnName("Email")

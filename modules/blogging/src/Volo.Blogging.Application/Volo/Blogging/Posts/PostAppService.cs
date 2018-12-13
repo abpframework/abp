@@ -146,7 +146,7 @@ namespace Volo.Blogging.Posts
             var tags = await GetTagsOfPost(id);
             _tagRepository.DecreaseUsageCountOfTags(tags.Select(t => t.Id).ToList());
             _postTagRepository.DeleteOfPost(id);
-            _commentRepository.DeleteOfPost(id);
+            await _commentRepository.DeleteOfPost(id);
 
             await _postRepository.DeleteAsync(id);
         }
