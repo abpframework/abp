@@ -4,7 +4,8 @@ using Volo.Abp.Storage.FileSystem;
 
 namespace Volo.Abp.Storage.Configuration
 {
-    public class FileSystemParsedOptions : IAbpParsedOptions<FileSystemProviderInstanceOptions, FileSystemStoreOptions, FileSystemScopedStoreOptions>
+    public class FileSystemParsedOptions : IAbpParsedOptions<FileSystemProviderInstanceOptions, FileSystemStoreOptions,
+        FileSystemScopedStoreOptions>
     {
         public string Name => AbpFileSystemStorageProvider.ProviderName;
 
@@ -33,10 +34,11 @@ namespace Volo.Abp.Storage.Configuration
             }
         }
 
-        public void BindStoreOptions(FileSystemStoreOptions storeOptions, FileSystemProviderInstanceOptions providerInstanceOptions = null)
+        public void BindStoreOptions(FileSystemStoreOptions storeOptions,
+            FileSystemProviderInstanceOptions providerInstanceOptions = null)
         {
             if (!string.IsNullOrEmpty(storeOptions.RootPath)) return;
-            
+
             if (providerInstanceOptions != null
                 && storeOptions.ProviderName == providerInstanceOptions.Name)
             {

@@ -24,6 +24,7 @@ namespace Volo.Abp.Storage.Azure
             _path = path ?? "";
             _files = files;
             _fullName = _path;
+            
             var lastSlash = _path.LastIndexOf('/');
             _name = lastSlash >= 0 ? path.Substring(lastSlash + 1) : path;
         }

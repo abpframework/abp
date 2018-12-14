@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
+using Microsoft.Extensions.FileSystemGlobbing;
+using Microsoft.Extensions.FileSystemGlobbing.Abstractions;
 using Volo.Abp.Storage.Configuration;
 
 namespace Volo.Abp.Storage.FileSystem
@@ -14,7 +16,11 @@ namespace Volo.Abp.Storage.FileSystem
         private readonly IPublicUrlProvider _publicUrlProvider;
         private readonly IAbpExtendedPropertiesProvider _extendedPropertiesProvider;
 
-        public AbpFileSystemStore(FileSystemStoreOptions storeOptions, IPublicUrlProvider publicUrlProvider, IAbpExtendedPropertiesProvider extendedPropertiesProvider)
+        public AbpFileSystemStore(
+            FileSystemStoreOptions storeOptions,
+            IPublicUrlProvider publicUrlProvider,
+            IAbpExtendedPropertiesProvider extendedPropertiesProvider
+        )
         {
             storeOptions.Validate();
 
@@ -39,12 +45,14 @@ namespace Volo.Abp.Storage.FileSystem
 
         public async ValueTask<IFileReference[]> ListAsync(string path, bool recursive, bool withMetadata)
         {
-            var directoryPath = (string.IsNullOrEmpty(path) || path == "/" || path == "\\") ? AbsolutePath : Path.Combine(AbsolutePath, path);
+            var directoryPath = (string.IsNullOrEmpty(path) || path == "/" || path == "\\")
+                ? AbsolutePath
+                : Path.Combine(AbsolutePath, path);
 
             var result = new List<IFileReference>();
-            
+
             if (!Directory.Exists(directoryPath)) return result.ToArray();
-            
+
             var allResultPaths = Directory.GetFiles(directoryPath)
                 .Select(fp => fp.Replace(AbsolutePath, "").Trim('/', '\\'))
                 .ToList();
@@ -57,17 +65,20 @@ namespace Volo.Abp.Storage.FileSystem
             return result.ToArray();
         }
 
-        public async ValueTask<IFileReference[]> ListAsync(string path, string searchPattern, bool recursive, bool withMetadata)
+        public async ValueTask<IFileReference[]> ListAsync(string path, string searchPattern, bool recursive,
+            bool withMetadata)
         {
-            var directoryPath = (string.IsNullOrEmpty(path) || path == "/" || path == "\\") ? AbsolutePath : Path.Combine(AbsolutePath, path);
+            var directoryPath = (string.IsNullOrEmpty(path) || path == "/" || path == "\\")
+                ? AbsolutePath
+                : Path.Combine(AbsolutePath, path);
 
             var result = new List<IFileReference>();
             if (!Directory.Exists(directoryPath)) return result.ToArray();
-            
-            var matcher = new Microsoft.Extensions.FileSystemGlobbing.Matcher(StringComparison.Ordinal);
+
+            var matcher = new Matcher(StringComparison.Ordinal);
             matcher.AddInclude(searchPattern);
 
-            var matches = matcher.Execute(new Microsoft.Extensions.FileSystemGlobbing.Abstractions.DirectoryInfoWrapper(new DirectoryInfo(directoryPath)));
+            var matches = matcher.Execute(new DirectoryInfoWrapper(new DirectoryInfo(directoryPath)));
             var allResultPaths = matches.Files
                 .Select(match => Path.Combine(path, match.Path).Trim('/', '\\'))
                 .ToList();
@@ -119,7 +130,8 @@ namespace Volo.Abp.Storage.FileSystem
             return await fileReference.ReadAllTextAsync();
         }
 
-        public async ValueTask<IFileReference> SaveAsync(byte[] data, IPrivateFileReference file, string contentType, OverwritePolicy overwritePolicy = OverwritePolicy.Always, IDictionary<string, string> metadata = null)
+        public async ValueTask<IFileReference> SaveAsync(byte[] data, IPrivateFileReference file, string contentType,
+            OverwritePolicy overwritePolicy = OverwritePolicy.Always, IDictionary<string, string> metadata = null)
         {
             using (var stream = new MemoryStream(data, 0, data.Length))
             {
@@ -127,7 +139,8 @@ namespace Volo.Abp.Storage.FileSystem
             }
         }
 
-        public async ValueTask<IFileReference> SaveAsync(Stream data, IPrivateFileReference file, string contentType, OverwritePolicy overwritePolicy = OverwritePolicy.Always, IDictionary<string, string> metadata = null)
+        public async ValueTask<IFileReference> SaveAsync(Stream data, IPrivateFileReference file, string contentType,
+            OverwritePolicy overwritePolicy = OverwritePolicy.Always, IDictionary<string, string> metadata = null)
         {
             var fileReference = await InternalGetAsync(file, withMetadata: true, checkIfExists: false);
             var fileExists = File.Exists(fileReference.FileSystemPath);
@@ -143,7 +156,7 @@ namespace Volo.Abp.Storage.FileSystem
             var properties = fileReference.Properties as FileSystemFileProperties;
             var hashes = ComputeHashes(data);
 
-            if (!fileExists 
+            if (!fileExists
                 || overwritePolicy == OverwritePolicy.Always
                 || (overwritePolicy == OverwritePolicy.IfContentModified && properties.ContentMd5 != hashes.ContentMD5))
             {
@@ -177,31 +190,42 @@ namespace Volo.Abp.Storage.FileSystem
             throw new NotSupportedException();
         }
 
-        private ValueTask<FileSystemFileReference> InternalGetAsync(IPrivateFileReference file, bool withMetadata = false, bool checkIfExists = true)
+        private ValueTask<FileSystemFileReference> InternalGetAsync(IPrivateFileReference file,
+            bool withMetadata = false, bool checkIfExists = true)
         {
             return InternalGetAsync(file.Path, withMetadata, checkIfExists);
         }
 
-        private async ValueTask<FileSystemFileReference> InternalGetAsync(string path, bool withMetadata, bool checkIfExists = true)
+        private async ValueTask<FileSystemFileReference> InternalGetAsync(string path, bool withMetadata,
+            bool checkIfExists = true)
         {
             var fullPath = Path.Combine(AbsolutePath, path);
+            
             if (checkIfExists && !File.Exists(fullPath))
             {
                 return null;
             }
 
             FileExtendedProperties extendedProperties = null;
-            if (withMetadata)
-            {
-                if (_extendedPropertiesProvider == null)
-                {
-                    throw new InvalidOperationException("There is no FileSystem extended properties provider.");
-                }
+            
+            if (!withMetadata)
+                return new FileSystemFileReference(
+                    fullPath,
+                    path,
+                    this,
+                    withMetadata,
+                    extendedProperties,
+                    _publicUrlProvider,
+                    _extendedPropertiesProvider);
 
-                extendedProperties = await _extendedPropertiesProvider.GetExtendedPropertiesAsync(
-                    AbsolutePath,
-                    new PrivateFileReference(path));
+            if (_extendedPropertiesProvider == null)
+            {
+                throw new InvalidOperationException("There is no FileSystem extended properties provider.");
             }
+
+            extendedProperties = await _extendedPropertiesProvider.GetExtendedPropertiesAsync(
+                AbsolutePath,
+                new PrivateFileReference(path));
 
             return new FileSystemFileReference(
                 fullPath,

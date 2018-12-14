@@ -22,8 +22,12 @@ namespace Volo.Abp.Storage.Azure
             storeOptions.Validate();
 
             _storeOptions = storeOptions;
-            _client = new Lazy<CloudBlobClient>(() => CloudStorageAccount.Parse(storeOptions.ConnectionString).CreateCloudBlobClient());
-            _container = new Lazy<CloudBlobContainer>(() => _client.Value.GetContainerReference(storeOptions.FolderName));
+            
+            _client = new Lazy<CloudBlobClient>(() =>
+                CloudStorageAccount.Parse(storeOptions.ConnectionString).CreateCloudBlobClient());
+            
+            _container =
+                new Lazy<CloudBlobContainer>(() => _client.Value.GetContainerReference(storeOptions.FolderName));
         }
 
         public string Name => _storeOptions.Name;
@@ -40,6 +44,8 @@ namespace Volo.Abp.Storage.Azure
                     accessType = BlobContainerPublicAccessType.Blob;
                     break;
                 case AbpStorageAccessLevel.Private:
+                    accessType = BlobContainerPublicAccessType.Off;
+                    break;
                 default:
                     accessType = BlobContainerPublicAccessType.Off;
                     break;
@@ -56,10 +62,7 @@ namespace Volo.Abp.Storage.Azure
             }
             else
             {
-                if (!path.EndsWith("/"))
-                {
-                    path = path + "/";
-                }
+                if (!path.EndsWith("/")) path = path + "/";
             }
 
             BlobContinuationToken continuationToken = null;
@@ -67,16 +70,21 @@ namespace Volo.Abp.Storage.Azure
 
             do
             {
-                var response = await _container.Value.ListBlobsSegmentedAsync(path, recursive, withMetadata ? BlobListingDetails.Metadata : BlobListingDetails.None, null, continuationToken, new BlobRequestOptions(), new OperationContext());
+                var response = await _container.Value.ListBlobsSegmentedAsync(path, recursive,
+                    withMetadata ? BlobListingDetails.Metadata : BlobListingDetails.None, null, continuationToken,
+                    new BlobRequestOptions(), new OperationContext());
+                
                 continuationToken = response.ContinuationToken;
                 results.AddRange(response.Results);
-            }
-            while (continuationToken != null);
+                
+            } while (continuationToken != null);
 
-            return results.OfType<ICloudBlob>().Select(blob => new AzureFileReference(blob, withMetadata: withMetadata)).ToArray();
+            return results.OfType<ICloudBlob>().Select(blob => new AzureFileReference(blob, withMetadata))
+                .ToArray();
         }
 
-        public async ValueTask<IFileReference[]> ListAsync(string path, string searchPattern, bool recursive, bool withMetadata)
+        public async ValueTask<IFileReference[]> ListAsync(string path, string searchPattern, bool recursive,
+            bool withMetadata)
         {
             if (string.IsNullOrWhiteSpace(path))
             {
@@ -84,10 +92,7 @@ namespace Volo.Abp.Storage.Azure
             }
             else
             {
-                if (!path.EndsWith("/"))
-                {
-                    path = path + "/";
-                }
+                if (!path.EndsWith("/")) path = path + "/";
             }
 
             var prefix = path;
@@ -107,17 +112,19 @@ namespace Volo.Abp.Storage.Azure
 
             do
             {
-                var response = await _container.Value.ListBlobsSegmentedAsync(prefix, recursive, withMetadata ? BlobListingDetails.Metadata : BlobListingDetails.None, null, continuationToken, new BlobRequestOptions(), new OperationContext());
+                var response = await _container.Value.ListBlobsSegmentedAsync(prefix, recursive,
+                    withMetadata ? BlobListingDetails.Metadata : BlobListingDetails.None, null, continuationToken,
+                    new BlobRequestOptions(), new OperationContext());
                 continuationToken = response.ContinuationToken;
                 results.AddRange(response.Results);
-            }
-            while (continuationToken != null);
+            } while (continuationToken != null);
 
-            var pathMap = results.OfType<ICloudBlob>().Select(blob => new AzureFileReference(blob, withMetadata: withMetadata)).ToDictionary(x => x.Path);
+            var pathMap = results.OfType<ICloudBlob>()
+                .Select(blob => new AzureFileReference(blob, withMetadata)).ToDictionary(x => x.Path);
 
             var filteredResults = matcher.Execute(
                 new AzureListDirectoryWrapper(path,
-                pathMap));
+                    pathMap));
 
             return filteredResults.Files.Select(x => pathMap[path + x.Path]).ToArray();
         }
@@ -156,7 +163,8 @@ namespace Volo.Abp.Storage.Azure
             return await fileReference.ReadAllTextAsync();
         }
 
-        public async ValueTask<IFileReference> SaveAsync(byte[] data, IPrivateFileReference file, string contentType, OverwritePolicy overwritePolicy = OverwritePolicy.Always, IDictionary<string, string> metadata = null)
+        public async ValueTask<IFileReference> SaveAsync(byte[] data, IPrivateFileReference file, string contentType,
+            OverwritePolicy overwritePolicy = OverwritePolicy.Always, IDictionary<string, string> metadata = null)
         {
             using (var stream = new SyncMemoryStream(data, 0, data.Length))
             {
@@ -164,7 +172,8 @@ namespace Volo.Abp.Storage.Azure
             }
         }
 
-        public async ValueTask<IFileReference> SaveAsync(Stream data, IPrivateFileReference file, string contentType, OverwritePolicy overwritePolicy = OverwritePolicy.Always, IDictionary<string, string> metadata = null)
+        public async ValueTask<IFileReference> SaveAsync(Stream data, IPrivateFileReference file, string contentType,
+            OverwritePolicy overwritePolicy = OverwritePolicy.Always, IDictionary<string, string> metadata = null)
         {
             var uploadBlob = true;
             var blockBlob = _container.Value.GetBlockBlobReference(file.Path);
@@ -172,43 +181,30 @@ namespace Volo.Abp.Storage.Azure
 
             if (blobExists)
             {
-                if (overwritePolicy == OverwritePolicy.Never)
-                {
-                    throw new Exceptions.FileAlreadyExistsException(Name, file.Path);
-                }
+                if (overwritePolicy == OverwritePolicy.Never) throw new Exceptions.FileAlreadyExistsException(Name, file.Path);
 
                 await blockBlob.FetchAttributesAsync();
 
                 if (overwritePolicy == OverwritePolicy.IfContentModified)
-                {
                     using (var md5 = MD5.Create())
                     {
                         data.Seek(0, SeekOrigin.Begin);
                         var contentMd5 = Convert.ToBase64String(md5.ComputeHash(data));
                         data.Seek(0, SeekOrigin.Begin);
-                        uploadBlob = (contentMd5 != blockBlob.Properties.ContentMD5);
+                        uploadBlob = contentMd5 != blockBlob.Properties.ContentMD5;
                     }
-                }
             }
 
             if (metadata != null)
-            {
-                foreach (var kvp in metadata)
-                {
-                    blockBlob.Metadata.Add(kvp.Key, kvp.Value);
-                }
-            }
+                foreach (var kvp in metadata) blockBlob.Metadata.Add(kvp.Key, kvp.Value);
 
-            if (uploadBlob)
-            {
-                await blockBlob.UploadFromStreamAsync(data);
-            }
+            if (uploadBlob) await blockBlob.UploadFromStreamAsync(data);
 
-            var reference = new AzureFileReference(blockBlob, withMetadata: true);
+            var reference = new AzureFileReference(blockBlob, true);
 
-            if (reference.Properties.ContentType == contentType) 
+            if (reference.Properties.ContentType == contentType)
                 return reference;
-            
+
             reference.Properties.ContentType = contentType;
             await reference.SavePropertiesAsync();
 
@@ -231,35 +227,17 @@ namespace Volo.Abp.Storage.Azure
         {
             var result = SharedAccessBlobPermissions.None;
 
-            if (permissions.HasFlag(SharedAccessPermissions.Add))
-            {
-                result |= SharedAccessBlobPermissions.Add;
-            }
+            if (permissions.HasFlag(SharedAccessPermissions.Add)) result |= SharedAccessBlobPermissions.Add;
 
-            if (permissions.HasFlag(SharedAccessPermissions.Create))
-            {
-                result |= SharedAccessBlobPermissions.Create;
-            }
+            if (permissions.HasFlag(SharedAccessPermissions.Create)) result |= SharedAccessBlobPermissions.Create;
 
-            if (permissions.HasFlag(SharedAccessPermissions.Delete))
-            {
-                result |= SharedAccessBlobPermissions.Delete;
-            }
+            if (permissions.HasFlag(SharedAccessPermissions.Delete)) result |= SharedAccessBlobPermissions.Delete;
 
-            if (permissions.HasFlag(SharedAccessPermissions.List))
-            {
-                result |= SharedAccessBlobPermissions.List;
-            }
+            if (permissions.HasFlag(SharedAccessPermissions.List)) result |= SharedAccessBlobPermissions.List;
 
-            if (permissions.HasFlag(SharedAccessPermissions.Read))
-            {
-                result |= SharedAccessBlobPermissions.Read;
-            }
+            if (permissions.HasFlag(SharedAccessPermissions.Read)) result |= SharedAccessBlobPermissions.Read;
 
-            if (permissions.HasFlag(SharedAccessPermissions.Write))
-            {
-                result |= SharedAccessBlobPermissions.Write;
-            }
+            if (permissions.HasFlag(SharedAccessPermissions.Write)) result |= SharedAccessBlobPermissions.Write;
 
             return result;
         }
@@ -289,10 +267,7 @@ namespace Volo.Abp.Storage.Azure
                     else
                     {
                         blob = _container.Value.GetBlockBlobReference(uri.ToString());
-                        if (!(await blob.ExistsAsync()))
-                        {
-                            return null;
-                        }
+                        if (!await blob.ExistsAsync()) return null;
                     }
                 }
 
@@ -300,10 +275,7 @@ namespace Volo.Abp.Storage.Azure
             }
             catch (StorageException storageException)
             {
-                if (storageException.RequestInformation.HttpStatusCode == 404)
-                {
-                    return null;
-                }
+                if (storageException.RequestInformation.HttpStatusCode == 404) return null;
 
                 throw;
             }

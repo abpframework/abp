@@ -16,6 +16,7 @@ namespace Volo.Abp.Storage.Azure
         public AzureFileProperties(ICloudBlob cloudBlob)
         {
             _cloudBlob = cloudBlob;
+            
             if (string.IsNullOrEmpty(_cloudBlob.Properties.CacheControl))
             {
                 _cloudBlob.Properties.CacheControl = DefaultCacheControl;

@@ -15,7 +15,8 @@ namespace Volo.Abp.Storage.FileSystem
             _extendedProperties = extendedProperties;
         }
 
-        public DateTimeOffset? LastModified => new DateTimeOffset(_fileInfo.LastWriteTimeUtc, TimeZoneInfo.Local.BaseUtcOffset);
+        public DateTimeOffset? LastModified =>
+            new DateTimeOffset(_fileInfo.LastWriteTimeUtc, TimeZoneInfo.Local.BaseUtcOffset);
 
         public long Length => _fileInfo.Length;
 

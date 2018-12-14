@@ -15,19 +15,20 @@ namespace Volo.Abp.Storage.FileSystem.ExtendedProperties
             _options = options.Value;
         }
 
-        public ValueTask<FileExtendedProperties> GetExtendedPropertiesAsync(string storeAbsolutePath, IPrivateFileReference file)
+        public ValueTask<FileExtendedProperties> GetExtendedPropertiesAsync(string storeAbsolutePath,
+            IPrivateFileReference file)
         {
             var extendedPropertiesPath = GetExtendedPropertiesPath(storeAbsolutePath, file);
             if (!File.Exists(extendedPropertiesPath))
-            {
                 return new ValueTask<FileExtendedProperties>(new FileExtendedProperties());
-            }
 
             var content = File.ReadAllText(extendedPropertiesPath);
-            return new ValueTask<FileExtendedProperties>(JsonConvert.DeserializeObject<FileExtendedProperties>(content));
+            return new ValueTask<FileExtendedProperties>(
+                JsonConvert.DeserializeObject<FileExtendedProperties>(content));
         }
 
-        public Task SaveExtendedPropertiesAsync(string storeAbsolutePath, IPrivateFileReference file, FileExtendedProperties extendedProperties)
+        public Task SaveExtendedPropertiesAsync(string storeAbsolutePath, IPrivateFileReference file,
+            FileExtendedProperties extendedProperties)
         {
             var extendedPropertiesPath = GetExtendedPropertiesPath(storeAbsolutePath, file);
             var toStore = JsonConvert.SerializeObject(extendedProperties);
@@ -41,18 +42,16 @@ namespace Volo.Abp.Storage.FileSystem.ExtendedProperties
             var rootPath = Path.GetDirectoryName(fullPath);
             var storeName = Path.GetFileName(fullPath);
 
-            var extendedPropertiesPath = Path.Combine(rootPath, string.Format(_options.FolderNameFormat, storeName), file.Path + ".json");
+            var extendedPropertiesPath = Path.Combine(rootPath, string.Format(_options.FolderNameFormat, storeName),
+                file.Path + ".json");
             EnsurePathExists(extendedPropertiesPath);
             return extendedPropertiesPath;
         }
 
-        private void EnsurePathExists(string path)
+        private static void EnsurePathExists(string path)
         {
             var directoryPath = Path.GetDirectoryName(path);
-            if (!Directory.Exists(directoryPath))
-            {
-                Directory.CreateDirectory(directoryPath);
-            }
+            if (!Directory.Exists(directoryPath)) Directory.CreateDirectory(directoryPath);
         }
     }
 }

@@ -54,7 +54,9 @@ namespace Volo.Abp.Storage.Azure
         {
             var memoryStream = new MemoryStream();
             await CloudBlob.DownloadRangeToStreamAsync(memoryStream, null, null);
+
             memoryStream.Seek(0, SeekOrigin.Begin);
+
             return memoryStream;
         }
 
@@ -70,7 +72,8 @@ namespace Volo.Abp.Storage.Azure
 
         public async ValueTask<string> ReadAllTextAsync()
         {
-            using (var reader = new StreamReader(await CloudBlob.OpenReadAsync(AccessCondition.GenerateEmptyCondition(), new BlobRequestOptions(), new OperationContext())))
+            using (var reader = new StreamReader(await CloudBlob.OpenReadAsync(AccessCondition.GenerateEmptyCondition(),
+                new BlobRequestOptions(), new OperationContext())))
             {
                 return await reader.ReadToEndAsync();
             }

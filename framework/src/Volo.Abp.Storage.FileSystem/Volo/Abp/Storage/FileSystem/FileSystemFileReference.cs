@@ -29,20 +29,14 @@ namespace Volo.Abp.Storage.FileSystem
 
             _propertiesLazy = new Lazy<IFileProperties>(() =>
             {
-                if (withMetadata)
-                {
-                    return new FileSystemFileProperties(FileSystemPath, extendedProperties);
-                }
+                if (withMetadata) return new FileSystemFileProperties(FileSystemPath, extendedProperties);
 
                 throw new InvalidOperationException("Metadata are not loaded, please use withMetadata option");
             });
 
             _publicUrlLazy = new Lazy<string>(() =>
             {
-                if (publicUrlProvider != null)
-                {
-                    return publicUrlProvider.GetPublicUrl(_store.Name, this);
-                }
+                if (publicUrlProvider != null) return publicUrlProvider.GetPublicUrl(_store.Name, this);
 
                 throw new InvalidOperationException("There is not FileSystemServer enabled.");
             });
@@ -96,9 +90,7 @@ namespace Volo.Abp.Storage.FileSystem
         public Task SavePropertiesAsync()
         {
             if (_extendedPropertiesProvider == null)
-            {
                 throw new InvalidOperationException("There is no FileSystem extended properties provider.");
-            }
 
             return _extendedPropertiesProvider.SaveExtendedPropertiesAsync(
                 _store.AbsolutePath,
@@ -113,21 +105,17 @@ namespace Volo.Abp.Storage.FileSystem
 
         public async Task FetchProperties()
         {
-            if (_withMetadata)
-            {
-                return;
-            }
+            if (_withMetadata) return;
 
             if (_extendedPropertiesProvider == null)
-            {
                 throw new InvalidOperationException("There is no FileSystem extended properties provider.");
-            }
 
             var extendedProperties = await _extendedPropertiesProvider.GetExtendedPropertiesAsync(
                 _store.AbsolutePath,
                 this);
 
-            _propertiesLazy = new Lazy<IFileProperties>(() => new FileSystemFileProperties(FileSystemPath, extendedProperties));
+            _propertiesLazy =
+                new Lazy<IFileProperties>(() => new FileSystemFileProperties(FileSystemPath, extendedProperties));
             _withMetadata = true;
         }
     }
