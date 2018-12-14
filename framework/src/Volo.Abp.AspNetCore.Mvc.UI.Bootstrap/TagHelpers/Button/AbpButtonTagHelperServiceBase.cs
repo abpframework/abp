@@ -26,7 +26,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button
 
             if (TagHelper.ButtonType != AbpButtonType.Default)
             {
-                output.Attributes.AddClass("btn-" + TagHelper.ButtonType.ToString().ToLowerInvariant());
+                output.Attributes.AddClass("btn-" + TagHelper.ButtonType.ToString().ToLowerInvariant().Replace("_","-"));
             }
 
             if (TagHelper.Size != AbpButtonSize.Default)
