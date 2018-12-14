@@ -2,15 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using Volo.Abp.Storage.Configuration;
 
 namespace Volo.Abp.Storage
 {
-    public interface IAbpStore<TOptions> : IAbpStore
-        where TOptions : class, IAbpStoreOptions, new()
-    {
-    }
-    
     public interface IAbpStore
     {
         string Name { get; }
@@ -33,9 +27,11 @@ namespace Volo.Abp.Storage
 
         ValueTask<string> ReadAllTextAsync(IPrivateFileReference file);
 
-        ValueTask<IFileReference> SaveAsync(byte[] data, IPrivateFileReference file, string contentType, OverwritePolicy overwritePolicy = OverwritePolicy.Always, IDictionary<string, string> metadata = null);
+        ValueTask<IFileReference> SaveAsync(byte[] data, IPrivateFileReference file, string contentType,
+            OverwritePolicy overwritePolicy = OverwritePolicy.Always, IDictionary<string, string> metadata = null);
 
-        ValueTask<IFileReference> SaveAsync(Stream data, IPrivateFileReference file, string contentType, OverwritePolicy overwritePolicy = OverwritePolicy.Always, IDictionary<string, string> metadata = null);
+        ValueTask<IFileReference> SaveAsync(Stream data, IPrivateFileReference file, string contentType,
+            OverwritePolicy overwritePolicy = OverwritePolicy.Always, IDictionary<string, string> metadata = null);
 
         ValueTask<string> GetSharedAccessSignatureAsync(ISharedAccessPolicy policy);
     }

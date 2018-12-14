@@ -11,7 +11,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddAbpStorage(this IServiceCollection services)
         {
             services.TryAddTransient<IAbpStorageFactory, AbpStorageFactory>();
-            services.TryAdd(ServiceDescriptor.Transient(typeof(IAbpStore<>), typeof(GenericStoreProxy<>)));
+            services.TryAdd(ServiceDescriptor.Transient(typeof(IAbpStoreWithOption<>), typeof(GenericStoreProxy<>)));
             return services;
         }
 
