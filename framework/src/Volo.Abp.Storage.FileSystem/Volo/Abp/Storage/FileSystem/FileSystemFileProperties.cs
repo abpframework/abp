@@ -7,12 +7,11 @@ namespace Volo.Abp.Storage.FileSystem
     public class FileSystemFileProperties : IFileProperties
     {
         private readonly FileInfo _fileInfo;
-        private readonly FileExtendedProperties _extendedProperties;
 
         public FileSystemFileProperties(string fileSystemPath, FileExtendedProperties extendedProperties)
         {
             _fileInfo = new FileInfo(fileSystemPath);
-            _extendedProperties = extendedProperties;
+            ExtendedProperties = extendedProperties;
         }
 
         public DateTimeOffset? LastModified =>
@@ -22,22 +21,22 @@ namespace Volo.Abp.Storage.FileSystem
 
         public string ContentType
         {
-            get => _extendedProperties.ContentType;
-            set => _extendedProperties.ContentType = value;
+            get => ExtendedProperties.ContentType;
+            set => ExtendedProperties.ContentType = value;
         }
 
-        public string ETag => _extendedProperties.ETag;
+        public string ETag => ExtendedProperties.ETag;
 
         public string CacheControl
         {
-            get => _extendedProperties.CacheControl;
-            set => _extendedProperties.CacheControl = value;
+            get => ExtendedProperties.CacheControl;
+            set => ExtendedProperties.CacheControl = value;
         }
 
-        public string ContentMd5 => _extendedProperties.ContentMd5;
+        public string ContentMd5 => ExtendedProperties.ContentMd5;
 
-        public IDictionary<string, string> Metadata => _extendedProperties.Metadata;
+        public IDictionary<string, string> Metadata => ExtendedProperties.Metadata;
 
-        internal FileExtendedProperties ExtendedProperties => _extendedProperties;
+        internal FileExtendedProperties ExtendedProperties { get; }
     }
 }

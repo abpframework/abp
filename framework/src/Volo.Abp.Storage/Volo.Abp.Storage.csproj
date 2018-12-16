@@ -12,10 +12,13 @@
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <RootNamespace />
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.1" />
+  </ItemGroup>
   
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.Core\Volo.Abp.Core.csproj" />
-    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.4.0" />
   </ItemGroup>
   
 </Project>

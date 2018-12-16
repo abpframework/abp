@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Volo.Abp.Storage.Exceptions;
 
 namespace Volo.Abp.Storage.Configuration
 {
@@ -43,7 +42,7 @@ namespace Volo.Abp.Storage.Configuration
 
             if (throwOnError && optionErrors.Any())
             {
-                throw new BadStoreConfiguration(Name, optionErrors);
+                throw new BadStoreConfigurationException(Name, optionErrors);
             }
 
             return optionErrors;

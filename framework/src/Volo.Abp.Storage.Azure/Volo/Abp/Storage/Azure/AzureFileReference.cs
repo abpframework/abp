@@ -91,7 +91,7 @@ namespace Volo.Abp.Storage.Azure
 
         public ValueTask<string> GetSharedAccessSignature(ISharedAccessPolicy policy)
         {
-            var adHocPolicy = new SharedAccessBlobPolicy()
+            var adHocPolicy = new SharedAccessBlobPolicy
             {
                 SharedAccessStartTime = policy.StartTime,
                 SharedAccessExpiryTime = policy.ExpiryTime,

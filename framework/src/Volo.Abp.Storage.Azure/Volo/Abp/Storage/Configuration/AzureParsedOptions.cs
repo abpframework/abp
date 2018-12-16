@@ -19,13 +19,16 @@ namespace Volo.Abp.Storage.Configuration
         public void BindProviderInstanceOptions(AzureProviderInstanceOptions providerInstanceOptions)
         {
             if (string.IsNullOrEmpty(providerInstanceOptions.ConnectionStringName) ||
-                !string.IsNullOrEmpty(providerInstanceOptions.ConnectionString)) return;
-            
+                !string.IsNullOrEmpty(providerInstanceOptions.ConnectionString))
+            {
+                return;
+            }
+
             if (!ConnectionStrings.ContainsKey(providerInstanceOptions.ConnectionStringName))
             {
-                throw new Exceptions.BadProviderConfiguration(
+                throw new BadProviderConfigurationException(
                     providerInstanceOptions.Name,
-                    $"The ConnectionString '{providerInstanceOptions.ConnectionStringName}' cannot be found. Did you call AddStorage with the ConfigurationRoot?");
+                    $"The ConnectionString '{providerInstanceOptions.ConnectionStringName}' cannot be found.");
             }
 
             providerInstanceOptions.ConnectionString =
@@ -42,9 +45,9 @@ namespace Volo.Abp.Storage.Configuration
             {
                 if (!ConnectionStrings.ContainsKey(storeOptions.ConnectionStringName))
                 {
-                    throw new Exceptions.BadStoreConfiguration(
+                    throw new BadStoreConfigurationException(
                         storeOptions.Name,
-                        $"The ConnectionString '{storeOptions.ConnectionStringName}' cannot be found. Did you call AddStorage with the ConfigurationRoot?");
+                        $"The ConnectionString '{storeOptions.ConnectionStringName}' cannot be found.");
                 }
 
                 storeOptions.ConnectionString = ConnectionStrings[storeOptions.ConnectionStringName];

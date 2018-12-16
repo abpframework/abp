@@ -36,6 +36,7 @@ namespace Volo.Abp.Storage
             }
 
             var parsedStores = _storageOptions.Stores.Parse<TStoreOptions>();
+
             foreach (var parsedStore in parsedStores)
             {
                 parsedStore.Value.Compute<TParsedOptions, TInstanceOptions, TStoreOptions, TScopedStoreOptions>(options);
@@ -46,6 +47,7 @@ namespace Volo.Abp.Storage
                 .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
 
             var parsedScopedStores = _storageOptions.ScopedStores.Parse<TScopedStoreOptions>();
+
             foreach (var parsedScopedStore in parsedScopedStores)
             {
                 parsedScopedStore.Value.Compute<TParsedOptions, TInstanceOptions, TStoreOptions, TScopedStoreOptions>(options);

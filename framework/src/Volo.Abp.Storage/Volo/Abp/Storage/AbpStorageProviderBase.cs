@@ -44,7 +44,7 @@ namespace Volo.Abp.Storage
             }
             catch (Exception ex)
             {
-                throw new Exceptions.BadScopedStoreConfiguration(storeName,
+                throw new BadScopedStoreConfigurationException(storeName,
                     "Cannot format folder name. See InnerException for details.", ex);
             }
 

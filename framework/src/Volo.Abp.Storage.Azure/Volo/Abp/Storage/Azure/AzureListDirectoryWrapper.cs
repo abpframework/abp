@@ -48,6 +48,7 @@ namespace Volo.Abp.Storage.Azure
 
         public override DirectoryInfoBase GetDirectory(string path)
         {
+            // TODO: Get container info?!
             throw new NotImplementedException();
         }
 

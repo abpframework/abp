@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.Options;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Storage.Configuration;
 
 namespace Volo.Abp.Storage
 {
-    public class AbpStorageFactory : IAbpStorageFactory
+    public class AbpStorageFactory : IAbpStorageFactory, ITransientDependency
     {
         private readonly AbpStorageOptions _options;
         private readonly IReadOnlyDictionary<string, IAbpStorageProvider> _storageProviders;
@@ -84,12 +85,12 @@ namespace Volo.Abp.Storage
                 }
                 else if (throwIfNotFound)
                 {
-                    throw new Exceptions.BadProviderConfiguration(configuration.ProviderName, "Unable to find it in the configuration.");
+                    throw new BadProviderConfigurationException(configuration.ProviderName, "Unable to find it in the configuration.");
                 }
             }
             else if (throwIfNotFound)
             {
-                throw new Exceptions.BadStoreConfiguration(configuration.Name, "You have to set either 'ProviderType' or 'ProviderName' on Store configuration.");
+                throw new BadStoreConfigurationException(configuration.Name, "You have to set either 'ProviderType' or 'ProviderName' on Store configuration.");
             }
 
             if (string.IsNullOrEmpty(providerTypeName))
@@ -100,7 +101,7 @@ namespace Volo.Abp.Storage
             _storageProviders.TryGetValue(providerTypeName, out var provider);
             if (provider == null && throwIfNotFound)
             {
-                throw new Exceptions.ProviderNotFoundException(providerTypeName);
+                throw new ProviderNotFoundException(providerTypeName);
             }
 
             return provider;

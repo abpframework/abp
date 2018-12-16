@@ -7,18 +7,21 @@ using Volo.Abp.Storage.Configuration;
 
 namespace Volo.Abp.Storage.FileSystem.Server
 {
+    // TODO: Refactore this!
     public class FileSystemStorageServerMiddleware
     {
-        private RequestDelegate _next;
+        private readonly RequestDelegate _next;
 
-        private ILogger<FileSystemStorageServerMiddleware> _logger;
-        private IOptions<FileSystemStorageServerOptions> _serverOptions;
+        private readonly ILogger<FileSystemStorageServerMiddleware> _logger;
+        private readonly IOptions<FileSystemStorageServerOptions> _serverOptions;
         private readonly FileSystemParsedOptions _fileSystemParsedOptions;
 
-        public FileSystemStorageServerMiddleware(RequestDelegate next,
+        public FileSystemStorageServerMiddleware(
+            RequestDelegate next,
             IOptions<FileSystemStorageServerOptions> serverOptions,
             ILogger<FileSystemStorageServerMiddleware> logger,
-            IOptions<FileSystemParsedOptions> fileSystemParsedOptions)
+            IOptions<FileSystemParsedOptions> fileSystemParsedOptions
+            )
         {
             _fileSystemParsedOptions = fileSystemParsedOptions.Value;
             _next = next;

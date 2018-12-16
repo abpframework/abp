@@ -1,10 +1,11 @@
 ﻿using System;
 using Microsoft.Extensions.Options;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Storage.Configuration;
 
 namespace Volo.Abp.Storage.FileSystem.Server
 {
-    public class PublicUrlProvider : IPublicUrlProvider
+    public class PublicUrlProvider : IPublicUrlProvider, ITransientDependency
     {
         private readonly FileSystemStorageServerOptions _options;
 

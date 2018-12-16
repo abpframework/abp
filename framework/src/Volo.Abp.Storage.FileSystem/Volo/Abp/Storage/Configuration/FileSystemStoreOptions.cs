@@ -8,18 +8,10 @@ namespace Volo.Abp.Storage.Configuration
     {
         public string RootPath { get; set; }
 
-        public string AbsolutePath
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(RootPath))
-                {
-                    return FolderName;
-                }
-
-                return string.IsNullOrEmpty(FolderName) ? RootPath : Path.Combine(RootPath, FolderName);
-            }
-        }
+        public string AbsolutePath 
+            => string.IsNullOrEmpty(RootPath) 
+            ? FolderName : string.IsNullOrEmpty(FolderName) 
+            ? RootPath : Path.Combine(RootPath, FolderName);
 
         public override IEnumerable<IAbpStorageOptionError> Validate(bool throwOnError = true)
         {
@@ -32,9 +24,10 @@ namespace Volo.Abp.Storage.Configuration
             }
 
             var finalErrors = baseErrors.Concat(optionErrors);
+
             if (throwOnError && finalErrors.Any())
             {
-                throw new Exceptions.BadStoreConfiguration(Name, finalErrors);
+                throw new BadStoreConfigurationException(Name, finalErrors);
             }
 
             return finalErrors;

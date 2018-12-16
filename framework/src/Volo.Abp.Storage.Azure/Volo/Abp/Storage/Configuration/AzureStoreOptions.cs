@@ -20,9 +20,10 @@ namespace Volo.Abp.Storage.Configuration
             }
 
             var finalErrors = baseErrors.Concat(optionErrors);
+
             if (throwOnError && finalErrors.Any())
             {
-                throw new Exceptions.BadStoreConfiguration(Name, finalErrors);
+                throw new BadStoreConfigurationException(Name, finalErrors);
             }
 
             return finalErrors;

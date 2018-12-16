@@ -2,10 +2,11 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Storage.FileSystem.ExtendedProperties
 {
-    public class AbpExtendedPropertiesProvider : IAbpExtendedPropertiesProvider
+    public class AbpExtendedPropertiesProvider : IAbpExtendedPropertiesProvider, ITransientDependency
     {
         private readonly FileSystemExtendedPropertiesOptions _options;
 

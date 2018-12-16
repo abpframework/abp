@@ -6,8 +6,8 @@ namespace Volo.Abp.Storage.Azure
     public class AzureListFileWrapper : FileInfoBase
     {
         private readonly ICloudBlob _blob;
-        private readonly string _name;
         private readonly AzureListDirectoryWrapper _parent;
+        private readonly string _name;
 
         public AzureListFileWrapper(ICloudBlob blob, AzureListDirectoryWrapper parent)
         {

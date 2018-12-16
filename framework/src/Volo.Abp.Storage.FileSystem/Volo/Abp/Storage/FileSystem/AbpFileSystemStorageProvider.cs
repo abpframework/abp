@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Storage.Configuration;
 
 namespace Volo.Abp.Storage.FileSystem

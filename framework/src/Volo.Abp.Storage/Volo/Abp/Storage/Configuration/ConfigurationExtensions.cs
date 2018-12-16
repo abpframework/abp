@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.Configuration;
-using Volo.Abp.Storage.Exceptions;
 
 namespace Volo.Abp.Storage.Configuration
 {
@@ -17,9 +16,7 @@ namespace Volo.Abp.Storage.Configuration
             }
 
             return unparsedConfiguration
-                .ToDictionary(
-                    kvp => kvp.Key,
-                    BindOptions<TOptions>);
+                .ToDictionary(kvp => kvp.Key, BindOptions<TOptions>);
         }
 
         public static TStoreOptions GetStoreConfiguration<TInstanceOptions, TStoreOptions, TScopedStoreOptions>(
@@ -29,7 +26,8 @@ namespace Volo.Abp.Storage.Configuration
             where TStoreOptions : class, IAbpStoreOptions
             where TScopedStoreOptions : class, TStoreOptions, IScopedStoreOptions
         {
-            parsedOptions.ParsedStores.TryGetValue(storeName, out var storeOptions);
+            parsedOptions.ParsedStores.TryGetValue(storeName, out TStoreOptions storeOptions);
+
             if (storeOptions != null)
             {
                 return storeOptions;
@@ -51,7 +49,8 @@ namespace Volo.Abp.Storage.Configuration
             where TStoreOptions : class, IAbpStoreOptions
             where TScopedStoreOptions : class, TStoreOptions, IScopedStoreOptions
         {
-            parsedOptions.ParsedScopedStores.TryGetValue(storeName, out var scopedStoreOptions);
+            parsedOptions.ParsedScopedStores.TryGetValue(storeName, out TScopedStoreOptions scopedStoreOptions);
+
             if (scopedStoreOptions != null)
             {
                 return scopedStoreOptions;

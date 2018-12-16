@@ -149,16 +149,17 @@ namespace Volo.Abp.Storage.FileSystem
             {
                 if (overwritePolicy == OverwritePolicy.Never)
                 {
-                    throw new Exceptions.FileAlreadyExistsException(Name, file.Path);
+                    throw new FileAlreadyExistsException(Name, file.Path);
                 }
             }
 
             var properties = fileReference.Properties as FileSystemFileProperties;
-            var hashes = ComputeHashes(data);
+            var (ETag, ContentMd5) = ComputeHashes(data);
 
             if (!fileExists
                 || overwritePolicy == OverwritePolicy.Always
-                || (overwritePolicy == OverwritePolicy.IfContentModified && properties.ContentMd5 != hashes.ContentMD5))
+                || (overwritePolicy == OverwritePolicy.IfContentModified 
+                && properties.ContentMd5 != ContentMd5))
             {
                 EnsurePathExists(fileReference.FileSystemPath);
 
@@ -169,8 +170,8 @@ namespace Volo.Abp.Storage.FileSystem
             }
 
             properties.ContentType = contentType;
-            properties.ExtendedProperties.ETag = hashes.ETag;
-            properties.ExtendedProperties.ContentMd5 = hashes.ContentMD5;
+            properties.ExtendedProperties.ETag = ETag;
+            properties.ExtendedProperties.ContentMd5 = ContentMd5;
 
             if (metadata != null)
             {
@@ -207,7 +208,12 @@ namespace Volo.Abp.Storage.FileSystem
             }
 
             FileExtendedProperties extendedProperties = null;
-            
+
+            if (_extendedPropertiesProvider == null)
+            {
+                throw new InvalidOperationException("There is no FileSystem extended properties provider.");
+            }
+
             if (!withMetadata)
                 return new FileSystemFileReference(
                     fullPath,
@@ -217,11 +223,6 @@ namespace Volo.Abp.Storage.FileSystem
                     extendedProperties,
                     _publicUrlProvider,
                     _extendedPropertiesProvider);
-
-            if (_extendedPropertiesProvider == null)
-            {
-                throw new InvalidOperationException("There is no FileSystem extended properties provider.");
-            }
 
             extendedProperties = await _extendedPropertiesProvider.GetExtendedPropertiesAsync(
                 AbsolutePath,
@@ -246,7 +247,7 @@ namespace Volo.Abp.Storage.FileSystem
             }
         }
 
-        private static (string ETag, string ContentMD5) ComputeHashes(Stream stream)
+        private static (string ETag, string ContentMd5) ComputeHashes(Stream stream)
         {
             string eTag;
             string contentMd5;

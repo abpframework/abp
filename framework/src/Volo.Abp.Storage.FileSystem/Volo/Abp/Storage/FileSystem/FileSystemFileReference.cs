@@ -9,6 +9,7 @@ namespace Volo.Abp.Storage.FileSystem
         private readonly AbpFileSystemStore _store;
         private readonly Lazy<string> _publicUrlLazy;
         private readonly IAbpExtendedPropertiesProvider _extendedPropertiesProvider;
+
         private bool _withMetadata;
         private Lazy<IFileProperties> _propertiesLazy;
 
@@ -36,7 +37,10 @@ namespace Volo.Abp.Storage.FileSystem
 
             _publicUrlLazy = new Lazy<string>(() =>
             {
-                if (publicUrlProvider != null) return publicUrlProvider.GetPublicUrl(_store.Name, this);
+                if (publicUrlProvider != null)
+                {
+                    return publicUrlProvider.GetPublicUrl(_store.Name, this);
+                }
 
                 throw new InvalidOperationException("There is not FileSystemServer enabled.");
             });
