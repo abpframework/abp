@@ -1,14 +1,16 @@
-﻿using Volo.Abp.DependencyInjection;
+﻿using System;
+using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.RabbitMQ
 {
-    public class RabbitMqMessageConsumerFactory : IRabbitMqMessageConsumerFactory, ISingletonDependency
+    public class RabbitMqMessageConsumerFactory : IRabbitMqMessageConsumerFactory, ISingletonDependency, IDisposable
     {
-        protected IConnectionPool ConnectionPool { get; }
+        protected IServiceScope ServiceScope { get; }
 
-        public RabbitMqMessageConsumerFactory(IConnectionPool connectionPool)
+        public RabbitMqMessageConsumerFactory(IServiceScopeFactory serviceScopeFactory)
         {
-            ConnectionPool = connectionPool;
+            ServiceScope = serviceScopeFactory.CreateScope();
         }
 
         public IRabbitMqMessageConsumer Create(
@@ -16,12 +18,14 @@ namespace Volo.Abp.RabbitMQ
             QueueDeclareConfiguration queue,
             string connectionName = null)
         {
-            return new RabbitMqMessageConsumer(
-                ConnectionPool,
-                exchange,
-                queue,
-                connectionName
-            );
+            var consumer = ServiceScope.ServiceProvider.GetRequiredService<RabbitMqMessageConsumer>();
+            consumer.Initialize(exchange, queue, connectionName);
+            return consumer;
+        }
+
+        public void Dispose()
+        {
+            ServiceScope?.Dispose();
         }
     }
 }

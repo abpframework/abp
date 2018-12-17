@@ -62,7 +62,8 @@ namespace Volo.Abp.EventBus.Distributed.RabbitMq
                     durable: true,
                     exclusive: false,
                     autoDelete: false
-                    )
+                    ),
+                RabbitMqDistributedEventBusOptions.ConnectionName
             );
 
             Consumer.OnMessageReceived(ProcessEventAsync);
@@ -101,8 +102,6 @@ namespace Volo.Abp.EventBus.Distributed.RabbitMq
             var eventData = Serializer.Deserialize(ea.Body, eventType);
 
             await TriggerHandlersAsync(eventType, eventData);
-
-            channel.BasicAck(ea.DeliveryTag, multiple: false);
         }
 
         public IDisposable Subscribe<TEvent>(IDistributedEventHandler<TEvent> handler) where TEvent : class
@@ -120,7 +119,7 @@ namespace Volo.Abp.EventBus.Distributed.RabbitMq
             {
                 var eventName = EventNameAttribute.GetNameOrDefault(eventType);
 
-                using (var channel = ConnectionPool.Get().CreateModel()) //TODO: Connection name per event!
+                using (var channel = ConnectionPool.Get(RabbitMqDistributedEventBusOptions.ConnectionName).CreateModel())
                 {
                     channel.QueueBind(
                         queue: RabbitMqDistributedEventBusOptions.ClientName,
