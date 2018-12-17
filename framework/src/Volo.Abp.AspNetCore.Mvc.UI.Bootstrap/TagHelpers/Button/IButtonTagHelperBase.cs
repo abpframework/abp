@@ -6,8 +6,6 @@
 
         AbpButtonSize Size { get; }
 
-        bool? Block { get;}
-
         string Text { get; }
 
         string Icon { get; }
