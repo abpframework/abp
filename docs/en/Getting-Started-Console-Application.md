@@ -117,8 +117,8 @@ namespace AbpConsoleDemo
 }
 ````
 
-While it's enough for this simple code example, it's always suggested to create scopes in case of directly resolving dependencies from ``IServiceProvider`` (TODO: see DI documentation).
+While it's enough for this simple code example, it's always suggested to create scopes in case of directly resolving dependencies from ``IServiceProvider`` (see the [Dependency Injection documentation](Dependency-Injection.md)).
 
 ### Source Code
 
-Get source code of the sample project created in this tutorial from [here](https://github.com/abpframework/abp/tree/master/samples/BasicConsoleApplication.
+Get source code of the sample project created in this tutorial from [here](https://github.com/abpframework/abp/tree/master/samples/BasicConsoleApplication).
