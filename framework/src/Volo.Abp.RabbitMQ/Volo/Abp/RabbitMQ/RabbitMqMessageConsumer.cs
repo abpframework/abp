@@ -29,6 +29,10 @@ namespace Volo.Abp.RabbitMQ
 
         protected IModel Channel { get; private set; }
 
+        protected ConcurrentQueue<QueueBindCommand> QueueBindCommands { get; }
+
+        protected object ChannelSendSyncLock { get; } = new object();
+
         public RabbitMqMessageConsumer(
             IConnectionPool connectionPool,
             AbpTimer timer)
@@ -37,6 +41,7 @@ namespace Volo.Abp.RabbitMQ
             Timer = timer;
             Logger = NullLogger<RabbitMqMessageConsumer>.Instance;
 
+            QueueBindCommands = new ConcurrentQueue<QueueBindCommand>();
             Callbacks = new ConcurrentBag<Func<IModel, BasicDeliverEventArgs, Task>>();
 
             Timer.Period = 5000; //5 sec.
@@ -51,6 +56,66 @@ namespace Volo.Abp.RabbitMQ
             Exchange = Check.NotNull(exchange, nameof(exchange));
             Queue = Check.NotNull(queue, nameof(queue));
             ConnectionName = connectionName;
+            Timer.Start();
+        }
+
+        public async Task BindAsync(string routingKey)
+        {
+            QueueBindCommands.Enqueue(new QueueBindCommand(QueueBindType.Bind, routingKey));
+            await TrySendQueueBindCommandsAsync();
+        }
+
+        public async Task UnbindAsync(string routingKey)
+        {
+            QueueBindCommands.Enqueue(new QueueBindCommand(QueueBindType.Unbind, routingKey));
+            await TrySendQueueBindCommandsAsync();
+        }
+
+        protected Task TrySendQueueBindCommandsAsync()
+        {
+            try
+            {
+                while (!QueueBindCommands.IsEmpty)
+                {
+                    if (Channel == null || Channel.IsClosed)
+                    {
+                        return Task.CompletedTask;
+                    }
+
+                    lock (ChannelSendSyncLock)
+                    {
+                        QueueBindCommands.TryPeek(out var command);
+
+                        switch (command.Type)
+                        {
+                            case QueueBindType.Bind:
+                                Channel.QueueBind(
+                                    queue: Queue.QueueName,
+                                    exchange: Exchange.ExchangeName,
+                                    routingKey: command.RoutingKey
+                                );
+                                break;
+                            case QueueBindType.Unbind:
+                                Channel.QueueUnbind(
+                                    queue: Queue.QueueName,
+                                    exchange: Exchange.ExchangeName,
+                                    routingKey: command.RoutingKey
+                                );
+                                break;
+                            default:
+                                throw new AbpException($"Unknown {nameof(QueueBindType)}: {command.Type}");
+                        }
+
+                        QueueBindCommands.TryDequeue(out command);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.LogException(ex, LogLevel.Warning);
+            }
+
+            return Task.CompletedTask;
         }
 
         public void OnMessageReceived(Func<IModel, BasicDeliverEventArgs, Task> callback)
@@ -63,6 +128,7 @@ namespace Volo.Abp.RabbitMQ
             if (Channel == null || Channel.IsOpen == false)
             {
                 TryCreateChannel();
+                AsyncHelper.RunSync(TrySendQueueBindCommandsAsync);
             }
         }
 
@@ -146,6 +212,25 @@ namespace Volo.Abp.RabbitMQ
         public virtual void Dispose()
         {
             DisposeChannel();
+        }
+
+        public class QueueBindCommand
+        {
+            public QueueBindType Type { get; }
+
+            public string RoutingKey { get; }
+
+            public QueueBindCommand(QueueBindType type, string routingKey)
+            {
+                Type = type;
+                RoutingKey = routingKey;
+            }
+        }
+
+        public enum QueueBindType
+        {
+            Bind,
+            Unbind
         }
     }
 }

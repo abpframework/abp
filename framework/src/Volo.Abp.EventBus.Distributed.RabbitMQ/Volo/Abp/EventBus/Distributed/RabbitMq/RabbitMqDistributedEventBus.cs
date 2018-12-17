@@ -119,14 +119,7 @@ namespace Volo.Abp.EventBus.Distributed.RabbitMq
             {
                 var eventName = EventNameAttribute.GetNameOrDefault(eventType);
 
-                using (var channel = ConnectionPool.Get(RabbitMqDistributedEventBusOptions.ConnectionName).CreateModel())
-                {
-                    channel.QueueBind(
-                        queue: RabbitMqDistributedEventBusOptions.ClientName,
-                        exchange: RabbitMqDistributedEventBusOptions.ExchangeName,
-                        routingKey: eventName
-                    );
-                }
+                Consumer.BindAsync(eventName);
             }
 
             return new EventHandlerFactoryUnregistrar(this, eventType, factory);
@@ -191,7 +184,7 @@ namespace Volo.Abp.EventBus.Distributed.RabbitMq
             var eventName = EventNameAttribute.GetNameOrDefault(eventType);
             var body = Serializer.Serialize(eventData);
 
-            using (var channel = ConnectionPool.Get().CreateModel()) //TODO: Connection name per event!
+            using (var channel = ConnectionPool.Get(RabbitMqDistributedEventBusOptions.ConnectionName).CreateModel())
             {
                 //TODO: Other properties like durable?
                 channel.ExchangeDeclare(RabbitMqDistributedEventBusOptions.ExchangeName, "");
