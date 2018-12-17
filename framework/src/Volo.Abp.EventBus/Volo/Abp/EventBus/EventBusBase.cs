@@ -5,6 +5,8 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
+using Volo.Abp.Collections;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Reflection;
 
@@ -12,6 +14,13 @@ namespace Volo.Abp.EventBus
 {
     public abstract class EventBusBase : IEventBus
     {
+        protected IHybridServiceScopeFactory ServiceScopeFactory { get; }
+
+        protected EventBusBase(IHybridServiceScopeFactory serviceScopeFactory)
+        {
+            ServiceScopeFactory = serviceScopeFactory;
+        }
+
         /// <inheritdoc/>
         public virtual IDisposable Subscribe<TEvent>(Func<TEvent, Task> action) where TEvent : class
         {
@@ -118,6 +127,27 @@ namespace Volo.Abp.EventBus
                     var constructorArgs = ((IEventDataWithInheritableGenericArgument)eventData).GetConstructorArgs();
                     var baseEventData = Activator.CreateInstance(baseEventType, constructorArgs);
                     await PublishAsync(baseEventType, baseEventData);
+                }
+            }
+        }
+
+        protected virtual void SubscribeHandlers(ITypeList<IEventHandler> handlers)
+        {
+            foreach (var handler in handlers)
+            {
+                var interfaces = handler.GetInterfaces();
+                foreach (var @interface in interfaces)
+                {
+                    if (!typeof(IEventHandler).GetTypeInfo().IsAssignableFrom(@interface))
+                    {
+                        continue;
+                    }
+
+                    var genericArgs = @interface.GetGenericArguments();
+                    if (genericArgs.Length == 1)
+                    {
+                        Subscribe(genericArgs[0], new IocEventHandlerFactory(ServiceScopeFactory, handler));
+                    }
                 }
             }
         }
