@@ -10,7 +10,6 @@ using Volo.Abp.RabbitMQ;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using Volo.Abp.Collections;
-using Volo.Abp.EventBus.Local;
 using Volo.Abp.Threading;
 
 namespace Volo.Abp.EventBus.Distributed.RabbitMq
@@ -29,27 +28,44 @@ namespace Volo.Abp.EventBus.Distributed.RabbitMq
         protected IRabbitMqSerializer Serializer { get; }
         protected ConcurrentDictionary<Type, List<IEventHandlerFactory>> HandlerFactories { get; } //TODO: Accessing to the List<IEventHandlerFactory> may not be thread-safe!
         protected ConcurrentDictionary<string, Type> EventTypes { get; }
-        protected IModel ConsumerChannel;
         protected IHybridServiceScopeFactory ServiceScopeFactory { get; }
+        protected IRabbitMqMessageConsumerFactory MessageConsumerFactory { get; }
+        protected IRabbitMqMessageConsumer Consumer { get; }
 
         public RabbitMqDistributedEventBus(
             IOptions<RabbitMqDistributedEventBusOptions> options,
             IConnectionPool connectionPool,
             IRabbitMqSerializer serializer,
             IHybridServiceScopeFactory serviceScopeFactory, 
-            IOptions<DistributedEventBusOptions> distributedEventBusOptions)
+            IOptions<DistributedEventBusOptions> distributedEventBusOptions,
+            IRabbitMqMessageConsumerFactory messageConsumerFactory)
         {
             ConnectionPool = connectionPool;
             Serializer = serializer;
             ServiceScopeFactory = serviceScopeFactory;
+            MessageConsumerFactory = messageConsumerFactory;
             DistributedEventBusOptions = distributedEventBusOptions.Value;
             RabbitMqDistributedEventBusOptions = options.Value;
             
             HandlerFactories = new ConcurrentDictionary<Type, List<IEventHandlerFactory>>();
             EventTypes = new ConcurrentDictionary<string, Type>();
 
-            ConsumerChannel = CreateConsumerChannel();
             Subscribe(DistributedEventBusOptions.Handlers);
+
+            Consumer = MessageConsumerFactory.Create(
+                new ExchangeDeclareConfiguration(
+                    RabbitMqDistributedEventBusOptions.ExchangeName, 
+                    type: "direct"
+                    ),
+                new QueueDeclareConfiguration(
+                    RabbitMqDistributedEventBusOptions.ClientName,
+                    durable: true,
+                    exclusive: false,
+                    autoDelete: false
+                    )
+            );
+
+            Consumer.OnMessageReceived(ProcessEventAsync);
         }
 
         protected virtual void Subscribe(ITypeList<IEventHandler> handlers)
@@ -71,41 +87,6 @@ namespace Volo.Abp.EventBus.Distributed.RabbitMq
                     }
                 }
             }
-        }
-
-        private IModel CreateConsumerChannel()
-        {
-            //TODO: Support multiple connection (and consumer)?
-            var channel = ConnectionPool.Get().CreateModel();
-            channel.ExchangeDeclare(
-                exchange: RabbitMqDistributedEventBusOptions.ExchangeName,
-                type: "direct"
-            );
-
-            channel.QueueDeclare(
-                queue: RabbitMqDistributedEventBusOptions.ClientName,
-                durable: true,
-                exclusive: false,
-                autoDelete: false,
-                arguments: null
-            );
-
-            var consumer = new EventingBasicConsumer(channel);
-            consumer.Received += async (model, ea) => { await ProcessEventAsync(channel, ea); };
-
-            channel.BasicConsume(
-                queue: RabbitMqDistributedEventBusOptions.ClientName,
-                autoAck: false,
-                consumer: consumer
-            );
-
-            channel.CallbackException += (sender, ea) =>
-            {
-                ConsumerChannel.Dispose();
-                ConsumerChannel = CreateConsumerChannel();
-            };
-
-            return channel;
         }
 
         private async Task ProcessEventAsync(IModel channel, BasicDeliverEventArgs ea)
