@@ -2,14 +2,12 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.RabbitMQ;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using Volo.Abp.Collections;
 using Volo.Abp.Threading;
 
 namespace Volo.Abp.EventBus.Distributed.RabbitMq
