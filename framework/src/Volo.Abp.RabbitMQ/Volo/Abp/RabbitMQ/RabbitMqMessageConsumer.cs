@@ -46,6 +46,7 @@ namespace Volo.Abp.RabbitMQ
 
             Timer.Period = 5000; //5 sec.
             Timer.Elapsed += Timer_Elapsed;
+            Timer.RunOnStart = true;
         }
 
         public void Initialize(
@@ -59,19 +60,19 @@ namespace Volo.Abp.RabbitMQ
             Timer.Start();
         }
 
-        public async Task BindAsync(string routingKey)
+        public virtual async Task BindAsync(string routingKey)
         {
             QueueBindCommands.Enqueue(new QueueBindCommand(QueueBindType.Bind, routingKey));
             await TrySendQueueBindCommandsAsync();
         }
 
-        public async Task UnbindAsync(string routingKey)
+        public virtual async Task UnbindAsync(string routingKey)
         {
             QueueBindCommands.Enqueue(new QueueBindCommand(QueueBindType.Unbind, routingKey));
             await TrySendQueueBindCommandsAsync();
         }
 
-        protected Task TrySendQueueBindCommandsAsync()
+        protected virtual Task TrySendQueueBindCommandsAsync()
         {
             try
             {
@@ -118,7 +119,7 @@ namespace Volo.Abp.RabbitMQ
             return Task.CompletedTask;
         }
 
-        public void OnMessageReceived(Func<IModel, BasicDeliverEventArgs, Task> callback)
+        public virtual void OnMessageReceived(Func<IModel, BasicDeliverEventArgs, Task> callback)
         {
             Callbacks.Add(callback);
         }
@@ -132,7 +133,7 @@ namespace Volo.Abp.RabbitMQ
             }
         }
 
-        private void TryCreateChannel()
+        protected virtual void TryCreateChannel()
         {
             DisposeChannel();
 
@@ -214,7 +215,7 @@ namespace Volo.Abp.RabbitMQ
             DisposeChannel();
         }
 
-        public class QueueBindCommand
+        protected class QueueBindCommand
         {
             public QueueBindType Type { get; }
 
@@ -227,7 +228,7 @@ namespace Volo.Abp.RabbitMQ
             }
         }
 
-        public enum QueueBindType
+        protected enum QueueBindType
         {
             Bind,
             Unbind
