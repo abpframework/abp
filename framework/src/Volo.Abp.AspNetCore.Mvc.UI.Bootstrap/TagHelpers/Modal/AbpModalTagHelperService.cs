@@ -36,6 +36,12 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
         {
             var classNames = new StringBuilder("modal-dialog");
 
+            if (TagHelper.Centered ?? false)
+            {
+                classNames.Append(" ");
+                classNames.Append("modal-dialog-centered");
+            }
+
             if (TagHelper.Size != AbpModalSize.Default)
             {
                 classNames.Append(" ");
