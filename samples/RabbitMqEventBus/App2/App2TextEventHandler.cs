@@ -23,6 +23,7 @@ namespace App2
             Console.WriteLine("************************ INCOMING MESSAGE ****************************");
             Console.WriteLine(eventData.TextMessage);
             Console.WriteLine("**********************************************************************");
+            Console.WriteLine();
 
             _distributedEventBus.PublishAsync(new App2TextReceivedEventData(eventData.TextMessage));
 

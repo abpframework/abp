@@ -14,7 +14,8 @@ namespace App2
         public Task HandleEventAsync(App1TextReceivedEventData eventData)
         {
             Console.WriteLine("--------> App1 has received the message: " + eventData.ReceivedText.TruncateWithPostfix(32));
-            
+            Console.WriteLine();
+
             return Task.CompletedTask;
         }
     }

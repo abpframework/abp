@@ -25,7 +25,6 @@ namespace App2
             do
             {
                 Console.WriteLine();
-                Console.WriteLine("Send message to App1: ");
 
                 message = Console.ReadLine();
 
