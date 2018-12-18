@@ -28,11 +28,11 @@ namespace MyCompany.MyProject
 }
 ```
 
-最后, 配置 `AbpApplicationCreationOptions` 用 Autofac 替换默认的依赖注入服务. 根据应用程序类型，情况有所不同.
+最后, 配置 `AbpApplicationCreationOptions` 用 Autofac 替换默认的依赖注入服务. 根据应用程序类型, 情况有所不同.
 
 ### ASP.NET Core 应用程序
 
-如下所示，在 **Startup.cs** 文件中调用 `UseAutofac()`:
+如下所示, 在 **Startup.cs** 文件中调用 `UseAutofac()`:
 
 ````csharp
 public class Startup
@@ -57,7 +57,7 @@ public class Startup
 
 ### 控制台应用程序
 
-如下所示，在 `AbpApplicationFactory.Create` 中用options调用 `UseAutofac()` 方法:
+如下所示, 在 `AbpApplicationFactory.Create` 中用options调用 `UseAutofac()` 方法:
 
 ````csharp
 using System;
