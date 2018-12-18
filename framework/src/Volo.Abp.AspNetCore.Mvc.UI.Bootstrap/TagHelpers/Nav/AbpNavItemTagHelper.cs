@@ -2,8 +2,6 @@
 {
     public class AbpNavItemTagHelper : AbpTagHelper<AbpNavItemTagHelper, AbpNavItemTagHelperService>
     {
-        public bool? Active { get; set; }
-
         public bool? Dropdown { get; set; }
 
         public AbpNavItemTagHelper(AbpNavItemTagHelperService tagHelperService)
