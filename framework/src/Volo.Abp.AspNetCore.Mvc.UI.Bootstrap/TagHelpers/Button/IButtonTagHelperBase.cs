@@ -10,6 +10,8 @@
 
         string Icon { get; }
 
+        bool? Disabled { get; }
+
         FontIconType IconType { get; }
     }
 }

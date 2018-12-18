@@ -13,6 +13,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button
             AddClasses(context, output);
             AddIcon(context, output);
             AddText(context, output);
+            AddDisabled(context, output);
         }
 
         protected virtual void NormalizeTagMode(TagHelperContext context, TagHelperOutput output)
@@ -64,6 +65,14 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button
             }
 
             output.Content.AppendHtml($"<span>{TagHelper.Text}</span>");
+        }
+
+        protected virtual void AddDisabled(TagHelperContext context, TagHelperOutput output)
+        {
+            if (TagHelper.Disabled ?? false)
+            {
+                output.Attributes.Add("disabled", "disabled");
+            }
         }
     }
 }
