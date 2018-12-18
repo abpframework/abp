@@ -134,10 +134,10 @@ Install-Package Volo.Abp.Autofac
 1. Add ``AbpAutofacModule`` Dependency
 
 ```c#
-[DependsOn(typeof(AbpAutofacModule))] //Add dependency to ABP Autofac module
+[DependsOn(typeof(AbpAutofacModule))] //Add dependency to the AbpAutofacModule
 public class AppModule : AbpModule
 {
-    ...
+    
 }
 ```
 
