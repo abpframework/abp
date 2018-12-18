@@ -228,6 +228,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Storage.FileSystem
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Storage.FileSystem.Server", "src\Volo.Abp.Storage.FileSystem.Server\Volo.Abp.Storage.FileSystem.Server.csproj", "{A8E7513C-FC2B-414F-9FDB-5333C900F268}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Storage.Tests", "test\Volo.Abp.Storage.Tests\Volo.Abp.Storage.Tests.csproj", "{60D329A7-07A6-4331-BB7C-B9ADB31FF364}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -646,6 +648,10 @@ Global
 		{A8E7513C-FC2B-414F-9FDB-5333C900F268}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A8E7513C-FC2B-414F-9FDB-5333C900F268}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A8E7513C-FC2B-414F-9FDB-5333C900F268}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60D329A7-07A6-4331-BB7C-B9ADB31FF364}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60D329A7-07A6-4331-BB7C-B9ADB31FF364}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60D329A7-07A6-4331-BB7C-B9ADB31FF364}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60D329A7-07A6-4331-BB7C-B9ADB31FF364}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -756,6 +762,7 @@ Global
 		{D4EF4D97-6CAF-4699-AD21-8DBF8B8C6DB7} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{4107D8C5-7739-431A-A683-FD6A197FF1B8} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{A8E7513C-FC2B-414F-9FDB-5333C900F268} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
+		{60D329A7-07A6-4331-BB7C-B9ADB31FF364} = {447C8A77-E5F0-4538-8687-7383196D04EA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB97ECF4-9A84-433F-A80B-2A3285BDD1D5}

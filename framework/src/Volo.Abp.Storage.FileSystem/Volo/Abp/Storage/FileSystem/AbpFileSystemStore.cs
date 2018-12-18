@@ -13,12 +13,12 @@ namespace Volo.Abp.Storage.FileSystem
     public class AbpFileSystemStore : IAbpStore
     {
         private readonly FileSystemStoreOptions _storeOptions;
-        private readonly IPublicUrlProvider _publicUrlProvider;
+        private readonly IAbpPublicUrlProvider _publicUrlProvider;
         private readonly IAbpExtendedPropertiesProvider _extendedPropertiesProvider;
 
         public AbpFileSystemStore(
             FileSystemStoreOptions storeOptions,
-            IPublicUrlProvider publicUrlProvider,
+            IAbpPublicUrlProvider publicUrlProvider,
             IAbpExtendedPropertiesProvider extendedPropertiesProvider
         )
         {
@@ -51,15 +51,16 @@ namespace Volo.Abp.Storage.FileSystem
 
             var result = new List<IFileReference>();
 
-            if (!Directory.Exists(directoryPath)) return result.ToArray();
-
-            var allResultPaths = Directory.GetFiles(directoryPath)
-                .Select(fp => fp.Replace(AbsolutePath, "").Trim('/', '\\'))
-                .ToList();
-
-            foreach (var resultPath in allResultPaths)
+            if (Directory.Exists(directoryPath))
             {
-                result.Add(await InternalGetAsync(resultPath, withMetadata));
+                var allResultPaths = Directory.GetFiles(directoryPath)
+                    .Select(fp => fp.Replace(AbsolutePath, "").Trim('/', '\\'))
+                    .ToList();
+
+                foreach (var resultPath in allResultPaths)
+                {
+                    result.Add(await InternalGetAsync(resultPath, withMetadata));
+                }
             }
 
             return result.ToArray();
@@ -73,19 +74,21 @@ namespace Volo.Abp.Storage.FileSystem
                 : Path.Combine(AbsolutePath, path);
 
             var result = new List<IFileReference>();
-            if (!Directory.Exists(directoryPath)) return result.ToArray();
 
-            var matcher = new Matcher(StringComparison.Ordinal);
-            matcher.AddInclude(searchPattern);
-
-            var matches = matcher.Execute(new DirectoryInfoWrapper(new DirectoryInfo(directoryPath)));
-            var allResultPaths = matches.Files
-                .Select(match => Path.Combine(path, match.Path).Trim('/', '\\'))
-                .ToList();
-
-            foreach (var resultPath in allResultPaths)
+            if (Directory.Exists(directoryPath))
             {
-                result.Add(await InternalGetAsync(resultPath, withMetadata));
+                var matcher = new Matcher(StringComparison.Ordinal);
+                matcher.AddInclude(searchPattern);
+
+                var matches = matcher.Execute(new DirectoryInfoWrapper(new DirectoryInfo(directoryPath)));
+                var allResultPaths = matches.Files
+                    .Select(match => Path.Combine(path, match.Path).Trim('/', '\\'))
+                    .ToList();
+
+                foreach (var resultPath in allResultPaths)
+                {
+                    result.Add(await InternalGetAsync(resultPath, withMetadata));
+                }
             }
 
             return result.ToArray();
@@ -201,32 +204,19 @@ namespace Volo.Abp.Storage.FileSystem
             bool checkIfExists = true)
         {
             var fullPath = Path.Combine(AbsolutePath, path);
-            
+
             if (checkIfExists && !File.Exists(fullPath))
             {
                 return null;
             }
 
             FileExtendedProperties extendedProperties = null;
-
-            if (_extendedPropertiesProvider == null)
+            if (withMetadata)
             {
-                throw new InvalidOperationException("There is no FileSystem extended properties provider.");
+                extendedProperties = await _extendedPropertiesProvider.GetExtendedPropertiesAsync(
+                    AbsolutePath,
+                    new PrivateFileReference(path));
             }
-
-            if (!withMetadata)
-                return new FileSystemFileReference(
-                    fullPath,
-                    path,
-                    this,
-                    withMetadata,
-                    extendedProperties,
-                    _publicUrlProvider,
-                    _extendedPropertiesProvider);
-
-            extendedProperties = await _extendedPropertiesProvider.GetExtendedPropertiesAsync(
-                AbsolutePath,
-                new PrivateFileReference(path));
 
             return new FileSystemFileReference(
                 fullPath,

@@ -5,11 +5,12 @@ using Volo.Abp.Storage.Configuration;
 
 namespace Volo.Abp.Storage.FileSystem.Server
 {
-    public class PublicUrlProvider : IPublicUrlProvider, ITransientDependency
+    [Dependency(ReplaceServices = true)]
+    public class AbpPublicUrlProvider : IAbpPublicUrlProvider, ITransientDependency
     {
         private readonly FileSystemStorageServerOptions _options;
 
-        public PublicUrlProvider(IOptions<FileSystemStorageServerOptions> options)
+        public AbpPublicUrlProvider(IOptions<FileSystemStorageServerOptions> options)
         {
             _options = options.Value;
         }

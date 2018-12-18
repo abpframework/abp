@@ -12,15 +12,13 @@ namespace Volo.Abp.Storage.FileSystem
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<FileSystemParsedOptions>(options => options.RootPath = Directory.GetCurrentDirectory());
+            context.Services.Configure<FileSystemParsedOptions>(options => options.RootPath = Directory.GetCurrentDirectory());
 
             context.Services.AddSingleton<IConfigureOptions<FileSystemParsedOptions>, ConfigureProviderOptions<
                     FileSystemParsedOptions, FileSystemProviderInstanceOptions, FileSystemStoreOptions,
                     FileSystemScopedStoreOptions>>();
 
-            context.Services.TryAddEnumerable(
-                ServiceDescriptor.Transient<IAbpStorageProvider, AbpFileSystemStorageProvider>()
-                );
+            context.Services.TryAddEnumerable(ServiceDescriptor.Transient<IAbpStorageProvider, AbpFileSystemStorageProvider>());
         }
     }
 }

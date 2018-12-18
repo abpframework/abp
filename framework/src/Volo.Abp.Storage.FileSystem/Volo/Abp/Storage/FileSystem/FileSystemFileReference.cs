@@ -19,7 +19,7 @@ namespace Volo.Abp.Storage.FileSystem
             AbpFileSystemStore store,
             bool withMetadata,
             FileExtendedProperties extendedProperties,
-            IPublicUrlProvider publicUrlProvider,
+            IAbpPublicUrlProvider publicUrlProvider,
             IAbpExtendedPropertiesProvider extendedPropertiesProvider)
         {
             FileSystemPath = filePath;
@@ -30,7 +30,10 @@ namespace Volo.Abp.Storage.FileSystem
 
             _propertiesLazy = new Lazy<IFileProperties>(() =>
             {
-                if (withMetadata) return new FileSystemFileProperties(FileSystemPath, extendedProperties);
+                if (withMetadata)
+                {
+                    return new FileSystemFileProperties(FileSystemPath, extendedProperties);
+                }
 
                 throw new InvalidOperationException("Metadata are not loaded, please use withMetadata option");
             });
@@ -42,7 +45,7 @@ namespace Volo.Abp.Storage.FileSystem
                     return publicUrlProvider.GetPublicUrl(_store.Name, this);
                 }
 
-                throw new InvalidOperationException("There is not FileSystemServer enabled.");
+                throw new InvalidOperationException("There is not Server enabled.");
             });
         }
 
@@ -93,9 +96,6 @@ namespace Volo.Abp.Storage.FileSystem
 
         public Task SavePropertiesAsync()
         {
-            if (_extendedPropertiesProvider == null)
-                throw new InvalidOperationException("There is no FileSystem extended properties provider.");
-
             return _extendedPropertiesProvider.SaveExtendedPropertiesAsync(
                 _store.AbsolutePath,
                 this,
@@ -109,10 +109,10 @@ namespace Volo.Abp.Storage.FileSystem
 
         public async Task FetchProperties()
         {
-            if (_withMetadata) return;
-
-            if (_extendedPropertiesProvider == null)
-                throw new InvalidOperationException("There is no FileSystem extended properties provider.");
+            if (_withMetadata)
+            {
+                return;
+            }
 
             var extendedProperties = await _extendedPropertiesProvider.GetExtendedPropertiesAsync(
                 _store.AbsolutePath,

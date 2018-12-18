@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Options;
-using Volo.Abp.DependencyInjection;
 using Volo.Abp.Storage.Configuration;
 
 namespace Volo.Abp.Storage.FileSystem
@@ -9,15 +8,14 @@ namespace Volo.Abp.Storage.FileSystem
     {
         public const string ProviderName = "FileSystem";
         
-        private readonly IPublicUrlProvider _publicUrlProvider;
+        private readonly IAbpPublicUrlProvider _publicUrlProvider;
         private readonly IAbpExtendedPropertiesProvider _extendedPropertiesProvider;
 
         public AbpFileSystemStorageProvider(
             IOptions<FileSystemParsedOptions> options,
-            IPublicUrlProvider publicUrlProvider = null,
-            IAbpExtendedPropertiesProvider extendedPropertiesProvider = null
-            )
-            : base(options)
+            IAbpPublicUrlProvider publicUrlProvider,
+            IAbpExtendedPropertiesProvider extendedPropertiesProvider
+            ): base(options)
         {
             _publicUrlProvider = publicUrlProvider;
             _extendedPropertiesProvider = extendedPropertiesProvider;

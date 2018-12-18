@@ -6,6 +6,7 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Storage.FileSystem.ExtendedProperties
 {
+    [Dependency(ReplaceServices = true)]
     public class AbpExtendedPropertiesProvider : IAbpExtendedPropertiesProvider, ITransientDependency
     {
         private readonly FileSystemExtendedPropertiesOptions _options;

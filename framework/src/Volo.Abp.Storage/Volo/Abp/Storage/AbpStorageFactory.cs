@@ -1,12 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Storage.Configuration;
 
 namespace Volo.Abp.Storage
 {
-    public class AbpStorageFactory : IAbpStorageFactory, ITransientDependency
+    [Dependency(ServiceLifetime.Transient, TryRegister = true)]
+    public class AbpStorageFactory : IAbpStorageFactory
     {
         private readonly AbpStorageOptions _options;
         private readonly IReadOnlyDictionary<string, IAbpStorageProvider> _storageProviders;

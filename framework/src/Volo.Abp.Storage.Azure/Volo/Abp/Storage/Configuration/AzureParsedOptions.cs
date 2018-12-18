@@ -18,25 +18,21 @@ namespace Volo.Abp.Storage.Configuration
 
         public void BindProviderInstanceOptions(AzureProviderInstanceOptions providerInstanceOptions)
         {
-            if (string.IsNullOrEmpty(providerInstanceOptions.ConnectionStringName) ||
-                !string.IsNullOrEmpty(providerInstanceOptions.ConnectionString))
+            if (!string.IsNullOrEmpty(providerInstanceOptions.ConnectionStringName)
+                && string.IsNullOrEmpty(providerInstanceOptions.ConnectionString))
             {
-                return;
-            }
+                if (!ConnectionStrings.ContainsKey(providerInstanceOptions.ConnectionStringName))
+                {
+                    throw new BadProviderConfigurationException(
+                        providerInstanceOptions.Name,
+                        $"The ConnectionString '{providerInstanceOptions.ConnectionStringName}' cannot be found.");
+                }
 
-            if (!ConnectionStrings.ContainsKey(providerInstanceOptions.ConnectionStringName))
-            {
-                throw new BadProviderConfigurationException(
-                    providerInstanceOptions.Name,
-                    $"The ConnectionString '{providerInstanceOptions.ConnectionStringName}' cannot be found.");
+                providerInstanceOptions.ConnectionString = ConnectionStrings[providerInstanceOptions.ConnectionStringName];
             }
-
-            providerInstanceOptions.ConnectionString =
-                ConnectionStrings[providerInstanceOptions.ConnectionStringName];
         }
 
-        public void BindStoreOptions(AzureStoreOptions storeOptions,
-            AzureProviderInstanceOptions providerInstanceOptions = null)
+        public void BindStoreOptions(AzureStoreOptions storeOptions, AzureProviderInstanceOptions providerInstanceOptions = null)
         {
             storeOptions.FolderName = storeOptions.FolderName.ToLowerInvariant();
 
