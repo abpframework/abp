@@ -23,5 +23,18 @@ namespace Volo.Abp.Authorization.Permissions
 
             return Groups[name] = new PermissionGroupDefinition(name, displayName);
         }
+
+        public virtual PermissionGroupDefinition GetGroupOrNull(string name)
+        {
+            Check.NotNull(name, nameof(name));
+
+            if (!Groups.ContainsKey(name))
+            {
+                return null;
+            }
+
+            return Groups[name];
+        }
+
     }
 }
