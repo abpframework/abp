@@ -11,6 +11,19 @@
         <abp-style src="/css/demo.css" />
     </abp-style-bundle>
 }
+
+@section scripts {
+    <abp-script-bundle>
+        @*<abp-script src="/libs/highlight.js/lib/highlight.js" />
+            <abp-script src="/Pages/Components/highlightCode.js" />*@
+    </abp-script-bundle>
+}
+
+<link rel="stylesheet"
+      href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/default.min.css">
+<script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
 <h2>Collapse</h2>
 
 <p>Based on <a href="https://getbootstrap.com/docs/4.1/components/collapse/" target="_blank"> Bootstrap Collapse</a>.</p>
@@ -69,11 +82,11 @@
         <a abp-button="Primary" abp-collapse-id="FirstCollapseExample"> Toggle first element </a>
         <abp-button button-type="Primary" abp-collapse-id="SecondCollapseExample" text="Toggle second element" />
         <abp-button button-type="Primary" abp-collapse-id="FirstCollapseExample SecondCollapseExample" text="Toggle both elements" />
-        
+
         <abp-row class="mt-3">
             <abp-column size-sm="_6">
                 <abp-collapse-body id="FirstCollapseExample" multi="true">
-                        3Anim pariatur wolf moon tempor,,, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                    3Anim pariatur wolf moon tempor,,, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
                 </abp-collapse-body>
             </abp-column>
             <abp-column size-sm="_6">
