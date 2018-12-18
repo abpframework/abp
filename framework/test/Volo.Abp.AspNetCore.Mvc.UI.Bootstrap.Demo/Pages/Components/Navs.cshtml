@@ -14,14 +14,14 @@
 
 <p>Based on <a href="https://getbootstrap.com/docs/4.1/components/navs/" target="_blank"> Bootstrap Navs</a>.</p>
 
-<h4># Navs Examples</h4>
+<h4>Base nav</h4>
 
 <div class="demo-with-code">
     <div class="demo-area">
 
         <abp-nav nav-style="Pill" align="Center">
             <abp-nav-item>
-                <a abp-nav-link Active="true" href="#">Active</a>
+                <a abp-nav-link active="true" href="#">Active</a>
             </abp-nav-item>
             <abp-nav-item>
                 <a abp-nav-link href="#">Longer nav link</a>
@@ -33,29 +33,51 @@
                 <a abp-nav-link disabled="true" href="#">disabled</a>
             </abp-nav-item>
         </abp-nav>
-
     </div>
     <div class="code-area">
-        <pre>
-        &lt;abp-nav nav-style=&quot;Pill&quot; align=&quot;Center&quot;&gt;
-            &lt;abp-nav-item&gt;
-                &lt;a abp-nav-link Active=&quot;true&quot; href=&quot;#&quot;&gt;Active&lt;/a&gt;
-            &lt;/abp-nav-item&gt;
-            &lt;abp-nav-item &gt;
-                &lt;a abp-nav-link  href=&quot;#&quot;&gt;Longer nav link&lt;/a&gt;
-            &lt;/abp-nav-item&gt;
-            &lt;abp-nav-item &gt;
-                &lt;a abp-nav-link  href=&quot;#&quot;&gt;link&lt;/a&gt;
-            &lt;/abp-nav-item&gt;
-            &lt;abp-nav-item &gt;
-                &lt;a abp-nav-link disabled=&quot;true&quot; href=&quot;#&quot;&gt;disabled&lt;/a&gt;
-            &lt;/abp-nav-item&gt;
-        &lt;/abp-nav&gt;
-</pre>
+        <abp-tabs>
+            <abp-tab title="Tag Helper">
+                <pre><code>
+
+&lt;abp-nav nav-style=&quot;Pill&quot; align=&quot;Center&quot;&gt;
+    &lt;abp-nav-item&gt;
+&lt;a abp-nav-link active=&quot;true&quot; href=&quot;#&quot;&gt;Active&lt;/a&gt;
+    &lt;/abp-nav-item&gt;
+    &lt;abp-nav-item&gt;
+&lt;a abp-nav-link href=&quot;#&quot;&gt;Longer nav link&lt;/a&gt;
+    &lt;/abp-nav-item&gt;
+    &lt;abp-nav-item&gt;
+&lt;a abp-nav-link href=&quot;#&quot;&gt;link&lt;/a&gt;
+    &lt;/abp-nav-item&gt;
+    &lt;abp-nav-item&gt;
+&lt;a abp-nav-link disabled=&quot;true&quot; href=&quot;#&quot;&gt;disabled&lt;/a&gt;
+    &lt;/abp-nav-item&gt;
+&lt;/abp-nav&gt;
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Rendered">
+                <pre><code>
+&lt;ul class=&quot;nav justify-content-center nav-pills&quot;&gt;
+   &lt;li class=&quot;nav-item&quot;&gt;
+       &lt;a href=&quot;#&quot; class=&quot;nav-link active&quot;&gt;Active&lt;/a&gt;
+   &lt;/li&gt;
+   &lt;li class=&quot;nav-item&quot;&gt;
+       &lt;a href=&quot;#&quot; class=&quot;nav-link&quot;&gt;Longer nav link&lt;/a&gt;
+   &lt;/li&gt;
+   &lt;li class=&quot;nav-item&quot;&gt;
+       &lt;a href=&quot;#&quot; class=&quot;nav-link&quot;&gt;link&lt;/a&gt;
+   &lt;/li&gt;
+   &lt;li class=&quot;nav-item&quot;&gt;
+       &lt;a href=&quot;#&quot; class=&quot;nav-link disabled&quot;&gt;disabled&lt;/a&gt;
+   &lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+            </abp-tab>
+        </abp-tabs>
     </div>
 </div>
 
-<h4># Navs Examples</h4>
+<h4>Base nav</h4>
 
 <div class="demo-with-code">
     <div class="demo-area">
@@ -92,42 +114,85 @@
                 </abp-navbar-nav>
             </abp-navbar-toggle>
         </abp-nav-bar>
-
     </div>
     <div class="code-area">
-        <pre>
-        &lt;abp-nav-bar size=&quot;Lg&quot; navbar-style=&quot;Dark_Warning&quot;&gt;
-            &lt;a abp-navbar-brand href=&quot;#&quot;&gt;Navbar&lt;/a&gt;
-            &lt;abp-navbar-toggle&gt;
-                &lt;abp-navbar-nav&gt;
-                    &lt;abp-nav-item active=&quot;true&quot;&gt;
-                        &lt;a abp-nav-link href=&quot;#&quot;&gt;Home &lt;span class=&quot;sr-only&quot;&gt;(current)&lt;/span&gt;&lt;/a&gt;
-                    &lt;/abp-nav-item&gt;
-                    &lt;abp-nav-item&gt;
-                        &lt;a abp-nav-link href=&quot;#&quot;&gt;Link&lt;/a&gt;
-                    &lt;/abp-nav-item&gt;
-                    &lt;abp-nav-item dropdown=&quot;true&quot;&gt;
-                        &lt;abp-dropdown&gt;
-                            &lt;abp-dropdown-button nav-link=&quot;true&quot; text=&quot;Dropdown&quot; /&gt;
-                            &lt;abp-dropdown-menu&gt;
-                                &lt;abp-dropdown-header&gt;Dropdown header&lt;/abp-dropdown-header&gt;
-                                &lt;abp-dropdown-item href=&quot;#&quot; active=&quot;true&quot;&gt;Action&lt;/abp-dropdown-item&gt;
-                                &lt;abp-dropdown-item href=&quot;#&quot; disabled=&quot;true&quot;&gt;Another disabled action&lt;/abp-dropdown-item&gt;
-                                &lt;abp-dropdown-item href=&quot;#&quot;&gt;Something else here&lt;/abp-dropdown-item&gt;
-                                &lt;abp-dropdown-divider /&gt;
-                                &lt;abp-dropdown-item href=&quot;#&quot;&gt;Separated link&lt;/abp-dropdown-item&gt;
-                            &lt;/abp-dropdown-menu&gt;
-                        &lt;/abp-dropdown&gt;
-                    &lt;/abp-nav-item&gt;
-                    &lt;abp-nav-item&gt;
-                        &lt;a abp-nav-link disabled=&quot;true&quot; href=&quot;#&quot;&gt;Disabled&lt;/a&gt;
-                    &lt;/abp-nav-item&gt;
-                &lt;/abp-navbar-nav&gt;            
-            &lt;span abp-navbar-text&gt;
+        <abp-tabs>
+            <abp-tab title="Tag Helper">
+                <pre><code>
+
+&lt;abp-nav-bar size=&quot;Lg&quot; navbar-style=&quot;Dark_Warning&quot;&gt;
+    &lt;a abp-navbar-brand href=&quot;#&quot;&gt;Navbar&lt;/a&gt;
+    &lt;abp-navbar-toggle&gt;
+        &lt;abp-navbar-nav&gt;
+            &lt;abp-nav-item active=&quot;true&quot;&gt;
+                &lt;a abp-nav-link href=&quot;#&quot;&gt;Home &lt;span class=&quot;sr-only&quot;&gt;(current)&lt;/span&gt;&lt;/a&gt;
+            &lt;/abp-nav-item&gt;
+            &lt;abp-nav-item&gt;
+                &lt;a abp-nav-link href=&quot;#&quot;&gt;Link&lt;/a&gt;
+            &lt;/abp-nav-item&gt;
+            &lt;abp-nav-item dropdown=&quot;true&quot;&gt;
+                &lt;abp-dropdown&gt;
+                    &lt;abp-dropdown-button nav-link=&quot;true&quot; text=&quot;Dropdown&quot; /&gt;
+                    &lt;abp-dropdown-menu&gt;
+                        &lt;abp-dropdown-header&gt;Dropdown header&lt;/abp-dropdown-header&gt;
+                        &lt;abp-dropdown-item href=&quot;#&quot; active=&quot;true&quot;&gt;Action&lt;/abp-dropdown-item&gt;
+                        &lt;abp-dropdown-item href=&quot;#&quot; disabled=&quot;true&quot;&gt;Another disabled action&lt;/abp-dropdown-item&gt;
+                        &lt;abp-dropdown-item href=&quot;#&quot;&gt;Something else here&lt;/abp-dropdown-item&gt;
+                        &lt;abp-dropdown-divider /&gt;
+                        &lt;abp-dropdown-item href=&quot;#&quot;&gt;Separated link&lt;/abp-dropdown-item&gt;
+                    &lt;/abp-dropdown-menu&gt;
+                &lt;/abp-dropdown&gt;
+            &lt;/abp-nav-item&gt;
+            &lt;abp-nav-item&gt;
+                &lt;a abp-nav-link disabled=&quot;true&quot; href=&quot;#&quot;&gt;Disabled&lt;/a&gt;
+            &lt;/abp-nav-item&gt;
+        &lt;/abp-navbar-nav&gt;            
+        &lt;span abp-navbar-text&gt;
+          Sample Text
+        &lt;/span&gt;
+    &lt;/abp-navbar-toggle&gt;
+&lt;/abp-nav-bar&gt;
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Rendered">
+                <pre><code>
+&lt;nav class=&quot;navbar navbar-expand-lg navbar-dark bg-warning&quot;&gt;
+    &lt;a href=&quot;#&quot; class=&quot;navbar-brand&quot;&gt;Navbar&lt;/a&gt;
+    &lt;button class=&quot;navbar-toggler&quot; type=&quot;button&quot; data-toggle=&quot;collapse&quot; data-target=&quot;#13da550319ec478099dd4c9c3efb3d09&quot; aria-controls=&quot;13da550319ec478099dd4c9c3efb3d09&quot; aria-expanded=&quot;false&quot; aria-label=&quot;Toggle navigation&quot;&gt;
+    &lt;span class=&quot;navbar-toggler-icon&quot;&gt;&lt;/span&gt;
+    &lt;/button&gt;&lt;div class=&quot;collapse navbar-collapse&quot; id=&quot;13da550319ec478099dd4c9c3efb3d09&quot;&gt;
+        &lt;ul class=&quot;navbar-nav&quot;&gt;
+            &lt;li active=&quot;true&quot; class=&quot;nav-item&quot;&gt;
+                &lt;a href=&quot;#&quot; class=&quot;nav-link&quot;&gt;Home &lt;span class=&quot;sr-only&quot;&gt;(current)&lt;/span&gt;&lt;/a&gt;
+            &lt;/li&gt;
+            &lt;li class=&quot;nav-item&quot;&gt;
+                &lt;a href=&quot;#&quot; class=&quot;nav-link&quot;&gt;Link&lt;/a&gt;
+            &lt;/li&gt;
+            &lt;li class=&quot;nav-item dropdown&quot;&gt;
+                &lt;div class=&quot;btn-group&quot;&gt;
+                    &lt;a class=&quot;dropdown-toggle btn nav-link&quot; data-toggle=&quot;dropdown&quot; aria-haspopup=&quot;true&quot; aria-expanded=&quot;false&quot; data-busy-text=&quot;Processing...&quot; roles=&quot;button&quot; href=&quot;#&quot;&gt;&lt;span&gt;Dropdown&lt;/span&gt;&lt;/a&gt;
+                    &lt;div&gt;&lt;/div&gt;
+                    &lt;div class=&quot;dropdown-menu&quot;&gt;
+                        &lt;h6 class=&quot;dropdown-header&quot;&gt;Dropdown header&lt;/h6&gt;
+                        &lt;a href=&quot;#&quot; class=&quot;dropdown-item active&quot;&gt;Action&lt;/a&gt;
+                        &lt;a href=&quot;#&quot; class=&quot;dropdown-item disabled&quot;&gt;Another disabled action&lt;/a&gt;
+                        &lt;a href=&quot;#&quot; class=&quot;dropdown-item&quot;&gt;Something else here&lt;/a&gt;
+                        &lt;div class=&quot;dropdown-divider&quot;&gt;&lt;/div&gt;
+                        &lt;a href=&quot;#&quot; class=&quot;dropdown-item&quot;&gt;Separated link&lt;/a&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/li&gt;
+            &lt;li class=&quot;nav-item&quot;&gt;
+                &lt;a href=&quot;#&quot; class=&quot;nav-link disabled&quot;&gt;Disabled&lt;/a&gt;
+            &lt;/li&gt;
+            &lt;span class=&quot;navbar-text&quot;&gt;
                  Sample Text
             &lt;/span&gt;
-            &lt;/abp-navbar-toggle&gt;
-        &lt;/abp-nav-bar&gt;
-</pre>
+        &lt;/ul&gt;
+    &lt;/div&gt;
+&lt;/nav&gt;
+</code></pre>
+            </abp-tab>
+        </abp-tabs>
     </div>
 </div>
