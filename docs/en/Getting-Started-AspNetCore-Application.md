@@ -1,6 +1,6 @@
 ﻿# Getting Started ABP With AspNet Core MVC Web Application
 
-This tutorial explains how to start ABP from scratch with minimal dependencies. You generally want to start with a **[startup template](https://abp.io/Templates)**.
+This tutorial explains how to start ABP from scratch with minimal dependencies. You generally want to start with the **[startup template](Getting-Started-AspNetCore-MVC-Template.md)**.
 
 ## Create A New Project
 
