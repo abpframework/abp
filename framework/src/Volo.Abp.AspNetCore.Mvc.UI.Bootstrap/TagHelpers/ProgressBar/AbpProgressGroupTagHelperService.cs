@@ -3,7 +3,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.ProgressBar
 {
-    public class AbpProgressTagHelperService : AbpTagHelperService<AbpProgressTagHelper>
+    public class AbpProgressGroupTagHelperService : AbpTagHelperService<AbpProgressGroupTagHelper>
     {
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
