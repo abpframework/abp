@@ -12,6 +12,7 @@ namespace MyCompanyName.MyProjectName.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
+                    ExtraProperties = table.Column<string>(nullable: true),
                     ConcurrencyStamp = table.Column<string>(nullable: true),
                     UserId = table.Column<Guid>(nullable: true),
                     UserName = table.Column<string>(maxLength: 256, nullable: true),
@@ -27,8 +28,7 @@ namespace MyCompanyName.MyProjectName.Migrations
                     Url = table.Column<string>(maxLength: 256, nullable: true),
                     Exceptions = table.Column<string>(maxLength: 4000, nullable: true),
                     Comments = table.Column<string>(maxLength: 256, nullable: true),
-                    HttpStatusCode = table.Column<int>(nullable: true),
-                    ExtraProperties = table.Column<string>(nullable: true)
+                    HttpStatusCode = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -173,8 +173,7 @@ namespace MyCompanyName.MyProjectName.Migrations
                     Parameters = table.Column<string>(maxLength: 2000, nullable: true),
                     ExecutionTime = table.Column<DateTime>(nullable: false),
                     ExecutionDuration = table.Column<int>(nullable: false),
-                    ExtraProperties = table.Column<string>(nullable: true),
-                    AuditLogId1 = table.Column<Guid>(nullable: true)
+                    ExtraProperties = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -185,12 +184,6 @@ namespace MyCompanyName.MyProjectName.Migrations
                         principalTable: "AbpAuditLogs",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AbpAuditLogActions_AbpAuditLogs_AuditLogId1",
-                        column: x => x.AuditLogId1,
-                        principalTable: "AbpAuditLogs",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -204,8 +197,7 @@ namespace MyCompanyName.MyProjectName.Migrations
                     ChangeType = table.Column<byte>(nullable: false),
                     EntityId = table.Column<string>(maxLength: 128, nullable: false),
                     EntityTypeFullName = table.Column<string>(maxLength: 128, nullable: false),
-                    ExtraProperties = table.Column<string>(nullable: true),
-                    AuditLogId1 = table.Column<Guid>(nullable: true)
+                    ExtraProperties = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -216,12 +208,6 @@ namespace MyCompanyName.MyProjectName.Migrations
                         principalTable: "AbpAuditLogs",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AbpEntityChanges_AbpAuditLogs_AuditLogId1",
-                        column: x => x.AuditLogId1,
-                        principalTable: "AbpAuditLogs",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -369,11 +355,6 @@ namespace MyCompanyName.MyProjectName.Migrations
                 column: "AuditLogId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AbpAuditLogActions_AuditLogId1",
-                table: "AbpAuditLogActions",
-                column: "AuditLogId1");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_AbpAuditLogActions_TenantId_ServiceName_MethodName_ExecutionTime",
                 table: "AbpAuditLogActions",
                 columns: new[] { "TenantId", "ServiceName", "MethodName", "ExecutionTime" });
@@ -397,11 +378,6 @@ namespace MyCompanyName.MyProjectName.Migrations
                 name: "IX_AbpEntityChanges_AuditLogId",
                 table: "AbpEntityChanges",
                 column: "AuditLogId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AbpEntityChanges_AuditLogId1",
-                table: "AbpEntityChanges",
-                column: "AuditLogId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AbpEntityChanges_TenantId_EntityTypeFullName_EntityId",
