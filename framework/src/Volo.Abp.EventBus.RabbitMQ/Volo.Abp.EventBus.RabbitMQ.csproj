@@ -4,8 +4,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>Volo.Abp.EventBus.Distributed.RabbitMQ</AssemblyName>
-    <PackageId>Volo.Abp.EventBus.Distributed.RabbitMQ</PackageId>
+    <AssemblyName>Volo.Abp.EventBus.RabbitMQ</AssemblyName>
+    <PackageId>Volo.Abp.EventBus.RabbitMQ</PackageId>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>

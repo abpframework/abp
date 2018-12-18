@@ -62,10 +62,19 @@ namespace Volo.AbpWebSite
             var hostingEnvironment = context.Services.GetHostingEnvironment();
             var configuration = context.Services.GetConfiguration();
 
+            ConfigureLanguages(context.Services);
             ConfigureDatabaseServices(context.Services, configuration);
             ConfigureVirtualFileSystem(context.Services, hostingEnvironment);
             ConfigureBundles(context.Services);
             ConfigureTheme(context.Services);
+        }
+
+        private static void ConfigureLanguages(IServiceCollection services)
+        {
+            services.Configure<AbpLocalizationOptions>(options =>
+            {
+                options.Languages.Add(new LanguageInfo("en-US", "en-US", "English"));
+            });
         }
 
         private static void ConfigureBundles(IServiceCollection services)
@@ -138,12 +147,7 @@ namespace Volo.AbpWebSite
             var app = context.GetApplicationBuilder();
             var env = context.GetEnvironment();
 
-            app.UseRequestLocalization(options =>
-            {
-                options.DefaultRequestCulture = new RequestCulture("en-US", "en-US");
-                options.AddSupportedCultures("en-US");
-                options.AddSupportedUICultures("en-US");
-            });
+            app.UseAbpRequestLocalization();
 
             if (env.IsDevelopment())
             {

@@ -1,0 +1,4 @@
+﻿namespace Volo.Abp.RabbitMQ
+{
+
+}

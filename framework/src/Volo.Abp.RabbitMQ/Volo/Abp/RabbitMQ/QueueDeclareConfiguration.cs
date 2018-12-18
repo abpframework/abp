@@ -4,7 +4,7 @@ using RabbitMQ.Client;
 
 namespace Volo.Abp.RabbitMQ
 {
-    public class QueueConfiguration
+    public class QueueDeclareConfiguration
     {
         [NotNull]
         public string QueueName { get; }
@@ -17,7 +17,7 @@ namespace Volo.Abp.RabbitMQ
 
         public IDictionary<string, object> Arguments { get; }
 
-        public QueueConfiguration(
+        public QueueDeclareConfiguration(
             [NotNull] string queueName, 
             bool durable = true, 
             bool exclusive = false, 

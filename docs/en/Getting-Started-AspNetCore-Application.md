@@ -1,8 +1,8 @@
-﻿## Getting Started ABP With AspNet Core MVC Web Application
+﻿# Getting Started ABP With AspNet Core MVC Web Application
 
-This tutorial explains how to start ABP from scratch with minimal dependencies. You generally want to start with a **[startup template](https://abp.io/Templates)**.
+This tutorial explains how to start ABP from scratch with minimal dependencies. You generally want to start with the **[startup template](Getting-Started-AspNetCore-MVC-Template.md)**.
 
-### Create A New Project
+## Create A New Project
 
 1. Create a new empty AspNet Core Web Application from Visual Studio:
 
@@ -14,7 +14,7 @@ This tutorial explains how to start ABP from scratch with minimal dependencies. 
 
 You could select another template, but I want to show it from a clear project.
 
-### Install Volo.Abp.AspNetCore.Mvc Package
+## Install Volo.Abp.AspNetCore.Mvc Package
 
 Volo.Abp.AspNetCore.Mvc is AspNet Core MVC integration package for ABP. So, install it to your project:
 
@@ -22,7 +22,7 @@ Volo.Abp.AspNetCore.Mvc is AspNet Core MVC integration package for ABP. So, inst
 Install-Package Volo.Abp.AspNetCore.Mvc
 ````
 
-### Create First ABP Module
+## Create First ABP Module
 
 ABP is a modular framework and it requires a **startup (root) module** class derived from ``AbpModule``:
 
@@ -62,7 +62,7 @@ ABP packages define module classes and a module can depend on another module. In
 
 Instead of Startup class, we are configuring ASP.NET Core pipeline in this module class.
 
-### The Startup Class
+## The Startup Class
 
 Next step is to modify Startup class to integrate to ABP module system:
 
@@ -95,7 +95,7 @@ Changed ``ConfigureServices`` method to return ``IServiceProvider`` instead of `
 
 ``app.InitializeApplication()`` call in ``Configure`` method initializes and starts the application.
 
-### Hello World!
+## Hello World!
 
 The application above does nothing. Let's create an MVC controller does something:
 
@@ -120,13 +120,13 @@ If you run the application, you will see a "Hello World!" message on the page.
 
 Derived ``HomeController`` from ``AbpController`` instead of standard ``Controller`` class. This is not required, but ``AbpController`` class has useful base properties and methods to make your development easier.
 
-### Using Autofac as the Dependency Injection Framework
+## Using Autofac as the Dependency Injection Framework
 
 While AspNet Core's Dependency Injection (DI) system is fine for basic requirements, Autofac provides advanced features like Property Injection and Method Interception which are required by ABP to perform advanced application framework features.
 
 Replacing AspNet Core's DI system by Autofac and integrating to ABP is pretty easy.
 
-1. Install Volo.Abp.Autofac package
+1. Install [Volo.Abp.Autofac](https://www.nuget.org/packages/Volo.Abp.Autofac) package
 
 ````
 Install-Package Volo.Abp.Autofac
@@ -152,6 +152,6 @@ services.AddApplication<AppModule>(options =>
 });
 ````
 
-### Source Code
+## Source Code
 
 Get source code of the sample project created in this tutorial from [here](https://github.com/abpframework/abp/tree/master/samples/BasicAspNetCoreApplication).

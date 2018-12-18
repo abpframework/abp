@@ -16,6 +16,7 @@
   <ItemGroup>
     <PackageReference Include="RabbitMQ.Client" Version="5.1.0" />
     <ProjectReference Include="..\Volo.Abp.Json\Volo.Abp.Json.csproj" />
+    <ProjectReference Include="..\Volo.Abp.Threading\Volo.Abp.Threading.csproj" />
   </ItemGroup>
 
 </Project>
