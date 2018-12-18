@@ -145,7 +145,10 @@ namespace Volo.Abp.RabbitMQ
 
                 channel.ExchangeDeclare(
                     exchange: Exchange.ExchangeName,
-                    type: Exchange.Type
+                    type: Exchange.Type,
+                    durable: Exchange.Durable,
+                    autoDelete: Exchange.AutoDelete,
+                    arguments: Exchange.Arguments
                 );
 
                 channel.QueueDeclare(
@@ -212,6 +215,7 @@ namespace Volo.Abp.RabbitMQ
 
         public virtual void Dispose()
         {
+            Timer.Stop();
             DisposeChannel();
         }
 

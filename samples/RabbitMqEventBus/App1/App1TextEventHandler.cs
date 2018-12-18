@@ -4,9 +4,12 @@ using SharedModule;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus.Distributed;
 
-namespace App2
+namespace App1
 {
-    public class App1TextEventHandler : IDistributedEventHandler<TextEventData>, ITransientDependency
+    /// <summary>
+    /// Used to listen messages sent to App2 by App1.
+    /// </summary>
+    public class App1TextEventHandler : IDistributedEventHandler<App2ToApp1TextEventData>, ITransientDependency
     {
         private readonly IDistributedEventBus _distributedEventBus;
 
@@ -15,18 +18,13 @@ namespace App2
             _distributedEventBus = distributedEventBus;
         }
 
-        public Task HandleEventAsync(TextEventData eventData)
+        public Task HandleEventAsync(App2ToApp1TextEventData eventData)
         {
             Console.WriteLine("************************ INCOMING MESSAGE ****************************");
             Console.WriteLine(eventData.TextMessage);
             Console.WriteLine("**********************************************************************");
 
-            _distributedEventBus.PublishAsync(
-                new TextReceivedEventData
-                {
-                    ReceivedText = eventData.TextMessage
-                }
-            );
+            _distributedEventBus.PublishAsync(new App1TextReceivedEventData(eventData.TextMessage));
 
             return Task.CompletedTask;
         }

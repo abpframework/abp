@@ -6,9 +6,12 @@ using Volo.Abp.EventBus.Distributed;
 
 namespace App2
 {
-    public class App2TextReceivedEventHandler : IDistributedEventHandler<TextReceivedEventData>, ITransientDependency
+    /// <summary>
+    /// Used to know when App1 has received a message sent by App2.
+    /// </summary>
+    public class App2TextReceivedEventHandler : IDistributedEventHandler<App1TextReceivedEventData>, ITransientDependency
     {
-        public Task HandleEventAsync(TextReceivedEventData eventData)
+        public Task HandleEventAsync(App1TextReceivedEventData eventData)
         {
             Console.WriteLine("--------> App1 has received the message: " + eventData.ReceivedText.TruncateWithPostfix(32));
             

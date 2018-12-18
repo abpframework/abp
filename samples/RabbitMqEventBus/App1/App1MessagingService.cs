@@ -4,7 +4,7 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus;
 using Volo.Abp.EventBus.Distributed;
 
-namespace App2
+namespace App1
 {
     public class App1MessagingService : ITransientDependency
     {
@@ -17,21 +17,25 @@ namespace App2
 
         public void Run()
         {
-            Console.WriteLine("Press ENTER (without writing a message) to stop application...");
-            Console.WriteLine();
+            Console.WriteLine("*** Started the APPLICATION 1 ***");
+            Console.WriteLine("Write a message and press ENTER to send to the App2.");
+            Console.WriteLine("Press ENTER (without writing a message) to stop the application.");
 
             string message;
             do
             {
+                Console.WriteLine();
+                Console.WriteLine("Send message to App2: ");
+
                 message = Console.ReadLine();
 
                 if (!message.IsNullOrEmpty())
                 {
-                    _distributedEventBus.Publish(new TextEventData { TextMessage = message });
+                    _distributedEventBus.Publish(new App1ToApp2TextEventData(message));
                 }
                 else
                 {
-                    _distributedEventBus.Publish(new TextEventData { TextMessage = "App1 is exiting. Bye bye...!" });
+                    _distributedEventBus.Publish(new App1ToApp2TextEventData("App1 is exiting. Bye bye...!"));
                 }
 
             } while (!message.IsNullOrEmpty());

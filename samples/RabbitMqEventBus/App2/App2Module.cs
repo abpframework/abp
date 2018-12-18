@@ -1,10 +1,12 @@
-﻿using Volo.Abp.EventBus.Distributed.RabbitMq;
+﻿using Volo.Abp.Autofac;
+using Volo.Abp.EventBus.Distributed.RabbitMq;
 using Volo.Abp.Modularity;
 
 namespace App2
 {
     [DependsOn(
-        typeof(AbpEventBusRabbitMqModule)
+        typeof(AbpEventBusRabbitMqModule),
+        typeof(AbpAutofacModule)
         )]
     public class App2Module : AbpModule
     {

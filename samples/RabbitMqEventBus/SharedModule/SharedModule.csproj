@@ -4,4 +4,8 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\framework\src\Volo.Abp.EventBus\Volo.Abp.EventBus.csproj" />
+  </ItemGroup>
+
 </Project>

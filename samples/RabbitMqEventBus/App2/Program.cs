@@ -7,7 +7,10 @@ namespace App2
     {
         private static void Main(string[] args)
         {
-            using (var application = AbpApplicationFactory.Create<App2Module>())
+            using (var application = AbpApplicationFactory.Create<App2Module>(options =>
+            {
+                options.UseAutofac();
+            }))
             {
                 application.Initialize();
 

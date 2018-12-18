@@ -38,7 +38,7 @@ namespace Volo.Abp.EventBus.Distributed.RabbitMq
             IHybridServiceScopeFactory serviceScopeFactory, 
             IOptions<DistributedEventBusOptions> distributedEventBusOptions,
             IRabbitMqMessageConsumerFactory messageConsumerFactory)
-        : base(serviceScopeFactory)
+            : base(serviceScopeFactory)
         {
             ConnectionPool = connectionPool;
             Serializer = serializer;
@@ -52,7 +52,8 @@ namespace Volo.Abp.EventBus.Distributed.RabbitMq
             Consumer = MessageConsumerFactory.Create(
                 new ExchangeDeclareConfiguration(
                     RabbitMqDistributedEventBusOptions.ExchangeName, 
-                    type: "direct"
+                    type: "direct",
+                    durable: true
                     ),
                 new QueueDeclareConfiguration(
                     RabbitMqDistributedEventBusOptions.ClientName,
@@ -96,7 +97,6 @@ namespace Volo.Abp.EventBus.Distributed.RabbitMq
             if (handlerFactories.Count == 1) //TODO: Multi-threading!
             {
                 var eventName = EventNameAttribute.GetNameOrDefault(eventType);
-
                 Consumer.BindAsync(eventName);
             }
 
@@ -166,8 +166,8 @@ namespace Volo.Abp.EventBus.Distributed.RabbitMq
             {
                 channel.ExchangeDeclare(
                     RabbitMqDistributedEventBusOptions.ExchangeName,
-                    "direct"
-                    //TODO: Other properties like durable?
+                    "direct",
+                    durable: true
                 );
                 
                 var properties = channel.CreateBasicProperties();
