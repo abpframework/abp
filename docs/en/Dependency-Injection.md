@@ -270,6 +270,48 @@ using (var scope = _serviceProvider.CreateScope())
 
 Both services are released when the created scope is disposed (at the end of the using block).
 
+## Advanced Features
+
+### IServiceCollection.OnRegistred Event
+
+You may want to perform an action for every service registered to the dependency injection. In the `PreConfigureServices` method of your module, register a callback using the `OnRegistred` method as shown below:
+
+````csharp
+public class AppModule : AbpModule
+{
+    public override void PreConfigureServices(ServiceConfigurationContext context)
+    {
+        context.Services.OnRegistred(ctx =>
+        {
+            var type = ctx.ImplementationType;
+            //...
+        });
+    }
+}
+````
+
+`ImplementationType` provides the service type. This callback is generally used to add interceptor to a service. Example:
+
+````csharp
+public class AppModule : AbpModule
+{
+    public override void PreConfigureServices(ServiceConfigurationContext context)
+    {
+        context.Services.OnRegistred(ctx =>
+        {
+            if (ctx.ImplementationType.IsDefined(typeof(MyLogAttribute), true))
+            {
+                ctx.Interceptors.TryAdd<MyLogInterceptor>();
+            }
+        });
+    }
+}
+````
+
+This example simply checks if the service class has `MyLogAttribute` attribute and adds `MyLogInterceptor` to the interceptor list if so.
+
+> Notice that `OnRegistred` callback might be called multiple times for the same service class if it exposes more than one service/interface. So, it's safe to use `Interceptors.TryAdd` method instead of `Interceptors.Add` method. See [the documentation](Dynamic-Proxying-Interceptors.md) of dynamic proxying / interceptors.
+
 ## 3rd-Party Providers
 
 While ABP has no core dependency to any 3rd-party DI provider, it's required to use a provider that supports dynamic proxying and some other advanced features to make some ABP features properly work. 
