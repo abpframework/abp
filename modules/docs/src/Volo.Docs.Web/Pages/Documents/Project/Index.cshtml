@@ -4,6 +4,7 @@
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.Clipboard
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.MalihuCustomScrollbar
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.Popper
+@using Volo.Abp.AspNetCore.Mvc.UI.Packages.Prismjs
 @using Volo.Abp.AspNetCore.Mvc.UI.Theming
 @using Volo.Docs
 @using Volo.Docs.Localization
@@ -30,7 +31,7 @@
         <abp-script type="@typeof(MalihuCustomScrollbarPluginScriptBundleContributor)" />
         <abp-script type="@typeof(ClipboardScriptBundleContributor)" />
         <abp-script type="@typeof(AnchorJsScriptBundleContributor)" />
-        <abp-script src="/libs/prismjs/prism.js" />
+        <abp-script type="@typeof(PrismjsScriptBundleContributor)" />
         <abp-script src="/libs/prismjs/plugins/toolbar/prism-toolbar.js" />
         <abp-script src="/libs/prismjs/plugins/show-language/prism-show-language.js" />
         <abp-script src="/libs/prismjs/plugins/copy-to-clipboard/prism-copy-to-clipboard.js" />
