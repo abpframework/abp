@@ -1,5 +1,5 @@
 
-## ASP.NET Core MVC Bundling & Minification
+# ASP.NET Core MVC Bundling & Minification
 
 There are many ways of bundling & minification of client side resources (JavaScript and CSS files). Most common ways are:
 
@@ -8,7 +8,7 @@ There are many ways of bundling & minification of client side resources (JavaScr
 
 ABP offers a simple, dynamic, powerful, modular and built-in way.
 
-### Volo.Abp.AspNetCore.Mvc.UI.Bundling Package
+## Volo.Abp.AspNetCore.Mvc.UI.Bundling Package
 
 > This package is already installed by default with the startup templates. So, most of the time, you don't need to install it manually.
 
@@ -34,7 +34,7 @@ namespace MyCompany.MyProject
 }
 ````
 
-### Razor Bundling Tag Helpers
+## Razor Bundling Tag Helpers
 
 The simplest way of creating a bundle is to use `abp-script-bundle` or `abp-style-bundle` tag helpers. Example:
 
@@ -54,7 +54,7 @@ This bundle defines a style bundle with a **unique name**: `MyGlobalBundle`. It'
 * The bundle files may be **physical** files or [**virtual/embedded** files](../Virtual-File-System.md).
 * ABP automatically adds **version query string** to the bundle file URL to prevent browsers from caching when the bundle is being updated. (like ?_v=67872834243042 - generated from last change date of the related files). The versioning works even if the bundle files are individually added to the page (on the development environment).
 
-#### Importing The Bundling Tag Helpers
+### Importing The Bundling Tag Helpers
 
 > This is already imported by default with the startup templates. So, most of the time, you don't need to add it manually.
 
@@ -64,7 +64,7 @@ In order to use bundle tag helpers, you need to add it into your `_ViewImports.c
 @addTagHelper *, Volo.Abp.AspNetCore.Mvc.UI.Bundling
 ````
 
-#### Unnamed Bundles
+### Unnamed Bundles
 
 The `name` is **optional** for the razor bundle tag helpers. If you don't define a name, it's automatically **calculated** based on the used bundle file names (they are **concatenated** and **hashed**). Example:
 
@@ -90,7 +90,7 @@ Advantages of **named** bundles:
 
 * Other **modules can contribute** to the bundle by its name (see the sections below).
 
-#### Single File
+### Single File
 
 If you need to just add a single file to the page, you can use the `abp-script` or `abp-style` tag without a wrapping in the `abp-script-bundle` or `abp-style-bundle` tag. Example:
 
@@ -100,11 +100,11 @@ If you need to just add a single file to the page, you can use the `abp-script` 
 
 The bundle name will be *scripts.my-scripts* for the example above ("/" is replaced by "."). All bundling features are work as expected for single file bundles too.
 
-### Bundling Options
+## Bundling Options
 
 If you need to use same bundle in **multiple pages** or want to use some more **powerful features**, you can configure bundles **by code** in your [module](../Module-Development-Basics.md) class.
 
-#### Creating A New Bundle
+### Creating A New Bundle
 
 Example usage:
 
@@ -141,7 +141,7 @@ After defining such a bundle, it can be included into a page using the same tag 
 
 This time, no file defined in the tag helper definition because the bundle files are defined by the code.
 
-#### Configuring An Existing Bundle
+### Configuring An Existing Bundle
 
 ABP supports [modularity](../Module-Development-Basics.md) for bundling as well. A module can modify an existing bundle that is created by a dependant module. 
 Example:
@@ -168,7 +168,7 @@ public class MyWebExtensionModule : AbpModule
 
 > It's not possible to configure unnamed bundle tag helpers by code, because their name are not known at the development time. It's suggested to always use a name for a bundle tag helper.
 
-### Bundle Contributors
+## Bundle Contributors
 
 Adding files to an existing bundle seems useful. What if you need to **replace** a file in the bundle or you want to **conditionally** add files? Defining a bundle contributor provides extra power for such cases.
 
@@ -200,8 +200,7 @@ services.Configure<BundlingOptions>(options =>
 });
 ````
 
-Contributors can also be used in the bundle tag helpers. 
-Example:
+Contributors can also be used in the bundle tag helpers. Example:
 
 ````xml
 <abp-style-bundle>
@@ -213,7 +212,7 @@ Example:
 
 `abp-style` and `abp-script` tags can get `type` attributes (instead of `src` attributes) as shown in this sample. When you add a bundle contributor, its dependencies are also automatically added to the bundle.
 
-#### Contributor Dependencies
+### Contributor Dependencies
 
 A bundle contributor can have one or more dependencies to other contributors. 
 Example:
@@ -230,11 +229,11 @@ When a bundle contributor is added, its dependencies are **automatically and rec
 
 Creating contributors and defining dependencies is a way of organizing bundle creation across different modules.
 
-#### Accessing to the IServiceProvider
+### Accessing to the IServiceProvider
 
 While it is rarely needed, `BundleConfigurationContext` has a `ServiceProvider` property that you can resolve service dependencies inside the `ConfigureBundle` method.
 
-#### Standard Package Contributors
+### Standard Package Contributors
 
 Adding a specific NPM package resource (js, css files) into a bundle is pretty straight forward for that package. For example you always add the `bootstrap.css` file for the bootstrap NPM package.
 
@@ -255,7 +254,7 @@ Using the built-in contributors for standard packages;
 * Prevents multiple modules adding the **duplicate the files**.
 * Manages **dependencies recursively** (adds dependencies of dependencies, if necessary).
 
-##### Volo.Abp.AspNetCore.Mvc.UI.Packages Package
+#### Volo.Abp.AspNetCore.Mvc.UI.Packages Package
 
 > This package is already installed by default in the startup templates. So, most of the time, you don't need to install it manually.
 
@@ -282,7 +281,7 @@ namespace MyCompany.MyProject
 }
 ````
 
-#### Bundle Inheritance
+### Bundle Inheritance
 
 In some specific cases, it may be needed to create a **new** bundle **inherited** from other bundle(s). Inheriting from a bundle (recursively) inherits all files/contributors of that bundle. Then the derived bundle can add or modify files/contributors **without modifying** the original bundle. 
 Example:
@@ -302,11 +301,11 @@ services.Configure<BundlingOptions>(options =>
 });
 ````
 
-### Themes
+## Themes
 
 Themes uses the standard package contributors to add library resources to page layouts. Themes may also define some standard/global bundles, so any module can contribute to these standard/global bundles. See the [theming documentation](Theming.md) for more.
 
-### Best Practices & Suggestions
+## Best Practices & Suggestions
 
 It's suggested to define multiple bundles for an application, each one is used for different purposes.
 
@@ -317,7 +316,7 @@ It's suggested to define multiple bundles for an application, each one is used f
 
 Establish a balance between performance, network bandwidth usage and count of many bundles.
 
-### See Also
+## See Also
 
 * [Client Side Package Management](Client-Side-Package-Management.md)
 * [Theming](Theming.md)
