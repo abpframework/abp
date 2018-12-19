@@ -38,8 +38,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             else
             {
                 output.TagName = "div";
-                output.Attributes.AddClass("form-group");
                 LeaveOnlyGroupAttributes(context, output);
+                output.Attributes.AddClass("form-group");
                 output.TagMode = TagMode.StartTagAndEndTag;
                 output.Content.SetHtmlContent(innerHtml);
             }
