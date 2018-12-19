@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -38,6 +39,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             {
                 output.TagName = "div";
                 output.Attributes.AddClass("form-group");
+                LeaveOnlyGroupAttributes(context, output);
                 output.TagMode = TagMode.StartTagAndEndTag;
                 output.Content.SetHtmlContent(innerHtml);
             }
@@ -59,16 +61,14 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         protected virtual TagHelperOutput GetSelectTag(TagHelperContext context, TagHelperOutput output)
         {
-            var selectItems = GetSelectItems(context, output);
-
             var selectTagHelper = new SelectTagHelper(_generator)
             {
                 For = TagHelper.AspFor,
-                Items = selectItems,
+                Items = GetSelectItems(context, output),
                 ViewContext = TagHelper.ViewContext
             };
 
-            var inputTagHelperOutput = GetInnerTagHelper(new TagHelperAttributeList(), context, selectTagHelper, "select", TagMode.StartTagAndEndTag);
+            var inputTagHelperOutput = GetInnerTagHelper(GetInputAttributes(context, output), context, selectTagHelper, "select", TagMode.StartTagAndEndTag);
 
             inputTagHelperOutput.Attributes.AddClass("form-control");
             inputTagHelperOutput.Attributes.AddClass(GetSize(context,output));
@@ -98,8 +98,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 throw new Exception("No items provided for select attribute.");
             }
 
-            SetSelectedValue(context, output, selectItems);
-
             return selectItems;
         }
 
@@ -126,39 +124,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             selectItems = GetAttribute<SelectItems>(explorer)?.GetItems(explorer)?.ToList();
 
             return selectItems != null;
-        }
-
-        protected virtual void SetSelectedValue(TagHelperContext context, TagHelperOutput output, List<SelectListItem> selectItems)
-        {
-            if (!selectItems.Any(si => si.Selected))
-            {
-                var selectedValue = GetSelectedValue(context, output);
-
-                var itemToBeSelected = selectItems.FirstOrDefault(si => si.Value.ToString() == selectedValue);
-
-                if (itemToBeSelected != null)
-                {
-                    itemToBeSelected.Selected = true;
-                }
-            }
-        }
-
-        protected virtual string GetSelectedValue(TagHelperContext context, TagHelperOutput output)
-        {
-            var modelExplorer = TagHelper.AspFor.ModelExplorer;
-
-            if (modelExplorer.Metadata.IsEnum)
-            {
-                var baseType = modelExplorer.Model?.GetType().GetEnumUnderlyingType();
-
-                if (baseType == null) { return null; }
-
-                return Convert.ChangeType(modelExplorer.Model, baseType)?.ToString() ?? "";
-            }
-            else
-            {
-                return modelExplorer.Model?.ToString();
-            }
         }
 
         protected virtual string GetLabelAsHtmlUsingTagHelper(TagHelperContext context, TagHelperOutput output)
@@ -192,6 +157,36 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             }
 
             return "";
+        }
+
+        protected virtual TagHelperAttributeList GetInputAttributes(TagHelperContext context, TagHelperOutput output)
+        {
+            var groupPrefix = "group-";
+
+            var tagHelperAttributes = output.Attributes.Where(a => !a.Name.StartsWith(groupPrefix)).ToList();
+            var attrList = new TagHelperAttributeList();
+
+            foreach (var tagHelperAttribute in tagHelperAttributes)
+            {
+                attrList.Add(tagHelperAttribute);
+            }
+
+            return attrList;
+        }
+
+        protected virtual void LeaveOnlyGroupAttributes(TagHelperContext context, TagHelperOutput output)
+        {
+            var groupPrefix = "group-";
+            var tagHelperAttributes = output.Attributes.Where(a => a.Name.StartsWith(groupPrefix)).ToList();
+
+            output.Attributes.Clear();
+
+            foreach (var tagHelperAttribute in tagHelperAttributes)
+            {
+                var nameWithoutPrefix = tagHelperAttribute.Name.Substring(groupPrefix.Length);
+                var newAttritube = new TagHelperAttribute(nameWithoutPrefix, tagHelperAttribute.Value);
+                output.Attributes.Add(newAttritube);
+            }
         }
     }
 }
