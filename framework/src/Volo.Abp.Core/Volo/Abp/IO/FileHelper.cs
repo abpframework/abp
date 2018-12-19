@@ -1,4 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Text;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
 
 namespace Volo.Abp.IO
@@ -41,5 +44,35 @@ namespace Volo.Abp.IO
 
             return fileNameWithExtension.Substring(lastDotIndex + 1);
         }
+
+        /// <summary>
+        /// Opens a text file, reads all lines of the file, and then closes the file.
+        /// </summary>
+        /// <param name="path">The file to open for reading.</param>
+        /// <returns>A string containing all lines of the file.</returns>
+        public static async Task<string> ReadAllTextAsync(string path)
+        {
+            using (var reader = File.OpenText(path))
+            {
+                return await reader.ReadToEndAsync();
+            }
+        }
+
+        /// <summary>
+        /// Opens a text file, reads all lines of the file, and then closes the file.
+        /// </summary>
+        /// <param name="path">The file to open for reading.</param>
+        /// <returns>A string containing all lines of the file.</returns>
+        public static async Task<byte[]> ReadAllBytesAsync(string path)
+        {
+            using (var stream = File.Open(path, FileMode.Open))
+            {
+                var result = new byte[stream.Length];
+                await stream.ReadAsync(result, 0, (int)stream.Length);
+                return result;
+            }
+        }
+
+        //TODO: ReadAllLinesAsync
     }
 }

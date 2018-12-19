@@ -2,6 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Services;
+using Volo.Abp.IO;
 using Volo.Docs.Documents;
 using Volo.Docs.FileSystem.Projects;
 using Volo.Docs.Projects;
@@ -15,7 +16,7 @@ namespace Volo.Docs.FileSystem.Documents
         public async Task<Document> GetDocument(Project project, string documentName, string version)
         {
             var path = Path.Combine(project.GetFileSystemPath(), documentName);
-            var content = File.ReadAllText(path); //TODO: async!
+            var content = await FileHelper.ReadAllTextAsync(path);
             var localDirectory = "";
 
             if (documentName.Contains("/"))
@@ -43,7 +44,7 @@ namespace Volo.Docs.FileSystem.Documents
         public async Task<DocumentResource> GetResource(Project project, string resourceName, string version)
         {
             var path = Path.Combine(project.GetFileSystemPath(), resourceName);
-            return new DocumentResource(File.ReadAllBytes(path));
+            return new DocumentResource(await FileHelper.ReadAllBytesAsync(path));
         }
     }
 }
