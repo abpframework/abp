@@ -124,7 +124,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             AddReadOnlyAttribute(inputTagHelperOutput);
             AddAutoFocusAttribute(inputTagHelperOutput);
             isCheckbox = IsInputCheckbox(context, output, inputTagHelperOutput.Attributes);
-            inputTagHelperOutput.Attributes.AddClass(isCheckbox ? "form-check-input" : "form-control");
+            inputTagHelperOutput.Attributes.AddClass(isCheckbox ? "form-check-input" : "form-control" + " " + GetSize(context,output));
 
             return inputTagHelperOutput;
         }
@@ -253,6 +253,28 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 var newAttritube = new TagHelperAttribute(nameWithoutPrefix, tagHelperAttribute.Value);
                 output.Attributes.Add(newAttritube);
             }
+        }
+
+        protected virtual string GetSize(TagHelperContext context, TagHelperOutput output)
+        {
+            var attribute = GetAttribute<FormControlSize>(TagHelper.AspFor.ModelExplorer);
+
+            if (attribute != null)
+            {
+                TagHelper.Size = attribute.Size;
+            }
+
+            switch (TagHelper.Size)
+            {
+                case AbpFormControlSize.Small:
+                    return "form-control-sm";
+                case AbpFormControlSize.Medium:
+                    return "form-control-md";
+                case AbpFormControlSize.Large:
+                    return "form-control-lg";
+            }
+
+            return "";
         }
     }
 }

@@ -70,7 +70,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
             var inputTagHelperOutput = GetInnerTagHelper(new TagHelperAttributeList(), context, selectTagHelper, "select", TagMode.StartTagAndEndTag);
 
-            inputTagHelperOutput.Attributes.Add("class", "form-control");
+            inputTagHelperOutput.Attributes.AddClass("form-control");
+            inputTagHelperOutput.Attributes.AddClass(GetSize(context,output));
             AddDisabledAttribute(inputTagHelperOutput);
 
             return inputTagHelperOutput;
@@ -169,6 +170,28 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             };
 
             return RenderTagHelper(new TagHelperAttributeList(), context, labelTagHelper, _encoder, "label", TagMode.StartTagAndEndTag, true);
+        }
+
+        protected virtual string GetSize(TagHelperContext context, TagHelperOutput output)
+        {
+            var attribute = GetAttribute<FormControlSize>(TagHelper.AspFor.ModelExplorer);
+
+            if (attribute != null)
+            {
+                TagHelper.Size = attribute.Size;
+            }
+
+            switch (TagHelper.Size)
+            {
+                case AbpFormControlSize.Small:
+                    return "form-control-sm";
+                case AbpFormControlSize.Medium:
+                    return "form-control-md";
+                case AbpFormControlSize.Large:
+                    return "form-control-lg";
+            }
+
+            return "";
         }
     }
 }

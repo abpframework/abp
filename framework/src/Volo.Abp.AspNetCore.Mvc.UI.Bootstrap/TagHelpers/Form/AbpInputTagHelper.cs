@@ -18,6 +18,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         public bool AutoFocus { get; set; }
 
+        public AbpFormControlSize Size { get; set; } = AbpFormControlSize.Default;
+
         [HtmlAttributeNotBound]
         [ViewContext]
         public ViewContext ViewContext { get; set; }
