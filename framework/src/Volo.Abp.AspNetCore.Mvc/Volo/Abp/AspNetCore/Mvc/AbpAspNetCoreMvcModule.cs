@@ -75,14 +75,22 @@ namespace Volo.Abp.AspNetCore.Mvc
             var mvcCoreBuilder = context.Services.AddMvcCore();
             context.Services.ExecutePreConfiguredActions(mvcCoreBuilder);
 
+            var abpMvcDataAnnotationsLocalizationOptions = context.Services.ExecutePreConfiguredActions(new AbpMvcDataAnnotationsLocalizationOptions());
+
+            context.Services
+                .AddSingleton<IOptions<AbpMvcDataAnnotationsLocalizationOptions>>(
+                    new OptionsWrapper<AbpMvcDataAnnotationsLocalizationOptions>(
+                        abpMvcDataAnnotationsLocalizationOptions
+                    )
+                );
+
             var mvcBuilder = context.Services.AddMvc()
                 .AddDataAnnotationsLocalization(options =>
                 {
-                    var assemblyResources = context.Services.ExecutePreConfiguredActions(new AbpMvcDataAnnotationsLocalizationOptions()).AssemblyResources;
 
                     options.DataAnnotationLocalizerProvider = (type, factory) =>
                     {
-                        var resourceType = assemblyResources.GetOrDefault(type.Assembly);
+                        var resourceType = abpMvcDataAnnotationsLocalizationOptions.AssemblyResources.GetOrDefault(type.Assembly);
                         return factory.Create(resourceType ?? type);
                     };
                 })

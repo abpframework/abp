@@ -14,7 +14,6 @@ using Volo.Abp.Localization.Resources.AbpValidation;
 using Volo.Abp.MemoryDb;
 using Volo.Abp.Modularity;
 using Volo.Abp.TestApp;
-using Volo.Abp.UI;
 using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.AspNetCore.Mvc
