@@ -32,7 +32,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components
         {
                 MyDetailedModel = new DetailedModel
                 {
-                    Name = "John Surname",
+                    Name = "",
                     Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
                     IsActive = true,
                     Age = 65,
@@ -46,12 +46,16 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components
             MyFormContentExampleModel = new FormContentExampleModel();
 
             MyOrderExampleModel = new OrderExampleModel();
-            MyAttributeExamplesModel = new AttributeExamplesModel();
-            MyAttributeExamplesModel.DisabledInput = "Disabled Input";
-            MyAttributeExamplesModel.ReadonlyInput = "Readonly Input";
-            MyAttributeExamplesModel.ReadonlyPlainTextInput = "Readonly Plain Text Input";
-            MyAttributeExamplesModel.LargeInput = "Large Input";
-            MyAttributeExamplesModel.SmallInput = "Small Input";
+
+            MyAttributeExamplesModel = new AttributeExamplesModel
+            {
+                DisabledInput = "Disabled Input",
+                ReadonlyInput = "Readonly Input",
+                ReadonlyPlainTextInput = "Readonly Plain Text Input",
+                LargeInput = "Large Input",
+                SmallInput = "Small Input"
+            };
+
         }
 
         public class FormContentExampleModel
@@ -98,6 +102,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components
         public class DetailedModel
         {
             [Required]
+            [Placeholder("Enter your name...")]
             [Display(Name = "Name")]
             public string Name { get; set; }
             
