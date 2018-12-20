@@ -75,7 +75,9 @@ namespace Volo.Docs.Documents
                 },
                 () => new DistributedCacheEntryOptions
                 {
-                    SlidingExpiration = TimeSpan.FromMinutes(30) //TODO: Configurable?
+                    //TODO: Configurable?
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(6),
+                    SlidingExpiration = TimeSpan.FromMinutes(30)
                 }
             );
         }
@@ -98,7 +100,9 @@ namespace Volo.Docs.Documents
                 },
                 () => new DistributedCacheEntryOptions
                 {
-                    SlidingExpiration = TimeSpan.FromMinutes(30) //TODO: Configurable?
+                    //TODO: Configurable?
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(6),
+                    SlidingExpiration = TimeSpan.FromMinutes(30)
                 }
             );
         }
