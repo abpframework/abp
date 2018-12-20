@@ -3,7 +3,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid
 {
-    public class AbpColBreakTagHelperService : AbpTagHelperService<AbpColBreakTagHelper>
+    public class AbpColumnBreakerTagHelperService : AbpTagHelperService<AbpColumnBreakerTagHelper>
     {
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
