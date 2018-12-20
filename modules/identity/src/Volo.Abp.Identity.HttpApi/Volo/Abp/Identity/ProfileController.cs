@@ -9,7 +9,7 @@ namespace Volo.Abp.Identity
     [RemoteService]
     [Area("identity")]
     [ControllerName("Profile")]
-    public class ProfileController : IProfileAppService
+    public class ProfileController : AbpController, IProfileAppService
     {
         private readonly IProfileAppService _profileAppService;
 
