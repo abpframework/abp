@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Options;
+using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
@@ -12,11 +16,15 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
     {
         private readonly IHtmlGenerator _generator;
         private readonly HtmlEncoder _encoder;
+        private readonly IStringLocalizerFactory _stringLocalizerFactory;
+        private readonly AbpMvcDataAnnotationsLocalizationOptions _options;
 
-        public AbpInputTagHelperService(IHtmlGenerator generator, HtmlEncoder encoder)
+        public AbpInputTagHelperService(IHtmlGenerator generator, HtmlEncoder encoder, IOptions<AbpMvcDataAnnotationsLocalizationOptions> options, IStringLocalizerFactory stringLocalizerFactory)
         {
             _generator = generator;
             _encoder = encoder;
+            _stringLocalizerFactory = stringLocalizerFactory;
+            _options = options.Value;
         }
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
@@ -184,8 +192,21 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
             if (attribute != null)
             {
-                inputTagHelperOutput.Attributes.Add("placeholder", attribute.Value);
+                inputTagHelperOutput.Attributes.Add("placeholder", LocalizeText(attribute.Value));
             }
+        }
+
+        protected virtual string LocalizeText(string text)
+        {
+            IStringLocalizer localizer = null;
+            var resourceType = _options.AssemblyResources.GetOrDefault(TagHelper.AspFor.ModelExplorer.ModelType.Assembly);
+
+            if (resourceType != null)
+            {
+               localizer = _stringLocalizerFactory.Create(resourceType);
+            }
+
+            return localizer == null? text: localizer[text].Value;
         }
 
         protected virtual bool IsInputCheckbox(TagHelperContext context, TagHelperOutput output, TagHelperAttributeList attributes)

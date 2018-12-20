@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Options;
+using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
@@ -16,11 +19,15 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
     {
         private readonly IHtmlGenerator _generator;
         private readonly HtmlEncoder _encoder;
+        private readonly IStringLocalizerFactory _stringLocalizerFactory;
+        private readonly AbpMvcDataAnnotationsLocalizationOptions _options;
 
-        public AbpSelectTagHelperService(IHtmlGenerator generator, HtmlEncoder encoder)
+        public AbpSelectTagHelperService(IHtmlGenerator generator, HtmlEncoder encoder, IOptions<AbpMvcDataAnnotationsLocalizationOptions> options, IStringLocalizerFactory stringLocalizerFactory)
         {
             _generator = generator;
             _encoder = encoder;
+            _stringLocalizerFactory = stringLocalizerFactory;
+            _options = options.Value;
         }
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
@@ -113,10 +120,30 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         protected virtual bool GetSelectItemsIfProvidedByEnum(TagHelperContext context, TagHelperOutput output, ModelExplorer explorer, out List<SelectListItem> selectItems)
         {
+            IStringLocalizer localizer = null;
+            var resourceType = _options.AssemblyResources.GetOrDefault(explorer.ModelType.Assembly);
+
+            if (resourceType != null)
+            {
+                localizer = _stringLocalizerFactory.Create(resourceType);
+            }
+
             selectItems = explorer.Metadata.IsEnum ? explorer.ModelType.GetTypeInfo().GetMembers(BindingFlags.Public | BindingFlags.Static)
-                .Select((t, i) => new SelectListItem { Value = i.ToString(), Text = t.Name }).ToList() : null;
+                .Select((t, i) => new SelectListItem { Value = i.ToString(), Text = GetLocalizedPropertyName(localizer, explorer.ModelType, t.Name) }).ToList() : null;
 
             return selectItems != null;
+        }
+
+        protected virtual string GetLocalizedPropertyName(IStringLocalizer localizer, Type enumType, string propertyName)
+        {
+            if (localizer == null)
+            {
+                return propertyName;
+            }
+
+            var localizedString = localizer[enumType.Name + "." + propertyName];
+
+            return !localizedString.ResourceNotFound ? localizedString.Value : localizer[propertyName].Value;
         }
 
         protected virtual bool GetSelectItemsIfProvidedFromAttribute(TagHelperContext context, TagHelperOutput output, ModelExplorer explorer, out List<SelectListItem> selectItems)
