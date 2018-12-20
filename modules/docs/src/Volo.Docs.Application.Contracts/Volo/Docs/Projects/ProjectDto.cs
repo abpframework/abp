@@ -3,6 +3,7 @@ using Volo.Abp.Application.Dtos;
 
 namespace Volo.Docs.Projects
 {
+    [Serializable]
     public class ProjectDto : EntityDto<Guid>
     {
         public string Name { get; set; }

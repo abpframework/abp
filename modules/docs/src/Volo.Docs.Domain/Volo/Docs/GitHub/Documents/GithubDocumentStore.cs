@@ -15,7 +15,7 @@ using Project = Volo.Docs.Projects.Project;
 
 namespace Volo.Docs.GitHub.Documents
 {
-    //TODO: Needs refactoring
+    //TODO: Needs more refactoring
 
     public class GithubDocumentStore : DomainService, IDocumentStore
     {
@@ -46,7 +46,7 @@ namespace Volo.Docs.GitHub.Documents
                 LocalDirectory = localDirectory,
                 FileName = fileName,
                 Version = version,
-                Content = await DownloadWebContentAsync(rawDocumentUrl, project.GetGitHubAccessTokenOrNull())
+                Content = await DownloadWebContentAsStringAsync(rawDocumentUrl, project.GetGitHubAccessTokenOrNull())
             };
         }
 
@@ -136,7 +136,7 @@ namespace Volo.Docs.GitHub.Documents
             }
         }
 
-        private async Task<string> DownloadWebContentAsync(string rawUrl, string token)
+        private async Task<string> DownloadWebContentAsStringAsync(string rawUrl, string token)
         {
             try
             {
