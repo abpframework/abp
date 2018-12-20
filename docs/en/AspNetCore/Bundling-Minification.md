@@ -143,8 +143,7 @@ This time, no file defined in the tag helper definition because the bundle files
 
 ### Configuring An Existing Bundle
 
-ABP supports [modularity](../Module-Development-Basics.md) for bundling as well. A module can modify an existing bundle that is created by a dependant module. 
-Example:
+ABP supports [modularity](../Module-Development-Basics.md) for bundling as well. A module can modify an existing bundle that is created by a dependant module. Example:
 
 ````C#
 [DependsOn(typeof(MyWebModule))]
@@ -187,7 +186,7 @@ public class MyExtensionGlobalStyleContributor : BundleContributor
 }
 ````
 
-Then you can use this contributor as below:
+Then you can use this contributor as like below:
 
 ````C#
 services.Configure<BundlingOptions>(options =>
@@ -199,6 +198,8 @@ services.Configure<BundlingOptions>(options =>
         });        
 });
 ````
+
+> You can also add contributors while creating a new bundle.
 
 Contributors can also be used in the bundle tag helpers. Example:
 
@@ -228,6 +229,35 @@ public class MyExtensionStyleBundleContributor : BundleContributor
 When a bundle contributor is added, its dependencies are **automatically and recursively** added. Dependencies added by the **dependency order** by preventing **duplicates**. Duplicates are prevented even if they are in separated bundles. ABP organizes all bundles in a page and eliminates duplications.
 
 Creating contributors and defining dependencies is a way of organizing bundle creation across different modules.
+
+### Contributor Extensions
+
+In some advanced scenarios, you may want to do some additional configuration whenever a bundle contributor is used. Contributor extensions works seamlessly when the extended contributor is used.
+
+The example below adds some styles for prism.js library:
+
+````csharp
+public class MyPrismjsStyleExtension : BundleContributor
+{
+    public override void ConfigureBundle(BundleConfigurationContext context)
+    {
+        context.Files.AddIfNotContains("/libs/prismjs/plugins/toolbar/prism-toolbar.css");
+    }
+}
+````
+
+Then you can configure `BundleContributorOptions` to extend existing `PrismjsStyleBundleContributor`.
+
+````csharp
+Configure<BundleContributorOptions>(options =>
+{
+    options
+        .Extensions<PrismjsStyleBundleContributor>()
+        .Add<MyPrismjsStyleExtension>();
+});
+````
+
+Whenever `PrismjsStyleBundleContributor` is added into a bundle, `MyPrismjsStyleExtension` will also be automatically added.
 
 ### Accessing to the IServiceProvider
 
