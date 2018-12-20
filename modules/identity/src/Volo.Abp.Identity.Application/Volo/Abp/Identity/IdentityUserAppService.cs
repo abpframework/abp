@@ -153,6 +153,14 @@ namespace Volo.Abp.Identity
 
             user.Name = input.Name;
             user.Surname = input.Surname;
+            if (input.ExtraProperties != null)
+            {
+                user.ExtraProperties.Clear();
+                foreach (var properties in input.ExtraProperties)
+                {
+                    user.ExtraProperties.Add(properties.Key, properties.Value);
+                }
+            }
 
             if (input.RoleNames != null)
             {

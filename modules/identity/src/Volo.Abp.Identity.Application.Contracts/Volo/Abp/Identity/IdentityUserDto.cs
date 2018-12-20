@@ -1,11 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Identity
 {
-    public class IdentityUserDto : FullAuditedEntityDto<Guid>, IMultiTenant, IHasConcurrencyStamp
+    public class IdentityUserDto : FullAuditedEntityDto<Guid>, IMultiTenant, IHasConcurrencyStamp, IHasExtraProperties
     {
         public Guid? TenantId { get; set; }
 
@@ -30,5 +32,7 @@ namespace Volo.Abp.Identity
         public DateTimeOffset? LockoutEnd { get; set; }
 
         public string ConcurrencyStamp { get; set; }
+
+        public Dictionary<string, object> ExtraProperties { get; set; }
     }
 }

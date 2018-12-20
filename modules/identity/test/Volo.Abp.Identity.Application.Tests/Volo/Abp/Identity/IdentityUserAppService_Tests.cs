@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.Data;
@@ -56,6 +57,8 @@ namespace Volo.Abp.Identity
         public async Task CreateAsync()
         {
             //Arrange
+            var extraProperties = new Dictionary<string, object>();
+            extraProperties.Add("extraProps", "extraPropsValue");
 
             var input = new IdentityUserCreateDto
             {
@@ -64,7 +67,8 @@ namespace Volo.Abp.Identity
                 LockoutEnabled = true,
                 PhoneNumber = CreateRandomPhoneNumber(),
                 Password = "123qwE4r*",
-                RoleNames = new[] { "moderator" }
+                RoleNames = new[] { "moderator" },
+                ExtraProperties = extraProperties
             };
 
             //Act
@@ -78,6 +82,7 @@ namespace Volo.Abp.Identity
             result.Email.ShouldBe(input.Email);
             result.LockoutEnabled.ShouldBe(input.LockoutEnabled);
             result.PhoneNumber.ShouldBe(input.PhoneNumber);
+            result.ExtraProperties["extraProps"].ShouldBe("extraPropsValue");
 
             var user = await _userRepository.GetAsync(result.Id);
             user.Id.ShouldBe(result.Id);
@@ -85,6 +90,7 @@ namespace Volo.Abp.Identity
             user.Email.ShouldBe(input.Email);
             user.LockoutEnabled.ShouldBe(input.LockoutEnabled);
             user.PhoneNumber.ShouldBe(input.PhoneNumber);
+            user.ExtraProperties["extraProps"].ShouldBe("extraPropsValue");
         }
 
         [Fact]
@@ -93,6 +99,9 @@ namespace Volo.Abp.Identity
             //Arrange
 
             var johnNash = GetUser("john.nash");
+
+            var extraProperties = new Dictionary<string, object>();
+            extraProperties.Add("extraProps", "extraPropsValue");
 
             var input = new IdentityUserUpdateDto
             {
@@ -104,7 +113,8 @@ namespace Volo.Abp.Identity
                 RoleNames = new[] { "admin", "moderator" },
                 ConcurrencyStamp = johnNash.ConcurrencyStamp,
                 Surname = johnNash.Surname,
-                Name = johnNash.Name
+                Name = johnNash.Name,
+                ExtraProperties = extraProperties
             };
 
             //Act
@@ -118,6 +128,7 @@ namespace Volo.Abp.Identity
             result.Email.ShouldBe(input.Email);
             result.LockoutEnabled.ShouldBe(input.LockoutEnabled);
             result.PhoneNumber.ShouldBe(input.PhoneNumber);
+            result.ExtraProperties["extraProps"].ShouldBe("extraPropsValue");
 
             var user = await _userRepository.GetAsync(result.Id);
             user.Id.ShouldBe(result.Id);
@@ -126,6 +137,7 @@ namespace Volo.Abp.Identity
             user.LockoutEnabled.ShouldBe(input.LockoutEnabled);
             user.PhoneNumber.ShouldBe(input.PhoneNumber);
             user.Roles.Count.ShouldBe(2);
+            user.ExtraProperties["extraProps"].ShouldBe("extraPropsValue");
         }
 
 
@@ -134,7 +146,7 @@ namespace Volo.Abp.Identity
         {
             //Get user
             var johnNash = await _userAppService.GetAsync(_testData.UserJohnId);
-            
+
             //Act
 
             var input = new IdentityUserUpdateDto

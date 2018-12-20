@@ -1,9 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using JetBrains.Annotations;
+using Volo.Abp.Data;
 
 namespace Volo.Abp.Identity
 {
-    public abstract class IdentityUserCreateOrUpdateDtoBase
+    public abstract class IdentityUserCreateOrUpdateDtoBase : IHasExtraProperties
     {
         [Required]
         [StringLength(IdentityUserConsts.MaxUserNameLength)]
@@ -29,5 +31,8 @@ namespace Volo.Abp.Identity
 
         [CanBeNull]
         public string[] RoleNames { get; set; }
+
+        [CanBeNull]
+        public Dictionary<string, object> ExtraProperties { get; set; }
     }
 }
