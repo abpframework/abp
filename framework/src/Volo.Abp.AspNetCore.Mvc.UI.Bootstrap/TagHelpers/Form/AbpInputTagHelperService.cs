@@ -60,10 +60,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             var inputTag = GetInputTagHelperOutput(context, output, out isCheckbox);
             var inputHtml = RenderTagHelperOutput(inputTag, _encoder);
             var label = GetLabelAsHtml(context, output, inputTag, isCheckbox);
+            var info = GetInfoAsHtml(context, output, inputTag, isCheckbox);
 
             var validation = isCheckbox ? "" : GetValidationAsHtml(context, output, inputTag);
 
-            return GetContent(context, output, label, inputHtml, validation, isCheckbox);
+            return GetContent(context, output, label, inputHtml, validation, info, isCheckbox);
         }
 
         protected virtual string GetValidationAsHtml(TagHelperContext context, TagHelperOutput output, TagHelperOutput inputTag)
@@ -84,14 +85,14 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             return RenderTagHelper(attributeList, context, validationMessageTagHelper, _encoder, "span", TagMode.StartTagAndEndTag, true);
         }
 
-        protected virtual string GetContent(TagHelperContext context, TagHelperOutput output, string label, string inputHtml, string validation, bool isCheckbox)
+        protected virtual string GetContent(TagHelperContext context, TagHelperOutput output, string label, string inputHtml, string validation, string infoHtml, bool isCheckbox)
         {
             var innerContent = isCheckbox ?
                 inputHtml + Environment.NewLine + label :
                 label + Environment.NewLine + inputHtml;
 
             return Environment.NewLine + innerContent + Environment.NewLine +
-                Environment.NewLine + validation + Environment.NewLine;
+                Environment.NewLine + validation + Environment.NewLine + infoHtml;
         }
 
         protected virtual string SurroundInnerHtmlAndGet(TagHelperContext context, TagHelperOutput output, string innerHtml, bool isCheckbox)
@@ -134,6 +135,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             AddFormControlClass(context, output, isCheckbox, inputTagHelperOutput);
             AddReadOnlyAttribute(inputTagHelperOutput);
             AddPlaceholderAttribute(inputTagHelperOutput);
+            AddInfoTextId(inputTagHelperOutput);
 
             return inputTagHelperOutput;
         }
@@ -196,6 +198,23 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             }
         }
 
+        protected virtual void AddInfoTextId(TagHelperOutput inputTagHelperOutput)
+        {
+            if (GetAttribute<InputInfoText>(TagHelper.AspFor.ModelExplorer) == null)
+            {
+                return;
+            }
+
+            var idAttr = inputTagHelperOutput.Attributes.FirstOrDefault(a => a.Name == "id");
+
+            if (idAttr == null)
+            {
+                return;
+            }
+
+            inputTagHelperOutput.Attributes.Add("aria-describedby", LocalizeText(idAttr.Value + "InfoText"));
+        }
+
         protected virtual string LocalizeText(string text)
         {
             IStringLocalizer localizer = null;
@@ -231,6 +250,33 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             return "<label " + checkboxClass + GetIdAttributeAsString(inputTag) + ">"
                    + TagHelper.Label +
                    "</label>";
+        }
+
+        protected virtual string GetInfoAsHtml(TagHelperContext context, TagHelperOutput output, TagHelperOutput inputTag, bool isCheckbox)
+        {
+            if (isCheckbox)
+            {
+                return "";
+            }
+
+            var infoAttribute = GetAttribute<InputInfoText>(TagHelper.AspFor.ModelExplorer);
+            if (infoAttribute == null)
+            {
+                return "";
+            }
+
+            var idAttr = inputTag.Attributes.FirstOrDefault(a => a.Name == "id");
+
+            if (idAttr == null)
+            {
+                return "";
+            }
+
+            var id = idAttr.Value + "InfoText";
+
+            return "<small id=\""+ id + "\" class=\"form-text text-muted\">" +
+                   LocalizeText(infoAttribute.Text) +
+                   "</small>";
         }
 
         protected virtual string GetLabelAsHtmlUsingTagHelper(TagHelperContext context, TagHelperOutput output, bool isCheckbox)

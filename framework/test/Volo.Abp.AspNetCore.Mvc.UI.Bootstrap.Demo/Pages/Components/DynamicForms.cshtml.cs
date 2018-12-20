@@ -108,6 +108,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components
             
             [TextArea(Rows = 4)]
             [Display(Name = "Description")]
+            [InputInfoText("Describe Yourself")]
             public string Description { get; set; }
 
             [Required]
