@@ -125,6 +125,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             isCheckbox = IsInputCheckbox(context, output, inputTagHelperOutput.Attributes);
             AddFormControlClass(context, output, isCheckbox, inputTagHelperOutput);
             AddReadOnlyAttribute(inputTagHelperOutput);
+            AddPlaceholderAttribute(inputTagHelperOutput);
 
             return inputTagHelperOutput;
         }
@@ -169,6 +170,21 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                     (TagHelper.IsReadonly != AbpReadonlyInputType.False || GetAttribute<ReadOnlyInput>(TagHelper.AspFor.ModelExplorer) != null))
             {
                 inputTagHelperOutput.Attributes.Add("readonly", "");
+            }
+        }
+
+        protected virtual void AddPlaceholderAttribute(TagHelperOutput inputTagHelperOutput)
+        {
+            if (inputTagHelperOutput.Attributes.ContainsName("placeholder"))
+            {
+                return;
+            }
+
+            var attribute = GetAttribute<Placeholder>(TagHelper.AspFor.ModelExplorer);
+
+            if (attribute != null)
+            {
+                inputTagHelperOutput.Attributes.Add("placeholder", attribute.Value);
             }
         }
 
