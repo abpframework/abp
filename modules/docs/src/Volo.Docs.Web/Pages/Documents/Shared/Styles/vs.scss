@@ -101,8 +101,9 @@ body {
                 height: 100vh;
 
                 > ul {
-                    display: block;
-                    height: calc(100vh - 210px);
+                    display: block; 
+                    height: calc(100vh - 220px);
+                    overflow-y: auto;
                 }
 
                 ul {
@@ -259,7 +260,7 @@ body {
     }
 
     .docs-content {
-        overflow-x:scroll;
+        overflow-x: scroll;
 
         .docs-link-btns {
             border-bottom: 1px solid #f4f5f7;

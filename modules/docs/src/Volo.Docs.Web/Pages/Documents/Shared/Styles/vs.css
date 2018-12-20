@@ -67,7 +67,8 @@
         height: 100vh; }
         .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-tree-list > ul {
           display: block;
-          height: calc(100vh - 210px); }
+          height: calc(100vh - 220px);
+          overflow-y: auto; }
         .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-tree-list ul {
           font-size: .935em;
           list-style: none;
