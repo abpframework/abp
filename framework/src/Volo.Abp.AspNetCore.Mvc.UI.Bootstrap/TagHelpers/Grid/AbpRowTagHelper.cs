@@ -6,6 +6,8 @@
 
         public HorizontalAlign HAlign { get; set; } = HorizontalAlign.Default;
 
+        public bool? Gutters { get; set; } = true;
+
         public AbpRowTagHelper(AbpRowTagHelperService tagHelperService)
             : base(tagHelperService)
         {
