@@ -5,6 +5,8 @@ using Volo.Abp.Threading;
 
 namespace Acme.BookStore.ConsoleApiClient
 {
+    /* Before running this application, ensure that the Acme.BookStore.Web application is running.
+     */
     class Program
     {
         static void Main(string[] args)
