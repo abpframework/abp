@@ -75,7 +75,7 @@ namespace System.Collections.Generic
         public static bool AddIfNotContains<T>([NotNull] this ICollection<T> source, [NotNull] Func<T, bool> predicate, [NotNull] Func<T> itemFactory)
         {
             Check.NotNull(source, nameof(source));
-            Check.NotNull(source, nameof(predicate));
+            Check.NotNull(predicate, nameof(predicate));
             Check.NotNull(itemFactory, nameof(itemFactory));
 
             if (source.Any(predicate))
