@@ -57,8 +57,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             var selectTag = GetSelectTag(context, output);
             var selectAsHtml = RenderTagHelperOutput(selectTag, _encoder);
             var label = GetLabelAsHtml(context, output, selectTag);
+            var validation =  GetValidationAsHtml(context, output, selectTag);
 
-            return label + Environment.NewLine + selectAsHtml;
+            return label + Environment.NewLine + selectAsHtml + Environment.NewLine + validation;
         }
 
         protected virtual string SurroundInnerHtmlAndGet(TagHelperContext context, TagHelperOutput output, string innerHtml)
@@ -162,6 +163,24 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             };
 
             return RenderTagHelper(new TagHelperAttributeList(), context, labelTagHelper, _encoder, "label", TagMode.StartTagAndEndTag, true);
+        }
+
+        protected virtual string GetValidationAsHtml(TagHelperContext context, TagHelperOutput output, TagHelperOutput inputTag)
+        {
+            if (inputTag.Attributes.Any(a => a.Name.ToLowerInvariant() == "type" && a.Value.ToString().ToLowerInvariant() == "hidden"))
+            {
+                return "";
+            }
+
+            var validationMessageTagHelper = new ValidationMessageTagHelper(_generator)
+            {
+                For = TagHelper.AspFor,
+                ViewContext = TagHelper.ViewContext
+            };
+
+            var attributeList = new TagHelperAttributeList { { "class", "text-danger" } };
+
+            return RenderTagHelper(attributeList, context, validationMessageTagHelper, _encoder, "span", TagMode.StartTagAndEndTag, true);
         }
 
         protected virtual string GetSize(TagHelperContext context, TagHelperOutput output)
