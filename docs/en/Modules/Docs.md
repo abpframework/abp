@@ -412,7 +412,7 @@ public class Person
 
 As an example you can see ABP Framework documentation:
 
-https://github.com/abpframework/abp/blob/master/docs/en/
+[https://github.com/abpframework/abp/blob/master/docs/en/](https://github.com/abpframework/abp/blob/master/docs/en/)
 
 ### 8- Creating the Navigation Document
 
