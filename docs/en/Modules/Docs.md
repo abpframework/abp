@@ -32,13 +32,13 @@ Navigate to https://abp.io/Templates. Enter your project name as `Acme.MyProject
 
 Note that this document covers `Entity Framework Core` provider but you can also select `MongoDB` as your database provider. 
 
-![Create new project](..\images\docs-module_download-new-abp-project.png)
+![Create new project](../images/docs-module_download-new-abp-project.png)
 
 ### 2- Running The Empty Application
 
 After you download the project, extract the ZIP file and open `Acme.MyProject.sln`. You will see that the solution consists of `Application`, `Domain `, `EntityFrameworkCore` and `Web` projects. Right click on `Acme.MyProject.Web` project and **Set as StartUp Project**.
 
-![Create a new project](..\images\docs-module_solution-explorer.png)
+![Create a new project](../images/docs-module_solution-explorer.png)
 
 The database connection string is located in `appsettings.json` of your `Acme.MyProject.Web` project. If you have a different database configuration, change the connection string.
 
@@ -468,7 +468,7 @@ Navigation document is the main menu of the documents page. It is located on the
 
 The upper sample `JSON` file renders the below navigation menu as `HTML`.
 
-![Create a new project](..\images\docs-module_download-sample-navigation-menu.png)
+![Navigation menu](../images/docs-module_download-sample-navigation-menu.png)
 
 
 
