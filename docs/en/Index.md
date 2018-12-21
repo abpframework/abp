@@ -16,7 +16,7 @@ Easiest way to start a new project with ABP is to use the Startup templates:
 
 * [ASP.NET Core MVC Template](Getting-Started-AspNetCore-MVC-Template.md)
 
-If you want to start from scratch (with an empty project) then manually install the ABP framework, use following tutorials:
+If you want to start from scratch (with an empty project) then manually install the ABP framework, use the following tutorials:
 
 * [Console Application](Getting-Started-Console-Application.md)
 * [ASP.NET Core Web Application](Getting-Started-AspNetCore-Application.md)

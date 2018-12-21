@@ -189,7 +189,13 @@
       "text": "ASP.NET Core MVC",
       "items": [
         {
-          "text": "API Versioning"
+          "text": "API",
+          "items": [            
+            {
+              "text": "Auto API Controllers",
+              "path": "AspNetCore/Auto-API-Controllers.md"
+            }
+          ]
         },
         {
           "text": "User Interface",
