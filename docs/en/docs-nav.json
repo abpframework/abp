@@ -194,6 +194,10 @@
             {
               "text": "Auto API Controllers",
               "path": "AspNetCore/Auto-API-Controllers.md"
+            },
+            {
+              "text": "Dynamic C# API Clients",
+              "path": "AspNetCore/Dynamic-CSharp-API-Clients.md"
             }
           ]
         },

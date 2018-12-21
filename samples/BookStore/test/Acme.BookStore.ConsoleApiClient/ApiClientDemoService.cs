@@ -16,6 +16,7 @@ namespace Acme.BookStore.ConsoleApiClient
 
         public async Task RunAsync()
         {
+            //While it seems like a regular method call, it actually calls a remote REST API.
             var output = await _bookAppService.GetListAsync(new PagedAndSortedResultRequestDto());
             foreach (var bookDto in output.Items)
             {
