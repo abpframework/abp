@@ -45,7 +45,7 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Shared
 
         [Required]
         [StringLength(IdentityUserConsts.MaxEmailLength)]
-        [Display(Name = "DisplayName:Email")]
+        [Display(Name = "DisplayName:EmailAddress")]
         public string Email { get; set; }
 
         [StringLength(IdentityUserConsts.MaxNameLength)]
