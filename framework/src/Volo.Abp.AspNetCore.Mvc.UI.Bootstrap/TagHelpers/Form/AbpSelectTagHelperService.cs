@@ -168,6 +168,13 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         protected virtual string LocalizeText(string text)
         {
+            var localizer = GetLocalizer();
+
+            return localizer == null ? text : localizer[text].Value;
+        }
+
+        protected virtual IStringLocalizer GetLocalizer()
+        {
             IStringLocalizer localizer = null;
             var resourceType = _options.AssemblyResources.GetOrDefault(TagHelper.AspFor.ModelExplorer.ModelType.Assembly);
 
@@ -176,18 +183,12 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 localizer = _stringLocalizerFactory.Create(resourceType);
             }
 
-            return localizer == null ? text : localizer[text].Value;
+            return localizer;
         }
 
         protected virtual bool GetSelectItemsIfProvidedByEnum(TagHelperContext context, TagHelperOutput output, ModelExplorer explorer, out List<SelectListItem> selectItems)
         {
-            IStringLocalizer localizer = null;
-            var resourceType = _options.AssemblyResources.GetOrDefault(explorer.ModelType.Assembly);
-
-            if (resourceType != null)
-            {
-                localizer = _stringLocalizerFactory.Create(resourceType);
-            }
+            var localizer = GetLocalizer();
 
             selectItems = explorer.Metadata.IsEnum ? explorer.ModelType.GetTypeInfo().GetMembers(BindingFlags.Public | BindingFlags.Static)
                 .Select((t, i) => new SelectListItem { Value = i.ToString(), Text = GetLocalizedPropertyName(localizer, explorer.ModelType, t.Name) }).ToList() : null;
