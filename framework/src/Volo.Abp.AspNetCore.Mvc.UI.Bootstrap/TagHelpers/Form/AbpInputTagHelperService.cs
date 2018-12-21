@@ -58,10 +58,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
         protected virtual string GetFormInputGroupAsHtml(TagHelperContext context, TagHelperOutput output, out bool isCheckbox)
         {
             var inputTag = GetInputTagHelperOutput(context, output, out isCheckbox);
+
             var inputHtml = RenderTagHelperOutput(inputTag, _encoder);
             var label = GetLabelAsHtml(context, output, inputTag, isCheckbox);
             var info = GetInfoAsHtml(context, output, inputTag, isCheckbox);
-
             var validation = isCheckbox ? "" : GetValidationAsHtml(context, output, inputTag);
 
             return GetContent(context, output, label, inputHtml, validation, info, isCheckbox);
@@ -88,11 +88,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
         protected virtual string GetContent(TagHelperContext context, TagHelperOutput output, string label, string inputHtml, string validation, string infoHtml, bool isCheckbox)
         {
             var innerContent = isCheckbox ?
-                inputHtml + Environment.NewLine + label :
-                label + Environment.NewLine + inputHtml;
+                inputHtml + label :
+                label + inputHtml;
 
-            return Environment.NewLine + innerContent + Environment.NewLine +
-                Environment.NewLine + validation + Environment.NewLine + infoHtml;
+            return  innerContent + infoHtml + validation;
         }
 
         protected virtual string SurroundInnerHtmlAndGet(TagHelperContext context, TagHelperOutput output, string innerHtml, bool isCheckbox)
@@ -259,23 +258,29 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 return "";
             }
 
-            var infoAttribute = GetAttribute<InputInfoText>(TagHelper.AspFor.ModelExplorer);
-            if (infoAttribute == null)
+            string text = "";
+
+            if (!string.IsNullOrEmpty(TagHelper.InfoText))
             {
-                return "";
+                text = TagHelper.InfoText;
+            }
+            else
+            {
+                var infoAttribute = GetAttribute<InputInfoText>(TagHelper.AspFor.ModelExplorer);
+                if (infoAttribute != null)
+                {
+                    text = infoAttribute.Text;
+                }
+                else
+                {
+                    return "";
+                }
             }
 
             var idAttr = inputTag.Attributes.FirstOrDefault(a => a.Name == "id");
 
-            if (idAttr == null)
-            {
-                return "";
-            }
-
-            var id = idAttr.Value + "InfoText";
-
-            return "<small id=\""+ id + "\" class=\"form-text text-muted\">" +
-                   LocalizeText(infoAttribute.Text) +
+            return "<small id=\""+ idAttr?.Value + "InfoText\" class=\"form-text text-muted\">" +
+                   LocalizeText(text) +
                    "</small>";
         }
 

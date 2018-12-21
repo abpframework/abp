@@ -58,8 +58,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             var selectAsHtml = RenderTagHelperOutput(selectTag, _encoder);
             var label = GetLabelAsHtml(context, output, selectTag);
             var validation =  GetValidationAsHtml(context, output, selectTag);
+            var infoText = GetInfoAsHtml(context, output, selectTag);
 
-            return label + Environment.NewLine + selectAsHtml + Environment.NewLine + validation;
+            return label + Environment.NewLine + selectAsHtml + Environment.NewLine + infoText+ Environment.NewLine + validation;
         }
 
         protected virtual string SurroundInnerHtmlAndGet(TagHelperContext context, TagHelperOutput output, string innerHtml)
@@ -76,13 +77,14 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 ViewContext = TagHelper.ViewContext
             };
 
-            var inputTagHelperOutput = GetInnerTagHelper(GetInputAttributes(context, output), context, selectTagHelper, "select", TagMode.StartTagAndEndTag);
+            var selectTagHelperOutput = GetInnerTagHelper(GetInputAttributes(context, output), context, selectTagHelper, "select", TagMode.StartTagAndEndTag);
 
-            inputTagHelperOutput.Attributes.AddClass("form-control");
-            inputTagHelperOutput.Attributes.AddClass(GetSize(context,output));
-            AddDisabledAttribute(inputTagHelperOutput);
+            selectTagHelperOutput.Attributes.AddClass("form-control");
+            selectTagHelperOutput.Attributes.AddClass(GetSize(context,output));
+            AddDisabledAttribute(selectTagHelperOutput);
+            AddInfoTextId(selectTagHelperOutput);
 
-            return inputTagHelperOutput;
+            return selectTagHelperOutput;
         }
 
         protected virtual void AddDisabledAttribute(TagHelperOutput inputTagHelperOutput)
@@ -117,6 +119,64 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             }
 
             return GetLabelAsHtmlUsingTagHelper(context, output);
+        }
+
+        protected virtual void AddInfoTextId(TagHelperOutput inputTagHelperOutput)
+        {
+            if (GetAttribute<InputInfoText>(TagHelper.AspFor.ModelExplorer) == null)
+            {
+                return;
+            }
+
+            var idAttr = inputTagHelperOutput.Attributes.FirstOrDefault(a => a.Name == "id");
+
+            if (idAttr == null)
+            {
+                return;
+            }
+
+            inputTagHelperOutput.Attributes.Add("aria-describedby", LocalizeText(idAttr.Value + "InfoText"));
+        }
+
+        protected virtual string GetInfoAsHtml(TagHelperContext context, TagHelperOutput output, TagHelperOutput inputTag)
+        {
+            string text = "";
+
+            if (!string.IsNullOrEmpty(TagHelper.InfoText))
+            {
+                text = TagHelper.InfoText;
+            }
+            else
+            {
+                var infoAttribute = GetAttribute<InputInfoText>(TagHelper.AspFor.ModelExplorer);
+                if (infoAttribute != null)
+                {
+                    text = infoAttribute.Text;
+                }
+                else
+                {
+                    return "";
+                }
+            }
+
+            var idAttr = inputTag.Attributes.FirstOrDefault(a => a.Name == "id");
+
+            return "<small id=\"" + idAttr?.Value + "InfoText\" class=\"form-text text-muted\">" +
+                   LocalizeText(text) +
+                   "</small>";
+        }
+
+        protected virtual string LocalizeText(string text)
+        {
+            IStringLocalizer localizer = null;
+            var resourceType = _options.AssemblyResources.GetOrDefault(TagHelper.AspFor.ModelExplorer.ModelType.Assembly);
+
+            if (resourceType != null)
+            {
+                localizer = _stringLocalizerFactory.Create(resourceType);
+            }
+
+            return localizer == null ? text : localizer[text].Value;
         }
 
         protected virtual bool GetSelectItemsIfProvidedByEnum(TagHelperContext context, TagHelperOutput output, ModelExplorer explorer, out List<SelectListItem> selectItems)

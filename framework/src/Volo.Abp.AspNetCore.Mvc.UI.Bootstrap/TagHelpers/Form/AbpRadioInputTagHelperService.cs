@@ -31,7 +31,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
             var html = GetHtml(context, output, selectItems);
 
-
             AddGroupToFormGroupContents(context, TagHelper.AspFor.Name, html, order, out var surpress);
 
             if (surpress)
