@@ -236,7 +236,7 @@ namespace Acme.BookStore
 
 You normally create **Controllers** to expose application services as **HTTP API** endpoints. Thus allowing browser or 3rd-party clients to call them via AJAX.
 
-ABP can **automagically** configures your application services as MVC API Controllers by convention.
+ABP can [**automagically**](../../AspNetCore/Auto-API-Controllers.md) configures your application services as MVC API Controllers by convention.
 
 #### Swagger UI
 

@@ -4,6 +4,7 @@
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.Clipboard
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.MalihuCustomScrollbar
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.Popper
+@using Volo.Abp.AspNetCore.Mvc.UI.Packages.Prismjs
 @using Volo.Abp.AspNetCore.Mvc.UI.Theming
 @using Volo.Docs
 @using Volo.Docs.Localization
@@ -16,26 +17,19 @@
     Layout = ThemeManager.CurrentTheme.GetEmptyLayout();
 }
 @section styles {
-    <abp-style-bundle name="@typeof(IndexModel).FullName">
-        <abp-style src="/libs/prismjs/themes/prism-okaidia.css" />
-        <abp-style src="/libs/prismjs/plugins/line-highlight/prism-line-highlight.css" />
-        <abp-style src="/libs/prismjs/plugins/toolbar/prism-toolbar.css" />
-        <abp-script type="@typeof(MalihuCustomScrollbarPluginStyleBundleContributor)" />
-        <abp-style src="/Pages/Documents/Shared/Styles/vs.css" />
-        <abp-style src="/Pages/Documents/Project/bootstrap-toc.css" />
-    </abp-style-bundle>
+<abp-style-bundle name="@typeof(IndexModel).FullName">
+    <abp-script type="@typeof(PrismjsStyleBundleContributor)" />
+    <abp-script type="@typeof(MalihuCustomScrollbarPluginStyleBundleContributor)" />
+    <abp-style src="/Pages/Documents/Project/bootstrap-toc.css" />
+    <abp-style src="/Pages/Documents/Shared/Styles/vs.css" />
+</abp-style-bundle>
 }
 @section scripts {
     <abp-script-bundle name="@typeof(IndexModel).FullName">
         <abp-script type="@typeof(MalihuCustomScrollbarPluginScriptBundleContributor)" />
         <abp-script type="@typeof(ClipboardScriptBundleContributor)" />
         <abp-script type="@typeof(AnchorJsScriptBundleContributor)" />
-        <abp-script src="/libs/prismjs/prism.js" />
-        <abp-script src="/libs/prismjs/plugins/toolbar/prism-toolbar.js" />
-        <abp-script src="/libs/prismjs/plugins/show-language/prism-show-language.js" />
-        <abp-script src="/libs/prismjs/plugins/copy-to-clipboard/prism-copy-to-clipboard.js" />
-        <abp-script src="/libs/prismjs/plugins/line-highlight/prism-line-highlight.js" />
-        <abp-script src="/libs/prismjs/components/prism-csharp.js" />
+        <abp-script type="@typeof(PrismjsScriptBundleContributor)" />
         <abp-script type="@typeof(PopperJsScriptBundleContributor)" />
         <abp-script src="/Pages/Documents/Project/bootstrap-toc.js" />
         <abp-script src="/Pages/Documents/Shared/Scripts/vs.js" />

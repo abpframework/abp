@@ -1,7 +1,9 @@
+using System;
 using Volo.Docs.Projects;
 
 namespace Volo.Docs.Documents
 {
+    [Serializable]
     public class DocumentWithDetailsDto
     {
         public string Title { get; set; }

@@ -101,8 +101,9 @@ body {
                 height: 100vh;
 
                 > ul {
-                    display: block;
-                    height: calc(100vh - 210px);
+                    display: block; 
+                    height: calc(100vh - 220px);
+                    overflow-y: auto;
                 }
 
                 ul {
@@ -259,6 +260,8 @@ body {
     }
 
     .docs-content {
+        overflow-x: scroll;
+
         .docs-link-btns {
             border-bottom: 1px solid #f4f5f7;
             background: #fdfdfd;
@@ -283,7 +286,7 @@ body {
 
         article.docs-body {
             h1 {
-                padding-top: 2rem;
+                padding-top: 1rem;
                 font-size: 2.25rem;
                 padding-bottom: 10px;
             }

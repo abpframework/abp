@@ -125,6 +125,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Dropdown
             buttonTag.TagName = "a";
             buttonTag.Attributes.RemoveAll("type");
             buttonTag.Attributes.Add("roles", "button");
+            buttonTag.Attributes.Add("href", "#");
 
             if (TagHelper.NavLink??false)
             {

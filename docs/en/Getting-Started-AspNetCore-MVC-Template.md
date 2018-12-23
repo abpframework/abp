@@ -1,5 +1,7 @@
 ## ASP.NET Core MVC Template
 
+This tutorials explains how to create a new ASP.NET Core MVC web application using the startup template, configure and run it.
+
 ### Creating a new project
 
 Go to [the template creation page](https://abp.io/Templates), enter a project name and create your project as shown below:
