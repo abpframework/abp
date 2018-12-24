@@ -10,12 +10,6 @@ namespace Volo.Docs.Projects
         Task<ListResultDto<ProjectDto>> GetListAsync();
      
         Task<ProjectDto> GetAsync(string shortName);
-     
-        Task<ProjectDto> CreateAsync(CreateProjectDto input);
-     
-        Task<ProjectDto> UpdateAsync(Guid id, UpdateProjectDto input);
-     
-        Task DeleteAsync(Guid id);
         
         Task<ListResultDto<VersionInfoDto>> GetVersionsAsync(string shortName);
     }

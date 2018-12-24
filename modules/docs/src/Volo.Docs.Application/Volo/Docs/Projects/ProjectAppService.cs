@@ -45,60 +45,6 @@ namespace Volo.Docs.Projects
             return ObjectMapper.Map<Project, ProjectDto>(project);
         }
 
-        public async Task<ProjectDto> CreateAsync(CreateProjectDto input)
-        {
-            var project = new Project(_guidGenerator.Create(),
-                input.Name,
-                input.ShortName,
-                input.DocumentStoreType,
-                input.Format,
-                input.DefaultDocumentName,
-                input.NavigationDocumentName
-            )
-            {
-                MinimumVersion = input.MinimumVersion,
-                MainWebsiteUrl = input.MainWebsiteUrl,
-                LatestVersionBranchName = input.LatestVersionBranchName
-            };
-
-            foreach (var extraProperty in input.ExtraProperties)
-            {
-                project.ExtraProperties.Add(extraProperty.Key,extraProperty.Value);
-            }
-
-            project = await _projectRepository.InsertAsync(project);
-
-            return ObjectMapper.Map<Project, ProjectDto>(project);
-        }
-
-        public async Task<ProjectDto> UpdateAsync(Guid id, UpdateProjectDto input)
-        {
-            var project = await _projectRepository.GetAsync(id);
-
-            project.SetName(input.Name);
-            project.SetFormat(input.Format);
-            project.SetNavigationDocumentName(input.NavigationDocumentName);
-            project.SetDefaultDocumentName(input.DefaultDocumentName);
-
-            project.MinimumVersion = input.MinimumVersion;
-            project.MainWebsiteUrl = input.MainWebsiteUrl;
-            project.LatestVersionBranchName = input.LatestVersionBranchName;
-
-            foreach (var extraProperty in input.ExtraProperties)
-            {
-                project.ExtraProperties[extraProperty.Key] = extraProperty.Value;
-            }
-
-            project = await _projectRepository.UpdateAsync(project);
-
-            return ObjectMapper.Map<Project, ProjectDto>(project);
-        }
-
-        public async Task DeleteAsync(Guid id)
-        {
-            await _projectRepository.DeleteAsync(id);
-        }
-
         public async Task<ListResultDto<VersionInfoDto>> GetVersionsAsync(string shortName)
         {
             var project = await _projectRepository.GetByShortNameAsync(shortName);

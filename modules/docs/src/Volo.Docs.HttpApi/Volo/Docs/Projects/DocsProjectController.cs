@@ -34,21 +34,6 @@ namespace Volo.Docs.Projects
             return ProjectAppService.GetAsync(shortName);
         }
 
-        public Task<ProjectDto> CreateAsync(CreateProjectDto input)
-        {
-            return ProjectAppService.CreateAsync(input);
-        }
-
-        public Task<ProjectDto> UpdateAsync(Guid id, UpdateProjectDto input)
-        {
-            return ProjectAppService.UpdateAsync(id, input);
-        }
-
-        public Task DeleteAsync(Guid id)
-        {
-            return ProjectAppService.DeleteAsync(id);
-        }
-
         [HttpGet]
         [Route("{shortName}/versions")]
         public virtual Task<ListResultDto<VersionInfoDto>> GetVersionsAsync(string shortName)

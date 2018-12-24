@@ -1,12 +1,10 @@
 using System.Collections.Generic;
 
-namespace Volo.Docs.Projects
+namespace Volo.Docs.Admin.Projects
 {
-    public class CreateProjectDto
+    public class UpdateProjectDto
     {
         public string Name { get; set; }
-
-        public string ShortName { get; set; }
 
         public string Format { get; set; }
 
@@ -19,8 +17,6 @@ namespace Volo.Docs.Projects
         public string MainWebsiteUrl { get; set; }
 
         public string LatestVersionBranchName { get; set; }
-
-        public string DocumentStoreType { get; set; }
 
         public Dictionary<string, object> ExtraProperties { get; set; }
     }
