@@ -22,6 +22,7 @@ namespace Volo.Docs.EntityFrameworkCore
             {
                 b.ToTable(options.TablePrefix + "Projects", options.Schema);
 
+                b.ConfigureConcurrencyStamp();
                 b.ConfigureExtraProperties();
 
                 b.Property(x => x.Name).IsRequired().HasMaxLength(ProjectConsts.MaxNameLength);
