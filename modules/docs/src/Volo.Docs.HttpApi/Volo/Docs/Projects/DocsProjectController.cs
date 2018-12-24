@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
@@ -31,6 +32,21 @@ namespace Volo.Docs.Projects
         public virtual Task<ProjectDto> GetAsync(string shortName)
         {
             return ProjectAppService.GetAsync(shortName);
+        }
+
+        public Task<ProjectDto> CreateAsync(CreateProjectDto input)
+        {
+            return ProjectAppService.CreateAsync(input);
+        }
+
+        public Task<ProjectDto> UpdateAsync(Guid id, UpdateProjectDto input)
+        {
+            return ProjectAppService.UpdateAsync(id, input);
+        }
+
+        public Task DeleteAsync(Guid id)
+        {
+            return ProjectAppService.DeleteAsync(id);
         }
 
         [HttpGet]
