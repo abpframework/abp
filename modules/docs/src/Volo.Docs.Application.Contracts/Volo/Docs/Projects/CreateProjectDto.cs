@@ -1,11 +1,8 @@
-using System;
 using System.Collections.Generic;
-using Volo.Abp.Application.Dtos;
 
 namespace Volo.Docs.Projects
 {
-    [Serializable]
-    public class ProjectDto : EntityDto<Guid>
+    public class CreateProjectDto
     {
         public string Name { get; set; }
 

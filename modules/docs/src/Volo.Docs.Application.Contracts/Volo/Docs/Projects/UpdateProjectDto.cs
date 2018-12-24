@@ -4,12 +4,9 @@ using Volo.Abp.Application.Dtos;
 
 namespace Volo.Docs.Projects
 {
-    [Serializable]
-    public class ProjectDto : EntityDto<Guid>
+    public class UpdateProjectDto
     {
         public string Name { get; set; }
-
-        public string ShortName { get; set; }
 
         public string Format { get; set; }
 
@@ -22,8 +19,6 @@ namespace Volo.Docs.Projects
         public string MainWebsiteUrl { get; set; }
 
         public string LatestVersionBranchName { get; set; }
-
-        public string DocumentStoreType { get; set; }
 
         public Dictionary<string, object> ExtraProperties { get; set; }
     }
