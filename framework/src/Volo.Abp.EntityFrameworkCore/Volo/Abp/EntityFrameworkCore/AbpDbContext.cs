@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Newtonsoft.Json;
 using Volo.Abp.Auditing;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
@@ -49,10 +50,10 @@ namespace Volo.Abp.EntityFrameworkCore
 
         public ILogger<AbpDbContext<TDbContext>> Logger { get; set; }
 
-        private static readonly MethodInfo ConfigureGlobalFiltersMethodInfo
+        private static readonly MethodInfo ConfigureBasePropertiesMethodInfo
             = typeof(AbpDbContext<TDbContext>)
                 .GetMethod(
-                    nameof(ConfigureGlobalFilters),
+                    nameof(ConfigureBaseProperties),
                     BindingFlags.Instance | BindingFlags.NonPublic
                 );
 
@@ -71,9 +72,7 @@ namespace Volo.Abp.EntityFrameworkCore
 
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
-                ConfigureConcurrencyStamp(entityType);
-
-                ConfigureGlobalFiltersMethodInfo
+                ConfigureBasePropertiesMethodInfo
                     .MakeGenericMethod(entityType.ClrType)
                     .Invoke(this, new object[] { modelBuilder, entityType });
             }
@@ -153,19 +152,6 @@ namespace Volo.Abp.EntityFrameworkCore
             {
                 ChangeTracker.AutoDetectChangesEnabled = true;
             }
-        }
-
-        protected virtual void ConfigureConcurrencyStamp(IMutableEntityType entityType)
-        {
-            if (!typeof(IHasConcurrencyStamp).GetTypeInfo().IsAssignableFrom(entityType.ClrType))
-            {
-                return;
-            }
-
-            entityType
-                .GetProperties()
-                .First(p => p.Name == nameof(IHasConcurrencyStamp.ConcurrencyStamp))
-                .IsConcurrencyToken = true;
         }
 
         protected virtual EntityChangeReport ApplyAbpConcepts()
@@ -326,10 +312,53 @@ namespace Volo.Abp.EntityFrameworkCore
             AuditPropertySetter.SetDeletionProperties(entry.Entity);
         }
 
-        protected void ConfigureGlobalFilters<TEntity>(ModelBuilder modelBuilder, IMutableEntityType entityType)
+        protected virtual void ConfigureBaseProperties<TEntity>(ModelBuilder modelBuilder, IMutableEntityType mutableEntityType)
             where TEntity : class
         {
-            if (entityType.BaseType == null && ShouldFilterEntity<TEntity>(entityType))
+            ConfigureConcurrencyStamp<TEntity>(modelBuilder, mutableEntityType);
+            ConfigureExtraProperties<TEntity>(modelBuilder, mutableEntityType);
+            ConfigureGlobalFilters<TEntity>(modelBuilder, mutableEntityType);
+        }
+
+        protected virtual void ConfigureConcurrencyStamp<TEntity>(ModelBuilder modelBuilder, IMutableEntityType mutableEntityType)
+            where TEntity : class
+        {
+            if (!typeof(IHasConcurrencyStamp).GetTypeInfo().IsAssignableFrom(typeof(TEntity)))
+            {
+                return;
+            }
+
+            modelBuilder.Entity<TEntity>(b =>
+            {
+                b.Property(x => ((IHasConcurrencyStamp) x).ConcurrencyStamp)
+                    .IsConcurrencyToken()
+                    .HasColumnName(nameof(IHasConcurrencyStamp.ConcurrencyStamp));
+            });
+        }
+
+        protected virtual void ConfigureExtraProperties<TEntity>(ModelBuilder modelBuilder, IMutableEntityType mutableEntityType)
+            where TEntity : class
+        {
+            if (!typeof(IHasExtraProperties).GetTypeInfo().IsAssignableFrom(typeof(TEntity)))
+            {
+                return;
+            }
+
+            modelBuilder.Entity<TEntity>(b =>
+            {
+                b.Property(x => ((IHasExtraProperties) x).ExtraProperties)
+                    .HasConversion(
+                        d => JsonConvert.SerializeObject(d, Formatting.None),
+                        s => JsonConvert.DeserializeObject<Dictionary<string, object>>(s)
+                    )
+                    .HasColumnName(nameof(IHasExtraProperties.ExtraProperties));
+            });
+        }
+
+        protected virtual void ConfigureGlobalFilters<TEntity>(ModelBuilder modelBuilder, IMutableEntityType mutableEntityType)
+            where TEntity : class
+        {
+            if (mutableEntityType.BaseType == null && ShouldFilterEntity<TEntity>(mutableEntityType))
             {
                 var filterExpression = CreateFilterExpression<TEntity>();
                 if (filterExpression != null)

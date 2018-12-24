@@ -4,12 +4,21 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Newtonsoft.Json;
 using Volo.Abp.Auditing;
 using Volo.Abp.Data;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.EntityFrameworkCore.Modeling
 {
     public static class AbpEntityTypeBuilderExtensions
     {
+        public static void ConfigureConcurrencyStamp<T>(this EntityTypeBuilder<T> b)
+            where T : class, IHasConcurrencyStamp
+        {
+            b.Property(x => x.ConcurrencyStamp)
+                .IsConcurrencyToken()
+                .HasColumnName(nameof(IHasConcurrencyStamp.ConcurrencyStamp));
+        }
+
         public static void ConfigureExtraProperties<T>(this EntityTypeBuilder<T> b)
             where T : class, IHasExtraProperties
         {
