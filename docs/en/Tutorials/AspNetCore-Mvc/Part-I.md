@@ -82,11 +82,25 @@ namespace Acme.BookStore
 EF Core requires you to relate entities with your DbContext. The easiest way to do this is to add a `DbSet` property to the `BookStoreDbContext` class in the `Acme.BookStore.EntityFrameworkCore` project, as shown below:
 
 ````C#
-public class BookStoreDbContext : AbpDbContext<BookStoreDbContext>
-{
-    public DbSet<Book> Book { get; set; }
-    ...
-}
+    public class BookStoreDbContext : AbpDbContext<BookStoreDbContext>
+    {
+        public DbSet<Book> Book { get; set; }
+
+        public BookStoreDbContext(DbContextOptions<BookStoreDbContext> options)
+            : base(options)
+        {
+
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Book>(
+                b => b.ConfigureExtraProperties()
+            );
+        }
+    }
 ````
 
 #### Add New Migration & Update the Database
