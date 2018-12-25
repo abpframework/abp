@@ -4,6 +4,6 @@ namespace Volo.Abp.UI.Navigation
     {
         public const string Main = "Main";
         public const string User = "User";
-        public const string Shortcut = "User";
+        public const string Shortcut = "Shortcut";
     }
 }
