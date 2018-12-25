@@ -132,17 +132,19 @@ namespace Volo.DocsTestApp.EntityFrameworkCore.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
-                        .IsRequired()
-                        .HasColumnName("ConcurrencyStamp")
-                        .HasMaxLength(256);
+                        .HasColumnName("ConcurrencyStamp");
 
-                    b.Property<DateTime>("CreationTime");
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnName("CreationTime");
 
-                    b.Property<Guid?>("CreatorId");
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnName("CreatorId");
 
-                    b.Property<Guid?>("DeleterId");
+                    b.Property<Guid?>("DeleterId")
+                        .HasColumnName("DeleterId");
 
-                    b.Property<DateTime?>("DeletionTime");
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnName("DeletionTime");
 
                     b.Property<string>("Email")
                         .HasColumnName("Email")
@@ -156,11 +158,16 @@ namespace Volo.DocsTestApp.EntityFrameworkCore.Migrations
                     b.Property<string>("ExtraProperties")
                         .HasColumnName("ExtraProperties");
 
-                    b.Property<bool>("IsDeleted");
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("IsDeleted")
+                        .HasDefaultValue(false);
 
-                    b.Property<DateTime?>("LastModificationTime");
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnName("LastModificationTime");
 
-                    b.Property<Guid?>("LastModifierId");
+                    b.Property<Guid?>("LastModifierId")
+                        .HasColumnName("LastModifierId");
 
                     b.Property<bool>("LockoutEnabled")
                         .ValueGeneratedOnAdd()

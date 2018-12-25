@@ -22,15 +22,15 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             {
                 b.ToTable(options.TablePrefix + "Users", options.Schema);
 
-                b.ConfigureAbpUser(options);
-
+                b.ConfigureFullAudited();
                 b.ConfigureExtraProperties();
+                b.ConfigureConcurrencyStamp();
+                b.ConfigureAbpUser(options);
 
                 b.Property(u => u.NormalizedUserName).IsRequired().HasMaxLength(IdentityUserConsts.MaxNormalizedUserNameLength).HasColumnName(nameof(IdentityUser.NormalizedUserName));
                 b.Property(u => u.NormalizedEmail).HasMaxLength(IdentityUserConsts.MaxNormalizedEmailLength).HasColumnName(nameof(IdentityUser.NormalizedEmail));
                 b.Property(u => u.PasswordHash).HasMaxLength(IdentityUserConsts.MaxPasswordHashLength).HasColumnName(nameof(IdentityUser.PasswordHash));
                 b.Property(u => u.SecurityStamp).IsRequired().HasMaxLength(IdentityUserConsts.MaxSecurityStampLength).HasColumnName(nameof(IdentityUser.SecurityStamp));
-                b.Property(u => u.ConcurrencyStamp).IsRequired().IsConcurrencyToken().HasMaxLength(IdentityUserConsts.MaxConcurrencyStampLength).HasColumnName(nameof(IdentityUser.ConcurrencyStamp));
                 b.Property(u => u.TwoFactorEnabled).HasDefaultValue(false).HasColumnName(nameof(IdentityUser.TwoFactorEnabled));
                 b.Property(u => u.LockoutEnabled).HasDefaultValue(false).HasColumnName(nameof(IdentityUser.LockoutEnabled));
                 b.Property(u => u.AccessFailedCount).HasDefaultValue(0).HasColumnName(nameof(IdentityUser.AccessFailedCount));
@@ -95,6 +95,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             {
                 b.ToTable(options.TablePrefix + "Roles", options.Schema);
 
+                b.ConfigureConcurrencyStamp();
                 b.ConfigureExtraProperties();
 
                 b.Property(r => r.Name).IsRequired().HasMaxLength(IdentityRoleConsts.MaxNameLength);
