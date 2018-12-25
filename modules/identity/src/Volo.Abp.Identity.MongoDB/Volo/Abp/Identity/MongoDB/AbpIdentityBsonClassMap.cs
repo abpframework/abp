@@ -27,6 +27,7 @@ namespace Volo.Abp.Identity.MongoDB
                 BsonClassMap.RegisterClassMap<IdentityClaimType>(map =>
                 {
                     map.AutoMap();
+                    map.ConfigureExtraProperties();
                 });
             });
         }
