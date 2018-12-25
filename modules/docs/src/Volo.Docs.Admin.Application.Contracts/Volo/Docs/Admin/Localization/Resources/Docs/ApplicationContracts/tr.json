@@ -1,0 +1,10 @@
+﻿{
+  "culture": "tr",
+  "texts": {
+    "Permission:DocumentManagement": "Döküman yönetimi",
+    "Permission:Projects": "Projeler",
+    "Permission:Edit": "Düzenle",
+    "Permission:Delete": "Sil",
+    "Permission:Create": "Oluştur"
+  }
+}

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Localization;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
+using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Modularity;
 using Volo.Abp.AspNetCore.Mvc.UI;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
@@ -18,19 +20,28 @@ using Volo.Abp.AspNetCore.Mvc.UI.Theming;
 using Volo.Abp.Autofac;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.Identity;
+using Volo.Abp.Identity.Web;
 using Volo.Abp.Modularity;
+using Volo.Abp.Threading;
 using Volo.Abp.UI;
 using Volo.Abp.VirtualFileSystem;
 using Volo.Docs;
+using Volo.Docs.Admin;
 using Volo.DocsTestApp.EntityFrameworkCore;
 
 namespace Volo.DocsTestApp
 {
     [DependsOn(
         typeof(DocsWebModule),
+        typeof(DocsAdminWebModule),
         typeof(DocsApplicationModule),
+        typeof(DocsAdminApplicationModule),
         typeof(DocsTestAppEntityFrameworkCoreModule),
         typeof(AbpAutofacModule),
+        typeof(AbpAccountWebModule),
+        typeof(AbpIdentityWebModule),
+        typeof(AbpIdentityApplicationModule),
         typeof(AbpAspNetCoreMvcUiBasicThemeModule)
     )]
     public class DocsTestAppModule : AbpModule
@@ -62,6 +73,7 @@ namespace Volo.DocsTestApp
                     options.FileSets.ReplaceEmbeddedByPyhsical<AbpAspNetCoreMvcUiBasicThemeModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic", Path.DirectorySeparatorChar)));
                     options.FileSets.ReplaceEmbeddedByPyhsical<DocsDomainModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}src{0}Volo.Docs.Domain", Path.DirectorySeparatorChar)));
                     options.FileSets.ReplaceEmbeddedByPyhsical<DocsWebModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}src{0}Volo.Docs.Web", Path.DirectorySeparatorChar)));
+                    options.FileSets.ReplaceEmbeddedByPyhsical<DocsWebModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}src{0}Volo.Docs.Admin.Web", Path.DirectorySeparatorChar)));
                 });
             }
 
@@ -71,7 +83,6 @@ namespace Volo.DocsTestApp
                     options.SwaggerDoc("v1", new Info { Title = "Docs API", Version = "v1" });
                     options.DocInclusionPredicate((docName, description) => true);
                 });
-
 
             var cultures = new List<CultureInfo> { new CultureInfo("en"), new CultureInfo("tr") };
             Configure<RequestLocalizationOptions>(options =>
@@ -94,7 +105,7 @@ namespace Volo.DocsTestApp
             app.UseDeveloperExceptionPage();
 
             app.UseVirtualFiles();
-
+            
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
@@ -114,6 +125,16 @@ namespace Volo.DocsTestApp
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
+            });
+
+            AsyncHelper.RunSync(async () =>
+            {
+                await context.ServiceProvider
+                    .GetRequiredService<IIdentityDataSeeder>()
+                    .SeedAsync(
+                        "1q2w3E*",
+                        IdentityPermissions.GetAll().Union(DocsAdminPermissions.GetAll())
+                    );
             });
         }
     }

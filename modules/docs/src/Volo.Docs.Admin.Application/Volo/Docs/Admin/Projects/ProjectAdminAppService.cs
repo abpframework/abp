@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Guids;
@@ -8,6 +9,7 @@ using Volo.Docs.Projects;
 
 namespace Volo.Docs.Admin.Projects
 {
+    [Authorize(DocsAdminPermissions.Projects.Default)]
     public class ProjectAdminAppService : ApplicationService, IProjectAdminAppService
     {
         private readonly IProjectRepository _projectRepository;
@@ -22,11 +24,11 @@ namespace Volo.Docs.Admin.Projects
 
         public async Task<PagedResultDto<ProjectDto>> GetListAsync(PagedAndSortedResultRequestDto input)
         {
-            var blogs = await _projectRepository.GetListAsync(input.Sorting, input.MaxResultCount, input.SkipCount);
+            var projects = await _projectRepository.GetListAsync(input.Sorting, input.MaxResultCount, input.SkipCount);
 
             var totalCount = await _projectRepository.GetTotalProjectCount();
 
-            var dtos = ObjectMapper.Map<List<Project>, List<ProjectDto>>(blogs);
+            var dtos = ObjectMapper.Map<List<Project>, List<ProjectDto>>(projects);
 
             return new PagedResultDto<ProjectDto>(totalCount, dtos);
         }
@@ -38,6 +40,7 @@ namespace Volo.Docs.Admin.Projects
             return ObjectMapper.Map<Project, ProjectDto>(project);
         }
 
+        [Authorize(DocsAdminPermissions.Projects.Create)]
         public async Task<ProjectDto> CreateAsync(CreateProjectDto input)
         {
             var project = new Project(_guidGenerator.Create(),
@@ -64,6 +67,7 @@ namespace Volo.Docs.Admin.Projects
             return ObjectMapper.Map<Project, ProjectDto>(project);
         }
 
+        [Authorize(DocsAdminPermissions.Projects.Update)]
         public async Task<ProjectDto> UpdateAsync(Guid id, UpdateProjectDto input)
         {
             var project = await _projectRepository.GetAsync(id);
@@ -87,6 +91,7 @@ namespace Volo.Docs.Admin.Projects
             return ObjectMapper.Map<Project, ProjectDto>(project);
         }
 
+        [Authorize(DocsAdminPermissions.Projects.Delete)]
         public async Task DeleteAsync(Guid id)
         {
             await _projectRepository.DeleteAsync(id);

@@ -33,23 +33,29 @@
 
   <ItemGroup>
     <Content Remove="wwwroot\**\*.*" />
-    <Content Remove="Pages\**\*.cshtml" />
-    <Content Remove="Pages\**\*.css" />
-    <Content Remove="Pages\**\*.js" />
-    <Content Remove="Localization\Resources\**\*.json" />
+    <Content Remove="Localization\Resources\Docs\Web\en.json" />
+    <Content Remove="Localization\Resources\Docs\Web\tr.json" />
+    <Content Remove="Pages\Docs\Admin\Projects\Create.cshtml" />
+    <Content Remove="Pages\Docs\Admin\Projects\Edit.cshtml" />
+    <Content Remove="Pages\Docs\Admin\Projects\Index.cshtml" />
     <Content Remove="Properties\launchSettings.json" />
     <Content Remove="compilerconfig.json" />
     <Content Remove="compilerconfig.json.defaults" />
-    <None Remove="Pages\Documents\Project\bootstrap-toc.js" />
-    <None Remove="Pages\Documents\Project\index - Copy.css" />
-    <None Remove="Pages\Documents\Project\index - Copy.min.css" />
-    <None Remove="Pages\Documents\Project\vs.js" />
+    <None Remove="Pages\Docs\Admin\Projects\create.js" />
+    <None Remove="Pages\Docs\Admin\Projects\edit.js" />
+    <None Remove="Pages\Docs\Admin\Projects\index.js" />
     <None Include="compilerconfig.json" />
     <None Include="Properties\launchSettings.json" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="wwwroot\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Pages\Docs\Admin\Projects\Edit.cshtml.cs">
+      <DependentUpon>Edit.cshtml</DependentUpon>
+    </Compile>
   </ItemGroup>
 
 </Project>
