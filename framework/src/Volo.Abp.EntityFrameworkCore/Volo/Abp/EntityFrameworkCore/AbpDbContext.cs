@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Newtonsoft.Json;
@@ -315,15 +316,17 @@ namespace Volo.Abp.EntityFrameworkCore
         protected virtual void ConfigureBaseProperties<TEntity>(ModelBuilder modelBuilder, IMutableEntityType mutableEntityType)
             where TEntity : class
         {
-            ConfigureConcurrencyStamp<TEntity>(modelBuilder, mutableEntityType);
+            ConfigureConcurrencyStampProperty<TEntity>(modelBuilder, mutableEntityType);
             ConfigureExtraProperties<TEntity>(modelBuilder, mutableEntityType);
+            ConfigureAuditProperties<TEntity>(modelBuilder, mutableEntityType);
+            ConfigureTenantIdProperty<TEntity>(modelBuilder, mutableEntityType);
             ConfigureGlobalFilters<TEntity>(modelBuilder, mutableEntityType);
         }
 
-        protected virtual void ConfigureConcurrencyStamp<TEntity>(ModelBuilder modelBuilder, IMutableEntityType mutableEntityType)
+        protected virtual void ConfigureConcurrencyStampProperty<TEntity>(ModelBuilder modelBuilder, IMutableEntityType mutableEntityType)
             where TEntity : class
         {
-            if (!typeof(IHasConcurrencyStamp).GetTypeInfo().IsAssignableFrom(typeof(TEntity)))
+            if (!typeof(IHasConcurrencyStamp).IsAssignableFrom(typeof(TEntity)))
             {
                 return;
             }
@@ -339,7 +342,7 @@ namespace Volo.Abp.EntityFrameworkCore
         protected virtual void ConfigureExtraProperties<TEntity>(ModelBuilder modelBuilder, IMutableEntityType mutableEntityType)
             where TEntity : class
         {
-            if (!typeof(IHasExtraProperties).GetTypeInfo().IsAssignableFrom(typeof(TEntity)))
+            if (!typeof(IHasExtraProperties).IsAssignableFrom(typeof(TEntity)))
             {
                 return;
             }
@@ -352,6 +355,107 @@ namespace Volo.Abp.EntityFrameworkCore
                         s => JsonConvert.DeserializeObject<Dictionary<string, object>>(s)
                     )
                     .HasColumnName(nameof(IHasExtraProperties.ExtraProperties));
+            });
+        }
+
+        protected virtual void ConfigureAuditProperties<TEntity>(ModelBuilder modelBuilder, IMutableEntityType mutableEntityType)
+            where TEntity : class
+        {
+            if (typeof(TEntity).IsAssignableTo<IHasCreationTime>())
+            {
+                modelBuilder.Entity<TEntity>(b =>
+                {
+                    b.Property(x => ((IHasCreationTime)x).CreationTime)
+                        .IsRequired()
+                        .HasColumnName(nameof(IHasCreationTime.CreationTime));
+                });
+            }
+
+            if (typeof(TEntity).IsAssignableTo<IMayHaveCreator>())
+            {
+                modelBuilder.Entity<TEntity>(b =>
+                {
+                    b.Property(x => ((IMayHaveCreator)x).CreatorId)
+                        .IsRequired(false)
+                        .HasColumnName(nameof(IMayHaveCreator.CreatorId));
+                });
+            }
+
+            if (typeof(TEntity).IsAssignableTo<IMustHaveCreator>())
+            {
+                modelBuilder.Entity<TEntity>(b =>
+                {
+                    b.Property(x => ((IMustHaveCreator)x).CreatorId)
+                        .IsRequired()
+                        .HasColumnName(nameof(IMustHaveCreator.CreatorId));
+                });
+            }
+
+            if (typeof(TEntity).IsAssignableTo<IHasModificationTime>())
+            {
+                modelBuilder.Entity<TEntity>(b =>
+                {
+                    b.Property(x => ((IHasModificationTime)x).LastModificationTime)
+                        .IsRequired(false)
+                        .HasColumnName(nameof(IHasModificationTime.LastModificationTime));
+                });
+            }
+
+            if (typeof(TEntity).IsAssignableTo<IModificationAuditedObject>())
+            {
+                modelBuilder.Entity<TEntity>(b =>
+                {
+                    b.Property(x => ((IModificationAuditedObject)x).LastModifierId)
+                        .IsRequired(false)
+                        .HasColumnName(nameof(IModificationAuditedObject.LastModifierId));
+                });
+            }
+
+            if (typeof(TEntity).IsAssignableTo<ISoftDelete>())
+            {
+                modelBuilder.Entity<TEntity>(b =>
+                {
+                    b.Property(x => ((ISoftDelete) x).IsDeleted)
+                        .IsRequired()
+                        .HasDefaultValue(false)
+                        .HasColumnName(nameof(ISoftDelete.IsDeleted));
+                });
+            }
+
+            if (typeof(TEntity).IsAssignableTo<IHasDeletionTime>())
+            {
+                modelBuilder.Entity<TEntity>(b =>
+                {
+                    b.Property(x => ((IHasDeletionTime)x).DeletionTime)
+                        .IsRequired(false)
+                        .HasColumnName(nameof(IHasDeletionTime.DeletionTime));
+                });
+            }
+
+            if (typeof(TEntity).IsAssignableTo<IDeletionAuditedObject>())
+            {
+                modelBuilder.Entity<TEntity>(b =>
+                {
+                    b.Property(x => ((IDeletionAuditedObject)x).DeleterId)
+                        .IsRequired(false)
+                        .HasColumnName(nameof(IDeletionAuditedObject.DeleterId));
+                });
+            }
+        }
+
+        protected virtual void ConfigureTenantIdProperty<TEntity>(ModelBuilder modelBuilder, IMutableEntityType mutableEntityType)
+            where TEntity : class
+        {
+            if (!typeof(TEntity).IsAssignableTo<IMultiTenant>())
+            {
+                return;
+            }
+
+            modelBuilder.Entity<TEntity>(b =>
+            {
+                b.Property(x => ((IMultiTenant)x).TenantId)
+                    .IsRequired(false)
+                    .HasColumnName(nameof(IMultiTenant.TenantId));
             });
         }
 
