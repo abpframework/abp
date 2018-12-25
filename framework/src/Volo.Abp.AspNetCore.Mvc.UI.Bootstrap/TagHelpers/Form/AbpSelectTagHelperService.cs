@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using System.Text.Encodings.Web;
@@ -56,11 +57,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
         {
             var selectTag = GetSelectTag(context, output);
             var selectAsHtml = RenderTagHelperOutput(selectTag, _encoder);
-            var label = GetLabelAsHtml(context, output, selectTag);
-            var validation =  GetValidationAsHtml(context, output, selectTag);
+            var label = GetLabelAsHtml(context, output, selectTag) + GetRequiredSymbol(context, output);
+            var validation = GetValidationAsHtml(context, output, selectTag);
             var infoText = GetInfoAsHtml(context, output, selectTag);
 
-            return label + Environment.NewLine + selectAsHtml + Environment.NewLine + infoText+ Environment.NewLine + validation;
+            return label + Environment.NewLine + selectAsHtml + Environment.NewLine + infoText + Environment.NewLine + validation;
         }
 
         protected virtual string SurroundInnerHtmlAndGet(TagHelperContext context, TagHelperOutput output, string innerHtml)
@@ -80,7 +81,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             var selectTagHelperOutput = GetInnerTagHelper(GetInputAttributes(context, output), context, selectTagHelper, "select", TagMode.StartTagAndEndTag);
 
             selectTagHelperOutput.Attributes.AddClass("form-control");
-            selectTagHelperOutput.Attributes.AddClass(GetSize(context,output));
+            selectTagHelperOutput.Attributes.AddClass(GetSize(context, output));
             AddDisabledAttribute(selectTagHelperOutput);
             AddInfoTextId(selectTagHelperOutput);
 
@@ -119,6 +120,12 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             }
 
             return GetLabelAsHtmlUsingTagHelper(context, output);
+        }
+
+
+        protected virtual string GetRequiredSymbol(TagHelperContext context, TagHelperOutput output)
+        {
+            return GetAttribute<RequiredAttribute>(TagHelper.AspFor.ModelExplorer) != null ? "<span> (*) </span>" : "";
         }
 
         protected virtual void AddInfoTextId(TagHelperOutput inputTagHelperOutput)
