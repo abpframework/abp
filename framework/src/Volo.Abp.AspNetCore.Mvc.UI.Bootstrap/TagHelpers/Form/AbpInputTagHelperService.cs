@@ -61,7 +61,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             var inputTag = GetInputTagHelperOutput(context, output, out isCheckbox);
 
             var inputHtml = RenderTagHelperOutput(inputTag, _encoder);
-            var label = GetLabelAsHtml(context, output, inputTag, isCheckbox) + GetRequiredSymbol(context, output, inputTag);
+            var label = GetLabelAsHtml(context, output, inputTag, isCheckbox);
             var info = GetInfoAsHtml(context, output, inputTag, isCheckbox);
             var validation = isCheckbox ? "" : GetValidationAsHtml(context, output, inputTag);
 
@@ -242,19 +242,19 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
             if (string.IsNullOrEmpty(TagHelper.Label))
             {
-                return GetLabelAsHtmlUsingTagHelper(context, output, isCheckbox);
+                return GetLabelAsHtmlUsingTagHelper(context, output, isCheckbox) + GetRequiredSymbol(context, output, inputTag);
             }
 
             var checkboxClass = isCheckbox ? "class=\"form-check-label\" " : "";
 
             return "<label " + checkboxClass + GetIdAttributeAsString(inputTag) + ">"
                    + TagHelper.Label +
-                   "</label>";
+                   "</label>" + GetRequiredSymbol(context, output, inputTag);
         }
 
         protected virtual string GetRequiredSymbol(TagHelperContext context, TagHelperOutput output, TagHelperOutput inputTag)
         {
-            if (IsOutputHidden(inputTag))
+            if (!TagHelper.DisplayRequiredSymbol)
             {
                 return "";
             }

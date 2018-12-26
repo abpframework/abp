@@ -192,6 +192,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             var abpInputTagHelper = _serviceProvider.GetRequiredService<AbpInputTagHelper>();
             abpInputTagHelper.AspFor = model;
             abpInputTagHelper.ViewContext = TagHelper.ViewContext;
+            abpInputTagHelper.DisplayRequiredSymbol = TagHelper.RequiredSymbols ?? true;
 
             RenderTagHelper(new TagHelperAttributeList(), context, abpInputTagHelper, _htmlEncoder, "div", TagMode.StartTagAndEndTag);
         }

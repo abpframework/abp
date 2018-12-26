@@ -57,7 +57,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
         {
             var selectTag = GetSelectTag(context, output);
             var selectAsHtml = RenderTagHelperOutput(selectTag, _encoder);
-            var label = GetLabelAsHtml(context, output, selectTag) + GetRequiredSymbol(context, output);
+            var label = GetLabelAsHtml(context, output, selectTag);
             var validation = GetValidationAsHtml(context, output, selectTag);
             var infoText = GetInfoAsHtml(context, output, selectTag);
 
@@ -116,15 +116,20 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
         {
             if (!string.IsNullOrEmpty(TagHelper.Label))
             {
-                return "<label " + GetIdAttributeAsString(selectTag) + ">" + TagHelper.Label + "</label>";
+                return "<label " + GetIdAttributeAsString(selectTag) + ">" + TagHelper.Label + "</label>" + GetRequiredSymbol(context, output);
             }
 
-            return GetLabelAsHtmlUsingTagHelper(context, output);
+            return GetLabelAsHtmlUsingTagHelper(context, output) + GetRequiredSymbol(context, output);
         }
 
 
         protected virtual string GetRequiredSymbol(TagHelperContext context, TagHelperOutput output)
         {
+            if (!TagHelper.DisplayRequiredSymbol)
+            {
+                return "";
+            }
+
             return GetAttribute<RequiredAttribute>(TagHelper.AspFor.ModelExplorer) != null ? "<span> (*) </span>" : "";
         }
 

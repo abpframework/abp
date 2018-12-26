@@ -19,6 +19,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
         public string InfoText { get; set; }
 
         [HtmlAttributeNotBound]
+        public bool DisplayRequiredSymbol { get; set; } = true;
+
+        [HtmlAttributeNotBound]
         [ViewContext]
         public ViewContext ViewContext { get; set; }
 

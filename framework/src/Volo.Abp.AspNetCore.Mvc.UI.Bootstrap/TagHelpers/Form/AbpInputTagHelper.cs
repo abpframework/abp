@@ -24,6 +24,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
         public AbpFormControlSize Size { get; set; } = AbpFormControlSize.Default;
 
         [HtmlAttributeNotBound]
+        public bool DisplayRequiredSymbol { get; set; } = true;
+
+        [HtmlAttributeNotBound]
         [ViewContext]
         public ViewContext ViewContext { get; set; }
 
