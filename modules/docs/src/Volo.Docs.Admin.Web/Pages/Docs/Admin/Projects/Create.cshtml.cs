@@ -104,7 +104,6 @@ namespace Volo.Docs.Admin.Pages.Docs.Admin.Projects
             [StringLength(256)]
             public string GitHubRootUrl { get; set; }
 
-
             [DisplayOrder(10001)]
             [StringLength(512)]
             public string GitHubAccessToken { get; set; }
