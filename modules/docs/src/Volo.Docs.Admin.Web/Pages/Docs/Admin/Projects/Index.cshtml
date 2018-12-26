@@ -1,11 +1,19 @@
 ﻿@page
 @using Microsoft.AspNetCore.Authorization
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
 @using Volo.Docs.Admin
+@using Volo.Docs.Admin.Navigation
 @inherits Volo.Docs.Admin.Pages.Docs.Admin.DocsAdminPage
 @model Volo.Docs.Admin.Pages.Docs.Admin.Projects.IndexModel
 @inject IAuthorizationService Authorization
 @{
     ViewBag.PageTitle = "Projects";
+}
+@inject IPageLayout PageLayout
+@{
+    PageLayout.Content.Title = L["Projects"].Value;
+    PageLayout.Content.BreadCrumb.Add(L["Menu:DocumentManagement"].Value);
+    PageLayout.Content.MenuItemName = DocsMenuNames.Projects;
 }
 
 @section scripts {
@@ -24,7 +32,7 @@
                 @if (await Authorization.IsGrantedAsync(DocsAdminPermissions.Projects.Create))
                 {
                     <abp-dropdown>
-                        <abp-dropdown-button button-type="Primary" icon="plus" text="@L["CreateANewProject"].Value"/>
+                        <abp-dropdown-button button-type="Primary" icon="plus" text="@L["CreateANewProject"].Value" />
                         <abp-dropdown-menu align="Right">
                             <abp-dropdown-item href="#" id="CreateNewGithubProjectButtonId">Github</abp-dropdown-item>
                         </abp-dropdown-menu>

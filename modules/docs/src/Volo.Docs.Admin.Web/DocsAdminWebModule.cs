@@ -7,6 +7,7 @@ using Volo.Abp.Modularity;
 using Volo.Abp.UI;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
+using Volo.Docs.Admin.Navigation;
 using Volo.Docs.Localization;
 
 namespace Volo.Docs.Admin
