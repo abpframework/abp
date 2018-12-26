@@ -72,6 +72,7 @@ namespace Volo.Docs.Admin.Pages.Docs.Admin.Projects
 
             [Required]
             [StringLength(ProjectConsts.MaxShortNameLength)]
+            [InputInfoText("ShortNameInfoText")]
             public string ShortName { get; set; }
 
             [Required]

@@ -11,6 +11,7 @@
     "ShortName": "ShortName",
     "DocumentStoreType": "DocumentStoreType",
     "Format": "Format",
+    "ShortNameInfoText": "Will be used for unique URL.",
     "DisplayName:Name": "Name",
     "DisplayName:ShortName": "Short name",
     "DisplayName:Format": "Format",
