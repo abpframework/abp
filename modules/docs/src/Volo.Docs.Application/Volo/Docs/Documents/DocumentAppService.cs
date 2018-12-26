@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
 using Volo.Abp.Application.Services;
@@ -111,6 +112,7 @@ namespace Volo.Docs.Documents
         {
             var documentDto = ObjectMapper.Map<Document, DocumentWithDetailsDto>(document);
             documentDto.Project = ObjectMapper.Map<Project, ProjectDto>(project);
+            documentDto.Contributors = ObjectMapper.Map<List<DocumentContributor>, List<DocumentContributorDto>>(document.Contributors);
             return documentDto;
         }
     }

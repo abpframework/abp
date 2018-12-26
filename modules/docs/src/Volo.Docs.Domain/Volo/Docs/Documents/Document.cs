@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Volo.Docs.Documents
 {
     public class Document
@@ -19,5 +21,7 @@ namespace Volo.Docs.Documents
         public string LocalDirectory { get; set; }
 
         public string FileName { get; set; }
+
+        public List<DocumentContributor> Contributors { get; set; }
     }
 }

@@ -262,6 +262,30 @@ body {
     .docs-content {
         overflow-x: scroll;
 
+        .contributors {
+            position: absolute;
+            top: 15px;
+            right: 5px;
+
+            .contributors-avatar {
+                border-radius: 21px;
+                width: 21px;
+                height: 21px;
+            }
+
+            a {
+                padding: 0;
+                width: 21px;
+                height: 21px;
+                display: inline-block;
+                margin: 0 0 0 2px;
+
+                &:hover {
+                    text-decoration: none;
+                }
+            }
+        }
+
         .docs-link-btns {
             border-bottom: 1px solid #f4f5f7;
             background: #fdfdfd;
@@ -281,21 +305,18 @@ body {
 
             .twitter {
                 color: #00ACEE;
-
             }
 
             .linkedin {
                 color: #0077B5;
-
             }
 
             .email {
                 color: #5a5a5a;
-
             }
 
             .share-button {
-                margin-left: 3px;
+                margin-left: 10px;
             }
         }
 
@@ -830,4 +851,5 @@ div.code-toolbar > .toolbar a {
     .mb-5, .my-5 {
         margin-bottom: 2rem !important;
     }
+
 }

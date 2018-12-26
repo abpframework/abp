@@ -17,12 +17,12 @@
     Layout = ThemeManager.CurrentTheme.GetEmptyLayout();
 }
 @section styles {
-<abp-style-bundle name="@typeof(IndexModel).FullName">
-    <abp-script type="@typeof(PrismjsStyleBundleContributor)" />
-    <abp-script type="@typeof(MalihuCustomScrollbarPluginStyleBundleContributor)" />
-    <abp-style src="/Pages/Documents/Project/bootstrap-toc.css" />
-    <abp-style src="/Pages/Documents/Shared/Styles/vs.css" />
-</abp-style-bundle>
+    <abp-style-bundle name="@typeof(IndexModel).FullName">
+        <abp-script type="@typeof(PrismjsStyleBundleContributor)" />
+        <abp-script type="@typeof(MalihuCustomScrollbarPluginStyleBundleContributor)" />
+        <abp-style src="/Pages/Documents/Project/bootstrap-toc.css" />
+        <abp-style src="/Pages/Documents/Shared/Styles/vs.css" />
+    </abp-style-bundle>
 }
 @section scripts {
     <abp-script-bundle name="@typeof(IndexModel).FullName">
@@ -121,15 +121,15 @@
 
                 <div class="docs-link-btns">
                     <div class="float-left">
-                        Share on : 
-                        <a href="#" target="_blank" class="share-button twitter" id="TwitterShareLink">
-                            <i class="fa fa-twitter"></i> Twitter
+                        @(L["ShareOn"].Value + " :")
+                        <a href="#" target="_blank" class="share-button twitter" id="TwitterShareLink" title="twitter">
+                            <i class="fa fa-twitter"></i>
                         </a>
-                        <a href="#" target="_blank" class="share-button linkedin" id="LinkedinShareLink">
-                            <i class="fa fa-linkedin"></i> LinkedIn
+                        <a href="#" target="_blank" class="share-button linkedin" id="LinkedinShareLink" title="linkedin">
+                            <i class="fa fa-linkedin"></i>
                         </a>
-                        <a href="#" target="_blank" class="share-button email" id="EmailShareLink">
-                            <i class="fa fa-envelope-square"></i> E-mail
+                        <a href="#" target="_blank" class="share-button email" id="EmailShareLink" title="Send e-mail">
+                            <i class="fa fa-envelope-square"></i>
                         </a>
                     </div>
 
@@ -139,7 +139,22 @@
                     }
                 </div>
 
-                <div class="docs-content-field">
+                <div class="docs-content-field"> 
+                        <div class="position-relative">
+                        <div class="contributors">
+                            @if (Model.Document.Contributors.Count > 0)
+                            {
+                                <small class="text-muted">@(L["Contributors"].Value + " :")</small>
+                            }
+                            @foreach (var contributor in Model.Document.Contributors)
+                            {
+                                <a href="@contributor.UserProfileUrl" target="_blank">
+                                    <img src="@contributor.AvatarUrl"
+                                         class="contributors-avatar" height="21" width="21" title="@contributor.Username" />
+                                </a>
+                            }
+                        </div> 
+                        </div> 
                     <div class="docs-text-field">
                         <div data-spy="scroll" data-target="#docs-sticky-index" data-offset="0">
                             <article class="docs-body">
