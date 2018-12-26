@@ -80,6 +80,40 @@
         initNavigationFilter("sidebar-scroll");
 
         initAnchorTags(".docs-page .docs-body");
+
+        var getTitle = function() {
+            var h1Tags = $(document).find('h1');
+            if (h1Tags.length < 1) {
+                return "";
+            }
+            return h1Tags[0].innerText;
+        }
+
+        $('#TwitterShareLink').attr(
+            'href',
+            'https://twitter.com/intent/tweet?text='
+                      + encodeURI(getTitle() +
+                " | " + $('#ProjectName')[0].innerText +
+                " | " + window.location.href)
+        );
+
+        $('#LinkedinShareLink').attr(
+            'href',
+            'https://www.linkedin.com/shareArticle?'
+            + 'url=' + encodeURI(window.location.href) + '&'
+            + 'mini=true&'
+            + "summary=" + encodeURI($('#ProjectName')[0].innerText) + '&'
+            + "title=" + encodeURI(getTitle()) + '&'
+            + "source=" + encodeURI($('#GoToMainWebSite').attr('href'))
+        );
+
+        $('#EmailShareLink').attr(
+            'href',
+            'mailto:?'
+            + 'body=' + encodeURI('I want you to look at ' + window.location.href) + '&'
+            + "subject=" + encodeURI(getTitle() + ' | ' + $('#ProjectName')[0].innerText) + '&'
+        );
+
     });
 
 })(jQuery);

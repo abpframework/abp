@@ -101,7 +101,7 @@ body {
                 height: 100vh;
 
                 > ul {
-                    display: block; 
+                    display: block;
                     height: calc(100vh - 220px);
                     overflow-y: auto;
                 }
@@ -277,6 +277,25 @@ body {
                     color: #444;
                     text-decoration: none;
                 }
+            }
+
+            .twitter {
+                color: #00ACEE;
+
+            }
+
+            .linkedin {
+                color: #0077B5;
+
+            }
+
+            .email {
+                color: #5a5a5a;
+
+            }
+
+            .share-button {
+                margin-left: 3px;
             }
         }
 

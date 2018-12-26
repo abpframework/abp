@@ -169,6 +169,14 @@
         .docs-page .docs-content .docs-link-btns a:hover {
           color: #444;
           text-decoration: none; }
+      .docs-page .docs-content .docs-link-btns .twitter {
+        color: #00ACEE; }
+      .docs-page .docs-content .docs-link-btns .linkedin {
+        color: #0077B5; }
+      .docs-page .docs-content .docs-link-btns .email {
+        color: #5a5a5a; }
+      .docs-page .docs-content .docs-link-btns .share-button {
+        margin-left: 3px; }
     .docs-page .docs-content .docs-text-field {
       padding: 2rem; }
     .docs-page .docs-content article.docs-body h1 {
