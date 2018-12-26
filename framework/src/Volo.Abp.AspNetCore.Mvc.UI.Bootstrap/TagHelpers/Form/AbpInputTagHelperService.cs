@@ -61,7 +61,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             var inputTag = GetInputTagHelperOutput(context, output, out isCheckbox);
 
             var inputHtml = RenderTagHelperOutput(inputTag, _encoder);
-            var label = GetLabelAsHtml(context, output, inputTag, isCheckbox) + GetRequiredSymbol(context, output);
+            var label = GetLabelAsHtml(context, output, inputTag, isCheckbox) + GetRequiredSymbol(context, output, inputTag);
             var info = GetInfoAsHtml(context, output, inputTag, isCheckbox);
             var validation = isCheckbox ? "" : GetValidationAsHtml(context, output, inputTag);
 
@@ -70,7 +70,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         protected virtual string GetValidationAsHtml(TagHelperContext context, TagHelperOutput output, TagHelperOutput inputTag)
         {
-            if (inputTag.Attributes.Any(a => a.Name.ToLowerInvariant() == "type" && a.Value.ToString().ToLowerInvariant() == "hidden"))
+            if (IsOutputHidden(inputTag))
             {
                 return "";
             }
@@ -235,7 +235,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         protected virtual string GetLabelAsHtml(TagHelperContext context, TagHelperOutput output, TagHelperOutput inputTag, bool isCheckbox)
         {
-            if (inputTag.Attributes.Any(a => a.Name.ToLowerInvariant() == "type" && a.Value.ToString().ToLowerInvariant() == "hidden"))
+            if (IsOutputHidden(inputTag))
             {
                 return "";
             }
@@ -252,13 +252,24 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                    "</label>";
         }
 
-        protected virtual string GetRequiredSymbol(TagHelperContext context, TagHelperOutput output)
+        protected virtual string GetRequiredSymbol(TagHelperContext context, TagHelperOutput output, TagHelperOutput inputTag)
         {
+
+            if (IsOutputHidden(inputTag))
+            {
+                return "";
+            }
+
             return GetAttribute<RequiredAttribute>(TagHelper.AspFor.ModelExplorer) != null ? "<span> (*) </span>":"";
         }
 
         protected virtual string GetInfoAsHtml(TagHelperContext context, TagHelperOutput output, TagHelperOutput inputTag, bool isCheckbox)
         {
+            if (IsOutputHidden(inputTag))
+            {
+                return "";
+            }
+
             if (isCheckbox)
             {
                 return "";
@@ -380,6 +391,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             }
 
             return "";
+        }
+
+        protected virtual bool IsOutputHidden(TagHelperOutput inputTag)
+        {
+            return inputTag.Attributes.Any(a => a.Name.ToLowerInvariant() == "type" && a.Value.ToString().ToLowerInvariant() == "hidden");
         }
     }
 }
