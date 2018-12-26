@@ -8,16 +8,6 @@ namespace Volo.Blogging.Tagging
 {
     public interface ITagAppService : IApplicationService
     {
-        Task<List<TagDto>> GetListAsync();
-
-        Task<List<TagDto>> GetListAsync(GetTagListInput input);
-
-        Task<TagDto> CreateAsync(CreateTagDto input);
-
-        Task<TagDto> UpdateAsync(Guid id, UpdateTagDto input);
-
-        Task DeleteAsync(Guid id);
-
         Task<List<TagDto>> GetPopularTags(GetPopularTagsInput input);
 
     }

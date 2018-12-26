@@ -24,19 +24,19 @@ namespace Volo.Abp.PermissionManagement.Web
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.Configure<VirtualFileSystemOptions>(options =>
+            Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpPermissionManagementWebModule>("Volo.Abp.PermissionManagement.Web");
             });
 
-            context.Services.Configure<AbpLocalizationOptions>(options =>
+            Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources
                     .Add<AbpPermissionManagementResource>("en")
                     .AddVirtualJson("/Localization/Resources/AbpPermissionManagement");
             });
 
-            context.Services.Configure<AbpAutoMapperOptions>(options =>
+            Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<AbpPermissionManagementWebAutoMapperProfile>(validate: true);
             });

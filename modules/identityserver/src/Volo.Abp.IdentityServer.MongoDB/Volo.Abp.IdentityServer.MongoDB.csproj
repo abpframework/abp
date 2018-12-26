@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="..\..\common.props" />
+  <Import Project="..\..\..\..\common.props" />
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -16,7 +16,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.IdentityServer.Domain\Volo.Abp.IdentityServer.Domain.csproj" />
 
-    <ProjectReference Include="..\..\..\..\..\abp\framework\src\Volo.Abp.MongoDB\Volo.Abp.MongoDB.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.MongoDB\Volo.Abp.MongoDB.csproj" />
   </ItemGroup>
 
 </Project>

@@ -15,6 +15,6 @@ namespace Volo.Blogging.Comments
 
         Task<List<Comment>> GetRepliesOfComment(Guid id);
 
-        void DeleteOfPost(Guid id);
+        Task DeleteOfPost(Guid id);
     }
 }

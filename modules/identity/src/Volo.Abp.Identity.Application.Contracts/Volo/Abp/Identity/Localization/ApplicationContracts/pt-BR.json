@@ -1,0 +1,12 @@
+{
+  "culture": "pt-BR",
+  "texts": {
+    "Permission:IdentityManagement": "Gerenciamento de Acessos",
+    "Permission:RoleManagement": "Gerenciamento de Perfis",
+    "Permission:Create": "Criar",
+    "Permission:Edit": "Editar",
+    "Permission:Delete": "Excluir",
+    "Permission:ChangePermissions": "Alterar Permissões",
+    "Permission:UserManagement": "Gerenciamento de Usuários"
+  }
+}

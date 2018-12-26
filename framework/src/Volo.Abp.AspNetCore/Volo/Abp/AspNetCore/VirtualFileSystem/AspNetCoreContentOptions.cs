@@ -12,7 +12,8 @@ namespace Volo.Abp.AspNetCore.VirtualFileSystem
             AllowedExtraWebContentFolders = new List<string>
             {
                 "/Pages",
-                "/Views"
+                "/Views",
+                "/Themes"
             };
 
             AllowedExtraWebContentFileExtensions = new List<string>

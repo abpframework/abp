@@ -42,7 +42,7 @@ namespace Volo.Blogging
             await _postRepository.InsertAsync(new Post(_testData.Blog1Post1Id, _testData.Blog1Id, Guid.Empty, "title", "coverImage", "url"));
             await _postRepository.InsertAsync(new Post(_testData.Blog1Post2Id, _testData.Blog1Id, Guid.Empty, "title", "coverImage", "url"));
             await _commentRepository.InsertAsync(new Comment(_testData.Blog1Post1Comment1Id,_testData.Blog1Post1Id,null,"text"));
-            await _tagRepository.InsertAsync(new Tag(_testData.Tag1Name));
+            await _tagRepository.InsertAsync(new Tag(_testData.Blog1Id, _testData.Tag1Name));
         }
     }
 }

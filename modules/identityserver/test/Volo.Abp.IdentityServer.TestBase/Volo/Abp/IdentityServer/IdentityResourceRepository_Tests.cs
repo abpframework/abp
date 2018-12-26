@@ -10,10 +10,11 @@ using Xunit;
 
 namespace Volo.Abp.IdentityServer
 {
-    public class IdentityResourceRepository_Tests<TStartupModule> : AbpIdentityServerTestBase<TStartupModule>
+    public abstract class IdentityResourceRepository_Tests<TStartupModule> : AbpIdentityServerTestBase<TStartupModule>
         where TStartupModule : IAbpModule
     {
-        private IIdentityResourceRepository identityResourceRepository;
+        protected IIdentityResourceRepository identityResourceRepository;
+
         public IdentityResourceRepository_Tests()
         {
             identityResourceRepository = ServiceProvider.GetRequiredService<IIdentityResourceRepository>();

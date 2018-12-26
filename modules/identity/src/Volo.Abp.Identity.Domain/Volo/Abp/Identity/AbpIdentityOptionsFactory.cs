@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
+using Volo.Abp.Identity.Settings;
 using Volo.Abp.Options;
 using Volo.Abp.Settings;
 

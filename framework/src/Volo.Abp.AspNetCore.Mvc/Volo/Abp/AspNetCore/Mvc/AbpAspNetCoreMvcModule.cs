@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.DependencyInjection;
@@ -56,14 +57,14 @@ namespace Volo.Abp.AspNetCore.Mvc
                 )
             );
 
-            context.Services.Configure<ApiDescriptionModelOptions>(options =>
+            Configure<ApiDescriptionModelOptions>(options =>
             {
                 options.IgnoredInterfaces.AddIfNotContains(typeof(IAsyncActionFilter));
                 options.IgnoredInterfaces.AddIfNotContains(typeof(IFilterMetadata));
                 options.IgnoredInterfaces.AddIfNotContains(typeof(IActionFilter));
             });
 
-            context.Services.Configure<AbpAspNetCoreMvcOptions>(options =>
+            Configure<AbpAspNetCoreMvcOptions>(options =>
             {
                 options.ConventionalControllers.Create(typeof(AbpAspNetCoreMvcModule).Assembly, o =>
                 {
@@ -74,14 +75,22 @@ namespace Volo.Abp.AspNetCore.Mvc
             var mvcCoreBuilder = context.Services.AddMvcCore();
             context.Services.ExecutePreConfiguredActions(mvcCoreBuilder);
 
+            var abpMvcDataAnnotationsLocalizationOptions = context.Services.ExecutePreConfiguredActions(new AbpMvcDataAnnotationsLocalizationOptions());
+
+            context.Services
+                .AddSingleton<IOptions<AbpMvcDataAnnotationsLocalizationOptions>>(
+                    new OptionsWrapper<AbpMvcDataAnnotationsLocalizationOptions>(
+                        abpMvcDataAnnotationsLocalizationOptions
+                    )
+                );
+
             var mvcBuilder = context.Services.AddMvc()
                 .AddDataAnnotationsLocalization(options =>
                 {
-                    var assemblyResources = context.Services.ExecutePreConfiguredActions(new AbpMvcDataAnnotationsLocalizationOptions()).AssemblyResources;
 
                     options.DataAnnotationLocalizerProvider = (type, factory) =>
                     {
-                        var resourceType = assemblyResources.GetOrDefault(type.Assembly);
+                        var resourceType = abpMvcDataAnnotationsLocalizationOptions.AssemblyResources.GetOrDefault(type.Assembly);
                         return factory.Create(resourceType ?? type);
                     };
                 })
@@ -105,7 +114,7 @@ namespace Volo.Abp.AspNetCore.Mvc
 
             partManager.FeatureProviders.Add(new AbpConventionalControllerFeatureProvider(application));
 
-            context.Services.Configure<MvcOptions>(mvcOptions =>
+            Configure<MvcOptions>(mvcOptions =>
             {
                 mvcOptions.AddAbp(context.Services);
             });

@@ -9,7 +9,7 @@ namespace Volo.Abp.EventBus
     /// <remarks>
     /// This class always creates a new transient instance of handler.
     /// </remarks>
-    internal class TransientEventHandlerFactory<THandler> : IEventHandlerFactory 
+    public class TransientEventHandlerFactory<THandler> : IEventHandlerFactory 
         where THandler : IEventHandler, new()
     {
         /// <summary>

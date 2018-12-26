@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using NSubstitute;
 using Shouldly;
+using Volo.Abp.Identity.Settings;
 using Volo.Abp.Settings;
 using Xunit;
 

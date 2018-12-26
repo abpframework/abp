@@ -1,5 +1,6 @@
 ﻿using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
+using Volo.Abp.EntityFrameworkCore.Modeling;
 using Volo.Abp.IdentityServer.ApiResources;
 using Volo.Abp.IdentityServer.Clients;
 using Volo.Abp.IdentityServer.Grants;
@@ -24,6 +25,8 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
             builder.Entity<Client>(client =>
             {
                 client.ToTable(tablePrefix + "Clients", schema);
+
+                client.ConfigureExtraProperties();
 
                 client.Property(x => x.ClientId).HasMaxLength(ClientConsts.ClientIdMaxLength).IsRequired();
                 client.Property(x => x.ProtocolType).HasMaxLength(ClientConsts.ProtocolTypeMaxLength).IsRequired();
@@ -136,6 +139,8 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
             {
                 grant.ToTable(tablePrefix + "PersistedGrants", schema);
 
+                grant.ConfigureExtraProperties();
+
                 grant.Property(x => x.Key).HasMaxLength(PersistedGrantConsts.KeyMaxLength).ValueGeneratedNever();
                 grant.Property(x => x.Type).HasMaxLength(PersistedGrantConsts.TypeMaxLength).IsRequired();
                 grant.Property(x => x.SubjectId).HasMaxLength(PersistedGrantConsts.SubjectIdMaxLength);
@@ -151,6 +156,8 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
             builder.Entity<IdentityResource>(identityResource =>
             {
                 identityResource.ToTable(tablePrefix + "IdentityResources", schema);
+
+                identityResource.ConfigureExtraProperties();
 
                 identityResource.Property(x => x.Name).HasMaxLength(IdentityResourceConsts.NameMaxLength).IsRequired();
                 identityResource.Property(x => x.DisplayName).HasMaxLength(IdentityResourceConsts.DisplayNameMaxLength);
@@ -171,6 +178,8 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
             builder.Entity<ApiResource>(apiResource =>
             {
                 apiResource.ToTable(tablePrefix + "ApiResources", schema);
+
+                apiResource.ConfigureExtraProperties();
 
                 apiResource.Property(x => x.Name).HasMaxLength(ApiResourceConsts.NameMaxLength).IsRequired();
                 apiResource.Property(x => x.DisplayName).HasMaxLength(ApiResourceConsts.DisplayNameMaxLength);

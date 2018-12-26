@@ -8,8 +8,8 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Acme.BookStore.Application\Acme.BookStore.Application.csproj" />
     <ProjectReference Include="..\..\src\Acme.BookStore.EntityFrameworkCore\Acme.BookStore.EntityFrameworkCore.csproj" />
-    <PackageReference Include="Volo.Abp.TestBase" Version="0.4.1" />
-    <PackageReference Include="Volo.Abp.Autofac" Version="0.4.1" />
+    <PackageReference Include="Volo.Abp.TestBase" Version="0.10.0" />
+    <PackageReference Include="Volo.Abp.Autofac" Version="0.10.0" />
   </ItemGroup>
 
   <ItemGroup>

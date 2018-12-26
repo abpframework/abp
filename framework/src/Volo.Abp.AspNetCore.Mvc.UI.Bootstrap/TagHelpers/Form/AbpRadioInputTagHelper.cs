@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 {
+    [HtmlTargetElement("abp-radio")]
     public class AbpRadioInputTagHelper : AbpTagHelper<AbpRadioInputTagHelper, AbpRadioInputTagHelperService>
     {
         public ModelExpression AspFor { get; set; }

@@ -3,7 +3,7 @@ using Volo.Abp.RabbitMQ;
 
 namespace Volo.Abp.BackgroundJobs.RabbitMQ
 {
-    public class JobQueueConfiguration : QueueConfiguration
+    public class JobQueueConfiguration : QueueDeclareConfiguration
     {
         public Type JobArgsType { get; }
 

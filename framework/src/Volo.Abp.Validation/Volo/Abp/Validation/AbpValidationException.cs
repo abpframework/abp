@@ -20,7 +20,7 @@ namespace Volo.Abp.Validation
         /// <summary>
         /// Detailed list of validation errors for this exception.
         /// </summary>
-        public IList<ValidationResult> ValidationErrors { get; set; }
+        public IList<ValidationResult> ValidationErrors { get; }
 
         /// <summary>
         /// Exception severity.

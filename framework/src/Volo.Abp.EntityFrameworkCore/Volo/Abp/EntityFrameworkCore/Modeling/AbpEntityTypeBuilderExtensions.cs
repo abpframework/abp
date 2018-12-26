@@ -4,12 +4,21 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Newtonsoft.Json;
 using Volo.Abp.Auditing;
 using Volo.Abp.Data;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.EntityFrameworkCore.Modeling
 {
     public static class AbpEntityTypeBuilderExtensions
     {
+        public static void ConfigureConcurrencyStamp<T>(this EntityTypeBuilder<T> b)
+            where T : class, IHasConcurrencyStamp
+        {
+            b.Property(x => x.ConcurrencyStamp)
+                .IsConcurrencyToken()
+                .HasColumnName(nameof(IHasConcurrencyStamp.ConcurrencyStamp));
+        }
+
         public static void ConfigureExtraProperties<T>(this EntityTypeBuilder<T> b)
             where T : class, IHasExtraProperties
         {
@@ -24,59 +33,76 @@ namespace Volo.Abp.EntityFrameworkCore.Modeling
         public static void ConfigureSoftDelete<T>(this EntityTypeBuilder<T> b)
             where T : class, ISoftDelete
         {
-            b.Property(x => x.IsDeleted).IsRequired().HasDefaultValue(false).HasColumnName(nameof(ISoftDelete.IsDeleted));
+            b.Property(x => x.IsDeleted)
+                .IsRequired()
+                .HasDefaultValue(false)
+                .HasColumnName(nameof(ISoftDelete.IsDeleted));
         }
 
         public static void ConfigureDeletionTime<T>(this EntityTypeBuilder<T> b)
             where T : class, IHasDeletionTime
         {
             b.ConfigureSoftDelete();
-            b.Property(x => x.DeletionTime).IsRequired(false).HasColumnName(nameof(IHasDeletionTime.DeletionTime));
+            b.Property(x => x.DeletionTime)
+                .IsRequired(false)
+                .HasColumnName(nameof(IHasDeletionTime.DeletionTime));
         }
 
         public static void ConfigureMayHaveCreator<T>(this EntityTypeBuilder<T> b)
             where T : class, IMayHaveCreator
         {
-            b.Property(x => x.CreatorId).IsRequired(false).HasColumnName(nameof(IMayHaveCreator.CreatorId));
+            b.Property(x => x.CreatorId)
+                .IsRequired(false)
+                .HasColumnName(nameof(IMayHaveCreator.CreatorId));
         }
 
         public static void ConfigureMustHaveCreator<T>(this EntityTypeBuilder<T> b)
             where T : class, IMustHaveCreator
         {
-            b.Property(x => x.CreatorId).IsRequired().HasColumnName(nameof(IMustHaveCreator.CreatorId));
+            b.Property(x => x.CreatorId)
+                .IsRequired()
+                .HasColumnName(nameof(IMustHaveCreator.CreatorId));
         }
 
         public static void ConfigureDeletionAudited<T>(this EntityTypeBuilder<T> b)
             where T : class, IDeletionAuditedObject
         {
             b.ConfigureDeletionTime();
-            b.Property(x => x.DeleterId).IsRequired(false).HasColumnName(nameof(IDeletionAuditedObject.DeleterId));
+            b.Property(x => x.DeleterId)
+                .IsRequired(false)
+                .HasColumnName(nameof(IDeletionAuditedObject.DeleterId));
         }
 
         public static void ConfigureCreationTime<T>(this EntityTypeBuilder<T> b)
             where T : class, IHasCreationTime
         {
-            b.Property(x => x.CreationTime).IsRequired().HasColumnName(nameof(IHasCreationTime.CreationTime));
+            b.Property(x => x.CreationTime)
+                .IsRequired()
+                .HasColumnName(nameof(IHasCreationTime.CreationTime));
         }
 
         public static void ConfigureCreationAudited<T>(this EntityTypeBuilder<T> b)
             where T : class, ICreationAuditedObject
         {
             b.ConfigureCreationTime();
-            b.Property(x => x.CreatorId).IsRequired(false).HasColumnName(nameof(ICreationAuditedObject.CreatorId));
+            b.ConfigureMayHaveCreator();
         }
 
         public static void ConfigureLastModificationTime<T>(this EntityTypeBuilder<T> b)
             where T : class, IHasModificationTime
         {
-            b.Property(x => x.LastModificationTime).IsRequired(false).HasColumnName(nameof(IHasModificationTime.LastModificationTime));
+            b.Property(x => x.LastModificationTime)
+                .IsRequired(false)
+                .HasColumnName(nameof(IHasModificationTime.LastModificationTime));
         }
 
         public static void ConfigureModificationAudited<T>(this EntityTypeBuilder<T> b)
             where T : class, IModificationAuditedObject
         {
             b.ConfigureLastModificationTime();
-            b.Property(x => x.LastModifierId).IsRequired(false).HasColumnName(nameof(IModificationAuditedObject.LastModifierId));
+            b.Property(x => x.LastModifierId)
+                .IsRequired(false)
+                .HasColumnName(nameof(IModificationAuditedObject.LastModifierId));
         }
 
         public static void ConfigureAudited<T>(this EntityTypeBuilder<T> b)
@@ -96,9 +122,11 @@ namespace Volo.Abp.EntityFrameworkCore.Modeling
         public static void ConfigureMultiTenant<T>(this EntityTypeBuilder<T> b)
             where T : class, IMultiTenant
         {
-            b.Property(x => x.TenantId).IsRequired(false).HasColumnName(nameof(IMultiTenant.TenantId));
+            b.Property(x => x.TenantId)
+                .IsRequired(false)
+                .HasColumnName(nameof(IMultiTenant.TenantId));
         }
 
-        //TODO: Add other interfaces (IMultiTenant, IAuditedObject<TUser>...)
+        //TODO: Add other interfaces (IAuditedObject<TUser>...)
     }
 }

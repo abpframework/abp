@@ -15,11 +15,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{2C792EC1-B
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.IdentityServer.EntityFrameworkCore.Tests", "test\Volo.Abp.IdentityServer.EntityFrameworkCore.Tests\Volo.Abp.IdentityServer.EntityFrameworkCore.Tests.csproj", "{8B8FBA95-4FA2-4438-A387-7C5EC7A89E82}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.IdentityServer.MongoDB", "src\Volo.Abp.IdentityServer.MongoDB\Volo.Abp.IdentityServer.MongoDB.csproj", "{FC6CC65A-27B9-43D4-8F20-D941B4987B2C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.IdentityServer.MongoDB", "src\Volo.Abp.IdentityServer.MongoDB\Volo.Abp.IdentityServer.MongoDB.csproj", "{FC6CC65A-27B9-43D4-8F20-D941B4987B2C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.IdentityServer.TestBase", "test\Volo.Abp.IdentityServer.TestBase\Volo.Abp.IdentityServer.TestBase.csproj", "{9CD1BFDB-DD76-4194-ACAD-A64541AC2069}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.IdentityServer.TestBase", "test\Volo.Abp.IdentityServer.TestBase\Volo.Abp.IdentityServer.TestBase.csproj", "{9CD1BFDB-DD76-4194-ACAD-A64541AC2069}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.IdentityServer.MongoDB.Tests", "test\Volo.Abp.IdentityServer.MongoDB.Tests\Volo.Abp.IdentityServer.MongoDB.Tests.csproj", "{2E18B471-7FCA-497B-90FF-6AA9172CC62F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.IdentityServer.MongoDB.Tests", "test\Volo.Abp.IdentityServer.MongoDB.Tests\Volo.Abp.IdentityServer.MongoDB.Tests.csproj", "{2E18B471-7FCA-497B-90FF-6AA9172CC62F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.IdentityServer.Domain.Tests", "test\Volo.Abp.IdentityServer.Domain.Tests\Volo.Abp.IdentityServer.Domain.Tests.csproj", "{0680D0B6-51C0-4812-8A0B-192FDE717E60}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,6 +57,10 @@ Global
 		{2E18B471-7FCA-497B-90FF-6AA9172CC62F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2E18B471-7FCA-497B-90FF-6AA9172CC62F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2E18B471-7FCA-497B-90FF-6AA9172CC62F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0680D0B6-51C0-4812-8A0B-192FDE717E60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0680D0B6-51C0-4812-8A0B-192FDE717E60}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0680D0B6-51C0-4812-8A0B-192FDE717E60}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0680D0B6-51C0-4812-8A0B-192FDE717E60}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -67,6 +73,7 @@ Global
 		{FC6CC65A-27B9-43D4-8F20-D941B4987B2C} = {59A0FC0F-EA6D-477B-84A7-3B1E41B4C858}
 		{9CD1BFDB-DD76-4194-ACAD-A64541AC2069} = {2C792EC1-BA27-44ED-B7CC-D0939553F1B2}
 		{2E18B471-7FCA-497B-90FF-6AA9172CC62F} = {2C792EC1-BA27-44ED-B7CC-D0939553F1B2}
+		{0680D0B6-51C0-4812-8A0B-192FDE717E60} = {2C792EC1-BA27-44ED-B7CC-D0939553F1B2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {45562023-C330-4060-A583-2BA10F472D3D}

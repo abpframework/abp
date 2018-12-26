@@ -7,7 +7,13 @@ namespace Volo.Abp.Users
     {
         public Guid Id { get; set; }
 
+        public Guid? TenantId { get; set; }
+
         public string UserName { get; set; }
+
+        public string Name { get; set; }
+
+        public string Surname { get; set; }
 
         public string Email { get; set; }
 
@@ -16,8 +22,6 @@ namespace Volo.Abp.Users
         public string PhoneNumber { get; set; }
 
         public bool PhoneNumberConfirmed { get; set; }
-
-        public Guid? TenantId { get; set; }
 
         public UserData()
         {
@@ -28,6 +32,8 @@ namespace Volo.Abp.Users
             Guid id,
             [NotNull] string userName,
             [CanBeNull] string email = null,
+            [CanBeNull] string name = null,
+            [CanBeNull] string surname = null,
             bool emailConfirmed = false,
             [CanBeNull] string phoneNumber = null,
             bool phoneNumberConfirmed = false,
@@ -36,6 +42,8 @@ namespace Volo.Abp.Users
             Id = id;
             UserName = userName;
             Email = email;
+            Name = name;
+            Surname = surname;
             EmailConfirmed = emailConfirmed;
             PhoneNumber = phoneNumber;
             PhoneNumberConfirmed = phoneNumberConfirmed;

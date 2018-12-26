@@ -17,16 +17,14 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Collapse
                 output.Attributes.AddClass("show");
             }
 
+            if (TagHelper.Multi ?? false)
+            {
+                output.Attributes.AddClass("multi-collapse");
+            }
+
             var innerContent = (await output.GetChildContentAsync()).GetContent();
 
-            var body = GetBody(context, output, innerContent);
-
-            output.Content.SetHtmlContent(body);
-        }
-
-        protected virtual string GetBody(TagHelperContext context, TagHelperOutput output, string innerContent)
-        {
-            return "<div class=\"card card-body\">" + innerContent + "</div>";
+            output.Content.SetHtmlContent(innerContent);
         }
     }
 }

@@ -1,8 +1,10 @@
 # ABP
 
-[![Build Status](http://vjenkins.dynu.net:5480/job/abp/badge/icon)](http://vjenkins.dynu.net:5480/blue/organizations/jenkins/abp/activity)
+[![Build Status](http://vjenkins.dynu.net:5480/job/abp/badge/icon)](http://ci.volosoft.com:5480/blue/organizations/jenkins/abp/activity)
 
 This project is the next generation of the [ASP.NET Boilerplate](https://aspnetboilerplate.com/) web application framework. See [the announcement](https://abp.io/blog/abp/Abp-vNext-Announcement).
+
+See the official [web site (abp.io)](https://abp.io/) for more information.
 
 ### Status
 
@@ -10,7 +12,7 @@ This project is in **very early preview** stage and it's not suggested to use it
 
 ### Documentation
 
-See the <a href="docs\Index.md" target="_blank">documentation</a>.
+See the <a href="https://abp.io/documents/" target="_blank">documentation</a>.
 
 ### How to Build
 
@@ -32,15 +34,11 @@ Framework solution is located under the `framework` folder. It has no external d
 
 - Disable "*Automatically check for missing packages during build in Visual Studio*" in the Visual Studio options.
 
-![disable-package-restore-visual-studio](docs/images/disable-package-restore-visual-studio.png)
+![disable-package-restore-visual-studio](docs/en/images/disable-package-restore-visual-studio.png)
 
 - When you open a solution, first run `dotnet restore` in the root folder of the solution.
 - When you change a dependency of a project (or any of the dependencies of your projects change their dependencies), run `dotnet restore` again.
 
 ### Contribution
 
-ABP is an open source platform.
-
-* Open a [new issue](https://github.com/volosoft/volo/issues/new) if you found a bug or if you have a new feature/enhancement idea.
-* Open a pull request if you want to make a development. Please create an issue before a development, so we can discuss it.
-* Contribute to the [documentation](docs/Index.md).
+ABP is an open source platform. Check [the contribution guide](docs/en/Contribution/Index.md) if you want to contribute to the project.

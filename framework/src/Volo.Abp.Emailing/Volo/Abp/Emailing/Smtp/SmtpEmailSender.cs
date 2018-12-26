@@ -2,6 +2,7 @@ using System;
 using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
+using Volo.Abp.BackgroundJobs;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Emailing.Smtp
@@ -16,9 +17,8 @@ namespace Volo.Abp.Emailing.Smtp
         /// <summary>
         /// Creates a new <see cref="SmtpEmailSender"/>.
         /// </summary>
-        /// <param name="configuration">Configuration</param>
-        public SmtpEmailSender(ISmtpEmailSenderConfiguration configuration)
-            : base(configuration)
+        public SmtpEmailSender(ISmtpEmailSenderConfiguration configuration, IBackgroundJobManager backgroundJobManager)
+            : base(configuration, backgroundJobManager)
         {
             _configuration = configuration;
         }

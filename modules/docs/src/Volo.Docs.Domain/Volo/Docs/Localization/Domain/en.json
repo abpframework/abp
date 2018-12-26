@@ -9,6 +9,7 @@
     "GoToTop": "Go to top",
     "Projects": "Project(s)",
     "NoProjectWarning": "There are no projects yet!",
-    "DocumentNotFound": "Oops, the requested document was not found!"
+    "DocumentNotFound": "Oops, the requested document was not found!",
+    "NavigationDocumentNotFound": "This version does not have a navigation document!"
   }
 }

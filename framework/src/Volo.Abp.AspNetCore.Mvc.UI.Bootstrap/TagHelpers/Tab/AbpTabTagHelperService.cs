@@ -18,7 +18,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
 
             var active = TagHelper.Active ?? false;
 
-            tabHeaderItems.Add(new TabItem(tabHeader, tabContent,active));
+            tabHeaderItems.Add(new TabItem(tabHeader, tabContent, active, TagHelper.Name, TagHelper.ParentDropdownName, false));
 
             output.SuppressOutput();
         }
@@ -30,9 +30,14 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
             var control = TagHelper.Name;
             var title = TagHelper.Title;
 
-            return "<a class=\"nav-item nav-link" + AbpTabItemActivePlaceholder + "\" id=\"" + id + "\" data-toggle=\"" + TabItemsDataTogglePlaceHolder + "\" href=\"#" + link + "\" role=\"tab\" aria-controls=\"" + control + "\" aria-selected=\"" + AbpTabItemSelectedPlaceholder + "\">" +
+            if (!string.IsNullOrWhiteSpace(TagHelper.ParentDropdownName))
+            {
+                return "<a class=\"dropdown-item\" id=\"" + id + "\" href=\"#" + link + "\" data-toggle=\"tab\"  role=\"tab\" aria-controls=\"" + control + "\" aria-selected=\"false\">" + title + "</a>";
+            }
+
+            return "<li class=\"nav-item\"><a class=\"nav-link" + AbpTabItemActivePlaceholder + "\" id=\"" + id + "\" data-toggle=\"" + TabItemsDataTogglePlaceHolder + "\" href=\"#" + link + "\" role=\"tab\" aria-controls=\"" + control + "\" aria-selected=\"" + AbpTabItemSelectedPlaceholder + "\">" +
                    title +
-                   "</a>";
+                   "</a></li>";
         }
 
         protected virtual string GetTabContentItem(string content)

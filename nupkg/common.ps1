@@ -15,7 +15,8 @@ $solutions = (
     "modules/audit-logging",
     "modules/background-jobs",
     "modules/blogging",
-    "modules/docs"
+    "modules/docs",
+    "abp_io"
 )
 
 # List of projects
@@ -54,8 +55,8 @@ $projects = (
     "framework/src/Volo.Abp.EntityFrameworkCore",
     "framework/src/Volo.Abp.EntityFrameworkCore.SqlServer",
     "framework/src/Volo.Abp.EntityFrameworkCore.MySQL",
+    "framework/src/Volo.Abp.EntityFrameworkCore.PostgreSql",
     "framework/src/Volo.Abp.EventBus",
-    "framework/src/Volo.Abp.EventBus.Distributed",
     "framework/src/Volo.Abp.EventBus.Distributed.RabbitMQ",
     "framework/src/Volo.Abp.Guids",
     "framework/src/Volo.Abp.HangFire",
@@ -64,6 +65,7 @@ $projects = (
     "framework/src/Volo.Abp.Http.Client",    
     "framework/src/Volo.Abp.Json",
     "framework/src/Volo.Abp.Localization",
+    "framework/src/Volo.Abp.Localization.Abstractions",
     "framework/src/Volo.Abp.MemoryDb",
     "framework/src/Volo.Abp.MongoDB",
     "framework/src/Volo.Abp.MultiTenancy.Abstractions",
@@ -94,6 +96,7 @@ $projects = (
     "modules/setting-management/src/Volo.Abp.SettingManagement.Domain",
     "modules/setting-management/src/Volo.Abp.SettingManagement.EntityFrameworkCore",
     "modules/setting-management/src/Volo.Abp.SettingManagement.MongoDB",
+    "modules/setting-management/src/Volo.Abp.SettingManagement.Web",
 
     # modules/permission-management
     "modules/permission-management/src/Volo.Abp.PermissionManagement.Domain.Shared",
@@ -127,9 +130,10 @@ $projects = (
     "modules/identity/src/Volo.Abp.Identity.Web", 
     
     # modules/identityserver
-    "modules/identityserver/src/Volo.Abp.IdentityServer.Domain",
     "modules/identityserver/src/Volo.Abp.IdentityServer.Domain.Shared",
+    "modules/identityserver/src/Volo.Abp.IdentityServer.Domain",
     "modules/identityserver/src/Volo.Abp.IdentityServer.EntityFrameworkCore", 
+    "modules/identityserver/src/Volo.Abp.IdentityServer.MongoDB",
 
     # modules/account
     "modules/account/src/Volo.Abp.Account.Web",
@@ -164,5 +168,8 @@ $projects = (
     "modules/background-jobs/src/Volo.Abp.BackgroundJobs.Domain.Shared",
     "modules/background-jobs/src/Volo.Abp.BackgroundJobs.Domain",
     "modules/background-jobs/src/Volo.Abp.BackgroundJobs.EntityFrameworkCore",
-    "modules/background-jobs/src/Volo.Abp.BackgroundJobs.MongoDB"
+    "modules/background-jobs/src/Volo.Abp.BackgroundJobs.MongoDB",
+    
+    # abp_io/SolutionTemplating
+    "abp_io/src/Volo.Utils.SolutionTemplating"
 )

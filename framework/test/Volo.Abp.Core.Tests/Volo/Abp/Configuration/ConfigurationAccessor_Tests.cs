@@ -30,7 +30,7 @@ namespace Volo.Abp.Configuration
             using (var application = AbpApplicationFactory.Create<IndependentEmptyModule>())
             {
                 var myConfiguration = new ConfigurationBuilder().Build();
-                application.Services.AddConfiguration(myConfiguration);
+                application.Services.SetConfiguration(myConfiguration);
                 application.Services.GetConfiguration().ShouldBe(myConfiguration);
 
                 application.Initialize();

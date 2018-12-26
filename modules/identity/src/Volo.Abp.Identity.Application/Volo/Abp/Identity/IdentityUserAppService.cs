@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Authentication;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -71,6 +72,7 @@ namespace Volo.Abp.Identity
         public async Task<IdentityUserDto> UpdateAsync(Guid id, IdentityUserUpdateDto input)
         {
             var user = await _userManager.GetByIdAsync(id);
+            user.ConcurrencyStamp = input.ConcurrencyStamp;
 
             (await _userManager.SetUserNameAsync(user, input.UserName)).CheckErrors();
             await UpdateUserByInput(user, input);
@@ -148,6 +150,9 @@ namespace Volo.Abp.Identity
             (await _userManager.SetPhoneNumberAsync(user, input.PhoneNumber)).CheckErrors();
             (await _userManager.SetTwoFactorEnabledAsync(user, input.TwoFactorEnabled)).CheckErrors();
             (await _userManager.SetLockoutEnabledAsync(user, input.LockoutEnabled)).CheckErrors();
+
+            user.Name = input.Name;
+            user.Surname = input.Surname;
 
             if (input.RoleNames != null)
             {

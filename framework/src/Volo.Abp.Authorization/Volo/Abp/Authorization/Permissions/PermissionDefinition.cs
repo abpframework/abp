@@ -28,6 +28,9 @@ namespace Volo.Abp.Authorization.Permissions
         public IReadOnlyList<PermissionDefinition> Children => _children.ToImmutableList();
         private readonly List<PermissionDefinition> _children;
 
+        /// <summary>
+        /// Can be used to get/set custom properties for this permission definition.
+        /// </summary>
         public Dictionary<string, object> Properties { get; }
 
         /// <summary>

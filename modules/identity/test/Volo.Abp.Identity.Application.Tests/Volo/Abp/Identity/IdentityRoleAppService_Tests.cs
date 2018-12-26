@@ -78,7 +78,10 @@ namespace Volo.Abp.Identity
 
             var input = new IdentityRoleUpdateDto
             {
-                Name = Guid.NewGuid().ToString("N").Left(8)
+                Name = Guid.NewGuid().ToString("N").Left(8),
+                ConcurrencyStamp = moderator.ConcurrencyStamp,
+                IsDefault = moderator.IsDefault,
+                IsPublic = moderator.IsPublic
             };
 
             //Act

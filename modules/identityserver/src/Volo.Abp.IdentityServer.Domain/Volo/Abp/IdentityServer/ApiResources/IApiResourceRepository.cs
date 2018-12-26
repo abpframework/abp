@@ -21,8 +21,18 @@ namespace Volo.Abp.IdentityServer.ApiResources
         );
 
         Task<List<ApiResource>> GetListAsync(
+            string sorting,
+            int skipCount,
+            int maxResultCount,
             bool includeDetails = false,
             CancellationToken cancellationToken = default
         );
+
+        Task<List<ApiResource>> GetListAsync(
+            bool includeDetails = false,
+            CancellationToken cancellationToken = default
+        );
+
+        Task<long> GetTotalCount();
     }
 }

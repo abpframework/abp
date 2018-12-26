@@ -23,12 +23,12 @@
             };
 
             var filterDocumentItems = function (filterText) {
-
                 $navigation.find(".mCSB_container .opened").removeClass("opened");
                 $navigation.find(".mCSB_container > li, .mCSB_container > li ul").hide();
 
                 if (!filterText) {
                     $navigation.find(".mCSB_container > li").show();
+                    $navigation.find(".mCSB_container .selected-tree > ul").show();
                     return;
                 }
 
@@ -83,3 +83,4 @@
     });
 
 })(jQuery);
+

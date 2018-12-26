@@ -32,7 +32,7 @@ namespace Volo.Blogging.Blogs
             return auditLogs;
         }
 
-        public async Task<int> GetTotalBlogCount()
+        public async Task<int> GetTotalCount()
         {
             return await DbSet.CountAsync();
         }

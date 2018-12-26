@@ -73,7 +73,7 @@
 #docsContainer main.bd-content .img-thumbnail {
   padding: 0;
   border: 1px solid #dee2e6;
-  border-radius: .25rem;
+  border-radius: 0.25rem;
 }
 #docsContainer main.bd-content img {
   max-width: 100%;
@@ -85,7 +85,7 @@
   background-position: center;
   -ms-background-position: center;
   border: 1px solid #dee2e6;
-  border-radius: .25rem;
+  border-radius: 0.25rem;
   opacity: 0.4;
   -webkit-transition: opacity 0.4s ease-in;
   -moz-transition: opacity 0.4s ease-in;
@@ -150,7 +150,7 @@
 #docsContainer nav.bd-links ul li a {
   word-wrap: break-word;
   display: block;
-  padding: .20rem 0.1rem .20rem 1.0rem;
+  padding: 0.2rem 0.1rem 0.2rem 1rem;
   font-size: 90%;
   color: #28c;
 }

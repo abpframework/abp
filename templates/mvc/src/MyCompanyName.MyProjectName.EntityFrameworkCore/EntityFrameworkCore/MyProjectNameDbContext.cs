@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
+using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
@@ -8,6 +9,7 @@ using Volo.Abp.SettingManagement.EntityFrameworkCore;
 
 namespace MyCompanyName.MyProjectName.EntityFrameworkCore
 {
+    [ConnectionStringName("Default")]
     public class MyProjectNameDbContext : AbpDbContext<MyProjectNameDbContext>
     {
         public MyProjectNameDbContext(DbContextOptions<MyProjectNameDbContext> options)

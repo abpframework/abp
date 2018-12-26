@@ -10,7 +10,7 @@ using Volo.Abp.MultiTenancy;
 namespace Volo.Abp.AuditLogging
 {
     [DisableAuditing]
-    public class AuditLog : AggregateRoot<Guid>, IHasExtraProperties, IMultiTenant
+    public class AuditLog : AggregateRoot<Guid>, IMultiTenant
     {
         public virtual Guid? UserId { get; protected set; }
 
@@ -41,8 +41,6 @@ namespace Volo.Abp.AuditLogging
         public virtual string Comments { get; protected set; }
 
         public virtual int? HttpStatusCode { get; set; }
-
-        public virtual Dictionary<string, object> ExtraProperties { get; protected set; }
 
         public virtual ICollection<EntityChange> EntityChanges { get; protected set; }
 

@@ -16,12 +16,12 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.Configure<VirtualFileSystemOptions>(options =>
+            Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpAspNetCoreMvcUiThemeSharedModule>("Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared");
             });
 
-            context.Services.Configure<BundlingOptions>(options =>
+            Configure<BundlingOptions>(options =>
             {
                 options
                     .StyleBundles

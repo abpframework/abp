@@ -10,15 +10,15 @@ namespace Microsoft.Extensions.DependencyInjection
             return services.GetSingletonInstance<IHostingEnvironment>();
         }
 
-        public static IConfigurationRoot BuildConfiguration(this IServiceCollection services, string fileName = "appsettings")
+        public static IConfigurationRoot BuildConfiguration(this IServiceCollection services, AbpAspNetCoreConfigurationOptions options = null)
         {
-            return services.GetHostingEnvironment().BuildConfiguration(fileName);
+            return services.GetHostingEnvironment().BuildConfiguration(options);
         }
 
-        public static IConfigurationRoot AddConfiguration(this IServiceCollection services, string fileName = "appsettings")
+        public static IConfigurationRoot AddConfiguration(this IServiceCollection services, AbpAspNetCoreConfigurationOptions options = null)
         {
-            var configuration = services.BuildConfiguration(fileName);
-            services.AddConfiguration(configuration);
+            var configuration = services.BuildConfiguration(options);
+            services.SetConfiguration(configuration);
             return configuration;
         }
     }

@@ -12,7 +12,7 @@ namespace Volo.Abp.EntityFrameworkCore
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.Configure<AbpDbContextOptions>(options =>
+            Configure<AbpDbContextOptions>(options =>
             {
                 options.PreConfigure(abpDbContextConfigurationContext =>
                 {

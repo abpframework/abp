@@ -18,7 +18,7 @@ namespace Volo.Abp.SettingManagement.EntityFrameworkCore
         {
             var sqliteConnection = CreateDatabaseAndGetConnection();
 
-            context.Services.Configure<AbpDbContextOptions>(options =>
+            Configure<AbpDbContextOptions>(options =>
             {
                 options.Configure(abpDbContextConfigurationContext =>
                 {

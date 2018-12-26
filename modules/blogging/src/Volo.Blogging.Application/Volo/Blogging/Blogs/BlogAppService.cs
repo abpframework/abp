@@ -22,7 +22,7 @@ namespace Volo.Blogging.Blogs
         {
             var blogs = await _blogRepository.GetListAsync(input.Sorting, input.MaxResultCount, input.SkipCount );
 
-            var totalCount = await _blogRepository.GetTotalBlogCount();
+            var totalCount = await _blogRepository.GetTotalCount();
 
             var dtos = ObjectMapper.Map<List<Blog>, List<BlogDto>>(blogs);
 

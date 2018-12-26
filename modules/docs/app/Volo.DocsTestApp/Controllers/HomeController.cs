@@ -5,9 +5,9 @@ namespace Volo.DocsTestApp.Controllers
 {
     public class HomeController : AbpController
     {
-        public ActionResult Index()
+        public void Index()
         {
-            return Redirect("/Documents/");
+
         }
     }
 }

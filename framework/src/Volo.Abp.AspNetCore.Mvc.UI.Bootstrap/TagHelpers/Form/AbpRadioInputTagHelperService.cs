@@ -6,11 +6,23 @@ using System.Text;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Options;
+using Volo.Abp.AspNetCore.Mvc.Localization;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 {
     public class AbpRadioInputTagHelperService : AbpTagHelperService<AbpRadioInputTagHelper>
     {
+        private readonly AbpMvcDataAnnotationsLocalizationOptions _options;
+        private readonly IStringLocalizerFactory _stringLocalizerFactory;
+
+        public AbpRadioInputTagHelperService(IOptions<AbpMvcDataAnnotationsLocalizationOptions> options, IStringLocalizerFactory stringLocalizerFactory)
+        {
+            _options = options.Value;
+            _stringLocalizerFactory = stringLocalizerFactory;
+        }
+
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             var selectItems = GetSelectItems(context,output);
@@ -18,7 +30,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             var order = GetInputOrder(TagHelper.AspFor.ModelExplorer);
 
             var html = GetHtml(context, output, selectItems);
-
 
             AddGroupToFormGroupContents(context, TagHelper.AspFor.Name, html, order, out var surpress);
 
@@ -76,10 +87,30 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         protected virtual bool GetSelectItemsIfProvidedByEnum(TagHelperContext context, TagHelperOutput output, ModelExplorer explorer, out List<SelectListItem> selectItems)
         {
+            IStringLocalizer localizer = null;
+            var resourceType = _options.AssemblyResources.GetOrDefault(explorer.ModelType.Assembly);
+
+            if (resourceType != null)
+            {
+                localizer = _stringLocalizerFactory.Create(resourceType);
+            }
+
             selectItems = explorer.Metadata.IsEnum ? explorer.ModelType.GetTypeInfo().GetMembers(BindingFlags.Public | BindingFlags.Static)
-                .Select((t, i) => new SelectListItem { Value = i.ToString(), Text = t.Name }).ToList() : null;
+                .Select((t, i) => new SelectListItem { Value = i.ToString(), Text = GetLocalizedPropertyName(localizer, explorer.ModelType, t.Name) }).ToList() : null;
 
             return selectItems != null;
+        }
+
+        protected virtual string GetLocalizedPropertyName(IStringLocalizer localizer, Type enumType, string propertyName)
+        {
+            if (localizer == null)
+            {
+                return propertyName;
+            }
+
+            var localizedString = localizer[enumType.Name + "." + propertyName];
+
+            return !localizedString.ResourceNotFound ? localizedString.Value : localizer[propertyName].Value;
         }
 
         protected virtual bool GetSelectItemsIfProvidedFromAttribute(TagHelperContext context, TagHelperOutput output, ModelExplorer explorer, out List<SelectListItem> selectItems)

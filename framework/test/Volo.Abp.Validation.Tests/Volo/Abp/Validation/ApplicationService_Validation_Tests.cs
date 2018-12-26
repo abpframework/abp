@@ -145,6 +145,22 @@ namespace Volo.Abp.Validation
             _myAppService.MyMethodWithNullableEnum(null);
         }
 
+        [Fact]
+        public void Should_Validate_Emails()
+        {
+            //Valid
+            ValidationHandler.IsValidEmailAddress("john.doe@domain.com").ShouldBe(true);
+            ValidationHandler.IsValidEmailAddress("ip@1.2.3.123").ShouldBe(true);
+            ValidationHandler.IsValidEmailAddress("pharaoh@egyptian.museum").ShouldBe(true);
+            ValidationHandler.IsValidEmailAddress("john.doe+regexbuddy@gmail.com").ShouldBe(true);
+            ValidationHandler.IsValidEmailAddress("Mike.O'Dell@ireland.com").ShouldBe(true);
+
+            //Invalid
+            ValidationHandler.IsValidEmailAddress("1024x768@60Hz").ShouldBe(false);
+            ValidationHandler.IsValidEmailAddress("not.a.valid.email").ShouldBe(false);
+            ValidationHandler.IsValidEmailAddress("john@aol...com").ShouldBe(false);
+        }
+
         [DependsOn(typeof(AbpAutofacModule))]
         [DependsOn(typeof(AbpValidationModule))]
         public class TestModule : AbpModule

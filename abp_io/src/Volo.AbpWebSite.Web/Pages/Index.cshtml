@@ -1,0 +1,369 @@
+﻿@page
+@using Volo.AbpWebSite
+@model Volo.AbpWebSite.Pages.IndexModel
+@{
+    Layout = "~/Pages/Shared/HomePageLayout.cshtml";
+    ViewBag.FluidLayout = false;
+}
+
+<div class="jumbotron text-center text-light">
+    <div class="row align-items-center">
+        <div class="col">
+
+            <div class="container">
+                <h1 class="display-1">
+                    <span class="position-relative jlogo-wrapper">
+                        <img src="assets/abp-logo-light.svg" class="jumbotron-logo"> <span class="abp-version">PREVIEW</span>
+                    </span>
+                </h1>
+                <h2 class="display-6"><span class="text-underline text-success">open source</span> web application framework</h2>
+                <p><span class="desc-span">for asp.net core</span></p>
+                <hr class="my-4">
+                <p>
+                    <a class="btn btn-outline-light btn-md" href="/documents" role="button">
+                        Learn how to use
+                    </a>
+                    &nbsp;
+                    <a class="btn btn-success btn-md" href="/Templates" role="button">
+                        Create a new project
+                        <i class="fa fa-long-arrow-right"></i>
+                    </a>
+                </p>
+                <p>
+                    See the <a class="btn-link text-success" href="https://github.com/volosoft/abp/releases">
+                        latest release logs
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="position-relative overflow-hidden text-center bg-white  p-responsive">
+    <div class="container">
+        <div class="col-md-8 mx-auto m-0">
+            <img class="section-icon mb-5" src="img/modular.png" />
+            <h2 class="text-primary">Complete Application Development Infrastructure</h2>
+            <p class="font-weight-normal">ABP provides a full stack development model and infrastructure for modern web applications.</p>
+        </div>
+        <div class="row pb-5">
+            <div class="col-md-4">
+                <div class="p-4">
+                    <img class="subsection-icon mb-3" src="assets/icons/1-modular.png" />
+                    <h3 class="text-primary display-6">Modular Architecture</h3>
+                    <p class="font-weight-normal">Designed as modular and extensible from the bottom to the top.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-4">
+                    <img class="subsection-icon mb-3" src="assets/icons/2-micro.png" />
+                    <h3 class="text-primary display-6">Microservice Focused</h3>
+                    <p class="font-weight-normal">Designed to support microservice architecture and helps to build autonomous microservices.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-4">
+                    <img class="subsection-icon mb-3" src="assets/icons/3-ddd.png" />
+                    <h3 class="text-primary display-6">Domain Driven Design</h3>
+                    <p class="font-weight-normal">Designed and developed based on DDD patterns and principles. Provides a layered model for your application.</p>
+                </div>
+            </div>
+        </div>
+        <div class="row pb-5">
+            <div class="col-md-4">
+                <div class="p-4">
+                    <img class="subsection-icon mb-3" src="assets/icons/4-autho.png" />
+                    <h3 class="text-primary display-6">Authorization</h3>
+                    <p class="font-weight-normal">Advanced authorization with user, role and fine-grained permission system. Built on the Microsoft Identity library.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-4">
+                    <img class="subsection-icon mb-3" src="assets/icons/5-multi-tenancy.png" />
+                    <h3 class="text-primary display-6">Multi-Tenancy</h3>
+                    <p class="font-weight-normal">SaaS applications made easy! Integrated multi-tenancy from database to UI.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-4">
+                    <img class="subsection-icon mb-3" src="assets/icons/cross.png" />
+                    <h3 class="text-primary display-6">Cross Cutting Concerns</h3>
+                    <p class="font-weight-normal">Complete infrastructure for authorization, validation, exception handling, caching, audit logging, transaction management and so on.</p>
+                </div>
+            </div>
+        </div>
+        <div class="toggle-row">
+            <div class="row pb-5">
+                <div class="col-md-4">
+                    <div class="p-4">
+                        <img class="subsection-icon mb-3" src="assets/icons/bundle.png" />
+                        <h3 class="text-primary display-6">Built-In Bundling & Minification</h3>
+                        <p class="font-weight-normal">Stop to use external tools for bundling & minification. ABP offers a simpler, dynamic, powerful, modular and built-in way!</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="p-4">
+                        <img class="subsection-icon mb-3" src="assets/icons/virtualfile.png" />
+                        <h3 class="text-primary display-6">Virtual File System</h3>
+                        <p class="font-weight-normal">Embed views, scripts, styles, images... into packages/libraries and reuse in different applications.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="p-4">
+                        <img class="subsection-icon mb-3" src="assets/icons/theming.png" />
+                        <h3 class="text-primary display-6">Theming</h3>
+                        <p class="font-weight-normal">Use and customize the bootstrap-based standard UI theme or create your own one.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row pb-5">
+                <div class="col-md-4">
+                    <div class="p-4">
+                        <img class="subsection-icon mb-3" src="assets/icons/bg-job.png" />
+                        <h3 class="text-primary display-6">Background Jobs</h3>
+                        <p class="font-weight-normal">Built-in background job system that can be integrated to Hangfire, RabbitMQ or any tool you like.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="p-4">
+                        <img class="subsection-icon mb-3" src="assets/icons/custom.png" />
+                        <h3 class="text-primary display-6">Testable & Customizable</h3>
+                        <p class="font-weight-normal">Helps to build testable applications. Easy to replace/override built-in services.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="p-4">
+                        <img class="subsection-icon mb-3" src="assets/icons/request.png" />
+                        <h3 class="text-primary display-6"> HTTP APIs & Dynamic Proxies</h3>
+                        <p class="font-weight-normal">Automatically expose application services as REST style HTTP APIs and consume with dynamic JavaScript & C# proxies.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4 mx-auto">
+                <div class="p-4">
+                    <a href="javascript:;" class="btn btn-outline-primary btn-toggle">
+                        <span class="moreText">See More Features</span>
+                        <span class="lessText">See Less Features</span>
+
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="position-relative  overflow-hidden text-center bg-primary text-light p-responsive">
+    <div class="container">
+        <div class="col-md-10 mx-auto">
+            <img class="section-icon mb-5" src="img/multi-tenancy.png" />
+            <div class="row">
+                <div class="col-md-6 mb-5">
+                    <img src="img/mt-left.png" />
+                </div>
+                <div class="col-md-6 text-left multi-tenancy">
+                    <h2 class="text-success mt-3">Multi-Tenancy</h2>
+                    <p class="font-weight-normal">
+                        ABP framework not only supports to develop multi-tenant applications, but also makes your code mostly unaware of the multi-tenancy.
+                    </p>
+                    <p class="font-weight-normal">
+                        Can automatically determine the current tenant, isolate data of different tenants from each other.
+                    </p>
+                    <p class="font-weight-normal">
+                        Supports single database, database per tenant and hybrid approaches.
+                    </p>
+                    <p class="font-weight-normal">
+                        You focus on your business code and let the framework to handle multi-tenancy on behalf of you.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="position-relative overflow-hidden text-center bg-success text-light p-responsive">
+    <div class="container">
+        <div class="col-md-7 mx-auto">
+            <img class="section-icon mb-5" src="img/bootstrap.png" />
+            <h2 class="text-light">Bootstrap Tag Helpers</h2>
+            <p class="font-weight-normal text-light">
+                Instead of manually writing the repeating details of bootstrap components,
+                use ABP's tag helpers to simplify it and take advantage of intellisense.
+            </p>
+        </div>
+        <div class="row justify-content-md-center">
+            <div class="col-lg">
+                <div class="code-block">
+                    <pre class="line-numbers"> 
+                    <code class="language-html">
+                    &lt;abp-card&gt;
+                        &lt;img abp-card-image="Top" src="~/images/my-dog.png" /&gt;
+                        &lt;abp-card-body&gt;
+                            &lt;abp-card-title&gt;Card title&lt;/abp-card-title&gt;
+                            &lt;abp-card-text&gt;
+                                &lt;p&gt;
+                                    This is a sample card component built by ABP bootstrap
+                                    card tag helper. ABP has tag helper wrappers for most of 
+                                    the bootstrap components.
+                                &lt;/p&gt;
+                            &lt;/abp-card-text&gt;
+                            &lt;a abp-button="Primary" href="#"&gt;Go somewhere &amp;rarr;&lt;/a&gt;
+                        &lt;/abp-card-body&gt;
+                    &lt;/abp-card&gt;
+                        </code>
+                    </pre>
+                </div>
+            </div>
+            <div class="col-lg-1">
+                <span class="code-arrow">
+                    <i class="fa fa-long-arrow-right"></i>
+                </span>
+            </div>
+            <div class="col-lg text-dark">
+                <div class="abp-browser">
+                    <div class="browser-container">
+                        <div class="browser-row">
+                            <div class="browser-column">
+                                <span class="browser-dot" style="background:#ED594A;"></span>
+                                <span class="browser-dot" style="background:#FDD800;"></span>
+                                <span class="browser-dot" style="background:#5AC05A;"></span>
+                            </div>
+                        </div>
+
+                        <div class="browser-content">
+                            <abp-card>
+                                <img abp-card-image="Top" src="assets/my-image.png" />
+                                <abp-card-body>
+                                    <abp-card-title>Card title</abp-card-title>
+                                    <abp-card-text>
+                                        <p>
+                                            This is a sample card component built by ABP bootstrap card tag helper.
+                                            ABP has tag helper wrappers for most of the bootstrap components.
+                                        </p>
+                                    </abp-card-text>
+                                    <a abp-button="Primary" href="#">Go somewhere &rarr;</a>
+                                </abp-card-body>
+                            </abp-card>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="position-relative overflow-hidden text-center bg-white  p-responsive">
+    <div class="container">
+        <div class="col-md-7  mx-auto">
+            <img class="section-icon mb-5" src="assets/dynamic.png" />
+            <h2 class="text-primary">Dynamic Forms</h2>
+            <p class="font-weight-normal">
+                Dynamic form & input tag helpers can create the complete form from a C# class as the model.
+            </p>
+        </div>
+
+        <div class="row justify-content-md-center">
+            <div class="col-lg">
+                <div class="code-block">
+                    <pre class="line-numbers" data-line=""> 
+                    <code class="language-xml">
+&lt;abp-dynamic-form abp-model="@@Model.PersonInput" submit-button="true" /&gt;
+                        </code>
+                    </pre>
+                </div>
+                <div class="code-block">
+                    <pre class="line-numbers" data-line=""> 
+                    <code class="language-csharp">
+public class PersonModel
+{
+    [HiddenInput]
+    public Guid Id { get; set; }
+
+    [Required]
+    [EmailAddress]
+    [StringLength(255)]
+    public string Email { get; set; }
+
+    [Required]
+    [StringLength(32)]
+    [DataType(DataType.Password)]
+    public string Password { get; set; }
+
+    [StringLength(255)]
+    public string Address { get; set; }
+
+    public Gender Gender { get; set; }
+}
+                        </code>
+                    </pre>
+                </div>
+            </div>
+            <div class="col-lg-1">
+                <span class="code-arrow">
+                    <i class="fa fa-long-arrow-right"></i>
+                </span>
+            </div>
+            <div class="col-lg">
+                <div class="abp-browser">
+                    <div class="browser-container">
+                        <div class="browser-row">
+                            <div class="browser-column">
+                                <span class="browser-dot" style="background:#ED594A;"></span>
+                                <span class="browser-dot" style="background:#FDD800;"></span>
+                                <span class="browser-dot" style="background:#5AC05A;"></span>
+                            </div>
+                        </div>
+                        <div class="browser-content">
+                            <abp-dynamic-form abp-model="@Model.PersonInput" submit-button="true" asp-page="/Index" asp-page-handler="DynamicForm" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="position-relative overflow-hidden text-center bg-light  p-responsive">
+
+    <div class="container">
+        <div class="col-md-7 mx-auto">
+            <img class="section-icon mb-5" src="assets/multiple-db.png" />
+            <h2 class="text-primary">Multiple Database Provider Support</h2>
+            <p class="font-weight-normal">
+                The core framework is ORM/database indepdendent and can work with any data source.
+                Entity Framework Core and MongoDB providers are currently available.
+            </p>
+        </div>
+        <div class="section-with-logos">
+            <img src="assets/tools/17.png" />
+            <img src="assets/tools/18.png" />
+        </div>
+    </div>
+</div>
+<div class="position-relative overflow-hidden text-center   bg-transparency  p-responsive">
+    <div class="container">
+        <div class="col-md-7 mx-auto">
+            <img class="section-icon mb-5" src="assets/familiar.png" />
+            <h2 class="text-primary">Familiar Tools</h2>
+            <p class="font-weight-normal">Built on and integrated to popular tools you already know.</p>
+        </div>
+        <div class="section-with-logos">
+            <img src="assets/tools/1.png" />
+            <img src="assets/tools/2.png" />
+            <img src="assets/tools/17.png" />
+            <img src="assets/tools/7.png" />
+            <img src="assets/tools/6.png" />
+            <img src="assets/tools/8.png" />
+            <img src="assets/tools/9.png" />
+            <img src="assets/tools/10.png" />
+            <img src="assets/tools/sass.png" />
+            <img src="assets/tools/13.png" />
+            <img src="assets/tools/15.png" />
+            <img src="assets/tools/16.png" />
+            <img src="assets/tools/18.png" />
+            <img src="assets/tools/rabbitmq.png" />
+        </div>
+    </div>
+</div>
+

@@ -10,7 +10,7 @@
 }
 @section styles {
     <abp-style-bundle name="@typeof(IndexModel).FullName">
-        <abp-style src="/Pages/Documents/vs.css" />
+        <abp-style src="/Pages/Documents/Shared/Styles/vs.css" />
         <abp-style src="/assets/fa/css/font-awesome.min.css" />
     </abp-style-bundle>
 }
@@ -33,7 +33,7 @@
                         <h3>
                             <a asp-page="./Project/Index"
                                asp-route-projectName="@project.ShortName"
-                               asp-route-version="@DocsAppConsts.DefaultVersion.Version">
+                               asp-route-version="@DocsAppConsts.Latest">
                                 @project.Name
                             </a>
                         </h3>

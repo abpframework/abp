@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.IdentityServer.EntityFrameworkCore;
+using System.Linq.Dynamic.Core;
 
 namespace Volo.Abp.IdentityServer.ApiResources
 {
@@ -41,7 +42,16 @@ namespace Volo.Abp.IdentityServer.ApiResources
 
             return await query.ToListAsync(GetCancellationToken(cancellationToken));
         }
-        
+
+        public virtual async Task<List<ApiResource>> GetListAsync(string sorting, int skipCount, int maxResultCount, bool includeDetails = false,
+            CancellationToken cancellationToken = default)
+        {
+            return await DbSet
+                .IncludeDetails(includeDetails).OrderBy(sorting ?? "name desc")
+                .PageBy(skipCount, maxResultCount)
+                .ToListAsync(GetCancellationToken(cancellationToken));
+        }
+
         public virtual async Task<List<ApiResource>> GetListAsync(
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
@@ -49,6 +59,56 @@ namespace Volo.Abp.IdentityServer.ApiResources
             return await DbSet
                 .IncludeDetails(includeDetails)
                 .ToListAsync(GetCancellationToken(cancellationToken));
+        }
+
+        public virtual async Task<long> GetTotalCount()
+        {
+            return await DbSet.CountAsync();
+        }
+
+        public override async Task<ApiResource> UpdateAsync(ApiResource entity, bool autoSave = false, CancellationToken cancellationToken = default)
+        {
+            var scopeClaims = DbContext.Set<ApiScopeClaim>().Where(sc => sc.ApiResourceId == entity.Id);
+
+            foreach (var scopeClaim in scopeClaims)
+            {
+                DbContext.Set<ApiScopeClaim>().Remove(scopeClaim);
+            }
+
+            var scopes = DbContext.Set<ApiScope>().Where(s => s.ApiResourceId == entity.Id);
+
+            foreach (var scope in scopes)
+            {
+                DbContext.Set<ApiScope>().Remove(scope);
+            }
+
+            var secrets = DbContext.Set<ApiSecret>().Where(s => s.ApiResourceId == entity.Id);
+
+            foreach (var secret in secrets)
+            {
+                DbContext.Set<ApiSecret>().Remove(secret);
+            }
+
+            return await base.UpdateAsync(entity, autoSave, cancellationToken);
+        }
+
+        public override async Task DeleteAsync(Guid id, bool autoSave = false, CancellationToken cancellationToken = default)
+        {
+            var scopeClaims = DbContext.Set<ApiScopeClaim>().Where(sc => sc.ApiResourceId == id);
+
+            foreach (var scopeClaim in scopeClaims)
+            {
+                DbContext.Set<ApiScopeClaim>().Remove(scopeClaim);
+            }
+
+            var scopes = DbContext.Set<ApiScope>().Where(s => s.ApiResourceId == id);
+
+            foreach (var scope in scopes)
+            {
+                DbContext.Set<ApiScope>().Remove(scope);
+            }
+
+            await base.DeleteAsync(id, autoSave, cancellationToken);
         }
 
         public override IQueryable<ApiResource> WithDetails()

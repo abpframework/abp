@@ -11,17 +11,18 @@ namespace Volo.Abp.Settings
     public class SettingManager : ISettingManager, ISingletonDependency
     {
         protected ISettingDefinitionManager SettingDefinitionManager { get; }
-
+        protected ISettingEncryptionService SettingEncryptionService { get; }
         protected Lazy<List<ISettingValueProvider>> Providers { get; }
-
         protected SettingOptions Options { get; }
 
         public SettingManager(
             IOptions<SettingOptions> options,
             IServiceProvider serviceProvider,
-            ISettingDefinitionManager settingDefinitionManager)
+            ISettingDefinitionManager settingDefinitionManager,
+            ISettingEncryptionService settingEncryptionService)
         {
             SettingDefinitionManager = settingDefinitionManager;
+            SettingEncryptionService = settingEncryptionService;
             Options = options.Value;
 
             Providers = new Lazy<List<ISettingValueProvider>>(
@@ -48,34 +49,6 @@ namespace Volo.Abp.Settings
             return GetOrNullInternalAsync(name, providerName, providerKey, fallback);
         }
 
-        public virtual async Task<string> GetOrNullInternalAsync(string name, string providerName, string providerKey, bool fallback = true)
-        {
-            var setting = SettingDefinitionManager.Get(name);
-            var providers = Enumerable
-                .Reverse(Providers.Value);
-
-            if (providerName != null)
-            {
-                providers = providers.SkipWhile(c => c.Name != providerName);
-            }
-
-            if (!fallback || !setting.IsInherited)
-            {
-                providers = providers.TakeWhile(c => c.Name == providerName);
-            }
-
-            foreach (var provider in providers)
-            {
-                var value = await provider.GetOrNullAsync(setting, providerKey);
-                if (value != null)
-                {
-                    return value;
-                }
-            }
-
-            return null;
-        }
-
         public virtual async Task<List<SettingValue>> GetAllAsync()
         {
             var settingValues = new Dictionary<string, SettingValue>();
@@ -88,6 +61,11 @@ namespace Volo.Abp.Settings
                     var value = await provider.GetOrNullAsync(setting, null);
                     if (value != null)
                     {
+                        if (setting.IsEncrypted)
+                        {
+                            value = SettingEncryptionService.Decrypt(setting, value);
+                        }
+
                         settingValues[setting.Name] = new SettingValue(setting.Name, value);
                     }
                 }
@@ -100,7 +78,6 @@ namespace Volo.Abp.Settings
         {
             Check.NotNull(providerName, nameof(providerName));
 
-            var settingValues = new Dictionary<string, SettingValue>();
             var settingDefinitions = SettingDefinitionManager.GetAll();
             var providers = Enumerable.Reverse(Providers.Value)
                 .SkipWhile(c => c.Name != providerName);
@@ -112,29 +89,39 @@ namespace Volo.Abp.Settings
 
             var providerList = providers.Reverse().ToList();
 
-            if (providerList.Any())
+            if (!providerList.Any())
             {
-                foreach (var setting in settingDefinitions)
+                return new List<SettingValue>();
+            }
+
+            var settingValues = new Dictionary<string, SettingValue>();
+
+            foreach (var setting in settingDefinitions)
+            {
+                string value = null;
+
+                if (setting.IsInherited)
                 {
-                    if (setting.IsInherited)
+                    foreach (var provider in providerList)
                     {
-                        foreach (var provider in providerList)
+                        var providerValue = await provider.GetOrNullAsync(setting, providerKey);
+                        if (providerValue != null)
                         {
-                            var value = await provider.GetOrNullAsync(setting, providerKey);
-                            if (value != null)
-                            {
-                                settingValues[setting.Name] = new SettingValue(setting.Name, value);
-                            }
+                            value = providerValue;
                         }
                     }
-                    else
-                    {
-                        settingValues[setting.Name] = new SettingValue(
-                            setting.Name,
-                            await providerList[0].GetOrNullAsync(setting, providerKey)
-                        );
-                    }
                 }
+                else
+                {
+                    value = await providerList[0].GetOrNullAsync(setting, providerKey);
+                }
+
+                if (setting.IsEncrypted)
+                {
+                    value = SettingEncryptionService.Decrypt(setting, value);
+                }
+
+                settingValues[setting.Name] = new SettingValue(setting.Name, value);
             }
 
             return settingValues.Values.ToList();
@@ -155,6 +142,11 @@ namespace Volo.Abp.Settings
             if (!providers.Any())
             {
                 return;
+            }
+
+            if (setting.IsEncrypted)
+            {
+                value = SettingEncryptionService.Encrypt(setting, value);
             }
 
             if (providers.Count > 1 && !forceToSet && setting.IsInherited && value != null)
@@ -185,6 +177,48 @@ namespace Volo.Abp.Settings
                     await provider.SetAsync(setting, value, providerKey);
                 }
             }
+        }
+
+        protected virtual async Task<string> GetOrNullInternalAsync(string name, string providerName, string providerKey, bool fallback = true)
+        {
+            var setting = SettingDefinitionManager.Get(name);
+            var providers = Enumerable
+                .Reverse(Providers.Value);
+
+            if (providerName != null)
+            {
+                providers = providers.SkipWhile(c => c.Name != providerName);
+            }
+
+            if (!fallback || !setting.IsInherited)
+            {
+                providers = providers.TakeWhile(c => c.Name == providerName);
+            }
+
+            var value = await GetOrNullValueFromProvidersAsync(providerKey, providers, setting);
+            if (setting.IsEncrypted)
+            {
+                value = SettingEncryptionService.Decrypt(setting, value);
+            }
+
+            return value;
+        }
+
+        protected virtual async Task<string> GetOrNullValueFromProvidersAsync(
+            string providerKey, 
+            IEnumerable<ISettingValueProvider> providers, 
+            SettingDefinition setting)
+        {
+            foreach (var provider in providers)
+            {
+                var value = await provider.GetOrNullAsync(setting, providerKey);
+                if (value != null)
+                {
+                    return value;
+                }
+            }
+
+            return null;
         }
     }
 }

@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
 using Volo.Abp.Application.Services;
@@ -11,88 +10,108 @@ namespace Volo.Docs.Documents
     public class DocumentAppService : ApplicationService, IDocumentAppService
     {
         private readonly IProjectRepository _projectRepository;
-        private readonly IDistributedCache<List<string>> _distributedCache;
         private readonly IDocumentStoreFactory _documentStoreFactory;
+        protected IDistributedCache<DocumentWithDetailsDto> DocumentCache { get; }
+        protected IDistributedCache<DocumentResourceDto> ResourceCache { get; }
 
         public DocumentAppService(
             IProjectRepository projectRepository,
-            IDistributedCache<List<string>> distributedCache,
-            IDocumentStoreFactory documentStoreFactory)
+            IDocumentStoreFactory documentStoreFactory, 
+            IDistributedCache<DocumentWithDetailsDto> documentCache, 
+            IDistributedCache<DocumentResourceDto> resourceCache)
         {
             _projectRepository = projectRepository;
-            _distributedCache = distributedCache;
             _documentStoreFactory = documentStoreFactory;
+            DocumentCache = documentCache;
+            ResourceCache = resourceCache;
         }
 
-        public async Task<DocumentWithDetailsDto> GetByNameAsync(string projectShortName, string documentName, string version, bool normalize)
+        public virtual async Task<DocumentWithDetailsDto> GetAsync(GetDocumentInput input)
         {
-            var project = await _projectRepository.FindByShortNameAsync(projectShortName);
+            var project = await _projectRepository.GetAsync(input.ProjectId);
 
-            return await GetDocument(ObjectMapper.Map<Project, ProjectDto>(project), documentName, version, normalize);
+            return await GetDocumentWithDetailsDto(
+                project,
+                input.Name,
+                input.Version
+            );
         }
 
-        public async Task<NavigationWithDetailsDto> GetNavigationDocumentAsync(string projectShortName, string version, bool normalize)
+        public virtual async Task<DocumentWithDetailsDto> GetDefaultAsync(GetDefaultDocumentInput input)
         {
-            var project = await _projectRepository.FindByShortNameAsync(projectShortName);
+            var project = await _projectRepository.GetAsync(input.ProjectId);
 
-            return ObjectMapper.Map<DocumentWithDetailsDto, NavigationWithDetailsDto>(
-                await GetDocument(ObjectMapper.Map<Project, ProjectDto>(project), project.NavigationDocumentName,
-                    version, normalize));
+            return await GetDocumentWithDetailsDto(
+                project,
+                project.DefaultDocumentName,
+                input.Version
+            );
         }
 
-        public async Task<DocumentWithDetailsDto> GetDocument(ProjectDto project, string documentName, string version, bool normalize)
+        public virtual async Task<DocumentWithDetailsDto> GetNavigationAsync(GetNavigationDocumentInput input)
         {
-            if (project == null)
-            {
-                throw new ArgumentNullException(nameof(project));
-            }
+            var project = await _projectRepository.GetAsync(input.ProjectId);
 
-            if (string.IsNullOrWhiteSpace(documentName))
-            {
-                documentName = project.DefaultDocumentName;
-            }
-
-            IDocumentStore documentStore = _documentStoreFactory.Create(project.DocumentStoreType);
-
-            Document document = await documentStore.FindDocumentByNameAsync(project.ExtraProperties, project.Format, documentName, version);
-
-            var dto = ObjectMapper.Map<Document, DocumentWithDetailsDto>(document);
-
-            dto.Project = project;
-
-            return dto;
+            return await GetDocumentWithDetailsDto(
+                project,
+                project.NavigationDocumentName,
+                input.Version
+            );
         }
 
-        public async Task<List<string>> GetVersions(string projectShortName, string defaultDocumentName, Dictionary<string, object> projectExtraProperties,
-            string documentStoreType, string documentName)
+        public async Task<DocumentResourceDto> GetResourceAsync(GetDocumentResourceInput input)
         {
-            if (string.IsNullOrWhiteSpace(documentName))
-            {
-                documentName = defaultDocumentName;
-            }
+            var project = await _projectRepository.GetAsync(input.ProjectId);
+            var cacheKey = $"Resource@{project.ShortName}#{input.Name}#{input.Version}";
 
-            var documentStore = _documentStoreFactory.Create(documentStoreType);
+            return await ResourceCache.GetOrAddAsync(
+                cacheKey,
+                async () =>
+                {
+                    var store = _documentStoreFactory.Create(project.DocumentStoreType);
+                    var documentResource = await store.GetResource(project, input.Name, input.Version);
 
-            var versions = await GetVersionsFromCache(projectShortName);
-
-            if (versions == null)
-            {
-                versions = await documentStore.GetVersions(projectExtraProperties, documentName);
-                await SetVersionsToCache(projectShortName, versions);
-            }
-
-            return versions;
+                    return ObjectMapper.Map<DocumentResource, DocumentResourceDto>(documentResource);
+                },
+                () => new DistributedCacheEntryOptions
+                {
+                    //TODO: Configurable?
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(6),
+                    SlidingExpiration = TimeSpan.FromMinutes(30)
+                }
+            );
         }
 
-        private async Task<List<string>> GetVersionsFromCache(string projectShortName)
+        protected virtual async Task<DocumentWithDetailsDto> GetDocumentWithDetailsDto(
+            Project project, 
+            string documentName, 
+            string version)
         {
-            return await _distributedCache.GetAsync(projectShortName);
+            var cacheKey = $"Document@{project.ShortName}#{documentName}#{version}";
+
+            return await DocumentCache.GetOrAddAsync(
+                cacheKey,
+                async () =>
+                {
+                    var store = _documentStoreFactory.Create(project.DocumentStoreType);
+                    var document = await store.GetDocument(project, documentName, version);
+
+                    return CreateDocumentWithDetailsDto(project, document);
+                },
+                () => new DistributedCacheEntryOptions
+                {
+                    //TODO: Configurable?
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(6),
+                    SlidingExpiration = TimeSpan.FromMinutes(30)
+                }
+            );
         }
 
-        private async Task SetVersionsToCache(string projectShortName, List<string> versions)
+        protected virtual DocumentWithDetailsDto CreateDocumentWithDetailsDto(Project project, Document document)
         {
-            var options = new DistributedCacheEntryOptions() { SlidingExpiration = TimeSpan.FromDays(1) };
-            await _distributedCache.SetAsync(projectShortName, versions, options);
+            var documentDto = ObjectMapper.Map<Document, DocumentWithDetailsDto>(document);
+            documentDto.Project = ObjectMapper.Map<Project, ProjectDto>(project);
+            return documentDto;
         }
     }
 }

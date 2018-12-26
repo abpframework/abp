@@ -28,9 +28,14 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Users
         {
             UserInfo = new UserInfoViewModel();
 
-            Roles = ObjectMapper.Map<List<IdentityRoleDto>, AssignedRoleViewModel[]>(
-                await _identityRoleAppService.GetAllListAsync()
-            );
+            var roleDtoList = await _identityRoleAppService.GetAllListAsync();
+
+            Roles = ObjectMapper.Map<List<IdentityRoleDto>, AssignedRoleViewModel[]>(roleDtoList);
+
+            foreach (var role in Roles)
+            {
+                role.IsAssigned = role.IsDefault;
+            }
         }
 
         public async Task<NoContentResult> OnPostAsync()
@@ -50,6 +55,12 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Users
             [Required]
             [StringLength(IdentityUserConsts.MaxUserNameLength)]
             public string UserName { get; set; }
+
+            [StringLength(IdentityUserConsts.MaxNameLength)]
+            public string Name { get; set; }
+
+            [StringLength(IdentityUserConsts.MaxSurnameLength)]
+            public string Surname { get; set; }
 
             [Required]
             [StringLength(IdentityUserConsts.MaxPasswordLength)]
@@ -76,6 +87,8 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Users
             public string Name { get; set; }
 
             public bool IsAssigned { get; set; }
+
+            public bool IsDefault { get; set; }
         }
     }
 }

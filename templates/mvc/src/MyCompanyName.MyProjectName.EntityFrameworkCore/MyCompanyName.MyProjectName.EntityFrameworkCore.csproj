@@ -6,9 +6,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20180528221424_Initial.cs" />
-    <Compile Remove="Migrations\20180917103757_Added_Modules.cs" />
-    <Compile Remove="Migrations\20180917103851_Added_Modules.cs" />
+    <Compile Remove="Migrations\20181114070127_Initial.cs" />
+    <Compile Remove="Migrations\20181212113826_Initial.cs" />
+    <Compile Remove="Migrations\20181218133646_Remove_Duplicate_AuditLogId1.cs" />
   </ItemGroup>
 
   <ItemGroup>

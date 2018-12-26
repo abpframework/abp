@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
 using MyCompanyName.MyProjectName.Localization;
 using Volo.Abp.AspNetCore.Mvc.Localization;
-using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.Resources.AbpValidation;
@@ -14,7 +14,7 @@ using Volo.Abp.VirtualFileSystem;
 namespace MyCompanyName.MyProjectName
 {
     [DependsOn(typeof(MyProjectNameHttpApiModule))]
-    [DependsOn(typeof(AbpAspNetCoreMvcUiBootstrapModule))]
+    [DependsOn(typeof(AbpAspNetCoreMvcUiThemeSharedModule))]
     [DependsOn(typeof(AbpAutoMapperModule))]
     public class MyProjectNameWebModule : AbpModule
     {
@@ -28,17 +28,17 @@ namespace MyCompanyName.MyProjectName
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.Configure<NavigationOptions>(options =>
+            Configure<NavigationOptions>(options =>
             {
                 options.MenuContributors.Add(new MyProjectNameMenuContributor());
             });
 
-            context.Services.Configure<VirtualFileSystemOptions>(options =>
+            Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<MyProjectNameWebModule>("MyCompanyName.MyProjectName");
             });
 
-            context.Services.Configure<AbpLocalizationOptions>(options =>
+            Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources
                     .Get<MyProjectNameResource>()
@@ -48,12 +48,12 @@ namespace MyCompanyName.MyProjectName
                     ).AddVirtualJson("/Localization/Resources/MyProjectName");
             });
 
-            context.Services.Configure<AbpAutoMapperOptions>(options =>
+            Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<MyProjectNameWebAutoMapperProfile>(validate: true);
             });
 
-            context.Services.Configure<RazorPagesOptions>(options =>
+            Configure<RazorPagesOptions>(options =>
             {
                 //Configure authorization.
             });

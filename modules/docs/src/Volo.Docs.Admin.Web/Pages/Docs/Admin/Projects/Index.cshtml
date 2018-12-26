@@ -1,0 +1,49 @@
+﻿@page
+@using Microsoft.AspNetCore.Authorization
+@using Volo.Docs.Admin
+@inherits Volo.Docs.Admin.Pages.Docs.Admin.DocsAdminPage
+@model Volo.Docs.Admin.Pages.Docs.Admin.Projects.IndexModel
+@inject IAuthorizationService Authorization
+@{
+    ViewBag.PageTitle = "Projects";
+}
+
+@section scripts {
+    <abp-script src="/Pages/Docs/Admin/Projects/index.js" />
+    <abp-script src="/Pages/Docs/Admin/Projects/create.js" />
+    <abp-script src="/Pages/Docs/Admin/Projects/edit.js" />
+}
+
+<abp-card>
+    <abp-card-header>
+        <abp-row>
+            <abp-column size-md="_6">
+                <h2>@L["Projects"]</h2>
+            </abp-column>
+            <abp-column size-md="_6" class="text-right">
+                @if (await Authorization.IsGrantedAsync(DocsAdminPermissions.Projects.Create))
+                {
+                    <abp-dropdown>
+                        <abp-dropdown-button button-type="Primary" icon="plus" text="@L["CreateANewProject"].Value"/>
+                        <abp-dropdown-menu align="Right">
+                            <abp-dropdown-item href="#" id="CreateNewGithubProjectButtonId">Github</abp-dropdown-item>
+                        </abp-dropdown-menu>
+                    </abp-dropdown>
+                }
+            </abp-column>
+        </abp-row>
+    </abp-card-header>
+    <abp-card-body>
+        <abp-table striped-rows="true" id="ProjectsTable" class="nowrap">
+            <thead>
+                <tr>
+                    <th>@L["Actions"]</th>
+                    <th>@L["Name"]</th>
+                    <th>@L["ShortName"]</th>
+                    <th>@L["DocumentStoreType"]</th>
+                    <th>@L["Format"]</th>
+                </tr>
+            </thead>
+        </abp-table>
+    </abp-card-body>
+</abp-card>

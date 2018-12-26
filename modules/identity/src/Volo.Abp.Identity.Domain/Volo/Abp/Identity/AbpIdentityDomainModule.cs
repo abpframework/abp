@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Domain;
+using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Identity.Localization;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
@@ -21,27 +22,32 @@ namespace Volo.Abp.Identity
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.Configure<PermissionManagementOptions>(options =>
+            Configure<PermissionManagementOptions>(options =>
             {
                 options.ManagementProviders.Add<UserPermissionManagementProvider>();
                 options.ManagementProviders.Add<RolePermissionManagementProvider>();
             });
 
-            context.Services.Configure<SettingOptions>(options =>
+            Configure<SettingOptions>(options =>
             {
                 options.DefinitionProviders.Add<AbpIdentitySettingDefinitionProvider>();
             });
 
-            context.Services.Configure<VirtualFileSystemOptions>(options =>
+            Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpIdentityDomainModule>();
             });
 
-            context.Services.Configure<AbpLocalizationOptions>(options =>
+            Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources
                     .Get<IdentityResource>()
                     .AddVirtualJson("/Volo/Abp/Identity/Localization/Domain");
+            });
+
+            Configure<DistributedEventBusOptions>(options =>
+            {
+                options.EtoMappings.Add<IdentityUser, UserEto>();
             });
 
             var identityBuilder = context.Services.AddAbpIdentity(options =>

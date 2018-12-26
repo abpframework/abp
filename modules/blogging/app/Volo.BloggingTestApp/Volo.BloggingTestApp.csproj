@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Volo.BloggingTestApp.EntityFrameworkCore\Volo.BloggingTestApp.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\Volo.BloggingTestApp.MongoDb\Volo.BloggingTestApp.MongoDb.csproj" />
     <ProjectReference Include="..\..\src\Volo.Blogging.Application\Volo.Blogging.Application.csproj" />
     <ProjectReference Include="..\..\src\Volo.Blogging.Web\Volo.Blogging.Web.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />

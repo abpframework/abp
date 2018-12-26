@@ -25,8 +25,13 @@ namespace Volo.Abp.BackgroundJobs.DemoApp.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("ConcurrencyStamp");
+
                     b.Property<DateTime>("CreationTime")
                         .HasColumnName("CreationTime");
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnName("ExtraProperties");
 
                     b.Property<bool>("IsAbandoned")
                         .ValueGeneratedOnAdd()

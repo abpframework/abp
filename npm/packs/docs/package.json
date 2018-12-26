@@ -1,0 +1,15 @@
+{
+  "version": "0.5.1",
+  "name": "@abp/docs",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@abp/anchor-js": "^0.5.1",
+    "@abp/clipboard": "^0.5.1",
+    "@abp/malihu-custom-scrollbar-plugin": "^0.5.1",
+    "@abp/popper.js": "^0.5.1",
+    "@abp/prismjs": "^0.5.1"
+  },
+  "gitHead": "2e846ad3e5a8cbe04100484865335fbcd845a342"
+}

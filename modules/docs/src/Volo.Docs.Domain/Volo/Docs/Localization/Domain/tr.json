@@ -9,6 +9,7 @@
     "GoToTop": "En üste çık",
     "Projects": "Proje(ler)",
     "NoProjectWarning": "Hiç proje yok!",
-    "DocumentNotFound": "Aradığınız döküman bulunamadı!"
+    "DocumentNotFound": "Aradığınız döküman bulunamadı!",
+    "NavigationDocumentNotFound": "Bu döküman için menü bulunamadı!"
   }
 }

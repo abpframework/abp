@@ -6,7 +6,12 @@ namespace Volo.Abp.Authorization.TestServices
     {
         public override void Define(IPermissionDefinitionContext context)
         {
-            var group = context.AddGroup("TestGroup");
+            PermissionGroupDefinition getGroup = context.GetGroupOrNull("TestGetGroup");
+            if (getGroup == null)
+            {
+                getGroup = context.AddGroup("TestGetGroup");
+            }
+            PermissionGroupDefinition group = context.AddGroup("TestGroup");
             group.AddPermission("MyAuthorizedService1");
         }
     }

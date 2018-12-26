@@ -1,4 +1,5 @@
 ﻿using System;
+using Volo.Abp.DynamicProxy;
 using Volo.Abp.Threading;
 
 namespace Volo.Abp.BackgroundJobs
@@ -19,6 +20,17 @@ namespace Volo.Abp.BackgroundJobs
         public static string Enqueue<TArgs>(this IBackgroundJobManager backgroundJobManager, TArgs args, BackgroundJobPriority priority = BackgroundJobPriority.Normal, TimeSpan? delay = null)
         {
             return AsyncHelper.RunSync(() => backgroundJobManager.EnqueueAsync<TArgs>(args, priority, delay));
+        }
+
+        /// <summary>
+        /// Checks if background job system has a real implementation.
+        /// It returns false if the current implementation is <see cref="NullBackgroundJobManager"/>.
+        /// </summary>
+        /// <param name="backgroundJobManager"></param>
+        /// <returns></returns>
+        public static bool IsAvailable(this IBackgroundJobManager backgroundJobManager)
+        {
+            return !(ProxyHelper.UnProxy(backgroundJobManager) is NullBackgroundJobManager);
         }
     }
 }

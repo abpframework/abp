@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.EventBus.Distributed;
+using Volo.Abp.EventBus.Local;
 using Volo.Abp.Modularity;
+using Volo.Abp.Reflection;
 
 namespace Volo.Abp.EventBus
 {
@@ -15,22 +17,29 @@ namespace Volo.Abp.EventBus
 
         private static void AddEventHandlers(IServiceCollection services)
         {
-            var handlers = new List<Type>();
+            var localHandlers = new List<Type>();
+            var distributedHandlers = new List<Type>();
 
             services.OnRegistred(context =>
             {
-                if (context.ImplementationType.GetInterfaces().Any(i => typeof(IEventHandler).IsAssignableFrom(i)))
+                if (ReflectionHelper.IsAssignableToGenericType(context.ImplementationType, typeof(ILocalEventHandler<>)))
                 {
-                    handlers.Add(context.ImplementationType);
+                    localHandlers.Add(context.ImplementationType);
+                }
+                else if (ReflectionHelper.IsAssignableToGenericType(context.ImplementationType, typeof(IDistributedEventHandler<>)))
+                {
+                    distributedHandlers.Add(context.ImplementationType);
                 }
             });
 
-            services.Configure<EventBusOptions>(options =>
+            services.Configure<LocalEventBusOptions>(options =>
             {
-                foreach (var handler in handlers)
-                {
-                    options.Handlers.AddIfNotContains(handler);
-                }
+                options.Handlers.AddIfNotContains(localHandlers);
+            });
+
+            services.Configure<DistributedEventBusOptions>(options =>
+            {
+                options.Handlers.AddIfNotContains(distributedHandlers);
             });
         }
     }

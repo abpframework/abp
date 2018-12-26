@@ -2,6 +2,7 @@ using System;
 using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
+using Volo.Abp.BackgroundJobs;
 
 namespace Volo.Abp.Emailing
 {
@@ -10,15 +11,17 @@ namespace Volo.Abp.Emailing
     /// </summary>
     public abstract class EmailSenderBase : IEmailSender
     {
-        public IEmailSenderConfiguration Configuration { get; }
+        protected IEmailSenderConfiguration Configuration { get; }
+
+        protected IBackgroundJobManager BackgroundJobManager { get; }
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="configuration">Configuration</param>
-        protected EmailSenderBase(IEmailSenderConfiguration configuration)
+        protected EmailSenderBase(IEmailSenderConfiguration configuration, IBackgroundJobManager backgroundJobManager)
         {
             Configuration = configuration;
+            BackgroundJobManager = backgroundJobManager;
         }
 
         public virtual async Task SendAsync(string to, string subject, string body, bool isBodyHtml = true)
@@ -61,6 +64,25 @@ namespace Volo.Abp.Emailing
             }
 
             await SendEmailAsync(mail);
+        }
+
+        public virtual async Task QueueAsync(string to, string subject, string body, bool isBodyHtml = true)
+        {
+            if (!BackgroundJobManager.IsAvailable())
+            {
+                await SendAsync(to, subject, body, isBodyHtml);
+                return;
+            }
+
+            await BackgroundJobManager.EnqueueAsync(
+                new BackgroundEmailSendingJobArgs
+                {
+                    To = to,
+                    Subject = subject,
+                    Body = body,
+                    IsBodyHtml = isBodyHtml
+                }
+            );
         }
 
         public virtual void Send(MailMessage mail, bool normalize = true)

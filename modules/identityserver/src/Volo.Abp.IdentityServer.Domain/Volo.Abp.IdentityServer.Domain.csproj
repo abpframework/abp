@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="..\..\common.props" />
+  <Import Project="..\..\..\..\common.props" />
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -15,9 +15,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.IdentityServer.Domain.Shared\Volo.Abp.IdentityServer.Domain.Shared.csproj" />
-    <ProjectReference Include="..\..\..\..\..\abp\modules\identity\src\Volo.Abp.Identity.Domain\Volo.Abp.Identity.Domain.csproj" />
-    <ProjectReference Include="..\..\..\..\..\abp\framework\src\Volo.Abp.AutoMapper\Volo.Abp.AutoMapper.csproj" />
-    <ProjectReference Include="..\..\..\..\..\abp\framework\src\Volo.Abp.Security\Volo.Abp.Security.csproj" />
+    <ProjectReference Include="..\..\..\..\modules\identity\src\Volo.Abp.Identity.Domain\Volo.Abp.Identity.Domain.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AutoMapper\Volo.Abp.AutoMapper.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Security\Volo.Abp.Security.csproj" />
   </ItemGroup>
 
   <ItemGroup>

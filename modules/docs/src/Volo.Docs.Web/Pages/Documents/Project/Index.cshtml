@@ -1,5 +1,10 @@
 ﻿@page
 @using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Packages.Anchor
+@using Volo.Abp.AspNetCore.Mvc.UI.Packages.Clipboard
+@using Volo.Abp.AspNetCore.Mvc.UI.Packages.MalihuCustomScrollbar
+@using Volo.Abp.AspNetCore.Mvc.UI.Packages.Popper
+@using Volo.Abp.AspNetCore.Mvc.UI.Packages.Prismjs
 @using Volo.Abp.AspNetCore.Mvc.UI.Theming
 @using Volo.Docs
 @using Volo.Docs.Localization
@@ -12,30 +17,23 @@
     Layout = ThemeManager.CurrentTheme.GetEmptyLayout();
 }
 @section styles {
-    <abp-style-bundle name="@typeof(IndexModel).FullName">
-        <abp-style src="/Pages/Documents/vs.css" />
-        <abp-style src="/lib/prismjs/themes/prism-okaidia.css" />
-        <abp-style src="/lib/prismjs/plugins/line-highlight/prism-line-highlight.css" />
-        <abp-style src="/lib/prismjs/plugins/toolbar/prism-toolbar.css" />
-        <abp-style src="/lib/mCustomScrollbar/jquery.mCustomScrollbar.min.css" />
-        <abp-style src="/lib/bootstrap-toc/bootstrap-toc.css" />
-    </abp-style-bundle>
+<abp-style-bundle name="@typeof(IndexModel).FullName">
+    <abp-script type="@typeof(PrismjsStyleBundleContributor)" />
+    <abp-script type="@typeof(MalihuCustomScrollbarPluginStyleBundleContributor)" />
+    <abp-style src="/Pages/Documents/Project/bootstrap-toc.css" />
+    <abp-style src="/Pages/Documents/Shared/Styles/vs.css" />
+</abp-style-bundle>
 }
 @section scripts {
     <abp-script-bundle name="@typeof(IndexModel).FullName">
-        <abp-script src="/lib/anchor-js/anchor.js" />
+        <abp-script type="@typeof(MalihuCustomScrollbarPluginScriptBundleContributor)" />
+        <abp-script type="@typeof(ClipboardScriptBundleContributor)" />
+        <abp-script type="@typeof(AnchorJsScriptBundleContributor)" />
+        <abp-script type="@typeof(PrismjsScriptBundleContributor)" />
+        <abp-script type="@typeof(PopperJsScriptBundleContributor)" />
+        <abp-script src="/Pages/Documents/Project/bootstrap-toc.js" />
+        <abp-script src="/Pages/Documents/Shared/Scripts/vs.js" />
         <abp-script src="/Pages/Documents/Project/index.js" />
-        <abp-script src="/lib/mCustomScrollbar/jquery.mCustomScrollbar.concat.min.js" />
-        <abp-script src="/lib/clipboard/dist/clipboard.js" />
-        <abp-script src="/lib/prismjs/prism.js" />
-        <abp-script src="/lib/prismjs/plugins/toolbar/prism-toolbar.js" />
-        <abp-script src="/lib/prismjs/plugins/show-language/prism-show-language.js" />
-        <abp-script src="/lib/prismjs/plugins/copy-to-clipboard/prism-copy-to-clipboard.js" />
-        <abp-script src="/lib/prismjs/plugins/line-highlight/prism-line-highlight.js" />
-        <abp-script src="/lib/prismjs/components/prism-csharp.js" />
-        <abp-script src="/lib/popper.js/dist/umd/popper.min.js" />
-        <abp-script src="/lib/bootstrap-toc/bootstrap-toc.js" />
-        <abp-script src="/Pages/Documents/vs.js" />
     </abp-script-bundle>
 }
 <div class="docs-page" data-spy="scroll" data-target="#docs-sticky-index">
@@ -45,10 +43,10 @@
 
                 <div class="docs-top">
                     <nav class="navbar navbar-logo">
-                        @if (!Model.ProjectName.IsNullOrWhiteSpace())
+                        @if (!Model.Project.Name.IsNullOrWhiteSpace())
                         {
-                            <a class="navbar-brand w-100" href="/">
-                                @Model.ProjectName<br>
+                            <a class="navbar-brand w-100" href="@Model.CreateLink(Model.LatestVersionInfo, Model.GetSpecificVersionOrLatest())">
+                                @Model.Project.Name<br>
                                 <strong class="display-block">
                                     @L["Documents"]
                                 </strong>
@@ -81,7 +79,7 @@
                         </span>
                     </div>
 
-                    @if (Model.Versions.Any())
+                    @if (Model.VersionSelectItems.Any())
                     {
                         <div class="docs-version">
                             <div class="version-select">
@@ -96,21 +94,29 @@
                         </div>
                     }
 
-                    <ul root-node="@Model.Navigation.RootNode"
-                        version="@(Model.LatestVersionInfo.IsSelected ? DocsAppConsts.LatestVersion : Model.Version)"
-                        project-name="@Model.ProjectName"
-                        project-format="@Model.ProjectFormat"
-                        selected-document-name="@Model.DocumentNameWithExtension"
-                        id="sidebar-scroll"
-                        class="nav nav-list"></ul>
+                    @if (Model.Navigation == null || Model.Navigation.Content.IsNullOrEmpty())
+                    {
+                        <div class="text-muted p-3">
+                            <i class="fa fa-warning"></i> @L["NavigationDocumentNotFound"]
+                        </div>
+                    }
+                    else
+                    {
+                        <ul root-node="@Model.Navigation.RootNode"
+                            version="@(Model.LatestVersionInfo == null || Model.LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Model.Version)"
+                            project-name="@Model.ProjectName"
+                            project-format="@Model.Project.Format"
+                            selected-document-name="@Model.DocumentNameWithExtension"
+                            id="sidebar-scroll"
+                            class="nav nav-list"></ul>
+                    }
                 </div>
 
             </div>
         </div>
 
-        @if (Model.Document.SuccessfullyRetrieved)
+        @if (Model.Document != null)
         {
-
             <div class="col-md-7 docs-content bg-white">
 
                 <div class="docs-link-btns">

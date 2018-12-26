@@ -8,7 +8,10 @@ namespace Volo.Abp.MongoDB
         public static void ConfigureExtraProperties<T>(this BsonClassMap<T> map)
             where T : class, IHasExtraProperties
         {
-            map.MapExtraElementsProperty(x => x.ExtraProperties);
+            map.SetExtraElementsMember(new BsonMemberMap(
+                map,
+                typeof(T).GetMember(nameof(IHasExtraProperties.ExtraProperties))[0])
+            );
         }
     }
 }

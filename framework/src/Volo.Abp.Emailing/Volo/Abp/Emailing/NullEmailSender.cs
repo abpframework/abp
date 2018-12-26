@@ -2,6 +2,7 @@ using System.Net.Mail;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Volo.Abp.BackgroundJobs;
 
 namespace Volo.Abp.Emailing
 {
@@ -16,9 +17,8 @@ namespace Volo.Abp.Emailing
         /// <summary>
         /// Creates a new <see cref="NullEmailSender"/> object.
         /// </summary>
-        /// <param name="configuration">Configuration</param>
-        public NullEmailSender(IEmailSenderConfiguration configuration)
-            : base(configuration)
+        public NullEmailSender(IEmailSenderConfiguration configuration, IBackgroundJobManager backgroundJobManager)
+            : base(configuration, backgroundJobManager)
         {
             Logger = NullLogger<NullEmailSender>.Instance;
         }

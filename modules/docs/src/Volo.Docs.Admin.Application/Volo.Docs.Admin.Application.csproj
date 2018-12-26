@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>Volo.Docs.Admin.Application</AssemblyName>
+    <PackageId>Volo.Docs.Admin.Application</PackageId>
+    <RootNamespace />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Volo.Docs.Admin.Application.Contracts\Volo.Docs.Admin.Application.Contracts.csproj" />
+    <ProjectReference Include="..\Volo.Docs.Domain\Volo.Docs.Domain.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AutoMapper\Volo.Abp.AutoMapper.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Caching\Volo.Abp.Caching.csproj" />
+  </ItemGroup>
+
+</Project>
