@@ -218,7 +218,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
         protected virtual string LocalizeText(string text)
         {
             IStringLocalizer localizer = null;
-            var resourceType = _options.AssemblyResources.GetOrDefault(TagHelper.AspFor.ModelExplorer.ModelType.Assembly);
+            var resourceType = _options.AssemblyResources.GetOrDefault(TagHelper.AspFor.ModelExplorer.Container.ModelType.Assembly);
 
             if (resourceType != null)
             {
@@ -254,7 +254,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         protected virtual string GetRequiredSymbol(TagHelperContext context, TagHelperOutput output, TagHelperOutput inputTag)
         {
-
             if (IsOutputHidden(inputTag))
             {
                 return "";

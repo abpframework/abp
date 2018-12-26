@@ -183,7 +183,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
         protected virtual IStringLocalizer GetLocalizer()
         {
             IStringLocalizer localizer = null;
-            var resourceType = _options.AssemblyResources.GetOrDefault(TagHelper.AspFor.ModelExplorer.ModelType.Assembly);
+            var resourceType = _options.AssemblyResources.GetOrDefault(TagHelper.AspFor.ModelExplorer.Container.ModelType.Assembly);
 
             if (resourceType != null)
             {

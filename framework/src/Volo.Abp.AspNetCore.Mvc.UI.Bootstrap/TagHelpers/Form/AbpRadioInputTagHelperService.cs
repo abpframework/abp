@@ -88,7 +88,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
         protected virtual bool GetSelectItemsIfProvidedByEnum(TagHelperContext context, TagHelperOutput output, ModelExplorer explorer, out List<SelectListItem> selectItems)
         {
             IStringLocalizer localizer = null;
-            var resourceType = _options.AssemblyResources.GetOrDefault(explorer.ModelType.Assembly);
+            var resourceType = _options.AssemblyResources.GetOrDefault(explorer.Container.ModelType.Assembly);
 
             if (resourceType != null)
             {
