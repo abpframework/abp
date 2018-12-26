@@ -235,11 +235,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         protected virtual string GetValidationAsHtml(TagHelperContext context, TagHelperOutput output, TagHelperOutput inputTag)
         {
-            if (inputTag.Attributes.Any(a => a.Name.ToLowerInvariant() == "type" && a.Value.ToString().ToLowerInvariant() == "hidden"))
-            {
-                return "";
-            }
-
             var validationMessageTagHelper = new ValidationMessageTagHelper(_generator)
             {
                 For = TagHelper.AspFor,
