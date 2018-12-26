@@ -25,7 +25,7 @@ namespace Volo.Abp.SettingManagement.Web.Navigation
             //TODO: Localize
             //var l = context.ServiceProvider.GetRequiredService<IStringLocalizer<IdentityResource>>();
 
-            context.Menu.AddItem(new ApplicationMenuItem("Volo.Abp.SettingManagement", "Settings", "/SettingManagement", icon: "fa fa-cog", order: int.MaxValue - 1000));
+            context.Menu.AddItem(new ApplicationMenuItem(SettingManagementMenuNames.GroupName, "Settings", "/SettingManagement", icon: "fa fa-cog", order: int.MaxValue - 1000));
 
             return Task.CompletedTask;
         }

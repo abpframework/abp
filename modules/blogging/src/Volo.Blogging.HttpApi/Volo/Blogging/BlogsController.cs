@@ -65,7 +65,7 @@ namespace Volo.Blogging
         [Route("{id}")]
         public async Task<BlogDto> Update(Guid id, UpdateBlogDto input)
         {
-            throw new NotImplementedException();
+            return await _blogAppService.Update(id, input);
         }
 
         [HttpDelete]

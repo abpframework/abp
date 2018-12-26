@@ -1,0 +1,25 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "Menu:DocumentManagement": "Documents",
+    "Menu:ProjectManagement": "Projects",
+    "CreateANewProject": "Create new project",
+    "Edit": "Edit",
+    "Create": "Create",
+    "Projects": "Projects",
+    "Name": "Name",
+    "ShortName": "ShortName",
+    "DocumentStoreType": "DocumentStoreType",
+    "Format": "Format",
+    "DisplayName:Name": "Name",
+    "DisplayName:ShortName": "Short name",
+    "DisplayName:Format": "Format",
+    "DisplayName:DefaultDocumentName": "Default documentName",
+    "DisplayName:NavigationDocumentName": "Navigation document name",
+    "DisplayName:MinimumVersion": "Minimum version",
+    "DisplayName:MainWebsiteUrl": "Main web site url",
+    "DisplayName:LatestVersionBranchName": "Latest version branch name",
+    "DisplayName:GitHubRootUrl": "GitHub root url",
+    "DisplayName:GitHubAccessToken": "GitHub access token"
+  }
+}

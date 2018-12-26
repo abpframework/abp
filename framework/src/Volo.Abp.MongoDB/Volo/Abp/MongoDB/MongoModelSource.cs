@@ -58,6 +58,8 @@ namespace Volo.Abp.MongoDB
             {
                 b.CollectionName = collectionAttribute?.CollectionName ?? collectionProperty.Name;
             });
+
+            AbpGlobalBsonClassMap.ConfigureDefaults(entityType);
         }
 
         protected virtual void BuildModelFromDbContextInstance(IMongoModelBuilder modelBuilder, AbpMongoDbContext dbContext)

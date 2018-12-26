@@ -33,15 +33,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "admin-app", "admin-app", "{
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "public-app", "public-app", "{8B0CDFC9-E313-4323-9390-59CFFAAC60B5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Docs.Admin.Application.Contracts", "src\Volo.Docs.Admin.Application.Contracts\Volo.Docs.Admin.Application.Contracts.csproj", "{37D483C8-400B-4127-A6D0-2EE4E80CB696}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Docs.Admin.Application.Contracts", "src\Volo.Docs.Admin.Application.Contracts\Volo.Docs.Admin.Application.Contracts.csproj", "{37D483C8-400B-4127-A6D0-2EE4E80CB696}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Docs.Admin.Application", "src\Volo.Docs.Admin.Application\Volo.Docs.Admin.Application.csproj", "{823C51A7-40AB-45D8-8FB8-F212AF7E45F2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Docs.Admin.Application", "src\Volo.Docs.Admin.Application\Volo.Docs.Admin.Application.csproj", "{823C51A7-40AB-45D8-8FB8-F212AF7E45F2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Docs.Admin.HttpApi", "src\Volo.Docs.Admin.HttpApi\Volo.Docs.Admin.HttpApi.csproj", "{262F38DB-62AF-427F-96E2-C6385C5AB695}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Docs.Admin.HttpApi", "src\Volo.Docs.Admin.HttpApi\Volo.Docs.Admin.HttpApi.csproj", "{262F38DB-62AF-427F-96E2-C6385C5AB695}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Docs.Admin.HttpApi.Client", "src\Volo.Docs.Admin.HttpApi.Client\Volo.Docs.Admin.HttpApi.Client.csproj", "{81EE378A-0DE1-47BA-86D9-08EF6317BB95}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Docs.Admin.HttpApi.Client", "src\Volo.Docs.Admin.HttpApi.Client\Volo.Docs.Admin.HttpApi.Client.csproj", "{81EE378A-0DE1-47BA-86D9-08EF6317BB95}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Docs.Admin.Web", "src\Volo.Docs.Admin.Web\Volo.Docs.Admin.Web.csproj", "{116A6145-9D66-4867-B3EF-A464FAC47946}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Docs.Admin.Web", "src\Volo.Docs.Admin.Web\Volo.Docs.Admin.Web.csproj", "{116A6145-9D66-4867-B3EF-A464FAC47946}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

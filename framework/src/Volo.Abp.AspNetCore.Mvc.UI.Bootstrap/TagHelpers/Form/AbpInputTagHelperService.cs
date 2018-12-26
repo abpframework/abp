@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
@@ -60,7 +61,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             var inputTag = GetInputTagHelperOutput(context, output, out isCheckbox);
 
             var inputHtml = RenderTagHelperOutput(inputTag, _encoder);
-            var label = GetLabelAsHtml(context, output, inputTag, isCheckbox);
+            var label = GetLabelAsHtml(context, output, inputTag, isCheckbox) + GetRequiredSymbol(context, output);
             var info = GetInfoAsHtml(context, output, inputTag, isCheckbox);
             var validation = isCheckbox ? "" : GetValidationAsHtml(context, output, inputTag);
 
@@ -249,6 +250,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             return "<label " + checkboxClass + GetIdAttributeAsString(inputTag) + ">"
                    + TagHelper.Label +
                    "</label>";
+        }
+
+        protected virtual string GetRequiredSymbol(TagHelperContext context, TagHelperOutput output)
+        {
+            return GetAttribute<RequiredAttribute>(TagHelper.AspFor.ModelExplorer) != null ? "<span> (*) </span>":"";
         }
 
         protected virtual string GetInfoAsHtml(TagHelperContext context, TagHelperOutput output, TagHelperOutput inputTag, bool isCheckbox)

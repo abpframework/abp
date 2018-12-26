@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using Volo.Abp.AutoMapper;
+using Volo.Docs.Admin.Pages.Docs.Admin.Projects;
+using Volo.Docs.Admin.Projects;
 
 namespace Volo.Docs.Admin
 {
@@ -7,7 +9,12 @@ namespace Volo.Docs.Admin
     {
         public DocsAdminWebAutoMapperProfile()
         {
+            CreateMap<CreateModel.CreateGithubProjectViewModel, CreateProjectDto>().Ignore(x => x.ExtraProperties);
 
+            CreateMap<EditModel.EditGithubProjectViewModel, UpdateProjectDto>().Ignore(x => x.ExtraProperties);
+
+            CreateMap<ProjectDto, EditModel.EditGithubProjectViewModel > ()
+                .Ignore(x => x.GitHubAccessToken).Ignore(x => x.GitHubRootUrl);
         }
     }
 }
