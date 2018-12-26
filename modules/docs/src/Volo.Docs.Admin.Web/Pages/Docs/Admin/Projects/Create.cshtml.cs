@@ -79,10 +79,10 @@ namespace Volo.Docs.Admin.Pages.Docs.Admin.Projects
             public string Format { get; set; }
 
             [StringLength(ProjectConsts.MaxDefaultDocumentNameLength)]
-            public string DefaultDocumentName { get; set; }
+            public string DefaultDocumentName { get; set; } = "Index";
 
             [StringLength(ProjectConsts.MaxNavigationDocumentNameLength)]
-            public string NavigationDocumentName { get; set; }
+            public string NavigationDocumentName { get; set; } = "docs-nav.json";
 
             [StringLength(ProjectConsts.MaxVersionNameLength)]
             public string MinimumVersion { get; set; }
