@@ -18,8 +18,11 @@ namespace Volo.Abp.EntityFrameworkCore.Modeling
             b.TryConfigureExtraProperties();
             b.TryConfigureMayHaveCreator();
             b.TryConfigureMustHaveCreator();
+            b.TryConfigureSoftDelete();
+            b.TryConfigureDeletionTime();
             b.TryConfigureDeletionAudited();
             b.TryConfigureCreationTime();
+            b.TryConfigureLastModificationTime();
             b.TryConfigureModificationAudited();
             b.TryConfigureMultiTenant(); 
         }
@@ -86,10 +89,10 @@ namespace Volo.Abp.EntityFrameworkCore.Modeling
 
         public static void TryConfigureDeletionTime(this EntityTypeBuilder b)
         {
-            b.TryConfigureSoftDelete();
-
             if (b.Metadata.ClrType.IsAssignableTo<IHasDeletionTime>())
             {
+                b.TryConfigureSoftDelete();
+
                 b.Property(nameof(IHasDeletionTime.DeletionTime))
                     .IsRequired(false)
                     .HasColumnName(nameof(IHasDeletionTime.DeletionTime));
@@ -136,10 +139,10 @@ namespace Volo.Abp.EntityFrameworkCore.Modeling
 
         public static void TryConfigureDeletionAudited(this EntityTypeBuilder b)
         {
-            b.TryConfigureDeletionTime();
-
             if (b.Metadata.ClrType.IsAssignableTo<IDeletionAuditedObject>())
             {
+                b.TryConfigureDeletionTime();
+
                 b.Property(nameof(IDeletionAuditedObject.DeleterId))
                     .IsRequired(false)
                     .HasColumnName(nameof(IDeletionAuditedObject.DeleterId));
@@ -201,10 +204,10 @@ namespace Volo.Abp.EntityFrameworkCore.Modeling
 
         public static void TryConfigureModificationAudited(this EntityTypeBuilder b)
         {
-            b.As<EntityTypeBuilder>().TryConfigureLastModificationTime();
-
             if (b.Metadata.ClrType.IsAssignableTo<IModificationAuditedObject>())
             {
+                b.TryConfigureLastModificationTime();
+
                 b.Property(nameof(IModificationAuditedObject.LastModifierId))
                     .IsRequired(false)
                     .HasColumnName(nameof(IModificationAuditedObject.LastModifierId));
