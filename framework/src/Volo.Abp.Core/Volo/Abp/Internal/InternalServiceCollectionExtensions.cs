@@ -16,13 +16,22 @@ namespace Volo.Abp.Internal
             services.AddLocalization();
         }
 
-        internal static void AddCoreAbpServices(this IServiceCollection services, IAbpApplication abpApplication)
+        internal static void AddCoreAbpServices(this IServiceCollection services,
+            IAbpApplication abpApplication, 
+            AbpApplicationCreationOptions applicationCreationOptions)
         {
             var moduleLoader = new ModuleLoader();
             var assemblyFinder = new AssemblyFinder(abpApplication);
             var typeFinder = new TypeFinder(assemblyFinder);
 
-            services.TryAddSingleton<IConfigurationAccessor>(DefaultConfigurationAccessor.Empty);
+            services.TryAddSingleton<IConfigurationAccessor>(
+                new DefaultConfigurationAccessor(
+                    ConfigurationHelper.BuildConfiguration(
+                        applicationCreationOptions.Configuration
+                    )
+                )
+            );
+
             services.TryAddSingleton<IModuleLoader>(moduleLoader);
             services.TryAddSingleton<IAssemblyFinder>(assemblyFinder);
             services.TryAddSingleton<ITypeFinder>(typeFinder);

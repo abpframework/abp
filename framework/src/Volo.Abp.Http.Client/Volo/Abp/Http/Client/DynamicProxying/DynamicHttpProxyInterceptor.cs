@@ -126,7 +126,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                 var accessToken = await _accessTokenProvider.GetOrNullAsync();
                 if (accessToken != null)
                 {
-                    //TODO: "Bearer" should not by static.
+                    //TODO: "Bearer" should not be static.
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
                 }
 

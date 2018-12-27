@@ -2,7 +2,7 @@
 
 namespace Microsoft.Extensions.Configuration
 {
-    public class AbpAspNetCoreConfigurationOptions
+    public class ConfigurationBuilderOptions
     {
         /// <summary>
         /// Used to set assembly which is used to get the user secret id for the application.
@@ -20,5 +20,15 @@ namespace Microsoft.Extensions.Configuration
         /// Default value: "appsettings".
         /// </summary>
         public string FileName { get; set; } = "appsettings";
+
+        /// <summary>
+        /// Environment name. Generally used "Development", "Staging" or "Production".
+        /// </summary>
+        public string EnvironmentName { get; set; }
+
+        /// <summary>
+        /// Base path to read the configuration file indicated by <see cref="FileName"/>.
+        /// </summary>
+        public string BasePath { get; set; }
     }
 }
