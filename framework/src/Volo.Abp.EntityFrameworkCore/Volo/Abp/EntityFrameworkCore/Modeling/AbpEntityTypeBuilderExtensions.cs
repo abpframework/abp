@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Newtonsoft.Json;
@@ -11,24 +12,51 @@ namespace Volo.Abp.EntityFrameworkCore.Modeling
 {
     public static class AbpEntityTypeBuilderExtensions
     {
+        public static void ConfigureByConvention(this EntityTypeBuilder b)
+        {
+            b.TryConfigureConcurrencyStamp();
+            b.TryConfigureExtraProperties();
+            //TODO: Others
+        }
+
         public static void ConfigureConcurrencyStamp<T>(this EntityTypeBuilder<T> b)
             where T : class, IHasConcurrencyStamp
         {
-            b.Property(x => x.ConcurrencyStamp)
-                .IsConcurrencyToken()
-                .HasColumnName(nameof(IHasConcurrencyStamp.ConcurrencyStamp));
+            b.As<EntityTypeBuilder>().TryConfigureConcurrencyStamp();
+        }
+
+        public static void TryConfigureConcurrencyStamp(this EntityTypeBuilder b)
+        {
+            if (b.Metadata.ClrType.IsAssignableTo<IHasConcurrencyStamp>())
+            {
+                //TODO: Max length?
+                b.Property<string>(nameof(IHasConcurrencyStamp.ConcurrencyStamp))
+                    .IsConcurrencyToken()
+                    .HasColumnName(nameof(IHasConcurrencyStamp.ConcurrencyStamp));
+            }
         }
 
         public static void ConfigureExtraProperties<T>(this EntityTypeBuilder<T> b)
             where T : class, IHasExtraProperties
         {
-            b.Property(x => x.ExtraProperties)
-                .HasConversion(
-                    d => JsonConvert.SerializeObject(d, Formatting.None),
-                    s => JsonConvert.DeserializeObject<Dictionary<string, object>>(s)
-                )
-                .HasColumnName(nameof(IHasExtraProperties.ExtraProperties));
+            b.As<EntityTypeBuilder>().TryConfigureExtraProperties();
         }
+
+        public static void TryConfigureExtraProperties(this EntityTypeBuilder b)
+        {
+            //TODO: Max length?
+            if (b.Metadata.ClrType.IsAssignableTo<IHasExtraProperties>())
+            {
+                b.Property<Dictionary<string, object>>(nameof(IHasExtraProperties.ExtraProperties))
+                    .HasConversion(
+                        d => JsonConvert.SerializeObject(d, Formatting.None),
+                        s => JsonConvert.DeserializeObject<Dictionary<string, object>>(s)
+                    )
+                    .HasColumnName(nameof(IHasExtraProperties.ExtraProperties));
+            }
+        }
+
+        //TODO: Others like ConfigureConcurrencyStamp/TryConfigureConcurrencyStamp and ConfigureExtraProperties/TryConfigureExtraProperties
 
         public static void ConfigureSoftDelete<T>(this EntityTypeBuilder<T> b)
             where T : class, ISoftDelete
