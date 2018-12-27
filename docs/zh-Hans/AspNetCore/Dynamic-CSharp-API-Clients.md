@@ -15,12 +15,11 @@ public interface IBookService : IApplicationService
 
 你的接口需要实现`IRemoteService`接口.由于`IApplicationService`继承自`IRemoteService`接口.所以`IBookService`完全满足这个条件.
 
-Implement this class in your service application. You can use [auto API controller system](Auto-API-Controllers.md) to expose the service as a REST API endpoint.
 在你的服务中实现这个类,你可以使用[Auto API Controller](Auto-API-Controllers.md)将你的服务暴漏为一个REST API 端点.
 
 ## 客户端代理生成
 
-首先,将[Volo.Abp.Http.Client](https://www.nuget.org/packages/Volo.Abp.Http.Client)nuget包添加到你的客户端项目中:
+首先,将[Volo.Abp.Http.Client](https://www.nuget.org/packages/Volo.Abp.Http.Client) nuget包添加到你的客户端项目中:
 
 ````
 Install-Package Volo.Abp.Http.Client
@@ -46,7 +45,7 @@ public class MyClientAppModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        //配置 remote end point
+        //配置远程端点
         context.Services.Configure<RemoteServiceOptions>(options =>
         {
             options.RemoteServices.Default =
@@ -123,8 +122,7 @@ context.Services.Configure<RemoteServiceOptions>(configuration);
 
 #### 多个远程服务端点
 
-The examples above have configured the "Default" remote service endpoint. You may have different endpoints for different services (as like in a microservice approach where each microservice has different endpoint). In this case, you can add other endpoints to your configuration file:
-上面的例子已经配置了"Default"远程服务端点.你可能为不同的服务创建不同的端点.(就像在微服务方法中一样,每个微服务具有不同的端点).在这种情况下,你可以在你的配置文件中添加其他的端点:
+上面的例子已经配置了"Default"远程服务端点.你可能需要为不同的服务创建不同的端点.(就像在微服务方法中一样,每个微服务具有不同的端点).在这种情况下,你可以在你的配置文件中添加其他的端点:
 
 ````json
 {
