@@ -1,6 +1,6 @@
 ﻿namespace Volo.Abp.Modularity
 {
-    public abstract class ModuleLifecycleContributerBase : IModuleLifecycleContributer
+    public abstract class ModuleLifecycleContributorBase : IModuleLifecycleContributor
     {
         public virtual void Initialize(ApplicationInitializationContext context, IAbpModule module)
         {

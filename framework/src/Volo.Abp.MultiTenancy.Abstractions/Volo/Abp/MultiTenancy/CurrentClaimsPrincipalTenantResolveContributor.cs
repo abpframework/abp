@@ -4,7 +4,7 @@ using Volo.Abp.Security.Claims;
 
 namespace Volo.Abp.MultiTenancy
 {
-    public class CurrentClaimsPrincipalTenantResolveContributer : ITenantResolveContributer
+    public class CurrentClaimsPrincipalTenantResolveContributor : ITenantResolveContributor
     {
         public void Resolve(ITenantResolveContext context)
         {

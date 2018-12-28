@@ -1,6 +1,6 @@
 namespace Volo.Abp.MultiTenancy
 {
-    public interface ITenantResolveContributer
+    public interface ITenantResolveContributor
     {
         void Resolve(ITenantResolveContext context);
     }

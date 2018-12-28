@@ -3,7 +3,7 @@ using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.AspNetCore.MultiTenancy
 {
-    public class CookieTenantResolveContributer : HttpTenantResolveContributerBase
+    public class CookieTenantResolveContributor : HttpTenantResolveContributorBase
     {
         protected override string GetTenantIdOrNameFromHttpContextOrNull(ITenantResolveContext context, HttpContext httpContext)
         {

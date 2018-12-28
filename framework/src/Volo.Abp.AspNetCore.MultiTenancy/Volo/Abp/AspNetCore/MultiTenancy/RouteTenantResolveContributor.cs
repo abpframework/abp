@@ -5,7 +5,7 @@ using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.AspNetCore.MultiTenancy
 {
-    public class RouteTenantResolveContributer : HttpTenantResolveContributerBase
+    public class RouteTenantResolveContributor : HttpTenantResolveContributorBase
     {
         protected override string GetTenantIdOrNameFromHttpContextOrNull(ITenantResolveContext context, HttpContext httpContext)
         {
