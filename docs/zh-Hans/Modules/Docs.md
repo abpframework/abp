@@ -1,0 +1,467 @@
+# 文档模块
+
+## 什么是文档模块?
+
+文档模块是ABP框架的一个应用程序模块. 它简化了软件文档的制作. 这个模块是开源免费的.
+
+### 集成
+
+目前文档模块提供提供了两种支持的存储,Github与文件系统. 
+
+### 托管
+
+文档模块是一个应用程序模块,不提供任何托管的解决方案,你可以在本地或云上托管文档.
+
+### 版本
+
+当你使用GitHub存储文档时,文档模块支持多版本. 如果你的文档具有多个版本, UI上有一个组合框,用于切换版本. 如果你选择使用文件系统存储文档, 那么它不支持多版本. 
+
+ABP框架的[文档](https://abp.io/documents/)也是使用的此模块.
+
+> 文档模块遵循 [模块化架构最佳实践](../Best-Practices/Module-Architecture.md) 指南.
+
+
+
+## 安装
+
+### 1- 下载
+
+如果你没有现有的ABP项目, 这个步骤向你展示如何在[abp.io](https://cn.abp.io)创建一个新项目并添加文档模块. 如果你本地已经有了一个ABP项目, 那么你可以跳过这一步. 
+
+打开 https://cn.abp.io/Templates. 输入项目名称为 `Acme.MyProject`, 选择 `ASP.NET Core Mvc Application` 和选择 `Entity Framework Core` 做为数据库提供者.
+
+请注意,本文档包含了 `Entity Framework Core` 提供者 不过你也可以选择 `MongoDB` 做为数据库提供者. 
+
+![创建新项目](../images/docs-module_download-new-abp-project.png)
+
+### 2- 运行这个空项目
+
+下载项目后, 解压压缩文档并且打开 `Acme.MyProject.sln`. 你可以看到这个解决方案包含了 `Application`, `Domain `, `EntityFrameworkCore` 和 `Web` 项目. 右键选择 `Acme.MyProject.Web` 项目**设置为启动项目**.
+
+![创建新项目](../images/docs-module_solution-explorer.png)
+
+数据库连接字符串位于`Acme.MyProject.Web`项目的`appsettings.json`中. 如果你有不同的数据库配置, 可以修改这个连接字符串.
+
+```json
+{
+  "ConnectionStrings": {
+    "Default": "Server=localhost;Database=MyProject;Trusted_Connection=True;MultipleActiveResultSets=true"
+  }
+}
+```
+
+打开Visual Studio包管理控制台选择`src\Acme.MyProject.EntityFrameworkCore` 做为默认项目. 运行 `Update-Database` 命令创建数据库. 数据库`MyProject`将在数据库服务器中创建.
+
+现在一个空的ABP项目已经创建完成! 现在你可以运行项目并且查看网站.
+
+输入用户名 `admin` 密码 `1q2w3E*` 登陆到网站.
+
+### 2- 引用文档模块包
+
+文档模块包托管在Nuget上面. 需要有四个包安装到你的应用程序中. 每个包必须安装到相关的项目.  
+
+* [Volo.Docs.Domain](https://www.nuget.org/packages/Volo.Docs.Domain/) 需要安装到 `Acme.MyProject.Domain` 项目.
+
+  * 修改 `Acme.MyProject.Domain.csproj` 文件并且添加以下行. 需要注意它要设置(v0.9.0)为Latest版本.
+
+    ```csharp
+     <PackageReference Include="Volo.Docs.Domain" Version="0.9.0" />
+    ```
+* [Volo.Docs.EntityFrameworkCore](https://www.nuget.org/packages/Volo.Docs.EntityFrameworkCore/) 需要安装到 `Acme.MyProject.EntityFrameworkCore` 项目.
+
+  - 修改 `Acme.MyProject.EntityFrameworkCore.csproj`文件并且添加以下行. 需要注意它要设置(v0.9.0)为Latest版本.
+
+    ```csharp
+    <PackageReference Include="Volo.Docs.EntityFrameworkCore" Version="0.9.0" />
+    ```
+* [Volo.Docs.Application](https://www.nuget.org/packages/Volo.Docs.Application/) 需要安装到 `Acme.MyProject.Application` 项目.
+
+  * 修改 `Acme.MyProject.Application.csproj`文件并且添加以下行. 需要注意它要设置(v0.9.0)为Latest版本.
+
+    ```csharp
+    <PackageReference Include="Volo.Docs.Application" Version="0.9.0" />
+    ```
+* [Volo.Docs.Web ](https://www.nuget.org/packages/Volo.Docs.Web/) 需要安装到 `Acme.MyProject.Web` 项目.
+
+  - 修改 `Acme.MyProject.Web.csproj`文件并且添加以下行. 需要注意它要设置(v0.9.0)为Latest版本.
+
+    ```csharp
+    <PackageReference Include="Volo.Docs.Web" Version="0.9.0" />
+    ```
+
+
+
+### 3- 添加模块添加
+
+一个ABP模块必须声明 `[DependsOn]` attribute 如果它依赖于另一个模块. 每个模块都必须在相关的项目的`[DependsOn]`Attribute 中添加.
+
+* 打开 `MyProjectDomainModule.cs`并且添加 `typeof(DocsDomainModule)` 如下所示;
+
+  ```csharp
+   [DependsOn(
+          typeof(DocsDomainModule),
+          typeof(AbpIdentityDomainModule),
+          typeof(AbpAuditingModule),
+          typeof(BackgroundJobsDomainModule),
+          typeof(AbpAuditLoggingDomainModule)
+          )]
+      public class MyProjectDomainModule : AbpModule
+      {
+          //...
+      }
+  ```
+
+* 打开 `MyProjectEntityFrameworkCoreModule.cs`并且添加 `typeof(DocsEntityFrameworkCoreModule)` 如下所示;
+
+  ```csharp
+      [DependsOn(
+          typeof(DocsEntityFrameworkCoreModule),
+          typeof(MyProjectDomainModule),
+          typeof(AbpIdentityEntityFrameworkCoreModule),
+          typeof(AbpPermissionManagementEntityFrameworkCoreModule),
+          typeof(AbpSettingManagementEntityFrameworkCoreModule),
+          typeof(AbpEntityFrameworkCoreSqlServerModule),
+          typeof(BackgroundJobsEntityFrameworkCoreModule),
+          typeof(AbpAuditLoggingEntityFrameworkCoreModule)
+          )]
+      public class MyProjectEntityFrameworkCoreModule : AbpModule
+      {
+          //...
+      }
+  ```
+
+
+* 打开 `MyProjectApplicationModule.cs`并且添加 `typeof(DocsApplicationModule)` 如下所示;
+
+  ```csharp
+     [DependsOn(
+          typeof(DocsApplicationModule),
+          typeof(MyProjectDomainModule),
+          typeof(AbpIdentityApplicationModule))]
+      public class MyProjectApplicationModule : AbpModule
+      {
+          public override void ConfigureServices(ServiceConfigurationContext context)
+          {
+              Configure<PermissionOptions>(options =>
+              {
+                  options.DefinitionProviders.Add<MyProjectPermissionDefinitionProvider>();
+              });
+  
+              Configure<AbpAutoMapperOptions>(options =>
+              {
+                  options.AddProfile<MyProjectApplicationAutoMapperProfile>();
+              });
+          }
+      }
+  ```
+
+
+* 打开 `MyProjectWebModule.cs`并且添加 `typeof(DocsWebModule)` 如下所示;
+
+  ```csharp
+     [DependsOn(
+          typeof(DocsWebModule),
+          typeof(MyProjectApplicationModule),
+          typeof(MyProjectEntityFrameworkCoreModule),
+          typeof(AbpAutofacModule),
+          typeof(AbpIdentityWebModule),
+          typeof(AbpAccountWebModule),
+          typeof(AbpAspNetCoreMvcUiBasicThemeModule)
+      )]
+      public class MyProjectWebModule : AbpModule
+      {
+          //...
+      }
+  ```
+
+
+
+### 4- 数据库集成
+
+#### 4.1- Entity Framework 集成
+
+如果你选择了Entity Framework 做为数据库供应者,你需要在DbContext中配置文档模块. 做以下操作;
+
+- 打开 `MyProjectDbContext.cs` 并且添加 `modelBuilder.ConfigureDocs()` 到 `OnModelCreating()` 方法中
+
+  ```csharp
+  [ConnectionStringName("Default")]
+  public class MyProjectDbContext : AbpDbContext<MyProjectDbContext>
+  {
+      public MyProjectDbContext(DbContextOptions<MyProjectDbContext> options)
+          : base(options)
+      {
+  
+      }
+  
+      protected override void OnModelCreating(ModelBuilder modelBuilder)
+      {      
+         //...
+         modelBuilder.ConfigureDocs();
+      }
+  }
+  ```
+
+* 打开 `Visual Studio` 的 `包管理控制台` 选择 `Acme.MyProject.EntityFrameworkCore` 做为默认项目. 然后编写以下命令为文档模块添加迁移.
+
+  ```csharp
+  add-migration Added_Docs_Module
+  ```
+
+  当命令执行成功后 , 你会看到`Acme.MyProject.EntityFrameworkCore\Migrations` 目录下有名为 `20181221111621_Added_Docs_Module` 的迁移文件.
+
+  现在更新数据库. 在 `Visual Studio` 的 `包管理控制台` 中执行以下代码. 要确认已 `Acme.MyProject.EntityFrameworkCore` 项目设置为默认项目.
+
+  ```csharp
+  update-database
+  ```
+
+  最后你可以查看数据库中创建的新表,例如你可以看到 `DocsProjects` 表已经添加到数据库中.
+
+
+### 5- 链接文档模块
+
+文档模块的默认路由是;
+
+```
+/Documents
+```
+
+添加文档模块的链接到你的应用程序菜单中;
+
+* 打开 `MyProjectMenuContributor.cs` 并且在 `ConfigureMainMenuAsync()` 方法方法中添加以下代码.
+
+  ```csharp
+  context.Menu.Items.Add(new ApplicationMenuItem("MyProject.Docs", l["Menu:Docs"], "/Documents"));
+  ```
+
+  最后 **MyProjectMenuContributor.cs** 有以下内容
+
+  ```csharp
+      private async Task ConfigureMainMenuAsync(MenuConfigurationContext context)
+      {
+          var l = context.ServiceProvider.GetRequiredService<IStringLocalizer<MyProjectResource>>();
+  
+          context.Menu.Items.Insert(0, new ApplicationMenuItem("MyProject.Home", l["Menu:Home"], "/"));
+  
+          context.Menu.Items.Add(new ApplicationMenuItem("MyProject.Docs", l["Menu:Docs"], "/Documents"));
+      }
+  ```
+
+`Menu:Docs` 关键词是本地化的Key. 要本地化菜单文本, 打开`Acme.MyProject.Domain` 中的 `Localization\MyProject\zh-Hans.json`. 添加以下行.
+
+```json
+"Menu:Docs": "文档"
+```
+
+最后 **zh-Hans.json** 有以下内容
+
+```json
+{
+  "culture": "zh-Hans",
+  "texts": {
+    "Menu:Home": "首页",
+      "Welcome": "欢迎",
+      "LongWelcomeMessage": "欢迎来到该应用程序. 这是一个基于ABP框架的启动项目. 有关更多信息, 请访问 cn.abp.io.",
+    "Menu:Docs": "文档"
+  }
+}
+```
+
+现在菜单中已经添加了文档模块项. 运行Web应用程序并且在浏览器中打开 `http://localhost:YOUR_PORT_NUMBER/documents` URL.
+
+你会看到一个警告;
+
+```
+There are no projects yet!
+```
+
+这个警告是正常的,因为我们还没有添加任何项目.
+
+### 6- 添加文档项目
+
+在数据库中打开 `DocsProjects`, 并且插入包含以下字段的新记录;
+
+* **Name**: 在Web页面上文档的显示名称.
+* **ShortName**: 在文档URL中使用的友好的简短URL名称.
+* **Format**: 文档的格式 ( Markdown: `md`,  HTML: `html`)
+* **DefaultDocumentName**: 文档的初始页面.
+* **NavigationDocumentName**: 导航菜单(索引)的文档.
+* **MinimumVersion**: 显示文档的最低版本. 低于此的版本不会列出.
+* **DocumentStoreType**: 文档的来源 ( GitHub:`GitHub`,文件系统`FileSystem`).
+* **ExtraProperties**: 序列化的`JSON`, 它存储所选 `DocumentStoreType` 的特殊配置.
+* **MainWebsiteUrl**: 用户单击文档模块页面Logo时跳转的URL.你只需设置为`/`即可链接到网站根地址.
+* **LatestVersionBranchName**: 这是GitHub的配置.它是检索文档的分支名称.你可以将其设置为`master`.
+
+#### "GitHub" 项目的示例记录
+
+你可以使用 [ABP Framework](https://github.com/abpframework/abp/) GitHub文档来配置Github文档存储.
+
+- Name: `ABP framework (GitHub)`
+
+- ShortName: `abp`
+
+- Format: `md`
+
+- DefaultDocumentName: `Index`
+
+- NavigationDocumentName: `docs-nav.json`
+
+- MinimumVersion: `<NULL>` (no minimum version)
+
+- DocumentStoreType: `GitHub`
+
+- ExtraProperties: 
+
+  ```json
+  {"GitHubRootUrl":"https://github.com/abpframework/abp/tree/{version}/docs/zh-Hans/","GitHubAccessToken":"***"}
+  ```
+
+  注意 `GitHubAccessToken` 用 `***` 掩盖. 这是一个私人令牌，你必须从GitHub获取它. 请参阅 https://help.github.com/articles/creating-a-personal-access-token-for-the-command-line/
+
+- MainWebsiteUrl: `/` 
+
+- LatestVersionBranchName: `master`
+
+对于 `SQL` 数据库,你可以使用下面的 `T-SQL` 命令将指定的示例插入到 `DocsProjects` 表中:
+
+```mssql
+INSERT [dbo].[DocsProjects] ([Id], [Name], [ShortName], [Format], [DefaultDocumentName], [NavigationDocumentName], [MinimumVersion], [DocumentStoreType], [ExtraProperties], [MainWebsiteUrl], [LatestVersionBranchName]) VALUES (N'12f21123-e08e-4f15-bedb-ae0b2d939658', N'ABP framework (GitHub)', N'abp', N'md', N'Index', N'docs-nav.json', NULL, N'GitHub', N'{"GitHubRootUrl":"https://github.com/abpframework/abp/tree/{version}/docs/zh-Hans/","GitHubAccessToken":"***"}', N'/', N'master')
+```
+
+请注意，`GitHubAccessToken` 被屏蔽了.它是一个私人令牌,你必须获得自己的令牌并替换 `***` 字符串.
+
+#### "FileSystem" 项目的示例记录
+
+你可以使用 [ABP Framework](https://github.com/abpframework/abp/) GitHub文档来配置你的文件系统存储.
+
+- Name: `ABP framework (FileSystem)`
+
+- ShortName: `abp`
+
+- Format: `md`
+
+- DefaultDocumentName: `Index`
+
+- NavigationDocumentName: `docs-nav.json`
+
+- MinimumVersion: `<NULL>` (no minimum version)
+
+- DocumentStoreType: `FileSystem`
+
+- ExtraProperties: 
+
+  ```json
+  {"Path":"C:\\Github\\abp\\docs\\zh-Hans"}
+  ```
+
+  请注意 `Path` 必须使用本地docs目录替换. 你可以从https://github.com/abpframework/abp/tree/master/docs/zh-hans获取ABP Framework的文档并且复制到该目录 `C:\\Github\\abp\\docs\\zh-Hans` 使其正常工作.
+
+- MainWebsiteUrl: `/`
+
+- LatestVersionBranchName: `<NULL>`
+
+对于 `SQL` 数据库,你可以使用下面的 `T-SQL` 命令将指定的示例插入到 `DocsProjects` 表中:
+
+```mssql
+INSERT [dbo].[DocsProjects] ([Id], [Name], [ShortName], [Format], [DefaultDocumentName], [NavigationDocumentName], [MinimumVersion], [DocumentStoreType], [ExtraProperties], [MainWebsiteUrl], [LatestVersionBranchName]) VALUES (N'12f21123-e08e-4f15-bedb-ae0b2d939659', N'ABP framework (FileSystem)', N'abp', N'md', N'Index', N'docs-nav.json', NULL, N'FileSystem', N'{"Path":"C:\\Github\\abp\\docs\\zh-Hans"}', N'/', NULL)
+```
+
+添加上面的一个示例项目后运行该应用程序. 在菜单中你会看到`文档` 链接，点击菜单链接打开文档页面.
+
+到目前为止, 我们已经从abp.io网站创建了一个新的应用程序，并为Docs模块做好准备.
+
+### 7- 添加一个新文档
+
+在示例项目记录中, 你可以看到 `Format` 被指定为 `md` 指的是 [Mark Down](https://en.wikipedia.org/wiki/Markdown).  你可以打开下面的链接查看语法;
+
+https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet
+
+ABP文档模块可以把MarkDown渲染为HTML.
+
+现在让我们看一下Markdown格式的示例文档.
+
+~~~markdown
+# This is a header
+
+Welcome to Docs Module.
+
+## This is a sub header
+
+ [This is a link](https://abp.io) 
+
+![This is an image](https://abp.io/assets/my-image.png)
+
+## This is a code block
+
+```csharp
+public class Person
+{
+    public string Name { get; set; }
+
+    public string Address { get; set; }
+}
+```
+~~~
+
+你可以使用 ABP Framework 的文档做为示例:
+
+[https://github.com/abpframework/abp/blob/master/docs/zh-Hans/](https://github.com/abpframework/abp/blob/master/docs/zh-Hans/)
+
+### 8- 创建文档导航
+
+导航文档是文档页面的主菜单. 它位于页面的左侧,是一个`JSON` 文件. 请查看以下示例导航文档以了解结构.
+
+```json
+{  
+   "items":[  
+      {  
+         "text":"Sample Menu Item - 1",
+         "items":[  
+            {  
+               "text":"Sample Menu Item - 1.1",
+               "items":[  
+                  {  
+                     "text":"Sample Menu Item - 1.1.1",
+                     "path":"SampleMenuItem_1_1_1.md"
+                  }
+               ]
+            },
+            {  
+               "text":"Sample Menu Item - 1.2",
+               "items":[  
+                  {  
+                     "text":"Sample Menu Item - 1.2.1",
+                     "path":"SampleMenuItem_1_2_1.md"
+                  },
+                  {  
+                     "text":"Sample Menu Item - 1.2.2",
+                     "path":"SampleMenuItem_1_2_2.md"
+                  }
+               ]
+            }
+         ]
+      },
+      {  
+         "text":"Sample Menu Item - 2",
+         "items":[  
+            {  
+               "text":"Sample Menu Item - 2.1",
+               "items":[  
+                  {  
+                     "text":"Sample Menu Item - 2.1.1",
+                     "path":"SampleMenuItem_2_1_1.md"
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+```
+
+上面的示例 `JSON` 文件将下面的导航菜单呈现为 `HTML` .
+
+![Navigation menu](../images/docs-module_download-sample-navigation-menu.png)
+
+最后，为您的项目添加了一个新的Docs模块, 该模块由GitHub提供.
