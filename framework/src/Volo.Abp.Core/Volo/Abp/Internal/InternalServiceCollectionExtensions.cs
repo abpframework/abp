@@ -40,10 +40,10 @@ namespace Volo.Abp.Internal
 
             services.Configure<ModuleLifecycleOptions>(options =>
             {
-                options.Contributers.Add<OnPreApplicationInitializationModuleLifecycleContributer>();
-                options.Contributers.Add<OnApplicationInitializationModuleLifecycleContributer>();
-                options.Contributers.Add<OnPostApplicationInitializationModuleLifecycleContributer>();
-                options.Contributers.Add<OnApplicationShutdownModuleLifecycleContributer>();
+                options.Contributors.Add<OnPreApplicationInitializationModuleLifecycleContributor>();
+                options.Contributors.Add<OnApplicationInitializationModuleLifecycleContributor>();
+                options.Contributors.Add<OnPostApplicationInitializationModuleLifecycleContributor>();
+                options.Contributors.Add<OnApplicationShutdownModuleLifecycleContributor>();
             });
         }
     }

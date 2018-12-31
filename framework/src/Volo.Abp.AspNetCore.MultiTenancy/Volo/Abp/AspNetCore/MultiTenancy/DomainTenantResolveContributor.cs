@@ -7,11 +7,11 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
 {
     //TODO: Create a better domain format. We can accept regex for example.
 
-    public class DomainTenantResolveContributer : HttpTenantResolveContributerBase
+    public class DomainTenantResolveContributor : HttpTenantResolveContributorBase
     {
         private readonly string _domainFormat;
 
-        public DomainTenantResolveContributer(string domainFormat)
+        public DomainTenantResolveContributor(string domainFormat)
         {
             _domainFormat = domainFormat.RemovePreFix("http://", "https://");
         }

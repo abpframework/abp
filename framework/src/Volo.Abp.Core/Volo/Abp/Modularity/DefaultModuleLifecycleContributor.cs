@@ -1,6 +1,6 @@
 ﻿namespace Volo.Abp.Modularity
 {
-    public class OnApplicationInitializationModuleLifecycleContributer : ModuleLifecycleContributerBase
+    public class OnApplicationInitializationModuleLifecycleContributor : ModuleLifecycleContributorBase
     {
         public override void Initialize(ApplicationInitializationContext context, IAbpModule module)
         {
@@ -8,7 +8,7 @@
         }
     }
 
-    public class OnApplicationShutdownModuleLifecycleContributer : ModuleLifecycleContributerBase
+    public class OnApplicationShutdownModuleLifecycleContributor : ModuleLifecycleContributorBase
     {
         public override void Shutdown(ApplicationShutdownContext context, IAbpModule module)
         {
@@ -16,7 +16,7 @@
         }
     }
 
-    public class OnPreApplicationInitializationModuleLifecycleContributer : ModuleLifecycleContributerBase
+    public class OnPreApplicationInitializationModuleLifecycleContributor : ModuleLifecycleContributorBase
     {
         public override void Initialize(ApplicationInitializationContext context, IAbpModule module)
         {
@@ -24,7 +24,7 @@
         }
     }
 
-    public class OnPostApplicationInitializationModuleLifecycleContributer : ModuleLifecycleContributerBase
+    public class OnPostApplicationInitializationModuleLifecycleContributor : ModuleLifecycleContributorBase
     {
         public override void Initialize(ApplicationInitializationContext context, IAbpModule module)
         {
