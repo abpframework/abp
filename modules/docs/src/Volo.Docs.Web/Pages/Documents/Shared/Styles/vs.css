@@ -225,6 +225,24 @@
       margin: 15px 0 25px;
       box-shadow: 0 0 45px #f8f9fa;
       border-radius: 6px; }
+    .docs-page .docs-content article.docs-body table {
+      display: block;
+      overflow: auto;
+      width: 100%; }
+      .docs-page .docs-content article.docs-body table thead tr {
+        border-bottom: 2px inset; }
+      .docs-page .docs-content article.docs-body table th {
+        font-weight: 600; }
+      .docs-page .docs-content article.docs-body table td, .docs-page .docs-content article.docs-body table th {
+        border: 1px solid #dfe2e5;
+        padding: 6px 13px; }
+      .docs-page .docs-content article.docs-body table tr {
+        background-color: #fff;
+        border-top: 1px solid #c6cbd1; }
+      .docs-page .docs-content article.docs-body table tr:nth-child(2n) {
+        background-color: #f6f8fa; }
+      .docs-page .docs-content article.docs-body table img {
+        background-color: initial; }
   .docs-page .docs-page-index {
     min-height: 100vh; }
     .docs-page .docs-page-index #scroll-index {

@@ -370,6 +370,41 @@ body {
                 box-shadow: 0 0 45px #f8f9fa;
                 border-radius: 6px;
             }
+
+
+            table {
+                display: block;
+                overflow: auto;
+                width: 100%;
+
+                thead {
+                    tr {
+                        border-bottom: 2px inset;
+                    }
+                }
+
+                th {
+                    font-weight: 600
+                }
+
+                td, th {
+                    border: 1px solid #dfe2e5;
+                    padding: 6px 13px
+                }
+
+                tr {
+                    background-color: #fff;
+                    border-top: 1px solid #c6cbd1
+                }
+
+                tr:nth-child(2n) {
+                    background-color: #f6f8fa
+                }
+
+                img {
+                    background-color: initial
+                }
+            }
         }
     }
 
@@ -833,7 +868,7 @@ div.code-toolbar > .toolbar a {
             margin-left: -1rem;
         }
     }
-     
+
     .section-with-logos img {
         margin: 15px;
         opacity: 1;
@@ -851,5 +886,4 @@ div.code-toolbar > .toolbar a {
     .mb-5, .my-5 {
         margin-bottom: 2rem !important;
     }
-
 }
