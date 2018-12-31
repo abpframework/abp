@@ -100,16 +100,22 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         protected virtual List<SelectListItem> GetSelectItems(TagHelperContext context, TagHelperOutput output)
         {
-            var selectItems = TagHelper.AspItems?.ToList();
-
-            if (TagHelper.AspItems == null &&
-                !GetSelectItemsIfProvidedByEnum(context, output, TagHelper.AspFor.ModelExplorer, out selectItems) &&
-                !GetSelectItemsIfProvidedFromAttribute(context, output, TagHelper.AspFor.ModelExplorer, out selectItems))
+            if (TagHelper.AspItems != null)
+            {
+                return TagHelper.AspItems.ToList();
+            }
+            else if (TagHelper.AspFor.ModelExplorer.Metadata.IsEnum)
+            {
+                return GetSelectItemsFromEnum(context, output, TagHelper.AspFor.ModelExplorer);
+            }
+            else if (TagHelper.AspFor.ModelExplorer.Metadata.IsEnum)
+            {
+                return GetSelectItemsFromAttribute(context, output, TagHelper.AspFor.ModelExplorer);
+            }
+            else
             {
                 throw new Exception("No items provided for select attribute.");
             }
-
-            return selectItems;
         }
 
         protected virtual string GetLabelAsHtml(TagHelperContext context, TagHelperOutput output, TagHelperOutput selectTag)
@@ -198,14 +204,14 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             return localizer;
         }
 
-        protected virtual bool GetSelectItemsIfProvidedByEnum(TagHelperContext context, TagHelperOutput output, ModelExplorer explorer, out List<SelectListItem> selectItems)
+        protected virtual List<SelectListItem> GetSelectItemsFromEnum(TagHelperContext context, TagHelperOutput output, ModelExplorer explorer)
         {
             var localizer = GetLocalizer();
 
-            selectItems = explorer.Metadata.IsEnum ? explorer.ModelType.GetTypeInfo().GetMembers(BindingFlags.Public | BindingFlags.Static)
+            var selectItems = explorer.Metadata.IsEnum ? explorer.ModelType.GetTypeInfo().GetMembers(BindingFlags.Public | BindingFlags.Static)
                 .Select((t, i) => new SelectListItem { Value = i.ToString(), Text = GetLocalizedPropertyName(localizer, explorer.ModelType, t.Name) }).ToList() : null;
 
-            return selectItems != null;
+            return selectItems;
         }
 
         protected virtual string GetLocalizedPropertyName(IStringLocalizer localizer, Type enumType, string propertyName)
@@ -220,11 +226,23 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             return !localizedString.ResourceNotFound ? localizedString.Value : localizer[propertyName].Value;
         }
 
-        protected virtual bool GetSelectItemsIfProvidedFromAttribute(TagHelperContext context, TagHelperOutput output, ModelExplorer explorer, out List<SelectListItem> selectItems)
+        protected virtual List<SelectListItem> GetSelectItemsFromAttribute(TagHelperContext context, TagHelperOutput output, ModelExplorer explorer)
         {
-            selectItems = GetAttribute<SelectItems>(explorer)?.GetItems(explorer)?.ToList();
+            var selectItemsAttribute = GetAttribute<SelectItems>(explorer);
 
-            return selectItems != null;
+            if (selectItemsAttribute == null)
+            {
+                return null;
+            }
+
+            var selectItems = selectItemsAttribute.GetItems(explorer)?.ToList();
+
+            if (selectItems == null)
+            {
+                return new List<SelectListItem>();
+            }
+
+            return selectItems;
         }
 
         protected virtual string GetLabelAsHtmlUsingTagHelper(TagHelperContext context, TagHelperOutput output)
