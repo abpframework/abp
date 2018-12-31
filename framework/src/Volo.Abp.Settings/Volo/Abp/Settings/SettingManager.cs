@@ -121,7 +121,10 @@ namespace Volo.Abp.Settings
                     value = SettingEncryptionService.Decrypt(setting, value);
                 }
 
-                settingValues[setting.Name] = new SettingValue(setting.Name, value);
+                if (value != null)
+                {
+                    settingValues[setting.Name] = new SettingValue(setting.Name, value);
+                }
             }
 
             return settingValues.Values.ToList();
