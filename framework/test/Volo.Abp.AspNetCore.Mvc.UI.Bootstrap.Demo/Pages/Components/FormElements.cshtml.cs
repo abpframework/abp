@@ -27,7 +27,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components
             MyModel = new SampleModel();
             MyModel.SampleInput0 = "This is a disabled input.";
             MyModel.SampleInput1 = "This is a readonly input.";
-            MyModel.SampleInput2 = "This is a readonly plain-text.";
             MyModel.CityRadio = "IST";
         }
 

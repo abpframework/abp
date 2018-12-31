@@ -143,15 +143,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
         private void AddFormControlClass(TagHelperContext context, TagHelperOutput output, bool isCheckbox, TagHelperOutput inputTagHelperOutput)
         {
             var className = "form-control";
-            var readonlyAttribute = GetAttribute<ReadOnlyInput>(TagHelper.AspFor.ModelExplorer);
 
             if (isCheckbox)
             {
                 className = "form-check-input";
-            }
-            else if (TagHelper.IsReadonly == AbpReadonlyInputType.True_PlainText || (readonlyAttribute != null && readonlyAttribute.PlainText))
-            {
-                className = "form-control-plaintext";
             }
 
             inputTagHelperOutput.Attributes.AddClass(className + " " + GetSize(context, output));
@@ -177,7 +172,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
         protected virtual void AddReadOnlyAttribute(TagHelperOutput inputTagHelperOutput)
         {
             if (inputTagHelperOutput.Attributes.ContainsName("readonly") == false && 
-                    (TagHelper.IsReadonly != AbpReadonlyInputType.False || GetAttribute<ReadOnlyInput>(TagHelper.AspFor.ModelExplorer) != null))
+                    (TagHelper.IsReadonly != false || GetAttribute<ReadOnlyInput>(TagHelper.AspFor.ModelExplorer) != null))
             {
                 inputTagHelperOutput.Attributes.Add("readonly", "");
             }

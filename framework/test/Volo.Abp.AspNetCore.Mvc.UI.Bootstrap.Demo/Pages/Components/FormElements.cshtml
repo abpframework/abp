@@ -239,8 +239,7 @@
 <div class="demo-with-code">
     <div class="demo-area">
         <abp-input asp-for="@Model.MyModel.SampleInput0" disabled="true" />
-        <abp-input asp-for="@Model.MyModel.SampleInput1" readonly="True" />
-        <abp-input asp-for="@Model.MyModel.SampleInput2" readonly="True_PlainText"/>
+        <abp-input asp-for="@Model.MyModel.SampleInput1" readonly="true" />
     </div>
     <div class="code-area">
         <abp-tabs>
@@ -256,7 +255,6 @@
             MyModel.SampleInput0 = "This is a disabled input.";
             MyModel.SampleInput0 = "This is a disabled input.";
             MyModel.SampleInput1 = "This is a readonly input.";
-            MyModel.SampleInput2 = "This is a readonly plain-text.";
         }
 
         public class SampleModel
@@ -274,7 +272,6 @@
                 <pre><code>
 &lt;abp-input asp-for=&quot;@@Model.MyModel.SampleInput0&quot; disabled=&quot;true&quot; /&gt;
 &lt;abp-input asp-for=&quot;@@Model.MyModel.SampleInput1&quot; readonly=&quot;True&quot; /&gt;
-&lt;abp-input asp-for=&quot;@@Model.MyModel.SampleInput2&quot; readonly=&quot;True_PlainText&quot;/&gt;
 </code></pre>
             </abp-tab>
             <abp-tab title="Rendered">
@@ -288,11 +285,6 @@
     &lt;label for=&quot;MyModel_SampleInput1&quot;&gt;SampleInput1&lt;/label&gt;
     &lt;input type=&quot;text&quot; id=&quot;MyModel_SampleInput1&quot; name=&quot;MyModel.SampleInput1&quot; value=&quot;This is a readonly input.&quot; class=&quot;form-control &quot; readonly=&quot;&quot;&gt;
     &lt;span class=&quot;text-danger field-validation-valid&quot; data-valmsg-for=&quot;MyModel.SampleInput1&quot; data-valmsg-replace=&quot;true&quot;&gt;&lt;/span&gt;
-&lt;/div&gt;
-&lt;div class=&quot;form-group&quot;&gt;
-    &lt;label for=&quot;MyModel_SampleInput2&quot;&gt;SampleInput2&lt;/label&gt;
-    &lt;input type=&quot;text&quot; id=&quot;MyModel_SampleInput2&quot; name=&quot;MyModel.SampleInput2&quot; value=&quot;This is a readonly plain-text.&quot; class=&quot;form-control-plaintext &quot; readonly=&quot;&quot;&gt;
-    &lt;span class=&quot;text-danger field-validation-valid&quot; data-valmsg-for=&quot;MyModel.SampleInput2&quot; data-valmsg-replace=&quot;true&quot;&gt;&lt;/span&gt;
 &lt;/div&gt;
 </code></pre>
             </abp-tab>
