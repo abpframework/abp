@@ -1,10 +1,8 @@
-﻿using System.Globalization;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
@@ -26,7 +24,6 @@ using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.Threading;
 using Volo.Abp.UI;
-using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
 using Volo.AbpWebSite.Bundling;
 using Volo.Blogging;
@@ -49,14 +46,6 @@ namespace Volo.AbpWebSite
         )]
     public class AbpWebSiteWebModule : AbpModule
     {
-        public override void PreConfigureServices(ServiceConfigurationContext context)
-        {
-            context.Services.PreConfigure<AbpAspNetCoreConfigurationOptions>(options =>
-            {
-                options.UserSecretsAssembly = typeof(AbpWebSiteWebModule).Assembly;
-            });
-        }
-
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var hostingEnvironment = context.Services.GetHostingEnvironment();
