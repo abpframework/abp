@@ -22,7 +22,7 @@ See the <a href="https://abp.io/documents/" target="_blank">documentation</a>.
 
 #### Pre Requirements
 
-- Visual Studio 2017 15.7.0+
+- Visual Studio 2017 15.9.0+
 
 #### Framework
 
