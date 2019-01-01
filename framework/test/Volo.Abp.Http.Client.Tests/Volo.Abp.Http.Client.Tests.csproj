@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
     <AssemblyName>Volo.Abp.Http.Client.Tests</AssemblyName>
     <PackageId>Volo.Abp.Http.Client.Tests</PackageId>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
@@ -15,7 +15,7 @@
     <ProjectReference Include="..\..\src\Volo.Abp.Http.Client\Volo.Abp.Http.Client.csproj" />
     <ProjectReference Include="..\AbpTestBase\AbpTestBase.csproj" />
     <ProjectReference Include="..\Volo.Abp.AspNetCore.Mvc.Tests\Volo.Abp.AspNetCore.Mvc.Tests.csproj" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.2" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
   </ItemGroup>
 
 </Project>

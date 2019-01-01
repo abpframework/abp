@@ -2,13 +2,12 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Volo.Abp.Autofac" Version="0.10.0" />
     <PackageReference Include="Volo.Abp.Http.Client" Version="0.10.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.1.1" />
     <ProjectReference Include="..\..\src\Acme.BookStore.Application\Acme.BookStore.Application.csproj" />
   </ItemGroup>
 
