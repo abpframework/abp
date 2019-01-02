@@ -11,7 +11,7 @@ namespace Volo.Abp.TenantManagement
             CreateMap<Tenant, TenantInfo>()
                 .ForMember(ti => ti.ConnectionStrings, opts =>
                 {
-                    opts.ResolveUsing(tenant =>
+                    opts.MapFrom((tenant, ti) =>
                     {
                         var connStrings = new ConnectionStrings();
 
