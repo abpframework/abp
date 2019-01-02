@@ -42,13 +42,15 @@ namespace Volo.Docs.Admin.Pages.Docs.Admin.Projects
             }
         }
 
-        public async void OnPostAsync()
+        public async Task<IActionResult> OnPostAsync()
         {
             if (GithubProject != null)
             {
                 var dto = GetGithubProjectAsDto();
                 await _projectAppService.CreateAsync(dto);
             }
+
+            return NoContent();
         }
 
         public CreateProjectDto GetGithubProjectAsDto()
