@@ -238,7 +238,7 @@ namespace Acme.BookStore
 
 你通常需要创建 **Controllers** 将应用服务暴露为 **HTTP API**.这样浏览器或第三方客户端可以通过AJAX的方式访问它们.
 
-ABP可以 **自动地** 将应用服务转换成MVC API Controllers.
+ABP可以 **自动地** (../../AspNetCore/Auto-API-Controllers.md)将应用服务转换成MVC API Controllers.
 
 #### Swagger UI
 

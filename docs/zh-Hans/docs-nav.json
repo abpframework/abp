@@ -184,10 +184,20 @@
       ]
     },
     {
-      "text": "ASP.NET Core MVC",
+      "text": "ASP.NET Core",
       "items": [
         {
-          "text": "API 版本控制"
+          "text": "API",
+           "items": [            
+             {
+               "text": "自动API控制器",
+               "path": "AspNetCore/Auto-API-Controllers.md"
+             },
+             {
+              "text": "动态C# API客户端",
+              "path": "AspNetCore/Dynamic-CSharp-API-Clients.md"
+            }
+           ]
         },
         {
           "text": "用户界面",
