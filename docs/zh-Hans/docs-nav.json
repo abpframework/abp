@@ -187,7 +187,13 @@
       "text": "ASP.NET Core MVC",
       "items": [
         {
-          "text": "API 版本控制"
+          "text": "API",
+           "items": [            
+             {
+               "text": "自动API控制器",
+               "path": "AspNetCore/Auto-API-Controllers.md"
+             }
+           ]
         },
         {
           "text": "用户界面",
