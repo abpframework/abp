@@ -104,18 +104,19 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             {
                 return TagHelper.AspItems.ToList();
             }
-            else if (TagHelper.AspFor.ModelExplorer.Metadata.IsEnum)
+
+            if (TagHelper.AspFor.ModelExplorer.Metadata.IsEnum)
             {
                 return GetSelectItemsFromEnum(context, output, TagHelper.AspFor.ModelExplorer);
             }
-            else if (TagHelper.AspFor.ModelExplorer.Metadata.IsEnum)
+
+            var selectItemsAttribute = GetAttribute<SelectItems>(TagHelper.AspFor.ModelExplorer);
+            if (selectItemsAttribute != null)
             {
-                return GetSelectItemsFromAttribute(context, output, TagHelper.AspFor.ModelExplorer);
+                return GetSelectItemsFromAttribute(selectItemsAttribute, TagHelper.AspFor.ModelExplorer);
             }
-            else
-            {
-                throw new Exception("No items provided for select attribute.");
-            }
+
+            throw new Exception("No items provided for select attribute.");
         }
 
         protected virtual string GetLabelAsHtml(TagHelperContext context, TagHelperOutput output, TagHelperOutput selectTag)
@@ -226,15 +227,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             return !localizedString.ResourceNotFound ? localizedString.Value : localizer[propertyName].Value;
         }
 
-        protected virtual List<SelectListItem> GetSelectItemsFromAttribute(TagHelperContext context, TagHelperOutput output, ModelExplorer explorer)
+        protected virtual List<SelectListItem> GetSelectItemsFromAttribute(
+            SelectItems selectItemsAttribute, 
+            ModelExplorer explorer)
         {
-            var selectItemsAttribute = GetAttribute<SelectItems>(explorer);
-
-            if (selectItemsAttribute == null)
-            {
-                return null;
-            }
-
             var selectItems = selectItemsAttribute.GetItems(explorer)?.ToList();
 
             if (selectItems == null)
