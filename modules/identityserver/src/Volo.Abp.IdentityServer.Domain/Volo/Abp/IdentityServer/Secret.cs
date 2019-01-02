@@ -1,5 +1,6 @@
 ﻿using System;
 using IdentityServer4;
+using IdentityServer4.Models;
 using JetBrains.Annotations;
 using Volo.Abp.Domain.Entities;
 

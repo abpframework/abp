@@ -42,74 +42,74 @@ namespace Volo.Abp.IdentityServer.Clients
             return await DbSet.CountAsync();
         }
 
-        public override async Task<Client> UpdateAsync(Client entity, bool autoSave = false, CancellationToken cancellationToken = default)
-        {
+        //public override async Task<Client> UpdateAsync(Client entity, bool autoSave = false, CancellationToken cancellationToken = default)
+        //{
 
-            var secrets = DbContext.Set<ClientSecret>().Where(s => s.ClientId == entity.Id);
+        //    var secrets = DbContext.Set<ClientSecret>().Where(s => s.ClientId == entity.Id);
 
-            foreach (var secret in secrets)
-            {
-                DbContext.Set<ClientSecret>().Remove(secret);
-            }
+        //    foreach (var secret in secrets)
+        //    {
+        //        DbContext.Set<ClientSecret>().Remove(secret);
+        //    }
 
-            var claims = DbContext.Set<ClientClaim>().Where(s => s.ClientId == entity.Id);
+        //    var claims = DbContext.Set<ClientClaim>().Where(s => s.ClientId == entity.Id);
 
-            foreach (var claim in claims)
-            {
-                DbContext.Set<ClientClaim>().Remove(claim);
-            }
+        //    foreach (var claim in claims)
+        //    {
+        //        DbContext.Set<ClientClaim>().Remove(claim);
+        //    }
 
-            var grantTypes = DbContext.Set<ClientGrantType>().Where(s => s.ClientId == entity.Id);
+        //    var grantTypes = DbContext.Set<ClientGrantType>().Where(s => s.ClientId == entity.Id);
 
-            foreach (var grantType in grantTypes)
-            {
-                DbContext.Set<ClientGrantType>().Remove(grantType);
-            }
+        //    foreach (var grantType in grantTypes)
+        //    {
+        //        DbContext.Set<ClientGrantType>().Remove(grantType);
+        //    }
 
-            var restrictions = DbContext.Set<ClientIdPRestriction>().Where(s => s.ClientId == entity.Id);
+        //    var restrictions = DbContext.Set<ClientIdPRestriction>().Where(s => s.ClientId == entity.Id);
 
-            foreach (var restriction in restrictions)
-            {
-                DbContext.Set<ClientIdPRestriction>().Remove(restriction);
-            }
+        //    foreach (var restriction in restrictions)
+        //    {
+        //        DbContext.Set<ClientIdPRestriction>().Remove(restriction);
+        //    }
 
-            var properties = DbContext.Set<ClientProperty>().Where(s => s.ClientId == entity.Id);
+        //    var properties = DbContext.Set<ClientProperty>().Where(s => s.ClientId == entity.Id);
 
-            foreach (var clientProperty in properties)
-            {
-                DbContext.Set<ClientProperty>().Remove(clientProperty);
-            }
+        //    foreach (var clientProperty in properties)
+        //    {
+        //        DbContext.Set<ClientProperty>().Remove(clientProperty);
+        //    }
 
-            var scopes = DbContext.Set<ClientScope>().Where(s => s.ClientId == entity.Id);
+        //    var scopes = DbContext.Set<ClientScope>().Where(s => s.ClientId == entity.Id);
 
-            foreach (var scope in scopes)
-            {
-                DbContext.Set<ClientScope>().Remove(scope);
-            }
+        //    foreach (var scope in scopes)
+        //    {
+        //        DbContext.Set<ClientScope>().Remove(scope);
+        //    }
 
-            var corsOrigins = DbContext.Set<ClientCorsOrigin>().Where(s => s.ClientId == entity.Id);
+        //    var corsOrigins = DbContext.Set<ClientCorsOrigin>().Where(s => s.ClientId == entity.Id);
 
-            foreach (var corsOrigin in corsOrigins)
-            {
-                DbContext.Set<ClientCorsOrigin>().Remove(corsOrigin);
-            }
+        //    foreach (var corsOrigin in corsOrigins)
+        //    {
+        //        DbContext.Set<ClientCorsOrigin>().Remove(corsOrigin);
+        //    }
 
-            var redirectUris = DbContext.Set<ClientRedirectUri>().Where(s => s.ClientId == entity.Id);
+        //    var redirectUris = DbContext.Set<ClientRedirectUri>().Where(s => s.ClientId == entity.Id);
 
-            foreach (var redirectUri in redirectUris)
-            {
-                DbContext.Set<ClientRedirectUri>().Remove(redirectUri);
-            }
+        //    foreach (var redirectUri in redirectUris)
+        //    {
+        //        DbContext.Set<ClientRedirectUri>().Remove(redirectUri);
+        //    }
 
-            var postLogoutRedirectUris = DbContext.Set<ClientPostLogoutRedirectUri>().Where(s => s.ClientId == entity.Id);
+        //    var postLogoutRedirectUris = DbContext.Set<ClientPostLogoutRedirectUri>().Where(s => s.ClientId == entity.Id);
 
-            foreach (var postLogoutRedirectUri in postLogoutRedirectUris)
-            {
-                DbContext.Set<ClientPostLogoutRedirectUri>().Remove(postLogoutRedirectUri);
-            }
+        //    foreach (var postLogoutRedirectUri in postLogoutRedirectUris)
+        //    {
+        //        DbContext.Set<ClientPostLogoutRedirectUri>().Remove(postLogoutRedirectUri);
+        //    }
 
-            return await base.UpdateAsync(entity, autoSave, cancellationToken);
-        }
+        //    return await base.UpdateAsync(entity, autoSave, cancellationToken);
+        //}
 
         public override IQueryable<Client> WithDetails()
         {
