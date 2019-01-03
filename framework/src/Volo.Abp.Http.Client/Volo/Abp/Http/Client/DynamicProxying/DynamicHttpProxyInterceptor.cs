@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
@@ -28,7 +27,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
         private readonly RemoteServiceOptions _remoteServiceOptions;
         private readonly AbpHttpClientOptions _clientOptions;
         private readonly IJsonSerializer _jsonSerializer;
-        private readonly IAccessTokenProvider _accessTokenProvider;
+        private readonly IHttpClientAuthenticator _clientAuthenticator;
 
         static DynamicHttpProxyInterceptor()
         {
@@ -43,12 +42,12 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             IOptionsSnapshot<RemoteServiceOptions> remoteServiceOptions,
             IApiDescriptionFinder apiDescriptionFinder,
             IJsonSerializer jsonSerializer,
-            IAccessTokenProvider accessTokenProvider)
+            IHttpClientAuthenticator clientAuthenticator)
         {
             _httpClientFactory = httpClientFactory;
             _apiDescriptionFinder = apiDescriptionFinder;
             _jsonSerializer = jsonSerializer;
-            _accessTokenProvider = accessTokenProvider;
+            _clientAuthenticator = clientAuthenticator;
             _clientOptions = clientOptions.Value;
             _remoteServiceOptions = remoteServiceOptions.Value;
         }
@@ -123,12 +122,13 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
                 AddHeaders(invocation, action, requestMessage, apiVersion);
 
-                var accessToken = await _accessTokenProvider.GetOrNullAsync(clientConfig);
-                if (accessToken != null)
-                {
-                    //TODO: "Bearer" should not be static.
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-                }
+                await _clientAuthenticator.Authenticate(
+                    new HttpClientAuthenticateContext(
+                        client,
+                        requestMessage,
+                        clientConfig.RemoteServiceName
+                    )
+                );
 
                 var response = await client.SendAsync(requestMessage);
 
