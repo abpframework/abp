@@ -17,13 +17,13 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             var body = GenerateBody(action, methodArguments, jsonSerializer);
             if (body != null)
             {
-                return new StringContent(body, Encoding.UTF8, "application/json"); //TODO: application/json to a constant
+                return new StringContent(body, Encoding.UTF8, MimeTypes.Application.Json);
             }
 
             body = GenerateFormPostData(action, methodArguments);
             if (body != null)
             {
-                return new StringContent(body, Encoding.UTF8, "application/x-www-form-urlencoded"); //TODO: application/x-www-form-urlencoded to a constant
+                return new StringContent(body, Encoding.UTF8, MimeTypes.Application.XWwwFormUrlencoded);
             }
 
             return null;

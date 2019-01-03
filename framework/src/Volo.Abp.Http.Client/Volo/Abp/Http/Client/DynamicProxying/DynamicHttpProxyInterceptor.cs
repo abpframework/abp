@@ -174,8 +174,8 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             if (!apiVersion.Version.IsNullOrEmpty())
             {
                 //TODO: What about other media types?
-                requestMessage.Headers.Add("accept", $"text/plain; v={apiVersion.Version}");
-                requestMessage.Headers.Add("accept", $"application/json; v={apiVersion.Version}");
+                requestMessage.Headers.Add("accept", $"{MimeTypes.Text.Plain}; v={apiVersion.Version}");
+                requestMessage.Headers.Add("accept", $"{MimeTypes.Application.Json}; v={apiVersion.Version}");
                 requestMessage.Headers.Add("api-version", apiVersion.Version);
             }
 

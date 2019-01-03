@@ -32,6 +32,7 @@ namespace Volo.Abp.Http
             public const string XPkcs12 = "application/x-pkcs12";
             public const string XShockwaveFlash = "application/x-shockwave-flash";
             public const string XSilverlightApp = "application/x-silverlight-app";
+            public const string XWwwFormUrlencoded = "application/x-www-form-urlencoded";
             public const string XhtmlXml = "application/xhtml+xml";
             public const string Xml = "application/xml";
             public const string XmlDtd = "application/xml-dtd";
