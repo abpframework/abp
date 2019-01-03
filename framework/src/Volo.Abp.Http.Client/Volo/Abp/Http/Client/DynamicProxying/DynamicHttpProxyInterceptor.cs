@@ -123,7 +123,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
                 AddHeaders(invocation, action, requestMessage, apiVersion);
 
-                var accessToken = await _accessTokenProvider.GetOrNullAsync();
+                var accessToken = await _accessTokenProvider.GetOrNullAsync(clientConfig);
                 if (accessToken != null)
                 {
                     //TODO: "Bearer" should not be static.

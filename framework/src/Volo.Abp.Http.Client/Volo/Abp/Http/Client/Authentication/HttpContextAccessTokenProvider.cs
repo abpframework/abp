@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Http.Client.DynamicProxying;
 
 namespace Volo.Abp.Http.Client.Authentication
 {
@@ -9,7 +10,7 @@ namespace Volo.Abp.Http.Client.Authentication
     {
         public IHttpContextAccessor HttpContextAccessor { get; set; }
 
-        public async Task<string> GetOrNullAsync()
+        public async Task<string> GetOrNullAsync(DynamicHttpClientProxyConfig config)
         {
             var httpContext = HttpContextAccessor?.HttpContext;
             if (httpContext == null)
