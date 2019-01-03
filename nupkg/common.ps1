@@ -119,6 +119,7 @@ $projects = (
     "modules/tenant-management/src/Volo.Abp.TenantManagement.Web",
     
     # modules/identity
+    "modules/identity/src/Volo.Abp.Identity.AspNetCore", 
     "modules/identity/src/Volo.Abp.Identity.Application",
     "modules/identity/src/Volo.Abp.Identity.Application.Contracts",
     "modules/identity/src/Volo.Abp.Identity.Domain",
