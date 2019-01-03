@@ -109,11 +109,11 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             using (var client = _httpClientFactory.Create())
             {
                 var clientConfig = _clientOptions.HttpClientProxies.GetOrDefault(typeof(TService)) ?? throw new AbpException($"Could not get DynamicHttpClientProxyConfig for {typeof(TService).FullName}.");
+                var remoteServiceConfig = _remoteServiceOptions.RemoteServices.GetConfigurationOrDefault(clientConfig.RemoteServiceName);
 
-                var baseUrl = GetBaseUrl(clientConfig);
-                var action = await _apiDescriptionFinder.FindActionAsync(baseUrl, typeof(TService), invocation.Method);
+                var action = await _apiDescriptionFinder.FindActionAsync(remoteServiceConfig.BaseUrl, typeof(TService), invocation.Method);
                 var apiVersion = GetApiVersionInfo(action);
-                var url = baseUrl + UrlBuilder.GenerateUrlWithParameters(action, invocation.ArgumentsDictionary, apiVersion);
+                var url = remoteServiceConfig.BaseUrl + UrlBuilder.GenerateUrlWithParameters(action, invocation.ArgumentsDictionary, apiVersion);
 
                 var requestMessage = new HttpRequestMessage(action.GetHttpMethod(), url)
                 {
@@ -126,7 +126,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                     new HttpClientAuthenticateContext(
                         client,
                         requestMessage,
-                        clientConfig.RemoteServiceName
+                        remoteServiceConfig
                     )
                 );
 
@@ -189,13 +189,6 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                     requestMessage.Headers.Add(headerParameter.Name, value.ToString());
                 }
             }
-        }
-
-        private string GetBaseUrl(DynamicHttpClientProxyConfig config)
-        {
-            return _remoteServiceOptions.RemoteServices.GetOrDefault(config.RemoteServiceName)?.BaseUrl
-                   ?? _remoteServiceOptions.RemoteServices.Default?.BaseUrl
-                   ?? throw new AbpException($"Could not find Base URL for {typeof(TService).FullName}.");
         }
 
         private string GetConfiguredApiVersion()
