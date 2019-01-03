@@ -22,6 +22,7 @@ using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.Web;
+using Volo.Abp.Identity.AspNetCore;
 using Volo.Abp.Modularity;
 using Volo.Abp.Threading;
 using Volo.Abp.UI;
@@ -41,6 +42,7 @@ namespace Volo.DocsTestApp
         typeof(AbpAutofacModule),
         typeof(AbpAccountWebModule),
         typeof(AbpIdentityWebModule),
+        typeof(AbpIdentityAspNetCoreModule),
         typeof(AbpIdentityApplicationModule),
         typeof(AbpAspNetCoreMvcUiBasicThemeModule)
     )]

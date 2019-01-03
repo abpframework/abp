@@ -24,6 +24,7 @@ using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.Web;
+using Volo.Abp.Identity.AspNetCore;
 using Volo.Abp.Modularity;
 using Volo.Abp.Threading;
 using Volo.Abp.UI;
@@ -44,6 +45,7 @@ namespace Volo.BloggingTestApp
 #endif
         typeof(AbpAccountWebModule),
         typeof(AbpIdentityWebModule),
+        typeof(AbpIdentityAspNetCoreModule),
         typeof(AbpIdentityApplicationModule),
         typeof(AbpAutofacModule),
         typeof(AbpAspNetCoreMvcUiBasicThemeModule)
