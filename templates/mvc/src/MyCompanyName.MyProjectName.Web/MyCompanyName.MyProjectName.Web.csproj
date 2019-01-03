@@ -32,6 +32,7 @@
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
     <ProjectReference Include="..\..\..\..\modules\identity\src\Volo.Abp.Identity.Web\Volo.Abp.Identity.Web.csproj" />
+    <ProjectReference Include="..\..\..\..\modules\identity\src\Volo.Abp.Identity.AspNetCore\Volo.Abp.Identity.AspNetCore.csproj" />
     <ProjectReference Include="..\..\..\..\modules\account\src\Volo.Abp.Account.Web\Volo.Abp.Account.Web.csproj" />
   </ItemGroup>
 
