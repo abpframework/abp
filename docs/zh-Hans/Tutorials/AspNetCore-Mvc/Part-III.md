@@ -1,6 +1,6 @@
-## ASP.NET Core MVC Tutorial - Part III
+## ASP.NET Core MVC 教程 - 第三章
 
-### About this Tutorial
+### 关于本教程
 
 这是本教程所有章节中的第三章.下面是所有的章节:
 
