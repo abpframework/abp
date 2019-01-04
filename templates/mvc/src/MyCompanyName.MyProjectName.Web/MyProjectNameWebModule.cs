@@ -24,7 +24,6 @@ using Volo.Abp.AutoMapper;
 using Volo.Abp.Data;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.Web;
-using Volo.Abp.Identity.AspNetCore;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.Resources.AbpValidation;
 using Volo.Abp.Modularity;
@@ -44,7 +43,6 @@ namespace MyCompanyName.MyProjectName
         typeof(MyProjectNameEntityFrameworkCoreModule),
         typeof(AbpAutofacModule),
         typeof(AbpIdentityWebModule),
-        typeof(AbpIdentityAspNetCoreModule),
         typeof(AbpAccountWebModule),
         typeof(AbpAspNetCoreMvcUiBasicThemeModule)
         )]
