@@ -168,11 +168,6 @@ namespace Volo.Abp.IdentityServer.Clients
             ClientSecrets.RemoveAll(s => s.Value == value && s.Type == type);
         }
 
-        public virtual void RemoveAllSecrets()
-        {
-            ClientSecrets.Clear();
-        }
-
         public virtual ClientSecret FindSecret([NotNull] string value, string type = IdentityServerConstants.SecretTypes.SharedSecret)
         {
             return ClientSecrets.FirstOrDefault(s => s.Type == type && s.Value == value);
