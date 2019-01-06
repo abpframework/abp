@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Options;
 using Nito.AsyncEx;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Serialization;
@@ -27,12 +28,17 @@ namespace Volo.Abp.Caching
 
         protected AsyncLock AsyncLock { get; } = new AsyncLock();
 
+        protected DistributedCacheEntryOptions DefaultCacheOptions;
+
+        private readonly CacheOptions _cacheOption;
         public DistributedCache(
+            IOptions<CacheOptions> cacheOption,
             IDistributedCache cache,
             ICancellationTokenProvider cancellationTokenProvider,
             IObjectSerializer objectSerializer,
             ICurrentTenant currentTenant)
         {
+            _cacheOption = cacheOption.Value;
             Cache = cache;
             CancellationTokenProvider = cancellationTokenProvider;
             ObjectSerializer = objectSerializer;
@@ -64,7 +70,7 @@ namespace Volo.Abp.Caching
         }
 
         public TCacheItem GetOrAdd(
-            string key, 
+            string key,
             Func<TCacheItem> factory,
             Func<DistributedCacheEntryOptions> optionsFactory = null)
         {
@@ -90,11 +96,12 @@ namespace Volo.Abp.Caching
         }
 
         public async Task<TCacheItem> GetOrAddAsync(
-            string key, 
+            string key,
             Func<Task<TCacheItem>> factory,
-            Func<DistributedCacheEntryOptions> optionsFactory = null, 
+            Func<DistributedCacheEntryOptions> optionsFactory = null,
             CancellationToken token = default)
         {
+            token = CancellationTokenProvider.FallbackToProvider(token);
             var value = await GetAsync(key, token);
             if (value != null)
             {
@@ -121,7 +128,7 @@ namespace Volo.Abp.Caching
             Cache.Set(
                 NormalizeKey(key),
                 ObjectSerializer.Serialize(value),
-                options ?? new DistributedCacheEntryOptions { SlidingExpiration = TimeSpan.FromMinutes(20) } //TODO: implement per cache item and global defaults!!!
+                options ?? DefaultCacheOptions
             );
         }
 
@@ -130,7 +137,7 @@ namespace Volo.Abp.Caching
             return Cache.SetAsync(
                 NormalizeKey(key),
                 ObjectSerializer.Serialize(value),
-                options ?? new DistributedCacheEntryOptions { SlidingExpiration = TimeSpan.FromMinutes(20) }, //TODO: implement per cache item and global defaults!!!
+                options ?? DefaultCacheOptions,
                 CancellationTokenProvider.FallbackToProvider(token)
             );
         }
@@ -166,6 +173,18 @@ namespace Volo.Abp.Caching
 
             return normalizedKey;
         }
+        protected virtual DistributedCacheEntryOptions GetDefaultCacheEntryOptions()
+        {
+            foreach (var configure in _cacheOption.CacheConfigurators)
+            {
+                var options = configure.Invoke(CacheName);
+                if (options != null)
+                {
+                    return options;
+                }
+            }
+            return _cacheOption.GlobalCacheEntryOptions;
+        }
 
         protected virtual void SetDefaultOptions()
         {
@@ -175,10 +194,13 @@ namespace Volo.Abp.Caching
                 .OfType<CacheNameAttribute>()
                 .FirstOrDefault();
 
-            CacheName = cacheNameAttribute != null ? cacheNameAttribute.Name : typeof(TCacheItem).Name;
+            CacheName = cacheNameAttribute != null ? cacheNameAttribute.Name : typeof(TCacheItem).FullName;
 
             //IgnoreMultiTenancy
             IgnoreMultiTenancy = typeof(TCacheItem).IsDefined(typeof(IgnoreMultiTenancyAttribute), true);
+
+            //Configure default cache entry options
+            DefaultCacheOptions = GetDefaultCacheEntryOptions();
         }
     }
 }
