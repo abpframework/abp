@@ -258,7 +258,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 return "";
             }
 
-            string text = "";
+            var text = "";
 
             if (!string.IsNullOrEmpty(TagHelper.InfoText))
             {
