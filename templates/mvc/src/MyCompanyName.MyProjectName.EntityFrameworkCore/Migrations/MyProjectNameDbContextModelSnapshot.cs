@@ -176,6 +176,8 @@ namespace MyCompanyName.MyProjectName.Migrations
 
                     b.Property<Guid>("EntityChangeId");
 
+                    b.Property<Guid?>("EntityChangeId1");
+
                     b.Property<string>("NewValue")
                         .HasColumnName("NewValue")
                         .HasMaxLength(512);
@@ -199,6 +201,8 @@ namespace MyCompanyName.MyProjectName.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("EntityChangeId");
+
+                    b.HasIndex("EntityChangeId1");
 
                     b.ToTable("AbpEntityPropertyChanges");
                 });
@@ -616,9 +620,13 @@ namespace MyCompanyName.MyProjectName.Migrations
             modelBuilder.Entity("Volo.Abp.AuditLogging.EntityPropertyChange", b =>
                 {
                     b.HasOne("Volo.Abp.AuditLogging.EntityChange")
-                        .WithMany("PropertyChanges")
+                        .WithMany()
                         .HasForeignKey("EntityChangeId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Volo.Abp.AuditLogging.EntityChange")
+                        .WithMany("PropertyChanges")
+                        .HasForeignKey("EntityChangeId1");
                 });
 
             modelBuilder.Entity("Volo.Abp.Identity.IdentityRoleClaim", b =>

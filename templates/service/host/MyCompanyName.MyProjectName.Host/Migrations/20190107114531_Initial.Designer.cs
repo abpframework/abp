@@ -10,14 +10,14 @@ using MyCompanyName.MyProjectName.Host;
 namespace MyCompanyName.MyProjectName.Host.Migrations
 {
     [DbContext(typeof(DemoAppDbContext))]
-    [Migration("20181218135310_Initial")]
+    [Migration("20190107114531_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.1-rtm-30846")
+                .HasAnnotation("ProductVersion", "2.2.0-rtm-35687")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 

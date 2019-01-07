@@ -9,6 +9,8 @@
     <Compile Remove="Migrations\20181114070127_Initial.cs" />
     <Compile Remove="Migrations\20181212113826_Initial.cs" />
     <Compile Remove="Migrations\20181218133646_Remove_Duplicate_AuditLogId1.cs" />
+    <Compile Remove="Migrations\20181218134025_Initial.cs" />
+    <Compile Remove="Migrations\20190107104851_AuditLogging_Module_Changes.cs" />
   </ItemGroup>
 
   <ItemGroup>

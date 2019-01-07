@@ -10,14 +10,14 @@ using MyCompanyName.MyProjectName.DemoApp;
 namespace MyCompanyName.MyProjectName.DemoApp.Migrations
 {
     [DbContext(typeof(DemoAppDbContext))]
-    [Migration("20181218134206_Initial")]
+    [Migration("20190107113413_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.1-rtm-30846")
+                .HasAnnotation("ProductVersion", "2.2.0-rtm-35687")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -134,17 +134,19 @@ namespace MyCompanyName.MyProjectName.DemoApp.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
-                        .IsRequired()
-                        .HasColumnName("ConcurrencyStamp")
-                        .HasMaxLength(256);
+                        .HasColumnName("ConcurrencyStamp");
 
-                    b.Property<DateTime>("CreationTime");
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnName("CreationTime");
 
-                    b.Property<Guid?>("CreatorId");
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnName("CreatorId");
 
-                    b.Property<Guid?>("DeleterId");
+                    b.Property<Guid?>("DeleterId")
+                        .HasColumnName("DeleterId");
 
-                    b.Property<DateTime?>("DeletionTime");
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnName("DeletionTime");
 
                     b.Property<string>("Email")
                         .HasColumnName("Email")
@@ -158,11 +160,16 @@ namespace MyCompanyName.MyProjectName.DemoApp.Migrations
                     b.Property<string>("ExtraProperties")
                         .HasColumnName("ExtraProperties");
 
-                    b.Property<bool>("IsDeleted");
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("IsDeleted")
+                        .HasDefaultValue(false);
 
-                    b.Property<DateTime?>("LastModificationTime");
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnName("LastModificationTime");
 
-                    b.Property<Guid?>("LastModifierId");
+                    b.Property<Guid?>("LastModifierId")
+                        .HasColumnName("LastModifierId");
 
                     b.Property<bool>("LockoutEnabled")
                         .ValueGeneratedOnAdd()

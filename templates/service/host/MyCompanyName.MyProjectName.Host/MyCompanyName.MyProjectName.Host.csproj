@@ -32,6 +32,7 @@
 
   <ItemGroup>
     <Compile Remove="Migrations\20181212121232_Initial.cs" />
+    <Compile Remove="Migrations\20181218135310_Initial.cs" />
   </ItemGroup>
 
 </Project>
