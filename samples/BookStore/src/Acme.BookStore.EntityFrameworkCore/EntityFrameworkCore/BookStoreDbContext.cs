@@ -21,10 +21,6 @@ namespace Acme.BookStore.EntityFrameworkCore
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Book>(
-                b => b.ConfigureExtraProperties()
-            );
-
             modelBuilder.ConfigureIdentity();
             modelBuilder.ConfigurePermissionManagement();
             modelBuilder.ConfigureSettingManagement();

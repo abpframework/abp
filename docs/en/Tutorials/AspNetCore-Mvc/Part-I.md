@@ -85,21 +85,7 @@ EF Core requires you to relate entities with your DbContext. The easiest way to 
     public class BookStoreDbContext : AbpDbContext<BookStoreDbContext>
     {
         public DbSet<Book> Book { get; set; }
-
-        public BookStoreDbContext(DbContextOptions<BookStoreDbContext> options)
-            : base(options)
-        {
-
-        }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
-
-            modelBuilder.Entity<Book>(
-                b => b.ConfigureExtraProperties()
-            );
-        }
+		...
     }
 ````
 
