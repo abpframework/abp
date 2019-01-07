@@ -17,15 +17,13 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
     {
         private readonly IHtmlGenerator _generator;
         private readonly HtmlEncoder _encoder;
-        private readonly IStringLocalizerFactory _stringLocalizerFactory;
-        private readonly AbpMvcDataAnnotationsLocalizationOptions _options;
+        private readonly IAbpTagHelperLocalizer _tagHelperLocalizer;
 
-        public AbpInputTagHelperService(IHtmlGenerator generator, HtmlEncoder encoder, IOptions<AbpMvcDataAnnotationsLocalizationOptions> options, IStringLocalizerFactory stringLocalizerFactory)
+        public AbpInputTagHelperService(IHtmlGenerator generator, HtmlEncoder encoder, IAbpTagHelperLocalizer tagHelperLocalizer)
         {
             _generator = generator;
             _encoder = encoder;
-            _stringLocalizerFactory = stringLocalizerFactory;
-            _options = options.Value;
+            _tagHelperLocalizer = tagHelperLocalizer;
         }
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
@@ -189,7 +187,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
             if (attribute != null)
             {
-                inputTagHelperOutput.Attributes.Add("placeholder", LocalizeText(attribute.Value));
+                var placeholderLocalized = _tagHelperLocalizer.GetLocalizedText(attribute.Value, TagHelper.AspFor.ModelExplorer);
+
+                inputTagHelperOutput.Attributes.Add("placeholder", placeholderLocalized);
             }
         }
 
@@ -207,20 +207,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 return;
             }
 
-            inputTagHelperOutput.Attributes.Add("aria-describedby", LocalizeText(idAttr.Value + "InfoText"));
-        }
+            var infoText = _tagHelperLocalizer.GetLocalizedText(idAttr.Value + "InfoText", TagHelper.AspFor.ModelExplorer);
 
-        protected virtual string LocalizeText(string text)
-        {
-            IStringLocalizer localizer = null;
-            var resourceType = _options.AssemblyResources.GetOrDefault(TagHelper.AspFor.ModelExplorer.Container.ModelType.Assembly);
-
-            if (resourceType != null)
-            {
-               localizer = _stringLocalizerFactory.Create(resourceType);
-            }
-
-            return localizer == null? text: localizer[text].Value;
+            inputTagHelperOutput.Attributes.Add("aria-describedby", infoText);
         }
 
         protected virtual bool IsInputCheckbox(TagHelperContext context, TagHelperOutput output, TagHelperAttributeList attributes)
@@ -289,9 +278,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             }
 
             var idAttr = inputTag.Attributes.FirstOrDefault(a => a.Name == "id");
+            var localizedText = _tagHelperLocalizer.GetLocalizedText(text, TagHelper.AspFor.ModelExplorer);
 
             return "<small id=\""+ idAttr?.Value + "InfoText\" class=\"form-text text-muted\">" +
-                   LocalizeText(text) +
+                   localizedText +
                    "</small>";
         }
 
