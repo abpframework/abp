@@ -4,21 +4,14 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using IdentityModel;
 using IdentityModel.Client;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Http.Client.Authentication;
 
-namespace Volo.Abp.Http.Client.IdentityModel
+namespace Volo.Abp.IdentityModel
 {
-    //TODO: This class should be optimized and improved:
-
     [Dependency(ReplaceServices = true)]
-    public class IdentityModelHttpClientAuthenticator : IHttpClientAuthenticator, ITransientDependency
+    public class IdentityModelHttpClientAuthenticator : IIdentityModelHttpClientAuthenticator, ITransientDependency
     {
-        public IHttpContextAccessor HttpContextAccessor { get; set; }
-
         protected IdentityClientOptions ClientOptions { get; }
 
         public IdentityModelHttpClientAuthenticator(
@@ -27,10 +20,9 @@ namespace Volo.Abp.Http.Client.IdentityModel
             ClientOptions = options.Value;
         }
 
-        public async Task Authenticate(HttpClientAuthenticateContext context)
+        public async Task Authenticate(IdentityModelHttpClientAuthenticateContext context)
         {
-            var accessToken = await GetAccessTokenFromHttpContextOrNullAsync() ??
-                              await GetAccessTokenFromServerOrNullAsync(context);
+            var accessToken = await GetAccessTokenFromServerOrNullAsync(context);
 
             if (accessToken != null)
             {
@@ -40,18 +32,7 @@ namespace Volo.Abp.Http.Client.IdentityModel
             }
         }
 
-        protected virtual async Task<string> GetAccessTokenFromHttpContextOrNullAsync()
-        {
-            var httpContext = HttpContextAccessor?.HttpContext;
-            if (httpContext == null)
-            {
-                return null;
-            }
-
-            return await httpContext.GetTokenAsync("access_token");
-        }
-
-        protected virtual async Task<string> GetAccessTokenFromServerOrNullAsync(HttpClientAuthenticateContext context)
+        protected virtual async Task<string> GetAccessTokenFromServerOrNullAsync(IdentityModelHttpClientAuthenticateContext context)
         {
             var configuration = GetClientConfiguration(context);
 
@@ -75,15 +56,14 @@ namespace Volo.Abp.Http.Client.IdentityModel
             return tokenResponse.AccessToken;
         }
 
-        private IdentityClientConfiguration GetClientConfiguration(HttpClientAuthenticateContext context)
+        private IdentityClientConfiguration GetClientConfiguration(IdentityModelHttpClientAuthenticateContext context)
         {
-            var identityClientName = context.RemoteService.GetIdentityClient();
-            if (identityClientName.IsNullOrEmpty())
+            if (context.IdentityClientName.IsNullOrEmpty())
             {
                 return ClientOptions.IdentityClients.Default;
             }
 
-            return ClientOptions.IdentityClients.GetOrDefault(identityClientName) ??
+            return ClientOptions.IdentityClients.GetOrDefault(context.IdentityClientName) ??
                    ClientOptions.IdentityClients.Default;
         }
 

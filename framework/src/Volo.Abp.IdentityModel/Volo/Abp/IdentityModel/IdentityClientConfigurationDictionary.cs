@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Volo.Abp.Http.Client.IdentityModel
+namespace Volo.Abp.IdentityModel
 {
     public class IdentityClientConfigurationDictionary : Dictionary<string, IdentityClientConfiguration>
     {

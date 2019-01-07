@@ -2,7 +2,7 @@
 
 namespace Volo.Abp.Http.Client.Authentication
 {
-    public class HttpClientAuthenticateContext
+    public class RemoteServiceHttpClientAuthenticateContext
     {
         public HttpClient Client { get; }
 
@@ -10,7 +10,7 @@ namespace Volo.Abp.Http.Client.Authentication
 
         public RemoteServiceConfiguration RemoteService { get; }
 
-        public HttpClientAuthenticateContext(
+        public RemoteServiceHttpClientAuthenticateContext(
             HttpClient client, 
             HttpRequestMessage request,
             RemoteServiceConfiguration remoteService)

@@ -27,7 +27,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
         private readonly RemoteServiceOptions _remoteServiceOptions;
         private readonly AbpHttpClientOptions _clientOptions;
         private readonly IJsonSerializer _jsonSerializer;
-        private readonly IHttpClientAuthenticator _clientAuthenticator;
+        private readonly IRemoteServiceHttpClientAuthenticator _clientAuthenticator;
 
         static DynamicHttpProxyInterceptor()
         {
@@ -42,7 +42,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             IOptionsSnapshot<RemoteServiceOptions> remoteServiceOptions,
             IApiDescriptionFinder apiDescriptionFinder,
             IJsonSerializer jsonSerializer,
-            IHttpClientAuthenticator clientAuthenticator)
+            IRemoteServiceHttpClientAuthenticator clientAuthenticator)
         {
             _httpClientFactory = httpClientFactory;
             _apiDescriptionFinder = apiDescriptionFinder;
@@ -123,7 +123,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                 AddHeaders(invocation, action, requestMessage, apiVersion);
 
                 await _clientAuthenticator.Authenticate(
-                    new HttpClientAuthenticateContext(
+                    new RemoteServiceHttpClientAuthenticateContext(
                         client,
                         requestMessage,
                         remoteServiceConfig

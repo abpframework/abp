@@ -4,8 +4,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>Volo.Abp.Http.Client.IdentityModel</AssemblyName>
-    <PackageId>Volo.Abp.Http.Client.IdentityModel</PackageId>
+    <AssemblyName>Volo.Abp.IdentityModel</AssemblyName>
+    <PackageId>Volo.Abp.IdentityModel</PackageId>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
@@ -15,8 +15,7 @@
 
   <ItemGroup>
     <PackageReference Include="IdentityModel" Version="3.10.4" />
-    <ProjectReference Include="..\Volo.Abp.Http.Client\Volo.Abp.Http.Client.csproj" />
-    <ProjectReference Include="..\Volo.Abp.IdentityModel\Volo.Abp.IdentityModel.csproj" />
+    <ProjectReference Include="..\Volo.Abp.Core\Volo.Abp.Core.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,4 @@
-﻿namespace Volo.Abp.Http.Client.IdentityModel
+﻿namespace Volo.Abp.IdentityModel
 {
     public class IdentityClientOptions
     {

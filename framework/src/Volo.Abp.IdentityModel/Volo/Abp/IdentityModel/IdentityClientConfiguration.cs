@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using IdentityModel;
 
-namespace Volo.Abp.Http.Client.IdentityModel
+namespace Volo.Abp.IdentityModel
 {
     public class IdentityClientConfiguration : Dictionary<string, string>
     {
