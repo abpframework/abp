@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using JetBrains.Annotations;
 using Volo.Abp.Domain.Entities;
 
@@ -60,6 +61,16 @@ namespace Volo.Abp.IdentityServer.IdentityResources
         public virtual void RemoveAllUserClaims()
         {
             UserClaims.Clear();
+        }
+
+        public virtual void RemoveUserClaim(string type)
+        {
+            UserClaims.RemoveAll(c => c.Type == type);
+        }
+
+        public virtual IdentityClaim FindUserClaim(string type)
+        {
+            return UserClaims.FirstOrDefault(c => c.Type == type);
         }
     }
 }
