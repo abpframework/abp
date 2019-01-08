@@ -50,6 +50,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 output.TagName = "div";
                 LeaveOnlyGroupAttributes(context, output);
                 output.Attributes.AddClass(isCheckbox ? "form-check" : "form-group");
+                output.Attributes.AddClass(isCheckbox ? "mb-2" : "");
                 output.Content.SetHtmlContent(output.Content.GetContent() + innerHtml);
             }
         }
