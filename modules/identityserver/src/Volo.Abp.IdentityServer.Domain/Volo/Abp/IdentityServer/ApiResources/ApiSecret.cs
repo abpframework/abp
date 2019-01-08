@@ -10,7 +10,12 @@ namespace Volo.Abp.IdentityServer.ApiResources
 
         protected ApiSecret()
         {
-            
+
+        }
+
+        public virtual bool Equals(Guid apiResourceId, [NotNull] string value, string type = IdentityServerConstants.SecretTypes.SharedSecret)
+        {
+            return ApiResourceId == apiResourceId && Value == value && Type == type;
         }
 
         protected internal ApiSecret(
