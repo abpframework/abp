@@ -75,5 +75,15 @@ namespace Volo.Abp.IdentityServer.IdentityResources
         {
             UserClaims.Clear();
         }
+
+        public virtual void RemoveUserClaim(string type)
+        {
+            UserClaims.RemoveAll(c => c.Type == type);
+        }
+
+        public virtual IdentityClaim FindUserClaim(string type)
+        {
+            return UserClaims.FirstOrDefault(c => c.Type == type);
+        }
     }
 }

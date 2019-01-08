@@ -15,6 +15,11 @@ namespace Volo.Abp.IdentityServer.Clients
 
         }
 
+        public virtual bool Equals(Guid clientId, [NotNull] string grantType)
+        {
+            return ClientId == clientId && GrantType == grantType;
+        }
+
         protected internal ClientGrantType(Guid clientId, [NotNull] string grantType)
         {
             Check.NotNull(grantType, nameof(grantType));

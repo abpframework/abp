@@ -20,14 +20,14 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
 
         public string GetLocalizedText(string text, ModelExplorer explorer)
         {
-            var localizer = GetLocalizer(explorer);
+            var localizer = GetStringLocalizer(explorer);
 
             return localizer == null ? text : localizer[text].Value;
         }
 
         public IStringLocalizer GetLocalizer(ModelExplorer explorer)
         {
-            return GetLocalizer(explorer);
+            return GetStringLocalizer(explorer);
         }
 
         private IStringLocalizer GetStringLocalizer(ModelExplorer explorer)
