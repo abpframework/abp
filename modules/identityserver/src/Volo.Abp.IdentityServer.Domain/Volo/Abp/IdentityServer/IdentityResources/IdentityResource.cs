@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using JetBrains.Annotations;
 using Volo.Abp.Domain.Entities;
 
@@ -50,6 +51,19 @@ namespace Volo.Abp.IdentityServer.IdentityResources
             ShowInDiscoveryDocument = showInDiscoveryDocument;
             
             UserClaims = new List<IdentityClaim>();
+        }
+
+        public IdentityResource(Guid id, IdentityServer4.Models.IdentityResource resource)
+        {
+            Id = id;
+            Name = resource.Name;
+            DisplayName = resource.DisplayName;
+            Description = resource.Description;
+            Enabled = resource.Enabled;
+            Required = resource.Required;
+            Emphasize = resource.Emphasize;
+            ShowInDiscoveryDocument = resource.ShowInDiscoveryDocument;
+            UserClaims = resource.UserClaims.Select(claimType => new IdentityClaim(id, claimType)).ToList();
         }
 
         public virtual void AddUserClaim([NotNull] string type)
