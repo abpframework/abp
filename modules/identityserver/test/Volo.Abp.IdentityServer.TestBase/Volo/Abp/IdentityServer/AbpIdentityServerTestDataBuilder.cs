@@ -1,4 +1,5 @@
-﻿using Volo.Abp.DependencyInjection;
+﻿using System.Collections.Generic;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
 using Volo.Abp.IdentityServer.ApiResources;
 using Volo.Abp.IdentityServer.Clients;
@@ -63,7 +64,28 @@ namespace Volo.Abp.IdentityServer
 
         private void AddClients()
         {
-            _clientRepository.Insert(new Client(_testData.Client1Id, "ClientId1"));
+            var client = new Client(_testData.Client1Id, "ClientId1")
+            {
+                Description = nameof(Client.Description),
+                ClientName = nameof(Client.ClientName),
+                ClientUri = nameof(Client.ClientUri),
+                LogoUri = nameof(Client.LogoUri),
+                ProtocolType = nameof(Client.ProtocolType),
+                FrontChannelLogoutUri = nameof(Client.FrontChannelLogoutUri)
+            };
+
+            client.AddCorsOrigin(nameof(ClientCorsOrigin.Origin));
+            client.AddClaim(nameof(ClientClaim.Value), nameof(ClientClaim.Type));
+            client.AddGrantType(nameof(ClientGrantType.GrantType));
+            client.AddIdentityProviderRestriction(nameof(ClientIdPRestriction.Provider));
+            client.AddPostLogoutRedirectUri(nameof(ClientPostLogoutRedirectUri.PostLogoutRedirectUri));
+            client.AddProperty(nameof(ClientProperty.Key), nameof(ClientProperty.Value));
+            client.AddRedirectUri(nameof(ClientRedirectUri.RedirectUri));
+            client.AddScope(nameof(ClientScope.Scope));
+            client.AddSecret(nameof(ClientSecret.Value));
+
+            _clientRepository.Insert(client);
+
             _clientRepository.Insert(new Client(_guidGenerator.Create(), "ClientId2"));
             _clientRepository.Insert(new Client(_guidGenerator.Create(), "ClientId3"));
         }
