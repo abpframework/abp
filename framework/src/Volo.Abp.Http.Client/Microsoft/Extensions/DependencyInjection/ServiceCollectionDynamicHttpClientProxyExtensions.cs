@@ -25,14 +25,14 @@ namespace Microsoft.Extensions.DependencyInjection
         /// The name of the remote service configuration to be used by the HTTP Client proxies.
         /// See <see cref="RemoteServiceOptions"/>.
         /// </param>
-        /// <param name="asDefaultService">
+        /// <param name="asDefaultServices">
         /// True, to register the HTTP client proxy as the default implementation for the services.
         /// </param>
         public static IServiceCollection AddHttpClientProxies(
             [NotNull] this IServiceCollection services,
             [NotNull] Assembly assembly,
             [NotNull] string remoteServiceConfigurationName = RemoteServiceConfigurationDictionary.DefaultName,
-            bool asDefaultService = true)
+            bool asDefaultServices = true)
         {
             Check.NotNull(services, nameof(assembly));
 
@@ -48,7 +48,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 services.AddHttpClientProxy(
                     serviceType, 
                     remoteServiceConfigurationName,
-                    asDefaultService
+                    asDefaultServices
                     );
             }
 
