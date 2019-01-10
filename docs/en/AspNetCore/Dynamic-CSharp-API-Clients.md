@@ -160,6 +160,6 @@ context.Services.AddHttpClientProxies(
 );
 ````
 
-If you disable `asDefaultServices`, you can only use `IHttpClientProxy<T>` interface to use the client proxies (see the related section above).
+Using `asDefaultServices: false` may only be needed if your application has already an implementation of the service and you do not want to override/replace the other implementation by your client proxy.
 
-Using `asDefaultServices: false` may only be needed if your application has multiple implementation of the service, so you want to distinguish the HTTP client proxy and do not want to override the other implementation.
+> If you disable `asDefaultServices`, you can only use `IHttpClientProxy<T>` interface to use the client proxies (see the related section above).
