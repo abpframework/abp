@@ -1,24 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Volo.Abp.Application.Services;
 using Volo.Abp.Authorization;
-using Volo.Abp.DependencyInjection;
 using Volo.Abp.Localization;
 
 namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
 {
-    public class ApplicationConfigurationBuilder : IApplicationConfigurationBuilder, ITransientDependency
+    public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApplicationConfigurationAppService
     {
         private readonly AbpLocalizationOptions _localizationOptions;
         private readonly IServiceProvider _serviceProvider;
         private readonly IAbpAuthorizationPolicyProvider _abpAuthorizationPolicyProvider;
         private readonly IAuthorizationService _authorizationService;
 
-        public ApplicationConfigurationBuilder(
+        public AbpApplicationConfigurationAppService(
             IOptions<AbpLocalizationOptions> localizationOptions,
             IServiceProvider serviceProvider,
             IAbpAuthorizationPolicyProvider abpAuthorizationPolicyProvider,
@@ -30,7 +30,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
             _localizationOptions = localizationOptions.Value;
         }
 
-        public async Task<ApplicationConfigurationDto> GetAsync() //TODO: Test, at least with a simple Get
+        public async Task<ApplicationConfigurationDto> GetAsync()
         {
             //TODO: Optimize & cache..?
 
@@ -66,7 +66,9 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
             {
                 var dictionary = new Dictionary<string, string>();
 
-                var localizer = _serviceProvider.GetRequiredService(typeof(IStringLocalizer<>).MakeGenericType(resource.ResourceType)) as IStringLocalizer;
+                var localizer = _serviceProvider.GetRequiredService(
+                    typeof(IStringLocalizer<>).MakeGenericType(resource.ResourceType)
+                ) as IStringLocalizer;
 
                 foreach (var localizedString in localizer.GetAllStrings())
                 {
