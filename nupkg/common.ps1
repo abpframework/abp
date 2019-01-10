@@ -28,6 +28,7 @@ $projects = (
     "framework/src/Volo.Abp.AspNetCore.Authentication.OAuth",
     "framework/src/Volo.Abp.AspNetCore.MultiTenancy",
     "framework/src/Volo.Abp.AspNetCore.Mvc",
+    "framework/src/Volo.Abp.AspNetCore.Mvc.Client",    
     "framework/src/Volo.Abp.AspNetCore.Mvc.UI",
     "framework/src/Volo.Abp.AspNetCore.Mvc.UI.Bootstrap",
     "framework/src/Volo.Abp.AspNetCore.Mvc.UI.Bundling",
