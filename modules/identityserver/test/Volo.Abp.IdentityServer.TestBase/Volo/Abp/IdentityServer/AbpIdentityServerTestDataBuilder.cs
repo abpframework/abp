@@ -50,7 +50,15 @@ namespace Volo.Abp.IdentityServer
 
         private void AddIdentityResources()
         {
-            _identityResourceRepository.Insert(new IdentityResource(_testData.IdentityResource1Id, "NewIdentityResource1"));
+            var identityResource = new IdentityResource(_testData.IdentityResource1Id, "NewIdentityResource1")
+            {
+                Description = nameof(Client.Description),
+                DisplayName = nameof(IdentityResource.DisplayName)
+            };
+
+            identityResource.AddUserClaim(nameof(ApiResourceClaim.Type));
+
+            _identityResourceRepository.Insert(identityResource);
             _identityResourceRepository.Insert(new IdentityResource(_guidGenerator.Create(), "NewIdentityResource2"));
             _identityResourceRepository.Insert(new IdentityResource(_guidGenerator.Create(), "NewIdentityResource3"));
         }
