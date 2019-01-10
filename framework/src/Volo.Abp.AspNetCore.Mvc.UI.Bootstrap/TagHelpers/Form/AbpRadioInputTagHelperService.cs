@@ -14,13 +14,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 {
     public class AbpRadioInputTagHelperService : AbpTagHelperService<AbpRadioInputTagHelper>
     {
-        private readonly AbpMvcDataAnnotationsLocalizationOptions _options;
-        private readonly IStringLocalizerFactory _stringLocalizerFactory;
+        private readonly IAbpTagHelperLocalizer _tagHelperLocalizer;
 
-        public AbpRadioInputTagHelperService(IOptions<AbpMvcDataAnnotationsLocalizationOptions> options, IStringLocalizerFactory stringLocalizerFactory)
+        public AbpRadioInputTagHelperService(IAbpTagHelperLocalizer tagHelperLocalizer)
         {
-            _options = options.Value;
-            _stringLocalizerFactory = stringLocalizerFactory;
+            _tagHelperLocalizer = tagHelperLocalizer;
         }
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
@@ -93,13 +91,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         protected virtual List<SelectListItem> GetSelectItemsFromEnum(TagHelperContext context, TagHelperOutput output, ModelExplorer explorer)
         {
-            IStringLocalizer localizer = null;
-            var resourceType = _options.AssemblyResources.GetOrDefault(explorer.Container.ModelType.Assembly);
-
-            if (resourceType != null)
-            {
-                localizer = _stringLocalizerFactory.Create(resourceType);
-            }
+            var localizer = _tagHelperLocalizer.GetLocalizer(explorer);
 
             var selectItems = explorer.Metadata.IsEnum ? explorer.ModelType.GetTypeInfo().GetMembers(BindingFlags.Public | BindingFlags.Static)
                 .Select((t, i) => new SelectListItem { Value = i.ToString(), Text = GetLocalizedPropertyName(localizer, explorer.ModelType, t.Name) }).ToList() : null;

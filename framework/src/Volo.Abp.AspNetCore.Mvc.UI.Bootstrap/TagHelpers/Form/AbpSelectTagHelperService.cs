@@ -20,15 +20,13 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
     {
         private readonly IHtmlGenerator _generator;
         private readonly HtmlEncoder _encoder;
-        private readonly IStringLocalizerFactory _stringLocalizerFactory;
-        private readonly AbpMvcDataAnnotationsLocalizationOptions _options;
+        private readonly IAbpTagHelperLocalizer _tagHelperLocalizer;
 
-        public AbpSelectTagHelperService(IHtmlGenerator generator, HtmlEncoder encoder, IOptions<AbpMvcDataAnnotationsLocalizationOptions> options, IStringLocalizerFactory stringLocalizerFactory)
+        public AbpSelectTagHelperService(IHtmlGenerator generator, HtmlEncoder encoder, IAbpTagHelperLocalizer tagHelperLocalizer)
         {
             _generator = generator;
             _encoder = encoder;
-            _stringLocalizerFactory = stringLocalizerFactory;
-            _options = options.Value;
+            _tagHelperLocalizer = tagHelperLocalizer;
         }
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
@@ -154,12 +152,14 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 return;
             }
 
-            inputTagHelperOutput.Attributes.Add("aria-describedby", LocalizeText(idAttr.Value + "InfoText"));
+            var infoText = _tagHelperLocalizer.GetLocalizedText(idAttr.Value + "InfoText", TagHelper.AspFor.ModelExplorer);
+
+            inputTagHelperOutput.Attributes.Add("aria-describedby", infoText);
         }
 
         protected virtual string GetInfoAsHtml(TagHelperContext context, TagHelperOutput output, TagHelperOutput inputTag)
         {
-            string text = "";
+            var text = "";
 
             if (!string.IsNullOrEmpty(TagHelper.InfoText))
             {
@@ -179,35 +179,16 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             }
 
             var idAttr = inputTag.Attributes.FirstOrDefault(a => a.Name == "id");
+            var localizedText = _tagHelperLocalizer.GetLocalizedText(text, TagHelper.AspFor.ModelExplorer);
 
             return "<small id=\"" + idAttr?.Value + "InfoText\" class=\"form-text text-muted\">" +
-                   LocalizeText(text) +
+                   localizedText +
                    "</small>";
-        }
-
-        protected virtual string LocalizeText(string text)
-        {
-            var localizer = GetLocalizer();
-
-            return localizer == null ? text : localizer[text].Value;
-        }
-
-        protected virtual IStringLocalizer GetLocalizer()
-        {
-            IStringLocalizer localizer = null;
-            var resourceType = _options.AssemblyResources.GetOrDefault(TagHelper.AspFor.ModelExplorer.Container.ModelType.Assembly);
-
-            if (resourceType != null)
-            {
-                localizer = _stringLocalizerFactory.Create(resourceType);
-            }
-
-            return localizer;
         }
 
         protected virtual List<SelectListItem> GetSelectItemsFromEnum(TagHelperContext context, TagHelperOutput output, ModelExplorer explorer)
         {
-            var localizer = GetLocalizer();
+            var localizer = _tagHelperLocalizer.GetLocalizer(explorer);
 
             var selectItems = explorer.Metadata.IsEnum ? explorer.ModelType.GetTypeInfo().GetMembers(BindingFlags.Public | BindingFlags.Static)
                 .Select((t, i) => new SelectListItem { Value = i.ToString(), Text = GetLocalizedPropertyName(localizer, explorer.ModelType, t.Name) }).ToList() : null;

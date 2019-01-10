@@ -52,12 +52,12 @@ namespace IdentityServerHost.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     ExtraProperties = table.Column<string>(nullable: true),
-                    ConcurrencyStamp = table.Column<string>(maxLength: 256, nullable: false),
+                    ConcurrencyStamp = table.Column<string>(nullable: true),
                     CreationTime = table.Column<DateTime>(nullable: false),
                     CreatorId = table.Column<Guid>(nullable: true),
                     LastModificationTime = table.Column<DateTime>(nullable: true),
                     LastModifierId = table.Column<Guid>(nullable: true),
-                    IsDeleted = table.Column<bool>(nullable: false),
+                    IsDeleted = table.Column<bool>(nullable: false, defaultValue: false),
                     DeleterId = table.Column<Guid>(nullable: true),
                     DeletionTime = table.Column<DateTime>(nullable: true),
                     TenantId = table.Column<Guid>(nullable: true),
@@ -170,10 +170,10 @@ namespace IdentityServerHost.Migrations
                 name: "IdentityServerPersistedGrants",
                 columns: table => new
                 {
+                    Key = table.Column<string>(maxLength: 200, nullable: false),
                     Id = table.Column<Guid>(nullable: false),
                     ExtraProperties = table.Column<string>(nullable: true),
                     ConcurrencyStamp = table.Column<string>(nullable: true),
-                    Key = table.Column<string>(maxLength: 200, nullable: false),
                     Type = table.Column<string>(maxLength: 50, nullable: false),
                     SubjectId = table.Column<string>(maxLength: 200, nullable: true),
                     ClientId = table.Column<string>(maxLength: 200, nullable: false),
@@ -232,9 +232,9 @@ namespace IdentityServerHost.Migrations
                 name: "AbpUserLogins",
                 columns: table => new
                 {
-                    TenantId = table.Column<Guid>(nullable: true),
                     UserId = table.Column<Guid>(nullable: false),
                     LoginProvider = table.Column<string>(maxLength: 64, nullable: false),
+                    TenantId = table.Column<Guid>(nullable: true),
                     ProviderKey = table.Column<string>(maxLength: 196, nullable: false),
                     ProviderDisplayName = table.Column<string>(maxLength: 128, nullable: true)
                 },
@@ -253,9 +253,9 @@ namespace IdentityServerHost.Migrations
                 name: "AbpUserRoles",
                 columns: table => new
                 {
-                    TenantId = table.Column<Guid>(nullable: true),
                     UserId = table.Column<Guid>(nullable: false),
-                    RoleId = table.Column<Guid>(nullable: false)
+                    RoleId = table.Column<Guid>(nullable: false),
+                    TenantId = table.Column<Guid>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -278,10 +278,10 @@ namespace IdentityServerHost.Migrations
                 name: "AbpUserTokens",
                 columns: table => new
                 {
-                    TenantId = table.Column<Guid>(nullable: true),
                     UserId = table.Column<Guid>(nullable: false),
                     LoginProvider = table.Column<string>(maxLength: 64, nullable: false),
                     Name = table.Column<string>(maxLength: 128, nullable: false),
+                    TenantId = table.Column<Guid>(nullable: true),
                     Value = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -340,11 +340,11 @@ namespace IdentityServerHost.Migrations
                 name: "IdentityServerApiSecrets",
                 columns: table => new
                 {
-                    Expiration = table.Column<DateTime>(nullable: true),
                     Type = table.Column<string>(maxLength: 32, nullable: false),
                     Value = table.Column<string>(maxLength: 196, nullable: false),
+                    ApiResourceId = table.Column<Guid>(nullable: false),
                     Description = table.Column<string>(maxLength: 256, nullable: true),
-                    ApiResourceId = table.Column<Guid>(nullable: false)
+                    Expiration = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -508,11 +508,11 @@ namespace IdentityServerHost.Migrations
                 name: "IdentityServerClientSecrets",
                 columns: table => new
                 {
-                    Expiration = table.Column<DateTime>(nullable: true),
                     Type = table.Column<string>(maxLength: 32, nullable: false),
                     Value = table.Column<string>(maxLength: 196, nullable: false),
+                    ClientId = table.Column<Guid>(nullable: false),
                     Description = table.Column<string>(maxLength: 256, nullable: true),
-                    ClientId = table.Column<Guid>(nullable: false)
+                    Expiration = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {

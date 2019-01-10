@@ -31,7 +31,7 @@ namespace Volo.Docs.Admin.Pages.Docs.Admin.Projects
 
         public async Task<ActionResult> OnGetAsync(string source)
         {
-            if (source == "GitHub")
+            if (source != null && source.ToLowerInvariant() == "github")
             {
                 GithubProject = new CreateGithubProjectViewModel();
                 return Page();
