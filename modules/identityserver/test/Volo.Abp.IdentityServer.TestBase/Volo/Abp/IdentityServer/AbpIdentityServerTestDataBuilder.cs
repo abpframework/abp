@@ -57,7 +57,15 @@ namespace Volo.Abp.IdentityServer
 
         private void AddApiResources()
         {
-            _apiResourceRepository.Insert(new ApiResource(_testData.ApiResource1Id, "NewApiResource1"));
+            var apiResource = new ApiResource(_testData.ApiResource1Id, "NewApiResource1");
+            apiResource.Description = nameof(apiResource.Description);
+            apiResource.DisplayName = nameof(apiResource.DisplayName);
+
+            apiResource.AddScope(nameof(ApiScope.Name));
+            apiResource.AddUserClaim(nameof(ApiResourceClaim.Type));
+            apiResource.AddSecret(nameof(ApiSecret.Value));
+
+            _apiResourceRepository.Insert(apiResource);
             _apiResourceRepository.Insert(new ApiResource(_guidGenerator.Create(), "NewApiResource2"));
             _apiResourceRepository.Insert(new ApiResource(_guidGenerator.Create(), "NewApiResource3"));
         }
