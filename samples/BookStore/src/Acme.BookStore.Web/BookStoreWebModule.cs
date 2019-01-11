@@ -2,7 +2,6 @@
 using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Acme.BookStore.EntityFrameworkCore;
 using Acme.BookStore.Localization.BookStore;
@@ -17,7 +16,6 @@ using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
-using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.Web;
@@ -56,42 +54,40 @@ namespace Acme.BookStore
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var hostingEnvironment = context.Services.GetHostingEnvironment();
-            var configuration = context.Services.BuildConfiguration();
+            var configuration = context.Services.GetConfiguration();
 
-            ConfigureDatabaseServices(context.Services, configuration);
-            ConfigureAutoMapper(context.Services);
-            ConfigureVirtualFileSystem(context.Services, hostingEnvironment);
-            ConfigureLocalizationServices(context.Services);
-            ConfigureNavigationServices(context.Services);
-            ConfigureAutoApiControllers(context.Services);
+            ConfigureDatabaseServices();
+            ConfigureAutoMapper();
+            ConfigureVirtualFileSystem(hostingEnvironment);
+            ConfigureLocalizationServices();
+            ConfigureNavigationServices();
+            ConfigureAutoApiControllers();
             ConfigureSwaggerServices(context.Services);
 
             context.Services.AddAssemblyOf<BookStoreWebModule>();
         }
 
-        private static void ConfigureDatabaseServices(IServiceCollection services, IConfigurationRoot configuration)
+        private void ConfigureDatabaseServices()
         {
-            services.Configure<DbConnectionOptions>(options =>
+            Configure<AbpDbContextOptions>(options =>
             {
-                options.ConnectionStrings.Default = configuration.GetConnectionString("Default");
+                options.UseSqlServer();
             });
-
-            services.Configure<AbpDbContextOptions>(options => { options.UseSqlServer(); });
         }
 
-        private static void ConfigureAutoMapper(IServiceCollection services)
+        private void ConfigureAutoMapper()
         {
-            services.Configure<AbpAutoMapperOptions>(options =>
+            Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<BookStoreWebAutoMapperProfile>();
             });
         }
 
-        private static void ConfigureVirtualFileSystem(IServiceCollection services, IHostingEnvironment hostingEnvironment)
+        private void ConfigureVirtualFileSystem(IHostingEnvironment hostingEnvironment)
         {
             if (hostingEnvironment.IsDevelopment())
             {
-                services.Configure<VirtualFileSystemOptions>(options =>
+                Configure<VirtualFileSystemOptions>(options =>
                 {
                     options.FileSets.ReplaceEmbeddedByPyhsical<BookStoreDomainModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}Acme.BookStore.Domain", Path.DirectorySeparatorChar)));
                     
@@ -99,9 +95,9 @@ namespace Acme.BookStore
             }
         }
 
-        private static void ConfigureLocalizationServices(IServiceCollection services)
+        private void ConfigureLocalizationServices()
         {
-            services.Configure<AbpLocalizationOptions>(options =>
+            Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources
                     .Get<BookStoreResource>()
@@ -115,23 +111,23 @@ namespace Acme.BookStore
             });
         }
 
-        private static void ConfigureNavigationServices(IServiceCollection services)
+        private void ConfigureNavigationServices()
         {
-            services.Configure<NavigationOptions>(options =>
+            Configure<NavigationOptions>(options =>
             {
                 options.MenuContributors.Add(new BookStoreMenuContributor());
             });
         }
 
-        private static void ConfigureAutoApiControllers(IServiceCollection services)
+        private void ConfigureAutoApiControllers()
         {
-            services.Configure<AbpAspNetCoreMvcOptions>(options =>
+            Configure<AbpAspNetCoreMvcOptions>(options =>
             {
                 options.ConventionalControllers.Create(typeof(BookStoreApplicationModule).Assembly);
             });
         }
 
-        private static void ConfigureSwaggerServices(IServiceCollection services)
+        private void ConfigureSwaggerServices(IServiceCollection services)
         {
             services.AddSwaggerGen(
                 options =>
@@ -180,7 +176,7 @@ namespace Acme.BookStore
             SeedDatabase(context);
         }
 
-        private static void SeedDatabase(ApplicationInitializationContext context)
+        private void SeedDatabase(ApplicationInitializationContext context)
         {
             AsyncHelper.RunSync(async () =>
             {
