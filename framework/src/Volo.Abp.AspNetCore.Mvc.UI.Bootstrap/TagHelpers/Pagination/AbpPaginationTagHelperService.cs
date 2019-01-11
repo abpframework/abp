@@ -158,7 +158,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
                 pagerInfo +
                 "    <div class=\"col-sm-12 col-md-7\">\r\n" +
                 "        <nav aria-label=\"Page navigation\">\r\n" +
-                "            <ul class=\"pagination justify-localizationKey-end\">";
+                "            <ul class=\"pagination justify-content-end\">";
         }
 
         protected virtual string GetClosingTags(TagHelperContext context, TagHelperOutput output)
