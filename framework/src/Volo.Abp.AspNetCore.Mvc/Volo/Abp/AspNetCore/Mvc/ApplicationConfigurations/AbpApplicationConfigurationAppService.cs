@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Authorization;
 using Volo.Abp.Localization;
+using Volo.Abp.Users;
 
 namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
 {
@@ -17,16 +18,19 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
         private readonly IServiceProvider _serviceProvider;
         private readonly IAbpAuthorizationPolicyProvider _abpAuthorizationPolicyProvider;
         private readonly IAuthorizationService _authorizationService;
+        private readonly ICurrentUser _currentUser;
 
         public AbpApplicationConfigurationAppService(
             IOptions<AbpLocalizationOptions> localizationOptions,
             IServiceProvider serviceProvider,
             IAbpAuthorizationPolicyProvider abpAuthorizationPolicyProvider,
-            IAuthorizationService authorizationService)
+            IAuthorizationService authorizationService,
+            ICurrentUser currentUser)
         {
             _serviceProvider = serviceProvider;
             _abpAuthorizationPolicyProvider = abpAuthorizationPolicyProvider;
             _authorizationService = authorizationService;
+            _currentUser = currentUser;
             _localizationOptions = localizationOptions.Value;
         }
 
@@ -37,7 +41,19 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
             return new ApplicationConfigurationDto
             {
                 Auth = await GetAuthConfig(),
-                Localization = GetLocalizationConfig()
+                Localization = GetLocalizationConfig(),
+                CurrentUser = GetCurrentUser()
+            };
+        }
+
+        protected virtual CurrentUserDto GetCurrentUser()
+        {
+            return new CurrentUserDto
+            {
+                IsAuthenticated = _currentUser.IsAuthenticated,
+                Id = _currentUser.Id,
+                TenantId = _currentUser.TenantId,
+                UserName = _currentUser.UserName
             };
         }
 

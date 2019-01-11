@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
 {
     [Route("api/abp/application-configuration")]
-    public class AbpApplicationConfigurationController : AbpController
+    public class AbpApplicationConfigurationController : AbpController, IAbpApplicationConfigurationAppService
     {
         private readonly IAbpApplicationConfigurationAppService _applicationConfigurationAppService;
 
