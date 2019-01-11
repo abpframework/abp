@@ -1,4 +1,4 @@
-﻿using System.Net.Http.Headers;
+﻿using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
@@ -26,9 +26,7 @@ namespace Volo.Abp.Http.Client.IdentityModel
 
             if (accessToken != null)
             {
-                //TODO: "Bearer" should be configurable
-                context.Client.DefaultRequestHeaders.Authorization
-                    = new AuthenticationHeaderValue("Bearer", accessToken);
+                context.Client.SetBearerToken(accessToken);
             }
             else
             {

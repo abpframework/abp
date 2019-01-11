@@ -99,7 +99,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             Check.NotNull(services, nameof(services));
             Check.NotNull(type, nameof(type));
-            Check.NotNull(remoteServiceConfigurationName, nameof(remoteServiceConfigurationName));
+            Check.NotNullOrWhiteSpace(remoteServiceConfigurationName, nameof(remoteServiceConfigurationName));
 
             services.Configure<AbpHttpClientOptions>(options =>
             {
