@@ -27,6 +27,18 @@ namespace Volo.Abp.Settings
                 .ShouldBe("default-value");
         }
 
+        [Fact]
+        public async Task Should_Two_Set_Same_Global_Value_And_Get_Value()
+        {
+            await _settingManager.SetGlobalAsync(TestSettingNames.TestSettingWithDefaultValue, "Test");
+
+            (await _settingManager.GetOrNullGlobalAsync(TestSettingNames.TestSettingWithDefaultValue)).ShouldBe("Test");
+
+            await _settingManager.SetGlobalAsync(TestSettingNames.TestSettingWithDefaultValue, "Test");
+
+            (await _settingManager.GetOrNullGlobalAsync(TestSettingNames.TestSettingWithDefaultValue)).ShouldBe("Test");
+        }
+
         [Theory]
         [InlineData(null)]
         [InlineData("")]

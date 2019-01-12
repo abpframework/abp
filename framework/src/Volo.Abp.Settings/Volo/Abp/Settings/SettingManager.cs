@@ -155,7 +155,7 @@ namespace Volo.Abp.Settings
             if (providers.Count > 1 && !forceToSet && setting.IsInherited && value != null)
             {
                 //Clear the value if it's same as it's fallback value
-                var fallbackValue = await GetOrNullInternalAsync(name, providers[1].Name, providerKey);
+                var fallbackValue = await GetOrNullInternalAsync(name, providers[1].Name, providerKey, false);
                 if (fallbackValue == value)
                 {
                     value = null;
@@ -208,8 +208,8 @@ namespace Volo.Abp.Settings
         }
 
         protected virtual async Task<string> GetOrNullValueFromProvidersAsync(
-            string providerKey, 
-            IEnumerable<ISettingValueProvider> providers, 
+            string providerKey,
+            IEnumerable<ISettingValueProvider> providers,
             SettingDefinition setting)
         {
             foreach (var provider in providers)
