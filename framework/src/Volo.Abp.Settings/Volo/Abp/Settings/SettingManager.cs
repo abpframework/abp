@@ -155,7 +155,7 @@ namespace Volo.Abp.Settings
             if (providers.Count > 1 && !forceToSet && setting.IsInherited && value != null)
             {
                 //Clear the value if it's same as it's fallback value
-                var fallbackValue = await GetOrNullInternalAsync(name, providers[1].Name, providerKey, false);
+                var fallbackValue = await GetOrNullInternalAsync(name, providers[1].Name, providerKey);
                 if (fallbackValue == value)
                 {
                     value = null;
@@ -193,7 +193,7 @@ namespace Volo.Abp.Settings
                 providers = providers.SkipWhile(c => c.Name != providerName);
             }
 
-            if (!fallback || !setting.IsInherited)
+            if (providerName == null || !fallback || !setting.IsInherited)
             {
                 providers = providers.TakeWhile(c => c.Name == providerName);
             }
