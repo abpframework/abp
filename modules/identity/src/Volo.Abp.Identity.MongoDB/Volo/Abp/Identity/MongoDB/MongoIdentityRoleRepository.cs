@@ -44,24 +44,6 @@ namespace Volo.Abp.Identity.MongoDB
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task UpdateClaimsAsync(Guid id, List<IdentityRoleClaim> claims)
-        {
-            var role = await GetAsync(id);
-
-            role.Claims.Clear();
-
-            foreach (var claim in claims)
-            {
-                role.Claims.Add(new IdentityRoleClaim(_guidGenerator.Create(), id, claim.ClaimType, claim.ClaimValue, CurrentTenant.Id));
-            }
-        }
-
-        public async Task<List<IdentityRoleClaim>> GetClaimsAsync(Guid id, CancellationToken cancellationToken = default)
-        {
-            var role = await GetAsync(id, cancellationToken: GetCancellationToken(cancellationToken));
-            return role.Claims.ToList();
-        }
-
         public async Task<long> GetCountAsync(CancellationToken cancellationToken = default)
         {
             return await GetMongoQueryable()
