@@ -164,7 +164,7 @@ namespace Volo.Abp.Settings
 
             providers = providers
                 .TakeWhile(p => p.Name == providerName)
-                .ToList(); //Getting list for case of there are more than one provider with same EntityType
+                .ToList(); //Getting list for case of there are more than one provider with same providerName
 
             if (value == null)
             {
