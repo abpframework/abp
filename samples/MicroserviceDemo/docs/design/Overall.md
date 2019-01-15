@@ -22,24 +22,23 @@ The solution consists of;
     * Hosts the [IdentityServer4](https://github.com/abpframework/abp/tree/master/modules/identityserver) module for authentication.
     * Uses an SQL server database and [EF Core](https://abp.io/documents/abp/latest/Entity-Framework-Core) as the ORM.
   * **Public Site Application**
-    * Hosts the [docs](https://github.com/abpframework/abp/tree/master/modules/docs) module UI. Uses the docs microservice as backend.
+    * "Our products" page to list the products using the products microservice.
     * Hosts the [blogging](https://github.com/abpframework/abp/tree/master/modules/blogging) module UI. Uses the blogging microservice as backend.
-    * Contains a sample page that uses multiple microservice API calls.
     * Authenticates from the AuthServer.
   * **Backend Admin Application**
     * Hosts the [Identity](https://github.com/abpframework/abp/tree/master/modules/identity) module UI for user/role/permission management. Uses the identity microservice as backend.
-    * Hosts the blogging admin UI to manage the docs web site. Uses the blogging microservice as backend.
+    * A CRUD page to manage products using the products microservice.
 * **Microservices**:
   * **Blogging Microservice**
     * Hosts the [blogging](https://github.com/abpframework/abp/tree/master/modules/blogging) module API.
     * Uses its own [MongoDB](https://abp.io/documents/abp/latest/MongoDB) database.
     * Listens user update events (of the Identity microservice) to update the users stored in its own database.
-  * **Docs Microservice**
-    * Serves the docs module API.
-    * Uses its own SQL Server database.
   * **Identity Microservice**
     * Hosts the [identity](https://github.com/abpframework/abp/tree/master/modules/identity) module API.
     * Shares the same SQL Server database with the AuthServer application.
+  * **Product Microservice**
+    * A simple microservice that is used to manage products (simple CRUD API).
+    * Uses its own SQL Server database.
 * **API Gateways**
   * **Public Site Gateway**: Used by the public site application.
   * **Backend Gateway**: Used by the Backend admin application.
