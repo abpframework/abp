@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using System.Text.Encodings.Web;
@@ -19,15 +20,13 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
     {
         private readonly IHtmlGenerator _generator;
         private readonly HtmlEncoder _encoder;
-        private readonly IStringLocalizerFactory _stringLocalizerFactory;
-        private readonly AbpMvcDataAnnotationsLocalizationOptions _options;
+        private readonly IAbpTagHelperLocalizer _tagHelperLocalizer;
 
-        public AbpSelectTagHelperService(IHtmlGenerator generator, HtmlEncoder encoder, IOptions<AbpMvcDataAnnotationsLocalizationOptions> options, IStringLocalizerFactory stringLocalizerFactory)
+        public AbpSelectTagHelperService(IHtmlGenerator generator, HtmlEncoder encoder, IAbpTagHelperLocalizer tagHelperLocalizer)
         {
             _generator = generator;
             _encoder = encoder;
-            _stringLocalizerFactory = stringLocalizerFactory;
-            _options = options.Value;
+            _tagHelperLocalizer = tagHelperLocalizer;
         }
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
@@ -57,10 +56,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             var selectTag = GetSelectTag(context, output);
             var selectAsHtml = RenderTagHelperOutput(selectTag, _encoder);
             var label = GetLabelAsHtml(context, output, selectTag);
-            var validation =  GetValidationAsHtml(context, output, selectTag);
+            var validation = GetValidationAsHtml(context, output, selectTag);
             var infoText = GetInfoAsHtml(context, output, selectTag);
 
-            return label + Environment.NewLine + selectAsHtml + Environment.NewLine + infoText+ Environment.NewLine + validation;
+            return label + Environment.NewLine + selectAsHtml + Environment.NewLine + infoText + Environment.NewLine + validation;
         }
 
         protected virtual string SurroundInnerHtmlAndGet(TagHelperContext context, TagHelperOutput output, string innerHtml)
@@ -80,7 +79,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             var selectTagHelperOutput = GetInnerTagHelper(GetInputAttributes(context, output), context, selectTagHelper, "select", TagMode.StartTagAndEndTag);
 
             selectTagHelperOutput.Attributes.AddClass("form-control");
-            selectTagHelperOutput.Attributes.AddClass(GetSize(context,output));
+            selectTagHelperOutput.Attributes.AddClass(GetSize(context, output));
             AddDisabledAttribute(selectTagHelperOutput);
             AddInfoTextId(selectTagHelperOutput);
 
@@ -99,26 +98,44 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         protected virtual List<SelectListItem> GetSelectItems(TagHelperContext context, TagHelperOutput output)
         {
-            var selectItems = TagHelper.AspItems?.ToList();
-
-            if (TagHelper.AspItems == null &&
-                !GetSelectItemsIfProvidedByEnum(context, output, TagHelper.AspFor.ModelExplorer, out selectItems) &&
-                !GetSelectItemsIfProvidedFromAttribute(context, output, TagHelper.AspFor.ModelExplorer, out selectItems))
+            if (TagHelper.AspItems != null)
             {
-                throw new Exception("No items provided for select attribute.");
+                return TagHelper.AspItems.ToList();
             }
 
-            return selectItems;
+            if (TagHelper.AspFor.ModelExplorer.Metadata.IsEnum)
+            {
+                return GetSelectItemsFromEnum(context, output, TagHelper.AspFor.ModelExplorer);
+            }
+
+            var selectItemsAttribute = GetAttribute<SelectItems>(TagHelper.AspFor.ModelExplorer);
+            if (selectItemsAttribute != null)
+            {
+                return GetSelectItemsFromAttribute(selectItemsAttribute, TagHelper.AspFor.ModelExplorer);
+            }
+
+            throw new Exception("No items provided for select attribute.");
         }
 
         protected virtual string GetLabelAsHtml(TagHelperContext context, TagHelperOutput output, TagHelperOutput selectTag)
         {
             if (!string.IsNullOrEmpty(TagHelper.Label))
             {
-                return "<label " + GetIdAttributeAsString(selectTag) + ">" + TagHelper.Label + "</label>";
+                return "<label " + GetIdAttributeAsString(selectTag) + ">" + TagHelper.Label + "</label>" + GetRequiredSymbol(context, output);
             }
 
-            return GetLabelAsHtmlUsingTagHelper(context, output);
+            return GetLabelAsHtmlUsingTagHelper(context, output) + GetRequiredSymbol(context, output);
+        }
+
+
+        protected virtual string GetRequiredSymbol(TagHelperContext context, TagHelperOutput output)
+        {
+            if (!TagHelper.DisplayRequiredSymbol)
+            {
+                return "";
+            }
+
+            return GetAttribute<RequiredAttribute>(TagHelper.AspFor.ModelExplorer) != null ? "<span> * </span>" : "";
         }
 
         protected virtual void AddInfoTextId(TagHelperOutput inputTagHelperOutput)
@@ -135,12 +152,14 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 return;
             }
 
-            inputTagHelperOutput.Attributes.Add("aria-describedby", LocalizeText(idAttr.Value + "InfoText"));
+            var infoText = _tagHelperLocalizer.GetLocalizedText(idAttr.Value + "InfoText", TagHelper.AspFor.ModelExplorer);
+
+            inputTagHelperOutput.Attributes.Add("aria-describedby", infoText);
         }
 
         protected virtual string GetInfoAsHtml(TagHelperContext context, TagHelperOutput output, TagHelperOutput inputTag)
         {
-            string text = "";
+            var text = "";
 
             if (!string.IsNullOrEmpty(TagHelper.InfoText))
             {
@@ -160,40 +179,21 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             }
 
             var idAttr = inputTag.Attributes.FirstOrDefault(a => a.Name == "id");
+            var localizedText = _tagHelperLocalizer.GetLocalizedText(text, TagHelper.AspFor.ModelExplorer);
 
             return "<small id=\"" + idAttr?.Value + "InfoText\" class=\"form-text text-muted\">" +
-                   LocalizeText(text) +
+                   localizedText +
                    "</small>";
         }
 
-        protected virtual string LocalizeText(string text)
+        protected virtual List<SelectListItem> GetSelectItemsFromEnum(TagHelperContext context, TagHelperOutput output, ModelExplorer explorer)
         {
-            var localizer = GetLocalizer();
+            var localizer = _tagHelperLocalizer.GetLocalizer(explorer);
 
-            return localizer == null ? text : localizer[text].Value;
-        }
-
-        protected virtual IStringLocalizer GetLocalizer()
-        {
-            IStringLocalizer localizer = null;
-            var resourceType = _options.AssemblyResources.GetOrDefault(TagHelper.AspFor.ModelExplorer.ModelType.Assembly);
-
-            if (resourceType != null)
-            {
-                localizer = _stringLocalizerFactory.Create(resourceType);
-            }
-
-            return localizer;
-        }
-
-        protected virtual bool GetSelectItemsIfProvidedByEnum(TagHelperContext context, TagHelperOutput output, ModelExplorer explorer, out List<SelectListItem> selectItems)
-        {
-            var localizer = GetLocalizer();
-
-            selectItems = explorer.Metadata.IsEnum ? explorer.ModelType.GetTypeInfo().GetMembers(BindingFlags.Public | BindingFlags.Static)
+            var selectItems = explorer.Metadata.IsEnum ? explorer.ModelType.GetTypeInfo().GetMembers(BindingFlags.Public | BindingFlags.Static)
                 .Select((t, i) => new SelectListItem { Value = i.ToString(), Text = GetLocalizedPropertyName(localizer, explorer.ModelType, t.Name) }).ToList() : null;
 
-            return selectItems != null;
+            return selectItems;
         }
 
         protected virtual string GetLocalizedPropertyName(IStringLocalizer localizer, Type enumType, string propertyName)
@@ -208,11 +208,18 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             return !localizedString.ResourceNotFound ? localizedString.Value : localizer[propertyName].Value;
         }
 
-        protected virtual bool GetSelectItemsIfProvidedFromAttribute(TagHelperContext context, TagHelperOutput output, ModelExplorer explorer, out List<SelectListItem> selectItems)
+        protected virtual List<SelectListItem> GetSelectItemsFromAttribute(
+            SelectItems selectItemsAttribute, 
+            ModelExplorer explorer)
         {
-            selectItems = GetAttribute<SelectItems>(explorer)?.GetItems(explorer)?.ToList();
+            var selectItems = selectItemsAttribute.GetItems(explorer)?.ToList();
 
-            return selectItems != null;
+            if (selectItems == null)
+            {
+                return new List<SelectListItem>();
+            }
+
+            return selectItems;
         }
 
         protected virtual string GetLabelAsHtmlUsingTagHelper(TagHelperContext context, TagHelperOutput output)
@@ -228,11 +235,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         protected virtual string GetValidationAsHtml(TagHelperContext context, TagHelperOutput output, TagHelperOutput inputTag)
         {
-            if (inputTag.Attributes.Any(a => a.Name.ToLowerInvariant() == "type" && a.Value.ToString().ToLowerInvariant() == "hidden"))
-            {
-                return "";
-            }
-
             var validationMessageTagHelper = new ValidationMessageTagHelper(_generator)
             {
                 For = TagHelper.AspFor,

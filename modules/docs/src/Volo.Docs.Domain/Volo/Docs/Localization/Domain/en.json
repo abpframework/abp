@@ -3,8 +3,11 @@
   "texts": {
     "Documents": "Documents",
     "BackToWebsite": "Back to website",
+    "Contributors": "Contributors",
+    "ShareOn": "Share on",
     "Version": "Version",
     "Edit": "Edit",
+    "Delete": "Delete",
     "InThisDocument": "In this document",
     "GoToTop": "Go to top",
     "Projects": "Project(s)",

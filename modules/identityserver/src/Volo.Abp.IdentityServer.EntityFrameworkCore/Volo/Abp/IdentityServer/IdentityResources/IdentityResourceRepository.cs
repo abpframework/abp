@@ -31,15 +31,6 @@ namespace Volo.Abp.IdentityServer.IdentityResources
             return await query.ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<List<IdentityResource>> GetListAsync(
-            bool includeDetails = false,
-            CancellationToken cancellationToken = default)
-        {
-            return await DbSet
-                .IncludeDetails(includeDetails)
-                .ToListAsync(GetCancellationToken(cancellationToken));
-        }
-
         public override IQueryable<IdentityResource> WithDetails()
         {
             return GetQueryable().IncludeDetails();
@@ -49,12 +40,24 @@ namespace Volo.Abp.IdentityServer.IdentityResources
             bool includeDetails = false, CancellationToken cancellationToken = default)
         {
             return await DbSet
-                .IncludeDetails(includeDetails).OrderBy(sorting ?? "name desc")
+                .IncludeDetails(includeDetails)
+                .OrderBy(sorting ?? "name desc")
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<long> GetTotalCount()
+        public async Task<IdentityResource> FindByNameAsync(
+            string name, 
+            bool includeDetails = true, 
+            CancellationToken cancellationToken = default)
+        {
+            return await DbSet
+                .IncludeDetails(includeDetails)
+                .Where(x => x.Name == name)
+                .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
+        }
+
+        public virtual async Task<long> GetTotalCountAsync()
         {
             return await DbSet.CountAsync();
         }

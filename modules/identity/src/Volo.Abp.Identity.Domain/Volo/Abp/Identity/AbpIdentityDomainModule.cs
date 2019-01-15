@@ -55,6 +55,7 @@ namespace Volo.Abp.Identity
                 options.User.RequireUniqueEmail = true;
             });
 
+            context.Services.AddObjectAccessor(identityBuilder);
             context.Services.ExecutePreConfiguredActions(identityBuilder);
 
             AddAbpIdentityOptionsFactory(context.Services);

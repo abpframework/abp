@@ -17,12 +17,12 @@
     Layout = ThemeManager.CurrentTheme.GetEmptyLayout();
 }
 @section styles {
-<abp-style-bundle name="@typeof(IndexModel).FullName">
-    <abp-script type="@typeof(PrismjsStyleBundleContributor)" />
-    <abp-script type="@typeof(MalihuCustomScrollbarPluginStyleBundleContributor)" />
-    <abp-style src="/Pages/Documents/Project/bootstrap-toc.css" />
-    <abp-style src="/Pages/Documents/Shared/Styles/vs.css" />
-</abp-style-bundle>
+    <abp-style-bundle name="@typeof(IndexModel).FullName">
+        <abp-script type="@typeof(PrismjsStyleBundleContributor)" />
+        <abp-script type="@typeof(MalihuCustomScrollbarPluginStyleBundleContributor)" />
+        <abp-style src="/Pages/Documents/Project/bootstrap-toc.css" />
+        <abp-style src="/Pages/Documents/Shared/Styles/vs.css" />
+    </abp-style-bundle>
 }
 @section scripts {
     <abp-script-bundle name="@typeof(IndexModel).FullName">
@@ -46,7 +46,7 @@
                         @if (!Model.Project.Name.IsNullOrWhiteSpace())
                         {
                             <a class="navbar-brand w-100" href="@Model.CreateLink(Model.LatestVersionInfo, Model.GetSpecificVersionOrLatest())">
-                                @Model.Project.Name<br>
+                                <span id="ProjectName">@Model.Project.Name</span><br>
                                 <strong class="display-block">
                                     @L["Documents"]
                                 </strong>
@@ -55,7 +55,7 @@
 
                         @if (!Model.Document.Project.MainWebsiteUrl.IsNullOrWhiteSpace())
                         {
-                            <a href="@Model.Document.Project.MainWebsiteUrl" class="go-back-site">
+                            <a href="@Model.Document.Project.MainWebsiteUrl" class="go-back-site" id="GoToMainWebSite">
                                 <i class="fa fa-chevron-left"></i>
                                 @L["BackToWebsite"]
                             </a>
@@ -120,13 +120,41 @@
             <div class="col-md-7 docs-content bg-white">
 
                 <div class="docs-link-btns">
+                    <div class="float-left">
+                        @(L["ShareOn"].Value + " :")
+                        <a href="#" target="_blank" class="share-button twitter" id="TwitterShareLink" title="Twitter">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                        <a href="#" target="_blank" class="share-button linkedin" id="LinkedinShareLink" title="LinkedIn">
+                            <i class="fa fa-linkedin"></i>
+                        </a>
+                        <a href="#" target="_blank" class="share-button email" id="EmailShareLink" title="E-mail">
+                            <i class="fa fa-envelope-square"></i>
+                        </a>
+                    </div>
+
                     @if (!string.IsNullOrEmpty(Model.Document.EditLink))
                     {
                         <a href="@Model.Document.EditLink" target="_blank"> <i class="fa fa-edit"></i> @L["Edit"]</a>
                     }
                 </div>
 
-                <div class="docs-content-field">
+                <div class="docs-content-field"> 
+                        <div class="position-relative">
+                        <div class="contributors">
+                            @if (Model.Document.Contributors.Count > 0)
+                            {
+                                <small class="text-muted">@(L["Contributors"].Value + " :")</small>
+                            }
+                            @foreach (var contributor in Model.Document.Contributors)
+                            {
+                                <a href="@contributor.UserProfileUrl" target="_blank">
+                                    <img src="@contributor.AvatarUrl"
+                                         class="contributors-avatar" height="21" width="21" title="@contributor.Username" />
+                                </a>
+                            }
+                        </div> 
+                        </div> 
                     <div class="docs-text-field">
                         <div data-spy="scroll" data-target="#docs-sticky-index" data-offset="0">
                             <article class="docs-body">

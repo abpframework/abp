@@ -30,7 +30,7 @@
 
 <div class="demo-with-code">
     <div class="demo-area">
-        <abp-dynamic-form abp-model="@Model.MyDetailedModel" submit-button="true" />
+        <abp-dynamic-form abp-model="@Model.MyDetailedModel" submit-button="true"/>
     </div>
     <div class="code-area">
         <abp-tabs>
@@ -301,7 +301,6 @@ public class DynamicFormsModel : PageModel
             MyAttributeExamplesModel = new AttributeExamplesModel();
             MyAttributeExamplesModel.DisabledInput = "Disabled Input";
             MyAttributeExamplesModel.ReadonlyInput = "Readonly Input";
-            MyAttributeExamplesModel.ReadonlyPlainTextInput = "Readonly Plain Text Input";
             MyAttributeExamplesModel.LargeInput = "Large Input";
             MyAttributeExamplesModel.SmallInput = "Small Input";
         }
@@ -316,9 +315,6 @@ public class DynamicFormsModel : PageModel
 
             [ReadOnlyInput]
             public string ReadonlyInput { get; set; }
-
-            [ReadOnlyInput(PlainText = true)]
-            public string ReadonlyPlainTextInput { get; set; }
 
             [FormControlSize(AbpFormControlSize.Large)]
             public string LargeInput { get; set; }
@@ -349,11 +345,6 @@ public class DynamicFormsModel : PageModel
         &lt;label for=&quot;MyAttributeExamplesModel_ReadonlyInput&quot;&gt;ReadonlyInput&lt;/label&gt;
         &lt;input type=&quot;text&quot; id=&quot;MyAttributeExamplesModel_ReadonlyInput&quot; name=&quot;MyAttributeExamplesModel.ReadonlyInput&quot; value=&quot;Readonly Input&quot; class=&quot;form-control &quot; readonly=&quot;&quot;&gt;
         &lt;span class=&quot;text-danger field-validation-valid&quot; data-valmsg-for=&quot;MyAttributeExamplesModel.ReadonlyInput&quot; data-valmsg-replace=&quot;true&quot;&gt;&lt;/span&gt;
-    &lt;/div&gt;
-    &lt;div class=&quot;form-group&quot;&gt;
-        &lt;label for=&quot;MyAttributeExamplesModel_ReadonlyPlainTextInput&quot;&gt;ReadonlyPlainTextInput&lt;/label&gt;
-        &lt;input type=&quot;text&quot; id=&quot;MyAttributeExamplesModel_ReadonlyPlainTextInput&quot; name=&quot;MyAttributeExamplesModel.ReadonlyPlainTextInput&quot; value=&quot;Readonly Plain Text Input&quot; class=&quot;form-control-plaintext &quot; readonly=&quot;&quot;&gt;
-        &lt;span class=&quot;text-danger field-validation-valid&quot; data-valmsg-for=&quot;MyAttributeExamplesModel.ReadonlyPlainTextInput&quot; data-valmsg-replace=&quot;true&quot;&gt;&lt;/span&gt;
     &lt;/div&gt;
     &lt;div class=&quot;form-group&quot;&gt;
         &lt;label for=&quot;MyAttributeExamplesModel_LargeInput&quot;&gt;LargeInput&lt;/label&gt;

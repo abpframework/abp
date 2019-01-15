@@ -35,6 +35,9 @@ namespace Volo.Abp.Users
         [NotNull]
         Claim[] FindClaims(string claimType);
 
+        [NotNull]
+        Claim[] GetAllClaims();
+
         bool IsInRole(string roleName);
     }
 }

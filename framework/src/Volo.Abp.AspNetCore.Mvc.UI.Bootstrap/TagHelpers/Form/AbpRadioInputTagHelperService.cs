@@ -14,18 +14,17 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 {
     public class AbpRadioInputTagHelperService : AbpTagHelperService<AbpRadioInputTagHelper>
     {
-        private readonly AbpMvcDataAnnotationsLocalizationOptions _options;
-        private readonly IStringLocalizerFactory _stringLocalizerFactory;
+        private readonly IAbpTagHelperLocalizer _tagHelperLocalizer;
 
-        public AbpRadioInputTagHelperService(IOptions<AbpMvcDataAnnotationsLocalizationOptions> options, IStringLocalizerFactory stringLocalizerFactory)
+        public AbpRadioInputTagHelperService(IAbpTagHelperLocalizer tagHelperLocalizer)
         {
-            _options = options.Value;
-            _stringLocalizerFactory = stringLocalizerFactory;
+            _tagHelperLocalizer = tagHelperLocalizer;
         }
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             var selectItems = GetSelectItems(context,output);
+            SetSelectedValue(context, output, selectItems);
 
             var order = GetInputOrder(TagHelper.AspFor.ModelExplorer);
 
@@ -71,34 +70,33 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         protected virtual List<SelectListItem> GetSelectItems(TagHelperContext context, TagHelperOutput output)
         {
-            var selectItems = TagHelper.AspItems?.ToList();
-
-            if (TagHelper.AspItems == null &&
-                !GetSelectItemsIfProvidedByEnum(context, output, TagHelper.AspFor.ModelExplorer, out selectItems) &&
-                !GetSelectItemsIfProvidedFromAttribute(context, output, TagHelper.AspFor.ModelExplorer, out selectItems))
+            if (TagHelper.AspItems != null)
             {
-                throw new Exception("No items provided for select attribute.");
+                return TagHelper.AspItems.ToList();
             }
 
-            SetSelectedValue(context, output, selectItems);
+            if (TagHelper.AspFor.ModelExplorer.Metadata.IsEnum)
+            {
+                return GetSelectItemsFromEnum(context, output, TagHelper.AspFor.ModelExplorer);
+            }
 
-            return selectItems;
+            var selectItemsAttribute = GetAttribute<SelectItems>(TagHelper.AspFor.ModelExplorer);
+            if (selectItemsAttribute != null)
+            {
+                return GetSelectItemsFromAttribute(selectItemsAttribute, TagHelper.AspFor.ModelExplorer);
+            }
+
+            throw new Exception("No items provided for select attribute.");
         }
 
-        protected virtual bool GetSelectItemsIfProvidedByEnum(TagHelperContext context, TagHelperOutput output, ModelExplorer explorer, out List<SelectListItem> selectItems)
+        protected virtual List<SelectListItem> GetSelectItemsFromEnum(TagHelperContext context, TagHelperOutput output, ModelExplorer explorer)
         {
-            IStringLocalizer localizer = null;
-            var resourceType = _options.AssemblyResources.GetOrDefault(explorer.ModelType.Assembly);
+            var localizer = _tagHelperLocalizer.GetLocalizer(explorer);
 
-            if (resourceType != null)
-            {
-                localizer = _stringLocalizerFactory.Create(resourceType);
-            }
-
-            selectItems = explorer.Metadata.IsEnum ? explorer.ModelType.GetTypeInfo().GetMembers(BindingFlags.Public | BindingFlags.Static)
+            var selectItems = explorer.Metadata.IsEnum ? explorer.ModelType.GetTypeInfo().GetMembers(BindingFlags.Public | BindingFlags.Static)
                 .Select((t, i) => new SelectListItem { Value = i.ToString(), Text = GetLocalizedPropertyName(localizer, explorer.ModelType, t.Name) }).ToList() : null;
 
-            return selectItems != null;
+            return selectItems;
         }
 
         protected virtual string GetLocalizedPropertyName(IStringLocalizer localizer, Type enumType, string propertyName)
@@ -113,11 +111,18 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             return !localizedString.ResourceNotFound ? localizedString.Value : localizer[propertyName].Value;
         }
 
-        protected virtual bool GetSelectItemsIfProvidedFromAttribute(TagHelperContext context, TagHelperOutput output, ModelExplorer explorer, out List<SelectListItem> selectItems)
+        protected virtual List<SelectListItem> GetSelectItemsFromAttribute(
+            SelectItems selectItemsAttribute,
+            ModelExplorer explorer)
         {
-            selectItems = GetAttribute<SelectItems>(explorer)?.GetItems(explorer)?.ToList();
+            var selectItems = selectItemsAttribute.GetItems(explorer)?.ToList();
 
-            return selectItems != null;
+            if (selectItems == null)
+            {
+                return new List<SelectListItem>();
+            }
+
+            return selectItems;
         }
 
         protected virtual void SetSelectedValue(TagHelperContext context, TagHelperOutput output, List<SelectListItem> selectItems)

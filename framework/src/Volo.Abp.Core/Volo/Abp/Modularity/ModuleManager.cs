@@ -11,7 +11,7 @@ namespace Volo.Abp.Modularity
     public class ModuleManager : IModuleManager, ISingletonDependency
     {
         private readonly IModuleContainer _moduleContainer;
-        private readonly IEnumerable<IModuleLifecycleContributer> _lifecycleContributers;
+        private readonly IEnumerable<IModuleLifecycleContributor> _lifecycleContributors;
         private readonly ILogger<ModuleManager> _logger;
 
         public ModuleManager(
@@ -23,10 +23,10 @@ namespace Volo.Abp.Modularity
             _moduleContainer = moduleContainer;
             _logger = logger;
 
-            _lifecycleContributers = options.Value
-                .Contributers
+            _lifecycleContributors = options.Value
+                .Contributors
                 .Select(serviceProvider.GetRequiredService)
-                .Cast<IModuleLifecycleContributer>()
+                .Cast<IModuleLifecycleContributor>()
                 .ToArray();
         }
 
@@ -34,11 +34,11 @@ namespace Volo.Abp.Modularity
         {
             LogListOfModules();
 
-            foreach (var contributer in _lifecycleContributers)
+            foreach (var Contributor in _lifecycleContributors)
             {
                 foreach (var module in _moduleContainer.Modules)
                 {
-                    contributer.Initialize(context, module.Instance);
+                    Contributor.Initialize(context, module.Instance);
                 }
             }
 
@@ -59,11 +59,11 @@ namespace Volo.Abp.Modularity
         {
             var modules = _moduleContainer.Modules.Reverse().ToList();
 
-            foreach (var contributer in _lifecycleContributers)
+            foreach (var Contributor in _lifecycleContributors)
             {
                 foreach (var module in modules)
                 {
-                    contributer.Shutdown(context, module.Instance);
+                    Contributor.Shutdown(context, module.Instance);
                 }
             }
         }

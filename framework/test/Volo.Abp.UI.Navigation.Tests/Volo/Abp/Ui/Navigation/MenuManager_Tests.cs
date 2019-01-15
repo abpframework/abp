@@ -38,8 +38,8 @@ namespace Volo.Abp.UI.Navigation
             {
                 Configure<NavigationOptions>(options =>
                 {
-                    options.MenuContributors.Add(new TestMenuContributer1());
-                    options.MenuContributors.Add(new TestMenuContributer2());
+                    options.MenuContributors.Add(new TestMenuContributor1());
+                    options.MenuContributors.Add(new TestMenuContributor2());
                 });
             }
         }
@@ -49,7 +49,7 @@ namespace Volo.Abp.UI.Navigation
          *   - User Management
          *   - Role Management
          */
-        public class TestMenuContributer1 : IMenuContributor
+        public class TestMenuContributor1 : IMenuContributor
         {
             public Task ConfigureMenuAsync(MenuConfigurationContext context)
             {
@@ -77,7 +77,7 @@ namespace Volo.Abp.UI.Navigation
          * - Administration
          *   - Dashboard Settings
          */
-        public class TestMenuContributer2 : IMenuContributor
+        public class TestMenuContributor2 : IMenuContributor
         {
             public Task ConfigureMenuAsync(MenuConfigurationContext context)
             {

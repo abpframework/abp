@@ -157,6 +157,22 @@
         display: block; }
   .docs-page .docs-content {
     overflow-x: scroll; }
+    .docs-page .docs-content .contributors {
+      position: absolute;
+      top: 15px;
+      right: 5px; }
+      .docs-page .docs-content .contributors .contributors-avatar {
+        border-radius: 21px;
+        width: 21px;
+        height: 21px; }
+      .docs-page .docs-content .contributors a {
+        padding: 0;
+        width: 21px;
+        height: 21px;
+        display: inline-block;
+        margin: 0 0 0 2px; }
+        .docs-page .docs-content .contributors a:hover {
+          text-decoration: none; }
     .docs-page .docs-content .docs-link-btns {
       border-bottom: 1px solid #f4f5f7;
       background: #fdfdfd;
@@ -169,6 +185,14 @@
         .docs-page .docs-content .docs-link-btns a:hover {
           color: #444;
           text-decoration: none; }
+      .docs-page .docs-content .docs-link-btns .twitter {
+        color: #00ACEE; }
+      .docs-page .docs-content .docs-link-btns .linkedin {
+        color: #0077B5; }
+      .docs-page .docs-content .docs-link-btns .email {
+        color: #5a5a5a; }
+      .docs-page .docs-content .docs-link-btns .share-button {
+        margin-left: 10px; }
     .docs-page .docs-content .docs-text-field {
       padding: 2rem; }
     .docs-page .docs-content article.docs-body h1 {
@@ -201,6 +225,24 @@
       margin: 15px 0 25px;
       box-shadow: 0 0 45px #f8f9fa;
       border-radius: 6px; }
+    .docs-page .docs-content article.docs-body table {
+      display: block;
+      overflow: auto;
+      width: 100%; }
+      .docs-page .docs-content article.docs-body table thead tr {
+        border-bottom: 2px inset; }
+      .docs-page .docs-content article.docs-body table th {
+        font-weight: 600; }
+      .docs-page .docs-content article.docs-body table td, .docs-page .docs-content article.docs-body table th {
+        border: 1px solid #dfe2e5;
+        padding: 6px 13px; }
+      .docs-page .docs-content article.docs-body table tr {
+        background-color: #fff;
+        border-top: 1px solid #c6cbd1; }
+      .docs-page .docs-content article.docs-body table tr:nth-child(2n) {
+        background-color: #f6f8fa; }
+      .docs-page .docs-content article.docs-body table img {
+        background-color: initial; }
   .docs-page .docs-page-index {
     min-height: 100vh; }
     .docs-page .docs-page-index #scroll-index {

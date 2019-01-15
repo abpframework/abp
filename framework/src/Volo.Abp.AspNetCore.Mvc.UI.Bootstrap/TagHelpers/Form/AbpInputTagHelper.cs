@@ -17,11 +17,14 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
         public bool IsDisabled { get; set; } = false;
 
         [HtmlAttributeName("readonly")]
-        public AbpReadonlyInputType IsReadonly { get; set; } = AbpReadonlyInputType.False;
+        public bool? IsReadonly { get; set; } = false;
 
         public bool AutoFocus { get; set; }
 
         public AbpFormControlSize Size { get; set; } = AbpFormControlSize.Default;
+
+        [HtmlAttributeNotBound]
+        public bool DisplayRequiredSymbol { get; set; } = true;
 
         [HtmlAttributeNotBound]
         [ViewContext]

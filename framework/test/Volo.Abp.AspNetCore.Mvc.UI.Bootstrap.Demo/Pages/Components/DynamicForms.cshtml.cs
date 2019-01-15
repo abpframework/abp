@@ -51,7 +51,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components
             {
                 DisabledInput = "Disabled Input",
                 ReadonlyInput = "Readonly Input",
-                ReadonlyPlainTextInput = "Readonly Plain Text Input",
                 LargeInput = "Large Input",
                 SmallInput = "Small Input"
             };
@@ -73,9 +72,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components
 
             [ReadOnlyInput]
             public string ReadonlyInput { get; set; }
-
-            [ReadOnlyInput(PlainText = true)]
-            public string ReadonlyPlainTextInput { get; set; }
 
             [FormControlSize(AbpFormControlSize.Large)]
             public string LargeInput { get; set; }

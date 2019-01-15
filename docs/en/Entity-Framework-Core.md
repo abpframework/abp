@@ -1,8 +1,8 @@
-## Entity Framework Core Integration
+# Entity Framework Core Integration
 
 This document explains how to integrate EF Core as an ORM provider to ABP based applications and how to configure it.
 
-### Installation
+## Installation
 
 `Volo.Abp.EntityFrameworkCore` is the main nuget package for the EF Core integration. Install it to your project (for a layered application, to your data/infrastructure layer):
 
@@ -28,7 +28,7 @@ namespace MyCompany.MyProject
 
 > Note: Instead, you can directly download a [startup template](https://abp.io/Templates) with EF Core pre-installed.
 
-### Creating DbContext
+## Creating DbContext
 
 You can create your DbContext as you normally do. It should be derived from `AbpDbContext<T>` as shown below:
 
@@ -50,7 +50,21 @@ namespace MyCompany.MyProject
 }
 ````
 
-### Registering DbContext To Dependency Injection
+### Configure the Connection String Selection
+
+If you have multiple databases in your application, you can configure the connection string name for your DbContext using the `[ConnectionStringName]` attribute. Example:
+
+```csharp
+[ConnectionStringName("MySecondConnString")]
+public class MyDbContext : AbpDbContext<MyDbContext>
+{
+    
+}
+```
+
+If you don't configure, the `Default` connection string is used. If you configure a specific connection string name, but not define this connection string name in the application configuration then it fallbacks to the `Default` connection string.
+
+## Registering DbContext To Dependency Injection
 
 Use `AddAbpDbContext` method in your module to register your DbContext class for [dependency injection](Dependency-Injection.md) system.
 
@@ -74,7 +88,7 @@ namespace MyCompany.MyProject
 }
 ````
 
-#### Add Default Repositories
+### Add Default Repositories
 
 ABP can automatically create default [generic repositories](Repositories.md) for the entities in your DbContext. Just use `AddDefaultRepositories()` option on the registration:
 
@@ -137,7 +151,7 @@ public class BookManager : DomainService
 
 This sample uses `InsertAsync` method to insert a new entity to the database.
 
-#### Add Custom Repositories
+### Add Custom Repositories
 
 Default generic repositories are powerful enough in most cases (since they implement `IQueryable`). However, you may need to create a custom repository to add your own repository methods.
 
@@ -173,7 +187,7 @@ public class BookRepository : EfCoreRepository<BookStoreDbContext, Book, Guid>, 
 
 Now, it's possible to [inject](Dependency-Injection.md) the `IBookRepository` and use the `DeleteBooksByType` method when needed.
 
-##### Override Default Generic Repository
+#### Override Default Generic Repository
 
 Even if you create a custom repository, you can still inject the default generic repository (`IRepository<Book, Guid>` for this example). Default repository implementation will not use the class you have created.
 
@@ -199,7 +213,7 @@ public override async Task DeleteAsync(
 }
 ````
 
-#### Access to the EF Core API
+### Access to the EF Core API
 
 In most cases, you want to hide EF Core APIs behind a repository (this is the main purpose of the repository). However, if you want to access the DbContext instance over the repository, you can use `GetDbContext()` or `GetDbSet()` extension methods. Example:
 
@@ -225,9 +239,9 @@ public class BookService
 
 > Important: You must reference to the `Volo.Abp.EntityFrameworkCore` package from the project you want to access to the DbContext. This breaks encapsulation, but this is what you want in that case.
 
-#### Advanced Topics
+### Advanced Topics
 
-##### Set Default Repository Classes
+#### Set Default Repository Classes
 
 Default generic repositories are implemented by `EfCoreRepository` class by default. You can create your own implementation and use it for default repository implementation.
 
@@ -272,7 +286,7 @@ context.Services.AddAbpDbContext<BookStoreDbContext>(options =>
 });
 ```
 
-##### Set Base DbContext Class or Interface for Default Repositories
+#### Set Base DbContext Class or Interface for Default Repositories
 
 If your DbContext inherits from another DbContext or implements an interface, you can use that base class or interface as DbContext for default repositories. Example:
 
@@ -304,7 +318,7 @@ public class BookRepository : EfCoreRepository<IBookStoreDbContext, Book, Guid>,
 
 One advantage of using interface for a DbContext is then it becomes replaceable by another implementation.
 
-##### Replace Other DbContextes
+#### Replace Other DbContextes
 
 Once you properly define and use an interface for DbContext, then any other implementation can replace it using the `ReplaceDbContext` option:
 

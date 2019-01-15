@@ -7,13 +7,13 @@ ABP can dynamically create C# API client proxies to call remote HTTP services (R
 Your service/controller should implement an interface that is shared between the server and the client. So, first define a service interface in a shared library project. Example:
 
 ````csharp
-public interface IBookService : IApplicationService
+public interface IBookAppService : IApplicationService
 {
     Task<List<BookDto>> GetListAsync();
 }
 ````
 
-Your interface should implement the `IRemoteService` interface. Since the `IApplicationService` inherits the `IRemoteService` interface, the `IBookService` above satisfies this condition.
+Your interface should implement the `IRemoteService` interface to be automatically discovered. Since the `IApplicationService` inherits the `IRemoteService` interface, the `IBookAppService` above satisfies this condition.
 
 Implement this class in your service application. You can use [auto API controller system](Auto-API-Controllers.md) to expose the service as a REST API endpoint.
 
@@ -45,13 +45,6 @@ public class MyClientAppModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        //Configure remote end point
-        context.Services.Configure<RemoteServiceOptions>(options =>
-        {
-            options.RemoteServices.Default =
-                new RemoteServiceConfiguration("http://localhost:53929/");
-        });
-
         //Create dynamic client proxies
         context.Services.AddHttpClientProxies(
             typeof(BookStoreApplicationModule).Assembly
@@ -60,9 +53,23 @@ public class MyClientAppModule : AbpModule
 }
 ````
 
-`RemoteServiceOptions` is used to configure endpoints for remote services (This example sets the default endpoint while you can have different service endpoints used by different clients. See the "Multiple Remote Service Endpoint" section).
-
 `AddHttpClientProxies` method gets an assembly, finds all service interfaces in the given assembly, creates and registers proxy classes.
+
+### Endpoint Configuration
+
+`RemoteServices` section in the `appsettings.json` file is used to get remote service address by default. Simplest configuration is shown below:
+
+````
+{
+  "RemoteServices": {
+    "Default": {
+      "BaseUrl": "http://localhost:53929/"
+    } 
+  } 
+}
+````
+
+See the "RemoteServiceOptions" section below for more detailed configuration.
 
 ## Usage
 
@@ -71,9 +78,9 @@ It's straightforward to use. Just inject the service interface in the client app
 ````csharp
 public class MyService : ITransientDependency
 {
-    private readonly IBookService _bookService;
+    private readonly IBookAppService _bookService;
 
-    public MyService(IBookService bookService)
+    public MyService(IBookAppService bookService)
     {
         _bookService = bookService;
     }
@@ -89,40 +96,34 @@ public class MyService : ITransientDependency
 }
 ````
 
-This sample injects the `IBookService` service interface defined above. The dynamic client proxy implementation makes an HTTP call whenever a service method is called by the client.
+This sample injects the `IBookAppService` service interface defined above. The dynamic client proxy implementation makes an HTTP call whenever a service method is called by the client.
 
-## Configuration Details
+### IHttpClientProxy Interface
+
+While you can inject `IBookAppService` like above to use the client proxy, you could inject `IHttpClientProxy<IBookAppService>` for a more explicit usage. In this case you will use the `Service` property of the `IHttpClientProxy<T>` interface.
+
+## Configuration
 
 ### RemoteServiceOptions
 
-While you can configure `RemoteServiceOptions` as the example shown above, you can let it to read from your `appsettings.json` file. Add a `RemoteServices` section to your `appsettings.json` file:
+`RemoteServiceOptions` is automatically set from the `appsettings.json` by default. Alternatively, you can use `Configure` method to set or override it. Example:
 
-````json
+````csharp
+public override void ConfigureServices(ServiceConfigurationContext context)
 {
-  "RemoteServices": {
-    "Default": {
-      "BaseUrl": "http://localhost:53929/"
-    } 
-  } 
+    context.Services.Configure<RemoteServiceOptions>(options =>
+    {
+        options.RemoteServices.Default =
+            new RemoteServiceConfiguration("http://localhost:53929/");
+    });
+    
+    //...
 }
 ````
 
-Then you can pass your `IConfigurationRoot` instance directly to the `Configure<RemoteServiceOptions>()` method as shown below:
+### Multiple Remote Service Endpoints
 
-````csharp
-var configuration = new ConfigurationBuilder()
-    .SetBasePath(Directory.GetCurrentDirectory())
-    .AddJsonFile("appsettings.json")
-    .Build();
-
-context.Services.Configure<RemoteServiceOptions>(configuration);
-````
-
-This approach is useful since it's easy to change the configuration later without touching to the code.
-
-#### Multiple Remote Service Endpoint
-
-The examples above have configured the "Default" remote service endpoint. You may have different endpoints for different services (as like in a microservice approach where each microservice has different endpoint). In this case, you can add other endpoints to your configuration file:
+The examples above have configured the "Default" remote service endpoint. You may have different endpoints for different services (as like in a microservice approach where each microservice has different endpoints). In this case, you can add other endpoints to your configuration file:
 
 ````json
 {
@@ -137,10 +138,6 @@ The examples above have configured the "Default" remote service endpoint. You ma
 }
 ````
 
-See the next section to learn how to use this new endpoint.
-
-### AddHttpClientProxies Method
-
 `AddHttpClientProxies` method can get an additional parameter for the remote service name. Example:
 
 ````csharp
@@ -151,3 +148,18 @@ context.Services.AddHttpClientProxies(
 ````
 
 `remoteServiceName` parameter matches the service endpoint configured via `RemoteServiceOptions`. If the `BookStore` endpoint is not defined then it fallbacks to the `Default` endpoint.
+
+### As Default Services
+
+When you create a service proxy for `IBookAppService`, you can directly inject the `IBookAppService` to use the proxy client (as shown in the usage section). You can pass `asDefaultServices: false` to the `AddHttpClientProxies` method to disable this feature.
+
+````csharp
+context.Services.AddHttpClientProxies(
+    typeof(BookStoreApplicationModule).Assembly,
+    asDefaultServices: false
+);
+````
+
+Using `asDefaultServices: false` may only be needed if your application has already an implementation of the service and you do not want to override/replace the other implementation by your client proxy.
+
+> If you disable `asDefaultServices`, you can only use `IHttpClientProxy<T>` interface to use the client proxies (see the related section above).

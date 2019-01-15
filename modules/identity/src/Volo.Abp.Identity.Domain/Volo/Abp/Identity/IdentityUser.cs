@@ -201,6 +201,13 @@ namespace Volo.Abp.Identity
             }
         }
 
+        public virtual IdentityUserClaim FindClaim([NotNull] Claim claim)
+        {
+            Check.NotNull(claim, nameof(claim));
+
+            return Claims.FirstOrDefault(c => c.ClaimType == claim.Type && c.ClaimValue == claim.Value);
+        }
+
         public virtual void ReplaceClaim([NotNull] Claim claim, [NotNull] Claim newClaim)
         {
             Check.NotNull(claim, nameof(claim));

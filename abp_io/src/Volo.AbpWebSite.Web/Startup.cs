@@ -15,6 +15,7 @@ namespace Volo.AbpWebSite
             services.AddApplication<AbpWebSiteWebModule>(options =>
             {
                 options.UseAutofac();
+                options.Configuration.UserSecretsAssembly = typeof(AbpWebSiteWebModule).Assembly;
             });
 
             return services.BuildServiceProviderFromFactory();

@@ -16,8 +16,6 @@ namespace Volo.Abp.IdentityServer.MongoDB
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            AbpIdentityServerBsonClassMap.Configure();
-
             context.Services.AddMongoDbContext<AbpIdentityServerMongoDbContext>(options =>
             {
                 options.AddRepository<ApiResource, MongoApiResourceRepository>();

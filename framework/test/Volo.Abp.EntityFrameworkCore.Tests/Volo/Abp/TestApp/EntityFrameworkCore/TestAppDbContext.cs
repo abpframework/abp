@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
-using Volo.Abp.EntityFrameworkCore.Modeling;
 using Volo.Abp.EntityFrameworkCore.TestApp.ThirdDbContext;
 using Volo.Abp.TestApp.Domain;
 
@@ -24,24 +23,9 @@ namespace Volo.Abp.TestApp.EntityFrameworkCore
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Person>(b =>
-            {
-                b.ConfigureExtraProperties();
-            });
-
             modelBuilder.Entity<Phone>(b =>
             {
                 b.HasKey(p => new {p.PersonId, p.Number});
-            });
-
-            modelBuilder.Entity<City>(b =>
-            {
-                b.ConfigureExtraProperties();
-            });
-
-            modelBuilder.Entity<ThirdDbContextDummyEntity>(b =>
-            {
-                b.ConfigureExtraProperties();
             });
         }
     }

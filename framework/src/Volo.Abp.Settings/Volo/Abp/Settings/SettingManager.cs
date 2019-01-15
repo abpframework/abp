@@ -121,7 +121,10 @@ namespace Volo.Abp.Settings
                     value = SettingEncryptionService.Decrypt(setting, value);
                 }
 
-                settingValues[setting.Name] = new SettingValue(setting.Name, value);
+                if (value != null)
+                {
+                    settingValues[setting.Name] = new SettingValue(setting.Name, value);
+                }
             }
 
             return settingValues.Values.ToList();
@@ -161,7 +164,7 @@ namespace Volo.Abp.Settings
 
             providers = providers
                 .TakeWhile(p => p.Name == providerName)
-                .ToList(); //Getting list for case of there are more than one provider with same EntityType
+                .ToList(); //Getting list for case of there are more than one provider with same providerName
 
             if (value == null)
             {

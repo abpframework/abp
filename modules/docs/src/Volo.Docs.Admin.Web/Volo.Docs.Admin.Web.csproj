@@ -1,0 +1,61 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <Import Project="..\..\..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>Volo.Docs.Admin.Web</AssemblyName>
+    <PackageId>Volo.Docs.Admin.Web</PackageId>
+    <OutputType>Library</OutputType>
+    <IsPackable>true</IsPackable>
+    <RootNamespace>Volo.Docs.Admin</RootNamespace>
+    <TypeScriptToolsVersion>2.8</TypeScriptToolsVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AutoMapper\Volo.Abp.AutoMapper.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Bundling\Volo.Abp.AspNetCore.Mvc.UI.Bundling.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Packages\Volo.Abp.AspNetCore.Mvc.UI.Packages.csproj" />
+    <ProjectReference Include="..\Volo.Docs.Admin.HttpApi\Volo.Docs.Admin.HttpApi.csproj" />
+    <PackageReference Include="CommonMark.NET" Version="0.15.1" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <EmbeddedResource Include="wwwroot\**\*.*" />
+    <EmbeddedResource Include="Pages\**\*.cshtml" />
+    <EmbeddedResource Include="Pages\**\*.css" />
+    <EmbeddedResource Include="Pages\**\*.js" />
+    <EmbeddedResource Include="Localization\Resources\**\*.json" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Content Remove="wwwroot\**\*.*" />
+    <Content Remove="Localization\Resources\Docs\Web\en.json" />
+    <Content Remove="Localization\Resources\Docs\Web\tr.json" />
+    <Content Remove="Pages\Docs\Admin\Projects\Create.cshtml" />
+    <Content Remove="Pages\Docs\Admin\Projects\Edit.cshtml" />
+    <Content Remove="Pages\Docs\Admin\Projects\Index.cshtml" />
+    <Content Remove="Properties\launchSettings.json" />
+    <Content Remove="compilerconfig.json" />
+    <Content Remove="compilerconfig.json.defaults" />
+    <None Remove="Pages\Docs\Admin\Projects\create.js" />
+    <None Remove="Pages\Docs\Admin\Projects\edit.js" />
+    <None Remove="Pages\Docs\Admin\Projects\index.js" />
+    <None Include="compilerconfig.json" />
+    <None Include="Properties\launchSettings.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Pages\Docs\Admin\Projects\Edit.cshtml.cs">
+      <DependentUpon>Edit.cshtml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+</Project>

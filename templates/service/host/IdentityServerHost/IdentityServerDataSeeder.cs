@@ -79,11 +79,8 @@ namespace IdentityServerHost
             client.AddScope("roles");
             client.AddScope("unique_name");
 
-            client.AddGrantTypes(new List<string>
-            {
-                "client_credentials",
-                "password"
-            });
+            client.AddGrantType("client_credentials");
+            client.AddGrantType("password");
 
             client.AddSecret("K7gNU3sdo+OL0wNhqoVWhr3g6s1xYv72ol/pe/Unols=");
 

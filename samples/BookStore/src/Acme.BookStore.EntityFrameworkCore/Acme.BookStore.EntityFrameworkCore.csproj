@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
     <RootNamespace>Acme.BookStore</RootNamespace>
   </PropertyGroup>
 
@@ -11,16 +11,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="2.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.1.1" />
-  </ItemGroup>
-  
-  <ItemGroup>
     <ProjectReference Include="..\Acme.BookStore.Domain\Acme.BookStore.Domain.csproj" />
-    <PackageReference Include="Volo.Abp.PermissionManagement.EntityFrameworkCore" Version="0.8.0" />
-    <PackageReference Include="Volo.Abp.SettingManagement.EntityFrameworkCore" Version="0.8.0" />
-    <PackageReference Include="Volo.Abp.Identity.EntityFrameworkCore" Version="0.8.0" />
-    <PackageReference Include="Volo.Abp.EntityFrameworkCore.SqlServer" Version="0.8.0" />
+    <PackageReference Include="Volo.Abp.PermissionManagement.EntityFrameworkCore" Version="0.12.0" />
+    <PackageReference Include="Volo.Abp.SettingManagement.EntityFrameworkCore" Version="0.12.0" />
+    <PackageReference Include="Volo.Abp.Identity.EntityFrameworkCore" Version="0.12.0" />
+    <PackageReference Include="Volo.Abp.EntityFrameworkCore.SqlServer" Version="0.12.0" />
   </ItemGroup>
 
 </Project>

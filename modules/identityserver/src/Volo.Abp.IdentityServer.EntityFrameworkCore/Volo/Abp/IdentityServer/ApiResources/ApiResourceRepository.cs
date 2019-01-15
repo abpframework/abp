@@ -66,32 +66,6 @@ namespace Volo.Abp.IdentityServer.ApiResources
             return await DbSet.CountAsync();
         }
 
-        public override async Task<ApiResource> UpdateAsync(ApiResource entity, bool autoSave = false, CancellationToken cancellationToken = default)
-        {
-            var scopeClaims = DbContext.Set<ApiScopeClaim>().Where(sc => sc.ApiResourceId == entity.Id);
-
-            foreach (var scopeClaim in scopeClaims)
-            {
-                DbContext.Set<ApiScopeClaim>().Remove(scopeClaim);
-            }
-
-            var scopes = DbContext.Set<ApiScope>().Where(s => s.ApiResourceId == entity.Id);
-
-            foreach (var scope in scopes)
-            {
-                DbContext.Set<ApiScope>().Remove(scope);
-            }
-
-            var secrets = DbContext.Set<ApiSecret>().Where(s => s.ApiResourceId == entity.Id);
-
-            foreach (var secret in secrets)
-            {
-                DbContext.Set<ApiSecret>().Remove(secret);
-            }
-
-            return await base.UpdateAsync(entity, autoSave, cancellationToken);
-        }
-
         public override async Task DeleteAsync(Guid id, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             var scopeClaims = DbContext.Set<ApiScopeClaim>().Where(sc => sc.ApiResourceId == id);

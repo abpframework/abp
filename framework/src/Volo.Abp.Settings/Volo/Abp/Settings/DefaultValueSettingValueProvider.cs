@@ -4,7 +4,7 @@ namespace Volo.Abp.Settings
 {
     public class DefaultValueSettingValueProvider : SettingValueProvider
     {
-        public const string ProviderName = null;
+        public const string ProviderName = "Default";
 
         public override string Name => ProviderName;
 

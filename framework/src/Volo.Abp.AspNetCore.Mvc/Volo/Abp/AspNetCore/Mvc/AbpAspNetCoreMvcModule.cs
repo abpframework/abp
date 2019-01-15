@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,23 +15,23 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.ViewComponents;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Volo.Abp.ApiVersioning;
-using Volo.Abp.Application;
 using Volo.Abp.AspNetCore.Mvc.Conventions;
 using Volo.Abp.AspNetCore.Mvc.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.VirtualFileSystem;
-using Volo.Abp.Http;
 using Volo.Abp.Http.Modeling;
 using Volo.Abp.Localization;
 using Volo.Abp.UI;
 
 namespace Volo.Abp.AspNetCore.Mvc
 {
-    [DependsOn(typeof(AbpAspNetCoreModule))]
-    [DependsOn(typeof(AbpLocalizationModule))]
-    [DependsOn(typeof(AbpApiVersioningAbstractionsModule))]
-    [DependsOn(typeof(AbpDddApplicationModule))]
-    [DependsOn(typeof(AbpUiModule))]
+    [DependsOn(
+        typeof(AbpAspNetCoreModule), 
+        typeof(AbpLocalizationModule), 
+        typeof(AbpApiVersioningAbstractionsModule), 
+        typeof(AbpAspNetCoreMvcContractsModule),
+        typeof(AbpUiModule)
+        )]
     public class AbpAspNetCoreMvcModule : AbpModule
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)

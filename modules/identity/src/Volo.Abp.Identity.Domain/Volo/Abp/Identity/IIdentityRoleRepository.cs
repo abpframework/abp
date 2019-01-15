@@ -22,12 +22,6 @@ namespace Volo.Abp.Identity
             CancellationToken cancellationToken = default
         );
 
-        Task UpdateClaimsAsync(Guid id, List<IdentityRoleClaim> claims);
-
-        Task<List<IdentityRoleClaim>> GetClaimsAsync(
-            Guid id,
-            CancellationToken cancellationToken = default);
-
         Task<long> GetCountAsync(
             CancellationToken cancellationToken = default
         );
