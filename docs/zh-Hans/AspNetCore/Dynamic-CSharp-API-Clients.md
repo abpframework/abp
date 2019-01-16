@@ -1,6 +1,6 @@
 # 动态 C# API 客户端
 
-ABP可以自动创建C# API 客户端代理来调用远程HTTP服务(REST APIS).通过这种方式,你不需要通过 HttpClient 或者其他低级的HTTP功能调用远程服务并获取数据.
+ABP可以自动创建C# API 客户端代理来调用远程HTTP服务(REST APIS).通过这种方式,你不需要通过 `HttpClient` 或者其他低级的HTTP功能调用远程服务并获取数据.
 
 ## 服务接口
 
@@ -13,7 +13,7 @@ public interface IBookAppService : IApplicationService
 }
 ````
 
-为了能自动被发现,你的接口需要实现IRemoteService接口.由于IApplicationService继承自IRemoteService接口.所以IBookAppService完全满足这个条件.
+为了能自动被发现,你的接口需要实现`IRemoteService`接口.由于`IApplicationService`继承自`IRemoteService`接口.所以`IBookAppService`完全满足这个条件.
 
 在你的服务中实现这个类,你可以使用[auto API controller system](Auto-API-Controllers.md)将你的服务暴漏为一个REST API 端点.
 
@@ -25,7 +25,7 @@ public interface IBookAppService : IApplicationService
 Install-Package Volo.Abp.Http.Client
 ````
 
-然后给你的模块添加AbpHttpClientModule依赖:
+然后给你的模块添加`AbpHttpClientModule`依赖:
 
 ````csharp
 [DependsOn(typeof(AbpHttpClientModule))] //添加依赖
@@ -53,7 +53,7 @@ public class MyClientAppModule : AbpModule
 }
 ````
 
-AddHttpClientproxies方法获得一个程序集,找到这个程序集中所有的服务接口,创建并注册代理类.
+`AddHttpClientproxies`方法获得一个程序集,找到这个程序集中所有的服务接口,创建并注册代理类.
 
 ### Endpoint配置
 
@@ -96,7 +96,7 @@ public class MyService : ITransientDependency
 }
 ````
 
-本例注入了上面定义的IBookAppService服务接口.当客户端调用服务方法的时候动态客户端代理就会创建一个HTTP调用.
+本例注入了上面定义的`IBookAppService`服务接口.当客户端调用服务方法的时候动态客户端代理就会创建一个HTTP调用.
 
 ### IHttpClientProxy接口
 
@@ -138,7 +138,7 @@ public override void ConfigureServices(ServiceConfigurationContext context)
 }
 ````
 
-AddHttpClientProxies方法有一个可选的参数来定义远程服务的名字:
+`AddHttpClientProxies`方法有一个可选的参数来定义远程服务的名字:
 
 ````csharp
 context.Services.AddHttpClientProxies(
@@ -147,7 +147,7 @@ context.Services.AddHttpClientProxies(
 );
 ````
 
-remoteServiceName参数会匹配通过RemoteServiceOptions配置的服务端点.如果BookStore端点没有定义就会使用默认的Default端点.
+`remoteServiceName`参数会匹配通过`RemoteServiceOptions`配置的服务端点.如果`BookStore`端点没有定义就会使用默认的`Default`端点.
 
 ### 作为默认服务
 
