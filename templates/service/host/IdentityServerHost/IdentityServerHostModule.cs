@@ -17,6 +17,7 @@ namespace IdentityServerHost
     [DependsOn(
         typeof(AbpAutofacModule),
         typeof(AbpAspNetCoreMvcModule),
+        typeof(AbpIdentityAspNetCoreModule),
         typeof(AbpIdentityServerEntityFrameworkCoreModule),
         typeof(AbpIdentityEntityFrameworkCoreModule),
         typeof(AbpEntityFrameworkCoreSqlServerModule)
