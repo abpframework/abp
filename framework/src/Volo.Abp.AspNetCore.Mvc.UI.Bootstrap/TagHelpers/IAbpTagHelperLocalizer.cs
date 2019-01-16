@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.ViewFeatures;
+﻿using System.Reflection;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.DependencyInjection;
 
@@ -9,5 +10,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
         string GetLocalizedText(string text, ModelExplorer explorer);
 
         IStringLocalizer GetLocalizer(ModelExplorer explorer);
+
+        IStringLocalizer GetLocalizer(Assembly assembly);
     }
 }
