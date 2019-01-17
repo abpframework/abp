@@ -162,6 +162,7 @@ namespace Acme.BookStore
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "BookStore API");
             });
 
+            //TODO: use app.UseMvcWithDefaultRouteAndArea(); after v1.3.0 release
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

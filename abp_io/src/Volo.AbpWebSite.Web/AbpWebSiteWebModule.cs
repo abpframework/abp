@@ -158,18 +158,8 @@ namespace Volo.AbpWebSite
             app.UseVirtualFiles();
 
             app.UseAuthentication();
-            
-            //TODO: Create an extension method!
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "defaultWithArea",
-                    template: "{area}/{controller=Home}/{action=Index}/{id?}");
 
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-            });
+            app.UseMvcWithDefaultRouteAndArea();
 
             AsyncHelper.RunSync(async () =>
             {
