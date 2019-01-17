@@ -15,6 +15,7 @@ namespace IdentityService.Host
             services.AddApplication<IdentityServiceHostModule>(options =>
             {
                 options.UseAutofac();
+                options.Configuration.UserSecretsAssembly = typeof(Startup).Assembly;
             });
 
             return services.BuildServiceProviderFromFactory();

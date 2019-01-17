@@ -19,13 +19,13 @@ namespace AuthServer.Host
 
             try
             {
-                Log.Information("Starting MyCompanyName.MyProjectName.HttpApi.Host.");
+                Log.Information("Starting AuthServer.Host.");
                 BuildWebHostInternal(args).Run();
                 return 0;
             }
             catch (Exception ex)
             {
-                Log.Fatal(ex, "Host terminated unexpectedly!");
+                Log.Fatal(ex, "AuthServer.Host terminated unexpectedly!");
                 return 1;
             }
             finally

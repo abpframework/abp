@@ -22,6 +22,7 @@ namespace AuthServer.Host
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            //TODO: Need to this?
             loggerFactory
                 .AddConsole()
                 .AddDebug()
