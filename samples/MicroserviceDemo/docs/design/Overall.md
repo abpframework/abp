@@ -12,6 +12,7 @@ The goal of this work is to show how to create a complete microservice solution 
 * **[IdentityServer4](https://identityserver.io/)** as the authentication server/framework.
 * [**Redis**](https://redis.io/) for distributed cache.
 * [**RabbitMQ**](https://www.rabbitmq.com/) for distributed messaging.
+* **[Serilog](https://serilog.net/)** for logging.
 
 ## The Solution
 
