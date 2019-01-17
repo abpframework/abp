@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Serilog;
 using Volo.Abp;
 
 namespace IdentityService.Host
@@ -23,17 +22,7 @@ namespace IdentityService.Host
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            //TODO: Need to this?
-            loggerFactory
-                .AddConsole()
-                .AddDebug()
-                .AddSerilog(new LoggerConfiguration()
-                    .Enrich.FromLogContext()
-                    .WriteTo.File("Logs/logs.txt")
-                    .CreateLogger()
-                );
-
-            app.InitializeApplication();
+           app.InitializeApplication();
         }
     }
 }

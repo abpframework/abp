@@ -15,6 +15,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "authserver", "authserver", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthServer.Host", "applications\authserver\AuthServer.Host\AuthServer.Host.csproj", "{E015158C-BCDB-4890-8B3B-1CEE1FC817CC}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "consoleclient", "consoleclient", "{72DA455F-4BD5-401D-8B2B-EE20F0C8D1AE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleClientDemo", "applications\consoleclient\ConsoleClientDemo\ConsoleClientDemo.csproj", "{06383443-5840-4C95-A038-A4B9E9211202}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +33,10 @@ Global
 		{E015158C-BCDB-4890-8B3B-1CEE1FC817CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E015158C-BCDB-4890-8B3B-1CEE1FC817CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E015158C-BCDB-4890-8B3B-1CEE1FC817CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06383443-5840-4C95-A038-A4B9E9211202}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06383443-5840-4C95-A038-A4B9E9211202}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06383443-5840-4C95-A038-A4B9E9211202}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06383443-5840-4C95-A038-A4B9E9211202}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -38,6 +46,8 @@ Global
 		{DBED3AEE-9861-48B3-9F8C-49D2779CDBB8} = {146D0838-B1E3-44C2-BD81-BED2153C02CE}
 		{C53F39BA-7409-4957-8FF8-C04D7377CA62} = {8F6834D7-E6FA-4A04-83BB-955F68EA0A0A}
 		{E015158C-BCDB-4890-8B3B-1CEE1FC817CC} = {C53F39BA-7409-4957-8FF8-C04D7377CA62}
+		{72DA455F-4BD5-401D-8B2B-EE20F0C8D1AE} = {8F6834D7-E6FA-4A04-83BB-955F68EA0A0A}
+		{06383443-5840-4C95-A038-A4B9E9211202} = {72DA455F-4BD5-401D-8B2B-EE20F0C8D1AE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {37474F0D-2E52-4D2F-B39B-7FE3FF31B4EC}
