@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
@@ -20,20 +21,25 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
 
         public string GetLocalizedText(string text, ModelExplorer explorer)
         {
-            var localizer = GetStringLocalizer(explorer);
+            var localizer = GetStringLocalizer(explorer.Container.ModelType.Assembly);
 
             return localizer == null ? text : localizer[text].Value;
         }
 
         public IStringLocalizer GetLocalizer(ModelExplorer explorer)
         {
-            return GetStringLocalizer(explorer);
+            return GetStringLocalizer(explorer.Container.ModelType.Assembly);
         }
 
-        private IStringLocalizer GetStringLocalizer(ModelExplorer explorer)
+        public IStringLocalizer GetLocalizer(Assembly assembly)
+        {
+            return GetStringLocalizer(assembly);
+        }
+
+        private IStringLocalizer GetStringLocalizer(Assembly assembly)
         {
             IStringLocalizer localizer = null;
-            var resourceType = _options.AssemblyResources.GetOrDefault(explorer.Container.ModelType.Assembly);
+            var resourceType = _options.AssemblyResources.GetOrDefault(assembly);
 
             if (resourceType != null)
             {
