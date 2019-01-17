@@ -4,6 +4,8 @@ using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DynamicProxy;
@@ -29,6 +31,8 @@ namespace Volo.Abp.Http.Client.DynamicProxying
         private readonly IJsonSerializer _jsonSerializer;
         private readonly IRemoteServiceHttpClientAuthenticator _clientAuthenticator;
 
+        public ILogger<DynamicHttpProxyInterceptor<TService>> Logger { get; set; }
+
         static DynamicHttpProxyInterceptor()
         {
             GenericInterceptAsyncMethod = typeof(DynamicHttpProxyInterceptor<TService>)
@@ -50,6 +54,8 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             _clientAuthenticator = clientAuthenticator;
             _clientOptions = clientOptions.Value;
             _remoteServiceOptions = remoteServiceOptions.Value;
+
+            Logger = NullLogger<DynamicHttpProxyInterceptor<TService>>.Instance;
         }
 
         public override void Intercept(IAbpMethodInvocation invocation)
