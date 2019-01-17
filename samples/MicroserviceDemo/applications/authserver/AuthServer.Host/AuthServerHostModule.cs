@@ -58,7 +58,7 @@ namespace AuthServer.Host
             var app = context.GetApplicationBuilder();
 
             app.UseVirtualFiles();
-            app.UseIdentityServer(); //TODO: Enable this and disable UseAuthentication
+            app.UseIdentityServer();
             app.UseAbpRequestLocalization();
             app.UseAuditing();
             app.UseMvcWithDefaultRouteAndArea();
