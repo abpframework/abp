@@ -21,32 +21,38 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
 
         public string GetLocalizedText(string text, ModelExplorer explorer)
         {
-            var localizer = GetStringLocalizer(explorer.Container.ModelType.Assembly);
+            var resourceType = GetResourceTypeFromModelExplorer(explorer);
+            var localizer = GetStringLocalizer(resourceType);
 
             return localizer == null ? text : localizer[text].Value;
         }
 
         public IStringLocalizer GetLocalizer(ModelExplorer explorer)
         {
-            return GetStringLocalizer(explorer.Container.ModelType.Assembly);
+            var resourceType = GetResourceTypeFromModelExplorer(explorer);
+            return GetStringLocalizer(resourceType);
         }
 
         public IStringLocalizer GetLocalizer(Assembly assembly)
         {
-            return GetStringLocalizer(assembly);
+            var resourceType = _options.AssemblyResources.GetOrDefault(assembly);
+            return GetStringLocalizer(resourceType);
         }
 
-        private IStringLocalizer GetStringLocalizer(Assembly assembly)
+        public IStringLocalizer GetLocalizer(Type resourceType)
         {
-            IStringLocalizer localizer = null;
-            var resourceType = _options.AssemblyResources.GetOrDefault(assembly);
+            return GetStringLocalizer(resourceType);
+        }
 
-            if (resourceType != null)
-            {
-                localizer = _stringLocalizerFactory.Create(resourceType);
-            }
+        private IStringLocalizer GetStringLocalizer(Type resourceType)
+        {
+            return resourceType == null ? null : _stringLocalizerFactory.Create(resourceType);
+        }
 
-            return localizer;
+        private Type GetResourceTypeFromModelExplorer(ModelExplorer explorer)
+        {
+            var assembly = explorer.Container.ModelType.Assembly;
+            return _options.AssemblyResources.GetOrDefault(assembly);
         }
     }
 }
