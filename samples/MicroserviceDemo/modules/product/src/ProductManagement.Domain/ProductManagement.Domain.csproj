@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ProductManagement.Domain.Shared\ProductManagement.Domain.Shared.csproj" />
+    <PackageReference Include="Volo.Abp.Ddd.Domain" Version="0.12.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="MyCompanyName\ProductManagement\Localization\Domain\*.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="MyCompanyName\ProductManagement\Localization\Domain\*.json" />
+  </ItemGroup>
+
+</Project>

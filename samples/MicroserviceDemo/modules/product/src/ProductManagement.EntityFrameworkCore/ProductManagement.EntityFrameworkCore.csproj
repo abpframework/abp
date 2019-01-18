@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ProductManagement.Domain\ProductManagement.Domain.csproj" />
+    <PackageReference Include="Volo.Abp.EntityFrameworkCore" Version="0.12.0" />
+  </ItemGroup>
+
+</Project>
