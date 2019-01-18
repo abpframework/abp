@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
@@ -13,6 +12,7 @@ using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
+using Volo.Abp.Security.Claims;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 
 namespace IdentityService.Host
@@ -31,15 +31,21 @@ namespace IdentityService.Host
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            var configuration = context.Services.GetConfiguration();
-            var x = configuration.GetConnectionString("Default");
-
             context.Services.AddAuthentication("Bearer")
                 .AddIdentityServerAuthentication(options =>
                 {
-                    options.Authority = "http://localhost:64999"; //TODO: Update
+                    options.Authority = "http://localhost:64999";
                     options.RequireHttpsMetadata = false;
                     options.ApiName = "IdentityService";
+
+                    //TODO: Should create an extension method for that (may require to create a new ABP package depending on the IdentityServer4.AccessTokenValidation)
+                    options.InboundJwtClaimTypeMap["sub"] = AbpClaimTypes.UserId;
+                    options.InboundJwtClaimTypeMap["role"] = AbpClaimTypes.Role;
+                    options.InboundJwtClaimTypeMap["email"] = AbpClaimTypes.Email;
+                    options.InboundJwtClaimTypeMap["email_verified"] = AbpClaimTypes.EmailVerified;
+                    options.InboundJwtClaimTypeMap["phone_number"] = AbpClaimTypes.PhoneNumber;
+                    options.InboundJwtClaimTypeMap["phone_number_verified"] = AbpClaimTypes.PhoneNumberVerified;
+                    options.InboundJwtClaimTypeMap["name"] = AbpClaimTypes.UserName;
                 });
 
             context.Services.AddSwaggerGen(options =>
