@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using ProductManagement;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
@@ -8,6 +9,7 @@ using Volo.Abp.Domain.Repositories;
 
 namespace ProductManagement
 {
+    [Authorize(ProductManagementPermissions.Products.Default)]
     public class ProductAppService : ApplicationService, IProductAppService
     {
         private readonly ProductManager _productManager;
@@ -46,6 +48,7 @@ namespace ProductManagement
             return ObjectMapper.Map<Product, ProductDto>(product);
         }
 
+        [Authorize(ProductManagementPermissions.Products.Create)]
         public async Task<ProductDto> CreateAsync(CreateProductDto input)
         {
             var product = await _productManager.CreateAsync(input.Code, input.Name, input.Price, input.StockCount);
@@ -53,6 +56,7 @@ namespace ProductManagement
             return ObjectMapper.Map<Product, ProductDto>(product);
         }
 
+        [Authorize(ProductManagementPermissions.Products.Update)]
         public async Task<ProductDto> UpdateAsync(Guid id, UpdateProductDto input)
         {
             var product = await _productRepository.GetAsync(id);
@@ -64,6 +68,7 @@ namespace ProductManagement
             return ObjectMapper.Map<Product, ProductDto>(product);
         }
 
+        [Authorize(ProductManagementPermissions.Products.Delete)]
         public async Task DeleteAsync(Guid id)
         {
             await _productRepository.DeleteAsync(id);
