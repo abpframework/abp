@@ -4,6 +4,6 @@ namespace Volo.Abp.IdentityModel
 {
     public interface IIdentityModelHttpClientAuthenticator
     {
-        Task Authenticate(IdentityModelHttpClientAuthenticateContext context);
+        Task AuthenticateAsync(IdentityModelHttpClientAuthenticateContext context);
     }
 }
