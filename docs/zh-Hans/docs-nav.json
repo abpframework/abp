@@ -16,11 +16,11 @@
           "text": "从空项目开始",
           "items": [
             {
-              "text": "使用Console Application",
+              "text": "使用ASP.NET Core Web Application",
               "path": "Getting-Started-AspNetCore-Application.md"
             },
             {
-              "text": "使用 ASP.NET Core Web Application",
+              "text": "使用Console Application",
               "path": "Getting-Started-Console-Application.md"
             }
           ]

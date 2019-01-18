@@ -11,7 +11,7 @@ ABP是一个 **模块化的应用程序框架** 由十多个 **nuget packages** 
 
 有一些由ABP社区开发和维护的 **开源免费** 的应用程序模块:
 
-* **Account**: 用于用户登陆/注册应用程序.
+* **Account**: 用于用户登录/注册应用程序.
 * **Audit Logging**: 用于将审计日志持久化到数据库.
 * **Background Jobs**: 用于在使用默认后台作业管理器时保存后台作业.
 * **Blogging**: 用于创建精美的博客. ABP的[博客](https://abp.io/blog/abp/) 就使用了此模块.
