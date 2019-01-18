@@ -1,8 +1,8 @@
-﻿using System;
+﻿using JetBrains.Annotations;
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using JetBrains.Annotations;
 using Volo.Abp.Modularity;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
@@ -18,6 +18,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 
         public void Add(BundleContributor contributor)
         {
+            foreach (var dependedType in GetDirectDependencies(contributor.GetType()))
+            {
+                AddWithDependencies(dependedType);
+            }
+
             _contributors.Add(contributor);
         }
 
@@ -39,11 +44,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
             return _contributors.ToImmutableList();
         }
 
-        private bool IsAlreadyAdded(Type contributorType)
-        {
-            return _contributors.Any(c => c.GetType() == contributorType);
-        }
-
         private void AddWithDependencies(Type contributorType)
         {
             if (IsAlreadyAdded(contributorType))
@@ -51,20 +51,28 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
                 return;
             }
 
+            foreach (var dependedType in GetDirectDependencies(contributorType))
+            {
+                AddWithDependencies(dependedType); //Recursive call
+            }
+
+            AddInstanceToContributors(contributorType);
+        }
+
+        private IEnumerable<Type> GetDirectDependencies(Type contributorType)
+        {
             var dependsOnAttributes = contributorType
                 .GetCustomAttributes(true)
                 .OfType<IDependedTypesProvider>()
                 .ToList();
 
-            foreach (var dependsOnAttribute in dependsOnAttributes)
-            {
-                foreach (var dependedType in dependsOnAttribute.GetDependedTypes())
-                {
-                    AddWithDependencies(dependedType); //Recursive call
-                }
-            }
+            return dependsOnAttributes
+                .SelectMany(a => a.GetDependedTypes());
+        }
 
-            AddInstanceToContributors(contributorType);
+        private bool IsAlreadyAdded(Type contributorType)
+        {
+            return _contributors.Any(c => c.GetType() == contributorType);
         }
 
         private void AddInstanceToContributors(Type contributorType)
