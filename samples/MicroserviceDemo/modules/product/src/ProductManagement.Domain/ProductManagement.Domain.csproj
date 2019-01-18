@@ -8,14 +8,15 @@
   <ItemGroup>
     <ProjectReference Include="..\ProductManagement.Domain.Shared\ProductManagement.Domain.Shared.csproj" />
     <PackageReference Include="Volo.Abp.Ddd.Domain" Version="0.12.0" />
+    <PackageReference Include="Volo.Abp.EntityFrameworkCore" Version="0.12.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="MyCompanyName\ProductManagement\Localization\Domain\*.json" />
+    <EmbeddedResource Include="ProductManagement\Localization\Domain\*.json" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="MyCompanyName\ProductManagement\Localization\Domain\*.json" />
+    <Content Remove="ProductManagement\Localization\Domain\*.json" />
   </ItemGroup>
 
 </Project>

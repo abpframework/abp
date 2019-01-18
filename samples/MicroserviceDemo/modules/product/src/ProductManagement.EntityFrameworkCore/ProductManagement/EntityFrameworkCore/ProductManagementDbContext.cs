@@ -11,9 +11,7 @@ namespace ProductManagement.EntityFrameworkCore
 
         public static string Schema { get; set; } = ProductManagementConsts.DefaultDbSchema;
 
-        /* Add DbSet for each Aggregate Root here. Example:
-         * public DbSet<Question> Questions { get; set; }
-         */
+        public DbSet<Product> Products { get; set; }
 
         public ProductManagementDbContext(DbContextOptions<ProductManagementDbContext> options) 
             : base(options)
@@ -31,5 +29,6 @@ namespace ProductManagement.EntityFrameworkCore
                 options.Schema = Schema;
             });
         }
+
     }
 }

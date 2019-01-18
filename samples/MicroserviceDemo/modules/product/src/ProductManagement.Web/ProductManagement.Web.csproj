@@ -9,15 +9,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="wwwroot\**\*.*" />
     <EmbeddedResource Include="Pages\**\*.cshtml" Exclude="*.cs" />
     <EmbeddedResource Include="Localization\Resources\**\*.json" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="wwwroot\**\*.*" />
+    <Compile Remove="wwwroot\**" />
     <Content Remove="Pages\**\*.cshtml" />
     <Content Remove="Localization\Resources\**\*.json" />
+    <Content Remove="wwwroot\**" />
+    <EmbeddedResource Remove="wwwroot\**" />
+    <None Remove="wwwroot\**" />
     <Content Remove="Properties\launchSettings.json" />
     <None Include="Properties\launchSettings.json" />
   </ItemGroup>
@@ -26,10 +28,6 @@
     <ProjectReference Include="..\ProductManagement.HttpApi\ProductManagement.HttpApi.csproj" />
     <PackageReference Include="Volo.Abp.AutoMapper" Version="0.12.0" />
     <PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared" Version="0.12.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="wwwroot\" />
   </ItemGroup>
 
 </Project>

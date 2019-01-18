@@ -14,9 +14,7 @@ namespace ProductManagement.EntityFrameworkCore
         {
             context.Services.AddAbpDbContext<ProductManagementDbContext>(options =>
             {
-                /* Add custom repositories here. Example:
-                 * options.AddRepository<Question, EfCoreQuestionRepository>();
-                 */
+                options.AddDefaultRepositories();
             });
         }
     }
