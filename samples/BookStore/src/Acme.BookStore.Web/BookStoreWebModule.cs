@@ -134,6 +134,7 @@ namespace Acme.BookStore
                 {
                     options.SwaggerDoc("v1", new Info { Title = "BookStore API", Version = "v1" });
                     options.DocInclusionPredicate((docName, description) => true);
+                    options.CustomSchemaIds(type => type.FullName);
                 });
         }
 
