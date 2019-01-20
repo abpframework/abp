@@ -82,6 +82,7 @@ namespace Volo.DocsTestApp
                 {
                     options.SwaggerDoc("v1", new Info { Title = "Docs API", Version = "v1" });
                     options.DocInclusionPredicate((docName, description) => true);
+                    options.CustomSchemaIds(type => type.FullName);
                 });
 
             var cultures = new List<CultureInfo> { new CultureInfo("en"), new CultureInfo("tr") };

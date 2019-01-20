@@ -76,6 +76,7 @@ namespace MyCompanyName.MyProjectName.DemoApp
                 {
                     options.SwaggerDoc("v1", new Info { Title = "MyProjectName API", Version = "v1" });
                     options.DocInclusionPredicate((docName, description) => true);
+                    options.CustomSchemaIds(type => type.FullName);
                 });
 
             Configure<AbpLocalizationOptions>(options =>
