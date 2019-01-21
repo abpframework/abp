@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using ProductManagement;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Authentication.OAuth;
@@ -23,6 +24,8 @@ namespace BackendAdminApp.Host
         typeof(AbpHttpClientIdentityModelModule),
         typeof(AbpIdentityHttpApiClientModule),
         typeof(AbpIdentityWebModule),
+        typeof(ProductManagementHttpApiClientModule),
+        typeof(ProductManagementWebModule),
         typeof(AbpAspNetCoreMvcUiBasicThemeModule)
         )]
     public class BackendAdminAppHostModule : AbpModule

@@ -288,3 +288,4 @@ templates/mvc/src/MyCompanyName\.MyProjectName\.Web/package-lock\.json
 samples/MicroserviceDemo/applications/authserver/AuthServer.Host/Logs/logs.txt
 samples/MicroserviceDemo/microservices/identity/IdentityService.Host/Logs/logs.txt
 samples/MicroserviceDemo/applications/backend/BackendAdminApp.Host/Logs/logs.txt
+samples/MicroserviceDemo/microservices/product/ProductService.Host/Logs/logs.txt

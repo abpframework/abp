@@ -37,4 +37,8 @@
     <None Remove="Logs\**" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="Migrations\20190121115804_Initial.cs" />
+  </ItemGroup>
+
 </Project>
