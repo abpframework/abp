@@ -89,7 +89,7 @@ namespace Acme.BookStore
             {
                 Configure<VirtualFileSystemOptions>(options =>
                 {
-                    options.FileSets.ReplaceEmbeddedByPyhsical<BookStoreDomainModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}Acme.BookStore.Domain", Path.DirectorySeparatorChar)));
+                    options.FileSets.ReplaceEmbeddedByPhysical<BookStoreDomainModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}Acme.BookStore.Domain", Path.DirectorySeparatorChar)));
                     
                 });
             }
