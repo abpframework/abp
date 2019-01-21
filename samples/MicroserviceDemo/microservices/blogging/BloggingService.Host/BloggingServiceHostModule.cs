@@ -6,15 +6,15 @@ using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.Autofac;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.SqlServer;
-using Volo.Abp.Identity;
-using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
+using Volo.Blogging;
+using Volo.Blogging.MongoDB;
 
-namespace IdentityService.Host
+namespace BloggingService.Host
 {
     [DependsOn(
         typeof(AbpAutofacModule),
@@ -22,11 +22,11 @@ namespace IdentityService.Host
         typeof(AbpAuditLoggingEntityFrameworkCoreModule),
         typeof(AbpPermissionManagementEntityFrameworkCoreModule),
         typeof(AbpSettingManagementEntityFrameworkCoreModule),
-        typeof(AbpIdentityHttpApiModule),
-        typeof(AbpIdentityEntityFrameworkCoreModule),
-        typeof(AbpIdentityApplicationModule)
+        typeof(BloggingHttpApiModule),
+        typeof(BloggingMongoDbModule),
+        typeof(BloggingApplicationModule)
         )]
-    public class IdentityServiceHostModule : AbpModule
+    public class BloggingServiceHostModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
@@ -35,7 +35,7 @@ namespace IdentityService.Host
                 {
                     options.Authority = "http://localhost:64999";
                     options.RequireHttpsMetadata = false;
-                    options.ApiName = "IdentityService";
+                    options.ApiName = "BloggingService";
 
                     //TODO: Should create an extension method for that (may require to create a new ABP package depending on the IdentityServer4.AccessTokenValidation)
                     options.InboundJwtClaimTypeMap["sub"] = AbpClaimTypes.UserId;
