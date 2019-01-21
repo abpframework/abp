@@ -1,30 +1,59 @@
 ﻿@page
-@model Volo.Abp.Account.Web.Pages.Account.LoginModel
 @using Volo.Abp.Account.Web.Settings
-@inherits Volo.Abp.Account.Web.Pages.Account.AccountPage
+@model Volo.Abp.Account.Web.Pages.Account.LoginModel
 @inject Volo.Abp.Settings.ISettingManager SettingManager
-<h2>@L["Login"]</h2>
-
-<form method="post">
-    <abp-input asp-for="Input.UserNameOrEmailAddress" auto-focus="true" />
-    <abp-input asp-for="Input.Password" />
-    <abp-input asp-for="Input.RememberMe" class="mb-3" />
-    <abp-button button-type="Primary" type="submit">@L["Login"]</abp-button>
-    @if (string.Equals(await SettingManager.GetOrNullAsync(AccountSettingNames.IsSelfRegistrationEnabled), "true", StringComparison.OrdinalIgnoreCase))
-    {
-        <a abp-button="Secondary" href="@Url.Page("./Register", new {returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash})">@L["Register"]</a>
-    }
-</form>
-
-@if (Model.ExternalLogins.Any())
+@if (Model.EnableLocalLogin)
 {
-    <h4>Use another service to log in.</h4>
-    <form asp-page="./Login" asp-page-handler="ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" asp-route-returnUrlHash="@Model.ReturnUrlHash" method="post">
-        <div>
-            @foreach (var provider in Model.ExternalLogins)
-            {
-                <abp-button button-type="Primary" type="submit" name="provider" value="@provider.Name">@provider.DisplayName</abp-button>
-            }
+    <form method="post">
+        <input asp-for="ReturnUrl" />
+        <input asp-for="ReturnUrlHash" />
+        <div class="form-group">
+            <label asp-for="LoginInput.UserNameOrEmailAddress"></label>
+            <input asp-for="LoginInput.UserNameOrEmailAddress" class="form-control" />
+            <span asp-validation-for="LoginInput.UserNameOrEmailAddress" class="text-danger"></span>
         </div>
+        <div class="form-group">
+            <label asp-for="LoginInput.Password"></label>
+            <input asp-for="LoginInput.Password" class="form-control" />
+            <span asp-validation-for="LoginInput.Password" class="text-danger"></span>
+        </div>
+        <div class="form-check">
+            <label asp-for="LoginInput.RememberMe" class="form-check-label">
+                <input asp-for="LoginInput.RememberMe" class="form-check-input" />
+                @Html.DisplayNameFor(m => m.LoginInput.RememberMe)
+            </label>
+        </div>
+        <abp-button type="button" button-type="Secondary" name="Action" value="Cancel">Cancel</abp-button> @* TODO: Only show if identity server is used *@
+        <abp-button type="submit" button-type="Primary" name="Action" value="Login">Login</abp-button>
     </form>
+
+    <div style="padding-top: 20px">
+        @if (string.Equals(await SettingManager.GetOrNullAsync(AccountSettingNames.IsSelfRegistrationEnabled), "true", StringComparison.OrdinalIgnoreCase))
+        {
+            <a href="@Url.Page("./Register", new {returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash})">Register</a><text>  | </text>
+        }
+    </div>
+}
+
+@if (Model.VisibleExternalProviders.Any())
+{
+    <div class="col-md-6">
+        <h4>Use another service to log in.</h4>
+        <form asp-page="./Login" asp-page-handler="ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" asp-route-returnUrlHash="@Model.ReturnUrlHash" method="post">
+            <input asp-for="ReturnUrl" />
+            <input asp-for="ReturnUrlHash" />
+            @foreach (var provider in Model.VisibleExternalProviders)
+            {
+                <button type="submit" class="btn btn-primary" name="provider" value="@provider.AuthenticationScheme" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+            }
+        </form>
+    </div>
+}
+
+@if (!Model.EnableLocalLogin && !Model.VisibleExternalProviders.Any())
+{
+    <div class="alert alert-warning">
+        <strong>Invalid login request</strong>
+        There are no login schemes configured for this client.
+    </div>
 }
