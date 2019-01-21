@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Shouldly;
@@ -40,7 +41,9 @@ namespace ProductManagement
         [Fact]
         public async Task GetAsync()
         {
-            var result = await _productAppService.GetAsync(_testData.ProductId1);
+            var product = (await _productRepository.GetListAsync()).FirstOrDefault();
+
+            var result = await _productAppService.GetAsync(product.Id);
 
             result.ShouldNotBeNull();
             result.Name.ShouldBe(_testData.ProductName1);
@@ -66,25 +69,29 @@ namespace ProductManagement
         [Fact]
         public async Task UpdateAsync()
         {
-            var result = await _productAppService.UpdateAsync(_testData.ProductId1, new UpdateProductDto()
+            var product = (await _productRepository.GetListAsync()).FirstOrDefault();
+
+            var result = await _productAppService.UpdateAsync(product.Id, new UpdateProductDto()
             {
-                Code = nameof(Product.Code),
                 Name = nameof(Product.Name),
                 Price = 15,
                 StockCount = 14
             });
 
             result.ShouldNotBeNull();
-            result.Code.ShouldBe(nameof(Product.Code));
             result.Name.ShouldBe(nameof(Product.Name));
+            result.Price.ShouldBe(15);
+            result.StockCount.ShouldBe(14);
         }
 
         [Fact]
         public async Task DeleteAsync()
         {
-            await _productAppService.DeleteAsync(_testData.ProductId2);
+            var product = (await _productRepository.GetListAsync()).LastOrDefault();
 
-            var result = await _productRepository.GetAsync(_testData.ProductId2);
+            await _productAppService.DeleteAsync(product.Id);
+
+            var result = await _productRepository.FindAsync(product.Id);
 
             result.ShouldBeNull();
         }
