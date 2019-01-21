@@ -31,7 +31,7 @@ namespace ProductManagement
         }
 
         [HttpGet]
-        [Route("/all")]
+        [Route("all")]
         public Task<ListResultDto<ProductDto>> GetListAsync()
         {
             return _productAppService.GetListAsync();

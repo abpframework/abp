@@ -45,7 +45,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Client
                 async () => await Proxy.Service.GetAsync(),
                 () => new DistributedCacheEntryOptions
                 {
-                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5)
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(5)
                 }
             );
 

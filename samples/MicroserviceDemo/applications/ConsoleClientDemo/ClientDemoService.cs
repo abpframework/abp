@@ -2,7 +2,9 @@
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Http.Client;
 using Volo.Abp.Identity;
 using Volo.Abp.IdentityModel;
 
@@ -13,14 +15,17 @@ namespace ConsoleClientDemo
         private readonly IIdentityUserAppService _userAppService;
         private readonly IProductAppService _productAppService;
         private readonly IIdentityModelHttpClientAuthenticator _authenticator;
+        private readonly RemoteServiceOptions _remoteServiceOptions;
 
         public ClientDemoService(
             IIdentityUserAppService userAppService,
             IProductAppService productAppService,
-            IIdentityModelHttpClientAuthenticator authenticator)
+            IIdentityModelHttpClientAuthenticator authenticator, 
+            IOptions<RemoteServiceOptions> remoteServiceOptions)
         {
             _userAppService = userAppService;
             _authenticator = authenticator;
+            _remoteServiceOptions = remoteServiceOptions.Value;
             _productAppService = productAppService;
         }
 
@@ -46,7 +51,7 @@ namespace ConsoleClientDemo
                 {
                     await _authenticator.AuthenticateAsync(client);
 
-                    var response = await client.GetAsync("http://localhost:63568/Test");
+                    var response = await client.GetAsync(_remoteServiceOptions.RemoteServices.Default.BaseUrl.EnsureEndsWith('/') + "Test");
                     if (!response.IsSuccessStatusCode)
                     {
                         Console.WriteLine(response.StatusCode);

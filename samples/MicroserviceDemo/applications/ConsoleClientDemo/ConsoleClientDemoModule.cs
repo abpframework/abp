@@ -14,6 +14,6 @@ namespace ConsoleClientDemo
         )]
     public class ConsoleClientDemoModule : AbpModule
     {
-        
+         
     }
 }
