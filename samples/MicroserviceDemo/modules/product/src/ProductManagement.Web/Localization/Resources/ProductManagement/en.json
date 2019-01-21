@@ -1,6 +1,7 @@
 {
   "culture": "en",
   "texts": {
-
+    "Menu:ProductManagement": "Product Management",
+    "Menu:Products": "Products"
   }
 }
