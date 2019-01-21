@@ -38,7 +38,6 @@ namespace ProductManagement.Pages.ProductManagement.Products
         {
             await _productAppService.UpdateAsync(Product.Id, new UpdateProductDto()
             {
-                Code = Product.Code,
                 Name = Product.Name,
                 Price = Product.Price,
                 StockCount = Product.StockCount
@@ -50,10 +49,6 @@ namespace ProductManagement.Pages.ProductManagement.Products
             [HiddenInput]
             [Required]
             public Guid Id { get; set; }
-
-            [Required]
-            [StringLength(ProductConsts.MaxCodeLength)]
-            public string Code { get; set; }
 
             [Required]
             [StringLength(ProductConsts.MaxNameLength)]
