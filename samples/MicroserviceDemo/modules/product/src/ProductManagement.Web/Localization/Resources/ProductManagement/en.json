@@ -2,6 +2,14 @@
   "culture": "en",
   "texts": {
     "Menu:ProductManagement": "Product Management",
-    "Menu:Products": "Products"
+    "Menu:Products": "Products",
+    "ProductManagement": "Product Management",
+    "CreateANewProduct": "Create A New Product",
+    "Products": "Products",
+    "StockCount": "Stock Count",
+    "Code": "Code",
+    "Name": "Name",
+    "Price": "Price",
+    "ProductDeletionWarningMessage": "Are you sure you want to delete this product?"
   }
 }

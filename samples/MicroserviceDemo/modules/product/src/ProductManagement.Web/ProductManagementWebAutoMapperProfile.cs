@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ProductManagement.Pages.ProductManagement.Products;
 
 namespace ProductManagement
 {
@@ -6,7 +7,8 @@ namespace ProductManagement
     {
         public ProductManagementWebAutoMapperProfile()
         {
-            //Create mappings.
+            CreateMap<CreateModel.ProductCreateModalView, CreateProductDto>();
+            CreateMap<ProductDto, EditModel.ProductEditModalView>();
         }
     }
 }
