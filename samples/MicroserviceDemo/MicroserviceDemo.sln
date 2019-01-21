@@ -13,15 +13,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "applications", "application
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "authserver", "authserver", "{C53F39BA-7409-4957-8FF8-C04D7377CA62}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthServer.Host", "applications\authserver\AuthServer.Host\AuthServer.Host.csproj", "{E015158C-BCDB-4890-8B3B-1CEE1FC817CC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthServer.Host", "applications\authserver\AuthServer.Host\AuthServer.Host.csproj", "{E015158C-BCDB-4890-8B3B-1CEE1FC817CC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "consoleclient", "consoleclient", "{72DA455F-4BD5-401D-8B2B-EE20F0C8D1AE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleClientDemo", "applications\consoleclient\ConsoleClientDemo\ConsoleClientDemo.csproj", "{06383443-5840-4C95-A038-A4B9E9211202}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleClientDemo", "applications\consoleclient\ConsoleClientDemo\ConsoleClientDemo.csproj", "{06383443-5840-4C95-A038-A4B9E9211202}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "product", "product", "{DB29DE67-61C2-4B21-BAE3-A9C5A5F04822}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductService.Host", "microservices\product\ProductService.Host\ProductService.Host.csproj", "{8A3F1AEE-5B54-48AD-8EC7-C2D9339E107C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductService.Host", "microservices\product\ProductService.Host\ProductService.Host.csproj", "{8A3F1AEE-5B54-48AD-8EC7-C2D9339E107C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "modules", "modules", "{818134CC-2F7F-41B9-ACA6-87F0650F5D52}"
 EndProject
@@ -54,6 +54,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductManagement.Domain.Tests", "modules\product\test\ProductManagement.Domain.Tests\ProductManagement.Domain.Tests.csproj", "{BDCDBC2D-C05B-4A18-A698-86525E3EFC95}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductManagement.Application.Tests", "modules\product\test\ProductManagement.Application.Tests\ProductManagement.Application.Tests.csproj", "{B6F469F0-FB01-4A60-B6A6-D4127907E3B6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "backend", "backend", "{F3F13E26-9121-4125-9417-851A54F84BDC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackendAdminApp.Host", "applications\backend\BackendAdminApp.Host\BackendAdminApp.Host.csproj", "{94D639F4-A6B5-4563-884F-5C58C7E8AF7E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -125,6 +129,10 @@ Global
 		{B6F469F0-FB01-4A60-B6A6-D4127907E3B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B6F469F0-FB01-4A60-B6A6-D4127907E3B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B6F469F0-FB01-4A60-B6A6-D4127907E3B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94D639F4-A6B5-4563-884F-5C58C7E8AF7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94D639F4-A6B5-4563-884F-5C58C7E8AF7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94D639F4-A6B5-4563-884F-5C58C7E8AF7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94D639F4-A6B5-4563-884F-5C58C7E8AF7E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -153,6 +161,8 @@ Global
 		{1FA2B816-7841-44B0-931C-D4F84DA7E146} = {D1526262-55E0-43F1-9EF1-C6095E76A9E2}
 		{BDCDBC2D-C05B-4A18-A698-86525E3EFC95} = {D1526262-55E0-43F1-9EF1-C6095E76A9E2}
 		{B6F469F0-FB01-4A60-B6A6-D4127907E3B6} = {D1526262-55E0-43F1-9EF1-C6095E76A9E2}
+		{F3F13E26-9121-4125-9417-851A54F84BDC} = {8F6834D7-E6FA-4A04-83BB-955F68EA0A0A}
+		{94D639F4-A6B5-4563-884F-5C58C7E8AF7E} = {F3F13E26-9121-4125-9417-851A54F84BDC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {37474F0D-2E52-4D2F-B39B-7FE3FF31B4EC}
