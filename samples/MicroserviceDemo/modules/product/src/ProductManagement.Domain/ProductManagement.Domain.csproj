@@ -6,9 +6,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\..\framework\src\Volo.Abp.Ddd.Domain\Volo.Abp.Ddd.Domain.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\framework\src\Volo.Abp.EntityFrameworkCore\Volo.Abp.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\ProductManagement.Domain.Shared\ProductManagement.Domain.Shared.csproj" />
-    <PackageReference Include="Volo.Abp.Ddd.Domain" Version="0.12.0" />
-    <PackageReference Include="Volo.Abp.EntityFrameworkCore" Version="0.12.0" />
   </ItemGroup>
 
   <ItemGroup>
