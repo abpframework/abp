@@ -30,6 +30,8 @@ namespace ProductService.Host
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
+            var configuration = context.Services.GetConfiguration();
+
             context.Services.AddAuthentication("Bearer")
                 .AddIdentityServerAuthentication(options =>
                 {
@@ -62,6 +64,11 @@ namespace ProductService.Host
             Configure<AbpDbContextOptions>(options =>
             {
                 options.UseSqlServer();
+            });
+
+            context.Services.AddDistributedRedisCache(options =>
+            {
+                options.Configuration = configuration["Redis:Configuration"];
             });
         }
 

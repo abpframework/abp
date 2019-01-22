@@ -35,6 +35,8 @@ namespace AuthServer.Host
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
+            var configuration = context.Services.GetConfiguration();
+
             context.Services.AddAbpDbContext<AuthServerDbContext>(options =>
             {
                 options.AddDefaultRepositories();
@@ -48,6 +50,11 @@ namespace AuthServer.Host
             Configure<AbpLocalizationOptions>(options =>
             {
                 options.Languages.Add(new LanguageInfo("en", "en", "English"));
+            });
+
+            context.Services.AddDistributedRedisCache(options =>
+            {
+                options.Configuration = configuration["Redis:Configuration"];
             });
         }
 

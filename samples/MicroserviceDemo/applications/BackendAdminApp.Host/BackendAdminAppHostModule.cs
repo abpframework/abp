@@ -32,6 +32,8 @@ namespace BackendAdminApp.Host
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
+            var configuration = context.Services.GetConfiguration();
+
             Configure<AbpLocalizationOptions>(options =>
             {
                 options.Languages.Add(new LanguageInfo("en", "en", "English"));
@@ -71,6 +73,11 @@ namespace BackendAdminApp.Host
                     options.SwaggerDoc("v1", new Info { Title = "Backend Admin Application API", Version = "v1" });
                     options.DocInclusionPredicate((docName, description) => true);
                 });
+
+            context.Services.AddDistributedRedisCache(options =>
+            {
+                options.Configuration = configuration["Redis:Configuration"];
+            });
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)

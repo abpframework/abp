@@ -28,6 +28,8 @@ namespace PublicWebSite.Host
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
+            var configuration = context.Services.GetConfiguration();
+
             Configure<AbpLocalizationOptions>(options =>
             {
                 options.Languages.Add(new LanguageInfo("en", "en", "English"));
@@ -65,6 +67,11 @@ namespace PublicWebSite.Host
 
                     options.ClaimActions.MapAbpClaimTypes();
                 });
+
+            context.Services.AddDistributedRedisCache(options =>
+            {
+                options.Configuration = configuration["Redis:Configuration"];
+            });
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)

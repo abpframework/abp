@@ -28,7 +28,7 @@ namespace PublicWebSiteGateway.Host
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            //TODO: Internal gateway may not need to authentication in the gateway level, we may remove this when we complete and use the other gateways
+            var configuration = context.Services.GetConfiguration();
 
             context.Services.AddAuthentication("Bearer")
                 .AddIdentityServerAuthentication(options =>
@@ -59,6 +59,11 @@ namespace PublicWebSiteGateway.Host
             Configure<AbpDbContextOptions>(options =>
             {
                 options.UseSqlServer();
+            });
+
+            context.Services.AddDistributedRedisCache(options =>
+            {
+                options.Configuration = configuration["Redis:Configuration"];
             });
         }
 
