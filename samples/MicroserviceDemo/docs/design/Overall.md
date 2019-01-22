@@ -42,8 +42,12 @@ The solution consists of;
     * Hosts the [identity](https://github.com/abpframework/abp/tree/master/modules/identity) module API.
     * Shares the same SQL Server database with the AuthServer application.
   * **Product Microservice**
-    * A simple microservice that is used to manage products (simple CRUD API).
+    * Hosts product management module API.
     * Uses its own SQL Server database.
+* **Modules**
+  * **Product Management**
+    * A simple module that is used to manage products.
+    * Uses EF Core & SQL Server for data access.
 * **API Gateways**
   * **Public Site Gateway**: Used by the public site application.
   * **Backend Gateway**: Used by the Backend admin application.

@@ -25,7 +25,7 @@ namespace Volo.Abp.IdentityModel
             Logger = NullLogger<IdentityModelHttpClientAuthenticator>.Instance;
         }
 
-        public async Task Authenticate(IdentityModelHttpClientAuthenticateContext context)
+        public async Task AuthenticateAsync(IdentityModelHttpClientAuthenticateContext context)
         {
             var accessToken = await GetAccessTokenFromServerOrNullAsync(context);
 
