@@ -1,6 +1,6 @@
 ﻿namespace Volo.Abp.EventBus.Distributed.RabbitMq
 {
-    public class RabbitMqDistributedEventBusOptions
+    public class RabbitMqEventBusOptions
     {
         public string ConnectionName { get; set; }
 
