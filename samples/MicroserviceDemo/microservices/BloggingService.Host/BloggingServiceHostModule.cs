@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
@@ -6,12 +8,15 @@ using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.Autofac;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.SqlServer;
+using Volo.Abp.Guids;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
+using Volo.Abp.Threading;
 using Volo.Blogging;
+using Volo.Blogging.Blogs;
 using Volo.Blogging.MongoDB;
 
 namespace BloggingService.Host
@@ -49,7 +54,7 @@ namespace BloggingService.Host
 
             context.Services.AddSwaggerGen(options =>
             {
-                options.SwaggerDoc("v1", new Info {Title = "Identity Service API", Version = "v1"});
+                options.SwaggerDoc("v1", new Info {Title = "Blogging Service API", Version = "v1"});
                 options.DocInclusionPredicate((docName, description) => true);
                 options.CustomSchemaIds(type => type.FullName);
             });
@@ -75,10 +80,32 @@ namespace BloggingService.Host
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Identity Service API");
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Blogging Service API");
             });
             app.UseAuditing();
             app.UseMvcWithDefaultRouteAndArea();
+
+            AsyncHelper.RunSync(() => SeedDataAsync(context.ServiceProvider));
+        }
+
+        public async Task SeedDataAsync(IServiceProvider serviceProvider)
+        {
+            using (var scope = serviceProvider.CreateScope())
+            {
+                var blogRepository = scope.ServiceProvider.GetRequiredService<IBlogRepository>();
+                var guidGenerator = scope.ServiceProvider.GetRequiredService<IGuidGenerator>();
+
+                if (await blogRepository.FindByShortNameAsync("abp") == null)
+                {
+                    await blogRepository.InsertAsync(
+                        new Blog(
+                            guidGenerator.Create(),
+                            "ABP Blog",
+                            "abp"
+                        )
+                    );
+                }
+            }
         }
     }
 }

@@ -11,7 +11,7 @@ namespace PublicWebSite.Host
     {
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.AddApplication<BackendAdminAppHostModule>(options =>
+            services.AddApplication<PublicWebSiteHostModule>(options =>
             {
                 options.UseAutofac();
             });

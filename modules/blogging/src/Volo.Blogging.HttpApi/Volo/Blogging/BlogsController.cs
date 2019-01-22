@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
@@ -28,21 +26,20 @@ namespace Volo.Blogging
         }
 
         [HttpGet]
-        [Route("")]
         public async Task<PagedResultDto<BlogDto>> GetListPagedAsync(PagedAndSortedResultRequestDto input)
         {
             return await _blogAppService.GetListPagedAsync(input);
         }
 
         [HttpGet]
-        [Route("/all")]
+        [Route("all")]
         public async Task<ListResultDto<BlogDto>> GetListAsync()
         {
             return await _blogAppService.GetListAsync();
         }
 
         [HttpGet]
-        [Route("{shortName}")]
+        [Route("by-shortname/{shortName}")]
         public async Task<BlogDto> GetByShortNameAsync(string shortName)
         {
             return await _blogAppService.GetByShortNameAsync(shortName);

@@ -10,6 +10,8 @@ using Volo.Abp.Autofac;
 using Volo.Abp.Http.Client.IdentityModel;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
+using Volo.Abp.UI.Navigation;
+using Volo.Blogging;
 
 namespace PublicWebSite.Host
 {
@@ -18,15 +20,22 @@ namespace PublicWebSite.Host
         typeof(AbpAspNetCoreMvcClientModule),
         typeof(AbpAspNetCoreAuthenticationOAuthModule),
         typeof(AbpHttpClientIdentityModelModule),
-        typeof(AbpAspNetCoreMvcUiBasicThemeModule)
+        typeof(AbpAspNetCoreMvcUiBasicThemeModule),
+        typeof(BloggingHttpApiClientModule),
+        typeof(BloggingWebModule)
         )]
-    public class BackendAdminAppHostModule : AbpModule
+    public class PublicWebSiteHostModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             Configure<AbpLocalizationOptions>(options =>
             {
                 options.Languages.Add(new LanguageInfo("en", "en", "English"));
+            });
+
+            Configure<NavigationOptions>(options =>
+            {
+                options.MenuContributors.Add(new PublicWebSiteMenuContributor());
             });
 
             context.Services.AddAuthentication(options =>
@@ -50,7 +59,9 @@ namespace PublicWebSite.Host
                     options.Scope.Add("role");
                     options.Scope.Add("email");
                     options.Scope.Add("phone");
-                    //options.Scope.Add("ProductService"); //TODO: Enable once available
+                    options.Scope.Add("PublicWebSiteGateway");
+                    options.Scope.Add("ProductService");
+                    options.Scope.Add("BloggingService");
 
                     options.ClaimActions.MapAbpClaimTypes();
                 });

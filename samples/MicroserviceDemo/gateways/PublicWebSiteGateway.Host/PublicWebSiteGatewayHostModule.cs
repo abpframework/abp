@@ -8,17 +8,17 @@ using Volo.Abp;
 using Volo.Abp.Autofac;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.SqlServer;
-using Volo.Abp.Identity;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
+using Volo.Blogging;
 
 namespace PublicWebSiteGateway.Host
 {
     [DependsOn(
         typeof(AbpAutofacModule),
-        typeof(AbpIdentityHttpApiModule),
+        typeof(BloggingHttpApiModule),
         typeof(ProductManagementHttpApiModule),
         typeof(AbpEntityFrameworkCoreSqlServerModule),
         typeof(AbpPermissionManagementEntityFrameworkCoreModule),
