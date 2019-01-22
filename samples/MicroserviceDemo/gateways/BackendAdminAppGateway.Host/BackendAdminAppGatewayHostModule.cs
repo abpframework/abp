@@ -14,7 +14,7 @@ using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 
-namespace InternalGateway.Host
+namespace BackendAdminAppGateway.Host
 {
     [DependsOn(
         typeof(AbpAutofacModule),
@@ -24,7 +24,7 @@ namespace InternalGateway.Host
         typeof(AbpPermissionManagementEntityFrameworkCoreModule),
         typeof(AbpSettingManagementEntityFrameworkCoreModule)
         )]
-    public class InternalGatewayHostModule : AbpModule
+    public class BackendAdminAppGatewayHostModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
@@ -35,7 +35,7 @@ namespace InternalGateway.Host
                 {
                     options.Authority = "http://localhost:64999";
                     options.RequireHttpsMetadata = false;
-                    options.ApiName = "InternalGateway";
+                    options.ApiName = "BackendAdminAppGateway";
 
                     //TODO: Should create an extension method for that (may require to create a new ABP package depending on the IdentityServer4.AccessTokenValidation)
                     options.InboundJwtClaimTypeMap["sub"] = AbpClaimTypes.UserId;
@@ -49,7 +49,7 @@ namespace InternalGateway.Host
 
             context.Services.AddSwaggerGen(options =>
             {
-                options.SwaggerDoc("v1", new Info { Title = "Internal Gateway API", Version = "v1" });
+                options.SwaggerDoc("v1", new Info { Title = "BackendAdminApp Gateway API", Version = "v1" });
                 options.DocInclusionPredicate((docName, description) => true);
                 options.CustomSchemaIds(type => type.FullName);
             });
@@ -71,13 +71,11 @@ namespace InternalGateway.Host
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Internal Gateway API");
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "BackendAdminApp Gateway API");
             });
 
-            app.MapWhen(ctx => 
-                    ctx.Request.Path.ToString().StartsWith("/api/abp/") || 
-                    ctx.Request.Path.ToString().StartsWith("/Abp/") ||
-                    ctx.Request.Path.ToString().StartsWith("/Test/"),
+            app.MapWhen(ctx => ctx.Request.Path.ToString().StartsWith("/api/abp/") || 
+                               ctx.Request.Path.ToString().StartsWith("/Abp/"),
                 app2 =>
                 {
                     app2.UseMvcWithDefaultRouteAndArea();

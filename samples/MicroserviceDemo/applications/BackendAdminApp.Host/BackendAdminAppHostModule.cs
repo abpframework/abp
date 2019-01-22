@@ -58,7 +58,7 @@ namespace BackendAdminApp.Host
                     options.Scope.Add("role");
                     options.Scope.Add("email");
                     options.Scope.Add("phone");
-                    options.Scope.Add("InternalGateway");
+                    options.Scope.Add("BackendAdminAppGateway");
                     options.Scope.Add("IdentityService");
                     options.Scope.Add("ProductService");
 

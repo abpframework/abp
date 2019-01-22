@@ -51,7 +51,7 @@ namespace ConsoleClientDemo
                 {
                     await _authenticator.AuthenticateAsync(client);
 
-                    var response = await client.GetAsync(_remoteServiceOptions.RemoteServices.Default.BaseUrl.EnsureEndsWith('/') + "Test");
+                    var response = await client.GetAsync(_remoteServiceOptions.RemoteServices.Default.BaseUrl.EnsureEndsWith('/') + "Test/Index");
                     if (!response.IsSuccessStatusCode)
                     {
                         Console.WriteLine(response.StatusCode);

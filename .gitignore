@@ -290,3 +290,4 @@ samples/MicroserviceDemo/microservices/IdentityService.Host/Logs/logs.txt
 samples/MicroserviceDemo/applications/BackendAdminApp.Host/Logs/logs.txt
 samples/MicroserviceDemo/microservices/ProductService.Host/Logs/logs.txt
 samples/MicroserviceDemo/gateways/InternalGateway.Host/Logs/logs.txt
+samples/MicroserviceDemo/gateways/BackendAdminAppGateway.Host/Logs/logs.txt

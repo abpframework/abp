@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Json;
 
-namespace IdentityService.Host
+namespace InternalGateway.Host
 {
     public class TestController : AbpController
     {
