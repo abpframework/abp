@@ -17,11 +17,6 @@ namespace ProductManagement.Pages.ProductManagement.Products
             _productAppService = productAppService;
         }
 
-        public void OnGet()
-        {
-
-        }
-
         public async Task<IActionResult> OnPostAsync()
         {
             var createProductDto = ObjectMapper.Map<ProductCreateModalView, CreateProductDto>(Product);

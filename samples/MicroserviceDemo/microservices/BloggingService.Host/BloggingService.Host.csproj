@@ -23,6 +23,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.MongoDB\Volo.Abp.MongoDB.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.EventBus.RabbitMQ\Volo.Abp.EventBus.RabbitMQ.csproj" />
     <ProjectReference Include="..\..\..\..\modules\blogging\src\Volo.Blogging.HttpApi\Volo.Blogging.HttpApi.csproj" />
     <ProjectReference Include="..\..\..\..\modules\blogging\src\Volo.Blogging.MongoDB\Volo.Blogging.MongoDB.csproj" />
     <ProjectReference Include="..\..\..\..\modules\blogging\src\Volo.Blogging.Application\Volo.Blogging.Application.csproj" />

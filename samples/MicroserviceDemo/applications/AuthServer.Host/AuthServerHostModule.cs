@@ -5,6 +5,7 @@ using Volo.Abp;
 using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
+using Volo.Abp.EventBus.Distributed.RabbitMq;
 using Volo.Abp.Autofac;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.SqlServer;
@@ -21,6 +22,7 @@ namespace AuthServer.Host
 {
     [DependsOn(
         typeof(AbpAutofacModule),
+        typeof(AbpEventBusRabbitMqModule),
         typeof(AbpPermissionManagementEntityFrameworkCoreModule),
         typeof(AbpAuditLoggingEntityFrameworkCoreModule),
         typeof(AbpSettingManagementEntityFrameworkCoreModule),

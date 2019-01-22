@@ -8,6 +8,7 @@ using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.Autofac;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.SqlServer;
+using Volo.Abp.EventBus.Distributed.RabbitMq;
 using Volo.Abp.Guids;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
@@ -23,6 +24,7 @@ namespace BloggingService.Host
 {
     [DependsOn(
         typeof(AbpAutofacModule),
+        typeof(AbpEventBusRabbitMqModule),
         typeof(AbpEntityFrameworkCoreSqlServerModule),
         typeof(AbpAuditLoggingEntityFrameworkCoreModule),
         typeof(AbpPermissionManagementEntityFrameworkCoreModule),

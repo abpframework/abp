@@ -21,10 +21,6 @@ namespace ProductManagement.Pages.ProductManagement.Products
             _productAppService = productAppService;
         }
 
-        public void OnGet()
-        {
-        }
-
         public async Task<ActionResult> OnGetAsync(Guid productId)
         {
             var productDto = await _productAppService.GetAsync(productId);
