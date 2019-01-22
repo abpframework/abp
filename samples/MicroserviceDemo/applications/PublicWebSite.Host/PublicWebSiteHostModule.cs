@@ -50,23 +50,19 @@ namespace PublicWebSite.Host
                 .AddCookie("Cookies")
                 .AddOpenIdConnect("oidc", options =>
                 {
-                    options.Authority = "http://localhost:64999";
+                    options.Authority = configuration["AuthServer:Authority"];
+                    options.ClientId = configuration["AuthServer:ClientId"];
+                    options.ClientSecret = configuration["AuthServer:ClientSecret"];
                     options.RequireHttpsMetadata = false;
                     options.ResponseType = OpenIdConnectResponseType.CodeIdToken;
-
-                    options.ClientId = "public-website-client";
-                    options.ClientSecret = "1q2w3e*";
-
                     options.SaveTokens = true;
                     options.GetClaimsFromUserInfoEndpoint = true;
-
                     options.Scope.Add("role");
                     options.Scope.Add("email");
                     options.Scope.Add("phone");
                     options.Scope.Add("PublicWebSiteGateway");
                     options.Scope.Add("ProductService");
                     options.Scope.Add("BloggingService");
-
                     options.ClaimActions.MapAbpClaimTypes();
                 });
 

@@ -42,10 +42,9 @@ namespace BloggingService.Host
             context.Services.AddAuthentication("Bearer")
                 .AddIdentityServerAuthentication(options =>
                 {
-                    options.Authority = "http://localhost:64999";
+                    options.Authority = configuration["AuthServer:Authority"];
+                    options.ApiName = configuration["AuthServer:ApiName"];
                     options.RequireHttpsMetadata = false;
-                    options.ApiName = "BloggingService";
-
                     //TODO: Should create an extension method for that (may require to create a new ABP package depending on the IdentityServer4.AccessTokenValidation)
                     options.InboundJwtClaimTypeMap["sub"] = AbpClaimTypes.UserId;
                     options.InboundJwtClaimTypeMap["role"] = AbpClaimTypes.Role;

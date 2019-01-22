@@ -47,23 +47,19 @@ namespace BackendAdminApp.Host
                 .AddCookie("Cookies")
                 .AddOpenIdConnect("oidc", options =>
                 {
-                    options.Authority = "http://localhost:64999";
+                    options.Authority = configuration["AuthServer:Authority"];
+                    options.ClientId = configuration["AuthServer:ClientId"];
+                    options.ClientSecret = configuration["AuthServer:ClientSecret"];
                     options.RequireHttpsMetadata = false;
                     options.ResponseType = OpenIdConnectResponseType.CodeIdToken;
-
-                    options.ClientId = "backend-admin-app-client";
-                    options.ClientSecret = "1q2w3e*";
-
                     options.SaveTokens = true;
                     options.GetClaimsFromUserInfoEndpoint = true;
-
                     options.Scope.Add("role");
                     options.Scope.Add("email");
                     options.Scope.Add("phone");
                     options.Scope.Add("BackendAdminAppGateway");
                     options.Scope.Add("IdentityService");
                     options.Scope.Add("ProductService");
-
                     options.ClaimActions.MapAbpClaimTypes();
                 });
 
