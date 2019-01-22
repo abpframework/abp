@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using ProductManagement;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Authentication.OAuth;
 using Volo.Abp.AspNetCore.Mvc.Client;
@@ -22,7 +23,8 @@ namespace PublicWebSite.Host
         typeof(AbpHttpClientIdentityModelModule),
         typeof(AbpAspNetCoreMvcUiBasicThemeModule),
         typeof(BloggingHttpApiClientModule),
-        typeof(BloggingWebModule)
+        typeof(BloggingWebModule),
+        typeof(ProductManagementHttpApiClientModule)
         )]
     public class PublicWebSiteHostModule : AbpModule
     {

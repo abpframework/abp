@@ -10,10 +10,7 @@ namespace ProductManagement
 {
     [RemoteService]
     [Area("productManagement")]
-    [Controller]
-    [ControllerName("products")]
     [Route("api/productManagement/products")]
-    [DisableAuditing]
     public class ProductsController : AbpController, IProductAppService
     {
         private readonly IProductAppService _productAppService;

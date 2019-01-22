@@ -27,6 +27,7 @@
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.csproj" />
     <ProjectReference Include="..\..\..\..\modules\blogging\src\Volo.Blogging.HttpApi.Client\Volo.Blogging.HttpApi.Client.csproj" />
     <ProjectReference Include="..\..\..\..\modules\blogging\src\Volo.Blogging.Web\Volo.Blogging.Web.csproj" />
+    <ProjectReference Include="..\..\modules\product\src\ProductManagement.HttpApi.Client\ProductManagement.HttpApi.Client.csproj" />
   </ItemGroup>
 
   <ItemGroup>
