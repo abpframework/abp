@@ -11,10 +11,7 @@ namespace Volo.Blogging
 {
     [RemoteService]
     [Area("blogging")]
-    [Controller]
-    [ControllerName("Posts")]
     [Route("api/blogging/posts")]
-    [DisableAuditing]
     public class PostsController : AbpController, IPostAppService
     {
         private readonly IPostAppService _postAppService;
@@ -45,12 +42,6 @@ namespace Volo.Blogging
             return _postAppService.GetAsync(id);
         }
 
-        [HttpDelete]
-        public Task DeleteAsync(Guid id)
-        {
-            return _postAppService.DeleteAsync(id);
-        }
-
         [HttpPost]
         public Task<PostWithDetailsDto> CreateAsync(CreatePostDto input)
         {
@@ -62,6 +53,13 @@ namespace Volo.Blogging
         public Task<PostWithDetailsDto> UpdateAsync(Guid id, UpdatePostDto input)
         {
             return _postAppService.UpdateAsync(id, input);
+        }
+
+        [HttpDelete]
+        [Route("{id}")]
+        public Task DeleteAsync(Guid id)
+        {
+            return _postAppService.DeleteAsync(id);
         }
     }
 }

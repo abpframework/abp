@@ -13,33 +13,38 @@ namespace Volo.Blogging
 {
     [RemoteService]
     [Area("blogging")]
-    [Controller]
-    [ControllerName("Comments")]
     [Route("api/blogging/comments")]
-    [DisableAuditing]
     public class CommentsController : AbpController, ICommentAppService
     {
+        private readonly ICommentAppService _commentAppService;
+
+        public CommentsController(ICommentAppService commentAppService)
+        {
+            _commentAppService = commentAppService;
+        }
+
         [HttpGet]
-        [Route("{postId}")]
+        [Route("hierarchical/{postId}")]
         public Task<List<CommentWithRepliesDto>> GetHierarchicalListOfPostAsync(Guid postId)
         {
-            throw new NotImplementedException();
+            return _commentAppService.GetHierarchicalListOfPostAsync(postId);
         }
 
         [HttpPost]
         public Task<CommentWithDetailsDto> CreateAsync(CreateCommentDto input)
         {
-            throw new NotImplementedException();
+            return _commentAppService.CreateAsync(input);
         }
 
         [HttpPut]
         [Route("{id}")]
         public Task<CommentWithDetailsDto> UpdateAsync(Guid id, UpdateCommentDto input)
         {
-            throw new NotImplementedException();
+            return _commentAppService.UpdateAsync(id, input);
         }
 
         [HttpDelete]
+        [Route("{id}")]
         public Task DeleteAsync(Guid id)
         {
             throw new NotImplementedException();

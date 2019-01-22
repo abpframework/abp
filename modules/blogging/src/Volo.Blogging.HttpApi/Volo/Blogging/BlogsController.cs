@@ -12,10 +12,7 @@ namespace Volo.Blogging
 {
     [RemoteService]
     [Area("blogging")]
-    [Controller]
-    [ControllerName("Blogs")]
     [Route("api/blogging/blogs")]
-    [DisableAuditing]
     public class BlogsController : AbpController, IBlogAppService
     {
         private readonly IBlogAppService _blogAppService;
@@ -66,6 +63,7 @@ namespace Volo.Blogging
         }
 
         [HttpDelete]
+        [Route("{id}")]
         public async Task Delete(Guid id)
         {
             await _blogAppService.Delete(id);

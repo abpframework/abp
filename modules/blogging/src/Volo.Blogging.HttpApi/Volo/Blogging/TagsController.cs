@@ -12,10 +12,7 @@ namespace Volo.Blogging
 {
     [RemoteService]
     [Area("blogging")]
-    [Controller]
-    [ControllerName("Tags")]
     [Route("api/blogging/tags")]
-    [DisableAuditing]
     public class TagsController : AbpController, ITagAppService
     {
         private readonly ITagAppService _tagAppService;
