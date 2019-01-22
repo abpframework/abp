@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using ProductManagement.Localization;
+﻿using ProductManagement.Localization;
 using Volo.Abp.Application;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Localization;
@@ -30,7 +29,7 @@ namespace ProductManagement
             {
                 options.Resources
                     .Get<ProductManagementResource>()
-                    .AddVirtualJson("/MyCompanyName/ProductManagement/Localization/ApplicationContracts");
+                    .AddVirtualJson("/ProductManagement/Localization/ApplicationContracts");
             });
         }
     }

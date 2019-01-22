@@ -25,7 +25,7 @@ namespace ProductManagement
 
             Configure<AbpLocalizationOptions>(options =>
             {
-                options.Resources.Get<ProductManagementResource>().AddVirtualJson("/MyCompanyName/ProductManagement/Localization/Domain");
+                options.Resources.Get<ProductManagementResource>().AddVirtualJson("/ProductManagement/Localization/Domain");
             });
 
             Configure<ExceptionLocalizationOptions>(options =>
