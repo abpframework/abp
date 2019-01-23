@@ -5,6 +5,7 @@ using Volo.Abp;
 using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
+using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.EventBus.Distributed.RabbitMq;
 using Volo.Abp.Autofac;
 using Volo.Abp.EntityFrameworkCore;
@@ -14,6 +15,7 @@ using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.IdentityServer.EntityFrameworkCore;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
+using Volo.Abp.PermissionManagement;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.Threading;
@@ -71,14 +73,26 @@ namespace AuthServer.Host
             app.UseMvcWithDefaultRouteAndArea();
 
             //TODO: Problem on a clustered environment
-            AsyncHelper.RunSync(async () =>
+            using (var scope = context.ServiceProvider.CreateScope())
             {
-                await context.ServiceProvider
-                    .GetRequiredService<IIdentityDataSeeder>()
-                    .SeedAsync(
-                        "1q2w3E*"
-                    );
-            });
+                AsyncHelper.RunSync(async () =>
+                {
+                    await scope.ServiceProvider
+                        .GetRequiredService<IIdentityDataSeeder>()
+                        .SeedAsync(
+                            adminUserPassword: "1q2w3E*"
+                        );
+
+                    await scope.ServiceProvider
+                        .GetRequiredService<IPermissionDataSeeder>()
+                        .SeedAsync(
+                            RolePermissionValueProvider.ProviderName,
+                            "admin",
+                            IdentityPermissions.GetAll()
+                        );
+                });
+            }
+            
         }
     }
 }
