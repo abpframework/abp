@@ -26,9 +26,9 @@ namespace Volo.Blogging.Comments
             UserLookupService = userLookupService;
         }
 
-        public async Task<List<CommentWithRepliesDto>> GetHierarchicalListOfPostAsync(GetCommentListOfPostAsync input)
+        public async Task<List<CommentWithRepliesDto>> GetHierarchicalListOfPostAsync(Guid postId)
         {
-            var comments = await GetListOfPostAsync(input);
+            var comments = await GetListOfPostAsync(postId);
             var userDictionary = new Dictionary<Guid, BlogUserDto>();
 
             foreach (var commentDto in comments)
@@ -73,9 +73,9 @@ namespace Volo.Blogging.Comments
             return hierarchicalComments;
         }
 
-        private async Task<List<CommentWithDetailsDto>> GetListOfPostAsync(GetCommentListOfPostAsync input)
+        private async Task<List<CommentWithDetailsDto>> GetListOfPostAsync(Guid postId)
         {
-            var comments = await _commentRepository.GetListOfPostAsync(input.PostId);
+            var comments = await _commentRepository.GetListOfPostAsync(postId);
 
             return new List<CommentWithDetailsDto>(
                 ObjectMapper.Map<List<Comment>, List<CommentWithDetailsDto>>(comments));

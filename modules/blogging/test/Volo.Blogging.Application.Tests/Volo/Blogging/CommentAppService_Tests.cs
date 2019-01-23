@@ -33,8 +33,7 @@ namespace Volo.Blogging
             await _commentRepository.InsertAsync(new Comment(Guid.NewGuid(), post.Id, null, "qweasd"));
 
             var comments =
-                await _commentAppService.GetHierarchicalListOfPostAsync(
-                    new GetCommentListOfPostAsync() { PostId = post.Id });
+                await _commentAppService.GetHierarchicalListOfPostAsync(post.Id);
 
             comments.Count.ShouldBeGreaterThan(2);
         }

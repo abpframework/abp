@@ -89,7 +89,7 @@ namespace Acme.BookStore
             {
                 Configure<VirtualFileSystemOptions>(options =>
                 {
-                    options.FileSets.ReplaceEmbeddedByPyhsical<BookStoreDomainModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}Acme.BookStore.Domain", Path.DirectorySeparatorChar)));
+                    options.FileSets.ReplaceEmbeddedByPhysical<BookStoreDomainModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}Acme.BookStore.Domain", Path.DirectorySeparatorChar)));
                     
                 });
             }
@@ -134,6 +134,7 @@ namespace Acme.BookStore
                 {
                     options.SwaggerDoc("v1", new Info { Title = "BookStore API", Version = "v1" });
                     options.DocInclusionPredicate((docName, description) => true);
+                    options.CustomSchemaIds(type => type.FullName);
                 });
         }
 
@@ -162,6 +163,7 @@ namespace Acme.BookStore
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "BookStore API");
             });
 
+            //TODO: use app.UseMvcWithDefaultRouteAndArea(); after v1.3.0 release
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

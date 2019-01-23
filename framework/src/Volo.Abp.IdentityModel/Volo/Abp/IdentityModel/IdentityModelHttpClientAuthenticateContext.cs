@@ -1,4 +1,5 @@
 ﻿using System.Net.Http;
+using JetBrains.Annotations;
 
 namespace Volo.Abp.IdentityModel
 {
@@ -11,16 +12,13 @@ namespace Volo.Abp.IdentityModel
         /// </summary>
         public string IdentityClientName { get; }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="client"><see cref="HttpClient"/> object to be authorized</param>
+        /// <param name="client"><see cref="HttpClient"/> object to be authenticated</param>
         /// <param name="identityClientName">The identity client name configured with the <see cref="IdentityClientOptions"/>.</param>
         public IdentityModelHttpClientAuthenticateContext(
-            HttpClient client,
+            [NotNull] HttpClient client,
             string identityClientName = null)
         {
-            Client = client;
+            Client = Check.NotNull(client, nameof(client));
             IdentityClientName = identityClientName;
         }
     }

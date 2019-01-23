@@ -40,8 +40,6 @@ namespace Volo.Blogging
                     context.Menu.AddItem(managementRootMenuItem);
                 }
             }
-
-
         }
     }
 }

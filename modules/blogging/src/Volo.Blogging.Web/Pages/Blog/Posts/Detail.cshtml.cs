@@ -70,7 +70,7 @@ namespace Volo.Blogging.Pages.Blog.Posts
         {
             Blog = await _blogAppService.GetByShortNameAsync(BlogShortName);
             Post = await _postAppService.GetForReadingAsync(new GetPostInput { BlogId = Blog.Id, Url = PostUrl });
-            CommentsWithReplies = await _commentAppService.GetHierarchicalListOfPostAsync(new GetCommentListOfPostAsync() { PostId = Post.Id });
+            CommentsWithReplies = await _commentAppService.GetHierarchicalListOfPostAsync(Post.Id);
             CountComments();
         }
 

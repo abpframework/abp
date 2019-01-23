@@ -285,3 +285,12 @@ framework/test/Volo\.Abp\.AspNetCore\.Mvc\.UI\.Bootstrap\.Demo/package-lock\.jso
 modules/blogging/app/Volo\.BloggingTestApp/package-lock\.json
 
 templates/mvc/src/MyCompanyName\.MyProjectName\.Web/package-lock\.json
+samples/MicroserviceDemo/applications/AuthServer.Host/Logs/logs.txt
+samples/MicroserviceDemo/microservices/IdentityService.Host/Logs/logs.txt
+samples/MicroserviceDemo/applications/BackendAdminApp.Host/Logs/logs.txt
+samples/MicroserviceDemo/microservices/ProductService.Host/Logs/logs.txt
+samples/MicroserviceDemo/gateways/InternalGateway.Host/Logs/logs.txt
+samples/MicroserviceDemo/gateways/BackendAdminAppGateway.Host/Logs/logs.txt
+samples/MicroserviceDemo/applications/PublicWebSite.Host/Logs/logs.txt
+samples/MicroserviceDemo/gateways/PublicWebSiteGateway.Host/Logs/logs.txt
+samples/MicroserviceDemo/microservices/BloggingService.Host/Logs/logs.txt
