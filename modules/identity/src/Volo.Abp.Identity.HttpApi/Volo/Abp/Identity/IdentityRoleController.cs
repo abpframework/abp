@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Mvc;
-using Volo.Abp.PermissionManagement;
 
 namespace Volo.Abp.Identity
 {
@@ -48,16 +47,6 @@ namespace Volo.Abp.Identity
         public virtual Task<List<IdentityRoleDto>> GetAllListAsync()
         {
             return _roleAppService.GetAllListAsync();
-        }
-
-        public virtual Task<GetPermissionListResultDto> GetPermissionsAsync(Guid id)
-        {
-            return _roleAppService.GetPermissionsAsync(id);
-        }
-
-        public virtual Task UpdatePermissionsAsync(Guid id, UpdatePermissionsDto input)
-        {
-            return _roleAppService.UpdatePermissionsAsync(id, input);
         }
     }
 }

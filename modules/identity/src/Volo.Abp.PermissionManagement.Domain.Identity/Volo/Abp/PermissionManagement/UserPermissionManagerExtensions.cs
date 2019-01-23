@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Volo.Abp.Authorization.Permissions;
-using Volo.Abp.PermissionManagement;
 
-namespace Volo.Abp.Permissions
+namespace Volo.Abp.PermissionManagement
 {
     public static class UserPermissionManagerExtensions
     {

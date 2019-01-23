@@ -10,7 +10,10 @@ using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.SqlServer;
 using Volo.Abp.Identity;
 using Volo.Abp.Modularity;
+using Volo.Abp.PermissionManagement;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
+using Volo.Abp.PermissionManagement.HttpApi;
+using Volo.Abp.PermissionManagement.Identity;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 
@@ -19,10 +22,14 @@ namespace BackendAdminAppGateway.Host
     [DependsOn(
         typeof(AbpAutofacModule),
         typeof(AbpIdentityHttpApiModule),
+        typeof(AbpIdentityHttpApiClientModule),
         typeof(ProductManagementHttpApiModule),
         typeof(AbpEntityFrameworkCoreSqlServerModule),
         typeof(AbpPermissionManagementEntityFrameworkCoreModule),
-        typeof(AbpSettingManagementEntityFrameworkCoreModule)
+        typeof(AbpPermissionManagementApplicationModule),
+        typeof(AbpPermissionManagementHttpApiModule),
+        typeof(AbpSettingManagementEntityFrameworkCoreModule),
+        typeof(AbpPermissionManagementDomainIdentityModule)
         )]
     public class BackendAdminAppGatewayHostModule : AbpModule
     {

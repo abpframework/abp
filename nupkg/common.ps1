@@ -109,6 +109,8 @@ $projects = (
     "modules/permission-management/src/Volo.Abp.PermissionManagement.Application",
     "modules/permission-management/src/Volo.Abp.PermissionManagement.EntityFrameworkCore",
     "modules/permission-management/src/Volo.Abp.PermissionManagement.MongoDB",
+    "modules/permission-management/src/Volo.Abp.PermissionManagement.HttpApi",
+    "modules/permission-management/src/Volo.Abp.PermissionManagement.HttpApi.Client",
     "modules/permission-management/src/Volo.Abp.PermissionManagement.Web",
 
     # modules/tenant-management

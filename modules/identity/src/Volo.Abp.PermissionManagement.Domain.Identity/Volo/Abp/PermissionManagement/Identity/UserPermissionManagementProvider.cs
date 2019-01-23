@@ -1,9 +1,8 @@
 ﻿using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
-using Volo.Abp.PermissionManagement;
 
-namespace Volo.Abp.Identity
+namespace Volo.Abp.PermissionManagement.Identity
 {
     public class UserPermissionManagementProvider : PermissionManagementProvider
     {

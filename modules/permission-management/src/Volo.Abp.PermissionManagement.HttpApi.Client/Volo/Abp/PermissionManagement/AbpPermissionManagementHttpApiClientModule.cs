@@ -1,22 +1,20 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Modularity;
-using Volo.Abp.Users;
 
-namespace Volo.Abp.Identity
+namespace Volo.Abp.PermissionManagement
 {
     [DependsOn(
-        typeof(AbpIdentityApplicationContractsModule),
-        typeof(AbpUsersAbstractionModule),
+        typeof(AbpPermissionManagementApplicationContractsModule),
         typeof(AbpHttpClientModule))]
-    public class AbpIdentityHttpApiClientModule : AbpModule
+    public class AbpPermissionManagementHttpApiClientModule : AbpModule
     {
-        public const string RemoteServiceName = "AbpIdentity";
+        public const string RemoteServiceName = "AbpPermissionManagement";
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.AddHttpClientProxies(
-                typeof(AbpIdentityApplicationContractsModule).Assembly,
+                typeof(AbpPermissionManagementApplicationContractsModule).Assembly,
                 RemoteServiceName
             );
         }

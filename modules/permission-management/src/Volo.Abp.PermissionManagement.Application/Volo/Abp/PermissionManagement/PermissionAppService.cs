@@ -1,18 +1,20 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Localization;
+using Volo.Abp.Application.Services;
 using Volo.Abp.Authorization.Permissions;
-using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.PermissionManagement
 {
-    public class PermissionAppServiceHelper : IPermissionAppServiceHelper, ITransientDependency
+    //[Authorize]
+    public class PermissionAppService : ApplicationService, IPermissionAppService
     {
         private readonly IPermissionManager _permissionManager;
         private readonly IPermissionDefinitionManager _permissionDefinitionManager;
         private readonly IStringLocalizerFactory _stringLocalizerFactory;
 
-        public PermissionAppServiceHelper(
+        public PermissionAppService(
             IPermissionManager permissionManager, 
             IPermissionDefinitionManager permissionDefinitionManager,
             IStringLocalizerFactory stringLocalizerFactory)

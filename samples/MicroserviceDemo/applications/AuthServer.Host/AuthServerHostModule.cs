@@ -76,8 +76,7 @@ namespace AuthServer.Host
                 await context.ServiceProvider
                     .GetRequiredService<IIdentityDataSeeder>()
                     .SeedAsync(
-                        "1q2w3E*",
-                        IdentityPermissions.GetAll()
+                        "1q2w3E*"
                     );
             });
         }
