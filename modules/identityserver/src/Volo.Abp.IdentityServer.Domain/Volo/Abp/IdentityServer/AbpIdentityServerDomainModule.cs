@@ -3,6 +3,7 @@ using Volo.Abp.AutoMapper;
 using Volo.Abp.Domain;
 using Volo.Abp.Identity;
 using Volo.Abp.IdentityServer.Clients;
+using Volo.Abp.IdentityServer.Cors;
 using Volo.Abp.Modularity;
 using Volo.Abp.Security;
 
@@ -39,6 +40,7 @@ namespace Volo.Abp.IdentityServer
                 .AddDeveloperSigningCredential() //TODO: Should be able to change this!
                 .AddClientStore<ClientStore>()
                 .AddResourceStore<ResourceStore>()
+                .AddCorsPolicyCache<CorsPolicyService>()
                 .AddAbpIdentityServer();
 
             services.ExecutePreConfiguredActions(identityServerBuilder);

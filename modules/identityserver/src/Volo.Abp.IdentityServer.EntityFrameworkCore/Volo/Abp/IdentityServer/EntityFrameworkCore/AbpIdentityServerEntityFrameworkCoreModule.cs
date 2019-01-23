@@ -22,6 +22,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 options.AddRepository<ApiResource, ApiResourceRepository>();
                 options.AddRepository<IdentityResource, IdentityResourceRepository>();
                 options.AddRepository<PersistedGrant, PersistentGrantRepository>();
+                options.AddRepository<ClientCorsOrigin, ClientCorsOriginRepository>();
             });
         }
     }
