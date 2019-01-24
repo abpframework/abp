@@ -32,7 +32,7 @@ namespace AuthServer.Host
         typeof(AbpIdentityApplicationContractsModule),
         typeof(AbpIdentityServerEntityFrameworkCoreModule),
         typeof(AbpEntityFrameworkCoreSqlServerModule),
-        typeof(AbpAccountWebModule),
+        typeof(AbpAccountWebIdentityServerModule),
         typeof(AbpAspNetCoreMvcUiBasicThemeModule)
         )]
     public class AuthServerHostModule : AbpModule
