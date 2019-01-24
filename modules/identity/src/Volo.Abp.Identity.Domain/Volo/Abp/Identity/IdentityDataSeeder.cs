@@ -35,10 +35,12 @@ namespace Volo.Abp.Identity
         }
 
         [UnitOfWork]
-        public virtual async Task SeedAsync(
+        public virtual async Task<IdentityDataSeedResult> SeedAsync(
             string adminUserPassword,
             Guid? tenantId = null)
         {
+            var result = new IdentityDataSeedResult();
+
             const string adminUserName = "admin";
             const string adminRoleName = "admin";
 
@@ -46,11 +48,12 @@ namespace Volo.Abp.Identity
             var adminUser = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize(adminUserName));
             if (adminUser != null)
             {
-                return;
+                return result;
             }
 
             adminUser = new IdentityUser(_guidGenerator.Create(), adminUserName, "admin@abp.io", tenantId);
             CheckIdentityErrors(await _userManager.CreateAsync(adminUser, adminUserPassword));
+            result.CreatedAdminUser = true;
 
             //"admin" role
             var adminRole = await _roleRepository.FindByNormalizedNameAsync(_lookupNormalizer.Normalize(adminRoleName));
@@ -62,12 +65,13 @@ namespace Volo.Abp.Identity
                 adminRole.IsPublic = true;
 
                 CheckIdentityErrors(await _roleManager.CreateAsync(adminRole));
+                result.CreatedAdminRole = true;
             }
 
             CheckIdentityErrors(await _userManager.AddToRoleAsync(adminUser, adminRoleName));
+
+            return result;
         }
-
-
 
         protected void CheckIdentityErrors(IdentityResult identityResult) //TODO: This is temporary and duplicate code!
         {

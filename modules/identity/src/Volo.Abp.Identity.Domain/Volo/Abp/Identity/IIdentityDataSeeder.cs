@@ -5,7 +5,7 @@ namespace Volo.Abp.Identity
 {
     public interface IIdentityDataSeeder
     {
-        Task SeedAsync(
+        Task<IdentityDataSeedResult> SeedAsync(
             string adminUserPassword,
             Guid? tenantId = null);
     }

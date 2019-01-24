@@ -195,19 +195,22 @@ namespace MyCompanyName.MyProjectName
             {
                 AsyncHelper.RunSync(async () =>
                 {
-                    await scope.ServiceProvider
+                    var identitySeedResult = await scope.ServiceProvider
                         .GetRequiredService<IIdentityDataSeeder>()
                         .SeedAsync(
                             "1q2w3E*"
                         );
 
-                    await scope.ServiceProvider
-                        .GetRequiredService<IPermissionDataSeeder>()
-                        .SeedAsync(
-                            RolePermissionValueProvider.ProviderName,
-                            "admin",
-                            IdentityPermissions.GetAll().Union(MyProjectNamePermissions.GetAll())
-                        );
+                    if (identitySeedResult.CreatedAdminRole)
+                    {
+                        await scope.ServiceProvider
+                            .GetRequiredService<IPermissionDataSeeder>()
+                            .SeedAsync(
+                                RolePermissionValueProvider.ProviderName,
+                                "admin",
+                                IdentityPermissions.GetAll().Union(MyProjectNamePermissions.GetAll())
+                            );
+                    }
                 });
             }
         }
