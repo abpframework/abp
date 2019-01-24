@@ -1,6 +1,9 @@
+using System.IdentityModel.Tokens.Jwt;
+using Volo.Abp.Security.Claims;
+
 namespace Volo.Abp.IdentityServer
 {
-    public class AbpIdentityServerOptions
+    public class AbpIdentityServerBuilderOptions
     {
         /// <summary>
         /// Updates <see cref="JwtSecurityTokenHandler.DefaultInboundClaimTypeMap"/> to be compatible with identity server claims.
@@ -13,5 +16,11 @@ namespace Volo.Abp.IdentityServer
         /// Default: true.
         /// </summary>
         public bool UpdateAbpClaimTypes { get; set; } = true;
+
+        /// <summary>
+        /// Integrate to AspNet Identity.
+        /// Default: true.
+        /// </summary>
+        public bool IntegrateToAspNetIdentity { get; set; } = true;
     }
 }
