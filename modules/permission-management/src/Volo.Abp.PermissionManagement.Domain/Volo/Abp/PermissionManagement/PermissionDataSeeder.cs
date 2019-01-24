@@ -27,6 +27,11 @@ namespace Volo.Abp.PermissionManagement
         {
             foreach (var permissionName in grantedPermissions)
             {
+                if (await PermissionGrantRepository.FindAsync(permissionName, providerName, providerKey) != null)
+                {
+                    continue;
+                }
+
                 await PermissionGrantRepository.InsertAsync(
                     new PermissionGrant(
                         GuidGenerator.Create(),

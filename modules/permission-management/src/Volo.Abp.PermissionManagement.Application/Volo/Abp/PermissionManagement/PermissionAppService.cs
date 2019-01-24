@@ -1,15 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Options;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Authorization.Permissions;
 
 namespace Volo.Abp.PermissionManagement
 {
-    //[Authorize]
+    [Authorize]
     public class PermissionAppService : ApplicationService, IPermissionAppService
     {
+        protected PermissionManagementOptions Options { get; }
+
         private readonly IPermissionManager _permissionManager;
         private readonly IPermissionDefinitionManager _permissionDefinitionManager;
         private readonly IStringLocalizerFactory _stringLocalizerFactory;
@@ -17,8 +21,10 @@ namespace Volo.Abp.PermissionManagement
         public PermissionAppService(
             IPermissionManager permissionManager, 
             IPermissionDefinitionManager permissionDefinitionManager,
-            IStringLocalizerFactory stringLocalizerFactory)
+            IStringLocalizerFactory stringLocalizerFactory,
+            IOptions<PermissionManagementOptions> options)
         {
+            Options = options.Value;
             _permissionManager = permissionManager;
             _permissionDefinitionManager = permissionDefinitionManager;
             _stringLocalizerFactory = stringLocalizerFactory;
@@ -26,6 +32,8 @@ namespace Volo.Abp.PermissionManagement
 
         public async Task<GetPermissionListResultDto> GetAsync(string providerName, string providerKey)
         {
+            await CheckProviderPolicy(providerName);
+
             var result = new GetPermissionListResultDto
             {
                 EntityDisplayName = providerKey,
@@ -75,10 +83,23 @@ namespace Volo.Abp.PermissionManagement
 
         public async Task UpdateAsync(string providerName, string providerKey, UpdatePermissionsDto input)
         {
+            await CheckProviderPolicy(providerName);
+
             foreach (var permission in input.Permissions)
             {
                 await _permissionManager.SetAsync(permission.Name, providerName, providerKey, permission.IsGranted);
             }
+        }
+
+        protected virtual async Task CheckProviderPolicy(string providerName)
+        {
+            var policyName = Options.ProviderPolicies.GetOrDefault(providerName);
+            if (policyName.IsNullOrEmpty())
+            {
+                throw new AbpException($"No policy defined to get/set permissions for the provider '{policyName}'. Use {nameof(PermissionManagementOptions)} to map the policy.");
+            }
+
+            await AuthorizationService.CheckAsync(policyName);
         }
     }
 }
