@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\modules\identity\src\Volo.Abp.Identity.Domain\Volo.Abp.Identity.Domain.csproj" />
+    <ProjectReference Include="..\..\..\..\modules\identity\src\Volo.Abp.PermissionManagement.Domain.Identity\Volo.Abp.PermissionManagement.Domain.Identity.csproj" />
     <ProjectReference Include="..\..\..\..\modules\background-jobs\src\Volo.Abp.BackgroundJobs.Domain\Volo.Abp.BackgroundJobs.Domain.csproj" />
     <ProjectReference Include="..\..\..\..\modules\audit-logging\src\Volo.Abp.AuditLogging.Domain\Volo.Abp.AuditLogging.Domain.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Auditing\Volo.Abp.Auditing.csproj" />

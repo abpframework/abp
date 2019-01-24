@@ -17,6 +17,7 @@ using Volo.Abp.AspNetCore.Mvc.UI;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
+using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Identity;
@@ -29,6 +30,7 @@ using Volo.Abp.Threading;
 using Volo.Abp.UI;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
+using Volo.Abp.PermissionManagement;
 //<TEMPLATE-REMOVE IF-NOT='EntityFrameworkCore'>
 using Volo.Abp.EntityFrameworkCore;
 //</TEMPLATE-REMOVE>
@@ -189,16 +191,25 @@ namespace MyCompanyName.MyProjectName
 
         private static void SeedDatabase(ApplicationInitializationContext context)
         {
-            AsyncHelper.RunSync(async () =>
+            using (var scope = context.ServiceProvider.CreateScope())
             {
-                await context.ServiceProvider
-                    .GetRequiredService<IIdentityDataSeeder>()
-                    .SeedAsync(
-                        "1q2w3E*",
-                        IdentityPermissions.GetAll()
-                            .Union(MyProjectNamePermissions.GetAll())
-                    );
-            });
+                AsyncHelper.RunSync(async () =>
+                {
+                    await scope.ServiceProvider
+                        .GetRequiredService<IIdentityDataSeeder>()
+                        .SeedAsync(
+                            "1q2w3E*"
+                        );
+
+                    await scope.ServiceProvider
+                        .GetRequiredService<IPermissionDataSeeder>()
+                        .SeedAsync(
+                            RolePermissionValueProvider.ProviderName,
+                            "admin",
+                            IdentityPermissions.GetAll().Union(MyProjectNamePermissions.GetAll())
+                        );
+                });
+            }
         }
     }
 }
