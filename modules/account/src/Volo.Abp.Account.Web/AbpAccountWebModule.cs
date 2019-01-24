@@ -6,7 +6,6 @@ using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars;
 using Volo.Abp.Identity.AspNetCore;
-using Volo.Abp.IdentityServer;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.Resources.AbpValidation;
 using Volo.Abp.Modularity;
@@ -18,8 +17,7 @@ namespace Volo.Abp.Account.Web
 {
     [DependsOn(
         typeof(AbpIdentityAspNetCoreModule),
-        typeof(AbpAspNetCoreMvcUiThemeSharedModule),
-        typeof(AbpIdentityServerDomainModule)
+        typeof(AbpAspNetCoreMvcUiThemeSharedModule)
         )]
     public class AbpAccountWebModule : AbpModule
     {

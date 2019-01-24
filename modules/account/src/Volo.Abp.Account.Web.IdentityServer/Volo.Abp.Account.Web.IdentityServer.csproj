@@ -4,8 +4,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>Volo.Abp.Account.Web</AssemblyName>
-    <PackageId>Volo.Abp.Account.Web</PackageId>
+    <AssemblyName>Volo.Abp.Account.Web.IdentityServer</AssemblyName>
+    <PackageId>Volo.Abp.Account.Web.IdentityServer</PackageId>
     <IsPackable>true</IsPackable>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
@@ -16,22 +16,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Modules\**\*.*" Exclude="*.cs" />
     <EmbeddedResource Include="Pages\**\*.*" Exclude="*.cs" />
-    <EmbeddedResource Include="Localization\**\*.json" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="Modules\**\*.cshtml" />
-    <Content Remove="Pages\**\*.cshtml" />
-    <Content Remove="Localization\**\*.json" />
     <Content Remove="Properties\launchSettings.json" />
+    <EmbeddedResource Remove="Pages\Account\IdentityServerSupportedLoginModel.cs" />
     <None Include="Properties\launchSettings.json" />
   </ItemGroup>
-  
+
   <ItemGroup>
-    <ProjectReference Include="..\..\..\identity\src\Volo.Abp.Identity.AspNetCore\Volo.Abp.Identity.AspNetCore.csproj" />
-    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.csproj" />
+    <ProjectReference Include="..\..\..\identityserver\src\Volo.Abp.IdentityServer.Domain\Volo.Abp.IdentityServer.Domain.csproj" />
+    <ProjectReference Include="..\Volo.Abp.Account.Web\Volo.Abp.Account.Web.csproj" />
   </ItemGroup>
 
 </Project>

@@ -144,6 +144,7 @@ $projects = (
 
     # modules/account
     "modules/account/src/Volo.Abp.Account.Web",
+    "modules/account/src/Volo.Abp.Account.Web.IdentityServer",
     
     # modules/docs
     "modules/docs/src/Volo.Docs.Application",
