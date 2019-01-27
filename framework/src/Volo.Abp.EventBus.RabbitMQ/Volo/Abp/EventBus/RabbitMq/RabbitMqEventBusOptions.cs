@@ -1,4 +1,4 @@
-﻿namespace Volo.Abp.EventBus.Distributed.RabbitMq
+﻿namespace Volo.Abp.EventBus.RabbitMq
 {
     public class RabbitMqEventBusOptions
     {

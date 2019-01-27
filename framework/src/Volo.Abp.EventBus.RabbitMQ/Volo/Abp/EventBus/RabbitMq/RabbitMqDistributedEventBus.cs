@@ -4,13 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
-using Volo.Abp.DependencyInjection;
-using Volo.Abp.RabbitMQ;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.EventBus.Distributed;
+using Volo.Abp.RabbitMQ;
 using Volo.Abp.Threading;
 
-namespace Volo.Abp.EventBus.Distributed.RabbitMq
+namespace Volo.Abp.EventBus.RabbitMq
 {
     /* TODO: How to handle unsubscribe to unbind on RabbitMq (may not be possible for)
      * TODO: Implement Retry system

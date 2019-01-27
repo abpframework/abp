@@ -2,8 +2,7 @@
 using Volo.Abp.Modularity;
 using Volo.Abp.RabbitMQ;
 
-//TODO: Rename Volo.Abp.EventBus.Distributed.RabbitMq namespace to Volo.Abp.EventBus.RabbitMq
-namespace Volo.Abp.EventBus.Distributed.RabbitMq
+namespace Volo.Abp.EventBus.RabbitMq
 {
     [DependsOn(
         typeof(AbpEventBusModule),
@@ -14,7 +13,7 @@ namespace Volo.Abp.EventBus.Distributed.RabbitMq
         {
             var configuration = context.Services.GetConfiguration();
 
-            Configure<RabbitMqEventBusOptions>(configuration.GetSection("RabbitMqEventBus"));
+            Configure<RabbitMqEventBusOptions>(configuration.GetSection("RabbitMQ:EventBus"));
         }
     }
 }
