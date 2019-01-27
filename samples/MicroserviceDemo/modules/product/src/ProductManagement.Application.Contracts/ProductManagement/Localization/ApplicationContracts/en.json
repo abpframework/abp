@@ -1,6 +1,10 @@
 {
   "culture": "en",
   "texts": {
-    "Permission:ProductManagement": "ProductManagement"
+    "Permission:ProductManagement": "Product Management",
+    "Permission:Products": "Products",
+    "Permission:Edit": "Edit",
+    "Permission:Delete": "Delete",
+    "Permission:Create": "Create"
   }
 }
