@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.OAuth.Claims;
+﻿using System;
+using Microsoft.AspNetCore.Authentication.OAuth.Claims;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
@@ -47,7 +48,11 @@ namespace PublicWebSite.Host
                     options.DefaultScheme = "Cookies";
                     options.DefaultChallengeScheme = "oidc";
                 })
-                .AddCookie("Cookies")
+                .AddCookie("Cookies", options =>
+                {
+                    options.Cookie.Expiration = TimeSpan.FromDays(365);
+                    options.ExpireTimeSpan = TimeSpan.FromDays(365);
+                })
                 .AddOpenIdConnect("oidc", options =>
                 {
                     options.Authority = configuration["AuthServer:Authority"];
