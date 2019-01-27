@@ -29,6 +29,7 @@
     <ProjectReference Include="..\..\..\..\modules\permission-management\src\Volo.Abp.PermissionManagement.HttpApi.Client\Volo.Abp.PermissionManagement.HttpApi.Client.csproj" />
     <ProjectReference Include="..\..\..\..\modules\identity\src\Volo.Abp.Identity.HttpApi.Client\Volo.Abp.Identity.HttpApi.Client.csproj" />
     <ProjectReference Include="..\..\..\..\modules\identity\src\Volo.Abp.Identity.Web\Volo.Abp.Identity.Web.csproj" />
+    <ProjectReference Include="..\..\..\..\modules\blogging\src\Volo.Blogging.Application.Contracts\Volo.Blogging.Application.Contracts.csproj" />
     <ProjectReference Include="..\..\modules\product\src\ProductManagement.HttpApi.Client\ProductManagement.HttpApi.Client.csproj" />
     <ProjectReference Include="..\..\modules\product\src\ProductManagement.Web\ProductManagement.Web.csproj" />
   </ItemGroup>

@@ -16,6 +16,7 @@ using Volo.Abp.Identity.Web;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement;
+using Volo.Blogging;
 
 namespace BackendAdminApp.Host
 {
@@ -26,6 +27,7 @@ namespace BackendAdminApp.Host
         typeof(AbpHttpClientIdentityModelModule),
         typeof(AbpIdentityHttpApiClientModule),
         typeof(AbpIdentityWebModule),
+        typeof(BloggingApplicationContractsModule),
         typeof(AbpPermissionManagementHttpApiClientModule),
         typeof(ProductManagementHttpApiClientModule),
         typeof(ProductManagementWebModule),
