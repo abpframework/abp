@@ -31,13 +31,18 @@ namespace Volo.Abp.Caching
         protected DistributedCacheEntryOptions DefaultCacheOptions;
 
         private readonly CacheOptions _cacheOption;
+
+        private readonly DistributedCacheOptions _distributedCacheOption;
+
         public DistributedCache(
             IOptions<CacheOptions> cacheOption,
+            IOptions<DistributedCacheOptions> distributedCacheOption,
             IDistributedCache cache,
             ICancellationTokenProvider cancellationTokenProvider,
             IObjectSerializer objectSerializer,
             ICurrentTenant currentTenant)
         {
+            _distributedCacheOption = distributedCacheOption.Value;
             _cacheOption = cacheOption.Value;
             Cache = cache;
             CancellationTokenProvider = cancellationTokenProvider;
@@ -47,9 +52,25 @@ namespace Volo.Abp.Caching
             SetDefaultOptions();
         }
 
-        public virtual TCacheItem Get(string key)
+        public virtual TCacheItem Get(string key, bool? hideErrors = null)
         {
-            var cachedBytes = Cache.Get(NormalizeKey(key));
+            hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
+
+            byte[] cachedBytes;
+
+            try
+            {
+                cachedBytes = Cache.Get(NormalizeKey(key));
+            }
+            catch (Exception)
+            {
+                if ((bool) hideErrors)
+                {
+                    return null;
+                }
+                throw;
+            }
+
             if (cachedBytes == null)
             {
                 return null;
@@ -58,9 +79,25 @@ namespace Volo.Abp.Caching
             return ObjectSerializer.Deserialize<TCacheItem>(cachedBytes);
         }
 
-        public virtual async Task<TCacheItem> GetAsync(string key, CancellationToken token = default)
+        public virtual async Task<TCacheItem> GetAsync(string key, bool? hideErrors = null, CancellationToken token = default)
         {
-            var cachedBytes = await Cache.GetAsync(NormalizeKey(key), CancellationTokenProvider.FallbackToProvider(token));
+            hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
+
+            byte[] cachedBytes;
+
+            try
+            {
+                cachedBytes = await Cache.GetAsync(NormalizeKey(key), CancellationTokenProvider.FallbackToProvider(token));
+            }
+            catch (Exception)
+            {
+                if ((bool)hideErrors)
+                {
+                    return null;
+                }
+                throw;
+            }
+            
             if (cachedBytes == null)
             {
                 return null;
@@ -72,9 +109,10 @@ namespace Volo.Abp.Caching
         public TCacheItem GetOrAdd(
             string key,
             Func<TCacheItem> factory,
-            Func<DistributedCacheEntryOptions> optionsFactory = null)
+            Func<DistributedCacheEntryOptions> optionsFactory = null,
+            bool? hideErrors = null)
         {
-            var value = Get(key);
+            var value = Get(key, hideErrors);
             if (value != null)
             {
                 return value;
@@ -82,14 +120,14 @@ namespace Volo.Abp.Caching
 
             using (AsyncLock.Lock())
             {
-                value = Get(key);
+                value = Get(key, hideErrors);
                 if (value != null)
                 {
                     return value;
                 }
 
                 value = factory();
-                Set(key, value, optionsFactory?.Invoke());
+                Set(key, value, optionsFactory?.Invoke(), hideErrors);
             }
 
             return value;
@@ -99,10 +137,11 @@ namespace Volo.Abp.Caching
             string key,
             Func<Task<TCacheItem>> factory,
             Func<DistributedCacheEntryOptions> optionsFactory = null,
+            bool? hideErrors = null,
             CancellationToken token = default)
         {
             token = CancellationTokenProvider.FallbackToProvider(token);
-            var value = await GetAsync(key, token);
+            var value = await GetAsync(key, hideErrors, token);
             if (value != null)
             {
                 return value;
@@ -110,56 +149,131 @@ namespace Volo.Abp.Caching
 
             using (await AsyncLock.LockAsync(token))
             {
-                value = await GetAsync(key, token);
+                value = await GetAsync(key, hideErrors, token);
                 if (value != null)
                 {
                     return value;
                 }
 
                 value = await factory();
-                await SetAsync(key, value, optionsFactory?.Invoke(), token);
+                await SetAsync(key, value, optionsFactory?.Invoke(), hideErrors, token);
             }
 
             return value;
         }
 
-        public virtual void Set(string key, TCacheItem value, DistributedCacheEntryOptions options = null)
+        public virtual void Set(string key, TCacheItem value, DistributedCacheEntryOptions options = null, bool? hideErrors = null)
         {
-            Cache.Set(
-                NormalizeKey(key),
-                ObjectSerializer.Serialize(value),
-                options ?? DefaultCacheOptions
-            );
+            hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
+
+            try
+            {
+                Cache.Set(
+                    NormalizeKey(key),
+                    ObjectSerializer.Serialize(value),
+                    options ?? DefaultCacheOptions
+                );
+            }
+            catch (Exception)
+            {
+                if (!(bool) hideErrors)
+                {
+                    throw;
+                }
+            }
         }
 
-        public virtual Task SetAsync(string key, TCacheItem value, DistributedCacheEntryOptions options = null, CancellationToken token = default)
+        public virtual Task SetAsync(string key, TCacheItem value, DistributedCacheEntryOptions options = null, bool? hideErrors = null, CancellationToken token = default)
         {
-            return Cache.SetAsync(
-                NormalizeKey(key),
-                ObjectSerializer.Serialize(value),
-                options ?? DefaultCacheOptions,
-                CancellationTokenProvider.FallbackToProvider(token)
-            );
+            hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
+
+            try
+            {
+                return Cache.SetAsync(
+                    NormalizeKey(key),
+                    ObjectSerializer.Serialize(value),
+                    options ?? DefaultCacheOptions,
+                    CancellationTokenProvider.FallbackToProvider(token)
+                );
+            }
+            catch (Exception)
+            {
+                if ((bool)hideErrors)
+                {
+                    return Task.CompletedTask;
+                }
+                throw;
+            }
         }
 
-        public virtual void Refresh(string key)
+        public virtual void Refresh(string key, bool? hideErrors = null)
         {
-            Cache.Refresh(NormalizeKey(key));
+            hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
+
+            try
+            {
+                Cache.Refresh(NormalizeKey(key));
+            }
+            catch (Exception)
+            {
+                if (!(bool) hideErrors)
+                {
+                    throw;
+                }
+            }
         }
 
-        public virtual Task RefreshAsync(string key, CancellationToken token = default)
+        public virtual Task RefreshAsync(string key, bool? hideErrors = null, CancellationToken token = default)
         {
-            return Cache.RefreshAsync(NormalizeKey(key), CancellationTokenProvider.FallbackToProvider(token));
+            hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
+
+            try
+            {
+                return Cache.RefreshAsync(NormalizeKey(key), CancellationTokenProvider.FallbackToProvider(token));
+            }
+            catch (Exception)
+            {
+                if ((bool)hideErrors)
+                {
+                    return Task.CompletedTask;
+                }
+                throw;
+            }
         }
 
-        public virtual void Remove(string key)
+        public virtual void Remove(string key, bool? hideErrors = null)
         {
-            Cache.Remove(NormalizeKey(key));
+            hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
+
+            try
+            {
+                Cache.Remove(NormalizeKey(key));
+            }
+            catch (Exception)
+            {
+                if (!(bool)hideErrors)
+                {
+                    throw;
+                }
+            }
         }
 
-        public virtual Task RemoveAsync(string key, CancellationToken token = default)
+        public virtual Task RemoveAsync(string key, bool? hideErrors = null, CancellationToken token = default)
         {
-            return Cache.RemoveAsync(NormalizeKey(key), CancellationTokenProvider.FallbackToProvider(token));
+            hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
+
+            try
+            {
+                return Cache.RemoveAsync(NormalizeKey(key), CancellationTokenProvider.FallbackToProvider(token));
+            }
+            catch (Exception)
+            {
+                if ((bool)hideErrors)
+                {
+                    return Task.CompletedTask;
+                }
+                throw;
+            }
         }
 
         protected virtual string NormalizeKey(string key)
@@ -173,6 +287,7 @@ namespace Volo.Abp.Caching
 
             return normalizedKey;
         }
+
         protected virtual DistributedCacheEntryOptions GetDefaultCacheEntryOptions()
         {
             foreach (var configure in _cacheOption.CacheConfigurators)
