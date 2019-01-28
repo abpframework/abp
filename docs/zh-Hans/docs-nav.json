@@ -171,7 +171,8 @@
           "text": "应用服务层",
           "items": [
             {
-              "text": "应用服务"
+              "text": "应用服务",
+              "path": "Application-Services.md"
             },
             {
               "text": "数据传输对象(DTO)"
