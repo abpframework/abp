@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Volo.Abp.Caching
+﻿namespace Volo.Abp.Caching
 {
     public class DistributedCacheOptions
     {

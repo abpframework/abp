@@ -3,6 +3,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Nito.AsyncEx;
 using Volo.Abp.MultiTenancy;
@@ -14,6 +16,8 @@ namespace Volo.Abp.Caching
     public class DistributedCache<TCacheItem> : IDistributedCache<TCacheItem>
         where TCacheItem : class
     {
+        public ILogger<DistributedCache<TCacheItem>> Logger { get; set; }
+
         protected string CacheName { get; set; }
 
         protected bool IgnoreMultiTenancy { get; set; }
@@ -39,6 +43,7 @@ namespace Volo.Abp.Caching
             IOptions<DistributedCacheOptions> distributedCacheOption,
             IDistributedCache cache,
             ICancellationTokenProvider cancellationTokenProvider,
+
             IObjectSerializer objectSerializer,
             ICurrentTenant currentTenant)
         {
@@ -46,6 +51,7 @@ namespace Volo.Abp.Caching
             _cacheOption = cacheOption.Value;
             Cache = cache;
             CancellationTokenProvider = cancellationTokenProvider;
+            Logger = NullLogger<DistributedCache<TCacheItem>>.Instance;
             ObjectSerializer = objectSerializer;
             CurrentTenant = currentTenant;
 
@@ -62,10 +68,11 @@ namespace Volo.Abp.Caching
             {
                 cachedBytes = Cache.Get(NormalizeKey(key));
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 if ((bool) hideErrors)
                 {
+                    Logger.LogException(ex, LogLevel.Warning);
                     return null;
                 }
                 throw;
@@ -89,10 +96,11 @@ namespace Volo.Abp.Caching
             {
                 cachedBytes = await Cache.GetAsync(NormalizeKey(key), CancellationTokenProvider.FallbackToProvider(token));
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 if ((bool)hideErrors)
                 {
+                    Logger.LogException(ex, LogLevel.Warning);
                     return null;
                 }
                 throw;
@@ -174,12 +182,15 @@ namespace Volo.Abp.Caching
                     options ?? DefaultCacheOptions
                 );
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                if (!(bool) hideErrors)
+                if ((bool) hideErrors)
                 {
-                    throw;
+                    Logger.LogException(ex, LogLevel.Warning);
+                    return;
                 }
+
+                throw;
             }
         }
 
@@ -196,10 +207,11 @@ namespace Volo.Abp.Caching
                     CancellationTokenProvider.FallbackToProvider(token)
                 );
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 if ((bool)hideErrors)
                 {
+                    Logger.LogException(ex, LogLevel.Warning);
                     return Task.CompletedTask;
                 }
                 throw;
@@ -214,12 +226,15 @@ namespace Volo.Abp.Caching
             {
                 Cache.Refresh(NormalizeKey(key));
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                if (!(bool) hideErrors)
+                if ((bool) hideErrors)
                 {
-                    throw;
+                    Logger.LogException(ex, LogLevel.Warning);
+                    return;
                 }
+
+                throw;
             }
         }
 
@@ -231,10 +246,11 @@ namespace Volo.Abp.Caching
             {
                 return Cache.RefreshAsync(NormalizeKey(key), CancellationTokenProvider.FallbackToProvider(token));
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 if ((bool)hideErrors)
                 {
+                    Logger.LogException(ex, LogLevel.Warning);
                     return Task.CompletedTask;
                 }
                 throw;
@@ -249,12 +265,14 @@ namespace Volo.Abp.Caching
             {
                 Cache.Remove(NormalizeKey(key));
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                if (!(bool)hideErrors)
+                if ((bool) hideErrors)
                 {
-                    throw;
+                    Logger.LogException(ex, LogLevel.Warning);
                 }
+
+                throw;
             }
         }
 
@@ -266,10 +284,11 @@ namespace Volo.Abp.Caching
             {
                 return Cache.RemoveAsync(NormalizeKey(key), CancellationTokenProvider.FallbackToProvider(token));
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 if ((bool)hideErrors)
                 {
+                    Logger.LogException(ex, LogLevel.Warning);
                     return Task.CompletedTask;
                 }
                 throw;
