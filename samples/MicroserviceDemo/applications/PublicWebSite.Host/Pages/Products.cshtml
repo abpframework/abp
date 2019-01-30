@@ -1,0 +1,12 @@
+﻿@page
+@model PublicWebSite.Host.Pages.ProductsModel
+<h1>Our Products</h1>
+<ul>
+    @foreach (var product in Model.Products.Items)
+    {
+        <li>
+            @product.Code / @product.Name / $@product.Price <br/>
+            <i>Stock count: @product.StockCount</i>
+        </li>
+    }
+</ul>

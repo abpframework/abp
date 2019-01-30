@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Security.Authentication;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Volo.Abp.Application.Dtos;
-using Volo.Abp.Authorization.Permissions;
-using Volo.Abp.PermissionManagement;
 
 namespace Volo.Abp.Identity
 {
@@ -14,18 +11,16 @@ namespace Volo.Abp.Identity
     {
         private readonly IdentityUserManager _userManager;
         private readonly IIdentityUserRepository _userRepository;
-        private readonly IPermissionAppServiceHelper _permissionAppServiceHelper;
 
         public IdentityUserAppService(
             IdentityUserManager userManager,
-            IIdentityUserRepository userRepository,
-            IPermissionAppServiceHelper permissionAppServiceHelper)
+            IIdentityUserRepository userRepository)
         {
             _userManager = userManager;
             _userRepository = userRepository;
-            _permissionAppServiceHelper = permissionAppServiceHelper;
         }
 
+        //TODO: [Authorize(IdentityPermissions.Users.Default)] should go the IdentityUserAppService class.
         [Authorize(IdentityPermissions.Users.Default)]
         public async Task<IdentityUserDto> GetAsync(Guid id)
         {
@@ -37,7 +32,7 @@ namespace Volo.Abp.Identity
         [Authorize(IdentityPermissions.Users.Default)]
         public async Task<PagedResultDto<IdentityUserDto>> GetListAsync(GetIdentityUsersInput input)
         {
-            var count = await _userRepository.GetCountAsync(input.Filter); //TODO: 
+            var count = await _userRepository.GetCountAsync(input.Filter);
             var list = await _userRepository.GetListAsync(input.Sorting, input.MaxResultCount, input.SkipCount, input.Filter);
 
             return new PagedResultDto<IdentityUserDto>(
@@ -102,21 +97,6 @@ namespace Volo.Abp.Identity
             await _userRepository.UpdateAsync(user);
         }
 
-        [Authorize(IdentityPermissions.Users.ManagePermissions)]
-        public async Task<GetPermissionListResultDto> GetPermissionsAsync(Guid id)
-        {
-            var user = await _userManager.GetByIdAsync(id);
-            var result = await _permissionAppServiceHelper.GetAsync(UserPermissionValueProvider.ProviderName, id.ToString());
-            result.EntityDisplayName = user.UserName;
-            return result;
-        }
-
-        [Authorize(IdentityPermissions.Users.ManagePermissions)]
-        public async Task UpdatePermissionsAsync(Guid id, UpdatePermissionsDto input)
-        {
-            await _permissionAppServiceHelper.UpdateAsync(UserPermissionValueProvider.ProviderName, id.ToString(), input);
-        }
-
         [Authorize(IdentityPermissions.Users.Default)]
         public async Task<IdentityUserDto> FindByUsernameAsync(string username)
         {
@@ -133,6 +113,7 @@ namespace Volo.Abp.Identity
             );
         }
 
+        //TODO: Move this to the profile service!
         public async Task ChangePasswordAsync(string currentPassword, string newPassword)
         {
             if (!CurrentUser.Id.HasValue)

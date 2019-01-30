@@ -14,6 +14,16 @@ namespace Volo.Abp.IdentityServer.MongoDB
     )]
     public class AbpIdentityServerMongoDbModule : AbpModule
     {
+        public override void PreConfigureServices(ServiceConfigurationContext context)
+        {
+            context.Services.PreConfigure<IIdentityServerBuilder>(
+                builder =>
+                {
+                    builder.AddAbpStores();
+                }
+            );
+        }
+
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.AddMongoDbContext<AbpIdentityServerMongoDbContext>(options =>

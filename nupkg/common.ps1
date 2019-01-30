@@ -109,6 +109,8 @@ $projects = (
     "modules/permission-management/src/Volo.Abp.PermissionManagement.Application",
     "modules/permission-management/src/Volo.Abp.PermissionManagement.EntityFrameworkCore",
     "modules/permission-management/src/Volo.Abp.PermissionManagement.MongoDB",
+    "modules/permission-management/src/Volo.Abp.PermissionManagement.HttpApi",
+    "modules/permission-management/src/Volo.Abp.PermissionManagement.HttpApi.Client",
     "modules/permission-management/src/Volo.Abp.PermissionManagement.Web",
 
     # modules/tenant-management
@@ -133,6 +135,7 @@ $projects = (
     "modules/identity/src/Volo.Abp.Identity.HttpApi",
     "modules/identity/src/Volo.Abp.Identity.HttpApi.Client",
     "modules/identity/src/Volo.Abp.Identity.Web", 
+    "modules/identity/src/Volo.Abp.PermissionManagement.Domain.Identity",
     
     # modules/identityserver
     "modules/identityserver/src/Volo.Abp.IdentityServer.Domain.Shared",
@@ -142,6 +145,7 @@ $projects = (
 
     # modules/account
     "modules/account/src/Volo.Abp.Account.Web",
+    "modules/account/src/Volo.Abp.Account.Web.IdentityServer",
     
     # modules/docs
     "modules/docs/src/Volo.Docs.Application",

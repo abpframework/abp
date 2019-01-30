@@ -15,8 +15,10 @@ using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.Account.Web
 {
-    [DependsOn(typeof(AbpIdentityAspNetCoreModule))]
-    [DependsOn(typeof(AbpAspNetCoreMvcUiThemeSharedModule))]
+    [DependsOn(
+        typeof(AbpIdentityAspNetCoreModule),
+        typeof(AbpAspNetCoreMvcUiThemeSharedModule)
+        )]
     public class AbpAccountWebModule : AbpModule
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)

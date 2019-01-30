@@ -10,8 +10,6 @@ namespace Volo.Abp.PermissionManagement.Web.Pages.AbpPermissionManagement
 {
     public class PermissionManagementModal : AbpPageModel
     {
-        private readonly IPermissionAppServiceGateway _permissionAppServiceGateway;
-
         [Required]
         [HiddenInput]
         [BindProperty(SupportsGet = true)]
@@ -27,16 +25,18 @@ namespace Volo.Abp.PermissionManagement.Web.Pages.AbpPermissionManagement
 
         public string EntityDisplayName { get; set; }
 
-        public PermissionManagementModal(IPermissionAppServiceGateway permissionAppServiceGateway)
+        private readonly IPermissionAppService _permissionAppService;
+
+        public PermissionManagementModal(IPermissionAppService permissionAppService)
         {
-            _permissionAppServiceGateway = permissionAppServiceGateway;
+            _permissionAppService = permissionAppService;
         }
 
         public async Task OnGetAsync()
         {
             ValidateModel();
 
-            var result = await _permissionAppServiceGateway.GetAsync(ProviderName, ProviderKey);
+            var result = await _permissionAppService.GetAsync(ProviderName, ProviderKey);
 
             EntityDisplayName = result.EntityDisplayName;
 
@@ -64,7 +64,7 @@ namespace Volo.Abp.PermissionManagement.Web.Pages.AbpPermissionManagement
                 })
                 .ToArray();
 
-            await _permissionAppServiceGateway.UpdateAsync(
+            await _permissionAppService.UpdateAsync(
                 ProviderName,
                 ProviderKey,
                 new UpdatePermissionsDto

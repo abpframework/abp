@@ -130,7 +130,7 @@ namespace Volo.Abp.Identity
             ExtraProperties = new Dictionary<string, object>();
         }
 
-        public IdentityUser(Guid id, [NotNull] string userName, [NotNull] string email, Guid? tenantId = null)
+        public IdentityUser(Guid id, [NotNull] string userName, string email = null, Guid? tenantId = null)
         {
             Check.NotNull(userName, nameof(userName));
 
@@ -139,7 +139,7 @@ namespace Volo.Abp.Identity
             UserName = userName;
             NormalizedUserName = userName.ToUpperInvariant();
             Email = email;
-            NormalizedEmail = email.ToUpperInvariant();
+            NormalizedEmail = email?.ToUpperInvariant();
             ConcurrencyStamp = Guid.NewGuid().ToString();
             SecurityStamp = Guid.NewGuid().ToString();
 
