@@ -256,6 +256,23 @@
       ]
     },
     {
+      "text": "示例",
+      "items": [
+        {
+          "text": "微服务示例",
+          "path": "Samples/Microservice-Demo.md"
+        }
+      ]
+    },
+    {
+      "text": "应用模块",
+      "path": "Modules/Index.md"
+    },
+    {
+      "text": "微服务架构",
+      "path": "Microservice-Architecture.md"
+    },
+    {
       "text": "测试"
     },
     {

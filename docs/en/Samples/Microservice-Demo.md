@@ -6,7 +6,7 @@
 
 ## Introduction
 
-One of the major goals of the ABP framework is to provide a [convenient infrastructure to create microservice solutions](Microservice-Architecture.md).
+One of the major goals of the ABP framework is to provide a [convenient infrastructure to create microservice solutions](../Microservice-Architecture.md).
 
 This sample aims to demonstrate a simple yet complete microservice solution;
 
