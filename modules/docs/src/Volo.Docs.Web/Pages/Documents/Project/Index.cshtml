@@ -139,22 +139,22 @@
                     }
                 </div>
 
-                <div class="docs-content-field"> 
-                        <div class="position-relative">
-                        <div class="contributors">
-                            @if (Model.Document.Contributors.Count > 0)
-                            {
+                <div class="docs-content-field">
+                    <div class="position-relative">
+                        @if (Model.Document.Contributors != null && Model.Document.Contributors.Count > 0)
+                        {
+                            <div class="contributors">
                                 <small class="text-muted">@(L["Contributors"].Value + " :")</small>
-                            }
-                            @foreach (var contributor in Model.Document.Contributors)
-                            {
-                                <a href="@contributor.UserProfileUrl" target="_blank">
-                                    <img src="@contributor.AvatarUrl"
-                                         class="contributors-avatar" height="21" width="21" title="@contributor.Username" />
-                                </a>
-                            }
-                        </div> 
-                        </div> 
+                                @foreach (var contributor in Model.Document.Contributors)
+                                {
+                                    <a href="@contributor.UserProfileUrl" target="_blank">
+                                        <img src="@contributor.AvatarUrl"
+                                             class="contributors-avatar" height="21" width="21" title="@contributor.Username" />
+                                    </a>
+                                }
+                            </div>
+                        }
+                    </div>
                     <div class="docs-text-field">
                         <div data-spy="scroll" data-target="#docs-sticky-index" data-offset="0">
                             <article class="docs-body">
