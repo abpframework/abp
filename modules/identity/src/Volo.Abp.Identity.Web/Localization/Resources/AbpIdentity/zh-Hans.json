@@ -22,7 +22,7 @@
       "DisplayName:Name": "名",
       "DisplayName:Surname": "姓",
       "DisplayName:Password": "密码",
-      "DisplayName:EmailAddress": "邮箱地址",
+      "DisplayName:Email": "邮箱地址",
       "DisplayName:PhoneNumber": "手机号码",
       "DisplayName:TwoFactorEnabled": "二次认证",
       "DisplayName:LockoutEnabled": "登录失败,账户被锁定",

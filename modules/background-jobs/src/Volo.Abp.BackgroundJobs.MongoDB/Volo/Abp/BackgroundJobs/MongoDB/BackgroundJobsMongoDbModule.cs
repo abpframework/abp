@@ -12,8 +12,6 @@ namespace Volo.Abp.BackgroundJobs.MongoDB
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            BackgroundJobsBsonClassMap.Configure();
-
             context.Services.AddMongoDbContext<BackgroundJobsMongoDbContext>(options =>
             {
                  options.AddRepository<BackgroundJobRecord, MongoBackgroundJobRepository>();

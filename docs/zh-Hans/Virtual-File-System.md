@@ -109,7 +109,7 @@ public class MyService
 
 假设你正在开发一个包含嵌入式JavaScript文件的模块. 当你更改文件时, 你必须重新编译项目, 重新启动应用程序并刷新浏览器页面以进行更改. 显然, 这是非常耗时和乏味的.
 
-我们需要的是应用程序在开发时直接使用物理文件的能力, 让浏览器刷新时同步JavaScript文件的任何更改. `ReplaceEmbeddedByPyhsical` 方法使其成为可能.
+我们需要的是应用程序在开发时直接使用物理文件的能力, 让浏览器刷新时同步JavaScript文件的任何更改. `ReplaceEmbeddedByPhysical` 方法使其成为可能.
 
 下面的示例展示了应用程序依赖于包含嵌入文件的模块("MyModule"), 并且应用程序可以在开发过程中直接使用模块的源代码.
 
@@ -125,8 +125,8 @@ public class MyWebAppModule : AbpModule
         {
             Configure<VirtualFileSystemOptions>(options =>
             {
-                //ReplaceEmbeddedByPyhsical gets the root folder of the MyModule project
-                options.FileSets.ReplaceEmbeddedByPyhsical<MyModule>(
+                //ReplaceEmbeddedByPhysical gets the root folder of the MyModule project
+                options.FileSets.ReplaceEmbeddedByPhysical<MyModule>(
                     Path.Combine(hostingEnvironment.ContentRootPath, "..\\MyModuleProject")
                 );
             });

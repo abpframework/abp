@@ -70,8 +70,8 @@ namespace Volo.Abp.AuditLogging
             ExtraProperties = auditInfo.ExtraProperties.ToDictionary(pair => pair.Key, pair => pair.Value);
             EntityChanges = auditInfo.EntityChanges.Select(e => new EntityChange(guidGenerator, Id, e)).ToList();
             Actions = auditInfo.Actions.Select(e => new AuditLogAction(guidGenerator.Create(), Id, e)).ToList();
-            Exceptions = auditInfo.Exceptions.JoinAsString(Environment.NewLine);
-            Comments = auditInfo.Comments.JoinAsString(Environment.NewLine);
+            Exceptions = auditInfo.Exceptions.JoinAsString(Environment.NewLine).Truncate(AuditLogConsts.MaxExceptionsLength);
+            Comments = auditInfo.Comments.JoinAsString(Environment.NewLine).Truncate(AuditLogConsts.MaxCommentsLength);
         }
     }
 }

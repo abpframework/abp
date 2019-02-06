@@ -1,7 +1,7 @@
 ﻿@using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy.Components.TenantSwitch
 @model TenantSwitchViewComponent.TenantSwitchViewModel
 <li class="nav-item">
-    <a id="TenantSwitchToolbarLink" href="#">
+    <a abp-button="Link" id="TenantSwitchToolbarLink" href="#">
         @if (Model.Tenant == null)
         {
             <text>@@host</text>

@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Security;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Services;
+using Volo.Abp.IO;
 using Volo.Docs.Documents;
 using Volo.Docs.FileSystem.Projects;
 using Volo.Docs.Projects;
@@ -14,8 +16,12 @@ namespace Volo.Docs.FileSystem.Documents
 
         public async Task<Document> GetDocument(Project project, string documentName, string version)
         {
-            var path = Path.Combine(project.GetFileSystemPath(), documentName);
-            var content = File.ReadAllText(path); //TODO: async!
+            var projectFolder = project.GetFileSystemPath();
+            var path = Path.Combine(projectFolder, documentName);
+
+            CheckDirectorySecurity(projectFolder, path);
+            
+            var content = await FileHelper.ReadAllTextAsync(path);
             var localDirectory = "";
 
             if (documentName.Contains("/"))
@@ -42,8 +48,23 @@ namespace Volo.Docs.FileSystem.Documents
 
         public async Task<DocumentResource> GetResource(Project project, string resourceName, string version)
         {
-            var path = Path.Combine(project.GetFileSystemPath(), resourceName);
-            return new DocumentResource(File.ReadAllBytes(path));
+            var projectFolder = project.GetFileSystemPath();
+            var path = Path.Combine(projectFolder, resourceName);
+
+            if (!DirectoryHelper.IsSubDirectoryOf(projectFolder, path))
+            {
+                throw new SecurityException("Can not get a resource file out of the project folder!");
+            }
+
+            return new DocumentResource(await FileHelper.ReadAllBytesAsync(path));
+        }
+
+        private static void CheckDirectorySecurity(string projectFolder, string path)
+        {
+            if (!DirectoryHelper.IsSubDirectoryOf(projectFolder, path))
+            {
+                throw new SecurityException("Can not get a resource file out of the project folder!");
+            }
         }
     }
 }

@@ -22,9 +22,9 @@ namespace Volo.Blogging.Tagging
             _tagRepository = tagRepository;
         }
 
-        public async Task<List<TagDto>> GetPopularTags(GetPopularTagsInput input)
+        public async Task<List<TagDto>> GetPopularTags(Guid blogId, GetPopularTagsInput input)
         {
-            var postTags = (await _tagRepository.GetListAsync(input.BlogId)).OrderByDescending(t=>t.UsageCount)
+            var postTags = (await _tagRepository.GetListAsync(blogId)).OrderByDescending(t=>t.UsageCount)
                 .WhereIf(input.MinimumPostCount != null, t=>t.UsageCount >= input.MinimumPostCount)
                 .Take(input.ResultCount).ToList();
 

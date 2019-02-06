@@ -600,7 +600,7 @@ span.code-arrow {
     .docs-page .docs-page-index {
       display: none; } }
 
-@media (max-width: 767px) {
+@media (max-width: 992px) {
   body {
     font-size: 14px; }
   .for-mobile {

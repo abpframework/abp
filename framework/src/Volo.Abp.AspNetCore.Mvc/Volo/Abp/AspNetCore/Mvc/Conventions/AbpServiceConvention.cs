@@ -233,11 +233,11 @@ namespace Volo.Abp.AspNetCore.Mvc.Conventions
             var controllerSetting = GetControllerSettingOrNull(controllerType);
             if (controllerSetting?.RootPath != null)
             {
-                return GetControllerSettingOrNull(controllerType)?.RootPath;
+                return controllerSetting.RootPath;
             }
 
             var areaAttribute = controllerType.GetCustomAttributes().OfType<AreaAttribute>().FirstOrDefault();
-            if (areaAttribute.RouteValue != null)
+            if (areaAttribute?.RouteValue != null)
             {
                 return areaAttribute.RouteValue;
             }

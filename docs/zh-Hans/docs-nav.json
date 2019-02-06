@@ -16,11 +16,11 @@
           "text": "从空项目开始",
           "items": [
             {
-              "text": "使用Console Application",
+              "text": "使用ASP.NET Core Web Application",
               "path": "Getting-Started-AspNetCore-Application.md"
             },
             {
-              "text": "使用 ASP.NET Core Web Application",
+              "text": "使用Console Application",
               "path": "Getting-Started-Console-Application.md"
             }
           ]
@@ -49,7 +49,8 @@
           "path": "Dependency-Injection.md",
           "items": [
             {
-              "text": "AutoFac 集成"
+              "text": "AutoFac 集成",
+              "path": "Autofac-Integration.md"
             }
           ]
         },
@@ -170,7 +171,8 @@
           "text": "应用服务层",
           "items": [
             {
-              "text": "应用服务"
+              "text": "应用服务",
+              "path": "Application-Services.md"
             },
             {
               "text": "数据传输对象(DTO)"
@@ -183,10 +185,20 @@
       ]
     },
     {
-      "text": "ASP.NET Core MVC",
+      "text": "ASP.NET Core",
       "items": [
         {
-          "text": "API 版本控制"
+          "text": "API",
+           "items": [            
+             {
+               "text": "自动API控制器",
+               "path": "AspNetCore/Auto-API-Controllers.md"
+             },
+             {
+              "text": "动态C# API客户端",
+              "path": "AspNetCore/Dynamic-CSharp-API-Clients.md"
+            }
+           ]
         },
         {
           "text": "用户界面",
@@ -242,6 +254,23 @@
           ]
         }
       ]
+    },
+    {
+      "text": "示例",
+      "items": [
+        {
+          "text": "微服务示例",
+          "path": "Samples/Microservice-Demo.md"
+        }
+      ]
+    },
+    {
+      "text": "应用模块",
+      "path": "Modules/Index.md"
+    },
+    {
+      "text": "微服务架构",
+      "path": "Microservice-Architecture.md"
     },
     {
       "text": "测试"

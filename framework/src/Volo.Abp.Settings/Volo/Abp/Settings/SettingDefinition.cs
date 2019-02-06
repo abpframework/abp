@@ -48,13 +48,20 @@ namespace Volo.Abp.Settings
         [NotNull]
         public Dictionary<string, object> Properties { get; }
 
+        /// <summary>
+        /// Is this setting stored as encrypted in the data source.
+        /// Default: False.
+        /// </summary>
+        public bool IsEncrypted { get; set; }
+
         public SettingDefinition(
             string name,
             string defaultValue = null,
             ILocalizableString displayName = null,
             ILocalizableString description = null,
             bool isVisibleToClients = false,
-            bool isInherited = true)
+            bool isInherited = true,
+            bool isEncrypted = false)
         {
             Name = name;
             DefaultValue = defaultValue;
@@ -62,6 +69,7 @@ namespace Volo.Abp.Settings
             DisplayName = displayName ?? new FixedLocalizableString(name);
             Description = description;
             IsInherited = isInherited;
+            IsEncrypted = isEncrypted;
 
             Properties = new Dictionary<string, object>();
         }

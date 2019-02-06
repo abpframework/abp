@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using Shouldly;
@@ -12,16 +11,12 @@ namespace Volo.Abp.Identity
     public class ProfileAppService_Tests : AbpIdentityApplicationTestBase
     {
         private readonly IProfileAppService _profileAppService;
-        private readonly IIdentityUserRepository _userRepository;
-        private readonly SignInManager<IdentityUser> _signInManager;
         private readonly IdentityTestData _testData;
         private ICurrentUser _currentUser;
 
         public ProfileAppService_Tests()
         {
             _profileAppService = GetRequiredService<IProfileAppService>();
-            _userRepository = GetRequiredService<IIdentityUserRepository>();
-            _signInManager = GetRequiredService<SignInManager<IdentityUser>>();
             _testData = GetRequiredService<IdentityTestData>();
         }
 

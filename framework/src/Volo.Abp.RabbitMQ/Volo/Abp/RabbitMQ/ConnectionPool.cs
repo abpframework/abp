@@ -28,7 +28,7 @@ namespace Volo.Abp.RabbitMQ
             return Connections.GetOrAdd(
                 connectionName,
                 () => Options
-                    .ConnectionFactories
+                    .Connections
                     .GetOrDefault(connectionName)
                     .CreateConnection()
             );

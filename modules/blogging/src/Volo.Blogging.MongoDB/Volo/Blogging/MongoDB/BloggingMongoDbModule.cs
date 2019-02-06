@@ -17,8 +17,6 @@ namespace Volo.Blogging.MongoDB
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            AbpBloggingBsonClassMap.Configure();
-
             context.Services.AddMongoDbContext<BloggingMongoDbContext>(options =>
             {
                 options.AddRepository<Blog, MongoBlogRepository>();

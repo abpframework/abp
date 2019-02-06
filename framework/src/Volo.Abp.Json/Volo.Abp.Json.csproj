@@ -14,11 +14,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
   </ItemGroup>
   
   <ItemGroup>
-    <ProjectReference Include="..\Volo.Abp.Core\Volo.Abp.Core.csproj" />
     <ProjectReference Include="..\Volo.Abp.Timing\Volo.Abp.Timing.csproj" />
   </ItemGroup>
 

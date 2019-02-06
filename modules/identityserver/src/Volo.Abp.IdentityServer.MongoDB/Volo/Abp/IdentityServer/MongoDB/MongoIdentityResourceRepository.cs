@@ -28,6 +28,16 @@ namespace Volo.Abp.IdentityServer.MongoDB
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
+        public async Task<IdentityResource> FindByNameAsync(
+            string name,
+            bool includeDetails = true,
+            CancellationToken cancellationToken = default)
+        {
+            return await GetMongoQueryable()
+                .Where(x => x.Name == name)
+                .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
+        }
+
         public async Task<List<IdentityResource>> GetListByScopesAsync(string[] scopeNames, bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
@@ -36,7 +46,7 @@ namespace Volo.Abp.IdentityServer.MongoDB
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<long> GetTotalCount()
+        public virtual async Task<long> GetTotalCountAsync()
         {
             return await GetCountAsync();
         }

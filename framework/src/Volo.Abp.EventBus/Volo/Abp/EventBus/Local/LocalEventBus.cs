@@ -5,9 +5,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
-using Volo.Abp.Collections;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Threading;
 
@@ -28,39 +26,16 @@ namespace Volo.Abp.EventBus.Local
 
         protected ConcurrentDictionary<Type, List<IEventHandlerFactory>> HandlerFactories { get; }
 
-        protected IHybridServiceScopeFactory ServiceScopeFactory { get; }
-
         public LocalEventBus(
             IOptions<LocalEventBusOptions> options,
             IHybridServiceScopeFactory serviceScopeFactory)
+            : base(serviceScopeFactory)
         {
-            ServiceScopeFactory = serviceScopeFactory;
             Options = options.Value;
             Logger = NullLogger<LocalEventBus>.Instance;
 
             HandlerFactories = new ConcurrentDictionary<Type, List<IEventHandlerFactory>>();
-            Subscribe(Options.Handlers);
-        }
-
-        public virtual void Subscribe(ITypeList<IEventHandler> handlers)
-        {
-            foreach (var handler in handlers)
-            {
-                var interfaces = handler.GetInterfaces();
-                foreach (var @interface in interfaces)
-                {
-                    if (!typeof(IEventHandler).GetTypeInfo().IsAssignableFrom(@interface))
-                    {
-                        continue;
-                    }
-
-                    var genericArgs = @interface.GetGenericArguments();
-                    if (genericArgs.Length == 1)
-                    {
-                        Subscribe(genericArgs[0], new IocEventHandlerFactory(ServiceScopeFactory, handler));
-                    }
-                }
-            }
+            SubscribeHandlers(Options.Handlers);
         }
 
         /// <inheritdoc/>

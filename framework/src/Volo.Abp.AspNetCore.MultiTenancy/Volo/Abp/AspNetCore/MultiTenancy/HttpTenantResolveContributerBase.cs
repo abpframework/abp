@@ -7,7 +7,7 @@ using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.AspNetCore.MultiTenancy
 {
-    public abstract class HttpTenantResolveContributerBase : ITenantResolveContributer
+    public abstract class HttpTenantResolveContributorBase : ITenantResolveContributor
     {
         public virtual void Resolve(ITenantResolveContext context)
         {
@@ -24,7 +24,7 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
             catch (Exception e)
             {
                 context.ServiceProvider
-                    .GetRequiredService<ILogger<HttpTenantResolveContributerBase>>()
+                    .GetRequiredService<ILogger<HttpTenantResolveContributorBase>>()
                     .LogWarning(e.ToString());
             }
         }

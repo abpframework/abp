@@ -5,12 +5,15 @@ using Volo.Abp.Identity;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.Resources.AbpValidation;
 using Volo.Abp.Modularity;
+using Volo.Abp.PermissionManagement.Identity;
 using Volo.Abp.Settings;
 using Volo.Abp.VirtualFileSystem;
 
 namespace Acme.BookStore
 {
-    [DependsOn(typeof(AbpIdentityDomainModule))]
+    [DependsOn(
+        typeof(AbpIdentityDomainModule),
+        typeof(AbpPermissionManagementDomainIdentityModule))]
     public class BookStoreDomainModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)

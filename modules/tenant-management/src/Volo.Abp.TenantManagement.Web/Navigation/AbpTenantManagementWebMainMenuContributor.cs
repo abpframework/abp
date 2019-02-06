@@ -19,12 +19,12 @@ namespace Volo.Abp.TenantManagement.Web.Navigation
             var authorizationService = context.ServiceProvider.GetRequiredService<IAuthorizationService>();
             var l = context.ServiceProvider.GetRequiredService<IStringLocalizer<AbpTenantManagementResource>>();
 
-            var tenantManagementMenuItem = new ApplicationMenuItem("TenantManagement", l["Menu:TenantManagement"]);
+            var tenantManagementMenuItem = new ApplicationMenuItem(TenantManagementMenuNames.GroupName, l["Menu:TenantManagement"], icon: "fa fa-users");
             context.Menu.AddItem(tenantManagementMenuItem);
 
             if (await authorizationService.IsGrantedAsync(TenantManagementPermissions.Tenants.Default))
             {
-                tenantManagementMenuItem.AddItem(new ApplicationMenuItem("Tenants", l["Tenants"], url: "/TenantManagement/Tenants"));
+                tenantManagementMenuItem.AddItem(new ApplicationMenuItem(TenantManagementMenuNames.Tenants, l["Tenants"], url: "/TenantManagement/Tenants"));
             }
         }
     }

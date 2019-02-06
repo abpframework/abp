@@ -22,7 +22,7 @@
     "DisplayName:Name": "Nome",
     "DisplayName:Surname": "Sobrenome",
     "DisplayName:Password": "Senha",
-    "DisplayName:EmailAddress": "E-mail",
+    "DisplayName:Email": "E-mail",
     "DisplayName:PhoneNumber": "Telefone",
     "DisplayName:TwoFactorEnabled": "Verificação em dois fatores",
     "DisplayName:LockoutEnabled": "Bloquear conta após falhas ao entrar",

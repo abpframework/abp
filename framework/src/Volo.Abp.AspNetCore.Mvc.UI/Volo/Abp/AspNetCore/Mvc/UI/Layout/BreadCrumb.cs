@@ -20,5 +20,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Layout
         {
             Items = new List<BreadCrumbItem>();
         }
+
+        public void Add(string text, string url = null, string icon = null)
+        {
+            Items.Add(new BreadCrumbItem(text, url, icon));
+        }
     }
 }

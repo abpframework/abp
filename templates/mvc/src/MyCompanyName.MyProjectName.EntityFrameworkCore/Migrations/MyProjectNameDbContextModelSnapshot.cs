@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyCompanyName.MyProjectName.EntityFrameworkCore;
-using Volo.Abp.BackgroundJobs;
 
 namespace MyCompanyName.MyProjectName.Migrations
 {
@@ -16,7 +15,7 @@ namespace MyCompanyName.MyProjectName.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.1-rtm-30846")
+                .HasAnnotation("ProductVersion", "2.2.0-rtm-35687")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -99,8 +98,6 @@ namespace MyCompanyName.MyProjectName.Migrations
                     b.Property<Guid>("AuditLogId")
                         .HasColumnName("AuditLogId");
 
-                    b.Property<Guid?>("AuditLogId1");
-
                     b.Property<int>("ExecutionDuration")
                         .HasColumnName("ExecutionDuration");
 
@@ -128,8 +125,6 @@ namespace MyCompanyName.MyProjectName.Migrations
 
                     b.HasIndex("AuditLogId");
 
-                    b.HasIndex("AuditLogId1");
-
                     b.HasIndex("TenantId", "ServiceName", "MethodName", "ExecutionTime");
 
                     b.ToTable("AbpAuditLogActions");
@@ -142,8 +137,6 @@ namespace MyCompanyName.MyProjectName.Migrations
 
                     b.Property<Guid>("AuditLogId")
                         .HasColumnName("AuditLogId");
-
-                    b.Property<Guid?>("AuditLogId1");
 
                     b.Property<DateTime>("ChangeTime")
                         .HasColumnName("ChangeTime");
@@ -170,8 +163,6 @@ namespace MyCompanyName.MyProjectName.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AuditLogId");
-
-                    b.HasIndex("AuditLogId1");
 
                     b.HasIndex("TenantId", "EntityTypeFullName", "EntityId");
 
@@ -373,17 +364,19 @@ namespace MyCompanyName.MyProjectName.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
-                        .IsRequired()
-                        .HasColumnName("ConcurrencyStamp")
-                        .HasMaxLength(256);
+                        .HasColumnName("ConcurrencyStamp");
 
-                    b.Property<DateTime>("CreationTime");
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnName("CreationTime");
 
-                    b.Property<Guid?>("CreatorId");
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnName("CreatorId");
 
-                    b.Property<Guid?>("DeleterId");
+                    b.Property<Guid?>("DeleterId")
+                        .HasColumnName("DeleterId");
 
-                    b.Property<DateTime?>("DeletionTime");
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnName("DeletionTime");
 
                     b.Property<string>("Email")
                         .HasColumnName("Email")
@@ -397,11 +390,16 @@ namespace MyCompanyName.MyProjectName.Migrations
                     b.Property<string>("ExtraProperties")
                         .HasColumnName("ExtraProperties");
 
-                    b.Property<bool>("IsDeleted");
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("IsDeleted")
+                        .HasDefaultValue(false);
 
-                    b.Property<DateTime?>("LastModificationTime");
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnName("LastModificationTime");
 
-                    b.Property<Guid?>("LastModifierId");
+                    b.Property<Guid?>("LastModifierId")
+                        .HasColumnName("LastModifierId");
 
                     b.Property<bool>("LockoutEnabled")
                         .ValueGeneratedOnAdd()
@@ -606,25 +604,17 @@ namespace MyCompanyName.MyProjectName.Migrations
             modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLogAction", b =>
                 {
                     b.HasOne("Volo.Abp.AuditLogging.AuditLog")
-                        .WithMany()
+                        .WithMany("Actions")
                         .HasForeignKey("AuditLogId")
                         .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Volo.Abp.AuditLogging.AuditLog")
-                        .WithMany("Actions")
-                        .HasForeignKey("AuditLogId1");
                 });
 
             modelBuilder.Entity("Volo.Abp.AuditLogging.EntityChange", b =>
                 {
                     b.HasOne("Volo.Abp.AuditLogging.AuditLog")
-                        .WithMany()
+                        .WithMany("EntityChanges")
                         .HasForeignKey("AuditLogId")
                         .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Volo.Abp.AuditLogging.AuditLog")
-                        .WithMany("EntityChanges")
-                        .HasForeignKey("AuditLogId1");
                 });
 
             modelBuilder.Entity("Volo.Abp.AuditLogging.EntityPropertyChange", b =>

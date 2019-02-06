@@ -12,6 +12,7 @@ namespace Volo.Abp.IdentityServer.AspNetIdentity
     public class AbpProfileService : ProfileService<IdentityUser>
     {
         private readonly ICurrentTenant _currentTenant;
+
         public AbpProfileService(
             IdentityUserManager userManager,
             IUserClaimsPrincipalFactory<IdentityUser> claimsFactory,

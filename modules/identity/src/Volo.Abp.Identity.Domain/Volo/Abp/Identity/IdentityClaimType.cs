@@ -1,5 +1,5 @@
-﻿using System;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
+using System;
 using Volo.Abp.Domain.Entities;
 
 namespace Volo.Abp.Identity
@@ -8,15 +8,15 @@ namespace Volo.Abp.Identity
     {
         public virtual string Name { get; protected set; }
 
-        public virtual bool Required { get; protected set; }
+        public virtual bool Required { get; set; }
 
         public virtual bool IsStatic { get; protected set; }
 
-        public virtual string Regex { get; protected set; }
+        public virtual string Regex { get; set; }
 
-        public virtual string RegexDescription { get; protected set; }
+        public virtual string RegexDescription { get; set; }
 
-        public virtual string Description { get; protected set; }
+        public virtual string Description { get; set; }
 
         public virtual IdentityClaimValueType ValueType { get; protected set; }
 
@@ -25,12 +25,18 @@ namespace Volo.Abp.Identity
 
         }
 
-        public IdentityClaimType(Guid id, [NotNull] string name, bool required, bool isStatic, [CanBeNull]string regex, [CanBeNull]string regexDescription, [CanBeNull] string description, IdentityClaimValueType valueType  = IdentityClaimValueType.String)
+        public IdentityClaimType(
+            Guid id,
+            [NotNull] string name,
+            bool required = false,
+            bool isStatic = false,
+            [CanBeNull] string regex = null,
+            [CanBeNull] string regexDescription = null,
+            [CanBeNull] string description = null,
+            IdentityClaimValueType valueType = IdentityClaimValueType.String)
         {
-            Check.NotNull(name, nameof(name));
-
             Id = id;
-            Name = name;
+            Name = Check.NotNull(name, nameof(name));
             Required = required;
             IsStatic = isStatic;
             Regex = regex;

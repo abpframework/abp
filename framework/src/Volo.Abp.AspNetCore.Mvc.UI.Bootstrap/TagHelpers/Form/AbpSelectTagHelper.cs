@@ -13,6 +13,14 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         public IEnumerable<SelectListItem> AspItems { get; set; }
 
+        public AbpFormControlSize Size { get; set; } = AbpFormControlSize.Default;
+
+        [HtmlAttributeName("info")]
+        public string InfoText { get; set; }
+
+        [HtmlAttributeNotBound]
+        public bool DisplayRequiredSymbol { get; set; } = true;
+
         [HtmlAttributeNotBound]
         [ViewContext]
         public ViewContext ViewContext { get; set; }

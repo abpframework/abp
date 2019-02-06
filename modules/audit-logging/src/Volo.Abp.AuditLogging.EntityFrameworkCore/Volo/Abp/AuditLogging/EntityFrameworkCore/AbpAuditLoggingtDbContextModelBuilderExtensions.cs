@@ -39,8 +39,8 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
                 b.Property(x => x.UserName).HasMaxLength(AuditLogConsts.MaxUserNameLength).HasColumnName(nameof(AuditLog.UserName));
                 b.Property(x => x.TenantId).HasColumnName(nameof(AuditLog.TenantId));
 
-                b.HasMany<AuditLogAction>().WithOne().HasForeignKey(x => x.AuditLogId);
-                b.HasMany<EntityChange>().WithOne().HasForeignKey(x => x.AuditLogId);
+                b.HasMany(a => a.Actions).WithOne().HasForeignKey(x => x.AuditLogId).IsRequired();
+                b.HasMany(a => a.EntityChanges).WithOne().HasForeignKey(x => x.AuditLogId).IsRequired();
 
                 b.HasIndex(x => new { x.TenantId, x.ExecutionTime });
                 b.HasIndex(x => new { x.TenantId, x.UserId, x.ExecutionTime });
@@ -76,7 +76,7 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
                 b.Property(x => x.ChangeType).IsRequired().HasColumnName(nameof(EntityChange.ChangeType));
                 b.Property(x => x.TenantId).HasColumnName(nameof(EntityChange.TenantId));
 
-                b.HasMany<EntityPropertyChange>().WithOne().HasForeignKey(x => x.EntityChangeId);
+                b.HasMany(a => a.PropertyChanges).WithOne().HasForeignKey(x => x.EntityChangeId);
 
                 b.HasIndex(x => new { x.AuditLogId });
                 b.HasIndex(x => new { x.TenantId, x.EntityTypeFullName, x.EntityId });

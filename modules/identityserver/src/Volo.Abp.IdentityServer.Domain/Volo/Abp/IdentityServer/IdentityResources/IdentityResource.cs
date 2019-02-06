@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using JetBrains.Annotations;
 using Volo.Abp.Domain.Entities;
 
@@ -52,6 +53,19 @@ namespace Volo.Abp.IdentityServer.IdentityResources
             UserClaims = new List<IdentityClaim>();
         }
 
+        public IdentityResource(Guid id, IdentityServer4.Models.IdentityResource resource)
+        {
+            Id = id;
+            Name = resource.Name;
+            DisplayName = resource.DisplayName;
+            Description = resource.Description;
+            Enabled = resource.Enabled;
+            Required = resource.Required;
+            Emphasize = resource.Emphasize;
+            ShowInDiscoveryDocument = resource.ShowInDiscoveryDocument;
+            UserClaims = resource.UserClaims.Select(claimType => new IdentityClaim(id, claimType)).ToList();
+        }
+
         public virtual void AddUserClaim([NotNull] string type)
         {
             UserClaims.Add(new IdentityClaim(Id, type));
@@ -60,6 +74,16 @@ namespace Volo.Abp.IdentityServer.IdentityResources
         public virtual void RemoveAllUserClaims()
         {
             UserClaims.Clear();
+        }
+
+        public virtual void RemoveUserClaim(string type)
+        {
+            UserClaims.RemoveAll(c => c.Type == type);
+        }
+
+        public virtual IdentityClaim FindUserClaim(string type)
+        {
+            return UserClaims.FirstOrDefault(c => c.Type == type);
         }
     }
 }

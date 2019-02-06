@@ -207,7 +207,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
         {
             if (string.IsNullOrWhiteSpace(TagHelper.Name))
             {
-                TagHelper.Name = Guid.NewGuid().ToString("N");
+                TagHelper.Name =  "T" +  Guid.NewGuid().ToString("N");
             }
         }
 

@@ -24,7 +24,6 @@ namespace Volo.Docs.Areas.Documents
 
         [HttpGet]
         [Route("")]
-        //[Produces(MimeTypes.Image.Jpeg, MimeTypes.Image.Png, MimeTypes.Image.Gif)]
         public async Task<FileResult> GetResource(GetDocumentResourceInput input)
         {
             input.Name = input.Name.RemovePreFix("/");

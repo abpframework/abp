@@ -18,6 +18,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
         
         public bool? SubmitButton { get; set; }
 
+        public bool? RequiredSymbols { get; set; } = true;
+
 #region MvcFormTagHelperAttiributes
 
         private const string ActionAttributeName = "asp-action";

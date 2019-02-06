@@ -1,6 +1,6 @@
 # ABP
 
-[![Build Status](http://vjenkins.dynu.net:5480/job/abp/badge/icon)](http://vjenkins.dynu.net:5480/blue/organizations/jenkins/abp/activity)
+[![Build Status](http://vjenkins.dynu.net:5480/job/abp/badge/icon)](http://ci.volosoft.com:5480/blue/organizations/jenkins/abp/activity)
 
 This project is the next generation of the [ASP.NET Boilerplate](https://aspnetboilerplate.com/) web application framework. See [the announcement](https://abp.io/blog/abp/Abp-vNext-Announcement).
 
@@ -22,7 +22,7 @@ See the <a href="https://abp.io/documents/" target="_blank">documentation</a>.
 
 #### Pre Requirements
 
-- Visual Studio 2017 15.7.0+
+- Visual Studio 2017 15.9.0+
 
 #### Framework
 

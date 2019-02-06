@@ -15,6 +15,11 @@ namespace Volo.Abp.IdentityServer.Clients
 
         }
 
+        public virtual bool Equals(Guid clientId, [NotNull] string provider)
+        {
+            return ClientId == clientId && Provider == provider;
+        }
+
         protected internal ClientIdPRestriction(Guid clientId, [NotNull] string provider)
         {
             Check.NotNull(provider, nameof(provider));

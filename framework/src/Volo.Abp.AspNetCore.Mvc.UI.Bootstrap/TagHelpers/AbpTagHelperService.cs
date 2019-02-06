@@ -66,6 +66,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
 
             var innerContext = new TagHelperContext(attributeList, context.Items, Guid.NewGuid().ToString());
 
+            tagHelper.Init(context);
+
             if (runAsync)
             {
                 AsyncHelper.RunSync(() => tagHelper.ProcessAsync(innerContext, innerOutput));

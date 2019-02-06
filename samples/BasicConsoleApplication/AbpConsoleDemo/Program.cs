@@ -8,11 +8,16 @@ namespace AbpConsoleDemo
     {
         static void Main(string[] args)
         {
-            using (var application = AbpApplicationFactory.Create<AppModule>())
+            using (var application = AbpApplicationFactory.Create<AppModule>(options =>
+            {
+                options.UseAutofac(); //Autofac integration
+            }))
             {
                 application.Initialize();
 
-                var helloWorldService = application.ServiceProvider.GetService<HelloWorldService>();
+                //Resolve a service and use it
+                var helloWorldService = 
+                    application.ServiceProvider.GetService<HelloWorldService>();
                 helloWorldService.SayHello();
 
                 Console.WriteLine("Press ENTER to stop application...");

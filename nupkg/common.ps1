@@ -28,6 +28,8 @@ $projects = (
     "framework/src/Volo.Abp.AspNetCore.Authentication.OAuth",
     "framework/src/Volo.Abp.AspNetCore.MultiTenancy",
     "framework/src/Volo.Abp.AspNetCore.Mvc",
+    "framework/src/Volo.Abp.AspNetCore.Mvc.Contracts",
+    "framework/src/Volo.Abp.AspNetCore.Mvc.Client",
     "framework/src/Volo.Abp.AspNetCore.Mvc.UI",
     "framework/src/Volo.Abp.AspNetCore.Mvc.UI.Bootstrap",
     "framework/src/Volo.Abp.AspNetCore.Mvc.UI.Bundling",
@@ -57,14 +59,17 @@ $projects = (
     "framework/src/Volo.Abp.EntityFrameworkCore.MySQL",
     "framework/src/Volo.Abp.EntityFrameworkCore.PostgreSql",
     "framework/src/Volo.Abp.EventBus",
-    "framework/src/Volo.Abp.EventBus.Distributed.RabbitMQ",
+    "framework/src/Volo.Abp.EventBus.RabbitMQ",
     "framework/src/Volo.Abp.Guids",
     "framework/src/Volo.Abp.HangFire",
     "framework/src/Volo.Abp.Http",
     "framework/src/Volo.Abp.Http.Abstractions",
-    "framework/src/Volo.Abp.Http.Client",    
+    "framework/src/Volo.Abp.Http.Client",
+    "framework/src/Volo.Abp.Http.Client.IdentityModel",
+    "framework/src/Volo.Abp.IdentityModel",
     "framework/src/Volo.Abp.Json",
     "framework/src/Volo.Abp.Localization",
+    "framework/src/Volo.Abp.Localization.Abstractions",
     "framework/src/Volo.Abp.MemoryDb",
     "framework/src/Volo.Abp.MongoDB",
     "framework/src/Volo.Abp.MultiTenancy.Abstractions",
@@ -104,6 +109,8 @@ $projects = (
     "modules/permission-management/src/Volo.Abp.PermissionManagement.Application",
     "modules/permission-management/src/Volo.Abp.PermissionManagement.EntityFrameworkCore",
     "modules/permission-management/src/Volo.Abp.PermissionManagement.MongoDB",
+    "modules/permission-management/src/Volo.Abp.PermissionManagement.HttpApi",
+    "modules/permission-management/src/Volo.Abp.PermissionManagement.HttpApi.Client",
     "modules/permission-management/src/Volo.Abp.PermissionManagement.Web",
 
     # modules/tenant-management
@@ -118,6 +125,7 @@ $projects = (
     "modules/tenant-management/src/Volo.Abp.TenantManagement.Web",
     
     # modules/identity
+    "modules/identity/src/Volo.Abp.Identity.AspNetCore", 
     "modules/identity/src/Volo.Abp.Identity.Application",
     "modules/identity/src/Volo.Abp.Identity.Application.Contracts",
     "modules/identity/src/Volo.Abp.Identity.Domain",
@@ -127,6 +135,7 @@ $projects = (
     "modules/identity/src/Volo.Abp.Identity.HttpApi",
     "modules/identity/src/Volo.Abp.Identity.HttpApi.Client",
     "modules/identity/src/Volo.Abp.Identity.Web", 
+    "modules/identity/src/Volo.Abp.PermissionManagement.Domain.Identity",
     
     # modules/identityserver
     "modules/identityserver/src/Volo.Abp.IdentityServer.Domain.Shared",
@@ -136,6 +145,7 @@ $projects = (
 
     # modules/account
     "modules/account/src/Volo.Abp.Account.Web",
+    "modules/account/src/Volo.Abp.Account.Web.IdentityServer",
     
     # modules/docs
     "modules/docs/src/Volo.Docs.Application",

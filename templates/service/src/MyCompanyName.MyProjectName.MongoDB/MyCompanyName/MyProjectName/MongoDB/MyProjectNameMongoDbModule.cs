@@ -12,8 +12,6 @@ namespace MyCompanyName.MyProjectName.MongoDB
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            MyProjectNameBsonClassMap.Configure();
-
             context.Services.AddMongoDbContext<MyProjectNameMongoDbContext>(options =>
             {
                 /* Add custom repositories here. Example:

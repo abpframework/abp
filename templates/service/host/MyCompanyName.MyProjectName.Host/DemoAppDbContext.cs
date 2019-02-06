@@ -12,7 +12,7 @@ namespace MyCompanyName.MyProjectName.Host
         public DemoAppDbContext(DbContextOptions<DemoAppDbContext> options)
             : base(options)
         {
-
+        
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -6,7 +6,7 @@ namespace Volo.Abp.EventBus
     public interface IEventBus
     {
         /// <summary>
-        /// Triggers an event asynchronously.
+        /// Triggers an event.
         /// </summary>
         /// <typeparam name="TEvent">Event type</typeparam>
         /// <param name="eventData">Related data for the event</param>
@@ -15,7 +15,7 @@ namespace Volo.Abp.EventBus
             where TEvent : class;
 
         /// <summary>
-        /// Triggers an event asynchronously.
+        /// Triggers an event.
         /// </summary>
         /// <param name="eventType">Event type</param>
         /// <param name="eventData">Related data for the event</param>

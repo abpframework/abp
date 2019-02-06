@@ -10,13 +10,21 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         public string Label { get; set; }
 
+        [HtmlAttributeName("info")]
+        public string InfoText { get; set; }
+
         [HtmlAttributeName("disabled")]
         public bool IsDisabled { get; set; } = false;
 
         [HtmlAttributeName("readonly")]
-        public bool IsReadonly { get; set; } = false;
+        public bool? IsReadonly { get; set; } = false;
 
         public bool AutoFocus { get; set; }
+
+        public AbpFormControlSize Size { get; set; } = AbpFormControlSize.Default;
+
+        [HtmlAttributeNotBound]
+        public bool DisplayRequiredSymbol { get; set; } = true;
 
         [HtmlAttributeNotBound]
         [ViewContext]

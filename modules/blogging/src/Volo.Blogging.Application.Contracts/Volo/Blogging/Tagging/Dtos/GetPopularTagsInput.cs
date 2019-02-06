@@ -7,7 +7,5 @@ namespace Volo.Blogging.Tagging.Dtos
         public int ResultCount { get; set; } = 10;
 
         public int? MinimumPostCount { get; set; }
-
-        public Guid BlogId { get; set; }
     }
 }

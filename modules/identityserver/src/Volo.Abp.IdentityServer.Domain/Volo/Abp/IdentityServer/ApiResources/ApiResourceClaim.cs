@@ -9,7 +9,12 @@ namespace Volo.Abp.IdentityServer.ApiResources
 
         protected ApiResourceClaim()
         {
-            
+
+        }
+
+        public virtual bool Equals(Guid apiResourceId, [NotNull] string type)
+        {
+            return ApiResourceId == apiResourceId && Type == type;
         }
 
         protected internal ApiResourceClaim(Guid apiResourceId, [NotNull] string type)

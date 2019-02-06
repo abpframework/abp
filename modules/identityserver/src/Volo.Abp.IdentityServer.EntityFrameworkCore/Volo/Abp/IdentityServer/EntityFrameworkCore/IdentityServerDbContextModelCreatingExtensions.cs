@@ -103,6 +103,8 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
             {
                 claim.ToTable(tablePrefix + "ClientClaims", schema);
 
+                claim.HasKey(x => new { x.ClientId, x.Type, x.Value });
+
                 claim.Property(x => x.Type).HasMaxLength(ClientClaimConsts.TypeMaxLength).IsRequired();
                 claim.Property(x => x.Value).HasMaxLength(ClientClaimConsts.ValueMaxLength).IsRequired();
             });

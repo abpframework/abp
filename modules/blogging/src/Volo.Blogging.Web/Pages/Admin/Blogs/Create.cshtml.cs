@@ -33,11 +33,13 @@ namespace Volo.Blogging.Pages.Admin.Blogs
             return Page();
         }
 
-        public async void OnPostAsync()
+        public async Task<IActionResult> OnPostAsync()
         {
-            var language = ObjectMapper.Map<BlogCreateModalView, CreateBlogDto>(Blog);
+            var blogDto = ObjectMapper.Map<BlogCreateModalView, CreateBlogDto>(Blog);
 
-            await _blogAppService.Create(language);
+            await _blogAppService.Create(blogDto);
+
+            return NoContent();
         }
 
 

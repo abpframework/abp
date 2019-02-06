@@ -20,7 +20,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.JQueryValidation
         {
             //TODO: Can we optimize these points:
             // - Can we get rid of context.FileProvider.GetFileInfo call?
-            // - What if the same contributer is used twice for a page.
+            // - What if the same Contributor is used twice for a page.
             //   Duplication is prevented by the bundle manager, however the logic below will execute twice
 
             var cultureName = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.Replace('-', '_');

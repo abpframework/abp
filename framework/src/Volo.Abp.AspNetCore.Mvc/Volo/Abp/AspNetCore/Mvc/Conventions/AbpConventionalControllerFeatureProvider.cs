@@ -17,6 +17,11 @@ namespace Volo.Abp.AspNetCore.Mvc.Conventions
         protected override bool IsController(TypeInfo typeInfo)
         {
             //TODO: Move this to a lazy loaded field for efficiency.
+            if (_application.ServiceProvider == null)
+            {
+                return false;
+            }
+
             var configuration = _application.ServiceProvider
                 .GetRequiredService<IOptions<AbpAspNetCoreMvcOptions>>().Value
                 .ConventionalControllers
