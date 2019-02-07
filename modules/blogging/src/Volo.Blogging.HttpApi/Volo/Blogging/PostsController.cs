@@ -29,7 +29,7 @@ namespace Volo.Blogging
         }
 
         [HttpGet]
-        [Route("read/{id}")]
+        [Route("read")]
         public Task<PostWithDetailsDto> GetForReadingAsync(GetPostInput input)
         {
             return _postAppService.GetForReadingAsync(input);
