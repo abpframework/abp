@@ -19,8 +19,6 @@ namespace Volo.Blogging.MongoDB
 
         IMongoCollection<Tagging.Tag> Tags { get; }
 
-        IMongoCollection<PostTag> PostTags { get; }
-
         IMongoCollection<Comment> Comments { get; }
 
     }

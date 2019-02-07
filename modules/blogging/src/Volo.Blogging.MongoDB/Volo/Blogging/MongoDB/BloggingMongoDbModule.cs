@@ -23,7 +23,6 @@ namespace Volo.Blogging.MongoDB
                 options.AddRepository<BlogUser, MongoBlogUserRepository>();
                 options.AddRepository<Post, MongoPostRepository>();
                 options.AddRepository<Tag, MongoTagRepository>();
-                options.AddRepository<PostTag, MongoPostTagRepository>();
                 options.AddRepository<Comment, MongoCommentRepository>();
             });
         }
