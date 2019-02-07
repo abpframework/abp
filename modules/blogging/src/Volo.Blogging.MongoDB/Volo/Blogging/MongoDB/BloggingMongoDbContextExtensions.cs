@@ -42,11 +42,6 @@ namespace Volo.Blogging.MongoDB
                 b.CollectionName = options.CollectionPrefix + "Tags";
             });
 
-            builder.Entity<PostTag>(b =>
-            {
-                b.CollectionName = options.CollectionPrefix + "PostTags";
-            });
-
             builder.Entity<Comment>(b =>
             {
                 b.CollectionName = options.CollectionPrefix + "Comments";
