@@ -1,0 +1,143 @@
+version: '3.0'
+services:
+  sqlserver:
+    environment:
+      - SA_PASSWORD=yourStrong(!)Password
+      - ACCEPT_EULA=Y
+    ports:
+      - 1433:1433
+
+  mongodb:
+    ports:
+      - 27017:27017
+
+  rabbitmq:
+    ports:
+      - 15672:15672
+      - 5672:5672
+
+  redis:
+    ports:
+      - 6379:6379
+
+  internal-gateway:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - AuthServer__Authority=http://auth-server:64999
+      - ConnectionStrings__Default=Server=sqlserver;Database=MsDemo_Identity;Trusted_Connection=True;MultipleActiveResultSets=true;User=sa;Password=yourStrong(!)Password;Integrated Security=false
+      - Redis__Configuration=redis
+      - ReRoutes__0__DownstreamHostAndPorts__Host=identity-service
+      - ReRoutes__0__DownstreamHostAndPorts__Port=80
+      - ReRoutes__1__DownstreamHostAndPorts__Host=product-service
+      - ReRoutes__1__DownstreamHostAndPorts__Port=80
+      - ReRoutes__2__DownstreamHostAndPorts__Host=blogging-service
+      - ReRoutes__2__DownstreamHostAndPorts__Port=80
+      - GlobalConfiguration__BaseUrl=http://internal-gateway
+    ports:
+      - 65129:80
+
+  backend-admin-app-gateway:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - RemoteServices__Default__BaseUrl=http://backend-admin-app-gateway/
+      - AuthServer__Authority=http://auth-server:64999
+      - ConnectionStrings__Default=Server=sqlserver;Database=MsDemo_Identity;Trusted_Connection=True;MultipleActiveResultSets=true;User=sa;Password=yourStrong(!)Password;Integrated Security=false
+      - Redis__Configuration=redis
+      - ReRoutes__0__DownstreamHostAndPorts__Host=identity-service
+      - ReRoutes__0__DownstreamHostAndPorts__Port=80
+      - ReRoutes__1__DownstreamHostAndPorts__Host=product-service
+      - ReRoutes__1__DownstreamHostAndPorts__Port=80
+      - GlobalConfiguration__BaseUrl=http://backend-admin-app-gateway
+    ports:
+      - 65115:80
+
+  public-website-gateway:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - AuthServer__Authority=http://auth-server:64999
+      - ConnectionStrings__Default=Server=sqlserver;Database=MsDemo_Identity;Trusted_Connection=True;MultipleActiveResultSets=true;User=sa;Password=yourStrong(!)Password;Integrated Security=false
+      - Redis__Configuration=redis
+      - ReRoutes__0__DownstreamHostAndPorts__Host=product-service
+      - ReRoutes__0__DownstreamHostAndPorts__Port=80
+      - ReRoutes__1__DownstreamHostAndPorts__Host=blogging-service
+      - ReRoutes__1__DownstreamHostAndPorts__Port=80
+      - GlobalConfiguration__BaseUrl=http://public-website-gateway
+    ports:
+      - 64897:80
+
+  blogging-service:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - AuthServer__Authority=http://auth-server:64999
+      - ConnectionStrings__Default=Server=sqlserver;Database=MsDemo_Identity;Trusted_Connection=True;MultipleActiveResultSets=true;User=sa;Password=yourStrong(!)Password;Integrated Security=false
+      - ConnectionStrings__Blogging=mongodb://mongodb|MsDemo_Blogging
+      - Redis__Configuration=redis
+      - RabbitMQ__Connections__Default__HostName=rabbitmq
+    ports:
+      - 62157:80
+
+  identity-service:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - AuthServer__Authority=http://auth-server:64999
+      - ConnectionStrings__Default=Server=sqlserver;Database=MsDemo_Identity;Trusted_Connection=True;MultipleActiveResultSets=true;User=sa;Password=yourStrong(!)Password;Integrated Security=false
+      - Redis__Configuration=redis
+      - RabbitMQ__Connections__Default__HostName=rabbitmq
+    ports:
+      - 63568:80
+
+  product-service:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - AuthServer__Authority=http://auth-server:64999
+      - ConnectionStrings__Default=Server=sqlserver;Database=MsDemo_Identity;Trusted_Connection=True;MultipleActiveResultSets=true;User=sa;Password=yourStrong(!)Password;Integrated Security=false
+      - ConnectionStrings__ProductManagement=Server=sqlserver;Database=MsDemo_Identity;Trusted_Connection=True;MultipleActiveResultSets=true;User=sa;Password=yourStrong(!)Password;Integrated Security=false
+      - Redis__Configuration=redis
+      - RabbitMQ__Connections__Default__HostName=rabbitmq
+    ports:
+      - 60244:80
+
+  auth-server:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:64999
+      - ConnectionStrings__Default=Server=sqlserver;Database=MsDemo_Identity;Trusted_Connection=True;MultipleActiveResultSets=true;User=sa;Password=yourStrong(!)Password;Integrated Security=false
+      - Redis__Configuration=redis
+      - RabbitMQ__Connections__Default__HostName=rabbitmq
+    ports:
+      - 64999:64999
+
+  backend-admin-app:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - AuthServer__Authority=http://auth-server:64999
+      - RemoteServices__Default__BaseUrl=http://backend-admin-app-gateway/
+      - Redis__Configuration=redis
+    ports:
+      - 3000:80
+
+  console-client-demo:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - RemoteServices__Default__BaseUrl=http://internal-gateway/
+      - IdentityClients__Default__Authority=http://auth-server:64999
+    ports:
+      - 3001:80
+
+  public-website:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - AuthServer__Authority=http://auth-server:64999
+      - RemoteServices__Default__BaseUrl=http://public-website-gateway/
+      - Redis__Configuration=redis
+    ports:
+      - 3002:80

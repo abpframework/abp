@@ -1,0 +1,12 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migrations
+spec:
+  template:
+    spec:
+      containers:
+      - image: microservice-demo/migrations:latest
+        name: migrations
+        imagePullPolicy: Never
+      restartPolicy: Never

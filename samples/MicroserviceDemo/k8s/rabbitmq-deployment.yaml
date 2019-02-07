@@ -1,0 +1,24 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: rabbitmq
+  name: rabbitmq
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        io.kompose.service: rabbitmq
+    spec:
+      containers:
+      - image: rabbitmq:3-management-alpine
+        name: rabbitmq
+        ports:
+        - containerPort: 5672
+        - containerPort: 15672
+        resources: {}
+        imagePullPolicy: IfNotPresent
+      restartPolicy: Always
+status: {}

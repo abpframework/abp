@@ -1,0 +1,36 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: sqlserver
+  name: sqlserver
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        io.kompose.service: sqlserver
+    spec:
+      containers:
+      - env:
+        - name: ACCEPT_EULA
+          value: "Y"
+        - name: SA_PASSWORD
+          value: yourStrong(!)Password
+        image: mcr.microsoft.com/mssql/server
+        name: sqlserver
+        ports:
+        - containerPort: 1433
+        resources: {}
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+        - mountPath: /var/opt/mssql
+          name: dbdata
+      restartPolicy: Always
+      volumes:
+      - name: dbdata
+        persistentVolumeClaim:
+          claimName: dbdata
+status: {}
