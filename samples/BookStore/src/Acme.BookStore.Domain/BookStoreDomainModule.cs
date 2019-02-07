@@ -35,8 +35,6 @@ namespace Acme.BookStore
             {
                 options.DefinitionProviders.Add<BookStoreSettingDefinitionProvider>();
             });
-
-            context.Services.AddAssemblyOf<BookStoreDomainModule>();
         }
     }
 }

@@ -64,8 +64,6 @@ namespace Acme.BookStore
             ConfigureNavigationServices();
             ConfigureAutoApiControllers();
             ConfigureSwaggerServices(context.Services);
-
-            context.Services.AddAssemblyOf<BookStoreWebModule>();
         }
 
         private void ConfigureDatabaseServices()

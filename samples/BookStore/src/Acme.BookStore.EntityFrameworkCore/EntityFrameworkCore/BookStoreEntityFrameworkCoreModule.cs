@@ -21,8 +21,6 @@ namespace Acme.BookStore.EntityFrameworkCore
             {
                 options.AddDefaultRepositories();
             });
-
-            context.Services.AddAssemblyOf<BookStoreEntityFrameworkCoreModule>();
         }
     }
 }
