@@ -1,6 +1,7 @@
 ﻿@page
 @using Volo.Abp.Account.Web.Settings
 @model Volo.Abp.Account.Web.Pages.Account.LoginModel
+@inherits Volo.Abp.Account.Web.Pages.Account.AccountPage
 @inject Volo.Abp.Settings.ISettingManager SettingManager
 @if (Model.EnableLocalLogin)
 {
@@ -23,14 +24,14 @@
                 @Html.DisplayNameFor(m => m.LoginInput.RememberMe)
             </label>
         </div>
-        <abp-button type="button" button-type="Secondary" name="Action" value="Cancel">Cancel</abp-button> @* TODO: Only show if identity server is used *@
-        <abp-button type="submit" button-type="Primary" name="Action" value="Login">Login</abp-button>
+        <abp-button type="button" button-type="Secondary" name="Action" value="Cancel">@L["Cancel"]</abp-button> @* TODO: Only show if identity server is used *@
+        <abp-button type="submit" button-type="Primary" name="Action" value="Login">@L["Login"]</abp-button>
     </form>
 
     <div style="padding-top: 20px">
         @if (string.Equals(await SettingManager.GetOrNullAsync(AccountSettingNames.IsSelfRegistrationEnabled), "true", StringComparison.OrdinalIgnoreCase))
         {
-            <a href="@Url.Page("./Register", new {returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash})">Register</a>
+            <a href="@Url.Page("./Register", new {returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash})">@L["Register"]</a>
         }
     </div>
 }
@@ -38,13 +39,13 @@
 @if (Model.VisibleExternalProviders.Any())
 {
     <div class="col-md-6">
-        <h4>Use another service to log in.</h4>
+        <h4>@L["UseAnotherServiceToLogIn"]</h4>
         <form asp-page="./Login" asp-page-handler="ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" asp-route-returnUrlHash="@Model.ReturnUrlHash" method="post">
             <input asp-for="ReturnUrl" />
             <input asp-for="ReturnUrlHash" />
             @foreach (var provider in Model.VisibleExternalProviders)
             {
-                <button type="submit" class="btn btn-primary" name="provider" value="@provider.AuthenticationScheme" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                <button type="submit" class="btn btn-primary" name="provider" value="@provider.AuthenticationScheme" title="@L["GivenTenantIsNotAvailable", provider.DisplayName]">@provider.DisplayName</button>
             }
         </form>
     </div>
@@ -53,7 +54,7 @@
 @if (!Model.EnableLocalLogin && !Model.VisibleExternalProviders.Any())
 {
     <div class="alert alert-warning">
-        <strong>Invalid login request</strong>
-        There are no login schemes configured for this client.
+        <strong>@L["InvalidLoginRequest"]</strong>
+        @L["ThereAreNoLoginSchemesConfiguredForThisClient"]
     </div>
 }
