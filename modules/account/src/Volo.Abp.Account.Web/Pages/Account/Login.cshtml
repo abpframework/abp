@@ -1,6 +1,7 @@
 ﻿@page
 @using Volo.Abp.Account.Web.Settings
 @model Volo.Abp.Account.Web.Pages.Account.LoginModel
+@inherits Volo.Abp.Account.Web.Pages.Account.AccountPage
 @inject Volo.Abp.Settings.ISettingManager SettingManager
 @if (Model.EnableLocalLogin)
 {

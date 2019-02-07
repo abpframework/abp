@@ -14,7 +14,6 @@ using Volo.Abp.Identity;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Uow;
 using Volo.Abp.Validation;
-using Microsoft.AspNetCore.Mvc.Localization;
 
 namespace Volo.Abp.Account.Web.Pages.Account
 {
