@@ -1,0 +1,35 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: auth-server
+  name: auth-server
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        io.kompose.service: auth-server
+    spec:
+      containers:
+      - env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: Development
+        - name: ASPNETCORE_URLS
+          value: http://0.0.0.0:64999
+        - name: ConnectionStrings__Default
+          value: Server=sqlserver;Database=MsDemo_Identity;Trusted_Connection=True;MultipleActiveResultSets=true;User=sa;Password=yourStrong(!)Password;Integrated
+            Security=false
+        - name: RabbitMQ__Connections__Default__HostName
+          value: rabbitmq
+        - name: Redis__Configuration
+          value: redis
+        image: microservice-demo/auth-server:latest
+        name: auth-server
+        ports:
+        - containerPort: 64999
+        resources: {}
+        imagePullPolicy: Never
+      restartPolicy: Always
+status: {}
