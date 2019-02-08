@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Localization;
@@ -51,6 +52,11 @@ namespace Volo.Abp.PermissionManagement
 
                 foreach (var permission in group.GetPermissionsWithChildren())
                 {
+                    if (permission.Providers.Any() && !permission.Providers.Contains(providerName))
+                    {
+                        continue;
+                    }
+
                     var grantInfoDto = new PermissionGrantInfoDto
                     {
                         Name = permission.Name,
@@ -75,7 +81,10 @@ namespace Volo.Abp.PermissionManagement
                     groupDto.Permissions.Add(grantInfoDto);
                 }
 
-                result.Groups.Add(groupDto);
+                if (groupDto.Permissions.Any())
+                {
+                    result.Groups.Add(groupDto);
+                }
             }
 
             return result;
@@ -85,9 +94,16 @@ namespace Volo.Abp.PermissionManagement
         {
             await CheckProviderPolicy(providerName);
 
-            foreach (var permission in input.Permissions)
+            foreach (var permissionDto in input.Permissions)
             {
-                await _permissionManager.SetAsync(permission.Name, providerName, providerKey, permission.IsGranted);
+                var permissionDefinition = _permissionDefinitionManager.Get(permissionDto.Name);
+                if (permissionDefinition.Providers.Any() && 
+                    !permissionDefinition.Providers.Contains(providerName))
+                {
+                    throw new ApplicationException($"The permission named '{permissionDto.Name}' has not compatible with the provider named '{providerName}'");
+                }
+
+                await _permissionManager.SetAsync(permissionDto.Name, providerName, providerKey, permissionDto.IsGranted);
             }
         }
 

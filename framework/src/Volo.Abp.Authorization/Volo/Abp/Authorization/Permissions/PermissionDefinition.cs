@@ -18,6 +18,8 @@ namespace Volo.Abp.Authorization.Permissions
         /// </summary>
         public PermissionDefinition Parent { get; private set; }
 
+        public List<string> Providers { get; }
+
         public ILocalizableString DisplayName
         {
             get => _displayName;
@@ -53,6 +55,7 @@ namespace Volo.Abp.Authorization.Permissions
             DisplayName = displayName ?? new FixedLocalizableString(name);
 
             Properties = new Dictionary<string, object>();
+            Providers = new List<string>();
             _children = new List<PermissionDefinition>();
         }
 
@@ -66,6 +69,30 @@ namespace Volo.Abp.Authorization.Permissions
             _children.Add(child);
 
             return child;
+        }
+
+        /// <summary>
+        /// Sets a property in the <see cref="Properties"/> dictionary.
+        /// This is a shortcut for nested calls on this object.
+        /// </summary>
+        public virtual PermissionDefinition WithProperty(string key, object value)
+        {
+            Properties[key] = value;
+            return this;
+        }
+
+        /// <summary>
+        /// Sets a property in the <see cref="Properties"/> dictionary.
+        /// This is a shortcut for nested calls on this object.
+        /// </summary>
+        public virtual PermissionDefinition WithProviders(params string[] providers)
+        {
+            if (!providers.IsNullOrEmpty())
+            {
+                Providers.AddRange(providers);
+            }
+
+            return this;
         }
 
         public override string ToString()
