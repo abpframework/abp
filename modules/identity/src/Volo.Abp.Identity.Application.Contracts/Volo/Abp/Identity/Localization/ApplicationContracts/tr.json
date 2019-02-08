@@ -7,6 +7,7 @@
     "Permission:Edit": "Düzenleme",
     "Permission:Delete": "Silme",
     "Permission:ChangePermissions": "İzinleri değiştirme",
-    "Permission:UserManagement": "Kullanıcı yönetimi"
+    "Permission:UserManagement": "Kullanıcı yönetimi",
+    "Permission:UserLookup": "Kullanıcı sorgulama"
   }
 }

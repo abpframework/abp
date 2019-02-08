@@ -5,7 +5,7 @@ using Volo.Abp.Users;
 
 namespace Volo.Abp.Identity
 {
-    //TODO: Authorization (for clients, not users)
+    [Authorize(IdentityPermissions.UserLookup.Default)]
     public class IdentityUserLookupAppService : IdentityAppServiceBase, IIdentityUserLookupAppService
     {
         protected IdentityUserRepositoryExternalUserLookupServiceProvider UserLookupServiceProvider { get; }
