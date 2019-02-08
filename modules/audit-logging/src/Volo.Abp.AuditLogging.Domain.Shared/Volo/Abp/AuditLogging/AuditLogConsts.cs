@@ -6,6 +6,10 @@
 
         public const int MaxClientNameLength = 128;
 
+        public const int MaxClientIdLength = 64;
+
+        public const int MaxCorrelationIdLength = 64;
+
         public const int MaxBrowserInfoLength = 512;
 
         public const int MaxExceptionsLength = 4000;

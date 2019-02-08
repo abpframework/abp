@@ -24,6 +24,10 @@ namespace Volo.Abp.Auditing
 
         public int ExecutionDuration { get; set; }
 
+        public string ClientId { get; set; }
+
+        public string CorrelationId { get; set; }
+
         public string ClientIpAddress { get; set; }
 
         public string ClientName { get; set; }

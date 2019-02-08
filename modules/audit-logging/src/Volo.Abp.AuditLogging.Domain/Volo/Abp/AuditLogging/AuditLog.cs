@@ -30,6 +30,10 @@ namespace Volo.Abp.AuditLogging
 
         public virtual string ClientName { get; protected set; }
 
+        public string ClientId { get; set; }
+
+        public string CorrelationId { get; set; }
+
         public virtual string BrowserInfo { get; protected set; }
 
         public virtual string HttpMethod { get; protected set; }
@@ -61,6 +65,8 @@ namespace Volo.Abp.AuditLogging
             ExecutionDuration = auditInfo.ExecutionDuration;
             ClientIpAddress = auditInfo.ClientIpAddress.Truncate(AuditLogConsts.MaxClientIpAddressLength);
             ClientName = auditInfo.ClientName.Truncate(AuditLogConsts.MaxClientNameLength);
+            ClientId = auditInfo.ClientId.Truncate(AuditLogConsts.MaxClientIdLength);
+            CorrelationId = auditInfo.CorrelationId.Truncate(AuditLogConsts.MaxCorrelationIdLength);
             BrowserInfo = auditInfo.BrowserInfo.Truncate(AuditLogConsts.MaxBrowserInfoLength);
             HttpMethod = auditInfo.HttpMethod.Truncate(AuditLogConsts.MaxHttpMethodLength);
             Url = auditInfo.Url.Truncate(AuditLogConsts.MaxUrlLength);
