@@ -66,8 +66,10 @@ namespace PublicWebSite.Host
                     options.Scope.Add("email");
                     options.Scope.Add("phone");
                     options.Scope.Add("PublicWebSiteGateway");
+                    options.Scope.Add("InternalGateway");
                     options.Scope.Add("ProductService");
                     options.Scope.Add("BloggingService");
+                    options.Scope.Add("IdentityService");
                     options.ClaimActions.MapAbpClaimTypes();
                 });
 
