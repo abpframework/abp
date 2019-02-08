@@ -132,7 +132,8 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                     new RemoteServiceHttpClientAuthenticateContext(
                         client,
                         requestMessage,
-                        remoteServiceConfig
+                        remoteServiceConfig,
+                        clientConfig.RemoteServiceName
                     )
                 );
 
