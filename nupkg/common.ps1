@@ -140,6 +140,7 @@ $projects = (
     # modules/identityserver
     "modules/identityserver/src/Volo.Abp.IdentityServer.Domain.Shared",
     "modules/identityserver/src/Volo.Abp.IdentityServer.Domain",
+    "modules/identityserver/src/Volo.Abp.PermissionManagement.Domain.IdentityServer",
     "modules/identityserver/src/Volo.Abp.IdentityServer.EntityFrameworkCore", 
     "modules/identityserver/src/Volo.Abp.IdentityServer.MongoDB",
 
