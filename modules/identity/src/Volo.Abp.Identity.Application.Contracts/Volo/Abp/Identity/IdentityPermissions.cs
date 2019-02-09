@@ -41,7 +41,8 @@
                 Users.Create,
                 Users.Update,
                 Users.Delete,
-                Users.ManagePermissions
+                Users.ManagePermissions,
+                UserLookup.Default
             };
         }
     }
