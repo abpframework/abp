@@ -1,4 +1,4 @@
-﻿namespace Volo.Abp.Auditing
+﻿namespace Volo.Abp.Tracing
 {
     public interface ICorrelationIdProvider
     {

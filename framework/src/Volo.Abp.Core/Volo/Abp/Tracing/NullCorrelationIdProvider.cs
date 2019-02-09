@@ -1,6 +1,6 @@
 ﻿using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Auditing
+namespace Volo.Abp.Tracing
 {
     public class NullCorrelationIdProvider : ICorrelationIdProvider, ISingletonDependency
     {

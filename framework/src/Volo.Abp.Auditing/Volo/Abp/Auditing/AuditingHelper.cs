@@ -9,6 +9,7 @@ using Volo.Abp.Clients;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Timing;
+using Volo.Abp.Tracing;
 using Volo.Abp.Users;
 
 namespace Volo.Abp.Auditing
