@@ -10,11 +10,11 @@ namespace Volo.Abp.AspNetCore.Tracing
     public class AspNetCoreCorrelationIdProvider : ICorrelationIdProvider, ITransientDependency
     {
         protected IHttpContextAccessor HttpContextAccessor { get; }
-        protected AspNetCoreCorrelationIdOptions Options { get; }
+        protected CorrelationIdOptions Options { get; }
 
         public AspNetCoreCorrelationIdProvider(
             IHttpContextAccessor httpContextAccessor,
-            IOptions<AspNetCoreCorrelationIdOptions> options)
+            IOptions<CorrelationIdOptions> options)
         {
             HttpContextAccessor = httpContextAccessor;
             Options = options.Value;
@@ -29,12 +29,12 @@ namespace Volo.Abp.AspNetCore.Tracing
 
             lock (HttpContextAccessor.HttpContext.Request.Headers)
             {
-                string correlationId = HttpContextAccessor.HttpContext.Request.Headers[Options.HeaderName];
+                string correlationId = HttpContextAccessor.HttpContext.Request.Headers[Options.HttpHeaderName];
 
                 if (correlationId.IsNullOrEmpty())
                 {
                     correlationId = CreateNewCorrelationId();
-                    HttpContextAccessor.HttpContext.Request.Headers[Options.HeaderName] = correlationId;
+                    HttpContextAccessor.HttpContext.Request.Headers[Options.HttpHeaderName] = correlationId;
                 }
 
                 return correlationId;
