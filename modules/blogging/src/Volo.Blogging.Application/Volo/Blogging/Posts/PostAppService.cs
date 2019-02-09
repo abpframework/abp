@@ -60,20 +60,19 @@ namespace Volo.Blogging.Posts
             {
                 if (postDto.CreatorId.HasValue)
                 {
-                    var creatorUser = await UserLookupService.FindByIdAsync(postDto.CreatorId.Value);
-
-                    if (creatorUser != null && !userDictionary.ContainsKey(creatorUser.Id))
+                    if (!userDictionary.ContainsKey(postDto.CreatorId.Value))
                     {
-                        userDictionary.Add(creatorUser.Id, ObjectMapper.Map<BlogUser, BlogUserDto>(creatorUser));
+                        var creatorUser = await UserLookupService.FindByIdAsync(postDto.CreatorId.Value);
+                        if (creatorUser != null)
+                        {
+                            userDictionary[creatorUser.Id] = ObjectMapper.Map<BlogUser, BlogUserDto>(creatorUser);
+                        }
                     }
-                }
-            }
 
-            foreach (var postDto in postDtos)
-            {
-                if (postDto.CreatorId.HasValue && userDictionary.ContainsKey((Guid)postDto.CreatorId))
-                {
-                    postDto.Writer = userDictionary[(Guid)postDto.CreatorId];
+                    if (userDictionary.ContainsKey(postDto.CreatorId.Value))
+                    {
+                        postDto.Writer = userDictionary[(Guid)postDto.CreatorId];
+                    }
                 }
             }
 

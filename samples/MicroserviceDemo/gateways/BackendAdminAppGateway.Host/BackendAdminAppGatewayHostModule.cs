@@ -14,6 +14,7 @@ using Volo.Abp.PermissionManagement;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.HttpApi;
 using Volo.Abp.PermissionManagement.Identity;
+using Volo.Abp.PermissionManagement.IdentityServer;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Blogging;
@@ -31,7 +32,8 @@ namespace BackendAdminAppGateway.Host
         typeof(AbpPermissionManagementHttpApiModule),
         typeof(AbpSettingManagementEntityFrameworkCoreModule),
         typeof(BloggingApplicationContractsModule),
-        typeof(AbpPermissionManagementDomainIdentityModule)
+        typeof(AbpPermissionManagementDomainIdentityModule),
+        typeof(AbpPermissionManagementDomainIdentityServerModule)
         )]
     public class BackendAdminAppGatewayHostModule : AbpModule
     {

@@ -8,8 +8,8 @@ namespace Volo.Abp.PermissionManagement.Identity
     {
         public override string Name => UserPermissionValueProvider.ProviderName;
 
-        public UserPermissionManagementProvider(IPermissionGrantRepository 
-            permissionGrantRepository, 
+        public UserPermissionManagementProvider(
+            IPermissionGrantRepository permissionGrantRepository, 
             IGuidGenerator guidGenerator,
             ICurrentTenant currentTenant) 
             : base(

@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Volo.Abp.Clients;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Users;
 
@@ -10,11 +11,16 @@ namespace Volo.Abp.Authorization
     {
         private readonly IAuthorizationService _authorizationService;
         private readonly ICurrentUser _currentUser;
+        private readonly ICurrentClient _currentClient;
 
-        public MethodInvocationAuthorizationService(IAuthorizationService authorizationService, ICurrentUser currentUser)
+        public MethodInvocationAuthorizationService(
+            IAuthorizationService authorizationService, 
+            ICurrentUser currentUser,
+            ICurrentClient currentClient)
         {
             _authorizationService = authorizationService;
             _currentUser = currentUser;
+            _currentClient = currentClient;
         }
 
         public async Task CheckAsync(MethodInvocationAuthorizationContext context)
@@ -53,7 +59,8 @@ namespace Volo.Abp.Authorization
         {
             if (authorizationAttribute.Policy == null)
             {
-                if (!_currentUser.IsAuthenticated) //TODO: What about API calls without user id?
+                //TODO: Can we find a better, unified, way of checking if current request has been authenticated
+                if (!_currentUser.IsAuthenticated && !_currentClient.IsAuthenticated)
                 {
                     throw new AbpAuthorizationException("Authorization failed! User has not logged in.");
                 }

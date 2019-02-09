@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
@@ -10,24 +9,21 @@ namespace Volo.Abp.Identity
     [Dependency(TryRegister = true)]
     public class HttpClientExternalUserLookupServiceProvider : IExternalUserLookupServiceProvider, ITransientDependency
     {
-        private readonly IIdentityUserAppService _userAppService;
+        private readonly IIdentityUserLookupAppService _userLookupAppService;
 
-        public HttpClientExternalUserLookupServiceProvider(IIdentityUserAppService userAppService)
+        public HttpClientExternalUserLookupServiceProvider(IIdentityUserLookupAppService userLookupAppService)
         {
-            _userAppService = userAppService;
+            _userLookupAppService = userLookupAppService;
         }
 
         public async Task<IUserData> FindByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            //TODO: Should return null if not found!
-            return (await _userAppService.GetAsync(id)).ToUserInfo();
+            return await _userLookupAppService.FindByIdAsync(id);
         }
 
         public async Task<IUserData> FindByUserNameAsync(string userName, CancellationToken cancellationToken = default)
         {
-            //TODO: Should return null if not found!
-            //TODO: Search by UserName, not by a general filter!
-            return (await _userAppService.GetListAsync(new GetIdentityUsersInput { Filter = userName })).Items.FirstOrDefault()?.ToUserInfo();
+            return await _userLookupAppService.FindByUserNameAsync(userName);
         }
     }
 }
