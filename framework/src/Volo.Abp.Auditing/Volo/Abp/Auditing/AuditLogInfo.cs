@@ -10,6 +10,8 @@ namespace Volo.Abp.Auditing
     //TODO: Make serializable!
     public class AuditLogInfo : IMultiTenant, IHasExtraProperties
     {
+        public string ApplicationName { get; set; }
+
         public Guid? UserId { get; set; }
 
         public string UserName { get; set; }

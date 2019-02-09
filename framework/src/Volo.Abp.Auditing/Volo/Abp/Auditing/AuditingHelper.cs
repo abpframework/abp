@@ -90,6 +90,7 @@ namespace Volo.Abp.Auditing
         {
             var auditInfo = new AuditLogInfo
             {
+                ApplicationName = Options.ApplicationName,
                 TenantId = CurrentTenant.Id,
                 UserId = CurrentUser.Id,
                 UserName = CurrentUser.UserName,

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Volo.Abp.Auditing;
-using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
@@ -12,6 +11,8 @@ namespace Volo.Abp.AuditLogging
     [DisableAuditing]
     public class AuditLog : AggregateRoot<Guid>, IMultiTenant
     {
+        public virtual string ApplicationName { get; set; }
+
         public virtual Guid? UserId { get; protected set; }
 
         public virtual string UserName { get; protected set; }
@@ -58,6 +59,7 @@ namespace Volo.Abp.AuditLogging
         public AuditLog(IGuidGenerator guidGenerator, AuditLogInfo auditInfo)
         {
             Id = guidGenerator.Create();
+            ApplicationName = auditInfo.ApplicationName;
             TenantId = auditInfo.TenantId;
             UserId = auditInfo.UserId;
             UserName = auditInfo.UserName.Truncate(AuditLogConsts.MaxUserNameLength);

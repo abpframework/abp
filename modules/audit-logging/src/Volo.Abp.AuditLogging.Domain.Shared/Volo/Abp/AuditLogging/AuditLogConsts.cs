@@ -2,6 +2,8 @@
 {
     public static class AuditLogConsts
     {
+        public const int MaxApplicationNameLength = 96;
+
         public const int MaxClientIpAddressLength = 64;
 
         public const int MaxClientNameLength = 128;
