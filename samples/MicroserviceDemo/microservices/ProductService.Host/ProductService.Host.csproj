@@ -41,6 +41,7 @@
 
   <ItemGroup>
     <Compile Remove="Migrations\20190121115804_Initial.cs" />
+    <Compile Remove="Migrations\20190209193421_Added_ApplicationName_To_AuditLogs.cs" />
   </ItemGroup>
 
 </Project>

@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
+using Volo.Abp.Auditing;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.Autofac;
 using Volo.Abp.EntityFrameworkCore;
@@ -70,6 +71,12 @@ namespace IdentityService.Host
             context.Services.AddDistributedRedisCache(options =>
             {
                 options.Configuration = configuration["Redis:Configuration"];
+            });
+
+            Configure<AbpAuditingOptions>(options =>
+            {
+                options.IsEnabledForGetRequests = true;
+                options.ApplicationName = "IdentityService";
             });
         }
 

@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Security.Claims;
 
@@ -40,7 +40,7 @@ namespace Volo.Abp.Authorization.Permissions
                 true
             );
         }
-        
+
         public virtual Task<PermissionGrantInfo> CheckAsync(string name)
         {
             return CheckAsync(PrincipalAccessor.Principal, name);
@@ -57,6 +57,12 @@ namespace Volo.Abp.Authorization.Permissions
 
             foreach (var provider in ValueProviders)
             {
+                if (context.Permission.Providers.Any() &&
+                    !context.Permission.Providers.Contains(provider.Name))
+                {
+                    continue;
+                }
+
                 var result = await provider.CheckAsync(context);
                 if (result.IsGranted)
                 {
