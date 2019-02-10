@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    io.kompose.service: auth-server
+  name: auth-server
+spec:
+  ports:
+  - name: "64999"
+    port: 64999
+    targetPort: 64999
+  selector:
+    io.kompose.service: auth-server
+status:
+  loadBalancer: {}
