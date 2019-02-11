@@ -11,16 +11,16 @@ namespace Volo.Abp.Emailing
     {
         public virtual string DefaultFromAddress => GetNotEmptySettingValue(EmailSettingNames.DefaultFromAddress);
 
-        public virtual string DefaultFromDisplayName => SettingManager.GetOrNull(EmailSettingNames.DefaultFromDisplayName);
+        public virtual string DefaultFromDisplayName => SettingProvider.GetOrNull(EmailSettingNames.DefaultFromDisplayName);
 
-        protected readonly ISettingManager SettingManager;
+        protected readonly ISettingProvider SettingProvider;
 
         /// <summary>
         /// Creates a new <see cref="EmailSenderConfiguration"/>.
         /// </summary>
-        protected EmailSenderConfiguration(ISettingManager settingManager)
+        protected EmailSenderConfiguration(ISettingProvider settingProvider)
         {
-            SettingManager = settingManager;
+            SettingProvider = settingProvider;
         }
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace Volo.Abp.Emailing
         /// <returns>Value of the setting</returns>
         protected string GetNotEmptySettingValue(string name)
         {
-            var value = SettingManager.GetOrNull(name);
+            var value = SettingProvider.GetOrNull(name);
 
             if (value.IsNullOrEmpty())
             {
