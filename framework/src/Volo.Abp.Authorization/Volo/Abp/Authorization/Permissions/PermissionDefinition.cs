@@ -19,7 +19,7 @@ namespace Volo.Abp.Authorization.Permissions
         public PermissionDefinition Parent { get; private set; }
 
         /// <summary>
-        /// A list of allowed providers to get value of this permission.
+        /// A list of allowed providers to get/set value of this permission.
         /// An empty list indicates that all providers are allowed.
         /// </summary>
         public List<string> Providers { get; }

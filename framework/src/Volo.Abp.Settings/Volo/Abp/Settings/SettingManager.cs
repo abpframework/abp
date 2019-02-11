@@ -33,45 +33,13 @@ namespace Volo.Abp.Settings
                 true
             );
         }
-
-        public virtual Task<string> GetOrNullAsync(string name)
-        {
-            Check.NotNull(name, nameof(name));
-
-            return GetOrNullInternalAsync(name, null, null);
-        }
-
+        
         public virtual Task<string> GetOrNullAsync(string name, string providerName, string providerKey, bool fallback = true)
         {
             Check.NotNull(name, nameof(name));
             Check.NotNull(providerName, nameof(providerName));
 
             return GetOrNullInternalAsync(name, providerName, providerKey, fallback);
-        }
-
-        public virtual async Task<List<SettingValue>> GetAllAsync()
-        {
-            var settingValues = new Dictionary<string, SettingValue>();
-            var settingDefinitions = SettingDefinitionManager.GetAll();
-
-            foreach (var provider in Providers.Value)
-            {
-                foreach (var setting in settingDefinitions)
-                {
-                    var value = await provider.GetOrNullAsync(setting, null);
-                    if (value != null)
-                    {
-                        if (setting.IsEncrypted)
-                        {
-                            value = SettingEncryptionService.Decrypt(setting, value);
-                        }
-
-                        settingValues[setting.Name] = new SettingValue(setting.Name, value);
-                    }
-                }
-            }
-
-            return settingValues.Values.ToList();
         }
 
         public virtual async Task<List<SettingValue>> GetAllAsync(string providerName, string providerKey, bool fallback = true)

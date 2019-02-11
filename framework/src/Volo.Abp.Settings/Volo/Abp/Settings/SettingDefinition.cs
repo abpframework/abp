@@ -37,7 +37,7 @@ namespace Volo.Abp.Settings
         public bool IsVisibleToClients { get; set; }
 
         /// <summary>
-        /// A list of allowed providers to get value of this permission.
+        /// A list of allowed providers to get/set value of this setting.
         /// An empty list indicates that all providers are allowed.
         /// </summary>
         public List<string> Providers { get; }
