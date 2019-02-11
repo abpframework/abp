@@ -14,6 +14,7 @@ namespace MyCompanyName.MyProjectName.Host.Migrations
                     Id = table.Column<Guid>(nullable: false),
                     ExtraProperties = table.Column<string>(nullable: true),
                     ConcurrencyStamp = table.Column<string>(nullable: true),
+                    ApplicationName = table.Column<string>(maxLength: 96, nullable: true),
                     UserId = table.Column<Guid>(nullable: true),
                     UserName = table.Column<string>(maxLength: 256, nullable: true),
                     TenantId = table.Column<Guid>(nullable: true),
@@ -23,6 +24,8 @@ namespace MyCompanyName.MyProjectName.Host.Migrations
                     ExecutionDuration = table.Column<int>(nullable: false),
                     ClientIpAddress = table.Column<string>(maxLength: 64, nullable: true),
                     ClientName = table.Column<string>(maxLength: 128, nullable: true),
+                    ClientId = table.Column<string>(maxLength: 64, nullable: true),
+                    CorrelationId = table.Column<string>(maxLength: 64, nullable: true),
                     BrowserInfo = table.Column<string>(maxLength: 512, nullable: true),
                     HttpMethod = table.Column<string>(maxLength: 16, nullable: true),
                     Url = table.Column<string>(maxLength: 256, nullable: true),
@@ -124,8 +127,7 @@ namespace MyCompanyName.MyProjectName.Host.Migrations
                     NewValue = table.Column<string>(maxLength: 512, nullable: true),
                     OriginalValue = table.Column<string>(maxLength: 512, nullable: true),
                     PropertyName = table.Column<string>(maxLength: 128, nullable: false),
-                    PropertyTypeFullName = table.Column<string>(maxLength: 64, nullable: false),
-                    EntityChangeId1 = table.Column<Guid>(nullable: true)
+                    PropertyTypeFullName = table.Column<string>(maxLength: 64, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -136,12 +138,6 @@ namespace MyCompanyName.MyProjectName.Host.Migrations
                         principalTable: "AbpEntityChanges",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AbpEntityPropertyChanges_AbpEntityChanges_EntityChangeId1",
-                        column: x => x.EntityChangeId1,
-                        principalTable: "AbpEntityChanges",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -178,11 +174,6 @@ namespace MyCompanyName.MyProjectName.Host.Migrations
                 name: "IX_AbpEntityPropertyChanges_EntityChangeId",
                 table: "AbpEntityPropertyChanges",
                 column: "EntityChangeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AbpEntityPropertyChanges_EntityChangeId1",
-                table: "AbpEntityPropertyChanges",
-                column: "EntityChangeId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AbpPermissionGrants_Name_ProviderName_ProviderKey",

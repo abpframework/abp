@@ -10,8 +10,8 @@ using MyCompanyName.MyProjectName.EntityFrameworkCore;
 namespace MyCompanyName.MyProjectName.Migrations
 {
     [DbContext(typeof(MyProjectNameDbContext))]
-    [Migration("20190211103303_Audit_Log_Module_Changes")]
-    partial class Audit_Log_Module_Changes
+    [Migration("20190211104804_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
