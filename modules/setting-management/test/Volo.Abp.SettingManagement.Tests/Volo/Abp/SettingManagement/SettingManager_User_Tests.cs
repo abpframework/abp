@@ -15,11 +15,13 @@ namespace Volo.Abp.SettingManagement
         private Guid? _currentUserId;
 
         private readonly ISettingManager _settingManager;
+        private readonly ISettingProvider _settingProvider;
         private readonly SettingTestData _testData;
 
         public SettingManager_User_Tests()
         {
             _settingManager = GetRequiredService<ISettingManager>();
+            _settingProvider = GetRequiredService<ISettingProvider>();
             _testData = GetRequiredService<SettingTestData>();
         }
 
@@ -53,17 +55,17 @@ namespace Volo.Abp.SettingManagement
         public async Task Should_Get_From_Store_For_Current_User()
         {
             _currentUserId = _testData.User1Id;
-            (await _settingManager.GetOrNullAsync("MySetting2")).ShouldBe("user1-store-value");
+            (await _settingProvider.GetOrNullAsync("MySetting2")).ShouldBe("user1-store-value");
 
             _currentUserId = _testData.User2Id;
-            (await _settingManager.GetOrNullAsync("MySetting2")).ShouldBe("user2-store-value");
+            (await _settingProvider.GetOrNullAsync("MySetting2")).ShouldBe("user2-store-value");
         }
 
         [Fact]
         public async Task Should_Fallback_To_Default_Store_Value_When_No_Value_For_Current_User()
         {
             _currentUserId = Guid.NewGuid();
-            (await _settingManager.GetOrNullAsync("MySetting2")).ShouldBe("default-store-value");
+            (await _settingProvider.GetOrNullAsync("MySetting2")).ShouldBe("default-store-value");
         }
 
         [Fact]
@@ -80,7 +82,7 @@ namespace Volo.Abp.SettingManagement
         public async Task Should_Fallback_To_Default_Store_Value_When_No_Value_For_Current_User_With_GetOrNullForCurrentUserAsync()
         {
             _currentUserId = Guid.NewGuid();
-            (await _settingManager.GetOrNullAsync("MySetting2")).ShouldBe("default-store-value");
+            (await _settingProvider.GetOrNullAsync("MySetting2")).ShouldBe("default-store-value");
         }
 
         [Fact]

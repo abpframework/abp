@@ -10,15 +10,15 @@ namespace Volo.Abp.Identity
 {
     public class AbpIdentityOptionsFactory : AbpOptionsFactory<IdentityOptions>
     {
-        private readonly ISettingManager _settingManager;
+        private readonly ISettingProvider _settingProvider;
 
         public AbpIdentityOptionsFactory(
             IEnumerable<IConfigureOptions<IdentityOptions>> setups,
             IEnumerable<IPostConfigureOptions<IdentityOptions>> postConfigures,
-            ISettingManager settingManager)
+            ISettingProvider settingProvider)
             : base(setups, postConfigures)
         {
-            _settingManager = settingManager;
+            _settingProvider = settingProvider;
         }
 
         public override IdentityOptions Create(string name)
@@ -32,19 +32,20 @@ namespace Volo.Abp.Identity
 
         protected virtual void OverrideOptions(IdentityOptions options)
         {
-            options.Password.RequiredLength = _settingManager.Get(IdentitySettingNames.Password.RequiredLength, options.Password.RequiredLength);
-            options.Password.RequiredUniqueChars = _settingManager.Get(IdentitySettingNames.Password.RequiredUniqueChars, options.Password.RequiredUniqueChars);
-            options.Password.RequireNonAlphanumeric = _settingManager.Get(IdentitySettingNames.Password.RequireNonAlphanumeric, options.Password.RequireNonAlphanumeric);
-            options.Password.RequireLowercase = _settingManager.Get(IdentitySettingNames.Password.RequireLowercase, options.Password.RequireLowercase);
-            options.Password.RequireUppercase = _settingManager.Get(IdentitySettingNames.Password.RequireUppercase, options.Password.RequireUppercase);
-            options.Password.RequireDigit = _settingManager.Get(IdentitySettingNames.Password.RequireDigit, options.Password.RequireDigit);
+            
+            options.Password.RequiredLength = _settingProvider.Get(IdentitySettingNames.Password.RequiredLength, options.Password.RequiredLength);
+            options.Password.RequiredUniqueChars = _settingProvider.Get(IdentitySettingNames.Password.RequiredUniqueChars, options.Password.RequiredUniqueChars);
+            options.Password.RequireNonAlphanumeric = _settingProvider.Get(IdentitySettingNames.Password.RequireNonAlphanumeric, options.Password.RequireNonAlphanumeric);
+            options.Password.RequireLowercase = _settingProvider.Get(IdentitySettingNames.Password.RequireLowercase, options.Password.RequireLowercase);
+            options.Password.RequireUppercase = _settingProvider.Get(IdentitySettingNames.Password.RequireUppercase, options.Password.RequireUppercase);
+            options.Password.RequireDigit = _settingProvider.Get(IdentitySettingNames.Password.RequireDigit, options.Password.RequireDigit);
 
-            options.Lockout.AllowedForNewUsers = _settingManager.Get(IdentitySettingNames.Lockout.AllowedForNewUsers, options.Lockout.AllowedForNewUsers);
-            options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromSeconds(_settingManager.Get(IdentitySettingNames.Lockout.LockoutDuration, options.Lockout.DefaultLockoutTimeSpan.TotalSeconds.To<int>()));
-            options.Lockout.MaxFailedAccessAttempts = _settingManager.Get(IdentitySettingNames.Lockout.MaxFailedAccessAttempts, options.Lockout.MaxFailedAccessAttempts);
+            options.Lockout.AllowedForNewUsers = _settingProvider.Get(IdentitySettingNames.Lockout.AllowedForNewUsers, options.Lockout.AllowedForNewUsers);
+            options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromSeconds(_settingProvider.Get(IdentitySettingNames.Lockout.LockoutDuration, options.Lockout.DefaultLockoutTimeSpan.TotalSeconds.To<int>()));
+            options.Lockout.MaxFailedAccessAttempts = _settingProvider.Get(IdentitySettingNames.Lockout.MaxFailedAccessAttempts, options.Lockout.MaxFailedAccessAttempts);
 
-            options.SignIn.RequireConfirmedEmail = _settingManager.Get(IdentitySettingNames.SignIn.RequireConfirmedEmail, options.SignIn.RequireConfirmedEmail);
-            options.SignIn.RequireConfirmedPhoneNumber = _settingManager.Get(IdentitySettingNames.SignIn.RequireConfirmedPhoneNumber, options.SignIn.RequireConfirmedPhoneNumber);
+            options.SignIn.RequireConfirmedEmail = _settingProvider.Get(IdentitySettingNames.SignIn.RequireConfirmedEmail, options.SignIn.RequireConfirmedEmail);
+            options.SignIn.RequireConfirmedPhoneNumber = _settingProvider.Get(IdentitySettingNames.SignIn.RequireConfirmedPhoneNumber, options.SignIn.RequireConfirmedPhoneNumber);
         }
     }
 }
