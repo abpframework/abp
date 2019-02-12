@@ -84,6 +84,7 @@ namespace IdentityService.Host
         {
             var app = context.GetApplicationBuilder();
 
+            app.UseCorrelationId();
             app.UseVirtualFiles();
             app.UseAuthentication();
             app.UseAbpRequestLocalization(); //TODO: localization?

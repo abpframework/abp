@@ -70,6 +70,7 @@ namespace InternalGateway.Host
         {
             var app = context.GetApplicationBuilder();
 
+            app.UseCorrelationId();
             app.UseVirtualFiles();
             app.UseAuthentication();
             app.UseSwagger();
