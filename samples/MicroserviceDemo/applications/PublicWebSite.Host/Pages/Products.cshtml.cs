@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using MyCompanyName.ProductManagement;
 using ProductManagement;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
