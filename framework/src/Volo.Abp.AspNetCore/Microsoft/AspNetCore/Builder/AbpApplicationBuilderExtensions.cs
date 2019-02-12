@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Auditing;
 using Volo.Abp.AspNetCore.Mvc.ExceptionHandling;
+using Volo.Abp.AspNetCore.Tracing;
 using Volo.Abp.AspNetCore.Uow;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Localization;
@@ -38,6 +39,12 @@ namespace Microsoft.AspNetCore.Builder
             return app
                 .UseAbpExceptionHandling()
                 .UseMiddleware<AbpUnitOfWorkMiddleware>();
+        }
+
+        public static IApplicationBuilder UseCorrelationId(this IApplicationBuilder app)
+        {
+            return app
+                .UseMiddleware<AbpCorrelationIdMiddleware>();
         }
 
         public static IApplicationBuilder UseAbpRequestLocalization(this IApplicationBuilder app)

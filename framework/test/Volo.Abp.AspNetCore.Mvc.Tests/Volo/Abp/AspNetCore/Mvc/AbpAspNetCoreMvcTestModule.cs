@@ -82,6 +82,7 @@ namespace Volo.Abp.AspNetCore.Mvc
         {
             var app = context.GetApplicationBuilder();
 
+            app.UseCorrelationId();
             app.UseMiddleware<FakeAuthenticationMiddleware>();
             app.UseAuditing();
             app.UseUnitOfWork();
