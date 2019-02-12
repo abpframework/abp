@@ -17,21 +17,9 @@ namespace Volo.Abp.Settings
             _values = new Dictionary<string, string>();
         }
 
-        public Task<string> GetOrNullAsync(SettingDefinition setting, string providerKey)
+        public Task<string> GetOrNullAsync(SettingDefinition setting)
         {
             return Task.FromResult(_values.GetOrDefault(setting.Name));
-        }
-
-        public Task SetAsync(SettingDefinition setting, string value, string providerKey)
-        {
-            _values[setting.Name] = value;
-            return Task.CompletedTask;
-        }
-
-        public Task ClearAsync(SettingDefinition setting, string providerKey)
-        {
-            _values.Remove(setting.Name);
-            return Task.CompletedTask;
         }
     }
 }

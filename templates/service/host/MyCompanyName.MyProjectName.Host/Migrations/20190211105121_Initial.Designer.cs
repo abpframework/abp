@@ -10,14 +10,14 @@ using MyCompanyName.MyProjectName.Host;
 namespace MyCompanyName.MyProjectName.Host.Migrations
 {
     [DbContext(typeof(DemoAppDbContext))]
-    [Migration("20190107114531_Initial")]
+    [Migration("20190211105121_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.0-rtm-35687")
+                .HasAnnotation("ProductVersion", "2.2.1-servicing-10028")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -26,9 +26,17 @@ namespace MyCompanyName.MyProjectName.Host.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("ApplicationName")
+                        .HasColumnName("ApplicationName")
+                        .HasMaxLength(96);
+
                     b.Property<string>("BrowserInfo")
                         .HasColumnName("BrowserInfo")
                         .HasMaxLength(512);
+
+                    b.Property<string>("ClientId")
+                        .HasColumnName("ClientId")
+                        .HasMaxLength(64);
 
                     b.Property<string>("ClientIpAddress")
                         .HasColumnName("ClientIpAddress")
@@ -43,6 +51,10 @@ namespace MyCompanyName.MyProjectName.Host.Migrations
                         .HasMaxLength(256);
 
                     b.Property<string>("ConcurrencyStamp");
+
+                    b.Property<string>("CorrelationId")
+                        .HasColumnName("CorrelationId")
+                        .HasMaxLength(64);
 
                     b.Property<string>("Exceptions")
                         .HasColumnName("Exceptions")
@@ -178,8 +190,6 @@ namespace MyCompanyName.MyProjectName.Host.Migrations
 
                     b.Property<Guid>("EntityChangeId");
 
-                    b.Property<Guid?>("EntityChangeId1");
-
                     b.Property<string>("NewValue")
                         .HasColumnName("NewValue")
                         .HasMaxLength(512);
@@ -203,8 +213,6 @@ namespace MyCompanyName.MyProjectName.Host.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("EntityChangeId");
-
-                    b.HasIndex("EntityChangeId1");
 
                     b.ToTable("AbpEntityPropertyChanges");
                 });
@@ -280,13 +288,9 @@ namespace MyCompanyName.MyProjectName.Host.Migrations
             modelBuilder.Entity("Volo.Abp.AuditLogging.EntityPropertyChange", b =>
                 {
                     b.HasOne("Volo.Abp.AuditLogging.EntityChange")
-                        .WithMany()
+                        .WithMany("PropertyChanges")
                         .HasForeignKey("EntityChangeId")
                         .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Volo.Abp.AuditLogging.EntityChange")
-                        .WithMany("PropertyChanges")
-                        .HasForeignKey("EntityChangeId1");
                 });
 #pragma warning restore 612, 618
         }

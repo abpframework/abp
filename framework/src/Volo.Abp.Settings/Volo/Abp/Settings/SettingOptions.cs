@@ -11,11 +11,7 @@ namespace Volo.Abp.Settings
         public SettingOptions()
         {
             DefinitionProviders = new TypeList<ISettingDefinitionProvider>();
-            ValueProviders = new TypeList<ISettingValueProvider>
-            {
-                typeof(DefaultValueSettingValueProvider),
-                typeof(GlobalSettingValueProvider)
-            };
+            ValueProviders = new TypeList<ISettingValueProvider>();
         }
     }
 }

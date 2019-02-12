@@ -48,10 +48,10 @@ namespace Microsoft.AspNetCore.Builder
             using (var scope = app.ApplicationServices.CreateScope())
             {
                 var languageProvider = scope.ServiceProvider.GetRequiredService<ILanguageProvider>();
-                var settingManager = scope.ServiceProvider.GetRequiredService<ISettingManager>();
+                languages = languageProvider.GetLanguages();
 
-                languages = AsyncHelper.RunSync(() => languageProvider.GetLanguagesAsync());
-                defaultLanguage = settingManager.GetOrNull(LocalizationSettingNames.DefaultLanguage);
+                var settingProvider = scope.ServiceProvider.GetRequiredService<ISettingProvider>();
+                defaultLanguage = settingProvider.GetOrNull(LocalizationSettingNames.DefaultLanguage);
             }
 
             if (!languages.Any())

@@ -1,14 +1,12 @@
 ﻿using Volo.Abp.Modularity;
 using Volo.Abp.Security;
-using Volo.Abp.Settings;
 
 namespace Volo.Abp.Users
 {
     [DependsOn(
         typeof(AbpUsersDomainSharedModule),
         typeof(AbpUsersAbstractionModule),
-        typeof(AbpSecurityModule),
-        typeof(AbpSettingsModule)
+        typeof(AbpSecurityModule)
         )]
     public class AbpUsersDomainModule : AbpModule
     {

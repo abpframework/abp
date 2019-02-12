@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
+using Volo.Abp.Settings;
 using Volo.Abp.Users;
 
-namespace Volo.Abp.Settings
+namespace Volo.Abp.SettingManagement
 {
     //TODO: Consider to move to another package?
 

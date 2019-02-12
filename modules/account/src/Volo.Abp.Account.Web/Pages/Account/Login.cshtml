@@ -2,7 +2,7 @@
 @using Volo.Abp.Account.Web.Settings
 @model Volo.Abp.Account.Web.Pages.Account.LoginModel
 @inherits Volo.Abp.Account.Web.Pages.Account.AccountPage
-@inject Volo.Abp.Settings.ISettingManager SettingManager
+@inject Volo.Abp.Settings.ISettingProvider SettingProvider
 @if (Model.EnableLocalLogin)
 {
     <form method="post">
@@ -29,7 +29,7 @@
     </form>
 
     <div style="padding-top: 20px">
-        @if (string.Equals(await SettingManager.GetOrNullAsync(AccountSettingNames.IsSelfRegistrationEnabled), "true", StringComparison.OrdinalIgnoreCase))
+        @if (string.Equals(await SettingProvider.GetOrNullAsync(AccountSettingNames.IsSelfRegistrationEnabled), "true", StringComparison.OrdinalIgnoreCase))
         {
             <a href="@Url.Page("./Register", new {returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash})">@L["Register"]</a>
         }

@@ -255,11 +255,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             switch (TagHelper.Size)
             {
                 case AbpFormControlSize.Small:
-                    return "form-control-sm";
+                    return "custom-select-sm";
                 case AbpFormControlSize.Medium:
-                    return "form-control-md";
+                    return "custom-select-md";
                 case AbpFormControlSize.Large:
-                    return "form-control-lg";
+                    return "custom-select-lg";
             }
 
             return "";
@@ -276,6 +276,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             {
                 attrList.Add(tagHelperAttribute);
             }
+
+            attrList.AddClass("custom-select");
 
             return attrList;
         }
