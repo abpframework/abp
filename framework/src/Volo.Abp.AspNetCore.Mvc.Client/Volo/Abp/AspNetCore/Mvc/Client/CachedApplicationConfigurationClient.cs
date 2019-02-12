@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
@@ -45,7 +46,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Client
                 async () => await Proxy.Service.GetAsync(),
                 () => new DistributedCacheEntryOptions
                 {
-                    AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(30) //TODO: Should be configurable. Default value should be higher (5 mins would be good).
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(60) //TODO: Should be configurable. Default value should be higher (5 mins would be good).
                 }
             );
 
@@ -59,7 +60,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Client
 
         protected virtual string CreateCacheKey()
         {
-            return $"ApplicationConfiguration_{CurrentUser.Id?.ToString("N") ?? "Anonymous"}";
+            return $"ApplicationConfiguration_{CurrentUser.Id?.ToString("N") ?? "Anonymous"}_{CultureInfo.CurrentUICulture.Name}";
         }
     }
 }
