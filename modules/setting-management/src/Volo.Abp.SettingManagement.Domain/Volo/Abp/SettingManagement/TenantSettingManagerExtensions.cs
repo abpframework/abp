@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
-using Volo.Abp.MultiTenancy;
+using Volo.Abp.Settings;
 
-namespace Volo.Abp.Settings
+namespace Volo.Abp.SettingManagement
 {
     public static class TenantSettingManagerExtensions
     {

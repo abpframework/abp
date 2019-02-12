@@ -1,16 +1,16 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using Shouldly;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Volo.Abp.Settings;
 using Volo.Abp.Users;
 using Xunit;
 
 namespace Volo.Abp.SettingManagement
 {
-    public class SettingManager_User_Tests: SettingsTestBase
+    public class SettingManager_User_Tests : SettingsTestBase
     {
         private Guid? _currentUserId;
 

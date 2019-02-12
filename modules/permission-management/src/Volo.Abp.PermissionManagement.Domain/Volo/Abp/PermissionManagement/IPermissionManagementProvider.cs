@@ -5,7 +5,7 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.PermissionManagement
 {
-    public interface IPermissionManagementProvider : ISingletonDependency
+    public interface IPermissionManagementProvider : ISingletonDependency //TODO: Consider to remove this pre-assumption
     {
         string Name { get; }
 

@@ -5,18 +5,20 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Settings;
 
-namespace Volo.Abp.Settings
+namespace Volo.Abp.SettingManagement
 {
     public class SettingManager : ISettingManager, ISingletonDependency
     {
         protected ISettingDefinitionManager SettingDefinitionManager { get; }
         protected ISettingEncryptionService SettingEncryptionService { get; }
-        protected Lazy<List<ISettingValueProvider>> Providers { get; }
-        protected SettingOptions Options { get; }
+        protected List<ISettingManagementProvider> Providers => _lazyProviders.Value;
+        protected SettingManagementOptions Options { get; }
+        private readonly Lazy<List<ISettingManagementProvider>> _lazyProviders;
 
         public SettingManager(
-            IOptions<SettingOptions> options,
+            IOptions<SettingManagementOptions> options,
             IServiceProvider serviceProvider,
             ISettingDefinitionManager settingDefinitionManager,
             ISettingEncryptionService settingEncryptionService)
@@ -25,10 +27,12 @@ namespace Volo.Abp.Settings
             SettingEncryptionService = settingEncryptionService;
             Options = options.Value;
 
-            Providers = new Lazy<List<ISettingValueProvider>>(
+            //TODO: Instead, use IHybridServiceScopeFactory and create a scope..?
+
+            _lazyProviders = new Lazy<List<ISettingManagementProvider>>(
                 () => Options
-                    .ValueProviders
-                    .Select(c => serviceProvider.GetRequiredService(c) as ISettingValueProvider)
+                    .Providers
+                    .Select(c => serviceProvider.GetRequiredService(c) as ISettingManagementProvider)
                     .ToList(),
                 true
             );
@@ -47,7 +51,7 @@ namespace Volo.Abp.Settings
             Check.NotNull(providerName, nameof(providerName));
 
             var settingDefinitions = SettingDefinitionManager.GetAll();
-            var providers = Enumerable.Reverse(Providers.Value)
+            var providers = Enumerable.Reverse(Providers)
                 .SkipWhile(c => c.Name != providerName);
 
             if (!fallback)
@@ -72,7 +76,10 @@ namespace Volo.Abp.Settings
                 {
                     foreach (var provider in providerList)
                     {
-                        var providerValue = await provider.GetOrNullAsync(setting, providerKey);
+                        var providerValue = await provider.GetOrNullAsync(
+                            setting,
+                            provider.Name == providerName ? providerKey : null
+                        );
                         if (providerValue != null)
                         {
                             value = providerValue;
@@ -81,7 +88,10 @@ namespace Volo.Abp.Settings
                 }
                 else
                 {
-                    value = await providerList[0].GetOrNullAsync(setting, providerKey);
+                    value = await providerList[0].GetOrNullAsync(
+                        setting,
+                        providerKey
+                    );
                 }
 
                 if (setting.IsEncrypted)
@@ -106,7 +116,7 @@ namespace Volo.Abp.Settings
             var setting = SettingDefinitionManager.Get(name);
 
             var providers = Enumerable
-                .Reverse(Providers.Value)
+                .Reverse(Providers)
                 .SkipWhile(p => p.Name != providerName)
                 .ToList();
 
@@ -122,10 +132,10 @@ namespace Volo.Abp.Settings
 
             if (providers.Count > 1 && !forceToSet && setting.IsInherited && value != null)
             {
-                //Clear the value if it's same as it's fallback value
-                var fallbackValue = await GetOrNullInternalAsync(name, providers[1].Name, providerKey);
+                var fallbackValue = await GetOrNullInternalAsync(name, providers[1].Name, null);
                 if (fallbackValue == value)
                 {
+                    //Clear the value if it's same as it's fallback value
                     value = null;
                 }
             }
@@ -154,7 +164,7 @@ namespace Volo.Abp.Settings
         {
             var setting = SettingDefinitionManager.Get(name);
             var providers = Enumerable
-                .Reverse(Providers.Value);
+                .Reverse(Providers);
 
             if (providerName != null)
             {
@@ -166,30 +176,26 @@ namespace Volo.Abp.Settings
                 providers = providers.TakeWhile(c => c.Name == providerName);
             }
 
-            var value = await GetOrNullValueFromProvidersAsync(providerKey, providers, setting);
+            string value = null;
+            foreach (var provider in providers)
+            {
+                value = await provider.GetOrNullAsync(
+                    setting,
+                    provider.Name == providerName ? providerKey : null
+                );
+
+                if (value != null)
+                {
+                    break;
+                }
+            }
+
             if (setting.IsEncrypted)
             {
                 value = SettingEncryptionService.Decrypt(setting, value);
             }
 
             return value;
-        }
-
-        protected virtual async Task<string> GetOrNullValueFromProvidersAsync(
-            string providerKey, 
-            IEnumerable<ISettingValueProvider> providers, 
-            SettingDefinition setting)
-        {
-            foreach (var provider in providers)
-            {
-                var value = await provider.GetOrNullAsync(setting, providerKey);
-                if (value != null)
-                {
-                    return value;
-                }
-            }
-
-            return null;
         }
     }
 }

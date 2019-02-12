@@ -14,12 +14,6 @@ namespace Volo.Abp.Users
         )]
     public class AbpUsersAbstractionModule : AbpModule
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            Configure<SettingOptions>(options =>
-            {
-                options.ValueProviders.Add<UserSettingValueProvider>();
-            });
-        }
+
     }
 }
