@@ -13,14 +13,13 @@ namespace Volo.Abp.Identity
 {
     public class IdentityOptions_Tests : AbpIdentityDomainTestBase
     {
-        private ISettingManager _settingManager;
         private ISettingProvider _settingProvider;
 
         protected override void AfterAddApplication(IServiceCollection services)
         {
-            _settingManager = Substitute.For<ISettingManager>();
+            _settingProvider = Substitute.For<ISettingProvider>();
             _settingProvider.GetOrNullAsync(Arg.Any<string>()).Returns((string) null);
-            services.Replace(ServiceDescriptor.Singleton(_settingManager));
+            services.Replace(ServiceDescriptor.Singleton(_settingProvider));
         }
 
         [Fact]
