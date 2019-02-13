@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button;
+using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Dropdown
 {
@@ -66,17 +67,17 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Dropdown
             abpButtonTagHelper.ButtonType = TagHelper.ButtonType;
             var attributes = GetAttributesForMainButton(context, output);
 
-            var buttonTag = GetInnerTagHelper(attributes, context, abpButtonTagHelper, "button", TagMode.StartTagAndEndTag);
+            var buttonTag = abpButtonTagHelper.GetTagHelperOutput(attributes, context, "button", TagMode.StartTagAndEndTag);
 
             buttonTag.PreContent.SetHtmlContent(content.GetContent());
 
             if ((TagHelper.NavLink ?? false) || (TagHelper.Link ?? false))
             {
                 var linkTag = ConvertButtonToLink(buttonTag);
-                return RenderTagHelperOutput(linkTag, _htmlEncoder);
+                return linkTag.Render(_htmlEncoder);
             }
 
-            return RenderTagHelperOutput(buttonTag, _htmlEncoder);
+            return buttonTag.Render(_htmlEncoder);
         }
 
         protected virtual string GetSplitButton(TagHelperContext context, TagHelperOutput output)
@@ -87,7 +88,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Dropdown
             abpButtonTagHelper.ButtonType = TagHelper.ButtonType;
             var attributes = GetAttributesForSplitButton(context, output);
 
-            return RenderTagHelper(attributes, context, abpButtonTagHelper, _htmlEncoder, "button", TagMode.StartTagAndEndTag);
+            return abpButtonTagHelper.Render(attributes, context, _htmlEncoder, "button", TagMode.StartTagAndEndTag);
         }
 
         protected virtual TagHelperAttributeList GetAttributesForMainButton(TagHelperContext context, TagHelperOutput output)

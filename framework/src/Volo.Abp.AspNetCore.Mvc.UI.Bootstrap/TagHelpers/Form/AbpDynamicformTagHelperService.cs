@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button;
+using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 {
@@ -66,7 +67,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 ViewContext = TagHelper.ViewContext
             };
 
-            var formTagOutput = GetInnerTagHelper(output.Attributes, context, formTagHelper, "form", TagMode.StartTagAndEndTag);
+            var formTagOutput = formTagHelper.GetTagHelperOutput(output.Attributes, context, "form", TagMode.StartTagAndEndTag);
 
             await formTagOutput.GetChildContentAsync();
 
@@ -146,7 +147,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
         {
             var abpSelectTagHelper = GetSelectGroupTagHelper(context, output, model);
 
-            RenderTagHelper(new TagHelperAttributeList(), context, abpSelectTagHelper, _htmlEncoder, "div", TagMode.StartTagAndEndTag);
+            abpSelectTagHelper.Render(new TagHelperAttributeList(), context, _htmlEncoder, "div", TagMode.StartTagAndEndTag);
         }
 
         protected virtual AbpTagHelper GetSelectGroupTagHelper(TagHelperContext context, TagHelperOutput output, ModelExpression model)
@@ -167,7 +168,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         protected virtual AbpTagHelper GetAbpRadioInputTagHelper(ModelExpression model)
         {
-            var radioButtonAttribute = GetAttribute<AbpRadioButton>(model.ModelExplorer);
+            var radioButtonAttribute = model.ModelExplorer.GetAttribute<AbpRadioButton>();
             var abpRadioInputTagHelper = _serviceProvider.GetRequiredService<AbpRadioInputTagHelper>();
             abpRadioInputTagHelper.AspFor = model;
             abpRadioInputTagHelper.AspItems = null;
@@ -184,7 +185,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             abpButtonTagHelper.Text = "Submit";
             abpButtonTagHelper.ButtonType = AbpButtonType.Primary;
 
-            return RenderTagHelper(attributes, context, abpButtonTagHelper, _htmlEncoder, "button", TagMode.StartTagAndEndTag);
+            return abpButtonTagHelper.Render(attributes, context, _htmlEncoder, "button", TagMode.StartTagAndEndTag);
         }
 
         protected virtual void ProcessInputGroup(TagHelperContext context, TagHelperOutput output, ModelExpression model)
@@ -194,7 +195,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             abpInputTagHelper.ViewContext = TagHelper.ViewContext;
             abpInputTagHelper.DisplayRequiredSymbol = TagHelper.RequiredSymbols ?? true;
 
-            RenderTagHelper(new TagHelperAttributeList(), context, abpInputTagHelper, _htmlEncoder, "div", TagMode.StartTagAndEndTag);
+            abpInputTagHelper.Render(new TagHelperAttributeList(), context, _htmlEncoder, "div", TagMode.StartTagAndEndTag);
         }
 
         protected virtual List<ModelExpression> GetModels(TagHelperContext context, TagHelperOutput output)
@@ -280,12 +281,12 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         protected virtual bool AreSelectItemsProvided(ModelExplorer explorer)
         {
-            return GetAttribute<SelectItems>(explorer) != null;
+            return explorer.GetAttribute<SelectItems>() != null;
         }
 
         protected virtual bool IsRadioGroup(ModelExplorer explorer)
         {
-            return GetAttribute<AbpRadioButton>(explorer) != null;
+            return explorer.GetAttribute<AbpRadioButton>() != null;
         }
     }
 }

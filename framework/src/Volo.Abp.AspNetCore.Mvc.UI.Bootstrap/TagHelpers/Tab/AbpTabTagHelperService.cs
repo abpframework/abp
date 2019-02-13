@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
 {
@@ -14,7 +15,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
             var tabHeader = GetTabHeaderItem(context, output);
             var tabContent = GetTabContentItem(innerContent.GetContent());
 
-            var tabHeaderItems = GetValueFromContext<List<TabItem>>(context, TabItems);
+            var tabHeaderItems = context.GetValue<List<TabItem>>(TabItems);
 
             var active = TagHelper.Active ?? false;
 

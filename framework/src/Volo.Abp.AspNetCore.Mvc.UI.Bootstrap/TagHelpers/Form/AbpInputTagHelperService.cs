@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text.Encodings.Web;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
+using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 {
@@ -26,7 +28,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
         {
             var innerHtml = GetFormInputGroupAsHtml(context, output, out var isCheckbox);
 
-            var order = GetInputOrder(TagHelper.AspFor.ModelExplorer);
+            var order = TagHelper.AspFor.ModelExplorer.GetDisplayOrder();
 
             AddGroupToFormGroupContents(
                 context,
@@ -56,7 +58,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
         {
             var inputTag = GetInputTagHelperOutput(context, output, out isCheckbox);
             
-            var inputHtml = RenderTagHelperOutput(inputTag, _encoder);
+            var inputHtml = inputTag.Render(_encoder);
             var label = GetLabelAsHtml(context, output, inputTag, isCheckbox);
             var info = GetInfoAsHtml(context, output, inputTag, isCheckbox);
             var validation = isCheckbox ? "" : GetValidationAsHtml(context, output, inputTag);
@@ -79,7 +81,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
             var attributeList = new TagHelperAttributeList { { "class", "text-danger" } };
 
-            return RenderTagHelper(attributeList, context, validationMessageTagHelper, _encoder, "span", TagMode.StartTagAndEndTag, true);
+            return validationMessageTagHelper.Render(attributeList, context, _encoder, "span", TagMode.StartTagAndEndTag, true);
         }
 
         protected virtual string GetContent(TagHelperContext context, TagHelperOutput output, string label, string inputHtml, string validation, string infoHtml, bool isCheckbox)
@@ -100,7 +102,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         protected virtual TagHelper GetInputTagHelper(TagHelperContext context, TagHelperOutput output)
         {
-            var textAreaAttribute = GetAttribute<TextArea>(TagHelper.AspFor.ModelExplorer);
+            var textAreaAttribute = TagHelper.AspFor.ModelExplorer.GetAttribute<TextArea>();
 
             if (textAreaAttribute != null)
             {
@@ -122,7 +124,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
         {
             var tagHelper = GetInputTagHelper(context, output);
 
-            var inputTagHelperOutput = GetInnerTagHelper(GetInputAttributes(context, output), context, tagHelper, "input");
+            var inputTagHelperOutput = tagHelper.GetTagHelperOutput(GetInputAttributes(context, output), context, "input");
 
             ConvertToTextAreaIfTextArea(inputTagHelperOutput);
             AddDisabledAttribute(inputTagHelperOutput);
@@ -159,7 +161,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
         protected virtual void AddDisabledAttribute(TagHelperOutput inputTagHelperOutput)
         {
             if (inputTagHelperOutput.Attributes.ContainsName("disabled") == false && 
-                     (TagHelper.IsDisabled || GetAttribute<DisabledInput>(TagHelper.AspFor.ModelExplorer) != null))
+                     (TagHelper.IsDisabled || TagHelper.AspFor.ModelExplorer.GetAttribute<DisabledInput>() != null))
             {
                 inputTagHelperOutput.Attributes.Add("disabled", "");
             }
@@ -168,7 +170,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
         protected virtual void AddReadOnlyAttribute(TagHelperOutput inputTagHelperOutput)
         {
             if (inputTagHelperOutput.Attributes.ContainsName("readonly") == false && 
-                    (TagHelper.IsReadonly != false || GetAttribute<ReadOnlyInput>(TagHelper.AspFor.ModelExplorer) != null))
+                    (TagHelper.IsReadonly != false || TagHelper.AspFor.ModelExplorer.GetAttribute<ReadOnlyInput>() != null))
             {
                 inputTagHelperOutput.Attributes.Add("readonly", "");
             }
@@ -181,7 +183,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 return;
             }
 
-            var attribute = GetAttribute<Placeholder>(TagHelper.AspFor.ModelExplorer);
+            var attribute = TagHelper.AspFor.ModelExplorer.GetAttribute<Placeholder>();
 
             if (attribute != null)
             {
@@ -193,7 +195,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         protected virtual void AddInfoTextId(TagHelperOutput inputTagHelperOutput)
         {
-            if (GetAttribute<InputInfoText>(TagHelper.AspFor.ModelExplorer) == null)
+            if (TagHelper.AspFor.ModelExplorer.GetAttribute<InputInfoText>() == null)
             {
                 return;
             }
@@ -241,7 +243,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 return "";
             }
 
-            return GetAttribute<RequiredAttribute>(TagHelper.AspFor.ModelExplorer) != null ? "<span> * </span>":"";
+            return TagHelper.AspFor.ModelExplorer.GetAttribute<RequiredAttribute>() != null ? "<span> * </span>":"";
         }
 
         protected virtual string GetInfoAsHtml(TagHelperContext context, TagHelperOutput output, TagHelperOutput inputTag, bool isCheckbox)
@@ -264,7 +266,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             }
             else
             {
-                var infoAttribute = GetAttribute<InputInfoText>(TagHelper.AspFor.ModelExplorer);
+                var infoAttribute = TagHelper.AspFor.ModelExplorer.GetAttribute<InputInfoText>();
                 if (infoAttribute != null)
                 {
                     text = infoAttribute.Text;
@@ -298,12 +300,12 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 attributeList.AddClass("custom-control-label");
             }
 
-            return RenderTagHelper(attributeList, context, labelTagHelper, _encoder, "label", TagMode.StartTagAndEndTag, true);
+            return labelTagHelper.Render(attributeList, context, _encoder, "label", TagMode.StartTagAndEndTag, true);
         }
 
         protected virtual void ConvertToTextAreaIfTextArea(TagHelperOutput tagHelperOutput)
         {
-            var textAreaAttribute = GetAttribute<TextArea>(TagHelper.AspFor.ModelExplorer);
+            var textAreaAttribute = TagHelper.AspFor.ModelExplorer.GetAttribute<TextArea>();
 
             if (textAreaAttribute == null)
             {
@@ -355,7 +357,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         protected virtual string GetSize(TagHelperContext context, TagHelperOutput output)
         {
-            var attribute = GetAttribute<FormControlSize>(TagHelper.AspFor.ModelExplorer);
+            var attribute = TagHelper.AspFor.ModelExplorer.GetAttribute<FormControlSize>();
 
             if (attribute != null)
             {
@@ -378,6 +380,28 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
         protected virtual bool IsOutputHidden(TagHelperOutput inputTag)
         {
             return inputTag.Attributes.Any(a => a.Name.ToLowerInvariant() == "type" && a.Value.ToString().ToLowerInvariant() == "hidden");
+        }
+
+        protected virtual string GetIdAttributeAsString(TagHelperOutput inputTag)
+        {
+            var idAttr = inputTag.Attributes.FirstOrDefault(a => a.Name == "id");
+
+            return idAttr != null ? "for=\"" + idAttr.Value + "\"" : "";
+        }
+
+        protected virtual void AddGroupToFormGroupContents(TagHelperContext context, string propertyName, string html, int order, out bool surpress)
+        {
+            var list = context.GetValue<List<FormGroupItem>>(FormGroupContents) ?? new List<FormGroupItem>();
+            surpress = list != null;
+
+            if (list != null && !list.Any(igc => igc.HtmlContent.Contains("id=\"" + propertyName.Replace('.', '_') + "\"")))
+            {
+                list.Add(new FormGroupItem
+                {
+                    HtmlContent = html,
+                    Order = order
+                });
+            }
         }
     }
 }
