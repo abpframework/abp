@@ -122,7 +122,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
 
             var anchorTagHelper = GetAnchorTagHelper(currentPage, out var attributeList);
 
-            var tagHelperOutput = anchorTagHelper.GetTagHelperOutput(attributeList, context, "a", TagMode.StartTagAndEndTag);
+            var tagHelperOutput = anchorTagHelper.ProcessAndGetOutput(attributeList, context, "a", TagMode.StartTagAndEndTag);
 
             tagHelperOutput.Content.SetHtmlContent(localizer[localizationKey]);
 

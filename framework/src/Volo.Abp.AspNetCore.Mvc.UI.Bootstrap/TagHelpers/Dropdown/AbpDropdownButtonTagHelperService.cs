@@ -67,7 +67,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Dropdown
             abpButtonTagHelper.ButtonType = TagHelper.ButtonType;
             var attributes = GetAttributesForMainButton(context, output);
 
-            var buttonTag = abpButtonTagHelper.GetTagHelperOutput(attributes, context, "button", TagMode.StartTagAndEndTag);
+            var buttonTag = abpButtonTagHelper.ProcessAndGetOutput(attributes, context, "button", TagMode.StartTagAndEndTag);
 
             buttonTag.PreContent.SetHtmlContent(content.GetContent());
 

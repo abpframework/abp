@@ -124,7 +124,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
         {
             var tagHelper = GetInputTagHelper(context, output);
 
-            var inputTagHelperOutput = tagHelper.GetTagHelperOutput(GetInputAttributes(context, output), context, "input");
+            var inputTagHelperOutput = tagHelper.ProcessAndGetOutput(GetInputAttributes(context, output), context, "input");
 
             ConvertToTextAreaIfTextArea(inputTagHelperOutput);
             AddDisabledAttribute(inputTagHelperOutput);
