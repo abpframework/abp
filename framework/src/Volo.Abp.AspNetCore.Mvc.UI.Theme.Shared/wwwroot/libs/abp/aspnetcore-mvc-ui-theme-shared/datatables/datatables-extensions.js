@@ -338,9 +338,8 @@
                 }
             }
 
-
             return configuration;
-        }
+        };
 
     }();
 
