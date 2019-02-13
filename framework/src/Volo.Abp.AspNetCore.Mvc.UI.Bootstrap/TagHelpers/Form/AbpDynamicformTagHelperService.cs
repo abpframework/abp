@@ -156,7 +156,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 GetSelectTagHelper(model);
         }
 
-        private AbpTagHelper GetSelectTagHelper(ModelExpression model)
+        protected virtual AbpTagHelper GetSelectTagHelper(ModelExpression model)
         {
             var abpSelectTagHelper = _serviceProvider.GetRequiredService<AbpSelectTagHelper>();
             abpSelectTagHelper.AspFor = model;
@@ -165,7 +165,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             return abpSelectTagHelper;
         }
 
-        private AbpTagHelper GetAbpRadioInputTagHelper(ModelExpression model)
+        protected virtual AbpTagHelper GetAbpRadioInputTagHelper(ModelExpression model)
         {
             var radioButtonAttribute = GetAttribute<AbpRadioButton>(model.ModelExplorer);
             var abpRadioInputTagHelper = _serviceProvider.GetRequiredService<AbpRadioInputTagHelper>();
