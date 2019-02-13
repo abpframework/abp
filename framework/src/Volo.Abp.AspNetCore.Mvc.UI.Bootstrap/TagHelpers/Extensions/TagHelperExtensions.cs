@@ -8,7 +8,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions
 {
     public static class TagHelperExtensions
     {
-        public static TagHelperOutput GetTagHelperOutput(this TagHelper tagHelper, TagHelperAttributeList attributeList, TagHelperContext context, string tagName = "div", TagMode tagMode = TagMode.SelfClosing, bool runAsync = false)
+        public static TagHelperOutput ProcessAndGetOutput(this TagHelper tagHelper, TagHelperAttributeList attributeList, TagHelperContext context, string tagName = "div", TagMode tagMode = TagMode.SelfClosing, bool runAsync = false)
         {
             var innerOutput = new TagHelperOutput(tagName, attributeList, (useCachedResult, encoder) => Task.Run<TagHelperContent>(() => new DefaultTagHelperContent()))
             {
@@ -33,7 +33,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions
 
         public static string Render(this TagHelper tagHelper, TagHelperAttributeList attributeList, TagHelperContext context, HtmlEncoder htmlEncoder, string tagName = "div", TagMode tagMode = TagMode.SelfClosing, bool runAsync = false)
         {
-            var innerOutput = tagHelper.GetTagHelperOutput(attributeList, context, tagName, tagMode, runAsync);
+            var innerOutput = tagHelper.ProcessAndGetOutput(attributeList, context, tagName, tagMode, runAsync);
 
             return innerOutput.Render(htmlEncoder);
         }

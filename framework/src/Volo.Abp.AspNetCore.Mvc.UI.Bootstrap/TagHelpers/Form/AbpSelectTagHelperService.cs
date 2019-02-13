@@ -74,7 +74,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 ViewContext = TagHelper.ViewContext
             };
 
-            var selectTagHelperOutput = selectTagHelper.GetTagHelperOutput(GetInputAttributes(context, output), context, "select", TagMode.StartTagAndEndTag);
+            var selectTagHelperOutput = selectTagHelper.ProcessAndGetOutput(GetInputAttributes(context, output), context, "select", TagMode.StartTagAndEndTag);
 
             selectTagHelperOutput.Attributes.AddClass("form-control");
             selectTagHelperOutput.Attributes.AddClass(GetSize(context, output));

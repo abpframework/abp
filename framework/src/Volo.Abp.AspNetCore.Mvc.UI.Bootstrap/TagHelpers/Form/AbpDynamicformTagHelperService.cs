@@ -67,7 +67,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 ViewContext = TagHelper.ViewContext
             };
 
-            var formTagOutput = formTagHelper.GetTagHelperOutput(output.Attributes, context, "form", TagMode.StartTagAndEndTag);
+            var formTagOutput = formTagHelper.ProcessAndGetOutput(output.Attributes, context, "form", TagMode.StartTagAndEndTag);
 
             await formTagOutput.GetChildContentAsync();
 
