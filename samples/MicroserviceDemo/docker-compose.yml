@@ -15,12 +15,28 @@ services:
   redis:
     image: redis
 
+  elasticsearch:
+    image: 'docker.elastic.co/elasticsearch/elasticsearch:6.6.0'
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+
+  logstash:
+    image: 'docker.elastic.co/logstash/logstash:6.6.0'
+    depends_on:
+      - elasticsearch
+
+  kibana:
+    image: 'docker.elastic.co/kibana/kibana:6.6.0'
+    depends_on:
+      - elasticsearch
+
   internal-gateway:
     image: 'microservice-demo/internal-gateway:${TAG:-latest}'
     build:
       context: ../../
       dockerfile: samples/MicroserviceDemo/gateways/InternalGateway.Host/Dockerfile
     depends_on:
+      - elasticsearch
       - redis
       - sqlserver
       - identity-service
@@ -33,6 +49,7 @@ services:
       context: ../../
       dockerfile: samples/MicroserviceDemo/gateways/BackendAdminAppGateway.Host/Dockerfile
     depends_on:
+      - elasticsearch
       - redis
       - sqlserver
       - identity-service
@@ -44,6 +61,7 @@ services:
       context: ../../
       dockerfile: samples/MicroserviceDemo/gateways/PublicWebSiteGateway.Host/Dockerfile
     depends_on:
+      - elasticsearch
       - redis
       - blogging-service
       - product-service
@@ -54,6 +72,7 @@ services:
       context: ../../
       dockerfile: samples/MicroserviceDemo/microservices/BloggingService.Host/Dockerfile
     depends_on:
+      - elasticsearch
       - mongodb
       - redis
   
@@ -63,6 +82,7 @@ services:
       context: ../../
       dockerfile: samples/MicroserviceDemo/microservices/IdentityService.Host/Dockerfile
     depends_on:
+      - elasticsearch
       - rabbitmq
       - redis
       - sqlserver
@@ -73,6 +93,7 @@ services:
       context: ../../
       dockerfile: samples/MicroserviceDemo/microservices/ProductService.Host/Dockerfile
     depends_on:
+      - elasticsearch
       - sqlserver
       - redis
   
@@ -82,6 +103,7 @@ services:
       context: ../../
       dockerfile: samples/MicroserviceDemo/applications/AuthServer.Host/Dockerfile
     depends_on:
+      - elasticsearch
       - redis
       - rabbitmq
       - identity-service
@@ -92,6 +114,7 @@ services:
       context: ../../
       dockerfile: samples/MicroserviceDemo/applications/BackendAdminApp.Host/Dockerfile
     depends_on:
+      - elasticsearch
       - backend-admin-app-gateway
   
   console-client-demo:
@@ -100,6 +123,7 @@ services:
       context: ../../
       dockerfile: samples/MicroserviceDemo/applications/ConsoleClientDemo/Dockerfile
     depends_on:
+      - elasticsearch
       - internal-gateway
   
   public-website:
@@ -108,7 +132,9 @@ services:
       context: ../../
       dockerfile: samples/MicroserviceDemo/applications/PublicWebSite.Host/Dockerfile
     depends_on:
+      - elasticsearch
       - public-website-gateway
 
 volumes:
   dbdata:
+  esdata:
