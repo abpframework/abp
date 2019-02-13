@@ -13,6 +13,6 @@ $ docker-compose up -d
 ```
 
 ### Accessing the Web User Interfaces
-- AuthServer: `http://127.0.0.1:64899`
-- PublicWebsite: `http://127.0.0.1:63897`
-- BackendAdminApp: `http://127.0.0.1:63899`
+- AuthServer: `http://localhost:64999`
+- PublicWebsite: `http://localhost:53435`
+- BackendAdminApp: `http://localhost:51954`
