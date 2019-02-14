@@ -9,6 +9,8 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
 
         public ApplicationAuthConfigurationDto Auth { get; set; }
 
+        public ApplicationSettingConfigurationDto Setting { get; set; }
+
         public CurrentUserDto CurrentUser { get; set; }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
 {
@@ -17,7 +18,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
             await output.GetChildContentAsync();
             var tabHeader = GetTabHeaderItem(context, output);
 
-            var tabHeaderItems = GetValueFromContext<List<TabItem>>(context, TabItems);
+            var tabHeaderItems = context.GetValue<List<TabItem>>(TabItems);
 
             tabHeaderItems.Add(new TabItem(tabHeader, "", false, TagHelper.Name, "", true));
 

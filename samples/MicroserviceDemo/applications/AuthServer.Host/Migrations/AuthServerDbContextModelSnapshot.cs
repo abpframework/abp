@@ -24,6 +24,10 @@ namespace AuthServer.Host.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("ApplicationName")
+                        .HasColumnName("ApplicationName")
+                        .HasMaxLength(96);
+
                     b.Property<string>("BrowserInfo")
                         .HasColumnName("BrowserInfo")
                         .HasMaxLength(512);

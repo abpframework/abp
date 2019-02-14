@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
+using Volo.Abp.Auditing;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.EventBus.RabbitMq;
@@ -60,12 +61,19 @@ namespace AuthServer.Host
             {
                 options.Configuration = configuration["Redis:Configuration"];
             });
+
+            Configure<AbpAuditingOptions>(options =>
+            {
+                options.IsEnabledForGetRequests = true;
+                options.ApplicationName = "AuthServer";
+            });
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             var app = context.GetApplicationBuilder();
 
+            app.UseCorrelationId();
             app.UseVirtualFiles();
             app.UseIdentityServer();
             app.UseAbpRequestLocalization();

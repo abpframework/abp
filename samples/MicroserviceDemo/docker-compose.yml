@@ -1,0 +1,140 @@
+version: '3.0'
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server
+    volumes:
+      - dbdata:/var/opt/mssql
+  
+  mongodb:
+    image: mongo
+  
+  rabbitmq:
+    image: 'rabbitmq:3-management-alpine'
+
+  redis:
+    image: redis
+
+  elasticsearch:
+    image: 'docker.elastic.co/elasticsearch/elasticsearch:6.6.0'
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+
+  logstash:
+    image: 'docker.elastic.co/logstash/logstash:6.6.0'
+    depends_on:
+      - elasticsearch
+
+  kibana:
+    image: 'docker.elastic.co/kibana/kibana:6.6.0'
+    depends_on:
+      - elasticsearch
+
+  internal-gateway:
+    image: 'microservice-demo/internal-gateway:${TAG:-latest}'
+    build:
+      context: ../../
+      dockerfile: samples/MicroserviceDemo/gateways/InternalGateway.Host/Dockerfile
+    depends_on:
+      - elasticsearch
+      - redis
+      - sqlserver
+      - identity-service
+      - product-service
+      - blogging-service
+  
+  backend-admin-app-gateway:
+    image: 'microservice-demo/backend-admin-app-gateway:${TAG:-latest}'
+    build:
+      context: ../../
+      dockerfile: samples/MicroserviceDemo/gateways/BackendAdminAppGateway.Host/Dockerfile
+    depends_on:
+      - elasticsearch
+      - redis
+      - sqlserver
+      - identity-service
+      - product-service
+  
+  public-website-gateway:
+    image: 'microservice-demo/public-website-gateway:${TAG:-latest}'
+    build:
+      context: ../../
+      dockerfile: samples/MicroserviceDemo/gateways/PublicWebSiteGateway.Host/Dockerfile
+    depends_on:
+      - elasticsearch
+      - redis
+      - blogging-service
+      - product-service
+  
+  blogging-service:
+    image: 'microservice-demo/blogging-service:${TAG:-latest}'
+    build:
+      context: ../../
+      dockerfile: samples/MicroserviceDemo/microservices/BloggingService.Host/Dockerfile
+    depends_on:
+      - elasticsearch
+      - mongodb
+      - redis
+  
+  identity-service:
+    image: 'microservice-demo/identity-service:${TAG:-latest}'
+    build:
+      context: ../../
+      dockerfile: samples/MicroserviceDemo/microservices/IdentityService.Host/Dockerfile
+    depends_on:
+      - elasticsearch
+      - rabbitmq
+      - redis
+      - sqlserver
+  
+  product-service:
+    image: 'microservice-demo/product-service:${TAG:-latest}'
+    build:
+      context: ../../
+      dockerfile: samples/MicroserviceDemo/microservices/ProductService.Host/Dockerfile
+    depends_on:
+      - elasticsearch
+      - sqlserver
+      - redis
+  
+  auth-server:
+    image: 'microservice-demo/auth-server:${TAG:-latest}'
+    build:
+      context: ../../
+      dockerfile: samples/MicroserviceDemo/applications/AuthServer.Host/Dockerfile
+    depends_on:
+      - elasticsearch
+      - redis
+      - rabbitmq
+      - identity-service
+  
+  backend-admin-app:
+    image: 'microservice-demo/backend-admin-app:${TAG:-latest}'
+    build:
+      context: ../../
+      dockerfile: samples/MicroserviceDemo/applications/BackendAdminApp.Host/Dockerfile
+    depends_on:
+      - elasticsearch
+      - backend-admin-app-gateway
+  
+  console-client-demo:
+    image: 'microservice-demo/console-client-demo:${TAG:-latest}'
+    build:
+      context: ../../
+      dockerfile: samples/MicroserviceDemo/applications/ConsoleClientDemo/Dockerfile
+    depends_on:
+      - elasticsearch
+      - internal-gateway
+  
+  public-website:
+    image: 'microservice-demo/public-website:${TAG:-latest}'
+    build:
+      context: ../../
+      dockerfile: samples/MicroserviceDemo/applications/PublicWebSite.Host/Dockerfile
+    depends_on:
+      - elasticsearch
+      - public-website-gateway
+
+volumes:
+  dbdata:
+  esdata:

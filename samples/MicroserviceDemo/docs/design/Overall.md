@@ -13,6 +13,8 @@ The goal of this work is to show how to create a complete microservice solution 
 * [**Redis**](https://redis.io/) for distributed cache.
 * [**RabbitMQ**](https://www.rabbitmq.com/) for distributed messaging.
 * **[Serilog](https://serilog.net/)** for logging.
+* **[Elasticsearch](https://www.elastic.co/products/elasticsearch)** as log database.
+* **[Kibana](https://www.elastic.co/products/kibana)** as visualization tool (for logs in the Elasticsearch).
 
 ## Diagram
 

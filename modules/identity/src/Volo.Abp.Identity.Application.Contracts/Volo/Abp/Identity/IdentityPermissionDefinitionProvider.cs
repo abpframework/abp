@@ -22,7 +22,9 @@ namespace Volo.Abp.Identity
             usersPermission.AddChild(IdentityPermissions.Users.Delete, L("Permission:Delete"));
             usersPermission.AddChild(IdentityPermissions.Users.ManagePermissions, L("Permission:ChangePermissions"));
 
-            identityGroup.AddPermission(IdentityPermissions.UserLookup.Default, L("Permission:UserLookup"));
+            identityGroup
+                .AddPermission(IdentityPermissions.UserLookup.Default, L("Permission:UserLookup"))
+                .WithProviders(ClientPermissionValueProvider.ProviderName);
         }
 
         private static LocalizableString L(string name)

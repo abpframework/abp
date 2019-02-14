@@ -7,7 +7,7 @@ namespace Volo.Abp.Localization
     {
         public static IReadOnlyList<LanguageInfo> GetLanguages(this ILanguageProvider languageProvider)
         {
-            return AsyncHelper.RunSync(() => languageProvider.GetLanguagesAsync());
+            return AsyncHelper.RunSync(languageProvider.GetLanguagesAsync);
         }
     }
 }

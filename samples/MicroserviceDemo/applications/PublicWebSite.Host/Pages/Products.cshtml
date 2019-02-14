@@ -1,5 +1,8 @@
 ﻿@page
+@using ProductManagement
+@using Volo.Abp.Settings
 @model PublicWebSite.Host.Pages.ProductsModel
+@inject ISettingProvider SettingProvider
 <h1>Our Products</h1>
 <ul>
     @foreach (var product in Model.Products.Items)
@@ -10,3 +13,6 @@
         </li>
     }
 </ul>
+
+@* An example to show how to read settings from the client side / UI *@
+<p><i>Maximum allowed page size: @await SettingProvider.GetOrNullAsync(ProductManagementSettings.MaxPageSize)</i></p>

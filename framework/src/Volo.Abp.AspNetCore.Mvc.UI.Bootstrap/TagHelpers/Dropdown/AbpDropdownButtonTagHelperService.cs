@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Text;
 using System.Text.Encodings.Web;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button;
+using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Dropdown
 {
@@ -22,22 +24,25 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Dropdown
             _serviceProvider = serviceProvider;
         }
 
-        public override void Process(TagHelperContext context, TagHelperOutput output)
+        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            var buttonsAsHtml = GetButtonsAsHtml(context, output);
+            var content = await output.GetChildContentAsync();
+
+            var buttonsAsHtml = GetButtonsAsHtml(context, output, content);
 
             output.PreElement.SetHtmlContent(buttonsAsHtml);
 
             output.TagName = "div";
             output.TagMode = TagMode.StartTagAndEndTag;
+            output.Content.SetContent("");
             output.Attributes.Clear();
         }
 
-        protected virtual string GetButtonsAsHtml(TagHelperContext context, TagHelperOutput output)
+        protected virtual string GetButtonsAsHtml(TagHelperContext context, TagHelperOutput output, TagHelperContent content)
         {
             var buttonBuilder = new StringBuilder("");
 
-            var mainButton = GetMainButton(context, output);
+            var mainButton = GetMainButton(context, output, content);
 
             buttonBuilder.AppendLine(mainButton);
 
@@ -51,10 +56,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Dropdown
             return buttonBuilder.ToString();
         }
 
-        protected virtual string GetMainButton(TagHelperContext context, TagHelperOutput output)
+        protected virtual string GetMainButton(TagHelperContext context, TagHelperOutput output, TagHelperContent content)
         {
             var abpButtonTagHelper = _serviceProvider.GetRequiredService<AbpButtonTagHelper>();
-
+            
             abpButtonTagHelper.Icon = TagHelper.Icon;
             abpButtonTagHelper.Text = TagHelper.Text;
             abpButtonTagHelper.IconType = TagHelper.IconType;
@@ -62,15 +67,17 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Dropdown
             abpButtonTagHelper.ButtonType = TagHelper.ButtonType;
             var attributes = GetAttributesForMainButton(context, output);
 
-            var buttonTag = GetInnerTagHelper(attributes, context, abpButtonTagHelper, "button", TagMode.StartTagAndEndTag);
+            var buttonTag = abpButtonTagHelper.ProcessAndGetOutput(attributes, context, "button", TagMode.StartTagAndEndTag);
+
+            buttonTag.PreContent.SetHtmlContent(content.GetContent());
 
             if ((TagHelper.NavLink ?? false) || (TagHelper.Link ?? false))
             {
                 var linkTag = ConvertButtonToLink(buttonTag);
-                return RenderTagHelperOutput(linkTag, _htmlEncoder);
+                return linkTag.Render(_htmlEncoder);
             }
 
-            return RenderTagHelperOutput(buttonTag, _htmlEncoder);
+            return buttonTag.Render(_htmlEncoder);
         }
 
         protected virtual string GetSplitButton(TagHelperContext context, TagHelperOutput output)
@@ -81,7 +88,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Dropdown
             abpButtonTagHelper.ButtonType = TagHelper.ButtonType;
             var attributes = GetAttributesForSplitButton(context, output);
 
-            return RenderTagHelper(attributes, context, abpButtonTagHelper, _htmlEncoder, "button", TagMode.StartTagAndEndTag);
+            return abpButtonTagHelper.Render(attributes, context, _htmlEncoder, "button", TagMode.StartTagAndEndTag);
         }
 
         protected virtual TagHelperAttributeList GetAttributesForMainButton(TagHelperContext context, TagHelperOutput output)

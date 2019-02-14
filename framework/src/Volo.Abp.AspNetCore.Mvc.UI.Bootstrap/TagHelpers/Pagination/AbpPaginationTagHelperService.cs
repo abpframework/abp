@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
+using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
 {
@@ -121,11 +122,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
 
             var anchorTagHelper = GetAnchorTagHelper(currentPage, out var attributeList);
 
-            var tagHelperOutput = GetInnerTagHelper(attributeList, context, anchorTagHelper, "a", TagMode.StartTagAndEndTag);
+            var tagHelperOutput = anchorTagHelper.ProcessAndGetOutput(attributeList, context, "a", TagMode.StartTagAndEndTag);
 
             tagHelperOutput.Content.SetHtmlContent(localizer[localizationKey]);
 
-            var renderedHtml = RenderTagHelperOutput(tagHelperOutput, _encoder);
+            var renderedHtml = tagHelperOutput.Render(_encoder);
 
             return renderedHtml;
         }

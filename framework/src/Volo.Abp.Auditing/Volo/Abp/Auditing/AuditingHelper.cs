@@ -9,6 +9,7 @@ using Volo.Abp.Clients;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Timing;
+using Volo.Abp.Tracing;
 using Volo.Abp.Users;
 
 namespace Volo.Abp.Auditing
@@ -89,6 +90,7 @@ namespace Volo.Abp.Auditing
         {
             var auditInfo = new AuditLogInfo
             {
+                ApplicationName = Options.ApplicationName,
                 TenantId = CurrentTenant.Id,
                 UserId = CurrentUser.Id,
                 UserName = CurrentUser.UserName,

@@ -1,0 +1,21 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: migrations
+  name: migrations
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        io.kompose.service: migrations
+    spec:
+      containers:
+      - image: microservice-demo/migrations:latest
+        name: migrations
+        resources: {}
+        imagePullPolicy: Never
+      restartPolicy: Always
+status: {}
