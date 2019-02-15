@@ -6,7 +6,7 @@ services:
       - SA_PASSWORD=yourStrong(!)Password
       - ACCEPT_EULA=Y
     ports:
-      - "1433:1433"
+      - "1433"
 
   migrations:
     image: 'microservice-demo/migrations:${TAG:-latest}'

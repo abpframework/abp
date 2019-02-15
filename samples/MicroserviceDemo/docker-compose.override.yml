@@ -42,14 +42,14 @@ services:
     volumes:
       - ./elk/kibana/config/:/usr/share/kibana/config:ro
     ports:
-      - 5601:5601
+      - 51510:5601
 
   internal-gateway:
     environment:
       - ElasticSearch__Url=http://elasticsearch:9200
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
-      - AuthServer__Authority=http://auth-server:64999
+      - AuthServer__Authority=http://auth-server:51511
       - ConnectionStrings__Default=Server=sqlserver;Database=MsDemo_Identity;Trusted_Connection=True;MultipleActiveResultSets=true;User=sa;Password=yourStrong(!)Password;Integrated Security=false
       - Redis__Configuration=redis
       - ReRoutes__0__DownstreamHostAndPorts__0__Host=identity-service
@@ -60,7 +60,7 @@ services:
       - ReRoutes__2__DownstreamHostAndPorts__0__Port=80
       - GlobalConfiguration__BaseUrl=http://internal-gateway
     ports:
-      - 65129:80
+      - "80"
 
   backend-admin-app-gateway:
     environment:
@@ -68,7 +68,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
       - RemoteServices__Default__BaseUrl=http://backend-admin-app-gateway/
-      - AuthServer__Authority=http://auth-server:64999
+      - AuthServer__Authority=http://auth-server:51511
       - ConnectionStrings__Default=Server=sqlserver;Database=MsDemo_Identity;Trusted_Connection=True;MultipleActiveResultSets=true;User=sa;Password=yourStrong(!)Password;Integrated Security=false
       - Redis__Configuration=redis
       - ReRoutes__0__DownstreamHostAndPorts__0__Host=identity-service
@@ -77,14 +77,14 @@ services:
       - ReRoutes__1__DownstreamHostAndPorts__0__Port=80
       - GlobalConfiguration__BaseUrl=http://backend-admin-app-gateway
     ports:
-      - 65115:80
+      - 51531:80
 
   public-website-gateway:
     environment:
       - ElasticSearch__Url=http://elasticsearch:9200
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
-      - AuthServer__Authority=http://auth-server:64999
+      - AuthServer__Authority=http://auth-server:51511
       - ConnectionStrings__Default=Server=sqlserver;Database=MsDemo_Identity;Trusted_Connection=True;MultipleActiveResultSets=true;User=sa;Password=yourStrong(!)Password;Integrated Security=false
       - Redis__Configuration=redis
       - ReRoutes__0__DownstreamHostAndPorts__0__Host=product-service
@@ -93,76 +93,76 @@ services:
       - ReRoutes__1__DownstreamHostAndPorts__0__Port=80
       - GlobalConfiguration__BaseUrl=http://public-website-gateway
     ports:
-      - 64897:80
+      - 51532:80
 
   blogging-service:
     environment:
       - ElasticSearch__Url=http://elasticsearch:9200
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
-      - AuthServer__Authority=http://auth-server:64999
+      - AuthServer__Authority=http://auth-server:51511
       - ConnectionStrings__Default=Server=sqlserver;Database=MsDemo_Identity;Trusted_Connection=True;MultipleActiveResultSets=true;User=sa;Password=yourStrong(!)Password;Integrated Security=false
       - ConnectionStrings__Blogging=mongodb://mongodb|MsDemo_Blogging
       - Redis__Configuration=redis
       - RabbitMQ__Connections__Default__HostName=rabbitmq
       - RemoteServices__Default__BaseUrl=http://internal-gateway/
     ports:
-      - 62157:80
+      - 51521:80
 
   identity-service:
     environment:
       - ElasticSearch__Url=http://elasticsearch:9200
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
-      - AuthServer__Authority=http://auth-server:64999
+      - AuthServer__Authority=http://auth-server:51511
       - ConnectionStrings__Default=Server=sqlserver;Database=MsDemo_Identity;Trusted_Connection=True;MultipleActiveResultSets=true;User=sa;Password=yourStrong(!)Password;Integrated Security=false
       - Redis__Configuration=redis
       - RabbitMQ__Connections__Default__HostName=rabbitmq
     ports:
-      - 63568:80
+      - 51522:80
 
   product-service:
     environment:
       - ElasticSearch__Url=http://elasticsearch:9200
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
-      - AuthServer__Authority=http://auth-server:64999
+      - AuthServer__Authority=http://auth-server:51511
       - ConnectionStrings__Default=Server=sqlserver;Database=MsDemo_Identity;Trusted_Connection=True;MultipleActiveResultSets=true;User=sa;Password=yourStrong(!)Password;Integrated Security=false
       - ConnectionStrings__ProductManagement=Server=sqlserver;Database=MsDemo_ProductManagement;Trusted_Connection=True;MultipleActiveResultSets=true;User=sa;Password=yourStrong(!)Password;Integrated Security=false
       - Redis__Configuration=redis
       - RabbitMQ__Connections__Default__HostName=rabbitmq
     ports:
-      - 60244:80
+      - 51523:80
 
   auth-server:
     environment:
       - ElasticSearch__Url=http://elasticsearch:9200
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://0.0.0.0:64999
+      - ASPNETCORE_URLS=http://0.0.0.0:51511
       - ConnectionStrings__Default=Server=sqlserver;Database=MsDemo_Identity;Trusted_Connection=True;MultipleActiveResultSets=true;User=sa;Password=yourStrong(!)Password;Integrated Security=false
       - Redis__Configuration=redis
       - RabbitMQ__Connections__Default__HostName=rabbitmq
     ports:
-      - 64999:64999
+      - 51511:51511
 
   backend-admin-app:
     environment:
       - ElasticSearch__Url=http://elasticsearch:9200
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
-      - AuthServer__Authority=http://auth-server:64999
+      - AuthServer__Authority=http://auth-server:51511
       - RemoteServices__Default__BaseUrl=http://backend-admin-app-gateway/
       - Redis__Configuration=redis
     ports:
-      - 51954:80
+      - 51512:80
 
   public-website:
     environment:
       - ElasticSearch__Url=http://elasticsearch:9200
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
-      - AuthServer__Authority=http://auth-server:64999
+      - AuthServer__Authority=http://auth-server:51511
       - RemoteServices__Default__BaseUrl=http://public-website-gateway/
       - Redis__Configuration=redis
     ports:
-      - 53435:80
+      - 51513:80
