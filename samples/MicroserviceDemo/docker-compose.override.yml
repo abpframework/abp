@@ -52,12 +52,12 @@ services:
       - AuthServer__Authority=http://auth-server:64999
       - ConnectionStrings__Default=Server=sqlserver;Database=MsDemo_Identity;Trusted_Connection=True;MultipleActiveResultSets=true;User=sa;Password=yourStrong(!)Password;Integrated Security=false
       - Redis__Configuration=redis
-      - ReRoutes__0__DownstreamHostAndPorts__Host=identity-service
-      - ReRoutes__0__DownstreamHostAndPorts__Port=80
-      - ReRoutes__1__DownstreamHostAndPorts__Host=product-service
-      - ReRoutes__1__DownstreamHostAndPorts__Port=80
-      - ReRoutes__2__DownstreamHostAndPorts__Host=blogging-service
-      - ReRoutes__2__DownstreamHostAndPorts__Port=80
+      - ReRoutes__0__DownstreamHostAndPorts__0__Host=identity-service
+      - ReRoutes__0__DownstreamHostAndPorts__0__Port=80
+      - ReRoutes__1__DownstreamHostAndPorts__0__Host=product-service
+      - ReRoutes__1__DownstreamHostAndPorts__0__Port=80
+      - ReRoutes__2__DownstreamHostAndPorts__0__Host=blogging-service
+      - ReRoutes__2__DownstreamHostAndPorts__0__Port=80
       - GlobalConfiguration__BaseUrl=http://internal-gateway
     ports:
       - 65129:80
@@ -71,10 +71,10 @@ services:
       - AuthServer__Authority=http://auth-server:64999
       - ConnectionStrings__Default=Server=sqlserver;Database=MsDemo_Identity;Trusted_Connection=True;MultipleActiveResultSets=true;User=sa;Password=yourStrong(!)Password;Integrated Security=false
       - Redis__Configuration=redis
-      - ReRoutes__0__DownstreamHostAndPorts__Host=identity-service
-      - ReRoutes__0__DownstreamHostAndPorts__Port=80
-      - ReRoutes__1__DownstreamHostAndPorts__Host=product-service
-      - ReRoutes__1__DownstreamHostAndPorts__Port=80
+      - ReRoutes__0__DownstreamHostAndPorts__0__Host=identity-service
+      - ReRoutes__0__DownstreamHostAndPorts__0__Port=80
+      - ReRoutes__1__DownstreamHostAndPorts__0__Host=product-service
+      - ReRoutes__1__DownstreamHostAndPorts__0__Port=80
       - GlobalConfiguration__BaseUrl=http://backend-admin-app-gateway
     ports:
       - 65115:80
@@ -87,10 +87,10 @@ services:
       - AuthServer__Authority=http://auth-server:64999
       - ConnectionStrings__Default=Server=sqlserver;Database=MsDemo_Identity;Trusted_Connection=True;MultipleActiveResultSets=true;User=sa;Password=yourStrong(!)Password;Integrated Security=false
       - Redis__Configuration=redis
-      - ReRoutes__0__DownstreamHostAndPorts__Host=product-service
-      - ReRoutes__0__DownstreamHostAndPorts__Port=80
-      - ReRoutes__1__DownstreamHostAndPorts__Host=blogging-service
-      - ReRoutes__1__DownstreamHostAndPorts__Port=80
+      - ReRoutes__0__DownstreamHostAndPorts__0__Host=product-service
+      - ReRoutes__0__DownstreamHostAndPorts__0__Port=80
+      - ReRoutes__1__DownstreamHostAndPorts__0__Host=blogging-service
+      - ReRoutes__1__DownstreamHostAndPorts__0__Port=80
       - GlobalConfiguration__BaseUrl=http://public-website-gateway
     ports:
       - 64897:80
