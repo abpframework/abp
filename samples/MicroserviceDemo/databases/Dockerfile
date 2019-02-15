@@ -16,6 +16,7 @@ WORKDIR /src
 COPY --from=build /src/samples/MicroserviceDemo/microservices/ProductService.Host ./ProductService.Host
 COPY --from=build /src/samples/MicroserviceDemo/applications/AuthServer.Host ./AuthServer.Host
 COPY --from=build /src/samples/MicroserviceDemo/databases/entrypoint.sh .
+RUN sed -i $'s/\r$//' entrypoint.sh
 RUN chmod +x ./entrypoint.sh
 
 ENTRYPOINT ["./entrypoint.sh"]
