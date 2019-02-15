@@ -80,7 +80,7 @@ There are a few applications running in the containers you may want to explore:
   *(Used to manage users & products in the system)*
 * Public Web Site (PublicWebsite.Host): `http://localhost:51513`
   *(Used to list products and run/manage the blog module)*
-* Authentication Server (AuthServer.Host): `http://localhost:51511`
+* Authentication Server (AuthServer.Host): `http://auth-server:51511/`
   *(Used as a single sign on and authentication server built with IdentityServer4)*
 * Kibana UI: `http://localhost:51510`
   *(Use to show/trace logs written by all services/applications/gateways)*
