@@ -127,7 +127,7 @@ services:
       - ASPNETCORE_URLS=http://0.0.0.0:80
       - AuthServer__Authority=http://auth-server:64999
       - ConnectionStrings__Default=Server=sqlserver;Database=MsDemo_Identity;Trusted_Connection=True;MultipleActiveResultSets=true;User=sa;Password=yourStrong(!)Password;Integrated Security=false
-      - ConnectionStrings__ProductManagement=Server=sqlserver;Database=MsDemo_Identity;Trusted_Connection=True;MultipleActiveResultSets=true;User=sa;Password=yourStrong(!)Password;Integrated Security=false
+      - ConnectionStrings__ProductManagement=Server=sqlserver;Database=MsDemo_ProductManagement;Trusted_Connection=True;MultipleActiveResultSets=true;User=sa;Password=yourStrong(!)Password;Integrated Security=false
       - Redis__Configuration=redis
       - RabbitMQ__Connections__Default__HostName=rabbitmq
     ports:
