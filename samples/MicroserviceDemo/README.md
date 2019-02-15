@@ -21,6 +21,7 @@ Add this line to your `hosts` file
 
 
 ### Accessing the Web User Interfaces
-- AuthServer: `http://localhost:64999`
-- PublicWebsite: `http://localhost:53435`
-- BackendAdminApp: `http://localhost:51954`
+- Kibana: `http://localhost:51510`
+- AuthServer: `http://localhost:51511`
+- BackendAdminApp: `http://localhost:51512`
+- PublicWebsite: `http://localhost:51513`
