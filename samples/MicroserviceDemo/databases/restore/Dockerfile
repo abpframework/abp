@@ -10,6 +10,6 @@ WORKDIR /src
 COPY --from=unzip /src/MsDemo_Identity.bak .
 COPY --from=unzip /src/MsDemo_ProductManagement.bak .
 COPY /samples/MicroserviceDemo/databases/restore/entrypoint.sh .
-RUN sed -i $'s/\r$//' entrypoint.sh
+RUN /bin/bash -c "sed -i $'s/\r$//' entrypoint.sh"
 RUN chmod +x ./entrypoint.sh
 ENTRYPOINT [ "./entrypoint.sh" ]
