@@ -10,20 +10,14 @@ until /opt/mssql-tools/bin/sqlcmd -S sqlserver -U SA -P $SA_PASSWORD -Q 'SELECT 
 sleep 1
 done
 
-/opt/mssql-tools/bin/sqlcmd -S sqlserver \
-   -U SA -P $SA_PASSWORD \
-   -Q 'RESTORE FILELISTONLY FROM DISK = "/var/opt/mssql/backup/MsDemo_Identity.bak"' \
-   | tr -s ' ' | cut -d ' ' -f 1-2
-
-/opt/mssql-tools/bin/sqlcmd -S sqlserver \
-   -U SA -P $SA_PASSWORD \
-   -Q 'RESTORE FILELISTONLY FROM DISK = "/var/opt/mssql/backup/MsDemo_ProductManagement.bak"' \
-   | tr -s ' ' | cut -d ' ' -f 1-2
+/opt/mssql-tools/bin/sqlcmd \
+   -S sqlserver -U SA -P $SA_PASSWORD \
+   -Q 'RESTORE DATABASE MsDemo_Identity FROM DISK = "/var/opt/mssql/backup/MsDemo_Identity.bak" WITH REPLACE,
+         MOVE "MsDemo_Identity" TO "/var/opt/mssql/data/MsDemo_Identity.mdf", 
+         MOVE "MsDemo_Identity_log" TO "/var/opt/mssql/data/MsDemo_Identity_log.ldf"'
 
 /opt/mssql-tools/bin/sqlcmd \
    -S sqlserver -U SA -P $SA_PASSWORD \
-   -Q 'RESTORE DATABASE MsDemo_Identity FROM DISK = "/var/opt/mssql/backup/MsDemo_Identity.bak" WITH MOVE "MsDemo_Identity" TO "/var/opt/mssql/data/MsDemo_Identity.mdf", MOVE "MsDemo_Identity_log" TO "/var/opt/mssql/data/MsDemo_Identity_log.ldf"'
-
-/opt/mssql-tools/bin/sqlcmd \
-   -S sqlserver -U SA -P $SA_PASSWORD \
-   -Q 'RESTORE DATABASE MsDemo_ProductManagement FROM DISK = "/var/opt/mssql/backup/MsDemo_ProductManagement.bak" WITH MOVE "MsDemo_ProductManagement" TO "/var/opt/mssql/data/MsDemo_ProductManagement.mdf", MOVE "MsDemo_ProductManagement_log" TO "/var/opt/mssql/data/MsDemo_ProductManagement_log.ldf"'
+   -Q 'RESTORE DATABASE MsDemo_ProductManagement FROM DISK = "/var/opt/mssql/backup/MsDemo_ProductManagement.bak" WITH REPLACE,
+         MOVE "MsDemo_ProductManagement" TO "/var/opt/mssql/data/MsDemo_ProductManagement.mdf", 
+         MOVE "MsDemo_ProductManagement_log" TO "/var/opt/mssql/data/MsDemo_ProductManagement_log.ldf"'
