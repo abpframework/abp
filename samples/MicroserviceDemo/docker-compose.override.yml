@@ -105,6 +105,7 @@ services:
       - ConnectionStrings__Blogging=mongodb://mongodb|MsDemo_Blogging
       - Redis__Configuration=redis
       - RabbitMQ__Connections__Default__HostName=rabbitmq
+      - RemoteServices__Default__BaseUrl=http://internal-gateway/
     ports:
       - 62157:80
 
