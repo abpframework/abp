@@ -156,16 +156,6 @@ services:
     ports:
       - 51954:80
 
-  console-client-demo:
-    environment:
-      - ElasticSearch__Url=http://elasticsearch:9200
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://0.0.0.0:80
-      - RemoteServices__Default__BaseUrl=http://internal-gateway/
-      - IdentityClients__Default__Authority=http://auth-server:64999
-    ports:
-      - 63898:80
-
   public-website:
     environment:
       - ElasticSearch__Url=http://elasticsearch:9200

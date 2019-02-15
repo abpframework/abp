@@ -117,15 +117,6 @@ services:
       - elasticsearch
       - backend-admin-app-gateway
   
-  console-client-demo:
-    image: 'microservice-demo/console-client-demo:${TAG:-latest}'
-    build:
-      context: ../../
-      dockerfile: samples/MicroserviceDemo/applications/ConsoleClientDemo/Dockerfile
-    depends_on:
-      - elasticsearch
-      - internal-gateway
-  
   public-website:
     image: 'microservice-demo/public-website:${TAG:-latest}'
     build:
