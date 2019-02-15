@@ -42,7 +42,7 @@ You can either run from the **source code** or from the pre-configured **docker-
 
 #### Pre Requirements
 
-Running as docker containers is easier since all dependencies are pre-configured. You only need to install the latest docker. For Windows, follow [this URL](https://docs.docker.com/docker-for-windows/install/).
+Running as docker containers is easier since all dependencies are pre-configured. You only need to install the [latest docker](https://docs.docker.com/compose/install/).
 
 #### Running Containers
 
