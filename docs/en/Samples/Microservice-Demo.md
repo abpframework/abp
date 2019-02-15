@@ -19,7 +19,8 @@ This sample aims to demonstrate a simple yet complete microservice solution;
 * Has a **console application** to show the simplest way of using a service by authenticating.
 * Uses [Redis](https://redis.io/) for **distributed caching**.
 * Uses [RabbitMQ](https://www.rabbitmq.com/) for service-to-service **messaging**.
-* Uses docker & [Kubernates](https://kubernetes.io/) to **deploy** & run all services and applications.
+* Uses [docker](https://www.docker.com/) & [Kubernates](https://kubernetes.io/) to **deploy** & run all services and applications.
+* Used [Elasticsearch](https://www.elastic.co/products/elasticsearch) & [Kibana](https://www.elastic.co/products/kibana) to store and visualize the logs (written using [Serilog](https://serilog.net/)).
 
 The diagram below shows the system:
 
@@ -123,50 +124,50 @@ Run the projects with the following order (right click to each project, set as s
 * BackendAdminApp.Host
 * PublicWebSite.Host
 
-### Running the Docker Containers
-
-* Clone or download the [ABP repository](https://github.com/abpframework/abp).
-
-* Open a command line in the `samples/MicroserviceDemo` folder of the repository.
-
-* Restore databases:
-
-  ````
-  docker-compose -f docker-compose.yml -f docker-compose.migrations.yml run restore-database
-  ````
-
-* Start the containers:
-
-  ````
-  docker-compose up -d
-  ````
-
-  At the first run, it will take a **long time** because it will build all docker images.
-
-* Add this line to the end of your `hosts` file:
-
-  ````
-  127.0.0.1	auth-server
-  ````
-
-  hosts file is located inside the `C:\Windows\System32\Drivers\etc\hosts` folder on Windows and `/etc/hosts` for Linux/MacOS.
-
 ## Exploring the Solution
 
 The Visual Studio solution consists of multiple projects each have different roles in the system:
 
 ![microservice-sample-solution](../images/microservice-sample-solution.png)
 
-It has 3 **microservices** with have no UI but exposes REST services:
+#### Microservices
+
+Microservices have no UI, but exposes some REST APIs.
 
 * **IdentityService.Host**: Host the ABP Identity module which is used to manage users & roles. It has no additional service, but only hosts the Identity module's API.
 * **BloggingService.Host**: Host the ABP Blogging module which is used to manage blog & posts (a typical blog application). It has no additional service, but only hosts the Blogging module's API.
 * **ProductService.Host**: Hosts the Product module (that is inside the solution) which is used to manage products. It also contains the EF Core migrations to create/update the Product Management database schema.
 
-It has 3 **databases**:
+#### Gateways / BFFs (Backend for Frontend)
 
-* ...
+Gateways are used to provide a single entry point to the applications. It can also used for rate limiting, load balancing... etc. Used the [Ocelot](https://github.com/ThreeMammals/Ocelot) library.
+
+* **BackendAdminAppGateway.Host**: Used by the BackendAdminApp.Host application as backend.
+* **PublicWebSiteGateway.Host**: Used by the PublicWebSite.Host application as backend.
+* **InternalGateway.Host**: Used for inter-service communication (the communication between microservices).
+
+#### Applications
+
+These are the actual applications those have user interfaces to interact to the users.
+
+* **AuthServer.Host**: Host the IdentityServer4 to provide an authentication service to other services and applications. It is a single-sign on server and contains the login page.
+* **BackendAdminApp.Host**: This is a backend admin application that host UI for Identity and Product management modules.
+* **PubicWebSite.Host**: As public web site that contains a simple product list page and blog module UI.
+* **ConsoleClientDemo**: A simple console application to demonstrate the usage of services from a C# application.
+
+#### Modules
+
+* **Product**: A layered module that is developed with the [module development best practices](../Best-Practices/Index.md). It can be embedded into a monolithic application or can be hosted as a microservice by separately deploying API and UI (as done in this demo solution).
+
+#### Databases
+
+This solution is using multiple databases:
+
+* **MsDemo_Identity**: An SQL database. Used **SQL Server** by default, but can be any DBMS supported by the EF Core. Shared by AuthServer and IdentityService. Also audit logs, permissions and settings are stored in this database (while they could easily have their own databases, shared the same database to keep it simple).
+* **MsDemo_Productmanagement**: An SQL database. Again, used **SQL Server** by default, but can be any DBMS supported by the EF Core. Used by the ProductService as a dedicated database.
+* **MsDemo_Blogging**: A **MongoDB** database. Used by the BloggingService.
+* **Elasticsearch**: Used to write logs over Serilog.
 
 ### Identity Service
 
-...
+TODO...
