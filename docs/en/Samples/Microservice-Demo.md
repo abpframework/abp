@@ -19,8 +19,8 @@ This sample aims to demonstrate a simple yet complete microservice solution;
 * Has a **console application** to show the simplest way of using a service by authenticating.
 * Uses [Redis](https://redis.io/) for **distributed caching**.
 * Uses [RabbitMQ](https://www.rabbitmq.com/) for service-to-service **messaging**.
-* Uses [docker](https://www.docker.com/) & [Kubernates](https://kubernetes.io/) to **deploy** & run all services and applications.
-* Used [Elasticsearch](https://www.elastic.co/products/elasticsearch) & [Kibana](https://www.elastic.co/products/kibana) to store and visualize the logs (written using [Serilog](https://serilog.net/)).
+* Uses [Docker](https://www.docker.com/) & [Kubernates](https://kubernetes.io/) to **deploy** & run all services and applications.
+* Uses [Elasticsearch](https://www.elastic.co/products/elasticsearch) & [Kibana](https://www.elastic.co/products/kibana) to store and visualize the logs (written using [Serilog](https://serilog.net/)).
 
 The diagram below shows the system:
 
