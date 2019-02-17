@@ -476,6 +476,101 @@ Resource Owner Password requires a `UserName` & `UserPassword` in addition to cl
 
 Using the services is straightforward. See the `ClientDemoService` class which simply injects `IIdentityUserAppService` and `IProductAppService` and uses them. This class also shows a manual HTTP call using an `HttpClient` object. See source code of the `ClientDemoService` for details.
 
+## API Gateways / BFFs (Backend for Frontend)
+
+Gateways are used to provide a **single entry point** to the applications. In this way, an application only deal with a single service address (API endpoint) instead of a different addresses for each services. Gateways are also used for rate limiting, security, authentication, load balancing and many more requirements.
+
+"**Backend for Frontend**" (BFF) is a common architectural pattern which offers to build a **dedicated and specialized** gateway for each different application / client type. This solution uses this pattern and has multiple gateways.
+
+This solution uses the [Ocelot](https://github.com/ThreeMammals/Ocelot) library to build API Gateways. It's a widely accepted API Gateway library for ASP.NET Core.
+
+### Backend Admin Application Gateway (BackendAdminAppGateway.Host)
+
+This is backend (server side API) for the "Backend Admin Application" (don't confuse about the naming; Backend Admin Application is a frontend web application actually, but used by system admins rather than regular users).
+
+#### Authentication
+
+This gateway uses IdentityServer `Bearer` authentication and configured like that:
+
+````csharp
+context.Services.AddAuthentication("Bearer")
+.AddIdentityServerAuthentication(options =>
+{
+    options.Authority = configuration["AuthServer:Authority"];
+    options.ApiName = configuration["AuthServer:ApiName"];
+    options.RequireHttpsMetadata = false;    
+    options.InboundJwtClaimTypeMap["sub"] = AbpClaimTypes.UserId;
+    options.InboundJwtClaimTypeMap["role"] = AbpClaimTypes.Role;
+    options.InboundJwtClaimTypeMap["email"] = AbpClaimTypes.Email;
+    options.InboundJwtClaimTypeMap["email_verified"] = AbpClaimTypes.EmailVerified;
+    options.InboundJwtClaimTypeMap["phone_number"] = AbpClaimTypes.PhoneNumber;
+    options.InboundJwtClaimTypeMap["phone_number_verified"] = 
+        AbpClaimTypes.PhoneNumberVerified;
+    options.InboundJwtClaimTypeMap["name"] = AbpClaimTypes.UserName;
+});
+````
+
+`AddIdentityServerAuthentication` extension method comes from the [IdentityServer4.AccessTokenValidation](https://www.nuget.org/packages/IdentityServer4.AccessTokenValidation) package, part of the IdentityServer4 project (see [its documentation](http://docs.identityserver.io/en/latest/topics/apis.html)). 
+
+`ApiName` is the API which is being protected, `BackendAdminAppGateway` in this case. So, this solution defines gateways as APIs too. Rest of the configuration is related to claims mapping (which is planned to be automated in next ABP versions). The configuration related to authentication in the `appsettings.json` is simple:
+
+````json
+"AuthServer": {
+  "Authority": "http://localhost:64999",
+  "ApiName": "BackendAdminAppGateway"
+}
+````
+
+#### Ocelot Configuration
+
+Ocelot needs to know the real URLs of the microservices to be able to redirect HTTP requests. The configuration for this gateway is like below:
+
+````json
+"ReRoutes": [
+  {
+    "DownstreamPathTemplate": "/api/identity/{everything}",
+    "DownstreamScheme": "http",
+    "DownstreamHostAndPorts": [
+      {
+        "Host": "localhost",
+        "Port": 63568
+      }
+    ],
+    "UpstreamPathTemplate": "/api/identity/{everything}",
+    "UpstreamHttpMethod": [ "Put", "Delete", "Get", "Post" ]
+  },
+  {
+    "DownstreamPathTemplate": "/api/productManagement/{everything}",
+    "DownstreamScheme": "http",
+    "DownstreamHostAndPorts": [
+      {
+        "Host": "localhost",
+        "Port": 60244
+      }
+    ],
+    "UpstreamPathTemplate": "/api/productManagement/{everything}",
+    "UpstreamHttpMethod": [ "Put", "Delete", "Get", "Post" ]
+  }
+],
+"GlobalConfiguration": {
+  "BaseUrl": "http://localhost:65115"
+}
+````
+
+`ReRoutes` is an array of URL mappings. `BaseUrl` in the `GlobalConfiguration` section is the URL of this gateway (Ocelot needs to know its own URL). See [its own documentation](https://ocelot.readthedocs.io/en/latest/features/configuration.html) to better understand the configuration.
+
+TODO...
+
+Swagger
+
+TODO
+
+#### Other Dependencies
+
+- **RabbitMQ** for messaging to other services.
+- **Redis** for distributed/shared caching.
+- **Elasticsearch** for storing logs.
+
 ## Microservices
 
 ### Identity Service
