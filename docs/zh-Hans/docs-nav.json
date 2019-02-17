@@ -67,7 +67,8 @@
           "path": "Exception-Handling.md"
         },
         {
-          "text": "验证"
+          "text": "验证",
+          "path": "Validation.md"
         },
         {
           "text": "授权"
@@ -160,7 +161,8 @@
               "path": "Repositories.md"
             },
             {
-              "text": "领域服务"
+              "text": "领域服务",
+              "path": "Domain-Services.md"
             },
             {
               "text": "规约"
@@ -178,7 +180,8 @@
               "text": "数据传输对象(DTO)"
             },
             {
-              "text": "工作单元"
+              "text": "工作单元",
+              "path": "Unit-Of-Work.md"
             }
           ]
         }
@@ -189,7 +192,7 @@
       "items": [
         {
           "text": "API",
-           "items": [            
+           "items": [
              {
                "text": "自动API控制器",
                "path": "AspNetCore/Auto-API-Controllers.md"
