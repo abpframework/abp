@@ -13,10 +13,10 @@ namespace Volo.Abp.Domain.Entities
         IHasExtraProperties,
         IHasConcurrencyStamp
     {
-        public Dictionary<string, object> ExtraProperties { get; protected set; }
+        public virtual Dictionary<string, object> ExtraProperties { get; protected set; }
 
         [DisableAuditing]
-        public string ConcurrencyStamp { get; set; }
+        public virtual string ConcurrencyStamp { get; set; }
 
         private readonly ICollection<object> _localEvents = new Collection<object>();
         private readonly ICollection<object> _distributedEvents = new Collection<object>();
@@ -65,10 +65,10 @@ namespace Volo.Abp.Domain.Entities
         IHasExtraProperties,
         IHasConcurrencyStamp
     {
-        public Dictionary<string, object> ExtraProperties { get; protected set; }
+        public virtual Dictionary<string, object> ExtraProperties { get; protected set; }
 
         [DisableAuditing]
-        public string ConcurrencyStamp { get; set; }
+        public virtual string ConcurrencyStamp { get; set; }
 
         private readonly ICollection<object> _localEvents = new Collection<object>();
         private readonly ICollection<object> _distributedEvents = new Collection<object>();

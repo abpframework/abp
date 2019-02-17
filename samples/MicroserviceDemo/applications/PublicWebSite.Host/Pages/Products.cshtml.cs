@@ -1,12 +1,11 @@
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using MyCompanyName.ProductManagement;
 using ProductManagement;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 
 namespace PublicWebSite.Host.Pages
 {
-    public class ProductsModel : PageModel
+    public class ProductsModel : AbpPageModel
     {
         public ListResultDto<ProductDto> Products { get; set; }
 

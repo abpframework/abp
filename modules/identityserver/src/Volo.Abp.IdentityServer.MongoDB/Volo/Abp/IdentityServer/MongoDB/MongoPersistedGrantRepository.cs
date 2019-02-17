@@ -10,9 +10,9 @@ using Volo.Abp.MongoDB;
 
 namespace Volo.Abp.IdentityServer.MongoDB
 {
-    public class MongoPersistedGrantRepository : MongoDbRepository<IAbpIdentityServerMongoDbContext, PersistedGrant, Guid>, IPersistentGrantRepository
+    public class MongoPersistentGrantRepository : MongoDbRepository<IAbpIdentityServerMongoDbContext, PersistedGrant, Guid>, IPersistentGrantRepository
     {
-        public MongoPersistedGrantRepository(IMongoDbContextProvider<IAbpIdentityServerMongoDbContext> dbContextProvider) : base(dbContextProvider)
+        public MongoPersistentGrantRepository(IMongoDbContextProvider<IAbpIdentityServerMongoDbContext> dbContextProvider) : base(dbContextProvider)
         {
         }
 

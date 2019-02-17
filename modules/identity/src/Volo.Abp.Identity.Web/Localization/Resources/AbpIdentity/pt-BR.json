@@ -1,7 +1,7 @@
 {
   "culture": "pt-BR",
   "texts": {
-    "Menu:IdentityManagement": "Gerenciamento de Acessos",
+    "Menu:IdentityManagement": "Acessos",
     "Users": "Usuários",
     "NewUser": "Novo Usuário",
     "UserName": "Usuário",

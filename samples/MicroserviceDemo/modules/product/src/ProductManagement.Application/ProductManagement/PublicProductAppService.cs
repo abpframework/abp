@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using ProductManagement;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 
-namespace MyCompanyName.ProductManagement
+namespace ProductManagement
 {
     public class PublicProductAppService : ApplicationService, IPublicProductAppService
     {

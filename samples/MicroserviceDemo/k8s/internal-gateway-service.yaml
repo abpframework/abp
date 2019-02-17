@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    io.kompose.service: internal-gateway
+  name: internal-gateway
+spec:
+  ports:
+  - name: "65129"
+    port: 65129
+    targetPort: 80
+  selector:
+    io.kompose.service: internal-gateway
+status:
+  loadBalancer: {}

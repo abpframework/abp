@@ -10,6 +10,8 @@ namespace Volo.Abp.Auditing
     //TODO: Make serializable!
     public class AuditLogInfo : IMultiTenant, IHasExtraProperties
     {
+        public string ApplicationName { get; set; }
+
         public Guid? UserId { get; set; }
 
         public string UserName { get; set; }
@@ -23,6 +25,10 @@ namespace Volo.Abp.Auditing
         public DateTime ExecutionTime { get; set; }
 
         public int ExecutionDuration { get; set; }
+
+        public string ClientId { get; set; }
+
+        public string CorrelationId { get; set; }
 
         public string ClientIpAddress { get; set; }
 

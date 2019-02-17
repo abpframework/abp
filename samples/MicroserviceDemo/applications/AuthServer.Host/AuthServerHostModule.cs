@@ -1,9 +1,12 @@
 ﻿using AuthServer.Host.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.DependencyInjection;
+using StackExchange.Redis;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
+using Volo.Abp.Auditing;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.EventBus.RabbitMq;
@@ -60,12 +63,23 @@ namespace AuthServer.Host
             {
                 options.Configuration = configuration["Redis:Configuration"];
             });
+
+            Configure<AbpAuditingOptions>(options =>
+            {
+                options.IsEnabledForGetRequests = true;
+                options.ApplicationName = "AuthServer";
+            });
+
+            var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
+            context.Services.AddDataProtection()
+                .PersistKeysToStackExchangeRedis(redis, "MsDemo-DataProtection-Keys");
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             var app = context.GetApplicationBuilder();
 
+            app.UseCorrelationId();
             app.UseVirtualFiles();
             app.UseIdentityServer();
             app.UseAbpRequestLocalization();

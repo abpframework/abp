@@ -37,6 +37,12 @@ namespace Volo.Abp.Settings
         public bool IsVisibleToClients { get; set; }
 
         /// <summary>
+        /// A list of allowed providers to get/set value of this setting.
+        /// An empty list indicates that all providers are allowed.
+        /// </summary>
+        public List<string> Providers { get; }
+
+        /// <summary>
         /// Is this setting inherited from parent scopes.
         /// Default: True.
         /// </summary>
@@ -72,6 +78,31 @@ namespace Volo.Abp.Settings
             IsEncrypted = isEncrypted;
 
             Properties = new Dictionary<string, object>();
+            Providers = new List<string>();
+        }
+
+        /// <summary>
+        /// Sets a property in the <see cref="Properties"/> dictionary.
+        /// This is a shortcut for nested calls on this object.
+        /// </summary>
+        public virtual SettingDefinition WithProperty(string key, object value)
+        {
+            Properties[key] = value;
+            return this;
+        }
+
+        /// <summary>
+        /// Sets a property in the <see cref="Properties"/> dictionary.
+        /// This is a shortcut for nested calls on this object.
+        /// </summary>
+        public virtual SettingDefinition WithProviders(params string[] providers)
+        {
+            if (!providers.IsNullOrEmpty())
+            {
+                Providers.AddRange(providers);
+            }
+
+            return this;
         }
     }
 }

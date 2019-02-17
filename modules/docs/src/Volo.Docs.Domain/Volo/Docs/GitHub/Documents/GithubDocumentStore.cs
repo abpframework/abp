@@ -56,9 +56,10 @@ namespace Volo.Docs.GitHub.Documents
 
         public async Task<List<VersionInfo>> GetVersions(Project project)
         {
+            List<VersionInfo> versions;
             try
             {
-                return (await GetReleasesAsync(project))
+                versions = (await GetReleasesAsync(project))
                     .OrderByDescending(r => r.PublishedAt)
                     .Select(r => new VersionInfo
                     {
@@ -70,8 +71,15 @@ namespace Volo.Docs.GitHub.Documents
             {
                 //TODO: It may not be a good idea to hide the error!
                 Logger.LogError(ex.Message, ex);
-                return new List<VersionInfo>();
+                versions = new List<VersionInfo>();
             }
+
+            if (!versions.Any() && !string.IsNullOrEmpty(project.LatestVersionBranchName))
+            {
+                versions.Add(new VersionInfo { DisplayName = "1.0.0", Name = project.LatestVersionBranchName });
+            }
+
+            return versions;
         }
 
         public async Task<DocumentResource> GetResource(Project project, string resourceName, string version)

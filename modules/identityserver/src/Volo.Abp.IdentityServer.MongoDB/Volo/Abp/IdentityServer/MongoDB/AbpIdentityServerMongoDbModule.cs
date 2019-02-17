@@ -31,7 +31,7 @@ namespace Volo.Abp.IdentityServer.MongoDB
                 options.AddRepository<ApiResource, MongoApiResourceRepository>();
                 options.AddRepository<IdentityResource, MongoIdentityResourceRepository>();
                 options.AddRepository<Client, MongoClientRepository>();
-                options.AddRepository<PersistedGrant, MongoPersistedGrantRepository>();
+                options.AddRepository<PersistedGrant, MongoPersistentGrantRepository>();
             });
         }
     }

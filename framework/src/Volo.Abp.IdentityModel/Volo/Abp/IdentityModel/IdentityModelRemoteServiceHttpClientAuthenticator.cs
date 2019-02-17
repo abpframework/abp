@@ -15,7 +15,6 @@ namespace Volo.Abp.IdentityModel
     public class IdentityModelHttpClientAuthenticator : IIdentityModelHttpClientAuthenticator, ITransientDependency
     {
         public ILogger<IdentityModelHttpClientAuthenticator> Logger { get; set; }
-
         protected IdentityClientOptions ClientOptions { get; }
         
         public IdentityModelHttpClientAuthenticator(
@@ -84,6 +83,8 @@ namespace Volo.Abp.IdentityModel
 
         protected virtual async Task<TokenResponse> GetTokenResponse(DiscoveryResponse discoveryResponse, IdentityClientConfiguration configuration)
         {
+            //TODO: Pass cancellation token
+
             var tokenClient = new TokenClient(discoveryResponse.TokenEndpoint, configuration.ClientId, configuration.ClientSecret);
 
             switch (configuration.GrantType)

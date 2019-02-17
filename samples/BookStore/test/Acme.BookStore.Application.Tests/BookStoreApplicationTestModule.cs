@@ -26,8 +26,6 @@ namespace Acme.BookStore
             context.Services.AddAlwaysAllowAuthorization();
 
             ConfigureInMemorySqlite(context.Services);
-
-            context.Services.AddAssemblyOf<BookStoreApplicationTestModule>();
         }
 
         private void ConfigureInMemorySqlite(IServiceCollection services)

@@ -41,8 +41,6 @@ namespace Acme.BookStore
         {
             ConfigureLocalizationServices(context.Services);
             ConfigureNavigationServices(context.Services);
-
-            context.Services.AddAssemblyOf<BookStoreWebTestModule>();
         }
 
         private static void ConfigureLocalizationServices(IServiceCollection services)

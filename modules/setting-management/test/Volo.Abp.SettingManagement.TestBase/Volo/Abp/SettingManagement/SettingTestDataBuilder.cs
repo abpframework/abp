@@ -22,7 +22,7 @@ namespace Volo.Abp.SettingManagement
 
         public void Build()
         {
-            _settingRepository.InsertAsync(
+            _settingRepository.Insert(
                 new Setting(
                     _guidGenerator.Create(),
                     "MySetting1",
@@ -31,7 +31,7 @@ namespace Volo.Abp.SettingManagement
                 )
             );
 
-            _settingRepository.InsertAsync(
+            _settingRepository.Insert(
                 new Setting(
                     _guidGenerator.Create(),
                     "MySetting2",
@@ -40,7 +40,7 @@ namespace Volo.Abp.SettingManagement
                 )
             );
 
-            _settingRepository.InsertAsync(
+            _settingRepository.Insert(
                 new Setting(
                     _guidGenerator.Create(),
                     "MySetting2",
@@ -50,7 +50,7 @@ namespace Volo.Abp.SettingManagement
                 )
             );
 
-            _settingRepository.InsertAsync(
+            _settingRepository.Insert(
                 new Setting(
                     _guidGenerator.Create(),
                     "MySetting2",
@@ -60,7 +60,7 @@ namespace Volo.Abp.SettingManagement
                 )
             );
 
-            _settingRepository.InsertAsync(
+            _settingRepository.Insert(
                 new Setting(
                     _guidGenerator.Create(),
                     "MySettingWithoutInherit",
@@ -69,7 +69,7 @@ namespace Volo.Abp.SettingManagement
                 )
             );
 
-            _settingRepository.InsertAsync(
+            _settingRepository.Insert(
                 new Setting(
                     _guidGenerator.Create(),
                     "MySettingWithoutInherit",

@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
+using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 {
@@ -30,7 +31,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
         {
             var innerHtml = GetFormInputGroupAsHtml(context, output);
 
-            var order = GetInputOrder(TagHelper.AspFor.ModelExplorer);
+            var order = TagHelper.AspFor.ModelExplorer.GetDisplayOrder();
 
             AddGroupToFormGroupContents(context, TagHelper.AspFor.Name, SurroundInnerHtmlAndGet(context, output, innerHtml), order, out var surpress);
 
@@ -51,7 +52,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
         protected virtual string GetFormInputGroupAsHtml(TagHelperContext context, TagHelperOutput output)
         {
             var selectTag = GetSelectTag(context, output);
-            var selectAsHtml = RenderTagHelperOutput(selectTag, _encoder);
+            var selectAsHtml = selectTag.Render(_encoder);
             var label = GetLabelAsHtml(context, output, selectTag);
             var validation = GetValidationAsHtml(context, output, selectTag);
             var infoText = GetInfoAsHtml(context, output, selectTag);
@@ -73,7 +74,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 ViewContext = TagHelper.ViewContext
             };
 
-            var selectTagHelperOutput = GetInnerTagHelper(GetInputAttributes(context, output), context, selectTagHelper, "select", TagMode.StartTagAndEndTag);
+            var selectTagHelperOutput = selectTagHelper.ProcessAndGetOutput(GetInputAttributes(context, output), context, "select", TagMode.StartTagAndEndTag);
 
             selectTagHelperOutput.Attributes.AddClass("form-control");
             selectTagHelperOutput.Attributes.AddClass(GetSize(context, output));
@@ -85,7 +86,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         protected virtual void AddDisabledAttribute(TagHelperOutput inputTagHelperOutput)
         {
-            var disabledAttribute = GetAttribute<DisabledInput>(TagHelper.AspFor.ModelExplorer);
+            var disabledAttribute = TagHelper.AspFor.ModelExplorer.GetAttribute<DisabledInput>();
 
             if (disabledAttribute != null && !inputTagHelperOutput.Attributes.ContainsName("disabled"))
             {
@@ -105,7 +106,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 return GetSelectItemsFromEnum(context, output, TagHelper.AspFor.ModelExplorer);
             }
 
-            var selectItemsAttribute = GetAttribute<SelectItems>(TagHelper.AspFor.ModelExplorer);
+            var selectItemsAttribute = TagHelper.AspFor.ModelExplorer.GetAttribute<SelectItems>();
             if (selectItemsAttribute != null)
             {
                 return GetSelectItemsFromAttribute(selectItemsAttribute, TagHelper.AspFor.ModelExplorer);
@@ -132,12 +133,12 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 return "";
             }
 
-            return GetAttribute<RequiredAttribute>(TagHelper.AspFor.ModelExplorer) != null ? "<span> * </span>" : "";
+            return TagHelper.AspFor.ModelExplorer.GetAttribute<RequiredAttribute>() != null ? "<span> * </span>" : "";
         }
 
         protected virtual void AddInfoTextId(TagHelperOutput inputTagHelperOutput)
         {
-            if (GetAttribute<InputInfoText>(TagHelper.AspFor.ModelExplorer) == null)
+            if (TagHelper.AspFor.ModelExplorer.GetAttribute<InputInfoText>() == null)
             {
                 return;
             }
@@ -164,7 +165,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             }
             else
             {
-                var infoAttribute = GetAttribute<InputInfoText>(TagHelper.AspFor.ModelExplorer);
+                var infoAttribute = TagHelper.AspFor.ModelExplorer.GetAttribute<InputInfoText>();
                 if (infoAttribute != null)
                 {
                     text = infoAttribute.Text;
@@ -227,7 +228,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 ViewContext = TagHelper.ViewContext
             };
 
-            return RenderTagHelper(new TagHelperAttributeList(), context, labelTagHelper, _encoder, "label", TagMode.StartTagAndEndTag, true);
+            return labelTagHelper.Render(new TagHelperAttributeList(), context, _encoder, "label", TagMode.StartTagAndEndTag, true);
         }
 
         protected virtual string GetValidationAsHtml(TagHelperContext context, TagHelperOutput output, TagHelperOutput inputTag)
@@ -240,12 +241,12 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
             var attributeList = new TagHelperAttributeList { { "class", "text-danger" } };
 
-            return RenderTagHelper(attributeList, context, validationMessageTagHelper, _encoder, "span", TagMode.StartTagAndEndTag, true);
+            return validationMessageTagHelper.Render(attributeList, context, _encoder, "span", TagMode.StartTagAndEndTag, true);
         }
 
         protected virtual string GetSize(TagHelperContext context, TagHelperOutput output)
         {
-            var attribute = GetAttribute<FormControlSize>(TagHelper.AspFor.ModelExplorer);
+            var attribute = TagHelper.AspFor.ModelExplorer.GetAttribute<FormControlSize>();
 
             if (attribute != null)
             {
@@ -255,11 +256,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             switch (TagHelper.Size)
             {
                 case AbpFormControlSize.Small:
-                    return "form-control-sm";
+                    return "custom-select-sm";
                 case AbpFormControlSize.Medium:
-                    return "form-control-md";
+                    return "custom-select-md";
                 case AbpFormControlSize.Large:
-                    return "form-control-lg";
+                    return "custom-select-lg";
             }
 
             return "";
@@ -277,6 +278,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 attrList.Add(tagHelperAttribute);
             }
 
+            attrList.AddClass("custom-select");
+
             return attrList;
         }
 
@@ -292,6 +295,28 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 var nameWithoutPrefix = tagHelperAttribute.Name.Substring(groupPrefix.Length);
                 var newAttritube = new TagHelperAttribute(nameWithoutPrefix, tagHelperAttribute.Value);
                 output.Attributes.Add(newAttritube);
+            }
+        }
+
+        protected virtual string GetIdAttributeAsString(TagHelperOutput inputTag)
+        {
+            var idAttr = inputTag.Attributes.FirstOrDefault(a => a.Name == "id");
+
+            return idAttr != null ? "for=\"" + idAttr.Value + "\"" : "";
+        }
+
+        protected virtual void AddGroupToFormGroupContents(TagHelperContext context, string propertyName, string html, int order, out bool surpress)
+        {
+            var list = context.GetValue<List<FormGroupItem>>(FormGroupContents) ?? new List<FormGroupItem>();
+            surpress = list == null;
+
+            if (list != null && !list.Any(igc => igc.HtmlContent.Contains("id=\"" + propertyName.Replace('.', '_') + "\"")))
+            {
+                list.Add(new FormGroupItem
+                {
+                    HtmlContent = html,
+                    Order = order
+                });
             }
         }
     }

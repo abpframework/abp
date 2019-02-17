@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    io.kompose.service: backend-admin-app
+  name: backend-admin-app
+spec:
+  ports:
+  - name: "3000"
+    port: 3000
+    targetPort: 80
+  selector:
+    io.kompose.service: backend-admin-app
+status:
+  loadBalancer: {}

@@ -28,6 +28,7 @@ namespace Volo.Abp.Authorization
             {
                 options.ValueProviders.Add<UserPermissionValueProvider>();
                 options.ValueProviders.Add<RolePermissionValueProvider>();
+                options.ValueProviders.Add<ClientPermissionValueProvider>();
             });
         }
     }

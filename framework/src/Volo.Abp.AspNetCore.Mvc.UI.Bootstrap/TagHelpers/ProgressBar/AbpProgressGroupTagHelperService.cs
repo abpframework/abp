@@ -10,6 +10,5 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.ProgressBar
             output.Attributes.AddClass("progress");
             output.TagName = "div";
         }
-        
     }
 }

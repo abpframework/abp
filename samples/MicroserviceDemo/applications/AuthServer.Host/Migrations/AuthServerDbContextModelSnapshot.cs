@@ -24,9 +24,17 @@ namespace AuthServer.Host.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("ApplicationName")
+                        .HasColumnName("ApplicationName")
+                        .HasMaxLength(96);
+
                     b.Property<string>("BrowserInfo")
                         .HasColumnName("BrowserInfo")
                         .HasMaxLength(512);
+
+                    b.Property<string>("ClientId")
+                        .HasColumnName("ClientId")
+                        .HasMaxLength(64);
 
                     b.Property<string>("ClientIpAddress")
                         .HasColumnName("ClientIpAddress")
@@ -41,6 +49,10 @@ namespace AuthServer.Host.Migrations
                         .HasMaxLength(256);
 
                     b.Property<string>("ConcurrencyStamp");
+
+                    b.Property<string>("CorrelationId")
+                        .HasColumnName("CorrelationId")
+                        .HasMaxLength(64);
 
                     b.Property<string>("Exceptions")
                         .HasColumnName("Exceptions")
@@ -753,7 +765,7 @@ namespace AuthServer.Host.Migrations
                     b.Property<Guid>("ClientId");
 
                     b.Property<string>("PostLogoutRedirectUri")
-                        .HasMaxLength(2000);
+                        .HasMaxLength(200);
 
                     b.HasKey("ClientId", "PostLogoutRedirectUri");
 

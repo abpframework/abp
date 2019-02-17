@@ -24,15 +24,13 @@ namespace Volo.Blogging.Posts
 
         private readonly IPostRepository _postRepository;
         private readonly ITagRepository _tagRepository;
-        private readonly IPostTagRepository _postTagRepository;
         private readonly ICommentRepository _commentRepository;
 
-        public PostAppService(IPostRepository postRepository, ITagRepository tagRepository, IPostTagRepository postTagRepository, ICommentRepository commentRepository, IBlogUserLookupService userLookupService)
+        public PostAppService(IPostRepository postRepository, ITagRepository tagRepository, ICommentRepository commentRepository, IBlogUserLookupService userLookupService)
         {
             UserLookupService = userLookupService;
             _postRepository = postRepository;
             _tagRepository = tagRepository;
-            _postTagRepository = postTagRepository;
             _commentRepository = commentRepository;
         }
 
@@ -62,20 +60,19 @@ namespace Volo.Blogging.Posts
             {
                 if (postDto.CreatorId.HasValue)
                 {
-                    var creatorUser = await UserLookupService.FindByIdAsync(postDto.CreatorId.Value);
-
-                    if (creatorUser != null && !userDictionary.ContainsKey(creatorUser.Id))
+                    if (!userDictionary.ContainsKey(postDto.CreatorId.Value))
                     {
-                        userDictionary.Add(creatorUser.Id, ObjectMapper.Map<BlogUser, BlogUserDto>(creatorUser));
+                        var creatorUser = await UserLookupService.FindByIdAsync(postDto.CreatorId.Value);
+                        if (creatorUser != null)
+                        {
+                            userDictionary[creatorUser.Id] = ObjectMapper.Map<BlogUser, BlogUserDto>(creatorUser);
+                        }
                     }
-                }
-            }
 
-            foreach (var postDto in postDtos)
-            {
-                if (postDto.CreatorId.HasValue && userDictionary.ContainsKey((Guid)postDto.CreatorId))
-                {
-                    postDto.Writer = userDictionary[(Guid)postDto.CreatorId];
+                    if (userDictionary.ContainsKey(postDto.CreatorId.Value))
+                    {
+                        postDto.Writer = userDictionary[(Guid)postDto.CreatorId];
+                    }
                 }
             }
 
@@ -85,10 +82,11 @@ namespace Volo.Blogging.Posts
         private async Task<List<PostWithDetailsDto>> FilterPostsByTag(List<PostWithDetailsDto> allPostDtos, Tag tag)
         {
             var filteredPostDtos = new List<PostWithDetailsDto>();
+            var posts = await _postRepository.GetListAsync();
 
             foreach (var postDto in allPostDtos)
             {
-                if (await _postTagRepository.FindByTagIdAndPostIdAsync(postDto.Id, tag.Id) == null)
+                if (!postDto.Tags.Any(p=> p.Id == tag.Id))
                 {
                     continue;
                 }
@@ -145,7 +143,6 @@ namespace Volo.Blogging.Posts
 
             var tags = await GetTagsOfPost(id);
             _tagRepository.DecreaseUsageCountOfTags(tags.Select(t => t.Id).ToList());
-            _postTagRepository.DeleteOfPost(id);
             await _commentRepository.DeleteOfPost(id);
 
             await _postRepository.DeleteAsync(id);
@@ -210,7 +207,6 @@ namespace Volo.Blogging.Posts
 
         private async Task SaveTags(List<String> newTags, Post post)
         {
-
             await RemoveOldTags(newTags, post);
 
             await AddNewTags(newTags, post);
@@ -218,9 +214,7 @@ namespace Volo.Blogging.Posts
 
         private async Task RemoveOldTags(List<string> newTags, Post post)
         {
-            var oldTags = (await _postTagRepository.GetListAsync()).Where(pt => pt.PostId == post.Id).ToList();
-
-            foreach (var oldTag in oldTags)
+            foreach (var oldTag in post.Tags)
             {
                 var tag = await _tagRepository.GetAsync(oldTag.TagId);
 
@@ -228,7 +222,7 @@ namespace Volo.Blogging.Posts
 
                 if (oldTagNameInNewTags == null)
                 {
-                    await _postTagRepository.DeleteAsync(oldTag);
+                    post.RemoveTag(oldTag.TagId);
 
                     tag.DecreaseUsageCount();
                     await _tagRepository.UpdateAsync(tag);
@@ -256,15 +250,14 @@ namespace Volo.Blogging.Posts
                 {
                     tag.IncreaseUsageCount();
                     tag = await _tagRepository.UpdateAsync(tag);
+                    post.AddTag(tag.Id);
                 }
-
-                await _postTagRepository.InsertAsync(new PostTag(post.Id, tag.Id));
             }
         }
 
         private async Task<List<TagDto>> GetTagsOfPost(Guid id)
         {
-            var tagIds = (await _postTagRepository.GetListAsync()).Where(pt => pt.PostId == id);
+            var tagIds = (await _postRepository.GetAsync(id)).Tags;
 
             var tags = await _tagRepository.GetListAsync(tagIds.Select(t => t.TagId));
 

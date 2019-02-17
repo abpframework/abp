@@ -45,7 +45,7 @@ namespace Volo.Abp.Application.Services
 
         public ICurrentUser CurrentUser { get; set; }
 
-        public ISettingManager SettingManager { get; set; }
+        public ISettingProvider SettingProvider { get; set; }
 
         public IClock Clock { get; set; }
 
