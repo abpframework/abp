@@ -220,6 +220,7 @@ These pages are not included in the project itself. Instead, AuthServer project 
 
 * **RabbitMQ** for messaging to other services.
 * **Redis** for distributed/shared caching.
+* **Elasticsearch** for storing logs.
 
 ### Backend Admin Application (BackendAdminApp.Host)
 
@@ -316,7 +317,104 @@ Once you refer these client packages, you can directly inject an application ser
 
 Since microservices requires authentication & authorization, each remote service call should contain an Authentication header. This header is obtained from the `access_token` inside the current `HttpContext` for the current user. This is automatically done when you use the `Volo.Abp.Http.Client.IdentityModel` package. `BackendAdminAppHostModule` declares dependencies to this package and to the related `AbpHttpClientIdentityModelModule` class. It is integrated to the HTTP Clients explained above.
 
+#### Other Dependencies
+
+- **Redis** for distributed/shared caching.
+- **Elasticsearch** for storing logs.
+
 ### Public Web Site (PublicWebSite.Host)
+
+This is a public web site project that has a web blog and product list page.
+
+#### Authentication
+
+PublicWebSite can show blog posts and product list without login. If you login, you can also manage blogs. It redirects to the AuthServer for authentication. Once the user enters a correct username & password, the page is redirected to the public web site application again. Authentication configuration is setup in the `PublicWebSiteHostModule` class:
+
+```charp
+context.Services.AddAuthentication(options =>
+{
+    options.DefaultScheme = "Cookies";
+    options.DefaultChallengeScheme = "oidc";
+})
+.AddCookie("Cookies", options =>
+{
+    options.Cookie.Expiration = TimeSpan.FromDays(365);
+    options.ExpireTimeSpan = TimeSpan.FromDays(365);
+})
+.AddOpenIdConnect("oidc", options =>
+{
+    options.Authority = configuration["AuthServer:Authority"];
+    options.ClientId = configuration["AuthServer:ClientId"];
+    options.ClientSecret = configuration["AuthServer:ClientSecret"];
+    options.RequireHttpsMetadata = false;
+    options.ResponseType = OpenIdConnectResponseType.CodeIdToken;
+    options.SaveTokens = true;
+    options.GetClaimsFromUserInfoEndpoint = true;
+    options.Scope.Add("role");
+    options.Scope.Add("email");
+    options.Scope.Add("phone");
+    options.Scope.Add("PublicWebSiteGateway");
+    options.Scope.Add("ProductService");
+    options.Scope.Add("BloggingService");
+    options.ClaimActions.MapAbpClaimTypes();
+});
+```
+
+- It adds "Cookies" authentication as the primary authentication type.
+- "oidc" authentication is configured to use the AuthServer application as the authentication server.
+- It requires the additional identity scopes *role*, *email* and *phone*.
+- It requires the API resource scopes *PublicWebSiteGateway*, *BloggingService* and *ProductService* because it will use these services as APIs.
+
+IdentityServer client settings are stored inside the `appsettings.json` file:
+
+```json
+"AuthServer": {
+  "Authority": "http://localhost:64999",
+  "ClientId": "public-website-client",
+  "ClientSecret": "1q2w3e*"
+}
+```
+
+#### User Interface
+
+The PublicWebSite.Host project has a page to list products (`Pages/Products.cshtml`). It also uses the UI from the blogging module. `PublicWebSiteHostModule` adds dependencies to `BloggingWebModule` (*[Volo.Blogging.Web](https://www.nuget.org/packages/Volo.Blogging.Web)* package) for that purpose.
+
+A screenshot from the Products page:
+
+![microservice-sample-public-product-list](../images/microservice-sample-public-product-list.png)
+
+#### Using Microservices
+
+Publc web site application uses the Blogging and Product microservices for all operations, over the Public  Web Site Gateway (PublicWebSiteGateway.Host).
+
+##### Remote End Point
+
+`appsettings.json` file contains the `RemoteServices` section to declare the remote service endpoint(s). Each microservice will normally have different endpoints. However, this solution uses the API Gateway pattern to provide a single endpoint for the applications:
+
+```json
+"RemoteServices": {
+  "Default": {
+    "BaseUrl": "http://localhost:64897/"
+  }
+}
+```
+
+`http://localhost:64897/` is the URL of the *PublicWebSiteGateway.Host* project. It knows where are Blogging and Product services are located.
+
+##### HTTP Clients
+
+`PublicWebSiteHostModule` class declares dependencies for `BloggingHttpApiClientModule` and `ProductManagementHttpApiClientModule` to be able to use remote HTTP APIs for these services.
+
+##### Passing the Access Token
+
+Just like explained in the Backend Admin Application section, Public Web Site project also uses the `AbpHttpClientIdentityModelModule` to pass `access_token` to the calling services for authentication.
+
+#### Other Dependencies
+
+- **Redis** for distributed/shared caching.
+- **Elasticsearch** for storing logs.
+
+### Console Client Demo
 
 TODO
 
