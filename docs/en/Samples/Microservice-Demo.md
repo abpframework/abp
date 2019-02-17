@@ -34,7 +34,7 @@ You can get the source code from [the GitHub repository](https://github.com/abpf
 
 This sample is still in development, not completed yet.
 
-## How To Run?
+## Running the Solution
 
 You can either run from the **source code** or from the pre-configured **docker-compose** file.
 
@@ -124,21 +124,22 @@ Run the projects with the following order (right click to each project, set as s
 * BackendAdminApp.Host
 * PublicWebSite.Host
 
-## Exploring the Solution
+## A Brief Overview of the Solution
 
 The Visual Studio solution consists of multiple projects each have different roles in the system:
 
 ![microservice-sample-solution](../images/microservice-sample-solution.png)
 
-#### Microservices
+### Applications
 
-Microservices have no UI, but exposes some REST APIs.
+These are the actual applications those have user interfaces to interact to the users and use the system.
 
-* **IdentityService.Host**: Host the ABP Identity module which is used to manage users & roles. It has no additional service, but only hosts the Identity module's API.
-* **BloggingService.Host**: Host the ABP Blogging module which is used to manage blog & posts (a typical blog application). It has no additional service, but only hosts the Blogging module's API.
-* **ProductService.Host**: Hosts the Product module (that is inside the solution) which is used to manage products. It also contains the EF Core migrations to create/update the Product Management database schema.
+- **AuthServer.Host**: Host the IdentityServer4 to provide an authentication service to other services and applications. It is a single-sign server and contains the login page.
+- **BackendAdminApp.Host**: This is a backend admin application that host UI for Identity and Product management modules.
+- **PubicWebSite.Host**: As public web site that contains a simple product list page and blog module UI.
+- **ConsoleClientDemo**: A simple console application to demonstrate the usage of services from a C# application.
 
-#### Gateways / BFFs (Backend for Frontend)
+### Gateways / BFFs (Backend for Frontend)
 
 Gateways are used to provide a single entry point to the applications. It can also used for rate limiting, load balancing... etc. Used the [Ocelot](https://github.com/ThreeMammals/Ocelot) library.
 
@@ -146,28 +147,98 @@ Gateways are used to provide a single entry point to the applications. It can al
 * **PublicWebSiteGateway.Host**: Used by the PublicWebSite.Host application as backend.
 * **InternalGateway.Host**: Used for inter-service communication (the communication between microservices).
 
-#### Applications
+### Microservices
 
-These are the actual applications those have user interfaces to interact to the users.
+Microservices have no UI, but exposes some REST APIs.
 
-* **AuthServer.Host**: Host the IdentityServer4 to provide an authentication service to other services and applications. It is a single-sign on server and contains the login page.
-* **BackendAdminApp.Host**: This is a backend admin application that host UI for Identity and Product management modules.
-* **PubicWebSite.Host**: As public web site that contains a simple product list page and blog module UI.
-* **ConsoleClientDemo**: A simple console application to demonstrate the usage of services from a C# application.
+- **IdentityService.Host**: Host the ABP Identity module which is used to manage users & roles. It has no additional service, but only hosts the Identity module's API.
+- **BloggingService.Host**: Host the ABP Blogging module which is used to manage blog & posts (a typical blog application). It has no additional service, but only hosts the Blogging module's API.
+- **ProductService.Host**: Hosts the Product module (that is inside the solution) which is used to manage products. It also contains the EF Core migrations to create/update the Product Management database schema.
 
-#### Modules
+### Modules
 
 * **Product**: A layered module that is developed with the [module development best practices](../Best-Practices/Index.md). It can be embedded into a monolithic application or can be hosted as a microservice by separately deploying API and UI (as done in this demo solution).
 
-#### Databases
+### Databases
 
 This solution is using multiple databases:
 
 * **MsDemo_Identity**: An SQL database. Used **SQL Server** by default, but can be any DBMS supported by the EF Core. Shared by AuthServer and IdentityService. Also audit logs, permissions and settings are stored in this database (while they could easily have their own databases, shared the same database to keep it simple).
-* **MsDemo_Productmanagement**: An SQL database. Again, used **SQL Server** by default, but can be any DBMS supported by the EF Core. Used by the ProductService as a dedicated database.
+* **MsDemo_ProductManagement**: An SQL database. Again, used **SQL Server** by default, but can be any DBMS supported by the EF Core. Used by the ProductService as a dedicated database.
 * **MsDemo_Blogging**: A **MongoDB** database. Used by the BloggingService.
 * **Elasticsearch**: Used to write logs over Serilog.
 
+## Applications
+
+### Authentication Server (AuthServer.Host)
+
+This project is used by all other services and applications for authentication & single sign on. Mainly, uses **IdentityServer4** to provide these services. It uses some of the [pre-build ABP modules](../Modules/Index) like *Identity*, *Audit Logging* and *Permission Management*.
+
+#### Database & EF Core Configuration
+
+This application uses a SQL database (named it as **MsDemo_Identity**) and maintains its schema via **Entity Framework Core migrations.**
+
+It has a DbContext named **AuthServerDbContext** and defined as shown below:
+
+````csharp
+public class AuthServerDbContext : AbpDbContext<AuthServerDbContext>
+{
+    public AuthServerDbContext(DbContextOptions<AuthServerDbContext> options) 
+        : base(options)
+    {
+
+    }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+        modelBuilder.ConfigureIdentity();
+        modelBuilder.ConfigureIdentityServer();
+        modelBuilder.ConfigureAuditLogging();
+        modelBuilder.ConfigurePermissionManagement();
+        modelBuilder.ConfigureSettingManagement();
+    }
+}
+````
+
+In the **OnModelCreating**, you see **ConfigureX()** method calls. A module with a database schema generally declares such an extension method to configure EF Core mappings for its own entities. This is a flexible approach where you can arrange your databases and modules inside them; You can use a different database for each module, or combine some of them in a shared database. In the AuthServer project, we decided to combine multiple module schemas in a single EF Core DbContext, in a single physical database. These modules are Identity, IdentityServer, AuditLogging, PermissionManagement and SettingManagement modules.
+
+#### User Interface
+
+AuthServer has a simple home page that shows the current user info if the current user has logged in:
+
+![microservice-sample-authserver-home](../images/microservice-sample-authserver-home.png)
+
+It also provides Login & Register pages:
+
+![microservice-sample-authserver-login](../images/microservice-sample-authserver-login.png)
+
+These pages are not included in the project itself. Instead, AuthServer project uses the prebuilt ABP [account module](https://github.com/abpframework/abp/tree/master/modules/account) with IdentityServer extension. That means it can also act as an OpenId Connect server with necessary UI and logic.
+
+#### Other Dependencies
+
+* **RabbitMQ** for messaging to other services.
+* **Redis** for distributed/shared caching.
+
+### Backend Admin Application (BackendAdminApp.Host)
+
+TODO
+
+## Microservices
+
 ### Identity Service
 
-TODO...
+TODO
+
+## Infrastructure
+
+TODO
+
+### Messaging
+
+### Caching
+
+### Logging
+
+### Correlation Id
