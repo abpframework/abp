@@ -416,7 +416,65 @@ Just like explained in the Backend Admin Application section, Public Web Site pr
 
 ### Console Client Demo
 
-TODO
+Finally, the solution includes a very simple console application, named ConsoleClientDemo, that uses Identity and Product services by authenticating through the AuthServer. It uses the Internal Gateway (InternalGateway.Host) to perform HTTP API calls.
+
+#### Remote Service Configuration
+
+`RemoteService` configuration in the `appsettings.json` file is simple:
+
+````json
+"RemoteServices": {
+  "Default": {
+    "BaseUrl": "http://localhost:65129/"
+  }
+}
+````
+
+`http://localhost:65129/` is the URL of the Internal Gateway. All API calls to the services are performed over this URL.
+
+#### Authentication (IdentityServer Client) Configuration
+
+`appsettings.json` also has a configuration for the IdentityServer authentication:
+
+````json
+"IdentityClients": {
+  "Default": {
+    "GrantType": "client_credentials",
+    "ClientId": "console-client-demo",
+    "ClientSecret": "1q2w3e*",
+    "Authority": "http://localhost:64999",
+    "Scope": "InternalGateway IdentityService ProductService"
+  }
+}
+````
+
+This sample uses the `client_credentials` grant type which requires a `ClientId` and `ClientSecret` for the authentication process. There are also [other grant types](http://docs.identityserver.io/en/latest/topics/grant_types.html). For example, you can use the following configuration to swith to the `password` (Resource Owner Password) grant type:
+
+````json
+"IdentityClients": {
+  "Default": {
+    "GrantType": "password",
+    "ClientId": "console-client-demo",
+    "ClientSecret": "1q2w3e*",
+    "UserName": "admin",
+    "UserPassword": "1q2w3E*",
+    "Authority": "http://localhost:64999",
+    "Scope": "InternalGateway IdentityService ProductService"
+  }
+}
+````
+
+Resource Owner Password requires a `UserName` & `UserPassword` in addition to client credentials. This grant type is useful to call remote services on behalf of a user.
+
+`Scope` declares the APIs (and the gateway) to grant access.
+
+#### HTTP Client Dependencies
+
+`ConsoleClientDemoModule` has dependencies to `AbpIdentityHttpApiClientModule` and `ProductManagementHttpApiClientModule` in order to use Identity and Product APIs. It also has `AbpHttpClientIdentityModelModule` dependency to authenticate via IdentityServer.
+
+#### Using the Services
+
+Using the services is straightforward. See the `ClientDemoService` class which simply injects `IIdentityUserAppService` and `IProductAppService` and uses them. This class also shows a manual HTTP call using an `HttpClient` object. See source code of the `ClientDemoService` for details.
 
 ## Microservices
 
