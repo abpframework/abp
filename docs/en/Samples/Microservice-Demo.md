@@ -223,6 +223,101 @@ These pages are not included in the project itself. Instead, AuthServer project 
 
 ### Backend Admin Application (BackendAdminApp.Host)
 
+This is a web application that is used to manage users, roles, permissions and products in the system.
+
+#### Authentication
+
+BackendAdminApp redirects to the AuthServer for authentication. Once the user enters a correct username & password, the page is redirected to the backend application again. Authentication configuration is setup in the `BackendAdminAppHostModule` class:
+
+````charp
+context.Services.AddAuthentication(options =>
+{
+    options.DefaultScheme = "Cookies";
+    options.DefaultChallengeScheme = "oidc";
+})
+.AddCookie("Cookies", options =>
+{
+    options.Cookie.Expiration = TimeSpan.FromDays(365);
+    options.ExpireTimeSpan = TimeSpan.FromDays(365);
+})
+.AddOpenIdConnect("oidc", options =>
+{
+    options.Authority = configuration["AuthServer:Authority"];
+    options.ClientId = configuration["AuthServer:ClientId"];
+    options.ClientSecret = configuration["AuthServer:ClientSecret"];
+    options.RequireHttpsMetadata = false;
+    options.ResponseType = OpenIdConnectResponseType.CodeIdToken;
+    options.SaveTokens = true;
+    options.GetClaimsFromUserInfoEndpoint = true;
+    options.Scope.Add("role");
+    options.Scope.Add("email");
+    options.Scope.Add("phone");
+    options.Scope.Add("BackendAdminAppGateway");
+    options.Scope.Add("IdentityService");
+    options.Scope.Add("ProductService");
+    options.ClaimActions.MapAbpClaimTypes();
+});
+````
+
+* It adds "Cookies" authentication as the primary authentication type.
+* "oidc" authentication is configured to use the AuthServer application as the authentication server.
+* It requires the additional identity scopes *role*, *email* and *phone*.
+* It requires the API resource scopes *BackendAdminAppGateway*, *IdentityService* and *ProductService* because it will use these services as APIs.
+
+IdentityServer client settings are stored inside the `appsettings.json` file:
+
+````json
+"AuthServer": {
+  "Authority": "http://localhost:64999",
+  "ClientId": "backend-admin-app-client",
+  "ClientSecret": "1q2w3e*"
+}
+````
+
+#### User Interface
+
+The BackendAdminApp.Host project itself has not a single UI element/page. It is only used to serve UI pages of the Identity and Product Management modules. `BackendAdminAppHostModule` adds dependencies to `AbpIdentityWebModule` (*[Volo.Abp.Identity.Web](https://www.nuget.org/packages/Volo.Abp.Identity.Web)* package) and `ProductManagementWebModule` (*ProductManagement.Web* project) for that purpose.
+
+A screenshot from the user management page:
+
+![microservice-sample-backend-ui](../images/microservice-sample-backend-ui.png)
+
+A screenshot from the permission management modal for a role:
+
+![microservice-sample-backend-ui-permissions](../images/microservice-sample-backend-ui-permissions.png)
+
+#### Using Microservices
+
+Backend admin application uses the Identity and Product microservices for all operations, over the Backend Admin Gateway (BackendAdminAppGateway.Host).
+
+##### Remote End Point
+
+`appsettings.json` file contains the `RemoteServices` section to declare the remote service endpoint(s). Each microservice will normally have different endpoints. However, this solution uses the API Gateway pattern to provide a single endpoint for the applications:
+
+````json
+"RemoteServices": {
+  "Default": {
+    "BaseUrl": "http://localhost:65115/"
+  }
+}
+````
+
+`http://localhost:65115/` is the URL of the *BackendAdminAppGateway.Host* project. It knows where are Identity and Product services are located.
+
+##### HTTP Clients
+
+ABP application modules generally provides C# client libraries to consume services (APIs) easily (they generally uses the [Dynamic C# API Clients](../AspNetCore/Dynamic-CSharp-API-Clients.md) feature of the ABP framework). That means if you need to consume Identity service API, you can reference to its client package and easily use the APIs by provided interfaces.
+
+For that purpose, `BackendAdminAppHostModule` class declares dependencies for `AbpIdentityHttpApiClientModule` and `ProductManagementHttpApiClientModule`.
+
+Once you refer these client packages, you can directly inject an application service interface (e.g. `IIdentityUserAppService`) and use its methods like a local method call. It actually invokes remote service calls over HTTP to the related service endpoint.
+
+##### Passing the Access Token
+
+Since microservices requires authentication & authorization, each remote service call should contain an Authentication header. This header is obtained from the `access_token` inside the current `HttpContext` for the current user. This is automatically done when you use the `Volo.Abp.Http.Client.IdentityModel` package. `BackendAdminAppHostModule` declares dependencies to this package and to the related `AbpHttpClientIdentityModelModule` class. It is integrated to the HTTP Clients explained above.
+
+### Public Web Site (PublicWebSite.Host)
+
 TODO
 
 ## Microservices
