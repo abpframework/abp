@@ -29,6 +29,7 @@ namespace Volo.Docs.GitHub.Documents
             var rawRootUrl = CalculateRawRootUrl(rootUrl);
             var rawDocumentUrl = rawRootUrl + documentName;
             var commitHistoryUrl = project.GetGitHubUrlForCommitHistory() + documentName;
+            var userAgent = project.GetGithubUserAgentOrNull();
             var isNavigationDocument = documentName == project.NavigationDocumentName;
             var editLink = rootUrl.ReplaceFirst("/tree/", "/blob/") + documentName;
             var localDirectory = "";
@@ -49,9 +50,9 @@ namespace Volo.Docs.GitHub.Documents
                 Format = project.Format,
                 LocalDirectory = localDirectory,
                 FileName = fileName,
-                Contributors = !isNavigationDocument ? await GetContributors(commitHistoryUrl, token): new List<DocumentContributor>(),
+                Contributors = !isNavigationDocument ? await GetContributors(commitHistoryUrl, token, userAgent): new List<DocumentContributor>(),
                 Version = version,
-                Content = await DownloadWebContentAsStringAsync(rawDocumentUrl, token)
+                Content = await DownloadWebContentAsStringAsync(rawDocumentUrl, token, userAgent)
             };
         }
 
@@ -88,7 +89,8 @@ namespace Volo.Docs.GitHub.Documents
             var rawRootUrl = CalculateRawRootUrl(project.GetGitHubUrl(version));
             var content = await DownloadWebContentAsByteArrayAsync(
                 rawRootUrl + resourceName,
-                project.GetGitHubAccessTokenOrNull()
+                project.GetGitHubAccessTokenOrNull(),
+                project.GetGithubUserAgentOrNull()
             );
 
             return new DocumentResource(content);
@@ -142,7 +144,7 @@ namespace Volo.Docs.GitHub.Documents
             }
         }
 
-        private async Task<string> DownloadWebContentAsStringAsync(string rawUrl, string token)
+        private async Task<string> DownloadWebContentAsStringAsync(string rawUrl, string token, string userAgent)
         {
             try
             {
@@ -152,7 +154,7 @@ namespace Volo.Docs.GitHub.Documents
                     {
                         webClient.Headers.Add("Authorization", "token " + token);
                     }
-                    webClient.Headers.Add("User-Agent", "request");
+                    webClient.Headers.Add("User-Agent", userAgent ?? "");
 
                     return await webClient.DownloadStringTaskAsync(new Uri(rawUrl));
                 }
@@ -165,7 +167,7 @@ namespace Volo.Docs.GitHub.Documents
             }
         }
 
-        private async Task<byte[]> DownloadWebContentAsByteArrayAsync(string rawUrl, string token)
+        private async Task<byte[]> DownloadWebContentAsByteArrayAsync(string rawUrl, string token, string userAgent)
         {
             try
             {
@@ -175,6 +177,7 @@ namespace Volo.Docs.GitHub.Documents
                     {
                         webClient.Headers.Add("Authorization", "token " + token);
                     }
+                    webClient.Headers.Add("User-Agent", userAgent ?? "");
 
                     return await webClient.DownloadDataTaskAsync(new Uri(rawUrl));
                 }
@@ -187,13 +190,13 @@ namespace Volo.Docs.GitHub.Documents
             }
         }
 
-        private async Task<List<DocumentContributor>> GetContributors(string url, string token)
+        private async Task<List<DocumentContributor>> GetContributors(string url, string token, string userAgent)
         {
             var contributors = new List<DocumentContributor>();
 
             try
             {
-                var commitsJsonAsString = await DownloadWebContentAsStringAsync(url, token);
+                var commitsJsonAsString = await DownloadWebContentAsStringAsync(url, token, userAgent);
 
                 var commits = JArray.Parse(commitsJsonAsString);
 

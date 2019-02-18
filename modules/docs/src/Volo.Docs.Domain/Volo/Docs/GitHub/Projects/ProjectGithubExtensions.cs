@@ -41,6 +41,12 @@ namespace Volo.Docs.GitHub.Projects
             return project.ExtraProperties["GitHubAccessToken"] as string;
         }
 
+        public static string GetGithubUserAgentOrNull([NotNull] this Project project)
+        {
+            CheckGitHubProject(project);
+            return project.ExtraProperties["GitHubUserAgent"] as string;
+        }
+
         public static void SetGitHubAccessToken([NotNull] this Project project, string value)
         {
             CheckGitHubProject(project);
