@@ -164,6 +164,7 @@ $projects = (
     "modules/blogging/src/Volo.Blogging.Domain",
     "modules/blogging/src/Volo.Blogging.Domain.Shared",
     "modules/blogging/src/Volo.Blogging.EntityFrameworkCore",
+    "modules/blogging/src/Volo.Blogging.MongoDB",
     "modules/blogging/src/Volo.Blogging.HttpApi",
     "modules/blogging/src/Volo.Blogging.HttpApi.Client",
     "modules/blogging/src/Volo.Blogging.Web",
