@@ -1055,9 +1055,245 @@ Swagger UI is configured and is the default page for this service. If you naviga
 
 ## Modules
 
+ABP provides a strong infrastructure to make modular application development easier by providing services and architecture (see the [module development best practices guide](../Best-Practices/Index.md)).
+
+This solution demonstrate how to use [prebuilt application modules](../Modules/Index.md) in a distributed architecture. The solution also includes a simple "Product Management" module to show the implementation of a well layered module example.
+
 ### Product Management
 
-TODO
+Product Management is a module that consists of several layers and packages/projects:
+
+![microservice-sample-product-module-in-solution](../images/microservice-sample-product-module-in-solution.png)
+
+* `ProductManagement.Domain.Shared` contains constants and types shared among all layers.
+* `ProductManagement.Domain` contains the domain logic and defines entities, domain services, domain events, business/domain exceptions.
+* `ProductManagement.Application.Contracts` contains application service interfaces and DTOs.
+* `ProductManagement.Application` contains the implementation of application services.
+* `ProductManagement.EntityFrameworkCore` contains DbConext and other EF Core related classes and configuration.
+* `ProductManagement.HttpApi` contains API Controllers.
+* `ProductManagement.HttpApi.Client` contains C# proxies to directly use the HTTP API remotely. Uses [Dynamic C# API Clients](../AspNetCore/Dynamic-CSharp-API-Clients.md) feature of the ABP framework.
+* `ProductManagement.Web` contains the UI elements (pages, scripts, styles... etc).
+
+By the help of this layering, it is possible to use the same module as a package reference in a monolithic application or use as a service that runs in another server. It is possible to separate UI (Web) and API layers, so they run in different servers.
+
+In this solution, Web layer runs in the Backend Admin Application while API layer is hosted by the Product microservice.
+
+This tutorial will highlight some important aspects of the module. But, it's suggested to see the source code for a better understanding.
+
+#### Domain Layer
+
+`Product` is the main [Aggregate Root](../Entities.md) of this module:
+
+````csharp
+public class Product : AuditedAggregateRoot<Guid>
+{
+    /// <summary>
+    /// A unique value for this product.
+    /// ProductManager ensures the uniqueness of it.
+    /// It can not be changed after creation of the product.
+    /// </summary>
+    [NotNull]
+    public string Code { get; private set; }
+
+    [NotNull]
+    public string Name { get; private set; }
+
+    public float Price { get; private set; }
+
+    public int StockCount { get; private set; }    
+    
+    //...
+}
+````
+
+All of its properties have private setters which prevents any direct change of the properties from out of the class. Product class ensures its own integrity and validity by its own constructors and methods.
+
+It has two constructors:
+
+````csharp
+private Product()
+{
+    //Default constructor is needed for ORMs.
+}
+
+internal Product(
+    Guid id,
+    [NotNull] string code, 
+    [NotNull] string name, 
+    float price = 0.0f, 
+    int stockCount = 0)
+{
+    Check.NotNullOrWhiteSpace(code, nameof(code));
+
+    if (code.Length >= ProductConsts.MaxCodeLength)
+    {
+        throw new ArgumentException(
+            $"Product code can not be longer than {ProductConsts.MaxCodeLength}"
+        );
+    }
+
+    Id = id;
+    Code = code;
+    SetName(Check.NotNullOrWhiteSpace(name, nameof(name)));
+    SetPrice(price);
+    SetStockCountInternal(stockCount, triggerEvent: false);
+}
+
+````
+
+Default (**parameterless**) constructor is private and is not used in the application code. It is needed because most ORMs requires a parameterless constructor on deserializing entities while getting from the database.
+
+Second constructor is **internal** that means it can only be used inside the domain layer. This enforces to use the `ProductManager` while creating a new `Product`. Because, `ProductManager` should implement a business rule on a new product creation. This constructor only requires the minimal required arguments to create a new product with some optional arguments. It checks some simple business rules to ensure that the entity is created as a valid product.
+
+Rest of the class has methods to manipulate properties of the entity. Example:
+
+````csharp
+public Product SetPrice(float price)
+{
+    if (price < 0.0f)
+    {
+        throw new ArgumentException($"{nameof(price)} can not be less than 0.0!");
+    }
+
+    Price = price;
+    return this;
+}
+
+````
+
+`SetPrice` method is used to change the price of the product in a safe manner (by checking a validation rule).
+
+`SetStockCount` is another method that is used to change stock count of a product:
+
+````csharp
+public Product SetStockCount(int stockCount)
+{
+    return SetStockCountInternal(stockCount);
+}
+
+private Product SetStockCountInternal(int stockCount, bool triggerEvent = true)
+{
+    if (StockCount < 0)
+    {
+        throw new ArgumentException($"{nameof(stockCount)} can not be less than 0!");
+    }
+
+    if (StockCount == stockCount)
+    {
+        return this;
+    }
+
+    if (triggerEvent)
+    {
+        AddDistributedEvent(new ProductStockCountChangedEto(StockCount, stockCount));
+    }
+
+    StockCount = stockCount;
+    return this;
+}
+
+````
+
+This method also triggers a **distributed event** with the `ProductStockCountChangedEto` parameter (Eto is a conventional postfix stands for **E**vent **T**ransfer **O**bject, but not required) to notify listeners that stock count of a product has changed. Any subscriber can receive this event and perform an action based on that knowledge.
+
+Events are distributed by RabbitMQ for this solution. But ABP is message broker independent by providing necessary abstractions (see the [Event Bus](../Event-Bus.md) document).
+
+As said before, this module forces to always use the `ProductManager` to create a new `Product`. `ProductManager` is a simple domain service defined as shown:
+
+````csharp
+public class ProductManager : DomainService
+{
+    private readonly IRepository<Product, Guid> _productRepository;
+
+    public ProductManager(IRepository<Product, Guid> productRepository)
+    {
+        _productRepository = productRepository;
+    }
+
+    public async Task<Product> CreateAsync(
+        [NotNull] string code,
+        [NotNull] string name,
+        float price = 0.0f,
+        int stockCount = 0)
+    {
+        var existingProduct = 
+            await _productRepository.FirstOrDefaultAsync(p => p.Code == code);
+            
+        if (existingProduct != null)
+        {
+            throw new ProductCodeAlreadyExistsException(code);
+        }
+
+        return await _productRepository.InsertAsync(
+            new Product(
+                GuidGenerator.Create(),
+                code,
+                name,
+                price,
+                stockCount
+            )
+        );
+    }
+}
+````
+
+* It checks if given code is used before. Throws `ProductCodeAlreadyExistsException` so.
+* If uses the `GuidGenerator` (`IGuidGenerator`) service to create a new `Guid`.
+* It inserts the entity to the repository.
+
+So, with this design, uniqueness of the product code is guaranteed.
+
+`ProductCodeAlreadyExistsException` is a domain/business exception defined as like below:
+
+````csharp
+public class ProductCodeAlreadyExistsException : BusinessException
+{
+    public ProductCodeAlreadyExistsException(string productCode)
+        : base("PM:000001", $"A product with code {productCode} has already exists!")
+    {
+
+    }
+}
+````
+
+`PM:000001` is a code for the exception type that is sent to the clients, so they can understand the error type. Not implemented for this case, but it is also possible to localize business exceptions. See the [exception handling documentation](../Exception-Handling.md).
+
+#### Application Layer
+
+Application layer of this module has two services:
+
+* `ProductAppService` is mainly used by the Backend Admin Application to manage (create, update, delete...) products. It requires permission to perform any operation.
+* `PublicProductAppService` is used by the Public Web Site to show list of products to the visitors. It does not require any permission since most of the visitors are not logged in to the application.
+
+Notice that; instead of putting two application service into the same project, it might be a better principle to have separated application layers per application. But we unified them for simplicity in this solution.
+
+As an example, `ProductAppService` has the following method to update a product:
+
+````csharp
+[Authorize(ProductManagementPermissions.Products.Update)]
+public async Task<ProductDto> UpdateAsync(Guid id, UpdateProductDto input)
+{
+    var product = await _productRepository.GetAsync(id);
+
+    product.SetName(input.Name);
+    product.SetPrice(input.Price);
+    product.SetStockCount(input.StockCount);
+
+    return ObjectMapper.Map<Product, ProductDto>(product);
+}
+````
+
+* It defines the required permission (*ProductManagementPermissions.Products.Update* is a constant with value `ProductManagement.Update`) to perform this operation.
+* Gets the id of the product and a DTO contains the values to update.
+* Gets the related product entity from the repository.
+* Uses the related methods (like `SetName`) of the `Product` class to change properties, because they are with private setters and the only way to change a value is to use an entity method.
+* Returns an updated `ProductDto` to the client (client may need it for some reason) by using the [ObjectMapper](../Object-To-Object-Mapping.md).
+
+The implementation may vary based on the requirements. This implementation follows the [best practices offered here](../Best-Practices/Application-Services.md).
+
+#### Other Layers
+
+See other layers from the source code.
 
 ## Infrastructure
 
