@@ -9,5 +9,7 @@ namespace Volo.Abp.Authorization.Permissions
         PermissionGroupDefinition GetGroupOrNull(string name);
 
         PermissionGroupDefinition AddGroup([NotNull] string name, ILocalizableString displayName = null);
+
+        void RemoveGroup(string name);
     }
 }
