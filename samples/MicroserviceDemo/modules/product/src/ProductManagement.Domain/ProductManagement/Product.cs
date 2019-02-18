@@ -79,7 +79,7 @@ namespace ProductManagement
 
         private Product SetStockCountInternal(int stockCount, bool triggerEvent = true)
         {
-            if (StockCount < 0.0f)
+            if (StockCount < 0)
             {
                 throw new ArgumentException($"{nameof(stockCount)} can not be less than 0!");
             }
