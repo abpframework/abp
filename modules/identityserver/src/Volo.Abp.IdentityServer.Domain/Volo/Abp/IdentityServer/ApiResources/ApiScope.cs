@@ -67,14 +67,14 @@ namespace Volo.Abp.IdentityServer.ApiResources
             UserClaims.Clear();
         }
 
-        public virtual void RemoveClaim(string name, string type)
+        public virtual void RemoveClaim(string type)
         {
-            UserClaims.RemoveAll(r => r.Name == name && r.Type == type);
+            UserClaims.RemoveAll(r => r.Type == type);
         }
 
-        public virtual ApiScopeClaim FindClaim(string name, string type)
+        public virtual ApiScopeClaim FindClaim(string type)
         {
-            return UserClaims.FirstOrDefault(r => r.Name == name && r.Type == type);
+            return UserClaims.FirstOrDefault(r => r.Name == Name && r.Type == type);
         }
 
         public override object[] GetKeys()

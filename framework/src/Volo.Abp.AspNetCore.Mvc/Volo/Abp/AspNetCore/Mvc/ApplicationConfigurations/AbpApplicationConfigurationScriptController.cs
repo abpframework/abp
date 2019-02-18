@@ -12,14 +12,14 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
     [DisableAuditing]
     public class AbpApplicationConfigurationScriptController : AbpController
     {
-        private readonly IApplicationConfigurationBuilder _configurationBuilder;
+        private readonly IAbpApplicationConfigurationAppService _configurationAppService;
         private readonly IJsonSerializer _jsonSerializer;
 
         public AbpApplicationConfigurationScriptController(
-            IApplicationConfigurationBuilder configurationBuilder,
+            IAbpApplicationConfigurationAppService configurationAppService,
             IJsonSerializer jsonSerializer)
         {
-            _configurationBuilder = configurationBuilder;
+            _configurationAppService = configurationAppService;
             _jsonSerializer = jsonSerializer;
         }
 
@@ -28,7 +28,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
         public async Task<string> Get()
         {
             return CreateAbpExtendScript(
-                await _configurationBuilder.GetAsync()
+                await _configurationAppService.GetAsync()
             );
         }
 

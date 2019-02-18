@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
 {
+    [Serializable]
     public class ApplicationLocalizationConfigurationDto
     {
         public Dictionary<string, Dictionary<string, string>> Values { get; set; }

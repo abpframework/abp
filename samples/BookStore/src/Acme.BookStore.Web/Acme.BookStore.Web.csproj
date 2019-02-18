@@ -27,10 +27,10 @@
   <ItemGroup>
     <ProjectReference Include="..\Acme.BookStore.Application\Acme.BookStore.Application.csproj" />
     <ProjectReference Include="..\Acme.BookStore.EntityFrameworkCore\Acme.BookStore.EntityFrameworkCore.csproj" />
-    <PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic" Version="0.11.0" />
-    <PackageReference Include="Volo.Abp.Autofac" Version="0.11.0" />
-    <PackageReference Include="Volo.Abp.Identity.Web" Version="0.11.0" />
-    <PackageReference Include="Volo.Abp.Account.Web" Version="0.11.0" />
+    <PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic" Version="0.12.0" />
+    <PackageReference Include="Volo.Abp.Autofac" Version="0.12.0" />
+    <PackageReference Include="Volo.Abp.Identity.Web" Version="0.12.0" />
+    <PackageReference Include="Volo.Abp.Account.Web" Version="0.12.0" />
   </ItemGroup>
 
 </Project>

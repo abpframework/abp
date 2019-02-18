@@ -13,7 +13,7 @@ namespace Volo.Abp.IdentityServer.IdentityResources
 
         public IdentityResourceDataSeeder(
             IIdentityResourceRepository identityResourceRepository,
-            IGuidGenerator guidGenerator, 
+            IGuidGenerator guidGenerator,
             IIdentityClaimTypeRepository claimTypeRepository)
         {
             IdentityResourceRepository = identityResourceRepository;
@@ -23,13 +23,14 @@ namespace Volo.Abp.IdentityServer.IdentityResources
 
         public virtual async Task CreateStandardResourcesAsync()
         {
-            var resources = new IdentityServer4.Models.IdentityResource[]
+            var resources = new[]
             {
                 new IdentityServer4.Models.IdentityResources.OpenId(),
                 new IdentityServer4.Models.IdentityResources.Profile(),
                 new IdentityServer4.Models.IdentityResources.Email(),
                 new IdentityServer4.Models.IdentityResources.Address(),
-                new IdentityServer4.Models.IdentityResources.Phone()
+                new IdentityServer4.Models.IdentityResources.Phone(),
+                new IdentityServer4.Models.IdentityResource("role", "Roles of the user", new[] {"role"})
             };
 
             foreach (var resource in resources)
@@ -42,7 +43,7 @@ namespace Volo.Abp.IdentityServer.IdentityResources
                 await AddIdentityResourceIfNotExistsAsync(resource);
             }
         }
-        
+
         protected virtual async Task AddIdentityResourceIfNotExistsAsync(IdentityServer4.Models.IdentityResource resource)
         {
             if (await IdentityResourceRepository.FindByNameAsync(resource.Name) != null)
