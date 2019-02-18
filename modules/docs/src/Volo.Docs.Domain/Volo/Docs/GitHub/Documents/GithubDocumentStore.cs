@@ -29,6 +29,7 @@ namespace Volo.Docs.GitHub.Documents
             var rawRootUrl = CalculateRawRootUrl(rootUrl);
             var rawDocumentUrl = rawRootUrl + documentName;
             var commitHistoryUrl = project.GetGitHubUrlForCommitHistory() + documentName;
+            var isNavigationDocument = documentName == project.NavigationDocumentName;
             var editLink = rootUrl.ReplaceFirst("/tree/", "/blob/") + documentName;
             var localDirectory = "";
             var fileName = documentName;
@@ -48,7 +49,7 @@ namespace Volo.Docs.GitHub.Documents
                 Format = project.Format,
                 LocalDirectory = localDirectory,
                 FileName = fileName,
-                Contributors = await GetContributors(commitHistoryUrl, token),
+                Contributors = !isNavigationDocument ? await GetContributors(commitHistoryUrl, token): new List<DocumentContributor>(),
                 Version = version,
                 Content = await DownloadWebContentAsStringAsync(rawDocumentUrl, token)
             };
@@ -118,7 +119,7 @@ namespace Volo.Docs.GitHub.Documents
         {
             try
             {
-                var urlStartingAfterFirstSlash = url.Substring(url.IndexOf("github.com/",StringComparison.OrdinalIgnoreCase) + "github.com/".Length);
+                var urlStartingAfterFirstSlash = url.Substring(url.IndexOf("github.com/", StringComparison.OrdinalIgnoreCase) + "github.com/".Length);
                 return urlStartingAfterFirstSlash.Substring(0, urlStartingAfterFirstSlash.IndexOf('/'));
             }
             catch (Exception)
@@ -200,18 +201,16 @@ namespace Volo.Docs.GitHub.Documents
                 {
                     var author = commit["author"];
 
-                    if (contributors.All(c => c.Username != (string) author["login"]))
+                    contributors.Add(new DocumentContributor
                     {
-                        contributors.Add(new DocumentContributor
-                        {
-                            Username = (string)author["login"],
-                            UserProfileUrl = (string)author["html_url"],
-                            AvatarUrl = (string)author["avatar_url"]
-                        });
-                    }
+                        Username = (string)author["login"],
+                        UserProfileUrl = (string)author["html_url"],
+                        AvatarUrl = (string)author["avatar_url"]
+                    });
                 }
 
-                contributors.Reverse();
+                contributors = contributors.GroupBy(c => c.Username).OrderByDescending(c=>c.Count())
+                    .Select( c => c.FirstOrDefault()).ToList();
             }
             catch (Exception ex)
             {
