@@ -466,7 +466,7 @@ This sample uses the `client_credentials` grant type which requires a `ClientId`
 
 Resource Owner Password requires a `UserName` & `UserPassword` in addition to client credentials. This grant type is useful to call remote services on behalf of a user.
 
-`Scope` declares the APIs (and the gateway) to grant access.
+`Scope` declares the APIs (and the gateway) to grant access. This application uses the Internal Gateway.
 
 #### HTTP Client Dependencies
 
@@ -696,7 +696,93 @@ See the "ABP Configuration Endpoints" and "Swagger" topics inside the "Backend A
 
 ### Internal Gateway (InternalGateway.Host)
 
-TODO
+This gateway is not a BFF. It is designed for inter-microservice communication and is not exposed publicly.
+
+#### Authentication
+
+This gateway uses IdentityServer `Bearer` authentication and configured like that:
+
+```csharp
+context.Services.AddAuthentication("Bearer")
+.AddIdentityServerAuthentication(options =>
+{
+    options.Authority = configuration["AuthServer:Authority"];
+    options.ApiName = configuration["AuthServer:ApiName"];
+    options.RequireHttpsMetadata = false;    
+    options.InboundJwtClaimTypeMap["sub"] = AbpClaimTypes.UserId;
+    options.InboundJwtClaimTypeMap["role"] = AbpClaimTypes.Role;
+    options.InboundJwtClaimTypeMap["email"] = AbpClaimTypes.Email;
+    options.InboundJwtClaimTypeMap["email_verified"] = AbpClaimTypes.EmailVerified;
+    options.InboundJwtClaimTypeMap["phone_number"] = AbpClaimTypes.PhoneNumber;
+    options.InboundJwtClaimTypeMap["phone_number_verified"] = AbpClaimTypes.PhoneNumberVerified;
+    options.InboundJwtClaimTypeMap["name"] = AbpClaimTypes.UserName;
+});
+```
+
+`AddIdentityServerAuthentication` extension method comes from the [IdentityServer4.AccessTokenValidation](https://www.nuget.org/packages/IdentityServer4.AccessTokenValidation) package, part of the IdentityServer4 project (see [its documentation](http://docs.identityserver.io/en/latest/topics/apis.html)). 
+
+`ApiName` is the API which is being protected, `InternalGateway` in this case. Rest of the configuration is related to claims mapping (which is planned to be automated in next ABP versions). The configuration related to authentication in the `appsettings.json` is simple:
+
+```json
+"AuthServer": {
+  "Authority": "http://localhost:64999",
+  "ApiName": "InternalGateway"
+}
+```
+
+#### Ocelot Configuration
+
+Ocelot needs to know the real URLs of the microservices to be able to redirect HTTP requests. The configuration for this gateway is like below:
+
+```json
+"ReRoutes": [
+  {
+    "DownstreamPathTemplate": "/api/identity/{everything}",
+    "DownstreamScheme": "http",
+    "DownstreamHostAndPorts": [
+      {
+        "Host": "localhost",
+        "Port": 63568
+      }
+    ],
+    "UpstreamPathTemplate": "/api/identity/{everything}",
+    "UpstreamHttpMethod": [ "Put", "Delete", "Get", "Post" ]
+  },
+  {
+    "DownstreamPathTemplate": "/api/productManagement/{everything}",
+    "DownstreamScheme": "http",
+    "DownstreamHostAndPorts": [
+      {
+        "Host": "localhost",
+        "Port": 60244
+      }
+    ],
+    "UpstreamPathTemplate": "/api/productManagement/{everything}",
+    "UpstreamHttpMethod": [ "Put", "Delete", "Get", "Post" ]
+  },
+  {
+    "DownstreamPathTemplate": "/api/blogging/{everything}",
+    "DownstreamScheme": "http",
+    "DownstreamHostAndPorts": [
+      {
+        "Host": "localhost",
+        "Port": 62157
+      }
+    ],
+    "UpstreamPathTemplate": "/api/blogging/{everything}",
+    "UpstreamHttpMethod": [ "Put", "Delete", "Get", "Post" ]
+  }
+],
+"GlobalConfiguration": {
+  "BaseUrl": "http://localhost:65129"
+}
+```
+
+`ReRoutes` configuration covers all microservices in the system. See [its own documentation](https://ocelot.readthedocs.io/en/latest/features/configuration.html) to better understand the Ocelot configuration.
+
+#### Other
+
+See the "ABP Configuration Endpoints" and "Swagger" topics inside the "Backend Admin Application Gateway" section which are very similar for this gateway.
 
 ## Microservices
 
@@ -704,14 +790,32 @@ TODO
 
 TODO
 
-## Infrastructure
+### Blogging Service
 
 TODO
 
+### Product Service
+
+TODO
+
+## Infrastructure
+
 ### Messaging
+
+TODO
 
 ### Caching
 
+TODO
+
 ### Logging
 
+TODO
+
+### Audit Logging
+
+TODO
+
 ### Correlation Id
+
+TODO
