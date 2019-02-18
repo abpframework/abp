@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
+using Volo.Abp.Domain.Repositories;
 
 namespace ProductManagement
 {
@@ -11,9 +15,9 @@ namespace ProductManagement
     public class ProductAppService : ApplicationService, IProductAppService
     {
         private readonly ProductManager _productManager;
-        private readonly IProductRepository _productRepository;
+        private readonly IRepository<Product, Guid> _productRepository;
 
-        public ProductAppService(ProductManager productManager, IProductRepository productRepository)
+        public ProductAppService(ProductManager productManager, IRepository<Product, Guid> productRepository)
         {
             _productManager = productManager;
             _productRepository = productRepository;
@@ -23,7 +27,11 @@ namespace ProductManagement
         {
             await NormalizeMaxResultCountAsync(input);
 
-            var products = await _productRepository.GetListAsync(input.Sorting, input.MaxResultCount, input.SkipCount);
+            var products = await _productRepository
+                .OrderBy(input.Sorting)
+                .Skip(input.SkipCount)
+                .Take(input.MaxResultCount)
+                .ToListAsync();
 
             var totalCount = await _productRepository.GetCountAsync();
 

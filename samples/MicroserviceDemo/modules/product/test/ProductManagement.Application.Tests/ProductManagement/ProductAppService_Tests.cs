@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Domain.Repositories;
 using Xunit;
 
 namespace ProductManagement
@@ -12,13 +11,13 @@ namespace ProductManagement
     public class ProductAppService_Tests : ProductManagementApplicationTestBase
     {
         private readonly IProductAppService _productAppService;
-        private readonly IProductRepository _productRepository;
+        private readonly IRepository<Product, Guid> _productRepository;
         private readonly ProductManagementTestData _testData;
 
         public ProductAppService_Tests()
         {
             _productAppService = GetRequiredService<IProductAppService>();
-            _productRepository = GetRequiredService<IProductRepository>();
+            _productRepository = GetRequiredService<IRepository<Product, Guid>>();
             _testData = GetRequiredService<ProductManagementTestData>();
         }
 
