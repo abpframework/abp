@@ -1185,7 +1185,11 @@ private Product SetStockCountInternal(int stockCount, bool triggerEvent = true)
 
     if (triggerEvent)
     {
-        AddDistributedEvent(new ProductStockCountChangedEto(StockCount, stockCount));
+        AddDistributedEvent(
+            new ProductStockCountChangedEto(
+                Id, StockCount, stockCount
+            )
+        );
     }
 
     StockCount = stockCount;
@@ -1299,7 +1303,80 @@ See other layers from the source code.
 
 ### Messaging
 
-TODO
+Asynchronous Messaging is a key concept in distributed systems. It makes possible to communicate as a loosely coupled manner with fault tolerance. It does not require both sides to be online at the moment of messaging. So, it is a widely used communication pattern in microservice architecture.
+
+#### Distributed Event Bus
+
+Distributed Events (Event Bus) is a way of messaging where a service raise/trigger events while other services registers/listens to these events to be notified when an important event occurs. ABP makes distributed events easier to use by providing conventions, services and integrations.
+
+You have seen that the `Product` class publishing an event using the following code line:
+
+````csharp
+AddDistributedEvent(new ProductStockCountChangedEto(Id, StockCount, stockCount));
+````
+
+`ProductStockCountChangedEto` was defined as shown below:
+
+````csharp
+[Serializable]
+public class ProductStockCountChangedEto : EtoBase
+{
+    public Guid Id { get; }
+
+    public int OldCount { get; set; }
+
+    public int CurrentCount { get; set; }
+
+    private ProductStockCountChangedEto()
+    {
+        //Default constructor is needed for deserialization.
+    }
+
+    public ProductStockCountChangedEto(Guid id, int oldCount, int currentCount)
+    {
+        Id = id;
+        OldCount = oldCount;
+        CurrentCount = currentCount;
+    }
+}
+````
+
+This object stores necessary information about the event. Another service can easily register to this event by implementing the `IDistributedEventHandler` interface with the generic `ProductStockCountChangedEto` parameter:
+
+````csharp
+public class MyHandler : IDistributedEventHandler<ProductStockCountChangedEto>
+{
+    public async Task HandleEventAsync(ProductStockCountChangedEto eventData)
+    {
+        var productId = eventData.Id;
+        //...
+    }
+}
+````
+
+All the integration and communication are done by the ABP framework when you use the [Volo.Abp.EventBus.RabbitMQ](https://www.nuget.org/packages/Volo.Abp.EventBus.RabbitMQ) package. If you need to publish events out of an entity, just inject the `IDistributedEventBus` and use the `PublishAsync` method.
+
+See the [Event Bus](../Event-Bus.md) documentation for more information about the distributed event system.
+
+#### RabbitMQ Configuration
+
+[Volo.Abp.EventBus.RabbitMQ](https://www.nuget.org/packages/Volo.Abp.EventBus.RabbitMQ) package is required to integrate to the RabbitMQ for distributed event system. Then you need to add dependency to the `AbpEventBusRabbitMqModule` for your module. For example, `ProductServiceHostModule` declares this dependency.
+
+`AbpEventBusRabbitMqModule` gets configuration from the `appsettings.json` by default. For example, the Product Service has such a configuration:
+
+````json
+"RabbitMQ": {
+  "Connections": {
+    "Default": {
+      "HostName": "localhost"
+    }
+  },
+  "EventBus": {
+    "ClientName": "MsDemo_ProductService",
+    "ExchangeName": "MsDemo"
+  }
+}
+````
 
 ### Caching
 
