@@ -559,11 +559,49 @@ Ocelot needs to know the real URLs of the microservices to be able to redirect H
 
 `ReRoutes` is an array of URL mappings. `BaseUrl` in the `GlobalConfiguration` section is the URL of this gateway (Ocelot needs to know its own URL). See [its own documentation](https://ocelot.readthedocs.io/en/latest/features/configuration.html) to better understand the configuration.
 
-TODO...
+Ocelot is a finalizer ASP.NET Core middleware and should be written as the last item in the pipeline:
 
-Swagger
+````csharp
+app.UseOcelot().Wait();
+````
 
-TODO
+It handles and redirects requests based on the configuration above. 
+
+#### ABP Configuration Endpoints
+
+ABP provides some built-in APIs to get some configuration and information from the server. Examples:
+
+* `/api/abp/application-configuration` returns localization texts, permission and setting values (try http://localhost:65115/api/abp/application-configuration for this gateway).
+* `/Abp/ServiceProxyScript` returns dynamic javascript proxies to call services from a javascript client (try http://localhost:65115/Abp/ServiceProxyScript for this gateway).
+
+These endpoints should be served by the gateway service, not by microservices. A microservice can only know permissions related to that microservice. But, once properly configured, gateway can aggregate permission values for multiple services as a single list which is more suitable for clients.
+
+For this purpose, the ASP.NET Core pipeline was configured to handle some specific routes via MVC, instead of Ocelot. To make this possible, MapWhen extension method is used like that:
+
+````csharp
+app.MapWhen(ctx => ctx.Request.Path.ToString().StartsWith("/api/abp/") || 
+                   ctx.Request.Path.ToString().StartsWith("/Abp/"),
+    app2 =>
+    {
+        app2.UseMvcWithDefaultRouteAndArea();
+    });
+
+app.UseOcelot().Wait();
+````
+
+This configuration uses standard MVC middleware when request path starts with `/api/abp/` or `/Abp/`.
+
+#### Swagger
+
+This gateway is configured to use the [swagger UI](https://swagger.io/tools/swagger-ui/), a popular tool to discover & test HTTP APIs. Normally, Ocelot does not support to show APIs on the swagger, because it can not know details of each microservice API. But it is possible when you follow ABP layered module architecture [best practices](../Best-Practices/Index.md).
+
+`BackendAdminAppGatewayHostModule` adds dependency to `AbpIdentityHttpApiModule` (*[Volo.Abp.Identity.HttpApi](https://www.nuget.org/packages/Volo.Abp.Identity.HttpApi)* package) and `ProductManagementHttpApiModule` (*ProductManagement.HttpApi* project) to include their HTTP API Controllers. In this way, swagger can discover them. While it references to the API layer, it does not reference to the implementation of application services, because they will be running in the related microservice endpoints and redirected by the Ocelot based on the request URL.
+
+Anyway, when you open the URL `http://localhost:65115/swagger/index.html`, you will see APIs of all configured microservices.
+
+#### Permission Management
+
+Backend Admin Application provides a permission management UI (seen before) and uses this gateway to get/set permissions. Permission management API is hosted inside the gateway, instead of a separate service. This is a design decision, but it could be hosted as another microservice if you would like.
 
 #### Other Dependencies
 
