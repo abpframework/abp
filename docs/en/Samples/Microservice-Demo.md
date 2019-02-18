@@ -784,17 +784,86 @@ Ocelot needs to know the real URLs of the microservices to be able to redirect H
 
 See the "ABP Configuration Endpoints" and "Swagger" topics inside the "Backend Admin Application Gateway" section which are very similar for this gateway.
 
+#### Dependencies
+
+- **RabbitMQ** for messaging to other services.
+- **Redis** for distributed/shared caching.
+- **Elasticsearch** for storing logs.
+
 ## Microservices
+
+Microservices are standalone HTTP APIs those implement the business of the system in a distributed manner.
+
+* They are used by applications and other microservices through the gateways and HTTP APIs.
+* They can raise or register to events in the system.
+* They can communicate to each other via asynchronous messaging.
 
 ### Identity Service
 
-TODO
+This service provides user and role management APIs. Shares the same database (MsDemo_Identity) with the AuthServer application.
+
+#### Identity Module
+
+This service actually just hosts the ABP Identity package/module. Does not include any API itself. In order to host it, adds the following dependencies:
+
+* `AbpIdentityHttpApiModule` (*[Volo.Abp.Identity.HttpApi](https://www.nuget.org/packages/Volo.Abp.Identity.HttpApi)* package) to provide Identity APIs.
+* `AbpIdentityApplicationModule` (*[Volo.Abp.Identity.Application](https://www.nuget.org/packages/Volo.Abp.Identity.Application)* package) to host the implementation of the application and domain layers of the module.
+* `AbpIdentityEntityFrameworkCoreModule` (*[Volo.Abp.Identity.EntityFrameworkCore](https://www.nuget.org/packages/Volo.Abp.Identity.EntityFrameworkCore)* package) to use EF Core as database API.
+
+See the [module architecture best practice guide](../Best-Practices/Module-Architecture) to understand the layering better.
+
+#### Authentication
+
+This microservice uses IdentityServer `Bearer` authentication and configured like that:
+
+```csharp
+context.Services.AddAuthentication("Bearer")
+.AddIdentityServerAuthentication(options =>
+{
+    options.Authority = configuration["AuthServer:Authority"];
+    options.ApiName = configuration["AuthServer:ApiName"];
+    options.RequireHttpsMetadata = false;
+    options.InboundJwtClaimTypeMap["sub"] = AbpClaimTypes.UserId;
+    options.InboundJwtClaimTypeMap["role"] = AbpClaimTypes.Role;
+    options.InboundJwtClaimTypeMap["email"] = AbpClaimTypes.Email;
+    options.InboundJwtClaimTypeMap["email_verified"] = AbpClaimTypes.EmailVerified;
+    options.InboundJwtClaimTypeMap["phone_number"] = AbpClaimTypes.PhoneNumber;
+    options.InboundJwtClaimTypeMap["phone_number_verified"] = 
+        AbpClaimTypes.PhoneNumberVerified;
+    options.InboundJwtClaimTypeMap["name"] = AbpClaimTypes.UserName;
+});
+```
+
+`ApiName` is the API which is being protected, `IdentityService` in this case. Rest of the configuration is related to claims mapping (which is planned to be automated in next ABP versions). The configuration related to authentication in the `appsettings.json` is simple:
+
+```json
+"AuthServer": {
+  "Authority": "http://localhost:64999",
+  "ApiName": "IdentityService"
+}
+```
+
+#### Swagger
+
+Swagger UI is configured and is the default page for this service. If you navigate to the URL `http://localhost:63568/`, you are redirected to the swagger page to see and test the API.
+
+#### Dependencies
+
+- **RabbitMQ** for messaging to other services.
+- **Redis** for distributed/shared caching.
+- **Elasticsearch** for storing logs.
 
 ### Blogging Service
 
 TODO
 
 ### Product Service
+
+TODO
+
+## Modules
+
+### Product Management
 
 TODO
 
