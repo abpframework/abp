@@ -1435,4 +1435,8 @@ Kibana URL is `http://localhost:5601/` by default.
 
 ### Audit Logging
 
-TODO
+ABP provides automatic audit logging which saves every request in detail (who is the current user, what is the browser/client, what actions performed, which entities changed, even which properties of entities has been updated). See the [audit logging document](../Audit-Logging.md) for details.
+
+All of the services and applications are configured to write audit logs. Audit logs are saved to the MsDemo_Identity SQL database. So, you can query all audit logs of all applications from a single point.
+
+An Audit Log record has a `CorrelationId` property that can be used to track a request. When a service calls another service in a single web request, they both save audit logs with the same `CorrelationId`. See the `AbpAuditLogs` table in the database.
