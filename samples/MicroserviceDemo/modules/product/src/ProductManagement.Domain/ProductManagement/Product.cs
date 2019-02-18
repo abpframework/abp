@@ -91,7 +91,13 @@ namespace ProductManagement
 
             if (triggerEvent)
             {
-                AddDistributedEvent(new ProductStockCountChangedEto(StockCount, stockCount));
+                AddDistributedEvent(
+                    new ProductStockCountChangedEto(
+                        Id,
+                        StockCount,
+                        stockCount
+                    )
+                );
             }
 
             StockCount = stockCount;
