@@ -216,7 +216,7 @@ It also provides Login & Register pages:
 
 These pages are not included in the project itself. Instead, AuthServer project uses the prebuilt ABP [account module](https://github.com/abpframework/abp/tree/master/modules/account) with IdentityServer extension. That means it can also act as an OpenId Connect server with necessary UI and logic.
 
-#### Other Dependencies
+#### Dependencies
 
 * **RabbitMQ** for messaging to other services.
 * **Redis** for distributed/shared caching.
@@ -317,7 +317,7 @@ Once you refer these client packages, you can directly inject an application ser
 
 Since microservices requires authentication & authorization, each remote service call should contain an Authentication header. This header is obtained from the `access_token` inside the current `HttpContext` for the current user. This is automatically done when you use the `Volo.Abp.Http.Client.IdentityModel` package. `BackendAdminAppHostModule` declares dependencies to this package and to the related `AbpHttpClientIdentityModelModule` class. It is integrated to the HTTP Clients explained above.
 
-#### Other Dependencies
+#### Dependencies
 
 - **Redis** for distributed/shared caching.
 - **Elasticsearch** for storing logs.
@@ -409,7 +409,7 @@ Publc web site application uses the Blogging and Product microservices for all o
 
 Just like explained in the Backend Admin Application section, Public Web Site project also uses the `AbpHttpClientIdentityModelModule` to pass `access_token` to the calling services for authentication.
 
-#### Other Dependencies
+#### Dependencies
 
 - **Redis** for distributed/shared caching.
 - **Elasticsearch** for storing logs.
@@ -512,7 +512,7 @@ context.Services.AddAuthentication("Bearer")
 
 `AddIdentityServerAuthentication` extension method comes from the [IdentityServer4.AccessTokenValidation](https://www.nuget.org/packages/IdentityServer4.AccessTokenValidation) package, part of the IdentityServer4 project (see [its documentation](http://docs.identityserver.io/en/latest/topics/apis.html)). 
 
-`ApiName` is the API which is being protected, `BackendAdminAppGateway` in this case. So, this solution defines gateways as APIs too. Rest of the configuration is related to claims mapping (which is planned to be automated in next ABP versions). The configuration related to authentication in the `appsettings.json` is simple:
+`ApiName` is the API which is being protected, `BackendAdminAppGateway` in this case. So, this solution defines gateways as API resources. Rest of the configuration is related to claims mapping (which is planned to be automated in next ABP versions). The configuration related to authentication in the `appsettings.json` is simple:
 
 ````json
 "AuthServer": {
@@ -603,11 +603,100 @@ Anyway, when you open the URL `http://localhost:65115/swagger/index.html`, you w
 
 Backend Admin Application provides a permission management UI (seen before) and uses this gateway to get/set permissions. Permission management API is hosted inside the gateway, instead of a separate service. This is a design decision, but it could be hosted as another microservice if you would like.
 
-#### Other Dependencies
+#### Dependencies
 
 - **RabbitMQ** for messaging to other services.
 - **Redis** for distributed/shared caching.
 - **Elasticsearch** for storing logs.
+
+### Public Web Site Gateway (PublicWebSiteGateway.Host)
+
+This is backend (server side API gateway) for the "Public Web Site" application.
+
+#### Authentication
+
+This gateway uses IdentityServer `Bearer` authentication and configured like that:
+
+```csharp
+context.Services.AddAuthentication("Bearer")
+.AddIdentityServerAuthentication(options =>
+{
+    options.Authority = configuration["AuthServer:Authority"];
+    options.ApiName = configuration["AuthServer:ApiName"];
+    options.RequireHttpsMetadata = false;    
+    options.InboundJwtClaimTypeMap["sub"] = AbpClaimTypes.UserId;
+    options.InboundJwtClaimTypeMap["role"] = AbpClaimTypes.Role;
+    options.InboundJwtClaimTypeMap["email"] = AbpClaimTypes.Email;
+    options.InboundJwtClaimTypeMap["email_verified"] = AbpClaimTypes.EmailVerified;
+    options.InboundJwtClaimTypeMap["phone_number"] = AbpClaimTypes.PhoneNumber;
+    options.InboundJwtClaimTypeMap["phone_number_verified"] = 
+        AbpClaimTypes.PhoneNumberVerified;
+    options.InboundJwtClaimTypeMap["name"] = AbpClaimTypes.UserName;
+});
+```
+
+`AddIdentityServerAuthentication` extension method comes from the [IdentityServer4.AccessTokenValidation](https://www.nuget.org/packages/IdentityServer4.AccessTokenValidation) package, part of the IdentityServer4 project (see [its documentation](http://docs.identityserver.io/en/latest/topics/apis.html)). 
+
+`ApiName` is the API which is being protected, `PublicWebSiteGateway` in this case. Rest of the configuration is related to claims mapping (which is planned to be automated in next ABP versions). The configuration related to authentication in the `appsettings.json` is simple:
+
+```json
+"AuthServer": {
+  "Authority": "http://localhost:64999",
+  "ApiName": "PublicWebSiteGateway"
+}
+```
+
+#### Ocelot Configuration
+
+Ocelot needs to know the real URLs of the microservices to be able to redirect HTTP requests. The configuration for this gateway is like below:
+
+```json
+"ReRoutes": [
+  {
+    "DownstreamPathTemplate": "/api/productManagement/{everything}",
+    "DownstreamScheme": "http",
+    "DownstreamHostAndPorts": [
+      {
+        "Host": "localhost",
+        "Port": 60244
+      }
+    ],
+    "UpstreamPathTemplate": "/api/productManagement/{everything}",
+    "UpstreamHttpMethod": [ "Put", "Delete", "Get", "Post" ]
+  },
+  {
+    "DownstreamPathTemplate": "/api/blogging/{everything}",
+    "DownstreamScheme": "http",
+    "DownstreamHostAndPorts": [
+      {
+        "Host": "localhost",
+        "Port": 62157
+      }
+    ],
+    "UpstreamPathTemplate": "/api/blogging/{everything}",
+    "UpstreamHttpMethod": [ "Put", "Delete", "Get", "Post" ]
+  }
+],
+"GlobalConfiguration": {
+  "BaseUrl": "http://localhost:64897"
+}
+```
+
+See [its own documentation](https://ocelot.readthedocs.io/en/latest/features/configuration.html) to better understand the Ocelot configuration.
+
+#### Other
+
+See the "ABP Configuration Endpoints" and "Swagger" topics inside the "Backend Admin Application Gateway" section which are very similar for this gateway.
+
+#### Dependencies
+
+- **RabbitMQ** for messaging to other services.
+- **Redis** for distributed/shared caching.
+- **Elasticsearch** for storing logs.
+
+### Internal Gateway (InternalGateway.Host)
+
+TODO
 
 ## Microservices
 
