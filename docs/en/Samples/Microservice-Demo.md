@@ -1301,7 +1301,7 @@ See other layers from the source code.
 
 ## Infrastructure
 
-### Messaging
+### Messaging and RabbitMQ
 
 Asynchronous Messaging is a key concept in distributed systems. It makes possible to communicate as a loosely coupled manner with fault tolerance. It does not require both sides to be online at the moment of messaging. So, it is a widely used communication pattern in microservice architecture.
 
@@ -1360,6 +1360,8 @@ See the [Event Bus](../Event-Bus.md) documentation for more information about th
 
 #### RabbitMQ Configuration
 
+In this solution, [RabbitMQ](https://www.rabbitmq.com/) is used for messaging & distributed events.
+
 [Volo.Abp.EventBus.RabbitMQ](https://www.nuget.org/packages/Volo.Abp.EventBus.RabbitMQ) package is required to integrate to the RabbitMQ for distributed event system. Then you need to add dependency to the `AbpEventBusRabbitMqModule` for your module. For example, `ProductServiceHostModule` declares this dependency.
 
 `AbpEventBusRabbitMqModule` gets configuration from the `appsettings.json` by default. For example, the Product Service has such a configuration:
@@ -1378,18 +1380,59 @@ See the [Event Bus](../Event-Bus.md) documentation for more information about th
 }
 ````
 
-### Caching
+### Caching and Redis
 
-TODO
+A distributed system obviously needs to a distributed and shared cache, instead of isolated in-memory caches for each service.
 
-### Logging
+[Redis](https://redis.io/) is used as a distributed cache in this solution. The solution uses Microsoft's standard [Microsoft.Extensions.Caching.Redis](https://www.nuget.org/packages/Microsoft.Extensions.Caching.Redis) package for integration. All applications and services uses Redis cache when you use and configure this package. See [Microsoft's documentation](https://docs.microsoft.com/en-us/aspnet/core/performance/caching/distributed) for more.
 
-TODO
+The solution also uses the [Microsoft.AspNetCore.DataProtection.StackExchangeRedis](https://www.nuget.org/packages/Microsoft.AspNetCore.DataProtection.StackExchangeRedis) package to share data protection keys between applications and services over Redis cache.
+
+### Logging, Serilog, Elasticsearch and Kibana
+
+This solution uses [Serilog](https://serilog.net/) as a logging library. It is a widely used library which has many data source integrations including [Elasticsearch](https://www.elastic.co/products/elasticsearch).
+
+Logging configurations are done in `Program.cs` files using a code block similar to the given below:
+
+````csharp
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Debug()
+    .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+    .Enrich.WithProperty("Application", "ProductService")
+    .Enrich.FromLogContext()
+    .WriteTo.File("Logs/logs.txt")
+    .WriteTo.Elasticsearch(
+        new ElasticsearchSinkOptions(new Uri(configuration["ElasticSearch:Url"]))
+        {
+            AutoRegisterTemplate = true,
+            AutoRegisterTemplateVersion = AutoRegisterTemplateVersion.ESv6,
+            IndexFormat = "msdemo-log-{0:yyyy.MM}"
+        })
+    .CreateLogger();
+````
+
+This configures multiple log target: File and Elasticsearch. `Application` property is set to `ProductService` for this example. This is a way of distinguishing the logs of multiple services in a single database. You can then query logs by the `Application` name.
+
+Elasticsearch URL is read from the `appsettings.json` configuration file:
+
+````json
+"ElasticSearch": {
+  "Url": "http://localhost:9200"
+}
+````
+
+If you use Kibana, which is a Visualization tool that is well integrated to Elasticsearch, you can see some fancy UI about your logs:
+
+![microservice-sample-kibana-2](../images/microservice-sample-kibana-2.png)
+
+*Figure - A dashboard that shows log and error counts by service/application.*
+
+![microservice-sample-kibana-1](../images/microservice-sample-kibana-1.png)
+
+*Figure - A list of log entries*
+
+Kibana URL is `http://localhost:5601/` by default.
 
 ### Audit Logging
-
-TODO
-
-### Correlation Id
 
 TODO
