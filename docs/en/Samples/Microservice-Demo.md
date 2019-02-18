@@ -800,7 +800,11 @@ Microservices are standalone HTTP APIs those implement the business of the syste
 
 ### Identity Service
 
-This service provides user and role management APIs. Shares the same database (MsDemo_Identity) with the AuthServer application.
+This service provides user and role management APIs.
+
+#### Database
+
+Shares the same database (MsDemo_Identity) with the AuthServer application.
 
 #### Identity Module
 
@@ -855,7 +859,104 @@ Swagger UI is configured and is the default page for this service. If you naviga
 
 ### Blogging Service
 
-TODO
+This service provides the blogging API.
+
+#### Database
+
+It has a dedicated MongoDB database (MsDemo_Blogging) to store blog and posts. It also uses the MsDemo_Identity SQL database for audit logs, permissions and settings. So, there are two connection strings in the `appsettings.json` file:
+
+````json
+"ConnectionStrings": {
+  "Default": "Server=localhost;Database=MsDemo_Identity;Trusted_Connection=True;MultipleActiveResultSets=true",
+  "Blogging": "mongodb://localhost|MsDemo_Blogging"
+}
+````
+
+#### Blogging Module
+
+This service actually just hosts the ABP Blogging package/module. Does not include any API itself. In order to host it, adds the following dependencies:
+
+- `BloggingHttpApiModule` (*[Volo.Blogging.HttpApi](https://www.nuget.org/packages/Volo.Blogging.HttpApi)* package) to provide Blogging APIs.
+- `BloggingApplicationModule` (*[Volo.Blogging.Application](https://www.nuget.org/packages/Volo.Blogging.Application)* package) to host the implementation of the application and domain layers of the module.
+- `BloggingMongoDbModule` (*[Volo.Blogging.MongoDB](https://www.nuget.org/packages/Volo.Abp.Identity.EntityFrameworkCore)* package) to use MongoDB as the database.
+
+See the [module architecture best practice guide](../Best-Practices/Module-Architecture) to understand the layering better.
+
+#### Authentication
+
+This microservice uses IdentityServer `Bearer` authentication and configured like that:
+
+```csharp
+context.Services.AddAuthentication("Bearer")
+.AddIdentityServerAuthentication(options =>
+{
+    options.Authority = configuration["AuthServer:Authority"];
+    options.ApiName = configuration["AuthServer:ApiName"];
+    options.RequireHttpsMetadata = false;    
+    options.InboundJwtClaimTypeMap["sub"] = AbpClaimTypes.UserId;
+    options.InboundJwtClaimTypeMap["role"] = AbpClaimTypes.Role;
+    options.InboundJwtClaimTypeMap["email"] = AbpClaimTypes.Email;
+    options.InboundJwtClaimTypeMap["email_verified"] = AbpClaimTypes.EmailVerified;
+    options.InboundJwtClaimTypeMap["phone_number"] = AbpClaimTypes.PhoneNumber;
+    options.InboundJwtClaimTypeMap["phone_number_verified"] = 
+        AbpClaimTypes.PhoneNumberVerified;
+    options.InboundJwtClaimTypeMap["name"] = AbpClaimTypes.UserName;
+});
+```
+
+`ApiName` is the API which is being protected, `BloggingService` in this case. Rest of the configuration is related to claims mapping (which is planned to be automated in next ABP versions). The configuration related to authentication in the `appsettings.json` is simple:
+
+```json
+"AuthServer": {
+  "Authority": "http://localhost:64999",
+  "ApiName": "BloggingService"
+}
+```
+
+#### IdentityServer Client
+
+This microservice also uses the Identity microservice API through the Internal Gateway, because it needs to query user details (username, email, phone, name and surname) in some cases. So, it is also a client for the IdentityServer and defines a section in the `appsettings.json` file for that:
+
+````json
+"IdentityClients": {
+  "Default": {
+    "GrantType": "client_credentials",
+    "ClientId": "blogging-service-client",
+    "ClientSecret": "1q2w3e*",
+    "Authority": "http://localhost:64999",
+    "Scope": "InternalGateway IdentityService"
+  }
+}
+````
+
+Since it uses the Internal Gateway, it should also configure the remote endpoint of the gateway:
+
+````json
+"RemoteServices": {
+  "Default": {
+    "BaseUrl": "http://localhost:65129/",
+    "UseCurrentAccessToken": "false"
+  }
+}
+````
+
+When you set `UseCurrentAccessToken` to `false`, ABP ignores the current `access_token` in the current `HttpContext` and authenticates to the AuthServer with the credentials defined above.
+
+Why not using the token of the current user in the current request? Because, the user may not have required permissions on the Identity module, so it can not just pass the current authentication token directly to the Identity service. In addition, some of the blog service APIs are anonymous (not requires authenticated user), so in some cases there is no "current user" in the HTTP request. For these reasons, Blogging service should be defined as a client for the Identity service with its own credentials and permissions.
+
+If you check the `AbpPermissionGrants` table in the `MsDemo_Identity` database, you can see the related permission for the `blogging-service-client`.
+
+![microservice-sample-blogservice-permission-in-database](../images/microservice-sample-blogservice-permission-in-database.png)
+
+#### Swagger
+
+Swagger UI is configured and is the default page for this service. If you navigate to the URL `http://localhost:62157/`, you are redirected to the swagger page to see and test the API.
+
+#### Dependencies
+
+- **RabbitMQ** for messaging to other services.
+- **Redis** for distributed/shared caching.
+- **Elasticsearch** for storing logs.
 
 ### Product Service
 
