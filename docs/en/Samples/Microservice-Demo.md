@@ -204,6 +204,8 @@ public class AuthServerDbContext : AbpDbContext<AuthServerDbContext>
 
 In the **OnModelCreating**, you see **ConfigureX()** method calls. A module with a database schema generally declares such an extension method to configure EF Core mappings for its own entities. This is a flexible approach where you can arrange your databases and modules inside them; You can use a different database for each module, or combine some of them in a shared database. In the AuthServer project, we decided to combine multiple module schemas in a single EF Core DbContext, in a single physical database. These modules are Identity, IdentityServer, AuditLogging, PermissionManagement and SettingManagement modules.
 
+Notice that this DbContext is only for database migrations. All modules have their own `DbContext` classes those are used in the runtime by the modules.
+
 #### User Interface
 
 AuthServer has a simple home page that shows the current user info if the current user has logged in:
@@ -798,7 +800,7 @@ Microservices are standalone HTTP APIs those implement the business of the syste
 * They can raise or register to events in the system.
 * They can communicate to each other via asynchronous messaging.
 
-### Identity Service
+### Identity Service (IdentityService.Host)
 
 This service provides user and role management APIs.
 
@@ -857,9 +859,9 @@ Swagger UI is configured and is the default page for this service. If you naviga
 - **Redis** for distributed/shared caching.
 - **Elasticsearch** for storing logs.
 
-### Blogging Service
+### Blogging Service (BloggingService.Host)
 
-This service provides the blogging API.
+This service hosts the blogging API.
 
 #### Database
 
@@ -958,9 +960,98 @@ Swagger UI is configured and is the default page for this service. If you naviga
 - **Redis** for distributed/shared caching.
 - **Elasticsearch** for storing logs.
 
-### Product Service
+### Product Service (ProductService.Host)
 
-TODO
+This service hosts the Product Management API.
+
+#### Database & EF Core Migrations
+
+It has a separated SQL database, named **MsDemo_ProductManagement**, for the product management module. It uses EF Core as the database provider and has a DbContext named `ProductServiceMigrationDbContext`:
+
+````csharp
+public class ProductServiceMigrationDbContext : AbpDbContext<ProductServiceMigrationDbContext>
+{
+    public ProductServiceMigrationDbContext(
+        DbContextOptions<ProductServiceMigrationDbContext> options
+        ) : base(options)
+    {
+
+    }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+        modelBuilder.ConfigureProductManagement();
+    }
+}
+````
+
+Actual model configuration is done inside the `modelBuilder.ConfigureProductManagement()` extension method. This project maintains the database schema using EF Core migrations.
+
+Notice that this DbContext is only for database migrations. Product Management module has its own `DbContext` class that is used in the runtime (See `ProductManagementDbContext` class in the ProductManagement.EntityFrameworkCore project).
+
+There are two connection strings in the `appsettings.json` file:
+
+````json
+"ConnectionStrings": {
+  "Default": "Server=localhost;Database=MsDemo_Identity;Trusted_Connection=True;MultipleActiveResultSets=true",
+  "ProductManagement": "Server=localhost;Database=MsDemo_ProductManagement;Trusted_Connection=True;MultipleActiveResultSets=true"
+}
+````
+
+`Default` connection strings points to the MsDemo_Identity database that is used for audit logging, permission and setting stores. `ProductManagement` connection string is used by the product module.
+
+#### Product Module
+
+This service actually just hosts the Product Management module. Does not include any API itself. In order to host it, adds the following dependencies:
+
+- `ProductManagementHttpApiModule` to provide product management APIs.
+- `ProductManagementApplicationModule` to host the implementation of the application and domain layers of the module.
+- `ProductManagementEntityFrameworkCoreModule` to use EF Core as database API.
+
+See the [module architecture best practice guide](../Best-Practices/Module-Architecture) to understand the layering better. See the Product Management module section below for more information about this module.
+
+#### Authentication
+
+This microservice uses IdentityServer `Bearer` authentication and configured like that:
+
+```csharp
+context.Services.AddAuthentication("Bearer")
+.AddIdentityServerAuthentication(options =>
+{
+    options.Authority = configuration["AuthServer:Authority"];
+    options.ApiName = configuration["AuthServer:ApiName"];
+    options.RequireHttpsMetadata = false;
+    options.InboundJwtClaimTypeMap["sub"] = AbpClaimTypes.UserId;
+    options.InboundJwtClaimTypeMap["role"] = AbpClaimTypes.Role;
+    options.InboundJwtClaimTypeMap["email"] = AbpClaimTypes.Email;
+    options.InboundJwtClaimTypeMap["email_verified"] = AbpClaimTypes.EmailVerified;
+    options.InboundJwtClaimTypeMap["phone_number"] = AbpClaimTypes.PhoneNumber;
+    options.InboundJwtClaimTypeMap["phone_number_verified"] = 
+        AbpClaimTypes.PhoneNumberVerified;
+    options.InboundJwtClaimTypeMap["name"] = AbpClaimTypes.UserName;
+});
+```
+
+`ApiName` is the API which is being protected, `ProductService` in this case. Rest of the configuration is related to claims mapping (which is planned to be automated in next ABP versions). The configuration related to authentication in the `appsettings.json` is simple:
+
+```json
+"AuthServer": {
+  "Authority": "http://localhost:64999",
+  "ApiName": "ProductService"
+}
+```
+
+#### Swagger
+
+Swagger UI is configured and is the default page for this service. If you navigate to the URL `http://localhost:60244/`, you are redirected to the swagger page to see and test the API.
+
+#### Dependencies
+
+- **RabbitMQ** for messaging to other services.
+- **Redis** for distributed/shared caching.
+- **Elasticsearch** for storing logs.
 
 ## Modules
 
