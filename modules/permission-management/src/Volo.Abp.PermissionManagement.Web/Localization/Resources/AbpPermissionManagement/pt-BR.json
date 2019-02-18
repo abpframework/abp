@@ -2,6 +2,8 @@
 {
   "culture": "pt-BR",
   "texts": {
-    "Permissions": "Permissões"
+    "Permissions": "Permissões",
+    "OnlyProviderPermissons": "Apenas este provedor",
+    "All": "Todos"
   }
 }
