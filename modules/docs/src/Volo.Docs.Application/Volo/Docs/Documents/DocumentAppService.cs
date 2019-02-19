@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Logging;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Caching;
 using Volo.Docs.Projects;
@@ -94,9 +95,10 @@ namespace Volo.Docs.Documents
                 cacheKey,
                 async () =>
                 {
+                    Logger.LogInformation($"Not found in the cache. Requesting {documentName} from the store...");
                     var store = _documentStoreFactory.Create(project.DocumentStoreType);
                     var document = await store.GetDocumentAsync(project, documentName, version);
-
+                    Logger.LogInformation($"Document retrieved: {documentName}");
                     return CreateDocumentWithDetailsDto(project, document);
                 },
                 () => new DistributedCacheEntryOptions
