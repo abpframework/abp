@@ -51,12 +51,12 @@
                 $('input:radio[name="ShowOnlyProviderPermissonsToggle"]').change(
                     function () {
                         if ($(this).val() == '1') {
-                            $('.HideOnProviderToggle').slideUp();
-                            $('.hideTabOnToggle').slideUp();
+                            $('.hidePermissonOnProviderToggle').slideUp();
+                            $('.hideTabOnProviderToggle').slideUp();
                         }
                         else {
-                            $('.HideOnProviderToggle').slideDown();
-                            $('.hideTabOnToggle').slideDown();
+                            $('.hidePermissonOnProviderToggle').slideDown();
+                            $('.hideTabOnProviderToggle').slideDown();
                         }
                     });
             });
