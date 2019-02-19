@@ -37,6 +37,15 @@ namespace Volo.Abp.IdentityServer.Clients
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
+        public async Task<List<string>> GetAllDistinctAllowedCorsOriginsAsync(CancellationToken cancellationToken = default)
+        {
+            return await DbSet
+                .AsNoTracking()
+                .SelectMany(x => x.AllowedCorsOrigins.Select(y => y.Origin))
+                .Distinct()
+                .ToListAsync(GetCancellationToken(cancellationToken));
+        }
+
         public virtual async Task<long> GetTotalCount()
         {
             return await DbSet.CountAsync();

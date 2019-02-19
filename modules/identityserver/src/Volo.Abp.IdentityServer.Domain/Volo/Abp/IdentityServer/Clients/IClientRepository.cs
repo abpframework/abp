@@ -23,6 +23,8 @@ namespace Volo.Abp.IdentityServer.Clients
             CancellationToken cancellationToken = default
         );
 
+        Task<List<string>> GetAllDistinctAllowedCorsOriginsAsync(CancellationToken cancellationToken = default);
+
         Task<long> GetTotalCount();
     }
 }
