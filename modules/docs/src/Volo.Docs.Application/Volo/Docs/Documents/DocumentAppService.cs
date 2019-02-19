@@ -102,7 +102,7 @@ namespace Volo.Docs.Documents
                 () => new DistributedCacheEntryOptions
                 {
                     //TODO: Configurable?
-                    AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(6),
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(2),
                     SlidingExpiration = TimeSpan.FromMinutes(30)
                 }
             );
