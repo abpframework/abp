@@ -12,7 +12,6 @@ namespace Volo.Abp.IdentityServer
 {
     [DependsOn(
         typeof(AbpIdentityServerDomainSharedModule),
-        typeof(AbpDddDomainModule),
         typeof(AbpAutoMapperModule),
         typeof(AbpIdentityDomainModule),
         typeof(AbpSecurityModule)

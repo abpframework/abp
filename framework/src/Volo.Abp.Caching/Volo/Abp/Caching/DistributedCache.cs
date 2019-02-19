@@ -326,13 +326,7 @@ namespace Volo.Abp.Caching
 
         protected virtual void SetDefaultOptions()
         {
-            //CacheName
-            var cacheNameAttribute = typeof(TCacheItem)
-                .GetCustomAttributes(true)
-                .OfType<CacheNameAttribute>()
-                .FirstOrDefault();
-
-            CacheName = cacheNameAttribute != null ? cacheNameAttribute.Name : typeof(TCacheItem).FullName;
+            CacheName = CacheNameAttribute.GetCacheName(typeof(TCacheItem));
 
             //IgnoreMultiTenancy
             IgnoreMultiTenancy = typeof(TCacheItem).IsDefined(typeof(IgnoreMultiTenancyAttribute), true);
