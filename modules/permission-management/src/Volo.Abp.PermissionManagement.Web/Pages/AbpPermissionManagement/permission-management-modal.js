@@ -48,6 +48,17 @@
                         }
                     });
                 });
+                $('input:radio[name="ShowOnlyProviderPermissonsToggle"]').change(
+                    function () {
+                        if ($(this).val() == '1') {
+                            $('.hidePermissonOnProviderToggle').slideUp();
+                            $('.hideTabOnProviderToggle').slideUp();
+                        }
+                        else {
+                            $('.hidePermissonOnProviderToggle').slideDown();
+                            $('.hideTabOnProviderToggle').slideDown();
+                        }
+                    });
             });
         };
     };

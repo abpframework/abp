@@ -20,6 +20,9 @@ namespace Volo.Abp.PermissionManagement.Web.Pages.AbpPermissionManagement
         [BindProperty(SupportsGet = true)]
         public string ProviderKey { get; set; }
 
+        [BindProperty(SupportsGet = true)]
+        public bool ShowOnlyProviderPermissons { get; set; } = false;
+
         [BindProperty]
         public List<PermissionGroupViewModel> Groups { get; set; }
 
