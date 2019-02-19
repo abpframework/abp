@@ -35,6 +35,17 @@
                 });
         }
 
+        function togglePermissions(radioButton) {
+            if (radioButton.val() == '1') {
+                $('.hidePermissonOnProviderToggle').slideUp();
+                $('.hideTabOnProviderToggle').slideUp();
+            }
+            else {
+                $('.hidePermissonOnProviderToggle').slideDown();
+                $('.hideTabOnProviderToggle').slideDown();
+            }
+        }
+
         this.initDom = function($el) {
             $el.find('.tab-pane').each(function () {
                 var $tab = $(this);
@@ -48,18 +59,19 @@
                         }
                     });
                 });
-                $('input:radio[name="ShowOnlyProviderPermissonsToggle"]').change(
-                    function () {
-                        if ($(this).val() == '1') {
-                            $('.hidePermissonOnProviderToggle').slideUp();
-                            $('.hideTabOnProviderToggle').slideUp();
-                        }
-                        else {
-                            $('.hidePermissonOnProviderToggle').slideDown();
-                            $('.hideTabOnProviderToggle').slideDown();
-                        }
-                    });
             });
+
+            var radioButton = $('input:radio[name="ShowOnlyProviderPermissonsToggle"]');
+
+            if ($('#ShowOnlyProviderPermissonsLabel').hasClass('active')) {
+                $('.hidePermissonOnProviderToggle').slideUp();
+                $('.hideTabOnProviderToggle').slideUp();
+            }
+
+            radioButton.change(
+                function () {
+                    togglePermissions($(this));
+                });
         };
     };
 })(jQuery);
