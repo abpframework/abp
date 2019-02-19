@@ -14,7 +14,7 @@ namespace Volo.Docs.FileSystem.Documents
     {
         public const string Type = "FileSystem";
 
-        public async Task<Document> GetDocument(Project project, string documentName, string version)
+        public async Task<Document> GetDocumentAsync(Project project, string documentName, string version)
         {
             var projectFolder = project.GetFileSystemPath();
             var path = Path.Combine(projectFolder, documentName);
@@ -41,7 +41,7 @@ namespace Volo.Docs.FileSystem.Documents
             };
         }
 
-        public Task<List<VersionInfo>> GetVersions(Project project)
+        public Task<List<VersionInfo>> GetVersionsAsync(Project project)
         {
             return Task.FromResult(new List<VersionInfo>());
         }

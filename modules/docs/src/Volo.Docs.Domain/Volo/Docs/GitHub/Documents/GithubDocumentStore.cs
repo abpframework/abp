@@ -22,7 +22,7 @@ namespace Volo.Docs.GitHub.Documents
     {
         public const string Type = "GitHub";
 
-        public virtual async Task<Document> GetDocument(Project project, string documentName, string version)
+        public virtual async Task<Document> GetDocumentAsync(Project project, string documentName, string version)
         {
             var token = project.GetGitHubAccessTokenOrNull();
             var rootUrl = project.GetGitHubUrl(version);
@@ -56,7 +56,7 @@ namespace Volo.Docs.GitHub.Documents
             };
         }
 
-        public async Task<List<VersionInfo>> GetVersions(Project project)
+        public async Task<List<VersionInfo>> GetVersionsAsync(Project project)
         {
             List<VersionInfo> versions;
             try
@@ -148,12 +148,15 @@ namespace Volo.Docs.GitHub.Documents
         {
             try
             {
+                Logger.LogInformation("Downloading content from Github (DownloadWebContentAsStringAsync): " + rawUrl);
+
                 using (var webClient = new WebClient())
                 {
                     if (!token.IsNullOrWhiteSpace())
                     {
                         webClient.Headers.Add("Authorization", "token " + token);
                     }
+
                     webClient.Headers.Add("User-Agent", userAgent ?? "");
 
                     return await webClient.DownloadStringTaskAsync(new Uri(rawUrl));
@@ -171,6 +174,8 @@ namespace Volo.Docs.GitHub.Documents
         {
             try
             {
+                Logger.LogInformation("Downloading content from Github (DownloadWebContentAsByteArrayAsync): " + rawUrl);
+
                 using (var webClient = new WebClient())
                 {
                     if (!token.IsNullOrWhiteSpace())
@@ -219,8 +224,7 @@ namespace Volo.Docs.GitHub.Documents
             {
                 Logger.LogWarning(ex.Message);
             }
-
-
+            
             return contributors;
         }
 

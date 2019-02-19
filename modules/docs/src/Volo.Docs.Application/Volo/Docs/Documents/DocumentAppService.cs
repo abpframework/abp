@@ -95,7 +95,7 @@ namespace Volo.Docs.Documents
                 async () =>
                 {
                     var store = _documentStoreFactory.Create(project.DocumentStoreType);
-                    var document = await store.GetDocument(project, documentName, version);
+                    var document = await store.GetDocumentAsync(project, documentName, version);
 
                     return CreateDocumentWithDetailsDto(project, document);
                 },
