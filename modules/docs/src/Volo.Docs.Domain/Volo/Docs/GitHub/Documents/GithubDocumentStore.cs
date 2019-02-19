@@ -150,7 +150,7 @@ namespace Volo.Docs.GitHub.Documents
             {
                 Logger.LogInformation("Downloading content from Github (DownloadWebContentAsStringAsync): " + rawUrl);
 
-                using (var webClient = new WebClient())
+                using (var webClient = new GithubWebClient())
                 {
                     if (!token.IsNullOrWhiteSpace())
                     {
@@ -158,6 +158,8 @@ namespace Volo.Docs.GitHub.Documents
                     }
 
                     webClient.Headers.Add("User-Agent", userAgent ?? "");
+                    
+                    //TODO: SET TIMEOUT?
 
                     return await webClient.DownloadStringTaskAsync(new Uri(rawUrl));
                 }
@@ -176,7 +178,7 @@ namespace Volo.Docs.GitHub.Documents
             {
                 Logger.LogInformation("Downloading content from Github (DownloadWebContentAsByteArrayAsync): " + rawUrl);
 
-                using (var webClient = new WebClient())
+                using (var webClient = new GithubWebClient())
                 {
                     if (!token.IsNullOrWhiteSpace())
                     {
@@ -233,6 +235,22 @@ namespace Volo.Docs.GitHub.Documents
             return rootUrl
                 .Replace("github.com", "raw.githubusercontent.com")
                 .ReplaceFirst("/tree/", "/");
+        }
+
+        private class GithubWebClient : WebClient
+        {
+            protected override WebRequest GetWebRequest(Uri address)
+            {
+                var webRequest = base.GetWebRequest(address);
+                if (webRequest == null)
+                {
+                    return null;
+                }
+
+                webRequest.Timeout = 15000;
+
+                return webRequest;
+            }
         }
     }
 }
