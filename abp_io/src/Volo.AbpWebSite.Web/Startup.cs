@@ -28,7 +28,8 @@ namespace Volo.AbpWebSite
                 .AddDebug()
                 .AddSerilog(new LoggerConfiguration()
                     .Enrich.FromLogContext()
-                    .WriteTo.File("Logs/logs.txt")
+                    .Enrich.With(app.ApplicationServices.GetRequiredService<CorrelationIdLogEventEnricher>())
+                    .WriteTo.File("Logs/logs.txt",outputTemplate: "{Timestamp:HH:mm:ss} [{Level:u3}] [{CorrelationId}] {Message:lj}{NewLine}{Exception}")
                     .CreateLogger()
                 );
 
