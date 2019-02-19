@@ -46,11 +46,6 @@ namespace Volo.Abp.IdentityServer.Clients
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<long> GetTotalCount()
-        {
-            return await DbSet.CountAsync();
-        }
-
         public override IQueryable<Client> WithDetails()
         {
             return GetQueryable().IncludeDetails();
