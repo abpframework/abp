@@ -31,6 +31,8 @@ namespace Volo.Docs.Pages.Documents.Project
 
         public List<SelectListItem> VersionSelectItems { get; private set; }
 
+        public List<SelectListItem> ProjectSelectItems { get; private set; }
+
         public NavigationWithDetailsDto Navigation { get; private set; }
 
         public VersionInfoViewModel LatestVersionInfo { get; private set; }
@@ -52,6 +54,7 @@ namespace Volo.Docs.Pages.Documents.Project
         public async Task OnGetAsync()
         {
             await SetProjectAsync();
+            await SetProjectsAsync();
             await SetVersionAsync();
             await SetDocumentAsync();
             await SetNavigationAsync();
@@ -60,6 +63,18 @@ namespace Volo.Docs.Pages.Documents.Project
         private async Task SetProjectAsync()
         {
             Project = await _projectAppService.GetAsync(ProjectName);
+        }
+
+        private async Task SetProjectsAsync()
+        {
+            var projects = await _projectAppService.GetListAsync();
+
+            ProjectSelectItems = projects.Items.Select(p => new SelectListItem
+            {
+                Text = p.Name,
+                Value = p.Id != Project.Id ? "/documents/" + p.ShortName + "/" + DocsAppConsts.Latest : null,
+                Selected = p.Id == Project.Id
+            }).ToList();
         }
 
         private async Task SetVersionAsync()
@@ -101,7 +116,7 @@ namespace Volo.Docs.Pages.Documents.Project
             VersionSelectItems = versions.Select(v => new SelectListItem
             {
                 Text = v.DisplayText,
-                Value = CreateLink(LatestVersionInfo, v.Version, DocumentName),
+                Value = CreateVersionLink(LatestVersionInfo, v.Version, DocumentName),
                 Selected = v.IsSelected
             }).ToList();
         }
@@ -128,7 +143,7 @@ namespace Volo.Docs.Pages.Documents.Project
             Navigation.ConvertItems();
         }
         
-        public string CreateLink(VersionInfoViewModel latestVersion, string version, string documentName = null)
+        public string CreateVersionLink(VersionInfoViewModel latestVersion, string version, string documentName = null)
         {
             if (latestVersion == null || latestVersion.Version == version)
             {

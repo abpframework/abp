@@ -12,52 +12,28 @@
 
     <abp-modal size="Large">
 
-        <abp-modal-header title="@(L["Permissions"].Value) - @Model.EntityDisplayName"></abp-modal-header>
+        <abp-modal-header title="@(L["Permissions"].Value) - @Model.EntityDisplayName">
+
+        </abp-modal-header>
 
         <abp-modal-body>
 
             <input asp-for="@Model.ProviderKey" />
             <input asp-for="@Model.ProviderName" />
-
-            <abp-row h-align="End">
-                <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                    <label class="btn btn-light btn-sm @(Model.ShowOnlyProviderPermissons? "":"active")">
-                       <input type="radio" value="0" name="ShowOnlyProviderPermissonsToggle" autocomplete="off"
-                               @(Model.ShowOnlyProviderPermissons ? "" : "checked") /> @L["All"]
-                     </label>
-                     <label id="ShowOnlyProviderPermissonsLabel" class="btn btn-light btn-sm @(!Model.ShowOnlyProviderPermissons? "":"active")">
-                       <input type="radio" value="1" name="ShowOnlyProviderPermissonsToggle" id="ShowOnlyProviderPermissonsInput" autocomplete="off"
-                                   @(!Model.ShowOnlyProviderPermissons ? "" : "checked") />  @L["OnlyProviderPermissons"]
-                     </label>
-                </div>
-            </abp-row>
-
             <abp-tabs tab-style="PillVertical" vertical-header-size="_4">
                 @for (var i = 0; i < Model.Groups.Count; i++)
                 {
-                    var hideTabOnProviderToggle = true;
-                    @for (var j = 0; j < Model.Groups[i].Permissions.Count; j++)
-                    {
-                        if (!(!Model.Groups[i].Permissions[j].AllowedProviders?.Any() ?? true))
-                        {
-                            hideTabOnProviderToggle = false;
-                            break;
-                        }
-                    }
-
-                    <abp-tab header-class="@(hideTabOnProviderToggle?"hideTabOnProviderToggle":"")" title="@Model.Groups[i].DisplayName" name="v-pills-tab-@Model.Groups[i].GetNormalizedGroupName()">
+                    <abp-tab title="@Model.Groups[i].DisplayName" name="v-pills-tab-@Model.Groups[i].GetNormalizedGroupName()">
+                        <h2>@Model.Groups[i].DisplayName</h2>
                         @for (var j = 0; j < Model.Groups[i].Permissions.Count; j++)
                         {
-                            var hidePermissonOnProviderToggle = !Model.Groups[i].Permissions[j].AllowedProviders?.Any() ?? true;
-                            <div class="@(hidePermissonOnProviderToggle?"hidePermissonOnProviderToggle":"")">
-                                <abp-input asp-for="@Model.Groups[i].Permissions[j].IsGranted"
-                                           label="@Model.Groups[i].Permissions[j].GetShownName(Model.ProviderName)"
-                                           disabled="@Model.Groups[i].Permissions[j].IsDisabled(Model.ProviderName)"
-                                           group-data-permission-name="@Model.Groups[i].Permissions[j].Name"
-                                           group-data-parent-name="@(Model.Groups[i].Permissions[j].ParentName ?? "")"
-                                           group-style="margin-left: @(Model.Groups[i].Permissions[j].Depth * 20)px" />
-                                <input asp-for="@Model.Groups[i].Permissions[j].Name" />
-                            </div>
+                            <abp-input asp-for="@Model.Groups[i].Permissions[j].IsGranted"
+                                       label="@Model.Groups[i].Permissions[j].GetShownName(Model.ProviderName)"
+                                       disabled="@Model.Groups[i].Permissions[j].IsDisabled(Model.ProviderName)"
+                                       group-data-permission-name="@Model.Groups[i].Permissions[j].Name"
+                                       group-data-parent-name="@(Model.Groups[i].Permissions[j].ParentName ?? "")"
+                                       group-style="margin-left: @(Model.Groups[i].Permissions[j].Depth * 20)px" />
+                            <input asp-for="@Model.Groups[i].Permissions[j].Name" />
                         }
                     </abp-tab>
                 }

@@ -4,12 +4,12 @@
 
     abp.modals.PermissionManagement = function () {
         function checkParents($tab, $checkBox) {
-            var parentName = $checkBox.closest('.form-check').attr('data-parent-name');
+            var parentName = $checkBox.closest('.custom-checkbox').attr('data-parent-name');
             if (!parentName) {
                 return;
             }
 
-            $tab.find('.form-check')
+            $tab.find('.custom-checkbox')
                 .filter('[data-permission-name="' + parentName + '"]')
                 .find('input[type="checkbox"]')
                 .each(function() {
@@ -20,12 +20,12 @@
         }
 
         function uncheckChildren($tab, $checkBox) {
-            var permissionName = $checkBox.closest('.form-check').attr('data-permission-name');
+            var permissionName = $checkBox.closest('.custom-checkbox').attr('data-permission-name');
             if (!permissionName) {
                 return;
             }
 
-            $tab.find('.form-check')
+            $tab.find('.custom-checkbox')
                 .filter('[data-parent-name="' + permissionName + '"]')
                 .find('input[type="checkbox"]')
                 .each(function () {
@@ -33,17 +33,6 @@
                     $child.prop('checked', false);
                     uncheckChildren($tab, $child);
                 });
-        }
-
-        function togglePermissions(radioButton) {
-            if (radioButton.val() == '1') {
-                $('.hidePermissonOnProviderToggle').slideUp();
-                $('.hideTabOnProviderToggle').slideUp();
-            }
-            else {
-                $('.hidePermissonOnProviderToggle').slideDown();
-                $('.hideTabOnProviderToggle').slideDown();
-            }
         }
 
         this.initDom = function($el) {
@@ -60,18 +49,6 @@
                     });
                 });
             });
-
-            var radioButton = $('input:radio[name="ShowOnlyProviderPermissonsToggle"]');
-
-            if ($('#ShowOnlyProviderPermissonsLabel').hasClass('active')) {
-                $('.hidePermissonOnProviderToggle').slideUp();
-                $('.hideTabOnProviderToggle').slideUp();
-            }
-
-            radioButton.change(
-                function () {
-                    togglePermissions($(this));
-                });
         };
     };
 })(jQuery);

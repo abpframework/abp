@@ -56,10 +56,5 @@ namespace Volo.Abp.IdentityServer.IdentityResources
                 .Where(x => x.Name == name)
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
-
-        public virtual async Task<long> GetTotalCountAsync()
-        {
-            return await DbSet.CountAsync();
-        }
     }
 }

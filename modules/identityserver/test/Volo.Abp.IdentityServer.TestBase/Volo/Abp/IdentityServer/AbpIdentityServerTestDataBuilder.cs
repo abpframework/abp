@@ -90,7 +90,7 @@ namespace Volo.Abp.IdentityServer
                 FrontChannelLogoutUri = nameof(Client.FrontChannelLogoutUri)
             };
 
-            client.AddCorsOrigin(nameof(ClientCorsOrigin.Origin));
+            client.AddCorsOrigin("https://client1-origin.com");
             client.AddClaim(nameof(ClientClaim.Value), nameof(ClientClaim.Type));
             client.AddGrantType(nameof(ClientGrantType.GrantType));
             client.AddIdentityProviderRestriction(nameof(ClientIdPRestriction.Provider));

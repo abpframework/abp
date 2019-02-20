@@ -140,6 +140,8 @@ namespace Volo.AbpWebSite
             var app = context.GetApplicationBuilder();
             var env = context.GetEnvironment();
 
+            app.UseCorrelationId();
+
             app.UseAbpRequestLocalization();
 
             if (env.IsDevelopment())
