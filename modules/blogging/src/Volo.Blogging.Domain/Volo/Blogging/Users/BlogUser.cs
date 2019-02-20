@@ -4,7 +4,7 @@ using Volo.Abp.Users;
 
 namespace Volo.Blogging.Users
 {
-    public class BlogUser : AggregateRoot<Guid>, IUser
+    public class BlogUser : AggregateRoot<Guid>, IUser, IUpdateUserData
     {
         public virtual Guid? TenantId { get; protected set; }
 
@@ -40,8 +40,19 @@ namespace Volo.Blogging.Users
             TenantId = user.TenantId;
         }
 
-        public void Update(IUserData user)
+        public bool Update(IUserData user)
         {
+            if (UserName == user.UserName &&
+                Name == user.Name &&
+                Surname == user.Surname &&
+                Email == user.Email &&
+                EmailConfirmed == user.EmailConfirmed &&
+                PhoneNumber == user.PhoneNumber &&
+                PhoneNumberConfirmed == user.PhoneNumberConfirmed)
+            {
+                return false;
+            }
+
             Email = user.Email;
             Name = user.Name;
             Surname = user.Surname;
@@ -49,6 +60,8 @@ namespace Volo.Blogging.Users
             PhoneNumber = user.PhoneNumber;
             PhoneNumberConfirmed = user.PhoneNumberConfirmed;
             UserName = user.UserName;
+
+            return true;
         }
     }
 }
