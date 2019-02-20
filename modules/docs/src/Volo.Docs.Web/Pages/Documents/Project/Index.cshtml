@@ -45,7 +45,7 @@
                     <nav class="navbar navbar-logo">
                         @if (!Model.Project.Name.IsNullOrWhiteSpace())
                         {
-                            <a class="navbar-brand w-100" href="@Model.CreateLink(Model.LatestVersionInfo, Model.GetSpecificVersionOrLatest())">
+                            <a class="navbar-brand w-100" href="@Model.CreateVersionLink(Model.LatestVersionInfo, Model.GetSpecificVersionOrLatest())">
                                 <span id="ProjectName">@Model.Project.Name</span><br>
                                 <strong class="display-block">
                                     @L["Documents"]
@@ -72,12 +72,21 @@
                 </div>
 
                 <div class="docs-tree-list">
-                    <div class="docs-filter">
-                        <input class="form-control" type="search" placeholder="Filter topics" aria-label="Filter">
-                        <span class="my-2 filter-icon my-sm-0">
-                            <i class="fa fa-filter"></i>
-                        </span>
-                    </div>
+
+                    @if (Model.ProjectSelectItems.Any())
+                    {
+                        <div class="docs-version">
+                            <div class="version-select">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <label class="input-group-text">@L["Project"]</label>
+                                    </div>
+
+                                    <select asp-items="Model.ProjectSelectItems" class="form-control" onchange="window.location.replace(this.value)"></select>
+                                </div>
+                            </div>
+                        </div>
+                    }
 
                     @if (Model.VersionSelectItems.Any())
                     {
@@ -88,11 +97,18 @@
                                         <label class="input-group-text">@L["Version"]</label>
                                     </div>
 
-                                    <select asp-items="Model.VersionSelectItems" class="form-control" onchange="window.location.replace(this.value)"></select>
+                                    <select asp-items="Model.VersionSelectItems" class="form-control" onchange="if (this.value) { window.location.replace(this.value) }"></select>
                                 </div>
                             </div>
                         </div>
                     }
+
+                    <div class="docs-filter">
+                        <input class="form-control" type="search" placeholder="Filter topics" aria-label="Filter">
+                        <span class="my-2 filter-icon my-sm-0">
+                            <i class="fa fa-filter"></i>
+                        </span>
+                    </div>
 
                     @if (Model.Navigation == null || Model.Navigation.Content.IsNullOrEmpty())
                     {
