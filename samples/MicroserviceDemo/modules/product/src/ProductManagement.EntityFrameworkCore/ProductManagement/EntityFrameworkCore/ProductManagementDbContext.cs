@@ -29,6 +29,5 @@ namespace ProductManagement.EntityFrameworkCore
                 options.Schema = Schema;
             });
         }
-
     }
 }

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using ProductManagement;
+using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
@@ -13,9 +15,9 @@ namespace ProductManagement
     public class ProductAppService : ApplicationService, IProductAppService
     {
         private readonly ProductManager _productManager;
-        private readonly IProductRepository _productRepository;
+        private readonly IRepository<Product, Guid> _productRepository;
 
-        public ProductAppService(ProductManager productManager, IProductRepository productRepository)
+        public ProductAppService(ProductManager productManager, IRepository<Product, Guid> productRepository)
         {
             _productManager = productManager;
             _productRepository = productRepository;
@@ -23,7 +25,13 @@ namespace ProductManagement
 
         public async Task<PagedResultDto<ProductDto>> GetListPagedAsync(PagedAndSortedResultRequestDto input)
         {
-            var products = await _productRepository.GetListAsync(input.Sorting, input.MaxResultCount, input.SkipCount);
+            await NormalizeMaxResultCountAsync(input);
+
+            var products = await _productRepository
+                .OrderBy(input.Sorting)
+                .Skip(input.SkipCount)
+                .Take(input.MaxResultCount)
+                .ToListAsync();
 
             var totalCount = await _productRepository.GetCountAsync();
 
@@ -32,7 +40,7 @@ namespace ProductManagement
             return new PagedResultDto<ProductDto>(totalCount, dtos);
         }
 
-        public async Task<ListResultDto<ProductDto>> GetListAsync()
+        public async Task<ListResultDto<ProductDto>> GetListAsync() //TODO: Why there are two GetList. GetListPagedAsync would be enough (rename it to GetList)!
         {
             var products = await _productRepository.GetListAsync();
 
@@ -72,6 +80,15 @@ namespace ProductManagement
         public async Task DeleteAsync(Guid id)
         {
             await _productRepository.DeleteAsync(id);
+        }
+
+        private async Task NormalizeMaxResultCountAsync(PagedAndSortedResultRequestDto input)
+        {
+            var maxPageSize = (await SettingProvider.GetOrNullAsync(ProductManagementSettings.MaxPageSize))?.To<int>();
+            if (maxPageSize.HasValue && input.MaxResultCount > maxPageSize.Value)
+            {
+                input.MaxResultCount = maxPageSize.Value;
+            }
         }
     }
 }

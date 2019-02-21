@@ -1,8 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.EventBus;
+﻿using Volo.Abp.EventBus;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
-using Volo.Abp.Settings;
 
 namespace Volo.Abp.Users
 {
@@ -14,12 +12,6 @@ namespace Volo.Abp.Users
         )]
     public class AbpUsersAbstractionModule : AbpModule
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            Configure<SettingOptions>(options =>
-            {
-                options.ValueProviders.Add<UserSettingValueProvider>();
-            });
-        }
+
     }
 }

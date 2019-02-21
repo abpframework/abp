@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Users;
 
 namespace Volo.Blogging.Users
 {
-    public class BlogUser : AggregateRoot<Guid>, IUser, IHasExtraProperties
+    public class BlogUser : AggregateRoot<Guid>, IUser, IUpdateUserData
     {
         public virtual Guid? TenantId { get; protected set; }
 
@@ -24,16 +22,14 @@ namespace Volo.Blogging.Users
 
         public virtual bool PhoneNumberConfirmed { get; protected set; }
 
-        public virtual Dictionary<string, object> ExtraProperties { get; protected set; }
-
         protected BlogUser()
         {
-            ExtraProperties = new Dictionary<string, object>();
+
         }
 
         public BlogUser(IUserData user)
+            : base(user.Id)
         {
-            Id = user.Id;
             Email = user.Email;
             Name = user.Name;
             Surname = user.Surname;
@@ -42,8 +38,30 @@ namespace Volo.Blogging.Users
             PhoneNumberConfirmed = user.PhoneNumberConfirmed;
             UserName = user.UserName;
             TenantId = user.TenantId;
+        }
 
-            ExtraProperties = new Dictionary<string, object>();
+        public bool Update(IUserData user)
+        {
+            if (UserName == user.UserName &&
+                Name == user.Name &&
+                Surname == user.Surname &&
+                Email == user.Email &&
+                EmailConfirmed == user.EmailConfirmed &&
+                PhoneNumber == user.PhoneNumber &&
+                PhoneNumberConfirmed == user.PhoneNumberConfirmed)
+            {
+                return false;
+            }
+
+            Email = user.Email;
+            Name = user.Name;
+            Surname = user.Surname;
+            EmailConfirmed = user.EmailConfirmed;
+            PhoneNumber = user.PhoneNumber;
+            PhoneNumberConfirmed = user.PhoneNumberConfirmed;
+            UserName = user.UserName;
+
+            return true;
         }
     }
 }

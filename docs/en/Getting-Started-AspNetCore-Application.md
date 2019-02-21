@@ -152,6 +152,27 @@ services.AddApplication<AppModule>(options =>
 });
 ````
 
+4. Update `Program.cs` to not use the `WebHost.CreateDefaultBuilder()` method since it uses the default DI container:
+
+````csharp
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        BuildWebHostInternal(args).Run();
+    }
+
+    public static IWebHost BuildWebHostInternal(string[] args) =>
+        new WebHostBuilder()
+            .UseKestrel()
+            .UseContentRoot(Directory.GetCurrentDirectory())
+            .UseIISIntegration()
+            .UseStartup<Startup>()
+            .Build();
+}
+````
+
 ## Source Code
 
 Get source code of the sample project created in this tutorial from [here](https://github.com/abpframework/abp/tree/master/samples/BasicAspNetCoreApplication).
+

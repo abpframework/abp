@@ -3,6 +3,7 @@ using Volo.Abp.Application;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
+using Volo.Abp.Settings;
 using Volo.Abp.VirtualFileSystem;
 
 namespace ProductManagement
@@ -30,6 +31,11 @@ namespace ProductManagement
                 options.Resources
                     .Get<ProductManagementResource>()
                     .AddVirtualJson("/ProductManagement/Localization/ApplicationContracts");
+            });
+
+            Configure<SettingOptions>(options =>
+            {
+                options.DefinitionProviders.Add<ProductManagementSettingDefinitionProvider>();
             });
         }
     }

@@ -36,5 +36,16 @@ namespace Volo.Abp.Authorization.Permissions
             return Groups[name];
         }
 
+        public virtual void RemoveGroup(string name)
+        {
+            Check.NotNull(name, nameof(name));
+
+            if (!Groups.ContainsKey(name))
+            {
+                throw new AbpException($"Not found permission group with name: {name}");
+            }
+
+            Groups.Remove(name);
+        }
     }
 }

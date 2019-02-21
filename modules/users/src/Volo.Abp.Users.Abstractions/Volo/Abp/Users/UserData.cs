@@ -28,6 +28,19 @@ namespace Volo.Abp.Users
 
         }
 
+        public UserData(IUserData userData)
+        {
+            Id = userData.Id;
+            UserName = userData.UserName;
+            Email = userData.Email;
+            Name = userData.Name;
+            Surname = userData.Surname;
+            EmailConfirmed = userData.EmailConfirmed;
+            PhoneNumber = userData.PhoneNumber;
+            PhoneNumberConfirmed = userData.PhoneNumberConfirmed;
+            TenantId = userData.TenantId;
+        }
+
         public UserData(
             Guid id,
             [NotNull] string userName,

@@ -68,7 +68,7 @@ namespace Volo.Docs.Projects
         protected virtual async Task<List<VersionInfo>> GetVersionsAsync(Project project)
         {
             var store = _documentStoreFactory.Create(project.DocumentStoreType);
-            var versions = await store.GetVersions(project);
+            var versions = await store.GetVersionsAsync(project);
 
             if (!versions.Any())
             {

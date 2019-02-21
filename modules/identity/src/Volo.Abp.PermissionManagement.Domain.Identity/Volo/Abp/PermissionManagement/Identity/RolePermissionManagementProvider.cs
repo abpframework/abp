@@ -36,7 +36,7 @@ namespace Volo.Abp.PermissionManagement.Identity
                 );
             }
 
-            if (providerName == "User")
+            if (providerName == UserPermissionValueProvider.ProviderName)
             {
                 var userId = Guid.Parse(providerKey);
                 var roleNames = await _userRoleFinder.GetRolesAsync(userId);

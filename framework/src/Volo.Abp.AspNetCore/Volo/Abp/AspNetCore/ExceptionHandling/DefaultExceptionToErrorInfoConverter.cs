@@ -13,7 +13,6 @@ using Volo.Abp.ExceptionHandling;
 using Volo.Abp.Http;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.ExceptionHandling;
-using Volo.Abp.UI;
 using Volo.Abp.Validation;
 
 namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling

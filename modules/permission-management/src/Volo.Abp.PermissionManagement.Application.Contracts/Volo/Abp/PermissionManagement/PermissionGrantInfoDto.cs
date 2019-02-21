@@ -12,6 +12,8 @@ namespace Volo.Abp.PermissionManagement
 
         public bool IsGranted { get; set; }
 
-        public List<ProviderInfoDto> Providers { get; set; }
+        public List<string> AllowedProviders { get; set; }
+
+        public List<ProviderInfoDto> GrantedProviders { get; set; }
     }
 }

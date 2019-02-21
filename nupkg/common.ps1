@@ -140,6 +140,7 @@ $projects = (
     # modules/identityserver
     "modules/identityserver/src/Volo.Abp.IdentityServer.Domain.Shared",
     "modules/identityserver/src/Volo.Abp.IdentityServer.Domain",
+    "modules/identityserver/src/Volo.Abp.PermissionManagement.Domain.IdentityServer",
     "modules/identityserver/src/Volo.Abp.IdentityServer.EntityFrameworkCore", 
     "modules/identityserver/src/Volo.Abp.IdentityServer.MongoDB",
 
@@ -163,6 +164,7 @@ $projects = (
     "modules/blogging/src/Volo.Blogging.Domain",
     "modules/blogging/src/Volo.Blogging.Domain.Shared",
     "modules/blogging/src/Volo.Blogging.EntityFrameworkCore",
+    "modules/blogging/src/Volo.Blogging.MongoDB",
     "modules/blogging/src/Volo.Blogging.HttpApi",
     "modules/blogging/src/Volo.Blogging.HttpApi.Client",
     "modules/blogging/src/Volo.Blogging.Web",
