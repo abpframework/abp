@@ -1,0 +1,37 @@
+﻿@using Volo.Abp.UI.Navigation
+@model ApplicationMenuItem
+@{
+    var elementId = string.IsNullOrEmpty(Model.ElementId) ? string.Empty : $"id=\"{Model.ElementId}\"";
+    var cssClass = string.IsNullOrEmpty(Model.CssClass) ? string.Empty : Model.CssClass;
+    var disabled = Model.IsDisabled ? "disabled" : string.Empty;
+}
+@if (Model.IsLeaf)
+{
+    @if (Model.Url != null)
+    {
+        <a class="dropdown-item @cssClass @disabled" href="@(Model.Url ?? "#")" @Html.Raw(elementId)>
+            @Model.DisplayName
+        </a>
+    }
+}
+else
+{
+    @*<li class="dropdown-submenu">
+        <a role="button" class="btn dropdown-toggle" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+            <span class="lp-icon">
+                <i class="@(Model.Icon ?? "")"></i>
+            </span>
+            <span class="lp-text">
+                @Model.DisplayName
+            </span>
+        </a>
+        <div class="dropdown-menu">
+            @foreach (var childMenuItem in Model.Items)
+            {
+                @await Html.PartialAsync("~/Themes/Basic/Components/Menu/_MenuItem.cshtml", childMenuItem)
+            }
+        </div>
+    </li>*@
+
+}
