@@ -3,6 +3,7 @@
 @model Volo.Abp.Account.Web.Pages.Account.LoginModel
 @inherits Volo.Abp.Account.Web.Pages.Account.AccountPage
 @inject Volo.Abp.Settings.ISettingProvider SettingProvider
+<h2>@L["Login"]</h2>
 @if (Model.EnableLocalLogin)
 {
     <form method="post">
