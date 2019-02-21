@@ -13,11 +13,6 @@ using Volo.Blogging.Users;
 
 namespace Volo.Blogging.Posts
 {
-    /* TODO: Custom policy with configuration.
-     * We should create a custom policy to see the blog as read only if the blog is
-     * configured as 'public' or the current user has the related permission.
-     */
-    //[Authorize(BloggingPermissions.Posts.Default)]
     public class PostAppService : ApplicationService, IPostAppService
     {
         protected IBlogUserLookupService UserLookupService { get; }
@@ -256,14 +251,13 @@ namespace Volo.Blogging.Posts
             return new List<string>(tags.Split(",").Select(t => t.Trim()));
         }
 
-        private async Task<List<PostWithDetailsDto>> FilterPostsByTag(List<PostWithDetailsDto> allPostDtos, Tag tag)
+        private Task<List<PostWithDetailsDto>> FilterPostsByTag(List<PostWithDetailsDto> allPostDtos, Tag tag)
         {
             var filteredPostDtos = new List<PostWithDetailsDto>();
-            var posts = await _postRepository.GetListAsync();
 
             foreach (var postDto in allPostDtos)
             {
-                if (!postDto.Tags.Any(p => p.Id == tag.Id))
+                if (postDto.Tags.All(p => p.Id != tag.Id))
                 {
                     continue;
                 }
@@ -271,7 +265,7 @@ namespace Volo.Blogging.Posts
                 filteredPostDtos.Add(postDto);
             }
 
-            return filteredPostDtos;
+            return Task.FromResult(filteredPostDtos);
         }
     }
 }
