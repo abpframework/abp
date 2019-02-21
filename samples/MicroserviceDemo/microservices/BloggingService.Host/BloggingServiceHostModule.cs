@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
@@ -23,6 +24,7 @@ using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.Threading;
 using Volo.Blogging;
 using Volo.Blogging.Blogs;
+using Volo.Blogging.Files;
 using Volo.Blogging.MongoDB;
 
 namespace BloggingService.Host
@@ -45,6 +47,7 @@ namespace BloggingService.Host
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var configuration = context.Services.GetConfiguration();
+            var hostingEnvironment = context.Services.GetHostingEnvironment();
 
             context.Services.AddAuthentication("Bearer")
                 .AddIdentityServerAuthentication(options =>
@@ -77,6 +80,12 @@ namespace BloggingService.Host
             Configure<AbpDbContextOptions>(options =>
             {
                 options.UseSqlServer();
+            });
+
+            Configure<BlogFileOptions>(options =>
+            {
+                options.FileUploadLocalFolder = Path.Combine(hostingEnvironment.WebRootPath, "files");
+                options.FileUploadUrlRoot = "/files/";
             });
 
             context.Services.AddDistributedRedisCache(options =>
