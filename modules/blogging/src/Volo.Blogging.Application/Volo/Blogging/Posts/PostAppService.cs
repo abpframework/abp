@@ -135,6 +135,7 @@ namespace Volo.Blogging.Posts
             return postDto;
         }
 
+        [Authorize(BloggingPermissions.Posts.Delete)]
         public async Task DeleteAsync(Guid id)
         {
             var post = await _postRepository.GetAsync(id);
