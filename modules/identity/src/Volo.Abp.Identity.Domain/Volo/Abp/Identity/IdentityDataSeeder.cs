@@ -56,6 +56,7 @@ namespace Volo.Abp.Identity
             }
 
             adminUser = new IdentityUser(_guidGenerator.Create(), adminUserName, "admin@abp.io", tenantId);
+            adminUser.Name = adminUserName;
             CheckIdentityErrors(await _userManager.CreateAsync(adminUser, adminUserPassword));
 
             //"admin" role
