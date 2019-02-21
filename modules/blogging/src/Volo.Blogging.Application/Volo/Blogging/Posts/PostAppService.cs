@@ -79,24 +79,6 @@ namespace Volo.Blogging.Posts
             return new ListResultDto<PostWithDetailsDto>(postDtos);
         }
 
-        private async Task<List<PostWithDetailsDto>> FilterPostsByTag(List<PostWithDetailsDto> allPostDtos, Tag tag)
-        {
-            var filteredPostDtos = new List<PostWithDetailsDto>();
-            var posts = await _postRepository.GetListAsync();
-
-            foreach (var postDto in allPostDtos)
-            {
-                if (!postDto.Tags.Any(p=> p.Id == tag.Id))
-                {
-                    continue;
-                }
-
-                filteredPostDtos.Add(postDto);
-            }
-
-            return filteredPostDtos;
-        }
-
         public async Task<PostWithDetailsDto> GetForReadingAsync(GetPostInput input)
         {
             var post = await _postRepository.GetPostByUrl(input.BlogId, input.Url);
@@ -272,6 +254,24 @@ namespace Volo.Blogging.Posts
                 return new List<string>();
             }
             return new List<string>(tags.Split(",").Select(t => t.Trim()));
+        }
+
+        private async Task<List<PostWithDetailsDto>> FilterPostsByTag(List<PostWithDetailsDto> allPostDtos, Tag tag)
+        {
+            var filteredPostDtos = new List<PostWithDetailsDto>();
+            var posts = await _postRepository.GetListAsync();
+
+            foreach (var postDto in allPostDtos)
+            {
+                if (!postDto.Tags.Any(p => p.Id == tag.Id))
+                {
+                    continue;
+                }
+
+                filteredPostDtos.Add(postDto);
+            }
+
+            return filteredPostDtos;
         }
     }
 }
