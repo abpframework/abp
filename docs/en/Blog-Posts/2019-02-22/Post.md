@@ -24,7 +24,7 @@ See [its documentation](https://abp.io/documents/abp/latest/Samples/Microservice
 
 ## Improvements/Features
 
-We've worked on so many features including distributed event bus (with RabbitMQ integration), IdentityServer4 integration and enhancements for almost all features. We are continuously refactoring and adding tests to make the framework more stable and production ready. It is [rapidly growing](https://github.com/abpframework/abp/graphs/contributors).
+We've worked on so many features including **distributed event bus** (with RabbitMQ integration), **IdentityServer4 integration** and enhancements for almost all features. We are continuously refactoring and adding tests to make the framework more stable and production ready. It is [rapidly growing](https://github.com/abpframework/abp/graphs/contributors).
 
 ## Road Map
 
@@ -34,11 +34,11 @@ According to our estimation, we have planned to release v1.0 in Q2 of 2019 (prob
 
 We will also work on [the documentation](https://abp.io/documents/abp/latest) since it is far from complete now.
 
-First release may not include a SPA template. However, we want to prepare a simple one if it can be possible. Haven't decided yet about the SPA framework. Alternatives: Angular, React and Blazor. Please write your thought as a comment to this post.
+First release may not include a SPA template. However, we want to prepare a simple one if it can be possible. Haven't decided yet about the SPA framework. Alternatives: **Angular, React and Blazor**. Please write your thought as a comment to this post.
 
 ## Chinese Web Site
 
-There is a big ABP community in China. They have created a Chinese version of the abp.io web site: https://cn.abp.io/ They are keeping it up to date. Thanks to the Chinese developers and especially to Liming Ma ([twitter](https://twitter.com/realmaliming), [github](https://github.com/maliming)).
+There is a big ABP community in China. They have created a Chinese version of the abp.io web site: https://cn.abp.io/ They are keeping it up to date. Thanks to the Chinese developers and especially to [Liming Ma](https://github.com/maliming).
 
 ## NDC {London} 2019
 
@@ -48,3 +48,7 @@ We also had a chance to talk with [Scott Hanselman](https://twitter.com/shanselm
 
 ![scott-and-jon](scott-and-jon.png)
 
+## Follow It
+
+* You can star and follow the **GitHub** repository: https://github.com/abpframework/abp
+* You can follow the official **Twitter** account for news: https://twitter.com/abpframework
