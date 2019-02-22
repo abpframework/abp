@@ -31,6 +31,12 @@ namespace Volo.Abp.Identity.Web.Navigation
             {
                 identityMenuItem.AddItem(new ApplicationMenuItem(IdentityMenuNames.Users, l["Users"], url: "/Identity/Users"));
             }
+
+            var identityMenuItem2 = new ApplicationMenuItem("asdasd", "Dropdown", icon: "fa fa-id-card-o");
+            identityMenuItem2.AddItem(new ApplicationMenuItem("qweqew", "Link 2", url: "/Identity/Users"));
+            identityMenuItem2.AddItem(new ApplicationMenuItem("qweqeww", "Link 1", url: "/Identity/Roles"));
+
+            identityMenuItem.AddItem(identityMenuItem2);
         }
     }
 }

@@ -26,14 +26,59 @@
     }
     else
     {
-        <nav-item class="dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="Menu_@(menuItem.Name)" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">@menuItem.DisplayName</a>
-            <div class="dropdown-menu" aria-labelledby="Menu_@(menuItem.Name)">
-                @foreach (var childMenuItem in menuItem.Items)
-                {
-                    @await Html.PartialAsync("~/Themes/Basic/Components/Menu/_MenuItem.cshtml", childMenuItem)
-                }
+        <li class="nav-item">
+            <div class="dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="Menu_@(menuItem.Name)" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">@menuItem.DisplayName</a>
+                <div class="dropdown-menu" aria-labelledby="Menu_@(menuItem.Name)">
+                    @foreach (var childMenuItem in menuItem.Items)
+                    {
+                        @await Html.PartialAsync("~/Themes/Basic/Components/Menu/_MenuItem.cshtml", childMenuItem)
+                    }
+                </div>
             </div>
-        </nav-item>
+        </li>
     }
 }
+
+<!-- Test yapılabilmesi için çağırıldı. Silinecek. ÖNEMLİ -->
+<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+
+
+<!-- Olması gereken yere bu stiller yazılacak. -->
+<style type="text/css">
+    .navbar .dropdown-submenu {
+        position: relative;
+    }
+
+        .navbar .dropdown-submenu a::after {
+            transform: rotate(-90deg);
+            position: absolute;
+            right: 6px;
+            top: .8em;
+        }
+
+        .navbar .dropdown-submenu .dropdown-menu {
+            top: 0;
+            left: 100%;
+            margin-left: .1rem;
+            margin-right: .1rem;
+        }
+</style>
+
+<!-- Olması gereken yere bu script yazılacak. -->
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.dropdown-menu a.dropdown-toggle').on('click', function (e) {
+            if (!$(this).next().hasClass('show')) {
+                $(this).parents('.dropdown-menu').first().find('.show').removeClass("show");
+            }
+            var $subMenu = $(this).next(".dropdown-menu");
+            $subMenu.toggleClass('show');
+
+            $(this).parents('li.nav-item.dropdown.show').on('hidden.bs.dropdown', function (e) {
+                $('.dropdown-submenu .show').removeClass("show");
+            });
+            return false;
+        });
+    });
+</script>

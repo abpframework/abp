@@ -16,7 +16,7 @@
 }
 else
 {
-    @*<li class="dropdown-submenu">
+    <div class="dropdown-submenu">
         <a role="button" class="btn dropdown-toggle" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
             <span class="lp-icon">
@@ -32,6 +32,5 @@ else
                 @await Html.PartialAsync("~/Themes/Basic/Components/Menu/_MenuItem.cshtml", childMenuItem)
             }
         </div>
-    </li>*@
-
+    </div> 
 }
