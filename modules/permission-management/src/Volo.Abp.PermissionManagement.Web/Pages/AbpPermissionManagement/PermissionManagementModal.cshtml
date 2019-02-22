@@ -12,7 +12,7 @@
 
     <abp-modal size="Large">
 
-        <abp-modal-header title="@(L["Permissions"].Value) - @Model.EntityDisplayName">
+        <abp-modal-header title="@(L["Permissions"].Value)">
 
         </abp-modal-header>
 
@@ -24,7 +24,10 @@
                 @for (var i = 0; i < Model.Groups.Count; i++)
                 {
                     <abp-tab title="@Model.Groups[i].DisplayName" name="v-pills-tab-@Model.Groups[i].GetNormalizedGroupName()">
-                        <h2>@Model.Groups[i].DisplayName</h2>
+                        <h4>@Model.Groups[i].DisplayName</h4>
+                        <p> Permissions for "<strong>@Model.EntityDisplayName</strong>".</p>
+                        <hr class="mb-4" />
+
                         @for (var j = 0; j < Model.Groups[i].Permissions.Count; j++)
                         {
                             <abp-input asp-for="@Model.Groups[i].Permissions[j].IsGranted"
