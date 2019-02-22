@@ -1,12 +1,12 @@
-# Microservice Demo, Projects Status and More
+# Microservice Demo, Projects Status and Road Map
 
-After the first announcement on the ABP vNext, we have a lot of improvements on the codebase (1138 commits on the [GitHub repository](https://github.com/abpframework/abp)). We've created features, samples, documentation and much more. In this post, I want to write about what's happening and what you can expect in the next few months.
+After [the first announcement](https://abp.io/blog/abp/Abp-vNext-Announcement) on the ABP vNext, we have a lot of improvements on the codebase (1100+ commits on the [GitHub repository](https://github.com/abpframework/abp)). We've created features, samples, documentation and much more. In this post, I want to inform you about some news and the status of the project.
 
 ## Microservice Demo Solution
 
 One of the major goals of the ABP framework is to provide a [convenient infrastructure to create microservice solutions](https://abp.io/documents/abp/latest/Microservice-Architecture).
 
-We've been working to develop a microservice solution demo. Initial version is completed and [documented](https://abp.io/documents/abp/latest/Samples/Microservice-Demo). This sample solution aims to demonstrate a simple yet complete microservice solution;
+We've been working to develop a microservice solution demo. Initial version was completed and [documented](https://abp.io/documents/abp/latest/Samples/Microservice-Demo). This sample solution aims to demonstrate a simple yet complete microservice solution;
 
 - Has multiple, independent, self-deployable **microservices**.
 - Multiple **web applications**, each uses a different API gateway.
@@ -28,7 +28,9 @@ We've worked on so many features including distributed event bus (with RabbitMQ 
 
 ## Road Map
 
-There are too much work before first stable version (v1.0). You can see [prioritized backlog items](https://github.com/abpframework/abp/issues?q=is%3Aopen+is%3Aissue+milestone%3ABacklog) on the GitHub repo. However, according to our estimation, we have planned to release v1.0 in Q2 2019 (probably in May or June). So, not too much time to wait. We are also very excited for the first stable release.
+There are still too much work to be done before the first stable release (v1.0). You can see [prioritized backlog items](https://github.com/abpframework/abp/issues?q=is%3Aopen+is%3Aissue+milestone%3ABacklog) on the GitHub repo.
+
+According to our estimation, we have planned to release v1.0 in Q2 of 2019 (probably in May or June). So, not too much time to wait. We are also very excited for the first stable release.
 
 We will also work on [the documentation](https://abp.io/documents/abp/latest) since it is far from complete now.
 
