@@ -15,6 +15,12 @@ namespace Volo.Abp.Auditing
         public bool IsEnabled { get; set; }
 
         /// <summary>
+        /// The name of the application or service writing audit logs.
+        /// Default: null.
+        /// </summary>
+        public string ApplicationName { get; set; }
+
+        /// <summary>
         /// Default: true.
         /// </summary>
         public bool IsEnabledForAnonymousUsers { get; set; }

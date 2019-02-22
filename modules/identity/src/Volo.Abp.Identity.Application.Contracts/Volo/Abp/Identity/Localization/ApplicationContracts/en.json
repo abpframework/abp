@@ -7,6 +7,7 @@
     "Permission:Edit": "Edit",
     "Permission:Delete": "Delete",
     "Permission:ChangePermissions": "Change permissions",
-    "Permission:UserManagement": "User management"
+    "Permission:UserManagement": "User management",
+    "Permission:UserLookup": "User lookup"
   }
 }

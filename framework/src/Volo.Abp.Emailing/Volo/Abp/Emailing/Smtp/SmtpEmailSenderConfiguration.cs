@@ -18,14 +18,14 @@ namespace Volo.Abp.Emailing.Smtp
 
         public virtual string Password => GetNotEmptySettingValue(EmailSettingNames.Smtp.Password);
 
-        public virtual string Domain => SettingManager.GetOrNull(EmailSettingNames.Smtp.Domain);
+        public virtual string Domain => SettingProvider.GetOrNull(EmailSettingNames.Smtp.Domain);
 
-        public virtual bool EnableSsl => SettingManager.GetOrNull(EmailSettingNames.Smtp.EnableSsl).To<bool>();
+        public virtual bool EnableSsl => SettingProvider.GetOrNull(EmailSettingNames.Smtp.EnableSsl).To<bool>();
 
-        public virtual bool UseDefaultCredentials => SettingManager.GetOrNull(EmailSettingNames.Smtp.UseDefaultCredentials).To<bool>();
+        public virtual bool UseDefaultCredentials => SettingProvider.GetOrNull(EmailSettingNames.Smtp.UseDefaultCredentials).To<bool>();
 
-        public SmtpEmailSenderConfiguration(ISettingManager settingManager)
-            : base(settingManager)
+        public SmtpEmailSenderConfiguration(ISettingProvider settingProvider)
+            : base(settingProvider)
         {
 
         }

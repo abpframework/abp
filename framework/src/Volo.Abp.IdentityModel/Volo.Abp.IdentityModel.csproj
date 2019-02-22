@@ -14,7 +14,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="IdentityModel" Version="3.10.4" />
+    <PackageReference Include="IdentityModel" Version="3.10.5" />
     <ProjectReference Include="..\Volo.Abp.Core\Volo.Abp.Core.csproj" />
   </ItemGroup>
 

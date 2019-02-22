@@ -1,0 +1,34 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: public-website
+  name: public-website
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        io.kompose.service: public-website
+    spec:
+      containers:
+      - env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: Development
+        - name: ASPNETCORE_URLS
+          value: http://0.0.0.0:80
+        - name: AuthServer__Authority
+          value: http://auth-server:64999
+        - name: Redis__Configuration
+          value: redis
+        - name: RemoteServices__Default__BaseUrl
+          value: http://public-website-gateway/
+        image: microservice-demo/public-website:latest
+        name: public-website
+        ports:
+        - containerPort: 80
+        resources: {}
+        imagePullPolicy: Never
+      restartPolicy: Always
+status: {}

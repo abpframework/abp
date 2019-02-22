@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
+﻿using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Toolbars;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
@@ -46,7 +45,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic
                     {
                         bundle
                             .AddBaseBundles(StandardBundles.Styles.Global)
-                            .AddContributors(new BasicThemeGlobalStyleContributor());
+                            .AddContributors(typeof(BasicThemeGlobalStyleContributor));
                     });
 
                 options

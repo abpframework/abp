@@ -4,7 +4,7 @@ namespace Volo.Abp.Settings
 {
     public class DefaultValueSettingValueProvider : SettingValueProvider
     {
-        public const string ProviderName = null;
+        public const string ProviderName = "Default";
 
         public override string Name => ProviderName;
 
@@ -14,21 +14,9 @@ namespace Volo.Abp.Settings
 
         }
 
-        public override Task<string> GetOrNullAsync(SettingDefinition setting, string providerKey)
+        public override Task<string> GetOrNullAsync(SettingDefinition setting)
         {
             return Task.FromResult(setting.DefaultValue);
-        }
-
-        public override Task SetAsync(SettingDefinition setting, string value, string providerKey)
-        {
-            setting.DefaultValue = value;
-            return Task.CompletedTask;
-        }
-
-        public override Task ClearAsync(SettingDefinition setting, string providerKey)
-        {
-            setting.DefaultValue = null;
-            return Task.CompletedTask;
         }
     }
 }

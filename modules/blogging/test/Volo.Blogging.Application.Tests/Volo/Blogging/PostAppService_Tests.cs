@@ -29,7 +29,7 @@ namespace Volo.Blogging
         }
 
         [Fact]
-        public async Task Should_Get_Fore_Reading()
+        public async Task Should_Get_For_Reading()
         {
             var blogId = (await _blogRepository.GetListAsync()).First().Id;
             var post = (await _postRepository.GetListAsync()).First(p=>p.BlogId == blogId);

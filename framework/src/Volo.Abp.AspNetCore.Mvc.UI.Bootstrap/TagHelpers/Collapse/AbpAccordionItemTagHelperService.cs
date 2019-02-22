@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Collapse
 {
@@ -15,7 +16,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Collapse
 
             var html = GetAccordionHeaderItem(context, output) + GetAccordionContentItem(context, output, innerContent);
 
-            var tabHeaderItems = GetValueFromContext<List<string>>(context, AccordionItems);
+            var tabHeaderItems = context.GetValue<List<string>>(AccordionItems);
 
             tabHeaderItems.Add(html);
 

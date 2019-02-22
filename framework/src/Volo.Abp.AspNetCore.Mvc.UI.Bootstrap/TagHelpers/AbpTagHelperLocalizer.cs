@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
@@ -20,27 +21,38 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
 
         public string GetLocalizedText(string text, ModelExplorer explorer)
         {
-            var localizer = GetStringLocalizer(explorer);
+            var resourceType = GetResourceTypeFromModelExplorer(explorer);
+            var localizer = GetStringLocalizer(resourceType);
 
             return localizer == null ? text : localizer[text].Value;
         }
 
         public IStringLocalizer GetLocalizer(ModelExplorer explorer)
         {
-            return GetStringLocalizer(explorer);
+            var resourceType = GetResourceTypeFromModelExplorer(explorer);
+            return GetStringLocalizer(resourceType);
         }
 
-        private IStringLocalizer GetStringLocalizer(ModelExplorer explorer)
+        public IStringLocalizer GetLocalizer(Assembly assembly)
         {
-            IStringLocalizer localizer = null;
-            var resourceType = _options.AssemblyResources.GetOrDefault(explorer.Container.ModelType.Assembly);
+            var resourceType = _options.AssemblyResources.GetOrDefault(assembly);
+            return GetStringLocalizer(resourceType);
+        }
 
-            if (resourceType != null)
-            {
-                localizer = _stringLocalizerFactory.Create(resourceType);
-            }
+        public IStringLocalizer GetLocalizer(Type resourceType)
+        {
+            return GetStringLocalizer(resourceType);
+        }
 
-            return localizer;
+        private IStringLocalizer GetStringLocalizer(Type resourceType)
+        {
+            return resourceType == null ? null : _stringLocalizerFactory.Create(resourceType);
+        }
+
+        private Type GetResourceTypeFromModelExplorer(ModelExplorer explorer)
+        {
+            var assembly = explorer.Container.ModelType.Assembly;
+            return _options.AssemblyResources.GetOrDefault(assembly);
         }
     }
 }

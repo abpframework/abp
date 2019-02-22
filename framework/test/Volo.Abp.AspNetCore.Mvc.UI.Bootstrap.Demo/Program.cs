@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore;
+﻿using System.IO;
 using Microsoft.AspNetCore.Hosting;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo
@@ -11,7 +11,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo
         }
 
         public static IWebHost BuildWebHostInternal(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
+            new WebHostBuilder()
+                .UseKestrel()
+                .UseContentRoot(Directory.GetCurrentDirectory())
+                .UseIISIntegration()
                 .UseStartup<Startup>()
                 .Build();
     }

@@ -35,7 +35,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Identity.TestBase"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Identity.Domain.Tests", "test\Volo.Abp.Identity.Domain.Tests\Volo.Abp.Identity.Domain.Tests.csproj", "{588B6E38-323B-4251-AC21-5F67C815A44E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Identity.AspNetCore", "src\Volo.Abp.Identity.AspNetCore\Volo.Abp.Identity.AspNetCore.csproj", "{D5EFC912-75A0-4856-9B8D-DFDD4CD66BAB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Identity.AspNetCore", "src\Volo.Abp.Identity.AspNetCore\Volo.Abp.Identity.AspNetCore.csproj", "{D5EFC912-75A0-4856-9B8D-DFDD4CD66BAB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.PermissionManagement.Domain.Identity", "src\Volo.Abp.PermissionManagement.Domain.Identity\Volo.Abp.PermissionManagement.Domain.Identity.csproj", "{736F91E7-8A70-441B-89DE-0E29A348E718}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -103,6 +105,10 @@ Global
 		{D5EFC912-75A0-4856-9B8D-DFDD4CD66BAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D5EFC912-75A0-4856-9B8D-DFDD4CD66BAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D5EFC912-75A0-4856-9B8D-DFDD4CD66BAB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{736F91E7-8A70-441B-89DE-0E29A348E718}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{736F91E7-8A70-441B-89DE-0E29A348E718}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{736F91E7-8A70-441B-89DE-0E29A348E718}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{736F91E7-8A70-441B-89DE-0E29A348E718}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -123,6 +129,7 @@ Global
 		{D7F61598-E7CE-4DAB-99EA-C266F0423606} = {9FACAF96-A681-4B36-A938-A37DCA0B7EC1}
 		{588B6E38-323B-4251-AC21-5F67C815A44E} = {9FACAF96-A681-4B36-A938-A37DCA0B7EC1}
 		{D5EFC912-75A0-4856-9B8D-DFDD4CD66BAB} = {AADC5A0A-F100-4511-87DE-B74E55F5B69B}
+		{736F91E7-8A70-441B-89DE-0E29A348E718} = {AADC5A0A-F100-4511-87DE-B74E55F5B69B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {05740D37-83CF-4041-9C2A-D89F1B3DB5A4}

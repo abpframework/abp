@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
+using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
 {
@@ -13,13 +14,13 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
     {
         private readonly IHtmlGenerator _generator;
         private readonly HtmlEncoder _encoder;
-        private readonly IStringLocalizer<AbpUiResource> _localizer;
+        private readonly IAbpTagHelperLocalizer _tagHelperLocalizer;
 
-        public AbpPaginationTagHelperService(IHtmlGenerator generator, HtmlEncoder encoder, IStringLocalizer<AbpUiResource> localizer)
+        public AbpPaginationTagHelperService(IHtmlGenerator generator, HtmlEncoder encoder, IAbpTagHelperLocalizer tagHelperLocalizer)
         {
             _generator = generator;
             _encoder = encoder;
-            _localizer = localizer;
+            _tagHelperLocalizer = tagHelperLocalizer;
         }
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
@@ -117,13 +118,15 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
 
         protected virtual string RenderAnchorTagHelperLinkHtml(TagHelperContext context, TagHelperOutput output, string currentPage, string localizationKey)
         {
+            var localizer = _tagHelperLocalizer.GetLocalizer(typeof(AbpUiResource));
+
             var anchorTagHelper = GetAnchorTagHelper(currentPage, out var attributeList);
 
-            var tagHelperOutput = GetInnerTagHelper(attributeList, context, anchorTagHelper, "a", TagMode.StartTagAndEndTag);
+            var tagHelperOutput = anchorTagHelper.ProcessAndGetOutput(attributeList, context, "a", TagMode.StartTagAndEndTag);
 
-            tagHelperOutput.Content.SetHtmlContent(_localizer[localizationKey]);
+            tagHelperOutput.Content.SetHtmlContent(localizer[localizationKey]);
 
-            var renderedHtml = RenderTagHelperOutput(tagHelperOutput, _encoder);
+            var renderedHtml = tagHelperOutput.Render(_encoder);
 
             return renderedHtml;
         }
@@ -150,8 +153,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
 
         protected virtual string GetOpeningTags(TagHelperContext context, TagHelperOutput output)
         {
+            var localizer = _tagHelperLocalizer.GetLocalizer(typeof(AbpUiResource));
+
             var pagerInfo = (TagHelper.ShowInfo ?? false) ?
-                "    <div class=\"col-sm-12 col-md-5\"> " + _localizer["PagerInfo", TagHelper.Model.ShowingFrom, TagHelper.Model.ShowingTo, TagHelper.Model.TotalItemsCount] + "</div>\r\n"
+                "    <div class=\"col-sm-12 col-md-5\"> " + localizer["PagerInfo", TagHelper.Model.ShowingFrom, TagHelper.Model.ShowingTo, TagHelper.Model.TotalItemsCount] + "</div>\r\n"
                 : "";
 
             return

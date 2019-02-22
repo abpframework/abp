@@ -63,14 +63,6 @@ namespace Volo.Abp.AspNetCore.Mvc
                 options.IgnoredInterfaces.AddIfNotContains(typeof(IActionFilter));
             });
 
-            Configure<AbpAspNetCoreMvcOptions>(options =>
-            {
-                options.ConventionalControllers.Create(typeof(AbpAspNetCoreMvcModule).Assembly, o =>
-                {
-                    o.RootPath = "abp";
-                });
-            });
-
             var mvcCoreBuilder = context.Services.AddMvcCore();
             context.Services.ExecutePreConfiguredActions(mvcCoreBuilder);
 

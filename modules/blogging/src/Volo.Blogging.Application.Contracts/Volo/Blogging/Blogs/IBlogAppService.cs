@@ -8,8 +8,6 @@ namespace Volo.Blogging.Blogs
 {
     public interface IBlogAppService : IApplicationService
     {
-        Task<PagedResultDto<BlogDto>> GetListPagedAsync(PagedAndSortedResultRequestDto input);
-
         Task<ListResultDto<BlogDto>> GetListAsync();
 
         Task<BlogDto> GetByShortNameAsync(string shortName);

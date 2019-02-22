@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.AspNetCore.Modularity;
 using Volo.Abp.AspNetCore.TestBase;
 using Volo.Abp.Autofac;
 using Volo.Abp.Http.Client;

@@ -1,0 +1,32 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: console-client-demo
+  name: console-client-demo
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        io.kompose.service: console-client-demo
+    spec:
+      containers:
+      - env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: Development
+        - name: ASPNETCORE_URLS
+          value: http://0.0.0.0:80
+        - name: IdentityClients__Default__Authority
+          value: http://auth-server:64999
+        - name: RemoteServices__Default__BaseUrl
+          value: http://internal-gateway/
+        image: microservice-demo/console-client-demo:latest
+        name: console-client-demo
+        ports:
+        - containerPort: 80
+        resources: {}
+        imagePullPolicy: Never
+      restartPolicy: Always
+status: {}

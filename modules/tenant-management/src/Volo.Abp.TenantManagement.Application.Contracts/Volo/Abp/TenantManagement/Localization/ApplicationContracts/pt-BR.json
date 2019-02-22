@@ -1,7 +1,7 @@
 {
   "culture": "pt-BR",
   "texts": {
-    "Permission:TenantManagement": "Gerenciamento de Inquilinos",
+    "Permission:TenantManagement": "Inquilinos",
     "Permission:Create": "Criar",
     "Permission:Edit": "Editar",
     "Permission:Delete": "Excluir"

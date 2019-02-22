@@ -20,7 +20,8 @@ $solutionPaths = (
     "abp_io",
     "templates/module",
     "templates/service",
-    "templates/mvc"
+    "templates/mvc",
+    "samples/MicroserviceDemo"
 )
 
 # Build all solutions

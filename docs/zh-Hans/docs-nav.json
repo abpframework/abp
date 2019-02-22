@@ -16,11 +16,11 @@
           "text": "从空项目开始",
           "items": [
             {
-              "text": "使用Console Application",
+              "text": "使用ASP.NET Core Web Application",
               "path": "Getting-Started-AspNetCore-Application.md"
             },
             {
-              "text": "使用 ASP.NET Core Web Application",
+              "text": "使用Console Application",
               "path": "Getting-Started-Console-Application.md"
             }
           ]
@@ -67,7 +67,8 @@
           "path": "Exception-Handling.md"
         },
         {
-          "text": "验证"
+          "text": "验证",
+          "path": "Validation.md"
         },
         {
           "text": "授权"
@@ -160,7 +161,8 @@
               "path": "Repositories.md"
             },
             {
-              "text": "领域服务"
+              "text": "领域服务",
+              "path": "Domain-Services.md"
             },
             {
               "text": "规约"
@@ -171,13 +173,15 @@
           "text": "应用服务层",
           "items": [
             {
-              "text": "应用服务"
+              "text": "应用服务",
+              "path": "Application-Services.md"
             },
             {
               "text": "数据传输对象(DTO)"
             },
             {
-              "text": "工作单元"
+              "text": "工作单元",
+              "path": "Unit-Of-Work.md"
             }
           ]
         }
@@ -188,7 +192,7 @@
       "items": [
         {
           "text": "API",
-           "items": [            
+           "items": [
              {
                "text": "自动API控制器",
                "path": "AspNetCore/Auto-API-Controllers.md"
@@ -253,6 +257,23 @@
           ]
         }
       ]
+    },
+    {
+      "text": "示例",
+      "items": [
+        {
+          "text": "微服务示例",
+          "path": "Samples/Microservice-Demo.md"
+        }
+      ]
+    },
+    {
+      "text": "应用模块",
+      "path": "Modules/Index.md"
+    },
+    {
+      "text": "微服务架构",
+      "path": "Microservice-Architecture.md"
     },
     {
       "text": "测试"

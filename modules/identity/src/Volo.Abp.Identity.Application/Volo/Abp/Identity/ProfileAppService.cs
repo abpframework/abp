@@ -28,12 +28,12 @@ namespace Volo.Abp.Identity
         {
             var user = await _userManager.GetByIdAsync(CurrentUser.GetId());
 
-            if (await SettingManager.IsTrueAsync(IdentitySettingNames.User.IsUserNameUpdateEnabled))
+            if (await SettingProvider.IsTrueAsync(IdentitySettingNames.User.IsUserNameUpdateEnabled))
             {
                 (await _userManager.SetUserNameAsync(user, input.UserName)).CheckErrors();
             }
 
-            if (await SettingManager.IsTrueAsync(IdentitySettingNames.User.IsEmailUpdateEnabled))
+            if (await SettingProvider.IsTrueAsync(IdentitySettingNames.User.IsEmailUpdateEnabled))
             {
                 (await _userManager.SetEmailAsync(user, input.Email)).CheckErrors();
             }

@@ -7,15 +7,15 @@ ABP可以自动创建C# API 客户端代理来调用远程HTTP服务(REST APIS).
 你的service或controller需要实现一个在服务端和客户端共享的接口.因此,首先需要在一个共享的类库项目中定义一个服务接口.例如:
 
 ````csharp
-public interface IBookService : IApplicationService
+public interface IBookAppService : IApplicationService
 {
     Task<List<BookDto>> GetListAsync();
 }
 ````
 
-你的接口需要实现`IRemoteService`接口.由于`IApplicationService`继承自`IRemoteService`接口.所以`IBookService`完全满足这个条件.
+为了能自动被发现,你的接口需要实现`IRemoteService`接口.由于`IApplicationService`继承自`IRemoteService`接口.所以`IBookAppService`完全满足这个条件.
 
-在你的服务中实现这个类,你可以使用[Auto API Controller](Auto-API-Controllers.md)将你的服务暴漏为一个REST API 端点.
+在你的服务中实现这个类,你可以使用[auto API controller system](Auto-API-Controllers.md)将你的服务暴漏为一个REST API 端点.
 
 ## 客户端代理生成
 
@@ -45,13 +45,6 @@ public class MyClientAppModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        //配置远程端点
-        context.Services.Configure<RemoteServiceOptions>(options =>
-        {
-            options.RemoteServices.Default =
-                new RemoteServiceConfiguration("http://localhost:53929/");
-        });
-
         //创建动态客户端代理
         context.Services.AddHttpClientProxies(
             typeof(BookStoreApplicationModule).Assembly
@@ -60,9 +53,23 @@ public class MyClientAppModule : AbpModule
 }
 ````
 
-`RemoteServiceOptions`被用来为远程服务配置端点(本例设置了默认的端点,当然你也可以拥有不同的服务端点供不同的客户端使用.参考本文"多个远程服务端点"小节).
-
 `AddHttpClientproxies`方法获得一个程序集,找到这个程序集中所有的服务接口,创建并注册代理类.
+
+### Endpoint配置
+
+`appsettings.json`文件中的`RemoteServices`节点被用来设置默认的服务地址.下面是最简单的配置:
+
+````
+{
+  "RemoteServices": {
+    "Default": {
+      "BaseUrl": "http://localhost:53929/"
+    } 
+  } 
+}
+````
+
+查看下面的"RemoteServiceOptions"章节获取更多详细配置.
 
 ## 使用
 
@@ -71,9 +78,9 @@ public class MyClientAppModule : AbpModule
 ````csharp
 public class MyService : ITransientDependency
 {
-    private readonly IBookService _bookService;
+    private readonly IBookAppService _bookService;
 
-    public MyService(IBookService bookService)
+    public MyService(IBookAppService bookService)
     {
         _bookService = bookService;
     }
@@ -89,38 +96,32 @@ public class MyService : ITransientDependency
 }
 ````
 
-本例注入了上面定义的`IBookService`服务接口.当客户端调用服务方法的时候动态客户端代理就会创建一个HTTP调用.
+本例注入了上面定义的`IBookAppService`服务接口.当客户端调用服务方法的时候动态客户端代理就会创建一个HTTP调用.
 
-## 详细配置
+### IHttpClientProxy接口
+
+你可以像上面那样注入`IBookAppService`来使用客户端代理,也可以注入`IHttpClientProxy<IBookAppService>`获取更多明确的用法.这种情况下你可以使用`IHttpClientProxy<T>`接口的`Service`属性.
+
+## 配置
 
 ### RemoteServiceOptions
 
-你可以像上面展示的那样配置`RemoteServiceOptions`.也可以从`appsettings.json`文件中读取.在你的`appsettings.json`文件中添加`RemoteServices`节点:
+默认情况下`RemoteServiceOptions`从`appsettings.json`获取.或者,你可以使用`Configure`方法来设置或重写它.如:
 
-````json
+````csharp
+public override void ConfigureServices(ServiceConfigurationContext context)
 {
-  "RemoteServices": {
-    "Default": {
-      "BaseUrl": "http://localhost:53929/"
-    } 
-  } 
+    context.Services.Configure<RemoteServiceOptions>(options =>
+    {
+        options.RemoteServices.Default =
+            new RemoteServiceConfiguration("http://localhost:53929/");
+    });
+    
+    //...
 }
 ````
 
-然后你可以像下面这样将`IConfigurationRoot`实例直接传递到`Configure<RemoteServiceOptions>()`方法中:
-
-````csharp
-var configuration = new ConfigurationBuilder()
-    .SetBasePath(Directory.GetCurrentDirectory())
-    .AddJsonFile("appsettings.json")
-    .Build();
-
-context.Services.Configure<RemoteServiceOptions>(configuration);
-````
-
-这种方式对于不修改代码来改变配置是非常有用的.
-
-#### 多个远程服务端点
+### 多个远程服务端点
 
 上面的例子已经配置了"Default"远程服务端点.你可能需要为不同的服务创建不同的端点.(就像在微服务方法中一样,每个微服务具有不同的端点).在这种情况下,你可以在你的配置文件中添加其他的端点:
 
@@ -137,10 +138,6 @@ context.Services.Configure<RemoteServiceOptions>(configuration);
 }
 ````
 
-下一节学习如何使用这个新的端点.
-
-### AddHttpClientProxies方法
-
 `AddHttpClientProxies`方法有一个可选的参数来定义远程服务的名字:
 
 ````csharp
@@ -151,3 +148,18 @@ context.Services.AddHttpClientProxies(
 ````
 
 `remoteServiceName`参数会匹配通过`RemoteServiceOptions`配置的服务端点.如果`BookStore`端点没有定义就会使用默认的`Default`端点.
+
+### 作为默认服务
+
+当你为`IBookAppService`创建了一个服务代理,你可以直接注入`IBookAppService`来使用代理客户端(像上面章节中将的那样).你可以传递`asDefaultService:false`到`AddHttpClientProxies`方法来禁用此功能.
+
+````csharp
+context.Services.AddHttpClientProxies(
+    typeof(BookStoreApplicationModule).Assembly,
+    asDefaultServices: false
+);
+````
+
+如果你的程序中已经有一个服务的实现并且你不想用你的客户端代理重写或替换其他的实现,就需要使用`asDefaultServices:false`
+
+> 如果你禁用了`asDefaultService`,你只能使用`IHttpClientProxy<T>`接口去使用客户端代理.(参见上面的相关章节).

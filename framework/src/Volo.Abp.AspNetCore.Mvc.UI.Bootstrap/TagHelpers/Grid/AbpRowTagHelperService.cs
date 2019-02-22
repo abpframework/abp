@@ -7,8 +7,16 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid
     {
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
+            if (output.TagName == "abp-row")
+            {
+                output.Attributes.AddClass("row");
+            }
+            if (output.TagName == "abp-form-row")
+            {
+                output.Attributes.AddClass("form-row");
+            }
+
             output.TagName = "div";
-            output.Attributes.AddClass("row");
 
             ProcessVerticalAlign(output);
             ProcessHorizontalAlign(output);

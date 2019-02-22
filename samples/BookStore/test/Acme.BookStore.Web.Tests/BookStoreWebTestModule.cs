@@ -4,16 +4,13 @@ using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
-using Microsoft.AspNetCore.Mvc.Internal;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Acme.BookStore.Localization.BookStore;
 using Acme.BookStore.Menus;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
-using Volo.Abp.AspNetCore.Modularity;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.TestBase;
 using Volo.Abp.Identity.Web;
 using Volo.Abp.Localization;
@@ -44,8 +41,6 @@ namespace Acme.BookStore
         {
             ConfigureLocalizationServices(context.Services);
             ConfigureNavigationServices(context.Services);
-
-            context.Services.AddAssemblyOf<BookStoreWebTestModule>();
         }
 
         private static void ConfigureLocalizationServices(IServiceCollection services)

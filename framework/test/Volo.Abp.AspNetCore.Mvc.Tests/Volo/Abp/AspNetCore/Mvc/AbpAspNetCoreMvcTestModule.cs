@@ -2,7 +2,6 @@
 using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.AspNetCore.Modularity;
 using Volo.Abp.AspNetCore.Mvc.Authorization;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.Localization.Resource;
@@ -83,6 +82,7 @@ namespace Volo.Abp.AspNetCore.Mvc
         {
             var app = context.GetApplicationBuilder();
 
+            app.UseCorrelationId();
             app.UseMiddleware<FakeAuthenticationMiddleware>();
             app.UseAuditing();
             app.UseUnitOfWork();
