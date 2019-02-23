@@ -1,6 +1,5 @@
 ﻿@using Volo.Abp.UI.Navigation
 @model ApplicationMenu
-
 @foreach (var menuItem in Model.Items)
 {
     var elementId = string.IsNullOrEmpty(menuItem.ElementId) ? string.Empty : $"id=\"{menuItem.ElementId}\"";
@@ -39,46 +38,3 @@
         </li>
     }
 }
-
-<!-- Test yapılabilmesi için çağırıldı. Silinecek. ÖNEMLİ -->
-<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
-
-
-<!-- Olması gereken yere bu stiller yazılacak. -->
-<style type="text/css">
-    .navbar .dropdown-submenu {
-        position: relative;
-    }
-
-        .navbar .dropdown-submenu a::after {
-            transform: rotate(-90deg);
-            position: absolute;
-            right: 16px;
-            top: 18px;
-        }
-
-        .navbar .dropdown-submenu .dropdown-menu {
-            top: 0;
-            left: 100%;
-            margin-left: .1rem;
-            margin-right: .1rem;
-        }
-</style>
-
-<!-- Olması gereken yere bu script yazılacak. -->
-<script type="text/javascript">
-    $(document).ready(function () {
-        $('.dropdown-menu a.dropdown-toggle').on('click', function (e) {
-            if (!$(this).next().hasClass('show')) {
-                $(this).parents('.dropdown-menu').first().find('.show').removeClass("show");
-            }
-            var $subMenu = $(this).next(".dropdown-menu");
-            $subMenu.toggleClass('show');
-
-            $(this).parents('li.nav-item.dropdown.show').on('hidden.bs.dropdown', function (e) {
-                $('.dropdown-submenu .show').removeClass("show");
-            });
-            return false;
-        });
-    });
-</script>
