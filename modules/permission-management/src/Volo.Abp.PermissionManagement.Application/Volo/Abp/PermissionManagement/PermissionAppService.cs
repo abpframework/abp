@@ -62,7 +62,8 @@ namespace Volo.Abp.PermissionManagement
                         Name = permission.Name,
                         DisplayName = permission.DisplayName.Localize(_stringLocalizerFactory),
                         ParentName = permission.Parent?.Name,
-                        Providers = new List<ProviderInfoDto>()
+                        AllowedProviders = permission.Providers,
+                        GrantedProviders = new List<ProviderInfoDto>()
                     };
 
                     var grantInfo = await _permissionManager.GetAsync(permission.Name, providerName, providerKey);
@@ -71,7 +72,7 @@ namespace Volo.Abp.PermissionManagement
 
                     foreach (var provider in grantInfo.Providers)
                     {
-                        grantInfoDto.Providers.Add(new ProviderInfoDto
+                        grantInfoDto.GrantedProviders.Add(new ProviderInfoDto
                         {
                             ProviderName = provider.Name,
                             ProviderKey = provider.Key,

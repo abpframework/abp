@@ -1,6 +1,8 @@
 ﻿using AuthServer.Host.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.DependencyInjection;
+using StackExchange.Redis;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
@@ -67,6 +69,11 @@ namespace AuthServer.Host
                 options.IsEnabledForGetRequests = true;
                 options.ApplicationName = "AuthServer";
             });
+
+            //TODO: ConnectionMultiplexer.Connect call has problem since redis may not be ready when this service has started!
+            var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
+            context.Services.AddDataProtection()
+                .PersistKeysToStackExchangeRedis(redis, "MsDemo-DataProtection-Keys");
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)

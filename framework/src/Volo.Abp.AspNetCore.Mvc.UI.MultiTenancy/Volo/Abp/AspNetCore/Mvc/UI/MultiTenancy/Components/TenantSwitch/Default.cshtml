@@ -1,14 +1,17 @@
 ﻿@using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy.Components.TenantSwitch
 @model TenantSwitchViewComponent.TenantSwitchViewModel
-<li class="nav-item">
-    <a abp-button="Link" id="TenantSwitchToolbarLink" href="#">
-        @if (Model.Tenant == null)
-        {
-            <text>@@host</text>
-        }
-        else
-        {
-            <text>@@@Model.Tenant.Name</text>
-        }
-    </a>
-</li>
+@if (!Model.CurrentUser.IsAuthenticated)
+{
+    <li class="nav-item">
+        <a abp-button="Link" id="TenantSwitchToolbarLink" href="#">
+            @if (Model.Tenant == null)
+            {
+                <text>@@host</text>
+            }
+            else
+            {
+                <text>@@@Model.Tenant.Name</text>
+            }
+        </a>
+    </li>
+}

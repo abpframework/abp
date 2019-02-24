@@ -13,6 +13,8 @@ namespace Volo.Abp.Authorization.TestServices
             }
             PermissionGroupDefinition group = context.AddGroup("TestGroup");
             group.AddPermission("MyAuthorizedService1");
+
+            context.RemoveGroup("TestGetGroup");
         }
     }
 }

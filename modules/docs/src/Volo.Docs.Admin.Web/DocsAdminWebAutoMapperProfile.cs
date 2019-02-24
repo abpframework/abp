@@ -14,7 +14,7 @@ namespace Volo.Docs.Admin
             CreateMap<EditModel.EditGithubProjectViewModel, UpdateProjectDto>().Ignore(x => x.ExtraProperties);
 
             CreateMap<ProjectDto, EditModel.EditGithubProjectViewModel > ()
-                .Ignore(x => x.GitHubAccessToken).Ignore(x => x.GitHubRootUrl);
+                .Ignore(x => x.GitHubAccessToken).Ignore(x => x.GitHubRootUrl).Ignore(x => x.GitHubUserAgent);
         }
     }
 }

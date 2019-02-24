@@ -13,7 +13,8 @@ namespace Volo.Abp.IdentityServer
 
             return builder
                 .AddClientStore<ClientStore>()
-                .AddResourceStore<ResourceStore>();
+                .AddResourceStore<ResourceStore>()
+                .AddCorsPolicyService<AbpCorsPolicyService>();
         }
     }
 }

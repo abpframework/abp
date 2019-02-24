@@ -36,7 +36,7 @@ namespace Volo.Abp.TestApp
         {
             _cityRepository.Insert(new City(Guid.NewGuid(), "Tokyo"));
             _cityRepository.Insert(new City(Guid.NewGuid(), "Madrid"));
-            _cityRepository.Insert(new City(LondonCityId, "London"));
+            _cityRepository.Insert(new City(LondonCityId, "London") {ExtraProperties = { { "Population", 10_470_000 } } });
             _cityRepository.Insert(new City(IstanbulCityId, "Istanbul"));
             _cityRepository.Insert(new City(Guid.NewGuid(), "Paris"));
             _cityRepository.Insert(new City(Guid.NewGuid(), "Washington"));
