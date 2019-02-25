@@ -13,11 +13,6 @@ using Volo.Blogging.Users;
 
 namespace Volo.Blogging.Posts
 {
-    /* TODO: Custom policy with configuration.
-     * We should create a custom policy to see the blog as read only if the blog is
-     * configured as 'public' or the current user has the related permission.
-     */
-    //[Authorize(BloggingPermissions.Posts.Default)]
     public class PostAppService : ApplicationService, IPostAppService
     {
         protected IBlogUserLookupService UserLookupService { get; }
@@ -79,24 +74,6 @@ namespace Volo.Blogging.Posts
             return new ListResultDto<PostWithDetailsDto>(postDtos);
         }
 
-        private async Task<List<PostWithDetailsDto>> FilterPostsByTag(List<PostWithDetailsDto> allPostDtos, Tag tag)
-        {
-            var filteredPostDtos = new List<PostWithDetailsDto>();
-            var posts = await _postRepository.GetListAsync();
-
-            foreach (var postDto in allPostDtos)
-            {
-                if (!postDto.Tags.Any(p=> p.Id == tag.Id))
-                {
-                    continue;
-                }
-
-                filteredPostDtos.Add(postDto);
-            }
-
-            return filteredPostDtos;
-        }
-
         public async Task<PostWithDetailsDto> GetForReadingAsync(GetPostInput input)
         {
             var post = await _postRepository.GetPostByUrl(input.BlogId, input.Url);
@@ -135,6 +112,7 @@ namespace Volo.Blogging.Posts
             return postDto;
         }
 
+        [Authorize(BloggingPermissions.Posts.Delete)]
         public async Task DeleteAsync(Guid id)
         {
             var post = await _postRepository.GetAsync(id);
@@ -271,6 +249,23 @@ namespace Volo.Blogging.Posts
                 return new List<string>();
             }
             return new List<string>(tags.Split(",").Select(t => t.Trim()));
+        }
+
+        private Task<List<PostWithDetailsDto>> FilterPostsByTag(List<PostWithDetailsDto> allPostDtos, Tag tag)
+        {
+            var filteredPostDtos = new List<PostWithDetailsDto>();
+
+            foreach (var postDto in allPostDtos)
+            {
+                if (postDto.Tags.All(p => p.Id != tag.Id))
+                {
+                    continue;
+                }
+
+                filteredPostDtos.Add(postDto);
+            }
+
+            return Task.FromResult(filteredPostDtos);
         }
     }
 }

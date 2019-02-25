@@ -31,6 +31,7 @@ using Volo.Abp.Threading;
 using Volo.Abp.UI;
 using Volo.Abp.VirtualFileSystem;
 using Volo.Blogging;
+using Volo.Blogging.Files;
 using Volo.BloggingTestApp.EntityFrameworkCore;
 using Volo.BloggingTestApp.MongoDb;
 
@@ -108,6 +109,12 @@ namespace Volo.BloggingTestApp
             Configure<ThemingOptions>(options =>
             {
                 options.DefaultThemeName = BasicTheme.Name;
+            });
+
+            Configure<BlogFileOptions>(options =>
+            {
+                options.FileUploadLocalFolder = Path.Combine(hostingEnvironment.WebRootPath, "files");
+                options.FileUploadUrlRoot = "/files/";
             });
         }
 

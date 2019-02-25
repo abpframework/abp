@@ -26,7 +26,7 @@ namespace MyCompanyName.MyProjectName
         {
             Configure<VirtualFileSystemOptions>(options =>
             {
-                options.FileSets.AddEmbedded<MyProjectNameDomainModule>();
+                options.FileSets.AddEmbedded<MyProjectNameDomainModule>("MyCompanyName.MyProjectName");
             });
 
             Configure<AbpLocalizationOptions>(options =>

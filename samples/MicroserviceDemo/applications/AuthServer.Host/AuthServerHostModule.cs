@@ -70,6 +70,7 @@ namespace AuthServer.Host
                 options.ApplicationName = "AuthServer";
             });
 
+            //TODO: ConnectionMultiplexer.Connect call has problem since redis may not be ready when this service has started!
             var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
             context.Services.AddDataProtection()
                 .PersistKeysToStackExchangeRedis(redis, "MsDemo-DataProtection-Keys");

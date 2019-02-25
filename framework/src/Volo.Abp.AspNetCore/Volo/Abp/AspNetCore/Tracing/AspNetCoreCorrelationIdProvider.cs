@@ -27,18 +27,21 @@ namespace Volo.Abp.AspNetCore.Tracing
                 return CreateNewCorrelationId();
             }
 
-            lock (HttpContextAccessor.HttpContext.Request.Headers)
+            string correlationId = HttpContextAccessor.HttpContext.Request.Headers[Options.HttpHeaderName];
+
+            if (correlationId.IsNullOrEmpty())
             {
-                string correlationId = HttpContextAccessor.HttpContext.Request.Headers[Options.HttpHeaderName];
-
-                if (correlationId.IsNullOrEmpty())
+                lock (HttpContextAccessor.HttpContext.Request.Headers)
                 {
-                    correlationId = CreateNewCorrelationId();
-                    HttpContextAccessor.HttpContext.Request.Headers[Options.HttpHeaderName] = correlationId;
+                    if (correlationId.IsNullOrEmpty())
+                    {
+                        correlationId = CreateNewCorrelationId();
+                        HttpContextAccessor.HttpContext.Request.Headers[Options.HttpHeaderName] = correlationId;
+                    }
                 }
-
-                return correlationId;
             }
+
+            return correlationId;
         }
 
         protected virtual string CreateNewCorrelationId()
