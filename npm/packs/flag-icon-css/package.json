@@ -1,0 +1,10 @@
+{
+  "version": "0.5.1",
+  "name": "@abp/flag-icon-css",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "flag-icon-css": "^3.3.0"
+  }
+}
