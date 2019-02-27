@@ -24,11 +24,6 @@ namespace Volo.Abp.Authorization.Permissions
         /// </summary>
         public List<string> Providers { get; } //TODO: Rename to AllowedProviders?
 
-        /// <summary>
-        /// Used to mark this permission as also a feature of the application.
-        /// </summary>
-        public bool IsFeature { get; set; }
-
         public ILocalizableString DisplayName
         {
             get => _displayName;
@@ -60,12 +55,10 @@ namespace Volo.Abp.Authorization.Permissions
 
         protected internal PermissionDefinition(
             [NotNull] string name, 
-            ILocalizableString displayName = null,
-            bool isFeature = false)
+            ILocalizableString displayName = null)
         {
             Name = Check.NotNull(name, nameof(name));
             DisplayName = displayName ?? new FixedLocalizableString(name);
-            IsFeature = isFeature;
 
             Properties = new Dictionary<string, object>();
             Providers = new List<string>();
@@ -74,10 +67,9 @@ namespace Volo.Abp.Authorization.Permissions
 
         public virtual PermissionDefinition AddChild(
             [NotNull] string name, 
-            ILocalizableString displayName = null,
-            bool isFeature = false)
+            ILocalizableString displayName = null)
         {
-            var child = new PermissionDefinition(name, displayName, isFeature)
+            var child = new PermissionDefinition(name, displayName)
             {
                 Parent = this
             };

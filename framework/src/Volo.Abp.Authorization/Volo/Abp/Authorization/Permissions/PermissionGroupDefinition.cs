@@ -50,10 +50,9 @@ namespace Volo.Abp.Authorization.Permissions
 
         public virtual PermissionDefinition AddPermission(
             string name, 
-            ILocalizableString displayName = null,
-            bool isFeature = false)
+            ILocalizableString displayName = null)
         {
-            var permission = new PermissionDefinition(name, displayName, isFeature);
+            var permission = new PermissionDefinition(name, displayName);
 
             _permissions.Add(permission);
 
