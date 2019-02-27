@@ -24,7 +24,7 @@ This sample aims to demonstrate a simple yet complete microservice solution;
 
 The diagram below shows the system:
 
-![microservice-sample-diagram](../images/microservice-sample-diagram.png)
+![microservice-sample-diagram-2](../images/microservice-sample-diagram-2.png)
 
 ### Source Code
 
@@ -32,7 +32,7 @@ You can get the source code from [the GitHub repository](https://github.com/abpf
 
 ### Status
 
-This sample is still in development, not completed yet.
+Initial version of this sample has been completed. Additional improvement are still in development.
 
 ## Running the Solution
 
