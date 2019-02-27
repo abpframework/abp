@@ -73,8 +73,7 @@ namespace Volo.Abp.Authorization.Permissions
                 }
                 else if (result == PermissionGrantResult.Prohibited)
                 {
-                    isGranted = true;
-                    break;
+                    return false;
                 }
             }
 
