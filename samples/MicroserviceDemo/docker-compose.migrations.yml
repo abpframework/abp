@@ -9,7 +9,7 @@ services:
       - "1433"
 
   migrations:
-    image: 'microservice-demo/migrations:${TAG:-latest}'
+    image: 'volosoft/microservice-demo-migrations:${TAG:-latest}'
     build:
       context: ../..
       dockerfile: samples/MicroserviceDemo/databases/Dockerfile
@@ -17,7 +17,7 @@ services:
       - sqlserver
 
   restore-database:
-    image: 'microservice-demo/restore-database:${TAG:-latest}'
+    image: 'volosoft/microservice-demo-restore-database:${TAG:-latest}'
     build:
       context: ../..
       dockerfile: samples/MicroserviceDemo/databases/restore/Dockerfile
