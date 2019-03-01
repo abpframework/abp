@@ -2,7 +2,6 @@
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Security;
-using Volo.Abp.Users;
 
 namespace Volo.Abp.Settings
 {
