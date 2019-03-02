@@ -39,5 +39,12 @@ namespace Volo.Abp.Data
             source.ExtraProperties[name] = value;
             return source;
         }
+
+        public static TSource RemoveProperty<TSource>(this TSource source, string name)
+            where TSource : IHasExtraProperties
+        {
+            source.ExtraProperties.Remove(name);
+            return source;
+        }
     }
 }

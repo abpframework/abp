@@ -40,7 +40,7 @@ namespace Volo.Abp.Settings
         /// A list of allowed providers to get/set value of this setting.
         /// An empty list indicates that all providers are allowed.
         /// </summary>
-        public List<string> Providers { get; }
+        public List<string> Providers { get; } //TODO: Rename to AllowedProviders
 
         /// <summary>
         /// Is this setting inherited from parent scopes.
