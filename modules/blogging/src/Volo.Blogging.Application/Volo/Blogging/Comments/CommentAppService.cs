@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Guids;
-using Volo.Abp.Users;
 using Volo.Blogging.Comments.Dtos;
 using Volo.Blogging.Posts;
 using Volo.Blogging.Users;
@@ -81,7 +80,7 @@ namespace Volo.Blogging.Comments
                 ObjectMapper.Map<List<Comment>, List<CommentWithDetailsDto>>(comments));
         }
 
-        //[Authorize(BloggingPermissions.Comments.Create)] TODO: Temporary removed
+        [Authorize]
         public async Task<CommentWithDetailsDto> CreateAsync(CreateCommentDto input)
         {
             var comment = new Comment(_guidGenerator.Create(), input.PostId, input.RepliedCommentId, input.Text);
@@ -91,6 +90,7 @@ namespace Volo.Blogging.Comments
             return ObjectMapper.Map<Comment, CommentWithDetailsDto>(comment);
         }
 
+        [Authorize]
         public async Task<CommentWithDetailsDto> UpdateAsync(Guid id, UpdateCommentDto input)
         {
             var comment = await _commentRepository.GetAsync(id);
@@ -104,6 +104,7 @@ namespace Volo.Blogging.Comments
             return ObjectMapper.Map<Comment, CommentWithDetailsDto>(comment);
         }
 
+        [Authorize]
         public async Task DeleteAsync(Guid id)
         {
             var comment = await _commentRepository.GetAsync(id);

@@ -52,7 +52,6 @@
         });
     };
 
-    console.log($form.find("input[name='Post.Content']").val() + "asda");
     var newPostEditor = $editorContainer.tuiEditor({
         usageStatistics: false,
         initialEditType: 'markdown',
@@ -82,7 +81,6 @@
 
         var postText = newPostEditor.getMarkdown();
         $postTextInput.val(postText);
-        console.log(postText);
 
         $submitButton.buttonBusy();
         $(this).off('submit').submit();

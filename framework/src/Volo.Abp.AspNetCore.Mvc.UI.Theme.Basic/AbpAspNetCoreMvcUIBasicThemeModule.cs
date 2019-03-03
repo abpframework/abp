@@ -52,7 +52,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic
                     .ScriptBundles
                     .Add(BasicThemeBundles.Scripts.Global, bundle =>
                     {
-                        bundle.AddBaseBundles(StandardBundles.Scripts.Global);
+                        bundle
+                            .AddBaseBundles(StandardBundles.Scripts.Global)
+                            .AddContributors(typeof(BasicThemeGlobalScriptContributor));
                     });
             });
         }
