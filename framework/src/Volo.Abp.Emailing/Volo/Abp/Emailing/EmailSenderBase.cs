@@ -68,6 +68,12 @@ namespace Volo.Abp.Emailing
 
         public virtual async Task QueueAsync(string to, string subject, string body, bool isBodyHtml = true)
         {
+            if (!BackgroundJobManager.IsAvailable())
+            {
+                await SendAsync(to, subject, body, isBodyHtml);
+                return;
+            }
+
             await BackgroundJobManager.EnqueueAsync(
                 new BackgroundEmailSendingJobArgs
                 {

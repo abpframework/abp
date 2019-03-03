@@ -19,7 +19,9 @@ $solutionPaths = (
     "modules/background-jobs",
     "abp_io",
     "templates/module",
-    "templates/mvc"
+    "templates/service",
+    "templates/mvc",
+    "samples/MicroserviceDemo"
 )
 
 # Build all solutions
@@ -30,6 +32,7 @@ foreach ($solutionPath in $solutionPaths) {
     dotnet build
     if (-Not $?) {
         Write-Host ("Build failed for the solution: " + $solutionPath)
+        Set-Location $rootFolder
         exit $LASTEXITCODE
     }
 }

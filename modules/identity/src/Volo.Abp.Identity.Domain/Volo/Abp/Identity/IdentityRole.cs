@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Security.Claims;
 using JetBrains.Annotations;
 using Volo.Abp.Auditing;
@@ -13,7 +14,7 @@ namespace Volo.Abp.Identity
     /// <summary>
     /// Represents a role in the identity system
     /// </summary>
-    public class IdentityRole : AggregateRoot<Guid>, IHasConcurrencyStamp, IMultiTenant
+    public class IdentityRole : AggregateRoot<Guid>, IMultiTenant
     {
         public virtual Guid? TenantId { get; protected set; }
 
@@ -34,11 +35,20 @@ namespace Volo.Abp.Identity
         public virtual ICollection<IdentityRoleClaim> Claims { get; protected set; }
 
         /// <summary>
-        /// A random value that should change whenever a role is persisted to the store
+        /// A default role is automatically assigned to a new user
         /// </summary>
-        [DisableAuditing]
-        public virtual string ConcurrencyStamp { get; set; }
+        public virtual bool IsDefault { get; set; }
 
+        /// <summary>
+        /// A static role can not be deleted/renamed
+        /// </summary>
+        public virtual bool IsStatic { get; set; }
+
+        /// <summary>
+        /// A user can see other user's public roles
+        /// </summary>
+        public virtual bool IsPublic { get; set; }
+        
         /// <summary>
         /// Initializes a new instance of <see cref="IdentityRole"/>.
         /// </summary>
@@ -74,6 +84,13 @@ namespace Volo.Abp.Identity
             {
                 AddClaim(guidGenerator, claim);
             }
+        }
+
+        public virtual IdentityRoleClaim FindClaim([NotNull] Claim claim)
+        {
+            Check.NotNull(claim, nameof(claim));
+
+            return Claims.FirstOrDefault(c => c.ClaimType == claim.Type && c.ClaimValue == claim.Value);
         }
 
         public virtual void RemoveClaim([NotNull] Claim claim)

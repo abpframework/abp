@@ -85,7 +85,6 @@ namespace Volo.Abp.UI.Navigation
         /// </summary>
         public string CssClass { get; set; }
 
-
         public ApplicationMenuItem(
             [NotNull] string name,
             [NotNull] string displayName,
@@ -107,7 +106,7 @@ namespace Volo.Abp.UI.Navigation
             Order = order;
             CustomData = customData;
             Target = target;
-            ElementId = elementId;
+            ElementId = elementId ?? GetDefaultElementId();
             CssClass = cssClass;
 
             Items = new List<ApplicationMenuItem>();
@@ -122,6 +121,11 @@ namespace Volo.Abp.UI.Navigation
         {
             Items.Add(menuItem);
             return this;
+        }
+
+        private string GetDefaultElementId()
+        {
+            return "MenuItem_" + Name;
         }
     }
 }

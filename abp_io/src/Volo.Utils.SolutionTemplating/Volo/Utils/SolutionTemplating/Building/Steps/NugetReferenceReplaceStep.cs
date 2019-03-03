@@ -54,7 +54,14 @@ namespace Volo.Utils.SolutionTemplating.Building.Steps
 
                 doc.Load(GenerateStreamFromString(content));
 
-                return ProcessReferenceNodes(doc.DocumentNode.SelectNodes("//projectreference[@include]"), content);
+                var nodes = doc.DocumentNode.SelectNodes("//projectreference[@include]");
+
+                if (nodes == null)
+                {
+                    return content;
+                }
+
+                return ProcessReferenceNodes(nodes, content);
             }
 
             private string ProcessReferenceNodes(HtmlNodeCollection nodes, string content)

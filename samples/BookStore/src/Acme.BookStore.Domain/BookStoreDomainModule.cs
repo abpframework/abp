@@ -5,22 +5,25 @@ using Volo.Abp.Identity;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.Resources.AbpValidation;
 using Volo.Abp.Modularity;
+using Volo.Abp.PermissionManagement.Identity;
 using Volo.Abp.Settings;
 using Volo.Abp.VirtualFileSystem;
 
 namespace Acme.BookStore
 {
-    [DependsOn(typeof(AbpIdentityDomainModule))]
+    [DependsOn(
+        typeof(AbpIdentityDomainModule),
+        typeof(AbpPermissionManagementDomainIdentityModule))]
     public class BookStoreDomainModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.Configure<VirtualFileSystemOptions>(options =>
+            Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<BookStoreDomainModule>();
             });
 
-            context.Services.Configure<AbpLocalizationOptions>(options =>
+            Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources
                     .Add<BookStoreResource>("en")
@@ -28,12 +31,10 @@ namespace Acme.BookStore
                     .AddVirtualJson("/Localization/BookStore");
             });
 
-            context.Services.Configure<SettingOptions>(options =>
+            Configure<SettingOptions>(options =>
             {
                 options.DefinitionProviders.Add<BookStoreSettingDefinitionProvider>();
             });
-
-            context.Services.AddAssemblyOf<BookStoreDomainModule>();
         }
     }
 }

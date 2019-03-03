@@ -49,7 +49,8 @@
           "path": "Dependency-Injection.md",
           "items": [
             {
-              "text": "AutoFac Integration"
+              "text": "AutoFac Integration",
+              "path": "Autofac-Integration.md"
             }
           ]
         },
@@ -143,6 +144,7 @@
     },
     {
       "text": "Domain Driven Design",
+      "path": "Domain-Driven-Design.md",
       "items": [
         {
           "text": "Domain Layer",
@@ -170,7 +172,8 @@
           "text": "Application Layer",
           "items": [
             {
-              "text": "Application Services"
+              "text": "Application Services",
+              "path": "Application-Services.md"
             },
             {
               "text": "Data Transfer Objects"
@@ -183,10 +186,20 @@
       ]
     },
     {
-      "text": "ASP.NET Core MVC",
+      "text": "ASP.NET Core",
       "items": [
         {
-          "text": "API Versioning"
+          "text": "API",
+          "items": [            
+            {
+              "text": "Auto API Controllers",
+              "path": "AspNetCore/Auto-API-Controllers.md"
+            },
+            {
+              "text": "Dynamic C# API Clients",
+              "path": "AspNetCore/Dynamic-CSharp-API-Clients.md"
+            }
+          ]
         },
         {
           "text": "User Interface",
@@ -223,6 +236,42 @@
           "path": "MongoDB.md"
         }
       ]
+    },
+    {
+      "text": "Background",
+      "items": [
+        {
+          "text": "Background Jobs",
+          "path": "Background-Jobs.md",
+          "items": [
+            {
+              "text": "Hangfire Integration",
+              "path": "Background-Jobs-Hangfire.md"
+            },
+            {
+              "text": "RabbitMQ Integration",
+              "path": "Background-Jobs-RabbitMq.md"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "Samples",
+      "items": [
+        {
+          "text": "Microservice Demo",
+          "path": "Samples/Microservice-Demo.md"
+        }
+      ]
+    },
+    {
+      "text": "Application Modules",
+      "path": "Modules/Index.md"
+    },
+    {
+      "text": "Microservice Architecture",
+      "path": "Microservice-Architecture.md"
     },
     {
       "text": "Testing"

@@ -238,7 +238,7 @@ namespace Acme.BookStore
 
 你通常需要创建 **Controllers** 将应用服务暴露为 **HTTP API**.这样浏览器或第三方客户端可以通过AJAX的方式访问它们.
 
-ABP可以 **自动地** 将应用服务转换成MVC API Controllers.
+ABP可以 **自动地** (../../AspNetCore/Auto-API-Controllers.md)将应用服务转换成MVC API Controllers.
 
 #### Swagger UI
 
@@ -295,7 +295,7 @@ successfully created the book with id: f3f03580-c1aa-d6a9-072d-39e75c69f5c7
 现在我们来创建一些可见的可用的东西,我们使用[Razor Pages UI](https://docs.microsoft.com/en-us/aspnet/core/tutorials/razor-pages/razor-pages-start)代替经典的MVC.微软也推荐使用Razor Pages UI
 
 
-在 `Acme.BookStore.Web`项目的`Pages`文件夹下创建一个新的文件夹叫`Books`并添加一个名叫`Index.html`的Razor Page.
+在 `Acme.BookStore.Web`项目的`Pages`文件夹下创建一个新的文件夹叫`Books`并添加一个名叫`Index.cshtml`的Razor Page.
 
 ![bookstore-add-index-page](images/bookstore-add-index-page.png)
 

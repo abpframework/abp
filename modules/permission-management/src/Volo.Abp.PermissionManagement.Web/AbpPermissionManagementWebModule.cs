@@ -1,15 +1,18 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Localization.Resources.AbpUi;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Localization;
+using Volo.Abp.Localization.Resources.AbpValidation;
 using Volo.Abp.Modularity;
-using Volo.Abp.PermissionManagement.Web.Localization.Resources.AbpPermissionManagement;
+using Volo.Abp.PermissionManagement.HttpApi;
+using Volo.Abp.PermissionManagement.Localization;
 using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.PermissionManagement.Web
 {
-    [DependsOn(typeof(AbpPermissionManagementApplicationContractsModule))]
+    [DependsOn(typeof(AbpPermissionManagementHttpApiModule))]
     [DependsOn(typeof(AbpAspNetCoreMvcUiBootstrapModule))]
     [DependsOn(typeof(AbpAutoMapperModule))]
     public class AbpPermissionManagementWebModule : AbpModule
@@ -24,19 +27,22 @@ namespace Volo.Abp.PermissionManagement.Web
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.Configure<VirtualFileSystemOptions>(options =>
+            Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpPermissionManagementWebModule>("Volo.Abp.PermissionManagement.Web");
             });
 
-            context.Services.Configure<AbpLocalizationOptions>(options =>
+            Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources
-                    .Add<AbpPermissionManagementResource>("en")
-                    .AddVirtualJson("/Localization/Resources/AbpPermissionManagement");
+                    .Get<AbpPermissionManagementResource>()
+                    .AddBaseTypes(
+                        typeof(AbpValidationResource),
+                        typeof(AbpUiResource)
+                     ).AddVirtualJson("/Localization/Resources/AbpPermissionManagement");
             });
 
-            context.Services.Configure<AbpAutoMapperOptions>(options =>
+            Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<AbpPermissionManagementWebAutoMapperProfile>(validate: true);
             });

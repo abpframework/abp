@@ -7,13 +7,11 @@ using Volo.Abp.Domain.Entities;
 
 namespace Volo.Abp.TenantManagement
 {
-    public class Tenant : AggregateRoot<Guid>, IHasExtraProperties
+    public class Tenant : AggregateRoot<Guid>
     {
         public virtual string Name { get; protected set; }
 
         public virtual List<TenantConnectionString> ConnectionStrings { get; protected set; }
-
-        public Dictionary<string, object> ExtraProperties { get; }
 
         protected Tenant()
         {

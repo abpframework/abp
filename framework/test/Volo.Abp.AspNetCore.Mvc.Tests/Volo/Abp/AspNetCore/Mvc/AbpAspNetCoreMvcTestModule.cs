@@ -1,7 +1,7 @@
 ﻿using System;
+using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.AspNetCore.Modularity;
 using Volo.Abp.AspNetCore.Mvc.Authorization;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.Localization.Resource;
@@ -9,6 +9,7 @@ using Volo.Abp.AspNetCore.TestBase;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Autofac;
 using Volo.Abp.Localization;
+using Volo.Abp.Localization.Resources.AbpValidation;
 using Volo.Abp.MemoryDb;
 using Volo.Abp.Modularity;
 using Volo.Abp.TestApp;
@@ -45,7 +46,7 @@ namespace Volo.Abp.AspNetCore.Mvc
                 });
             });
 
-            context.Services.Configure<AbpAspNetCoreMvcOptions>(options =>
+            Configure<AbpAspNetCoreMvcOptions>(options =>
             {
                 options.ConventionalControllers.Create(typeof(TestAppModule).Assembly, opts =>
                 {
@@ -56,21 +57,24 @@ namespace Volo.Abp.AspNetCore.Mvc
                 });
             });
 
-            context.Services.Configure<PermissionOptions>(options =>
+            Configure<PermissionOptions>(options =>
             {
                 options.DefinitionProviders.Add<TestPermissionDefinitionProvider>();
             });
 
-            context.Services.Configure<VirtualFileSystemOptions>(options =>
+            Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpAspNetCoreMvcTestModule>();
             });
 
-            context.Services.Configure<AbpLocalizationOptions>(options =>
+            Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources
                     .Add<MvcTestResource>("en")
-                    .AddVirtualJson("/Volo/Abp/AspNetCore/Mvc/Localization/Resource");
+                    .AddBaseTypes(
+                        typeof(AbpUiResource),
+                        typeof(AbpValidationResource)
+                    ).AddVirtualJson("/Volo/Abp/AspNetCore/Mvc/Localization/Resource");
             });
         }
 
@@ -78,6 +82,7 @@ namespace Volo.Abp.AspNetCore.Mvc
         {
             var app = context.GetApplicationBuilder();
 
+            app.UseCorrelationId();
             app.UseMiddleware<FakeAuthenticationMiddleware>();
             app.UseAuditing();
             app.UseUnitOfWork();

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Localization;
@@ -9,28 +10,42 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
-using Volo.Abp.AspNetCore.Modularity;
+using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Mvc.UI;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Mvc.UI.Theming;
+using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Autofac;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.Identity;
+using Volo.Abp.Identity.Web;
 using Volo.Abp.Modularity;
+using Volo.Abp.PermissionManagement;
+using Volo.Abp.PermissionManagement.Identity;
+using Volo.Abp.Threading;
 using Volo.Abp.UI;
 using Volo.Abp.VirtualFileSystem;
 using Volo.Docs;
+using Volo.Docs.Admin;
 using Volo.DocsTestApp.EntityFrameworkCore;
 
 namespace Volo.DocsTestApp
 {
     [DependsOn(
         typeof(DocsWebModule),
+        typeof(DocsAdminWebModule),
         typeof(DocsApplicationModule),
+        typeof(DocsAdminApplicationModule),
         typeof(DocsTestAppEntityFrameworkCoreModule),
         typeof(AbpAutofacModule),
+        typeof(AbpAccountWebModule),
+        typeof(AbpIdentityWebModule),
+        typeof(AbpIdentityApplicationModule),
+        typeof(AbpPermissionManagementDomainIdentityModule),
+        typeof(AbpPermissionManagementApplicationModule),
         typeof(AbpAspNetCoreMvcUiBasicThemeModule)
     )]
     public class DocsTestAppModule : AbpModule
@@ -40,28 +55,29 @@ namespace Volo.DocsTestApp
             var hostingEnvironment = context.Services.GetHostingEnvironment();
             var configuration = context.Services.GetConfiguration();
 
-            context.Services.Configure<DbConnectionOptions>(options =>
+            Configure<DbConnectionOptions>(options =>
             {
                 const string connStringName = "SqlServer";
                 options.ConnectionStrings.Default = configuration.GetConnectionString(connStringName);
             });
 
-            context.Services.Configure<AbpDbContextOptions>(options =>
+            Configure<AbpDbContextOptions>(options =>
             {
                 options.UseSqlServer();
             });
 
             if (hostingEnvironment.IsDevelopment())
             {
-                context.Services.Configure<VirtualFileSystemOptions>(options =>
+                Configure<VirtualFileSystemOptions>(options =>
                 {
-                    options.FileSets.ReplaceEmbeddedByPyhsical<AbpUiModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.UI", Path.DirectorySeparatorChar)));
-                    options.FileSets.ReplaceEmbeddedByPyhsical<AbpAspNetCoreMvcUiModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI", Path.DirectorySeparatorChar)));
-                    options.FileSets.ReplaceEmbeddedByPyhsical<AbpAspNetCoreMvcUiBootstrapModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI.Bootstrap", Path.DirectorySeparatorChar)));
-                    options.FileSets.ReplaceEmbeddedByPyhsical<AbpAspNetCoreMvcUiThemeSharedModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared", Path.DirectorySeparatorChar)));
-                    options.FileSets.ReplaceEmbeddedByPyhsical<AbpAspNetCoreMvcUiBasicThemeModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic", Path.DirectorySeparatorChar)));
-                    options.FileSets.ReplaceEmbeddedByPyhsical<DocsDomainModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}src{0}Volo.Docs.Domain", Path.DirectorySeparatorChar)));
-                    options.FileSets.ReplaceEmbeddedByPyhsical<DocsWebModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}src{0}Volo.Docs.Web", Path.DirectorySeparatorChar)));
+                    options.FileSets.ReplaceEmbeddedByPhysical<AbpUiModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.UI", Path.DirectorySeparatorChar)));
+                    options.FileSets.ReplaceEmbeddedByPhysical<AbpAspNetCoreMvcUiModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI", Path.DirectorySeparatorChar)));
+                    options.FileSets.ReplaceEmbeddedByPhysical<AbpAspNetCoreMvcUiBootstrapModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI.Bootstrap", Path.DirectorySeparatorChar)));
+                    options.FileSets.ReplaceEmbeddedByPhysical<AbpAspNetCoreMvcUiThemeSharedModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared", Path.DirectorySeparatorChar)));
+                    options.FileSets.ReplaceEmbeddedByPhysical<AbpAspNetCoreMvcUiBasicThemeModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic", Path.DirectorySeparatorChar)));
+                    options.FileSets.ReplaceEmbeddedByPhysical<DocsDomainModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}src{0}Volo.Docs.Domain", Path.DirectorySeparatorChar)));
+                    options.FileSets.ReplaceEmbeddedByPhysical<DocsWebModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}src{0}Volo.Docs.Web", Path.DirectorySeparatorChar)));
+                    options.FileSets.ReplaceEmbeddedByPhysical<DocsWebModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}src{0}Volo.Docs.Admin.Web", Path.DirectorySeparatorChar)));
                 });
             }
 
@@ -70,18 +86,18 @@ namespace Volo.DocsTestApp
                 {
                     options.SwaggerDoc("v1", new Info { Title = "Docs API", Version = "v1" });
                     options.DocInclusionPredicate((docName, description) => true);
+                    options.CustomSchemaIds(type => type.FullName);
                 });
 
-
             var cultures = new List<CultureInfo> { new CultureInfo("en"), new CultureInfo("tr") };
-            context.Services.Configure<RequestLocalizationOptions>(options =>
+            Configure<RequestLocalizationOptions>(options =>
             {
                 options.DefaultRequestCulture = new RequestCulture("en");
                 options.SupportedCultures = cultures;
                 options.SupportedUICultures = cultures;
             });
 
-            context.Services.Configure<ThemingOptions>(options =>
+            Configure<ThemingOptions>(options =>
             {
                 options.DefaultThemeName = BasicTheme.Name;
             });
@@ -94,7 +110,7 @@ namespace Volo.DocsTestApp
             app.UseDeveloperExceptionPage();
 
             app.UseVirtualFiles();
-
+            
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
@@ -115,6 +131,26 @@ namespace Volo.DocsTestApp
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            using (var scope = context.ServiceProvider.CreateScope())
+            {
+                AsyncHelper.RunSync(async () =>
+                {
+                    await context.ServiceProvider
+                        .GetRequiredService<IIdentityDataSeeder>()
+                        .SeedAsync(
+                            "1q2w3E*"
+                        );
+
+                    await scope.ServiceProvider
+                        .GetRequiredService<IPermissionDataSeeder>()
+                        .SeedAsync(
+                            RolePermissionValueProvider.ProviderName,
+                            "admin",
+                            IdentityPermissions.GetAll().Union(DocsAdminPermissions.GetAll())
+                        );
+                });
+            }
         }
     }
 }

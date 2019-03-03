@@ -3,7 +3,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.Domain.Repositories;
-using Volo.Abp.EventBus;
+using Volo.Abp.EventBus.Distributed;
+using Volo.Abp.EventBus.Local;
 using Volo.Abp.Modularity;
 using Volo.Abp.TestApp.Domain;
 using Xunit;
@@ -14,12 +15,14 @@ namespace Volo.Abp.TestApp.Testing
         where TStartupModule : IAbpModule
     {
         protected readonly IRepository<Person, Guid> PersonRepository;
-        protected readonly IEventBus EventBus;
+        protected readonly ILocalEventBus LocalEventBus;
+        protected readonly IDistributedEventBus DistributedEventBus;
 
         protected DomainEvents_Tests()
         {
             PersonRepository = GetRequiredService<IRepository<Person, Guid>>();
-            EventBus = GetRequiredService<IEventBus>();
+            LocalEventBus = GetRequiredService<ILocalEventBus>();
+            DistributedEventBus = GetRequiredService<IDistributedEventBus>();
         }
 
         [Fact]
@@ -27,13 +30,22 @@ namespace Volo.Abp.TestApp.Testing
         {
             //Arrange
 
-            var isTriggered = false;
+            var isLocalEventTriggered = false;
+            var isDistributedEventTriggered = false;
 
-            EventBus.Register<PersonNameChangedEvent>(data =>
+            LocalEventBus.Subscribe<PersonNameChangedEvent>(data =>
             {
                 data.OldName.ShouldBe("Douglas");
                 data.Person.Name.ShouldBe("Douglas-Changed");
-                isTriggered = true;
+                isLocalEventTriggered = true;
+                return Task.CompletedTask;
+            });
+
+            DistributedEventBus.Subscribe<PersonNameChangedEto>(data =>
+            {
+                data.OldName.ShouldBe("Douglas");
+                data.NewName.ShouldBe("Douglas-Changed");
+                isDistributedEventTriggered = true;
                 return Task.CompletedTask;
             });
 
@@ -48,7 +60,8 @@ namespace Volo.Abp.TestApp.Testing
 
             //Assert
 
-            isTriggered.ShouldBeTrue();
+            isLocalEventTriggered.ShouldBeTrue();
+            isDistributedEventTriggered.ShouldBeTrue();
         }
     }
 }

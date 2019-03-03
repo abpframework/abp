@@ -1,5 +1,8 @@
-﻿namespace Volo.Abp.Settings
+﻿using System;
+
+namespace Volo.Abp.Settings
 {
+    [Serializable]
     public class SettingValue : NameValue
     {
         /// <summary>

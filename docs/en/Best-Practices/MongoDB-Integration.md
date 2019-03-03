@@ -103,34 +103,6 @@ public class IdentityMongoModelBuilderConfigurationOptions
 }
 ```
 
-* **Do** explicitly configure `BsonClassMap` for all entities. Create a static method for this purpose. Example:
-
-````C#
-public static class AbpIdentityBsonClassMap
-{
-    private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
-
-    public static void Configure()
-    {
-        OneTimeRunner.Run(() =>
-        {
-            BsonClassMap.RegisterClassMap<IdentityUser>(map =>
-            {
-                map.AutoMap();
-                map.ConfigureExtraProperties();
-            });
-
-            BsonClassMap.RegisterClassMap<IdentityRole>(map =>
-            {
-                map.AutoMap();
-            });
-        });
-    }
-}
-````
-
-`BsonClassMap` works with static methods. So, it is only needed to configure entities once in an application. `OneTimeRunner` guarantees that it runs in a thread safe manner and only once in the application life. Such a mapping above ensures that unit test properly run. This code will be called by the **module class** below.
-
 ### Repository Implementation
 
 - **Do** **inherit** the repository from the `MongoDbRepository<TMongoDbContext, TEntity, TKey>` class and implement the corresponding repository interface. Example:
@@ -187,8 +159,6 @@ public class AbpIdentityMongoDbModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        AbpIdentityBsonClassMap.Configure();
-
         context.Services.AddMongoDbContext<AbpIdentityMongoDbContext>(options =>
         {
             options.AddRepository<IdentityUser, MongoIdentityUserRepository>();

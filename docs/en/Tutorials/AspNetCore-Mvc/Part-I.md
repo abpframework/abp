@@ -82,11 +82,11 @@ namespace Acme.BookStore
 EF Core requires you to relate entities with your DbContext. The easiest way to do this is to add a `DbSet` property to the `BookStoreDbContext` class in the `Acme.BookStore.EntityFrameworkCore` project, as shown below:
 
 ````C#
-public class BookStoreDbContext : AbpDbContext<BookStoreDbContext>
-{
-    public DbSet<Book> Book { get; set; }
-    ...
-}
+    public class BookStoreDbContext : AbpDbContext<BookStoreDbContext>
+    {
+        public DbSet<Book> Book { get; set; }
+		...
+    }
 ````
 
 #### Add New Migration & Update the Database
@@ -236,7 +236,7 @@ namespace Acme.BookStore
 
 You normally create **Controllers** to expose application services as **HTTP API** endpoints. Thus allowing browser or 3rd-party clients to call them via AJAX.
 
-ABP can **automagically** configures your application services as MVC API Controllers by convention.
+ABP can [**automagically**](../../AspNetCore/Auto-API-Controllers.md) configures your application services as MVC API Controllers by convention.
 
 #### Swagger UI
 
@@ -292,7 +292,7 @@ Check the `books` table in the database to see the new book row. You can try `ge
 
 It's time to create something visible and usable! Instead of classic MVC, we will use the new [Razor Pages UI](https://docs.microsoft.com/en-us/aspnet/core/tutorials/razor-pages/razor-pages-start) approach which is recommended by Microsoft.
 
-Create a new `Books` folder under the `Pages` folder of the `Acme.BookStore.Web` project and add a new Razor Page named `Index.html`:
+Create a new `Books` folder under the `Pages` folder of the `Acme.BookStore.Web` project and add a new Razor Page named `Index.cshtml`:
 
 ![bookstore-add-index-page](images/bookstore-add-index-page.png)
 

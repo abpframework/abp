@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Users;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy.Components.TenantSwitch
 {
@@ -12,18 +13,25 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy.Components.TenantSwitch
         public const int Order = -1_000_000;
 
         protected ITenantStore TenantStore { get; }
-
         protected ICurrentTenant CurrentTenant { get; }
+        protected ICurrentUser CurrentUser { get; }
 
-        public TenantSwitchViewComponent(ITenantStore tenantStore, ICurrentTenant currentTenant)
+        public TenantSwitchViewComponent(
+            ITenantStore tenantStore, 
+            ICurrentTenant currentTenant,
+            ICurrentUser currentUser)
         {
             TenantStore = tenantStore;
             CurrentTenant = currentTenant;
+            CurrentUser = currentUser;
         }
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var model = new TenantSwitchViewModel();
+            var model = new TenantSwitchViewModel
+            {
+                CurrentUser = CurrentUser
+            };
 
             if (CurrentTenant.Id.HasValue)
             {
@@ -36,6 +44,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy.Components.TenantSwitch
         public class TenantSwitchViewModel
         {
             public TenantInfo Tenant { get; set; }
+
+            public ICurrentUser CurrentUser { get; set; }
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Razor.TagHelpers;
+﻿using System;
+using Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.ProgressBar
@@ -7,6 +8,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.ProgressBar
     {
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
+            SetParentElement(context, output);
+
             output.Attributes.AddClass("progress-bar");
             output.Attributes.Add("role","progressbar");
 
@@ -14,6 +17,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.ProgressBar
             SetStripClass(context,output);
             SetTypeClass(context,output);
             SetValues(context, output);
+
+            output.TagName = "div";
+            output.TagMode = TagMode.StartTagAndEndTag;
         }
 
         protected virtual void SetValues(TagHelperContext context, TagHelperOutput output)
@@ -46,6 +52,17 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.ProgressBar
             {
                 output.Attributes.AddClass("bg-" + TagHelper.Type.ToString().ToLowerInvariant());
             }
+        }
+
+        protected virtual void SetParentElement(TagHelperContext context, TagHelperOutput output)
+        {
+            if (output.TagName == "abp-progress-part")
+            {
+                return;
+            }
+
+            output.PreElement.SetHtmlContent("<div class=\"progress\">" + Environment.NewLine);
+            output.PostElement.SetHtmlContent(Environment.NewLine + "</div>");
         }
 
         protected virtual int CalculateStyleWidth()

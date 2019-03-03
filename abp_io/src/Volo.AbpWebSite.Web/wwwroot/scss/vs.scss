@@ -3,7 +3,7 @@
 @import "footer.scss";
 @import "home.scss";
 @import "docs.scss"; 
-@media (max-width: 767px) { 
+@media (max-width: 992px) { 
     @import "responsive.scss"; 
 }
 
@@ -15,4 +15,8 @@
     max-width: 400px;
     margin: 0 auto;
     margin-top: -88px !important;
+}
+
+body {
+    background-size: cover;
 }

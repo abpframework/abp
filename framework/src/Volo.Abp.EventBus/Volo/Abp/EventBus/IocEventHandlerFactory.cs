@@ -1,5 +1,6 @@
 using System;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.EventBus
 {
@@ -7,15 +8,15 @@ namespace Volo.Abp.EventBus
     /// This <see cref="IEventHandlerFactory"/> implementation is used to get/release
     /// handlers using Ioc.
     /// </summary>
-    public class IocEventHandlerFactory : IEventHandlerFactory
+    public class IocEventHandlerFactory : IEventHandlerFactory, IDisposable
     {
         public Type HandlerType { get; }
 
-        private readonly IServiceProvider _serviceProvider;
+        protected IHybridServiceScopeFactory ScopeFactory { get; }
 
-        public IocEventHandlerFactory(IServiceProvider serviceProvider, Type handlerType)
+        public IocEventHandlerFactory(IHybridServiceScopeFactory scopeFactory, Type handlerType)
         {
-            _serviceProvider = serviceProvider;
+            ScopeFactory = scopeFactory;
             HandlerType = handlerType;
         }
 
@@ -25,11 +26,16 @@ namespace Volo.Abp.EventBus
         /// <returns>Resolved handler object</returns>
         public IEventHandlerDisposeWrapper GetHandler()
         {
-            var scope = _serviceProvider.CreateScope();
+            var scope = ScopeFactory.CreateScope();
             return new EventHandlerDisposeWrapper(
                 (IEventHandler) scope.ServiceProvider.GetRequiredService(HandlerType),
                 () => scope.Dispose()
             );
+        }
+
+        public void Dispose()
+        {
+
         }
     }
 }

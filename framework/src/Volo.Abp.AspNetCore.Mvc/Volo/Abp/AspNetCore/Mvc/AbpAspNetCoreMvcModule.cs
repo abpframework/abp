@@ -15,23 +15,23 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.ViewComponents;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Volo.Abp.ApiVersioning;
-using Volo.Abp.Application;
 using Volo.Abp.AspNetCore.Mvc.Conventions;
 using Volo.Abp.AspNetCore.Mvc.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.VirtualFileSystem;
-using Volo.Abp.Http;
 using Volo.Abp.Http.Modeling;
 using Volo.Abp.Localization;
 using Volo.Abp.UI;
 
 namespace Volo.Abp.AspNetCore.Mvc
 {
-    [DependsOn(typeof(AbpAspNetCoreModule))]
-    [DependsOn(typeof(AbpLocalizationModule))]
-    [DependsOn(typeof(AbpApiVersioningAbstractionsModule))]
-    [DependsOn(typeof(AbpDddApplicationModule))]
-    [DependsOn(typeof(AbpUiModule))]
+    [DependsOn(
+        typeof(AbpAspNetCoreModule), 
+        typeof(AbpLocalizationModule), 
+        typeof(AbpApiVersioningAbstractionsModule), 
+        typeof(AbpAspNetCoreMvcContractsModule),
+        typeof(AbpUiModule)
+        )]
     public class AbpAspNetCoreMvcModule : AbpModule
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
@@ -56,32 +56,32 @@ namespace Volo.Abp.AspNetCore.Mvc
                 )
             );
 
-            context.Services.Configure<ApiDescriptionModelOptions>(options =>
+            Configure<ApiDescriptionModelOptions>(options =>
             {
                 options.IgnoredInterfaces.AddIfNotContains(typeof(IAsyncActionFilter));
                 options.IgnoredInterfaces.AddIfNotContains(typeof(IFilterMetadata));
                 options.IgnoredInterfaces.AddIfNotContains(typeof(IActionFilter));
             });
 
-            context.Services.Configure<AbpAspNetCoreMvcOptions>(options =>
-            {
-                options.ConventionalControllers.Create(typeof(AbpAspNetCoreMvcModule).Assembly, o =>
-                {
-                    o.RootPath = "abp";
-                });
-            });
-
             var mvcCoreBuilder = context.Services.AddMvcCore();
             context.Services.ExecutePreConfiguredActions(mvcCoreBuilder);
+
+            var abpMvcDataAnnotationsLocalizationOptions = context.Services.ExecutePreConfiguredActions(new AbpMvcDataAnnotationsLocalizationOptions());
+
+            context.Services
+                .AddSingleton<IOptions<AbpMvcDataAnnotationsLocalizationOptions>>(
+                    new OptionsWrapper<AbpMvcDataAnnotationsLocalizationOptions>(
+                        abpMvcDataAnnotationsLocalizationOptions
+                    )
+                );
 
             var mvcBuilder = context.Services.AddMvc()
                 .AddDataAnnotationsLocalization(options =>
                 {
-                    var assemblyResources = context.Services.ExecutePreConfiguredActions(new AbpMvcDataAnnotationsLocalizationOptions()).AssemblyResources;
 
                     options.DataAnnotationLocalizerProvider = (type, factory) =>
                     {
-                        var resourceType = assemblyResources.GetOrDefault(type.Assembly);
+                        var resourceType = abpMvcDataAnnotationsLocalizationOptions.AssemblyResources.GetOrDefault(type.Assembly);
                         return factory.Create(resourceType ?? type);
                     };
                 })
@@ -105,7 +105,7 @@ namespace Volo.Abp.AspNetCore.Mvc
 
             partManager.FeatureProviders.Add(new AbpConventionalControllerFeatureProvider(application));
 
-            context.Services.Configure<MvcOptions>(mvcOptions =>
+            Configure<MvcOptions>(mvcOptions =>
             {
                 mvcOptions.AddAbp(context.Services);
             });

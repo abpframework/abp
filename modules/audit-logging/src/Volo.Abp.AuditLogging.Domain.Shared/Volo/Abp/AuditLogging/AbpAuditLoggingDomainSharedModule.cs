@@ -9,7 +9,7 @@ namespace Volo.Abp.AuditLogging
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.Configure<AbpLocalizationOptions>(options =>
+            Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources.Add<AuditLoggingResource>("en");
             });

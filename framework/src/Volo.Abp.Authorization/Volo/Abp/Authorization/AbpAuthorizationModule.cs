@@ -9,7 +9,7 @@ namespace Volo.Abp.Authorization
 {
     [DependsOn(
         typeof(AbpSecurityModule),
-        typeof(AbpLocalizationModule)
+        typeof(AbpLocalizationAbstractionsModule)
         )]
     public class AbpAuthorizationModule : AbpModule
     {
@@ -24,10 +24,11 @@ namespace Volo.Abp.Authorization
 
             context.Services.AddSingleton<IAuthorizationHandler, PermissionRequirementHandler>();
 
-            context.Services.Configure<PermissionOptions>(options =>
+            Configure<PermissionOptions>(options =>
             {
                 options.ValueProviders.Add<UserPermissionValueProvider>();
                 options.ValueProviders.Add<RolePermissionValueProvider>();
+                options.ValueProviders.Add<ClientPermissionValueProvider>();
             });
         }
     }

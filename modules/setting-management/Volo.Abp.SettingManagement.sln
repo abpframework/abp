@@ -15,13 +15,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{7E8D2943-A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.SettingManagement.Tests", "test\Volo.Abp.SettingManagement.Tests\Volo.Abp.SettingManagement.Tests.csproj", "{E8335ADC-D09E-4B74-8190-45A9FAF962CA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.SettingManagement.MongoDB", "src\Volo.Abp.SettingManagement.MongoDB\Volo.Abp.SettingManagement.MongoDB.csproj", "{7615D255-FB8F-49F0-81C0-F2E69F7F0CB7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.SettingManagement.MongoDB", "src\Volo.Abp.SettingManagement.MongoDB\Volo.Abp.SettingManagement.MongoDB.csproj", "{7615D255-FB8F-49F0-81C0-F2E69F7F0CB7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.SettingManagement.TestBase", "test\Volo.Abp.SettingManagement.TestBase\Volo.Abp.SettingManagement.TestBase.csproj", "{D4A2DCB2-FA6A-43DC-9469-B6CDAA7EB489}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.SettingManagement.TestBase", "test\Volo.Abp.SettingManagement.TestBase\Volo.Abp.SettingManagement.TestBase.csproj", "{D4A2DCB2-FA6A-43DC-9469-B6CDAA7EB489}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.SettingManagement.EntityFrameworkCore.Tests", "test\Volo.Abp.SettingManagement.EntityFrameworkCore.Tests\Volo.Abp.SettingManagement.EntityFrameworkCore.Tests.csproj", "{AFF6A7B6-A80B-4569-9F6B-CD6C72EAB6D4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.SettingManagement.EntityFrameworkCore.Tests", "test\Volo.Abp.SettingManagement.EntityFrameworkCore.Tests\Volo.Abp.SettingManagement.EntityFrameworkCore.Tests.csproj", "{AFF6A7B6-A80B-4569-9F6B-CD6C72EAB6D4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.SettingManagement.MongoDB.Tests", "test\Volo.Abp.SettingManagement.MongoDB.Tests\Volo.Abp.SettingManagement.MongoDB.Tests.csproj", "{DF76DE74-1029-4FEA-8ADF-3C5636944757}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.SettingManagement.MongoDB.Tests", "test\Volo.Abp.SettingManagement.MongoDB.Tests\Volo.Abp.SettingManagement.MongoDB.Tests.csproj", "{DF76DE74-1029-4FEA-8ADF-3C5636944757}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.SettingManagement.Web", "src\Volo.Abp.SettingManagement.Web\Volo.Abp.SettingManagement.Web.csproj", "{AF6BE46D-AC88-4DEF-BBEC-F60A00847D43}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -61,6 +63,10 @@ Global
 		{DF76DE74-1029-4FEA-8ADF-3C5636944757}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DF76DE74-1029-4FEA-8ADF-3C5636944757}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DF76DE74-1029-4FEA-8ADF-3C5636944757}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF6BE46D-AC88-4DEF-BBEC-F60A00847D43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF6BE46D-AC88-4DEF-BBEC-F60A00847D43}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF6BE46D-AC88-4DEF-BBEC-F60A00847D43}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF6BE46D-AC88-4DEF-BBEC-F60A00847D43}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -74,6 +80,7 @@ Global
 		{D4A2DCB2-FA6A-43DC-9469-B6CDAA7EB489} = {7E8D2943-ADE7-4C89-8048-0780CE07E0E0}
 		{AFF6A7B6-A80B-4569-9F6B-CD6C72EAB6D4} = {7E8D2943-ADE7-4C89-8048-0780CE07E0E0}
 		{DF76DE74-1029-4FEA-8ADF-3C5636944757} = {7E8D2943-ADE7-4C89-8048-0780CE07E0E0}
+		{AF6BE46D-AC88-4DEF-BBEC-F60A00847D43} = {F1BE945B-F0CF-4712-BC2B-9AF8C02059EA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {24B3A486-E7CA-4AA5-B76F-27D351A97E59}

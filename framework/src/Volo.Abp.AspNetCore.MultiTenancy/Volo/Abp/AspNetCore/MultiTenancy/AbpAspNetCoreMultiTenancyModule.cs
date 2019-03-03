@@ -12,12 +12,12 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.Configure<TenantResolveOptions>(options =>
+            Configure<TenantResolveOptions>(options =>
             {
-                options.TenantResolvers.Add(new QueryStringTenantResolveContributer());
-                options.TenantResolvers.Add(new RouteTenantResolveContributer());
-                options.TenantResolvers.Add(new HeaderTenantResolveContributer());
-                options.TenantResolvers.Add(new CookieTenantResolveContributer());
+                options.TenantResolvers.Add(new QueryStringTenantResolveContributor());
+                options.TenantResolvers.Add(new RouteTenantResolveContributor());
+                options.TenantResolvers.Add(new HeaderTenantResolveContributor());
+                options.TenantResolvers.Add(new CookieTenantResolveContributor());
             });
         }
     }

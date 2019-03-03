@@ -10,6 +10,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using Volo.Abp.Http;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Json;
 using Volo.Abp.TestApp.Application.Dto;
@@ -66,7 +67,7 @@ namespace Volo.Abp.AspNetCore.Mvc
 
             var response = await Client.PostAsync(
                 "/api/app/people",
-                new StringContent(postData, Encoding.UTF8, "application/json")
+                new StringContent(postData, Encoding.UTF8, MimeTypes.Application.Json)
             );
 
             response.StatusCode.ShouldBe(HttpStatusCode.OK);
@@ -98,7 +99,7 @@ namespace Volo.Abp.AspNetCore.Mvc
 
             var response = await Client.PutAsync(
                 $"/api/app/people/{updateDto.Id}",
-                new StringContent(putData, Encoding.UTF8, "application/json")
+                new StringContent(putData, Encoding.UTF8, MimeTypes.Application.Json)
             );
 
             response.StatusCode.ShouldBe(HttpStatusCode.OK);
@@ -131,7 +132,7 @@ namespace Volo.Abp.AspNetCore.Mvc
 
             var response = await Client.PostAsync(
                 $"/api/app/people/{personToAddNewPhone.Id}/phones",
-                new StringContent(postData, Encoding.UTF8, "application/json")
+                new StringContent(postData, Encoding.UTF8, MimeTypes.Application.Json)
             );
 
             response.StatusCode.ShouldBe(HttpStatusCode.OK);

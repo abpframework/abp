@@ -28,7 +28,7 @@ namespace Volo.Blogging.Pages.Blog
             return title;
         }
 
-        public string GetShortContent(string content)
+        public string GetShortContent(string content) //TODO: This should be moved to its own place!
         {
             var openingTag = "<p>";
             var closingTag = "</p>";

@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
-using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
-using Volo.Abp.PermissionManagement;
 using Volo.Abp.Uow;
 
 namespace Volo.Abp.Identity
@@ -14,7 +12,6 @@ namespace Volo.Abp.Identity
     public class IdentityDataSeeder : ITransientDependency, IIdentityDataSeeder
     {
         private readonly IGuidGenerator _guidGenerator;
-        private readonly IPermissionGrantRepository _permissionGrantRepository;
         private readonly IIdentityRoleRepository _roleRepository;
         private readonly IIdentityUserRepository _userRepository;
         private readonly ILookupNormalizer _lookupNormalizer;
@@ -23,7 +20,6 @@ namespace Volo.Abp.Identity
 
         public IdentityDataSeeder(
             IGuidGenerator guidGenerator,
-            IPermissionGrantRepository permissionGrantRepository,
             IIdentityRoleRepository roleRepository,
             IIdentityUserRepository userRepository,
             ILookupNormalizer lookupNormalizer,
@@ -31,7 +27,6 @@ namespace Volo.Abp.Identity
             IdentityRoleManager roleManager)
         {
             _guidGenerator = guidGenerator;
-            _permissionGrantRepository = permissionGrantRepository;
             _roleRepository = roleRepository;
             _userRepository = userRepository;
             _lookupNormalizer = lookupNormalizer;
@@ -40,11 +35,12 @@ namespace Volo.Abp.Identity
         }
 
         [UnitOfWork]
-        public virtual async Task SeedAsync(
+        public virtual async Task<IdentityDataSeedResult> SeedAsync(
             string adminUserPassword,
-            IEnumerable<string> adminRolePermissions = null,
             Guid? tenantId = null)
         {
+            var result = new IdentityDataSeedResult();
+
             const string adminUserName = "admin";
             const string adminRoleName = "admin";
 
@@ -52,47 +48,30 @@ namespace Volo.Abp.Identity
             var adminUser = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize(adminUserName));
             if (adminUser != null)
             {
-                return;
+                return result;
             }
 
             adminUser = new IdentityUser(_guidGenerator.Create(), adminUserName, "admin@abp.io", tenantId);
+            adminUser.Name = adminUserName;
             CheckIdentityErrors(await _userManager.CreateAsync(adminUser, adminUserPassword));
+            result.CreatedAdminUser = true;
 
             //"admin" role
             var adminRole = await _roleRepository.FindByNormalizedNameAsync(_lookupNormalizer.Normalize(adminRoleName));
             if (adminRole == null)
             {
                 adminRole = new IdentityRole(_guidGenerator.Create(), adminRoleName, tenantId);
-                CheckIdentityErrors(await _roleManager.CreateAsync(adminRole));
 
-                if (adminRolePermissions != null)
-                {
-                    await AddRolePermissionsAsync(adminRole, adminRolePermissions);
-                }
+                adminRole.IsStatic = true;
+                adminRole.IsPublic = true;
+
+                CheckIdentityErrors(await _roleManager.CreateAsync(adminRole));
+                result.CreatedAdminRole = true;
             }
 
             CheckIdentityErrors(await _userManager.AddToRoleAsync(adminUser, adminRoleName));
-        }
 
-        protected virtual async Task AddRolePermissionsAsync(IdentityRole role, IEnumerable<string> permissionNames)
-        {
-            foreach (var permissionName in permissionNames)
-            {
-                await AddPermissionAsync(permissionName, RolePermissionValueProvider.ProviderName, role.Name, role.TenantId);
-            }
-        }
-
-        protected virtual Task AddPermissionAsync(string permissionName, string providerName, string providerKey, Guid? tenantId)
-        {
-            return _permissionGrantRepository.InsertAsync(
-                new PermissionGrant(
-                    _guidGenerator.Create(),
-                    permissionName,
-                    providerName,
-                    providerKey,
-                    tenantId
-                )
-            );
+            return result;
         }
 
         protected void CheckIdentityErrors(IdentityResult identityResult) //TODO: This is temporary and duplicate code!

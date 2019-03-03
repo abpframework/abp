@@ -12,7 +12,12 @@ namespace Volo.Abp.IdentityServer.Clients
 
         protected ClientCorsOrigin()
         {
-            
+
+        }
+
+        public virtual bool Equals(Guid clientId, [NotNull] string uri)
+        {
+            return ClientId == clientId && Origin == uri;
         }
 
         protected internal ClientCorsOrigin(Guid clientId, [NotNull] string origin)

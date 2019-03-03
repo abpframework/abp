@@ -39,14 +39,14 @@
                                     action: function (data) {
                                         _permissionsModal.open({
                                             providerName: 'Role',
-                                            providerKey: data.record.id
+                                            providerKey: data.record.name
                                         });
                                     }
                                 },
                                 {
                                     text: l('Delete'),
-                                    visible: function () {
-                                        return true; //TODO: Check permission
+                                    visible: function (data) {
+                                        return !data.isStatic; //TODO: Check permission
                                     },
                                     confirmMessage: function (data) { return l('RoleDeletionConfirmationMessage', data.record.name)},
                                     action: function (data) {

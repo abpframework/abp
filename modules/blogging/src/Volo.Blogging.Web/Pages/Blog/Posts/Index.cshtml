@@ -109,6 +109,13 @@
             </div>
 
             <div class="col-md-4">
+            
+                
+                @if (await Authorization.IsGrantedAsync(BloggingPermissions.Posts.Create))
+                {
+                    <a  class="btn btn-primary btn-rounded mb-3 active "  asp-page="./New" asp-route-blogShortName="@Model.BlogShortName">@L["CreateANewPost"]</a>
+                }
+                
                 <div class="list-group">
                     @for (var index = 0; index < Model.Posts.Count && index < 3; index++)
                     {

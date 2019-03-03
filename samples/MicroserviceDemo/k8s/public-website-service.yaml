@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    io.kompose.service: public-website
+  name: public-website
+spec:
+  ports:
+  - name: "3002"
+    port: 3002
+    targetPort: 80
+  selector:
+    io.kompose.service: public-website
+status:
+  loadBalancer: {}

@@ -9,7 +9,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
         [Fact]
         public async Task ApplicationConfigurationBuilder_GetAsync()
         {
-            var applicationConfigurationBuilder = GetRequiredService<IApplicationConfigurationBuilder>();
+            var applicationConfigurationBuilder = GetRequiredService<IAbpApplicationConfigurationAppService>();
 
             var config = await applicationConfigurationBuilder.GetAsync();
 

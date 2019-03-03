@@ -15,7 +15,7 @@ namespace Acme.BookStore.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.1-rtm-30846")
+                .HasAnnotation("ProductVersion", "2.2.0-rtm-35687")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -24,13 +24,24 @@ namespace Acme.BookStore.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("CreationTime");
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnName("ConcurrencyStamp");
 
-                    b.Property<Guid?>("CreatorId");
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnName("CreationTime");
 
-                    b.Property<DateTime?>("LastModificationTime");
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnName("CreatorId");
 
-                    b.Property<Guid?>("LastModifierId");
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnName("LastModificationTime");
+
+                    b.Property<Guid?>("LastModifierId")
+                        .HasColumnName("LastModifierId");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -47,12 +58,66 @@ namespace Acme.BookStore.Migrations
                     b.ToTable("Books");
                 });
 
+            modelBuilder.Entity("Volo.Abp.Identity.IdentityClaimType", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .HasColumnName("ConcurrencyStamp")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<bool>("IsStatic");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(256);
+
+                    b.Property<string>("Regex")
+                        .HasMaxLength(512);
+
+                    b.Property<string>("RegexDescription")
+                        .HasMaxLength(128);
+
+                    b.Property<bool>("Required");
+
+                    b.Property<int>("ValueType");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AbpClaimTypes");
+                });
+
             modelBuilder.Entity("Volo.Abp.Identity.IdentityRole", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("ConcurrencyStamp");
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .HasColumnName("ConcurrencyStamp")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<bool>("IsDefault")
+                        .HasColumnName("IsDefault");
+
+                    b.Property<bool>("IsPublic")
+                        .HasColumnName("IsPublic");
+
+                    b.Property<bool>("IsStatic")
+                        .HasColumnName("IsStatic");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -105,9 +170,20 @@ namespace Acme.BookStore.Migrations
                         .HasDefaultValue(0);
 
                     b.Property<string>("ConcurrencyStamp")
-                        .IsRequired()
-                        .HasColumnName("ConcurrencyStamp")
-                        .HasMaxLength(256);
+                        .IsConcurrencyToken()
+                        .HasColumnName("ConcurrencyStamp");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnName("CreationTime");
+
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnName("CreatorId");
+
+                    b.Property<Guid?>("DeleterId")
+                        .HasColumnName("DeleterId");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnName("DeletionTime");
 
                     b.Property<string>("Email")
                         .HasColumnName("Email")
@@ -121,12 +197,27 @@ namespace Acme.BookStore.Migrations
                     b.Property<string>("ExtraProperties")
                         .HasColumnName("ExtraProperties");
 
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("IsDeleted")
+                        .HasDefaultValue(false);
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnName("LastModificationTime");
+
+                    b.Property<Guid?>("LastModifierId")
+                        .HasColumnName("LastModifierId");
+
                     b.Property<bool>("LockoutEnabled")
                         .ValueGeneratedOnAdd()
                         .HasColumnName("LockoutEnabled")
                         .HasDefaultValue(false);
 
                     b.Property<DateTimeOffset?>("LockoutEnd");
+
+                    b.Property<string>("Name")
+                        .HasColumnName("Name")
+                        .HasMaxLength(64);
 
                     b.Property<string>("NormalizedEmail")
                         .HasColumnName("NormalizedEmail")
@@ -154,6 +245,10 @@ namespace Acme.BookStore.Migrations
                         .IsRequired()
                         .HasColumnName("SecurityStamp")
                         .HasMaxLength(256);
+
+                    b.Property<string>("Surname")
+                        .HasColumnName("Surname")
+                        .HasMaxLength(64);
 
                     b.Property<Guid?>("TenantId")
                         .HasColumnName("TenantId");
@@ -247,9 +342,10 @@ namespace Acme.BookStore.Migrations
                     b.Property<Guid>("UserId");
 
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128);
+                        .HasMaxLength(64);
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasMaxLength(128);
 
                     b.Property<Guid?>("TenantId");
 

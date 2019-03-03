@@ -18,7 +18,7 @@
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Packages\Volo.Abp.AspNetCore.Mvc.UI.Packages.csproj" />
     <ProjectReference Include="..\Volo.Docs.HttpApi\Volo.Docs.HttpApi.csproj" />
-    <PackageReference Include="CommonMark.NET" Version="0.15.1" />
+    <PackageReference Include="Markdig.Signed" Version="0.15.6" />
   </ItemGroup>
   
   
@@ -40,8 +40,6 @@
     <Content Remove="Properties\launchSettings.json" />
     <Content Remove="compilerconfig.json" />
     <Content Remove="compilerconfig.json.defaults" />
-    <None Remove="Pages\Documents\Project\vs.js" />
-    <None Remove="Pages\Documents\vs.min.css" />
     <None Include="compilerconfig.json" />
     <None Include="Properties\launchSettings.json" />
   </ItemGroup>

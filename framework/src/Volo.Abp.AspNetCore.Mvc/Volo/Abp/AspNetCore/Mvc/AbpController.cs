@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Aspects;
+using Volo.Abp.AspNetCore.Mvc.Validation;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectMapping;
@@ -31,7 +32,14 @@ namespace Volo.Abp.AspNetCore.Mvc
 
         public IClock Clock { get; set; }
 
+        public IModelStateValidator ModelValidator { get; set; }
+        
         public List<string> AppliedCrossCuttingConcerns { get; } = new List<string>();
+
+        protected virtual void ValidateModel()
+        {
+            ModelValidator?.Validate(ModelState);
+        }
 
         protected ILogger Logger => _lazyLogger.Value;
         private Lazy<ILogger> _lazyLogger => new Lazy<ILogger>(() => LoggerFactory?.CreateLogger(GetType().FullName) ?? NullLogger.Instance, true);

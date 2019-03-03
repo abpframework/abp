@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Volo.Abp.EntityFrameworkCore.Modeling;
 
 namespace Volo.Abp.EntityFrameworkCore.TestApp.SecondContext
 {

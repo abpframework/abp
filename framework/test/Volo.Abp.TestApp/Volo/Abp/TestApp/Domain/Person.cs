@@ -1,10 +1,12 @@
 using System;
 using System.Collections.ObjectModel;
+using Volo.Abp.AutoMapper;
 using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.TestApp.Domain
 {
+    [AutoMapTo(typeof(PersonEto))]
     public class Person : FullAuditedAggregateRoot<Guid>, IMultiTenant
     {
         public virtual Guid? TenantId { get; set; }
@@ -39,7 +41,24 @@ namespace Volo.Abp.TestApp.Domain
 
             var oldName = Name;
             Name = name;
-            AddDomainEvent(new PersonNameChangedEvent{Person = this, OldName =  oldName});
+
+            AddLocalEvent(
+                new PersonNameChangedEvent
+                {
+                    Person = this,
+                    OldName = oldName
+                }
+            );
+
+            AddDistributedEvent(
+                new PersonNameChangedEto
+                {
+                    Id = Id,
+                    OldName = oldName,
+                    NewName = Name,
+                    TenantId = TenantId
+                }
+            );
         }
     }
 }

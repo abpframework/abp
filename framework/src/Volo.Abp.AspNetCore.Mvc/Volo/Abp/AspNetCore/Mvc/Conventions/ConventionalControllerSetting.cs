@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.AspNetCore.Mvc.Versioning;
-using Volo.Abp.Application.Services;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using Volo.Abp.Reflection;
 
 namespace Volo.Abp.AspNetCore.Mvc.Conventions
@@ -17,7 +16,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Conventions
         public Assembly Assembly { get; }
 
         [NotNull]
-        public HashSet<Type> ControllerTypes { get; }
+        public HashSet<Type> ControllerTypes { get; } //TODO: Internal?
 
         [NotNull]
         public string RootPath

@@ -29,17 +29,17 @@ namespace Volo.Abp.TenantManagement.Web
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.Configure<NavigationOptions>(options =>
+            Configure<NavigationOptions>(options =>
             {
                 options.MenuContributors.Add(new AbpTenantManagementWebMainMenuContributor());
             });
 
-            context.Services.Configure<VirtualFileSystemOptions>(options =>
+            Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpTenantManagementWebModule>("Volo.Abp.TenantManagement.Web");
             });
 
-            context.Services.Configure<AbpLocalizationOptions>(options =>
+            Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources
                     .Get<AbpTenantManagementResource>()
@@ -49,12 +49,12 @@ namespace Volo.Abp.TenantManagement.Web
                     ).AddVirtualJson("/Localization/Resources/AbpTenantManagement/Web");
             });
 
-            context.Services.Configure<AbpAutoMapperOptions>(options =>
+            Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<AbpTenantManagementWebAutoMapperProfile>(validate: true);
             });
 
-            context.Services.Configure<RazorPagesOptions>(options =>
+            Configure<RazorPagesOptions>(options =>
             {
                 options.Conventions.AuthorizePage("/TenantManagement/Tenants/Index", TenantManagementPermissions.Tenants.Default);
                 options.Conventions.AuthorizePage("/TenantManagement/Tenants/CreateModal", TenantManagementPermissions.Tenants.Create);

@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Mongo2Go;
+﻿using Mongo2Go;
 using Volo.Abp.Data;
 using Volo.Abp.IdentityServer.MongoDB;
 using Volo.Abp.Modularity;
@@ -19,7 +18,7 @@ namespace Volo.Abp.IdentityServer
         {
             _mongoDbRunner = MongoDbRunner.Start();
 
-            context.Services.Configure<DbConnectionOptions>(options =>
+            Configure<DbConnectionOptions>(options =>
             {
                 options.ConnectionStrings.Default = _mongoDbRunner.ConnectionString;
             });

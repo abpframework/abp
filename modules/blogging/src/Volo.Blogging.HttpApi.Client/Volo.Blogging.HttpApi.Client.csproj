@@ -11,7 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Volo.Blogging.Application.Contracts\Volo.Blogging.Application.Contracts.csproj" />
-    <ProjectReference Include="..\..\..\..\..\abp\framework\src\Volo.Abp.Http.Client\Volo.Abp.Http.Client.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Http.Client\Volo.Abp.Http.Client.csproj" />
   </ItemGroup>
 
 </Project>

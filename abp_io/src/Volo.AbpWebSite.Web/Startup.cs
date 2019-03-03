@@ -3,7 +3,6 @@ using System.Text;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Serilog;
 using Volo.Abp;
 
 namespace Volo.AbpWebSite
@@ -15,6 +14,7 @@ namespace Volo.AbpWebSite
             services.AddApplication<AbpWebSiteWebModule>(options =>
             {
                 options.UseAutofac();
+                options.Configuration.UserSecretsAssembly = typeof(AbpWebSiteWebModule).Assembly;
             });
 
             return services.BuildServiceProviderFromFactory();
@@ -22,15 +22,6 @@ namespace Volo.AbpWebSite
 
         public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
         {
-            loggerFactory
-                .AddConsole()
-                .AddDebug()
-                .AddSerilog(new LoggerConfiguration()
-                    .Enrich.FromLogContext()
-                    .WriteTo.File("Logs/logs.txt")
-                    .CreateLogger()
-                );
-
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
             app.InitializeApplication();

@@ -42,7 +42,7 @@ public class BlogModule : AbpModule
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         //为应用程序配置默认的连接字符串
-        context.Services.Configure<DbConnectionOptions>(options =>
+        Configure<DbConnectionOptions>(options =>
         {
             options.ConnectionStrings.Default = "......";
         });
@@ -125,3 +125,10 @@ public class BlogModule
 你可以根据需要使用多个``DependsOn``属性或将多个模块类型传递给单个``DependsOn``属性.
 
 依赖模块可能依赖于另一个模块,但你只需要定义直接依赖项.ABP在启动时会调查应用程序的依赖关系,并以正确的顺序初始化/关闭模块.
+
+## 框架模块 vs 应用程序模块
+
+**模块分为两种类型.** 这两种类型并没有任何结构上的区别,只是按功能和用途分类:
+
+- **框架模块**: 这些是**框架的核心模块** 如缓存, 邮件, 主题, 安全, 序列化, 验证, EF Core集成, MongoDB集成... 等. 它们没有应用/业务功能,它们提供了日常开发经常用到的基础设施,集成和抽象.
+- **应用程序模块**: 这些模块实现了 **特定的应用/业务功能** 像博客, 文档管理, 身份管理, 租房管理... 等等. 它们通过有自己的实体,服务,API和UI组件. 请参阅 [预构建的应用程序模块](Modules/Index.md).

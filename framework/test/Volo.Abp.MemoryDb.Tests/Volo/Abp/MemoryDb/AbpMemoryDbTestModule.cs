@@ -19,7 +19,7 @@ namespace Volo.Abp.MemoryDb
         {
             var connStr = Guid.NewGuid().ToString();
 
-            context.Services.Configure<DbConnectionOptions>(options =>
+            Configure<DbConnectionOptions>(options =>
             {
                 options.ConnectionStrings.Default = connStr;
             });

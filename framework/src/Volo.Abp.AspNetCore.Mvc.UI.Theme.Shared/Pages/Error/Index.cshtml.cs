@@ -25,6 +25,31 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Pages.Error
 
         public void OnGet()
         {
+            HandleError();
+        }
+
+        public void OnPost()
+        {
+            HandleError();
+        }
+
+        public void OnPut()
+        {
+            HandleError();
+        }
+
+        public void OnDelete()
+        {
+            HandleError();
+        }
+
+        public void OnPatch()
+        {
+            HandleError();
+        }
+
+        private void HandleError()
+        {
             var exHandlerFeature = HttpContext.Features.Get<IExceptionHandlerFeature>();
 
             var exception = exHandlerFeature != null

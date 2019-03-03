@@ -188,6 +188,14 @@ namespace System
         }
 
         [Fact]
+        public void ReplaceFirst_Tests()
+        {
+            "Test string".ReplaceFirst("s", "X").ShouldBe("TeXt string");
+            "Test test test".ReplaceFirst("test", "XX").ShouldBe("Test XX test");
+            "Test test test".ReplaceFirst("test", "XX", StringComparison.OrdinalIgnoreCase).ShouldBe("XX test test");
+        }
+
+        [Fact]
         public void ToEnum_Test()
         {
             "MyValue1".ToEnum<MyEnum>().ShouldBe(MyEnum.MyValue1);

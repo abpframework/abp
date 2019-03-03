@@ -15,7 +15,7 @@ namespace Volo.Blogging
         public BloggingApplicationAutoMapperProfile()
         {
             CreateMap<Blog, BlogDto>();
-            CreateMap<Post, PostWithDetailsDto>().Ignore(x=>x.Writer).Ignore(x=>x.CommentCount);
+            CreateMap<Post, PostWithDetailsDto>().Ignore(x=>x.Writer).Ignore(x=>x.CommentCount).Ignore(x=>x.Tags);
             CreateMap<Comment, CommentWithDetailsDto>().Ignore(x => x.Writer);
             CreateMap<Tag, TagDto>();
         }

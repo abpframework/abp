@@ -1,6 +1,7 @@
 {
   ".well-known/": {},
   "TemplateFiles/": {},
+  "Logs/": {},
   "wwwroot/files/": {},
   "appsettings.json": {},
   "web.config": {}

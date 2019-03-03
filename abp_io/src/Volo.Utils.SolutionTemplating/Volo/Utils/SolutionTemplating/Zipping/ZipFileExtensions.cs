@@ -41,13 +41,13 @@ namespace Volo.Utils.SolutionTemplating.Zipping
                         fileName = fileName.RemovePreFix(rootFolder);
                     }
 
-                    fileName = fileName.EnsureStartsWith('/');
-
                     if (fileName.IsNullOrEmpty())
                     {
                         continue;
                     }
 
+                    fileName = fileName.EnsureStartsWith('/');
+                    
                     fileEntries.Add(new FileEntry(fileName, entryStream.GetAllBytes(), zipEntry.IsDirectory));
                 }
             }

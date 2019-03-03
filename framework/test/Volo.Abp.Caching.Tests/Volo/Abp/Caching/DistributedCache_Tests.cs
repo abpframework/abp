@@ -72,5 +72,55 @@ namespace Volo.Abp.Caching
             factoryExecuted.ShouldBeFalse();
             cacheItem.Name.ShouldBe(personName);
         }
+
+        [Fact]
+        public async Task SameClassName_But_DiffNamespace_Should_Not_Use_Same_Cache()
+        {
+            var personCache = GetRequiredService<IDistributedCache<PersonCacheItem>>();
+            var otherPersonCache = GetRequiredService<IDistributedCache<Sail.Testing.Caching.PersonCacheItem>>();
+
+
+            var cacheKey = Guid.NewGuid().ToString();
+            const string personName = "john nash";
+
+            //Get (not exists yet)
+            var cacheItem = await personCache.GetAsync(cacheKey);
+            cacheItem.ShouldBeNull();
+
+            var cacheItem1 = await otherPersonCache.GetAsync(cacheKey);
+            cacheItem1.ShouldBeNull();
+
+            //Set
+            cacheItem = new PersonCacheItem(personName);
+            await personCache.SetAsync(cacheKey, cacheItem);
+
+            //Get (it should be available now, but otherPersonCache not exists now.
+            cacheItem = await personCache.GetAsync(cacheKey);
+            cacheItem.ShouldNotBeNull();
+            cacheItem.Name.ShouldBe(personName);
+
+            cacheItem1 = await otherPersonCache.GetAsync(cacheKey);
+            cacheItem1.ShouldBeNull();
+
+            //set other person cache
+            cacheItem1 = new Sail.Testing.Caching.PersonCacheItem(personName);
+            await otherPersonCache.SetAsync(cacheKey, cacheItem1);
+
+            cacheItem1 = await otherPersonCache.GetAsync(cacheKey);
+            cacheItem1.ShouldNotBeNull();
+            cacheItem1.Name.ShouldBe(personName);
+
+            //Remove 
+            await personCache.RemoveAsync(cacheKey);
+
+
+            //Get (not exists since removed)
+            cacheItem = await personCache.GetAsync(cacheKey);
+            cacheItem.ShouldBeNull();
+
+            cacheItem1 = await otherPersonCache.GetAsync(cacheKey);
+            cacheItem1.ShouldNotBeNull();
+
+        }
     }
 }

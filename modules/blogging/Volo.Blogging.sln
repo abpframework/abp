@@ -29,11 +29,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{42BF26EF-B8C
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{25B3A516-5C0D-42E3-9294-E8A9346CEE4B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Blogging.TestBase", "test\Volo.Blogging.TestBase\Volo.Blogging.TestBase.csproj", "{BBE8D8BE-1B24-49FE-86EF-3848D4BB6829}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Blogging.TestBase", "test\Volo.Blogging.TestBase\Volo.Blogging.TestBase.csproj", "{BBE8D8BE-1B24-49FE-86EF-3848D4BB6829}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Blogging.EntityFrameworkCore.Tests", "test\Volo.Blogging.EntityFrameworkCore.Tests\Volo.Blogging.EntityFrameworkCore.Tests.csproj", "{0B9AAD44-1FCF-4AF1-838F-A09446E98E37}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Blogging.EntityFrameworkCore.Tests", "test\Volo.Blogging.EntityFrameworkCore.Tests\Volo.Blogging.EntityFrameworkCore.Tests.csproj", "{0B9AAD44-1FCF-4AF1-838F-A09446E98E37}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Blogging.Application.Tests", "test\Volo.Blogging.Application.Tests\Volo.Blogging.Application.Tests.csproj", "{C949B953-80B3-4B36-B535-1AD74A34FEAC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Blogging.Application.Tests", "test\Volo.Blogging.Application.Tests\Volo.Blogging.Application.Tests.csproj", "{C949B953-80B3-4B36-B535-1AD74A34FEAC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Blogging.MongoDB", "src\Volo.Blogging.MongoDB\Volo.Blogging.MongoDB.csproj", "{98C2D36A-F874-405D-8565-9CE59438E879}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.BloggingTestApp.MongoDb", "app\Volo.BloggingTestApp.MongoDb\Volo.BloggingTestApp.MongoDb.csproj", "{4C818374-2DE8-422F-8585-975E8366DB26}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -93,6 +97,14 @@ Global
 		{C949B953-80B3-4B36-B535-1AD74A34FEAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C949B953-80B3-4B36-B535-1AD74A34FEAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C949B953-80B3-4B36-B535-1AD74A34FEAC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98C2D36A-F874-405D-8565-9CE59438E879}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98C2D36A-F874-405D-8565-9CE59438E879}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98C2D36A-F874-405D-8565-9CE59438E879}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98C2D36A-F874-405D-8565-9CE59438E879}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C818374-2DE8-422F-8585-975E8366DB26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C818374-2DE8-422F-8585-975E8366DB26}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C818374-2DE8-422F-8585-975E8366DB26}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C818374-2DE8-422F-8585-975E8366DB26}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -111,6 +123,8 @@ Global
 		{BBE8D8BE-1B24-49FE-86EF-3848D4BB6829} = {25B3A516-5C0D-42E3-9294-E8A9346CEE4B}
 		{0B9AAD44-1FCF-4AF1-838F-A09446E98E37} = {25B3A516-5C0D-42E3-9294-E8A9346CEE4B}
 		{C949B953-80B3-4B36-B535-1AD74A34FEAC} = {25B3A516-5C0D-42E3-9294-E8A9346CEE4B}
+		{98C2D36A-F874-405D-8565-9CE59438E879} = {42BF26EF-B8C7-42DC-9FFB-3653109B7776}
+		{4C818374-2DE8-422F-8585-975E8366DB26} = {EB4FB44A-FE39-4245-9DAD-D6437BCE3870}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F2BAE819-78D4-407A-9201-22473B2850B0}

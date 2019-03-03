@@ -60,7 +60,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.RazorPages
 
         public ICurrentTenant CurrentTenant { get; set; }
 
-        public ISettingManager SettingManager { get; set; }
+        public ISettingProvider SettingProvider { get; set; }
 
         public IModelStateValidator ModelValidator { get; set; }
 

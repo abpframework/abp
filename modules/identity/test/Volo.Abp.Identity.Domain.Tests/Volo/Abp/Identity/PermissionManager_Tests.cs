@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.PermissionManagement;
-using Volo.Abp.Permissions;
 using Xunit;
 
 namespace Volo.Abp.Identity

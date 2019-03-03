@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
+﻿using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Toolbars;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
@@ -18,7 +17,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.Configure<ThemingOptions>(options =>
+            Configure<ThemingOptions>(options =>
             {
                 options.Themes.Add<BasicTheme>();
 
@@ -28,17 +27,17 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic
                 }
             });
 
-            context.Services.Configure<VirtualFileSystemOptions>(options =>
+            Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpAspNetCoreMvcUiBasicThemeModule>("Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic");
             });
 
-            context.Services.Configure<ToolbarOptions>(options =>
+            Configure<ToolbarOptions>(options =>
             {
                 options.Contributors.Add(new BasicThemeMainTopToolbarContributor());
             });
 
-            context.Services.Configure<BundlingOptions>(options =>
+            Configure<BundlingOptions>(options =>
             {
                 options
                     .StyleBundles
@@ -46,14 +45,16 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic
                     {
                         bundle
                             .AddBaseBundles(StandardBundles.Styles.Global)
-                            .AddContributors(new BasicThemeGlobalStyleContributor());
+                            .AddContributors(typeof(BasicThemeGlobalStyleContributor));
                     });
 
                 options
                     .ScriptBundles
                     .Add(BasicThemeBundles.Scripts.Global, bundle =>
                     {
-                        bundle.AddBaseBundles(StandardBundles.Scripts.Global);
+                        bundle
+                            .AddBaseBundles(StandardBundles.Scripts.Global)
+                            .AddContributors(typeof(BasicThemeGlobalScriptContributor));
                     });
             });
         }

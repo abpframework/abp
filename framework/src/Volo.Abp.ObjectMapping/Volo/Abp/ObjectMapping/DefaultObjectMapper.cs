@@ -1,5 +1,5 @@
-using System;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.ObjectMapping
@@ -22,13 +22,32 @@ namespace Volo.Abp.ObjectMapping
                 return default;
             }
 
-            //Check if a specific mapper is registered
             using (var scope = _serviceProvider.CreateScope())
             {
                 var specificMapper = scope.ServiceProvider.GetService<IObjectMapper<TSource, TDestination>>();
                 if (specificMapper != null)
                 {
                     return specificMapper.Map(source);
+                }
+            }
+
+            if (source is IMapTo<TDestination> mapperSource)
+            {
+                return mapperSource.MapTo();
+            }
+
+            if (typeof(IMapFrom<TSource>).IsAssignableFrom(typeof(TDestination)))
+            {
+                try
+                {
+                    //TODO: Check if TDestination has a proper constructor which takes TSource
+                    //TODO: Check if TDestination has an empty constructor (in this case, use MapFrom)
+
+                    return (TDestination) Activator.CreateInstance(typeof(TDestination), source);
+                }
+                catch
+                {
+                    //TODO: Remove catch when TODOs are implemented above
                 }
             }
 
@@ -42,7 +61,6 @@ namespace Volo.Abp.ObjectMapping
                 return default;
             }
 
-            //Check if a specific mapper is registered
             using (var scope = _serviceProvider.CreateScope())
             {
                 var specificMapper = scope.ServiceProvider.GetService<IObjectMapper<TSource, TDestination>>();
@@ -50,6 +68,18 @@ namespace Volo.Abp.ObjectMapping
                 {
                     return specificMapper.Map(source, destination);
                 }
+            }
+
+            if (source is IMapTo<TDestination> mapperSource)
+            {
+                mapperSource.MapTo(destination);
+                return destination;
+            }
+
+            if (destination is IMapFrom<TSource> mapperDestination)
+            {
+                mapperDestination.MapFrom(source);
+                return destination;
             }
 
             return AutoMap(source, destination);

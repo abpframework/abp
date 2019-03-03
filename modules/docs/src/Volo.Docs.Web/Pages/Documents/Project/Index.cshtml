@@ -1,5 +1,10 @@
 ﻿@page
 @using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Packages.Anchor
+@using Volo.Abp.AspNetCore.Mvc.UI.Packages.Clipboard
+@using Volo.Abp.AspNetCore.Mvc.UI.Packages.MalihuCustomScrollbar
+@using Volo.Abp.AspNetCore.Mvc.UI.Packages.Popper
+@using Volo.Abp.AspNetCore.Mvc.UI.Packages.Prismjs
 @using Volo.Abp.AspNetCore.Mvc.UI.Theming
 @using Volo.Docs
 @using Volo.Docs.Localization
@@ -13,29 +18,22 @@
 }
 @section styles {
     <abp-style-bundle name="@typeof(IndexModel).FullName">
-        <abp-style src="/Pages/Documents/vs.css" />
-        <abp-style src="/lib/prismjs/themes/prism-okaidia.css" />
-        <abp-style src="/lib/prismjs/plugins/line-highlight/prism-line-highlight.css" />
-        <abp-style src="/lib/prismjs/plugins/toolbar/prism-toolbar.css" />
-        <abp-style src="/lib/mCustomScrollbar/jquery.mCustomScrollbar.min.css" />
-        <abp-style src="/lib/bootstrap-toc/bootstrap-toc.css" />
+        <abp-script type="@typeof(PrismjsStyleBundleContributor)" />
+        <abp-script type="@typeof(MalihuCustomScrollbarPluginStyleBundleContributor)" />
+        <abp-style src="/Pages/Documents/Project/bootstrap-toc.css" />
+        <abp-style src="/Pages/Documents/Shared/Styles/vs.css" />
     </abp-style-bundle>
 }
 @section scripts {
     <abp-script-bundle name="@typeof(IndexModel).FullName">
-        <abp-script src="/lib/anchor-js/anchor.js" />
+        <abp-script type="@typeof(MalihuCustomScrollbarPluginScriptBundleContributor)" />
+        <abp-script type="@typeof(ClipboardScriptBundleContributor)" />
+        <abp-script type="@typeof(AnchorJsScriptBundleContributor)" />
+        <abp-script type="@typeof(PrismjsScriptBundleContributor)" />
+        <abp-script type="@typeof(PopperJsScriptBundleContributor)" />
+        <abp-script src="/Pages/Documents/Project/bootstrap-toc.js" />
+        <abp-script src="/Pages/Documents/Shared/Scripts/vs.js" />
         <abp-script src="/Pages/Documents/Project/index.js" />
-        <abp-script src="/lib/mCustomScrollbar/jquery.mCustomScrollbar.concat.min.js" />
-        <abp-script src="/lib/clipboard/dist/clipboard.js" />
-        <abp-script src="/lib/prismjs/prism.js" />
-        <abp-script src="/lib/prismjs/plugins/toolbar/prism-toolbar.js" />
-        <abp-script src="/lib/prismjs/plugins/show-language/prism-show-language.js" />
-        <abp-script src="/lib/prismjs/plugins/copy-to-clipboard/prism-copy-to-clipboard.js" />
-        <abp-script src="/lib/prismjs/plugins/line-highlight/prism-line-highlight.js" />
-        <abp-script src="/lib/prismjs/components/prism-csharp.js" />
-        <abp-script src="/lib/popper.js/dist/umd/popper.min.js" />
-        <abp-script src="/lib/bootstrap-toc/bootstrap-toc.js" />
-        <abp-script src="/Pages/Documents/vs.js" />
     </abp-script-bundle>
 }
 <div class="docs-page" data-spy="scroll" data-target="#docs-sticky-index">
@@ -45,10 +43,10 @@
 
                 <div class="docs-top">
                     <nav class="navbar navbar-logo">
-                        @if (!Model.ProjectName.IsNullOrWhiteSpace())
+                        @if (!Model.Project.Name.IsNullOrWhiteSpace())
                         {
-                            <a class="navbar-brand w-100" href="@Model.CreateLink(Model.GetSpecificVersionOrLatest())">
-                                @Model.ProjectName<br>
+                            <a class="navbar-brand w-100" href="@Model.CreateVersionLink(Model.LatestVersionInfo, Model.GetSpecificVersionOrLatest())">
+                                <span id="ProjectName">@Model.Project.Name</span><br>
                                 <strong class="display-block">
                                     @L["Documents"]
                                 </strong>
@@ -57,7 +55,7 @@
 
                         @if (!Model.Document.Project.MainWebsiteUrl.IsNullOrWhiteSpace())
                         {
-                            <a href="@Model.Document.Project.MainWebsiteUrl" class="go-back-site">
+                            <a href="@Model.Document.Project.MainWebsiteUrl" class="go-back-site" id="GoToMainWebSite">
                                 <i class="fa fa-chevron-left"></i>
                                 @L["BackToWebsite"]
                             </a>
@@ -74,14 +72,23 @@
                 </div>
 
                 <div class="docs-tree-list">
-                    <div class="docs-filter">
-                        <input class="form-control" type="search" placeholder="Filter topics" aria-label="Filter">
-                        <span class="my-2 filter-icon my-sm-0">
-                            <i class="fa fa-filter"></i>
-                        </span>
-                    </div>
 
-                    @if (Model.Versions.Any())
+                    @if (Model.ProjectSelectItems.Count > 1)
+                    {
+                        <div class="docs-version">
+                            <div class="version-select">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <label class="input-group-text">@L["Project"]</label>
+                                    </div>
+
+                                    <select asp-items="Model.ProjectSelectItems" class="form-control" onchange="window.location.replace(this.value)"></select>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    @if (Model.VersionSelectItems.Any())
                     {
                         <div class="docs-version">
                             <div class="version-select">
@@ -90,13 +97,20 @@
                                         <label class="input-group-text">@L["Version"]</label>
                                     </div>
 
-                                    <select asp-items="Model.VersionSelectItems" class="form-control" onchange="window.location.replace(this.value)"></select>
+                                    <select asp-items="Model.VersionSelectItems" class="form-control" onchange="if (this.value) { window.location.replace(this.value) }"></select>
                                 </div>
                             </div>
                         </div>
                     }
 
-                    @if (!Model.Navigation.SuccessfullyRetrieved || Model.Navigation.Content.IsNullOrEmpty())
+                    <div class="docs-filter">
+                        <input class="form-control" type="search" placeholder="Filter topics" aria-label="Filter">
+                        <span class="my-2 filter-icon my-sm-0">
+                            <i class="fa fa-filter"></i>
+                        </span>
+                    </div>
+
+                    @if (Model.Navigation == null || Model.Navigation.Content.IsNullOrEmpty())
                     {
                         <div class="text-muted p-3">
                             <i class="fa fa-warning"></i> @L["NavigationDocumentNotFound"]
@@ -105,9 +119,9 @@
                     else
                     {
                         <ul root-node="@Model.Navigation.RootNode"
-                            version="@(Model.LatestVersionInfo.IsSelected ? DocsAppConsts.LatestVersion : Model.Version)"
+                            version="@(Model.LatestVersionInfo == null || Model.LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Model.Version)"
                             project-name="@Model.ProjectName"
-                            project-format="@Model.ProjectFormat"
+                            project-format="@Model.Project.Format"
                             selected-document-name="@Model.DocumentNameWithExtension"
                             id="sidebar-scroll"
                             class="nav nav-list"></ul>
@@ -117,12 +131,24 @@
             </div>
         </div>
 
-        @if (Model.Document.SuccessfullyRetrieved)
+        @if (Model.Document != null)
         {
-
             <div class="col-md-7 docs-content bg-white">
 
                 <div class="docs-link-btns">
+                    <div class="float-left">
+                        @(L["ShareOn"].Value + " :")
+                        <a href="#" target="_blank" class="share-button twitter" id="TwitterShareLink" title="Twitter">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                        <a href="#" target="_blank" class="share-button linkedin" id="LinkedinShareLink" title="LinkedIn">
+                            <i class="fa fa-linkedin"></i>
+                        </a>
+                        <a href="#" target="_blank" class="share-button email" id="EmailShareLink" title="E-mail">
+                            <i class="fa fa-envelope-square"></i>
+                        </a>
+                    </div>
+
                     @if (!string.IsNullOrEmpty(Model.Document.EditLink))
                     {
                         <a href="@Model.Document.EditLink" target="_blank"> <i class="fa fa-edit"></i> @L["Edit"]</a>
@@ -130,6 +156,21 @@
                 </div>
 
                 <div class="docs-content-field">
+                    <div class="position-relative">
+                        @if (Model.Document.Contributors != null && Model.Document.Contributors.Count > 0)
+                        {
+                            <div class="contributors">
+                                <small class="text-muted">@(L["Contributors"].Value + " :")</small>
+                                @foreach (var contributor in Model.Document.Contributors)
+                                {
+                                    <a href="@contributor.UserProfileUrl" target="_blank">
+                                        <img src="@contributor.AvatarUrl"
+                                             class="contributors-avatar" height="21" width="21" title="@contributor.Username" />
+                                    </a>
+                                }
+                            </div>
+                        }
+                    </div>
                     <div class="docs-text-field">
                         <div data-spy="scroll" data-target="#docs-sticky-index" data-offset="0">
                             <article class="docs-body">

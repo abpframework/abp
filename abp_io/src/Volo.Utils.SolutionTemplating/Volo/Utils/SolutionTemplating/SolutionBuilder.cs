@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
@@ -30,7 +31,7 @@ namespace Volo.Utils.SolutionTemplating
         {
             var stopwatch = Stopwatch.StartNew();
 
-            var templateRootPath = _hostingEnvironment.ContentRootPath + "\\TemplateFiles"; //TODO: To another folder that is not in the deployment folder!
+            var templateRootPath = Path.Combine(_hostingEnvironment.ContentRootPath, "TemplateFiles"); //TODO: To another folder that is not in the deployment folder!
             var solutionName = SolutionName.Parse(companyAndProjectName);
 
             var context = new ProjectBuildContext(

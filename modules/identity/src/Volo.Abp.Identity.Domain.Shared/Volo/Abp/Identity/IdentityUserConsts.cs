@@ -6,6 +6,10 @@ namespace Volo.Abp.Identity
     {
         public const int MaxUserNameLength = AbpUserConsts.MaxUserNameLength;
 
+        public const int MaxNameLength = AbpUserConsts.MaxNameLength;
+
+        public const int MaxSurnameLength = AbpUserConsts.MaxSurnameLength;
+
         public const int MaxNormalizedUserNameLength = MaxUserNameLength;
 
         public const int MaxEmailLength = AbpUserConsts.MaxEmailLength;

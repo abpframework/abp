@@ -1,32 +1,27 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System;
+using Microsoft.Extensions.Configuration;
 
 namespace Microsoft.AspNetCore.Hosting
 {
     public static class AbpHostingEnvironmentExtensions
     {
-        public static IConfigurationRoot BuildConfiguration(this IHostingEnvironment env, AbpAspNetCoreConfigurationOptions options = null)
+        public static IConfigurationRoot BuildConfiguration(
+            this IHostingEnvironment env,
+            ConfigurationBuilderOptions options = null)
         {
-            options = options ?? new AbpAspNetCoreConfigurationOptions();
+            options = options ?? new ConfigurationBuilderOptions();
 
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile(options.FileName + ".json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"{options.FileName}.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
-                .AddEnvironmentVariables();
-
-            if (env.IsDevelopment())
+            if (options.BasePath.IsNullOrEmpty())
             {
-                if (options.UserSecretsId != null)
-                {
-                    builder.AddUserSecrets(options.UserSecretsId);
-                }
-                else if (options.UserSecretsAssembly != null)
-                {
-                    builder.AddUserSecrets(options.UserSecretsAssembly, true);
-                }
+                options.BasePath = env.ContentRootPath;
             }
 
-            return builder.Build();
+            if (options.EnvironmentName.IsNullOrEmpty())
+            {
+                options.EnvironmentName = env.EnvironmentName;
+            }
+
+            return ConfigurationHelper.BuildConfiguration(options);
         }
     }
 }

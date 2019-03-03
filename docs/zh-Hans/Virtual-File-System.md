@@ -59,7 +59,7 @@ namespace MyCompany.MyProject
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.Configure<VirtualFileSystemOptions>(options =>
+            Configure<VirtualFileSystemOptions>(options =>
             {
                 //Register all embedded files of this assembly to the virtual file system
                 options.FileSets.AddEmbedded<MyModule>();
@@ -107,9 +107,9 @@ public class MyService
 
 通过引用程序集(或添加nuget包)将文件嵌入模块程序集并从另一个项目中使用它对于创建可重用模块非常有价值. 但是, 这使得开发模块本身变得有点困难.
 
-假设您正在开发一个包含嵌入式JavaScript文件的模块. 当你更改文件时, 你必须重新编译项目, 重新启动应用程序并刷新浏览器页面以进行更改. 显然, 这是非常耗时和乏味的.
+假设你正在开发一个包含嵌入式JavaScript文件的模块. 当你更改文件时, 你必须重新编译项目, 重新启动应用程序并刷新浏览器页面以进行更改. 显然, 这是非常耗时和乏味的.
 
-我们需要的是应用程序在开发时直接使用物理文件的能力, 让浏览器刷新时同步JavaScript文件的任何更改. `ReplaceEmbeddedByPyhsical` 方法使其成为可能.
+我们需要的是应用程序在开发时直接使用物理文件的能力, 让浏览器刷新时同步JavaScript文件的任何更改. `ReplaceEmbeddedByPhysical` 方法使其成为可能.
 
 下面的示例展示了应用程序依赖于包含嵌入文件的模块("MyModule"), 并且应用程序可以在开发过程中直接使用模块的源代码.
 
@@ -123,10 +123,10 @@ public class MyWebAppModule : AbpModule
 
         if (hostingEnvironment.IsDevelopment()) //only for development time
         {
-            context.Services.Configure<VirtualFileSystemOptions>(options =>
+            Configure<VirtualFileSystemOptions>(options =>
             {
-                //ReplaceEmbeddedByPyhsical gets the root folder of the MyModule project
-                options.FileSets.ReplaceEmbeddedByPyhsical<MyModule>(
+                //ReplaceEmbeddedByPhysical gets the root folder of the MyModule project
+                options.FileSets.ReplaceEmbeddedByPhysical<MyModule>(
                     Path.Combine(hostingEnvironment.ContentRootPath, "..\\MyModuleProject")
                 );
             });

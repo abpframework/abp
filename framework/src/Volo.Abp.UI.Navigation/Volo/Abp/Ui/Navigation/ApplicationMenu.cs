@@ -33,6 +33,7 @@ namespace Volo.Abp.UI.Navigation
 
         /// <summary>
         /// Can be used to store a custom object related to this menu.
+        /// TODO: Conver to dictionary!
         /// </summary>
         [CanBeNull]
         public object CustomData { get; set; }
