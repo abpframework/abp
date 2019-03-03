@@ -20,8 +20,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="Pages\**\*.cshtml" />
+    <Content Remove="Pages\**\*.css" />
+    <Content Remove="Pages\**\*.js" />
     <Content Remove="Properties\launchSettings.json" />
-    <EmbeddedResource Remove="Pages\Account\IdentityServerSupportedLoginModel.cs" />
     <None Include="Properties\launchSettings.json" />
   </ItemGroup>
 

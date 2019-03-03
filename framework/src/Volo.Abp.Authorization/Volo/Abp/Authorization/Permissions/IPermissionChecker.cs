@@ -6,8 +6,8 @@ namespace Volo.Abp.Authorization.Permissions
 {
     public interface IPermissionChecker
     {
-        Task<PermissionGrantInfo> CheckAsync([NotNull]string name);
+        Task<bool> IsGrantedAsync([NotNull]string name);
 
-        Task<PermissionGrantInfo> CheckAsync([CanBeNull] ClaimsPrincipal claimsPrincipal, [NotNull]string name);
+        Task<bool> IsGrantedAsync([CanBeNull] ClaimsPrincipal claimsPrincipal, [NotNull]string name);
     }
 }

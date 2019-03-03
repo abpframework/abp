@@ -10,3 +10,27 @@ body {
     text-decoration: none;
     color: #fff;
 }
+
+/* Main Menu */
+
+.navbar .dropdown-submenu {
+    position: relative;
+}
+
+    .navbar .dropdown-submenu a {
+        padding: 0.25rem 1.4rem;
+    }
+
+        .navbar .dropdown-submenu a::after {
+            transform: rotate(-90deg);
+            position: absolute;
+            right: 16px;
+            top: 18px;
+        }
+
+    .navbar .dropdown-submenu .dropdown-menu {
+        top: 0;
+        left: 100%;
+        margin-left: .1rem;
+        margin-right: .1rem;
+    }

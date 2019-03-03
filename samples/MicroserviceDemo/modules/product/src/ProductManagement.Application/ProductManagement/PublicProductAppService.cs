@@ -1,15 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
+using Volo.Abp.Domain.Repositories;
 
 namespace ProductManagement
 {
     public class PublicProductAppService : ApplicationService, IPublicProductAppService
     {
-        private readonly IProductRepository _productRepository;
+        private readonly IRepository<Product, Guid> _productRepository;
 
-        public PublicProductAppService(IProductRepository productRepository)
+        public PublicProductAppService(IRepository<Product, Guid> productRepository)
         {
             _productRepository = productRepository;
         }

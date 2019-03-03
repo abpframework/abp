@@ -14,19 +14,17 @@ namespace Volo.Abp.AspNetCore.Mvc.Client
             ConfigurationClient = configurationClient;
         }
 
-        public async Task<PermissionGrantInfo> CheckAsync(string name)
+        public async Task<bool> IsGrantedAsync(string name)
         {
             var configuration = await ConfigurationClient.GetAsync();
 
-            return new PermissionGrantInfo(
-                name,
-                configuration.Auth.GrantedPolicies.ContainsKey(name)
-            );
+            return configuration.Auth.GrantedPolicies.ContainsKey(name);
         }
 
-        public Task<PermissionGrantInfo> CheckAsync(ClaimsPrincipal claimsPrincipal, string name)
+        public Task<bool> IsGrantedAsync(ClaimsPrincipal claimsPrincipal, string name)
         {
-            return CheckAsync(name);
+            /* This provider always works for the current principal. */
+            return IsGrantedAsync(name);
         }
     }
 }

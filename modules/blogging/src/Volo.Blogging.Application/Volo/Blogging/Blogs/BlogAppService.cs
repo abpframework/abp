@@ -18,17 +18,6 @@ namespace Volo.Blogging.Blogs
             _blogRepository = blogRepository;
         }
 
-        public async Task<PagedResultDto<BlogDto>> GetListPagedAsync(PagedAndSortedResultRequestDto input)
-        {
-            var blogs = await _blogRepository.GetListAsync(input.Sorting, input.MaxResultCount, input.SkipCount );
-
-            var totalCount = await _blogRepository.GetTotalCount();
-
-            var dtos = ObjectMapper.Map<List<Blog>, List<BlogDto>>(blogs);
-
-            return new PagedResultDto<BlogDto>(totalCount, dtos);
-        }
-
         public async Task<ListResultDto<BlogDto>> GetListAsync()
         {
             var blogs = await _blogRepository.GetListAsync();

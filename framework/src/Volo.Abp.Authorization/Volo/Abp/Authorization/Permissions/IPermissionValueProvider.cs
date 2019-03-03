@@ -7,6 +7,7 @@ namespace Volo.Abp.Authorization.Permissions
     {
         string Name { get; }
 
-        Task<PermissionValueProviderGrantInfo> CheckAsync(PermissionValueCheckContext context);
+        //TODO: Rename to GetResult? (CheckAsync throws exception by naming convention)
+        Task<PermissionGrantResult> CheckAsync(PermissionValueCheckContext context);
     }
 }

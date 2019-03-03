@@ -13,13 +13,14 @@ namespace Volo.Abp.Caching
             {
                 option.CacheConfigurators.Add(cacheName =>
                 {
-                    if (cacheName == typeof(Sail.Testing.Caching.PersonCacheItem).FullName)
+                    if (cacheName == CacheNameAttribute.GetCacheName(typeof(Sail.Testing.Caching.PersonCacheItem)))
                     {
                         return new DistributedCacheEntryOptions()
                         {
                             AbsoluteExpiration = DateTime.Parse("2099-01-01 12:00:00")
                         };
                     }
+
                     return null;
                 });
 

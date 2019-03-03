@@ -29,6 +29,7 @@ using Volo.Abp.UI;
 using Volo.Abp.VirtualFileSystem;
 using Volo.AbpWebSite.Bundling;
 using Volo.Blogging;
+using Volo.Blogging.Files;
 using Volo.Docs;
 
 namespace Volo.AbpWebSite
@@ -55,24 +56,34 @@ namespace Volo.AbpWebSite
             var hostingEnvironment = context.Services.GetHostingEnvironment();
             var configuration = context.Services.GetConfiguration();
 
-            ConfigureLanguages(context.Services);
-            ConfigureDatabaseServices(context.Services, configuration);
-            ConfigureVirtualFileSystem(context.Services, hostingEnvironment);
-            ConfigureBundles(context.Services);
-            ConfigureTheme(context.Services);
+            ConfigureLanguages();
+            ConfigureDatabaseServices(configuration);
+            ConfigureVirtualFileSystem(hostingEnvironment);
+            ConfigureBundles();
+            ConfigureTheme();
+            ConfigureBlogging(hostingEnvironment);
         }
 
-        private static void ConfigureLanguages(IServiceCollection services)
+        private void ConfigureBlogging(IHostingEnvironment hostingEnvironment)
         {
-            services.Configure<AbpLocalizationOptions>(options =>
+            Configure<BlogFileOptions>(options =>
+            {
+                options.FileUploadLocalFolder = Path.Combine(hostingEnvironment.WebRootPath, "files");
+                options.FileUploadUrlRoot = "/files/";
+            });
+        }
+
+        private void ConfigureLanguages()
+        {
+            Configure<AbpLocalizationOptions>(options =>
             {
                 options.Languages.Add(new LanguageInfo("en-US", "en-US", "English"));
             });
         }
 
-        private static void ConfigureBundles(IServiceCollection services)
+        private void ConfigureBundles()
         {
-            services.Configure<BundlingOptions>(options =>
+            Configure<BundlingOptions>(options =>
             {
                 options
                     .StyleBundles
@@ -95,24 +106,24 @@ namespace Volo.AbpWebSite
             });
         }
 
-        private static void ConfigureDatabaseServices(IServiceCollection services, IConfigurationRoot configuration)
+        private void ConfigureDatabaseServices(IConfigurationRoot configuration)
         {
-            services.Configure<DbConnectionOptions>(options =>
+            Configure<DbConnectionOptions>(options =>
             {
                 options.ConnectionStrings.Default = configuration.GetConnectionString("Default");
             });
 
-            services.Configure<AbpDbContextOptions>(options =>
+            Configure<AbpDbContextOptions>(options =>
             {
                 options.UseSqlServer();
             });
         }
 
-        private static void ConfigureVirtualFileSystem(IServiceCollection services, IHostingEnvironment hostingEnvironment)
+        private void ConfigureVirtualFileSystem(IHostingEnvironment hostingEnvironment)
         {
             if (hostingEnvironment.IsDevelopment())
             {
-                services.Configure<VirtualFileSystemOptions>(options =>
+                Configure<VirtualFileSystemOptions>(options =>
                 {
                     options.FileSets.ReplaceEmbeddedByPhysical<AbpUiModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}framework{0}src{0}Volo.Abp.UI", Path.DirectorySeparatorChar)));
                     options.FileSets.ReplaceEmbeddedByPhysical<AbpAspNetCoreMvcUiModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI", Path.DirectorySeparatorChar)));
@@ -126,9 +137,9 @@ namespace Volo.AbpWebSite
             }
         }
 
-        private void ConfigureTheme(IServiceCollection services)
+        private void ConfigureTheme()
         {
-            services.Configure<ThemingOptions>(options =>
+            Configure<ThemingOptions>(options =>
             {
                 options.Themes.Add<AbpIoTheme>();
                 options.DefaultThemeName = AbpIoTheme.Name;
@@ -139,6 +150,8 @@ namespace Volo.AbpWebSite
         {
             var app = context.GetApplicationBuilder();
             var env = context.GetEnvironment();
+
+            app.UseCorrelationId();
 
             app.UseAbpRequestLocalization();
 
