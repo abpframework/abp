@@ -1,8 +1,10 @@
-﻿using Volo.Abp.Modularity;
+﻿using Volo.Abp.Autofac;
+using Volo.Abp.Modularity;
 
 namespace Volo.Abp.Settings
 {
     [DependsOn(
+        typeof(AbpAutofacModule),
         typeof(AbpSettingsModule),
         typeof(AbpTestBaseModule)
         )]

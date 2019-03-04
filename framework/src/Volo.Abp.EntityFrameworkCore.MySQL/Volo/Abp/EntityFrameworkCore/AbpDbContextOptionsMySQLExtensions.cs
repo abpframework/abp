@@ -1,6 +1,6 @@
 ﻿using JetBrains.Annotations;
-using MySql.Data.EntityFrameworkCore.Infraestructure;
 using System;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace Volo.Abp.EntityFrameworkCore
 {
@@ -8,7 +8,7 @@ namespace Volo.Abp.EntityFrameworkCore
     {
         public static void UseMySQL(
                 [NotNull] this AbpDbContextOptions options,
-                [CanBeNull] Action<MySQLDbContextOptionsBuilder> mySQLOptionsAction = null)
+                [CanBeNull] Action<MySqlDbContextOptionsBuilder> mySQLOptionsAction = null)
         {
             options.Configure(context =>
             {
@@ -18,7 +18,7 @@ namespace Volo.Abp.EntityFrameworkCore
 
         public static void UseMySQL<TDbContext>(
             [NotNull] this AbpDbContextOptions options,
-            [CanBeNull] Action<MySQLDbContextOptionsBuilder> mySQLOptionsAction = null)
+            [CanBeNull] Action<MySqlDbContextOptionsBuilder> mySQLOptionsAction = null)
             where TDbContext : AbpDbContext<TDbContext>
         {
             options.Configure<TDbContext>(context =>

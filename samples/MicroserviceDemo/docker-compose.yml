@@ -31,7 +31,7 @@ services:
       - elasticsearch
 
   internal-gateway:
-    image: 'microservice-demo/internal-gateway:${TAG:-latest}'
+    image: 'volosoft/microservice-demo-internal-gateway:${TAG:-latest}'
     build:
       context: ../../
       dockerfile: samples/MicroserviceDemo/gateways/InternalGateway.Host/Dockerfile
@@ -44,7 +44,7 @@ services:
       - blogging-service
   
   backend-admin-app-gateway:
-    image: 'microservice-demo/backend-admin-app-gateway:${TAG:-latest}'
+    image: 'volosoft/microservice-demo-backend-admin-app-gateway:${TAG:-latest}'
     build:
       context: ../../
       dockerfile: samples/MicroserviceDemo/gateways/BackendAdminAppGateway.Host/Dockerfile
@@ -56,7 +56,7 @@ services:
       - product-service
   
   public-website-gateway:
-    image: 'microservice-demo/public-website-gateway:${TAG:-latest}'
+    image: 'volosoft/microservice-demo-public-website-gateway:${TAG:-latest}'
     build:
       context: ../../
       dockerfile: samples/MicroserviceDemo/gateways/PublicWebSiteGateway.Host/Dockerfile
@@ -67,7 +67,7 @@ services:
       - product-service
   
   blogging-service:
-    image: 'microservice-demo/blogging-service:${TAG:-latest}'
+    image: 'volosoft/microservice-demo-blogging-service:${TAG:-latest}'
     build:
       context: ../../
       dockerfile: samples/MicroserviceDemo/microservices/BloggingService.Host/Dockerfile
@@ -77,7 +77,7 @@ services:
       - redis
   
   identity-service:
-    image: 'microservice-demo/identity-service:${TAG:-latest}'
+    image: 'volosoft/microservice-demo-identity-service:${TAG:-latest}'
     build:
       context: ../../
       dockerfile: samples/MicroserviceDemo/microservices/IdentityService.Host/Dockerfile
@@ -88,7 +88,7 @@ services:
       - sqlserver
   
   product-service:
-    image: 'microservice-demo/product-service:${TAG:-latest}'
+    image: 'volosoft/microservice-demo-product-service:${TAG:-latest}'
     build:
       context: ../../
       dockerfile: samples/MicroserviceDemo/microservices/ProductService.Host/Dockerfile
@@ -98,7 +98,7 @@ services:
       - redis
   
   auth-server:
-    image: 'microservice-demo/auth-server:${TAG:-latest}'
+    image: 'volosoft/microservice-demo-auth-server:${TAG:-latest}'
     build:
       context: ../../
       dockerfile: samples/MicroserviceDemo/applications/AuthServer.Host/Dockerfile
@@ -109,7 +109,7 @@ services:
       - identity-service
   
   backend-admin-app:
-    image: 'microservice-demo/backend-admin-app:${TAG:-latest}'
+    image: 'volosoft/microservice-demo-backend-admin-app:${TAG:-latest}'
     build:
       context: ../../
       dockerfile: samples/MicroserviceDemo/applications/BackendAdminApp.Host/Dockerfile
@@ -118,7 +118,7 @@ services:
       - backend-admin-app-gateway
   
   public-website:
-    image: 'microservice-demo/public-website:${TAG:-latest}'
+    image: 'volosoft/microservice-demo-public-website:${TAG:-latest}'
     build:
       context: ../../
       dockerfile: samples/MicroserviceDemo/applications/PublicWebSite.Host/Dockerfile

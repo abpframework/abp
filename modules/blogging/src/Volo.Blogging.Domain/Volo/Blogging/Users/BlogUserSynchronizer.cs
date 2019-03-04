@@ -32,8 +32,10 @@ namespace Volo.Blogging.Users
                 }
             }
 
-            user.Update(eventData.Entity);
-            await UserRepository.UpdateAsync(user);
+            if (user.Update(eventData.Entity))
+            {
+                await UserRepository.UpdateAsync(user);
+            }
         }
     }
 }

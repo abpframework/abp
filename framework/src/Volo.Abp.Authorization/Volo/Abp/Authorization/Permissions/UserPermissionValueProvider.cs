@@ -15,21 +15,18 @@ namespace Volo.Abp.Authorization.Permissions
 
         }
 
-        public override async Task<PermissionValueProviderGrantInfo> CheckAsync(PermissionValueCheckContext context)
+        public override async Task<PermissionGrantResult> CheckAsync(PermissionValueCheckContext context)
         {
             var userId = context.Principal?.FindFirst(AbpClaimTypes.UserId)?.Value;
 
             if (userId == null)
             {
-                return PermissionValueProviderGrantInfo.NonGranted;
+                return PermissionGrantResult.Undefined;
             }
 
-            if (await PermissionStore.IsGrantedAsync(context.Permission.Name, Name, userId))
-            {
-                return new PermissionValueProviderGrantInfo(true, userId);
-            }
-
-            return PermissionValueProviderGrantInfo.NonGranted;
+            return await PermissionStore.IsGrantedAsync(context.Permission.Name, Name, userId)
+                ? PermissionGrantResult.Granted
+                : PermissionGrantResult.Undefined;
         }
     }
 }
