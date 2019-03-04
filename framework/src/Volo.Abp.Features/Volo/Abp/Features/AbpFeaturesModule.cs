@@ -4,12 +4,14 @@ using System.Collections.Generic;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Validation;
 
 namespace Volo.Abp.Features
 {
     [DependsOn(
         typeof(AbpLocalizationAbstractionsModule),
-        typeof(AbpMultiTenancyAbstractionsModule)
+        typeof(AbpMultiTenancyAbstractionsModule),
+        typeof(AbpValidationModule)
         )]
     public class AbpFeaturesModule : AbpModule
     {

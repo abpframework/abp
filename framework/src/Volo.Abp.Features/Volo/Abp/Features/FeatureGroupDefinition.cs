@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
 using Volo.Abp.Localization;
+using Volo.Abp.Validation.StringValues;
 
 namespace Volo.Abp.Features
 {
@@ -53,6 +54,7 @@ namespace Volo.Abp.Features
             string defaultValue = null,
             ILocalizableString displayName = null,
             ILocalizableString description = null,
+            IStringValueType valueType = null,
             bool isVisibleToClients = true)
         {
             var feature = new FeatureDefinition(
@@ -60,6 +62,7 @@ namespace Volo.Abp.Features
                 defaultValue,
                 displayName,
                 description,
+                valueType,
                 isVisibleToClients
             );
 
