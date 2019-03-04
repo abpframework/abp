@@ -18,6 +18,15 @@ namespace Volo.Abp.Features
             AutoAddDefinitionProviders(context.Services);
         }
 
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            context.Services.Configure<FeatureOptions>(options =>
+            {
+                options.ValueProviders.Add<DefaultValueFeatureValueProvider>();
+                options.ValueProviders.Add<TenantFeatureValueProvider>();
+            });
+        }
+
         private static void AutoAddDefinitionProviders(IServiceCollection services)
         {
             var definitionProviders = new List<Type>();
