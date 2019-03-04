@@ -4,11 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Features
 {
-    public class FeatureChecker : IFeatureChecker, ITransientDependency
+    public class FeatureChecker : FeatureCheckerBase
     {
         protected FeatureOptions Options { get; }
         protected IServiceProvider ServiceProvider { get; }
@@ -36,7 +35,7 @@ namespace Volo.Abp.Features
             );
         }
         
-        public virtual async Task<string> GetOrNullAsync(string name)
+        public override async Task<string> GetOrNullAsync(string name)
         {
             var featureDefinition = FeatureDefinitionManager.Get(name);
             var providers = Enumerable
@@ -48,27 +47,6 @@ namespace Volo.Abp.Features
             }
 
             return await GetOrNullValueFromProvidersAsync(providers, featureDefinition);
-        }
-
-        public async Task<bool> IsEnabledAsync(string name)
-        {
-            var value = await GetOrNullAsync(name);
-            if (value == null)
-            {
-                return false;
-            }
-
-            try
-            {
-                return bool.Parse(value);
-            }
-            catch (Exception ex)
-            {
-                throw new AbpException(
-                    $"The value '{value}' for the feature '{name}' should be a boolean, but was not!",
-                    ex
-                );
-            }
         }
 
         protected virtual async Task<string> GetOrNullValueFromProvidersAsync(
