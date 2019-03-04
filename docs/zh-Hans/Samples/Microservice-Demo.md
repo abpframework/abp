@@ -51,6 +51,21 @@ Running as docker containers is easier since all dependencies are pre-configured
 
 - Open a command line in the `samples/MicroserviceDemo` folder of the repository.
 
+
+- Pull images from Docker Hub:
+
+  ```
+  docker-compose -f docker-compose.yml -f docker-compose.migrations.yml pull
+  ```
+
+- If you want to build images locally you may skip the above step and instead use build command:
+
+  ```
+  docker-compose -f docker-compose.yml -f docker-compose.migrations.yml build
+  ```
+
+  Building images may take a **long time** depending on your machine.
+
 - Restore SQL Server databases:
 
   ```
@@ -62,8 +77,6 @@ Running as docker containers is easier since all dependencies are pre-configured
   ```
   docker-compose up -d
   ```
-
-  At the first run, it will take a **long time** because it will build all docker images.
 
 - Add this line to the end of your `hosts` file:
 
