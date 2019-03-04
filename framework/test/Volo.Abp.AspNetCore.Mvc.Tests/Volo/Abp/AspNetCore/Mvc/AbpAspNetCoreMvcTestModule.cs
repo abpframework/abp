@@ -57,11 +57,6 @@ namespace Volo.Abp.AspNetCore.Mvc
                 });
             });
 
-            Configure<PermissionOptions>(options =>
-            {
-                options.DefinitionProviders.Add<TestPermissionDefinitionProvider>();
-            });
-
             Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpAspNetCoreMvcTestModule>();
