@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Localization;
@@ -16,7 +18,7 @@ namespace Volo.Abp.Authorization
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.OnRegistred(AuthorizationInterceptorRegistrar.RegisterIfNeeded);
-            //TODO: Auto Add Providers to PermissionOptions just like did in AbpFeaturesModule.AutoAddProviders
+            AutoAddDefinitionProviders(context.Services);
         }
 
         public override void ConfigureServices(ServiceConfigurationContext context)
@@ -30,6 +32,24 @@ namespace Volo.Abp.Authorization
                 options.ValueProviders.Add<UserPermissionValueProvider>();
                 options.ValueProviders.Add<RolePermissionValueProvider>();
                 options.ValueProviders.Add<ClientPermissionValueProvider>();
+            });
+        }
+
+        private static void AutoAddDefinitionProviders(IServiceCollection services)
+        {
+            var definitionProviders = new List<Type>();
+
+            services.OnRegistred(context =>
+            {
+                if (typeof(IPermissionDefinitionProvider).IsAssignableFrom(context.ImplementationType))
+                {
+                    definitionProviders.Add(context.ImplementationType);
+                }
+            });
+
+            services.Configure<PermissionOptions>(options =>
+            {
+                options.DefinitionProviders.AddIfNotContains(definitionProviders);
             });
         }
     }

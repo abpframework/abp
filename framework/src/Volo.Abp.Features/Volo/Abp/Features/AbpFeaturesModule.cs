@@ -15,24 +15,24 @@ namespace Volo.Abp.Features
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            AutoAddProviders(context.Services);
+            AutoAddDefinitionProviders(context.Services);
         }
 
-        private static void AutoAddProviders(IServiceCollection services)
+        private static void AutoAddDefinitionProviders(IServiceCollection services)
         {
-            var featureDefinitionProviders = new List<Type>();
+            var definitionProviders = new List<Type>();
 
             services.OnRegistred(context =>
             {
                 if (typeof(IFeatureDefinitionProvider).IsAssignableFrom(context.ImplementationType))
                 {
-                    featureDefinitionProviders.Add(context.ImplementationType);
+                    definitionProviders.Add(context.ImplementationType);
                 }
             });
 
             services.Configure<FeatureOptions>(options =>
             {
-                options.DefinitionProviders.AddIfNotContains(featureDefinitionProviders);
+                options.DefinitionProviders.AddIfNotContains(definitionProviders);
             });
         }
     }
