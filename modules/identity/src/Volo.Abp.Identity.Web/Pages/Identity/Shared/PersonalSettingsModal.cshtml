@@ -7,11 +7,11 @@
 @using Volo.Abp.Settings
 @model PersonalSettingsModal
 @inject IHtmlLocalizer<IdentityResource> L
-@inject ISettingManager SettingManager
+@inject ISettingProvider SettingProvider
 @{
     Layout = null;
-    var isUserNameUpdateEnabled = await SettingManager.IsTrueAsync(IdentitySettingNames.User.IsUserNameUpdateEnabled);
-    var isEmailUpdateEnabled = await SettingManager.IsTrueAsync(IdentitySettingNames.User.IsEmailUpdateEnabled);
+    var isUserNameUpdateEnabled = await SettingProvider.IsTrueAsync(IdentitySettingNames.User.IsUserNameUpdateEnabled);
+    var isEmailUpdateEnabled = await SettingProvider.IsTrueAsync(IdentitySettingNames.User.IsEmailUpdateEnabled);
 }
 
 <form asp-page="/Identity/Shared/PersonalSettingsModal">
