@@ -6,8 +6,7 @@ metadata:
   name: identity-service
 spec:
   ports:
-  - name: "63568"
-    port: 63568
+  - port: 80
     targetPort: 80
   selector:
     io.kompose.service: identity-service

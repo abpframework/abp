@@ -6,8 +6,7 @@ metadata:
   name: blogging-service
 spec:
   ports:
-  - name: "62157"
-    port: 62157
+  - port: 80
     targetPort: 80
   selector:
     io.kompose.service: blogging-service
