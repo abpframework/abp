@@ -8,8 +8,11 @@ namespace Volo.Abp.Features
 {
     public class TestFeatureStore : IFeatureStore, ISingletonDependency
     {
-        public static Guid Tenant1Id = new Guid("f460fcf7-f944-469a-967b-3b2463323dfe");
-        public static Guid Tenant2Id = new Guid("e10428ad-4608-4c34-a304-6f82502156f2");
+        public const string Tenant1IdValue = "f460fcf7-f944-469a-967b-3b2463323dfe";
+        public const string Tenant2IdValue = "e10428ad-4608-4c34-a304-6f82502156f2";
+
+        public static Guid Tenant1Id = new Guid(Tenant1IdValue);
+        public static Guid Tenant2Id = new Guid(Tenant2IdValue);
 
         private readonly List<SettingRecord> _settingRecords;
 
@@ -18,6 +21,7 @@ namespace Volo.Abp.Features
             _settingRecords = new List<SettingRecord>
             {
                 new SettingRecord("BooleanTestFeature1", TenantFeatureValueProvider.ProviderName, Tenant1Id.ToString(), "true"),
+                new SettingRecord("BooleanTestFeature2", TenantFeatureValueProvider.ProviderName, Tenant1Id.ToString(), "true"),
                 new SettingRecord("IntegerTestFeature1", TenantFeatureValueProvider.ProviderName, Tenant2Id.ToString(), "34")
             };
         }

@@ -15,6 +15,7 @@ namespace Volo.Abp.Features
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
+            context.Services.OnRegistred(FeatureInterceptorRegistrar.RegisterIfNeeded);
             AutoAddDefinitionProviders(context.Services);
         }
 

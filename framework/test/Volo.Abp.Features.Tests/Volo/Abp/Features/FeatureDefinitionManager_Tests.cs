@@ -3,7 +3,7 @@ using Xunit;
 
 namespace Volo.Abp.Features
 {
-    public class FeatureDefinitionManager_Tests : AbpFeaturesTestBase
+    public class FeatureDefinitionManager_Tests : FeatureTestBase
     {
         private readonly IFeatureDefinitionManager _featureDefinitionManager;
 

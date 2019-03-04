@@ -5,7 +5,7 @@ using Xunit;
 
 namespace Volo.Abp.Features
 {
-    public class FeatureChecker_Tests : AbpFeaturesTestBase
+    public class FeatureChecker_Tests : FeatureTestBase
     {
         private readonly IFeatureChecker _featureChecker;
         private readonly ICurrentTenant _currentTenant;

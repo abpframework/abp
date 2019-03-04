@@ -6,6 +6,7 @@
         {
             var group = context.AddGroup("Test Group");
             group.AddFeature("BooleanTestFeature1");
+            group.AddFeature("BooleanTestFeature2");
             group.AddFeature("IntegerTestFeature1", defaultValue: "1");
         }
     }

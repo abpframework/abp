@@ -2,6 +2,7 @@
 using Volo.Abp.Application.Services;
 using Volo.Abp.Authorization;
 using Volo.Abp.Domain;
+using Volo.Abp.Features;
 using Volo.Abp.Http;
 using Volo.Abp.Http.Modeling;
 using Volo.Abp.Modularity;
@@ -20,7 +21,8 @@ namespace Volo.Abp.Application
         typeof(AbpValidationModule),
         typeof(AbpAuthorizationModule),
         typeof(AbpHttpAbstractionsModule),
-        typeof(AbpSettingsModule)
+        typeof(AbpSettingsModule),
+        typeof(AbpFeaturesModule)
         )]
     public class AbpDddApplicationModule : AbpModule
     {
@@ -30,8 +32,8 @@ namespace Volo.Abp.Application
             {
                 options.IgnoredInterfaces.AddIfNotContains(typeof(IRemoteService));
                 options.IgnoredInterfaces.AddIfNotContains(typeof(IApplicationService));
-                options.IgnoredInterfaces.AddIfNotContains(typeof(IUnitOfWorkEnabled)); //TODO: Move to it's own module if possible?
-                options.IgnoredInterfaces.AddIfNotContains(typeof(IAuthorizationEnabled)); //TODO: Move to it's own module if possible?
+                options.IgnoredInterfaces.AddIfNotContains(typeof(IUnitOfWorkEnabled));
+                options.IgnoredInterfaces.AddIfNotContains(typeof(IAuthorizationEnabled));
             });
         }
     }
