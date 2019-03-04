@@ -26,7 +26,6 @@ namespace Volo.Abp.Application.Services
         IAvoidDuplicateCrossCuttingConcerns,
         IValidationEnabled,
         IUnitOfWorkEnabled,
-        IAuthorizationEnabled,
         IAuditingEnabled,
         ITransientDependency
     {

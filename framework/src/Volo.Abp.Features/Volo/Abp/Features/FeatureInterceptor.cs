@@ -8,12 +8,12 @@ namespace Volo.Abp.Features
 {
     public class FeatureInterceptor : AbpInterceptor, ITransientDependency
     {
-        private readonly IMethodInvocationFeatureCheckerService _methodInvocationAuthorizationService;
+        private readonly IMethodInvocationFeatureCheckerService _methodInvocationFeatureCheckerService;
 
         public FeatureInterceptor(
-            IMethodInvocationFeatureCheckerService methodInvocationAuthorizationService)
+            IMethodInvocationFeatureCheckerService methodInvocationFeatureCheckerService)
         {
-            _methodInvocationAuthorizationService = methodInvocationAuthorizationService;
+            _methodInvocationFeatureCheckerService = methodInvocationFeatureCheckerService;
         }
 
         public override void Intercept(IAbpMethodInvocation invocation)
@@ -46,7 +46,7 @@ namespace Volo.Abp.Features
 
         protected virtual Task CheckFeaturesAsync(IAbpMethodInvocation invocation)
         {
-            return _methodInvocationAuthorizationService.CheckAsync(
+            return _methodInvocationFeatureCheckerService.CheckAsync(
                 new MethodInvocationFeatureCheckerContext(
                     invocation.Method
                 )

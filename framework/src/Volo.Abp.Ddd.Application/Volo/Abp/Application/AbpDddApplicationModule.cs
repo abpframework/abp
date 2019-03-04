@@ -33,7 +33,6 @@ namespace Volo.Abp.Application
                 options.IgnoredInterfaces.AddIfNotContains(typeof(IRemoteService));
                 options.IgnoredInterfaces.AddIfNotContains(typeof(IApplicationService));
                 options.IgnoredInterfaces.AddIfNotContains(typeof(IUnitOfWorkEnabled));
-                options.IgnoredInterfaces.AddIfNotContains(typeof(IAuthorizationEnabled));
             });
         }
     }

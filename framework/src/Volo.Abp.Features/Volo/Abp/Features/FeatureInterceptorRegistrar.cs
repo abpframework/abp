@@ -18,10 +18,10 @@ namespace Volo.Abp.Features
         private static bool ShouldIntercept(Type type)
         {
             return type.IsDefined(typeof(RequiresFeatureAttribute), true) ||
-                   AnyMethodRequiresFeatureAttribute(type);
+                   AnyMethodHasRequiresFeatureAttribute(type);
         }
 
-        private static bool AnyMethodRequiresFeatureAttribute(Type implementationType)
+        private static bool AnyMethodHasRequiresFeatureAttribute(Type implementationType)
         {
             return implementationType
                 .GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
