@@ -16,6 +16,7 @@ namespace Volo.Abp.Authorization
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.OnRegistred(AuthorizationInterceptorRegistrar.RegisterIfNeeded);
+            //TODO: Auto Add Providers to PermissionOptions just like did in AbpFeaturesModule.AutoAddProviders
         }
 
         public override void ConfigureServices(ServiceConfigurationContext context)

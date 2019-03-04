@@ -10,33 +10,37 @@ namespace Volo.Abp.Features
 {
     public class FeatureChecker : IFeatureChecker, ITransientDependency
     {
-        protected IFeatureDefinitionManager FeatureDefinitionManager { get; }
-        protected Lazy<List<IFeatureValueProvider>> Providers { get; }
         protected FeatureOptions Options { get; }
+        protected IServiceProvider ServiceProvider { get; }
+        protected IFeatureDefinitionManager FeatureDefinitionManager { get; }
+        protected List<IFeatureValueProvider> Providers => _providers.Value;
+
+        private readonly Lazy<List<IFeatureValueProvider>> _providers;
 
         public FeatureChecker(
             IOptions<FeatureOptions> options,
             IServiceProvider serviceProvider,
             IFeatureDefinitionManager featureDefinitionManager)
         {
+            ServiceProvider = serviceProvider;
             FeatureDefinitionManager = featureDefinitionManager;
 
             Options = options.Value;
 
-            Providers = new Lazy<List<IFeatureValueProvider>>(
+            _providers = new Lazy<List<IFeatureValueProvider>>(
                 () => Options
                     .ValueProviders
-                    .Select(type => serviceProvider.GetRequiredService(type) as IFeatureValueProvider)
+                    .Select(type => ServiceProvider.GetRequiredService(type) as IFeatureValueProvider)
                     .ToList(),
                 true
             );
         }
-
+        
         public virtual async Task<string> GetOrNullAsync(string name)
         {
             var featureDefinition = FeatureDefinitionManager.Get(name);
             var providers = Enumerable
-                .Reverse(Providers.Value);
+                .Reverse(Providers);
 
             if (featureDefinition.AllowedProviders.Any())
             {
