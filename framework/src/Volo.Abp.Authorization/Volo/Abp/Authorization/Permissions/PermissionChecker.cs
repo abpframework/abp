@@ -41,12 +41,12 @@ namespace Volo.Abp.Authorization.Permissions
             );
         }
 
-        public virtual Task<PermissionGrantInfo> CheckAsync(string name)
+        public virtual Task<bool> IsGrantedAsync(string name)
         {
-            return CheckAsync(PrincipalAccessor.Principal, name);
+            return IsGrantedAsync(PrincipalAccessor.Principal, name);
         }
 
-        public virtual async Task<PermissionGrantInfo> CheckAsync(ClaimsPrincipal claimsPrincipal, string name)
+        public virtual async Task<bool> IsGrantedAsync(ClaimsPrincipal claimsPrincipal, string name)
         {
             Check.NotNull(name, nameof(name));
 
@@ -54,6 +54,8 @@ namespace Volo.Abp.Authorization.Permissions
                 PermissionDefinitionManager.Get(name),
                 claimsPrincipal
             );
+
+            var isGranted = false;
 
             foreach (var provider in ValueProviders)
             {
@@ -64,13 +66,18 @@ namespace Volo.Abp.Authorization.Permissions
                 }
 
                 var result = await provider.CheckAsync(context);
-                if (result.IsGranted)
+
+                if (result == PermissionGrantResult.Granted)
                 {
-                    return new PermissionGrantInfo(context.Permission.Name, true, provider.Name, result.ProviderKey);
+                    isGranted = true;
+                }
+                else if (result == PermissionGrantResult.Prohibited)
+                {
+                    return false;
                 }
             }
 
-            return new PermissionGrantInfo(context.Permission.Name, false);
+            return isGranted;
         }
     }
 }

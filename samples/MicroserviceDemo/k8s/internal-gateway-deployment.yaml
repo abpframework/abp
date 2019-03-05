@@ -19,31 +19,29 @@ spec:
         - name: ASPNETCORE_URLS
           value: http://0.0.0.0:80
         - name: AuthServer__Authority
-          value: http://auth-server:64999
+          value: http://auth-server:51511
         - name: ConnectionStrings__Default
-          value: Server=sqlserver;Database=MsDemo_Identity;Trusted_Connection=True;MultipleActiveResultSets=true;User=sa;Password=yourStrong(!)Password;Integrated
-            Security=false
+          value: Server=sqlserver;Database=MsDemo_Identity;Trusted_Connection=True;MultipleActiveResultSets=true;User=sa;Password=yourStrong(!)Password;Integrated Security=false
         - name: GlobalConfiguration__BaseUrl
           value: http://internal-gateway
-        - name: ReRoutes__0__DownstreamHostAndPorts__Host
+        - name: ReRoutes__0__DownstreamHostAndPorts__0__Host
           value: identity-service
-        - name: ReRoutes__0__DownstreamHostAndPorts__Port
+        - name: ReRoutes__0__DownstreamHostAndPorts__0__Port
           value: "80"
-        - name: ReRoutes__1__DownstreamHostAndPorts__Host
+        - name: ReRoutes__1__DownstreamHostAndPorts__0__Host
           value: product-service
-        - name: ReRoutes__1__DownstreamHostAndPorts__Port
+        - name: ReRoutes__1__DownstreamHostAndPorts__0__Port
           value: "80"
-        - name: ReRoutes__2__DownstreamHostAndPorts__Host
+        - name: ReRoutes__2__DownstreamHostAndPorts__0__Host
           value: blogging-service
-        - name: ReRoutes__2__DownstreamHostAndPorts__Port
+        - name: ReRoutes__2__DownstreamHostAndPorts__0__Port
           value: "80"
         - name: Redis__Configuration
           value: redis
-        image: microservice-demo/internal-gateway:latest
+        image: volosoft/microservice-demo-internal-gateway
         name: internal-gateway
         ports:
         - containerPort: 80
         resources: {}
-        imagePullPolicy: Never
       restartPolicy: Always
 status: {}

@@ -36,11 +36,6 @@ namespace MyCompanyName.MyProjectName
                     .AddBaseTypes(typeof(AbpValidationResource))
                     .AddVirtualJson("/Localization/MyProjectName");
             });
-
-            Configure<SettingOptions>(options =>
-            {
-                options.DefinitionProviders.Add<MyProjectNameSettingDefinitionProvider>();
-            });
         }
     }
 }

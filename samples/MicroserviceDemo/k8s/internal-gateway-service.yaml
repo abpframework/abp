@@ -6,8 +6,7 @@ metadata:
   name: internal-gateway
 spec:
   ports:
-  - name: "65129"
-    port: 65129
+  - port: 80
     targetPort: 80
   selector:
     io.kompose.service: internal-gateway

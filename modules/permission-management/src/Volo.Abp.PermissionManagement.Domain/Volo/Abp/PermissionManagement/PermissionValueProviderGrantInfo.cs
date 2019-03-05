@@ -1,8 +1,8 @@
 ﻿using JetBrains.Annotations;
 
-namespace Volo.Abp.Authorization.Permissions
+namespace Volo.Abp.PermissionManagement
 {
-    public class PermissionValueProviderGrantInfo
+    public class PermissionValueProviderGrantInfo //TODO: Rename to PermissionGrantInfo
     {
         public static PermissionValueProviderGrantInfo NonGranted { get; } = new PermissionValueProviderGrantInfo(false);
 

@@ -16,11 +16,6 @@ namespace MyCompanyName.MyProjectName
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<PermissionOptions>(options =>
-            {
-                options.DefinitionProviders.Add<MyProjectNamePermissionDefinitionProvider>();
-            });
-
             Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<MyProjectNameApplicationContractsModule>();

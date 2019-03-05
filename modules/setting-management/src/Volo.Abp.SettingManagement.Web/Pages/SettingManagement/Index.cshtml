@@ -14,24 +14,21 @@
     </abp-script-bundle>
 }
 
-<abp-card id="SettingManagementWrapper">
-    <abp-card-header>
-        <abp-row>
-            <abp-column size-md="_6">
-                <abp-card-title>@*@L["Settings"]*@Settings</abp-card-title>
-            </abp-column>
-        </abp-row>
-    </abp-card-header>
-    <abp-card-body>
-        <abp-tabs tab-style="PillVertical" vertical-header-size="_2">
-            @foreach (var group in Model.SettingPageCreationContext.Groups)
-            {
-                <abp-tab title="@group.DisplayName">
+    <div id="SettingManagementWrapper">
+        <abp-card>
+            <abp-card-body>
 
-                    <h2>@group.DisplayName</h2>
-                    @await Component.InvokeAsync(group.ComponentType)
-                </abp-tab>
-            }
-        </abp-tabs>
-    </abp-card-body>
-</abp-card>
+                <abp-tabs tab-style="PillVertical" vertical-header-size="_3">
+                    @foreach (var group in Model.SettingPageCreationContext.Groups)
+                    {
+                        <abp-tab title="@group.DisplayName">
+
+                            <h2>@group.DisplayName</h2>
+                            <hr class="my-4" />
+                            @await Component.InvokeAsync(group.ComponentType)
+                        </abp-tab>
+                    }
+                </abp-tabs>
+            </abp-card-body>
+        </abp-card>
+    </div>

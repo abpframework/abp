@@ -31,11 +31,6 @@ namespace Volo.Abp.Account.Web
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<SettingOptions>(options =>
-            {
-                options.DefinitionProviders.Add<AccountSettingDefinitionProvider>();
-            });
-
             Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpAccountWebModule>("Volo.Abp.Account.Web");

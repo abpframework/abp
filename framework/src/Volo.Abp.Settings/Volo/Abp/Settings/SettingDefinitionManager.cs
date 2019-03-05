@@ -10,22 +10,19 @@ namespace Volo.Abp.Settings
 {
     public class SettingDefinitionManager : ISettingDefinitionManager, ISingletonDependency
     {
-        protected Lazy<List<ISettingDefinitionProvider>> Providers { get; }
-
         protected Lazy<IDictionary<string, SettingDefinition>> SettingDefinitions { get; }
 
         protected SettingOptions Options { get; }
 
-        private readonly IServiceProvider _serviceProvider;
+        protected IServiceProvider ServiceProvider { get; }
 
         public SettingDefinitionManager(
             IOptions<SettingOptions> options,
             IServiceProvider serviceProvider)
         {
-            _serviceProvider = serviceProvider;
+            ServiceProvider = serviceProvider;
             Options = options.Value;
 
-            Providers = new Lazy<List<ISettingDefinitionProvider>>(CreateSettingProviders, true);
             SettingDefinitions = new Lazy<IDictionary<string, SettingDefinition>>(CreateSettingDefinitions, true);
         }
 
@@ -53,21 +50,21 @@ namespace Volo.Abp.Settings
             return SettingDefinitions.Value.GetOrDefault(name);
         }
 
-        protected virtual List<ISettingDefinitionProvider> CreateSettingProviders()
-        {
-            return Options
-                .DefinitionProviders
-                .Select(p => _serviceProvider.GetRequiredService(p) as ISettingDefinitionProvider)
-                .ToList();
-        }
-
         protected virtual IDictionary<string, SettingDefinition> CreateSettingDefinitions()
         {
             var settings = new Dictionary<string, SettingDefinition>();
 
-            foreach (var provider in Providers.Value)
+            using (var scope = ServiceProvider.CreateScope())
             {
-                provider.Define(new SettingDefinitionContext(settings));
+                var providers = Options
+                    .DefinitionProviders
+                    .Select(p => scope.ServiceProvider.GetRequiredService(p) as ISettingDefinitionProvider)
+                    .ToList();
+
+                foreach (var provider in providers)
+                {
+                    provider.Define(new SettingDefinitionContext(settings));
+                }
             }
 
             return settings;
