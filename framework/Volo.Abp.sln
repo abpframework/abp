@@ -5,22 +5,7 @@ VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CBCC288A-53C3-402F-99F7-E468738560F5}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{447C8A77-E5F0-4538-8687-7383196D04EA}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docker-files", "docker-files", "{0BEA55D6-E0B8-40DD-A256-B34C4DD990A5}"
-	ProjectSection(SolutionItems) = preProject
-		..\docker\docker-compose.yml = ..\docker\docker-compose.yml
-		..\docker\down.ps1 = ..\docker\down.ps1
-		..\docker\haproxy.cfg = ..\docker\haproxy.cfg
-		..\docker\up.ps1 = ..\docker\up.ps1
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{6D893E48-0739-401A-9AD1-286BCB6E5517}"
-	ProjectSection(SolutionItems) = preProject
-		..\build\build.ps1 = ..\build\build.ps1
-	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AbpTestBase", "test\AbpTestBase\AbpTestBase.csproj", "{1020F5FD-6A97-40C2-AFCA-EBDF641DF111}"
 EndProject
@@ -657,8 +642,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{0BEA55D6-E0B8-40DD-A256-B34C4DD990A5} = {CBCC288A-53C3-402F-99F7-E468738560F5}
-		{6D893E48-0739-401A-9AD1-286BCB6E5517} = {CBCC288A-53C3-402F-99F7-E468738560F5}
 		{1020F5FD-6A97-40C2-AFCA-EBDF641DF111} = {447C8A77-E5F0-4538-8687-7383196D04EA}
 		{02BE03BA-3411-448C-AB61-CB36407CC49A} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{B1D860BB-6EC6-4BAE-ADAA-C2AEC2FFB510} = {447C8A77-E5F0-4538-8687-7383196D04EA}
