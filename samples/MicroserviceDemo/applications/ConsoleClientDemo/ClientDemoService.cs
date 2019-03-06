@@ -116,6 +116,7 @@ namespace ConsoleClientDemo
             try
             {
                 var output = await _productAppService.GetListAsync();
+
                 Console.WriteLine("Total product count: " + output.Items.Count);
 
                 foreach (var product in output.Items)
