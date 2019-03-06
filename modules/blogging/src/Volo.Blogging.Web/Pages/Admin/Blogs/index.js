@@ -12,7 +12,7 @@
         autoWidth: false,
         scrollCollapse: true,
         order: [[3, "desc"]],
-        ajax: abp.libs.datatables.createAjax(volo.blogging.blogs.getListPaged),
+        ajax: abp.libs.datatables.createAjax(volo.blogging.blogs.getList),
         columnDefs: [
             {
                 rowAction: {
