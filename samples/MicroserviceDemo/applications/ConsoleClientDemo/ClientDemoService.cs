@@ -52,6 +52,7 @@ namespace ConsoleClientDemo
                     await _authenticator.AuthenticateAsync(client);
 
                     var url = GetServerUrl() + "Test/Index";
+
                     var response = await client.GetAsync(url);
 
                     if (!response.IsSuccessStatusCode)
