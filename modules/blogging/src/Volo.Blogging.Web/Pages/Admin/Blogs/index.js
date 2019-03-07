@@ -7,7 +7,8 @@
     var _dataTable = $('#BlogsTable').DataTable(abp.libs.datatables.normalizeConfiguration({
         processing: true,
         serverSide: true,
-        paging: true,
+        paging: false,
+        info: false,
         searching: false,
         autoWidth: false,
         scrollCollapse: true,
