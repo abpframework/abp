@@ -2,15 +2,9 @@
 @using Volo.Abp.Users
 @model AuthServer.Host.Pages.IndexModel
 @inject ICurrentUser CurrentUser
-@section styles {
-    <style>
-        .online-user-info {
-        }
-    </style>
-}
 @if (CurrentUser.IsAuthenticated)
 {
-    <div class="online-user-info">
+    <div>
         <abp-row>
             <abp-column size-md="_3" class="text-center">
                 <i class="fa fa-user d-block" style="font-size: 10em; color: #12b900"></i>
