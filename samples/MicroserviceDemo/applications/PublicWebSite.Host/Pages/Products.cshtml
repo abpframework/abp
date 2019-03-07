@@ -8,6 +8,10 @@
     @foreach (var product in Model.Products.Items)
     {
         <li>
+            @if (!product.ImageName.IsNullOrEmpty())
+            {
+                <img src="/product-images/@product.ImageName" width="300" height="300"/>
+            }
             @product.Code / @product.Name / $@product.Price <br/>
             <i>Stock count: @product.StockCount</i>
         </li>
