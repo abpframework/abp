@@ -6,11 +6,11 @@
 
         AbpButtonSize Size { get; }
 
-        bool? Block { get;}
-
         string Text { get; }
 
         string Icon { get; }
+
+        bool? Disabled { get; }
 
         FontIconType IconType { get; }
     }

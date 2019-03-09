@@ -102,7 +102,8 @@ body {
 
                 > ul {
                     display: block;
-                    height: calc(100vh - 210px);
+                    height: calc(100vh - 220px);
+                    overflow-y: auto;
                 }
 
                 ul {
@@ -259,6 +260,32 @@ body {
     }
 
     .docs-content {
+        overflow-x: scroll;
+
+        .contributors {
+            position: absolute;
+            top: 15px;
+            right: 5px;
+
+            .contributors-avatar {
+                border-radius: 21px;
+                width: 21px;
+                height: 21px;
+            }
+
+            a {
+                padding: 0;
+                width: 21px;
+                height: 21px;
+                display: inline-block;
+                margin: 0 0 0 2px;
+
+                &:hover {
+                    text-decoration: none;
+                }
+            }
+        }
+
         .docs-link-btns {
             border-bottom: 1px solid #f4f5f7;
             background: #fdfdfd;
@@ -275,6 +302,22 @@ body {
                     text-decoration: none;
                 }
             }
+
+            .twitter {
+                color: #00ACEE;
+            }
+
+            .linkedin {
+                color: #0077B5;
+            }
+
+            .email {
+                color: #5a5a5a;
+            }
+
+            .share-button {
+                margin-left: 10px;
+            }
         }
 
         .docs-text-field {
@@ -283,7 +326,7 @@ body {
 
         article.docs-body {
             h1 {
-                padding-top: 2rem;
+                padding-top: 1rem;
                 font-size: 2.25rem;
                 padding-bottom: 10px;
             }
@@ -326,6 +369,41 @@ body {
                 margin: 15px 0 25px;
                 box-shadow: 0 0 45px #f8f9fa;
                 border-radius: 6px;
+            }
+
+
+            table {
+                display: block;
+                overflow: auto;
+                width: 100%;
+
+                thead {
+                    tr {
+                        border-bottom: 2px inset;
+                    }
+                }
+
+                th {
+                    font-weight: 600
+                }
+
+                td, th {
+                    border: 1px solid #dfe2e5;
+                    padding: 6px 13px
+                }
+
+                tr {
+                    background-color: #fff;
+                    border-top: 1px solid #c6cbd1
+                }
+
+                tr:nth-child(2n) {
+                    background-color: #f6f8fa
+                }
+
+                img {
+                    background-color: initial
+                }
             }
         }
     }
@@ -790,7 +868,7 @@ div.code-toolbar > .toolbar a {
             margin-left: -1rem;
         }
     }
-     
+
     .section-with-logos img {
         margin: 15px;
         opacity: 1;

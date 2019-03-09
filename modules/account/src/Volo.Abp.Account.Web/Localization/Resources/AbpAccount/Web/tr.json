@@ -10,6 +10,13 @@
     "UserLockedOutMessage": "Kullanıcı hesabı hatalı giriş denemeleri nedeniyle kilitlenmiştir. Lütfen bir süre bekleyip tekrar deneyin.",
     "InvalidUserNameOrPassword": "Kullanıcı adı ya da şifre geçersiz!",
     "LoginIsNotAllowed": "Giriş yapamazsınız! E-posta adresinizi ya da telefon numaranızı doğrulamanız gerekiyor.",
-    "SelfRegistrationDisabledMessage": "Bu uygulama için kullanıcıların kendi kendilerine kaydolmaları engellenmiştir. Yeni bir kullanıcı kaydetmek için lütfen uygulama yöneticisi ile iletişime geçin."
+    "SelfRegistrationDisabledMessage": "Bu uygulama için kullanıcıların kendi kendilerine kaydolmaları engellenmiştir. Yeni bir kullanıcı kaydetmek için lütfen uygulama yöneticisi ile iletişime geçin.",
+    "Login": "Login",
+    "Cancel": "Cancel",
+    "Register": "Register",
+    "UseAnotherServiceToLogIn.": "Use another service to log in.",
+    "InvalidLoginRequest": "Invalid login request",
+    "ThereAreNoLoginSchemesConfiguredForThisClient": "There are no login schemes configured for this client.",
+    "LogInUsingYourProviderAccount": "Log in using your {0} account"
   }
 }

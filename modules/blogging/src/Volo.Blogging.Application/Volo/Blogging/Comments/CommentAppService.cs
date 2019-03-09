@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Guids;
-using Volo.Abp.Users;
 using Volo.Blogging.Comments.Dtos;
 using Volo.Blogging.Posts;
 using Volo.Blogging.Users;
@@ -26,9 +25,9 @@ namespace Volo.Blogging.Comments
             UserLookupService = userLookupService;
         }
 
-        public async Task<List<CommentWithRepliesDto>> GetHierarchicalListOfPostAsync(GetCommentListOfPostAsync input)
+        public async Task<List<CommentWithRepliesDto>> GetHierarchicalListOfPostAsync(Guid postId)
         {
-            var comments = await GetListOfPostAsync(input);
+            var comments = await GetListOfPostAsync(postId);
             var userDictionary = new Dictionary<Guid, BlogUserDto>();
 
             foreach (var commentDto in comments)
@@ -73,15 +72,15 @@ namespace Volo.Blogging.Comments
             return hierarchicalComments;
         }
 
-        private async Task<List<CommentWithDetailsDto>> GetListOfPostAsync(GetCommentListOfPostAsync input)
+        private async Task<List<CommentWithDetailsDto>> GetListOfPostAsync(Guid postId)
         {
-            var comments = await _commentRepository.GetListOfPostAsync(input.PostId);
+            var comments = await _commentRepository.GetListOfPostAsync(postId);
 
             return new List<CommentWithDetailsDto>(
                 ObjectMapper.Map<List<Comment>, List<CommentWithDetailsDto>>(comments));
         }
 
-        //[Authorize(BloggingPermissions.Comments.Create)] TODO: Temporary removed
+        [Authorize]
         public async Task<CommentWithDetailsDto> CreateAsync(CreateCommentDto input)
         {
             var comment = new Comment(_guidGenerator.Create(), input.PostId, input.RepliedCommentId, input.Text);
@@ -91,6 +90,7 @@ namespace Volo.Blogging.Comments
             return ObjectMapper.Map<Comment, CommentWithDetailsDto>(comment);
         }
 
+        [Authorize]
         public async Task<CommentWithDetailsDto> UpdateAsync(Guid id, UpdateCommentDto input)
         {
             var comment = await _commentRepository.GetAsync(id);
@@ -104,6 +104,7 @@ namespace Volo.Blogging.Comments
             return ObjectMapper.Map<Comment, CommentWithDetailsDto>(comment);
         }
 
+        [Authorize]
         public async Task DeleteAsync(Guid id)
         {
             var comment = await _commentRepository.GetAsync(id);

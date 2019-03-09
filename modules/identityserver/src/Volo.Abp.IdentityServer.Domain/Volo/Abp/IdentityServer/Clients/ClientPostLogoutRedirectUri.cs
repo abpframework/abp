@@ -15,6 +15,11 @@ namespace Volo.Abp.IdentityServer.Clients
 
         }
 
+        public virtual bool Equals(Guid clientId, [NotNull] string uri)
+        {
+            return ClientId == clientId && PostLogoutRedirectUri == uri;
+        }
+
         protected internal ClientPostLogoutRedirectUri(Guid clientId, [NotNull] string postLogoutRedirectUri)
         {
             Check.NotNull(postLogoutRedirectUri, nameof(postLogoutRedirectUri));

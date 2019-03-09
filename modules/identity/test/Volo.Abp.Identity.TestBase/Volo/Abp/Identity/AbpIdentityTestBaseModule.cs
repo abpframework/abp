@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Authorization;
 using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
 using Volo.Abp.Threading;
@@ -8,13 +9,14 @@ namespace Volo.Abp.Identity
     [DependsOn(
         typeof(AbpAutofacModule),
         typeof(AbpTestBaseModule),
-        typeof(AbpIdentityDomainModule)
+        typeof(AbpIdentityDomainModule),
+        typeof(AbpAuthorizationModule)
         )]
     public class AbpIdentityTestBaseModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.AddAlwaysAllowPermissionChecker();
+            context.Services.AddAlwaysAllowAuthorization();
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)

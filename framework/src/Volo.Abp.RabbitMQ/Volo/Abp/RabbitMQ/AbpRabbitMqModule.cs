@@ -11,6 +11,12 @@ namespace Volo.Abp.RabbitMQ
         )]
     public class AbpRabbitMqModule : AbpModule
     {
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            var configuration = context.Services.GetConfiguration();
+            Configure<AbpRabbitMqOptions>(configuration.GetSection("RabbitMQ"));
+        }
+
         public override void OnApplicationShutdown(ApplicationShutdownContext context)
         {
             context.ServiceProvider

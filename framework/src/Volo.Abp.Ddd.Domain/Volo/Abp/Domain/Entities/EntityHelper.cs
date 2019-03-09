@@ -75,11 +75,10 @@ namespace Volo.Abp.Domain.Entities
             where TEntity : IEntity<TKey>
         {
             var lambdaParam = Expression.Parameter(typeof(TEntity));
-            var lambdaBody = Expression.Equal(
-                Expression.PropertyOrField(lambdaParam, nameof(Entity<TKey>.Id)),
-                Expression.Constant(id, typeof(TKey))
-            );
-
+            var leftExpression = Expression.PropertyOrField(lambdaParam, "Id");
+            Expression<Func<object>> closure = () => id;
+            var rightExpression = Expression.Convert(closure.Body, leftExpression.Type);
+            var lambdaBody = Expression.Equal(leftExpression, rightExpression);
             return Expression.Lambda<Func<TEntity, bool>>(lambdaBody, lambdaParam);
         }
     }

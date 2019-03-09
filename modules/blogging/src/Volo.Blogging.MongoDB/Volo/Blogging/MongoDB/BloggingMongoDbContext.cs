@@ -24,8 +24,6 @@ namespace Volo.Blogging.MongoDB
 
         public IMongoCollection<Tagging.Tag> Tags => Collection<Tagging.Tag>();
 
-        public IMongoCollection<PostTag> PostTags => Collection<PostTag>();
-
         public IMongoCollection<Comment> Comments => Collection<Comment>();
 
         protected override void CreateModel(IMongoModelBuilder modelBuilder)

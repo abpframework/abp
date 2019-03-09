@@ -54,6 +54,8 @@ namespace Volo.Docs.Projects
             Guid id, 
             [NotNull] string name, 
             [NotNull] string shortName, 
+            [NotNull] string documentStoreType,
+            [NotNull] string format,
             [NotNull] string defaultDocumentName, 
             [NotNull] string navigationDocumentName)
         {
@@ -61,10 +63,32 @@ namespace Volo.Docs.Projects
 
             Name = Check.NotNullOrWhiteSpace(name, nameof(name));
             ShortName = Check.NotNullOrWhiteSpace(shortName, nameof(shortName));
+            DocumentStoreType = Check.NotNullOrWhiteSpace(documentStoreType, nameof(documentStoreType));
+            Format = Check.NotNullOrWhiteSpace(format, nameof(format));
             DefaultDocumentName = Check.NotNullOrWhiteSpace(defaultDocumentName, nameof(defaultDocumentName));
             NavigationDocumentName = Check.NotNullOrWhiteSpace(navigationDocumentName, nameof(navigationDocumentName));
 
             ExtraProperties = new Dictionary<string, object>();
+        }
+
+        public void SetName(string name)
+        {
+            Name = Check.NotNullOrWhiteSpace(name, nameof(name));
+        }
+
+        public void SetFormat(string format)
+        {
+            Format = Check.NotNullOrWhiteSpace(format, nameof(format));
+        }
+
+        public void SetNavigationDocumentName(string navigationDocumentName)
+        {
+            NavigationDocumentName = Check.NotNullOrWhiteSpace(navigationDocumentName, nameof(navigationDocumentName));
+        }
+
+        public void SetDefaultDocumentName(string defaultDocumentName)
+        {
+            DefaultDocumentName = Check.NotNullOrWhiteSpace(defaultDocumentName, nameof(defaultDocumentName));
         }
     }
 }

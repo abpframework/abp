@@ -6,6 +6,7 @@ using Microsoft.Extensions.Caching.Distributed;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Caching;
+using Volo.Abp.Guids;
 using Volo.Docs.Documents;
 
 namespace Volo.Docs.Projects
@@ -15,15 +16,17 @@ namespace Volo.Docs.Projects
         private readonly IProjectRepository _projectRepository;
         private readonly IDistributedCache<List<VersionInfo>> _versionCache;
         private readonly IDocumentStoreFactory _documentStoreFactory;
+        private readonly IGuidGenerator _guidGenerator;
 
         public ProjectAppService(
             IProjectRepository projectRepository,
             IDistributedCache<List<VersionInfo>> versionCache,
-            IDocumentStoreFactory documentStoreFactory)
+            IDocumentStoreFactory documentStoreFactory, IGuidGenerator guidGenerator)
         {
             _projectRepository = projectRepository;
             _versionCache = versionCache;
             _documentStoreFactory = documentStoreFactory;
+            _guidGenerator = guidGenerator;
         }
 
         public async Task<ListResultDto<ProjectDto>> GetListAsync()
@@ -51,7 +54,9 @@ namespace Volo.Docs.Projects
                 () => GetVersionsAsync(project),
                 () => new DistributedCacheEntryOptions
                 {
-                    SlidingExpiration = TimeSpan.FromSeconds(2)
+                    //TODO: Configurable?
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(12),
+                    SlidingExpiration = TimeSpan.FromMinutes(60)
                 }
             );
 
@@ -63,7 +68,7 @@ namespace Volo.Docs.Projects
         protected virtual async Task<List<VersionInfo>> GetVersionsAsync(Project project)
         {
             var store = _documentStoreFactory.Create(project.DocumentStoreType);
-            var versions = await store.GetVersions(project);
+            var versions = await store.GetVersionsAsync(project);
 
             if (!versions.Any())
             {

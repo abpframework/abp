@@ -1,26 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Volo.Abp.Domain.Services;
-using Volo.Abp.Guids;
 
 namespace Volo.Abp.Identity
 {
     public class IdenityClaimTypeManager : DomainService
     {
         private readonly IIdentityClaimTypeRepository _identityClaimTypeRepository;
-        private readonly IGuidGenerator _guidGenerator;
 
-        public IdenityClaimTypeManager(IIdentityClaimTypeRepository identityClaimTypeRepository, IGuidGenerator guidGenerator)
+        public IdenityClaimTypeManager(IIdentityClaimTypeRepository identityClaimTypeRepository)
         {
             _identityClaimTypeRepository = identityClaimTypeRepository;
-            _guidGenerator = guidGenerator;
         }
 
         public virtual async Task<IdentityClaimType> CreateAsync(IdentityClaimType claimType)
         {
-            if (await _identityClaimTypeRepository.DoesNameExist(claimType.Name))
+            if (await _identityClaimTypeRepository.AnyAsync(claimType.Name))
             {
                 throw new AbpException($"Name Exist: {claimType.Name}");
             }
@@ -30,7 +24,7 @@ namespace Volo.Abp.Identity
 
         public virtual async Task<IdentityClaimType> UpdateAsync(IdentityClaimType claimType)
         {
-            if (await _identityClaimTypeRepository.DoesNameExist(claimType.Name, claimType.Id))
+            if (await _identityClaimTypeRepository.AnyAsync(claimType.Name, claimType.Id))
             {
                 throw new AbpException($"Name Exist: {claimType.Name}");
             }

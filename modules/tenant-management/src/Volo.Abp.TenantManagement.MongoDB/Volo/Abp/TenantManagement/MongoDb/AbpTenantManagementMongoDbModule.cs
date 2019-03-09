@@ -12,8 +12,6 @@ namespace Volo.Abp.TenantManagement.MongoDb
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            AbpTenantManagementBsonClassMap.Configure();
-
             context.Services.AddMongoDbContext<TenantManagementMongoDbContext>(options =>
             {
                 options.AddDefaultRepositories<ITenantManagementMongoDbContext>();

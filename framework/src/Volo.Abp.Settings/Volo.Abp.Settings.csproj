@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.Localization.Abstractions\Volo.Abp.Localization.Abstractions.csproj" />
+    <ProjectReference Include="..\Volo.Abp.MultiTenancy.Abstractions\Volo.Abp.MultiTenancy.Abstractions.csproj" />
     <ProjectReference Include="..\Volo.Abp.Security\Volo.Abp.Security.csproj" />
   </ItemGroup>
 

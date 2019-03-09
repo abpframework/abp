@@ -1,8 +1,8 @@
-## MongoDB Integration
+# MongoDB Integration
 
 This document explains how to integrate MongoDB as a database provider to ABP based applications and how to configure it.
 
-### Installation
+## Installation
 
 `Volo.Abp.MongoDB` is the main nuget package for the MongoDB integration. Install it to your project (for a layered application, to your data/infrastructure layer):
 
@@ -26,7 +26,7 @@ namespace MyCompany.MyProject
 }
 ```
 
-### Creating a Mongo Db Context
+## Creating a Mongo Db Context
 
 ABP introduces **Mongo Db Context** concept (which is similar to Entity Framework Core's DbContext) to make it easier to use collections and configure them. An example is shown below:
 
@@ -39,19 +39,62 @@ public class MyDbContext : AbpMongoDbContext
 
     protected override void CreateModel(IMongoModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Question>(b =>
-        {
-            b.CollectionName = "Questions";
-        });
+        base.CreateModel(modelBuilder);
+        
+        //Customize the configuration for your collections.
     }
 }
 ```
 
 * It's derived from `AbpMongoDbContext` class.
 * Adds a public `IMongoCollection<TEntity>` property for each mongo collection. ABP uses these properties to create default repositories by default.
-* Overriding `CreateModel` method allows to configure collections (like their collection name in the database).
+* Overriding `CreateModel` method allows to configure collection configuration.
 
-### Registering DbContext To Dependency Injection
+### Configure Mapping for a Collection
+
+ABP automatically register entities to MongoDB client library for all `IMongoCollection<TEntity>` properties in your DbContext. For the example above, `Question` and `Category` entities are automatically registered.
+
+For each registered entity, it calls `AutoMap()` and configures known properties of your entity. For instance, if your entity implements `IHasExtraProperties` interface (which is already implemented for every aggregate root by default), it automatically configures `ExtraProperties`.
+
+So, most of times you don't need to explicitly configure registration for your entities. However, if you need it you can do it by overriding the `CreateModel` method in your DbContext. Example:
+
+````csharp
+protected override void CreateModel(IMongoModelBuilder modelBuilder)
+{
+    base.CreateModel(modelBuilder);
+    
+    modelBuilder.Entity<Question>(b =>
+    {
+        b.CollectionName = "MyQuestions"; //Sets the collection name
+        b.BsonMap.UnmapProperty(x => x.MyProperty); //Ignores 'MyProperty'
+    });
+}
+````
+
+This example changes the mapped collection name to 'MyQuestions' in the database and ignores a property in the `Question` class.
+
+If you only need to configure the collection name, you can also use `[MongoCollection]` attribute for the collection in your DbContext. Example:
+
+````csharp
+[MongoCollection("MyQuestions")] //Sets the collection name
+public IMongoCollection<Question> Questions => Collection<Question>();
+````
+
+### Configure the Connection String Selection
+
+If you have multiple databases in your application, you can configure the connection string name for your DbContext using the `[ConnectionStringName]` attribute. Example:
+
+````csharp
+[ConnectionStringName("MySecondConnString")]
+public class MyDbContext : AbpMongoDbContext
+{
+    
+}
+````
+
+If you don't configure, the `Default` connection string is used. If you configure a specific connection string name, but not define this connection string name in the application configuration then it fallbacks to the `Default` connection string.
+
+## Registering DbContext To Dependency Injection
 
 Use `AddAbpDbContext` method in your module to register your DbContext class for [dependency injection](Dependency-Injection.md) system.
 
@@ -75,7 +118,7 @@ namespace MyCompany.MyProject
 }
 ```
 
-#### Add Default Repositories
+### Add Default Repositories
 
 ABP can automatically create default [generic repositories](Repositories.md) for the entities in your DbContext. Just use `AddDefaultRepositories()` option on the registration:
 
@@ -138,7 +181,7 @@ public class BookManager : DomainService
 
 This sample uses `InsertAsync` method to insert a new entity to the database.
 
-#### Add Custom Repositories
+### Add Custom Repositories
 
 Default generic repositories are powerful enough in most cases (since they implement `IQueryable`). However, you may need to create a custom repository to add your own repository methods.
 
@@ -182,7 +225,7 @@ public class BookRepository :
 
 Now, it's possible to [inject](Dependency-Injection.md) the `IBookRepository` and use the `DeleteBooksByType` method when needed.
 
-##### Override Default Generic Repository
+#### Override Default Generic Repository
 
 Even if you create a custom repository, you can still inject the default generic repository (`IRepository<Book, Guid>` for this example). Default repository implementation will not use the class you have created.
 
@@ -208,7 +251,7 @@ public override async Task DeleteAsync(
 }
 ```
 
-#### Access to the MongoDB API
+### Access to the MongoDB API
 
 In most cases, you want to hide MongoDB APIs behind a repository (this is the main purpose of the repository). However, if you want to access the MongoDB API over the repository, you can use `GetDatabase()` or `GetCollection()` extension methods. Example:
 
@@ -232,9 +275,9 @@ public class BookService
 
 > Important: You must reference to the `Volo.Abp.MongoDB` package from the project you want to access to the MongoDB API. This breaks encapsulation, but this is what you want in that case.
 
-#### Advanced Topics
+### Advanced Topics
 
-##### Set Default Repository Classes
+#### Set Default Repository Classes
 
 Default generic repositories are implemented by `MongoDbRepository` class by default. You can create your own implementation and use it for default repository implementation.
 
@@ -279,7 +322,7 @@ context.Services.AddMongoDbContext<BookStoreMongoDbContext>(options =>
 });
 ```
 
-##### Set Base MongoDbContext Class or Interface for Default Repositories
+#### Set Base MongoDbContext Class or Interface for Default Repositories
 
 If your MongoDbContext inherits from another MongoDbContext or implements an interface, you can use that base class or interface as the MongoDbContext for default repositories. Example:
 
@@ -313,7 +356,7 @@ public class BookRepository
 
 One advantage of using interface for a MongoDbContext is then it becomes replaceable by another implementation.
 
-##### Replace Other DbContextes
+#### Replace Other DbContextes
 
 Once you properly define and use an interface for a MongoDbContext , then any other implementation can replace it using the `ReplaceDbContext` option:
 

@@ -13,6 +13,6 @@ namespace Volo.Abp.Authorization.Permissions
             PermissionStore = permissionStore;
         }
 
-        public abstract Task<PermissionValueProviderGrantInfo> CheckAsync(PermissionValueCheckContext context);
+        public abstract Task<PermissionGrantResult> CheckAsync(PermissionValueCheckContext context);
     }
 }

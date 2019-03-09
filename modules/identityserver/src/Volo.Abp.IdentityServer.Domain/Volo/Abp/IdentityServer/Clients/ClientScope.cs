@@ -1,4 +1,5 @@
 ﻿using System;
+using JetBrains.Annotations;
 using Volo.Abp.Domain.Entities;
 
 namespace Volo.Abp.IdentityServer.Clients
@@ -12,6 +13,11 @@ namespace Volo.Abp.IdentityServer.Clients
         protected ClientScope()
         {
 
+        }
+
+        public virtual bool Equals(Guid clientId, [NotNull] string scope)
+        {
+            return ClientId == clientId && Scope == scope;
         }
 
         protected internal ClientScope(Guid clientId, string scope)

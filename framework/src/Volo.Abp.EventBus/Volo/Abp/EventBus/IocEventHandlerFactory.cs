@@ -12,12 +12,12 @@ namespace Volo.Abp.EventBus
     {
         public Type HandlerType { get; }
 
-        protected IServiceScope ServiceScope { get; }
+        protected IHybridServiceScopeFactory ScopeFactory { get; }
 
         public IocEventHandlerFactory(IHybridServiceScopeFactory scopeFactory, Type handlerType)
         {
+            ScopeFactory = scopeFactory;
             HandlerType = handlerType;
-            ServiceScope = scopeFactory.CreateScope();
         }
 
         /// <summary>
@@ -26,7 +26,7 @@ namespace Volo.Abp.EventBus
         /// <returns>Resolved handler object</returns>
         public IEventHandlerDisposeWrapper GetHandler()
         {
-            var scope = ServiceScope.ServiceProvider.CreateScope();
+            var scope = ScopeFactory.CreateScope();
             return new EventHandlerDisposeWrapper(
                 (IEventHandler) scope.ServiceProvider.GetRequiredService(HandlerType),
                 () => scope.Dispose()
@@ -35,7 +35,7 @@ namespace Volo.Abp.EventBus
 
         public void Dispose()
         {
-            ServiceScope.Dispose();
+
         }
     }
 }

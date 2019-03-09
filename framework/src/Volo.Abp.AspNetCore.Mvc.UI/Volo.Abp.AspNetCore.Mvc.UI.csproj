@@ -11,7 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NUglify" Version="1.5.11" />
+    <PackageReference Include="NUglify" Version="1.5.12" />
   </ItemGroup>
 
   <ItemGroup>

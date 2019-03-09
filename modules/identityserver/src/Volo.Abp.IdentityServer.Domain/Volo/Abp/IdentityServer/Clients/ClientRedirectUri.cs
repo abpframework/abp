@@ -15,6 +15,11 @@ namespace Volo.Abp.IdentityServer.Clients
 
         }
 
+        public virtual bool Equals(Guid clientId, [NotNull] string uri)
+        {
+            return ClientId == clientId && RedirectUri == uri;
+        }
+
         protected internal ClientRedirectUri(Guid clientId, [NotNull] string redirectUri)
         {
             Check.NotNull(redirectUri, nameof(redirectUri));

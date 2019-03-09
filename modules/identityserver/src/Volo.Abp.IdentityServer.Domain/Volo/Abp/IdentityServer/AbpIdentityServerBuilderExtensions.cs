@@ -13,16 +13,21 @@ namespace Volo.Abp.IdentityServer
     public static class AbpIdentityServerBuilderExtensions
     {
         public static IIdentityServerBuilder AddAbpIdentityServer(
-            this IIdentityServerBuilder builder, 
-            Action<AbpIdentityServerOptions> optionsAction = null)
+            this IIdentityServerBuilder builder,
+            AbpIdentityServerBuilderOptions options = null)
         {
-            var options = new AbpIdentityServerOptions();
-            optionsAction?.Invoke(options);
+            if (options == null)
+            {
+                options = new AbpIdentityServerBuilderOptions();
+            }
 
             //TODO: AspNet Identity integration lines. Can be extracted to a extension method
-            builder.AddAspNetIdentity<IdentityUser>();
-            builder.AddProfileService<AbpProfileService>();
-            builder.AddResourceOwnerValidator<AbpResourceOwnerPasswordValidator>();
+            if (options.IntegrateToAspNetIdentity)
+            {
+                builder.AddAspNetIdentity<IdentityUser>();
+                builder.AddProfileService<AbpProfileService>();
+                builder.AddResourceOwnerValidator<AbpResourceOwnerPasswordValidator>();
+            }
 
             builder.Services.Replace(ServiceDescriptor.Transient<IClaimsService, AbpClaimsService>());
 

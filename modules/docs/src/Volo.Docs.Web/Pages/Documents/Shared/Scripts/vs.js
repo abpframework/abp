@@ -34,9 +34,34 @@
             return false;
         });
 
+        var scrollToHashLink = function () {
+            var hash = window.location.hash;
+
+            if (!hash || hash === "#") {
+                return;
+            }
+
+            var $targetElement = $(hash);
+
+            $targetElement = $targetElement.length ? $targetElement : $('[name=' + this.hash.slice(1) + ']');
+
+            if (!$targetElement.length) {
+                return;
+            }
+
+            $('html,body').stop().animate({
+                scrollTop: $targetElement.offset().top 
+            }, 200);
+
+            return;
+        };
+
         $(document).ready(function () {
+            handleCustomScrolls();
+
             var $myNav = $("#docs-sticky-index");
             Toc.init($myNav);
+
             $("body").scrollspy({
                 target: $myNav
             });
@@ -66,6 +91,17 @@
                 $(".docs-tree-list").slideToggle();
             });
 
+            scrollToHashLink();
+        });
+
+        $(window).resize(function () {
+            handleCustomScrolls();
+        });
+    });
+
+    function handleCustomScrolls() {
+        var wWidth = $(window).width();
+        if (wWidth > 766) {
             $("#sidebar-scroll").mCustomScrollbar({
                 theme: "minimal"
             });
@@ -73,8 +109,8 @@
             $("#scroll-index").mCustomScrollbar({
                 theme: "minimal-dark"
             });
-        });
-    });
+        }
+    }
 
     window.Toc.helpers.createNavList = function () {
         return $('<ul class="nav nav-pills flex-column"></ul>');
@@ -94,4 +130,5 @@
         $li.append($a);
         return $li;
     };
+
 })(jQuery);

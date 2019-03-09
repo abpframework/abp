@@ -28,7 +28,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Nav
         {
             if (string.IsNullOrWhiteSpace(TagHelper.Id))
             {
-                TagHelper.Id = Guid.NewGuid().ToString("N");
+                TagHelper.Id = "N" + Guid.NewGuid().ToString("N");
             }
         }
     }

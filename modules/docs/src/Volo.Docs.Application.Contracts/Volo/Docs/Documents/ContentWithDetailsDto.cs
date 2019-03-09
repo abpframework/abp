@@ -1,7 +1,10 @@
+using System;
+using System.Collections.Generic;
 using Volo.Docs.Projects;
 
 namespace Volo.Docs.Documents
 {
+    [Serializable]
     public class DocumentWithDetailsDto
     {
         public string Title { get; set; }
@@ -23,5 +26,7 @@ namespace Volo.Docs.Documents
         public string FileName { get; set; }
 
         public ProjectDto Project { get; set; }
+
+        public List<DocumentContributorDto> Contributors { get; set; }
     }
 }

@@ -6,6 +6,10 @@
     /// </summary>
     public interface IEntity
     {
+        /// <summary>
+        /// Returns an array of ordered keys for this entity.
+        /// </summary>
+        /// <returns></returns>
         object[] GetKeys();
     }
 

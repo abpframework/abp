@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyCompanyName.MyProjectName.EntityFrameworkCore;
-using Volo.Abp.BackgroundJobs;
 
 namespace MyCompanyName.MyProjectName.Migrations
 {
@@ -16,7 +15,7 @@ namespace MyCompanyName.MyProjectName.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.1-rtm-30846")
+                .HasAnnotation("ProductVersion", "2.2.1-servicing-10028")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -25,9 +24,17 @@ namespace MyCompanyName.MyProjectName.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("ApplicationName")
+                        .HasColumnName("ApplicationName")
+                        .HasMaxLength(96);
+
                     b.Property<string>("BrowserInfo")
                         .HasColumnName("BrowserInfo")
                         .HasMaxLength(512);
+
+                    b.Property<string>("ClientId")
+                        .HasColumnName("ClientId")
+                        .HasMaxLength(64);
 
                     b.Property<string>("ClientIpAddress")
                         .HasColumnName("ClientIpAddress")
@@ -42,6 +49,10 @@ namespace MyCompanyName.MyProjectName.Migrations
                         .HasMaxLength(256);
 
                     b.Property<string>("ConcurrencyStamp");
+
+                    b.Property<string>("CorrelationId")
+                        .HasColumnName("CorrelationId")
+                        .HasMaxLength(64);
 
                     b.Property<string>("Exceptions")
                         .HasColumnName("Exceptions")
@@ -177,8 +188,6 @@ namespace MyCompanyName.MyProjectName.Migrations
 
                     b.Property<Guid>("EntityChangeId");
 
-                    b.Property<Guid?>("EntityChangeId1");
-
                     b.Property<string>("NewValue")
                         .HasColumnName("NewValue")
                         .HasMaxLength(512);
@@ -202,8 +211,6 @@ namespace MyCompanyName.MyProjectName.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("EntityChangeId");
-
-                    b.HasIndex("EntityChangeId1");
 
                     b.ToTable("AbpEntityPropertyChanges");
                 });
@@ -365,17 +372,19 @@ namespace MyCompanyName.MyProjectName.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
-                        .IsRequired()
-                        .HasColumnName("ConcurrencyStamp")
-                        .HasMaxLength(256);
+                        .HasColumnName("ConcurrencyStamp");
 
-                    b.Property<DateTime>("CreationTime");
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnName("CreationTime");
 
-                    b.Property<Guid?>("CreatorId");
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnName("CreatorId");
 
-                    b.Property<Guid?>("DeleterId");
+                    b.Property<Guid?>("DeleterId")
+                        .HasColumnName("DeleterId");
 
-                    b.Property<DateTime?>("DeletionTime");
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnName("DeletionTime");
 
                     b.Property<string>("Email")
                         .HasColumnName("Email")
@@ -389,11 +398,16 @@ namespace MyCompanyName.MyProjectName.Migrations
                     b.Property<string>("ExtraProperties")
                         .HasColumnName("ExtraProperties");
 
-                    b.Property<bool>("IsDeleted");
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("IsDeleted")
+                        .HasDefaultValue(false);
 
-                    b.Property<DateTime?>("LastModificationTime");
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnName("LastModificationTime");
 
-                    b.Property<Guid?>("LastModifierId");
+                    b.Property<Guid?>("LastModifierId")
+                        .HasColumnName("LastModifierId");
 
                     b.Property<bool>("LockoutEnabled")
                         .ValueGeneratedOnAdd()
@@ -614,13 +628,9 @@ namespace MyCompanyName.MyProjectName.Migrations
             modelBuilder.Entity("Volo.Abp.AuditLogging.EntityPropertyChange", b =>
                 {
                     b.HasOne("Volo.Abp.AuditLogging.EntityChange")
-                        .WithMany()
+                        .WithMany("PropertyChanges")
                         .HasForeignKey("EntityChangeId")
                         .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Volo.Abp.AuditLogging.EntityChange")
-                        .WithMany("PropertyChanges")
-                        .HasForeignKey("EntityChangeId1");
                 });
 
             modelBuilder.Entity("Volo.Abp.Identity.IdentityRoleClaim", b =>

@@ -37,7 +37,9 @@ namespace Volo.Abp.Authorization.Permissions
             set => Properties[name] = value;
         }
 
-        protected internal PermissionGroupDefinition(string name, ILocalizableString displayName = null)
+        protected internal PermissionGroupDefinition(
+            string name, 
+            ILocalizableString displayName = null)
         {
             Name = name;
             DisplayName = displayName ?? new FixedLocalizableString(Name);
@@ -46,7 +48,9 @@ namespace Volo.Abp.Authorization.Permissions
             _permissions = new List<PermissionDefinition>();
         }
 
-        public virtual PermissionDefinition AddPermission(string name, ILocalizableString displayName = null)
+        public virtual PermissionDefinition AddPermission(
+            string name, 
+            ILocalizableString displayName = null)
         {
             var permission = new PermissionDefinition(name, displayName);
 

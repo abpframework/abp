@@ -18,6 +18,12 @@ namespace Volo.Abp.Authorization.Permissions
         /// </summary>
         public PermissionDefinition Parent { get; private set; }
 
+        /// <summary>
+        /// A list of allowed providers to get/set value of this permission.
+        /// An empty list indicates that all providers are allowed.
+        /// </summary>
+        public List<string> Providers { get; } //TODO: Rename to AllowedProviders?
+
         public ILocalizableString DisplayName
         {
             get => _displayName;
@@ -47,16 +53,21 @@ namespace Volo.Abp.Authorization.Permissions
             set => Properties[name] = value;
         }
 
-        protected internal PermissionDefinition([NotNull] string name, ILocalizableString displayName = null)
+        protected internal PermissionDefinition(
+            [NotNull] string name, 
+            ILocalizableString displayName = null)
         {
             Name = Check.NotNull(name, nameof(name));
             DisplayName = displayName ?? new FixedLocalizableString(name);
 
             Properties = new Dictionary<string, object>();
+            Providers = new List<string>();
             _children = new List<PermissionDefinition>();
         }
 
-        public virtual PermissionDefinition AddChild([NotNull] string name, ILocalizableString displayName = null)
+        public virtual PermissionDefinition AddChild(
+            [NotNull] string name, 
+            ILocalizableString displayName = null)
         {
             var child = new PermissionDefinition(name, displayName)
             {
@@ -66,6 +77,30 @@ namespace Volo.Abp.Authorization.Permissions
             _children.Add(child);
 
             return child;
+        }
+
+        /// <summary>
+        /// Sets a property in the <see cref="Properties"/> dictionary.
+        /// This is a shortcut for nested calls on this object.
+        /// </summary>
+        public virtual PermissionDefinition WithProperty(string key, object value)
+        {
+            Properties[key] = value;
+            return this;
+        }
+
+        /// <summary>
+        /// Sets a property in the <see cref="Properties"/> dictionary.
+        /// This is a shortcut for nested calls on this object.
+        /// </summary>
+        public virtual PermissionDefinition WithProviders(params string[] providers)
+        {
+            if (!providers.IsNullOrEmpty())
+            {
+                Providers.AddRange(providers);
+            }
+
+            return this;
         }
 
         public override string ToString()

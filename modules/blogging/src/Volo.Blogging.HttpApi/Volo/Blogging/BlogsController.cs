@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Mvc;
-using Volo.Abp.Auditing;
 using Volo.Blogging.Blogs;
 using Volo.Blogging.Blogs.Dtos;
 
@@ -14,10 +11,7 @@ namespace Volo.Blogging
 {
     [RemoteService]
     [Area("blogging")]
-    [Controller]
-    [ControllerName("Blogs")]
     [Route("api/blogging/blogs")]
-    [DisableAuditing]
     public class BlogsController : AbpController, IBlogAppService
     {
         private readonly IBlogAppService _blogAppService;
@@ -28,21 +22,13 @@ namespace Volo.Blogging
         }
 
         [HttpGet]
-        [Route("")]
-        public async Task<PagedResultDto<BlogDto>> GetListPagedAsync(PagedAndSortedResultRequestDto input)
-        {
-            return await _blogAppService.GetListPagedAsync(input);
-        }
-
-        [HttpGet]
-        [Route("/all")]
         public async Task<ListResultDto<BlogDto>> GetListAsync()
         {
             return await _blogAppService.GetListAsync();
         }
 
         [HttpGet]
-        [Route("{shortName}")]
+        [Route("by-shortname/{shortName}")]
         public async Task<BlogDto> GetByShortNameAsync(string shortName)
         {
             return await _blogAppService.GetByShortNameAsync(shortName);
@@ -65,10 +51,11 @@ namespace Volo.Blogging
         [Route("{id}")]
         public async Task<BlogDto> Update(Guid id, UpdateBlogDto input)
         {
-            throw new NotImplementedException();
+            return await _blogAppService.Update(id, input);
         }
 
         [HttpDelete]
+        [Route("{id}")]
         public async Task Delete(Guid id)
         {
             await _blogAppService.Delete(id);

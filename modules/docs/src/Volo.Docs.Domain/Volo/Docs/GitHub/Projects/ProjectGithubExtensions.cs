@@ -21,6 +21,14 @@ namespace Volo.Docs.GitHub.Projects
                 .Replace("{version}", version);
         }
 
+        public static string GetGitHubUrlForCommitHistory([NotNull] this Project project)
+        {
+            return project
+                .GetGitHubUrl()
+                .Replace("github.com", "api.github.com/repos")
+                .Replace("tree/{version}/", "commits?path=");
+        }
+
         public static void SetGitHubUrl([NotNull] this Project project, string value)
         {
             CheckGitHubProject(project);
@@ -31,6 +39,12 @@ namespace Volo.Docs.GitHub.Projects
         {
             CheckGitHubProject(project);
             return project.ExtraProperties["GitHubAccessToken"] as string;
+        }
+
+        public static string GetGithubUserAgentOrNull([NotNull] this Project project)
+        {
+            CheckGitHubProject(project);
+            return project.ExtraProperties["GitHubUserAgent"] as string;
         }
 
         public static void SetGitHubAccessToken([NotNull] this Project project, string value)

@@ -1,7 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="..\..\..\..\common.props" />
+
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Volo.Blogging.MongoDB</AssemblyName>
     <PackageId>Volo.Blogging.MongoDB</PackageId>
     <RootNamespace />
