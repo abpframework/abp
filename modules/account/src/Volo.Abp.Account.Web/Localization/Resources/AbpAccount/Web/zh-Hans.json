@@ -11,12 +11,11 @@
     "InvalidUserNameOrPassword": "用户名或密码错误!",
     "LoginIsNotAllowed": "无法登录!你需要验证邮箱地址/手机号.",
     "SelfRegistrationDisabledMessage": "应用程序未开放注册,请联系管理员添加新用户.",
-    "Login": "Login",
-    "Cancel": "Cancel",
-    "Register": "Register",
-    "UseAnotherServiceToLogIn.": "Use another service to log in.",
-    "InvalidLoginRequest": "Invalid login request",
-    "ThereAreNoLoginSchemesConfiguredForThisClient": "There are no login schemes configured for this client.",
-    "LogInUsingYourProviderAccount": "Log in using your {0} account"
+    "Login": "登录",
+    "Cancel": "取消",
+    "Register": "注册",
+    "InvalidLoginRequest": "无效的登录请求",
+    "ThereAreNoLoginSchemesConfiguredForThisClient": "没有为此客户端配置登录方案.",
+    "LogInUsingYourProviderAccount": "使用你的 {0} 账号登录"
   }
 }
