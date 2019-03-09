@@ -99,8 +99,6 @@ namespace MyCompanyName.MyProjectName.Migrations
                     b.Property<Guid>("AuditLogId")
                         .HasColumnName("AuditLogId");
 
-                    b.Property<Guid?>("AuditLogId1");
-
                     b.Property<int>("ExecutionDuration")
                         .HasColumnName("ExecutionDuration");
 
@@ -128,8 +126,6 @@ namespace MyCompanyName.MyProjectName.Migrations
 
                     b.HasIndex("AuditLogId");
 
-                    b.HasIndex("AuditLogId1");
-
                     b.HasIndex("TenantId", "ServiceName", "MethodName", "ExecutionTime");
 
                     b.ToTable("AbpAuditLogActions");
@@ -142,8 +138,6 @@ namespace MyCompanyName.MyProjectName.Migrations
 
                     b.Property<Guid>("AuditLogId")
                         .HasColumnName("AuditLogId");
-
-                    b.Property<Guid?>("AuditLogId1");
 
                     b.Property<DateTime>("ChangeTime")
                         .HasColumnName("ChangeTime");
@@ -170,8 +164,6 @@ namespace MyCompanyName.MyProjectName.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AuditLogId");
-
-                    b.HasIndex("AuditLogId1");
 
                     b.HasIndex("TenantId", "EntityTypeFullName", "EntityId");
 
@@ -606,25 +598,17 @@ namespace MyCompanyName.MyProjectName.Migrations
             modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLogAction", b =>
                 {
                     b.HasOne("Volo.Abp.AuditLogging.AuditLog")
-                        .WithMany()
+                        .WithMany("Actions")
                         .HasForeignKey("AuditLogId")
                         .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Volo.Abp.AuditLogging.AuditLog")
-                        .WithMany("Actions")
-                        .HasForeignKey("AuditLogId1");
                 });
 
             modelBuilder.Entity("Volo.Abp.AuditLogging.EntityChange", b =>
                 {
                     b.HasOne("Volo.Abp.AuditLogging.AuditLog")
-                        .WithMany()
+                        .WithMany("EntityChanges")
                         .HasForeignKey("AuditLogId")
                         .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Volo.Abp.AuditLogging.AuditLog")
-                        .WithMany("EntityChanges")
-                        .HasForeignKey("AuditLogId1");
                 });
 
             modelBuilder.Entity("Volo.Abp.AuditLogging.EntityPropertyChange", b =>

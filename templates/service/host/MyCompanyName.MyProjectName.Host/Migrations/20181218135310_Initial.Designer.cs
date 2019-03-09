@@ -10,7 +10,7 @@ using MyCompanyName.MyProjectName.Host;
 namespace MyCompanyName.MyProjectName.Host.Migrations
 {
     [DbContext(typeof(DemoAppDbContext))]
-    [Migration("20181212121232_Initial")]
+    [Migration("20181218135310_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -100,8 +100,6 @@ namespace MyCompanyName.MyProjectName.Host.Migrations
                     b.Property<Guid>("AuditLogId")
                         .HasColumnName("AuditLogId");
 
-                    b.Property<Guid?>("AuditLogId1");
-
                     b.Property<int>("ExecutionDuration")
                         .HasColumnName("ExecutionDuration");
 
@@ -129,8 +127,6 @@ namespace MyCompanyName.MyProjectName.Host.Migrations
 
                     b.HasIndex("AuditLogId");
 
-                    b.HasIndex("AuditLogId1");
-
                     b.HasIndex("TenantId", "ServiceName", "MethodName", "ExecutionTime");
 
                     b.ToTable("AbpAuditLogActions");
@@ -143,8 +139,6 @@ namespace MyCompanyName.MyProjectName.Host.Migrations
 
                     b.Property<Guid>("AuditLogId")
                         .HasColumnName("AuditLogId");
-
-                    b.Property<Guid?>("AuditLogId1");
 
                     b.Property<DateTime>("ChangeTime")
                         .HasColumnName("ChangeTime");
@@ -171,8 +165,6 @@ namespace MyCompanyName.MyProjectName.Host.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AuditLogId");
-
-                    b.HasIndex("AuditLogId1");
 
                     b.HasIndex("TenantId", "EntityTypeFullName", "EntityId");
 
@@ -272,25 +264,17 @@ namespace MyCompanyName.MyProjectName.Host.Migrations
             modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLogAction", b =>
                 {
                     b.HasOne("Volo.Abp.AuditLogging.AuditLog")
-                        .WithMany()
+                        .WithMany("Actions")
                         .HasForeignKey("AuditLogId")
                         .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Volo.Abp.AuditLogging.AuditLog")
-                        .WithMany("Actions")
-                        .HasForeignKey("AuditLogId1");
                 });
 
             modelBuilder.Entity("Volo.Abp.AuditLogging.EntityChange", b =>
                 {
                     b.HasOne("Volo.Abp.AuditLogging.AuditLog")
-                        .WithMany()
+                        .WithMany("EntityChanges")
                         .HasForeignKey("AuditLogId")
                         .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Volo.Abp.AuditLogging.AuditLog")
-                        .WithMany("EntityChanges")
-                        .HasForeignKey("AuditLogId1");
                 });
 
             modelBuilder.Entity("Volo.Abp.AuditLogging.EntityPropertyChange", b =>
