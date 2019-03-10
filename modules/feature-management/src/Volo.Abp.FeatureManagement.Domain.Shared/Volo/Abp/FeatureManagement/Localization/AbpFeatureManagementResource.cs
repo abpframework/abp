@@ -2,8 +2,8 @@
 
 namespace Volo.Abp.FeatureManagement.Localization
 {
-    [LocalizationResourceName("FeatureManagement")]
-    public class FeatureManagementResource
+    [LocalizationResourceName("AbpFeatureManagement")]
+    public class AbpFeatureManagementResource
     {
         
     }

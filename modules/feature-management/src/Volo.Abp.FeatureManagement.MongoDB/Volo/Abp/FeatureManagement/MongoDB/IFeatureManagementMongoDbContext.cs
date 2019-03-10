@@ -3,11 +3,9 @@ using Volo.Abp.MongoDB;
 
 namespace Volo.Abp.FeatureManagement.MongoDB
 {
-    [ConnectionStringName("FeatureManagement")]
+    [ConnectionStringName("AbpFeatureManagement")]
     public interface IFeatureManagementMongoDbContext : IAbpMongoDbContext
     {
-        /* Define mongo collections here. Example:
-         * IMongoCollection<Question> Questions { get; }
-         */
+
     }
 }

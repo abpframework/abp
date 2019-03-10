@@ -5,11 +5,11 @@ using Volo.Abp.Settings;
 namespace Volo.Abp.FeatureManagement
 {
     [DependsOn(
-        typeof(FeatureManagementDomainModule),
-        typeof(FeatureManagementApplicationContractsModule),
+        typeof(AbpFeatureManagementDomainModule),
+        typeof(AbpFeatureManagementApplicationContractsModule),
         typeof(AbpAutoMapperModule)
         )]
-    public class FeatureManagementApplicationModule : AbpModule
+    public class AbpFeatureManagementApplicationModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {

@@ -1,5 +1,4 @@
 ﻿using Volo.Abp.Application;
-using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.FeatureManagement.Localization;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
@@ -8,28 +7,23 @@ using Volo.Abp.VirtualFileSystem;
 namespace Volo.Abp.FeatureManagement
 {
     [DependsOn(
-        typeof(FeatureManagementDomainSharedModule),
+        typeof(AbpFeatureManagementDomainSharedModule),
         typeof(AbpDddApplicationModule)
         )]
-    public class FeatureManagementApplicationContractsModule : AbpModule
+    public class AbpFeatureManagementApplicationContractsModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<PermissionOptions>(options =>
-            {
-                options.DefinitionProviders.Add<FeatureManagementPermissionDefinitionProvider>();
-            });
-
             Configure<VirtualFileSystemOptions>(options =>
             {
-                options.FileSets.AddEmbedded<FeatureManagementApplicationContractsModule>();
+                options.FileSets.AddEmbedded<AbpFeatureManagementApplicationContractsModule>();
             });
 
             Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources
-                    .Get<FeatureManagementResource>()
-                    .AddVirtualJson("/Abp/FeatureManagement/Localization/ApplicationContracts");
+                    .Get<AbpFeatureManagementResource>()
+                    .AddVirtualJson("/Volo/Abp/FeatureManagement/Localization/ApplicationContracts");
             });
         }
     }

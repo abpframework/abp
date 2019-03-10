@@ -8,40 +8,36 @@ using Volo.Abp.FeatureManagement.Localization;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.Resources.AbpValidation;
 using Volo.Abp.Modularity;
-using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.FeatureManagement
 {
-    [DependsOn(typeof(FeatureManagementHttpApiModule))]
-    [DependsOn(typeof(AbpAspNetCoreMvcUiThemeSharedModule))]
-    [DependsOn(typeof(AbpAutoMapperModule))]
-    public class FeatureManagementWebModule : AbpModule
+    [DependsOn(
+        typeof(AbpFeatureManagementHttpApiModule),
+        typeof(AbpAspNetCoreMvcUiThemeSharedModule),
+        typeof(AbpAutoMapperModule)
+        )]
+    public class AbpFeatureManagementWebModule : AbpModule
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
             {
-                options.AddAssemblyResource(typeof(FeatureManagementResource), typeof(FeatureManagementWebModule).Assembly);
+                options.AddAssemblyResource(typeof(AbpFeatureManagementResource), typeof(AbpFeatureManagementWebModule).Assembly);
             });
         }
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<NavigationOptions>(options =>
-            {
-                options.MenuContributors.Add(new FeatureManagementMenuContributor());
-            });
-
             Configure<VirtualFileSystemOptions>(options =>
             {
-                options.FileSets.AddEmbedded<FeatureManagementWebModule>("Abp.FeatureManagement");
+                options.FileSets.AddEmbedded<AbpFeatureManagementWebModule>("Volo.Abp.FeatureManagement");
             });
 
             Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources
-                    .Get<FeatureManagementResource>()
+                    .Get<AbpFeatureManagementResource>()
                     .AddBaseTypes(
                         typeof(AbpValidationResource),
                         typeof(AbpUiResource)

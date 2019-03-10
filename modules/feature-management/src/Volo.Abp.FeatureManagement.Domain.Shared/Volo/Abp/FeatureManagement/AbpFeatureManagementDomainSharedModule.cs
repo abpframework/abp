@@ -7,13 +7,13 @@ namespace Volo.Abp.FeatureManagement
     [DependsOn(
         typeof(AbpLocalizationModule)
         )]
-    public class FeatureManagementDomainSharedModule : AbpModule
+    public class AbpFeatureManagementDomainSharedModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             Configure<AbpLocalizationOptions>(options =>
             {
-                options.Resources.Add<FeatureManagementResource>("en");
+                options.Resources.Add<AbpFeatureManagementResource>("en");
             });
         }
     }

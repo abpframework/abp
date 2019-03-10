@@ -5,16 +5,16 @@ using Volo.Abp.Modularity;
 namespace Volo.Abp.FeatureManagement
 {
     [DependsOn(
-        typeof(FeatureManagementApplicationContractsModule),
+        typeof(AbpFeatureManagementApplicationContractsModule),
         typeof(AbpHttpClientModule))]
-    public class FeatureManagementHttpApiClientModule : AbpModule
+    public class AbpFeatureManagementHttpApiClientModule : AbpModule
     {
-        public const string RemoteServiceName = "FeatureManagement";
+        public const string RemoteServiceName = "AbpFeatureManagement";
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.AddHttpClientProxies(
-                typeof(FeatureManagementApplicationContractsModule).Assembly,
+                typeof(AbpFeatureManagementApplicationContractsModule).Assembly,
                 RemoteServiceName
             );
         }

@@ -3,14 +3,10 @@ using Volo.Abp.MongoDB;
 
 namespace Volo.Abp.FeatureManagement.MongoDB
 {
-    [ConnectionStringName("FeatureManagement")]
+    [ConnectionStringName("AbpFeatureManagement")]
     public class FeatureManagementMongoDbContext : AbpMongoDbContext, IFeatureManagementMongoDbContext
     {
         public static string CollectionPrefix { get; set; } = FeatureManagementConsts.DefaultDbTablePrefix;
-
-        /* Add mongo collections here. Example:
-         * public IMongoCollection<Question> Questions => Collection<Question>();
-         */
 
         protected override void CreateModel(IMongoModelBuilder modelBuilder)
         {

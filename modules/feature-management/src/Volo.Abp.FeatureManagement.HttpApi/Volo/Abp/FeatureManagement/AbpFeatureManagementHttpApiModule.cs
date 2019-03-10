@@ -4,9 +4,9 @@ using Volo.Abp.Modularity;
 namespace Volo.Abp.FeatureManagement
 {
     [DependsOn(
-        typeof(FeatureManagementApplicationContractsModule),
+        typeof(AbpFeatureManagementApplicationContractsModule),
         typeof(AbpAspNetCoreMvcModule))]
-    public class FeatureManagementHttpApiModule : AbpModule
+    public class AbpFeatureManagementHttpApiModule : AbpModule
     {
         
     }

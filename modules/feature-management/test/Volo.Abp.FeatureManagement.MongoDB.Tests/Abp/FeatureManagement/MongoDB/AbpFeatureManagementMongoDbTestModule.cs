@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Mongo2Go;
+﻿using Mongo2Go;
 using Volo.Abp;
 using Volo.Abp.Data;
 using Volo.Abp.FeatureManagement.MongoDB;
@@ -8,10 +7,10 @@ using Volo.Abp.Modularity;
 namespace Abp.FeatureManagement.MongoDB
 {
     [DependsOn(
-        typeof(FeatureManagementTestBaseModule),
-        typeof(FeatureManagementMongoDbModule)
+        typeof(AbpFeatureManagementTestBaseModule),
+        typeof(AbpFeatureManagementMongoDbModule)
         )]
-    public class FeatureManagementMongoDbTestModule : AbpModule
+    public class AbpFeatureManagementMongoDbTestModule : AbpModule
     {
         private MongoDbRunner _mongoDbRunner;
 

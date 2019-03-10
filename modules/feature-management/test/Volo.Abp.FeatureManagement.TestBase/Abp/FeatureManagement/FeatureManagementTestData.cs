@@ -4,5 +4,6 @@ namespace Abp.FeatureManagement
 {
     public class FeatureManagementTestData : ISingletonDependency
     {
+
     }
 }

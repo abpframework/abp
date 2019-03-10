@@ -9,6 +9,7 @@ namespace Volo.Abp.FeatureManagement.MongoDB
             [NotNull] string tablePrefix = FeatureManagementConsts.DefaultDbTablePrefix)
             : base(tablePrefix)
         {
+
         }
     }
 }

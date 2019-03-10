@@ -5,10 +5,10 @@ using Volo.Abp.MongoDB;
 namespace Volo.Abp.FeatureManagement.MongoDB
 {
     [DependsOn(
-        typeof(FeatureManagementDomainModule),
+        typeof(AbpFeatureManagementDomainModule),
         typeof(AbpMongoDbModule)
         )]
-    public class FeatureManagementMongoDbModule : AbpModule
+    public class AbpFeatureManagementMongoDbModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {

@@ -9,10 +9,10 @@ using Volo.Abp.Modularity;
 namespace Volo.Abp.FeatureManagement.EntityFrameworkCore
 {
     [DependsOn(
-        typeof(FeatureManagementTestBaseModule),
-        typeof(FeatureManagementEntityFrameworkCoreModule)
+        typeof(AbpFeatureManagementTestBaseModule),
+        typeof(AbpFeatureManagementEntityFrameworkCoreModule)
         )]
-    public class FeatureManagementEntityFrameworkCoreTestModule : AbpModule
+    public class AbpFeatureManagementEntityFrameworkCoreTestModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {

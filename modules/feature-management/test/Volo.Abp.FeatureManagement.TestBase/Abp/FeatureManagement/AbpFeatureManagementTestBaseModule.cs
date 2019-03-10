@@ -11,9 +11,9 @@ namespace Abp.FeatureManagement
         typeof(AbpAutofacModule),
         typeof(AbpTestBaseModule),
         typeof(AbpAuthorizationModule),
-        typeof(FeatureManagementDomainModule)
+        typeof(AbpFeatureManagementDomainModule)
         )]
-    public class FeatureManagementTestBaseModule : AbpModule
+    public class AbpFeatureManagementTestBaseModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {

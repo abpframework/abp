@@ -4,9 +4,9 @@ using Volo.Abp.Modularity;
 namespace Volo.Abp.FeatureManagement
 {
     [DependsOn(
-        typeof(FeatureManagementEntityFrameworkCoreTestModule)
+        typeof(AbpFeatureManagementEntityFrameworkCoreTestModule)
         )]
-    public class FeatureManagementDomainTestModule : AbpModule
+    public class AbpFeatureManagementDomainTestModule : AbpModule
     {
         
     }

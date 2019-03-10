@@ -2,7 +2,7 @@
 {
     public static class FeatureManagementConsts
     {
-        public const string DefaultDbTablePrefix = "FeatureManagement";
+        public const string DefaultDbTablePrefix = "Abp";
 
         public const string DefaultDbSchema = null;
     }

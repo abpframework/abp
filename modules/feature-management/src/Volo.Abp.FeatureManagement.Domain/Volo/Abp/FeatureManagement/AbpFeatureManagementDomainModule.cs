@@ -7,25 +7,27 @@ using Volo.Abp.VirtualFileSystem;
 namespace Volo.Abp.FeatureManagement
 {
     [DependsOn(
-        typeof(FeatureManagementDomainSharedModule)
+        typeof(AbpFeatureManagementDomainSharedModule)
         )]
-    public class FeatureManagementDomainModule : AbpModule
+    public class AbpFeatureManagementDomainModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             Configure<VirtualFileSystemOptions>(options =>
             {
-                options.FileSets.AddEmbedded<FeatureManagementDomainModule>();
+                options.FileSets.AddEmbedded<AbpFeatureManagementDomainModule>();
             });
 
             Configure<AbpLocalizationOptions>(options =>
             {
-                options.Resources.Get<FeatureManagementResource>().AddVirtualJson("/Abp/FeatureManagement/Localization/Domain");
+                options.Resources
+                    .Get<AbpFeatureManagementResource>()
+                    .AddVirtualJson("/Volo/Abp/FeatureManagement/Localization/Domain");
             });
 
             Configure<ExceptionLocalizationOptions>(options =>
             {
-                options.MapCodeNamespace("FeatureManagement", typeof(FeatureManagementResource));
+                options.MapCodeNamespace("AbpFeatureManagement", typeof(AbpFeatureManagementResource));
             });
         }
     }
