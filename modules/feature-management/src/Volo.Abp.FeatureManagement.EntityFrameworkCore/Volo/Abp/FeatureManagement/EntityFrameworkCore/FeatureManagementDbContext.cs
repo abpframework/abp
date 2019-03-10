@@ -2,7 +2,7 @@
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 
-namespace Abp.FeatureManagement.EntityFrameworkCore
+namespace Volo.Abp.FeatureManagement.EntityFrameworkCore
 {
     [ConnectionStringName("FeatureManagement")]
     public class FeatureManagementDbContext : AbpDbContext<FeatureManagementDbContext>, IFeatureManagementDbContext

@@ -1,6 +1,6 @@
 ﻿using Volo.Abp.Settings;
 
-namespace Abp.FeatureManagement
+namespace Volo.Abp.FeatureManagement
 {
     public class FeatureManagementSettingDefinitionProvider : SettingDefinitionProvider
     {

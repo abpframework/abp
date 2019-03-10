@@ -1,17 +1,17 @@
 ﻿using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
-using Abp.FeatureManagement.Localization;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.FeatureManagement.Localization;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.Resources.AbpValidation;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Abp.FeatureManagement
+namespace Volo.Abp.FeatureManagement
 {
     [DependsOn(typeof(FeatureManagementHttpApiModule))]
     [DependsOn(typeof(AbpAspNetCoreMvcUiThemeSharedModule))]

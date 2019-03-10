@@ -1,9 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.Modularity;
+﻿using Volo.Abp.FeatureManagement.Localization;
 using Volo.Abp.Localization;
-using Abp.FeatureManagement.Localization;
+using Volo.Abp.Modularity;
 
-namespace Abp.FeatureManagement
+namespace Volo.Abp.FeatureManagement
 {
     [DependsOn(
         typeof(AbpLocalizationModule)

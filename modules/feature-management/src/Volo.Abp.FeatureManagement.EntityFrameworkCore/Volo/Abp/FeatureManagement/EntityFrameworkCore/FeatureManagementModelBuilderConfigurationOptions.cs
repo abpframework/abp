@@ -1,7 +1,7 @@
 ﻿using JetBrains.Annotations;
 using Volo.Abp.EntityFrameworkCore.Modeling;
 
-namespace Abp.FeatureManagement.EntityFrameworkCore
+namespace Volo.Abp.FeatureManagement.EntityFrameworkCore
 {
     public class FeatureManagementModelBuilderConfigurationOptions : ModelBuilderConfigurationOptions
     {

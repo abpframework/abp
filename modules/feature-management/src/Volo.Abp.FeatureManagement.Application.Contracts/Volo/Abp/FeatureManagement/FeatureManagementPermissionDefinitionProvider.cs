@@ -1,8 +1,8 @@
-﻿using Abp.FeatureManagement.Localization;
-using Volo.Abp.Authorization.Permissions;
+﻿using Volo.Abp.Authorization.Permissions;
+using Volo.Abp.FeatureManagement.Localization;
 using Volo.Abp.Localization;
 
-namespace Abp.FeatureManagement
+namespace Volo.Abp.FeatureManagement
 {
     public class FeatureManagementPermissionDefinitionProvider : PermissionDefinitionProvider
     {

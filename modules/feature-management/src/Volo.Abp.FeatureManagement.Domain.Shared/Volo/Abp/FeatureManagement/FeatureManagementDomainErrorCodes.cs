@@ -1,4 +1,4 @@
-﻿namespace Abp.FeatureManagement
+﻿namespace Volo.Abp.FeatureManagement
 {
     public static class FeatureManagementDomainErrorCodes
     {

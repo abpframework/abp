@@ -2,7 +2,7 @@
 using Volo.Abp.Http.Client;
 using Volo.Abp.Modularity;
 
-namespace Abp.FeatureManagement
+namespace Volo.Abp.FeatureManagement
 {
     [DependsOn(
         typeof(FeatureManagementApplicationContractsModule),

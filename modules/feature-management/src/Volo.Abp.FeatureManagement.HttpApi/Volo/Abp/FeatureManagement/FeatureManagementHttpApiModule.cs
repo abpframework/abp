@@ -1,7 +1,7 @@
 ﻿using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Modularity;
 
-namespace Abp.FeatureManagement
+namespace Volo.Abp.FeatureManagement
 {
     [DependsOn(
         typeof(FeatureManagementApplicationContractsModule),

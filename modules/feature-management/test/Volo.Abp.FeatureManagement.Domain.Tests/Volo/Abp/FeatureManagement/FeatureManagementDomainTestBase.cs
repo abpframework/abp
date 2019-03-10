@@ -1,4 +1,6 @@
-﻿namespace Abp.FeatureManagement
+﻿using Abp.FeatureManagement;
+
+namespace Volo.Abp.FeatureManagement
 {
     public abstract class FeatureManagementDomainTestBase : FeatureManagementTestBase<FeatureManagementDomainTestModule>
     {

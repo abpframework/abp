@@ -2,7 +2,7 @@
 using Volo.Abp.Modularity;
 using Volo.Abp.MongoDB;
 
-namespace Abp.FeatureManagement.MongoDB
+namespace Volo.Abp.FeatureManagement.MongoDB
 {
     [DependsOn(
         typeof(FeatureManagementDomainModule),

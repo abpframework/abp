@@ -1,7 +1,7 @@
 ﻿using Volo.Abp.Data;
 using Volo.Abp.MongoDB;
 
-namespace Abp.FeatureManagement.MongoDB
+namespace Volo.Abp.FeatureManagement.MongoDB
 {
     [ConnectionStringName("FeatureManagement")]
     public class FeatureManagementMongoDbContext : AbpMongoDbContext, IFeatureManagementMongoDbContext

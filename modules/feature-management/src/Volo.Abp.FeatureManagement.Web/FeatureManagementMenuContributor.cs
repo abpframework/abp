@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Volo.Abp.UI.Navigation;
 
-namespace Abp.FeatureManagement
+namespace Volo.Abp.FeatureManagement
 {
     public class FeatureManagementMenuContributor : IMenuContributor
     {

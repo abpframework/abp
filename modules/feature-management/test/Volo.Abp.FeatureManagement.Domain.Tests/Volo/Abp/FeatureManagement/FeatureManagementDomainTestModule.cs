@@ -1,7 +1,7 @@
-﻿using Abp.FeatureManagement.EntityFrameworkCore;
+﻿using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 
-namespace Abp.FeatureManagement
+namespace Volo.Abp.FeatureManagement
 {
     [DependsOn(
         typeof(FeatureManagementEntityFrameworkCoreTestModule)

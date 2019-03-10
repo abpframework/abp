@@ -1,7 +1,7 @@
 ﻿using JetBrains.Annotations;
 using Volo.Abp.MongoDB;
 
-namespace Abp.FeatureManagement.MongoDB
+namespace Volo.Abp.FeatureManagement.MongoDB
 {
     public class FeatureManagementMongoModelBuilderConfigurationOptions : MongoModelBuilderConfigurationOptions
     {

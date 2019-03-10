@@ -2,6 +2,7 @@
 using Volo.Abp;
 using Volo.Abp.Authorization;
 using Volo.Abp.Autofac;
+using Volo.Abp.FeatureManagement;
 using Volo.Abp.Modularity;
 
 namespace Abp.FeatureManagement

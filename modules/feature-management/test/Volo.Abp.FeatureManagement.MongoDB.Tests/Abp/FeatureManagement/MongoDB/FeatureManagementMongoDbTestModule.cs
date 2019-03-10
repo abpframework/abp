@@ -2,6 +2,7 @@
 using Mongo2Go;
 using Volo.Abp;
 using Volo.Abp.Data;
+using Volo.Abp.FeatureManagement.MongoDB;
 using Volo.Abp.Modularity;
 
 namespace Abp.FeatureManagement.MongoDB

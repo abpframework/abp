@@ -1,8 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
-using Volo.Abp;
 
-namespace Abp.FeatureManagement.EntityFrameworkCore
+namespace Volo.Abp.FeatureManagement.EntityFrameworkCore
 {
     public static class FeatureManagementDbContextModelCreatingExtensions
     {

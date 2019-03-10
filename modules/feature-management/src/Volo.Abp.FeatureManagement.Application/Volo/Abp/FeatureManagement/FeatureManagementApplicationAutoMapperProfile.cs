@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 
-namespace Abp.FeatureManagement
+namespace Volo.Abp.FeatureManagement
 {
     public class FeatureManagementApplicationAutoMapperProfile : Profile
     {

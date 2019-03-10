@@ -1,8 +1,7 @@
 ﻿using System;
-using Volo.Abp;
 using Volo.Abp.MongoDB;
 
-namespace Abp.FeatureManagement.MongoDB
+namespace Volo.Abp.FeatureManagement.MongoDB
 {
     public static class FeatureManagementMongoDbContextExtensions
     {
