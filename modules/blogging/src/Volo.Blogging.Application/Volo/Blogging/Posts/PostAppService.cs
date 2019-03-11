@@ -36,6 +36,11 @@ namespace Volo.Blogging.Posts
             var userDictionary = new Dictionary<Guid, BlogUserDto>();
             var postDtos = new List<PostWithDetailsDto>(ObjectMapper.Map<List<Post>, List<PostWithDetailsDto>>(posts));
 
+            foreach (var postDto in postDtos)
+            {
+                postDto.Tags = await GetTagsOfPost(postDto.Id);
+            }
+
             if (tag != null)
             {
                 postDtos = await FilterPostsByTag(postDtos, tag);
@@ -44,11 +49,6 @@ namespace Volo.Blogging.Posts
             foreach (var postDto in postDtos)
             {
                 postDto.CommentCount = await _commentRepository.GetCommentCountOfPostAsync(postDto.Id);
-            }
-
-            foreach (var postDto in postDtos)
-            {
-                postDto.Tags = await GetTagsOfPost(postDto.Id);
             }
 
             foreach (var postDto in postDtos)
