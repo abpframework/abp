@@ -253,18 +253,8 @@ namespace Volo.Blogging.Posts
 
         private Task<List<PostWithDetailsDto>> FilterPostsByTag(List<PostWithDetailsDto> allPostDtos, Tag tag)
         {
-            var filteredPostDtos = new List<PostWithDetailsDto>();
-
-            foreach (var postDto in allPostDtos)
-            {
-                if (postDto.Tags.All(p => p.Id != tag.Id))
-                {
-                    continue;
-                }
-
-                filteredPostDtos.Add(postDto);
-            }
-
+            var filteredPostDtos = allPostDtos.Where(p => p.Tags?.Any(t => t.Id == tag.Id) ?? false).ToList();
+           
             return Task.FromResult(filteredPostDtos);
         }
     }
