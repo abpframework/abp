@@ -4,24 +4,21 @@ using Volo.Abp.Features;
 
 namespace Volo.Abp.FeatureManagement
 {
-    //TODO: Implement caching
-
     public class FeatureStore : IFeatureStore, ITransientDependency
     {
-        protected IFeatureValueRepository FeatureValueRepository { get; }
+        protected IFeatureManagementStore FeatureManagementStore { get; }
 
-        public FeatureStore(IFeatureValueRepository featureValueRepository)
+        public FeatureStore(IFeatureManagementStore featureManagementStore)
         {
-            FeatureValueRepository = featureValueRepository;
+            FeatureManagementStore = featureManagementStore;
         }
 
-        public async Task<string> GetOrNullAsync(
-            string name, 
-            string providerName, 
+        public Task<string> GetOrNullAsync(
+            string name,
+            string providerName,
             string providerKey)
         {
-            var featureValue = await FeatureValueRepository.FindAsync(name, providerName, providerKey);
-            return featureValue?.Value;
+            return FeatureManagementStore.GetOrNullAsync(name, providerName, providerKey);
         }
     }
 }

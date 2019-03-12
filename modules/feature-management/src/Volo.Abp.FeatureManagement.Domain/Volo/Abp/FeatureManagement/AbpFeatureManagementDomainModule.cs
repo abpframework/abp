@@ -1,4 +1,5 @@
-﻿using Volo.Abp.FeatureManagement.Localization;
+﻿using Volo.Abp.Caching;
+using Volo.Abp.FeatureManagement.Localization;
 using Volo.Abp.Features;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.ExceptionHandling;
@@ -9,12 +10,19 @@ namespace Volo.Abp.FeatureManagement
 {
     [DependsOn(
         typeof(AbpFeatureManagementDomainSharedModule),
-        typeof(AbpFeaturesModule)
+        typeof(AbpFeaturesModule),
+        typeof(AbpCachingModule)
         )]
     public class AbpFeatureManagementDomainModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
+            Configure<FeatureManagementOptions>(options =>
+            {
+                options.Providers.Add<DefaultValueFeatureManagementProvider>();
+                options.Providers.Add<TenantFeatureManagementProvider>();
+            });
+
             Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpFeatureManagementDomainModule>();
