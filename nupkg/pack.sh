@@ -1,5 +1,6 @@
 #!/bin/bash
 . ./common.sh
+set -eE
 
 # Rebuild all solutions
 for solution in "${solutions[@]}"
@@ -18,12 +19,6 @@ do
     cd "$projectFolder"
     rm -rf "$projectFolder/bin/Release" \
     & dotnet pack --no-restore -c Release -p:SourceLinkCreate=true -o "$packFolder"
-
-    if [ $? -ne 0 ]
-    then
-        echo "Packaging failed for the project: $projectFolder"
-        exit 1
-    fi
 done
 
 # Go back to the pack folder
