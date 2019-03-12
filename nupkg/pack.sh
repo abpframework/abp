@@ -1,6 +1,6 @@
 #!/bin/bash
-. ./common.sh
 set -eE
+. ./common.sh
 
 # Rebuild all solutions
 for solution in "${solutions[@]}"
