@@ -41,7 +41,7 @@ projects=(
    
     "framework/src/Volo.Abp.Auditing"
     "framework/src/Volo.Abp.Authorization"
-    "framework/src/Volo.Abp.AutoFac"
+    "framework/src/Volo.Abp.Autofac"
     "framework/src/Volo.Abp.AutoMapper"
     "framework/src/Volo.Abp.BackgroundJobs"
     "framework/src/Volo.Abp.BackgroundJobs.Abstractions"
