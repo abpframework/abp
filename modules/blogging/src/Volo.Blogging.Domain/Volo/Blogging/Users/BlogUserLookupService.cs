@@ -12,6 +12,7 @@ namespace Volo.Blogging.Users
                 userRepository,
                 unitOfWorkManager)
         {
+            
         }
 
         protected override BlogUser CreateUser(IUserData externalUser)

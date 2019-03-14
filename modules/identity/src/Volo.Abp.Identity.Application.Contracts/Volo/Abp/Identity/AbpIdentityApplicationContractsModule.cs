@@ -21,11 +21,6 @@ namespace Volo.Abp.Identity
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<PermissionOptions>(options =>
-            {
-                options.DefinitionProviders.Add<IdentityPermissionDefinitionProvider>();
-            });
-
             Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpIdentityApplicationContractsModule>();

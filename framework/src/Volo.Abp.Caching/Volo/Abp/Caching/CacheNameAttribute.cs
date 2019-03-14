@@ -15,5 +15,20 @@ namespace Volo.Abp.Caching
 
             Name = name;
         }
+
+        public static string GetCacheName(Type cacheItemType)
+        {
+            var cacheNameAttribute = cacheItemType
+                .GetCustomAttributes(true)
+                .OfType<CacheNameAttribute>()
+                .FirstOrDefault();
+
+            if (cacheNameAttribute != null)
+            {
+                return cacheNameAttribute.Name;
+            }
+
+            return cacheItemType.FullName.RemovePostFix("CacheItem");
+        }
     }
 }

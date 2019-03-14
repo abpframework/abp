@@ -2,6 +2,7 @@
 using IdentityServer4.Stores;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.Caching;
 using Volo.Abp.Domain;
 using Volo.Abp.Identity;
 using Volo.Abp.IdentityServer.Clients;
@@ -12,10 +13,10 @@ namespace Volo.Abp.IdentityServer
 {
     [DependsOn(
         typeof(AbpIdentityServerDomainSharedModule),
-        typeof(AbpDddDomainModule),
         typeof(AbpAutoMapperModule),
         typeof(AbpIdentityDomainModule),
-        typeof(AbpSecurityModule)
+        typeof(AbpSecurityModule),
+        typeof(AbpCachingModule)
         )]
     public class AbpIdentityServerDomainModule : AbpModule
     {

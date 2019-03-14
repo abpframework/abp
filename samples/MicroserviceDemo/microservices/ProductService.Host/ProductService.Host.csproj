@@ -8,7 +8,7 @@
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <PreserveCompilationContext>true</PreserveCompilationContext>
     <MvcRazorExcludeRefAssembliesFromPublish>false</MvcRazorExcludeRefAssembliesFromPublish>
-    <MvcRazorCompileOnPublish>true</MvcRazorCompileOnPublish>
+    
   </PropertyGroup>
 
   <ItemGroup>

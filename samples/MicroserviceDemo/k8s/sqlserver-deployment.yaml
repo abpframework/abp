@@ -24,7 +24,6 @@ spec:
         ports:
         - containerPort: 1433
         resources: {}
-        imagePullPolicy: IfNotPresent
         volumeMounts:
         - mountPath: /var/opt/mssql
           name: dbdata

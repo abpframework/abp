@@ -50,7 +50,8 @@ namespace Volo.Docs.GitHub.Documents
                 Format = project.Format,
                 LocalDirectory = localDirectory,
                 FileName = fileName,
-                Contributors = !isNavigationDocument ? await GetContributors(commitHistoryUrl, token, userAgent): new List<DocumentContributor>(),
+                Contributors = new List<DocumentContributor>(),
+                //Contributors = !isNavigationDocument ? await GetContributors(commitHistoryUrl, token, userAgent): new List<DocumentContributor>(),
                 Version = version,
                 Content = await DownloadWebContentAsStringAsync(rawDocumentUrl, token, userAgent)
             };

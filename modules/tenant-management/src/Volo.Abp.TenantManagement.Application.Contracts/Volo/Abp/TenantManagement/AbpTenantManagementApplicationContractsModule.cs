@@ -14,11 +14,6 @@ namespace Volo.Abp.TenantManagement
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<PermissionOptions>(options =>
-            {
-                options.DefinitionProviders.Add<AbpTenantManagementPermissionDefinitionProvider>();
-            });
-
             Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpTenantManagementApplicationContractsModule>();

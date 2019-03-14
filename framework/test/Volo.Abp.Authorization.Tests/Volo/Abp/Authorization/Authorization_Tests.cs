@@ -50,7 +50,7 @@ namespace Volo.Abp.Authorization
         [Fact]
         public void Should_Permission_Definition_GetGroup()
         {
-            _permissionDefinitionManager.GetGroups().Count.ShouldBe(2);
+            _permissionDefinitionManager.GetGroups().Count.ShouldBe(1);
         }
     }
 }

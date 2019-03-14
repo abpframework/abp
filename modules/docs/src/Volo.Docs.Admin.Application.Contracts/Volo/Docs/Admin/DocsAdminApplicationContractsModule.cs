@@ -15,11 +15,6 @@ namespace Volo.Docs.Admin
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<PermissionOptions>(options =>
-            {
-                options.DefinitionProviders.Add<DocsAdminPermissionDefinitionProvider>();
-            });
-
             Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<DocsAdminApplicationContractsModule>();

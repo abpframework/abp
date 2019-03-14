@@ -7,8 +7,8 @@ namespace ProductManagement
     {
         public ProductManagementWebAutoMapperProfile()
         {
-            CreateMap<CreateModel.ProductCreateModalView, CreateProductDto>();
-            CreateMap<ProductDto, EditModel.ProductEditModalView>();
+            CreateMap<CreateModel.ProductCreateViewModel, CreateProductDto>();
+            CreateMap<ProductDto, EditModel.ProductEditViewModel>();
         }
     }
 }

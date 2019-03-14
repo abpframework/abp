@@ -15,5 +15,13 @@ namespace Volo.Abp.EventBus.RabbitMq
 
             Configure<RabbitMqEventBusOptions>(configuration.GetSection("RabbitMQ:EventBus"));
         }
+
+        public override void OnApplicationInitialization(ApplicationInitializationContext context)
+        {
+            context
+                .ServiceProvider
+                .GetRequiredService<RabbitMqDistributedEventBus>()
+                .Initialize();
+        }
     }
 }

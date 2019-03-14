@@ -9,6 +9,7 @@ using Volo.Abp.Aspects;
 using Volo.Abp.Auditing;
 using Volo.Abp.Authorization;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Features;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectMapping;
@@ -25,7 +26,6 @@ namespace Volo.Abp.Application.Services
         IAvoidDuplicateCrossCuttingConcerns,
         IValidationEnabled,
         IUnitOfWorkEnabled,
-        IAuthorizationEnabled,
         IAuditingEnabled,
         ITransientDependency
     {
@@ -50,6 +50,8 @@ namespace Volo.Abp.Application.Services
         public IClock Clock { get; set; }
 
         public IAuthorizationService AuthorizationService { get; set; }
+
+        public IFeatureChecker FeatureChecker { get; set; }
 
         protected IUnitOfWork CurrentUnitOfWork => UnitOfWorkManager?.Current;
 

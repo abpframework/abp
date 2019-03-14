@@ -27,11 +27,6 @@ namespace Volo.Abp.Localization
                 .Add<AbpValidationResource>("en")
                 .AddVirtualJson("/Localization/Resources/AbpValidation");
             });
-
-            Configure<SettingOptions>(options =>
-            {
-                options.DefinitionProviders.Add<LocalizationSettingProvider>();
-            });
         }
     }
 }

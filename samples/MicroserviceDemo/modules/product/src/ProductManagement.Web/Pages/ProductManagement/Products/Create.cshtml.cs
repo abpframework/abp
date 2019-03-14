@@ -10,7 +10,7 @@ namespace ProductManagement.Pages.ProductManagement.Products
         private readonly IProductAppService _productAppService;
 
         [BindProperty]
-        public ProductCreateModalView Product { get; set; } = new ProductCreateModalView();
+        public ProductCreateViewModel Product { get; set; } = new ProductCreateViewModel();
 
         public CreateModel(IProductAppService productAppService)
         {
@@ -19,14 +19,14 @@ namespace ProductManagement.Pages.ProductManagement.Products
 
         public async Task<IActionResult> OnPostAsync()
         {
-            var createProductDto = ObjectMapper.Map<ProductCreateModalView, CreateProductDto>(Product);
+            var createProductDto = ObjectMapper.Map<ProductCreateViewModel, CreateProductDto>(Product);
 
             await _productAppService.CreateAsync(createProductDto);
 
             return NoContent();
         }
 
-        public class ProductCreateModalView
+        public class ProductCreateViewModel
         {
             [Required]
             [StringLength(ProductConsts.MaxCodeLength)]
@@ -35,6 +35,9 @@ namespace ProductManagement.Pages.ProductManagement.Products
             [Required]
             [StringLength(ProductConsts.MaxNameLength)]
             public string Name { get; set; }
+
+            [StringLength(ProductConsts.MaxImageNameLength)]
+            public string ImageName { get; set; }
 
             public float Price { get; set; }
 

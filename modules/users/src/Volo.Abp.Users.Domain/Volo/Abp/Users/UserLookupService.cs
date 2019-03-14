@@ -12,6 +12,8 @@ namespace Volo.Abp.Users
         where TUser : class, IUser
         where TUserRepository : IUserRepository<TUser>
     {
+        protected bool SkipExternalLookupIfLocalUserExists { get; set; } = true;
+
         public IExternalUserLookupServiceProvider ExternalUserLookupServiceProvider { get; set; }
         public ILogger<UserLookupService<TUser, TUserRepository>> Logger { get; set; }
 
@@ -30,9 +32,16 @@ namespace Volo.Abp.Users
 
         public async Task<TUser> FindByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
+            var localUser = await _userRepository.FindAsync(id, cancellationToken: cancellationToken);
+
             if (ExternalUserLookupServiceProvider == null)
             {
-                return await _userRepository.FindAsync(id, cancellationToken: cancellationToken);
+                return localUser;
+            }
+
+            if (SkipExternalLookupIfLocalUserExists && localUser != null)
+            {
+                return localUser;
             }
 
             IUserData externalUser;
@@ -42,8 +51,11 @@ namespace Volo.Abp.Users
                 externalUser = await ExternalUserLookupServiceProvider.FindByIdAsync(id, cancellationToken);
                 if (externalUser == null)
                 {
-                    //TODO: Instead of deleting, should be make it inactive or something like that?
-                    await WithNewUowAsync(() => _userRepository.DeleteAsync(id, cancellationToken: cancellationToken));
+                    if (localUser != null)
+                    {
+                        //TODO: Instead of deleting, should be make it inactive or something like that?
+                        await WithNewUowAsync(() => _userRepository.DeleteAsync(localUser, cancellationToken: cancellationToken));
+                    }
 
                     return null;
                 }
@@ -51,14 +63,12 @@ namespace Volo.Abp.Users
             catch (Exception ex)
             {
                 Logger.LogException(ex);
-                return await _userRepository.FindAsync(id, cancellationToken: cancellationToken);
+                return localUser;
             }
 
-            var localUser = await _userRepository.FindAsync(id, cancellationToken: cancellationToken);
             if (localUser == null)
             {
                 await WithNewUowAsync(() => _userRepository.InsertAsync(CreateUser(externalUser), cancellationToken: cancellationToken));
-
                 return await _userRepository.FindAsync(id, cancellationToken: cancellationToken);
             }
 
@@ -76,9 +86,16 @@ namespace Volo.Abp.Users
 
         public async Task<TUser> FindByUserNameAsync(string userName, CancellationToken cancellationToken = default)
         {
+            var localUser = await _userRepository.FindByUserNameAsync(userName, cancellationToken);
+
             if (ExternalUserLookupServiceProvider == null)
             {
-                return await _userRepository.FindByUserNameAsync(userName, cancellationToken);
+                return localUser;
+            }
+
+            if (SkipExternalLookupIfLocalUserExists && localUser != null)
+            {
+                return localUser;
             }
 
             IUserData externalUser;
@@ -88,11 +105,10 @@ namespace Volo.Abp.Users
                 externalUser = await ExternalUserLookupServiceProvider.FindByUserNameAsync(userName, cancellationToken);
                 if (externalUser == null)
                 {
-                    var localExistingUser = await _userRepository.FindByUserNameAsync(userName, cancellationToken);
-                    if (localExistingUser != null)
+                    if (localUser != null)
                     {
                         //TODO: Instead of deleting, should be make it passive or something like that?
-                        await WithNewUowAsync(() => _userRepository.DeleteAsync(localExistingUser.Id, cancellationToken: cancellationToken));
+                        await WithNewUowAsync(() => _userRepository.DeleteAsync(localUser, cancellationToken: cancellationToken));
                     }
 
                     return null;
@@ -101,10 +117,9 @@ namespace Volo.Abp.Users
             catch (Exception ex)
             {
                 Logger.LogException(ex);
-                return await _userRepository.FindByUserNameAsync(userName, cancellationToken);
+                return localUser;
             }
 
-            var localUser = await _userRepository.FindByUserNameAsync(userName, cancellationToken);
             if (localUser == null)
             {
                 await WithNewUowAsync(() => _userRepository.InsertAsync(CreateUser(externalUser), cancellationToken: cancellationToken));

@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Mvc;
-using Volo.Abp.Auditing;
 using Volo.Blogging.Blogs;
 using Volo.Blogging.Blogs.Dtos;
 
@@ -23,13 +22,6 @@ namespace Volo.Blogging
         }
 
         [HttpGet]
-        public async Task<PagedResultDto<BlogDto>> GetListPagedAsync(PagedAndSortedResultRequestDto input)
-        {
-            return await _blogAppService.GetListPagedAsync(input);
-        }
-
-        [HttpGet]
-        [Route("all")]
         public async Task<ListResultDto<BlogDto>> GetListAsync()
         {
             return await _blogAppService.GetListAsync();
