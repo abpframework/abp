@@ -14,9 +14,9 @@ namespace Volo.Abp.FeatureManagement.MongoDB
         {
             context.Services.AddMongoDbContext<FeatureManagementMongoDbContext>(options =>
             {
-                /* Add custom repositories here. Example:
-                 * options.AddRepository<Question, MongoQuestionRepository>();
-                 */
+                options.AddDefaultRepositories<IFeatureManagementMongoDbContext>();
+
+                options.AddRepository<FeatureValue, MongoFeatureValueRepository>();
             });
         }
     }

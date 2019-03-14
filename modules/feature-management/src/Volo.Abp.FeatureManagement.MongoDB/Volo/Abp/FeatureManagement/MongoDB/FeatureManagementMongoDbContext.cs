@@ -1,4 +1,5 @@
-﻿using Volo.Abp.Data;
+﻿using MongoDB.Driver;
+using Volo.Abp.Data;
 using Volo.Abp.MongoDB;
 
 namespace Volo.Abp.FeatureManagement.MongoDB
@@ -7,6 +8,8 @@ namespace Volo.Abp.FeatureManagement.MongoDB
     public class FeatureManagementMongoDbContext : AbpMongoDbContext, IFeatureManagementMongoDbContext
     {
         public static string CollectionPrefix { get; set; } = FeatureManagementConsts.DefaultDbTablePrefix;
+
+        public IMongoCollection<FeatureValue> FeatureValues => Collection<FeatureValue>();
 
         protected override void CreateModel(IMongoModelBuilder modelBuilder)
         {

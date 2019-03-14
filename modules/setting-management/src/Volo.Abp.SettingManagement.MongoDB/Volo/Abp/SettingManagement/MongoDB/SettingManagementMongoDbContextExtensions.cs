@@ -3,7 +3,7 @@ using Volo.Abp.MongoDB;
 
 namespace Volo.Abp.SettingManagement.MongoDB
 {
-    public static class AbpSettingManagementMongoDbContextExtensions
+    public static class SettingManagementMongoDbContextExtensions
     {
         public static void ConfigureSettingManagement(
             this IMongoModelBuilder builder,

@@ -14,6 +14,11 @@ namespace Volo.Abp.FeatureManagement.MongoDB
             var options = new FeatureManagementMongoModelBuilderConfigurationOptions();
 
             optionsAction?.Invoke(options);
+
+            builder.Entity<FeatureValue>(b =>
+            {
+                b.CollectionName = options.CollectionPrefix + "FeatureValues";
+            });
         }
     }
 }
