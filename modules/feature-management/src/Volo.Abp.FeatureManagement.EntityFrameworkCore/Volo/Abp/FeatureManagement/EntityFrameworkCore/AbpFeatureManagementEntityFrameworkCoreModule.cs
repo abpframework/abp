@@ -14,9 +14,9 @@ namespace Volo.Abp.FeatureManagement.EntityFrameworkCore
         {
             context.Services.AddAbpDbContext<FeatureManagementDbContext>(options =>
             {
-                /* Add custom repositories here. Example:
-                 * options.AddRepository<Question, EfCoreQuestionRepository>();
-                 */
+                options.AddDefaultRepositories<IFeatureManagementDbContext>();
+
+                options.AddRepository<FeatureValue, EfCoreFeatureValueRepository>();
             });
         }
     }

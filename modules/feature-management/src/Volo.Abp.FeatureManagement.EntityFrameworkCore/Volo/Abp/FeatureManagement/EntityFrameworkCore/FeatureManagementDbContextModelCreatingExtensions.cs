@@ -15,23 +15,17 @@ namespace Volo.Abp.FeatureManagement.EntityFrameworkCore
 
             optionsAction?.Invoke(options);
 
-            /* Configure all entities here. Example:
-
-            builder.Entity<Question>(b =>
+            builder.Entity<FeatureValue>(b =>
             {
-                //Configure table & schema name
-                //b.ToTable(options.TablePrefix + "Questions", options.Schema);
-                
-                //Properties
-                //b.Property(q => q.Title).IsRequired().HasMaxLength(QuestionConsts.MaxTitleLength);
-                
-                //Configure relations
-                //b.HasMany(question => question.Tags).WithOne().HasForeignKey(qt => qt.QuestionId);
+                b.ToTable(options.TablePrefix + "FeatureValues", options.Schema);
 
-                //Configure indexes
-                //b.HasIndex(q => q.CreationTime);
+                b.Property(x => x.Name).HasMaxLength(FeatureValueConsts.MaxNameLength).IsRequired();
+                b.Property(x => x.Value).HasMaxLength(FeatureValueConsts.MaxValueLength).IsRequired();
+                b.Property(x => x.ProviderName).HasMaxLength(FeatureValueConsts.MaxProviderNameLength);
+                b.Property(x => x.ProviderKey).HasMaxLength(FeatureValueConsts.MaxProviderKeyLength);
+
+                b.HasIndex(x => new { x.Name, x.ProviderName, x.ProviderKey });
             });
-            */
         }
     }
 }

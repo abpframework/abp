@@ -1,11 +1,10 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp;
+﻿using System.Collections.Generic;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Authorization;
 using Volo.Abp.Autofac;
-using Volo.Abp.FeatureManagement;
 using Volo.Abp.Modularity;
 
-namespace Abp.FeatureManagement
+namespace Volo.Abp.FeatureManagement
 {
     [DependsOn(
         typeof(AbpAutofacModule),
@@ -18,6 +17,14 @@ namespace Abp.FeatureManagement
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.AddAlwaysAllowAuthorization();
+
+            Configure<FeatureManagementOptions>(options =>
+            {
+                options.Providers.InsertBefore(
+                    typeof(TenantFeatureManagementProvider),
+                    typeof(EditionFeatureManagementProvider)
+                );
+            });
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)

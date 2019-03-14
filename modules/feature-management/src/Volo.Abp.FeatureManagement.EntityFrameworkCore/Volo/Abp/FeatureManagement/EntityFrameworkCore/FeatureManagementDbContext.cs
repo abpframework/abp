@@ -11,6 +11,8 @@ namespace Volo.Abp.FeatureManagement.EntityFrameworkCore
 
         public static string Schema { get; set; } = FeatureManagementConsts.DefaultDbSchema;
 
+        public DbSet<FeatureValue> FeatureValues { get; set; }
+
         public FeatureManagementDbContext(DbContextOptions<FeatureManagementDbContext> options) 
             : base(options)
         {

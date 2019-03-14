@@ -1,7 +1,6 @@
-﻿using Volo.Abp;
-using Volo.Abp.Modularity;
+﻿using Volo.Abp.Modularity;
 
-namespace Abp.FeatureManagement
+namespace Volo.Abp.FeatureManagement
 {
     public abstract class FeatureManagementTestBase<TStartupModule> : AbpIntegratedTest<TStartupModule> 
         where TStartupModule : IAbpModule
