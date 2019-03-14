@@ -92,7 +92,7 @@ namespace System.Security.Principal
             return clientIdOrNull.Value;
         }
 
-        public static string FindEditionId([NotNull] this ClaimsPrincipal principal)
+        public static Guid? FindEditionId([NotNull] this ClaimsPrincipal principal)
         {
             Check.NotNull(principal, nameof(principal));
 
@@ -102,10 +102,10 @@ namespace System.Security.Principal
                 return null;
             }
 
-            return editionIdOrNull.Value;
+            return Guid.Parse(editionIdOrNull.Value);
         }
 
-        public static string FindEditionId([NotNull] this IIdentity identity)
+        public static Guid? FindEditionId([NotNull] this IIdentity identity)
         {
             Check.NotNull(identity, nameof(identity));
 
@@ -117,7 +117,7 @@ namespace System.Security.Principal
                 return null;
             }
 
-            return editionIdOrNull.Value;
+            return Guid.Parse(editionIdOrNull.Value);
         }
     }
 }
