@@ -91,5 +91,33 @@ namespace System.Security.Principal
 
             return clientIdOrNull.Value;
         }
+
+        public static string FindEditionId([NotNull] this ClaimsPrincipal principal)
+        {
+            Check.NotNull(principal, nameof(principal));
+
+            var editionIdOrNull = principal.Claims?.FirstOrDefault(c => c.Type == AbpClaimTypes.EditionId);
+            if (editionIdOrNull == null || editionIdOrNull.Value.IsNullOrWhiteSpace())
+            {
+                return null;
+            }
+
+            return editionIdOrNull.Value;
+        }
+
+        public static string FindEditionId([NotNull] this IIdentity identity)
+        {
+            Check.NotNull(identity, nameof(identity));
+
+            var claimsIdentity = identity as ClaimsIdentity;
+
+            var editionIdOrNull = claimsIdentity?.Claims?.FirstOrDefault(c => c.Type == AbpClaimTypes.EditionId);
+            if (editionIdOrNull == null || editionIdOrNull.Value.IsNullOrWhiteSpace())
+            {
+                return null;
+            }
+
+            return editionIdOrNull.Value;
+        }
     }
 }
