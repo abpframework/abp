@@ -22,7 +22,7 @@ namespace Volo.Abp.FeatureManagement
 
         public void Build()
         {
-            // "Regular" edition features /////////////////////////////////////
+            #region "Regular" edition features
 
             //SocialLogins
             _featureValueRepository.Insert(
@@ -30,7 +30,7 @@ namespace Volo.Abp.FeatureManagement
                     _guidGenerator.Create(),
                     TestFeatureDefinitionProvider.SocialLogins,
                     true.ToString().ToLowerInvariant(),
-                    EditionFeatureManagementProvider.ProviderName,
+                    EditionFeatureValueProvider.ProviderName,
                     TestEditionNames.Regular
                 )
             );
@@ -41,7 +41,7 @@ namespace Volo.Abp.FeatureManagement
                     _guidGenerator.Create(),
                     TestFeatureDefinitionProvider.UserCount,
                     "10",
-                    EditionFeatureManagementProvider.ProviderName,
+                    EditionFeatureValueProvider.ProviderName,
                     TestEditionNames.Regular
                 )
             );
@@ -52,12 +52,14 @@ namespace Volo.Abp.FeatureManagement
                     _guidGenerator.Create(),
                     TestFeatureDefinitionProvider.ProjectCount,
                     "1",
-                    EditionFeatureManagementProvider.ProviderName,
+                    EditionFeatureValueProvider.ProviderName,
                     TestEditionNames.Regular
                 )
             );
 
-            // "Enterprise" edition features //////////////////////////////////
+            #endregion
+
+            #region "Enterprise" edition features
 
             //SocialLogins
             _featureValueRepository.Insert(
@@ -65,7 +67,7 @@ namespace Volo.Abp.FeatureManagement
                     _guidGenerator.Create(),
                     TestFeatureDefinitionProvider.SocialLogins,
                     true.ToString().ToLowerInvariant(),
-                    EditionFeatureManagementProvider.ProviderName,
+                    EditionFeatureValueProvider.ProviderName,
                     TestEditionNames.Enterprise
                 )
             );
@@ -76,7 +78,7 @@ namespace Volo.Abp.FeatureManagement
                     _guidGenerator.Create(),
                     TestFeatureDefinitionProvider.EmailSupport,
                     true.ToString().ToLowerInvariant(),
-                    EditionFeatureManagementProvider.ProviderName,
+                    EditionFeatureValueProvider.ProviderName,
                     TestEditionNames.Enterprise
                 )
             );
@@ -87,7 +89,7 @@ namespace Volo.Abp.FeatureManagement
                     _guidGenerator.Create(),
                     TestFeatureDefinitionProvider.UserCount,
                     "20",
-                    EditionFeatureManagementProvider.ProviderName,
+                    EditionFeatureValueProvider.ProviderName,
                     TestEditionNames.Enterprise
                 )
             );
@@ -98,7 +100,7 @@ namespace Volo.Abp.FeatureManagement
                     _guidGenerator.Create(),
                     TestFeatureDefinitionProvider.ProjectCount,
                     "3",
-                    EditionFeatureManagementProvider.ProviderName,
+                    EditionFeatureValueProvider.ProviderName,
                     TestEditionNames.Enterprise
                 )
             );
@@ -109,12 +111,14 @@ namespace Volo.Abp.FeatureManagement
                     _guidGenerator.Create(),
                     TestFeatureDefinitionProvider.BackupCount,
                     "5",
-                    EditionFeatureManagementProvider.ProviderName,
+                    EditionFeatureValueProvider.ProviderName,
                     TestEditionNames.Enterprise
                 )
             );
 
-            // "Ultimate" edition features ////////////////////////////////////
+            #endregion
+
+            #region "Ultimate" edition features
 
             //SocialLogins
             _featureValueRepository.Insert(
@@ -122,7 +126,7 @@ namespace Volo.Abp.FeatureManagement
                     _guidGenerator.Create(),
                     TestFeatureDefinitionProvider.SocialLogins,
                     true.ToString().ToLowerInvariant(),
-                    EditionFeatureManagementProvider.ProviderName,
+                    EditionFeatureValueProvider.ProviderName,
                     TestEditionNames.Enterprise
                 )
             );
@@ -133,7 +137,7 @@ namespace Volo.Abp.FeatureManagement
                     _guidGenerator.Create(),
                     TestFeatureDefinitionProvider.EmailSupport,
                     true.ToString().ToLowerInvariant(),
-                    EditionFeatureManagementProvider.ProviderName,
+                    EditionFeatureValueProvider.ProviderName,
                     TestEditionNames.Enterprise
                 )
             );
@@ -144,7 +148,7 @@ namespace Volo.Abp.FeatureManagement
                     _guidGenerator.Create(),
                     TestFeatureDefinitionProvider.DailyAnalysis,
                     true.ToString().ToLowerInvariant(),
-                    EditionFeatureManagementProvider.ProviderName,
+                    EditionFeatureValueProvider.ProviderName,
                     TestEditionNames.Enterprise
                 )
             );
@@ -155,7 +159,7 @@ namespace Volo.Abp.FeatureManagement
                     _guidGenerator.Create(),
                     TestFeatureDefinitionProvider.UserCount,
                     "100",
-                    EditionFeatureManagementProvider.ProviderName,
+                    EditionFeatureValueProvider.ProviderName,
                     TestEditionNames.Enterprise
                 )
             );
@@ -166,7 +170,7 @@ namespace Volo.Abp.FeatureManagement
                     _guidGenerator.Create(),
                     TestFeatureDefinitionProvider.ProjectCount,
                     "10",
-                    EditionFeatureManagementProvider.ProviderName,
+                    EditionFeatureValueProvider.ProviderName,
                     TestEditionNames.Enterprise
                 )
             );
@@ -177,10 +181,12 @@ namespace Volo.Abp.FeatureManagement
                     _guidGenerator.Create(),
                     TestFeatureDefinitionProvider.BackupCount,
                     "10",
-                    EditionFeatureManagementProvider.ProviderName,
+                    EditionFeatureValueProvider.ProviderName,
                     TestEditionNames.Enterprise
                 )
             );
+
+            #endregion
         }
     }
 }

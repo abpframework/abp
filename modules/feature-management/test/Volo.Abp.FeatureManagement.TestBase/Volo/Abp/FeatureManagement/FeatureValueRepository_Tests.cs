@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Shouldly;
+using Volo.Abp.Features;
 using Volo.Abp.Modularity;
 using Xunit;
 
@@ -22,7 +23,7 @@ namespace Volo.Abp.FeatureManagement
 
             var featureValue = await Repository.FindAsync(
                 TestFeatureDefinitionProvider.ProjectCount,
-                EditionFeatureManagementProvider.ProviderName,
+                EditionFeatureValueProvider.ProviderName,
                 TestEditionNames.Enterprise
             );
 
@@ -32,7 +33,7 @@ namespace Volo.Abp.FeatureManagement
             //feature value does not exists
             featureValue = await Repository.FindAsync(
                 TestFeatureDefinitionProvider.ProjectCount,
-                EditionFeatureManagementProvider.ProviderName,
+                EditionFeatureValueProvider.ProviderName,
                 "undefined-edition-name"
             );
 
@@ -42,7 +43,10 @@ namespace Volo.Abp.FeatureManagement
         [Fact]
         public async Task GetListAsync()
         {
-            var featureValues = await Repository.GetListAsync(EditionFeatureManagementProvider.ProviderName, TestEditionNames.Enterprise);
+            var featureValues = await Repository.GetListAsync(
+                EditionFeatureValueProvider.ProviderName,
+                TestEditionNames.Enterprise
+            );
 
             featureValues.Count.ShouldBeGreaterThan(0);
 

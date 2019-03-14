@@ -1,10 +1,10 @@
-﻿namespace Volo.Abp.FeatureManagement
+﻿using Volo.Abp.Features;
+
+namespace Volo.Abp.FeatureManagement
 {
     public class EditionFeatureManagementProvider : FeatureManagementProvider
     {
-        public const string ProviderName = "Edition";
-
-        public override string Name => ProviderName;
+        public override string Name => EditionFeatureValueProvider.ProviderName;
 
         public EditionFeatureManagementProvider(IFeatureManagementStore store) 
             : base(store)
