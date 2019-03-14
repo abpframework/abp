@@ -24,7 +24,7 @@ namespace Volo.Abp.FeatureManagement
             var featureValue = await Repository.FindAsync(
                 TestFeatureDefinitionProvider.ProjectCount,
                 EditionFeatureValueProvider.ProviderName,
-                TestEditionNames.Enterprise
+                TestEditionIds.Enterprise.ToString("N")
             );
 
             featureValue.ShouldNotBeNull();
@@ -34,7 +34,7 @@ namespace Volo.Abp.FeatureManagement
             featureValue = await Repository.FindAsync(
                 TestFeatureDefinitionProvider.ProjectCount,
                 EditionFeatureValueProvider.ProviderName,
-                "undefined-edition-name"
+                "undefined-edition-id"
             );
 
             featureValue.ShouldBeNull();
@@ -45,7 +45,7 @@ namespace Volo.Abp.FeatureManagement
         {
             var featureValues = await Repository.GetListAsync(
                 EditionFeatureValueProvider.ProviderName,
-                TestEditionNames.Enterprise
+                TestEditionIds.Enterprise.ToString("N")
             );
 
             featureValues.Count.ShouldBeGreaterThan(0);

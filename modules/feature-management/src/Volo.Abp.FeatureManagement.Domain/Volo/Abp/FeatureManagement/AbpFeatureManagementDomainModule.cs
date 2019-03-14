@@ -20,6 +20,7 @@ namespace Volo.Abp.FeatureManagement
             Configure<FeatureManagementOptions>(options =>
             {
                 options.Providers.Add<DefaultValueFeatureManagementProvider>();
+                options.Providers.Add<EditionFeatureManagementProvider>();
                 options.Providers.Add<TenantFeatureManagementProvider>();
             });
 

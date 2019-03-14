@@ -31,7 +31,7 @@ namespace Volo.Abp.FeatureManagement
                     TestFeatureDefinitionProvider.SocialLogins,
                     true.ToString().ToLowerInvariant(),
                     EditionFeatureValueProvider.ProviderName,
-                    TestEditionNames.Regular
+                    TestEditionIds.Regular.ToString("N")
                 )
             );
 
@@ -42,7 +42,7 @@ namespace Volo.Abp.FeatureManagement
                     TestFeatureDefinitionProvider.UserCount,
                     "10",
                     EditionFeatureValueProvider.ProviderName,
-                    TestEditionNames.Regular
+                    TestEditionIds.Regular.ToString("N")
                 )
             );
 
@@ -53,7 +53,7 @@ namespace Volo.Abp.FeatureManagement
                     TestFeatureDefinitionProvider.ProjectCount,
                     "1",
                     EditionFeatureValueProvider.ProviderName,
-                    TestEditionNames.Regular
+                    TestEditionIds.Regular.ToString("N")
                 )
             );
 
@@ -68,7 +68,7 @@ namespace Volo.Abp.FeatureManagement
                     TestFeatureDefinitionProvider.SocialLogins,
                     true.ToString().ToLowerInvariant(),
                     EditionFeatureValueProvider.ProviderName,
-                    TestEditionNames.Enterprise
+                    TestEditionIds.Enterprise.ToString("N")
                 )
             );
 
@@ -79,7 +79,7 @@ namespace Volo.Abp.FeatureManagement
                     TestFeatureDefinitionProvider.EmailSupport,
                     true.ToString().ToLowerInvariant(),
                     EditionFeatureValueProvider.ProviderName,
-                    TestEditionNames.Enterprise
+                    TestEditionIds.Enterprise.ToString("N")
                 )
             );
 
@@ -90,7 +90,7 @@ namespace Volo.Abp.FeatureManagement
                     TestFeatureDefinitionProvider.UserCount,
                     "20",
                     EditionFeatureValueProvider.ProviderName,
-                    TestEditionNames.Enterprise
+                    TestEditionIds.Enterprise.ToString("N")
                 )
             );
 
@@ -101,7 +101,7 @@ namespace Volo.Abp.FeatureManagement
                     TestFeatureDefinitionProvider.ProjectCount,
                     "3",
                     EditionFeatureValueProvider.ProviderName,
-                    TestEditionNames.Enterprise
+                    TestEditionIds.Enterprise.ToString("N")
                 )
             );
 
@@ -112,7 +112,7 @@ namespace Volo.Abp.FeatureManagement
                     TestFeatureDefinitionProvider.BackupCount,
                     "5",
                     EditionFeatureValueProvider.ProviderName,
-                    TestEditionNames.Enterprise
+                    TestEditionIds.Enterprise.ToString("N")
                 )
             );
 
@@ -127,7 +127,7 @@ namespace Volo.Abp.FeatureManagement
                     TestFeatureDefinitionProvider.SocialLogins,
                     true.ToString().ToLowerInvariant(),
                     EditionFeatureValueProvider.ProviderName,
-                    TestEditionNames.Enterprise
+                    TestEditionIds.Ultimate.ToString("N")
                 )
             );
 
@@ -138,7 +138,7 @@ namespace Volo.Abp.FeatureManagement
                     TestFeatureDefinitionProvider.EmailSupport,
                     true.ToString().ToLowerInvariant(),
                     EditionFeatureValueProvider.ProviderName,
-                    TestEditionNames.Enterprise
+                    TestEditionIds.Ultimate.ToString("N")
                 )
             );
 
@@ -149,7 +149,7 @@ namespace Volo.Abp.FeatureManagement
                     TestFeatureDefinitionProvider.DailyAnalysis,
                     true.ToString().ToLowerInvariant(),
                     EditionFeatureValueProvider.ProviderName,
-                    TestEditionNames.Enterprise
+                    TestEditionIds.Ultimate.ToString("N")
                 )
             );
 
@@ -160,7 +160,7 @@ namespace Volo.Abp.FeatureManagement
                     TestFeatureDefinitionProvider.UserCount,
                     "100",
                     EditionFeatureValueProvider.ProviderName,
-                    TestEditionNames.Enterprise
+                    TestEditionIds.Ultimate.ToString("N")
                 )
             );
 
@@ -171,7 +171,7 @@ namespace Volo.Abp.FeatureManagement
                     TestFeatureDefinitionProvider.ProjectCount,
                     "10",
                     EditionFeatureValueProvider.ProviderName,
-                    TestEditionNames.Enterprise
+                    TestEditionIds.Ultimate.ToString("N")
                 )
             );
 
@@ -182,7 +182,7 @@ namespace Volo.Abp.FeatureManagement
                     TestFeatureDefinitionProvider.BackupCount,
                     "10",
                     EditionFeatureValueProvider.ProviderName,
-                    TestEditionNames.Enterprise
+                    TestEditionIds.Ultimate.ToString("N")
                 )
             );
 
