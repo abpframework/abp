@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -28,6 +29,8 @@ namespace Volo.Abp.AspNetCore.Mvc
         public ICurrentUser CurrentUser { get; set; }
 
         public ICurrentTenant CurrentTenant { get; set; }
+
+        public IAuthorizationService AuthorizationService { get; set; }
 
         protected IUnitOfWork CurrentUnitOfWork => UnitOfWorkManager?.Current;
 
