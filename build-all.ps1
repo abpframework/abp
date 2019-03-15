@@ -24,12 +24,27 @@ $solutionPaths = (
     "samples/MicroserviceDemo"
 )
 
+# Specific Dictionary when the path contains more than one sln/proj
+$solutionPathsSpecificNames = @{
+	"samples/MicroserviceDemo" = "MicroserviceDemo.sln"
+}
+
 # Build all solutions
 
 foreach ($solutionPath in $solutionPaths) {    
     $solutionAbsPath = (Join-Path $rootFolder $solutionPath)
     Set-Location $solutionAbsPath
-    dotnet build
+
+	# Added exceptional scenario when we have more than one sln in the directory
+	if ( $solutionPathsSpecificNames.ContainsKey(($solutionPath))) {
+		$sln = $solutionPathsSpecificNames[$solutionPath]
+		dotnet build $sln
+	}
+	else
+	{
+		dotnet build
+	}
+    
     if (-Not $?) {
         Write-Host ("Build failed for the solution: " + $solutionPath)
         Set-Location $rootFolder
