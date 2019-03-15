@@ -12,3 +12,10 @@ README.md
 LICENSE
 **/.vscode
 **/.vs
+
+abp_io
+docs
+npm
+nupkg
+templates
+tools
