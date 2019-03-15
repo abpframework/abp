@@ -5,20 +5,20 @@ services:
       - SA_PASSWORD=yourStrong(!)Password
       - ACCEPT_EULA=Y
     ports:
-      - "1433"
+      - 51501:1433
 
   mongodb:
     ports:
-      - "27017"
+      - 51502:27017
 
   rabbitmq:
     ports:
-      - "15672"
-      - "5672"
+      - 51503:15672
+      - 51504:5672
 
   redis:
     ports:
-      - "6379"
+      - 51505:6379
 
   elasticsearch:
     volumes:
@@ -26,7 +26,7 @@ services:
     environment:
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     ports:
-      - "9200"
+      - 51506:9200
 
   logstash:
     volumes:
@@ -35,8 +35,8 @@ services:
     environment:
       - "LS_JAVA_OPTS=-Xmx256m -Xms256m"
     ports:
-      - "9600"
-      - "5000"
+      - 51507:9600
+      - 51508:5000
 
   kibana:
     volumes:
@@ -60,7 +60,7 @@ services:
       - ReRoutes__2__DownstreamHostAndPorts__0__Port=80
       - GlobalConfiguration__BaseUrl=http://internal-gateway
     ports:
-      - "80"
+      - 51530:80
 
   backend-admin-app-gateway:
     environment:
