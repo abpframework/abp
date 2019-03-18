@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
@@ -25,10 +26,15 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
             string httpMethod = null,
             string url = null,
             string userName = null,
+            string applicationName = null,
+            string correlationId = null,
+            int? maxExecutionDuration = null,
+            int? minExecutionDuration = null,
             HttpStatusCode? httpStatusCode = null,
-            bool includeDetails = true)
+            bool includeDetails = false,
+            CancellationToken cancellationToken = default)
         {
-            var query = GetListQuery(httpMethod, url, userName, httpStatusCode, includeDetails);
+            var query = GetListQuery(httpMethod, url, userName, applicationName, correlationId, maxExecutionDuration, minExecutionDuration, httpStatusCode, includeDetails);
 
             var auditLogs = await query.OrderBy(sorting ?? "executionTime desc")
                 .PageBy(skipCount, maxResultCount)
@@ -41,10 +47,14 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
             string httpMethod = null,
             string url = null,
             string userName = null,
+            string applicationName = null,
+            string correlationId = null,
+            int? maxExecutionDuration = null,
+            int? minExecutionDuration = null,
             HttpStatusCode? httpStatusCode = null,
-            bool includeDetails = true)
+            CancellationToken cancellationToken = default)
         {
-            var query = GetListQuery(httpMethod, url, userName, httpStatusCode, includeDetails);
+            var query = GetListQuery(httpMethod, url, userName, applicationName, correlationId, maxExecutionDuration, minExecutionDuration, httpStatusCode);
 
             var totalCount = await query.LongCountAsync();
 
@@ -55,15 +65,23 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
             string httpMethod = null,
             string url = null,
             string userName = null,
+            string applicationName = null,
+            string correlationId = null,
+            int? maxExecutionDuration = null,
+            int? minExecutionDuration = null,
             HttpStatusCode? httpStatusCode = null,
-            bool includeDetails = true)
+            bool includeDetails = false)
         {
             return DbSet.AsNoTracking()
                 .IncludeDetails(includeDetails)
                 .WhereIf(httpMethod != null, auditLog => auditLog.HttpMethod != null && auditLog.HttpMethod.ToLowerInvariant() == httpMethod.ToLowerInvariant())
-                .WhereIf(url != null, auditLog => auditLog.Url != null && auditLog.Url.ToLowerInvariant().Contains(url.ToLowerInvariant()))
-                .WhereIf(userName != null, auditLog => auditLog.UserName != null && auditLog.UserName == userName)
-                .WhereIf(httpStatusCode != null && httpStatusCode > 0, auditLog => auditLog.HttpStatusCode == (int?)httpStatusCode);
+                .WhereIf(string.IsNullOrWhiteSpace(url), auditLog => auditLog.Url != null && auditLog.Url.ToLowerInvariant().Contains(url.ToLowerInvariant()))
+                .WhereIf(string.IsNullOrWhiteSpace(userName), auditLog => auditLog.UserName != null && auditLog.UserName.ToLowerInvariant() == userName.ToLowerInvariant())
+                .WhereIf(string.IsNullOrWhiteSpace(applicationName), auditLog => auditLog.ApplicationName != null && auditLog.ApplicationName.ToLowerInvariant() == applicationName.ToLowerInvariant())
+                .WhereIf(string.IsNullOrWhiteSpace(correlationId), auditLog => auditLog.CorrelationId != null && auditLog.CorrelationId.ToLowerInvariant() == correlationId.ToLowerInvariant())
+                .WhereIf(httpStatusCode != null && httpStatusCode > 0, auditLog => auditLog.HttpStatusCode == (int?)httpStatusCode)
+                .WhereIf(maxExecutionDuration != null && maxExecutionDuration > 0, auditLog => auditLog.ExecutionDuration <= maxExecutionDuration)
+                .WhereIf(minExecutionDuration != null && minExecutionDuration > 0, auditLog => auditLog.ExecutionDuration >= minExecutionDuration);
         }
 
         public override IQueryable<AuditLog> WithDetails()
