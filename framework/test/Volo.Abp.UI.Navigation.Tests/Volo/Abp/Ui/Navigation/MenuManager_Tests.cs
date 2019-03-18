@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.Modularity;
-using System.Collections.Generic;
+using Volo.Abp.Ui.Navigation;
 using Xunit;
 
 namespace Volo.Abp.UI.Navigation
@@ -25,7 +25,7 @@ namespace Volo.Abp.UI.Navigation
             mainMenu.DisplayName.ShouldBe("Main Menu");
             mainMenu.Items.Count.ShouldBe(2);
             mainMenu.Items[0].Name.ShouldBe("Dashboard");
-            mainMenu.Items[1].Name.ShouldBe("Administration");
+            mainMenu.Items[1].Name.ShouldBe(DefaultMenuNames.Application.Main.Administration);
             mainMenu.Items[1].Items[0].Name.ShouldBe("Administration.UserManagement");
             mainMenu.Items[1].Items[1].Name.ShouldBe("Administration.RoleManagement");
             mainMenu.Items[1].Items[2].Name.ShouldBe("Administration.DashboardSettings");
@@ -60,10 +60,7 @@ namespace Volo.Abp.UI.Navigation
 
                 context.Menu.DisplayName = "Main Menu";
 
-                var administration = context.Menu.Items.GetOrAdd(
-                    m => m.Name == "Administration",
-                    () => new ApplicationMenuItem("Administration", "Administration")
-                );
+                var administration = context.Menu.GetAdministration();
 
                 administration.AddItem(new ApplicationMenuItem("Administration.UserManagement", "User Management", url: "/admin/users"));
                 administration.AddItem(new ApplicationMenuItem("Administration.RoleManagement", "Role Management", url: "/admin/roles"));
@@ -88,10 +85,7 @@ namespace Volo.Abp.UI.Navigation
 
                 context.Menu.Items.Insert(0, new ApplicationMenuItem("Dashboard", "Dashboard", url: "/dashboard"));
 
-                var administration = context.Menu.Items.GetOrAdd(
-                    m => m.Name == "Administration",
-                    () => new ApplicationMenuItem("Administration", "Administration")
-                );
+                var administration = context.Menu.GetAdministration();
 
                 administration.AddItem(new ApplicationMenuItem("Administration.DashboardSettings", "Dashboard Settings", url: "/admin/settings/dashboard"));
 
