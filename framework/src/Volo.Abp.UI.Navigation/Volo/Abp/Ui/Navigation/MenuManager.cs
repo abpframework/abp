@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
@@ -38,10 +39,14 @@ namespace Volo.Abp.UI.Navigation
             return menu;
         }
 
-        protected virtual void NormalizeMenu(ApplicationMenu menu)
+        protected virtual void NormalizeMenu(IHasMenuItems menuWithItems)
         {
-            //TODO: Should also consider sub menus, recursively, bottom to top!
-            menu.Items.RemoveAll(item => item.IsLeaf && item.Url.IsNullOrEmpty());
+            foreach (var menuItem in menuWithItems.Items)
+            {
+                NormalizeMenu(menuItem);
+            }
+
+            menuWithItems.Items.Normalize();
         }
     }
 }

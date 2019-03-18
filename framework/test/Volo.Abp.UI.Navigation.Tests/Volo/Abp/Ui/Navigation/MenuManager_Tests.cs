@@ -29,6 +29,9 @@ namespace Volo.Abp.UI.Navigation
             mainMenu.Items[1].Items[0].Name.ShouldBe("Administration.UserManagement");
             mainMenu.Items[1].Items[1].Name.ShouldBe("Administration.RoleManagement");
             mainMenu.Items[1].Items[2].Name.ShouldBe("Administration.DashboardSettings");
+            mainMenu.Items[1].Items[3].Name.ShouldBe("Administration.SubMenu1");
+            mainMenu.Items[1].Items[3].Items[0].Name.ShouldBe("Administration.SubMenu1.1");
+            mainMenu.Items[1].Items[3].Items[1].Name.ShouldBe("Administration.SubMenu1.2");
         }
 
         [DependsOn(typeof(AbpUiNavigationModule))]
@@ -88,6 +91,12 @@ namespace Volo.Abp.UI.Navigation
                 var administration = context.Menu.GetAdministration();
 
                 administration.AddItem(new ApplicationMenuItem("Administration.DashboardSettings", "Dashboard Settings", url: "/admin/settings/dashboard"));
+
+                administration.AddItem(
+                    new ApplicationMenuItem("Administration.SubMenu1", "Sub menu 1")
+                        .AddItem(new ApplicationMenuItem("Administration.SubMenu1.1", "Sub menu 1.1", url: "/submenu1/submenu1_1"))
+                        .AddItem(new ApplicationMenuItem("Administration.SubMenu1.2", "Sub menu 1.2", url: "/submenu1/submenu1_2"))
+                );
 
                 return Task.CompletedTask;
             }

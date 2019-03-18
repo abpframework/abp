@@ -1,5 +1,5 @@
-using System.Linq;
 using JetBrains.Annotations;
+using System.Linq;
 using Volo.Abp.Ui.Navigation;
 
 namespace Volo.Abp.UI.Navigation
@@ -7,13 +7,18 @@ namespace Volo.Abp.UI.Navigation
     public static class ApplicationMenuExtensions
     {
         [NotNull]
-        public static ApplicationMenuItem GetAdministration(this ApplicationMenu applicationMenu)
+        public static ApplicationMenuItem GetAdministration(
+            [NotNull] this ApplicationMenu applicationMenu)
         {
-            return applicationMenu.GetMenuItem(DefaultMenuNames.Application.Main.Administration);
+            return applicationMenu.GetMenuItem(
+                DefaultMenuNames.Application.Main.Administration
+            );
         }
 
         [NotNull]
-        public static ApplicationMenuItem GetMenuItem(this IHasMenuItems menuWithItems, string menuItemName)
+        public static ApplicationMenuItem GetMenuItem(
+            [NotNull] this IHasMenuItems menuWithItems, 
+            string menuItemName)
         {
             var menuItem = menuWithItems.GetMenuItemOrNull(menuItemName);
             if (menuItem == null)
@@ -26,10 +31,29 @@ namespace Volo.Abp.UI.Navigation
 
         [CanBeNull]
         public static ApplicationMenuItem GetMenuItemOrNull(
-            this IHasMenuItems menuWithItems, 
+            [NotNull] this IHasMenuItems menuWithItems,
             string menuItemName)
         {
+            Check.NotNull(menuWithItems, nameof(menuWithItems));
+
             return menuWithItems.Items.FirstOrDefault(mi => mi.Name == menuItemName);
+        }
+
+        [NotNull]
+        public static IHasMenuItems SetSubItemOrder(
+            [NotNull] this IHasMenuItems menuWithItems, 
+            string menuItemName, 
+            int order)
+        {
+            Check.NotNull(menuWithItems, nameof(menuWithItems));
+
+            var menuItem = menuWithItems.GetMenuItemOrNull(menuItemName);
+            if (menuItem != null)
+            {
+                menuItem.Order = order;
+            }
+
+            return menuWithItems;
         }
     }
 }
