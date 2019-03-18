@@ -73,10 +73,10 @@ namespace Volo.Abp.AuditLogging.MongoDB
         {
             return GetMongoQueryable()
                 .WhereIf(httpMethod != null, auditLog => auditLog.HttpMethod != null && auditLog.HttpMethod.ToLowerInvariant() == httpMethod.ToLowerInvariant())
-                .WhereIf(string.IsNullOrWhiteSpace(url), auditLog => auditLog.Url != null && auditLog.Url.ToLowerInvariant().Contains(url.ToLowerInvariant()))
-                .WhereIf(string.IsNullOrWhiteSpace(userName), auditLog => auditLog.UserName != null && auditLog.UserName == userName)
-                .WhereIf(string.IsNullOrWhiteSpace(applicationName), auditLog => auditLog.ApplicationName == applicationName)
-                .WhereIf(string.IsNullOrWhiteSpace(correlationId), auditLog => auditLog.CorrelationId == correlationId)
+                .WhereIf(url != null, auditLog => auditLog.Url != null && auditLog.Url.ToLowerInvariant().Contains(url.ToLowerInvariant()))
+                .WhereIf(userName != null, auditLog => auditLog.UserName != null && auditLog.UserName.ToLowerInvariant() == userName.ToLowerInvariant())
+                .WhereIf(applicationName != null, auditLog => auditLog.ApplicationName != null && auditLog.ApplicationName.ToLowerInvariant() == applicationName.ToLowerInvariant())
+                .WhereIf(correlationId != null, auditLog => auditLog.CorrelationId != null && auditLog.CorrelationId.ToLowerInvariant() == correlationId.ToLowerInvariant())
                 .WhereIf(httpStatusCode != null && httpStatusCode > 0, auditLog => auditLog.HttpStatusCode == (int?)httpStatusCode)
                 .WhereIf(maxDuration != null && maxDuration > 0, auditLog => auditLog.ExecutionDuration <= maxDuration)
                 .WhereIf(minDuration != null && minDuration > 0, auditLog => auditLog.ExecutionDuration >= minDuration); ;
