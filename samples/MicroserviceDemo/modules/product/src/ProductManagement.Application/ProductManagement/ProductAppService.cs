@@ -28,7 +28,7 @@ namespace ProductManagement
             await NormalizeMaxResultCountAsync(input);
 
             var products = await _productRepository
-                .OrderBy(input.Sorting)
+                .OrderBy(input.Sorting ?? "Name")
                 .Skip(input.SkipCount)
                 .Take(input.MaxResultCount)
                 .ToListAsync();
