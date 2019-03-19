@@ -228,8 +228,9 @@ namespace Volo.Blogging.Posts
                 {
                     tag.IncreaseUsageCount();
                     tag = await _tagRepository.UpdateAsync(tag);
-                    post.AddTag(tag.Id);
                 }
+
+                post.AddTag(tag.Id);
             }
         }
 
