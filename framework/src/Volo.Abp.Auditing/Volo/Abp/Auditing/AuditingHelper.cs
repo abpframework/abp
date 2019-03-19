@@ -92,6 +92,7 @@ namespace Volo.Abp.Auditing
             {
                 ApplicationName = Options.ApplicationName,
                 TenantId = CurrentTenant.Id,
+                TenantName = CurrentTenant.
                 UserId = CurrentUser.Id,
                 UserName = CurrentUser.UserName,
                 ClientId = CurrentClient.Id,
