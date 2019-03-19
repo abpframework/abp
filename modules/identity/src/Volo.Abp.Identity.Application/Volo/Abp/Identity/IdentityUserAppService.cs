@@ -80,6 +80,11 @@ namespace Volo.Abp.Identity
         [Authorize(IdentityPermissions.Users.Delete)]
         public async Task DeleteAsync(Guid id)
         {
+            if (CurrentUser.Id.Value == id)
+            {
+                throw new BusinessException(code: IdentityErrorCodes.UserSelfDeletion);
+            }
+
             var user = await _userManager.FindByIdAsync(id.ToString());
             if (user == null)
             {
