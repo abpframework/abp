@@ -179,7 +179,7 @@ namespace Volo.Abp.Localization
                 : cultureName;
         }
 
-        public class CultureWrapperStringLocalizer : IStringLocalizer
+        public class CultureWrapperStringLocalizer : IStringLocalizer, IStringLocalizerSupportsInheritance
         {
             private readonly string _cultureName;
             private readonly AbpDictionaryBasedStringLocalizer _innerLocalizer;
@@ -202,6 +202,11 @@ namespace Volo.Abp.Localization
             public IStringLocalizer WithCulture(CultureInfo culture)
             {
                 return new CultureWrapperStringLocalizer(culture.Name, _innerLocalizer);
+            }
+
+            public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures, bool includeBaseLocalizers)
+            {
+                return _innerLocalizer.GetAllStrings(includeParentCultures, includeBaseLocalizers);
             }
         }
     }

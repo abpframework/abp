@@ -15,16 +15,26 @@ namespace Volo.Abp.Localization
     public class AbpLocalization_Tests : AbpIntegratedTest<AbpLocalization_Tests.TestModule>
     {
         private readonly IStringLocalizer<LocalizationTestResource> _localizer;
+        private readonly IStringLocalizerFactory _localizerFactory;
 
         public AbpLocalization_Tests()
         {
             _localizer = GetRequiredService<IStringLocalizer<LocalizationTestResource>>();
+            _localizerFactory = GetRequiredService<IStringLocalizerFactory>();
         }
 
         [Fact]
         public void AbpStringLocalizerExtensions_GetInternalLocalizer()
         {
             var internalLocalizer = _localizer.GetInternalLocalizer();
+            internalLocalizer.ShouldNotBeNull();
+            internalLocalizer.ShouldBeOfType<AbpDictionaryBasedStringLocalizer>();
+        }
+
+        [Fact]
+        public void AbpStringLocalizerExtensions_GetInternalLocalizer_Using_LocalizerFactory()
+        {
+            var internalLocalizer = _localizerFactory.Create(typeof(LocalizationTestResource)).GetInternalLocalizer();
             internalLocalizer.ShouldNotBeNull();
             internalLocalizer.ShouldBeOfType<AbpDictionaryBasedStringLocalizer>();
         }
@@ -173,6 +183,12 @@ namespace Volo.Abp.Localization
                           ls.Value == "Evren" &&
                           ls.ResourceNotFound == false
                 );
+
+                localizedStrings.ShouldContain(
+                    ls => ls.Name == "SeeYou" &&
+                          ls.Value == "See you" &&
+                          ls.ResourceNotFound == false
+                );
             }
         }
 
@@ -192,6 +208,12 @@ namespace Volo.Abp.Localization
                 localizedStrings.ShouldContain(
                     ls => ls.Name == "Universe" &&
                           ls.Value == "Evren" &&
+                          ls.ResourceNotFound == false
+                );
+
+                localizedStrings.ShouldContain(
+                    ls => ls.Name == "SeeYou" &&
+                          ls.Value == "See you" &&
                           ls.ResourceNotFound == false
                 );
             }
