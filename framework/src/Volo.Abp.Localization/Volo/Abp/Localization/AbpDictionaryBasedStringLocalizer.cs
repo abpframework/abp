@@ -26,7 +26,10 @@ namespace Volo.Abp.Localization
 
         public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures)
         {
-            return GetAllStrings(CultureInfo.CurrentUICulture.Name, includeParentCultures);
+            return GetAllStrings(
+                CultureInfo.CurrentUICulture.Name,
+                includeParentCultures
+            );
         }
 
         public IStringLocalizer WithCulture(CultureInfo culture)
@@ -109,7 +112,9 @@ namespace Volo.Abp.Localization
             return null;
         }
 
-        protected virtual IReadOnlyList<LocalizedString> GetAllStrings(string cultureName, bool includeParentCultures = true)
+        protected virtual IReadOnlyList<LocalizedString> GetAllStrings(
+            string cultureName, 
+            bool includeParentCultures = true)
         {
             //TODO: Can be optimized (example: if it's already default dictionary, skip overriding)
 
