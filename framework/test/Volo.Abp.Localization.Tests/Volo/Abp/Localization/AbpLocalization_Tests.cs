@@ -22,6 +22,14 @@ namespace Volo.Abp.Localization
         }
 
         [Fact]
+        public void AbpStringLocalizerExtensions_GetInternalLocalizer()
+        {
+            var internalLocalizer = _localizer.GetInternalLocalizer();
+            internalLocalizer.ShouldNotBeNull();
+            internalLocalizer.ShouldBeOfType<AbpDictionaryBasedStringLocalizer>();
+        }
+
+        [Fact]
         public void Should_Get_Same_Text_If_Not_Defined_Anywhere()
         {
             const string text = "A string that is not defined anywhere!";
@@ -135,6 +143,50 @@ namespace Volo.Abp.Localization
 
                 localizedStrings.ShouldNotContain(
                     ls => ls.Name == "FortyTwo"
+                );
+
+                localizedStrings.ShouldContain(
+                    ls => ls.Name == "Universe" &&
+                          ls.Value == "Evren" &&
+                          ls.ResourceNotFound == false
+                );
+            }
+        }
+
+        [Fact]
+        public void GetAllStrings_With_Inheritance()
+        {
+            using (AbpCultureHelper.Use("tr"))
+            {
+                var localizedStrings = _localizer
+                    .GetAllStrings(true, includeBaseLocalizers: true)
+                    .ToList();
+
+                localizedStrings.ShouldContain(
+                    ls => ls.Name == "USA" &&
+                          ls.Value == "Amerika Birleşik Devletleri" &&
+                          ls.ResourceNotFound == false
+                );
+
+                localizedStrings.ShouldContain(
+                    ls => ls.Name == "Universe" &&
+                          ls.Value == "Evren" &&
+                          ls.ResourceNotFound == false
+                );
+            }
+        }
+
+        [Fact]
+        public void GetAllStrings_Without_Inheritance()
+        {
+            using (AbpCultureHelper.Use("tr"))
+            {
+                var localizedStrings = _localizer
+                    .GetAllStrings(true, includeBaseLocalizers: false)
+                    .ToList();
+
+                localizedStrings.ShouldNotContain(
+                    ls => ls.Name == "USA"
                 );
 
                 localizedStrings.ShouldContain(

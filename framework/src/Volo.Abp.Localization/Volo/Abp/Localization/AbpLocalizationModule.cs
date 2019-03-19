@@ -1,4 +1,5 @@
-﻿using Volo.Abp.Localization.Resources.AbpValidation;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Localization.Resources.AbpValidation;
 using Volo.Abp.Modularity;
 using Volo.Abp.Settings;
 using Volo.Abp.VirtualFileSystem;
