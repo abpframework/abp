@@ -133,10 +133,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
 
         protected virtual async Task<ApplicationFeatureConfigurationDto> GetFeaturesConfigAsync()
         {
-            var result = new ApplicationFeatureConfigurationDto
-            {
-                Values = new Dictionary<string, string>()
-            };
+            var result = new ApplicationFeatureConfigurationDto();
 
             foreach (var featureDefinition in _featureDefinitionManager.GetAll())
             {
