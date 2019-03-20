@@ -22,7 +22,7 @@ namespace MyCompanyName.MyProjectName.EntityFrameworkCore
         {
             base.OnModelCreating(builder);
 
-            /* Configure your shared tables (with included modules) here */
+            /* Configure the shared tables (with included modules) here */
 
             builder.Entity<AppUser>(b =>
             {
@@ -33,6 +33,7 @@ namespace MyCompanyName.MyProjectName.EntityFrameworkCore
                 b.ConfigureConcurrencyStamp();
                 b.ConfigureAbpUser();
 
+                //Moved customization to a method so we can share it with the MyProjectNameMigrationsDbContext class
                 b.ConfigureCustomUserProperties();
             });
 
