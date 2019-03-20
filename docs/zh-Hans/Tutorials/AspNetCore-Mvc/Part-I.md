@@ -20,7 +20,7 @@
 
 下面的图片展示了从启动模板创建的项目是如何分层的.
 
-![bookstore-visual-studio-solution](images/bookstore-visual-studio-solution.png)
+![bookstore-visual-studio-solution](images/bookstore-visual-studio-solution-v2.png)
 
 ### 创建Book实体
 
@@ -93,7 +93,7 @@ public class BookStoreDbContext : AbpDbContext<BookStoreDbContext>
 
 这个启动模板使用了[EF Core Code First Migrations](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/)来创建并维护数据库结构.打开 **Package Manager Console (PMC)** (工具/Nuget包管理器菜单),选择 `Acme.BookStore.EntityFrameworkCore`作为默认的项目然后执行下面的命令:
 
-![bookstore-pmc-add-book-migration](images/bookstore-pmc-add-book-migration.png)
+![bookstore-pmc-add-book-migration](images/bookstore-pmc-add-book-migration-v2.png)
 
 这样就会在`Migrations`文件夹中创建一个新的migration类.然后执行`Update-Database`命令更新数据库结构.
 
