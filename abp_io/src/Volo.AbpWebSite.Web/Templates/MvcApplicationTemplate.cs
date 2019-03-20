@@ -37,6 +37,7 @@ namespace Volo.AbpWebSite.Templates
             if (context.Request.DatabaseProvider != DatabaseProvider.EntityFrameworkCore)
             {
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.EntityFrameworkCore"));
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.EntityFrameworkCore.DbMigrations"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Application.Tests", projectFolderPath: "test/MyCompanyName.MyProjectName.Application.Tests"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Tests", projectFolderPath: "test/MyCompanyName.MyProjectName.Web.Tests"));
             }
