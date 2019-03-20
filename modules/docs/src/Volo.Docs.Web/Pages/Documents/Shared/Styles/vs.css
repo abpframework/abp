@@ -179,7 +179,8 @@
       padding: 10px 20px;
       margin: 0 -15px;
       text-align: right;
-      font-size: .8em; }
+      font-size: .8em;
+      min-height: 40px; }
       .docs-page .docs-content .docs-link-btns a {
         color: #999; }
         .docs-page .docs-content .docs-link-btns a:hover {
