@@ -1,5 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using MyCompanyName.MyProjectName.Users;
 using Volo.Abp;
+using Volo.Abp.Identity;
+using Volo.Abp.Users;
 
 namespace MyCompanyName.MyProjectName.EntityFrameworkCore
 {
@@ -12,23 +16,18 @@ namespace MyCompanyName.MyProjectName.EntityFrameworkCore
             var tablePrefix = MyProjectNameConsts.DefaultDbTablePrefix;
             var schema = MyProjectNameConsts.DefaultDbSchema;
 
-            /* Configure all entities here. Example:
+            //builder.Entity<YourEntity>(b =>
+            //{
+            //    b.ToTable(tablePrefix + "YourEntities", schema);
 
-            builder.Entity<Question>(b =>
-            {
-                //Configure table & schema name
-                //b.ToTable(tablePrefix + "Questions", schema);
-                
-                //Properties
-                //b.Property(q => q.Title).IsRequired().HasMaxLength(QuestionConsts.MaxTitleLength);
-                
-                //Configure relations
-                //b.HasMany(question => question.Tags).WithOne().HasForeignKey(qt => qt.QuestionId);
+            //    //...
+            //});
+        }
 
-                //Configure indexes
-                //b.HasIndex(q => q.CreationTime);
-            });
-            */
+        public static void ConfigureCustomUserProperties<TUser>(this EntityTypeBuilder<TUser> b)
+            where TUser: class, IUser
+        {
+            //b.Property(nameof(AppUser.MyProperty))...
         }
     }
 }
