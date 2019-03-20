@@ -24,7 +24,7 @@ namespace MyCompanyName.MyProjectName.EntityFrameworkCore
         public static void ConfigureCustomUserProperties<TUser>(this EntityTypeBuilder<TUser> b)
             where TUser: class, IUser
         {
-            //b.Property(nameof(AppUser.MyProperty))...
+            //b.Property<string>(nameof(AppUser.MyProperty))...
         }
     }
 }
