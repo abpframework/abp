@@ -39,6 +39,30 @@
     <None Remove="Logs\**" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Remove="wwwroot\product-images\asus.jpg" />
+    <Content Remove="wwwroot\product-images\beats.jpg" />
+    <Content Remove="wwwroot\product-images\bluecat.jpg" />
+    <Content Remove="wwwroot\product-images\lego.jpg" />
+    <Content Remove="wwwroot\product-images\nikon.jpg" />
+    <Content Remove="wwwroot\product-images\oki.jpg" />
+    <Content Remove="wwwroot\product-images\playstation.jpg" />
+    <Content Remove="wwwroot\product-images\rampage.jpg" />
+    <Content Remove="wwwroot\product-images\sunny.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="wwwroot\product-images\asus.jpg" />
+    <EmbeddedResource Include="wwwroot\product-images\beats.jpg" />
+    <EmbeddedResource Include="wwwroot\product-images\bluecat.jpg" />
+    <EmbeddedResource Include="wwwroot\product-images\lego.jpg" />
+    <EmbeddedResource Include="wwwroot\product-images\nikon.jpg" />
+    <EmbeddedResource Include="wwwroot\product-images\oki.jpg" />
+    <EmbeddedResource Include="wwwroot\product-images\playstation.jpg" />
+    <EmbeddedResource Include="wwwroot\product-images\rampage.jpg" />
+    <EmbeddedResource Include="wwwroot\product-images\sunny.jpg" />
+  </ItemGroup>
+
   <Target Name="ChangeAliasesOfStrongNameAssemblies" BeforeTargets="FindReferenceAssembliesForReferences;ResolveReferences">
     <ItemGroup>
       <ReferencePath Condition="'%(FileName)' == 'StackExchange.Redis.StrongName'">

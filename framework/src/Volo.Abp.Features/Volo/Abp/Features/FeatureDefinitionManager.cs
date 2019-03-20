@@ -10,9 +10,11 @@ namespace Volo.Abp.Features
 {
     public class FeatureDefinitionManager : IFeatureDefinitionManager, ISingletonDependency
     {
-        protected Lazy<List<IFeatureDefinitionProvider>> Providers { get; }
+        protected IDictionary<string, FeatureGroupDefinition> FeatureGroupDefinitions => _lazyFeatureGroupDefinitions.Value;
+        private readonly Lazy<Dictionary<string, FeatureGroupDefinition>> _lazyFeatureGroupDefinitions;
 
-        protected Lazy<IDictionary<string, FeatureDefinition>> FeatureDefinitions { get; }
+        protected IDictionary<string, FeatureDefinition> FeatureDefinitions => _lazyFeatureDefinitions.Value;
+        private readonly Lazy<Dictionary<string, FeatureDefinition>> _lazyFeatureDefinitions;
 
         protected FeatureOptions Options { get; }
 
@@ -25,8 +27,15 @@ namespace Volo.Abp.Features
             _serviceProvider = serviceProvider;
             Options = options.Value;
 
-            Providers = new Lazy<List<IFeatureDefinitionProvider>>(CreateFeatureProviders, true);
-            FeatureDefinitions = new Lazy<IDictionary<string, FeatureDefinition>>(CreateFeatureDefinitions, true);
+            _lazyFeatureDefinitions = new Lazy<Dictionary<string, FeatureDefinition>>(
+                CreateFeatureDefinitions,
+                isThreadSafe: true
+            );
+
+            _lazyFeatureGroupDefinitions = new Lazy<Dictionary<string, FeatureGroupDefinition>>(
+                CreateFeatureGroupDefinitions,
+                isThreadSafe:true
+            );
         }
 
         public virtual FeatureDefinition Get(string name)
@@ -45,32 +54,64 @@ namespace Volo.Abp.Features
 
         public virtual IReadOnlyList<FeatureDefinition> GetAll()
         {
-            return FeatureDefinitions.Value.Values.ToImmutableList();
+            return FeatureDefinitions.Values.ToImmutableList();
         }
 
         public virtual FeatureDefinition GetOrNull(string name)
         {
-            return FeatureDefinitions.Value.GetOrDefault(name);
+            return FeatureDefinitions.GetOrDefault(name);
         }
 
-        protected virtual List<IFeatureDefinitionProvider> CreateFeatureProviders()
-        {
-            return Options
-                .DefinitionProviders
-                .Select(p => _serviceProvider.GetRequiredService(p) as IFeatureDefinitionProvider)
-                .ToList();
-        }
-
-        protected virtual IDictionary<string, FeatureDefinition> CreateFeatureDefinitions()
+        protected virtual Dictionary<string, FeatureDefinition> CreateFeatureDefinitions()
         {
             var features = new Dictionary<string, FeatureDefinition>();
 
-            foreach (var provider in Providers.Value)
+            foreach (var groupDefinition in FeatureGroupDefinitions.Values)
             {
-                provider.Define(new FeatureDefinitionContext(features));
+                foreach (var feature in groupDefinition.Features)
+                {
+                    AddFeatureToDictionaryRecursively(features, feature);
+                }
             }
 
             return features;
+        }
+
+        protected virtual void AddFeatureToDictionaryRecursively(
+            Dictionary<string, FeatureDefinition> features, 
+            FeatureDefinition feature)
+        {
+            if (features.ContainsKey(feature.Name))
+            {
+                throw new AbpException("Duplicate feature name: " + feature.Name);
+            }
+
+            features[feature.Name] = feature;
+
+            foreach (var child in feature.Children)
+            {
+                AddFeatureToDictionaryRecursively(features, child);
+            }
+        }
+
+        protected virtual Dictionary<string, FeatureGroupDefinition> CreateFeatureGroupDefinitions()
+        {
+            var context = new FeatureDefinitionContext();
+
+            using (var scope = _serviceProvider.CreateScope())
+            {
+                var providers = Options
+                    .DefinitionProviders
+                    .Select(p => scope.ServiceProvider.GetRequiredService(p) as IFeatureDefinitionProvider)
+                    .ToList();
+
+                foreach (var provider in providers)
+                {
+                    provider.Define(context);
+                }
+            }
+
+            return context.Groups;
         }
     }
 }

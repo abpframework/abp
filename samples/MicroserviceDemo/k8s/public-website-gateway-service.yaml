@@ -6,8 +6,7 @@ metadata:
   name: public-website-gateway
 spec:
   ports:
-  - name: "64897"
-    port: 64897
+  - port: 80
     targetPort: 80
   selector:
     io.kompose.service: public-website-gateway

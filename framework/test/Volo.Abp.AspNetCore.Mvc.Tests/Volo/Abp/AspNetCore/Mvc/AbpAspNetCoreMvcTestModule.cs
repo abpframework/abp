@@ -6,7 +6,6 @@ using Volo.Abp.AspNetCore.Mvc.Authorization;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.Localization.Resource;
 using Volo.Abp.AspNetCore.TestBase;
-using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Autofac;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.Resources.AbpValidation;
@@ -55,11 +54,6 @@ namespace Volo.Abp.AspNetCore.Mvc
                             ? "phones"
                             : urlActionNameNormalizerContext.ActionNameInUrl;
                 });
-            });
-
-            Configure<PermissionOptions>(options =>
-            {
-                options.DefinitionProviders.Add<TestPermissionDefinitionProvider>();
             });
 
             Configure<VirtualFileSystemOptions>(options =>

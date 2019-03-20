@@ -13,6 +13,11 @@ namespace Volo.Abp.Settings
             _settingProvider = GetRequiredService<ISettingProvider>();
         }
 
+        protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
+        {
+            options.UseAutofac();
+        }
+
         [Fact]
         public async Task Should_Get_Null_If_No_Value_Provided_And_No_Default_Value()
         {

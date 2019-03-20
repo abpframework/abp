@@ -38,10 +38,8 @@ namespace Volo.Docs.Admin.Pages.Docs.Admin.Projects
                 SetGithubProjectFromDto(project);
                 return Page();
             }
-            else
-            {
-                throw new BusinessException("UnknowDocumentSourceExceptionMessage");
-            }
+
+            throw new BusinessException("UnknowDocumentSourceExceptionMessage");
         }
 
         public async Task<IActionResult> OnPostAsync()

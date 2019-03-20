@@ -5,6 +5,7 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Settings
 {
+    [Dependency(TryRegister = true)]
     public class NullSettingStore : ISettingStore, ISingletonDependency
     {
         public ILogger<NullSettingStore> Logger { get; set; }

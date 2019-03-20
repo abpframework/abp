@@ -12,6 +12,7 @@ namespace Volo.Abp.Aspects
         public const string Validation = "AbpValidation";
         public const string UnitOfWork = "AbpUnitOfWork";
         public const string Authorization = "AbpAuthorization";
+        public const string FeatureChecking = "AbpFeatureChecking";
 
         public static void AddApplied(object obj, params string[] concerns)
         {

@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Clients;
@@ -30,8 +32,7 @@ namespace Volo.Abp.Authorization
                 return;
             }
 
-            var authorizationAttributes = GetAuthorizationDataAttributes(context);
-            foreach (var authorizationAttribute in authorizationAttributes)
+            foreach (var authorizationAttribute in GetAuthorizationDataAttributes(context.Method))
             {
                 await CheckAsync(authorizationAttribute);
             }
@@ -42,17 +43,23 @@ namespace Volo.Abp.Authorization
             return context.Method.GetCustomAttributes(true).OfType<IAllowAnonymous>().Any();
         }
 
-        protected virtual IAuthorizeData[] GetAuthorizationDataAttributes(MethodInvocationAuthorizationContext context)
+        protected virtual IEnumerable<IAuthorizeData> GetAuthorizationDataAttributes(MethodInfo methodInfo)
         {
-            var classAttributes = context.Method.DeclaringType
+            var attributes = methodInfo
                 .GetCustomAttributes(true)
                 .OfType<IAuthorizeData>();
 
-            var methodAttributes = context.Method
-                .GetCustomAttributes(true)
-                .OfType<IAuthorizeData>();
+            if (methodInfo.IsPublic)
+            {
+                attributes = attributes
+                    .Union(
+                        methodInfo.DeclaringType
+                            .GetCustomAttributes(true)
+                            .OfType<IAuthorizeData>()
+                    );
+            }
 
-            return classAttributes.Union(methodAttributes).ToArray();
+            return attributes;
         }
 
         protected async Task CheckAsync(IAuthorizeData authorizationAttribute)

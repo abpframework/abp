@@ -170,7 +170,7 @@ public class BlogModule : AbpModule
 
 There are three common ways of using a service that has already been registered.
 
-### Contructor Injection
+### Constructor Injection
 
 This is the most common way of injecting a service into a class. For example:
 

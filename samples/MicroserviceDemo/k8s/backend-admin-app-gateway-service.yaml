@@ -6,8 +6,7 @@ metadata:
   name: backend-admin-app-gateway
 spec:
   ports:
-  - name: "65115"
-    port: 65115
+  - port: 80
     targetPort: 80
   selector:
     io.kompose.service: backend-admin-app-gateway

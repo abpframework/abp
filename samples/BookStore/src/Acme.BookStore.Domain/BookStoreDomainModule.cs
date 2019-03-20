@@ -30,11 +30,6 @@ namespace Acme.BookStore
                     .AddBaseTypes(typeof(AbpValidationResource))
                     .AddVirtualJson("/Localization/BookStore");
             });
-
-            Configure<SettingOptions>(options =>
-            {
-                options.DefinitionProviders.Add<BookStoreSettingDefinitionProvider>();
-            });
         }
     }
 }

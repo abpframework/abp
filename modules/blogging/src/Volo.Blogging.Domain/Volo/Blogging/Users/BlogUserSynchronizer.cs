@@ -13,7 +13,9 @@ namespace Volo.Blogging.Users
         protected IBlogUserRepository UserRepository { get; }
         protected IBlogUserLookupService UserLookupService { get; }
 
-        public BlogUserSynchronizer(IBlogUserRepository userRepository, IBlogUserLookupService userLookupService)
+        public BlogUserSynchronizer(
+            IBlogUserRepository userRepository, 
+            IBlogUserLookupService userLookupService)
         {
             UserRepository = userRepository;
             UserLookupService = userLookupService;
@@ -24,7 +26,6 @@ namespace Volo.Blogging.Users
             var user = await UserRepository.FindAsync(eventData.Entity.Id);
             if (user == null)
             {
-                //TODO: Why needed (ask to @ebicoglu)?
                 user = await UserLookupService.FindByIdAsync(eventData.Entity.Id);
                 if (user == null)
                 {

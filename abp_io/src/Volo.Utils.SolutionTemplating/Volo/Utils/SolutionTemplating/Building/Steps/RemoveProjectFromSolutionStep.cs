@@ -23,7 +23,7 @@ namespace Volo.Utils.SolutionTemplating.Building.Steps
         public override void Execute(ProjectBuildContext context)
         {
             context.Files.RemoveAll(file => file.Name.StartsWith(_projectFolderPath));
-            var solutionFile = GetFile(context, _solutionFilePath);
+            var solutionFile = context.GetFile(_solutionFilePath);
             solutionFile.NormalizeLineEndings();
             solutionFile.SetLines(RemoveProject(solutionFile.GetLines().ToList()));
         }
