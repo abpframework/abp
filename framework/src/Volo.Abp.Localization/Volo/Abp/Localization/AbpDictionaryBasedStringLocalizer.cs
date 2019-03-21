@@ -206,7 +206,7 @@ namespace Volo.Abp.Localization
 
             public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures, bool includeBaseLocalizers)
             {
-                return _innerLocalizer.GetAllStrings(includeParentCultures, includeBaseLocalizers);
+                return _innerLocalizer.GetAllStrings(_cultureName, includeParentCultures, includeBaseLocalizers);
             }
         }
     }
