@@ -1,0 +1,10 @@
+{
+    "culture": "zh-Hans",
+    "texts": {
+      "Permission:DocumentManagement": "文档管理",
+      "Permission:Projects": "项目",
+      "Permission:Edit": "编辑",
+      "Permission:Delete": "删除",
+      "Permission:Create": "创建"
+    }
+  }
