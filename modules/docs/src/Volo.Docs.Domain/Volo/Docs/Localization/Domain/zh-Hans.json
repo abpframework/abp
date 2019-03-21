@@ -2,14 +2,17 @@
   "culture": "zh-Hans",
   "texts": {
     "Documents": "文档",
-    "BackToWebsite": "返回网站",
+    "BackToWebsite": "返回主网站",
+    "Contributors": "贡献者",
+    "ShareOn": "分享到",
     "Version": "版本",
     "Edit": "编辑",
-    "InThisDocument": "在这个文档中",
-    "GoToTop": "返回顶部",
+    "Delete": "删除",
+    "InThisDocument": "在本文中",
+    "GoToTop": "到顶部",
     "Projects": "项目",
-    "NoProjectWarning": "当前并没有项目!",
-    "DocumentNotFound": "抱歉,您请求的文档不存在!",
-    "NavigationDocumentNotFound": "此版本并没有导航文档!"
+    "NoProjectWarning": "还没有项目!",
+    "DocumentNotFound": "找不到请求的文档!",
+    "NavigationDocumentNotFound": "这个版本没有导航文件!"
   }
 }
