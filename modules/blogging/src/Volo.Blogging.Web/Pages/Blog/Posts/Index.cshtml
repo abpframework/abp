@@ -77,7 +77,7 @@
                                     <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">@post.Title</a>
                                 </h2>
                                 <p class="article-sum">
-                                    @(GetShortContent(post.Content))
+                                  @Html.Raw(GetShortContent(post.Content)))
                                 </p>
                                 <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName" class="btn btn-primary btn-rounded">@L["ContinueReading"]</a>
 
