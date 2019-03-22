@@ -14,8 +14,9 @@
     "Login": "登录",
     "Cancel": "取消",
     "Register": "注册",
-    "InvalidLoginRequest": "无效的登录请求",
+    "UseAnotherServiceToLogIn.": "使用其他服务登录.",
+    "InvalidLoginRequest": "登录请求无效",
     "ThereAreNoLoginSchemesConfiguredForThisClient": "没有为此客户端配置登录方案.",
-    "LogInUsingYourProviderAccount": "使用你的 {0} 账号登录"
+    "LogInUsingYourProviderAccount": "使用你的{0}帐户登录"
   }
 }

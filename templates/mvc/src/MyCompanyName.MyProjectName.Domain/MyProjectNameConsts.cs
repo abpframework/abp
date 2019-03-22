@@ -2,8 +2,8 @@
 {
     public static class MyProjectNameConsts
     {
-        public const string DefaultDbTablePrefix = "App";
+        public const string DbTablePrefix = "App";
 
-        public const string DefaultDbSchema = null;
+        public const string DbSchema = null;
     }
 }
