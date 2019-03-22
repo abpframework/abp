@@ -116,15 +116,15 @@ $projects = (
     "modules/permission-management/src/Volo.Abp.PermissionManagement.Web",
 
     # modules/feature-management
-    "modules/feature-management/src/Volo.Abp.TenantManagement.Domain.Shared",
-    "modules/feature-management/src/Volo.Abp.TenantManagement.Domain",
-    "modules/feature-management/src/Volo.Abp.TenantManagement.Application.Contracts",
-    "modules/feature-management/src/Volo.Abp.TenantManagement.Application",
-    "modules/feature-management/src/Volo.Abp.TenantManagement.EntityFrameworkCore",
-    "modules/feature-management/src/Volo.Abp.TenantManagement.MongoDB",
-    "modules/feature-management/src/Volo.Abp.TenantManagement.HttpApi",
-    "modules/feature-management/src/Volo.Abp.TenantManagement.HttpApi.Client",
-    "modules/feature-management/src/Volo.Abp.TenantManagement.Web",
+    "modules/feature-management/src/Volo.Abp.FeatureManagement.Domain.Shared",
+    "modules/feature-management/src/Volo.Abp.FeatureManagement.Domain",
+    "modules/feature-management/src/Volo.Abp.FeatureManagement.Application.Contracts",
+    "modules/feature-management/src/Volo.Abp.FeatureManagement.Application",
+    "modules/feature-management/src/Volo.Abp.FeatureManagement.EntityFrameworkCore",
+    "modules/feature-management/src/Volo.Abp.FeatureManagement.MongoDB",
+    "modules/feature-management/src/Volo.Abp.FeatureManagement.HttpApi",
+    "modules/feature-management/src/Volo.Abp.FeatureManagement.HttpApi.Client",
+    "modules/feature-management/src/Volo.Abp.FeatureManagement.Web",
     
     # modules/tenant-management
     "modules/tenant-management/src/Volo.Abp.TenantManagement.Domain.Shared",
