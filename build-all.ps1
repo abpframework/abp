@@ -9,6 +9,7 @@ $solutionPaths = (
     "modules/users",
     "modules/permission-management",
     "modules/setting-management",
+    "modules/feature-management",
     "modules/identity",
     "modules/identityserver",
     "modules/tenant-management",
