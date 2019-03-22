@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Application;
 using Volo.Abp.Authorization.Permissions;
+using Volo.Abp.FeatureManagement;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.TenantManagement.Localization;
@@ -10,6 +11,7 @@ namespace Volo.Abp.TenantManagement
 {
     [DependsOn(typeof(AbpDddApplicationModule))]
     [DependsOn(typeof(AbpTenantManagementDomainSharedModule))]
+    [DependsOn(typeof(AbpFeatureManagementApplicationContractsModule))]
     public class AbpTenantManagementApplicationContractsModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
