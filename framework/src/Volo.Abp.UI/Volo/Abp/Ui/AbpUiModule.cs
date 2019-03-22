@@ -20,7 +20,9 @@ namespace Volo.Abp.UI
 
             Configure<AbpLocalizationOptions>(options =>
             {
-                options.Resources.Add<AbpUiResource>("en").AddVirtualJson("/Localization/Resources/AbpUi");
+                options.Resources
+                    .Add<AbpUiResource>("en")
+                    .AddVirtualJson("/Localization/Resources/AbpUi");
             });
         }
     }

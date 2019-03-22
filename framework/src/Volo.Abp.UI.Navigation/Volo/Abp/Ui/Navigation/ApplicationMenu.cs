@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using JetBrains.Annotations;
+using Volo.Abp.Ui.Navigation;
 
 namespace Volo.Abp.UI.Navigation
 {
@@ -29,11 +29,11 @@ namespace Volo.Abp.UI.Navigation
 
         /// <inheritdoc cref="IHasMenuItems.Items"/>
         [NotNull]
-        public IList<ApplicationMenuItem> Items { get; } //TODO: Create a specialized collection (that can contain AddAfter for example)
+        public ApplicationMenuItemList Items { get; }
 
         /// <summary>
         /// Can be used to store a custom object related to this menu.
-        /// TODO: Conver to dictionary!
+        /// TODO: Convert to dictionary!
         /// </summary>
         [CanBeNull]
         public object CustomData { get; set; }
@@ -47,7 +47,7 @@ namespace Volo.Abp.UI.Navigation
             Name = name;
             DisplayName = displayName ?? Name;
 
-            Items = new List<ApplicationMenuItem>();
+            Items = new ApplicationMenuItemList();
         }
 
         /// <summary>
@@ -59,6 +59,11 @@ namespace Volo.Abp.UI.Navigation
         {
             Items.Add(menuItem);
             return this;
+        }
+
+        public override string ToString()
+        {
+            return $"[ApplicationMenu] Name = {Name}";
         }
     }
 }

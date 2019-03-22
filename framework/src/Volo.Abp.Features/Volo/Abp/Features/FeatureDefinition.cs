@@ -3,6 +3,7 @@ using System.Collections.Immutable;
 using System.Linq;
 using JetBrains.Annotations;
 using Volo.Abp.Localization;
+using Volo.Abp.Validation.StringValues;
 
 namespace Volo.Abp.Features
 {
@@ -29,6 +30,7 @@ namespace Volo.Abp.Features
         /// Parent of this feature, if one exists.
         /// If set, this feature can be enabled only if the parent is enabled.
         /// </summary>
+        [CanBeNull]
         public FeatureDefinition Parent { get; private set; }
 
         /// <summary>
@@ -53,7 +55,23 @@ namespace Volo.Abp.Features
         /// A list of allowed providers to get/set value of this feature.
         /// An empty list indicates that all providers are allowed.
         /// </summary>
+        [NotNull]
         public List<string> AllowedProviders { get; }
+
+        /// <summary>
+        /// Gets/sets a key-value on the <see cref="Properties"/>.
+        /// </summary>
+        /// <param name="name">Name of the property</param>
+        /// <returns>
+        /// Returns the value in the <see cref="Properties"/> dictionary by given <see cref="name"/>.
+        /// Returns null if given <see cref="name"/> is not present in the <see cref="Properties"/> dictionary.
+        /// </returns>
+        [CanBeNull]
+        public object this[string name]
+        {
+            get => Properties.GetOrDefault(name);
+            set => Properties[name] = value;
+        }
 
         /// <summary>
         /// Can be used to get/set custom properties for this feature.
@@ -61,20 +79,28 @@ namespace Volo.Abp.Features
         [NotNull]
         public Dictionary<string, object> Properties { get; }
 
-        //TODO: Implement input type like old ABP!
+        /// <summary>
+        /// Input type.
+        /// This can be used to prepare an input for changing this feature's value.
+        /// Default: <see cref="ToggleStringValueType"/>.
+        /// </summary>
+        [CanBeNull]
+        public IStringValueType ValueType { get; set; }
 
         public FeatureDefinition(
             string name,
             string defaultValue = null,
             ILocalizableString displayName = null,
             ILocalizableString description = null,
+            IStringValueType valueType = null,
             bool isVisibleToClients = true)
         {
             Name = name;
             DefaultValue = defaultValue;
-            IsVisibleToClients = isVisibleToClients;
             DisplayName = displayName ?? new FixedLocalizableString(name);
             Description = description;
+            ValueType = valueType;
+            IsVisibleToClients = isVisibleToClients;
 
             Properties = new Dictionary<string, object>();
             AllowedProviders = new List<string>();
@@ -114,13 +140,15 @@ namespace Volo.Abp.Features
             string defaultValue = null, 
             ILocalizableString displayName = null, 
             ILocalizableString description = null,
+            IStringValueType valueType = null,
             bool isVisibleToClients = true)
         {
             var feature = new FeatureDefinition(
                 name, 
                 defaultValue, 
                 displayName, 
-                description, 
+                description,
+                valueType,
                 isVisibleToClients)
             {
                 Parent = this

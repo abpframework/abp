@@ -7,8 +7,6 @@ using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Identity.Localization;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
-using Volo.Abp.SettingManagement;
-using Volo.Abp.Settings;
 using Volo.Abp.Users;
 using Volo.Abp.VirtualFileSystem;
 
@@ -17,18 +15,12 @@ namespace Volo.Abp.Identity
     [DependsOn(
         typeof(AbpDddDomainModule),
         typeof(AbpIdentityDomainSharedModule),
-        typeof(AbpUsersDomainModule),
-        typeof(AbpSettingManagementDomainModule)
+        typeof(AbpUsersDomainModule)
         )]
     public class AbpIdentityDomainModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<SettingOptions>(options =>
-            {
-                options.DefinitionProviders.Add<AbpIdentitySettingDefinitionProvider>();
-            });
-
             Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpIdentityDomainModule>();

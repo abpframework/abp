@@ -5,6 +5,7 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Features
 {
+    [Dependency(TryRegister = true)]
     public class NullFeatureStore : IFeatureStore, ISingletonDependency
     {
         public ILogger<NullFeatureStore> Logger { get; set; }

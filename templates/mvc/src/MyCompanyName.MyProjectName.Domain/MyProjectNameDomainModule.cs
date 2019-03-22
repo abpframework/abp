@@ -1,5 +1,4 @@
 ﻿using MyCompanyName.MyProjectName.Localization.MyProjectName;
-using MyCompanyName.MyProjectName.Settings;
 using Volo.Abp.Auditing;
 using Volo.Abp.AuditLogging;
 using Volo.Abp.BackgroundJobs;
@@ -8,7 +7,6 @@ using Volo.Abp.Localization;
 using Volo.Abp.Localization.Resources.AbpValidation;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.Identity;
-using Volo.Abp.Settings;
 using Volo.Abp.VirtualFileSystem;
 
 namespace MyCompanyName.MyProjectName
@@ -35,11 +33,6 @@ namespace MyCompanyName.MyProjectName
                     .Add<MyProjectNameResource>("en")
                     .AddBaseTypes(typeof(AbpValidationResource))
                     .AddVirtualJson("/Localization/MyProjectName");
-            });
-
-            Configure<SettingOptions>(options =>
-            {
-                options.DefinitionProviders.Add<MyProjectNameSettingDefinitionProvider>();
             });
         }
     }

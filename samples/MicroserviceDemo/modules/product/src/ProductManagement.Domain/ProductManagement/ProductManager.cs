@@ -20,7 +20,8 @@ namespace ProductManagement
             [NotNull] string code,
             [NotNull] string name,
             float price = 0.0f,
-            int stockCount = 0)
+            int stockCount = 0,
+            string imageName = null)
         {
             var existingProduct = await _productRepository.FirstOrDefaultAsync(p => p.Code == code);
             if (existingProduct != null)
@@ -34,7 +35,8 @@ namespace ProductManagement
                     code,
                     name,
                     price,
-                    stockCount
+                    stockCount,
+                    imageName
                 )
             );
         }

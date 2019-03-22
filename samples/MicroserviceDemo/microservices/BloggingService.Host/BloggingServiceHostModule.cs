@@ -85,7 +85,6 @@ namespace BloggingService.Host
             Configure<BlogFileOptions>(options =>
             {
                 options.FileUploadLocalFolder = Path.Combine(hostingEnvironment.WebRootPath, "files");
-                options.FileUploadUrlRoot = "/files/";
             });
 
             context.Services.AddDistributedRedisCache(options =>

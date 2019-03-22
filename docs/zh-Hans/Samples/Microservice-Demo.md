@@ -35,85 +35,97 @@ ABP框架的主要目标之一就是提供[便捷的基础设施来创建微服�
 
 此示例仍处于开发阶段,尚未完成.
 
-## Running the Solution
+## 运行解决方案
 
-You can either run from the **source code** or from the pre-configured **docker-compose** file.
+您可以从 **源代码** 或者预先配置好的 **docker-compose** 文件运行.
 
-### Using the Docker Containers
+### 使用Docker容器
 
-#### Pre Requirements
+#### 预先要求
 
-Running as docker containers is easier since all dependencies are pre-configured. You only need to install the [latest docker](https://docs.docker.com/compose/install/).
+由于所有依赖项都已预先配置, 因此作为Docker容器运行更容易. 你只需要安装[最新的docker](https://docs.docker.com/compose/install/).
 
-#### Running Containers
+#### 运行容器
 
-- Clone or download the [ABP repository](https://github.com/abpframework/abp).
+- 克隆或下载 [ABP仓库](https://github.com/abpframework/abp).
 
-- Open a command line in the `samples/MicroserviceDemo` folder of the repository.
+- 在存储库的`samples/MicroserviceDemo`文件夹中打开命令行.
 
-- Restore SQL Server databases:
+- 从Docker Hub中拉取image:
+
+  ```
+  docker-compose -f docker-compose.yml -f docker-compose.migrations.yml pull
+  ```
+
+- 如果要在本地构建映像, 可以跳过上述步骤, 使用build命令:
+
+  ```
+  docker-compose -f docker-compose.yml -f docker-compose.migrations.yml build
+  ```
+
+  根据你的电脑配置, 构建image可能需要**很长时间**.
+
+- 还原 SQL Server 数据库:
 
   ```
   docker-compose -f docker-compose.yml -f docker-compose.migrations.yml run restore-database
   ```
 
-- Start the containers:
+- 启动容器:
 
   ```
   docker-compose up -d
   ```
 
-  At the first run, it will take a **long time** because it will build all docker images.
-
-- Add this line to the end of your `hosts` file:
+- 将此行添加到`hosts`文件的末尾:
 
   ```
   127.0.0.1	auth-server
   ```
 
-  hosts file is located inside the `C:\Windows\System32\Drivers\etc\hosts` folder on Windows and `/etc/hosts` for Linux/MacOS.
+  hosts文件位于Windows上的`C:\Windows\System32\Drivers\etc\hosts`文件夹, Linux/MacOS的`/etc/hosts`中.
 
-#### Run the Applications
+#### 运行应用程序
 
-There are a few applications running in the containers you may want to explore:
+你可能想要了解容器中运行一些应用程序:
 
-* Backend Admin Application (BackendAdminApp.Host): `http://localhost:51512`
-  *(Used to manage users & products in the system)*
-* Public Web Site (PublicWebsite.Host): `http://localhost:51513`
-  *(Used to list products and run/manage the blog module)*
-* Authentication Server (AuthServer.Host): `http://auth-server:51511/`
-  *(Used as a single sign on and authentication server built with IdentityServer4)*
+* 后端管理应用程序 (BackendAdminApp.Host): `http://localhost:51512`
+  *(用于管理系统中的用户和产品)*
+* 公共网站 (PublicWebsite.Host): `http://localhost:51513`
+  *(用于列出产品并运行/管理博客模块)*
+* 认证服务器 (AuthServer.Host): `http://auth-server:51511/`
+  *(用作使用IdentityServer4构建的单点登录和身份验证服务器)*
 * Kibana UI: `http://localhost:51510`
-  *(Use to show/trace logs written by all services/applications/gateways)*
+  *(用于显示/跟踪所有服务/应用程序/网关写入的日志)*
 
-### Running From the Source Code
+### 从源代码运行
 
-#### Pre Requirements
+#### 预先要求
 
-To be able to run the solution from source code, following tools should be installed and running on your computer:
+为了能够从源代码运行解决方案, 应在你的计算机上安装并运行以下工具:
 
-* [SQL Server](https://www.microsoft.com/en-us/sql-server/sql-server-downloads) 2015+ (can be [express edition](https://www.microsoft.com/en-us/sql-server/sql-server-editions-express))
+* [SQL Server](https://www.microsoft.com/en-us/sql-server/sql-server-downloads) 2015+ (可以是 [express edition](https://www.microsoft.com/en-us/sql-server/sql-server-editions-express))
 * [Redis](https://redis.io/download) 5.0+
 * [RabbitMQ](https://www.rabbitmq.com/install-windows.html) 3.7.11+
 * [MongoDB](https://www.mongodb.com/download-center) 4.0+
 * [ElasticSearch](https://www.elastic.co/downloads/elasticsearch) 6.6+
-* [Kibana](https://www.elastic.co/downloads/kibana) 6.6+ (optional, recommended to show logs)
+* [Kibana](https://www.elastic.co/downloads/kibana) 6.6+ (可选,建议显示日志)
 
-#### Open & Build the Visual Studio Solution
+#### 打开并构建Visual Studio解决方案
 
-* Open the `samples\MicroserviceDemo\MicroserviceDemo.sln` in Visual Studio 2017 (15.9.0+).
-* Run `dotnet restore` from the command line inside the `samples\MicroserviceDemo` folder.
-* Build the solution in Visual Studio.
+* 在Visual Studio 2017 (15.9.0+)中打开`samples\MicroserviceDemo\MicroserviceDemo.sln`.
+* 在`samples\MicroserviceDemo`文件夹中的命令行运行`dotnet restore`命令.
+* 在Visual Studio中构建解决方案.
 
-#### Restore Databases
+#### 还原数据库
 
-Open `MsDemo_Identity.zip` and `MsDemo_ProductManagement.zip` inside the `samples\MicroserviceDemo\databases` folder and restore to the SQL Server.
+在`samples\MicroserviceDemo\databases`文件夹中打开`MsDemo_Identity.zip`和`MsDemo_ProductManagement.zip`并恢复到SQL Server.
 
-> Notice that: These databases have EF Core migrations in the solution, however they don't have seed data, especially required for IdentityServer4 configuration. So, restoring the databases is much more easier.
+> 请注意:这些数据库在解决方案中具有EF Core迁移,但它们没有种子数据,尤其是IdentityServer4所需的配置. 因此,恢复数据库要容易得多.
 
-#### Run Projects
+#### 运行项目
 
-Run the projects with the following order (right click to each project, set as startup project an press Ctrl+F5 to run without debug):
+按以下顺序运行项目(右键单击每个项目设置为启动项目,按Ctrl+F5运行,无需调试):
 
 * AuthServer.Host
 * IdentityService.Host
@@ -125,61 +137,61 @@ Run the projects with the following order (right click to each project, set as s
 * BackendAdminApp.Host
 * PublicWebSite.Host
 
-## A Brief Overview of the Solution
+## 解决方案简介
 
-The Visual Studio solution consists of multiple projects each have different roles in the system:
+Visual Studio解决方案由多个项目组成,每个项目在系统中具有不同的角色:
 
 ![microservice-sample-solution](../images/microservice-sample-solution.png)
 
-### Applications
+### 应用程序(Applications)
 
-These are the actual applications those have user interfaces to interact to the users and use the system.
+这些是具有用户界面以与用户交互并使用系统的实际应用程序.
 
-- **AuthServer.Host**: Host the IdentityServer4 to provide an authentication service to other services and applications. It is a single-sign server and contains the login page.
-- **BackendAdminApp.Host**: This is a backend admin application that host UI for Identity and Product management modules.
-- **PubicWebSite.Host**: As public web site that contains a simple product list page and blog module UI.
-- **ConsoleClientDemo**: A simple console application to demonstrate the usage of services from a C# application.
+- **AuthServer.Host**: 托管IdentityServer4以向其他服务和应用程序提供身份验证服务. 它是一个单点登录服务器,包含登录页面.
+- **BackendAdminApp.Host**: 这是一个后端管理应用程序,用于托管身份和产品管理模块的UI.
+- **PubicWebSite.Host**: 作为包含简单产品列表页面和博客模块UI的公共网站.
+- **ConsoleClientDemo**: 一个简单的控制台应用程序,用于演示C＃应用程序中使用服务.
 
-### Gateways / BFFs (Backend for Frontend)
+### 网关/BFF(前端后端)
 
-Gateways are used to provide a single entry point to the applications. It can also used for rate limiting, load balancing... etc. Used the [Ocelot](https://github.com/ThreeMammals/Ocelot) library.
+网关用于为应用程序提供单一入口点.它还可以用于速率限制,负载平衡等. 使用[Ocelot](https://github.com/ThreeMammals/Ocelot)类库.
 
-* **BackendAdminAppGateway.Host**: Used by the BackendAdminApp.Host application as backend.
-* **PublicWebSiteGateway.Host**: Used by the PublicWebSite.Host application as backend.
-* **InternalGateway.Host**: Used for inter-service communication (the communication between microservices).
+* **BackendAdminAppGateway.Host**: 由BackendAdminApp.Host应用程序用作后端.
+* **PublicWebSiteGateway.Host**: 由PublicWebSite.Host应用程序用作后端.
+* **InternalGateway.Host**: 用于服务间通信(微服务之间的通信).
 
-### Microservices
+### 微服务
 
-Microservices have no UI, but exposes some REST APIs.
+微服务没有UI,但暴露了一些REST API.
 
-- **IdentityService.Host**: Host the ABP Identity module which is used to manage users & roles. It has no additional service, but only hosts the Identity module's API.
-- **BloggingService.Host**: Host the ABP Blogging module which is used to manage blog & posts (a typical blog application). It has no additional service, but only hosts the Blogging module's API.
-- **ProductService.Host**: Hosts the Product module (that is inside the solution) which is used to manage products. It also contains the EF Core migrations to create/update the Product Management database schema.
+- **IdentityService.Host**: 托管用于管理用户和角色的ABP Identity模块. 它没有其他服务,仅托管Identity模块的API.
+- **BloggingService.Host**: 托管ABP博客模块,该模块用于管理博客和帖子(典型的博客应用程序). 它没有其他服务,仅托管Blogging模块的API.
+- **ProductService.Host**: 托管用于管理产品的产品模块(位于解决方案内). 它还包含用于创建/更新产品管理数据库架构的EF Core迁移.
 
-### Modules
+### 模块
 
-* **Product**: A layered module that is developed with the [module development best practices](../Best-Practices/Index.md). It can be embedded into a monolithic application or can be hosted as a microservice by separately deploying API and UI (as done in this demo solution).
+* **产品**: 使用[模块开发最佳实践](../Best-Practices/Index.md)开发的分层模块. 它可以嵌入到单个应用程序中,也可以通过单独部署API和UI作为微服务托管(如本演示解决方案中所述).
 
-### Databases
+### 数据库
 
-This solution is using multiple databases:
+此解决方案使用多个数据库:
 
-* **MsDemo_Identity**: An SQL database. Used **SQL Server** by default, but can be any DBMS supported by the EF Core. Shared by AuthServer and IdentityService. Also audit logs, permissions and settings are stored in this database (while they could easily have their own databases, shared the same database to keep it simple).
-* **MsDemo_ProductManagement**: An SQL database. Again, used **SQL Server** by default, but can be any DBMS supported by the EF Core. Used by the ProductService as a dedicated database.
-* **MsDemo_Blogging**: A **MongoDB** database. Used by the BloggingService.
-* **Elasticsearch**: Used to write logs over Serilog.
+* **MsDemo_Identity**: 一个SQL数据库. 默认使用** SQL Server **,但可以是EF Core支持的任何DBMS. 由AuthServer和IdentityService共享. 审计日志,权限和设置也存储在此数据库中(虽然它们可以轻松拥有自己的数据库,共享相同的数据库以保持简单).
+* **MsDemo_ProductManagement**: 一个SQL数据库. 同样默认使用 **SQL Server**,但可以是EF Core支持的任何DBMS. 由ProductService用作专用数据库.
+* **MsDemo_Blogging**: **MongoDB**数据库. 由BloggingService使用.
+* **Elasticsearch**: 用于在Serilog上写日志.
 
-## Applications
+## 应用
 
-### Authentication Server (AuthServer.Host)
+### 认证服务器 (AuthServer.Host)
 
-This project is used by all other services and applications for authentication & single sign on. Mainly, uses **IdentityServer4** to provide these services. It uses some of the [pre-build ABP modules](../Modules/Index) like *Identity*, *Audit Logging* and *Permission Management*.
+所有其他服务和应用程序都使用此项目进行身份验证和单点登录. 主要使用**IdentityServer4**来提供这些服务. 它使用了一些[预构建ABP模块](../Modules/Index) 如 *Identity*, *Audit Logging* 和 *Permission Management*.
 
-#### Database & EF Core Configuration
+#### 数据库和EF Core配置
 
-This application uses a SQL database (named it as **MsDemo_Identity**) and maintains its schema via **Entity Framework Core migrations.**
+此应用程序使用SQL数据库(将其命名为**MsDemo_Identity**)并通过**Entity Framework Core迁移**维护其架构.
 
-It has a DbContext named **AuthServerDbContext** and defined as shown below:
+它有一个名为**AuthServerDbContext**的DbContext,定义如下:
 
 ````csharp
 public class AuthServerDbContext : AbpDbContext<AuthServerDbContext>
@@ -203,35 +215,35 @@ public class AuthServerDbContext : AbpDbContext<AuthServerDbContext>
 }
 ````
 
-In the **OnModelCreating**, you see **ConfigureX()** method calls. A module with a database schema generally declares such an extension method to configure EF Core mappings for its own entities. This is a flexible approach where you can arrange your databases and modules inside them; You can use a different database for each module, or combine some of them in a shared database. In the AuthServer project, we decided to combine multiple module schemas in a single EF Core DbContext, in a single physical database. These modules are Identity, IdentityServer, AuditLogging, PermissionManagement and SettingManagement modules.
+在**OnModelCreating**方法中, 你会看到 **ConfigureX()** 方法调用. 具有数据库模式的模块通常声明这样的扩展方法,以便为其自己的实体配置EF Core映射. 这是一种灵活的方法, 可以在其中安排数据库和模块; 可以为每个模块使用不同的数据库,或者将它们中的一些组合在一个共享数据库中. 在AuthServer项目中,我们决定在单个物理数据库中将单个EF Core DbContext中的多个模块模式组合在一起. 这些模块是Identity,IdentityServer,AuditLogging,PermissionManagement和SettingManagement模块.
 
-Notice that this DbContext is only for database migrations. All modules have their own `DbContext` classes those are used in the runtime by the modules.
+请注意,此DbContext仅用于数据库迁移. 所有模块都有自己的`DbContext`类,模块在运行时使用这些类.
 
-#### User Interface
+#### 用户界面
 
-AuthServer has a simple home page that shows the current user info if the current user has logged in:
+AuthServer有一个简单的主页,如果当前用户已登录,则显示当前用户信息:
 
 ![microservice-sample-authserver-home](../images/microservice-sample-authserver-home.png)
 
-It also provides Login & Register pages:
+它还提供登录和注册页面:
 
 ![microservice-sample-authserver-login](../images/microservice-sample-authserver-login.png)
 
-These pages are not included in the project itself. Instead, AuthServer project uses the prebuilt ABP [account module](https://github.com/abpframework/abp/tree/master/modules/account) with IdentityServer extension. That means it can also act as an OpenId Connect server with necessary UI and logic.
+这些页面不包含在项目本身中. 相反,AuthServer项目使用带有IdentityServer扩展的预构建ABP[帐户模块](https://github.com/abpframework/abp/tree/master/modules/account). 这意味着它还可以充当具有必要UI和逻辑的OpenId Connect服务器.
 
-#### Dependencies
+#### 依赖
 
-* **RabbitMQ** for messaging to other services.
-* **Redis** for distributed/shared caching.
-* **Elasticsearch** for storing logs.
+* **RabbitMQ** 用于向其他服务发送消息.
+* **Redis** 用于分布式/共享缓存.
+* **Elasticsearch** 用于存储日志.
 
-### Backend Admin Application (BackendAdminApp.Host)
+### 后端管理应用程序 (BackendAdminApp.Host)
 
-This is a web application that is used to manage users, roles, permissions and products in the system.
+这是一个Web应用程序,用于管理系统中的用户,角色,权限和产品.
 
-#### Authentication
+#### 认证
 
-BackendAdminApp redirects to the AuthServer for authentication. Once the user enters a correct username & password, the page is redirected to the backend application again. Authentication configuration is setup in the `BackendAdminAppHostModule` class:
+BackendAdminApp重定向到AuthServer进行身份验证. 用户输入正确的用户名和密码后,页面将再次重定向到后端应用程序. 身份验证配置在`BackendAdminAppHostModule`类中设置:
 
 ````charp
 context.Services.AddAuthentication(options =>
@@ -263,12 +275,13 @@ context.Services.AddAuthentication(options =>
 });
 ````
 
-* It adds "Cookies" authentication as the primary authentication type.
-* "oidc" authentication is configured to use the AuthServer application as the authentication server.
-* It requires the additional identity scopes *role*, *email* and *phone*.
+* 它将"Cookies"身份验证添加为主要身份验证类型.
+* "oidc"身份验证配置为使用AuthServer应用程序作为身份验证服务器.
+* 它需要额外的身份范围(scopes) *role*, *email* and *phone*.
 * It requires the API resource scopes *BackendAdminAppGateway*, *IdentityService* and *ProductService* because it will use these services as APIs.
+* 它需要API资源范围 *BackendAdminAppGateway*, *IdentityService* 和 *ProductService*,因为它将这些服务用作API.
 
-IdentityServer client settings are stored inside the `appsettings.json` file:
+IdentityServer客户端设置存储在`appsettings.json`文件中:
 
 ````json
 "AuthServer": {
@@ -278,25 +291,27 @@ IdentityServer client settings are stored inside the `appsettings.json` file:
 }
 ````
 
-#### User Interface
+#### 用户界面
 
-The BackendAdminApp.Host project itself has not a single UI element/page. It is only used to serve UI pages of the Identity and Product Management modules. `BackendAdminAppHostModule` adds dependencies to `AbpIdentityWebModule` (*[Volo.Abp.Identity.Web](https://www.nuget.org/packages/Volo.Abp.Identity.Web)* package) and `ProductManagementWebModule` (*ProductManagement.Web* project) for that purpose.
+BackendAdminApp.Host项目本身没有单个UI元素/页面. 它仅用于提供身份和产品管理模块的UI页面.
 
-A screenshot from the user management page:
+`BackendAdminAppHostModule`将依赖关系添加到`AbpIdentityWebModule`(*[Volo.Abp.Identity.Web](https://www.nuget.org/packages/Volo.Abp.Identity.Web)* 包)和`ProductManagementWebModule`(*ProductManagement.Web*项目)为此目的.
+
+用户管理页面的屏幕截图:
 
 ![microservice-sample-backend-ui](../images/microservice-sample-backend-ui.png)
 
-A screenshot from the permission management modal for a role:
+来自权限的权限管理模式的屏幕截图:
 
 ![microservice-sample-backend-ui-permissions](../images/microservice-sample-backend-ui-permissions.png)
 
-#### Using Microservices
+#### 使用微服务
 
-Backend admin application uses the Identity and Product microservices for all operations, over the Backend Admin Gateway (BackendAdminAppGateway.Host).
+后端管理应用程序通过后端管理网关对所有操作使用Identity和Product微服务(BackendAdminAppGateway.Host).
 
-##### Remote End Point
+##### 远程端点
 
-`appsettings.json` file contains the `RemoteServices` section to declare the remote service endpoint(s). Each microservice will normally have different endpoints. However, this solution uses the API Gateway pattern to provide a single endpoint for the applications:
+`appsettings.json`文件包含`RemoteServices`部分,用于声明远程服务端点. 每个微服务通常都有不同的端点. 但是,此解决方案使用API网关模式为应用程序提供单个端点:
 
 ````json
 "RemoteServices": {
@@ -306,32 +321,32 @@ Backend admin application uses the Identity and Product microservices for all op
 }
 ````
 
-`http://localhost:65115/` is the URL of the *BackendAdminAppGateway.Host* project. It knows where are Identity and Product services are located.
+`http://localhost:65115/` 是 *BackendAdminAppGateway.Host* 项目的URL. 它知道身份和产品服务的位置.
 
 ##### HTTP Clients
 
-ABP application modules generally provides C# client libraries to consume services (APIs) easily (they generally uses the [Dynamic C# API Clients](../AspNetCore/Dynamic-CSharp-API-Clients.md) feature of the ABP framework). That means if you need to consume Identity service API, you can reference to its client package and easily use the APIs by provided interfaces.
+ABP应用程序模块通常提供C＃客户端库以轻松地使用服务(API)(它们通常使用ABP框架的[Dynamic C# API客户端](../AspNetCore/Dynamic-CSharp-API-Clients.md)). 这意味着如果你需要使用Identity Service API, 你可以引用其客户端软件包,并通过提供的接口轻松使用API.
 
-For that purpose, `BackendAdminAppHostModule` class declares dependencies for `AbpIdentityHttpApiClientModule` and `ProductManagementHttpApiClientModule`.
+为此`BackendAdminAppHostModule`类声明了`AbpIdentityHttpApiClientModule`和`ProductManagementHttpApiClientModule`的依赖关系.
 
-Once you refer these client packages, you can directly inject an application service interface (e.g. `IIdentityUserAppService`) and use its methods like a local method call. It actually invokes remote service calls over HTTP to the related service endpoint.
+一旦引用这些客户端软件包,就可以直接注入应用程序服务接口(例如`IIdentityUserAppService`)并使用其方法,如本地方法调用. 它实际上通过HTTP调用到相关服务端点的远程服务调用.
 
-##### Passing the Access Token
+##### 传递访问令牌(Access Token)
 
-Since microservices requires authentication & authorization, each remote service call should contain an Authentication header. This header is obtained from the `access_token` inside the current `HttpContext` for the current user. This is automatically done when you use the `Volo.Abp.Http.Client.IdentityModel` package. `BackendAdminAppHostModule` declares dependencies to this package and to the related `AbpHttpClientIdentityModelModule` class. It is integrated to the HTTP Clients explained above.
+由于微服务需要身份验证和授权,因此每个远程服务调用都应包含Authentication头. 该头是从当前用户的当前`HttpContext`中的`access_token`获得的. 当你使用`Volo.Abp.Http.Client.IdentityModel`包时,会自动执行此操作. `BackendAdminAppHostModule`声明对此包和相关的`AbpHttpClientIdentityModelModule`类的依赖. 它集成到上面解释的HTTP客户端.
 
-#### Dependencies
+#### 依赖
 
-- **Redis** for distributed/shared caching.
-- **Elasticsearch** for storing logs.
+- **Redis** 用于分布式/共享缓存.
+- **Elasticsearch** 用于存储日志.
 
-### Public Web Site (PublicWebSite.Host)
+### 公共网站 (PublicWebSite.Host)
 
-This is a public web site project that has a web blog and product list page.
+这是一个公共网站项目,具有Web博客和产品列表页面.
 
-#### Authentication
+#### 认证
 
-PublicWebSite can show blog posts and product list without login. If you login, you can also manage blogs. It redirects to the AuthServer for authentication. Once the user enters a correct username & password, the page is redirected to the public web site application again. Authentication configuration is setup in the `PublicWebSiteHostModule` class:
+公共网站可以在不登录的情况下显示博客文章和产品列表. 如果你登录,你还可以管理博客. 它重定向到AuthServer进行身份验证. 用户输入正确的用户名和密码后,页面将再次重定向到公共网站应用程序. 身份验证配置在`PublicWebSiteHostModule`类中设置:
 
 ```charp
 context.Services.AddAuthentication(options =>
@@ -363,12 +378,12 @@ context.Services.AddAuthentication(options =>
 });
 ```
 
-- It adds "Cookies" authentication as the primary authentication type.
-- "oidc" authentication is configured to use the AuthServer application as the authentication server.
-- It requires the additional identity scopes *role*, *email* and *phone*.
-- It requires the API resource scopes *PublicWebSiteGateway*, *BloggingService* and *ProductService* because it will use these services as APIs.
+- 它将"Cookies"身份验证添加为主要身份验证类型.
+- "oidc"身份验证配置为使用AuthServer应用程序作为身份验证服务器.
+- 它需要额外的身份范围 *role*, *email* and *phone*.
+- 它需要API资源范围 *PublicWebSiteGateway*,*BloggingService*和*ProductService*,因为它将这些服务用作API.
 
-IdentityServer client settings are stored inside the `appsettings.json` file:
+IdentityServer客户端设置存储在`appsettings.json`文件中：
 
 ```json
 "AuthServer": {
@@ -378,21 +393,22 @@ IdentityServer client settings are stored inside the `appsettings.json` file:
 }
 ```
 
-#### User Interface
+#### 用户界面
 
-The PublicWebSite.Host project has a page to list products (`Pages/Products.cshtml`). It also uses the UI from the blogging module. `PublicWebSiteHostModule` adds dependencies to `BloggingWebModule` (*[Volo.Blogging.Web](https://www.nuget.org/packages/Volo.Blogging.Web)* package) for that purpose.
+PublicWebSite.Host项目有一个列出产品的页面 (`Pages/Products.cshtml`). 它还使用博客模块中的UI. 为此`PublicWebSiteHostModule`加入了`BloggingWebModule`(*[Volo.Blogging.Web](https://www.nuget.org/packages/Volo.Blogging.Web)* 包)的依赖项.
 
-A screenshot from the Products page:
+产品页面的屏幕截图：
 
 ![microservice-sample-public-product-list](../images/microservice-sample-public-product-list.png)
 
-#### Using Microservices
+#### 使用微服务
 
-Publc web site application uses the Blogging and Product microservices for all operations, over the Public  Web Site Gateway (PublicWebSiteGateway.Host).
+公共网站应用程序使用Blogging和Product微服务通过公共网站网关进行所有操作(PublicWebSiteGateway.Host).
 
-##### Remote End Point
+##### 远程端点
 
-`appsettings.json` file contains the `RemoteServices` section to declare the remote service endpoint(s). Each microservice will normally have different endpoints. However, this solution uses the API Gateway pattern to provide a single endpoint for the applications:
+
+`appsettings.json`文件包含`RemoteServices`部分,用于声明远程服务端点. 每个微服务通常都有不同的端点. 但是,此解决方案使用API网关模式为应用程序提供单个端点:
 
 ```json
 "RemoteServices": {
@@ -402,28 +418,28 @@ Publc web site application uses the Blogging and Product microservices for all o
 }
 ```
 
-`http://localhost:64897/` is the URL of the *PublicWebSiteGateway.Host* project. It knows where are Blogging and Product services are located.
+`http://localhost:64897/` 是*PublicWebSiteGateway.Host*项目的URL. 它知道Blogging和产品服务的位置.
 
 ##### HTTP Clients
 
-`PublicWebSiteHostModule` class declares dependencies for `BloggingHttpApiClientModule` and `ProductManagementHttpApiClientModule` to be able to use remote HTTP APIs for these services.
+`PublicWebSiteHostModule`类声明`BloggingHttpApiClientModule`和`ProductManagementHttpApiClientModule`的依赖关系,以便能够为这些服务使用远程HTTP API.
 
-##### Passing the Access Token
+##### 传递访问令牌(Access Token)
 
-Just like explained in the Backend Admin Application section, Public Web Site project also uses the `AbpHttpClientIdentityModelModule` to pass `access_token` to the calling services for authentication.
+正如后端管理应用程序部分中所述, Public Web Site项目还使用`AbpHttpClientIdentityModelModule`将`access_token`传递给调用服务进行身份验证.
 
 #### Dependencies
 
-- **Redis** for distributed/shared caching.
-- **Elasticsearch** for storing logs.
+- **Redis** 用于分布式/共享缓存.
+- **Elasticsearch** 用于存储日志.
 
-### Console Client Demo
+### 控制台客户端演示
 
-Finally, the solution includes a very simple console application, named ConsoleClientDemo, that uses Identity and Product services by authenticating through the AuthServer. It uses the Internal Gateway (InternalGateway.Host) to perform HTTP API calls.
+最后,该解决方案包括一个非常简单的控制台应用程序,名为ConsoleClientDemo,它通过AuthServer进行身份验证来使用Identity和Product服务. 它使用内部网关(InternalGateway.Host)来执行HTTP API调用.
 
-#### Remote Service Configuration
+#### 远程服务配置
 
-`RemoteService` configuration in the `appsettings.json` file is simple:
+`appsettings.json`文件中的`RemoteService`配置很简单：
 
 ````json
 "RemoteServices": {
@@ -433,11 +449,11 @@ Finally, the solution includes a very simple console application, named ConsoleC
 }
 ````
 
-`http://localhost:65129/` is the URL of the Internal Gateway. All API calls to the services are performed over this URL.
+`http://localhost:65129/` 是内部网关的URL. 对服务的所有API调用都是通过此URL执行的.
 
-#### Authentication (IdentityServer Client) Configuration
+#### 身份验证(IdentityServer客户端)配置
 
-`appsettings.json` also has a configuration for the IdentityServer authentication:
+`appsettings.json`还有一个IdentityServer身份验证配置:
 
 ````json
 "IdentityClients": {
@@ -451,7 +467,7 @@ Finally, the solution includes a very simple console application, named ConsoleC
 }
 ````
 
-This sample uses the `client_credentials` grant type which requires a `ClientId` and `ClientSecret` for the authentication process. There are also [other grant types](http://docs.identityserver.io/en/latest/topics/grant_types.html). For example, you can use the following configuration to swith to the `password` (Resource Owner Password) grant type:
+此示例使用`client_credentials` 授予类型,该类型需要`ClientId`和`ClientSecret`进行身份验证过程. 还有[其他授予类型](http://docs.identityserver.io/en/latest/topics/grant_types.html). 例如, 你可以使用以下配置切换到`password`(Resource Owner Password)授予类型：
 
 ````json
 "IdentityClients": {
@@ -467,33 +483,33 @@ This sample uses the `client_credentials` grant type which requires a `ClientId`
 }
 ````
 
-Resource Owner Password requires a `UserName` & `UserPassword` in addition to client credentials. This grant type is useful to call remote services on behalf of a user.
+除客户端凭据外,Resource Owner Password还需要`UserName` 和 `UserPassword`. 此授权类型对于代表用户调用远程服务很有用.
 
-`Scope` declares the APIs (and the gateway) to grant access. This application uses the Internal Gateway.
+`Scope` 声明API(和网关)以授予访问权限. 此应用程序使用内部网关.
 
-#### HTTP Client Dependencies
+#### HTTP Client依赖
 
-`ConsoleClientDemoModule` has dependencies to `AbpIdentityHttpApiClientModule` and `ProductManagementHttpApiClientModule` in order to use Identity and Product APIs. It also has `AbpHttpClientIdentityModelModule` dependency to authenticate via IdentityServer.
+`ConsoleClientDemoModule`与`AbpIdentityHttpApiClientModule`和`ProductManagementHttpApiClientModule`有依赖关系,以便使用Identity和Product API. 它还具有“AbpHttpClientIdentityModelModule”依赖性,可通过IdentityServer进行身份验证.
 
-#### Using the Services
+#### 使用服务
 
-Using the services is straightforward. See the `ClientDemoService` class which simply injects `IIdentityUserAppService` and `IProductAppService` and uses them. This class also shows a manual HTTP call using an `HttpClient` object. See source code of the `ClientDemoService` for details.
+使用这些服务非常简单. 请参阅`ClientDemoService`类,它只是注入`IIdentityUserAppService`和`IProductAppService`并使用它们. 该类还显示了使用`HttpClient`对象的手动HTTP调用. 有关详细信息,请参阅`ClientDemoService`的源代码.
 
-## API Gateways / BFFs (Backend for Frontend)
+## API网关/ BFF(前端后端)
 
-Gateways are used to provide a **single entry point** to the applications. In this way, an application only deal with a single service address (API endpoint) instead of a different addresses for each services. Gateways are also used for rate limiting, security, authentication, load balancing and many more requirements.
+网关用于为应用程序提供 **单一入口点**. 通过这种方式,应用程序仅处理单个服务地址(API端点),而不是每个服务的不同地址. 网关还用于速率限制,安全性,身份验证,负载平衡和更多要求.
 
-"**Backend for Frontend**" (BFF) is a common architectural pattern which offers to build a **dedicated and specialized** gateway for each different application / client type. This solution uses this pattern and has multiple gateways.
+"**后端前端**"(BFF)是一种常见的架构模式,可为每种不同的应用程序/客户端类型构建**专注而专业的**网关. 此解决方案使用此模式并具有多个网关.
 
-This solution uses the [Ocelot](https://github.com/ThreeMammals/Ocelot) library to build API Gateways. It's a widely accepted API Gateway library for ASP.NET Core.
+此解决方案使用[Ocelot](https://github.com/ThreeMammals/Ocelot)库来构建API网关. 它是ASP.NET核心广泛接受的API网关库.
 
-### Backend Admin Application Gateway (BackendAdminAppGateway.Host)
+### 后端管理应用程序网关 (BackendAdminAppGateway.Host)
 
-This is backend (server side API) for the "Backend Admin Application" (don't confuse about the naming; Backend Admin Application is a frontend web application actually, but used by system admins rather than regular users).
+这是"后端管理应用程序"的后端(服务器端API)(不要混淆命名;后端管理应用程序实际上是前端Web应用程序,但系统管理员而不是普通用户使用).
 
-#### Authentication
+#### 认证
 
-This gateway uses IdentityServer `Bearer` authentication and configured like that:
+此网关使用IdentityServer `Bearer`身份验证并配置如下:
 
 ````csharp
 context.Services.AddAuthentication("Bearer")
@@ -513,9 +529,9 @@ context.Services.AddAuthentication("Bearer")
 });
 ````
 
-`AddIdentityServerAuthentication` extension method comes from the [IdentityServer4.AccessTokenValidation](https://www.nuget.org/packages/IdentityServer4.AccessTokenValidation) package, part of the IdentityServer4 project (see [its documentation](http://docs.identityserver.io/en/latest/topics/apis.html)). 
+`AddIdentityServerAuthentication` 扩展方法来自 [IdentityServer4.AccessTokenValidation](https://www.nuget.org/packages/IdentityServer4.AccessTokenValidation) 包, IdentityServer4项目的一部分 (参见 [identityserver文档](http://docs.identityserver.io/en/latest/topics/apis.html)). 
 
-`ApiName` is the API which is being protected, `BackendAdminAppGateway` in this case. So, this solution defines gateways as API resources. Rest of the configuration is related to claims mapping (which is planned to be automated in next ABP versions). The configuration related to authentication in the `appsettings.json` is simple:
+`ApiName`是受保护的API,在这种情况下是`BackendAdminAppGateway`. 因此,此解决方案将网关定义为API资源. 其余配置与声明映射(计划在下一个ABP版本中自动化)相关. `appsettings.json`中的身份验证相关的配置很简单:
 
 ````json
 "AuthServer": {
@@ -524,9 +540,9 @@ context.Services.AddAuthentication("Bearer")
 }
 ````
 
-#### Ocelot Configuration
+#### Ocelot配置
 
-Ocelot needs to know the real URLs of the microservices to be able to redirect HTTP requests. The configuration for this gateway is like below:
+Ocelot需要知道微服务的真实URL才能重定向HTTP请求. 此网关的配置如下所示:
 
 ````json
 "ReRoutes": [
@@ -560,26 +576,28 @@ Ocelot needs to know the real URLs of the microservices to be able to redirect H
 }
 ````
 
-`ReRoutes` is an array of URL mappings. `BaseUrl` in the `GlobalConfiguration` section is the URL of this gateway (Ocelot needs to know its own URL). See [its own documentation](https://ocelot.readthedocs.io/en/latest/features/configuration.html) to better understand the configuration.
+`ReRoutes`是一个URL映射数组. `GlobalConfiguration`部分中的`BaseUrl`是该网关的URL(Ocelot需要知道自己的URL). 参见 [ocelot文档](https://ocelot.readthedocs.io/en/latest/features/configuration.html) 更好地了解配置.
 
 Ocelot is a finalizer ASP.NET Core middleware and should be written as the last item in the pipeline:
+
+Ocelot是一个终结ASP.NET核心中间件,应该写成管道中的最后一项:
 
 ````csharp
 app.UseOcelot().Wait();
 ````
 
-It handles and redirects requests based on the configuration above. 
+它根据上面的配置处理和重定向请求.
 
-#### ABP Configuration Endpoints
+#### ABP 配置端点
 
-ABP provides some built-in APIs to get some configuration and information from the server. Examples:
+ABP提供了一些内置API,以从服务器获取一些配置和信息. 例子:
 
-* `/api/abp/application-configuration` returns localization texts, permission and setting values (try http://localhost:65115/api/abp/application-configuration for this gateway).
-* `/Abp/ServiceProxyScript` returns dynamic javascript proxies to call services from a javascript client (try http://localhost:65115/Abp/ServiceProxyScript for this gateway).
+* `/api/abp/application-configuration` 返回本地化文本,权限和设置值 (http://localhost:65115/api/abp/application-configuration).
+* `/Abp/ServiceProxyScript` 返回动态javascript代理以从javascript客户端调用服务 (http://localhost:65115/Abp/ServiceProxyScript ).
 
-These endpoints should be served by the gateway service, not by microservices. A microservice can only know permissions related to that microservice. But, once properly configured, gateway can aggregate permission values for multiple services as a single list which is more suitable for clients.
+这些端点应由网关服务提供,而不是由微服务提供. 微服务只能知道与该微服务相关的权限. 但是,一旦正确配置,网关就可以将多个服务的权限值聚合为一个更适合客户端的列表.
 
-For this purpose, the ASP.NET Core pipeline was configured to handle some specific routes via MVC, instead of Ocelot. To make this possible, MapWhen extension method is used like that:
+为此, ASP.NET Core管道配置为通过MVC而不是Ocelot处理某些特定路由. 为了实现这一点,MapWhen扩展方法使用如下:
 
 ````csharp
 app.MapWhen(ctx => ctx.Request.Path.ToString().StartsWith("/api/abp/") || 
@@ -592,33 +610,33 @@ app.MapWhen(ctx => ctx.Request.Path.ToString().StartsWith("/api/abp/") ||
 app.UseOcelot().Wait();
 ````
 
-This configuration uses standard MVC middleware when request path starts with `/api/abp/` or `/Abp/`.
+当请求路径以 `/api/abp/` 或 `/Abp/`.开头时,此配置使用标准MVC中间件.
 
 #### Swagger
 
-This gateway is configured to use the [swagger UI](https://swagger.io/tools/swagger-ui/), a popular tool to discover & test HTTP APIs. Normally, Ocelot does not support to show APIs on the swagger, because it can not know details of each microservice API. But it is possible when you follow ABP layered module architecture [best practices](../Best-Practices/Index.md).
+此网关配置为使用[swagger UI](https://swagger.io/tools/swagger-ui/), 这是一种用于发现和测试HTTP API的流行工具. 通常,Ocelot不支持在swagger上显示API,因为它无法了解每个微服务API的详细信息. 但是当你遵循ABP分层模块架构[最佳实践](../Best-Practices/Index.md)时,它是可能的.
 
-`BackendAdminAppGatewayHostModule` adds dependency to `AbpIdentityHttpApiModule` (*[Volo.Abp.Identity.HttpApi](https://www.nuget.org/packages/Volo.Abp.Identity.HttpApi)* package) and `ProductManagementHttpApiModule` (*ProductManagement.HttpApi* project) to include their HTTP API Controllers. In this way, swagger can discover them. While it references to the API layer, it does not reference to the implementation of application services, because they will be running in the related microservice endpoints and redirected by the Ocelot based on the request URL.
+`BackendAdminAppGatewayHostModule`将依赖性添加到`AbpIdentityHttpApiModule`(*[Volo.Abp.Identity.HttpApi](https://www.nuget.org/packages/Volo.Abp.Identity.HttpApi)* 包)和`ProductManagementHttpApiModule`(*ProductManagement.HttpApi* 项目)以包含它们的HTTP API控制器. 通过这种方式,swagger可以发现它们. 虽然它引用了API层,但它没有引用应用程序服务的实现,因为它们将在相关的微服务端点中运行,并由Ocelot根据请求URL重定向.
 
-Anyway, when you open the URL `http://localhost:65115/swagger/index.html`, you will see APIs of all configured microservices.
+无论如何,当你打开URL`http://localhost:65115/swagger/index.html`时, 你将看到所有已配置的微服务的API.
 
-#### Permission Management
+#### 权限管理
 
-Backend Admin Application provides a permission management UI (seen before) and uses this gateway to get/set permissions. Permission management API is hosted inside the gateway, instead of a separate service. This is a design decision, but it could be hosted as another microservice if you would like.
+后端管理应用程序提供权限管理UI(之前见过),并使用此网关获取/设置权限. 权限管理API托管在网关内,而不是单独的服务. 这是一个设计决策,但如果您愿意,它可以作为另一个微服务托管.
 
 #### Dependencies
 
-- **RabbitMQ** for messaging to other services.
-- **Redis** for distributed/shared caching.
-- **Elasticsearch** for storing logs.
+- **RabbitMQ** 用于向其他服务发送消息.
+- **Redis** 用于分布式/共享缓存.
+- **Elasticsearch** 用于存储日志.
 
-### Public Web Site Gateway (PublicWebSiteGateway.Host)
+### 公共网站网关 (PublicWebSiteGateway.Host)
 
-This is backend (server side API gateway) for the "Public Web Site" application.
+这是"公共网站"应用程序的后端(服务器端API网关).
 
-#### Authentication
+#### 认证
 
-This gateway uses IdentityServer `Bearer` authentication and configured like that:
+此网关使用IdentityServer `Bearer`身份验证并配置如下:
 
 ```csharp
 context.Services.AddAuthentication("Bearer")
@@ -638,9 +656,9 @@ context.Services.AddAuthentication("Bearer")
 });
 ```
 
-`AddIdentityServerAuthentication` extension method comes from the [IdentityServer4.AccessTokenValidation](https://www.nuget.org/packages/IdentityServer4.AccessTokenValidation) package, part of the IdentityServer4 project (see [its documentation](http://docs.identityserver.io/en/latest/topics/apis.html)). 
+`AddIdentityServerAuthentication` 扩展方法来自 [IdentityServer4.AccessTokenValidation](https://www.nuget.org/packages/IdentityServer4.AccessTokenValidation)包, IdentityServer4项目的一部分 (参见 [identityserver文档](http://docs.identityserver.io/en/latest/topics/apis.html)). 
 
-`ApiName` is the API which is being protected, `PublicWebSiteGateway` in this case. Rest of the configuration is related to claims mapping (which is planned to be automated in next ABP versions). The configuration related to authentication in the `appsettings.json` is simple:
+`ApiName`是受保护的API,在这种情况下是`PublicWebSiteGateway`. 其余配置与声明映射(计划在下一个ABP版本中自动化)相关. 与`appsettings.json`中的身份验证相关的配置很简单:
 
 ```json
 "AuthServer": {
@@ -649,9 +667,9 @@ context.Services.AddAuthentication("Bearer")
 }
 ```
 
-#### Ocelot Configuration
+#### Ocelot配置
 
-Ocelot needs to know the real URLs of the microservices to be able to redirect HTTP requests. The configuration for this gateway is like below:
+Ocelot需要知道微服务的真实URL才能重定向HTTP请求. 此网关的配置如下所示:
 
 ```json
 "ReRoutes": [
@@ -685,25 +703,25 @@ Ocelot needs to know the real URLs of the microservices to be able to redirect H
 }
 ```
 
-See [its own documentation](https://ocelot.readthedocs.io/en/latest/features/configuration.html) to better understand the Ocelot configuration.
+参见 [ocelot文档](https://ocelot.readthedocs.io/en/latest/features/configuration.html) 更好地了解配置.
 
-#### Other
+#### 其它
 
-See the "ABP Configuration Endpoints" and "Swagger" topics inside the "Backend Admin Application Gateway" section which are very similar for this gateway.
+请参阅"后端管理应用程序网关"部分中的"ABP配置端点"和"Swagger"主题,这些主题与此网关非常相似.
 
-#### Dependencies
+#### 依赖
 
-- **RabbitMQ** for messaging to other services.
-- **Redis** for distributed/shared caching.
-- **Elasticsearch** for storing logs.
+- **RabbitMQ** 用于向其他服务发送消息.
+- **Redis** 用于分布式/共享缓存.
+- **Elasticsearch** 用于存储日志.
 
-### Internal Gateway (InternalGateway.Host)
+### 内部网关 (InternalGateway.Host)
 
-This gateway is not a BFF. It is designed for inter-microservice communication and is not exposed publicly.
+该网关不是BFF. 它专为微服务间通信而设计,不会公开.
 
-#### Authentication
+#### 认证
 
-This gateway uses IdentityServer `Bearer` authentication and configured like that:
+此网关使用IdentityServer `Bearer`身份验证并配置如下:
 
 ```csharp
 context.Services.AddAuthentication("Bearer")
@@ -722,9 +740,9 @@ context.Services.AddAuthentication("Bearer")
 });
 ```
 
-`AddIdentityServerAuthentication` extension method comes from the [IdentityServer4.AccessTokenValidation](https://www.nuget.org/packages/IdentityServer4.AccessTokenValidation) package, part of the IdentityServer4 project (see [its documentation](http://docs.identityserver.io/en/latest/topics/apis.html)). 
+`AddIdentityServerAuthentication` 扩展方法来自 [IdentityServer4.AccessTokenValidation](https://www.nuget.org/packages/IdentityServer4.AccessTokenValidation)包, IdentityServer4项目的一部分 (参见 [identityserver文档](http://docs.identityserver.io/en/latest/topics/apis.html)).
 
-`ApiName` is the API which is being protected, `InternalGateway` in this case. Rest of the configuration is related to claims mapping (which is planned to be automated in next ABP versions). The configuration related to authentication in the `appsettings.json` is simple:
+`ApiName`是受保护的API,在这种情况下是`InternalGateway`. 其余配置与声明映射(计划在下一个ABP版本中自动化)相关. 与`appsettings.json`中的身份验证相关的配置很简单:
 
 ```json
 "AuthServer": {
@@ -733,9 +751,9 @@ context.Services.AddAuthentication("Bearer")
 }
 ```
 
-#### Ocelot Configuration
+#### Ocelot 配置
 
-Ocelot needs to know the real URLs of the microservices to be able to redirect HTTP requests. The configuration for this gateway is like below:
+Ocelot需要知道微服务的真实URL才能重定向HTTP请求. 此网关的配置如下所示:
 
 ```json
 "ReRoutes": [
@@ -781,47 +799,47 @@ Ocelot needs to know the real URLs of the microservices to be able to redirect H
 }
 ```
 
-`ReRoutes` configuration covers all microservices in the system. See [its own documentation](https://ocelot.readthedocs.io/en/latest/features/configuration.html) to better understand the Ocelot configuration.
+`ReRoutes`配置涵盖了系统中的所有微服务. 参见 [ocelot文档](https://ocelot.readthedocs.io/en/latest/features/configuration.html) 更好地了解配置.
 
-#### Other
+#### 其它
 
-See the "ABP Configuration Endpoints" and "Swagger" topics inside the "Backend Admin Application Gateway" section which are very similar for this gateway.
+请参阅"后端管理应用程序网关"部分中的"ABP配置端点"和"Swagger"主题,这些主题与此网关非常相似.
 
-#### Dependencies
+#### 依赖
 
-- **RabbitMQ** for messaging to other services.
-- **Redis** for distributed/shared caching.
-- **Elasticsearch** for storing logs.
+- **RabbitMQ** 用于向其他服务发送消息.
+- **Redis** 用于分布式/共享缓存.
+- **Elasticsearch** 用于存储日志.
 
-## Microservices
+## 微服务
 
-Microservices are standalone HTTP APIs those implement the business of the system in a distributed manner.
+微服务是独立的HTTP API,它们以分布式方式实现系统业务.
 
-* They are used by applications and other microservices through the gateways and HTTP APIs.
-* They can raise or register to events in the system.
-* They can communicate to each other via asynchronous messaging.
+* 它们由应用程序和其他微服务通过网关和HTTP API使用.
+* 他们可以提升或注册系统中的事件.
+* 它们可以通过异步消息传递相互通信.
 
 ### Identity Service (IdentityService.Host)
 
-This service provides user and role management APIs.
+此服务提供用户和角色管理API.
 
-#### Database
+#### 数据库
 
-Shares the same database (MsDemo_Identity) with the AuthServer application.
+与AuthServer应用程序共享相同的数据库(MsDemo_Identity).
 
-#### Identity Module
+#### Identity模块
 
-This service actually just hosts the ABP Identity package/module. Does not include any API itself. In order to host it, adds the following dependencies:
+该服务实际上只托管ABP身份包/模块. 不包含任何API本身. 为了托管它,添加以下依赖项:
 
-* `AbpIdentityHttpApiModule` (*[Volo.Abp.Identity.HttpApi](https://www.nuget.org/packages/Volo.Abp.Identity.HttpApi)* package) to provide Identity APIs.
-* `AbpIdentityApplicationModule` (*[Volo.Abp.Identity.Application](https://www.nuget.org/packages/Volo.Abp.Identity.Application)* package) to host the implementation of the application and domain layers of the module.
-* `AbpIdentityEntityFrameworkCoreModule` (*[Volo.Abp.Identity.EntityFrameworkCore](https://www.nuget.org/packages/Volo.Abp.Identity.EntityFrameworkCore)* package) to use EF Core as database API.
+* `AbpIdentityHttpApiModule` (*[Volo.Abp.Identity.HttpApi](https://www.nuget.org/packages/Volo.Abp.Identity.HttpApi)* 包) 提供身份API.
+* `AbpIdentityApplicationModule` (*[Volo.Abp.Identity.Application](https://www.nuget.org/packages/Volo.Abp.Identity.Application)* 包)承载模块的应用程序和域层的实现.
+* `AbpIdentityEntityFrameworkCoreModule` (*[Volo.Abp.Identity.EntityFrameworkCore](https://www.nuget.org/packages/Volo.Abp.Identity.EntityFrameworkCore)* 包) 使用EF Core作为数据库API.
 
-See the [module architecture best practice guide](../Best-Practices/Module-Architecture) to understand the layering better.
+请参阅[module architecture best practice guide](../Best-Practices/Module-Architecture)以更好地理解分层.
 
-#### Authentication
+#### 认证
 
-This microservice uses IdentityServer `Bearer` authentication and configured like that:
+这个微服务使用IdentityServer`Bearer`身份验证,并配置如下:
 
 ```csharp
 context.Services.AddAuthentication("Bearer")
@@ -841,7 +859,7 @@ context.Services.AddAuthentication("Bearer")
 });
 ```
 
-`ApiName` is the API which is being protected, `IdentityService` in this case. Rest of the configuration is related to claims mapping (which is planned to be automated in next ABP versions). The configuration related to authentication in the `appsettings.json` is simple:
+`ApiName`是受保护的API,在这种情况下是`IdentityService`. 其余配置与声明映射(计划在下一个ABP版本中自动化)相关. 与`appsettings.json`中的身份验证相关的配置很简单:
 
 ```json
 "AuthServer": {
@@ -852,21 +870,21 @@ context.Services.AddAuthentication("Bearer")
 
 #### Swagger
 
-Swagger UI is configured and is the default page for this service. If you navigate to the URL `http://localhost:63568/`, you are redirected to the swagger page to see and test the API.
+Swagger UI已配置,是此服务的默认页面. 如果你导航到URL`http://localhost:63568/`, 你将被重定向到swagger页面以查看和测试API.
 
-#### Dependencies
+#### 依赖
 
-- **RabbitMQ** for messaging to other services.
-- **Redis** for distributed/shared caching.
-- **Elasticsearch** for storing logs.
+- **RabbitMQ** 用于向其他服务发送消息.
+- **Redis** 用于分布式/共享缓存.
+- **Elasticsearch** 用于存储日志.
 
-### Blogging Service (BloggingService.Host)
+### 博客服务 (BloggingService.Host)
 
-This service hosts the blogging API.
+此服务托管博客API.
 
-#### Database
+#### 数据库
 
-It has a dedicated MongoDB database (MsDemo_Blogging) to store blog and posts. It also uses the MsDemo_Identity SQL database for audit logs, permissions and settings. So, there are two connection strings in the `appsettings.json` file:
+它有一个专门的MongoDB数据库(MsDemo_Blogging)来存储博客和帖子. 它还使用MsDemo_Identity SQL数据库来审核日志,权限和设置. 因此,`appsettings.json`文件中有两个连接字符串:
 
 ````json
 "ConnectionStrings": {
@@ -875,19 +893,19 @@ It has a dedicated MongoDB database (MsDemo_Blogging) to store blog and posts. I
 }
 ````
 
-#### Blogging Module
+#### 博客模块
 
-This service actually just hosts the ABP Blogging package/module. Does not include any API itself. In order to host it, adds the following dependencies:
+该服务实际上只托管ABP Blogging包/模块. 不包含任何API本身. 为了托管它,添加以下依赖项:
 
-- `BloggingHttpApiModule` (*[Volo.Blogging.HttpApi](https://www.nuget.org/packages/Volo.Blogging.HttpApi)* package) to provide Blogging APIs.
-- `BloggingApplicationModule` (*[Volo.Blogging.Application](https://www.nuget.org/packages/Volo.Blogging.Application)* package) to host the implementation of the application and domain layers of the module.
-- `BloggingMongoDbModule` (*[Volo.Blogging.MongoDB](https://www.nuget.org/packages/Volo.Abp.Identity.EntityFrameworkCore)* package) to use MongoDB as the database.
+- `BloggingHttpApiModule` (*[Volo.Blogging.HttpApi](https://www.nuget.org/packages/Volo.Blogging.HttpApi)* 包) 提供Blogging API.
+- `BloggingApplicationModule` (*[Volo.Blogging.Application](https://www.nuget.org/packages/Volo.Blogging.Application)* 包) 承载模块的应用程序和域层的实现.
+- `BloggingMongoDbModule` (*[Volo.Blogging.MongoDB](https://www.nuget.org/packages/Volo.Abp.Identity.EntityFrameworkCore)* 包) 使用MongoDB作为数据库.
 
-See the [module architecture best practice guide](../Best-Practices/Module-Architecture) to understand the layering better.
+请参阅[module architecture best practice guide](../Best-Practices/Module-Architecture)以更好地理解分层.
 
-#### Authentication
+#### 认证
 
-This microservice uses IdentityServer `Bearer` authentication and configured like that:
+这个微服务使用IdentityServer `Bearer`身份验证,并配置如下:
 
 ```csharp
 context.Services.AddAuthentication("Bearer")
@@ -907,7 +925,7 @@ context.Services.AddAuthentication("Bearer")
 });
 ```
 
-`ApiName` is the API which is being protected, `BloggingService` in this case. Rest of the configuration is related to claims mapping (which is planned to be automated in next ABP versions). The configuration related to authentication in the `appsettings.json` is simple:
+`ApiName`是受保护的API,在这种情况下是`BloggingService`. 其余配置与声明映射(计划在下一个ABP版本中自动化)相关.与`appsettings.json`中的身份验证相关的配置很简单:
 
 ```json
 "AuthServer": {
@@ -918,7 +936,7 @@ context.Services.AddAuthentication("Bearer")
 
 #### IdentityServer Client
 
-This microservice also uses the Identity microservice API through the Internal Gateway, because it needs to query user details (username, email, phone, name and surname) in some cases. So, it is also a client for the IdentityServer and defines a section in the `appsettings.json` file for that:
+此微服务还通过内部网关使用Identity微服务API, 因为在某些情况下它需要查询用户详细信息(username, email, phone, name and surname). 因此,它也是IdentityServer的客户端,并在`appsettings.json`文件中定义了一个部分:
 
 ````json
 "IdentityClients": {
@@ -932,7 +950,7 @@ This microservice also uses the Identity microservice API through the Internal G
 }
 ````
 
-Since it uses the Internal Gateway, it should also configure the remote endpoint of the gateway:
+由于它使用内部网关, 因此它还应配置网关的远程端点:
 
 ````json
 "RemoteServices": {
@@ -943,31 +961,31 @@ Since it uses the Internal Gateway, it should also configure the remote endpoint
 }
 ````
 
-When you set `UseCurrentAccessToken` to `false`, ABP ignores the current `access_token` in the current `HttpContext` and authenticates to the AuthServer with the credentials defined above.
+当你将`UseCurrentAccessToken`设置为`false`时,ABP会忽略当前`HttpContext`中的当前`access_token`,并使用上面定义的凭据对AuthServer进行身份验证.
 
-Why not using the token of the current user in the current request? Because, the user may not have required permissions on the Identity module, so it can not just pass the current authentication token directly to the Identity service. In addition, some of the blog service APIs are anonymous (not requires authenticated user), so in some cases there is no "current user" in the HTTP request. For these reasons, Blogging service should be defined as a client for the Identity service with its own credentials and permissions.
+为什么不在当前请求中使用当前用户的令牌? 因为,用户可能没有Identity模块所需的权限,因此它不能直接将当前身份验证令牌传递给Identity服务. 此外,某些博客服务API是匿名的(不需要经过身份验证的用户),因此在某些情况下,HTTP请求中没有"当前用户". 出于这些原因,应将Blogging服务定义为具有自己的凭据和权限的Identity服务的客户端.
 
-If you check the `AbpPermissionGrants` table in the `MsDemo_Identity` database, you can see the related permission for the `blogging-service-client`.
+如果检查`MsDemo_Identity`数据库中的`AbpPermissionGrants`表,则可以看到`blogging-service-client`的相关权限.
 
 ![microservice-sample-blogservice-permission-in-database](../images/microservice-sample-blogservice-permission-in-database.png)
 
 #### Swagger
 
-Swagger UI is configured and is the default page for this service. If you navigate to the URL `http://localhost:62157/`, you are redirected to the swagger page to see and test the API.
+Swagger UI已配置,是此服务的默认页面. 如果你导航到URL`http://localhost:62157/`, 你将被重定向到swagger页面以查看和测试API.
 
-#### Dependencies
+#### 依赖
 
-- **RabbitMQ** for messaging to other services.
-- **Redis** for distributed/shared caching.
-- **Elasticsearch** for storing logs.
+- **RabbitMQ** 用于向其他服务发送消息.
+- **Redis** 用于分布式/共享缓存.
+- **Elasticsearch** 用于存储日志.
 
-### Product Service (ProductService.Host)
+### 产品服务 (ProductService.Host)
 
-This service hosts the Product Management API.
+此服务托管产品管理API.
 
-#### Database & EF Core Migrations
+#### 数据库和EF核心迁移
 
-It has a separated SQL database, named **MsDemo_ProductManagement**, for the product management module. It uses EF Core as the database provider and has a DbContext named `ProductServiceMigrationDbContext`:
+它有一个单独的SQL数据库,名为**MsDemo_ProductManagement**,用于产品管理模块. 它使用EF Core作为数据库提供程序,并具有名为`ProductServiceMigrationDbContext`的DbContext:
 
 ````csharp
 public class ProductServiceMigrationDbContext : AbpDbContext<ProductServiceMigrationDbContext>
@@ -988,11 +1006,11 @@ public class ProductServiceMigrationDbContext : AbpDbContext<ProductServiceMigra
 }
 ````
 
-Actual model configuration is done inside the `modelBuilder.ConfigureProductManagement()` extension method. This project maintains the database schema using EF Core migrations.
+实际模型配置在`modelBuilder.ConfigureProductManagement()`扩展方法内完成. 此项目使用EF Core迁移维护数据库模式.
 
-Notice that this DbContext is only for database migrations. Product Management module has its own `DbContext` class that is used in the runtime (See `ProductManagementDbContext` class in the ProductManagement.EntityFrameworkCore project).
+请注意,此DbContext仅用于数据库迁移. Product Management模块有自己的`DbContext`类,它在运行时使用(参见ProductManagement.EntityFrameworkCore项目中的`ProductManagementDbContext`类).
 
-There are two connection strings in the `appsettings.json` file:
+`appsettings.json`文件中有两个连接字符串:
 
 ````json
 "ConnectionStrings": {
@@ -1001,21 +1019,21 @@ There are two connection strings in the `appsettings.json` file:
 }
 ````
 
-`Default` connection strings points to the MsDemo_Identity database that is used for audit logging, permission and setting stores. `ProductManagement` connection string is used by the product module.
+`Default`连接字符串指向MsDemo_Identity数据库,该数据库用于审计日志记录,权限和设置存储. 产品模块使用`ProductManagement`连接字符串.
 
-#### Product Module
+#### 产品模块
 
-This service actually just hosts the Product Management module. Does not include any API itself. In order to host it, adds the following dependencies:
+该服务实际上只托管产品管理模块. 不包含任何API本身. 为了托管它,添加以下依赖项:
 
-- `ProductManagementHttpApiModule` to provide product management APIs.
-- `ProductManagementApplicationModule` to host the implementation of the application and domain layers of the module.
-- `ProductManagementEntityFrameworkCoreModule` to use EF Core as database API.
+- `ProductManagementHttpApiModule` 提供产品管理API.
+- `ProductManagementApplicationModule` 承载模块的应用程序和域层的实现.
+- `ProductManagementEntityFrameworkCoreModule` 使用EF Core作为数据库API.
 
-See the [module architecture best practice guide](../Best-Practices/Module-Architecture) to understand the layering better. See the Product Management module section below for more information about this module.
+请参阅[module architecture best practice guide](../Best-Practices/Module-Architecture)以更好地理解分层. 有关此模块的更多信息,请参阅下面的"产品管理"模块部分
 
-#### Authentication
+#### 认证
 
-This microservice uses IdentityServer `Bearer` authentication and configured like that:
+这个微服务使用IdentityServer `Bearer`身份验证,并配置如下:
 
 ```csharp
 context.Services.AddAuthentication("Bearer")
@@ -1035,7 +1053,7 @@ context.Services.AddAuthentication("Bearer")
 });
 ```
 
-`ApiName` is the API which is being protected, `ProductService` in this case. Rest of the configuration is related to claims mapping (which is planned to be automated in next ABP versions). The configuration related to authentication in the `appsettings.json` is simple:
+`ApiName`是受保护的API,在这种情况下是`ProductService`. 其余配置与声明映射(计划在下一个ABP版本中自动化)相关. 与`appsettings.json`中的身份验证相关的配置很简单:
 
 ```json
 "AuthServer": {
@@ -1046,44 +1064,45 @@ context.Services.AddAuthentication("Bearer")
 
 #### Swagger
 
-Swagger UI is configured and is the default page for this service. If you navigate to the URL `http://localhost:60244/`, you are redirected to the swagger page to see and test the API.
+Swagger UI已配置,是此服务的默认页面. 如果你导航到URL`http://localhost:60244/`, 你将被重定向到swagger页面以查看和测试API.
 
-#### Dependencies
+#### 依赖
 
-- **RabbitMQ** for messaging to other services.
-- **Redis** for distributed/shared caching.
-- **Elasticsearch** for storing logs.
+- **RabbitMQ** 用于向其他服务发送消息.
+- **Redis** 用于分布式/共享缓存.
+- **Elasticsearch** 用于存储日志.
 
-## Modules
+## 模块
 
-ABP provides a strong infrastructure to make modular application development easier by providing services and architecture (see the [module development best practices guide](../Best-Practices/Index.md)).
+ABP提供强大的基础架构,通过提供服务和架构,使模块化应用程序开发更容易(参见[模块开发最佳实践指南](../Best-Practices/Index.md)).
 
-This solution demonstrate how to use [prebuilt application modules](../Modules/Index.md) in a distributed architecture. The solution also includes a simple "Product Management" module to show the implementation of a well layered module example.
+此解决方案演示了如何在分布式体系结构中使用[预构建的应用程序模块](../Modules/Index.md). 该解决方案还包括一个简单的"产品管理"模块,用于显示分层模块示例的实现.
 
-### Product Management
+### 产品管理
 
-Product Management is a module that consists of several layers and packages/projects:
+产品管理是一个由多个层和包/项目组成的模块:
 
 ![microservice-sample-product-module-in-solution](../images/microservice-sample-product-module-in-solution.png)
 
-* `ProductManagement.Domain.Shared` contains constants and types shared among all layers.
-* `ProductManagement.Domain` contains the domain logic and defines entities, domain services, domain events, business/domain exceptions.
-* `ProductManagement.Application.Contracts` contains application service interfaces and DTOs.
-* `ProductManagement.Application` contains the implementation of application services.
-* `ProductManagement.EntityFrameworkCore` contains DbConext and other EF Core related classes and configuration.
-* `ProductManagement.HttpApi` contains API Controllers.
-* `ProductManagement.HttpApi.Client` contains C# proxies to directly use the HTTP API remotely. Uses [Dynamic C# API Clients](../AspNetCore/Dynamic-CSharp-API-Clients.md) feature of the ABP framework.
-* `ProductManagement.Web` contains the UI elements (pages, scripts, styles... etc).
+* `ProductManagement.Domain.Shared` 包含所有层之间共享的常量和类型.
+* `ProductManagement.Domain` 包含域逻辑并定义实体,域服务,域事件,业务/域异常.
+* `ProductManagement.Application.Contracts` 包含应用程序服务接口和DTO.
+* `ProductManagement.Application` 包含应用程序服务的实现.
+* `ProductManagement.EntityFrameworkCore` 包含DbContext和其他与EF Core相关的类和配置.
+* `ProductManagement.HttpApi` 包含API控制器.
+* `ProductManagement.HttpApi.Client` 包含C#代理以远程直接使用HTTP API. 使用ABP的[Dynamic C＃API客户端](../AspNetCore/Dynamic-CSharp-API-Clients.md)功能.
 
-By the help of this layering, it is possible to use the same module as a package reference in a monolithic application or use as a service that runs in another server. It is possible to separate UI (Web) and API layers, so they run in different servers.
+* `ProductManagement.Web` 包含UI元素(页面,脚本,样式..等).
 
-In this solution, Web layer runs in the Backend Admin Application while API layer is hosted by the Product microservice.
+通过此分层的帮助,可以在单个应用程序中使用相同的模块作为包引用,或者用作在另一个服务器中运行的服务. 可以分离UI(Web)和API层,因此它们可以在不同的服务器中运行.
 
-This tutorial will highlight some important aspects of the module. But, it's suggested to see the source code for a better understanding.
+在此解决方案中,Web层在后端管理应用程序中运行,而API层由产品微服务托管.
+
+本教程将重点介绍该模块的一些重要方面. 但是,建议查看源代码以便更好地理解.
 
 #### Domain Layer
 
-`Product` is the main [Aggregate Root](../Entities.md) of this module:
+`Product`是这个模块的主要[聚合根](../Entities.md):
 
 ````csharp
 public class Product : AuditedAggregateRoot<Guid>
@@ -1107,9 +1126,9 @@ public class Product : AuditedAggregateRoot<Guid>
 }
 ````
 
-All of its properties have private setters which prevents any direct change of the properties from out of the class. Product class ensures its own integrity and validity by its own constructors and methods.
+它的所有属性都有私有的set方法,可以防止属性从类中直接更改. 产品类通过自己的构造函数和方法确保其自身的完整性和有效性.
 
-It has two constructors:
+它有两个构造函数:
 
 ````csharp
 private Product()
@@ -1142,11 +1161,11 @@ internal Product(
 
 ````
 
-Default (**parameterless**) constructor is private and is not used in the application code. It is needed because most ORMs requires a parameterless constructor on deserializing entities while getting from the database.
+默认(**无参数**)构造函数是私有的,不在应用程序代码中使用. 这是必需的,因为大多数ORM在从数据库获取时需要在反序列化实体时使用无参数构造函数.
 
-Second constructor is **internal** that means it can only be used inside the domain layer. This enforces to use the `ProductManager` while creating a new `Product`. Because, `ProductManager` should implement a business rule on a new product creation. This constructor only requires the minimal required arguments to create a new product with some optional arguments. It checks some simple business rules to ensure that the entity is created as a valid product.
+第二个构造函数是**internal**,这意味着它只能在域层内使用. 这强制在创建新的`Product`时使用`ProductManager`. 因为``ProductManager`应该在新产品创建上实现业务规则. 此构造函数仅需要最少的必需参数来创建具有一些可选参数的新产品. 它会检查一些简单的业务规则,以确保将实体创建为有效产品.
 
-Rest of the class has methods to manipulate properties of the entity. Example:
+该类的其余部分具有操纵实体属性的方法. 例:
 
 ````csharp
 public Product SetPrice(float price)
@@ -1162,9 +1181,9 @@ public Product SetPrice(float price)
 
 ````
 
-`SetPrice` method is used to change the price of the product in a safe manner (by checking a validation rule).
+`SetPrice`方法用于以安全的方式更改产品的价格(通过检查验证规则).
 
-`SetStockCount` is another method that is used to change stock count of a product:
+`SetStockCount`是另一种用于更改产品库存数量的方法:
 
 ````csharp
 public Product SetStockCount(int stockCount)
@@ -1199,11 +1218,11 @@ private Product SetStockCountInternal(int stockCount, bool triggerEvent = true)
 
 ````
 
-This method also triggers a **distributed event** with the `ProductStockCountChangedEto` parameter (Eto is a conventional postfix stands for **E**vent **T**ransfer **O**bject, but not required) to notify listeners that stock count of a product has changed. Any subscriber can receive this event and perform an action based on that knowledge.
+此方法还触发**分布式事件**,其中带有`ProductStockCountChangedEto`参数(Eto是传统的后缀代表**E**vent **T**ransfer **O**bject,但不是必需的)通知产品库存数量的听众已发生变化. 任何订户都可以接收此事件并根据该知识执行操作.
 
-Events are distributed by RabbitMQ for this solution. But ABP is message broker independent by providing necessary abstractions (see the [Event Bus](../Event-Bus.md) document).
+RabbitMQ为此解决方案分发事件. 但是ABP通过提供必要的抽象来独立于消息代理[Event Bus](../Event-Bus.md)文档).
 
-As said before, this module forces to always use the `ProductManager` to create a new `Product`. `ProductManager` is a simple domain service defined as shown:
+如前所述,该模块强制始终使用`ProductManager`来创建新的`Product`. `ProductManager`是一个简单的域服务,定义如下:
 
 ````csharp
 public class ProductManager : DomainService
@@ -1242,13 +1261,13 @@ public class ProductManager : DomainService
 }
 ````
 
-* It checks if given code is used before. Throws `ProductCodeAlreadyExistsException` so.
-* If uses the `GuidGenerator` (`IGuidGenerator`) service to create a new `Guid`.
-* It inserts the entity to the repository.
+* 它检查之前是否使用过给定的代码. 否则抛出`ProductCodeAlreadyExistsException`.
+* 使用`GuidGenerator`(`IGuidGenerator`)服务来创建一个新的`Guid`.
+* 它将实体插入存储库.
 
-So, with this design, uniqueness of the product code is guaranteed.
+因此,通过这种设计,产品代码的唯一性得到保证.
 
-`ProductCodeAlreadyExistsException` is a domain/business exception defined as like below:
+`ProductCodeAlreadyExistsException`是一个域/业务异常,定义如下:
 
 ````csharp
 public class ProductCodeAlreadyExistsException : BusinessException
@@ -1261,18 +1280,18 @@ public class ProductCodeAlreadyExistsException : BusinessException
 }
 ````
 
-`PM:000001` is a code for the exception type that is sent to the clients, so they can understand the error type. Not implemented for this case, but it is also possible to localize business exceptions. See the [exception handling documentation](../Exception-Handling.md).
+`PM：000001`是发送给客户端的异常类型的代码,因此他们可以理解错误类型. 在这种情况下没有实现,但也可以本地化业务异常. 请参阅[异常处理文档](../Exception-Handling.md).
 
-#### Application Layer
+#### 应用层
 
-Application layer of this module has two services:
+该模块的应用层有两个服务:
 
-* `ProductAppService` is mainly used by the Backend Admin Application to manage (create, update, delete...) products. It requires permission to perform any operation.
-* `PublicProductAppService` is used by the Public Web Site to show list of products to the visitors. It does not require any permission since most of the visitors are not logged in to the application.
+* `ProductAppService`主要由后端管理应用程序用于管理(创建,更新,删除.)产品. 它需要许可才能执行任何操作.
+* 公共网站使用`PublicProductAppService`来向访问者显示产品列表. 它不需要任何权限,因为大多数访问者都没有登录到应用程序.
 
-Notice that; instead of putting two application service into the same project, it might be a better principle to have separated application layers per application. But we unified them for simplicity in this solution.
+请注意; 每个应用程序分离应用程序层可能是更好的原则, 而不是将两个应用程序服务放入同一个项目中. 但是我们在这个解决方案中简化了它们.
 
-As an example, `ProductAppService` has the following method to update a product:
+例如,`ProductAppService`具有以下更新产品的方法:
 
 ````csharp
 [Authorize(ProductManagementPermissions.Products.Update)]
@@ -1288,29 +1307,29 @@ public async Task<ProductDto> UpdateAsync(Guid id, UpdateProductDto input)
 }
 ````
 
-* It defines the required permission (*ProductManagementPermissions.Products.Update* is a constant with value `ProductManagement.Update`) to perform this operation.
-* Gets the id of the product and a DTO contains the values to update.
-* Gets the related product entity from the repository.
-* Uses the related methods (like `SetName`) of the `Product` class to change properties, because they are with private setters and the only way to change a value is to use an entity method.
-* Returns an updated `ProductDto` to the client (client may need it for some reason) by using the [ObjectMapper](../Object-To-Object-Mapping.md).
+* 它定义了所需的权限(*ProductManagementPermissions.Products.Update*是一个值为`ProductManagement.Update`的常量)来执行此操作.
+* 获取产品的ID,DTO包含要更新的值.
+* 从存储库中获取相关的产品实体.
+* 使用`Product`类的相关方法(如`SetName`)来更改属性,因为它们是私有set方法,更改值的唯一方法是使用实体方法.
+* 通过使用[ObjectMapper](../Object-To-Object-Mapping.md)向客户端返回更新的`ProductDto`(客户端可能由于某种原因需要它).
 
-The implementation may vary based on the requirements. This implementation follows the [best practices offered here](../Best-Practices/Application-Services.md).
+实施可能会根据要求而有所不同. 此实现遵循此处提供的[最佳实践](../Best-Practices/Application-Services.md).
 
-#### Other Layers
+#### 其他层
 
-See other layers from the source code.
+请参阅源代码中的其他层.
 
-## Infrastructure
+## 基础设施
 
-### Messaging and RabbitMQ
+### 消息和RabbitMQ
 
-Asynchronous Messaging is a key concept in distributed systems. It makes possible to communicate as a loosely coupled manner with fault tolerance. It does not require both sides to be online at the moment of messaging. So, it is a widely used communication pattern in microservice architecture.
+异步消息传递是分布式系统中的关键概念. 它可以以松散耦合的方式与容错进行通信. 在发送消息时,它不要求双方都在线. 因此,它是微服务架构中广泛使用的通信模式.
 
-#### Distributed Event Bus
+#### 分布式事件总线
 
-Distributed Events (Event Bus) is a way of messaging where a service raise/trigger events while other services registers/listens to these events to be notified when an important event occurs. ABP makes distributed events easier to use by providing conventions, services and integrations.
+分布式事件(事件总线)是一种消息传递方式,其中服务引发/触发事件,而其他服务注册/侦听这些事件,以便在发生重要事件时得到通知. ABP通过提供约定,服务和集成使分布式事件更易于使用.
 
-You have seen that the `Product` class publishing an event using the following code line:
+您已经看到`Product`类使用以下代码行发布事件:
 
 ````csharp
 AddDistributedEvent(new ProductStockCountChangedEto(Id, StockCount, stockCount));
@@ -1342,7 +1361,7 @@ public class ProductStockCountChangedEto : EtoBase
 }
 ````
 
-This object stores necessary information about the event. Another service can easily register to this event by implementing the `IDistributedEventHandler` interface with the generic `ProductStockCountChangedEto` parameter:
+该对象存储有关该事件的必要信息. 通过使用通用的`ProductStockCountChangedEto`参数实现`IDistributedEventHandler`接口,另一个服务可以轻松注册到此事件:
 
 ````csharp
 public class MyHandler : IDistributedEventHandler<ProductStockCountChangedEto>
@@ -1355,17 +1374,17 @@ public class MyHandler : IDistributedEventHandler<ProductStockCountChangedEto>
 }
 ````
 
-All the integration and communication are done by the ABP framework when you use the [Volo.Abp.EventBus.RabbitMQ](https://www.nuget.org/packages/Volo.Abp.EventBus.RabbitMQ) package. If you need to publish events out of an entity, just inject the `IDistributedEventBus` and use the `PublishAsync` method.
+当你使用[Volo.Abp.EventBus.RabbitMQ](https://www.nuget.org/packages/Volo.Abp.EventBus.RabbitMQ)包时,所有集成和通信都由ABP框架完成.如果需要从实体发布事件,只需注入`IDistributedEventBus`并使用`PublishAsync`方法.
 
-See the [Event Bus](../Event-Bus.md) documentation for more information about the distributed event system.
+有关分布式事件系统的更多信息, 请参见[Event Bus](../Event-Bus.md)文档.
 
-#### RabbitMQ Configuration
+#### RabbitMQ配置
 
-In this solution, [RabbitMQ](https://www.rabbitmq.com/) is used for messaging & distributed events.
+在此解决方案中, [RabbitMQ](https://www.rabbitmq.com/)用于消息传递和分布式事件.
 
-[Volo.Abp.EventBus.RabbitMQ](https://www.nuget.org/packages/Volo.Abp.EventBus.RabbitMQ) package is required to integrate to the RabbitMQ for distributed event system. Then you need to add dependency to the `AbpEventBusRabbitMqModule` for your module. For example, `ProductServiceHostModule` declares this dependency.
+[Volo.Abp.EventBus.RabbitMQ](https://www.nuget.org/packages/Volo.Abp.EventBus.RabbitMQ)包需要集成到RabbitMQ以用于分布式事件系统. 然后你需要为模块的`AbpEventBusRabbitMqModule`添加依赖项. 例如`ProductServiceHostModule`声明了这种依赖.
 
-`AbpEventBusRabbitMqModule` gets configuration from the `appsettings.json` by default. For example, the Product Service has such a configuration:
+默认情况下,`abpEventBusRabbitMqModule`从`appsettings.json`获取配置. 例如产品服务具有以下配置:
 
 ````json
 "RabbitMQ": {
@@ -1381,19 +1400,19 @@ In this solution, [RabbitMQ](https://www.rabbitmq.com/) is used for messaging & 
 }
 ````
 
-### Caching and Redis
+### 缓存和Redis
 
-A distributed system obviously needs to a distributed and shared cache, instead of isolated in-memory caches for each service.
+分布式系统显然需要分布式和共享缓存,而不是每个服务的隔离内存缓存.
 
-[Redis](https://redis.io/) is used as a distributed cache in this solution. The solution uses Microsoft's standard [Microsoft.Extensions.Caching.Redis](https://www.nuget.org/packages/Microsoft.Extensions.Caching.Redis) package for integration. All applications and services uses Redis cache when you use and configure this package. See [Microsoft's documentation](https://docs.microsoft.com/en-us/aspnet/core/performance/caching/distributed) for more.
+[Redis](https://redis.io/)在此解决方案中用作分布式缓存. 该解决方案使用Microsoft的标准[Microsoft.Extensions.Caching.Redis](https://www.nuget.org/packages/Microsoft.Extensions.Caching.Redis) 包进行集成. 使用和配置此程序包时,所有应用程序和服务都使用Redis缓存. 有关详细信息请参阅[Microsoft的文档](https://docs.microsoft.com/en-us/aspnet/core/performance/caching/distributed).
 
-The solution also uses the [Microsoft.AspNetCore.DataProtection.StackExchangeRedis](https://www.nuget.org/packages/Microsoft.AspNetCore.DataProtection.StackExchangeRedis) package to share data protection keys between applications and services over Redis cache.
+该解决方案还使用[Microsoft.AspNetCore.DataProtection.StackExchangeRedis](https://www.nuget.org/packages/Microsoft.AspNetCore.DataProtection.StackExchangeRedis)包在Redis缓存上共享应用程序和服务之间的数据保护密钥.
 
-### Logging, Serilog, Elasticsearch and Kibana
+### Logging,Serilog,Elasticsearch和Kibana
 
-This solution uses [Serilog](https://serilog.net/) as a logging library. It is a widely used library which has many data source integrations including [Elasticsearch](https://www.elastic.co/products/elasticsearch).
+该解决方案使用[Serilog](https://serilog.net/)作为日志库. 它是一个广泛使用的库,有许多数据源集成,包括[Elasticsearch](https://www.elastic.co/products/elasticsearch).
 
-Logging configurations are done in `Program.cs` files using a code block similar to the given below:
+使用类似于下面给出的代码块在`Program.cs`文件中完成日志配置:
 
 ````csharp
 Log.Logger = new LoggerConfiguration()
@@ -1412,9 +1431,9 @@ Log.Logger = new LoggerConfiguration()
     .CreateLogger();
 ````
 
-This configures multiple log target: File and Elasticsearch. `Application` property is set to `ProductService` for this example. This is a way of distinguishing the logs of multiple services in a single database. You can then query logs by the `Application` name.
+这会配置多个日志输出目标:File和Elasticsearch.对于此示例,`Application`属性设置为`ProductService`. 这是一种区分单个数据库中多个服务的日志的方法. 然后, 你可以通过`Application`名称查询日志.
 
-Elasticsearch URL is read from the `appsettings.json` configuration file:
+从`appsettings.json`配置文件中读取Elasticsearch URL:
 
 ````json
 "ElasticSearch": {
@@ -1422,22 +1441,22 @@ Elasticsearch URL is read from the `appsettings.json` configuration file:
 }
 ````
 
-If you use Kibana, which is a Visualization tool that is well integrated to Elasticsearch, you can see some fancy UI about your logs:
+如果你使用Kibana, 它是一个与Elasticsearch完美集成的可视化工具,可以看到有关你的日志的一些UI:
 
 ![microservice-sample-kibana-2](../images/microservice-sample-kibana-2.png)
 
-*Figure - A dashboard that shows log and error counts by service/application.*
+*Figure - 一个仪表板,显示服务/应用程序的日志和错误计数.*
 
 ![microservice-sample-kibana-1](../images/microservice-sample-kibana-1.png)
 
-*Figure - A list of log entries*
+*Figure - 日志条目列表*
 
-Kibana URL is `http://localhost:5601/` by default.
+Kibana URL默认为`http://localhost:5601/`.
 
-### Audit Logging
+### 审计日志
 
-ABP provides automatic audit logging which saves every request in detail (who is the current user, what is the browser/client, what actions performed, which entities changed, even which properties of entities has been updated). See the [audit logging document](../Audit-Logging.md) for details.
+ABP提供自动审计日志记录,详细保存每个请求(当前用户,浏览器/客户端,执行了哪些操作,哪些实体更改,甚至实体的哪些属性已更新). 有关详细信息,请参阅[审计日志文档](../Audit-Logging.md).
 
-All of the services and applications are configured to write audit logs. Audit logs are saved to the MsDemo_Identity SQL database. So, you can query all audit logs of all applications from a single point.
+所有服务和应用程序都配置为编写审核日志. 审核日志将保存到MsDemo_Identity SQL数据库中. 因此,您可以从单个点查询所有应用程序的所有审核日志.
 
-An Audit Log record has a `CorrelationId` property that can be used to track a request. When a service calls another service in a single web request, they both save audit logs with the same `CorrelationId`. See the `AbpAuditLogs` table in the database.
+审核日志记录具有`CorrelationId`属性,可用于跟踪请求. 当服务在单个Web请求中调用另一个服务时,它们都会使用相同的`CorrelationId`保存审核日志. 请参阅数据库中的`AbpAuditLogs`表.

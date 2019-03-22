@@ -30,7 +30,7 @@ namespace Volo.Abp.EventBus.RabbitMq
         protected ConcurrentDictionary<Type, List<IEventHandlerFactory>> HandlerFactories { get; }
         protected ConcurrentDictionary<string, Type> EventTypes { get; }
         protected IRabbitMqMessageConsumerFactory MessageConsumerFactory { get; }
-        protected IRabbitMqMessageConsumer Consumer { get; }
+        protected IRabbitMqMessageConsumer Consumer { get; private set; }
 
         public RabbitMqDistributedEventBus(
             IOptions<RabbitMqEventBusOptions> options,
@@ -50,18 +50,23 @@ namespace Volo.Abp.EventBus.RabbitMq
             HandlerFactories = new ConcurrentDictionary<Type, List<IEventHandlerFactory>>();
             EventTypes = new ConcurrentDictionary<string, Type>();
 
+            Initialize();
+        }
+
+        public void Initialize()
+        {
             Consumer = MessageConsumerFactory.Create(
                 new ExchangeDeclareConfiguration(
-                    RabbitMqEventBusOptions.ExchangeName, 
+                    RabbitMqEventBusOptions.ExchangeName,
                     type: "direct",
                     durable: true
-                    ),
+                ),
                 new QueueDeclareConfiguration(
                     RabbitMqEventBusOptions.ClientName,
                     durable: true,
                     exclusive: false,
                     autoDelete: false
-                    ),
+                ),
                 RabbitMqEventBusOptions.ConnectionName
             );
 

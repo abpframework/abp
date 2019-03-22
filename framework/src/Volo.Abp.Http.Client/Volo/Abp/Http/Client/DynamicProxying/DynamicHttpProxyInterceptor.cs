@@ -35,7 +35,6 @@ namespace Volo.Abp.Http.Client.DynamicProxying
         protected IJsonSerializer JsonSerializer { get; }
         protected IRemoteServiceHttpClientAuthenticator ClientAuthenticator { get; }
 
-
         public ILogger<DynamicHttpProxyInterceptor<TService>> Logger { get; set; }
 
         static DynamicHttpProxyInterceptor()

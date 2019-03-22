@@ -8,7 +8,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Volo.Abp.Localization
 {
-    public class AbpDictionaryBasedStringLocalizer : IStringLocalizer
+    public class AbpDictionaryBasedStringLocalizer : IStringLocalizer, IStringLocalizerSupportsInheritance
     {
         public LocalizationResource Resource { get; }
 
@@ -26,7 +26,20 @@ namespace Volo.Abp.Localization
 
         public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures)
         {
-            return GetAllStrings(CultureInfo.CurrentUICulture.Name, includeParentCultures);
+            return GetAllStrings(
+                CultureInfo.CurrentUICulture.Name,
+                includeParentCultures
+            );
+        }
+
+
+        public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures, bool includeBaseLocalizers)
+        {
+            return GetAllStrings(
+                CultureInfo.CurrentUICulture.Name,
+                includeParentCultures,
+                includeBaseLocalizers
+            );
         }
 
         public IStringLocalizer WithCulture(CultureInfo culture)
@@ -109,26 +122,32 @@ namespace Volo.Abp.Localization
             return null;
         }
 
-        protected virtual IReadOnlyList<LocalizedString> GetAllStrings(string cultureName, bool includeParentCultures = true)
+        protected virtual IReadOnlyList<LocalizedString> GetAllStrings(
+            string cultureName, 
+            bool includeParentCultures = true,
+            bool includeBaseLocalizers = true)
         {
             //TODO: Can be optimized (example: if it's already default dictionary, skip overriding)
 
             var allStrings = new Dictionary<string, LocalizedString>();
 
-            foreach (var baseLocalizer in BaseLocalizers.Select(l => l.WithCulture(CultureInfo.GetCultureInfo(cultureName))))
+            if (includeBaseLocalizers)
             {
-                //TODO: Try/catch is a workaround here!
-                try
+                foreach (var baseLocalizer in BaseLocalizers.Select(l => l.WithCulture(CultureInfo.GetCultureInfo(cultureName))))
                 {
-                    var baseLocalizedString = baseLocalizer.GetAllStrings(includeParentCultures);
-                    foreach (var localizedString in baseLocalizedString)
+                    //TODO: Try/catch is a workaround here!
+                    try
                     {
-                        allStrings[localizedString.Name] = localizedString;
+                        var baseLocalizedString = baseLocalizer.GetAllStrings(includeParentCultures);
+                        foreach (var localizedString in baseLocalizedString)
+                        {
+                            allStrings[localizedString.Name] = localizedString;
+                        }
                     }
-                }
-                catch (MissingManifestResourceException)
-                {
+                    catch (MissingManifestResourceException)
+                    {
 
+                    }
                 }
             }
 
@@ -160,7 +179,7 @@ namespace Volo.Abp.Localization
                 : cultureName;
         }
 
-        public class CultureWrapperStringLocalizer : IStringLocalizer
+        public class CultureWrapperStringLocalizer : IStringLocalizer, IStringLocalizerSupportsInheritance
         {
             private readonly string _cultureName;
             private readonly AbpDictionaryBasedStringLocalizer _innerLocalizer;
@@ -183,6 +202,11 @@ namespace Volo.Abp.Localization
             public IStringLocalizer WithCulture(CultureInfo culture)
             {
                 return new CultureWrapperStringLocalizer(culture.Name, _innerLocalizer);
+            }
+
+            public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures, bool includeBaseLocalizers)
+            {
+                return _innerLocalizer.GetAllStrings(_cultureName, includeParentCultures, includeBaseLocalizers);
             }
         }
     }

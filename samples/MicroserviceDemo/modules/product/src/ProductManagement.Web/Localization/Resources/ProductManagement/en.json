@@ -10,6 +10,7 @@
     "Code": "Code",
     "Name": "Name",
     "Price": "Price",
+    "ImageName": "Image Name",
     "ProductDeletionWarningMessage": "Are you sure you want to delete this product?"
   }
 }

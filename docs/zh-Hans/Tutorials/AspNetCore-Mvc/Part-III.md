@@ -14,7 +14,6 @@
 
 本解决方案中有两个测试项目:
 
-![bookstore-test-projects](images/bookstore-test-projects.png)
 
 * `Acme.BookStore.Application.Tests` 项目用于单元测试和集成测试.你可以在这个项目中为Application Service方法写测试代码.这个项目使用了 **EF Core SQLite in-memory** 数据库.
 * `Acme.BookStore.Web.Tests` 项目用于包含Web层的完整集成测试.所以,你也可以在这里写关于UI页面的测试.

@@ -3,7 +3,7 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Settings
 {
-    public abstract class SettingValueProvider : ISettingValueProvider, ISingletonDependency
+    public abstract class SettingValueProvider : ISettingValueProvider, ISingletonDependency //TODO: to transient?
     {
         public abstract string Name { get; }
 

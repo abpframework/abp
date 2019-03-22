@@ -18,11 +18,6 @@ namespace Volo.Abp.Emailing
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<SettingOptions>(options =>
-            {
-                options.DefinitionProviders.Add<EmailSettingProvider>();
-            });
-
             Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpEmailingModule>();

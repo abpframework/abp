@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using Volo.Abp.Ui.Navigation;
 
 namespace Volo.Abp.UI.Navigation
 {
@@ -7,6 +7,6 @@ namespace Volo.Abp.UI.Navigation
         /// <summary>
         /// Menu items.
         /// </summary>
-        IList<ApplicationMenuItem> Items { get; }
+        ApplicationMenuItemList Items { get; }
     }
 }

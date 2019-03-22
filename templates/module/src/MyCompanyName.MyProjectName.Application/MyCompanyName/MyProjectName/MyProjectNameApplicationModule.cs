@@ -18,11 +18,6 @@ namespace MyCompanyName.MyProjectName
             {
                 options.AddProfile<MyProjectNameApplicationAutoMapperProfile>(validate: true);
             });
-
-            Configure<SettingOptions>(options =>
-            {
-                options.DefinitionProviders.Add<MyProjectNameSettingDefinitionProvider>();
-            });
         }
     }
 }

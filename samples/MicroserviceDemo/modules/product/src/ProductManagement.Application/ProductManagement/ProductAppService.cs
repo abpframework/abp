@@ -28,7 +28,7 @@ namespace ProductManagement
             await NormalizeMaxResultCountAsync(input);
 
             var products = await _productRepository
-                .OrderBy(input.Sorting)
+                .OrderBy(input.Sorting ?? "Name")
                 .Skip(input.SkipCount)
                 .Take(input.MaxResultCount)
                 .ToListAsync();
@@ -59,7 +59,13 @@ namespace ProductManagement
         [Authorize(ProductManagementPermissions.Products.Create)]
         public async Task<ProductDto> CreateAsync(CreateProductDto input)
         {
-            var product = await _productManager.CreateAsync(input.Code, input.Name, input.Price, input.StockCount);
+            var product = await _productManager.CreateAsync(
+                input.Code,
+                input.Name,
+                input.Price,
+                input.StockCount,
+                input.ImageName
+            );
 
             return ObjectMapper.Map<Product, ProductDto>(product);
         }
@@ -72,6 +78,7 @@ namespace ProductManagement
             product.SetName(input.Name);
             product.SetPrice(input.Price);
             product.SetStockCount(input.StockCount);
+            product.SetImageName(input.ImageName);
 
             return ObjectMapper.Map<Product, ProductDto>(product);
         }

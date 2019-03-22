@@ -11,6 +11,29 @@ namespace System.Collections.Generic
         {
             var list = Enumerable.Range(1, 3).ToList();
 
+            list.InsertAfter(2, 42);
+
+            list.Count.ShouldBe(4);
+            list[0].ShouldBe(1);
+            list[1].ShouldBe(2);
+            list[2].ShouldBe(42);
+            list[3].ShouldBe(3);
+
+            list.InsertAfter(3, 43);
+
+            list.Count.ShouldBe(5);
+            list[0].ShouldBe(1);
+            list[1].ShouldBe(2);
+            list[2].ShouldBe(42);
+            list[3].ShouldBe(3);
+            list[4].ShouldBe(43);
+        }
+
+        [Fact]
+        public void InsertAfter_With_Predicate()
+        {
+            var list = Enumerable.Range(1, 3).ToList();
+
             list.InsertAfter(i => i == 2, 42);
 
             list.Count.ShouldBe(4);
@@ -30,7 +53,7 @@ namespace System.Collections.Generic
         }
 
         [Fact]
-        public void InsertAfter_Should_Insert_To_First_If_Not_Found()
+        public void InsertAfter_With_Predicate_Should_Insert_To_First_If_Not_Found()
         {
             var list = Enumerable.Range(1, 3).ToList();
 
@@ -45,6 +68,29 @@ namespace System.Collections.Generic
 
         [Fact]
         public void InsertBefore()
+        {
+            var list = Enumerable.Range(1, 3).ToList();
+
+            list.InsertBefore(2, 42);
+
+            list.Count.ShouldBe(4);
+            list[0].ShouldBe(1);
+            list[1].ShouldBe(42);
+            list[2].ShouldBe(2);
+            list[3].ShouldBe(3);
+
+            list.InsertBefore(1, 43);
+
+            list.Count.ShouldBe(5);
+            list[0].ShouldBe(43);
+            list[1].ShouldBe(1);
+            list[2].ShouldBe(42);
+            list[3].ShouldBe(2);
+            list[4].ShouldBe(3);
+        }
+
+        [Fact]
+        public void InsertBefore_With_Predicate()
         {
             var list = Enumerable.Range(1, 3).ToList();
 

@@ -1,38 +1,51 @@
 ﻿using System.Collections.Generic;
-using System.Collections.Immutable;
+using Volo.Abp.Localization;
 
 namespace Volo.Abp.Features
 {
     public class FeatureDefinitionContext : IFeatureDefinitionContext
     {
-        protected Dictionary<string, FeatureDefinition> Features { get; }
+        internal Dictionary<string, FeatureGroupDefinition> Groups { get; }
 
-        public FeatureDefinitionContext(Dictionary<string, FeatureDefinition> features)
+        public FeatureDefinitionContext()
         {
-            Features = features;
+            Groups = new Dictionary<string, FeatureGroupDefinition>();
         }
 
-        public virtual FeatureDefinition GetOrNull(string name)
+        public FeatureGroupDefinition AddGroup(string name, ILocalizableString displayName = null)
         {
-            return Features.GetOrDefault(name);
-        }
+            Check.NotNull(name, nameof(name));
 
-        public virtual IReadOnlyList<FeatureDefinition> GetAll()
-        {
-            return Features.Values.ToImmutableList();
-        }
-
-        public virtual void Add(params FeatureDefinition[] definitions)
-        {
-            if (definitions.IsNullOrEmpty())
+            if (Groups.ContainsKey(name))
             {
-                return;
+                throw new AbpException($"There is already an existing permission group with name: {name}");
             }
 
-            foreach (var definition in definitions)
+            return Groups[name] = new FeatureGroupDefinition(name, displayName);
+        }
+
+        public FeatureGroupDefinition GetGroupOrNull(string name)
+        {
+            Check.NotNull(name, nameof(name));
+
+            if (!Groups.ContainsKey(name))
             {
-                Features[definition.Name] = definition;
+                return null;
             }
+
+            return Groups[name];
+        }
+
+        public void RemoveGroup(string name)
+        {
+            Check.NotNull(name, nameof(name));
+
+            if (!Groups.ContainsKey(name))
+            {
+                throw new AbpException($"Undefined feature group: '{name}'.");
+            }
+
+            Groups.Remove(name);
         }
     }
 }

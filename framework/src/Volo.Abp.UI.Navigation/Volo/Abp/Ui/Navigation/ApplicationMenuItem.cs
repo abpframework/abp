@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using JetBrains.Annotations;
+using Volo.Abp.Ui.Navigation;
 
 namespace Volo.Abp.UI.Navigation
 {
@@ -68,7 +69,7 @@ namespace Volo.Abp.UI.Navigation
 
         /// <inheritdoc cref="IHasMenuItems.Items"/>
         [NotNull]
-        public IList<ApplicationMenuItem> Items { get; }
+        public ApplicationMenuItemList Items { get; }
 
         /// <summary>
         /// Can be used to store a custom object related to this menu item. Optional.
@@ -109,7 +110,7 @@ namespace Volo.Abp.UI.Navigation
             ElementId = elementId ?? GetDefaultElementId();
             CssClass = cssClass;
 
-            Items = new List<ApplicationMenuItem>();
+            Items = new ApplicationMenuItemList();
         }
 
         /// <summary>
@@ -126,6 +127,11 @@ namespace Volo.Abp.UI.Navigation
         private string GetDefaultElementId()
         {
             return "MenuItem_" + Name;
+        }
+
+        public override string ToString()
+        {
+            return $"[ApplicationMenuItem] Name = {Name}";
         }
     }
 }

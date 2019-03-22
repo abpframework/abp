@@ -7,12 +7,13 @@
     var _dataTable = $('#BlogsTable').DataTable(abp.libs.datatables.normalizeConfiguration({
         processing: true,
         serverSide: true,
-        paging: true,
+        paging: false,
+        info: false,
         searching: false,
         autoWidth: false,
         scrollCollapse: true,
         order: [[3, "desc"]],
-        ajax: abp.libs.datatables.createAjax(volo.blogging.blogs.getListPaged),
+        ajax: abp.libs.datatables.createAjax(volo.blogging.blogs.getList),
         columnDefs: [
             {
                 rowAction: {

@@ -1,32 +1,45 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Volo.Abp.AuditLogging.EntityFrameworkCore;
-using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
+using MyCompanyName.MyProjectName.Users;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
-using Volo.Abp.Identity.EntityFrameworkCore;
-using Volo.Abp.PermissionManagement.EntityFrameworkCore;
-using Volo.Abp.SettingManagement.EntityFrameworkCore;
+using Volo.Abp.EntityFrameworkCore.Modeling;
+using Volo.Abp.Users.EntityFrameworkCore;
 
 namespace MyCompanyName.MyProjectName.EntityFrameworkCore
 {
     [ConnectionStringName("Default")]
     public class MyProjectNameDbContext : AbpDbContext<MyProjectNameDbContext>
     {
+        public DbSet<AppUser> Users { get; set; }
+
         public MyProjectNameDbContext(DbContextOptions<MyProjectNameDbContext> options)
             : base(options)
         {
 
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder builder)
         {
-            base.OnModelCreating(modelBuilder);
+            base.OnModelCreating(builder);
 
-            modelBuilder.ConfigureIdentity();
-            modelBuilder.ConfigurePermissionManagement();
-            modelBuilder.ConfigureSettingManagement();
-            modelBuilder.ConfigureBackgroundJobs();
-            modelBuilder.ConfigureAuditLogging();
+            /* Configure the shared tables (with included modules) here */
+
+            builder.Entity<AppUser>(b =>
+            {
+                b.ToTable("AbpUsers"); //Sharing the same table "AbpUsers" with the IdentityUser
+
+                b.ConfigureFullAudited();
+                b.ConfigureExtraProperties();
+                b.ConfigureConcurrencyStamp();
+                b.ConfigureAbpUser();
+
+                //Moved customization to a method so we can share it with the MyProjectNameMigrationsDbContext class
+                b.ConfigureCustomUserProperties();
+            });
+
+            /* Configure your own tables/entities inside the ConfigureMyProjectName method */
+
+            builder.ConfigureMyProjectName();
         }
     }
 }

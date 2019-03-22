@@ -4,10 +4,10 @@ using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Authorization;
+using Volo.Abp.Features;
 using Volo.Abp.Localization;
 using Volo.Abp.Settings;
 using Volo.Abp.Users;
@@ -23,6 +23,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
         private readonly ICurrentUser _currentUser;
         private readonly ISettingProvider _settingProvider;
         private readonly ISettingDefinitionManager _settingDefinitionManager;
+        private readonly IFeatureDefinitionManager _featureDefinitionManager;
 
         public AbpApplicationConfigurationAppService(
             IOptions<AbpLocalizationOptions> localizationOptions,
@@ -31,7 +32,8 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
             IAuthorizationService authorizationService,
             ICurrentUser currentUser, 
             ISettingProvider settingProvider, 
-            SettingDefinitionManager settingDefinitionManager)
+            SettingDefinitionManager settingDefinitionManager, 
+            IFeatureDefinitionManager featureDefinitionManager)
         {
             _serviceProvider = serviceProvider;
             _abpAuthorizationPolicyProvider = abpAuthorizationPolicyProvider;
@@ -39,16 +41,18 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
             _currentUser = currentUser;
             _settingProvider = settingProvider;
             _settingDefinitionManager = settingDefinitionManager;
+            _featureDefinitionManager = featureDefinitionManager;
             _localizationOptions = localizationOptions.Value;
         }
 
-        public async Task<ApplicationConfigurationDto> GetAsync()
+        public virtual async Task<ApplicationConfigurationDto> GetAsync()
         {
             //TODO: Optimize & cache..?
 
             return new ApplicationConfigurationDto
             {
                 Auth = await GetAuthConfigAsync(),
+                Features = await GetFeaturesConfigAsync(),
                 Localization = GetLocalizationConfig(),
                 CurrentUser = GetCurrentUser(),
                 Setting = await GetSettingConfigAsync()
@@ -122,6 +126,23 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
                 }
 
                 result.Values[settingDefinition.Name] = await _settingProvider.GetOrNullAsync(settingDefinition.Name);
+            }
+
+            return result;
+        }
+
+        protected virtual async Task<ApplicationFeatureConfigurationDto> GetFeaturesConfigAsync()
+        {
+            var result = new ApplicationFeatureConfigurationDto();
+
+            foreach (var featureDefinition in _featureDefinitionManager.GetAll())
+            {
+                if (!featureDefinition.IsVisibleToClients)
+                {
+                    continue;
+                }
+
+                result.Values[featureDefinition.Name] = await FeatureChecker.GetOrNullAsync(featureDefinition.Name);
             }
 
             return result;

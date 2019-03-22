@@ -10,7 +10,6 @@ namespace Volo.Abp.BackgroundWorkers
         )]
     public class AbpBackgroundWorkersModule : AbpModule
     {
-
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             var options = context.ServiceProvider.GetRequiredService<IOptions<BackgroundWorkerOptions>>().Value;
