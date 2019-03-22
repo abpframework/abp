@@ -12,14 +12,14 @@
 
 下载的项目需要:
 
-* [Visual Studio 2017 (v15.7.0+)](https://visualstudio.microsoft.com/tr/downloads/)
+* [Visual Studio 2017 (v15.9.0+)](https://visualstudio.microsoft.com/tr/downloads/)
 * [.NET Core 2.1.1+](https://www.microsoft.com/net/download/dotnet-core/)
 
 ### 解决方案结构
 
 下载后解压文件并在 **Visual Studio 2017(15.7.0 +)** 中打开:
 
-![bookstore-visual-studio-solution](images/bookstore-visual-studio-solution.png)
+![bookstore-visual-studio-solution](images/bookstore-visual-studio-solution-v2.png)
 
 该解决方案具有分层结构(基于域驱动设计), 其中:
 
@@ -27,6 +27,8 @@
 * ``.Application`` 为应用层.
 * ``.Web`` 为是表示层.
 * ``.EntityFrameworkCore`` 是EF Core集成.
+
+EF Core 数据库迁移被分离到名为`.EntityFrameworkCore.DbMigrations`项目中.
 
 解决方案还包含配置好的的单元&集成测试项目, 以便与 **EF Core** 和 **SQLite内存中** 数据库配合使用.
 
@@ -48,9 +50,9 @@
 
 ![set-as-startup-project](images/set-as-startup-project.png)
 
-打开**包管理器控制台(Package Manager Console)**, 选择`.EntityFrameworkCore`项目作为**默认项目**并运行`Update-Database`命令:
+打开**包管理器控制台(Package Manager Console)**, 选择`.EntityFrameworkCore.DbMigrations`项目作为**默认项目**并运行`Update-Database`命令:
 
-![pcm-update-database](images/pcm-update-database.png)
+![pcm-update-database](images/pcm-update-database-v2.png)
 
 这将基于配置的连接字符串创建新数据库.
 
