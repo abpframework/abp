@@ -1,22 +1,23 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Volo.Abp.Features;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.Localization;
 
 namespace Volo.Abp.AspNetCore.Mvc.Client
 {
-    public class RemoteFeatureChecker : FeatureCheckerBase
+    public class RemoteLanguageProvider : ILanguageProvider, ITransientDependency
     {
         protected ICachedApplicationConfigurationClient ConfigurationClient { get; }
 
-        public RemoteFeatureChecker(ICachedApplicationConfigurationClient configurationClient)
+        public RemoteLanguageProvider(ICachedApplicationConfigurationClient configurationClient)
         {
             ConfigurationClient = configurationClient;
         }
 
-        public override async Task<string> GetOrNullAsync(string name)
+        public async Task<IReadOnlyList<LanguageInfo>> GetLanguagesAsync()
         {
             var configuration = await ConfigurationClient.GetAsync();
-            return configuration.Features.Values.GetOrDefault(name);
+            return configuration.Localization.Languages;
         }
     }
 }

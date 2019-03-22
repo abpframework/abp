@@ -24,6 +24,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
         private readonly ISettingProvider _settingProvider;
         private readonly ISettingDefinitionManager _settingDefinitionManager;
         private readonly IFeatureDefinitionManager _featureDefinitionManager;
+        private readonly ILanguageProvider _languageProvider;
 
         public AbpApplicationConfigurationAppService(
             IOptions<AbpLocalizationOptions> localizationOptions,
@@ -33,7 +34,8 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
             ICurrentUser currentUser, 
             ISettingProvider settingProvider, 
             SettingDefinitionManager settingDefinitionManager, 
-            IFeatureDefinitionManager featureDefinitionManager)
+            IFeatureDefinitionManager featureDefinitionManager, 
+            ILanguageProvider languageProvider)
         {
             _serviceProvider = serviceProvider;
             _abpAuthorizationPolicyProvider = abpAuthorizationPolicyProvider;
@@ -42,6 +44,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
             _settingProvider = settingProvider;
             _settingDefinitionManager = settingDefinitionManager;
             _featureDefinitionManager = featureDefinitionManager;
+            _languageProvider = languageProvider;
             _localizationOptions = localizationOptions.Value;
         }
 
@@ -53,7 +56,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
             {
                 Auth = await GetAuthConfigAsync(),
                 Features = await GetFeaturesConfigAsync(),
-                Localization = GetLocalizationConfig(),
+                Localization = await GetLocalizationConfigAsync(),
                 CurrentUser = GetCurrentUser(),
                 Setting = await GetSettingConfigAsync()
             };
@@ -87,9 +90,11 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
             return authConfig;
         }
 
-        protected virtual ApplicationLocalizationConfigurationDto GetLocalizationConfig()
+        protected virtual async Task<ApplicationLocalizationConfigurationDto> GetLocalizationConfigAsync()
         {
             var localizationConfig = new ApplicationLocalizationConfigurationDto();
+
+            localizationConfig.Languages.AddRange(await _languageProvider.GetLanguagesAsync());
 
             foreach (var resource in _localizationOptions.Resources.Values)
             {
