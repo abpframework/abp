@@ -34,6 +34,8 @@ namespace Volo.Abp.FeatureManagement
 
         public async Task<FeatureListDto> GetAsync([NotNull] string providerName, [NotNull] string providerKey)
         {
+            await CheckProviderPolicy(providerName);
+
             var featureDefinitions = _featureDefinitionManager.GetAll();
             var features = new List<FeatureDto>();
 
@@ -56,6 +58,8 @@ namespace Volo.Abp.FeatureManagement
 
         public async Task UpdateAsync([NotNull] string providerName, [NotNull] string providerKey, UpdateFeaturesDto input)
         {
+            await CheckProviderPolicy(providerName);
+
             foreach (var feature in input.Features)
             {
                 await _featureManager.SetAsync(feature.Name, feature.Value, providerName, providerKey);
@@ -73,6 +77,17 @@ namespace Volo.Abp.FeatureManagement
                     SetFeatureDepth(features, providerName, providerKey, feature, depth + 1);
                 }
             }
+        }
+
+        protected virtual async Task CheckProviderPolicy(string providerName)
+        {
+            var policyName = Options.ProviderPolicies.GetOrDefault(providerName);
+            if (policyName.IsNullOrEmpty())
+            {
+                throw new AbpException($"No policy defined to get/set permissions for the provider '{policyName}'. Use {nameof(FeatureManagementOptions)} to map the policy.");
+            }
+
+            await AuthorizationService.CheckAsync(policyName);
         }
     }
 }

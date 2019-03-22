@@ -11,7 +11,7 @@ namespace Volo.Abp.FeatureManagement
         protected ICurrentTenant CurrentTenant { get; }
 
         public TenantFeatureManagementProvider(
-            IFeatureManagementStore store, 
+            IFeatureManagementStore store,
             ICurrentTenant currentTenant)
             : base(store)
         {

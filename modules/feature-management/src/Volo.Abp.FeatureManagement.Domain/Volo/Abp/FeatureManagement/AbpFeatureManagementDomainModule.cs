@@ -21,7 +21,6 @@ namespace Volo.Abp.FeatureManagement
             {
                 options.Providers.Add<DefaultValueFeatureManagementProvider>();
                 options.Providers.Add<EditionFeatureManagementProvider>();
-                options.Providers.Add<TenantFeatureManagementProvider>();
             });
 
             Configure<VirtualFileSystemOptions>(options =>
