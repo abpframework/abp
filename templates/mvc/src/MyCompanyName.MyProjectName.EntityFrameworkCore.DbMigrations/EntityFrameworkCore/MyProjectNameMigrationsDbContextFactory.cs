@@ -5,22 +5,22 @@ using Microsoft.Extensions.Configuration;
 
 namespace MyCompanyName.MyProjectName.EntityFrameworkCore
 {
-    public class MyProjectNameDbContextFactory : IDesignTimeDbContextFactory<MyProjectNameDbContext>
+    public class MyProjectNameMigrationsDbContextFactory : IDesignTimeDbContextFactory<MyProjectNameMigrationsDbContext>
     {
-        public MyProjectNameDbContext CreateDbContext(string[] args)
+        public MyProjectNameMigrationsDbContext CreateDbContext(string[] args)
         {
             var configuration = BuildConfiguration();
 
-            var builder = new DbContextOptionsBuilder<MyProjectNameDbContext>()
+            var builder = new DbContextOptionsBuilder<MyProjectNameMigrationsDbContext>()
                 .UseSqlServer(configuration.GetConnectionString("Default"));
 
-            return new MyProjectNameDbContext(builder.Options);
+            return new MyProjectNameMigrationsDbContext(builder.Options);
         }
 
         private static IConfigurationRoot BuildConfiguration()
         {
             var builder = new ConfigurationBuilder()
-                .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../MyCompanyName.MyProjectName.Web/"))
+                .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", optional: false);
 
             return builder.Build();

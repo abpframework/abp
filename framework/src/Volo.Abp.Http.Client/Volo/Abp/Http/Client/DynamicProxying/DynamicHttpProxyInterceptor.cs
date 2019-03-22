@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -210,6 +212,9 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
             //CorrelationId
             requestMessage.Headers.Add(CorrelationIdOptions.HttpHeaderName, CorrelationIdProvider.Get());
+
+            //TODO: Is that the way we want? Couldn't send the culture (not ui culture)
+            requestMessage.Headers.AcceptLanguage.Add(new StringWithQualityHeaderValue(CultureInfo.CurrentUICulture.Name));
         }
 
         private string GetConfiguredApiVersion()

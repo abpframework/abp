@@ -30,11 +30,12 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
             string correlationId = null,
             int? maxExecutionDuration = null,
             int? minExecutionDuration = null,
+            bool? hasException = null,
             HttpStatusCode? httpStatusCode = null,
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
-            var query = GetListQuery(httpMethod, url, userName, applicationName, correlationId, maxExecutionDuration, minExecutionDuration, httpStatusCode, includeDetails);
+            var query = GetListQuery(httpMethod, url, userName, applicationName, correlationId, maxExecutionDuration, minExecutionDuration, hasException, httpStatusCode, includeDetails);
 
             var auditLogs = await query.OrderBy(sorting ?? "executionTime desc")
                 .PageBy(skipCount, maxResultCount)
@@ -51,10 +52,11 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
             string correlationId = null,
             int? maxExecutionDuration = null,
             int? minExecutionDuration = null,
+            bool? hasException = null,
             HttpStatusCode? httpStatusCode = null,
             CancellationToken cancellationToken = default)
         {
-            var query = GetListQuery(httpMethod, url, userName, applicationName, correlationId, maxExecutionDuration, minExecutionDuration, httpStatusCode);
+            var query = GetListQuery(httpMethod, url, userName, applicationName, correlationId, maxExecutionDuration, minExecutionDuration, hasException, httpStatusCode);
 
             var totalCount = await query.LongCountAsync();
 
@@ -69,11 +71,14 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
             string correlationId = null,
             int? maxExecutionDuration = null,
             int? minExecutionDuration = null,
+            bool? hasException = null,
             HttpStatusCode? httpStatusCode = null,
             bool includeDetails = false)
         {
             return DbSet.AsNoTracking()
                 .IncludeDetails(includeDetails)
+                .WhereIf(hasException.HasValue && hasException.Value, auditLog => auditLog.Exceptions != null && auditLog.Exceptions.Length > 0)
+                .WhereIf(hasException.HasValue && !hasException.Value, auditLog => auditLog.Exceptions == null || auditLog.Exceptions.Length == 0)
                 .WhereIf(httpMethod != null, auditLog => auditLog.HttpMethod != null && auditLog.HttpMethod.ToLowerInvariant() == httpMethod.ToLowerInvariant())
                 .WhereIf(url != null, auditLog => auditLog.Url != null && auditLog.Url.ToLowerInvariant().Contains(url.ToLowerInvariant()))
                 .WhereIf(userName != null, auditLog => auditLog.UserName != null && auditLog.UserName.ToLowerInvariant() == userName.ToLowerInvariant())

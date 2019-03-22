@@ -1,16 +1,18 @@
+using JetBrains.Annotations;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using JetBrains.Annotations;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Aspects;
 using Volo.Abp.Auditing;
 using Volo.Abp.Authorization;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Features;
 using Volo.Abp.Guids;
+using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Settings;
@@ -21,8 +23,8 @@ using Volo.Abp.Validation;
 
 namespace Volo.Abp.Application.Services
 {
-    public abstract class ApplicationService : 
-        IApplicationService, 
+    public abstract class ApplicationService :
+        IApplicationService,
         IAvoidDuplicateCrossCuttingConcerns,
         IValidationEnabled,
         IUnitOfWorkEnabled,
@@ -52,6 +54,22 @@ namespace Volo.Abp.Application.Services
         public IAuthorizationService AuthorizationService { get; set; }
 
         public IFeatureChecker FeatureChecker { get; set; }
+
+        public IStringLocalizerFactory StringLocalizerFactory { get; set; }
+
+        public IStringLocalizer L => _localizer ?? (_localizer = StringLocalizerFactory.Create(LocalizationResource));
+        private IStringLocalizer _localizer;
+
+        protected Type LocalizationResource
+        {
+            get => _localizationResource;
+            set
+            {
+                _localizationResource = value;
+                _localizer = null;
+            }
+        }
+        private Type _localizationResource = typeof(DefaultResource);
 
         protected IUnitOfWork CurrentUnitOfWork => UnitOfWorkManager?.Current;
 

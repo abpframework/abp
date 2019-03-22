@@ -5,6 +5,7 @@
     "Car": "Car",
     "CarPlural": "Cars",
     "MaxLenghtErrorMessage": "This field's length can be maximum of '{0}' chars",
-    "Universe": "Universe"
+    "Universe": "Universe",
+    "FortyTwo": "Forty Two"
   }
 }

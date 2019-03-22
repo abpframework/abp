@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Volo.Abp.DependencyInjection;
@@ -53,7 +52,7 @@ namespace Volo.Abp.Identity
 
             adminUser = new IdentityUser(_guidGenerator.Create(), adminUserName, "admin@abp.io", tenantId);
             adminUser.Name = adminUserName;
-            CheckIdentityErrors(await _userManager.CreateAsync(adminUser, adminUserPassword));
+            (await _userManager.CreateAsync(adminUser, adminUserPassword)).CheckErrors();
             result.CreatedAdminUser = true;
 
             //"admin" role
@@ -65,24 +64,13 @@ namespace Volo.Abp.Identity
                 adminRole.IsStatic = true;
                 adminRole.IsPublic = true;
 
-                CheckIdentityErrors(await _roleManager.CreateAsync(adminRole));
+                (await _roleManager.CreateAsync(adminRole)).CheckErrors();
                 result.CreatedAdminRole = true;
             }
 
-            CheckIdentityErrors(await _userManager.AddToRoleAsync(adminUser, adminRoleName));
+            (await _userManager.AddToRoleAsync(adminUser, adminRoleName)).CheckErrors();
 
             return result;
-        }
-
-        protected void CheckIdentityErrors(IdentityResult identityResult) //TODO: This is temporary and duplicate code!
-        {
-            if (!identityResult.Succeeded)
-            {
-                //TODO: A better exception that can be shown on UI as localized?
-                throw new AbpException("Operation failed: " + identityResult.Errors.Select(e => $"[{e.Code}] {e.Description}").JoinAsString(", "));
-            }
-
-            //identityResult.CheckErrors(LocalizationManager); //TODO: Get from old Abp
         }
     }
 }

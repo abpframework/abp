@@ -20,6 +20,7 @@ namespace Volo.Abp.AuditLogging
             string correlationId = null,
             int? maxExecutionDuration = null,
             int? minExecutionDuration = null,
+            bool? hasException = null,
             HttpStatusCode? httpStatusCode = null,
             bool includeDetails = false,
             CancellationToken cancellationToken = default);
@@ -32,6 +33,7 @@ namespace Volo.Abp.AuditLogging
             string correlationId = null,
             int? maxExecutionDuration = null,
             int? minExecutionDuration = null,
+            bool? hasException = null,
             HttpStatusCode? httpStatusCode = null,
             CancellationToken cancellationToken = default);
     }

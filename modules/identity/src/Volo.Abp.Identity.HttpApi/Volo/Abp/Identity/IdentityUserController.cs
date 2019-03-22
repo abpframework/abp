@@ -64,10 +64,5 @@ namespace Volo.Abp.Identity
         {
             return _userAppService.FindByEmailAsync(email);
         }
-
-        public Task ChangePasswordAsync(string currentPassword, string newPassword)
-        {
-            return _userAppService.ChangePasswordAsync(currentPassword, newPassword);
-        }
     }
 }

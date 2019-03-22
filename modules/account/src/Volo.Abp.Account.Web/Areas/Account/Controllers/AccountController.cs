@@ -47,6 +47,12 @@ namespace Volo.Abp.Account.Web.Areas.Account.Controllers
         {
             ValidateLoginInfo(login);
             var identityUser = await _userManager.FindByNameAsync(login.UserNameOrEmailAddress);
+
+            if (identityUser == null)
+            {
+                return new AbpLoginResult(LoginResultType.InvalidUserNameOrPassword);
+            }
+
             return GetAbpLoginResult(await _signInManager.CheckPasswordSignInAsync(identityUser, login.Password, true));
         }
 

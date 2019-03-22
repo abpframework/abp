@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Localization\Volo.Abp.Localization.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,7 +26,6 @@
     <Content Remove="Pages\**\*.cshtml" />
     <Content Remove="Pages\**\*.js" />
     <Content Remove="Pages\**\*.css" />
-    <Content Remove="Localization\Resources\**\*.json" />
     <Content Remove="Properties\launchSettings.json" />
     <None Remove="Pages\Identity\Shared\personal-settings-modal.js" />
     <None Include="Properties\launchSettings.json" />

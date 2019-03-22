@@ -20,7 +20,7 @@ namespace Volo.Abp.Features
 
         public override async Task<string> GetOrNullAsync(FeatureDefinition feature)
         {
-            var editionId = PrincipalAccessor.Principal.FindEditionId();
+            var editionId = PrincipalAccessor.Principal?.FindEditionId();
             if (editionId == null)
             {
                 return null;
