@@ -109,8 +109,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
                     dictionary[localizedString.Name] = localizedString.Value;
                 }
 
-                var resourceName = LocalizationResourceNameAttribute.GetName(resource.ResourceType);
-                localizationConfig.Values[resourceName] = dictionary;
+                localizationConfig.Values[resource.ResourceName] = dictionary;
             }
 
             return localizationConfig;
