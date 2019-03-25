@@ -22,10 +22,9 @@ ABP框架的主要目标之一就是提供[便捷的基础设施来创建微服�
 * 使用 [Docker](https://www.docker.com/) & [Kubernates](https://kubernetes.io/) 来**部署**&**运行**所有的服务和应用程序.
 * 使用 [Elasticsearch](https://www.elastic.co/products/elasticsearch) & [Kibana](https://www.elastic.co/products/kibana) 来存储和可视化日志 (使用[Serilog](https://serilog.net/)写日志).
 
+下图展示了该系统:
 
-下图显示了该系统:
-
-![microservice-sample-diagram](../images/microservice-sample-diagram.png)
+![microservice-sample-diagram](../images/microservice-sample-diagram-2.png)
 
 ### 源码
 
@@ -33,7 +32,7 @@ ABP框架的主要目标之一就是提供[便捷的基础设施来创建微服�
 
 ### 状态
 
-此示例仍处于开发阶段,尚未完成.
+该示例的初始版本已完成.其他改进仍在开发中.
 
 ## 运行解决方案
 
@@ -176,7 +175,7 @@ Visual Studio解决方案由多个项目组成,每个项目在系统中具有不
 
 此解决方案使用多个数据库:
 
-* **MsDemo_Identity**: 一个SQL数据库. 默认使用** SQL Server **,但可以是EF Core支持的任何DBMS. 由AuthServer和IdentityService共享. 审计日志,权限和设置也存储在此数据库中(虽然它们可以轻松拥有自己的数据库,共享相同的数据库以保持简单).
+* **MsDemo_Identity**: 一个SQL数据库. 默认使用**SQL Server**,但可以是EF Core支持的任何DBMS. 由AuthServer和IdentityService共享. 审计日志,权限和设置也存储在此数据库中(虽然它们可以轻松拥有自己的数据库,共享相同的数据库以保持简单).
 * **MsDemo_ProductManagement**: 一个SQL数据库. 同样默认使用 **SQL Server**,但可以是EF Core支持的任何DBMS. 由ProductService用作专用数据库.
 * **MsDemo_Blogging**: **MongoDB**数据库. 由BloggingService使用.
 * **Elasticsearch**: 用于在Serilog上写日志.
