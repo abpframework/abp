@@ -6,13 +6,12 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.MultiTenancy.ConfigurationStore
 {
-    //TODO: Move to another package.
     [Dependency(TryRegister = true)]
-    public class ConfigurationTenantStore : ITenantStore, ITransientDependency
+    public class DefaultTenantStore : ITenantStore, ITransientDependency
     {
-        private readonly ConfigurationTenantStoreOptions _options;
+        private readonly DefaultTenantStoreOptions _options;
 
-        public ConfigurationTenantStore(IOptionsSnapshot<ConfigurationTenantStoreOptions> options)
+        public DefaultTenantStore(IOptionsSnapshot<DefaultTenantStoreOptions> options)
         {
             _options = options.Value;
         }

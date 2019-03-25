@@ -31,7 +31,7 @@ namespace Volo.Abp.Data.MultiTenancy
                 options.ConnectionStrings["db1"] = "db1-default-value";
             });
 
-            services.Configure<ConfigurationTenantStoreOptions>(options =>
+            services.Configure<DefaultTenantStoreOptions>(options =>
             {
                 options.Tenants = new[]
                 {

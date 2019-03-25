@@ -28,7 +28,7 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
         {
             return base.CreateWebHostBuilder().ConfigureServices(services =>
             {
-                services.Configure<ConfigurationTenantStoreOptions>(options =>
+                services.Configure<DefaultTenantStoreOptions>(options =>
                 {
                     options.Tenants = new[]
                     {

@@ -28,7 +28,7 @@ namespace Volo.Abp.MultiTenancy
 
         protected override void BeforeAddApplication(IServiceCollection services)
         {
-            services.Configure<ConfigurationTenantStoreOptions>(options =>
+            services.Configure<DefaultTenantStoreOptions>(options =>
             {
                 options.Tenants = new[]
                 {
