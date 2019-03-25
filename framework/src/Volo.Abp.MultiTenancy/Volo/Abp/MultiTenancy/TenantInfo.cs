@@ -7,13 +7,13 @@ namespace Volo.Abp.MultiTenancy
     [Serializable]
     public class TenantInfo //TODO: Add a custom data to TenantInfo and make it available in ICurrentTenant
     {
-        public Guid Id { get; }
+        public Guid Id { get; set; }
 
-        public string Name { get; }
+        public string Name { get; set; }
 
         public ConnectionStrings ConnectionStrings { get; }
 
-        private TenantInfo()
+        public TenantInfo()
         {
             
         }

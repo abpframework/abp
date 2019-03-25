@@ -18,12 +18,12 @@ namespace Volo.Abp.MultiTenancy.ConfigurationStore
 
         public Task<TenantInfo> FindAsync(string name)
         {
-            return Task.FromResult(_options.Tenants.FirstOrDefault(t => t.Name == name));
+            return Task.FromResult(_options.Tenants?.FirstOrDefault(t => t.Name == name));
         }
 
         public Task<TenantInfo> FindAsync(Guid id)
         {
-            return Task.FromResult(_options.Tenants.FirstOrDefault(t => t.Id == id));
+            return Task.FromResult(_options.Tenants?.FirstOrDefault(t => t.Id == id));
         }
     }
 }
