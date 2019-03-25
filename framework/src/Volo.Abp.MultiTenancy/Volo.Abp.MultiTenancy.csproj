@@ -4,8 +4,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>Volo.Abp.MultiTenancy.Abstractions</AssemblyName>
-    <PackageId>Volo.Abp.MultiTenancy.Abstractions</PackageId>
+    <AssemblyName>Volo.Abp.MultiTenancy</AssemblyName>
+    <PackageId>Volo.Abp.MultiTenancy</PackageId>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>

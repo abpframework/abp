@@ -8,7 +8,7 @@ namespace Volo.Abp.MultiTenancy
         typeof(AbpDataModule),
         typeof(AbpSecurityModule)
         )]
-    public class AbpMultiTenancyAbstractionsModule : AbpModule //TODO: Rename to AbpMultiTenancyModule?
+    public class AbpMultiTenancyModule : AbpModule
     {
 
     }

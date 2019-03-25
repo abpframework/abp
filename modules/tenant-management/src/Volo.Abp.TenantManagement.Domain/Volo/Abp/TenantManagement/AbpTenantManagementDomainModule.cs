@@ -8,7 +8,7 @@ using Volo.Abp.UI;
 
 namespace Volo.Abp.TenantManagement
 {
-    [DependsOn(typeof(AbpMultiTenancyAbstractionsModule))]
+    [DependsOn(typeof(AbpMultiTenancyModule))]
     [DependsOn(typeof(AbpTenantManagementDomainSharedModule))]
     [DependsOn(typeof(AbpDataModule))]
     [DependsOn(typeof(AbpDddDomainModule))]
