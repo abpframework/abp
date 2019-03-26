@@ -1,9 +1,11 @@
-{
+﻿{
   "culture": "en",
   "texts": {
     "GivenTenantIsNotAvailable": "Given tenant is not available: {0}",
-    "SwitchTenant": "Switch tenant",
+    "Tenant": "Tenant",
+    "Switch": "Switch",
     "Name": "Name",
-    "SwitchTenantHint": "Leave the name field blank to switch to the host side."
+    "SwitchTenantHint": "Leave the name field blank to switch to the host side.",
+    "NotSelected": "Seçili değil"
   }
 }

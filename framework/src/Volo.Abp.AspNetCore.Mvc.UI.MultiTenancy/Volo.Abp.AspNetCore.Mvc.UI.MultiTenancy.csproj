@@ -18,11 +18,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Pages\**\*.cshtml" />
     <EmbeddedResource Include="Pages\**\*.js" />
-    <EmbeddedResource Include="Volo\Abp\AspNetCore\Mvc\UI\MultiTenancy\Components\**\*.cshtml" />
     <EmbeddedResource Include="Volo\Abp\AspNetCore\Mvc\UI\MultiTenancy\Localization\*.json" />
     <Content Remove="Pages\**\*.cshtml" />
     <Content Remove="Pages\**\*.js" />
-    <Content Remove="Volo\Abp\AspNetCore\Mvc\UI\MultiTenancy\Components\**\*.cshtml" />
     <Content Remove="Volo\Abp\AspNetCore\Mvc\UI\MultiTenancy\Localization\*.json" />
   </ItemGroup>
 

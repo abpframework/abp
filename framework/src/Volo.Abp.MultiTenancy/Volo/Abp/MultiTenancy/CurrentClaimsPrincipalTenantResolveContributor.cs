@@ -14,8 +14,11 @@ namespace Volo.Abp.MultiTenancy
                 return;
             }
 
-            context.TenantIdOrName = principal.Claims.FirstOrDefault(c => c.Type == AbpClaimTypes.TenantId)?.Value;
             context.Handled = true;
+            context.TenantIdOrName = principal
+                .Claims
+                .FirstOrDefault(c => c.Type == AbpClaimTypes.TenantId)
+                ?.Value;
         }
     }
 }
