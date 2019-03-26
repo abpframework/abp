@@ -10,7 +10,7 @@ namespace Volo.Abp.MultiTenancy
         /// <returns>
         /// Tenant id, unique name or null (if could not resolve).
         /// </returns>
-        [CanBeNull]
-        string ResolveTenantIdOrName();
+        [NotNull]
+        TenantResolveResult ResolveTenantIdOrName();
     }
 }

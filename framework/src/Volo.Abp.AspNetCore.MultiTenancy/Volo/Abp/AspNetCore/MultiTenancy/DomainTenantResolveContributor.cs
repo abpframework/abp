@@ -9,6 +9,10 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
 
     public class DomainTenantResolveContributor : HttpTenantResolveContributorBase
     {
+        public const string ContributorName = "Domain";
+
+        public override string Name => ContributorName;
+
         private static readonly string[] ProtocolPrefixes = { "http://", "https://" };
 
         private readonly string _domainFormat;

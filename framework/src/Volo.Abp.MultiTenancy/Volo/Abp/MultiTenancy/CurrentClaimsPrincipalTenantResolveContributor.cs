@@ -4,9 +4,13 @@ using Volo.Abp.Security.Claims;
 
 namespace Volo.Abp.MultiTenancy
 {
-    public class CurrentClaimsPrincipalTenantResolveContributor : ITenantResolveContributor
+    public class CurrentClaimsPrincipalTenantResolveContributor : TenantResolveContributorBase
     {
-        public void Resolve(ITenantResolveContext context)
+        public const string ContributorName = "CurrentClaims";
+
+        public override string Name => ContributorName;
+
+        public override void Resolve(ITenantResolveContext context)
         {
             var principal = context.ServiceProvider.GetRequiredService<ICurrentPrincipalAccessor>().Principal;
             if (principal?.Identity?.IsAuthenticated != true)

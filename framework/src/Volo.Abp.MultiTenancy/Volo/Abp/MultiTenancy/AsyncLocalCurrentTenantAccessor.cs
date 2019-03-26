@@ -3,7 +3,7 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.MultiTenancy
 {
-    public class AsyncLocalCurrentTenantIdAccessor : ICurrentTenantIdAccessor, ISingletonDependency
+    public class AsyncLocalCurrentTenantAccessor : ICurrentTenantAccessor, ISingletonDependency
     {
         public BasicTenantInfo Current
         {
@@ -13,7 +13,7 @@ namespace Volo.Abp.MultiTenancy
 
         private readonly AsyncLocal<BasicTenantInfo> _currentScope;
 
-        public AsyncLocalCurrentTenantIdAccessor()
+        public AsyncLocalCurrentTenantAccessor()
         {
             _currentScope = new AsyncLocal<BasicTenantInfo>();
         }

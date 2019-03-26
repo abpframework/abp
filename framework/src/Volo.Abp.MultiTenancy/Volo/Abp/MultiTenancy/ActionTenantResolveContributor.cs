@@ -3,8 +3,12 @@ using JetBrains.Annotations;
 
 namespace Volo.Abp.MultiTenancy
 {
-    public class ActionTenantResolveContributor : ITenantResolveContributor
+    public class ActionTenantResolveContributor : TenantResolveContributorBase
     {
+        public const string ContributorName = "Action";
+
+        public override string Name => ContributorName;
+
         private readonly Action<ITenantResolveContext> _resolveAction;
 
         public ActionTenantResolveContributor([NotNull] Action<ITenantResolveContext> resolveAction)
@@ -14,7 +18,7 @@ namespace Volo.Abp.MultiTenancy
             _resolveAction = resolveAction;
         }
 
-        public void Resolve(ITenantResolveContext context)
+        public override void Resolve(ITenantResolveContext context)
         {
             _resolveAction(context);
         }

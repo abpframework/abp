@@ -3,9 +3,9 @@
   "texts": {
     "GivenTenantIsNotAvailable": "Given tenant is not available: {0}",
     "Tenant": "Tenant",
-    "Switch": "Switch",
+    "Switch": "switch",
     "Name": "Name",
     "SwitchTenantHint": "Leave the name field blank to switch to the host side.",
-    "NotSelected": "Seçili değil"
+    "NotSelected": "Not selected"
   }
 }

@@ -3,9 +3,9 @@
   "texts": {
     "GivenTenantIsNotAvailable": "İstenilen müşteri bulunamadı: {0}",
     "Tenant": "Müşteri",
-    "Switch": "Değiştir",
+    "Switch": "değiştir",
     "Name": "İsim",
     "SwitchTenantHint": "Host tarafına geçmek için isim alanını boş bırakın.",
-    "NotSelected": "Not selected"
+    "NotSelected": "Seçili değil"
   }
 }

@@ -12,43 +12,44 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
         private readonly ITenantResolver _tenantResolver;
         private readonly ITenantStore _tenantStore;
         private readonly ICurrentTenant _currentTenant;
+        private readonly ITenantResolveResultAccessor _tenantResolveResultAccessor;
 
         public MultiTenancyMiddleware(
             RequestDelegate next,
             ITenantResolver tenantResolver, 
             ITenantStore tenantStore, 
-            ICurrentTenant currentTenant)
+            ICurrentTenant currentTenant, 
+            ITenantResolveResultAccessor tenantResolveResultAccessor)
         {
             _next = next;
             _tenantResolver = tenantResolver;
             _tenantStore = tenantStore;
             _currentTenant = currentTenant;
+            _tenantResolveResultAccessor = tenantResolveResultAccessor;
         }
 
         public async Task Invoke(HttpContext httpContext)
         {
-            var tenant = await ResolveCurrentTenantAsync();
+            var resolveResult = _tenantResolver.ResolveTenantIdOrName();
+            _tenantResolveResultAccessor.Result = resolveResult;
+
+            TenantConfiguration tenant = null;
+            if (resolveResult.TenantIdOrName != null)
+            {
+                tenant = await FindTenantAsync(resolveResult.TenantIdOrName);
+                if (tenant == null)
+                {
+                    //TODO: A better exception?
+                    throw new AbpException(
+                        "There is no tenant with given tenant id or name: " + resolveResult.TenantIdOrName
+                    );
+                }
+            }
+
             using (_currentTenant.Change(tenant?.Id, tenant?.Name))
             {
                 await _next(httpContext);
             }
-        }
-
-        private async Task<TenantConfiguration> ResolveCurrentTenantAsync()
-        {
-            var tenantIdOrName = _tenantResolver.ResolveTenantIdOrName();
-            if (tenantIdOrName == null)
-            {
-                return null;
-            }
-
-            var tenant = await FindTenantAsync(tenantIdOrName);
-            if (tenant == null)
-            {
-                throw new AbpException("There is no tenant with given tenant id or name: " + tenantIdOrName);
-            }
-
-            return tenant;
         }
 
         private async Task<TenantConfiguration> FindTenantAsync(string tenantIdOrName)

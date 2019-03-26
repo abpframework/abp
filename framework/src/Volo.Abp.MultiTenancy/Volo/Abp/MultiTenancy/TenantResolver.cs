@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
@@ -17,12 +18,9 @@ namespace Volo.Abp.MultiTenancy
             _options = options.Value;
         }
 
-        public string ResolveTenantIdOrName()
+        public TenantResolveResult ResolveTenantIdOrName()
         {
-            if (!_options.TenantResolvers.Any())
-            {
-                return null;
-            }
+            var result = new TenantResolveResult();
 
             using (var serviceScope = _serviceProvider.CreateScope())
             {
@@ -32,15 +30,17 @@ namespace Volo.Abp.MultiTenancy
                 {
                     tenantResolver.Resolve(context);
 
+                    result.AppliedResolvers.Add(tenantResolver.Name);
+
                     if (context.HasResolvedTenantOrHost())
                     {
-                        return context.TenantIdOrName;
+                        result.TenantIdOrName = context.TenantIdOrName;
+                        break;
                     }
                 }
-
-                //Could not find a tenant
-                return null;
             }
+
+            return result;
         }
     }
 }
