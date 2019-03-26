@@ -9,6 +9,8 @@ namespace Volo.Abp.MultiTenancy
 
         public virtual Guid? Id => _currentTenantIdAccessor.Current?.TenantId;
 
+        public string Name => _currentTenantIdAccessor.Current?.Name;
+
         private readonly ICurrentTenantIdAccessor _currentTenantIdAccessor;
 
         public CurrentTenant(ICurrentTenantIdAccessor currentTenantIdAccessor)
@@ -16,15 +18,15 @@ namespace Volo.Abp.MultiTenancy
             _currentTenantIdAccessor = currentTenantIdAccessor;
         }
 
-        public IDisposable Change(Guid? id)
+        public IDisposable Change(Guid? id, string name = null)
         {
-            return SetCurrent(id);
+            return SetCurrent(id, name);
         }
 
-        private IDisposable SetCurrent(Guid? tenantId)
+        private IDisposable SetCurrent(Guid? tenantId, string name = null)
         {
             var parentScope = _currentTenantIdAccessor.Current;
-            _currentTenantIdAccessor.Current = new TenantIdWrapper(tenantId);
+            _currentTenantIdAccessor.Current = new BasicTenantInfo(tenantId, name);
             return new DisposeAction(() =>
             {
                 _currentTenantIdAccessor.Current = parentScope;

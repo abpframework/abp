@@ -43,7 +43,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy.Components.TenantSwitch
 
         public class TenantSwitchViewModel
         {
-            public TenantInfo Tenant { get; set; }
+            public TenantConfiguration Tenant { get; set; }
 
             public ICurrentUser CurrentUser { get; set; }
         }

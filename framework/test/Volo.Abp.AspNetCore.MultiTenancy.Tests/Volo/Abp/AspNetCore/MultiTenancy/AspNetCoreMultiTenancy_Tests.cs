@@ -32,7 +32,7 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
                 {
                     options.Tenants = new[]
                     {
-                        new TenantInfo(_testTenantId, _testTenantName)
+                        new TenantConfiguration(_testTenantId, _testTenantName)
                     };
                 });
             });

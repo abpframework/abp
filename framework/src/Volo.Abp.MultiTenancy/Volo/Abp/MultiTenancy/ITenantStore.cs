@@ -5,8 +5,8 @@ namespace Volo.Abp.MultiTenancy
 {
     public interface ITenantStore
     {
-        Task<TenantInfo> FindAsync(string name);
+        Task<TenantConfiguration> FindAsync(string name);
 
-        Task<TenantInfo> FindAsync(Guid id);
+        Task<TenantConfiguration> FindAsync(Guid id);
     }
 }

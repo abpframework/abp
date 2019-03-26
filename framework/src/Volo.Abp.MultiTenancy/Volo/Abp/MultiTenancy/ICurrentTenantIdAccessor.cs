@@ -8,6 +8,6 @@ namespace Volo.Abp.MultiTenancy
 
     public interface ICurrentTenantIdAccessor
     {
-        TenantIdWrapper Current { get; set; }
+        BasicTenantInfo Current { get; set; }
     }
 }

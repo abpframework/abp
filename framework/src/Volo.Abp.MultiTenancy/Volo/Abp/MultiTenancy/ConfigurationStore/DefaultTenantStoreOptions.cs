@@ -2,11 +2,11 @@
 {
     public class DefaultTenantStoreOptions
     {
-        public TenantInfo[] Tenants { get; set; }
+        public TenantConfiguration[] Tenants { get; set; }
 
         public DefaultTenantStoreOptions()
         {
-            Tenants = new TenantInfo[0];
+            Tenants = new TenantConfiguration[0];
         }
     }
 }

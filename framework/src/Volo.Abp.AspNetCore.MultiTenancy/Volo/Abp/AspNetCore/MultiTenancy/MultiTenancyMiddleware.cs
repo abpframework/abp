@@ -28,13 +28,13 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
         public async Task Invoke(HttpContext httpContext)
         {
             var tenant = await ResolveCurrentTenantAsync();
-            using (_currentTenant.Change(tenant?.Id))
+            using (_currentTenant.Change(tenant?.Id, tenant?.Name))
             {
                 await _next(httpContext);
             }
         }
 
-        private async Task<TenantInfo> ResolveCurrentTenantAsync()
+        private async Task<TenantConfiguration> ResolveCurrentTenantAsync()
         {
             var tenantIdOrName = _tenantResolver.ResolveTenantIdOrName();
             if (tenantIdOrName == null)
@@ -51,7 +51,7 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
             return tenant;
         }
 
-        private async Task<TenantInfo> FindTenantAsync(string tenantIdOrName)
+        private async Task<TenantConfiguration> FindTenantAsync(string tenantIdOrName)
         {
             if (Guid.TryParse(tenantIdOrName, out var parsedTenantId))
             {

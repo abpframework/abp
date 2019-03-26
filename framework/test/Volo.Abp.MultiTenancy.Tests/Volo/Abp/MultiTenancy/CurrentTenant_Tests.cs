@@ -32,8 +32,8 @@ namespace Volo.Abp.MultiTenancy
             {
                 options.Tenants = new[]
                 {
-                    new TenantInfo(_tenantAId, "A"),
-                    new TenantInfo(_tenantAId, "B")
+                    new TenantConfiguration(_tenantAId, "A"),
+                    new TenantConfiguration(_tenantAId, "B")
                 };
             });
         }

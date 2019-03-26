@@ -35,7 +35,7 @@ namespace Volo.Abp.Data.MultiTenancy
             {
                 options.Tenants = new[]
                 {
-                    new TenantInfo(_tenant1Id, "tenant1")
+                    new TenantConfiguration(_tenant1Id, "tenant1")
                     {
                         ConnectionStrings =
                         {
@@ -43,7 +43,7 @@ namespace Volo.Abp.Data.MultiTenancy
                             {"db1", "tenant1-db1-value"}
 }
                     },
-                    new TenantInfo(_tenant2Id, "tenant2")
+                    new TenantConfiguration(_tenant2Id, "tenant2")
                 };
             });
         }

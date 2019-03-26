@@ -10,6 +10,9 @@ namespace Volo.Abp.MultiTenancy
         [CanBeNull]
         Guid? Id { get; }
 
-        IDisposable Change(Guid? id);
+        [CanBeNull]
+        string Name { get; }
+
+        IDisposable Change(Guid? id, string name = null);
     }
 }
