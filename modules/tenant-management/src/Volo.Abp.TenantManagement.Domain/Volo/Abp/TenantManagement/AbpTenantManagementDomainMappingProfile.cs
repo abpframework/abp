@@ -8,7 +8,7 @@ namespace Volo.Abp.TenantManagement
     {
         public AbpTenantManagementDomainMappingProfile()
         {
-            CreateMap<Tenant, TenantInfo>()
+            CreateMap<Tenant, TenantConfiguration>()
                 .ForMember(ti => ti.ConnectionStrings, opts =>
                 {
                     opts.MapFrom((tenant, ti) =>
