@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using JetBrains.Annotations;
 using Microsoft.AspNetCore.Http;
 using Volo.Abp.MultiTenancy;
 
@@ -12,23 +11,24 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
 
         private readonly ITenantResolver _tenantResolver;
         private readonly ITenantStore _tenantStore;
-        private readonly ICurrentTenantIdAccessor _currentTenantIdAccessor;
+        private readonly ICurrentTenant _currentTenant;
 
         public MultiTenancyMiddleware(
             RequestDelegate next,
             ITenantResolver tenantResolver, 
             ITenantStore tenantStore, 
-            ICurrentTenantIdAccessor currentTenantIdAccessor)
+            ICurrentTenant currentTenant)
         {
             _next = next;
             _tenantResolver = tenantResolver;
             _tenantStore = tenantStore;
-            _currentTenantIdAccessor = currentTenantIdAccessor;
+            _currentTenant = currentTenant;
         }
 
         public async Task Invoke(HttpContext httpContext)
         {
-            using (SetCurrentTenant(await ResolveCurrentTenantAsync()))
+            var tenant = await ResolveCurrentTenantAsync();
+            using (_currentTenant.Change(tenant?.Id))
             {
                 await _next(httpContext);
             }
@@ -61,16 +61,6 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
             {
                 return await _tenantStore.FindAsync(tenantIdOrName);
             }
-        }
-
-        private IDisposable SetCurrentTenant([CanBeNull] TenantInfo tenant)
-        {
-            var parentScope = _currentTenantIdAccessor.Current;
-            _currentTenantIdAccessor.Current = new TenantIdWrapper(tenant?.Id);
-            return new DisposeAction(() =>
-            {
-                _currentTenantIdAccessor.Current = parentScope;
-            });
         }
     }
 }
