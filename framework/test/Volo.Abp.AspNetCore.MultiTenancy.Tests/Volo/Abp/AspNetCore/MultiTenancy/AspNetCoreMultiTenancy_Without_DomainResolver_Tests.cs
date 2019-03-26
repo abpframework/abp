@@ -12,14 +12,14 @@ using Xunit;
 
 namespace Volo.Abp.AspNetCore.MultiTenancy
 {
-    public class AspNetCoreMultiTenancy_Tests : AspNetCoreMultiTenancyTestBase
+    public class AspNetCoreMultiTenancy_Without_DomainResolver_Tests : AspNetCoreMultiTenancyTestBase
     {
         private readonly Guid _testTenantId = Guid.NewGuid();
         private readonly string _testTenantName = "acme";
 
         private readonly AspNetCoreMultiTenancyOptions _options;
 
-        public AspNetCoreMultiTenancy_Tests()
+        public AspNetCoreMultiTenancy_Without_DomainResolver_Tests()
         {
             _options = ServiceProvider.GetRequiredService<IOptions<AspNetCoreMultiTenancyOptions>>().Value;
         }
@@ -61,23 +61,7 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
             var result = await GetResponseAsObjectAsync<Dictionary<string, string>>("http://abp.io");
             result["TenantId"].ShouldBe(_testTenantId.ToString());
         }
-
-        [Fact]
-        public async Task Should_Use_Domain_If_Specified()
-        {
-            var result = await GetResponseAsObjectAsync<Dictionary<string, string>>("http://acme.abp.io");
-            result["TenantId"].ShouldBe(_testTenantId.ToString());
-        }
-
-        [Fact]
-        public async Task Should_Use_Domain_As_First_Priority_If_Specified()
-        {
-            Client.DefaultRequestHeaders.Add(_options.TenantKey, Guid.NewGuid().ToString());
-
-            var result = await GetResponseAsObjectAsync<Dictionary<string, string>>("http://acme.abp.io");
-            result["TenantId"].ShouldBe(_testTenantId.ToString());
-        }
-
+        
         [Fact]
         public async Task Should_Use_Cookie_Tenant_Id_If_Specified()
         {
