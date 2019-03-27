@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Volo.Abp.DependencyInjection;
@@ -35,34 +34,53 @@ namespace Volo.Abp.Identity
 
         [UnitOfWork]
         public virtual async Task<IdentityDataSeedResult> SeedAsync(
-            string adminUserPassword,
+            string adminEmail,
+            string adminPassword,
             Guid? tenantId = null)
         {
+            Check.NotNullOrWhiteSpace(adminEmail, nameof(adminEmail));
+            Check.NotNullOrWhiteSpace(adminPassword, nameof(adminPassword));
+
             var result = new IdentityDataSeedResult();
 
-            const string adminUserName = "admin";
-            const string adminRoleName = "admin";
-
             //"admin" user
-            var adminUser = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize(adminUserName));
+            const string adminUserName = "admin";
+            var adminUser = await _userRepository.FindByNormalizedUserNameAsync(
+                _lookupNormalizer.Normalize(adminUserName)
+            );
+
             if (adminUser != null)
             {
                 return result;
             }
 
-            adminUser = new IdentityUser(_guidGenerator.Create(), adminUserName, "admin@abp.io", tenantId);
-            adminUser.Name = adminUserName;
-            (await _userManager.CreateAsync(adminUser, adminUserPassword)).CheckErrors();
+            adminUser = new IdentityUser(
+                _guidGenerator.Create(),
+                adminUserName,
+                adminEmail,
+                tenantId
+            )
+            {
+                Name = adminUserName
+            };
+
+            (await _userManager.CreateAsync(adminUser, adminPassword)).CheckErrors();
             result.CreatedAdminUser = true;
 
             //"admin" role
+            const string adminRoleName = "admin";
             var adminRole = await _roleRepository.FindByNormalizedNameAsync(_lookupNormalizer.Normalize(adminRoleName));
             if (adminRole == null)
             {
-                adminRole = new IdentityRole(_guidGenerator.Create(), adminRoleName, tenantId);
-
-                adminRole.IsStatic = true;
-                adminRole.IsPublic = true;
+                adminRole = new IdentityRole(
+                    _guidGenerator.Create(),
+                    adminRoleName,
+                    tenantId
+                )
+                {
+                    IsStatic = true,
+                    IsPublic = true
+                };
 
                 (await _roleManager.CreateAsync(adminRole)).CheckErrors();
                 result.CreatedAdminRole = true;
