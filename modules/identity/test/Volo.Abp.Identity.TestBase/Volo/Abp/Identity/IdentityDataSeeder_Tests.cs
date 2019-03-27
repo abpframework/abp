@@ -25,7 +25,7 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task Should_Create_Admin_User_And_Role()
         {
-            await _identityDataSeeder.SeedAsync("1q2w3E*");
+            await _identityDataSeeder.SeedAsync("admin@abp.io", "1q2w3E*");
 
             (await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize("admin"))).ShouldNotBeNull();
             (await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize("admin"))).Name.ShouldBe("admin");

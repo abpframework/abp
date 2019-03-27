@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Volo.Abp.Validation.StringValues
 {
+    [Serializable]
     public abstract class StringValueTypeBase : IStringValueType
     {
         public virtual string Name => ValueValidatorAttribute.GetName(GetType());

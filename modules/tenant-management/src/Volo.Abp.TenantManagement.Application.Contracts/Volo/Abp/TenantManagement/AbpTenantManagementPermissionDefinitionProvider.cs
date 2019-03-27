@@ -8,12 +8,13 @@ namespace Volo.Abp.TenantManagement
     {
         public override void Define(IPermissionDefinitionContext context)
         {
-            var identityGroup = context.AddGroup(TenantManagementPermissions.GroupName, L("Permission:TenantManagement"));
+            var tenantManagementGroup = context.AddGroup(TenantManagementPermissions.GroupName, L("Permission:TenantManagement"));
 
-            var rolesPermission = identityGroup.AddPermission(TenantManagementPermissions.Tenants.Default, L("Permission:TenantManagement"));
-            rolesPermission.AddChild(TenantManagementPermissions.Tenants.Create, L("Permission:Create"));
-            rolesPermission.AddChild(TenantManagementPermissions.Tenants.Update, L("Permission:Edit"));
-            rolesPermission.AddChild(TenantManagementPermissions.Tenants.Delete, L("Permission:Delete"));
+            var tenantsPermission = tenantManagementGroup.AddPermission(TenantManagementPermissions.Tenants.Default, L("Permission:TenantManagement"));
+            tenantsPermission.AddChild(TenantManagementPermissions.Tenants.Create, L("Permission:Create"));
+            tenantsPermission.AddChild(TenantManagementPermissions.Tenants.Update, L("Permission:Edit"));
+            tenantsPermission.AddChild(TenantManagementPermissions.Tenants.Delete, L("Permission:Delete"));
+            tenantsPermission.AddChild(TenantManagementPermissions.Tenants.ManageFeatures, L("Permission:ManageFeatures"));
         }
 
         private static LocalizableString L(string name)

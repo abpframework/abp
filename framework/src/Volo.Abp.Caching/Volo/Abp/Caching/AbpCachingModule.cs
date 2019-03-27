@@ -9,7 +9,7 @@ namespace Volo.Abp.Caching
 {
     [DependsOn(typeof(AbpThreadingModule))]
     [DependsOn(typeof(AbpSerializationModule))]
-    [DependsOn(typeof(AbpMultiTenancyAbstractionsModule))]
+    [DependsOn(typeof(AbpMultiTenancyModule))]
     public class AbpCachingModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)

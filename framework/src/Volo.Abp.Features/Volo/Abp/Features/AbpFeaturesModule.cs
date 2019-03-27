@@ -10,7 +10,7 @@ namespace Volo.Abp.Features
 {
     [DependsOn(
         typeof(AbpLocalizationAbstractionsModule),
-        typeof(AbpMultiTenancyAbstractionsModule),
+        typeof(AbpMultiTenancyModule),
         typeof(AbpValidationModule)
         )]
     public class AbpFeaturesModule : AbpModule

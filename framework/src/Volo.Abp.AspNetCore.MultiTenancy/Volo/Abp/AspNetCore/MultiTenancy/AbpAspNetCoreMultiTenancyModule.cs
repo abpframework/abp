@@ -5,7 +5,7 @@ using Volo.Abp.MultiTenancy;
 namespace Volo.Abp.AspNetCore.MultiTenancy
 {
     [DependsOn(
-        typeof(AbpMultiTenancyAbstractionsModule), 
+        typeof(AbpMultiTenancyModule), 
         typeof(AbpAspNetCoreModule)
         )]
     public class AbpAspNetCoreMultiTenancyModule : AbpModule
