@@ -2,6 +2,7 @@
 using System.Collections.Immutable;
 using JetBrains.Annotations;
 using Volo.Abp.Localization;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Authorization.Permissions
 {
@@ -17,6 +18,12 @@ namespace Volo.Abp.Authorization.Permissions
         /// If set, this permission can be granted only if parent is granted.
         /// </summary>
         public PermissionDefinition Parent { get; private set; }
+
+        /// <summary>
+        /// MultiTenancy side.
+        /// Default: <see cref="MultiTenancySides.Both"/>
+        /// </summary>
+        public MultiTenancySides MultiTenancySide { get; set; }
 
         /// <summary>
         /// A list of allowed providers to get/set value of this permission.
@@ -55,10 +62,12 @@ namespace Volo.Abp.Authorization.Permissions
 
         protected internal PermissionDefinition(
             [NotNull] string name, 
-            ILocalizableString displayName = null)
+            ILocalizableString displayName = null,
+            MultiTenancySides multiTenancySide = MultiTenancySides.Both)
         {
             Name = Check.NotNull(name, nameof(name));
             DisplayName = displayName ?? new FixedLocalizableString(name);
+            MultiTenancySide = multiTenancySide;
 
             Properties = new Dictionary<string, object>();
             Providers = new List<string>();
@@ -67,9 +76,13 @@ namespace Volo.Abp.Authorization.Permissions
 
         public virtual PermissionDefinition AddChild(
             [NotNull] string name, 
-            ILocalizableString displayName = null)
+            ILocalizableString displayName = null,
+            MultiTenancySides multiTenancySide = MultiTenancySides.Both)
         {
-            var child = new PermissionDefinition(name, displayName)
+            var child = new PermissionDefinition(
+                name, 
+                displayName, 
+                multiTenancySide)
             {
                 Parent = this
             };

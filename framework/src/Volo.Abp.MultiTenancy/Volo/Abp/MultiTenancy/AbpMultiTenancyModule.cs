@@ -6,6 +6,8 @@ using Volo.Abp.Security;
 
 namespace Volo.Abp.MultiTenancy
 {
+    //TODO: Create a Volo.Abp.MultiTenancy.Abstractions package?
+
     [DependsOn(
         typeof(AbpDataModule),
         typeof(AbpSecurityModule)

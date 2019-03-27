@@ -5,13 +5,15 @@ using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.Security;
 
 namespace Volo.Abp.Authorization
 {
     [DependsOn(
         typeof(AbpSecurityModule),
-        typeof(AbpLocalizationAbstractionsModule)
+        typeof(AbpLocalizationAbstractionsModule),
+        typeof(AbpMultiTenancyModule)
         )]
     public class AbpAuthorizationModule : AbpModule
     {
