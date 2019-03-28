@@ -1,8 +1,13 @@
 ﻿using Volo.Abp.Authorization.Permissions;
+using Volo.Abp.Identity;
 using Volo.Abp.Modularity;
 
 namespace Volo.Abp.PermissionManagement.Identity
 {
+    [DependsOn(
+        typeof(AbpIdentityDomainSharedModule),
+        typeof(AbpPermissionManagementDomainModule)
+        )]
     public class AbpPermissionManagementDomainIdentityModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)

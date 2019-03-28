@@ -87,7 +87,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Data", "src\Volo.A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Data.Tests", "test\Volo.Abp.Data.Tests\Volo.Abp.Data.Tests.csproj", "{5D2275B7-0745-420A-AF1C-32C563DAB5C8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.MultiTenancy.Abstractions", "src\Volo.Abp.MultiTenancy.Abstractions\Volo.Abp.MultiTenancy.Abstractions.csproj", "{10EB789E-C993-4BE8-BA43-C419936C7233}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.MultiTenancy", "src\Volo.Abp.MultiTenancy\Volo.Abp.MultiTenancy.csproj", "{10EB789E-C993-4BE8-BA43-C419936C7233}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.ObjectMapping", "src\Volo.Abp.ObjectMapping\Volo.Abp.ObjectMapping.csproj", "{8D22063D-88DE-4F7A-A917-C81AB4ACE601}"
 EndProject
@@ -213,7 +213,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AspNetCore.Mvc.Con
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Features", "src\Volo.Abp.Features\Volo.Abp.Features.csproj", "{01E3D389-8872-4EB1-9D3D-13B6ED54DE0E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Features.Tests", "test\Volo.Abp.Features.Tests\Volo.Abp.Features.Tests.csproj", "{575BEFA1-19C2-49B1-8D31-B5D4472328DE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Features.Tests", "test\Volo.Abp.Features.Tests\Volo.Abp.Features.Tests.csproj", "{575BEFA1-19C2-49B1-8D31-B5D4472328DE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

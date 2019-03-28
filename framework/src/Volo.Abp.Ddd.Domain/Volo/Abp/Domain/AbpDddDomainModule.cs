@@ -16,7 +16,7 @@ namespace Volo.Abp.Domain
         typeof(AbpDataModule),
         typeof(AbpEventBusModule),
         typeof(AbpGuidsModule),
-        typeof(AbpMultiTenancyAbstractionsModule),
+        typeof(AbpMultiTenancyModule),
         typeof(AbpThreadingModule),
         typeof(AbpTimingModule),
         typeof(AbpUnitOfWorkModule),

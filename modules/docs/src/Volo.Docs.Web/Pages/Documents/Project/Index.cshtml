@@ -79,7 +79,9 @@
                             <div class="version-select">
                                 <div class="input-group">
                                     <div class="input-group-prepend">
-                                        <label class="input-group-text">@L["Project"]</label>
+                                        <label class="input-group-text">
+                                            <i class="fa fa-folder-open" aria-hidden="true" data-toggle="tooltip" title="@L["Project"]"></i>
+                                        </label>
                                     </div>
 
                                     <select asp-items="Model.ProjectSelectItems" class="form-control" onchange="window.location.replace(this.value)"></select>
@@ -94,7 +96,9 @@
                             <div class="version-select">
                                 <div class="input-group">
                                     <div class="input-group-prepend">
-                                        <label class="input-group-text">@L["Version"]</label>
+                                        <label class="input-group-text">
+                                            <i class="fa fa-check-square-o" aria-hidden="true" data-toggle="tooltip" title="@L["Version"]"></i>
+                                        </label>
                                     </div>
 
                                     <select asp-items="Model.VersionSelectItems" class="form-control" onchange="if (this.value) { window.location.replace(this.value) }"></select>
@@ -103,11 +107,16 @@
                         </div>
                     }
 
-                    <div class="docs-filter">
-                        <input class="form-control" type="search" placeholder="Filter topics" aria-label="Filter">
-                        <span class="my-2 filter-icon my-sm-0">
-                            <i class="fa fa-filter"></i>
-                        </span>
+                    <div class="docs-version"> 
+                        <div class="version-select">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <label class="input-group-text"><i class="fa fa-filter"></i></label>
+                                </div>
+
+                                <input class="form-control" type="search" placeholder="Filter topics" aria-label="Filter">
+                            </div>
+                        </div> 
                     </div>
 
                     @if (Model.Navigation == null || Model.Navigation.Content.IsNullOrEmpty())
