@@ -91,7 +91,7 @@ public class BookStoreDbContext : AbpDbContext<BookStoreDbContext>
 
 #### 添加新的Migration并更新数据库
 
-这个启动模板使用了[EF Core Code First Migrations](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/)来创建并维护数据库结构.打开 **Package Manager Console (PMC)** (工具/Nuget包管理器菜单),选择 `Acme.BookStore.EntityFrameworkCore`作为默认的项目然后执行下面的命令:
+这个启动模板使用了[EF Core Code First Migrations](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/)来创建并维护数据库结构.打开 **Package Manager Console (PMC)** (工具/Nuget包管理器菜单),选择 `Acme.BookStore.EntityFrameworkCore.DbMigrations`作为默认的项目然后执行下面的命令:
 
 ![bookstore-pmc-add-book-migration](images/bookstore-pmc-add-book-migration-v2.png)
 
