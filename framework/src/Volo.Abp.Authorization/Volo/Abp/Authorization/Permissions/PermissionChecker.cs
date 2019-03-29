@@ -50,13 +50,10 @@ namespace Volo.Abp.Authorization.Permissions
         {
             Check.NotNull(name, nameof(name));
 
-            var context = new PermissionValueCheckContext(
-                PermissionDefinitionManager.Get(name),
-                claimsPrincipal
-            );
-
             var isGranted = false;
 
+            var permission = PermissionDefinitionManager.Get(name);
+            var context = new PermissionValueCheckContext(permission, claimsPrincipal);
             foreach (var provider in ValueProviders)
             {
                 if (context.Permission.Providers.Any() &&
