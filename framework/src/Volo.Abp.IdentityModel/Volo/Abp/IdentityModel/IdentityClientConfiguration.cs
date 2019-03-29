@@ -12,7 +12,7 @@ namespace Volo.Abp.IdentityModel
         public string GrantType
         {
             get => this.GetOrDefault(nameof(GrantType));
-            set => this[GrantType] = value;
+            set => this[nameof(GrantType)] = value;
         }
 
         /// <summary>
@@ -21,7 +21,7 @@ namespace Volo.Abp.IdentityModel
         public string ClientId
         {
             get => this.GetOrDefault(nameof(ClientId));
-            set => this[ClientId] = value;
+            set => this[nameof(ClientId)] = value;
         }
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace Volo.Abp.IdentityModel
         public string ClientSecret
         {
             get => this.GetOrDefault(nameof(ClientSecret));
-            set => this[ClientSecret] = value;
+            set => this[nameof(ClientSecret)] = value;
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace Volo.Abp.IdentityModel
         public string UserName
         {
             get => this.GetOrDefault(nameof(UserName));
-            set => this[UserName] = value;
+            set => this[nameof(UserName)] = value;
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace Volo.Abp.IdentityModel
         public string UserPassword
         {
             get => this.GetOrDefault(nameof(UserPassword));
-            set => this[UserPassword] = value;
+            set => this[nameof(UserPassword)] = value;
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace Volo.Abp.IdentityModel
         public string Authority
         {
             get => this.GetOrDefault(nameof(Authority));
-            set => this[Authority] = value;
+            set => this[nameof(Authority)] = value;
         }
 
         /// <summary>
@@ -68,7 +68,7 @@ namespace Volo.Abp.IdentityModel
         public string Scope
         {
             get => this.GetOrDefault(nameof(Scope));
-            set => this[Scope] = value;
+            set => this[nameof(Scope)] = value;
         }
 
         public IdentityClientConfiguration()
