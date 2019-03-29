@@ -11,6 +11,7 @@ using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.EventBus.RabbitMq;
 using Volo.Abp.Autofac;
+using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.SqlServer;
 using Volo.Abp.Identity;
@@ -93,21 +94,10 @@ namespace AuthServer.Host
                 AsyncHelper.RunSync(async () =>
                 {
                     await scope.ServiceProvider
-                        .GetRequiredService<IIdentityDataSeeder>()
-                        .SeedAsync(
-                            adminUserPassword: "1q2w3E*"
-                        );
-
-                    await scope.ServiceProvider
-                        .GetRequiredService<IPermissionDataSeeder>()
-                        .SeedAsync(
-                            RolePermissionValueProvider.ProviderName,
-                            "admin",
-                            IdentityPermissions.GetAll()
-                        );
+                        .GetRequiredService<IDataSeeder>()
+                        .SeedAsync();
                 });
             }
-            
         }
     }
 }

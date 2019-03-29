@@ -20,6 +20,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.Data;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.Web;
 using Volo.Abp.Localization;
@@ -195,22 +196,9 @@ namespace MyCompanyName.MyProjectName
             {
                 AsyncHelper.RunSync(async () =>
                 {
-                    var identitySeedResult = await scope.ServiceProvider
-                        .GetRequiredService<IIdentityDataSeeder>()
-                        .SeedAsync(
-                            "1q2w3E*"
-                        );
-
-                    if (identitySeedResult.CreatedAdminRole)
-                    {
-                        await scope.ServiceProvider
-                            .GetRequiredService<IPermissionDataSeeder>()
-                            .SeedAsync(
-                                RolePermissionValueProvider.ProviderName,
-                                "admin",
-                                IdentityPermissions.GetAll().Union(MyProjectNamePermissions.GetAll())
-                            );
-                    }
+                    await scope.ServiceProvider
+                        .GetRequiredService<IDataSeeder>()
+                        .SeedAsync();
                 });
             }
         }
