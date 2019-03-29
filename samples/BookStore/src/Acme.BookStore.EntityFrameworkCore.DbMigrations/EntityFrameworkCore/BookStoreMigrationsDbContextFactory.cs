@@ -5,22 +5,22 @@ using Microsoft.Extensions.Configuration;
 
 namespace Acme.BookStore.EntityFrameworkCore
 {
-    public class BookStoreDbContextFactory : IDesignTimeDbContextFactory<BookStoreDbContext>
+    public class BookStoreMigrationsDbContextFactory : IDesignTimeDbContextFactory<BookStoreMigrationsDbContext>
     {
-        public BookStoreDbContext CreateDbContext(string[] args)
+        public BookStoreMigrationsDbContext CreateDbContext(string[] args)
         {
             var configuration = BuildConfiguration();
 
-            var builder = new DbContextOptionsBuilder<BookStoreDbContext>()
+            var builder = new DbContextOptionsBuilder<BookStoreMigrationsDbContext>()
                 .UseSqlServer(configuration.GetConnectionString("Default"));
 
-            return new BookStoreDbContext(builder.Options);
+            return new BookStoreMigrationsDbContext(builder.Options);
         }
 
         private static IConfigurationRoot BuildConfiguration()
         {
             var builder = new ConfigurationBuilder()
-                .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../Acme.BookStore.Web/"))
+                .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", optional: false);
 
             return builder.Build();

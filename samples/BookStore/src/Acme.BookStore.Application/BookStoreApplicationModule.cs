@@ -10,7 +10,8 @@ namespace Acme.BookStore
     [DependsOn(
         typeof(BookStoreDomainModule),
         typeof(AbpIdentityApplicationModule),
-        typeof(AbpPermissionManagementApplicationModule))]
+        typeof(AbpPermissionManagementApplicationModule)
+        )]
     public class BookStoreApplicationModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
