@@ -74,7 +74,7 @@ $projects = (
     "framework/src/Volo.Abp.Localization.Abstractions",
     "framework/src/Volo.Abp.MemoryDb",
     "framework/src/Volo.Abp.MongoDB",
-    "framework/src/Volo.Abp.MultiTenancy.Abstractions",
+    "framework/src/Volo.Abp.MultiTenancy",
     "framework/src/Volo.Abp.ObjectMapping",
     "framework/src/Volo.Abp.RabbitMQ",
     "framework/src/Volo.Abp.Security",
