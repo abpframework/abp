@@ -1,12 +1,11 @@
-﻿using System;
-using Microsoft.AspNetCore.Authentication.OAuth.Claims;
+﻿using Microsoft.AspNetCore.Authentication.OAuth.Claims;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
-using ProductManagement;
 using StackExchange.Redis;
 using Swashbuckle.AspNetCore.Swagger;
+using System;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Authentication.OAuth;
 using Volo.Abp.AspNetCore.Mvc.Client;
@@ -18,7 +17,6 @@ using Volo.Abp.Identity.Web;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement;
-using Volo.Blogging;
 
 namespace BackendAdminApp.Host
 {
@@ -29,10 +27,7 @@ namespace BackendAdminApp.Host
         typeof(AbpHttpClientIdentityModelModule),
         typeof(AbpIdentityHttpApiClientModule),
         typeof(AbpIdentityWebModule),
-        typeof(BloggingApplicationContractsModule),
         typeof(AbpPermissionManagementHttpApiClientModule),
-        typeof(ProductManagementHttpApiClientModule),
-        typeof(ProductManagementWebModule),
         typeof(AbpAspNetCoreMvcUiBasicThemeModule)
         )]
     public class BackendAdminAppHostModule : AbpModule
@@ -70,7 +65,6 @@ namespace BackendAdminApp.Host
                     options.Scope.Add("phone");
                     options.Scope.Add("BackendAdminAppGateway");
                     options.Scope.Add("IdentityService");
-                    options.Scope.Add("ProductService");
                     options.ClaimActions.MapAbpClaimTypes();
                 });
 

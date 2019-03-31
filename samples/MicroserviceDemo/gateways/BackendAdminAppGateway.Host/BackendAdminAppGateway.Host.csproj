@@ -35,8 +35,6 @@
     <ProjectReference Include="..\..\..\..\modules\permission-management\src\Volo.Abp.PermissionManagement.HttpApi\Volo.Abp.PermissionManagement.HttpApi.csproj" />
     <ProjectReference Include="..\..\..\..\modules\permission-management\src\Volo.Abp.PermissionManagement.EntityFrameworkCore\Volo.Abp.PermissionManagement.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\..\..\..\modules\setting-management\src\Volo.Abp.SettingManagement.EntityFrameworkCore\Volo.Abp.SettingManagement.EntityFrameworkCore.csproj" />
-    <ProjectReference Include="..\..\..\..\modules\blogging\src\Volo.Blogging.Application.Contracts\Volo.Blogging.Application.Contracts.csproj" />
-    <ProjectReference Include="..\..\modules\product\src\ProductManagement.HttpApi\ProductManagement.HttpApi.csproj" />
   </ItemGroup>
 
   <ItemGroup>

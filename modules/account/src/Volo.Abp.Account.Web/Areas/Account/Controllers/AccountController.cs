@@ -1,8 +1,7 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Threading.Tasks;
 using Volo.Abp.Account.Web.Areas.Account.Controllers.Models;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Identity;
@@ -40,6 +39,7 @@ namespace Volo.Abp.Account.Web.Areas.Account.Controllers
                 true
             ));
         }
+
 
         [HttpPost]
         [Route("checkPassword")]
