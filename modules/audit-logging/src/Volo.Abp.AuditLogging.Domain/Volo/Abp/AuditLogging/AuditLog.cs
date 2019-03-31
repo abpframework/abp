@@ -19,6 +19,8 @@ namespace Volo.Abp.AuditLogging
 
         public virtual Guid? TenantId { get; protected set; }
 
+        public virtual string TenantName { get; protected set; }
+
         public virtual Guid? ImpersonatorUserId { get; protected set; }
 
         public virtual Guid? ImpersonatorTenantId { get; protected set; }
@@ -31,9 +33,9 @@ namespace Volo.Abp.AuditLogging
 
         public virtual string ClientName { get; protected set; }
 
-        public string ClientId { get; set; }
+        public virtual string ClientId { get; set; }
 
-        public string CorrelationId { get; set; }
+        public virtual string CorrelationId { get; set; }
 
         public virtual string BrowserInfo { get; protected set; }
 
@@ -59,8 +61,9 @@ namespace Volo.Abp.AuditLogging
         public AuditLog(IGuidGenerator guidGenerator, AuditLogInfo auditInfo)
         {
             Id = guidGenerator.Create();
-            ApplicationName = auditInfo.ApplicationName;
+            ApplicationName = auditInfo.ApplicationName.Truncate(AuditLogConsts.MaxApplicationNameLength);
             TenantId = auditInfo.TenantId;
+            TenantName = auditInfo.TenantName.Truncate(AuditLogConsts.MaxTenantNameLength);
             UserId = auditInfo.UserId;
             UserName = auditInfo.UserName.Truncate(AuditLogConsts.MaxUserNameLength);
             ExecutionTime = auditInfo.ExecutionTime;
