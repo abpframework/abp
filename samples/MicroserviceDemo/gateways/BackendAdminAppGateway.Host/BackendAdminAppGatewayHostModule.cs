@@ -77,6 +77,8 @@ namespace BackendAdminAppGateway.Host
 
             context.Services.AddOcelot(context.Services.GetConfiguration());
 
+            context.Services.AddCors();
+
             Configure<AbpDbContextOptions>(options =>
             {
                 options.UseSqlServer();
@@ -104,6 +106,12 @@ namespace BackendAdminAppGateway.Host
             {
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "BackendAdminApp Gateway API");
             });
+
+            app.UseCors(builder => builder
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials());
 
             app.MapWhen(
                 ctx => ctx.Request.Path.ToString().StartsWith("/api/abp/") ||
