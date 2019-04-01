@@ -20,6 +20,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.Castle.Core\Volo.Abp.Castle.Core.csproj" />
     <ProjectReference Include="..\Volo.Abp.Http\Volo.Abp.Http.csproj" />
+    <ProjectReference Include="..\Volo.Abp.MultiTenancy\Volo.Abp.MultiTenancy.csproj" />
     <ProjectReference Include="..\Volo.Abp.Threading\Volo.Abp.Threading.csproj" />
   </ItemGroup>
 

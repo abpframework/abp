@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Volo.Abp.Data;
-using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Auditing
 {
     [Serializable]
-    public class AuditLogInfo : IMultiTenant, IHasExtraProperties
+    public class AuditLogInfo : IHasExtraProperties
     {
         public string ApplicationName { get; set; }
 
