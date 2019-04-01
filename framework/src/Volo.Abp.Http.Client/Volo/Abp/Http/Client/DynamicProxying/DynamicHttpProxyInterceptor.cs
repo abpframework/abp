@@ -16,6 +16,7 @@ using Volo.Abp.Http.Client.Authentication;
 using Volo.Abp.Http.Modeling;
 using Volo.Abp.Http.ProxyScripting.Generators;
 using Volo.Abp.Json;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.Reflection;
 using Volo.Abp.Threading;
 using Volo.Abp.Tracing;
@@ -29,6 +30,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
         protected ICancellationTokenProvider CancellationTokenProvider { get; }
         protected ICorrelationIdProvider CorrelationIdProvider { get; }
+        protected ICurrentTenant CurrentTenant { get; }
         protected CorrelationIdOptions CorrelationIdOptions { get; }
         protected IDynamicProxyHttpClientFactory HttpClientFactory { get; }
         protected IApiDescriptionFinder ApiDescriptionFinder { get; }
@@ -55,10 +57,12 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             IRemoteServiceHttpClientAuthenticator clientAuthenticator,
             ICancellationTokenProvider cancellationTokenProvider,
             ICorrelationIdProvider correlationIdProvider, 
-            IOptions<CorrelationIdOptions> correlationIdOptions)
+            IOptions<CorrelationIdOptions> correlationIdOptions,
+            ICurrentTenant currentTenant)
         {
             CancellationTokenProvider = cancellationTokenProvider;
             CorrelationIdProvider = correlationIdProvider;
+            CurrentTenant = currentTenant;
             CorrelationIdOptions = correlationIdOptions.Value;
             HttpClientFactory = httpClientFactory;
             ApiDescriptionFinder = apiDescriptionFinder;
@@ -212,6 +216,13 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
             //CorrelationId
             requestMessage.Headers.Add(CorrelationIdOptions.HttpHeaderName, CorrelationIdProvider.Get());
+
+            //TenantId
+            if (CurrentTenant.Id.HasValue)
+            {
+                //TODO: Use AspNetCoreMultiTenancyOptions to get the key
+                requestMessage.Headers.Add(TenantResolverConsts.DefaultTenantKey, CurrentTenant.Id.Value.ToString());
+            }
 
             //TODO: Is that the way we want? Couldn't send the culture (not ui culture)
             requestMessage.Headers.AcceptLanguage.Add(new StringWithQualityHeaderValue(CultureInfo.CurrentUICulture.Name));
