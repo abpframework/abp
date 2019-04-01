@@ -5,6 +5,7 @@ using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Auditing
 {
+    [Serializable]
     public class AuditLogActionInfo : IMultiTenant, IHasExtraProperties
     {
         public Guid? TenantId { get; set; }

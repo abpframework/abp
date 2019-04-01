@@ -22,6 +22,11 @@
             public const string ManagePermissions = Default + ".ManagePermissions";
         }
 
+        public static class UserLookup
+        {
+            public const string Default = GroupName + ".UserLookup";
+        }
+
         public static string[] GetAll()
         {
             return new[]
@@ -36,7 +41,8 @@
                 Users.Create,
                 Users.Update,
                 Users.Delete,
-                Users.ManagePermissions
+                Users.ManagePermissions,
+                UserLookup.Default
             };
         }
     }

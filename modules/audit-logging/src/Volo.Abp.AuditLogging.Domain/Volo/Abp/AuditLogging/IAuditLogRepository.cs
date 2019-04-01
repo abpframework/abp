@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories;
 
@@ -15,14 +16,25 @@ namespace Volo.Abp.AuditLogging
             string httpMethod = null,
             string url = null,
             string userName = null,
+            string applicationName = null,
+            string correlationId = null,
+            int? maxExecutionDuration = null,
+            int? minExecutionDuration = null,
+            bool? hasException = null,
             HttpStatusCode? httpStatusCode = null,
-            bool includeDetails = true);
+            bool includeDetails = false,
+            CancellationToken cancellationToken = default);
 
         Task<long> GetCountAsync(
             string httpMethod = null,
             string url = null,
             string userName = null,
+            string applicationName = null,
+            string correlationId = null,
+            int? maxExecutionDuration = null,
+            int? minExecutionDuration = null,
+            bool? hasException = null,
             HttpStatusCode? httpStatusCode = null,
-            bool includeDetails = true);
+            CancellationToken cancellationToken = default);
     }
 }

@@ -8,10 +8,22 @@ using Volo.Abp.Modularity;
 
 namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 {
-    [DependsOn(typeof(AbpIdentityServerDomainModule))]
-    [DependsOn(typeof(AbpEntityFrameworkCoreModule))]
+    [DependsOn(
+        typeof(AbpIdentityServerDomainModule),
+        typeof(AbpEntityFrameworkCoreModule)
+        )]
     public class AbpIdentityServerEntityFrameworkCoreModule : AbpModule
     {
+        public override void PreConfigureServices(ServiceConfigurationContext context)
+        {
+            context.Services.PreConfigure<IIdentityServerBuilder>(
+                builder =>
+                {
+                    builder.AddAbpStores();
+                }
+            );
+        }
+
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.AddAbpDbContext<IdentityServerDbContext>(options =>

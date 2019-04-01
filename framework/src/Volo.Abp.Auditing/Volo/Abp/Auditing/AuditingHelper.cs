@@ -5,9 +5,11 @@ using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Volo.Abp.Clients;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Timing;
+using Volo.Abp.Tracing;
 using Volo.Abp.Users;
 
 namespace Volo.Abp.Auditing
@@ -18,30 +20,36 @@ namespace Volo.Abp.Auditing
         protected IAuditingStore AuditingStore { get; }
         protected ICurrentUser CurrentUser { get; }
         protected ICurrentTenant CurrentTenant { get; }
+        protected ICurrentClient CurrentClient { get; }
         protected IClock Clock { get; }
         protected AbpAuditingOptions Options;
         protected IAuditSerializer AuditSerializer;
         protected IServiceProvider ServiceProvider;
+        protected ICorrelationIdProvider CorrelationIdProvider { get; }
 
         public AuditingHelper(
             IAuditSerializer auditSerializer,
             IOptions<AbpAuditingOptions> options,
             ICurrentUser currentUser,
             ICurrentTenant currentTenant,
+            ICurrentClient currentClient,
             IClock clock,
             IAuditingStore auditingStore,
             ILogger<AuditingHelper> logger,
-            IServiceProvider serviceProvider)
+            IServiceProvider serviceProvider, 
+            ICorrelationIdProvider correlationIdProvider)
         {
             Options = options.Value;
             AuditSerializer = auditSerializer;
             CurrentUser = currentUser;
             CurrentTenant = currentTenant;
+            CurrentClient = currentClient;
             Clock = clock;
             AuditingStore = auditingStore;
 
             Logger = logger;
             ServiceProvider = serviceProvider;
+            CorrelationIdProvider = correlationIdProvider;
         }
 
         public virtual bool ShouldSaveAudit(MethodInfo methodInfo, bool defaultValue = false)
@@ -82,9 +90,13 @@ namespace Volo.Abp.Auditing
         {
             var auditInfo = new AuditLogInfo
             {
+                ApplicationName = Options.ApplicationName,
                 TenantId = CurrentTenant.Id,
+                TenantName = CurrentTenant.Name,
                 UserId = CurrentUser.Id,
                 UserName = CurrentUser.UserName,
+                ClientId = CurrentClient.Id,
+                CorrelationId = CorrelationIdProvider.Get(),
                 //ImpersonatorUserId = AbpSession.ImpersonatorUserId, //TODO: Impersonation system is not available yet!
                 //ImpersonatorTenantId = AbpSession.ImpersonatorTenantId,
                 ExecutionTime = Clock.Now

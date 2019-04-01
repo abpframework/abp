@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Volo.Abp.Localization;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Authorization.Permissions
 {
@@ -12,7 +13,10 @@ namespace Volo.Abp.Authorization.Permissions
             Groups = new Dictionary<string, PermissionGroupDefinition>();
         }
 
-        public virtual PermissionGroupDefinition AddGroup(string name, ILocalizableString displayName = null)
+        public virtual PermissionGroupDefinition AddGroup(
+            string name, 
+            ILocalizableString displayName = null,
+            MultiTenancySides multiTenancySide = MultiTenancySides.Both)
         {
             Check.NotNull(name, nameof(name));
 
@@ -21,7 +25,7 @@ namespace Volo.Abp.Authorization.Permissions
                 throw new AbpException($"There is already an existing permission group with name: {name}");
             }
 
-            return Groups[name] = new PermissionGroupDefinition(name, displayName);
+            return Groups[name] = new PermissionGroupDefinition(name, displayName, multiTenancySide);
         }
 
         public virtual PermissionGroupDefinition GetGroupOrNull(string name)
@@ -36,5 +40,16 @@ namespace Volo.Abp.Authorization.Permissions
             return Groups[name];
         }
 
+        public virtual void RemoveGroup(string name)
+        {
+            Check.NotNull(name, nameof(name));
+
+            if (!Groups.ContainsKey(name))
+            {
+                throw new AbpException($"Not found permission group with name: {name}");
+            }
+
+            Groups.Remove(name);
+        }
     }
 }

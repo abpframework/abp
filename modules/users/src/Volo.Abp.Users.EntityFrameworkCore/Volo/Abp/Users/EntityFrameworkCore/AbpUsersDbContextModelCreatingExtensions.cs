@@ -1,12 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Volo.Abp.EntityFrameworkCore.Modeling;
 
 namespace Volo.Abp.Users.EntityFrameworkCore
 {
     public static class AbpUsersDbContextModelCreatingExtensions
     {
-        public static void ConfigureAbpUser<TUser>(this EntityTypeBuilder<TUser> b, ModelBuilderConfigurationOptions options)
+        public static void ConfigureAbpUser<TUser>(this EntityTypeBuilder<TUser> b)
             where TUser : class, IUser
         {
             b.Property(u => u.TenantId).HasColumnName(nameof(IUser.TenantId));

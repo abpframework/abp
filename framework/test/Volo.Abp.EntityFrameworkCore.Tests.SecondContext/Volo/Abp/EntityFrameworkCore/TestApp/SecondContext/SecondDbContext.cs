@@ -21,12 +21,6 @@ namespace Volo.Abp.EntityFrameworkCore.TestApp.SecondContext
             modelBuilder.Entity<PhoneInSecondDbContext>(b =>
             {
                 b.HasKey(p => new { p.PersonId, p.Number });
-                b.ConfigureExtraProperties();
-            });
-
-            modelBuilder.Entity<BookInSecondDbContext>(b =>
-            {
-                b.ConfigureExtraProperties();
             });
         }
     }

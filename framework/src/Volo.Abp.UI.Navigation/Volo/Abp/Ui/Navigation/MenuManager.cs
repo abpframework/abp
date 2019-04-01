@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
@@ -9,26 +9,26 @@ namespace Volo.Abp.UI.Navigation
 {
     public class MenuManager : IMenuManager, ITransientDependency
     {
-        private readonly NavigationOptions _options;
-        private readonly IServiceProvider _serviceProvider;
+        protected NavigationOptions Options { get; }
+        protected IHybridServiceScopeFactory ServiceScopeFactory { get; }
 
         public MenuManager(
             IOptions<NavigationOptions> options, 
-            IServiceProvider serviceProvider)
+            IHybridServiceScopeFactory serviceScopeFactory)
         {
-            _serviceProvider = serviceProvider;
-            _options = options.Value;
+            ServiceScopeFactory = serviceScopeFactory;
+            Options = options.Value;
         }
 
         public async Task<ApplicationMenu> GetAsync(string name)
         {
             var menu = new ApplicationMenu(name);
 
-            using (var scope = _serviceProvider.CreateScope())
+            using (var scope = ServiceScopeFactory.CreateScope())
             {
                 var context = new MenuConfigurationContext(menu, scope.ServiceProvider);
 
-                foreach (var contributor in _options.MenuContributors)
+                foreach (var contributor in Options.MenuContributors)
                 {
                     await contributor.ConfigureMenuAsync(context);
                 }
@@ -39,9 +39,14 @@ namespace Volo.Abp.UI.Navigation
             return menu;
         }
 
-        protected virtual void NormalizeMenu(ApplicationMenu menu)
+        protected virtual void NormalizeMenu(IHasMenuItems menuWithItems)
         {
-            menu.Items.RemoveAll(item => item.IsLeaf && item.Url.IsNullOrEmpty());
+            foreach (var menuItem in menuWithItems.Items)
+            {
+                NormalizeMenu(menuItem);
+            }
+
+            menuWithItems.Items.Normalize();
         }
     }
 }

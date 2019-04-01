@@ -6,6 +6,8 @@ using Volo.Blogging.Posts;
 
 namespace Volo.Blogging.Areas.Blog.Controllers
 {
+    //TODO: Is that being used?
+
     [Area("Blog")]
     [Route("Blog/[controller]/[action]")]
     public class PostsController : AbpController

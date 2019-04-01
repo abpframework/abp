@@ -161,6 +161,25 @@ var abp = abp || {};
         abp.auth.setToken();
     }
 
+    /* SETTINGS *************************************************/
+
+    abp.setting = abp.setting || {};
+
+    abp.setting.values = abp.setting.values || {};
+    
+    abp.setting.get = function (name) {
+        return abp.setting.values[name];
+    };
+
+    abp.setting.getBoolean = function (name) {
+        var value = abp.setting.get(name);
+        return value == 'true' || value == 'True';
+    };
+
+    abp.setting.getInt = function (name) {
+        return parseInt(abp.setting.values[name]);
+    };
+    
     /* NOTIFICATION *********************************************/
     //Defines Notification API, not implements it
 

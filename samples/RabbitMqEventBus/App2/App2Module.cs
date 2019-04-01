@@ -1,5 +1,5 @@
 ﻿using Volo.Abp.Autofac;
-using Volo.Abp.EventBus.Distributed.RabbitMq;
+using Volo.Abp.EventBus.RabbitMq;
 using Volo.Abp.Modularity;
 
 namespace App2
@@ -12,7 +12,7 @@ namespace App2
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<RabbitMqDistributedEventBusOptions>(options =>
+            Configure<RabbitMqEventBusOptions>(options =>
             {
                 options.ClientName = "TestApp2";
                 options.ExchangeName = "TestMessages";

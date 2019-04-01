@@ -3,6 +3,7 @@ using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Auditing
 {
+    [Serializable]
     public class EntityPropertyChangeInfo : IMultiTenant
     {
         /// <summary>

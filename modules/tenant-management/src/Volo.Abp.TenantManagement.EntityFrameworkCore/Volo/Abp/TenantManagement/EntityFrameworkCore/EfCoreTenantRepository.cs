@@ -48,11 +48,6 @@ namespace Volo.Abp.TenantManagement.EntityFrameworkCore
                 .ToListAsync(cancellationToken);
         }
 
-        public virtual async Task<long> GetCountAsync(CancellationToken cancellationToken = default)
-        {
-            return await DbSet.LongCountAsync(cancellationToken);
-        }
-
         public override IQueryable<Tenant> WithDetails()
         {
             return GetQueryable().IncludeDetails();

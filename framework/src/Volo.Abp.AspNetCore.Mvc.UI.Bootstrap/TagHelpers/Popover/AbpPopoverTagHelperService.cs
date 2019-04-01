@@ -7,7 +7,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Popover
     {
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            if (!TagHelper.Disabled??true)
+            if (!TagHelper.Disabled ?? true)
             {
                 SetDataToggle(context, output);
                 SetDataPlacement(context, output);
@@ -16,21 +16,17 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Popover
             }
             else
             {
-                SetDisabled(context,output);
+                SetDisabled(context, output);
             }
         }
 
         protected virtual void SetDisabled(TagHelperContext context, TagHelperOutput output)
         {
             var triggerAsHtml = TagHelper.Dismissible ?? false ? "datatrigger=\"focus\" " : "";
-
-            var dataPlacementAsHtml = "data-placement=\"" +GetDirectory().ToString().ToLowerInvariant() + "\" ";
-
+            var dataPlacementAsHtml = "data-placement=\"" + GetDirectory().ToString().ToLowerInvariant() + "\" ";
             var titleAttribute = output.Attributes.FirstOrDefault(at => at.Name == "title");
-            var titleAsHtml = titleAttribute == null? "":"title=\""+ titleAttribute.Value +"\" ";
-
-            var preElementHtml = "<span class=\"d-inline-block\" "+ titleAsHtml + triggerAsHtml + dataPlacementAsHtml + "data-toggle=\"popover\" data-content=\"" +GetDataContent()+"\">";
-
+            var titleAsHtml = titleAttribute == null ? "" : "title=\"" + titleAttribute.Value + "\" ";
+            var preElementHtml = "<span class=\"d-inline-block\" " + titleAsHtml + triggerAsHtml + dataPlacementAsHtml + "data-toggle=\"popover\" data-content=\"" + GetDataContent() + "\">";
             var postElementHtml = "</span>";
 
             output.PreElement.SetHtmlContent(preElementHtml);

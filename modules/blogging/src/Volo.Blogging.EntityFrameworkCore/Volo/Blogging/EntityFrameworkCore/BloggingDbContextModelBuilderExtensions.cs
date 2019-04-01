@@ -27,7 +27,7 @@ namespace Volo.Blogging.EntityFrameworkCore
             {
                 b.ToTable(options.TablePrefix + "Users", options.Schema);
 
-                b.ConfigureAbpUser(options);
+                b.ConfigureAbpUser();
                 b.ConfigureExtraProperties();
             });
 

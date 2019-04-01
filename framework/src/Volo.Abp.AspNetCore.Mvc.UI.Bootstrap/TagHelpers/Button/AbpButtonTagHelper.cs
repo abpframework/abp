@@ -9,13 +9,13 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button
 
         public AbpButtonSize Size { get; set; } = AbpButtonSize.Default;
 
-        public bool? Block { get; set; } = false;
-
         public string BusyText { get; set; }
 
         public string Text { get; set; }
 
         public string Icon { get; set; }
+
+        public bool? Disabled { get; set; }
 
         public FontIconType IconType { get; set; } = FontIconType.FontAwesome;
 

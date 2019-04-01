@@ -1,7 +1,7 @@
 ﻿@page
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
-@using Volo.Abp.PermissionManagement.Web.Localization.Resources.AbpPermissionManagement
+@using Volo.Abp.PermissionManagement.Localization
 @using Volo.Abp.PermissionManagement.Web.Pages.AbpPermissionManagement
 @model PermissionManagementModal
 @inject IHtmlLocalizer<AbpPermissionManagementResource> L
@@ -9,33 +9,21 @@
     Layout = null;
 }
 <form method="post" asp-page="/AbpPermissionManagement/PermissionManagementModal" data-script-class="abp.modals.PermissionManagement">
-
     <abp-modal size="Large">
-
         <abp-modal-header title="@(L["Permissions"].Value) - @Model.EntityDisplayName"></abp-modal-header>
-
         <abp-modal-body>
-
             <input asp-for="@Model.ProviderKey" />
             <input asp-for="@Model.ProviderName" />
-
-            <abp-row>
-                <abp-column size-sm="_4">
-                    <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                        @for (var i = 0; i < Model.Groups.Count; i++)
-                        {
-                            <a class="nav-link @(i == 0 ? "active" : "")" id="v-pills-tab-@Model.Groups[i].GetNormalizedGroupName()" data-toggle="pill" href="#v-pills-@Model.Groups[i].GetNormalizedGroupName()" role="tab" aria-controls="v-pills-@Model.Groups[i].GetNormalizedGroupName()" aria-selected="false">@Model.Groups[i].DisplayName</a>
-                        }
-                    </div>
-                </abp-column>
-                <abp-column size-sm="_8">
-                    <div class="tab-content" id="v-pills-tabContent">
-                        @for (var i = 0; i < Model.Groups.Count; i++)
-                        {
-                            <div class="tab-pane fade @(i == 0 ? "show active" : "")" id="v-pills-@Model.Groups[i].GetNormalizedGroupName()" role="tabpanel" aria-labelledby="v-pills-tab-@Model.Groups[i].GetNormalizedGroupName()">
+            <abp-tabs name="PermissionsTabs" tab-style="PillVertical" vertical-header-size="_4">
+                @for (var i = 0; i < Model.Groups.Count; i++)
+                {
+                    <abp-tab title="@Model.Groups[i].DisplayName" name="v-pills-tab-@Model.Groups[i].GetNormalizedGroupName()">
+                        <h4>@Model.Groups[i].DisplayName</h4>
+                        <hr class="mt-3 mb-4" />
+                        <div class="pl-1 pt-1" style="height: 450px; overflow: auto;">
                                 @for (var j = 0; j < Model.Groups[i].Permissions.Count; j++)
                                 {
-                                    <abp-input asp-for="@Model.Groups[i].Permissions[j].IsGranted" 
+                                    <abp-input asp-for="@Model.Groups[i].Permissions[j].IsGranted"
                                                label="@Model.Groups[i].Permissions[j].GetShownName(Model.ProviderName)"
                                                disabled="@Model.Groups[i].Permissions[j].IsDisabled(Model.ProviderName)"
                                                group-data-permission-name="@Model.Groups[i].Permissions[j].Name"
@@ -43,16 +31,11 @@
                                                group-style="margin-left: @(Model.Groups[i].Permissions[j].Depth * 20)px" />
                                     <input asp-for="@Model.Groups[i].Permissions[j].Name" />
                                 }
-                            </div>
-                        }
-                    </div>
-                </abp-column>
-            </abp-row>
-
+                        </div>
+                    </abp-tab>
+                }
+            </abp-tabs>
         </abp-modal-body>
-
         <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)"></abp-modal-footer>
-
     </abp-modal>
-
 </form>

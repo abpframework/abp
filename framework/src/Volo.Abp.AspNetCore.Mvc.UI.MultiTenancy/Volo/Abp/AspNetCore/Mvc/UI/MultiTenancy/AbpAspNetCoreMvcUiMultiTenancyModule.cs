@@ -1,11 +1,9 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.AspNetCore.MultiTenancy;
+﻿using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
@@ -34,11 +32,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy
             Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpAspNetCoreMvcUiMultiTenancyModule>();
-            });
-
-            Configure<ToolbarOptions>(options =>
-            {
-                options.Contributors.Add(new MultiTenancyToolbarContributor());
             });
 
             Configure<AbpLocalizationOptions>(options =>

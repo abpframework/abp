@@ -1,0 +1,11 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: blogging-service
+spec:
+  selector:
+    app: blogging-service
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: http

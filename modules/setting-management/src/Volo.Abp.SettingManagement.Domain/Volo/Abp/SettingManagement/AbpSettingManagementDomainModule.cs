@@ -13,6 +13,15 @@ namespace Volo.Abp.SettingManagement
         )]
     public class AbpSettingManagementDomainModule : AbpModule
     {
-        
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            Configure<SettingManagementOptions>(options =>
+            {
+                options.Providers.Add<DefaultValueSettingManagementProvider>();
+                options.Providers.Add<GlobalSettingManagementProvider>();
+                options.Providers.Add<TenantSettingManagementProvider>();
+                options.Providers.Add<UserSettingManagementProvider>();
+            });
+        }
     }
 }

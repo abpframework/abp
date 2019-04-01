@@ -5,7 +5,7 @@ using Volo.Abp.MultiTenancy;
 namespace Volo.Abp.AspNetCore.MultiTenancy
 {
     [DependsOn(
-        typeof(AbpMultiTenancyAbstractionsModule), 
+        typeof(AbpMultiTenancyModule), 
         typeof(AbpAspNetCoreModule)
         )]
     public class AbpAspNetCoreMultiTenancyModule : AbpModule
@@ -14,10 +14,10 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
         {
             Configure<TenantResolveOptions>(options =>
             {
-                options.TenantResolvers.Add(new QueryStringTenantResolveContributer());
-                options.TenantResolvers.Add(new RouteTenantResolveContributer());
-                options.TenantResolvers.Add(new HeaderTenantResolveContributer());
-                options.TenantResolvers.Add(new CookieTenantResolveContributer());
+                options.TenantResolvers.Add(new QueryStringTenantResolveContributor());
+                options.TenantResolvers.Add(new RouteTenantResolveContributor());
+                options.TenantResolvers.Add(new HeaderTenantResolveContributor());
+                options.TenantResolvers.Add(new CookieTenantResolveContributor());
             });
         }
     }

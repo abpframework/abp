@@ -2,9 +2,12 @@
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
+using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
+using Volo.Abp.AspNetCore.Mvc.UI.Packages.Prismjs;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
+using Volo.Docs.Bundling;
 using Volo.Docs.HtmlConverting;
 using Volo.Docs.Localization;
 using Volo.Docs.Markdown;
@@ -46,6 +49,17 @@ namespace Volo.Docs
             Configure<DocumentToHtmlConverterOptions>(options =>
             {
                 options.Converters[MarkdownDocumentToHtmlConverter.Type] = typeof(MarkdownDocumentToHtmlConverter);
+            });
+
+            Configure<BundleContributorOptions>(options =>
+            {
+                options
+                    .Extensions<PrismjsStyleBundleContributor>()
+                    .Add<PrismjsStyleBundleContributorDocsExtension>();
+
+                options
+                    .Extensions<PrismjsScriptBundleContributor>()
+                    .Add<PrismjsScriptBundleContributorDocsExtension>();
             });
         }
     }

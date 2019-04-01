@@ -2,6 +2,7 @@
 using System.Collections.Immutable;
 using JetBrains.Annotations;
 using Volo.Abp.Localization;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Authorization.Permissions
 {
@@ -17,6 +18,18 @@ namespace Volo.Abp.Authorization.Permissions
         /// If set, this permission can be granted only if parent is granted.
         /// </summary>
         public PermissionDefinition Parent { get; private set; }
+
+        /// <summary>
+        /// MultiTenancy side.
+        /// Default: <see cref="MultiTenancySides.Both"/>
+        /// </summary>
+        public MultiTenancySides MultiTenancySide { get; set; }
+
+        /// <summary>
+        /// A list of allowed providers to get/set value of this permission.
+        /// An empty list indicates that all providers are allowed.
+        /// </summary>
+        public List<string> Providers { get; } //TODO: Rename to AllowedProviders?
 
         public ILocalizableString DisplayName
         {
@@ -47,18 +60,29 @@ namespace Volo.Abp.Authorization.Permissions
             set => Properties[name] = value;
         }
 
-        protected internal PermissionDefinition([NotNull] string name, ILocalizableString displayName = null)
+        protected internal PermissionDefinition(
+            [NotNull] string name, 
+            ILocalizableString displayName = null,
+            MultiTenancySides multiTenancySide = MultiTenancySides.Both)
         {
             Name = Check.NotNull(name, nameof(name));
             DisplayName = displayName ?? new FixedLocalizableString(name);
+            MultiTenancySide = multiTenancySide;
 
             Properties = new Dictionary<string, object>();
+            Providers = new List<string>();
             _children = new List<PermissionDefinition>();
         }
 
-        public virtual PermissionDefinition AddChild([NotNull] string name, ILocalizableString displayName = null)
+        public virtual PermissionDefinition AddChild(
+            [NotNull] string name, 
+            ILocalizableString displayName = null,
+            MultiTenancySides multiTenancySide = MultiTenancySides.Both)
         {
-            var child = new PermissionDefinition(name, displayName)
+            var child = new PermissionDefinition(
+                name, 
+                displayName, 
+                multiTenancySide)
             {
                 Parent = this
             };
@@ -66,6 +90,30 @@ namespace Volo.Abp.Authorization.Permissions
             _children.Add(child);
 
             return child;
+        }
+
+        /// <summary>
+        /// Sets a property in the <see cref="Properties"/> dictionary.
+        /// This is a shortcut for nested calls on this object.
+        /// </summary>
+        public virtual PermissionDefinition WithProperty(string key, object value)
+        {
+            Properties[key] = value;
+            return this;
+        }
+
+        /// <summary>
+        /// Sets a property in the <see cref="Properties"/> dictionary.
+        /// This is a shortcut for nested calls on this object.
+        /// </summary>
+        public virtual PermissionDefinition WithProviders(params string[] providers)
+        {
+            if (!providers.IsNullOrEmpty())
+            {
+                Providers.AddRange(providers);
+            }
+
+            return this;
         }
 
         public override string ToString()

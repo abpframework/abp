@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.BackgroundJobs;
+﻿using Volo.Abp.BackgroundJobs;
 using Volo.Abp.Emailing.Templates;
 using Volo.Abp.Emailing.Templates.Virtual;
 using Volo.Abp.Localization;
@@ -19,11 +18,6 @@ namespace Volo.Abp.Emailing
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<SettingOptions>(options =>
-            {
-                options.DefinitionProviders.Add<EmailSettingProvider>();
-            });
-
             Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpEmailingModule>();

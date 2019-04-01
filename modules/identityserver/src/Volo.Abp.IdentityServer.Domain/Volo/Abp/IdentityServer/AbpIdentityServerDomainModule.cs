@@ -1,5 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using IdentityServer4.Services;
+using IdentityServer4.Stores;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.Caching;
 using Volo.Abp.Domain;
 using Volo.Abp.Identity;
 using Volo.Abp.IdentityServer.Clients;
@@ -8,11 +11,13 @@ using Volo.Abp.Security;
 
 namespace Volo.Abp.IdentityServer
 {
-    [DependsOn(typeof(AbpIdentityServerDomainSharedModule))]
-    [DependsOn(typeof(AbpDddDomainModule))]
-    [DependsOn(typeof(AbpAutoMapperModule))]
-    [DependsOn(typeof(AbpIdentityDomainModule))]
-    [DependsOn(typeof(AbpSecurityModule))]
+    [DependsOn(
+        typeof(AbpIdentityServerDomainSharedModule),
+        typeof(AbpAutoMapperModule),
+        typeof(AbpIdentityDomainModule),
+        typeof(AbpSecurityModule),
+        typeof(AbpCachingModule)
+        )]
     public class AbpIdentityServerDomainModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
@@ -24,9 +29,12 @@ namespace Volo.Abp.IdentityServer
 
             AddIdentityServer(context.Services);
         }
-
+        
         private static void AddIdentityServer(IServiceCollection services)
         {
+            var configuration = services.GetConfiguration();
+            var builderOptions = services.ExecutePreConfiguredActions<AbpIdentityServerBuilderOptions>();
+
             var identityServerBuilder = services.AddIdentityServer(options =>
             {
                 options.Events.RaiseErrorEvents = true;
@@ -37,11 +45,25 @@ namespace Volo.Abp.IdentityServer
 
             identityServerBuilder
                 .AddDeveloperSigningCredential() //TODO: Should be able to change this!
-                .AddClientStore<ClientStore>()
-                .AddResourceStore<ResourceStore>()
-                .AddAbpIdentityServer();
+                .AddAbpIdentityServer(builderOptions);
 
             services.ExecutePreConfiguredActions(identityServerBuilder);
+
+            if (!services.IsAdded<IPersistedGrantService>())
+            {
+                identityServerBuilder.AddInMemoryPersistedGrants();
+            }
+
+            if (!services.IsAdded<IClientStore>())
+            {
+                identityServerBuilder.AddInMemoryClients(configuration.GetSection("IdentityServer:Clients"));
+            }
+
+            if (!services.IsAdded<IResourceStore>())
+            {
+                identityServerBuilder.AddInMemoryApiResources(configuration.GetSection("IdentityServer:ApiResources"));
+                identityServerBuilder.AddInMemoryIdentityResources(configuration.GetSection("IdentityServer:IdentityResources"));
+            }
         }
     }
 }

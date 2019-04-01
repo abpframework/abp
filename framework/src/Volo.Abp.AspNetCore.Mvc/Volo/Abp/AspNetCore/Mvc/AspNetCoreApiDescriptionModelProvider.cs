@@ -79,6 +79,7 @@ namespace Volo.Abp.AspNetCore.Mvc
                 return;
             }
 
+            Logger.LogDebug($"ActionApiDescriptionModel.Create: {controllerModel.ControllerName}.{uniqueMethodName}");
             var actionModel = controllerModel.AddAction(uniqueMethodName, ActionApiDescriptionModel.Create(
                 uniqueMethodName,
                 method,

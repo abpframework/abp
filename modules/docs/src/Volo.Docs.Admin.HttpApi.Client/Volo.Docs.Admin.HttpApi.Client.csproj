@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>Volo.Docs.Admin.HttpApi.Client</AssemblyName>
+    <PackageId>Volo.Docs.Admin.HttpApi.Client</PackageId>
+    <RootNamespace />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Volo.Docs.Admin.Application.Contracts\Volo.Docs.Admin.Application.Contracts.csproj" />
+  </ItemGroup>
+
+</Project>

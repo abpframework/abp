@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
 using Volo.Abp.Localization;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Authorization.Permissions
 {
@@ -20,6 +21,12 @@ namespace Volo.Abp.Authorization.Permissions
         }
         private ILocalizableString _displayName;
 
+        /// <summary>
+        /// MultiTenancy side.
+        /// Default: <see cref="MultiTenancySides.Both"/>
+        /// </summary>
+        public MultiTenancySides MultiTenancySide { get; set; }
+
         public IReadOnlyList<PermissionDefinition> Permissions => _permissions.ToImmutableList();
         private readonly List<PermissionDefinition> _permissions;
 
@@ -37,18 +44,25 @@ namespace Volo.Abp.Authorization.Permissions
             set => Properties[name] = value;
         }
 
-        protected internal PermissionGroupDefinition(string name, ILocalizableString displayName = null)
+        protected internal PermissionGroupDefinition(
+            string name, 
+            ILocalizableString displayName = null,
+            MultiTenancySides multiTenancySide = MultiTenancySides.Both)
         {
             Name = name;
             DisplayName = displayName ?? new FixedLocalizableString(Name);
+            MultiTenancySide = multiTenancySide;
 
             Properties = new Dictionary<string, object>();
             _permissions = new List<PermissionDefinition>();
         }
 
-        public virtual PermissionDefinition AddPermission(string name, ILocalizableString displayName = null)
+        public virtual PermissionDefinition AddPermission(
+            string name, 
+            ILocalizableString displayName = null,
+            MultiTenancySides multiTenancySide = MultiTenancySides.Both)
         {
-            var permission = new PermissionDefinition(name, displayName);
+            var permission = new PermissionDefinition(name, displayName, multiTenancySide);
 
             _permissions.Add(permission);
 

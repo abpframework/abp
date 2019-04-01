@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
-using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
-using Volo.Abp.PermissionManagement;
 using Volo.Abp.Uow;
 
 namespace Volo.Abp.Identity
@@ -14,7 +10,6 @@ namespace Volo.Abp.Identity
     public class IdentityDataSeeder : ITransientDependency, IIdentityDataSeeder
     {
         private readonly IGuidGenerator _guidGenerator;
-        private readonly IPermissionGrantRepository _permissionGrantRepository;
         private readonly IIdentityRoleRepository _roleRepository;
         private readonly IIdentityUserRepository _userRepository;
         private readonly ILookupNormalizer _lookupNormalizer;
@@ -23,7 +18,6 @@ namespace Volo.Abp.Identity
 
         public IdentityDataSeeder(
             IGuidGenerator guidGenerator,
-            IPermissionGrantRepository permissionGrantRepository,
             IIdentityRoleRepository roleRepository,
             IIdentityUserRepository userRepository,
             ILookupNormalizer lookupNormalizer,
@@ -31,7 +25,6 @@ namespace Volo.Abp.Identity
             IdentityRoleManager roleManager)
         {
             _guidGenerator = guidGenerator;
-            _permissionGrantRepository = permissionGrantRepository;
             _roleRepository = roleRepository;
             _userRepository = userRepository;
             _lookupNormalizer = lookupNormalizer;
@@ -40,74 +33,62 @@ namespace Volo.Abp.Identity
         }
 
         [UnitOfWork]
-        public virtual async Task SeedAsync(
-            string adminUserPassword,
-            IEnumerable<string> adminRolePermissions = null,
+        public virtual async Task<IdentityDataSeedResult> SeedAsync(
+            string adminEmail,
+            string adminPassword,
             Guid? tenantId = null)
         {
-            const string adminUserName = "admin";
-            const string adminRoleName = "admin";
+            Check.NotNullOrWhiteSpace(adminEmail, nameof(adminEmail));
+            Check.NotNullOrWhiteSpace(adminPassword, nameof(adminPassword));
+
+            var result = new IdentityDataSeedResult();
 
             //"admin" user
-            var adminUser = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize(adminUserName));
+            const string adminUserName = "admin";
+            var adminUser = await _userRepository.FindByNormalizedUserNameAsync(
+                _lookupNormalizer.Normalize(adminUserName)
+            );
+
             if (adminUser != null)
             {
-                return;
+                return result;
             }
 
-            adminUser = new IdentityUser(_guidGenerator.Create(), adminUserName, "admin@abp.io", tenantId);
-            CheckIdentityErrors(await _userManager.CreateAsync(adminUser, adminUserPassword));
+            adminUser = new IdentityUser(
+                _guidGenerator.Create(),
+                adminUserName,
+                adminEmail,
+                tenantId
+            )
+            {
+                Name = adminUserName
+            };
+
+            (await _userManager.CreateAsync(adminUser, adminPassword)).CheckErrors();
+            result.CreatedAdminUser = true;
 
             //"admin" role
+            const string adminRoleName = "admin";
             var adminRole = await _roleRepository.FindByNormalizedNameAsync(_lookupNormalizer.Normalize(adminRoleName));
             if (adminRole == null)
             {
-                adminRole = new IdentityRole(_guidGenerator.Create(), adminRoleName, tenantId);
-
-                adminRole.IsStatic = true;
-                adminRole.IsPublic = true;
-
-                CheckIdentityErrors(await _roleManager.CreateAsync(adminRole));
-
-                if (adminRolePermissions != null)
-                {
-                    await AddRolePermissionsAsync(adminRole, adminRolePermissions);
-                }
-            }
-
-            CheckIdentityErrors(await _userManager.AddToRoleAsync(adminUser, adminRoleName));
-        }
-
-        protected virtual async Task AddRolePermissionsAsync(IdentityRole role, IEnumerable<string> permissionNames)
-        {
-            foreach (var permissionName in permissionNames)
-            {
-                await AddPermissionAsync(permissionName, RolePermissionValueProvider.ProviderName, role.Name, role.TenantId);
-            }
-        }
-
-        protected virtual Task AddPermissionAsync(string permissionName, string providerName, string providerKey, Guid? tenantId)
-        {
-            return _permissionGrantRepository.InsertAsync(
-                new PermissionGrant(
+                adminRole = new IdentityRole(
                     _guidGenerator.Create(),
-                    permissionName,
-                    providerName,
-                    providerKey,
+                    adminRoleName,
                     tenantId
                 )
-            );
-        }
+                {
+                    IsStatic = true,
+                    IsPublic = true
+                };
 
-        protected void CheckIdentityErrors(IdentityResult identityResult) //TODO: This is temporary and duplicate code!
-        {
-            if (!identityResult.Succeeded)
-            {
-                //TODO: A better exception that can be shown on UI as localized?
-                throw new AbpException("Operation failed: " + identityResult.Errors.Select(e => $"[{e.Code}] {e.Description}").JoinAsString(", "));
+                (await _roleManager.CreateAsync(adminRole)).CheckErrors();
+                result.CreatedAdminRole = true;
             }
 
-            //identityResult.CheckErrors(LocalizationManager); //TODO: Get from old Abp
+            (await _userManager.AddToRoleAsync(adminUser, adminRoleName)).CheckErrors();
+
+            return result;
         }
     }
 }

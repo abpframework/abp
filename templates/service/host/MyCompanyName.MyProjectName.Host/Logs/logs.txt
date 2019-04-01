@@ -135,3 +135,209 @@
 2018-10-30 18:17:38.171 +03:00 [INF] Request finished in 8.1569ms 200 text/html
 2018-10-30 18:17:38.401 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:57992/swagger/v1/swagger.json  
 2018-10-30 18:17:38.581 +03:00 [INF] Request finished in 179.8033ms 200 application/json
+2019-01-07 14:46:19.756 +03:00 [INF] Starting web host.
+2019-01-07 14:46:21.104 +03:00 [INF] User profile is available. Using 'C:\Users\halil\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2019-01-07 14:46:21.168 +03:00 [INF] Loaded modules:
+2019-01-07 14:46:21.168 +03:00 [INF] - Volo.Abp.Castle.AbpCastleCoreModule
+2019-01-07 14:46:21.168 +03:00 [INF] - Volo.Abp.Autofac.AbpAutofacModule
+2019-01-07 14:46:21.168 +03:00 [INF] - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2019-01-07 14:46:21.168 +03:00 [INF] - Volo.Abp.Localization.AbpLocalizationAbstractionsModule
+2019-01-07 14:46:21.168 +03:00 [INF] - Volo.Abp.Security.AbpSecurityModule
+2019-01-07 14:46:21.168 +03:00 [INF] - Volo.Abp.Settings.AbpSettingsModule
+2019-01-07 14:46:21.168 +03:00 [INF] - Volo.Abp.Localization.AbpLocalizationModule
+2019-01-07 14:46:21.168 +03:00 [INF] - MyCompanyName.MyProjectName.MyProjectNameDomainSharedModule
+2019-01-07 14:46:21.168 +03:00 [INF] - MyCompanyName.MyProjectName.MyProjectNameDomainModule
+2019-01-07 14:46:21.168 +03:00 [INF] - Volo.Abp.Data.AbpDataModule
+2019-01-07 14:46:21.168 +03:00 [INF] - Volo.Abp.Timing.AbpTimingModule
+2019-01-07 14:46:21.168 +03:00 [INF] - Volo.Abp.Json.AbpJsonModule
+2019-01-07 14:46:21.168 +03:00 [INF] - Volo.Abp.Threading.AbpThreadingModule
+2019-01-07 14:46:21.168 +03:00 [INF] - Volo.Abp.MultiTenancy.AbpMultiTenancyAbstractionsModule
+2019-01-07 14:46:21.168 +03:00 [INF] - Volo.Abp.Auditing.AbpAuditingModule
+2019-01-07 14:46:21.168 +03:00 [INF] - Volo.Abp.EventBus.AbpEventBusModule
+2019-01-07 14:46:21.168 +03:00 [INF] - Volo.Abp.Guids.AbpGuidsModule
+2019-01-07 14:46:21.168 +03:00 [INF] - Volo.Abp.Uow.AbpUnitOfWorkModule
+2019-01-07 14:46:21.168 +03:00 [INF] - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2019-01-07 14:46:21.168 +03:00 [INF] - Volo.Abp.Domain.AbpDddDomainModule
+2019-01-07 14:46:21.168 +03:00 [INF] - Volo.Abp.Validation.AbpValidationModule
+2019-01-07 14:46:21.168 +03:00 [INF] - Volo.Abp.Authorization.AbpAuthorizationModule
+2019-01-07 14:46:21.168 +03:00 [INF] - Volo.Abp.Http.AbpHttpAbstractionsModule
+2019-01-07 14:46:21.168 +03:00 [INF] - Volo.Abp.Application.AbpDddApplicationModule
+2019-01-07 14:46:21.168 +03:00 [INF] - MyCompanyName.MyProjectName.MyProjectNameApplicationContractsModule
+2019-01-07 14:46:21.168 +03:00 [INF] - Volo.Abp.AutoMapper.AbpAutoMapperModule
+2019-01-07 14:46:21.168 +03:00 [INF] - MyCompanyName.MyProjectName.MyProjectNameApplicationModule
+2019-01-07 14:46:21.169 +03:00 [INF] - Volo.Abp.EntityFrameworkCore.AbpEntityFrameworkCoreModule
+2019-01-07 14:46:21.169 +03:00 [INF] - MyCompanyName.MyProjectName.EntityFrameworkCore.MyProjectNameEntityFrameworkCoreModule
+2019-01-07 14:46:21.169 +03:00 [INF] - Volo.Abp.Http.AbpHttpModule
+2019-01-07 14:46:21.169 +03:00 [INF] - Volo.Abp.UI.AbpUiModule
+2019-01-07 14:46:21.169 +03:00 [INF] - Volo.Abp.AspNetCore.AbpAspNetCoreModule
+2019-01-07 14:46:21.169 +03:00 [INF] - Volo.Abp.ApiVersioning.AbpApiVersioningAbstractionsModule
+2019-01-07 14:46:21.169 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcModule
+2019-01-07 14:46:21.169 +03:00 [INF] - MyCompanyName.MyProjectName.MyProjectNameHttpApiModule
+2019-01-07 14:46:21.169 +03:00 [INF] - Volo.Abp.PermissionManagement.AbpPermissionManagementDomainSharedModule
+2019-01-07 14:46:21.169 +03:00 [INF] - Volo.Abp.Serialization.AbpSerializationModule
+2019-01-07 14:46:21.169 +03:00 [INF] - Volo.Abp.Caching.AbpCachingModule
+2019-01-07 14:46:21.169 +03:00 [INF] - Volo.Abp.PermissionManagement.AbpPermissionManagementDomainModule
+2019-01-07 14:46:21.169 +03:00 [INF] - Volo.Abp.PermissionManagement.EntityFrameworkCore.AbpPermissionManagementEntityFrameworkCoreModule
+2019-01-07 14:46:21.169 +03:00 [INF] - Volo.Abp.SettingManagement.AbpSettingManagementDomainSharedModule
+2019-01-07 14:46:21.169 +03:00 [INF] - Volo.Abp.SettingManagement.AbpSettingManagementDomainModule
+2019-01-07 14:46:21.169 +03:00 [INF] - Volo.Abp.SettingManagement.EntityFrameworkCore.AbpSettingManagementEntityFrameworkCoreModule
+2019-01-07 14:46:21.169 +03:00 [INF] - Volo.Abp.AuditLogging.AbpAuditLoggingDomainSharedModule
+2019-01-07 14:46:21.169 +03:00 [INF] - Volo.Abp.AuditLogging.AbpAuditLoggingDomainModule
+2019-01-07 14:46:21.169 +03:00 [INF] - Volo.Abp.AuditLogging.EntityFrameworkCore.AbpAuditLoggingEntityFrameworkCoreModule
+2019-01-07 14:46:21.169 +03:00 [INF] - Volo.Abp.EntityFrameworkCore.SqlServer.AbpEntityFrameworkCoreSqlServerModule
+2019-01-07 14:46:21.169 +03:00 [INF] - MyCompanyName.MyProjectName.Host.DemoAppModule
+2019-01-07 14:46:21.213 +03:00 [DBG] No class found with auto mapping attributes.
+2019-01-07 14:46:21.668 +03:00 [FTL] Application startup exception
+System.Data.SqlClient.SqlException (0x80131904): Cannot open database "MyProjectNameCache" requested by the login. The login failed.
+Login failed for user 'MicrosoftAccount\halilibrahimkalkan@outlook.com'.
+   at System.Data.SqlClient.SqlInternalConnectionTds..ctor(DbConnectionPoolIdentity identity, SqlConnectionString connectionOptions, SqlCredential credential, Object providerInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString userConnectionOptions, SessionData reconnectSessionData, Boolean applyTransientFaultHandling, String accessToken)
+   at System.Data.SqlClient.SqlConnectionFactory.CreateConnection(DbConnectionOptions options, DbConnectionPoolKey poolKey, Object poolGroupProviderInfo, DbConnectionPool pool, DbConnection owningConnection, DbConnectionOptions userOptions)
+   at System.Data.ProviderBase.DbConnectionFactory.CreatePooledConnection(DbConnectionPool pool, DbConnection owningObject, DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionOptions userOptions)
+   at System.Data.ProviderBase.DbConnectionPool.CreateObject(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+   at System.Data.ProviderBase.DbConnectionPool.UserCreateRequest(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+   at System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   at System.Data.ProviderBase.DbConnectionPool.WaitForPendingOpen()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.Extensions.Caching.SqlServer.DatabaseOperations.GetCacheItemAsync(String key, Boolean includeValue, CancellationToken token)
+   at Microsoft.Extensions.Caching.SqlServer.DatabaseOperations.GetCacheItemAsync(String key, CancellationToken token)
+   at Microsoft.Extensions.Caching.SqlServer.SqlServerCache.GetAsync(String key, CancellationToken token)
+   at Volo.Abp.Caching.DistributedCache`1.GetAsync(String key, CancellationToken token) in D:\Github\abp\framework\src\Volo.Abp.Caching\Volo\Abp\Caching\DistributedCache.cs:line 57
+   at Volo.Abp.SettingManagement.SettingStore.GetCacheItemAsync(String name, String providerName, String providerKey) in D:\Github\abp\modules\setting-management\src\Volo.Abp.SettingManagement.Domain\Volo\Abp\SettingManagement\SettingStore.cs:line 66
+   at Volo.Abp.SettingManagement.SettingStore.GetOrNullAsync(String name, String providerName, String providerKey) in D:\Github\abp\modules\setting-management\src\Volo.Abp.SettingManagement.Domain\Volo\Abp\SettingManagement\SettingStore.cs:line 29
+   at Volo.Abp.Settings.SettingManager.GetOrNullValueFromProvidersAsync(String providerKey, IEnumerable`1 providers, SettingDefinition setting) in D:\Github\abp\framework\src\Volo.Abp.Settings\Volo\Abp\Settings\SettingManager.cs:line 217
+   at Volo.Abp.Settings.SettingManager.GetOrNullInternalAsync(String name, String providerName, String providerKey, Boolean fallback) in D:\Github\abp\framework\src\Volo.Abp.Settings\Volo\Abp\Settings\SettingManager.cs:line 201
+   at Nito.AsyncEx.Synchronous.TaskExtensions.WaitAndUnwrapException[TResult](Task`1 task)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot)
+--- End of stack trace from previous location where exception was thrown ---
+   at Nito.AsyncEx.Synchronous.TaskExtensions.WaitAndUnwrapException[TResult](Task`1 task)
+   at Nito.AsyncEx.AsyncContext.Run[TResult](Func`1 action)
+   at Volo.Abp.Threading.AsyncHelper.RunSync[TResult](Func`1 func) in D:\Github\abp\framework\src\Volo.Abp.Core\Volo\Abp\Threading\AsyncHelper.cs:line 60
+   at Volo.Abp.Settings.SettingManagerSyncExtensions.GetOrNull(ISettingManager settingManager, String name) in D:\Github\abp\framework\src\Volo.Abp.Settings\Volo\Abp\Settings\SettingManagerSyncExtensions.cs:line 13
+   at Microsoft.AspNetCore.Builder.AbpApplicationBuilderExtensions.UseAbpRequestLocalization(IApplicationBuilder app) in D:\Github\abp\framework\src\Volo.Abp.AspNetCore\Microsoft\AspNetCore\Builder\AbpApplicationBuilderExtensions.cs:line 54
+   at MyCompanyName.MyProjectName.Host.DemoAppModule.OnApplicationInitialization(ApplicationInitializationContext context) in D:\Github\abp\templates\service\host\MyCompanyName.MyProjectName.Host\DemoAppModule.cs:line 109
+   at Volo.Abp.Modularity.OnApplicationInitializationModuleLifecycleContributor.Initialize(ApplicationInitializationContext context, IAbpModule module) in D:\Github\abp\framework\src\Volo.Abp.Core\Volo\Abp\Modularity\DefaultModuleLifecycleContributor.cs:line 7
+   at Volo.Abp.Modularity.ModuleManager.InitializeModules(ApplicationInitializationContext context) in D:\Github\abp\framework\src\Volo.Abp.Core\Volo\Abp\Modularity\ModuleManager.cs:line 41
+   at Volo.Abp.AbpApplicationBase.InitializeModules() in D:\Github\abp\framework\src\Volo.Abp.Core\Volo\Abp\AbpApplicationBase.cs:line 72
+   at Volo.Abp.AbpApplicationWithExternalServiceProvider.Initialize(IServiceProvider serviceProvider) in D:\Github\abp\framework\src\Volo.Abp.Core\Volo\Abp\AbpApplicationWithExternalServiceProvider.cs:line 27
+   at Microsoft.AspNetCore.Builder.AbpApplicationBuilderExtensions.InitializeApplication(IApplicationBuilder app) in D:\Github\abp\framework\src\Volo.Abp.AspNetCore\Microsoft\AspNetCore\Builder\AbpApplicationBuilderExtensions.cs:line 27
+   at MyCompanyName.MyProjectName.Host.Startup.Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory) in D:\Github\abp\templates\service\host\MyCompanyName.MyProjectName.Host\Startup.cs:line 24
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Hosting.ConventionBasedStartup.Configure(IApplicationBuilder app)
+   at Microsoft.AspNetCore.Mvc.Internal.MiddlewareFilterBuilderStartupFilter.<>c__DisplayClass0_0.<Configure>g__MiddlewareFilterBuilder|0(IApplicationBuilder builder)
+   at Microsoft.AspNetCore.Server.IISIntegration.IISSetupFilter.<>c__DisplayClass4_0.<Configure>b__0(IApplicationBuilder app)
+   at Microsoft.AspNetCore.Hosting.Internal.AutoRequestServicesStartupFilter.<>c__DisplayClass0_0.<Configure>b__0(IApplicationBuilder builder)
+   at Microsoft.AspNetCore.Hosting.Internal.WebHost.BuildApplication()
+ClientConnectionId:f4f9905c-c66c-41ee-8497-649f2e111e03
+Error Number:4060,State:1,Class:11
+2019-01-07 14:46:22.022 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:57992/  
+2019-01-07 14:46:22.061 +03:00 [INF] Request finished in 39.0742ms 500 text/html; charset=utf-8
+2019-01-07 14:46:39.070 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:57992/  
+2019-01-07 14:46:39.085 +03:00 [INF] Request finished in 14.9782ms 500 text/html; charset=utf-8
+2019-01-07 14:46:48.817 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:57992/  
+2019-01-07 14:46:48.855 +03:00 [INF] Request finished in 38.2239ms 500 text/html; charset=utf-8
+2019-01-07 14:47:42.990 +03:00 [INF] Starting web host.
+2019-01-07 14:47:44.287 +03:00 [INF] User profile is available. Using 'C:\Users\halil\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2019-01-07 14:47:44.347 +03:00 [INF] Loaded modules:
+2019-01-07 14:47:44.347 +03:00 [INF] - Volo.Abp.Castle.AbpCastleCoreModule
+2019-01-07 14:47:44.347 +03:00 [INF] - Volo.Abp.Autofac.AbpAutofacModule
+2019-01-07 14:47:44.347 +03:00 [INF] - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2019-01-07 14:47:44.347 +03:00 [INF] - Volo.Abp.Localization.AbpLocalizationAbstractionsModule
+2019-01-07 14:47:44.347 +03:00 [INF] - Volo.Abp.Security.AbpSecurityModule
+2019-01-07 14:47:44.347 +03:00 [INF] - Volo.Abp.Settings.AbpSettingsModule
+2019-01-07 14:47:44.347 +03:00 [INF] - Volo.Abp.Localization.AbpLocalizationModule
+2019-01-07 14:47:44.347 +03:00 [INF] - MyCompanyName.MyProjectName.MyProjectNameDomainSharedModule
+2019-01-07 14:47:44.347 +03:00 [INF] - MyCompanyName.MyProjectName.MyProjectNameDomainModule
+2019-01-07 14:47:44.347 +03:00 [INF] - Volo.Abp.Data.AbpDataModule
+2019-01-07 14:47:44.347 +03:00 [INF] - Volo.Abp.Timing.AbpTimingModule
+2019-01-07 14:47:44.347 +03:00 [INF] - Volo.Abp.Json.AbpJsonModule
+2019-01-07 14:47:44.347 +03:00 [INF] - Volo.Abp.Threading.AbpThreadingModule
+2019-01-07 14:47:44.347 +03:00 [INF] - Volo.Abp.MultiTenancy.AbpMultiTenancyAbstractionsModule
+2019-01-07 14:47:44.347 +03:00 [INF] - Volo.Abp.Auditing.AbpAuditingModule
+2019-01-07 14:47:44.347 +03:00 [INF] - Volo.Abp.EventBus.AbpEventBusModule
+2019-01-07 14:47:44.347 +03:00 [INF] - Volo.Abp.Guids.AbpGuidsModule
+2019-01-07 14:47:44.347 +03:00 [INF] - Volo.Abp.Uow.AbpUnitOfWorkModule
+2019-01-07 14:47:44.347 +03:00 [INF] - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2019-01-07 14:47:44.347 +03:00 [INF] - Volo.Abp.Domain.AbpDddDomainModule
+2019-01-07 14:47:44.347 +03:00 [INF] - Volo.Abp.Validation.AbpValidationModule
+2019-01-07 14:47:44.347 +03:00 [INF] - Volo.Abp.Authorization.AbpAuthorizationModule
+2019-01-07 14:47:44.347 +03:00 [INF] - Volo.Abp.Http.AbpHttpAbstractionsModule
+2019-01-07 14:47:44.347 +03:00 [INF] - Volo.Abp.Application.AbpDddApplicationModule
+2019-01-07 14:47:44.347 +03:00 [INF] - MyCompanyName.MyProjectName.MyProjectNameApplicationContractsModule
+2019-01-07 14:47:44.347 +03:00 [INF] - Volo.Abp.AutoMapper.AbpAutoMapperModule
+2019-01-07 14:47:44.347 +03:00 [INF] - MyCompanyName.MyProjectName.MyProjectNameApplicationModule
+2019-01-07 14:47:44.347 +03:00 [INF] - Volo.Abp.EntityFrameworkCore.AbpEntityFrameworkCoreModule
+2019-01-07 14:47:44.347 +03:00 [INF] - MyCompanyName.MyProjectName.EntityFrameworkCore.MyProjectNameEntityFrameworkCoreModule
+2019-01-07 14:47:44.347 +03:00 [INF] - Volo.Abp.Http.AbpHttpModule
+2019-01-07 14:47:44.347 +03:00 [INF] - Volo.Abp.UI.AbpUiModule
+2019-01-07 14:47:44.347 +03:00 [INF] - Volo.Abp.AspNetCore.AbpAspNetCoreModule
+2019-01-07 14:47:44.347 +03:00 [INF] - Volo.Abp.ApiVersioning.AbpApiVersioningAbstractionsModule
+2019-01-07 14:47:44.347 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcModule
+2019-01-07 14:47:44.347 +03:00 [INF] - MyCompanyName.MyProjectName.MyProjectNameHttpApiModule
+2019-01-07 14:47:44.347 +03:00 [INF] - Volo.Abp.PermissionManagement.AbpPermissionManagementDomainSharedModule
+2019-01-07 14:47:44.347 +03:00 [INF] - Volo.Abp.Serialization.AbpSerializationModule
+2019-01-07 14:47:44.347 +03:00 [INF] - Volo.Abp.Caching.AbpCachingModule
+2019-01-07 14:47:44.347 +03:00 [INF] - Volo.Abp.PermissionManagement.AbpPermissionManagementDomainModule
+2019-01-07 14:47:44.347 +03:00 [INF] - Volo.Abp.PermissionManagement.EntityFrameworkCore.AbpPermissionManagementEntityFrameworkCoreModule
+2019-01-07 14:47:44.347 +03:00 [INF] - Volo.Abp.SettingManagement.AbpSettingManagementDomainSharedModule
+2019-01-07 14:47:44.347 +03:00 [INF] - Volo.Abp.SettingManagement.AbpSettingManagementDomainModule
+2019-01-07 14:47:44.347 +03:00 [INF] - Volo.Abp.SettingManagement.EntityFrameworkCore.AbpSettingManagementEntityFrameworkCoreModule
+2019-01-07 14:47:44.347 +03:00 [INF] - Volo.Abp.AuditLogging.AbpAuditLoggingDomainSharedModule
+2019-01-07 14:47:44.347 +03:00 [INF] - Volo.Abp.AuditLogging.AbpAuditLoggingDomainModule
+2019-01-07 14:47:44.347 +03:00 [INF] - Volo.Abp.AuditLogging.EntityFrameworkCore.AbpAuditLoggingEntityFrameworkCoreModule
+2019-01-07 14:47:44.347 +03:00 [INF] - Volo.Abp.EntityFrameworkCore.SqlServer.AbpEntityFrameworkCoreSqlServerModule
+2019-01-07 14:47:44.347 +03:00 [INF] - MyCompanyName.MyProjectName.Host.DemoAppModule
+2019-01-07 14:47:44.390 +03:00 [DBG] No class found with auto mapping attributes.
+2019-01-07 14:47:44.806 +03:00 [FTL] Application startup exception
+System.Data.SqlClient.SqlException (0x80131904): Invalid object name 'dbo.TestCache'.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlDataReader.get_MetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.CompleteAsyncExecuteReader()
+   at System.Data.SqlClient.SqlCommand.InternalEndExecuteReader(IAsyncResult asyncResult, String endMethod)
+   at System.Data.SqlClient.SqlCommand.EndExecuteReaderInternal(IAsyncResult asyncResult)
+   at System.Data.SqlClient.SqlCommand.EndExecuteReader(IAsyncResult asyncResult)
+   at System.Threading.Tasks.TaskFactory`1.FromAsyncCoreLogic(IAsyncResult iar, Func`2 endFunction, Action`1 endAction, Task`1 promise, Boolean requiresSynchronization)
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.Extensions.Caching.SqlServer.DatabaseOperations.GetCacheItemAsync(String key, Boolean includeValue, CancellationToken token)
+   at Microsoft.Extensions.Caching.SqlServer.DatabaseOperations.GetCacheItemAsync(String key, CancellationToken token)
+   at Microsoft.Extensions.Caching.SqlServer.SqlServerCache.GetAsync(String key, CancellationToken token)
+   at Volo.Abp.Caching.DistributedCache`1.GetAsync(String key, CancellationToken token) in D:\Github\abp\framework\src\Volo.Abp.Caching\Volo\Abp\Caching\DistributedCache.cs:line 57
+   at Volo.Abp.SettingManagement.SettingStore.GetCacheItemAsync(String name, String providerName, String providerKey) in D:\Github\abp\modules\setting-management\src\Volo.Abp.SettingManagement.Domain\Volo\Abp\SettingManagement\SettingStore.cs:line 66
+   at Volo.Abp.SettingManagement.SettingStore.GetOrNullAsync(String name, String providerName, String providerKey) in D:\Github\abp\modules\setting-management\src\Volo.Abp.SettingManagement.Domain\Volo\Abp\SettingManagement\SettingStore.cs:line 29
+   at Volo.Abp.Settings.SettingManager.GetOrNullValueFromProvidersAsync(String providerKey, IEnumerable`1 providers, SettingDefinition setting) in D:\Github\abp\framework\src\Volo.Abp.Settings\Volo\Abp\Settings\SettingManager.cs:line 217
+   at Volo.Abp.Settings.SettingManager.GetOrNullInternalAsync(String name, String providerName, String providerKey, Boolean fallback) in D:\Github\abp\framework\src\Volo.Abp.Settings\Volo\Abp\Settings\SettingManager.cs:line 201
+   at Nito.AsyncEx.Synchronous.TaskExtensions.WaitAndUnwrapException[TResult](Task`1 task)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot)
+--- End of stack trace from previous location where exception was thrown ---
+   at Nito.AsyncEx.Synchronous.TaskExtensions.WaitAndUnwrapException[TResult](Task`1 task)
+   at Nito.AsyncEx.AsyncContext.Run[TResult](Func`1 action)
+   at Volo.Abp.Threading.AsyncHelper.RunSync[TResult](Func`1 func) in D:\Github\abp\framework\src\Volo.Abp.Core\Volo\Abp\Threading\AsyncHelper.cs:line 60
+   at Volo.Abp.Settings.SettingManagerSyncExtensions.GetOrNull(ISettingManager settingManager, String name) in D:\Github\abp\framework\src\Volo.Abp.Settings\Volo\Abp\Settings\SettingManagerSyncExtensions.cs:line 13
+   at Microsoft.AspNetCore.Builder.AbpApplicationBuilderExtensions.UseAbpRequestLocalization(IApplicationBuilder app) in D:\Github\abp\framework\src\Volo.Abp.AspNetCore\Microsoft\AspNetCore\Builder\AbpApplicationBuilderExtensions.cs:line 54
+   at MyCompanyName.MyProjectName.Host.DemoAppModule.OnApplicationInitialization(ApplicationInitializationContext context) in D:\Github\abp\templates\service\host\MyCompanyName.MyProjectName.Host\DemoAppModule.cs:line 109
+   at Volo.Abp.Modularity.OnApplicationInitializationModuleLifecycleContributor.Initialize(ApplicationInitializationContext context, IAbpModule module) in D:\Github\abp\framework\src\Volo.Abp.Core\Volo\Abp\Modularity\DefaultModuleLifecycleContributor.cs:line 7
+   at Volo.Abp.Modularity.ModuleManager.InitializeModules(ApplicationInitializationContext context) in D:\Github\abp\framework\src\Volo.Abp.Core\Volo\Abp\Modularity\ModuleManager.cs:line 41
+   at Volo.Abp.AbpApplicationBase.InitializeModules() in D:\Github\abp\framework\src\Volo.Abp.Core\Volo\Abp\AbpApplicationBase.cs:line 72
+   at Volo.Abp.AbpApplicationWithExternalServiceProvider.Initialize(IServiceProvider serviceProvider) in D:\Github\abp\framework\src\Volo.Abp.Core\Volo\Abp\AbpApplicationWithExternalServiceProvider.cs:line 27
+   at Microsoft.AspNetCore.Builder.AbpApplicationBuilderExtensions.InitializeApplication(IApplicationBuilder app) in D:\Github\abp\framework\src\Volo.Abp.AspNetCore\Microsoft\AspNetCore\Builder\AbpApplicationBuilderExtensions.cs:line 27
+   at MyCompanyName.MyProjectName.Host.Startup.Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory) in D:\Github\abp\templates\service\host\MyCompanyName.MyProjectName.Host\Startup.cs:line 24
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Hosting.ConventionBasedStartup.Configure(IApplicationBuilder app)
+   at Microsoft.AspNetCore.Mvc.Internal.MiddlewareFilterBuilderStartupFilter.<>c__DisplayClass0_0.<Configure>g__MiddlewareFilterBuilder|0(IApplicationBuilder builder)
+   at Microsoft.AspNetCore.Server.IISIntegration.IISSetupFilter.<>c__DisplayClass4_0.<Configure>b__0(IApplicationBuilder app)
+   at Microsoft.AspNetCore.Hosting.Internal.AutoRequestServicesStartupFilter.<>c__DisplayClass0_0.<Configure>b__0(IApplicationBuilder builder)
+   at Microsoft.AspNetCore.Hosting.Internal.WebHost.BuildApplication()
+ClientConnectionId:d28745af-08b1-4111-a089-3f46c995c65d
+Error Number:208,State:1,Class:16
+2019-01-07 14:47:44.964 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:57992/  
+2019-01-07 14:47:44.998 +03:00 [INF] Request finished in 33.8928ms 500 text/html; charset=utf-8

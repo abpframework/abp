@@ -1,8 +1,10 @@
 ﻿using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Options;
 using Nito.AsyncEx;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Serialization;
@@ -13,6 +15,8 @@ namespace Volo.Abp.Caching
     public class DistributedCache<TCacheItem> : IDistributedCache<TCacheItem>
         where TCacheItem : class
     {
+        public ILogger<DistributedCache<TCacheItem>> Logger { get; set; }
+
         protected string CacheName { get; set; }
 
         protected bool IgnoreMultiTenancy { get; set; }
@@ -27,23 +31,53 @@ namespace Volo.Abp.Caching
 
         protected AsyncLock AsyncLock { get; } = new AsyncLock();
 
+        protected DistributedCacheEntryOptions DefaultCacheOptions;
+
+        private readonly CacheOptions _cacheOption;
+
+        private readonly DistributedCacheOptions _distributedCacheOption;
+
         public DistributedCache(
+            IOptions<CacheOptions> cacheOption,
+            IOptions<DistributedCacheOptions> distributedCacheOption,
             IDistributedCache cache,
             ICancellationTokenProvider cancellationTokenProvider,
+
             IObjectSerializer objectSerializer,
             ICurrentTenant currentTenant)
         {
+            _distributedCacheOption = distributedCacheOption.Value;
+            _cacheOption = cacheOption.Value;
             Cache = cache;
             CancellationTokenProvider = cancellationTokenProvider;
+            Logger = NullLogger<DistributedCache<TCacheItem>>.Instance;
             ObjectSerializer = objectSerializer;
             CurrentTenant = currentTenant;
 
             SetDefaultOptions();
         }
 
-        public virtual TCacheItem Get(string key)
+        public virtual TCacheItem Get(string key, bool? hideErrors = null)
         {
-            var cachedBytes = Cache.Get(NormalizeKey(key));
+            hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
+
+            byte[] cachedBytes;
+
+            try
+            {
+                cachedBytes = Cache.Get(NormalizeKey(key));
+            }
+            catch (Exception ex)
+            {
+                if (hideErrors == true)
+                {
+                    Logger.LogException(ex, LogLevel.Warning);
+                    return null;
+                }
+
+                throw;
+            }
+
             if (cachedBytes == null)
             {
                 return null;
@@ -52,9 +86,30 @@ namespace Volo.Abp.Caching
             return ObjectSerializer.Deserialize<TCacheItem>(cachedBytes);
         }
 
-        public virtual async Task<TCacheItem> GetAsync(string key, CancellationToken token = default)
+        public virtual async Task<TCacheItem> GetAsync(string key, bool? hideErrors = null, CancellationToken token = default)
         {
-            var cachedBytes = await Cache.GetAsync(NormalizeKey(key), CancellationTokenProvider.FallbackToProvider(token));
+            hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
+
+            byte[] cachedBytes;
+
+            try
+            {
+                cachedBytes = await Cache.GetAsync(
+                    NormalizeKey(key),
+                    CancellationTokenProvider.FallbackToProvider(token)
+                );
+            }
+            catch (Exception ex)
+            {
+                if (hideErrors == true)
+                {
+                    Logger.LogException(ex, LogLevel.Warning);
+                    return null;
+                }
+
+                throw;
+            }
+            
             if (cachedBytes == null)
             {
                 return null;
@@ -64,38 +119,41 @@ namespace Volo.Abp.Caching
         }
 
         public TCacheItem GetOrAdd(
-            string key, 
+            string key,
             Func<TCacheItem> factory,
-            Func<DistributedCacheEntryOptions> optionsFactory = null)
+            Func<DistributedCacheEntryOptions> optionsFactory = null,
+            bool? hideErrors = null)
         {
-            var value = Get(key);
+            var value = Get(key, hideErrors);
             if (value != null)
             {
                 return value;
             }
 
-            using (AsyncLock.Lock())
+            using (AsyncLock.Lock(CancellationTokenProvider.Token))
             {
-                value = Get(key);
+                value = Get(key, hideErrors);
                 if (value != null)
                 {
                     return value;
                 }
 
                 value = factory();
-                Set(key, value, optionsFactory?.Invoke());
+                Set(key, value, optionsFactory?.Invoke(), hideErrors);
             }
 
             return value;
         }
 
         public async Task<TCacheItem> GetOrAddAsync(
-            string key, 
+            string key,
             Func<Task<TCacheItem>> factory,
-            Func<DistributedCacheEntryOptions> optionsFactory = null, 
+            Func<DistributedCacheEntryOptions> optionsFactory = null,
+            bool? hideErrors = null,
             CancellationToken token = default)
         {
-            var value = await GetAsync(key, token);
+            token = CancellationTokenProvider.FallbackToProvider(token);
+            var value = await GetAsync(key, hideErrors, token);
             if (value != null)
             {
                 return value;
@@ -103,56 +161,145 @@ namespace Volo.Abp.Caching
 
             using (await AsyncLock.LockAsync(token))
             {
-                value = await GetAsync(key, token);
+                value = await GetAsync(key, hideErrors, token);
                 if (value != null)
                 {
                     return value;
                 }
 
                 value = await factory();
-                await SetAsync(key, value, optionsFactory?.Invoke(), token);
+                await SetAsync(key, value, optionsFactory?.Invoke(), hideErrors, token);
             }
 
             return value;
         }
 
-        public virtual void Set(string key, TCacheItem value, DistributedCacheEntryOptions options = null)
+        public virtual void Set(string key, TCacheItem value, DistributedCacheEntryOptions options = null, bool? hideErrors = null)
         {
-            Cache.Set(
-                NormalizeKey(key),
-                ObjectSerializer.Serialize(value),
-                options ?? new DistributedCacheEntryOptions { SlidingExpiration = TimeSpan.FromMinutes(20) } //TODO: implement per cache item and global defaults!!!
-            );
+            hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
+
+            try
+            {
+                Cache.Set(
+                    NormalizeKey(key),
+                    ObjectSerializer.Serialize(value),
+                    options ?? DefaultCacheOptions
+                );
+            }
+            catch (Exception ex)
+            {
+                if (hideErrors == true)
+                {
+                    Logger.LogException(ex, LogLevel.Warning);
+                    return;
+                }
+
+                throw;
+            }
         }
 
-        public virtual Task SetAsync(string key, TCacheItem value, DistributedCacheEntryOptions options = null, CancellationToken token = default)
+        public virtual async Task SetAsync(string key, TCacheItem value, DistributedCacheEntryOptions options = null, bool? hideErrors = null, CancellationToken token = default)
         {
-            return Cache.SetAsync(
-                NormalizeKey(key),
-                ObjectSerializer.Serialize(value),
-                options ?? new DistributedCacheEntryOptions { SlidingExpiration = TimeSpan.FromMinutes(20) }, //TODO: implement per cache item and global defaults!!!
-                CancellationTokenProvider.FallbackToProvider(token)
-            );
+            hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
+
+            try
+            {
+                await Cache.SetAsync(
+                    NormalizeKey(key),
+                    ObjectSerializer.Serialize(value),
+                    options ?? DefaultCacheOptions,
+                    CancellationTokenProvider.FallbackToProvider(token)
+                );
+            }
+            catch (Exception ex)
+            {
+                if (hideErrors == true)
+                {
+                    Logger.LogException(ex, LogLevel.Warning);
+                    return;
+                }
+
+                throw;
+            }
         }
 
-        public virtual void Refresh(string key)
+        public virtual void Refresh(string key, bool? hideErrors = null)
         {
-            Cache.Refresh(NormalizeKey(key));
+            hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
+
+            try
+            {
+                Cache.Refresh(NormalizeKey(key));
+            }
+            catch (Exception ex)
+            {
+                if (hideErrors == true)
+                {
+                    Logger.LogException(ex, LogLevel.Warning);
+                    return;
+                }
+
+                throw;
+            }
         }
 
-        public virtual Task RefreshAsync(string key, CancellationToken token = default)
+        public virtual async Task RefreshAsync(string key, bool? hideErrors = null, CancellationToken token = default)
         {
-            return Cache.RefreshAsync(NormalizeKey(key), CancellationTokenProvider.FallbackToProvider(token));
+            hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
+
+            try
+            {
+                await Cache.RefreshAsync(NormalizeKey(key), CancellationTokenProvider.FallbackToProvider(token));
+            }
+            catch (Exception ex)
+            {
+                if (hideErrors == true)
+                {
+                    Logger.LogException(ex, LogLevel.Warning);
+                    return;
+                }
+
+                throw;
+            }
         }
 
-        public virtual void Remove(string key)
+        public virtual void Remove(string key, bool? hideErrors = null)
         {
-            Cache.Remove(NormalizeKey(key));
+            hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
+
+            try
+            {
+                Cache.Remove(NormalizeKey(key));
+            }
+            catch (Exception ex)
+            {
+                if (hideErrors == true)
+                {
+                    Logger.LogException(ex, LogLevel.Warning);
+                }
+
+                throw;
+            }
         }
 
-        public virtual Task RemoveAsync(string key, CancellationToken token = default)
+        public virtual async Task RemoveAsync(string key, bool? hideErrors = null, CancellationToken token = default)
         {
-            return Cache.RemoveAsync(NormalizeKey(key), CancellationTokenProvider.FallbackToProvider(token));
+            hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
+
+            try
+            {
+                await Cache.RemoveAsync(NormalizeKey(key), CancellationTokenProvider.FallbackToProvider(token));
+            }
+            catch (Exception ex)
+            {
+                if (hideErrors == true)
+                {
+                    Logger.LogException(ex, LogLevel.Warning);
+                    return;
+                }
+
+                throw;
+            }
         }
 
         protected virtual string NormalizeKey(string key)
@@ -167,18 +314,28 @@ namespace Volo.Abp.Caching
             return normalizedKey;
         }
 
+        protected virtual DistributedCacheEntryOptions GetDefaultCacheEntryOptions()
+        {
+            foreach (var configure in _cacheOption.CacheConfigurators)
+            {
+                var options = configure.Invoke(CacheName);
+                if (options != null)
+                {
+                    return options;
+                }
+            }
+            return _cacheOption.GlobalCacheEntryOptions;
+        }
+
         protected virtual void SetDefaultOptions()
         {
-            //CacheName
-            var cacheNameAttribute = typeof(TCacheItem)
-                .GetCustomAttributes(true)
-                .OfType<CacheNameAttribute>()
-                .FirstOrDefault();
-
-            CacheName = cacheNameAttribute != null ? cacheNameAttribute.Name : typeof(TCacheItem).Name;
+            CacheName = CacheNameAttribute.GetCacheName(typeof(TCacheItem));
 
             //IgnoreMultiTenancy
             IgnoreMultiTenancy = typeof(TCacheItem).IsDefined(typeof(IgnoreMultiTenancyAttribute), true);
+
+            //Configure default cache entry options
+            DefaultCacheOptions = GetDefaultCacheEntryOptions();
         }
     }
 }

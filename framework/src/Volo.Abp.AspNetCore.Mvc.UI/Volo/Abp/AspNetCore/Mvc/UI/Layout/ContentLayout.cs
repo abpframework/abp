@@ -1,4 +1,7 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Layout
+﻿using System;
+using System.Linq;
+
+namespace Volo.Abp.AspNetCore.Mvc.UI.Layout
 {
     public class ContentLayout
     {
@@ -11,6 +14,21 @@
         public ContentLayout()
         {
             BreadCrumb = new BreadCrumb();
+        }
+
+        public virtual bool ShouldShowBreadCrumb()
+        {
+            if (BreadCrumb.Items.Any())
+            {
+                return true;
+            }
+
+            if (BreadCrumb.ShowCurrent && !Title.IsNullOrEmpty())
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

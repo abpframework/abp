@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.AspNetCore.Modularity;
 using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.TestBase;
 using Volo.Abp.Json;
@@ -19,9 +18,9 @@ namespace Volo.Abp.AspNetCore.App
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<TenantResolveOptions>(options =>
+            Configure<MultiTenancyOptions>(options =>
             {
-                options.AddDomainTenantResolver("{0}.abp.io");
+                options.IsEnabled = true;
             });
         }
 

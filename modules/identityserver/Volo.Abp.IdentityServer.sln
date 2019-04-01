@@ -21,7 +21,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.IdentityServer.Tes
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.IdentityServer.MongoDB.Tests", "test\Volo.Abp.IdentityServer.MongoDB.Tests\Volo.Abp.IdentityServer.MongoDB.Tests.csproj", "{2E18B471-7FCA-497B-90FF-6AA9172CC62F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.IdentityServer.Domain.Tests", "test\Volo.Abp.IdentityServer.Domain.Tests\Volo.Abp.IdentityServer.Domain.Tests.csproj", "{0680D0B6-51C0-4812-8A0B-192FDE717E60}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.IdentityServer.Domain.Tests", "test\Volo.Abp.IdentityServer.Domain.Tests\Volo.Abp.IdentityServer.Domain.Tests.csproj", "{0680D0B6-51C0-4812-8A0B-192FDE717E60}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.PermissionManagement.Domain.IdentityServer", "src\Volo.Abp.PermissionManagement.Domain.IdentityServer\Volo.Abp.PermissionManagement.Domain.IdentityServer.csproj", "{072BD630-FB89-45FC-BA2D-12A9745AAB93}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -61,6 +63,10 @@ Global
 		{0680D0B6-51C0-4812-8A0B-192FDE717E60}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0680D0B6-51C0-4812-8A0B-192FDE717E60}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0680D0B6-51C0-4812-8A0B-192FDE717E60}.Release|Any CPU.Build.0 = Release|Any CPU
+		{072BD630-FB89-45FC-BA2D-12A9745AAB93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{072BD630-FB89-45FC-BA2D-12A9745AAB93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{072BD630-FB89-45FC-BA2D-12A9745AAB93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{072BD630-FB89-45FC-BA2D-12A9745AAB93}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -74,6 +80,7 @@ Global
 		{9CD1BFDB-DD76-4194-ACAD-A64541AC2069} = {2C792EC1-BA27-44ED-B7CC-D0939553F1B2}
 		{2E18B471-7FCA-497B-90FF-6AA9172CC62F} = {2C792EC1-BA27-44ED-B7CC-D0939553F1B2}
 		{0680D0B6-51C0-4812-8A0B-192FDE717E60} = {2C792EC1-BA27-44ED-B7CC-D0939553F1B2}
+		{072BD630-FB89-45FC-BA2D-12A9745AAB93} = {59A0FC0F-EA6D-477B-84A7-3B1E41B4C858}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {45562023-C330-4060-A583-2BA10F472D3D}

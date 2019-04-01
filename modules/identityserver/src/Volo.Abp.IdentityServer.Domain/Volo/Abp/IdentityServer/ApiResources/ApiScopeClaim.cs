@@ -15,6 +15,11 @@ namespace Volo.Abp.IdentityServer.ApiResources
 
         }
 
+        public virtual bool Equals(Guid apiResourceId, [NotNull] string name, [NotNull] string type)
+        {
+            return ApiResourceId == apiResourceId && Name == name && Type == type;
+        }
+
         protected internal ApiScopeClaim(Guid apiResourceId, [NotNull] string name, [NotNull] string type)
             : base(type)
         {

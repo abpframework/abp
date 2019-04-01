@@ -28,12 +28,12 @@ namespace Volo.Abp.Identity
         {
             var user = await _userManager.GetByIdAsync(CurrentUser.GetId());
 
-            if (await SettingManager.IsTrueAsync(IdentitySettingNames.User.IsUserNameUpdateEnabled))
+            if (await SettingProvider.IsTrueAsync(IdentitySettingNames.User.IsUserNameUpdateEnabled))
             {
                 (await _userManager.SetUserNameAsync(user, input.UserName)).CheckErrors();
             }
 
-            if (await SettingManager.IsTrueAsync(IdentitySettingNames.User.IsEmailUpdateEnabled))
+            if (await SettingProvider.IsTrueAsync(IdentitySettingNames.User.IsEmailUpdateEnabled))
             {
                 (await _userManager.SetEmailAsync(user, input.Email)).CheckErrors();
             }
@@ -48,6 +48,12 @@ namespace Volo.Abp.Identity
             await CurrentUnitOfWork.SaveChangesAsync();
 
             return ObjectMapper.Map<IdentityUser, ProfileDto>(user);
+        }
+
+        public async Task ChangePasswordAsync(string currentPassword, string newPassword)
+        {
+            var currentUser = await _userManager.GetByIdAsync(CurrentUser.GetId());
+            (await _userManager.ChangePasswordAsync(currentUser, currentPassword, newPassword)).CheckErrors();
         }
     }
 }

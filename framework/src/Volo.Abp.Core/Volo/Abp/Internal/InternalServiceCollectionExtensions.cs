@@ -16,13 +16,22 @@ namespace Volo.Abp.Internal
             services.AddLocalization();
         }
 
-        internal static void AddCoreAbpServices(this IServiceCollection services, IAbpApplication abpApplication)
+        internal static void AddCoreAbpServices(this IServiceCollection services,
+            IAbpApplication abpApplication, 
+            AbpApplicationCreationOptions applicationCreationOptions)
         {
             var moduleLoader = new ModuleLoader();
             var assemblyFinder = new AssemblyFinder(abpApplication);
             var typeFinder = new TypeFinder(assemblyFinder);
 
-            services.TryAddSingleton<IConfigurationAccessor>(DefaultConfigurationAccessor.Empty);
+            services.TryAddSingleton<IConfigurationAccessor>(
+                new DefaultConfigurationAccessor(
+                    ConfigurationHelper.BuildConfiguration(
+                        applicationCreationOptions.Configuration
+                    )
+                )
+            );
+
             services.TryAddSingleton<IModuleLoader>(moduleLoader);
             services.TryAddSingleton<IAssemblyFinder>(assemblyFinder);
             services.TryAddSingleton<ITypeFinder>(typeFinder);
@@ -31,10 +40,10 @@ namespace Volo.Abp.Internal
 
             services.Configure<ModuleLifecycleOptions>(options =>
             {
-                options.Contributers.Add<OnPreApplicationInitializationModuleLifecycleContributer>();
-                options.Contributers.Add<OnApplicationInitializationModuleLifecycleContributer>();
-                options.Contributers.Add<OnPostApplicationInitializationModuleLifecycleContributer>();
-                options.Contributers.Add<OnApplicationShutdownModuleLifecycleContributer>();
+                options.Contributors.Add<OnPreApplicationInitializationModuleLifecycleContributor>();
+                options.Contributors.Add<OnApplicationInitializationModuleLifecycleContributor>();
+                options.Contributors.Add<OnPostApplicationInitializationModuleLifecycleContributor>();
+                options.Contributors.Add<OnApplicationShutdownModuleLifecycleContributor>();
             });
         }
     }

@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Text;
 using System.Text.RegularExpressions;
-using CommonMark;
 using Volo.Abp.DependencyInjection;
 using Volo.Docs.Documents;
 using Volo.Docs.HtmlConverting;
@@ -14,10 +12,17 @@ namespace Volo.Docs.Markdown
     {
         public const string Type = "md";
 
+        private readonly IMarkdownConverter _markdownConverter;
+
+        public MarkdownDocumentToHtmlConverter(IMarkdownConverter markdownConverter)
+        {
+            _markdownConverter = markdownConverter;
+        }
+
         private const string MdLinkFormat = "[{0}](/documents/{1}/{2}{3}/{4})";
         private const string MarkdownLinkRegExp = @"\[(.*)\]\((.*\.md)\)";
         private const string AnchorLinkRegExp = @"<a[^>]+href=\""(.*?)\""[^>]*>(.*)?</a>";
-
+         
         public virtual string Convert(ProjectDto project, DocumentWithDetailsDto document, string version)
         {
             if (document.Content.IsNullOrEmpty())
@@ -32,9 +37,9 @@ namespace Volo.Docs.Markdown
                 document.LocalDirectory
             );
 
-            return CommonMarkConverter.Convert(Encoding.UTF8.GetString(Encoding.Default.GetBytes(content)));
+            return _markdownConverter.ConvertToHtml(content);
         }
-
+        
         protected virtual string NormalizeLinks(
             string content,
             string projectShortName,

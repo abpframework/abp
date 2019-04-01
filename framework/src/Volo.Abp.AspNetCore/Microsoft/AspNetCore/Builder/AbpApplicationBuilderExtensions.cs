@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Auditing;
 using Volo.Abp.AspNetCore.Mvc.ExceptionHandling;
+using Volo.Abp.AspNetCore.Tracing;
 using Volo.Abp.AspNetCore.Uow;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Localization;
@@ -40,6 +41,12 @@ namespace Microsoft.AspNetCore.Builder
                 .UseMiddleware<AbpUnitOfWorkMiddleware>();
         }
 
+        public static IApplicationBuilder UseCorrelationId(this IApplicationBuilder app)
+        {
+            return app
+                .UseMiddleware<AbpCorrelationIdMiddleware>();
+        }
+
         public static IApplicationBuilder UseAbpRequestLocalization(this IApplicationBuilder app)
         {
             IReadOnlyList<LanguageInfo> languages;
@@ -48,10 +55,10 @@ namespace Microsoft.AspNetCore.Builder
             using (var scope = app.ApplicationServices.CreateScope())
             {
                 var languageProvider = scope.ServiceProvider.GetRequiredService<ILanguageProvider>();
-                var settingManager = scope.ServiceProvider.GetRequiredService<ISettingManager>();
+                languages = languageProvider.GetLanguages();
 
-                languages = AsyncHelper.RunSync(() => languageProvider.GetLanguagesAsync());
-                defaultLanguage = settingManager.GetOrNull(LocalizationSettingNames.DefaultLanguage);
+                var settingProvider = scope.ServiceProvider.GetRequiredService<ISettingProvider>();
+                defaultLanguage = settingProvider.GetOrNull(LocalizationSettingNames.DefaultLanguage);
             }
 
             if (!languages.Any())

@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Security.Claims;
 
@@ -40,31 +40,41 @@ namespace Volo.Abp.Authorization.Permissions
                 true
             );
         }
-        
-        public virtual Task<PermissionGrantInfo> CheckAsync(string name)
+
+        public virtual Task<bool> IsGrantedAsync(string name)
         {
-            return CheckAsync(PrincipalAccessor.Principal, name);
+            return IsGrantedAsync(PrincipalAccessor.Principal, name);
         }
 
-        public virtual async Task<PermissionGrantInfo> CheckAsync(ClaimsPrincipal claimsPrincipal, string name)
+        public virtual async Task<bool> IsGrantedAsync(ClaimsPrincipal claimsPrincipal, string name)
         {
             Check.NotNull(name, nameof(name));
 
-            var context = new PermissionValueCheckContext(
-                PermissionDefinitionManager.Get(name),
-                claimsPrincipal
-            );
+            var isGranted = false;
 
+            var permission = PermissionDefinitionManager.Get(name);
+            var context = new PermissionValueCheckContext(permission, claimsPrincipal);
             foreach (var provider in ValueProviders)
             {
-                var result = await provider.CheckAsync(context);
-                if (result.IsGranted)
+                if (context.Permission.Providers.Any() &&
+                    !context.Permission.Providers.Contains(provider.Name))
                 {
-                    return new PermissionGrantInfo(context.Permission.Name, true, provider.Name, result.ProviderKey);
+                    continue;
+                }
+
+                var result = await provider.CheckAsync(context);
+
+                if (result == PermissionGrantResult.Granted)
+                {
+                    isGranted = true;
+                }
+                else if (result == PermissionGrantResult.Prohibited)
+                {
+                    return false;
                 }
             }
 
-            return new PermissionGrantInfo(context.Permission.Name, false);
+            return isGranted;
         }
     }
 }

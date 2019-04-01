@@ -1,6 +1,9 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Volo.Abp.Clients;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Users;
 
@@ -10,11 +13,16 @@ namespace Volo.Abp.Authorization
     {
         private readonly IAuthorizationService _authorizationService;
         private readonly ICurrentUser _currentUser;
+        private readonly ICurrentClient _currentClient;
 
-        public MethodInvocationAuthorizationService(IAuthorizationService authorizationService, ICurrentUser currentUser)
+        public MethodInvocationAuthorizationService(
+            IAuthorizationService authorizationService, 
+            ICurrentUser currentUser,
+            ICurrentClient currentClient)
         {
             _authorizationService = authorizationService;
             _currentUser = currentUser;
+            _currentClient = currentClient;
         }
 
         public async Task CheckAsync(MethodInvocationAuthorizationContext context)
@@ -24,8 +32,7 @@ namespace Volo.Abp.Authorization
                 return;
             }
 
-            var authorizationAttributes = GetAuthorizationDataAttributes(context);
-            foreach (var authorizationAttribute in authorizationAttributes)
+            foreach (var authorizationAttribute in GetAuthorizationDataAttributes(context.Method))
             {
                 await CheckAsync(authorizationAttribute);
             }
@@ -36,24 +43,31 @@ namespace Volo.Abp.Authorization
             return context.Method.GetCustomAttributes(true).OfType<IAllowAnonymous>().Any();
         }
 
-        protected virtual IAuthorizeData[] GetAuthorizationDataAttributes(MethodInvocationAuthorizationContext context)
+        protected virtual IEnumerable<IAuthorizeData> GetAuthorizationDataAttributes(MethodInfo methodInfo)
         {
-            var classAttributes = context.Method.DeclaringType
+            var attributes = methodInfo
                 .GetCustomAttributes(true)
                 .OfType<IAuthorizeData>();
 
-            var methodAttributes = context.Method
-                .GetCustomAttributes(true)
-                .OfType<IAuthorizeData>();
+            if (methodInfo.IsPublic)
+            {
+                attributes = attributes
+                    .Union(
+                        methodInfo.DeclaringType
+                            .GetCustomAttributes(true)
+                            .OfType<IAuthorizeData>()
+                    );
+            }
 
-            return classAttributes.Union(methodAttributes).ToArray();
+            return attributes;
         }
 
         protected async Task CheckAsync(IAuthorizeData authorizationAttribute)
         {
             if (authorizationAttribute.Policy == null)
             {
-                if (!_currentUser.IsAuthenticated) //TODO: What about API calls without user id?
+                //TODO: Can we find a better, unified, way of checking if current request has been authenticated
+                if (!_currentUser.IsAuthenticated && !_currentClient.IsAuthenticated)
                 {
                     throw new AbpAuthorizationException("Authorization failed! User has not logged in.");
                 }

@@ -23,14 +23,14 @@ namespace Volo.Abp.Localization
 
             Configure<AbpLocalizationOptions>(options =>
             {
-                options.Resources
-                .Add<AbpValidationResource>("en")
-                .AddVirtualJson("/Localization/Resources/AbpValidation");
-            });
+                options
+                    .Resources
+                    .Add<DefaultResource>("en");
 
-            Configure<SettingOptions>(options =>
-            {
-                options.DefinitionProviders.Add<LocalizationSettingProvider>();
+                options
+                    .Resources
+                    .Add<AbpValidationResource>("en")
+                    .AddVirtualJson("/Localization/Resources/AbpValidation");
             });
         }
     }

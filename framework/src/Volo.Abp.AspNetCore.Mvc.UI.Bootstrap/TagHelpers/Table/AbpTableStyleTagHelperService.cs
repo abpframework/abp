@@ -12,17 +12,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Table
 
         protected virtual void SetStyle(TagHelperContext context, TagHelperOutput output)
         {
-            if (TagHelper.AbpTableStyle != AbpTableStyle.Default)
+            if (TagHelper.TableStyle != AbpTableStyle.Default)
             {
-                output.Attributes.AddClass("table-" + TagHelper.AbpTableStyle.ToString().ToLowerInvariant());
-            }
-        }
-
-        protected virtual void SetDarkTableStyle(TagHelperContext context, TagHelperOutput output)
-        {
-            if (TagHelper.AbpDarkTableStyle != AbpTableStyle.Default)
-            {
-                output.Attributes.AddClass("bg-" + TagHelper.AbpDarkTableStyle.ToString().ToLowerInvariant());
+                output.Attributes.AddClass("table-" + TagHelper.TableStyle.ToString().ToLowerInvariant());
             }
         }
     }

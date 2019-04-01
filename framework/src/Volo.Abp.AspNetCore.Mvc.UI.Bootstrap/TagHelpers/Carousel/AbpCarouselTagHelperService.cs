@@ -127,7 +127,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Carousel
         {
             if (string.IsNullOrWhiteSpace(TagHelper.Id))
             {
-                TagHelper.Id = Guid.NewGuid().ToString("N");
+                TagHelper.Id = "C" + Guid.NewGuid().ToString("N");
             }
         }
 

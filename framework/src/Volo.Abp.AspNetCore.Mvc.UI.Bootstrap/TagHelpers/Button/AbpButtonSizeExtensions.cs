@@ -12,6 +12,14 @@
                     return "btn-md";
                 case AbpButtonSize.Large:
                     return "btn-lg";
+                case AbpButtonSize.Block:
+                    return "btn-block";
+                case AbpButtonSize.Block_Small:
+                    return "btn-sm  btn-block";
+                case AbpButtonSize.Block_Medium:
+                    return "btn-md  btn-block";
+                case AbpButtonSize.Block_Large:
+                    return "btn-lg  btn-block";
                 case AbpButtonSize.Default:
                     return "";
                 default:

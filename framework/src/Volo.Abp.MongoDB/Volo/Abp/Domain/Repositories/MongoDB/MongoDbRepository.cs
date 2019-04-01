@@ -221,7 +221,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
 
         public override async Task<List<TEntity>> GetListAsync(bool includeDetails = false, CancellationToken cancellationToken = default)
         {
-            return await GetMongoQueryable().ToListAsync(cancellationToken);
+            return await GetMongoQueryable().ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public override long GetCount()
@@ -231,7 +231,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
 
         public override async Task<long> GetCountAsync(CancellationToken cancellationToken = default)
         {
-            return await GetMongoQueryable().LongCountAsync(cancellationToken);
+            return await GetMongoQueryable().LongCountAsync(GetCancellationToken(cancellationToken));
         }
 
         public override void Delete(Expression<Func<TEntity, bool>> predicate, bool autoSave = false)
@@ -257,7 +257,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
 
             foreach (var entity in entities)
             {
-                await DeleteAsync(entity, autoSave, GetCancellationToken(cancellationToken));
+                await DeleteAsync(entity, autoSave, cancellationToken);
             }
         }
 

@@ -20,7 +20,7 @@
 
 下面的图片展示了从启动模板创建的项目是如何分层的.
 
-![bookstore-visual-studio-solution](images/bookstore-visual-studio-solution.png)
+![bookstore-visual-studio-solution](images/bookstore-visual-studio-solution-v2.png)
 
 ### 创建Book实体
 
@@ -91,9 +91,9 @@ public class BookStoreDbContext : AbpDbContext<BookStoreDbContext>
 
 #### 添加新的Migration并更新数据库
 
-这个启动模板使用了[EF Core Code First Migrations](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/)来创建并维护数据库结构.打开 **Package Manager Console (PMC)** (工具/Nuget包管理器菜单),选择 `Acme.BookStore.EntityFrameworkCore`作为默认的项目然后执行下面的命令:
+这个启动模板使用了[EF Core Code First Migrations](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/)来创建并维护数据库结构.打开 **Package Manager Console (PMC)** (工具/Nuget包管理器菜单),选择 `Acme.BookStore.EntityFrameworkCore.DbMigrations`作为默认的项目然后执行下面的命令:
 
-![bookstore-pmc-add-book-migration](images/bookstore-pmc-add-book-migration.png)
+![bookstore-pmc-add-book-migration](images/bookstore-pmc-add-book-migration-v2.png)
 
 这样就会在`Migrations`文件夹中创建一个新的migration类.然后执行`Update-Database`命令更新数据库结构.
 
@@ -238,7 +238,7 @@ namespace Acme.BookStore
 
 你通常需要创建 **Controllers** 将应用服务暴露为 **HTTP API**.这样浏览器或第三方客户端可以通过AJAX的方式访问它们.
 
-ABP可以 **自动地** 将应用服务转换成MVC API Controllers.
+ABP可以 **自动地** (../../AspNetCore/Auto-API-Controllers.md)将应用服务转换成MVC API Controllers.
 
 #### Swagger UI
 

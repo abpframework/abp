@@ -10,22 +10,27 @@ using Volo.Abp.Domain.Services;
 using Volo.Docs.Documents;
 using Volo.Docs.GitHub.Projects;
 using Volo.Docs.Projects;
+using Newtonsoft.Json.Linq;
 using ProductHeaderValue = Octokit.ProductHeaderValue;
 using Project = Volo.Docs.Projects.Project;
 
 namespace Volo.Docs.GitHub.Documents
 {
-    //TODO: Needs refactoring
+    //TODO: Needs more refactoring
 
     public class GithubDocumentStore : DomainService, IDocumentStore
     {
         public const string Type = "GitHub";
 
-        public virtual async Task<Document> GetDocument(Project project, string documentName, string version)
+        public virtual async Task<Document> GetDocumentAsync(Project project, string documentName, string version)
         {
+            var token = project.GetGitHubAccessTokenOrNull();
             var rootUrl = project.GetGitHubUrl(version);
             var rawRootUrl = CalculateRawRootUrl(rootUrl);
             var rawDocumentUrl = rawRootUrl + documentName;
+            var commitHistoryUrl = project.GetGitHubUrlForCommitHistory() + documentName;
+            var userAgent = project.GetGithubUserAgentOrNull();
+            var isNavigationDocument = documentName == project.NavigationDocumentName;
             var editLink = rootUrl.ReplaceFirst("/tree/", "/blob/") + documentName;
             var localDirectory = "";
             var fileName = documentName;
@@ -45,23 +50,19 @@ namespace Volo.Docs.GitHub.Documents
                 Format = project.Format,
                 LocalDirectory = localDirectory,
                 FileName = fileName,
+                Contributors = new List<DocumentContributor>(),
+                //Contributors = !isNavigationDocument ? await GetContributors(commitHistoryUrl, token, userAgent): new List<DocumentContributor>(),
                 Version = version,
-                Content = await DownloadWebContentAsync(rawDocumentUrl, project.GetGitHubAccessTokenOrNull())
+                Content = await DownloadWebContentAsStringAsync(rawDocumentUrl, token, userAgent)
             };
         }
 
-        private static string CalculateRawRootUrl(string rootUrl)
+        public async Task<List<VersionInfo>> GetVersionsAsync(Project project)
         {
-            return rootUrl
-                .Replace("github.com", "raw.githubusercontent.com")
-                .ReplaceFirst("/tree/", "/");
-        }
-
-        public async Task<List<VersionInfo>> GetVersions(Project project)
-        {
+            List<VersionInfo> versions;
             try
             {
-                return (await GetReleasesAsync(project))
+                versions = (await GetReleasesAsync(project))
                     .OrderByDescending(r => r.PublishedAt)
                     .Select(r => new VersionInfo
                     {
@@ -73,8 +74,15 @@ namespace Volo.Docs.GitHub.Documents
             {
                 //TODO: It may not be a good idea to hide the error!
                 Logger.LogError(ex.Message, ex);
-                return new List<VersionInfo>();
+                versions = new List<VersionInfo>();
             }
+
+            if (!versions.Any() && !string.IsNullOrEmpty(project.LatestVersionBranchName))
+            {
+                versions.Add(new VersionInfo { DisplayName = "1.0.0", Name = project.LatestVersionBranchName });
+            }
+
+            return versions;
         }
 
         public async Task<DocumentResource> GetResource(Project project, string resourceName, string version)
@@ -82,7 +90,8 @@ namespace Volo.Docs.GitHub.Documents
             var rawRootUrl = CalculateRawRootUrl(project.GetGitHubUrl(version));
             var content = await DownloadWebContentAsByteArrayAsync(
                 rawRootUrl + resourceName,
-                project.GetGitHubAccessTokenOrNull()
+                project.GetGitHubAccessTokenOrNull(),
+                project.GetGithubUserAgentOrNull()
             );
 
             return new DocumentResource(content);
@@ -113,7 +122,7 @@ namespace Volo.Docs.GitHub.Documents
         {
             try
             {
-                var urlStartingAfterFirstSlash = url.Substring(url.IndexOf("github.com/",StringComparison.OrdinalIgnoreCase) + "github.com/".Length);
+                var urlStartingAfterFirstSlash = url.Substring(url.IndexOf("github.com/", StringComparison.OrdinalIgnoreCase) + "github.com/".Length);
                 return urlStartingAfterFirstSlash.Substring(0, urlStartingAfterFirstSlash.IndexOf('/'));
             }
             catch (Exception)
@@ -136,16 +145,22 @@ namespace Volo.Docs.GitHub.Documents
             }
         }
 
-        private async Task<string> DownloadWebContentAsync(string rawUrl, string token)
+        private async Task<string> DownloadWebContentAsStringAsync(string rawUrl, string token, string userAgent)
         {
             try
             {
-                using (var webClient = new WebClient())
+                Logger.LogInformation("Downloading content from Github (DownloadWebContentAsStringAsync): " + rawUrl);
+
+                using (var webClient = new GithubWebClient())
                 {
                     if (!token.IsNullOrWhiteSpace())
                     {
                         webClient.Headers.Add("Authorization", "token " + token);
                     }
+
+                    webClient.Headers.Add("User-Agent", userAgent ?? "");
+                    
+                    //TODO: SET TIMEOUT?
 
                     return await webClient.DownloadStringTaskAsync(new Uri(rawUrl));
                 }
@@ -158,16 +173,19 @@ namespace Volo.Docs.GitHub.Documents
             }
         }
 
-        private async Task<byte[]> DownloadWebContentAsByteArrayAsync(string rawUrl, string token)
+        private async Task<byte[]> DownloadWebContentAsByteArrayAsync(string rawUrl, string token, string userAgent)
         {
             try
             {
-                using (var webClient = new WebClient())
+                Logger.LogInformation("Downloading content from Github (DownloadWebContentAsByteArrayAsync): " + rawUrl);
+
+                using (var webClient = new GithubWebClient())
                 {
                     if (!token.IsNullOrWhiteSpace())
                     {
                         webClient.Headers.Add("Authorization", "token " + token);
                     }
+                    webClient.Headers.Add("User-Agent", userAgent ?? "");
 
                     return await webClient.DownloadDataTaskAsync(new Uri(rawUrl));
                 }
@@ -177,6 +195,62 @@ namespace Volo.Docs.GitHub.Documents
                 //TODO: Only handle when resource is really not available
                 Logger.LogWarning(ex.Message, ex);
                 throw new ResourceNotFoundException(rawUrl);
+            }
+        }
+
+        private async Task<List<DocumentContributor>> GetContributors(string url, string token, string userAgent)
+        {
+            var contributors = new List<DocumentContributor>();
+
+            try
+            {
+                var commitsJsonAsString = await DownloadWebContentAsStringAsync(url, token, userAgent);
+
+                var commits = JArray.Parse(commitsJsonAsString);
+
+                foreach (var commit in commits)
+                {
+                    var author = commit["author"];
+
+                    contributors.Add(new DocumentContributor
+                    {
+                        Username = (string)author["login"],
+                        UserProfileUrl = (string)author["html_url"],
+                        AvatarUrl = (string)author["avatar_url"]
+                    });
+                }
+
+                contributors = contributors.GroupBy(c => c.Username).OrderByDescending(c=>c.Count())
+                    .Select( c => c.FirstOrDefault()).ToList();
+            }
+            catch (Exception ex)
+            {
+                Logger.LogWarning(ex.Message);
+            }
+            
+            return contributors;
+        }
+
+        private static string CalculateRawRootUrl(string rootUrl)
+        {
+            return rootUrl
+                .Replace("github.com", "raw.githubusercontent.com")
+                .ReplaceFirst("/tree/", "/");
+        }
+
+        private class GithubWebClient : WebClient
+        {
+            protected override WebRequest GetWebRequest(Uri address)
+            {
+                var webRequest = base.GetWebRequest(address);
+                if (webRequest == null)
+                {
+                    return null;
+                }
+
+                webRequest.Timeout = 15000;
+
+                return webRequest;
             }
         }
     }
