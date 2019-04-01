@@ -1,12 +1,10 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
-using Volo.Abp.Authorization.Permissions;
-using Volo.Abp.PermissionManagement;
 
 namespace Volo.Abp.Identity
 {
@@ -33,8 +31,8 @@ namespace Volo.Abp.Identity
 
         public async Task<PagedResultDto<IdentityRoleDto>> GetListAsync(GetIdentityRolesInput input) //TODO: Remove this method since it's not used
         {
-            var count = (int) await _roleRepository.GetCountAsync();
-            var list = await _roleRepository.GetListAsync();
+            var count = (int)await _roleRepository.GetCountAsync(input.Filter);
+            var list = await _roleRepository.GetListAsync(input.Sorting, input.MaxResultCount, input.SkipCount, input.Filter);
 
             return new PagedResultDto<IdentityRoleDto>(
                 count,
