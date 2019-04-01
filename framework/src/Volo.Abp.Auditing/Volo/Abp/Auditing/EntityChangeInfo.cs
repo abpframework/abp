@@ -6,6 +6,7 @@ using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Auditing
 {
+    [Serializable]
     public class EntityChangeInfo : IMultiTenant, IHasExtraProperties
     {
         public DateTime ChangeTime { get; set; }
