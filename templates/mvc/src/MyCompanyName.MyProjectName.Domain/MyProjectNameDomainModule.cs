@@ -6,7 +6,9 @@ using Volo.Abp.Identity;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.Resources.AbpValidation;
 using Volo.Abp.Modularity;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement.Identity;
+using Volo.Abp.TenantManagement;
 using Volo.Abp.VirtualFileSystem;
 
 namespace MyCompanyName.MyProjectName
@@ -16,7 +18,8 @@ namespace MyCompanyName.MyProjectName
         typeof(AbpPermissionManagementDomainIdentityModule),
         typeof(AbpAuditingModule),
         typeof(BackgroundJobsDomainModule),
-        typeof(AbpAuditLoggingDomainModule)
+        typeof(AbpAuditLoggingDomainModule),
+        typeof(AbpTenantManagementDomainModule)
         )]
     public class MyProjectNameDomainModule : AbpModule
     {
@@ -33,6 +36,11 @@ namespace MyCompanyName.MyProjectName
                     .Add<MyProjectNameResource>("en")
                     .AddBaseTypes(typeof(AbpValidationResource))
                     .AddVirtualJson("/Localization/MyProjectName");
+            });
+
+            Configure<MultiTenancyOptions>(options =>
+            {
+                options.IsEnabled = true;
             });
         }
     }
