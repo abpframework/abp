@@ -6,6 +6,6 @@
 
         public const string DbSchema = null;
 
-        public const bool IsMultiTenancyEnabled = false;
+        public const bool IsMultiTenancyEnabled = true;
     }
 }

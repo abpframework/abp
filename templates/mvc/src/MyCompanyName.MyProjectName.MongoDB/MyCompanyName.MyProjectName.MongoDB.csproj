@@ -15,6 +15,7 @@
     <ProjectReference Include="..\..\..\..\modules\background-jobs\src\Volo.Abp.BackgroundJobs.MongoDB\Volo.Abp.BackgroundJobs.MongoDB.csproj" />
     <ProjectReference Include="..\..\..\..\modules\audit-logging\src\Volo.Abp.AuditLogging.MongoDB\Volo.Abp.AuditLogging.MongoDB.csproj" />
     <ProjectReference Include="..\..\..\..\modules\tenant-management\src\Volo.Abp.TenantManagement.MongoDB\Volo.Abp.TenantManagement.MongoDB.csproj" />
+    <ProjectReference Include="..\..\..\..\modules\feature-management\src\Volo.Abp.FeatureManagement.MongoDB\Volo.Abp.FeatureManagement.MongoDB.csproj" />
   </ItemGroup>
 
 </Project>

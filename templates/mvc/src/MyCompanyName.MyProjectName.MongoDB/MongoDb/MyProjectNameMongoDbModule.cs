@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AuditLogging.MongoDB;
 using Volo.Abp.BackgroundJobs.MongoDB;
+using Volo.Abp.FeatureManagement.MongoDB;
 using Volo.Abp.Identity.MongoDB;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.MongoDB;
@@ -15,7 +16,8 @@ namespace MyCompanyName.MyProjectName.MongoDb
         typeof(AbpIdentityMongoDbModule),
         typeof(BackgroundJobsMongoDbModule),
         typeof(AbpAuditLoggingMongoDbModule),
-        typeof(AbpTenantManagementMongoDbModule)
+        typeof(AbpTenantManagementMongoDbModule),
+        typeof(AbpFeatureManagementMongoDbModule)
         )]
     public class MyProjectNameMongoDbModule : AbpModule
     {

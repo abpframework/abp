@@ -2,6 +2,7 @@
 using Volo.Abp.Auditing;
 using Volo.Abp.AuditLogging;
 using Volo.Abp.BackgroundJobs;
+using Volo.Abp.FeatureManagement;
 using Volo.Abp.Identity;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.Resources.AbpValidation;
@@ -19,7 +20,8 @@ namespace MyCompanyName.MyProjectName
         typeof(AbpAuditingModule),
         typeof(BackgroundJobsDomainModule),
         typeof(AbpAuditLoggingDomainModule),
-        typeof(AbpTenantManagementDomainModule)
+        typeof(AbpTenantManagementDomainModule),
+        typeof(AbpFeatureManagementDomainModule)
         )]
     public class MyProjectNameDomainModule : AbpModule
     {
