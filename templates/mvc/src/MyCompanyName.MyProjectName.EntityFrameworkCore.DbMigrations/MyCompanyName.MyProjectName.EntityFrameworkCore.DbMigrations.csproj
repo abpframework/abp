@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20190320072839_Initial.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\MyCompanyName.MyProjectName.EntityFrameworkCore\MyCompanyName.MyProjectName.EntityFrameworkCore.csproj" />
   </ItemGroup>
 

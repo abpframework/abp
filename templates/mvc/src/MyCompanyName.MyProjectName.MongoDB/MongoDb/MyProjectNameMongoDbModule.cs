@@ -5,6 +5,7 @@ using Volo.Abp.Identity.MongoDB;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.MongoDB;
 using Volo.Abp.SettingManagement.MongoDB;
+using Volo.Abp.TenantManagement.MongoDb;
 
 namespace MyCompanyName.MyProjectName.MongoDb
 {
@@ -13,7 +14,8 @@ namespace MyCompanyName.MyProjectName.MongoDb
         typeof(AbpSettingManagementMongoDbModule),
         typeof(AbpIdentityMongoDbModule),
         typeof(BackgroundJobsMongoDbModule),
-        typeof(AbpAuditLoggingMongoDbModule)
+        typeof(AbpAuditLoggingMongoDbModule),
+        typeof(AbpTenantManagementMongoDbModule)
         )]
     public class MyProjectNameMongoDbModule : AbpModule
     {

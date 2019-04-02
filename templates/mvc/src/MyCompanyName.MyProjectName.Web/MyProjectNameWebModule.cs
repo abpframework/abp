@@ -34,6 +34,8 @@ using Volo.Abp.VirtualFileSystem;
 using Volo.Abp.PermissionManagement;
 //<TEMPLATE-REMOVE IF-NOT='EntityFrameworkCore'>
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.TenantManagement.Web;
+
 //</TEMPLATE-REMOVE>
 
 namespace MyCompanyName.MyProjectName
@@ -44,7 +46,8 @@ namespace MyCompanyName.MyProjectName
         typeof(AbpAutofacModule),
         typeof(AbpIdentityWebModule),
         typeof(AbpAccountWebModule),
-        typeof(AbpAspNetCoreMvcUiBasicThemeModule)
+        typeof(AbpAspNetCoreMvcUiBasicThemeModule),
+        typeof(AbpTenantManagementWebModule)
         )]
     public class MyProjectNameWebModule : AbpModule
     {
