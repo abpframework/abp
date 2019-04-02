@@ -39,6 +39,15 @@ namespace Volo.Abp.UI.Navigation
             return menuWithItems.Items.FirstOrDefault(mi => mi.Name == menuItemName);
         }
 
+        public static bool TryRemoveMenuItem(
+            [NotNull] this IHasMenuItems menuWithItems,
+            string menuItemName)
+        {
+            Check.NotNull(menuWithItems, nameof(menuWithItems));
+
+            return menuWithItems.Items.RemoveAll(item => item.Name == menuItemName) > 0;
+        }
+
         [NotNull]
         public static IHasMenuItems SetSubItemOrder(
             [NotNull] this IHasMenuItems menuWithItems, 

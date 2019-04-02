@@ -40,7 +40,7 @@ namespace MyCompanyName.MyProjectName
 
             Configure<MultiTenancyOptions>(options =>
             {
-                options.IsEnabled = true;
+                options.IsEnabled = MyProjectNameConsts.IsMultiTenancyEnabled;
             });
         }
     }

@@ -178,6 +178,12 @@ namespace MyCompanyName.MyProjectName
 
             app.UseVirtualFiles();
             app.UseAuthentication();
+
+            if (MyProjectNameConsts.IsMultiTenancyEnabled)
+            {
+                app.UseMultiTenancy();
+            }
+
             app.UseAbpRequestLocalization();
 
             app.UseSwagger();
