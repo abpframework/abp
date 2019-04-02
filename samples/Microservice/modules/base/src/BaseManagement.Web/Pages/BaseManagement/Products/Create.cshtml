@@ -1,0 +1,19 @@
+﻿@page
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@inherits BaseManagement.Pages.BaseManagement.BaseManagementPage
+@model BaseManagement.Pages.BaseManagement.Products.CreateModel
+@{
+    Layout = null;
+}
+
+
+<abp-dynamic-form submit-button="false" abp-model="Product" asp-page="/BaseManagement/Products/Create">
+    <abp-modal size="@(AbpModalSize.Large)">
+        <abp-modal-header title="@L["Create"].Value"></abp-modal-header>
+        <abp-modal-body>
+            <abp-form-content />
+        </abp-modal-body>
+        <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)">
+        </abp-modal-footer>
+    </abp-modal>
+</abp-dynamic-form>

@@ -1,0 +1,14 @@
+{
+  "culture": "en",
+  "texts": {
+    "Permission:BaseManagement": "Base Management",
+    "Permission:BaseTypes": "BaseTypes",
+    "Permission:BaseTypes:Edit": "Edit",
+    "Permission:BaseTypes:Delete": "Delete",
+    "Permission:BaseTypes:Create": "Create",
+    "Permission:BaseItems": "BaseItems",
+    "Permission:BaseItems:Edit": "Edit",
+    "Permission:BaseItems:Delete": "Delete",
+    "Permission:BaseItems:Create": "Create"
+  }
+}

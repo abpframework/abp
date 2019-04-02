@@ -1,25 +1,19 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Redis;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+using BaseManagement.EntityFrameworkCore;
 using Volo.Abp;
-using Volo.Abp.AspNetCore;
-using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Auditing;
-using Volo.Abp.AuditLogging;
-using Volo.Abp.AuditLogging.Application.Volo.Abp.AuditLogging;
-using Volo.Abp.AuditLogging.EntityFrameworkCore;
-using Volo.Abp.AuditLogging.HttpApi.Volo.Abp.AuditLogging;
 using Volo.Abp.Autofac;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.SqlServer;
 using Volo.Abp.EventBus.RabbitMq;
-using Volo.Abp.Guids;
 using Volo.Abp.Http.Client.IdentityModel;
 using Volo.Abp.Identity;
 using Volo.Abp.Localization;
@@ -28,7 +22,7 @@ using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.Threading;
-namespace AuditLogging.Host
+namespace BaseManagement.Host
 {
     [DependsOn(
         typeof(AbpAutofacModule),
@@ -37,12 +31,12 @@ namespace AuditLogging.Host
         typeof(AbpPermissionManagementEntityFrameworkCoreModule),
         typeof(AbpSettingManagementEntityFrameworkCoreModule),
         typeof(AbpHttpClientIdentityModelModule),
-        typeof(AuditLoggingHttpApiModule),
-        typeof(AbpAuditLoggingEntityFrameworkCoreModule),
-        typeof(AuditLogApplicationModule),
+        typeof(BaseManagementHttpApiModule),
+        typeof(BaseManagementEntityFrameworkCoreModule),
+        typeof(BaseManagementApplicationModule),
         typeof(AbpIdentityHttpApiClientModule)
         )]
-    public class AuditLoggingHostModule : AbpModule
+    public class BaseManagementHostModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
@@ -66,7 +60,7 @@ namespace AuditLogging.Host
 
             context.Services.AddSwaggerGen(options =>
             {
-                options.SwaggerDoc("v1", new Info {Title = "AuditLogging Service API", Version = "v1"});
+                options.SwaggerDoc("v1", new Info {Title = "BaseManagement Service API", Version = "v1"});
                 options.DocInclusionPredicate((docName, description) => true);
                 options.CustomSchemaIds(type => type.FullName);
 
@@ -105,7 +99,7 @@ namespace AuditLogging.Host
             Configure<AbpAuditingOptions>(options =>
             {
                 options.IsEnabledForGetRequests = true;
-                options.ApplicationName = "AuditLogging";
+                options.ApplicationName = "BaseManagement";
             });
 
             var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
@@ -124,12 +118,12 @@ namespace AuditLogging.Host
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "AuditLoggings Service API");
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "BaseManagements Service API");
             });
             app.UseAuditing();
             app.UseMvcWithDefaultRouteAndArea();
 
-            AsyncHelper.RunSync(() => SeedDataAsync(context.ServiceProvider));
+            //AsyncHelper.RunSync(() => SeedDataAsync(context.ServiceProvider));
         }
 
         public async Task SeedDataAsync(IServiceProvider serviceProvider)

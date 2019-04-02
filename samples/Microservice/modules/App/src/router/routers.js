@@ -124,13 +124,13 @@ export default [{
       },
       component: () => import( /* webpackChunkName: "rbac" */ '@/view/rbac/role.vue')
     }, {
-      path: 'menu',
-      name: 'rbac_menu_page',
+      path: 'audit',
+      name: 'AuditLogging.AuditLog',
       meta: {
         icon: 'md-menu',
-        title: '菜单管理'
+        title: '审计日志'
       },
-      component: () => import( /* webpackChunkName: "rbac" */ '@/view/rbac/menu.vue')
+      component: () => import('@/view/auditlog/auditlog.vue')
     }, {
       path: 'icon',
       name: 'rbac_icon_page',

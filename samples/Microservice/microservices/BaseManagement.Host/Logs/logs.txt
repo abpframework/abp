@@ -5580,3 +5580,613 @@ Volo.Abp.Domain.Entities.EntityNotFoundException: There is no such an entity. En
 2019-04-02 20:35:36.226 +08:00 [INF] Executed action Volo.Abp.AuditLogging.HttpApi.Volo.Abp.AuditLogging.AuditLogController.GetAsync (Volo.Abp.AuditLogging.HttpApi) in 194.9872ms
 2019-04-02 20:35:36.226 +08:00 [INF] Executed endpoint 'Volo.Abp.AuditLogging.HttpApi.Volo.Abp.AuditLogging.AuditLogController.GetAsync (Volo.Abp.AuditLogging.HttpApi)'
 2019-04-02 20:35:36.226 +08:00 [INF] Request finished in 197.5981ms 200 application/json; charset=utf-8
+2019-04-02 22:38:23.669 +08:00 [INF] Starting BaseManagement.Host
+2019-04-02 22:38:28.214 +08:00 [INF] Loaded modules:
+2019-04-02 22:38:28.215 +08:00 [INF] - Volo.Abp.Castle.AbpCastleCoreModule
+2019-04-02 22:38:28.215 +08:00 [INF] - Volo.Abp.Autofac.AbpAutofacModule
+2019-04-02 22:38:28.215 +08:00 [INF] - Volo.Abp.EventBus.AbpEventBusModule
+2019-04-02 22:38:28.215 +08:00 [INF] - Volo.Abp.Timing.AbpTimingModule
+2019-04-02 22:38:28.215 +08:00 [INF] - Volo.Abp.Json.AbpJsonModule
+2019-04-02 22:38:28.215 +08:00 [INF] - Volo.Abp.Threading.AbpThreadingModule
+2019-04-02 22:38:28.215 +08:00 [INF] - Volo.Abp.RabbitMQ.AbpRabbitMqModule
+2019-04-02 22:38:28.215 +08:00 [INF] - Volo.Abp.EventBus.RabbitMq.AbpEventBusRabbitMqModule
+2019-04-02 22:38:28.215 +08:00 [INF] - Volo.Abp.Data.AbpDataModule
+2019-04-02 22:38:28.215 +08:00 [INF] - Volo.Abp.Security.AbpSecurityModule
+2019-04-02 22:38:28.215 +08:00 [INF] - Volo.Abp.MultiTenancy.AbpMultiTenancyModule
+2019-04-02 22:38:28.215 +08:00 [INF] - Volo.Abp.Auditing.AbpAuditingModule
+2019-04-02 22:38:28.215 +08:00 [INF] - Volo.Abp.Guids.AbpGuidsModule
+2019-04-02 22:38:28.215 +08:00 [INF] - Volo.Abp.Uow.AbpUnitOfWorkModule
+2019-04-02 22:38:28.215 +08:00 [INF] - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2019-04-02 22:38:28.215 +08:00 [INF] - Volo.Abp.Domain.AbpDddDomainModule
+2019-04-02 22:38:28.215 +08:00 [INF] - Volo.Abp.EntityFrameworkCore.AbpEntityFrameworkCoreModule
+2019-04-02 22:38:28.215 +08:00 [INF] - Volo.Abp.EntityFrameworkCore.SqlServer.AbpEntityFrameworkCoreSqlServerModule
+2019-04-02 22:38:28.215 +08:00 [INF] - Volo.Abp.Localization.AbpLocalizationAbstractionsModule
+2019-04-02 22:38:28.215 +08:00 [INF] - Volo.Abp.Authorization.AbpAuthorizationModule
+2019-04-02 22:38:28.215 +08:00 [INF] - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2019-04-02 22:38:28.215 +08:00 [INF] - Volo.Abp.Settings.AbpSettingsModule
+2019-04-02 22:38:28.215 +08:00 [INF] - Volo.Abp.Localization.AbpLocalizationModule
+2019-04-02 22:38:28.215 +08:00 [INF] - Volo.Abp.PermissionManagement.AbpPermissionManagementDomainSharedModule
+2019-04-02 22:38:28.215 +08:00 [INF] - Volo.Abp.Serialization.AbpSerializationModule
+2019-04-02 22:38:28.215 +08:00 [INF] - Volo.Abp.Caching.AbpCachingModule
+2019-04-02 22:38:28.215 +08:00 [INF] - Volo.Abp.PermissionManagement.AbpPermissionManagementDomainModule
+2019-04-02 22:38:28.215 +08:00 [INF] - Volo.Abp.PermissionManagement.EntityFrameworkCore.AbpPermissionManagementEntityFrameworkCoreModule
+2019-04-02 22:38:28.215 +08:00 [INF] - Volo.Abp.SettingManagement.AbpSettingManagementDomainSharedModule
+2019-04-02 22:38:28.215 +08:00 [INF] - Volo.Abp.SettingManagement.AbpSettingManagementDomainModule
+2019-04-02 22:38:28.215 +08:00 [INF] - Volo.Abp.SettingManagement.EntityFrameworkCore.AbpSettingManagementEntityFrameworkCoreModule
+2019-04-02 22:38:28.215 +08:00 [INF] - Volo.Abp.Http.AbpHttpAbstractionsModule
+2019-04-02 22:38:28.215 +08:00 [INF] - Volo.Abp.Http.AbpHttpModule
+2019-04-02 22:38:28.215 +08:00 [INF] - Volo.Abp.Http.Client.AbpHttpClientModule
+2019-04-02 22:38:28.215 +08:00 [INF] - Volo.Abp.IdentityModel.AbpIdentityModelModule
+2019-04-02 22:38:28.215 +08:00 [INF] - Volo.Abp.Http.Client.IdentityModel.AbpHttpClientIdentityModelModule
+2019-04-02 22:38:28.215 +08:00 [INF] - BaseManagement.BaseManagementDomainSharedModule
+2019-04-02 22:38:28.215 +08:00 [INF] - Volo.Abp.Validation.AbpValidationModule
+2019-04-02 22:38:28.215 +08:00 [INF] - Volo.Abp.Features.AbpFeaturesModule
+2019-04-02 22:38:28.215 +08:00 [INF] - Volo.Abp.Application.AbpDddApplicationModule
+2019-04-02 22:38:28.215 +08:00 [INF] - BaseManagement.BaseManagementApplicationContractsModule
+2019-04-02 22:38:28.215 +08:00 [INF] - Volo.Abp.UI.AbpUiModule
+2019-04-02 22:38:28.215 +08:00 [INF] - Volo.Abp.AspNetCore.AbpAspNetCoreModule
+2019-04-02 22:38:28.215 +08:00 [INF] - Volo.Abp.ApiVersioning.AbpApiVersioningAbstractionsModule
+2019-04-02 22:38:28.215 +08:00 [INF] - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcContractsModule
+2019-04-02 22:38:28.215 +08:00 [INF] - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcModule
+2019-04-02 22:38:28.215 +08:00 [INF] - BaseManagement.BaseManagementHttpApiModule
+2019-04-02 22:38:28.215 +08:00 [INF] - BaseManagement.BaseManagementDomainModule
+2019-04-02 22:38:28.215 +08:00 [INF] - BaseManagement.EntityFrameworkCore.BaseManagementEntityFrameworkCoreModule
+2019-04-02 22:38:28.215 +08:00 [INF] - Volo.Abp.AutoMapper.AbpAutoMapperModule
+2019-04-02 22:38:28.215 +08:00 [INF] - BaseManagement.BaseManagementApplicationModule
+2019-04-02 22:38:28.215 +08:00 [INF] - Volo.Abp.Users.AbpUsersDomainSharedModule
+2019-04-02 22:38:28.215 +08:00 [INF] - Volo.Abp.Identity.AbpIdentityDomainSharedModule
+2019-04-02 22:38:28.215 +08:00 [INF] - Volo.Abp.Users.AbpUsersAbstractionModule
+2019-04-02 22:38:28.215 +08:00 [INF] - Volo.Abp.PermissionManagement.AbpPermissionManagementApplicationContractsModule
+2019-04-02 22:38:28.215 +08:00 [INF] - Volo.Abp.Identity.AbpIdentityApplicationContractsModule
+2019-04-02 22:38:28.215 +08:00 [INF] - Volo.Abp.Identity.AbpIdentityHttpApiClientModule
+2019-04-02 22:38:28.215 +08:00 [INF] - BaseManagement.Host.BaseManagementHostModule
+2019-04-02 22:38:28.250 +08:00 [DBG] No class found with auto mapping attributes.
+2019-04-02 22:38:28.599 +08:00 [FTL] Application startup exception
+AutoMapper.AutoMapperConfigurationException: 
+Unmapped members were found. Review the types and members below.
+Add a custom mapping expression, ignore, add a custom resolver, or modify the source/destination type
+For no matching constructor, add a no-arg ctor, add optional arguments, or map all of the constructor parameters
+============================================================
+CreateBaseTypeDto -> BaseType (Destination member list)
+BaseManagement.CreateBaseTypeDto -> BaseManagement.BaseType (Destination member list)
+
+Unmapped properties:
+BaseItems
+IsDeleted
+DeleterId
+DeletionTime
+LastModificationTime
+LastModifierId
+CreationTime
+CreatorId
+Id
+============================================================
+UpdateBaseTypeDto -> BaseType (Destination member list)
+BaseManagement.UpdateBaseTypeDto -> BaseManagement.BaseType (Destination member list)
+
+Unmapped properties:
+BaseItems
+IsDeleted
+DeleterId
+DeletionTime
+LastModificationTime
+LastModifierId
+CreationTime
+CreatorId
+
+   at AutoMapper.ConfigurationValidator.AssertConfigurationIsValid(IEnumerable`1 typeMaps) in C:\projects\automapper\src\AutoMapper\ConfigurationValidator.cs:line 48
+   at Volo.Abp.AutoMapper.AbpAutoMapperModule.<>c__DisplayClass4_1.<CreateMappings>g__ValidateAll|1(IConfigurationProvider config) in D:\code\openSource\abp\framework\src\Volo.Abp.AutoMapper\Volo\Abp\AutoMapper\AbpAutoMapperModule.cs:line 53
+   at Volo.Abp.AutoMapper.AbpAutoMapperModule.CreateMappings(IServiceProvider serviceProvider) in D:\code\openSource\abp\framework\src\Volo.Abp.AutoMapper\Volo\Abp\AutoMapper\AbpAutoMapperModule.cs:line 67
+   at Volo.Abp.AutoMapper.AbpAutoMapperModule.OnPreApplicationInitialization(ApplicationInitializationContext context) in D:\code\openSource\abp\framework\src\Volo.Abp.AutoMapper\Volo\Abp\AutoMapper\AbpAutoMapperModule.cs:line 29
+   at Volo.Abp.Modularity.OnPreApplicationInitializationModuleLifecycleContributor.Initialize(ApplicationInitializationContext context, IAbpModule module) in D:\code\openSource\abp\framework\src\Volo.Abp.Core\Volo\Abp\Modularity\DefaultModuleLifecycleContributor.cs:line 23
+   at Volo.Abp.Modularity.ModuleManager.InitializeModules(ApplicationInitializationContext context) in D:\code\openSource\abp\framework\src\Volo.Abp.Core\Volo\Abp\Modularity\ModuleManager.cs:line 41
+   at Volo.Abp.AbpApplicationBase.InitializeModules() in D:\code\openSource\abp\framework\src\Volo.Abp.Core\Volo\Abp\AbpApplicationBase.cs:line 72
+   at Volo.Abp.AbpApplicationWithExternalServiceProvider.Initialize(IServiceProvider serviceProvider) in D:\code\openSource\abp\framework\src\Volo.Abp.Core\Volo\Abp\AbpApplicationWithExternalServiceProvider.cs:line 27
+   at Microsoft.AspNetCore.Builder.AbpApplicationBuilderExtensions.InitializeApplication(IApplicationBuilder app) in D:\code\openSource\abp\framework\src\Volo.Abp.AspNetCore\Microsoft\AspNetCore\Builder\AbpApplicationBuilderExtensions.cs:line 28
+   at BaseManagement.Host.Startup.Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory) in D:\code\openSource\abp\samples\Microservice\microservices\BaseManagement.Host\Startup.cs:line 25
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Hosting.ConventionBasedStartup.Configure(IApplicationBuilder app)
+   at Microsoft.AspNetCore.Mvc.Internal.MiddlewareFilterBuilderStartupFilter.<>c__DisplayClass0_0.<Configure>g__MiddlewareFilterBuilder|0(IApplicationBuilder builder)
+   at Microsoft.AspNetCore.Hosting.Internal.AutoRequestServicesStartupFilter.<>c__DisplayClass0_0.<Configure>b__0(IApplicationBuilder builder)
+   at Microsoft.AspNetCore.Hosting.Internal.WebHost.BuildApplication()
+2019-04-02 22:38:28.713 +08:00 [FTL] BaseManagement.Host terminated unexpectedly!
+AutoMapper.AutoMapperConfigurationException: 
+Unmapped members were found. Review the types and members below.
+Add a custom mapping expression, ignore, add a custom resolver, or modify the source/destination type
+For no matching constructor, add a no-arg ctor, add optional arguments, or map all of the constructor parameters
+============================================================
+CreateBaseTypeDto -> BaseType (Destination member list)
+BaseManagement.CreateBaseTypeDto -> BaseManagement.BaseType (Destination member list)
+
+Unmapped properties:
+BaseItems
+IsDeleted
+DeleterId
+DeletionTime
+LastModificationTime
+LastModifierId
+CreationTime
+CreatorId
+Id
+============================================================
+UpdateBaseTypeDto -> BaseType (Destination member list)
+BaseManagement.UpdateBaseTypeDto -> BaseManagement.BaseType (Destination member list)
+
+Unmapped properties:
+BaseItems
+IsDeleted
+DeleterId
+DeletionTime
+LastModificationTime
+LastModifierId
+CreationTime
+CreatorId
+
+   at AutoMapper.ConfigurationValidator.AssertConfigurationIsValid(IEnumerable`1 typeMaps) in C:\projects\automapper\src\AutoMapper\ConfigurationValidator.cs:line 48
+   at Volo.Abp.AutoMapper.AbpAutoMapperModule.<>c__DisplayClass4_1.<CreateMappings>g__ValidateAll|1(IConfigurationProvider config) in D:\code\openSource\abp\framework\src\Volo.Abp.AutoMapper\Volo\Abp\AutoMapper\AbpAutoMapperModule.cs:line 53
+   at Volo.Abp.AutoMapper.AbpAutoMapperModule.CreateMappings(IServiceProvider serviceProvider) in D:\code\openSource\abp\framework\src\Volo.Abp.AutoMapper\Volo\Abp\AutoMapper\AbpAutoMapperModule.cs:line 67
+   at Volo.Abp.AutoMapper.AbpAutoMapperModule.OnPreApplicationInitialization(ApplicationInitializationContext context) in D:\code\openSource\abp\framework\src\Volo.Abp.AutoMapper\Volo\Abp\AutoMapper\AbpAutoMapperModule.cs:line 29
+   at Volo.Abp.Modularity.OnPreApplicationInitializationModuleLifecycleContributor.Initialize(ApplicationInitializationContext context, IAbpModule module) in D:\code\openSource\abp\framework\src\Volo.Abp.Core\Volo\Abp\Modularity\DefaultModuleLifecycleContributor.cs:line 23
+   at Volo.Abp.Modularity.ModuleManager.InitializeModules(ApplicationInitializationContext context) in D:\code\openSource\abp\framework\src\Volo.Abp.Core\Volo\Abp\Modularity\ModuleManager.cs:line 41
+   at Volo.Abp.AbpApplicationBase.InitializeModules() in D:\code\openSource\abp\framework\src\Volo.Abp.Core\Volo\Abp\AbpApplicationBase.cs:line 72
+   at Volo.Abp.AbpApplicationWithExternalServiceProvider.Initialize(IServiceProvider serviceProvider) in D:\code\openSource\abp\framework\src\Volo.Abp.Core\Volo\Abp\AbpApplicationWithExternalServiceProvider.cs:line 27
+   at Microsoft.AspNetCore.Builder.AbpApplicationBuilderExtensions.InitializeApplication(IApplicationBuilder app) in D:\code\openSource\abp\framework\src\Volo.Abp.AspNetCore\Microsoft\AspNetCore\Builder\AbpApplicationBuilderExtensions.cs:line 28
+   at BaseManagement.Host.Startup.Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory) in D:\code\openSource\abp\samples\Microservice\microservices\BaseManagement.Host\Startup.cs:line 25
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Hosting.ConventionBasedStartup.Configure(IApplicationBuilder app)
+   at Microsoft.AspNetCore.Mvc.Internal.MiddlewareFilterBuilderStartupFilter.<>c__DisplayClass0_0.<Configure>g__MiddlewareFilterBuilder|0(IApplicationBuilder builder)
+   at Microsoft.AspNetCore.Hosting.Internal.AutoRequestServicesStartupFilter.<>c__DisplayClass0_0.<Configure>b__0(IApplicationBuilder builder)
+   at Microsoft.AspNetCore.Hosting.Internal.WebHost.BuildApplication()
+   at Microsoft.AspNetCore.Hosting.Internal.WebHost.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Hosting.WebHostExtensions.RunAsync(IWebHost host, CancellationToken token, String shutdownMessage)
+   at Microsoft.AspNetCore.Hosting.WebHostExtensions.RunAsync(IWebHost host, CancellationToken token)
+   at Microsoft.AspNetCore.Hosting.WebHostExtensions.Run(IWebHost host)
+   at BaseManagement.Host.Program.Main(String[] args) in D:\code\openSource\abp\samples\Microservice\microservices\BaseManagement.Host\Program.cs:line 40
+2019-04-02 22:40:19.898 +08:00 [INF] Starting BaseManagement.Host
+2019-04-02 22:40:26.749 +08:00 [INF] Loaded modules:
+2019-04-02 22:40:26.750 +08:00 [INF] - Volo.Abp.Castle.AbpCastleCoreModule
+2019-04-02 22:40:26.750 +08:00 [INF] - Volo.Abp.Autofac.AbpAutofacModule
+2019-04-02 22:40:26.750 +08:00 [INF] - Volo.Abp.EventBus.AbpEventBusModule
+2019-04-02 22:40:26.750 +08:00 [INF] - Volo.Abp.Timing.AbpTimingModule
+2019-04-02 22:40:26.750 +08:00 [INF] - Volo.Abp.Json.AbpJsonModule
+2019-04-02 22:40:26.750 +08:00 [INF] - Volo.Abp.Threading.AbpThreadingModule
+2019-04-02 22:40:26.750 +08:00 [INF] - Volo.Abp.RabbitMQ.AbpRabbitMqModule
+2019-04-02 22:40:26.750 +08:00 [INF] - Volo.Abp.EventBus.RabbitMq.AbpEventBusRabbitMqModule
+2019-04-02 22:40:26.750 +08:00 [INF] - Volo.Abp.Data.AbpDataModule
+2019-04-02 22:40:26.750 +08:00 [INF] - Volo.Abp.Security.AbpSecurityModule
+2019-04-02 22:40:26.751 +08:00 [INF] - Volo.Abp.MultiTenancy.AbpMultiTenancyModule
+2019-04-02 22:40:26.751 +08:00 [INF] - Volo.Abp.Auditing.AbpAuditingModule
+2019-04-02 22:40:26.751 +08:00 [INF] - Volo.Abp.Guids.AbpGuidsModule
+2019-04-02 22:40:26.751 +08:00 [INF] - Volo.Abp.Uow.AbpUnitOfWorkModule
+2019-04-02 22:40:26.751 +08:00 [INF] - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2019-04-02 22:40:26.751 +08:00 [INF] - Volo.Abp.Domain.AbpDddDomainModule
+2019-04-02 22:40:26.751 +08:00 [INF] - Volo.Abp.EntityFrameworkCore.AbpEntityFrameworkCoreModule
+2019-04-02 22:40:26.751 +08:00 [INF] - Volo.Abp.EntityFrameworkCore.SqlServer.AbpEntityFrameworkCoreSqlServerModule
+2019-04-02 22:40:26.751 +08:00 [INF] - Volo.Abp.Localization.AbpLocalizationAbstractionsModule
+2019-04-02 22:40:26.751 +08:00 [INF] - Volo.Abp.Authorization.AbpAuthorizationModule
+2019-04-02 22:40:26.751 +08:00 [INF] - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2019-04-02 22:40:26.751 +08:00 [INF] - Volo.Abp.Settings.AbpSettingsModule
+2019-04-02 22:40:26.751 +08:00 [INF] - Volo.Abp.Localization.AbpLocalizationModule
+2019-04-02 22:40:26.751 +08:00 [INF] - Volo.Abp.PermissionManagement.AbpPermissionManagementDomainSharedModule
+2019-04-02 22:40:26.751 +08:00 [INF] - Volo.Abp.Serialization.AbpSerializationModule
+2019-04-02 22:40:26.751 +08:00 [INF] - Volo.Abp.Caching.AbpCachingModule
+2019-04-02 22:40:26.751 +08:00 [INF] - Volo.Abp.PermissionManagement.AbpPermissionManagementDomainModule
+2019-04-02 22:40:26.751 +08:00 [INF] - Volo.Abp.PermissionManagement.EntityFrameworkCore.AbpPermissionManagementEntityFrameworkCoreModule
+2019-04-02 22:40:26.751 +08:00 [INF] - Volo.Abp.SettingManagement.AbpSettingManagementDomainSharedModule
+2019-04-02 22:40:26.751 +08:00 [INF] - Volo.Abp.SettingManagement.AbpSettingManagementDomainModule
+2019-04-02 22:40:26.751 +08:00 [INF] - Volo.Abp.SettingManagement.EntityFrameworkCore.AbpSettingManagementEntityFrameworkCoreModule
+2019-04-02 22:40:26.751 +08:00 [INF] - Volo.Abp.Http.AbpHttpAbstractionsModule
+2019-04-02 22:40:26.751 +08:00 [INF] - Volo.Abp.Http.AbpHttpModule
+2019-04-02 22:40:26.751 +08:00 [INF] - Volo.Abp.Http.Client.AbpHttpClientModule
+2019-04-02 22:40:26.751 +08:00 [INF] - Volo.Abp.IdentityModel.AbpIdentityModelModule
+2019-04-02 22:40:26.751 +08:00 [INF] - Volo.Abp.Http.Client.IdentityModel.AbpHttpClientIdentityModelModule
+2019-04-02 22:40:26.751 +08:00 [INF] - BaseManagement.BaseManagementDomainSharedModule
+2019-04-02 22:40:26.751 +08:00 [INF] - Volo.Abp.Validation.AbpValidationModule
+2019-04-02 22:40:26.751 +08:00 [INF] - Volo.Abp.Features.AbpFeaturesModule
+2019-04-02 22:40:26.751 +08:00 [INF] - Volo.Abp.Application.AbpDddApplicationModule
+2019-04-02 22:40:26.751 +08:00 [INF] - BaseManagement.BaseManagementApplicationContractsModule
+2019-04-02 22:40:26.751 +08:00 [INF] - Volo.Abp.UI.AbpUiModule
+2019-04-02 22:40:26.751 +08:00 [INF] - Volo.Abp.AspNetCore.AbpAspNetCoreModule
+2019-04-02 22:40:26.751 +08:00 [INF] - Volo.Abp.ApiVersioning.AbpApiVersioningAbstractionsModule
+2019-04-02 22:40:26.751 +08:00 [INF] - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcContractsModule
+2019-04-02 22:40:26.751 +08:00 [INF] - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcModule
+2019-04-02 22:40:26.751 +08:00 [INF] - BaseManagement.BaseManagementHttpApiModule
+2019-04-02 22:40:26.751 +08:00 [INF] - BaseManagement.BaseManagementDomainModule
+2019-04-02 22:40:26.751 +08:00 [INF] - BaseManagement.EntityFrameworkCore.BaseManagementEntityFrameworkCoreModule
+2019-04-02 22:40:26.751 +08:00 [INF] - Volo.Abp.AutoMapper.AbpAutoMapperModule
+2019-04-02 22:40:26.751 +08:00 [INF] - BaseManagement.BaseManagementApplicationModule
+2019-04-02 22:40:26.751 +08:00 [INF] - Volo.Abp.Users.AbpUsersDomainSharedModule
+2019-04-02 22:40:26.751 +08:00 [INF] - Volo.Abp.Identity.AbpIdentityDomainSharedModule
+2019-04-02 22:40:26.751 +08:00 [INF] - Volo.Abp.Users.AbpUsersAbstractionModule
+2019-04-02 22:40:26.751 +08:00 [INF] - Volo.Abp.PermissionManagement.AbpPermissionManagementApplicationContractsModule
+2019-04-02 22:40:26.751 +08:00 [INF] - Volo.Abp.Identity.AbpIdentityApplicationContractsModule
+2019-04-02 22:40:26.752 +08:00 [INF] - Volo.Abp.Identity.AbpIdentityHttpApiClientModule
+2019-04-02 22:40:26.752 +08:00 [INF] - BaseManagement.Host.BaseManagementHostModule
+2019-04-02 22:40:26.859 +08:00 [DBG] No class found with auto mapping attributes.
+2019-04-02 22:40:27.481 +08:00 [FTL] Application startup exception
+AutoMapper.AutoMapperConfigurationException: 
+Unmapped members were found. Review the types and members below.
+Add a custom mapping expression, ignore, add a custom resolver, or modify the source/destination type
+For no matching constructor, add a no-arg ctor, add optional arguments, or map all of the constructor parameters
+============================================================
+CreateBaseTypeDto -> BaseType (Destination member list)
+BaseManagement.CreateBaseTypeDto -> BaseManagement.BaseType (Destination member list)
+
+Unmapped properties:
+BaseItems
+IsDeleted
+DeleterId
+DeletionTime
+LastModificationTime
+LastModifierId
+CreationTime
+CreatorId
+Id
+============================================================
+UpdateBaseTypeDto -> BaseType (Destination member list)
+BaseManagement.UpdateBaseTypeDto -> BaseManagement.BaseType (Destination member list)
+
+Unmapped properties:
+BaseItems
+IsDeleted
+DeleterId
+DeletionTime
+LastModificationTime
+LastModifierId
+CreationTime
+CreatorId
+
+   at AutoMapper.ConfigurationValidator.AssertConfigurationIsValid(IEnumerable`1 typeMaps) in C:\projects\automapper\src\AutoMapper\ConfigurationValidator.cs:line 48
+   at Volo.Abp.AutoMapper.AbpAutoMapperModule.<>c__DisplayClass4_1.<CreateMappings>g__ValidateAll|1(IConfigurationProvider config) in D:\code\openSource\abp\framework\src\Volo.Abp.AutoMapper\Volo\Abp\AutoMapper\AbpAutoMapperModule.cs:line 53
+   at Volo.Abp.AutoMapper.AbpAutoMapperModule.CreateMappings(IServiceProvider serviceProvider) in D:\code\openSource\abp\framework\src\Volo.Abp.AutoMapper\Volo\Abp\AutoMapper\AbpAutoMapperModule.cs:line 67
+   at Volo.Abp.AutoMapper.AbpAutoMapperModule.OnPreApplicationInitialization(ApplicationInitializationContext context) in D:\code\openSource\abp\framework\src\Volo.Abp.AutoMapper\Volo\Abp\AutoMapper\AbpAutoMapperModule.cs:line 29
+   at Volo.Abp.Modularity.OnPreApplicationInitializationModuleLifecycleContributor.Initialize(ApplicationInitializationContext context, IAbpModule module) in D:\code\openSource\abp\framework\src\Volo.Abp.Core\Volo\Abp\Modularity\DefaultModuleLifecycleContributor.cs:line 23
+   at Volo.Abp.Modularity.ModuleManager.InitializeModules(ApplicationInitializationContext context) in D:\code\openSource\abp\framework\src\Volo.Abp.Core\Volo\Abp\Modularity\ModuleManager.cs:line 41
+   at Volo.Abp.AbpApplicationBase.InitializeModules() in D:\code\openSource\abp\framework\src\Volo.Abp.Core\Volo\Abp\AbpApplicationBase.cs:line 72
+   at Volo.Abp.AbpApplicationWithExternalServiceProvider.Initialize(IServiceProvider serviceProvider) in D:\code\openSource\abp\framework\src\Volo.Abp.Core\Volo\Abp\AbpApplicationWithExternalServiceProvider.cs:line 27
+   at Microsoft.AspNetCore.Builder.AbpApplicationBuilderExtensions.InitializeApplication(IApplicationBuilder app) in D:\code\openSource\abp\framework\src\Volo.Abp.AspNetCore\Microsoft\AspNetCore\Builder\AbpApplicationBuilderExtensions.cs:line 28
+   at BaseManagement.Host.Startup.Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory) in D:\code\openSource\abp\samples\Microservice\microservices\BaseManagement.Host\Startup.cs:line 25
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Hosting.ConventionBasedStartup.Configure(IApplicationBuilder app)
+   at Microsoft.AspNetCore.Mvc.Internal.MiddlewareFilterBuilderStartupFilter.<>c__DisplayClass0_0.<Configure>g__MiddlewareFilterBuilder|0(IApplicationBuilder builder)
+   at Microsoft.AspNetCore.Hosting.Internal.AutoRequestServicesStartupFilter.<>c__DisplayClass0_0.<Configure>b__0(IApplicationBuilder builder)
+   at Microsoft.AspNetCore.Hosting.Internal.WebHost.BuildApplication()
+2019-04-02 22:40:27.622 +08:00 [FTL] BaseManagement.Host terminated unexpectedly!
+AutoMapper.AutoMapperConfigurationException: 
+Unmapped members were found. Review the types and members below.
+Add a custom mapping expression, ignore, add a custom resolver, or modify the source/destination type
+For no matching constructor, add a no-arg ctor, add optional arguments, or map all of the constructor parameters
+============================================================
+CreateBaseTypeDto -> BaseType (Destination member list)
+BaseManagement.CreateBaseTypeDto -> BaseManagement.BaseType (Destination member list)
+
+Unmapped properties:
+BaseItems
+IsDeleted
+DeleterId
+DeletionTime
+LastModificationTime
+LastModifierId
+CreationTime
+CreatorId
+Id
+============================================================
+UpdateBaseTypeDto -> BaseType (Destination member list)
+BaseManagement.UpdateBaseTypeDto -> BaseManagement.BaseType (Destination member list)
+
+Unmapped properties:
+BaseItems
+IsDeleted
+DeleterId
+DeletionTime
+LastModificationTime
+LastModifierId
+CreationTime
+CreatorId
+
+   at AutoMapper.ConfigurationValidator.AssertConfigurationIsValid(IEnumerable`1 typeMaps) in C:\projects\automapper\src\AutoMapper\ConfigurationValidator.cs:line 48
+   at Volo.Abp.AutoMapper.AbpAutoMapperModule.<>c__DisplayClass4_1.<CreateMappings>g__ValidateAll|1(IConfigurationProvider config) in D:\code\openSource\abp\framework\src\Volo.Abp.AutoMapper\Volo\Abp\AutoMapper\AbpAutoMapperModule.cs:line 53
+   at Volo.Abp.AutoMapper.AbpAutoMapperModule.CreateMappings(IServiceProvider serviceProvider) in D:\code\openSource\abp\framework\src\Volo.Abp.AutoMapper\Volo\Abp\AutoMapper\AbpAutoMapperModule.cs:line 67
+   at Volo.Abp.AutoMapper.AbpAutoMapperModule.OnPreApplicationInitialization(ApplicationInitializationContext context) in D:\code\openSource\abp\framework\src\Volo.Abp.AutoMapper\Volo\Abp\AutoMapper\AbpAutoMapperModule.cs:line 29
+   at Volo.Abp.Modularity.OnPreApplicationInitializationModuleLifecycleContributor.Initialize(ApplicationInitializationContext context, IAbpModule module) in D:\code\openSource\abp\framework\src\Volo.Abp.Core\Volo\Abp\Modularity\DefaultModuleLifecycleContributor.cs:line 23
+   at Volo.Abp.Modularity.ModuleManager.InitializeModules(ApplicationInitializationContext context) in D:\code\openSource\abp\framework\src\Volo.Abp.Core\Volo\Abp\Modularity\ModuleManager.cs:line 41
+   at Volo.Abp.AbpApplicationBase.InitializeModules() in D:\code\openSource\abp\framework\src\Volo.Abp.Core\Volo\Abp\AbpApplicationBase.cs:line 72
+   at Volo.Abp.AbpApplicationWithExternalServiceProvider.Initialize(IServiceProvider serviceProvider) in D:\code\openSource\abp\framework\src\Volo.Abp.Core\Volo\Abp\AbpApplicationWithExternalServiceProvider.cs:line 27
+   at Microsoft.AspNetCore.Builder.AbpApplicationBuilderExtensions.InitializeApplication(IApplicationBuilder app) in D:\code\openSource\abp\framework\src\Volo.Abp.AspNetCore\Microsoft\AspNetCore\Builder\AbpApplicationBuilderExtensions.cs:line 28
+   at BaseManagement.Host.Startup.Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory) in D:\code\openSource\abp\samples\Microservice\microservices\BaseManagement.Host\Startup.cs:line 25
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Hosting.ConventionBasedStartup.Configure(IApplicationBuilder app)
+   at Microsoft.AspNetCore.Mvc.Internal.MiddlewareFilterBuilderStartupFilter.<>c__DisplayClass0_0.<Configure>g__MiddlewareFilterBuilder|0(IApplicationBuilder builder)
+   at Microsoft.AspNetCore.Hosting.Internal.AutoRequestServicesStartupFilter.<>c__DisplayClass0_0.<Configure>b__0(IApplicationBuilder builder)
+   at Microsoft.AspNetCore.Hosting.Internal.WebHost.BuildApplication()
+   at Microsoft.AspNetCore.Hosting.Internal.WebHost.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Hosting.WebHostExtensions.RunAsync(IWebHost host, CancellationToken token, String shutdownMessage)
+   at Microsoft.AspNetCore.Hosting.WebHostExtensions.RunAsync(IWebHost host, CancellationToken token)
+   at Microsoft.AspNetCore.Hosting.WebHostExtensions.Run(IWebHost host)
+   at BaseManagement.Host.Program.Main(String[] args) in D:\code\openSource\abp\samples\Microservice\microservices\BaseManagement.Host\Program.cs:line 40
+2019-04-02 22:41:24.730 +08:00 [INF] Starting BaseManagement.Host
+2019-04-02 22:41:29.405 +08:00 [INF] Loaded modules:
+2019-04-02 22:41:29.405 +08:00 [INF] - Volo.Abp.Castle.AbpCastleCoreModule
+2019-04-02 22:41:29.406 +08:00 [INF] - Volo.Abp.Autofac.AbpAutofacModule
+2019-04-02 22:41:29.406 +08:00 [INF] - Volo.Abp.EventBus.AbpEventBusModule
+2019-04-02 22:41:29.406 +08:00 [INF] - Volo.Abp.Timing.AbpTimingModule
+2019-04-02 22:41:29.406 +08:00 [INF] - Volo.Abp.Json.AbpJsonModule
+2019-04-02 22:41:29.406 +08:00 [INF] - Volo.Abp.Threading.AbpThreadingModule
+2019-04-02 22:41:29.406 +08:00 [INF] - Volo.Abp.RabbitMQ.AbpRabbitMqModule
+2019-04-02 22:41:29.406 +08:00 [INF] - Volo.Abp.EventBus.RabbitMq.AbpEventBusRabbitMqModule
+2019-04-02 22:41:29.406 +08:00 [INF] - Volo.Abp.Data.AbpDataModule
+2019-04-02 22:41:29.406 +08:00 [INF] - Volo.Abp.Security.AbpSecurityModule
+2019-04-02 22:41:29.406 +08:00 [INF] - Volo.Abp.MultiTenancy.AbpMultiTenancyModule
+2019-04-02 22:41:29.406 +08:00 [INF] - Volo.Abp.Auditing.AbpAuditingModule
+2019-04-02 22:41:29.406 +08:00 [INF] - Volo.Abp.Guids.AbpGuidsModule
+2019-04-02 22:41:29.406 +08:00 [INF] - Volo.Abp.Uow.AbpUnitOfWorkModule
+2019-04-02 22:41:29.406 +08:00 [INF] - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2019-04-02 22:41:29.406 +08:00 [INF] - Volo.Abp.Domain.AbpDddDomainModule
+2019-04-02 22:41:29.406 +08:00 [INF] - Volo.Abp.EntityFrameworkCore.AbpEntityFrameworkCoreModule
+2019-04-02 22:41:29.406 +08:00 [INF] - Volo.Abp.EntityFrameworkCore.SqlServer.AbpEntityFrameworkCoreSqlServerModule
+2019-04-02 22:41:29.406 +08:00 [INF] - Volo.Abp.Localization.AbpLocalizationAbstractionsModule
+2019-04-02 22:41:29.406 +08:00 [INF] - Volo.Abp.Authorization.AbpAuthorizationModule
+2019-04-02 22:41:29.406 +08:00 [INF] - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2019-04-02 22:41:29.406 +08:00 [INF] - Volo.Abp.Settings.AbpSettingsModule
+2019-04-02 22:41:29.406 +08:00 [INF] - Volo.Abp.Localization.AbpLocalizationModule
+2019-04-02 22:41:29.406 +08:00 [INF] - Volo.Abp.PermissionManagement.AbpPermissionManagementDomainSharedModule
+2019-04-02 22:41:29.406 +08:00 [INF] - Volo.Abp.Serialization.AbpSerializationModule
+2019-04-02 22:41:29.406 +08:00 [INF] - Volo.Abp.Caching.AbpCachingModule
+2019-04-02 22:41:29.406 +08:00 [INF] - Volo.Abp.PermissionManagement.AbpPermissionManagementDomainModule
+2019-04-02 22:41:29.406 +08:00 [INF] - Volo.Abp.PermissionManagement.EntityFrameworkCore.AbpPermissionManagementEntityFrameworkCoreModule
+2019-04-02 22:41:29.406 +08:00 [INF] - Volo.Abp.SettingManagement.AbpSettingManagementDomainSharedModule
+2019-04-02 22:41:29.406 +08:00 [INF] - Volo.Abp.SettingManagement.AbpSettingManagementDomainModule
+2019-04-02 22:41:29.406 +08:00 [INF] - Volo.Abp.SettingManagement.EntityFrameworkCore.AbpSettingManagementEntityFrameworkCoreModule
+2019-04-02 22:41:29.406 +08:00 [INF] - Volo.Abp.Http.AbpHttpAbstractionsModule
+2019-04-02 22:41:29.406 +08:00 [INF] - Volo.Abp.Http.AbpHttpModule
+2019-04-02 22:41:29.406 +08:00 [INF] - Volo.Abp.Http.Client.AbpHttpClientModule
+2019-04-02 22:41:29.406 +08:00 [INF] - Volo.Abp.IdentityModel.AbpIdentityModelModule
+2019-04-02 22:41:29.406 +08:00 [INF] - Volo.Abp.Http.Client.IdentityModel.AbpHttpClientIdentityModelModule
+2019-04-02 22:41:29.406 +08:00 [INF] - BaseManagement.BaseManagementDomainSharedModule
+2019-04-02 22:41:29.406 +08:00 [INF] - Volo.Abp.Validation.AbpValidationModule
+2019-04-02 22:41:29.406 +08:00 [INF] - Volo.Abp.Features.AbpFeaturesModule
+2019-04-02 22:41:29.406 +08:00 [INF] - Volo.Abp.Application.AbpDddApplicationModule
+2019-04-02 22:41:29.406 +08:00 [INF] - BaseManagement.BaseManagementApplicationContractsModule
+2019-04-02 22:41:29.406 +08:00 [INF] - Volo.Abp.UI.AbpUiModule
+2019-04-02 22:41:29.406 +08:00 [INF] - Volo.Abp.AspNetCore.AbpAspNetCoreModule
+2019-04-02 22:41:29.406 +08:00 [INF] - Volo.Abp.ApiVersioning.AbpApiVersioningAbstractionsModule
+2019-04-02 22:41:29.406 +08:00 [INF] - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcContractsModule
+2019-04-02 22:41:29.406 +08:00 [INF] - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcModule
+2019-04-02 22:41:29.406 +08:00 [INF] - BaseManagement.BaseManagementHttpApiModule
+2019-04-02 22:41:29.406 +08:00 [INF] - BaseManagement.BaseManagementDomainModule
+2019-04-02 22:41:29.406 +08:00 [INF] - BaseManagement.EntityFrameworkCore.BaseManagementEntityFrameworkCoreModule
+2019-04-02 22:41:29.406 +08:00 [INF] - Volo.Abp.AutoMapper.AbpAutoMapperModule
+2019-04-02 22:41:29.406 +08:00 [INF] - BaseManagement.BaseManagementApplicationModule
+2019-04-02 22:41:29.406 +08:00 [INF] - Volo.Abp.Users.AbpUsersDomainSharedModule
+2019-04-02 22:41:29.406 +08:00 [INF] - Volo.Abp.Identity.AbpIdentityDomainSharedModule
+2019-04-02 22:41:29.406 +08:00 [INF] - Volo.Abp.Users.AbpUsersAbstractionModule
+2019-04-02 22:41:29.406 +08:00 [INF] - Volo.Abp.PermissionManagement.AbpPermissionManagementApplicationContractsModule
+2019-04-02 22:41:29.406 +08:00 [INF] - Volo.Abp.Identity.AbpIdentityApplicationContractsModule
+2019-04-02 22:41:29.406 +08:00 [INF] - Volo.Abp.Identity.AbpIdentityHttpApiClientModule
+2019-04-02 22:41:29.406 +08:00 [INF] - BaseManagement.Host.BaseManagementHostModule
+2019-04-02 22:41:29.441 +08:00 [DBG] No class found with auto mapping attributes.
+2019-04-02 22:41:29.809 +08:00 [FTL] Application startup exception
+AutoMapper.AutoMapperConfigurationException: 
+Unmapped members were found. Review the types and members below.
+Add a custom mapping expression, ignore, add a custom resolver, or modify the source/destination type
+For no matching constructor, add a no-arg ctor, add optional arguments, or map all of the constructor parameters
+============================================================
+CreateBaseTypeDto -> BaseType (Destination member list)
+BaseManagement.CreateBaseTypeDto -> BaseManagement.BaseType (Destination member list)
+
+Unmapped properties:
+BaseItems
+IsDeleted
+DeleterId
+DeletionTime
+LastModificationTime
+LastModifierId
+CreationTime
+CreatorId
+Id
+============================================================
+UpdateBaseTypeDto -> BaseType (Destination member list)
+BaseManagement.UpdateBaseTypeDto -> BaseManagement.BaseType (Destination member list)
+
+Unmapped properties:
+BaseItems
+IsDeleted
+DeleterId
+DeletionTime
+LastModificationTime
+LastModifierId
+CreationTime
+CreatorId
+
+   at AutoMapper.ConfigurationValidator.AssertConfigurationIsValid(IEnumerable`1 typeMaps) in C:\projects\automapper\src\AutoMapper\ConfigurationValidator.cs:line 48
+   at Volo.Abp.AutoMapper.AbpAutoMapperModule.<>c__DisplayClass4_1.<CreateMappings>g__ValidateAll|1(IConfigurationProvider config) in D:\code\openSource\abp\framework\src\Volo.Abp.AutoMapper\Volo\Abp\AutoMapper\AbpAutoMapperModule.cs:line 53
+   at Volo.Abp.AutoMapper.AbpAutoMapperModule.CreateMappings(IServiceProvider serviceProvider) in D:\code\openSource\abp\framework\src\Volo.Abp.AutoMapper\Volo\Abp\AutoMapper\AbpAutoMapperModule.cs:line 67
+   at Volo.Abp.AutoMapper.AbpAutoMapperModule.OnPreApplicationInitialization(ApplicationInitializationContext context) in D:\code\openSource\abp\framework\src\Volo.Abp.AutoMapper\Volo\Abp\AutoMapper\AbpAutoMapperModule.cs:line 29
+   at Volo.Abp.Modularity.OnPreApplicationInitializationModuleLifecycleContributor.Initialize(ApplicationInitializationContext context, IAbpModule module) in D:\code\openSource\abp\framework\src\Volo.Abp.Core\Volo\Abp\Modularity\DefaultModuleLifecycleContributor.cs:line 23
+   at Volo.Abp.Modularity.ModuleManager.InitializeModules(ApplicationInitializationContext context) in D:\code\openSource\abp\framework\src\Volo.Abp.Core\Volo\Abp\Modularity\ModuleManager.cs:line 41
+   at Volo.Abp.AbpApplicationBase.InitializeModules() in D:\code\openSource\abp\framework\src\Volo.Abp.Core\Volo\Abp\AbpApplicationBase.cs:line 72
+   at Volo.Abp.AbpApplicationWithExternalServiceProvider.Initialize(IServiceProvider serviceProvider) in D:\code\openSource\abp\framework\src\Volo.Abp.Core\Volo\Abp\AbpApplicationWithExternalServiceProvider.cs:line 27
+   at Microsoft.AspNetCore.Builder.AbpApplicationBuilderExtensions.InitializeApplication(IApplicationBuilder app) in D:\code\openSource\abp\framework\src\Volo.Abp.AspNetCore\Microsoft\AspNetCore\Builder\AbpApplicationBuilderExtensions.cs:line 28
+   at BaseManagement.Host.Startup.Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory) in D:\code\openSource\abp\samples\Microservice\microservices\BaseManagement.Host\Startup.cs:line 25
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Hosting.ConventionBasedStartup.Configure(IApplicationBuilder app)
+   at Microsoft.AspNetCore.Mvc.Internal.MiddlewareFilterBuilderStartupFilter.<>c__DisplayClass0_0.<Configure>g__MiddlewareFilterBuilder|0(IApplicationBuilder builder)
+   at Microsoft.AspNetCore.Hosting.Internal.AutoRequestServicesStartupFilter.<>c__DisplayClass0_0.<Configure>b__0(IApplicationBuilder builder)
+   at Microsoft.AspNetCore.Hosting.Internal.WebHost.BuildApplication()
+2019-04-02 22:41:29.915 +08:00 [FTL] BaseManagement.Host terminated unexpectedly!
+AutoMapper.AutoMapperConfigurationException: 
+Unmapped members were found. Review the types and members below.
+Add a custom mapping expression, ignore, add a custom resolver, or modify the source/destination type
+For no matching constructor, add a no-arg ctor, add optional arguments, or map all of the constructor parameters
+============================================================
+CreateBaseTypeDto -> BaseType (Destination member list)
+BaseManagement.CreateBaseTypeDto -> BaseManagement.BaseType (Destination member list)
+
+Unmapped properties:
+BaseItems
+IsDeleted
+DeleterId
+DeletionTime
+LastModificationTime
+LastModifierId
+CreationTime
+CreatorId
+Id
+============================================================
+UpdateBaseTypeDto -> BaseType (Destination member list)
+BaseManagement.UpdateBaseTypeDto -> BaseManagement.BaseType (Destination member list)
+
+Unmapped properties:
+BaseItems
+IsDeleted
+DeleterId
+DeletionTime
+LastModificationTime
+LastModifierId
+CreationTime
+CreatorId
+
+   at AutoMapper.ConfigurationValidator.AssertConfigurationIsValid(IEnumerable`1 typeMaps) in C:\projects\automapper\src\AutoMapper\ConfigurationValidator.cs:line 48
+   at Volo.Abp.AutoMapper.AbpAutoMapperModule.<>c__DisplayClass4_1.<CreateMappings>g__ValidateAll|1(IConfigurationProvider config) in D:\code\openSource\abp\framework\src\Volo.Abp.AutoMapper\Volo\Abp\AutoMapper\AbpAutoMapperModule.cs:line 53
+   at Volo.Abp.AutoMapper.AbpAutoMapperModule.CreateMappings(IServiceProvider serviceProvider) in D:\code\openSource\abp\framework\src\Volo.Abp.AutoMapper\Volo\Abp\AutoMapper\AbpAutoMapperModule.cs:line 67
+   at Volo.Abp.AutoMapper.AbpAutoMapperModule.OnPreApplicationInitialization(ApplicationInitializationContext context) in D:\code\openSource\abp\framework\src\Volo.Abp.AutoMapper\Volo\Abp\AutoMapper\AbpAutoMapperModule.cs:line 29
+   at Volo.Abp.Modularity.OnPreApplicationInitializationModuleLifecycleContributor.Initialize(ApplicationInitializationContext context, IAbpModule module) in D:\code\openSource\abp\framework\src\Volo.Abp.Core\Volo\Abp\Modularity\DefaultModuleLifecycleContributor.cs:line 23
+   at Volo.Abp.Modularity.ModuleManager.InitializeModules(ApplicationInitializationContext context) in D:\code\openSource\abp\framework\src\Volo.Abp.Core\Volo\Abp\Modularity\ModuleManager.cs:line 41
+   at Volo.Abp.AbpApplicationBase.InitializeModules() in D:\code\openSource\abp\framework\src\Volo.Abp.Core\Volo\Abp\AbpApplicationBase.cs:line 72
+   at Volo.Abp.AbpApplicationWithExternalServiceProvider.Initialize(IServiceProvider serviceProvider) in D:\code\openSource\abp\framework\src\Volo.Abp.Core\Volo\Abp\AbpApplicationWithExternalServiceProvider.cs:line 27
+   at Microsoft.AspNetCore.Builder.AbpApplicationBuilderExtensions.InitializeApplication(IApplicationBuilder app) in D:\code\openSource\abp\framework\src\Volo.Abp.AspNetCore\Microsoft\AspNetCore\Builder\AbpApplicationBuilderExtensions.cs:line 28
+   at BaseManagement.Host.Startup.Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory) in D:\code\openSource\abp\samples\Microservice\microservices\BaseManagement.Host\Startup.cs:line 25
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Hosting.ConventionBasedStartup.Configure(IApplicationBuilder app)
+   at Microsoft.AspNetCore.Mvc.Internal.MiddlewareFilterBuilderStartupFilter.<>c__DisplayClass0_0.<Configure>g__MiddlewareFilterBuilder|0(IApplicationBuilder builder)
+   at Microsoft.AspNetCore.Hosting.Internal.AutoRequestServicesStartupFilter.<>c__DisplayClass0_0.<Configure>b__0(IApplicationBuilder builder)
+   at Microsoft.AspNetCore.Hosting.Internal.WebHost.BuildApplication()
+   at Microsoft.AspNetCore.Hosting.Internal.WebHost.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Hosting.WebHostExtensions.RunAsync(IWebHost host, CancellationToken token, String shutdownMessage)
+   at Microsoft.AspNetCore.Hosting.WebHostExtensions.RunAsync(IWebHost host, CancellationToken token)
+   at Microsoft.AspNetCore.Hosting.WebHostExtensions.Run(IWebHost host)
+   at BaseManagement.Host.Program.Main(String[] args) in D:\code\openSource\abp\samples\Microservice\microservices\BaseManagement.Host\Program.cs:line 40
+2019-04-02 22:42:32.427 +08:00 [INF] Starting BaseManagement.Host
+2019-04-02 22:42:38.525 +08:00 [INF] Loaded modules:
+2019-04-02 22:42:38.526 +08:00 [INF] - Volo.Abp.Castle.AbpCastleCoreModule
+2019-04-02 22:42:38.526 +08:00 [INF] - Volo.Abp.Autofac.AbpAutofacModule
+2019-04-02 22:42:38.526 +08:00 [INF] - Volo.Abp.EventBus.AbpEventBusModule
+2019-04-02 22:42:38.526 +08:00 [INF] - Volo.Abp.Timing.AbpTimingModule
+2019-04-02 22:42:38.526 +08:00 [INF] - Volo.Abp.Json.AbpJsonModule
+2019-04-02 22:42:38.526 +08:00 [INF] - Volo.Abp.Threading.AbpThreadingModule
+2019-04-02 22:42:38.527 +08:00 [INF] - Volo.Abp.RabbitMQ.AbpRabbitMqModule
+2019-04-02 22:42:38.527 +08:00 [INF] - Volo.Abp.EventBus.RabbitMq.AbpEventBusRabbitMqModule
+2019-04-02 22:42:38.527 +08:00 [INF] - Volo.Abp.Data.AbpDataModule
+2019-04-02 22:42:38.527 +08:00 [INF] - Volo.Abp.Security.AbpSecurityModule
+2019-04-02 22:42:38.527 +08:00 [INF] - Volo.Abp.MultiTenancy.AbpMultiTenancyModule
+2019-04-02 22:42:38.527 +08:00 [INF] - Volo.Abp.Auditing.AbpAuditingModule
+2019-04-02 22:42:38.527 +08:00 [INF] - Volo.Abp.Guids.AbpGuidsModule
+2019-04-02 22:42:38.527 +08:00 [INF] - Volo.Abp.Uow.AbpUnitOfWorkModule
+2019-04-02 22:42:38.527 +08:00 [INF] - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2019-04-02 22:42:38.527 +08:00 [INF] - Volo.Abp.Domain.AbpDddDomainModule
+2019-04-02 22:42:38.527 +08:00 [INF] - Volo.Abp.EntityFrameworkCore.AbpEntityFrameworkCoreModule
+2019-04-02 22:42:38.527 +08:00 [INF] - Volo.Abp.EntityFrameworkCore.SqlServer.AbpEntityFrameworkCoreSqlServerModule
+2019-04-02 22:42:38.527 +08:00 [INF] - Volo.Abp.Localization.AbpLocalizationAbstractionsModule
+2019-04-02 22:42:38.527 +08:00 [INF] - Volo.Abp.Authorization.AbpAuthorizationModule
+2019-04-02 22:42:38.527 +08:00 [INF] - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2019-04-02 22:42:38.527 +08:00 [INF] - Volo.Abp.Settings.AbpSettingsModule
+2019-04-02 22:42:38.527 +08:00 [INF] - Volo.Abp.Localization.AbpLocalizationModule
+2019-04-02 22:42:38.527 +08:00 [INF] - Volo.Abp.PermissionManagement.AbpPermissionManagementDomainSharedModule
+2019-04-02 22:42:38.527 +08:00 [INF] - Volo.Abp.Serialization.AbpSerializationModule
+2019-04-02 22:42:38.527 +08:00 [INF] - Volo.Abp.Caching.AbpCachingModule
+2019-04-02 22:42:38.527 +08:00 [INF] - Volo.Abp.PermissionManagement.AbpPermissionManagementDomainModule
+2019-04-02 22:42:38.527 +08:00 [INF] - Volo.Abp.PermissionManagement.EntityFrameworkCore.AbpPermissionManagementEntityFrameworkCoreModule
+2019-04-02 22:42:38.527 +08:00 [INF] - Volo.Abp.SettingManagement.AbpSettingManagementDomainSharedModule
+2019-04-02 22:42:38.527 +08:00 [INF] - Volo.Abp.SettingManagement.AbpSettingManagementDomainModule
+2019-04-02 22:42:38.527 +08:00 [INF] - Volo.Abp.SettingManagement.EntityFrameworkCore.AbpSettingManagementEntityFrameworkCoreModule
+2019-04-02 22:42:38.527 +08:00 [INF] - Volo.Abp.Http.AbpHttpAbstractionsModule
+2019-04-02 22:42:38.527 +08:00 [INF] - Volo.Abp.Http.AbpHttpModule
+2019-04-02 22:42:38.527 +08:00 [INF] - Volo.Abp.Http.Client.AbpHttpClientModule
+2019-04-02 22:42:38.527 +08:00 [INF] - Volo.Abp.IdentityModel.AbpIdentityModelModule
+2019-04-02 22:42:38.527 +08:00 [INF] - Volo.Abp.Http.Client.IdentityModel.AbpHttpClientIdentityModelModule
+2019-04-02 22:42:38.527 +08:00 [INF] - BaseManagement.BaseManagementDomainSharedModule
+2019-04-02 22:42:38.527 +08:00 [INF] - Volo.Abp.Validation.AbpValidationModule
+2019-04-02 22:42:38.527 +08:00 [INF] - Volo.Abp.Features.AbpFeaturesModule
+2019-04-02 22:42:38.527 +08:00 [INF] - Volo.Abp.Application.AbpDddApplicationModule
+2019-04-02 22:42:38.527 +08:00 [INF] - BaseManagement.BaseManagementApplicationContractsModule
+2019-04-02 22:42:38.527 +08:00 [INF] - Volo.Abp.UI.AbpUiModule
+2019-04-02 22:42:38.527 +08:00 [INF] - Volo.Abp.AspNetCore.AbpAspNetCoreModule
+2019-04-02 22:42:38.527 +08:00 [INF] - Volo.Abp.ApiVersioning.AbpApiVersioningAbstractionsModule
+2019-04-02 22:42:38.527 +08:00 [INF] - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcContractsModule
+2019-04-02 22:42:38.527 +08:00 [INF] - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcModule
+2019-04-02 22:42:38.527 +08:00 [INF] - BaseManagement.BaseManagementHttpApiModule
+2019-04-02 22:42:38.527 +08:00 [INF] - BaseManagement.BaseManagementDomainModule
+2019-04-02 22:42:38.527 +08:00 [INF] - BaseManagement.EntityFrameworkCore.BaseManagementEntityFrameworkCoreModule
+2019-04-02 22:42:38.527 +08:00 [INF] - Volo.Abp.AutoMapper.AbpAutoMapperModule
+2019-04-02 22:42:38.527 +08:00 [INF] - BaseManagement.BaseManagementApplicationModule
+2019-04-02 22:42:38.527 +08:00 [INF] - Volo.Abp.Users.AbpUsersDomainSharedModule
+2019-04-02 22:42:38.527 +08:00 [INF] - Volo.Abp.Identity.AbpIdentityDomainSharedModule
+2019-04-02 22:42:38.527 +08:00 [INF] - Volo.Abp.Users.AbpUsersAbstractionModule
+2019-04-02 22:42:38.527 +08:00 [INF] - Volo.Abp.PermissionManagement.AbpPermissionManagementApplicationContractsModule
+2019-04-02 22:42:38.527 +08:00 [INF] - Volo.Abp.Identity.AbpIdentityApplicationContractsModule
+2019-04-02 22:42:38.527 +08:00 [INF] - Volo.Abp.Identity.AbpIdentityHttpApiClientModule
+2019-04-02 22:42:38.527 +08:00 [INF] - BaseManagement.Host.BaseManagementHostModule
+2019-04-02 22:42:38.563 +08:00 [DBG] No class found with auto mapping attributes.
+2019-04-02 22:42:38.884 +08:00 [FTL] Application startup exception
+AutoMapper.AutoMapperConfigurationException: 
+Unmapped members were found. Review the types and members below.
+Add a custom mapping expression, ignore, add a custom resolver, or modify the source/destination type
+For no matching constructor, add a no-arg ctor, add optional arguments, or map all of the constructor parameters
+============================================================
+CreateBaseTypeDto -> BaseType (Destination member list)
+BaseManagement.CreateBaseTypeDto -> BaseManagement.BaseType (Destination member list)
+
+Unmapped properties:
+BaseItems
+IsDeleted
+DeleterId
+DeletionTime
+LastModificationTime
+LastModifierId
+CreationTime
+CreatorId
+Id
+============================================================
+UpdateBaseTypeDto -> BaseType (Destination member list)
+BaseManagement.UpdateBaseTypeDto -> BaseManagement.BaseType (Destination member list)
+
+Unmapped properties:
+BaseItems
+IsDeleted
+DeleterId
+DeletionTime
+LastModificationTime
+LastModifierId
+CreationTime
+CreatorId
+
+   at AutoMapper.ConfigurationValidator.AssertConfigurationIsValid(IEnumerable`1 typeMaps) in C:\projects\automapper\src\AutoMapper\ConfigurationValidator.cs:line 48
+   at Volo.Abp.AutoMapper.AbpAutoMapperModule.<>c__DisplayClass4_1.<CreateMappings>g__ValidateAll|1(IConfigurationProvider config) in D:\code\openSource\abp\framework\src\Volo.Abp.AutoMapper\Volo\Abp\AutoMapper\AbpAutoMapperModule.cs:line 53
+   at Volo.Abp.AutoMapper.AbpAutoMapperModule.CreateMappings(IServiceProvider serviceProvider) in D:\code\openSource\abp\framework\src\Volo.Abp.AutoMapper\Volo\Abp\AutoMapper\AbpAutoMapperModule.cs:line 67
+   at Volo.Abp.AutoMapper.AbpAutoMapperModule.OnPreApplicationInitialization(ApplicationInitializationContext context) in D:\code\openSource\abp\framework\src\Volo.Abp.AutoMapper\Volo\Abp\AutoMapper\AbpAutoMapperModule.cs:line 29
+   at Volo.Abp.Modularity.OnPreApplicationInitializationModuleLifecycleContributor.Initialize(ApplicationInitializationContext context, IAbpModule module) in D:\code\openSource\abp\framework\src\Volo.Abp.Core\Volo\Abp\Modularity\DefaultModuleLifecycleContributor.cs:line 23
+   at Volo.Abp.Modularity.ModuleManager.InitializeModules(ApplicationInitializationContext context) in D:\code\openSource\abp\framework\src\Volo.Abp.Core\Volo\Abp\Modularity\ModuleManager.cs:line 41
+   at Volo.Abp.AbpApplicationBase.InitializeModules() in D:\code\openSource\abp\framework\src\Volo.Abp.Core\Volo\Abp\AbpApplicationBase.cs:line 72
+   at Volo.Abp.AbpApplicationWithExternalServiceProvider.Initialize(IServiceProvider serviceProvider) in D:\code\openSource\abp\framework\src\Volo.Abp.Core\Volo\Abp\AbpApplicationWithExternalServiceProvider.cs:line 27
+   at Microsoft.AspNetCore.Builder.AbpApplicationBuilderExtensions.InitializeApplication(IApplicationBuilder app) in D:\code\openSource\abp\framework\src\Volo.Abp.AspNetCore\Microsoft\AspNetCore\Builder\AbpApplicationBuilderExtensions.cs:line 28
+   at BaseManagement.Host.Startup.Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory) in D:\code\openSource\abp\samples\Microservice\microservices\BaseManagement.Host\Startup.cs:line 25
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Hosting.ConventionBasedStartup.Configure(IApplicationBuilder app)
+   at Microsoft.AspNetCore.Mvc.Internal.MiddlewareFilterBuilderStartupFilter.<>c__DisplayClass0_0.<Configure>g__MiddlewareFilterBuilder|0(IApplicationBuilder builder)
+   at Microsoft.AspNetCore.Server.IISIntegration.IISSetupFilter.<>c__DisplayClass4_0.<Configure>b__0(IApplicationBuilder app)
+   at Microsoft.AspNetCore.Hosting.Internal.AutoRequestServicesStartupFilter.<>c__DisplayClass0_0.<Configure>b__0(IApplicationBuilder builder)
+   at Microsoft.AspNetCore.Hosting.Internal.WebHost.BuildApplication()
+2019-04-02 22:42:39.193 +08:00 [INF] Request starting HTTP/1.1 DEBUG http://localhost:62158/  0
+2019-04-02 22:42:39.193 +08:00 [INF] Request starting HTTP/1.1 GET http://localhost:62158/  
+2019-04-02 22:42:39.462 +08:00 [ERR] Connection id "0HLLNF5Q6B7E0", Request id "0HLLNF5Q6B7E0:00000001": An unhandled exception was thrown by the application.
+System.ArgumentNullException: Value cannot be null.
+Parameter name: values
+   at System.String.Join(String separator, IEnumerable`1 values)
+   at Microsoft.Extensions.RazorViews.BaseView.EndWriteAttribute()
+   at Microsoft.AspNetCore.Hosting.Views.ErrorPage.ExecuteAsync()
+   at Microsoft.Extensions.RazorViews.BaseView.ExecuteAsync(HttpContext context)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpProtocol.ProcessRequests[TContext](IHttpApplication`1 application)
+2019-04-02 22:42:39.462 +08:00 [INF] Request finished in 260.6709ms 500 text/html; charset=utf-8
+2019-04-02 22:42:39.465 +08:00 [INF] Request finished in 272.8154ms 500 
+2019-04-02 22:42:39.693 +08:00 [INF] Request starting HTTP/1.1 GET http://localhost:62158/favicon.ico  
+2019-04-02 22:42:39.699 +08:00 [INF] Request finished in 5.8741ms 500 text/html; charset=utf-8
