@@ -14,7 +14,7 @@ namespace BaseManagement.EntityFrameworkCore
         {
             context.Services.AddAbpDbContext<BaseManagementDbContext>(options =>
             {
-                options.AddDefaultRepositories();
+                options.AddDefaultRepositories<IBaseManagementDbContext>(true);
             });
         }
     }

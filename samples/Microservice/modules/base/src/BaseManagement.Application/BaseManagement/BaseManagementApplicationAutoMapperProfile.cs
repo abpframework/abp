@@ -8,8 +8,10 @@ namespace BaseManagement
         public BaseManagementApplicationAutoMapperProfile()
         {
             CreateMap<BaseType, BaseTypeDto>();
-            CreateMap<CreateBaseTypeDto, BaseType>().Ignore(x => x.BaseItems);
-            CreateMap<UpdateBaseTypeDto, BaseType>();
+            CreateMap<CreateUpdateBaseTypeDto, BaseType>().Ignore(x => x.BaseItems);
+
+            CreateMap<BaseItem, BaseItemDto>();
+            CreateMap<CreateUpdateBaseItemDto, BaseItem>().Ignore(x => x.BaseType);
         }
     }
 }

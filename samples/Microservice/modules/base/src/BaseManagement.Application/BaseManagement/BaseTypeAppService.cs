@@ -13,14 +13,15 @@ namespace BaseManagement
 {
     [Authorize(BaseManagementPermissions.BaseTypes.Default)]
     public class BaseTypeAppService : AsyncCrudAppService<BaseType, BaseTypeDto, Guid, PagedAndSortedResultRequestDto,
-        CreateBaseTypeDto, UpdateBaseTypeDto>, IBaseTypeAppService
+        CreateUpdateBaseTypeDto, CreateUpdateBaseTypeDto>, IBaseTypeAppService
     {
 
         public BaseTypeAppService(IRepository<BaseType, Guid> repository)
             : base(repository)
         {
-
+            base.CreatePolicyName = BaseManagementPermissions.BaseTypes.Create;
+            base.UpdatePolicyName = BaseManagementPermissions.BaseTypes.Update;
+            base.DeletePolicyName = BaseManagementPermissions.BaseTypes.Delete;
         }
-
     }
 }

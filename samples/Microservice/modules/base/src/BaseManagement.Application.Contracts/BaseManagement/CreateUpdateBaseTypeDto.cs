@@ -1,10 +1,11 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using Volo.Abp.Domain.Entities;
+using JetBrains.Annotations;
 
 namespace BaseManagement
 {
-    public class UpdateBaseTypeDto:Entity<Guid>
+
+    public class CreateUpdateBaseTypeDto
     {
         public Guid? ParentId { get; set; }
         [Required]

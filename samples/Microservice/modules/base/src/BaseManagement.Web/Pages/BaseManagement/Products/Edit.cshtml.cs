@@ -29,7 +29,7 @@ namespace BaseManagement.Pages.BaseManagement.Products
 
         public async Task OnPostAsync()
         {
-            await _productAppService.UpdateAsync(Product.Id, new UpdateBaseTypeDto()
+            await _productAppService.UpdateAsync(Product.Id, new CreateUpdateBaseTypeDto()
             {
                 Name = Product.Name,
             });

@@ -15,13 +15,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using JetBrains.Annotations;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Entities.Auditing;
 
 namespace BaseManagement
 {
-    public class BaseType:FullAuditedEntity<Guid>
+    public class BaseType: Entity<Guid>
     {
-        private BaseType()
+        public BaseType()
         {
         }
 

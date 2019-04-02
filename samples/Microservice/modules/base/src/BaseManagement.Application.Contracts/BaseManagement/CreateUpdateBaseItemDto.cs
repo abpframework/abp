@@ -4,9 +4,10 @@ using JetBrains.Annotations;
 
 namespace BaseManagement
 {
-    public class CreateBaseTypeDto
+
+    public class CreateUpdateBaseItemDto
     {
-        public Guid? ParentId { get; set; }
+        public Guid BaseTypeGuid { get; set; }
         [Required]
         [MaxLength(BaseConsts.MaxCodeLength)]
         public string Code { get; set; }
@@ -16,5 +17,6 @@ namespace BaseManagement
         public int Sort { get; set; }
         [MaxLength(BaseConsts.MaxRemarkLength)]
         public string Remark { get; set; }
+
     }
 }

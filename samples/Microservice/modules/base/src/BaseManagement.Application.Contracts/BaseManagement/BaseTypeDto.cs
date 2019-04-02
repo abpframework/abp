@@ -4,7 +4,7 @@ using Volo.Abp.Application.Dtos;
 
 namespace BaseManagement
 {
-    public class BaseTypeDto : AuditedEntityDto<Guid>
+    public class BaseTypeDto : EntityDto<Guid>
     {
         public Guid? ParentId { get; set; }
         public string Code { get; set; }

@@ -13,12 +13,17 @@
 
 using System;
 using JetBrains.Annotations;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Entities.Auditing;
 
 namespace BaseManagement
 {
-    public class BaseItem:FullAuditedEntity<Guid>
+    public class BaseItem:Entity<Guid>
     {
+        public BaseItem()
+        {
+        }
+
         public BaseItem(Guid baseTypeGuid, string code, string name)
         {
             BaseTypeGuid = baseTypeGuid;

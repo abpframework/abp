@@ -3,12 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BaseManagement.Host.Migrations
 {
-    public partial class Added_BaseType : Migration
+    public partial class AddBaseType_BaseItem : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "PmBaseTypes",
+                name: "BmBaseTypes",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
@@ -27,11 +27,11 @@ namespace BaseManagement.Host.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PmBaseTypes", x => x.Id);
+                    table.PrimaryKey("PK_BmBaseTypes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "PmBaseItems",
+                name: "BmBaseItems",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
@@ -50,28 +50,28 @@ namespace BaseManagement.Host.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PmBaseItems", x => x.Id);
+                    table.PrimaryKey("PK_BmBaseItems", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PmBaseItems_PmBaseTypes_BaseTypeGuid",
+                        name: "FK_BmBaseItems_BmBaseTypes_BaseTypeGuid",
                         column: x => x.BaseTypeGuid,
-                        principalTable: "PmBaseTypes",
+                        principalTable: "BmBaseTypes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_PmBaseItems_BaseTypeGuid",
-                table: "PmBaseItems",
+                name: "IX_BmBaseItems_BaseTypeGuid",
+                table: "BmBaseItems",
                 column: "BaseTypeGuid");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "PmBaseItems");
+                name: "BmBaseItems");
 
             migrationBuilder.DropTable(
-                name: "PmBaseTypes");
+                name: "BmBaseTypes");
         }
     }
 }

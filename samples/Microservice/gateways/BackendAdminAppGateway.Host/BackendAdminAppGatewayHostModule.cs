@@ -6,6 +6,7 @@ using Ocelot.Middleware;
 using StackExchange.Redis;
 using Swashbuckle.AspNetCore.Swagger;
 using System.Collections.Generic;
+using BaseManagement;
 using Volo.Abp;
 using Volo.Abp.AspNetCore;
 using Volo.Abp.AspNetCore.Mvc;
@@ -32,6 +33,8 @@ namespace BackendAdminAppGateway.Host
 
         typeof(AuditLoggingHttpApiModule),
         typeof(AbpIdentityHttpApiClientModule),
+
+        typeof(BaseManagementHttpApiModule),
 
         typeof(AbpEntityFrameworkCoreSqlServerModule),
         typeof(AbpPermissionManagementEntityFrameworkCoreModule),

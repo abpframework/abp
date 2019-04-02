@@ -7,7 +7,7 @@ namespace BaseManagement
     {
         public BaseManagementWebAutoMapperProfile()
         {
-            CreateMap<CreateModel.ProductCreateViewModel, CreateBaseTypeDto>();
+            CreateMap<CreateModel.ProductCreateViewModel, CreateUpdateBaseTypeDto>();
             CreateMap<BaseTypeDto, EditModel.ProductEditViewModel>();
         }
     }

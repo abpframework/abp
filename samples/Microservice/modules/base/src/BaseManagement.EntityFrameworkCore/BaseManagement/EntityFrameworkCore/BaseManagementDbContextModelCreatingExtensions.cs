@@ -21,7 +21,7 @@ namespace BaseManagement.EntityFrameworkCore
             {
                 b.ToTable(options.TablePrefix + "BaseTypes", options.Schema);
        
-                b.ConfigureAudited();
+                //b.ConfigureAudited();
 
                 b.Property(x => x.Code).IsRequired().HasMaxLength(BaseConsts.MaxCodeLength);
                 b.Property(x => x.Name).IsRequired().HasMaxLength(BaseConsts.MaxNameLength);
@@ -34,7 +34,7 @@ namespace BaseManagement.EntityFrameworkCore
             {
                 b.ToTable(options.TablePrefix + "BaseItems", options.Schema);
 
-                b.ConfigureAudited();
+                //b.ConfigureAudited();
 
                 b.Property(x => x.Code).IsRequired().HasMaxLength(BaseConsts.MaxCodeLength);
                 b.Property(x => x.Name).IsRequired().HasMaxLength(BaseConsts.MaxNameLength);

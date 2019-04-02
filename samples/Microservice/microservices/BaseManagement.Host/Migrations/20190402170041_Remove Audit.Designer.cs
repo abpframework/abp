@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BaseManagement.Host.Migrations
 {
     [DbContext(typeof(BaseManagementServiceMigrationDbContext))]
-    [Migration("20190402152308_Added_BaseType")]
-    partial class Added_BaseType
+    [Migration("20190402170041_Remove Audit")]
+    partial class RemoveAudit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -32,24 +32,6 @@ namespace BaseManagement.Host.Migrations
                         .IsRequired()
                         .HasMaxLength(32);
 
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnName("CreationTime");
-
-                    b.Property<Guid?>("CreatorId")
-                        .HasColumnName("CreatorId");
-
-                    b.Property<Guid?>("DeleterId");
-
-                    b.Property<DateTime?>("DeletionTime");
-
-                    b.Property<bool>("IsDeleted");
-
-                    b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnName("LastModificationTime");
-
-                    b.Property<Guid?>("LastModifierId")
-                        .HasColumnName("LastModifierId");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(128);
@@ -63,7 +45,7 @@ namespace BaseManagement.Host.Migrations
 
                     b.HasIndex("BaseTypeGuid");
 
-                    b.ToTable("PmBaseItems");
+                    b.ToTable("BmBaseItems");
                 });
 
             modelBuilder.Entity("BaseManagement.BaseType", b =>
@@ -74,24 +56,6 @@ namespace BaseManagement.Host.Migrations
                     b.Property<string>("Code")
                         .IsRequired()
                         .HasMaxLength(32);
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnName("CreationTime");
-
-                    b.Property<Guid?>("CreatorId")
-                        .HasColumnName("CreatorId");
-
-                    b.Property<Guid?>("DeleterId");
-
-                    b.Property<DateTime?>("DeletionTime");
-
-                    b.Property<bool>("IsDeleted");
-
-                    b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnName("LastModificationTime");
-
-                    b.Property<Guid?>("LastModifierId")
-                        .HasColumnName("LastModifierId");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -106,7 +70,7 @@ namespace BaseManagement.Host.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PmBaseTypes");
+                    b.ToTable("BmBaseTypes");
                 });
 
             modelBuilder.Entity("BaseManagement.BaseItem", b =>

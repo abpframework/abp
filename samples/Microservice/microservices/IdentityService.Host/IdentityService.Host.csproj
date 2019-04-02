@@ -37,6 +37,9 @@
     <ProjectReference Include="..\..\..\..\modules\audit-logging\src\Volo.Abp.AuditLogging.EntityFrameworkCore\Volo.Abp.AuditLogging.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\..\..\..\modules\permission-management\src\Volo.Abp.PermissionManagement.EntityFrameworkCore\Volo.Abp.PermissionManagement.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\..\..\..\modules\setting-management\src\Volo.Abp.SettingManagement.EntityFrameworkCore\Volo.Abp.SettingManagement.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\..\modules\base\src\BaseManagement.Application.Contracts\BaseManagement.Application.Contracts.csproj" />
+    <ProjectReference Include="..\..\modules\base\src\BaseManagement.EntityFrameworkCore\BaseManagement.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\..\modules\base\src\BaseManagement.HttpApi\BaseManagement.HttpApi.csproj" />
   </ItemGroup>
 
   <ItemGroup>

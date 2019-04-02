@@ -5,6 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Redis;
 using Swashbuckle.AspNetCore.Swagger;
 using System.Collections.Generic;
+using BaseManagement;
+using BaseManagement.EntityFrameworkCore;
 using Volo.Abp;
 using Volo.Abp.Auditing;
 using Volo.Abp.AuditLogging.Application.Contracts.Volo.Abp.AuditLogging;
@@ -30,9 +32,17 @@ namespace IdentityService.Host
         typeof(AbpAuditLoggingEntityFrameworkCoreModule),
         typeof(AbpPermissionManagementEntityFrameworkCoreModule),
         typeof(AbpSettingManagementEntityFrameworkCoreModule),
+
+        //审计日志
         typeof(AbpIdentityHttpApiModule),
         typeof(AbpIdentityEntityFrameworkCoreModule),
         typeof(AbpIdentityApplicationModule),
+
+        //基础资料
+        typeof(BaseManagementHttpApiModule),
+        typeof(BaseManagementEntityFrameworkCoreModule),
+        typeof(BaseManagementApplicationContractsModule),
+
         typeof(AuditLoggingApplicationContractsModule)
         )]
     public class IdentityServiceHostModule : AbpModule

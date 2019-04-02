@@ -19,7 +19,7 @@ namespace BaseManagement.Pages.BaseManagement.Products
 
         public async Task<IActionResult> OnPostAsync()
         {
-            var createProductDto = ObjectMapper.Map<ProductCreateViewModel, CreateBaseTypeDto>(Product);
+            var createProductDto = ObjectMapper.Map<ProductCreateViewModel, CreateUpdateBaseTypeDto>(Product);
 
             await _productAppService.CreateAsync(createProductDto);
 

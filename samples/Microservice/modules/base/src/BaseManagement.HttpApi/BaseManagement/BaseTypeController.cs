@@ -34,14 +34,14 @@ namespace BaseManagement
         }
 
         [HttpPost]
-        public Task<BaseTypeDto> CreateAsync(CreateBaseTypeDto input)
+        public Task<BaseTypeDto> CreateAsync(CreateUpdateBaseTypeDto input)
         {
             return _baseTypeAppService.CreateAsync(input);
         }
 
         [HttpPut]
         [Route("{id}")]
-        public Task<BaseTypeDto> UpdateAsync(Guid id, UpdateBaseTypeDto input)
+        public Task<BaseTypeDto> UpdateAsync(Guid id, CreateUpdateBaseTypeDto input)
         {
             return _baseTypeAppService.UpdateAsync(id, input);
         }

@@ -14,7 +14,7 @@ namespace BaseManagement
         {
             Configure<AbpAutoMapperOptions>(options =>
             {
-                options.AddProfile<BaseManagementApplicationAutoMapperProfile>(validate: true);
+                options.AddProfile<BaseManagementApplicationAutoMapperProfile>(validate: false);
             });
         }
     }
