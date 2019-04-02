@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>Volo.Abp.AuditLogging.Application</AssemblyName>
+    <PackageId>Volo.Abp.AuditLogging.Application</PackageId>
+  </PropertyGroup>
+
+  <ItemGroup>
+  
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AutoMapper\Volo.Abp.AutoMapper.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Caching\Volo.Abp.Caching.csproj" />
+    <ProjectReference Include="..\Volo.Abp.AuditLogging.Application.Contracts\Volo.Abp.AuditLogging.Application.Contracts.csproj" />
+    <ProjectReference Include="..\Volo.Abp.AuditLogging.Domain\Volo.Abp.AuditLogging.Domain.csproj" />
+    <ProjectReference Include="..\Volo.Abp.AuditLogging.EntityFrameworkCore\Volo.Abp.AuditLogging.EntityFrameworkCore.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -16,10 +16,8 @@
         @on-select="handleSelect"
         @on-selection-change="handleSelectionChange"
         @on-refresh="handleRefresh"
-        :row-class-name="rowClsRender"
         @on-page-change="handlePageChanged"
         @on-page-size-change="handlePageSizeChanged"
-        @on-assign="handleAssignRole"
       >
         <div slot="search">
           <section class="dnc-toolbar-wrap">
@@ -31,66 +29,15 @@
                       type="text"
                       search
                       :clearable="true"
-                      v-model="stores.user.query.kw"
+                      v-model="stores.user.query.Filter"
                       placeholder="输入关键字搜索..."
-                      @on-search="handleSearchUser()"
-                    >
-                      <Select
-                        slot="prepend"
-                        v-model="stores.user.query.isDeleted"
-                        @on-change="handleSearchUser"
-                        placeholder="删除状态"
-                        style="width:60px;"
-                      >
-                        <Option
-                          v-for="item in stores.user.sources.isDeletedSources"
-                          :value="item.value"
-                          :key="item.value"
-                        >{{item.text}}</Option>
-                      </Select>
-                      <Select
-                        slot="prepend"
-                        v-model="stores.user.query.status"
-                        @on-change="handleSearchUser"
-                        placeholder="用户状态"
-                        style="width:60px;"
-                      >
-                        <Option
-                          v-for="item in stores.user.sources.statusSources"
-                          :value="item.value"
-                          :key="item.value"
-                        >{{item.text}}</Option>
-                      </Select>
-                    </Input>
+                      @on-search="loadUserList()"
+                    ></Input>
                   </FormItem>
                 </Form>
               </Col>
               <Col span="8" class="dnc-toolbar-btns">
                 <ButtonGroup class="mr3">
-                  <Button
-                    class="txt-danger"
-                    icon="md-trash"
-                    title="删除"
-                    @click="handleBatchCommand('delete')"
-                  ></Button>
-                  <Button
-                    class="txt-success"
-                    icon="md-redo"
-                    title="恢复"
-                    @click="handleBatchCommand('recover')"
-                  ></Button>
-                  <Button
-                    class="txt-danger"
-                    icon="md-hand"
-                    title="禁用"
-                    @click="handleBatchCommand('forbidden')"
-                  ></Button>
-                  <Button
-                    class="txt-success"
-                    icon="md-checkmark"
-                    title="启用"
-                    @click="handleBatchCommand('normal')"
-                  ></Button>
                   <Button icon="md-refresh" title="刷新" @click="handleRefresh"></Button>
                 </ButtonGroup>
                 <Button
@@ -117,69 +64,68 @@
       <Form :model="formModel.fields" ref="formUser" :rules="formModel.rules" label-position="top">
         <Row :gutter="16">
           <Col span="12">
-            <FormItem label="登录名" prop="loginName">
-              <Input v-model="formModel.fields.loginName" placeholder="请输入登录名"/>
+            <FormItem label="登录名" prop="userName">
+              <Input v-model="formModel.fields.userName" placeholder="请输入登录名"/>
             </FormItem>
           </Col>
-          <Col span="12">
-            <FormItem label="显示名" prop="displayName">
-              <Input v-model="formModel.fields.displayName" placeholder="请输入显示名"/>
-            </FormItem>
-          </Col>
-        </Row>
-        <Row :gutter="16">
-          <Col span="12">
-            <FormItem label="密码" prop="password">
+          <Col span="12" v-show="formModel.fields.id==''">
+            <FormItem label="登录密码" prop="password">
               <Input type="password" v-model="formModel.fields.password" placeholder="请输入登录密码"/>
             </FormItem>
           </Col>
+        </Row>
+        <Row :gutter="16">
           <Col span="12">
-            <FormItem label="用户类型">
-              <Select v-model="formModel.fields.userType">
-                <Option
-                  v-for="item in stores.user.sources.userTypes"
-                  :value="item.value"
-                  :key="item.value"
-                >{{ item.text }}</Option>
-              </Select>
+            <FormItem label="姓" prop="surname">
+              <Input v-model="formModel.fields.surname" placeholder="请输入姓"/>
+            </FormItem>
+          </Col>
+          <Col span="12">
+            <FormItem label="名" prop="name">
+              <Input v-model="formModel.fields.name" placeholder="请输入名"/>
             </FormItem>
           </Col>
         </Row>
         <Row :gutter="16">
           <Col span="12">
-            <FormItem label="用户状态" label-position="left">
-              <!-- <RadioGroup v-model="formModel.fields.status" type="button">
-                              <Radio v-for="item in stores.user.sources.statusFormSources" :label="item.text" :key="item.value"></Radio>
-              </RadioGroup>-->
+            <FormItem label="email" prop="email">
+              <Input type="text" v-model="formModel.fields.email" placeholder="请输入email"/>
+            </FormItem>
+          </Col>
+          <Col span="12">
+            <FormItem label="手机号" prop="phoneNumber">
+              <Input type="text" v-model="formModel.fields.phoneNumber" placeholder="请输入手机号"/>
+            </FormItem>
+          </Col>
+        </Row>
+        <Row :gutter="16">
+          <Col span="12">
+            <FormItem label="是否启用禁用" label-position="left">
               <i-switch
                 size="large"
-                v-model="formModel.fields.status"
-                :true-value="1"
-                :false-value="0"
+                v-model="formModel.fields.lockoutEnabled"
+                :true-value="true"
+                :false-value="false"
               >
-                <span slot="open">正常</span>
-                <span slot="close">禁用</span>
+                <span slot="open">是</span>
+                <span slot="close">否</span>
+              </i-switch>
+            </FormItem>
+          </Col>
+          <Col span="12">
+            <FormItem label="双身份验证" label-position="left">
+              <i-switch
+                size="large"
+                v-model="formModel.fields.twoFactorEnabled"
+                :true-value="true"
+                :false-value="false"
+              >
+                <span slot="open">是</span>
+                <span slot="close">否</span>
               </i-switch>
             </FormItem>
           </Col>
         </Row>
-        <FormItem label="备注" label-position="top">
-          <Input type="textarea" v-model="formModel.fields.desc" :rows="4" placeholder="用户备注信息"/>
-        </FormItem>
-      </Form>
-      <div class="demo-drawer-footer">
-        <Button icon="md-checkmark-circle" type="primary" @click="handleSubmitUser">保 存</Button>
-        <Button style="margin-left: 8px" icon="md-close" @click="formModel.opened = false">取 消</Button>
-      </div>
-    </Drawer>
-    <Drawer
-      title="用户角色分配"
-      v-model="formAssignRole.opened"
-      width="500"
-      :mask-closable="true"
-      :mask="true"
-    >
-      <Form>
         <FormItem>
           <Transfer
             :data="formAssignRole.roles"
@@ -190,9 +136,9 @@
           ></Transfer>
         </FormItem>
       </Form>
-      <div class="demo-drawer-footer" style="margin-top:15px;">
-        <Button icon="md-checkmark-circle" type="primary" @click="handleSaveUserRoles">保 存</Button>
-        <Button style="margin-left: 8px" icon="md-close" @click="formAssignRole.opened = false">取 消</Button>
+      <div class="demo-drawer-footer">
+        <Button icon="md-checkmark-circle" type="primary" @click="handleSubmitUser">保 存</Button>
+        <Button style="margin-left: 8px" icon="md-close" @click="formModel.opened = false">取 消</Button>
       </div>
     </Drawer>
   </div>
@@ -209,7 +155,7 @@ import {
   batchCommand,
   saveUserRoles
 } from "@/api/rbac/user";
-import { loadRoleListByUserGuid } from "@/api/rbac/role";
+import { loadRoleListByUserGuid, loadSimpleList } from "@/api/rbac/role";
 export default {
   name: "rbac_user_page",
   components: {
@@ -217,44 +163,51 @@ export default {
   },
   data() {
     return {
-      commands: {
-        delete: { name: "delete", title: "删除" },
-        recover: { name: "recover", title: "恢复" },
-        forbidden: { name: "forbidden", title: "禁用" },
-        normal: { name: "normal", title: "启用" }
-      },
       formModel: {
         opened: false,
         title: "创建用户",
         mode: "create",
         selection: [],
         fields: {
-          guid: "",
-          loginName: "",
-          displayName: "",
+          id: "",
           password: "",
-          avatar: "",
-          userType: 0,
-          isLocked: 0,
-          status: 1,
-          isDeleted: 0,
-          createdOn: null,
-          createdByUserGuid: "",
-          createdByUserName: "",
-          modifiedOn: null,
-          modifiedByUserGuid: "",
-          modifiedByUserName: ""
+          userName: "",
+          name: "",
+          surname: "",
+          email: "",
+          phoneNumber: "",
+          twoFactorEnabled: false,
+          lockoutEnabled: true,
+          roleNames: []
         },
         rules: {
-          loginName: [
-            { type: "string", required: true, message: "请输入登录名", min: 3 }
+          userName: [
+            {
+              type: "string",
+              required: true,
+              message: "请输入登录名,大于三个字符!",
+              min: 3
+            }
           ],
-          displayName: [],
-          password: []
+          email: [
+            {
+              type: "email",
+              required: true,
+              message: "请输入email格式,大于三个字符",
+              min: 3
+            }
+          ],
+          password: [
+            {
+              type: "string",
+              required: true,
+              message: "请输入密码!"
+            }
+          ]
         }
       },
       formAssignRole: {
-        userGuid: "",
+        id: "",
         opened: false,
         ownedRoles: [],
         inited: false,
@@ -264,34 +217,12 @@ export default {
         user: {
           query: {
             totalCount: 0,
-            pageSize: 20,
-            currentPage: 1,
-            kw: "",
-            isDeleted: 0,
-            status: -1,
-            sort: [
-              {
-                direct: "DESC",
-                field: ""
-              }
-            ]
+            MaxResultCount: 20,
+            SkipCount: 0,
+            Filter: "",
+            Sorting: "Id"
           },
           sources: {
-            userTypes: [
-              { value: 0, text: "超级管理员" },
-              { value: 1, text: "管理员" },
-              { value: 2, text: "普通用户" }
-            ],
-            isDeletedSources: [
-              { value: -1, text: "全部" },
-              { value: 0, text: "正常" },
-              { value: 1, text: "已删" }
-            ],
-            statusSources: [
-              { value: -1, text: "全部" },
-              { value: 0, text: "禁用" },
-              { value: 1, text: "正常" }
-            ],
             statusFormSources: [
               { value: 0, text: "禁用" },
               { value: 1, text: "正常" }
@@ -299,85 +230,18 @@ export default {
           },
           columns: [
             { type: "selection", width: 50, key: "handle" },
-            { title: "登录名", key: "loginName", width: 250, sortable: true },
-            { title: "显示名", key: "displayName", width: 250 },
-            {
-              title: "用户类型",
-              key: "userType",
-              render: (h, params) => {
-                var userTypeText = "未知";
-                switch (params.row.userType) {
-                  case 0:
-                    userTypeText = "超级管理员";
-                    break;
-                  case 1:
-                    userTypeText = "管理员";
-                    break;
-                  case 2:
-                    userTypeText = "普通用户";
-                    break;
-                }
-                return h("p", userTypeText);
-              }
-            },
-            {
-              title: "状态",
-              key: "status",
-              align: "center",
-              width: 120,
-              render: (h, params) => {
-                let status = params.row.status;
-                let statusColor = "success";
-                let statusText = "正常";
-                switch (status) {
-                  case 0:
-                    statusText = "禁用";
-                    statusColor = "default";
-                    break;
-                }
-                return h(
-                  "Tooltip",
-                  {
-                    props: {
-                      placement: "top",
-                      transfer: true,
-                      delay: 500
-                    }
-                  },
-                  [
-                    //这个中括号表示是Tooltip标签的子标签
-                    h(
-                      "Tag",
-                      {
-                        props: {
-                          //type: "dot",
-                          color: statusColor
-                        }
-                      },
-                      statusText
-                    ), //表格列显示文字
-                    h(
-                      "p",
-                      {
-                        slot: "content",
-                        style: {
-                          whiteSpace: "normal"
-                        }
-                      },
-                      statusText //整个的信息即气泡内文字
-                    )
-                  ]
-                );
-              }
-            },
+            { title: "登录名", key: "userName", width: 250, sortable: true },
+            { title: "姓", key: "surname", width: 100 },
+            { title: "名", key: "name", width: 100 },
+            { title: "email", key: "email", width: 250 },
+            { title: "手机号", key: "phoneNumber", width: 150 },
             {
               title: "创建时间",
-              width: 120,
+              width: 200,
               ellipsis: true,
               tooltip: true,
-              key: "createdOn"
+              key: "creationTime"
             },
-            { title: "创建者", key: "createdByUserName" },
             {
               title: "操作",
               align: "center",
@@ -473,41 +337,13 @@ export default {
                   );
                 },
                 (h, params, vm) => {
-                  return h(
-                    "Tooltip",
-                    {
-                      props: {
-                        placement: "left",
-                        transfer: true,
-                        delay: 1000
-                      }
-                    },
-                    [
-                      h("Button", {
-                        props: {
-                          shape: "circle",
-                          size: "small",
-                          icon: "md-contacts",
-                          type: "success"
-                        },
-                        on: {
-                          click: () => {
-                            vm.$emit("on-assign", params);
-                          }
-                        }
-                      }),
-                      h(
-                        "p",
-                        {
-                          slot: "content",
-                          style: {
-                            whiteSpace: "normal"
-                          }
-                        },
-                        "分配角色"
-                      )
-                    ]
-                  );
+                  return h("Tooltip", {
+                    props: {
+                      placement: "left",
+                      transfer: true,
+                      delay: 1000
+                    }
+                  });
                 }
               ]
             }
@@ -543,7 +379,7 @@ export default {
   methods: {
     loadUserList() {
       getUserList(this.stores.user.query).then(res => {
-        this.stores.user.data = res.data.data;
+        this.stores.user.data = res.data.items;
         this.stores.user.query.totalCount = res.data.totalCount;
       });
     },
@@ -563,7 +399,8 @@ export default {
     handleEdit(params) {
       this.handleSwitchFormModeToEdit();
       this.handleResetFormUser();
-      this.doLoadUser(params.row.guid);
+      this.doLoadUser(params.row.id);
+      this.loadUserRoleList(params.row.id);
     },
     handleSelect(selection, row) {},
     handleSelectionChange(selection) {
@@ -573,9 +410,11 @@ export default {
       this.loadUserList();
     },
     handleShowCreateWindow() {
+      this.formModel.fields.id = "";
       this.handleSwitchFormModeToCreate();
       this.handleOpenFormWindow();
       this.handleResetFormUser();
+      this.loadUserRoleList();
     },
     handleSubmitUser() {
       let valid = this.validateUserForm();
@@ -592,25 +431,19 @@ export default {
       this.$refs["formUser"].resetFields();
     },
     doCreateUser() {
+      this.formModel.fields.roleNames = this.formAssignRole.ownedRoles;
       createUser(this.formModel.fields).then(res => {
-        if (res.data.code === 200) {
-          this.$Message.success(res.data.message);
-          this.handleCloseFormWindow();
-          this.loadUserList();
-        } else {
-          this.$Message.warning(res.data.message);
-        }
+        this.$Message.success("新增用户成功");
+        this.handleCloseFormWindow();
+        this.loadUserList();
       });
     },
     doEditUser() {
+      this.formModel.fields.roleNames = this.formAssignRole.ownedRoles;
       editUser(this.formModel.fields).then(res => {
-        if (res.data.code === 200) {
-          this.$Message.success(res.data.message);
-          this.handleCloseFormWindow();
-          this.loadUserList();
-        } else {
-          this.$Message.warning(res.data.message);
-        }
+        this.$Message.success("修改成功");
+        this.handleCloseFormWindow();
+        this.loadUserList();
       });
     },
     validateUserForm() {
@@ -624,9 +457,10 @@ export default {
       });
       return _valid;
     },
-    doLoadUser(guid) {
-      loadUser({ guid: guid }).then(res => {
-        this.formModel.fields = res.data.data;
+    doLoadUser(id) {
+      loadUser({ id: id }).then(res => {
+        this.formModel.fields = res.data;
+        this.formModel.fields.password = "t";
       });
     },
     handleDelete(params) {
@@ -647,53 +481,13 @@ export default {
         }
       });
     },
-    handleBatchCommand(command) {
-      if (!this.selectedRowsId || this.selectedRowsId.length <= 0) {
-        this.$Message.warning("请选择至少一条数据");
-        return;
-      }
-      this.$Modal.confirm({
-        title: "操作提示",
-        content:
-          "<p>确定要执行当前 [" +
-          this.commands[command].title +
-          "] 操作吗?</p>",
-        loading: true,
-        onOk: () => {
-          this.doBatchCommand(command);
-        }
-      });
-    },
-    doBatchCommand(command) {
-      batchCommand({
-        command: command,
-        ids: this.selectedRowsId.join(",")
-      }).then(res => {
-        if (res.data.code === 200) {
-          this.$Message.success(res.data.message);
-          this.loadUserList();
-          this.formModel.selection = [];
-        } else {
-          this.$Message.warning(res.data.message);
-        }
-        this.$Modal.remove();
-      });
-    },
-    handleSearchUser() {
-      this.loadUserList();
-    },
-    rowClsRender(row, index) {
-      if (row.isDeleted) {
-        return "table-row-disabled";
-      }
-      return "";
-    },
     handlePageChanged(page) {
-      this.stores.user.query.currentPage = page;
+      this.stores.user.query.SkipCount =
+        (page - 1) * this.stores.user.query.MaxResultCount;
       this.loadUserList();
     },
-    handlePageSizeChanged(pageSize) {
-      this.stores.user.query.pageSize = pageSize;
+    handlePageSizeChanged(MaxResultCount) {
+      this.stores.user.query.MaxResultCount = MaxResultCount;
       this.loadUserList();
     },
     renderOwnedRoles(item) {
@@ -702,33 +496,31 @@ export default {
     handleChangeOwnedRolesChanged(newTargetKeys, direction, moveKeys) {
       this.formAssignRole.ownedRoles = newTargetKeys;
     },
-    loadUserRoleList(guid) {
+    loadUserRoleList(id) {
       this.formAssignRole.roles = [];
       this.formAssignRole.ownedRoles = [];
-      loadRoleListByUserGuid(guid).then(res => {
-        var result = res.data.data;
-        this.formAssignRole.roles = result.roles;
-        this.formAssignRole.ownedRoles = result.assignedRoles;
-      });
-    },
-    handleAssignRole(params) {
-      this.formAssignRole.opened = true;
-      this.formAssignRole.userGuid = params.row.guid;
-      this.loadUserRoleList(params.row.guid);
-    },
-    handleSaveUserRoles() {
-      var data = {
-        userGuid: this.formAssignRole.userGuid,
-        assignedRoles: this.formAssignRole.ownedRoles
-      };
-      saveUserRoles(data).then(res => {
-        this.formAssignRole.opened = false;
-        if (res.data.code === 200) {
-          this.$Message.success(res.data.message);
-        } else {
-          this.$Message.warning(res.data.message);
+      var defaults = [];
+      loadSimpleList().then(res => {
+        var result = [];
+        for (var i = 0; i < res.data.length; i++) {
+          result.push({
+            key: res.data[i].name,
+            label: res.data[i].name
+          });
+          if (res.data[i].isDefault == true) {
+            defaults.push(res.data[i].name);
+          }
         }
+        this.formAssignRole.roles = result;
       });
+      if (id != "" && id != undefined) {
+        loadRoleListByUserGuid(id).then(res => {
+          var roleIds = res.data.items.map(item => item.name);
+          this.formAssignRole.ownedRoles = roleIds;
+        });
+      } else {
+        this.formAssignRole.ownedRoles = defaults;
+      }
     }
   },
   mounted() {

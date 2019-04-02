@@ -294,3 +294,9 @@ samples/MicroserviceDemo/gateways/BackendAdminAppGateway.Host/Logs/logs.txt
 samples/MicroserviceDemo/applications/PublicWebSite.Host/Logs/logs.txt
 samples/MicroserviceDemo/gateways/PublicWebSiteGateway.Host/Logs/logs.txt
 samples/MicroserviceDemo/microservices/BloggingService.Host/Logs/logs.txt
+samples/MicroserviceDemo/microservices/IdentityService.Host/IdentityService.Host.xml
+samples/Microservice/microservices/IdentityService.Host/Logs/logs.txt
+samples/Microservice/applications/BackendAdminApp.Host/Logs/logs.txt
+samples/Microservice/applications/AuthServer.Host/Logs/logs.txt
+samples/Microservice/gateways/BackendAdminAppGateway.Host/Logs/logs.txt
+samples/MicroserviceDemo/applications/AuthServer.Host/AuthServer.Host.xml

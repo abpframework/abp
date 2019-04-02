@@ -65,6 +65,7 @@ namespace BackendAdminApp.Host
                     options.Scope.Add("phone");
                     options.Scope.Add("BackendAdminAppGateway");
                     options.Scope.Add("IdentityService");
+                    options.Scope.Add("AuditLogging");
                     options.ClaimActions.MapAbpClaimTypes();
                 });
 

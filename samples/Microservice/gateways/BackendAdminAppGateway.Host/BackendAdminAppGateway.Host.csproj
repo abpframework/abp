@@ -28,6 +28,9 @@
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.EntityFrameworkCore.SqlServer\Volo.Abp.EntityFrameworkCore.SqlServer.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Http.Client.IdentityModel\Volo.Abp.Http.Client.IdentityModel.csproj" />
     <ProjectReference Include="..\..\..\..\modules\identity\src\Volo.Abp.Identity.HttpApi\Volo.Abp.Identity.HttpApi.csproj" />
+
+    <ProjectReference Include="..\..\..\..\modules\\audit-logging\src\Volo.Abp.AuditLogging.HttpApi\Volo.Abp.AuditLogging.HttpApi.csproj" />
+
     <ProjectReference Include="..\..\..\..\modules\identity\src\Volo.Abp.Identity.HttpApi.Client\Volo.Abp.Identity.HttpApi.Client.csproj" />
     <ProjectReference Include="..\..\..\..\modules\identity\src\Volo.Abp.PermissionManagement.Domain.Identity\Volo.Abp.PermissionManagement.Domain.Identity.csproj" />
     <ProjectReference Include="..\..\..\..\modules\identityserver\src\Volo.Abp.PermissionManagement.Domain.IdentityServer\Volo.Abp.PermissionManagement.Domain.IdentityServer.csproj" />

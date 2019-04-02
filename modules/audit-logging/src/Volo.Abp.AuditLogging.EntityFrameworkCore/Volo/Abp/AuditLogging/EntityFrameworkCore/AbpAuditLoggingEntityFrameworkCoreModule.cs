@@ -13,6 +13,7 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
             context.Services.AddAbpDbContext<AbpAuditLoggingDbContext>(options =>
             {
                 options.AddRepository<AuditLog, EfCoreAuditLogRepository>();
+                options.AddRepository<AuditLogAction, EfCoreAuditLogActionRepository>();
             });
         }
     }

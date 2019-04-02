@@ -104,7 +104,7 @@ export default [{
     name: 'AbpIdentity',
     meta: {
       icon: 'logo-buffer',
-      title: '用户及授权'
+      title: '系统管理'
     },
     component: Main,
     children: [{
@@ -124,14 +124,6 @@ export default [{
       },
       component: () => import( /* webpackChunkName: "rbac" */ '@/view/rbac/role.vue')
     }, {
-      path: 'permission',
-      name: 'rbac_permission_page',
-      meta: {
-        icon: 'md-contacts',
-        title: '权限管理'
-      },
-      component: () => import( /* webpackChunkName: "rbac" */ '@/view/rbac/permission.vue')
-    }, {
       path: 'menu',
       name: 'rbac_menu_page',
       meta: {
@@ -147,14 +139,6 @@ export default [{
         title: '图标管理'
       },
       component: () => import( /* webpackChunkName: "rbac" */ '@/view/rbac/icon.vue')
-    }, {
-      path: 'role-permission',
-      name: 'rbac_role_permission_page',
-      meta: {
-        icon: 'md-aperture',
-        title: '角色权限分配'
-      },
-      component: () => import( /* webpackChunkName: "rbac" */ '@/view/rbac/role-permission.vue')
     }]
   },
   {

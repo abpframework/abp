@@ -78,14 +78,17 @@ router.beforeEach((to, from, next) => {
       // turnTo(to, store.state.user.pages, checkPermission, store.state.user.permissions, next)
     } else {
       store.dispatch('getUserInfo').then(user => {
+        // debugger
+        next();
         // 拉取用户信息，通过用户权限和跳转的页面的name来判断是否有权限访问;access必须是一个数组，如：['super_admin']
         checkPermission = user.user_type != 0;
-        turnTo(to, getUnion(user.pages, staticRouters), checkPermission, user.permissions, next)
-      }).catch(() => {
+        // turnTo(to, getUnion(user.pages, staticRouters), checkPermission, user.permissions, next)
+      }).catch((r) => {
+     
         // setToken('')
-        next({
-          name: 'login'
-        })
+        // next({
+        //   name: 'login'
+        // })
       })
     }
   }

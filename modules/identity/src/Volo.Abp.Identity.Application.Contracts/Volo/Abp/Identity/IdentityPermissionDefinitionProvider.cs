@@ -25,6 +25,8 @@ namespace Volo.Abp.Identity
             identityGroup
                 .AddPermission(IdentityPermissions.UserLookup.Default, L("Permission:UserLookup"))
                 .WithProviders(ClientPermissionValueProvider.ProviderName);
+
+
         }
 
         private static LocalizableString L(string name)

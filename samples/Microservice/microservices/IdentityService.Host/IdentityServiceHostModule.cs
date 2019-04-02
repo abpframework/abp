@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Redis;
 using Swashbuckle.AspNetCore.Swagger;
 using System.Collections.Generic;
 using Volo.Abp;
 using Volo.Abp.Auditing;
+using Volo.Abp.AuditLogging.Application.Contracts.Volo.Abp.AuditLogging;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.Autofac;
 using Volo.Abp.EntityFrameworkCore;
@@ -30,7 +32,8 @@ namespace IdentityService.Host
         typeof(AbpSettingManagementEntityFrameworkCoreModule),
         typeof(AbpIdentityHttpApiModule),
         typeof(AbpIdentityEntityFrameworkCoreModule),
-        typeof(AbpIdentityApplicationModule)
+        typeof(AbpIdentityApplicationModule),
+        typeof(AuditLoggingApplicationContractsModule)
         )]
     public class IdentityServiceHostModule : AbpModule
     {
@@ -56,7 +59,7 @@ namespace IdentityService.Host
 
             context.Services.AddSwaggerGen(options =>
             {
-                options.SwaggerDoc("v1", new Info {Title = "Identity Service API", Version = "v1"});
+                options.SwaggerDoc("v1", new Info { Title = "Identity Service API", Version = "v1" });
                 options.DocInclusionPredicate((docName, description) => true);
                 options.CustomSchemaIds(type => type.FullName);
 
@@ -85,6 +88,12 @@ namespace IdentityService.Host
             {
                 options.Configuration = configuration["Redis:Configuration"];
             });
+
+            context.Services.AddMvc().AddJsonOptions(json =>
+            {
+                //统一设置JsonResult中的日期格式    
+                json.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss";
+            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             Configure<AbpAuditingOptions>(options =>
             {

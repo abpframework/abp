@@ -12,11 +12,9 @@
         :totalCount="stores.role.query.totalCount"
         :columns="stores.role.columns"
         @on-delete="handleDelete"
+        @on-permission="handlePermission"
         @on-edit="handleEdit"
-        @on-select="handleSelect"
-        @on-selection-change="handleSelectionChange"
-        @on-refresh="handleRefresh"
-        :row-class-name="rowClsRender"
+        @on-refresh="loadRoleList"
         @on-page-change="handlePageChanged"
         @on-page-size-change="handlePageSizeChanged"
       >
@@ -39,13 +37,7 @@
               </Col>
               <Col span="8" class="dnc-toolbar-btns">
                 <ButtonGroup class="mr3">
-                  <Button
-                    class="txt-danger"
-                    icon="md-trash"
-                    title="删除"
-                    @click="handleBatchCommand('delete')"
-                  ></Button>
-                  <Button icon="md-refresh" title="刷新" @click="handleRefresh"></Button>
+                  <Button icon="md-refresh" title="刷新" @click="loadRoleList"></Button>
                 </ButtonGroup>
                 <Button
                   icon="md-create"
@@ -69,7 +61,11 @@
     >
       <Form :model="formModel.fields" ref="formRole" :rules="formModel.rules" label-position="left">
         <FormItem label="角色名称" prop="name" label-position="left">
-          <Input v-model="formModel.fields.name" :disabled="formModel.fields.isStatic" placeholder="请输入角色名称"/>
+          <Input
+            v-model="formModel.fields.name"
+            :disabled="formModel.fields.isStatic"
+            placeholder="请输入角色名称"
+          />
         </FormItem>
         <FormItem label="是否默认" label-position="left">
           <i-switch
@@ -99,6 +95,36 @@
         <Button style="margin-left: 8px" icon="md-close" @click="formModel.opened = false">取 消</Button>
       </div>
     </Drawer>
+
+    <Drawer
+      title="角色权限配置"
+      v-model="permissionModal.opened"
+      width="600"
+      :mask-closable="false"
+      :mask="false"
+      :styles="styles"
+    >
+      <Form ref="permissionRole" :model="permissionModal" label-position="left">
+        <FormItem label="角色名称" prop="entityDisplayName" label-position="left">
+          <Input v-model="permissionModal.entityDisplayName" disabled/>
+        </FormItem>
+        <FormItem>
+          <Row :gutter="16">
+            <Tabs type="card">
+              <template v-for="item in permissionModal.groups">
+                <TabPane :label="item.displayName" :name="item.name">
+                  <Tree ref="tree" show-checkbox check-directly :data="item.permissions"></Tree>
+                </TabPane>
+              </template>
+            </Tabs>
+          </Row>
+        </FormItem>
+      </Form>
+      <div class="demo-drawer-footer">
+        <Button icon="md-checkmark-circle" type="primary" @click="handleSubmitPermission">保 存</Button>
+        <Button style="margin-left: 8px" icon="md-close" @click="permissionModal.opened = false">取 消</Button>
+      </div>
+    </Drawer>
   </div>
 </template>
 
@@ -112,6 +138,9 @@ import {
   deleteRole,
   batchCommand
 } from "@/api/rbac/role";
+
+import { editPermission, loadPermissionTree } from "@/api/rbac/permission";
+
 export default {
   name: "rbac_role_page",
   components: {
@@ -119,19 +148,13 @@ export default {
   },
   data() {
     return {
-      commands: {
-        delete: { name: "delete", title: "删除" },
-        forbidden: { name: "forbidden", title: "禁用" },
-        normal: { name: "normal", title: "启用" }
-      },
       formModel: {
         opened: false,
         title: "创建角色",
         mode: "create",
-        selection: [],
         fields: {
-          isStatic:false,
-          concurrencyStamp:'',
+          isStatic: false,
+          concurrencyStamp: "",
           name: "",
           isDefault: false,
           isPublic: false
@@ -147,14 +170,21 @@ export default {
           ]
         }
       },
+      permissionModal: {
+        opened: false,
+        rolePermission: [],
+        name: "",
+        entityDisplayName: "",
+        groups: []
+      },
       stores: {
         role: {
           query: {
             totalCount: 0,
-            MaxResultCount:20,
-            SkipCount:0,
+            MaxResultCount: 20,
+            SkipCount: 0,
             Filter: "",
-            // Sorting: "Id desc"
+            Sorting: "Id"
           },
           sources: {
             statusSources: [
@@ -194,7 +224,6 @@ export default {
                     }
                   },
                   [
-                    //这个中括号表示是Tooltip标签的子标签
                     h(
                       "Tag",
                       {
@@ -204,7 +233,7 @@ export default {
                         }
                       },
                       statusText
-                    ), //表格列显示文字
+                    ),
                     h(
                       "p",
                       {
@@ -213,7 +242,7 @@ export default {
                           whiteSpace: "normal"
                         }
                       },
-                      statusText //整个的信息即气泡内文字
+                      statusText
                     )
                   ]
                 );
@@ -244,7 +273,6 @@ export default {
                     }
                   },
                   [
-                    //这个中括号表示是Tooltip标签的子标签
                     h(
                       "Tag",
                       {
@@ -254,7 +282,7 @@ export default {
                         }
                       },
                       statusText
-                    ), //表格列显示文字
+                    ),
                     h(
                       "p",
                       {
@@ -263,7 +291,7 @@ export default {
                           whiteSpace: "normal"
                         }
                       },
-                      statusText //整个的信息即气泡内文字
+                      statusText
                     )
                   ]
                 );
@@ -323,7 +351,7 @@ export default {
               title: "操作",
               align: "center",
               key: "handle",
-              width: 150,
+              width: 180,
               className: "table-command-column",
               options: ["edit"],
               button: [
@@ -412,6 +440,44 @@ export default {
                       )
                     ]
                   );
+                },
+                (h, params, vm) => {
+                  return h(
+                    "Tooltip",
+                    {
+                      props: {
+                        placement: "left",
+                        transfer: true,
+                        delay: 1000
+                      }
+                    },
+                    [
+                      h("Button", {
+                        props: {
+                          shape: "circle",
+                          size: "small",
+                          icon: "ios-cog",
+                          type: "primary"
+                        },
+                        on: {
+                          click: () => {
+                            vm.$emit("on-permission", params);
+                            vm.$emit("input", params.tableData);
+                          }
+                        }
+                      }),
+                      h(
+                        "p",
+                        {
+                          slot: "content",
+                          style: {
+                            whiteSpace: "normal"
+                          }
+                        },
+                        "配置权限"
+                      )
+                    ]
+                  );
                 }
               ]
             }
@@ -436,12 +502,6 @@ export default {
         return "编辑角色";
       }
       return "";
-    },
-    selectedRows() {
-      return this.formModel.selection;
-    },
-    selectedRowsId() {
-      return this.formModel.selection.map(x => x.code);
     }
   },
   methods: {
@@ -469,14 +529,8 @@ export default {
       this.handleResetFormRole();
       this.doLoadRole(params.row.id);
     },
-    handleSelect(selection, row) {},
-    handleSelectionChange(selection) {
-      this.formModel.selection = selection;
-    },
-    handleRefresh() {
-      this.loadRoleList();
-    },
     handleShowCreateWindow() {
+      this.formModel.fields.isStatic = false;
       this.handleSwitchFormModeToCreate();
       this.handleOpenFormWindow();
       this.handleResetFormRole();
@@ -508,7 +562,7 @@ export default {
         this.$Message.success("修改角色成功");
         this.loadRoleList();
         this.handleCloseFormWindow();
-      })
+      });
     },
     validateRoleForm() {
       let _valid = false;
@@ -536,58 +590,90 @@ export default {
         return;
       }
       deleteRole(ids).then(res => {
-          this.$Message.success('删除成功');
-          this.loadRoleList();
-      });
-    },
-    handleBatchCommand(command) {
-      if (!this.selectedRowsId || this.selectedRowsId.length <= 0) {
-        this.$Message.warning("请选择至少一条数据");
-        return;
-      }
-      this.$Modal.confirm({
-        title: "操作提示",
-        content:
-          "<p>确定要执行当前 [" +
-          this.commands[command].title +
-          "] 操作吗?</p>",
-        loading: true,
-        onOk: () => {
-          this.doBatchCommand(command);
-        }
-      });
-    },
-    doBatchCommand(command) {
-      batchCommand({
-        command: command,
-        ids: this.selectedRowsId.join(",")
-      }).then(res => {
-        if (res.data.code === 200) {
-          this.$Message.success(res.data.message);
-          this.loadRoleList();
-          this.formModel.selection = [];
-        } else {
-          this.$Message.warning(res.data.message);
-        }
-        this.$Modal.remove();
+        this.$Message.success("删除成功");
+        this.loadRoleList();
       });
     },
     handleSearchRole() {
+      this.stores.role.query.SkipCount = 0;
       this.loadRoleList();
     },
-    rowClsRender(row, index) {
-      if (row.isDeleted) {
-        return "table-row-disabled";
-      }
-      return "";
-    },
     handlePageChanged(page) {
-      this.stores.role.query.SkipCount = (page-1)*this.stores.role.query.MaxResultCount;
+      this.stores.role.query.SkipCount =
+        (page - 1) * this.stores.role.query.MaxResultCount;
       this.loadRoleList();
     },
     handlePageSizeChanged(MaxResultCount) {
       this.stores.role.query.MaxResultCount = MaxResultCount;
       this.loadRoleList();
+    },
+    dfsTreeData(permissions) {
+      var newTrees = [];
+      var that = this;
+      var parentNames = permissions.filter(item => item.parentName == null);
+      parentNames.forEach(item => {
+        var treeData = {
+          title: item.displayName,
+          expand: true,
+          name: item.name,
+          checked: item.isGranted,
+          children: []
+        };
+        var childrens = permissions.filter(it => it.parentName == item.name);
+        childrens.forEach(r => {
+          treeData.children.push({
+            title: r.displayName,
+            name: r.name,
+            checked: r.isGranted,
+            expand: true
+          });
+        });
+        newTrees.push(treeData);
+      });
+      return newTrees;
+    },
+    handlePermission(params) {
+      this.permissionModal.opened = true;
+      var that = this;
+      loadPermissionTree({
+        providerName: "Role",
+        providerKey: params.row.name
+      }).then(res => {
+        that.permissionModal.name = params.row.name;
+        that.permissionModal.entityDisplayName = res.data.entityDisplayName;
+        that.permissionModal.rolePermission.length = 0;
+        // that.permissionModal.rolePermission = that.dfsTreeData(res.data.groups);
+        var newObj = [];
+        res.data.groups.forEach(element => {
+          element.permissions = that.dfsTreeData(element.permissions);
+          newObj.push(element);
+        });
+        that.permissionModal.groups = newObj;
+      });
+    },
+    handleSubmitPermission() {
+      var that = this;
+      var permissions = [];
+      that.permissionModal.groups.forEach(r => {
+        r.permissions.forEach(i => {
+          permissions.push({
+            name: i.name,
+            isGranted: i.checked
+          });
+          i.children.forEach(j => {
+            permissions.push({
+              name: j.name,
+              isGranted: j.checked
+            });
+          });
+        });
+      });
+
+      editPermission("Role", that.permissionModal.name, {
+        permissions: permissions
+      }).then(res => {
+        this.$Message.success("配置权限成功!");
+      });
     }
   },
   mounted() {

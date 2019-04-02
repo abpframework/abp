@@ -22,7 +22,8 @@ $solutionPaths = (
     "templates/module",
     "templates/service",
     "templates/mvc",
-    "samples/MicroserviceDemo"
+    "samples/MicroserviceDemo",
+    "samples/Microservice"
 )
 
 # Build all solutions

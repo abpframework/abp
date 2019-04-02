@@ -54,7 +54,7 @@ export const batchCommand = (data) => {
 //load role list by user guid
 export const loadRoleListByUserGuid = (user_guid) => {
   return axios.request({
-    url: 'rbac/role/find_list_by_user_guid/' + user_guid,
+    url: 'identity/identityUser/'+user_guid+'/roles',
     method: 'get'
   })
 }
@@ -62,7 +62,7 @@ export const loadRoleListByUserGuid = (user_guid) => {
 //load role simple list
 export const loadSimpleList = () => {
   return axios.request({
-    url: 'rbac/role/find_simple_list',
+    url: 'identity/identityRole/list',
     method: 'get'
   })
 }

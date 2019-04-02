@@ -16,6 +16,7 @@ const BASE_URL = process.env.NODE_ENV === 'production'
   : '/'
 
 module.exports = {
+  runtimeCompiler:true,
   // Project deployment base
   // By default we assume your app will be deployed at the root of a domain,
   // e.g. https://www.my-app.com/
@@ -36,8 +37,12 @@ module.exports = {
   productionSourceMap: false,
   // 这里写你调用接口的基础路径，来解决跨域，如果设置了代理，那你本地开发环境的axios的baseUrl要写为 '' ，即空字符串
   devServer: {
+    contentBase: path.join(__dirname, 'dist') // 将 dist 目录下的文件，作为可访问文件。
+    ,compress: true // 开启Gzip压缩
+    ,host: 'localhost' // 设置服务器的ip地址，默认localhost
+    ,open:true // 自动打开浏览器
     // proxy: 'localhost:3000'
-    port: 9000,
+    ,port: 9000,
     //禁用host检查,不然在部分流利器中会报[WDS disconnected]的错误
     // 参考:https://github.com/webpack/webpack-dev-server/issues/851
     disableHostCheck: true

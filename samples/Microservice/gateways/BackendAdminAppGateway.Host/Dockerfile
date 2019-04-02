@@ -5,7 +5,7 @@ EXPOSE 80
 FROM microsoft/dotnet:2.2-sdk-alpine AS build
 WORKDIR /src
 COPY . .
-WORKDIR "/src/samples/MicroserviceDemo/gateways/BackendAdminAppGateway.Host"
+WORKDIR "/src/samples/Microservice/gateways/BackendAdminAppGateway.Host"
 RUN dotnet restore -nowarn:msb3202,nu1503
 RUN dotnet build --no-restore -c Release -o /app
 

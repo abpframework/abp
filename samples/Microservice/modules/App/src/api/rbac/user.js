@@ -2,16 +2,16 @@ import axios from '@/libs/api.request'
 
 export const getUserList = (data) => {
   return axios.request({
-    url: 'rbac/user/list',
-    method: 'post',
-    data
+    url: 'identity/identityUser',
+    method: 'get',
+    params:data
   })
 }
 
 // createUser
 export const createUser = (data) => {
   return axios.request({
-    url: 'rbac/user/create',
+    url: 'identity/identityUser',
     method: 'post',
     data
   })
@@ -20,7 +20,7 @@ export const createUser = (data) => {
 //loadUser
 export const loadUser = (data) => {
   return axios.request({
-    url: 'rbac/user/edit/' + data.guid,
+    url: 'identity/identityUser/' + data.id,
     method: 'get'
   })
 }
@@ -28,8 +28,8 @@ export const loadUser = (data) => {
 // editUser
 export const editUser = (data) => {
   return axios.request({
-    url: 'rbac/user/edit',
-    method: 'post',
+    url: 'identity/identityUser/'+data.id,
+    method: 'put',
     data
   })
 }
@@ -37,8 +37,8 @@ export const editUser = (data) => {
 // delete user
 export const deleteUser = (ids) => {
   return axios.request({
-    url: 'rbac/user/delete/' + ids,
-    method: 'get'
+    url: 'identity/identityUser/' + ids,
+    method: 'delete'
   })
 }
 

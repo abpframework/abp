@@ -12,6 +12,7 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
         public static string Schema { get; set; } = AbpAuditLoggingConsts.DefaultDbSchema;
 
         public DbSet<AuditLog> AuditLogs { get; set; }
+        public DbSet<AuditLogAction> AuditLogActions { get; set; }
 
         public AbpAuditLoggingDbContext(DbContextOptions<AbpAuditLoggingDbContext> options)
             : base(options)

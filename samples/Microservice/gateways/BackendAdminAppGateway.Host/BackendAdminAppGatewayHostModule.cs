@@ -7,6 +7,9 @@ using StackExchange.Redis;
 using Swashbuckle.AspNetCore.Swagger;
 using System.Collections.Generic;
 using Volo.Abp;
+using Volo.Abp.AspNetCore;
+using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.AuditLogging.HttpApi.Volo.Abp.AuditLogging;
 using Volo.Abp.Autofac;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.SqlServer;
@@ -26,7 +29,10 @@ namespace BackendAdminAppGateway.Host
     [DependsOn(
         typeof(AbpAutofacModule),
         typeof(AbpIdentityHttpApiModule),
+
+        typeof(AuditLoggingHttpApiModule),
         typeof(AbpIdentityHttpApiClientModule),
+
         typeof(AbpEntityFrameworkCoreSqlServerModule),
         typeof(AbpPermissionManagementEntityFrameworkCoreModule),
         typeof(AbpPermissionManagementApplicationModule),

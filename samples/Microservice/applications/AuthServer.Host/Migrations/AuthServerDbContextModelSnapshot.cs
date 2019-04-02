@@ -15,7 +15,7 @@ namespace AuthServer.Host.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.0-rtm-35687")
+                .HasAnnotation("ProductVersion", "2.2.3-servicing-35854")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -81,6 +81,8 @@ namespace AuthServer.Host.Migrations
 
                     b.Property<Guid?>("TenantId")
                         .HasColumnName("TenantId");
+
+                    b.Property<string>("TenantName");
 
                     b.Property<string>("Url")
                         .HasColumnName("Url")
@@ -639,7 +641,7 @@ namespace AuthServer.Host.Migrations
                     b.Property<bool>("BackChannelLogoutSessionRequired");
 
                     b.Property<string>("BackChannelLogoutUri")
-                        .HasMaxLength(2000);
+                        .HasMaxLength(300);
 
                     b.Property<string>("ClientClaimsPrefix")
                         .HasMaxLength(200);
@@ -652,7 +654,7 @@ namespace AuthServer.Host.Migrations
                         .HasMaxLength(200);
 
                     b.Property<string>("ClientUri")
-                        .HasMaxLength(2000);
+                        .HasMaxLength(300);
 
                     b.Property<string>("ConcurrencyStamp");
 
@@ -671,14 +673,14 @@ namespace AuthServer.Host.Migrations
                     b.Property<bool>("FrontChannelLogoutSessionRequired");
 
                     b.Property<string>("FrontChannelLogoutUri")
-                        .HasMaxLength(2000);
+                        .HasMaxLength(300);
 
                     b.Property<int>("IdentityTokenLifetime");
 
                     b.Property<bool>("IncludeJwtId");
 
                     b.Property<string>("LogoUri")
-                        .HasMaxLength(2000);
+                        .HasMaxLength(300);
 
                     b.Property<string>("PairWiseSubjectSalt")
                         .HasMaxLength(200);
@@ -777,11 +779,11 @@ namespace AuthServer.Host.Migrations
                     b.Property<Guid>("ClientId");
 
                     b.Property<string>("Key")
-                        .HasMaxLength(250);
+                        .HasMaxLength(64);
 
                     b.Property<string>("Value")
                         .IsRequired()
-                        .HasMaxLength(2000);
+                        .HasMaxLength(128);
 
                     b.HasKey("ClientId", "Key");
 
@@ -793,7 +795,7 @@ namespace AuthServer.Host.Migrations
                     b.Property<Guid>("ClientId");
 
                     b.Property<string>("RedirectUri")
-                        .HasMaxLength(2000);
+                        .HasMaxLength(200);
 
                     b.HasKey("ClientId", "RedirectUri");
 

@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>Volo.Abp.AuditLogging.Application.Contracts</RootNamespace>
+    <AssemblyName>Volo.Abp.AuditLogging.Application.Contracts</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Volo\Abp\AuditLogging\Localization\Resources\ApplicationContracts\en.json" />
+    <None Remove="Volo\Abp\AuditLogging\Localization\Resources\ApplicationContracts\pt-BR.json" />
+    <None Remove="Volo\Abp\AuditLogging\Localization\Resources\ApplicationContracts\tr.json" />
+    <None Remove="Volo\Abp\AuditLogging\Localization\Resources\ApplicationContracts\zh-Hans.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Volo\Abp\AuditLogging\Localization\Resources\ApplicationContracts\tr.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Volo\Abp\AuditLogging\Localization\Resources\ApplicationContracts\pt-BR.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Volo\Abp\AuditLogging\Localization\Resources\ApplicationContracts\en.json" />
+    <EmbeddedResource Include="Volo\Abp\AuditLogging\Localization\Resources\ApplicationContracts\zh-Hans.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Ddd.Application\Volo.Abp.Ddd.Application.csproj" />
+    
+    <ProjectReference Include="..\Volo.Abp.AuditLogging.Domain.Shared\Volo.Abp.AuditLogging.Domain.Shared.csproj" />
+  </ItemGroup>
+
+</Project>
