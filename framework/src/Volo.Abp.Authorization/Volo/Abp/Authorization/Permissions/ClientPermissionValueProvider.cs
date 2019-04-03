@@ -1,23 +1,25 @@
 ﻿using System.Threading.Tasks;
-using Volo.Abp.Security.Claims;
+using Volo.Abp.Clients;
 
 namespace Volo.Abp.Authorization.Permissions
 {
     public class ClientPermissionValueProvider : PermissionValueProvider
     {
+        protected ICurrentClient CurrentClient { get; }
+
         public const string ProviderName = "Client";
 
         public override string Name => ProviderName;
 
-        public ClientPermissionValueProvider(IPermissionStore permissionStore)
+        public ClientPermissionValueProvider(ICurrentClient currentClient, IPermissionStore permissionStore)
             : base(permissionStore)
         {
-
+            CurrentClient = currentClient;
         }
 
         public override async Task<PermissionGrantResult> CheckAsync(PermissionValueCheckContext context)
         {
-            var clientId = context.Principal?.FindFirst(AbpClaimTypes.ClientId)?.Value;
+            var clientId = CurrentClient.Id;
 
             if (clientId == null)
             {

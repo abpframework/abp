@@ -1,6 +1,5 @@
-using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.Security.Claims;
+using Volo.Abp.Users;
 
 namespace Volo.Abp.MultiTenancy
 {
@@ -12,17 +11,14 @@ namespace Volo.Abp.MultiTenancy
 
         public override void Resolve(ITenantResolveContext context)
         {
-            var principal = context.ServiceProvider.GetRequiredService<ICurrentPrincipalAccessor>().Principal;
-            if (principal?.Identity?.IsAuthenticated != true)
+            var currentUser = context.ServiceProvider.GetRequiredService<ICurrentUser>();
+            if (currentUser.IsAuthenticated != true)
             {
                 return;
             }
 
             context.Handled = true;
-            context.TenantIdOrName = principal
-                .Claims
-                .FirstOrDefault(c => c.Type == AbpClaimTypes.TenantId)
-                ?.Value;
+            context.TenantIdOrName = currentUser.TenantId.ToString();
         }
     }
 }
