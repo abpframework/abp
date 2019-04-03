@@ -1,79 +1,52 @@
-﻿**DRAFT**: This doc has been created as a draft. 
-See https://help.github.com/en/articles/setting-guidelines-for-repository-contributors
+## Contribution Guide
 
-# Contributing to ASP.NET Boilerplate
+ABP is an [open source](https://github.com/abpframework) and community driven project. This guide is aims to help anyone wants to contribute to the project.
 
-ASP.NET Boilerplate is an [open source](https://github.com/aspnetboilerplate/aspnetboilerplate) and community driven project. This guide is aims to help anyone wants to contribute to the project.
+### Code Contribution
 
-## Code Contribution
+You can always send pull requests to the Github repository.
 
-You can always send pull requests to the GitHub repository.
-
-- Clone the [ASP.NET Boilerplate repository](https://github.com/aspnetboilerplate/aspnetboilerplate/) from GitHub.
+- Clone the [ABP repository](https://github.com/abpframework/abp/) from Github.
 - Make the required changes.
 - Send a pull request.
 
-Before making any change, please discuss it on the [GitHub issues page](https://github.com/aspnetboilerplate/aspnetboilerplate/issues). So that, other developers will not work on the same issue and your PR will have a better chance to be accepted.
+Before making any change, please discuss it on the [Github issues](https://github.com/abpframework/abp/issues). In this way, no other developer will work on the same issue and your PR will have a better chance to be accepted.
 
-### Bug Fixes & Enhancements
+#### Bug Fixes & Enhancements
 
-You may want to fix a known bug or work on a planned enhancement. See [the issue list](https://github.com/aspnetboilerplate/aspnetboilerplate/issues) on GitHub.
+You may want to fix a known bug or work on a planned enhancement. See [the issue list](https://github.com/abpframework/abp/issues) on Github.
 
-### Feature Requests
+#### Feature Requests
 
-If you have a feature idea for the framework or modules, [create an issue](https://github.com/aspnetboilerplate/aspnetboilerplate/issues/new) on GitHub or attend to an existing discussion. Then you can implement it if it's embraced by the community.
+If you have a feature idea for the framework or modules, [create an issue](https://github.com/abpframework/abp/issues/new) on Github or attend to an existing discussion. Then you can implement it if it's embraced by the community.
 
-## Document Contribution
+### Document Translation
 
-You may want to improve the [documentation](https://aspnetboilerplate.com/Pages/Documents). If so, follow these steps:
+You may want to translate the complete [documentation](https://abp.io/documents/) (including this one) to your mother language. If so, follow these steps:
 
-* Clone the [ABP repository](https://github.com/aspnetboilerplate/aspnetboilerplate/) from GitHub.
-* Documents are located in [/aspnetboilerplate/doc](https://github.com/aspnetboilerplate/aspnetboilerplate/tree/master/doc/WebSite) folder.
-* Modify the documents and send pull request
-* If you would like to add a new document, you need to add it to the navigation document as well. Navigation document is located in [doc/WebSite/Navigation.md](https://github.com/aspnetboilerplate/aspnetboilerplate/blob/master/doc/WebSite/Navigation.md).
+* Clone the [ABP repository](https://github.com/abpframework/abp/) from Github.
+* To add a new language, create a new folder inside the [docs](https://github.com/abpframework/abp/tree/master/docs) folder. Folder names can be "en", "es", "fr", "tr" and so on based on the language (see [all culture codes](https://msdn.microsoft.com/en-us/library/hh441729.aspx)).
+* Get the ["en" folder](https://github.com/abpframework/abp/tree/master/docs/en) as a reference for the file names and folder structure. Keep the same naming if you are translating the same documentation.
+* Send a pull request (PR) once you translate any document. Please translate documents & send PRs one by one. Don't wait to finish translations for all documents.
 
-## Resource Localization
+### Resource Localization
 
-ASP.NET Boilerplate framework has a [localization system](https://aspnetboilerplate.com/Pages/Documents/Localization). Localization resources are located in [Abp\Localization\Sources\AbpXmlSource](https://github.com/aspnetboilerplate/aspnetboilerplate/tree/dev/src/Abp/Localization/Sources/AbpXmlSource). 
-You can add a new translation or update existing ones.
-To add missing translation, see [this example pull request](https://github.com/aspnetboilerplate/aspnetboilerplate/pull/2471)
+ABP framework has a flexible [localization system](https://abp.io/documents/abp/latest/Localization). You can create localized user interfaces for your own application.
 
-## Writing a New Module
+In addition to that, the framework and pre-build modules have already localized texts. As an example, see [the localization texts for the Volo.Abp.UI package](https://github.com/abpframework/abp/blob/master/framework/src/Volo.Abp.UI/Localization/Resources/AbpUi/en.json). You can create a new file in the [same folder](https://github.com/abpframework/abp/tree/master/framework/src/Volo.Abp.UI/Localization/Resources/AbpUi) to translate it.
 
-The framework has pre-build modules, you can also add a new module. [Abp.Dapper](https://github.com/aspnetboilerplate/aspnetboilerplate/tree/dev/src/Abp.Dapper) is a contributed module. You can check Abp.Dapper module to make your own.
+* Clone the [ABP repository](https://github.com/abpframework/abp/) from Github.
+* Create a new file for the target language for a localization text (json) file (near to the en.json file).
+* Copy all texts from the en.json file.
+* Translate the texts.
+* Send pull request on Github.
 
-TODO: May be added step by step module development guide.
+ABP is a modular framework. So there are many localization text resource, one per module. To find all .json files, you can search for "en.json" after cloning the repository. You can also check [this list](Localization-Text-Files.md) for a list of localization text files.
 
-## Blog Posts & Tutorials
+### Blog Posts & Tutorials
 
-If you would like to write tutorials or blog posts for ASP.NET Boilerplate, please let us know (by creating a GitHub issue](https://github.com/aspnetboilerplate/aspnetboilerplate/issues), so we may add a link to your tutorial/post in the official documentation and we announce it on the official [Twitter account](https://twitter.com/aspboilerplate).
+If you decide to create some tutorials or blog posts on ABP, please inform us (by creating a [Github issue](https://github.com/abpframework/abp/issues)), so we may add a link to your tutorial/post in the official documentation and we can announce it on our [Twitter account](https://twitter.com/abpframework).
 
-## Bug Report
+### Bug Report
 
-If you would like to report a bug, please [create an issue on the GitHub repository](https://github.com/aspnetboilerplate/aspnetboilerplate/issues/new)
-
-You need to fill out the issue template before posting a bug.
-
-```markdown
-### GitHub Issues
-
-GitHub issues are for bug reports, feature requests and other discussions about the framework.
-
-If you're creating a bug/problem report, please include followings:
-
-* Your Abp package version.
-* Your base framework: .Net Framework or .Net Core.
-* Exception message and stack trace if available.
-* Steps needed to reproduce the problem.
-
-Please write in English.
-
-### Stack Overflow
-
-Please use Stack Overflow for your questions about using the framework, templates and samples:
-
-https://stackoverflow.com/questions/tagged/aspnetboilerplate
-
-Use aspnetboilerplate tag in your questions.
-
-```
+If you find any bug, please [create an issue on the Github repository](https://github.com/abpframework/abp/issues/new).
