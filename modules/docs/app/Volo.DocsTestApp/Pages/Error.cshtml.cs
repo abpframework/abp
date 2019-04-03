@@ -1,43 +1,59 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
-using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
+using Volo.Abp.Domain.Entities;
 
-namespace Volo.DocsTestApp.Controllers
+namespace Volo.DocsTestApp.Pages
 {
-    public class ErrorController : AbpController
+    public class ErrorModel : AbpPageModel
     {
-        [Route("error/{statusCode}")]
-        [HttpGet]
-        public IActionResult Index(int statusCode = 0)
+        public string ErrorMessage { get; set; }
+
+        public async Task<ActionResult> OnGetAsync(string statusCode)
         {
+            if (!int.TryParse(statusCode, out var errorStatusCode))
+            {
+                errorStatusCode = (int)HttpStatusCode.BadRequest;
+            }
+
             var statusFeature = HttpContext.Features.Get<IStatusCodeReExecuteFeature>();
             if (statusFeature != null)
             {
                 Log.Warning("Handled {0} error for URL: {1}", statusCode, statusFeature.OriginalPath);
             }
 
-            var isValidStatusCode = Enum.IsDefined(typeof(HttpStatusCode), statusCode);
-            if (!isValidStatusCode)
+            var exceptionHandlerPathFeature = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
+            if (exceptionHandlerPathFeature != null)
             {
-                statusCode = (int)HttpStatusCode.BadRequest;
+                var exception = exceptionHandlerPathFeature.Error;
+                var path = exceptionHandlerPathFeature.Path;
+
+                if (exception is EntityNotFoundException)
+                {
+                    ErrorMessage = exception.Message;
+                    return Page();
+                }
             }
 
-            return new ContentResult
+            var isValidStatusCode = Enum.IsDefined(typeof(HttpStatusCode), errorStatusCode);
+            if (!isValidStatusCode)
             {
-                ContentType = System.Net.Mime.MediaTypeNames.Text.Html,
-                StatusCode = statusCode,
-                Content = string.Format(HtmlBody, _errorMessages.ContainsKey(statusCode)
-                    ? _errorMessages[statusCode]
-                    : "Looks like something went wrong!")
-            };
+                errorStatusCode = (int)HttpStatusCode.BadRequest;
+            }
+
+            ErrorMessage = _errorMessages.ContainsKey(errorStatusCode)
+                ? _errorMessages[errorStatusCode]
+                : "Looks like something went wrong!";
+
+            return Page();
         }
 
-        private const string HtmlBody = "<html><body><div style='text-align:center'><pre>{0}</pre><a href='/'>Go to home page</a></div></body></html>";
-
+        #region Error Messages
         /*For more ASCII arts http://patorjk.com/software/taag/#p=display&h=0&f=Big&t=400*/
         private readonly Dictionary<int, string> _errorMessages = new Dictionary<int, string>
         {
@@ -84,7 +100,7 @@ This is a forbidden area!"
     | |   | |_| |    | |  
     |_|    \___/     |_|  
                           
-We can't find the page you're looking for..."
+Hmm, we couldn't find the page you're looking for..."
             },
             {
                 500,
@@ -123,5 +139,6 @@ Ooops! Our server is experiencing a mild case of the hiccups."
 Looks like we're having some server issues."
             }
         };
+        #endregion
     }
 }

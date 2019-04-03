@@ -3,8 +3,11 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -100,13 +103,17 @@ namespace Volo.DocsTestApp
             {
                 options.DefaultThemeName = BasicTheme.Name;
             });
+
+            Configure<RazorPagesOptions>(options =>
+            {
+                options.Conventions.AddPageRoute("/Error", "error/{statusCode}");
+            });
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             var app = context.GetApplicationBuilder();
-
-            app.UseDeveloperExceptionPage();
+            var env = context.GetEnvironment();
 
             app.UseVirtualFiles();
 
@@ -119,8 +126,15 @@ namespace Volo.DocsTestApp
             app.UseAuthentication();
 
             app.UseRequestLocalization(app.ApplicationServices.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value);
- 
-            app.UseStatusCodePagesWithReExecute("/error/{0}");
+
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseStatusCodePagesWithReExecute("/error/{0}");
+            }
 
             app.UseMvc(routes =>
             {
