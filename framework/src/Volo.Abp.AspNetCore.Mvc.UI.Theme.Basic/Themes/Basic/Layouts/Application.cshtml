@@ -23,7 +23,7 @@
 
     <abp-style-bundle name="@BasicThemeBundles.Styles.Global" />
 
-    @RenderSection("styles", false)
+    @await RenderSectionAsync("styles", false)
 </head>
 <body class="abp-application-layout">
 
@@ -39,7 +39,7 @@
     <script type="text/javascript" src="~/Abp/ApplicationConfigurationScript"></script>
     <script type="text/javascript" src="~/Abp/ServiceProxyScript"></script>
 
-    @RenderSection("scripts", false)
+    @await RenderSectionAsync("scripts", false)
 
 </body>
 </html>
