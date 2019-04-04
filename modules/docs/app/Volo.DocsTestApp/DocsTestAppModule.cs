@@ -33,6 +33,7 @@ using Volo.Abp.VirtualFileSystem;
 using Volo.Docs;
 using Volo.Docs.Admin;
 using Volo.DocsTestApp.EntityFrameworkCore;
+using Volo.DocsTestApp.Utils;
 
 namespace Volo.DocsTestApp
 {
@@ -134,6 +135,7 @@ namespace Volo.DocsTestApp
             else
             {
                 app.UseStatusCodePagesWithReExecute("/error/{0}");
+                app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
             }
 
             app.UseMvc(routes =>

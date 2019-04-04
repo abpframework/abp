@@ -4,6 +4,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Serilog;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Abp.Domain.Entities;
@@ -24,7 +25,7 @@ namespace Volo.DocsTestApp.Pages
             var statusFeature = HttpContext.Features.Get<IStatusCodeReExecuteFeature>();
             if (statusFeature != null)
             {
-                Log.Warning("Handled {0} error for URL: {1}", statusCode, statusFeature.OriginalPath);
+                Logger.LogWarning("Handled {0} error for URL: {1}", statusCode, statusFeature.OriginalPath);
             }
 
             var exceptionHandlerPathFeature = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
