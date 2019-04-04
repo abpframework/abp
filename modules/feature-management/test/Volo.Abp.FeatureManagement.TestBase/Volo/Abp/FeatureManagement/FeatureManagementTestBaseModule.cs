@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Authorization;
 using Volo.Abp.Autofac;
+using Volo.Abp.Features;
 using Volo.Abp.Modularity;
 
 namespace Volo.Abp.FeatureManagement
@@ -11,7 +12,7 @@ namespace Volo.Abp.FeatureManagement
         typeof(AbpAuthorizationModule),
         typeof(AbpFeatureManagementDomainModule)
         )]
-    public class AbpFeatureManagementTestBaseModule : AbpModule
+    public class FeatureManagementTestBaseModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
@@ -21,6 +22,15 @@ namespace Volo.Abp.FeatureManagement
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             SeedTestData(context);
+        }
+
+        public override void PostConfigureServices(ServiceConfigurationContext context)
+        {
+            context.Services.Configure<FeatureManagementOptions>(options =>
+            {
+                //TODO: Any value can pass. After completing the permission unit test, look at it again.
+                options.ProviderPolicies[EditionFeatureValueProvider.ProviderName] = EditionFeatureValueProvider.ProviderName;
+            });
         }
 
         private static void SeedTestData(ApplicationInitializationContext context)
