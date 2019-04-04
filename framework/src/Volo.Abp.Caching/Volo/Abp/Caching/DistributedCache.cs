@@ -25,11 +25,12 @@ namespace Volo.Abp.Caching
 
         protected ICancellationTokenProvider CancellationTokenProvider { get; }
 
-        protected IObjectSerializer ObjectSerializer { get; }
+        //TODO: Create IDistributedCacheSerializer
+        protected IDistributedCacheSerializer Serializer { get; }
 
         protected ICurrentTenant CurrentTenant { get; }
 
-        protected AsyncLock AsyncLock { get; } = new AsyncLock();
+        //protected AsyncLock AsyncLock { get; } = new AsyncLock();
 
         protected DistributedCacheEntryOptions DefaultCacheOptions;
 
@@ -42,8 +43,7 @@ namespace Volo.Abp.Caching
             IOptions<DistributedCacheOptions> distributedCacheOption,
             IDistributedCache cache,
             ICancellationTokenProvider cancellationTokenProvider,
-
-            IObjectSerializer objectSerializer,
+            IDistributedCacheSerializer serializer,
             ICurrentTenant currentTenant)
         {
             _distributedCacheOption = distributedCacheOption.Value;
@@ -51,7 +51,7 @@ namespace Volo.Abp.Caching
             Cache = cache;
             CancellationTokenProvider = cancellationTokenProvider;
             Logger = NullLogger<DistributedCache<TCacheItem>>.Instance;
-            ObjectSerializer = objectSerializer;
+            Serializer = serializer;
             CurrentTenant = currentTenant;
 
             SetDefaultOptions();
@@ -85,7 +85,7 @@ namespace Volo.Abp.Caching
                 return null;
             }
 
-            return ObjectSerializer.Deserialize<TCacheItem>(cachedBytes);
+            return Serializer.Deserialize<TCacheItem>(cachedBytes);
         }
 
         public virtual async Task<TCacheItem> GetAsync(
@@ -120,7 +120,7 @@ namespace Volo.Abp.Caching
                 return null;
             }
 
-            return ObjectSerializer.Deserialize<TCacheItem>(cachedBytes);
+            return Serializer.Deserialize<TCacheItem>(cachedBytes);
         }
 
         public TCacheItem GetOrAdd(
@@ -135,7 +135,7 @@ namespace Volo.Abp.Caching
                 return value;
             }
 
-            using (AsyncLock.Lock(CancellationTokenProvider.Token))
+            //using (AsyncLock.Lock(CancellationTokenProvider.Token))
             {
                 value = Get(key, hideErrors);
                 if (value != null)
@@ -164,7 +164,7 @@ namespace Volo.Abp.Caching
                 return value;
             }
 
-            using (await AsyncLock.LockAsync(token))
+            //using (await AsyncLock.LockAsync(token))
             {
                 value = await GetAsync(key, hideErrors, token);
                 if (value != null)
@@ -191,7 +191,7 @@ namespace Volo.Abp.Caching
             {
                 Cache.Set(
                     NormalizeKey(key),
-                    ObjectSerializer.Serialize(value),
+                    Serializer.Serialize(value),
                     options ?? DefaultCacheOptions
                 );
             }
@@ -220,7 +220,7 @@ namespace Volo.Abp.Caching
             {
                 await Cache.SetAsync(
                     NormalizeKey(key),
-                    ObjectSerializer.Serialize(value),
+                    Serializer.Serialize(value),
                     options ?? DefaultCacheOptions,
                     CancellationTokenProvider.FallbackToProvider(token)
                 );
