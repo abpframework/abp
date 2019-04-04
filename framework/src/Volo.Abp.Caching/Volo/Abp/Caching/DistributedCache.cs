@@ -57,7 +57,9 @@ namespace Volo.Abp.Caching
             SetDefaultOptions();
         }
 
-        public virtual TCacheItem Get(string key, bool? hideErrors = null)
+        public virtual TCacheItem Get(
+            string key, 
+            bool? hideErrors = null)
         {
             hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
 
@@ -86,7 +88,10 @@ namespace Volo.Abp.Caching
             return ObjectSerializer.Deserialize<TCacheItem>(cachedBytes);
         }
 
-        public virtual async Task<TCacheItem> GetAsync(string key, bool? hideErrors = null, CancellationToken token = default)
+        public virtual async Task<TCacheItem> GetAsync(
+            string key,
+            bool? hideErrors = null, 
+            CancellationToken token = default)
         {
             hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
 
@@ -174,7 +179,11 @@ namespace Volo.Abp.Caching
             return value;
         }
 
-        public virtual void Set(string key, TCacheItem value, DistributedCacheEntryOptions options = null, bool? hideErrors = null)
+        public virtual void Set(
+            string key, 
+            TCacheItem value, 
+            DistributedCacheEntryOptions options = null, 
+            bool? hideErrors = null)
         {
             hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
 
@@ -198,7 +207,12 @@ namespace Volo.Abp.Caching
             }
         }
 
-        public virtual async Task SetAsync(string key, TCacheItem value, DistributedCacheEntryOptions options = null, bool? hideErrors = null, CancellationToken token = default)
+        public virtual async Task SetAsync(
+            string key, 
+            TCacheItem value, 
+            DistributedCacheEntryOptions options = null, 
+            bool? hideErrors = null, 
+            CancellationToken token = default)
         {
             hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
 
@@ -223,7 +237,9 @@ namespace Volo.Abp.Caching
             }
         }
 
-        public virtual void Refresh(string key, bool? hideErrors = null)
+        public virtual void Refresh(
+            string key, 
+            bool? hideErrors = null)
         {
             hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
 
@@ -243,7 +259,10 @@ namespace Volo.Abp.Caching
             }
         }
 
-        public virtual async Task RefreshAsync(string key, bool? hideErrors = null, CancellationToken token = default)
+        public virtual async Task RefreshAsync(
+            string key, 
+            bool? hideErrors = null, 
+            CancellationToken token = default)
         {
             hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
 
@@ -263,7 +282,9 @@ namespace Volo.Abp.Caching
             }
         }
 
-        public virtual void Remove(string key, bool? hideErrors = null)
+        public virtual void Remove(
+            string key, 
+            bool? hideErrors = null)
         {
             hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
 
@@ -282,7 +303,10 @@ namespace Volo.Abp.Caching
             }
         }
 
-        public virtual async Task RemoveAsync(string key, bool? hideErrors = null, CancellationToken token = default)
+        public virtual async Task RemoveAsync(
+            string key, 
+            bool? hideErrors = null, 
+            CancellationToken token = default)
         {
             hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
 
