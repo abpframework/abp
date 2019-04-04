@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
@@ -52,6 +53,11 @@ namespace BaseManagement
             return _baseItemAppService.DeleteAsync(id);
         }
 
-
+        [HttpGet]
+        [Route("getViewTrees")]
+        public List<ViewTree> GetViewTrees(Guid? id)
+        {
+            return _baseItemAppService.GetViewTrees(id);
+        }
     }
 }

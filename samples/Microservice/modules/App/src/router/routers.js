@@ -132,13 +132,21 @@ export default [{
       },
       component: () => import('@/view/auditlog/auditlog.vue')
     }, {
-      path: 'icon',
-      name: 'rbac_icon_page',
+      path: 'baseType',
+      name: 'BaseManagement.BaseType',
       meta: {
         icon: 'md-aperture',
-        title: '图标管理'
+        title: '基础资料字典类别管理'
       },
-      component: () => import( /* webpackChunkName: "rbac" */ '@/view/rbac/icon.vue')
+      component: () => import( /* webpackChunkName: "rbac" */ '@/view/base/baseType.vue')
+    },{
+      path: 'baseItem',
+      name: 'BaseManagement.BaseItem',
+      meta: {
+        icon: 'ios-hammer',
+        title: '基础资料字典管理'
+      },
+      component: () => import('@/view/base/baseItem.vue')
     }]
   },
   {

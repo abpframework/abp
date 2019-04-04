@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 
@@ -12,6 +13,6 @@ namespace BaseManagement
                 CreateUpdateBaseItemDto, //Used to create a new 
                 CreateUpdateBaseItemDto> //Used to update a 
     {
-
+        List<ViewTree> GetViewTrees(Guid? id);
     }
 }

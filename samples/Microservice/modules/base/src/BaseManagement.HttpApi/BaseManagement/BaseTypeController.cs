@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
@@ -21,7 +22,7 @@ namespace BaseManagement
 
         [HttpGet]
         [Route("")]
-        public Task<PagedResultDto<BaseTypeDto>> GetListAsync(PagedAndSortedResultRequestDto input)
+        public Task<PagedResultDto<BaseTypeDto>> GetListAsync(BaseTypePagedRequestDto input)
         {
             return _baseTypeAppService.GetListAsync(input);
         }
@@ -52,6 +53,11 @@ namespace BaseManagement
             return _baseTypeAppService.DeleteAsync(id);
         }
 
-     
+        [HttpGet]
+        [Route("getViewTrees")]
+        public List<ViewTree> GetViewTrees(Guid? id)
+        {
+            return _baseTypeAppService.GetViewTrees(id);
+        }
     }
 }

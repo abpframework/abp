@@ -11,5 +11,7 @@ namespace BaseManagement
         public string Name { get; set; }
         public int Sort { get; set; }
         public string Remark { get; set; }
+
+        public bool HasChildren { get; set; }
     }
 }

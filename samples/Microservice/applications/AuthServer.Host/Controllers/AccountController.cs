@@ -23,7 +23,7 @@ namespace AuthServer.Host.Controllers
             var dico = await DiscoveryClient.GetAsync("http://localhost:64999");
 
             var tokenClient = new TokenClient(dico.TokenEndpoint, "backend-admin-app-client", "1q2w3e*");
-            TokenResponse tokenresp = await tokenClient.RequestResourceOwnerPasswordAsync(login.UserNameOrEmailAddress, login.Password, "IdentityService BackendAdminAppGateway AuditLogging");
+            TokenResponse tokenresp = await tokenClient.RequestResourceOwnerPasswordAsync(login.UserNameOrEmailAddress, login.Password, "IdentityService BackendAdminAppGateway AuditLogging BaseManagement");
             if (tokenresp.IsError)
             {
                 Console.WriteLine(tokenresp.Error);
