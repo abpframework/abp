@@ -32,10 +32,10 @@ namespace Volo.Abp.Castle.DynamicProxy
         protected IInvocation Invocation { get; }
         protected IInvocationProceedInfo ProceedInfo { get; }
 
-        public CastleAbpMethodInvocationAdapter(IInvocation invocation)
+        public CastleAbpMethodInvocationAdapter(IInvocation invocation, IInvocationProceedInfo proceedInfo)
         {
             Invocation = invocation;
-            ProceedInfo = invocation.CaptureProceedInfo();
+            ProceedInfo = proceedInfo;
 
             _lazyArgumentsDictionary = new Lazy<IReadOnlyDictionary<string, object>>(GetArgumentsDictionary);
         }
@@ -53,7 +53,9 @@ namespace Volo.Abp.Castle.DynamicProxy
         public Task ProceedAsync()
         {
             ProceedInfo.Invoke();
+
             _actualReturnValue = Invocation.ReturnValue;
+
             return Invocation.Method.IsAsync()
                 ? (Task)_actualReturnValue
                 : Task.FromResult(_actualReturnValue);

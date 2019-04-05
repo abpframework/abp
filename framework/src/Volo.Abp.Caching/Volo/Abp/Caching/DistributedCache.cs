@@ -30,7 +30,7 @@ namespace Volo.Abp.Caching
 
         protected ICurrentTenant CurrentTenant { get; }
 
-        //protected AsyncLock AsyncLock { get; } = new AsyncLock();
+        protected AsyncLock AsyncLock { get; } = new AsyncLock();
 
         protected DistributedCacheEntryOptions DefaultCacheOptions;
 
@@ -135,7 +135,7 @@ namespace Volo.Abp.Caching
                 return value;
             }
 
-            //using (AsyncLock.Lock(CancellationTokenProvider.Token))
+            using (AsyncLock.Lock(CancellationTokenProvider.Token))
             {
                 value = Get(key, hideErrors);
                 if (value != null)
@@ -164,7 +164,7 @@ namespace Volo.Abp.Caching
                 return value;
             }
 
-            //using (await AsyncLock.LockAsync(token))
+            using (await AsyncLock.LockAsync(token))
             {
                 value = await GetAsync(key, hideErrors, token);
                 if (value != null)
