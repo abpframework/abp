@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.AspNetCore.Uow;
 
-namespace Volo.DocsTestApp.Utils
+namespace VoloDocs.Utils
 {
     public class GlobalExceptionHandlerMiddleware
     {

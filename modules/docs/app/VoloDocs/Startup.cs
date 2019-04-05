@@ -5,13 +5,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Volo.Abp;
 
-namespace Volo.DocsTestApp
+namespace VoloDocs
 {
     public class Startup
     {
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.AddApplication<DocsTestAppModule>(options =>
+            services.AddApplication<VoloDocsModule>(options =>
             {
                 options.UseAutofac();
             });

@@ -5,11 +5,11 @@ using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Docs.EntityFrameworkCore;
 
-namespace Volo.DocsTestApp.EntityFrameworkCore
+namespace VoloDocs.EntityFrameworkCore
 {
-    public class DocsTestAppDbContext : AbpDbContext<DocsTestAppDbContext>
+    public class VoloDocsDbContext : AbpDbContext<VoloDocsDbContext>
     {
-        public DocsTestAppDbContext(DbContextOptions<DocsTestAppDbContext> options) 
+        public VoloDocsDbContext(DbContextOptions<VoloDocsDbContext> options) 
             : base(options)
         {
 

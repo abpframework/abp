@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Volo.DocsTestApp.EntityFrameworkCore.Migrations
+namespace VoloDocs.EntityFrameworkCore.Migrations
 {
     public partial class Initial20181225 : Migration
     {

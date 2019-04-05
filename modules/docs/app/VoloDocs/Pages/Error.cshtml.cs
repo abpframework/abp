@@ -9,7 +9,7 @@ using Serilog;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Abp.Domain.Entities;
 
-namespace Volo.DocsTestApp.Pages
+namespace VoloDocs.Pages
 {
     public class ErrorModel : AbpPageModel
     {

@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Volo.DocsTestApp.EntityFrameworkCore;
+using VoloDocs.EntityFrameworkCore;
 
-namespace Volo.DocsTestApp.EntityFrameworkCore.Migrations
+namespace VoloDocs.EntityFrameworkCore.Migrations
 {
-    [DbContext(typeof(DocsTestAppDbContext))]
+    [DbContext(typeof(VoloDocsDbContext))]
     [Migration("20181225134002_Initial20181225")]
     partial class Initial20181225
     {

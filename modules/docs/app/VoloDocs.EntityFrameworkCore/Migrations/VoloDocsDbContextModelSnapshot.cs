@@ -4,12 +4,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Volo.DocsTestApp.EntityFrameworkCore;
+using VoloDocs.EntityFrameworkCore;
 
-namespace Volo.DocsTestApp.EntityFrameworkCore.Migrations
+namespace VoloDocs.EntityFrameworkCore.Migrations
 {
-    [DbContext(typeof(DocsTestAppDbContext))]
-    partial class DocsTestAppDbContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(VoloDocsDbContext))]
+    partial class VoloDocsDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {

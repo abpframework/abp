@@ -18,6 +18,7 @@ using Volo.Abp.AspNetCore.Mvc.UI;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Components;
 using Volo.Abp.AspNetCore.Mvc.UI.Theming;
 using Volo.Abp.Autofac;
 using Volo.Abp.Data;
@@ -32,17 +33,17 @@ using Volo.Abp.UI;
 using Volo.Abp.VirtualFileSystem;
 using Volo.Docs;
 using Volo.Docs.Admin;
-using Volo.DocsTestApp.EntityFrameworkCore;
-using Volo.DocsTestApp.Utils;
+using VoloDocs.EntityFrameworkCore;
+using VoloDocs.Utils;
 
-namespace Volo.DocsTestApp
+namespace VoloDocs
 {
     [DependsOn(
         typeof(DocsWebModule),
         typeof(DocsAdminWebModule),
         typeof(DocsApplicationModule),
         typeof(DocsAdminApplicationModule),
-        typeof(DocsTestAppEntityFrameworkCoreModule),
+        typeof(VoloDocsEntityFrameworkCoreModule),
         typeof(AbpAutofacModule),
         typeof(AbpAccountWebModule),
         typeof(AbpIdentityWebModule),
@@ -51,7 +52,7 @@ namespace Volo.DocsTestApp
         typeof(AbpPermissionManagementApplicationModule),
         typeof(AbpAspNetCoreMvcUiBasicThemeModule)
     )]
-    public class DocsTestAppModule : AbpModule
+    public class VoloDocsModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
@@ -109,6 +110,8 @@ namespace Volo.DocsTestApp
             {
                 options.Conventions.AddPageRoute("/Error", "error/{statusCode}");
             });
+             
+             
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)

@@ -5,7 +5,7 @@ using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Docs.EntityFrameworkCore;
 
-namespace Volo.DocsTestApp.EntityFrameworkCore
+namespace VoloDocs.EntityFrameworkCore
 {
     [DependsOn(
         typeof(DocsEntityFrameworkCoreModule),
@@ -13,7 +13,7 @@ namespace Volo.DocsTestApp.EntityFrameworkCore
         typeof(AbpPermissionManagementEntityFrameworkCoreModule),
         typeof(AbpSettingManagementEntityFrameworkCoreModule),
         typeof(AbpEntityFrameworkCoreSqlServerModule))]
-    public class DocsTestAppEntityFrameworkCoreModule : AbpModule
+    public class VoloDocsEntityFrameworkCoreModule : AbpModule
     {
         
     }

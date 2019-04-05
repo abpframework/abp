@@ -3,24 +3,24 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 
-namespace Volo.DocsTestApp.EntityFrameworkCore
+namespace VoloDocs.EntityFrameworkCore
 {
-    public class DocsTestAppDbContextFactory : IDesignTimeDbContextFactory<DocsTestAppDbContext>
+    public class VoloDocsDbContextFactory : IDesignTimeDbContextFactory<VoloDocsDbContext>
     {
-        public DocsTestAppDbContext CreateDbContext(string[] args)
+        public VoloDocsDbContext CreateDbContext(string[] args)
         {
             var configuration = BuildConfiguration();
 
-            var builder = new DbContextOptionsBuilder<DocsTestAppDbContext>()
+            var builder = new DbContextOptionsBuilder<VoloDocsDbContext>()
                 .UseSqlServer(configuration.GetConnectionString("SqlServer"));
 
-            return new DocsTestAppDbContext(builder.Options);
+            return new VoloDocsDbContext(builder.Options);
         }
 
         private static IConfigurationRoot BuildConfiguration()
         {
             var builder = new ConfigurationBuilder()
-                .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../Volo.DocsTestApp/"))
+                .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../VoloDocs/"))
                 .AddJsonFile("appsettings.json", optional: false);
 
             return builder.Build();

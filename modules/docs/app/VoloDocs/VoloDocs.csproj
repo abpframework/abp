@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
+    <UserSecretsId>b5e1445f-a53c-4d4b-9539-061359f52fcf</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,7 +24,7 @@
     <ProjectReference Include="..\..\src\Volo.Docs.Admin.Web\Volo.Docs.Admin.Web.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.csproj" />
-    <ProjectReference Include="..\Volo.DocsTestApp.EntityFrameworkCore\Volo.DocsTestApp.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\VoloDocs.EntityFrameworkCore\VoloDocs.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\..\..\..\modules\identity\src\Volo.Abp.Identity.Application\Volo.Abp.Identity.Application.csproj" />
     <ProjectReference Include="..\..\..\..\modules\identity\src\Volo.Abp.Identity.Web\Volo.Abp.Identity.Web.csproj" />
     <ProjectReference Include="..\..\..\..\modules\identity\src\Volo.Abp.PermissionManagement.Domain.Identity\Volo.Abp.PermissionManagement.Domain.Identity.csproj" />

@@ -1,6 +1,6 @@
 ﻿using Volo.Abp.AspNetCore.Mvc;
 
-namespace Volo.DocsTestApp.Controllers
+namespace VoloDocs.Controllers
 {
     public class HomeController : AbpController
     {

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Volo.DocsTestApp.Pages
+namespace VoloDocs.Pages
 {
     public class IndexModel : PageModel
     {
