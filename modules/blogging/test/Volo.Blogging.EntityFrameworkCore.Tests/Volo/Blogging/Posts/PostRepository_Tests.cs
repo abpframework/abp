@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Volo.Blogging.EntityFrameworkCore;
+﻿using Volo.Blogging.Posts;
 
-namespace Volo.Blogging.Posts
+namespace Volo.Blogging
 {
     public class PostRepository_Tests : PostRepository_Tests<BloggingEntityFrameworkCoreTestModule>
     {
-
     }
 }

@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Volo.Blogging.Tagging;
+﻿using Volo.Blogging.Tagging;
 
-namespace Volo.Blogging.MongoDB
+namespace Volo.Blogging
 {
     public class TagRepository_Tests : TagRepository_Tests<BloggingMongoDBTestModule>
     {
-
     }
 }

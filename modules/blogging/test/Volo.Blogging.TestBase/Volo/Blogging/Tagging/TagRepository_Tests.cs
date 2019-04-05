@@ -65,7 +65,7 @@ namespace Volo.Blogging.Tagging
                 tag.Id
             });
 
-            var qq = await TagRepository.FindByNameAsync(BloggingTestData.Blog1Id, BloggingTestData.Tag1Name);
+            await TagRepository.FindByNameAsync(BloggingTestData.Blog1Id, BloggingTestData.Tag1Name);
             (await TagRepository.FindByNameAsync(BloggingTestData.Blog1Id, BloggingTestData.Tag1Name)).UsageCount
                 .ShouldBe(usageCount - 1);
         }

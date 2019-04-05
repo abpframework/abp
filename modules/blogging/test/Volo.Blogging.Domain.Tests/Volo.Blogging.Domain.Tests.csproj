@@ -8,11 +8,10 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
-    <PackageReference Include="Mongo2Go" Version="2.2.8" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Volo.Blogging.MongoDB\Volo.Blogging.MongoDB.csproj" />
+    <ProjectReference Include="..\Volo.Blogging.EntityFrameworkCore.Tests\Volo.Blogging.EntityFrameworkCore.Tests.csproj" />
     <ProjectReference Include="..\Volo.Blogging.TestBase\Volo.Blogging.TestBase.csproj" />
   </ItemGroup>
 

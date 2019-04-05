@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Mongo2Go;
+﻿using Mongo2Go;
 using Volo.Abp;
 using Volo.Abp.Data;
 using Volo.Abp.Modularity;
+using Volo.Blogging.MongoDB;
 
-namespace Volo.Blogging.MongoDB
+namespace Volo.Blogging
 {
     [DependsOn(
         typeof(BloggingTestBaseModule),
