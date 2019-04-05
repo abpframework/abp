@@ -1,10 +1,22 @@
-﻿@page
+﻿@page "{handler?}"
 @{
     Layout = null;
 }
-@using Volo.Abp
+@using Volo.ClientSimulation
 @model Volo.ClientSimulation.Web.Pages.SimulationAreaModel
-<abp-button id="StartButton" button-type="Primary" asp-page-handler="Start">Start</abp-button>
-<abp-button id="StopButton" button-type="Primary" abp-button="Primary" asp-page-handler="Stop">Stop</abp-button>
+<abp-alert alert-type="Primary">
+    <form class="d-inline" id="StartButtonForm" method="post" asp-page-handler="Start" data-ajaxForm="true">
+        <abp-button button-type="Primary" type="submit" disabled="@(Model.Simulation.State != SimulationState.Stopped)">Start</abp-button>
+    </form>
+    <form class="d-inline" id="StopButtonForm" method="post" asp-page-handler="Stop" data-ajaxForm="true">
+        <abp-button button-type="Primary" type="submit" disabled="@(Model.Simulation.State != SimulationState.Started)">Stop</abp-button>
+    </form>
+    <span class="ml-3">
+        @Model.Simulation.State
+    </span>
+</abp-alert>
+<abp-card class="mt-3">
+    <abp-card-body>
 
-@RandomHelper.GetRandom(1, 111)
+    </abp-card-body>
+</abp-card>

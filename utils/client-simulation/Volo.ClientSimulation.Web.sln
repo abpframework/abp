@@ -7,6 +7,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{42503D63-D29
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.ClientSimulation.Web", "src\Volo.ClientSimulation.Web\Volo.ClientSimulation.Web.csproj", "{7579B444-3411-4E3B-8DF3-19684C1F34C2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.ClientSimulation", "src\Volo.ClientSimulation\Volo.ClientSimulation.csproj", "{BB780A98-727D-49CF-9A4C-91E6EA7047AD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,12 +19,17 @@ Global
 		{7579B444-3411-4E3B-8DF3-19684C1F34C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7579B444-3411-4E3B-8DF3-19684C1F34C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7579B444-3411-4E3B-8DF3-19684C1F34C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB780A98-727D-49CF-9A4C-91E6EA7047AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB780A98-727D-49CF-9A4C-91E6EA7047AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB780A98-727D-49CF-9A4C-91E6EA7047AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB780A98-727D-49CF-9A4C-91E6EA7047AD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{7579B444-3411-4E3B-8DF3-19684C1F34C2} = {42503D63-D292-4A18-8ECE-8270167DD842}
+		{BB780A98-727D-49CF-9A4C-91E6EA7047AD} = {42503D63-D292-4A18-8ECE-8270167DD842}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1AF598E1-2012-47B4-A591-ADC9F327600A}

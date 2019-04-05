@@ -9,7 +9,8 @@ namespace Volo.ClientSimulation.Web
 {
     [DependsOn(
         typeof(AbpAspNetCoreMvcUiBasicThemeModule),
-        typeof(AbpAutofacModule)
+        typeof(AbpAutofacModule),
+        typeof(ClientSimulationModule)
         )]
     public class ClientSimulationWebModule : AbpModule
     {
