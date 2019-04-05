@@ -1,0 +1,10 @@
+﻿@page
+@{
+    Layout = null;
+}
+@using Volo.Abp
+@model Volo.ClientSimulation.Web.Pages.SimulationAreaModel
+<abp-button id="StartButton" button-type="Primary" asp-page-handler="Start">Start</abp-button>
+<abp-button id="StopButton" button-type="Primary" abp-button="Primary" asp-page-handler="Stop">Stop</abp-button>
+
+@RandomHelper.GetRandom(1, 111)

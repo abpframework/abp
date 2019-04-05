@@ -1,8 +1,10 @@
 ﻿@page
 @model Volo.ClientSimulation.Web.Pages.IndexModel
-@{
+@section scripts
+    {
+    <abp-script-bundle>
+        <abp-script src="/Pages/SimulationArea.js" />
+        <abp-script src="/Pages/Index.js" />
+    </abp-script-bundle>
 }
-<div>
-    <a abp-button="Primary" href="#">Start</a>
-    <a abp-button="Primary" href="#">Stop</a>
-</div>
+<div id="SimulationArea"></div>
