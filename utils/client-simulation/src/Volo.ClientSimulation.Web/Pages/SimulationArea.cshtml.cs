@@ -20,13 +20,13 @@ namespace Volo.ClientSimulation.Web.Pages
 
         public async Task<IActionResult> OnPostStartAsync()
         {
-            await Simulation.StartAsync();
+            Simulation.Start();
             return new NoContentResult();
         }
 
         public async Task<IActionResult> OnPostStopAsync()
         {
-            await Simulation.StopAsync();
+            Simulation.Stop();
             return new NoContentResult();
         }
     }

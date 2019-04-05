@@ -8,5 +8,6 @@ namespace Volo.ClientSimulation
         )]
     public class ClientSimulationModule : AbpModule
     {
+
     }
 }
