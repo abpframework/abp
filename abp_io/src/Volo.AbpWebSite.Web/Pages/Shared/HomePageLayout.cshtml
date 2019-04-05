@@ -17,7 +17,7 @@
     <title>@(ViewBag.Title == null ? "abp.io" : ViewBag.Title)</title>
     @await Component.InvokeAsync(typeof(StandardMetaViewComponent))
     <abp-style-bundle name="@AbpIoBundles.Styles.Global" />
-    @RenderSection("styles", false)
+    @await RenderSectionAsync("styles", false)
 </head>
 <body>
 
@@ -47,7 +47,7 @@
         gtag('config', 'UA-49982725-4');
     </script>
 
-    @RenderSection("scripts", false)
+    @await RenderSectionAsync("scripts", false)
 
 </body>
 </html>
