@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using Microsoft.AspNetCore.Builder;
@@ -108,7 +109,7 @@ namespace Volo.DocsTestApp
             app.UseDeveloperExceptionPage();
 
             app.UseVirtualFiles();
-            
+
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
@@ -118,6 +119,8 @@ namespace Volo.DocsTestApp
             app.UseAuthentication();
 
             app.UseRequestLocalization(app.ApplicationServices.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value);
+ 
+            app.UseStatusCodePagesWithReExecute("/error/{0}");
 
             app.UseMvc(routes =>
             {

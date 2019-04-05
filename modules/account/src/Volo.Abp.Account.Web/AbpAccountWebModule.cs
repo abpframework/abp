@@ -1,7 +1,6 @@
 ﻿using Localization.Resources.AbpUi;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Account.Web.Localization;
-using Volo.Abp.Account.Web.Settings;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars;
@@ -9,7 +8,6 @@ using Volo.Abp.Identity.AspNetCore;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.Resources.AbpValidation;
 using Volo.Abp.Modularity;
-using Volo.Abp.Settings;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
 

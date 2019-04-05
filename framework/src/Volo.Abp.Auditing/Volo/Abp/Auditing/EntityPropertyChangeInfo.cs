@@ -1,10 +1,9 @@
 ﻿using System;
-using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Auditing
 {
     [Serializable]
-    public class EntityPropertyChangeInfo : IMultiTenant
+    public class EntityPropertyChangeInfo
     {
         /// <summary>
         /// Maximum length of <see cref="PropertyName"/> property.
@@ -24,8 +23,6 @@ namespace Volo.Abp.Auditing
         /// </summary>
         public const int MaxPropertyTypeFullNameLength = 192;
 
-        public Guid? TenantId { get; set; }
-        
         public virtual string NewValue { get; set; }
 
         public virtual string OriginalValue { get; set; }

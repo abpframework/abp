@@ -6,6 +6,7 @@ using Volo.Abp.Identity;
 using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
+using Volo.Abp.TenantManagement.EntityFrameworkCore;
 
 namespace MyCompanyName.MyProjectName.EntityFrameworkCore
 {
@@ -28,6 +29,7 @@ namespace MyCompanyName.MyProjectName.EntityFrameworkCore
             builder.ConfigureBackgroundJobs();
             builder.ConfigureAuditLogging();
             builder.ConfigureIdentity();
+            builder.ConfigureTenantManagement();
 
             /* Configure customizations for entities from the modules included  */
 

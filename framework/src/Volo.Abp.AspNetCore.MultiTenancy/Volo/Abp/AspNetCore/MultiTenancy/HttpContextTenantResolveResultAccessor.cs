@@ -1,13 +1,12 @@
-﻿using JetBrains.Annotations;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.AspNetCore.MultiTenancy
 {
+    [Dependency(ReplaceServices = true)]
     public class HttpContextTenantResolveResultAccessor : ITenantResolveResultAccessor, ITransientDependency
     {
-        [CanBeNull]
         public TenantResolveResult Result
         {
             get

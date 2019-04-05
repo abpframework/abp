@@ -107,12 +107,20 @@ namespace Volo.Abp.Auditing
             return auditInfo;
         }
 
-        public virtual AuditLogActionInfo CreateAuditLogAction(Type type, MethodInfo method, object[] arguments)
+        public virtual AuditLogActionInfo CreateAuditLogAction(
+            AuditLogInfo auditLog,
+            Type type, 
+            MethodInfo method, 
+            object[] arguments)
         {
-            return CreateAuditLogAction(type, method, CreateArgumentsDictionary(method, arguments));
+            return CreateAuditLogAction(auditLog, type, method, CreateArgumentsDictionary(method, arguments));
         }
 
-        public virtual AuditLogActionInfo CreateAuditLogAction(Type type, MethodInfo method, IDictionary<string, object> arguments)
+        public virtual AuditLogActionInfo CreateAuditLogAction(
+            AuditLogInfo auditLog,
+            Type type, 
+            MethodInfo method, 
+            IDictionary<string, object> arguments)
         {
             var actionInfo = new AuditLogActionInfo
             {

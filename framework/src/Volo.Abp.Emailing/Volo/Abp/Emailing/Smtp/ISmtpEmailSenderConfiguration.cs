@@ -1,4 +1,6 @@
-﻿namespace Volo.Abp.Emailing.Smtp
+﻿using System.Threading.Tasks;
+
+namespace Volo.Abp.Emailing.Smtp
 {
     /// <summary>
     /// Defines configurations to used by SmtpClient object.
@@ -8,36 +10,36 @@
         /// <summary>
         /// SMTP Host name/IP.
         /// </summary>
-        string Host { get; }
+        Task<string> GetHostAsync();
 
         /// <summary>
         /// SMTP Port.
         /// </summary>
-        int Port { get; }
+        Task<int> GetPortAsync();
 
         /// <summary>
         /// User name to login to SMTP server.
         /// </summary>
-        string UserName { get; }
+        Task<string> GetUserNameAsync();
 
         /// <summary>
         /// Password to login to SMTP server.
         /// </summary>
-        string Password { get; }
+        Task<string> GetPasswordAsync();
 
         /// <summary>
         /// Domain name to login to SMTP server.
         /// </summary>
-        string Domain { get; }
+        Task<string> GetDomainAsync();
 
         /// <summary>
         /// Is SSL enabled?
         /// </summary>
-        bool EnableSsl { get; }
+        Task<bool> GetEnableSslAsync();
 
         /// <summary>
         /// Use default credentials?
         /// </summary>
-        bool UseDefaultCredentials { get; }
+        Task<bool> GetUseDefaultCredentialsAsync();
     }
 }
