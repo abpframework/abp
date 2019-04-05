@@ -1,4 +1,69 @@
 ﻿@page
+
+@using Castle.Core.Internal
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Docs
+@using Volo.Docs.Localization
+@using Volo.Docs.Pages.Documents
+
 @model VoloDocs.Pages.IndexModel
+@inject IHtmlLocalizer<DocsResource> L
+
+@section styles {
+    <abp-style-bundle name="@typeof(IndexModel).FullName">
+        <abp-style src="/Pages/Documents/Shared/Styles/vs.css" />
+        <abp-style src="/assets/fa/css/font-awesome.min.css" />
+    </abp-style-bundle>
+}
+
 <h3>Welcome to the VoloDocs!</h3>
-<a href="/documents/">Go to documents...</a>
+
+
+<p>1- CHECK APPSETTINGS.JSON IS CONFIGURED </p>
+<p>2- CHECK DATABASE EXIST </p>
+<p>2- CHECK ANY PROJECT </p>
+
+<p>
+    <a href="/Documents">Go to documents...</a>
+</p>
+<p>
+    <a href="/Docs/Admin/Projects">Create project</a>
+</p>
+<p>
+    <a href="/Admin">Go to admin...</a>
+</p>
+
+<p>
+    <a href="/account/login">Login</a>
+</p>
+
+<div class="p-5">
+
+    @if (Model.Projects.IsNullOrEmpty())
+    {
+        <div class="alert alert-secondary text-center" role="alert">
+            No project!
+        </div>
+    }
+    @if (Model.Projects.Count > 0)
+    {
+        <h1>@L["Projects"]</h1>
+        <p>
+            <ul style="list-style-type: upper-roman;">
+                @foreach (var project in Model.Projects)
+                {
+                    <li>
+                        <h3>
+                            <a asp-page="./Project/Index"
+                               asp-route-projectName="@project.ShortName"
+                               asp-route-version="@DocsAppConsts.Latest">
+                                @project.Name
+                            </a>
+                        </h3>
+                    </li>
+                }
+            </ul>
+        </p>
+    }
+
+</div>

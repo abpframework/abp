@@ -1,14 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.Swagger;
@@ -18,7 +14,6 @@ using Volo.Abp.AspNetCore.Mvc.UI;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Components;
 using Volo.Abp.AspNetCore.Mvc.UI.Theming;
 using Volo.Abp.Autofac;
 using Volo.Abp.Data;
@@ -61,8 +56,7 @@ namespace VoloDocs
 
             Configure<DbConnectionOptions>(options =>
             {
-                const string connStringName = "SqlServer";
-                options.ConnectionStrings.Default = configuration.GetConnectionString(connStringName);
+                options.ConnectionStrings.Default = configuration["ConnectionString"];
             });
 
             Configure<AbpDbContextOptions>(options =>
@@ -131,15 +125,8 @@ namespace VoloDocs
 
             app.UseRequestLocalization(app.ApplicationServices.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value);
 
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseStatusCodePagesWithReExecute("/error/{0}");
-                app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
-            }
+            app.UseStatusCodePagesWithReExecute("/error/{0}");
+            app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 
             app.UseMvc(routes =>
             {
