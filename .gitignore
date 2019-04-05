@@ -300,3 +300,5 @@ samples/Microservice/applications/BackendAdminApp.Host/Logs/logs.txt
 samples/Microservice/applications/AuthServer.Host/Logs/logs.txt
 samples/Microservice/gateways/BackendAdminAppGateway.Host/Logs/logs.txt
 samples/MicroserviceDemo/applications/AuthServer.Host/AuthServer.Host.xml
+samples/Microservice/microservices/AuditLogging.Host/Logs/logs.txt
+samples/Microservice/microservices/BaseManagement.Host/Logs/logs.txt
