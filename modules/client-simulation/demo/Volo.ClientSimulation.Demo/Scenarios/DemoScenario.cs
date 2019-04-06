@@ -1,6 +1,7 @@
 ﻿using Volo.Abp;
+using Volo.ClientSimulation.Scenarios;
 
-namespace Volo.ClientSimulation.Scenarios
+namespace Volo.ClientSimulation.Demo.Scenarios
 {
     public class DemoScenario : Scenario
     {

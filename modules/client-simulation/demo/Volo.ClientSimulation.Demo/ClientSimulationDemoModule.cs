@@ -4,6 +4,7 @@ using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
+using Volo.ClientSimulation.Demo.Scenarios;
 using Volo.ClientSimulation.Scenarios;
 
 namespace Volo.ClientSimulation.Demo
