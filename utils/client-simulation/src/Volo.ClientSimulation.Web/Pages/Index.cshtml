@@ -1,7 +1,11 @@
 ﻿@page
 @model Volo.ClientSimulation.Web.Pages.IndexModel
-@section scripts
-    {
+@section styles {
+    <abp-style-bundle>
+        <abp-style src="/Pages/SimulationArea.min.css" />
+    </abp-style-bundle>
+}
+@section scripts {
     <abp-script-bundle>
         <abp-script src="/Pages/SimulationArea.js" />
         <abp-script src="/Pages/Index.js" />

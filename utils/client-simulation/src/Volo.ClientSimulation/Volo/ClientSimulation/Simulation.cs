@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using Volo.Abp;
 using Volo.Abp.DependencyInjection;
 using Volo.ClientSimulation.Clients;
 
 namespace Volo.ClientSimulation
 {
-    public class Simulation : ISingletonDependency, IDisposable
+    public class Simulation : ISingletonDependency
     {
         public GlobalOptions GlobalOptions { get; }
 
@@ -14,17 +15,21 @@ namespace Volo.ClientSimulation
 
         public SimulationState State { get; private set; }
 
-        public List<IClient> ActiveClients { get; }
+        public List<IDisposableClientHandler> ActiveClients { get; }
 
-        private readonly IServiceScope _serviceScope;
+        protected IClientFactory ClientFactory { get; }
+
+        protected ClientSimulationOptions Options { get; }
 
         public Simulation(
-            GlobalOptions globalOptions, 
-            IServiceScopeFactory serviceScopeFactory)
+            GlobalOptions globalOptions,
+            IClientFactory clientFactory, 
+            IOptions<ClientSimulationOptions> options)
         {
-            _serviceScope = serviceScopeFactory.CreateScope();
             GlobalOptions = globalOptions;
-            ActiveClients = new List<IClient>();
+            ClientFactory = clientFactory;
+            Options = options.Value;
+            ActiveClients = new List<IDisposableClientHandler>();
         }
 
         public void Start()
@@ -39,13 +44,14 @@ namespace Volo.ClientSimulation
 
                 for (int i = 0; i < CurrentOptions.MaxClientCount; i++)
                 {
-                    ActiveClients.Add(_serviceScope.ServiceProvider.GetRequiredService<IClient>());
+                    var selectedScenario = RandomHelper.GetRandomOfList(Options.Scenarios);
+                    ActiveClients.Add(ClientFactory.Create(selectedScenario));
                 }
 
                 foreach (var activeClient in ActiveClients)
                 {
-                    activeClient.Stopped += ActiveClientOnStopped;
-                    activeClient.Start();
+                    activeClient.Client.Stopped += ActiveClientOnStopped;
+                    activeClient.Client.Start();
                 }
             }
 
@@ -60,7 +66,7 @@ namespace Volo.ClientSimulation
             {
                 foreach (var activeClient in ActiveClients)
                 {
-                    activeClient.Stop();
+                    activeClient.Client.Stop();
                 }
             }
 
@@ -73,13 +79,8 @@ namespace Volo.ClientSimulation
 
             lock (ActiveClients)
             {
-                ActiveClients.Remove(client);
+                ActiveClients.RemoveAll(c => c.Client == client);
             }
-        }
-
-        public void Dispose()
-        {
-            _serviceScope.Dispose();
         }
     }
 }

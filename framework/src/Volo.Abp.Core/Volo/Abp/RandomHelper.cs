@@ -77,7 +77,7 @@ namespace Volo.Abp
         /// </summary>
         /// <typeparam name="T">Type of the objects</typeparam>
         /// <param name="list">List of object to select a random one</param>
-        public static T GetRandomOf<T>([NotNull] IList<T> list)
+        public static T GetRandomOfList<T>([NotNull] IList<T> list)
         {
             Check.NotNullOrEmpty(list, nameof(list));
 

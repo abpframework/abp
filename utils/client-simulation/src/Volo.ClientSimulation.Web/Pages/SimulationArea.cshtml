@@ -17,6 +17,11 @@
 </abp-alert>
 <abp-card class="mt-3">
     <abp-card-body>
-        <span>Active client count: @Model.Simulation.ActiveClients.Count</span>
+        @foreach (var clientHandler in Model.Simulation.ActiveClients)
+        {
+        <span class="simulation-client">
+            [@clientHandler.Client.State] @clientHandler.Client.Scenario.GetDisplayText(): @clientHandler.Client.Scenario.CurrentStep.GetDisplayText()
+        </span>
+        }
     </abp-card-body>
 </abp-card>
