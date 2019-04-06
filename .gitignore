@@ -294,4 +294,3 @@ samples/MicroserviceDemo/gateways/BackendAdminAppGateway.Host/Logs/logs.txt
 samples/MicroserviceDemo/applications/PublicWebSite.Host/Logs/logs.txt
 samples/MicroserviceDemo/gateways/PublicWebSiteGateway.Host/Logs/logs.txt
 samples/MicroserviceDemo/microservices/BloggingService.Host/Logs/logs.txt
-utils/client-simulation/demo/Volo.ClientSimulation.Demo/Logs/logs.txt
