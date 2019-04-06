@@ -73,6 +73,18 @@ namespace Volo.Abp
         }
 
         /// <summary>
+        /// Gets random item from the given list.
+        /// </summary>
+        /// <typeparam name="T">Type of the objects</typeparam>
+        /// <param name="list">List of object to select a random one</param>
+        public static T GetRandomOf<T>([NotNull] IList<T> list)
+        {
+            Check.NotNullOrEmpty(list, nameof(list));
+
+            return list[GetRandom(0, list.Count)];
+        }
+
+        /// <summary>
         /// Generates a randomized list from given enumerable.
         /// </summary>
         /// <typeparam name="T">Type of items in the list</typeparam>
