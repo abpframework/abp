@@ -4,8 +4,8 @@
 }
 @using Volo.ClientSimulation
 @using Volo.ClientSimulation.Clients
-@using Volo.ClientSimulation.Demo.Pages
-@model Volo.ClientSimulation.Demo.Pages.SimulationAreaModel
+@using Volo.ClientSimulation.Pages.ClientSimulation
+@model Volo.ClientSimulation.Pages.ClientSimulation.SimulationAreaModel
 <abp-alert alert-type="Primary">
     <form class="d-inline" id="StartButtonForm" method="post" asp-page-handler="Start" data-ajaxForm="true">
         <abp-button button-type="Primary" type="submit" disabled="@(Model.Simulation.State != SimulationState.Stopped)">Start</abp-button>

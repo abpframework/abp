@@ -5,9 +5,9 @@ namespace Volo.ClientSimulation.Demo.Controllers
 {
     public class HomeController : AbpController
     {
-        public RedirectToPageResult Index()
+        public ActionResult Index()
         {
-            return RedirectToPage("/ClientSimulation/Index");
+            return Redirect("/ClientSimulation");
         }
     }
 }

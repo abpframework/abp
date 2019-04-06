@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Volo.ClientSimulation.Demo.Pages
+namespace Volo.ClientSimulation.Pages.ClientSimulation
 {
     public class IndexModel : PageModel
     {
