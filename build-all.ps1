@@ -18,6 +18,7 @@ $solutionPaths = (
     "modules/blogging",
     "modules/audit-logging",
     "modules/background-jobs",
+    "modules/client-simulation",
     "abp_io",
     "templates/module",
     "templates/service",
