@@ -6,10 +6,6 @@
   min-width: 250px;
   overflow: hidden;
   display: inline-block; }
-  .simulation-client.simulation-client-running {
-    background-color: #d6ffce; }
-  .simulation-client.simulation-client-stopping {
-    background-color: #fde0d7; }
   .simulation-client .simulation-client-icon {
     color: #999; }
   .simulation-client .simulation-client-scenario {
@@ -17,3 +13,11 @@
   .simulation-client .simulation-client-scenario-current-step {
     color: #666;
     font-size: 0.8em; }
+  .simulation-client.simulation-client-running {
+    background-color: #d6ffce; }
+    .simulation-client.simulation-client-running .simulation-client-icon {
+      color: #008000; }
+  .simulation-client.simulation-client-stopping {
+    background-color: #fde0d7; }
+    .simulation-client.simulation-client-stopping .simulation-client-icon {
+      color: #f88562; }

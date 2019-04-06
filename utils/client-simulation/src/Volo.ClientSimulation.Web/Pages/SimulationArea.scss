@@ -7,14 +7,6 @@
     overflow: hidden;
     display: inline-block;
 
-    &.simulation-client-running {
-        background-color: #d6ffce;
-    }
-
-    &.simulation-client-stopping {
-        background-color: #fde0d7;
-    }
-
     .simulation-client-icon {
         color: #999;
     }
@@ -26,5 +18,21 @@
     .simulation-client-scenario-current-step {
         color: #666;
         font-size: 0.8em;
+    }
+
+    &.simulation-client-running {
+        background-color: #d6ffce;
+
+        .simulation-client-icon {
+            color: #008000;
+        }
+    }
+
+    &.simulation-client-stopping {
+        background-color: #fde0d7;
+
+        .simulation-client-icon {
+            color: #f88562;
+        }
     }
 }
