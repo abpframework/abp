@@ -20,6 +20,8 @@ namespace Volo.ClientSimulation
 
         protected IServiceScope ServiceScope { get; }
 
+        protected readonly object SyncObj = new object();
+
         public Simulation(
             IClientFactory clientFactory, 
             IServiceScopeFactory serviceScopeFactory,
@@ -29,55 +31,47 @@ namespace Volo.ClientSimulation
             Options = options.Value;
             ServiceScope = serviceScopeFactory.CreateScope();
             ActiveClients = new List<IDisposableClientHandler>();
+
+            foreach (var scenarioConfiguration in Options.Scenarios)
+            {
+                for (int i = 0; i < scenarioConfiguration.ClientCount; i++)
+                {
+                    var scenario = (IScenario) ServiceScope.ServiceProvider.GetRequiredService(
+                        scenarioConfiguration.ScenarioType
+                    );
+
+                    ActiveClients.Add(ClientFactory.Create(scenario));
+                }
+            }
         }
 
         public void Start()
         {
-            State = SimulationState.Starting;
-
-            lock (ActiveClients)
+            lock (SyncObj)
             {
-                ActiveClients.Clear();
+                State = SimulationState.Starting;
 
-                foreach (var scenarioConfiguration in Options.Scenarios)
+                foreach (var clientHandler in ActiveClients)
                 {
-                    for (int i = 0; i < scenarioConfiguration.ClientCount; i++)
-                    {
-                        var scenario = (IScenario) ServiceScope.ServiceProvider.GetRequiredService(scenarioConfiguration.ScenarioType);
-                        var clientHandler = ClientFactory.Create(scenario);
-
-                        ActiveClients.Add(clientHandler);
-                        clientHandler.Client.Stopped += ActiveClientOnStopped;
-                        clientHandler.Client.Start();
-                    }
+                    clientHandler.Client.Start();
                 }
-            }
 
-            State = SimulationState.Started;
+                State = SimulationState.Started;
+            }
         }
 
         public void Stop()
         {
-            State = SimulationState.Stopping;
-
-            lock (ActiveClients)
+            lock (SyncObj)
             {
+                State = SimulationState.Stopping;
+
                 foreach (var activeClient in ActiveClients)
                 {
                     activeClient.Client.Stop();
                 }
-            }
 
-            State = SimulationState.Stopped;
-        }
-
-        private void ActiveClientOnStopped(object sender, EventArgs e)
-        {
-            var client = (IClient) sender;
-
-            lock (ActiveClients)
-            {
-                ActiveClients.RemoveAll(c => c.Client == client);
+                State = SimulationState.Stopped;
             }
         }
 

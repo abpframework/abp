@@ -8,8 +8,6 @@ namespace Volo.ClientSimulation.Clients
     {
         public IScenario Scenario { get; }
 
-        public event EventHandler Stopped;
-
         public ClientState State
         {
             get => _state;
@@ -63,7 +61,6 @@ namespace Volo.ClientSimulation.Clients
             }
 
             State = ClientState.Stopped;
-            Stopped.InvokeSafely(this);
         }
     }
 }

@@ -18,7 +18,7 @@ namespace Volo.ClientSimulation.Scenarios
 
         public override string GetDisplayText()
         {
-            return base.GetDisplayText() + $"({Duration})";
+            return base.GetDisplayText() + $" ({Duration})";
         }
     }
 }
