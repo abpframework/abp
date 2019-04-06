@@ -1,1 +1,1 @@
-﻿.simulation-client{border:1px solid #008000;background-color:#d6ffce;margin:3px;padding:5px;}
+﻿.simulation-client{border:1px solid #008000;background-color:#d6ffce;margin:3px;padding:5px;min-width:250px;overflow:hidden;display:inline-block;}

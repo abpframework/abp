@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Text;
-using System.Threading;
+using Volo.Abp.DependencyInjection;
 
 namespace Volo.ClientSimulation.Scenarios
 {
-    public abstract class Scenario : IScenario
+    public abstract class Scenario : IScenario, ITransientDependency
     {
         public IReadOnlyList<IScenarioStep> Steps => StepList.ToImmutableList();
         protected List<IScenarioStep> StepList { get; }
@@ -52,7 +51,7 @@ namespace Volo.ClientSimulation.Scenarios
             if (StepList.Count <= 0)
             {
                 throw new ApplicationException(
-                    $"No Steps defined for the scenario '{GetDisplayText()}'"
+                    $"No Steps added to the scenario '{GetDisplayText()}'"
                 );
             }
         }
@@ -60,63 +59,6 @@ namespace Volo.ClientSimulation.Scenarios
         protected void AddStep(IScenarioStep step)
         {
             StepList.Add(step);
-        }
-    }
-
-    public interface IScenario
-    {
-        IReadOnlyList<IScenarioStep> Steps { get; }
-
-        IScenarioStep CurrentStep { get; }
-
-        int CurrentStepIndex { get; }
-
-        string GetDisplayText();
-
-        void Proceed();
-    }
-
-    public interface IScenarioStep
-    {
-        void Run();
-
-        string GetDisplayText();
-    }
-
-    public abstract class ScenarioStep : IScenarioStep
-    {
-        public abstract void Run();
-
-        public virtual string GetDisplayText()
-        {
-            return GetType()
-                .Name
-                .RemovePostFix(nameof(ScenarioStep));
-        }
-    }
-
-    public class DemoScenario : Scenario
-    {
-        public DemoScenario()
-        {
-            AddStep(new SleepScenarioStep());
-            AddStep(new SleepScenarioStep(3000));
-            AddStep(new SleepScenarioStep());
-        }
-    }
-
-    public class SleepScenarioStep : ScenarioStep
-    {
-        public int Duration { get; }
-
-        public SleepScenarioStep(int duration = 1000)
-        {
-            Duration = duration;
-        }
-
-        public override void Run()
-        {
-            Thread.Sleep(Duration);
         }
     }
 }
