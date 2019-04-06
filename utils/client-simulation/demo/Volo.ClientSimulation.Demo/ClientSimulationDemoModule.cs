@@ -11,15 +11,14 @@ namespace Volo.ClientSimulation.Demo
     [DependsOn(
         typeof(AbpAspNetCoreMvcUiBasicThemeModule),
         typeof(AbpAutofacModule),
-        typeof(ClientSimulationModule)
+        typeof(ClientSimulationWebModule)
         )]
-    public class ClientSimulationWebModule : AbpModule
+    public class ClientSimulationDemoModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             Configure<ClientSimulationOptions>(options =>
             {
-                //TODO: Temporary add a DemoScenario
                 options.Scenarios.Add(
                     new ScenarioConfiguration(
                         typeof(DemoScenario),

@@ -9,7 +9,7 @@ namespace Volo.ClientSimulation.Demo
     {
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.AddApplication<ClientSimulationWebModule>(options =>
+            services.AddApplication<ClientSimulationDemoModule>(options =>
             {
                 options.UseAutofac();
             });

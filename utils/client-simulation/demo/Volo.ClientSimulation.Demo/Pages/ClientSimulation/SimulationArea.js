@@ -4,7 +4,7 @@
     var $mainContainer = null;
 
     function refreshSimulationArea() {
-        $.get('/SimulationArea')
+        $.get('/ClientSimulation/SimulationArea')
             .done(function(result) {
                 $mainContainer.html(result);
             })

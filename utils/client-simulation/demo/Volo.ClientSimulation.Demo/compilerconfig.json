@@ -1,6 +1,6 @@
 ﻿[
   {
-    "outputFile": "Pages/SimulationArea.css",
-    "inputFile": "Pages/SimulationArea.scss"
+    "outputFile": "Pages/ClientSimulation/SimulationArea.css",
+    "inputFile": "Pages/ClientSimulation/SimulationArea.scss"
   }
 ]
