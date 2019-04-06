@@ -4,8 +4,9 @@ using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
+using Volo.ClientSimulation.Scenarios;
 
-namespace Volo.ClientSimulation.Web
+namespace Volo.ClientSimulation.Demo
 {
     [DependsOn(
         typeof(AbpAspNetCoreMvcUiBasicThemeModule),
@@ -14,6 +15,20 @@ namespace Volo.ClientSimulation.Web
         )]
     public class ClientSimulationWebModule : AbpModule
     {
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            Configure<ClientSimulationOptions>(options =>
+            {
+                //TODO: Temporary add a DemoScenario
+                options.Scenarios.Add(
+                    new ScenarioConfiguration(
+                        typeof(DemoScenario),
+                        clientCount: 20
+                    )
+                );
+            });
+        }
+
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             var app = context.GetApplicationBuilder();

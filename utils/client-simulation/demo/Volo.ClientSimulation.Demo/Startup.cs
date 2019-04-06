@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp;
 
-namespace Volo.ClientSimulation.Web
+namespace Volo.ClientSimulation.Demo
 {
     public class Startup
     {

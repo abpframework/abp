@@ -14,7 +14,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
-    <ProjectReference Include="..\Volo.ClientSimulation\Volo.ClientSimulation.csproj" />
+    <ProjectReference Include="..\..\src\Volo.ClientSimulation\Volo.ClientSimulation.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,11 +1,10 @@
 ﻿using System;
 using System.IO;
-using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Serilog;
 using Serilog.Events;
 
-namespace Volo.ClientSimulation.Web
+namespace Volo.ClientSimulation.Demo
 {
     public class Program
     {
