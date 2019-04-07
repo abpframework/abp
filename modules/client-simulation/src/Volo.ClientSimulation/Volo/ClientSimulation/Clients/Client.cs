@@ -1,12 +1,14 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
+using Volo.Abp;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.Threading;
 using Volo.ClientSimulation.Scenarios;
 
 namespace Volo.ClientSimulation.Clients
 {
-    public class Client : IClient
+    public class Client : IClient, ITransientDependency
     {
-        public IScenario Scenario { get; }
+        public Scenario Scenario { get; private set; }
 
         public ClientState State
         {
@@ -19,7 +21,7 @@ namespace Volo.ClientSimulation.Clients
 
         protected readonly object SyncLock = new object();
 
-        public Client(IScenario scenario)
+        public void Initialize(Scenario scenario)
         {
             Scenario = scenario;
         }
@@ -30,7 +32,7 @@ namespace Volo.ClientSimulation.Clients
             {
                 if (State != ClientState.Stopped)
                 {
-                    throw new ApplicationException("State is not stopped. It is " + State);
+                    throw new UserFriendlyException($"Client should be stopped to be able to start it. Current state is '{State}'.");
                 }
 
                 State = ClientState.Running;
@@ -55,12 +57,21 @@ namespace Volo.ClientSimulation.Clients
 
         private void Run()
         {
-            while (State == ClientState.Running)
-            {
-                Scenario.Proceed();
-            }
+            Scenario.Reset();
 
-            State = ClientState.Stopped;
+            while (true)
+            {
+                lock (SyncLock)
+                {
+                    if (State != ClientState.Running)
+                    {
+                        State = ClientState.Stopped;
+                        break;
+                    }
+                }
+
+                AsyncHelper.RunSync(() => Scenario.ProceedAsync());
+            }
         }
     }
 }

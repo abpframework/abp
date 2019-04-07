@@ -1,4 +1,4 @@
-﻿using System.Threading;
+﻿using System.Threading.Tasks;
 
 namespace Volo.ClientSimulation.Scenarios
 {
@@ -11,9 +11,9 @@ namespace Volo.ClientSimulation.Scenarios
             Duration = duration;
         }
 
-        public override void Run()
+        protected override Task ExecuteAsync()
         {
-            Thread.Sleep(Duration);
+            return Task.Delay(Duration);
         }
 
         public override string GetDisplayText()

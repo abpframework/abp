@@ -4,9 +4,11 @@ namespace Volo.ClientSimulation.Clients
 {
     public interface IClient
     {
-        IScenario Scenario { get; }
+        Scenario Scenario { get; }
 
         ClientState State { get; }
+
+        void Initialize(Scenario scenario);
 
         void Start();
 

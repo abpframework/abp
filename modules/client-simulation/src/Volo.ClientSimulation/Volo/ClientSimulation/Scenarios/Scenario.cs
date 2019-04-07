@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.ClientSimulation.Scenarios
 {
-    public abstract class Scenario : IScenario, ITransientDependency
+    public abstract class Scenario : ITransientDependency
     {
-        public IReadOnlyList<IScenarioStep> Steps => StepList.ToImmutableList();
-        protected List<IScenarioStep> StepList { get; }
+        public IReadOnlyList<ScenarioStep> Steps => StepList.ToImmutableList();
+        protected List<ScenarioStep> StepList { get; }
 
-        public IScenarioStep CurrentStep
+        public ScenarioStep CurrentStep
         {
             get
             {
@@ -22,7 +23,7 @@ namespace Volo.ClientSimulation.Scenarios
 
         protected Scenario()
         {
-            StepList = new List<IScenarioStep>();
+            StepList = new List<ScenarioStep>();
         }
 
         public virtual string GetDisplayText()
@@ -32,11 +33,11 @@ namespace Volo.ClientSimulation.Scenarios
                 .RemovePostFix(nameof(Scenario));
         }
 
-        public virtual void Proceed()
+        public virtual async Task ProceedAsync()
         {
             CheckStepCount();
 
-            StepList[CurrentStepIndex].Run();
+            await StepList[CurrentStepIndex].RunAsync();
 
             CurrentStepIndex++;
 
@@ -44,6 +45,11 @@ namespace Volo.ClientSimulation.Scenarios
             {
                 CurrentStepIndex = 0;
             }
+        }
+
+        public void Reset()
+        {
+            CurrentStepIndex = 0;
         }
 
         private void CheckStepCount()
@@ -56,7 +62,7 @@ namespace Volo.ClientSimulation.Scenarios
             }
         }
 
-        protected void AddStep(IScenarioStep step)
+        protected void AddStep(ScenarioStep step)
         {
             StepList.Add(step);
         }

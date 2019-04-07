@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Volo.Abp;
 using Volo.Abp.DependencyInjection;
 using Volo.ClientSimulation.Clients;
 using Volo.ClientSimulation.Scenarios;
@@ -12,9 +13,7 @@ namespace Volo.ClientSimulation
     {
         public SimulationState State { get; private set; }
 
-        public List<IDisposableClientHandler> ActiveClients { get; }
-
-        protected IClientFactory ClientFactory { get; }
+        public List<IClient> Clients { get; }
 
         protected ClientSimulationOptions Options { get; }
 
@@ -23,24 +22,25 @@ namespace Volo.ClientSimulation
         protected readonly object SyncObj = new object();
 
         public Simulation(
-            IClientFactory clientFactory, 
             IServiceScopeFactory serviceScopeFactory,
             IOptions<ClientSimulationOptions> options)
         {
-            ClientFactory = clientFactory;
             Options = options.Value;
             ServiceScope = serviceScopeFactory.CreateScope();
-            ActiveClients = new List<IDisposableClientHandler>();
+
+            Clients = new List<IClient>();
 
             foreach (var scenarioConfiguration in Options.Scenarios)
             {
                 for (int i = 0; i < scenarioConfiguration.ClientCount; i++)
                 {
-                    var scenario = (IScenario) ServiceScope.ServiceProvider.GetRequiredService(
+                    var scenario = (Scenario) ServiceScope.ServiceProvider.GetRequiredService(
                         scenarioConfiguration.ScenarioType
                     );
 
-                    ActiveClients.Add(ClientFactory.Create(scenario));
+                    var client = ServiceScope.ServiceProvider.GetRequiredService<IClient>();
+                    client.Initialize(scenario);
+                    Clients.Add(client);
                 }
             }
         }
@@ -49,11 +49,16 @@ namespace Volo.ClientSimulation
         {
             lock (SyncObj)
             {
+                if (State != SimulationState.Stopped)
+                {
+                    throw new UserFriendlyException($"Simulation should be stopped to be able to start. Current state is '{State}'.");
+                }
+
                 State = SimulationState.Starting;
 
-                foreach (var clientHandler in ActiveClients)
+                foreach (var client in Clients)
                 {
-                    clientHandler.Client.Start();
+                    client.Start();
                 }
 
                 State = SimulationState.Started;
@@ -64,11 +69,16 @@ namespace Volo.ClientSimulation
         {
             lock (SyncObj)
             {
+                if (State != SimulationState.Started)
+                {
+                    throw new UserFriendlyException($"Simulation should be started to be able to stop. Current state is '{State}'.");
+                }
+
                 State = SimulationState.Stopping;
 
-                foreach (var activeClient in ActiveClients)
+                foreach (var client in Clients)
                 {
-                    activeClient.Client.Stop();
+                    client.Stop();
                 }
 
                 State = SimulationState.Stopped;

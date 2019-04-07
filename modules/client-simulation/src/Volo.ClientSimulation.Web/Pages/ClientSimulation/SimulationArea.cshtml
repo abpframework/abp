@@ -19,30 +19,30 @@
 </abp-alert>
 <abp-card class="mt-3">
     <abp-card-body>
-        @foreach (var clientHandler in Model.Simulation.ActiveClients)
+        @foreach (var client in Model.Simulation.Clients)
         {
-            <span class="simulation-client simulation-client-@clientHandler.Client.State.ToString().ToLowerInvariant()">
+            <span class="simulation-client simulation-client-@client.State.ToString().ToLowerInvariant()">
                 <span class="simulation-client-icon">
-                    @if (clientHandler.Client.State == ClientState.Running)
+                    @if (client.State == ClientState.Running)
                     {
                         <i class="fa fa-play"></i>
                     }
-                    else if (clientHandler.Client.State == ClientState.Stopping)
+                    else if (client.State == ClientState.Stopping)
                     {
                         <i class="fa fa-eject"></i>
                     }
-                    else if (clientHandler.Client.State == ClientState.Stopped)
+                    else if (client.State == ClientState.Stopped)
                     {
                         <i class="fa fa-stop"></i>
                     }
                 </span>
                 <span class="simulation-client-scenario">
-                    @clientHandler.Client.Scenario.GetDisplayText()
+                    @client.Scenario.GetDisplayText()
                 </span>
                 <span class="simulation-client-scenario-current-step">
-                @if (clientHandler.Client.State != ClientState.Stopped)
+                @if (client.State != ClientState.Stopped)
                 {
-                    <text>| @clientHandler.Client.Scenario.CurrentStep.GetDisplayText()</text>
+                    <text>| @client.Scenario.CurrentStep.GetDisplayText()</text>
                 }
                 </span>
             </span>
