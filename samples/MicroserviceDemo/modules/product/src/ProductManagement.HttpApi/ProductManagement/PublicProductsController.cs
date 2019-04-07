@@ -5,7 +5,7 @@ using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Mvc;
 
-namespace MyCompanyName.ProductManagement
+namespace ProductManagement
 {
     [RemoteService]
     [Area("productManagement")]
