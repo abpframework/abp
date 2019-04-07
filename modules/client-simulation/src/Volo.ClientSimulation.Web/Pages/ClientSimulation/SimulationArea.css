@@ -21,3 +21,6 @@
     background-color: #fde0d7; }
     .simulation-client.simulation-client-stopping .simulation-client-icon {
       color: #f88562; }
+
+.simulation-scenario .step-positive-fail-count {
+  color: red; }

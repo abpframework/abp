@@ -12,8 +12,6 @@ namespace Volo.ClientSimulation.Clients
     {
         public event EventHandler Stopped;
 
-        public Scenario Scenario { get; private set; }
-
         public ClientState State
         {
             get => _state;
@@ -21,9 +19,10 @@ namespace Volo.ClientSimulation.Clients
         }
         private volatile ClientState _state;
 
-        private Thread _thread;
+        protected Scenario Scenario { get; private set; }
+        protected object SyncLock { get; } = new object();
 
-        protected readonly object SyncLock = new object();
+        protected Thread ClientThread;
 
         public void Initialize(Scenario scenario)
         {
@@ -50,8 +49,8 @@ namespace Volo.ClientSimulation.Clients
                 State = ClientState.Running;
 
                 Scenario.Reset();
-                _thread = new Thread(Run);
-                _thread.Start();
+                ClientThread = new Thread(Run);
+                ClientThread.Start();
             }
         }
 
@@ -89,7 +88,7 @@ namespace Volo.ClientSimulation.Clients
                     if (State != ClientState.Running)
                     {
                         State = ClientState.Stopped;
-                        _thread = null;
+                        ClientThread = null;
                         Stopped.InvokeSafely(this);
                         break;
                     }

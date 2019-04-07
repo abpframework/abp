@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
@@ -22,13 +23,26 @@ namespace Volo.ClientSimulation.Scenarios
 
         protected int CurrentStepIndex { get; set; }
 
-        protected Scenario()
+        protected ScenarioExecutionContext ExecutionContext { get; }
+
+        protected Scenario(IServiceProvider serviceProvider)
         {
+            ExecutionContext = new ScenarioExecutionContext(serviceProvider);
             Steps = new List<ScenarioStep>();
         }
 
         public virtual string GetDisplayText()
         {
+            var displayNameAttr = GetType()
+                .GetCustomAttributes(true)
+                .OfType<DisplayNameAttribute>()
+                .FirstOrDefault();
+
+            if (displayNameAttr != null)
+            {
+                return displayNameAttr.DisplayName;
+            }
+
             return GetType()
                 .Name
                 .RemovePostFix(nameof(Scenario));
@@ -38,7 +52,7 @@ namespace Volo.ClientSimulation.Scenarios
         {
             CheckStepCount();
 
-            await Steps[CurrentStepIndex].RunAsync();
+            await Steps[CurrentStepIndex].RunAsync(ExecutionContext);
 
             CurrentStepIndex++;
 
@@ -51,10 +65,13 @@ namespace Volo.ClientSimulation.Scenarios
         public void Reset()
         {
             CurrentStepIndex = 0;
+
             foreach (var step in Steps)
             {
                 step.Reset();
             }
+
+            ExecutionContext.Reset();
         }
 
         public ScenarioSnapshot CreateSnapshot()

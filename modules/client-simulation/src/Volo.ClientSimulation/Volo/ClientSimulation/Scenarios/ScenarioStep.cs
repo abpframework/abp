@@ -1,6 +1,11 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
+using System.Resources;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.ClientSimulation.Snapshot;
 
 namespace Volo.ClientSimulation.Scenarios
@@ -15,27 +20,17 @@ namespace Volo.ClientSimulation.Scenarios
         protected double MaxExecutionDuration;
         protected double LastExecutionDuration;
 
-        public async Task RunAsync()
+        public async Task RunAsync(ScenarioExecutionContext context)
         {
-            await BeforeExecuteAsync();
+            await BeforeExecuteAsync(context);
 
             var stopwatch = Stopwatch.StartNew();
 
             try
             {
-                await ExecuteAsync();
-                SuccessCount++;
-            }
-            catch
-            {
-                //TODO: Log!
-                FailCount++;
-            }
-            finally
-            {
-                stopwatch.Stop();
+                await ExecuteAsync(context);
 
-                ExecutionCount++;
+                SuccessCount++;
 
                 LastExecutionDuration = stopwatch.Elapsed.TotalMilliseconds;
 
@@ -51,24 +46,49 @@ namespace Volo.ClientSimulation.Scenarios
                     MaxExecutionDuration = LastExecutionDuration;
                 }
             }
+            catch(Exception ex)
+            {
+                FailCount++;
 
-            await AfterExecuteAsync();
+                context
+                    .ServiceProvider
+                    .GetService<ILogger<ScenarioStep>>()
+                    .LogException(ex);
+            }
+            finally
+            {
+                stopwatch.Stop();
+
+                ExecutionCount++;
+            }
+
+            await AfterExecuteAsync(context);
         }
 
-        protected virtual Task BeforeExecuteAsync()
+        protected virtual Task BeforeExecuteAsync(ScenarioExecutionContext context)
         {
             return Task.CompletedTask;
         }
 
-        protected abstract Task ExecuteAsync();
+        protected abstract Task ExecuteAsync(ScenarioExecutionContext context);
 
-        protected virtual Task AfterExecuteAsync()
+        protected virtual Task AfterExecuteAsync(ScenarioExecutionContext context)
         {
             return Task.CompletedTask;
         }
 
         public virtual string GetDisplayText()
         {
+            var displayNameAttr = GetType()
+                .GetCustomAttributes(true)
+                .OfType<DisplayNameAttribute>()
+                .FirstOrDefault();
+
+            if (displayNameAttr != null)
+            {
+                return displayNameAttr.DisplayName;
+            }
+
             return GetType()
                 .Name
                 .RemovePostFix(nameof(ScenarioStep));
@@ -84,9 +104,9 @@ namespace Volo.ClientSimulation.Scenarios
                 MaxExecutionDuration = MaxExecutionDuration,
                 MinExecutionDuration = MinExecutionDuration,
                 TotalExecutionDuration = TotalExecutionDuration,
-                AvgExecutionDuration = ExecutionCount == 0 
+                AvgExecutionDuration = SuccessCount == 0 
                     ? 0.0 
-                    : TotalExecutionDuration / ExecutionCount,
+                    : TotalExecutionDuration / SuccessCount,
                 FailCount = FailCount,
                 SuccessCount = SuccessCount
             };

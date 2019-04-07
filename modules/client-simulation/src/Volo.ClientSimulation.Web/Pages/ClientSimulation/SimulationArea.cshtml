@@ -57,25 +57,52 @@
         Scenarios
     </abp-card-header>
     <abp-card-body>
-        <abp-row>
             @foreach (var scenario in Model.Snapshot.Scenarios)
             {
-                <abp-column size-md="_6">
-                    <abp-card>
+                    <abp-card class="simulation-scenario">
                         <abp-card-header>
                             @scenario.DisplayText
                         </abp-card-header>
                         <abp-card-body>
-                            <pre>
-@foreach (var step in scenario.Steps)
-{
-    <text>@step.DisplayText: E: @step.ExecutionCount | S: @step.SuccessCount | A: @step.AvgExecutionDuration.ToString("0.00") ms. </text>@Environment.NewLine
-}
-</pre>
+                            <abp-table>
+                                <thead>
+                                <tr>
+                                    <th>Step</th>
+                                    <th>Execution</th>
+                                    <th>Success</th>
+                                    <th>Fail</th>
+                                    <th>Min</th>
+                                    <th>Max</th>
+                                    <th>Avg</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach (var step in scenario.Steps)
+                                {
+                                    <tr>
+                                        <th>@step.DisplayText</th>
+                                        <th>@step.ExecutionCount</th>
+                                        <th>@step.SuccessCount</th>
+                                        <th>
+                                            @if (step.FailCount > 0)
+                                            {
+                                                <span class="step-positive-fail-count">@step.FailCount</span>
+                                            }
+                                            else
+                                            {
+                                                <text>@step.FailCount</text>
+                                            }
+                                        </th>
+                                        <th>@step.MinExecutionDuration.ToString("0.0") ms</th>
+                                        <th>@step.MaxExecutionDuration.ToString("0.0") ms</th>
+                                        <th>@step.AvgExecutionDuration.ToString("0.0") ms</th>
+                                    </tr>
+                                }
+                                </tbody>
+                            </abp-table>
+                    
                         </abp-card-body>
                     </abp-card>
-                </abp-column>
             }
-        </abp-row>
     </abp-card-body>
 </abp-card>

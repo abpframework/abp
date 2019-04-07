@@ -8,13 +8,15 @@ namespace Volo.ClientSimulation.Scenarios
 
         public int Duration { get; }
 
-        public SleepScenarioStep(string name, int duration = 1000)
+        public SleepScenarioStep(
+            string name, 
+            int duration = 1000)
         {
             Name = name;
             Duration = duration;
         }
 
-        protected override Task ExecuteAsync()
+        protected override Task ExecuteAsync(ScenarioExecutionContext context)
         {
             return Task.Delay(Duration);
         }

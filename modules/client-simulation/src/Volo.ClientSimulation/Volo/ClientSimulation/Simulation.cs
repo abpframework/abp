@@ -17,15 +17,19 @@ namespace Volo.ClientSimulation
     {
         public ILogger<Simulation> Logger { get; set; }
 
-        public SimulationState State { get; private set; }
+        public SimulationState State
+        {
+            get => _state;
+            private set => _state = value;
+        }
+        private volatile SimulationState _state;
 
         public List<IClient> Clients { get; }
 
         protected ClientSimulationOptions Options { get; }
         protected IServiceScopeFactory ServiceScopeFactory { get; }
         protected IServiceScope ServiceScope { get; private set; }
-
-        protected readonly object SyncObj = new object();
+        protected object SyncObj { get; } = new object();
 
         public Simulation(
             IServiceScopeFactory serviceScopeFactory,

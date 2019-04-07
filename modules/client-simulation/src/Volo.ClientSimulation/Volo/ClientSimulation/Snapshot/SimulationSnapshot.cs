@@ -56,9 +56,9 @@ namespace Volo.ClientSimulation.Snapshot
                         scenarioStepSummary.MaxExecutionDuration = scenarioStep.MaxExecutionDuration;
                     }
 
-                    scenarioStepSummary.AvgExecutionDuration = scenarioStepSummary.ExecutionCount == 0
+                    scenarioStepSummary.AvgExecutionDuration = scenarioStepSummary.SuccessCount == 0
                         ? 0.0
-                        : scenarioStepSummary.TotalExecutionDuration / scenarioStepSummary.ExecutionCount;
+                        : scenarioStepSummary.TotalExecutionDuration / scenarioStepSummary.SuccessCount;
                 }
             }
 

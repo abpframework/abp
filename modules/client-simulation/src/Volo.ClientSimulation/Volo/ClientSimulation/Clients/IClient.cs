@@ -8,8 +8,6 @@ namespace Volo.ClientSimulation.Clients
     {
         event EventHandler Stopped;
 
-        Scenario Scenario { get; }
-
         ClientState State { get; }
 
         void Initialize(Scenario scenario);
