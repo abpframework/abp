@@ -1,13 +1,17 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using Volo.Abp;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Threading;
 using Volo.ClientSimulation.Scenarios;
+using Volo.ClientSimulation.Snapshot;
 
 namespace Volo.ClientSimulation.Clients
 {
     public class Client : IClient, ITransientDependency
     {
+        public event EventHandler Stopped;
+
         public Scenario Scenario { get; private set; }
 
         public ClientState State
@@ -23,7 +27,15 @@ namespace Volo.ClientSimulation.Clients
 
         public void Initialize(Scenario scenario)
         {
-            Scenario = scenario;
+            lock (SyncLock)
+            {
+                if (State != ClientState.Stopped)
+                {
+                    throw new UserFriendlyException($"Client should be stopped to be able to initialize it. Current state is '{State}'.");
+                }
+
+                Scenario = scenario;
+            }
         }
 
         public void Start()
@@ -37,6 +49,7 @@ namespace Volo.ClientSimulation.Clients
 
                 State = ClientState.Running;
 
+                Scenario.Reset();
                 _thread = new Thread(Run);
                 _thread.Start();
             }
@@ -55,10 +68,20 @@ namespace Volo.ClientSimulation.Clients
             }
         }
 
+        public ClientSnapshot CreateSnapshot()
+        {
+            lock (SyncLock)
+            {
+                return new ClientSnapshot
+                {
+                    State = State,
+                    Scenario = Scenario.CreateSnapshot()
+                };
+            }
+        }
+
         private void Run()
         {
-            Scenario.Reset();
-
             while (true)
             {
                 lock (SyncLock)
@@ -66,6 +89,8 @@ namespace Volo.ClientSimulation.Clients
                     if (State != ClientState.Running)
                     {
                         State = ClientState.Stopped;
+                        _thread = null;
+                        Stopped.InvokeSafely(this);
                         break;
                     }
                 }

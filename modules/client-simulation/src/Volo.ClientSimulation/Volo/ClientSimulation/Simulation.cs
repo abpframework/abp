@@ -1,23 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Volo.Abp;
 using Volo.Abp.DependencyInjection;
 using Volo.ClientSimulation.Clients;
 using Volo.ClientSimulation.Scenarios;
+using Volo.ClientSimulation.Snapshot;
 
 namespace Volo.ClientSimulation
 {
     public class Simulation : ISingletonDependency, IDisposable
     {
+        public ILogger<Simulation> Logger { get; set; }
+
         public SimulationState State { get; private set; }
 
         public List<IClient> Clients { get; }
 
         protected ClientSimulationOptions Options { get; }
-
-        protected IServiceScope ServiceScope { get; }
+        protected IServiceScopeFactory ServiceScopeFactory { get; }
+        protected IServiceScope ServiceScope { get; private set; }
 
         protected readonly object SyncObj = new object();
 
@@ -25,27 +31,15 @@ namespace Volo.ClientSimulation
             IServiceScopeFactory serviceScopeFactory,
             IOptions<ClientSimulationOptions> options)
         {
+            ServiceScopeFactory = serviceScopeFactory;
             Options = options.Value;
-            ServiceScope = serviceScopeFactory.CreateScope();
+
+            Logger = NullLogger<Simulation>.Instance;
 
             Clients = new List<IClient>();
-
-            foreach (var scenarioConfiguration in Options.Scenarios)
-            {
-                for (int i = 0; i < scenarioConfiguration.ClientCount; i++)
-                {
-                    var scenario = (Scenario) ServiceScope.ServiceProvider.GetRequiredService(
-                        scenarioConfiguration.ScenarioType
-                    );
-
-                    var client = ServiceScope.ServiceProvider.GetRequiredService<IClient>();
-                    client.Initialize(scenario);
-                    Clients.Add(client);
-                }
-            }
         }
 
-        public void Start()
+        public virtual void Start()
         {
             lock (SyncObj)
             {
@@ -56,16 +50,42 @@ namespace Volo.ClientSimulation
 
                 State = SimulationState.Starting;
 
-                foreach (var client in Clients)
+                try
                 {
-                    client.Start();
-                }
+                    DisposeResources();
+                    ServiceScope = ServiceScopeFactory.CreateScope();
 
-                State = SimulationState.Started;
+                    foreach (var scenarioConfiguration in Options.Scenarios)
+                    {
+                        for (int i = 0; i < scenarioConfiguration.ClientCount; i++)
+                        {
+                            var scenario = (Scenario)ServiceScope.ServiceProvider.GetRequiredService(
+                                scenarioConfiguration.ScenarioType
+                            );
+
+                            var client = ServiceScope.ServiceProvider.GetRequiredService<IClient>();
+                            client.Stopped += Client_OnStopped;
+                            client.Initialize(scenario);
+                            Clients.Add(client);
+                        }
+                    }
+
+                    foreach (var client in Clients)
+                    {
+                        client.Start();
+                    }
+
+                    State = SimulationState.Started;
+                }
+                catch(Exception ex)
+                {
+                    Logger.LogException(ex);
+                    State = SimulationState.Stopped;
+                }
             }
         }
 
-        public void Stop()
+        public virtual void Stop()
         {
             lock (SyncObj)
             {
@@ -80,14 +100,48 @@ namespace Volo.ClientSimulation
                 {
                     client.Stop();
                 }
-
-                State = SimulationState.Stopped;
             }
         }
 
-        public void Dispose()
+        public virtual SimulationSnapshot CreateSnapshot()
         {
-            ServiceScope.Dispose();
+            lock (SyncObj)
+            {
+                return new SimulationSnapshot
+                {
+                    State = State,
+                    Clients = Clients
+                        .Select(c => c.CreateSnapshot())
+                        .ToList()
+                };
+            }
+        }
+
+        public virtual void Dispose()
+        {
+            DisposeResources();
+        }
+
+        protected virtual void Client_OnStopped(object sender, EventArgs e)
+        {
+            lock (SyncObj)
+            {
+                if (Clients.All(c => c.State == ClientState.Stopped))
+                {
+                    OnStopped();
+                }
+            }
+        }
+
+        private void OnStopped()
+        {
+            State = SimulationState.Stopped;
+        }
+
+        private void DisposeResources()
+        {
+            Clients.Clear();
+            ServiceScope?.Dispose();
         }
     }
 }

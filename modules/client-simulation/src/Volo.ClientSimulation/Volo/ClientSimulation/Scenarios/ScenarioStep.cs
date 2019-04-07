@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Volo.ClientSimulation.Snapshot;
 
 namespace Volo.ClientSimulation.Scenarios
 {
@@ -45,6 +46,14 @@ namespace Volo.ClientSimulation.Scenarios
             return GetType()
                 .Name
                 .RemovePostFix(nameof(ScenarioStep));
+        }
+
+        public ScenarioStepSnapshot CreateSnapshot()
+        {
+            return new ScenarioStepSnapshot
+            {
+                DisplayText = GetDisplayText()
+            };
         }
     }
 }

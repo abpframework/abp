@@ -1,12 +1,15 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Volo.ClientSimulation.Snapshot;
 
 namespace Volo.ClientSimulation.Pages.ClientSimulation
 {
     public class SimulationAreaModel : PageModel
     {
-        public Simulation Simulation { get; }
+        public SimulationSnapshot Snapshot { get; private set; }
+
+        protected Simulation Simulation { get; }
 
         public SimulationAreaModel(Simulation simulation)
         {
@@ -15,6 +18,7 @@ namespace Volo.ClientSimulation.Pages.ClientSimulation
 
         public Task OnGetAsync()
         {
+            Snapshot = Simulation.CreateSnapshot();
             return Task.CompletedTask;
         }
 
