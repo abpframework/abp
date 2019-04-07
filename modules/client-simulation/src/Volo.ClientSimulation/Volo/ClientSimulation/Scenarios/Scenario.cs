@@ -51,6 +51,10 @@ namespace Volo.ClientSimulation.Scenarios
         public void Reset()
         {
             CurrentStepIndex = 0;
+            foreach (var step in Steps)
+            {
+                step.Reset();
+            }
         }
 
         public ScenarioSnapshot CreateSnapshot()

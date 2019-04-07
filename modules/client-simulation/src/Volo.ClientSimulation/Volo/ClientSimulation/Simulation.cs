@@ -105,9 +105,11 @@ namespace Volo.ClientSimulation
 
         public virtual SimulationSnapshot CreateSnapshot()
         {
+            SimulationSnapshot snapshot;
+
             lock (SyncObj)
             {
-                return new SimulationSnapshot
+                snapshot = new SimulationSnapshot
                 {
                     State = State,
                     Clients = Clients
@@ -115,6 +117,10 @@ namespace Volo.ClientSimulation
                         .ToList()
                 };
             }
+
+            snapshot.CreateSummaries();
+
+            return snapshot;
         }
 
         public virtual void Dispose()

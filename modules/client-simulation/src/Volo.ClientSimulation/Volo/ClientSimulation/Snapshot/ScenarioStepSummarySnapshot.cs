@@ -3,7 +3,7 @@
 namespace Volo.ClientSimulation.Snapshot
 {
     [Serializable]
-    public class ScenarioStepSnapshot
+    public class ScenarioStepSummarySnapshot
     {
         public string DisplayText { get; set; }
 
@@ -20,7 +20,5 @@ namespace Volo.ClientSimulation.Snapshot
         public double MinExecutionDuration { get; set; }
 
         public double MaxExecutionDuration { get; set; }
-
-        public double LastExecutionDuration { get; set; }
     }
 }

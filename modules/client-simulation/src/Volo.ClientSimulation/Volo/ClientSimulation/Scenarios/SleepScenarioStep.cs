@@ -4,10 +4,13 @@ namespace Volo.ClientSimulation.Scenarios
 {
     public class SleepScenarioStep : ScenarioStep
     {
+        public string Name { get; }
+
         public int Duration { get; }
 
-        public SleepScenarioStep(int duration = 1000)
+        public SleepScenarioStep(string name, int duration = 1000)
         {
+            Name = name;
             Duration = duration;
         }
 
@@ -18,7 +21,7 @@ namespace Volo.ClientSimulation.Scenarios
 
         public override string GetDisplayText()
         {
-            return base.GetDisplayText() + $" ({Duration})";
+            return base.GetDisplayText() + $" ({Name})";
         }
     }
 }

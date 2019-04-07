@@ -18,6 +18,9 @@
     </span>
 </abp-alert>
 <abp-card class="mt-3">
+    <abp-card-header>
+        Clients
+    </abp-card-header>
     <abp-card-body>
         @foreach (var client in Model.Snapshot.Clients)
         {
@@ -40,12 +43,39 @@
                     @client.Scenario.DisplayText
                 </span>
                 <span class="simulation-client-scenario-current-step">
-                @if (client.State != ClientState.Stopped)
-                {
-                    <text>| @client.Scenario.CurrentStep.DisplayText</text>
-                }
+                    @if (client.State != ClientState.Stopped)
+                    {
+                        <text>| @client.Scenario.CurrentStep.DisplayText</text>
+                    }
                 </span>
             </span>
         }
+    </abp-card-body>
+</abp-card>
+<abp-card class="mt-3">
+    <abp-card-header>
+        Scenarios
+    </abp-card-header>
+    <abp-card-body>
+        <abp-row>
+            @foreach (var scenario in Model.Snapshot.Scenarios)
+            {
+                <abp-column size-md="_6">
+                    <abp-card>
+                        <abp-card-header>
+                            @scenario.DisplayText
+                        </abp-card-header>
+                        <abp-card-body>
+                            <pre>
+@foreach (var step in scenario.Steps)
+{
+    <text>@step.DisplayText: E: @step.ExecutionCount | S: @step.SuccessCount | A: @step.AvgExecutionDuration.ToString("0.00") ms. </text>@Environment.NewLine
+}
+</pre>
+                        </abp-card-body>
+                    </abp-card>
+                </abp-column>
+            }
+        </abp-row>
     </abp-card-body>
 </abp-card>
