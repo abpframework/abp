@@ -39,13 +39,17 @@
 
 <div class="p-5">
 
-    @if (Model.Projects.IsNullOrEmpty())
+    @if (!Model.Projects.Any())
     {
-        <div class="alert alert-secondary text-center" role="alert">
-            No project!
-        </div>
+    <div class="alert alert-secondary col-md-6 text-center" role="alert">
+        <h4 class="alert-heading">No project!</h4>
+        <p>Welcome to VoloDocs! There`s no defined project yet.</p>
+        <hr />
+        <a href="@Model.CreateProjectLink">Click here to start your first project <i class="fa fa-arrow-circle-right"></i></a>
+ 
+    </div>
     }
-    @if (Model.Projects.Count > 0)
+    else if (Model.Projects.Count > 1)
     {
         <h1>@L["Projects"]</h1>
         <p>
