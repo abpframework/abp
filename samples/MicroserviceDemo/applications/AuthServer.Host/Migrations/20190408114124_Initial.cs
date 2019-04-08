@@ -14,15 +14,19 @@ namespace AuthServer.Host.Migrations
                     Id = table.Column<Guid>(nullable: false),
                     ExtraProperties = table.Column<string>(nullable: true),
                     ConcurrencyStamp = table.Column<string>(nullable: true),
+                    ApplicationName = table.Column<string>(maxLength: 96, nullable: true),
                     UserId = table.Column<Guid>(nullable: true),
                     UserName = table.Column<string>(maxLength: 256, nullable: true),
                     TenantId = table.Column<Guid>(nullable: true),
+                    TenantName = table.Column<string>(nullable: true),
                     ImpersonatorUserId = table.Column<Guid>(nullable: true),
                     ImpersonatorTenantId = table.Column<Guid>(nullable: true),
                     ExecutionTime = table.Column<DateTime>(nullable: false),
                     ExecutionDuration = table.Column<int>(nullable: false),
                     ClientIpAddress = table.Column<string>(maxLength: 64, nullable: true),
                     ClientName = table.Column<string>(maxLength: 128, nullable: true),
+                    ClientId = table.Column<string>(maxLength: 64, nullable: true),
+                    CorrelationId = table.Column<string>(maxLength: 64, nullable: true),
                     BrowserInfo = table.Column<string>(maxLength: 512, nullable: true),
                     HttpMethod = table.Column<string>(maxLength: 16, nullable: true),
                     Url = table.Column<string>(maxLength: 256, nullable: true),
@@ -147,6 +151,13 @@ namespace AuthServer.Host.Migrations
                     Id = table.Column<Guid>(nullable: false),
                     ExtraProperties = table.Column<string>(nullable: true),
                     ConcurrencyStamp = table.Column<string>(nullable: true),
+                    CreationTime = table.Column<DateTime>(nullable: false),
+                    CreatorId = table.Column<Guid>(nullable: true),
+                    LastModificationTime = table.Column<DateTime>(nullable: true),
+                    LastModifierId = table.Column<Guid>(nullable: true),
+                    IsDeleted = table.Column<bool>(nullable: false, defaultValue: false),
+                    DeleterId = table.Column<Guid>(nullable: true),
+                    DeletionTime = table.Column<DateTime>(nullable: true),
                     Name = table.Column<string>(maxLength: 200, nullable: false),
                     DisplayName = table.Column<string>(maxLength: 200, nullable: true),
                     Description = table.Column<string>(maxLength: 1000, nullable: true),
@@ -164,11 +175,18 @@ namespace AuthServer.Host.Migrations
                     Id = table.Column<Guid>(nullable: false),
                     ExtraProperties = table.Column<string>(nullable: true),
                     ConcurrencyStamp = table.Column<string>(nullable: true),
+                    CreationTime = table.Column<DateTime>(nullable: false),
+                    CreatorId = table.Column<Guid>(nullable: true),
+                    LastModificationTime = table.Column<DateTime>(nullable: true),
+                    LastModifierId = table.Column<Guid>(nullable: true),
+                    IsDeleted = table.Column<bool>(nullable: false, defaultValue: false),
+                    DeleterId = table.Column<Guid>(nullable: true),
+                    DeletionTime = table.Column<DateTime>(nullable: true),
                     ClientId = table.Column<string>(maxLength: 200, nullable: false),
                     ClientName = table.Column<string>(maxLength: 200, nullable: true),
                     Description = table.Column<string>(maxLength: 1000, nullable: true),
-                    ClientUri = table.Column<string>(maxLength: 2000, nullable: true),
-                    LogoUri = table.Column<string>(maxLength: 2000, nullable: true),
+                    ClientUri = table.Column<string>(maxLength: 300, nullable: true),
+                    LogoUri = table.Column<string>(maxLength: 300, nullable: true),
                     Enabled = table.Column<bool>(nullable: false),
                     ProtocolType = table.Column<string>(maxLength: 200, nullable: false),
                     RequireClientSecret = table.Column<bool>(nullable: false),
@@ -178,9 +196,9 @@ namespace AuthServer.Host.Migrations
                     RequirePkce = table.Column<bool>(nullable: false),
                     AllowPlainTextPkce = table.Column<bool>(nullable: false),
                     AllowAccessTokensViaBrowser = table.Column<bool>(nullable: false),
-                    FrontChannelLogoutUri = table.Column<string>(maxLength: 2000, nullable: true),
+                    FrontChannelLogoutUri = table.Column<string>(maxLength: 300, nullable: true),
                     FrontChannelLogoutSessionRequired = table.Column<bool>(nullable: false),
-                    BackChannelLogoutUri = table.Column<string>(maxLength: 2000, nullable: true),
+                    BackChannelLogoutUri = table.Column<string>(maxLength: 300, nullable: true),
                     BackChannelLogoutSessionRequired = table.Column<bool>(nullable: false),
                     AllowOfflineAccess = table.Column<bool>(nullable: false),
                     IdentityTokenLifetime = table.Column<int>(nullable: false),
@@ -211,6 +229,13 @@ namespace AuthServer.Host.Migrations
                     Id = table.Column<Guid>(nullable: false),
                     ExtraProperties = table.Column<string>(nullable: true),
                     ConcurrencyStamp = table.Column<string>(nullable: true),
+                    CreationTime = table.Column<DateTime>(nullable: false),
+                    CreatorId = table.Column<Guid>(nullable: true),
+                    LastModificationTime = table.Column<DateTime>(nullable: true),
+                    LastModifierId = table.Column<Guid>(nullable: true),
+                    IsDeleted = table.Column<bool>(nullable: false, defaultValue: false),
+                    DeleterId = table.Column<Guid>(nullable: true),
+                    DeletionTime = table.Column<DateTime>(nullable: true),
                     Name = table.Column<string>(maxLength: 200, nullable: false),
                     DisplayName = table.Column<string>(maxLength: 200, nullable: true),
                     Description = table.Column<string>(maxLength: 1000, nullable: true),
@@ -278,6 +303,7 @@ namespace AuthServer.Host.Migrations
                     TenantId = table.Column<Guid>(nullable: true),
                     ChangeTime = table.Column<DateTime>(nullable: false),
                     ChangeType = table.Column<byte>(nullable: false),
+                    EntityTenantId = table.Column<Guid>(nullable: true),
                     EntityId = table.Column<string>(maxLength: 128, nullable: false),
                     EntityTypeFullName = table.Column<string>(maxLength: 128, nullable: false),
                     ExtraProperties = table.Column<string>(nullable: true)
@@ -542,7 +568,7 @@ namespace AuthServer.Host.Migrations
                 columns: table => new
                 {
                     ClientId = table.Column<Guid>(nullable: false),
-                    PostLogoutRedirectUri = table.Column<string>(maxLength: 2000, nullable: false)
+                    PostLogoutRedirectUri = table.Column<string>(maxLength: 200, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -560,8 +586,8 @@ namespace AuthServer.Host.Migrations
                 columns: table => new
                 {
                     ClientId = table.Column<Guid>(nullable: false),
-                    Key = table.Column<string>(maxLength: 250, nullable: false),
-                    Value = table.Column<string>(maxLength: 2000, nullable: false)
+                    Key = table.Column<string>(maxLength: 64, nullable: false),
+                    Value = table.Column<string>(maxLength: 128, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -579,7 +605,7 @@ namespace AuthServer.Host.Migrations
                 columns: table => new
                 {
                     ClientId = table.Column<Guid>(nullable: false),
-                    RedirectUri = table.Column<string>(maxLength: 2000, nullable: false)
+                    RedirectUri = table.Column<string>(maxLength: 200, nullable: false)
                 },
                 constraints: table =>
                 {

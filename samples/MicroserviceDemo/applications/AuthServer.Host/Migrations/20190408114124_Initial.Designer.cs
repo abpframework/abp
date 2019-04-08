@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AuthServer.Host.Migrations
 {
     [DbContext(typeof(AuthServerDbContext))]
-    [Migration("20190404130536_Make_IDS4_Entities_Audited")]
-    partial class Make_IDS4_Entities_Audited
+    [Migration("20190408114124_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

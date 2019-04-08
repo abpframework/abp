@@ -10,7 +10,7 @@ using ProductService.Host.EntityFrameworkCore;
 namespace ProductService.Host.Migrations
 {
     [DbContext(typeof(ProductServiceMigrationDbContext))]
-    [Migration("20190121115908_Initial")]
+    [Migration("20190408114353_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -42,6 +42,9 @@ namespace ProductService.Host.Migrations
 
                     b.Property<string>("ExtraProperties")
                         .HasColumnName("ExtraProperties");
+
+                    b.Property<string>("ImageName")
+                        .HasMaxLength(128);
 
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnName("LastModificationTime");

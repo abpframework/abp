@@ -21,7 +21,8 @@ namespace ProductService.Host.Migrations
                     Code = table.Column<string>(maxLength: 32, nullable: false),
                     Name = table.Column<string>(maxLength: 256, nullable: false),
                     Price = table.Column<float>(nullable: false),
-                    StockCount = table.Column<int>(nullable: false)
+                    StockCount = table.Column<int>(nullable: false),
+                    ImageName = table.Column<string>(maxLength: 128, nullable: true)
                 },
                 constraints: table =>
                 {
