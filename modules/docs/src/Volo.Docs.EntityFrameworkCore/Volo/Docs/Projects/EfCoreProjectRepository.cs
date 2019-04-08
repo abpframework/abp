@@ -21,7 +21,7 @@ namespace Volo.Docs.Projects
 
         public async Task<List<Project>> GetListAsync(string sorting, int maxResultCount, int skipCount)
         {
-            var projects = await DbSet.OrderBy(sorting ?? "creationTime desc")
+            var projects = await DbSet.OrderBy(sorting ?? "Id desc")
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync();
 
