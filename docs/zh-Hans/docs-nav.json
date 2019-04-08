@@ -279,6 +279,10 @@
       "text": "测试"
     },
     {
+      "text": "每日构建",
+      "path": "Abp-Nightly-Builds.md"
+    },
+    {
       "text": "贡献指南",
       "path": "Contribution/Index.md"
     }
