@@ -1,7 +1,5 @@
-using System;
 using Volo.Abp.Modularity;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
-using Xunit;
 
 namespace Volo.Abp.TenantManagement
 {
