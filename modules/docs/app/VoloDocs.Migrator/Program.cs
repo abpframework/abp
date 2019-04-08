@@ -37,6 +37,20 @@ namespace VoloDocs.Migrator
                             dbContext.Database.Migrate();
 
                             Console.WriteLine("\nCompleted.");
+
+                            Console.Write("\nDo you want to see the applied migrations? (y/n) ");
+                            if (Console.ReadKey().Key == ConsoleKey.Y)
+                            {
+                                Console.WriteLine("\n\n-- start of migrations --");
+                                
+                                var appliedMigrations = dbContext.Database.GetAppliedMigrations();
+                                foreach (var appliedMigration in appliedMigrations)
+                                {
+                                    Console.WriteLine(appliedMigration);
+                                }
+
+                                Console.WriteLine("-- end of migrations --\n");
+                            }
                         }
                         catch (Exception ex)
                         {
