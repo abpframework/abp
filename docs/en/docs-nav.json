@@ -277,6 +277,10 @@
       "text": "Testing"
     },
     {
+      "text": "Nightly Builds",
+      "path": "Abp-Nightly-Builds.md"
+    },
+    {
       "text": "Contribution Guide",
       "path": "Contribution/Index.md"
     }
