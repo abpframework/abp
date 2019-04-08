@@ -19,10 +19,5 @@ namespace Volo.Blogging.Blogs
         {
             return await DbSet.FirstOrDefaultAsync(p => p.ShortName == shortName);
         }
-
-        public async Task<int> GetTotalCount()
-        {
-            return await DbSet.CountAsync();
-        }
     }
 }
