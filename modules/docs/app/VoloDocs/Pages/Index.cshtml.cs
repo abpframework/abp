@@ -36,15 +36,15 @@ namespace VoloDocs.Pages
         public async Task<IActionResult> OnGet()
         {
             ConnectionString = _dbConnectionOptions.ConnectionStrings.Default;
-            CreateProjectLink = _currentUser.Id.HasValue
-                ? "/Docs/Admin/Projects"
-                : "/Account/Login?returnUrl=/Docs/Admin/Projects";
-
             if (string.IsNullOrWhiteSpace(ConnectionString))
             {
                 return RedirectToPage("./Configure");
             }
 
+            CreateProjectLink = _currentUser.Id.HasValue
+                ? "/Docs/Admin/Projects"
+                : "/Account/Login?returnUrl=/Docs/Admin/Projects";
+           
             Projects = (await _projectAppService.GetListAsync()).Items;
             if (Projects.Count == 1)
             {

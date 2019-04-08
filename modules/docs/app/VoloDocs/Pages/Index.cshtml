@@ -23,31 +23,18 @@
 <p>2- CHECK DATABASE EXIST </p>
 <p>2- CHECK ANY PROJECT </p>
 
-<p>
-    <a href="/Documents">Go to documents...</a>
-</p>
-<p>
-    <a href="/Docs/Admin/Projects">Create project</a>
-</p>
-<p>
-    <a href="/Admin">Go to admin...</a>
-</p>
-
-<p>
-    <a href="/account/login">Login</a>
-</p>
 
 <div class="p-5">
 
     @if (!Model.Projects.Any())
     {
-    <div class="alert alert-secondary col-md-6 text-center" role="alert">
-        <h4 class="alert-heading">No project!</h4>
-        <p>Welcome to VoloDocs! There`s no defined project yet.</p>
-        <hr />
-        <a href="@Model.CreateProjectLink">Click here to start your first project <i class="fa fa-arrow-circle-right"></i></a>
- 
-    </div>
+        <div class="alert alert-secondary col-md-6 text-center" role="alert">
+            <h4 class="alert-heading">No project!</h4>
+            <p>Welcome to VoloDocs! There`s no defined project yet.</p>
+            <hr />
+            <a href="@Model.CreateProjectLink">Click here to start your first project <i class="fa fa-arrow-circle-right"></i></a>
+
+        </div>
     }
     else if (Model.Projects.Count > 1)
     {
