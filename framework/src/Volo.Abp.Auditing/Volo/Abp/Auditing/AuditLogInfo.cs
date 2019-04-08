@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Volo.Abp.Data;
-using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Auditing
 {
-    //TODO: Make serializable!
-    public class AuditLogInfo : IMultiTenant, IHasExtraProperties
+    [Serializable]
+    public class AuditLogInfo : IHasExtraProperties
     {
         public string ApplicationName { get; set; }
 
@@ -17,6 +16,8 @@ namespace Volo.Abp.Auditing
         public string UserName { get; set; }
 
         public Guid? TenantId { get; set; }
+
+        public string TenantName { get; set; }
 
         public Guid? ImpersonatorUserId { get; set; }
 

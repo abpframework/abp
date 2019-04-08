@@ -2,7 +2,7 @@
 
 namespace Volo.Abp.Features
 {
-    public class DefaultValueFeatureValueProvider : FeatureValueProvider
+    public class DefaultValueFeatureValueProvider : FeatureValueProvider //TODO: Directly implement IFeatureValueProvider
     {
         public const string ProviderName = "Default";
 

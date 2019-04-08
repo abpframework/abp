@@ -1,14 +1,11 @@
-apiVersion: v1
 kind: Service
+apiVersion: v1
 metadata:
-  labels:
-    io.kompose.service: identity-service
   name: identity-service
 spec:
-  ports:
-  - port: 80
-    targetPort: 80
   selector:
-    io.kompose.service: identity-service
-status:
-  loadBalancer: {}
+    app: identity-service
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: http

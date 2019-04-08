@@ -7,7 +7,5 @@
     public class BlogFileOptions
     {
         public string FileUploadLocalFolder { get; set; }
-
-        public string FileUploadUrlRoot { get; set; }
     }
 }

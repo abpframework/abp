@@ -2,12 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
-using Volo.Abp.Data;
-using Volo.Abp.Domain.Entities;
+using Volo.Abp.Domain.Entities.Auditing;
 
 namespace Volo.Abp.TenantManagement
 {
-    public class Tenant : AggregateRoot<Guid>
+    public class Tenant : FullAuditedAggregateRoot<Guid>
     {
         public virtual string Name { get; protected set; }
 
@@ -20,10 +19,8 @@ namespace Volo.Abp.TenantManagement
 
         protected internal Tenant(Guid id, [NotNull] string name)
         {
-            Check.NotNull(name, nameof(name));
-
             Id = id;
-            Name = name;
+            SetName(name);
 
             ConnectionStrings = new List<TenantConnectionString>();
             ExtraProperties = new Dictionary<string, object>();
@@ -43,9 +40,7 @@ namespace Volo.Abp.TenantManagement
 
         internal void SetName([NotNull] string name)
         {
-            Check.NotNull(name, nameof(name));
-
-            Name = name;
+            Name = Check.NotNullOrWhiteSpace(name, nameof(name), TenantConsts.MaxNameLength);
         }
     }
 }

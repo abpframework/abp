@@ -7,6 +7,7 @@ using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.Users;
 using Volo.Abp.VirtualFileSystem;
+using Volo.Abp.Localization.ExceptionHandling;
 
 namespace Volo.Abp.Identity
 {
@@ -31,6 +32,11 @@ namespace Volo.Abp.Identity
                 options.Resources
                     .Get<IdentityResource>()
                     .AddVirtualJson("/Volo/Abp/Identity/Localization/ApplicationContracts");
+            });
+
+            Configure<ExceptionLocalizationOptions>(options =>
+            {
+                options.MapCodeNamespace("Volo.Abp.Identity", typeof(IdentityResource));
             });
         }
     }

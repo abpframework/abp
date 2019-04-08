@@ -20,6 +20,8 @@ namespace Volo.Abp.AuditLogging
 
         public virtual EntityChangeType ChangeType { get; protected set; }
 
+        public virtual Guid? EntityTenantId { get; protected set; }
+
         public virtual string EntityId { get; protected set; }
 
         public virtual string EntityTypeFullName { get; protected set; }
@@ -33,17 +35,30 @@ namespace Volo.Abp.AuditLogging
             ExtraProperties = new Dictionary<string, object>();
         }
 
-        public EntityChange(IGuidGenerator guidGenerator, Guid auditLogId, EntityChangeInfo entityChangeInfo)
+        public EntityChange(
+            IGuidGenerator guidGenerator, 
+            Guid auditLogId, 
+            EntityChangeInfo entityChangeInfo,
+            Guid? tenantId = null)
         {
             Id = guidGenerator.Create();
             AuditLogId = auditLogId;
-            TenantId = entityChangeInfo.TenantId;
+            TenantId = tenantId;
             ChangeTime = entityChangeInfo.ChangeTime;
             ChangeType = entityChangeInfo.ChangeType;
             EntityId = entityChangeInfo.EntityId.Truncate(EntityChangeConsts.MaxEntityTypeFullNameLength);
             EntityTypeFullName = entityChangeInfo.EntityTypeFullName.TruncateFromBeginning(EntityChangeConsts.MaxEntityTypeFullNameLength);
-            PropertyChanges = entityChangeInfo.PropertyChanges.Select(p => new EntityPropertyChange(guidGenerator, Id, p)).ToList();
-            ExtraProperties = entityChangeInfo.ExtraProperties.ToDictionary(pair => pair.Key, pair => pair.Value);
+
+            PropertyChanges = entityChangeInfo
+                                  .PropertyChanges?
+                                  .Select(p => new EntityPropertyChange(guidGenerator, Id, p, tenantId))
+                                  .ToList()
+                              ?? new List<EntityPropertyChange>();
+
+            ExtraProperties = entityChangeInfo
+                                  .ExtraProperties?
+                                  .ToDictionary(pair => pair.Key, pair => pair.Value)
+                              ?? new Dictionary<string, object>();
         }
     }
 }

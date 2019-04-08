@@ -49,7 +49,7 @@ namespace Volo.Abp.Auditing
         {
             if (!ShouldIntercept(invocation, out var auditLog, out var auditLogAction))
             {
-                invocation.Proceed();
+                await invocation.ProceedAsync();
                 return;
             }
 
@@ -72,7 +72,10 @@ namespace Volo.Abp.Auditing
             }
         }
 
-        protected virtual bool ShouldIntercept(IAbpMethodInvocation invocation, out AuditLogInfo auditLog, out AuditLogActionInfo auditLogAction)
+        protected virtual bool ShouldIntercept(
+            IAbpMethodInvocation invocation, 
+            out AuditLogInfo auditLog, 
+            out AuditLogActionInfo auditLogAction)
         {
             auditLog = null;
             auditLogAction = null;
@@ -95,7 +98,10 @@ namespace Volo.Abp.Auditing
 
             auditLog = auditLogScope.Log;
             auditLogAction = _auditingHelper.CreateAuditLogAction(
-                invocation.TargetObject.GetType(), invocation.Method, invocation.Arguments
+                auditLog,
+                invocation.TargetObject.GetType(),
+                invocation.Method, 
+                invocation.Arguments
             );
 
             return true;

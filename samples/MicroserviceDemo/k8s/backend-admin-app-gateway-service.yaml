@@ -1,14 +1,11 @@
-apiVersion: v1
 kind: Service
+apiVersion: v1
 metadata:
-  labels:
-    io.kompose.service: backend-admin-app-gateway
   name: backend-admin-app-gateway
 spec:
-  ports:
-  - port: 80
-    targetPort: 80
   selector:
-    io.kompose.service: backend-admin-app-gateway
-status:
-  loadBalancer: {}
+    app: backend-admin-app-gateway
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: http

@@ -12,13 +12,14 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Shared
         [BindProperty]
         public ChangePasswordInfoModel ChangePasswordInfoModel { get; set; }
 
-        private readonly IIdentityUserAppService _userAppService;
+        private readonly IProfileAppService _profileAppService;
         private readonly IStringLocalizer<IdentityResource> _localizer;
 
-        public ChangePasswordModal(IIdentityUserAppService userAppService,
+        public ChangePasswordModal(
+            IProfileAppService profileAppService,
             IStringLocalizer<IdentityResource> localizer)
         {
-            _userAppService = userAppService;
+            _profileAppService = profileAppService;
             _localizer = localizer;
         }
 
@@ -31,8 +32,10 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Shared
                 throw new UserFriendlyException(_localizer.GetString("Identity.PasswordConfirmationFailed").Value);
             }
 
-            await _userAppService.ChangePasswordAsync(ChangePasswordInfoModel.CurrentPassword,
-                ChangePasswordInfoModel.NewPassword);
+            await _profileAppService.ChangePasswordAsync(
+                ChangePasswordInfoModel.CurrentPassword,
+                ChangePasswordInfoModel.NewPassword
+            );
 
             return NoContent();
         }

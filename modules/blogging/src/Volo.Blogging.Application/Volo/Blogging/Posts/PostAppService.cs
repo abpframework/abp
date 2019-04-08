@@ -36,6 +36,11 @@ namespace Volo.Blogging.Posts
             var userDictionary = new Dictionary<Guid, BlogUserDto>();
             var postDtos = new List<PostWithDetailsDto>(ObjectMapper.Map<List<Post>, List<PostWithDetailsDto>>(posts));
 
+            foreach (var postDto in postDtos)
+            {
+                postDto.Tags = await GetTagsOfPost(postDto.Id);
+            }
+
             if (tag != null)
             {
                 postDtos = await FilterPostsByTag(postDtos, tag);
@@ -44,11 +49,6 @@ namespace Volo.Blogging.Posts
             foreach (var postDto in postDtos)
             {
                 postDto.CommentCount = await _commentRepository.GetCommentCountOfPostAsync(postDto.Id);
-            }
-
-            foreach (var postDto in postDtos)
-            {
-                postDto.Tags = await GetTagsOfPost(postDto.Id);
             }
 
             foreach (var postDto in postDtos)
@@ -228,8 +228,9 @@ namespace Volo.Blogging.Posts
                 {
                     tag.IncreaseUsageCount();
                     tag = await _tagRepository.UpdateAsync(tag);
-                    post.AddTag(tag.Id);
                 }
+
+                post.AddTag(tag.Id);
             }
         }
 
@@ -253,18 +254,8 @@ namespace Volo.Blogging.Posts
 
         private Task<List<PostWithDetailsDto>> FilterPostsByTag(List<PostWithDetailsDto> allPostDtos, Tag tag)
         {
-            var filteredPostDtos = new List<PostWithDetailsDto>();
-
-            foreach (var postDto in allPostDtos)
-            {
-                if (postDto.Tags.All(p => p.Id != tag.Id))
-                {
-                    continue;
-                }
-
-                filteredPostDtos.Add(postDto);
-            }
-
+            var filteredPostDtos = allPostDtos.Where(p => p.Tags?.Any(t => t.Id == tag.Id) ?? false).ToList();
+           
             return Task.FromResult(filteredPostDtos);
         }
     }

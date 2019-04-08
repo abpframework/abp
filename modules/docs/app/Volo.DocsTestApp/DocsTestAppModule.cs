@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Localization;
@@ -16,7 +16,6 @@ using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Mvc.UI.Theming;
-using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Autofac;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
@@ -110,7 +109,7 @@ namespace Volo.DocsTestApp
             app.UseDeveloperExceptionPage();
 
             app.UseVirtualFiles();
-            
+
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
@@ -120,6 +119,8 @@ namespace Volo.DocsTestApp
             app.UseAuthentication();
 
             app.UseRequestLocalization(app.ApplicationServices.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value);
+ 
+            app.UseStatusCodePagesWithReExecute("/error/{0}");
 
             app.UseMvc(routes =>
             {
@@ -136,19 +137,9 @@ namespace Volo.DocsTestApp
             {
                 AsyncHelper.RunSync(async () =>
                 {
-                    await context.ServiceProvider
-                        .GetRequiredService<IIdentityDataSeeder>()
-                        .SeedAsync(
-                            "1q2w3E*"
-                        );
-
                     await scope.ServiceProvider
-                        .GetRequiredService<IPermissionDataSeeder>()
-                        .SeedAsync(
-                            RolePermissionValueProvider.ProviderName,
-                            "admin",
-                            IdentityPermissions.GetAll().Union(DocsAdminPermissions.GetAll())
-                        );
+                        .GetRequiredService<IDataSeeder>()
+                        .SeedAsync();
                 });
             }
         }

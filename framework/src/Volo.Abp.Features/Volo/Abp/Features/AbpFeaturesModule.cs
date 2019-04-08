@@ -10,7 +10,7 @@ namespace Volo.Abp.Features
 {
     [DependsOn(
         typeof(AbpLocalizationAbstractionsModule),
-        typeof(AbpMultiTenancyAbstractionsModule),
+        typeof(AbpMultiTenancyModule),
         typeof(AbpValidationModule)
         )]
     public class AbpFeaturesModule : AbpModule
@@ -26,6 +26,7 @@ namespace Volo.Abp.Features
             context.Services.Configure<FeatureOptions>(options =>
             {
                 options.ValueProviders.Add<DefaultValueFeatureValueProvider>();
+                options.ValueProviders.Add<EditionFeatureValueProvider>();
                 options.ValueProviders.Add<TenantFeatureValueProvider>();
             });
         }

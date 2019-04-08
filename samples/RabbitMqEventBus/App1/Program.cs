@@ -14,8 +14,6 @@ namespace App1
             {
                 application.Initialize();
 
-                var x = application.ServiceProvider.GetRequiredService<App1TextEventHandler>();
-
                 var messagingService = application
                     .ServiceProvider
                     .GetRequiredService<App1MessagingService>();

@@ -5,6 +5,7 @@ using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.PermissionManagement
 {
+    //TODO: To aggregate root?
     public class PermissionGrant : Entity<Guid>, IMultiTenant
     {
         public virtual Guid? TenantId { get; protected set; }
@@ -15,7 +16,7 @@ namespace Volo.Abp.PermissionManagement
         [NotNull]
         public virtual string ProviderName { get; protected set; }
 
-        [NotNull]
+        [CanBeNull]
         public virtual string ProviderKey { get; protected set; }
 
         protected PermissionGrant()
@@ -27,14 +28,14 @@ namespace Volo.Abp.PermissionManagement
             Guid id,
             [NotNull] string name,
             [NotNull] string providerName ,
-            [NotNull] string providerKey,
+            [CanBeNull] string providerKey,
             Guid? tenantId = null)
         {
             Check.NotNull(name, nameof(name));
 
             Id = id;
-            Name = name;
-            ProviderName = providerName;
+            Name = Check.NotNullOrWhiteSpace(name, nameof(name));
+            ProviderName = Check.NotNullOrWhiteSpace(providerName, nameof(providerName));
             ProviderKey = providerKey;
             TenantId = tenantId;
         }

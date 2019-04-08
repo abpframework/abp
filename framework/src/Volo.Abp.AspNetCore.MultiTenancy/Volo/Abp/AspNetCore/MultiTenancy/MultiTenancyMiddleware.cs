@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using JetBrains.Annotations;
 using Microsoft.AspNetCore.Http;
 using Volo.Abp.MultiTenancy;
 
@@ -12,46 +11,48 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
 
         private readonly ITenantResolver _tenantResolver;
         private readonly ITenantStore _tenantStore;
-        private readonly ICurrentTenantIdAccessor _currentTenantIdAccessor;
+        private readonly ICurrentTenant _currentTenant;
+        private readonly ITenantResolveResultAccessor _tenantResolveResultAccessor;
 
         public MultiTenancyMiddleware(
             RequestDelegate next,
             ITenantResolver tenantResolver, 
             ITenantStore tenantStore, 
-            ICurrentTenantIdAccessor currentTenantIdAccessor)
+            ICurrentTenant currentTenant, 
+            ITenantResolveResultAccessor tenantResolveResultAccessor)
         {
             _next = next;
             _tenantResolver = tenantResolver;
             _tenantStore = tenantStore;
-            _currentTenantIdAccessor = currentTenantIdAccessor;
+            _currentTenant = currentTenant;
+            _tenantResolveResultAccessor = tenantResolveResultAccessor;
         }
 
         public async Task Invoke(HttpContext httpContext)
         {
-            using (SetCurrentTenant(await ResolveCurrentTenantAsync()))
+            var resolveResult = _tenantResolver.ResolveTenantIdOrName();
+            _tenantResolveResultAccessor.Result = resolveResult;
+
+            TenantConfiguration tenant = null;
+            if (resolveResult.TenantIdOrName != null)
+            {
+                tenant = await FindTenantAsync(resolveResult.TenantIdOrName);
+                if (tenant == null)
+                {
+                    //TODO: A better exception?
+                    throw new AbpException(
+                        "There is no tenant with given tenant id or name: " + resolveResult.TenantIdOrName
+                    );
+                }
+            }
+
+            using (_currentTenant.Change(tenant?.Id, tenant?.Name))
             {
                 await _next(httpContext);
             }
         }
 
-        private async Task<TenantInfo> ResolveCurrentTenantAsync()
-        {
-            var tenantIdOrName = _tenantResolver.ResolveTenantIdOrName();
-            if (tenantIdOrName == null)
-            {
-                return null;
-            }
-
-            var tenant = await FindTenantAsync(tenantIdOrName);
-            if (tenant == null)
-            {
-                throw new AbpException("There is no tenant with given tenant id or name: " + tenantIdOrName);
-            }
-
-            return tenant;
-        }
-
-        private async Task<TenantInfo> FindTenantAsync(string tenantIdOrName)
+        private async Task<TenantConfiguration> FindTenantAsync(string tenantIdOrName)
         {
             if (Guid.TryParse(tenantIdOrName, out var parsedTenantId))
             {
@@ -61,16 +62,6 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
             {
                 return await _tenantStore.FindAsync(tenantIdOrName);
             }
-        }
-
-        private IDisposable SetCurrentTenant([CanBeNull] TenantInfo tenant)
-        {
-            var parentScope = _currentTenantIdAccessor.Current;
-            _currentTenantIdAccessor.Current = new TenantIdWrapper(tenant?.Id);
-            return new DisposeAction(() =>
-            {
-                _currentTenantIdAccessor.Current = parentScope;
-            });
         }
     }
 }

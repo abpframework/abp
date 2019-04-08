@@ -42,8 +42,8 @@ namespace Volo.Docs.Pages.Documents.Project
         private readonly IProjectAppService _projectAppService;
 
         public IndexModel(
-            IDocumentAppService documentAppService, 
-            IDocumentToHtmlConverterFactory documentToHtmlConverterFactory, 
+            IDocumentAppService documentAppService,
+            IDocumentToHtmlConverterFactory documentToHtmlConverterFactory,
             IProjectAppService projectAppService)
         {
             _documentAppService = documentAppService;
@@ -80,6 +80,10 @@ namespace Volo.Docs.Pages.Documents.Project
         private async Task SetVersionAsync()
         {
             //TODO: Needs refactoring
+            if (string.IsNullOrWhiteSpace(Version))
+            {
+                Version = DocsAppConsts.Latest;
+            }
 
             var output = await _projectAppService.GetVersionsAsync(Project.ShortName);
             var versions = output.Items
@@ -142,7 +146,7 @@ namespace Volo.Docs.Pages.Documents.Project
 
             Navigation.ConvertItems();
         }
-        
+
         public string CreateVersionLink(VersionInfoViewModel latestVersion, string version, string documentName = null)
         {
             if (latestVersion == null || latestVersion.Version == version)

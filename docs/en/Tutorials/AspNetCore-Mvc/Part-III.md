@@ -14,8 +14,6 @@ You can download the **source code** of the application [from here](https://gith
 
 There are two test projects in the solution:
 
-![bookstore-test-projects](images/bookstore-test-projects.png)
-
 * `Acme.BookStore.Application.Tests` is for unit & integration tests. You can write tests for application service methods. It uses **EF Core SQLite in-memory** database.
 * `Acme.BookStore.Web.Tests` is for full stack integration tests including the web layer. So, you can write tests for UI pages too.
 

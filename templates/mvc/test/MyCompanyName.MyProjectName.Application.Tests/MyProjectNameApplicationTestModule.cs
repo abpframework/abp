@@ -53,11 +53,11 @@ namespace MyCompanyName.MyProjectName
             var connection = new SqliteConnection("Data Source=:memory:");
             connection.Open();
 
-            var options = new DbContextOptionsBuilder<MyProjectNameDbContext>()
+            var options = new DbContextOptionsBuilder<MyProjectNameMigrationsDbContext>()
                 .UseSqlite(connection)
                 .Options;
 
-            using (var context = new MyProjectNameDbContext(options))
+            using (var context = new MyProjectNameMigrationsDbContext(options))
             {
                 context.GetService<IRelationalDatabaseCreator>().CreateTables();
             }

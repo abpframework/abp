@@ -1,33 +1,31 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
-  labels:
-    io.kompose.service: backend-admin-app
   name: backend-admin-app
 spec:
+  selector:
+    matchLabels:
+      app: backend-admin-app
   replicas: 1
-  strategy: {}
   template:
     metadata:
       labels:
-        io.kompose.service: backend-admin-app
+        app: backend-admin-app
     spec:
       containers:
-      - env:
-        - name: ASPNETCORE_ENVIRONMENT
-          value: Development
-        - name: ASPNETCORE_URLS
-          value: http://0.0.0.0:80
-        - name: AuthServer__Authority
-          value: http://auth-server:51511
-        - name: Redis__Configuration
-          value: redis
-        - name: RemoteServices__Default__BaseUrl
-          value: http://backend-admin-app-gateway/
-        image: volosoft/microservice-demo-backend-admin-app
-        name: backend-admin-app
-        ports:
-        - containerPort: 80
-        resources: {}
-      restartPolicy: Always
-status: {}
+        - name: backend-admin-app
+          image: "volosoft/microservice-demo-backend-admin-app"
+          env:
+          - name: ASPNETCORE_ENVIRONMENT
+            value: Development
+          - name: ASPNETCORE_URLS
+            value: http://0.0.0.0:80
+          - name: AuthServer__Authority
+            value: http://auth-server:51511
+          - name: Redis__Configuration
+            value: redis
+          - name: RemoteServices__Default__BaseUrl
+            value: http://backend-admin-app-gateway/
+          ports:
+            - name: http
+              containerPort: 80

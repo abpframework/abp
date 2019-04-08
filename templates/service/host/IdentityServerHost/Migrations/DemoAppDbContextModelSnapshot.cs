@@ -19,6 +19,202 @@ namespace IdentityServerHost.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ApplicationName")
+                        .HasColumnName("ApplicationName")
+                        .HasMaxLength(96);
+
+                    b.Property<string>("BrowserInfo")
+                        .HasColumnName("BrowserInfo")
+                        .HasMaxLength(512);
+
+                    b.Property<string>("ClientId")
+                        .HasColumnName("ClientId")
+                        .HasMaxLength(64);
+
+                    b.Property<string>("ClientIpAddress")
+                        .HasColumnName("ClientIpAddress")
+                        .HasMaxLength(64);
+
+                    b.Property<string>("ClientName")
+                        .HasColumnName("ClientName")
+                        .HasMaxLength(128);
+
+                    b.Property<string>("Comments")
+                        .HasColumnName("Comments")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("ConcurrencyStamp");
+
+                    b.Property<string>("CorrelationId")
+                        .HasColumnName("CorrelationId")
+                        .HasMaxLength(64);
+
+                    b.Property<string>("Exceptions")
+                        .HasColumnName("Exceptions")
+                        .HasMaxLength(4000);
+
+                    b.Property<int>("ExecutionDuration")
+                        .HasColumnName("ExecutionDuration");
+
+                    b.Property<DateTime>("ExecutionTime");
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<string>("HttpMethod")
+                        .HasColumnName("HttpMethod")
+                        .HasMaxLength(16);
+
+                    b.Property<int?>("HttpStatusCode")
+                        .HasColumnName("HttpStatusCode");
+
+                    b.Property<Guid?>("ImpersonatorTenantId")
+                        .HasColumnName("ImpersonatorTenantId");
+
+                    b.Property<Guid?>("ImpersonatorUserId")
+                        .HasColumnName("ImpersonatorUserId");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnName("TenantId");
+
+                    b.Property<string>("Url")
+                        .HasColumnName("Url")
+                        .HasMaxLength(256);
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnName("UserId");
+
+                    b.Property<string>("UserName")
+                        .HasColumnName("UserName")
+                        .HasMaxLength(256);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TenantId", "ExecutionTime");
+
+                    b.HasIndex("TenantId", "UserId", "ExecutionTime");
+
+                    b.ToTable("AbpAuditLogs");
+                });
+
+            modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLogAction", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<Guid>("AuditLogId")
+                        .HasColumnName("AuditLogId");
+
+                    b.Property<int>("ExecutionDuration")
+                        .HasColumnName("ExecutionDuration");
+
+                    b.Property<DateTime>("ExecutionTime")
+                        .HasColumnName("ExecutionTime");
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<string>("MethodName")
+                        .HasColumnName("MethodName")
+                        .HasMaxLength(128);
+
+                    b.Property<string>("Parameters")
+                        .HasColumnName("Parameters")
+                        .HasMaxLength(2000);
+
+                    b.Property<string>("ServiceName")
+                        .HasColumnName("ServiceName")
+                        .HasMaxLength(256);
+
+                    b.Property<Guid?>("TenantId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuditLogId");
+
+                    b.HasIndex("TenantId", "ServiceName", "MethodName", "ExecutionTime");
+
+                    b.ToTable("AbpAuditLogActions");
+                });
+
+            modelBuilder.Entity("Volo.Abp.AuditLogging.EntityChange", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<Guid>("AuditLogId")
+                        .HasColumnName("AuditLogId");
+
+                    b.Property<DateTime>("ChangeTime")
+                        .HasColumnName("ChangeTime");
+
+                    b.Property<byte>("ChangeType")
+                        .HasColumnName("ChangeType");
+
+                    b.Property<string>("EntityId")
+                        .IsRequired()
+                        .HasColumnName("EntityId")
+                        .HasMaxLength(128);
+
+                    b.Property<string>("EntityTypeFullName")
+                        .IsRequired()
+                        .HasColumnName("EntityTypeFullName")
+                        .HasMaxLength(128);
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnName("TenantId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuditLogId");
+
+                    b.HasIndex("TenantId", "EntityTypeFullName", "EntityId");
+
+                    b.ToTable("AbpEntityChanges");
+                });
+
+            modelBuilder.Entity("Volo.Abp.AuditLogging.EntityPropertyChange", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<Guid>("EntityChangeId");
+
+                    b.Property<string>("NewValue")
+                        .HasColumnName("NewValue")
+                        .HasMaxLength(512);
+
+                    b.Property<string>("OriginalValue")
+                        .HasColumnName("OriginalValue")
+                        .HasMaxLength(512);
+
+                    b.Property<string>("PropertyName")
+                        .IsRequired()
+                        .HasColumnName("PropertyName")
+                        .HasMaxLength(128);
+
+                    b.Property<string>("PropertyTypeFullName")
+                        .IsRequired()
+                        .HasColumnName("PropertyTypeFullName")
+                        .HasMaxLength(64);
+
+                    b.Property<Guid?>("TenantId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EntityChangeId");
+
+                    b.ToTable("AbpEntityPropertyChanges");
+                });
+
             modelBuilder.Entity("Volo.Abp.Identity.IdentityClaimType", b =>
                 {
                     b.Property<Guid>("Id")
@@ -443,7 +639,7 @@ namespace IdentityServerHost.Migrations
                     b.Property<bool>("BackChannelLogoutSessionRequired");
 
                     b.Property<string>("BackChannelLogoutUri")
-                        .HasMaxLength(2000);
+                        .HasMaxLength(300);
 
                     b.Property<string>("ClientClaimsPrefix")
                         .HasMaxLength(200);
@@ -456,7 +652,7 @@ namespace IdentityServerHost.Migrations
                         .HasMaxLength(200);
 
                     b.Property<string>("ClientUri")
-                        .HasMaxLength(2000);
+                        .HasMaxLength(300);
 
                     b.Property<string>("ConcurrencyStamp");
 
@@ -475,14 +671,14 @@ namespace IdentityServerHost.Migrations
                     b.Property<bool>("FrontChannelLogoutSessionRequired");
 
                     b.Property<string>("FrontChannelLogoutUri")
-                        .HasMaxLength(2000);
+                        .HasMaxLength(300);
 
                     b.Property<int>("IdentityTokenLifetime");
 
                     b.Property<bool>("IncludeJwtId");
 
                     b.Property<string>("LogoUri")
-                        .HasMaxLength(2000);
+                        .HasMaxLength(300);
 
                     b.Property<string>("PairWiseSubjectSalt")
                         .HasMaxLength(200);
@@ -515,22 +711,15 @@ namespace IdentityServerHost.Migrations
 
             modelBuilder.Entity("Volo.Abp.IdentityServer.Clients.ClientClaim", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
                     b.Property<Guid>("ClientId");
 
                     b.Property<string>("Type")
-                        .IsRequired()
                         .HasMaxLength(250);
 
                     b.Property<string>("Value")
-                        .IsRequired()
                         .HasMaxLength(250);
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClientId");
+                    b.HasKey("ClientId", "Type", "Value");
 
                     b.ToTable("IdentityServerClientClaims");
                 });
@@ -576,7 +765,7 @@ namespace IdentityServerHost.Migrations
                     b.Property<Guid>("ClientId");
 
                     b.Property<string>("PostLogoutRedirectUri")
-                        .HasMaxLength(2000);
+                        .HasMaxLength(200);
 
                     b.HasKey("ClientId", "PostLogoutRedirectUri");
 
@@ -588,11 +777,11 @@ namespace IdentityServerHost.Migrations
                     b.Property<Guid>("ClientId");
 
                     b.Property<string>("Key")
-                        .HasMaxLength(250);
+                        .HasMaxLength(64);
 
                     b.Property<string>("Value")
                         .IsRequired()
-                        .HasMaxLength(2000);
+                        .HasMaxLength(128);
 
                     b.HasKey("ClientId", "Key");
 
@@ -604,7 +793,7 @@ namespace IdentityServerHost.Migrations
                     b.Property<Guid>("ClientId");
 
                     b.Property<string>("RedirectUri")
-                        .HasMaxLength(2000);
+                        .HasMaxLength(200);
 
                     b.HasKey("ClientId", "RedirectUri");
 
@@ -723,6 +912,82 @@ namespace IdentityServerHost.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("IdentityServerIdentityResources");
+                });
+
+            modelBuilder.Entity("Volo.Abp.PermissionManagement.PermissionGrant", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(128);
+
+                    b.Property<string>("ProviderKey")
+                        .IsRequired()
+                        .HasMaxLength(64);
+
+                    b.Property<string>("ProviderName")
+                        .IsRequired()
+                        .HasMaxLength(64);
+
+                    b.Property<Guid?>("TenantId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name", "ProviderName", "ProviderKey");
+
+                    b.ToTable("AbpPermissionGrants");
+                });
+
+            modelBuilder.Entity("Volo.Abp.SettingManagement.Setting", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(128);
+
+                    b.Property<string>("ProviderKey")
+                        .HasMaxLength(64);
+
+                    b.Property<string>("ProviderName")
+                        .HasMaxLength(64);
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(2048);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name", "ProviderName", "ProviderKey");
+
+                    b.ToTable("AbpSettings");
+                });
+
+            modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLogAction", b =>
+                {
+                    b.HasOne("Volo.Abp.AuditLogging.AuditLog")
+                        .WithMany("Actions")
+                        .HasForeignKey("AuditLogId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Volo.Abp.AuditLogging.EntityChange", b =>
+                {
+                    b.HasOne("Volo.Abp.AuditLogging.AuditLog")
+                        .WithMany("EntityChanges")
+                        .HasForeignKey("AuditLogId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Volo.Abp.AuditLogging.EntityPropertyChange", b =>
+                {
+                    b.HasOne("Volo.Abp.AuditLogging.EntityChange")
+                        .WithMany("PropertyChanges")
+                        .HasForeignKey("EntityChangeId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Volo.Abp.Identity.IdentityRoleClaim", b =>

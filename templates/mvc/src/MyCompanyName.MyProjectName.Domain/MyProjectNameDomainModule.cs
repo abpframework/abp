@@ -1,14 +1,15 @@
 ﻿using MyCompanyName.MyProjectName.Localization.MyProjectName;
-using MyCompanyName.MyProjectName.Settings;
 using Volo.Abp.Auditing;
 using Volo.Abp.AuditLogging;
 using Volo.Abp.BackgroundJobs;
+using Volo.Abp.FeatureManagement;
 using Volo.Abp.Identity;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.Resources.AbpValidation;
 using Volo.Abp.Modularity;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement.Identity;
-using Volo.Abp.Settings;
+using Volo.Abp.TenantManagement;
 using Volo.Abp.VirtualFileSystem;
 
 namespace MyCompanyName.MyProjectName
@@ -18,7 +19,9 @@ namespace MyCompanyName.MyProjectName
         typeof(AbpPermissionManagementDomainIdentityModule),
         typeof(AbpAuditingModule),
         typeof(BackgroundJobsDomainModule),
-        typeof(AbpAuditLoggingDomainModule)
+        typeof(AbpAuditLoggingDomainModule),
+        typeof(AbpTenantManagementDomainModule),
+        typeof(AbpFeatureManagementDomainModule)
         )]
     public class MyProjectNameDomainModule : AbpModule
     {
@@ -35,6 +38,11 @@ namespace MyCompanyName.MyProjectName
                     .Add<MyProjectNameResource>("en")
                     .AddBaseTypes(typeof(AbpValidationResource))
                     .AddVirtualJson("/Localization/MyProjectName");
+            });
+
+            Configure<MultiTenancyOptions>(options =>
+            {
+                options.IsEnabled = MyProjectNameConsts.IsMultiTenancyEnabled;
             });
         }
     }

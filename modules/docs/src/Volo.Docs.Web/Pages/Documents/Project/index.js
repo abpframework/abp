@@ -3,7 +3,7 @@
     $(function () {
 
         var initNavigationFilter = function (navigationContainerId) {
-
+         
             var $navigation = $("#" + navigationContainerId);
 
             var getShownDocumentLinks = function () {
@@ -57,7 +57,7 @@
                 });
             };
 
-            $(".docs-page .docs-filter input[type='search']").keyup(function (e) {
+            $(".docs-page .docs-tree-list input[type='search']").keyup(function (e) {
                 filterDocumentItems(e.target.value);
 
                 if (e.key === "Enter") {
