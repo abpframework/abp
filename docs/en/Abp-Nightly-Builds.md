@@ -16,4 +16,4 @@ Once you reached that window:
 3. Click the `Update` button
 4. Click `OK`
 
-Then open the **Package Manager Console** and from `Package source` drop**-**down menu, select the new package source you added. If you choose the “abp-nightly” feed and check the `Include prerelease` checkbox.
+Then open the **Package Manager Console** and from `Package source` drop-down menu, select the new package source you added. If you choose the “abp-nightly” feed and check the `Include prerelease` checkbox.
