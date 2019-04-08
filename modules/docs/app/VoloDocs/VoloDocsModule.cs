@@ -14,7 +14,6 @@ using Volo.Abp.AspNetCore.Mvc.UI;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Components;
 using Volo.Abp.AspNetCore.Mvc.UI.Theming;
 using Volo.Abp.Autofac;
 using Volo.Abp.Data;
@@ -55,12 +54,6 @@ namespace VoloDocs
         {
             var hostingEnvironment = context.Services.GetHostingEnvironment();
             var configuration = context.Services.GetConfiguration();
-
-            //Configure<AppSettings>(options =>
-            //{
-            //    options.ConnectionString = configuration["ConnectionString"];
-            //    options.Title = configuration["Title"];
-            //});
              
             Configure<DbConnectionOptions>(options =>
             {
@@ -112,8 +105,6 @@ namespace VoloDocs
             {
                 options.Conventions.AddPageRoute("/Error", "error/{statusCode}");
             });
-             
-             
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)

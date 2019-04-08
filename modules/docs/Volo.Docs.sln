@@ -43,6 +43,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VoloDocs.EntityFrameworkCor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VoloDocs", "app\VoloDocs\VoloDocs.csproj", "{057EA924-4524-4452-840C-5E3D509F2ED3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoloDocs.Migrator", "app\VoloDocs.Migrator\VoloDocs.Migrator.csproj", "{8A5E5001-C017-44A8-ADDA-DC66C102556E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -109,6 +111,10 @@ Global
 		{057EA924-4524-4452-840C-5E3D509F2ED3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{057EA924-4524-4452-840C-5E3D509F2ED3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{057EA924-4524-4452-840C-5E3D509F2ED3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A5E5001-C017-44A8-ADDA-DC66C102556E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A5E5001-C017-44A8-ADDA-DC66C102556E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A5E5001-C017-44A8-ADDA-DC66C102556E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A5E5001-C017-44A8-ADDA-DC66C102556E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -132,6 +138,7 @@ Global
 		{116A6145-9D66-4867-B3EF-A464FAC47946} = {BCA19441-17E9-43E6-AED1-15344D18F967}
 		{1B459653-8DAC-41CD-A08E-28D6E74265D3} = {555508AD-F593-43E3-9354-9FA51512F181}
 		{057EA924-4524-4452-840C-5E3D509F2ED3} = {555508AD-F593-43E3-9354-9FA51512F181}
+		{8A5E5001-C017-44A8-ADDA-DC66C102556E} = {555508AD-F593-43E3-9354-9FA51512F181}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {13691265-2547-4FFF-B757-E8FACB05679D}
