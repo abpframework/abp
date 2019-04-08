@@ -4,7 +4,8 @@ using Volo.Abp.Modularity;
 namespace Volo.Docs
 {
     [DependsOn(
-        typeof(DocsEntityFrameworkCoreTestModule)
+        typeof(DocsEntityFrameworkCoreTestModule),
+        typeof(DocsTestBaseModule)
         )]
     public class DocsDomainTestModule : AbpModule
     {

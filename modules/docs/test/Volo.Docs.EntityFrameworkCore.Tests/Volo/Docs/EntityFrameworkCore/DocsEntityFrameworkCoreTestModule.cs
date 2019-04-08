@@ -2,11 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
-using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Modularity;
+using Volo.Docs.EntityFrameworkCore;
 
-namespace Volo.Docs.EntityFrameworkCore
+namespace Volo.Docs
 {
     [DependsOn(
         typeof(DocsTestBaseModule),

@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Volo.Docs.Admin.Application\Volo.Docs.Admin.Application.csproj" />
+    <ProjectReference Include="..\..\src\Volo.Docs.Application\Volo.Docs.Application.csproj" />
     <ProjectReference Include="..\Volo.Docs.Domain.Tests\Volo.Docs.Domain.Tests.csproj" />
   </ItemGroup>
 
