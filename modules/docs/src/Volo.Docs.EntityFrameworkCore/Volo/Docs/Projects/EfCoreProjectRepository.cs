@@ -28,11 +28,6 @@ namespace Volo.Docs.Projects
             return projects;
         }
 
-        public async Task<int> GetTotalProjectCount()
-        {
-            return await DbSet.CountAsync();
-        }
-
         public async Task<Project> GetByShortNameAsync(string shortName)
         {
             var project = await DbSet.FirstOrDefaultAsync(p => p.ShortName == shortName);

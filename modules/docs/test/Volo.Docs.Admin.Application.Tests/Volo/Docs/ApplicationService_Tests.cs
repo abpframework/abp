@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Shouldly;
-using Volo.Docs.Admin.Projects;
 using Volo.Docs.Projects;
 using Xunit;
 
@@ -12,12 +8,10 @@ namespace Volo.Docs
     public class ApplicationService_Tests : DocsApplicationTestBase
     {
         private readonly IProjectAppService _projectAppService;
-        private readonly IProjectRepository _projectRepository;
         private readonly DocsTestData _testData;
 
         public ApplicationService_Tests()
         {
-            _projectRepository = GetRequiredService<IProjectRepository>();
             _projectAppService = GetRequiredService<IProjectAppService>();
             _testData = GetRequiredService<DocsTestData>();
         }
@@ -44,7 +38,5 @@ namespace Volo.Docs
         {
             // TODO: Need to mock WebClient and Octokit components
         }
-
     }
-
 }

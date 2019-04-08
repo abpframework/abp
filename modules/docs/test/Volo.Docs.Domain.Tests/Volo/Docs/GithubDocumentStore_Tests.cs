@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using NSubstitute;
-using Octokit;
+﻿using System.Threading.Tasks;
 using Shouldly;
 using Volo.Docs.Documents;
 using Volo.Docs.GitHub.Documents;
@@ -29,8 +24,10 @@ namespace Volo.Docs
         public async Task GetDocumentAsync()
         {
             var store = _documentStoreFactory.Create(GithubDocumentStore.Type);
+
             var project = await _projectRepository.FindAsync(_testData.PorjectId);
             project.ShouldNotBeNull();
+
             var document = await store.GetDocumentAsync(project, "index2", "0.123.0");
             document.ShouldNotBeNull();
 
@@ -44,6 +41,7 @@ namespace Volo.Docs
         public async Task GetVersionsAsync()
         {
             var store = _documentStoreFactory.Create(GithubDocumentStore.Type);
+
             var project = await _projectRepository.FindAsync(_testData.PorjectId);
             project.ShouldNotBeNull();
 
@@ -58,6 +56,7 @@ namespace Volo.Docs
         public async Task GetResource()
         {
             var store = _documentStoreFactory.Create(GithubDocumentStore.Type);
+
             var project = await _projectRepository.FindAsync(_testData.PorjectId);
             project.ShouldNotBeNull();
 

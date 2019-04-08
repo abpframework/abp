@@ -4,9 +4,8 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Modularity;
-using Volo.Docs.EntityFrameworkCore;
 
-namespace Volo.Docs
+namespace Volo.Docs.EntityFrameworkCore
 {
     [DependsOn(
         typeof(DocsTestBaseModule),

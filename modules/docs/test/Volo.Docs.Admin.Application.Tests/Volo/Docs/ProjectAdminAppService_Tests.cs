@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.Application.Dtos;
@@ -76,7 +74,6 @@ namespace Volo.Docs
             projectDto.DocumentStoreType.ShouldBe(createProjectDto.DocumentStoreType);
 
             projectDto.ExtraProperties.Except(createProjectDto.ExtraProperties).Any().ShouldBe(false);
-
         }
 
         [Fact]
