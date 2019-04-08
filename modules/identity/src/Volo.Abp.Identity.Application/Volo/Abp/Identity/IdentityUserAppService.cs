@@ -118,18 +118,6 @@ namespace Volo.Abp.Identity
             );
         }
 
-        //TODO: Move this to the profile service!
-        public async Task ChangePasswordAsync(string currentPassword, string newPassword)
-        {
-            if (!CurrentUser.Id.HasValue)
-            {
-                throw new AbpException("Current user Id is null!");
-            }
-
-            var currentUser = await _userManager.GetByIdAsync(CurrentUser.Id.Value);
-            (await _userManager.ChangePasswordAsync(currentUser, currentPassword, newPassword)).CheckErrors();
-        }
-
         private async Task UpdateUserByInput(IdentityUser user, IdentityUserCreateOrUpdateDtoBase input)
         {
             (await _userManager.SetEmailAsync(user, input.Email)).CheckErrors();

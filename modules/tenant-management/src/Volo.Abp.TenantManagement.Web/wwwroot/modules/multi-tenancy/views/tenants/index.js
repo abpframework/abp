@@ -5,6 +5,7 @@
 
     var _editModal = new abp.ModalManager(abp.appPath + 'TenantManagement/Tenants/EditModal');
     var _createModal = new abp.ModalManager(abp.appPath + 'TenantManagement/Tenants/CreateModal');
+    var _featuresModal = new abp.ModalManager(abp.appPath + 'FeatureManagement/FeatureManagementModal');
 
     $(function () {
 
@@ -24,6 +25,18 @@
                                     action: function (data) {
                                         _editModal.open({
                                             id: data.record.id
+                                        });
+                                    }
+                                },
+                                {
+                                    text: l('Features'),
+                                    visible: function () {
+                                        return true; //TODO: Check permission
+                                    },
+                                    action: function (data) {
+                                        _featuresModal.open({
+                                            providerName: 'Tenant',
+                                            providerKey: data.record.id
                                         });
                                     }
                                 },

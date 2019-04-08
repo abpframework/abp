@@ -37,7 +37,7 @@
       "PagerPrevious": "上一页",
       "PagerFirst": "首页",
       "PagerLast": "尾页",
-      "PagerInfo": "显示 {0} 到 {1} 个 {2} 条目.",
+      "PagerInfo": "显示 _TOTAL_ 个条目中的 _START_ 到 _END_ 个.",
       "PagerInfoEmpty": "显示0个条目中的0到0",
       "PagerInfoFiltered": "(从 _MAX_ 总条目中过滤掉)",
       "NoDataAvailableInDatatable": "表中没有数据",

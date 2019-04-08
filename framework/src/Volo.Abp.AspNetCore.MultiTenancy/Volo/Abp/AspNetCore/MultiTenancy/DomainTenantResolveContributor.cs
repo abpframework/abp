@@ -9,22 +9,32 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
 
     public class DomainTenantResolveContributor : HttpTenantResolveContributorBase
     {
+        public const string ContributorName = "Domain";
+
+        public override string Name => ContributorName;
+
+        private static readonly string[] ProtocolPrefixes = { "http://", "https://" };
+
         private readonly string _domainFormat;
 
         public DomainTenantResolveContributor(string domainFormat)
         {
-            _domainFormat = domainFormat.RemovePreFix("http://", "https://");
+            _domainFormat = domainFormat.RemovePreFix(ProtocolPrefixes);
         }
 
-        protected override string GetTenantIdOrNameFromHttpContextOrNull(ITenantResolveContext context, HttpContext httpContext)
+        protected override string GetTenantIdOrNameFromHttpContextOrNull(
+            ITenantResolveContext context, 
+            HttpContext httpContext)
         {
             if (httpContext.Request?.Host == null)
             {
                 return null;
             }
 
-            var hostName = httpContext.Request.Host.Host.RemovePreFix("http://", "https://");
+            var hostName = httpContext.Request.Host.Host.RemovePreFix(ProtocolPrefixes);
             var extractResult = FormattedStringValueExtracter.Extract(hostName, _domainFormat, ignoreCase: true);
+
+            context.Handled = true;
 
             if (!extractResult.IsMatch)
             {

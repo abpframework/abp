@@ -12,7 +12,6 @@
 @section scripts {
     <abp-script-bundle name="@typeof(IndexModel).FullName">
         <abp-script type="@typeof(OwlCarouselScriptContributor)" />
-        <abp-script src="/Pages/Blog/Posts/detail.js" />
         <abp-script src="/Pages/Blog/Shared/Scripts/blog.js" />
     </abp-script-bundle>
 }
@@ -77,7 +76,7 @@
                                     <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">@post.Title</a>
                                 </h2>
                                 <p class="article-sum">
-                                    @(GetShortContent(post.Content))
+                                    @Html.Raw(GetShortContent(post.Content)))
                                 </p>
                                 <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName" class="btn btn-primary btn-rounded">@L["ContinueReading"]</a>
 
@@ -109,13 +108,13 @@
             </div>
 
             <div class="col-md-4">
-            
-                
+
+
                 @if (await Authorization.IsGrantedAsync(BloggingPermissions.Posts.Create))
                 {
-                    <a  class="btn btn-primary btn-rounded mb-3 active "  asp-page="./New" asp-route-blogShortName="@Model.BlogShortName">@L["CreateANewPost"]</a>
+                    <a class="btn btn-primary btn-rounded mb-3 active " asp-page="./New" asp-route-blogShortName="@Model.BlogShortName">@L["CreateANewPost"]</a>
                 }
-                
+
                 <div class="list-group">
                     @for (var index = 0; index < Model.Posts.Count && index < 3; index++)
                     {

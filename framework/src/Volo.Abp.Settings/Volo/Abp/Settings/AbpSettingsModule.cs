@@ -11,7 +11,7 @@ namespace Volo.Abp.Settings
     [DependsOn(
         typeof(AbpLocalizationAbstractionsModule),
         typeof(AbpSecurityModule),
-        typeof(AbpMultiTenancyAbstractionsModule)
+        typeof(AbpMultiTenancyModule)
         )]
     public class AbpSettingsModule : AbpModule
     {

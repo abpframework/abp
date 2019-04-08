@@ -7,9 +7,9 @@ using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.AspNetCore.MultiTenancy
 {
-    public abstract class HttpTenantResolveContributorBase : ITenantResolveContributor
+    public abstract class HttpTenantResolveContributorBase : TenantResolveContributorBase
     {
-        public virtual void Resolve(ITenantResolveContext context)
+        public override void Resolve(ITenantResolveContext context)
         {
             var httpContext = context.GetHttpContext();
             if (httpContext == null)

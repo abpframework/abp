@@ -25,11 +25,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.TenantManagement.W
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.TenantManagement.Application.Tests", "test\Volo.Abp.TenantManagement.Application.Tests\Volo.Abp.TenantManagement.Application.Tests.csproj", "{72445B2D-07FA-4A35-A3D6-FF4ACE299BF4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.TenantManagement.EntityFrameworkCore.Tests", "test\Volo.Abp.TenantManagement.EntityFrameworkCore.Tests\Volo.Abp.TenantManagement.EntityFrameworkCore.Tests.csproj", "{A2BB8897-EBDB-46BB-B885-F8635B21F376}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.TenantManagement.EntityFrameworkCore.Tests", "test\Volo.Abp.TenantManagement.EntityFrameworkCore.Tests\Volo.Abp.TenantManagement.EntityFrameworkCore.Tests.csproj", "{A2BB8897-EBDB-46BB-B885-F8635B21F376}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.TenantManagement.MongoDB", "src\Volo.Abp.TenantManagement.MongoDB\Volo.Abp.TenantManagement.MongoDB.csproj", "{ED95242E-3C31-4A89-9C62-93B306EFEB15}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.TenantManagement.MongoDB", "src\Volo.Abp.TenantManagement.MongoDB\Volo.Abp.TenantManagement.MongoDB.csproj", "{ED95242E-3C31-4A89-9C62-93B306EFEB15}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.TenantManagement.MongoDB.Tests", "test\Volo.Abp.TenantManagement.MongoDB.Tests\Volo.Abp.TenantManagement.MongoDB.Tests.csproj", "{F75B4C54-A5F1-4101-99F5-A5B868A5146B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.TenantManagement.MongoDB.Tests", "test\Volo.Abp.TenantManagement.MongoDB.Tests\Volo.Abp.TenantManagement.MongoDB.Tests.csproj", "{F75B4C54-A5F1-4101-99F5-A5B868A5146B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.TenantManagement.TestBase", "test\Volo.Abp.TenantManagement.TestBase\Volo.Abp.TenantManagement.TestBase.csproj", "{C3BAD6E8-00CD-4283-9416-64287BB5B265}"
 EndProject

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
@@ -70,11 +69,12 @@ namespace Volo.Abp.Caching
             }
             catch (Exception ex)
             {
-                if ((bool) hideErrors)
+                if (hideErrors == true)
                 {
                     Logger.LogException(ex, LogLevel.Warning);
                     return null;
                 }
+
                 throw;
             }
 
@@ -94,11 +94,14 @@ namespace Volo.Abp.Caching
 
             try
             {
-                cachedBytes = await Cache.GetAsync(NormalizeKey(key), CancellationTokenProvider.FallbackToProvider(token));
+                cachedBytes = await Cache.GetAsync(
+                    NormalizeKey(key),
+                    CancellationTokenProvider.FallbackToProvider(token)
+                );
             }
             catch (Exception ex)
             {
-                if ((bool)hideErrors)
+                if (hideErrors == true)
                 {
                     Logger.LogException(ex, LogLevel.Warning);
                     return null;
@@ -185,7 +188,7 @@ namespace Volo.Abp.Caching
             }
             catch (Exception ex)
             {
-                if ((bool) hideErrors)
+                if (hideErrors == true)
                 {
                     Logger.LogException(ex, LogLevel.Warning);
                     return;
@@ -210,7 +213,7 @@ namespace Volo.Abp.Caching
             }
             catch (Exception ex)
             {
-                if ((bool)hideErrors)
+                if (hideErrors == true)
                 {
                     Logger.LogException(ex, LogLevel.Warning);
                     return;
@@ -230,7 +233,7 @@ namespace Volo.Abp.Caching
             }
             catch (Exception ex)
             {
-                if ((bool) hideErrors)
+                if (hideErrors == true)
                 {
                     Logger.LogException(ex, LogLevel.Warning);
                     return;
@@ -250,7 +253,7 @@ namespace Volo.Abp.Caching
             }
             catch (Exception ex)
             {
-                if ((bool)hideErrors)
+                if (hideErrors == true)
                 {
                     Logger.LogException(ex, LogLevel.Warning);
                     return;
@@ -270,7 +273,7 @@ namespace Volo.Abp.Caching
             }
             catch (Exception ex)
             {
-                if ((bool) hideErrors)
+                if (hideErrors == true)
                 {
                     Logger.LogException(ex, LogLevel.Warning);
                 }
@@ -289,7 +292,7 @@ namespace Volo.Abp.Caching
             }
             catch (Exception ex)
             {
-                if ((bool)hideErrors)
+                if (hideErrors == true)
                 {
                     Logger.LogException(ex, LogLevel.Warning);
                     return;
