@@ -33,7 +33,7 @@ namespace Volo.Blogging.Posts
             
         }
 
-        public Post(Guid id, Guid blogId, Guid creatorId, [NotNull] string title, [NotNull] string coverImage, [NotNull] string url)
+        public Post(Guid id, Guid blogId, Guid? creatorId, [NotNull] string title, [NotNull] string coverImage, [NotNull] string url)
         {
             Id = id;
             CreatorId = creatorId;

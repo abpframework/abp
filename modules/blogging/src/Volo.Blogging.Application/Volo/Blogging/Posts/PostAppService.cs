@@ -156,7 +156,7 @@ namespace Volo.Blogging.Posts
             var post = new Post(
                 id: GuidGenerator.Create(),
                 blogId: input.BlogId,
-                creatorId: CurrentUser.GetId(),
+                creatorId: CurrentUser.Id,
                 title: input.Title,
                 coverImage: input.CoverImage,
                 url: input.Url
