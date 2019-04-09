@@ -22,10 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Volo\Abp\FeatureManagement\Localization\Domain\pt-BR.json" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.FeatureManagement.Domain.Shared\Volo.Abp.FeatureManagement.Domain.Shared.csproj" />
   </ItemGroup>
 

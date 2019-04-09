@@ -30,21 +30,15 @@
     <EmbeddedResource Include="Localization\Resources\**\*.json" />
   </ItemGroup>
 
-
   <ItemGroup>
     <Content Remove="wwwroot\**\*.*" />
-    <Content Remove="Localization\Resources\Docs\Web\en.json" />
-    <Content Remove="Localization\Resources\Docs\Web\pt-BR.json" />
-    <Content Remove="Localization\Resources\Docs\Web\tr.json" />
-    <Content Remove="Pages\Docs\Admin\Projects\Create.cshtml" />
-    <Content Remove="Pages\Docs\Admin\Projects\Edit.cshtml" />
-    <Content Remove="Pages\Docs\Admin\Projects\Index.cshtml" />
+    <Content Remove="Pages\**\*.cshtml" />
+    <Content Remove="Pages\**\*.css" />
+    <Content Remove="Pages\**\*.js" />
+    <Content Remove="Localization\Resources\**\*.json" />
     <Content Remove="Properties\launchSettings.json" />
     <Content Remove="compilerconfig.json" />
     <Content Remove="compilerconfig.json.defaults" />
-    <None Remove="Pages\Docs\Admin\Projects\create.js" />
-    <None Remove="Pages\Docs\Admin\Projects\edit.js" />
-    <None Remove="Pages\Docs\Admin\Projects\index.js" />
     <None Include="compilerconfig.json" />
     <None Include="Properties\launchSettings.json" />
   </ItemGroup>
