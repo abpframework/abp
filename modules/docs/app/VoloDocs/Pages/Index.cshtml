@@ -1,6 +1,5 @@
 ﻿@page
 
-@using Castle.Core.Internal
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.Docs
 @using Volo.Docs.Localization
@@ -18,24 +17,24 @@
 
 <div class="p-5">
 
-    <h2 class="text-center mb-5">
-        Welcome to the VoloDocs!
-    </h2>
+    <h1 class="text-center mb-5">
+       @L["WelcomeVoloDocs"]
+    </h1>
 
     @if (!Model.Projects.Any())
     {
         <div class="d-flex justify-content-center">
             <div class="alert alert-secondary col-md-6 text-center" role="alert">
-                <h4 class="alert-heading">No project!</h4>
-                <p>There`s no defined project yet!</p>
+                <h4 class="alert-heading">@L["NoProject"]</h4>
+                <p>@L["NoProjectWarning"]</p>
                 <hr />
-                <a href="@Model.CreateProjectLink">Click here to start your first project <i class="fa fa-arrow-circle-right"></i></a>
+                <a href="@Model.CreateProjectLink">@L["CreateYourFirstProject"] <i class="fa fa-arrow-circle-right"></i></a>
             </div>
         </div>
     }
     else if (Model.Projects.Count > 1)
     {
-        <h1>@L["Projects"]</h1>
+        <h2>@L["Projects"]</h2>
         <p>
             <ul style="list-style-type: upper-roman;">
                 @foreach (var project in Model.Projects)

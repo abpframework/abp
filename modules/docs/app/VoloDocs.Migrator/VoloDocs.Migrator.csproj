@@ -20,7 +20,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Core\Volo.Abp.Core.csproj" />
     <ProjectReference Include="..\VoloDocs.EntityFrameworkCore\VoloDocs.EntityFrameworkCore.csproj" />
-    <!--<ProjectReference Include="..\VoloDocs\VoloDocs.csproj" />-->
   </ItemGroup>
 
 </Project>

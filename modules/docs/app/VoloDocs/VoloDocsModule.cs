@@ -10,6 +10,7 @@ using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
+using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
@@ -20,6 +21,8 @@ using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.Web;
+using Volo.Abp.Localization;
+using Volo.Abp.Localization.Resources.AbpValidation;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.PermissionManagement.Identity;
@@ -28,12 +31,12 @@ using Volo.Abp.UI;
 using Volo.Abp.VirtualFileSystem;
 using Volo.Docs;
 using Volo.Docs.Admin;
-using VoloDocs.Branding;
+using Volo.Docs.Localization;
 using VoloDocs.EntityFrameworkCore;
 using VoloDocs.Utils;
 
 namespace VoloDocs
-{
+{  
     [DependsOn(
         typeof(DocsWebModule),
         typeof(DocsAdminWebModule),
@@ -50,11 +53,19 @@ namespace VoloDocs
     )]
     public class VoloDocsModule : AbpModule
     {
+        public override void PreConfigureServices(ServiceConfigurationContext context)
+        {
+            PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
+            {
+                options.AddAssemblyResource(typeof(DocsResource), typeof(VoloDocsModule).Assembly);
+            });
+        }
+
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var hostingEnvironment = context.Services.GetHostingEnvironment();
             var configuration = context.Services.GetConfiguration();
-             
+
             Configure<DbConnectionOptions>(options =>
             {
                 options.ConnectionStrings.Default = configuration["ConnectionString"];
@@ -83,7 +94,11 @@ namespace VoloDocs
             context.Services.AddSwaggerGen(
                 options =>
                 {
-                    options.SwaggerDoc("v1", new Info { Title = "Docs API", Version = "v1" });
+                    options.SwaggerDoc("v1", new Info
+                    {
+                        Title = "Docs API",
+                        Version = "v1"
+                    });
                     options.DocInclusionPredicate((docName, description) => true);
                     options.CustomSchemaIds(type => type.FullName);
                 });
@@ -94,6 +109,20 @@ namespace VoloDocs
                 options.DefaultRequestCulture = new RequestCulture("en");
                 options.SupportedCultures = cultures;
                 options.SupportedUICultures = cultures;
+            });
+
+            Configure<VirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.AddEmbedded<VoloDocsModule>();
+            });
+
+            Configure<AbpLocalizationOptions>(options =>
+            {
+                options.Resources
+                    .Get<DocsResource>()
+                    .AddBaseTypes(typeof(AbpValidationResource))
+                    .AddBaseTypes(typeof(AbpUiModule))
+                    .AddVirtualJson("/Localization/Resources/VoloDocs/Web");
             });
 
             Configure<ThemingOptions>(options =>

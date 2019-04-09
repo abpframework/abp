@@ -2,8 +2,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Options;
-using Volo.Abp.Data;
 using Volo.Abp.Users;
 using Volo.Docs;
 using Volo.Docs.Projects;
@@ -16,15 +14,12 @@ namespace VoloDocs.Pages
         public string CreateProjectLink { get; set; }
 
         private readonly IProjectAppService _projectAppService;
-        private readonly DbConnectionOptions _dbConnectionOptions;
         private readonly ICurrentUser _currentUser;
 
-        public IndexModel(IProjectAppService projectAppService,
-            IOptionsSnapshot<DbConnectionOptions> dbConnectionOptions, ICurrentUser currentUser)
+        public IndexModel(IProjectAppService projectAppService, ICurrentUser currentUser)
         {
             _projectAppService = projectAppService;
             _currentUser = currentUser;
-            _dbConnectionOptions = dbConnectionOptions.Value;
         }
 
         public async Task<IActionResult> OnGet()
