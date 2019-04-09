@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
+using Volo.Abp.Identity;
 using Volo.Abp.IdentityServer.ApiResources;
 using Volo.Abp.IdentityServer.Clients;
 using Volo.Abp.IdentityServer.Grants;
@@ -14,6 +16,7 @@ namespace Volo.Abp.IdentityServer
         private readonly IApiResourceRepository _apiResourceRepository;
         private readonly IClientRepository _clientRepository;
         private readonly IIdentityResourceRepository _identityResourceRepository;
+        private readonly IIdentityClaimTypeRepository _identityClaimTypeRepository;
         //private readonly IPersistentGrantRepository _persistentGrantRepository;
         private readonly AbpIdentityServerTestData _testData;
 
@@ -22,6 +25,7 @@ namespace Volo.Abp.IdentityServer
             IApiResourceRepository apiResourceRepository,
             IClientRepository clientRepository,
             IIdentityResourceRepository identityResourceRepository,
+            IIdentityClaimTypeRepository identityClaimTypeRepository,
             AbpIdentityServerTestData testData
             /*IPersistentGrantRepository persistentGrantRepository*/)
         {
@@ -30,6 +34,7 @@ namespace Volo.Abp.IdentityServer
             _apiResourceRepository = apiResourceRepository;
             _clientRepository = clientRepository;
             _identityResourceRepository = identityResourceRepository;
+            _identityClaimTypeRepository = identityClaimTypeRepository;
             //_persistentGrantRepository = persistentGrantRepository;
         }
 
@@ -39,6 +44,7 @@ namespace Volo.Abp.IdentityServer
             AddIdentityResources();
             AddApiResources();
             AddClients();
+            AddClaimTypes();
         }
 
         private void AddPersistedGrants()
@@ -104,6 +110,13 @@ namespace Volo.Abp.IdentityServer
 
             _clientRepository.Insert(new Client(_guidGenerator.Create(), "ClientId2"));
             _clientRepository.Insert(new Client(_guidGenerator.Create(), "ClientId3"));
+        }
+
+        private void AddClaimTypes()
+        {
+            var ageClaim = new IdentityClaimType(Guid.NewGuid(), "Age", false, false, null, null, null,
+                IdentityClaimValueType.Int);
+            _identityClaimTypeRepository.Insert(ageClaim);
         }
     }
 }
