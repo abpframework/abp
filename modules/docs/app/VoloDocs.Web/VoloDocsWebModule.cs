@@ -112,7 +112,7 @@ namespace Volo.Docs
 
             Configure<VirtualFileSystemOptions>(options =>
             {
-                options.FileSets.AddEmbedded<VoloDocsWebModule>();
+                options.FileSets.AddEmbedded<VoloDocsWebModule>("VoloDocs.Web");
             });
 
             Configure<AbpLocalizationOptions>(options =>

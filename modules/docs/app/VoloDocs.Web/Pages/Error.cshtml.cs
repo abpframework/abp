@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Abp.Domain.Entities;
 
-namespace Volo.Docs.Pages
+namespace VoloDocs.Web.Pages
 {
     public class ErrorModel : AbpPageModel
     {
@@ -16,39 +16,47 @@ namespace Volo.Docs.Pages
 
         public async Task<ActionResult> OnGetAsync(string statusCode)
         {
-            if (!int.TryParse(statusCode, out var errorStatusCode))
+            try
             {
-                errorStatusCode = (int)HttpStatusCode.BadRequest;
-            }
-
-            var statusFeature = HttpContext.Features.Get<IStatusCodeReExecuteFeature>();
-            if (statusFeature != null)
-            {
-                Logger.LogWarning("Handled {0} error for URL: {1}", statusCode, statusFeature.OriginalPath);
-            }
-
-            var exceptionHandlerPathFeature = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
-            if (exceptionHandlerPathFeature != null)
-            {
-                var exception = exceptionHandlerPathFeature.Error;
-                var path = exceptionHandlerPathFeature.Path;
-
-                if (exception is EntityNotFoundException)
+                if (!int.TryParse(statusCode, out var errorStatusCode))
                 {
-                    ErrorMessage = exception.Message;
-                    return Page();
+                    errorStatusCode = (int)HttpStatusCode.BadRequest;
                 }
-            }
 
-            var isValidStatusCode = Enum.IsDefined(typeof(HttpStatusCode), errorStatusCode);
-            if (!isValidStatusCode)
+                var statusFeature = HttpContext.Features.Get<IStatusCodeReExecuteFeature>();
+                if (statusFeature != null)
+                {
+                    Logger.LogWarning("Handled {0} error for URL: {1}", statusCode, statusFeature.OriginalPath);
+                }
+
+                var exceptionHandlerPathFeature = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
+                if (exceptionHandlerPathFeature != null)
+                {
+                    var exception = exceptionHandlerPathFeature.Error;
+                    var path = exceptionHandlerPathFeature.Path;
+
+                    if (exception is EntityNotFoundException)
+                    {
+                        ErrorMessage = exception.Message;
+                        return Page();
+                    }
+                }
+
+                var isValidStatusCode = Enum.IsDefined(typeof(HttpStatusCode), errorStatusCode);
+                if (!isValidStatusCode)
+                {
+                    errorStatusCode = (int)HttpStatusCode.BadRequest;
+                }
+
+                ErrorMessage = _errorMessages.ContainsKey(errorStatusCode)
+                    ? _errorMessages[errorStatusCode]
+                    : "Looks like something went wrong!";
+
+            }
+            catch (Exception e)
             {
-                errorStatusCode = (int)HttpStatusCode.BadRequest;
+                Logger.LogError("Error on error page: " + e);
             }
-
-            ErrorMessage = _errorMessages.ContainsKey(errorStatusCode)
-                ? _errorMessages[errorStatusCode]
-                : "Looks like something went wrong!";
 
             return Page();
         }

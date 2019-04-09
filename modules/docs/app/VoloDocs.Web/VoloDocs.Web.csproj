@@ -2,14 +2,10 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
-    <UserSecretsId>b5e1445f-a53c-4d4b-9539-061359f52fcf</UserSecretsId>
-    <RootNamespace>Volo.Docs</RootNamespace>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="Logs\**" />
-    <None Remove="Logs\**" />
-  </ItemGroup>
+ 
 
   <ItemGroup>
     <EmbeddedResource Include="Localization\Resources\VoloDocs\Web\en.json" />

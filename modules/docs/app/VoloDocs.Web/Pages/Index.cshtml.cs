@@ -3,9 +3,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Volo.Abp.Users;
+using Volo.Docs;
 using Volo.Docs.Projects;
 
-namespace Volo.Docs.Pages
+namespace VoloDocs.Web.Pages
 {
     public class IndexModel : PageModel
     {
