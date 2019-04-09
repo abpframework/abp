@@ -13,14 +13,6 @@ namespace Volo.Abp.Identity
         )]
     public class AbpIdentityDomainTestModule : AbpModule
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            Configure<PermissionOptions>(options =>
-            {
-                options.DefinitionProviders.Add<IdentityTestPermissionDefinitionProvider>();
-            });
-        }
-
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             SeedTestData(context);

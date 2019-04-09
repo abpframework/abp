@@ -12,7 +12,6 @@
 @section scripts {
     <abp-script-bundle name="@typeof(IndexModel).FullName">
         <abp-script type="@typeof(OwlCarouselScriptContributor)" />
-        <abp-script src="/Pages/Blog/Posts/detail.js" />
         <abp-script src="/Pages/Blog/Shared/Scripts/blog.js" />
     </abp-script-bundle>
 }
@@ -77,31 +76,34 @@
                                     <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">@post.Title</a>
                                 </h2>
                                 <p class="article-sum">
-                                    @(GetShortContent(post.Content))
+                                    @Html.Raw(GetShortContent(post.Content)))
                                 </p>
                                 <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName" class="btn btn-primary btn-rounded">@L["ContinueReading"]</a>
 
                             </div>
-                            <div class="article-owner">
-                                <div class="article-infos">
-                                    <div class="user-card">
-                                        <a>
-                                            <img gravatar-email="@post.Writer.Email" default-image="Identicon" class="article-avatar" />
-                                        </a>
-                                        <a>
-                                            <strong>@post.Writer.UserName</strong>, @ConvertDatetimeToTimeAgo(post.CreationTime)
-                                        </a>
-                                        <span class="vs-seperator">|</span>
-                                        <a>
-                                            <i class="fa fa-eye"></i>  @L["WiewsWithCount", post.ReadCount]
-                                        </a>
-                                        <span class="vs-seperator">|</span>
-                                        <a>
-                                            <i class="fa fa-comment"></i>  @L["CommentWithCount", post.CommentCount]
-                                        </a>
+                            @if (post.Writer != null)
+                            {
+                                <div class="article-owner">
+                                    <div class="article-infos">
+                                        <div class="user-card">
+                                            <a>
+                                                <img gravatar-email="@post.Writer.Email" default-image="Identicon" class="article-avatar" />
+                                            </a>
+                                            <a>
+                                                <strong>@post.Writer.UserName</strong>, @ConvertDatetimeToTimeAgo(post.CreationTime)
+                                            </a>
+                                            <span class="vs-seperator">|</span>
+                                            <a>
+                                                <i class="fa fa-eye"></i>  @L["WiewsWithCount", post.ReadCount]
+                                            </a>
+                                            <span class="vs-seperator">|</span>
+                                            <a>
+                                                <i class="fa fa-comment"></i>  @L["CommentWithCount", post.CommentCount]
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            }
                         </div>
 
                     }
@@ -109,13 +111,13 @@
             </div>
 
             <div class="col-md-4">
-            
-                
+
+
                 @if (await Authorization.IsGrantedAsync(BloggingPermissions.Posts.Create))
                 {
-                    <a  class="btn btn-primary btn-rounded mb-3 active "  asp-page="./New" asp-route-blogShortName="@Model.BlogShortName">@L["CreateANewPost"]</a>
+                    <a class="btn btn-primary btn-rounded mb-3 active " asp-page="./New" asp-route-blogShortName="@Model.BlogShortName">@L["CreateANewPost"]</a>
                 }
-                
+
                 <div class="list-group">
                     @for (var index = 0; index < Model.Posts.Count && index < 3; index++)
                     {
@@ -138,7 +140,12 @@
                                             <div class="article-infos">
                                                 <div class="user-card">
                                                     <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">
-                                                        <strong>@post.Writer.UserName</strong>, @ConvertDatetimeToTimeAgo(post.CreationTime)
+                                                        @if (post.Writer != null)
+                                                        {
+                                                            <strong>@(post.Writer.UserName),</strong>
+                                                        }
+                                                        
+                                                        @ConvertDatetimeToTimeAgo(post.CreationTime)
                                                     </a>
                                                 </div>
                                             </div>
@@ -197,7 +204,12 @@
                                                         <img gravatar-email="@post.Writer.Email" default-image="Identicon" class="article-avatar" />
                                                     </a>
                                                     <a>
-                                                        <strong>@post.Writer.UserName</strong>, @ConvertDatetimeToTimeAgo(post.CreationTime)
+                                                        @if (post.Writer != null)
+                                                        {
+                                                            <strong>@(post.Writer.UserName),</strong>
+                                                        }
+
+                                                        @ConvertDatetimeToTimeAgo(post.CreationTime)
                                                     </a>
                                                     <span class="vs-seperator">|</span>
                                                     <a>

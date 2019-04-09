@@ -1,0 +1,26 @@
+version: '3.4'
+
+services:
+  sqlserver:
+    environment:
+      - SA_PASSWORD=yourStrong(!)Password
+      - ACCEPT_EULA=Y
+    ports:
+      - "1433:1433"
+
+  identity-server:
+    environment:
+      - ConnectionStrings__Default=Server=sqlserver;Database=MyProjectName_Identity;Trusted_Connection=True;MultipleActiveResultSets=true;User=sa;Password=yourStrong(!)Password;Integrated Security=false
+      - ConnectionStrings__SqlServerCache=Server=sqlserver;Database=MyProjectName_Cache;Trusted_Connection=True;MultipleActiveResultSets=true;User=sa;Password=yourStrong(!)Password;Integrated Security=false
+    ports:
+      - "51600:80"
+
+  my-project-name:
+    environment:
+      - ConnectionStrings__Default=Server=sqlserver;Database=MyProjectName_ModuleDb;Trusted_Connection=True;MultipleActiveResultSets=true;User=sa;Password=yourStrong(!)Password;Integrated Security=false
+      - ConnectionStrings__AbpSettingManagement=Server=sqlserver;Database=MyProjectName_Identity;Trusted_Connection=True;MultipleActiveResultSets=true;User=sa;Password=yourStrong(!)Password;Integrated Security=false
+      - ConnectionStrings__AbpPermissionManagement=Server=sqlserver;Database=MyProjectName_Identity;Trusted_Connection=True;MultipleActiveResultSets=true;User=sa;Password=yourStrong(!)Password;Integrated Security=false
+      - ConnectionStrings__AbpAuditLogging=Server=sqlserver;Database=MyProjectName_Identity;Trusted_Connection=True;MultipleActiveResultSets=true;User=sa;Password=yourStrong(!)Password;Integrated Security=false
+      - ConnectionStrings__SqlServerCache=Server=sqlserver;Database=MyProjectName_Cache;Trusted_Connection=True;MultipleActiveResultSets=true;User=sa;Password=yourStrong(!)Password;Integrated Security=false
+    ports:
+      - "51601:80"

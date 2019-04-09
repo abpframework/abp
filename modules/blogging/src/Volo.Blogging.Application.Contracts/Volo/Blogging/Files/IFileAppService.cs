@@ -5,6 +5,8 @@ namespace Volo.Blogging.Files
 {
     public interface IFileAppService : IApplicationService
     {
-        Task<FileUploadOutputDto> UploadAsync(FileUploadInputDto input);
+        Task<RawFileDto> GetAsync(string name);
+
+        Task<FileUploadOutputDto> CreateAsync(FileUploadInputDto input);
     }
 }

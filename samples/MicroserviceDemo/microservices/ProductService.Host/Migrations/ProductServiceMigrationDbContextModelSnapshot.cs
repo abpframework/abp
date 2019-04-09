@@ -41,6 +41,9 @@ namespace ProductService.Host.Migrations
                     b.Property<string>("ExtraProperties")
                         .HasColumnName("ExtraProperties");
 
+                    b.Property<string>("ImageName")
+                        .HasMaxLength(128);
+
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnName("LastModificationTime");
 

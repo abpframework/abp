@@ -26,6 +26,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
             {
                 client.ToTable(tablePrefix + "Clients", schema);
 
+                client.ConfigureFullAudited();
                 client.ConfigureExtraProperties();
 
                 client.Property(x => x.ClientId).HasMaxLength(ClientConsts.ClientIdMaxLength).IsRequired();
@@ -159,6 +160,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
             {
                 identityResource.ToTable(tablePrefix + "IdentityResources", schema);
 
+                identityResource.ConfigureFullAudited();
                 identityResource.ConfigureExtraProperties();
 
                 identityResource.Property(x => x.Name).HasMaxLength(IdentityResourceConsts.NameMaxLength).IsRequired();
@@ -181,6 +183,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
             {
                 apiResource.ToTable(tablePrefix + "ApiResources", schema);
 
+                apiResource.ConfigureFullAudited();
                 apiResource.ConfigureExtraProperties();
 
                 apiResource.Property(x => x.Name).HasMaxLength(ApiResourceConsts.NameMaxLength).IsRequired();

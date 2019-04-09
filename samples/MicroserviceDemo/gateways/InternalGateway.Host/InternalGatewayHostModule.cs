@@ -87,14 +87,13 @@ namespace InternalGateway.Host
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "Internal Gateway API");
             });
 
-            app.MapWhen(ctx => 
-                    ctx.Request.Path.ToString().StartsWith("/api/abp/") || 
+            app.MapWhen(
+                ctx =>
+                    ctx.Request.Path.ToString().StartsWith("/api/abp/") ||
                     ctx.Request.Path.ToString().StartsWith("/Abp/") ||
                     ctx.Request.Path.ToString().StartsWith("/Test/"),
-                app2 =>
-                {
-                    app2.UseMvcWithDefaultRouteAndArea();
-                });
+                app2 => { app2.UseMvcWithDefaultRouteAndArea(); }
+            );
 
             app.UseOcelot().Wait();
         }

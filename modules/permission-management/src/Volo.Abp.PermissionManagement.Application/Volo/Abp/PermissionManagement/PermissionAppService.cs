@@ -7,6 +7,7 @@ using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Authorization.Permissions;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.PermissionManagement
 {
@@ -41,6 +42,8 @@ namespace Volo.Abp.PermissionManagement
                 Groups = new List<PermissionGroupDto>()
             };
 
+            var multiTenancySide = CurrentTenant.GetMultiTenancySide();
+
             foreach (var group in _permissionDefinitionManager.GetGroups())
             {
                 var groupDto = new PermissionGroupDto
@@ -53,6 +56,11 @@ namespace Volo.Abp.PermissionManagement
                 foreach (var permission in group.GetPermissionsWithChildren())
                 {
                     if (permission.Providers.Any() && !permission.Providers.Contains(providerName))
+                    {
+                        continue;
+                    }
+
+                    if (!permission.MultiTenancySide.HasFlag(multiTenancySide))
                     {
                         continue;
                     }
@@ -97,13 +105,6 @@ namespace Volo.Abp.PermissionManagement
 
             foreach (var permissionDto in input.Permissions)
             {
-                var permissionDefinition = _permissionDefinitionManager.Get(permissionDto.Name);
-                if (permissionDefinition.Providers.Any() && 
-                    !permissionDefinition.Providers.Contains(providerName))
-                {
-                    throw new ApplicationException($"The permission named '{permissionDto.Name}' has not compatible with the provider named '{providerName}'");
-                }
-
                 await _permissionManager.SetAsync(permissionDto.Name, providerName, providerKey, permissionDto.IsGranted);
             }
         }

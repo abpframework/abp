@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
@@ -18,8 +19,8 @@ namespace Volo.Docs.Documents
 
         public DocumentAppService(
             IProjectRepository projectRepository,
-            IDocumentStoreFactory documentStoreFactory, 
-            IDistributedCache<DocumentWithDetailsDto> documentCache, 
+            IDocumentStoreFactory documentStoreFactory,
+            IDistributedCache<DocumentWithDetailsDto> documentCache,
             IDistributedCache<DocumentResourceDto> resourceCache)
         {
             _projectRepository = projectRepository;
@@ -66,15 +67,22 @@ namespace Volo.Docs.Documents
             var project = await _projectRepository.GetAsync(input.ProjectId);
             var cacheKey = $"Resource@{project.ShortName}#{input.Name}#{input.Version}";
 
+            async Task<DocumentResourceDto> GetResourceAsync()
+            {
+                var store = _documentStoreFactory.Create(project.DocumentStoreType);
+                var documentResource = await store.GetResource(project, input.Name, input.Version);
+
+                return ObjectMapper.Map<DocumentResource, DocumentResourceDto>(documentResource);
+            }
+
+            if (Debugger.IsAttached)
+            {
+                return await GetResourceAsync();
+            }
+
             return await ResourceCache.GetOrAddAsync(
                 cacheKey,
-                async () =>
-                {
-                    var store = _documentStoreFactory.Create(project.DocumentStoreType);
-                    var documentResource = await store.GetResource(project, input.Name, input.Version);
-
-                    return ObjectMapper.Map<DocumentResource, DocumentResourceDto>(documentResource);
-                },
+                GetResourceAsync,
                 () => new DistributedCacheEntryOptions
                 {
                     //TODO: Configurable?
@@ -85,22 +93,29 @@ namespace Volo.Docs.Documents
         }
 
         protected virtual async Task<DocumentWithDetailsDto> GetDocumentWithDetailsDto(
-            Project project, 
-            string documentName, 
+            Project project,
+            string documentName,
             string version)
         {
             var cacheKey = $"Document@{project.ShortName}#{documentName}#{version}";
 
+            async Task<DocumentWithDetailsDto> GetDocumentAsync()
+            {
+                Logger.LogInformation($"Not found in the cache. Requesting {documentName} from the store...");
+                var store = _documentStoreFactory.Create(project.DocumentStoreType);
+                var document = await store.GetDocumentAsync(project, documentName, version);
+                Logger.LogInformation($"Document retrieved: {documentName}");
+                return CreateDocumentWithDetailsDto(project, document);
+            }
+
+            if (Debugger.IsAttached)
+            {
+                return await GetDocumentAsync();
+            }
+
             return await DocumentCache.GetOrAddAsync(
                 cacheKey,
-                async () =>
-                {
-                    Logger.LogInformation($"Not found in the cache. Requesting {documentName} from the store...");
-                    var store = _documentStoreFactory.Create(project.DocumentStoreType);
-                    var document = await store.GetDocumentAsync(project, documentName, version);
-                    Logger.LogInformation($"Document retrieved: {documentName}");
-                    return CreateDocumentWithDetailsDto(project, document);
-                },
+                GetDocumentAsync,
                 () => new DistributedCacheEntryOptions
                 {
                     //TODO: Configurable?

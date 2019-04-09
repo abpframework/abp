@@ -7,6 +7,7 @@ namespace Volo.Abp.SettingManagement
     {
         public abstract string Name { get; }
 
+        //TODO: Rename to Store
         protected ISettingManagementStore SettingManagementStore { get; }
 
         protected SettingManagementProvider(ISettingManagementStore settingManagementStore)

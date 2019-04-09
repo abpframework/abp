@@ -82,6 +82,8 @@ namespace AuthServer.Host.Migrations
                     b.Property<Guid?>("TenantId")
                         .HasColumnName("TenantId");
 
+                    b.Property<string>("TenantName");
+
                     b.Property<string>("Url")
                         .HasColumnName("Url")
                         .HasMaxLength(256);
@@ -160,6 +162,8 @@ namespace AuthServer.Host.Migrations
                         .IsRequired()
                         .HasColumnName("EntityId")
                         .HasMaxLength(128);
+
+                    b.Property<Guid?>("EntityTenantId");
 
                     b.Property<string>("EntityTypeFullName")
                         .IsRequired()
@@ -520,6 +524,18 @@ namespace AuthServer.Host.Migrations
 
                     b.Property<string>("ConcurrencyStamp");
 
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnName("CreationTime");
+
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnName("CreatorId");
+
+                    b.Property<Guid?>("DeleterId")
+                        .HasColumnName("DeleterId");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnName("DeletionTime");
+
                     b.Property<string>("Description")
                         .HasMaxLength(1000);
 
@@ -530,6 +546,17 @@ namespace AuthServer.Host.Migrations
 
                     b.Property<string>("ExtraProperties")
                         .HasColumnName("ExtraProperties");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("IsDeleted")
+                        .HasDefaultValue(false);
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnName("LastModificationTime");
+
+                    b.Property<Guid?>("LastModifierId")
+                        .HasColumnName("LastModifierId");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -639,7 +666,7 @@ namespace AuthServer.Host.Migrations
                     b.Property<bool>("BackChannelLogoutSessionRequired");
 
                     b.Property<string>("BackChannelLogoutUri")
-                        .HasMaxLength(2000);
+                        .HasMaxLength(300);
 
                     b.Property<string>("ClientClaimsPrefix")
                         .HasMaxLength(200);
@@ -652,11 +679,23 @@ namespace AuthServer.Host.Migrations
                         .HasMaxLength(200);
 
                     b.Property<string>("ClientUri")
-                        .HasMaxLength(2000);
+                        .HasMaxLength(300);
 
                     b.Property<string>("ConcurrencyStamp");
 
                     b.Property<int?>("ConsentLifetime");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnName("CreationTime");
+
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnName("CreatorId");
+
+                    b.Property<Guid?>("DeleterId")
+                        .HasColumnName("DeleterId");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnName("DeletionTime");
 
                     b.Property<string>("Description")
                         .HasMaxLength(1000);
@@ -671,14 +710,25 @@ namespace AuthServer.Host.Migrations
                     b.Property<bool>("FrontChannelLogoutSessionRequired");
 
                     b.Property<string>("FrontChannelLogoutUri")
-                        .HasMaxLength(2000);
+                        .HasMaxLength(300);
 
                     b.Property<int>("IdentityTokenLifetime");
 
                     b.Property<bool>("IncludeJwtId");
 
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("IsDeleted")
+                        .HasDefaultValue(false);
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnName("LastModificationTime");
+
+                    b.Property<Guid?>("LastModifierId")
+                        .HasColumnName("LastModifierId");
+
                     b.Property<string>("LogoUri")
-                        .HasMaxLength(2000);
+                        .HasMaxLength(300);
 
                     b.Property<string>("PairWiseSubjectSalt")
                         .HasMaxLength(200);
@@ -777,11 +827,11 @@ namespace AuthServer.Host.Migrations
                     b.Property<Guid>("ClientId");
 
                     b.Property<string>("Key")
-                        .HasMaxLength(250);
+                        .HasMaxLength(64);
 
                     b.Property<string>("Value")
                         .IsRequired()
-                        .HasMaxLength(2000);
+                        .HasMaxLength(128);
 
                     b.HasKey("ClientId", "Key");
 
@@ -793,7 +843,7 @@ namespace AuthServer.Host.Migrations
                     b.Property<Guid>("ClientId");
 
                     b.Property<string>("RedirectUri")
-                        .HasMaxLength(2000);
+                        .HasMaxLength(200);
 
                     b.HasKey("ClientId", "RedirectUri");
 
@@ -888,6 +938,18 @@ namespace AuthServer.Host.Migrations
 
                     b.Property<string>("ConcurrencyStamp");
 
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnName("CreationTime");
+
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnName("CreatorId");
+
+                    b.Property<Guid?>("DeleterId")
+                        .HasColumnName("DeleterId");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnName("DeletionTime");
+
                     b.Property<string>("Description")
                         .HasMaxLength(1000);
 
@@ -900,6 +962,17 @@ namespace AuthServer.Host.Migrations
 
                     b.Property<string>("ExtraProperties")
                         .HasColumnName("ExtraProperties");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("IsDeleted")
+                        .HasDefaultValue(false);
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnName("LastModificationTime");
+
+                    b.Property<Guid?>("LastModifierId")
+                        .HasColumnName("LastModifierId");
 
                     b.Property<string>("Name")
                         .IsRequired()

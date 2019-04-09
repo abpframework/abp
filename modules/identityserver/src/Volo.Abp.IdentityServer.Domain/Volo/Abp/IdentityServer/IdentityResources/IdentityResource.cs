@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
-using Volo.Abp.Domain.Entities;
+using Volo.Abp.Domain.Entities.Auditing;
 
 namespace Volo.Abp.IdentityServer.IdentityResources
 {
-    public class IdentityResource : AggregateRoot<Guid>
+    public class IdentityResource : FullAuditedAggregateRoot<Guid>
     {
         public virtual string Name { get; set; }
 

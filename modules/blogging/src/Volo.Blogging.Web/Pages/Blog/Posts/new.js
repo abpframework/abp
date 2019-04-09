@@ -19,7 +19,7 @@
 
         $.ajax({
             type: "POST",
-            url: "/Blog/Files/UploadImage",
+            url: "/api/blogging/files/images/upload",
             data: formData,
             contentType: false,
             processData: false,
@@ -43,7 +43,7 @@
 
         $.ajax({ 
             type: "POST",
-            url: "/Blog/Files/UploadImage",
+            url: "/api/blogging/files/images/upload",
             data: formData,
             contentType: false,
             processData: false,

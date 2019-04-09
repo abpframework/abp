@@ -21,8 +21,9 @@ namespace MyCompanyName.MyProjectName.Host
 
             modelBuilder.ConfigurePermissionManagement();
             modelBuilder.ConfigureSettingManagement();
-            modelBuilder.ConfigureMyProjectName();
             modelBuilder.ConfigureAuditLogging();
+
+            modelBuilder.ConfigureMyProjectName();
         }
     }
 }

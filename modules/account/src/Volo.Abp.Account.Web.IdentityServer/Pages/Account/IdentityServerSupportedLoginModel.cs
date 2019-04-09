@@ -35,11 +35,9 @@ namespace Volo.Abp.Account.Web.Pages.Account
                 schemeProvider, 
                 accountOptions)
         {
-            _schemeProvider = schemeProvider;
             Interaction = interaction;
             ClientStore = clientStore;
             IdentityServerEvents = identityServerEvents;
-            _accountOptions = accountOptions.Value;
         }
 
         public override async Task OnGetAsync()

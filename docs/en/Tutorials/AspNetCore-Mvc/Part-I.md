@@ -20,7 +20,7 @@ Go to the [startup template page](https://abp.io/Templates) and download a new p
 
 This is the how the layered solution structure looks after it's created from the startup template:
 
-![bookstore-visual-studio-solution](images/bookstore-visual-studio-solution.png)
+![bookstore-visual-studio-solution](images/bookstore-visual-studio-solution-v2.png)
 
 ### Create the Book Entity
 
@@ -91,9 +91,9 @@ EF Core requires you to relate entities with your DbContext. The easiest way to 
 
 #### Add New Migration & Update the Database
 
-The Startup template uses [EF Core Code First Migrations](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/) to create and maintain the database schema. Open the **Package Manager Console (PMC)** (under the *Tools/Nuget Package Manager* menu), select the `Acme.BookStore.EntityFrameworkCore` as the **default project** and execute the following command:
+The Startup template uses [EF Core Code First Migrations](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/) to create and maintain the database schema. Open the **Package Manager Console (PMC)** (under the *Tools/Nuget Package Manager* menu), select the `Acme.BookStore.EntityFrameworkCore.DbMigrations` as the **default project** and execute the following command:
 
-![bookstore-pmc-add-book-migration](images/bookstore-pmc-add-book-migration.png)
+![bookstore-pmc-add-book-migration](images/bookstore-pmc-add-book-migration-v2.png)
 
 This will create a new migration class inside the `Migrations` folder. Then execute the `Update-Database` command to update the database schema:
 

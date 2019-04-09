@@ -12,8 +12,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Volo.Abp.IdentityServer.MongoDB.Tests\Volo.Abp.IdentityServer.MongoDB.Tests.csproj" />
-    <ProjectReference Include="..\Volo.Abp.IdentityServer.TestBase\Volo.Abp.IdentityServer.TestBase.csproj" />
+    <ProjectReference Include="..\Volo.Abp.IdentityServer.EntityFrameworkCore.Tests\Volo.Abp.IdentityServer.EntityFrameworkCore.Tests.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -24,7 +24,7 @@ namespace Volo.Abp.TenantManagement
             _currentTenant = currentTenant;
         }
 
-        public async Task<TenantInfo> FindAsync(string name)
+        public async Task<TenantConfiguration> FindAsync(string name)
         {
             using (_currentTenant.Change(null)) //TODO: No need this if we can implement to define host side (or tenant-independent) entities!
             {
@@ -34,11 +34,11 @@ namespace Volo.Abp.TenantManagement
                     return null;
                 }
 
-                return _objectMapper.Map<Tenant, TenantInfo>(tenant);
+                return _objectMapper.Map<Tenant, TenantConfiguration>(tenant);
             }
         }
 
-        public async Task<TenantInfo> FindAsync(Guid id)
+        public async Task<TenantConfiguration> FindAsync(Guid id)
         {
             using (_currentTenant.Change(null)) //TODO: No need this if we can implement to define host side (or tenant-independent) entities!
             {
@@ -48,7 +48,7 @@ namespace Volo.Abp.TenantManagement
                     return null;
                 }
 
-                return _objectMapper.Map<Tenant, TenantInfo>(tenant);
+                return _objectMapper.Map<Tenant, TenantConfiguration>(tenant);
             }
         }
     }

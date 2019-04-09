@@ -51,15 +51,18 @@ namespace ConsoleClientDemo
                 {
                     await _authenticator.AuthenticateAsync(client);
 
-                    var response = await client.GetAsync(_remoteServiceOptions.RemoteServices.Default.BaseUrl.EnsureEndsWith('/') + "Test/Index");
+                    var url = GetServerUrl() + "Test/Index";
+
+                    var response = await client.GetAsync(url);
+
                     if (!response.IsSuccessStatusCode)
                     {
                         Console.WriteLine(response.StatusCode);
                     }
                     else
                     {
-                        var content = await response.Content.ReadAsStringAsync();
-                        Console.WriteLine(content);
+                        var responseContent = await response.Content.ReadAsStringAsync();
+                        Console.WriteLine(responseContent);
                     }
                 }
             }
@@ -113,6 +116,7 @@ namespace ConsoleClientDemo
             try
             {
                 var output = await _productAppService.GetListAsync();
+
                 Console.WriteLine("Total product count: " + output.Items.Count);
 
                 foreach (var product in output.Items)
@@ -124,6 +128,11 @@ namespace ConsoleClientDemo
             {
                 Console.WriteLine(e);
             }
+        }
+
+        private string GetServerUrl()
+        {
+            return _remoteServiceOptions.RemoteServices.Default.BaseUrl.EnsureEndsWith('/');
         }
     }
 }

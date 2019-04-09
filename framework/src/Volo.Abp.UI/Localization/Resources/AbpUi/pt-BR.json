@@ -24,6 +24,7 @@
     "Actions": "Ações",
     "Delete": "Excluir",
     "Edit": "Editar",
+    "Refresh": "Refrescar",
     "ProcessingWithThreeDot": "Processando...",
     "Login": "Entrar",
     "Register": "cadastrar",
@@ -32,7 +33,7 @@
     "Back": "Voltar",
     "PagerNext": "Próximo",
     "PagerPrevious": "Anterior",
-    "PagerInfo": "Mostrando {0} até {1} de {2} registros.",
+    "PagerInfo": "Mostrando _START_ até _END_ de _TOTAL_ registros.",
     "DatatableActionDropdownDefaultText": "Ações",
     "ChangePassword": "Alterar senha",
     "PersonalInfo": "Perfil"

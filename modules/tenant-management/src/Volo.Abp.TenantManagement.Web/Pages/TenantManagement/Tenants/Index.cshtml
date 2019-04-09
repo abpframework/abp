@@ -13,7 +13,10 @@
     PageLayout.Content.MenuItemName = TenantManagementMenuNames.Tenants;
 }
 @section scripts {
-    <script type="text/javascript" src="~/modules/multi-tenancy/views/tenants/index.js"></script>
+    <abp-script-bundle name="@typeof(IndexModel).FullName">
+        <abp-script src="/modules/multi-tenancy/views/tenants/index.js" />
+        <abp-script src="/Pages/FeatureManagement/feature-management-modal.js" />
+    </abp-script-bundle>
 }
 <abp-card id="TenantsWrapper">
     <abp-card-header>

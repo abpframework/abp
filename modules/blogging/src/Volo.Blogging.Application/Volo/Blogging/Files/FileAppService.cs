@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Threading.Tasks;
@@ -20,7 +19,21 @@ namespace Volo.Blogging.Files
             Options = options.Value;
         }
 
-        public virtual Task<FileUploadOutputDto> UploadAsync(FileUploadInputDto input)
+        public virtual Task<RawFileDto> GetAsync(string name)
+        {
+            Check.NotNullOrWhiteSpace(name, nameof(name));
+
+            var filePath = Path.Combine(Options.FileUploadLocalFolder, name);
+
+            return Task.FromResult(
+                new RawFileDto
+                {
+                    Bytes = File.ReadAllBytes(filePath)
+                }
+            );
+        }
+
+        public virtual Task<FileUploadOutputDto> CreateAsync(FileUploadInputDto input)
         {
             if (input.Bytes.IsNullOrEmpty())
             {
@@ -44,7 +57,8 @@ namespace Volo.Blogging.Files
 
             return Task.FromResult(new FileUploadOutputDto
             {
-                Url = Options.FileUploadUrlRoot.EnsureEndsWith('/') + uniqueFileName
+                Name = uniqueFileName,
+                WebUrl = "/api/blogging/files/www/" + uniqueFileName
             });
         }
 

@@ -25,7 +25,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 b.ConfigureFullAudited();
                 b.ConfigureExtraProperties();
                 b.ConfigureConcurrencyStamp();
-                b.ConfigureAbpUser(options);
+                b.ConfigureAbpUser();
 
                 b.Property(u => u.NormalizedUserName).IsRequired().HasMaxLength(IdentityUserConsts.MaxNormalizedUserNameLength).HasColumnName(nameof(IdentityUser.NormalizedUserName));
                 b.Property(u => u.NormalizedEmail).HasMaxLength(IdentityUserConsts.MaxNormalizedEmailLength).HasColumnName(nameof(IdentityUser.NormalizedEmail));

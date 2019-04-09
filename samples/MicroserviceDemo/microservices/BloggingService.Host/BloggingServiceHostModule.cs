@@ -10,6 +10,7 @@ using Volo.Abp;
 using Volo.Abp.Auditing;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.Autofac;
+using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.SqlServer;
 using Volo.Abp.EventBus.RabbitMq;
@@ -85,7 +86,6 @@ namespace BloggingService.Host
             Configure<BlogFileOptions>(options =>
             {
                 options.FileUploadLocalFolder = Path.Combine(hostingEnvironment.WebRootPath, "files");
-                options.FileUploadUrlRoot = "/files/";
             });
 
             context.Services.AddDistributedRedisCache(options =>
@@ -120,27 +120,16 @@ namespace BloggingService.Host
             app.UseAuditing();
             app.UseMvcWithDefaultRouteAndArea();
 
-            AsyncHelper.RunSync(() => SeedDataAsync(context.ServiceProvider));
-        }
-
-        public async Task SeedDataAsync(IServiceProvider serviceProvider)
-        {
-            using (var scope = serviceProvider.CreateScope())
+            //TODO: Problem on a clustered environment
+            AsyncHelper.RunSync(async () =>
             {
-                var blogRepository = scope.ServiceProvider.GetRequiredService<IBlogRepository>();
-                var guidGenerator = scope.ServiceProvider.GetRequiredService<IGuidGenerator>();
-
-                if (await blogRepository.FindByShortNameAsync("abp") == null)
+                using (var scope = context.ServiceProvider.CreateScope())
                 {
-                    await blogRepository.InsertAsync(
-                        new Blog(
-                            guidGenerator.Create(),
-                            "ABP Blog",
-                            "abp"
-                        )
-                    );
+                    await scope.ServiceProvider
+                        .GetRequiredService<IDataSeeder>()
+                        .SeedAsync();
                 }
-            }
+            });
         }
     }
 }

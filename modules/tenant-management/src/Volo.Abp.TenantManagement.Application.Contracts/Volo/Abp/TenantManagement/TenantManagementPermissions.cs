@@ -10,6 +10,20 @@
             public const string Create = Default + ".Create";
             public const string Update = Default + ".Update";
             public const string Delete = Default + ".Delete";
+            public const string ManageFeatures = Default + ".ManageFeatures";
+        }
+
+        public static string[] GetAll()
+        {
+            return new[]
+            {
+                GroupName,
+                Tenants.Default,
+                Tenants.Create,
+                Tenants.Update,
+                Tenants.Delete,
+                Tenants.ManageFeatures
+            };
         }
     }
 }
