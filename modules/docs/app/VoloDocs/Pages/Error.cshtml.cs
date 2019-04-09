@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Abp.Domain.Entities;
 
-namespace VoloDocs.Pages
+namespace Volo.Docs.Pages
 {
     public class ErrorModel : AbpPageModel
     {

@@ -29,13 +29,12 @@ using Volo.Abp.PermissionManagement.Identity;
 using Volo.Abp.Threading;
 using Volo.Abp.UI;
 using Volo.Abp.VirtualFileSystem;
-using Volo.Docs;
 using Volo.Docs.Admin;
 using Volo.Docs.Localization;
+using Volo.Docs.Utils;
 using VoloDocs.EntityFrameworkCore;
-using VoloDocs.Utils;
 
-namespace VoloDocs
+namespace Volo.Docs
 {  
     [DependsOn(
         typeof(DocsWebModule),
@@ -51,13 +50,13 @@ namespace VoloDocs
         typeof(AbpPermissionManagementApplicationModule),
         typeof(AbpAspNetCoreMvcUiBasicThemeModule)
     )]
-    public class VoloDocsModule : AbpModule
+    public class VoloDocsWebModule : AbpModule
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
             PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
             {
-                options.AddAssemblyResource(typeof(DocsResource), typeof(VoloDocsModule).Assembly);
+                options.AddAssemblyResource(typeof(DocsResource), typeof(VoloDocsWebModule).Assembly);
             });
         }
 
@@ -113,7 +112,7 @@ namespace VoloDocs
 
             Configure<VirtualFileSystemOptions>(options =>
             {
-                options.FileSets.AddEmbedded<VoloDocsModule>();
+                options.FileSets.AddEmbedded<VoloDocsWebModule>();
             });
 
             Configure<AbpLocalizationOptions>(options =>

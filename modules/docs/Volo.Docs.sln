@@ -41,7 +41,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Docs.Admin.Web", "src\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VoloDocs.EntityFrameworkCore", "app\VoloDocs.EntityFrameworkCore\VoloDocs.EntityFrameworkCore.csproj", "{1B459653-8DAC-41CD-A08E-28D6E74265D3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VoloDocs", "app\VoloDocs\VoloDocs.csproj", "{057EA924-4524-4452-840C-5E3D509F2ED3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VoloDocs.Web", "app\VoloDocs\VoloDocs.Web.csproj", "{057EA924-4524-4452-840C-5E3D509F2ED3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoloDocs.Migrator", "app\VoloDocs.Migrator\VoloDocs.Migrator.csproj", "{8A5E5001-C017-44A8-ADDA-DC66C102556E}"
 EndProject

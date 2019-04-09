@@ -5,7 +5,7 @@
 @using Volo.Docs.Localization
 @using Volo.Docs.Pages.Documents
 
-@model VoloDocs.Pages.IndexModel
+@model Volo.Docs.Pages.IndexModel
 @inject IHtmlLocalizer<DocsResource> L
 
 @section styles {
@@ -18,7 +18,7 @@
 <div class="p-5">
 
     <h1 class="text-center mb-5">
-       @L["WelcomeVoloDocs"]
+        @L["WelcomeVoloDocs"]
     </h1>
 
     @if (!Model.Projects.Any())

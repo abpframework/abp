@@ -1,7 +1,8 @@
 ﻿using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Components;
 using Volo.Abp.Configuration;
 using Volo.Abp.DependencyInjection;
-namespace VoloDocs.Branding
+
+namespace Volo.Docs.Branding
 {
     [Dependency(ReplaceServices = true)]
     public class VoloDocsBrandingProvider : DefaultBrandingProvider
