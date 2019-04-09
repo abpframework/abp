@@ -43,10 +43,10 @@ namespace Volo.Abp.PermissionManagement.Application.Tests.Volo.Abp.PermissionMan
         public async Task UpdateAsync()
         {
             (await _permissionGrantRepository.FindAsync("MyPermission1", "Test",
-                PermissionTestDataBuilder.User1Id.ToString())).ShouldBeNull();
+                "Test")).ShouldBeNull();
 
             await _permissionAppService.UpdateAsync("Test",
-                PermissionTestDataBuilder.User1Id.ToString(), new UpdatePermissionsDto()
+                "Test", new UpdatePermissionsDto()
                 {
                     Permissions = new UpdatePermissionDto[]
                     {
@@ -59,7 +59,7 @@ namespace Volo.Abp.PermissionManagement.Application.Tests.Volo.Abp.PermissionMan
                 });
 
             (await _permissionGrantRepository.FindAsync("MyPermission1", "Test",
-                PermissionTestDataBuilder.User1Id.ToString())).ShouldNotBeNull();
+                "Test")).ShouldNotBeNull();
         }
 
         [Fact]
@@ -70,14 +70,14 @@ namespace Volo.Abp.PermissionManagement.Application.Tests.Volo.Abp.PermissionMan
                     Guid.NewGuid(), 
                     "MyPermission1",
                     "Test",
-                    PermissionTestDataBuilder.User1Id.ToString()
+                    "Test"
                 )
             );
             (await _permissionGrantRepository.FindAsync("MyPermission1", "Test",
-                PermissionTestDataBuilder.User1Id.ToString())).ShouldNotBeNull();
+                "Test")).ShouldNotBeNull();
 
             await _permissionAppService.UpdateAsync("Test",
-                PermissionTestDataBuilder.User1Id.ToString(), new UpdatePermissionsDto()
+                "Test", new UpdatePermissionsDto()
                 {
                     Permissions = new UpdatePermissionDto[]
                     {
@@ -90,7 +90,7 @@ namespace Volo.Abp.PermissionManagement.Application.Tests.Volo.Abp.PermissionMan
                 });
 
             (await _permissionGrantRepository.FindAsync("MyPermission1", "Test",
-                PermissionTestDataBuilder.User1Id.ToString())).ShouldBeNull();
+                "Test")).ShouldBeNull();
         }
     }
 }
