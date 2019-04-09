@@ -13,7 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Volo.Blogging.Application\Volo.Blogging.Application.csproj" />
-    <ProjectReference Include="..\Volo.Blogging.EntityFrameworkCore.Tests\Volo.Blogging.EntityFrameworkCore.Tests.csproj" />
+    <ProjectReference Include="..\Volo.Blogging.Domain.Tests\Volo.Blogging.Domain.Tests.csproj" />
   </ItemGroup>
 
 </Project>
