@@ -8,7 +8,7 @@ using Volo.Abp.Modularity;
 namespace Volo.Abp.FeatureManagement.EntityFrameworkCore
 {
     [DependsOn(
-        typeof(AbpFeatureManagementTestBaseModule),
+        typeof(FeatureManagementTestBaseModule),
         typeof(AbpFeatureManagementEntityFrameworkCoreModule)
         )]
     public class AbpFeatureManagementEntityFrameworkCoreTestModule : AbpModule

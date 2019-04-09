@@ -6,7 +6,7 @@ namespace Volo.Abp.FeatureManagement
         typeof(AbpFeatureManagementApplicationModule),
         typeof(AbpFeatureManagementDomainTestModule)
         )]
-    public class AbpFeatureManagementApplicationTestModule : AbpModule
+    public class FeatureManagementApplicationTestModule : AbpModule
     {
 
     }
